@@ -2,64 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00886F7F1C
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 10:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DB86F7F27
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 10:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbjEEIb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 04:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
+        id S230402AbjEEId1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 04:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbjEEIbM (ORCPT
+        with ESMTP id S231157AbjEEIdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 04:31:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F00C18DDF
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 01:30:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2408361164
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 08:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7FF73C433D2;
-        Fri,  5 May 2023 08:30:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683275420;
-        bh=Xh+MAs5cv5wNzyY4Qb3IokgWAMpQ9j0XmCCpo/doi/8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ns9suoPaM+L7RW4vZCeWKcmdi0BoMwFyWhyCMKS36YLyz2t87PSCa8uSUR3UfYyaq
-         70bgoSoT5zVGNWrZ6A+5s3Am+/XUQJsomNH7XCN26jHYMkaaPLhgVgekLMBLj0pAOo
-         4A61Q5pmmk0AQbXhfUPbp7tHfo8/nhHbzh9KrwMN/hnpLxG2cA29VRY+2wibUpOYYy
-         lSYiiu2qeed7NOopvTxlNfF2O1XANEiGJzL66P89NkU6hx98HGT4atGyP/4WrnUbQZ
-         qWI9XUv27UO4bOUVQnEs20uRbEITLxOqZkFX9Vd7CcNWPxrnTwZT9IRco7H/B3jqi+
-         0x/ZBoeY5emmw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5EC97E5FFC4;
-        Fri,  5 May 2023 08:30:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 5 May 2023 04:33:25 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EF818929
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 01:32:54 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-76640f8deb5so91532139f.1
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 01:32:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683275549; x=1685867549;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FY1oVG0nSupc0he1hbXBLthUlzEY5zmu3j39rrbGFkw=;
+        b=BM2CzzbCsfs7AHKD4C6RZcUbgs0N5vmk4OdetCFTF9I6KKGqfTu6vdLjOSm5DIvJoD
+         CcMIT89serxdqZc+Eble2NPTcb/KiIefdlMZ0dtTwAaJkic/hIAC8CNxHYmenb7Wfov2
+         CEw5fUklSEoo9TxDi0piVZGey3cJ8+72VNKTPXrcRemzahTnJsICv+KdnKf04Gx3quKT
+         2sAOTG6OuTstJ08cPD3RCZEVXOvLSMRdaKg5zRG/4wYmVeU3lTLKD6Hdfqq9/aT1wULw
+         uc4QrQUIzaHuwBIT7Y2bt8Mjtc2WN7nKrusfZdf7VFPuLfmbJwy/YyOLVLUqLRj208zd
+         b6Kg==
+X-Gm-Message-State: AC+VfDyoKviuJyzw6fQTXCgkzQ8M1Gacd2tpO7jHyo6djz1syo9lJeAl
+        HIdcmmNodWW2JxJzUZLORahyeNgevFcJvBvwMmS0G97zHuo6
+X-Google-Smtp-Source: ACHHUZ7YAK22GI+ner0Ix44sYyMtPe6xEsvPMBEyFB6s9TeyF3gyUP94i7qhOGCscNzTSNTuj0A/w/hhhd7m+qgJqzmUkJq2JNOj
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 net 1/2] net: dsa: mt7530: fix corrupt frames using trgmii
- on 40 MHz XTAL MT7621
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168327542038.4615.4214008191819438520.git-patchwork-notify@kernel.org>
-Date:   Fri, 05 May 2023 08:30:20 +0000
-References: <20230502210947.6815-1-arinc.unal@arinc9.com>
-In-Reply-To: <20230502210947.6815-1-arinc.unal@arinc9.com>
-To:     =?utf-8?b?QXLEsW7DpyDDnE5BTCA8YXJpbmM5LnVuYWxAZ21haWwuY29tPg==?=@ci.codeaurora.org
-Cc:     sean.wang@mediatek.com, Landen.Chao@mediatek.com, dqfext@gmail.com,
-        daniel@makrotopia.org, andrew@lunn.ch, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, opensource@vdorst.com,
-        arinc.unal@arinc9.com, bartel.eerdekens@constell8.be,
-        richard@routerhints.com, vschagen@cs.com, frank-w@public-files.de,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a6b:ee17:0:b0:760:e308:1070 with SMTP id
+ i23-20020a6bee17000000b00760e3081070mr210410ioh.0.1683275549241; Fri, 05 May
+ 2023 01:32:29 -0700 (PDT)
+Date:   Fri, 05 May 2023 01:32:29 -0700
+In-Reply-To: <20230505075628.4150-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002bf72005faee211a@google.com>
+Subject: Re: [syzbot] [reiserfs?] possible deadlock in open_xa_dir
+From:   syzbot <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,32 +55,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hello,
 
-This series was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in reiserfs_check_lock_depth
 
-On Wed,  3 May 2023 00:09:46 +0300 you wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> The multi-chip module MT7530 switch with a 40 MHz oscillator on the
-> MT7621AT, MT7621DAT, and MT7621ST SoCs forwards corrupt frames using
-> trgmii.
-> 
-> This is caused by the assumption that MT7621 SoCs have got 150 MHz PLL,
-> hence using the ncpo1 value, 0x0780.
-> 
-> [...]
+REISERFS (device loop0): checking transaction log (loop0)
+REISERFS (device loop0): Using r5 hash to sort names
+REISERFS (device loop0): Created .reiserfs_priv - reserved for xattr storage.
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 5415 at fs/reiserfs/lock.c:91 reiserfs_check_lock_depth+0x71/0x90
+Modules linked in:
+CPU: 1 PID: 5415 Comm: syz-executor.0 Not tainted 6.3.0-syzkaller-13164-g78b421b6a7c6-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+RIP: 0010:reiserfs_check_lock_depth+0x71/0x90 fs/reiserfs/lock.c:91
+Code: 03 42 0f b6 04 38 84 c0 75 24 41 8b 1e 31 ff 89 de e8 a3 4f 58 ff 85 db 78 0b e8 ea 4b 58 ff 5b 41 5e 41 5f c3 e8 df 4b 58 ff <0f> 0b eb f1 44 89 f1 80 e1 07 80 c1 03 38 c1 7c cf 4c 89 f7 e8 86
+RSP: 0018:ffffc9000581f520 EFLAGS: 00010293
+RAX: ffffffff82334431 RBX: 00000000ffffffff RCX: ffff888025ed0000
+RDX: 0000000000000000 RSI: 00000000ffffffff RDI: 0000000000000000
+RBP: ffffc9000581f7b0 R08: ffffffff8233441d R09: ffffed100e877044
+R10: 0000000000000000 R11: dffffc0000000001 R12: 1ffff92000b03f05
+R13: dffffc0000000000 R14: ffff88807783b0c0 R15: dffffc0000000000
+FS:  00007f9491058700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f62321d1ff8 CR3: 000000002a3c7000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ do_journal_end+0x20f/0x4770 fs/reiserfs/journal.c:4018
+ reiserfs_create+0x68e/0x710 fs/reiserfs/namei.c:694
+ lookup_open fs/namei.c:3492 [inline]
+ open_last_lookups fs/namei.c:3560 [inline]
+ path_openat+0x13df/0x3170 fs/namei.c:3788
+ do_filp_open+0x234/0x490 fs/namei.c:3818
+ do_sys_openat2+0x13f/0x500 fs/open.c:1356
+ do_sys_open fs/open.c:1372 [inline]
+ __do_sys_openat fs/open.c:1388 [inline]
+ __se_sys_openat fs/open.c:1383 [inline]
+ __x64_sys_openat+0x247/0x290 fs/open.c:1383
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f949028c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f9491058168 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 00007f94903abf80 RCX: 00007f949028c169
+RDX: 000000000000275a RSI: 0000000020000080 RDI: ffffffffffffff9c
+RBP: 00007f94902e7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff4aaf8b4f R14: 00007f9491058300 R15: 0000000000022000
+ </TASK>
 
-Here is the summary with links:
-  - [v3,net,1/2] net: dsa: mt7530: fix corrupt frames using trgmii on 40 MHz XTAL MT7621
-    https://git.kernel.org/netdev/net/c/37c218d8021e
-  - [v3,net,2/2] net: dsa: mt7530: fix network connectivity with multiple CPU ports
-    https://git.kernel.org/netdev/net/c/120a56b01bee
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Tested on:
 
+commit:         78b421b6 Merge tag 'linux-watchdog-6.4-rc1' of git://w..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=1271004c280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
+dashboard link: https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1194d2f4280000
 
