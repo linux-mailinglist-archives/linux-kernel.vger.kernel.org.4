@@ -2,102 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B77936F7C78
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 07:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 823226F7C83
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 07:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjEEFkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 01:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
+        id S230244AbjEEFrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 01:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjEEFku (ORCPT
+        with ESMTP id S229577AbjEEFrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 01:40:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A017A1FE1
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 22:40:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683265199;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=B7kVUYKilEKC1sSmEWakcXvmq4DsPQRiV4ukNCTywSc=;
-        b=Xm2BF87MonuEAxF7cIMUenCAko/atMdhGRD2ZxTrI897+S+l2CyarlQbtRcZ7ZIBc7U2Yj
-        ZAZ6J22aAdsHUeQf2Obx5vCsWoPV0qspmgHl1+SuaCtgqZcyU0qRdo1Z1ZJKLXiy7NTeia
-        27lOc6YsM6U0lcqpabCSByDwhR1GHNs=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-290-33TQ21VBP8O2GGhmsZ_xww-1; Fri, 05 May 2023 01:39:58 -0400
-X-MC-Unique: 33TQ21VBP8O2GGhmsZ_xww-1
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-38e279dfb65so968817b6e.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 22:39:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683265197; x=1685857197;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B7kVUYKilEKC1sSmEWakcXvmq4DsPQRiV4ukNCTywSc=;
-        b=MbXpNXZHhuXcWUaazkYtnat2MLjLm0XlD9OVWZcbdJQAgYlDfT8w+j7QUoRiARxovV
-         Icc590nrcOgCr+NQTFC5DUhyV9nONB2RpAMOugB/beFh4Z6uVLFTXUmzTl2jbfzX6Eda
-         A7dpx7myhNjb8ijhKhZUfJDkPY29Y5tL6uuUihhS4LkSZGpLMsytnq3ADT6ocXaOrV7l
-         4mFrL7bBKobuZtWHMvE/jJ/n/0vQEvxMDn6w4f8L/FbNX6mGet7aGQlhKJLpr3hpVkf/
-         kEel9wYegC3pZpF14QqZAB44LK2UaKG10nfdBNhZDcOD/95e+Z6o3mPfjgSudG63apfe
-         n1Aw==
-X-Gm-Message-State: AC+VfDzNecx5s0atnvElLfTBiiRmwbfQbGkzoCOyw3W9Ru9MqEZUEZlI
-        /XacLvJQ/eczR4B6pFxkNo30QfCo8ZY0TRQaGB49i/OYQ2e+hmHNF0pAmjlZ/xDdx5oYY3sCylB
-        ZG84KGa4EfZA+c6hPZaSm4hLmxBrhTT9zmjitvic6
-X-Received: by 2002:a05:6808:150:b0:38d:ce1e:306e with SMTP id h16-20020a056808015000b0038dce1e306emr34752oie.34.1683265197609;
-        Thu, 04 May 2023 22:39:57 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4evgGa3yxWmOKvDQyUe48IQ3fGoJnCZIUnXAFsqCW728s0O5cb4DUrp8vPlNnfa6aHS5mgHxkgCo3kPf4R30A=
-X-Received: by 2002:a05:6808:150:b0:38d:ce1e:306e with SMTP id
- h16-20020a056808015000b0038dce1e306emr34749oie.34.1683265197395; Thu, 04 May
- 2023 22:39:57 -0700 (PDT)
+        Fri, 5 May 2023 01:47:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C398A11D89;
+        Thu,  4 May 2023 22:47:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CA2563B30;
+        Fri,  5 May 2023 05:47:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEBDC433B0;
+        Fri,  5 May 2023 05:47:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683265636;
+        bh=TmEJ43a9wRyU79Q4Z9WHv4VZR6aLeCdSzDRMZZtHgkE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=I2g+vyhe1hoLtc3xpRjAc9BU/OAumbEN1B7Qbc0uCZJ6vm38izq9WxgG6TDQIw9Cn
+         gtD6rIxqmEHNa8rMU8v/ldvTpcVtaEF3DSdJwkdOmvdfZad8eHH3pZuMYUuPnRHXOF
+         aYYdetp0cJMW6mFI28DiTiu7OK1/suDqFmm+PnshMDcFrjGxdV75SdkN4eyVXeCkzW
+         HSaITHGNl7LHZa0zreUIjIqZKUUeH1GUas9yTSfl5gIOK4Nx3H8cZuqGu0g7MQUCMn
+         LcnwJPgGPB8cca2qNfnc8SP0goqQZTmJ1qZnOLhwiQAwrnHXfTiUVeCmF7841pmmh4
+         RSuO/9+XH4fLg==
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-94f3cd32799so263635666b.0;
+        Thu, 04 May 2023 22:47:16 -0700 (PDT)
+X-Gm-Message-State: AC+VfDz2FrmL4Up3fD5j3mGM/O8YWH2p5IWI7Om1S8wwmKwlPsAcDzfQ
+        f0Yxie+j4D8vrLMz9f2waM7nC/UUl9aPPiqySfE=
+X-Google-Smtp-Source: ACHHUZ7vjZvoO17O2+xGcjw8YRQwo0MSgi9BtdhaWD+v+3nmuTyY0RrEyW2wbSK+lqJd6C9lcTXOXjjLYHG3jJse7RE=
+X-Received: by 2002:a17:907:1c07:b0:960:ddba:e5c7 with SMTP id
+ nc7-20020a1709071c0700b00960ddbae5c7mr139047ejc.40.1683265634680; Thu, 04 May
+ 2023 22:47:14 -0700 (PDT)
 MIME-Version: 1.0
-From:   Costa Shulyupin <costa.shul@redhat.com>
-Date:   Fri, 5 May 2023 08:39:46 +0300
-Message-ID: <CADDUTFy29Cn6y56XLB-me0FneXrMED0LuHLb-7KD_NoiXZSZrg@mail.gmail.com>
-Subject: confusing documentation about Development Process
-To:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>
-Cc:     open list <linux-kernel@vger.kernel.org>
+References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-10-arnd@kernel.org>
+In-Reply-To: <20230327121317.4081816-10-arnd@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 5 May 2023 13:47:03 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT2VCVMJs1NvgK66uD+BhObjM2WNxf2RY7wTZsho4sjVA@mail.gmail.com>
+Message-ID: <CAJF2gTT2VCVMJs1NvgK66uD+BhObjM2WNxf2RY7wTZsho4sjVA@mail.gmail.com>
+Subject: Re: [PATCH 09/21] riscv: dma-mapping: skip invalidation before
+ bidirectional DMA
+To:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     linux-kernel@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are five topics named "Development Process" or "Working with the
-development community" or both.
+On Mon, Mar 27, 2023 at 8:15=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> For a DMA_BIDIRECTIONAL transfer, the caches have to be cleaned
+> first to let the device see data written by the CPU, and invalidated
+> after the transfer to let the CPU see data written by the device.
+>
+> riscv also invalidates the caches before the transfer, which does
+> not appear to serve any purpose.
+Yes, we can't guarantee the CPU pre-load cache lines randomly during
+dma working.
 
-It is clear that these topics are related to the development. Some
-content is overlapping.
+But I've two purposes to keep invalidates before dma transfer:
+ - We clearly tell the CPU these cache lines are invalid. The caching
+algorithm would use these invalid slots first instead of replacing
+valid ones.
+ - Invalidating is very cheap. Actually, flush and clean have the same
+performance in our machine.
 
-Questions:
-- Is it by design or chance?
-- What are the principal differences between the topics?
-- Are there any outdated documents?
-- How should it be?
+So, how about:
+
+diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoheren=
+t.c
+index d919efab6eba..2c52fbc15064 100644
+--- a/arch/riscv/mm/dma-noncoherent.c
++++ b/arch/riscv/mm/dma-noncoherent.c
+@@ -22,8 +22,6 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t s=
+ize,
+                ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+                break;
+        case DMA_FROM_DEVICE:
+-               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+-               break;
+        case DMA_BIDIRECTIONAL:
+                ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+                break;
+@@ -42,7 +40,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size=
+,
+                break;
+        case DMA_FROM_DEVICE:
+        case DMA_BIDIRECTIONAL:
+                /* I'm not sure all drivers have guaranteed cacheline
+alignment. If not, this inval would cause problems */
+-               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
++               ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
+                break;
+        default:
+                break;
+
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/riscv/mm/dma-noncoherent.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoher=
+ent.c
+> index 640f4c496d26..69c80b2155a1 100644
+> --- a/arch/riscv/mm/dma-noncoherent.c
+> +++ b/arch/riscv/mm/dma-noncoherent.c
+> @@ -25,7 +25,7 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t=
+ size,
+>                 ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+>                 break;
+>         case DMA_BIDIRECTIONAL:
+> -               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+> +               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+>                 break;
+>         default:
+>                 break;
+> --
+> 2.39.2
+>
 
 
-References:
-
-"Working with the development community":
-https://docs.kernel.org/index.html#working-with-the-development-community
-
-- "All development-process docs" linked to "Working with the kernel
-development" community: https://docs.kernel.org/process/index.html
-
--  - "How the development process works":
-https://docs.kernel.org/process/2.Process.html
-
-- "A guide to the Kernel Development Process":
-https://docs.kernel.org/process/development-process.html
-
-Development tools and processes:
-https://docs.kernel.org/index.html#development-tools-and-processes
-
-Thanks,
-Costa
-
+--=20
+Best Regards
+ Guo Ren
