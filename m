@@ -2,101 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240B86F83E7
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857E66F83EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbjEENZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 09:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
+        id S232536AbjEENZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 09:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232516AbjEENYu (ORCPT
+        with ESMTP id S232065AbjEENZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 09:24:50 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584FD20758
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 06:24:49 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bcb229adaso3377735a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 06:24:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683293088; x=1685885088;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=88pW8qWBWl/gwLo1P5APo+OBYDB/KVhHfdTYqAO9eAY=;
-        b=AYnqjAD5rvuD0ZLSQ5l7Hx9KJ9x+C+/56HPgqiMC3wy3USc+lyae/7wy9iNF7t0vxb
-         lvrAaaQBdc0S1YkRVHZo+0sD3UDvZNQSkuwx6CPFfAUibMm1mHqyPM3TMSp351Jn6VIt
-         VrwvYV30SSKTYqbhmhusdZFioAnNVpYUwfVWEwLuG11XE9PNhZcecwjcCY9Erbtv5Uci
-         FHYoc8dBhR6TNPell11XM5U3IEOj8EjSZfnQQpI5Rlzhy3y9OnheMWlcHj+ztw3baaDJ
-         PIuHKw9ZbJ/toYNj6//FTWJMhfHsi3HUbmsWXGeWMBjxmNcnAfPDv5rAZ3pJvbLAKiNv
-         r/cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683293088; x=1685885088;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=88pW8qWBWl/gwLo1P5APo+OBYDB/KVhHfdTYqAO9eAY=;
-        b=XQ64bzrYRt7XXSQ9TRxorKl7/Fg5K0ebDLRsoCX34odJfeXacsOEJG9Z0goxDPIK7C
-         BnreTvJhWIo8gk6bc/Dpabkm5mfDPIokppL0o6apwMklE3eHEA01YZqvY9OV8Giotvk7
-         zJ3pV8e38m4Bd/tcjVzk4GgVPKqWQUWlIlOkCJ2+D1CWSXaVslawitBXG+nBNsE9tddk
-         zdniBSHsdvYbtwjpc3qNhPd/PUHtJjcYDyc/cr6RhiNEIdgHkM7FIJHLe56+yM1Bl6Na
-         Aby5zpKvwDgOH+fiopymEYlVOGuOTkNoUCicvh8Hr/2zZOD68ResgdifZBcVmS0WSuWY
-         Fuww==
-X-Gm-Message-State: AC+VfDy5g9rXx/oEwQpgjler7GmG39rZFrCJ4iBS8JYuGAApzTspVRiB
-        Izr3ve9qRXecmJNtTs2BaRSREA==
-X-Google-Smtp-Source: ACHHUZ7tE6qiopnAwq868iND3B4v8MQrCg6KKrBzkP+dMPCgtv9gp6t7xiaJTraOtyF4Q0MGc7vvBw==
-X-Received: by 2002:a17:907:7d94:b0:961:b0:3e0e with SMTP id oz20-20020a1709077d9400b0096100b03e0emr1314712ejc.30.1683293087751;
-        Fri, 05 May 2023 06:24:47 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
-        by smtp.gmail.com with ESMTPSA id i19-20020a17090685d300b0094ebc041e20sm930557ejy.46.2023.05.05.06.24.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 06:24:47 -0700 (PDT)
-Message-ID: <6582da01-03c0-77cf-9646-fc536ceb9b3d@linaro.org>
-Date:   Fri, 5 May 2023 15:24:45 +0200
+        Fri, 5 May 2023 09:25:37 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAAA1F4B9;
+        Fri,  5 May 2023 06:25:36 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id CD56E5C0314;
+        Fri,  5 May 2023 09:25:35 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 05 May 2023 09:25:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1683293135; x=
+        1683379535; bh=7t+/lIxhqlgnlEBYwfT2xXhyCdqZvuaeWIN7vpHYLAI=; b=k
+        oAn0tSE2cwE/I/11d2hDIDF/GVjIvJOP1byJzpKIad9fJSaTOcuSEYY9MO299OYn
+        /WkYaLXUt9uH9viJXopHdVupX59beGHD+RNMrtjFo+HIMq5D9EtssPim8CGh+gp7
+        8ACTf9KpAgSNNTqiqoQnXkXEgfpVvZY2MzDMuIE68AdaCQgt8WfRDvBxYOEe2QKK
+        F9XBLpt3BYXoEkSXEUXi6brJozAL5XNm/iJ3TyXCuQko2iRAy9ivx5s4za83Ij1A
+        725wTxeUOkdWBRjhtd+CPkn06uvDrbmHozeKmf4v6MNIiWRRfwK6jfEsVZomMMs0
+        vWZdeNXA5XCK4r2l2qgyA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1683293135; x=
+        1683379535; bh=7t+/lIxhqlgnlEBYwfT2xXhyCdqZvuaeWIN7vpHYLAI=; b=J
+        1RgSkhR5Vd4V3MJiHcGT3pIsADbScMo7opwlybEp1qzKeaJ/ufEKT+kwGW7hR9wp
+        ywk8QbvzwbJ2gdg0WrqSCXzcZW9MH5WvXAWkV0a/3kraHL2AgQmnYvKjvtg2Q4Zw
+        /1oYhMZZ2RNglx+s/81I0kFb/G4e7Cj4cinKlzXWGmD5d1qZjOmwEO6SOYOrgX0A
+        jWbfNIXbb7kl6ujUqH1YACBPi64YHFPC2ZiQiTtqDJ9BTiL8doHF51rWbIxm45dk
+        bvTLKgk1B0qTQ4Qnc/RBAeLErCxZJMOwTY181B3v9xaDWQBwiYrQ5ISOIwoaS7Xz
+        uhfdXBqfJmtPkLfzDEOMQ==
+X-ME-Sender: <xms:zwNVZHdSHWmPdCrwOS8DI_aTUWBIHsOZqJGIL4iml7u-oCSU01D5nw>
+    <xme:zwNVZNMiPZmtOY5y0Gs_61ATCKe-n4oWTlRkAKc_mg_Q0NsxTQGrpJlbmcq2oj-2k
+    GK-CvaoR6dmQNk2wlI>
+X-ME-Received: <xmr:zwNVZAi-NTia1oeHsjNmfnQpQOUqvCPimSzbg2YXRGfMEFr24VU5oGNqPd3ltWgkh9ld4T1rFzLgr4Xvkh_UibpVv-ckGxfZ0AKwoBt26eU_54V-Uk-vKQF5tXK_S3_o_ntROWujlA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeefvddgieehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgoteeftdduqddtudculdduhedmnecujfgurhephf
+    fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepofgrrhhkucfrvggrrhhs
+    ohhnuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrgeqnecuggftrf
+    grthhtvghrnhepvedvtdejlefgvdeffeefgfefieduvdejledtgfeludffleeivedugeei
+    jedtuedtnecuffhomhgrihhnpehrvgguhhgrthdrtghomhenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmphgvrghrshhonhdqlhgvnhhovhho
+    sehsqhhuvggssgdrtggr
+X-ME-Proxy: <xmx:zwNVZI-F4JssSio2WVl6DQWmyKY46WDw9Tazlolh1tJvpHD91bBnXA>
+    <xmx:zwNVZDscr3Q-myETuESxwWQ9ukQemVtEZj9WBV3LFtUt5BTBxm7OcA>
+    <xmx:zwNVZHGjNrNeAjcg-81WX3EqlJbMupVjL71Mh_64IllY4sQVM2spuA>
+    <xmx:zwNVZNJOcpZHl2w3R9yTY3_wOxIJ4aXI05vxPC_URi88P2K-Iwr0bA>
+Feedback-ID: ibe194615:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 5 May 2023 09:25:35 -0400 (EDT)
+From:   Mark Pearson <mpearson-lenovo@squebb.ca>
+To:     mpearson-lenovo@squebb.ca
+Cc:     hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH 1/2] platform/x86: thinkpad_acpi: Fix platform profiles on T490
+Date:   Fri,  5 May 2023 09:25:22 -0400
+Message-Id: <20230505132523.214338-1-mpearson-lenovo@squebb.ca>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <mpearson-lenovo@squebb.ca>
+References: <mpearson-lenovo@squebb.ca>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: reset: mt8188: add thermal reset
- control bit
-To:     Runyang Chen <runyang.chen@mediatek.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-References: <20230505131308.27190-1-runyang.chen@mediatek.com>
- <20230505131308.27190-2-runyang.chen@mediatek.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230505131308.27190-2-runyang.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2023 15:13, Runyang Chen wrote:
-> To support reset of infra_ao, add the index of infra_ao reset of thermal
-> for MT8188.
-> 
-> Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
-> ---
->  include/dt-bindings/reset/mt8188-resets.h | 5 +++++
->  1 file changed, 5 insertions(+)
+I had incorrectly thought that PSC profiles were not usable on Intel
+platforms so had blocked them in the driver initialistion. This broke
+platform profiles on the T490.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+After discussion with the FW team PSC does work on Intel platforms and
+should be allowed.
 
-Best regards,
-Krzysztof
+Note - it's possible this may impact other platforms where it is advertised
+but special driver support that only Windows has is needed. But if it does
+then they will need fixing via quirks. Please report any issues to me so I
+can get them addressed - but I haven't found any problems in testing...yet
+
+Fixes: bce6243f767f ("platform/x86: thinkpad_acpi: do not use PSC mode on Intel platforms")
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=2177962
+Cc: stable@vger.kernel.org
+Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+---
+ drivers/platform/x86/thinkpad_acpi.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+index 826c522ed1c0..d84a4c7e3c35 100644
+--- a/drivers/platform/x86/thinkpad_acpi.c
++++ b/drivers/platform/x86/thinkpad_acpi.c
+@@ -10585,11 +10585,6 @@ static int tpacpi_dytc_profile_init(struct ibm_init_struct *iibm)
+ 				dytc_mmc_get_available = true;
+ 		}
+ 	} else if (dytc_capabilities & BIT(DYTC_FC_PSC)) { /* PSC MODE */
+-		/* Support for this only works on AMD platforms */
+-		if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD) {
+-			dbg_printk(TPACPI_DBG_INIT, "PSC not support on Intel platforms\n");
+-			return -ENODEV;
+-		}
+ 		pr_debug("PSC is supported\n");
+ 	} else {
+ 		dbg_printk(TPACPI_DBG_INIT, "No DYTC support available\n");
+-- 
+2.40.0
 
