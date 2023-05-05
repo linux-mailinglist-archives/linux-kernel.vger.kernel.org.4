@@ -2,132 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904656F83C8
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB396F83CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbjEENUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 09:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
+        id S232458AbjEENUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 09:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232133AbjEENT6 (ORCPT
+        with ESMTP id S232387AbjEENUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 09:19:58 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2E72688
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 06:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Axx0Ai+E7uI/gopDqIjvpCC5ufvysxbF5WjvYPweVkM=; b=PH8CrB2OE6jBsMgZgc1Ns/uAoL
-        DpKoU8g9HX2xjBDpMXOePDuT6PqtImvr9RMPe28EU84KDI5NGxEFPw40oV/Qque4rV0CFYj6ujnVP
-        oMJCzBJkKS3gNT8jqSTlHWIyQjSXVFETI5vz+5EI17MEcczZNOi6ShhrjTTMSkYK8bvmc4Bb0B8tt
-        oJ/PfTNi3U35cXHgIK/nRfvY2YIfz6HgzFe6oOOinaiBju8fFe8JSkz1gh7UNPk2X8fVLYDXsp4Yq
-        5lMYjOm2lZPbFUtfYcovjNf6EGedwZEOd+N+4PwuWiXLY9wGqjERJSbgqobMF9pNkj694nrJsFVFN
-        SshN9gRw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1puvKz-003G5G-2G;
-        Fri, 05 May 2023 13:19:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8061C306128;
-        Fri,  5 May 2023 15:19:03 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 55A4321353003; Fri,  5 May 2023 15:19:03 +0200 (CEST)
-Date:   Fri, 5 May 2023 15:19:03 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        naveen.n.rao@linux.vnet.ibm.com,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: Re: [PATCH 3/6] sched/fair: Fix busiest group selection for asym
- groups
-Message-ID: <20230505131903.GP83892@hirez.programming.kicks-ass.net>
-References: <cover.1683156492.git.tim.c.chen@linux.intel.com>
- <2e2e6844fb3ed28594d86c5e45295df7c4335c08.1683156492.git.tim.c.chen@linux.intel.com>
+        Fri, 5 May 2023 09:20:23 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65A72688;
+        Fri,  5 May 2023 06:20:19 -0700 (PDT)
+Received: from localhost ([31.220.113.235]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N6KMR-1qJ7Bu324H-016cR9; Fri, 05 May 2023 15:19:59 +0200
+Date:   Fri, 5 May 2023 15:19:59 +0200
+From:   Andreas Klinger <ak@it-klinger.de>
+To:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/3] Support Honeywell mprls0025pa pressure sensor
+Message-ID: <ZFUCf059+PSR+3Wb@arbad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2e2e6844fb3ed28594d86c5e45295df7c4335c08.1683156492.git.tim.c.chen@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Provags-ID: V03:K1:LvWwahpDxbW5ietDton1MeJ49tRciW1sgnT3RH04aGs3/1qpbKX
+ eZBZd34zYne/ZVfSfg6QPVXmfqdBEqkhuZ2rvDSFdzgnp8XpxMB2BcAIquVJPhDs5eQqIyS
+ U7zoINps68Fhft5D3djciOI2CIX37ihSe+r3lkUcHaIHtWQSF3HBiDjHgAPabDPzEmeNLct
+ ocQCQ0T/fqVXejTPiHeVQ==
+UI-OutboundReport: notjunk:1;M01:P0:TMie43ZwBSE=;ueCGyBUvD621qQ8q/ae9m/jhKK7
+ r0QAp574iP8Pbpc3pnVlWtP3Eq8QHL8X5OE4eVUzAWdTLV2hEXnfFN2W85v57Vk10E0kv/gct
+ eEKVft6teWgu/0NU6sokfXvw55h4rSYfepJB8yyQh0OoIx4rEfJvvzAY7lSGnQTbHcN5s4sys
+ hQzdG0UP/ej/hlAr1ySeNKzVBGHVZcddIdMYyJ0kMNpQAO7PUfenFg5AUIe+apan3mIIXiNmT
+ K2GZg/ZdtWHfW/+rmylUjTWVhmCNKEFofwjSTFb6fl5GoX1rnHN+iLgrQIZSvz5UjVvcrIpVG
+ j7w/vehxVvh3LTqwmegVtxsgtAxJJp2PyiN391Li3rjPuf7N927dOH3Z/AgiFyn+eeHlR4mNU
+ JpDD2tWypSZcLv5QHxdZLkd77TqmNEWivhpYzWsVDM4WuSO6z2qfjF4nqqPrZi7kTXISBAG8j
+ ZeuCpWjF0OdM9uCP7+bc0cIeFwaWnpo7idiodJeo6uP2I/fYMHVc83hfXH2aFYE3GOCbLXzMZ
+ B7GTvOYUWICj3TgKtQMdtqP20DjLTg+9NvNkMX9aWLtEVWVbQz5jXHQN6LlFN/gBiGNua1tW/
+ HYZ2LSjLtTRJSXiKwbaAXE2L4tK6zbZFr9Tjs44TRy78t6VgQvArtlnjJrKhFKYX5dhnZAfkt
+ Y3Hzmhal6/cNYN9f59eOkATAiuAAoSGsr5rP6VDJCw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 09:09:53AM -0700, Tim Chen wrote:
-> From: Tim C Chen <tim.c.chen@linux.intel.com>
-> 
-> For two groups that have spare capacity and are partially busy, the
-> busier group should be the group with pure CPUs rather than the group
-> with SMT CPUs.  We do not want to make the SMT group the busiest one to
-> pull task off the SMT and makes the whole core empty.
-> 
-> Otherwise suppose in the search for busiest group,
-> we first encounter an SMT group with 1 task and set it as the busiest.
-> The local group is an atom cluster with 1 task and we then encounter an atom
-> cluster group with 3 tasks, we will not pick this atom cluster group over the
-> SMT group, even though we should.  As a result, we do not load balance
-> the busier Atom cluster (with 3 tasks) towards the local Atom cluster
-> (with 1 task).  And it doesn't make sense to pick the 1 task SMT group
-> as the busier group as we also should not pull task off the SMT towards
-> the 1 task atom cluster and make the SMT core completely empty.
-> 
-> Fix this case.
-> 
-> Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> Signed-off-by: Tim Chen <tim.c.chen@linux.intel.com>
-> ---
->  kernel/sched/fair.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index bde962aa160a..8a325db34b02 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -9548,6 +9548,18 @@ static bool update_sd_pick_busiest(struct lb_env *env,
->  		break;
->  
->  	case group_has_spare:
-> +		/*
-> +		 * Do not pick sg with SMT CPUs over sg with pure CPUs,
-> +		 * as we do not want to pull task off half empty SMT core
-> +		 * and make the core idle.
-> +		 */
+Support Honeywell mprls0025pa pressure sensor.
 
-Comment says what the code does; not why.
+This patch series adds support for Honeywell mprls0025pa pressure sensor series.
+There are a variety of sensors with different pressure ranges supported.
 
-> +		if (asymmetric_groups(sds->busiest, sg)) {
-> +			if (sds->busiest->flags & SD_SHARE_CPUCAPACITY)
-> +				return true;
-> +			else
-> +				return false;
+Changes in v4:
+- Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
+  - change line length to 80 characters
+  - make vdd-supply mandatory
+- Patch 2: "iio: pressure: Honeywell mprls0025pa pressure sensor"
+  - change line length to 80 characters
+  - change regulator vcc to devm_regulator_get_enable()
+  - switch to probe_new
+  - many changes from the review
+- Patch 3: "MAINTAINERS: Add Honeywell mprls0025pa sensor"
+  - no changes
 
-			return (sds->busiest->flags & SD_SHARE_CPUCAPACITY)
-> +		}
+Changes in v3:
+- Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
+  - fix errors while doing dt_binding_check
+  - add vdd-supply
+- Patch 2: "iio: pressure: Honeywell mpr pressure sensor"
+  - change to _RAW interface
+  - add transfer function
+  - add regulator
+  - move to device_property_xxx functions
+  - many more changes from the feedbacks
+- Patch 3: "MAINTAINERS: Add Honeywell mpr sensor"
+  - change file names
 
-Also, should this not be part of the previous patch?
+Changes in v2:
+- Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
+  - change the global sensor decription of mpr to the specific sensor
+    mprls0025pa
+  - change compatible string
+  - rename the file to honeywell,mprls0025pa.yaml
+  - honeywell,pmin-pascal and honeywell,pmax-pascal: add unit pascal to property
+    names 
+  - add new property honeywell,transfer-function
+- Patch 2: "iio: pressure: Honeywell mpr pressure sensor"
+  - no change so far
+  - will be changed and send out as new version when the dt definition is
+    settled down
+- Patch 3: "MAINTAINERS: Add Honeywell mpr sensor"
+  - no change so far
+
+Andreas Klinger (3):
+  dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor
+  iio: pressure: Honeywell mprls0025pa pressure sensor
+  MAINTAINERS: Add Honeywell mprls0025pa sensor
+
+ .../iio/pressure/honeywell,mprls0025pa.yaml   | 104 +++++
+ MAINTAINERS                                   |   7 +
+ drivers/iio/pressure/Kconfig                  |  13 +
+ drivers/iio/pressure/Makefile                 |   1 +
+ drivers/iio/pressure/mprls0025pa.c            | 441 ++++++++++++++++++
+ 5 files changed, 566 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
+ create mode 100644 drivers/iio/pressure/mprls0025pa.c
+
+
+base-commit: 457391b0380335d5e9a5babdec90ac53928b23b4
+-- 
+2.30.2
