@@ -2,182 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810FA6F7DA1
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D317B6F7DA7
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjEEHS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 03:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48260 "EHLO
+        id S231290AbjEEHTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 03:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbjEEHS1 (ORCPT
+        with ESMTP id S231267AbjEEHTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 03:18:27 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDB317DCE;
-        Fri,  5 May 2023 00:18:25 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3075e802738so1033998f8f.1;
-        Fri, 05 May 2023 00:18:25 -0700 (PDT)
+        Fri, 5 May 2023 03:19:06 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54CC17DFA
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 00:18:37 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-24df758db1cso1016054a91.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 00:18:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683271104; x=1685863104;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mzWyvblqfilGBcUvRYaPuQZCVXt9S+B5Ox3Rgl5tdiY=;
-        b=Sif3uOWip9fRtda5rVF5altRdEq8+Shi/lYVnRwsCHiFd0KpCNWFHy7Bx3V0k//g6/
-         +wD6ylLJiGr13OtqIog/ELlV5TP45kWhnllNMbfFOSsENTtNZHSXlhyR3onz9ggoZ+HI
-         QlMtqV3juHlTybMgMhoUrrYdgouOHQcN8BjB7N1eOiMm3jRN2FK5c4NV4wMW1FsAZrF7
-         x8qWWMqsesXdFBzMZR+E4xKKeEWTsd/K+lQ5WUHeJuVF+jFf6MRisLjKfiuWXW2atf+q
-         XNzh3hFUZ3Qn73XCqXHHUEKqFG5yMOK6APVBKEq1ogF1OAJF0VYZ4y5wmvdC4xxG7o49
-         PSXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683271104; x=1685863104;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=bytedance.com; s=google; t=1683271117; x=1685863117;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mzWyvblqfilGBcUvRYaPuQZCVXt9S+B5Ox3Rgl5tdiY=;
-        b=RYkx9crmQVBTNhr3LNFNkUBGeizR/MT9+bwrPtLnUM8gt+E4H/OcNsWyF22vn3i8yO
-         PNoazxhdkwMWGLXWv7oym8d5QwdBAmjWbrlbwcaLAAMcT3ngAR9QbqTY+xtxU2bdnlg2
-         YcBNQ6bNMsOXqLDEIL6UsSDZf7ft2QwrSxcCTd6dZNjAN4BBWRN05nPxonJzC/ixHIDi
-         IQ6f+xCPxpvdBtnEmx9rEtEg95BwLR28qxT11RrsKUyhJxnEncbkDMgR/3LHXTQsUJDh
-         XGoMTKdbhFWWvfdount5iI/wNUtgUHzozZy5Iil9tL3Dcwihj2Gu8OEGtwKBjqFzFhgb
-         umnw==
-X-Gm-Message-State: AC+VfDxyld3GU/LbeSvZOPXm9COpkQiI6Px9kHsf+ixinjGACSS153PZ
-        fgzhfZ3siaCWQ2b/spg58eI=
-X-Google-Smtp-Source: ACHHUZ6ZBH8i0QtpKviFoyCrsF99lLGYiqDUsryIlE3yrjEiV9l9QOLubqLAxnW6gQdCz9Ijd+eYvw==
-X-Received: by 2002:a5d:5512:0:b0:306:41d3:fcb7 with SMTP id b18-20020a5d5512000000b0030641d3fcb7mr624935wrv.52.1683271104049;
-        Fri, 05 May 2023 00:18:24 -0700 (PDT)
-Received: from standask-GA-A55M-S2HP ([188.123.113.247])
-        by smtp.gmail.com with ESMTPSA id z6-20020adff746000000b002f103ca90cdsm1408741wrp.101.2023.05.05.00.18.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 00:18:23 -0700 (PDT)
-Date:   Fri, 5 May 2023 09:18:22 +0200
-From:   Stanislav Jakubek <stano.jakubek@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: misc: brcm,kona-smc: convert to YAML
-Message-ID: <20230505071822.GA3236@standask-GA-A55M-S2HP>
-References: <20230504190250.GA10108@standask-GA-A55M-S2HP>
- <30ee7d92-cc95-ba83-89e9-a2465cbd2fb7@linaro.org>
+        bh=MGBat/CgRbSnTAh4bkNae0IKQQw8RA2H99O/HWbocVk=;
+        b=YobhmHEqJpKwlGuxR+PdlcNg4pNFd/71XZGwRAh9iNQ16sBw3sPcCs2uhlb5Cioqjy
+         bilwQ0r9fNFkGWIZ0vyS3G2QRcXQCRUbzws0lxBvDlmkZs4A51dFYMdxZXpZ6c0V0ZBf
+         6ZhNLxFBuuwBny4YWzKXcRwL020Wv/mzJblp13ATG0sv9HzRbZxkd+Kc4T/lXwz5gwkX
+         bUfuvg/lJIXKbOfxzel1+ZvWNTCuBB3SiuNfzql8CZa8jg0OTS+baB/l2rCTNk8jKO2r
+         G2waFgQkbtNOkphgRKa3y7P+AjpJc1L1/wHnOzBmtPUZvNKlrkYrv6J75oDWbRU3RdQb
+         tA3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683271117; x=1685863117;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MGBat/CgRbSnTAh4bkNae0IKQQw8RA2H99O/HWbocVk=;
+        b=CDYUPL5TgKcNRjgmnkOZmn7qmFUFHe/FwDJnr6PYG4Yzmv3y7BdafkhD/0A5HwXkwf
+         CfKKJSbr7j5gwSg9ssVpNQYJlEw1GuT5zsG2aY/5iD3tAlsrNR9fj1jtk7ANV9s1i7GG
+         YZ+Z9hUWx2dDXWEUZzEvc7jVgFQQQAwE+3+2VX3O0xgvoGNIZOdiyvnC2zC4SajfgGTE
+         bPeC+y/QplpXyRn6RuIkshlqE3to0awADprXbaIcV60ah841GE8gGcMIQljHDK6Wk9q7
+         4uzg0d6i9tuUD1+JhyzIR51wZEL2THsIpSCZXI8+r20AcJV9ATNL2IrimLXvE9l/TNqd
+         Jy2Q==
+X-Gm-Message-State: AC+VfDztgnfOhSkP+0z8dOxIUp6e6ok1TFW+H4p6Oj/BaVmETcUVPlyU
+        dJ96PjtLPH+V1UXuzPQvYjZ93A==
+X-Google-Smtp-Source: ACHHUZ52pnllrRP8Kq0YP+n9IlYjk1yMj/IbEylG/jfXnVmVZOclgacQlNorsB22JL0FxY6OadbMYA==
+X-Received: by 2002:a17:902:f547:b0:1a6:45e5:a26a with SMTP id h7-20020a170902f54700b001a645e5a26amr792709plf.27.1683271117016;
+        Fri, 05 May 2023 00:18:37 -0700 (PDT)
+Received: from [10.71.57.173] ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id z12-20020a170903018c00b001aae64e9b36sm935313plg.114.2023.05.05.00.18.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 May 2023 00:18:36 -0700 (PDT)
+Message-ID: <f7a85b88-aa8c-a26a-8ccb-a20c62a76faa@bytedance.com>
+Date:   Fri, 5 May 2023 15:18:27 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <30ee7d92-cc95-ba83-89e9-a2465cbd2fb7@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: Re: [PATCH bpf-next v6 1/2] bpf: Add bpf_task_under_cgroup()
+ kfunc
+To:     Hao Luo <haoluo@google.com>
+Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
+        shuah@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, yangzhenze@bytedance.com,
+        wangdongdong.6@bytedance.com
+References: <20230505060818.60037-1-zhoufeng.zf@bytedance.com>
+ <20230505060818.60037-2-zhoufeng.zf@bytedance.com>
+ <CA+khW7g_gq1N=cNHC-5WG2nZ8a-wHSpwg_fc5=dQpkweGvROqA@mail.gmail.com>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <CA+khW7g_gq1N=cNHC-5WG2nZ8a-wHSpwg_fc5=dQpkweGvROqA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 08:49:55AM +0200, Krzysztof Kozlowski wrote:
-> On 04/05/2023 21:02, Stanislav Jakubek wrote:
-> > Convert Broadcom Kona family Secure Monitor bounce buffer bindings
-> > to DT schema.
-> > 
-> > Change during conversion:
-> >   - add used, but previously undocumented SoC-specific compatibles
-> > 
-> > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> > ---
-> >  .../bindings/misc/brcm,kona-smc.txt           | 15 -------
-> >  .../bindings/misc/brcm,kona-smc.yaml          | 44 +++++++++++++++++++
+在 2023/5/5 14:58, Hao Luo 写道:
+> On Thu, May 4, 2023 at 11:08 PM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
+>>
+> <...>
+>> ---
+>>   kernel/bpf/helpers.c | 20 ++++++++++++++++++++
+>>   1 file changed, 20 insertions(+)
+>>
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index bb6b4637ebf2..453cbd312366 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+>> @@ -2149,6 +2149,25 @@ __bpf_kfunc struct cgroup *bpf_cgroup_from_id(u64 cgid)
+>>                  return NULL;
+>>          return cgrp;
+>>   }
+>> +
+>> +/**
+>> + * bpf_task_under_cgroup - wrap task_under_cgroup_hierarchy() as a kfunc, test
+>> + * task's membership of cgroup ancestry.
+>> + * @task: the task to be tested
+>> + * @ancestor: possible ancestor of @task's cgroup
+>> + *
+>> + * Tests whether @task's default cgroup hierarchy is a descendant of @ancestor.
+>> + * It follows all the same rules as cgroup_is_descendant, and only applies
+>> + * to the default hierarchy.
+>> + */
+>> +__bpf_kfunc long bpf_task_under_cgroup(struct task_struct *task,
+>> +                                      struct cgroup *ancestor)
+>> +{
+>> +       if (unlikely(!ancestor || !task))
+>> +               return -EINVAL;
+>> +
+>> +       return task_under_cgroup_hierarchy(task, ancestor);
+>> +}
+>>   #endif /* CONFIG_CGROUPS */
+>>
 > 
-> Please put SMC stuff in firmware subdirectory.
-
-Ok, will move it there in V2.
-
+> I wonder in what situation a null 'task' or 'ancestor' can be passed.
+> Please call out in the comment that the returned value can be a
+> negative error, so that writing if(bpf_task_under_cgroup()) may cause
+> surprising results.
 > 
-> >  2 files changed, 44 insertions(+), 15 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/misc/brcm,kona-smc.txt
-> >  create mode 100644 Documentation/devicetree/bindings/misc/brcm,kona-smc.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/misc/brcm,kona-smc.txt b/Documentation/devicetree/bindings/misc/brcm,kona-smc.txt
-> > deleted file mode 100644
-> > index 05b47232ed9e..000000000000
-> > --- a/Documentation/devicetree/bindings/misc/brcm,kona-smc.txt
-> > +++ /dev/null
-> > @@ -1,15 +0,0 @@
-> > -Broadcom Secure Monitor Bounce buffer
-> > ------------------------------------------------------
-> > -This binding defines the location of the bounce buffer
-> > -used for non-secure to secure communications.
-> > -
-> > -Required properties:
-> > -- compatible : "brcm,kona-smc"
-> > -- DEPRECATED: compatible : "bcm,kona-smc"
-> > -- reg : Location and size of bounce buffer
-> > -
-> > -Example:
-> > -	smc@3404c000 {
-> > -		compatible = "brcm,bcm11351-smc", "brcm,kona-smc";
-> > -		reg = <0x3404c000 0x400>; //1 KiB in SRAM
-> > -	};
-> > diff --git a/Documentation/devicetree/bindings/misc/brcm,kona-smc.yaml b/Documentation/devicetree/bindings/misc/brcm,kona-smc.yaml
-> > new file mode 100644
-> > index 000000000000..ba0312a20083
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/misc/brcm,kona-smc.yaml
-> > @@ -0,0 +1,44 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/misc/brcm,kona-smc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Broadcom Kona family Secure Monitor bounce buffer
-> > +
-> > +description:
-> > +  A bounce buffer used for non-secure to secure communications.
-> > +
-> > +maintainers:
-> > +  - Florian Fainelli <f.fainelli@gmail.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +          - enum:
-> > +              - brcm,bcm11351-smc
-> > +              - brcm,bcm21664-smc
-> > +              - brcm,bcm23550-smc
-> > +          - const: brcm,kona-smc
-> > +      - items:
-> > +          - const: bcm,bcm11351-smc
-> > +          - const: bcm,kona-smc
-> > +        deprecated: true
-> 
-> That's not correct. You deprecate the same set as you allow before. I
-> think you wanted to deprecated kona-smc alone.
+> Hao
 
-What I'm trying to do here is to deprecate both compatibles with the
-"bcm" vendor prefix, as these were initially introduced in [1]. bcm11351 is the
-only one that ever had the "bcm" prefix, both bcm21664 [2] and bcm23550 [3]
-were introduced with the "brcm" prefix (though they were never documented).
+Hmm, you are right. As kfunc, the NULL value of the parameter is judged, 
+and bpf verify will prompt the developer to add it. There is really no 
+need to add this part of the judgment. See other people's opinions.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=7f6c62e2695bcb1547afdeb4ad3bcdf8c610be2c
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=2eba905e860f8aed5f2743b45259bb2e92548a55
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=fcd4138653f049c8fa45b48dc5f2806ced68e304
 
-Regards,
-Stanislav
-
-> 
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> 
-> Best regards,
-> Krzysztof
-> 
