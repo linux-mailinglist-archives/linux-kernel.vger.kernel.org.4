@@ -2,200 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C116F8109
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A356F810E
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbjEEKu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 06:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
+        id S231666AbjEEKx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 06:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbjEEKuy (ORCPT
+        with ESMTP id S229717AbjEEKxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 06:50:54 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29865F4;
-        Fri,  5 May 2023 03:50:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683283853; x=1714819853;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=ni/vJgiG6XHfX4g7uVzKoHiKBa270MzkVO6QSlgMSB8=;
-  b=Mok0mXZbDE/F7skYfaLDy257RA9plQ717XTzF4C8UjIdaDUT4ybqlPi2
-   Ytpie7O2Z5PdgqxLHKWtYCHiuF4ExzJfdWCqAQpZLRKI07mTOV0tH71+S
-   0R77+nlX19xFFNIAoilIFZjkSs7J86hvfFEkMppOxn0azOW4i9haan5J0
-   ezN7L05Xiu1r+vxgzXSOCRQaEPH3CdlowBp/dxMrmn7GS3hHlgXObA4un
-   vA49Cz/lfNGMIRtUs/uQPVZn33xfpX6sk+gYEMXJGx5K22ig02DQWJiSx
-   i9gHngkfR/RqaUnZQdkkA2hj/CT3qe/w5UBEcdk5kCdSsLk6kJsH+Uaif
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="412411064"
-X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
-   d="scan'208";a="412411064"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 03:50:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="871775693"
-X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
-   d="scan'208";a="871775693"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga005.jf.intel.com with ESMTP; 05 May 2023 03:50:50 -0700
-Message-ID: <f6689241-9749-28a2-6da4-842f3253c678@linux.intel.com>
-Date:   Fri, 5 May 2023 13:52:22 +0300
+        Fri, 5 May 2023 06:53:55 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0822C18DEF;
+        Fri,  5 May 2023 03:53:53 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so13274126276.0;
+        Fri, 05 May 2023 03:53:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683284032; x=1685876032;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QgaBKeEIlxAuYAP7cdMu1VdHHIFJCXTzQ7O6ZwAYCqE=;
+        b=s3pJv8phz4dcw/96mqO39Pu3tK+YbrwOtXJVou33ycR8vmYxCXLQC/YEJvQ9zA3kMt
+         Ekg9Nut3sqVhf3wQLuaeewXuP8M5PXc6cOjYB77jqgS0K27wq70pD5Nss5Lf69SZmEd/
+         HvHhjiU2TUv5M6r1dsUc/I08StmvCi74BoNwzxW1fQ8u5XvQ0vDBG21zfooscBMGU7au
+         CfPCMsAUGAXuj3oX/cCCRTBzxMLg6TJwpr03asJ33tyRsVwCE4MdqS85wGZXc8fdh3MN
+         vtQU5Eq8nh5YAq+wpHIk5TygGi/ep7R+y9Hm41l29oqNeLbtNA7ls41OYud0S+FmuCuz
+         488w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683284032; x=1685876032;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QgaBKeEIlxAuYAP7cdMu1VdHHIFJCXTzQ7O6ZwAYCqE=;
+        b=KmJtspgCotmlIahDryS4fjvHSKmA2nijQnf4E/PQZKQwaeycRBLGWvVJQaOBkgdSAJ
+         4nnyQl067Y0+83AEQUQMz7abOU35iGhN62FVnI0JHY9NVkqekRpMq2ZE1mWUkCJHq2p1
+         o0h5yewplBLU4J54n+tSIMqiqYCaDqqDVl+/aNYSdopYXj2maRkZnkPAbke2OvBL/UOK
+         Ew3pLAr6VYyEJa6UpjUV9xlOFvYdAsXH76MprB86rtJunkHsXCBnE7qNEoG2h1JByb43
+         JWNMiOhuwSmu4sD7l3HJ3nYNF754tI/PLL3mRrl0hfjJaelfaDFWaptDUa5mghjqr0tw
+         Hq4w==
+X-Gm-Message-State: AC+VfDxSgGfLD81Dmxpkdip/Sej0S6q8DKqXP6nMKFYYIY/sraSKRvFT
+        P1ToBe539Ku1p37xqG7exS3cqpstxu8lytOg3v8=
+X-Google-Smtp-Source: ACHHUZ7hJdO+nwsRv/rDJf2nGSyHPLvHPOluSAFe/tzWxJV9t4hvlk4iI83oot0NAp+ExTHfErnivZj0KMddbnmc/E0=
+X-Received: by 2002:a05:6902:729:b0:b9e:6c09:2d96 with SMTP id
+ l9-20020a056902072900b00b9e6c092d96mr1409374ybt.12.1683284032199; Fri, 05 May
+ 2023 03:53:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Content-Language: en-US
-To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
-        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
-References: <20230421203853.387210-1-WeitaoWang-oc@zhaoxin.com>
- <20230421203853.387210-4-WeitaoWang-oc@zhaoxin.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2 3/4] xhci: Show zhaoxin xHCI root hub speed correctly
-In-Reply-To: <20230421203853.387210-4-WeitaoWang-oc@zhaoxin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230503090708.2524310-1-nmi@metaspace.dk> <da7b815d-3da8-38e5-9b25-b9cfb6878293@acm.org>
+ <87jzxot0jk.fsf@metaspace.dk> <b9a1c1b2-3baa-2cad-31ae-8b14e4ee5709@acm.org>
+ <ZFP+8apHunCCMmOZ@kbusch-mbp.dhcp.thefacebook.com> <e7bc2155-613b-8904-9942-2e9615b0dc63@kernel.dk>
+ <CANiq72nAMH1SfGmPTEjGHfevbb9tMLN4W7gJ3nBpJcvkCEsZ4g@mail.gmail.com> <80ed2c0e-54db-777a-175b-1aa3ff776724@kernel.dk>
+In-Reply-To: <80ed2c0e-54db-777a-175b-1aa3ff776724@kernel.dk>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 5 May 2023 12:53:41 +0200
+Message-ID: <CANiq72=3kGRy-3Lq5oxUEhu5d-377QrhuzhvoKRL+_QvbnJE7A@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/11] Rust null block driver
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Keith Busch <kbusch@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        Christoph Hellwig <hch@lst.de>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Hannes Reinecke <hare@suse.de>,
+        lsf-pc@lists.linux-foundation.org, rust-for-linux@vger.kernel.org,
+        linux-block@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        open list <linux-kernel@vger.kernel.org>, gost.dev@samsung.com,
+        Daniel Vetter <daniel@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.4.2023 23.38, Weitao Wang wrote:
-> Some zhaoxin xHCI controllers follow usb3.1 spec,
-> but only support gen1 speed 5G. While in Linux kernel,
-> if xHCI suspport usb3.1,root hub speed will show on 10G.
-> To fix this issue of zhaoxin xHCI platforms, read usb speed ID
-> supported by xHCI to determine root hub speed.
-> 
-> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-> ---
->   drivers/usb/host/xhci.c | 22 ++++++++++++++++++++++
->   1 file changed, 22 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 6307bae9cddf..31d6ace9cace 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -5294,6 +5294,7 @@ static void xhci_hcd_init_usb2_data(struct xhci_hcd *xhci, struct usb_hcd *hcd)
->   static void xhci_hcd_init_usb3_data(struct xhci_hcd *xhci, struct usb_hcd *hcd)
->   {
->   	unsigned int minor_rev;
-> +	unsigned int i, j;
->   
->   	/*
->   	 * Early xHCI 1.1 spec did not mention USB 3.1 capable hosts
-> @@ -5323,6 +5324,27 @@ static void xhci_hcd_init_usb3_data(struct xhci_hcd *xhci, struct usb_hcd *hcd)
->   		hcd->self.root_hub->ssp_rate = USB_SSP_GEN_2x1;
->   		break;
->   	}
-> +
-> +	/* Usb3.1 has gen1 and gen2, Some zhaoxin's xHCI controller
-> +	 * that follow usb3.1 spec but only support gen1.
-> +	 */
-> +	if (xhci->quirks & XHCI_ZHAOXIN_HOST) {
-> +		minor_rev = 0;
-> +		for (j = 0; j < xhci->num_port_caps; j++) {
-> +			for (i = 0; i < xhci->port_caps[j].psi_count; i++) {
-> +				if (XHCI_EXT_PORT_PSIV(xhci->port_caps[j].psi[i]) >= 5) {
-> +					minor_rev = 1;
-> +					break;
-> +				}
-> +			}
-> +			if (minor_rev)
-> +				break;
-> +		}
-> +		if (minor_rev != 1) {
-> +			hcd->speed = HCD_USB3;
-> +			hcd->self.root_hub->speed = USB_SPEED_SUPER;
-> +		}
-> +	}
->   	xhci_info(xhci, "Host supports USB 3.%x %sSuperSpeed\n",
->   		  minor_rev, minor_rev ? "Enhanced " : "");
->   
+On Thu, May 4, 2023 at 10:22=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
+>
+> Right, but that doesn't really solve the problem when the rust bindings
+> get in the way of changes that you are currently making. Or if you break
+> them inadvertently. I do see benefits to that approach, but it's no
+> panacea.
+>
+> This seems to assume that time is plentiful and we can just add more to
+> our plate, which isn't always true. While I'd love to do more rust and
+> get more familiar with it, the time still has to be there for that. I'm
+> actually typing this on a laptop with a rust gpu driver :-)
+>
+> And this isn't just on me, there are other regular contributors and
+> reviewers that would need to be onboard with this.
 
-How about checking if port support over 5Gbps (psiv >= 5) when we parse the protocol speed ID
-entries the first time? This way we could avoid looping through all the port_cap psiv values.
+Indeed -- I didn't mean to imply it wouldn't be time consuming, only
+that it might be an alternative approach compared to having existing
+maintainers do it. Of course, it depends on the dynamics of the
+subsystem, how busy the subsystem is, whether there is good rapport,
+etc.
 
-Something like:
+> Each case is different though, different people and different schedules
+> and priorities. So while the above is promising, it's also just
+> annecdotal and doesn't necessarily apply to our case.
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index c4170421bc9c..2e4c80eb4972 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -1961,7 +1961,7 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
-  {
-         u32 temp, port_offset, port_count;
-         int i;
--       u8 major_revision, minor_revision;
-+       u8 major_revision, minor_revision, tmp_minor_revision;
-         struct xhci_hub *rhub;
-         struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
-         struct xhci_port_cap *port_cap;
-@@ -1981,6 +1981,11 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
-                  */
-                 if (minor_revision > 0x00 && minor_revision < 0x10)
-                         minor_revision <<= 4;
-+               if (xhci->quirks & XHCI_ZHAOXIN_HOST) {
-+                       tmp_minor_revision = minor_revision;
-+                       minor_revision = 0;
-+               }
-+
-         } else if (major_revision <= 0x02) {
-                 rhub = &xhci->usb2_rhub;
-         } else {
-@@ -1989,10 +1994,6 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
-                 /* Ignoring port protocol we can't understand. FIXME */
-                 return;
-         }
--       rhub->maj_rev = XHCI_EXT_PORT_MAJOR(temp);
--
--       if (rhub->min_rev < minor_revision)
--               rhub->min_rev = minor_revision;
-  
-         /* Port offset and count in the third dword, see section 7.2 */
-         temp = readl(addr + 2);
-@@ -2010,8 +2011,6 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
-         if (xhci->num_port_caps > max_caps)
-                 return;
-  
--       port_cap->maj_rev = major_revision;
--       port_cap->min_rev = minor_revision;
-         port_cap->psi_count = XHCI_EXT_PORT_PSIC(temp);
-  
-         if (port_cap->psi_count) {
-@@ -2032,6 +2031,10 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
-                                   XHCI_EXT_PORT_PSIV(port_cap->psi[i - 1])))
-                                 port_cap->psi_uid_count++;
-  
-+                       if (xhci->quirks & XHCI_ZHAOXIN_HOST &&
-+                           XHCI_EXT_PORT_PSIV(port_cap->psi[i]) >= 5)
-+                               minor_revision = tmp_minor_revision;
-+
-                         xhci_dbg(xhci, "PSIV:%d PSIE:%d PLT:%d PFD:%d LP:%d PSIM:%d\n",
-                                   XHCI_EXT_PORT_PSIV(port_cap->psi[i]),
-                                   XHCI_EXT_PORT_PSIE(port_cap->psi[i]),
-@@ -2041,6 +2044,15 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
-                                   XHCI_EXT_PORT_PSIM(port_cap->psi[i]));
-                 }
-         }
-+
-+       rhub->maj_rev = major_revision;
-+
-+       if (rhub->min_rev < minor_revision)
-+               rhub->min_rev = minor_revision;
-+
-+       port_cap->maj_rev = major_revision;
-+       port_cap->min_rev = minor_revision;
-+
-         /* cache usb2 port capabilities */
-         if (major_revision < 0x03 && xhci->num_ext_caps < max_caps)
-                 xhci->ext_caps[xhci->num_ext_caps++] = temp;
+Definitely, in the end subsystems know best if there is enough time
+available (from everybody) to pull it off. I only meant to say that
+the security angle is not the only benefit.
 
-Thanks
-Mathias
+For instance, like you said, the error handling, plus a bunch more
+that people usually enjoy: stricter typing, more information on
+signatures, sum types, pattern matching, privacy, closures, generics,
+etc.
+
+Cheers,
+Miguel
