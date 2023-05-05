@@ -2,47 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24BC6F8B9B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E764D6F8BA0
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbjEEVtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 17:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
+        id S232290AbjEEVwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 17:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbjEEVtd (ORCPT
+        with ESMTP id S231783AbjEEVwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 17:49:33 -0400
+        Fri, 5 May 2023 17:52:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AB649DA
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 14:49:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7CC4C28;
+        Fri,  5 May 2023 14:52:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8ECF64115
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 21:49:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBC7C4339B;
-        Fri,  5 May 2023 21:49:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C60AC64118;
+        Fri,  5 May 2023 21:52:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7FE0C433EF;
+        Fri,  5 May 2023 21:52:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683323358;
-        bh=unYNDvEC27rA57Olp50XGY/VQhkogxfy74i10B/Ekuc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MhzdebxQHGJpkd3fj39DGmU7qAQAP+co5EgxqXIDKdHGH31gOQ44WZFqku4d5D07G
-         1qSy7VjugN2MT5BGvlzdEi3G9hEYhyOKoGVg50nojN54uEzjvewC861IPWeDlWHgsG
-         WaSCKK0BV8zdrLmdL2D1jMYW9jPgcEkXBbmGbyymFwPeeB3qPqJ8QzWEv4UogoMOh4
-         xEz6344p3kliHX/xJRWicXD2RdB78vFWBkbLf9pmVNngPMeVv52+2YVNbVOzRzbIFp
-         bEp8cYIND0eI4v271QjK+KPww7FaqxXZpBrWP0l1YY2kPSankxyLc1htB2LFxUoqWy
-         Qzg5B61+2i5+A==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pabeni@redhat.com
-Subject: [GIT PULL] Networking for v6.4-rc1
-Date:   Fri,  5 May 2023 14:49:17 -0700
-Message-Id: <20230505214917.1453870-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        s=k20201202; t=1683323527;
+        bh=LBfqOVw4Z6GuC13VItNamLAOjDe39tStvarVotopRwI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nok614urewGKxx3mZLQ/3JFXst8YbvkWMLPAmAn9CWcdDQ/FzIJ6nHeDT3Cajoj00
+         CpFtyY+cEijzqw0scykBhuSuCFqmN1Svg3TNehoyBYgVBX30BskZBqRRen/BtFJMoZ
+         2cpS/QqWAB2lBlUniu3jVyrZ4TGZD9LqmW52FeNlwdsraQ6KLZDdGNDZo2U4UPR0yG
+         AuGXuIBNtwIbRMe2hcSa1nXroMfNf+JmAjWe2Y65llfDHd8CSL2dD5UTF+Y9VfwcBc
+         bPgmJyZOIsfiK4VwVckWcMIPtj6C/hUwbJax6GZJrHKWhPoWeC3PJEtG9Yi1/LnTpO
+         WGg+c20r6DZbw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 1C043403B5; Fri,  5 May 2023 18:52:04 -0300 (-03)
+Date:   Fri, 5 May 2023 18:52:04 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, Ian Rogers <irogers@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Namhyung Kim <namhyung@kernel.org>, Song Liu <song@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Hao Luo <haoluo@google.com>, James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Roman Lozko <lozko.roma@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Paul Clarke <pc@us.ibm.com>
+Subject: Re: [PATCH RFC/RFT] perf bpf skels: Stop using vmlinux.h generated
+ from BTF, use subset of used structs + CO-RE. was Re: BPF skels in perf .Re:
+ [GIT PULL] perf tools changes for v6.4
+Message-ID: <ZFV6hFG/YMiF8vY0@kernel.org>
+References: <ZFQoQjCNtyMIulp+@kernel.org>
+ <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
+ <ZFQ5sjjtfEYzvHNP@krava>
+ <ZFUFmxDU/6Z/JEsi@kernel.org>
+ <ZFU1PJrn8YtHIqno@kernel.org>
+ <CAP-5=fWfmmMCRnEmzj_CXTKacp6gjrzmR49Ge_C5XRyfTegRjg@mail.gmail.com>
+ <ZFVqeKLssg7uzxzI@krava>
+ <CAP-5=fVgJdBvjV8S2xKswAFiSZvyCcUvZTO1bsLyUf-wQ0pBuw@mail.gmail.com>
+ <ZFVyAap3R9RZ+P6u@krava>
+ <CAEf4BzYYnpD6+GSg+wfL1wUY5YasbN2-9NPJ3QkGZ9o963uYdA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzYYnpD6+GSg+wfL1wUY5YasbN2-9NPJ3QkGZ9o963uYdA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,320 +88,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
-
-The following changes since commit 6e98b09da931a00bf4e0477d0fa52748bf28fcce:
-
-  Merge tag 'net-next-6.4' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next (2023-04-26 16:07:23 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git net-6.4-rc1
-
-for you to fetch changes up to 644bca1d48139ad77570c24d22bafaf8e438cf03:
-
-  Merge git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next (2023-05-05 13:35:45 -0700)
-
-----------------------------------------------------------------
-Including fixes from netfilter.
-
-Current release - regressions:
-
- - sched: act_pedit: free pedit keys on bail from offset check
-
-Current release - new code bugs:
-
- - pds_core:
-  - Kconfig fixes (DEBUGFS and AUXILIARY_BUS)
-  - fix mutex double unlock in error path
-
-Previous releases - regressions:
-
- - sched: cls_api: remove block_cb from driver_list before freeing
-
- - nf_tables: fix ct untracked match breakage
-
- - eth: mtk_eth_soc: drop generic vlan rx offload
-
- - sched: flower: fix error handler on replace
-
-Previous releases - always broken:
-
- - tcp: fix skb_copy_ubufs() vs BIG TCP
-
- - ipv6: fix skb hash for some RST packets
-
- - af_packet: don't send zero-byte data in packet_sendmsg_spkt()
-
- - rxrpc: timeout handling fixes after moving client call connection
-   to the I/O thread
-
- - ixgbe: fix panic during XDP_TX with > 64 CPUs
-
- - igc: RMW the SRRCTL register to prevent losing timestamp config
-
- - dsa: mt7530: fix corrupt frames using TRGMII on 40 MHz XTAL MT7621
-
- - r8152:
-   - fix flow control issue of RTL8156A
-   - fix the poor throughput for 2.5G devices
-   - move setting r8153b_rx_agg_chg_indicate() to fix coalescing
-   - enable autosuspend
-
- - ncsi: clear Tx enable mode when handling a Config required AEN
-
- - octeontx2-pf: macsec: fixes for CN10KB ASIC rev
-
-Misc:
-
- - 9p: remove INET dependency
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-----------------------------------------------------------------
-Andrea Mayer (1):
-      selftests: srv6: make srv6_end_dt46_l3vpn_test more robust
-
-Andy Moreton (1):
-      sfc: Fix module EEPROM reporting for QSFP modules
-
-Angelo Dureghello (1):
-      net: dsa: mv88e6xxx: add mv88e6321 rsvd2cpu
-
-Antoine Tenart (1):
-      net: ipv6: fix skb hash for some RST packets
-
-Arınç ÜNAL (2):
-      net: dsa: mt7530: fix corrupt frames using trgmii on 40 MHz XTAL MT7621
-      net: dsa: mt7530: fix network connectivity with multiple CPU ports
-
-Christophe JAILLET (1):
-      mISDN: Use list_count_nodes()
-
-Cong Wang (1):
-      sit: update dev->needed_headroom in ipip6_tunnel_bind_dev()
-
-Cosmo Chou (1):
-      net/ncsi: clear Tx enable mode when handling a Config required AEN
-
-David Howells (4):
-      rxrpc: Fix potential data race in rxrpc_wait_to_be_connected()
-      rxrpc: Fix hard call timeout units
-      rxrpc: Make it so that a waiting process can be aborted
-      rxrpc: Fix timeout of a call that hasn't yet been granted a channel
-
-David S. Miller (5):
-      Merge branch 'r8152-fixes'
-      Merge branch 'rxrpc-timeout-fixes'
-      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
-      Merge branch 'octeontx2-af-fixes'
-      Merge branch 'tc-action-fixes'
-
-Eric Dumazet (1):
-      tcp: fix skb_copy_ubufs() vs BIG TCP
-
-Felix Fietkau (1):
-      net: ethernet: mtk_eth_soc: drop generic vlan rx offload, only use DSA untagging
-
-Florian Fainelli (1):
-      net: bcmgenet: Remove phy_stop() from bcmgenet_netif_stop()
-
-Florian Westphal (1):
-      netfilter: nf_tables: fix ct untracked match breakage
-
-Geetha sowjanya (4):
-      octeonxt2-af: mcs: Fix per port bypass config
-      octeontx2-af: mcs: Config parser to skip 8B header
-      octeontx2-af: mcs: Fix MCS block interrupt
-      octeontx2-af: Secure APR table update with the lock
-
-Hariprasad Kelam (1):
-      octeontx2-af: Add validation for lmac type
-
-Hayes Wang (4):
-      r8152: fix flow control issue of RTL8156A
-      r8152: fix the poor throughput for 2.5G devices
-      r8152: move setting r8153b_rx_agg_chg_indicate()
-      r8152: fix the autosuspend doesn't work
-
-Ido Schimmel (1):
-      ethtool: Fix uninitialized number of lanes
-
-Ivan Vecera (1):
-      net/sched: flower: Fix wrong handle assignment during filter change
-
-Jakub Kicinski (1):
-      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
-
-Jason Andryuk (1):
-      9p: Remove INET dependency
-
-Jeremy Sowden (1):
-      selftests: netfilter: fix libmnl pkg-config usage
-
-John Hickey (1):
-      ixgbe: Fix panic during XDP_TX with > 64 CPUs
-
-Kuniyuki Iwashima (1):
-      af_packet: Don't send zero-byte data in packet_sendmsg_spkt().
-
-Lorenzo Bianconi (1):
-      bonding: add xdp_features support
-
-Martin Habets (1):
-      sfc: Add back mailing list
-
-Michal Swiatkowski (1):
-      ice: block LAN in case of VF to VF offload
-
-Pablo Neira Ayuso (2):
-      netfilter: nf_tables: hit ENOENT on unexisting chain/flowtable update with missing attributes
-      netfilter: nf_tables: deactivate anonymous set from preparation phase
-
-Paolo Abeni (2):
-      Merge branch 'macsec-fixes-for-cn10kb'
-      Merge tag 'nf-23-05-03' of git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
-
-Pedro Tammela (1):
-      net/sched: act_pedit: free pedit keys on bail from offset check
-
-Ratheesh Kannoth (6):
-      octeontx2-af: Fix start and end bit for scan config
-      octeontx2-af: Fix depth of cam and mem table.
-      octeontx2-pf: Increase the size of dmac filter flows
-      octeontx2-af: Update/Fix NPC field hash extract feature
-      octeontx2-af: Fix issues with NPC field hash extract
-      octeontx2-af: Skip PFs if not enabled
-
-Shannon Nelson (5):
-      ionic: remove noise from ethtool rxnfc error msg
-      ionic: catch failure from devlink_alloc
-      pds_core: remove CONFIG_DEBUG_FS from makefile
-      pds_core: add AUXILIARY_BUS and NET_DEVLINK to Kconfig
-      pds_core: fix mutex double unlock in error path
-
-Shenwei Wang (1):
-      net: fec: correct the counting of XDP sent frames
-
-Song Yoong Siang (1):
-      igc: read before write to SRRCTL register
-
-Subbaraya Sundeep (8):
-      octeontx2-af: mcs: Write TCAM_DATA and TCAM_MASK registers at once
-      octeontx2-pf: mcs: Fix NULL pointer dereferences
-      octeontx2-pf: mcs: Match macsec ethertype along with DMAC
-      octeontx2-pf: mcs: Clear stats before freeing resource
-      octeontx2-pf: mcs: Fix shared counters logic
-      octeontx2-pf: mcs: Do not reset PN while updating secy
-      octeontx2-pf: Disable packet I/O for graceful exit
-      octeontx2-vf: Detach LF resources on probe cleanup
-
-Suman Ghosh (1):
-      octeontx2-af: Update correct mask to filter IPv4 fragments
-
-Tom Rix (1):
-      net: atlantic: Define aq_pm_ops conditionally on CONFIG_PM
-
-Victor Nogueira (1):
-      net/sched: act_mirred: Add carrier check
-
-Vlad Buslov (4):
-      net/sched: cls_api: remove block_cb from driver_list before freeing
-      net/sched: flower: fix filter idr initialization
-      Revert "net/sched: flower: Fix wrong handle assignment during filter change"
-      net/sched: flower: fix error handler on replace
-
-Wei Fang (1):
-      net: enetc: check the index of the SFI rather than the handle
-
-Wenliang Wang (1):
-      virtio_net: suppress cpu stall when free_unused_bufs
-
-wuych (1):
-      atlantic:hw_atl2:hw_atl2_utils_fw: Remove unnecessary (void*) conversions
-
- MAINTAINERS                                        |   1 +
- drivers/isdn/mISDN/dsp_cmx.c                       |  15 +--
- drivers/net/bonding/bond_main.c                    |  29 +++++
- drivers/net/bonding/bond_options.c                 |   2 +
- drivers/net/dsa/mt7530.c                           |  14 ++-
- drivers/net/dsa/mv88e6xxx/chip.c                   |   1 +
- drivers/net/ethernet/amd/Kconfig                   |   2 +
- drivers/net/ethernet/amd/pds_core/Makefile         |   3 +-
- drivers/net/ethernet/amd/pds_core/main.c           |  21 ++--
- .../net/ethernet/aquantia/atlantic/aq_pci_func.c   |   2 +
- .../aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c   |   4 +-
- drivers/net/ethernet/broadcom/genet/bcmgenet.c     |   1 -
- drivers/net/ethernet/freescale/enetc/enetc_qos.c   |   2 +-
- drivers/net/ethernet/freescale/fec_main.c          |  13 ++-
- drivers/net/ethernet/intel/ice/ice_tc_lib.c        |   3 +-
- drivers/net/ethernet/intel/igc/igc_base.h          |  11 +-
- drivers/net/ethernet/intel/igc/igc_main.c          |   7 +-
- drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c       |   3 -
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c      |   6 +-
- drivers/net/ethernet/marvell/octeontx2/af/cgx.c    |   8 ++
- drivers/net/ethernet/marvell/octeontx2/af/mbox.c   |   5 +-
- drivers/net/ethernet/marvell/octeontx2/af/mbox.h   |  19 +++-
- drivers/net/ethernet/marvell/octeontx2/af/mcs.c    | 110 +++++++++---------
- drivers/net/ethernet/marvell/octeontx2/af/mcs.h    |  26 ++---
- .../ethernet/marvell/octeontx2/af/mcs_cnf10kb.c    |  63 +++++++++++
- .../net/ethernet/marvell/octeontx2/af/mcs_reg.h    |   6 +-
- .../net/ethernet/marvell/octeontx2/af/mcs_rvu_if.c |  37 ++++++
- drivers/net/ethernet/marvell/octeontx2/af/rvu.c    |  49 ++++++--
- drivers/net/ethernet/marvell/octeontx2/af/rvu.h    |   1 +
- .../net/ethernet/marvell/octeontx2/af/rvu_cgx.c    |   2 +
- .../net/ethernet/marvell/octeontx2/af/rvu_cn10k.c  |  13 ++-
- .../ethernet/marvell/octeontx2/af/rvu_debugfs.c    |   5 +-
- .../net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c |  26 +++--
- .../net/ethernet/marvell/octeontx2/af/rvu_npc_fs.h |   4 +
- .../ethernet/marvell/octeontx2/af/rvu_npc_hash.c   | 125 ++++++++++++---------
- .../ethernet/marvell/octeontx2/af/rvu_npc_hash.h   |  10 +-
- .../ethernet/marvell/octeontx2/nic/cn10k_macsec.c  |  48 +++++---
- .../ethernet/marvell/octeontx2/nic/otx2_common.h   |   6 +-
- .../net/ethernet/marvell/octeontx2/nic/otx2_pf.c   |  14 ++-
- .../net/ethernet/marvell/octeontx2/nic/otx2_tc.c   |   2 +-
- .../net/ethernet/marvell/octeontx2/nic/otx2_vf.c   |   2 +-
- drivers/net/ethernet/mediatek/mtk_eth_soc.c        | 106 +++++++----------
- drivers/net/ethernet/mediatek/mtk_eth_soc.h        |   1 -
- .../net/ethernet/pensando/ionic/ionic_devlink.c    |   2 +
- .../net/ethernet/pensando/ionic/ionic_ethtool.c    |   2 +-
- drivers/net/ethernet/sfc/mcdi_port_common.c        |  11 +-
- drivers/net/usb/r8152.c                            |  85 +++++++++-----
- drivers/net/virtio_net.c                           |   2 +
- fs/9p/Kconfig                                      |   2 +-
- fs/9p/vfs_addr.c                                   |   1 -
- fs/9p/vfs_dentry.c                                 |   1 -
- fs/9p/vfs_dir.c                                    |   1 -
- fs/9p/vfs_file.c                                   |   1 -
- fs/9p/vfs_inode.c                                  |   1 -
- fs/9p/vfs_inode_dotl.c                             |   1 -
- fs/9p/vfs_super.c                                  |   1 -
- fs/afs/afs.h                                       |   4 +-
- fs/afs/internal.h                                  |   2 +-
- fs/afs/rxrpc.c                                     |   8 +-
- include/net/af_rxrpc.h                             |  21 ++--
- include/net/bonding.h                              |   1 +
- include/net/netfilter/nf_tables.h                  |   1 +
- net/9p/Kconfig                                     |   2 +
- net/core/skbuff.c                                  |  20 +++-
- net/ethtool/ioctl.c                                |   2 +-
- net/ipv6/sit.c                                     |   8 +-
- net/ipv6/tcp_ipv6.c                                |   2 +-
- net/ncsi/ncsi-aen.c                                |   1 +
- net/netfilter/nf_tables_api.c                      |  41 +++++--
- net/netfilter/nft_ct_fast.c                        |  14 ++-
- net/netfilter/nft_dynset.c                         |   2 +-
- net/netfilter/nft_lookup.c                         |   2 +-
- net/netfilter/nft_objref.c                         |   2 +-
- net/packet/af_packet.c                             |   2 +-
- net/rxrpc/af_rxrpc.c                               |   3 +
- net/rxrpc/ar-internal.h                            |   1 +
- net/rxrpc/call_object.c                            |   9 +-
- net/rxrpc/sendmsg.c                                |  22 ++--
- net/sched/act_mirred.c                             |   2 +-
- net/sched/act_pedit.c                              |   4 +-
- net/sched/cls_api.c                                |   1 +
- net/sched/cls_flower.c                             |   9 +-
- .../selftests/net/srv6_end_dt46_l3vpn_test.sh      |  10 +-
- tools/testing/selftests/netfilter/Makefile         |   7 +-
- 84 files changed, 735 insertions(+), 407 deletions(-)
+Em Fri, May 05, 2023 at 02:21:56PM -0700, Andrii Nakryiko escreveu:
+> On Fri, May 5, 2023 at 2:15 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Fri, May 05, 2023 at 01:46:30PM -0700, Ian Rogers wrote:
+> > > On Fri, May 5, 2023 at 1:43 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > >
+> > > > On Fri, May 05, 2023 at 10:04:47AM -0700, Ian Rogers wrote:
+> > > > > On Fri, May 5, 2023 at 9:56 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > > > > >
+> > > > > > Em Fri, May 05, 2023 at 10:33:15AM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > > > > Em Fri, May 05, 2023 at 01:03:14AM +0200, Jiri Olsa escreveu:
+> > > > > > > That with the preserve_access_index isn't needed, we need just the
+> > > > > > > fields that we access in the tools, right?
+> > > > > >
+> > > > > > I'm now doing build test this in many distro containers, without the two
+> > > > > > reverts, i.e. BPF skels continue as opt-out as in my pull request, to
+> > > > > > test build and also for the functionality tests on the tools using such
+> > > > > > bpf skels, see below, no touching of vmlinux nor BTF data during the
+> > > > > > build.
+> > > > > >
+> > > > > > - Arnaldo
+> > > > > >
+> > > > > > From 882adaee50bc27f85374aeb2fbaa5b76bef60d05 Mon Sep 17 00:00:00 2001
+> > > > > > From: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > > > > > Date: Thu, 4 May 2023 19:03:51 -0300
+> > > > > > Subject: [PATCH 1/1] perf bpf skels: Stop using vmlinux.h generated from BTF,
+> > > > > >  use subset of used structs + CO-RE
+> > > > > >
+> > > > > > Linus reported a build break due to using a vmlinux without a BTF elf
+> > > > > > section to generate the vmlinux.h header with bpftool for use in the BPF
+> > > > > > tools in tools/perf/util/bpf_skel/*.bpf.c.
+> > > > > >
+> > > > > > Instead add a vmlinux.h file with the structs needed with the fields the
+> > > > > > tools need, marking the structs with __attribute__((preserve_access_index)),
+> > > > > > so that libbpf's CO-RE code can fixup the struct field offsets.
+> > > > > >
+> > > > > > In some cases the vmlinux.h file that was being generated by bpftool
+> > > > > > from the kernel BTF information was not needed at all, just including
+> > > > > > linux/bpf.h, sometimes linux/perf_event.h was enough as non-UAPI
+> > > > > > types were not being used.
+> > > > > >
+> > > > > > To keep te patch small, include those UAPI headers from the trimmed down
+> > > > > > vmlinux.h file, that then provides the tools with just the structs and
+> > > > > > the subset of its fields needed for them.
+> > > > > >
+> > > > > > Testing it:
+> > > > > >
+> > > > > >   # perf lock contention -b find / > /dev/null
+> > > >
+> > > > I tested perf lock con -abv -L rcu_state sleep 1
+> > > > and needed fix below
+> > > >
+> > > > jirka
+> > >
+> > > I thought this was fixed by:
+> > > https://lore.kernel.org/lkml/20230427234833.1576130-1-namhyung@kernel.org/
+> > > but I think that is just in perf-tools-next.
+> >
+> > ah ok, missed that one
+> 
+> Please try validating with veristat to check if all of perf's .bpf.o
+> files are successful. Veristat is part of selftests and can be built
+> with just `make -C tools/testing/selftests/bpf veristat`. After that;
+> 
+>  sudo ~/bin/veristat tools/perf/util/bpf_skel/.tmp/*.bpf.o
+> 
+> This is a surer way to check that BPF object files are ok at least on
+> your currently running kernel, than trying to exercise each BPF
+> program through perf commands.
+
+[acme@quaco perf-tools]$ sudo tools/testing/selftests/bpf/veristat /tmp/build/perf-tools/util/bpf_skel/.tmp/*.bpf.o
+Processing 'bperf_cgroup.bpf.o'...
+Processing 'bperf_follower.bpf.o'...
+Processing 'bperf_leader.bpf.o'...
+Processing 'bpf_prog_profiler.bpf.o'...
+Processing 'func_latency.bpf.o'...
+Processing 'kwork_trace.bpf.o'...
+Processing 'lock_contention.bpf.o'...
+Processing 'off_cpu.bpf.o'...
+Processing 'sample_filter.bpf.o'...
+File                     Program                          Verdict  Duration (us)   Insns  States  Peak states
+-----------------------  -------------------------------  -------  -------------  ------  ------  -----------
+bperf_cgroup.bpf.o       on_cgrp_switch                   success           6479   17025     417          174
+bperf_cgroup.bpf.o       trigger_read                     success           6370   17025     417          174
+bperf_follower.bpf.o     fexit_XXX                        failure              0       0       0            0
+bperf_leader.bpf.o       on_switch                        success            360      49       3            3
+bpf_prog_profiler.bpf.o  fentry_XXX                       failure              0       0       0            0
+bpf_prog_profiler.bpf.o  fexit_XXX                        failure              0       0       0            0
+func_latency.bpf.o       func_begin                       success            351      69       6            6
+func_latency.bpf.o       func_end                         success            318     158      15           15
+kwork_trace.bpf.o        latency_softirq_entry            success            334     108      10           10
+kwork_trace.bpf.o        latency_softirq_raise            success            896    1993      34           34
+kwork_trace.bpf.o        latency_workqueue_activate_work  success            333      46       4            4
+kwork_trace.bpf.o        latency_workqueue_execute_start  success           1112    2219      41           41
+kwork_trace.bpf.o        report_irq_handler_entry         success           1067    2118      34           34
+kwork_trace.bpf.o        report_irq_handler_exit          success            334     110      10           10
+kwork_trace.bpf.o        report_softirq_entry             success            897    1993      34           34
+kwork_trace.bpf.o        report_softirq_exit              success            329     108      10           10
+kwork_trace.bpf.o        report_workqueue_execute_end     success           1124    2219      41           41
+kwork_trace.bpf.o        report_workqueue_execute_start   success            295      46       4            4
+lock_contention.bpf.o    collect_lock_syms                failure              0       0       0            0
+lock_contention.bpf.o    contention_begin                 failure              0       0       0            0
+lock_contention.bpf.o    contention_end                   failure              0       0       0            0
+off_cpu.bpf.o            on_newtask                       success            387      37       3            3
+off_cpu.bpf.o            on_switch                        success            536     220      20           20
+sample_filter.bpf.o      perf_sample_filter               success         190443  190237   11173          923
+-----------------------  -------------------------------  -------  -------------  ------  ------  -----------
+Done. Processed 9 files, 0 programs. Skipped 24 files, 0 programs.
+[acme@quaco perf-tools]$
+
+What extra info can we get from these "failure" lines?
+
+- Arnaldo
