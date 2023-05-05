@@ -2,130 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046466F839B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9052E6F839D
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232395AbjEENNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 09:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38578 "EHLO
+        id S232377AbjEENPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 09:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232225AbjEENNZ (ORCPT
+        with ESMTP id S231592AbjEENPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 09:13:25 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306AD1E986;
-        Fri,  5 May 2023 06:13:22 -0700 (PDT)
-X-UUID: 99904a7eeb4611ed9cb5633481061a41-20230505
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=5N66xXPaesJHbEN2e+y1DB+ADmXl9MaI6t+9Chgeapo=;
-        b=OQkRgqbdHkkc7frbm6kbSiTyV3VQNxExnAj0CPxedd2DO65Okv7fd15aal45e5EpsFFhHD4sjTtibU1tFliZdISi5vZlRECmIpxd0Y7VrwsDVzxHmK7/dD20vfx9O6eGWN7alsF+S3OfjiBeGY24S53+BZ7FrY0ZKGQ+AaqejhI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.23,REQID:a81fdd2e-07c5-4826-a262-4f6947dfffa9,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:697ab71,CLOUDID:f275e46a-2f20-4998-991c-3b78627e4938,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: 99904a7eeb4611ed9cb5633481061a41-20230505
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <runyang.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 924361886; Fri, 05 May 2023 21:13:17 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Fri, 5 May 2023 21:13:16 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 5 May 2023 21:13:15 +0800
-From:   Runyang Chen <runyang.chen@mediatek.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        Runyang Chen <runyang.chen@mediatek.com>
-Subject: [PATCH v2 2/2] clk: mediatek: reset: add infra_ao reset support for MT8188
-Date:   Fri, 5 May 2023 21:13:08 +0800
-Message-ID: <20230505131308.27190-3-runyang.chen@mediatek.com>
-X-Mailer: git-send-email 2.9.2
-In-Reply-To: <20230505131308.27190-1-runyang.chen@mediatek.com>
-References: <20230505131308.27190-1-runyang.chen@mediatek.com>
+        Fri, 5 May 2023 09:15:12 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78BD1E98B
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 06:15:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1683292508;
+        bh=tOiJ6zUW61cuEA7/jkY0uY1HvKlP4bmAuj7fVSfP534=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WrQsH6Q499vLW0wlKpHbAzGhoazcem/MAdA7RBNlIdLiOv6xLsDAKGWoAZa9T+xnF
+         UJheN7u77WC2iHEE4DCZCp9tKVYHPZafBV7hjIeL/TYmxYK+B+RmVAVfFLojORS8cD
+         Xku5oKyDNRP2UzCgBf2KyGohIh+k2jbtiyo8h5lJma/ezZ8oXQ414SFLSK3DPHuibj
+         MGKW1lYKZCo4V5IKFHO02rZjBgHBunthauuATYgspz13uP4qUEmLbNqluOefbMH6U6
+         nKb/aPr+ANC5C4M4olIMJta7ElBGlbnnJEWxusa+91T1LU60SjCT6N/EkwHlQLN0de
+         AiOj0k+1pT9SQ==
+Received: from [172.16.0.99] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QCWPm31plz11HQ;
+        Fri,  5 May 2023 09:15:08 -0400 (EDT)
+Message-ID: <34b873b0-93e5-d492-9c30-9d6b5c022ace@efficios.com>
+Date:   Fri, 5 May 2023 09:15:12 -0400
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH] rcu: rcupdate.h: Add missing parentheses around macro
+ pointer dereference
+Content-Language: en-US
+To:     paulmck@kernel.org, Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang1.zhang@intel.com>
+References: <20230503203236.1587590-1-mathieu.desnoyers@efficios.com>
+ <20230503180640.630f3006@gandalf.local.home>
+ <5b102a66-f88c-4a77-887e-1b41f8064454@paulmck-laptop>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <5b102a66-f88c-4a77-887e-1b41f8064454@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The infra_ao reset is needed for MT8188.
-- Add mtk_clk_rst_desc for MT8188.
-- Add register reset controller function for MT8188 infra_ao.
-- Add infra_ao_idx_map for MT8188.
+On 2023-05-04 20:28, Paul E. McKenney wrote:
+> On Wed, May 03, 2023 at 06:06:40PM -0400, Steven Rostedt wrote:
+>> On Wed,  3 May 2023 16:32:36 -0400
+>> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+>>
+>>> linux/rcupdate.h macros use the *p parameter without parentheses, e.g.:
+>>>
+>>>    typeof(*p)
+>>>
+>>> rather than
+>>>
+>>>    typeof(*(p))
+>>>
+>>> The following test-case shows how it can generate confusion due to C
+>>> operator precedence being reversed compared to the expectations:
+>>>
+>>>      #define m(p) \
+>>>      do { \
+>>>              __typeof__(*p) v = 0; \
+>>>      } while (0)
+>>>
+>>>      void fct(unsigned long long *p1)
+>>>      {
+>>>              m(p1 + 1);      /* works */
+>>>              m(1 + p1);      /* broken */
+>>>      }
+>>>
+>>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>>> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+>>> Cc: Joel Fernandes <joel@joelfernandes.org>
+>>> Cc: Josh Triplett <josh@joshtriplett.org>
+>>> Cc: Boqun Feng <boqun.feng@gmail.com>
+>>> Cc: Steven Rostedt <rostedt@goodmis.org>
+>>> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+>>> Cc: Zqiang <qiang1.zhang@intel.com>
+>>> ---
+>>>   include/linux/rcupdate.h | 18 +++++++++---------
+>>>   1 file changed, 9 insertions(+), 9 deletions(-)
+>>>
+>>> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+>>> index dcd2cf1e8326..1565012fa47f 100644
+>>> --- a/include/linux/rcupdate.h
+>>> +++ b/include/linux/rcupdate.h
+>>> @@ -430,16 +430,16 @@ static inline void rcu_preempt_sleep_check(void) { }
+>>>   
+>>>   #ifdef __CHECKER__
+>>>   #define rcu_check_sparse(p, space) \
+>>> -	((void)(((typeof(*p) space *)p) == p))
+>>> +	((void)(((typeof(*(p)) space *)p) == p))
+>>
+>> Hmm, should we have that be:
+>> 	((void)(((typeof(*(p)) space *)(p)) == (p)))
+>>
+>> In case of the 1 + p1, which would end up as:
+>>
+>> 	((void)(((typeof(*(1 + p1)) __rcu *)1 + p1 == 1 + p1;
+>>
+>> I don't know how that __rcu get's passed around via the + statement there,
+>> so it may be fine. May not even make sense to have that. But I like to
+>> error on more parenthesis. ;-)
+>>
+>> The rest looks fine.
+>>
+>> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> 
+> Thank you all!  I applied Steve's suggested change with attribution
+> as shown below.  Please let me know if I messed anything up.
 
-Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
----
- drivers/clk/mediatek/clk-mt8188-infra_ao.c | 24 ++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Hi Paul,
 
-diff --git a/drivers/clk/mediatek/clk-mt8188-infra_ao.c b/drivers/clk/mediatek/clk-mt8188-infra_ao.c
-index 91c35db40b4e..1d4b27ba06be 100644
---- a/drivers/clk/mediatek/clk-mt8188-infra_ao.c
-+++ b/drivers/clk/mediatek/clk-mt8188-infra_ao.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <dt-bindings/clock/mediatek,mt8188-clk.h>
-+#include <dt-bindings/reset/mt8188-resets.h>
- #include <linux/clk-provider.h>
- #include <linux/platform_device.h>
- 
-@@ -176,9 +177,32 @@ static const struct mtk_gate infra_ao_clks[] = {
- 		       "infra_ao_aes_msdcfde_0p", "top_aes_msdcfde", 18),
- };
- 
-+static u16 infra_ao_rst_ofs[] = {
-+	INFRA_RST0_SET_OFFSET,
-+	INFRA_RST1_SET_OFFSET,
-+	INFRA_RST2_SET_OFFSET,
-+	INFRA_RST3_SET_OFFSET,
-+	INFRA_RST4_SET_OFFSET,
-+};
-+
-+static u16 infra_ao_idx_map[] = {
-+	[MT8188_INFRA_RST1_THERMAL_MCU_RST] = 1 * RST_NR_PER_BANK + 2,
-+	[MT8188_INFRA_RST1_THERMAL_CTRL_RST] = 1 * RST_NR_PER_BANK + 4,
-+	[MT8188_INFRA_RST3_PTP_CTRL_RST] = 3 * RST_NR_PER_BANK + 5,
-+};
-+
-+static struct mtk_clk_rst_desc infra_ao_rst_desc = {
-+	.version = MTK_RST_SET_CLR,
-+	.rst_bank_ofs = infra_ao_rst_ofs,
-+	.rst_bank_nr = ARRAY_SIZE(infra_ao_rst_ofs),
-+	.rst_idx_map = infra_ao_idx_map,
-+	.rst_idx_map_nr = ARRAY_SIZE(infra_ao_idx_map),
-+};
-+
- static const struct mtk_clk_desc infra_ao_desc = {
- 	.clks = infra_ao_clks,
- 	.num_clks = ARRAY_SIZE(infra_ao_clks),
-+	.rst_desc = &infra_ao_rst_desc,
- };
- 
- static const struct of_device_id of_match_clk_mt8188_infra_ao[] = {
+I've done a new version of that patch which fixes other issues in 
+rcupdate.h in the next round. Can you hold merging this until I remove 
+the "RFC PATCH" tag please ? My goal is to gather feedback first to make 
+sure everyone is OK with the overall changes across headers, so 
+everything can become consistent.
+
+Thanks,
+
+Mathieu
+
+> 
+> 							Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+> commit d3d734216c88fb7c13205dc62178ff5011da415b
+> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Date:   Wed May 3 16:32:36 2023 -0400
+> 
+>      rcu: Add missing parentheses around rcu_dereference() "p" parameter
+>      
+>      linux/rcupdate.h macros use the *p parameter without parentheses, e.g.:
+>      
+>        typeof(*p)
+>      
+>      rather than
+>      
+>        typeof(*(p))
+>      
+>      The following test-case shows how it can generate confusion due to C
+>      operator precedence being reversed compared to the expectations:
+>      
+>          #define m(p) \
+>          do { \
+>                  __typeof__(*p) v = 0; \
+>          } while (0)
+>      
+>          void fct(unsigned long long *p1)
+>          {
+>                  m(p1 + 1);      /* works */
+>                  m(1 + p1);      /* broken */
+>          }
+>      
+>      [ paulmck: Apply Steve Rostedt additional () feedback. ]
+>      
+>      Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>      Cc: "Paul E. McKenney" <paulmck@kernel.org>
+>      Cc: Joel Fernandes <joel@joelfernandes.org>
+>      Cc: Josh Triplett <josh@joshtriplett.org>
+>      Cc: Boqun Feng <boqun.feng@gmail.com>
+>      Cc: Steven Rostedt <rostedt@goodmis.org>
+>      Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+>      Cc: Zqiang <qiang1.zhang@intel.com>
+>      Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+>      Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>      Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+>      Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> 
+> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> index ddd42efc6224..cb938a89a923 100644
+> --- a/include/linux/rcupdate.h
+> +++ b/include/linux/rcupdate.h
+> @@ -405,16 +405,16 @@ static inline void rcu_preempt_sleep_check(void) { }
+>   
+>   #ifdef __CHECKER__
+>   #define rcu_check_sparse(p, space) \
+> -	((void)(((typeof(*p) space *)p) == p))
+> +	((void)(((typeof(*(p)) space *)(p)) == (p)))
+>   #else /* #ifdef __CHECKER__ */
+>   #define rcu_check_sparse(p, space)
+>   #endif /* #else #ifdef __CHECKER__ */
+>   
+>   #define __unrcu_pointer(p, local)					\
+>   ({									\
+> -	typeof(*p) *local = (typeof(*p) *__force)(p);			\
+> +	typeof(*(p)) *local = (typeof(*(p)) *__force)(p);		\
+>   	rcu_check_sparse(p, __rcu);					\
+> -	((typeof(*p) __force __kernel *)(local)); 			\
+> +	((typeof(*(p)) __force __kernel *)(local));			\
+>   })
+>   /**
+>    * unrcu_pointer - mark a pointer as not being RCU protected
+> @@ -427,29 +427,29 @@ static inline void rcu_preempt_sleep_check(void) { }
+>   
+>   #define __rcu_access_pointer(p, local, space) \
+>   ({ \
+> -	typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+> +	typeof(*(p)) *local = (typeof(*(p)) *__force)READ_ONCE(p); \
+>   	rcu_check_sparse(p, space); \
+> -	((typeof(*p) __force __kernel *)(local)); \
+> +	((typeof(*(p)) __force __kernel *)(local)); \
+>   })
+>   #define __rcu_dereference_check(p, local, c, space) \
+>   ({ \
+>   	/* Dependency order vs. p above. */ \
+> -	typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+> +	typeof(*(p)) *local = (typeof(*(p)) *__force)READ_ONCE(p); \
+>   	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_check() usage"); \
+>   	rcu_check_sparse(p, space); \
+> -	((typeof(*p) __force __kernel *)(local)); \
+> +	((typeof(*(p)) __force __kernel *)(local)); \
+>   })
+>   #define __rcu_dereference_protected(p, local, c, space) \
+>   ({ \
+>   	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_protected() usage"); \
+>   	rcu_check_sparse(p, space); \
+> -	((typeof(*p) __force __kernel *)(p)); \
+> +	((typeof(*(p)) __force __kernel *)(p)); \
+>   })
+>   #define __rcu_dereference_raw(p, local) \
+>   ({ \
+>   	/* Dependency order vs. p above. */ \
+>   	typeof(p) local = READ_ONCE(p); \
+> -	((typeof(*p) __force __kernel *)(local)); \
+> +	((typeof(*(p)) __force __kernel *)(local)); \
+>   })
+>   #define rcu_dereference_raw(p) __rcu_dereference_raw(p, __UNIQUE_ID(rcu))
+>   
+
 -- 
-2.18.0
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
