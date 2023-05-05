@@ -2,103 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDA36F8882
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCB86F888A
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233076AbjEESOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 14:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39792 "EHLO
+        id S233147AbjEESQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 14:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjEESOT (ORCPT
+        with ESMTP id S231611AbjEESQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 14:14:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE902D63
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 11:14:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A47163FB6
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 18:14:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31340C433EF;
-        Fri,  5 May 2023 18:14:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683310458;
-        bh=0BxOsweHAsdSWwpMc1VYAmtq0gF5pxlUHWsC8Y24ZNo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oNwdu0OIW76KAjenXjaZsiXJVTDfeFjpl86Xt688+csW3DdJtQwgf6gxvWIARc8It
-         9NyALEij4thtsMl73Ex5Ifl6tupPOhAAg/FB613jKLtcLpSfrMTRd4IsxHBcsSMPBY
-         x/8pwCGWR5fTK1v/x6mQkIA0y4sUFrLqTHgdkIujCHID1cOT1Yxzp/3oo0tniWgDhJ
-         BvxKMzAN+lL/5ajjRkyNYRRDJDZQg/mVjbZzmoh4SScw0O08EDXCMg50VPS5O2PE3C
-         PrgWjZ/Okqhy8Q1Azsg3Y38W7QXMwfmwTf9BLA9qnE/OkVGMXZSaOA+romMGy8+XUx
-         51J/o3fLoDWoA==
-From:   rfoss@kernel.org
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Francesco Dolcini <francesco@dolcini.it>,
-        tomi.valkeinen@ideasonboard.com,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        dri-devel@lists.freedesktop.org, Jonas Karlman <jonas@kwiboo.se>
-Cc:     Robert Foss <rfoss@kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        David Airlie <airlied@gmail.com>, linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH v1 0/9] drm/bridge: tc358768: various fixes on PLL calculation and DSI timings
-Date:   Fri,  5 May 2023 20:14:11 +0200
-Message-Id: <168331044052.921601.10791583333930906104.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230427142934.55435-1-francesco@dolcini.it>
-References: <20230427142934.55435-1-francesco@dolcini.it>
+        Fri, 5 May 2023 14:16:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A13819D5F
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 11:16:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE5291FB;
+        Fri,  5 May 2023 11:17:18 -0700 (PDT)
+Received: from [192.168.178.92] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E63983F67D;
+        Fri,  5 May 2023 11:16:32 -0700 (PDT)
+Message-ID: <11e07f3a-3576-f408-1891-2dca5ddf343e@arm.com>
+Date:   Fri, 5 May 2023 20:16:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/1] sched: Consider CPU contention in frequency &
+ load-balance busiest CPU selection
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        linux-kernel@vger.kernel.org
+References: <20230406155030.1989554-1-dietmar.eggemann@arm.com>
+ <20230406155030.1989554-2-dietmar.eggemann@arm.com>
+ <CAKfTPtDh_aQn15to7E9JypVXarFVcEL+jiWJMV6J7-Gijj9SyQ@mail.gmail.com>
+ <f4501e45-3cfc-b605-b065-5693427ab877@arm.com>
+ <CAKfTPtBcT8KbH=r2zCgqBF7V7cp=REceiyWWjjCc8FD2btO-=A@mail.gmail.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <CAKfTPtBcT8KbH=r2zCgqBF7V7cp=REceiyWWjjCc8FD2btO-=A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Foss <rfoss@kernel.org>
+On 05/05/2023 10:22, Vincent Guittot wrote:
+> On Thu, 4 May 2023 at 19:11, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>>
+>> On 03/05/2023 18:08, Vincent Guittot wrote:
+>>> On Thu, 6 Apr 2023 at 17:50, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
 
-On Thu, 27 Apr 2023 16:29:25 +0200, Francesco Dolcini wrote:
-> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+[...]
+
+>>>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+>>>> index e3211455b203..728b186cd367 100644
+>>>> --- a/kernel/sched/cpufreq_schedutil.c
+>>>> +++ b/kernel/sched/cpufreq_schedutil.c
+>>>> @@ -158,7 +158,8 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
+>>>>         struct rq *rq = cpu_rq(sg_cpu->cpu);
+>>>>
+>>>>         sg_cpu->bw_dl = cpu_bw_dl(rq);
+>>>> -       sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
+>>>> +       sg_cpu->util = effective_cpu_util(sg_cpu->cpu,
+>>>> +                                         cpu_boosted_util_cfs(sg_cpu->cpu),
+>>>
+>>> Shouldn't we have a similar change in feec to estimate correctly which
+>>> OPP/ freq will be selected by schedutil ?
+>>
+>> Yes, this should be more correct. Schedutil and EAS should see the world
+>> the same way.
+>>
+>> But IMHO only for the
+>>
+>> find_energy_efficient_cpu()
+>>   compute_energy()
+>>     eenv_pd_max_util()
+>>       util = cpu_util_next(..., p, ...)
+>>       effective_cpu_util(..., util, FREQUENCY_UTIL, ...)
+>>                                     ^^^^^^^^^^^^^^
+> yes only to get same max utilization and as a result the same OPP as schedutil
 > 
-> This series includes multiple fixes on the tc358768 parallel RGB to DSI driver.
+>> case.
+>>
+>> Not sure what I do for the task contribution? We use
+>> task_util(p)/_task_util_est(p) inside cpu_util_next().
+>> Do I have to consider p->se.avg.runnable_avg as well?
 > 
-> With the following changes I am able to have a stable display output using a TI
-> SN65DSI83 (DSI-LVDS bridge) and a 1280 x 800 LVDS display panel and the
-> register values are coherent with Toshiba documentation and configuration
-> spreadsheet, I was not able to test any other display sink.
-> 
-> [...]
+> hmm, I would stay with util_avg for now
 
-Applied, thanks!
-
-[1/9] drm/bridge: tc358768: always enable HS video mode
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=ee18698e212b
-[2/9] drm/bridge: tc358768: fix PLL parameters computation
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=ee18698e212b
-[3/9] drm/bridge: tc358768: fix PLL target frequency
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=ee18698e212b
-[4/9] drm/bridge: tc358768: fix TCLK_ZEROCNT computation
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=ee18698e212b
-[5/9] drm/bridge: tc358768: fix TCLK_TRAILCNT computation
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=ee18698e212b
-[6/9] drm/bridge: tc358768: fix THS_ZEROCNT computation
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=77a089328da7
-[7/9] drm/bridge: tc358768: fix TXTAGOCNT computation
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=3666aad8185a
-[8/9] drm/bridge: tc358768: fix THS_TRAILCNT computation
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=bac7842cd179
-[9/9] drm/bridge: tc358768: remove unused variable
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=e4a5e4442a80
-
-
-
-Rob
-
+OK, in this case I'm trying  to refactor cpu_util_next() so that
+cpu_util_cfs() can call it as well. This will allow me to code the
+runnable boosting only once in cpu_util_next().
+Boosting can then be enabled via an additional `int boost` parameter for
+cpu_util_next() and cpu_util_cfs().
