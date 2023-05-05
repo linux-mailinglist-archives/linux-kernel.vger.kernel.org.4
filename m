@@ -2,316 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178F86F8A1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 22:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC2B6F8A21
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 22:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbjEEUWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 16:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
+        id S232709AbjEEUXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 16:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232347AbjEEUWO (ORCPT
+        with ESMTP id S230489AbjEEUXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 16:22:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A9B44BD
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 13:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683318087;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fsggkaMmsBvOy5xyONdITFWw/iHmRz4dl3tGfhzjtDI=;
-        b=AsFjbdPgh+Wyv+dUSCHG+cSIT9hLp+oJwF4hPJY2dVon5WDio+pwNGjk+unG7FAgvlM4IQ
-        ziM3qZQPg5Tn2FVyf044sYxkLxz7CiktUkFs1DRSRcPLwSs6xh0sihQk3diC05DRR/tFlC
-        KECQzO7obsc3ZKb/H5PrvPPlARgxFfA=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-333-Sp_XApa2MsKnCui_BXwC9g-1; Fri, 05 May 2023 16:21:26 -0400
-X-MC-Unique: Sp_XApa2MsKnCui_BXwC9g-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30635d18e55so784829f8f.2
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 13:21:26 -0700 (PDT)
+        Fri, 5 May 2023 16:23:01 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B596D7
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 13:23:00 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9659e9bbff5so393163266b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 13:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1683318179; x=1685910179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aL4O4xBkvv61r8l6fiCzi2l8LZqK+hvp7Gt2L2M0kwA=;
+        b=Oykg45fTdrjAbY7eTF+V20gWgchrThB6dOjgbfRUrV1Kck6I16pUPviTyqrqjHqAiP
+         TnC7UCf+c5OdiFhpfpupimUE29Y1qAdpBx0xAl3K5IQI7MO3FSiWS9bpRvLEJhjcTOaV
+         kdakVLv/4CObDj6PG19nXp0JJSbAj+kKnOwwM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683318085; x=1685910085;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fsggkaMmsBvOy5xyONdITFWw/iHmRz4dl3tGfhzjtDI=;
-        b=PaAtJAU2nFzyDtOmP84H4jFKPWzxubjoclawp9udCVcuUhgxjhiDKRj9WbMZi494ve
-         XJzK1BLnC2J6md2GZpjH/wsYeo5HIuJFgvXBdR4K2/tPJGZsgDJxKAXUunZepCaco3Qo
-         TI17xiKrKkGD81uLRg1rkPiLUnKMb9LlVCazkXNzkdfADfW0jgudj539hGBi343Zt0jD
-         2I8OP2DtT3R21N8adacesgY9mzbs/tpNXgRTph9+IPfbQbaBslzz9YsEGV8ZD5KEv1Ww
-         /+w0uN3JlbliPWFvBuGO11UfQ1n+ygAtZAC4Rez0b8NC/+mZa6pI08FotzYOD0nlLYy7
-         5jmQ==
-X-Gm-Message-State: AC+VfDwHbBAGrWGGz0ZcL8AqS/WS4kOktuUkkDfcCtMuLSzhn5VGhq22
-        /NCI76Pmyvs3toQ4kF1RPqiYVQBiPAMYuFugBCd9Y0xe1S9BIjVoQErJqK4lhOq8X0rOIhgH4Li
-        fdZg98WgqldkVljhps2KTb6bm
-X-Received: by 2002:a5d:4570:0:b0:2fe:c0ea:18b5 with SMTP id a16-20020a5d4570000000b002fec0ea18b5mr2183557wrc.35.1683318085030;
-        Fri, 05 May 2023 13:21:25 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7FviCLOGbcNtThAkyINVmphT4Em0kBlGhMilbIRI+JzZwkEaqvefxxGYCQlWMeGdaho0noZA==
-X-Received: by 2002:a5d:4570:0:b0:2fe:c0ea:18b5 with SMTP id a16-20020a5d4570000000b002fec0ea18b5mr2183541wrc.35.1683318084651;
-        Fri, 05 May 2023 13:21:24 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c71f:6900:2b25:fc69:599e:3986? (p200300cbc71f69002b25fc69599e3986.dip0.t-ipconnect.de. [2003:cb:c71f:6900:2b25:fc69:599e:3986])
-        by smtp.gmail.com with ESMTPSA id q18-20020a056000137200b003063176ef09sm3377323wrz.6.2023.05.05.13.21.22
+        d=1e100.net; s=20221208; t=1683318179; x=1685910179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aL4O4xBkvv61r8l6fiCzi2l8LZqK+hvp7Gt2L2M0kwA=;
+        b=dz/4f4ssqZ0DPTb56T86Y85xvQFQOQLS6Ahtfn/EbG9UBtpe6i9An7Ipoh2nxEsqKm
+         M/8vR+X+glETpLE6/tmC5glc6mOzpUEN3j/u/k+sk1wXSWI3jH4XadCau8o5+OgyxjAF
+         NtmPASadmSvJpmUMhhcE0ZfUIXJ7GIkaXT50iagm401+Gu2+yBqksS+niAP2WsWkSSGr
+         vwP3Kh/Dn4OoT+vZgI57Ex/MC6cBBwv1/0D/vE+QzAQ+5WnNfRDtDwBr/IeefjlID5GH
+         d1qnsNly+jivzmnDYKWf0iv1UGpproGQCiO3A0gq29nrpw8Yr8/sZviP3Nfhr1PfpdIF
+         aVjg==
+X-Gm-Message-State: AC+VfDzaDWhBpHAwSuyOzwK4tJBfE/tN/V1OfT2eCETYsSzdmisSgpkp
+        +Y8a+ZsTX4GR10Uj9fuAVd2CyaANvDfV1o/mHh4hIQ==
+X-Google-Smtp-Source: ACHHUZ6b2FnseGJeacE9g9j5UeF41xdQ+CkC7ifsyqeY7Qp5hl3wKzCVSRVea0f1IBfPxs1GDRnwyQ==
+X-Received: by 2002:a17:906:7947:b0:94e:dd68:aba1 with SMTP id l7-20020a170906794700b0094edd68aba1mr2398310ejo.67.1683318178654;
+        Fri, 05 May 2023 13:22:58 -0700 (PDT)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
+        by smtp.gmail.com with ESMTPSA id a19-20020a170906469300b0095004c87676sm1349431ejr.199.2023.05.05.13.22.57
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 13:21:24 -0700 (PDT)
-Message-ID: <6e96358e-bcb5-cc36-18c3-ec5153867b9a@redhat.com>
-Date:   Fri, 5 May 2023 22:21:21 +0200
+        Fri, 05 May 2023 13:22:58 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-9659e9bbff5so393158666b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 13:22:57 -0700 (PDT)
+X-Received: by 2002:a17:906:9b89:b0:965:a5b5:e075 with SMTP id
+ dd9-20020a1709069b8900b00965a5b5e075mr2580600ejc.75.1683318177525; Fri, 05
+ May 2023 13:22:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-References: <cover.1683235180.git.lstoakes@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v9 0/3] mm/gup: disallow GUP writing to file-backed
- mappings by default
-In-Reply-To: <cover.1683235180.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230504200527.1935944-1-mathieu.desnoyers@efficios.com>
+ <20230504200527.1935944-13-mathieu.desnoyers@efficios.com>
+ <3b017a9f-220d-4da8-2cf6-7f0d6175b30c@efficios.com> <CAHk-=wjzpHjqhybyEhkTzGgTdBP3LZ1FmOw8=1MMXr=-j5OPxQ@mail.gmail.com>
+ <3cc72a67-d648-0040-6f60-37663797e360@efficios.com> <CAHk-=wh-x1PL=UUGD__Dv6kd+kyCHjNF-TCHGG9ayLnysf-PdQ@mail.gmail.com>
+ <d8dfd1af-5b82-ddd8-24f5-fa9dfbb4b1fb@efficios.com>
+In-Reply-To: <d8dfd1af-5b82-ddd8-24f5-fa9dfbb4b1fb@efficios.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 5 May 2023 13:22:40 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg27iiFZWYmjKmULxwkXisOHuAXq=vbiazBabgh9M1rqg@mail.gmail.com>
+Message-ID: <CAHk-=wg27iiFZWYmjKmULxwkXisOHuAXq=vbiazBabgh9M1rqg@mail.gmail.com>
+Subject: Re: [RFC PATCH 12/13] blk-mq.h: Fix parentheses around macro
+ parameter use
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.05.23 23:27, Lorenzo Stoakes wrote:
-> Writing to file-backed mappings which require folio dirty tracking using
-> GUP is a fundamentally broken operation, as kernel write access to GUP
-> mappings do not adhere to the semantics expected by a file system.
-> 
-> A GUP caller uses the direct mapping to access the folio, which does not
-> cause write notify to trigger, nor does it enforce that the caller marks
-> the folio dirty.
-> 
-> The problem arises when, after an initial write to the folio, writeback
-> results in the folio being cleaned and then the caller, via the GUP
-> interface, writes to the folio again.
-> 
-> As a result of the use of this secondary, direct, mapping to the folio no
-> write notify will occur, and if the caller does mark the folio dirty, this
-> will be done so unexpectedly.
-> 
-> For example, consider the following scenario:-
-> 
-> 1. A folio is written to via GUP which write-faults the memory, notifying
->     the file system and dirtying the folio.
-> 2. Later, writeback is triggered, resulting in the folio being cleaned and
->     the PTE being marked read-only.
-> 3. The GUP caller writes to the folio, as it is mapped read/write via the
->     direct mapping.
-> 4. The GUP caller, now done with the page, unpins it and sets it dirty
->     (though it does not have to).
-> 
-> This change updates both the PUP FOLL_LONGTERM slow and fast APIs. As
-> pin_user_pages_fast_only() does not exist, we can rely on a slightly
-> imperfect whitelisting in the PUP-fast case and fall back to the slow case
-> should this fail.
-> 
+On Fri, May 5, 2023 at 1:08=E2=80=AFPM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
 >
+> The reason why I think the lvalue of a "=3D" operator can be argued to be
+> "special" is because it is simply invalid to apply many of the C
+> operators to an lvalue (e.g. +, -, /, ...),
 
-Thanks a lot, this looks pretty good to me!
+Mathieu, you are simply objectively wrong.
 
-I started writing some selftests (assuming none would be in the works) using
-iouring and and the gup_tests interface. So far, no real surprises for the general
-GUP interaction [1].
+See here:
 
+  #define m1(x) (x =3D 2)
+  #define m2(x) ((x) =3D 2)
 
-There are two things I noticed when registering an iouring fixed buffer (that differ
-now from generic gup_test usage):
+and then try using the argument "a =3D b" to those macros.
 
+Guess which one flags it as an error ("lvalue required") and which one does=
+ not?
 
-(1) Registering a fixed buffer targeting an unsupported MAP_SHARED FS file now fails with
-     EFAULT (from pin_user_pages()) instead of EOPNOTSUPP (from io_pin_pages()).
+m2 is the only "good" one. Yes, m1 works in 99% of all cases in
+practice, but if you want a safer macro, you *will* add the
+parentheses.
 
-The man page for io_uring_register documents:
+So *STOP*ARGUING* based on an incorrect "lowest precedence" basis.
+Even for the "lowest precedence" case, you have the *same* precedence.
 
-        EOPNOTSUPP
-               User buffers point to file-backed memory.
+The fact is, assignment is not in any way special operation in macros,
+and does not deserve - and should absolutely not have - any special
+"doesn't need parentheses around argument" rules.
 
-... we'd have to do some kind of errno translation in io_pin_pages(). But the
-translation is not simple (sometimes we want to forward EOPNOTSUPP). That also
-applies once we remove that special-casing in io_uring code.
-
-... maybe we can simply update the manpage (stating that older kernels returned
-EOPNOTSUPP) and start returning EFAULT?
-
-
-(2) Registering a fixed buffer targeting a MAP_PRIVATE FS file fails with EOPNOTSUPP
-     (from io_pin_pages()). As discussed, there is nothing wrong with pinning all-anon
-     pages (resulting from breaking COW).
-
-That could be easily be handled (allow any !VM_MAYSHARE), and would automatically be
-handled once removing the iouring special-casing.
-
-
-[1]
-
-# ./pin_longterm
-# [INFO] detected hugetlb size: 2048 KiB
-# [INFO] detected hugetlb size: 1048576 KiB
-TAP version 13
-1..50
-# [RUN] R/W longterm GUP pin in MAP_SHARED file mapping ... with memfd
-ok 1 Pinning succeeded as expected
-# [RUN] R/W longterm GUP pin in MAP_SHARED file mapping ... with tmpfile
-ok 2 Pinning succeeded as expected
-# [RUN] R/W longterm GUP pin in MAP_SHARED file mapping ... with local tmpfile
-ok 3 Pinning failed as expected
-# [RUN] R/W longterm GUP pin in MAP_SHARED file mapping ... with memfd hugetlb (2048 kB)
-ok 4 # SKIP need more free huge pages
-# [RUN] R/W longterm GUP pin in MAP_SHARED file mapping ... with memfd hugetlb (1048576 kB)
-ok 5 Pinning succeeded as expected
-# [RUN] R/W longterm GUP-fast pin in MAP_SHARED file mapping ... with memfd
-ok 6 Pinning succeeded as expected
-# [RUN] R/W longterm GUP-fast pin in MAP_SHARED file mapping ... with tmpfile
-ok 7 Pinning succeeded as expected
-# [RUN] R/W longterm GUP-fast pin in MAP_SHARED file mapping ... with local tmpfile
-ok 8 Pinning failed as expected
-# [RUN] R/W longterm GUP-fast pin in MAP_SHARED file mapping ... with memfd hugetlb (2048 kB)
-ok 9 # SKIP need more free huge pages
-# [RUN] R/W longterm GUP-fast pin in MAP_SHARED file mapping ... with memfd hugetlb (1048576 kB)
-ok 10 Pinning succeeded as expected
-# [RUN] R/O longterm GUP pin in MAP_SHARED file mapping ... with memfd
-ok 11 Pinning succeeded as expected
-# [RUN] R/O longterm GUP pin in MAP_SHARED file mapping ... with tmpfile
-ok 12 Pinning succeeded as expected
-# [RUN] R/O longterm GUP pin in MAP_SHARED file mapping ... with local tmpfile
-ok 13 Pinning succeeded as expected
-# [RUN] R/O longterm GUP pin in MAP_SHARED file mapping ... with memfd hugetlb (2048 kB)
-ok 14 # SKIP need more free huge pages
-# [RUN] R/O longterm GUP pin in MAP_SHARED file mapping ... with memfd hugetlb (1048576 kB)
-ok 15 Pinning succeeded as expected
-# [RUN] R/O longterm GUP-fast pin in MAP_SHARED file mapping ... with memfd
-ok 16 Pinning succeeded as expected
-# [RUN] R/O longterm GUP-fast pin in MAP_SHARED file mapping ... with tmpfile
-ok 17 Pinning succeeded as expected
-# [RUN] R/O longterm GUP-fast pin in MAP_SHARED file mapping ... with local tmpfile
-ok 18 Pinning succeeded as expected
-# [RUN] R/O longterm GUP-fast pin in MAP_SHARED file mapping ... with memfd hugetlb (2048 kB)
-ok 19 # SKIP need more free huge pages
-# [RUN] R/O longterm GUP-fast pin in MAP_SHARED file mapping ... with memfd hugetlb (1048576 kB)
-ok 20 Pinning succeeded as expected
-# [RUN] R/W longterm GUP pin in MAP_PRIVATE file mapping ... with memfd
-ok 21 Pinning succeeded as expected
-# [RUN] R/W longterm GUP pin in MAP_PRIVATE file mapping ... with tmpfile
-ok 22 Pinning succeeded as expected
-# [RUN] R/W longterm GUP pin in MAP_PRIVATE file mapping ... with local tmpfile
-ok 23 Pinning succeeded as expected
-# [RUN] R/W longterm GUP pin in MAP_PRIVATE file mapping ... with memfd hugetlb (2048 kB)
-ok 24 # SKIP need more free huge pages
-# [RUN] R/W longterm GUP pin in MAP_PRIVATE file mapping ... with memfd hugetlb (1048576 kB)
-ok 25 Pinning succeeded as expected
-# [RUN] R/W longterm GUP-fast pin in MAP_PRIVATE file mapping ... with memfd
-ok 26 Pinning succeeded as expected
-# [RUN] R/W longterm GUP-fast pin in MAP_PRIVATE file mapping ... with tmpfile
-ok 27 Pinning succeeded as expected
-# [RUN] R/W longterm GUP-fast pin in MAP_PRIVATE file mapping ... with local tmpfile
-ok 28 Pinning succeeded as expected
-# [RUN] R/W longterm GUP-fast pin in MAP_PRIVATE file mapping ... with memfd hugetlb (2048 kB)
-ok 29 # SKIP need more free huge pages
-# [RUN] R/W longterm GUP-fast pin in MAP_PRIVATE file mapping ... with memfd hugetlb (1048576 kB)
-ok 30 Pinning succeeded as expected
-# [RUN] R/O longterm GUP pin in MAP_PRIVATE file mapping ... with memfd
-ok 31 Pinning succeeded as expected
-# [RUN] R/O longterm GUP pin in MAP_PRIVATE file mapping ... with tmpfile
-ok 32 Pinning succeeded as expected
-# [RUN] R/O longterm GUP pin in MAP_PRIVATE file mapping ... with local tmpfile
-ok 33 Pinning succeeded as expected
-# [RUN] R/O longterm GUP pin in MAP_PRIVATE file mapping ... with memfd hugetlb (2048 kB)
-ok 34 # SKIP need more free huge pages
-# [RUN] R/O longterm GUP pin in MAP_PRIVATE file mapping ... with memfd hugetlb (1048576 kB)
-ok 35 Pinning succeeded as expected
-# [RUN] R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with memfd
-ok 36 Pinning succeeded as expected
-# [RUN] R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with tmpfile
-ok 37 Pinning succeeded as expected
-# [RUN] R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with local tmpfile
-ok 38 Pinning succeeded as expected
-# [RUN] R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with memfd hugetlb (2048 kB)
-ok 39 # SKIP need more free huge pages
-# [RUN] R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with memfd hugetlb (1048576 kB)
-ok 40 Pinning succeeded as expected
-# [RUN] iouring fixed buffer with MAP_SHARED file mapping ... with memfd
-ok 41 Pinning succeeded as expected
-# [RUN] iouring fixed buffer with MAP_SHARED file mapping ... with tmpfile
-ok 42 Pinning succeeded as expected
-# [RUN] iouring fixed buffer with MAP_SHARED file mapping ... with local tmpfile
-ok 43 Pinning failed as expected
-# [RUN] iouring fixed buffer with MAP_SHARED file mapping ... with memfd hugetlb (2048 kB)
-ok 44 # SKIP need more free huge pages
-# [RUN] iouring fixed buffer with MAP_SHARED file mapping ... with memfd hugetlb (1048576 kB)
-ok 45 Pinning succeeded as expected
-# [RUN] iouring fixed buffer with MAP_PRIVATE file mapping ... with memfd
-ok 46 Pinning succeeded as expected
-# [RUN] iouring fixed buffer with MAP_PRIVATE file mapping ... with tmpfile
-ok 47 Pinning succeeded as expected
-# [RUN] iouring fixed buffer with MAP_PRIVATE file mapping ... with local tmpfile
-not ok 48 Pinning failed as expected
-# [RUN] iouring fixed buffer with MAP_PRIVATE file mapping ... with memfd hugetlb (2048 kB)
-ok 49 # SKIP need more free huge pages
-# [RUN] iouring fixed buffer with MAP_PRIVATE file mapping ... with memfd hugetlb (1048576 kB)
-ok 50 Pinning succeeded as expected
-Bail out! 1 out of 50 tests failed
-# Totals: pass:39 fail:1 xfail:0 xpass:0 skip:10 error:0
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+           Linus
