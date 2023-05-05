@@ -2,136 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 503666F8989
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 21:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9337E6F898B
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 21:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233506AbjEETbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 15:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
+        id S233139AbjEETdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 15:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233527AbjEETbL (ORCPT
+        with ESMTP id S233553AbjEETcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 15:31:11 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512D55FE2;
-        Fri,  5 May 2023 12:31:04 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64389a44895so1888967b3a.1;
-        Fri, 05 May 2023 12:31:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683315064; x=1685907064;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sVSEn0zAZchU0XRfzSqIlgEVmcktBBmYwcVkhQoE8m0=;
-        b=NYCDjIhbaqBiOSrZ/jgxJYM++MvXfz+PziXmSOtlKBWR+5G4THFS2J6lKMYUL1ZtQp
-         /+n4GUaL/F1C/Hv7nTbtNqmpV5z7VXvQWx9UHrXUzwrHiw35fgnlVMsX4I0PBAgfwjUG
-         2ooHt7ZJh9wgSGvg/SHA6DtoJe/kiJ3Goxylyyfi6fMcMRmKbUeOvYZthBVzGkBWoj9k
-         uJVgHOEUm/rNXBynMU5Y//6lgXN9sg3cgtVtBR10M3kAWppabMcp+hGVLYpdWeVHjVxM
-         ZN1GgSLgrsNe6E6j4l34bTX+odwC3ez7lEInB6MbvS/FpUYjCDfl5Hx8sxVirIb5x3N4
-         kDbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683315064; x=1685907064;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sVSEn0zAZchU0XRfzSqIlgEVmcktBBmYwcVkhQoE8m0=;
-        b=BSV+aYjbMY+aZSPnYP/WXfNr7KMqVR6eIvx7PdnfpUVxG5MSBB8+yud2qzcIR3x0m1
-         uyqUZRurayZHB7MPQMflUTte6dpqihtui5kETLiuzbLQw/8QuMqXxWxTzJyc9SJCI4yq
-         sQwGq9xgOTFimc/3w/0JvYbvs5huQTHvJQEk9aRVqItT/VsWeul4Y4yhxIzMqqStbF+/
-         CWY43WFb2aISHhoQhKyDUGudtNAlcYb1XMUCdpFJ6AAIDAHY4bUdpD+5igDUIHTKIotI
-         XWlqb8U1gIqtPlLkcaACJd5QiTyKZhMjDWkZghU1tzsA/4gqn3WOGX/UTJK/cNw+77Tz
-         egqQ==
-X-Gm-Message-State: AC+VfDzxlxPTzIcNg4Kw4nQh/uRrnRdVwcP36gXOAd24L/T0s0cj4Lck
-        fYHIZIE8HQ2s8mIV2igfgEw=
-X-Google-Smtp-Source: ACHHUZ5Ox2/rwuw44nA8yVDCYWqWPSKjPRPFOf73NgI1WWFm1SFU3RHfe3Zukjpsitt3RMd6eal9YA==
-X-Received: by 2002:a05:6a20:6a22:b0:f2:bb3f:3b3e with SMTP id p34-20020a056a206a2200b000f2bb3f3b3emr3501654pzk.38.1683315063529;
-        Fri, 05 May 2023 12:31:03 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id n1-20020a63ee41000000b0050f7208b4bcsm1976619pgk.89.2023.05.05.12.31.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 12:31:03 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 5 May 2023 09:31:01 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Juri Lelli <juri.lelli@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>,
-        Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v2 0/6] sched/deadline: cpuset: Rework DEADLINE bandwidth
- restoration
-Message-ID: <ZFVZdbdZTLGhqYp4@slm.duckdns.org>
-References: <20230503072228.115707-1-juri.lelli@redhat.com>
- <20230504062525.GF1734100@hirez.programming.kicks-ass.net>
- <ZFNqJf+BQ0GMdr+y@localhost.localdomain>
+        Fri, 5 May 2023 15:32:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D9AA5DD;
+        Fri,  5 May 2023 12:32:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61C6E64028;
+        Fri,  5 May 2023 19:32:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 943A5C433D2;
+        Fri,  5 May 2023 19:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683315147;
+        bh=uIYZDSLkos+kOTYYQ2APOo0jrdAuVxmIhuS9ORUHscA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DkoV+rO6rWjTu8eduoeaimH2kFB1k5WM25kGWtXs76/7hnTGQAZ8gD2OnYDDeM8LD
+         6243wdWcCvo+jjuJ780cirSCz+EWkEELo0D70eOeniKhyMxbpHpM2+6ZkQb9e5ShbF
+         wWHTIITX7lFLSRtaj4kFolEMcm0iw+GEbkixDsBr8gWnce44EK9biBFiBVUs10pEzl
+         nS5uOSqGCV1SUdDNNm+rnFA1Pf+0j2AuwcPIUOfJg7iKjIkdkJWQuZvoy1CYgRnc4Y
+         YABjDLRX2UH+NJ0lw7e7YTcv0HYs/SnG1KYB6uRoSMVOIOqDiSN1ZKnB3mByUsjOwW
+         uZ4oqKmCFwAUg==
+Date:   Fri, 5 May 2023 12:32:26 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     workflows@vger.kernel.org, aros@gmx.com,
+        linux-kernel@vger.kernel.org, regressions@lists.linux.dev,
+        tools@linux.kernel.org, linux@leemhuis.info
+Subject: Re: Introducing bugbot
+Message-ID: <20230505123226.731d8ff8@kernel.org>
+In-Reply-To: <20230505-lent-swoosh-4897e2@meerkat>
+References: <gmnswy45efztvcyc3xqymm52h7cdfwjz64go2wy3zyeqcqwb76@36fva4hyip4q>
+        <20230505085218.60c62d75@kernel.org>
+        <20230505-lent-swoosh-4897e2@meerkat>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFNqJf+BQ0GMdr+y@localhost.localdomain>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 10:17:41AM +0200, Juri Lelli wrote:
-> On 04/05/23 08:25, Peter Zijlstra wrote:
-> > On Wed, May 03, 2023 at 09:22:22AM +0200, Juri Lelli wrote:
+On Fri, 5 May 2023 15:12:02 -0400 Konstantin Ryabitsev wrote:
+> On Fri, May 05, 2023 at 08:52:18AM -0700, Jakub Kicinski wrote:
+> > > Per our discussion last fall, I've been working on a bridge between bugzilla
+> > > and public-inbox, which went live in the past few days. It's still a very
+> > > early release, but it can do the following:  
 > > 
-> > > Dietmar Eggemann (2):
-> > >   sched/deadline: Create DL BW alloc, free & check overflow interface
-> > >   cgroup/cpuset: Free DL BW in case can_attach() fails
-> > > 
-> > > Juri Lelli (4):
-> > >   cgroup/cpuset: Rename functions dealing with DEADLINE accounting
-> > >   sched/cpuset: Bring back cpuset_mutex
-> > >   sched/cpuset: Keep track of SCHED_DEADLINE task in cpusets
-> > >   cgroup/cpuset: Iterate only if DEADLINE tasks are present
-> > > 
-> > >  include/linux/cpuset.h  |  12 +-
-> > >  include/linux/sched.h   |   4 +-
-> > >  kernel/cgroup/cgroup.c  |   4 +
-> > >  kernel/cgroup/cpuset.c  | 242 ++++++++++++++++++++++++++--------------
-> > >  kernel/sched/core.c     |  41 +++----
-> > >  kernel/sched/deadline.c |  67 ++++++++---
-> > >  kernel/sched/sched.h    |   2 +-
-> > >  7 files changed, 244 insertions(+), 128 deletions(-)
-> > 
-> > Aside from a few niggles, these look fine to me. Who were you expecting
-> > to merge these, tj or me?
+> > What about closing the bugs once they had been fixed/triaged/proven
+> > invalid?  
 > 
-> Thanks for reviewing!
-> 
-> Not entirely sure, it's kind of split, but maybe the cgroup changes are
-> predominant (cpuset_mutex is probably contributing the most). So, maybe
-> tj? Assuming this looks good to him as well of course. :)
+> For now, bugbot can look at a branch in a git repo and close bugs when it sees
+> a matching "Closes:" trailer.
 
-Yeah, they all look sane to me and both Waiman and Peter seem okay with
-them. If you post an updated version with the minor suggestions applied,
-I'll route the series through the cgroup tree.
+Interesting. Obviously that assumes the bug needs a fix, and we're
+talking bugzilla so lots of clueless people lobbing non-issues at us.
 
-Thanks.
+But also - Closes: is a legit trailer now? I thought we only allow Link:
 
--- 
-tejun
+In any case - I'm guessing I just don't have permissions to close the
+issues via web. Is your preference to iterate on the bot or maintainers
+to request permissions in BZ (how?)?
