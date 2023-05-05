@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFE86F83F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355216F83FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjEEN0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 09:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
+        id S232513AbjEEN1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 09:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjEEN0x (ORCPT
+        with ESMTP id S232574AbjEEN1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 09:26:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC6C2075E;
-        Fri,  5 May 2023 06:26:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF1E063E2B;
-        Fri,  5 May 2023 13:26:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD2FC433EF;
-        Fri,  5 May 2023 13:26:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683293177;
-        bh=ID6tW6Ir95UnY+CJe/xBNPDkriFuLBjLVGBTGdMHAHA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KtfAnawU1C9rk+poKY/7dK9D4kU21XPGcTzi2oI6K8aZvUvXDBcocyY5/uTR4s0NP
-         DNvceo27gyliZM6a2DYfRmCFwvGYUrJ1dW0tySXjQOG+nt6dMtaz4afVnNZgypVkSU
-         enh7LCCunBHhJ496LMVtB+J62qcyUMOSSqrszUuuyFu8/kEI+jROyu2NqhXnFvAbyZ
-         9urnbKfQ0UpyPLgHAEu88j3cYoAQ6JdxICWMjfez03hJCXa1jgehx4hVKBAfQL7C7d
-         QEk1Iqs857FdswUusQjoHKrJF8XQxlng+YAqbHZGX8JkdCx98+WL/q+LYxXpTKYdWE
-         FaswtRqUN9VRQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Alvin Lee <Alvin.Lee2@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Jasdeep Dhillon <jasdeep.dhillon@amd.com>,
-        Josip Pavic <Josip.Pavic@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Subject: linux-next: manual merge of the amdgpu tree with the drm-next tree
-Date:   Fri,  5 May 2023 22:26:13 +0900
-Message-Id: <20230505132613.215401-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 5 May 2023 09:27:23 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA03203C9;
+        Fri,  5 May 2023 06:27:20 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bc5197d33so3389714a12.1;
+        Fri, 05 May 2023 06:27:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683293239; x=1685885239;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pJVTeItn3/q+rs4Fp3PPs4uhLe3EOiwtZ3p5vx2OZsc=;
+        b=pW1eSFQtUOf4qd5Tqc4nNA0Lxc0orupxla+piV27edUUubj0zCl0YBkqsHBTbF1tz/
+         shZdBzRzJe/A/ESNBMVAqzGsJu/AzM2GR7Vme5pGfkRQ33GFyXbqkfr05hDtF3lluygb
+         ob7DwNWNnLG1srjhhp2cOse/kn/5/0QBVA/eFLxiMKNFwzbiJYDT+3WpcqvXcBxuTODL
+         m01ijHjxSezLk8GFHifw9arl0IJDzEWpb1C+SCMXboqI3V4VctTKfd4WAkkgPn+4ipKV
+         FHoUO3GseDFID+qZdDBuoxD78K+IAzlmeAvEnGsCIzaBUyzFyLSG884H+VKhqF8UIylS
+         LQNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683293239; x=1685885239;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pJVTeItn3/q+rs4Fp3PPs4uhLe3EOiwtZ3p5vx2OZsc=;
+        b=eeJeBWSrXRD3XWcfKfEIY4xzVK00BnfIbtUx7b0+FxBkTjACrIWO4LL/cDyze9hC1U
+         gHkpS0YSD2LRiGiKfWo2NFNllVZ8Jk17gneIz0dUMvUxeelt7RjGvBFwEVLwBgc5VMhX
+         kV6/NQdpqZ6jb2lNVb3xI/OneVp/C9rKMF8XMHaFhd06pktpPGwz2qhBHuQlM3lfwnpe
+         dH+YZgnO4gJbEXY6CDm1Y8aNCRZNBPZHgEcrWnZR2IOQpsJAafwtqMUQj3rBMT3SLh29
+         HMt/nwBfUx8gum80LmfBCPwHOeo/XWnJZsXGRo/TZ9O/NozcagQZvjcly3M7vgE05MIM
+         QafA==
+X-Gm-Message-State: AC+VfDxOzunShWJdV+4OfdGG3YEUGTEv9v66RX+0qun7MveGSqmk/Txi
+        jI+6jP5sAyEsYk0hN/qcKo2pXvFLqh3MXokwZ7U=
+X-Google-Smtp-Source: ACHHUZ4j4o+3ks7gqO0Cc3az7qvWANuOL9pmgjp9OgEvccsoElcFtMR8UppD8ccMx0iGR4Z540YQjU8jVHujZAMcF4c=
+X-Received: by 2002:a17:907:3e05:b0:94e:988d:acc5 with SMTP id
+ hp5-20020a1709073e0500b0094e988dacc5mr1256436ejc.46.1683293238964; Fri, 05
+ May 2023 06:27:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230505074701.1030980-1-bigunclemax@gmail.com> <20230505105805.548d1a1b@donnerap.cambridge.arm.com>
+In-Reply-To: <20230505105805.548d1a1b@donnerap.cambridge.arm.com>
+From:   Maxim Kiselev <bigunclemax@gmail.com>
+Date:   Fri, 5 May 2023 17:27:07 +0400
+Message-ID: <CALHCpMi8=t1bMceTOfZjh7aKEQcEEpfeG4wi9pB=5o34Ca+N3w@mail.gmail.com>
+Subject: Re: [PATCH] riscv: dts: allwinner: d1: Add SPI0 controller node
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     robh+dt@kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Hi Andre,
 
-Today's linux-next merge of the amdgpu tree got conflicts in:
+> From a quick glance at the manuals, it
+> looks like there are not quite the same, though: the D1/R528/T113s
+> mentions a SPI_SAMP_DL register @0x28, whereas the older IP has a SPI_CCR
+> register @0x24 - which is not mentioned in the newer manuals. The driver
+> relies on that clock control register, so it wouldn't really work
+> reliably, if that register is not there.
 
-  drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-  drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
-  drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
-  drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.h
-
-between commits:
-
-  822b84ecfc646 ("drm/amd/display: Add missing WA and MCLK validation")
-  f11aee97b13ea ("drm/amd/display: copy dmub caps to dc on dcn31")
-  3caab67db1f69 ("drm/amd/display: Isolate remaining FPU code in DCN32")
-
-from the drm-next tree and commits:
-
-  e0a77e09c707c ("drm/amd/display: Add missing WA and MCLK validation")
-  4f63b7a59926e ("drm/amd/display: Add FAMS capability to DCN31")
-  b058e3999021e ("drm/amd/display: Enable SubVP on PSR panels if single stream")
-  1938bcdc4b530 ("drm/amd/display: Query GECC enable for SubVP disable")
-
-from the amdgpu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-index 62ce36c75c4d2,55494730e5008..0000000000000
---- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-diff --cc drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
-index 1f5ee5cde6e1c,4950eaa4406b2..0000000000000
---- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
-diff --cc drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
-index 47beb4ea779d3,826059d5b3675..0000000000000
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
-diff --cc drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.h
-index dcf512cd30721,a4206b71d650a..0000000000000
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.h
+Thank you for pointing this out. I missed this difference.
+I actually have a board with T113 SoC, and it looks like writing to
+SPI_CCR@0x24 does nothing.
+And it doesn't affect access to connected SPI NOR flash (read\write
+operations are fine).
+But I completely agree with you that this difference should be handled
+by the spi driver.
