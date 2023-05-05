@@ -2,42 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4836F855C
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 17:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D80AC6F8565
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 17:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbjEEPPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 11:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
+        id S232575AbjEEPRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 11:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbjEEPPr (ORCPT
+        with ESMTP id S232457AbjEEPRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 11:15:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EE859F3
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 08:15:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7983E63EAF
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 15:15:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E081C433D2;
-        Fri,  5 May 2023 15:15:42 +0000 (UTC)
-Date:   Fri, 5 May 2023 11:15:40 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>
-Subject: [GIT PULL] tracing: Minor updates for 6.4
-Message-ID: <20230505111540.0b2af312@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 5 May 2023 11:17:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B102517FFB
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 08:17:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683299822;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=abj92oKBVKkSuSz9pqIREg9vXlBszotRotTWHKF/vxY=;
+        b=Ybkm35MQVl6W0UqmckRPall+d69uZ584vqXpsNH1xez1CQ4OIkUothZZOEuRRIiWMCoQTk
+        sv6MiKn4W48QwYnqkG3oNgNpTrjMkLQsWcKzANN7LllotiyXB67KRPxmmT5CMo2iQJpsWQ
+        xhiLO+nedfvHfQ5Q9HdsL2UYp+2oNi0=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-433-2KTS8tfzMSqVqVgTWJ271w-1; Fri, 05 May 2023 11:17:01 -0400
+X-MC-Unique: 2KTS8tfzMSqVqVgTWJ271w-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f173bd0fc9so10873685e9.3
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 08:17:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683299820; x=1685891820;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=abj92oKBVKkSuSz9pqIREg9vXlBszotRotTWHKF/vxY=;
+        b=iWZd+l0dr4xsyBqXa2XE/7pT0CGx+bwaD0/LtqFiJyS/i7eRlOYPMQM1diY12J890F
+         cca5iT3syXCym9H07YL9RfAueG3aEmkXeX16iADID94juBnlfCFIQmfe7jV+bCdUszAA
+         cWx2TeZrfQ1AEKifmr7zjK6DMYvcL2ANS7U1mwVEvWTQkO6/azI7IYmIOe0HyDtHXJ6l
+         gZCEBDyOp9an5ypmslApYbt2W58ahafd8rmpT2SFWYE/v/0n0CADIwoLkow3xWeJlmgk
+         cenNillzJ5zNNpOSqPPPhuSUeaWnrLXnCA/CfMiC51JRWpv/Qcnq3hSb4y2IyzNQk0i4
+         dOlQ==
+X-Gm-Message-State: AC+VfDyuuUuFoCz8SdZGkezk22bklpzOhHs+tGYWXEregY+/BL2LBvP4
+        hiL+8k3wPIjHmXtZHUUrRqLVm4c06jBvQU5+fiYeexjuEgBxkCWizITrtF6tWVenVEKYbH8uKAH
+        tNB9Da8+vjtBFM4NRDAxCWswL
+X-Received: by 2002:a1c:7702:0:b0:3f1:72ec:4009 with SMTP id t2-20020a1c7702000000b003f172ec4009mr1676493wmi.9.1683299820163;
+        Fri, 05 May 2023 08:17:00 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ78JBIXEOqF3dAix6y4QDwnEAMI8vIJEvszuxEpNDMp1Z2OwDOrdyWv9MUnAGy//RkyiltP9g==
+X-Received: by 2002:a1c:7702:0:b0:3f1:72ec:4009 with SMTP id t2-20020a1c7702000000b003f172ec4009mr1676482wmi.9.1683299819807;
+        Fri, 05 May 2023 08:16:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c71f:6900:2b25:fc69:599e:3986? (p200300cbc71f69002b25fc69599e3986.dip0.t-ipconnect.de. [2003:cb:c71f:6900:2b25:fc69:599e:3986])
+        by smtp.gmail.com with ESMTPSA id h5-20020a1ccc05000000b003ee5fa61f45sm8280845wmb.3.2023.05.05.08.16.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 May 2023 08:16:59 -0700 (PDT)
+Message-ID: <ac239fcf-9b2d-e82c-bec7-28d139384750@redhat.com>
+Date:   Fri, 5 May 2023 17:16:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] sysctl: add config to make randomize_va_space RO
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+To:     Sam James <sam@gentoo.org>
+Cc:     Michael McCracken <michael.mccracken@gmail.com>,
+        linux-kernel@vger.kernel.org, serge@hallyn.com, tycho@tycho.pizza,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        kernel-hardening@lists.openwall.com
+References: <20230504213002.56803-1-michael.mccracken@gmail.com>
+ <fbf37518-328d-c08c-7140-5d09d7a2674f@redhat.com> <87pm7f9q3q.fsf@gentoo.org>
+ <c50ac5e4-3f84-c52a-561d-de6530e617d7@redhat.com>
+Organization: Red Hat
+In-Reply-To: <c50ac5e4-3f84-c52a-561d-de6530e617d7@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,169 +91,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 05.05.23 17:15, David Hildenbrand wrote:
+> On 05.05.23 09:46, Sam James wrote:
+>>
+>> David Hildenbrand <david@redhat.com> writes:
+>>
+>>> On 04.05.23 23:30, Michael McCracken wrote:
+>>>> Add config RO_RANDMAP_SYSCTL to set the mode of the randomize_va_space
+>>>> sysctl to 0444 to disallow all runtime changes. This will prevent
+>>>> accidental changing of this value by a root service.
+>>>> The config is disabled by default to avoid surprises.
+>>>
+>>> Can you elaborate why we care about "accidental changing of this value
+>>> by a root service"?
+>>>
+>>> We cannot really stop root from doing a lot of stupid things (e.g.,
+>>> erase the root fs), so why do we particularly care here?
+>>
+>> (I'm really not defending the utility of this, fwiw).
+>>
+>> In the past, I've seen fuzzing tools and other debuggers try to set
+>> it, and it might be that an admin doesn't realise that. But they could
+>> easily set other dangerous settings unsuitable for production, so...
+> 
+> At least fuzzing tools randomly toggling it could actually find real
+> problems. Debugging tools ... makes sense that they might be using it.
+> 
+> What I understand is, that it's more of a problem that the system
+> continues running and the disabled randomization isn't revealed to an
+> admin easily.
+> 
+> If we really care, not sure what's better: maybe we want to disallow
+> disabling it only in a security lockdown kernel? Or at least warn the
+> user when disabling it? (WARN_TAINT?)
 
-Linus,
+Sorry, not WARN_TAINT. pr_warn() maybe. Tainting the kernel is probably 
+a bit too much as well.
 
-Minor tracing updates:
+-- 
+Thanks,
 
-- Make buffer_percent read/write. The buffer_percent file is how users can
-  state how long to block on the tracing buffer depending on how much
-  is in the buffer. When it hits the "buffer_percent" it will wake the
-  task waiting on the buffer. For some reason it was set to read-only.
-  This was not noticed because testing was done as root without SELinux,
-  but with SELinux it will prevent even root to write to it without having
-  CAP_DAC_OVERRIDE.
+David / dhildenb
 
-- The "touched_functions" was added this merge window, but one of the
-  reasons for adding it was not implemented. That was to show what functions
-  were not only touched, but had either a direct trampoline attached to
-  it, or a kprobe or live kernel patching that can "hijack" the function
-  to run a different function. The point is to know if there's functions
-  in the kernel that may not be behaving as the kernel code shows. This can
-  be used for debugging. TODO: Add this information to kernel oops too.
-
-
-Please pull the latest trace-v6.4-rc1 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-trace-v6.4-rc1
-
-Tag SHA1: b8448f2578d59f26c9f0236ad246e5a162438457
-Head SHA1: 6ce2c04fcbcaa5eb086e5142ab359be306cbc3e1
-
-
-Ondrej Mosnacek (1):
-      tracing: Fix permissions for the buffer_percent file
-
-Steven Rostedt (Google) (1):
-      ftrace: Add MODIFIED flag to show if IPMODIFY or direct was attached
-
-----
- Documentation/trace/ftrace.rst | 25 +++++++++++++++++++++++++
- include/linux/ftrace.h         |  4 +++-
- kernel/trace/ftrace.c          | 12 +++++++++---
- kernel/trace/trace.c           |  2 +-
- 4 files changed, 38 insertions(+), 5 deletions(-)
----------------------------
-diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
-index aaebb821912e..d5766229c71a 100644
---- a/Documentation/trace/ftrace.rst
-+++ b/Documentation/trace/ftrace.rst
-@@ -350,6 +350,19 @@ of ftrace. Here is a list of some of the key files:
- 	an 'I' will be displayed on the same line as the function that
- 	can be overridden.
- 
-+	If a non ftrace trampoline is attached (BPF) a 'D' will be displayed.
-+	Note, normal ftrace trampolines can also be attached, but only one
-+	"direct" trampoline can be attached to a given function at a time.
-+
-+	Some architectures can not call direct trampolines, but instead have
-+	the ftrace ops function located above the function entry point. In
-+	such cases an 'O' will be displayed.
-+
-+	If a function had either the "ip modify" or a "direct" call attached to
-+	it in the past, a 'M' will be shown. This flag is never cleared. It is
-+	used to know if a function was every modified by the ftrace infrastructure,
-+	and can be used for debugging.
-+
- 	If the architecture supports it, it will also show what callback
- 	is being directly called by the function. If the count is greater
- 	than 1 it most likely will be ftrace_ops_list_func().
-@@ -359,6 +372,18 @@ of ftrace. Here is a list of some of the key files:
- 	its address will be printed as well as the function that the
- 	trampoline calls.
- 
-+  touched_functions:
-+
-+	This file contains all the functions that ever had a function callback
-+	to it via the ftrace infrastructure. It has the same format as
-+	enabled_functions but shows all functions that have every been
-+	traced.
-+
-+	To see any function that has every been modified by "ip modify" or a
-+	direct trampoline, one can perform the following command:
-+
-+	grep ' M ' /sys/kernel/tracing/touched_functions
-+
-   function_profile_enabled:
- 
- 	When set it will enable all functions with either the function
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 327046f1278d..7dffd740e784 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -549,6 +549,7 @@ bool is_ftrace_trampoline(unsigned long addr);
-  *  CALL_OPS - the record can use callsite-specific ops
-  *  CALL_OPS_EN - the function is set up to use callsite-specific ops
-  *  TOUCHED  - A callback was added since boot up
-+ *  MODIFIED - The function had IPMODIFY or DIRECT attached to it
-  *
-  * When a new ftrace_ops is registered and wants a function to save
-  * pt_regs, the rec->flags REGS is set. When the function has been
-@@ -569,9 +570,10 @@ enum {
- 	FTRACE_FL_CALL_OPS	= (1UL << 22),
- 	FTRACE_FL_CALL_OPS_EN	= (1UL << 21),
- 	FTRACE_FL_TOUCHED	= (1UL << 20),
-+	FTRACE_FL_MODIFIED	= (1UL << 19),
- };
- 
--#define FTRACE_REF_MAX_SHIFT	20
-+#define FTRACE_REF_MAX_SHIFT	19
- #define FTRACE_REF_MAX		((1UL << FTRACE_REF_MAX_SHIFT) - 1)
- 
- #define ftrace_rec_count(rec)	((rec)->flags & FTRACE_REF_MAX)
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index db8532a4d5c8..885845fc851d 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -46,7 +46,8 @@
- #include "trace_stat.h"
- 
- /* Flags that do not get reset */
--#define FTRACE_NOCLEAR_FLAGS	(FTRACE_FL_DISABLED | FTRACE_FL_TOUCHED)
-+#define FTRACE_NOCLEAR_FLAGS	(FTRACE_FL_DISABLED | FTRACE_FL_TOUCHED | \
-+				 FTRACE_FL_MODIFIED)
- 
- #define FTRACE_INVALID_FUNCTION		"__ftrace_invalid_address__"
- 
-@@ -2273,6 +2274,10 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
- 					rec->flags &= ~FTRACE_FL_TRAMP_EN;
- 			}
- 
-+			/* Keep track of anything that modifies the function */
-+			if (rec->flags & (FTRACE_FL_DIRECT | FTRACE_FL_IPMODIFY))
-+				rec->flags |= FTRACE_FL_MODIFIED;
-+
- 			if (flag & FTRACE_FL_DIRECT) {
- 				/*
- 				 * If there's only one user (direct_ops helper)
-@@ -3866,12 +3871,13 @@ static int t_show(struct seq_file *m, void *v)
- 	if (iter->flags & (FTRACE_ITER_ENABLED | FTRACE_ITER_TOUCHED)) {
- 		struct ftrace_ops *ops;
- 
--		seq_printf(m, " (%ld)%s%s%s%s",
-+		seq_printf(m, " (%ld)%s%s%s%s%s",
- 			   ftrace_rec_count(rec),
- 			   rec->flags & FTRACE_FL_REGS ? " R" : "  ",
- 			   rec->flags & FTRACE_FL_IPMODIFY ? " I" : "  ",
- 			   rec->flags & FTRACE_FL_DIRECT ? " D" : "  ",
--			   rec->flags & FTRACE_FL_CALL_OPS ? " O" : "  ");
-+			   rec->flags & FTRACE_FL_CALL_OPS ? " O" : "  ",
-+			   rec->flags & FTRACE_FL_MODIFIED ? " M " : "   ");
- 		if (rec->flags & FTRACE_FL_TRAMP_EN) {
- 			ops = ftrace_find_tramp_ops_any(rec);
- 			if (ops) {
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 076d893d2965..b9be1af23a73 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -9660,7 +9660,7 @@ init_tracer_tracefs(struct trace_array *tr, struct dentry *d_tracer)
- 
- 	tr->buffer_percent = 50;
- 
--	trace_create_file("buffer_percent", TRACE_MODE_READ, d_tracer,
-+	trace_create_file("buffer_percent", TRACE_MODE_WRITE, d_tracer,
- 			tr, &buffer_percent_fops);
- 
- 	create_trace_options_dir(tr);
