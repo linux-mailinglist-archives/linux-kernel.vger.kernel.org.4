@@ -2,59 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B880C6F8C95
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 00:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814826F8C96
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbjEEW7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 18:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
+        id S229686AbjEEXAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 19:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbjEEW7F (ORCPT
+        with ESMTP id S229649AbjEEXAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 18:59:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720B1618B
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 15:59:01 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683327536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6sxb0Huk9DeXydwe6cpIDkL7SV2wlpTgDqHSYs1vaAs=;
-        b=wXfT696KaUYaGEuot+1Gy+WTVD+vu5j5EFC2LDzX+0ILhP/GjZeAhRSNqHPhj7V735MCNF
-        TNSaKjBop7cinpFB+Lq8P90+v37I/HD8LBqz0U0ehJouMf2x2FLx5L/mmZd1oW3Ub1okkr
-        J1yeIfb+uZautH79EEFukMh6jn1nSo6hXX7utU+HM0T+/+hIGp1es/KnnTYbmYCdhpTuwu
-        s6+OtQdXemng/eqJw7gIHF7JqM3pBZhtc5bOUFzejmc4FjnOP9oAG8kJOi3nukiceoHL9A
-        FK4y/JSajK37lhsSQFxYJDtIwQuElg3V4kIKEJ4ZdpnTE04aarNabweHtfuetw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683327536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6sxb0Huk9DeXydwe6cpIDkL7SV2wlpTgDqHSYs1vaAs=;
-        b=47+4+aKd4VWzrC4aVBxdK1WldAEyyCODSxsUrh5aqMLO9HvHrV2tgM9Vy+XeoGmBGbCi7a
-        4XQvR+P3vBB4MADg==
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: Re: [patch 02/20] posix-timers: Ensure timer ID search-loop limit
- is valid
-In-Reply-To: <ZFUXrCZtWyNG3Esi@lothringen>
-References: <20230425181827.219128101@linutronix.de>
- <20230425183312.932345089@linutronix.de> <ZFUXrCZtWyNG3Esi@lothringen>
-Date:   Sat, 06 May 2023 00:58:56 +0200
-Message-ID: <87zg6i2xn3.ffs@tglx>
+        Fri, 5 May 2023 19:00:36 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435CC5B8C
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:00:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=ynYN/E5zV6U2+rofOUaL5Z5bxVP7BjOHSyyXh1vFy+w=; b=iwTVzskZWEh0tMmEBjm3qOS/rX
+        JKdrBp3TdB08bFzwFZWUlfy8Xett54C8GbJAf84lju9ltpSe/veZy+5qVrXm6+Fng3JGh0QwNuFz0
+        A2uIcGYAUoQHXScjKTFj0uNRGkT2HVE2/xSowLk2/MgUcZERCzn16q4KzOZOMdUELEmQKhKtWIRPB
+        GoZYObc+0vLNHCEP9VONPxQZ9i//S91zqPl1mYjpch4UuXM2vUQrdY6qoT0usSZzXw5tAjYdmZe8a
+        ZTRHrayir4x20v1NMa8jp9EB9oOq7r7SOEbOtRDo8DG3VEd0cF+PckCSO89pPZLb5d/UBv9R+Suq8
+        JX9jepQQ==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pv4Ph-00C2jt-2P;
+        Fri, 05 May 2023 23:00:34 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] powerpc/embedded6xx: select MPC10X_BRIDGE only if PCI is set
+Date:   Fri,  5 May 2023 16:00:32 -0700
+Message-Id: <20230505230032.19156-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,67 +52,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05 2023 at 16:50, Frederic Weisbecker wrote:
-> On Tue, Apr 25, 2023 at 08:48:58PM +0200, Thomas Gleixner wrote:
->>  
->> -	do {
->> +	/* Can be written by a different task concurrently in the loop below */
->> +	start = READ_ONCE(sig->next_posix_timer_id);
->> +
->> +	for (id = ~start; start != id; id++) {
->>  		spin_lock(&hash_lock);
->> -		head = &posix_timers_hashtable[hash(sig, sig->posix_timer_id)];
->> -		if (!__posix_timers_find(head, sig, sig->posix_timer_id)) {
->> +		id = sig->next_posix_timer_id;
->> +
->> +		/* Write the next ID back. Clamp it to the positive space */
->> +		WRITE_ONCE(sig->next_posix_timer_id, (id + 1) & INT_MAX);
->
-> Isn't that looping forever?
+When CONFIG_SMP is not set, CONFIG_BROKEN_ON_SMP is set, and
+CONFIG_PCI is not set, there can be a kconfig warning:
 
-No. The loop breaks when @id reaches the locklessly read out @start
-value again.
+WARNING: unmet direct dependencies detected for PPC_INDIRECT_PCI
+  Depends on [n]: PCI [=n]
+  Selected by [y]:
+  - MPC10X_BRIDGE [=y]
 
-I admit that the 'id = ~start' part in the for() expression is confusing
-without a comment. That initial @id value is in the invalid space to
-make sure that the termination condition 'start != id' does not trigger
-right away. But that value gets immediately overwritten after acquiring
-hash_lock by the real sig->next_posix_timer_id value.
+To fix that, make the selects of MPC10X_BRIDGE be conditional
+on PCI.
 
-The clamp to the positive space has nothing to do with that. That's
-required because the ID must be positive as a negative value would be an
-error when returned, right?
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: linuxppc-dev@lists.ozlabs.org
+---
+ arch/powerpc/platforms/embedded6xx/Kconfig |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-So the whole thing works like this:
-
-   start = READ_LOCKLESS(sig->next_id);
-
-   // Enfore that id and start are different to not terminate right away
-   id = ~start;
-
-loop:
-   if (id == start)
-   	goto fail;
-   lock()
-        id = sig->next_id;                      <-- stable readout
-        sig->next_id = (id + 1) & INT_MAX;      <-- prevent going negative
-
-        if (unused_id(id)) {
-           add_timer_to_hash(timer, id);
-           unlock();
-           return id;
-        }
-   id++;
-   unlock();
-   goto loop;
-
-As the initial lockless readout is guaranteed to be in the positive
-space, how is that supposed to be looping forever?
-
-Admittedly this can be written less obscure, but not tonight :)
-
-Thanks,
-
-        tglx
-
-
+diff -- a/arch/powerpc/platforms/embedded6xx/Kconfig b/arch/powerpc/platforms/embedded6xx/Kconfig
+--- a/arch/powerpc/platforms/embedded6xx/Kconfig
++++ b/arch/powerpc/platforms/embedded6xx/Kconfig
+@@ -10,7 +10,7 @@ config LINKSTATION
+ 	select FSL_SOC
+ 	select PPC_UDBG_16550 if SERIAL_8250
+ 	select DEFAULT_UIMAGE
+-	select MPC10X_BRIDGE
++	select MPC10X_BRIDGE if PCI
+ 	help
+ 	  Select LINKSTATION if configuring for one of PPC- (MPC8241)
+ 	  based NAS systems from Buffalo Technology. So far only
+@@ -24,7 +24,7 @@ config STORCENTER
+ 	select MPIC
+ 	select FSL_SOC
+ 	select PPC_UDBG_16550 if SERIAL_8250
+-	select MPC10X_BRIDGE
++	select MPC10X_BRIDGE if PCI
+ 	help
+ 	  Select STORCENTER if configuring for the iomega StorCenter
+ 	  with an 8241 CPU in it.
