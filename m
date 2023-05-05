@@ -2,369 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D106F801F
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C19296F8028
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbjEEJhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 05:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S231781AbjEEJj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 05:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbjEEJhp (ORCPT
+        with ESMTP id S231797AbjEEJjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 05:37:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE86191ED;
-        Fri,  5 May 2023 02:37:42 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 75A766605709;
-        Fri,  5 May 2023 10:37:40 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1683279461;
-        bh=5/9WroyIBUi9E29he9XG+5WOW57u+xl9BEKI+4ueqDs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IF4K+zWu+UaxHjfmhNqtGGsdRPI5Jpbs5O946jjbUjMM3r5xgQwWgr1wgruTHGcBc
-         0eMW9Cleozs6FjBBmafQWWv8BEgjtwMVwOr6Q61eM8lZmdW6hCQ7BJhFPKR9Ipdm/Q
-         1UNIoL6W0X5a1VuQYdxchfDicaxg/eo97C5zhtLl0Vx9u/LMl9MRq1J48rKOc+gTgJ
-         OaYfHKDOz5we/MkPFcksl+LmG1ufJIGNr9+M1GGMmwDSga747r6tk/Dpcm5E782gW2
-         krS8J38UArpKzmotbyZtPjSWbPii6dF76AXIxSwN4Zq+u9VeOqrYoBx8kokeBlrMhm
-         k0ALQteu6WtKg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        chun-jie.chen@mediatek.com, mandyjh.liu@mediatek.com,
-        miles.chen@mediatek.com, zhaojh329@gmail.com,
-        daniel@makrotopia.org, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, Garmin.Chang@mediatek.com,
-        msp@baylibre.com, yangyingliang@huawei.com,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH 2/2] clk: mediatek: Remove CLK_SET_PARENT from all MSDC core clocks
-Date:   Fri,  5 May 2023 11:37:33 +0200
-Message-Id: <20230505093733.221922-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230505093733.221922-1-angelogioacchino.delregno@collabora.com>
-References: <20230505093733.221922-1-angelogioacchino.delregno@collabora.com>
+        Fri, 5 May 2023 05:39:24 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C84219928;
+        Fri,  5 May 2023 02:39:21 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-965ab8ed1c0so246057366b.2;
+        Fri, 05 May 2023 02:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683279560; x=1685871560;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GUktY4jStI4pioqhxhiQLqN7xdp1S8+7gGDVuIEND74=;
+        b=a/m+zAdVmVzY7n3IFMrOHes7piGpofgyMv0chbeHFQJBDhvUL1B1CocjQ5kUigMoyu
+         DGNr6C2U70w0fj8H8M+WIReDJv4hqiBYgywhuAEoahNjqg4sMkspLl3PDKe9RawCXvOr
+         L77U8IOhjtF6xkL3h906lXiVngWu4h6Q1UdUHFTa0M+wCllEBVaMea5oeHAzpkABD97l
+         Qmpcbe6MbTvJFOTfKFv0AaOPCMI+CAw9uu9Vx5FIx7U+uc8NOhjgF2xfc14yi1wWY3Hu
+         SvE98SUCKG8uqK532gzKmdqq+YfZMyPe2Kaz5RdxEdxu8lTF4o30w3qh3lOKY5nNt+tP
+         629g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683279560; x=1685871560;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GUktY4jStI4pioqhxhiQLqN7xdp1S8+7gGDVuIEND74=;
+        b=dwHEUn0uwNtBWkL5b9jB+2YTdaUxVzZzssJMPCwSgagRPfqsw7ptCJ2cL/vUOWquWM
+         G4+nrEK3bhLKiWnzklsYutEkGcjXQCTilefkeozrcLVyh49FrCzpl8IyvfghWE3Q3Sw8
+         48Qrw77OFHTozewAo13TmGNMhbdaGFDzyGvwpkQBhF5rLM2WBWh1eCtQp/cXe5GR90+J
+         KqoPVcX+9cLPThcwQrnEqEH3wnaJGHNxewMnyxVlE+FRwdsdfJdlwH1aapQE8+DfPfGP
+         0J5QVvrWBbbEzJzwpalWHiswc76KfWYdirUQNjlETtooD7lfVdUAesk3v1bqUh0Wcwmq
+         9Ghw==
+X-Gm-Message-State: AC+VfDxJ6hWU27LCB/yCaBXBN45Mgo7rKVUDuexkJrTnEmANKh98lZpF
+        YolnLO/CuKbHxsMv+Mc4QmM=
+X-Google-Smtp-Source: ACHHUZ5QYFD4IELsY0R7LPQMp/0MWV54qghTOrO9jyvy11VxKC4OuAqTMSBTYwCjrBV0h68SeRTpYA==
+X-Received: by 2002:a17:907:6289:b0:961:8d21:a480 with SMTP id nd9-20020a170907628900b009618d21a480mr582683ejc.58.1683279559773;
+        Fri, 05 May 2023 02:39:19 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id n5-20020a1709065da500b00965e68b8df5sm437929ejv.76.2023.05.05.02.39.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 02:39:19 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 5 May 2023 11:39:16 +0200
+To:     Ian Rogers <irogers@google.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Song Liu <song@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Hao Luo <haoluo@google.com>, James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Roman Lozko <lozko.roma@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: BPF skels in perf .Re: [GIT PULL] perf tools changes for v6.4
+Message-ID: <ZFTOxBDsbboKeEr9@krava>
+References: <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
+ <ZFOSUab5XEJD0kxj@kernel.org>
+ <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
+ <ZFPw0scDq1eIzfHr@kernel.org>
+ <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
+ <ZFQCccsx6GK+gY0j@kernel.org>
+ <ZFQoQjCNtyMIulp+@kernel.org>
+ <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
+ <ZFQ5sjjtfEYzvHNP@krava>
+ <CAP-5=fXgtNQ5KQv_M+b-mR-dm_s8AAgRkotXifFiTqBo9FHJzA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fXgtNQ5KQv_M+b-mR-dm_s8AAgRkotXifFiTqBo9FHJzA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various MSDC core clocks, used for multiple MSDC controller instances,
-share the same parent(s): in order to add parents selection in the
-mtk-sd driver to achieve an accurate clock rate for all modes, remove
-the CLK_SET_RATE_PARENT flag from all MSDC clocks for all SoCs: this
-will make sure that a clk_set_rate() call performed for a clock on
-a secondary controller will not change the rate of a common parent,
-which would result in an overclock or underclock of one of the
-controllers.
+On Thu, May 04, 2023 at 04:19:47PM -0700, Ian Rogers wrote:
+> On Thu, May 4, 2023 at 4:03 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Thu, May 04, 2023 at 03:03:42PM -0700, Ian Rogers wrote:
+> > > On Thu, May 4, 2023 at 2:48 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > > >
+> > > > Em Thu, May 04, 2023 at 04:07:29PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > > Em Thu, May 04, 2023 at 11:50:07AM -0700, Andrii Nakryiko escreveu:
+> > > > > > On Thu, May 4, 2023 at 10:52 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > > > > > > Andrii, can you add some more information about the usage of vmlinux.h
+> > > > > > > instead of using kernel headers?
+> > > > >
+> > > > > > I'll just say that vmlinux.h is not a hard requirement to build BPF
+> > > > > > programs, it's more a convenience allowing easy access to definitions
+> > > > > > of both UAPI and kernel-internal structures for tracing needs and
+> > > > > > marking them relocatable using BPF CO-RE machinery. Lots of real-world
+> > > > > > applications just check-in pregenerated vmlinux.h to avoid build-time
+> > > > > > dependency on up-to-date host kernel and such.
+> > > > >
+> > > > > > If vmlinux.h generation and usage is causing issues, though, given
+> > > > > > that perf's BPF programs don't seem to be using many different kernel
+> > > > > > types, it might be a better option to just use UAPI headers for public
+> > > > > > kernel type definitions, and just define CO-RE-relocatable minimal
+> > > > > > definitions locally in perf's BPF code for the other types necessary.
+> > > > > > E.g., if perf needs only pid and tgid from task_struct, this would
+> > > > > > suffice:
+> > > > >
+> > > > > > struct task_struct {
+> > > > > >     int pid;
+> > > > > >     int tgid;
+> > > > > > } __attribute__((preserve_access_index));
+> > > > >
+> > > > > Yeah, that seems like a way better approach, no vmlinux involved, libbpf
+> > > > > CO-RE notices that task_struct changed from this two integers version
+> > > > > (of course) and does the relocation to where it is in the running kernel
+> > > > > by using /sys/kernel/btf/vmlinux.
+> > > >
+> > > > Doing it for one of the skels, build tested, runtime untested, but not
+> > > > using any vmlinux, BTF to help, not that bad, more verbose, but at least
+> > > > we state what are the fields we actually use, have those attribute
+> > > > documenting that those offsets will be recorded for future use, etc.
+> > > >
+> > > > Namhyung, can you please check that this works?
+> > > >
+> > > > Thanks,
+> > > >
+> > > > - Arnaldo
+> > > >
+> > > > diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+> > > > index 6a438e0102c5a2cb..f376d162549ebd74 100644
+> > > > --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+> > > > +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+> > > > @@ -1,11 +1,40 @@
+> > > >  // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > >  // Copyright (c) 2021 Facebook
+> > > >  // Copyright (c) 2021 Google
+> > > > -#include "vmlinux.h"
+> > > > +#include <linux/types.h>
+> > > > +#include <linux/bpf.h>
+> > >
+> > > Compared to vmlinux.h here be dragons. It is easy to start dragging in
+> > > all of libc and that may not work due to missing #ifdefs, etc.. Could
+> > > we check in a vmlinux.h like libbpf-tools does?
+> > > https://github.com/iovisor/bcc/tree/master/libbpf-tools#vmlinuxh-generation
+> > > https://github.com/iovisor/bcc/tree/master/libbpf-tools/arm64
+> > >
+> > > This would also remove some of the errors that could be introduced by
+> > > copy+pasting enums, etc. and also highlight issues with things being
+> > > renamed as build time rather than runtime failures.
+> >
+> > we already have to deal with that, right? doing checks on fields in
+> > structs like mm_struct___old
+> 
+> We do, but the way I detected the problems in the first place was by
+> building against older kernels. Now the build will always succeed but
+> fail at runtime.
+> 
+> > > Could this be some shared resource for the different linux tools
+> > > projects using a vmlinux.h? e.g. tools/lib/vmlinuxh with an
+> > > install_headers target that builds a vmlinux.h.
+> >
+> > I tried to do the minimal header and it's not too big,
+> > I pushed it in here:
+> >   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=perf/vmlinux_h
+> >
+> > compile tested so far
+> >
+> > jirka
+> 
+> Cool, could we just call it vmlinux.h rather than perf-defs.h?
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/clk/mediatek/clk-mt6765.c          | 12 +++++------
- drivers/clk/mediatek/clk-mt6779.c          | 18 ++++++++--------
- drivers/clk/mediatek/clk-mt7981-topckgen.c | 12 +++++------
- drivers/clk/mediatek/clk-mt7986-topckgen.c | 12 +++++------
- drivers/clk/mediatek/clk-mt8173-topckgen.c | 24 +++++++++++-----------
- drivers/clk/mediatek/clk-mt8183.c          | 16 +++++++--------
- drivers/clk/mediatek/clk-mt8186-topckgen.c | 12 +++++------
- drivers/clk/mediatek/clk-mt8188-topckgen.c | 16 +++++++--------
- drivers/clk/mediatek/clk-mt8192.c          | 17 +++++++--------
- drivers/clk/mediatek/clk-mt8195-topckgen.c | 16 +++++++--------
- 10 files changed, 78 insertions(+), 77 deletions(-)
+right, it also makes the change smaller
 
-diff --git a/drivers/clk/mediatek/clk-mt6765.c b/drivers/clk/mediatek/clk-mt6765.c
-index 4f028df6c0a9..0377e6dd3206 100644
---- a/drivers/clk/mediatek/clk-mt6765.c
-+++ b/drivers/clk/mediatek/clk-mt6765.c
-@@ -406,15 +406,15 @@ static const struct mtk_mux top_muxes[] = {
- 			CLK_CFG_2_SET, CLK_CFG_2_CLR, 24, 2, 31,
- 			CLK_CFG_UPDATE, 11),
- 	/* CLK_CFG_3 */
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0_HCLK_SEL, "msdc5hclk",
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC50_0_HCLK_SEL, "msdc5hclk",
- 			msdc5hclk_parents, CLK_CFG_3, CLK_CFG_3_SET,
--			CLK_CFG_3_CLR, 0, 2, 7, CLK_CFG_UPDATE, 12),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0_SEL, "msdc50_0_sel",
-+			CLK_CFG_3_CLR, 0, 2, 7, CLK_CFG_UPDATE, 12, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC50_0_SEL, "msdc50_0_sel",
- 			msdc50_0_parents, CLK_CFG_3, CLK_CFG_3_SET,
--			CLK_CFG_3_CLR, 8, 3, 15, CLK_CFG_UPDATE, 13),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC30_1_SEL, "msdc30_1_sel",
-+			CLK_CFG_3_CLR, 8, 3, 15, CLK_CFG_UPDATE, 13, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC30_1_SEL, "msdc30_1_sel",
- 			msdc30_1_parents, CLK_CFG_3, CLK_CFG_3_SET,
--			CLK_CFG_3_CLR, 16, 3, 23, CLK_CFG_UPDATE, 14),
-+			CLK_CFG_3_CLR, 16, 3, 23, CLK_CFG_UPDATE, 14, 0),
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_AUDIO_SEL, "audio_sel", audio_parents,
- 			CLK_CFG_3, CLK_CFG_3_SET, CLK_CFG_3_CLR,
- 			24, 2, 31, CLK_CFG_UPDATE, 15),
-diff --git a/drivers/clk/mediatek/clk-mt6779.c b/drivers/clk/mediatek/clk-mt6779.c
-index ada927a61309..555e937e9430 100644
---- a/drivers/clk/mediatek/clk-mt6779.c
-+++ b/drivers/clk/mediatek/clk-mt6779.c
-@@ -687,16 +687,16 @@ static const struct mtk_mux top_muxes[] = {
- 			     0x70, 0x74, 0x78, 0, 1, 7, 0x004, 20),
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_SPI, "spi_sel", spi_parents,
- 			     0x70, 0x74, 0x78, 8, 2, 15, 0x004, 21),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0_HCLK, "msdc50_hclk_sel",
--			     msdc50_hclk_parents, 0x70, 0x74, 0x78,
--			     16, 2, 23, 0x004, 22),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0, "msdc50_0_sel",
--			     msdc50_0_parents, 0x70, 0x74, 0x78,
--			     24, 3, 31, 0x004, 23),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC50_0_HCLK, "msdc50_hclk_sel",
-+				   msdc50_hclk_parents, 0x70, 0x74, 0x78,
-+				   16, 2, 23, 0x004, 22, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC50_0, "msdc50_0_sel",
-+				   msdc50_0_parents, 0x70, 0x74, 0x78,
-+				   24, 3, 31, 0x004, 23, 0),
- 	/* CLK_CFG_6 */
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC30_1, "msdc30_1_sel",
--			     msdc30_1_parents, 0x80, 0x84, 0x88,
--			     0, 3, 7, 0x004, 24),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC30_1, "msdc30_1_sel",
-+				   msdc30_1_parents, 0x80, 0x84, 0x88,
-+				   0, 3, 7, 0x004, 24, 0),
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_AUD, "audio_sel", audio_parents,
- 			     0x80, 0x84, 0x88, 8, 2, 15, 0x004, 25),
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_AUD_INTBUS, "aud_intbus_sel",
-diff --git a/drivers/clk/mediatek/clk-mt7981-topckgen.c b/drivers/clk/mediatek/clk-mt7981-topckgen.c
-index 3aba1a9b9a36..ac015a68674c 100644
---- a/drivers/clk/mediatek/clk-mt7981-topckgen.c
-+++ b/drivers/clk/mediatek/clk-mt7981-topckgen.c
-@@ -310,12 +310,12 @@ static const struct mtk_mux top_muxes[] = {
- 			     pextp_tl_ck_parents, 0x010, 0x014, 0x018, 24, 2, 31,
- 			     0x1C0, 7),
- 	/* CLK_CFG_2 */
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_EMMC_208M_SEL, "emmc_208m_sel",
--			     emmc_208m_parents, 0x020, 0x024, 0x028, 0, 3, 7,
--			     0x1C0, 8),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_EMMC_400M_SEL, "emmc_400m_sel",
--			     emmc_400m_parents, 0x020, 0x024, 0x028, 8, 2, 15,
--			     0x1C0, 9),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_EMMC_208M_SEL, "emmc_208m_sel",
-+				   emmc_208m_parents, 0x020, 0x024, 0x028, 0, 3, 7,
-+				   0x1C0, 8, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_EMMC_400M_SEL, "emmc_400m_sel",
-+				   emmc_400m_parents, 0x020, 0x024, 0x028, 8, 2, 15,
-+				   0x1C0, 9, 0),
- 	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_F26M_SEL, "csw_f26m_sel",
- 				   csw_f26m_parents, 0x020, 0x024, 0x028, 16, 1, 23,
- 				   0x1C0, 10,
-diff --git a/drivers/clk/mediatek/clk-mt7986-topckgen.c b/drivers/clk/mediatek/clk-mt7986-topckgen.c
-index fbca3feded8f..536655bede26 100644
---- a/drivers/clk/mediatek/clk-mt7986-topckgen.c
-+++ b/drivers/clk/mediatek/clk-mt7986-topckgen.c
-@@ -193,12 +193,12 @@ static const struct mtk_mux top_muxes[] = {
- 			     pextp_tl_ck_parents, 0x010, 0x014, 0x018, 24, 2,
- 			     31, 0x1C0, 7),
- 	/* CLK_CFG_2 */
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_EMMC_250M_SEL, "emmc_250m_sel",
--			     emmc_250m_parents, 0x020, 0x024, 0x028, 0, 1, 7,
--			     0x1C0, 8),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_EMMC_416M_SEL, "emmc_416m_sel",
--			     emmc_416m_parents, 0x020, 0x024, 0x028, 8, 1, 15,
--			     0x1C0, 9),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_EMMC_250M_SEL, "emmc_250m_sel",
-+				   emmc_250m_parents, 0x020, 0x024, 0x028, 0, 1, 7,
-+				   0x1C0, 8, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_EMMC_416M_SEL, "emmc_416m_sel",
-+				   emmc_416m_parents, 0x020, 0x024, 0x028, 8, 1, 15,
-+				   0x1C0, 9, 0),
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_F_26M_ADC_SEL, "f_26m_adc_sel",
- 			     f_26m_adc_parents, 0x020, 0x024, 0x028, 16, 1, 23,
- 			     0x1C0, 10),
-diff --git a/drivers/clk/mediatek/clk-mt8173-topckgen.c b/drivers/clk/mediatek/clk-mt8173-topckgen.c
-index baa8fd6cb312..42c37541cebb 100644
---- a/drivers/clk/mediatek/clk-mt8173-topckgen.c
-+++ b/drivers/clk/mediatek/clk-mt8173-topckgen.c
-@@ -547,17 +547,17 @@ static const struct mtk_composite top_muxes[] = {
- 	MUX_GATE(CLK_TOP_USB20_SEL, "usb20_sel", usb20_parents, 0x0060, 24, 2, 31),
- 	/* CLK_CFG_3 */
- 	MUX_GATE(CLK_TOP_USB30_SEL, "usb30_sel", usb30_parents, 0x0070, 0, 2, 7),
--	MUX_GATE(CLK_TOP_MSDC50_0_H_SEL, "msdc50_0_h_sel", msdc50_0_h_parents,
--		 0x0070, 8, 3, 15),
--	MUX_GATE(CLK_TOP_MSDC50_0_SEL, "msdc50_0_sel", msdc50_0_parents,
--		 0x0070, 16, 4, 23),
--	MUX_GATE(CLK_TOP_MSDC30_1_SEL, "msdc30_1_sel", msdc30_1_parents,
--		 0x0070, 24, 3, 31),
-+	MUX_GATE_FLAGS(CLK_TOP_MSDC50_0_H_SEL, "msdc50_0_h_sel", msdc50_0_h_parents,
-+		 0x0070, 8, 3, 15, 0),
-+	MUX_GATE_FLAGS(CLK_TOP_MSDC50_0_SEL, "msdc50_0_sel", msdc50_0_parents,
-+		 0x0070, 16, 4, 23, 0),
-+	MUX_GATE_FLAGS(CLK_TOP_MSDC30_1_SEL, "msdc30_1_sel", msdc30_1_parents,
-+		 0x0070, 24, 3, 31, 0),
- 	/* CLK_CFG_4 */
--	MUX_GATE(CLK_TOP_MSDC30_2_SEL, "msdc30_2_sel", msdc30_2_parents,
--		 0x0080, 0, 3, 7),
--	MUX_GATE(CLK_TOP_MSDC30_3_SEL, "msdc30_3_sel", msdc30_3_parents,
--		 0x0080, 8, 4, 15),
-+	MUX_GATE_FLAGS(CLK_TOP_MSDC30_2_SEL, "msdc30_2_sel", msdc30_2_parents,
-+		 0x0080, 0, 3, 7, 0),
-+	MUX_GATE_FLAGS(CLK_TOP_MSDC30_3_SEL, "msdc30_3_sel", msdc30_3_parents,
-+		 0x0080, 8, 4, 15, 0),
- 	MUX_GATE(CLK_TOP_AUDIO_SEL, "audio_sel", audio_parents,
- 		 0x0080, 16, 2, 23),
- 	MUX_GATE(CLK_TOP_AUD_INTBUS_SEL, "aud_intbus_sel", aud_intbus_parents,
-@@ -595,8 +595,8 @@ static const struct mtk_composite top_muxes[] = {
- 	MUX_GATE(CLK_TOP_DPILVDS_SEL, "dpilvds_sel", dpilvds_parents,
- 		 0x00c0, 24, 3, 31),
- 	/* CLK_CFG_13 */
--	MUX_GATE(CLK_TOP_MSDC50_2_H_SEL, "msdc50_2_h_sel", msdc50_2_h_parents,
--		 0x00d0, 0, 3, 7),
-+	MUX_GATE_FLAGS(CLK_TOP_MSDC50_2_H_SEL, "msdc50_2_h_sel", msdc50_2_h_parents,
-+		 0x00d0, 0, 3, 7, 0),
- 	MUX_GATE(CLK_TOP_HDCP_SEL, "hdcp_sel", hdcp_parents, 0x00d0, 8, 2, 15),
- 	MUX_GATE(CLK_TOP_HDCP_24M_SEL, "hdcp_24m_sel", hdcp_24m_parents,
- 		 0x00d0, 16, 2, 23),
-diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
-index 95786b0c2d5f..dc1a24f0046f 100644
---- a/drivers/clk/mediatek/clk-mt8183.c
-+++ b/drivers/clk/mediatek/clk-mt8183.c
-@@ -487,14 +487,14 @@ static const struct mtk_mux top_muxes[] = {
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_MUX_SPI, "spi_sel",
- 		spi_parents, 0x70, 0x74, 0x78, 24, 2, 31, 0x004, 15),
- 	/* CLK_CFG_4 */
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MUX_MSDC50_0_HCLK, "msdc50_hclk_sel",
--		msdc50_hclk_parents, 0x80, 0x84, 0x88, 0, 2, 7, 0x004, 16),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MUX_MSDC50_0, "msdc50_0_sel",
--		msdc50_0_parents, 0x80, 0x84, 0x88, 8, 3, 15, 0x004, 17),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MUX_MSDC30_1, "msdc30_1_sel",
--		msdc30_1_parents, 0x80, 0x84, 0x88, 16, 3, 23, 0x004, 18),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MUX_MSDC30_2, "msdc30_2_sel",
--		msdc30_2_parents, 0x80, 0x84, 0x88, 24, 3, 31, 0x004, 19),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MUX_MSDC50_0_HCLK, "msdc50_hclk_sel",
-+		msdc50_hclk_parents, 0x80, 0x84, 0x88, 0, 2, 7, 0x004, 16, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MUX_MSDC50_0, "msdc50_0_sel",
-+		msdc50_0_parents, 0x80, 0x84, 0x88, 8, 3, 15, 0x004, 17, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MUX_MSDC30_1, "msdc30_1_sel",
-+		msdc30_1_parents, 0x80, 0x84, 0x88, 16, 3, 23, 0x004, 18, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MUX_MSDC30_2, "msdc30_2_sel",
-+		msdc30_2_parents, 0x80, 0x84, 0x88, 24, 3, 31, 0x004, 19, 0),
- 	/* CLK_CFG_5 */
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_MUX_AUDIO, "audio_sel",
- 		audio_parents, 0x90, 0x94, 0x98, 0, 2, 7, 0x004, 20),
-diff --git a/drivers/clk/mediatek/clk-mt8186-topckgen.c b/drivers/clk/mediatek/clk-mt8186-topckgen.c
-index 669806212073..b8a619e98da0 100644
---- a/drivers/clk/mediatek/clk-mt8186-topckgen.c
-+++ b/drivers/clk/mediatek/clk-mt8186-topckgen.c
-@@ -531,12 +531,12 @@ static const struct mtk_mux top_mtk_muxes[] = {
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_SPI, "top_spi",
- 		spi_parents, 0x0060, 0x0064, 0x0068, 24, 3, 31, 0x0004, 11),
- 	/* CLK_CFG_3 */
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0_HCLK, "top_msdc5hclk",
--		msdc5hclk_parents, 0x0070, 0x0074, 0x0078, 0, 2, 7, 0x0004, 12),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0, "top_msdc50_0",
--		msdc50_0_parents, 0x0070, 0x0074, 0x0078, 8, 3, 15, 0x0004, 13),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC30_1, "top_msdc30_1",
--		msdc30_1_parents, 0x0070, 0x0074, 0x0078, 16, 3, 23, 0x0004, 14),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC50_0_HCLK, "top_msdc5hclk",
-+		msdc5hclk_parents, 0x0070, 0x0074, 0x0078, 0, 2, 7, 0x0004, 12, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC50_0, "top_msdc50_0",
-+		msdc50_0_parents, 0x0070, 0x0074, 0x0078, 8, 3, 15, 0x0004, 13, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC30_1, "top_msdc30_1",
-+		msdc30_1_parents, 0x0070, 0x0074, 0x0078, 16, 3, 23, 0x0004, 14, 0),
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_AUDIO, "top_audio",
- 		audio_parents, 0x0070, 0x0074, 0x0078, 24, 2, 31, 0x0004, 15),
- 	/* CLK_CFG_4 */
-diff --git a/drivers/clk/mediatek/clk-mt8188-topckgen.c b/drivers/clk/mediatek/clk-mt8188-topckgen.c
-index 7c99244d997e..8699b87b130d 100644
---- a/drivers/clk/mediatek/clk-mt8188-topckgen.c
-+++ b/drivers/clk/mediatek/clk-mt8188-topckgen.c
-@@ -1015,15 +1015,15 @@ static const struct mtk_mux top_mtk_muxes[] = {
- 			     uart_parents, 0x068, 0x06C, 0x070, 0, 4, 7, 0x04, 24),
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_SPI, "top_spi",
- 			     spi_parents, 0x068, 0x06C, 0x070, 8, 4, 15, 0x04, 25),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0_HCLK, "top_msdc5hclk",
--			     msdc5hclk_parents, 0x068, 0x06C, 0x070, 16, 4, 23, 0x04, 26),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0, "top_msdc50_0",
--			     msdc50_0_parents, 0x068, 0x06C, 0x070, 24, 4, 31, 0x04, 27),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC50_0_HCLK, "top_msdc5hclk",
-+				   msdc5hclk_parents, 0x068, 0x06C, 0x070, 16, 4, 23, 0x04, 26, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC50_0, "top_msdc50_0",
-+				   msdc50_0_parents, 0x068, 0x06C, 0x070, 24, 4, 31, 0x04, 27, 0),
- 	/* CLK_CFG_7 */
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC30_1, "top_msdc30_1",
--			     msdc30_1_parents, 0x074, 0x078, 0x07C, 0, 4, 7, 0x04, 28),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC30_2, "top_msdc30_2",
--			     msdc30_2_parents, 0x074, 0x078, 0x07C, 8, 4, 15, 0x04, 29),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC30_1, "top_msdc30_1",
-+				   msdc30_1_parents, 0x074, 0x078, 0x07C, 0, 4, 7, 0x04, 28, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC30_2, "top_msdc30_2",
-+				   msdc30_2_parents, 0x074, 0x078, 0x07C, 8, 4, 15, 0x04, 29, 0),
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_INTDIR, "top_intdir",
- 			     intdir_parents, 0x074, 0x078, 0x07C, 16, 4, 23, 0x04, 30),
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_AUD_INTBUS, "top_aud_intbus",
-diff --git a/drivers/clk/mediatek/clk-mt8192.c b/drivers/clk/mediatek/clk-mt8192.c
-index 8a9e6d5f85b4..55fc6fc3c467 100644
---- a/drivers/clk/mediatek/clk-mt8192.c
-+++ b/drivers/clk/mediatek/clk-mt8192.c
-@@ -601,15 +601,16 @@ static const struct mtk_mux top_mtk_muxes[] = {
- 			     uart_parents, 0x070, 0x074, 0x078, 8, 1, 15, 0x004, 25),
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_SPI_SEL, "spi_sel",
- 			     spi_parents, 0x070, 0x074, 0x078, 16, 2, 23, 0x004, 26),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0_H_SEL, "msdc50_0_h_sel",
--			     msdc50_0_h_parents, 0x070, 0x074, 0x078, 24, 2, 31, 0x004, 27),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC50_0_H_SEL, "msdc50_0_h_sel",
-+				   msdc50_0_h_parents, 0x070, 0x074, 0x078, 24, 2,
-+				   31, 0x004, 27, 0),
- 	/* CLK_CFG_7 */
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0_SEL, "msdc50_0_sel",
--			     msdc50_0_parents, 0x080, 0x084, 0x088, 0, 3, 7, 0x004, 28),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC30_1_SEL, "msdc30_1_sel",
--			     msdc30_parents, 0x080, 0x084, 0x088, 8, 3, 15, 0x004, 29),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC30_2_SEL, "msdc30_2_sel",
--			     msdc30_parents, 0x080, 0x084, 0x088, 16, 3, 23, 0x004, 30),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC50_0_SEL, "msdc50_0_sel",
-+				   msdc50_0_parents, 0x080, 0x084, 0x088, 0, 3, 7, 0x004, 28, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC30_1_SEL, "msdc30_1_sel",
-+				   msdc30_parents, 0x080, 0x084, 0x088, 8, 3, 15, 0x004, 29, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC30_2_SEL, "msdc30_2_sel",
-+				   msdc30_parents, 0x080, 0x084, 0x088, 16, 3, 23, 0x004, 30, 0),
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_AUDIO_SEL, "audio_sel",
- 			     audio_parents, 0x080, 0x084, 0x088, 24, 2, 31, 0x008, 0),
- 	/* CLK_CFG_8 */
-diff --git a/drivers/clk/mediatek/clk-mt8195-topckgen.c b/drivers/clk/mediatek/clk-mt8195-topckgen.c
-index 3acbd1c907ab..f4b3d8ba9ff4 100644
---- a/drivers/clk/mediatek/clk-mt8195-topckgen.c
-+++ b/drivers/clk/mediatek/clk-mt8195-topckgen.c
-@@ -930,15 +930,15 @@ static const struct mtk_mux top_mtk_muxes[] = {
- 	/* CLK_CFG_7 */
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_SPIS, "top_spis",
- 		spis_parents, 0x074, 0x078, 0x07C, 0, 3, 7, 0x04, 28),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0_HCLK, "top_msdc50_0_hclk",
--		msdc50_0_h_parents, 0x074, 0x078, 0x07C, 8, 2, 15, 0x04, 29),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0, "top_msdc50_0",
--		msdc50_0_parents, 0x074, 0x078, 0x07C, 16, 3, 23, 0x04, 30),
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC30_1, "top_msdc30_1",
--		msdc30_parents, 0x074, 0x078, 0x07C, 24, 3, 31, 0x04, 31),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC50_0_HCLK, "top_msdc50_0_hclk",
-+		msdc50_0_h_parents, 0x074, 0x078, 0x07C, 8, 2, 15, 0x04, 29, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC50_0, "top_msdc50_0",
-+		msdc50_0_parents, 0x074, 0x078, 0x07C, 16, 3, 23, 0x04, 30, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC30_1, "top_msdc30_1",
-+		msdc30_parents, 0x074, 0x078, 0x07C, 24, 3, 31, 0x04, 31, 0),
- 	/* CLK_CFG_8 */
--	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC30_2, "top_msdc30_2",
--		msdc30_parents, 0x080, 0x084, 0x088, 0, 3, 7, 0x08, 0),
-+	MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MSDC30_2, "top_msdc30_2",
-+		msdc30_parents, 0x080, 0x084, 0x088, 0, 3, 7, 0x08, 0, 0),
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_INTDIR, "top_intdir",
- 		intdir_parents, 0x080, 0x084, 0x088, 8, 2, 15, 0x08, 1),
- 	MUX_GATE_CLR_SET_UPD(CLK_TOP_AUD_INTBUS, "top_aud_intbus",
--- 
-2.40.1
+> 
+> I notice cgroup_subsys_id is in there which is called out in Andrii's
+> CO-RE  guide/blog:
+> https://nakryiko.com/posts/bpf-core-reference-guide/#relocatable-enums
+> perhaps we can do something with names/types to make sure a helper is
+> being used for these enum values.
 
+ok, I'll check on that..  so far I made some clean ups and updated the branch
+
+thanks,
+jirka
