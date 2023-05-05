@@ -2,62 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC046F7C9C
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 07:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C786F7C9D
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 07:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbjEEF54 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 5 May 2023 01:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
+        id S230340AbjEEF6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 01:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjEEF5x (ORCPT
+        with ESMTP id S230038AbjEEF6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 01:57:53 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A796E11DB9;
-        Thu,  4 May 2023 22:57:50 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id EE8CA24DD6E;
-        Fri,  5 May 2023 13:57:48 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 5 May
- 2023 13:57:48 +0800
-Received: from [192.168.60.114] (180.164.60.184) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 5 May
- 2023 13:57:47 +0800
-Message-ID: <7bd29805-11e7-68ee-aa47-68bae2a2fb38@starfivetech.com>
-Date:   Fri, 5 May 2023 13:57:46 +0800
+        Fri, 5 May 2023 01:58:38 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E49E11D89;
+        Thu,  4 May 2023 22:58:34 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1puoSU-0003tm-VJ; Fri, 05 May 2023 07:58:22 +0200
+Date:   Fri, 5 May 2023 07:58:22 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     "Fengtao (fengtao, Euler)" <fengtao40@huawei.com>
+Cc:     Florian Westphal <fw@strlen.de>, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
+        kuba@kernel.org, stephen@networkplumber.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yanan@huawei.com, caowangbao@huawei.com
+Subject: Re: BUG: KASAN: stack-out-of-bounds in __ip_options_echo
+Message-ID: <20230505055822.GA6126@breakpoint.cc>
+References: <05324dd2-3620-8f07-60a0-051814913ff8@huawei.com>
+ <20230502165446.GA22029@breakpoint.cc>
+ <9dd7ec8f-bc40-39af-febb-a7e8aabbaaed@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 0/8] Add StarFive Camera Subsystem driver
-From:   Jack Zhu <jack.zhu@starfivetech.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        "Todor Tomov" <todor.too@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Eugen Hristev <eugen.hristev@collabora.com>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <changhuang.liang@starfivetech.com>
-References: <20230413035541.62129-1-jack.zhu@starfivetech.com>
- <14c06503-621f-2477-7b15-b17f1890ecfe@starfivetech.com>
-Content-Language: en-US
-In-Reply-To: <14c06503-621f-2477-7b15-b17f1890ecfe@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9dd7ec8f-bc40-39af-febb-a7e8aabbaaed@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,179 +45,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fengtao (fengtao, Euler) <fengtao40@huawei.com> wrote:
+> Hi
+> 
+> I have tested the patch, the panic not happend.
+> And I search the similar issue in kernel, and found commit:
+> [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed0de45a1008
+> [2]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3da1ed7ac398
+> 
+> So I tested another patch like this:
+> ------------[ cut here ]------------
+> --- .//net/ipv4/netfilter/nf_reject_ipv4.c      2023-05-02 13:03:35.427896081 +0000
+> +++ .//net/ipv4/netfilter/nf_reject_ipv4.c.new  2023-05-02 13:03:00.433897970 +0000
+> @@ -187,6 +187,7 @@ > 
+>  void nf_send_unreach(struct sk_buff *skb_in, int code, int hook)
+>  {
+> +       struct ip_options opt;
+>         struct iphdr *iph = ip_hdr(skb_in);
+>         u8 proto = iph->protocol;
+> 
+> @@ -196,13 +197,18 @@
+>         if (hook == NF_INET_PRE_ROUTING && nf_reject_fill_skb_dst(skb_in))
+>                 return;
+> 
+> +       memset(&opt, 0, sizeof(opt));
+> +       opt.optlen = iph->ihl*4 - sizeof(struct iphdr);
+> +       if (__ip_options_compile(dev_net(skb_in->dev), &opt, skb_in, NULL))
+> +               return;
+> +
+>         if (skb_csum_unnecessary(skb_in) || !nf_reject_verify_csum(proto)) {
+> -               icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0);
+> +               __icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0, &opt);
+>                 return;
+>         }
+> 
+>         if (nf_ip_checksum(skb_in, hook, ip_hdrlen(skb_in), proto) == 0)
+> -               icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0);
+> +               __icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0, &opt);
+>  }
+>  EXPORT_SYMBOL_GPL(nf_send_unreach);
+> ------------[ cut here ]------------
+> 
+> This can also fix the issue :)
 
+No, it papers over the problem, by only fixing this specific instance
+(icmpv4).  What about ipv6?  What about all other IPCB accesses?
 
-On 2023/4/24 19:19, Jack Zhu wrote:
-> 
-> 
-> On 2023/4/13 11:55, Jack Zhu wrote:
->> Hi,
->> 
->> This patch series adds support for the StarFive Camera Subsystem
->> found on StarFive JH7110 SoC.
->> 
->> The driver implements V4L2, Media controller and V4L2 subdev interfaces.
->> Camera sensor using V4L2 subdev interface in the kernel is supported.
->> 
->> The driver is tested on VisionFive V2 board with IMX219 camera sensor.
->> GStreamer 1.18.5 with v4l2src plugin is supported.
->> 
->> Changes since v3:
->> Patch 1:
->> - Modified port@0 and port@1 properties.
->> - Extended the port@0 example with appropriate properties.
->> - Added 'port@0' for 'required'
->> Patch 2:
->> - Modified spelling errors.
->> Patch 3:
->> - Merged patch 5 into the patch with an explanation for compatible in
->>   commit msg.
->> Patch 6:
->> - Asserted pixel_rst[i] reset in the loop after the err_disable_pixclk
->>   label.
->> - Modified Code Style for getting sys_rst and p_rst.
->> - Renamed clk_name to name and modified the relevant code.
->> Patch 9:
->> - Added static for stfcamss_get_mem_res function.
->> - Added static for isp_close function.
->> - Fixed implicit conversion warning for stf_vin_map_isp_pad function.
->> - Dropped unused variables.
->> 
->>   v3: https://lore.kernel.org/all/20230331121826.96973-1-jack.zhu@starfivetech.com/
->> 
-> 
-> Hello everyone,
-> 
-> From the current review status, the patches related to the CSI module
-> have 'reviewed-by' tags. I would like to know if it is okay to add
-> patches 1-5 from this series to a PR first.
-> 
-> Thank you!
-> 
-> Jack
-> 
+> BTW, I think the problem is more then ipvlan? Maybe some other scenarios that can trigger such issue.
 
-Hello Mauro, Laurent, Maxime, Rob, Krzysztof, Robert, Todor and Philipp,
+Such as?
 
-Can you give me some suggestions and comments on the previous request
-to commit CSI related patches first? Thank you for your time.
-
-Jack
-
->> Changes since v2:
->> - Rebased on v6.3-rc1.
->> Patch 1:
->> - Modified spelling errors.
->> - Added port@0.
->> - Modified '$ref' of port.
->> - Added 'ports' to 'required'.
->> - Dropped 'stfcamss' label in example.
->> - Added port@0 in example.
->> - Added MAINTAINERS file.
->> Patch 2:
->> - Split this patch into three new patches.
->> - Modified compatible property.
->> - Replaced clock names with the existing names.
->> - Modified 'bus-type' and 'clock-lanes'
->> - Added port@2 - port@4
->> - Dropped 'csi2rx' label in example.
->> Patch 3:
->> - Updated rst and dot file as three pipelines were deleted.
->> Patch 4:
->> - Split this patch into three new patches.
->> - Dropped .s_power() and .get_fmt().
->> - Dropped CSI-2 DT support.
->> - Dropped v4l2_device_register_subdev_nodes().
->> - Used assigned-clock-rates in DT to set clk value.
->> - Modified 'compatible' field.
->> Patch 5:
->> - Deleted three pipelines. 
->> - Modified 'stfcamss_clocks'/'stfcamss_resets' struct.
->> - Dropped stfcamss_find_sensor() function.
->> - Removed redundant code from stfcamss_of_parse_endpoint_node().
->> - Modified spelling errors.
->> - Rewrote stfcamss_reg_media_subdev_node() function.
->> - Modified stfcamss_subdev_notifier_bound().
->> - Modified stfcamss_probe() function.
->> - Dropped stfcamss_suspend() and stfcamss_resume().
->> - Dropped dev_info() in stfcamss_remove() function.
->> - Added 'stf_' prefix for enum subdev_type.
->> - Moved all includes to the top in stf_camss.h file.
->> - Dropped unused fields in stfcamss struct.
->> - Replaced Custom logging macros with regular macros.
->> - Rewrote register read and write functions.
->> - Used lowercase for all hex constants.
->> - Used macro to name registers.
->> - Dropped unused ioctl and stf_isp_ioctl.h file.
->> 
->>   v2: https://lore.kernel.org/all/20230310120553.60586-1-jack.zhu@starfivetech.com/
->> 
->> Changes since v1:
->> - Deleted starfive,jh7110-mipi-csi2.yaml.
->> - Converted cdns,csi2rx.txt to cdns,csi2rx.yaml and added ‘resets’
->>   properties.
->> - Added ‘cdns,csi2rx.yaml’ in ‘CADENCE MIPI-CSI2 BRIDGES’ entry.
->> - The following contents were modified in starfive,jh7110-camss.yaml:
->>   dropped quotes from ’id’ and ‘schema’; dropped ‘|’ for ‘description’;
->>   corrected the wrong or redundant words: ‘a ISP’, ‘PD ISP’;
->>   dropped ‘minItems’ for ‘reg’, ‘clocks’, ‘resets’ and ‘interrupts’;
->>   dropped the '_clk' and 'rst_' prefix about the 'clock-names' and
->>   'reset-names';
->>   changed ‘endpoint@1’ to ‘endpoint’; updated examples;
->> - Updated Subject for some patches.
->> - Merged patch 6, 7, 8, 9, 10, 11 into one patch.
->> 
->> Jack Zhu (8):
->>   media: dt-bindings: cadence-csi2rx: Convert to DT schema
->>   media: dt-bindings: cadence-csi2rx: Add resets property
->>   media: cadence: Add operation on reset
->>   media: cadence: Add support for external dphy
->>   media: cadence: Add support for JH7110 SoC
->>   media: dt-bindings: Add bindings for JH7110 Camera Subsystem
->>   media: admin-guide: Add starfive_camss.rst for Starfive Camera
->>     Subsystem
->>   media: starfive: Add Starfive Camera Subsystem driver
->> 
->>  .../admin-guide/media/starfive_camss.rst      |   57 +
->>  .../media/starfive_camss_graph.dot            |   16 +
->>  .../admin-guide/media/v4l-drivers.rst         |    1 +
->>  .../devicetree/bindings/media/cdns,csi2rx.txt |  100 --
->>  .../bindings/media/cdns,csi2rx.yaml           |  201 +++
->>  .../bindings/media/starfive,jh7110-camss.yaml |  164 +++
->>  MAINTAINERS                                   |   10 +
->>  drivers/media/platform/Kconfig                |    1 +
->>  drivers/media/platform/Makefile               |    1 +
->>  drivers/media/platform/cadence/cdns-csi2rx.c  |  107 +-
->>  drivers/media/platform/starfive/Kconfig       |   18 +
->>  drivers/media/platform/starfive/Makefile      |   14 +
->>  drivers/media/platform/starfive/stf_camss.c   |  477 +++++++
->>  drivers/media/platform/starfive/stf_camss.h   |  150 +++
->>  drivers/media/platform/starfive/stf_common.h  |   18 +
->>  drivers/media/platform/starfive/stf_isp.c     |  737 +++++++++++
->>  drivers/media/platform/starfive/stf_isp.h     |  999 +++++++++++++++
->>  .../media/platform/starfive/stf_isp_hw_ops.c  |  715 +++++++++++
->>  drivers/media/platform/starfive/stf_video.c   |  989 ++++++++++++++
->>  drivers/media/platform/starfive/stf_video.h   |   89 ++
->>  drivers/media/platform/starfive/stf_vin.c     | 1138 +++++++++++++++++
->>  drivers/media/platform/starfive/stf_vin.h     |  174 +++
->>  .../media/platform/starfive/stf_vin_hw_ops.c  |  211 +++
->>  23 files changed, 6272 insertions(+), 115 deletions(-)
->>  create mode 100644 Documentation/admin-guide/media/starfive_camss.rst
->>  create mode 100644 Documentation/admin-guide/media/starfive_camss_graph.dot
->>  delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
->>  create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
->>  create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
->>  create mode 100644 drivers/media/platform/starfive/Kconfig
->>  create mode 100644 drivers/media/platform/starfive/Makefile
->>  create mode 100644 drivers/media/platform/starfive/stf_camss.c
->>  create mode 100644 drivers/media/platform/starfive/stf_camss.h
->>  create mode 100644 drivers/media/platform/starfive/stf_common.h
->>  create mode 100644 drivers/media/platform/starfive/stf_isp.c
->>  create mode 100644 drivers/media/platform/starfive/stf_isp.h
->>  create mode 100644 drivers/media/platform/starfive/stf_isp_hw_ops.c
->>  create mode 100644 drivers/media/platform/starfive/stf_video.c
->>  create mode 100644 drivers/media/platform/starfive/stf_video.h
->>  create mode 100644 drivers/media/platform/starfive/stf_vin.c
->>  create mode 100644 drivers/media/platform/starfive/stf_vin.h
->>  create mode 100644 drivers/media/platform/starfive/stf_vin_hw_ops.c
->> 
+I don't see how this is fixable, just have have a look at "git grep
+IPCB", how do you envision stack to know how such access is valid or
+not?
