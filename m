@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1146F7FFA
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB3D6F8000
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbjEEJ26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 05:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
+        id S231519AbjEEJaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 05:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231742AbjEEJ2j (ORCPT
+        with ESMTP id S231592AbjEEJaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 05:28:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380611A10B
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 02:28:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD43063CB3
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 09:28:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E38C433D2;
-        Fri,  5 May 2023 09:28:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683278914;
-        bh=1RAXc0NiBF7f+OxPfJ6Q3iIY0ISS03O5QOmWMYZ+Rxk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lp9dhKV7U+yAXz8XoM5uYwnqkHMpOJNX4AafF2rX6XK9yCWv+doTi4UXb7tvPuA10
-         KNpEYJcc5CUUlgK03TE5D+xnA6DFAISKGJiyGMQ1fIpHDx0WtWbMiILEi9dCKltMfE
-         56Za1I3RJr7hcZUswM+W3tU6MFowUECKSjxGFMjKiu79cHbLzMhQu5pfyeCN2+3JP9
-         e1kWLDtSmwvSBYQ1amkgCeE+wBlNORJn4wpB/ZX/9DneqFgbaNLwEn5mmAucnMZ1cr
-         lDtHvKC5USXt8j2jaM4vXqNiPYskuLsmL2dzeUEZQbIx4sswbzPYNHvVjz8f6Y2FF7
-         Z2swNdODgi6JA==
-Date:   Fri, 5 May 2023 14:58:29 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de,
-        chunfeng.yun@mediatek.com, kishon@kernel.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        nathan@kernel.org, ndesaulniers@google.com, granquet@baylibre.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] phy: mediatek: fix returning garbage
-Message-ID: <ZFTMPWp8LhwA9uHz@matsya>
-References: <20230414122253.3171524-1-trix@redhat.com>
+        Fri, 5 May 2023 05:30:08 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C22718DD1
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 02:30:06 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-55a26b46003so21630547b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 02:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683279005; x=1685871005;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zKLLprNwaaeZYAnNNb830KY0y4SK3/A2CshWnDDE80w=;
+        b=IyeI2DkciUzyMxxJkZOgS4Wf48xUGAPNC5wvtQocGOSDSNVbotah9q12SzdcdTzC9V
+         B4FURdd4Wz5zfZtAfHXXvHmbVGHNlUf4cuPoQTNG1ifz5zAZzz5JeXrm7227Ir6MR/Lt
+         OFB//+zi1Qea68MpwIASOqpabWg8dBuZqtwUT+QdMQUq1pndBRZVuI60F8nDqIl+zutJ
+         3aJLqWzeYW6045FPK0R4ItYPlTd6iUBzwrSq5nrYZvKP6tVVBhDCmWEc0MYs6L3sxIwJ
+         yhTk5qFg0jHBqLToGH4P9nlWjqpqpkBiZoeOe9hnRkvCcTLS+c3Bx83fiO0Wlfjq4gAp
+         gOHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683279005; x=1685871005;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zKLLprNwaaeZYAnNNb830KY0y4SK3/A2CshWnDDE80w=;
+        b=T5mov7sqr2FuUCDnukeIOHjcd8XzqKzLH0L/5TNg5TsagT8Pp9J4tzObrjlN2KR3ht
+         dzxxR0TMMNeDX8c19JEcj6z5b0jqIXVyIIee44F6MaZIL7VsH6W+Z+36K+5a1obB+NCL
+         PCzLhHNJYGNIsx8nCjKk0pTYByG/7qq0LXYWp+kjg6c+ipSthsVJuowDUcLYDoa+hByz
+         gs32BL7DzOwDh8MzkdZuC8m6hOunZlKGeCnmWXWoLCL+AqQq5bOBqrAldlgcLOx7EBV2
+         kfPpvq+0BqcC5+hBBhRCaEu1eJBT5B8vhFoCri/XW2b00GLXJCRFjl1UwnUlp7A8jA+N
+         YEAQ==
+X-Gm-Message-State: AC+VfDzoZmI6VNg+b9xo98lR4J7LiK2f66hTm/3cZkZtGYz+J15kdZEE
+        kQlMZxkDuuQmxNmJF9HCA/yA3aGbPMpiyKiQrQiZ1Q==
+X-Google-Smtp-Source: ACHHUZ57uxYbtQ4r7HHvF2CMapziRFJbg7koTCsVXaNSfDQ941AHyjqZmqhvyR2XIphz/G6gzsJpm/RJwQ9QpSVa1P4=
+X-Received: by 2002:a81:4e8a:0:b0:55a:886c:bfc3 with SMTP id
+ c132-20020a814e8a000000b0055a886cbfc3mr999607ywb.7.1683279005467; Fri, 05 May
+ 2023 02:30:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230414122253.3171524-1-trix@redhat.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <cover.1683183860.git.quic_varada@quicinc.com> <8894bf2c44eaf4959c7a1966b66229e6cf5cda96.1683183860.git.quic_varada@quicinc.com>
+In-Reply-To: <8894bf2c44eaf4959c7a1966b66229e6cf5cda96.1683183860.git.quic_varada@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 5 May 2023 12:29:54 +0300
+Message-ID: <CAA8EJppvj2nzqwdsC+Xct4cJg2-_yPpiGDELjHJG4HyAH3zGMA@mail.gmail.com>
+Subject: Re: [PATCH v10 8/9] arm64: dts: qcom: ipq9574: Add LDO regulator node
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,15 +72,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14-04-23, 08:22, Tom Rix wrote:
-> clang reports
-> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable
->   'ret' is uninitialized when used here [-Werror,-Wuninitialized]
->         if (ret)
->             ^~~
-> ret should have been set by the preceding call to mtk_hdmi_pll_set_hw.
+On Fri, 5 May 2023 at 11:23, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
+>
+> Add LDO regulator node
 
-I have applied "phy: mediatek: hdmi: mt8195: fix uninitialized variable
-usage in pll_calc"
+As this LDO is provided by the PMIC, it would be nice to know why it
+is modelled as an always-on regulator instead of the proper PMIC
+regulator. Up to now we were doing this only for the outstanding power
+rails like CX/MX or EBI.
+
+>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>  Changes in v10:
+>         - Add LDO regulator node
+> ---
+>  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> index bdc1434..1f5d14f 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> @@ -60,6 +60,13 @@
+>                         regulator-min-microvolt = <725000>;
+>                         regulator-max-microvolt = <1075000>;
+>                 };
+> +
+> +               mp5496_l2: l2 {
+> +                       regulator-min-microvolt = <1800000>;
+> +                       regulator-max-microvolt = <1800000>;
+> +                       regulator-boot-on;
+> +                       regulator-always-on;
+> +               };
+>         };
+>  };
+>
+> --
+> 2.7.4
+>
+
+
 -- 
-~Vinod
+With best wishes
+Dmitry
