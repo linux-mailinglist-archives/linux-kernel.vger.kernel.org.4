@@ -2,294 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FDAD6F8B51
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D80F6F8B79
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233232AbjEEVlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 17:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
+        id S233641AbjEEVma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 17:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233594AbjEEVlR (ORCPT
+        with ESMTP id S233612AbjEEVlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 17:41:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF035BA5;
-        Fri,  5 May 2023 14:40:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C10FE640F7;
-        Fri,  5 May 2023 21:40:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 272CEC433EF;
-        Fri,  5 May 2023 21:40:34 +0000 (UTC)
-Date:   Fri, 5 May 2023 17:40:32 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: Re: [PATCH v9.1 05/11] tracing/probes: Move event parameter
- fetching code to common parser
-Message-ID: <20230505174032.052cbc7c@gandalf.local.home>
-In-Reply-To: <168299388376.3242086.1033501163178915960.stgit@mhiramat.roam.corp.google.com>
-References: <168299383880.3242086.7182498102007986127.stgit@mhiramat.roam.corp.google.com>
-        <168299388376.3242086.1033501163178915960.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 5 May 2023 17:41:40 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4073C5B96
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 14:40:56 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2ac8ee9cf7aso5359051fa.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 14:40:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683322854; x=1685914854;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YfCYGehx8jvC84gEQScBvdgxh6j6XnKzcug3iY2u1OA=;
+        b=DsaeYxBU9g9ForTdiZgFVwa6RUI3toWnWlz96/jahjNzwSbmn/2HQNYROEFyAwIMO8
+         NnUj5lJqrseuci7k8O7sOSJ5XG8Xd9e3URRFhsX396dPJQ+R5Txpg6tzKxsw/8hKciNE
+         okodG+YCb0JdaL1ahWKzBYp0foaKHNB0welhxglGvuE1K5ah+tFcYLGawM+3Xn4KqgM0
+         HuIrnt3DyPHKhEj8arOj1q7ztJxrdHMVhK9RAMeqFxiAfSyDvi6EJTKZHazRq2U6F6qI
+         5lV/gD5B2FhzKeDOtd6pk2wbtNOK+H70FwrMVAFPcmuYeZXDu/W24gHMt+VFgrC6c++I
+         ZUiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683322854; x=1685914854;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YfCYGehx8jvC84gEQScBvdgxh6j6XnKzcug3iY2u1OA=;
+        b=i/2H9IXEhrs5BfIYigA6uZpb+ZW5N5IArhYOQT6rZxbO9+ueRbv5G+28oFvayfOuZy
+         AmQ17MBxZN5ovHb+mL8mm0tKXNC8FT2fZ4MF09lmpkB1SqB9CEnyZghn8au8JCdyPHad
+         mydzyNTsceAPHia+DI0DS513GqKFdyFWSvozNtD8mPDzicvadVGEkLRLw2knw00ZS++k
+         rkzTKxKG9VtUC8vjvDoSurkJ2UDHr4dLhRpK0UUFT9KZihZDtDprax2iAzkHU6ayjcU0
+         DNiTiqa+6n7sqa6GYMg2GluVHfs4H50ky/mAdeSWR4NMlWMvQZC/RkaP6Y99JdXjt2GN
+         kkRg==
+X-Gm-Message-State: AC+VfDwQ9Cns/3z9hnXqx5aUe0qufCvroquOE335kRFJMmjw/KX2X2pK
+        H6hdbIioYW8oIVs847DgMvx8sQ==
+X-Google-Smtp-Source: ACHHUZ65Q2M3eywt4gCCW5xrW/hUx4DubH+77FjkC11leG51pxPBtoPmHzltCvFUlKN7HuVg1GQ3jQ==
+X-Received: by 2002:a2e:9f4f:0:b0:2a8:bf74:61cc with SMTP id v15-20020a2e9f4f000000b002a8bf7461ccmr850139ljk.26.1683322854648;
+        Fri, 05 May 2023 14:40:54 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id n12-20020a2e720c000000b002a776dbc277sm126453ljc.124.2023.05.05.14.40.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 14:40:54 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Fri, 05 May 2023 23:40:33 +0200
+Subject: [PATCH v3 07/12] drm/msm: mdss: Add SM6350 support
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <20230411-topic-straitlagoon_mdss-v3-7-9837d6b3516d@linaro.org>
+References: <20230411-topic-straitlagoon_mdss-v3-0-9837d6b3516d@linaro.org>
+In-Reply-To: <20230411-topic-straitlagoon_mdss-v3-0-9837d6b3516d@linaro.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1683322839; l=1447;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=0D7OZJvsI1VqBAldTbVtRFbwuC+jJW8mAUrMe9Ykcbs=;
+ b=tJk+hp42JEbVFdnnUZXF6Ww9u3ITN3Ny597c6lPUsEhtqF5AmZGzbMxXnXmKA+XitE4rGDxrE
+ jwtK6aBm5J9CLs9cD8i/4dS0CLFRzKzJ+bKuJZvxO64kE4i46eeWmGk
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  2 May 2023 11:18:03 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+Add support for MDSS on SM6350.
 
-> --- a/kernel/trace/trace_probe.c
-> +++ b/kernel/trace/trace_probe.c
-> @@ -283,27 +283,53 @@ int traceprobe_parse_event_name(const char **pevent, const char **pgroup,
->  	return 0;
->  }
->  
-> +static int parse_trace_event_arg(char *arg, struct fetch_insn *code,
-> +				 struct traceprobe_parse_context *ctx)
-> +{
-> +	struct ftrace_event_field *field;
-> +	struct list_head *head;
-> +
-> +	head = trace_get_fields(ctx->event);
-> +	list_for_each_entry(field, head, link) {
-> +		if (!strcmp(arg, field->name)) {
-> +			code->op = FETCH_OP_TP_ARG;
-> +			code->data = field;
-> +			return 0;
-> +		}
-> +	}
-> +	return -ENOENT;
-> +}
-> +
->  #define PARAM_MAX_STACK (THREAD_SIZE / sizeof(unsigned long))
->  
->  static int parse_probe_vars(char *arg, const struct fetch_type *t,
-> -			struct fetch_insn *code, unsigned int flags, int offs)
-> +			    struct fetch_insn *code,
-> +			    struct traceprobe_parse_context *ctx)
->  {
->  	unsigned long param;
->  	int ret = 0;
->  	int len;
->  
-> -	if (flags & TPARG_FL_TEVENT) {
-> +	if (ctx->flags & TPARG_FL_TEVENT) {
->  		if (code->data)
->  			return -EFAULT;
-> -		code->data = kstrdup(arg, GFP_KERNEL);
-> -		if (!code->data)
-> -			return -ENOMEM;
-> -		code->op = FETCH_OP_TP_ARG;
-> -	} else if (strcmp(arg, "retval") == 0) {
-> -		if (flags & TPARG_FL_RETURN) {
-> +		ret = parse_trace_event_arg(arg, code, ctx);
-> +		if (!ret)
-> +			return 0;
-> +		if (strcmp(arg, "comm") == 0 || strcmp(arg, "COMM") == 0) {
-> +			code->op = FETCH_OP_COMM;
-> +			return 0;
-> +		}
-> +		/* backward compatibility */
-> +		ctx->offset = 0;
-> +		goto inval_var;
-> +	}
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/gpu/drm/msm/msm_mdss.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-So this is a bit inconsistent in this function. We have here an if
-statement that returns 0 on success, and jumps to inval_var if it reaches
-the end.
-
-The rest of the if statements below, also goes to inval_var, or returns
-error, or just falls through the if statement to return ret. It's somewhat
-random.
-
-This should be cleaned up (see patch at the end).
-
-> +
-> +	if (strcmp(arg, "retval") == 0) {
-> +		if (ctx->flags & TPARG_FL_RETURN) {
->  			code->op = FETCH_OP_RETVAL;
->  		} else {
-> -			trace_probe_log_err(offs, RETVAL_ON_PROBE);
-> +			trace_probe_log_err(ctx->offset, RETVAL_ON_PROBE);
->  			ret = -EINVAL;
->  		}
->  	} else if ((len = str_has_prefix(arg, "stack"))) {
-> @@ -313,9 +339,9 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
->  			ret = kstrtoul(arg + len, 10, &param);
->  			if (ret) {
->  				goto inval_var;
-> -			} else if ((flags & TPARG_FL_KERNEL) &&
-> +			} else if ((ctx->flags & TPARG_FL_KERNEL) &&
->  				    param > PARAM_MAX_STACK) {
-> -				trace_probe_log_err(offs, BAD_STACK_NUM);
-> +				trace_probe_log_err(ctx->offset, BAD_STACK_NUM);
->  				ret = -EINVAL;
->  			} else {
->  				code->op = FETCH_OP_STACK;
-> @@ -326,13 +352,13 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
->  	} else if (strcmp(arg, "comm") == 0 || strcmp(arg, "COMM") == 0) {
->  		code->op = FETCH_OP_COMM;
->  #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
-> -	} else if (tparg_is_function_entry(flags) &&
-> +	} else if (tparg_is_function_entry(ctx->flags) &&
->  		   (len = str_has_prefix(arg, "arg"))) {
->  		ret = kstrtoul(arg + len, 10, &param);
->  		if (ret) {
->  			goto inval_var;
->  		} else if (!param || param > PARAM_MAX_STACK) {
-> -			trace_probe_log_err(offs, BAD_ARG_NUM);
-> +			trace_probe_log_err(ctx->offset, BAD_ARG_NUM);
->  			return -EINVAL;
->  		}
->  		code->op = FETCH_OP_ARG;
-> @@ -341,7 +367,7 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
->  		 * The tracepoint probe will probe a stub function, and the
->  		 * first parameter of the stub is a dummy and should be ignored.
->  		 */
-> -		if (flags & TPARG_FL_TPOINT)
-> +		if (ctx->flags & TPARG_FL_TPOINT)
->  			code->param++;
->  #endif
->  	} else
-> @@ -350,7 +376,7 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
->  	return ret;
->  
->  inval_var:
-> -	trace_probe_log_err(offs, BAD_VAR);
-> +	trace_probe_log_err(ctx->offset, BAD_VAR);
->  	return -EINVAL;
->  }
->  
-
-
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index 84a9f0446390..a30aab8cef7f 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -307,6 +307,7 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
- 			    struct traceprobe_parse_context *ctx)
- {
- 	unsigned long param;
-+	int err = BAD_VAR;
- 	int ret = 0;
- 	int len;
+diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
+index e8c93731aaa1..4e3a5f0c303c 100644
+--- a/drivers/gpu/drm/msm/msm_mdss.c
++++ b/drivers/gpu/drm/msm/msm_mdss.c
+@@ -538,6 +538,14 @@ static const struct msm_mdss_data sdm845_data = {
+ 	.highest_bank_bit = 2,
+ };
  
-@@ -322,45 +323,61 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
- 		}
- 		/* backward compatibility */
- 		ctx->offset = 0;
--		goto inval_var;
-+		goto inval;
- 	}
- 
- 	if (strcmp(arg, "retval") == 0) {
- 		if (ctx->flags & TPARG_FL_RETURN) {
- 			code->op = FETCH_OP_RETVAL;
--		} else {
--			trace_probe_log_err(ctx->offset, RETVAL_ON_PROBE);
--			ret = -EINVAL;
-+			return 0;
- 		}
--	} else if ((len = str_has_prefix(arg, "stack"))) {
-+		err = RETVAL_ON_PROBE;
-+		ret = -EINVAL;
-+		goto inval;
-+	}
++static const struct msm_mdss_data sm6350_data = {
++	.ubwc_version = UBWC_2_0,
++	.ubwc_dec_version = UBWC_2_0,
++	.ubwc_swizzle = 6,
++	.ubwc_static = 0x1e,
++	.highest_bank_bit = 1,
++};
 +
-+	if ((len = str_has_prefix(arg, "stack"))) {
-+
- 		if (arg[len] == '\0') {
- 			code->op = FETCH_OP_STACKP;
--		} else if (isdigit(arg[len])) {
-+			return 0;
-+		}
-+
-+		if (isdigit(arg[len])) {
- 			ret = kstrtoul(arg + len, 10, &param);
--			if (ret) {
--				goto inval_var;
--			} else if ((ctx->flags & TPARG_FL_KERNEL) &&
--				    param > PARAM_MAX_STACK) {
--				trace_probe_log_err(ctx->offset, BAD_STACK_NUM);
-+			if (ret)
-+				goto inval;
-+
-+			if ((ctx->flags & TPARG_FL_KERNEL) &&
-+			    param > PARAM_MAX_STACK) {
-+				err = BAD_STACK_NUM;
- 				ret = -EINVAL;
--			} else {
--				code->op = FETCH_OP_STACK;
--				code->param = (unsigned int)param;
-+				goto inval;
- 			}
--		} else
--			goto inval_var;
--	} else if (strcmp(arg, "comm") == 0 || strcmp(arg, "COMM") == 0) {
-+			code->op = FETCH_OP_STACK;
-+			code->param = (unsigned int)param;
-+			return 0;
-+		}
-+		goto inval;
-+	}
-+
-+	if (strcmp(arg, "comm") == 0 || strcmp(arg, "COMM") == 0) {
- 		code->op = FETCH_OP_COMM;
-+		return 0;
-+	}
-+
- #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
--	} else if (tparg_is_function_entry(ctx->flags) &&
--		   (len = str_has_prefix(arg, "arg"))) {
-+	if (tparg_is_function_entry(ctx->flags) &&
-+	    (len = str_has_prefix(arg, "arg"))) {
- 		ret = kstrtoul(arg + len, 10, &param);
--		if (ret) {
--			goto inval_var;
--		} else if (!param || param > PARAM_MAX_STACK) {
--			trace_probe_log_err(ctx->offset, BAD_ARG_NUM);
--			return -EINVAL;
-+		if (ret)
-+			goto inval;
-+
-+		if (!param || param > PARAM_MAX_STACK) {
-+			err = BAD_ARG_NUM;
-+			goto inval;
- 		}
-+
- 		code->op = FETCH_OP_ARG;
- 		code->param = (unsigned int)param - 1;
- 		/*
-@@ -369,14 +386,11 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
- 		 */
- 		if (ctx->flags & TPARG_FL_TPOINT)
- 			code->param++;
-+		return 0;
- #endif
--	} else
--		goto inval_var;
--
--	return ret;
- 
--inval_var:
--	trace_probe_log_err(ctx->offset, BAD_VAR);
-+inval:
-+	trace_probe_log_err(ctx->offset, err);
- 	return -EINVAL;
- }
- 
+ static const struct msm_mdss_data sm8150_data = {
+ 	.ubwc_version = UBWC_3_0,
+ 	.ubwc_dec_version = UBWC_3_0,
+@@ -571,6 +579,7 @@ static const struct of_device_id mdss_dt_match[] = {
+ 	{ .compatible = "qcom,sc8180x-mdss", .data = &sc8180x_data },
+ 	{ .compatible = "qcom,sc8280xp-mdss", .data = &sc8280xp_data },
+ 	{ .compatible = "qcom,sm6115-mdss", .data = &sm6115_data },
++	{ .compatible = "qcom,sm6350-mdss", .data = &sm6350_data },
+ 	{ .compatible = "qcom,sm8150-mdss", .data = &sm8150_data },
+ 	{ .compatible = "qcom,sm8250-mdss", .data = &sm8250_data },
+ 	{ .compatible = "qcom,sm8350-mdss", .data = &sm8250_data },
+
+-- 
+2.40.1
+
