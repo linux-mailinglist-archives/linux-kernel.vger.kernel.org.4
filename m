@@ -2,110 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDAE86F7FB1
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A589E6F7FB6
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbjEEJQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 05:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
+        id S231445AbjEEJQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 05:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbjEEJQV (ORCPT
+        with ESMTP id S231562AbjEEJQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 05:16:21 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763E518922;
-        Fri,  5 May 2023 02:16:19 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3459GCfD087717;
-        Fri, 5 May 2023 04:16:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683278172;
-        bh=913PCdaWN+n0Ch38NTPAuWeCeU4rsJc5zjk3K+t6OUc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=AXHfs82LNZa25KqD2es95FIUCOdRQY72GNlHe0qA6j2PhUSDbwwT4NKZ3rqt/gLt/
-         T+xOyjV2h8n5Wdvj6XqMv/C4cD7at1gJV7Y9qyP+uSC9g1JBC0GeO5rz7jgzUdRZkh
-         JvoWD0BdXYZvO19akhRRZgvMqTA5ZhcEQi04M/TM=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3459GCIF088672
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 5 May 2023 04:16:12 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 5
- May 2023 04:16:12 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 5 May 2023 04:16:12 -0500
-Received: from [10.24.69.26] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3459GA8A078651;
-        Fri, 5 May 2023 04:16:11 -0500
-Message-ID: <0608e366-1b0e-d387-569a-9ed123bc4d69@ti.com>
-Date:   Fri, 5 May 2023 14:46:10 +0530
+        Fri, 5 May 2023 05:16:30 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5F5191D5
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 02:16:28 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f1950f5628so15269265e9.3
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 02:16:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683278187; x=1685870187;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R8QM5puJROCr66b4Sdd07Ua1MuyFEDfA7m/IRGmTO5I=;
+        b=ZqazEs3gI0yIF4d1sbz/+w07uVVu51V4eFrfD/ea8LUczOqIJp7PVSD9Btj04Oo9gQ
+         JVNsu+M0X5qbSqSTNB08nOHUCoRurSJpEawAYWeQSbUhBlMGS419CS8Bz2oIrj1RFCIv
+         ORhiZEWRykAh8Tq0NJTlxvnGPPmwlSpGQzrtIzvXCPOg+FZvdXRKzSEmgE2Y+4KLWk6f
+         f5E+rHkTOfV0iiWefczv/4CmIDYnYif2ltcqJ+viEZ0aIvK08ciLV5otxFw9GR7dLXaB
+         DoSXpiMirldQKiHg7JoTdilS/5ugdEFqM4FxMk/Ry4NoE/EpxU0vAqTnfbV3o97ne3pU
+         IqZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683278187; x=1685870187;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R8QM5puJROCr66b4Sdd07Ua1MuyFEDfA7m/IRGmTO5I=;
+        b=Vd+/46Jt3edo/D5gdGCF6SKDPGckmR3B3hPftEjLHUqKBN45Q1p0fQbrs/JhtfqtGO
+         ZNS1KHboqzp8hXoQSUyxjqOaqej638da13Jc5UsRbFCc0uB/6RT/LZGBb16fX4kYqcjU
+         oEcavbsCkwH8AkQNwz7whLyC3RxIV0Gx1Sxk95HCJJHZPYbOYEsA+J4v8qEl7Ql3ekWZ
+         bheFEnSHJRGrYKFcCpuG8pyzy8aInc2vJadkgD5G4T7mJ7TBliX5/BQR+8CASZXORO2V
+         He4TAHl0LTS4cm8neev2Int1+jnuV+5IXe2mZKOpizb3qaPii9ICVkW8awMw+0udLiiF
+         JgYw==
+X-Gm-Message-State: AC+VfDwAFFnZ5+mNefxbqpF3TxnIoS0mcLJ2KEDMYtkFkH82Z3018Wd5
+        U2fTveVVtKX7hsx4cTqHnzaIJg==
+X-Google-Smtp-Source: ACHHUZ4B4N/FxcLqEkR6agepmE+jWYp6diDS8oVzqu4M9U5OQSZG+yuRxLBahAeE3t86XU17oZxTyw==
+X-Received: by 2002:a05:600c:d7:b0:3f1:9be0:b39f with SMTP id u23-20020a05600c00d700b003f19be0b39fmr573250wmm.8.1683278187357;
+        Fri, 05 May 2023 02:16:27 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id t8-20020a7bc3c8000000b003ee9c8cc631sm7275167wmj.23.2023.05.05.02.16.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 02:16:25 -0700 (PDT)
+Date:   Fri, 5 May 2023 12:16:22 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux SCSI <linux-scsi@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>,
+        Oliver Neukum <oliver@neukum.org>,
+        Ali Akcaagac <aliakc@web.de>,
+        Jamie Lenehan <lenehan@twibble.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH 1/3] MAINTAINERS: Drop DC395x list and site
+Message-ID: <b86a4837-3c31-4bf4-aff3-67abd7a4f5f2@kili.mountain>
+References: <20230505082704.16228-1-bagasdotme@gmail.com>
+ <20230505082704.16228-2-bagasdotme@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] spi: lpspi: disable lpspi module irq in DMA mode
-Content-Language: en-US
-To:     Clark Wang <xiaoning.wang@nxp.com>, <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230505063557.3962220-1-xiaoning.wang@nxp.com>
-From:   Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <20230505063557.3962220-1-xiaoning.wang@nxp.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230505082704.16228-2-bagasdotme@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 05, 2023 at 03:27:02PM +0700, Bagas Sanjaya wrote:
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8d5bc223f3053b..35de3289a8af04 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5692,10 +5692,8 @@ DC395x SCSI driver
+>  M:	Oliver Neukum <oliver@neukum.org>
+>  M:	Ali Akcaagac <aliakc@web.de>
+>  M:	Jamie Lenehan <lenehan@twibble.org>
+> -L:	dc395x@twibble.org
+> +L:	linux-scsi@vger.kernel.org
 
+Other people do this too, but is there really any reason to include
+the linux-scsi@vger.kernel.org list?  drivers/scsi/ will already
+include it.
 
-On 05/05/23 12:05, Clark Wang wrote:
-> When all bits of IER are set to 0, we still can observe the lpspi irq events
-> when using DMA mode to transfer data.
-> 
-> So disable irq to avoid the too much irq events.
-> 
-> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-> ---
->   drivers/spi/spi-fsl-lpspi.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-> index f2341ab99556..4b70038ceb6b 100644
-> --- a/drivers/spi/spi-fsl-lpspi.c
-> +++ b/drivers/spi/spi-fsl-lpspi.c
-> @@ -910,9 +910,14 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
->   	ret = fsl_lpspi_dma_init(&pdev->dev, fsl_lpspi, controller);
->   	if (ret == -EPROBE_DEFER)
->   		goto out_pm_get;
-> -
+regards,
+dan carpenter
 
-Any reason to delete this line?
-
->   	if (ret < 0)
->   		dev_err(&pdev->dev, "dma setup error %d, use pio\n", ret);
-> +	else
-> +		/*
-> +		 * disable LPSPI module IRQ when enable DMA mode successfully,
-> +		 * to prevent the unexpected LPSPI module IRQ events.
-> +		 */
-> +		disable_irq(irq);
-
-Just wondering, have you actually seen any unexpected LPSPI module IRQ
-events? If this was causing issues earlier then maybe add a fixes tag?
-
->   
->   	ret = devm_spi_register_controller(&pdev->dev, controller);
->   	if (ret < 0) {
-
--- 
-Thanks and Regards,
-Dhruva Gole
