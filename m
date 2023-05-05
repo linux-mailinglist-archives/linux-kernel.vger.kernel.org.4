@@ -2,158 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F82E6F7B3C
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 04:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FB06F7B40
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 04:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjEECvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 22:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
+        id S229823AbjEECzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 22:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjEECvi (ORCPT
+        with ESMTP id S229514AbjEECzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 22:51:38 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7153612094;
-        Thu,  4 May 2023 19:51:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683255097; x=1714791097;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=SDFdhdekvxyYCofffHMf6rRfIuAVFmPIluPrsnQHPEE=;
-  b=BykX//U80LZ0972eWKBejUvbB9+JObcK4lBuhH5tXHQXxUNNnucnhvb1
-   f7h1oWHk0NeBO/7OzGA8x4GGYDjqNfG7Vje3n3CpPO7ZwFlSGsbiw2UCS
-   DOsakabxPmnj7utBwcUvkM9rKRkT/tZd7ix7+dt1z6KDrgPfqvn4j09qV
-   qSi7nxoFPcib+MgMq5C46dkxlANtUZnuZp19PjR1ss+ahqqv6mhgZdrIN
-   U+0RbKdOOFN67AQvxQnc24DFXx+k2DVHjK2DqhQX92+2X3UHxt30pN4NJ
-   xGEHCZH+eqYQnRh6bYVK4XIsKYa81/JXzq4kMbtgn/7dqJ7uVqqIKxto7
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="347934038"
-X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
-   d="scan'208";a="347934038"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 19:51:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="841484488"
-X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
-   d="scan'208";a="841484488"
-Received: from syusufpa-mobl.gar.corp.intel.com (HELO [10.209.115.128]) ([10.209.115.128])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 19:51:36 -0700
-Message-ID: <2f32591a-77d8-f620-46bf-825074ba24c2@linux.intel.com>
-Date:   Thu, 4 May 2023 19:51:36 -0700
+        Thu, 4 May 2023 22:55:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A84B30F7
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 19:55:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683255301;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cjYsetGrBM63KihX4CFzxpJKx/AEwalSZhpNQfLiHHI=;
+        b=UBarOmyGeFiiwGYp3KWzflb/hjYPynGNWl7+MRpdSbek36z7sN8kw9ReYrmdRfQDwIr4eN
+        YEfDJRnYBimPEHCbU5MOGGK5PsdVZfetL7I0iI4EXW4kDhY6sEDbizVA7dMfS+ur7MAIqK
+        1BvsZAVIYKy/15fhSLIuyussgJR3rF8=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-347-KEouOSSJPDehW1b7pOyhoQ-1; Thu, 04 May 2023 22:55:00 -0400
+X-MC-Unique: KEouOSSJPDehW1b7pOyhoQ-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-751319bd93cso1014202685a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 19:55:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683255300; x=1685847300;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cjYsetGrBM63KihX4CFzxpJKx/AEwalSZhpNQfLiHHI=;
+        b=RaDCZE66WxdV8D4z4BvTl0/wsN8s6M17cLdnATNVInEg4lENZrd3oTgB2qpbcEMqzo
+         BCGO6TxeNXoG9Yg9afpkGpO1d6PUULYOKbEaCJT11ed+odRWgiajEMVKGZXGoyfnHb4L
+         s41Hk+Nja+QWHb14u/U7x9fVX8pGF8WyqnjFS4fAZDZicHcKIDNUUNIehg2UvqW0xFHL
+         4wIHSdhL18KdWZG/yoBXXal1ovE8s8PQszCgsF+C+SKQxHLUBtn7vhlIyiZbvfZpI0W+
+         THI3xN5D8EI+LqS+ugA/LZR9HC0Qc/CUzkWqGuzdrPGCPqfNx3hjtmq6RPAgIuEaM6XE
+         zxFg==
+X-Gm-Message-State: AC+VfDyoS1Xx9tGh2MTy8X4F0sGP/yq96MMOp76qjpoiAKu/jRbU8Zh/
+        IDVcA9NktnashhT264QzdFYUhQzPvsV4SjXJ15XhMpzt0sGpo4X4qFiJuF5/I8JjRWmet6BlZVB
+        U5F2w8CaTvX23556xNuSqCgOp
+X-Received: by 2002:a05:622a:409:b0:3e8:e986:b20a with SMTP id n9-20020a05622a040900b003e8e986b20amr9397764qtx.16.1683255299969;
+        Thu, 04 May 2023 19:54:59 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7L0Ig8yDCWu38q+AtSaJhk9cd5e+dZXKeZcxELnYEzOlnIFTyqh+dBVg8LWeBBdmN88tPaWg==
+X-Received: by 2002:a05:622a:409:b0:3e8:e986:b20a with SMTP id n9-20020a05622a040900b003e8e986b20amr9397756qtx.16.1683255299748;
+        Thu, 04 May 2023 19:54:59 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id o16-20020a05620a15d000b0074a1d2a17c8sm282513qkm.29.2023.05.04.19.54.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 19:54:59 -0700 (PDT)
+Date:   Thu, 4 May 2023 19:54:44 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     joro@8bytes.org, jgg@nvidia.com, will@kernel.org,
+        schnelle@linux.ibm.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] iommu: Make flush queues a proper capability
+Message-ID: <ol6xsnchb5od2br6qor6mdm3b6jedtwlbivfvx46dwx5bwm56w@ub47yn62g4ch>
+References: <cover.1683233867.git.robin.murphy@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH] PCI/ASPM: fix UAF by disable ASPM for link when child
- function is removed
-To:     Ding Hui <dinghui@sangfor.com.cn>, bhelgaas@google.com
-Cc:     vidyas@nvidia.com, david.e.box@linux.intel.com,
-        kai.heng.feng@canonical.com, michael.a.bottini@linux.intel.com,
-        rajatja@google.com, qinzongquan@sangfor.com.cn,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230504123418.4438-1-dinghui@sangfor.com.cn>
-Content-Language: en-US
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230504123418.4438-1-dinghui@sangfor.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1683233867.git.robin.murphy@arm.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 5/4/23 5:34 AM, Ding Hui wrote:
-
-Maybe you can use the following title?
-
-"PCI/ASPM: Fix UAF by disabling ASPM for link when child function is removed
-
-> If the Function 0 of a Multi-Function device is software removed,
-> a freed downstream pointer will be left in struct pcie_link_state,
-> and then when pcie_config_aspm_link() be invoked from any path,
-> we will trigger use-after-free.
+On Thu, May 04, 2023 at 10:10:54PM +0100, Robin Murphy wrote:
+> Hi all,
 > 
-> Based on the PCIe spec about ASPM Control (PCIe r6.0, sec 7.5.3.7),
-
-As per PCIe spec r6.0, sec 7.5.3.7, it is recommended
-
-> for Multi-Function Devices (including ARI Devices), it is recommended
-> that software program the same value in all Functions. For ARI
-> Devices, ASPM Control is determined solely by the setting in Function 0.
+> Since it came up in discussion on the default domain series, it seemed
+> pertinent to dig this idea up, whcih I started a while ago, and finish
+> it off.
 > 
-> So we can just disable ASPM of the whole component if any child
-> function is removed, the downstream pointer will be avoided from
-> use-after-free, that will also avoid other potential corner cases.
+> Cheers,
+> Robin.
 > 
-> Fixes: b5a0a9b59c81 ("PCI/ASPM: Read and set up L1 substate capabilities")
-> Debugged-by: Zongquan Qin <qinzongquan@sangfor.com.cn>
-
-Any bugzilla link with error log and reproduction steps?
-
-> Suggestion-by: Bjorn Helgaas <bhelgaas@google.com>
-
-Suggested-by?
-
-> Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
-> ---
->  drivers/pci/pcie/aspm.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 66d7514ca111..1bf8306141aa 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -1010,18 +1010,17 @@ void pcie_aspm_exit_link_state(struct pci_dev *pdev)
->  
->  	down_read(&pci_bus_sem);
->  	mutex_lock(&aspm_lock);
-> -	/*
-> -	 * All PCIe functions are in one slot, remove one function will remove
-> -	 * the whole slot, so just wait until we are the last function left.
-> -	 */
-> -	if (!list_empty(&parent->subordinate->devices))
-> -		goto out;
->  
->  	link = parent->link_state;
->  	root = link->root;
->  	parent_link = link->parent;
->  
-> -	/* All functions are removed, so just disable ASPM for the link */
-> +	/*
-> +	 * Any function is removed (including software removing), just
-> +	 * disable ASPM for the link, in case we can not configure the same
-> +	 * setting for all functions.
+> Robin Murphy (2):
+>   iommu: Add a capability for flush queue support
+>   iommu: Use flush queue capability
+> 
+>  drivers/iommu/amd/iommu.c                   | 2 ++
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 +-
+>  drivers/iommu/arm/arm-smmu/arm-smmu.c       | 4 ++--
+>  drivers/iommu/dma-iommu.c                   | 3 ++-
+>  drivers/iommu/intel/iommu.c                 | 2 +-
+>  drivers/iommu/iommu.c                       | 3 ++-
+>  include/linux/iommu.h                       | 6 ++++++
+>  7 files changed, 16 insertions(+), 6 deletions(-)
+> 
+> -- 
+> 2.39.2.101.g768bb238c484.dirty
+> 
 
-How about following?
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
-/*
- * For any function removed, disable ASPM for the link. See PCIe r6.0,
- * sec 7.7.3.7 for details.
- */
-
-> +	 * See PCIe r6.0, sec 7.5.3.7.
-> +	 */
->  	pcie_config_aspm_link(link, 0);
->  	list_del(&link->sibling);
->  	/* Clock PM is for endpoint device */
-> @@ -1032,7 +1031,7 @@ void pcie_aspm_exit_link_state(struct pci_dev *pdev)
->  		pcie_update_aspm_capable(root);
->  		pcie_config_aspm_path(parent_link);
->  	}
-> -out:
-> +
->  	mutex_unlock(&aspm_lock);
->  	up_read(&pci_bus_sem);
->  }
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
