@@ -2,75 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47FB66F8835
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 19:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE246F883F
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 19:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbjEERyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 13:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        id S233252AbjEER4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 13:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233194AbjEERx6 (ORCPT
+        with ESMTP id S233136AbjEERzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 13:53:58 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DC91E998
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:53:30 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bc0ced1d9so3151829a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 10:53:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683309198; x=1685901198;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WDCSv0avH4pfNfNeC0DOfI7drElfKwvWaAkxpPyXO/U=;
-        b=arfKTyei82D2UyXmshvlZvVJH0oJdCCSpkmvX0YjpNi5mjm6y6oYSvdQ43htajtoQ4
-         BcnJW+vPVPQ7zYB/vjrc5T5ofIzObYgo47OJzOeIbfx/O8ANwJHWWsUP851DaU2aMP2p
-         ayvnBpC7iDrYdN62V4K2HSJDJkXNE351nESXoixBMYcxTFjN60q+e4uJxUfqXi/2dq3b
-         6Omoq5bHXFUcYvYIUuDS9DUwdYN/U5+Ft26419VRWhnff3e/JhJ1obVVWjrs2V2l34Wn
-         Blxjw+k011P5t1fzmrAB7amuknFjzbfpSvKf/cQvrbvi0AtKfrlFr/yNwJy9mVGLvEOb
-         NZxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683309198; x=1685901198;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WDCSv0avH4pfNfNeC0DOfI7drElfKwvWaAkxpPyXO/U=;
-        b=MiHduQO7kdacDr6d7eGIV6Dk+IapmCDo//DiF66/bSZP3vKH+Qn9txtSx/fvO4icDW
-         Mb4dmo9UYNhTR2T6p2wVIo1pFhYVR5kd++0jVwsXWmGmnlgFqgL88pWAo8QIdccVqtm4
-         KgI22eYYPWnfEqzy+DI19G7tGp+EYZbbXm+++w5DfVgZeVuQA/5Sg/2IELqNDBPzkD4A
-         /p01y0Emk8oP5JweRe01kBUj19VCzzrYjuLdp98VEOZXNwv/eXRRFknF1zRxYpdyjq1g
-         2Wm6ALBvRs5yufB3nw/IrJMPjNx0xckxSUnmOOgu0KYJbSbUA4Cx7YchgpiyHp4ionV7
-         CmAA==
-X-Gm-Message-State: AC+VfDx9pcApwI32RHsyUDlPjzRxBuMOY8ONx9nnCMhEXH009eZNrtoM
-        EfPbmBp1ucBD7pJIqWcKO0h83Q==
-X-Google-Smtp-Source: ACHHUZ5b628M3V2IEGKahrsnnn1Vpsn6iI70y9x2AVaMedJcj0svHaUAy2+obEw0sOt1nmgZsXRzPA==
-X-Received: by 2002:a05:6402:884:b0:4fb:aa0a:5b72 with SMTP id e4-20020a056402088400b004fbaa0a5b72mr2015524edy.5.1683309198718;
-        Fri, 05 May 2023 10:53:18 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
-        by smtp.gmail.com with ESMTPSA id m18-20020aa7c2d2000000b0050bfeb15049sm2251324edp.60.2023.05.05.10.53.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 10:53:17 -0700 (PDT)
-Message-ID: <883eca69-4ed9-d5cd-8408-13e90c287c08@linaro.org>
-Date:   Fri, 5 May 2023 19:53:15 +0200
+        Fri, 5 May 2023 13:55:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2031F496;
+        Fri,  5 May 2023 10:55:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 268AC635D0;
+        Fri,  5 May 2023 17:54:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4700C433D2;
+        Fri,  5 May 2023 17:54:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683309290;
+        bh=iGxlMMfHq5zekP1cLLlA597ifNT3g2z8NHymFlQCd4A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nwja6AwnW4smOMGRvawHd98VsnoIFBSK6V0Q7CWqwqpW+qLg4TnkjoEXb5RTczp2T
+         H07bIqfn8yxspOmufiM8hf7fNhnsOdCexce9/d/ezR8WycIYoieyrINfU54O74/CF8
+         BkTMvbNq2yJFNqMqCs71QXMf7i7+w3t+L20j8nrckRfVZ/KwKnjDEXJ5oY4B5cqTnv
+         Lsk1y/8yD+JH/9r19Orhvb8pvG1Io1rOzioDerHmQfbQhl0TZ9VEstOquq01RaGDPp
+         nhSu9KZwx8NAF+ojYagr0e1ZZ5hoboZprPhyn+OeFJ0qg0HkwHdgVtIRLdu9NvEQek
+         uq9EJ14iow/xQ==
+Date:   Fri, 5 May 2023 19:54:44 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Ross Philipson <ross.philipson@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, ardb@kernel.org, mjg59@srcf.ucam.org,
+        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
+        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH v6 09/14] x86: Secure Launch SMP bringup support
+Message-ID: <ZFVC5Fv0wO0Awt0N@kernel.org>
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-10-ross.philipson@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 1/2] dt-bindings: dma: ti: Add J721S2 BCDMA
-Content-Language: en-US
-To:     Vaishnav Achath <vaishnav.a@ti.com>, peter.ujfalusi@gmail.com,
-        vigneshr@ti.com, vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, u-kumar1@ti.com, j-choudhary@ti.com
-References: <20230505143929.28131-1-vaishnav.a@ti.com>
- <20230505143929.28131-2-vaishnav.a@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230505143929.28131-2-vaishnav.a@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504145023.835096-10-ross.philipson@oracle.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,17 +62,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2023 16:39, Vaishnav Achath wrote:
-> Add bindings for J721S2 BCDMA instance dedicated for Camera
-> Serial Interface. Unlike AM62A CSI BCDMA, this instance has RX
-> and TX channels but lacks block copy channels.
+On Thu, May 04, 2023 at 02:50:18PM +0000, Ross Philipson wrote:
+> On Intel, the APs are left in a well documented state after TXT performs
+> the late launch. Specifically they cannot have #INIT asserted on them so
+> a standard startup via INIT/SIPI/SIPI cannot be performed. Instead the
+> early SL stub code parked the APs in a pause/jmp loop waiting for an NMI.
+> The modified SMP boot code is called for the Secure Launch case. The
+> jump address for the RM piggy entry point is fixed up in the jump where
+> the APs are waiting and an NMI IPI is sent to the AP. The AP vectors to
+> the Secure Launch entry point in the RM piggy which mimics what the real
+> mode code would do then jumps to the standard RM piggy protected mode
+> entry point.
 > 
-> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
-> ---
-> 
+> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi Ross,
 
-Best regards,
-Krzysztof
+just one minor nit on this one.
 
+>  /*
+>   * NOTE - on most systems this is a PHYSICAL apic ID, but on multiquad
+>   * (ie clustered apic addressing mode), this is a LOGICAL apic ID.
+> @@ -1132,6 +1210,13 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
+>  	cpumask_clear_cpu(cpu, cpu_initialized_mask);
+>  	smp_mb();
+>  
+> +	/* With Intel TXT, the AP startup is totally different */
+> +	if ((slaunch_get_flags() & (SL_FLAG_ACTIVE|SL_FLAG_ARCH_TXT)) ==
+
+nit: spaces around '|'
+
+> +	   (SL_FLAG_ACTIVE|SL_FLAG_ARCH_TXT)) {
+> +		boot_error = slaunch_wakeup_cpu_from_txt(cpu, apicid);
+> +		goto txt_wake;
+> +	}
