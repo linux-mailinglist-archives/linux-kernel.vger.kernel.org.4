@@ -2,183 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20846F79E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 02:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FA56F79ED
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 02:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjEEAEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 20:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S229982AbjEEAJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 20:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjEEAET (ORCPT
+        with ESMTP id S229449AbjEEAJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 20:04:19 -0400
-Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azon11020021.outbound.protection.outlook.com [52.101.56.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E349EA5D6
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 17:04:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OvSawUybx8W7SvksB1xlv+YKU96YFCKwRXAfNxI2cCX4l4cEOlrIZpgBW0QdePTVX+WqkXSSsSBop/iv+rwGOiEmD/K5isKW6W11xCs/5n2/3OjVUzUDGvS3k3OEWhKvQXiSkfU4x2VQlTlBDo1BTOv0w78DRMTVs86wfPuU9+lWOBGwuuhFdZaNOvfnd6ccD3c+t1K0ILjxIIfgJVE3STUnF3NgBBwWz6Wz1E9kkTQ2VzlyjgrzbGQThcKwqRI+B2kjYe9MI+TdgZdhrc03qYgDpEK9fF+N4WzYFyII23HQJ+FfPmjJPCzmH4MJp2i6pYBzSksVtLPekukBPmMwWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L4lq7OFCiulGh+0EHCrU8eEl+Df2tvkxJD2RFubtmsc=;
- b=Mrn2BkSqStdj78FrI0iEIY3XldrF5lg+QJJLMxY3292Q8b9Xn9zhA+kOzjllCIvASNKhSvEAW9+2E5sANtCC5TrASfh9yUdlPHSD5yOpsMBD6FiPQTTq913HOh+tKRn4V6MSZF5ONqg/BlFfh4wfL3QnLjKwfSKNRIcUaaU7mVs4G2KZHWT7Y84BCmIP1vtOJ5zIR92QPx9biD//sCkAO4KOSonEhmgmza/+aVXjjTyiETDdeSaOPrqyK66goOVIBwJ9z3l/fgqSvKzWxzRH+FDn4UTJqc2PjoDKYmZ65CwOnbTo6bmD73e91rcUo6BHeEmkOUnMmsBc973ycgBIEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L4lq7OFCiulGh+0EHCrU8eEl+Df2tvkxJD2RFubtmsc=;
- b=czvZVy6AUNw5jW6/0RQakF3fazHRJ7sxOc1VzjKimKR9LVOTTiW9hQ5c+KLeuaoJ3DDFoWLS6jEO/BwiDzG5y7vt9Ao5B6SEnBGbdjJqV9BZSo6i8pAICLGmlz5yzGALYs4rhTkuP4uETTGYDi2VV49naogMfniTfrCAMwjHpJs=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by DM4PR21MB3731.namprd21.prod.outlook.com (2603:10b6:8:a0::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6387.9; Fri, 5 May 2023 00:04:12 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::9a0f:a04d:69bd:e622]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::9a0f:a04d:69bd:e622%4]) with mapi id 15.20.6387.011; Fri, 5 May 2023
- 00:04:11 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Ben Greear <greearb@candelatech.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: RE: Hang loading initrd since last Friday.
-Thread-Topic: Hang loading initrd since last Friday.
-Thread-Index: AQHZfTr2qR4xve2R+0yhSMLHlSGWLq9H1EyAgAAlpYCAAT9/AIABJi8AgAAJFvCAAGIGgIAAAvTg
-Date:   Fri, 5 May 2023 00:04:11 +0000
-Message-ID: <BYAPR21MB1688E60DA4D61852125549BDD7729@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <9d87defc-5376-d690-b483-bc314e4f568b@candelatech.com>
- <ZFHHh/m0pkOYIzo7@debian.me>
- <ebb280e4-d381-0bf8-d134-0318c5cfdf83@leemhuis.info>
- <f12a8f23-5aac-b615-300c-38001b9583c2@candelatech.com>
- <a227583c-ef41-e954-fd4c-0cdb23c77222@candelatech.com>
- <BYAPR21MB168889708435D073352C4A46D76D9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <745e1e38-85ed-76dc-9cbb-2c3d71d70d97@candelatech.com>
-In-Reply-To: <745e1e38-85ed-76dc-9cbb-2c3d71d70d97@candelatech.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=d8372d20-9424-4fc2-be0d-9b74472d7f2c;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-04T23:56:41Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|DM4PR21MB3731:EE_
-x-ms-office365-filtering-correlation-id: f730df15-3c9c-4f4a-4346-08db4cfc4117
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xL73j6ltNXfUhqnBC1e2SQSRpJcT7dubYDkG7slzuCTcwd64uOzlJ2pnxBT24mYvhF02OfCQb1kUoW57PNC39+72S86PyZg58s1LKoFgm7EmlBL9avw21DS5JqTAT3wvaupmQzIczM/na4RCcOzyRPkTnPY1Wl1qnL8mo5xy1J+5YavkE3hVDRxpT88RjubWo5OlwSjbNA/R1fKx1dNiHSZtLqFqFf/S8ntX5TjhMGFlpVQNCEjaNIw4BxOyQEmqWNAm2SgWIPLwNGQNilT1aYdvrcdckw194W0DzOV8wguw3hpIUIqyG1kixJP4PR+UrSqKNMOQ3Dul3xrlXQETW7qBaJKVkcWxq8GSyTdxtqsgw+TRdhffhDVw+Wwt2nIPSfKsuCZvfLLYWEIrT4w1OpHngND/iUIdkTZsVejvg+nfMwcr2WhHQn0nPLLXkwBAqAy6Zc45hcjPJaWaTE1GtiHUfaeJ6Peh+6GD0BOZKK1qPICuBQM+fIl/LxzxGD73q+oI0KR4w3UgD9Vo4hzuyqT8fn0d21oPWj3J016Wn3cU6sY8dgqJY07Wvy767m+1P8zF461VAUIbXHzGmG9wLeivSVdgNtEBTXbEGgu/lFkuMQI89c30bx2wgvx4grFTCKh1AUKQGEJUKZhOzWBogzY/qx2mQ38F++g9t0dwqKU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(39860400002)(136003)(376002)(346002)(451199021)(82960400001)(33656002)(122000001)(38100700002)(52536014)(2906002)(55016003)(86362001)(8676002)(38070700005)(8936002)(316002)(786003)(41300700001)(66476007)(66946007)(66556008)(5660300002)(66446008)(64756008)(82950400001)(83380400001)(76116006)(26005)(8990500004)(186003)(9686003)(53546011)(7696005)(6506007)(110136005)(10290500003)(478600001)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?fO+fPA99eR1aMUF0LKLh/7Q5zEwAR9nHv2Ri3qLW6PzmAQqxBpxRVW7+dG?=
- =?iso-8859-1?Q?c0I9321kc+PELTsjnRbgWPM7/1E1/adMHY9wW/CH+MeAvb5bmKcI849wKS?=
- =?iso-8859-1?Q?3UxHeA2uG7k4wRDystr7dzSEfjIINjyzK/urWtKEak8epfca2N2Cym1kMe?=
- =?iso-8859-1?Q?RVhsW6W/LyYdEoBQBJdikEoZEU03kpkfpqx36h7WD9YvTpHukavxiYq4q8?=
- =?iso-8859-1?Q?jeBJr7gVSJ66dPpS2/T5EsJoWohV3tydGfCtkdkE4YGoZDqTLQimzN9cTj?=
- =?iso-8859-1?Q?MHi1NBlUa/Y9dkZHKnIuJMFgBM3bca7NUtVrv9OZFosIF/Hg67+o1bALZG?=
- =?iso-8859-1?Q?XVoYQJZeTquZWecckg679lVuEnDT2WfQkkMVee5cHjR6BpdX/A3Y/ZgkVK?=
- =?iso-8859-1?Q?5LWgym0AZX9uxenhc71jVw0WuonTm/xVUARql7rzDfVxjWx3grNfZMhMnK?=
- =?iso-8859-1?Q?74/JPHstOotgGmCguaJR3ZG5moWAUZHZL9nSXVk2tjucXqhp1MDDxRM835?=
- =?iso-8859-1?Q?9/MMholN1bhemMUIAF2mHg838G4NuQRvHFx7qDlZZnrXcKRTz0UrGr8hk5?=
- =?iso-8859-1?Q?lxoWdqpx+tCRWXcOEPK+0LR6m4PO9qGXaExL9SGnMbrA0SdOVGHwWnxurU?=
- =?iso-8859-1?Q?IZ9bJ8Iuia73bdW6YJI4mQGwEzGw+xFt7skqErPpntCySLAlE4GvQ7pTmJ?=
- =?iso-8859-1?Q?x26Nbd+46R5k9HVo8ft8GF9z3CqIECqcsc8qQ7FgJNEhNpvnOUTzqBQz9C?=
- =?iso-8859-1?Q?6xN9h/zLPcA1cj5UT8k8Nfk/yNKG+z1NJkIL6hPyFlIuU8wa6W8ajy08SW?=
- =?iso-8859-1?Q?pGRzOsnXS8t3iC/4hKaNvjYndCG9jwRwX0KC5kGkPMdA47KTHZxWnTjKFU?=
- =?iso-8859-1?Q?arIlb0PrktGZ6vmFWvQia8tZm8oBA6hJUE5B3rLe7spaO1jKL17kEuz+fs?=
- =?iso-8859-1?Q?oW8WQBw5d8y7P8Z9TijPtij7duqs8QcYPwR9huIvX2XyomJHlE4Z0isunX?=
- =?iso-8859-1?Q?Wcn0mxFwYaud3X+cxQT8GsF8BPtWMsd+H8noa+2F2+W7jT7jHQ7qEHeHHV?=
- =?iso-8859-1?Q?cugwynnpvkso1iKUXteWkdMewUq6LZes6eI0Ndk3Yr7njvBd+elqFX0DZD?=
- =?iso-8859-1?Q?kA0PKsfdXZx/2rGeJyeMcvDJuSEpWefdf4PMDezDhBKa1uZlZ5IOD6h0tn?=
- =?iso-8859-1?Q?R60h+CESJ/HDzghbMRclSQ59EKHz55T1AfusXOuIAGkUJ3qKhVHGVVO+k7?=
- =?iso-8859-1?Q?9mfqBO6OqJ589ZEDIYsn1CElVHsEeEuvRwbfOmLKLfQeyQ/GgZKY+Vz01t?=
- =?iso-8859-1?Q?X8DxqXy49hPTdbJuk8paLxgV019+/ii0OoLQNMzmQvN53564wi5WXVknUp?=
- =?iso-8859-1?Q?4Y2YHh4Jn5OfCrDRF7SSj2RPWzXzYDg/W1Zn74f2jhzeU8J2Bo+EpjGBVM?=
- =?iso-8859-1?Q?2lm7BdN8V8uptzAA9TiTIE7RMwqyY5z9VVXXEtTtU2WpEW6zcOdYiN1Hjo?=
- =?iso-8859-1?Q?caHaY7eg6pnQoLQ8cQpSur4hWRm84nGO+t3/IWbK2s92jywqdknGuK4bqg?=
- =?iso-8859-1?Q?ocP668ZYHF/s80BKewT+Fs/psmGnhBb7VfWy8EV5o+wiUhG7Q3lLeD2o5b?=
- =?iso-8859-1?Q?0RDdC1Y5HnPP5j1jI5Lq+tjl/397bVlE8bNp3VAnNlRReU6TJVUAE5cQ?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 4 May 2023 20:09:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE4F4215
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 17:08:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683245306;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=HJY/+1JnMiLlEkq2AgTedma+exuZfk/CXW/dTd1p/CU=;
+        b=fabERFKNQo15sDLB9hqAKUPjW6MJN4f+sf8itqa98O9A7CfG3LR/eS85LCoMqihIGD0Hv6
+        8LgXG+NF/yUDWFS6G5xPle/0QGcehImjFVAO2k39qFJIrVUoB1rAfuo3S172KRYlcMLlHU
+        RnnciWeNIleHNA0v8MX7U6illQARAlk=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-474-z-QjHbJ-OOSqVL7fnf05Lg-1; Thu, 04 May 2023 20:08:25 -0400
+X-MC-Unique: z-QjHbJ-OOSqVL7fnf05Lg-1
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-64115ef7234so10922194b3a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 17:08:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683245304; x=1685837304;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HJY/+1JnMiLlEkq2AgTedma+exuZfk/CXW/dTd1p/CU=;
+        b=dJGEQWQsDTJYnSUGB5hrcoa+gTXi1buVHGnj3Tt0zaprTSHMoFEcm6RXNUGcoM37ak
+         Bw2uUG0f2UsO4VXyseDhHzA+AWb44KG9L1FH6+hbjH4l+FtgjddUx+CLlL6/djx4iipv
+         C3n/I11myRq5j9UBsAkfjm4cpTsv9wfgGuf2D3Wio6AfMF5CfUdCWyVkCwcjzi+7ESI/
+         sAt8Avk6YxUSaoCIi6wqoTNuFBqGsvpWhcosW9OEaCyWOeklP2B2GBihX/fCyrINJtrE
+         0QSxOIQKFwDme0QkzjmKDSBsKOgPBUFvEKUiMNFtAx6jYvinSL9qfrEAyBC293iL+fQz
+         WQ4g==
+X-Gm-Message-State: AC+VfDylngVdqm+TJBwJhTWhPP3AHITxkNgiIA1DmyIycVJEGjC/FKLg
+        SdZ229xG8q2e5OaKC+7W7gTroDAX7WMcDEBGu/0hwMYIl2BUockVm4bhaVjiE8MgLcfXPUHrRjd
+        1I07vxibxjHMjh2TrjlcBf2lnJC9u+gMTAjhLRoH0
+X-Received: by 2002:a17:903:187:b0:1ab:11d5:4f07 with SMTP id z7-20020a170903018700b001ab11d54f07mr5943175plg.18.1683245304104;
+        Thu, 04 May 2023 17:08:24 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5pia5jzktcY9DJ3FiTjR62zcaa5OFwm3fL4RAbURwTghhmq5tClspk9pc5xmrXA3xEsNZQEXdO68OtnEdgOkw=
+X-Received: by 2002:a17:903:187:b0:1ab:11d5:4f07 with SMTP id
+ z7-20020a170903018700b001ab11d54f07mr5943146plg.18.1683245303744; Thu, 04 May
+ 2023 17:08:23 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f730df15-3c9c-4f4a-4346-08db4cfc4117
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 May 2023 00:04:11.0534
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ilS7WK5118Xq/yMoAN4nGrRZwdn9m13PAla0Qb7yRZVItdoiz5LeUomZspfTg09rPPc3SU8OgB2vaLy0LzbFAGfKr2CSH/pFIu4oUkSUc2c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3731
+From:   Guangwu Zhang <guazhang@redhat.com>
+Date:   Fri, 5 May 2023 08:09:28 +0800
+Message-ID: <CAGS2=Yrv_pXweGN7hsX1A0kc7a9WjYUg2G+swD5eiK4sqURsXg@mail.gmail.com>
+Subject: [bug report] BUG libfc_em (Not tainted): Objects remaining in
+ libfc_em on __kmem_cache_shutdown()
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        John Meneghini <jmeneghi@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ben Greear <greearb@candelatech.com> Sent: Thursday, May 4, 2023 4:46=
- PM
->=20
-> On 5/4/23 10:59, Michael Kelley (LINUX) wrote:
-> > From: Ben Greear <greearb@candelatech.com> Sent: Thursday, May 4, 2023 =
-10:23 AM
-> >>
-> >> On 5/3/23 16:49, Ben Greear wrote:
-> >>> On 5/2/23 21:46, Linux regression tracking (Thorsten Leemhuis) wrote:
-> >>>> On 03.05.23 04:31, Bagas Sanjaya wrote:
-> >>>>> On Tue, May 02, 2023 at 02:03:33PM -0700, Ben Greear wrote:
-> >>>>>>
-> >>>>>> Pulling today's upstream 6.3+ tree, my system now hangs loading in=
-itrd.
-> >>>>
-> >>>> Just to understand this properly: you mean after the boot loader sai=
-d it
-> >>>> loaded the initramfs, not when the kernel starts using it?
-> >>>
-> >>> I am bisecting...it appears to be .config related.=A0 If I skip enabl=
-ing things
-> >>> during bisect, then I do not see the problem.=A0 But I copied my orig=
-inal buggy .config
-> >>> into an otherwise good kernel commit, and now it fails.=A0 I'm manual=
-ly bisecting
-> >>> the .config settings....
-> >>
-> >> I had enabled this option:  CONFIG_HYPERV_VTL_MODE
-> >>
-> >> And that makes it not boot.  Not sure that is expected or not, but
-> >> I will simply un-select it and continue on, as I do not actually need =
-that feature.
-> >>
-> >
-> > What you observed is expected when CONFIG_HYPERV_VTL_MODE is selected,
-> > which is why it defaults to N.  The comment for that option in the Kcon=
-fig file says:
-> >
-> > 	  Select this option to build a Linux kernel to run at a VTL other tha=
-n
-> > 	  the normal VTL0, which currently is only VTL2.  This option
-> > 	  initializes the x86 platform for VTL2, and adds the ability to boot
-> > 	  secondary CPUs directly into 64-bit context as required for VTLs oth=
-er
-> > 	  than 0.  A kernel built with this option must run at VTL2, and will
-> > 	  not run as a normal guest.
->=20
-> I didn't read it close enough, but that is my fault.
->=20
+Hi,
+I found kernel panic issue with latest linux-block/for-next.
+repo : https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
+Merge branch 'for-6.4/block' into for-next
 
-No problem. :-)   Just FYI, in the future if you are come across issues
-specifically related to running Linux as a guest on Hyper-V, feel free
-to copy the linux-hyperv@vger.kernel.org mailing list.  That may
-elicit faster help from someone with Hyper-V expertise and potentially
-save you some trouble.
+Reproducer:
+1. found qedf HBA host
+2. create npiv port
+3. remove some modules
+modprobe -r qedf
+modprobe -r libfcoe
+modprobe -r libfc
+4. remove npiv port
 
-Michael
+=============================================================================
+[  218.400452] BUG libfc_em (Not tainted): Objects remaining in
+libfc_em on __kmem_cache_shutdown()
+[  218.410255] -----------------------------------------------------------------------------
+[  218.410255]
+[  218.421028] Slab 0xffffda6cc4444f00 objects=36 used=4
+fp=0xffff92381113ea40
+flags=0x17ffffc0010200(slab|head|node=0|zone=2|lastcpupid=0x1fffff)
+[  218.435392] CPU: 22 PID: 3794 Comm: modprobe Kdump: loaded Not
+tainted 6.3.0+ #1
+[  218.443645] Hardware name: Dell Inc. PowerEdge R730/0H21J3, BIOS
+2.16.0 07/20/2022
+[  218.452091] Call Trace:
+[  218.454817]  <TASK>
+[  218.457154]  dump_stack_lvl+0x33/0x50
+[  218.461240]  slab_err+0xc3/0x130
+[  218.464842]  ? pick_next_task+0x57/0x9b0
+[  218.469219]  ? check_preempt_curr+0x5d/0x70
+[  218.473883]  ? ttwu_do_activate+0x6b/0x220
+[  218.478453]  ? __switch_to_asm+0x3a/0x80
+[  218.482831]  __kmem_cache_shutdown+0x159/0x310
+[  218.487789]  kmem_cache_destroy+0x51/0x160
+[  218.492361]  libfc_exit+0xa/0x280 [libfc]
+[  218.496848]  __do_sys_delete_module.constprop.0+0x17a/0x2f0
+[  218.503067]  ? syscall_trace_enter.constprop.0+0x126/0x1a0
+[  218.509188]  do_syscall_64+0x5c/0x90
+[  218.513177]  ? exit_to_user_mode_prepare+0xc4/0xd0
+[  218.518522]  ? syscall_exit_to_user_mode+0x12/0x30
+[  218.523866]  ? do_syscall_64+0x69/0x90
+[  218.528046]  ? exc_page_fault+0x65/0x150
+[  218.532420]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[  218.538058] RIP: 0033:0x7f9fafa3f5ab
+[  218.542046] Code: 73 01 c3 48 8b 0d 75 a8 1b 00 f7 d8 64 89 01 48
+83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 b0 00 00
+00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 45 a8 1b 00 f7 d8 64 89
+01 48
+[  218.563001] RSP: 002b:00007fff16e560c8 EFLAGS: 00000206 ORIG_RAX:
+00000000000000b0
+[  218.571448] RAX: ffffffffffffffda RBX: 000055631b3dc510 RCX: 00007f9fafa3f5ab
+[  218.579407] RDX: 0000000000000000 RSI: 0000000000000800 RDI: 000055631b3dc578
+[  218.587367] RBP: 000055631b3dc510 R08: 0000000000000000 R09: 0000000000000000
+[  218.595328] R10: 00007f9fafb9eac0 R11: 0000000000000206 R12: 000055631b3dc578
+[  218.603287] R13: 0000000000000000 R14: 000055631b3dbda8 R15: 00007fff16e58458
+[  218.611248]  </TASK>
+[  218.613683] Disabling lock debugging due to kernel taint
+[  218.619610] Object 0xffff92381113c740 @offset=1856
+[  218.624953] Allocated in mempool_init_node+0x92/0xd0 age=205368 cpu=0 pid=391
+[  218.632917]  mempool_init_node+0x92/0xd0
+[  218.637291]  mempool_create+0x56/0x80
+[  218.641374]  fc_exch_mgr_alloc+0xd4/0x220 [libfc]
+[  218.646631]  0xffffffffc0a10cbf
+[  218.650133]  0xffffffffc0a12ce1
+[  218.653633]  local_pci_probe+0x46/0xa0
+[  218.657813]  work_for_cpu_fn+0x16/0x20
+[  218.661994]  process_one_work+0x1e5/0x3f0
+[  218.666467]  worker_thread+0x1c4/0x3a0
+[  218.670647]  kthread+0xe2/0x110
+[  218.674150]  ret_from_fork+0x2c/0x50
+[  218.678138] Object 0xffff92381113d8c0 @offset=6336
+[  218.683481] Allocated in mempool_init_node+0x92/0xd0 age=205133 cpu=0 pid=391
+[  218.691442]  mempool_init_node+0x92/0xd0
+[  218.695816]  mempool_create+0x56/0x80
+[  218.699898]  fc_exch_mgr_alloc+0xd4/0x220 [libfc]
+[  218.705155]  0xffffffffc0a10cbf
+[  218.708655]  0xffffffffc0a12ce1
+[  218.712156]  local_pci_probe+0x46/0xa0
+[  218.716334]  work_for_cpu_fn+0x16/0x20
+[  218.720515]  process_one_work+0x1e5/0x3f0
+[  218.724986]  worker_thread+0x1c4/0x3a0
+[  218.729167]  kthread+0xe2/0x110
+[  218.732668]  ret_from_fork+0x2c/0x50
+[  218.736656] Object 0xffff92381113da80 @offset=6784
+[  218.741998] Allocated in mempool_init_node+0x92/0xd0 age=205192 cpu=0 pid=391
+[  218.749959]  mempool_init_node+0x92/0xd0
+[  218.754333]  mempool_create+0x56/0x80
+[  218.758416]  fc_exch_mgr_alloc+0xd4/0x220 [libfc]
+[  218.763673]  0xffffffffc0a10cbf
+[  218.767173]  0xffffffffc0a12ce1
+[  218.770674]  local_pci_probe+0x46/0xa0
+[  218.774852]  work_for_cpu_fn+0x16/0x20
+[  218.779031]  process_one_work+0x1e5/0x3f0
+[  218.783504]  worker_thread+0x1c4/0x3a0
+[  218.787683]  kthread+0xe2/0x110
+[  218.791184]  ret_from_fork+0x2c/0x50
+[  218.795172] Object 0xffff92381113dfc0 @offset=8128
+[  218.800514] Allocated in mempool_init_node+0x92/0xd0 age=205544 cpu=0 pid=391
+[  218.808477]  mempool_init_node+0x92/0xd0
+[  218.812851]  mempool_create+0x56/0x80
+[  218.816933]  fc_exch_mgr_alloc+0xd4/0x220 [libfc]
+[  218.822187]  0xffffffffc0a10cbf
+[  218.825688]  0xffffffffc0a12ce1
+[  218.829188]  local_pci_probe+0x46/0xa0
+[  218.833367]  work_for_cpu_fn+0x16/0x20
+[  218.837547]  process_one_work+0x1e5/0x3f0
+[  218.842018]  worker_thread+0x1c4/0x3a0
+[  218.846197]  kthread+0xe2/0x110
+[  218.849698]  ret_from_fork+0x2c/0x50
+
