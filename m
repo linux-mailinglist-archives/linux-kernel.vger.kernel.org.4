@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7A16F8805
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 19:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3506F880B
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 19:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233161AbjEERwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 13:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
+        id S232493AbjEERwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 13:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbjEERwO (ORCPT
+        with ESMTP id S233178AbjEERwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 13:52:14 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A24203D6
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:51:35 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so29529512a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 10:51:34 -0700 (PDT)
+        Fri, 5 May 2023 13:52:39 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AC41C0F7
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:52:08 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bd87539c2so3309846a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 10:52:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683309032; x=1685901032;
+        d=linaro.org; s=google; t=1683309070; x=1685901070;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uNAjtGkZTnyvPXFM1hkH3rcTHl1qTgleJ0X8KEi0be8=;
-        b=crVV77F4duLe0194uuxbJ39uu++eszWvoJx05GoKD+iHRs6bG65rcDWXFqM6Tz+Ppw
-         EJN4Xp2vCYvQaXZAy6S9bdPHbvPSiGgRk5Bzfo028gUL/TQdQJe3cb43NDNZ+Jf3eq9b
-         NcmJ8BuPTy+ZVFIqG0HoCa49tlW+vp8P6LQvG5sImxdEtUdopSEJvkeBzypGw4yc40x+
-         OseD/p1NPVkzI/vnE1xfBR/zQFsm8HHvRqSRsSipcDlAUMlEDNNvBI/eobaPT8pRCpeq
-         JXgNQ8a/BfcM+ksfp94gfbSzs8XNJggvMl+AJKLnGOZpR9h3EdiU6ek4qy3uex4Lg0yT
-         wb6Q==
+        bh=l9KiUn2j/F3rd3L6a4gBAonK4ydKd36At77LcJnV4Hk=;
+        b=csstjdbtFjroFqvwHrAj7ASCkdwnZItI/fNeIzHVu87W9zqLlBfvxLeJp+R0u/JEId
+         tAQYpvEDjeR7XJQC0qKU+nohFILvaBZi2lFIInEBFyvwCea0rBtSc4D8/ufuyPHsfTmh
+         J8+f0cWSLrqTwEJqbCoLLxqSaKIi7WAdGU4oELV82QUPVmR3cgMdDOb55hOv7XAUaBLV
+         TzHFKV1xpVg3Pn61jMhE6iO0mkrZ5D8b+uMvtRa3U5MSTAlM+adKh1GILvt8wyOYMhVu
+         02lWdXL1a+t1Hh0KibdY4lorosL+o8VnRAqdHIr45nhhSDflQp10+43kyc0ODlqInvoP
+         oqYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683309032; x=1685901032;
+        d=1e100.net; s=20221208; t=1683309070; x=1685901070;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uNAjtGkZTnyvPXFM1hkH3rcTHl1qTgleJ0X8KEi0be8=;
-        b=UWxlgXVFnYgRcCHL+G7VUHcTInURxf6Si5C3mi4FyAdnnCCgDn63uJC1/JDCFZTGPU
-         mJ0L2WSSlktK4iOpc3aJb7arhnWkphZrgv4jPOWVJXFVz7YYoZX8n4mn2T20CfmSBU2I
-         ypvcDeDa26D6+Xnm3b1jb51flslpQ5S5jUqwiy3QGX1sjOAdyeJlzuMoxpMMM8qqvUh5
-         hrNYee4/B/SbHGeI6GdkQ3MIKO7v4YSJrh8XQibPdTb53kW/FjJ9zAR+fcC7uM40S9k8
-         QR+qJih5jEcI1XTN2rgj6653wLm8JF2yrvhAp98o1ri4WsDhsuqowqz5XDydWVQLkgVC
-         x0gQ==
-X-Gm-Message-State: AC+VfDwz2KpWnWiq6JmP2/FH1SNNgddH9y5gYcJqvgf0eq8XdkVvYgYi
-        xdP2Ho3e2elPSpzAavSj8A6eZA==
-X-Google-Smtp-Source: ACHHUZ4aXnYE6LxyyVrhPHgqL43SWNyHVz4GZAj8nJEgzI/1iOUrsrsRv6RWp4wzWl0RJ/YLjsba2w==
-X-Received: by 2002:aa7:d29a:0:b0:504:81d4:118d with SMTP id w26-20020aa7d29a000000b0050481d4118dmr2297086edq.3.1683309032559;
-        Fri, 05 May 2023 10:50:32 -0700 (PDT)
+        bh=l9KiUn2j/F3rd3L6a4gBAonK4ydKd36At77LcJnV4Hk=;
+        b=BSK59E6HgzmT8DzanNInD3si2cYRhm69ZlrWKVqnT6wuPo9dQ76ge/zJbvu24n9YSE
+         nf+rnOofCQSE+TdaboPJt9cV83d4O1L/sPK/qu7HupLj4HorMIb+ucdUmPnu/+c2QNh7
+         /1sdSB7Z1dxd1ZQ5SmnZzcuXdj+3wm/lWWO2ADadescNTe49lFMVeUb34XI8QHzZ3bFo
+         2vgkchUPyY+rV9XvpaA7+UlEg4eRn43jBr43op2ObvhuVhZZoXHJFPET66jVKh33WOaK
+         LDqdouOb9pSzd9ucxO+WZBIcL76XyZaSFv9ZMpt7rNjcT7iwTVcP0IVDi1task8N4KXh
+         h+3A==
+X-Gm-Message-State: AC+VfDwVzVUjCLI1EulMPwKrAqksE4EdJNni2BTWBIJ72j4QreCnJQxu
+        Wv4Eyma2ANDYNGkZ4dNvveUDDg==
+X-Google-Smtp-Source: ACHHUZ5xqpX2L5ebNYEvbbCCWtHxDyyOulKKr7mtICAZPFhip7BFcUyqOUSfDx5jcLvYiofFRZ5+OQ==
+X-Received: by 2002:a05:6402:182:b0:50b:f929:c6d3 with SMTP id r2-20020a056402018200b0050bf929c6d3mr2297319edv.1.1683309070329;
+        Fri, 05 May 2023 10:51:10 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
-        by smtp.gmail.com with ESMTPSA id n5-20020aa7c785000000b0050d89daaa70sm5885eds.2.2023.05.05.10.50.30
+        by smtp.gmail.com with ESMTPSA id f22-20020a056402069600b0050bd4b8ca8fsm3126782edy.14.2023.05.05.10.51.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 10:50:31 -0700 (PDT)
-Message-ID: <db835ac3-cf3e-8dd3-62b3-ffca9a7f6c03@linaro.org>
-Date:   Fri, 5 May 2023 19:50:30 +0200
+        Fri, 05 May 2023 10:51:09 -0700 (PDT)
+Message-ID: <0f6aa2f3-b56e-840c-9bb7-6add0335315a@linaro.org>
+Date:   Fri, 5 May 2023 19:51:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH 1/3] media: dt-bindings: media: camss: qcom,msm8996-camss:
- Add CAMSS power domain and power-domain-names
+Subject: Re: [PATCH 2/3] arm64: dts: qcom: msm8996: Add CAMSS power domain and
+ power-domain-names to CAMSS
 Content-Language: en-US
 To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
         Robert Foss <rfoss@kernel.org>,
@@ -74,9 +74,9 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230503072543.4837-1-y.oudjana@protonmail.com>
- <20230503072543.4837-2-y.oudjana@protonmail.com>
+ <20230503072543.4837-3-y.oudjana@protonmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230503072543.4837-2-y.oudjana@protonmail.com>
+In-Reply-To: <20230503072543.4837-3-y.oudjana@protonmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,20 +92,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 03/05/2023 09:25, Yassine Oudjana wrote:
 > From: Yassine Oudjana <y.oudjana@protonmail.com>
 > 
-> Add the CAMSS power domain which is needed for the proper operation of CAMSS, and add
-> power-domain-names to ease fetching it as well as the other power domains.
+> Add the CAMSS power domain as well as power-domain-names for all CAMSS power domains.
 
 Please wrap commit message according to Linux coding style / submission
 process (neither too early nor over the limit):
 https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
 
-Same for all other patches.
+You should explain why you are adding it.
 
-
-Subject: you have double media, drop the latter one.
-
-Your subject is anyway too long, so shorten it. camss: is also a
-redundant prefix.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> ---
+>  arch/arm64/boot/dts/qcom/msm8996.dtsi | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> index 30f6ebc4bd11..0168a086f57d 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> @@ -2118,7 +2118,9 @@ camss: camss@a00000 {
+>  				"vfe0",
+>  				"vfe1";
+>  			power-domains = <&mmcc VFE0_GDSC>,
+> -					<&mmcc VFE1_GDSC>;
+> +					<&mmcc VFE1_GDSC>,
+> +					<&mmcc CAMSS_GDSC>;
+> +			power-domain-names = "vfe0", "vfe1", "camss";
+>  			clocks = <&mmcc CAMSS_TOP_AHB_CLK>,
+>  				<&mmcc CAMSS_ISPIF_AHB_CLK>,
+>  				<&mmcc CAMSS_CSI0PHYTIMER_CLK>,
 
 Best regards,
 Krzysztof
