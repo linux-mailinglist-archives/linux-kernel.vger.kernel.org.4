@@ -2,77 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FA06F7D47
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B98506F7D50
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjEEGx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 02:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
+        id S231208AbjEEG5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 02:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbjEEGx4 (ORCPT
+        with ESMTP id S229577AbjEEG5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 02:53:56 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96EFAD11
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 23:53:54 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so24053262a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 23:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683269633; x=1685861633;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+5tc2CyrPtqMpDuXO00/MEGgQ9p3JI0/atSwH0Ii1mY=;
-        b=w5NUw1a9vT8f0AVOKaTDDu6iYddqpj4bW5s251lUBSYX0xwz3tQebHE9RVNtvO3o95
-         nnRLrSrpEZueODRnRVeCikGOwGTrZq6hmQrZllewwy5Qqr0G3ZMx4ZicmIbokYxd+Cjr
-         8E0LCjkQe50iaoZF+eYBwZ1TOJlhqvBGhYnSRPnN86813MDq2Me5sosx8/1ncNMi3vVc
-         84HpsgjXENlH06t6QEeUdLZNFgcrx1CHhAnVLD9Ke6va7RKCLH3t6sTYoAJo6MLb77ib
-         1iSwWmbHRJtxm06y+ir4f6KriWJVcpbNe5qaIWfvZp4f3fQ4LRFywsryKPK3rGawa2X4
-         cygg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683269633; x=1685861633;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+5tc2CyrPtqMpDuXO00/MEGgQ9p3JI0/atSwH0Ii1mY=;
-        b=ki34uCNZBL+sPDXwHeDFv1vz7+rd95MrJ5k/Fyxh1+cPc5Rr1RwuIWHNBjPNbafq5a
-         NUOjJR4kRTj70xm3sT7JxFiSHLBaDBRJvd3RnZ2x+80UJrgwop7DM55sT83/9r3Qbz8X
-         LsGHD9xTUdOa4oNSR0RbnKVULTpJycfYe4XK2a6NLDnkZENQHw9BZipGo6FkV8D6C0+K
-         mo/mDv7qx3isCtAus5OqZv3Nwb/UqLtwVF47MlPTerk5RzkSdCg2uKxV4C28E6NgU63g
-         3Wn1Y+8RTriqcQR94MZeXnmgYIPzvU4B5pDXStLMsQulyPsEaH6WMjvbzNNffUq8WMow
-         HR+A==
-X-Gm-Message-State: AC+VfDz4JAUgicQwSd7OdxyUGJLZxK7FYGgqe/hyBsY391eOGGFY9rTR
-        RaZIZ0DthCXeqXcS1+OPn7y+ng==
-X-Google-Smtp-Source: ACHHUZ4UqTMQclZve3W4bSXtxfuaOdUxuYDVJw+A56diQl+f74F0uraVpO1/McZ1VnsWYk6zNejEHw==
-X-Received: by 2002:a17:907:9306:b0:932:f88c:c2ff with SMTP id bu6-20020a170907930600b00932f88cc2ffmr1125923ejc.34.1683269633268;
-        Thu, 04 May 2023 23:53:53 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
-        by smtp.gmail.com with ESMTPSA id n26-20020a17090673da00b0094eeea5c649sm554617ejl.114.2023.05.04.23.53.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 23:53:52 -0700 (PDT)
-Message-ID: <63657ebd-41f8-69c7-5c4c-d77456d50d9f@linaro.org>
-Date:   Fri, 5 May 2023 08:53:51 +0200
+        Fri, 5 May 2023 02:57:11 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE531AE;
+        Thu,  4 May 2023 23:57:10 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3454mq1V026461;
+        Fri, 5 May 2023 06:57:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=2Cr4yp6+m/xXSoIvTb526YLiKj5MoW2rHpxTH4RqKvA=;
+ b=WX6SpXsGZk8osnNSAMuT6OS+mvXbp2AxSEstCeO29uIE3TRwAamK8sGN9N6SQCkBPiiV
+ i4zZlWVXGEEkBJFS3aGGe09zshwgSp6jihKyIT0XsTTHtxlFudROCM22b8Hea45st3XW
+ QPHX7R2KUbRUHtloWfle6PUsxuCy5+kk31gKWM0qKlm57HAntyXou6SxFgVqsEgBVf5h
+ wfkU9X+LtHdsWCP4JBgvDoT2Y1cp2QDkWER2cJm/Ta87YHpU6C5OV2BkVioW7cGlv7WU
+ Zv3wm9mUMLOC7QUPjfEud4wQHIsjExZEfy4g+O18+OuxhIOiS6Dx3DiEGs0dQsxoXgcU ew== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qce6mhubx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 May 2023 06:57:06 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3456v6me018854
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 5 May 2023 06:57:06 GMT
+Received: from [10.214.66.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 4 May 2023
+ 23:57:01 -0700
+Message-ID: <28761e5b-4746-14f9-c079-ee8e0d76882a@quicinc.com>
+Date:   Fri, 5 May 2023 12:26:58 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 1/2] dt-bindings: arm: ti: Add bindings for PHYTEC AM62x
- based hardware
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v5 2/3] pinctrl: qcom: Refactor target specific pinctrl
+ driver
 Content-Language: en-US
-To:     Wadim Egorov <w.egorov@phytec.de>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-hardening@vger.kernel.org
-Cc:     upstream@lists.phytec.de, nm@ti.com, vigneshr@ti.com,
-        kristo@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, keescook@chromium.org,
-        tony.luck@intel.com, gpiccoli@igalia.com
-References: <20230504140143.1425951-1-w.egorov@phytec.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230504140143.1425951-1-w.egorov@phytec.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <linus.walleij@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <richardcochran@gmail.com>, <manivannan.sadhasivam@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <1683092380-29551-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1683092380-29551-3-git-send-email-quic_rohiagar@quicinc.com>
+ <CAHp75VegxMgAamS3ORiJ2=D4MH7asD9PiWrM+3JAm-QOuEgcrg@mail.gmail.com>
+ <20a45e1e-6e62-9940-33d8-af7bad02b68d@quicinc.com>
+ <CAHp75VekkTVzVCJs10GEi=1Andb2rWTwK8RELw6SqMzKYCPq2w@mail.gmail.com>
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+In-Reply-To: <CAHp75VekkTVzVCJs10GEi=1Andb2rWTwK8RELw6SqMzKYCPq2w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 3LkMwWOhpMVtPFLv-e6i7p7XZbSmyJCU
+X-Proofpoint-ORIG-GUID: 3LkMwWOhpMVtPFLv-e6i7p7XZbSmyJCU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_15,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 phishscore=0
+ mlxlogscore=841 impostorscore=0 suspectscore=0 adultscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305050059
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,20 +89,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023 16:01, Wadim Egorov wrote:
-> Add devicetree bindings for AM62x based phyCORE-AM62 SoM
-> and phyBOARD-Lyra RDK.
 
-If there is going to be new version:
-Subject: drop second/last, redundant "bindings". The "dt-bindings"
-prefix is already stating that these are bindings.
+On 5/3/2023 7:23 PM, Andy Shevchenko wrote:
+> On Wed, May 3, 2023 at 2:14 PM Rohit Agarwal <quic_rohiagar@quicinc.com> wrote:
+>> On 5/3/2023 3:11 PM, Andy Shevchenko wrote:
+>>> On Wed, May 3, 2023 at 8:39 AM Rohit Agarwal <quic_rohiagar@quicinc.com> wrote:
+> ...
+>
+>>>>    /**
+>>>>     * struct msm_function - a pinmux function
+>>>> - * @name:    Name of the pinmux function.
+>>>> - * @groups:  List of pingroups for this function.
+>>>> - * @ngroups: Number of entries in @groups.
+>>>> + * @func: Generic data of the pin function (name and groups of pins)
+>>>>     */
+>>>>    struct msm_function {
+>>>> -       const char *name;
+>>>> -       const char * const *groups;
+>>>> -       unsigned ngroups;
+>>>> +       struct pinfunction func;
+>>>>    };
+>>> But why? Just kill the entire structure.
+>> Got it. Can we have a typedef for pinfunction to msm_function in the msm
+>> header file?
+> But why? You can replace the type everywhere it needs to be replaced.
+> I can't expect many lines to change.
+>
+> Also consider splitting struct pingroup change out of this. We will
+> focus only on the struct pinfunction change and less code to review.
+Ok Will update all of this.
 
-> 
-> Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
-
+Thanks,
+Rohit.
