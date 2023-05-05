@@ -2,118 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB3D6F8000
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D944A6F8026
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbjEEJaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 05:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40076 "EHLO
+        id S231335AbjEEJjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 05:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231592AbjEEJaI (ORCPT
+        with ESMTP id S230484AbjEEJjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 05:30:08 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C22718DD1
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 02:30:06 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-55a26b46003so21630547b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 02:30:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683279005; x=1685871005;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zKLLprNwaaeZYAnNNb830KY0y4SK3/A2CshWnDDE80w=;
-        b=IyeI2DkciUzyMxxJkZOgS4Wf48xUGAPNC5wvtQocGOSDSNVbotah9q12SzdcdTzC9V
-         B4FURdd4Wz5zfZtAfHXXvHmbVGHNlUf4cuPoQTNG1ifz5zAZzz5JeXrm7227Ir6MR/Lt
-         OFB//+zi1Qea68MpwIASOqpabWg8dBuZqtwUT+QdMQUq1pndBRZVuI60F8nDqIl+zutJ
-         3aJLqWzeYW6045FPK0R4ItYPlTd6iUBzwrSq5nrYZvKP6tVVBhDCmWEc0MYs6L3sxIwJ
-         yhTk5qFg0jHBqLToGH4P9nlWjqpqpkBiZoeOe9hnRkvCcTLS+c3Bx83fiO0Wlfjq4gAp
-         gOHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683279005; x=1685871005;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zKLLprNwaaeZYAnNNb830KY0y4SK3/A2CshWnDDE80w=;
-        b=T5mov7sqr2FuUCDnukeIOHjcd8XzqKzLH0L/5TNg5TsagT8Pp9J4tzObrjlN2KR3ht
-         dzxxR0TMMNeDX8c19JEcj6z5b0jqIXVyIIee44F6MaZIL7VsH6W+Z+36K+5a1obB+NCL
-         PCzLhHNJYGNIsx8nCjKk0pTYByG/7qq0LXYWp+kjg6c+ipSthsVJuowDUcLYDoa+hByz
-         gs32BL7DzOwDh8MzkdZuC8m6hOunZlKGeCnmWXWoLCL+AqQq5bOBqrAldlgcLOx7EBV2
-         kfPpvq+0BqcC5+hBBhRCaEu1eJBT5B8vhFoCri/XW2b00GLXJCRFjl1UwnUlp7A8jA+N
-         YEAQ==
-X-Gm-Message-State: AC+VfDzoZmI6VNg+b9xo98lR4J7LiK2f66hTm/3cZkZtGYz+J15kdZEE
-        kQlMZxkDuuQmxNmJF9HCA/yA3aGbPMpiyKiQrQiZ1Q==
-X-Google-Smtp-Source: ACHHUZ57uxYbtQ4r7HHvF2CMapziRFJbg7koTCsVXaNSfDQ941AHyjqZmqhvyR2XIphz/G6gzsJpm/RJwQ9QpSVa1P4=
-X-Received: by 2002:a81:4e8a:0:b0:55a:886c:bfc3 with SMTP id
- c132-20020a814e8a000000b0055a886cbfc3mr999607ywb.7.1683279005467; Fri, 05 May
- 2023 02:30:05 -0700 (PDT)
+        Fri, 5 May 2023 05:39:12 -0400
+X-Greylist: delayed 418 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 05 May 2023 02:39:11 PDT
+Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE022150E6;
+        Fri,  5 May 2023 02:39:10 -0700 (PDT)
+Received: from tarshish (unknown [10.0.8.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.tkos.co.il (Postfix) with ESMTPS id 8B328440F85;
+        Fri,  5 May 2023 12:26:25 +0300 (IDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+        s=default; t=1683278786;
+        bh=/HMflvUxM2+g4joc8VI/Bqtx5nCZ2tcOLWW0yiXmjhU=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=JMb/p58qy+zzuw6X8pcVc2w2MJL4OM4akuLec8WV4pjLGT5+W1kptkEuiGXImE5Fa
+         fq+UOyH2SuHV3byb0ePFRBiinXx1UeRqcFLeHLrbD+5wAIWSasikE+KqyRc/WkfvVD
+         oRr289ClAv9YSVlIdN61hBXDEN/m4EGfVGph2OdhI4A+Zf6+hL6CdSzQ0PSyt0L2vu
+         R4WJsusIqyH73CcgdXBogdd8ph+3PesT6FQ80slW0dYBRzuRtJ2U53vmFcOOku+7vN
+         BfyaHpv4+ZrHqvHiExVaLIkFpsmgrEQ7FPCa/Ok0zqOdNZRWIQInPxxqZc59FYP5Gb
+         Xd/bjhOq9SFlQ==
+References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
+ <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
+User-agent: mu4e 1.9.21; emacs 28.2
+From:   Baruch Siach <baruch@tkos.co.il>
+To:     Rob Herring <robh@kernel.org>
+Cc:     soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Lars Persson <lars.persson@axis.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Daniel Palmer <daniel@thingy.jp>,
+        Romain Perier <romain.perier@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Barker <paul.barker@sancloud.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@axis.com
+Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
+Date:   Fri, 05 May 2023 12:30:47 +0300
+In-reply-to: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
+Message-ID: <87jzxn3yzr.fsf@tarshish>
 MIME-Version: 1.0
-References: <cover.1683183860.git.quic_varada@quicinc.com> <8894bf2c44eaf4959c7a1966b66229e6cf5cda96.1683183860.git.quic_varada@quicinc.com>
-In-Reply-To: <8894bf2c44eaf4959c7a1966b66229e6cf5cda96.1683183860.git.quic_varada@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 5 May 2023 12:29:54 +0300
-Message-ID: <CAA8EJppvj2nzqwdsC+Xct4cJg2-_yPpiGDELjHJG4HyAH3zGMA@mail.gmail.com>
-Subject: Re: [PATCH v10 8/9] arm64: dts: qcom: ipq9574: Add LDO regulator node
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 5 May 2023 at 11:23, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
->
-> Add LDO regulator node
+Hi Rob,
 
-As this LDO is provided by the PMIC, it would be nice to know why it
-is modelled as an always-on regulator instead of the proper PMIC
-regulator. Up to now we were doing this only for the outstanding power
-rails like CX/MX or EBI.
+On Thu, May 04 2023, Rob Herring wrote:
+> The arm dts directory has grown to 1553 boards which makes it a bit
+> unwieldy to maintain and use. Past attempts stalled out due to plans to
+> move .dts files out of the kernel tree. Doing that is no longer planned
+> (any time soon at least), so let's go ahead and group .dts files by
+> vendors. This move aligns arm with arm64 .dts file structure.
+>
+> Doing this enables building subsets of dts files by vendor easily
+> without changing kernel configs:
+>
+> make allyesconfig
+> make arch/arm/boot/dts/ti/
+>
+> There's no change to dtbs_install as the flat structure is maintained on
+> install.
+>
+> The naming of vendor directories is roughly in this order of preference:
+> - Matching original and current SoC vendor prefix/name (e.g. ti, qcom)
+> - Current vendor prefix/name if still actively sold (SoCs which have
+>   been aquired) (e.g. nxp/imx)
+> - Existing platform name for older platforms not sold/maintained by any
+>   company (e.g. gemini, nspire)
+>
+> The whole move was scripted with the exception of MAINTAINERS.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
->
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  Changes in v10:
->         - Add LDO regulator node
-> ---
->  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> index bdc1434..1f5d14f 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> @@ -60,6 +60,13 @@
->                         regulator-min-microvolt = <725000>;
->                         regulator-max-microvolt = <1075000>;
->                 };
-> +
-> +               mp5496_l2: l2 {
-> +                       regulator-min-microvolt = <1800000>;
-> +                       regulator-max-microvolt = <1800000>;
-> +                       regulator-boot-on;
-> +                       regulator-always-on;
-> +               };
->         };
->  };
->
-> --
-> 2.7.4
->
+For Conexant Digicolor:
 
+Acked-by: Baruch Siach <baruch@tkos.co.il>
+
+baruch
 
 -- 
-With best wishes
-Dmitry
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
