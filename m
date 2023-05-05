@@ -2,200 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E8E6F83CE
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 683466F83D8
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbjEENUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 09:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
+        id S232466AbjEENWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 09:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbjEENUo (ORCPT
+        with ESMTP id S231764AbjEENWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 09:20:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEA51F4AC;
-        Fri,  5 May 2023 06:20:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61CA363E15;
-        Fri,  5 May 2023 13:20:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58040C433EF;
-        Fri,  5 May 2023 13:20:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683292840;
-        bh=1tIXs2qrQIkUsmb/r+/EjrPd2vRi0DVKFZc6hOpHua0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nsO0Qsl4rH4ZK0mnu5QCJzz0ti4NCFYq2SRFKkroDjxrXU+3PZNRq7qnUMyIpbVwJ
-         k1E2CTvz1Uhhk9lbMEgn9EmSSiNTr2msESUGLL3RSI/prmW+m1Tbrj8r+jb2AJbG/B
-         L8ls+7GZBtoKdjszRDtbcxUMnmV41xn+XNFE2pa2LkN23ZU5FvyGGx0cc+co/03hQm
-         zAxhiJGOmO3NfRqYP0EEWP1IWMyn7alV652KyRu8PqOCFUxNmru4gr80kjsth01iEM
-         dh3iYtCJsq05V2RzCQnUaT+Tu9+ux5ikFuT1VsBU/WZGml8W8czcMhFAjEbvVy/YhK
-         OeE8Evuwm8SOA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B0600403B5; Fri,  5 May 2023 10:20:37 -0300 (-03)
-Date:   Fri, 5 May 2023 10:20:37 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Song Liu <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Hao Luo <haoluo@google.com>, Ian Rogers <irogers@google.com>,
-        James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Roman Lozko <lozko.roma@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: BPF skels in perf .Re: [GIT PULL] perf tools changes for v6.4
-Message-ID: <ZFUCpepjOfFZjETL@kernel.org>
-References: <20230503211801.897735-1-acme@kernel.org>
- <CAHk-=wjY_3cBELRSLMpqCt6Eb71Qei2agfKSNsrr5KcpdEQCaA@mail.gmail.com>
- <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
- <ZFOSUab5XEJD0kxj@kernel.org>
- <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
- <ZFPw0scDq1eIzfHr@kernel.org>
- <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
- <ZFQCccsx6GK+gY0j@kernel.org>
- <ZFQoQjCNtyMIulp+@kernel.org>
- <ZFQrT42SyEbCj4om@kernel.org>
+        Fri, 5 May 2023 09:22:17 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB8F1F490;
+        Fri,  5 May 2023 06:22:15 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345Cv5Cd005378;
+        Fri, 5 May 2023 13:21:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=5EQVVhWshw5GFz8Sv8IEK/OzCkyfIIX+VeQOuoEZpIM=;
+ b=Zn3ENJaOZbYlGH9+gFrg/zSQwxdHFIYCJ+azLKhNc1O9Vo5sJPrOGdLCeNQevp+AkBUx
+ xlsuo+QbnAGIgUpBQ5/fmZMLSDFPUZqXirNMQRC363JNZuQK0HwBQUB/H6ggIWt6T/x+
+ XUtSjkMPEZgb5E7RKdoKXw+zOJfh0m5sQNiZiotXCe1sQgmGqkSdL4aaHOKdS9T1oWjh
+ 8cxBzbUVKlUB/5pFCanBRHIQyl9s8mMy1C5BXj4HEK8eIlzQ9Mz8mto3WuGRgu6YMCOp
+ LAO2AxFFo27wphXyQ0fvOcik4RZq74u6qdjgN4uoHl17dMulJ2YjgQq5tv628GMlWy7/ RQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qd28qg1hr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 May 2023 13:21:43 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345DLg5F002203
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 5 May 2023 13:21:42 GMT
+Received: from [10.216.37.178] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 5 May 2023
+ 06:21:37 -0700
+Message-ID: <4a95547d-916a-3875-7752-f815429182e5@quicinc.com>
+Date:   Fri, 5 May 2023 18:51:34 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZFQrT42SyEbCj4om@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 09/18] media: venus: hfi_venus: Fix version checks in
+ venus_halt_axi()
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Marijn Suijten" <marijn.suijten@somainline.org>
+References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
+ <20230228-topic-venus-v2-9-d95d14949c79@linaro.org>
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+In-Reply-To: <20230228-topic-venus-v2-9-d95d14949c79@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rX-Ct0MZMASKWsBwev-uRV7u6U6rVVHx
+X-Proofpoint-ORIG-GUID: rX-Ct0MZMASKWsBwev-uRV7u6U6rVVHx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-05_20,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ adultscore=0 suspectscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 bulkscore=0 clxscore=1015 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305050111
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, May 04, 2023 at 07:01:51PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Thu, May 04, 2023 at 06:48:50PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Thu, May 04, 2023 at 04:07:29PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > Em Thu, May 04, 2023 at 11:50:07AM -0700, Andrii Nakryiko escreveu:
-> > > > On Thu, May 4, 2023 at 10:52 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > > > Andrii, can you add some more information about the usage of vmlinux.h
-> > > > > instead of using kernel headers?
-> > >  
-> > > > I'll just say that vmlinux.h is not a hard requirement to build BPF
-> > > > programs, it's more a convenience allowing easy access to definitions
-> > > > of both UAPI and kernel-internal structures for tracing needs and
-> > > > marking them relocatable using BPF CO-RE machinery. Lots of real-world
-> > > > applications just check-in pregenerated vmlinux.h to avoid build-time
-> > > > dependency on up-to-date host kernel and such.
-> > >  
-> > > > If vmlinux.h generation and usage is causing issues, though, given
-> > > > that perf's BPF programs don't seem to be using many different kernel
-> > > > types, it might be a better option to just use UAPI headers for public
-> > > > kernel type definitions, and just define CO-RE-relocatable minimal
-> > > > definitions locally in perf's BPF code for the other types necessary.
-> > > > E.g., if perf needs only pid and tgid from task_struct, this would
-> > > > suffice:
-> > >  
-> > > > struct task_struct {
-> > > >     int pid;
-> > > >     int tgid;
-> > > > } __attribute__((preserve_access_index));
-> > > 
-> > > Yeah, that seems like a way better approach, no vmlinux involved, libbpf
-> > > CO-RE notices that task_struct changed from this two integers version
-> > > (of course) and does the relocation to where it is in the running kernel
-> > > by using /sys/kernel/btf/vmlinux.
-> > 
-> > Doing it for one of the skels, build tested, runtime untested, but not
-> > using any vmlinux, BTF to help, not that bad, more verbose, but at least
-> > we state what are the fields we actually use, have those attribute
-> > documenting that those offsets will be recorded for future use, etc.
-> > 
 
-Namhyung, can you please check that this one for the recent sample works?
+On 5/4/2023 1:31 PM, Konrad Dybcio wrote:
+> Only IRIS2(_1) should enter the until-now-IS_V6() path and the
+> condition for skipping part of it should be IS_IRIS2_1 and not the
+> number of VPP pipes. Fix that.
 
-From c6972dae6c962d7be5ba006ab90c9955268debc5 Mon Sep 17 00:00:00 2001
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
-Date: Fri, 5 May 2023 09:55:18 -0300
-Subject: [PATCH 1/2] perf sample_filter.bpf: Stop using vmlinux.h generated by
- bpftool, use CO-RE
+Do not see any issue with existing code. IRIS2 with single pipe is 
+IRIS2_1. This does not
 
-Including linux/bpf.h and linux/perf_events.h we get the UAPI structs
-and then define a subset  'struct perf_sample_data' with the fields we
-use in this tool while using __attribute__((preserve_access_index)) so
-that at libbpf load time it can fixup the offsets according to the
-'struct perf_data_sample' obtained from the running kernel BTF
-(/sys/kernel/btf/vmlinux).
+quality as a fix to earlier implementation. Since this series introduces 
+VPU versions,
 
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/perf/util/bpf_skel/sample_filter.bpf.c | 37 +++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+IRIS2 with 1 pipe is being replaced with IRIS2_1.
 
-diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-index cffe493af1ed5f31..045532c2366d74ef 100644
---- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
-+++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-@@ -1,12 +1,47 @@
- // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- // Copyright (c) 2023 Google
--#include "vmlinux.h"
-+#include <linux/bpf.h>
-+#include <linux/perf_event.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_core_read.h>
- 
- #include "sample-filter.h"
- 
-+// non-UAPI kernel data structures, just the fields used in this tool,
-+// preserving the access index so that libbpf can fixup offsets with the ones
-+// used in the kernel when loading the BPF bytecode, if they differ from what
-+// is used here.
-+
-+struct perf_sample_data {
-+	__u64			 addr;
-+	__u64			 period;
-+	union perf_sample_weight weight;
-+	__u64			 txn;
-+	union perf_mem_data_src  data_src;
-+	__u64			 ip;
-+	struct {
-+		__u32		 pid;
-+		__u32		 tid;
-+	} tid_entry;
-+	__u64			 time;
-+	__u64			 id;
-+	struct {
-+		__u32		 cpu;
-+	} cpu_entry;
-+	__u64			 phys_addr;
-+	__u64			 data_page_size;
-+	__u64			 code_page_size;
-+} __attribute__((__aligned__(64))) __attribute__((preserve_access_index));
-+
-+struct bpf_perf_event_data_kern {
-+	struct perf_sample_data *  data;
-+	struct perf_event *        event;
-+
-+	/* size: 24, cachelines: 1, members: 3 */
-+	/* last cacheline: 24 bytes */
-+} __attribute__((preserve_access_index));
-+
- /* BPF map that will be filled by user space */
- struct filters {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
--- 
-2.39.2
+-Vikash
 
+>
+> Fixes: 4b0b6e147dc9 ("media: venus: hfi: Add 6xx AXI halt logic")
+> Fixes: 78d434ba8659 ("media: venus: hfi: Skip AON register programming for V6 1pipe")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/media/platform/qcom/venus/hfi_venus.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
+> index 9b840440a115..ca56b1a8eb71 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_venus.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_venus.c
+> @@ -549,10 +549,10 @@ static int venus_halt_axi(struct venus_hfi_device *hdev)
+>   	u32 mask_val;
+>   	int ret;
+>   
+> -	if (IS_V6(hdev->core)) {
+> +	if (IS_IRIS2(hdev->core) || IS_IRIS2_1(hdev->core)) {
+>   		writel(0x3, cpu_cs_base + CPU_CS_X2RPMH_V6);
+>   
+> -		if (hdev->core->res->num_vpp_pipes == 1)
+> +		if (IS_IRIS2_1(hdev->core))
+>   			goto skip_aon_mvp_noc;
+>   
+>   		writel(0x1, aon_base + AON_WRAPPER_MVP_NOC_LPI_CONTROL);
+>
