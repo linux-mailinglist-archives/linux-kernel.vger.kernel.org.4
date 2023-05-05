@@ -2,168 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E566F8CB5
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E316F8CB8
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbjEEXSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 19:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S231805AbjEEXSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 19:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231450AbjEEXSD (ORCPT
+        with ESMTP id S231450AbjEEXS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 19:18:03 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999A64ECD
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683328682; x=1714864682;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=glIPBa+7wgG1nQ3Jwx6zBR+N18LhZNJ0ZCrel1fcq1E=;
-  b=FUDSlGy6ZiDZ2Bnjke7lWZHvhMc+tOgdj8NuOidSMAsWstBKyt/bnM+l
-   jGadmUs8M7kuvkbvhK/pjRNV1cZ7ALU+xTvO17Bdcebr4vhajhxYTQV85
-   kF+yxeBaXRktJkCNc4bvO7BtH3TYq03zCHYnVSYR8HKDXCePKPK5JLJxg
-   glUY7ataS9jrGGjX8pUPB5TyIyT+Ct/bKyyFLvZdFTkOkT1XEDfInnUjf
-   DqJlLNbovt+WEuJXMryU7/2bEdMVh9+UPJ3JGJOXAWfGuI3/t6JGfgTlP
-   1wy4KqD1kvB7m7BeOva8xxbXp6w5l7Eggu0agyjsPsRHXcOMJ2LlDnUhg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="377397999"
-X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
-   d="scan'208";a="377397999"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 16:17:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="809450207"
-X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
-   d="scan'208";a="809450207"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga002.fm.intel.com with ESMTP; 05 May 2023 16:17:53 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 5 May 2023 16:17:53 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 5 May 2023 16:17:53 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 5 May 2023 16:17:53 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.107)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 5 May 2023 16:17:52 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L/PAmu851R0K4vBKJqkDnicaf3S4DBRMyERSs673aYZGGR7CFM7Kv/Vdu80TyHDq+QykkWCzI/e28SS4GkQ/3sYSx98I6ExDtVxHGYtPl7go60Ph2V4K5C7fEOFqOf9fz4UwNLcnZaWHOiyZAkVRjU2RcV3RxA9kFW3A/QWb0q+TAYvr+NBldIqpFZHstkPGZZJGXmBTqYKddJWjaWz+NcYkoql+vKzr2PO8mBF/RYBcvjpjVqWsa+ve1YNhaX/EkMjEx7FmCzC3pSiV+9jkHBqTQHDByW2nXXE2Pdy2NJDSe15+42XRAi0eyKAGRdCxEWOcCkRS0U63OLbm66KVgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UTVkAS/zwNG5g1bVPpKyxpS7r2I4YogoLFFLm8lIk2c=;
- b=DKUSEkV+PM1FQPMEzQTgUnKUYeEkfidqZ7rZeCtvZWhDw9t0O+CLzGQN0793ouZ/mAAcdbGLT+IFHmYe3DI3nAtJ6H3kSOpXPD6y3SmOotlLqUdE16K0bbtH4lm9DuHVVrvnXsQmlZYc7OuxDgME1ZKLRPAFq+LQQrZcTwNn6g95sXgyI+LnVz/+1sCi1DviR+KQGs6Ixhme9hrkqNbQgBqSimJok8ontP0iPULpHW0KI9j5QtMZAr0GYM9lBDdxhObohv7eMpEULwtteJJFr0lyUZ8Gl10czTla8yn+bOm/XausW9CH+Vq4wOxo6/STE1PfY08Qsbb2omzK2EOe6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by BL1PR11MB5953.namprd11.prod.outlook.com (2603:10b6:208:384::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Fri, 5 May
- 2023 23:17:50 +0000
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::591f:4873:fd80:9a6d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::591f:4873:fd80:9a6d%6]) with mapi id 15.20.6363.022; Fri, 5 May 2023
- 23:17:50 +0000
-Message-ID: <14cea0fe-4e6d-daa1-7987-3d9ba7f793c7@intel.com>
-Date:   Fri, 5 May 2023 16:17:48 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.1
-Subject: Re: [RFC PATCH 1/7] x86/resctrl: Add register/unregister functions
- for driver to hook into resctrl
-Content-Language: en-US
-To:     Tony Luck <tony.luck@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Shaopeng Tan <tan.shaopeng@fujitsu.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        James Morse <james.morse@arm.com>,
-        "Babu Moger" <babu.moger@amd.com>
-CC:     <x86@kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230420220636.53527-1-tony.luck@intel.com>
- <20230420220636.53527-2-tony.luck@intel.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20230420220636.53527-2-tony.luck@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0182.namprd05.prod.outlook.com
- (2603:10b6:a03:330::7) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
+        Fri, 5 May 2023 19:18:28 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215C45BB6
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:18:22 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64395e2a715so2304992b3a.3
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 16:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683328701; x=1685920701;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6JdJ+eJduMN09JUXLpWhXffqEZ6RtqFZDIQ4YphdDr4=;
+        b=fN52VrQ7ZpWuHFVHFUJ+eHUlTeN451tAxBJKGDPuPWHlQiXQ6bFkaqMh0YponY6aMM
+         GsZnl2jCdzQAv2GeosJZ3YCJ0q5rKkATrphsTfuH4hULmkNEs8JtD6cPfa9XQwwMUJVz
+         jIYwJCvUXu9EdsjkgeBXpvMq5p+qTQy+Pkl1oYGD5j+WBtTkk8GIQfubg7y5siG7o+Jq
+         LSUL4ee/Okp4cx2ZT20NBTNqMiqU0tpxG/Ag7GQEBTeAWDF1JiRhz2yVxGKyo8WeKPHl
+         AnLIQGaCj62addwpyPiPEn8Phjx3YB3KMT6bXxTvkmgP3RcL3r0GdvtX8NFGZxU3zmZs
+         yIJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683328701; x=1685920701;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6JdJ+eJduMN09JUXLpWhXffqEZ6RtqFZDIQ4YphdDr4=;
+        b=VC3V/0feakhDsqnxkU+d4p/s64tWBRkq8MaKp87BsjTPldSvAu/IJnk0ialhwav239
+         AJRPtI2X+WsUaQ+HriKICfaMuLc7BJ23mVmLi2dXTB87C/FY+wTbB6I7PuhRpcjCxNd0
+         oLgjesIf69R1qkeOGzVYUFL4s7icn7xaYNUT0YUpSWx9w5GzvQuZcptRsNxv4hUD2VbT
+         i0ehfVUmwsoZXMESCoV7dkf/+VfhQLv9pE8BdhbFXvW2wLYsXUZUMJzFrrHRsI0qb0ND
+         a4itzNJ0ifTyJedUVHgqzSl29LST7yq+XUyCfrhYUwuycFnetTcDvbnLjh09/2rUmjeY
+         8caw==
+X-Gm-Message-State: AC+VfDx/f5CiePQmM3Ur3nZRNHKZtdfl0lpq1sxmBdCz03CwKryPDoou
+        W9tzGgj6aPZHKzcKQQS7E0L9lA==
+X-Google-Smtp-Source: ACHHUZ5wbQm6mg5RSVdxnCns5sa7KBO03F5e0cxzleqTCq4VGTZursfFF89+nfp5HQV/kBQ+XaN29g==
+X-Received: by 2002:a05:6a00:ccb:b0:63d:315f:560f with SMTP id b11-20020a056a000ccb00b0063d315f560fmr4928040pfv.13.1683328701343;
+        Fri, 05 May 2023 16:18:21 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
+        by smtp.gmail.com with ESMTPSA id c11-20020aa78c0b000000b0063b86aff031sm2099823pfd.108.2023.05.05.16.18.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 16:18:20 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pv4gq-00BoxF-NI; Sat, 06 May 2023 09:18:16 +1000
+Date:   Sat, 6 May 2023 09:18:16 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     John Garry <john.g.garry@oracle.com>
+Cc:     axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com, djwong@kernel.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
+        jejb@linux.ibm.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com,
+        Himanshu Madhani <himanshu.madhani@oracle.com>
+Subject: Re: [PATCH RFC 01/16] block: Add atomic write operations to
+ request_queue limits
+Message-ID: <20230505231816.GM3223426@dread.disaster.area>
+References: <20230503183821.1473305-1-john.g.garry@oracle.com>
+ <20230503183821.1473305-2-john.g.garry@oracle.com>
+ <20230503213925.GD3223426@dread.disaster.area>
+ <fc91aa12-1707-9825-a77e-9d5a41d97808@oracle.com>
+ <20230504222623.GI3223426@dread.disaster.area>
+ <90522281-863f-58bf-9b26-675374c72cc7@oracle.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|BL1PR11MB5953:EE_
-X-MS-Office365-Filtering-Correlation-Id: 383fb0b4-6d90-474e-0d91-08db4dbef222
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IEVY1lavjkwtL/u1PlZ8RjTyjk0VAHCgroA1PWTZlDRXyZULiARgmKXSHQJtiW06IB041U04K/IT2ixMWbvDmuBsMlc6ywfgN52HRv2KJz3EEKwE3XJ0yS7vefHYkDgjvvXoawlfXFVi1yGGhSWQmYGJdUCpZexitXcgnEsSOsW30PEB4oFc0OSu1ehJAFfZ8gokeqR54QjaQaiqLLl1MaRPUoehLpeBvpN+rPlIy+fgNzbr611HKLDe1FlBLrclqJ7OtLdeix/vcLc6JoKbXYhuCnWLhexaEupXwan9vPYOVrD9Ryy96gOfeBM8J044KTf9qforN4E9/bPaFvEo/oe4dxPiasqs815sHSiK2mrSf6ARpKxr55wJz1ROHnt+JptpZa0ZYnM8JAI5eu9UG/y9T3qO/SRaSVYMBTvIM7EbdbwdPWsKCxitEXnAaQtgE7qsA7eb3reSQJ3W9Sn2xe9F9JTTViQqMAK4hrSzoeN/fmXOLDqOuKEMrDBIV6RZ9lM9hX54qKy0evewpp+QR31+GRCjB+byWBeAeo5kbvYslvVjPqWlQxDtuPJQZrl7hjAj19aVNNkgVi4E4jBE2u9Cp5xiSqDYIaz2EXKPGQ+9n2+AHLjlozF1rZcE3w0Udc53jJJ9VTZmfl2FzFHYTQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(366004)(39860400002)(376002)(346002)(451199021)(6512007)(53546011)(6506007)(26005)(31696002)(186003)(2616005)(31686004)(966005)(110136005)(83380400001)(36756003)(6486002)(2906002)(82960400001)(316002)(8936002)(5660300002)(478600001)(4326008)(38100700002)(7416002)(86362001)(8676002)(44832011)(66476007)(41300700001)(66556008)(921005)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RHNFZ2xSNWFUWk10TnN3RG5JZEp0NkJvTHVFaFNuY1BkRFdKc0gzQlpjd3FB?=
- =?utf-8?B?bUl4dTBqMzlGeHdRd1J5OVNkOG9tQjhvVDBZbHF4STR2VDRINTFFeU5oMmF1?=
- =?utf-8?B?Y0hLZmllSE1oNGN1RE9ZaE5UMUY0dmNlaTdRRnViMlJjbU45SzFqRW5xdWkw?=
- =?utf-8?B?bXB0M0krbmlJYWVyeWNWdmJLbXk5dzdwS3FESmx0V0JsK0lnTDVaS2hMS3RS?=
- =?utf-8?B?VXc2R3VoQWp3OWlUdHExTGR3eVVzdGppYlBsK0IrcXpmUmc2WGlySy9hM2lh?=
- =?utf-8?B?TkI4bkExT3B3bzRiRVZnV2plMUhEZGl5Zy9xQjVjMkU0cXljbU5XSWluMkdw?=
- =?utf-8?B?bEUrYUNtdGlPc0ZwOU5xM1RlM3hJcHlmbW9QWGRXajc3a2ZkWXhHY3FnV3Bl?=
- =?utf-8?B?RW5qMWxra0ZEMDJxUG1YS3JKOEVsOTAwNmhrakRhQmtZdWRESnRsY2doaDFM?=
- =?utf-8?B?VWZDZmpyVDNEM0ZadS9aTzF3UVIra0JFQ2I2MXJ2STJsV1Vrc3REd2NBK09R?=
- =?utf-8?B?cUV1cGQ4TzlzREtPQ3N4Q2JoQkhwQkNsekVqT3F6eG1qbGVUUnIxUHN6ckhM?=
- =?utf-8?B?SkFsWTJjQzgrUlV0OWZrK2w0ODFZUm1STVpGVFFBYWw0UElJQ0ZWRy93c250?=
- =?utf-8?B?dG1LU2R3RERKOW9NVUk2WFl5UXpLU25qTmMvSWdlWjc5KzFWWVlsakVhT3pP?=
- =?utf-8?B?d2xzbVdDQWFFRUtkUzNua1J2bGdmUExwa3B1RFp5K2lURVpFcmZLRlRNNHlw?=
- =?utf-8?B?KzVlR1ZrYWVhUjFMSjJiUytndFhJeHNDVUtOeUt5ekt3TEowZXhpaVR0K2Iw?=
- =?utf-8?B?UGNTbFFZejV3ZzQrMThYRTR0NDhsbmhXanBkWW1LK3JJeWdtVjNwSEsxNENk?=
- =?utf-8?B?V090UGtJUS9Va2d5M3hZTm5VWHdCamJxak5keXp5UXF4d1JKdUNJMUdQSnZP?=
- =?utf-8?B?MEhJUUZyS3dhc3V4WjdKQkg2TzNjZ3lmN2FGTjU5NDlTMkNWS1hwaVlhY01T?=
- =?utf-8?B?ZHF6ejVwUC9nYXVyRGFyVTdYTEVGL1hIQ2YramE2NVFjTy9kbFIwL0p4KzFO?=
- =?utf-8?B?dFVSaUhOZlQwVFZ6N1ZQWC9KMTVVQXRROTBxQ3JkenA2TkdTOC82ejVqZWpN?=
- =?utf-8?B?VFpiQ0k0UDRJaUprRkdKLzl4NkZHNnl4WnRXYkxIM1JWYnJwYWozb3ptdnov?=
- =?utf-8?B?VDNWSGtPWWRkYkhwRk9OSW00RDNJdmNUcHNiNHFnMVd5OTZhaWpsRmZZck9X?=
- =?utf-8?B?WjBqMENOTm1mWjZNRVhNb3lqZXJJWFZTMjZHcmZNRGpCc1N4REswY25CL25h?=
- =?utf-8?B?czdSWGwyaGtldUJDbFJGT0N5VzRBQ3ZNUEVZb0ErdFVEVEsxRGtKdG80YjNw?=
- =?utf-8?B?TTVlYW9YSGpYMjg4clRVR1dZUC9tUzRxVTlFa0NzQkxObjhkSjlFVW1GK0RI?=
- =?utf-8?B?Y1Q1V0h2alRXTFpwckx2clpnWElwenpKdlVNcERNZEtsSXdLQzJnS0JwS3U1?=
- =?utf-8?B?dENlVGFUbUR3WVI5WnF3VGlzS09Jd29lVEcveHVyMXFBMExiYURLdnFleUNp?=
- =?utf-8?B?RVFCejZhZkFuU0RoYjA1TzB5TWlnTGFZK01SaThuWHI0NSs5Q093cmRJbklP?=
- =?utf-8?B?UXZpVW52SEdkTmhjZU1aaEd6SVdrVmJUc2tjM3Yyc0tqQTBFaG5EUitwQTdt?=
- =?utf-8?B?M0VyRnU3b0pVQXB5cFRBTXVTNUdaS25EUlp0M1pyU3lJRXFtK0tMSkVaL1Ex?=
- =?utf-8?B?MDF6Y3FCcFdVU3NHRGwvVEtiMmlOODNZa0lkblU5M3RleEJvU29aMms3Q0Zm?=
- =?utf-8?B?cXV5cHVmZnV1c2EwdUZQRmVDWlVsRWZORHJRaHNpbFE2ejhTcDJBaUFQSXha?=
- =?utf-8?B?WWxESnpCU21taWtPUjFjWGFZZjVrZWE2L2c0aUNhMWI5SHplNlhGeEVIUCtB?=
- =?utf-8?B?eWdhcGxKVDMvVE9RMG8yV3RQZ2hlTWlqZ1ZCbDlQYW9oeHFNeGJJMmoxbnZr?=
- =?utf-8?B?UXl4dHB4cjNtSG03eWlqbjdCN2lVdkFEUThXUzhCT2Y0RXoyOHk1L1dJZEht?=
- =?utf-8?B?Y2NTc3pXOHdYZHN3TkxWTDFFL1hCb3hPS0x0R2tSOVVIaVRnSGpmY3B4cHA5?=
- =?utf-8?B?MmEydVZqTU9rZjJURVhRaUtBVzlJWHFhYjNGSjBPVXMrSlBGSWNnSWFUS1Nu?=
- =?utf-8?B?MFE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 383fb0b4-6d90-474e-0d91-08db4dbef222
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 23:17:50.5435
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ItauvBheVCK2ur5gZoON9KLaoHOjkKV4KajCKxB1nswnz7I4IeJSMkZl24ly5elrLC1Zur5lklthe6tdH7G+tcU2FZ4lO4BwvHWp9oK0jFI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5953
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <90522281-863f-58bf-9b26-675374c72cc7@oracle.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -171,40 +88,259 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony,
+On Fri, May 05, 2023 at 08:54:12AM +0100, John Garry wrote:
+> On 04/05/2023 23:26, Dave Chinner wrote:
+> 
+> Hi Dave,
+> 
+> > > atomic_write_unit_max is largest application block size which we can
+> > > support, while atomic_write_max_bytes is the max size of an atomic operation
+> > > which the HW supports.
+> > Why are these different? If the hardware supports 128kB atomic
+> > writes, why limit applications to something smaller?
+> 
+> Two reasons:
+> a. If you see patch 6/16, we need to apply a limit on atomic_write_unit_max
+> from what is guaranteed we can fit in a bio without it being required to be
+> split when submitted.
 
-On 4/20/2023 3:06 PM, Tony Luck wrote:
-> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> index 6ad33f355861..3e6778bde427 100644
-> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> @@ -51,6 +51,9 @@ static struct kernfs_node *kn_mongrp;
->  /* Kernel fs node for "mon_data" directory under root */
->  static struct kernfs_node *kn_mondata;
->  
-> +static LIST_HEAD(drivers);
-> +static bool resctrl_is_mounted;
-> +
+Yes, that's obvious behaviour for an atomic IO.
 
-fyi ...
-https://lore.kernel.org/lkml/20230320172620.18254-13-james.morse@arm.com/
+> Consider iomap generates an atomic write bio for a single userspace block
+> and submits to the block layer - if the block layer needs to split due to
+> block driver request_queue limits, like max_segments, then we're in trouble.
+> So we need to limit atomic_write_unit_max such that this will not occur.
+> That same limit should not apply to atomic_write_max_bytes.
 
-> +int resctrl_register_driver(struct resctrl_driver *d)
-> +{
-> +	mutex_lock(&rdtgroup_mutex);
-> +	list_add(&d->list, &drivers);
-> +
-> +	if (resctrl_is_mounted)
-> +		driver_up(d);
-> +	mutex_unlock(&rdtgroup_mutex);
-> +
-> +	return 0;
-> +}
+Except the block layer doesn't provide any mechanism to do
+REQ_ATOMIC IOs larger than atomic_write_unit_max. So in what case
+will atomic_write_max_bytes > atomic_write_unit_max ever be
+relevant to anyone?
 
-Do you expect that the drivers may at any time
-need to call into resctrl as opposed to relying entirely
-on callbacks from resctrl? I am wondering about any potential
-lock ordering issues between rdtgroup_mutex and locks
-used internally by the drivers.
+> b. For NVMe, atomic_write_unit_max and atomic_write_max_bytes which the host
+> reports will be the same (ignoring a.).
+> 
+> However for SCSI they may be different. SCSI has its own concept of boundary
+> and it is relevant here. This is confusing as it is very different from NVMe
+> boundary. NVMe is a media boundary really. For SCSI, a boundary is a
+> sub-segment which the device may split an atomic write operation. For a SCSI
+> device which only supports this boundary mode of operation, we limit
+> atomic_write_unit_max to the max boundary segment size (such that we don't
+> get splitting of an atomic write by the device) and then limit
+> atomic_write_max_bytes to what is known in the spec as "maximum atomic
+> transfer length with boundary". So in this device mode of operation,
+> atomic_write_max_bytes and atomic_write_unit_max should be different.
 
-Reinette
+But if the application is limited to atomic_write_unit_max sized
+IOs, and that is always less than or equal to the size of the atomic
+write boundary, why does the block layer even need to care about
+this whacky quirk of the SCSI protocol implementation?
+
+The block layer shouldn't even need to be aware that SCSI can split
+"atomic" IOs into smaller individual IOs that result in the larger
+requested IO being non-atomic. the SCSI layer should just expose 
+"write with boundary" as the max atomic IO size it supports to the
+block layer. 
+
+At this point, both atomic_write_max_bytes and atomic write
+boundary size are completely irrelevant to anything in the block
+layer or above. If usrespace is limited to atomic_write_unit_max IO
+sizes and it is enforced at the ->write_iter() layer, then the block
+layer will never need to split REQ_ATOMIC bios because the entire
+stack has already stated that it guarantees atomic_write_unit_max
+bios will not get split....
+
+In what cases does hardware that supports atomic_write_max_bytes >
+atomic_write_unit_max actually be useful? I can see one situation,
+and one situation only: merging adjacent small REQ_ATOMIC write
+requests into single larger IOs before issuing them to the hardware.
+
+This is exactly the sort of optimisation the block layers should be
+doing - it fits perfectly with the SCSI "write with boundary"
+behaviour - the merged bios can be split by the hardware at the
+point where they were merged by the block layer, and everything is
+fine because the are independent IOs, not a single RWF_ATOMIC IO
+from userspace. And for NVMe, it allows IOs from small atomic write
+limits (because, say, 16kB RAID stripe unit) to be merged into
+larger atomic IOs with no penalty...
+
+
+> > >  From your review on the iomap patch, I assume that now you realise that we
+> > > are proposing a write which may include multiple application data blocks
+> > > (each limited in size to atomic_write_unit_max), and the limit in total size
+> > > of that write is atomic_write_max_bytes.
+> > I still don't get it - you haven't explained why/what an application
+> > atomic block write might be, nor why the block device should be
+> > determining the size of application data blocks, etc.  If the block
+> > device can do 128kB atomic writes, why wouldn't the device allow the
+> > application to do 128kB atomic writes if they've aligned the atomic
+> > write correctly?
+> 
+> An application block needs to be:
+> - sized at a power-of-two
+> - sized between atomic_write_unit_min and atomic_write_unit_max, inclusive
+> - naturally aligned
+> 
+> Please consider that the application does not explicitly tell the kernel the
+> size of its data blocks, it's implied from the size of the write and file
+> offset. So, assuming that userspace follows the rules properly when issuing
+> a write, the kernel may deduce the application block size and ensure only
+> that each individual user data block is not split.
+
+That's just *gross*. The kernel has no business assuming anything
+about the data layout inside an IO request. The kernel cannot assume
+that the application uses a single IO size for atomic writes when it
+expicitly provides a range of IO sizes that the application can use.
+
+e.g. min unit = 4kB, max unit = 128kB allows IO sizes of 4kB, 8kiB,
+16kiB, 32kB, 64kB and 128kB. How does the kernel infer what that
+application data block size is based on a 32kB atomic write vs a
+128kB atomic write?
+
+The kernel can't use file offset alignment to infer application
+block size, either. e.g. a 16kB write at 128kB could be a single
+16kB data block, it could be 2x8kB data blocks, or it could be 4x4kB
+data blocks - they all follow the rules you set above. So how does
+the kernel know that for two of these cases it is safe to split the
+IO at 8kB, and for one it isn't safe at all?
+
+AFAICS, there is no way the kernel can accurately derive this sort
+of information, so any assumptions that the "kernel can infer the
+application data layout" to split IOs correctly simply won't work.
+And that very important because we are talking about operations that
+provide data persistence guarantees....
+
+> If userspace wants a guarantee of no splitting of all in its write, then it
+> may issue a write for a single userspace data block, e.g. userspace block
+> size is 16KB, then write at a file offset aligned to 16KB and a total write
+> size of 16KB will be guaranteed to be written atomically by the device.
+
+Exactly what has "userspace block size" got to do with the kernel
+providing a guarantee that a RWF_ATOMIC write of a 16kB buffer at
+offset 16kB will be written atomically?
+
+> > What happens we we get hardware that can do atomic writes at any
+> > alignment, of any size up to atomic_write_max_bytes? Because this
+> > interface defines atomic writes as "must be a multiple of 2 of
+> > atomic_write_unit_min" then hardware that can do atomic writes of
+> > any size can not be effectively utilised by this interface....
+> > 
+> > > user applications should only pay attention to what we return from statx,
+> > > that being atomic_write_unit_min and atomic_write_unit_max.
+> > > 
+> > > atomic_write_max_bytes and atomic_write_boundary is only relevant to the
+> > > block layer.
+> > If applications can issue an multi-atomic_write_unit_max-block
+> > writes as a single, non-atomic, multi-bio RWF_ATOMIC pwritev2() IO
+> > and such IO is constrainted to atomic_write_max_bytes, then
+> > atomic_write_max_bytes is most definitely relevant to user
+> > applications.
+> 
+> But we still do not guarantee that multi-atomic_write_unit_max-block writes
+> as a single, non-atomic, multi-bio RWF_ATOMIC pwritev2() IO and such IO is
+> constrained to atomic_write_max_bytes will be written atomically by the
+> device.
+>
+> Three things may happen in the kernel:
+> - we may need to split due to atomic boundary
+
+Block layer rejects the IO - cannot be performed atomically.
+
+> - we may need to split due to the write spanning discontig extents
+
+Filesystem rejects the IO - cannot be performed atomically.
+
+> - atomic_write_max_bytes may be much larger than what we could fit in a bio,
+> so may need multiple bios
+
+Filesystem/blockdev rejects the IO - cannot be performed atomically.
+
+> And maybe more which does not come to mind.
+
+Relevant layer rejects the IO - cannot be performed atomically.
+
+> So I am not sure what value there is in reporting atomic_write_max_bytes to
+> the user. The description would need to be something like "we guarantee that
+> if the total write length is greater than atomic_write_max_bytes, then all
+> data will never be submitted to the device atomically. Otherwise it might
+> be".
+
+Exactly my point - there's a change of guarantee that the kernel
+provides userspace at that point, and hence application developers
+need to know it exists and, likely, be able to discover that
+threshold programatically.
+
+But this, to me, is a just another symptom of what I see as the
+wider issue here: trying to allow RWF_ATOMIC IO to do more than a
+*single atomic IO*.
+
+This reeks of premature API optimisation. We should be make
+RWF_ATOMIC do one thing, and one thing only: guaranteed single
+atomic IO submission.
+
+It doesn't matter what data userspace is trying to write atomically;
+it only matters that the kernel submits the write as a single atomic
+unit to the hardware which then guarantees that it completes the
+whole IO as a single atomic unit.
+
+What functionality the hardware can provide is largely irrelevant
+here; it's the IO semantics that we guarantee userspace that matter.
+The kernel interface needs to have simple, well defined behaviour
+and provide clear data persistence guarantees.
+
+Once we have that, we can optimise both the applications and the
+kernel implementation around that behaviour and guarantees. e.g.
+adjacent IO merging (either in the application or in the block
+layer), using AIO/io_uring with completion to submission ordering,
+etc.
+
+There are many well known IO optimisation techniques that do not
+require the kernel to infer or assume the format of the data in the
+user buffers as this current API does. May the API simple and hard
+to get wrong first, then optimise from there....
+
+
+
+> > We already have direct IO alignment and size constraints in statx(),
+> > so why wouldn't we just reuse those variables when the user requests
+> > atomic limits for DIO?
+> > 
+> > i.e. if STATX_DIOALIGN is set, we return normal DIO alignment
+> > constraints. If STATX_DIOALIGN_ATOMIC is set, we return the atomic
+> > DIO alignment requirements in those variables.....
+> > 
+> > Yes, we probably need the dio max size to be added to statx for
+> > this. Historically speaking, I wanted statx to support this in the
+> > first place because that's what we were already giving userspace
+> > with XFS_IOC_DIOINFO and we already knew that atomic IO when it came
+> > along would require a bound maximum IO size much smaller than normal
+> > DIO limits.  i.e.:
+> > 
+> > struct dioattr {
+> >          __u32           d_mem;          /* data buffer memory alignment */
+> >          __u32           d_miniosz;      /* min xfer size                */
+> >          __u32           d_maxiosz;      /* max xfer size                */
+> > };
+> > 
+> > where d_miniosz defined the alignment and size constraints for DIOs.
+> > 
+> > If we simply document that STATX_DIOALIGN_ATOMIC returns minimum
+> > (unit) atomic IO size and alignment in statx->dio_offset_align (as
+> > per STATX_DIOALIGN) and the maximum atomic IO size in
+> > statx->dio_max_iosize, then we don't burn up anywhere near as much
+> > space in the statx structure....
+> 
+> ok, so you are saying to unionize them, right? That would seem reasonable to
+> me.
+
+No, I don't recommend unionising them. RWF_ATOMIC only applies to
+direct IO, so if the application ask for ATOMIC DIO limits, we put
+the atomic dio limits in the dio limits variables rather than the
+looser non-atomic dio limits......
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
