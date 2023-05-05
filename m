@@ -2,232 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F45D6F8A40
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 22:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 003476F8A46
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 22:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbjEEUf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 16:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
+        id S232203AbjEEUkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 16:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjEEUf0 (ORCPT
+        with ESMTP id S229628AbjEEUkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 16:35:26 -0400
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2601A49E7
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 13:35:24 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id 5addbdeb-eb84-11ed-b3cf-005056bd6ce9;
-        Fri, 05 May 2023 23:35:21 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Fri, 5 May 2023 23:35:21 +0300
-To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-Cc:     "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Peng Fan <peng.fan@oss.nxp.com>,
-        Michal Simek <michal.simek@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
-Subject: Re: [RFC v2 2/3] pinctrl: Implementation of the generic scmi-pinctrl
- driver
-Message-ID: <ZFVoiWnvq7UXSBBw@surfacebook>
-References: <cover.1682513390.git.oleksii_moisieiev@epam.com>
- <812ae71d017b115c55648dbf0a4c3502715b1955.1682513390.git.oleksii_moisieiev@epam.com>
+        Fri, 5 May 2023 16:40:06 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A952D49FE
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 13:40:05 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-24df6bbf765so2048491a91.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 13:40:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683319205; x=1685911205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OGFXeU2dXaRo8clMCkR8c/hfrCLvrLrfrAcbGat2bS8=;
+        b=gM0mLhZPPogTqDhH2p1bvP3RMMjdphDn/Ubq+8G64h4i2qq7VyxacwfPbtU+trWfKU
+         U7gTntgoYJnK0Th0YsMLnQFnRLwRle6BHJYf9oxow1BmL14BDo+u9P0ZiNigKd3cRj/P
+         uJpIpOx5Mv2xA32aqLN6X8fjC+LabvrS4mt2mpMYMeEnhZaPHdphaz4LbzSEXIiMoOG0
+         GHMZ9uKkL+h0BauzZ0vBeJF/R79NsUchwPmDsX/fSIu+hWBN/68zg5TKJmn5j/hlUJUR
+         9qEi/QfcJy0yyve6CDIg7gFaZvjW+DmLiuytY1TkGxjQgf8tH1W5aUYRtnPca2XVR0xs
+         9U1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683319205; x=1685911205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OGFXeU2dXaRo8clMCkR8c/hfrCLvrLrfrAcbGat2bS8=;
+        b=V9CLM7K8QEIjOPJ+rL5wrBQhmNQ4YGR4y3qqeRrSB4YH/u+f2N5sq8rwIISnNM1FFH
+         MCuoJB8MkY0XmqkEMlJsSJiHpbJr8uLLCE5yBJTgbzSwHkWhNhx/WjRVIir6CK9BTQtW
+         bMQ6DP2aa6+qhKrhh+N9+GsGn5TpMmtgkQvb2bSvPh5hIwcSy3V5HcmimoL6t5ZHNS3b
+         YhKOcwljOjvauZOojek9Ghm/2fEytkDg8p213jBS0nCvf61JbnYTUZhR31NyCrCh1zZB
+         1sz/4FTJxivGW09X/U6eeGu+2QNJMUp+q6ltISLZkuinJsPa1cWduSMmmbDka3+9ExC6
+         6yvw==
+X-Gm-Message-State: AC+VfDyzZbCe60WUeo0Q7vvnyMJooLbE7bHqLNI7FMjDdo4/EPcCIAV1
+        xB3hgtki0DxkcMcOwynCS5k6cYLmiIk=
+X-Google-Smtp-Source: ACHHUZ6dB/vPtTYWg7uhHznNlXJ0K2YkXLUMaIa/tmbVDicNbO1mh6N+YwG2esq5hI9+qVRtISfWng==
+X-Received: by 2002:a17:90a:b281:b0:24e:1dcd:4e73 with SMTP id c1-20020a17090ab28100b0024e1dcd4e73mr3000560pjr.0.1683319204509;
+        Fri, 05 May 2023 13:40:04 -0700 (PDT)
+Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:4c39:b490:cecf:cb9c])
+        by smtp.gmail.com with ESMTPSA id i14-20020a17090ad34e00b0024e3d26f644sm6057166pjx.3.2023.05.05.13.40.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 13:40:04 -0700 (PDT)
+From:   Daeho Jeong <daeho43@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
+Cc:     Daeho Jeong <daehojeong@google.com>
+Subject: [PATCH] f2fs: close unused open zones while mounting
+Date:   Fri,  5 May 2023 13:40:00 -0700
+Message-ID: <20230505204000.3604748-1-daeho43@gmail.com>
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <812ae71d017b115c55648dbf0a4c3502715b1955.1682513390.git.oleksii_moisieiev@epam.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, Apr 26, 2023 at 01:26:37PM +0000, Oleksii Moisieiev kirjoitti:
-> scmi-pinctrl driver implements pinctrl driver interface and using
-> SCMI protocol to redirect messages from pinctrl subsystem SDK to
-> SCP firmware, which does the changes in HW.
-> 
-> This setup expects SCP firmware (or similar system, such as ATF)
-> to be installed on the platform, which implements pinctrl driver
-> for the specific platform.
-> 
-> SCMI-Pinctrl driver should be configured from the device-tree and uses
-> generic device-tree mappings for the configuration.
+From: Daeho Jeong <daehojeong@google.com>
 
-...
+Zoned UFS allows only 6 open zones at the same time, so we need to take
+care of the count of open zones while mounting.
 
-> +#include <linux/device.h>
-> +#include <linux/err.h>
+Signed-off-by: Daeho Jeong <daehojeong@google.com>
+---
+ fs/f2fs/segment.c | 53 +++++++++++++++++++++++++++--------------------
+ 1 file changed, 31 insertions(+), 22 deletions(-)
 
-> +#include <linux/of.h>
-
-I do not see any user of this header. Do you?
-
-> +#include <linux/module.h>
-> +#include <linux/seq_file.h>
-> +
-> +#include <linux/pinctrl/machine.h>
-> +#include <linux/pinctrl/pinconf.h>
-> +#include <linux/pinctrl/pinconf-generic.h>
-> +#include <linux/pinctrl/pinctrl.h>
-> +#include <linux/pinctrl/pinmux.h>
-
-> +#include <linux/scmi_protocol.h>
-> +#include <linux/slab.h>
-
-Please, move these two to the upper group of the generic headers.
-
-> +struct scmi_pinctrl_funcs {
-> +	unsigned int num_groups;
-> +	const char **groups;
-> +};
-
-Please, use struct pinfunction.
-
-...
-
-> +struct scmi_pinctrl {
-
-> +	struct scmi_pinctrl_funcs *functions;
-> +	unsigned int nr_functions;
-
-> +	char **groups;
-> +	unsigned int nr_groups;
-
-I'm not sure what is the difference to what "functions" above represent.
-
-> +};
-
-...
-
-> +static void pinctrl_scmi_pin_dbg_show(struct pinctrl_dev *pctldev,
-> +				      struct seq_file *s,
-> +				      unsigned int offset)
-> +{
-> +	seq_puts(s, DRV_NAME);
-> +}
-
-What is the usefulness of this method?
-
-...
-
-> +static int pinctrl_scmi_pinconf_group_get(struct pinctrl_dev *pctldev,
-> +					  unsigned int _pin,
-> +					  unsigned long *config)
-> +{
-> +	int ret;
-> +	struct scmi_pinctrl *pmx;
-> +	enum pin_config_param config_type;
-> +	unsigned long config_value;
-> +
-> +	if (!pctldev)
-> +		return -EINVAL;
-> +
-> +	pmx = pinctrl_dev_get_drvdata(pctldev);
-> +
-> +	if (!pmx || !pmx->ph || !config)
-> +		return -EINVAL;
-> +
-> +	config_type = pinconf_to_config_param(*config);
-> +
-> +	ret = pinctrl_ops->get_config(pmx->ph, _pin, GROUP_TYPE,
-> +				      config_type, (u32 *)&config_value);
-
-Endianess issue. This is, while likely working code, still ugly.
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	*config = pinconf_to_config_packed(config_type, config_value);
-> +
-> +	return 0;
-> +}
-
-...
-
-> + err:
-
-err_free.
-
-> +	kfree(pmx->pins);
-> +	pmx->nr_pins = 0;
-> +
-> +	return ret;
-
-...
-
-> +static const struct scmi_device_id scmi_id_table[] = {
-> +	{ SCMI_PROTOCOL_PINCTRL, "pinctrl" },
-
-> +	{ },
-
-No comma for the terminator entry.
-
-> +};
-
-...
-
-> +	pinctrl_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_PINCTRL,
-> +						&ph);
-
-Can be on one line.
-
-> +	if (IS_ERR(pinctrl_ops))
-> +		return PTR_ERR(pinctrl_ops);
-
-...
-
-> +	if (pmx->nr_functions) {
-> +		pmx->functions =
-> +			devm_kcalloc(&sdev->dev, pmx->nr_functions,
-> +				     sizeof(*pmx->functions),
-> +				     GFP_KERNEL);
-> +		if (!pmx->functions) {
-> +			ret = -ENOMEM;
-> +			goto clean;
-
-Interleaving devm_*() with non-devm_*() in such order is not a good idea.
-
-> +		}
-> +	}
-> +
-> +	if (pmx->nr_groups) {
-> +		pmx->groups =
-> +			devm_kcalloc(&sdev->dev, pmx->nr_groups,
-> +				     sizeof(*pmx->groups),
-> +				     GFP_KERNEL);
-> +		if (!pmx->groups) {
-> +			ret = -ENOMEM;
-> +			goto clean;
-> +		}
-> +	}
-> +
-> +	return pinctrl_enable(pmx->pctldev);
-> +
-> +clean:
-
-err_free:
-
-> +	if (pmx) {
-> +		kfree(pmx->functions);
-> +		kfree(pmx->groups);
-
-Ah, this is simply wrong.
-
-> +	}
-> +
-> +	kfree(pmx);
-
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 6db410f1bb8c..43d537d29b52 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -4810,40 +4810,49 @@ static int check_zone_write_pointer(struct f2fs_sb_info *sbi,
+ 			break;
+ 	}
+ 
+-	/*
+-	 * If last valid block is beyond the write pointer, report the
+-	 * inconsistency. This inconsistency does not cause write error
+-	 * because the zone will not be selected for write operation until
+-	 * it get discarded. Just report it.
+-	 */
+-	if (last_valid_block >= wp_block) {
+-		f2fs_notice(sbi, "Valid block beyond write pointer: "
+-			    "valid block[0x%x,0x%x] wp[0x%x,0x%x]",
+-			    GET_SEGNO(sbi, last_valid_block),
+-			    GET_BLKOFF_FROM_SEG0(sbi, last_valid_block),
+-			    wp_segno, wp_blkoff);
++	// The write pointer matches with the valid blocks
++	if (last_valid_block + 1 == wp_block)
+ 		return 0;
+-	}
+ 
+-	/*
+-	 * If there is no valid block in the zone and if write pointer is
+-	 * not at zone start, reset the write pointer.
+-	 */
+-	if (last_valid_block + 1 == zone_block && zone->wp != zone->start) {
++	if (last_valid_block + 1 == zone_block) {
++		/*
++		 * If there is no valid block in the zone and if write pointer
++		 * is not at zone start, reset the write pointer.
++		 */
+ 		f2fs_notice(sbi,
+ 			    "Zone without valid block has non-zero write "
+ 			    "pointer. Reset the write pointer: wp[0x%x,0x%x]",
+ 			    wp_segno, wp_blkoff);
+ 		ret = __f2fs_issue_discard_zone(sbi, fdev->bdev, zone_block,
+ 					zone->len >> log_sectors_per_block);
+-		if (ret) {
++		if (ret)
+ 			f2fs_err(sbi, "Discard zone failed: %s (errno=%d)",
+ 				 fdev->path, ret);
+-			return ret;
+-		}
++
++		return ret;
+ 	}
+ 
+-	return 0;
++	/*
++	 * If there are valid blocks and the write pointer doesn't
++	 * match with them, we need to report the inconsistency and
++	 * fill the zone till the end to close the zone. This inconsistency
++	 * does not cause write error because the zone will not be selected
++	 * for write operation until it get discarded.
++	 */
++	f2fs_notice(sbi, "Valid blocks are not aligned with write pointer: "
++		    "valid block[0x%x,0x%x] wp[0x%x,0x%x]",
++		    GET_SEGNO(sbi, last_valid_block),
++		    GET_BLKOFF_FROM_SEG0(sbi, last_valid_block),
++		    wp_segno, wp_blkoff);
++
++	ret = blkdev_issue_zeroout(fdev->bdev, zone->wp,
++				zone->len - (zone->wp - zone->start),
++				GFP_NOFS, 0);
++	if (ret)
++		f2fs_err(sbi, "Fill up zone failed: %s (errno=%d)",
++			 fdev->path, ret);
++
++	return ret;
+ }
+ 
+ static struct f2fs_dev_info *get_target_zoned_dev(struct f2fs_sb_info *sbi,
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.40.1.521.gf1e218fcd8-goog
 
