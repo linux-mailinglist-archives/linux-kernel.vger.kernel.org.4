@@ -2,64 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE736F80B8
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FAF6F80BC
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbjEEKXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 06:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        id S231696AbjEEKYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 06:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjEEKXL (ORCPT
+        with ESMTP id S231583AbjEEKY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 06:23:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9349B18902
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 03:23:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B4A360C94
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:23:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B315BC433EF;
-        Fri,  5 May 2023 10:23:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683282189;
-        bh=nWNitmoUADkfmgkehlM5eSbfxlPEEaLRPvnf7gZnV/c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GCxFMEGaPFYeeDiPMoXqoRCm7gALvdvTe93mKXt39+4zGIMTJj/7v3hcMdWCoonr/
-         HNn1HGTndg3RESLU4wuVGmv45/oVQT4JUWa/QM2H1uQLnaBXHRhmO5HbTpKro3bWQj
-         kb2L+ReqkhA32Ih1ziedzjnn17fvhMngBvmXgV5306mwUKHz1tDe4js9uk2EbhVtz8
-         adS/AxBeyx1k/yNCfTLLwfF95xE02IIxfTfr0O4GSJSldEiKnrIka7E/J0ATMvtLQI
-         BMeXmGHv/JITe+DMsWsD5JUFjbXSyDOHQlaLMiuak5Q9EvywcgAGH5DH8De9cb+HnQ
-         3o91WLK/Cvb+w==
-Date:   Fri, 5 May 2023 13:23:04 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev, Gagandeep Singh <g.singh@nxp.com>
-Subject: Re: [PATCH v3 net 1/1] net: fec: correct the counting of XDP sent
- frames
-Message-ID: <20230505102304.GA525452@unreal>
-References: <20230504153517.816636-1-shenwei.wang@nxp.com>
+        Fri, 5 May 2023 06:24:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7A619427
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 03:24:28 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pusbq-00080v-Gd; Fri, 05 May 2023 12:24:18 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pusbp-0007F2-4a; Fri, 05 May 2023 12:24:17 +0200
+Date:   Fri, 5 May 2023 12:24:17 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/2] dt-bindings: nvmem: add binding doc for i.MX
+ OCOTP/ELE
+Message-ID: <20230505102417.vtluekzx2oqsbcux@pengutronix.de>
+References: <20230505091733.1819521-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230504153517.816636-1-shenwei.wang@nxp.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230505091733.1819521-1-peng.fan@oss.nxp.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,30 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 10:35:17AM -0500, Shenwei Wang wrote:
-> In the current xdp_xmit implementation, if any single frame fails to
-> transmit due to insufficient buffer descriptors, the function nevertheless
-> reports success in sending all frames. This results in erroneously
-> indicating that frames were transmitted when in fact they were dropped.
-> 
-> This patch fixes the issue by ensureing the return value properly
-> indicates the actual number of frames successfully transmitted, rather than
-> potentially reporting success for all frames when some could not transmit.
-> 
-> Fixes: 6d6b39f180b8 ("net: fec: add initial XDP support")
-> Signed-off-by: Gagandeep Singh <g.singh@nxp.com>
-> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
-> ---
->  v3:
->   - resend the v2 fix for "net" as the standalone patch.
-> 
->  v2:
->   - only keep the bug fix part of codes according to Horatiu's comments.
->   - restructure the functions to avoid the forward declaration.
-> 
->  drivers/net/ethernet/freescale/fec_main.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
+Hi,
 
-Thanks,
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+On 23-05-05, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+
+...
+
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx6sx-clock.h>
+> +
+> +    ocotp: efuse@21bc000 {
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        compatible = "fsl,imx6sx-ocotp", "syscon";
+> +        reg = <0x021bc000 0x4000>;
+> +        clocks = <&clks IMX6SX_CLK_OCOTP>;
+
+Nit: the "compatible" should be the first property followed by the "reg"
+property.
+
+Regards,
+  Marco
+
+> +
+> +        cpu_speed_grade: speed-grade@10 {
+> +            reg = <0x10 4>;
+> +        };
+> +
+> +        tempmon_calib: calib@38 {
+> +            reg = <0x38 4>;
+> +        };
+> +
+> +        tempmon_temp_grade: temp-grade@20 {
+> +            reg = <0x20 4>;
+> +        };
+> +    };
+> +
+> +...
+> -- 
+> 2.37.1
+> 
+> 
+> 
