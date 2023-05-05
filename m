@@ -2,100 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6225D6F7E58
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 10:05:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EC26F7E5F
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 10:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbjEEIE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 04:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S231443AbjEEIG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 04:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbjEEIE4 (ORCPT
+        with ESMTP id S229781AbjEEIG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 04:04:56 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D601D17FEE
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 01:04:53 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:83f:2c6b:b7ae:7358])
-        by albert.telenet-ops.be with bizsmtp
-        id sw3l290093nKn5u06w3lFr; Fri, 05 May 2023 10:04:50 +0200
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1puqPp-001AUW-An;
-        Fri, 05 May 2023 10:03:45 +0200
-Date:   Fri, 5 May 2023 10:03:45 +0200 (CEST)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Rob Herring <robh@kernel.org>
-cc:     soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        =?ISO-8859-15?Q?Andreas_F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Lars Persson <lars.persson@axis.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        =?ISO-8859-15?Q?Jonathan_Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Paul Barker <paul.barker@sancloud.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@axis.com
-Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor
- sub-directories
-In-Reply-To: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
-Message-ID: <9d67cbbf-9be8-13c0-98fb-d0146bba79c8@linux-m68k.org>
-References: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
+        Fri, 5 May 2023 04:06:57 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1176E46
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 01:06:52 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-76998d984b0so196243639f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 01:06:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683274012; x=1685866012;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TeSUPZJHLmHu4GxXGL1I+J0K+4NIwj6BUxF5QRXN0fI=;
+        b=ELV3+Gah4bdEOcgDi822WSPRKHOF6MLxPeJsUDwKaShlF3t5FwlOPUiCjR1qOvDWYL
+         /fT8UeeADcfTFbd/rZ0p9ZRJZMGjhKg2QZ05uORV0uRnz1bYY4Ucfv9RD3xif5o5t3k4
+         soNsmGQPHotVuh1RhoZQ5sVtZgJiMNDHLpeznpUQOVLsgekyffx9q5r4eaW2aTq0HutC
+         4oYiquflmY74vDAUkTeC69X27TpEr8VovvJE8jkvCIhMfsg+PtR2xe2XQlECdaCyCFh1
+         9oqUZSYWHzU5blPkwklejX/e2xymKOZ8Os8yB3J9/kJT3KqikObm4NLH70b7i+viBwgn
+         tRRw==
+X-Gm-Message-State: AC+VfDzkKulpw5CW7lK/U7wfqcayWRl/Vz29b9ZrbgE4WrNvSL0V/7mQ
+        srxFv+1RzMGCimL186qUNFK3+mGOSZQq9T+HuGOMxEe55d9S
+X-Google-Smtp-Source: ACHHUZ5wZ6532/pMP+Qv5iqCEjQDIev11sib/BVfz5w42LFgq7uJRbqLCNWQB2uC03t2B1WrLQ/UpVF+Iaw4rMQjqNjjT6z/90S/
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a6b:d102:0:b0:759:25eb:210d with SMTP id
+ l2-20020a6bd102000000b0075925eb210dmr183833iob.0.1683274012052; Fri, 05 May
+ 2023 01:06:52 -0700 (PDT)
+Date:   Fri, 05 May 2023 01:06:52 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008c534305faedc5ce@google.com>
+Subject: [syzbot] Monthly block report (May 2023)
+From:   syzbot <syzbot+listce23541c780281f050fb@syzkaller.appspotmail.com>
+To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,122 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 4 May 2023, Rob Herring wrote:
-> The arm dts directory has grown to 1553 boards which makes it a bit
-> unwieldy to maintain and use. Past attempts stalled out due to plans to
-> move .dts files out of the kernel tree. Doing that is no longer planned
-> (any time soon at least), so let's go ahead and group .dts files by
-> vendors. This move aligns arm with arm64 .dts file structure.
->
-> Doing this enables building subsets of dts files by vendor easily
-> without changing kernel configs:
->
-> make allyesconfig
-> make arch/arm/boot/dts/ti/
->
-> There's no change to dtbs_install as the flat structure is maintained on
-> install.
->
-> The naming of vendor directories is roughly in this order of preference:
-> - Matching original and current SoC vendor prefix/name (e.g. ti, qcom)
-> - Current vendor prefix/name if still actively sold (SoCs which have
->  been aquired) (e.g. nxp/imx)
-> - Existing platform name for older platforms not sold/maintained by any
->  company (e.g. gemini, nspire)
->
-> The whole move was scripted with the exception of MAINTAINERS.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Hello block maintainers/developers,
 
-> arch/arm/boot/dts/renesas/Makefile                 |   33 +
-> arch/arm/boot/dts/{ => renesas}/emev2-kzm9d.dts    |    0
-> arch/arm/boot/dts/{ => renesas}/emev2.dtsi         |    0
-> .../{ => renesas}/gr-peach-audiocamerashield.dtsi  |    0
-> .../boot/dts/{ => renesas}/iwg20d-q7-common.dtsi   |    0
-> .../boot/dts/{ => renesas}/iwg20d-q7-dbcm-ca.dtsi  |    0
-> .../arm/boot/dts/{ => renesas}/r7s72100-genmai.dts |    0
-> .../boot/dts/{ => renesas}/r7s72100-gr-peach.dts   |    0
-> .../boot/dts/{ => renesas}/r7s72100-rskrza1.dts    |    0
-> arch/arm/boot/dts/{ => renesas}/r7s72100.dtsi      |    0
-> .../boot/dts/{ => renesas}/r7s9210-rza2mevb.dts    |    0
-> arch/arm/boot/dts/{ => renesas}/r7s9210.dtsi       |    0
-> .../arm/boot/dts/{ => renesas}/r8a73a4-ape6evm.dts |    0
-> arch/arm/boot/dts/{ => renesas}/r8a73a4.dtsi       |    0
-> .../dts/{ => renesas}/r8a7740-armadillo800eva.dts  |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7740.dtsi       |    0
-> .../{ => renesas}/r8a7742-iwg21d-q7-dbcm-ca.dts    |    0
-> .../r8a7742-iwg21d-q7-dbcm-ov5640-single.dtsi      |    0
-> .../r8a7742-iwg21d-q7-dbcm-ov7725-single.dtsi      |    0
-> .../boot/dts/{ => renesas}/r8a7742-iwg21d-q7.dts   |    0
-> .../arm/boot/dts/{ => renesas}/r8a7742-iwg21m.dtsi |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7742.dtsi       |    0
-> .../{ => renesas}/r8a7743-iwg20d-q7-dbcm-ca.dts    |    0
-> .../boot/dts/{ => renesas}/r8a7743-iwg20d-q7.dts   |    0
-> .../arm/boot/dts/{ => renesas}/r8a7743-iwg20m.dtsi |    0
-> .../boot/dts/{ => renesas}/r8a7743-sk-rzg1m.dts    |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7743.dtsi       |    0
-> .../{ => renesas}/r8a7744-iwg20d-q7-dbcm-ca.dts    |    0
-> .../boot/dts/{ => renesas}/r8a7744-iwg20d-q7.dts   |    0
-> .../arm/boot/dts/{ => renesas}/r8a7744-iwg20m.dtsi |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7744.dtsi       |    0
-> .../r8a7745-iwg22d-sodimm-dbhd-ca.dts              |    0
-> .../dts/{ => renesas}/r8a7745-iwg22d-sodimm.dts    |    0
-> .../arm/boot/dts/{ => renesas}/r8a7745-iwg22m.dtsi |    0
-> .../boot/dts/{ => renesas}/r8a7745-sk-rzg1e.dts    |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7745.dtsi       |    0
-> .../boot/dts/{ => renesas}/r8a77470-iwg23s-sbc.dts |    0
-> arch/arm/boot/dts/{ => renesas}/r8a77470.dtsi      |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7778-bockw.dts  |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7778.dtsi       |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7779-marzen.dts |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7779.dtsi       |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7790-lager.dts  |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7790-stout.dts  |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7790.dtsi       |    0
-> .../arm/boot/dts/{ => renesas}/r8a7791-koelsch.dts |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7791-porter.dts |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7791.dtsi       |    0
-> .../arm/boot/dts/{ => renesas}/r8a7792-blanche.dts |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7792-wheat.dts  |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7792.dtsi       |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7793-gose.dts   |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7793.dtsi       |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7794-alt.dts    |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7794-silk.dts   |    0
-> arch/arm/boot/dts/{ => renesas}/r8a7794.dtsi       |    0
-> .../dts/{ => renesas}/r8a77xx-aa121td01-panel.dtsi |    0
-> .../dts/{ => renesas}/r9a06g032-rzn1d400-db.dts    |    0
-> arch/arm/boot/dts/{ => renesas}/r9a06g032.dtsi     |    0
-> arch/arm/boot/dts/{ => renesas}/sh73a0-kzm9g.dts   |    0
-> arch/arm/boot/dts/{ => renesas}/sh73a0.dtsi        |    0
+This is a 31-day syzbot report for the block subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/block
 
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2646,13 +2636,7 @@ C:	irc://irc.libera.chat/renesas-soc
-> T:	git git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git next
-> F:	Documentation/devicetree/bindings/hwinfo/renesas,prr.yaml
-> F:	Documentation/devicetree/bindings/soc/renesas/
-> -F:	arch/arm/boot/dts/emev2*
-> -F:	arch/arm/boot/dts/gr-peach*
-> -F:	arch/arm/boot/dts/iwg20d-q7*
-> -F:	arch/arm/boot/dts/r7s*
-> -F:	arch/arm/boot/dts/r8a*
-> -F:	arch/arm/boot/dts/r9a*
-> -F:	arch/arm/boot/dts/sh*
-> +F:	arch/arm/boot/dts/renesas/
-> F:	arch/arm/configs/shmobile_defconfig
-> F:	arch/arm/include/debug/renesas-scif.S
-> F:	arch/arm/mach-shmobile/
+During the period, 9 new issues were detected and 0 were fixed.
+In total, 28 issues are still open and 81 have been fixed so far.
 
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Some of the still happening issues:
 
-Gr{oetje,eeting}s,
+Ref Crashes Repro Title
+<1> 392     Yes   WARNING in copy_page_from_iter
+                  https://syzkaller.appspot.com/bug?extid=63dec323ac56c28e644f
+<2> 359     Yes   INFO: task hung in blkdev_put (4)
+                  https://syzkaller.appspot.com/bug?extid=9a29d5e745bd7523c851
+<3> 78      Yes   INFO: task hung in blkdev_fallocate
+                  https://syzkaller.appspot.com/bug?extid=39b75c02b8be0a061bfc
+<4> 33      Yes   INFO: task hung in nbd_add_socket (2)
+                  https://syzkaller.appspot.com/bug?extid=cbb4b1ebc70d0c5a8c29
+<5> 21      Yes   WARNING in blk_register_tracepoints
+                  https://syzkaller.appspot.com/bug?extid=c54ded83396afee31eb1
+<6> 7       No    WARNING in wait_til_done (2)
+                  https://syzkaller.appspot.com/bug?extid=9bc4da690ee5334f5d15
+<7> 2       No    WARNING in floppy_interrupt (2)
+                  https://syzkaller.appspot.com/bug?extid=aa45f3927a085bc1b242
 
- 						Geert
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
