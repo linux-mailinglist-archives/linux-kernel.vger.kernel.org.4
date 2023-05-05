@@ -2,154 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABFE6F7D0C
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E116F7D0E
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 08:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjEEGkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 02:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55200 "EHLO
+        id S230356AbjEEGkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 02:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbjEEGkL (ORCPT
+        with ESMTP id S229905AbjEEGkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 02:40:11 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A97115EC5
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 23:40:09 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-965a68abfd4so253933466b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 23:40:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683268807; x=1685860807;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aTyxP1vj9LhqUkDcFtKF0jIyEwscl+LdksMcxhoHIX0=;
-        b=G0z6pdfLLcpRXBMfXu84fwOiLH0bYZ8N7aA7FRIkIs0vmuL5QK+Hg79DyL5CSrXb5V
-         pDi6+8ung1wbRWg4QD9/iahFef2T8Fw5inu/rt85I9j9MZb3MQYjV1WBLLGxkayID4Q+
-         9y/RD2zLE2X7Qxcb1qMa3PVbD1JRwS1mNiSx8327nKJJDeK8GE7jBN6pKMsJYCCn4wAy
-         3IlDplqBMPEgFJVRHOu5aGcqkLm1pjC4wXuE6UApKlM6foHQ+MlQFPJ8TUpivm+ZJ8ea
-         zMhL/XQhIod4bPJfcGEWa016dW+/WsPBzztT8vbMfGKHLolZ6QN+rsOU7eBE05dnJEws
-         Y7XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683268807; x=1685860807;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aTyxP1vj9LhqUkDcFtKF0jIyEwscl+LdksMcxhoHIX0=;
-        b=b6FR1R347glAkAW473OFT132NXIiETOBKKMOs1vwYwDoOo/vIA72l4ZeIgtGUtj093
-         hYCwUH5Ivukmuzzw7iyuINQRyvRtSZNIQJIeArJ1bz5exIryzPQHDtW/1j8lZL/nd9eT
-         r8DXLXIFlACKJfwQTMcSqPSm3dSCl+0xmTygworCluZso3n/0xnEeYoE5oy58KNFRSwF
-         JTKwFNiVwE/YkIRs02E6hmfhWinOEahgmuqxuUWqTwJMFs4+kiIDRcbLzmaK8vWarr54
-         D9ub2XXRQp7n9kguOzTANfcfselSMR+3aJEI5bqHzPKREZo9CFbJ8OoX4bJKSEXu6wCC
-         Q4kg==
-X-Gm-Message-State: AC+VfDzujTePMR9fKF1mNBdXkMx0PEUUnUpJ8zuenLwS8tsv4mVvWVZ5
-        A3ykYLxn+wk9WgIoi1CJ/IKg7g==
-X-Google-Smtp-Source: ACHHUZ60yiXciR7c56Q3PWRYkZepdVsaqppKAlJGiNIex8+MxKDx3TzcHvQ6hw7Gfdaj7zjLGfntrA==
-X-Received: by 2002:a17:907:6d1f:b0:94e:f1b9:e933 with SMTP id sa31-20020a1709076d1f00b0094ef1b9e933mr236593ejc.53.1683268807573;
-        Thu, 04 May 2023 23:40:07 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
-        by smtp.gmail.com with ESMTPSA id ak19-20020a170906889300b009545230e682sm522940ejc.91.2023.05.04.23.40.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 23:40:06 -0700 (PDT)
-Message-ID: <925bf170-bb54-b427-976a-87e0dca230da@linaro.org>
-Date:   Fri, 5 May 2023 08:40:05 +0200
+        Fri, 5 May 2023 02:40:35 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B6215EC7;
+        Thu,  4 May 2023 23:40:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=X0c1PBLFOhai+mqhEBi/tW1OeYtirBEECbmlevNdTtM=;
+        t=1683268834; x=1684478434; b=tYED6gMyFU8FHCp/t2Z6rOgjV0iHJl6LS3GH/R3WbiO4vZV
+        Qj4cn5YUTsx/4o08IYEzd90oy6527pEyfaXDS5UlujiTe6R5rcWSzwW4Z/IYozCcNL1b0uKkwdomr
+        FBN19mi5RqNndBQ0QHPZ2GRrQcvPlHe0/lxQj2UIutnub+3CPlgLCI9txyKjwI0ak7wGsstlH9MKU
+        u4uegyw6u2uyhkBd5HhyBGG7VWVKD3DMb8O6J0Kk/UENTPLzsX/Z8KboshxtZzHozZ9RLRuS1uGJv
+        QlpTxgPNdBhIx77QQLZQAzlxjerzjVuoOQ2tIugubMKOr+Qc1713nLkV4C2OFKAA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1pup74-000CRq-0E;
+        Fri, 05 May 2023 08:40:18 +0200
+Message-ID: <f02a94a6cad2e87e0cfe9c8ca8eedc89753313ab.camel@sipsolutions.net>
+Subject: Re: [PATCH] wifi: iwlwifi: Fix spurious packet drops with RSS
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Sultan Alsawaf <sultan@kerneltoast.com>
+Cc:     "Greenman, Gregory" <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Goodstein, Mordechay" <mordechay.goodstein@intel.com>,
+        "Coelho, Luciano" <luciano.coelho@intel.com>,
+        "Sisodiya, Mukesh" <mukesh.sisodiya@intel.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Fri, 05 May 2023 08:40:16 +0200
+In-Reply-To: <ZFPxkRKep27H74Su@sultan-box.localdomain>
+References: <20230430001348.3552-1-sultan@kerneltoast.com>
+         <8d2b0aec270b8cd0111654dc4b361987a112d3ce.camel@sipsolutions.net>
+         <ZFPxkRKep27H74Su@sultan-box.localdomain>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4 0/8] Add StarFive Camera Subsystem driver
-Content-Language: en-US
-To:     Jack Zhu <jack.zhu@starfivetech.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Eugen Hristev <eugen.hristev@collabora.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
-References: <20230413035541.62129-1-jack.zhu@starfivetech.com>
- <14c06503-621f-2477-7b15-b17f1890ecfe@starfivetech.com>
- <7bd29805-11e7-68ee-aa47-68bae2a2fb38@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <7bd29805-11e7-68ee-aa47-68bae2a2fb38@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2023 07:57, Jack Zhu wrote:
-> 
-> 
-> On 2023/4/24 19:19, Jack Zhu wrote:
->>
->>
->> On 2023/4/13 11:55, Jack Zhu wrote:
->>> Hi,
->>>
->>> This patch series adds support for the StarFive Camera Subsystem
->>> found on StarFive JH7110 SoC.
->>>
->>> The driver implements V4L2, Media controller and V4L2 subdev interfaces.
->>> Camera sensor using V4L2 subdev interface in the kernel is supported.
->>>
->>> The driver is tested on VisionFive V2 board with IMX219 camera sensor.
->>> GStreamer 1.18.5 with v4l2src plugin is supported.
->>>
->>> Changes since v3:
->>> Patch 1:
->>> - Modified port@0 and port@1 properties.
->>> - Extended the port@0 example with appropriate properties.
->>> - Added 'port@0' for 'required'
->>> Patch 2:
->>> - Modified spelling errors.
->>> Patch 3:
->>> - Merged patch 5 into the patch with an explanation for compatible in
->>>   commit msg.
->>> Patch 6:
->>> - Asserted pixel_rst[i] reset in the loop after the err_disable_pixclk
->>>   label.
->>> - Modified Code Style for getting sys_rst and p_rst.
->>> - Renamed clk_name to name and modified the relevant code.
->>> Patch 9:
->>> - Added static for stfcamss_get_mem_res function.
->>> - Added static for isp_close function.
->>> - Fixed implicit conversion warning for stf_vin_map_isp_pad function.
->>> - Dropped unused variables.
->>>
->>>   v3: https://lore.kernel.org/all/20230331121826.96973-1-jack.zhu@starfivetech.com/
->>>
->>
->> Hello everyone,
->>
->> From the current review status, the patches related to the CSI module
->> have 'reviewed-by' tags. I would like to know if it is okay to add
->> patches 1-5 from this series to a PR first.
->>
->> Thank you!
->>
->> Jack
->>
-> 
-> Hello Mauro, Laurent, Maxime, Rob, Krzysztof, Robert, Todor and Philipp,
-> 
-> Can you give me some suggestions and comments on the previous request
-> to commit CSI related patches first? Thank you for your time.
+On Thu, 2023-05-04 at 10:55 -0700, Sultan Alsawaf wrote:
+> >=20
+> > So I assume you tested it now, and it works? Somehow I had been under
+> > the impression we never got it to work back when...
+>=20
+> Yep, I've been using this for about a year and have let it run through th=
+e
+> original iperf3 reproducer I mentioned on bugzilla for hours with no stal=
+ls. My
+> big git clones don't freeze anymore either. :)
 
-You received very specific feedback, so know you decided to ignore it?
+Oh! OK, great.
 
-No, implement what you were asked for.
+> What I wasn't able to get working was the big reorder buffer cleanup that=
+'s made
+> possible by using these firmware bits. The explicit queue sync can be rem=
+oved
+> easily, but there were further potential cleanups you had mentioned that =
+I
+> wasn't able to get working.
 
-Best regards,
-Krzysztof
+Fair enough.
 
+> I hadn't submitted this patch until now because I was hoping to get the b=
+ig
+> cleanup done simultaneously but I got too busy until now. Since this smal=
+l patch
+> does fix the issue, my thought is that this could be merged and sent to s=
+table,
+> and with subsequent patches I can chip away at cleaning up the reorder bu=
+ffer.
+
+Sure, that makes sense.
+
+> > > Johannes mentions that the 9000 series' firmware doesn't support thes=
+e
+> > > bits, so disable RSS on the 9000 series chipsets since they lack a
+> > > mechanism to properly detect old and duplicated frames.
+> >=20
+> > Indeed, I checked this again, I also somehow thought it was backported
+> > to some versions but doesn't look like. We can either leave those old
+> > ones broken (they only shipped with fewer cores anyway), or just disabl=
+e
+> > it as you did here, not sure. RSS is probably not as relevant with thos=
+e
+> > slower speeds anyway.
+>=20
+> Agreed, I think it's worth disabling RSS on 9000 series to fix it there. =
+If the
+> RX queues are heavily backed up and incoming packets are not released fas=
+t
+> enough due to a slow CPU, then I think the spurious drops could happen so=
+mewhat
+> regularly on slow devices using 9000 series.
+>=20
+> It's probably also difficult to judge the impact/frequency of these spuri=
+ous
+> drops in the wild due to TCP retries potentially masking them. The issue =
+can be
+> very noticeable when a lot of packets are spuriously dropped at once thou=
+gh, so
+> I think it's certainly worth the tradeoff to disable RSS on the older chi=
+psets.
+
+:)
+
+> Indeed, and removing the queue sync + timer are easy. Would you prefer I =
+send
+> additional patches for at least those cleanups before the fix itself can =
+be
+> considered for merging?
+>=20
+
+No, you know, maybe this is easier since it's the smallest possible
+change that fixes issues. Just have to see what Emmanuel says, he had
+said he sees issues with this change.
+
+johannes
