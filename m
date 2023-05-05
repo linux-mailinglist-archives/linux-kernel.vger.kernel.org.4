@@ -2,77 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328CE6F842D
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 552D76F8432
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232672AbjEENgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 09:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59028 "EHLO
+        id S232657AbjEENgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 09:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbjEENf6 (ORCPT
+        with ESMTP id S232170AbjEENgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 09:35:58 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40302268F
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 06:35:27 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-643ac91c51fso234940b3a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 06:35:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1683293727; x=1685885727;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g3RvOc3E8ZFO1x/9akr2bpEbHeCFqf25nGHeEQGUAU0=;
-        b=C0II2oek0zykI2dzG8RkjOqVTRnziAg3YOlg88doaFXBlEhJiIQLAg034eFtxiz6vS
-         g4J8GzDJnyaqmfq8f7Z0i//CSTfgoxZmlub414QeBnfVUF727nol+9PHR2yR/xbSMxlC
-         o6lH+wAATQI69r76wyrPRw2nujuAx8X1wObPJk0sgB3Vz/JHn+/j7XfVEKvs6waccDv/
-         CdMFmqpzeiZ/fuPIhmQYLumv7uRuc7NYm7B7r0Pqre1WB3dgAeBFdvOU/ayOFBBfZ+tn
-         VfmjJuCKHmz5I3ZOVgB6eu0R670bvCMWjW2HF8jSwPMJdkvUVsLONN0m2u73Yc+tOvpQ
-         7C9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683293727; x=1685885727;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=g3RvOc3E8ZFO1x/9akr2bpEbHeCFqf25nGHeEQGUAU0=;
-        b=DpdrncsaMcbgtRyNsgWRQmK8hrnGMAyZv8ZG43qjSiBLNq/MZgKmEa0yJ1Ev2zLeQj
-         t76svRP5TYvL8bQIe3v4dbUmISib5fB/ChAocWPYHeCqimvM9eylrU0UuY8BzWZFOF0S
-         05BMfwHR1qmhT2O49ZEkIyivQSsB1//Yb8XVXdVckhYnVH0i2uqwXFCAkIFrjJUTDrZC
-         NrFH1snhVo4Nz7s2dxbS8xSzaRnjWrY9yu+2PEuOJrppKMp3n1Qp2Sdpn9JbSdjplbyL
-         YYaMy06uZLsYeMepayI/6b/w1PFUFsndo3Qsip7Om/Q4D7OHzTQNBpivgaSmCYKKAJyr
-         /0AQ==
-X-Gm-Message-State: AC+VfDxPccagruDByLnv/Zq4WOidnvaQYE5iozogpvEv9Uw7DMCUqz/7
-        wkWB124yjIa59lSJortLOcnoEA==
-X-Google-Smtp-Source: ACHHUZ7gQMBNAALjAbEgOqi206u0+0pNQfoKvfAbpiw5YTqHAEfnb7ItjMX7kIvFewN7aqFaOrs/fQ==
-X-Received: by 2002:a05:6a00:1ad0:b0:63b:5f78:d6db with SMTP id f16-20020a056a001ad000b0063b5f78d6dbmr2357743pfv.21.1683293727288;
-        Fri, 05 May 2023 06:35:27 -0700 (PDT)
-Received: from [10.254.14.195] ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id y17-20020aa78051000000b0062d859a33d1sm1650787pfm.84.2023.05.05.06.35.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 06:35:26 -0700 (PDT)
-Message-ID: <6696100e-e838-d96a-2894-bbca9783d2a3@bytedance.com>
-Date:   Fri, 5 May 2023 21:35:21 +0800
+        Fri, 5 May 2023 09:36:52 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7CD7ECF;
+        Fri,  5 May 2023 06:36:51 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345BRDuS021002;
+        Fri, 5 May 2023 13:36:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=YNlyM89W/zkSuXFFTAN8cbCHDZKQiuPuQUEG7gnXKBg=;
+ b=V54II73NEvA551aKh8JsU3VFRo+WPQn8LSPz+wIoi3AsxbJGQaaOS/e7YifuFd5FcsIl
+ c1vzWa6xtbUsScfPXVRYhQTd2g4PTefL/CsoHIJuh4/4U/zkdQbnA1u9WXk/5uCvZ2SC
+ UwX+MDEi9WBAwrdSrI1qiB3LbmgDKQGMZJqo3/Yu6nXbl1xPnJkLZQ+v+4TcTgtjYj9j
+ PNf5PsEhkLOWNHChyrqegBLggZcd9gPwghlVSDKCAksfSqJaJ59l4tx1gshJN1HiAulu
+ a3uDDINACHTwNi+KikYQbQzWwPJfhaM7Sxsse82KQmguEpgUiaDQgVOYNtwE/0/Uq7Av 6Q== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qcwdegn27-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 May 2023 13:36:22 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345DaLOZ025555
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 5 May 2023 13:36:21 GMT
+Received: from [10.216.37.178] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 5 May 2023
+ 06:36:16 -0700
+Message-ID: <a4c104d4-39d1-4b33-28c9-80a383c61f8e@quicinc.com>
+Date:   Fri, 5 May 2023 19:06:13 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.0
-Subject: Re: [External] Re: [PATCH v2] blk-throttle: Fix io statistics for
- cgroup v1
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230401094708.77631-1-hanjinke.666@bytedance.com>
- <ZEwY5Oo+5inO9UFf@righiandr-XPS-13-7390>
- <eb2eeb6b-07da-4e98-142c-da1e7ea35c2b@bytedance.com>
- <ZFQf3TCs7DqsSR8l@righiandr-XPS-13-7390>
-From:   hanjinke <hanjinke.666@bytedance.com>
-In-Reply-To: <ZFQf3TCs7DqsSR8l@righiandr-XPS-13-7390>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 11/18] media: venus: hfi_venus: Fix version check in
+ venus_cpu_and_video_core_idle()
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Marijn Suijten" <marijn.suijten@somainline.org>
+References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
+ <20230228-topic-venus-v2-11-d95d14949c79@linaro.org>
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+In-Reply-To: <20230228-topic-venus-v2-11-d95d14949c79@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: oQqwVdrEoc-NLzlwahRGaG4wNmw0sK5W
+X-Proofpoint-GUID: oQqwVdrEoc-NLzlwahRGaG4wNmw0sK5W
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-05_20,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 mlxlogscore=999 malwarescore=0 adultscore=0
+ lowpriorityscore=0 spamscore=0 mlxscore=0 phishscore=0 bulkscore=0
+ impostorscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2305050111
 X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,89 +95,37 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 5/4/2023 1:31 PM, Konrad Dybcio wrote:
+> IS_V6() should have instead checked for specific VPU versions. Fix it.
 
-在 2023/5/5 上午5:13, Andrea Righi 写道:
-> On Thu, May 04, 2023 at 11:08:53PM +0800, hanjinke wrote:
->> Hi
->>
->> Sorry for delay（Chinese Labor Day holiday).
-> 
-> No problem, it was also Labor Day in Italy. :)
-> 
->>
->> 在 2023/4/29 上午3:05, Andrea Righi 写道:
->>> On Sat, Apr 01, 2023 at 05:47:08PM +0800, Jinke Han wrote:
->>>> From: Jinke Han <hanjinke.666@bytedance.com>
->>>>
->>>> After commit f382fb0bcef4 ("block: remove legacy IO schedulers"),
->>>> blkio.throttle.io_serviced and blkio.throttle.io_service_bytes become
->>>> the only stable io stats interface of cgroup v1, and these statistics
->>>> are done in the blk-throttle code. But the current code only counts the
->>>> bios that are actually throttled. When the user does not add the throttle
->>>> limit, the io stats for cgroup v1 has nothing. I fix it according to the
->>>> statistical method of v2, and made it count all ios accurately.
->>>>
->>>> Fixes: a7b36ee6ba29 ("block: move blk-throtl fast path inline")
->>>> Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
->>>
->>> Thanks for fixing this!
->>>
->>> The code looks correct to me, but this seems to report io statistics
->>> only if at least one throttling limit is defined. IIRC with cgroup v1 it
->>> was possible to see the io statistics inside a cgroup also with no
->>> throttling limits configured.
->>>
->>> Basically to restore the old behavior we would need to drop the
->>> cgroup_subsys_on_dfl() check, something like the following (on top of
->>> your patch).
->>>
->>> But I'm not sure if we're breaking other behaviors in this way...
->>> opinions?
->>>
->>>    block/blk-cgroup.c   |  3 ---
->>>    block/blk-throttle.h | 12 +++++-------
->>>    2 files changed, 5 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
->>> index 79138bfc6001..43af86db7cf3 100644
->>> --- a/block/blk-cgroup.c
->>> +++ b/block/blk-cgroup.c
->>> @@ -2045,9 +2045,6 @@ void blk_cgroup_bio_start(struct bio *bio)
->>>    	struct blkg_iostat_set *bis;
->>>    	unsigned long flags;
->>> -	if (!cgroup_subsys_on_dfl(io_cgrp_subsys))
->>> -		return;
->>> -
->>>    	/* Root-level stats are sourced from system-wide IO stats */
->>>    	if (!cgroup_parent(blkcg->css.cgroup))
->>>    		return;
->>> diff --git a/block/blk-throttle.h b/block/blk-throttle.h
->>> index d1ccbfe9f797..bcb40ee2eeba 100644
->>> --- a/block/blk-throttle.h
->>> +++ b/block/blk-throttle.h
->>> @@ -185,14 +185,12 @@ static inline bool blk_should_throtl(struct bio *bio)
->>>    	struct throtl_grp *tg = blkg_to_tg(bio->bi_blkg);
->>>    	int rw = bio_data_dir(bio);
->>> -	if (!cgroup_subsys_on_dfl(io_cgrp_subsys)) {
->>> -		if (!bio_flagged(bio, BIO_CGROUP_ACCT)) {
->>> -			bio_set_flag(bio, BIO_CGROUP_ACCT);
->>> -			blkg_rwstat_add(&tg->stat_bytes, bio->bi_opf,
->>> -					bio->bi_iter.bi_size);
->>> -		}
->>> -		blkg_rwstat_add(&tg->stat_ios, bio->bi_opf, 1);
->>> +	if (!bio_flagged(bio, BIO_CGROUP_ACCT)) {
->>> +		bio_set_flag(bio, BIO_CGROUP_ACCT);
->>> +		blkg_rwstat_add(&tg->stat_bytes, bio->bi_opf,
->>> +				bio->bi_iter.bi_size);
->>>    	}
->>> +	blkg_rwstat_add(&tg->stat_ios, bio->bi_opf, 1);
->>
+This is again not a fix. The patch just adds a video hardware AR50_LITE, 
+which is
 
-I checked the code again. If we remove cgroup_subsys_on_dfl check here, 
-io statistics will still be performed in the case of v2, which I think 
-is unnecessary, and this information will be counted to 
-io_service_bytes/io_serviced, these two files are not visible in v2. Am 
-I missing something?
+not supported on existing driver yet. With existing code, IS_V6 covers 
+the video
 
-Thanks.
-Jinke
+hardwares which are enabled by the driver.
+
+-Vikash
+
+>
+> Fixes: e396e75fc254 ("media: venus: hfi: Read WRAPPER_TZ_CPU_STATUS_V6 on 6xx")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/media/platform/qcom/venus/hfi_venus.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
+> index 6d5906fab800..82aa7deeafa1 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_venus.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_venus.c
+> @@ -1537,7 +1537,7 @@ static bool venus_cpu_and_video_core_idle(struct venus_hfi_device *hdev)
+>   	void __iomem *cpu_cs_base = hdev->core->cpu_cs_base;
+>   	u32 ctrl_status, cpu_status;
+>   
+> -	if (IS_V6(hdev->core))
+> +	if (IS_AR50_LITE(hdev->core) || IS_IRIS2(hdev->core) || IS_IRIS2_1(hdev->core))
+>   		cpu_status = readl(wrapper_tz_base + WRAPPER_TZ_CPU_STATUS_V6);
+>   	else
+>   		cpu_status = readl(wrapper_base + WRAPPER_CPU_STATUS);
+>
