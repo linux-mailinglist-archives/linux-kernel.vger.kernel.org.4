@@ -2,63 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632C46F8261
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 13:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2347D6F826B
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbjEEL7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 07:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
+        id S231960AbjEEMBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 08:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjEEL7O (ORCPT
+        with ESMTP id S231564AbjEEMBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 07:59:14 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6538B30F7;
-        Fri,  5 May 2023 04:59:12 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 345Bx5As119261;
-        Fri, 5 May 2023 06:59:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683287945;
-        bh=mWCCYMK6drSmveVnuahFRASrK8ntgKM85dBE7RuKDO0=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=vAYCE2/gdcm3qecFP7RtcSW59eo9f5hY5xrReMbVEPtiX/b/RsAu76IVywlOOM5ol
-         v28UQ6weaq+azaT3L/ORoyGycG/DeIq3rqZFPnJBCXljLWz1PLCY0ZWzVI6wA83wni
-         HZKUTW8jo/Awc4D9UCdD7MRlX18fhOKADwQq2S+s=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 345Bx5Vc123195
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 5 May 2023 06:59:05 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 5
- May 2023 06:59:05 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 5 May 2023 06:59:05 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 345Bx4NT100001;
-        Fri, 5 May 2023 06:59:05 -0500
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-To:     <nm@ti.com>, <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <u-kumar1@ti.com>,
-        <vaishnav.a@ti.com>
-Subject: [PATCH v2 3/3] arm64: dts: ti: k3-j7200-mcu-wakeup: Update fss node and hbmc_mux
-Date:   Fri, 5 May 2023 17:28:58 +0530
-Message-ID: <20230505115858.7391-4-vaishnav.a@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230505115858.7391-1-vaishnav.a@ti.com>
-References: <20230505115858.7391-1-vaishnav.a@ti.com>
+        Fri, 5 May 2023 08:01:05 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F3A30F7
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:01:04 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so26370417a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 05:01:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683288063; x=1685880063;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ImF2e05bvx9rOSM694WfQMcc5pAkGih8DWv7R4NDd7o=;
+        b=iEBD9rhAhmMPxThK3WAQLLOD78WyYw9rSTbnihNNsDIB9+5jFZm2YH5e2xvsSoMx15
+         rdImbWjsUcaS6ofoD1fTrAh5fO09bDkU8bqiPK6Cm36eXJvJTgkKuipbFis+4azJz8AB
+         AGr0fYvODcgwXMHhblGfjR0TnOPsmIUo5O+/LM8aFX2DV3An44CUk0iH7nqH3lIRoA0J
+         5EtJLJwtdClhseTFpL6wMz2uqmrHx7S+Z0MHN7xChXdrEf+CU8TaHhlhsF4wdc6vVL8r
+         rZ+egU4/CC0WmzMisI2NkNp3c9OcZeHHMiHiYLHQZmUYRtkcMTbu7/sthhIOm5QYXpGT
+         YC+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683288063; x=1685880063;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ImF2e05bvx9rOSM694WfQMcc5pAkGih8DWv7R4NDd7o=;
+        b=GInv01A3SE+EFRyk9c3TuVSQXIVrmAX48pD0xBhH026Hc52rCxwGfGbLfs/8pfXPI+
+         jtWwEipW6b67jueUMc3L+ypnQmG4O2nErOGdYCo7qAcCn/hL5faEB+av02fPY0rGzhXv
+         rGoRduhCfPzUMgEQ6mRnnPLrut4DUlnvvoWS9/M/a84aFb7cDkRODNu8vJO98aJzbcVr
+         AmqgQQA4SOf/GrnVOqT2hjicipgE3ieJ+DpbEUzcQCD74n1s2cT/YTwCDbMr777A06Pt
+         vqFnpMmMqZ9pWLPZ30FF5/voiXwMgXT+SOzVUaxSeZRcxelfBH5x4fsBz5J10gxRN6UE
+         u65g==
+X-Gm-Message-State: AC+VfDyzWslmj4dflpUyipE+NMNm5HR1MY/DRfEkNkTtcfVzehCzs33O
+        08JWLgBgDEYHrKtyrdk0bH86RA==
+X-Google-Smtp-Source: ACHHUZ61Zi0U9a9Eqc/LVL0YQBE6XIipkFyC5I9H0ci1zC5hVkUNI4oMjeOgUiWAAXmTCg50scaffw==
+X-Received: by 2002:a17:907:2d8d:b0:94e:cfd0:ed9f with SMTP id gt13-20020a1709072d8d00b0094ecfd0ed9fmr1914691ejc.26.1683288062833;
+        Fri, 05 May 2023 05:01:02 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
+        by smtp.gmail.com with ESMTPSA id jl3-20020a17090775c300b009655eb8be26sm883521ejc.73.2023.05.05.05.01.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 May 2023 05:01:02 -0700 (PDT)
+Message-ID: <bb3d374d-0dc1-cf15-2458-f294c5ef23fd@linaro.org>
+Date:   Fri, 5 May 2023 14:01:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 1/2] dt-bindings: nvmem: add binding doc for i.MX
+ OCOTP/ELE
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+References: <20230505091733.1819521-1-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230505091733.1819521-1-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,64 +80,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nishanth Menon <nm@ti.com>
+On 05/05/2023 11:17, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> There are two parts of i.MX93 OCOTP, with 1st part Fuse shadow block(fsb),
+> 2nd part managed by ELE firmware. This binding doc supports both.
 
-fss node claims to be a syscon node, while it actually is a simple bus
-where ospi, hbmc peripherals are located and a mux for path select
-between OSPI and Hyperbus which can be modelled as a reg-mux. So model
-it accordingly and use reg-mux to describe the hbmc-mux. Also update
-the region size to the correct values as per the TRM.
+Subject: drop second/last, redundant "binding doc for". The
+"dt-bindings" prefix is already stating that these are bindings and
+documentation.
 
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
----
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../bindings/nvmem/imx-ocotp-ele.yaml         | 65 +++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/nvmem/imx-ocotp-ele.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/nvmem/imx-ocotp-ele.yaml b/Documentation/devicetree/bindings/nvmem/imx-ocotp-ele.yaml
+> new file mode 100644
+> index 000000000000..024594a2bcb4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/nvmem/imx-ocotp-ele.yaml
 
-V1->V2:
- * Address feedback from Udit to limit the FSS register region size as
- per TRM.
- * Use reg-mux changes to simplify the hbmc-mux modelling.
- * Update commit message to reflect changes.
+Filename matching compatible style. fsl,imx93-ocotp.yaml
 
-Depends on:
- https://lore.kernel.org/all/20230424184810.29453-1-afd@ti.com/
 
- arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+> @@ -0,0 +1,65 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/nvmem/imx-ocotp-ele.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP i.MX9 On-Chip OTP Controller (OCOTP)
+> +
+> +maintainers:
+> +  - Peng Fan <peng.fan@nxp.com>
+> +
+> +allOf:
+> +  - $ref: nvmem.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: fsl,imx93-ocotp-fsb
+> +          - const: syscon
+> +      - items:
+> +          - const: fsl,imx93-ocotp-ele
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
-index b58a31371bf3..333564ca9c91 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
-@@ -338,22 +338,23 @@
- 		status = "disabled";
- 	};
- 
--	fss: syscon@47000000 {
--		compatible = "syscon", "simple-mfd";
--		reg = <0x00 0x47000000 0x00 0x100>;
-+	fss: bus@47000000 {
-+		compatible = "simple-bus";
-+		reg = <0x00 0x47000000 0x0 0x7c>;
- 		#address-cells = <2>;
- 		#size-cells = <2>;
- 		ranges;
- 
--		hbmc_mux: hbmc-mux {
--			compatible = "mmio-mux";
-+		hbmc_mux: mux-controller@47000004 {
-+			compatible = "reg-mux";
-+			reg = <0x00 0x47000004 0x00 0x2>;
- 			#mux-control-cells = <1>;
- 			mux-reg-masks = <0x4 0x2>; /* HBMC select */
- 		};
- 
- 		hbmc: hyperbus@47034000 {
- 			compatible = "ti,am654-hbmc";
--			reg = <0x00 0x47034000 0x00 0x100>,
-+			reg = <0x00 0x47034000 0x00 0x0c>,
- 				<0x05 0x00000000 0x01 0x0000000>;
- 			power-domains = <&k3_pds 102 TI_SCI_PD_EXCLUSIVE>;
- 			clocks = <&k3_clks 102 0>;
--- 
-2.17.1
+Drop
+
+> +
+> +  "#size-cells":
+> +    const: 1
+
+Drop
+
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+
+Also: reg and clocks
+
+> +
+> +unevaluatedProperties: false
+> +
+Best regards,
+Krzysztof
 
