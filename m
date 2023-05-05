@@ -2,169 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC4B6F8048
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321B66F804C
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbjEEJpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 05:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
+        id S231839AbjEEJqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 05:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231517AbjEEJpB (ORCPT
+        with ESMTP id S231186AbjEEJqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 05:45:01 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157A33C20
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 02:44:59 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so13025533276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 02:44:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683279898; x=1685871898;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GCZ5gOZGay01QN1wHjQAh8Ri+WPvgr7jsxXO0RRuS7o=;
-        b=FD/WmZYVUi3EMNZPPg/hdLHt9s+vJ0y0SFqPowwwpMxpVpug2hrEEUQFsWQjONS9kr
-         0F6oayVS2FiN9rO8qOeW4zKxcjfV8ijlNCKyyLfQCCErFAR87zdNYcL7q28xNDEJDSCD
-         WrLx0PorpjnEsaEJUWxevDCk4FAKb/kjpWaJOK3PzZ9L3hIYS4ZIH+bPzNwvb22IOuxN
-         RT6Ss4h3HeL6Q1q1pc69bBAeIVuxewV2w/zXUXeP94Cy7oCBCqyLbe5heXjDSYXBxMa/
-         VPGcBIsuZKQRi5ET18ViQWvc3nI/AZr3tOuDt6h6vgB6uXHB8xWzydu8sVTcD/2q+/4j
-         9Hdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683279898; x=1685871898;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GCZ5gOZGay01QN1wHjQAh8Ri+WPvgr7jsxXO0RRuS7o=;
-        b=A1GpYTiesKSsPSXKSKEGnzOo3lJoCRp4aJIJZaV+56XohlnSokPAqsIGi+VgvMxZTs
-         cQYEQldhGnlfwgDUdsm0GxL+xEl1B3oYejBw3VYGM3n23LHr0nAJQTxFO1SUNduZCAD4
-         lZ5y4Ea03Na+YPjsnjy9f+v6UwTATGXZF5T1O9RpMyHIqUgbYoQJL5+ZK5+6pT7Wa1WE
-         8SzzOQTpYyH8gx9n2THpa7r32EOWlDtueY190kFJ4wADkPw9Zz4SzwrFmhdttwXwoScD
-         7bn80Vvgcxo/wC4JeaBCvzs5Ydb8FGWujywz9e6TLK8ZaiBxaE0wJ/Y/kPJX3WkFG7Oc
-         pzLg==
-X-Gm-Message-State: AC+VfDzQFQzP/bHfEUxpA0XLuOA/EZZy9G3f/EUtXgrhSFTKtsdojDFK
-        GgB0zDpoZcuFNbFPb/10zy+Do7flttX/rnc+PlTdmA==
-X-Google-Smtp-Source: ACHHUZ6HCkrAgHh/ojQsRbyFiV7ucIGBz6KdQOj7giDRR00rnT6kQZUC/O3u9ilY/OK6jDBf2o92eX7j01JxLdN8ZHQ=
-X-Received: by 2002:a25:3287:0:b0:b98:c6bb:137b with SMTP id
- y129-20020a253287000000b00b98c6bb137bmr2814731yby.9.1683279898093; Fri, 05
- May 2023 02:44:58 -0700 (PDT)
+        Fri, 5 May 2023 05:46:25 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C306BE7A
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 02:46:23 -0700 (PDT)
+Received: from fsav111.sakura.ne.jp (fsav111.sakura.ne.jp [27.133.134.238])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 3459k1WZ015765;
+        Fri, 5 May 2023 18:46:01 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav111.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp);
+ Fri, 05 May 2023 18:46:01 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 3459k1N5015762
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 5 May 2023 18:46:01 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <c8ce113e-423f-9109-94a1-631583e2ad8e@I-love.SAKURA.ne.jp>
+Date:   Fri, 5 May 2023 18:46:00 +0900
 MIME-Version: 1.0
-References: <20230504145737.286444-1-joychakr@google.com> <20230504145737.286444-8-joychakr@google.com>
- <78616bc1-8d9e-4a1c-70d6-ad62c2cfa8a8@linaro.org>
-In-Reply-To: <78616bc1-8d9e-4a1c-70d6-ad62c2cfa8a8@linaro.org>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Fri, 5 May 2023 15:14:45 +0530
-Message-ID: <CAOSNQF15UN2Rckes55UHxbUvN1PJcbj9aWirVGSLDOs5Y5EPnQ@mail.gmail.com>
-Subject: Re: [PATCH 7/7] dt-bindings: dmaengine: pl330: Add new quirks
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, manugautam@google.com,
-        danielmentz@google.com, sjadavani@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [syzbot] [fs?] INFO: task hung in synchronize_rcu (4)
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Hillf Danton <hdanton@sina.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        syzbot <syzbot+222aa26d0a5dbc2e84fe@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20230504061613.3901-1-hdanton@sina.com>
+ <7ea26a76-5c8c-a0d2-5b5e-63e370cdcb99@I-love.SAKURA.ne.jp>
+ <20230505083549.GB1770668@hirez.programming.kicks-ass.net>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20230505083549.GB1770668@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023 at 8:38=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 04/05/2023 16:57, Joy Chakraborty wrote:
-> > Add 2 new quirks added to the driver "arm,pl330-optimize-dev2mem-axsize=
-"
-> > and "arm,pl330-periph-single-dregs"
->
-> This we can see from the diff. You need to answer why?
->
+On 2023/05/05 17:35, Peter Zijlstra wrote:
+>> Linus, I think that "[PATCH v3 (repost)] locking/lockdep: add debug_show_all_lock_holders()"
+>> helps here, but I can't wake up locking people. What can we do?
+> 
+> How is that not also racy ?
 
-Sure will change it to:
-"
-Addition of following quirks :
-- "arm,pl330-periph-use-diff-axsize"
-   AxSize of transactions to peripherals are limited by the peripheral
-address width which inturn limits the AxSize used for transactions
-towards memory.
-   This quirk will make transactions to memory use the maximum
-possible bus width(AxSize), store data in MFIFO and use narrow
-multi-beat transactions to move data to peripherals.
-   This only applies to transfers between memory and peripherals where
-bus widths available are different for memory and the peripheral.
-- "arm,pl330-periph-complete-with-singles" :
-   When transfer sizes are not a multiple of a block of burst
-transfers (AxLen * AxSize configured at the peripheral), certain
-peripherals might choose not to set the burst request at the
-peripheral request interface of the DMA.
-   This quirk moves the remaining bytes to the peripheral using single
-transactions.
-"
+Nobody can make this code racy.
 
-> >
-> > Signed-off-by: Joy Chakraborty <joychakr@google.com>
-> > ---
-> >  Documentation/devicetree/bindings/dma/arm,pl330.yaml | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/dma/arm,pl330.yaml b/Doc=
-umentation/devicetree/bindings/dma/arm,pl330.yaml
-> > index 4a3dd6f5309b..0499a7fba88d 100644
-> > --- a/Documentation/devicetree/bindings/dma/arm,pl330.yaml
-> > +++ b/Documentation/devicetree/bindings/dma/arm,pl330.yaml
-> > @@ -53,6 +53,14 @@ properties:
-> >      type: boolean
-> >      description: quirk for performing burst transfer only
-> >
-> > +  arm,pl330-optimize-dev2mem-axsize:
-> > +    type: boolean
-> > +    description: quirk for optimizing AxSize used between dev<->mem
->
-> This tells me nothing... Neither what it is about nor why this is
-> property of a board or PL330 hardware implementation. Please describe
-> hardware, not drivers.
->
+> 
+> I think I've seen that patch, and it had a some 'blurb' Changelog that
+> leaves me wondering wtf the actual problem is and how it attempts to
+> solve it and I went on with looking at regressions because more
+> important than random weird patch.
 
-Will change the name to "arm,pl330-periph-use-diff-axsize" and add descript=
-ion:
-"
-Quirk to use different AxSize for bursts while accessing source and
-destination when moving data between memory and peripheral.
-Maximum possible bus width is used as AxSize for transactions towards
-memory and transactions towards peripherals use AxSize as per
-peripheral address width.
-"
+Please respond to
+https://lkml.kernel.org/393a440f-5f82-432c-bc24-e8de33e29d75@I-love.SAKURA.ne.jp .
 
-> > +
-> > +  arm,pl330-periph-single-dregs:
-> > +    type: boolean
-> > +    description: quirk for using dma-singles for peripherals in _dregs=
-()
->
-> Same concerns.
->
-
-Will change the name to  "arm,pl330-periph-complete-with-singles" and
-add description:
-"
-Quirk to use dma singles n times instead of an n beat burst to
-complete a transfer when the transfer size is not a multiple of the
-burst size and burst length configured at the peripheral.
-n being bytes left after the major chunk is transferred with
-peripheral configured burst transactions.
-"
-
->
-> Best regards,
-> Krzysztof
->
-
-Will update the patch series if this is satisfactory.
-
-Thanks
-Joy
