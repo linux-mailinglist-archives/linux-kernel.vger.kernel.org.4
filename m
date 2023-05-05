@@ -2,113 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E2E6F88A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2FC6F88B1
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbjEESec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 14:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
+        id S233205AbjEESin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 14:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjEESe3 (ORCPT
+        with ESMTP id S231730AbjEESil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 14:34:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672801816B
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 11:34:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 5 May 2023 14:38:41 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A551436C;
+        Fri,  5 May 2023 11:38:39 -0700 (PDT)
+Received: from localhost (mdns.lwn.net [45.79.72.68])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0EE963CDA
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 18:34:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1D7BC433EF;
-        Fri,  5 May 2023 18:34:24 +0000 (UTC)
-Date:   Fri, 5 May 2023 19:34:21 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Florent Revest <revest@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        joey.gouly@arm.com, mhocko@suse.com, keescook@chromium.org,
-        david@redhat.com, peterx@redhat.com, izbyshev@ispras.ru,
-        nd@arm.com, broonie@kernel.org, szabolcs.nagy@arm.com
-Subject: Re: [PATCH 3/4] mm: Add a NO_INHERIT flag to the PR_SET_MDWE prctl
-Message-ID: <ZFVMLQHObyP4Na+j@arm.com>
-References: <20230504170942.822147-1-revest@chromium.org>
- <20230504170942.822147-4-revest@chromium.org>
+        by ms.lwn.net (Postfix) with ESMTPSA id 124E62E0;
+        Fri,  5 May 2023 18:38:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 124E62E0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1683311919; bh=1ijoFgRvMyacNsF79Evr4UVIPMu4V4s6jcDs2K3BimA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OtLEjBv6Vo6w1VY56OH8dDUhWdylc7Xc0jdTav7xGwonZywFh52km0E+pfSzxJHul
+         aZlvuyRWJaPDbMqEAAcFG1+iWsHwxV8fa1gogv6cnxfoIzc2fIgv6nf0QzudtjPwah
+         JJqDnTz8Zulc4uYKj/FC60fAL8jO0CnvhcGD1rhtbzpQLMzH3eyKnFJRTUwuwqB5f3
+         NiO/IvWP44ST/s0JhLpWRk2sJ77o52GhMVPen+hNYbqn20Bb+oqs4KA+ffCbhXG/LO
+         71AcffbN3Yntpz3x0csFvwjruXm3izJT6w8KWnXnvGRnbCDIeIdAgDo/gE23M7QT8W
+         48OmXykOyoJFA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Linus Torvalds <torvalds@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [GIT PULL] Documentation stragglers for 6.4
+Date:   Fri, 05 May 2023 12:38:38 -0600
+Message-ID: <874joqmxn5.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230504170942.822147-4-revest@chromium.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 07:09:41PM +0200, Florent Revest wrote:
-> This extends the current PR_SET_MDWE prctl arg with a bit to indicate
-> that the process doesn't want MDWE protection to propagate to children.
-> 
-> To implement this no-inherit mode, the tag in current->mm->flags must be
-> absent from MMF_INIT_MASK. This means that the encoding for "MDWE but
-> without inherit" is different in the prctl than in the mm flags. This
-> leads to a bit of bit-mangling in the prctl implementation.
+The following changes since commit 7e8472c820f04517ae5d5a27c1aecfa2263a0aa5:
 
-That bit mangling is not that bad but it complicates the code a bit,
-especially if we'll add new bits in the future. We also need to check
-both the original and the no-inherit bits for each feature.
+  media: Adjust column width for pdfdocs (2023-04-23 09:25:52 -0600)
 
-Another question is whether we want to support more fine-grained
-inheriting or just a big knob that disables inheriting for all the
-(future) MDWE flags.
+are available in the Git repository at:
 
-I think a somewhat simpler way would be to clear the flags on fork(),
-either based on a big MMF_HAS_MDWE_NO_INHERIT knob or individual ones.
-Something like below (completely untested):
+  git://git.lwn.net/linux.git tags/docs-6.4-2
 
-diff --git a/include/linux/sched/coredump.h b/include/linux/sched/coredump.h
-index 0ee96ea7a0e9..ca83a0c8d19c 100644
---- a/include/linux/sched/coredump.h
-+++ b/include/linux/sched/coredump.h
-@@ -91,4 +91,12 @@ static inline int get_dumpable(struct mm_struct *mm)
- 				 MMF_DISABLE_THP_MASK | MMF_HAS_MDWE_MASK)
+for you to fetch changes up to cdc822dda6f82269b94d5fa60ddc71d98c160fa0:
 
- #define MMF_VM_MERGE_ANY	29
-+
-+#define MMF_INIT_FLAGS(flags)	({				\
-+	unsigned long new_flags = flags;			\
-+	if (new_flags & (1UL << MMF_HAS_MDWE_NO_INHERIT))	\
-+		new_flags &= ~(1UL << MMF_HAS_MDWE_MASK);	\
-+	new_flags & MMF_INIT_MASK;				\
-+})
-+
- #endif /* _LINUX_SCHED_COREDUMP_H */
-diff --git a/kernel/fork.c b/kernel/fork.c
-index ed4e01daccaa..53f0b68a5451 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1288,7 +1288,7 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
- 	hugetlb_count_init(mm);
+  docs/sp_SP: Add translation of process/adding-syscalls (2023-05-02 11:09:=
+53 -0600)
 
- 	if (current->mm) {
--		mm->flags = current->mm->flags & MMF_INIT_MASK;
-+		mm->flags = MMF_INIT_FLAGS(current->mm->flags);
- 		mm->def_flags = current->mm->def_flags & VM_INIT_DEF_MASK;
- 	} else {
- 		mm->flags = default_dump_filter;
+----------------------------------------------------------------
+A handful of late-arriving documentation fixes, plus one Spanish
+translation that has been ready for some time but got applied late.
 
-The checks in MMF_INIT_FLAGS() can grow in time if we add more bits in
-there but we still only keep a single flag that determines whether the
-feature is enabled (maybe that's more like bikeshedding at this moment
-when we have a single bit).
+----------------------------------------------------------------
+Carlos Bilbao (1):
+      docs/sp_SP: Add translation of process/adding-syscalls
 
+Deming Wang (1):
+      docs: fix "Reviewd" typo
 
-(fun remark: I see you cc'ed nd@arm.com'; that's not a real person, it's
-what our IT folk asked us to add on cc so that the Exchange server
-doesn't append the legal disclaimer; most lists are covered already
-without such cc but I guess people feel safer to add it, just in case)
+Donald Hunter (1):
+      docs/admin-guide/mm/ksm.rst fix intraface -> interface typo
 
--- 
-Catalin
+Fabio Fantoni (1):
+      doc:it_IT: fix some typos
+
+Geert Uytterhoeven (1):
+      Documentation: timers: hrtimers: Make hybrid union historical
+
+Mat Martineau (1):
+      CREDITS: Update email address for Mat Martineau
+
+Tao Liu (1):
+      docs: Remove unnecessary unicode character
+
+=E6=99=8F=E8=89=B3(=E9=87=87=E8=8B=93) (1):
+      Documentation: update kernel stack for x86_64
+
+ CREDITS                                            |   4 +-
+ Documentation/admin-guide/mm/ksm.rst               |   2 +-
+ Documentation/arch/x86/kernel-stacks.rst           |   2 +-
+ Documentation/timers/hrtimers.rst                  |  19 +-
+ .../translations/it_IT/kernel-hacking/locking.rst  |   2 +-
+ .../translations/it_IT/process/deprecated.rst      |   2 +-
+ .../it_IT/process/submitting-patches.rst           |   6 +-
+ Documentation/translations/ja_JP/SubmittingPatches |   2 +-
+ .../translations/sp_SP/process/adding-syscalls.rst | 632 +++++++++++++++++=
+++++
+ Documentation/translations/sp_SP/process/index.rst |   1 +
+ .../translations/zh_CN/process/magic-number.rst    |   2 +-
+ .../translations/zh_TW/process/magic-number.rst    |   2 +-
+ 12 files changed, 652 insertions(+), 24 deletions(-)
+ create mode 100644 Documentation/translations/sp_SP/process/adding-syscall=
+s.rst
