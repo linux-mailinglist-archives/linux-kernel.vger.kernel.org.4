@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D666F8B56
+	by mail.lfdr.de (Postfix) with ESMTP id 797DC6F8B55
 	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233609AbjEEVlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 17:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39702 "EHLO
+        id S233620AbjEEVl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 17:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233608AbjEEVlV (ORCPT
+        with ESMTP id S233594AbjEEVlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 17:41:21 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA74469D
+        Fri, 5 May 2023 17:41:22 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD2D49DA
         for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 14:40:41 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-33177659771so14600125ab.0
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-766588051b3so141813839f.2
         for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 14:40:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1683322840; x=1685914840;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6r1fpOCe4Fv1EAxhDcJy4IoI32U0TyXXfS1pn3Vn3eM=;
-        b=Nl2Zqm3uFVeRP/gergBulK4u22vG+MkMzmMfcSD2b5mlBRDVECyUabcBCtW3wfl+F/
-         IsKe56h6i7Ef3lxJwZQRaFIfhVx3Jw0gFV+FdWVlpZNJgrrHuFnx8Y+unKNg2mROJ/TH
-         Tv+3Bt6U6A/d0MYWIU6M6kInbIPlu+QQ8wOVBIsd5HxL6nLNCW/K6Kvxl1v7XSfhFZ0s
-         r3pneZwOYSE0GZQ6JiRqbRUPJGyt1+FQyM85bpdlgC9xaMGmbsnLHouTDv+Y4iAJaB7e
-         Aa51XSaOnW8jFlfcZ1xAsLykCx+WgPzNUBacFFF+ph+n7IHnCAtel55mE0wZ1ilBXznQ
-         S4cg==
-X-Gm-Message-State: AC+VfDzqM12KZcaci07VQ+0tiIBKut+/EKUyTMnPD35S6urS8RBTwzqV
-        wEmSvwaAi++PuC26KpNGkwJfs6uS/YBppxvC0o4uVq3YDN7H
-X-Google-Smtp-Source: ACHHUZ4+W5iAMTzlHsI1iNuw3ugVX93iXPox7IbLl9VrL3MAAawXiPp4lY9sMEiE9DjeZp8P3C8leyIKIlMbCyYfumOH3/6InX69
+        bh=NLO2KGmxOlyrro4cbhC1r8p/NUD/lOrFH+Mz9weAtvw=;
+        b=CfUw7iDGFN496Ll0rTzFnZbbFa8Ul3iCoBI5KQkp1NdOUbjtUwaEEBKPBFRBqON/b5
+         K4inyrm/43k9qf3iGGBvq0pOI0Hm7VJSOTF3wnD9+Hurcn9OsEtFm3HM7TiJPAj5nuMY
+         /6CuRpEx828O/6ImZLYIjxI1l2w2tEdaee7xyejjgwIkPj3sIi5nByKbZ7Z4oU7VkoZ6
+         33IrvQikgypMv58NHAAd6JYihOKl99eRmJx56iWtsDuSFDZKc+iAlRzqKZodke+oUMOO
+         UbfItYaOs5+Xscesqn7Hbc9jC/AZaaRdLah7o2TwGJ4mcgwjltUgZC2dVHA2lQM7jkXe
+         NHnw==
+X-Gm-Message-State: AC+VfDw8uSLm5rtYrEjR3bIsEICdOWS6QVzIxeZYAwign+1hfMqtfHzd
+        g+z03tt36hn7WaGR5lukvMqqRdm0hTNFzW2Oj8T60apSxhYY
+X-Google-Smtp-Source: ACHHUZ7wcfxS8qbcsI4sDudqW6tKpaKasV4+TuzT0Owm/JZSzZ2q70iYp1vzw3I2vlGn8X5O2picxZXvxZFK+gRgC7Rm5VHk54kP
 MIME-Version: 1.0
-X-Received: by 2002:a92:d4ce:0:b0:32a:9e86:242f with SMTP id
- o14-20020a92d4ce000000b0032a9e86242fmr1369094ilm.6.1683322840521; Fri, 05 May
+X-Received: by 2002:a6b:5c07:0:b0:745:5e5c:f091 with SMTP id
+ z7-20020a6b5c07000000b007455e5cf091mr1146987ioh.0.1683322840733; Fri, 05 May
  2023 14:40:40 -0700 (PDT)
 Date:   Fri, 05 May 2023 14:40:40 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f3a4ee05faf923fa@google.com>
-Subject: [syzbot] Monthly f2fs report (May 2023)
-From:   syzbot <syzbot+list4594bdd613fc4b2a114c@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+Message-ID: <000000000000f6df6105faf923c7@google.com>
+Subject: [syzbot] Monthly input report (May 2023)
+From:   syzbot <syzbot+list9de2130865dda7f4f397@syzkaller.appspotmail.com>
+To:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
@@ -56,24 +54,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello f2fs maintainers/developers,
+Hello input maintainers/developers,
 
-This is a 31-day syzbot report for the f2fs subsystem.
+This is a 31-day syzbot report for the input subsystem.
 All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/f2fs
+https://syzkaller.appspot.com/upstream/s/input
 
-During the period, 3 new issues were detected and 0 were fixed.
-In total, 20 issues are still open and 28 have been fixed so far.
+During the period, 0 new issues were detected and 1 were fixed.
+In total, 10 issues are still open and 48 have been fixed so far.
 
 Some of the still happening issues:
 
 Ref Crashes Repro Title
-<1> 173     Yes   INFO: task hung in f2fs_balance_fs
-                  https://syzkaller.appspot.com/bug?extid=8b85865808c8908a0d8c
-<2> 49      Yes   kernel BUG in f2fs_evict_inode
-                  https://syzkaller.appspot.com/bug?extid=e1246909d526a9d470fa
-<3> 7       No    general protection fault in __replace_atomic_write_block
-                  https://syzkaller.appspot.com/bug?extid=4420fa19a8667ff0b057
+<1> 2347    Yes   WARNING in input_mt_init_slots
+                  https://syzkaller.appspot.com/bug?extid=0122fa359a69694395d5
+<2> 933     Yes   WARNING in implement
+                  https://syzkaller.appspot.com/bug?extid=38e7237add3712479d65
+<3> 82      Yes   general protection fault in hidraw_release
+                  https://syzkaller.appspot.com/bug?extid=953a33deaf38c66a915e
+<4> 49      Yes   inconsistent lock state in find_vmap_area
+                  https://syzkaller.appspot.com/bug?extid=8d19062486784d15dda9
+<5> 33      Yes   WARNING in bcm5974_start_traffic/usb_submit_urb
+                  https://syzkaller.appspot.com/bug?extid=348331f63b034f89b622
 
 ---
 This report is generated by a bot. It may contain errors.
