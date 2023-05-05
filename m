@@ -2,82 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CDA6F82B1
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 372DE6F82BD
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbjEEMLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 08:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
+        id S231924AbjEEMOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 08:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231924AbjEEMLt (ORCPT
+        with ESMTP id S231256AbjEEMOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 08:11:49 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F269C12086
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:11:47 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4eed764a10cso1916461e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 05:11:47 -0700 (PDT)
+        Fri, 5 May 2023 08:14:08 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E83244A9
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:13:42 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-643990c5319so1000894b3a.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 05:13:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683288706; x=1685880706;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2h/CWEwyJq3P5FCMXAryqXO9WR4aBfMB6PjoKhzl8U4=;
-        b=Zbu8EzgqpkD96pt/0mSDWzGiFSmWODcuaUmVyreABq7m1znvVzYxy3l3faRkivY2vY
-         oLDI2Z5XuRhTnKbuFBXLPc79Hw/MPZxeUXAQnNwDtXe14aQjma+HI0G1sbW7eDeTzzEv
-         ET9OzwJbVh4F0fVY55KUrnh73Q4nFx6eiftAoxcso4H8tEn0IhBMqdm5mBrn4c6XKXWU
-         aYEgXzNvaiCEIbvMqEm/CYVmSXbLBHRsfCj5feqRL4dfICy7bloK6AgaXukl9ki6l80Z
-         qywFsTyxuplXRXKuaqUoh1JXnQdVgz6mEfvzQ40jCwV+5MiGVQDFUocZaHQ7RJY3r3C4
-         dEGA==
+        d=bytedance.com; s=google; t=1683288822; x=1685880822;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SPPnwS+gGPaq28WwhSna8FCrr8buoZKoYRGo6QsXgZo=;
+        b=JHKeP75qjUYnVVkRSBMjkZxBLp8w9/z32ffdPfWwLljZBGeWgyPyyF4XKDZmkfwQuT
+         oFJoMz7nZrnekb1W9SMsV9KU7HcIlLKkA1sH7N69s6AaEPsvNdS9yqQBycg1147EA6IY
+         qGxxImzWd5J+4P4jgEFFXbA2fQqhl5mO/OTYiqkYGPL9Q1yDBImJ3J/oT/P06hRNYaTY
+         6i9DetOzF53Zhp3QOSor8xEzQ865u5X+f22fPlifmCxWd6f6UhP7rljQ/4m1z7by3Eir
+         QLTUqBMCWbXsDzM1HfZob6+O8doZyC4C3Y91RzuYcDFCzDKyVKkTh01aubDVW+QZwLDk
+         +9DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683288706; x=1685880706;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2h/CWEwyJq3P5FCMXAryqXO9WR4aBfMB6PjoKhzl8U4=;
-        b=X2v34IMC34e8UNmQwdPkK5sPnobYGg0Dpv1x3G1kUtg5GU3S/MdQ8z/6SeWKOVFT3a
-         RVByvKwyhorDh9HpAMmS+oGt4ogFPO5rrx7Gn9hhDDC0ypvcEHrBBYjaTwORfBjMvTZP
-         jBZjV3OZzDC9CyByRZ/STuLXZGl80Dh+uBBetAifZCcvVf32dMTq/BENJQf4mY+csIpJ
-         fjoj7viW11IN5XVD1FH43ycK1rJgCvvP6hmkKU3JEfRrNwNePEqtDb7zRN5EzXVAFiKi
-         DThCyE6GFdbD1mAePyhc9V6IDa+pOdasPTYMAXA4cF96xuRb1vtyhsWsiF01kZMyDI1o
-         dIRg==
-X-Gm-Message-State: AC+VfDwLUG9X2RG2mTh8aLSefZY3ErxNs1lcFUOoJ6id8ApwyvLS4Q+2
-        f0bavcNGKJqUGVhpFE2IJIOJ5g==
-X-Google-Smtp-Source: ACHHUZ65oVZBAu9sTHfvlhswi1d1wC5/971YPvE+M2PAFaQfj7qir5wd68R9OeFyzxYBUMg/1QjD6w==
-X-Received: by 2002:ac2:5108:0:b0:4f1:1de7:1aab with SMTP id q8-20020ac25108000000b004f11de71aabmr554324lfb.44.1683288706252;
-        Fri, 05 May 2023 05:11:46 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id b21-20020ac25635000000b004f13633c260sm264975lff.145.2023.05.05.05.11.45
+        d=1e100.net; s=20221208; t=1683288822; x=1685880822;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SPPnwS+gGPaq28WwhSna8FCrr8buoZKoYRGo6QsXgZo=;
+        b=F+gp9meoywle5ghv5vB3GeeW/cAqY225IVL0ZFVh2edQt9ZAJXKC1wRnYY3oXMFybt
+         GAfOE1ehqVb6i1owbi6bzpUC3Opi9Dbwq0+E2SH3HlJlA+v6oYo+KZ2emquAOG5eHBCE
+         E5SJz4iI2nGzfNzu39X3VSkQZ5VARj0eLCSFIEjEeT6ogo4CouAAjZcJS1XVbakHlmOv
+         +gXN6quhu43xUcgDtXPG3bSYxu1pi3bnO8Wahf1FAcPQIq/o75IpBTETMSlV65TTIjak
+         7UHLFAaE5YZVIkQsEcFLaowwUO7bqlN5Nfm7ZbhRHRHZU4MxkkluWu8Lc7vorJWors1F
+         uUhA==
+X-Gm-Message-State: AC+VfDwp1/tx9yXkl7SN3A+hWl/PAF1s0kJJZjBWqFYK3CloeH/m5DSl
+        WlAnYbeULhk0alHgKTCVc8hdJQ==
+X-Google-Smtp-Source: ACHHUZ6/ly1hmPPFPD5DjFYoK3bcxjL1JJBG0b8qpXr7RMTLwWpqDRAHEFtaoJRiuJkiXr9bVyAbnQ==
+X-Received: by 2002:a05:6a00:10d3:b0:63b:5496:7afa with SMTP id d19-20020a056a0010d300b0063b54967afamr1967642pfu.11.1683288821600;
+        Fri, 05 May 2023 05:13:41 -0700 (PDT)
+Received: from [10.85.115.102] ([139.177.225.228])
+        by smtp.gmail.com with ESMTPSA id j1-20020a62b601000000b0062dbafced27sm1548174pff.27.2023.05.05.05.13.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 05:11:45 -0700 (PDT)
-Message-ID: <91a390b2-db3d-90f4-a2e2-6ccb75303d04@linaro.org>
-Date:   Fri, 5 May 2023 15:11:44 +0300
+        Fri, 05 May 2023 05:13:41 -0700 (PDT)
+Message-ID: <140948e1-63d5-1647-9911-181abbe6bd2f@bytedance.com>
+Date:   Fri, 5 May 2023 20:13:35 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 07/13] drm/msm/dpu: Add SM6350 support
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-References: <20230411-topic-straitlagoon_mdss-v2-0-5def73f50980@linaro.org>
- <20230411-topic-straitlagoon_mdss-v2-7-5def73f50980@linaro.org>
- <k25jg7cez2kimpxr4ztbdzjr2adq6a2vjknyvfe5frxujtogfg@vhfdyt45unv6>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <k25jg7cez2kimpxr4ztbdzjr2adq6a2vjknyvfe5frxujtogfg@vhfdyt45unv6>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [External] Re: [PATCH 2/2] sched/core: Avoid double calling
+ update_rq_clock()
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
+        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
+References: <20230410081206.23441-1-jiahao.os@bytedance.com>
+ <20230410081206.23441-3-jiahao.os@bytedance.com>
+ <CAKfTPtDaG12qb4piQahJNNrEgAM3ouTKCzHA8BsAAYg015Ggpw@mail.gmail.com>
+ <28cacb73-73d7-778a-24ca-9053702f6af7@bytedance.com>
+ <ZFPXSbjA7EQe4M1G@vingu-book>
+From:   Hao Jia <jiahao.os@bytedance.com>
+In-Reply-To: <ZFPXSbjA7EQe4M1G@vingu-book>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,123 +82,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2023 18:37, Marijn Suijten wrote:
-> On 2023-04-21 00:31:16, Konrad Dybcio wrote:
->> Add SM6350 support to the DPU1 driver to enable display output.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> After addressing the comments from Dmitry (CURSOR0->DMA1 and
-> CURSOR1->DMA2), this is:
-> 
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> 
-> See below for some nits.
 
-[...]
 
->> +static const struct dpu_mdp_cfg sm6350_mdp[] = {
->> +	{
->> +	.name = "top_0", .id = MDP_TOP,
->> +	.base = 0x0, .len = 0x494,
->> +	.features = 0,
->> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
->> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = { .reg_off = 0x2ac, .bit_off = 8 },
->> +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = { .reg_off = 0x2b4, .bit_off = 8 },
->> +	.clk_ctrls[DPU_CLK_CTRL_DMA2] = { .reg_off = 0x2c4, .bit_off = 8 },
->> +	.clk_ctrls[DPU_CLK_CTRL_REG_DMA] = { .reg_off = 0x2bc, .bit_off = 20 },
->> +	},
->> +};
->> +
->> +static const struct dpu_ctl_cfg sm6350_ctl[] = {
->> +	{
->> +	.name = "ctl_0", .id = CTL_0,
->> +	.base = 0x1000, .len = 0x1dc,
->> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
->> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
->> +	},
->> +	{
->> +	.name = "ctl_1", .id = CTL_1,
->> +	.base = 0x1200, .len = 0x1dc,
->> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
->> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 10),
->> +	},
->> +	{
->> +	.name = "ctl_2", .id = CTL_2,
->> +	.base = 0x1400, .len = 0x1dc,
->> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
->> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 11),
->> +	},
->> +	{
->> +	.name = "ctl_3", .id = CTL_3,
->> +	.base = 0x1600, .len = 0x1dc,
->> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
->> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 12),
->> +	},
->> +};
->> +
->> +static const struct dpu_sspp_cfg sm6350_sspp[] = {
->> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x1f8, VIG_SC7180_MASK,
->> +		 sc7180_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
->> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, 0x1f8, DMA_SDM845_MASK,
->> +		 sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
->> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000, 0x1f8, DMA_CURSOR_SDM845_MASK,
->> +		 sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
->> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000, 0x1f8, DMA_CURSOR_SDM845_MASK,
->> +		 sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
->> +};
->> +
->> +static const struct dpu_lm_cfg sm6350_lm[] = {
->> +	LM_BLK("lm_0", LM_0, 0x44000, MIXER_SDM845_MASK,
->> +		&sc7180_lm_sblk, PINGPONG_0, LM_1, DSPP_0),
->> +	LM_BLK("lm_1", LM_1, 0x45000, MIXER_SDM845_MASK,
->> +		&sc7180_lm_sblk, PINGPONG_1, LM_0, 0),
+On 2023/5/5 Vincent Guittot wrote:
+
+>>>>    rq_attach_root+0xc4/0xd0
+>>>>    cpu_attach_domain+0x3dc/0x7f0
+>>>>    partition_sched_domains_locked+0x2a5/0x3c0
+>>>>    rebuild_sched_domains_locked+0x477/0x830
+>>>>    rebuild_sched_domains+0x1b/0x30
+>>>>    cpuset_hotplug_workfn+0x2ca/0xc90
+>>>>    ? balance_push+0x56/0xf0
+>>>>    ? _raw_spin_unlock+0x15/0x30
+>>>>    ? finish_task_switch+0x98/0x2f0
+>>>>    ? __switch_to+0x291/0x410
+>>>>    ? __schedule+0x65e/0x1310
+>>>>    process_one_work+0x1bc/0x3d0
+>>>>    worker_thread+0x4c/0x380
+>>>>    ? preempt_count_add+0x92/0xa0
+>>>>    ? rescuer_thread+0x310/0x310
+>>>>    kthread+0xe6/0x110
+>>>>    ? kthread_complete_and_exit+0x20/0x20
+>>>>    ret_from_fork+0x1f/0x30
+>>>>
+>>>> For the __balance_push_cpu_stop() case, we remove update_rq_clock() from
+>>>> the __migrate_task() function to avoid double updating the rq clock.
+>>>> And in order to avoid missing rq clock update, add update_rq_clock()
+>>>> call before migration_cpu_stop() calls __migrate_task().
 > 
-> These two entries are indented with two tabs and have one character too
-> many to align with the opening parenthesis on the previous line.  Can we
-> please settle on a single style, as this commit mostly uses tabs+spaces
-> to align with the opening parenthesis?
-> 
-> Dmitry vouched for `cino=(0` (when in unclosed parenthesis, align next
-> line with zero extra characters to the opening parenthesis), but I find
-> double tabs more convenient as it doesn't require reindenting when
-> changing the name of the macro (which happened too often in my INTF TE
-> series).
+> Can we do the opposite ?
+> AFAICT, update_rq_clock() in __balance_push_cpu_stop() is only there for
+> __migrate_task(). I prefer to keep the update_rq_clock() as close as possible
+> to the user
 
-I mainly vote for 'cino=(0' for indenting conditions (where double tab 
-is confusing) and for function calls. I do not have a strong opinion 
-about macros expansions. We have been using double-tab there, which is 
-fine with me.
+I'm afraid not, the rq clock also needs to be updated before 
+select_fallback_rq() is called.
 
-Another option (which I personally find more appealing, but it doesn't 
-play well with the current guidelines) is to have all macro arguments in 
-a single line. It makes it easier to compare things.
-
-And another option would be to expand these macros up to some point. 
-Previous experience with clock and interconnect drivers showed that 
-expanding such multi-arg acros makes it _easier_ to handle the data. 
-Counterintuitive, but true.
 
 > 
->> +};
->> +
->> +static const struct dpu_dspp_cfg sm6350_dspp[] = {
->> +	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
->> +		 &sm8150_dspp_sblk),
->> +};
->> +
->> +static struct dpu_pingpong_cfg sm6350_pp[] = {
->> +	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
->> +	       DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->> +	       -1),
->> +	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
->> +	       DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->> +	       -1),
+>>>>
+>>>> This also works for unthrottle_cfs_rq(), so we also removed
+>>>> update_rq_clock() from the unthrottle_cfs_rq() function to avoid
+>>>> warnings caused by calling it multiple times, such as
+>>>> __cfsb_csd_unthrottle() and unthrottle_offline_cfs_rqs(). and
+> 
+> This happens with the for loop added by
+> commit: 8ad075c2eb1f ("sched: Async unthrottling for cfs bandwidth")
+> 
 
-[skipped the rest]
+Yes, the warning caused by this commit.
 
--- 
-With best wishes
-Dmitry
+>>>> in order to avoid missing rq clock update, we correspondingly add
+>>>> update_rq_clock() calls before unthrottle_cfs_rq() runs.
+> 
+> These are special cases that happen because of the for_each.
+> As said above, I would prefer keeping update_rq_clock close the their user
+> 
+> could we use something similar to rq_clock_skip_update() for those list ?
+> 
 
+I try to do it with the method you provided. Some things maybe like this?
+
+We also need to clear RQCF_ACT_SKIP after calling rq_clock_loop_update() 
+to avoid some warnings.
+
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index efdab1489113..f48b5d912d8c 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2420,7 +2420,6 @@ static struct rq *__migrate_task(struct rq *rq, 
+struct rq_flags *rf,
+         if (!is_cpu_allowed(p, dest_cpu))
+                 return rq;
+
+-       update_rq_clock(rq);
+         rq = move_queued_task(rq, rf, p, dest_cpu);
+
+         return rq;
+@@ -2478,10 +2477,12 @@ static int migration_cpu_stop(void *data)
+                                 goto out;
+                 }
+
+-               if (task_on_rq_queued(p))
++               if (task_on_rq_queued(p)) {
++                       update_rq_clock(rq);
+                         rq = __migrate_task(rq, &rf, p, arg->dest_cpu);
+-               else
++               } else {
+                         p->wake_cpu = arg->dest_cpu;
++               }
+
+                 /*
+                  * XXX __migrate_task() can fail, at which point we 
+might end
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 373ff5f55884..1dcef273bebe 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -5575,6 +5575,13 @@ static void __cfsb_csd_unthrottle(void *arg)
+         struct rq_flags rf;
+
+         rq_lock(rq, &rf);
++       /*
++        * Iterating over the list can trigger several call to 
+update_rq_clock()
++        * in unthrottle_cfs_rq().
++        * Do it once and skip the potential next ones.
++        */
++       update_rq_clock(rq);
++       rq_clock_loop_update(rq);
+
+         /*
+          * Since we hold rq lock we're safe from concurrent manipulation of
+@@ -5595,6 +5602,7 @@ static void __cfsb_csd_unthrottle(void *arg)
+
+         rcu_read_unlock();
+
++       rq_clock_cancel_loop_update(rq);
+         rq_unlock(rq, &rf);
+  }
+
+@@ -6114,6 +6122,12 @@ static void __maybe_unused 
+unthrottle_offline_cfs_rqs(struct rq *rq)
+         struct task_group *tg;
+
+         lockdep_assert_rq_held(rq);
++       /*
++        * The rq clock has already been updated before the
++        * set_rq_offline() runs, so we should skip updating
++        * the rq clock again in unthrottle_cfs_rq().
++        */
++       rq_clock_loop_update(rq);
+
+         rcu_read_lock();
+         list_for_each_entry_rcu(tg, &task_groups, list) {
+@@ -6137,6 +6151,7 @@ static void __maybe_unused 
+unthrottle_offline_cfs_rqs(struct rq *rq)
+                         unthrottle_cfs_rq(cfs_rq);
+         }
+         rcu_read_unlock();
++       rq_clock_cancel_loop_update(rq);
+  }
+
+  #else /* CONFIG_CFS_BANDWIDTH */
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index ec7b3e0a2b20..3d4981d354a9 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1536,6 +1536,25 @@ static inline void rq_clock_skip_update(struct rq 
+*rq)
+         rq->clock_update_flags |= RQCF_REQ_SKIP;
+  }
+
++/*
++ * During cpu offlining and rq wide unthrottling, we can trigger
++ * an update_rq_clock() for several cfs and rt runqueues (Typically
++ * when using list_for_each_entry_*)
++ * rq_clock_loop_update() can be called after updating the clock once
++ * and before iterating over the list to prevent multiple update.
++ */
++static inline void rq_clock_loop_update(struct rq *rq)
++{
++       lockdep_assert_rq_held(rq);
++       rq->clock_update_flags |= RQCF_ACT_SKIP;
++}
++
++static inline void rq_clock_cancel_loop_update(struct rq *rq)
++{
++       lockdep_assert_rq_held(rq);
++       rq->clock_update_flags &= ~RQCF_ACT_SKIP;
++}
++
+  /*
+   * See rt task throttling, which is the only time a skip
