@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 170476F8ABB
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1946F8AC4
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbjEEVYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 17:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S233185AbjEEVYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 17:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbjEEVYM (ORCPT
+        with ESMTP id S231438AbjEEVYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 17:24:12 -0400
+        Fri, 5 May 2023 17:24:13 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874B01BC;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF35E79;
         Fri,  5 May 2023 14:24:11 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345KRkNU002609;
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345JIbGY004308;
         Fri, 5 May 2023 21:24:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : date :
  subject : mime-version : content-type : content-transfer-encoding :
  message-id : references : in-reply-to : to : cc; s=qcppdkim1;
- bh=ONl2dre1X+5P9EF/VMp0fOJtCsY8r5izN5dRFCbZLxE=;
- b=BdDG+0ycxjLry15UFVDYuyqAz7RtZVbg42nvSi+7h1mMvv1FxTZLTOjkZRRg2Ed2bQEb
- hlLUd5s7pBMYhx0iewZKiGhsuOJ4OMZlZwfNGYxf5Bv0Rfhb5LKkR1M7JDGbTGKnwkub
- hE5esTDG5CfnINlV4xetjzzo4uVgOOTVd+xK+YDSLSDyJHRIX1WEwlbwe759kGTRJmMv
- wSk6u4l34uPFwcFpfb2iTSkrsjYqQIkNvgm/AjIffzdUirBfxauq7eqDA0VxMyexyBRa
- 2o9t7359VwExSuPk9ww2VpqKTm32N/vOoiJ6n5l5/ed7QY1SCoefT95SlBWLgKFmLPru pA== 
+ bh=vXy9duDC4lQn3/CsLZygcxrKTsAek/ssscdyNKOs8TQ=;
+ b=faa1UqfOj2gLxNG9nZAFkCod6DFKTIumtwGO/U+EcgIk2QHf71TyDsF229WURdFGCw3n
+ s6XFpwZF+xrIHADf69VBomlT/gR5O5/Atgzg956Ut9G7Bn1eLKy7gCVKoCdKQDcHXOG7
+ q8Xo/WKzwI10WzH92oPiOzWaXejHDdff0fErgII2vCv4n2g6AKbu7YJUhcIBWp+4xwKb
+ tLdFCEy3jIPDaZNVgySiP4fOvoLHyzrS6II7VO7Zp7z/+GmRUGYUCREAdSqE14nqX1Hj
+ rAqEU2RGjBwXyT0Oza2KhXDaycZd4faig29dyZ7X3hPu7dXIkzf9+Iuo9IY4ZU3LQZ7C SA== 
 Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qd8ud03ay-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qd3hrgw28-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 05 May 2023 21:24:05 +0000
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345LO4sL004035
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345LO4rF004039
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 5 May 2023 21:24:04 GMT
 Received: from jesszhan-linux.qualcomm.com (10.80.80.8) by
@@ -40,13 +40,12 @@ Received: from jesszhan-linux.qualcomm.com (10.80.80.8) by
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.986.42; Fri, 5 May 2023 14:24:04 -0700
 From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-Date:   Fri, 5 May 2023 14:23:50 -0700
-Subject: [PATCH v2 3/4] drm/msm/dpu: Add DPU_INTF_DATA_COMPRESS feature
- flag
+Date:   Fri, 5 May 2023 14:23:51 -0700
+Subject: [PATCH v2 4/4] drm/msm/dpu: Set DATA_COMPRESS for command mode
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20230405-add-dsc-support-v2-3-1072c70e9786@quicinc.com>
+Message-ID: <20230405-add-dsc-support-v2-4-1072c70e9786@quicinc.com>
 References: <20230405-add-dsc-support-v2-0-1072c70e9786@quicinc.com>
 In-Reply-To: <20230405-add-dsc-support-v2-0-1072c70e9786@quicinc.com>
 To:     Rob Clark <robdclark@gmail.com>,
@@ -60,11 +59,11 @@ CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
         Jessica Zhang <quic_jesszhan@quicinc.com>
 X-Mailer: b4 0.13-dev-bfdf5
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1683321843; l=2061;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1683321843; l=3559;
  i=quic_jesszhan@quicinc.com; s=20230329; h=from:subject:message-id;
- bh=oOPr2EYXRbZzS1nJp0nk1lw2BUUUgaLElUYeZTpTcg0=;
- b=5rDXC25jJIq6Zb0Z7v7vIPquLDVz6SJOjrBos5q2yq6jDcE/eWjJwf/qm5RQcFhmDlNIY9wiI
- udgFmWfmYN1CkWUlq4Yz23NPo7rLRN2aD6W4hWZRQvW4lmEEvsdmUO0
+ bh=vZ0+nr8GsTvgyaVtKJinHmx8lZ993+nHYQvEIt3ZMZw=;
+ b=qUvfjdd9piyTkhkZ+1dVBjR7Go0yTUoGHl6QhZ+yg/3euF+yon4WS5ae5w8xKMahHXi7OCQ0p
+ sgfI0VGuEKgA21l6IOERmFykgCpZ8giQ5YU9JZAY474CU+XqYXcehEh
 X-Developer-Key: i=quic_jesszhan@quicinc.com; a=ed25519;
  pk=gAUCgHZ6wTJOzQa3U0GfeCDH7iZLlqIEPo4rrjfDpWE=
 X-Originating-IP: [10.80.80.8]
@@ -72,15 +71,15 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: o7schd_PYhIoItvvciSKPFHIWHQ1pFek
-X-Proofpoint-GUID: o7schd_PYhIoItvvciSKPFHIWHQ1pFek
+X-Proofpoint-ORIG-GUID: fTPiaEwA531_rjRP5u4QTY7Gq9T5RAOw
+X-Proofpoint-GUID: fTPiaEwA531_rjRP5u4QTY7Gq9T5RAOw
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-05_27,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- adultscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
- mlxlogscore=612 clxscore=1015 spamscore=0 bulkscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ adultscore=0 clxscore=1015 priorityscore=1501 spamscore=0
+ lowpriorityscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303200000 definitions=main-2305050173
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -92,57 +91,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DATA_COMPRESS feature flag to DPU INTF block.
+Add a DPU INTF op to set DATA_COMPRESS register for command mode panels if
+the DPU_INTF_DATA_COMPRESS feature flag is set. This flag needs to be
+enabled in order for DSC v1.2 to work.
 
-In DPU 7.x and later, DSC/DCE enablement registers have been moved from
-PINGPONG to INTF.
-
-As core_rev (and related macros) was removed from the dpu_kms struct, the
-most straightforward way to indicate the presence of this register would be
-to have a feature flag.
+Note: These changes are for command mode only. Video mode changes will
+be posted along with the DSC v1.2 support for DP.
 
 Changes in v2:
-- Changed has_data_compress dpu_cap to a DATA_COMPRESS INTF feature flag
+- Fixed whitespace issue in macro definition
+- Read INTF_CONFIG2 before writing to DATA_COMPRESS bit
+- Only set dpu_hw_intf_ops.data_compress if DATA_COMPRESS feature is set
+- Removed `inline` from dpu_hw_intf_enable_compression declaration
 
 Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 2 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c |  3 +++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c          | 11 +++++++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h          |  2 ++
+ 3 files changed, 16 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-index 7944481d0a33..c74051906d05 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-@@ -104,7 +104,7 @@
- #define INTF_SC7180_MASK \
- 	(BIT(DPU_INTF_INPUT_CTRL) | BIT(DPU_INTF_TE) | BIT(DPU_INTF_STATUS_SUPPORTED))
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+index d8ed85a238af..1a4c20f02312 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+@@ -68,6 +68,9 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
+ 				phys_enc->hw_intf,
+ 				true,
+ 				phys_enc->hw_pp->idx);
++
++	if (phys_enc->hw_intf->ops.enable_compression)
++		phys_enc->hw_intf->ops.enable_compression(phys_enc->hw_intf);
+ }
  
--#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
-+#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN) | BIT(DPU_INTF_DATA_COMPRESS)
+ static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int irq_idx)
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+index 6485500eedb8..322c55a5042c 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+@@ -91,6 +91,14 @@
  
- #define WB_SM8250_MASK (BIT(DPU_WB_LINE_MODE) | \
- 			 BIT(DPU_WB_UBWC) | \
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-index 4eda2cc847ef..01c65f940f2a 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-@@ -185,6 +185,7 @@ enum {
-  * @DPU_DATA_HCTL_EN                Allows data to be transferred at different rate
-  *                                  than video timing
-  * @DPU_INTF_STATUS_SUPPORTED       INTF block has INTF_STATUS register
-+ * @DPU_INTF_DATA_COMPRESS          INTF block has DATA_COMPRESS register
-  * @DPU_INTF_MAX
+ #define INTF_CFG2_DATABUS_WIDEN	BIT(0)
+ #define INTF_CFG2_DATA_HCTL_EN	BIT(4)
++#define INTF_CFG2_DCE_DATA_COMPRESS     BIT(12)
++
++static void dpu_hw_intf_enable_compression(struct dpu_hw_intf *ctx)
++{
++	u32 intf_cfg2 = DPU_REG_READ(&ctx->hw, INTF_CONFIG2);
++
++	DPU_REG_WRITE(&ctx->hw, INTF_CONFIG2, intf_cfg2 | INTF_CFG2_DCE_DATA_COMPRESS);
++}
+ 
+ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+ 		const struct intf_timing_params *p,
+@@ -542,6 +550,9 @@ static void _setup_intf_ops(struct dpu_hw_intf_ops *ops,
+ 		ops->vsync_sel = dpu_hw_intf_vsync_sel;
+ 		ops->disable_autorefresh = dpu_hw_intf_disable_autorefresh;
+ 	}
++
++	if (cap & BIT(DPU_INTF_DATA_COMPRESS))
++		ops->enable_compression = dpu_hw_intf_enable_compression;
+ }
+ 
+ struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+index 73b0885918f8..a8def68a5ec2 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+@@ -70,6 +70,7 @@ struct intf_status {
+  * @get_autorefresh:            Retrieve autorefresh config from hardware
+  *                              Return: 0 on success, -ETIMEDOUT on timeout
+  * @vsync_sel:                  Select vsync signal for tear-effect configuration
++ * @enable_compression: Enable data compression
   */
- enum {
-@@ -192,6 +193,7 @@ enum {
- 	DPU_INTF_TE,
- 	DPU_DATA_HCTL_EN,
- 	DPU_INTF_STATUS_SUPPORTED,
-+	DPU_INTF_DATA_COMPRESS,
- 	DPU_INTF_MAX
+ struct dpu_hw_intf_ops {
+ 	void (*setup_timing_gen)(struct dpu_hw_intf *intf,
+@@ -107,6 +108,7 @@ struct dpu_hw_intf_ops {
+ 	 * Disable autorefresh if enabled
+ 	 */
+ 	void (*disable_autorefresh)(struct dpu_hw_intf *intf, uint32_t encoder_id, u16 vdisplay);
++	void (*enable_compression)(struct dpu_hw_intf *intf);
  };
  
+ struct dpu_hw_intf {
 
 -- 
 2.40.1
