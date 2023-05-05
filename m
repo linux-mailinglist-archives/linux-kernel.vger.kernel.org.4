@@ -2,166 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D80DE6F850F
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 16:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1CC6F8510
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 16:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbjEEOuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 10:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
+        id S232582AbjEEOua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 10:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjEEOuH (ORCPT
+        with ESMTP id S232580AbjEEOu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 10:50:07 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2049.outbound.protection.outlook.com [40.107.243.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3072E16353;
-        Fri,  5 May 2023 07:50:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VwHCVuGhKzqTdWQqgbFj5QBnhcoUEkUWvY2wSKBKjXD0xIUyR8VzYTeLaX9QMBE3SJgjiznqoOa37gWlRYsr5iBuTsDAkw+zmHGR5ZU/rW+Rgo9DpAGMcM6sFf8lVaAbUQpn7fiIyl48RiHFLoeKf/e/2H5kvLYV4GNYawCI/GBrq1+Nx4i0MY5SWalJ0rlKtkAnvQ3aNZv9yTpDyUJH9ce0NpzcpKyY0RPZYJfHMhrl38a1C4FiK7Nr9b7ZVOywZRHunuVjHhaZyRAp77Dfoftm0REiPdMWBgZ1w1fSglUSSC4/CAWpoaG1sKnkJw7OE6rLBG7s5kMLEBhzNCwYZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=StB404ipoKvQFQnnQRUfSUpCAqVpr9cKy6yQLiMs0MM=;
- b=BYCnw8p3jcI3eRUOEXaE2VbTJ23qOiovhQFs8fWku3ZUJHYxGb1KUZ4VDX89xw42VDBR02UaOt/nmH5b59OkCNMobNA826nnP8kaPuKo9Ka4QcJR0QciEiC3lu7YW+orA9uwfERbuiSyYNr43zD3IvTZHv/PUadt8R5gjGozRwQddSKWS/XzY+gXl/fyv4RYvWrbETkef9kAloG01hTut5Tuc9kehuVOJQ/nJtHrtFWg+/+l58QwG9vvkTgzcvU56vXiKCjFWAi+y4v5DLEvZNHEplXLI9ditEyCSPGfNRMVUw6/3ZfCCbVTK+5oNg3ZmGev04gFrxGJqYld9hO2lQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=StB404ipoKvQFQnnQRUfSUpCAqVpr9cKy6yQLiMs0MM=;
- b=W45vXgMWDPoiwkw3ytztDieciY+8j16bO/ItmtjrnQCCH/R0Dww8KLWLfNVY68JBHpSHPrEcz2TZ17f+flXKU+TnS3w5o4Zo57wZbc9OP5Fo9e/A/DqSXJn8snTq/E0dK2tBs5ygsq9N52Zt3H80jFXok5VggGGRCD65hoUQhCfg4iClW5ETgeUzENY3Ciw3T/+kt0WAPLjz5DCPmlYnkFk25eYDUs2TfeOs62KpBD9Ur4z1o3DgqThXu1liyz02JbcieFt7H5fxIaqVbd/1E3xzs7w0Eqg30EWjTnfZ5RwdGWhi0B5sRBGiW/dizRS2w7hFN35XSTf3w1AKFnvqdw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL1PR12MB5093.namprd12.prod.outlook.com (2603:10b6:208:309::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27; Fri, 5 May
- 2023 14:50:02 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6363.027; Fri, 5 May 2023
- 14:50:02 +0000
-Date:   Fri, 5 May 2023 11:50:00 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     joro@8bytes.org, will@kernel.org, catalin.marinas@arm.com,
-        jean-philippe@linaro.org, inki.dae@samsung.com,
-        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
-        tglx@linutronix.de, maz@kernel.org, alex.williamson@redhat.com,
-        cohuck@redhat.com, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-acpi@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH 1/3] iommu/dma: Clean up Kconfig
-Message-ID: <ZFUXmH9vndGZFuPr@nvidia.com>
-References: <cover.1660668998.git.robin.murphy@arm.com>
- <2e33c8bc2b1bb478157b7964bfed976cb7466139.1660668998.git.robin.murphy@arm.com>
+        Fri, 5 May 2023 10:50:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67E01635E
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 07:50:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E67966348E
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 14:50:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE52C433EF;
+        Fri,  5 May 2023 14:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683298223;
+        bh=dIDBpG6dhKNh4O8MDr9mOrIop26afePz8FQfz1RjU0o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MXNgQ22hNz/F6O3abYmNgNbgZaMH+72ul5lFb55gK+6PYXV0rUeqj0n6kJdTuk+Z2
+         muHlMecERZdf2yrwiPk7jyurKiTDsgQINO6owAQfMGY8TA10KdkGlPgDDnnZm8zf+R
+         28CDvHlGyPSGJ93iwZHOz3vgtFD7Xl8Yn2/hYGpwLK+pbMcHFh/OWJQ0q3HWKYkfxB
+         UOxWo3XWAO+T9UiuUlVT+y2SZ692wsS7iuFpjL+mB594/xteG6hGR8DYA1gyeQwWYz
+         SKayLRaJO06x585+4P7DLqDlzjlxOfQmRk6yt5Qx66sjvTPCR4JzHkHbrSrUSHlzaz
+         mzW/XjPNR+7zg==
+Date:   Fri, 5 May 2023 16:50:20 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Subject: Re: [patch 02/20] posix-timers: Ensure timer ID search-loop limit is
+ valid
+Message-ID: <ZFUXrCZtWyNG3Esi@lothringen>
+References: <20230425181827.219128101@linutronix.de>
+ <20230425183312.932345089@linutronix.de>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2e33c8bc2b1bb478157b7964bfed976cb7466139.1660668998.git.robin.murphy@arm.com>
-X-ClientProxiedBy: MN2PR20CA0054.namprd20.prod.outlook.com
- (2603:10b6:208:235::23) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5093:EE_
-X-MS-Office365-Filtering-Correlation-Id: 70233aa9-8375-422a-77c6-08db4d78017d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /pQC/nviKjCL0YwYjNFQu67EzB5mbJrqLoxFH3EPXBN9+oC/oTc3e2g+ixmsObLAjg4TqgzTToqbneE+fFuQCCrlCfg0lBcJ9tzxBPhSzksYmz5wi7SVyzWYZhLhgJ6KXX7HpSDi3Kg5trOElTO/96odI4tVgIeoyPHr8L96VRJSjsg6TED9tkfLAYJtU++OmyqgWMEEnWimZDE+CLwAzsrUtOXA6xKrLn4G20trNR7sT6Swe/OFeC/nyurMtg8yhAwEm5peU57DvrcYLpGIZ+SZZlMpGUAC/J+C1usfMh5vKPGET/1RVp6UijWNOR8GCZoiGeK+otHRHeiOqvQAJNX2adaR2Wd262Ct2wBJzSPJBkEsUsqUYTzUV1qBbMbQqQ6MR3BbZIPbSOommsHkAEvtwjOvfzLtLGnSnlnS+8MRYiDcsRFo/mrDgaEeVxAfzWurURlDkOWY0XkPGKE4j0UcuJdax5LTEFcLqC/1GOeWjZR62AM7goGrq8ylSS+csV0rhSj9pAb5Tp5AKw7AZNg7+s2wXGc5zjbO9hyzyp/rT7DgxWFtu+ILvu9F2LKD
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(366004)(346002)(376002)(451199021)(4326008)(66946007)(66556008)(66476007)(6916009)(478600001)(6486002)(316002)(86362001)(36756003)(83380400001)(2616005)(6512007)(6506007)(26005)(5660300002)(8676002)(8936002)(7416002)(2906002)(41300700001)(186003)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KqXejIFUoiMbnXCxxsieP8/yBgZQ7XVPWsSz3i1aJv88j3VPrnmOF/0SM82C?=
- =?us-ascii?Q?Z0d/T2kI9InyMqj80AuKnbi5CSSe+wPZAnFHYwfd/6a1K5fXAvugbllFFGkm?=
- =?us-ascii?Q?cv4O4MAOPyAyV13MOgidKfVgXmyUC3PWNQOOt+oWQbs5s1f1TrJz9BcrrUo4?=
- =?us-ascii?Q?xaK9c8hpwx162a/cOD5UkU0tfAOf2kzy03hJfUJDqZUgFPb0U/BS3rhTKA9E?=
- =?us-ascii?Q?xLVl3XXtRR54gUUZqLhCxSi4asSJnc41qWBRReNn4NYSNxSmtzBDgeFDH93F?=
- =?us-ascii?Q?92f+T6F3aFa3QCAVajoskdgMQxhUfnKDw4k26fZd9lnZPwKRCqsDgcf4IjVG?=
- =?us-ascii?Q?Po4th1dVpwQnjERdMPF2+lakkMCDWcdg5dd+xuuzfbdJdmAqtJxCRerwogqV?=
- =?us-ascii?Q?DcJW4uB1CE/+yNfS4y2ESlGtzjVh1TDbVxVqNAyELkHLeiuNjhyylfhjTdTo?=
- =?us-ascii?Q?yfSrQbU/HEhRQlA++G5lhGc6BzJ3JSsuOafvdljKw7zGS44WlkbZtg8er9JZ?=
- =?us-ascii?Q?pF5axM7wmqgylZogADSYvMObqig0JJE9F7/ZEKPgOcEV1MxCQoBVovdHN/Ot?=
- =?us-ascii?Q?+zWGmUIhCIISAWfcr5ajfNUGy6wVQDkORAFQHi6i3XPGiCo4wzHq12Ias0eH?=
- =?us-ascii?Q?MVWaDsqZamxtHv0NRECaDfia+nwRPVABOE+L9zoONbhyqxCswa1VljdVUXcz?=
- =?us-ascii?Q?P/CfQ8YPxTEJTlUoOQ3u3D6UVKnD4wJ79clQTOJ3O2e0USVktP+m44oVuePi?=
- =?us-ascii?Q?UXi1FFB1TwBbUt0UbPcNv8j+K22WiTqc452kM5RL6mpplGWZPXenb8at36Vo?=
- =?us-ascii?Q?UZc1DWt7pm450ZqSycfaIizpjM9Q7wl5+ErcSd1C3MXww2C+MJK+6HlOqpva?=
- =?us-ascii?Q?ap49Qh/fqesURvyFkFc6QSEA2XeASGmCDa6c2KV2USWrDCfxrSCx6h1WfciZ?=
- =?us-ascii?Q?CDtCxXx7T0WH95rJ7BHWhuUm2g7m2e1lRXhZl8Gmy24wGqAdf8mLnZMKiFEj?=
- =?us-ascii?Q?Dut8sSPqu7GmnVOd26m+xj6uJBmYfAPE3G+bpHNsk+Nou4nKREajzknU7lpP?=
- =?us-ascii?Q?IXTHu7WE63Vcuee3CS1dQtwoBP7TYBYym61noc44lWZXosXsZFNpsVl8Xh9t?=
- =?us-ascii?Q?LyAEn8IqAZUfYpxN2zAUmJwurfl6SxsSPKGOS8lbTCBskpW1AwASJcN+bQCx?=
- =?us-ascii?Q?ux69LIoxdNFX0t7Pg8wTj3nR60xTBMBhjoOIz1ImYB2hTTwXSI64+4Oh3EOR?=
- =?us-ascii?Q?yL1UudI6CK3DZ13bm4xeVVwLrjkrJuDrjttIHOzf/haMXob/kcDNvZyGtjDN?=
- =?us-ascii?Q?tIyFEFqIGrvKhq8vuhUCq5zK9BrCym3Q6Bh0C/HGiZzOiG5Lez0S9FiDnN0j?=
- =?us-ascii?Q?slqExbmIQBupWe2TrU6ZE7piQugnaEiJDkrqTRWA2eATabLxmOVYyXl6TlKF?=
- =?us-ascii?Q?cBnS8pDImbtOI/BHMF7jJzXKVB0ui3Ou1vKVzRk7Pv+DHP6dghuZm+BDMWF9?=
- =?us-ascii?Q?PTtZXq6Y88YtuTgAoPs6ZX1gpM78l3a8cHjV5GqWWFwCidsk3dJi8jz22n4g?=
- =?us-ascii?Q?m7bA1Pnhd2TSAF6FFC5QMvpNwqV92ibUOcebroEv?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 70233aa9-8375-422a-77c6-08db4d78017d
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 14:50:02.1643
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jkIa8VkhUz2NobbGxMlyNV+nRiFVBCmTnloB/5YTUXlbaoKGEuXYzfeEiv23wbFb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5093
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230425183312.932345089@linutronix.de>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 06:28:03PM +0100, Robin Murphy wrote:
-> Although iommu-dma is a per-architecture chonce, that is currently
-> implemented in a rather haphazard way. Selecting from the arch Kconfig
-> was the original logical approach, but is complicated by having to
-> manage dependencies; conversely, selecting from drivers ends up hiding
-> the architecture dependency *too* well. Instead, let's just have it
-> enable itself automatically when IOMMU API support is enabled for the
-> relevant architectures. It can't get much clearer than that.
+On Tue, Apr 25, 2023 at 08:48:58PM +0200, Thomas Gleixner wrote:
+> posix_timer_add() tries to allocate a posix timer ID by starting from the
+> cached ID which was stored by the last successful allocation.
 > 
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> This is done in a loop searching the ID space for a free slot one by
+> one. The loop has to terminate when the search wrapped around to the
+> starting point.
+> 
+> But that's racy vs. establishing the starting point. That is read out
+> lockless, which leads to the following problem:
+> 
+> CPU0	  	      	     	   CPU1
+> posix_timer_add()
+>   start = sig->posix_timer_id;
+>   lock(hash_lock);
+>   ...				   posix_timer_add()
+>   if (++sig->posix_timer_id < 0)
+>       			             start = sig->posix_timer_id;
+>      sig->posix_timer_id = 0;
+> 
+> So CPU1 can observe a negative start value, i.e. -1, and the loop break
+> never happens because the condition can never be true:
+> 
+>   if (sig->posix_timer_id == start)
+>      break;
+> 
+> While this is unlikely to ever turn into an endless loop as the ID space is
+> huge (INT_MAX), the racy read of the start value caught the attention of
+> KCSAN and Dmitry unearthed that incorrectness.
+> 
+> Rewrite it so that the start condition can never observe the negative value
+> and annotate the read and the write with READ_ONCE()/WRITE_ONCE().
+> 
+> Reported-by: syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com
+> Reported-by: Dmitry Vyukov <dvyukov@google.com>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > ---
->  arch/arm64/Kconfig          | 1 -
->  drivers/iommu/Kconfig       | 3 +--
->  drivers/iommu/amd/Kconfig   | 1 -
->  drivers/iommu/intel/Kconfig | 1 -
->  4 files changed, 1 insertion(+), 5 deletions(-)
+>  include/linux/sched/signal.h |    2 +-
+>  kernel/time/posix-timers.c   |   30 +++++++++++++++++-------------
+>  2 files changed, 18 insertions(+), 14 deletions(-)
 > 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 571cc234d0b3..59af600445c2 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -209,7 +209,6 @@ config ARM64
->  	select HAVE_KPROBES
->  	select HAVE_KRETPROBES
->  	select HAVE_GENERIC_VDSO
-> -	select IOMMU_DMA if IOMMU_SUPPORT
->  	select IRQ_DOMAIN
->  	select IRQ_FORCED_THREADING
->  	select KASAN_VMALLOC if KASAN
-> diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-> index 5c5cb5bee8b6..1d99c2d984fb 100644
-> --- a/drivers/iommu/Kconfig
-> +++ b/drivers/iommu/Kconfig
-> @@ -137,7 +137,7 @@ config OF_IOMMU
+> --- a/include/linux/sched/signal.h
+> +++ b/include/linux/sched/signal.h
+> @@ -135,7 +135,7 @@ struct signal_struct {
+>  #ifdef CONFIG_POSIX_TIMERS
 >  
->  # IOMMU-agnostic DMA-mapping layer
->  config IOMMU_DMA
-> -	bool
-> +	def_bool ARM64 || IA64 || X86
+>  	/* POSIX.1b Interval Timers */
+> -	int			posix_timer_id;
+> +	unsigned int		next_posix_timer_id;
+>  	struct list_head	posix_timers;
+>  
+>  	/* ITIMER_REAL timer for the process */
+> --- a/kernel/time/posix-timers.c
+> +++ b/kernel/time/posix-timers.c
+> @@ -140,25 +140,29 @@ static struct k_itimer *posix_timer_by_i
+>  static int posix_timer_add(struct k_itimer *timer)
+>  {
+>  	struct signal_struct *sig = current->signal;
+> -	int first_free_id = sig->posix_timer_id;
+>  	struct hlist_head *head;
+> -	int ret = -ENOENT;
+> +	unsigned int start, id;
+>  
+> -	do {
+> +	/* Can be written by a different task concurrently in the loop below */
+> +	start = READ_ONCE(sig->next_posix_timer_id);
+> +
+> +	for (id = ~start; start != id; id++) {
+>  		spin_lock(&hash_lock);
+> -		head = &posix_timers_hashtable[hash(sig, sig->posix_timer_id)];
+> -		if (!__posix_timers_find(head, sig, sig->posix_timer_id)) {
+> +		id = sig->next_posix_timer_id;
+> +
+> +		/* Write the next ID back. Clamp it to the positive space */
+> +		WRITE_ONCE(sig->next_posix_timer_id, (id + 1) & INT_MAX);
 
-Robin, do you remember why you added IA64 here? What is the Itanimum
-IOMMU driver?
+Isn't that looping forever?
 
-Thanks,
-Jason
+Thanks.
