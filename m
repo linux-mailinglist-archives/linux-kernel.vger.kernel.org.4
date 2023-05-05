@@ -2,126 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2B46F7F79
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3901A6F7F7D
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbjEEJBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 05:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
+        id S231286AbjEEJDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 05:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjEEJA6 (ORCPT
+        with ESMTP id S229478AbjEEJDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 05:00:58 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D31F13C22
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 02:00:56 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 9B4E66017E;
-        Fri,  5 May 2023 11:00:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1683277253; bh=nRqDNIOwpLVzu+gY5IMY4uO38J2lvGJyukw3w+el00Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=2bIaxo8x3KHJLLSZRAEoWoHM1g+NOZp3jfA/yx3HY3hUAQgUIsl8K7ovpBrh3ocX+
-         U+Y9xGJKXGt1rDC8mkwoXbIeI3G9DAT4Z19N2REqx/dROpsnMDeXG1aL8RAQQTc+cS
-         dl5m/Oua3EAg0Erlbg3pP6aee9XC7UBj5Fa84Ey2HIHXCFgjjP3G3yXkb/8IoeteY+
-         l6K2pOENdw/QjwKt96GTxmaVJ5IRKtFPxmx72izt5ZecMi7vrcPZ8LkzPf8Jt1c2RN
-         xQ4JsVwqK6JhOmuxBad5j82fv6nc5VlNc0m5eZxPUJCBvPWmWYDXdIltWHqMohXxbK
-         Hbj9z9SFtUFoQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mrqEIdXXJ5SD; Fri,  5 May 2023 11:00:51 +0200 (CEST)
-Received: from [10.0.1.134] (grf-nat.grf.hr [161.53.83.23])
-        by domac.alu.hr (Postfix) with ESMTPSA id 3F6C26016E;
-        Fri,  5 May 2023 11:00:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1683277251; bh=nRqDNIOwpLVzu+gY5IMY4uO38J2lvGJyukw3w+el00Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=d8SV3T63a9pa3YCcnIdHOPAGPnRoWuUum50gHjCnB/DoeiIrgkA6pMqRAxZgYnNDU
-         l+HlM7YYRiiaYi09AviSw0/jbf548v2pwzPYzMDB8DO5oH909ZFlWgT+BxIYbQrcoF
-         ir/+FKHpVzwAWAYGpnmX4/Fq8LjE9K43iiwmpAv6AUfHh1YwkTACUr9tWZR+ws6PBX
-         Z5CdQ3Ac5AfDQFlWFYGaha604n8HwxTj7Cwr0qxDpYpRw8T4wV3tUblIfG8eRFPosP
-         in6YRiq3ZWGW7kCU9CfuzTczCQCGaFUEdZY5V2WSQLZIg6OYuVQJS3H/DFv3oCFM/y
-         BwL38JpxAAdGA==
-Message-ID: <59599649-6481-eb3a-8584-6653f2c511cd@alu.unizg.hr>
-Date:   Fri, 5 May 2023 11:00:50 +0200
+        Fri, 5 May 2023 05:03:40 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3185218860;
+        Fri,  5 May 2023 02:03:39 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3457inYD020612;
+        Fri, 5 May 2023 09:03:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=74mGx6giKbWdRN8nfSAqZDCC8vlmrxk/WzeQd3WiVco=;
+ b=iCqmLfUBqWMyfXuU/cIlTTOW8Qe2SEc14o9uXxgme7eHtRZRBqTVP3St1ZgHtlR6Shkt
+ MWlhk+/mBHTNTJZI22Nt/KeKHuPdoUYiqnbPmwyHJcVPOZeo8apFdyOnwowRvHBn1lN+
+ Wgz1RCjQHCiIVbwnkzBDP1EVtiynFq1Wps6eBH1kX0Z2Q3xFV13T5oV5isi5RR+iOHk/
+ vMsnB8ZuHEL3O3aRVx31LS8/oVEpmdx8ypIgsHz4umPyvEVVA8KknpGfd7Cto9aPkLgT
+ t1WSyTe5WHhkGrR3DzdPOz6LwCqU6r4z2wIXi3iWyENfb3kvIC8TgzeFI5a3GSUIatyT bw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qcmm393p4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 May 2023 09:03:34 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34593XTU018315
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 5 May 2023 09:03:33 GMT
+Received: from [10.50.39.163] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 5 May 2023
+ 02:03:30 -0700
+Message-ID: <b5fa8e0a-1663-e386-cffe-e7feb16d8733@quicinc.com>
+Date:   Fri, 5 May 2023 14:33:20 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [BUILD] [FOUND WORKAROUND] Unable to sign drivers on Ubuntu 22.04
- LTS desktop
-Content-Language: en-US, hr
-To:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-References: <bb89a720-b1b2-18fc-7f89-44267885700d@alu.unizg.hr>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <bb89a720-b1b2-18fc-7f89-44267885700d@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 4/4] venus: return P010 as preferred format for 10 bit
+ decode
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-media@vger.kernel.org>, <stanimir.k.varbanov@gmail.com>,
+        <quic_vgarodia@quicinc.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <mchehab@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+References: <1683196599-3730-1-git-send-email-quic_dikshita@quicinc.com>
+ <1683196599-3730-5-git-send-email-quic_dikshita@quicinc.com>
+ <02f5d449-a64b-8f5e-6b72-2fdf8d9bafbe@linaro.org>
+Content-Language: en-US
+From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
+In-Reply-To: <02f5d449-a64b-8f5e-6b72-2fdf8d9bafbe@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: x5EAaqSF3P65jWAk0qpoxT0PiX3AGHPR
+X-Proofpoint-GUID: x5EAaqSF3P65jWAk0qpoxT0PiX3AGHPR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-05_15,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
+ priorityscore=1501 impostorscore=0 adultscore=0 malwarescore=0
+ suspectscore=0 phishscore=0 clxscore=1015 bulkscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305050074
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4.5.2023. 19:02, Mirsad Goran Todorovac wrote:
-> Hi Bagas,
-> 
-> I seem to have run into a dead end with this.
-> 
-> OpenSSL 3.0.2 refuses to cooperate, despite enabling legacy ciphers:
-> 
->    BTF [M] net/nsh/nsh.ko
->    BTF [M] net/hsr/hsr.ko
-> make -f ./Makefile ARCH=x86     KERNELRELEASE=6.3.0+ intdeb-pkg
-> sh ./scripts/package/builddeb
->    INSTALL debian/linux-image/lib/modules/6.3.0+/kernel/arch/x86/events/intel/intel-cstate.ko
->    SIGN debian/linux-image/lib/modules/6.3.0+/kernel/arch/x86/events/intel/intel-cstate.ko
-> At main.c:170:
-> - SSL error:1E08010C:DECODER routines::unsupported: ../crypto/encode_decode/decoder_lib.c:101
-> sign-file: ./
-> make[6]: *** [scripts/Makefile.modinst:87: debian/linux-image/lib/modules/6.3.0+/kernel/arch/x86/events/intel/intel-cstate.ko] Error 1
-> make[6]: *** Deleting file 'debian/linux-image/lib/modules/6.3.0+/kernel/arch/x86/events/intel/intel-cstate.ko'
-> make[5]: *** [Makefile:1955: modules_install] Error 2
-> make[4]: *** [scripts/Makefile.package:150: intdeb-pkg] Error 2
-> make[3]: *** [Makefile:1657: intdeb-pkg] Error 2
-> make[2]: *** [debian/rules:16: binary-arch] Error 2
-> dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
-> make[1]: *** [scripts/Makefile.package:139: bindeb-pkg] Error 2
-> make: *** [Makefile:1657: bindeb-pkg] Error 2
-> 
-> I have tried to enable NEXT crypto mode:
-> 
-> % sudo update-crypto-policies --set NEXT
-> 
-> and rebooted, but no use.
-> 
-> Google also doesn't give a clue.
-> I have been able to compile kernels on Ubuntu 22.04 LTS on my laptop just about a year ago.
 
-Hi all,
+On 5/4/2023 10:50 PM, Konrad Dybcio wrote:
+>
+> On 4.05.2023 12:36, Dikshita Agarwal wrote:
+>> If bit depth is detected as 10 bit by firmware, return
+>> P010 as preferred decoder format to the client.
+>>
+>> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+>> ---
+>>   drivers/media/platform/qcom/venus/vdec.c | 7 ++++++-
+>>   1 file changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+>> index 69f7f6e..ed11dc2 100644
+>> --- a/drivers/media/platform/qcom/venus/vdec.c
+>> +++ b/drivers/media/platform/qcom/venus/vdec.c
+>> @@ -1468,8 +1468,13 @@ static void vdec_event_change(struct venus_inst *inst,
+>>   	inst->out_width = ev_data->width;
+>>   	inst->out_height = ev_data->height;
+>>   
+>> -	if (inst->bit_depth != ev_data->bit_depth)
+>> +	if (inst->bit_depth != ev_data->bit_depth) {
+>>   		inst->bit_depth = ev_data->bit_depth;
+>> +		if (inst->bit_depth == VIDC_BITDEPTH_10)
+>> +			inst->fmt_cap = &vdec_formats[3];
+>> +		else
+>> +			inst->fmt_cap = &vdec_formats[0];
+> This doesn't scale and is very error-prone, please enumerate the
+> entries and assign it using the enumerator, like:
+>
+> enum {
+> 	VDEC_FORMAT_FOO,
+> 	...
+> };
+>
+> ... vdec_formats[] = {
+> 	[VDEC_FORMAT_FOO] = { foo, bar, baz }
+> }
+>
+> Konrad
 
-There was no success in building 6.3+ with the Ubuntu generic config, but it has succeeded
-with the config derived from Debian one.
+I agree, this can be improved but I would prefer making that change as 
+separate patch.
 
-Still, it would be interesting to find what is preventing the Ubuntu config from signing the
-kernel modules. Up to that point the build process is fine.
+As this is not only related to HDR 10 decoding, there are other places 
+in the code which will require similar change.
 
-Best regards,
-Mirsad
+Thanks,
 
--- 
-Mirsad Todorovac
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb
-Republic of Croatia, the European Union
+Dikshita
 
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
+>> +	}
+>>   
+>>   	if (inst->pic_struct != ev_data->pic_struct)
+>>   		inst->pic_struct = ev_data->pic_struct;
