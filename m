@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19FD86F7E03
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 567216F7E05
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbjEEHht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 03:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
+        id S231361AbjEEHi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 03:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjEEHhr (ORCPT
+        with ESMTP id S229810AbjEEHi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 03:37:47 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0D1AD38
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 00:37:46 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VhoHy3m_1683272257;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VhoHy3m_1683272257)
-          by smtp.aliyun-inc.com;
-          Fri, 05 May 2023 15:37:43 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] drm/amdgpu: remove unneeded semicolon
-Date:   Fri,  5 May 2023 15:37:31 +0800
-Message-Id: <20230505073731.5348-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Fri, 5 May 2023 03:38:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF5411544;
+        Fri,  5 May 2023 00:38:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2884363BDF;
+        Fri,  5 May 2023 07:38:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33B21C433EF;
+        Fri,  5 May 2023 07:38:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683272306;
+        bh=Pw3z/wSPton4j3lNLrHMugPK+GlT51qJrffU70l3EZ0=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=C1/ydpdinmi/GrtJJ0vsKhISDEEVcNA8iEONGU11bwz25hwix5IZMYYJg8lfnUK7N
+         nKcmR6lxOJPPst1pMh5miDsd8PP5Ea5tZ/Wq9zNBBdekpqsd5WiszUQhqfJFnEs2OY
+         duzKLsiKZ5pYZAxvSIety3CAQ+JSmw9TaapH3p49Q4AJuYkhXkTfkWMWBhkbp+8PmZ
+         YqAsAbYAkghk1T7B2foI2Tsu7zu7hzEYWT5xYjtKwacAGFvIW8YZxT7Yrx/SVQbwGK
+         jZkq30G0Qp38istRCVFLToSfa0xnfAsgxBQWOYzRByPtX+CaAzdOJXLCFwP42d/jkb
+         MVh0twUDY0A9A==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v3 1/2] wifi: rtw88: fix incorrect error codes in
+ rtw_debugfs_copy_from_user
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <tencent_D2EB102CC7435C0110154E62ECA6A7D67505@qq.com>
+References: <tencent_D2EB102CC7435C0110154E62ECA6A7D67505@qq.com>
+To:     Zhang Shurong <zhang_shurong@foxmail.com>
+Cc:     pkshih@realtek.com, tony0620emma@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Zhang Shurong <zhang_shurong@foxmail.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <168327230065.10202.16584084872255391845.kvalo@kernel.org>
+Date:   Fri,  5 May 2023 07:38:24 +0000 (UTC)
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional modification involved.
+Zhang Shurong <zhang_shurong@foxmail.com> wrote:
 
-./drivers/gpu/drm/amd/amdgpu/nbio_v7_9.c:146:2-3: Unneeded semicolon.
+> If there is a failure during copy_from_user or user-provided data
+> buffer is invalid, rtw_debugfs_copy_from_user should return negative
+> error code instead of a positive value count.
+> 
+> Fix this bug by returning correct error code. Moreover, the check
+> of buffer against null is removed since it will be handled by
+> copy_from_user.
+> 
+> Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+> Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4871
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/gpu/drm/amd/amdgpu/nbio_v7_9.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+2 patches applied to wireless-next.git, thanks.
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/nbio_v7_9.c b/drivers/gpu/drm/amd/amdgpu/nbio_v7_9.c
-index 24d12075ca3a..a331a59c49e3 100644
---- a/drivers/gpu/drm/amd/amdgpu/nbio_v7_9.c
-+++ b/drivers/gpu/drm/amd/amdgpu/nbio_v7_9.c
-@@ -143,7 +143,7 @@ static void nbio_v7_9_sdma_doorbell_range(struct amdgpu_device *adev, int instan
- 		break;
- 	default:
- 		break;
--	};
-+	}
- 
- 	return;
- }
+225622256b1b wifi: rtw88: fix incorrect error codes in rtw_debugfs_copy_from_user
+770055337772 wifi: rtw88: fix incorrect error codes in rtw_debugfs_set_*
+
 -- 
-2.20.1.7.g153144c
+https://patchwork.kernel.org/project/linux-wireless/patch/tencent_D2EB102CC7435C0110154E62ECA6A7D67505@qq.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
