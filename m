@@ -2,77 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C146F7FF2
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDEE96F7FF4
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231735AbjEEJ1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 05:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S231271AbjEEJ15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 05:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbjEEJ1J (ORCPT
+        with ESMTP id S231469AbjEEJ1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 05:27:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3461D2D66
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 02:26:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCF8063CB4
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 09:26:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD03C433EF;
-        Fri,  5 May 2023 09:26:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683278809;
-        bh=cbv7KqFW3EZCwbXiqh1UsSQZA6Dm577W9BTUAcRYjjs=;
+        Fri, 5 May 2023 05:27:49 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80BB19927;
+        Fri,  5 May 2023 02:27:37 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (133-32-181-51.west.xps.vectant.ne.jp [133.32.181.51])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 855492CF;
+        Fri,  5 May 2023 11:27:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1683278852;
+        bh=l6Dk0qKAGVGoSGHz4cAKtiNPF4yQeJEI5Z3o5yq+cYE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YR3ygV1n/WztmQPmypSDHPmCE21+CNyWvFvgd7VAxyi6F+rg2w9GATY0uAdZgQVtQ
-         4DPVLjOoqN7CfvpJbD/WKRzabu5rhGp9Ppyle//dCD6ZUck8fN4WD5pnVHIojEd4M1
-         RPonfvoC1x1T+xazjxm6SoE1dCKqLnakzXLmrRFOmOf26GwBTBQpPVLaElgsJL/ZSi
-         pHIMDgKZTCqpYQVw4qNT9bd4UUuXeZTlP0WCglUiZa8inC1NcroG6UffZRwk2ttqP8
-         WkF1rPZuz9M7bs8RcKyQ0YcSif40FX9PoP9WEPwGNBcIIt57hNTMxlug7WQ/Jiriuo
-         E7sWXyesn59lA==
-Date:   Fri, 5 May 2023 14:56:44 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Guillaume Ranquet <granquet@baylibre.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH 0/2] Fix mtk-hdmi-mt8195 unitialized variable usage and
- clock rate calculation
-Message-ID: <ZFTL1BRE+qke209f@matsya>
-References: <20230413-fixes-for-mt8195-hdmi-phy-v1-0-b8482458df0d@baylibre.com>
+        b=B6c3Se50/Nru0XMugYouJQXnSCajW5VV+UMf9R6Sff9yTkOrvUCh+MGo+3G6kqwR1
+         /cNII49dLm/t7vXM8Qgfq2hmplLiG8SUtf3FE4OSq5M+952yQoIw2+qqCoDt53nxvw
+         4nfasa/QSgvzOOE02trJRLZ04HNc4khBej9OA0Zs=
+Date:   Fri, 5 May 2023 12:27:47 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] media: nxp: remove unneeded semicolon
+Message-ID: <20230505092747.GU4551@pendragon.ideasonboard.com>
+References: <20230505060617.5327-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230413-fixes-for-mt8195-hdmi-phy-v1-0-b8482458df0d@baylibre.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230505060617.5327-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13-04-23, 14:46, Guillaume Ranquet wrote:
-> I've received a report from kernel test report [1] that a variable was used
-> unitialized in the mtk8195 hdmi phy code.
-> 
-> I've upon fixing that issue found out that the clock rate calculation
-> was erroneous since the calculus was moved to div_u64.
+Hi Jiapeng,
 
-Applied both, thanks
+Thank you for the patch.
+
+On Fri, May 05, 2023 at 02:06:17PM +0800, Jiapeng Chong wrote:
+> No functional modification involved.
+> 
+> ./drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c:226:2-3: Unneeded semicolon.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4868
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+
+I'll update the subject line to
+
+media: nxp: imx8-isi: Remove unneeded semicolon
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c b/drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c
+> index b5ffde46f31b..f7447b2f4d77 100644
+> --- a/drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c
+> +++ b/drivers/media/platform/nxp/imx8-isi/imx8-isi-crossbar.c
+> @@ -223,7 +223,7 @@ static int mxc_isi_crossbar_init_cfg(struct v4l2_subdev *sd,
+>  		route->sink_pad = i;
+>  		route->source_pad = i + xbar->num_sinks;
+>  		route->flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE;
+> -	};
+> +	}
+>  
+>  	routing.num_routes = xbar->num_sources;
+>  	routing.routes = routes;
 
 -- 
-~Vinod
+Regards,
+
+Laurent Pinchart
