@@ -2,109 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FB06F7B40
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 04:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912CC6F7B5C
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 05:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjEECzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 22:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44598 "EHLO
+        id S229957AbjEEDEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 23:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjEECzt (ORCPT
+        with ESMTP id S229768AbjEEDEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 22:55:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A84B30F7
-        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 19:55:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683255301;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cjYsetGrBM63KihX4CFzxpJKx/AEwalSZhpNQfLiHHI=;
-        b=UBarOmyGeFiiwGYp3KWzflb/hjYPynGNWl7+MRpdSbek36z7sN8kw9ReYrmdRfQDwIr4eN
-        YEfDJRnYBimPEHCbU5MOGGK5PsdVZfetL7I0iI4EXW4kDhY6sEDbizVA7dMfS+ur7MAIqK
-        1BvsZAVIYKy/15fhSLIuyussgJR3rF8=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-347-KEouOSSJPDehW1b7pOyhoQ-1; Thu, 04 May 2023 22:55:00 -0400
-X-MC-Unique: KEouOSSJPDehW1b7pOyhoQ-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-751319bd93cso1014202685a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 19:55:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683255300; x=1685847300;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cjYsetGrBM63KihX4CFzxpJKx/AEwalSZhpNQfLiHHI=;
-        b=RaDCZE66WxdV8D4z4BvTl0/wsN8s6M17cLdnATNVInEg4lENZrd3oTgB2qpbcEMqzo
-         BCGO6TxeNXoG9Yg9afpkGpO1d6PUULYOKbEaCJT11ed+odRWgiajEMVKGZXGoyfnHb4L
-         s41Hk+Nja+QWHb14u/U7x9fVX8pGF8WyqnjFS4fAZDZicHcKIDNUUNIehg2UvqW0xFHL
-         4wIHSdhL18KdWZG/yoBXXal1ovE8s8PQszCgsF+C+SKQxHLUBtn7vhlIyiZbvfZpI0W+
-         THI3xN5D8EI+LqS+ugA/LZR9HC0Qc/CUzkWqGuzdrPGCPqfNx3hjtmq6RPAgIuEaM6XE
-         zxFg==
-X-Gm-Message-State: AC+VfDyoS1Xx9tGh2MTy8X4F0sGP/yq96MMOp76qjpoiAKu/jRbU8Zh/
-        IDVcA9NktnashhT264QzdFYUhQzPvsV4SjXJ15XhMpzt0sGpo4X4qFiJuF5/I8JjRWmet6BlZVB
-        U5F2w8CaTvX23556xNuSqCgOp
-X-Received: by 2002:a05:622a:409:b0:3e8:e986:b20a with SMTP id n9-20020a05622a040900b003e8e986b20amr9397764qtx.16.1683255299969;
-        Thu, 04 May 2023 19:54:59 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7L0Ig8yDCWu38q+AtSaJhk9cd5e+dZXKeZcxELnYEzOlnIFTyqh+dBVg8LWeBBdmN88tPaWg==
-X-Received: by 2002:a05:622a:409:b0:3e8:e986:b20a with SMTP id n9-20020a05622a040900b003e8e986b20amr9397756qtx.16.1683255299748;
-        Thu, 04 May 2023 19:54:59 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05620a15d000b0074a1d2a17c8sm282513qkm.29.2023.05.04.19.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 19:54:59 -0700 (PDT)
-Date:   Thu, 4 May 2023 19:54:44 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     joro@8bytes.org, jgg@nvidia.com, will@kernel.org,
-        schnelle@linux.ibm.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] iommu: Make flush queues a proper capability
-Message-ID: <ol6xsnchb5od2br6qor6mdm3b6jedtwlbivfvx46dwx5bwm56w@ub47yn62g4ch>
-References: <cover.1683233867.git.robin.murphy@arm.com>
+        Thu, 4 May 2023 23:04:21 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEBB11B7C;
+        Thu,  4 May 2023 20:04:20 -0700 (PDT)
+Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QCFmD5JbfzpV4b;
+        Fri,  5 May 2023 11:00:12 +0800 (CST)
+Received: from localhost.localdomain (10.50.163.32) by
+ dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 5 May 2023 11:04:17 +0800
+From:   Xingui Yang <yangxingui@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <john.g.garry@oracle.com>, <damien.lemoal@opensource.wdc.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
+        <prime.zeng@hisilicon.com>, <kangfenglong@huawei.com>
+Subject: [PATCH v2] ata: libata-scsi: Fix get identity data failed
+Date:   Fri, 5 May 2023 02:57:12 +0000
+Message-ID: <20230505025712.19438-1-yangxingui@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1683233867.git.robin.murphy@arm.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.50.163.32]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500012.china.huawei.com (7.185.36.89)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 10:10:54PM +0100, Robin Murphy wrote:
-> Hi all,
-> 
-> Since it came up in discussion on the default domain series, it seemed
-> pertinent to dig this idea up, whcih I started a while ago, and finish
-> it off.
-> 
-> Cheers,
-> Robin.
-> 
-> 
-> Robin Murphy (2):
->   iommu: Add a capability for flush queue support
->   iommu: Use flush queue capability
-> 
->  drivers/iommu/amd/iommu.c                   | 2 ++
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 +-
->  drivers/iommu/arm/arm-smmu/arm-smmu.c       | 4 ++--
->  drivers/iommu/dma-iommu.c                   | 3 ++-
->  drivers/iommu/intel/iommu.c                 | 2 +-
->  drivers/iommu/iommu.c                       | 3 ++-
->  include/linux/iommu.h                       | 6 ++++++
->  7 files changed, 16 insertions(+), 6 deletions(-)
-> 
-> -- 
-> 2.39.2.101.g768bb238c484.dirty
-> 
+The function ata_get_identity() uses the helper ata_scsi_find_dev() to get
+the ata_device structure of a scsi device. However, when the ata device is
+managed by libsas, ata_scsi_find_dev() returns NULL, turning
+ata_get_identity() into a nop and always returns -ENOMSG.
 
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Fix this by checking whether ATA_FLAG_SAS_HOST is set for ap->flags in
+ata_scsi_find_dev(), as the flag is only used in libsas. If
+ATA_FLAG_SAS_HOST is set, use sas_to_ata_dev() to find associated ATA
+device.
+
+Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+---
+Changes to v1 
+- Let ata_scsi_find_dev() return the correct value and don't keep replacing
+calls to ata_scsi_find_dev().
+
+ drivers/ata/libata-scsi.c | 12 ++++++++++--
+ drivers/ata/libata.h      |  2 +-
+ 2 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+index 7bb12deab70c..aa580ea341fa 100644
+--- a/drivers/ata/libata-scsi.c
++++ b/drivers/ata/libata-scsi.c
+@@ -26,6 +26,7 @@
+ #include <scsi/scsi_device.h>
+ #include <scsi/scsi_tcq.h>
+ #include <scsi/scsi_transport.h>
++#include <scsi/libsas.h>
+ #include <linux/libata.h>
+ #include <linux/hdreg.h>
+ #include <linux/uaccess.h>
+@@ -2745,10 +2746,17 @@ static struct ata_device *__ata_scsi_find_dev(struct ata_port *ap,
+  *	Associated ATA device, or %NULL if not found.
+  */
+ struct ata_device *
+-ata_scsi_find_dev(struct ata_port *ap, const struct scsi_device *scsidev)
++ata_scsi_find_dev(struct ata_port *ap, struct scsi_device *scsidev)
+ {
+-	struct ata_device *dev = __ata_scsi_find_dev(ap, scsidev);
++	struct ata_device *dev;
++
++	if (ap->flags & ATA_FLAG_SAS_HOST) {
++		struct domain_device *ddev = sdev_to_domain_dev(scsidev);
++
++		return sas_to_ata_dev(ddev);
++	}
+ 
++	dev = __ata_scsi_find_dev(ap, scsidev);
+ 	if (unlikely(!dev || !ata_dev_enabled(dev)))
+ 		return NULL;
+ 
+diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
+index 926d0d33cd29..6d66f46da064 100644
+--- a/drivers/ata/libata.h
++++ b/drivers/ata/libata.h
+@@ -109,7 +109,7 @@ static inline void ata_acpi_bind_dev(struct ata_device *dev) {}
+ 
+ /* libata-scsi.c */
+ extern struct ata_device *ata_scsi_find_dev(struct ata_port *ap,
+-					    const struct scsi_device *scsidev);
++					    struct scsi_device *scsidev);
+ extern int ata_scsi_add_hosts(struct ata_host *host,
+ 			      const struct scsi_host_template *sht);
+ extern void ata_scsi_scan_host(struct ata_port *ap, int sync);
+-- 
+2.17.1
 
