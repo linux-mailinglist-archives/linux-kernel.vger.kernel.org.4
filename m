@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 427566F8C92
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 00:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9968D6F8C94
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 00:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231902AbjEEWxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 18:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
+        id S230242AbjEEW6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 18:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjEEWxU (ORCPT
+        with ESMTP id S229545AbjEEW6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 18:53:20 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686305FF2;
-        Fri,  5 May 2023 15:53:19 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-24df161f84bso1676113a91.3;
-        Fri, 05 May 2023 15:53:19 -0700 (PDT)
+        Fri, 5 May 2023 18:58:42 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C998F5B80;
+        Fri,  5 May 2023 15:58:40 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-18ef8aa1576so1994517fac.0;
+        Fri, 05 May 2023 15:58:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683327199; x=1685919199;
+        d=gmail.com; s=20221208; t=1683327520; x=1685919520;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FApjzzhqhojssFso/inw2w0ZDVDPm9jgi/AAIV7/rHk=;
-        b=jywK+RwxMhV9iU84grVOw5jKidLLptFFcS6tQe6Lbck8ZgygASbHzN1r7/+F6L5tuY
-         1Ldbo1BJ12GAvqxp6OIifiY6s2N5rO8h6M+GjVBO6/zL0P2RhmY6SnFIWz8pahXVcHlR
-         YTM/qBIdToM+ioIeJQcSbN95/A7WHL1GKEMaaV2GH9twEct5nwQOrKx/wCoTiWP9Iiwv
-         xNxDhI1UivAAeqXEqm0riKycXu3cRtCHfDskwQBmNlK38CIhwiguoOLS0iKq7mn1yuBO
-         SakwQLqjSXfC8l/H7Upuko6KJmwFh7lXRH7i5FJpaGHnT15O9gYzTcPmMbiBNXvEo5+r
-         qHqw==
+        bh=0sconPnHuLiRb7mO93auUZPY2wLtFsZtIgoJ9KhhDVE=;
+        b=dbTiZPGg3LT4PKOruSy7edjsU1L/yLpPXQQ5ZwYcgN2mL9unKkwhk14RuHDGuQFoPH
+         ZonY4L/DLMtyqnFUsM/5i4Mjf2t0DyNPK4panROCLfIiTEttXZlLRDUdfkitmPLlJNJv
+         rGhZtTPtWf34oZcWK8WHPMcTSyMS9HnABZRWfxAv1XBvMyuwlk30ijG3kVRuGDKsqGBJ
+         oIVRpsKGemd8zTrbS3t9Nd1HHfYTfzwHj0iJoQc3DAkDOuoAuWq/2Q3EJDDrolm/HIhe
+         x52rvp8q6iZvqw6ob8/C0DZsVo+7UhLkaf8jY6T9HHcQU4KiPWNLwGB/HawFfAkdPKgE
+         SE8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683327199; x=1685919199;
+        d=1e100.net; s=20221208; t=1683327520; x=1685919520;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FApjzzhqhojssFso/inw2w0ZDVDPm9jgi/AAIV7/rHk=;
-        b=VervEDR4x2us2b79hAHiEPRGMI6FtgfEzfFiul9pHMB3NYNnmcj3k5N//53byirN2m
-         bEufCx1YpPB/F49ck25CR3tPnCtUPsJPmD/arJj6JeGBZLg5Wiy0nrQJzAHfXhbm9/L7
-         kqvwaZxGshq4YSR/Jn7tC+O0zQYQDefqL/mgOEIT5IH+CMqpxjJPcoGu+m+JxGX+yXNV
-         P3YaHxjJZ39la47HpRuK7/t2+/wZKYnscOl1vykWUfwAD6CSgV5eDQJpVKgO3lf+N+1g
-         uLFxviDihXgLNDLEu8rmIyJNIqYaInHD3VI5aBH1QNOMqtCFWeW5zz6Ib8od0tTqSXt4
-         PibA==
-X-Gm-Message-State: AC+VfDwMlNr0iJu3ICJox4LXDCx2qVnXtBYOaX1tdWQ74kDFlqXJvxxG
-        1+mS1Lw7g+2KD//3lF/815I=
-X-Google-Smtp-Source: ACHHUZ7GPfmQCtflKFFEL+ZyFNN/RWwDQGdENQkLprgqzZssOiM7GWZUjtMN100dQEr3nO2HUAsoJw==
-X-Received: by 2002:a17:90b:390c:b0:24f:52ec:da17 with SMTP id ob12-20020a17090b390c00b0024f52ecda17mr2948988pjb.35.1683327198555;
-        Fri, 05 May 2023 15:53:18 -0700 (PDT)
+        bh=0sconPnHuLiRb7mO93auUZPY2wLtFsZtIgoJ9KhhDVE=;
+        b=T/xfdCV8wiI/dBBLiTPbzN0CSVqb+gNme4qpcZ7aTTF4OfwrO7jJ5gX+4EjQ9EGOeq
+         Yx0CtX1w0lbKuav+C8g8FTx4zoabZncOL5NzcY149w4A0HPHnri5xpg7FvNXqT3BvxjX
+         tkyvIUCcB0jw3VpM+ngUhP0BtEOKJUOFr2wTBfDPFBeMQijyM34eA6TKdHlF9qVXChMI
+         Q+CTBrSX2CRSEfW1UJmu3E6Bi3QdVwvQQWLddtORgEgOCe1O84nzia4mc6hreGno+4XX
+         eQT4mLDEw3zSadzKoYp4UTpfsaXOQZWH8aYUldoj9dB6u5WJBT/tOFyeNvOZOuRp+2PO
+         eHwQ==
+X-Gm-Message-State: AC+VfDy/yHwoRo1HQ9CHZeZX3tdiuTPHmgEfNkiwfpW4A1q1wQRGD6D7
+        QH/tsudWuKGqmfxafec9OoOkSRPgBDk=
+X-Google-Smtp-Source: ACHHUZ4h2FAbChuedf3MQXFY1UGQrZr+Qw1Ycdwui8WxtqawY7re1LJpYsaFDWhngMUin214+K/vtg==
+X-Received: by 2002:a05:6871:582:b0:17f:ee0f:b03a with SMTP id u2-20020a056871058200b0017fee0fb03amr1680892oan.34.1683327519778;
+        Fri, 05 May 2023 15:58:39 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id j6-20020a17090a94c600b0024de0de6ec8sm11654600pjw.17.2023.05.05.15.53.17
+        by smtp.gmail.com with ESMTPSA id a6-20020a056870618600b0017197629658sm2363638oah.56.2023.05.05.15.58.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 15:53:17 -0700 (PDT)
+        Fri, 05 May 2023 15:58:39 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 5 May 2023 12:53:16 -1000
+Date:   Fri, 5 May 2023 12:58:37 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     Brian Norris <briannorris@chromium.org>
+To:     Wang Yugui <wangyugui@e16-tech.com>
 Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH] wifi: mwifiex: Use default @max_active for workqueues
-Message-ID: <ZFWI3PpJXeXXnHzi@slm.duckdns.org>
+        kernel-team@meta.com, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org
+Subject: [PATCH v2 16/22] btrfs: Use alloc_ordered_workqueue() to create
+ ordered workqueues
+Message-ID: <ZFWKHRCDsaNDNXIj@slm.duckdns.org>
 References: <20230421025046.4008499-1-tj@kernel.org>
- <20230421025046.4008499-11-tj@kernel.org>
- <ZEgYdSOYaojJBoPP@google.com>
+ <20230421025046.4008499-17-tj@kernel.org>
+ <20230430124006.49D2.409509F4@e16-tech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZEgYdSOYaojJBoPP@google.com>
+In-Reply-To: <20230430124006.49D2.409509F4@e16-tech.com>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -85,89 +79,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These workqueues only host a single work item and thus doen't need explicit
-concurrency limit. Let's use the default @max_active. This doesn't cost
-anything and clearly expresses that @max_active doesn't matter.
+BACKGROUND
+==========
+
+When multiple work items are queued to a workqueue, their execution order
+doesn't match the queueing order. They may get executed in any order and
+simultaneously. When fully serialized execution - one by one in the queueing
+order - is needed, an ordered workqueue should be used which can be created
+with alloc_ordered_workqueue().
+
+However, alloc_ordered_workqueue() was a later addition. Before it, an
+ordered workqueue could be obtained by creating an UNBOUND workqueue with
+@max_active==1. This originally was an implementation side-effect which was
+broken by 4c16bd327c74 ("workqueue: restore WQ_UNBOUND/max_active==1 to be
+ordered"). Because there were users that depended on the ordered execution,
+5c0338c68706 ("workqueue: restore WQ_UNBOUND/max_active==1 to be ordered")
+made workqueue allocation path to implicitly promote UNBOUND workqueues w/
+@max_active==1 to ordered workqueues.
+
+While this has worked okay, overloading the UNBOUND allocation interface
+this way creates other issues. It's difficult to tell whether a given
+workqueue actually needs to be ordered and users that legitimately want a
+min concurrency level wq unexpectedly gets an ordered one instead. With
+planned UNBOUND workqueue updates to improve execution locality and more
+prevalence of chiplet designs which can benefit from such improvements, this
+isn't a state we wanna be in forever.
+
+This patch series audits all callsites that create an UNBOUND workqueue w/
+@max_active==1 and converts them to alloc_ordered_workqueue() as necessary.
+
+WHAT TO LOOK FOR
+================
+
+The conversions are from
+
+  alloc_workqueue(WQ_UNBOUND | flags, 1, args..)
+
+to 
+
+  alloc_ordered_workqueue(flags, args...)
+
+which don't cause any functional changes. If you know that fully ordered
+execution is not ncessary, please let me know. I'll drop the conversion and
+instead add a comment noting the fact to reduce confusion while conversion
+is in progress.
+
+If you aren't fully sure, it's completely fine to let the conversion
+through. The behavior will stay exactly the same and we can always
+reconsider later.
+
+As there are follow-up workqueue core changes, I'd really appreciate if the
+patch can be routed through the workqueue tree w/ your acks. Thanks.
+
+v2: btrfs_alloc_workqueue() updated too as suggested by Wang.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Amitkumar Karwar <amitkarwar@gmail.com>
-Cc: Ganapathi Bhat <ganapathi017@gmail.com>
-Cc: Sharvari Harisangam <sharvari.harisangam@nxp.com>
-Cc: Xinming Hu <huxinming820@gmail.com>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Cc: Wang Yugui <wangyugui@e16-tech.com>
+Cc: Chris Mason <clm@fb.com>
+Cc: Josef Bacik <josef@toxicpanda.com>
+Cc: David Sterba <dsterba@suse.com>
+Cc: linux-btrfs@vger.kernel.org
 ---
-Hello, Brian.
+Hello,
 
-Do you mind acking this patch instead?
+Wang, yeah, that's a helper that can't tell whether the caller wants an
+ordered wq or not, so it needs to be updated too. How does this look?
 
 Thanks.
 
- drivers/net/wireless/marvell/mwifiex/cfg80211.c |    4 ++--
- drivers/net/wireless/marvell/mwifiex/main.c     |    8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ fs/btrfs/async-thread.c |    7 +++++--
+ fs/btrfs/disk-io.c      |    2 +-
+ fs/btrfs/scrub.c        |    6 ++++--
+ 3 files changed, 10 insertions(+), 5 deletions(-)
 
---- a/drivers/net/wireless/marvell/mwifiex/cfg80211.c
-+++ b/drivers/net/wireless/marvell/mwifiex/cfg80211.c
-@@ -3127,7 +3127,7 @@ struct wireless_dev *mwifiex_add_virtual
- 	priv->dfs_cac_workqueue = alloc_workqueue("MWIFIEX_DFS_CAC%s",
- 						  WQ_HIGHPRI |
- 						  WQ_MEM_RECLAIM |
--						  WQ_UNBOUND, 1, name);
-+						  WQ_UNBOUND, 0, name);
- 	if (!priv->dfs_cac_workqueue) {
- 		mwifiex_dbg(adapter, ERROR, "cannot alloc DFS CAC queue\n");
- 		ret = -ENOMEM;
-@@ -3138,7 +3138,7 @@ struct wireless_dev *mwifiex_add_virtual
+--- a/fs/btrfs/async-thread.c
++++ b/fs/btrfs/async-thread.c
+@@ -99,8 +99,11 @@ struct btrfs_workqueue *btrfs_alloc_work
+ 		ret->thresh = thresh;
+ 	}
  
- 	priv->dfs_chan_sw_workqueue = alloc_workqueue("MWIFIEX_DFS_CHSW%s",
- 						      WQ_HIGHPRI | WQ_UNBOUND |
--						      WQ_MEM_RECLAIM, 1, name);
-+						      WQ_MEM_RECLAIM, 0, name);
- 	if (!priv->dfs_chan_sw_workqueue) {
- 		mwifiex_dbg(adapter, ERROR, "cannot alloc DFS channel sw queue\n");
- 		ret = -ENOMEM;
---- a/drivers/net/wireless/marvell/mwifiex/main.c
-+++ b/drivers/net/wireless/marvell/mwifiex/main.c
-@@ -1547,7 +1547,7 @@ mwifiex_reinit_sw(struct mwifiex_adapter
+-	ret->normal_wq = alloc_workqueue("btrfs-%s", flags, ret->current_active,
+-					 name);
++	if (ret->current_active == 1)
++		ret->normal_wq = alloc_ordered_workqueue("btrfs-%s", flags, name);
++	else
++		ret->normal_wq = alloc_workqueue("btrfs-%s", flags,
++						 ret->current_active, name);
+ 	if (!ret->normal_wq) {
+ 		kfree(ret);
+ 		return NULL;
+--- a/fs/btrfs/disk-io.c
++++ b/fs/btrfs/disk-io.c
+@@ -2218,7 +2218,7 @@ static int btrfs_init_workqueues(struct
+ 	fs_info->qgroup_rescan_workers =
+ 		btrfs_alloc_workqueue(fs_info, "qgroup-rescan", flags, 1, 0);
+ 	fs_info->discard_ctl.discard_workers =
+-		alloc_workqueue("btrfs_discard", WQ_UNBOUND | WQ_FREEZABLE, 1);
++		alloc_ordered_workqueue("btrfs_discard", WQ_FREEZABLE);
  
- 	adapter->workqueue =
- 		alloc_workqueue("MWIFIEX_WORK_QUEUE",
--				WQ_HIGHPRI | WQ_MEM_RECLAIM | WQ_UNBOUND, 1);
-+				WQ_HIGHPRI | WQ_MEM_RECLAIM | WQ_UNBOUND, 0);
- 	if (!adapter->workqueue)
- 		goto err_kmalloc;
+ 	if (!(fs_info->workers && fs_info->hipri_workers &&
+ 	      fs_info->delalloc_workers && fs_info->flush_workers &&
+--- a/fs/btrfs/scrub.c
++++ b/fs/btrfs/scrub.c
+@@ -4245,8 +4245,10 @@ static noinline_for_stack int scrub_work
+ 	if (refcount_inc_not_zero(&fs_info->scrub_workers_refcnt))
+ 		return 0;
  
-@@ -1557,7 +1557,7 @@ mwifiex_reinit_sw(struct mwifiex_adapter
- 		adapter->rx_workqueue = alloc_workqueue("MWIFIEX_RX_WORK_QUEUE",
- 							WQ_HIGHPRI |
- 							WQ_MEM_RECLAIM |
--							WQ_UNBOUND, 1);
-+							WQ_UNBOUND, 0);
- 		if (!adapter->rx_workqueue)
- 			goto err_kmalloc;
- 		INIT_WORK(&adapter->rx_work, mwifiex_rx_work_queue);
-@@ -1702,7 +1702,7 @@ mwifiex_add_card(void *card, struct comp
- 
- 	adapter->workqueue =
- 		alloc_workqueue("MWIFIEX_WORK_QUEUE",
--				WQ_HIGHPRI | WQ_MEM_RECLAIM | WQ_UNBOUND, 1);
-+				WQ_HIGHPRI | WQ_MEM_RECLAIM | WQ_UNBOUND, 0);
- 	if (!adapter->workqueue)
- 		goto err_kmalloc;
- 
-@@ -1712,7 +1712,7 @@ mwifiex_add_card(void *card, struct comp
- 		adapter->rx_workqueue = alloc_workqueue("MWIFIEX_RX_WORK_QUEUE",
- 							WQ_HIGHPRI |
- 							WQ_MEM_RECLAIM |
--							WQ_UNBOUND, 1);
-+							WQ_UNBOUND, 0);
- 		if (!adapter->rx_workqueue)
- 			goto err_kmalloc;
+-	scrub_workers = alloc_workqueue("btrfs-scrub", flags,
+-					is_dev_replace ? 1 : max_active);
++	if (is_dev_replace)
++		scrub_workers = alloc_ordered_workqueue("btrfs-scrub", flags);
++	else
++		scrub_workers = alloc_workqueue("btrfs-scrub", flags, max_active);
+ 	if (!scrub_workers)
+ 		goto fail_scrub_workers;
  
