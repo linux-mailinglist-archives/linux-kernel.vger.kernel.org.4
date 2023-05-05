@@ -2,62 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1396F84F6
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 16:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA1E6F84FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 16:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbjEEOjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 10:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
+        id S231768AbjEEOkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 10:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232758AbjEEOjj (ORCPT
+        with ESMTP id S232330AbjEEOkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 10:39:39 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3543C38;
-        Fri,  5 May 2023 07:39:38 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 345EdY3k083468;
-        Fri, 5 May 2023 09:39:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683297574;
-        bh=dDL1Ix5ed3FpBkik2TeAdp7w4F8HGFiJXQbTgcTMItg=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ipxeQOzq47k4DVknxcdtEMQNqnfx4hU2QZEd/WE/1xiSQkFfHPdZ1GCWQ20r6TRrT
-         YesYYxluA9CxeeCxJ5tB0VtBksCaVkgmwiYb6mXtyEFhGdv6mV9Ca2By3xFwWrSVEo
-         SZn1dz2Awb7gXwTgROhP7uAa/NHqsvXdoCjywhgU=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 345EdYo6015164
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 5 May 2023 09:39:34 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 5
- May 2023 09:39:34 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 5 May 2023 09:39:34 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 345EdX61113551;
-        Fri, 5 May 2023 09:39:34 -0500
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-To:     <peter.ujfalusi@gmail.com>, <vigneshr@ti.com>, <vkoul@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <devicetree@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <u-kumar1@ti.com>,
-        <j-choudhary@ti.com>, <vaishnav.a@ti.com>
-Subject: [PATCH v3 2/2] dmaengine: ti: k3-udma: Add support for J721S2 CSI BCDMA instance
-Date:   Fri, 5 May 2023 20:09:29 +0530
-Message-ID: <20230505143929.28131-3-vaishnav.a@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230505143929.28131-1-vaishnav.a@ti.com>
-References: <20230505143929.28131-1-vaishnav.a@ti.com>
+        Fri, 5 May 2023 10:40:16 -0400
+Received: from m228-4.mailgun.net (m228-4.mailgun.net [159.135.228.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBED18912
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 07:39:57 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
+ s=mx; t=1683297596; x=1683304796; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date:
+ Sender: Sender; bh=1zV5HkaO4AcJ2oJf1urH6etlYKt5oTziBWscnFyDS8k=;
+ b=n+LvbNTlTR2M84lzJEseOk1nD6juue+aeZkwijoJpEL9FbziPK70KE89+n3EyvMdrBdZnBBidJg+IXfcU5u7YW7nDGOWGVpqNuHzP0Vb8QOCp6sndu2sklYhImQTMf64nfUp3ehcVEO+oJKM+mHJ9IJWkSf4ewjwhzecAp0Aw+8PiQPOPpWnhHNhjy7XJMXyR86hhvcX8EOeMCQR5LW0PPYL4LHihipJMFqIon0mKhaI3xZlUVjL4Qr5vovp5Pr67rjIEtOIl/uKlmFEnMgju4EPwjrxnFnGjJNCE1oxq02G68us8SB5NWj26EEnWHTQKNXwgiMtSUmZ0RcBbranbQ==
+X-Mailgun-Sending-Ip: 159.135.228.4
+X-Mailgun-Sid: WyI4ZWI3MiIsImxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmciLCI5M2Q1YWIiXQ==
+Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by f5ac2268c446 with SMTP id
+ 6455153cf77227a8301b0176 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 05 May 2023 14:39:56 GMT
+Sender: james@equiv.tech
+Date:   Fri, 5 May 2023 07:39:55 -0700
+From:   James Seo <james@equiv.tech>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC 02/11] hwmon: (core) Rename last parameter of
+ devm_hwmon_register_with_info()
+Message-ID: <ZFUVO4ECF0Xlcmx8@equiv.tech>
+References: <20230504075752.1320967-1-james@equiv.tech>
+ <20230504075752.1320967-3-james@equiv.tech>
+ <ff6efe53-2173-1372-a1ca-c0928cf8a160@roeck-us.net>
+ <ZFUBZyG5eoz2TpZX@equiv.tech>
+ <ec28c2c2-4623-0d92-00bc-b8cd53c965b2@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ec28c2c2-4623-0d92-00bc-b8cd53c965b2@roeck-us.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,65 +54,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J721S2 has dedicated BCDMA instance for Camera Serial Interface RX
-and TX. The BCDMA instance supports RX and TX channels but block copy
-channels are not present, add support for the same.
+On Fri, May 05, 2023 at 06:30:53AM -0700, Guenter Roeck wrote:
+> On 5/5/23 06:15, James Seo wrote:
+>> On Thu, May 04, 2023 at 08:29:57AM -0700, Guenter Roeck wrote:
+>> 
+>> Hello,
+>> 
+>> Of course arbitrarily changing variable names is pointless. But this
+>> patch fulfills the intent of 848ba0a2f20dc121a3ef5272a24641d2bd963d8b,
+>> which makes this change for devm_hwmon_device_register_with_info() in
+>> hwmon-kernel-api.txt and in hwmon.h - but not in hwmon.c. The same
+>> commit makes the same change for hwmon_device_register_with_info() in
+>> all three files, so it obviously should have been in tree already.
+>> 
+>> The other reason for this patch is that for the purpose of generating
+>> function documentation from kerneldocs, it is not feasible to call
+>> this parameter "extra_groups" in the kerneldoc and still call it
+>> "groups" in the function itself. Doing so results in the lines
+>> "const struct attribute_group **groups / undescribed" and no mention
+>> of "extra_groups" in the generated document. Leaving things as is, so
+>> that [devm_]hwmon_device_register_with_info() have different names
+>> for this parameter, is potentially confusing and more noticeable to
+>> to the eye than I would like once rendered.
+>> 
+>> Is this good enough to proceed? And as a subsystem maintainer, is
+>> there anything else, specifically or in general, that you would like
+> 
+> Marginally. That should have been explained in more detail in the
+> description.
 
-Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
----
- drivers/dma/ti/k3-udma.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+OK, I will add more detail.
 
-diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-index fc3a2a05ab7b..16c5c333808b 100644
---- a/drivers/dma/ti/k3-udma.c
-+++ b/drivers/dma/ti/k3-udma.c
-@@ -4308,6 +4308,15 @@ static struct udma_soc_data am62a_dmss_csi_soc_data = {
- 	},
- };
- 
-+static struct udma_soc_data j721s2_bcdma_csi_soc_data = {
-+	.oes = {
-+		.bcdma_tchan_data = 0x800,
-+		.bcdma_tchan_ring = 0xa00,
-+		.bcdma_rchan_data = 0xe00,
-+		.bcdma_rchan_ring = 0x1000,
-+	},
-+};
-+
- static struct udma_match_data am62a_bcdma_csirx_data = {
- 	.type = DMA_TYPE_BCDMA,
- 	.psil_base = 0x3100,
-@@ -4346,6 +4355,18 @@ static struct udma_match_data am64_pktdma_data = {
- 	},
- };
- 
-+static struct udma_match_data j721s2_bcdma_csi_data = {
-+	.type = DMA_TYPE_BCDMA,
-+	.psil_base = 0x2000,
-+	.enable_memcpy_support = false,
-+	.burst_size = {
-+		TI_SCI_RM_UDMAP_CHAN_BURST_SIZE_64_BYTES, /* Normal Channels */
-+		0, /* No H Channels */
-+		0, /* No UH Channels */
-+	},
-+	.soc_data = &j721s2_bcdma_csi_soc_data,
-+};
-+
- static const struct of_device_id udma_of_match[] = {
- 	{
- 		.compatible = "ti,am654-navss-main-udmap",
-@@ -4373,6 +4394,10 @@ static const struct of_device_id udma_of_match[] = {
- 		.compatible = "ti,am62a-dmss-bcdma-csirx",
- 		.data = &am62a_bcdma_csirx_data,
- 	},
-+	{
-+		.compatible = "ti,j721s2-dmss-bcdma-csi",
-+		.data = &j721s2_bcdma_csi_data,
-+	},
- 	{ /* Sentinel */ },
- };
- 
--- 
-2.17.1
+> 
+>> to see addressed?
+>> 
+> 
+> I don't know. There are changes which seem to be more based on POV
+> than real improvement (such as the removal of the credit from the
+> PMBus document). I'll have to verify each and every reference to determine
+> if the change is appropriate. Also, the changes are substantial.
 
+Yes, sorry. At some point comparing a local make htmldocs build to
+docs.kernel.org became much easier to follow than slogging through
+diffs, and some of the markup only makes sense once rendered next to
+the automatic cross-references that Sphinx adds.
+
+> It will take a lot of time for me to review, and right now I do not have
+> that time. I have a hard time keeping up with code reviews.
+> 
+> Guenter
+> 
+
+No rush. Your time is always appreciated. As I have gathered some
+feedback from Bagas, I will submit the smaller changes as a PATCH
+series in a day or two and an updated RFC series that you can
+tackle at your leisure.
+
+James
