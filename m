@@ -2,66 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003476F8A46
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 22:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5644A6F8A4A
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 22:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbjEEUkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 16:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
+        id S233075AbjEEUlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 16:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjEEUkG (ORCPT
+        with ESMTP id S229628AbjEEUlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 16:40:06 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A952D49FE
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 13:40:05 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-24df6bbf765so2048491a91.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 13:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683319205; x=1685911205;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OGFXeU2dXaRo8clMCkR8c/hfrCLvrLrfrAcbGat2bS8=;
-        b=gM0mLhZPPogTqDhH2p1bvP3RMMjdphDn/Ubq+8G64h4i2qq7VyxacwfPbtU+trWfKU
-         U7gTntgoYJnK0Th0YsMLnQFnRLwRle6BHJYf9oxow1BmL14BDo+u9P0ZiNigKd3cRj/P
-         uJpIpOx5Mv2xA32aqLN6X8fjC+LabvrS4mt2mpMYMeEnhZaPHdphaz4LbzSEXIiMoOG0
-         GHMZ9uKkL+h0BauzZ0vBeJF/R79NsUchwPmDsX/fSIu+hWBN/68zg5TKJmn5j/hlUJUR
-         9qEi/QfcJy0yyve6CDIg7gFaZvjW+DmLiuytY1TkGxjQgf8tH1W5aUYRtnPca2XVR0xs
-         9U1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683319205; x=1685911205;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OGFXeU2dXaRo8clMCkR8c/hfrCLvrLrfrAcbGat2bS8=;
-        b=V9CLM7K8QEIjOPJ+rL5wrBQhmNQ4YGR4y3qqeRrSB4YH/u+f2N5sq8rwIISnNM1FFH
-         MCuoJB8MkY0XmqkEMlJsSJiHpbJr8uLLCE5yBJTgbzSwHkWhNhx/WjRVIir6CK9BTQtW
-         bMQ6DP2aa6+qhKrhh+N9+GsGn5TpMmtgkQvb2bSvPh5hIwcSy3V5HcmimoL6t5ZHNS3b
-         YhKOcwljOjvauZOojek9Ghm/2fEytkDg8p213jBS0nCvf61JbnYTUZhR31NyCrCh1zZB
-         1sz/4FTJxivGW09X/U6eeGu+2QNJMUp+q6ltISLZkuinJsPa1cWduSMmmbDka3+9ExC6
-         6yvw==
-X-Gm-Message-State: AC+VfDyzZbCe60WUeo0Q7vvnyMJooLbE7bHqLNI7FMjDdo4/EPcCIAV1
-        xB3hgtki0DxkcMcOwynCS5k6cYLmiIk=
-X-Google-Smtp-Source: ACHHUZ6dB/vPtTYWg7uhHznNlXJ0K2YkXLUMaIa/tmbVDicNbO1mh6N+YwG2esq5hI9+qVRtISfWng==
-X-Received: by 2002:a17:90a:b281:b0:24e:1dcd:4e73 with SMTP id c1-20020a17090ab28100b0024e1dcd4e73mr3000560pjr.0.1683319204509;
-        Fri, 05 May 2023 13:40:04 -0700 (PDT)
-Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:4c39:b490:cecf:cb9c])
-        by smtp.gmail.com with ESMTPSA id i14-20020a17090ad34e00b0024e3d26f644sm6057166pjx.3.2023.05.05.13.40.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 13:40:04 -0700 (PDT)
-From:   Daeho Jeong <daeho43@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
-Cc:     Daeho Jeong <daehojeong@google.com>
-Subject: [PATCH] f2fs: close unused open zones while mounting
-Date:   Fri,  5 May 2023 13:40:00 -0700
-Message-ID: <20230505204000.3604748-1-daeho43@gmail.com>
-X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
+        Fri, 5 May 2023 16:41:02 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2066.outbound.protection.outlook.com [40.107.244.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A604B49FF;
+        Fri,  5 May 2023 13:41:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jPerEKPC8W7jIVPX+x0GJSOWPdtpkA+VYWZ+7qzTsyAHaqdYjJ/h8VGuT2l0PyQAUqa0HWmUfu7bulzxfAsdAKu8w/jGz9I6x1L2hMsVaHOPTP9MHMOT19OsAWbM6OxDJEIiTZrrQdJ/Q85OOatAiuRwIAHqeNWJlOCUQt6xoTV4/fhr5E2xTEmnysv4RDXa8Sw3M4pIiSS4wrvNxDwxpREifC29cvZEokhPbSmk1H0ObGmhnIT4KsDYSVFtrIC6nXkX3QAv1mqTwXWlLAWGroO8yTNcfPr/FqllQIShOabGGPSPsBnx8tCqxSU4u6PeU2CPTiyt9tUn5mk1XbLckw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4qA/zZYRQNWADbMtRi2Kbl3/XlzdwyeB2BJc4yKVDu8=;
+ b=Gd+HWqqMmLERJEit76khaTz+9pmtfI4U0xaBazRFYXea0qll3zwDem+MoF5K4J04Aj25fyBbGZli08oDkvfhHFv4WqQ2Z47oVV669m7SeFjtGjIgUg7yVS5ntAhCtTTVe3nUnH9MIFbXcE1sB/kAQ1N/zQc4h9EkF60B33l3XgMeUL+ZBSS1mpXdu900YjXw52ZFZDdfIz0awZF5SzqEl17nifOcEDXfCjl8HDWbqXfrgVS+PN01YrQIEhOq+jpD5bacAImpCsyYppvzET7Y9GsNcyQoAI2oSMlqUjxLupyhVh2ikIpzDJ/PP76XuRFRaKnyHN4KNAaHkRfHXJ/COQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4qA/zZYRQNWADbMtRi2Kbl3/XlzdwyeB2BJc4yKVDu8=;
+ b=JQECdcIhQHtk/epMgZTyxANqltlje8bC6drgOUsMyLQKW4DrgmIGkGjQYU3itFvZYSbBUNbaJmy6q72SE5xu5o12opcN0Dsm8VwkkPJ3c6Mhxv6YpGXN1WUdN9dJ7XDQWCcxwGWEdJKw1fZwe5JylwYZC+AEuBOTtPEVRom1tPQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
+ by DM6PR12MB4513.namprd12.prod.outlook.com (2603:10b6:5:2ad::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.22; Fri, 5 May
+ 2023 20:40:59 +0000
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::216f:6f0f:4a21:5709]) by MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::216f:6f0f:4a21:5709%5]) with mapi id 15.20.6363.026; Fri, 5 May 2023
+ 20:40:59 +0000
+Message-ID: <c1a309b0-3d29-151d-b1af-04d524cfbd83@amd.com>
+Date:   Fri, 5 May 2023 15:40:51 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Reply-To: babu.moger@amd.com
+Subject: Re: [PATCH v4 4/7] x86/resctrl: Re-arrange RFTYPE flags and add more
+ comments
+Content-Language: en-US
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Babu Moger <babu.moger@amd.com>, corbet@lwn.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de
+Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
+        quic_neeraju@quicinc.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
+        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        jmattson@google.com, daniel.sneddon@linux.intel.com,
+        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bagasdotme@gmail.com, eranian@google.com,
+        christophe.leroy@csgroup.eu, jarkko@kernel.org,
+        adrian.hunter@intel.com, quic_jiles@quicinc.com,
+        peternewman@google.com
+References: <168177435378.1758847.8317743523931859131.stgit@bmoger-ubuntu>
+ <168177447844.1758847.17789021842152864417.stgit@bmoger-ubuntu>
+ <67e00f1e-bbb2-59b6-fe34-758d5b268324@intel.com>
+From:   "Moger, Babu" <bmoger@amd.com>
+In-Reply-To: <67e00f1e-bbb2-59b6-fe34-758d5b268324@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR14CA0019.namprd14.prod.outlook.com
+ (2603:10b6:208:23e::24) To MW3PR12MB4553.namprd12.prod.outlook.com
+ (2603:10b6:303:2c::19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4553:EE_|DM6PR12MB4513:EE_
+X-MS-Office365-Filtering-Correlation-Id: 240c152b-8d25-4035-246b-08db4da90847
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Euwi4aTtxf5VFGgACck8sDhgmyybYdT8D9c7vizJlLwHlqBVNE43JXQwCJnL2miO96M9VHnfeF1BxSLTUyQc10o10EV3bXHwx9N6bJteauGETXSbPHXP1XfrywwLJq31q1qJEiRz3NqvoB3/vD2qzsr8rfQuVfuNinzBKx3PT3DE5txiNnCP+n/RrEZBN19D8IxK8GA5EvvfnWwv2JCHfFGaX2fMLFmiaNjPsGmfJrLi97JOUC45lktpQ2TUKEbvH7g/pMI8gIz+mDRc7YuKeyNx62fIdk+edvsIhxkokMhzHvqaPkd0oTxF7fhlB6DrF3Xg10Nza49Yv/ZLBux3wD6UVKfxobiteQQE4HbMb5alOFXLJbKkwZ5Oh5Xhcj+yC4fFhk2WTp4aHUPMhMOnAPtBujwl+8xLN8pvYrfGJ6x6jYcA9l9eSkGmZleOoby535KgKYoBqcPTDV4wJvUOKix33eGecUTZa5JPobeDz+KWgim9zS6XwAHpA74IuHugQ2IAXFQ0NvtnujSPjVNjMUgTdFmWGY/ngFz4CLFdrnCqdmXNxZQ7JuoJUKRAPBKH6AEbYOQPiIDIKDSK1BiUGeHiSYtca8oNWtTEdoZF7qx+GpnFFrduDowcJRPoYZOvSBbeokWXGiBJrYc67FdxKw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(366004)(396003)(451199021)(6666004)(478600001)(110136005)(4744005)(2906002)(31696002)(5660300002)(4326008)(8676002)(2616005)(8936002)(316002)(41300700001)(31686004)(38100700002)(6486002)(7406005)(36756003)(7416002)(186003)(53546011)(66556008)(66476007)(66946007)(26005)(6506007)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U2MrZDVzVXRPcXNIVXhjYXFobnl6c3BPU3dGU25uZU0rYkQvK1BiTXhKc2VO?=
+ =?utf-8?B?UStBMXljWDBQZGNibzBIZzZpTkRjcFNsL0wwaDZ6cUd1QVMzeDRscHQvdkIr?=
+ =?utf-8?B?YmtyeGUydkhiQnBSLzIwcHNHN25iNytyNGQ3Y2JycXkxMmZqN3NyYStXMVRB?=
+ =?utf-8?B?YXAxNnMyWEdyZmpTRkNTRDBVOXUrTFJLZlZ2RVR1TXFDNm85U0xvUmswWjJz?=
+ =?utf-8?B?SXZlbjFJTkFjOG05Z3UyNytydkU0a1JBUy9HNlFkYk9BWVVVT2pISGZpZkZp?=
+ =?utf-8?B?K0U0UHRUNXZvU09yMVNlZWdLaGVhTDBBYlB2cUk3YkNFcCtENWtmK3Q4a2Z3?=
+ =?utf-8?B?ekdlRUVNNERzL29hbDVJT0l5ZTNpdHRiQnNzbzNrYUlnekZrUG12am1tQmpZ?=
+ =?utf-8?B?QkNveWg0eVhNZEVLOWxxK1ZPTXdVRlJWM25NcVdYMTMzQy9VcVdxVWlsSlhS?=
+ =?utf-8?B?WFE2SXN6ako3Z3VwZlpQV0VUZ3VwbmMrTm5ZRDdUUlZBS1FhaUZrL0NlckMz?=
+ =?utf-8?B?UEtZcmlkUGg2TGdvSVpQeXNteVByeC9CMThjdTdVVnhUem9sWmNTUWZZT1hN?=
+ =?utf-8?B?Q095UWkyTUVIWXI3dXJ0bStRYjZwdEJqQ0YyTTZQUFZhVGN5VWNJVWNlN3lR?=
+ =?utf-8?B?SS9ZbWFwQUh1OWZ2UEtWMC9VTFB6ZHdUYlE2NDMyUXFiWmNUaGlJckV6UjE5?=
+ =?utf-8?B?MzNnZVJodHV2L3Z6VXYvYzE2bWlna08zNjRnVjBMWm5hNHZMSmtUNnJtTGl5?=
+ =?utf-8?B?SVhSYXg3T1JLbTd3ZzlDU0Rob3B0SVYwNGxoWWhTaUZwSGg0OVNDQ3lvV2dZ?=
+ =?utf-8?B?YkxFeHlOOE1DWGpDUmxsVGpJUFQ4bjFRaGxYTlRMKzRZUTdFc21vWWljcnlK?=
+ =?utf-8?B?bDFDUCt2NXZIdGx6bjV6cHE3WjZKUzJCTGxRMCt2T0JteUYwb2dWT3JnOXBw?=
+ =?utf-8?B?RlpXclkrUXJqcCtQaGp3cksrM0lrRmVzN0xwMENXYWFUTEJGc29hUTB0SWZO?=
+ =?utf-8?B?aHEvekdGRkE2ZExzYTh0V3ljbHJlc2VCNDB1dEU0NTdwNTN6N05QUFlCeElR?=
+ =?utf-8?B?c1plOG9RQld5cDhuVTMrMVNWdHJQNVpTWWNZZ3RlUXpuMkVlQ200QnB4aXJR?=
+ =?utf-8?B?WHg4YjNJdzRTMlAyclF2ckIzREJEWlp1TzJTUHdLbXVqQlRMdFBYNGoxbGt5?=
+ =?utf-8?B?Q0NrTzJsb2V3WXk0UEMxbllYQk1hYXo3YnQxRWlCNzdFdFdUNjQ1b0RONkdn?=
+ =?utf-8?B?L0JKVDZlT3lGVTFIcnFrbjJmYWVRQzkzSUxKZThGRTZvNGlQMExJSlZsNG05?=
+ =?utf-8?B?Zll2R2ZyM0x4NHpSRVNCYjl1c082bXpZZXUwU2RyT1R5M0FSREE1SlNDaE9o?=
+ =?utf-8?B?TTQrUkI0WjAybEdZMnpaY2FKUjFHNDdveDd3ZDEzS1V3Ym1oZDhlNDRnNUho?=
+ =?utf-8?B?ZjR1a3gxNjU3Y1ljUWc0NFVkVmwvNW14M2ZIaEJkSnFBdnJnVEpNZ0JXVUJs?=
+ =?utf-8?B?RjRJZ0hjUUF3RGdBc0FHSWhaZU5Xb0tSN0ZkdWVwOTZROUtVMHVEWHRjZ1Jn?=
+ =?utf-8?B?cUlQaVZqd3loK0VIaGtXd044T2wyQ1N2ZUxBTFFNSWlmaFMvOFRBQUQ0QWlS?=
+ =?utf-8?B?SytQNmRWUjhaTXRtcjUzOXArVmh1ZElPYUdHMEVJRkpyR3dvWHpOYmZ3VTFR?=
+ =?utf-8?B?U0dmZDlUWndQcDJYZW5KcHMva1dsL3N2Zzk5eEZlcER4RS90WXZwWHFXQmdk?=
+ =?utf-8?B?RU9MSkZpUHdGOU5YSUY2MW9wbk12NUJuMEFzSnFrTmErMnlCZ2h6bFFPNkl4?=
+ =?utf-8?B?M25kbnRMZmZ5c3Z1Ri9ZVmZ3THZsd0xhenJFNVZCUnpLcmIrY3lIWU01a0w2?=
+ =?utf-8?B?NjlPZTc2d1VZVHpRYXJBY1R5Tk9RRVZLREl6Y3lGQ1ZtSHJwZUdIekwyVkxX?=
+ =?utf-8?B?VGliNlRVZWxlRzQ3eDU2UlU3THdJb3loTWZNRG5zN2hKanlrTWM3Z0tJK05L?=
+ =?utf-8?B?eHhwVFFxakRoRHFKM0s3ajZaMEhDZEtpQ1lNTXpzcjc2MHFLYk5aN0I3S2J6?=
+ =?utf-8?B?MWh0MHgydERQTlJ0eDhmSndQTEVUYmU0QnhFbWVmQlBoVEd5ajE2MllqZUVj?=
+ =?utf-8?Q?0jqX5BaCi55KA6RYBietHcpWx?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 240c152b-8d25-4035-246b-08db4da90847
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 20:40:58.9079
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: epSvtu2sPC1Q5/4Y4Ck6atEjuPDyjHVLyKKCv2y9LtCRyjqFrl/f1JSttgpJQMOj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4513
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,92 +141,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daeho Jeong <daehojeong@google.com>
+Hi Reinette,
 
-Zoned UFS allows only 6 open zones at the same time, so we need to take
-care of the count of open zones while mounting.
+On 5/4/2023 2:00 PM, Reinette Chatre wrote:
+> Hi Babu,
+>
+> On 4/17/2023 4:34 PM, Babu Moger wrote:
+>> Remove gaps in bit definitions of RFTYPE flags and add more comments
+> Why is it necessary to remove gaps in the bit definitions?
 
-Signed-off-by: Daeho Jeong <daehojeong@google.com>
----
- fs/f2fs/segment.c | 53 +++++++++++++++++++++++++++--------------------
- 1 file changed, 31 insertions(+), 22 deletions(-)
+Removing the gaps is not necessary definitely. I thought adding comments 
+will help adding new flags in the future.
 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 6db410f1bb8c..43d537d29b52 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -4810,40 +4810,49 @@ static int check_zone_write_pointer(struct f2fs_sb_info *sbi,
- 			break;
- 	}
- 
--	/*
--	 * If last valid block is beyond the write pointer, report the
--	 * inconsistency. This inconsistency does not cause write error
--	 * because the zone will not be selected for write operation until
--	 * it get discarded. Just report it.
--	 */
--	if (last_valid_block >= wp_block) {
--		f2fs_notice(sbi, "Valid block beyond write pointer: "
--			    "valid block[0x%x,0x%x] wp[0x%x,0x%x]",
--			    GET_SEGNO(sbi, last_valid_block),
--			    GET_BLKOFF_FROM_SEG0(sbi, last_valid_block),
--			    wp_segno, wp_blkoff);
-+	// The write pointer matches with the valid blocks
-+	if (last_valid_block + 1 == wp_block)
- 		return 0;
--	}
- 
--	/*
--	 * If there is no valid block in the zone and if write pointer is
--	 * not at zone start, reset the write pointer.
--	 */
--	if (last_valid_block + 1 == zone_block && zone->wp != zone->start) {
-+	if (last_valid_block + 1 == zone_block) {
-+		/*
-+		 * If there is no valid block in the zone and if write pointer
-+		 * is not at zone start, reset the write pointer.
-+		 */
- 		f2fs_notice(sbi,
- 			    "Zone without valid block has non-zero write "
- 			    "pointer. Reset the write pointer: wp[0x%x,0x%x]",
- 			    wp_segno, wp_blkoff);
- 		ret = __f2fs_issue_discard_zone(sbi, fdev->bdev, zone_block,
- 					zone->len >> log_sectors_per_block);
--		if (ret) {
-+		if (ret)
- 			f2fs_err(sbi, "Discard zone failed: %s (errno=%d)",
- 				 fdev->path, ret);
--			return ret;
--		}
-+
-+		return ret;
- 	}
- 
--	return 0;
-+	/*
-+	 * If there are valid blocks and the write pointer doesn't
-+	 * match with them, we need to report the inconsistency and
-+	 * fill the zone till the end to close the zone. This inconsistency
-+	 * does not cause write error because the zone will not be selected
-+	 * for write operation until it get discarded.
-+	 */
-+	f2fs_notice(sbi, "Valid blocks are not aligned with write pointer: "
-+		    "valid block[0x%x,0x%x] wp[0x%x,0x%x]",
-+		    GET_SEGNO(sbi, last_valid_block),
-+		    GET_BLKOFF_FROM_SEG0(sbi, last_valid_block),
-+		    wp_segno, wp_blkoff);
-+
-+	ret = blkdev_issue_zeroout(fdev->bdev, zone->wp,
-+				zone->len - (zone->wp - zone->start),
-+				GFP_NOFS, 0);
-+	if (ret)
-+		f2fs_err(sbi, "Fill up zone failed: %s (errno=%d)",
-+			 fdev->path, ret);
-+
-+	return ret;
- }
- 
- static struct f2fs_dev_info *get_target_zoned_dev(struct f2fs_sb_info *sbi,
--- 
-2.40.1.521.gf1e218fcd8-goog
+If you want me to drop this whole patch, I am fine with it.
+
+Thanks
+
+Babu
 
