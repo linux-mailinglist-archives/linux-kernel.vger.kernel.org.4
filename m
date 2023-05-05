@@ -2,118 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EE96F8106
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C116F8109
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbjEEKtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 06:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
+        id S231840AbjEEKu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 06:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbjEEKtI (ORCPT
+        with ESMTP id S230411AbjEEKuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 06:49:08 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D388F4;
-        Fri,  5 May 2023 03:49:07 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4C45F1F8C1;
-        Fri,  5 May 2023 10:49:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1683283745; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XbyxKS0XVSbntMZRS7J/xfGZnAu0J6KaI4py7lxlOio=;
-        b=pWQqIpLR5XTtiUEC6LYXykGJJkoqkbvackC0HRSM1h3uxZqW6FgW6PLD6sCe4SLJ2rkCzZ
-        TaXMcgUZn7sLUoncyKoEunmPvi3y5IxIvT447P+1Za23OfvZ3tXia8PBKMtfCFS96EgYc+
-        FCSPCuXGLeiHiUT7ocQ3nmZogtvzdLw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1683283745;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XbyxKS0XVSbntMZRS7J/xfGZnAu0J6KaI4py7lxlOio=;
-        b=+h8135oZgzMg52mRmcDCnaa52Uir/Rmj30Oa7s+58C2sEKwS3DdGycTxFaiqE5sG+xqt4E
-        9zkXQIppTHDgCdDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3E20A13488;
-        Fri,  5 May 2023 10:49:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 4rokDyHfVGSmBAAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 05 May 2023 10:49:05 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id BA638A0729; Fri,  5 May 2023 12:49:04 +0200 (CEST)
-Date:   Fri, 5 May 2023 12:49:04 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Christoph Hellwig <hch@lst.de>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: always respect QUEUE_FLAG_STABLE_WRITES on the block
- device
-Message-ID: <20230505104904.2zr4escdxvoekr2k@quack3>
-References: <20230504105624.9789-1-idryomov@gmail.com>
- <20230504135515.GA17048@lst.de>
- <ZFO+R0Ud6Yx546Tc@casper.infradead.org>
- <20230504155556.t6byee6shgb27pw5@quack3>
- <ZFPacOW6XMq+o4YU@casper.infradead.org>
- <20230504230736.GA2651828@dread.disaster.area>
+        Fri, 5 May 2023 06:50:54 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29865F4;
+        Fri,  5 May 2023 03:50:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683283853; x=1714819853;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=ni/vJgiG6XHfX4g7uVzKoHiKBa270MzkVO6QSlgMSB8=;
+  b=Mok0mXZbDE/F7skYfaLDy257RA9plQ717XTzF4C8UjIdaDUT4ybqlPi2
+   Ytpie7O2Z5PdgqxLHKWtYCHiuF4ExzJfdWCqAQpZLRKI07mTOV0tH71+S
+   0R77+nlX19xFFNIAoilIFZjkSs7J86hvfFEkMppOxn0azOW4i9haan5J0
+   ezN7L05Xiu1r+vxgzXSOCRQaEPH3CdlowBp/dxMrmn7GS3hHlgXObA4un
+   vA49Cz/lfNGMIRtUs/uQPVZn33xfpX6sk+gYEMXJGx5K22ig02DQWJiSx
+   i9gHngkfR/RqaUnZQdkkA2hj/CT3qe/w5UBEcdk5kCdSsLk6kJsH+Uaif
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="412411064"
+X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
+   d="scan'208";a="412411064"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 03:50:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="871775693"
+X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
+   d="scan'208";a="871775693"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga005.jf.intel.com with ESMTP; 05 May 2023 03:50:50 -0700
+Message-ID: <f6689241-9749-28a2-6da4-842f3253c678@linux.intel.com>
+Date:   Fri, 5 May 2023 13:52:22 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230504230736.GA2651828@dread.disaster.area>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Content-Language: en-US
+To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
+        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
+References: <20230421203853.387210-1-WeitaoWang-oc@zhaoxin.com>
+ <20230421203853.387210-4-WeitaoWang-oc@zhaoxin.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v2 3/4] xhci: Show zhaoxin xHCI root hub speed correctly
+In-Reply-To: <20230421203853.387210-4-WeitaoWang-oc@zhaoxin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 05-05-23 09:07:36, Dave Chinner wrote:
-> On Thu, May 04, 2023 at 05:16:48PM +0100, Matthew Wilcox wrote:
-> > On Thu, May 04, 2023 at 05:55:56PM +0200, Jan Kara wrote:
-> > > For bdev address_space that's easy but what Ilya also mentioned is a
-> > > problem when 'stable_write' flag gets toggled on the device and in that
-> > > case having to propagate the flag update to all the address_space
-> > > structures is a nightmare...
-> > 
-> > We have a number of flags which don't take effect when modified on a
-> > block device with a mounted filesystem on it.  For example, modifying
-> > the readahead settings do not change existing files, only new ones.
-> > Since this flag is only modifiable for debugging purposes, I think I'm
-> > OK with it not affecting already-mounted filesystems.  It feels like a
-> > decision that reasonable people could disagree on, though.
+On 21.4.2023 23.38, Weitao Wang wrote:
+> Some zhaoxin xHCI controllers follow usb3.1 spec,
+> but only support gen1 speed 5G. While in Linux kernel,
+> if xHCI suspport usb3.1,root hub speed will show on 10G.
+> To fix this issue of zhaoxin xHCI platforms, read usb speed ID
+> supported by xHCI to determine root hub speed.
 > 
-> I think an address space flag makes sense, because then we don't
-> even have to care about the special bdev sb/inode thing -
-> folio->mapping will already point at the bdev mapping and so do the
-> right thing.
+> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+> ---
+>   drivers/usb/host/xhci.c | 22 ++++++++++++++++++++++
+>   1 file changed, 22 insertions(+)
 > 
-> That is, if the bdev changes stable_write state, it can toggle the
-> AS_STABLE_WRITE flag on it's inode->i_mapping straight away and all
-> the folios and files pointing to the bdev mapping will change
-> behaviour immediately.  Everything else retains the same behaviour
-> we have now - the stable_write state is persistent on the superblock
-> until the filesystem mount is cycled.
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 6307bae9cddf..31d6ace9cace 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -5294,6 +5294,7 @@ static void xhci_hcd_init_usb2_data(struct xhci_hcd *xhci, struct usb_hcd *hcd)
+>   static void xhci_hcd_init_usb3_data(struct xhci_hcd *xhci, struct usb_hcd *hcd)
+>   {
+>   	unsigned int minor_rev;
+> +	unsigned int i, j;
+>   
+>   	/*
+>   	 * Early xHCI 1.1 spec did not mention USB 3.1 capable hosts
+> @@ -5323,6 +5324,27 @@ static void xhci_hcd_init_usb3_data(struct xhci_hcd *xhci, struct usb_hcd *hcd)
+>   		hcd->self.root_hub->ssp_rate = USB_SSP_GEN_2x1;
+>   		break;
+>   	}
+> +
+> +	/* Usb3.1 has gen1 and gen2, Some zhaoxin's xHCI controller
+> +	 * that follow usb3.1 spec but only support gen1.
+> +	 */
+> +	if (xhci->quirks & XHCI_ZHAOXIN_HOST) {
+> +		minor_rev = 0;
+> +		for (j = 0; j < xhci->num_port_caps; j++) {
+> +			for (i = 0; i < xhci->port_caps[j].psi_count; i++) {
+> +				if (XHCI_EXT_PORT_PSIV(xhci->port_caps[j].psi[i]) >= 5) {
+> +					minor_rev = 1;
+> +					break;
+> +				}
+> +			}
+> +			if (minor_rev)
+> +				break;
+> +		}
+> +		if (minor_rev != 1) {
+> +			hcd->speed = HCD_USB3;
+> +			hcd->self.root_hub->speed = USB_SPEED_SUPER;
+> +		}
+> +	}
+>   	xhci_info(xhci, "Host supports USB 3.%x %sSuperSpeed\n",
+>   		  minor_rev, minor_rev ? "Enhanced " : "");
+>   
 
-Yeah, I'm fine with this behavior. I just wasn't sure whether Ilya didn't
-need the sysfs change to be visible in the filesystem so that was why I
-pointed that out. But apparently he doesn't need it.
+How about checking if port support over 5Gbps (psiv >= 5) when we parse the protocol speed ID
+entries the first time? This way we could avoid looping through all the port_cap psiv values.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Something like:
+
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index c4170421bc9c..2e4c80eb4972 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1961,7 +1961,7 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+  {
+         u32 temp, port_offset, port_count;
+         int i;
+-       u8 major_revision, minor_revision;
++       u8 major_revision, minor_revision, tmp_minor_revision;
+         struct xhci_hub *rhub;
+         struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+         struct xhci_port_cap *port_cap;
+@@ -1981,6 +1981,11 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+                  */
+                 if (minor_revision > 0x00 && minor_revision < 0x10)
+                         minor_revision <<= 4;
++               if (xhci->quirks & XHCI_ZHAOXIN_HOST) {
++                       tmp_minor_revision = minor_revision;
++                       minor_revision = 0;
++               }
++
+         } else if (major_revision <= 0x02) {
+                 rhub = &xhci->usb2_rhub;
+         } else {
+@@ -1989,10 +1994,6 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+                 /* Ignoring port protocol we can't understand. FIXME */
+                 return;
+         }
+-       rhub->maj_rev = XHCI_EXT_PORT_MAJOR(temp);
+-
+-       if (rhub->min_rev < minor_revision)
+-               rhub->min_rev = minor_revision;
+  
+         /* Port offset and count in the third dword, see section 7.2 */
+         temp = readl(addr + 2);
+@@ -2010,8 +2011,6 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+         if (xhci->num_port_caps > max_caps)
+                 return;
+  
+-       port_cap->maj_rev = major_revision;
+-       port_cap->min_rev = minor_revision;
+         port_cap->psi_count = XHCI_EXT_PORT_PSIC(temp);
+  
+         if (port_cap->psi_count) {
+@@ -2032,6 +2031,10 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+                                   XHCI_EXT_PORT_PSIV(port_cap->psi[i - 1])))
+                                 port_cap->psi_uid_count++;
+  
++                       if (xhci->quirks & XHCI_ZHAOXIN_HOST &&
++                           XHCI_EXT_PORT_PSIV(port_cap->psi[i]) >= 5)
++                               minor_revision = tmp_minor_revision;
++
+                         xhci_dbg(xhci, "PSIV:%d PSIE:%d PLT:%d PFD:%d LP:%d PSIM:%d\n",
+                                   XHCI_EXT_PORT_PSIV(port_cap->psi[i]),
+                                   XHCI_EXT_PORT_PSIE(port_cap->psi[i]),
+@@ -2041,6 +2044,15 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+                                   XHCI_EXT_PORT_PSIM(port_cap->psi[i]));
+                 }
+         }
++
++       rhub->maj_rev = major_revision;
++
++       if (rhub->min_rev < minor_revision)
++               rhub->min_rev = minor_revision;
++
++       port_cap->maj_rev = major_revision;
++       port_cap->min_rev = minor_revision;
++
+         /* cache usb2 port capabilities */
+         if (major_revision < 0x03 && xhci->num_ext_caps < max_caps)
+                 xhci->ext_caps[xhci->num_ext_caps++] = temp;
+
+Thanks
+Mathias
