@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FE96F87C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 19:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D496F87CB
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 19:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232767AbjEERjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 13:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S232741AbjEERlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 13:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbjEERjP (ORCPT
+        with ESMTP id S229795AbjEERlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 13:39:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4563B559E
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:39:13 -0700 (PDT)
+        Fri, 5 May 2023 13:41:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A34F1
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:41:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEF19614A0
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 17:39:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33356C4339E
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 17:39:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A71F61486
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 17:41:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0438C433D2
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 17:41:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683308352;
-        bh=He2VD5WDJqObFt05b2FpAEZOvPVyPfhb6478Y3/8MxY=;
+        s=k20201202; t=1683308475;
+        bh=VXIPbVt5ooPbkAjjpZpHqh7KRKHYkPDMpipRC+g/0v0=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eQYJY2iF5yjQC7rU1s/b490L/utwiGhyxd+4mDES2GFaugkxpHqeRv5PaEJRitgXc
-         xVswx8FbPQorgmnLl+ReF5FFefbX+yeRR/jMEbhmWVwtCVtkpGxxiSr+Kpm3cI6jsT
-         8SEzZFk6CG4t//A8Z4tqO02jj9ZXVv4dBpwHOqySvQFLonXHn2alAaOgjK0E4Vl3YO
-         JfQT8QeAp+yqtySUfwI9AehFyJj2lcdKzeim29E4DFcngvKy7KrXtwZat/cra7I96U
-         LcWjd5t+Gu+qlRWy8VYvEBdS+n3HVaAIOt6j8BXHj64aaJhzskp4ZlOxCLrLsdfrQQ
-         7Kr7nQc0KEnBg==
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-24e25e2808fso1898138a91.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 10:39:12 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwqm+Vl9RTDusdy+uEWEL8QTi+dcD/Qy46qy3ekI5GVC7urgPlP
-        wHdwOa/+bGh1FWeLjoo7uXZNEzWZ9wAY7kdSY6C2mA==
-X-Google-Smtp-Source: ACHHUZ4Srhe0cJpjgons5yFqosWk+nmV6h5CJkAZUs0SS+EYfHlmueEYNFOMB1s8KLFPSPTA2LJj9MO5MZNVlWjyVGo=
-X-Received: by 2002:a17:90a:8e83:b0:250:3e1e:acd with SMTP id
- f3-20020a17090a8e8300b002503e1e0acdmr985112pjo.7.1683308351652; Fri, 05 May
- 2023 10:39:11 -0700 (PDT)
+        b=SoSkJRVpidOcO8iGxxBhTDA6YM3VT93vI4KfhxkA9ESb4doBNTMO9HTEYKNYlgJ5q
+         UmurNPr6kzsBAQ39jWnzonFivakdo8CJH2QHhVrx5qmHqfLigk2YLiWJ9hWj5IbGXO
+         Ofsfd0aVFji9X/WTatbIP5IIZI6kn9LBin6QjmAmle6KnHvuxa5MMpPRnqg3dBiWQH
+         MoTAym7TofKO/8QcuVNL7yq2hQ1BH3YCDwMCBIrpS7+La+mLrTvBxFgAQ3rdFfBnit
+         P+hOaJeoxk6tSr+gaTlquPGBVA6Y01+V+zaSo2TPI+RNZ06eMIOi/m2NEy/n3rFZMO
+         kF+YgcjIRGayw==
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-52160f75920so1408586a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 10:41:15 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxPrfEWQgnUMmZEEAKIbprFrA1JqAIKjAVsiXcAYoWa2cWfCFp5
+        E+OA3dRHFcx6id22Iy4UBm2qQqXAfTTLK49n3JRlkQ==
+X-Google-Smtp-Source: ACHHUZ7V0c8GuBWBpRyAstUWowwNQf+aYXoWkIYfxe801StPrNtcqkzx6w+RRrSKryhYqCm8BNK7dWJHW1lex6Pon8E=
+X-Received: by 2002:a17:90b:3a8d:b0:23f:9fac:6b35 with SMTP id
+ om13-20020a17090b3a8d00b0023f9fac6b35mr2173471pjb.39.1683308475334; Fri, 05
+ May 2023 10:41:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230427142934.55435-1-francesco@dolcini.it> <20230427142934.55435-4-francesco@dolcini.it>
-In-Reply-To: <20230427142934.55435-4-francesco@dolcini.it>
+References: <20230427142934.55435-1-francesco@dolcini.it> <20230427142934.55435-5-francesco@dolcini.it>
+In-Reply-To: <20230427142934.55435-5-francesco@dolcini.it>
 From:   Robert Foss <rfoss@kernel.org>
-Date:   Fri, 5 May 2023 19:39:00 +0200
-X-Gmail-Original-Message-ID: <CAN6tsi5fBur-WSd5xN-=yyFDGiUWEq-U9=xXbYRSqzdeo8CxLw@mail.gmail.com>
-Message-ID: <CAN6tsi5fBur-WSd5xN-=yyFDGiUWEq-U9=xXbYRSqzdeo8CxLw@mail.gmail.com>
-Subject: Re: [PATCH v1 3/9] drm/bridge: tc358768: fix PLL target frequency
+Date:   Fri, 5 May 2023 19:41:04 +0200
+X-Gmail-Original-Message-ID: <CAN6tsi4NmNbQ3dava=rr-Jx4tV37QD6=ujNq2bXDuSaoP8mdrQ@mail.gmail.com>
+Message-ID: <CAN6tsi4NmNbQ3dava=rr-Jx4tV37QD6=ujNq2bXDuSaoP8mdrQ@mail.gmail.com>
+Subject: Re: [PATCH v1 4/9] drm/bridge: tc358768: fix TCLK_ZEROCNT computation
 To:     Francesco Dolcini <francesco@dolcini.it>
 Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
@@ -56,12 +56,11 @@ Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         tomi.valkeinen@ideasonboard.com, dri-devel@lists.freedesktop.org,
         Francesco Dolcini <francesco.dolcini@toradex.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,75 +69,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 4:32=E2=80=AFPM Francesco Dolcini <francesco@dolcin=
+On Thu, Apr 27, 2023 at 4:35=E2=80=AFPM Francesco Dolcini <francesco@dolcin=
 i.it> wrote:
 >
 > From: Francesco Dolcini <francesco.dolcini@toradex.com>
 >
-> Correctly compute the PLL target frequency, the current formula works
-> correctly only when the input bus width is 24bit, actually to properly
-> compute the PLL target frequency what is relevant is the bits-per-pixel
-> on the DSI link.
+> Correct computation of TCLK_ZEROCNT register.
 >
-> No regression expected since the DSI format is currently hard-coded as
-> MIPI_DSI_FMT_RGB888.
+> This register must be set to a value that ensure that
+> (TCLK-PREPARECNT + TCLK-ZERO) > 300ns
+>
+> with the actual value of (TCLK-PREPARECNT + TCLK-ZERO) being
+>
+> (1 to 2) + (TCLK_ZEROCNT + 1)) x HSByteClkCycle + (PHY output delay)
+>
+> with PHY output delay being about
+>
+> (2 to 3) x MIPIBitClk cycle in the BitClk conversion.
 >
 > Fixes: ff1ca6397b1d ("drm/bridge: Add tc358768 driver")
 > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 > ---
->  drivers/gpu/drm/bridge/tc358768.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+>  drivers/gpu/drm/bridge/tc358768.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
 > diff --git a/drivers/gpu/drm/bridge/tc358768.c b/drivers/gpu/drm/bridge/t=
 c358768.c
-> index e9e3f9e02bba..dba1bf3912f1 100644
+> index dba1bf3912f1..aff400c36066 100644
 > --- a/drivers/gpu/drm/bridge/tc358768.c
 > +++ b/drivers/gpu/drm/bridge/tc358768.c
-> @@ -146,6 +146,7 @@ struct tc358768_priv {
+> @@ -742,10 +742,10 @@ static void tc358768_bridge_pre_enable(struct drm_b=
+ridge *bridge)
 >
->         u32 pd_lines; /* number of Parallel Port Input Data Lines */
->         u32 dsi_lanes; /* number of DSI Lanes */
-> +       u32 dsi_bpp; /* number of Bits Per Pixel over DSI */
->
->         /* Parameters for PLL programming */
->         u32 fbd;        /* PLL feedback divider */
-> @@ -284,12 +285,12 @@ static void tc358768_hw_disable(struct tc358768_pri=
-v *priv)
->
->  static u32 tc358768_pll_to_pclk(struct tc358768_priv *priv, u32 pll_clk)
->  {
-> -       return (u32)div_u64((u64)pll_clk * priv->dsi_lanes, priv->pd_line=
-s);
-> +       return (u32)div_u64((u64)pll_clk * priv->dsi_lanes, priv->dsi_bpp=
-);
->  }
->
->  static u32 tc358768_pclk_to_pll(struct tc358768_priv *priv, u32 pclk)
->  {
-> -       return (u32)div_u64((u64)pclk * priv->pd_lines, priv->dsi_lanes);
-> +       return (u32)div_u64((u64)pclk * priv->dsi_bpp, priv->dsi_lanes);
->  }
->
->  static int tc358768_calc_pll(struct tc358768_priv *priv,
-> @@ -426,6 +427,7 @@ static int tc358768_dsi_host_attach(struct mipi_dsi_h=
-ost *host,
->         priv->output.panel =3D panel;
->
->         priv->dsi_lanes =3D dev->lanes;
-> +       priv->dsi_bpp =3D mipi_dsi_pixel_format_to_bpp(dev->format);
->
->         /* get input ep (port0/endpoint0) */
->         ret =3D -EINVAL;
-> @@ -437,7 +439,7 @@ static int tc358768_dsi_host_attach(struct mipi_dsi_h=
-ost *host,
->         }
->
->         if (ret)
-> -               priv->pd_lines =3D mipi_dsi_pixel_format_to_bpp(dev->form=
-at);
-> +               priv->pd_lines =3D priv->dsi_bpp;
->
->         drm_bridge_add(&priv->bridge);
+>         /* 38ns < TCLK_PREPARE < 95ns */
+>         val =3D tc358768_ns_to_cnt(65, dsibclk_nsk) - 1;
+> -       /* TCLK_PREPARE > 300ns */
+> -       val2 =3D tc358768_ns_to_cnt(300 + tc358768_to_ns(3 * ui_nsk),
+> -                                 dsibclk_nsk);
+> -       val |=3D (val2 - tc358768_to_ns(phy_delay_nsk - dsibclk_nsk)) << =
+8;
+> +       /* TCLK_PREPARE + TCLK_ZERO > 300ns */
+> +       val2 =3D tc358768_ns_to_cnt(300 - tc358768_to_ns(2 * ui_nsk),
+> +                                 dsibclk_nsk) - 2;
+> +       val |=3D val2 << 8;
+>         dev_dbg(priv->dev, "TCLK_HEADERCNT: 0x%x\n", val);
+>         tc358768_write(priv, TC358768_TCLK_HEADERCNT, val);
 >
 > --
 > 2.25.1
