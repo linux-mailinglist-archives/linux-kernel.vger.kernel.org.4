@@ -2,236 +2,524 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510C96F8737
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 19:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F566F8738
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 19:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231829AbjEERED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 13:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
+        id S231945AbjEERFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 13:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjEEREA (ORCPT
+        with ESMTP id S231611AbjEERFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 13:04:00 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7A8150FC
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:03:58 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ab1ce53ca6so14552805ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 10:03:58 -0700 (PDT)
+        Fri, 5 May 2023 13:05:02 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770C415689
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:04:59 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3ef36d814a5so1124591cf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 10:04:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683306238; x=1685898238;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JMDVesgAKasFsor4GeKqlCagXQ7DH3+AoXUlf3OElm8=;
-        b=bR6gi0lcTDkNWyn7wz8u78OloJBPQ6KfsiLCSKJtSrf/mwTyj4RnLq3ZZsQz1dPnbt
-         YK9sctpzPhvjPa52msOKNb71MrX9QuGHxcjpZuU8MGICBCkBa6eWB9EHqDkaXzxExAeW
-         FPSm1Tea8e42GTKd966cAYYcdLDWPu6xE/hQeQUEo8fWlHBrOmBhtHxUicyfTT6TJWZj
-         gdLsXFigde8hbfEGXnwwZxx8j5oUZBhL4nJhOrzEA9MpP5f51RJbStN4VgCurhtsSYua
-         lGPxMvVeQXhWZLel1UYlHTqXLmtDeCWCBZJiBnr6VZn0Ox3VVAsNLkc8agKkEFCtkjTl
-         ZLCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683306238; x=1685898238;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1683306298; x=1685898298;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JMDVesgAKasFsor4GeKqlCagXQ7DH3+AoXUlf3OElm8=;
-        b=NGdeCXxQCpGbhfN5U5OAu9noHznJWzQt2bla7Og8aQe8fDjjs4X5XRRDg1HsPJu0Az
-         oS1dZnXWrcXqRW6chO/VPLrWR4Qi8lCMtdEMchr/IZjmWj3eeHp1jXcf5Pi4XfoqGEk7
-         M3QrXBXQGEhPhYkPOzqk6raJaFIyb6pittwQWsCWhnkmjxpRDgwZdNvr6cNM+wsKOxDa
-         pxdYjz1UXX0VGpHk4nImwCkhf45ofhQbOXBTUbIEb8koOB+EDNSZZoEFidBETvtHIHSu
-         x6POzpbo/pjs5mqcrOf1qoK3wqF22WkShpRKhsSjk7OwN07LhzskEAniJYKAfAI6yzDZ
-         mokQ==
-X-Gm-Message-State: AC+VfDwYJJsspMcMEsJ3q+E+5xN9wgaLSMTAPVMWkE5goGH14XeGfvYQ
-        OPPLolgSW4YRd32ricyNfjcpAQ==
-X-Google-Smtp-Source: ACHHUZ6UMaUB3IhahmbRyxKYzoTmEg9HFyUQpdd2o5G9PGG44utHoVF+53YsCBC0g19omuVtmiHoaw==
-X-Received: by 2002:a17:902:6901:b0:1a1:956e:5417 with SMTP id j1-20020a170902690100b001a1956e5417mr1763516plk.22.1683306237785;
-        Fri, 05 May 2023 10:03:57 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:fd16:b4b6:ee7c:e4e5])
-        by smtp.gmail.com with ESMTPSA id c13-20020a170902d48d00b001994fc55998sm2013388plg.217.2023.05.05.10.03.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 10:03:57 -0700 (PDT)
-Date:   Fri, 5 May 2023 11:03:54 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] remoteproc: stm32: Allow hold boot management by
- the SCMI reset controller
-Message-ID: <ZFU2+ni/tKOIIHbq@p14s>
-References: <20230504094641.870378-1-arnaud.pouliquen@foss.st.com>
- <20230504094641.870378-3-arnaud.pouliquen@foss.st.com>
+        bh=sgoEapUNJvuyfd4DwwXAMo4uOf8CXt5FW3QPdsUK8nE=;
+        b=MiaSnrkHiHpcxV1e6B26xqBpyzkwLjb3mcVNIvf3uuw0TOS4RtItdYqybvrILef774
+         rh3sIhhSnlmc2QqicdMDUcTsGEDJPJ7oeLTsx6vD2IDjvqkf/RTAqC3KGcz6UUYwuQxl
+         dnr0+WtF4iRA98jb5Yi+tFG/yS5mq8MnAkv55NkS1rdBHiRIHdcK9XBung+m7NMzRs3+
+         SC/UOeuO5SzozZMAr3YUpmiYHH/KIbVVCnFzj4F6baMJVySL/2ezdErPZDmxx5YQ1xdE
+         vFkdkxa3GE3Fqmy6X4th7a7Wjux0K4y+EL2KBI2GHtYR5CdEb409sZtiKk6a8TgixeNZ
+         fXsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683306298; x=1685898298;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sgoEapUNJvuyfd4DwwXAMo4uOf8CXt5FW3QPdsUK8nE=;
+        b=jFx4x7MgdMzUUCnhyFGDEIH1QoiTeiQjRFshEFS0WSGs5nnoEKdREf7ZIOTSsPz5c/
+         aRdPsgK9ajZTtrPxF4c1yJCRUfHbV6hfcutmhuF3aQ0vvwbCt8U//Oi78NjEAmeSx/ck
+         uxeNw2fw8poiOULc6t8DjMVpiFCWPMSFl6L3ip9STyAG7vVnELm1H3UgXyhQrrQy67w1
+         gk8El7rJ9xnk+ioIB+7Vu6FadGgAY5athMGHxUtC5POXJBGXrzGBZ46kxP1zo0nzleAO
+         yh47B3OlSoKTscEPimDkxjNc5cDQMSaDDBKbGk21KI0TJDeEAmWrJ4nJQUvVsQOnZget
+         yiLA==
+X-Gm-Message-State: AC+VfDxjE/K4x93qSWA/L8Fkb6oxLYxicxw+F2DYHNhWoxvGTw00mNwT
+        xRtOD+5m6m+5HQG+yLvFbBT99zMcVbLtYLUQ9EsVzA==
+X-Google-Smtp-Source: ACHHUZ4J6SP+2DGfrcIrQ85qvVGLzRSmvw3R2+RiEI3AOTOkwmXfDvPBog3kDU176Ncc7eIoNdbctGvoJP29nQLVhTs=
+X-Received: by 2002:ac8:5a8e:0:b0:3ef:3361:75d5 with SMTP id
+ c14-20020ac85a8e000000b003ef336175d5mr280648qtc.11.1683306298062; Fri, 05 May
+ 2023 10:04:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230504094641.870378-3-arnaud.pouliquen@foss.st.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
+ <ZFOSUab5XEJD0kxj@kernel.org> <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
+ <ZFPw0scDq1eIzfHr@kernel.org> <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
+ <ZFQCccsx6GK+gY0j@kernel.org> <ZFQoQjCNtyMIulp+@kernel.org>
+ <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
+ <ZFQ5sjjtfEYzvHNP@krava> <ZFUFmxDU/6Z/JEsi@kernel.org> <ZFU1PJrn8YtHIqno@kernel.org>
+In-Reply-To: <ZFU1PJrn8YtHIqno@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 5 May 2023 10:04:47 -0700
+Message-ID: <CAP-5=fWfmmMCRnEmzj_CXTKacp6gjrzmR49Ge_C5XRyfTegRjg@mail.gmail.com>
+Subject: Re: [PATCH RFC/RFT] perf bpf skels: Stop using vmlinux.h generated
+ from BTF, use subset of used structs + CO-RE. was Re: BPF skels in perf .Re:
+ [GIT PULL] perf tools changes for v6.4
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Namhyung Kim <namhyung@kernel.org>, Song Liu <song@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Hao Luo <haoluo@google.com>, James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Roman Lozko <lozko.roma@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Paul Clarke <pc@us.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaud,
-
-On Thu, May 04, 2023 at 11:46:39AM +0200, Arnaud Pouliquen wrote:
-> The hold boot can be managed by the SCMI controller as a reset.
-> If the "hold_boot" reset is defined in the device tree, use it.
-> Else use the syscon controller directly to access to the register.
-> The support of the SMC call is deprecated but kept for legacy support.
-> 
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+On Fri, May 5, 2023 at 9:56=E2=80=AFAM Arnaldo Carvalho de Melo <acme@kerne=
+l.org> wrote:
+>
+> Em Fri, May 05, 2023 at 10:33:15AM -0300, Arnaldo Carvalho de Melo escrev=
+eu:
+> > Em Fri, May 05, 2023 at 01:03:14AM +0200, Jiri Olsa escreveu:
+> > That with the preserve_access_index isn't needed, we need just the
+> > fields that we access in the tools, right?
+>
+> I'm now doing build test this in many distro containers, without the two
+> reverts, i.e. BPF skels continue as opt-out as in my pull request, to
+> test build and also for the functionality tests on the tools using such
+> bpf skels, see below, no touching of vmlinux nor BTF data during the
+> build.
+>
+> - Arnaldo
+>
+> From 882adaee50bc27f85374aeb2fbaa5b76bef60d05 Mon Sep 17 00:00:00 2001
+> From: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Date: Thu, 4 May 2023 19:03:51 -0300
+> Subject: [PATCH 1/1] perf bpf skels: Stop using vmlinux.h generated from =
+BTF,
+>  use subset of used structs + CO-RE
+>
+> Linus reported a build break due to using a vmlinux without a BTF elf
+> section to generate the vmlinux.h header with bpftool for use in the BPF
+> tools in tools/perf/util/bpf_skel/*.bpf.c.
+>
+> Instead add a vmlinux.h file with the structs needed with the fields the
+> tools need, marking the structs with __attribute__((preserve_access_index=
+)),
+> so that libbpf's CO-RE code can fixup the struct field offsets.
+>
+> In some cases the vmlinux.h file that was being generated by bpftool
+> from the kernel BTF information was not needed at all, just including
+> linux/bpf.h, sometimes linux/perf_event.h was enough as non-UAPI
+> types were not being used.
+>
+> To keep te patch small, include those UAPI headers from the trimmed down
+> vmlinux.h file, that then provides the tools with just the structs and
+> the subset of its fields needed for them.
+>
+> Testing it:
+>
+>   # perf lock contention -b find / > /dev/null
+>   ^C contended   total wait     max wait     avg wait         type   call=
+er
+>
+>            7     53.59 us     10.86 us      7.66 us     rwlock:R   start_=
+this_handle+0xa0
+>            2     30.35 us     21.99 us     15.17 us      rwsem:R   iterat=
+e_dir+0x52
+>            1      9.04 us      9.04 us      9.04 us     rwlock:W   start_=
+this_handle+0x291
+>            1      8.73 us      8.73 us      8.73 us     spinlock   raw_sp=
+in_rq_lock_nested+0x1e
+>   #
+>   # perf lock contention -abl find / > /dev/null
+>   ^C contended   total wait     max wait     avg wait            address =
+  symbol
+>
+>            1    262.96 ms    262.96 ms    262.96 ms   ffff8e67502d0170   =
+ (mutex)
+>           12    244.24 us     39.91 us     20.35 us   ffff8e6af56f8070   =
+mmap_lock (rwsem)
+>            7     30.28 us      6.85 us      4.33 us   ffff8e6c865f1d40   =
+rq_lock (spinlock)
+>            3      7.42 us      4.03 us      2.47 us   ffff8e6c864b1d40   =
+rq_lock (spinlock)
+>            2      3.72 us      2.19 us      1.86 us   ffff8e6c86571d40   =
+rq_lock (spinlock)
+>            1      2.42 us      2.42 us      2.42 us   ffff8e6c86471d40   =
+rq_lock (spinlock)
+>            4      2.11 us       559 ns       527 ns   ffffffff9a146c80   =
+rcu_state (spinlock)
+>            3      1.45 us       818 ns       482 ns   ffff8e674ae8384c   =
+ (rwlock)
+>            1       870 ns       870 ns       870 ns   ffff8e68456ee060   =
+ (rwlock)
+>            1       663 ns       663 ns       663 ns   ffff8e6c864f1d40   =
+rq_lock (spinlock)
+>            1       573 ns       573 ns       573 ns   ffff8e6c86531d40   =
+rq_lock (spinlock)
+>            1       472 ns       472 ns       472 ns   ffff8e6c86431740   =
+ (spinlock)
+>            1       397 ns       397 ns       397 ns   ffff8e67413a4f04   =
+ (spinlock)
+>   #
+>   # perf test offcpu
+>   95: perf record offcpu profiling tests                              : O=
+k
+>   #
+>   # perf kwork latency --use-bpf
+>   Starting trace, Hit <Ctrl+C> to stop and report
+>   ^C
+>     Kwork Name                     | Cpu  | Avg delay     | Count     | M=
+ax delay     | Max delay start     | Max delay end       |
+>    ----------------------------------------------------------------------=
+----------------------------------------------------------
+>     (w)flush_memcg_stats_dwork     | 0000 |   1056.212 ms |         2 |  =
+ 2112.345 ms |     550113.229573 s |     550115.341919 s |
+>     (w)toggle_allocation_gate      | 0000 |     10.144 ms |        62 |  =
+  416.389 ms |     550113.453518 s |     550113.869907 s |
+>     (w)0xffff8e6748e28080          | 0002 |      0.623 ms |         1 |  =
+    0.623 ms |     550110.989841 s |     550110.990464 s |
+>     (w)vmstat_shepherd             | 0000 |      0.586 ms |        10 |  =
+    2.828 ms |     550111.971536 s |     550111.974364 s |
+>     (w)vmstat_update               | 0007 |      0.363 ms |         5 |  =
+    1.634 ms |     550113.222520 s |     550113.224154 s |
+>     (w)vmstat_update               | 0000 |      0.324 ms |        10 |  =
+    2.827 ms |     550111.971526 s |     550111.974354 s |
+>     (w)0xffff8e674c5f4a58          | 0002 |      0.102 ms |         5 |  =
+    0.134 ms |     550110.989839 s |     550110.989972 s |
+>     (w)psi_avgs_work               | 0001 |      0.086 ms |         3 |  =
+    0.107 ms |     550114.957852 s |     550114.957959 s |
+>     (w)psi_avgs_work               | 0000 |      0.079 ms |         5 |  =
+    0.100 ms |     550118.605668 s |     550118.605768 s |
+>     (w)kfree_rcu_monitor           | 0006 |      0.079 ms |         1 |  =
+    0.079 ms |     550110.925821 s |     550110.925900 s |
+>     (w)psi_avgs_work               | 0004 |      0.079 ms |         1 |  =
+    0.079 ms |     550109.581835 s |     550109.581914 s |
+>     (w)psi_avgs_work               | 0001 |      0.078 ms |         1 |  =
+    0.078 ms |     550109.197809 s |     550109.197887 s |
+>     (w)psi_avgs_work               | 0002 |      0.077 ms |         5 |  =
+    0.086 ms |     550110.669819 s |     550110.669905 s |
+>   <SNIP>
+>   # strace -e bpf -o perf-stat-bpf-counters.output perf stat -e cycles --=
+bpf-counters sleep 1
+>
+>    Performance counter stats for 'sleep 1':
+>
+>            6,197,983      cycles
+>
+>          1.003922848 seconds time elapsed
+>
+>          0.000000000 seconds user
+>          0.002032000 seconds sys
+>
+>   # head -7 perf-stat-bpf-counters.output
+>   bpf(BPF_OBJ_GET, {pathname=3D"/sys/fs/bpf/perf_attr_map", bpf_fd=3D0, f=
+ile_flags=3D0}, 16) =3D 3
+>   bpf(BPF_OBJ_GET_INFO_BY_FD, {info=3D{bpf_fd=3D3, info_len=3D88, info=3D=
+0x7ffcead64990}}, 16) =3D 0
+>   bpf(BPF_MAP_LOOKUP_ELEM, {map_fd=3D3, key=3D0x24129e0, value=3D0x7ffcea=
+d65a48, flags=3DBPF_ANY}, 32) =3D 0
+>   bpf(BPF_LINK_GET_FD_BY_ID, {link_id=3D1252}, 12) =3D -1 ENOENT (No such=
+ file or directory)
+>   bpf(BPF_PROG_LOAD, {prog_type=3DBPF_PROG_TYPE_SOCKET_FILTER, insn_cnt=
+=3D2, insns=3D0x7ffcead65780, license=3D"GPL", log_level=3D0, log_size=3D0,=
+ log_buf=3DNULL, kern_version=3DKERNEL_VERSION(0, 0, 0), prog_flags=3D0, pr=
+og_name=3D"", prog_ifindex=3D0, expected_attach_type=3DBPF_CGROUP_INET_INGR=
+ESS, prog_btf_fd=3D0, func_info_rec_size=3D0, func_info=3DNULL, func_info_c=
+nt=3D0, line_info_rec_size=3D0, line_info=3DNULL, line_info_cnt=3D0, attach=
+_btf_id=3D0, attach_prog_fd=3D0}, 116) =3D 4
+>   bpf(BPF_PROG_LOAD, {prog_type=3DBPF_PROG_TYPE_SOCKET_FILTER, insn_cnt=
+=3D2, insns=3D0x7ffcead65920, license=3D"GPL", log_level=3D0, log_size=3D0,=
+ log_buf=3DNULL, kern_version=3DKERNEL_VERSION(0, 0, 0), prog_flags=3D0, pr=
+og_name=3D"", prog_ifindex=3D0, expected_attach_type=3DBPF_CGROUP_INET_INGR=
+ESS, prog_btf_fd=3D0, func_info_rec_size=3D0, func_info=3DNULL, func_info_c=
+nt=3D0, line_info_rec_size=3D0, line_info=3DNULL, line_info_cnt=3D0, attach=
+_btf_id=3D0, attach_prog_fd=3D0, fd_array=3DNULL}, 128) =3D 4
+>   bpf(BPF_BTF_LOAD, {btf=3D"\237\353\1\0\30\0\0\0\0\0\0\0\20\0\0\0\20\0\0=
+\0\5\0\0\0\1\0\0\0\0\0\0\1"..., btf_log_buf=3DNULL, btf_size=3D45, btf_log_=
+size=3D0, btf_log_level=3D0}, 28) =3D 4
+>   #
+>
+> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Ian Rogers <irogers@google.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Co-developed-by: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 > ---
-> Updates vs previous version
-> - keep support of the "st,syscfg-tz" property for legacy compatibility
-> - rename secured_soc in hold_boot_smc for readability
-> - add comments to explain hold boot management.
-> - update commit message
-> ---
->  drivers/remoteproc/stm32_rproc.c | 78 +++++++++++++++++++++++---------
->  1 file changed, 57 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-> index 7d782ed9e589..e9cf24274345 100644
-> --- a/drivers/remoteproc/stm32_rproc.c
-> +++ b/drivers/remoteproc/stm32_rproc.c
-> @@ -79,6 +79,7 @@ struct stm32_mbox {
->  
->  struct stm32_rproc {
->  	struct reset_control *rst;
-> +	struct reset_control *hold_boot_rst;
->  	struct stm32_syscon hold_boot;
->  	struct stm32_syscon pdds;
->  	struct stm32_syscon m4_state;
-> @@ -88,7 +89,7 @@ struct stm32_rproc {
->  	struct stm32_rproc_mem *rmems;
->  	struct stm32_mbox mb[MBOX_NB_MBX];
->  	struct workqueue_struct *workqueue;
-> -	bool secured_soc;
-> +	bool hold_boot_smc;
->  	void __iomem *rsc_va;
->  };
->  
-> @@ -401,13 +402,28 @@ static int stm32_rproc_set_hold_boot(struct rproc *rproc, bool hold)
->  	struct arm_smccc_res smc_res;
->  	int val, err;
->  
-> +	/*
-> +	 * Three ways to manage the hold boot
-> +	 * - using SCMI: the hold boot is managed as a reset,
-> +	 * - using Linux(no SCMI): the hold boot is managed as a syscon register
-> +	 * - using SMC call (deprecated): use SMC reset interface
-> +	 */
+>  tools/perf/Makefile.perf            |  20 +---
+>  tools/perf/util/bpf_skel/.gitignore |   1 -
+>  tools/perf/util/bpf_skel/vmlinux.h  | 173 ++++++++++++++++++++++++++++
+>  3 files changed, 174 insertions(+), 20 deletions(-)
+>  create mode 100644 tools/perf/util/bpf_skel/vmlinux.h
+>
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index 48aba186ceb50792..61c33d100b2bcc90 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -1063,25 +1063,7 @@ $(BPFTOOL): | $(SKEL_TMP_OUT)
+>         $(Q)CFLAGS=3D $(MAKE) -C ../bpf/bpftool \
+>                 OUTPUT=3D$(SKEL_TMP_OUT)/ bootstrap
+>
+> -VMLINUX_BTF_PATHS ?=3D $(if $(O),$(O)/vmlinux)                          =
+ \
+> -                    $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)    \
+> -                    ../../vmlinux                                      \
+> -                    /sys/kernel/btf/vmlinux                            \
+> -                    /boot/vmlinux-$(shell uname -r)
+> -VMLINUX_BTF ?=3D $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS)))=
+)
+> -
+> -$(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
+> -ifeq ($(VMLINUX_H),)
+> -       $(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@ || \
+> -       (echo "Failure to generate vmlinux.h needed for the recommended B=
+PF skeleton support." && \
+> -       echo "To disable this use the build option NO_BPF_SKEL=3D1." && \
+> -       echo "Alternatively point at a pre-generated vmlinux.h with VMLIN=
+UX_H=3D<path>." && \
+> -       false)
+> -else
+> -       $(Q)cp "$(VMLINUX_H)" $@
+> -endif
+
+Perhaps we can define VMLINUX_H in the Makefile.config to be
+tools/perf/util/bpf_skel/vmlinux.h, then someone can clear it like:
+make -C tools/perf VMLINIX_H=3D
+to trigger generation, etc. Such thoughts may be better kept for 6.5 :-)
+
+Thanks,
+Ian
+
+> -$(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) $(SKEL_OUT)/vml=
+inux.h | $(SKEL_TMP_OUT)
+> +$(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) | $(SKEL_TMP_OU=
+T)
+>         $(QUIET_CLANG)$(CLANG) -g -O2 -target bpf -Wall -Werror $(BPF_INC=
+LUDE) \
+>           -c $(filter util/bpf_skel/%.bpf.c,$^) -o $@ && $(LLVM_STRIP) -g=
+ $@
+>
+> diff --git a/tools/perf/util/bpf_skel/.gitignore b/tools/perf/util/bpf_sk=
+el/.gitignore
+> index cd01455e1b53c3d9..7a1c832825de8445 100644
+> --- a/tools/perf/util/bpf_skel/.gitignore
+> +++ b/tools/perf/util/bpf_skel/.gitignore
+> @@ -1,4 +1,3 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  .tmp
+>  *.skel.h
+> -vmlinux.h
+> diff --git a/tools/perf/util/bpf_skel/vmlinux.h b/tools/perf/util/bpf_ske=
+l/vmlinux.h
+> new file mode 100644
+> index 0000000000000000..449b1ea91fc48143
+> --- /dev/null
+> +++ b/tools/perf/util/bpf_skel/vmlinux.h
+> @@ -0,0 +1,173 @@
+> +#ifndef __VMLINUX_H
+> +#define __VMLINUX_H
 > +
->  	val = hold ? HOLD_BOOT : RELEASE_BOOT;
->  
-> -	if (IS_ENABLED(CONFIG_HAVE_ARM_SMCCC) && ddata->secured_soc) {
-> +	if (ddata->hold_boot_rst) {
-> +		/* Use the SCMI reset controller */
-> +		if (!hold)
-> +			err = reset_control_deassert(ddata->hold_boot_rst);
-> +		else
-> +			err =  reset_control_assert(ddata->hold_boot_rst);
-> +	} else if (IS_ENABLED(CONFIG_HAVE_ARM_SMCCC) && ddata->hold_boot_smc) {
-> +		/* Use the SMC call */
->  		arm_smccc_smc(STM32_SMC_RCC, STM32_SMC_REG_WRITE,
->  			      hold_boot.reg, val, 0, 0, 0, 0, &smc_res);
->  		err = smc_res.a0;
->  	} else {
-> +		/* Use syscon */
->  		err = regmap_update_bits(hold_boot.map, hold_boot.reg,
->  					 hold_boot.mask, val);
->  	}
-> @@ -705,34 +721,54 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
->  		dev_info(dev, "wdg irq registered\n");
->  	}
->  
-> -	ddata->rst = devm_reset_control_get_by_index(dev, 0);
-> +	ddata->rst = devm_reset_control_get_optional(dev, "mcu_rst");
-> +	if (!ddata->rst) {
-> +		/* Try legacy fallback method: get it by index */
-> +		ddata->rst = devm_reset_control_get_by_index(dev, 0);
-> +	}
->  	if (IS_ERR(ddata->rst))
->  		return dev_err_probe(dev, PTR_ERR(ddata->rst),
->  				     "failed to get mcu_reset\n");
->  
->  	/*
-> -	 * if platform is secured the hold boot bit must be written by
-> -	 * smc call and read normally.
-> -	 * if not secure the hold boot bit could be read/write normally
-> +	 * Three ways to manage the hold boot
-> +	 * - using SCMI: the hold boot is managed as a reset
-> +	 *    The DT "reset-mames" property should be defined with 2 items:
-> +	 *        reset-names = "mcu_rst", "hold_boot";
-> +	 * - using SMC call (deprecated): use SMC reset interface
-> +	 *    The DT "reset-mames" property is optional, "st,syscfg-tz" is required
-> +	 * - default(no SCMI, no SMC): the hold boot is managed as a syscon register
-> +	 *    The DT "reset-mames" property is optional, "st,syscfg-holdboot" is required
->  	 */
-> -	err = stm32_rproc_get_syscon(np, "st,syscfg-tz", &tz);
-> -	if (err) {
-> -		dev_err(dev, "failed to get tz syscfg\n");
-> -		return err;
-> -	}
->  
-> -	err = regmap_read(tz.map, tz.reg, &tzen);
-> -	if (err) {
-> -		dev_err(dev, "failed to read tzen\n");
-> -		return err;
-> +	ddata->hold_boot_rst = devm_reset_control_get_optional(dev, "hold_boot");
-> +	if (IS_ERR(ddata->hold_boot_rst)) {
-> +		if (PTR_ERR(ddata->hold_boot_rst) == -EPROBE_DEFER)
-> +			return PTR_ERR(ddata->hold_boot_rst);
-
-Here we know that devm_reset_control_get_optional() has returned an error that is
-not -EPROBE_DEFER and as such, I think we should return that error instead of
-continuing on with the probing.  Calling dev_err_probe() should be just fine. 
-
-Otherwise I'm good with this set.  Many thanks for the enhanced explanation.
-
-Mathieu
-
-> +		ddata->hold_boot_rst = NULL;
-> +	}
+> +#include <linux/bpf.h>
+> +#include <linux/types.h>
+> +#include <linux/perf_event.h>
+> +#include <stdbool.h>
 > +
-> +	if (!ddata->hold_boot_rst && IS_ENABLED(CONFIG_HAVE_ARM_SMCCC)) {
-> +		/* Manage the MCU_BOOT using SMC call */
-> +		err = stm32_rproc_get_syscon(np, "st,syscfg-tz", &tz);
-> +		if (!err) {
-> +			err = regmap_read(tz.map, tz.reg, &tzen);
-> +			if (err) {
-> +				dev_err(dev, "failed to read tzen\n");
-> +				return err;
-> +			}
-> +			ddata->hold_boot_smc = tzen & tz.mask;
-> +		}
->  	}
-> -	ddata->secured_soc = tzen & tz.mask;
->  
-> -	err = stm32_rproc_get_syscon(np, "st,syscfg-holdboot",
-> -				     &ddata->hold_boot);
-> -	if (err) {
-> -		dev_err(dev, "failed to get hold boot\n");
-> -		return err;
-> +	if (!ddata->hold_boot_rst && !ddata->hold_boot_smc) {
-> +		/* Default: hold boot manage it through the syscon controller */
-> +		err = stm32_rproc_get_syscon(np, "st,syscfg-holdboot",
-> +					     &ddata->hold_boot);
-> +		if (err) {
-> +			dev_err(dev, "failed to get hold boot\n");
-> +			return err;
-> +		}
->  	}
->  
->  	err = stm32_rproc_get_syscon(np, "st,syscfg-pdds", &ddata->pdds);
-> -- 
-> 2.25.1
-> 
+> +// non-UAPI kernel data structures, used in the .bpf.c BPF tool componen=
+t.
+> +
+> +// Just the fields used in these tools preserving the access index so th=
+at
+> +// libbpf can fixup offsets with the ones used in the kernel when loadin=
+g the
+> +// BPF bytecode, if they differ from what is used here.
+> +
+> +typedef __u8 u8;
+> +typedef __u32 u32;
+> +typedef __u64 u64;
+> +typedef __s64 s64;
+> +
+> +typedef int pid_t;
+> +
+> +enum cgroup_subsys_id {
+> +       perf_event_cgrp_id  =3D 8,
+> +};
+> +
+> +enum {
+> +       HI_SOFTIRQ =3D 0,
+> +       TIMER_SOFTIRQ,
+> +       NET_TX_SOFTIRQ,
+> +       NET_RX_SOFTIRQ,
+> +       BLOCK_SOFTIRQ,
+> +       IRQ_POLL_SOFTIRQ,
+> +       TASKLET_SOFTIRQ,
+> +       SCHED_SOFTIRQ,
+> +       HRTIMER_SOFTIRQ,
+> +       RCU_SOFTIRQ,    /* Preferable RCU should always be the last softi=
+rq */
+> +
+> +       NR_SOFTIRQS
+> +};
+> +
+> +typedef struct {
+> +       s64     counter;
+> +} __attribute__((preserve_access_index)) atomic64_t;
+> +
+> +typedef atomic64_t atomic_long_t;
+> +
+> +struct raw_spinlock {
+> +       int rawlock;
+> +} __attribute__((preserve_access_index));
+> +
+> +typedef struct raw_spinlock raw_spinlock_t;
+> +
+> +typedef struct {
+> +       struct raw_spinlock rlock;
+> +} __attribute__((preserve_access_index)) spinlock_t;
+> +
+> +struct sighand_struct {
+> +       spinlock_t siglock;
+> +} __attribute__((preserve_access_index));
+> +
+> +struct rw_semaphore {
+> +       atomic_long_t owner;
+> +} __attribute__((preserve_access_index));
+> +
+> +struct mutex {
+> +       atomic_long_t owner;
+> +} __attribute__((preserve_access_index));
+> +
+> +struct kernfs_node {
+> +       u64 id;
+> +} __attribute__((preserve_access_index));
+> +
+> +struct cgroup {
+> +       struct kernfs_node *kn;
+> +       int                level;
+> +}  __attribute__((preserve_access_index));
+> +
+> +struct cgroup_subsys_state {
+> +       struct cgroup *cgroup;
+> +} __attribute__((preserve_access_index));
+> +
+> +struct css_set {
+> +       struct cgroup_subsys_state *subsys[13];
+> +       struct cgroup *dfl_cgrp;
+> +} __attribute__((preserve_access_index));
+> +
+> +struct mm_struct {
+> +       struct rw_semaphore mmap_lock;
+> +} __attribute__((preserve_access_index));
+> +
+> +struct task_struct {
+> +       unsigned int          flags;
+> +       struct mm_struct      *mm;
+> +       pid_t                 pid;
+> +       pid_t                 tgid;
+> +       char                  comm[16];
+> +       struct sighand_struct *sighand;
+> +       struct css_set        *cgroups;
+> +} __attribute__((preserve_access_index));
+> +
+> +struct trace_entry {
+> +       short unsigned int type;
+> +       unsigned char      flags;
+> +       unsigned char      preempt_count;
+> +       int                pid;
+> +} __attribute__((preserve_access_index));
+> +
+> +struct trace_event_raw_irq_handler_entry {
+> +       struct trace_entry ent;
+> +       int                irq;
+> +       u32                __data_loc_name;
+> +       char               __data[];
+> +} __attribute__((preserve_access_index));
+> +
+> +struct trace_event_raw_irq_handler_exit {
+> +       struct trace_entry ent;
+> +       int                irq;
+> +       int                ret;
+> +       char               __data[];
+> +} __attribute__((preserve_access_index));
+> +
+> +struct trace_event_raw_softirq {
+> +       struct trace_entry ent;
+> +       unsigned int       vec;
+> +       char               __data[];
+> +} __attribute__((preserve_access_index));
+> +
+> +struct trace_event_raw_workqueue_execute_start {
+> +       struct trace_entry ent;
+> +       void               *work;
+> +       void               *function;
+> +       char               __data[];
+> +} __attribute__((preserve_access_index));
+> +
+> +struct trace_event_raw_workqueue_execute_end {
+> +       struct trace_entry ent;
+> +       void               *work;
+> +       void               *function;
+> +       char              __data[];
+> +} __attribute__((preserve_access_index));
+> +
+> +struct trace_event_raw_workqueue_activate_work {
+> +       struct trace_entry ent;
+> +       void               *work;
+> +       char               __data[];
+> +} __attribute__((preserve_access_index));
+> +
+> +struct perf_sample_data {
+> +       u64                      addr;
+> +       u64                      period;
+> +       union perf_sample_weight weight;
+> +       u64                      txn;
+> +       union perf_mem_data_src  data_src;
+> +       u64                      ip;
+> +       struct {
+> +               u32              pid;
+> +               u32              tid;
+> +       } tid_entry;
+> +       u64                      time;
+> +       u64                      id;
+> +       struct {
+> +               u32              cpu;
+> +       } cpu_entry;
+> +       u64                      phys_addr;
+> +       u64                      data_page_size;
+> +       u64                      code_page_size;
+> +} __attribute__((__aligned__(64))) __attribute__((preserve_access_index)=
+);
+> +
+> +struct bpf_perf_event_data_kern {
+> +       struct perf_sample_data *data;
+> +       struct perf_event       *event;
+> +} __attribute__((preserve_access_index));
+> +#endif // __VMLINUX_H
+> --
+> 2.39.2
+>
