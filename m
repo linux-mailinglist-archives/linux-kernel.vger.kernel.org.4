@@ -2,207 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C096F8231
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 13:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED546F823C
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 13:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbjEELmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 07:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
+        id S231897AbjEELn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 07:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjEELmR (ORCPT
+        with ESMTP id S231671AbjEELn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 07:42:17 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DB411607;
-        Fri,  5 May 2023 04:42:15 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f178da21b5so11393215e9.3;
-        Fri, 05 May 2023 04:42:15 -0700 (PDT)
+        Fri, 5 May 2023 07:43:57 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410DEAD2A
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 04:43:56 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-55aa1da9d4aso28535567b3.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 04:43:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683286934; x=1685878934;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jwA4RNzHLoe51BKJcNUYfJNJRyNu9DKsCjgDMwmTA7A=;
-        b=WF62c/j6RiITYW667aRT9w0LZy3zB+wgpx/WJ54+TRNLcLn4nTSikrpYai6OPrVGkz
-         IhgIvNnPGGl2SqlqbS+XLVcmzlBBB3OIewdGD/Mc7jw1zvkSCZS0gO6g4I18UKjJpoj1
-         FO9voODgeBvwtJghqcm99OfSx20ZYAYuzHd2L/pDpWIFnzEdDA3BDtg027bp6yGvd9Dy
-         qmFj4Wp7HLufi3CpLf5X1VBmgRP2xFU6Kl41WtHiVSFzxiRuFE36kp27VfhPHPstuWxI
-         64+hwtMFhwaAojMK5K/YmDlC2xrKZsqTNtkbqts5wT+hjaUtZQ2H9I3Ym5HgEfVBlr30
-         j7CQ==
+        d=linaro.org; s=google; t=1683287035; x=1685879035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ujLLumrKh4q+bshtlIQ6r54rkrCQR8hj9C2xEoyLMFo=;
+        b=TfNrY4h1C7phIcd7lcuwhAN5y160ShZqKhwyHQ0csa1IwEkQrcnzG2A+sxNyRSAWHw
+         XlKH+c68P1CICMVnAevc/iAhJ2lfGjq1GDMdzcnEPSyVwlMOmkwMyGDOO2h4sz9RFm0f
+         QWGrEDJ23O839qREbS8t6pbhg8FdQA5Ofc6rkeXQpmeRPo3xFkArAicHRJJvQ9gnsfTg
+         PXwvfj6ev/NUVV683ez8bn8iZZQfPkhnK9lmuLWOhuML89t734fxfhVZTpda9wgNgUYd
+         f3xIMPe4Z0+Ukfvv3BoiGgL+IFeJkvlX1zEZVB6IDKKEwBDec4XeSeGgXPk0nZpfCHkU
+         TL4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683286934; x=1685878934;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jwA4RNzHLoe51BKJcNUYfJNJRyNu9DKsCjgDMwmTA7A=;
-        b=e/mr5PElj8n0EMnDDEUQ19+O3x5Zdr3t8VmUh93yvsoaMFdsMogYYy15fPAxd1T3PW
-         yU4qDoIOoD2TIJktpgZzzvH6rMrGak1VW2snljc+09rvjNY64xlRx0XVDo/V+pDC039y
-         VbfULTcewhhBnp9yCtoHNjj5bqvT28oB2tRVN3i9J/4EZqfm9JTvWsdBRuyqxhQsFBpe
-         Y1g1iJWACcBPP/iTWOxSh1uSMWbCmTDXpy2g7QoTMPv7tZfPZ1YFS4AacUAI0RUmJMxI
-         geMOioyVM3+9fGX06c3YjAYHO7YQIzvtQwt3iYuaF3QgBDLizmOVwSdP5rUfi+3pkO60
-         iZng==
-X-Gm-Message-State: AC+VfDxcU7eFgZrlqZH+5Ri0VIHSVXYNdA+y78uxgbALkzaBy2uJemDW
-        HR9wKLnYWYfucxF/GroU85+2U0hCPI6OCg==
-X-Google-Smtp-Source: ACHHUZ5w3w27K7kl40zFdLW88ML+N5pSdsni2WgKoruZX/PkX3r58fPaDnqKsJGOacQJD5I58y5CNA==
-X-Received: by 2002:a7b:c8d9:0:b0:3f1:78a7:6bd2 with SMTP id f25-20020a7bc8d9000000b003f178a76bd2mr930562wml.27.1683286934055;
-        Fri, 05 May 2023 04:42:14 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id 20-20020a05600c029400b003f16932fe7dsm7803364wmk.38.2023.05.05.04.42.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 04:42:13 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 5 May 2023 13:42:10 +0200
-To:     Ian Rogers <irogers@google.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Hao Luo <haoluo@google.com>, James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Roman Lozko <lozko.roma@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: BPF skels in perf .Re: [GIT PULL] perf tools changes for v6.4
-Message-ID: <ZFTrkjccQ4cW6kYZ@krava>
-References: <ZFOSUab5XEJD0kxj@kernel.org>
- <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
- <ZFPw0scDq1eIzfHr@kernel.org>
- <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
- <ZFQCccsx6GK+gY0j@kernel.org>
- <ZFQoQjCNtyMIulp+@kernel.org>
- <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
- <ZFQ5sjjtfEYzvHNP@krava>
- <CAP-5=fXgtNQ5KQv_M+b-mR-dm_s8AAgRkotXifFiTqBo9FHJzA@mail.gmail.com>
- <ZFTOxBDsbboKeEr9@krava>
+        d=1e100.net; s=20221208; t=1683287035; x=1685879035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ujLLumrKh4q+bshtlIQ6r54rkrCQR8hj9C2xEoyLMFo=;
+        b=KVT+7BvIDE2dfxM1Ak3nSKXN4M1q4q6ZIESxBuub37CJYMS4EoqZqbtN2GoR+vpfeb
+         eADuvSw94KKWOw0wdnNavUh9YrbsjtVb/Rgif8opBhdMeRp9g6aKpHPB297dW0edUdcQ
+         IDKfyzsmvnB+Ly36rUeRxZ79Sjz78dmSFsdLBS/S2eQ+iwv+puWsHqUVsaJ+2IOoocgE
+         kcdGQi3aB6J0uyN6oivVhld1WKQAiwPOdBd2cNiS4Ua2mHTpq7tWYpqKczLw0LYFpoC2
+         9Ma1+DMwoQjt1E9EG/VdOj8dcs+SFlgnqF39lIr7hgBdrCUEHVap7lOXfGM7X4+Qb0jj
+         TUjA==
+X-Gm-Message-State: AC+VfDx3Y6T/IoDsd56subndmdDqUs9WX1uVjqR8RWcnBedz8Mt4oAYD
+        /E+Ch7a2XQ5cwt8yBkx/BxK5Jf53f7xAVHQla/UwgA==
+X-Google-Smtp-Source: ACHHUZ4F3IOG9rWuMS12gMDvukRJKxCG9ar8cI2zgHLUwfCzu6OzvjZWooJ1qnSYuUIqY97pc17fpBuJTGp8jhMZ2KI=
+X-Received: by 2002:a81:6dcc:0:b0:55a:1c79:8eab with SMTP id
+ i195-20020a816dcc000000b0055a1c798eabmr1036671ywc.32.1683287035463; Fri, 05
+ May 2023 04:43:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZFTOxBDsbboKeEr9@krava>
+References: <20230421120625.3366-1-mario.limonciello@amd.com>
+In-Reply-To: <20230421120625.3366-1-mario.limonciello@amd.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 5 May 2023 13:43:43 +0200
+Message-ID: <CACRpkda6zyvQ6a4ycEyyi=k5dTZo2Ecm6t6w_9e8hf3gih3qGA@mail.gmail.com>
+Subject: Re: [PATCH 0/4] pinctrl: amd: Adjust handling for firmware misconfigurations
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     linux-gpio@vger.kernel.org, nakato@nakato.io, korneld@chromium.org,
+        richard.gong@amd.com, Shyam-sundar.S-k@amd.com,
+        Basavaraj.Natikar@amd.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 11:39:19AM +0200, Jiri Olsa wrote:
-> On Thu, May 04, 2023 at 04:19:47PM -0700, Ian Rogers wrote:
-> > On Thu, May 4, 2023 at 4:03 PM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > >
-> > > On Thu, May 04, 2023 at 03:03:42PM -0700, Ian Rogers wrote:
-> > > > On Thu, May 4, 2023 at 2:48 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > > >
-> > > > > Em Thu, May 04, 2023 at 04:07:29PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > > > Em Thu, May 04, 2023 at 11:50:07AM -0700, Andrii Nakryiko escreveu:
-> > > > > > > On Thu, May 4, 2023 at 10:52 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > > > > > > Andrii, can you add some more information about the usage of vmlinux.h
-> > > > > > > > instead of using kernel headers?
-> > > > > >
-> > > > > > > I'll just say that vmlinux.h is not a hard requirement to build BPF
-> > > > > > > programs, it's more a convenience allowing easy access to definitions
-> > > > > > > of both UAPI and kernel-internal structures for tracing needs and
-> > > > > > > marking them relocatable using BPF CO-RE machinery. Lots of real-world
-> > > > > > > applications just check-in pregenerated vmlinux.h to avoid build-time
-> > > > > > > dependency on up-to-date host kernel and such.
-> > > > > >
-> > > > > > > If vmlinux.h generation and usage is causing issues, though, given
-> > > > > > > that perf's BPF programs don't seem to be using many different kernel
-> > > > > > > types, it might be a better option to just use UAPI headers for public
-> > > > > > > kernel type definitions, and just define CO-RE-relocatable minimal
-> > > > > > > definitions locally in perf's BPF code for the other types necessary.
-> > > > > > > E.g., if perf needs only pid and tgid from task_struct, this would
-> > > > > > > suffice:
-> > > > > >
-> > > > > > > struct task_struct {
-> > > > > > >     int pid;
-> > > > > > >     int tgid;
-> > > > > > > } __attribute__((preserve_access_index));
-> > > > > >
-> > > > > > Yeah, that seems like a way better approach, no vmlinux involved, libbpf
-> > > > > > CO-RE notices that task_struct changed from this two integers version
-> > > > > > (of course) and does the relocation to where it is in the running kernel
-> > > > > > by using /sys/kernel/btf/vmlinux.
-> > > > >
-> > > > > Doing it for one of the skels, build tested, runtime untested, but not
-> > > > > using any vmlinux, BTF to help, not that bad, more verbose, but at least
-> > > > > we state what are the fields we actually use, have those attribute
-> > > > > documenting that those offsets will be recorded for future use, etc.
-> > > > >
-> > > > > Namhyung, can you please check that this works?
-> > > > >
-> > > > > Thanks,
-> > > > >
-> > > > > - Arnaldo
-> > > > >
-> > > > > diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > > > > index 6a438e0102c5a2cb..f376d162549ebd74 100644
-> > > > > --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > > > > +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > > > > @@ -1,11 +1,40 @@
-> > > > >  // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > >  // Copyright (c) 2021 Facebook
-> > > > >  // Copyright (c) 2021 Google
-> > > > > -#include "vmlinux.h"
-> > > > > +#include <linux/types.h>
-> > > > > +#include <linux/bpf.h>
-> > > >
-> > > > Compared to vmlinux.h here be dragons. It is easy to start dragging in
-> > > > all of libc and that may not work due to missing #ifdefs, etc.. Could
-> > > > we check in a vmlinux.h like libbpf-tools does?
-> > > > https://github.com/iovisor/bcc/tree/master/libbpf-tools#vmlinuxh-generation
-> > > > https://github.com/iovisor/bcc/tree/master/libbpf-tools/arm64
-> > > >
-> > > > This would also remove some of the errors that could be introduced by
-> > > > copy+pasting enums, etc. and also highlight issues with things being
-> > > > renamed as build time rather than runtime failures.
-> > >
-> > > we already have to deal with that, right? doing checks on fields in
-> > > structs like mm_struct___old
-> > 
-> > We do, but the way I detected the problems in the first place was by
-> > building against older kernels. Now the build will always succeed but
-> > fail at runtime.
-> > 
-> > > > Could this be some shared resource for the different linux tools
-> > > > projects using a vmlinux.h? e.g. tools/lib/vmlinuxh with an
-> > > > install_headers target that builds a vmlinux.h.
-> > >
-> > > I tried to do the minimal header and it's not too big,
-> > > I pushed it in here:
-> > >   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=perf/vmlinux_h
-> > >
-> > > compile tested so far
-> > >
-> > > jirka
-> > 
-> > Cool, could we just call it vmlinux.h rather than perf-defs.h?
-> 
-> right, it also makes the change smaller
-> 
-> > 
-> > I notice cgroup_subsys_id is in there which is called out in Andrii's
-> > CO-RE  guide/blog:
-> > https://nakryiko.com/posts/bpf-core-reference-guide/#relocatable-enums
-> > perhaps we can do something with names/types to make sure a helper is
-> > being used for these enum values.
+On Fri, Apr 21, 2023 at 2:06=E2=80=AFPM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 
-both bperf_cgroup and off_cpu programs use bpf_core_enum_value, so we should be fine
+> commit 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on probe"=
+)
+> had intended to work around firmware problems on a Microsoft Surface
+> device but actually masked other real bugs in firmware and the driver.
+>
+> Before this commit, "wake on lid" doesn't work properly on a number of
+> systems, but this is because debounce handling was improperly configured
+> in the driver and due to a bug in this commit it gets configured a
+> different way.
+>
+> commit b26cd9325be4 ("pinctrl: amd: Disable and mask interrupts on
+> resume") attempted to build on top of this to mask issues on resume, but
+> it happened to "fix" the bug in commit 4e5a04be88fe ("pinctrl: amd:
+> disable and mask interrupts on probe") which "broke" wake on lid since
+> the debounce handling was programmed differently.
+>
+> This was reverted in commit 534e465845eb ("Revert "pinctrl: amd: Disable
+> and mask interrupts on resume"") which fixed the wake on lid.
+>
+> To fix this series of unfortunate events and prevent them in the future
+> this series corrects the GPIO0 debounce handling and reverts commit
+> 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on probe"). A ne=
+w
+> patch that is safer is included that will fix spurious interrupt handling
+> and is expected to fix the issues that both
+> commit 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on probe"=
+)
+> and
+> commit b26cd9325be4 ("pinctrl: amd: Disable and mask interrupts on
+> resume") attempted to fix in a more scalable way.
 
-jirka
+I applied the series for the next kernel cycle (becoming v6.5).
+
+If it gets urgent to get this in we can move it into the fixes (for v6.4 an=
+d
+stable) but at least this way we get some rotation in linux-next and wide
+testing of the patches.
+
+I will push it once v6.4-rc1 is out.
+
+Yours,
+Linus Walleij
