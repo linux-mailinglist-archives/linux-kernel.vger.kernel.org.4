@@ -2,107 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C606F84D8
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 16:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C49A6F84DA
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 16:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbjEEO31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 10:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S232600AbjEEO3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 10:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjEEO3Y (ORCPT
+        with ESMTP id S232406AbjEEO31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 10:29:24 -0400
+        Fri, 5 May 2023 10:29:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08741723;
-        Fri,  5 May 2023 07:29:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E021992
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 07:29:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B2A063E70;
-        Fri,  5 May 2023 14:29:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 819AEC433EF;
-        Fri,  5 May 2023 14:29:19 +0000 (UTC)
-Date:   Fri, 5 May 2023 10:29:16 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Wander Lairson Costa <wander@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>, Hu Chunyu <chuhu@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v7 2/3] sched/task: Add the
- put_task_struct_atomic_safe() function
-Message-ID: <20230505102916.4aa664dd@gandalf.local.home>
-In-Reply-To: <20230505102602.2052c83a@gandalf.local.home>
-References: <20230425114307.36889-1-wander@redhat.com>
-        <20230425114307.36889-3-wander@redhat.com>
-        <20230504084229.GI1734100@hirez.programming.kicks-ass.net>
-        <20230504122945.GA28757@redhat.com>
-        <20230504143303.GA1744142@hirez.programming.kicks-ass.net>
-        <CAAq0SUmYrQbS1k9NNKGQP7hQRQJ308dk9NCiUimEiLeBJUavgA@mail.gmail.com>
-        <20230504152424.GG1744258@hirez.programming.kicks-ass.net>
-        <cjhvb72qrqggom5gxdjz6mtz3bntlmznx7r52adz72z2t2edzr@hwcog2pltfaq>
-        <20230505133235.GG4253@hirez.programming.kicks-ass.net>
-        <20230505102602.2052c83a@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D5D363AB9
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 14:29:26 +0000 (UTC)
+Received: from rdvivi-mobl4 (unknown [192.55.54.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp.kernel.org (Postfix) with ESMTPSA id 9BDDEC433D2;
+        Fri,  5 May 2023 14:29:22 +0000 (UTC)
+Date:   Fri, 5 May 2023 10:29:20 -0400
+From:   Rodrigo Vivi <rodrigo.vivi@kernel.org>
+To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>,
+        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
+        Manasi Navare <manasi.d.navare@intel.com>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] drm/i915/dp: prevent potential div-by-zero
+Message-ID: <ZFUSwEVKF5S8LF3A@rdvivi-mobl4>
+References: <20230418140430.69902-1-n.zhandarovich@fintech.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418140430.69902-1-n.zhandarovich@fintech.ru>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 5 May 2023 10:26:02 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> > > IIRC, the in_task() is there because preemptible() doesn't check if it
-> > > is running in interrupt context.    
-> > 
-> > #define preemptible()   (preempt_count() == 0 && !irqs_disabled())
-> > 
-> > When in interrupt context preempt_count() will have a non-zero value in
-> > HARDIRQ_MASK and IRQs must be disabled, so preemptible() evaluates to
-> > (false && false), last time I checked that ends up being false.  
+On Tue, Apr 18, 2023 at 07:04:30AM -0700, Nikita Zhandarovich wrote:
+> drm_dp_dsc_sink_max_slice_count() may return 0 if something goes
+> wrong on the part of the DSC sink and its DPCD register. This null
+> value may be later used as a divisor in intel_dsc_compute_params(),
+> which will lead to an error.
+> In the unlikely event that this issue occurs, fix it by testing the
+> return value of drm_dp_dsc_sink_max_slice_count() against zero.
 > 
-> Interesting, I can't find v5 anywhere in my mail folders (but I have
-> v4 and v6!). Anyway, from just the context of this email, and seeing
-> IS_ENABLED(CONFIG_PREEMPT_RT), I'm guessing that in_task() returns false if
-> it's running in a interrupt thread, where preemtible() does not.
+> Found by Linux Verification Center (linuxtesting.org) with static
+> analysis tool SVACE.
+> 
+> Fixes: a4a157777c80 ("drm/i915/dp: Compute DSC pipe config in atomic check")
+> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
 
-But then I question, does it matter if it is running in an interrupt thread
-or not for put_task_struct()?
+Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
 
--- Steve
+and pushed.
+
+Thanks for the patch and sorry for the delay.
+
+> ---
+>  drivers/gpu/drm/i915/display/intel_dp.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
+> index 62cbab7402e9..c1825f8f885c 100644
+> --- a/drivers/gpu/drm/i915/display/intel_dp.c
+> +++ b/drivers/gpu/drm/i915/display/intel_dp.c
+> @@ -1533,6 +1533,11 @@ int intel_dp_dsc_compute_config(struct intel_dp *intel_dp,
+>  		pipe_config->dsc.slice_count =
+>  			drm_dp_dsc_sink_max_slice_count(intel_dp->dsc_dpcd,
+>  							true);
+> +		if (!pipe_config->dsc.slice_count) {
+> +			drm_dbg_kms(&dev_priv->drm, "Unsupported Slice Count %d\n",
+> +				    pipe_config->dsc.slice_count);
+> +			return -EINVAL;
+> +		}
+>  	} else {
+>  		u16 dsc_max_output_bpp = 0;
+>  		u8 dsc_dp_slice_count;
+> -- 
+> 2.25.1
+> 
