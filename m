@@ -2,102 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE6A6F886D
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BD36F886C
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233248AbjEESJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 14:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
+        id S233238AbjEESI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 14:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjEESJH (ORCPT
+        with ESMTP id S230473AbjEESI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 14:09:07 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276EB1CFCB
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 11:09:06 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bc4ba28cbso3798092a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 11:09:06 -0700 (PDT)
+        Fri, 5 May 2023 14:08:57 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3353E1A1FD;
+        Fri,  5 May 2023 11:08:56 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64115eef620so21468643b3a.1;
+        Fri, 05 May 2023 11:08:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1683310144; x=1685902144;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JhOBd9eyIHjYJojvwmT6dMwYds6GmWgjJtMpNnQft7I=;
-        b=WGzGqn1QjEUqa0QRJopVl9UbMEjN/POIagPEDljMo5stI2DkbKz556Xd74bsRYda43
-         bZnt07r8b12fyu86Z4XAi2Kswm92M7uUtC58z2tjEE27IpY6a9QPQZ5AnRzl3ZwFPRgX
-         7qgX08Vf/BvQ2xiE+yMLlD0mo5wf+Xu6NfvRs=
+        d=gmail.com; s=20221208; t=1683310135; x=1685902135;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3jmjCmOGhJKcTExgQHxoFdrZdNhIimvrG1KlJ+O2CnA=;
+        b=K0PiobN2K0CD1x/aK0LGxU/27Ndiiy3fP21rS2BmtRQcHEefRBzEKjTsRLJYEahi6T
+         0p6efnM3dGeXACImp1TH/0sv7ROoQguhATGB15wUfaJqt6NnRkN4yS4tvwXkq6JfGvKb
+         d6QPkljAU+BM2MzUZJLhEOlAA23YvvJKD6IPmyzANrbKlv6Vcsq1o67/Z2h4ICSmHJU9
+         pZmZk0xCt3FMh5MDlyo49MrZFNEQ6eoBpv4J2oFk+YjFJpqrfuLYbhBguRIZm3bztujZ
+         wSGZQkiG5PKBU9dUjNN//Zm+y0wc6Jj3mMr45r8z60uFXLcgftWIyJIku59qkOuRtlg/
+         3Qbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683310144; x=1685902144;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JhOBd9eyIHjYJojvwmT6dMwYds6GmWgjJtMpNnQft7I=;
-        b=Sj5bvgPxyiTF8adAOTD4UbUrMjH4smZ1qbfXVd2hFQN55j60au/dZ56FpomniOil/+
-         T/iCcvioVVQDP09YBZQhkVsmyWP2fUPsIB7sU/V2DaAtYUGzYBJWVzHa9PY1gU21wX5W
-         zEcS8Rh35IfzDv53q764oWvPb00aQfFc7obmNG6jYeEJ9D0OI6TZF1QHC9eECTgfIrcv
-         o2cCot25Ogreaam3LY4MrT7StceDKeCK818tQecxdQjRF5PYRfJXL/R/PQyny/Aj2TKA
-         ZRcY0W93w82pvhUu9whc5/K7DPrYPtZRe4juMx57/jm9ttyDkeLS+4MbbeIY9DM8/fxL
-         hGOg==
-X-Gm-Message-State: AC+VfDyahxDXdnkvYIAB8EG3+Dmu5IUiKx4cEu1vFB4GSUCaSMw84TZ9
-        ShXnE9r0GZVq3tFebW6I6EV6HZV2m+X8ssiyBfUSuA==
-X-Google-Smtp-Source: ACHHUZ7qEOTvoLVe6MeqN5sjhFcaz5HHVaQO4x7d8dqnX9mkDGfBo56QXKyyTpxrZO+t1WEeU+fZ8g==
-X-Received: by 2002:aa7:cd82:0:b0:50b:c8a0:1247 with SMTP id x2-20020aa7cd82000000b0050bc8a01247mr1889258edv.40.1683310144355;
-        Fri, 05 May 2023 11:09:04 -0700 (PDT)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
-        by smtp.gmail.com with ESMTPSA id y25-20020aa7d519000000b0050b57848b01sm3106975edq.82.2023.05.05.11.09.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 11:09:03 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-965a68abfd4so395787666b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 11:09:03 -0700 (PDT)
-X-Received: by 2002:a17:907:783:b0:862:c1d5:ea1b with SMTP id
- xd3-20020a170907078300b00862c1d5ea1bmr2184397ejb.8.1683310143215; Fri, 05 May
- 2023 11:09:03 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683310135; x=1685902135;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3jmjCmOGhJKcTExgQHxoFdrZdNhIimvrG1KlJ+O2CnA=;
+        b=KhGL17LwJmYny7XEnOb3tueFnBGnYJnfnZhT2tdbZ7ceccVBXYobc/4QVk/OGH5+yr
+         KmCHTeMdU5qRftI/3q7nGulUxMaZBTpr7RCfK+25X89OuR900aOj2mCtHC/ikb57VpSl
+         fLyL2R5ECGp0zq8KKFEWcgm5mcs7UaTxhe0MTOJ+pKHIYxdcAv05yvEPiiUgHeOsZExT
+         ECR7F4Hp4iX6LXC9hbtCJSXvwwY/JY8NlkLwv0v/TV8gCkZLkg/8BKTVQJGP1oEOeYwh
+         GdfgEVm86MxvEqeO8XDEEBDYoeIs4xBebr2g/tPC4GksLorqL0TYuKtMVhbGSaF7tP5l
+         6ubA==
+X-Gm-Message-State: AC+VfDyqxIWRBJH0F0XSXxTqNMmTo8nSILW2l5e8zYQO4iG+GWu2Iki3
+        tPwyMIG38m4Kssyhfs4s3WCbq+GsIpI=
+X-Google-Smtp-Source: ACHHUZ7Li5NhkqOE1+eiPls/+snjqcBfxl+Gcf+qRka4n1VUPtkhMwlUzgkzNuivRGulByJQdOt0tA==
+X-Received: by 2002:a17:90a:a595:b0:247:14ac:4d3a with SMTP id b21-20020a17090aa59500b0024714ac4d3amr2917795pjq.20.1683310135403;
+        Fri, 05 May 2023 11:08:55 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:5658:95c:e1cf:a1b0])
+        by smtp.gmail.com with ESMTPSA id j6-20020a17090aeb0600b002500df72713sm3186230pjz.7.2023.05.05.11.08.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 11:08:54 -0700 (PDT)
+Date:   Fri, 5 May 2023 11:08:50 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Helge Deller <deller@gmx.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mmc@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] Input: ads7846 - Convert to use software nodes
+Message-ID: <ZFVGMiuRT+e2eVXw@google.com>
+References: <20230430-nokia770-regression-v3-0-a6d0a89ffa8b@linaro.org>
+ <20230430-nokia770-regression-v3-1-a6d0a89ffa8b@linaro.org>
 MIME-Version: 1.0
-References: <20230504012914.1797355-1-mathieu.desnoyers@efficios.com>
- <20230504012914.1797355-4-mathieu.desnoyers@efficios.com> <87pm7gd4l5.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <8c28baa8-0945-fd77-3d1d-92c99c7bbbd1@efficios.com> <CAHk-=wjfgCa-u8h9z+8U7gaKK6PnRCpws1Md9wYSSXywUxoUSA@mail.gmail.com>
- <190e5f92-f386-77a4-21c3-7f07b15ac4a3@efficios.com>
-In-Reply-To: <190e5f92-f386-77a4-21c3-7f07b15ac4a3@efficios.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 5 May 2023 11:08:46 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjaGe_MO_Fk8MOr2KNwbWw3J0MS1j8G-FRKYaauCYY43g@mail.gmail.com>
-Message-ID: <CAHk-=wjaGe_MO_Fk8MOr2KNwbWw3J0MS1j8G-FRKYaauCYY43g@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/4] llist.h: Fix parentheses around macro pointer
- parameter use
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230430-nokia770-regression-v3-1-a6d0a89ffa8b@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 7:23=E2=80=AFAM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
->
-> Is a list iteration position absolutely required to be a local variable,
-> or can it be a dereferenced pointer ?
+Hi Linus,
+On Fri, May 05, 2023 at 01:16:55PM +0200, Linus Walleij wrote:
+> 
+> Populate the devices on the Nokia 770 CBUS I2C using software
+> nodes instead of platform data quirks. This includes the LCD
+> and the ADS7846 touchscreen so the conversion just brings the LCD
+> along with it as software nodes is an all-or-nothing design
+> pattern.
 
-Well, it was certainly the intention, but while the member name
-obviously has to be a member name, the iterator *could* be any lvalue.
+Wow, so that worked , awesome!
 
-Many of the "foreach" kind of loops would actually prefer to have
-entirely local variables, but C syntax rules didn't allow that (now
-with C11 we can do that variable declaration in the for-loop itself,
-but we're still limited to just _one_ variable which can be a
-problem).
+> +static const struct property_entry nokia770_ads7846_props[] = {
+> +	PROPERTY_ENTRY_U32("touchscreen-size-x", 4096),
+> +	PROPERTY_ENTRY_U32("touchscreen-size-y", 4096),
+> +	PROPERTY_ENTRY_U32("touchscreen-max-pressure", 256),
+> +	PROPERTY_ENTRY_U32("touchscreen-average-samples", 10),
+> +	PROPERTY_ENTRY_U16("ti,x-plate-ohms", 180),
+> +	PROPERTY_ENTRY_U16("ti,debounce-tol", 3),
+> +	PROPERTY_ENTRY_U16("ti,debounce-rep", 1),
+> +	PROPERTY_ENTRY_GPIO("pendown-gpios", &nokia770_gpiochip1_node,
+> +			    ADS7846_PENDOWN_GPIO, GPIO_ACTIVE_HIGH),
 
-So if we had started with C11, that 'list_for_each()' wouldn't have
-had an external 'pos' declaration at all, it would have done it
-internally, but that's not the reality we're in today ;/
+Looking at the driver this actually needs to be GPIO_ACTIVE_LOW.
 
-              Linus
+>  
+> +static struct gpiod_lookup_table spitz_ads7846_gpio_table = {
+> +	.dev_id = "spi2.0",
+> +	.table = {
+> +		GPIO_LOOKUP("gpio-pxa", SPITZ_GPIO_TP_INT,
+> +			    "pendown", GPIO_ACTIVE_HIGH),
+
+GPIO_ACTIVE_LOW here too.
+
+> +static struct gpiod_lookup_table db1100_touch_gpio_table = {
+> +	.dev_id = "spi0.0",
+> +	.table = {
+> +		GPIO_LOOKUP("alchemy-gpio2", 21,
+> +			    "pendown", GPIO_ACTIVE_HIGH),
+
+And here as well.
+
+> @@ -223,7 +220,7 @@ static int get_pendown_state(struct ads7846 *ts)
+>  	if (ts->get_pendown_state)
+>  		return ts->get_pendown_state();
+>  
+> -	return !gpio_get_value(ts->gpio_pendown);
+> +	return !gpiod_get_value(ts->gpio_pendown);
+
+This needs to be
+
+	return !gpiod_get_value_raw(ts->gpio_pendown);
+
+I looked at various DTSes we have and they use a mix of active high and
+active low annotations, so we have to go with the "raw" variant for now,
+and then update to normal one once we update bad DTSes.
+
+Thanks!
+
+-- 
+Dmitry
