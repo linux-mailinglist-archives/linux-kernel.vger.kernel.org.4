@@ -2,149 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7866F8084
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C81DE6F808C
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbjEEKDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 06:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        id S231219AbjEEKGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 06:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbjEEKDo (ORCPT
+        with ESMTP id S229441AbjEEKG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 06:03:44 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2083.outbound.protection.outlook.com [40.107.100.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D2B9EC4;
-        Fri,  5 May 2023 03:03:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JvLDc+IHykdFBMm3UxM6UcnVV3u4Ze3VPpuOj/Ic/wf9/C+SG7lVTECsoIY87R6EETnNzRYXkTLL3aPAAsFQLswHRl+HHG3TWiexcHiqhszw8O4e3W7aUn6iBq5J53iI5SC7xwrQ+SRpA+lo+HDhUiwPgPG+p4p4P+4QhalK7V+mdtKHHlHlgQkwSkuVMozR/jIaWlF7gsfbsfBWO7WrEKuVlwTot4BARzTB0fm04siaoRrk7hmQyOJXunRfZzv0aS0+XJoA178kPEg0wyrU+G5rWaJVckYxHAv4hcoNR6g6QEJY7Ms5rZYnPfDVpiWX7fGfL8ot1qiRVXBPjXjRVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cvb2KFEAG5qxbATKsSz98w+HrNL+FkKLbFmUQSJFqoU=;
- b=NXrOeGTpjKr4SIsF04Ihrc7KLW43Hgsvmw75maTs1CefRgFKcdgKZLNSoyJ8OlyyWn4OrD4fMZwzUd64vuTbrLTqf5S8vIHtxWPvQsBAb0DV7LN/ZkXawCETkVS6DtvhinCkQU14DxDqbZDWzjfqYI1CMi7IZkWdLTZXJYjm3rLcLHMwXmc6Fob7R1SiUFdkZD137Q07ObVuIsXaUXLU27PcgqAX7yIrOgzVChs7OHkBneEx4EmJTDNM8PZAMBjrmnAb89ybhPTG1jVHtMcwvFM+rLFgbjjVbiWiDMM/5aArI1IrFSYgFu+g7Dmh85sC12g2YgJ7bczlJUOUyUaALw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cvb2KFEAG5qxbATKsSz98w+HrNL+FkKLbFmUQSJFqoU=;
- b=N63VOUquOxSXmc69UzB1zrgYQH+KzCVBwAPxRBdzq6Myzf9UGDfFCiAhZlbwMn4BqRTPkW1dRwjDMqBRRBxLxJhgHDyDOrTRTOvRPB1EGY4051lGTlwkaBQYly/RvjQKPmCr7/zuxOeOyJ/VdsQJqgugEzuIQr5Xc6NWu9zYJHE=
-Received: from MW3PR06CA0018.namprd06.prod.outlook.com (2603:10b6:303:2a::23)
- by CH0PR12MB8487.namprd12.prod.outlook.com (2603:10b6:610:18c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27; Fri, 5 May
- 2023 10:03:25 +0000
-Received: from CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:2a:cafe::75) by MW3PR06CA0018.outlook.office365.com
- (2603:10b6:303:2a::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27 via Frontend
- Transport; Fri, 5 May 2023 10:03:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT033.mail.protection.outlook.com (10.13.174.247) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6363.27 via Frontend Transport; Fri, 5 May 2023 10:03:24 +0000
-Received: from sindhu.amdval.net (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 5 May
- 2023 05:03:19 -0500
-From:   Sandipan Das <sandipan.das@amd.com>
-To:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <acme@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <terrelln@fb.com>,
-        <ravi.bangoria@amd.com>, <ananth.narayan@amd.com>,
-        <sandipan.das@amd.com>
-Subject: [PATCH 2/2] perf test: Add stat test for record and script
-Date:   Fri, 5 May 2023 15:32:54 +0530
-Message-ID: <6a5429879764e3dac984cbb11ee2d95cc1604161.1683280603.git.sandipan.das@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <83d6c6c05c54bf00c5a9df32ac160718efca0c7a.1683280603.git.sandipan.das@amd.com>
-References: <83d6c6c05c54bf00c5a9df32ac160718efca0c7a.1683280603.git.sandipan.das@amd.com>
+        Fri, 5 May 2023 06:06:27 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DB0199D;
+        Fri,  5 May 2023 03:06:24 -0700 (PDT)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 394D41C000B;
+        Fri,  5 May 2023 10:06:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1683281183;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9a6n7DwxZclGXMi3qvsG0oZbkEqa2URoW/Q1gWp3eig=;
+        b=L9RcZyhKswX31T7f9QBhd8sR7VkQlmtGRM7fC4zdmhlkD1h9JjVmqTjwgkaNq+4GnBSNA3
+        Teb010QpYvH6ycpVHUVSCvYkxaS/fvvjnG0LlMg+32jBeHAXgjaTgUMsGFE0M02b8O2CIi
+        d3ZNYmT+Ywc78TBke0IXkmo/h+bUqxMTi20rDNx4l+IydrD1j3N99gn9UEZNs8mLbalDYu
+        RHp6mgKMQ/f2ltydN5Px5PPnqZfi2FZDKlwFYVR8792QSoYCDLYv8bt9w3HFOd5ah49C8U
+        o0FpU0i80D2J0xYOQ2ADi3Xta6W7Qj1KJgTS2pLYx9FAPISx7tjkzWVldQpHcA==
+Date:   Fri, 5 May 2023 12:06:18 +0200
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Jun Li <jun.li@nxp.com>
+Cc:     Francesco Dolcini <francesco@dolcini.it>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "peter.chen@nxp.com" <peter.chen@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+Message-ID: <20230505120618.2f4cf22c@booty>
+In-Reply-To: <PA4PR04MB96403377F5E37C12AD8C25B389729@PA4PR04MB9640.eurprd04.prod.outlook.com>
+References: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
+        <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
+        <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
+        <PA4PR04MB96403377F5E37C12AD8C25B389729@PA4PR04MB9640.eurprd04.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT033:EE_|CH0PR12MB8487:EE_
-X-MS-Office365-Filtering-Correlation-Id: 40192dfc-ec73-41d9-3c72-08db4d4ff73d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Q+sWaEUT3yaJ2v4wnce15cWNFR1iWq/iKmA+rkrfpRBYC9B+0sLZVXImDl7ViYrO8LA74Q2MgbPHOJOtZC6v6+JOajiCJTdbXDK2JXKFjW8SELchjr/UlcgltpPDVU+CTmPmGVb2OzERcSc7Zhf5017Kron66q1f+ohDKVWYUZKOyPu57M8Gi7q+3Ux2d5Ak94DyKDbfnQyXXYFsLAZWBD6WS2RApRPhJoSUypZ9D4LEPX2V2YjTSGnS/urmZ/yEPg+HeAy8xDjVJXMmzOnJn8EnF9VH97yfREGHun9KQWP6+WtJQBg0KNs3hiCD2V3fh8HFGw6+d1NALbQ9B0p5PG6/q8WYLFn2qwX2DbjeVw/m3aBW2ckJNVqQi/fgHQYrEVcoHqdEhIJlL/QfmYyYjpwL2xRovOCrtqaY674cJ52F1GTtPazqyLJMwkw/86lQN1KdadZVoX5tidXyeDeA6nfRJ4AYFUIcme6A77dOpAWBCz3cgBsCiaYNQ0wLEtznd/6B7tHaJ6lgc+Bce+111r0O4mN1ORuUJmiVb4Ps1MH6xo+oq5ooP1XIwFtrpeUD17EO6gOBiQ+PuEp6nN50isPA83aUO86fw4/+VX8OdCzqJpskkfHvhq0XnheL3j0pkeakiesD7OoAdgXZUdhOrMmoD6oMdUB4SVFOsGmCftEWX9T/getszcwEpzfofHOLFQCF7a3mQ8ePK4KxljoG5iuan/GxTtA5wr8A8PIOVt0=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39860400002)(346002)(396003)(451199021)(40470700004)(36840700001)(46966006)(86362001)(36756003)(54906003)(110136005)(316002)(70206006)(4326008)(70586007)(478600001)(6666004)(41300700001)(40480700001)(82310400005)(8676002)(5660300002)(8936002)(2906002)(44832011)(7416002)(82740400003)(356005)(81166007)(16526019)(186003)(2616005)(26005)(36860700001)(426003)(336012)(47076005)(40460700003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 10:03:24.7391
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40192dfc-ec73-41d9-3c72-08db4d4ff73d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8487
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using the global aggregation mode, running perf script after perf
-stat record can result in a segmentation fault as seen with commit
-8b76a3188b85 ("perf stat: Remove unused perf_counts.aggr field"). Add a
-basic test to the existing suite of stat-related tests for checking if
-that workflow runs without erroring out.
+Hello Jun,
 
-Signed-off-by: Sandipan Das <sandipan.das@amd.com>
----
- tools/perf/tests/shell/stat.sh | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+On Fri, 5 May 2023 09:49:16 +0000
+Jun Li <jun.li@nxp.com> wrote:
 
-diff --git a/tools/perf/tests/shell/stat.sh b/tools/perf/tests/shell/stat.sh
-index 2c1d3f704995..b154fbb15d54 100755
---- a/tools/perf/tests/shell/stat.sh
-+++ b/tools/perf/tests/shell/stat.sh
-@@ -28,6 +28,18 @@ test_stat_record_report() {
-   echo "stat record and report test [Success]"
- }
- 
-+test_stat_record_script() {
-+  echo "stat record and script test"
-+  if ! perf stat record -o - true | perf script -i - 2>&1 | \
-+    grep -E -q "CPU[[:space:]]+THREAD[[:space:]]+VAL[[:space:]]+ENA[[:space:]]+RUN[[:space:]]+TIME[[:space:]]+EVENT"
-+  then
-+    echo "stat record and script test [Failed]"
-+    err=1
-+    return
-+  fi
-+  echo "stat record and script test [Success]"
-+}
-+
- test_stat_repeat_weak_groups() {
-   echo "stat repeat weak groups test"
-   if ! perf stat -e '{cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles}' \
-@@ -93,6 +105,7 @@ test_topdown_weak_groups() {
- 
- test_default_stat
- test_stat_record_report
-+test_stat_record_script
- test_stat_repeat_weak_groups
- test_topdown_groups
- test_topdown_weak_groups
+> > -----Original Message-----
+> > From: Francesco Dolcini <francesco@dolcini.it>
+> > Sent: Friday, May 5, 2023 12:50 AM
+> > To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> > Cc: devicetree@vger.kernel.org; festevam@gmail.com;
+> > gregkh@linuxfoundation.org; Jun Li <jun.li@nxp.com>;
+> > kernel@pengutronix.de; linux-arm-kernel@lists.infradead.org;
+> > dl-linux-imx <linux-imx@nxp.com>; linux-kernel@vger.kernel.org;
+> > linux-usb@vger.kernel.org; peter.chen@nxp.com; robh+dt@kernel.org;
+> > s.hauer@pengutronix.de; shawnguo@kernel.org; Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org>; Francesco Dolcini
+> > <francesco.dolcini@toradex.com>
+> > Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+> >
+> > Hello Luca,
+> > I guess your mail to Philippe bounced, let me try to answer since I am aware
+> > of the issue here.
+> >
+> > On Thu, May 04, 2023 at 06:23:12PM +0200, Luca Ceresoli wrote:  
+> > > I found this thread after several hours spent in debugging why USB host  
+> > is  
+> > > not detecting new devices on a custom board using the iMX6ULL Colibri
+> > > SoM.
+> > >
+> > > My best workaround at the moment is:  
+> > We have the same workaround in our BSP since quite some time, see
+> > https://git.t/
+> > oradex.com%2Fcgit%2Fmeta-toradex-bsp-common.git%2Ftree%2Frecipes-kernel
+> > %2Flinux%2Flinux-toradex-mainline-git%2F0002-drivers-chipidea-disable-r
+> > untime-pm-for-imx6ul.patch&data=05%7C01%7Cjun.li%40nxp.com%7C776dc1e71a
+> > 554ee20ed908db4cbfa5aa%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638
+> > 188158228795706%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2l
+> > uMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3cFsUurgKBfic
+> > LNfRxMOErukGiMczhJREFGvaFYTH34%3D&reserved=0
+> >  
+> > > I haven't found any follow-up patches from you, so I'm wondering whether
+> > > you have made any progress on this issue.  
+> > You can find the latest discussion on that regard here
+> > https://lore/.
+> > kernel.org%2Fall%2FY1vLpaxpc5WBCuGD%40francesco-nb.int.toradex.com%2F&d
+> > ata=05%7C01%7Cjun.li%40nxp.com%7C776dc1e71a554ee20ed908db4cbfa5aa%7C686
+> > ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638188158228795706%7CUnknown%7C
+> > TWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI
+> > 6Mn0%3D%7C3000%7C%7C%7C&sdata=xgIAlY5Az9zQgOBaUTHeGJDXNIyNRmEBlcR49JOVB
+> > sI%3D&reserved=0
+> >  
+> > > As I see it, a quirk in the driver would make sense.  
+> > I am not sure.
+> >
+> > The reason this is not working is that the VBUS is not directly
+> > connected to the SOC and the USB IP is powered in a different way (all
+> > of that was reviewed/acked by NXP when the board was designed).  
+> 
+> Hi Luca,
+> 
+> Is your board design similar like Francesco's as below?
+
+Possibly, but I'm afraid I can't say: I am using the Toradex Colibri
+i.MX6ULL SoM, whose schematics are not public.
+
+Best regards,
+Luca
+
 -- 
-2.34.1
-
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
