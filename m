@@ -2,138 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3896F8455
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E0E6F8459
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbjEENql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 09:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
+        id S232732AbjEENs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 09:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbjEENqj (ORCPT
+        with ESMTP id S232333AbjEENsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 09:46:39 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC646191C2;
-        Fri,  5 May 2023 06:46:38 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64115eef620so19695365b3a.1;
-        Fri, 05 May 2023 06:46:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683294398; x=1685886398;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8bRq4rtERRLO3O9RzrLvDMxEszKCxH/+PYf5iKu/L0o=;
-        b=IssYN6yNBQ2tAmJ5lWyHsyY+jPFzR1pOVwv1ZLF1a0NhvMU9cM0ugjOczvggNAhKI2
-         cW0HMBE1mgWRv6/rECbNEkpAinP0p22AcX8g/xlDkD2DNXdlENxxy1OOJgQ5qGoIOnu1
-         Qh8eC/HhtP1d33Ss50F56CjZgmjSiyGEmqky4+Lm4p09fw5lfPjP4z5POGNlCaVKOYzO
-         g/YR+yrpjMkuqsaohWI9ZCMAfupKEFYlTVXUIU9mpRgL9sQhAKM8KdCI9tibK+BF54ho
-         QHsabtX3xf2t9HvE6fbtYb7mCTKyeyTVCqdn+r2PRDRkiln7Ea1XFUrMWEJsiY/nAH45
-         Fllg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683294398; x=1685886398;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8bRq4rtERRLO3O9RzrLvDMxEszKCxH/+PYf5iKu/L0o=;
-        b=MhDrW+ClCi6mAB3/lRULLMv99mnXtekiGmK46N/f2K22yFCGU106c2Z8ugMDtsTyYL
-         U8Xo2hryZR3CPbdA+zM/HmT6WQyTyMfW0bAJ37ZXbt4kBr3L9PX9XiVcvdUuB6RUXsBt
-         axBHROIKkmMuJWQB2E5P7okl0WCN8qCw41cGEjeU7WMuZQfuxv5KAajdJVi84Of4BYsP
-         7kQBwCU1fnAws2htsfIyySnPo5RWlnQbwYUIVVJOV+Uqzw6yVm5THaG4Uwm1V9YU1jxB
-         Mq3FWfmEAshD59S4aDso2Mvt+5iEgDmun4rDKU6jejVnBewftcVr/Tv8P0ZI1YihltvX
-         aVXQ==
-X-Gm-Message-State: AC+VfDyYBrL1Le3pyJE5Usan3L66Ckmtm7Svh3Q5sLwlKTDOiqzKOQeW
-        dSBXdrzb3wmScIlGjzZ2Xws=
-X-Google-Smtp-Source: ACHHUZ4bJde5iLkES5Vb/pf6epC7xZNmBLKX1JUXWEPFBgLorui1LXZpF4wZykchI1DeANc6iVcc9g==
-X-Received: by 2002:a05:6a20:4309:b0:f4:c0d6:87c with SMTP id h9-20020a056a20430900b000f4c0d6087cmr2081508pzk.14.1683294398138;
-        Fri, 05 May 2023 06:46:38 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-14.three.co.id. [180.214.232.14])
-        by smtp.gmail.com with ESMTPSA id v23-20020aa78517000000b006439bc7d791sm1532349pfn.57.2023.05.05.06.46.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 06:46:37 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 980A8106281; Fri,  5 May 2023 20:46:33 +0700 (WIB)
-Date:   Fri, 5 May 2023 20:46:33 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Linux x86 Architecture <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux perf users <linux-perf-users@vger.kernel.org>,
-        Linux Kernel Build System <linux-kbuild@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [BUILD] Unable to sign drivers on Ubuntu 22.04 LTS desktop
-Message-ID: <ZFUIuW58QjfTaRxt@debian.me>
-References: <bb89a720-b1b2-18fc-7f89-44267885700d@alu.unizg.hr>
+        Fri, 5 May 2023 09:48:25 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E066CAB;
+        Fri,  5 May 2023 06:48:24 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345CHTcd021048;
+        Fri, 5 May 2023 13:47:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=wrG3F3IhGoC8xojnPvd7JD0NO3NIj6eL4/3xLJ9gJZ8=;
+ b=ZXHSA4IpOr3MNTmzAOZThgZOZDIdeT/dOQ3FLGdiadPpUS7690WylP7s9q/cote394Wq
+ 084VUtWXqWmoEI8CCRF7hzDZ4HW4D7Dy17rLAO1nSJnPLvXWUAXGESWm9H0k7EvnFcjF
+ OFQIkEB3pkLsRLNTrnQfx9J/kXbrhIEikwDzUqY3+E0E5MA8Wlj3dEZTqm2jXz2yy2Yd
+ kr8HVXtwe7mZ/WLbWoOvpjyNDV8DReNh4KrrcBJChP3gvs1ZXNMXp4fuVu7oWEkVQwtF
+ Nl3bvYglwKjqWtWKNWjyrzTXfH46gXE7lcIKlJKpnlhkY2KdhlSxJABLf7KsGZlO8Ftd zQ== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qcf24jdjs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 May 2023 13:47:52 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345Dlqr9031185
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 5 May 2023 13:47:52 GMT
+Received: from [10.216.37.178] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 5 May 2023
+ 06:47:47 -0700
+Message-ID: <5e696512-00bf-e2b4-5c5b-53aa8088bb70@quicinc.com>
+Date:   Fri, 5 May 2023 19:17:44 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eF7GadaFw3DUPxSA"
-Content-Disposition: inline
-In-Reply-To: <bb89a720-b1b2-18fc-7f89-44267885700d@alu.unizg.hr>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 14/18] media: venus: hfi_platform: Check vpu_version
+ instead of device compatible
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Marijn Suijten" <marijn.suijten@somainline.org>
+References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
+ <20230228-topic-venus-v2-14-d95d14949c79@linaro.org>
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+In-Reply-To: <20230228-topic-venus-v2-14-d95d14949c79@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: A_qUJtSqUcPgiMPBEZ0089EO7zoplY1C
+X-Proofpoint-GUID: A_qUJtSqUcPgiMPBEZ0089EO7zoplY1C
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-05_21,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ suspectscore=0 bulkscore=0 impostorscore=0 phishscore=0 priorityscore=1501
+ spamscore=0 malwarescore=0 clxscore=1015 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305050115
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---eF7GadaFw3DUPxSA
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, May 04, 2023 at 07:02:57PM +0200, Mirsad Goran Todorovac wrote:
-> Hi Bagas,
->=20
-> I seem to have run into a dead end with this.
->=20
-> OpenSSL 3.0.2 refuses to cooperate, despite enabling legacy ciphers:
->=20
-> =C2=A0 BTF [M] net/nsh/nsh.ko
-> =C2=A0 BTF [M] net/hsr/hsr.ko
-> make -f ./Makefile ARCH=3Dx86 =C2=A0=C2=A0=C2=A0 KERNELRELEASE=3D6.3.0+ i=
-ntdeb-pkg
-> sh ./scripts/package/builddeb
-> =C2=A0 INSTALL debian/linux-image/lib/modules/6.3.0+/kernel/arch/x86/even=
-ts/intel/intel-cstate.ko
-> =C2=A0 SIGN debian/linux-image/lib/modules/6.3.0+/kernel/arch/x86/events/=
-intel/intel-cstate.ko
-> At main.c:170:
-> - SSL error:1E08010C:DECODER routines::unsupported:
-> ../crypto/encode_decode/decoder_lib.c:101
-
-I didn't find any errors using self-compiled OpenSSL 3.1.0. I installed the
-library to `/tmp/openssl` and specify
-`KCFLAGS=3D-L/tmp/openssl/lib -I/tmp/openssl/include` when building bindeb-=
-pkgs.
-Am I missing something?
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---eF7GadaFw3DUPxSA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFUItAAKCRD2uYlJVVFO
-o4pvAP9190LFAsa4XET4auqV33+yu5hZQvt30jmUmLCWx0EiEQEA4P+jsvEjukEg
-aUHCqcYykvJCja7hz3SxjHh6lcSJfwI=
-=vkpX
------END PGP SIGNATURE-----
-
---eF7GadaFw3DUPxSA--
+On 5/4/2023 1:31 PM, Konrad Dybcio wrote:
+> This is not a matter of the host SoC, but the VPU chip in Venus. Fix it.
+>
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Reviewed-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+> ---
+>   drivers/media/platform/qcom/venus/hfi_platform.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/platform/qcom/venus/hfi_platform.c b/drivers/media/platform/qcom/venus/hfi_platform.c
+> index f07f554bc5fe..d163d5b0e6b7 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_platform.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_platform.c
+> @@ -80,7 +80,7 @@ hfi_platform_get_codecs(struct venus_core *core, u32 *enc_codecs, u32 *dec_codec
+>   	if (plat->codecs)
+>   		plat->codecs(enc_codecs, dec_codecs, count);
+>   
+> -	if (of_device_is_compatible(core->dev->of_node, "qcom,sc7280-venus")) {
+> +	if (IS_IRIS2_1(core)) {
+>   		*enc_codecs &= ~HFI_VIDEO_CODEC_VP8;
+>   		*dec_codecs &= ~HFI_VIDEO_CODEC_VP8;
+>   	}
+>
