@@ -2,150 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE8A6F8878
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991806F887E
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbjEESKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 14:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
+        id S232280AbjEESLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 14:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233147AbjEESKh (ORCPT
+        with ESMTP id S231644AbjEESLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 14:10:37 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1614160B1
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 11:10:32 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b9d8b458e10so2742226276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 11:10:32 -0700 (PDT)
+        Fri, 5 May 2023 14:11:38 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14C31C0D7;
+        Fri,  5 May 2023 11:11:37 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so29555219a12.1;
+        Fri, 05 May 2023 11:11:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683310232; x=1685902232;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QVZYG1JecNO86jzNV6C/AMNw6VQt+fJvqwCxq5mp/Nc=;
-        b=JuehaV/RJK9Y4fUOdxkcZEuqDGAuEF/acJdDqJ45XbKARUoqq4czDg4ZH8mqWvQs0W
-         C3cMUZ3VtCr6q/eI+6qJp58nulUMjZvQdZpvpUFXRdmOfRfhasZuNayk1xVHyGVy9Mwz
-         ItoP45q/KUOjBJ5HUc+Vlm240zAnqes7cusDh4wsBFNSxkmDsbQVgr1QY7ENaCb2Pf+o
-         stmyjKNibly7r3/lcAzIGX4ZSS4stgbgtYjMfq5c0cI/ZADNQtKt98fqV/f8MiQv11Tt
-         rfeoXeDHmM1lnkcbyLTsW9UrOEazY/VwbfsLiL1Vyfp7oqXyyedjHeSP3hv1vKGbwqQn
-         8juQ==
+        d=gmail.com; s=20221208; t=1683310296; x=1685902296;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nd1nRrArnnbxZ/6yDMypPmNKlocui+NeEXIajpk0CTA=;
+        b=pQICc57928GvYredg4Lkr+crak0z5+/zHwdNaRu3UkkuFnRR3+Zu4UhVXYLGrUqA8U
+         Uh1JQkAm0YtmQPSCvbQmez29M2biXHSHS5TFDux7H6UERizWOJSMc4k7/t5dzq+nw94a
+         D6kbp88TOtlu6QhjS0EYWETXmR95BNvjJ7EFHWwfdSgUmy+tOo+tOV1qqqyV9NW+8wLP
+         9gQI/dznqrSeLkhGsn5h1CnkSw2uIESPuwBkA6EHfI+88hFFRXGC+6MyOojeHM0fPHUB
+         FStnwhuy1C87kAW7zIfKSsyvk9XHbUY4KAqRM0I+823U0kF8yie3CDzs5+WAu7gKEyuJ
+         AIlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683310232; x=1685902232;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QVZYG1JecNO86jzNV6C/AMNw6VQt+fJvqwCxq5mp/Nc=;
-        b=ak9nomQreHO9E5et1t92sOxoXrJnXCfH5Z0WzPuEaBfi06cO0atPBHnGI0wIrTNgSn
-         cjeV/7Zfxx9a84xDI+Bxf0n0HAEjjrUonpCODapzn6mZnpQdNLdS4pTIASyKRfYg93m2
-         oICOdz7OVPR1aAk8lmJQCPPdaQP3mpLcy/Pt+EiqdLRYFlbEpchWnfe5EP1Q76Da6LLk
-         0OR4jW8pDlnPEZupf5BT3BUbrYvWjCItU+DFWYOpi72Kt2WubuYERlUnaJjdyy5CtZmf
-         cgVMGMrPukVuc3xJbK7NUrebK3W28jHKA7E/KtFkPUTecZcP5Ub8bmNgkYhoP6M8L8El
-         vroQ==
-X-Gm-Message-State: AC+VfDzKhX8sHnbSYGymQAVx18fLH2W/9ktu4vyuNDhhHPCFF7QPx1TS
-        8kAWNzz8OYU6WxE7dreDAtFvTr/OJdSWiAtxqeEkdQ==
-X-Google-Smtp-Source: ACHHUZ7QHqfeTFCV6iTpJ174mK2XnlUcdiV6R/LWDFZ2cFLepn3d5BnEaLb2X1/400R6vZerp7fSwFYV9RLQ6kw5Ucs=
-X-Received: by 2002:a25:19d7:0:b0:b97:1e2e:a4e5 with SMTP id
- 206-20020a2519d7000000b00b971e2ea4e5mr2351347ybz.40.1683310231779; Fri, 05
- May 2023 11:10:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683310296; x=1685902296;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nd1nRrArnnbxZ/6yDMypPmNKlocui+NeEXIajpk0CTA=;
+        b=gV1fztsrQZDZHhkW3gvn/2jp4L8/HpxeQ6RhaA1wLsR4vULhHLUSPsoLKQ7LVfee5l
+         M9gjyddtNGnqBU78BBQfKKvRhMokYALwSrSP7r+4bW+pulO9uc44RDDxDtK2XMYV8gKs
+         /e2dtLz6lyCMHK7EWRkmC+2n5nIYYIX0tt9ZBWgO+8y8pV8wSOPnbNKDYmR4Acyb4qhw
+         xTwVFP5vKCkiLKaBejV0x2X6uMA3NvUnsHWPGjfhTrZFIagtYsg0Wn41JuaUWdaN+cjW
+         tavy4rdzUYMgCQt2rJO1kEd027dheH1x2hpDDOXSb1bPyTRxTXSCsap07n4oZSAf54Ed
+         +VsQ==
+X-Gm-Message-State: AC+VfDw76DyUb4NUrqtvFoahvGjDe2IRuWVV5e8x9xPg/gNKDIL4dkFX
+        wkAZnzJz7ZPo628BCGX/Mcg=
+X-Google-Smtp-Source: ACHHUZ65mn3IQ/hKgx+NHNuZrzFlw+JJ817PYazVbx/Uf//Bi+cD2stNAkZ5D4GK5m0wvJR58z4ALQ==
+X-Received: by 2002:a05:6402:42c6:b0:506:b94f:3d8f with SMTP id i6-20020a05640242c600b00506b94f3d8fmr3154413edc.5.1683310295832;
+        Fri, 05 May 2023 11:11:35 -0700 (PDT)
+Received: from carbian ([2a02:8109:aa3f:ead8::5908])
+        by smtp.gmail.com with ESMTPSA id be25-20020a0564021a3900b004fd1ee3f723sm3133138edb.67.2023.05.05.11.11.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 11:11:35 -0700 (PDT)
+Date:   Fri, 5 May 2023 20:11:33 +0200
+From:   Mehdi Djait <mehdi.djait.k@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     mazziesaccount@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
+        lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 7/7] iio: accel: Add support for Kionix/ROHM
+ KX132-1211 accelerometer
+Message-ID: <ZFVG1cyY/Ge/nXOh@carbian>
+References: <cover.1682373451.git.mehdi.djait.k@gmail.com>
+ <593798a44c8ba45f969b86aa29e172d59065958c.1682373451.git.mehdi.djait.k@gmail.com>
+ <20230501155645.435242f0@jic23-huawei>
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-36-surenb@google.com>
- <ZFIPmnrSIdJ5yusM@dhcp22.suse.cz> <CAJuCfpGsvWupMbasqvwcMYsOOPxTQqi1ed5+=vyu-yoPQwwybg@mail.gmail.com>
- <ZFNoVfb+1W4NAh74@dhcp22.suse.cz> <CAJuCfpGUtw6cbjLsksGJKATZfTV0FEYRXwXT0pZV83XqQydBgg@mail.gmail.com>
- <ZFTA8xVzxWc345Ug@dhcp22.suse.cz>
-In-Reply-To: <ZFTA8xVzxWc345Ug@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 5 May 2023 11:10:20 -0700
-Message-ID: <CAJuCfpFOLyZKvtqHuukOZvegxGHVUcAtbh3Egt+01yZ9kcEAew@mail.gmail.com>
-Subject: Re: [PATCH 35/40] lib: implement context capture support for tagged allocations
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
-        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230501155645.435242f0@jic23-huawei>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 1:40=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrote=
-:
->
-> On Thu 04-05-23 09:22:07, Suren Baghdasaryan wrote:
-> [...]
-> > > But even then I really detest an additional allocation from this cont=
-ext
-> > > for every single allocation request. There GFP_NOWAIT allocation for
-> > > steckdepot but that is at least cached and generally not allocating.
-> > > This will allocate for every single allocation.
-> >
-> > A small correction here. alloc_tag_create_ctx() is used only for
-> > allocations which we requested to capture the context. So, this last
-> > sentence is true for allocations we specifically marked to capture the
-> > context, not in general.
->
-> Ohh, right. I have misunderstood that part. Slightly better, still
-> potentially a scalability issue because hard to debug memory leaks
-> usually use a generic caches (for kmalloc). So this might be still a lot
-> of objects to track.
+Hello Jonathan,
 
-Yes, generally speaking, if a single code location is allocating very
-frequently then enabling context capture for it will generate many
-callstack buffers.
+On Mon, May 01, 2023 at 03:56:45PM +0100, Jonathan Cameron wrote:
+> On Tue, 25 Apr 2023 00:22:27 +0200
+> Mehdi Djait <mehdi.djait.k@gmail.com> wrote:
+> 
+> > Kionix KX132-1211 is a tri-axis 16-bit accelerometer that can support
+> > ranges from ±2G to ±16G, digital output through I²C/SPI.
+> > Add support for basic accelerometer features such as reading acceleration
+> > via IIO using raw reads, triggered buffer (data-ready), or the WMI IRQ.
+> > 
+> > Datasheet: https://kionixfs.azureedge.net/en/document/KX132-1211-Technical-Reference-Manual-Rev-5.0.pdf
+> > Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
+> 
+> Two tiny things inline.  
+> 
+> > +static int kx132_get_fifo_bytes(struct kx022a_data *data)
+> > +{
+> > +	struct device *dev = regmap_get_device(data->regmap);
+> > +	__le16 buf_status;
+> > +	int ret, fifo_bytes;
+> > +
+> > +	ret = regmap_bulk_read(data->regmap, data->chip_info->buf_status1,
+> > +			       &buf_status, sizeof(buf_status));
+> > +	if (ret) {
+> > +		dev_err(dev, "Error reading buffer status\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	fifo_bytes = le16_to_cpu(buf_status);
+> > +	fifo_bytes &= data->chip_info->buf_smp_lvl_mask;
+> 
+> Slight preference for FIELD_GET() as it saves me checking the mask includes
+> lowest bits.
 
-Your note about use of generic caches makes me think we still have a
-small misunderstanding. We tag at the allocation call site, not based
-on which cache is used. Two kmalloc calls from different code
-locations will have unique codetags for each, so enabling context
-capture for one would not result in context capturing for the other
-one.
+This will mean I have the remove the chip_info member buf_smp_lvl_mask
+and use KX132_MASK_BUF_SMP_LVL directly because otherwise the
+__builtin_constant_p function will cause an error when building. 
+Check: https://elixir.bootlin.com/linux/latest/source/include/linux/bitfield.h#L65
 
->
-> > > There must be a better way.
-> >
-> > Yeah, agree, it would be good to avoid allocations in this path. Any
-> > specific ideas on how to improve this? Pooling/caching perhaps? I
-> > think kmem_cache does some of that already but maybe something else?
->
-> The best I can come up with is a preallocated hash table to store
-> references to stack depots with some additional data associated. The
-> memory overhead could be still quite big but the hash tables could be
-> resized lazily.
+I can change it to FIELD_GET() if you want to.
 
-Ok, that seems like the continuation of you suggestion in another
-thread to combine identical callstack traces. That's an excellent
-idea! I think it would not be hard to implement. Thanks!
+> 
+> 
+> > +
+> > +	return fifo_bytes;
+> > +}
+> > +
+> >  static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int samples,
+> >  			       bool irq)
+> >  {
+> > @@ -1036,6 +1157,32 @@ const struct kx022a_chip_info kx022a_chip_info = {
+> >  };
+> >  EXPORT_SYMBOL_NS_GPL(kx022a_chip_info, IIO_KX022A);
+> >  
+> > +const struct kx022a_chip_info kx132_chip_info = {
+> > +	.name		  = "kx132-1211",
+> > +	.regmap_config	  = &kx132_regmap_config,
+> > +	.channels	  = kx132_channels,
+> > +	.num_channels	  = ARRAY_SIZE(kx132_channels),
+> > +	.fifo_length	  = KX132_FIFO_LENGTH,
+> > +	.who		  = KX132_REG_WHO,
+> > +	.id		  = KX132_ID,
+> > +	.cntl		  = KX132_REG_CNTL,
+> > +	.cntl2		  = KX132_REG_CNTL2,
+> > +	.odcntl		  = KX132_REG_ODCNTL,
+> > +	.buf_cntl1	  = KX132_REG_BUF_CNTL1,
+> > +	.buf_cntl2	  = KX132_REG_BUF_CNTL2,
+> > +	.buf_clear	  = KX132_REG_BUF_CLEAR,
+> > +	.buf_status1	  = KX132_REG_BUF_STATUS_1,
+> > +	.buf_smp_lvl_mask = KX132_MASK_BUF_SMP_LVL,
+> 
+> There are some things in here (typically where the define isn't used
+> anywhere else) where I think it would be easier to follow if the
+> value was listed here.  Masks and IDs for example. 
+> 
 
-> --
-> Michal Hocko
-> SUSE Labs
+After removing buf_smp_lvl_mask, which members will be easier to understand (besides id) ? 
+
+--
+Kind Regards
+Mehdi Djait
