@@ -2,45 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF2D6F7F5F
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 10:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0116E6F7F94
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbjEEIuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 04:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
+        id S231578AbjEEJJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 05:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjEEIuI (ORCPT
+        with ESMTP id S231186AbjEEJJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 04:50:08 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6524D18916
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 01:50:06 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QCPVY6jCwzpW7r;
-        Fri,  5 May 2023 16:48:53 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 5 May 2023 16:50:01 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <guohanjun@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: [PATCH] irqchip/mbigen: unify the error handling in mbigen_of_create_domain()
-Date:   Fri, 5 May 2023 17:06:54 +0800
-Message-ID: <20230505090654.12793-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
+        Fri, 5 May 2023 05:09:07 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FAE2D66
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 02:09:06 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9536df4b907so280308566b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 02:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683277745; x=1685869745;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/P/1J+YKpAP6PsQU3/RV6Z5u9zgqS7VWe/XXNeZKraY=;
+        b=QDNzE94mR8227V0fyrhVFP22OZVayw56p+85g0kTEx0A3jEskH9J5KycWG7m5q/F79
+         WwzQKnhymUxu4kH6GBAqjeCjH8St2aG9s81tB5SJqgTrIpBY1jzeOtu5NDs1MRvP0v6m
+         cWgUXyDUg2crfhrM9FXL3pDPrKOxp5jkiIigLux7PWN/Ml8UCqByeXYctIFuRK9ELaQJ
+         g1GoTBCZUscg8S3HWuDq5dd9LANw/tL1xOvgD7svrMDkujDXGVdQ/OFRcrxd2I0/j8q7
+         SU3R18gU0Gf1Q72TqCMaqIB/CyFbmESEZhjVbjxm5YG018xF1YKJCRyByy5s4p8pTeXy
+         17aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683277745; x=1685869745;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/P/1J+YKpAP6PsQU3/RV6Z5u9zgqS7VWe/XXNeZKraY=;
+        b=T8Tx7MxrtjUma9X+6zGtpdHZrCoxN8MixKGUDNTjDQ0OB0zw2yf3KAGJPDLleQoWvL
+         lR8NgvqOPf2saxqPPUO8zSH0lFvMAxjFMMROzV25goZuB1cH8DWrfcUQ34AN1D28gj2v
+         +y/Atj5+kyjDrHsKqYVVlSPbXMKk5o5rYAZcienKXxRaxh5cA2nmi3YUw9PG7COPkUTR
+         WVSGh4TYAE0ab7csSrATV1qs0GET2hoUYTpK2GYJYJj9YDFrtCyD8u7Db4ZsG5JhTMhc
+         8m7RSnGCOEqw8HTzgIkp9/lEve8Rl84MOu5zju7MlbWIhnPShqYSZPR0nNHKqyC6f6rg
+         sK9w==
+X-Gm-Message-State: AC+VfDyZGp2mDhQOEZgIn6jkIL5Nm0FotOOzpDNsaXHvQL7Fps+A6sXw
+        da/wJfi7JUmCOb1bXnHHQf4DuQ==
+X-Google-Smtp-Source: ACHHUZ6u+cmxtNpoEtgcnrYTh1VUp+XpQfdoooHy6hKndX5YZB49OQURIUXMyRdZ860MCwcrwKIX8Q==
+X-Received: by 2002:a17:907:36c1:b0:94e:e082:15b2 with SMTP id bj1-20020a17090736c100b0094ee08215b2mr517708ejc.55.1683277744704;
+        Fri, 05 May 2023 02:09:04 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
+        by smtp.gmail.com with ESMTPSA id my37-20020a1709065a6500b0094e62aa8bcesm690412ejc.29.2023.05.05.02.09.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 May 2023 02:09:04 -0700 (PDT)
+Message-ID: <fe00b340-ae27-1599-a457-3eca46dc01c8@linaro.org>
+Date:   Fri, 5 May 2023 11:09:03 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 1/3] spi: s3c64xx: change polling mode to optional
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+References: <20230502062813.112434-1-jaewon02.kim@samsung.com>
+ <CGME20230502065025epcas2p4143c8ff3d44b7676ea8667c14618f2cd@epcas2p4.samsung.com>
+ <20230502062813.112434-2-jaewon02.kim@samsung.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230502062813.112434-2-jaewon02.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,85 +80,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dan Carpenter reported that commit fea087fc291b "irqchip/mbigen: move
-to use bus_get_dev_root()" leads to the following Smatch static checker
-warning:
+On 02/05/2023 08:28, Jaewon Kim wrote:
+> Previously, Polling mode was supported as quirk for SOC without DMA.
+> To provide more flexible support for polling mode, it changed to polling
+> mode when the 'dmas' property is not present in the devicetree, rather than
+> using a quirk.
+> 
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
 
-	drivers/irqchip/irq-mbigen.c:258 mbigen_of_create_domain()
-	error: potentially dereferencing uninitialized 'child'.
 
-It should not cause a problem on real hardware, but better to fix the
-warning, let's move the bus_get_dev_root() out of the loop, and unify
-the error handling to silence it.
 
-Cc: Dan Carpenter <dan.carpenter@linaro.org>
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- drivers/irqchip/irq-mbigen.c | 31 ++++++++++++++++++-------------
- 1 file changed, 18 insertions(+), 13 deletions(-)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/irqchip/irq-mbigen.c b/drivers/irqchip/irq-mbigen.c
-index eada5e0e3eb9..5101a3fb11df 100644
---- a/drivers/irqchip/irq-mbigen.c
-+++ b/drivers/irqchip/irq-mbigen.c
-@@ -240,26 +240,27 @@ static int mbigen_of_create_domain(struct platform_device *pdev,
- 	struct irq_domain *domain;
- 	struct device_node *np;
- 	u32 num_pins;
-+	int ret = 0;
-+
-+	parent = bus_get_dev_root(&platform_bus_type);
-+	if (!parent)
-+		return -ENODEV;
- 
- 	for_each_child_of_node(pdev->dev.of_node, np) {
- 		if (!of_property_read_bool(np, "interrupt-controller"))
- 			continue;
- 
--		parent = bus_get_dev_root(&platform_bus_type);
--		if (parent) {
--			child = of_platform_device_create(np, NULL, parent);
--			put_device(parent);
--			if (!child) {
--				of_node_put(np);
--				return -ENOMEM;
--			}
-+		child = of_platform_device_create(np, NULL, parent);
-+		if (!child) {
-+			ret = -ENOMEM;
-+			break;
- 		}
- 
- 		if (of_property_read_u32(child->dev.of_node, "num-pins",
- 					 &num_pins) < 0) {
- 			dev_err(&pdev->dev, "No num-pins property\n");
--			of_node_put(np);
--			return -EINVAL;
-+			ret = -EINVAL;
-+			break;
- 		}
- 
- 		domain = platform_msi_create_device_domain(&child->dev, num_pins,
-@@ -267,12 +268,16 @@ static int mbigen_of_create_domain(struct platform_device *pdev,
- 							   &mbigen_domain_ops,
- 							   mgn_chip);
- 		if (!domain) {
--			of_node_put(np);
--			return -ENOMEM;
-+			ret = -ENOMEM;
-+			break;
- 		}
- 	}
- 
--	return 0;
-+	put_device(parent);
-+	if (ret)
-+		of_node_put(np);
-+
-+	return ret;
- }
- 
- #ifdef CONFIG_ACPI
--- 
-2.35.3
+Best regards,
+Krzysztof
 
