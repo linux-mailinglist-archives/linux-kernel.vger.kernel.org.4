@@ -2,113 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 121F46F7AA4
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 03:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCBB6F7AAA
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 03:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjEEBT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 May 2023 21:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
+        id S229879AbjEEBUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 May 2023 21:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjEEBTY (ORCPT
+        with ESMTP id S229459AbjEEBUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 May 2023 21:19:24 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1AFAA12494;
-        Thu,  4 May 2023 18:19:21 -0700 (PDT)
-Received: from d202180596$hust.edu.cn ( [10.12.189.15] ) by
- ajax-webmail-app2 (Coremail) ; Fri, 5 May 2023 09:18:16 +0800 (GMT+08:00)
-X-Originating-IP: [10.12.189.15]
-Date:   Fri, 5 May 2023 09:18:16 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   d202180596@hust.edu.cn
-To:     "andy gross" <agross@kernel.org>,
-        "bjorn andersson" <andersson@kernel.org>,
-        "konrad dybcio" <konrad.dybcio@linaro.org>,
-        "wolfram sang" <wsa@kernel.org>,
-        "ivan t. ivanov" <iivanov@mm-sol.com>,
-        "sricharan r" <sricharan@codeaurora.org>,
-        "naveen kaje" <nkaje@codeaurora.org>,
-        "austin christ" <austinwc@codeaurora.org>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        "andy gross" <agross@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: qup: Add missing unwind goto in qup_i2c_probe()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
- Copyright (c) 2002-2023 www.mailtech.cn hust
-In-Reply-To: <20230418135612.598-1-d202180596@hust.edu.cn>
-References: <20230418135612.598-1-d202180596@hust.edu.cn>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Thu, 4 May 2023 21:20:47 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4727412494
+        for <linux-kernel@vger.kernel.org>; Thu,  4 May 2023 18:20:46 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1aaea43def7so8049565ad.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 May 2023 18:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683249646; x=1685841646;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n0soDqfw6362dujeUcWQ5P8Z55oslCidLxBQzR0OR5g=;
+        b=TLSSFHC4/+nutVQAyNGbslhe+OJicKevchFGzKKnPrPaEfAyWKbRoCWUQpa5EQ66ne
+         bqNZSrNW2gAehb2mQ2S7SPgZlmUHfFWi/2BJJ/FpooJkI5W0P9B7ie1Jmb5EiR1adFP9
+         fmBJ2wX8WqQbEcjpvHUC9vHWhUxq5rTS71ElPpG0MDX1UPbbvA12TIzhQJ22nCHXCfiM
+         yd+HiOoZmBJlrQrU7u5YY6LcOuOuvXBONvCvnrNM75nyEmdZH/tNrH6sw784WL+7RGl6
+         +DOlWwqnD6CH9YI7z21986z3IEgzAtaAeZUBJK+Gzmdib4kx69yX/IlXYDuJEZHyKQAq
+         q6OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683249646; x=1685841646;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n0soDqfw6362dujeUcWQ5P8Z55oslCidLxBQzR0OR5g=;
+        b=NFoo7nFn79JjSzlQHbemB5eCvqUhZvOJA2pDAlM+6mAOVkwFfP3qkJWHF1qbAKbz94
+         yc7KURrxnKgwBVGlDwvlcOd1YWLVVmiPmuAx9g9KpeZBO+U1BQ56g6RJnCJL6V97IZul
+         WTZnd+Ov8L1hz2pvI0/AvfNNb/jlQoGjiabRGV/V1OgiO7pePTEU0948Hzi/HVRTgUn9
+         7zS9ouYw1/VqygNUEcLVo57A5wSLInDl8qFQS3dEXB7MFxKfwcoB8LcbANzME/VsoYnf
+         xlAZbdtuZqCmP9kMpr7wj8ScsBrbYtl/ULDC0RpcdjxTkT7yMfwTwDMnSWA3ieFNAy8g
+         vC+Q==
+X-Gm-Message-State: AC+VfDxiW0jiS8wzXAMA19rwXFFbsyLizeMITvjAbL4HAuSMaY9mmrwH
+        7uIBuZoCWQnbxdi3ZEXc+i65hJSMoFCagA==
+X-Google-Smtp-Source: ACHHUZ54hVNW8sc377s1AqcIhpKRNyKHeEd7ZYAA/6ulwj5hPj250Z/L+wAXPAyP+D0TL6KYMpGZwA==
+X-Received: by 2002:a17:902:8c90:b0:1a9:3fab:3ebe with SMTP id t16-20020a1709028c9000b001a93fab3ebemr4578727plo.10.1683249645579;
+        Thu, 04 May 2023 18:20:45 -0700 (PDT)
+Received: from ubuntu22-virtual-machine.localdomain ([211.218.36.103])
+        by smtp.gmail.com with ESMTPSA id o4-20020a170902d4c400b00199193e5ea1sm241636plg.61.2023.05.04.18.20.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 18:20:45 -0700 (PDT)
+Date:   Fri, 5 May 2023 10:20:41 +0900
+From:   "wonguk.lee" <wonguk.lee1023@gmail.com>
+To:     shaggy@kernel.org
+Cc:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH] fs: jfs: (trivial) Fix typo in dbInitTree function
+Message-ID: <ZFRZ6UwxnrxLf6ZX@ubuntu22-virtual-machine.localdomain>
 MIME-Version: 1.0
-Message-ID: <5c9f1e4d.47382.187e97d01a5.Coremail.d202180596@hust.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: GQEQrADX4JVYWVRkMDEDBQ--.4113W
-X-CM-SenderInfo: rgsqjiiyqvmlo6kx23oohg3hdfq/1tbiAQoCE17Em5bqRAAAsj
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cj4gLS0tLS3ljp/lp4vpgq7ku7YtLS0tLQo+IOWPkeS7tuS6ujogIlNodWFpIEppYW5nIiA8ZDIw
-MjE4MDU5NkBodXN0LmVkdS5jbj4KPiDlj5HpgIHml7bpl7Q6IDIwMjMtMDQtMTggMjE6NTY6MTIg
-KOaYn+acn+S6jCkKPiDmlLbku7bkuro6ICJBbmR5IEdyb3NzIiA8YWdyb3NzQGtlcm5lbC5vcmc+
-LCAiQmpvcm4gQW5kZXJzc29uIiA8YW5kZXJzc29uQGtlcm5lbC5vcmc+LCAiS29ucmFkIER5YmNp
-byIgPGtvbnJhZC5keWJjaW9AbGluYXJvLm9yZz4sICJXb2xmcmFtIFNhbmciIDx3c2FAa2VybmVs
-Lm9yZz4sICJJdmFuIFQuIEl2YW5vdiIgPGlpdmFub3ZAbW0tc29sLmNvbT4sICJTcmljaGFyYW4g
-UiIgPHNyaWNoYXJhbkBjb2RlYXVyb3JhLm9yZz4sICJOYXZlZW4gS2FqZSIgPG5rYWplQGNvZGVh
-dXJvcmEub3JnPiwgIkF1c3RpbiBDaHJpc3QiIDxhdXN0aW53Y0Bjb2RlYXVyb3JhLm9yZz4KPiDm
-ioTpgIE6IGh1c3Qtb3Mta2VybmVsLXBhdGNoZXNAZ29vZ2xlZ3JvdXBzLmNvbSwgIlNodWFpIEpp
-YW5nIiA8ZDIwMjE4MDU5NkBodXN0LmVkdS5jbj4sICJBbmR5IEdyb3NzIiA8YWdyb3NzQGNvZGVh
-dXJvcmEub3JnPiwgbGludXgtYXJtLW1zbUB2Z2VyLmtlcm5lbC5vcmcsIGxpbnV4LWkyY0B2Z2Vy
-Lmtlcm5lbC5vcmcsIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcKPiDkuLvpopg6IFtQQVRD
-SF0gaTJjOiBxdXA6IEFkZCBtaXNzaW5nIHVud2luZCBnb3RvIGluIHF1cF9pMmNfcHJvYmUoKQo+
-IAo+IFNtYXRjaCBXYXJuczoKPiAJZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1xdXAuYzoxNzg0IHF1
-cF9pMmNfcHJvYmUoKQo+IAl3YXJuOiBtaXNzaW5nIHVud2luZCBnb3RvPwo+IAo+IFRoZSBnb3Rv
-IGxhYmVsICJmYWlsX3J1bnRpbWUiIGFuZCAiZmFpbCIgd2lsbCBkaXNhYmxlIHF1cC0+cGNsaywg
-Cj4gYnV0IGhlcmUgcXVwLT5wY2xrIGZhaWxlZCB0byBvYnRhaW4sIGluIG9yZGVyIHRvIGJlIGNv
-bnNpc3RlbnQsIAo+IGNoYW5nZSB0aGUgZGlyZWN0IHJldHVybiB0byBnb3RvIGxhYmVsICJmYWls
-X2RtYSIuCj4gCj4gRml4ZXM6IDEwYzVhODQyNTk2OCAoImkyYzogcXVwOiBOZXcgYnVzIGRyaXZl
-ciBmb3IgdGhlIFF1YWxjb21tIFFVUCBJMkMgY29udHJvbGxlciIpCj4gRml4ZXM6IDUxNWRhNzQ2
-OTgzYiAoImkyYzogcXVwOiBhZGQgQUNQSSBzdXBwb3J0IikKPiBTaWduZWQtb2ZmLWJ5OiBTaHVh
-aSBKaWFuZyA8ZDIwMjE4MDU5NkBodXN0LmVkdS5jbj4KPiBSZXZpZXdlZC1ieTogRG9uZ2xpYW5n
-IE11IDxkem05MUBodXN0LmVkdS5jbj4KPiAtLS0KPiBUaGUgaXNzdWUgaXMgZm91bmQgYnkgc3Rh
-dGljIGFuYWx5c2lzIGFuZCByZW1haW5zIHVudGVzdGVkLgo+IC0tLQo+ICBkcml2ZXJzL2kyYy9i
-dXNzZXMvaTJjLXF1cC5jIHwgMjEgKysrKysrKysrKysrKystLS0tLS0tCj4gIDEgZmlsZSBjaGFu
-Z2VkLCAxNCBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9k
-cml2ZXJzL2kyYy9idXNzZXMvaTJjLXF1cC5jIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1xdXAu
-Ywo+IGluZGV4IDJlMTUzZjJmNzFiNi4uNzg2ODIzODhlMDJlIDEwMDY0NAo+IC0tLSBhL2RyaXZl
-cnMvaTJjL2J1c3Nlcy9pMmMtcXVwLmMKPiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLXF1
-cC5jCj4gQEAgLTE3NTIsMTYgKzE3NTIsMjEgQEAgc3RhdGljIGludCBxdXBfaTJjX3Byb2JlKHN0
-cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpCj4gIAlpZiAoIWNsa19mcmVxIHx8IGNsa19mcmVx
-ID4gSTJDX01BWF9GQVNUX01PREVfUExVU19GUkVRKSB7Cj4gIAkJZGV2X2VycihxdXAtPmRldiwg
-ImNsb2NrIGZyZXF1ZW5jeSBub3Qgc3VwcG9ydGVkICVkXG4iLAo+ICAJCQljbGtfZnJlcSk7Cj4g
-LQkJcmV0dXJuIC1FSU5WQUw7Cj4gKwkJcmV0ID0gLUVJTlZBTDsKPiArCQlnb3RvIGZhaWxfZG1h
-Owo+ICAJfQo+ICAKPiAgCXF1cC0+YmFzZSA9IGRldm1fcGxhdGZvcm1faW9yZW1hcF9yZXNvdXJj
-ZShwZGV2LCAwKTsKPiAtCWlmIChJU19FUlIocXVwLT5iYXNlKSkKPiAtCQlyZXR1cm4gUFRSX0VS
-UihxdXAtPmJhc2UpOwo+ICsJaWYgKElTX0VSUihxdXAtPmJhc2UpKSB7Cj4gKwkJcmV0ID0gUFRS
-X0VSUihxdXAtPmJhc2UpOwo+ICsJCWdvdG8gZmFpbF9kbWE7Cj4gKwl9Cj4gIAo+ICAJcXVwLT5p
-cnEgPSBwbGF0Zm9ybV9nZXRfaXJxKHBkZXYsIDApOwo+IC0JaWYgKHF1cC0+aXJxIDwgMCkKPiAt
-CQlyZXR1cm4gcXVwLT5pcnE7Cj4gKwlpZiAocXVwLT5pcnEgPCAwKSB7Cj4gKwkJcmV0ID0gcXVw
-LT5pcnE7Cj4gKwkJZ290byBmYWlsX2RtYTsKPiArCX0KPiAgCj4gIAlpZiAoaGFzX2FjcGlfY29t
-cGFuaW9uKHF1cC0+ZGV2KSkgewo+ICAJCXJldCA9IGRldmljZV9wcm9wZXJ0eV9yZWFkX3UzMihx
-dXAtPmRldiwKPiBAQCAtMTc3NSwxMyArMTc4MCwxNSBAQCBzdGF0aWMgaW50IHF1cF9pMmNfcHJv
-YmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPiAgCQlxdXAtPmNsayA9IGRldm1fY2xr
-X2dldChxdXAtPmRldiwgImNvcmUiKTsKPiAgCQlpZiAoSVNfRVJSKHF1cC0+Y2xrKSkgewo+ICAJ
-CQlkZXZfZXJyKHF1cC0+ZGV2LCAiQ291bGQgbm90IGdldCBjb3JlIGNsb2NrXG4iKTsKPiAtCQkJ
-cmV0dXJuIFBUUl9FUlIocXVwLT5jbGspOwo+ICsJCQlyZXQgPSBQVFJfRVJSKHF1cC0+Y2xrKTsK
-PiArCQkJZ290byBmYWlsX2RtYTsKPiAgCQl9Cj4gIAo+ICAJCXF1cC0+cGNsayA9IGRldm1fY2xr
-X2dldChxdXAtPmRldiwgImlmYWNlIik7Cj4gIAkJaWYgKElTX0VSUihxdXAtPnBjbGspKSB7Cj4g
-IAkJCWRldl9lcnIocXVwLT5kZXYsICJDb3VsZCBub3QgZ2V0IGlmYWNlIGNsb2NrXG4iKTsKPiAt
-CQkJcmV0dXJuIFBUUl9FUlIocXVwLT5wY2xrKTsKPiArCQkJcmV0ID0gUFRSX0VSUihxdXAtPnBj
-bGspOwo+ICsJCQlnb3RvIGZhaWxfZG1hOwo+ICAJCX0KPiAgCQlxdXBfaTJjX2VuYWJsZV9jbG9j
-a3MocXVwKTsKPiAgCQlzcmNfY2xrX2ZyZXEgPSBjbGtfZ2V0X3JhdGUocXVwLT5jbGspOwo+IC0t
-IAo+IDIuMjUuMQoKcGluZz8g
+Signed-off-by: wonguk.lee <wonguk.lee1023@gmail.com>
+---
+ fs/jfs/jfs_dmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
+index a3eb1e826947..d8a03d3026cc 100644
+--- a/fs/jfs/jfs_dmap.c
++++ b/fs/jfs/jfs_dmap.c
+@@ -3851,7 +3851,7 @@ static int dbInitTree(struct dmaptree * dtp)
+ 	l2max = le32_to_cpu(dtp->l2nleafs) + dtp->budmin;
+ 
+ 	/*
+-	 * configure the leaf levevl into binary buddy system
++	 * configure the leaf level into binary buddy system
+ 	 *
+ 	 * Try to combine buddies starting with a buddy size of 1
+ 	 * (i.e. two leaves). At a buddy size of 1 two buddy leaves
+-- 
+2.34.1
+
