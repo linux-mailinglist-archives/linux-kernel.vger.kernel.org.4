@@ -2,196 +2,478 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012DE6F7C8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 07:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1566F7C92
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 07:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbjEEFtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 01:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
+        id S230127AbjEEFvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 01:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbjEEFtn (ORCPT
+        with ESMTP id S229577AbjEEFv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 01:49:43 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A4611D96;
-        Thu,  4 May 2023 22:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1683265774;
-  x=1714801774;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cDIBRX8Ulk8P+kDO+DNb87Xtv4IZjVGMishO+Kq42zY=;
-  b=i4K+PgPjwlObV0Y5cW/BW6Kv1ynf/QChun7ZvoJVfDmtwEeMXDw3xZO+
-   U9lfhVQrO/ac+YgNEs3Z0LoveHE27knZIRnxMUoMUiggOJP7wSgqB4lcF
-   +EUvp4wmkbPtzMkYaOeqQxm13vgNQAyjjfO9B2lBs1tCF9w2vfo+IwZgW
-   Byj8cJBCnLCUOlC2S0o9zBHmfafrhJqU//bKDAxPN8b4D+M/yZnNJSN4A
-   B/OQQnBAsE22c0hbinHHQ9rnMt7I7g022psvsCM8OIlF1jfubRyGNenUW
-   Tjux1ChiogQe80/wG5qOs7tJwcwj2GZptQMVSxyYDSAKpuqT8sElxmwZ7
-   w==;
-From:   Hermes Zhang <chenhuiz@axis.com>
-To:     <jic23@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <robh+dt@kernel.org>
-CC:     <jmaneyrol@invensense.com>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@axis.com>,
-        Hermes Zhang <chenhuiz@axis.com>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH v3 2/2] iio: imu: mpu6050: Add support for the ICM 20600 IMU
-Date:   Fri, 5 May 2023 13:48:53 +0800
-Message-ID: <20230505054853.2155326-3-chenhuiz@axis.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230505054853.2155326-1-chenhuiz@axis.com>
-References: <20230505054853.2155326-1-chenhuiz@axis.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 5 May 2023 01:51:28 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53C941FE1;
+        Thu,  4 May 2023 22:51:26 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1134)
+        id DB02320EA25D; Thu,  4 May 2023 22:51:25 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DB02320EA25D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1683265885;
+        bh=RkYIlRpSGE3RkwByOMK1BBL7I2+pvXPyV2rSwbVWbgE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DPKyhacKJTGP09xQiYct3033LSZl8mkNnioERU8XDvVvKh2Q+srmTEdSeYquCREek
+         sQplfvVy82Qq2RftBAHnQe4UU4cb0tzau7lI5U0FiWeyqz7QUmfj2LRpEcZ1W3hKQX
+         jiyRk9DM33J2P4nnXt53VTh8o8lPKkQwGOCt9QSQ=
+From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
+Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Olaf Hering <olaf@aepfle.de>
+Subject: [PATCH v3] hv/hv_kvp_daemon: Add support for keyfile config based connection profile in NM
+Date:   Thu,  4 May 2023 22:51:15 -0700
+Message-Id: <1683265875-3706-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Invensense ICM-20600 is a 6-axis MotionTracking device that combines a
-3-axis gyroscope and an 3-axis accelerometer. It is very similar to the
-ICM20602 imu which is already supported by the mpu6050 driver. The main
-difference is that the ICM-20600 has a different WHOAMI value.
+Ifcfg config file support in NetworkManger is deprecated. This patch
+provides support for the new keyfile config format for connection
+profiles in NetworkManager. The patch modifies the hv_kvp_daemon code
+to generate the new network configuration in keyfile
+format(.ini-style format) along with a ifcfg format configuration.
+The ifcfg format configuration is also retained to support easy
+backward compatibility for distro vendors. These configurations are
+stored in temp files which are further translated using the
+hv_set_ifconfig.sh script. This script is implemented by individual
+distros based on the network management commands supported.
+For example, RHEL's implementation could be found here:
+https://gitlab.com/redhat/centos-stream/src/hyperv-daemons/-/blob/c9s/hv_set_ifconfig.sh
+Debian's implementation could be found here:
+https://github.com/endlessm/linux/blob/master/debian/cloud-tools/hv_set_ifconfig
 
-Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+The next part of this support is to let the Distro vendors consume
+these modified implementations to the new configuration format.
+
+Tested-on: Rhel9(Hyper-V, Azure)(nm and ifcfg files verified)
+Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
 ---
- drivers/iio/imu/inv_mpu6050/Kconfig        |  4 ++--
- drivers/iio/imu/inv_mpu6050/inv_mpu_core.c | 10 ++++++++++
- drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c  |  6 ++++++
- drivers/iio/imu/inv_mpu6050/inv_mpu_iio.h  |  2 ++
- drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c  |  5 +++++
- 5 files changed, 25 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iio/imu/inv_mpu6050/Kconfig b/drivers/iio/imu/inv_mpu6050/Kconfig
-index 3636b1bc90f1..64dd73dcc4ba 100644
---- a/drivers/iio/imu/inv_mpu6050/Kconfig
-+++ b/drivers/iio/imu/inv_mpu6050/Kconfig
-@@ -16,7 +16,7 @@ config INV_MPU6050_I2C
- 	select REGMAP_I2C
- 	help
- 	  This driver supports the Invensense MPU6050/9150,
--	  MPU6500/6515/6880/9250/9255, ICM20608(D)/20609/20689, ICM20602/ICM20690
-+	  MPU6500/6515/6880/9250/9255, ICM20608(D)/20609/20689, ICM20600/20602/20690
- 	  and IAM20680 motion tracking devices over I2C.
- 	  This driver can be built as a module. The module will be called
- 	  inv-mpu6050-i2c.
-@@ -28,7 +28,7 @@ config INV_MPU6050_SPI
- 	select REGMAP_SPI
- 	help
- 	  This driver supports the Invensense MPU6000,
--	  MPU6500/6515/6880/9250/9255, ICM20608(D)/20609/20689, ICM20602/ICM20690
-+	  MPU6500/6515/6880/9250/9255, ICM20608(D)/20609/20689, ICM20600/20602/20690
- 	  and IAM20680 motion tracking devices over SPI.
- 	  This driver can be built as a module. The module will be called
- 	  inv-mpu6050-spi.
-diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_core.c b/drivers/iio/imu/inv_mpu6050/inv_mpu_core.c
-index 8a129120b73d..592a6e60b413 100644
---- a/drivers/iio/imu/inv_mpu6050/inv_mpu_core.c
-+++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_core.c
-@@ -244,6 +244,15 @@ static const struct inv_mpu6050_hw hw_info[] = {
- 		.temp = {INV_ICM20608_TEMP_OFFSET, INV_ICM20608_TEMP_SCALE},
- 		.startup_time = {INV_MPU6500_GYRO_STARTUP_TIME, INV_MPU6500_ACCEL_STARTUP_TIME},
- 	},
-+	{
-+		.whoami = INV_ICM20600_WHOAMI_VALUE,
-+		.name = "ICM20600",
-+		.reg = &reg_set_icm20602,
-+		.config = &chip_config_6500,
-+		.fifo_size = 1008,
-+		.temp = {INV_ICM20608_TEMP_OFFSET, INV_ICM20608_TEMP_SCALE},
-+		.startup_time = {INV_ICM20602_GYRO_STARTUP_TIME, INV_ICM20602_ACCEL_STARTUP_TIME},
-+	},
- 	{
- 		.whoami = INV_ICM20602_WHOAMI_VALUE,
- 		.name = "ICM20602",
-@@ -1597,6 +1606,7 @@ int inv_mpu_core_probe(struct regmap *regmap, int irq, const char *name,
- 		indio_dev->num_channels = ARRAY_SIZE(inv_mpu9250_channels);
- 		indio_dev->available_scan_masks = inv_mpu9x50_scan_masks;
- 		break;
-+	case INV_ICM20600:
- 	case INV_ICM20602:
- 		indio_dev->channels = inv_mpu_channels;
- 		indio_dev->num_channels = ARRAY_SIZE(inv_mpu_channels);
-diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c b/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c
-index 2f2da4cb7321..0e39877678df 100644
---- a/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c
-+++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c
-@@ -32,6 +32,7 @@ static bool inv_mpu_i2c_aux_bus(struct device *dev)
- 	case INV_ICM20608D:
- 	case INV_ICM20609:
- 	case INV_ICM20689:
-+	case INV_ICM20600:
- 	case INV_ICM20602:
- 	case INV_IAM20680:
- 		/* no i2c auxiliary bus on the chip */
-@@ -183,6 +184,7 @@ static const struct i2c_device_id inv_mpu_id[] = {
- 	{"icm20608d", INV_ICM20608D},
- 	{"icm20609", INV_ICM20609},
- 	{"icm20689", INV_ICM20689},
-+	{"icm20600", INV_ICM20600},
- 	{"icm20602", INV_ICM20602},
- 	{"icm20690", INV_ICM20690},
- 	{"iam20680", INV_IAM20680},
-@@ -236,6 +238,10 @@ static const struct of_device_id inv_of_match[] = {
- 		.compatible = "invensense,icm20689",
- 		.data = (void *)INV_ICM20689
- 	},
-+	{
-+		.compatible = "invensense,icm20600",
-+		.data = (void *)INV_ICM20600
-+	},
- 	{
- 		.compatible = "invensense,icm20602",
- 		.data = (void *)INV_ICM20602
-diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_iio.h b/drivers/iio/imu/inv_mpu6050/inv_mpu_iio.h
-index 94b54c501ec0..b4ab2c397d0f 100644
---- a/drivers/iio/imu/inv_mpu6050/inv_mpu_iio.h
-+++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_iio.h
-@@ -79,6 +79,7 @@ enum inv_devices {
- 	INV_ICM20608D,
- 	INV_ICM20609,
- 	INV_ICM20689,
-+	INV_ICM20600,
- 	INV_ICM20602,
- 	INV_ICM20690,
- 	INV_IAM20680,
-@@ -398,6 +399,7 @@ struct inv_mpu6050_state {
- #define INV_ICM20608D_WHOAMI_VALUE		0xAE
- #define INV_ICM20609_WHOAMI_VALUE		0xA6
- #define INV_ICM20689_WHOAMI_VALUE		0x98
-+#define INV_ICM20600_WHOAMI_VALUE		0x11
- #define INV_ICM20602_WHOAMI_VALUE		0x12
- #define INV_ICM20690_WHOAMI_VALUE		0x20
- #define INV_IAM20680_WHOAMI_VALUE		0xA9
-diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c b/drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c
-index 89f46c2f213d..05451ca1580b 100644
---- a/drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c
-+++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c
-@@ -76,6 +76,7 @@ static const struct spi_device_id inv_mpu_id[] = {
- 	{"icm20608d", INV_ICM20608D},
- 	{"icm20609", INV_ICM20609},
- 	{"icm20689", INV_ICM20689},
-+	{"icm20600", INV_ICM20600},
- 	{"icm20602", INV_ICM20602},
- 	{"icm20690", INV_ICM20690},
- 	{"iam20680", INV_IAM20680},
-@@ -125,6 +126,10 @@ static const struct of_device_id inv_of_match[] = {
- 		.compatible = "invensense,icm20689",
- 		.data = (void *)INV_ICM20689
- 	},
-+	{
-+		.compatible = "invensense,icm20600",
-+		.data = (void *)INV_ICM20600
-+	},
- 	{
- 		.compatible = "invensense,icm20602",
- 		.data = (void *)INV_ICM20602
+Changes in v3:
+ * Corrected the patch description to include information about new
+   changes to persist ifcfg file format too
+ * Code changes to support population of ifcfg format configuration
+   file along with keyfiles
+ * Renamed the new temp keyfile configuration to
+   <interface>.nmconnection
+
+---
+ tools/hv/hv_kvp_daemon.c    | 224 ++++++++++++++++++++++++++++++++----
+ tools/hv/hv_set_ifconfig.sh |  39 ++++++-
+ 2 files changed, 234 insertions(+), 29 deletions(-)
+
+diff --git a/tools/hv/hv_kvp_daemon.c b/tools/hv/hv_kvp_daemon.c
+index 27f5e7dfc2f7..ae1e2eb10428 100644
+--- a/tools/hv/hv_kvp_daemon.c
++++ b/tools/hv/hv_kvp_daemon.c
+@@ -1171,11 +1171,91 @@ static int process_ip_string(FILE *f, char *ip_string, int type)
+ 	return 0;
+ }
+ 
++static int kvp_subnet_to_plen(char *subnet_addr_str)
++{
++	int plen = 0;
++	struct in_addr subnet_addr4;
++	struct in6_addr subnet_addr6;
++
++	/*
++	 * Convert subnet address to binary representation
++	 */
++	if (inet_pton(AF_INET, subnet_addr_str, &subnet_addr4) == 1) {
++
++		uint32_t subnet_mask = ntohl(subnet_addr4.s_addr);
++
++		while (subnet_mask & 0x80000000) {
++
++			plen++;
++			subnet_mask <<= 1;
++		}
++	} else if (inet_pton(AF_INET6, subnet_addr_str, &subnet_addr6) == 1) {
++
++		const uint8_t *subnet_mask = subnet_addr6.s6_addr;
++		int i = 0;
++
++		while (i < 16 && subnet_mask[i] == 0xff) {
++
++			plen += 8;
++			i++;
++		}
++		if (i < 16) {
++
++			uint8_t mask_byte = subnet_mask[i];
++
++			while (mask_byte & 0x80) {
++
++				plen++;
++				mask_byte <<= 1;
++			}
++		}
++	} else {
++		return -1;
++	}
++
++	return plen;
++}
++
++static int process_ip_string_nm(FILE *f, char *ip_string, char *subnet)
++{
++	int error = 0;
++	char addr[INET6_ADDRSTRLEN];
++	char subnet_addr[INET6_ADDRSTRLEN];
++	int i = 0;
++	int ip_offset = 0, subnet_offset = 0;
++	int plen;
++
++	memset(addr, 0, sizeof(addr));
++	memset(subnet_addr, 0, sizeof(subnet_addr));
++
++	while (parse_ip_val_buffer(ip_string, &ip_offset, addr,
++					(MAX_IP_ADDR_SIZE * 2)) &&
++					parse_ip_val_buffer(subnet,
++					&subnet_offset, subnet_addr,
++					(MAX_IP_ADDR_SIZE * 2))) {
++
++		plen = kvp_subnet_to_plen((char *)subnet_addr);
++		if (plen < 0)
++			return plen;
++
++		error = fprintf(f, "address%d=%s/%d\n", ++i, (char *)addr,
++							plen);
++		if (error < 0)
++			return error;
++
++		memset(addr, 0, sizeof(addr));
++		memset(subnet_addr, 0, sizeof(subnet_addr));
++	}
++
++	return 0;
++}
++
+ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ {
+ 	int error = 0;
+ 	char if_file[PATH_MAX];
+-	FILE *file;
++	char nm_file[PATH_MAX];
++	FILE *ifcfg_file, *nmfile;
+ 	char cmd[PATH_MAX];
+ 	char *mac_addr;
+ 	int str_len;
+@@ -1197,7 +1277,7 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ 	 * in a given distro to configure the interface and so are free
+ 	 * ignore information that may not be relevant.
+ 	 *
+-	 * Here is the format of the ip configuration file:
++	 * Here is the ifcfg format of the ip configuration file:
+ 	 *
+ 	 * HWADDR=macaddr
+ 	 * DEVICE=interface name
+@@ -1220,6 +1300,32 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ 	 * tagged as IPV6_DEFAULTGW and IPV6 NETMASK will be tagged as
+ 	 * IPV6NETMASK.
+ 	 *
++	 * Here is the keyfile format of the ip configuration file:
++	 *
++	 * [ethernet]
++	 * mac-address=macaddr
++	 * [connection]
++	 * interface-name=interface name
++	 *
++	 * [ipv4]
++	 * method=<protocol> (where <protocol> is "auto" if DHCP is configured
++	 *                       or "manual" if no boot-time protocol should be used)
++	 *
++	 * address1=ipaddr1/plen
++	 * address2=ipaddr2/plen
++	 *
++	 * gateway=gateway1;gateway2
++	 *
++	 * dns=dns1;dns2
++	 *
++	 * [ipv6]
++	 * address1=ipaddr1/plen
++	 * address2=ipaddr2/plen
++	 *
++	 * gateway=gateway1;gateway2
++	 *
++	 * dns=dns1;dns2
++	 *
+ 	 * The host can specify multiple ipv4 and ipv6 addresses to be
+ 	 * configured for the interface. Furthermore, the configuration
+ 	 * needs to be persistent. A subsequent GET call on the interface
+@@ -1227,12 +1333,26 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ 	 * call.
+ 	 */
+ 
++	/*
++	 * We are populating both ifcfg and nmconnection files
++	 */
+ 	snprintf(if_file, sizeof(if_file), "%s%s%s", KVP_CONFIG_LOC,
+ 		"/ifcfg-", if_name);
+ 
+-	file = fopen(if_file, "w");
++	ifcfg_file = fopen(if_file, "w");
+ 
+-	if (file == NULL) {
++	if (ifcfg_file == NULL) {
++		syslog(LOG_ERR, "Failed to open config file; error: %d %s",
++				errno, strerror(errno));
++		return HV_E_FAIL;
++	}
++
++	snprintf(nm_file, sizeof(if_file), "%s%s%s%s", KVP_CONFIG_LOC,
++		"/", if_name, ".nmconnection");
++
++	nmfile = fopen(nm_file, "w");
++
++	if (nmfile == NULL) {
+ 		syslog(LOG_ERR, "Failed to open config file; error: %d %s",
+ 				errno, strerror(errno));
+ 		return HV_E_FAIL;
+@@ -1248,12 +1368,28 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ 		goto setval_error;
+ 	}
+ 
+-	error = kvp_write_file(file, "HWADDR", "", mac_addr);
+-	free(mac_addr);
++	error = kvp_write_file(ifcfg_file, "HWADDR", "", mac_addr);
++	if (error < 0)
++		goto setval_error;
++
++	error = kvp_write_file(ifcfg_file, "DEVICE", "", if_name);
++	if (error < 0)
++		goto setval_error;
++
++	error = fprintf(nmfile, "\n[connection]\n");
++	if (error < 0)
++		goto setval_error;
++
++	error = kvp_write_file(nmfile, "interface-name", "", if_name);
+ 	if (error)
+ 		goto setval_error;
+ 
+-	error = kvp_write_file(file, "DEVICE", "", if_name);
++	error = fprintf(nmfile, "\n[ethernet]\n");
++	if (error < 0)
++		goto setval_error;
++
++	error = kvp_write_file(nmfile, "mac-address", "", mac_addr);
++	free(mac_addr);
+ 	if (error)
+ 		goto setval_error;
+ 
+@@ -1263,47 +1399,88 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ 	 * proceed to parse and pass the IPv6 information to the
+ 	 * disto-specific script hv_set_ifconfig.
+ 	 */
++
++	/*
++	 * First populate the ifcfg file format
++	 */
+ 	if (new_val->dhcp_enabled) {
+-		error = kvp_write_file(file, "BOOTPROTO", "", "dhcp");
++		error = kvp_write_file(ifcfg_file, "BOOTPROTO", "", "dhcp");
+ 		if (error)
+ 			goto setval_error;
+-
+ 	} else {
+-		error = kvp_write_file(file, "BOOTPROTO", "", "none");
++		error = kvp_write_file(ifcfg_file, "BOOTPROTO", "", "none");
+ 		if (error)
+ 			goto setval_error;
+ 	}
+ 
+-	/*
+-	 * Write the configuration for ipaddress, netmask, gateway and
+-	 * name servers.
+-	 */
+-
+-	error = process_ip_string(file, (char *)new_val->ip_addr, IPADDR);
++	error = process_ip_string(ifcfg_file, (char *)new_val->ip_addr,
++					IPADDR);
+ 	if (error)
+ 		goto setval_error;
+ 
+-	error = process_ip_string(file, (char *)new_val->sub_net, NETMASK);
++	error = process_ip_string(ifcfg_file, (char *)new_val->sub_net,
++					NETMASK);
+ 	if (error)
+ 		goto setval_error;
+ 
+-	error = process_ip_string(file, (char *)new_val->gate_way, GATEWAY);
++	error = process_ip_string(ifcfg_file, (char *)new_val->gate_way,
++					GATEWAY);
+ 	if (error)
+ 		goto setval_error;
+ 
+-	error = process_ip_string(file, (char *)new_val->dns_addr, DNS);
++	error = process_ip_string(ifcfg_file, (char *)new_val->dns_addr, DNS);
+ 	if (error)
+ 		goto setval_error;
+ 
+-	fclose(file);
++	if (new_val->addr_family == ADDR_FAMILY_IPV6) {
++
++		error = fprintf(nmfile, "\n[ipv6]\n");
++		if (error < 0)
++			goto setval_error;
++	} else {
++
++		error = fprintf(nmfile, "\n[ipv4]\n");
++		if (error < 0)
++			goto setval_error;
++
++		if (new_val->dhcp_enabled) {
++			error = kvp_write_file(nmfile, "method", "", "auto");
++			if (error < 0)
++				goto setval_error;
++		} else {
++			error = kvp_write_file(nmfile, "method", "", "manual");
++			if (error < 0)
++				goto setval_error;
++		}
++	}
++
++	/*
++	 * Write the configuration for ipaddress, netmask, gateway and
++	 * name services
++	 */
++	error = process_ip_string_nm(nmfile, (char *)new_val->ip_addr,
++					(char *)new_val->sub_net);
++	if (error < 0)
++		goto setval_error;
++
++	error = fprintf(nmfile, "gateway=%s\n", (char *)new_val->gate_way);
++	if (error < 0)
++		goto setval_error;
++
++	error = fprintf(nmfile, "dns=%s\n", (char *)new_val->dns_addr);
++	if (error < 0)
++		goto setval_error;
++
++	fclose(nmfile);
++	fclose(ifcfg_file);
+ 
+ 	/*
+ 	 * Now that we have populated the configuration file,
+ 	 * invoke the external script to do its magic.
+ 	 */
+ 
+-	str_len = snprintf(cmd, sizeof(cmd), KVP_SCRIPTS_PATH "%s %s",
+-			   "hv_set_ifconfig", if_file);
++	str_len = snprintf(cmd, sizeof(cmd), KVP_SCRIPTS_PATH "%s %s %s",
++			   "hv_set_ifconfig", if_file, nm_file);
+ 	/*
+ 	 * This is a little overcautious, but it's necessary to suppress some
+ 	 * false warnings from gcc 8.0.1.
+@@ -1323,7 +1500,8 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ 
+ setval_error:
+ 	syslog(LOG_ERR, "Failed to write config file");
+-	fclose(file);
++	fclose(ifcfg_file);
++	fclose(nmfile);
+ 	return error;
+ }
+ 
+diff --git a/tools/hv/hv_set_ifconfig.sh b/tools/hv/hv_set_ifconfig.sh
+index d10fe35b7f25..ae5a7a8249a2 100755
+--- a/tools/hv/hv_set_ifconfig.sh
++++ b/tools/hv/hv_set_ifconfig.sh
+@@ -18,12 +18,12 @@
+ #
+ # This example script is based on a RHEL environment.
+ #
+-# Here is the format of the ip configuration file:
++# Here is the ifcfg format of the ip configuration file:
+ #
+ # HWADDR=macaddr
+ # DEVICE=interface name
+ # BOOTPROTO=<protocol> (where <protocol> is "dhcp" if DHCP is configured
+-#                       or "none" if no boot-time protocol should be used)
++# 			or "none" if no boot-time protocol should be used)
+ #
+ # IPADDR0=ipaddr1
+ # IPADDR1=ipaddr2
+@@ -41,6 +41,32 @@
+ # tagged as IPV6_DEFAULTGW and IPV6 NETMASK will be tagged as
+ # IPV6NETMASK.
+ #
++# Here is the keyfile format of the ip configuration file:
++#
++# [ethernet]
++# mac-address=macaddr
++# [connection]
++# interface-name=interface name
++#
++# [ipv4]
++# method=<protocol> (where <protocol> is "auto" if DHCP is configured
++#                       or "manual" if no boot-time protocol should be used)
++#
++# address1=ipaddr1/plen
++# address=ipaddr2/plen
++#
++# gateway=gateway1;gateway2
++#
++# dns=dns1;
++#
++# [ipv6]
++# address1=ipaddr1/plen
++# address2=ipaddr1/plen
++#
++# gateway=gateway1;gateway2
++#
++# dns=dns1;dns2
++#
+ # The host can specify multiple ipv4 and ipv6 addresses to be
+ # configured for the interface. Furthermore, the configuration
+ # needs to be persistent. A subsequent GET call on the interface
+@@ -48,18 +74,19 @@
+ # call.
+ #
+ 
+-
+-
+ echo "IPV6INIT=yes" >> $1
+ echo "NM_CONTROLLED=no" >> $1
+ echo "PEERDNS=yes" >> $1
+ echo "ONBOOT=yes" >> $1
+ 
+-
+ cp $1 /etc/sysconfig/network-scripts/
+ 
++chmod 600 $2
++interface=$(echo $2 | awk -F - '{ print $2 }')
++filename="${2##*/}"
++
++sed '/\[connection\]/a autoconnect=true' $2 > /etc/NetworkManager/system-connections/${filename}
+ 
+-interface=$(echo $1 | awk -F - '{ print $2 }')
+ 
+ /sbin/ifdown $interface 2>/dev/null
+ /sbin/ifup $interface 2>/dev/null
 -- 
-2.30.2
+2.34.1
 
