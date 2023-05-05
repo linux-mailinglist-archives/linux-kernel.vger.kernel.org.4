@@ -2,148 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C779A6F8302
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7BB46F8304
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbjEEMdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 08:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
+        id S232173AbjEEMdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 08:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbjEEMdF (ORCPT
+        with ESMTP id S231785AbjEEMdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 08:33:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF8611617
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:33:04 -0700 (PDT)
+        Fri, 5 May 2023 08:33:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2D112EBF
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:33:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0833E611B7
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 12:33:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6010C433D2;
-        Fri,  5 May 2023 12:33:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683289983;
-        bh=pKG4Mf1bb5gbOdPLge/zmMjdEqspBKyucO7r0APgGMg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AAVyB+eImxXSdHKQeX+a1ytJ4aYUF9jejBsjDavPyRP/Iw66yBoHdGaAdCgMtcfHe
-         pe1LKTN5L7iwKKjqDVOHsYZv/JMy2R3fjU4k51bb5whcW8OMF6ttJbWkt4PIxE4SXG
-         wazkSXjR4yEtht1pX+SC9I0GI/wX7Aki7HtFjilD2ym5IMejQHQsS4EOtxIby3HoeF
-         hgqkMuaEmmJbBQSzmN053FwY9hdXyj+inDCUViWfJnkLQjlbUESp6McmwCT7Vw2hct
-         YPxyHx0XF9x5ATo8JhPG7+z8N2y5eluoZWTT2Pg292pSIAHAyd01xux0hoKiazayKc
-         opd0qZyraVjEQ==
-Message-ID: <d853431a-897c-71b2-d97f-5572bd7f79cb@kernel.org>
-Date:   Fri, 5 May 2023 20:32:58 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] f2fs_io: support move_range command
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7E306134C
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 12:33:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3DC2C433EF;
+        Fri,  5 May 2023 12:33:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1683290014;
+        bh=+a0NDfLpG5YPyImRcVvsVNMoUkCbK2ZuZXYKMyy+FI4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JuppAMDWi4XdjZPYreNQpGwIqtMoMF7YA6HDxySfwVu18Lr2mORwLTdkLWL7G84E8
+         B9VM/xasYrPr441ZIZlxmrTAKTXXUyeXimCw0gGK7cNU2Wb6tcGFJRyzNAgFxAgX/H
+         QW6/t20ko47i6m2eKQKt4dHJViznP86vCjGM6x+A=
+Date:   Fri, 5 May 2023 21:33:32 +0900
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "wonguk.lee" <wonguk.lee1023@gmail.com>
+Cc:     shaggy@kernel.org, jfs-discussion@lists.sourceforge.net,
+        linux-kernel-mentees@lists.linuxfoundation.org,
         linux-kernel@vger.kernel.org
-References: <20230504144406.33713-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230504144406.33713-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] fs: jfs: (trivial) Fix typo in dbInitTree function
+Message-ID: <2023050555-vacate-playroom-7402@gregkh>
+References: <ZFRZ6UwxnrxLf6ZX@ubuntu22-virtual-machine.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFRZ6UwxnrxLf6ZX@ubuntu22-virtual-machine.localdomain>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/4 22:44, Yangtao Li wrote:
-> This patch supports a new sub-command 'move_range' in f2fs_io
-> to move a range of data blocks from source file to destination
-> file via F2FS_IOC_MOVE_RANGE ioctl.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->   man/f2fs_io.8           |  4 ++++
->   tools/f2fs_io/f2fs_io.c | 35 +++++++++++++++++++++++++++++++++++
->   2 files changed, 39 insertions(+)
-> 
-> diff --git a/man/f2fs_io.8 b/man/f2fs_io.8
-> index 13d4bf3..b25f807 100644
-> --- a/man/f2fs_io.8
-> +++ b/man/f2fs_io.8
-> @@ -138,8 +138,12 @@ Trigger filesystem GC
->   .TP
->   \fBcheckpoint\fR \fI[file]\fR
->   Trigger filesystem checkpoint
-> +.TP
->   \fBprecache_extents\fR \fI[file]\fR
->   Trigger precache extents
-> +.TP
-> +\fBmove_range\fR \fI[src_path] [dst_path] [src_start] [dst_start] [length]\fR
-> +Move a range of data blocks from source file to destination file
->   .SH AUTHOR
->   This version of
->   .B f2fs_io
-> diff --git a/tools/f2fs_io/f2fs_io.c b/tools/f2fs_io/f2fs_io.c
-> index ac7b588..d545d8e 100644
-> --- a/tools/f2fs_io/f2fs_io.c
-> +++ b/tools/f2fs_io/f2fs_io.c
-> @@ -1357,6 +1357,40 @@ static void do_precache_extents(int argc, char **argv, const struct cmd_desc *cm
->   	exit(0);
->   }
->   
-> +#define move_range_desc "moving a range of data blocks from source file to destination file"
-> +#define move_range_help						\
-> +"f2fs_io move_range [src_path] [dst_path] [src_start] [dst_start] [length]\n\n"		\
+On Fri, May 05, 2023 at 10:20:41AM +0900, wonguk.lee wrote:
+> Signed-off-by: wonguk.lee <wonguk.lee1023@gmail.com>
 
-It's better to wrap the long line as below?
+Hi,
 
-#define move_range_help							\
-"f2fs_io move_range [src_path] [dst_path] [src_start] [dst_start] "	\
-"[length]\n\n"								\
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Thanks,
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-> +"  src_path  : path to source file\n"					\
-> +"  dst_path  : path to destination file\n"				\
-> +"  src_start : start offset of src file move region, unit: bytes\n"	\
-> +"  dst_start : start offset of dst file move region, unit: bytes\n"	\
-> +"  length    : size to move\n"						\
-> +
-> +static void do_move_range(int argc, char **argv, const struct cmd_desc *cmd)
-> +{
-> +	struct f2fs_move_range range;
-> +	int ret, fd;
-> +
-> +	if (argc != 6) {
-> +		fputs("Excess arguments\n\n", stderr);
-> +		fputs(cmd->cmd_help, stderr);
-> +		exit(1);
-> +	}
-> +
-> +	fd = xopen(argv[1], O_RDWR, 0);
-> +	range.dst_fd = xopen(argv[2], O_RDWR | O_CREAT, 0644);
-> +	range.pos_in = atoi(argv[3]);
-> +	range.pos_out = atoi(argv[4]);
-> +	range.len = atoi(argv[5]);
-> +
-> +	ret = ioctl(fd, F2FS_IOC_MOVE_RANGE, &range);
-> +	if (ret < 0)
-> +		die_errno("F2FS_IOC_MOVE_RANGE failed");
-> +
-> +	printf("move range ret=%d\n", ret);
-> +	exit(0);
-> +}
-> +
->   #define CMD_HIDDEN 	0x0001
->   #define CMD(name) { #name, do_##name, name##_desc, name##_help, 0 }
->   #define _CMD(name) { #name, do_##name, NULL, NULL, CMD_HIDDEN }
-> @@ -1391,6 +1425,7 @@ const struct cmd_desc cmd_list[] = {
->   	CMD(gc),
->   	CMD(checkpoint),
->   	CMD(precache_extents),
-> +	CMD(move_range),
->   	{ NULL, NULL, NULL, NULL, 0 }
->   };
->   
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what is needed in
+  order to properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what a proper
+  Subject: line should look like.
+
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file,
+  Documentation/process/submitting-patches.rst for how to do this
+  correctly.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
