@@ -2,144 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0076F7E3B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175356F7E39
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjEEH4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 03:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
+        id S231417AbjEEHzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 03:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbjEEHz7 (ORCPT
+        with ESMTP id S230211AbjEEHzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 03:55:59 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB96A17FC6;
-        Fri,  5 May 2023 00:55:55 -0700 (PDT)
-Received: from kwepemi500011.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QCNDh1J2Vz18KDc;
-        Fri,  5 May 2023 15:51:48 +0800 (CST)
-Received: from [10.67.103.39] (10.67.103.39) by kwepemi500011.china.huawei.com
- (7.221.188.124) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 5 May
- 2023 15:55:50 +0800
-Message-ID: <6454B66F.5050106@hisilicon.com>
-Date:   Fri, 5 May 2023 15:55:27 +0800
-From:   Wei Xu <xuwei5@hisilicon.com>
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
-MIME-Version: 1.0
-To:     Rob Herring <robh@kernel.org>, <soc@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        =?UTF-8?B?QW5kcmVhcyBGw6RyYmVy?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Lars Persson <lars.persson@axis.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        =?UTF-8?B?Sm9uYXRoYW4gTmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
+        Fri, 5 May 2023 03:55:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517D917DF1;
+        Fri,  5 May 2023 00:55:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD5B863C09;
+        Fri,  5 May 2023 07:55:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F23DC433D2;
+        Fri,  5 May 2023 07:55:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683273343;
+        bh=C0NxPbnK07NPfnCGHwtR10e2LP53WWBmIi+P/DTZCUE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j1mK3nKHO+Ac7/NW8Ugie16wfX1T5Rfbckz+i/6/1RsJl9jBmm2Ak4VOsieXsEoNT
+         7OV4Yl/wkfeCdNMzEeQAB4KKnMU10Ntjz2SmA0CE+MNo3O5PbO1aTv6U0vBxrzRA5Q
+         D/npfNIEpZy0CQ5fCuAi2QjYdvdO4dJvbvOMuvkU+YZ87A/UlWVwpce2GtA02WuD3g
+         dRHcRf/jf073XJGlOl0fqvGY1Ewlj1wwH9RxE2U7PjUqOVM8uH8XRe9cckU97A0J+S
+         asR6b5BU6HaF3pomhF4ZvEq1Dh3XYZVVVq3ckbjGmuIBO/tf8DtLH8GU1tuB0P1i2z
+         7bVHV7Ix72h4g==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1puqIC-0006lu-UO; Fri, 05 May 2023 09:55:53 +0200
+Date:   Fri, 5 May 2023 09:55:52 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Andrew Halaney <ahalaney@redhat.com>,
+        Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Paul Barker <paul.barker@sancloud.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Michal Simek <michal.simek@xilinx.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@axis.com>
-Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
-References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org> <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
-In-Reply-To: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.39]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500011.china.huawei.com (7.221.188.124)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        quic_harshq@quicinc.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v6 6/8] arm64: dts: qcom: sc8280xp: Add multiport
+ controller node for SC8280
+Message-ID: <ZFS2iJOfhsM8gxK5@hovoldconsulting.com>
+References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
+ <20230405125759.4201-7-quic_kriskura@quicinc.com>
+ <20230414154527.vsjtgtfsd5kc7vww@halaney-x13s>
+ <333ce700-8ca2-e230-3b5a-a95e4c021e45@quicinc.com>
+ <28a58bf9-5ad8-4084-11d6-cd1b0d3a2998@quicinc.com>
+ <20230425203328.hrz5dw7f2vsbbbgk@halaney-x13s>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230425203328.hrz5dw7f2vsbbbgk@halaney-x13s>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 25, 2023 at 03:33:28PM -0500, Andrew Halaney wrote:
+> On Sat, Apr 22, 2023 at 09:38:44PM +0530, Krishna Kurapati PSSNV wrote:
 
+> > Hi Andrew, Johan,
+> > 
+> >   I was looking at the pwr_event_irq interrupts for Multiport controller and
+> > see that there are two of them as per HW specs. All targets till date have
+> > only 1 pwr_event_irq required.
+> > 
+> > The reason I thought I missed pwr_event_irq in my patches is because in
+> > downstream this is a required IRQ for all targets, so I was under assumption
+> > that we need it for upstream targets as well. But upstream qcom driver
+> > doesn't have support for this IRQ yet. And this has been made a required one
+> > only for SC8280 [1]/[2].
+> > 
+> > Probably we can proceed in one of the following ways:
+> > 1. Remove pwr_event_irq in both bindings and DT as driver support is not
+> > present currently.
+> > 2. Update the bindings for SC8280 to include an optional secondary
+> > pwr_event_irq for multiport controller.
+> > 
+> > I would prefer option-1 as removing them would be better because they are
+> > not being used. Please let me know your thoughts on this.
+> > 
+> > [1]:
+> > https://lore.kernel.org/all/20220713131340.29401-2-johan+linaro@kernel.org/
+> > [2]:
+> > https://lore.kernel.org/all/20220713131340.29401-6-johan+linaro@kernel.org/
+> > 
+> 
+> Personally, I prefer option 2 since the IRQ does exist technically
+> (although it isn't currently used), I like it being described... it
+> makes the dt-binding a more complete description of the hardware.
+> 
+> I am unsure of the rules wrt dt-bindings and usage in drivers, but I
+> always like to view it as "this is a description of the hardware", and
+> the driver bit is just nice to have to ensure that whoever is adding the
+> binding is actually describing things sufficiently.
 
-On 2023/5/5 11:29, Rob Herring wrote:
-> The arm dts directory has grown to 1553 boards which makes it a bit
-> unwieldy to maintain and use. Past attempts stalled out due to plans to
-> move .dts files out of the kernel tree. Doing that is no longer planned
-> (any time soon at least), so let's go ahead and group .dts files by
-> vendors. This move aligns arm with arm64 .dts file structure.
-> 
-> Doing this enables building subsets of dts files by vendor easily
-> without changing kernel configs:
-> 
-> make allyesconfig
-> make arch/arm/boot/dts/ti/
-> 
-> There's no change to dtbs_install as the flat structure is maintained on
-> install.
-> 
-> The naming of vendor directories is roughly in this order of preference:
-> - Matching original and current SoC vendor prefix/name (e.g. ti, qcom)
-> - Current vendor prefix/name if still actively sold (SoCs which have
->   been aquired) (e.g. nxp/imx)
-> - Existing platform name for older platforms not sold/maintained by any
->   company (e.g. gemini, nspire)
-> 
-> The whole move was scripted with the exception of MAINTAINERS.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+As Andrew mentioned, the binding should reflect the hardware and not
+what is currently supported in some version of software. 
 
-Acked-by: Wei Xu <xuwei5@hisilicon.com> #hisilicon
-Thanks!
+It looks like you even had four of these pwr_event interrupt line
+judging from your last iteration of this series.
 
-Best Regards,
-Wei
+Johan
