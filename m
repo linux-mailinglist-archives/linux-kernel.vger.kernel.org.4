@@ -2,97 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E756F8284
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6416F8287
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 14:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbjEEMEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 08:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
+        id S232091AbjEEMEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 08:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbjEEMEN (ORCPT
+        with ESMTP id S232069AbjEEMEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 08:04:13 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C482B1C0E9
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 05:03:54 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-b9d8b2e1576so2252557276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 05:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683288234; x=1685880234;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NjGZxjD/xOLqxrY94x9geNnXbzDWmWVJxSwBi2F/yos=;
-        b=Zs+XpGs3vvxwm6KvbsSzGJMX0z3GmuwAYEWF/WaB9ituEPG64woEZYi0y+KjN1ca++
-         ZUX5Ytmo5vIWjclkGm6T9eA0ViOdhaId9c+MgLYFTjg9fwonf4zivyyUBjaEtpw6urOE
-         I65XJt6H6O9Gr5B6IeeVD3gBtlipdwozTRtu2Q0EBp4eYJBTFgl7dXWRJoWSz2Zel7DB
-         9mOiFwISybrLijKwzEXBAMzjQTuomdgAFii8nOihJrUmPk84VgSCcbvAMeQUiem4QVF3
-         KLj62H/MqmCqRZVxdkhVQ+LNj86Lep5lU1A3xygMjOI2AVr8M3+4peqZ+zUT5fmSsXI1
-         YWmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683288234; x=1685880234;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NjGZxjD/xOLqxrY94x9geNnXbzDWmWVJxSwBi2F/yos=;
-        b=W8bPJF21OHLkRy8vB88KlhbhGcUrnIur0Ex+Z80L1oI7SMCzs4RbBLKoaajeJA6Tat
-         or7n5aWlF0hsY/pFm0KgQeGEpTikaF3vz+0JP3ih6UWx2BGReyIC9rEA/OtQS9yin0IL
-         zEaHPmNPA+p6p6N8DPyUvOaR4L4qexwNfDqU5auNdkpdLx6aPxMbahI+fWiPaXyDrfxN
-         0HFAIpX8hlJ5PPhwm/wUYGA6BFGSd7IsjaPdt3SIlePs5CflWL4H0wnkOHLTDNvPqIy0
-         s0BvxHw0mPbHYn/Cpk7cvQoJCHGW/mZIjzinvqZmepo/gGL27hGVMqsv3oGH5ad9zzmU
-         NA4A==
-X-Gm-Message-State: AC+VfDy8EVcIj9t72gUo/i5InABhUcIDiOK0k1yiPpIJGMYovuLSre8N
-        ZzlM2rb0AvjEPC4/TyDdtf4Fl7Y8ewBAzVl16uXL4w==
-X-Google-Smtp-Source: ACHHUZ5DTYyRZ/nbDoFV4rCRH95kUgHqNnk+axA7sdy/kYLbQFLqMXiNea9F9snDVQsHz/EC0hDlj8tyH++vgCBB3B0=
-X-Received: by 2002:a25:c1c3:0:b0:b99:48ab:48b9 with SMTP id
- r186-20020a25c1c3000000b00b9948ab48b9mr1304898ybf.45.1683288233959; Fri, 05
- May 2023 05:03:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1682513390.git.oleksii_moisieiev@epam.com> <812ae71d017b115c55648dbf0a4c3502715b1955.1682513390.git.oleksii_moisieiev@epam.com>
-In-Reply-To: <812ae71d017b115c55648dbf0a4c3502715b1955.1682513390.git.oleksii_moisieiev@epam.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 5 May 2023 14:03:42 +0200
-Message-ID: <CACRpkdYUd+R5cUgDJTGm-_fjBSi4oMbcp+spnSWaGOuP5=c6Ww@mail.gmail.com>
-Subject: Re: [RFC v2 2/3] pinctrl: Implementation of the generic scmi-pinctrl driver
-To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-Cc:     "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Peng Fan <peng.fan@oss.nxp.com>,
-        Michal Simek <michal.simek@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 5 May 2023 08:04:37 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0C39EDF;
+        Fri,  5 May 2023 05:04:32 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id E468D5C02C1;
+        Fri,  5 May 2023 08:04:28 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 05 May 2023 08:04:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1683288268; x=1683374668; bh=LAgUMsID5w2avzf9PFHv2O+viyYgaFw1o+N
+        MLyWqG60=; b=H/bh1YSV4eq+4ZpRFAv55gNbJuhPtakE72182LsFotC8j2DgTIu
+        oXRjQ3r1ylDPH9UnBsOZZUYBJmGYmQXCLMb6viGJomasYQWeHOwZ7dDuiEThl3F4
+        CyrqrwejtER3OgqzazlYNnLJhDNIoHOb6Mfqd7GOpfW9CUMA/t43ruOSI/KrvBse
+        pb800EY/VOQmwZufAWJ/nOZoIJtk1yB1d32srLnvHxD+Tu4pp7JYVsL1sMwg9VHl
+        jgmplK0vxqzEjENNnL3IGOgAT4r0JewN+T+3OMNhOPq+Z+TiD9QkcQ2Wws/0LxwM
+        fSi/CQ8wBV7wpYIKsNQsKVmOEn6gs86yfnQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1683288268; x=1683374668; bh=LAgUMsID5w2avzf9PFHv2O+viyYgaFw1o+N
+        MLyWqG60=; b=XylrgE/FzpOkXP/38f7IkiLZCII9CBUuA/C0RjqY0nZtqr0hqGf
+        Er7A6zovX6ZSrGHXF06ocW3kOCRuzgOv/xGTpJulhNQTKVfxt29zjaa/G5iJ0lqt
+        KjSvcMrONnO05OBuI0KS1as3b1P1THDQtH+bFBQ1TSitaRCdy1iLQZuoZ6uZcCsU
+        3fs1C2g2OqupuruP9j2k+QzxXlssNm28Wvpje/URAZ16jYRL1vR/naHswlqJhY+r
+        /hSL662sDvMg09gEMJKGchvUNrJO9Iba3QU4HIxjJK13TJGD+HT2B1hke8LID+l2
+        Qy3IG/BJhm0l+wH8ALOK1YVSFRQvxAiaVBA==
+X-ME-Sender: <xms:zPBUZCenFASlTO_pgLzfRhj3VVhq5d0yCoMby11dH9buDUo_3bu2Nw>
+    <xme:zPBUZMNR4nxREst3JYpTtvPollr2prRiNpAkDIFvIyjALP4EVamT9MY--NhAiiTxY
+    71yZ2NNPKQ4VngPUNI>
+X-ME-Received: <xmr:zPBUZDha9vKFH-z6S4gVhLTI6TvDejELWo4Qgy4zw5DxGonu_EQgHF0zJ_poyXZRFZVX>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeefvddggeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepkeevieelveeiueekveejgeekfffhffekkeeikeejffdvkedt
+    geevfeejuefggeegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:zPBUZP8ldsgMnfy2UvAp7WN6LsBGx5BMLD1pUlozbj2itgMI3nc2uQ>
+    <xmx:zPBUZOsLyeVqlHCu9HoNlDHUwGFWdpRRYEoe3WzyZN4aXOf85u9fdg>
+    <xmx:zPBUZGHR2b64arDeGudEgVNbPolyQvcVusVBFG8xKk7SMuVY2Kvxcg>
+    <xmx:zPBUZPluBgGBZ9t0c67HhrGKaSt-vb7M6DnNQK__cSvc9MmKcGMvCg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 5 May 2023 08:04:26 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH AUTOSEL 6.3 08/59] bpf, mips: Implement DADDI workarounds
+ for JIT
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230504194142.3805425-8-sashal@kernel.org>
+Date:   Fri, 5 May 2023 13:04:14 +0100
+Cc:     linux-kernel@vger.kernel.org,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?utf-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "paulburton@kernel.org" <paulburton@kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        bpf@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <50FCC591-D86A-46A3-AF4A-DD68D2FACC78@flygoat.com>
+References: <20230504194142.3805425-1-sashal@kernel.org>
+ <20230504194142.3805425-8-sashal@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 3:26=E2=80=AFPM Oleksii Moisieiev
-<Oleksii_Moisieiev@epam.com> wrote:
 
-> scmi-pinctrl driver implements pinctrl driver interface and using
-> SCMI protocol to redirect messages from pinctrl subsystem SDK to
-> SCP firmware, which does the changes in HW.
->
-> This setup expects SCP firmware (or similar system, such as ATF)
-> to be installed on the platform, which implements pinctrl driver
-> for the specific platform.
->
-> SCMI-Pinctrl driver should be configured from the device-tree and uses
-> generic device-tree mappings for the configuration.
->
-> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
 
-This looks as good as ever.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> 2023=E5=B9=B45=E6=9C=884=E6=97=A5 20:40=EF=BC=8CSasha Levin =
+<sashal@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>=20
+> [ Upstream commit bbefef2f07080cd502a93cb1c529e1c8a6c4ac8e ]
+>=20
+> For DADDI errata we just workaround by disable immediate operation
+> for BPF_ADD / BPF_SUB to avoid generation of DADDIU.
+>=20
+> All other use cases in JIT won't cause overflow thus they are all =
+safe.
+>=20
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+> Acked-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+> Link: =
+https://lore.kernel.org/bpf/20230228113305.83751-2-jiaxun.yang@flygoat.com=
 
-Yours,
-Linus Walleij
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+
+Hi Sasha,
+
+I think this patch should count as a functional improvement instead of =
+regression fix.
+
+Please drop it from stable queue.
+
+Thanks
+Jiaxun
+
+> ---
+> arch/mips/Kconfig            | 1 -
+> arch/mips/net/bpf_jit_comp.c | 4 ++++
+> 2 files changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index e2f3ca73f40d6..edc7d8790f1e8 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -64,7 +64,6 @@ config MIPS
+> select HAVE_DMA_CONTIGUOUS
+> select HAVE_DYNAMIC_FTRACE
+> select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
+> - !CPU_DADDI_WORKAROUNDS && \
+> !CPU_R4000_WORKAROUNDS && \
+> !CPU_R4400_WORKAROUNDS
+> select HAVE_EXIT_THREAD
+> diff --git a/arch/mips/net/bpf_jit_comp.c =
+b/arch/mips/net/bpf_jit_comp.c
+> index b17130d510d49..a40d926b65139 100644
+> --- a/arch/mips/net/bpf_jit_comp.c
+> +++ b/arch/mips/net/bpf_jit_comp.c
+> @@ -218,9 +218,13 @@ bool valid_alu_i(u8 op, s32 imm)
+> /* All legal eBPF values are valid */
+> return true;
+> case BPF_ADD:
+> + if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
+> + return false;
+> /* imm must be 16 bits */
+> return imm >=3D -0x8000 && imm <=3D 0x7fff;
+> case BPF_SUB:
+> + if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
+> + return false;
+> /* -imm must be 16 bits */
+> return imm >=3D -0x7fff && imm <=3D 0x8000;
+> case BPF_AND:
+> --=20
+> 2.39.2
+>=20
+
