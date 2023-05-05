@@ -2,202 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9365E6F88E2
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB58A6F88DF
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 20:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbjEESr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 14:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
+        id S231464AbjEESrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 14:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233335AbjEESrX (ORCPT
+        with ESMTP id S232137AbjEESrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 14:47:23 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4A1203E0;
-        Fri,  5 May 2023 11:47:14 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345FPZvM031290;
-        Fri, 5 May 2023 11:46:42 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=/o7cToMRRMI5NBtSdDxyU+f3+bHXmIuyysgWD/DyY0U=;
- b=Ms2kfr1xGtiWoIzcq0yoqJBQ5x28MazlYx6xVyvTloUsvWFWN4z2fDjokbkugrKIaaTb
- qJ8GMMKX8e0bYTXd+U7CxXstQu7RzLDZOhGyx0iiLYOaEqMHuJWTebojD3uju1a4yd2i
- JNVTBJDEn683/9uneWKKzng+evdOh4GWT4H54pHT4hwNMgegeKYlkpiuis0MJzlFq9Fq
- 5YivvifMjroTCTGk96fCeiSit+oRaJPae0OT3DQ1sTtxbc5MdO9fPrN3k/f0Uq7Isl/B
- DzQw0DLE3B54dXGGAEwsND9UM8maTvq08WWBwqv93JDpuqFyL0Ud6dUIVKn/qzcEtDUC 7w== 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2041.outbound.protection.outlook.com [104.47.66.41])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qd4e1sd5n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 May 2023 11:46:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XkV3VQyzEvMrSljKWBJiSOhIeUmroYh1p3Mm5nsP1h3eSd0kSCI3vAd7G9fKvwNvnDhOnhYi4Cg3C7mJpt3CeUc+a8Tq+4mCm7053mWqg4Xlh2nAJ2mv+VL4eTPEAOq9vIpm1LWdssgC7rIRZSTIK1tkVPipu+0v0LtZx0veGC4/DVfRr9aOFruGqYqn1dWTqpGxB7V3TDsJGaLTM64aVE3h5dQiEXYNqoEUAreevs2KSBLTWFZ83wgpxhmZWbvM9jBEvlmKWouJXlONZIpL+h4xVUetC2ERrNfbUL5sijltoaag39Rbc8nmlidH5UUrfHXX0wHZU4KfK2Cih2XzWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/o7cToMRRMI5NBtSdDxyU+f3+bHXmIuyysgWD/DyY0U=;
- b=af9F5W74PNCj0NtX5bCoOlb8O+c41qfzaErW+RBoF8MojgWQYtk4NR3NzKxqUj7MHMQ172l+nTzUBbv3kREY/d2TBmaEbxxVQISco9kFWsHvW6Gvq41/PNWCCgK72qJs21lEGhIVj2FRUDeuLAPsKr29qMpFLgdxQDk4gzta1+I1dEc6W15eKFHwB3y5TRFEtFXhSTzeIGwT6nV6sr6c54kkSBX0BitTO4VOSwH1kVlEK+sN1LGqGDZggFgjEJt+PxIfcZYUXyl405csm7G4ViV52mhUUylngnGpf6PwTsPbTq+5nGtpydCxEjYZNnpq8jg6EzOdRKgtHzKFt+XtDA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by IA1PR15MB6339.namprd15.prod.outlook.com (2603:10b6:208:444::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27; Fri, 5 May
- 2023 18:46:38 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::589f:9230:518:7f53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::589f:9230:518:7f53%6]) with mapi id 15.20.6363.027; Fri, 5 May 2023
- 18:46:38 +0000
-Message-ID: <d5de53ef-3303-29c0-a4ae-4bede3ef315a@meta.com>
-Date:   Fri, 5 May 2023 11:46:34 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH bpf-next v6 2/2] selftests/bpf: Add testcase for
- bpf_task_under_cgroup
-Content-Language: en-US
-To:     Feng Zhou <zhoufeng.zf@bytedance.com>, Hao Luo <haoluo@google.com>
-Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
-        shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, yangzhenze@bytedance.com,
-        wangdongdong.6@bytedance.com
-References: <20230505060818.60037-1-zhoufeng.zf@bytedance.com>
- <20230505060818.60037-3-zhoufeng.zf@bytedance.com>
- <CA+khW7hZb6EJcoXUzkvrHKztsQ_J4cN+RRQjF-a73A8zE8S_NA@mail.gmail.com>
- <194f1ac1-6bb0-e3fc-5394-ad5cb95721d0@bytedance.com>
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <194f1ac1-6bb0-e3fc-5394-ad5cb95721d0@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR05CA0018.namprd05.prod.outlook.com
- (2603:10b6:a03:33b::23) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Fri, 5 May 2023 14:47:05 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A003818FD3
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 11:47:03 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-965cc5170bdso254364466b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 11:47:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683312422; x=1685904422;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xizeI1xw1N1o1KCR/0d3CEO5HKUJMy4YKMQX1QmsJGU=;
+        b=BYjn7MR+ccvEmSQ0mrXcIifJSGfkZYwfRcTeP0ubpg11K5pBkh3FQ/6t9t7zmM5pm4
+         Nja8mfI6By1KkXVz/cH092kKR4ynt0oIMRA9EoGPv5a12FRs1uVJBLYrM4bHUxtgDewC
+         s6i2bvPJT162ghE3iQXfHMRsqHt1M60kBOIMhqSLJBQubkfYgxx9MmtdI+rcAic5qg0Y
+         8kVtA3EQ8tHR4LmGqfU0bAoM55gZvv7QNCQG5GPVvdPgn6K3WBLOxwec8qDjSsipcG1D
+         XYZLHJu/I9NwxRuoMkTXSMGWDBTLWbrizX8sTIO8d16Ekbmc4PLyX9X8010RAitoXF3s
+         8qpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683312422; x=1685904422;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xizeI1xw1N1o1KCR/0d3CEO5HKUJMy4YKMQX1QmsJGU=;
+        b=ddcch/P6HdwfahFqOfzmcodWOkG7iQPrvmnCrmApzYLkqkFZwUQanZE1v3Yqj0zeDY
+         W2mQZGMSfv8RA8ujjsKOHQ2QQtFifZBOJnX09U7k9okTPzxedqmZIFqJdCmVU4j/kRjr
+         mqlOSz4wuqEJKlkiXMk8DhszkbXNPpYWbZnzFwpTamojDXYUFenYPmyEC7Frs5gBfnr+
+         1lh78CvpwZwtpyGwoLKSWEo7xz3YHBTM3Aow4CZw3Wx++LGrK6LhFSd0zVufP9gQhR8v
+         RUSO1i7LJZhSEnRa3+3PRJ/I4buD8mAd1c0XTqwyAPZucNvtYkWQKxMNFUIU7s6vM3u1
+         7JzQ==
+X-Gm-Message-State: AC+VfDxRBOuvqpvU9mZ6GXQSWgAwH72hMMzjPfsBSfALUXdJKJ/AY5y0
+        Zy1XCcKl/812FTcsVaUyMEY4PQ==
+X-Google-Smtp-Source: ACHHUZ6EzeWMpBxmWaCjOrtvtyfpMbhXeKnbo8gnWIGqsyLOp/pkuaTAcAyh14W6LDPIk97mCn1Hgw==
+X-Received: by 2002:a17:906:db03:b0:965:4b43:11f1 with SMTP id xj3-20020a170906db0300b009654b4311f1mr1799980ejb.3.1683312422000;
+        Fri, 05 May 2023 11:47:02 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
+        by smtp.gmail.com with ESMTPSA id n10-20020a1709065daa00b0094edbe5c7ddsm1252130ejv.38.2023.05.05.11.47.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 May 2023 11:47:01 -0700 (PDT)
+Message-ID: <316e9ee5-fccc-e199-f727-7b8187e965ff@linaro.org>
+Date:   Fri, 5 May 2023 20:47:00 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|IA1PR15MB6339:EE_
-X-MS-Office365-Filtering-Correlation-Id: 38e5f31f-157d-49fc-e092-08db4d990eda
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N9sRDQ32pnoNeYdWkhVm/FruIqPW9be9TsHvt+hJPDQ6ZZtrU4nW6//esPcuK1UZzwunL+MYDMguNj53/RXeSYJ1rzIqvWrhDra7/lk+6voDz73sV/ZqCkfHObtyBqVbdecR0YWQNjZJDsoJ5sZOkSLAf0rroSQuwLVDsE9u57LZQ1hZocPD4ob/PJeN7axaLHu/rFWBZP5To34GLH2tAoS/zIUhQf+2HwKsdLR4foTa49FbDDrQxycRCd5Mbug884lSkjo6DUJugdfqjpGd2IAlx4jAJHRbc8RyI/geBL3EognRE1jEL145vloZ2m31JjA1AA5nx2qT0odp/+JuIjY0Qo2ykWX1Z0jAOqSgJxsouaAq61KZXh2cz8Vl9Mpyf25q9B21H4acAhXtITVTVpEyXkOg4Tas2pp6CPYON6C5VexnO22RDi9TsuAMKYCDA0VidhWIGf8S+M92ua9goM0oWk0SDPAlNo0LbKozSZZCuI1846TAvc3QtucX1yahLNIEZxDdrtVzqLHppUaqgoGv3T8PnbexjzTUwu40Tdau9mWqd2UFSuwIHhJRM8nNMm4gN/aYyjq5/PaI48fGD10m9ZCI7K7RYQ+/vbQcpggpFnIrEah+6xe1rxmRx0CtSv56i33nEFNmI1ovOu+Zyw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(346002)(39860400002)(396003)(366004)(451199021)(36756003)(6666004)(31696002)(86362001)(478600001)(110136005)(316002)(66946007)(66556008)(66476007)(4326008)(6486002)(7416002)(8676002)(8936002)(5660300002)(2906002)(41300700001)(186003)(38100700002)(2616005)(6506007)(53546011)(6512007)(83380400001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dUNURW5wWUFuaHRmOCtnQU8xcVJBZ293NTlWUnR4ajlVZ3Q1NXNRTmc2VERW?=
- =?utf-8?B?OHR6YUNJNWJaQVkyelU4Z0ZVdkl4ZnIvM29lTVR0eUNZeCtlYjJLUmtKcmhS?=
- =?utf-8?B?REgrNW14ZHU3T1d1Ry9DWmlEZFI3VjFYdEdaZWJpNUtBeEYzMHZ1OXQ3YlU1?=
- =?utf-8?B?bzZjMFBLcUNTdkFIZFJJR1dDN25CcUJ1SUFaTUlGcWZDOXE2cmVOV3FFVk9L?=
- =?utf-8?B?d2gxM3J0bitpYU1pakhORGIxRTV5am4yM1dGYmtmRkgvcEQrUk9oR2xPSGg3?=
- =?utf-8?B?Vi9zalJ3OWEvOHZSOGNqRVBscU44WXNYM1F4THhyakxFR2lLMkpVNHpRcDBX?=
- =?utf-8?B?SlJFYkk4M3ppekFya0ZESUFMUW9xaE41OXZVeEhscVhGekVaWmFLZStHd0Uv?=
- =?utf-8?B?QUxSbXo3WmhvWkRySlIvMStvOVFjeCtSOS9vWm8va2RmaUlzSjVNamV5WTJR?=
- =?utf-8?B?WXNhSG9rZVpYVUI5MDhXWHF4QVByOU5DaGk4eHpPSmMvN0ZjMkJqZyt5Qngr?=
- =?utf-8?B?VThtQm5IWVdQR1AyRnVIM1p6SDZvYktqeVJuQmg3MThvY1lIUWd0NkFoV05h?=
- =?utf-8?B?M3plMGRtM2Rwbm9wOEdkcTc4MExZQUFsR2k5ZWQ4dmVDRDJUQVZ1T1NZS2t0?=
- =?utf-8?B?dElWUkFjNTlucUZtQnRxZU56dGpQblM4VDRpQUdJQzd4bEpFS2h0bktkcU9Z?=
- =?utf-8?B?SXBaUXFHaWNqSGZmemZ2YTN6M3o3QXBhQzBNdGN6VGtYWmxHU3ZwS0Npcld2?=
- =?utf-8?B?RjF3ZWF6OTBjZmVnWHJOenBSanUvdkdQeDBhSzN4SHdUUmZZMVI0bVRNb3hz?=
- =?utf-8?B?a3JLN09BU1grK1VtUHMvcFpRR2V4S2xwbnNsNktoKzZON0Rma1BHOVIyem83?=
- =?utf-8?B?bTZXUHNPeHdQZWtKVXhvOStNVG5LR283QXlIMGJQZk1GblNxZVdjMUpJNXdq?=
- =?utf-8?B?eWhZMkc3dXZZQUNpeGRRdkV1KzlqdGVuYjNqSkNkaWNtUjArM3d1Vy9yQVE5?=
- =?utf-8?B?bjBIWVFScW9wTjEvc3diSFVKSXJ5alpHaHRXSFltckIwRjl0LzR5U2NwOFo3?=
- =?utf-8?B?N2tFaU8vNm5kU3pLMmNBa053dHRDYVRmTy9jbElPT01Ya2ZQaTBkc1R3L0Yy?=
- =?utf-8?B?QjZteHN5cUlvaFpMbVFLNDdIdlg0RjhVT21xb0RzWUQ2UXlWOWltRGl4Lzkr?=
- =?utf-8?B?bzJnYXdrUzR5OUdrWi80VS9aem1HNDhsWVhZZTZFL2oyT3YwbDBWTmJlZDZv?=
- =?utf-8?B?M0ZiNnpBYk1QbXdmTWRTNWN3VmxwZ0NCa05mWDVGc2NsRUZZbDYwdVhvNmVs?=
- =?utf-8?B?ZE9vUG1va1pTaXhFQm9IeUFiNWVoTEx4TllrMzJwMk5Jejc1bTBXR3YyTzVo?=
- =?utf-8?B?aE5jZFNydDNqK05jV3VsNzUzYkttOUQwUTAvVXhZQWJEbUNVL0t5NnlLY2N1?=
- =?utf-8?B?S2xTNDVQWTRLalZxZHVHQzRyTmx1RzU0ZkZTa0NGTVFxWDVjUmpFOEthdk9w?=
- =?utf-8?B?TXFDNDhkNFc1TE9NS042VUwvZ0RLQy83NEdJakYxMUNmRzN6Y0w4SEw4enZD?=
- =?utf-8?B?akhybEsvMDF0SnVETHZZY05nNFhRY2xneUlmb1RQYTRMUFhpM0FmZ0VXUnFB?=
- =?utf-8?B?SUp5UXpxN2hyUEpJTXZ2QTFuby9jMTFCYnZPS1FHN3NHaXdyVWdNMEFUcFJP?=
- =?utf-8?B?eE92S3Fyc292M3F5djZMcGhhY0JYVEYwcVFCVzNpc3JvUHpQWXZGc2NLQlE1?=
- =?utf-8?B?ZXFCL2M1c08wZk9aaDhmL1lDWWV4VGk2SjhtckVEbEJwdGJHc3p1bHMveVo5?=
- =?utf-8?B?aFRYZCtQd2pqNkhRTDlyc3c0K0g5dTM4MDI1VFh4MnZNNWdrbisxYlZka2Yv?=
- =?utf-8?B?d2N5d001RFF2enZVK2d0RWhua3ovb3phS3pPdlF4ekY1RC9ZM0JqTS9LWUQy?=
- =?utf-8?B?TzhlREN3Zi94aGRSdExVOUhDaW9tQUI4VnBRTWZXQkVlWFhhbzF5Z2NhdW9n?=
- =?utf-8?B?UTZmb3kzemxCeUJaRGVPckUyNlNMbFRRenZxM1REMWZ1T1R4VXdPMXJyV3RW?=
- =?utf-8?B?SVRIVlFIa29Ia0wyN3R2WHFsRHFVVnZkeFNDd2VSdTliVnRDbVBMWTFWeWYy?=
- =?utf-8?B?OWt5QzdUbDUvbURhNVdOcTA2Mk1NY0hxaUN1eVNjU0dTbzR0QW1yVnZtVWhq?=
- =?utf-8?B?b3c9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 38e5f31f-157d-49fc-e092-08db4d990eda
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 18:46:37.9841
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 98ytFXq9vwQuZ2E83DFsoVmfgJfCB5bKAbNuhJUdYaIIbI/zx9Zoe10O8kwUGn01
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR15MB6339
-X-Proofpoint-GUID: nizAYi9s0j80rRR0mxq-aefHgJwgOnUk
-X-Proofpoint-ORIG-GUID: nizAYi9s0j80rRR0mxq-aefHgJwgOnUk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-05_25,2023-05-05_01,2023-02-09_01
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v7 1/3] dt-bindings: ufs: qcom: Add ICE phandle
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+References: <20230408214041.533749-1-abel.vesa@linaro.org>
+ <20230408214041.533749-2-abel.vesa@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230408214041.533749-2-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/5/23 12:24 AM, Feng Zhou wrote:
-> 在 2023/5/5 15:13, Hao Luo 写道:
->> On Thu, May 4, 2023 at 11:08 PM Feng zhou <zhoufeng.zf@bytedance.com> 
->> wrote:
->>>
->>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>>
->>> test_progs:
->>> Tests new kfunc bpf_task_under_cgroup().
->>>
->>> The bpf program saves the new task's pid within a given cgroup to
->>> the remote_pid, which is convenient for the user-mode program to
->>> verify the test correctness.
->>>
->>> The user-mode program creates its own mount namespace, and mounts the
->>> cgroupsv2 hierarchy in there, call the fork syscall, then check if
->>> remote_pid and local_pid are unequal.
->>>
->>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
->>> Acked-by: Yonghong Song <yhs@fb.com>
->>> ---
->>
->> Hi Feng,
->>
->> I have a comment about the methodology of the test, but the patch
->> looks ok to me. Why do we have to test via a tracing program? I think
->> what we need is just a task and a cgroup. Since we have the kfunc
->> bpf_task_from_pid() and bpf_cgroup_from_id(), we can write a syscall
->> program which takes a pid and a cgroup id as input and get the task
->> and cgroup objects directly in the program.
->>
->> I like testing via a syscall program because it doesn't depend on the
->> newtask tracepoint and it should be simpler. But I'm ok with the
->> current version of the patch, just have some thoughts.
->>
->> Hao
+On 08/04/2023 23:40, Abel Vesa wrote:
+> Starting with SM8550, the ICE will have its own devicetree node
+> so add the qcom,ice property to reference it.
 > 
-> Yes, your method is also very good. The reason why I did this is because 
-> of Song's suggestion before, hope that the parameter of the hook point 
-> will have a task, so I chose this to test.
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+> 
+> The v6 is here:
+> https://lore.kernel.org/all/20230407105029.2274111-3-abel.vesa@linaro.org/
+> 
+> Changes since v6:
+>  * Dropped the minItems for both the qcom,ice and the reg in the
+>    qcom,ice compatile subschema, like Krzysztof suggested
+> 
+> Changes since v5:
+>  * dropped the sm8550 specific subschema and replaced it with one that
+>    mutually excludes the qcom,ice vs both the ICE specific reg range
+>    and the ICE clock
+> 
+> Changes since v4:
+>  * Added check for sm8550 compatible w.r.t. qcom,ice in order to enforce
+>    it while making sure none of the other platforms are allowed to use it
+> 
+> Changes since v3:
+>  * dropped the "and drop core clock" part from subject line
+> 
+> Changes since v2:
+>  * dropped all changes except the qcom,ice property
+> 
+> 
+>  .../devicetree/bindings/ufs/qcom,ufs.yaml     | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
 
-The motivation of this patch is:
-   Trace sched related functions, such as enqueue_task_fair, it is 
-necessary to
-   specify a task instead of the current task which within a given cgroup.
+I see dt_binding_check errors after applying this patch. Are you sure
+this was tested?
 
-So I think it is okay to have a test related to sched.
+Best regards,
+Krzysztof
+
