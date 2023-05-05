@@ -2,80 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A6C6F7DFC
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E026F7DFB
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjEEHe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 03:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
+        id S230268AbjEEHeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 03:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbjEEHeT (ORCPT
+        with ESMTP id S230510AbjEEHeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 03:34:19 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734EC17FC3
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 00:34:14 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 5 May 2023 03:34:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128B617FD6;
+        Fri,  5 May 2023 00:34:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id C2553D27;
-        Fri,  5 May 2023 09:34:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1683272050;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZeveXooqm+xBLZjxuZkZXBfIKe/R2RjArxvJxAqKSus=;
-        b=WeS3SdbYdkBu1lvqYn/ZfzldBjvY/iitD+YPfri0cviuPnuqFGdIpgUyl/gB6PZ3Yhle25
-        7iZiTwX3jJh9xoyKOKFDNczLlPl+HrIxe0ixAvCJOvN/po49do7JC9ibapmx0BTTuYO/X1
-        QsOIP6z9CakiSc+Ox+g7d8AIr1UWTLJb6QyZ9er3vDYlPS1OSb3Pps0zaFvPne3XJtnwjU
-        ke4y3dJuDUQHjbhYBHsoHsilF6EQkQwZxYEqxCPs838+iLgvjxlJokj4y4dwBkTB3B//yr
-        B0tXTVPAy45fksmk92I3MfULIa15yg5iTh0rBk92BmZpMUYpVLvBSbL2fv3uDg==
-From:   Michael Walle <michael@walle.cc>
-To:     aford173@gmail.com
-Cc:     Laurent.pinchart@ideasonboard.com, aford@beaconembedded.com,
-        andrzej.hajda@intel.com, dri-devel@lists.freedesktop.org,
-        frieder.schrempf@kontron.de, jagan@amarulasolutions.com,
-        jernej.skrabec@gmail.com, jonas@kwiboo.se,
-        linux-kernel@vger.kernel.org, m.szyprowski@samsung.com,
-        marex@denx.de, neil.armstrong@linaro.org, rfoss@kernel.org,
-        wenst@chromium.org, Michael Walle <michael@walle.cc>
-Subject: [PATCH V3 5/7] drm: bridge: samsung-dsim: Dynamically configure DPHY timing
-Date:   Fri,  5 May 2023 09:33:59 +0200
-Message-Id: <20230505073359.3715594-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230502010759.17282-6-aford173@gmail.com>
-References: <20230502010759.17282-6-aford173@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C86E63BDF;
+        Fri,  5 May 2023 07:34:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7692C433EF;
+        Fri,  5 May 2023 07:34:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683272043;
+        bh=jou+LQyRCQeaGqtTBsEiVuLJnU3kOUVjVpVeFNIl5Ko=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=KD8aHhQAFm5Q+jkMUhdKwNqSdtUZx8KYgUV+nSnu0TU6U/OHW2ixhUQ/3vLWnkFwF
+         4I6UfdRf8Brxc/wEravSL6tad5g7lnkPNCJi5GxmX2PepXfJack9f6vtIOSAeI/DFu
+         BNp/hQvbN4e5zoTsXvWJsoe+wv8Kv+063Dng7izZF+FfCvRnowAstQIDYbUqqv6P1x
+         FMl/S6D2MFYoLQd2hRT2/fgYlwt9cAPw/EfIAufkylQMC5q48laVFYidtJ5lRzpjHe
+         PE3RHf9Nwr/7Bfuybi/c5lLeUBaZkW9Mo6H06WprAwyotv0xnR0zgSS1sdXxCF89O8
+         H6dWD51cZ5sLA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: wifi: rtl8xxxu: rtl8xxxu_rx_complete(): remove unnecessary return
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230427185936.923777-1-martin@kaiser.cx>
+References: <20230427185936.923777-1-martin@kaiser.cx>
+To:     Martin Kaiser <martin@kaiser.cx>
+Cc:     Jes Sorensen <Jes.Sorensen@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Martin Kaiser <martin@kaiser.cx>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <168327203908.10202.16212695864478416217.kvalo@kernel.org>
+Date:   Fri,  5 May 2023 07:34:00 +0000 (UTC)
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The DPHY timings are currently hard coded. Since the input
-> clock can be variable, the phy timings need to be variable
-> too.  Add an additional variable to the driver data to enable
-> this feature to prevent breaking boards that don't support it.
+Martin Kaiser <martin@kaiser.cx> wrote:
+
+> Remove a return statement at the end of a void function.
 > 
-> The phy_mipi_dphy_get_default_config function configures the
-> DPHY timings in pico-seconds, and a small macro converts those
-> timings into clock cycles based on the pixel clock rate.
+> This fixes a checkpatch warning.
+> 
+> WARNING: void function return statements are not generally useful
+> 6206: FILE: ./drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c:6206:
+> +  return;
+> +}
+> 
+> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+> Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
 
-This actually fixes a bug with the DSI84 bridge on our boards. The
-hardcoded settings will violate the D-PHY spec timings for lower
-frequencies, esp. the Ths_prepare+Ths_zero timing. Thus, the bridge
-will read a wrong HS sync sequence and set it's internal SoT error
-bit (and don't generate any RGB signals on the LVDS side).
+Patch applied to wireless-next.git, thanks.
 
-Tested-by: Michael Walle <michael@walle.cc>
+271a588d34ed wifi: rtl8xxxu: rtl8xxxu_rx_complete(): remove unnecessary return
 
-Thanks!
--michael
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230427185936.923777-1-martin@kaiser.cx/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
