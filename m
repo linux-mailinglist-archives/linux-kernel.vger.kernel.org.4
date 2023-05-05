@@ -2,78 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180DF6F8CD4
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388F96F8CDA
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 01:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232554AbjEEXjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 19:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S232647AbjEEXmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 19:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjEEXjh (ORCPT
+        with ESMTP id S229879AbjEEXmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 19:39:37 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C22C4EE1
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:39:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OtxxnW9p2nerlXGh0d+JG1ehfydOLVNIdu+32Zh+/84=; b=foM67Q/bK3dp3031L+6kA925fD
-        JQu1meEpFCKkAK5Nrx1P9gtmfQd8V0PzXF8oFO1f5qlOACKjsmCsXx3irqDi5l/UXO+UH5cyEO8dL
-        cj7rBGh9r96KFIwyTuyijJOgB+UwfwsySuxPXYGtb/cUyt/SQqFylKWFOBKqDlYcEpNfNMDagbs+W
-        d4TuXKqKs+KMvUpIUXb7g4+RldkZ5tXiezKOt1a55eKDYsImXuYFSG+hLX9CiH7aIHThy2TixEzEk
-        Dz6Ae2O4k3sMp7+7F5jNWJXWAXH+ajhtAwdoasdzW17BCGKNxvjfBJiqmn6UOVNDmSr1+5U9X3Zzd
-        IsQJFwRQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pv50Z-003P3L-34;
-        Fri, 05 May 2023 23:38:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EC0C93060E5;
-        Sat,  6 May 2023 01:38:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A3CB423C5C32C; Sat,  6 May 2023 01:38:36 +0200 (CEST)
-Date:   Sat, 6 May 2023 01:38:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        naveen.n.rao@linux.vnet.ibm.com,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: Re: [PATCH 4/6] sched/fair: Skip prefer sibling move between SMT
- group and non-SMT group
-Message-ID: <20230505233836.GB1821641@hirez.programming.kicks-ass.net>
-References: <cover.1683156492.git.tim.c.chen@linux.intel.com>
- <b20517e3986bfdde8a605afa19d144ec411c7a42.1683156492.git.tim.c.chen@linux.intel.com>
- <20230505132211.GQ83892@hirez.programming.kicks-ass.net>
- <7c5ad793fe0195f7129156b67a043df18b46d732.camel@linux.intel.com>
+        Fri, 5 May 2023 19:42:09 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06935FE5
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 16:42:07 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6434e263962so1871888b3a.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 16:42:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683330127; x=1685922127;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZCtnoETSxcB113Zij2dc92/a6FXT6zg5FXhG1u0c1nk=;
+        b=QusrV2Wwp2bfcRiTRr6hzIF/JXaTe4s/VrPmwKwo0KjCO5zokwC9p/TVY23qdqD/l1
+         Dli2uc+0UwP0iuI3XJJiRqCCR1FgBhbsbCfs3DBsxBDA+bBTXb8II9k8UOkYruYMdXhy
+         gwAAOON1JGC03tKiYjRGDxrPMDO2D458c4fsVC5Dvmbt5so6xvclSNo3u4T0qTypnasy
+         eyJy1DNm0nF83oEQuDkzVIzBajW2FDDdAiEilNv9J3lj3iA93K7uz8wuxLyAqRBsSQeD
+         7aahCv7qFLZjDKFH0N+HzdR7mcuioyTEBOlzKFarm+J+e4+MCHsEUXooUNe0p7ye3H6n
+         fFog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683330127; x=1685922127;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZCtnoETSxcB113Zij2dc92/a6FXT6zg5FXhG1u0c1nk=;
+        b=RGEjegQXk1j2wVHmVLYFLPcMjcvgtcjeajjAZLK9xrI4SY2zrKPmFW0OfoXDBRH9iA
+         aFa3qQl0duadR6ve6ow6zCauU4Uc+ineWq4VFXNhhDcmlGdledCDR054Eo99mI8ulAs9
+         VyNg2fikP8ZzKewQQHxUX/31R/aYZgq7v/Zy7KP5W1L7XXbiAqEuoxrU3JGDvYoKtHB2
+         CVh7i2b7qhgxij9F/Lhg7CXvB+sfyXg0fnED5ygPoXzHR7tKtRfXklJ8SADPy2kWokLi
+         AFTYdKyg+llSjK5tKIgdKr8iZgC1e1pBBVcV8OFjLbb4eJ9Kkr7AIBW+0i8DAXYiQ0Kq
+         dMeA==
+X-Gm-Message-State: AC+VfDzBn/m7kL6mdJFaN53Tmn7/fadXfGQhKU/HQXN2s7VgrDh/pavx
+        lsQIssnw6g5uCFksP3CpPKwxWg==
+X-Google-Smtp-Source: ACHHUZ6ZXwTvDt9dgqu5VnMU2vt75ZEwPCsWikBzLJH1LKI2sJCZP8HWyuvB09pM2j5L3woioye+0w==
+X-Received: by 2002:a05:6a20:1590:b0:f6:592a:7e28 with SMTP id h16-20020a056a20159000b000f6592a7e28mr3982333pzj.14.1683330127470;
+        Fri, 05 May 2023 16:42:07 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
+        by smtp.gmail.com with ESMTPSA id x2-20020a056a00270200b006338e0a9728sm2097064pfv.109.2023.05.05.16.42.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 16:42:06 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pv53r-00BpPv-Ud; Sat, 06 May 2023 09:42:03 +1000
+Date:   Sat, 6 May 2023 09:42:03 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     John Garry <john.g.garry@oracle.com>, axboe@kernel.dk,
+        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, dchinner@redhat.com, jejb@linux.ibm.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com,
+        Allison Henderson <allison.henderson@oracle.com>,
+        Catherine Hoang <catherine.hoang@oracle.com>
+Subject: Re: [PATCH RFC 12/16] xfs: Add support for fallocate2
+Message-ID: <20230505234203.GO3223426@dread.disaster.area>
+References: <20230503183821.1473305-1-john.g.garry@oracle.com>
+ <20230503183821.1473305-13-john.g.garry@oracle.com>
+ <20230503232616.GG3223426@dread.disaster.area>
+ <20230505222333.GM15394@frogsfrogsfrogs>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7c5ad793fe0195f7129156b67a043df18b46d732.camel@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20230505222333.GM15394@frogsfrogsfrogs>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,60 +86,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 04:07:39PM -0700, Tim Chen wrote:
-> On Fri, 2023-05-05 at 15:22 +0200, Peter Zijlstra wrote:
-> > On Thu, May 04, 2023 at 09:09:54AM -0700, Tim Chen wrote:
-> > > From: Tim C Chen <tim.c.chen@linux.intel.com>
-> > > 
-> > > Do not try to move tasks between non SMT sched group and SMT sched
-> > > group for "prefer sibling" load balance.
-> > > Let asym_active_balance_busiest() handle that case properly.
-> > > Otherwise we could get task bouncing back and forth between
-> > > the SMT sched group and non SMT sched group.
-> > > 
-> > > Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > > Signed-off-by: Tim Chen <tim.c.chen@linux.intel.com>
-> > > ---
-> > >  kernel/sched/fair.c | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > > index 8a325db34b02..58ef7d529731 100644
-> > > --- a/kernel/sched/fair.c
-> > > +++ b/kernel/sched/fair.c
-> > > @@ -10411,8 +10411,12 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
-> > >  	/*
-> > >  	 * Try to move all excess tasks to a sibling domain of the busiest
-> > >  	 * group's child domain.
-> > > +	 *
-> > > +	 * Do not try to move between non smt sched group and smt sched
-> > > +	 * group. Let asym active balance properly handle that case.
-> > >  	 */
-> > >  	if (sds.prefer_sibling && local->group_type == group_has_spare &&
-> > > +	    !asymmetric_groups(sds.busiest, sds.local) &&
-> > >  	    busiest->sum_nr_running > local->sum_nr_running + 1)
-> > >  		goto force_balance;
+On Fri, May 05, 2023 at 03:23:33PM -0700, Darrick J. Wong wrote:
+> On Thu, May 04, 2023 at 09:26:16AM +1000, Dave Chinner wrote:
+> > On Wed, May 03, 2023 at 06:38:17PM +0000, John Garry wrote:
+> > If we want fallocate() operations to apply filesystem atomic write
+> > constraints to operations, then add a new modifier flag to
+> > fallocate(), say FALLOC_FL_ATOMIC. The filesystem can then
+> > look up it's atomic write alignment constraints and apply them to
+> > the operation being performed appropriately.
 > > 
-> > This seems to have the hidden assumption that a !SMT core is somehow
-> > 'less' that an SMT code. Should this not also look at
-> > sched_asym_prefer() to establush this is so?
+> > > The alignment flag is not sticky, so further extent mutation will not
+> > > obey this original alignment request.
 > > 
-> > I mean, imagine I have a regular system and just offline one smt sibling
-> > for giggles.
+> > IOWs, you want the specific allocation to behave exactly as if an
+> > extent size hint of the given alignment had been set on that inode.
+> > Which could be done with:
+> > 
+> > 	ioctl(FS_IOC_FSGETXATTR, &fsx)
+> > 	old_extsize = fsx.fsx_extsize;
+> > 	fsx.fsx_extsize = atomic_align_size;
+> > 	ioctl(FS_IOC_FSSETXATTR, &fsx)
 > 
-> I don't quite follow your point as asymmetric_groups() returns false even
-> one smt sibling is offlined.
-> 
-> Even say sds.busiest has 1 SMT and sds.local has 2 SMT, both sched groups still
-> have SD_SHARE_CPUCAPACITY flag turned on.  So asymmetric_groups() return
-> false and the load balancing logic is not changed for regular non-hybrid system.
-> 
-> I may be missing something.
+> Eww, multiple threads doing fallocates can clobber each other here.
 
-What's the difference between the two cases? That is, if the remaining
-sibling will have SD_SHARE_CPUCAPACIY from the degenerate SMT domain
-that's been reaped, then why doesn't the same thing apply to the atoms
-in the hybrid muck?
+Sure, this was just an example of how the same behaviour could be be
+acheived without the new ioctl. Locking and other trivialities were
+left as an exercise for the reader.
 
-Those two cases *should* be identical, both cases you have cores with
-and cores without SMT.
+> 
+> > 	fallocate(....)
+> > 	fsx.fsx_extsize = old_extsize;
+> > 	ioctl(FS_IOC_FSSETXATTR, &fsx)
+> 
+> Also, you can't set extsize if the data fork has any mappings in it,
+> so you can't set the old value.  But perhaps it's not so bad to expect
+> that programs will set this up once and not change the underlying
+> storage?
+> 
+> I'm not actually sure why you can't change the extent size hint.  Why is
+> that?
+
+Hysterical raisins, I think.
+
+IIUC, it was largely to do with the fact that pre-existing
+allocation could not be realigned, so once allocation has been done
+the extent size hint can't guarantee extent size hint aligned/sized
+extents are actually allocated for the file.
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
