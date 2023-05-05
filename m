@@ -2,295 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0016F6F8676
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B98C76F8686
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbjEEQMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 12:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S232021AbjEEQTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 12:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbjEEQMR (ORCPT
+        with ESMTP id S230163AbjEEQTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 12:12:17 -0400
+        Fri, 5 May 2023 12:19:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096DF11D96;
-        Fri,  5 May 2023 09:12:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC90217FE2;
+        Fri,  5 May 2023 09:19:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B49063F0D;
-        Fri,  5 May 2023 16:12:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073E9C433EF;
-        Fri,  5 May 2023 16:12:13 +0000 (UTC)
-Date:   Fri, 5 May 2023 12:12:12 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: Re: [PATCH v9.1 02/11] tracing/probes: Add fprobe events for
- tracing function entry and exit.
-Message-ID: <20230505121212.7569c9b9@gandalf.local.home>
-In-Reply-To: <168299385687.3242086.18384268741128867952.stgit@mhiramat.roam.corp.google.com>
-References: <168299383880.3242086.7182498102007986127.stgit@mhiramat.roam.corp.google.com>
-        <168299385687.3242086.18384268741128867952.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4845263F15;
+        Fri,  5 May 2023 16:19:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBDE1C433EF;
+        Fri,  5 May 2023 16:19:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683303547;
+        bh=9eVD8TLEEJTPz7yUDaY/tcM4ySNHmYkUZSsW6auAYhI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=loLHgZ6lqZrIKBgo3yKKid4OzVFYz+8ZiKK82DAcPHoYWv38JEZTzJBc/0Jilf3Ac
+         13ZT853kkIOz5s92U2aLs8Qsw3/pa5XZXTWrM7RLBw1djPdirH/b7e328JT1KQDfo5
+         Ia02U9yr3HawpR+b0VyOH8cI2VeNJrHrSxmbVFpT3yoROBJG7kA8FvP3nIX4blUvei
+         1+YXY4yq6kvmuJAt1kUewv/TelPNq3i/P251E+XOAquYRG4fANOUEKMcFwQTJW2bcf
+         3FEbGZUddqObaXNkWfTnpVbHzIE26/z88HVTnkB5sY9x/JYwY+Z5S7f7VIT7tH5VvM
+         nkytUGk7g4Aow==
+Date:   Fri, 5 May 2023 18:19:01 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Ross Philipson <ross.philipson@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, ardb@kernel.org, mjg59@srcf.ucam.org,
+        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
+        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH v6 02/14] Documentation/x86: Secure Launch kernel
+ documentation
+Message-ID: <ZFUsdbkulMLlU3XA@kernel.org>
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-3-ross.philipson@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504145023.835096-3-ross.philipson@oracle.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  2 May 2023 11:17:36 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+On Thu, May 04, 2023 at 02:50:11PM +0000, Ross Philipson wrote:
+> Introduce background, overview and configuration/ABI information
+> for the Secure Launch kernel feature.
+> 
+> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
+> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
 
-> diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
+Hi Ross and Daniel,
+
+some minor nits from my side.
+
+> ---
+>  Documentation/security/index.rst                   |   1 +
+>  Documentation/security/launch-integrity/index.rst  |  10 +
+>  .../security/launch-integrity/principles.rst       | 313 ++++++++++++
+>  .../launch-integrity/secure_launch_details.rst     | 564 +++++++++++++++++++++
+>  .../launch-integrity/secure_launch_overview.rst    | 220 ++++++++
+>  5 files changed, 1108 insertions(+)
+>  create mode 100644 Documentation/security/launch-integrity/index.rst
+>  create mode 100644 Documentation/security/launch-integrity/principles.rst
+>  create mode 100644 Documentation/security/launch-integrity/secure_launch_details.rst
+>  create mode 100644 Documentation/security/launch-integrity/secure_launch_overview.rst
+> 
+> diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
+> index 6ed8d2f..fade37e 100644
+> --- a/Documentation/security/index.rst
+> +++ b/Documentation/security/index.rst
+> @@ -18,3 +18,4 @@ Security Documentation
+>     digsig
+>     landlock
+>     secrets/index
+> +   launch-integrity/index
+> diff --git a/Documentation/security/launch-integrity/index.rst b/Documentation/security/launch-integrity/index.rst
 > new file mode 100644
-> index 000000000000..0049d9ef2402
+> index 0000000..28eed91d
 > --- /dev/null
-> +++ b/kernel/trace/trace_fprobe.c
-> @@ -0,0 +1,1053 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Fprobe-based tracing events
-> + * Copyright (C) 2022 Google LLC.
-> + */
-> +#define pr_fmt(fmt)	"trace_fprobe: " fmt
-> +
-> +#include <linux/fprobe.h>
-> +#include <linux/module.h>
-> +#include <linux/rculist.h>
-> +#include <linux/security.h>
-> +#include <linux/uaccess.h>
-> +
-> +#include "trace_dynevent.h"
-> +#include "trace_probe.h"
-> +#include "trace_probe_kernel.h"
-> +#include "trace_probe_tmpl.h"
-> +
-> +#define FPROBE_EVENT_SYSTEM "fprobes"
-> +#define RETHOOK_MAXACTIVE_MAX 4096
-> +
-> +static int trace_fprobe_create(const char *raw_command);
-> +static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev);
-> +static int trace_fprobe_release(struct dyn_event *ev);
-> +static bool trace_fprobe_is_busy(struct dyn_event *ev);
-> +static bool trace_fprobe_match(const char *system, const char *event,
-> +			int argc, const char **argv, struct dyn_event *ev);
-> +
-> +static struct dyn_event_operations trace_fprobe_ops = {
-> +	.create = trace_fprobe_create,
-> +	.show = trace_fprobe_show,
-> +	.is_busy = trace_fprobe_is_busy,
-> +	.free = trace_fprobe_release,
-> +	.match = trace_fprobe_match,
-> +};
-> +
-> +/*
-> + * Fprobe event core functions
-> + */
-> +struct trace_fprobe {
-> +	struct dyn_event	devent;
-> +	struct fprobe		fp;
-> +	const char		*symbol;
-> +	struct trace_probe	tp;
-> +};
-> +
-> +static bool is_trace_fprobe(struct dyn_event *ev)
-> +{
-> +	return ev->ops == &trace_fprobe_ops;
-> +}
-> +
-> +static struct trace_fprobe *to_trace_fprobe(struct dyn_event *ev)
-> +{
-> +	return container_of(ev, struct trace_fprobe, devent);
-> +}
-> +
-> +/**
-> + * for_each_trace_fprobe - iterate over the trace_fprobe list
-> + * @pos:	the struct trace_fprobe * for each entry
-> + * @dpos:	the struct dyn_event * to use as a loop cursor
-> + */
-> +#define for_each_trace_fprobe(pos, dpos)	\
-> +	for_each_dyn_event(dpos)		\
-> +		if (is_trace_fprobe(dpos) && (pos = to_trace_fprobe(dpos)))
-> +
-> +static bool trace_fprobe_is_return(struct trace_fprobe *tf)
-> +{
-> +	return tf->fp.exit_handler != NULL;
-> +}
-> +
-> +static const char *trace_fprobe_symbol(struct trace_fprobe *tf)
-> +{
-> +	return tf->symbol ? tf->symbol : "unknown";
-> +}
-> +
-> +static bool trace_fprobe_is_busy(struct dyn_event *ev)
-> +{
-> +	struct trace_fprobe *tf = to_trace_fprobe(ev);
-> +
-> +	return trace_probe_is_enabled(&tf->tp);
-> +}
-> +
-> +static bool trace_fprobe_match_command_head(struct trace_fprobe *tf,
-> +					    int argc, const char **argv)
-> +{
-> +	char buf[MAX_ARGSTR_LEN + 1];
-> +
-> +	if (!argc)
-> +		return true;
-> +
-> +	snprintf(buf, sizeof(buf), "%s", trace_fprobe_symbol(tf));
-> +	if (strcmp(buf, argv[0]))
-> +		return false;
-> +	argc--; argv++;
-> +
-> +	return trace_probe_match_command_args(&tf->tp, argc, argv);
-> +}
-> +
-> +static bool trace_fprobe_match(const char *system, const char *event,
-> +			int argc, const char **argv, struct dyn_event *ev)
-> +{
-> +	struct trace_fprobe *tf = to_trace_fprobe(ev);
-> +
-> +	return (event[0] == '\0' ||
-> +		strcmp(trace_probe_name(&tf->tp), event) == 0) &&
-> +	    (!system || strcmp(trace_probe_group_name(&tf->tp), system) == 0) &&
-> +	    trace_fprobe_match_command_head(tf, argc, argv);
+> +++ b/Documentation/security/launch-integrity/index.rst
+> @@ -0,0 +1,10 @@
 
-The above is really hard to read, and Linus hates these kinds of
-statements. Please break it up (the compiler should do the right thing).
+I believe an SPDX tag should go at the top of each .rst file.
 
-Reversing the tests to return false:
-
-	if (event[0] != '\0' &&
-	    strcmp(trace_probe_name(&tf->tp), event) != 0))
-		return false;
-
-	if (system && strcmp(trace_probe_group_name(&tf->tp), system) != 0))
-		return false;
-
-	return trace_fprobe_match_command_head(tf, argc, argv);
-
-
-> +}
+> +=====================================
+> +System Launch Integrity documentation
+> +=====================================
 > +
-> +static bool trace_fprobe_is_registered(struct trace_fprobe *tf)
-> +{
-> +	return fprobe_is_registered(&tf->fp);
-> +}
+> +.. toctree::
 > +
-> +/* Note that we don't verify it, since the code does not come from user space */
-
-Verify what?
-
-Hmm, I see this is a copy of the comment from both trace_kprobe.c and
-trace_uprobe.c. I think this requires a bit more explanation (and also in
-those locations as well).
-
-> +static int
-> +process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
-> +		   void *base)
-> +{
-> +	struct pt_regs *regs = rec;
-> +	unsigned long val;
+> +   principles
+> +   secure_launch_overview
+> +   secure_launch_details
 > +
-> +retry:
-> +	/* 1st stage: get value from context */
-> +	switch (code->op) {
-> +	case FETCH_OP_REG:
-> +		val = regs_get_register(regs, code->param);
-> +		break;
-> +	case FETCH_OP_STACK:
-> +		val = regs_get_kernel_stack_nth(regs, code->param);
-> +		break;
-> +	case FETCH_OP_STACKP:
-> +		val = kernel_stack_pointer(regs);
-> +		break;
-> +	case FETCH_OP_RETVAL:
-> +		val = regs_return_value(regs);
-> +		break;
-
-
-> +	case FETCH_OP_IMM:
-> +		val = code->immediate;
-> +		break;
-> +	case FETCH_OP_COMM:
-> +		val = (unsigned long)current->comm;
-> +		break;
-> +	case FETCH_OP_DATA:
-> +		val = (unsigned long)code->data;
-> +		break;
-
-These are new and not part of trace_kprobe.c. Should we have a version that
-the two could share?
-
-Probably a helper function that can be called by these two.
-
-> +#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
-> +	case FETCH_OP_ARG:
-> +		val = regs_get_kernel_argument(regs, code->param);
-> +		break;
-> +#endif
-> +	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
-> +		code++;
-> +		goto retry;
-> +	default:
-> +		return -EILSEQ;
-> +	}
-> +	code++;
+> diff --git a/Documentation/security/launch-integrity/principles.rst b/Documentation/security/launch-integrity/principles.rst
+> new file mode 100644
+> index 0000000..73cf063
+> --- /dev/null
+> +++ b/Documentation/security/launch-integrity/principles.rst
+> @@ -0,0 +1,313 @@
+> +=======================
+> +System Launch Integrity
+> +=======================
 > +
-> +	return process_fetch_insn_bottom(code, val, dest, base);
-> +}
-> +NOKPROBE_SYMBOL(process_fetch_insn)
-> +
-> +/* function entry handler */
-> +static nokprobe_inline void
-> +__fentry_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> +		    struct pt_regs *regs,
-> +		    struct trace_event_file *trace_file)
-> +{
-> +	struct fentry_trace_entry_head *entry;
-> +	struct trace_event_call *call = trace_probe_event_call(&tf->tp);
-> +	struct trace_event_buffer fbuffer;
-> +	int dsize;
-> +
-> +	WARN_ON(call != trace_file->event_call);
+> +This document serves to establish a common understanding of what is system
+> +launch, the integrity concern for system launch, and why using a Root of Trust
+> +(RoT) from a Dynamic Launch may be desired. Through out this document
+> +terminology from the Trusted Computing Group (TCG) and National Institue for
 
- WARN_ON_ONCE()?
+s/Institue/Institute/
 
-And if you are doing the check, perhaps even:
+...
 
-	if (WARN_ON_ONCE(call != trace_file->event_call))
-		return;
+> +Trust Chains
+> +============
+> +
+> +Bulding upon the understanding of security mechanisms to establish load-time
 
--- Steve
+s/Bulding/Building/
 
+...
+
+> diff --git a/Documentation/security/launch-integrity/secure_launch_details.rst b/Documentation/security/launch-integrity/secure_launch_details.rst
+
+...
+
+> +Secure Launch Resource Table
+> +============================
 > +
-> +	if (trace_trigger_soft_disabled(trace_file))
-> +		return;
-> +
-> +	dsize = __get_data_size(&tf->tp, regs);
-> +
-> +	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
-> +					   sizeof(*entry) + tf->tp.size + dsize);
-> +	if (!entry)
-> +		return;
-> +
-> +	fbuffer.regs = regs;
-> +	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
-> +	entry->ip = entry_ip;
-> +	store_trace_args(&entry[1], &tf->tp, regs, sizeof(*entry), dsize);
-> +
-> +	trace_event_buffer_commit(&fbuffer);
-> +}
-> +
+> +The Secure Launch Resource Table (SLRT) is a platform-agnostic, standard format
+> +for providing information for the pre-launch environment and to pass
+> +information to the post-launch environment. The table is populated by one or
+> +more bootloaders in the boot chain and used by Secure Launch on how to setup
+> +the environment during post-launch. The details for the SLRT are documented
+> +in the TrenchBoot Secure Launch Specifcation [3]_.
+
+s/Specifcation/Specification/
+
+...
