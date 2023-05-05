@@ -2,524 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F566F8738
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 19:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92376F8741
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 19:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbjEERFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 13:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
+        id S232129AbjEERJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 13:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjEERFC (ORCPT
+        with ESMTP id S232001AbjEERJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 13:05:02 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770C415689
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 10:04:59 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3ef36d814a5so1124591cf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 10:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683306298; x=1685898298;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sgoEapUNJvuyfd4DwwXAMo4uOf8CXt5FW3QPdsUK8nE=;
-        b=MiaSnrkHiHpcxV1e6B26xqBpyzkwLjb3mcVNIvf3uuw0TOS4RtItdYqybvrILef774
-         rh3sIhhSnlmc2QqicdMDUcTsGEDJPJ7oeLTsx6vD2IDjvqkf/RTAqC3KGcz6UUYwuQxl
-         dnr0+WtF4iRA98jb5Yi+tFG/yS5mq8MnAkv55NkS1rdBHiRIHdcK9XBung+m7NMzRs3+
-         SC/UOeuO5SzozZMAr3YUpmiYHH/KIbVVCnFzj4F6baMJVySL/2ezdErPZDmxx5YQ1xdE
-         vFkdkxa3GE3Fqmy6X4th7a7Wjux0K4y+EL2KBI2GHtYR5CdEb409sZtiKk6a8TgixeNZ
-         fXsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683306298; x=1685898298;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sgoEapUNJvuyfd4DwwXAMo4uOf8CXt5FW3QPdsUK8nE=;
-        b=jFx4x7MgdMzUUCnhyFGDEIH1QoiTeiQjRFshEFS0WSGs5nnoEKdREf7ZIOTSsPz5c/
-         aRdPsgK9ajZTtrPxF4c1yJCRUfHbV6hfcutmhuF3aQ0vvwbCt8U//Oi78NjEAmeSx/ck
-         uxeNw2fw8poiOULc6t8DjMVpiFCWPMSFl6L3ip9STyAG7vVnELm1H3UgXyhQrrQy67w1
-         gk8El7rJ9xnk+ioIB+7Vu6FadGgAY5athMGHxUtC5POXJBGXrzGBZ46kxP1zo0nzleAO
-         yh47B3OlSoKTscEPimDkxjNc5cDQMSaDDBKbGk21KI0TJDeEAmWrJ4nJQUvVsQOnZget
-         yiLA==
-X-Gm-Message-State: AC+VfDxjE/K4x93qSWA/L8Fkb6oxLYxicxw+F2DYHNhWoxvGTw00mNwT
-        xRtOD+5m6m+5HQG+yLvFbBT99zMcVbLtYLUQ9EsVzA==
-X-Google-Smtp-Source: ACHHUZ4J6SP+2DGfrcIrQ85qvVGLzRSmvw3R2+RiEI3AOTOkwmXfDvPBog3kDU176Ncc7eIoNdbctGvoJP29nQLVhTs=
-X-Received: by 2002:ac8:5a8e:0:b0:3ef:3361:75d5 with SMTP id
- c14-20020ac85a8e000000b003ef336175d5mr280648qtc.11.1683306298062; Fri, 05 May
- 2023 10:04:58 -0700 (PDT)
+        Fri, 5 May 2023 13:09:42 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2089.outbound.protection.outlook.com [40.107.100.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5329A1990C;
+        Fri,  5 May 2023 10:09:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bSHxc5s4sRd1Iz2EkdtY0i1po1EGg9xL9ViypKFfy3eC658TNAOlFPA6+ah6TlcoGUI5BSlTVhesicYWyg0NjXH84GQPgJ6w96Ssk0IcybZAKESD/seccDmfTx0CroMuV7+oyuI9yMUQZrdUaFVKwjGMvwYWr9ueBrq/hnWlQkDqBWqlQ5NwH4Y2h/6OxUrHizL2NImKOYYSrEs//naHehoXH0Jrrg42UlV6MM0GFirimwTF/VfbscTW29f4trsl+6bEDqSf8HMzsoH4OLEJYWt9v3+UdctnfMh8ke/plghdzSNVoqb8hl8nZrTHKorGhGPOYBkwQ7996gbgY9dqsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2/IjbY5f/6vf5O47YcCxn5HQluIeFJSslAVQ63beW84=;
+ b=X43g/t0d4x3ScsEoxMkkROKEsayNizJmPFr1ArSPgNn5Nw/khPp5998bzrnZvviRRcLLOlZi2lbMvkwfe3rFpJo4mZRhjPcHmmVn91gcLkt7iKyTCmQhYUCK1dNUadd1CesF5nOfY40UA0cRcyTuZS8Ng2V6A7nWOJAR5K0IpWe9KackR7I13qN+DgkkDDCm4JMBmguy87K6FFU7LDQUGxqlVGtIlRnvdErXRiYQkcNhZeuYctas1Ps2jYjLm3/5jdvkLid2dLx17uXYgRkufETs79PgjqVRpQG1IU72fBnq+CYaMuttuPr7tXbriJwScjZj2truI3LD99GEDI0ldw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2/IjbY5f/6vf5O47YcCxn5HQluIeFJSslAVQ63beW84=;
+ b=YltVn7ubeTiAzjwX8sbrV+3ltfUxUl++alb+uUuBxdwVjOsJsr7xq+YLbT/6mDPlkT5vTRkMBbWd+3E5L3UReXmOc6Ujkoffaw2BlqAOLdFE8Xn1Exj9Po78Ix8VTGGUm+k0g2CsPcQYGwC6gnlpCKYyzBqH0pQGg6v6wFVNopU=
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
+ by CH3PR12MB8534.namprd12.prod.outlook.com (2603:10b6:610:15a::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27; Fri, 5 May
+ 2023 17:09:37 +0000
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::216f:6f0f:4a21:5709]) by MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::216f:6f0f:4a21:5709%5]) with mapi id 15.20.6363.026; Fri, 5 May 2023
+ 17:09:37 +0000
+From:   "Moger, Babu" <Babu.Moger@amd.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>
+CC:     "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "chang.seok.bae@intel.com" <chang.seok.bae@intel.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "Das1, Sandipan" <Sandipan.Das@amd.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "eranian@google.com" <eranian@google.com>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "quic_jiles@quicinc.com" <quic_jiles@quicinc.com>,
+        "peternewman@google.com" <peternewman@google.com>
+Subject: RE: [PATCH v4 1/7] x86/resctrl: Add multiple tasks to the resctrl
+ group at once
+Thread-Topic: [PATCH v4 1/7] x86/resctrl: Add multiple tasks to the resctrl
+ group at once
+Thread-Index: AQHZcYUkcs1a0ushqUSSQIeK80u5hq9KkZYAgAFn4/A=
+Date:   Fri, 5 May 2023 17:09:37 +0000
+Message-ID: <MW3PR12MB4553BAD1A9390D518D9919A895729@MW3PR12MB4553.namprd12.prod.outlook.com>
+References: <168177435378.1758847.8317743523931859131.stgit@bmoger-ubuntu>
+ <168177444676.1758847.11474266921067437724.stgit@bmoger-ubuntu>
+ <51a1b46e-9162-83bc-29df-8a154059f847@intel.com>
+In-Reply-To: <51a1b46e-9162-83bc-29df-8a154059f847@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-05-05T17:09:35Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=adb7db3a-a77b-43c8-a86a-2628c8355ed8;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2023-05-05T17:09:35Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 26bdb682-7b3b-481e-984c-be091dc36e65
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW3PR12MB4553:EE_|CH3PR12MB8534:EE_
+x-ms-office365-filtering-correlation-id: 7fef1fe8-0400-4271-3989-08db4d8b81a2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: SaIPZKPanJTFVdwIClLuP7niL2r03BX87BxS+6QfOz32+FRzQAkn5ukY3HOmVjBT5k74SfPUpFr+cQZXq97GU4MFmbPeFnViEwk78hxLqf/s9QMCDjOklBMqLtLF9UBeLEvGjAG5mu+fWh8+UVx16fxsf9Y71QzrkItVI4L0yg1AyYPKay8dJfB6PmMmR0tu+VXp74nrxauGCgaOp9U37FJA5OYAdWT6eIIhc/KOjg5RzIu4h5sFUK6h/3xFDzDDcWVatjWzBhwQc3yTrXfuD29lRoLZKhmeug2VT0K8ZGLDrIufLurJ+ZnlIMaCJmgOztpHTSDGL4Gdvl0UhjUbhMMXu7TjoU3lgfWtwE0q8r1jo/QrxLmEh+osm+1UftZBLC3d950Ve8c6segYiEePENXIktH8Qzs0cCHVL0diljq4qn7vOkTsz56pkj4feaHOL+yfE2bzAiTc5qn0Ue6PwP/nuDPXONpU7+Z2R3HDCygb/bDtufd057chpPPsVxp1PxkYYMStWJvW37Fhcj5GtapB8jcKKPZhueZWyTLsAyJvf4gkdLOUo8lhIjsTS+AA06K/FxZG1R5l7Lt+AwlEn+L0nDyvW19RuoyqMe+QAAA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(366004)(376002)(39860400002)(451199021)(66899021)(55016003)(8936002)(26005)(9686003)(6506007)(8676002)(7416002)(7406005)(53546011)(2906002)(83380400001)(41300700001)(4326008)(76116006)(7696005)(71200400001)(478600001)(316002)(52536014)(5660300002)(186003)(66446008)(110136005)(66476007)(66556008)(66946007)(54906003)(64756008)(86362001)(38070700005)(38100700002)(33656002)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cVZsS0Z1YUpmQ2VqUTRLc05yVHdnZldpWDZhdFd0QWVsYkplRGMzdDBsL29P?=
+ =?utf-8?B?YnhydUFYakFZd3o3di95OFI2dUxqd1Brd01HQjd2WUQ4TmprUUNSdHFKaEJY?=
+ =?utf-8?B?OGFIeTVEVSswVk9YTGhraEhYRVhlcHNZWE9vakZKcHJqV2FJUjVNdFlXRjIy?=
+ =?utf-8?B?R1lrVWV6MmJ2UE9nK0NnVFlvZnNVeDdzdXViamR1aWx4enh5Tm1ubmNvRXkw?=
+ =?utf-8?B?YktSc1hDSlNNM1l5WVRMZGV3Z2FnTGFQdXVJWkt2eGF5dElyWUVRZm5Eaktw?=
+ =?utf-8?B?VTFmcDVtMU1SRGh0MTczcHZtYm9IeFhVemVmdisvZFFHQ1h2enF4ZEhVc3lk?=
+ =?utf-8?B?ZHhkSE9kbWtXcWFiV1VaMEI4STRHM0p2a3lDT2o1Y0xJWDlmcFMyTSttdmZD?=
+ =?utf-8?B?T1E1VWdzdGtjUlRVRHJvVDZHV2xlZURMU3g1cHBRWENCcHlUc0tqQnNZUkZ3?=
+ =?utf-8?B?Wkw2Zit1T0F1OXFoZTRBZjdCUFlVK3lFcEx0UVFVaHZwWkhnOHZQcGtuZk1t?=
+ =?utf-8?B?amxrWnBVVGIxdStydFFCSCtWMHgzaHRiL2RPdVI2L1dvTkNEMVVBQ3Yzellk?=
+ =?utf-8?B?T1RwbDhUcEhLZTF2M2RVVkJkUlpoeTFoSU50WWNML3VtK09qcjM4MzAzeTEr?=
+ =?utf-8?B?cC8xTlNpdFcrZVd4YjZIZEZCdUg4U0NuYXQrRndwcUo3QzJLT0NCUnZTYXky?=
+ =?utf-8?B?Z2xZdTIvdGRsZm9PVFJnUmNNSVpkZHlQaVA0MG9rVlV6MWJZazcyT2VLREVR?=
+ =?utf-8?B?QWxRZW4xSkNDTThWQVVWL2JXa1VjYUsveWl2VXFwYy9tSkc0M05POWR3Nlho?=
+ =?utf-8?B?eUNJeFJIbXo5VXZEMlh4TWh0aGFsNDZIaUh6U2VwZjViV3JPaDRIVlJybW55?=
+ =?utf-8?B?Z2VPMG5zV0luN24rTE80aVdNa1A5RlZLYnJJMzR5RVBEeHZwL1U2ajl6RHFl?=
+ =?utf-8?B?akQrT2xibkFaR1Q5dFphZ003WmQxOS9UdFJRZFg0VFdrOWVsRk1NV0ZrYUdo?=
+ =?utf-8?B?UEk2ZitvSWFpQkZkTk9OWkpwQjhXbHY3dC9McCtVUlJKb1l1U2JGVG9ZQks0?=
+ =?utf-8?B?QWNxcndaRm1SVHdHQ3U3RVArVit4bTdqZmh1eEZNZWlnNG9zbnJHeE9MTEth?=
+ =?utf-8?B?a0pKL3hJWU5ZemZVMVkrOWFad1ZxcUVqaXdYZC9wamw4NFFrUUFmb2t2ZTB5?=
+ =?utf-8?B?NFl2Y3JoQ3lJT2JrSjdhd0VKNWRvNkNUSGs0eXdvVDVVeEtXRlRyK2FrY2U1?=
+ =?utf-8?B?dGhOdEdTSEVFNGFPcGc3bnZ5UGg3RkFGSGdwU3NTbmFCb0dlcndyVTNXRVdp?=
+ =?utf-8?B?TE1uaVViVUlYU3BmQzB3SVdGK0xxSWJKMW1qUmZicEpmYXBuMUtHSEh5R0p5?=
+ =?utf-8?B?ZUZXWXlkNXRwdDVuTjArRi9DTG5kaXNYWEJZa2hVTDFRclhUMFRNTzVIdWJr?=
+ =?utf-8?B?Sk1hb0NGUXRRTC96dnUvTFhoeGJQV0h4Y3RNU0pGOXRkVHBZRm16aEJNNlQ4?=
+ =?utf-8?B?dWZENHYvcURnMWJkRm5nNlJiZzJGMjF1Z1lEellhY1VOSVpVYzVhU1hCVlVN?=
+ =?utf-8?B?UzNKcXpObUZKdzdIeWpPSFNaV25PSmQ2VVlyWVJXYVkySHpuWWtxUldRc2Fu?=
+ =?utf-8?B?UzVRTTJ3T0VBTnlYNnFpbGVVOGQ0eU9TNmRDQmk3MG5XL1hEbEZDSUtQNVBD?=
+ =?utf-8?B?MWJ5U2kxdkM2Z0ZUbmtJWHFFUEFsb2NuUUtBYUlwMllZS1pYSy9IS1BrRysy?=
+ =?utf-8?B?dW1LQmlaamd3WGlFSU1LTTFkMGw3Y0FLYkxXdktrUXhoZGQvK3Q0QVMzUzFH?=
+ =?utf-8?B?b1MzaHE2MjF2OVhPNVRJM0ZLZHdDbUduK251aC94Sy9NVlI1OHN5cDVGQ0Ji?=
+ =?utf-8?B?YzRSTTNLVjZVYmZ0cytVb0N4VU9hUFJtMWtNQldWOGNQcldmS2tkZ1JVeTR6?=
+ =?utf-8?B?c2toWkk0MDVveWZyK2NTTHM2TERSdnhtS1Z4RmlMbGl0bUFnZEZZQ1ZKeWE0?=
+ =?utf-8?B?ZVlkYWx3eWo4dDdlV0ZRWmRGUnBXTTZQNllieTZzLzZtVzNNRVVSamQxV3Nz?=
+ =?utf-8?B?OWd1V20rYzI3bVhGRFRGT2tPOTdwVDJMNjBhK3FMdXRxOWFRSmQ4Y1d1eWIv?=
+ =?utf-8?Q?1qcw=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
- <ZFOSUab5XEJD0kxj@kernel.org> <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
- <ZFPw0scDq1eIzfHr@kernel.org> <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
- <ZFQCccsx6GK+gY0j@kernel.org> <ZFQoQjCNtyMIulp+@kernel.org>
- <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
- <ZFQ5sjjtfEYzvHNP@krava> <ZFUFmxDU/6Z/JEsi@kernel.org> <ZFU1PJrn8YtHIqno@kernel.org>
-In-Reply-To: <ZFU1PJrn8YtHIqno@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 5 May 2023 10:04:47 -0700
-Message-ID: <CAP-5=fWfmmMCRnEmzj_CXTKacp6gjrzmR49Ge_C5XRyfTegRjg@mail.gmail.com>
-Subject: Re: [PATCH RFC/RFT] perf bpf skels: Stop using vmlinux.h generated
- from BTF, use subset of used structs + CO-RE. was Re: BPF skels in perf .Re:
- [GIT PULL] perf tools changes for v6.4
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>, Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Hao Luo <haoluo@google.com>, James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Roman Lozko <lozko.roma@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Paul Clarke <pc@us.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7fef1fe8-0400-4271-3989-08db4d8b81a2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 May 2023 17:09:37.3686
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eGpFL+EIYcIAO7+11cl2EolGCVXrRPSmxy1u4rFN6efFZcsJB529I2mv33cOGszY
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8534
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 9:56=E2=80=AFAM Arnaldo Carvalho de Melo <acme@kerne=
-l.org> wrote:
->
-> Em Fri, May 05, 2023 at 10:33:15AM -0300, Arnaldo Carvalho de Melo escrev=
-eu:
-> > Em Fri, May 05, 2023 at 01:03:14AM +0200, Jiri Olsa escreveu:
-> > That with the preserve_access_index isn't needed, we need just the
-> > fields that we access in the tools, right?
->
-> I'm now doing build test this in many distro containers, without the two
-> reverts, i.e. BPF skels continue as opt-out as in my pull request, to
-> test build and also for the functionality tests on the tools using such
-> bpf skels, see below, no touching of vmlinux nor BTF data during the
-> build.
->
-> - Arnaldo
->
-> From 882adaee50bc27f85374aeb2fbaa5b76bef60d05 Mon Sep 17 00:00:00 2001
-> From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Date: Thu, 4 May 2023 19:03:51 -0300
-> Subject: [PATCH 1/1] perf bpf skels: Stop using vmlinux.h generated from =
-BTF,
->  use subset of used structs + CO-RE
->
-> Linus reported a build break due to using a vmlinux without a BTF elf
-> section to generate the vmlinux.h header with bpftool for use in the BPF
-> tools in tools/perf/util/bpf_skel/*.bpf.c.
->
-> Instead add a vmlinux.h file with the structs needed with the fields the
-> tools need, marking the structs with __attribute__((preserve_access_index=
-)),
-> so that libbpf's CO-RE code can fixup the struct field offsets.
->
-> In some cases the vmlinux.h file that was being generated by bpftool
-> from the kernel BTF information was not needed at all, just including
-> linux/bpf.h, sometimes linux/perf_event.h was enough as non-UAPI
-> types were not being used.
->
-> To keep te patch small, include those UAPI headers from the trimmed down
-> vmlinux.h file, that then provides the tools with just the structs and
-> the subset of its fields needed for them.
->
-> Testing it:
->
->   # perf lock contention -b find / > /dev/null
->   ^C contended   total wait     max wait     avg wait         type   call=
-er
->
->            7     53.59 us     10.86 us      7.66 us     rwlock:R   start_=
-this_handle+0xa0
->            2     30.35 us     21.99 us     15.17 us      rwsem:R   iterat=
-e_dir+0x52
->            1      9.04 us      9.04 us      9.04 us     rwlock:W   start_=
-this_handle+0x291
->            1      8.73 us      8.73 us      8.73 us     spinlock   raw_sp=
-in_rq_lock_nested+0x1e
->   #
->   # perf lock contention -abl find / > /dev/null
->   ^C contended   total wait     max wait     avg wait            address =
-  symbol
->
->            1    262.96 ms    262.96 ms    262.96 ms   ffff8e67502d0170   =
- (mutex)
->           12    244.24 us     39.91 us     20.35 us   ffff8e6af56f8070   =
-mmap_lock (rwsem)
->            7     30.28 us      6.85 us      4.33 us   ffff8e6c865f1d40   =
-rq_lock (spinlock)
->            3      7.42 us      4.03 us      2.47 us   ffff8e6c864b1d40   =
-rq_lock (spinlock)
->            2      3.72 us      2.19 us      1.86 us   ffff8e6c86571d40   =
-rq_lock (spinlock)
->            1      2.42 us      2.42 us      2.42 us   ffff8e6c86471d40   =
-rq_lock (spinlock)
->            4      2.11 us       559 ns       527 ns   ffffffff9a146c80   =
-rcu_state (spinlock)
->            3      1.45 us       818 ns       482 ns   ffff8e674ae8384c   =
- (rwlock)
->            1       870 ns       870 ns       870 ns   ffff8e68456ee060   =
- (rwlock)
->            1       663 ns       663 ns       663 ns   ffff8e6c864f1d40   =
-rq_lock (spinlock)
->            1       573 ns       573 ns       573 ns   ffff8e6c86531d40   =
-rq_lock (spinlock)
->            1       472 ns       472 ns       472 ns   ffff8e6c86431740   =
- (spinlock)
->            1       397 ns       397 ns       397 ns   ffff8e67413a4f04   =
- (spinlock)
->   #
->   # perf test offcpu
->   95: perf record offcpu profiling tests                              : O=
-k
->   #
->   # perf kwork latency --use-bpf
->   Starting trace, Hit <Ctrl+C> to stop and report
->   ^C
->     Kwork Name                     | Cpu  | Avg delay     | Count     | M=
-ax delay     | Max delay start     | Max delay end       |
->    ----------------------------------------------------------------------=
-----------------------------------------------------------
->     (w)flush_memcg_stats_dwork     | 0000 |   1056.212 ms |         2 |  =
- 2112.345 ms |     550113.229573 s |     550115.341919 s |
->     (w)toggle_allocation_gate      | 0000 |     10.144 ms |        62 |  =
-  416.389 ms |     550113.453518 s |     550113.869907 s |
->     (w)0xffff8e6748e28080          | 0002 |      0.623 ms |         1 |  =
-    0.623 ms |     550110.989841 s |     550110.990464 s |
->     (w)vmstat_shepherd             | 0000 |      0.586 ms |        10 |  =
-    2.828 ms |     550111.971536 s |     550111.974364 s |
->     (w)vmstat_update               | 0007 |      0.363 ms |         5 |  =
-    1.634 ms |     550113.222520 s |     550113.224154 s |
->     (w)vmstat_update               | 0000 |      0.324 ms |        10 |  =
-    2.827 ms |     550111.971526 s |     550111.974354 s |
->     (w)0xffff8e674c5f4a58          | 0002 |      0.102 ms |         5 |  =
-    0.134 ms |     550110.989839 s |     550110.989972 s |
->     (w)psi_avgs_work               | 0001 |      0.086 ms |         3 |  =
-    0.107 ms |     550114.957852 s |     550114.957959 s |
->     (w)psi_avgs_work               | 0000 |      0.079 ms |         5 |  =
-    0.100 ms |     550118.605668 s |     550118.605768 s |
->     (w)kfree_rcu_monitor           | 0006 |      0.079 ms |         1 |  =
-    0.079 ms |     550110.925821 s |     550110.925900 s |
->     (w)psi_avgs_work               | 0004 |      0.079 ms |         1 |  =
-    0.079 ms |     550109.581835 s |     550109.581914 s |
->     (w)psi_avgs_work               | 0001 |      0.078 ms |         1 |  =
-    0.078 ms |     550109.197809 s |     550109.197887 s |
->     (w)psi_avgs_work               | 0002 |      0.077 ms |         5 |  =
-    0.086 ms |     550110.669819 s |     550110.669905 s |
->   <SNIP>
->   # strace -e bpf -o perf-stat-bpf-counters.output perf stat -e cycles --=
-bpf-counters sleep 1
->
->    Performance counter stats for 'sleep 1':
->
->            6,197,983      cycles
->
->          1.003922848 seconds time elapsed
->
->          0.000000000 seconds user
->          0.002032000 seconds sys
->
->   # head -7 perf-stat-bpf-counters.output
->   bpf(BPF_OBJ_GET, {pathname=3D"/sys/fs/bpf/perf_attr_map", bpf_fd=3D0, f=
-ile_flags=3D0}, 16) =3D 3
->   bpf(BPF_OBJ_GET_INFO_BY_FD, {info=3D{bpf_fd=3D3, info_len=3D88, info=3D=
-0x7ffcead64990}}, 16) =3D 0
->   bpf(BPF_MAP_LOOKUP_ELEM, {map_fd=3D3, key=3D0x24129e0, value=3D0x7ffcea=
-d65a48, flags=3DBPF_ANY}, 32) =3D 0
->   bpf(BPF_LINK_GET_FD_BY_ID, {link_id=3D1252}, 12) =3D -1 ENOENT (No such=
- file or directory)
->   bpf(BPF_PROG_LOAD, {prog_type=3DBPF_PROG_TYPE_SOCKET_FILTER, insn_cnt=
-=3D2, insns=3D0x7ffcead65780, license=3D"GPL", log_level=3D0, log_size=3D0,=
- log_buf=3DNULL, kern_version=3DKERNEL_VERSION(0, 0, 0), prog_flags=3D0, pr=
-og_name=3D"", prog_ifindex=3D0, expected_attach_type=3DBPF_CGROUP_INET_INGR=
-ESS, prog_btf_fd=3D0, func_info_rec_size=3D0, func_info=3DNULL, func_info_c=
-nt=3D0, line_info_rec_size=3D0, line_info=3DNULL, line_info_cnt=3D0, attach=
-_btf_id=3D0, attach_prog_fd=3D0}, 116) =3D 4
->   bpf(BPF_PROG_LOAD, {prog_type=3DBPF_PROG_TYPE_SOCKET_FILTER, insn_cnt=
-=3D2, insns=3D0x7ffcead65920, license=3D"GPL", log_level=3D0, log_size=3D0,=
- log_buf=3DNULL, kern_version=3DKERNEL_VERSION(0, 0, 0), prog_flags=3D0, pr=
-og_name=3D"", prog_ifindex=3D0, expected_attach_type=3DBPF_CGROUP_INET_INGR=
-ESS, prog_btf_fd=3D0, func_info_rec_size=3D0, func_info=3DNULL, func_info_c=
-nt=3D0, line_info_rec_size=3D0, line_info=3DNULL, line_info_cnt=3D0, attach=
-_btf_id=3D0, attach_prog_fd=3D0, fd_array=3DNULL}, 128) =3D 4
->   bpf(BPF_BTF_LOAD, {btf=3D"\237\353\1\0\30\0\0\0\0\0\0\0\20\0\0\0\20\0\0=
-\0\5\0\0\0\1\0\0\0\0\0\0\1"..., btf_log_buf=3DNULL, btf_size=3D45, btf_log_=
-size=3D0, btf_log_level=3D0}, 28) =3D 4
->   #
->
-> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Adrian Hunter <adrian.hunter@intel.com>
-> Cc: Ian Rogers <irogers@google.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Co-developed-by: Jiri Olsa <jolsa@kernel.org>
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> ---
->  tools/perf/Makefile.perf            |  20 +---
->  tools/perf/util/bpf_skel/.gitignore |   1 -
->  tools/perf/util/bpf_skel/vmlinux.h  | 173 ++++++++++++++++++++++++++++
->  3 files changed, 174 insertions(+), 20 deletions(-)
->  create mode 100644 tools/perf/util/bpf_skel/vmlinux.h
->
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index 48aba186ceb50792..61c33d100b2bcc90 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -1063,25 +1063,7 @@ $(BPFTOOL): | $(SKEL_TMP_OUT)
->         $(Q)CFLAGS=3D $(MAKE) -C ../bpf/bpftool \
->                 OUTPUT=3D$(SKEL_TMP_OUT)/ bootstrap
->
-> -VMLINUX_BTF_PATHS ?=3D $(if $(O),$(O)/vmlinux)                          =
- \
-> -                    $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)    \
-> -                    ../../vmlinux                                      \
-> -                    /sys/kernel/btf/vmlinux                            \
-> -                    /boot/vmlinux-$(shell uname -r)
-> -VMLINUX_BTF ?=3D $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS)))=
-)
-> -
-> -$(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
-> -ifeq ($(VMLINUX_H),)
-> -       $(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@ || \
-> -       (echo "Failure to generate vmlinux.h needed for the recommended B=
-PF skeleton support." && \
-> -       echo "To disable this use the build option NO_BPF_SKEL=3D1." && \
-> -       echo "Alternatively point at a pre-generated vmlinux.h with VMLIN=
-UX_H=3D<path>." && \
-> -       false)
-> -else
-> -       $(Q)cp "$(VMLINUX_H)" $@
-> -endif
-
-Perhaps we can define VMLINUX_H in the Makefile.config to be
-tools/perf/util/bpf_skel/vmlinux.h, then someone can clear it like:
-make -C tools/perf VMLINIX_H=3D
-to trigger generation, etc. Such thoughts may be better kept for 6.5 :-)
-
-Thanks,
-Ian
-
-> -$(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) $(SKEL_OUT)/vml=
-inux.h | $(SKEL_TMP_OUT)
-> +$(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) | $(SKEL_TMP_OU=
-T)
->         $(QUIET_CLANG)$(CLANG) -g -O2 -target bpf -Wall -Werror $(BPF_INC=
-LUDE) \
->           -c $(filter util/bpf_skel/%.bpf.c,$^) -o $@ && $(LLVM_STRIP) -g=
- $@
->
-> diff --git a/tools/perf/util/bpf_skel/.gitignore b/tools/perf/util/bpf_sk=
-el/.gitignore
-> index cd01455e1b53c3d9..7a1c832825de8445 100644
-> --- a/tools/perf/util/bpf_skel/.gitignore
-> +++ b/tools/perf/util/bpf_skel/.gitignore
-> @@ -1,4 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  .tmp
->  *.skel.h
-> -vmlinux.h
-> diff --git a/tools/perf/util/bpf_skel/vmlinux.h b/tools/perf/util/bpf_ske=
-l/vmlinux.h
-> new file mode 100644
-> index 0000000000000000..449b1ea91fc48143
-> --- /dev/null
-> +++ b/tools/perf/util/bpf_skel/vmlinux.h
-> @@ -0,0 +1,173 @@
-> +#ifndef __VMLINUX_H
-> +#define __VMLINUX_H
-> +
-> +#include <linux/bpf.h>
-> +#include <linux/types.h>
-> +#include <linux/perf_event.h>
-> +#include <stdbool.h>
-> +
-> +// non-UAPI kernel data structures, used in the .bpf.c BPF tool componen=
-t.
-> +
-> +// Just the fields used in these tools preserving the access index so th=
-at
-> +// libbpf can fixup offsets with the ones used in the kernel when loadin=
-g the
-> +// BPF bytecode, if they differ from what is used here.
-> +
-> +typedef __u8 u8;
-> +typedef __u32 u32;
-> +typedef __u64 u64;
-> +typedef __s64 s64;
-> +
-> +typedef int pid_t;
-> +
-> +enum cgroup_subsys_id {
-> +       perf_event_cgrp_id  =3D 8,
-> +};
-> +
-> +enum {
-> +       HI_SOFTIRQ =3D 0,
-> +       TIMER_SOFTIRQ,
-> +       NET_TX_SOFTIRQ,
-> +       NET_RX_SOFTIRQ,
-> +       BLOCK_SOFTIRQ,
-> +       IRQ_POLL_SOFTIRQ,
-> +       TASKLET_SOFTIRQ,
-> +       SCHED_SOFTIRQ,
-> +       HRTIMER_SOFTIRQ,
-> +       RCU_SOFTIRQ,    /* Preferable RCU should always be the last softi=
-rq */
-> +
-> +       NR_SOFTIRQS
-> +};
-> +
-> +typedef struct {
-> +       s64     counter;
-> +} __attribute__((preserve_access_index)) atomic64_t;
-> +
-> +typedef atomic64_t atomic_long_t;
-> +
-> +struct raw_spinlock {
-> +       int rawlock;
-> +} __attribute__((preserve_access_index));
-> +
-> +typedef struct raw_spinlock raw_spinlock_t;
-> +
-> +typedef struct {
-> +       struct raw_spinlock rlock;
-> +} __attribute__((preserve_access_index)) spinlock_t;
-> +
-> +struct sighand_struct {
-> +       spinlock_t siglock;
-> +} __attribute__((preserve_access_index));
-> +
-> +struct rw_semaphore {
-> +       atomic_long_t owner;
-> +} __attribute__((preserve_access_index));
-> +
-> +struct mutex {
-> +       atomic_long_t owner;
-> +} __attribute__((preserve_access_index));
-> +
-> +struct kernfs_node {
-> +       u64 id;
-> +} __attribute__((preserve_access_index));
-> +
-> +struct cgroup {
-> +       struct kernfs_node *kn;
-> +       int                level;
-> +}  __attribute__((preserve_access_index));
-> +
-> +struct cgroup_subsys_state {
-> +       struct cgroup *cgroup;
-> +} __attribute__((preserve_access_index));
-> +
-> +struct css_set {
-> +       struct cgroup_subsys_state *subsys[13];
-> +       struct cgroup *dfl_cgrp;
-> +} __attribute__((preserve_access_index));
-> +
-> +struct mm_struct {
-> +       struct rw_semaphore mmap_lock;
-> +} __attribute__((preserve_access_index));
-> +
-> +struct task_struct {
-> +       unsigned int          flags;
-> +       struct mm_struct      *mm;
-> +       pid_t                 pid;
-> +       pid_t                 tgid;
-> +       char                  comm[16];
-> +       struct sighand_struct *sighand;
-> +       struct css_set        *cgroups;
-> +} __attribute__((preserve_access_index));
-> +
-> +struct trace_entry {
-> +       short unsigned int type;
-> +       unsigned char      flags;
-> +       unsigned char      preempt_count;
-> +       int                pid;
-> +} __attribute__((preserve_access_index));
-> +
-> +struct trace_event_raw_irq_handler_entry {
-> +       struct trace_entry ent;
-> +       int                irq;
-> +       u32                __data_loc_name;
-> +       char               __data[];
-> +} __attribute__((preserve_access_index));
-> +
-> +struct trace_event_raw_irq_handler_exit {
-> +       struct trace_entry ent;
-> +       int                irq;
-> +       int                ret;
-> +       char               __data[];
-> +} __attribute__((preserve_access_index));
-> +
-> +struct trace_event_raw_softirq {
-> +       struct trace_entry ent;
-> +       unsigned int       vec;
-> +       char               __data[];
-> +} __attribute__((preserve_access_index));
-> +
-> +struct trace_event_raw_workqueue_execute_start {
-> +       struct trace_entry ent;
-> +       void               *work;
-> +       void               *function;
-> +       char               __data[];
-> +} __attribute__((preserve_access_index));
-> +
-> +struct trace_event_raw_workqueue_execute_end {
-> +       struct trace_entry ent;
-> +       void               *work;
-> +       void               *function;
-> +       char              __data[];
-> +} __attribute__((preserve_access_index));
-> +
-> +struct trace_event_raw_workqueue_activate_work {
-> +       struct trace_entry ent;
-> +       void               *work;
-> +       char               __data[];
-> +} __attribute__((preserve_access_index));
-> +
-> +struct perf_sample_data {
-> +       u64                      addr;
-> +       u64                      period;
-> +       union perf_sample_weight weight;
-> +       u64                      txn;
-> +       union perf_mem_data_src  data_src;
-> +       u64                      ip;
-> +       struct {
-> +               u32              pid;
-> +               u32              tid;
-> +       } tid_entry;
-> +       u64                      time;
-> +       u64                      id;
-> +       struct {
-> +               u32              cpu;
-> +       } cpu_entry;
-> +       u64                      phys_addr;
-> +       u64                      data_page_size;
-> +       u64                      code_page_size;
-> +} __attribute__((__aligned__(64))) __attribute__((preserve_access_index)=
-);
-> +
-> +struct bpf_perf_event_data_kern {
-> +       struct perf_sample_data *data;
-> +       struct perf_event       *event;
-> +} __attribute__((preserve_access_index));
-> +#endif // __VMLINUX_H
-> --
-> 2.39.2
->
+W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCkhpIFJlaW5ldHRlLA0KDQo+IC0t
+LS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFJlaW5ldHRlIENoYXRyZSA8cmVpbmV0
+dGUuY2hhdHJlQGludGVsLmNvbT4NCj4gU2VudDogVGh1cnNkYXksIE1heSA0LCAyMDIzIDE6NTgg
+UE0NCj4gVG86IE1vZ2VyLCBCYWJ1IDxCYWJ1Lk1vZ2VyQGFtZC5jb20+OyBjb3JiZXRAbHduLm5l
+dDsNCj4gdGdseEBsaW51dHJvbml4LmRlOyBtaW5nb0ByZWRoYXQuY29tOyBicEBhbGllbjguZGUN
+Cj4gQ2M6IGZlbmdodWEueXVAaW50ZWwuY29tOyBkYXZlLmhhbnNlbkBsaW51eC5pbnRlbC5jb207
+IHg4NkBrZXJuZWwub3JnOw0KPiBocGFAenl0b3IuY29tOyBwYXVsbWNrQGtlcm5lbC5vcmc7IGFr
+cG1AbGludXgtZm91bmRhdGlvbi5vcmc7DQo+IHF1aWNfbmVlcmFqdUBxdWljaW5jLmNvbTsgcmR1
+bmxhcEBpbmZyYWRlYWQub3JnOw0KPiBkYW1pZW4ubGVtb2FsQG9wZW5zb3VyY2Uud2RjLmNvbTsg
+c29uZ211Y2h1bkBieXRlZGFuY2UuY29tOw0KPiBwZXRlcnpAaW5mcmFkZWFkLm9yZzsganBvaW1i
+b2VAa2VybmVsLm9yZzsgcGJvbnppbmlAcmVkaGF0LmNvbTsNCj4gY2hhbmcuc2Vvay5iYWVAaW50
+ZWwuY29tOyBwYXdhbi5rdW1hci5ndXB0YUBsaW51eC5pbnRlbC5jb207DQo+IGptYXR0c29uQGdv
+b2dsZS5jb207IGRhbmllbC5zbmVkZG9uQGxpbnV4LmludGVsLmNvbTsgRGFzMSwgU2FuZGlwYW4N
+Cj4gPFNhbmRpcGFuLkRhc0BhbWQuY29tPjsgdG9ueS5sdWNrQGludGVsLmNvbTsgamFtZXMubW9y
+c2VAYXJtLmNvbTsNCj4gbGludXgtZG9jQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZn
+ZXIua2VybmVsLm9yZzsNCj4gYmFnYXNkb3RtZUBnbWFpbC5jb207IGVyYW5pYW5AZ29vZ2xlLmNv
+bTsgY2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Ow0KPiBqYXJra29Aa2VybmVsLm9yZzsgYWRy
+aWFuLmh1bnRlckBpbnRlbC5jb207IHF1aWNfamlsZXNAcXVpY2luYy5jb207DQo+IHBldGVybmV3
+bWFuQGdvb2dsZS5jb20NCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2NCAxLzddIHg4Ni9yZXNjdHJs
+OiBBZGQgbXVsdGlwbGUgdGFza3MgdG8gdGhlIHJlc2N0cmwgZ3JvdXANCj4gYXQgb25jZQ0KPiAN
+Cj4gSGkgQmFidSwNCj4gDQo+IE9uIDQvMTcvMjAyMyA0OjM0IFBNLCBCYWJ1IE1vZ2VyIHdyb3Rl
+Og0KPiA+IFRoZSByZXNjdHJsIHRhc2sgYXNzaWdubWVudCBmb3IgTU9OSVRPUiBvciBDT05UUk9M
+IGdyb3VwIG5lZWRzIHRvIGJlDQo+ID4gZG9uZSBvbmUgYXQgYSB0aW1lLiBGb3IgZXhhbXBsZToN
+Cj4gDQo+IFdoeSBhbGwgY2FwcyBmb3IgbW9uaXRvciBhbmQgY29udHJvbD8gSWYgdGhlIGludGVu
+dGlvbiBpcyB0byB1c2UgdGhlIHRlcm1zIGZvcg0KPiB0aGVzZSBncm91cHMgdGhlbiBpdCBtYXkg
+YmUgZWFzaWVyIHRvIHVzZSB0aGUgc2FtZSB0ZXJtcyBhcyBpbiB0aGUNCj4gZG9jdW1lbnRhdGlv
+biwgb3IgeW91IGNvdWxkIGp1c3Qgbm90IHVzZSBhbGwgY2FwcyBsaWtlIHlvdSBkbyBpbiBsYXRl
+ciBwYXRjaGVzLg0KDQpTdXJlLg0KPiANCj4gPg0KPiA+ICAgJG1vdW50IC10IHJlc2N0cmwgcmVz
+Y3RybCAvc3lzL2ZzL3Jlc2N0cmwvDQo+ID4gICAkbWtkaXIgL3N5cy9mcy9yZXNjdHJsL2Nsb3Mx
+DQo+ID4gICAkZWNobyAxMjMgPiAvc3lzL2ZzL3Jlc2N0cmwvY2xvczEvdGFza3MNCj4gPiAgICRl
+Y2hvIDQ1NiA+IC9zeXMvZnMvcmVzY3RybC9jbG9zMS90YXNrcw0KPiA+ICAgJGVjaG8gNzg5ID4g
+L3N5cy9mcy9yZXNjdHJsL2Nsb3MxL3Rhc2tzDQo+ID4NCj4gPiBUaGlzIGlzIG5vdCB1c2VyLWZy
+aWVuZGx5IHdoZW4gZGVhbGluZyB3aXRoIGh1bmRyZWRzIG9mIHRhc2tzLg0KPiA+DQo+ID4gSXQg
+Y2FuIGJlIGltcHJvdmVkIGJ5IHN1cHBvcnRpbmcgdGhlIG11bHRpcGxlIHRhc2sgaWQgYXNzaWdu
+bWVudCBpbg0KPiA+IG9uZSBjb21tYW5kIHdpdGggdGhlIHRhc2tzIHNlcGFyYXRlZCBieSBjb21t
+YXMuIEZvciBleGFtcGxlOg0KPiANCj4gUGxlYXNlIHVzZSBpbXBlcmF0aXZlIG1vb2QgKHNlZSBE
+b2N1bWVudGF0aW9uL3Byb2Nlc3MvbWFpbnRhaW5lci10aXAucnN0KS4NCj4gDQo+IFNvbWV0aGlu
+ZyBsaWtlOg0KPiAiSW1wcm92ZSBtdWx0aXBsZSB0YXNrIGlkIGFzc2lnbm1lbnQgLi4uLiINCg0K
+SG93IGFib3V0Og0KIkltcHJvdmUgdGhlIGFzc2lnbm1lbnQgYnkgc3VwcG9ydGluZyBtdWx0aXBs
+ZSB0YXNrIGlkIGFzc2lnbm1lbnQgaW4NCm9uZSBjb21tYW5kIHdpdGggdGhlIHRhc2tzIHNlcGFy
+YXRlZCBieSBjb21tYXMuIg0KDQo+IA0KPiA+DQo+ID4gICAkZWNobyAxMjMsNDU2LDc4OSA+IC9z
+eXMvZnMvcmVzY3RybC9jbG9zMS90YXNrcw0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogQmFidSBN
+b2dlciA8YmFidS5tb2dlckBhbWQuY29tPg0KPiA+IC0tLQ0KPiA+ICBEb2N1bWVudGF0aW9uL3g4
+Ni9yZXNjdHJsLnJzdCAgICAgICAgICB8ICAgIDkgKysrKysrKystDQo+ID4gIGFyY2gveDg2L2tl
+cm5lbC9jcHUvcmVzY3RybC9yZHRncm91cC5jIHwgICAzMQ0KPiArKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKystDQo+ID4gIDIgZmlsZXMgY2hhbmdlZCwgMzggaW5zZXJ0aW9ucygrKSwgMiBk
+ZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3g4Ni9yZXNj
+dHJsLnJzdA0KPiA+IGIvRG9jdW1lbnRhdGlvbi94ODYvcmVzY3RybC5yc3QgaW5kZXggMzg3Y2Ni
+Y2I1NThmLi5mMjhlZDE0NDNhNmENCj4gPiAxMDA2NDQNCj4gPiAtLS0gYS9Eb2N1bWVudGF0aW9u
+L3g4Ni9yZXNjdHJsLnJzdA0KPiA+ICsrKyBiL0RvY3VtZW50YXRpb24veDg2L3Jlc2N0cmwucnN0
+DQo+ID4gQEAgLTI5Miw3ICsyOTIsMTQgQEAgQWxsIGdyb3VwcyBjb250YWluIHRoZSBmb2xsb3dp
+bmcgZmlsZXM6DQo+ID4gICJ0YXNrcyI6DQo+ID4gIAlSZWFkaW5nIHRoaXMgZmlsZSBzaG93cyB0
+aGUgbGlzdCBvZiBhbGwgdGFza3MgdGhhdCBiZWxvbmcgdG8NCj4gPiAgCXRoaXMgZ3JvdXAuIFdy
+aXRpbmcgYSB0YXNrIGlkIHRvIHRoZSBmaWxlIHdpbGwgYWRkIGEgdGFzayB0byB0aGUNCj4gPiAt
+CWdyb3VwLiBJZiB0aGUgZ3JvdXAgaXMgYSBDVFJMX01PTiBncm91cCB0aGUgdGFzayBpcyByZW1v
+dmVkIGZyb20NCj4gPiArCWdyb3VwLiBNdWx0aXBsZSB0YXNrcyBjYW4gYmUgYWRkZWQgYnkgc2Vw
+YXJhdGluZyB0aGUgdGFzayBpZHMNCj4gPiArCXdpdGggY29tbWFzLiBUYXNrcyB3aWxsIGJlIGFz
+c2lnbmVkIHNlcXVlbnRpYWxseSBpbiB0aGUgb3JkZXIgaXQNCj4gDQo+IEkgdGhpbmsgdGhlICJp
+biB0aGUgb3JkZXIgaXQgaXMgZW50ZXJlZC4iIGNhbiBiZSBkcm9wcGVkIHNvIHRoYXQgaXQganVz
+dCByZWFkcyAobm90ZQ0KPiB0ZW5zZSBjaGFuZ2UpOiAiVGFza3MgYXJlIGFzc2lnbmVkIHNlcXVl
+bnRpYWxseS4iDQoNCk9rLiBTdXJlDQoNCj4gDQo+ID4gKwlpcyBlbnRlcmVkLiBGYWlsdXJlcyB3
+aGlsZSBhc3NpZ25pbmcgdGhlIHRhc2tzIHdpbGwgYmUgYWJvcnRlZA0KPiA+ICsJaW1tZWRpYXRl
+bHkgYW5kIHRhc2tzIG5leHQgaW4gdGhlIHNlcXVlbmNlIHdpbGwgbm90IGJlIGFzc2lnbmVkLg0K
+PiANCj4gTXVsdGlwbGUgZmFpbHVyZXMgYXJlIG5vdCBzdXBwb3J0ZWQuIEEgc2luZ2xlIGZhaWx1
+cmUgZW5jb3VudGVyZWQgd2hpbGUNCj4gYXR0ZW1wdGluZyB0byBhc3NpZ24gYSBzaW5nbGUgdGFz
+ayB3aWxsIGNhdXNlIHRoZSBvcGVyYXRpb24gdG8gYWJvcnQuDQoNCk9rLiBTdXJlDQoNCj4gDQo+
+ID4gKwlVc2VycyBtYXkgbmVlZCB0byByZXRyeSB0aGVtIGFnYWluLiBGYWlsdXJlIGRldGFpbHMg
+cG9zc2libHkgd2l0aA0KPiANCj4gSSBhbSBub3Qgc3VyZSBhYm91dCB0aGlzIGd1aWRhbmNlLiBG
+cm9tIHdoYXQgSSBjYW4gdGVsbCBhIGZhaWx1cmUgY291bGQgYmUgZWl0aGVyDQo+IHRoYXQgdGhl
+IHBpZCBkb2VzIG5vdCBleGlzdCBvciB0aGF0IHRoZSBtb3ZlIGlzIGlsbGVnYWwuIEEgcmV0cnkg
+d291bGQgbm90IGFjaGlldmUNCj4gYSBkaWZmZXJlbnQgb3V0Y29tZS4gSSB0aGluayB5b3UgbWF5
+IHRodXMgbWVhbiB0aGF0IHRoZSB0YXNrcyB0aGF0IGZvbGxvd2VkIGENCj4gdGFzayB0aGF0IGNv
+dWxkIG5vdCBiZSBtb3ZlZCwgYnV0IGluIHRoYXQgY2FzZSB0aGUgInJldHJ5IiBpcyBub3QgY2xl
+YXIgdG8gbWUuDQoNCk9rLiBXaWxsIGRyb3AgInJldHJ5IiBzZW50ZW5jZS4NCg0KPiANCj4gPiAr
+CXBpZCB3aWxsIGJlIGxvZ2dlZCBpbiAvc3lzL2ZzL3Jlc2N0cmwvaW5mby9sYXN0X2NtZF9zdGF0
+dXMgZmlsZS4NCj4gDQo+IFdvdWxkIGl0IG5vdCBhbHdheXMgcHJpbnQgdGhlIGZhaWxpbmcgcGlk
+IChpZiBlcnJvciB3YXMgZW5jb3VudGVyZWQgd2hpbGUNCg0KTm90IGFsd2F5cy4gSW4gdGhpcyBj
+YXNlIGl0IGRvZXMgbm90IHByaW50IHRoZSBwaWQsDQpyZHRfbGFzdF9jbWRfcHV0cygiQ2FuJ3Qg
+bW92ZSB0YXNrIHRvIGRpZmZlcmVudCBjb250cm9sIGdyb3VwXG4iKTsNCiAgICAgICAgICAgICAg
+ICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0KDQo+IGF0dGVtcHRpbmcgdG8gbW92ZSBhIHRhc2sp
+ID8gTWF5YmUganVzdCBkcm9wIHRoYXQgc28gdGhhdCBpdCByZWFkcyAiRmFpbHVyZQ0KPiBkZXRh
+aWxzIHdpbGwgYmUgbG9nZ2VkIHRvIC4uLiIgKGFkZGluZyBmaWxlIHNlZW1zIHVubmVjZXNzYXJ5
+KS4NCg0KT2sNCg0KPiANCj4gDQo+ID4gKw0KPiA+ICsJSWYgdGhlIGdyb3VwIGlzIGEgQ1RSTF9N
+T04gZ3JvdXAgdGhlIHRhc2sgaXMgcmVtb3ZlZCBmcm9tDQo+ID4gIAl3aGljaGV2ZXIgcHJldmlv
+dXMgQ1RSTF9NT04gZ3JvdXAgb3duZWQgdGhlIHRhc2sgYW5kIGFsc28gZnJvbQ0KPiA+ICAJYW55
+IE1PTiBncm91cCB0aGF0IG93bmVkIHRoZSB0YXNrLiBJZiB0aGUgZ3JvdXAgaXMgYSBNT04gZ3Jv
+dXAsDQo+ID4gIAl0aGVuIHRoZSB0YXNrIG11c3QgYWxyZWFkeSBiZWxvbmcgdG8gdGhlIENUUkxf
+TU9OIHBhcmVudCBvZiB0aGlzDQo+ID4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9jcHUv
+cmVzY3RybC9yZHRncm91cC5jDQo+ID4gYi9hcmNoL3g4Ni9rZXJuZWwvY3B1L3Jlc2N0cmwvcmR0
+Z3JvdXAuYw0KPiA+IGluZGV4IDZhZDMzZjM1NTg2MS4uZGY1YmQxMzQ0MGIwIDEwMDY0NA0KPiA+
+IC0tLSBhL2FyY2gveDg2L2tlcm5lbC9jcHUvcmVzY3RybC9yZHRncm91cC5jDQo+ID4gKysrIGIv
+YXJjaC94ODYva2VybmVsL2NwdS9yZXNjdHJsL3JkdGdyb3VwLmMNCj4gPiBAQCAtNjk2LDE4ICs2
+OTYsNDEgQEAgc3RhdGljIHNzaXplX3QgcmR0Z3JvdXBfdGFza3Nfd3JpdGUoc3RydWN0DQo+IGtl
+cm5mc19vcGVuX2ZpbGUgKm9mLA0KPiA+ICAJCQkJICAgIGNoYXIgKmJ1Ziwgc2l6ZV90IG5ieXRl
+cywgbG9mZl90IG9mZikgIHsNCj4gPiAgCXN0cnVjdCByZHRncm91cCAqcmR0Z3JwOw0KPiA+ICsJ
+Y2hhciAqcGlkX3N0cjsNCj4gPiAgCWludCByZXQgPSAwOw0KPiA+ICAJcGlkX3QgcGlkOw0KPiA+
+DQo+ID4gLQlpZiAoa3N0cnRvaW50KHN0cnN0cmlwKGJ1ZiksIDAsICZwaWQpIHx8IHBpZCA8IDAp
+DQo+ID4gKwlpZiAobmJ5dGVzID09IDApDQo+ID4gIAkJcmV0dXJuIC1FSU5WQUw7DQo+ID4gKw0K
+PiA+ICsJYnVmW25ieXRlcyAtIDFdID0gJ1wwJzsNCj4gPiArDQo+IA0KPiBUaGlzIHNlZW1zIGxp
+a2UgYW5vdGhlciByZW1uYW50IG9mIHRoZSBzY2hlbWF0YSB3cml0ZSBjb2RlIHRoYXQgZXhwZWN0
+cyB0aGF0DQo+IHRoZSBidWZmZXIgZW5kcyB3aXRoIGEgJ1xuJy4gU2luY2UgdGhpcyBjb2RlIGRv
+ZXMgbm90IGhhdmUgdGhpcyByZXF1aXJlbWVudCB0aGUNCj4gYWJvdmUgbWF5IGhhdmUgdW5pbnRl
+bmRlZCBjb25zZXF1ZW5jZXMgaWYgYSB0b29sIHByb3ZpZGVzIGEgYnVmZmVyIHRoYXQgZG9lcw0K
+PiBub3QgZW5kIHdpdGggJ1xuJy4NCj4gSSB0aGluayB5b3UganVzdCB3YW50IHRvIGVuc3VyZSB0
+aGF0IHRoZSBidWZmZXIgaXMgcHJvcGVybHkgdGVybWluYXRlZCBhbmQgZnJvbQ0KPiB3aGF0IEkg
+dW5kZXJzdGFuZCB3aGVuIGxvb2tpbmcgYXQga2VybmZzX2ZvcF93cml0ZV9pdGVyKCkgdGhpcyBp
+cyBhbHJlYWR5IHRha2VuDQo+IGNhcmUgb2YuDQoNClN1cmUuIFdpbGwgY2hlY2suIFRoZW4gSSB3
+aWxsIGhhdmUgdG8gY2hhbmdlIHRoZSBjaGVjayBiZWxvdyB0byBpZiAoIWJ1ZikuDQo+IA0KPiA+
+ICAJcmR0Z3JwID0gcmR0Z3JvdXBfa25fbG9ja19saXZlKG9mLT5rbik7DQo+ID4gIAlpZiAoIXJk
+dGdycCkgew0KPiA+ICAJCXJkdGdyb3VwX2tuX3VubG9jayhvZi0+a24pOw0KPiA+ICAJCXJldHVy
+biAtRU5PRU5UOw0KPiA+ICAJfQ0KPiA+ICsNCj4gPiArbmV4dDoNCj4gPiArCWlmICghYnVmIHx8
+IGJ1ZlswXSA9PSAnXDAnKQ0KPiA+ICsJCWdvdG8gdW5sb2NrOw0KPiA+ICsNCj4gPiAgCXJkdF9s
+YXN0X2NtZF9jbGVhcigpOw0KPiANCj4gV2h5IGlzIHRoaXMgYnVmZmVyIGNsZWFyZWQgb24gcHJv
+Y2Vzc2luZyBvZiBlYWNoIHBpZD8NCg0KV2lsbCBjaGVjay4NCg0KPiANCj4gPg0KPiA+ICsJcGlk
+X3N0ciA9IHN0cmltKHN0cnNlcCgmYnVmLCAiLCIpKTsNCj4gPiArDQo+ID4gKwlpZiAoa3N0cnRv
+aW50KHBpZF9zdHIsIDAsICZwaWQpKSB7DQo+ID4gKwkJcmR0X2xhc3RfY21kX3ByaW50ZigiVGFz
+ayBsaXN0IHBhcnNpbmcgZXJyb3JcbiIpOw0KPiANCj4gcmR0X2xhc3RfY21kX3B1dHMoKT8NCg0K
+U3VyZS4NCg0KPiANCj4gPiArCQlyZXQgPSAtRUlOVkFMOw0KPiA+ICsJCWdvdG8gdW5sb2NrOw0K
+PiA+ICsJfQ0KPiA+ICsNCj4gPiArCWlmIChwaWQgPCAwKSB7DQo+ID4gKwkJcmR0X2xhc3RfY21k
+X3ByaW50ZigiSW52YWxpZCBwaWQgJWQgdmFsdWVcbiIsIHBpZCk7DQo+ID4gKwkJcmV0ID0gLUVJ
+TlZBTDsNCj4gPiArCQlnb3RvIHVubG9jazsNCj4gPiArCX0NCj4gPiArDQo+ID4gIAlpZiAocmR0
+Z3JwLT5tb2RlID09IFJEVF9NT0RFX1BTRVVET19MT0NLRUQgfHwNCj4gPiAgCSAgICByZHRncnAt
+Pm1vZGUgPT0gUkRUX01PREVfUFNFVURPX0xPQ0tTRVRVUCkgew0KPiA+ICAJCXJldCA9IC1FSU5W
+QUw7DQo+IA0KPiBUaGUgYWJvdmUgY29kZSBoYXMgbm90aGluZyB0byBkbyB3aXRoIHRoZSBwaWQg
+c28gcmVwZWF0aW5nIGl0cyBleGVjdXRpb24gZG9lcw0KPiBub3Qgc2VlbSBuZWNlc3NhcnkuDQoN
+CldpbGwgcmVtb3ZlLi4NClRoYW5rcw0KQmFidQ0KPiANCj4gPiBAQCAtNzE2LDYgKzczOSwxMiBA
+QCBzdGF0aWMgc3NpemVfdCByZHRncm91cF90YXNrc193cml0ZShzdHJ1Y3QNCj4ga2VybmZzX29w
+ZW5fZmlsZSAqb2YsDQo+ID4gIAl9DQo+ID4NCj4gPiAgCXJldCA9IHJkdGdyb3VwX21vdmVfdGFz
+ayhwaWQsIHJkdGdycCwgb2YpOw0KPiA+ICsJaWYgKHJldCkgew0KPiA+ICsJCXJkdF9sYXN0X2Nt
+ZF9wcmludGYoIkVycm9yIHdoaWxlIHByb2Nlc3NpbmcgdGFzayAlZFxuIiwgcGlkKTsNCj4gPiAr
+CQlnb3RvIHVubG9jazsNCj4gPiArCX0gZWxzZSB7DQo+ID4gKwkJZ290byBuZXh0Ow0KPiA+ICsJ
+fQ0KPiA+DQo+ID4gIHVubG9jazoNCj4gPiAgCXJkdGdyb3VwX2tuX3VubG9jayhvZi0+a24pOw0K
+PiA+DQo+ID4NCj4gDQo+IFJlaW5ldHRlDQo=
