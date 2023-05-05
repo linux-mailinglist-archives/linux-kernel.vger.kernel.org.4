@@ -2,55 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DD96F8062
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8886F8065
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 11:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbjEEJuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 05:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
+        id S231906AbjEEJui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 05:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbjEEJuO (ORCPT
+        with ESMTP id S231819AbjEEJu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 05:50:14 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6A019D71
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 02:49:57 -0700 (PDT)
-Received: from fsav118.sakura.ne.jp (fsav118.sakura.ne.jp [27.133.134.245])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 3459neom016438;
-        Fri, 5 May 2023 18:49:40 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav118.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp);
- Fri, 05 May 2023 18:49:40 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 3459ndQF016434
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 5 May 2023 18:49:40 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <fd2f89d9-73a5-c155-48a5-ccc6e93310b2@I-love.SAKURA.ne.jp>
-Date:   Fri, 5 May 2023 18:49:39 +0900
+        Fri, 5 May 2023 05:50:26 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02DF19D7D
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 02:50:23 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4edc114c716so1761051e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 02:50:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683280222; x=1685872222;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vjV8g4bNqzsKiHhjvJHnS22a79GyPl/muTufLSUiNIE=;
+        b=aDvIpY09gVXTK75VSGWJQAsYVDGiXP6kWqgTcoCgn3Jtk4ZQPXPTMNxUCalmRrnPZA
+         WWbxDRQcwGzFySN1mr/sGYaDISFePEKjyvNE+Ng5Ey3obgBLaUmvfG9k+jN/vibq0YdB
+         44RnQX7V6rRVxBrzDjkvXQ1IpNMZ0SMdxosixzE/ncStoe3VRrh+vwmuQqjvWPLB5i1o
+         ENUUj3aOAqZNQ/T7Ls5sPo06z4aVy0cyAIOHp3QkjQlCb8NyU8YpPOsDaaos8OwIdNBH
+         4jAKNH5qZtmny3RWMruVWFHIGStfuiEHnk64XjywTlGgiN7S+8hJOcF8QMkrrAzeI5Wy
+         kxog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683280222; x=1685872222;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vjV8g4bNqzsKiHhjvJHnS22a79GyPl/muTufLSUiNIE=;
+        b=O/fc4BqXeuATNJHgauspKlCWCN/qGjEZpz8JinSPcnKj6wuRXoPwWtgpJqtRuvoq4l
+         trp1vMbqJkbhWr5S8OxJJit4XzReBssvMKH6x0verR8w1DKfMYCT3RSEAzk8IvJuFE8r
+         ZLeFz0QlgWK3k6JX/q0JGGBk41NXHBWOO+z9VZiqOCYy+ZEO249/t/BWJco+9FLuEL19
+         5Nr5vZUVhnqKhomu4o7a/yZWJ1nrzlOjJiBSBn+TI3UJ6U00kNUrqTVDW3KprVFEs5H/
+         EW4mFATB9uG0PXs3RnmplkP9ITys1h0N4e178Gbc+XlJZgil4BZDN1pyA7IyQgnRA20u
+         0Ndg==
+X-Gm-Message-State: AC+VfDwj3+S/Q/zBIXw14Dn2iK8ecg79CrRWM9MM95uwk9wXMvSPnMJL
+        sY+hTL7yfmZHQeYr92g0+fWncA==
+X-Google-Smtp-Source: ACHHUZ7Vu0mXfGsKFvSg6OAyOzURgoVWc6fv9pXkYH6Vy6KfEfRhfQNfmx0u27QtywqGmROhxedtKQ==
+X-Received: by 2002:ac2:5ec4:0:b0:4f0:441:71a4 with SMTP id d4-20020ac25ec4000000b004f0044171a4mr376354lfq.35.1683280221912;
+        Fri, 05 May 2023 02:50:21 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id t25-20020ac243b9000000b004edc512515fsm225733lfl.47.2023.05.05.02.50.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 May 2023 02:50:21 -0700 (PDT)
+Message-ID: <440ac548-cc71-cc27-6f20-6bc553ff98d6@linaro.org>
+Date:   Fri, 5 May 2023 12:50:20 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [syzbot] [fs?] INFO: task hung in synchronize_rcu (4)
-Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        syzbot <syzbot+222aa26d0a5dbc2e84fe@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <20230504061613.3901-1-hdanton@sina.com>
- <7ea26a76-5c8c-a0d2-5b5e-63e370cdcb99@I-love.SAKURA.ne.jp>
- <20230505083549.GB1770668@hirez.programming.kicks-ass.net>
- <c8ce113e-423f-9109-94a1-631583e2ad8e@I-love.SAKURA.ne.jp>
-In-Reply-To: <c8ce113e-423f-9109-94a1-631583e2ad8e@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: qrb4210-rb2: Fix CD gpio for
+ SDHC2
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org,
+        devicetree@vger.kernel.org
+References: <20230505075354.1634547-1-bhupesh.sharma@linaro.org>
+ <20230505075354.1634547-3-bhupesh.sharma@linaro.org>
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230505075354.1634547-3-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,30 +80,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/05/05 18:46, Tetsuo Handa wrote:
-> On 2023/05/05 17:35, Peter Zijlstra wrote:
->>> Linus, I think that "[PATCH v3 (repost)] locking/lockdep: add debug_show_all_lock_holders()"
->>> helps here, but I can't wake up locking people. What can we do?
->>
->> How is that not also racy ?
+On 05/05/2023 10:53, Bhupesh Sharma wrote:
+> Card-Detect (CD) gpio for SDHC2 is an active GPIO line. Fix the same.
+> This allows the uSD card to be properly detected on the board.
 > 
-> Nobody can make this code racy.
+> Fixes: 8d58a8c0d930 ("arm64: dts: qcom: Add base qrb4210-rb2 board dts")
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Oops, nobody can make this code race-free.
-
-Capturing vmcore is not an option.
-
-> 
->>
->> I think I've seen that patch, and it had a some 'blurb' Changelog that
->> leaves me wondering wtf the actual problem is and how it attempts to
->> solve it and I went on with looking at regressions because more
->> important than random weird patch.
-> 
-> Please respond to
-> https://lkml.kernel.org/393a440f-5f82-432c-bc24-e8de33e29d75@I-love.SAKURA.ne.jp .
-> 
-
-I am waiting for your response.
-But since you don't respond, I have to repeat re-posting.
+-- 
+With best wishes
+Dmitry
 
