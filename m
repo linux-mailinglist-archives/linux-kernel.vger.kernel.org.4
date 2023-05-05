@@ -2,120 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CA66F85C4
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 17:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B086F85C6
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 17:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232840AbjEEPbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 11:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        id S232947AbjEEPbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 11:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232879AbjEEPbS (ORCPT
+        with ESMTP id S232890AbjEEPbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 5 May 2023 11:31:18 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6BC180;
-        Fri,  5 May 2023 08:30:53 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f14ec8d72aso140216e87.1;
-        Fri, 05 May 2023 08:30:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683300652; x=1685892652;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gYNlJmAOtKtfCnorNb9MVLj9uuZyFnPCEwDPQXYr3J0=;
-        b=N3lxpxjdqxeax2LBueQJL04Eay58+TdawdWIDQjiNSM1Tf9JXjeS+AxanPXBHv7z6k
-         Iwbuo8nDYr5ikG94DjUdqyZfaqjKm4k6ZkAUEywTlV+rJJyNOnA9hwX2o/PY2cN+iiLf
-         /5vLZOnioON+Ai2ax9Gc9EdhVBRhwZhFnKRLMmxcDfE3jnp7ubHk0FhdPEjVzZqL+1hu
-         nPgiY6C/TnQGb5V/gTbi8TnxCBAf0cWxxxCbFWO7RKU1aggkJryymmJ4kf8vcXigp2gI
-         69/gwJNmRyIdIpwXrGjQd/m+Q48r0ubRnDYFYPZv81IDDJGMuQRr9Bj+v6c8/GX7XusH
-         QLfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683300652; x=1685892652;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gYNlJmAOtKtfCnorNb9MVLj9uuZyFnPCEwDPQXYr3J0=;
-        b=BAmrPFMWycSXzALMUEXxguUQXPopqTMJpG/UOgBVkZRhh2xMdYoEgsMVqFGBfrsUfK
-         dMd4GlN2LsVqqtT2/Hy0qHe/NJKaAzX0bmovrWTjcL8pQSeo140JDdMsqTjjQQl2qZDP
-         oa8MVA6x2VGqTEI0F9sDzsLFF0x1XyXWr6rVKDD0Ahyw/XdrVUkDuAuiergKB2uR9om2
-         5vOg/OGLh37DhXRh82K0uXuKZiWYvNBQrzOxbu2SjWGeD8wRMqsibsWOkmFDiN40nd2i
-         dS4C4ELZeQMRL5beWSnOlTlPvgXPKOxBc7M3K1QZ2ooRmXRRtMYXbFaq3/hNz00gtwes
-         kApQ==
-X-Gm-Message-State: AC+VfDwkAOZFp4RwGTWc+xJFaD7M0sSHx1gkPzdXziONS7OoJ9LvmHQp
-        pm2rUsCR9w11IgZwEvxCGkRMeU4/fcdRHuhfLfkmeMQehFE=
-X-Google-Smtp-Source: ACHHUZ4bBjtxh9txrK2d45mebtAIPEiJjgOB+YyAj55cXoaJnoRQxw+4Pe8gKVrged1LXNOUxt7lNWf0h7guf6E6Ojc=
-X-Received: by 2002:ac2:41c1:0:b0:4ef:bcb6:a74c with SMTP id
- d1-20020ac241c1000000b004efbcb6a74cmr660754lfi.61.1683300651984; Fri, 05 May
- 2023 08:30:51 -0700 (PDT)
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49103156B0;
+        Fri,  5 May 2023 08:30:54 -0700 (PDT)
+Received: from localhost (mdns.lwn.net [45.79.72.68])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id A9DD12E0;
+        Fri,  5 May 2023 15:30:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A9DD12E0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1683300653; bh=+lo1onitVV1iX83ZaCXEymuCSdsb0AmrMt4xe68Qc94=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=BdrnCYjP1xc1OqkJ9ctj1/yMFRBY6YZ2Zft+B8XMuVNBcP0KFH0ria7hX80aoWynX
+         XZ4j4rMc3lpB7J0iuNRP6zMdLLA7teb4UvWD7TlR1DklgtUsHUMmdynY6m0RB5Q5vt
+         dS6xss6rfckPr616or+kmXnyCzrUuwKse3UhtqbZR6dJdITjeU26v9TjQrjtIGGdUV
+         Icp+7a7VIHLHI+hI8cjRIhMYMMTHYkG6gnqM0FxfCf9UZfx09x4ehLtPOJ4FprIff1
+         1TPkb350gxZdKKWjO67CF/e2mDR9z2EKp4oe4P9ZH+woAMb7kl9SfowxY4YON94g+M
+         knEc4gmGF56Ag==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Hongyan Xia <hongyan.xia2@arm.com>
+Cc:     Hongyan Xia <hongyan.xia2@arm.com>,
+        Qais Yousef <qyousef@layalina.io>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched/documentation: elaborate on uclamp limitations
+In-Reply-To: <20230505152440.142265-1-hongyan.xia2@arm.com>
+References: <20230505152440.142265-1-hongyan.xia2@arm.com>
+Date:   Fri, 05 May 2023 09:30:52 -0600
+Message-ID: <878re2n6c3.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <20230502165754.16728-1-will@kernel.org> <2cb24299-5322-6482-024a-427024f03b7d@meta.com>
-In-Reply-To: <2cb24299-5322-6482-024a-427024f03b7d@meta.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 5 May 2023 08:30:40 -0700
-Message-ID: <CAADnVQ+m_jJHTpYDvOuD1LOvgKgGPD5VHfUobMa3NF+uyu7Sbg@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Fix mask generation for 32-bit narrow loads of
- 64-bit fields
-To:     Yonghong Song <yhs@meta.com>
-Cc:     Will Deacon <will@kernel.org>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Krzesimir Nowak <krzesimir@kinvolk.io>,
-        Yonghong Song <yhs@fb.com>, Andrey Ignatov <rdna@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023 at 1:18=E2=80=AFPM Yonghong Song <yhs@meta.com> wrote:
->
->
->
-> On 5/2/23 9:57 AM, Will Deacon wrote:
-> > A narrow load from a 64-bit context field results in a 64-bit load
-> > followed potentially by a 64-bit right-shift and then a bitwise AND
-> > operation to extract the relevant data.
-> >
-> > In the case of a 32-bit access, an immediate mask of 0xffffffff is used
-> > to construct a 64-bit BPP_AND operation which then sign-extends the mas=
-k
-> > value and effectively acts as a glorified no-op.
-> >
-> > Fix the mask generation so that narrow loads always perform a 32-bit AN=
-D
-> > operation.
-> >
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: John Fastabend <john.fastabend@gmail.com>
-> > Cc: Krzesimir Nowak <krzesimir@kinvolk.io>
-> > Cc: Yonghong Song <yhs@fb.com>
-> > Cc: Andrey Ignatov <rdna@fb.com>
-> > Fixes: 31fd85816dbe ("bpf: permits narrower load from bpf program conte=
-xt fields")
-> > Signed-off-by: Will Deacon <will@kernel.org>
->
->
-> Thanks for the fix! You didn't miss anything. It is a bug and we did not
-> find it probably because user always use 'u64 val =3D ctx->u64_field' in
-> their bpf code...
->
-> But I think the commit message can be improved. An example to show the
-> difference without and with this patch can explain the issue much better.
->
-> Acked-by: Yonghong Song <yhs@fb.com>
+Hongyan Xia <hongyan.xia2@arm.com> writes:
 
-If I'm reading it correctly it's indeed a bug.
-alu64(and, 0xffffFFFF) is a nop
-but it should have been
-alu32(and, 0xffffFFFF) which will clear upper 32-bit, right?
-Would be good to have a selftest for this.
+> The story in 5.2 about util_avg abruptly jumping from 300 when
+> Fmax/Fmin == 3 to 1024 when Fmax/Fmin == 4 hides some details about how
+> clock_pelt works behind the scenes. Explicitly mention it to make it
+> easier for readers to follow.
+
+So this is a nit, but...
+
+> +Although running at Fmin reduces the rate of rq_clock_pelt() to 1/3 thus
+> +accumulates util_sum at 1/3 of the rate at Fmax, the clock period
+> +(rq_clock_pelt() now minus previous rq_clock_pelt()) in:
+> +
+> +::
+> +
+> +        util_sum / clock period = util_avg
+
+This can be written as:
+
+  ...previous rq_clock_pelt()) in::
+
+       util_sum / clock period = util_avg
+
+reducing the markup clutter and making the document a little more
+readable.
+
+Thanks,
+
+jon
