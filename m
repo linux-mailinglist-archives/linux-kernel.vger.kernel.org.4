@@ -2,146 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BE16F8479
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 16:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7F36F847D
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 16:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232786AbjEEODY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 10:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        id S232331AbjEEOF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 10:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232783AbjEEODV (ORCPT
+        with ESMTP id S232107AbjEEOF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 10:03:21 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B9A14902;
-        Fri,  5 May 2023 07:03:19 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id d75a77b69052e-3f1f1a7ecb7so14331971cf.1;
-        Fri, 05 May 2023 07:03:19 -0700 (PDT)
+        Fri, 5 May 2023 10:05:26 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DC6270D
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 07:05:22 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ab1ce53ca6so13015635ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 07:05:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683295398; x=1685887398;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DNnBW/9DKPNned4gcKG4BddIZdOfYvGpipGR0lVPqds=;
-        b=gpUOWGaZp1868eQnagIBWT+qM7r+Q0oxK5QziO/S56a9D+2VHnZTS217zXhJWjCwfi
-         +54cLmq4eRvTkIgD8BdmxKByx6kCAD2ve28SpngwDv5Tj8K3EzlEoWhJPrykyguo0Zqe
-         MxRi5yHY/mEP57Efu/srqFLkLBDQcoQCFwjFX3Q1AQbUvjRd8BHN57woJbiXomXcm6Uw
-         DeN4Ch0mAr3vMsA227qapIJcERGtRwdn6ylkmxwB7Vpd4pbd1bXssXQMZntB2L9MCnVK
-         cCNCnhNgLO1ifCzDkajFTRCxaydR0fqOTJVpFWchcuNo6vcZ7gxjjNLA1l3sWPL4+soj
-         8NEw==
+        d=gmail.com; s=20221208; t=1683295521; x=1685887521;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OzqCiS98IPcP1NO5D+IvEvMY4nJyl5P4wSObXpEuRpY=;
+        b=bpKZtv/aAeervyGxt6hJ5jf921aCdGeuIvYwOlAd5vCAslhLMj/MEyeq4nHFL+hwf9
+         ED3nywlxa2GqmtJzVdCCYkYFfTQbyYjyxi/X9ZTfV1I4Mo+9EfMKpZLpOs7mHh8zzymm
+         Q2Ice9GsQhX4EXznSnL/NXKYywcPAn3hdgyRRyZO+VqbL4EZlAfjb7h0ssg/btxrvc2A
+         Mnv54OYE3rQvoO7aMyIpUPQYpcXADGL5DM4hprWSse9L/pne+jutyCr0VaSw2wbf6k0B
+         Ru+lG+TUTLDw7dQGZq+Mb6/IqYfmAnxjGLZzrBOlGedyIYwT/gJML71z2a0BzOWmTAB2
+         ytdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683295398; x=1685887398;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DNnBW/9DKPNned4gcKG4BddIZdOfYvGpipGR0lVPqds=;
-        b=ewJy7W1njPmZY1KG0PUgkIKmRlPBnRSwVDGAqWy8UjvaNbBcO6SCbC1KeOkdQx82u/
-         WffHLkUtLz4CcF/oLlwUtZJ7OMvxr9RNwhD5VjRvjnVrBT2MQ6p+wMB/AM7qBuMx5XRm
-         3WqWl8g8kAahHEX4btAscUsoKswUC6soiat5ufbcWFzzrKt5B09w8CkGsFppEZsb7Qdi
-         OlhvDTX9B1xW6NN9gR19ltl81tSQjyDOe/TjVVcUJmmHS1doa6AKTkyoGsP2BaG4V7IN
-         HqzJCm9OVM/xfRJFlqHL84A+k22cqs8v890mTUKcvqAAS3LQEeLfQEf4rDgZiAkWruOe
-         UI7A==
-X-Gm-Message-State: AC+VfDx3nPPGvhJdSZ8L+Io+aIaXCNKyilFRO4S5C1i+5AQcrHePo838
-        1B6rJNYA4BVILHUQj+AB2WYRtCXqQjEoMQ7RBAw=
-X-Google-Smtp-Source: ACHHUZ6Gtxbu7QtuM8/o96PrE1k9tP0/ODLM3s/vaXzHqH7g0qXluHmxBddRDInongf5jHpS3EqdJxRdkUnLStzoYmM=
-X-Received: by 2002:a05:622a:1982:b0:3f0:842d:3c2a with SMTP id
- u2-20020a05622a198200b003f0842d3c2amr2714170qtc.20.1683295398201; Fri, 05 May
- 2023 07:03:18 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683295521; x=1685887521;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OzqCiS98IPcP1NO5D+IvEvMY4nJyl5P4wSObXpEuRpY=;
+        b=BeeTwIAjPEc9QxKKxUXLh3J+WFofxxfOOJKGEBrkHvnMzAyMJbL8MeCsmZb+0gmlsS
+         vLUcQT96GH5N6BLtPtEkr6QgjQMpaeK2vzHrdLtSZahyL8e1mrB7MGuo/ujLwVYHY38N
+         1F9yydkAxKSktXbK0pG1ZGsOSUOpt8PrFrDVsQjExsi/iBZ/p+z476XalPpFGmTGRQWt
+         KQ0qzCxm8KNXNus4SHgRDK3A6pK4++agd8wqOZicVJlq7TXazlIEgT8MFwT7k885YsXR
+         LbcysdwA6E6R7mK3ImAq8Nqg0twDcBvPlZOVBOAiZ9eBrH6asjdOZHHL4gszObtO2tiK
+         K5zw==
+X-Gm-Message-State: AC+VfDz0Q+cO6ytVBOsdIusV47RtrlnHK9y7v/B6Y0jZvW4KZMuyEB4s
+        5kVSd/805F7Y77LTI7M8CH0=
+X-Google-Smtp-Source: ACHHUZ7gbOnhc9STpFgcE/bQM1D6CfRmVBGNlFt05nMCk6igeMsP4gD6F5LqP/inTAFAJLNeLb2hpw==
+X-Received: by 2002:a17:902:f391:b0:1a1:dd2a:fe6c with SMTP id f17-20020a170902f39100b001a1dd2afe6cmr1275756ple.53.1683295521501;
+        Fri, 05 May 2023 07:05:21 -0700 (PDT)
+Received: from ubuntu22-virtual-machine.localdomain ([211.218.36.103])
+        by smtp.gmail.com with ESMTPSA id g5-20020a170902740500b001ab09f5ca61sm1822217pll.55.2023.05.05.07.05.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 07:05:21 -0700 (PDT)
+Date:   Fri, 5 May 2023 23:05:16 +0900
+From:   Wonguk Lee <wonguk.lee1023@gmail.com>
+To:     shaggy@kernel.org
+Cc:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH v2] fs: jfs: (trivial) Fix typo in dbInitTree function
+Message-ID: <ZFUNHFUr/IhyvTn9@ubuntu22-virtual-machine.localdomain>
 MIME-Version: 1.0
-References: <ZFTEkCsFcEa44CN8@DESKTOP> <87fs8bp33w.fsf@kernel.org>
-In-Reply-To: <87fs8bp33w.fsf@kernel.org>
-From:   Takeshi Misawa <jeantsuru.cumc.mandola@gmail.com>
-Date:   Fri, 5 May 2023 23:03:07 +0900
-Message-ID: <CAAKgYky4M_XjXRH9ieJ1SO=XjFbr26Aya1gUTUE-CWrVeRTJrQ@mail.gmail.com>
-Subject: Re: [PATCH] [net] Fix memory leak in htc_connect_service
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
-        Sujith <Sujith.Manoharan@atheros.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        Senthil Balasubramanian <senthilkumar@atheros.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for your advice.
-I will resend the modified patch later.
+While trying to fix the jfs UBSAN problem reported in syzkaller,
+(https://syzkaller.appspot.com/bug?id=01abadbd6ae6a08b1f1987aa61554c6b3ac19ff2)
 
-Regards,
+I found the typo in the comment of dbInitTree function and fix it.
 
+Signed-off-by: Wonguk Lee <wonguk.lee1023@gmail.com>
+---
+Changes in v2:
+  - Add the patch description and change the name in the Signed-off-by
 
-On Fri, May 5, 2023 at 5:57=E2=80=AFPM Kalle Valo <kvalo@kernel.org> wrote:
->
-> Takeshi Misawa <jeantsuru.cumc.mandola@gmail.com> writes:
->
-> > Timeout occurs in htc_connect_service(), then this function returns
-> > without freeing skb.
-> >
-> > Fix this by going to err path.
-> >
-> > syzbot report:
-> > https://syzkaller.appspot.com/bug?id=3Dfbf138952d6c1115ba7d797cf7d56f69=
-35184e3f
-> > BUG: memory leak
-> > unreferenced object 0xffff88810a980800 (size 240):
-> >   comm "kworker/1:1", pid 24, jiffies 4294947427 (age 16.220s)
-> >   hex dump (first 32 bytes):
-> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-> >   backtrace:
-> >     [<ffffffff83b971c6>] __alloc_skb+0x206/0x270 net/core/skbuff.c:552
-> >     [<ffffffff82eb3731>] alloc_skb include/linux/skbuff.h:1270 [inline]
-> >     [<ffffffff82eb3731>] htc_connect_service+0x121/0x230 drivers/net/wi=
-reless/ath/ath9k/htc_hst.c:259
-> >     [<ffffffff82ec03a5>] ath9k_htc_connect_svc drivers/net/wireless/ath=
-/ath9k/htc_drv_init.c:137 [inline]
-> >     [<ffffffff82ec03a5>] ath9k_init_htc_services.constprop.0+0xe5/0x390=
- drivers/net/wireless/ath/ath9k/htc_drv_init.c:157
-> >     [<ffffffff82ec0747>] ath9k_htc_probe_device+0xf7/0x8a0 drivers/net/=
-wireless/ath/ath9k/htc_drv_init.c:959
-> >     [<ffffffff82eb3ef5>] ath9k_htc_hw_init+0x35/0x60 drivers/net/wirele=
-ss/ath/ath9k/htc_hst.c:521
-> >     [<ffffffff82eb68dd>] ath9k_hif_usb_firmware_cb+0xcd/0x1f0 drivers/n=
-et/wireless/ath/ath9k/hif_usb.c:1243
-> >     [<ffffffff82aa835b>] request_firmware_work_func+0x4b/0x90 drivers/b=
-ase/firmware_loader/main.c:1107
-> >     [<ffffffff8129a35a>] process_one_work+0x2ba/0x5f0 kernel/workqueue.=
-c:2289
-> >     [<ffffffff8129ac7d>] worker_thread+0x5d/0x5b0 kernel/workqueue.c:24=
-36
-> >     [<ffffffff812a4fa9>] kthread+0x129/0x170 kernel/kthread.c:376
-> >     [<ffffffff81002dcf>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_6=
-4.S:308
-> >
-> > Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-> > Reported-and-tested-by: syzbot+b68fbebe56d8362907e8@syzkaller.appspotma=
-il.com
-> > Signed-off-by: Takeshi Misawa <jeantsuru.cumc.mandola@gmail.com>
-> > ---
-> >  drivers/net/wireless/ath/ath9k/htc_hst.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> The title should begin with "wifi: ath9k:", see more info from the wiki
-> link below.
->
-> Also ath9k patches go to ath-next, not to the net tree.
->
-> --
-> https://patchwork.kernel.org/project/linux-wireless/list/
->
-> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpa=
-tches
+ fs/jfs/jfs_dmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
+index a3eb1e826947..d8a03d3026cc 100644
+--- a/fs/jfs/jfs_dmap.c
++++ b/fs/jfs/jfs_dmap.c
+@@ -3851,7 +3851,7 @@ static int dbInitTree(struct dmaptree * dtp)
+ 	l2max = le32_to_cpu(dtp->l2nleafs) + dtp->budmin;
+ 
+ 	/*
+-	 * configure the leaf levevl into binary buddy system
++	 * configure the leaf level into binary buddy system
+ 	 *
+ 	 * Try to combine buddies starting with a buddy size of 1
+ 	 * (i.e. two leaves). At a buddy size of 1 two buddy leaves
+-- 
+2.34.1
+
