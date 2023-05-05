@@ -2,99 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F156F868E
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E694E6F8695
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbjEEQUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 12:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
+        id S232634AbjEEQWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 12:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbjEEQUs (ORCPT
+        with ESMTP id S230163AbjEEQW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 12:20:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 296CA1814D;
-        Fri,  5 May 2023 09:20:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2AF982F4;
-        Fri,  5 May 2023 09:21:31 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DCA43F5A1;
-        Fri,  5 May 2023 09:20:39 -0700 (PDT)
-Date:   Fri, 5 May 2023 17:20:36 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Lars Persson <lars.persson@axis.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Paul Barker <paul.barker@sancloud.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@axis.com
-Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
-Message-ID: <20230505162036.4jxonptrre7zzx5b@bogus>
-References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
- <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
+        Fri, 5 May 2023 12:22:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BE2160B8;
+        Fri,  5 May 2023 09:22:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06ABC63F1E;
+        Fri,  5 May 2023 16:22:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6C2C433EF;
+        Fri,  5 May 2023 16:22:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683303747;
+        bh=2K2sG1iqgAgCjF6w7LO1DpRP8tMIRvNOwwZ3Bg4XUBw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GZEwRFBu3OZwQgVrSyO4Ynl8ZobRrx7IJaO2Ag95MO9QXmRVqWD4FI+or+I91IfV8
+         RJGPzYzK6nSrGitFu88EAj3lGYv+fFDD3wfltYOjqhppvwFmI06OI4DqgzgN+OxuzC
+         ephmYdlUjJc48hQ7NEGyiDNgTaYJLvpBMW57huB3RYYhwaAUW8fwSn23THU9dAYkDw
+         PqaObywOHOQfeGhuXy4GCnJKCxnBgMTs/DAQtM7YRj7ouzp9qR3VMboqANSLpH9fnM
+         m++qETHrN5sEWH6zmRDzXt+mWb/EDniTdmX54yj3+wuskkZJf8BeNqK8gPLx+4MbIc
+         86Q9Zw5nvY0hg==
+Date:   Fri, 5 May 2023 18:22:21 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Ross Philipson <ross.philipson@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, ardb@kernel.org, mjg59@srcf.ucam.org,
+        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
+        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH v6 04/14] x86: Secure Launch Resource Table header file
+Message-ID: <ZFUtPbgvG0qifhnV@kernel.org>
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-5-ross.philipson@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230504145023.835096-5-ross.philipson@oracle.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,48 +62,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 10:29:29PM -0500, Rob Herring wrote:
-> The arm dts directory has grown to 1553 boards which makes it a bit
-> unwieldy to maintain and use. Past attempts stalled out due to plans to
-> move .dts files out of the kernel tree. Doing that is no longer planned
-> (any time soon at least), so let's go ahead and group .dts files by
-> vendors. This move aligns arm with arm64 .dts file structure.
+On Thu, May 04, 2023 at 02:50:13PM +0000, Ross Philipson wrote:
+> Introduce the Secure Launch Resource Table which forms the formal
+> interface between the pre and post launch code.
 > 
-> Doing this enables building subsets of dts files by vendor easily
-> without changing kernel configs:
-> 
-> make allyesconfig
-> make arch/arm/boot/dts/ti/
-> 
-> There's no change to dtbs_install as the flat structure is maintained on
-> install.
-> 
-> The naming of vendor directories is roughly in this order of preference:
-> - Matching original and current SoC vendor prefix/name (e.g. ti, qcom)
-> - Current vendor prefix/name if still actively sold (SoCs which have
->   been aquired) (e.g. nxp/imx)
-> - Existing platform name for older platforms not sold/maintained by any
->   company (e.g. gemini, nspire)
-> 
-> The whole move was scripted with the exception of MAINTAINERS.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
 > ---
->  MAINTAINERS                                        |  181 +--
+>  include/linux/slr_table.h | 270 ++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 270 insertions(+)
+>  create mode 100644 include/linux/slr_table.h
+> 
+> diff --git a/include/linux/slr_table.h b/include/linux/slr_table.h
 
-[...]
+...
 
->  arch/arm/boot/dts/{ => arm}/vexpress-v2m-rs1.dtsi  |    0
->  arch/arm/boot/dts/{ => arm}/vexpress-v2m.dtsi      |    0
->  .../boot/dts/{ => arm}/vexpress-v2p-ca15-tc1.dts   |    0
->  .../boot/dts/{ => arm}/vexpress-v2p-ca15_a7.dts    |    0
->  arch/arm/boot/dts/{ => arm}/vexpress-v2p-ca5s.dts  |    0
->  arch/arm/boot/dts/{ => arm}/vexpress-v2p-ca9.dts   |    0
+> +static inline void *slr_end_of_entrys(struct slr_table *table)
+> +{
+> +	return (((void *)table) + table->size);
+> +}
+> +
+> +static inline struct slr_entry_hdr *
+> +slr_next_entry(struct slr_table *table,
+> +		struct slr_entry_hdr *curr)
 
-For all vexpress related changes:
-
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-
---
-Regards,
-Sudeep
+nit: The indentation of the line above doesn't align with the '(' on
+     the line before it.
