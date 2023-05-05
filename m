@@ -2,79 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3786F8418
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57FE6F841C
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 15:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbjEENdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 09:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
+        id S232626AbjEENdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 09:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbjEENdU (ORCPT
+        with ESMTP id S232620AbjEENdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 09:33:20 -0400
+        Fri, 5 May 2023 09:33:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A2B203F2;
-        Fri,  5 May 2023 06:33:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E81820769;
+        Fri,  5 May 2023 06:33:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 370D36145F;
-        Fri,  5 May 2023 13:33:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37100C433D2;
-        Fri,  5 May 2023 13:33:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 272DC61035;
+        Fri,  5 May 2023 13:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F33AAC4339B;
+        Fri,  5 May 2023 13:33:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683293598;
-        bh=lYgIx4LtUAxSTE+FLYMqSKn8Xm5Kd/760J8cWkFOZxI=;
+        s=k20201202; t=1683293616;
+        bh=mwqoQO38w+V3pgb84DrA2oJJEX0u9T37WvU9ldSdV+M=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jzrZXGlhPUqc1ZlQh22FixMA6wnYqukcQ6wxPquyf+B7LZzPbxcq/0svrb0WjXFT0
-         UYMzCVd9a5crtktP5peVmOBMBJ0GCtYfd7ILFh4R8Xt2/gfZwbJ1Na808To+OMaJ7X
-         EKmtLuy5EM0sFzGtSmODdaiDlNMZTTPiiKA79QRV+aBaTEB1i1PPUIkIoiLFJ07Wj5
-         oR0Wn7YqxOOWBg+9jRVpSn3M/QJj/j17bBinDDdUZ7IRnwpyDyrGlmp2iN4LV5jSYZ
-         PTUevltLdI+e2qv9TKZ7+rrp4w3laRTvif7c8uzwHdPmOj6bC3GPR5HjwQeIR+q2yq
-         F/FavQkiGYKhw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id ACD31403B5; Fri,  5 May 2023 10:33:15 -0300 (-03)
-Date:   Fri, 5 May 2023 10:33:15 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Hao Luo <haoluo@google.com>, James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Roman Lozko <lozko.roma@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: BPF skels in perf .Re: [GIT PULL] perf tools changes for v6.4
-Message-ID: <ZFUFmxDU/6Z/JEsi@kernel.org>
-References: <CAHk-=wjY_3cBELRSLMpqCt6Eb71Qei2agfKSNsrr5KcpdEQCaA@mail.gmail.com>
- <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
- <ZFOSUab5XEJD0kxj@kernel.org>
- <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
- <ZFPw0scDq1eIzfHr@kernel.org>
- <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
- <ZFQCccsx6GK+gY0j@kernel.org>
- <ZFQoQjCNtyMIulp+@kernel.org>
- <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
- <ZFQ5sjjtfEYzvHNP@krava>
+        b=ng+1e5M4ix9INnlBoq6xpRPfZvWJDO4lyD6unpuFRTO61mNkFnTfR7GgVKYj/gZ9G
+         /iEjTDtPIFg4DSy9QbK3mq50jCN2SO+ZXmeM7qIKIlabmJCzfvFckjphLcpjW4bEpm
+         lsNPNlFjxbW8cZqcpMhfsaohGmg+qIRbdnw2RWa+Xi4BGtX3UFMJE/Ciz+3hKPv/vs
+         3OviYPVgb7llrDfukvAi3348mZLVVw45hdcsUy1HoPWWBB1z7ak0Dk8amj62E4PuGT
+         X/YxKUrghpijwJlqSAP+1wTJXzMcghIMRWI12FxLNWfWWhZwey6/IvswSk5+FedVqi
+         6dQ8Q3OcfAZzg==
+Date:   Fri, 5 May 2023 22:33:33 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Anup Sharma <anupnewsmail@gmail.com>
+Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        oder_chiou@realtek.com
+Subject: Re: [PATCH] ASoC: dt-bindings: rt1016: Convert to dtschema
+Message-ID: <ZFUFrWqOHVmzE+ut@finisterre.sirena.org.uk>
+References: <ZFUFAmBJXvkQAG7m@yoga>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AyRtPdmLQG54+4Aa"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZFQ5sjjtfEYzvHNP@krava>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <ZFUFAmBJXvkQAG7m@yoga>
+X-Cookie: Avoid contact with eyes.
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -85,135 +58,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, May 05, 2023 at 01:03:14AM +0200, Jiri Olsa escreveu:
-> On Thu, May 04, 2023 at 03:03:42PM -0700, Ian Rogers wrote:
-> > On Thu, May 4, 2023 at 2:48 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > >
-> > > Em Thu, May 04, 2023 at 04:07:29PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > Em Thu, May 04, 2023 at 11:50:07AM -0700, Andrii Nakryiko escreveu:
-> > > > > On Thu, May 4, 2023 at 10:52 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > > > > Andrii, can you add some more information about the usage of vmlinux.h
-> > > > > > instead of using kernel headers?
-> > > >
-> > > > > I'll just say that vmlinux.h is not a hard requirement to build BPF
-> > > > > programs, it's more a convenience allowing easy access to definitions
-> > > > > of both UAPI and kernel-internal structures for tracing needs and
-> > > > > marking them relocatable using BPF CO-RE machinery. Lots of real-world
-> > > > > applications just check-in pregenerated vmlinux.h to avoid build-time
-> > > > > dependency on up-to-date host kernel and such.
-> > > >
-> > > > > If vmlinux.h generation and usage is causing issues, though, given
-> > > > > that perf's BPF programs don't seem to be using many different kernel
-> > > > > types, it might be a better option to just use UAPI headers for public
-> > > > > kernel type definitions, and just define CO-RE-relocatable minimal
-> > > > > definitions locally in perf's BPF code for the other types necessary.
-> > > > > E.g., if perf needs only pid and tgid from task_struct, this would
-> > > > > suffice:
-> > > >
-> > > > > struct task_struct {
-> > > > >     int pid;
-> > > > >     int tgid;
-> > > > > } __attribute__((preserve_access_index));
-> > > >
-> > > > Yeah, that seems like a way better approach, no vmlinux involved, libbpf
-> > > > CO-RE notices that task_struct changed from this two integers version
-> > > > (of course) and does the relocation to where it is in the running kernel
-> > > > by using /sys/kernel/btf/vmlinux.
-> > >
-> > > Doing it for one of the skels, build tested, runtime untested, but not
-> > > using any vmlinux, BTF to help, not that bad, more verbose, but at least
-> > > we state what are the fields we actually use, have those attribute
-> > > documenting that those offsets will be recorded for future use, etc.
-> > >
-> > > Namhyung, can you please check that this works?
-> > >
-> > > Thanks,
-> > >
-> > > - Arnaldo
-> > >
-> > > diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > > index 6a438e0102c5a2cb..f376d162549ebd74 100644
-> > > --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > > +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > > @@ -1,11 +1,40 @@
-> > >  // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > >  // Copyright (c) 2021 Facebook
-> > >  // Copyright (c) 2021 Google
-> > > -#include "vmlinux.h"
-> > > +#include <linux/types.h>
-> > > +#include <linux/bpf.h>
-> > 
-> > Compared to vmlinux.h here be dragons. It is easy to start dragging in
-> > all of libc and that may not work due to missing #ifdefs, etc.. Could
-> > we check in a vmlinux.h like libbpf-tools does?
-> > https://github.com/iovisor/bcc/tree/master/libbpf-tools#vmlinuxh-generation
-> > https://github.com/iovisor/bcc/tree/master/libbpf-tools/arm64
-> > 
-> > This would also remove some of the errors that could be introduced by
-> > copy+pasting enums, etc. and also highlight issues with things being
-> > renamed as build time rather than runtime failures.
-> 
-> we already have to deal with that, right? doing checks on fields in
-> structs like mm_struct___old
-> 
-> > Could this be some shared resource for the different linux tools
-> > projects using a vmlinux.h? e.g. tools/lib/vmlinuxh with an
-> > install_headers target that builds a vmlinux.h.
-> 
-> I tried to do the minimal header and it's not too big,
-> I pushed it in here:
->   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/log/?h=perf/vmlinux_h
-> 
-> compile tested so far
 
-I see it and it makes the change to be minimal, which is good at the
-current stage, but I wonder if it wouldn't be better for us to define
-just the ones not in UAPI and use the #include <linux/bpf.h>,
-<linux/perf_event.h> as I did in the patches I posted here and Namhyung
-tested at least one, this way the added vmlinux.h file get even smaller
-by not including things like:
+--AyRtPdmLQG54+4Aa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[acme@quaco perf-tools]$ egrep -w '(perf_event_sample_format|bpf_perf_event_value|perf_sample_weight|perf_mem_data_src) {' include/uapi/linux/*.h
-include/uapi/linux/bpf.h:struct bpf_perf_event_value {
-include/uapi/linux/perf_event.h:enum perf_event_sample_format {
-include/uapi/linux/perf_event.h:union perf_mem_data_src {
-include/uapi/linux/perf_event.h:union perf_mem_data_src {
-include/uapi/linux/perf_event.h:union perf_sample_weight {
-[acme@quaco perf-tools]$
+On Fri, May 05, 2023 at 07:00:42PM +0530, Anup Sharma wrote:
 
-Also why do we need these:
+> +maintainers:
+> +  - oder_chiou@realtek.com
 
-+struct mm_struct {
-+} __attribute__((preserve_access_index));
-+
-+struct raw_spinlock {
-+} __attribute__((preserve_access_index));
-+
-+typedef struct raw_spinlock raw_spinlock_t;
-+
-+struct spinlock {
-+} __attribute__((preserve_access_index));
-+
-+typedef struct spinlock spinlock_t;
-+
-+struct sighand_struct {
-+	spinlock_t siglock;
-+} __attribute__((preserve_access_index));
+If you're nominating someone as the maintainer for a binding it's
+probably best to copy them on the patch so they're aware...
 
-We don't use them, they're just pointers you kept on:
+--AyRtPdmLQG54+4Aa
+Content-Type: application/pgp-signature; name="signature.asc"
 
-+struct task_struct {
-+	struct css_set *cgroups;
-+	pid_t pid;
-+	pid_t tgid;
-+	char comm[16];
-+	struct mm_struct *mm;
-+	struct sighand_struct *sighand;
-+	unsigned int flags;
-+} __attribute__((preserve_access_index));
+-----BEGIN PGP SIGNATURE-----
 
-That with the preserve_access_index isn't needed, we need just the
-fields that we access in the tools, right?
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRVBawACgkQJNaLcl1U
+h9AGbgf+PTsUzX2cym2JdhTl5yFGJj8rbfOCKPIS4ks0o52lfBdwu+gqXf1DiYie
+LcNNgDPmZZBoPTDDo/86bdVpIZDgBpkul4xNjDAxnIOi9Td4QmwNZ/dPW8yJa76S
+NltJATrzlEGS+eJyI+s2HDT8RrBV2Fi3kLBLEZ4m2wsqz5d3dGwMlqX1GPLytO1w
+cREcovpaCDnIc5mPxHRuOB8zPB1zqSJ9bY1xLjSKbM6k0Q8NhvZNtpDE44QrlYPi
+bO4Ip2mdkL9qCfThdtSiWpvRFdA14nXgeL5RRTTf5YaHw5xFxp9QdER1Q19aegLs
+WtItwmcXeMeowfbVSnathYByRMtl+w==
+=Puba
+-----END PGP SIGNATURE-----
 
-- Arnaldo
-
+--AyRtPdmLQG54+4Aa--
