@@ -2,86 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EA26F7F33
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 10:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F73E6F7F38
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 10:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbjEEIiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 04:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
+        id S231478AbjEEIjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 04:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbjEEIiU (ORCPT
+        with ESMTP id S230444AbjEEIjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 04:38:20 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19EE51885E;
-        Fri,  5 May 2023 01:38:19 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 3D4C480FC;
-        Fri,  5 May 2023 08:38:18 +0000 (UTC)
-Date:   Fri, 5 May 2023 11:38:16 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        linux-omap@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [BISECTED REGRESSION] OMAP1 GPIO breakage
-Message-ID: <20230505083816.GQ14287@atomide.com>
-References: <20230425173241.GF444508@darkstar.musicnaut.iki.fi>
- <20230425201117.457f224c@aktux>
- <20230425183857.GG444508@darkstar.musicnaut.iki.fi>
- <20230425212040.5a4d5b09@aktux>
- <20230425193637.GH444508@darkstar.musicnaut.iki.fi>
- <20230425215848.247a936a@aktux>
- <20230426071910.GE14287@atomide.com>
- <20230504055156.GO14287@atomide.com>
- <CACRpkdY9ShRATHa776KyzeArmQdKxdwGxJC11YnmhWiCdSGzEA@mail.gmail.com>
- <20230504144521.1b3a3574@aktux>
+        Fri, 5 May 2023 04:39:52 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74C618876;
+        Fri,  5 May 2023 01:39:50 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-24e4f674356so1385831a91.3;
+        Fri, 05 May 2023 01:39:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683275990; x=1685867990;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5aRZSqqSGHolTlh1jtoDKdcPZUN/607EWF6b0DkrsH0=;
+        b=AZK4dSGaMIFsre3ab92ohSTLZERw1D4UVGxEBRjOtKP6UhdmDSBcr8z0sm901npXrG
+         mWUooB0uHfaLjnmx7bfX1yx+wRSHgQsx4tLIA4huIQrbAiarI6jvfGE1nfn/xSB0A89l
+         t6mKGCVygg6b2/gLC4N6mWNU39w8dUQLO8K6lLO/j9eruFTh/Hmbg6SLuwv+pb6ySicp
+         eexkrTwLz8PrhTPSZnAE48CBGL3lK5qeCNmkq0OLRWpZauERfD7pcXFXqLVgeGbx5j67
+         3rLwWjyGlmZROMsmlX0gAsAHyAM1A+F83Nn4OTesBSFWvjv2aYpVxpSm78AGf0YEnIta
+         b7OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683275990; x=1685867990;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5aRZSqqSGHolTlh1jtoDKdcPZUN/607EWF6b0DkrsH0=;
+        b=Ja43UoPVcSP9LfPeihJ8aylyudcP0mPEVC+daMvzo1jyt2pA9CNh3Uv/AIZkJnCnqu
+         iKJTT+MOoIEtrMkuXj/iDgi/dyY4GYQayGf6cbRjvhObvEPZF2meQ/98/hNM4IsKE+qv
+         eaUQCkerGjCIs7gl8jQvYbSOTLZuiSxd/YeLk2mp9sjAbKJ+YFIau6kCjFfmHYtfVE4C
+         aJDkxZoOW0pkcPzk2LRfpGbWsc6Gbc99cbU7rFl5+8E1PVQ+WnOT1diT8w0Ci5A6zNHm
+         22IVCkVymY8MwGfugPG/XtUX+Si0VbP9VbrgY5o/q2FIKim6l201awmsjwJasZiyvkLF
+         wrVQ==
+X-Gm-Message-State: AC+VfDxwZGlsWcBWV9e3+g7i2h6nQGoBBOiTsS7Q03xfaWu7YozSd1YP
+        c9FRWUwhW1nAGSD0ybKuAYU=
+X-Google-Smtp-Source: ACHHUZ4UH5k0im9tHcDD0dnFM8xRvkntB8xfaghRqc4oSAV95zeDV+5tHiAc0U5MZUzLoIsVrIWOYA==
+X-Received: by 2002:a17:90a:e645:b0:247:35f8:81d2 with SMTP id ep5-20020a17090ae64500b0024735f881d2mr699164pjb.29.1683275990015;
+        Fri, 05 May 2023 01:39:50 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-14.three.co.id. [116.206.28.14])
+        by smtp.gmail.com with ESMTPSA id v13-20020a17090a0c8d00b00246b1b4a3ffsm12895140pja.0.2023.05.05.01.39.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 01:39:49 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 9BAC3106281; Fri,  5 May 2023 15:39:46 +0700 (WIB)
+Date:   Fri, 5 May 2023 15:39:46 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org
+Cc:     dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, ardb@kernel.org, mjg59@srcf.ucam.org,
+        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
+        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH v6 00/14] x86: Trenchboot secure dynamic launch Linux
+ kernel support
+Message-ID: <ZFTA0kg98XxeP2Hh@debian.me>
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8WmKHbH6zHIoE+UF"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230504144521.1b3a3574@aktux>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230504145023.835096-1-ross.philipson@oracle.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andreas Kemnade <andreas@kemnade.info> [230504 12:45]:
-> Hi,
-> 
-> On Thu, 4 May 2023 14:13:32 +0200
-> Linus Walleij <linus.walleij@linaro.org> wrote:
-> 
-> > On Thu, May 4, 2023 at 7:52 AM Tony Lindgren <tony@atomide.com> wrote:
-> > > * Tony Lindgren <tony@atomide.com> [230426 07:20]:  
-> > > > Seems that we should just revert this patch for now and try again after
-> > > > the issues have been fixed.  
-> > >
-> > > Looking at the proposed fixes being posted seems like they are quite
-> > > intrusive.. How about we partially revert this patch so omap1 still
-> > > uses static assigment of gpios?  
-> > 
-> > I think Andreas patch (commit 92bf78b33b0b463b00c6b0203b49aea845daecc8)
-> > kind of describes the problem with that: the probe order is now unpredictable,
-> > so if we revert the patch then that problem returns, but I don't know how
-> > serious that problem is.
-> > 
-> well, I think we can even fully revert 92bf78b33b0b463b00c6b0203b49aea845daecc8
-> after my patch
-> 
-> gpiolib: fix allocation of mixed dynamic/static GPIOs
-> 
-> is in as a short time solution. That should only leave unpredictable
-> numbers of multiple dynamic gpio controllers.
 
-OK thanks sounds good to me.
+--8WmKHbH6zHIoE+UF
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Regards,
+On Thu, May 04, 2023 at 02:50:09PM +0000, Ross Philipson wrote:
+> This patchset provides detailed documentation of DRTM, the approach used =
+for
+> adding the capbility, and relevant API/ABI documentation. In addition to =
+the
+> documentation the patch set introduces Intel TXT support as the first pla=
+tform
+> for Linux Secure Launch.
 
-Tony
+I'd like to apply this series, but on what commit it is based on? I
+don't see any branch containing this series version in trenchboot tree
+[1].
+
+Thanks.
+
+[1]: https://github.com/TrenchBoot/linux
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--8WmKHbH6zHIoE+UF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFTA0gAKCRD2uYlJVVFO
+o32tAQDw4tpfR8Ba+q25skoHxrAI3+hK4yJ0HkwQNobWGCAvRQD/Yq0tZ28KagpK
+QjB72gS5Kql0kR9GkjUSvUZRkt138ws=
+=ApTD
+-----END PGP SIGNATURE-----
+
+--8WmKHbH6zHIoE+UF--
