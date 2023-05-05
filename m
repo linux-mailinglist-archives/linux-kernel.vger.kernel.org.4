@@ -2,161 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF3C6F8485
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 16:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF21D6F848D
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 16:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232788AbjEEOHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 10:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
+        id S232593AbjEEOME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 10:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbjEEOHf (ORCPT
+        with ESMTP id S232011AbjEEOL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 10:07:35 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3AB12EAF
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 07:07:33 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so27519271a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 07:07:33 -0700 (PDT)
+        Fri, 5 May 2023 10:11:59 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B768AD0B;
+        Fri,  5 May 2023 07:11:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683295652; x=1685887652;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mfe37bhZKfVzu7XYhiq7AznCwFGYTw35W2iL7Bje62g=;
-        b=YCZRcNQIJMtF4Q0VKYQKCmoy57PhoEcBAs+SZCUZu60gmjEh3QxcKeySIs1wdhFkBj
-         hzgX+0f8QcwAO1WtttnkbEIkWvq4Bpl6KrThUjLMexgOcRIwju0IGRXO89ZieROPdZHQ
-         UEFkRtaoCXp0HI4sfzlRtdX7wlJuS/MAE1dOfJVXu910/SzjQWvmYTbyeB0rEh2HjlUt
-         iMsSyzLziqWjwiU94FTysbqQPw4RVcd+dv8qwLTp6hN9A7MqZcQzMAiC3ilYsLavk9uW
-         nE9BNUwUOHfjU9b1yJYLXNjDD7RCv0sQf6TI5MKTtBe747XNSNaEF62lWM2kaxukIYkX
-         uF6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683295652; x=1685887652;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mfe37bhZKfVzu7XYhiq7AznCwFGYTw35W2iL7Bje62g=;
-        b=TTefB2n1yBtrl8/+saKKh8gSSTPZKguyMlRse04540qSJVFvUKbeRGvbO4UpoB68fW
-         YuSDkzmQnn5JGPHGh7cBVnJX6i0j3kG0hyiaZEXiR5rGVFe+VfyMs6YP5ENmKIRPYPIC
-         pd3YxwO9Oa4jZf/YxE6B/+WAGZSo8FdncoMnwT2ZNY8KJbQnUovHmz+uHuDwS//b01J/
-         vLl7Kdz1YdnTnvOWXONLOvchj/LjKlx5+0EQCRUTkNsFz/zU0sqwc1qHFJAozgif7wna
-         sURM/JCQtL5d+Thohn5UdoF0Hof42/58sgqbJelw7mobk316sjh0e7R1N+ZlSiGENyTs
-         OwOA==
-X-Gm-Message-State: AC+VfDxGQ0TddZEBreSDnYYwMRaHjgb5yYZor/rbMIWTLjQLinaBHn+P
-        Ujw2TXAdHVZgTBjgPEKMIhzI+w==
-X-Google-Smtp-Source: ACHHUZ4GoVgXpiweHDRZdftQNnAgyTrTOi5YGaMTAkEIzK3CS02eT0yzC3NW4C2X1xnIQTBfzsy0vQ==
-X-Received: by 2002:a17:907:1690:b0:94f:6316:ce8d with SMTP id hc16-20020a170907169000b0094f6316ce8dmr1960135ejc.34.1683295651914;
-        Fri, 05 May 2023 07:07:31 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
-        by smtp.gmail.com with ESMTPSA id ze15-20020a170906ef8f00b0093a0e5977e2sm973932ejb.225.2023.05.05.07.07.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 07:07:30 -0700 (PDT)
-Message-ID: <27f30e11-c9cf-2e21-bbea-c6f1cd504cfe@linaro.org>
-Date:   Fri, 5 May 2023 16:07:29 +0200
+  d=axis.com; q=dns/txt; s=axis-central1; t=1683295916;
+  x=1714831916;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IQhrMEmbkdIeS/c4Mo1VR2kSTS1Kx2MwOx7h09x0ziM=;
+  b=Sbp+QawjUEriutBHJrSW3jf6P7+wqpaCu7jTqyrqAF/JUIz/og1QOs1X
+   StlBEw2fFtpFH/OkFhKW6VHYA/KJz6CxHwtyMIXw8vlkXR3CcJYhPNX56
+   ZOQy28lYqGeljx2NuigRz9VtHa2Jj03EZaF9gnKXpVQK5aHJa5ui3mH90
+   wa3VvhplAxst5bspGH6B1hmm2uFvVEfQfigKDJ5nIOi607zz2Ki1NSwi6
+   f9lQ0Z38UlDlO6CWZHQ7qOTMVOaxJBgOR/mhdmQwdiQWxLbLOm5x85S36
+   q27N46tmXX717vjxM8lOEgIhsDxag6DHIUBNHuGsuvUkWiIe68LN1N1L9
+   w==;
+Date:   Fri, 5 May 2023 16:11:52 +0200
+From:   Jesper Nilsson <jesper.nilsson@axis.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     <soc@kernel.org>, Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Lars Persson <lars.persson@axis.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Daniel Palmer <daniel@thingy.jp>,
+        Romain Perier <romain.perier@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Barker <paul.barker@sancloud.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-arm-kernel@axis.com>
+Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
+Message-ID: <20230505141152.GK19396@axis.com>
+References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
+ <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 2/5] dt-bindings: clocks: atmel,at91rm9200-pmc: convert to
- yaml
-Content-Language: en-US
-To:     Claudiu.Beznea@microchip.com, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230504060729.689579-1-claudiu.beznea@microchip.com>
- <20230504060729.689579-3-claudiu.beznea@microchip.com>
- <a964eeef-1db0-0d8a-e2a5-9e4c5fd8b2f0@linaro.org>
- <a7a40eda-9487-833d-8b6a-788812e8b80c@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a7a40eda-9487-833d-8b6a-788812e8b80c@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2023 14:46, Claudiu.Beznea@microchip.com wrote:
-> On 04.05.2023 15:47, Krzysztof Kozlowski wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>
->> On 04/05/2023 08:07, Claudiu Beznea wrote:
->>> Convert Atmel PMC documentation to yaml.
->>>
->>> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
->>
->> Thank you for your patch. There is something to discuss/improve.
->>
->>
->>> diff --git a/Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml b/Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml
->>> new file mode 100644
->>> index 000000000000..c4023c3a85f2
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml
->>> @@ -0,0 +1,161 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: "http://devicetree.org/schemas/clock/atmel,at91rm9200-pmc.yaml#"
->>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->>
->> Drop quotes from both.
->>
->>> +
->>> +title: Atmel Power Management Controller (PMC)
->>> +
->>> +maintainers:
->>> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
->>> +
->>> +description:
->>> +  The power management controller optimizes power consumption by controlling all
->>> +  system and user peripheral clocks. The PMC enables/disables the clock inputs
->>> +  to many of the peripherals and to the processor.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->>> +      - items:
->>> +          - const: atmel,at91sam9260-pmc
->>
->> Why this is separate, not part of bottom enum?
+On Thu, May 04, 2023 at 10:29:29PM -0500, Rob Herring wrote:
+> The arm dts directory has grown to 1553 boards which makes it a bit
+> unwieldy to maintain and use. Past attempts stalled out due to plans to
+> move .dts files out of the kernel tree. Doing that is no longer planned
+> (any time soon at least), so let's go ahead and group .dts files by
+> vendors. This move aligns arm with arm64 .dts file structure.
 > 
-> Current device trees uses the following compatibles (among others):
-> - "atmel,at91sam9260-pmc, "syscon" or
-> - "atmel,at91sam9g20-pmc", "atmel,at91sam9260-pmc, "syscon"
+> Doing this enables building subsets of dts files by vendor easily
+> without changing kernel configs:
 > 
-> I haven't found another way to make dtbs_check happy.
-> Is there another way for this?
-
-I mean the enum at the bottom of all compatibles.
-
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    #include <dt-bindings/interrupt-controller/irq.h>
->>> +
->>> +    pmc: clock-controller@f0018000 {
->>> +        compatible = "atmel,sama5d4-pmc", "syscon";
->>> +        reg = <0xf0018000 0x120>;
->>> +        interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
->>
->> interrupt looks a bit odd. Are you sure it is correct?
+> make allyesconfig
+> make arch/arm/boot/dts/ti/
 > 
-> This example is from SAMA5D4 SoC which uses a vendor specific interrupt
-> controller (Atmel AIC) where:
-> - 1st cell is the interrupt number
-> - 2nd cell is the interrupt type (level/edge sensitive)
-> - 3rd cell is the IRQ priority
+> There's no change to dtbs_install as the flat structure is maintained on
+> install.
+> 
+> The naming of vendor directories is roughly in this order of preference:
+> - Matching original and current SoC vendor prefix/name (e.g. ti, qcom)
+> - Current vendor prefix/name if still actively sold (SoCs which have
+>   been aquired) (e.g. nxp/imx)
+> - Existing platform name for older platforms not sold/maintained by any
+>   company (e.g. gemini, nspire)
+> 
+> The whole move was scripted with the exception of MAINTAINERS.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  MAINTAINERS                                        |  181 +--
+> [...]
+>  arch/arm/boot/dts/axis/Makefile                    |    3 +
+>  arch/arm/boot/dts/{ => axis}/artpec6-devboard.dts  |    0
+>  arch/arm/boot/dts/{ => axis}/artpec6.dtsi          |    0
 
-ok
+For the Axis ARTPEC ports,
 
-Best regards,
-Krzysztof
+Acked-by: Jesper Nilsson <jesper.nilsson@axis.com>
 
+/^JN - Jesper Nilsson
+-- 
+               Jesper Nilsson -- jesper.nilsson@axis.com
