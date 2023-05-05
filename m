@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB966F8083
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7866F8084
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 12:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbjEEKDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 06:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
+        id S230506AbjEEKDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 06:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbjEEKDL (ORCPT
+        with ESMTP id S231819AbjEEKDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 06:03:11 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2044.outbound.protection.outlook.com [40.107.223.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4099019;
-        Fri,  5 May 2023 03:03:09 -0700 (PDT)
+        Fri, 5 May 2023 06:03:44 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2083.outbound.protection.outlook.com [40.107.100.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D2B9EC4;
+        Fri,  5 May 2023 03:03:31 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nwaPVR79d8gAtTi3x2uElkJK45Wyd/n+1zYuVrN83yw5u2wMAgn1lPDagxU6KK4sLw9HFxkBl/fCsQy1MU8lvzZ+n2kFWBHgBhqXcZCpXYXl2kx/Toj9jQNzZBlF0fL8ezDzGXGICA+MTYykkXV4qhq3w+0mvCe6FZHsahSKO1nxzfLPU24dLHuTdtfwebW0ybOuMjSrrZncZ4LsiH8kxydxvl6GP1VNvIg/mSVVQkU1T26/H7h9EeT6f7H2iuCy69zVdAlCpJbiLyiR/uq/GTLutL9yXQRlj8IGCCvOt7uY93dGF2+Cfr1g+tej+Mmk8ahJK6Ci5PhGsyNMVYwlog==
+ b=JvLDc+IHykdFBMm3UxM6UcnVV3u4Ze3VPpuOj/Ic/wf9/C+SG7lVTECsoIY87R6EETnNzRYXkTLL3aPAAsFQLswHRl+HHG3TWiexcHiqhszw8O4e3W7aUn6iBq5J53iI5SC7xwrQ+SRpA+lo+HDhUiwPgPG+p4p4P+4QhalK7V+mdtKHHlHlgQkwSkuVMozR/jIaWlF7gsfbsfBWO7WrEKuVlwTot4BARzTB0fm04siaoRrk7hmQyOJXunRfZzv0aS0+XJoA178kPEg0wyrU+G5rWaJVckYxHAv4hcoNR6g6QEJY7Ms5rZYnPfDVpiWX7fGfL8ot1qiRVXBPjXjRVg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jutWhOYcfhVltBsmhAGpFE40+Id0JaupsxHlGmdKoQs=;
- b=kVffDqrzfT5KKMNTy1/aSJWRR8/CTMES+gbt3aMZ1KKYUxwsBzRVtLwqAzO/bsbqUdSQUp5Sg2lFmRDMZ2cFQCobpQaDCKd0TxMQTyTcqfbmb8nqaqAHLDMrEOUjD/cJ7e8kcYGpq3nI7yc1QQ4NGV3nZc8EmBIsFtn5omE14/pE0LbOPJsAaoTPDtxlrUUxqr2KB85A2p6uA/aqckASjij6owriQHEP8nxj30DJGr4BmB2xrHPsDOzmulCE7l3Z3Y07OfXaAf3Gvz3cFdxHtjqyBrBSEjwllYlO5Fv8gf9bedffBfvSt+kMSYvhenHaCHdd/I9xKSRWSI7hlsFEHA==
+ bh=cvb2KFEAG5qxbATKsSz98w+HrNL+FkKLbFmUQSJFqoU=;
+ b=NXrOeGTpjKr4SIsF04Ihrc7KLW43Hgsvmw75maTs1CefRgFKcdgKZLNSoyJ8OlyyWn4OrD4fMZwzUd64vuTbrLTqf5S8vIHtxWPvQsBAb0DV7LN/ZkXawCETkVS6DtvhinCkQU14DxDqbZDWzjfqYI1CMi7IZkWdLTZXJYjm3rLcLHMwXmc6Fob7R1SiUFdkZD137Q07ObVuIsXaUXLU27PcgqAX7yIrOgzVChs7OHkBneEx4EmJTDNM8PZAMBjrmnAb89ybhPTG1jVHtMcwvFM+rLFgbjjVbiWiDMM/5aArI1IrFSYgFu+g7Dmh85sC12g2YgJ7bczlJUOUyUaALw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jutWhOYcfhVltBsmhAGpFE40+Id0JaupsxHlGmdKoQs=;
- b=vtfwj851ysWwcZevhbksX8DYkCB0WcfsS/mb46U4ktix4DABLP+cBlzd1TPLWEopdayv/+4hiuz0Uibmpe5B8pO7Pkt8ZXeTiDE0bEZb3KQYKyugCqZ+hV7yH1k0ZgMFbF+jn0jPNdFjBh/sF2JJzbsey8sQZbebgwfopYmHglo=
-Received: from MW4PR04CA0093.namprd04.prod.outlook.com (2603:10b6:303:83::8)
- by MW4PR12MB7481.namprd12.prod.outlook.com (2603:10b6:303:212::12) with
+ bh=cvb2KFEAG5qxbATKsSz98w+HrNL+FkKLbFmUQSJFqoU=;
+ b=N63VOUquOxSXmc69UzB1zrgYQH+KzCVBwAPxRBdzq6Myzf9UGDfFCiAhZlbwMn4BqRTPkW1dRwjDMqBRRBxLxJhgHDyDOrTRTOvRPB1EGY4051lGTlwkaBQYly/RvjQKPmCr7/zuxOeOyJ/VdsQJqgugEzuIQr5Xc6NWu9zYJHE=
+Received: from MW3PR06CA0018.namprd06.prod.outlook.com (2603:10b6:303:2a::23)
+ by CH0PR12MB8487.namprd12.prod.outlook.com (2603:10b6:610:18c::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27; Fri, 5 May
- 2023 10:03:07 +0000
-Received: from CO1NAM11FT041.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:83:cafe::e4) by MW4PR04CA0093.outlook.office365.com
- (2603:10b6:303:83::8) with Microsoft SMTP Server (version=TLS1_2,
+ 2023 10:03:25 +0000
+Received: from CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:2a:cafe::75) by MW3PR06CA0018.outlook.office365.com
+ (2603:10b6:303:2a::23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27 via Frontend
- Transport; Fri, 5 May 2023 10:03:07 +0000
+ Transport; Fri, 5 May 2023 10:03:24 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT041.mail.protection.outlook.com (10.13.174.217) with Microsoft SMTP
+ CO1NAM11FT033.mail.protection.outlook.com (10.13.174.247) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6363.27 via Frontend Transport; Fri, 5 May 2023 10:03:07 +0000
+ 15.20.6363.27 via Frontend Transport; Fri, 5 May 2023 10:03:24 +0000
 Received: from sindhu.amdval.net (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 5 May
- 2023 05:03:02 -0500
+ 2023 05:03:19 -0500
 From:   Sandipan Das <sandipan.das@amd.com>
 To:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <acme@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
@@ -62,10 +62,12 @@ CC:     <acme@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
         <adrian.hunter@intel.com>, <terrelln@fb.com>,
         <ravi.bangoria@amd.com>, <ananth.narayan@amd.com>,
         <sandipan.das@amd.com>
-Subject: [PATCH 1/2] perf script: Skip aggregation for stat events
-Date:   Fri, 5 May 2023 15:32:53 +0530
-Message-ID: <83d6c6c05c54bf00c5a9df32ac160718efca0c7a.1683280603.git.sandipan.das@amd.com>
+Subject: [PATCH 2/2] perf test: Add stat test for record and script
+Date:   Fri, 5 May 2023 15:32:54 +0530
+Message-ID: <6a5429879764e3dac984cbb11ee2d95cc1604161.1683280603.git.sandipan.das@amd.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <83d6c6c05c54bf00c5a9df32ac160718efca0c7a.1683280603.git.sandipan.das@amd.com>
+References: <83d6c6c05c54bf00c5a9df32ac160718efca0c7a.1683280603.git.sandipan.das@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -74,23 +76,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT041:EE_|MW4PR12MB7481:EE_
-X-MS-Office365-Filtering-Correlation-Id: aacdbb1c-2af7-48dd-30f5-08db4d4fecd1
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT033:EE_|CH0PR12MB8487:EE_
+X-MS-Office365-Filtering-Correlation-Id: 40192dfc-ec73-41d9-3c72-08db4d4ff73d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bW3wqHOlIezOBYj/Ym4/VnO6c9WNqo6EfkS+1trlI06FTRwMwWrk/o7bB6yAYNLrxNnbm4mcMbQAeBiTJ+K4CxlQ1AHlRVrt+CYRuOqYNoR2pYKskcq/mNyHlKcTiVO+IV/b1UxiKTgNNtyMwl+Y9Fa2a9U2LdjWyra7MNX81221y/wmvb5h2t27TaL/rLRVfv5N4uUpawg18dB/mCL9Kck6ClNpMzt8rOdYn+gLVp7RwnDcCAgs79ADehQH6Axk5i53jvYKNgv6fgV13+lQaq/UwH0girQ8xhMPKbnGu8vuO9PtpcBHcpjexFe5CLjF+j29RzLgrEAtDPjsvqfhJYe7sipqPp9EjOOZjMVAhPeC+pgMVTPK2c+DBNuWQCQpPuhQ7JcM8t3t9uj30drMeDAUgdLUQawL4oD5Y2jDlnTisN9OuVBBdL9Nd6QFG0RMSYrewjTLz4M2HlqV77k8ORyIQUh5J93OGTEuGBCa5jjipK4MDPccn0xLMc1i7IuHkrnptIaTJCsdE8lU1V4hhyZV2wtpdcTOo8HhEzJ38DWf0D/9rFmzg/SYxJaLtpjUClI0llYT/w3HZv1RjWEJZlzRd8VXWnwBCKvBmzbVZ2ELsJcWK7/qAHVVSiw3Y4cMXr7AHg+Mr8JnFl1HkTtWfL4Zmfhq9ctLtWDazH0hDX3Rw5pwaRlCT96ys1ksAA6giictEJ6YTu0FACd6Je59lfbtal/jbHqKcVuphCaP03zhGjT8GWzorBSQyRXlJGP2mD3SbXe3nDNa9lsVD9TSEUhOu2V1mA7qEYF1k25ULfE=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(39860400002)(346002)(451199021)(36840700001)(40470700004)(46966006)(44832011)(70206006)(70586007)(41300700001)(4326008)(8936002)(8676002)(7416002)(5660300002)(26005)(54906003)(478600001)(316002)(6666004)(110136005)(2906002)(83380400001)(40460700003)(47076005)(336012)(426003)(2616005)(16526019)(186003)(36860700001)(81166007)(82740400003)(356005)(40480700001)(86362001)(82310400005)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Q+sWaEUT3yaJ2v4wnce15cWNFR1iWq/iKmA+rkrfpRBYC9B+0sLZVXImDl7ViYrO8LA74Q2MgbPHOJOtZC6v6+JOajiCJTdbXDK2JXKFjW8SELchjr/UlcgltpPDVU+CTmPmGVb2OzERcSc7Zhf5017Kron66q1f+ohDKVWYUZKOyPu57M8Gi7q+3Ux2d5Ak94DyKDbfnQyXXYFsLAZWBD6WS2RApRPhJoSUypZ9D4LEPX2V2YjTSGnS/urmZ/yEPg+HeAy8xDjVJXMmzOnJn8EnF9VH97yfREGHun9KQWP6+WtJQBg0KNs3hiCD2V3fh8HFGw6+d1NALbQ9B0p5PG6/q8WYLFn2qwX2DbjeVw/m3aBW2ckJNVqQi/fgHQYrEVcoHqdEhIJlL/QfmYyYjpwL2xRovOCrtqaY674cJ52F1GTtPazqyLJMwkw/86lQN1KdadZVoX5tidXyeDeA6nfRJ4AYFUIcme6A77dOpAWBCz3cgBsCiaYNQ0wLEtznd/6B7tHaJ6lgc+Bce+111r0O4mN1ORuUJmiVb4Ps1MH6xo+oq5ooP1XIwFtrpeUD17EO6gOBiQ+PuEp6nN50isPA83aUO86fw4/+VX8OdCzqJpskkfHvhq0XnheL3j0pkeakiesD7OoAdgXZUdhOrMmoD6oMdUB4SVFOsGmCftEWX9T/getszcwEpzfofHOLFQCF7a3mQ8ePK4KxljoG5iuan/GxTtA5wr8A8PIOVt0=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39860400002)(346002)(396003)(451199021)(40470700004)(36840700001)(46966006)(86362001)(36756003)(54906003)(110136005)(316002)(70206006)(4326008)(70586007)(478600001)(6666004)(41300700001)(40480700001)(82310400005)(8676002)(5660300002)(8936002)(2906002)(44832011)(7416002)(82740400003)(356005)(81166007)(16526019)(186003)(2616005)(26005)(36860700001)(426003)(336012)(47076005)(40460700003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 10:03:07.2069
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 10:03:24.7391
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: aacdbb1c-2af7-48dd-30f5-08db4d4fecd1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40192dfc-ec73-41d9-3c72-08db4d4ff73d
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT041.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7481
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8487
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -101,53 +103,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The script command does not support aggregation modes by itself although
-that can be achieved using post-processing scripts. Because of this, it
-does not allocate memory for aggregated event values.
+When using the global aggregation mode, running perf script after perf
+stat record can result in a segmentation fault as seen with commit
+8b76a3188b85 ("perf stat: Remove unused perf_counts.aggr field"). Add a
+basic test to the existing suite of stat-related tests for checking if
+that workflow runs without erroring out.
 
-Upon running perf stat record, the aggregation mode is set in the perf
-data file. If the mode is AGGR_GLOBAL, the aggregated event values are
-accessed and this leads to a segmentation fault since these were never
-allocated to begin with. Set the mode to AGGR_NONE explicitly to avoid
-this.
-
-E.g.
-
-  $ perf stat record -e cycles true
-  $ perf script
-
-Before:
-  Segmentation fault (core dumped)
-
-After:
-  CPU   THREAD             VAL             ENA             RUN            TIME EVENT
-   -1   231919          162831          362069          362069          935289 cycles:u
-
-Fixes: 8b76a3188b85 ("perf stat: Remove unused perf_counts.aggr field")
 Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-Cc: stable@vger.kernel.org # v6.2+
 ---
- tools/perf/builtin-script.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/perf/tests/shell/stat.sh | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index 006f522d0e7f..c57be48d65bb 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -3647,6 +3647,13 @@ static int process_stat_config_event(struct perf_session *session __maybe_unused
- 				     union perf_event *event)
- {
- 	perf_event__read_stat_config(&stat_config, &event->stat_config);
-+
-+	/*
-+	 * Aggregation modes are not used since post-processing scripts are
-+	 * supposed to take care of such requirements
-+	 */
-+	stat_config.aggr_mode = AGGR_NONE;
-+
- 	return 0;
+diff --git a/tools/perf/tests/shell/stat.sh b/tools/perf/tests/shell/stat.sh
+index 2c1d3f704995..b154fbb15d54 100755
+--- a/tools/perf/tests/shell/stat.sh
++++ b/tools/perf/tests/shell/stat.sh
+@@ -28,6 +28,18 @@ test_stat_record_report() {
+   echo "stat record and report test [Success]"
  }
  
++test_stat_record_script() {
++  echo "stat record and script test"
++  if ! perf stat record -o - true | perf script -i - 2>&1 | \
++    grep -E -q "CPU[[:space:]]+THREAD[[:space:]]+VAL[[:space:]]+ENA[[:space:]]+RUN[[:space:]]+TIME[[:space:]]+EVENT"
++  then
++    echo "stat record and script test [Failed]"
++    err=1
++    return
++  fi
++  echo "stat record and script test [Success]"
++}
++
+ test_stat_repeat_weak_groups() {
+   echo "stat repeat weak groups test"
+   if ! perf stat -e '{cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles}' \
+@@ -93,6 +105,7 @@ test_topdown_weak_groups() {
+ 
+ test_default_stat
+ test_stat_record_report
++test_stat_record_script
+ test_stat_repeat_weak_groups
+ test_topdown_groups
+ test_topdown_weak_groups
 -- 
 2.34.1
 
