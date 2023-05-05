@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CF16F8AC5
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BFF6F8ABF
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 23:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbjEEVYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 17:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S233066AbjEEVYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 17:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbjEEVYN (ORCPT
+        with ESMTP id S232792AbjEEVYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 17:24:13 -0400
+        Fri, 5 May 2023 17:24:12 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58BE2681;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86266A3;
         Fri,  5 May 2023 14:24:11 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345Jvmgf009940;
-        Fri, 5 May 2023 21:24:04 GMT
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345LGLj0027415;
+        Fri, 5 May 2023 21:24:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : date :
  subject : mime-version : content-type : content-transfer-encoding :
  message-id : references : in-reply-to : to : cc; s=qcppdkim1;
- bh=NNgxuTByx6ume4kdD6nXKqWOnG0hiha6GhDtLcO0Rcg=;
- b=hLVahI2ZdJ3TXswyhloVdwK4TMHfEYX84EboQKkIyOTI+m/0lSxWWPOwZyVU3CqqJd05
- 2jHltdqtZMw+q12dOcqGiVndRp/fK/QttaceF+ZzgWs2du6268FFM/gE0ptIhLidS6nQ
- ICxhQ+hwhITydJISUCTSJlilkMHsKNJyccuWvhbkdUJqAxZTQWviF5SZrBpMM28pJZ3w
- g5+lUQIF7FJyp2fodsv14YORN/qHA0h7fMz+cjIWohdKp3Db6hNf0MQEQq2PXwJOTnfF
- 0HPNeUN5vkM1dPsHtbYsJZMz2vsP/986L01UH/e06oLuzsCdkyTz6Zk8z1nOE7dS3MWm ZA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qckf72qts-1
+ bh=uF3VIzx4IwC21DQbpIefb6k4caeYIFUcpPHCNX/lBbo=;
+ b=AMIgK8NCM6I3uu1dRHr5X85TJ8fXKAaB+JeUvg6+yHhD3LzOtRoZH5M7qcw98QBeB3AV
+ ThY56pcLpP1yNCyvkVzMb8J0Sy5rynZCfCR9uOkBcInKOlB+3fR+b6LNXafhR0EEaKc8
+ z3v64Gfk3k2HCNDXbZt/YDBu5JhYGpOcDml/96s6R+Osjo4dSSsn5FyiMKM6IEeWI/MP
+ 0OD83aD1ie1KuCoQhje66NwzqsJMSBIFSdqkPPdvDixYW7SiD9v+xWTya1/1+x55FCEg
+ avOZuyORR7QUx8AzhpC96/MVTc5x7nrFpdlmmU/Nb2zlWcN89gm90Q8imstpzdosnyf9 jQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qd3hrgw27-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 05 May 2023 21:24:04 +0000
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345LO3jg004028
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 345LO4bX031798
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 5 May 2023 21:24:04 GMT
 Received: from jesszhan-linux.qualcomm.com (10.80.80.8) by
@@ -40,12 +40,12 @@ Received: from jesszhan-linux.qualcomm.com (10.80.80.8) by
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.986.42; Fri, 5 May 2023 14:24:03 -0700
 From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-Date:   Fri, 5 May 2023 14:23:48 -0700
-Subject: [PATCH v2 1/4] drm/msm/dsi: Adjust pclk rate for compression
+Date:   Fri, 5 May 2023 14:23:49 -0700
+Subject: [PATCH v2 2/4] drm/msm/dsi: Fix compressed word count calculation
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20230405-add-dsc-support-v2-1-1072c70e9786@quicinc.com>
+Message-ID: <20230405-add-dsc-support-v2-2-1072c70e9786@quicinc.com>
 References: <20230405-add-dsc-support-v2-0-1072c70e9786@quicinc.com>
 In-Reply-To: <20230405-add-dsc-support-v2-0-1072c70e9786@quicinc.com>
 To:     Rob Clark <robdclark@gmail.com>,
@@ -59,11 +59,11 @@ CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
         Jessica Zhang <quic_jesszhan@quicinc.com>
 X-Mailer: b4 0.13-dev-bfdf5
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1683321843; l=2828;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1683321843; l=1835;
  i=quic_jesszhan@quicinc.com; s=20230329; h=from:subject:message-id;
- bh=6n1T0L02ntmxE0+q2uWO5/DF/EkRCHj6r3frjVC2bss=;
- b=Bt1jmzQ16O2P1SrQWe4cARrdUa4KWBYBdCVkDsycyRPTseHF6hXmT1cdc+tejphR+r8L1Tt6B
- NvTKbj34AnPBqT3phrgorguxVu96pV3SnHCuiEcOsb9+2QxAc7wKbes
+ bh=dj1STSigYt2hwxL1JPzulKjaVnUdQAnxUQMk0hFmBBI=;
+ b=XLyzK9brVE5Z+YnPa4OHwWpi6UeZ3RUtwzBS2EP5PGuns8HnzdEojRWCLBpwy8ruCqasotXVY
+ dTh3xcnqyOZC5FNVh/6WuwsdOnYAJMgR5qyhfepZzIx5vgREM4ouXP8
 X-Developer-Key: i=quic_jesszhan@quicinc.com; a=ed25519;
  pk=gAUCgHZ6wTJOzQa3U0GfeCDH7iZLlqIEPo4rrjfDpWE=
 X-Originating-IP: [10.80.80.8]
@@ -71,15 +71,15 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4tRVdtU4hSjpjd_Gb7YAn7VDF02ypx5u
-X-Proofpoint-ORIG-GUID: 4tRVdtU4hSjpjd_Gb7YAn7VDF02ypx5u
+X-Proofpoint-ORIG-GUID: CzmhTGL-yMOzkiF2lVRbDs3pzaH0Ujah
+X-Proofpoint-GUID: CzmhTGL-yMOzkiF2lVRbDs3pzaH0Ujah
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-05_27,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- bulkscore=0 phishscore=0 adultscore=0 malwarescore=0 mlxlogscore=999
- suspectscore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ adultscore=0 clxscore=1015 priorityscore=1501 spamscore=0
+ lowpriorityscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303200000 definitions=main-2305050173
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -91,74 +91,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adjust the pclk rate to divide hdisplay by the compression ratio when DSC
-is enabled.
+Currently, word count is calculated using slice_count. This is incorrect
+as downstream uses slice per packet, which is different from
+slice_count.
+
+Slice count represents the number of soft slices per interface, and its
+value will not always match that of slice per packet. For example, it is
+possible to have cases where there are multiple soft slices per interface
+but the panel specifies only one slice per packet.
+
+Thus, use the default value of one slice per packet and remove slice_count
+from the word count calculation.
 
 Changes in v2:
-- Adjusted pclk_rate math to divide only the hdisplay value by
-  compression ratio
+- "drm_panel" -> "mipi_dsi_device" in TODO comment
 
+Fixes: bc6b6ff8135c ("drm/msm/dsi: Use DSC slice(s) packet size to compute word count")
 Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
 ---
- drivers/gpu/drm/msm/dsi/dsi_host.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/msm/dsi/dsi_host.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-index 43a5ec33eee8..0e5778e8091f 100644
+index 0e5778e8091f..f6fb32e2223c 100644
 --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
 +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-@@ -561,7 +561,8 @@ void dsi_link_clk_disable_v2(struct msm_dsi_host *msm_host)
- 	clk_disable_unprepare(msm_host->byte_clk);
- }
+@@ -999,7 +999,14 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+ 		if (!msm_host->dsc)
+ 			wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
+ 		else
+-			wc = msm_host->dsc->slice_chunk_size * msm_host->dsc->slice_count + 1;
++			/*
++			 * When DSC is enabled, WC = slice_chunk_size * slice_per_packet + 1.
++			 * Currently, the driver only supports default value of slice_per_packet = 1
++			 *
++			 * TODO: Expand mipi_dsi_device struct to hold slice_per_packet info
++			 *       and adjust DSC math to account for slice_per_packet.
++			 */
++			wc = msm_host->dsc->slice_chunk_size + 1;
  
--static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool is_bonded_dsi)
-+static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode,
-+		struct drm_dsc_config *dsc, bool is_bonded_dsi)
- {
- 	unsigned long pclk_rate;
- 
-@@ -576,6 +577,14 @@ static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool
- 	if (is_bonded_dsi)
- 		pclk_rate /= 2;
- 
-+	/* If DSC is enabled, divide hdisplay by compression ratio */
-+	if (dsc) {
-+		int new_hdisplay = DIV_ROUND_UP(mode->hdisplay * msm_dsc_get_bpp_int(dsc),
-+				dsc->bits_per_component * 3);
-+		int fps = DIV_ROUND_UP(pclk_rate, mode->htotal * mode->vtotal);
-+		pclk_rate = (new_hdisplay + (mode->htotal - mode->hdisplay)) * mode->vtotal * fps;
-+	}
-+
- 	return pclk_rate;
- }
- 
-@@ -585,7 +594,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
- 	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
- 	u8 lanes = msm_host->lanes;
- 	u32 bpp = dsi_get_bpp(msm_host->format);
--	unsigned long pclk_rate = dsi_get_pclk_rate(mode, is_bonded_dsi);
-+	unsigned long pclk_rate = dsi_get_pclk_rate(mode, msm_host->dsc, is_bonded_dsi);
- 	u64 pclk_bpp = (u64)pclk_rate * bpp;
- 
- 	if (lanes == 0) {
-@@ -604,7 +613,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
- 
- static void dsi_calc_pclk(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
- {
--	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, is_bonded_dsi);
-+	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, msm_host->dsc, is_bonded_dsi);
- 	msm_host->byte_clk_rate = dsi_byte_clk_get_rate(&msm_host->base, is_bonded_dsi,
- 							msm_host->mode);
- 
-@@ -634,7 +643,7 @@ int dsi_calc_clk_rate_v2(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
- 
- 	dsi_calc_pclk(msm_host, is_bonded_dsi);
- 
--	pclk_bpp = (u64)dsi_get_pclk_rate(msm_host->mode, is_bonded_dsi) * bpp;
-+	pclk_bpp = (u64)dsi_get_pclk_rate(msm_host->mode, msm_host->dsc, is_bonded_dsi) * bpp;
- 	do_div(pclk_bpp, 8);
- 	msm_host->src_clk_rate = pclk_bpp;
- 
+ 		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
+ 			DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
 
 -- 
 2.40.1
