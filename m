@@ -2,176 +2,480 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823226F7C83
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 07:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582886F7C88
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 07:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjEEFrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 01:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
+        id S230298AbjEEFtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 01:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjEEFrS (ORCPT
+        with ESMTP id S230063AbjEEFtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 01:47:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C398A11D89;
-        Thu,  4 May 2023 22:47:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CA2563B30;
-        Fri,  5 May 2023 05:47:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEBDC433B0;
-        Fri,  5 May 2023 05:47:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683265636;
-        bh=TmEJ43a9wRyU79Q4Z9WHv4VZR6aLeCdSzDRMZZtHgkE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=I2g+vyhe1hoLtc3xpRjAc9BU/OAumbEN1B7Qbc0uCZJ6vm38izq9WxgG6TDQIw9Cn
-         gtD6rIxqmEHNa8rMU8v/ldvTpcVtaEF3DSdJwkdOmvdfZad8eHH3pZuMYUuPnRHXOF
-         aYYdetp0cJMW6mFI28DiTiu7OK1/suDqFmm+PnshMDcFrjGxdV75SdkN4eyVXeCkzW
-         HSaITHGNl7LHZa0zreUIjIqZKUUeH1GUas9yTSfl5gIOK4Nx3H8cZuqGu0g7MQUCMn
-         LcnwJPgGPB8cca2qNfnc8SP0goqQZTmJ1qZnOLhwiQAwrnHXfTiUVeCmF7841pmmh4
-         RSuO/9+XH4fLg==
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-94f3cd32799so263635666b.0;
-        Thu, 04 May 2023 22:47:16 -0700 (PDT)
-X-Gm-Message-State: AC+VfDz2FrmL4Up3fD5j3mGM/O8YWH2p5IWI7Om1S8wwmKwlPsAcDzfQ
-        f0Yxie+j4D8vrLMz9f2waM7nC/UUl9aPPiqySfE=
-X-Google-Smtp-Source: ACHHUZ7vjZvoO17O2+xGcjw8YRQwo0MSgi9BtdhaWD+v+3nmuTyY0RrEyW2wbSK+lqJd6C9lcTXOXjjLYHG3jJse7RE=
-X-Received: by 2002:a17:907:1c07:b0:960:ddba:e5c7 with SMTP id
- nc7-20020a1709071c0700b00960ddbae5c7mr139047ejc.40.1683265634680; Thu, 04 May
- 2023 22:47:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-10-arnd@kernel.org>
-In-Reply-To: <20230327121317.4081816-10-arnd@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 5 May 2023 13:47:03 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTT2VCVMJs1NvgK66uD+BhObjM2WNxf2RY7wTZsho4sjVA@mail.gmail.com>
-Message-ID: <CAJF2gTT2VCVMJs1NvgK66uD+BhObjM2WNxf2RY7wTZsho4sjVA@mail.gmail.com>
-Subject: Re: [PATCH 09/21] riscv: dma-mapping: skip invalidation before
- bidirectional DMA
-To:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 5 May 2023 01:49:05 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A5FA11D89;
+        Thu,  4 May 2023 22:49:04 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1134)
+        id 8FC4E20EA25A; Thu,  4 May 2023 22:49:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8FC4E20EA25A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1683265743;
+        bh=RkYIlRpSGE3RkwByOMK1BBL7I2+pvXPyV2rSwbVWbgE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=lmbunTTEjJCMiSmzkofsK/DEaFz4U5850MdXB4/au/lbiVHTsXyqdyV4rJe7QMTST
+         vcYK3rVP7ufDQc774kT0tHeNmUH8OZRrS1OcRv08D17J2CXSX7QMTWJ2iFaFmeHFrV
+         5pmh2Avt21s3Swd0aGwvwae8KEbR48+10zh6yoCE=
+From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
+Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Olaf Hering <olaf@aepfle.de>
+Subject: [PATCH v3] hv/hv_kvp_daemon: Add support for keyfile config based connection profile in NM
+Date:   Thu,  4 May 2023 22:48:45 -0700
+Message-Id: <1683265725-3258-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <20230422135516.70a63d96.olaf@aepfle.de>
+References: <20230422135516.70a63d96.olaf@aepfle.de>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 8:15=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
-te:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> For a DMA_BIDIRECTIONAL transfer, the caches have to be cleaned
-> first to let the device see data written by the CPU, and invalidated
-> after the transfer to let the CPU see data written by the device.
->
-> riscv also invalidates the caches before the transfer, which does
-> not appear to serve any purpose.
-Yes, we can't guarantee the CPU pre-load cache lines randomly during
-dma working.
+Ifcfg config file support in NetworkManger is deprecated. This patch
+provides support for the new keyfile config format for connection
+profiles in NetworkManager. The patch modifies the hv_kvp_daemon code
+to generate the new network configuration in keyfile
+format(.ini-style format) along with a ifcfg format configuration.
+The ifcfg format configuration is also retained to support easy
+backward compatibility for distro vendors. These configurations are
+stored in temp files which are further translated using the
+hv_set_ifconfig.sh script. This script is implemented by individual
+distros based on the network management commands supported.
+For example, RHEL's implementation could be found here:
+https://gitlab.com/redhat/centos-stream/src/hyperv-daemons/-/blob/c9s/hv_set_ifconfig.sh
+Debian's implementation could be found here:
+https://github.com/endlessm/linux/blob/master/debian/cloud-tools/hv_set_ifconfig
 
-But I've two purposes to keep invalidates before dma transfer:
- - We clearly tell the CPU these cache lines are invalid. The caching
-algorithm would use these invalid slots first instead of replacing
-valid ones.
- - Invalidating is very cheap. Actually, flush and clean have the same
-performance in our machine.
+The next part of this support is to let the Distro vendors consume
+these modified implementations to the new configuration format.
 
-So, how about:
+Tested-on: Rhel9(Hyper-V, Azure)(nm and ifcfg files verified)
+Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+---
 
-diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoheren=
-t.c
-index d919efab6eba..2c52fbc15064 100644
---- a/arch/riscv/mm/dma-noncoherent.c
-+++ b/arch/riscv/mm/dma-noncoherent.c
-@@ -22,8 +22,6 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t s=
-ize,
-                ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-                break;
-        case DMA_FROM_DEVICE:
--               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
--               break;
-        case DMA_BIDIRECTIONAL:
-                ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-                break;
-@@ -42,7 +40,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size=
-,
-                break;
-        case DMA_FROM_DEVICE:
-        case DMA_BIDIRECTIONAL:
-                /* I'm not sure all drivers have guaranteed cacheline
-alignment. If not, this inval would cause problems */
--               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-+               ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
-                break;
-        default:
-                break;
+Changes in v3:
+ * Corrected the patch description to include information about new
+   changes to persist ifcfg file format too
+ * Code changes to support population of ifcfg format configuration
+   file along with keyfiles
+ * Renamed the new temp keyfile configuration to
+   <interface>.nmconnection
 
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/riscv/mm/dma-noncoherent.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoher=
-ent.c
-> index 640f4c496d26..69c80b2155a1 100644
-> --- a/arch/riscv/mm/dma-noncoherent.c
-> +++ b/arch/riscv/mm/dma-noncoherent.c
-> @@ -25,7 +25,7 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t=
- size,
->                 ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
->                 break;
->         case DMA_BIDIRECTIONAL:
-> -               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-> +               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
->                 break;
->         default:
->                 break;
-> --
-> 2.39.2
->
+---
+ tools/hv/hv_kvp_daemon.c    | 224 ++++++++++++++++++++++++++++++++----
+ tools/hv/hv_set_ifconfig.sh |  39 ++++++-
+ 2 files changed, 234 insertions(+), 29 deletions(-)
 
+diff --git a/tools/hv/hv_kvp_daemon.c b/tools/hv/hv_kvp_daemon.c
+index 27f5e7dfc2f7..ae1e2eb10428 100644
+--- a/tools/hv/hv_kvp_daemon.c
++++ b/tools/hv/hv_kvp_daemon.c
+@@ -1171,11 +1171,91 @@ static int process_ip_string(FILE *f, char *ip_string, int type)
+ 	return 0;
+ }
+ 
++static int kvp_subnet_to_plen(char *subnet_addr_str)
++{
++	int plen = 0;
++	struct in_addr subnet_addr4;
++	struct in6_addr subnet_addr6;
++
++	/*
++	 * Convert subnet address to binary representation
++	 */
++	if (inet_pton(AF_INET, subnet_addr_str, &subnet_addr4) == 1) {
++
++		uint32_t subnet_mask = ntohl(subnet_addr4.s_addr);
++
++		while (subnet_mask & 0x80000000) {
++
++			plen++;
++			subnet_mask <<= 1;
++		}
++	} else if (inet_pton(AF_INET6, subnet_addr_str, &subnet_addr6) == 1) {
++
++		const uint8_t *subnet_mask = subnet_addr6.s6_addr;
++		int i = 0;
++
++		while (i < 16 && subnet_mask[i] == 0xff) {
++
++			plen += 8;
++			i++;
++		}
++		if (i < 16) {
++
++			uint8_t mask_byte = subnet_mask[i];
++
++			while (mask_byte & 0x80) {
++
++				plen++;
++				mask_byte <<= 1;
++			}
++		}
++	} else {
++		return -1;
++	}
++
++	return plen;
++}
++
++static int process_ip_string_nm(FILE *f, char *ip_string, char *subnet)
++{
++	int error = 0;
++	char addr[INET6_ADDRSTRLEN];
++	char subnet_addr[INET6_ADDRSTRLEN];
++	int i = 0;
++	int ip_offset = 0, subnet_offset = 0;
++	int plen;
++
++	memset(addr, 0, sizeof(addr));
++	memset(subnet_addr, 0, sizeof(subnet_addr));
++
++	while (parse_ip_val_buffer(ip_string, &ip_offset, addr,
++					(MAX_IP_ADDR_SIZE * 2)) &&
++					parse_ip_val_buffer(subnet,
++					&subnet_offset, subnet_addr,
++					(MAX_IP_ADDR_SIZE * 2))) {
++
++		plen = kvp_subnet_to_plen((char *)subnet_addr);
++		if (plen < 0)
++			return plen;
++
++		error = fprintf(f, "address%d=%s/%d\n", ++i, (char *)addr,
++							plen);
++		if (error < 0)
++			return error;
++
++		memset(addr, 0, sizeof(addr));
++		memset(subnet_addr, 0, sizeof(subnet_addr));
++	}
++
++	return 0;
++}
++
+ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ {
+ 	int error = 0;
+ 	char if_file[PATH_MAX];
+-	FILE *file;
++	char nm_file[PATH_MAX];
++	FILE *ifcfg_file, *nmfile;
+ 	char cmd[PATH_MAX];
+ 	char *mac_addr;
+ 	int str_len;
+@@ -1197,7 +1277,7 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ 	 * in a given distro to configure the interface and so are free
+ 	 * ignore information that may not be relevant.
+ 	 *
+-	 * Here is the format of the ip configuration file:
++	 * Here is the ifcfg format of the ip configuration file:
+ 	 *
+ 	 * HWADDR=macaddr
+ 	 * DEVICE=interface name
+@@ -1220,6 +1300,32 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ 	 * tagged as IPV6_DEFAULTGW and IPV6 NETMASK will be tagged as
+ 	 * IPV6NETMASK.
+ 	 *
++	 * Here is the keyfile format of the ip configuration file:
++	 *
++	 * [ethernet]
++	 * mac-address=macaddr
++	 * [connection]
++	 * interface-name=interface name
++	 *
++	 * [ipv4]
++	 * method=<protocol> (where <protocol> is "auto" if DHCP is configured
++	 *                       or "manual" if no boot-time protocol should be used)
++	 *
++	 * address1=ipaddr1/plen
++	 * address2=ipaddr2/plen
++	 *
++	 * gateway=gateway1;gateway2
++	 *
++	 * dns=dns1;dns2
++	 *
++	 * [ipv6]
++	 * address1=ipaddr1/plen
++	 * address2=ipaddr2/plen
++	 *
++	 * gateway=gateway1;gateway2
++	 *
++	 * dns=dns1;dns2
++	 *
+ 	 * The host can specify multiple ipv4 and ipv6 addresses to be
+ 	 * configured for the interface. Furthermore, the configuration
+ 	 * needs to be persistent. A subsequent GET call on the interface
+@@ -1227,12 +1333,26 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ 	 * call.
+ 	 */
+ 
++	/*
++	 * We are populating both ifcfg and nmconnection files
++	 */
+ 	snprintf(if_file, sizeof(if_file), "%s%s%s", KVP_CONFIG_LOC,
+ 		"/ifcfg-", if_name);
+ 
+-	file = fopen(if_file, "w");
++	ifcfg_file = fopen(if_file, "w");
+ 
+-	if (file == NULL) {
++	if (ifcfg_file == NULL) {
++		syslog(LOG_ERR, "Failed to open config file; error: %d %s",
++				errno, strerror(errno));
++		return HV_E_FAIL;
++	}
++
++	snprintf(nm_file, sizeof(if_file), "%s%s%s%s", KVP_CONFIG_LOC,
++		"/", if_name, ".nmconnection");
++
++	nmfile = fopen(nm_file, "w");
++
++	if (nmfile == NULL) {
+ 		syslog(LOG_ERR, "Failed to open config file; error: %d %s",
+ 				errno, strerror(errno));
+ 		return HV_E_FAIL;
+@@ -1248,12 +1368,28 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ 		goto setval_error;
+ 	}
+ 
+-	error = kvp_write_file(file, "HWADDR", "", mac_addr);
+-	free(mac_addr);
++	error = kvp_write_file(ifcfg_file, "HWADDR", "", mac_addr);
++	if (error < 0)
++		goto setval_error;
++
++	error = kvp_write_file(ifcfg_file, "DEVICE", "", if_name);
++	if (error < 0)
++		goto setval_error;
++
++	error = fprintf(nmfile, "\n[connection]\n");
++	if (error < 0)
++		goto setval_error;
++
++	error = kvp_write_file(nmfile, "interface-name", "", if_name);
+ 	if (error)
+ 		goto setval_error;
+ 
+-	error = kvp_write_file(file, "DEVICE", "", if_name);
++	error = fprintf(nmfile, "\n[ethernet]\n");
++	if (error < 0)
++		goto setval_error;
++
++	error = kvp_write_file(nmfile, "mac-address", "", mac_addr);
++	free(mac_addr);
+ 	if (error)
+ 		goto setval_error;
+ 
+@@ -1263,47 +1399,88 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ 	 * proceed to parse and pass the IPv6 information to the
+ 	 * disto-specific script hv_set_ifconfig.
+ 	 */
++
++	/*
++	 * First populate the ifcfg file format
++	 */
+ 	if (new_val->dhcp_enabled) {
+-		error = kvp_write_file(file, "BOOTPROTO", "", "dhcp");
++		error = kvp_write_file(ifcfg_file, "BOOTPROTO", "", "dhcp");
+ 		if (error)
+ 			goto setval_error;
+-
+ 	} else {
+-		error = kvp_write_file(file, "BOOTPROTO", "", "none");
++		error = kvp_write_file(ifcfg_file, "BOOTPROTO", "", "none");
+ 		if (error)
+ 			goto setval_error;
+ 	}
+ 
+-	/*
+-	 * Write the configuration for ipaddress, netmask, gateway and
+-	 * name servers.
+-	 */
+-
+-	error = process_ip_string(file, (char *)new_val->ip_addr, IPADDR);
++	error = process_ip_string(ifcfg_file, (char *)new_val->ip_addr,
++					IPADDR);
+ 	if (error)
+ 		goto setval_error;
+ 
+-	error = process_ip_string(file, (char *)new_val->sub_net, NETMASK);
++	error = process_ip_string(ifcfg_file, (char *)new_val->sub_net,
++					NETMASK);
+ 	if (error)
+ 		goto setval_error;
+ 
+-	error = process_ip_string(file, (char *)new_val->gate_way, GATEWAY);
++	error = process_ip_string(ifcfg_file, (char *)new_val->gate_way,
++					GATEWAY);
+ 	if (error)
+ 		goto setval_error;
+ 
+-	error = process_ip_string(file, (char *)new_val->dns_addr, DNS);
++	error = process_ip_string(ifcfg_file, (char *)new_val->dns_addr, DNS);
+ 	if (error)
+ 		goto setval_error;
+ 
+-	fclose(file);
++	if (new_val->addr_family == ADDR_FAMILY_IPV6) {
++
++		error = fprintf(nmfile, "\n[ipv6]\n");
++		if (error < 0)
++			goto setval_error;
++	} else {
++
++		error = fprintf(nmfile, "\n[ipv4]\n");
++		if (error < 0)
++			goto setval_error;
++
++		if (new_val->dhcp_enabled) {
++			error = kvp_write_file(nmfile, "method", "", "auto");
++			if (error < 0)
++				goto setval_error;
++		} else {
++			error = kvp_write_file(nmfile, "method", "", "manual");
++			if (error < 0)
++				goto setval_error;
++		}
++	}
++
++	/*
++	 * Write the configuration for ipaddress, netmask, gateway and
++	 * name services
++	 */
++	error = process_ip_string_nm(nmfile, (char *)new_val->ip_addr,
++					(char *)new_val->sub_net);
++	if (error < 0)
++		goto setval_error;
++
++	error = fprintf(nmfile, "gateway=%s\n", (char *)new_val->gate_way);
++	if (error < 0)
++		goto setval_error;
++
++	error = fprintf(nmfile, "dns=%s\n", (char *)new_val->dns_addr);
++	if (error < 0)
++		goto setval_error;
++
++	fclose(nmfile);
++	fclose(ifcfg_file);
+ 
+ 	/*
+ 	 * Now that we have populated the configuration file,
+ 	 * invoke the external script to do its magic.
+ 	 */
+ 
+-	str_len = snprintf(cmd, sizeof(cmd), KVP_SCRIPTS_PATH "%s %s",
+-			   "hv_set_ifconfig", if_file);
++	str_len = snprintf(cmd, sizeof(cmd), KVP_SCRIPTS_PATH "%s %s %s",
++			   "hv_set_ifconfig", if_file, nm_file);
+ 	/*
+ 	 * This is a little overcautious, but it's necessary to suppress some
+ 	 * false warnings from gcc 8.0.1.
+@@ -1323,7 +1500,8 @@ static int kvp_set_ip_info(char *if_name, struct hv_kvp_ipaddr_value *new_val)
+ 
+ setval_error:
+ 	syslog(LOG_ERR, "Failed to write config file");
+-	fclose(file);
++	fclose(ifcfg_file);
++	fclose(nmfile);
+ 	return error;
+ }
+ 
+diff --git a/tools/hv/hv_set_ifconfig.sh b/tools/hv/hv_set_ifconfig.sh
+index d10fe35b7f25..ae5a7a8249a2 100755
+--- a/tools/hv/hv_set_ifconfig.sh
++++ b/tools/hv/hv_set_ifconfig.sh
+@@ -18,12 +18,12 @@
+ #
+ # This example script is based on a RHEL environment.
+ #
+-# Here is the format of the ip configuration file:
++# Here is the ifcfg format of the ip configuration file:
+ #
+ # HWADDR=macaddr
+ # DEVICE=interface name
+ # BOOTPROTO=<protocol> (where <protocol> is "dhcp" if DHCP is configured
+-#                       or "none" if no boot-time protocol should be used)
++# 			or "none" if no boot-time protocol should be used)
+ #
+ # IPADDR0=ipaddr1
+ # IPADDR1=ipaddr2
+@@ -41,6 +41,32 @@
+ # tagged as IPV6_DEFAULTGW and IPV6 NETMASK will be tagged as
+ # IPV6NETMASK.
+ #
++# Here is the keyfile format of the ip configuration file:
++#
++# [ethernet]
++# mac-address=macaddr
++# [connection]
++# interface-name=interface name
++#
++# [ipv4]
++# method=<protocol> (where <protocol> is "auto" if DHCP is configured
++#                       or "manual" if no boot-time protocol should be used)
++#
++# address1=ipaddr1/plen
++# address=ipaddr2/plen
++#
++# gateway=gateway1;gateway2
++#
++# dns=dns1;
++#
++# [ipv6]
++# address1=ipaddr1/plen
++# address2=ipaddr1/plen
++#
++# gateway=gateway1;gateway2
++#
++# dns=dns1;dns2
++#
+ # The host can specify multiple ipv4 and ipv6 addresses to be
+ # configured for the interface. Furthermore, the configuration
+ # needs to be persistent. A subsequent GET call on the interface
+@@ -48,18 +74,19 @@
+ # call.
+ #
+ 
+-
+-
+ echo "IPV6INIT=yes" >> $1
+ echo "NM_CONTROLLED=no" >> $1
+ echo "PEERDNS=yes" >> $1
+ echo "ONBOOT=yes" >> $1
+ 
+-
+ cp $1 /etc/sysconfig/network-scripts/
+ 
++chmod 600 $2
++interface=$(echo $2 | awk -F - '{ print $2 }')
++filename="${2##*/}"
++
++sed '/\[connection\]/a autoconnect=true' $2 > /etc/NetworkManager/system-connections/${filename}
+ 
+-interface=$(echo $1 | awk -F - '{ print $2 }')
+ 
+ /sbin/ifdown $interface 2>/dev/null
+ /sbin/ifup $interface 2>/dev/null
+-- 
+2.34.1
 
---=20
-Best Regards
- Guo Ren
