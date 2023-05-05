@@ -2,153 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19706F7DF6
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A6C6F7DFC
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 09:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbjEEHdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 03:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58718 "EHLO
+        id S230038AbjEEHe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 03:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjEEHdf (ORCPT
+        with ESMTP id S231338AbjEEHeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 03:33:35 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592E8358D;
-        Fri,  5 May 2023 00:33:30 -0700 (PDT)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4F52D240016;
-        Fri,  5 May 2023 07:33:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1683272009;
+        Fri, 5 May 2023 03:34:19 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734EC17FC3
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 00:34:14 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id C2553D27;
+        Fri,  5 May 2023 09:34:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1683272050;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=T7T1c6wxkR+mYUiMur2MxsOutKMVIwipkGNhZWm1sNM=;
-        b=k/m9/CBVnbJQdCRmTE60MGd9HHLAwMpzSKK1hSL/HOus34J3o3XbaRHowInL/zQDWlp81g
-        3BPMbHqzO6S7468r7tC42A1sgyy3o1a1P8yb6FLKbIbGOyCoQDxPCiMdND7TepQ5vZdP1b
-        z8mKmB02OnR+1SwwoEM20jj+eJoyOaHlNyxn9EhYQxidoODHzpZDG/Rg8wgurGADQiuVbG
-        7MGojmryLq9xqoCjCw3skbZKbzHP5lOYDuSBk4byhj1ULp4hGDRTAIR9wl1gNZJIt2s5AU
-        CBRSWCKXzVZ5iia0HnAvFZxDWgJSU6dL62GfB0w0k9jJG/q4cm9D2LZVfEth3g==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Rob Herring <robh@kernel.org>, soc@kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Lars Persson <lars.persson@axis.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Andrew Lunn <andrew@lunn.ch>, Lubomir Rintel <lkundrak@v3.sk>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Paul Barker <paul.barker@sancloud.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@axis.com
-Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
-In-Reply-To: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
-References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
- <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
-Date:   Fri, 05 May 2023 09:33:18 +0200
-Message-ID: <87wn1nz0zl.fsf@BL-laptop>
+        bh=ZeveXooqm+xBLZjxuZkZXBfIKe/R2RjArxvJxAqKSus=;
+        b=WeS3SdbYdkBu1lvqYn/ZfzldBjvY/iitD+YPfri0cviuPnuqFGdIpgUyl/gB6PZ3Yhle25
+        7iZiTwX3jJh9xoyKOKFDNczLlPl+HrIxe0ixAvCJOvN/po49do7JC9ibapmx0BTTuYO/X1
+        QsOIP6z9CakiSc+Ox+g7d8AIr1UWTLJb6QyZ9er3vDYlPS1OSb3Pps0zaFvPne3XJtnwjU
+        ke4y3dJuDUQHjbhYBHsoHsilF6EQkQwZxYEqxCPs838+iLgvjxlJokj4y4dwBkTB3B//yr
+        B0tXTVPAy45fksmk92I3MfULIa15yg5iTh0rBk92BmZpMUYpVLvBSbL2fv3uDg==
+From:   Michael Walle <michael@walle.cc>
+To:     aford173@gmail.com
+Cc:     Laurent.pinchart@ideasonboard.com, aford@beaconembedded.com,
+        andrzej.hajda@intel.com, dri-devel@lists.freedesktop.org,
+        frieder.schrempf@kontron.de, jagan@amarulasolutions.com,
+        jernej.skrabec@gmail.com, jonas@kwiboo.se,
+        linux-kernel@vger.kernel.org, m.szyprowski@samsung.com,
+        marex@denx.de, neil.armstrong@linaro.org, rfoss@kernel.org,
+        wenst@chromium.org, Michael Walle <michael@walle.cc>
+Subject: [PATCH V3 5/7] drm: bridge: samsung-dsim: Dynamically configure DPHY timing
+Date:   Fri,  5 May 2023 09:33:59 +0200
+Message-Id: <20230505073359.3715594-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230502010759.17282-6-aford173@gmail.com>
+References: <20230502010759.17282-6-aford173@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rob Herring <robh@kernel.org> writes:
+> The DPHY timings are currently hard coded. Since the input
+> clock can be variable, the phy timings need to be variable
+> too.  Add an additional variable to the driver data to enable
+> this feature to prevent breaking boards that don't support it.
+> 
+> The phy_mipi_dphy_get_default_config function configures the
+> DPHY timings in pico-seconds, and a small macro converts those
+> timings into clock cycles based on the pixel clock rate.
 
-> The arm dts directory has grown to 1553 boards which makes it a bit
-> unwieldy to maintain and use. Past attempts stalled out due to plans to
-> move .dts files out of the kernel tree. Doing that is no longer planned
-> (any time soon at least), so let's go ahead and group .dts files by
-> vendors. This move aligns arm with arm64 .dts file structure.
->
-> Doing this enables building subsets of dts files by vendor easily
-> without changing kernel configs:
->
-> make allyesconfig
-> make arch/arm/boot/dts/ti/
->
-> There's no change to dtbs_install as the flat structure is maintained on
-> install.
->
-> The naming of vendor directories is roughly in this order of preference:
-> - Matching original and current SoC vendor prefix/name (e.g. ti, qcom)
-> - Current vendor prefix/name if still actively sold (SoCs which have
->   been aquired) (e.g. nxp/imx)
-> - Existing platform name for older platforms not sold/maintained by any
->   company (e.g. gemini, nspire)
->
-> The whole move was scripted with the exception of MAINTAINERS.
+This actually fixes a bug with the DSI84 bridge on our boards. The
+hardcoded settings will violate the D-PHY spec timings for lower
+frequencies, esp. the Ths_prepare+Ths_zero timing. Thus, the bridge
+will read a wrong HS sync sequence and set it's internal SoT error
+bit (and don't generate any RGB signals on the LVDS side).
 
-Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Tested-by: Michael Walle <michael@walle.cc>
 
-Thanks,
-
-Gregory
-
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-
-> -- 
-> 2.39.2
->
-
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Thanks!
+-michael
