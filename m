@@ -2,113 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D22A6F870B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F8E6F870D
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 May 2023 18:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbjEEQvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 12:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
+        id S231626AbjEEQvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 12:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjEEQu7 (ORCPT
+        with ESMTP id S231611AbjEEQvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 12:50:59 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAA113843;
-        Fri,  5 May 2023 09:50:58 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8F41C228C4;
-        Fri,  5 May 2023 16:50:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1683305457; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zPT0GNbrLPn2WOzHVENqDErkuUZ+X4IxxxJ3W2ZkErM=;
-        b=cSVFEnb94dbwMgOTFX4MBhewNl2CKXGBZKtc/sXNdVmwvJNCkCHjoy6dW+dnR3UOjS8ys4
-        pbe0EcJpkahfcEdoudxVWOr8eVvpf4eexIcQ7LpCjF8Cp7Gk+6A0BNc+h7IP11qsLs10FM
-        jjs7yAS+YBOuUHQNfNM2qyv+RKmFi8Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1683305457;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zPT0GNbrLPn2WOzHVENqDErkuUZ+X4IxxxJ3W2ZkErM=;
-        b=L5BgV2ruVzmdMQT02Xefv5VEnPbF3ZweHV39ppuRF1TjxykM4KSpUKRg4rMduaU8CKGpys
-        0P0FjWt+cJauaPDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7B81913513;
-        Fri,  5 May 2023 16:50:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id XQEZHvEzVWSCNAAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 05 May 2023 16:50:57 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 034F3A0729; Fri,  5 May 2023 18:50:56 +0200 (CEST)
-Date:   Fri, 5 May 2023 18:50:56 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, yukuai3@huawei.com,
-        syzbot+08106c4b7d60702dbc14@syzkaller.appspotmail.com
-Subject: Re: [PATCH] ext4: check iomap type only if ext4_iomap_begin() does
- not fail
-Message-ID: <20230505165056.7yjsh5nlaf4blvh5@quack3>
-References: <20230505132429.714648-1-libaokun1@huawei.com>
+        Fri, 5 May 2023 12:51:21 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBA7160BD
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 09:51:18 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-32f240747cdso115398465ab.1
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 09:51:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683305478; x=1685897478;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rbnGNgdItHlqccm7N8gfCurOL2pfovrCoWlBfE15OrI=;
+        b=F7a7wHn+GnohaA7qdsulxdD/eEY5GWPUOfQkh55hVc8O9FaujgbvW7gehYuvapnVY8
+         zNbqHDWBd5EWYwa/U0P09EnW4h8Im1Gkd4YNTVo+kSScSpzpTIF74vxuKCuZpag4G8fa
+         2UJQ2jH4gIkfQIX+iGIDiwxmZz42suImDLxUKSza2E++rzOJ8Ju3MGVFTx8jnSxvig7Q
+         0EvlWroYYidB+YU8LFc5ZbOIzBYWIMCkfdc+NOritAouzHgZg+k8HLb01aa1niWgtv3b
+         gdgnsRyb+u2vM4dfjOsF4FZSZYeghUXRv2HsCi/nGShT9rjwvKFkxUn+VerUJXljxeEC
+         htDQ==
+X-Gm-Message-State: AC+VfDyM+YUeyQaPSlj36DopRxjJAm72hX732zm1o7hjUWxTp3MfYh8z
+        xVbuRFSvcmM9X8g3H8YDpsjOxgYIL/hgmYRBehaFFtCNINx1
+X-Google-Smtp-Source: ACHHUZ6nCwvxjaFQY1guH99PFmSUDzgXw6D1xJYhAHc386/xa4SGRfEEaP7fokaIOotO7bdkluxF8YTZpNfMgtwKc/w2zoRa+5cG
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230505132429.714648-1-libaokun1@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:a98b:0:b0:411:b866:8345 with SMTP id
+ q11-20020a02a98b000000b00411b8668345mr1210931jam.0.1683305478246; Fri, 05 May
+ 2023 09:51:18 -0700 (PDT)
+Date:   Fri, 05 May 2023 09:51:18 -0700
+In-Reply-To: <00000000000016552c05f1d7e734@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000014678c05faf51958@google.com>
+Subject: Re: [syzbot] [mm?] WARNING in shmem_evict_inode
+From:   syzbot <syzbot+3d4aa0d3e784b29b1520@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, hughd@google.com, jiaqiyan@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        shy828301@gmail.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 05-05-23 21:24:29, Baokun Li wrote:
-> When ext4_iomap_overwrite_begin() calls ext4_iomap_begin() map blocks may
-> fail for some reason (e.g. memory allocation failure, bare disk write), and
-> later because "iomap->type ! = IOMAP_MAPPED" triggers WARN_ON(). When ext4
-> iomap_begin() returns an error, it is normal that the type of iomap->type
-> may not match the expectation. Therefore, we only determine if iomap->type
-> is as expected when ext4_iomap_begin() is executed successfully.
-> 
-> Reported-by: syzbot+08106c4b7d60702dbc14@syzkaller.appspotmail.com
-> Link: https://lore.kernel.org/all/00000000000015760b05f9b4eee9@google.com
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+syzbot has bisected this issue to:
 
-Makes sense. Feel free to add:
+commit 12904d953364e3bd21789a45137bf90df7cc78ee
+Author: Jiaqi Yan <jiaqiyan@google.com>
+Date:   Wed Mar 29 15:11:21 2023 +0000
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+    mm/khugepaged: recover from poisoned file-backed memory
 
-								Honza
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14f67032280000
+start commit:   3c4aa4434377 Merge tag 'ceph-for-6.4-rc1' of https://githu..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16f67032280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12f67032280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c1d541e02d3faec
+dashboard link: https://syzkaller.appspot.com/bug?extid=3d4aa0d3e784b29b1520
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14d1973c280000
 
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index 0d5ba922e411..19c884abe52b 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -3375,7 +3375,7 @@ static int ext4_iomap_overwrite_begin(struct inode *inode, loff_t offset,
->  	 */
->  	flags &= ~IOMAP_WRITE;
->  	ret = ext4_iomap_begin(inode, offset, length, flags, iomap, srcmap);
-> -	WARN_ON_ONCE(iomap->type != IOMAP_MAPPED);
-> +	WARN_ON_ONCE(!ret && iomap->type != IOMAP_MAPPED);
->  	return ret;
->  }
->  
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Reported-by: syzbot+3d4aa0d3e784b29b1520@syzkaller.appspotmail.com
+Fixes: 12904d953364 ("mm/khugepaged: recover from poisoned file-backed memory")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
