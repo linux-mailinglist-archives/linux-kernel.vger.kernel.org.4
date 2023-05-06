@@ -2,145 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800986F90B3
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 10:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 078846F90BE
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 11:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbjEFI5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 04:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
+        id S231936AbjEFJBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 05:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbjEFI4w (ORCPT
+        with ESMTP id S231553AbjEFJB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 04:56:52 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2058.outbound.protection.outlook.com [40.107.104.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E003729A;
-        Sat,  6 May 2023 01:56:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BlXDkx0+yg+IyuDWxEveellG+UJAqxC2t8TxAeZRGQMZavTgzkb5cm0WeRblp8R9cFtbeTPfXVnh4p6JxfOwcIVqa+2zKsnJN3dOTfwFsWcYk04v0BILwvVV7fYSquTCAxqOz7v1u1TUQ3ZmuDiBwr1zljoYVIEExc4WTRSPC0U3KfHH9eTteEBicAMDv9rfDJ1MJAj+XSuNGP6XaPq2SRU33zUmDuDVZ6p+3CPBEMC/wtemnqvckus4QI4TlR1WmZvBP2UsZ1OnEvsneCZ/mgduKIdeayuQRu9xiaN0/Sl5XgOM1ahSnstv4jGhvhbLiWkpvYP2XHVmhSTOqi6zBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4xsZsrJsgUMxRk3kDPeb+gin30uiS4j75nr/gNWqiQA=;
- b=L16YnbjrzNuUMukHoUimmkcN75/3F4v07gBLUZlukzO7nUMWex093ZV8KlU4LyhEdwVCqy1KipSetnHMr2vSzQflTi9Szc1M0TU4ra4yJMmrnWwYGGcxyGdYFZjjTMOeMzklSXOR1MST9GHvrKJvLbcBy715JirHWswZPxy1AYI6tagmXmyLmRPcbMPq0JAyj2WJX//kJ4drD9GsBUkfaXaX+pJW+du0XPjDoylnh+MUsxa197NkrLk31Frq3nFphIq9PNGuhc5hwZqTbI2sHcnkqUDK1crDLlvHykgHpEUMFNU5PEjNFUNat8R/lOO2ua7I5zpSoXGNvl/WV1LqLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4xsZsrJsgUMxRk3kDPeb+gin30uiS4j75nr/gNWqiQA=;
- b=UEBoNPxfgQN/SFS9kWu8o+vGT61LoVHwdVvdFxan/EO0Nt+oGH8jhlgTI/632LrqUmf8KwXAQ7awaO56zGdP9fhXe8YDbhB50IidCbG3+gCCe4TUOjkNT4z8YVHcDHZq1DUyWmLX1uV9I+nlSARXHxo2l5kpYQ5V8qBlz8f0q00=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB7PR04MB4010.eurprd04.prod.outlook.com (2603:10a6:5:21::30) by
- AM8PR04MB7939.eurprd04.prod.outlook.com (2603:10a6:20b:241::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.29; Sat, 6 May
- 2023 08:56:48 +0000
-Received: from DB7PR04MB4010.eurprd04.prod.outlook.com
- ([fe80::86a3:5425:d6fd:2346]) by DB7PR04MB4010.eurprd04.prod.outlook.com
- ([fe80::86a3:5425:d6fd:2346%4]) with mapi id 15.20.6363.028; Sat, 6 May 2023
- 08:56:48 +0000
-From:   haibo.chen@nxp.com
-To:     linus.walleij@linaro.org, brgl@bgdev.pl
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, haibo.chen@nxp.com, christophe.leroy@csgroup.eu
-Subject: [PATCH 2/2] gpio: mxc: switch to dynamic allocat GPIO base
-Date:   Sat,  6 May 2023 16:59:28 +0800
-Message-Id: <20230506085928.933737-2-haibo.chen@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230506085928.933737-1-haibo.chen@nxp.com>
-References: <20230506085928.933737-1-haibo.chen@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR06CA0014.apcprd06.prod.outlook.com
- (2603:1096:4:186::11) To DB7PR04MB4010.eurprd04.prod.outlook.com
- (2603:10a6:5:21::30)
+        Sat, 6 May 2023 05:01:26 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4A0729A;
+        Sat,  6 May 2023 02:01:24 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 8569D24DEF0;
+        Sat,  6 May 2023 17:01:17 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 6 May
+ 2023 17:01:17 +0800
+Received: from SD-Server.starfivetech.com (183.27.98.219) by
+ EXMBX168.cuchost.com (172.16.6.78) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Sat, 6 May 2023 17:01:16 +0800
+From:   Walker Chen <walker.chen@starfivetech.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Walker Chen <walker.chen@starfivetech.com>
+CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v3 0/3]  Add TDM audio on StarFive JH7110
+Date:   Sat, 6 May 2023 17:01:13 +0800
+Message-ID: <20230506090116.9206-1-walker.chen@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB7PR04MB4010:EE_|AM8PR04MB7939:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8ec3d8f5-ac95-4ef8-de34-08db4e0fd397
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YXOm924OYOmKwo1eA1DpkJiEvVPwJ7rBp76f96M+5rbrc92GqBvkJeKgdnbKY/43Ak6gKBvhlLyuNtpzYSUWDsJ7NL3/pVEUZGsoo8df0ELWVcrZ0S8TtC5j0TrOK2xIainoqb6WTY6/ZAPeWH0e67NrSZTeNmXeavzyhapA8vcD3NIuKBuUV3QJHZ7zBZj40gZ0JgnnfGpP9grPQ/KUUDdSL8GS/N7JOksWV/gb4hjbXKD/o6zj8/Wi7+UwA9iJdrbo/1ULHyLxwS2BcW7d7RjVWztNHjYpismgKlCf0F+wTlThPUntCkWPxTTZMAw/ELVW03PRwOgBr2bQpxaLNrDT8m6XqtZOoUyFks4mZDB/3nuG1QNJ7U3haiakOXqBzfE8neOXV/PvbXRlu0cOLuY7qBn4/PiBv4IKQwR0ePP7B+lHkqi+5NjqPMd5BKqxYHPSvVLBTpzb9SbjWRWg5E4Vz0WfL8aRC6eB2a7yc7GFBt8zyKBYZsPPNuxTPkHv/Rk2b3SxIsmf215zIIiCgeLLGsa/sEksdSkCNtMd6mbQYzGvS6qMdVnuCNDzM6sQzXSudnicA49ci0uzx9HzWhLz2a7RUAH8rehadK2t6k1WpPsTSZXmYCx6IDe7lKYN
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4010.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(346002)(136003)(366004)(451199021)(86362001)(8676002)(8936002)(6486002)(52116002)(66946007)(66476007)(66556008)(4326008)(5660300002)(36756003)(38100700002)(38350700002)(478600001)(83380400001)(2616005)(26005)(41300700001)(2906002)(4744005)(186003)(316002)(6512007)(6506007)(1076003)(9686003)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oHDSf34wrkc0v7FxXfV8TIGwgfCjmHd4TxbkXBOWYV1775uYc273vDivtikv?=
- =?us-ascii?Q?6RNj1g4taM69sCOM5d1K5Noo6PaTC6X9JWm7Tc1zKSvllMWwU6xB2kDhJ9eV?=
- =?us-ascii?Q?lfBqsMd6H0VmGLLosiE3Qx4HUvf+c3wv3+jyOdRd4xmGY2aOvH2Nw3p9Lzj/?=
- =?us-ascii?Q?1aFkmmPXsdT2esYJDfCOR4B002tJEz9ckIGUSEkJ81pOpBUNlKeG5UtWC9my?=
- =?us-ascii?Q?TSC5WYinyN+/hJp3+QHoPVktK9iAmd4PksprhHcXbUnSbHx72LbyXE/FLWpL?=
- =?us-ascii?Q?m+Bc5ufRaYK0HjQpvwPiMGuYC6GNpdCm6rfrKmCmUiBsCi0BYm+VzX6H0Otw?=
- =?us-ascii?Q?pemKdJBDcdn6rCydWFUPipMRee87OLTIM9YWFtrYUY56s8V9HnuPU8mOJeT8?=
- =?us-ascii?Q?LHCNpux3AamYoYZnlzC+a7xgTP8GIADgzxyQkI+Ng3CQp2VEXcxrriMGmLTD?=
- =?us-ascii?Q?g0ZExfZbHis7vGk58zBnhEMJX++AdBwRkgk/HZHhin8zFZv28C7Cy7f0WuAO?=
- =?us-ascii?Q?KSSq0sQ3hia+g5V0Y1U/kB0tVVOARZaTPknyd9ac4HV83afCRJziIZ43oBEh?=
- =?us-ascii?Q?9mJ2B1eNrdOPYOiMn3T9xlzLEJf9ZvceyrPrKztSwNBnJVFGUjzHcvnS0vF/?=
- =?us-ascii?Q?/avl5Ks+zRwJp8sk/ObVaiF/T8HKuJ7PlUW1p5bsjwA0gBFQOfXXaz2gdSBR?=
- =?us-ascii?Q?JmUn5tGCjHnQ4S3JAOCZQq9Chi1VnbUMMvNKMeOQ6C4gw4yqUkFaaE8wLbmB?=
- =?us-ascii?Q?D42QA0CqLz31owkalcAthHZH8m37MeOKTaJhMqKpQo/deq19MbSJkZtLeELc?=
- =?us-ascii?Q?6+TG1V+wx9AGCtqWoKGrzkpZuNeCPp6nXhhUqykETU0/x11794o9uDBUAqII?=
- =?us-ascii?Q?qPd+t2xdaZ3w3ctHKk/BKk7/03PR6IphcBzSocSiKIZoSrV4R+115/Shfa9H?=
- =?us-ascii?Q?CK7FmRG4ToeIEtLhzhOAEiX5xUXPCQytKTdRHdLq8V16FmsdtiS1B82a6rSU?=
- =?us-ascii?Q?hVNpbZSMleomqGESZ9HfJQDl/mTvurrkGmE0oFh+a5mZizWVDmUBh4fzlpx9?=
- =?us-ascii?Q?RY1RwkfbyQYSesef6y0rh0SgcL3Pej88+vxALfcW6YBqWYeLanddjAbz/jMj?=
- =?us-ascii?Q?o/wshNRRrHztVYBlisGy4go6GbOR5BpUWY9RMPJHEi4L0gw1Uhj0cSHyB3Au?=
- =?us-ascii?Q?GqGL3CE9Gj1Rc/8WaDlmSPhgtFhM2WljwjOWMoVcJYyrFBAZUwwnQIGEI46H?=
- =?us-ascii?Q?H3HjcOlR9o2mU+q7yOO9zxDdJsEd5YDqF75I1C7Hqjx/6uu7l2LtnVlrdGs5?=
- =?us-ascii?Q?9Q+eMXiUYn/OumqLSbrUIMQfQvuoIeNv8m1O04sMHWSEP6KwmOS5ThJtI2OE?=
- =?us-ascii?Q?9rfrSbBfRfjBOQFmxytsoEsZFeAMLKb150a4IyXVqfWKLkoCMBiPvoHtcJgX?=
- =?us-ascii?Q?eGEbHjJcXEzmat7LQSVfowk0KMeXajJmlWK1iyxBE2nTEJ+OHqQVATBpdstx?=
- =?us-ascii?Q?tbf7WvVJVffdtQpDQbUpoub+Lz261Jk26IAn1/xGfTPchAl8O4kmabTTQunF?=
- =?us-ascii?Q?/hoJKPm9pWHvbEnJUeWqkbWrVe/M7ELQ1KDHQzQP?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8ec3d8f5-ac95-4ef8-de34-08db4e0fd397
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4010.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2023 08:56:48.7929
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: h2tcKfukVUUTV0pnI9uyLokXecPafXdzLuwR0tY6CuUGeBSKglhOjnWmOfPUBiZgJAFKvw2oebvdpan0+y0NeA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7939
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [183.27.98.219]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+This patchset adds TDM audio driver for the StarFive JH7110 SoC. The
+first patch adds device tree binding for TDM module. The second patch
+adds tdm driver support for JH7110 SoC. The last patch adds device node
+of tdm and sound card to JH7110 dts.
 
-gpiolib want to get completely rid of static gpiobase allocation,
-so switch to dynamic allocat GPIO base, also can avoid warning
-message:
+The series has been tested on the VisionFive 2 board by plugging an
+audio expansion board. 
 
-[    1.529974] gpio gpiochip0: Static allocation of GPIO base
-is deprecated, use dynamic allocation.
+For more information of audio expansion board, you can take a look
+at the following webpage:
+https://wiki.seeedstudio.com/ReSpeaker_2_Mics_Pi_HAT/
 
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+Changes since v2:
+- Use dt-overlay to describe sound card because need to plug the audio
+  expansion board into the VisionFive2 board.
+- Modified the coding style for driver.
+- Moved assignment of stop_dma_first to startup function of dai_driver.
+- Dropped some useless macro definition.
+- Use loops to get/enable/disable clocks. 
+
+Changes since v1:
+- Rebased on Linux 6.3-rc4.
+- Added the dts file dedicated to describe audio card.
+- Added the item for JH7110 audio board to the dt-binding of StarFive
+  SoC-based boards.
+
 ---
- drivers/gpio/gpio-mxc.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+v2: https://lore.kernel.org/all/20230420024118.22677-1-walker.chen@starfivetech.com/
+v1: https://lore.kernel.org/all/20230329153320.31390-1-walker.chen@starfivetech.com/
 
-diff --git a/drivers/gpio/gpio-mxc.c b/drivers/gpio/gpio-mxc.c
-index 9d0cec4b82a3..abc129a88a62 100644
---- a/drivers/gpio/gpio-mxc.c
-+++ b/drivers/gpio/gpio-mxc.c
-@@ -462,8 +462,7 @@ static int mxc_gpio_probe(struct platform_device *pdev)
- 	port->gc.request = gpiochip_generic_request;
- 	port->gc.free = gpiochip_generic_free;
- 	port->gc.to_irq = mxc_gpio_to_irq;
--	port->gc.base = (pdev->id < 0) ? of_alias_get_id(np, "gpio") * 32 :
--					     pdev->id * 32;
-+	port->gc.base = -1;
- 
- 	err = devm_gpiochip_add_data(&pdev->dev, &port->gc, port);
- 	if (err)
+Walker Chen (3):
+  dt-bindings: sound: Add TDM for StarFive JH7110
+  ASoC: starfive: Add JH7110 TDM driver
+  riscv: dts: starfive: add tdm node and sound card
+
+ .../bindings/sound/starfive,jh7110-tdm.yaml   |  98 +++
+ MAINTAINERS                                   |   6 +
+ arch/riscv/boot/dts/starfive/Makefile         |   3 +
+ .../jh7110-starfive-visionfive-2-wm8960.dtso  |  70 +++
+ .../jh7110-starfive-visionfive-2.dtsi         |  40 ++
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  21 +
+ sound/soc/Kconfig                             |   1 +
+ sound/soc/Makefile                            |   1 +
+ sound/soc/starfive/Kconfig                    |  15 +
+ sound/soc/starfive/Makefile                   |   2 +
+ sound/soc/starfive/jh7110_tdm.c               | 573 ++++++++++++++++++
+ sound/soc/starfive/jh7110_tdm.h               | 147 +++++
+ 12 files changed, 977 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-wm8960.dtso
+ create mode 100644 sound/soc/starfive/Kconfig
+ create mode 100644 sound/soc/starfive/Makefile
+ create mode 100644 sound/soc/starfive/jh7110_tdm.c
+ create mode 100644 sound/soc/starfive/jh7110_tdm.h
+
+
+base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
+prerequisite-patch-id: 30bec4dba6f250a6edd0c2cbab2ce09442e50e8a
+prerequisite-patch-id: bb939c0c7c26b08addfccd890f9d3974b6eaec53
+prerequisite-patch-id: 8a6f135bcabdad4a4bfb21f0c6a0ffd2bb57efe7
+prerequisite-patch-id: c2366f993a9d85e28c06d8d09f064dd5e8b29a61
+prerequisite-patch-id: 50d53a21f91f4087fc80b6f1f72864adfb0002b9
+prerequisite-patch-id: 0df3703af91c30f1ca2c47f5609012f2d7200028
+prerequisite-patch-id: 89f049f951e5acf75aab92541992f816fd0acc0d
+prerequisite-patch-id: 551fae54377090044c3612fca9740a9b359abdd2
+prerequisite-patch-id: c7fdf904f398d478f0ed6d57eb878982bc73329d
+prerequisite-patch-id: 1b2d0982b18da060c82134f05bf3ce16425bac8d
+prerequisite-patch-id: 090ba4b78d47bc19204916e76fdbc70021785388
+prerequisite-patch-id: a5d9e0f7d4f8163f566678894cf693015119f2d9
+prerequisite-patch-id: 4637a8fa2334a45fa6b64351f4e9e28d3e2d60d3
+prerequisite-patch-id: 32647ec60a3b614e1c59ec8e54cb511ae832c22f
+prerequisite-patch-id: aa06658ecf89c92d0dfdd6a4ba6d9e6e67532971
+prerequisite-patch-id: 1387a7e87b446329dfc21f3e575ceae7ebcf954c
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: dbb0c0151b8bdf093e6ce79fd2fe3f60791a6e0b
+prerequisite-patch-id: 9007c8610fdcd387592475949864edde874c20a2
+prerequisite-patch-id: d57e95d31686772abc4c4d5aa1cadc344dc293cd
+prerequisite-patch-id: 9f911969d0a550648493952c99096d26e05d4d83
+prerequisite-patch-id: 2ddada18ab6ea5cd1da14212aaf59632f5203d40
+prerequisite-patch-id: 80042661ff6156ce577a72e9eb8c0b218b624829
+prerequisite-patch-id: 398744c61913c76a35754de867c4f820ca7a8d99
+prerequisite-patch-id: f59269382164b5d642a5e10443ca447f5caa595c
+prerequisite-patch-id: 1babe83d6bf999bad17584dc595480f9070a5369
+prerequisite-patch-id: 77be3d122d66df813f13088141ce27b21107a341
+prerequisite-patch-id: 9fbb7ad1dd258bb8ff5946c4a0e59de4bfd82a04
+prerequisite-patch-id: 6f6984916dffd0cc66aa733c9b6bd3a55495a50c
+prerequisite-patch-id: 39e1be2a3d1593577ab997f55f59367cba665aa7
+prerequisite-patch-id: 584c256c9acb52ee2773d0c81c3f4977fc18155a
+prerequisite-patch-id: b37ac15032973e1fcd918f157c82a0606775c9e9
+prerequisite-patch-id: 32deea16304859842af5c2151bc41d91cf6dfc9b
+prerequisite-patch-id: 20ac2450fb93b3f69f83fc720fd4800a95e618a6
+prerequisite-patch-id: 6abf359fa445f4104432ddee27044dfbfb128417
 -- 
-2.34.1
+2.17.1
 
