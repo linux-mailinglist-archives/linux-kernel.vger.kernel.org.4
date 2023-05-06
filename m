@@ -2,228 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84F06F8FE4
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49C06F8FF0
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjEFHZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 03:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        id S230213AbjEFH1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 03:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjEFHZ5 (ORCPT
+        with ESMTP id S229714AbjEFH1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 03:25:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD04A267;
-        Sat,  6 May 2023 00:25:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCE6361827;
-        Sat,  6 May 2023 07:25:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41CA8C433B0;
-        Sat,  6 May 2023 07:25:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683357955;
-        bh=/pqLqv84J2jWuKl1Lk7AhETw9xQvFqEdpB7kxyH6fI8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cUPgDdY7WBdR+obN6ZVonxD9+AqvTjDLZek6hO8Bh5anvhOs4TmU67zRl7ySmPvBp
-         i8FRz1KX+mzHYYI+Z/y0wYNkkGVlDZfw2wNSyJH6w3yIBsRuEiCKsmGiGIf/pZsEal
-         texLImmTg/gCpVHUuWvn14o5Lgf+f1wOysFff2gp10PJHZgoXw6iwYzAwIUxisqWfw
-         u5jsEnyW3YFcIFUx6RL4jWbXoqzOfY/dd8vIcdt+Xq68Ux5KJCIYvI2XApR9C23Nmm
-         Sgkh2cUCXwwJKLy4JCAVy999KDS8Et5jkyt2gkH/o90zp2F9JCGMHuMQgxIkMklZJH
-         mmsRI+wgR/9MQ==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-50bc4ba28cbso4764522a12.0;
-        Sat, 06 May 2023 00:25:55 -0700 (PDT)
-X-Gm-Message-State: AC+VfDx1fH+AarEJBfLItd5cBE1oD/OYqmgTHedz96Mhy7/Sz0wG3gD+
-        8pXZX7UAVq9WS4X4inu9EdKBwRF8HD2z5O2lsMI=
-X-Google-Smtp-Source: ACHHUZ4qS4i5Im7J3Ox7v0tb1ueCK3xmeH5uM44ArLR4roviIMhnWXngkOBBuBeiDbJ5qp2UGTwR6EkhF28IpBmVniU=
-X-Received: by 2002:a17:907:3d9f:b0:959:5454:1db7 with SMTP id
- he31-20020a1709073d9f00b0095954541db7mr3511012ejc.3.1683357953246; Sat, 06
- May 2023 00:25:53 -0700 (PDT)
+        Sat, 6 May 2023 03:27:19 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7A92699
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 00:27:17 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f3331f928cso17757675e9.2
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 00:27:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683358036; x=1685950036;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nyO3bd/dy/ShKSE4Wtgdi8b7qlXeUkRE0/PJNUctuDU=;
+        b=X8HJOSXHh9sxiO01faufEmdtTyxOht0+qwkDUxFDoaqtV2MK9xTJpMOcuZKuhoTMxV
+         /ITKcIC7uW1FVOfzuQFog560aAzZhrBKjr8m+5hoW4SX2OMWMAOGCnaZpMeqnnyT6IlC
+         fVwrCAsgj1Qgka/ih1Xgoz/ps9i7rKsA/JQ4F9yHF3yfmjVZFuV84cSXXcTtsBooFsv+
+         4SrDqfR7yeGFa5X/A8Jv4ctIVtvM3+EHkYqHeCaJMuLvnVvRrCBtIKYNM2Ac/8SQIbZw
+         GRX3MHt/yXo++RKvx4Hu8LSVn1uWwFs40PpxZ+ioH2W6tjgBCxFAFrCjmsdRt/jJQkfH
+         AXWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683358036; x=1685950036;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nyO3bd/dy/ShKSE4Wtgdi8b7qlXeUkRE0/PJNUctuDU=;
+        b=Rx6XEjX9RD4GiH/LMbgWyCx4qXYDWlu08FyL8g9ROmZpJFkO5ULnxVV9xcoyVDqGjp
+         hODqC9L9CiDUgRc8cMlzRw97ima8nCWdYJ7AzdHQcF7zN52DUt3rh/ZzStN0hsXHgJ8X
+         LArTD25a7M6y5nSSehPtxShx1zzM4hB56zmbLx1Wx46aN4vzVflB7DRVsxBIfiDoZyY/
+         A+iklrpBeRprlqHfg9dX6bQyX1q/+ZvWuP6Y6F709V1ZVQxJ1vte3DjZMgnkglLvkr00
+         uIJVqc/1WaGKpl0ZJ3ykPWxmd58PsLijtms7CB+Q9qX213v1Xtfua6SvO5G/PImiLN0e
+         KzYA==
+X-Gm-Message-State: AC+VfDyKrp8I0j60eJDOM2C2qhGVMSf3qX4aWGymgPEkJlMwpzCryR0T
+        sBCaxG25m8sRnYBDYTYR5xyQ3A==
+X-Google-Smtp-Source: ACHHUZ4iTcz1CqJ/ZZpjtuurFjIyQgp+df5DDqtIMFXAaJWuamBMtxHkg+maT+c8bOZZXwfl6I5ZoA==
+X-Received: by 2002:a05:600c:248:b0:3f1:82d8:8fde with SMTP id 8-20020a05600c024800b003f182d88fdemr2525723wmj.24.1683358035850;
+        Sat, 06 May 2023 00:27:15 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id l11-20020a7bc34b000000b003f195d2f1a9sm9994159wmj.15.2023.05.06.00.27.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 May 2023 00:27:13 -0700 (PDT)
+Date:   Sat, 6 May 2023 10:27:08 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Subject: drivers/clk/mediatek/clk-mtk.c:588 __mtk_clk_simple_probe() error:
+ uninitialized symbol 'base'.
+Message-ID: <6b5f2290-3019-4058-a857-60eceb4b7b79@kili.mountain>
 MIME-Version: 1.0
-References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-10-arnd@kernel.org>
- <CAJF2gTT2VCVMJs1NvgK66uD+BhObjM2WNxf2RY7wTZsho4sjVA@mail.gmail.com> <f460ad77-aa76-43bb-b2bb-e3b6dbcd8b03@app.fastmail.com>
-In-Reply-To: <f460ad77-aa76-43bb-b2bb-e3b6dbcd8b03@app.fastmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 6 May 2023 15:25:41 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSRuj3-AgynXxZeXc2vGSH8Ohn5eP2hsuKi8rTzSPLhRQ@mail.gmail.com>
-Message-ID: <CAJF2gTSRuj3-AgynXxZeXc2vGSH8Ohn5eP2hsuKi8rTzSPLhRQ@mail.gmail.com>
-Subject: Re: [PATCH 09/21] riscv: dma-mapping: skip invalidation before
- bidirectional DMA
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        linux-kernel@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org,
-        "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 9:19=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, May 5, 2023, at 07:47, Guo Ren wrote:
-> > On Mon, Mar 27, 2023 at 8:15=E2=80=AFPM Arnd Bergmann <arnd@kernel.org>=
- wrote:
->
-> >>
-> >> riscv also invalidates the caches before the transfer, which does
-> >> not appear to serve any purpose.
-> > Yes, we can't guarantee the CPU pre-load cache lines randomly during
-> > dma working.
-> >
-> > But I've two purposes to keep invalidates before dma transfer:
-> >  - We clearly tell the CPU these cache lines are invalid. The caching
-> > algorithm would use these invalid slots first instead of replacing
-> > valid ones.
-> >  - Invalidating is very cheap. Actually, flush and clean have the same
-> > performance in our machine.
->
-> The main purpose of the series was to get consistent behavior on
-> all machines, so I really don't want a custom optimization on
-> one architecture. You make a good point about cacheline reuse
-> after invalidation, but if we do that, I'd suggest doing this
-> across all architectures.
-Yes, invalidation of DMA_FROM_DEVICE-for_device is a proposal for all
-architectures.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   418d5c98319f67b9ae651babea031b5394425c18
+commit: 252091242404aa7cee131a827a04b8e3d9b88daa clk: mediatek: clk-mtk: Introduce clk_mtk_pdev_{probe,remove}()
+config: microblaze-randconfig-m041-20230430 (https://download.01.org/0day-ci/archive/20230506/202305060920.yjRhTxrD-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 12.1.0
 
->
-> > So, how about:
-> >
-> > diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoh=
-erent.c
-> > index d919efab6eba..2c52fbc15064 100644
-> > --- a/arch/riscv/mm/dma-noncoherent.c
-> > +++ b/arch/riscv/mm/dma-noncoherent.c
-> > @@ -22,8 +22,6 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size=
-_t size,
-> >                 ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-> >                 break;
-> >         case DMA_FROM_DEVICE:
-> > -               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-> > -               break;
-> >         case DMA_BIDIRECTIONAL:
-> >                 ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-> >                 break;
->
-> This is something we can consider. Unfortunately, this is something
-> that no architecture (except pa-risc, which has other problems)
-> does at the moment, so we'd probably need to have a proper debate
-> about this.
->
-> We already have two conflicting ways to handle DMA_FROM_DEVICE,
-> either invalidate/invalidate, or clean/invalidate. I can see
-I vote to invalidate/invalidate.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202305060920.yjRhTxrD-lkp@intel.com/
 
-My key point is to let DMA_FROM_DEVICE-for_device invalidate, and
-DMA_BIDIRECTIONAL contains DMA_FROM_DEVICE.
-So I also agree:
-@@ -22,8 +22,6 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t s=
-ize,
-                 ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-                 break;
-         case DMA_FROM_DEVICE:
- -               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
- +              ALT_CMO_OP(invalidate, vaddr, size, riscv_cbom_block_size);
-                 break;
-         case DMA_BIDIRECTIONAL:
-                 ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-                 break;
+smatch warnings:
+drivers/clk/mediatek/clk-mtk.c:588 __mtk_clk_simple_probe() error: uninitialized symbol 'base'.
 
-> that flush/invalidate may be a sensible option as well, but I'd
-> want to have that discussion after the series is complete, so
-> we can come to a generic solution that has the same documented
-> behavior across all architectures.
-Yes, I agree to unify them into a generic solution first. My proposal
-could be another topic in the future.
-For that purpose, I give
-Acked-by: Guo Ren <guoren@kernel.org>
+vim +/base +588 drivers/clk/mediatek/clk-mtk.c
 
->
-> In particular, if we end up moving arm64 and riscv back to the
-> traditional invalidate/invalidate for DMA_FROM_DEVICE and
-> document that driver must not rely on buffers getting cleaned
-After invalidation, the cache lines are also cleaned, right? So why do
-we need to document it additionally?
+252091242404aa AngeloGioacchino Del Regno 2023-03-06  465  static int __mtk_clk_simple_probe(struct platform_device *pdev,
+252091242404aa AngeloGioacchino Del Regno 2023-03-06  466  				  struct device_node *node)
+c58cd0e40ffac6 Chun-Jie Chen              2021-07-26  467  {
+252091242404aa AngeloGioacchino Del Regno 2023-03-06  468  	const struct platform_device_id *id;
+c58cd0e40ffac6 Chun-Jie Chen              2021-07-26  469  	const struct mtk_clk_desc *mcd;
+609cc5e1a82394 Chen-Yu Tsai               2022-05-19  470  	struct clk_hw_onecell_data *clk_data;
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  471  	void __iomem *base;
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  472  	int num_clks, r;
+c58cd0e40ffac6 Chun-Jie Chen              2021-07-26  473  
+4b476b0f453431 AngeloGioacchino Del Regno 2023-03-06  474  	mcd = device_get_match_data(&pdev->dev);
+252091242404aa AngeloGioacchino Del Regno 2023-03-06  475  	if (!mcd) {
+252091242404aa AngeloGioacchino Del Regno 2023-03-06  476  		/* Clock driver wasn't registered from devicetree */
+252091242404aa AngeloGioacchino Del Regno 2023-03-06  477  		id = platform_get_device_id(pdev);
+252091242404aa AngeloGioacchino Del Regno 2023-03-06  478  		if (id)
+252091242404aa AngeloGioacchino Del Regno 2023-03-06  479  			mcd = (const struct mtk_clk_desc *)id->driver_data;
+252091242404aa AngeloGioacchino Del Regno 2023-03-06  480  
+c58cd0e40ffac6 Chun-Jie Chen              2021-07-26  481  		if (!mcd)
+c58cd0e40ffac6 Chun-Jie Chen              2021-07-26  482  			return -EINVAL;
+252091242404aa AngeloGioacchino Del Regno 2023-03-06  483  	}
+c58cd0e40ffac6 Chun-Jie Chen              2021-07-26  484  
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  485  	/* Composite clocks needs us to pass iomem pointer */
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  486  	if (mcd->composite_clks) {
 
-> before a partial DMA_FROM_DEVICE, the question between clean
-> or flush becomes moot as well.
->
-> > @@ -42,7 +40,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t =
-size,
-> >                 break;
-> >         case DMA_FROM_DEVICE:
-> >         case DMA_BIDIRECTIONAL:
-> >                 /* I'm not sure all drivers have guaranteed cacheline
-> > alignment. If not, this inval would cause problems */
-> > -               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-> > +               ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
-> >                 break;
->
-> This is my original patch, and I would not mix it with the other
-> change. The problem with non-aligned DMA_BIDIRECTIONAL buffers in
-> is that both flush and inval would be wrong if you get simultaneous
-> writes from device and cpu to the same cache line, so there is
-> no way to win this. Using inval instead of flush would at least
-> work if the CPU data in the cacheline is read-only from the CPU,
-> so that seems better than something that is always wrong.
-If CPU data in the cacheline is read-only, the cacheline would never
-be dirty. Yes, It's always safe.
-Okay, I agree we must keep cache-line-aligned. I comment it here, just
-worry some dirty drivers couldn't work with the "invalid mechanism"
-because of the CPU data corruption, and device data in the cacheline
-is useless.
+Assume mcd->composite_clks is false.
 
->
-> The documented API is that sharing the cache line is not allowed
-> at all, so anything that would observe a difference between the
-> two is also a bug. One idea that we have considered already is
-> that we could overwrite the unused bits of the cacheline with
-> poison values and/or mark them as invalid using KASAN for debugging
-> purposes, to find drivers that already violate this.
->
->       Arnd
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  487  		if (!mcd->shared_io)
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  488  			base = devm_platform_ioremap_resource(pdev, 0);
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  489  		else
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  490  			base = of_iomap(node, 0);
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  491  
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  492  		if (IS_ERR_OR_NULL(base))
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  493  			return IS_ERR(base) ? PTR_ERR(base) : -ENOMEM;
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  494  	}
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  495  
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  496  	/* Calculate how many clk_hw_onecell_data entries to allocate */
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  497  	num_clks = mcd->num_clks + mcd->num_composite_clks;
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  498  	num_clks += mcd->num_fixed_clks + mcd->num_factor_clks;
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  499  	num_clks += mcd->num_mux_clks;
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  500  
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  501  	clk_data = mtk_alloc_clk_data(num_clks);
+c58cd0e40ffac6 Chun-Jie Chen              2021-07-26  502  	if (!clk_data)
+c58cd0e40ffac6 Chun-Jie Chen              2021-07-26  503  		return -ENOMEM;
+c58cd0e40ffac6 Chun-Jie Chen              2021-07-26  504  
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  505  	if (mcd->fixed_clks) {
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  506  		r = mtk_clk_register_fixed_clks(mcd->fixed_clks,
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  507  						mcd->num_fixed_clks, clk_data);
+c58cd0e40ffac6 Chun-Jie Chen              2021-07-26  508  		if (r)
+6203815bf97eea Chun-Jie Chen              2021-09-14  509  			goto free_data;
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  510  	}
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  511  
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  512  	if (mcd->factor_clks) {
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  513  		r = mtk_clk_register_factors(mcd->factor_clks,
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  514  					     mcd->num_factor_clks, clk_data);
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  515  		if (r)
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  516  			goto unregister_fixed_clks;
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  517  	}
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  518  
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  519  	if (mcd->mux_clks) {
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  520  		r = mtk_clk_register_muxes(&pdev->dev, mcd->mux_clks,
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  521  					   mcd->num_mux_clks, node,
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  522  					   mcd->clk_lock, clk_data);
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  523  		if (r)
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  524  			goto unregister_factors;
+b30a027779a501 Yang Li                    2023-02-02  525  	}
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  526  
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  527  	if (mcd->composite_clks) {
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  528  		/* We don't check composite_lock because it's optional */
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  529  		r = mtk_clk_register_composites(&pdev->dev,
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  530  						mcd->composite_clks,
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  531  						mcd->num_composite_clks,
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  532  						base, mcd->clk_lock, clk_data);
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  533  		if (r)
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  534  			goto unregister_muxes;
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  535  	}
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  536  
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  537  	if (mcd->clks) {
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  538  		r = mtk_clk_register_gates(&pdev->dev, node, mcd->clks,
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  539  					   mcd->num_clks, clk_data);
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  540  		if (r)
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  541  			goto unregister_composites;
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  542  	}
+6203815bf97eea Chun-Jie Chen              2021-09-14  543  
+fd9fe654f41c02 AngeloGioacchino Del Regno 2023-01-20  544  	if (mcd->clk_notifier_func) {
+fd9fe654f41c02 AngeloGioacchino Del Regno 2023-01-20  545  		struct clk *mfg_mux = clk_data->hws[mcd->mfg_clk_idx]->clk;
+fd9fe654f41c02 AngeloGioacchino Del Regno 2023-01-20  546  
+fd9fe654f41c02 AngeloGioacchino Del Regno 2023-01-20  547  		r = mcd->clk_notifier_func(&pdev->dev, mfg_mux);
+fd9fe654f41c02 AngeloGioacchino Del Regno 2023-01-20  548  		if (r)
+fd9fe654f41c02 AngeloGioacchino Del Regno 2023-01-20  549  			goto unregister_clks;
+fd9fe654f41c02 AngeloGioacchino Del Regno 2023-01-20  550  	}
+fd9fe654f41c02 AngeloGioacchino Del Regno 2023-01-20  551  
+609cc5e1a82394 Chen-Yu Tsai               2022-05-19  552  	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+6203815bf97eea Chun-Jie Chen              2021-09-14  553  	if (r)
+2d18b7e31aa804 Chen-Yu Tsai               2022-02-08  554  		goto unregister_clks;
+6203815bf97eea Chun-Jie Chen              2021-09-14  555  
+2204d96b191912 Chen-Yu Tsai               2022-02-08  556  	platform_set_drvdata(pdev, clk_data);
+2204d96b191912 Chen-Yu Tsai               2022-02-08  557  
+b27a604a579310 Rex-BC Chen                2022-05-23  558  	if (mcd->rst_desc) {
+b27a604a579310 Rex-BC Chen                2022-05-23  559  		r = mtk_register_reset_controller_with_dev(&pdev->dev,
+b27a604a579310 Rex-BC Chen                2022-05-23  560  							   mcd->rst_desc);
+b27a604a579310 Rex-BC Chen                2022-05-23  561  		if (r)
+b27a604a579310 Rex-BC Chen                2022-05-23  562  			goto unregister_clks;
+b27a604a579310 Rex-BC Chen                2022-05-23  563  	}
+b27a604a579310 Rex-BC Chen                2022-05-23  564  
+c58cd0e40ffac6 Chun-Jie Chen              2021-07-26  565  	return r;
+c58cd0e40ffac6 Chun-Jie Chen              2021-07-26  566  
+2d18b7e31aa804 Chen-Yu Tsai               2022-02-08  567  unregister_clks:
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  568  	if (mcd->clks)
+2d18b7e31aa804 Chen-Yu Tsai               2022-02-08  569  		mtk_clk_unregister_gates(mcd->clks, mcd->num_clks, clk_data);
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  570  unregister_composites:
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  571  	if (mcd->composite_clks)
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  572  		mtk_clk_unregister_composites(mcd->composite_clks,
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  573  					      mcd->num_composite_clks, clk_data);
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  574  unregister_muxes:
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  575  	if (mcd->mux_clks)
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  576  		mtk_clk_unregister_muxes(mcd->mux_clks,
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  577  					 mcd->num_mux_clks, clk_data);
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  578  unregister_factors:
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  579  	if (mcd->factor_clks)
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  580  		mtk_clk_unregister_factors(mcd->factor_clks,
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  581  					   mcd->num_factor_clks, clk_data);
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  582  unregister_fixed_clks:
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  583  	if (mcd->fixed_clks)
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  584  		mtk_clk_unregister_fixed_clks(mcd->fixed_clks,
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  585  					      mcd->num_fixed_clks, clk_data);
+6203815bf97eea Chun-Jie Chen              2021-09-14  586  free_data:
+6203815bf97eea Chun-Jie Chen              2021-09-14  587  	mtk_free_clk_data(clk_data);
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20 @588  	if (mcd->shared_io && base)
 
+Uninitialized "base".  Checking "base" makes no sense because it's
+either valid or uninitialized...  Smatch wants this to be:
 
+	if (mcd->composite_clks && mcd->shared_io)
+		iounmap(base);
 
---=20
-Best Regards
- Guo Ren
+7b6183108c8ccf AngeloGioacchino Del Regno 2023-01-20  589  		iounmap(base);
+6203815bf97eea Chun-Jie Chen              2021-09-14  590  	return r;
+c58cd0e40ffac6 Chun-Jie Chen              2021-07-26  591  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
+
