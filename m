@@ -2,823 +2,410 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD826F929A
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 17:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7446F92A7
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 17:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbjEFPJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 11:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
+        id S232674AbjEFPQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 11:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231830AbjEFPJW (ORCPT
+        with ESMTP id S231830AbjEFPQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 11:09:22 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A525E1157B;
-        Sat,  6 May 2023 08:09:19 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64115e652eeso25653214b3a.0;
-        Sat, 06 May 2023 08:09:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683385759; x=1685977759;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qF8GDeVIxyqlJEAfd0RcDDRRi9wR9sAYdpzmsClyNvE=;
-        b=nHr4+3jU7Qavm5W04l5x1287DlXrE+tyxBSvJm42iij5SAri4RknRKSUGKQPCM+j5K
-         rk/d1yj/966tKVSY5CAlnEgpcQmJP5y9oXWvA3asP2fs8HFYc8JwHbEk/22TpvJn6o9n
-         KYZVKm+RThNcRNuYJiYiaq/gEFTI0HXkJbQkwH3X6egT7h4cGB3FVZYejXJqZBXNGf6a
-         3+g/SQUlkNBw6yAmGtAGPa3jpsfQpCxxAAMdI9PjIZMsKMUzjnQPneN3iP81Lq6aUXW2
-         dUdy/lAUGXdLfmwpsaj1St+MhHogwZb+Csi/CcrabRAPm+1bwXw8SF+NFdjl3cp+Vv+C
-         bV1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683385759; x=1685977759;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qF8GDeVIxyqlJEAfd0RcDDRRi9wR9sAYdpzmsClyNvE=;
-        b=KQTdoo6g2AHuHz7mVz7AkB3bVNXuZoJQLaEJOf+D4UYgiOeBAZAPWJjAsbuG7frVST
-         vyJCnX8Lt0sISd0Q4iqWhtc9I7WTBs+5Gk/JG/lJbLzy72Oox1cId5rTLE7+eSxhfg41
-         4q0652M/L/c5VYXjs9jSCnNrEgP+CDjKdxmsMt5JchjsnFwM+2rdxGCGgCcM7wLmeNH3
-         nMKuBfguIZpav3N6Fld3TiNf+yPwjwReeAttqk5+hbh5K0bVCMrXM4wC2TIqxnzZI//4
-         1PeWQbq91aSo7QGEp+GC1A3DfD1FlHQELo7eZaOb+61jP24B3scoXw44hcjYXLPegoE0
-         8laA==
-X-Gm-Message-State: AC+VfDztbJ7lB1LsfdpY1knDnnlknAD9gKHotQYwWUvJxaGdHg0R8RMl
-        ngPH8R+DlRZFYruZYb7362I=
-X-Google-Smtp-Source: ACHHUZ7yrrFvsmZLxYpRQvwebKg4YynQZdND3cQLzZjomKfjgRuMl4mVVOciLBKkrL3SCEw7iHQvKA==
-X-Received: by 2002:a05:6a20:144f:b0:ef:8de0:6a5 with SMTP id a15-20020a056a20144f00b000ef8de006a5mr6083765pzi.3.1683385758731;
-        Sat, 06 May 2023 08:09:18 -0700 (PDT)
-Received: from localhost.localdomain ([47.98.195.232])
-        by smtp.gmail.com with ESMTPSA id y15-20020aa7854f000000b0063db25e140bsm3347182pfn.32.2023.05.06.08.09.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 May 2023 08:09:18 -0700 (PDT)
-From:   wenjun93 <gwj0511@gmail.com>
-X-Google-Original-From: wenjun93 <gwj1235@yeah.net>
-To:     miklos@szeredi.hu
-Cc:     linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wenjun93 <gwj1235@yeah.net>
-Subject: [PATCH v2] overlayfs: clean error handling
-Date:   Sat,  6 May 2023 23:09:11 +0800
-Message-Id: <20230506150911.1983249-1-gwj1235@yeah.net>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <amir73il@gmail.com>
-References: <amir73il@gmail.com>
-MIME-Version: 1.0
+        Sat, 6 May 2023 11:16:25 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2124.outbound.protection.outlook.com [40.107.215.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E754A26F
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 08:16:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PzXOXF9SvL7zvylq1ZJDnFIOYCDamMklMzMmoU/1HD5+zeK4hn/tOjJfD8TkQO7HpfWcpRXlQgvHiN2GQwPCh+xkGr5xFhKy6yhX4QPFprnk79MUom0nEw1vSRoEydqycVihm1eaSUlmUMP1Mhv/MIia7lDDLR/pRrKaTGv655Q2/aRfhP6xW5Q/ToEmxCkGj+M187/gVFVDGYuhz/VhgvTXANjgVWHc7GxaD9Yp2IoqgHKPHVdHDKaZTOBFeV73nzJmLGLrDrah8DEhCBRSe8bIJ8sGmY8IsdNB2Ku5GKE8vHnSX/ywyvM8MabXxfG5uuzSxID/s8sbdTmKwDesyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8sZAHsPQCHwWNE1SoVsERf8imz0MB6/YZgiCcjXLnHc=;
+ b=BWw4I6DKO8c4KBq6ZXtwQciNn3Dlrt+h6ofF27hgDlZK7d8qKDk0EfYcWbYAkihN24NPfotrUt1z9jWvhM1haD7tAmXZb1zjvjTrosvFJzkf2lxOlVo1thobatbCawDn5xIPuYrZrhFk3L0HTuv862tKeNsSrdx+wPWF30QKc8Z9ewOgOnnlCdlMdyzk/RnwBh+efMWRXErRHrsUxiON8cBxtLao/gXH3xYkIQbZQxKyiQ1uqs380j3jpCmPAKoRfTZKmlugzy+n5eiZmBZnBpZiQmVXuh3KzaJ9OrN/7gt9Bktjw8PXKkWLzsPvP+HgZJAO7Qq8QNTIXaaTUj+NIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8sZAHsPQCHwWNE1SoVsERf8imz0MB6/YZgiCcjXLnHc=;
+ b=i+YztswliKCNBPzxSR4n0dV4yFkK4dcoNa7Z10iNkjCCzB+M2/Y88nVgDDUlmrEFdz3cPjc9vMnGbQXmSPIOZMKptuzgKtuhmChI2h1rxtKOK77QO7kRNJqW+iX4SEgWY2fHnLaB4eCuiy0o95YEWnlKE3E7NO2XHoBdxgAettpeTYaAU73oGUk7pgOfrkKPA3LHp35R9bVScF27FeiE6wNP2EAQ1GhE6yQaHqEnStiP5OwCrLrRXYZeRCEdCqvYzBPFYj2pJYyptgSBsZJeVxOI5npn/aaOHW7y4Ff/L4ITZta5jvZiTNuZjJi4TwUIhEusia+sv+bf0OmqNfHGEA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SI2PR06MB4521.apcprd06.prod.outlook.com (2603:1096:4:157::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.29; Sat, 6 May
+ 2023 15:16:16 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965%7]) with mapi id 15.20.6363.029; Sat, 6 May 2023
+ 15:16:15 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>, kernel test robot <lkp@intel.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] f2fs: refactor struct f2fs_attr macro
+Date:   Sat,  6 May 2023 23:16:03 +0800
+Message-Id: <20230506151604.36890-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0218.apcprd06.prod.outlook.com
+ (2603:1096:4:68::26) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4521:EE_
+X-MS-Office365-Filtering-Correlation-Id: ab6ebe1f-1587-45b8-1580-08db4e44d5ac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: D/RXxqMsRMXvGu7lewD9CjBh4wU4Nkzg0abnOUcJ05aGYDhJXWfj4LGAq+g915ehBqxUAJvKnGaS7Sb0Rh3kShZ6rJdsRPoNy0yXp3Y6BrshvzimcED46vRv95bMEZxVDRqALRFKul1R3M28Oua1JN7lOOxEYh3t2n8XedEO5UvwNsQ1NYUHRLWCqP9E9+Z6zjMg8dIfQJjo5FbzxLSf9kmZpIjxq85IXuku5fRLqK2zniRZ735QVgLvzUMeJkcDMu/Fg+8LpiMPbAAPIWyWKaFC+Yc5GA/QZ5ERDigjHnt21bPqI02mWaDOUo910SvHAIOIksm5hRGCHzqgDEs6nn8lFIST5h5EcpMlVLbxN1yHiG1aiBFCSlzS5CXNNGZnWFkxtjfw24/0n+HQLaKga0NNwT8m8bCDAGUuSjBRCj95pkgP3dCPC/JQfNSUgOpxpXY0RFKlNxRXT5BqTRBg5kewVypmM99RLjC8ub04D47II4EcTlEQzumx1oeNWVnhdq6ESbIRxFvLrNrxqEnY5sqahsE8amuOVZCAK0+8fMOnllhBT/p0fy9czzxlCKrFRqN7s+01yBzRQhHIAxWrAZgcK+R2UKCfJJfAl0hVG4s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(346002)(376002)(136003)(366004)(451199021)(86362001)(8676002)(8936002)(966005)(6486002)(52116002)(66946007)(66476007)(66556008)(4326008)(5660300002)(36756003)(38100700002)(38350700002)(478600001)(83380400001)(110136005)(2616005)(41300700001)(26005)(186003)(2906002)(30864003)(1076003)(316002)(6512007)(6506007)(54906003)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LOoitHujUM+qKcYNSSzA8EEE8Kh3uBuYBYsYLCU1A5efHum8Dnch/YZ2r4/q?=
+ =?us-ascii?Q?HyWrWLn+gSfCtG2tRCakzS1oOUsCuEKh1hDHigDsNybVCphfwCxOT2Rep4Nz?=
+ =?us-ascii?Q?9M+aTdH6yWEsaQBjedu+YjmyW5MfF201jREcmxITNoYliIQ9ga5IIVVtemdx?=
+ =?us-ascii?Q?rrgUlLc9kdTGQI4dnRSRArfMM36DbllqyH1t/OeT449HLkOaC/x9YYXAUJRX?=
+ =?us-ascii?Q?az3pY10eeY3mSjwIPVD8aDkxIA4R6GX89gTKdyyzEHe3uMfKl7O1fa2uTOnZ?=
+ =?us-ascii?Q?v9vGGCiw9erx5WmVSbOoBxvYiCBE/KMCYj+VhugV17EP6ez55K/CRaGHf9V0?=
+ =?us-ascii?Q?XktGrzXAySzoFUUY1gHSNYNSgucyCkNvMVHy114JzMOW2cagYS7YelvAlv5F?=
+ =?us-ascii?Q?jXi7LRox8AhqDzjvts1J6jaS1DWeKN/tIXE+qTApqC/96uWmG5oAN8E1FLFD?=
+ =?us-ascii?Q?trExga4g3J86ZDG8DNbfVoW6bjuQtukiLZ7phzBKOq38MrjxXQsex2ftt9I8?=
+ =?us-ascii?Q?FLYmElhmO6q/HK+L8rshebF5ZAGthBI9JRLXpSpRy3Naq54jtLornTHPPaFk?=
+ =?us-ascii?Q?gp3HSQ3vFAzE/M7BNwvImH0T7Udp8R8TKwB3kxjR4v3XCPpuWErKEZ6y0qTl?=
+ =?us-ascii?Q?A3jNxJoKHvWDSPPV1SCQ36EPJPIui120PzrUC+2fr5DrhZvMJpGnmCyuoCyY?=
+ =?us-ascii?Q?RGMkb6/Vdgz5QPIACWRUCqjk0sYnXm6SHd22Z4WxCwDTIUwfpbkC0445f54R?=
+ =?us-ascii?Q?7g6l8eiRrBHfAETAj8CmgQCR79ki7K77F2GE2p5j3bu2npjU+h4QhOC/zY2b?=
+ =?us-ascii?Q?RI/75xK11JxibboEVj4Mz0HwWIRR9LMKogdDa2qxgbPwgktRYwNejr3FKFsB?=
+ =?us-ascii?Q?mVncBWmiUWBipzGbgtcRrIEWJGQa8ZsnWO5sJjo2zTgfhwp8tUqe+u2BaUuW?=
+ =?us-ascii?Q?+77nZJ5p6HUExFJ01yenDehxQ93Im+SnTCiz4lmfZsT4eZYElLz9b9a0Wooh?=
+ =?us-ascii?Q?qrDURyIiAjzjEzA4rmiNWDawSXFSG4rzvtKckszw9dPw+1ivxsQw3TKAOenm?=
+ =?us-ascii?Q?kLg2sXhsMn7nej22PBbx/dErlaot9kRcKmH/4Hlpv+LlsumVTit+SMhX6uRD?=
+ =?us-ascii?Q?ZbTEbF30Yn+j1pYqzjS0mHd4vphzd56aEUswJG0/Q+AkNzVBzlL5XOfIV5h+?=
+ =?us-ascii?Q?1WMmmRe7tdjxHSCuSDNozg4D/e2Uw9DMct3WKvNRpFeaLyDE1ttrhKk2D9lM?=
+ =?us-ascii?Q?3thi4WSyrpJMKxyWAqB3G3EQiE9AUQ9dOWLAhGpDAkhWzSCInDPg8Xt37Gze?=
+ =?us-ascii?Q?0MMfuRmpqctaQ3TdfgNVx3oObUqR2ed9TBFx5PCihKF5jYnanZ2emCbg3xfU?=
+ =?us-ascii?Q?HUxpZ5hOxGSzz71MhCwWVgvli3l5betkHgOfqELfXtpWUOPjWjNGNM7G8qCu?=
+ =?us-ascii?Q?JztRY3ULE0U/YnYnN30NBiYysrWY0S9pA5A8r3zJdBhqZQqQgoTa6WN6ZJQM?=
+ =?us-ascii?Q?GoI9p80X0vgo+jGCumJiIaCnsiO7vmDYmYtCGj1SoRKe+OdPbdPjReXJ+0uC?=
+ =?us-ascii?Q?56k3bFuzC2+WnFG1tbNEy1SbHQo+Sl2I5q8TGAM5?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab6ebe1f-1587-45b8-1580-08db4e44d5ac
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2023 15:16:15.5742
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QGqxJn/U6h9SOeUsDocrA7D3ppvfPJ6Vokp/Fnm37ywRj+NRiAH8amsmb+h9a6EvfPfUjNTj4dTMwJh8Ourx8g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4521
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove PTR_ERR from unused code path and
-assign error value where it exactly happens.
-This cleans the code and also helps to reduce 
-the possibility of incorrect err settings
-when it's set globally and is forgotten to be
-overwrite in custom development.
+This patch provides a large number of variants of F2FS_RW_ATTR
+and F2FS_RO_ATTR macros, reducing the number of parameters required
+to initialize the f2fs_attr structure.
 
-Signed-off-by: wenjun93 <gwj1235@yeah.net>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202304152234.wjaY3IYm-lkp@intel.com/
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
 ---
- fs/overlayfs/copy_up.c |  20 ++++----
- fs/overlayfs/dir.c     | 101 ++++++++++++++++++++++++-----------------
- fs/overlayfs/export.c  |  22 +++++----
- fs/overlayfs/namei.c   |  34 ++++++++------
- fs/overlayfs/readdir.c |   5 +-
- fs/overlayfs/super.c   |  80 ++++++++++++++++++--------------
- fs/overlayfs/util.c    |   2 +-
- 7 files changed, 154 insertions(+), 110 deletions(-)
+v4:
+- add FAULT_INFO_GENERAL_RW_ATTR(type, elname)
+- remove redundant '\'
+ fs/f2fs/sysfs.c | 240 ++++++++++++++++++++++++++++++------------------
+ 1 file changed, 149 insertions(+), 91 deletions(-)
 
-diff --git a/fs/overlayfs/copy_up.c b/fs/overlayfs/copy_up.c
-index f658cc8ea492..2ec25bcacf8f 100644
---- a/fs/overlayfs/copy_up.c
-+++ b/fs/overlayfs/copy_up.c
-@@ -507,9 +507,10 @@ static int ovl_create_index(struct dentry *dentry, struct dentry *origin,
- 		return err;
- 
- 	temp = ovl_create_temp(ofs, indexdir, OVL_CATTR(S_IFDIR | 0));
--	err = PTR_ERR(temp);
--	if (IS_ERR(temp))
-+	if (IS_ERR(temp)) {
-+		err = PTR_ERR(temp);
- 		goto free_name;
-+	}
- 
- 	err = ovl_set_upper_fh(ofs, upper, temp);
- 	if (err)
-@@ -705,9 +706,10 @@ static int ovl_copy_up_workdir(struct ovl_copy_up_ctx *c)
- 	};
- 
- 	/* workdir and destdir could be the same when copying up to indexdir */
--	err = -EIO;
--	if (lock_rename(c->workdir, c->destdir) != NULL)
-+	if (lock_rename(c->workdir, c->destdir) != NULL) {
-+		err = -EIO;
- 		goto unlock;
-+	}
- 
- 	err = ovl_prep_cu_creds(c->dentry, &cc);
- 	if (err)
-@@ -716,9 +718,10 @@ static int ovl_copy_up_workdir(struct ovl_copy_up_ctx *c)
- 	temp = ovl_create_temp(ofs, c->workdir, &cattr);
- 	ovl_revert_cu_creds(&cc);
- 
--	err = PTR_ERR(temp);
--	if (IS_ERR(temp))
-+	if (IS_ERR(temp)) {
-+		err = PTR_ERR(temp);
- 		goto unlock;
-+	}
- 
- 	/*
- 	 * Copy up data first and then xattrs. Writing data after
-@@ -741,9 +744,10 @@ static int ovl_copy_up_workdir(struct ovl_copy_up_ctx *c)
- 
- 	upper = ovl_lookup_upper(ofs, c->destname.name, c->destdir,
- 				 c->destname.len);
--	err = PTR_ERR(upper);
--	if (IS_ERR(upper))
-+	if (IS_ERR(upper)) {
-+		err = PTR_ERR(upper);
- 		goto cleanup;
-+	}
- 
- 	err = ovl_do_rename(ofs, wdir, temp, udir, upper, 0);
- 	dput(upper);
-diff --git a/fs/overlayfs/dir.c b/fs/overlayfs/dir.c
-index fc25fb95d5fc..e083bb343ffa 100644
---- a/fs/overlayfs/dir.c
-+++ b/fs/overlayfs/dir.c
-@@ -115,9 +115,10 @@ int ovl_cleanup_and_whiteout(struct ovl_fs *ofs, struct inode *dir,
- 	int flags = 0;
- 
- 	whiteout = ovl_whiteout(ofs);
--	err = PTR_ERR(whiteout);
--	if (IS_ERR(whiteout))
-+	if (IS_ERR(whiteout)) {
-+		err = PTR_ERR(whiteout);
- 		return err;
-+	}
- 
- 	if (d_is_dir(dentry))
- 		flags = RENAME_EXCHANGE;
-@@ -176,9 +177,10 @@ struct dentry *ovl_create_real(struct ovl_fs *ofs, struct inode *dir,
- 	if (IS_ERR(newdentry))
- 		return newdentry;
- 
--	err = -ESTALE;
--	if (newdentry->d_inode)
-+	if (newdentry->d_inode) {
-+		err = -ESTALE;
- 		goto out;
-+	}
- 
- 	if (attr->hardlink) {
- 		err = ovl_do_link(ofs, attr->hardlink, dir, newdentry);
-@@ -336,9 +338,10 @@ static int ovl_create_upper(struct dentry *dentry, struct inode *inode,
- 				    ovl_lookup_upper(ofs, dentry->d_name.name,
- 						     upperdir, dentry->d_name.len),
- 				    attr);
--	err = PTR_ERR(newdentry);
--	if (IS_ERR(newdentry))
-+	if (IS_ERR(newdentry)) {
-+		err = PTR_ERR(newdentry);
- 		goto out_unlock;
-+	}
- 
- 	if (ovl_type_merge(dentry->d_parent) && d_is_dir(newdentry) &&
- 	    !ovl_allow_offline_changes(ofs)) {
-@@ -394,9 +397,10 @@ static struct dentry *ovl_clear_empty(struct dentry *dentry,
- 		goto out_unlock;
- 
- 	opaquedir = ovl_create_temp(ofs, workdir, OVL_CATTR(stat.mode));
--	err = PTR_ERR(opaquedir);
--	if (IS_ERR(opaquedir))
-+	if (IS_ERR(opaquedir)) {
-+		err = PTR_ERR(opaquedir);
- 		goto out_unlock;
-+	}
- 
- 	err = ovl_copy_xattr(dentry->d_sb, &upperpath, opaquedir);
- 	if (err)
-@@ -473,18 +477,21 @@ static int ovl_create_over_whiteout(struct dentry *dentry, struct inode *inode,
- 
- 	upper = ovl_lookup_upper(ofs, dentry->d_name.name, upperdir,
- 				 dentry->d_name.len);
--	err = PTR_ERR(upper);
--	if (IS_ERR(upper))
-+	if (IS_ERR(upper)) {
-+		err = PTR_ERR(upper);
- 		goto out_unlock;
-+	}
- 
--	err = -ESTALE;
--	if (d_is_negative(upper) || !IS_WHITEOUT(d_inode(upper)))
-+	if (d_is_negative(upper) || !IS_WHITEOUT(d_inode(upper))) {
-+		err = -ESTALE;
- 		goto out_dput;
-+	}
- 
- 	newdentry = ovl_create_temp(ofs, workdir, cattr);
--	err = PTR_ERR(newdentry);
--	if (IS_ERR(newdentry))
-+	if (IS_ERR(newdentry)) {
-+		err = PTR_ERR(newdentry);
- 		goto out_dput;
-+	}
- 
- 	/*
- 	 * mode could have been mutilated due to umask (e.g. sgid directory)
-@@ -577,10 +584,11 @@ static int ovl_create_or_link(struct dentry *dentry, struct inode *inode,
- 	}
- 
- 	if (!attr->hardlink) {
--		err = -ENOMEM;
- 		override_cred = prepare_creds();
--		if (!override_cred)
-+		if (!override_cred) {
-+			err = -ENOMEM;
- 			goto out_revert_creds;
-+		}
- 		/*
- 		 * In the creation cases(create, mkdir, mknod, symlink),
- 		 * ovl should transfer current's fs{u,g}id to underlying
-@@ -632,10 +640,11 @@ static int ovl_create_object(struct dentry *dentry, int mode, dev_t rdev,
- 		goto out;
- 
- 	/* Preallocate inode to be used by ovl_get_inode() */
--	err = -ENOMEM;
- 	inode = ovl_new_inode(dentry->d_sb, mode, rdev);
--	if (!inode)
-+	if (!inode) {
-+		err = -ENOMEM;
- 		goto out_drop_write;
-+	}
- 
- 	spin_lock(&inode->i_lock);
- 	inode->i_state |= I_CREATING;
-@@ -759,9 +768,10 @@ static int ovl_remove_and_whiteout(struct dentry *dentry,
- 
- 	if (!list_empty(list)) {
- 		opaquedir = ovl_clear_empty(dentry, list);
--		err = PTR_ERR(opaquedir);
--		if (IS_ERR(opaquedir))
-+		if (IS_ERR(opaquedir)) {
-+			err = PTR_ERR(opaquedir);
- 			goto out;
-+		}
- 	}
- 
- 	err = ovl_lock_rename_workdir(workdir, upperdir);
-@@ -770,14 +780,15 @@ static int ovl_remove_and_whiteout(struct dentry *dentry,
- 
- 	upper = ovl_lookup_upper(ofs, dentry->d_name.name, upperdir,
- 				 dentry->d_name.len);
--	err = PTR_ERR(upper);
--	if (IS_ERR(upper))
-+	if (IS_ERR(upper)) {
-+		err = PTR_ERR(upper);
- 		goto out_unlock;
-+	}
- 
--	err = -ESTALE;
- 	if ((opaquedir && upper != opaquedir) ||
- 	    (!opaquedir && ovl_dentry_upper(dentry) &&
- 	     !ovl_matches_upper(dentry, upper))) {
-+		err = -ESTALE;
- 		goto out_dput_upper;
- 	}
- 
-@@ -810,22 +821,25 @@ static int ovl_remove_upper(struct dentry *dentry, bool is_dir,
- 
- 	if (!list_empty(list)) {
- 		opaquedir = ovl_clear_empty(dentry, list);
--		err = PTR_ERR(opaquedir);
--		if (IS_ERR(opaquedir))
-+		if (IS_ERR(opaquedir)) {
-+			err = PTR_ERR(opaquedir);
- 			goto out;
-+		}
- 	}
- 
- 	inode_lock_nested(dir, I_MUTEX_PARENT);
- 	upper = ovl_lookup_upper(ofs, dentry->d_name.name, upperdir,
- 				 dentry->d_name.len);
--	err = PTR_ERR(upper);
--	if (IS_ERR(upper))
-+	if (IS_ERR(upper)) {
-+		err = PTR_ERR(upper);
- 		goto out_unlock;
-+	}
- 
--	err = -ESTALE;
- 	if ((opaquedir && upper != opaquedir) ||
--	    (!opaquedir && !ovl_matches_upper(dentry, upper)))
-+	    (!opaquedir && !ovl_matches_upper(dentry, upper))) {
-+		err = -ESTALE;
- 		goto out_dput_upper;
-+	}
- 
- 	if (is_dir)
- 		err = ovl_do_rmdir(ofs, dir, upper);
-@@ -1098,18 +1112,18 @@ static int ovl_rename(struct mnt_idmap *idmap, struct inode *olddir,
- 	struct ovl_fs *ofs = OVL_FS(old->d_sb);
- 	LIST_HEAD(list);
- 
--	err = -EINVAL;
--	if (flags & ~(RENAME_EXCHANGE | RENAME_NOREPLACE))
-+	if (flags & ~(RENAME_EXCHANGE | RENAME_NOREPLACE)) {
-+		err = -EINVAL;
- 		goto out;
-+	}
- 
- 	flags &= ~RENAME_NOREPLACE;
- 
- 	/* Don't copy up directory trees */
--	err = -EXDEV;
--	if (!ovl_can_move(old))
--		goto out;
--	if (!overwrite && !ovl_can_move(new))
-+	if (!ovl_can_move(old) || (!overwrite && !ovl_can_move(new))) {
-+		err = -EXDEV;
- 		goto out;
-+	}
- 
- 	if (overwrite && new_is_dir && !ovl_pure_upper(new)) {
- 		err = ovl_check_empty_dir(new, &list);
-@@ -1159,8 +1173,8 @@ static int ovl_rename(struct mnt_idmap *idmap, struct inode *olddir,
- 
- 	if (!list_empty(&list)) {
- 		opaquedir = ovl_clear_empty(new, &list);
--		err = PTR_ERR(opaquedir);
- 		if (IS_ERR(opaquedir)) {
-+			err = PTR_ERR(opaquedir);
- 			opaquedir = NULL;
- 			goto out_revert_creds;
- 		}
-@@ -1192,19 +1206,22 @@ static int ovl_rename(struct mnt_idmap *idmap, struct inode *olddir,
- 
- 	olddentry = ovl_lookup_upper(ofs, old->d_name.name, old_upperdir,
- 				     old->d_name.len);
--	err = PTR_ERR(olddentry);
--	if (IS_ERR(olddentry))
-+	if (IS_ERR(olddentry)) {
-+		err = PTR_ERR(olddentry);
- 		goto out_unlock;
-+	}
- 
--	err = -ESTALE;
--	if (!ovl_matches_upper(old, olddentry))
-+	if (!ovl_matches_upper(old, olddentry)) {
-+		err = -ESTALE;
- 		goto out_dput_old;
-+	}
- 
- 	newdentry = ovl_lookup_upper(ofs, new->d_name.name, new_upperdir,
- 				     new->d_name.len);
--	err = PTR_ERR(newdentry);
--	if (IS_ERR(newdentry))
-+	if (IS_ERR(newdentry)) {
-+		err = PTR_ERR(newdentry);
- 		goto out_dput_old;
-+	}
- 
- 	old_opaque = ovl_dentry_is_opaque(old);
- 	new_opaque = ovl_dentry_is_opaque(new);
-diff --git a/fs/overlayfs/export.c b/fs/overlayfs/export.c
-index defd4e231ad2..00183ebf8d28 100644
---- a/fs/overlayfs/export.c
-+++ b/fs/overlayfs/export.c
-@@ -379,10 +379,11 @@ static struct dentry *ovl_lookup_real_one(struct dentry *connected,
- 	 * connected real path from the top.
- 	 */
- 	inode_lock_nested(dir, I_MUTEX_PARENT);
--	err = -ECHILD;
- 	parent = dget_parent(real);
--	if (ovl_dentry_real_at(connected, layer->idx) != parent)
-+	if (ovl_dentry_real_at(connected, layer->idx) != parent) {
-+		err = -ECHILD;
- 		goto fail;
-+	}
- 
- 	/*
- 	 * We also need to take a snapshot of real dentry name to protect us
-@@ -716,9 +717,10 @@ static struct dentry *ovl_lower_fh_to_d(struct super_block *sb,
- 	if (!d_is_dir(origin.dentry) ||
- 	    !(origin.dentry->d_flags & DCACHE_DISCONNECTED)) {
- 		inode = ovl_lookup_inode(sb, origin.dentry, false);
--		err = PTR_ERR(inode);
--		if (IS_ERR(inode))
-+		if (IS_ERR(inode)) {
-+			err = PTR_ERR(inode);
- 			goto out_err;
-+		}
- 		if (inode) {
- 			dentry = d_find_any_alias(inode);
- 			iput(inode);
-@@ -730,8 +732,8 @@ static struct dentry *ovl_lower_fh_to_d(struct super_block *sb,
- 	/* Then lookup indexed upper/whiteout by origin fh */
- 	if (ofs->indexdir) {
- 		index = ovl_get_index_fh(ofs, fh);
--		err = PTR_ERR(index);
- 		if (IS_ERR(index)) {
-+			err = PTR_ERR(index);
- 			index = NULL;
- 			goto out_err;
- 		}
-@@ -741,9 +743,10 @@ static struct dentry *ovl_lower_fh_to_d(struct super_block *sb,
- 	if (index && d_is_dir(index)) {
- 		struct dentry *upper = ovl_index_upper(ofs, index, true);
- 
--		err = PTR_ERR(upper);
--		if (IS_ERR_OR_NULL(upper))
-+		if (IS_ERR_OR_NULL(upper)) {
-+			err = PTR_ERR(upper);
- 			goto out_err;
-+		}
- 
- 		dentry = ovl_get_dentry(sb, upper, NULL, NULL);
- 		dput(upper);
-@@ -810,9 +813,10 @@ static struct dentry *ovl_fh_to_dentry(struct super_block *sb, struct fid *fid,
- 	int err;
- 
- 	fh = ovl_fid_to_fh(fid, len, fh_type);
--	err = PTR_ERR(fh);
--	if (IS_ERR(fh))
-+	if (IS_ERR(fh)) {
-+		err = PTR_ERR(fh);
- 		goto out_err;
-+	}
- 
- 	err = ovl_check_fh_len(fh, len);
- 	if (err)
-diff --git a/fs/overlayfs/namei.c b/fs/overlayfs/namei.c
-index cfb3420b7df0..665e9f19d8de 100644
---- a/fs/overlayfs/namei.c
-+++ b/fs/overlayfs/namei.c
-@@ -462,8 +462,8 @@ int ovl_verify_set_fh(struct ovl_fs *ofs, struct dentry *dentry,
- 	int err;
- 
- 	fh = ovl_encode_real_fh(ofs, real, is_upper);
--	err = PTR_ERR(fh);
- 	if (IS_ERR(fh)) {
-+		err = PTR_ERR(fh);
- 		fh = NULL;
- 		goto fail;
- 	}
-@@ -533,19 +533,22 @@ int ovl_verify_index(struct ovl_fs *ofs, struct dentry *index)
- 	if (!d_inode(index))
- 		return 0;
- 
--	err = -EINVAL;
--	if (index->d_name.len < sizeof(struct ovl_fb)*2)
-+	if (index->d_name.len < sizeof(struct ovl_fb)*2) {
-+		err = -EINVAL;
- 		goto fail;
-+	}
- 
--	err = -ENOMEM;
- 	len = index->d_name.len / 2;
- 	fh = kzalloc(len + OVL_FH_WIRE_OFFSET, GFP_KERNEL);
--	if (!fh)
-+	if (!fh) {
-+		err = -ENOMEM;
- 		goto fail;
-+	}
- 
--	err = -EINVAL;
--	if (hex2bin(fh->buf, index->d_name.name, len))
-+	if (hex2bin(fh->buf, index->d_name.name, len)) {
-+		err = -EINVAL;
- 		goto fail;
-+	}
- 
- 	err = ovl_check_fb_len(&fh->fb, len);
- 	if (err)
-@@ -905,11 +908,12 @@ struct dentry *ovl_lookup(struct inode *dir, struct dentry *dentry,
- 	}
- 
- 	if (!d.stop && poe->numlower) {
--		err = -ENOMEM;
- 		stack = kcalloc(ofs->numlayer - 1, sizeof(struct ovl_path),
- 				GFP_KERNEL);
--		if (!stack)
-+		if (!stack) {
-+			err = -ENOMEM;
- 			goto out_put_upper;
-+		}
- 	}
- 
- 	for (i = 0; !d.stop && i < poe->numlower; i++) {
-@@ -994,10 +998,10 @@ struct dentry *ovl_lookup(struct inode *dir, struct dentry *dentry,
- 		 * Only following redirects when redirects are enabled disables
- 		 * this attack vector when not necessary.
- 		 */
--		err = -EPERM;
- 		if (d.redirect && !ofs->config.redirect_follow) {
- 			pr_warn_ratelimited("refusing to follow redirect for (%pd2)\n",
- 					    dentry);
-+			err = -EPERM;
- 			goto out_put;
- 		}
- 
-@@ -1068,9 +1072,10 @@ struct dentry *ovl_lookup(struct inode *dir, struct dentry *dentry,
- 	}
- 
- 	oe = ovl_alloc_entry(ctr);
--	err = -ENOMEM;
--	if (!oe)
-+	if (!oe) {
-+		err = -ENOMEM;
- 		goto out_put;
-+	}
- 
- 	memcpy(oe->lowerstack, stack, sizeof(struct ovl_path) * ctr);
- 	dentry->d_fsdata = oe;
-@@ -1115,9 +1120,10 @@ struct dentry *ovl_lookup(struct inode *dir, struct dentry *dentry,
- 		};
- 
- 		inode = ovl_get_inode(dentry->d_sb, &oip);
--		err = PTR_ERR(inode);
--		if (IS_ERR(inode))
-+		if (IS_ERR(inode)) {
-+			err = PTR_ERR(inode);
- 			goto out_free_oe;
-+		}
- 		if (upperdentry && !uppermetacopy)
- 			ovl_set_flag(OVL_UPPERDATA, inode);
- 	}
-diff --git a/fs/overlayfs/readdir.c b/fs/overlayfs/readdir.c
-index b6952b21a7ee..ad5363ac3a68 100644
---- a/fs/overlayfs/readdir.c
-+++ b/fs/overlayfs/readdir.c
-@@ -764,9 +764,10 @@ static int ovl_iterate(struct file *file, struct dir_context *ctx)
- 		struct ovl_dir_cache *cache;
- 
- 		cache = ovl_cache_get(dentry);
--		err = PTR_ERR(cache);
--		if (IS_ERR(cache))
-+		if (IS_ERR(cache)) {
-+			err = PTR_ERR(cache);
- 			goto out;
-+		}
- 
- 		od->cache = cache;
- 		ovl_seek_cursor(od, ctx->pos);
-diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
-index f97ad8b40dbb..f683ff46edaf 100644
---- a/fs/overlayfs/super.c
-+++ b/fs/overlayfs/super.c
-@@ -801,9 +801,10 @@ static struct dentry *ovl_workdir_create(struct ovl_fs *ofs,
- 			goto out_dput;
- 
- 		/* Weird filesystem returning with hashed negative (kernfs)? */
--		err = -EINVAL;
--		if (d_really_is_negative(work))
-+		if (d_really_is_negative(work)) {
-+			err = -EINVAL;
- 			goto out_dput;
-+		}
- 
- 		/*
- 		 * Try to remove POSIX ACL xattrs from workdir.  We are good if:
-@@ -1130,8 +1131,8 @@ static int ovl_get_upper(struct super_block *sb, struct ovl_fs *ofs,
- 		goto out;
- 
- 	upper_mnt = clone_private_mount(upperpath);
--	err = PTR_ERR(upper_mnt);
- 	if (IS_ERR(upper_mnt)) {
-+		err = PTR_ERR(upper_mnt);
- 		pr_err("failed to clone upperpath\n");
- 		goto out;
- 	}
-@@ -1184,13 +1185,14 @@ static int ovl_check_rename_whiteout(struct ovl_fs *ofs)
- 	inode_lock_nested(dir, I_MUTEX_PARENT);
- 
- 	temp = ovl_create_temp(ofs, workdir, OVL_CATTR(S_IFREG | 0));
--	err = PTR_ERR(temp);
--	if (IS_ERR(temp))
-+	if (IS_ERR(temp)) {
-+		err = PTR_ERR(temp);
- 		goto out_unlock;
-+	}
- 
- 	dest = ovl_lookup_temp(ofs, workdir);
--	err = PTR_ERR(dest);
- 	if (IS_ERR(dest)) {
-+		err = PTR_ERR(dest);
- 		dput(temp);
- 		goto out_unlock;
- 	}
-@@ -1205,9 +1207,10 @@ static int ovl_check_rename_whiteout(struct ovl_fs *ofs)
- 	}
- 
- 	whiteout = ovl_lookup_upper(ofs, name.name.name, workdir, name.name.len);
--	err = PTR_ERR(whiteout);
--	if (IS_ERR(whiteout))
-+	if (IS_ERR(whiteout)) {
-+		err = PTR_ERR(whiteout);
- 		goto cleanup_temp;
-+	}
- 
- 	err = ovl_is_whiteout(whiteout);
- 
-@@ -1284,9 +1287,10 @@ static int ovl_make_workdir(struct super_block *sb, struct ovl_fs *ofs,
- 		return err;
- 
- 	workdir = ovl_workdir_create(ofs, OVL_WORKDIR_NAME, false);
--	err = PTR_ERR(workdir);
--	if (IS_ERR_OR_NULL(workdir))
-+	if (IS_ERR_OR_NULL(workdir)) {
-+		err = PTR_ERR(workdir);
- 		goto out;
-+	}
- 
- 	ofs->workdir = workdir;
- 
-@@ -1598,10 +1602,11 @@ static int ovl_get_layers(struct super_block *sb, struct ovl_fs *ofs,
- 	int err;
- 	unsigned int i;
- 
--	err = -ENOMEM;
- 	ofs->fs = kcalloc(numlower + 1, sizeof(struct ovl_sb), GFP_KERNEL);
--	if (ofs->fs == NULL)
-+	if (ofs->fs == NULL) {
-+		err = -ENOMEM;
- 		goto out;
-+	}
- 
- 	/* idx/fsid 0 are reserved for upper fs even with lower only overlay */
- 	ofs->numfs++;
-@@ -1652,8 +1657,8 @@ static int ovl_get_layers(struct super_block *sb, struct ovl_fs *ofs,
- 		}
- 
- 		mnt = clone_private_mount(&stack[i]);
--		err = PTR_ERR(mnt);
- 		if (IS_ERR(mnt)) {
-+			err = PTR_ERR(mnt);
- 			pr_err("failed to clone lowerpath\n");
- 			iput(trap);
- 			goto out;
-@@ -1729,7 +1734,6 @@ static struct ovl_entry *ovl_get_lowerstack(struct super_block *sb,
- 	if (!stack)
- 		return ERR_PTR(-ENOMEM);
- 
--	err = -EINVAL;
- 	for (i = 0; i < numlower; i++) {
- 		err = ovl_lower_dir(lower, &stack[i], ofs, &sb->s_stack_depth);
- 		if (err)
-@@ -1738,10 +1742,10 @@ static struct ovl_entry *ovl_get_lowerstack(struct super_block *sb,
- 		lower = strchr(lower, '\0') + 1;
- 	}
- 
--	err = -EINVAL;
- 	sb->s_stack_depth++;
- 	if (sb->s_stack_depth > FILESYSTEM_MAX_STACK_DEPTH) {
- 		pr_err("maximum fs stacking depth exceeded\n");
-+		err = -EINVAL;
- 		goto out_err;
- 	}
- 
-@@ -1749,10 +1753,11 @@ static struct ovl_entry *ovl_get_lowerstack(struct super_block *sb,
- 	if (err)
- 		goto out_err;
- 
--	err = -ENOMEM;
- 	oe = ovl_alloc_entry(numlower);
--	if (!oe)
-+	if (!oe) {
-+		err = -ENOMEM;
- 		goto out_err;
-+	}
- 
- 	for (i = 0; i < numlower; i++) {
- 		oe->lowerstack[i].dentry = dget(stack[i].dentry);
-@@ -1894,21 +1899,24 @@ static int ovl_fill_super(struct super_block *sb, void *data, int silent)
- 	unsigned int numlower;
- 	int err;
- 
--	err = -EIO;
--	if (WARN_ON(sb->s_user_ns != current_user_ns()))
-+	if (WARN_ON(sb->s_user_ns != current_user_ns())) {
-+		err = -EIO;
- 		goto out;
-+	}
- 
- 	sb->s_d_op = &ovl_dentry_operations;
- 
--	err = -ENOMEM;
- 	ofs = kzalloc(sizeof(struct ovl_fs), GFP_KERNEL);
--	if (!ofs)
-+	if (!ofs) {
-+		err = -ENOMEM;
- 		goto out;
-+	}
- 
--	err = -ENOMEM;
- 	ofs->creator_cred = cred = prepare_creds();
--	if (!cred)
-+	if (!cred) {
-+		err = -ENOMEM;
- 		goto out_err;
-+	}
- 
- 	/* Is there a reason anyone would want not to share whiteouts? */
- 	ofs->share_whiteout = true;
-@@ -1922,30 +1930,32 @@ static int ovl_fill_super(struct super_block *sb, void *data, int silent)
- 	if (err)
- 		goto out_err;
- 
--	err = -EINVAL;
- 	if (!ofs->config.lowerdir) {
- 		if (!silent)
- 			pr_err("missing 'lowerdir'\n");
-+		err = -EINVAL;
- 		goto out_err;
- 	}
- 
--	err = -ENOMEM;
- 	splitlower = kstrdup(ofs->config.lowerdir, GFP_KERNEL);
--	if (!splitlower)
-+	if (!splitlower) {
-+		err = -ENOMEM;
- 		goto out_err;
-+	}
- 
--	err = -EINVAL;
- 	numlower = ovl_split_lowerdirs(splitlower);
- 	if (numlower > OVL_MAX_STACK) {
- 		pr_err("too many lower directories, limit is %d\n",
- 		       OVL_MAX_STACK);
-+		err = -EINVAL;
- 		goto out_err;
- 	}
- 
--	err = -ENOMEM;
- 	layers = kcalloc(numlower + 1, sizeof(struct ovl_layer), GFP_KERNEL);
--	if (!layers)
-+	if (!layers) {
-+		err = -ENOMEM;
- 		goto out_err;
-+	}
- 
- 	ofs->layers = layers;
- 	/* Layer 0 is reserved for upper even if there's no upper */
-@@ -1969,9 +1979,9 @@ static int ovl_fill_super(struct super_block *sb, void *data, int silent)
- 	if (ofs->config.upperdir) {
- 		struct super_block *upper_sb;
- 
--		err = -EINVAL;
- 		if (!ofs->config.workdir) {
- 			pr_err("missing 'workdir'\n");
-+			err = -EINVAL;
- 			goto out_err;
- 		}
- 
-@@ -2000,9 +2010,10 @@ static int ovl_fill_super(struct super_block *sb, void *data, int silent)
- 		sb->s_time_gran = upper_sb->s_time_gran;
- 	}
- 	oe = ovl_get_lowerstack(sb, splitlower, numlower, ofs, layers);
--	err = PTR_ERR(oe);
--	if (IS_ERR(oe))
-+	if (IS_ERR(oe)) {
-+		err = PTR_ERR(oe);
- 		goto out_err;
-+	}
- 
- 	/* If the upper fs is nonexistent, we mark overlayfs r/o too */
- 	if (!ovl_upper_mnt(ofs))
-@@ -2054,10 +2065,11 @@ static int ovl_fill_super(struct super_block *sb, void *data, int silent)
- 	sb->s_flags |= SB_POSIXACL;
- 	sb->s_iflags |= SB_I_SKIP_SYNC;
- 
--	err = -ENOMEM;
- 	root_dentry = ovl_get_root(sb, upperpath.dentry, oe);
--	if (!root_dentry)
-+	if (!root_dentry) {
-+		err = -ENOMEM;
- 		goto out_free_oe;
-+	}
- 
- 	mntput(upperpath.mnt);
- 	kfree(splitlower);
-diff --git a/fs/overlayfs/util.c b/fs/overlayfs/util.c
-index 923d66d131c1..4b9f09a274ae 100644
---- a/fs/overlayfs/util.c
-+++ b/fs/overlayfs/util.c
-@@ -851,8 +851,8 @@ static void ovl_cleanup_index(struct dentry *dentry)
- 
- 	inode_lock_nested(dir, I_MUTEX_PARENT);
- 	index = ovl_lookup_upper(ofs, name.name, indexdir, name.len);
--	err = PTR_ERR(index);
- 	if (IS_ERR(index)) {
-+		err = PTR_ERR(index);
- 		index = NULL;
- 	} else if (ovl_index_all(dentry->d_sb)) {
- 		/* Whiteout orphan index to block future open by handle */
+diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+index 467d743c801f..48b7e0073884 100644
+--- a/fs/f2fs/sysfs.c
++++ b/fs/f2fs/sysfs.c
+@@ -842,68 +842,160 @@ static struct f2fs_attr f2fs_attr_##_name = {			\
+ #define F2FS_GENERAL_RO_ATTR(name) \
+ static struct f2fs_attr f2fs_attr_##name = __ATTR(name, 0444, name##_show, NULL)
+ 
+-#define F2FS_STAT_ATTR(_struct_type, _struct_name, _name, _elname)	\
+-static struct f2fs_attr f2fs_attr_##_name = {			\
+-	.attr = {.name = __stringify(_name), .mode = 0444 },	\
+-	.show = f2fs_sbi_show,					\
+-	.struct_type = _struct_type,				\
+-	.offset = offsetof(struct _struct_name, _elname),       \
+-}
++#ifdef CONFIG_F2FS_STAT_FS
++#define STAT_INFO_RO_ATTR(name, elname)				\
++	F2FS_RO_ATTR(STAT_INFO, f2fs_stat_info, name, elname)
++#endif
+ 
+-F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, gc_urgent_sleep_time,
+-							urgent_sleep_time);
+-F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, gc_min_sleep_time, min_sleep_time);
+-F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, gc_max_sleep_time, max_sleep_time);
+-F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, gc_no_gc_sleep_time, no_gc_sleep_time);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_idle, gc_mode);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_urgent, gc_mode);
+-F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, reclaim_segments, rec_prefree_segments);
+-F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_small_discards, max_discards);
+-F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_discard_request, max_discard_request);
+-F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, min_discard_issue_time, min_discard_issue_time);
+-F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, mid_discard_issue_time, mid_discard_issue_time);
+-F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_discard_issue_time, max_discard_issue_time);
+-F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_io_aware_gran, discard_io_aware_gran);
+-F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_urgent_util, discard_urgent_util);
+-F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_granularity, discard_granularity);
+-F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_ordered_discard, max_ordered_discard);
+-F2FS_RW_ATTR(RESERVED_BLOCKS, f2fs_sb_info, reserved_blocks, reserved_blocks);
+-F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, ipu_policy, ipu_policy);
+-F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, min_ipu_util, min_ipu_util);
+-F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, min_fsync_blocks, min_fsync_blocks);
+-F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, min_seq_blocks, min_seq_blocks);
+-F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, min_hot_blocks, min_hot_blocks);
+-F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, min_ssr_sections, min_ssr_sections);
+-F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, ram_thresh, ram_thresh);
+-F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, ra_nid_pages, ra_nid_pages);
+-F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, dirty_nats_ratio, dirty_nats_ratio);
+-F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, max_roll_forward_node_blocks, max_rf_node_blocks);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_victim_search, max_victim_search);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, migration_granularity, migration_granularity);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, dir_level, dir_level);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, cp_interval, interval_time[CP_TIME]);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, idle_interval, interval_time[REQ_TIME]);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, discard_idle_interval,
+-					interval_time[DISCARD_TIME]);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_idle_interval, interval_time[GC_TIME]);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info,
+-		umount_discard_timeout, interval_time[UMOUNT_DISCARD_TIMEOUT]);
+-#ifdef CONFIG_F2FS_IOSTAT
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, iostat_enable, iostat_enable);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, iostat_period_ms, iostat_period_ms);
++#define GC_THREAD_RW_ATTR(name, elname)				\
++	F2FS_RW_ATTR(GC_THREAD, f2fs_gc_kthread, name, elname)
++
++#define SM_INFO_RW_ATTR(name, elname)				\
++	F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, name, elname)
++
++#define SM_INFO_GENERAL_RW_ATTR(elname)				\
++	SM_INFO_RW_ATTR(elname, elname)
++
++#define DCC_INFO_RW_ATTR(name, elname)				\
++	F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, name, elname)
++
++#define DCC_INFO_GENERAL_RW_ATTR(elname)			\
++	DCC_INFO_RW_ATTR(elname, elname)
++
++#define NM_INFO_RW_ATTR(name, elname)				\
++	F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, name, elname)
++
++#define NM_INFO_GENERAL_RW_ATTR(elname)				\
++	NM_INFO_RW_ATTR(elname, elname)
++
++#define F2FS_SBI_RW_ATTR(name, elname)				\
++	F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, name, elname)
++
++#define F2FS_SBI_GENERAL_RW_ATTR(elname)			\
++	F2FS_SBI_RW_ATTR(elname, elname)
++
++#define F2FS_SBI_GENERAL_RO_ATTR(elname)			\
++	F2FS_RO_ATTR(F2FS_SBI, f2fs_sb_info, elname, elname)
++
++#ifdef CONFIG_F2FS_FAULT_INJECTION
++#define FAULT_INFO_GENERAL_RW_ATTR(type, elname)		\
++	F2FS_RW_ATTR(type, f2fs_fault_info, elname, elname)
+ #endif
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, readdir_ra, readdir_ra);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_io_bytes, max_io_bytes);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_pin_file_thresh, gc_pin_file_threshold);
++
++#define RESERVED_BLOCKS_GENERAL_RW_ATTR(elname)			\
++	F2FS_RW_ATTR(RESERVED_BLOCKS, f2fs_sb_info, elname, elname)
++
++#define CPRC_INFO_GENERAL_RW_ATTR(elname)			\
++	F2FS_RW_ATTR(CPRC_INFO, ckpt_req_control, elname, elname)
++
++#define ATGC_INFO_RW_ATTR(name, elname)				\
++	F2FS_RW_ATTR(ATGC_INFO, atgc_management, name, elname)
++
++/* GC_THREAD ATTR */
++GC_THREAD_RW_ATTR(gc_urgent_sleep_time, urgent_sleep_time);
++GC_THREAD_RW_ATTR(gc_min_sleep_time, min_sleep_time);
++GC_THREAD_RW_ATTR(gc_max_sleep_time, max_sleep_time);
++GC_THREAD_RW_ATTR(gc_no_gc_sleep_time, no_gc_sleep_time);
++
++/* SM_INFO ATTR */
++SM_INFO_RW_ATTR(reclaim_segments, rec_prefree_segments);
++SM_INFO_GENERAL_RW_ATTR(ipu_policy);
++SM_INFO_GENERAL_RW_ATTR(min_ipu_util);
++SM_INFO_GENERAL_RW_ATTR(min_fsync_blocks);
++SM_INFO_GENERAL_RW_ATTR(min_seq_blocks);
++SM_INFO_GENERAL_RW_ATTR(min_hot_blocks);
++SM_INFO_GENERAL_RW_ATTR(min_ssr_sections);
++
++/* DCC_INFO ATTR */
++DCC_INFO_RW_ATTR(max_small_discards, max_discards);
++DCC_INFO_GENERAL_RW_ATTR(max_discard_request);
++DCC_INFO_GENERAL_RW_ATTR(min_discard_issue_time);
++DCC_INFO_GENERAL_RW_ATTR(mid_discard_issue_time);
++DCC_INFO_GENERAL_RW_ATTR(max_discard_issue_time);
++DCC_INFO_GENERAL_RW_ATTR(discard_io_aware_gran);
++DCC_INFO_GENERAL_RW_ATTR(discard_urgent_util);
++DCC_INFO_GENERAL_RW_ATTR(discard_granularity);
++DCC_INFO_GENERAL_RW_ATTR(max_ordered_discard);
++
++/* NM_INFO ATTR */
++NM_INFO_RW_ATTR(max_roll_forward_node_blocks, max_rf_node_blocks);
++NM_INFO_GENERAL_RW_ATTR(ram_thresh);
++NM_INFO_GENERAL_RW_ATTR(ra_nid_pages);
++NM_INFO_GENERAL_RW_ATTR(dirty_nats_ratio);
++
++/* F2FS_SBI ATTR */
+ F2FS_RW_ATTR(F2FS_SBI, f2fs_super_block, extension_list, extension_list);
++F2FS_SBI_RW_ATTR(gc_idle, gc_mode);
++F2FS_SBI_RW_ATTR(gc_urgent, gc_mode);
++F2FS_SBI_RW_ATTR(cp_interval, interval_time[CP_TIME]);
++F2FS_SBI_RW_ATTR(idle_interval, interval_time[REQ_TIME]);
++F2FS_SBI_RW_ATTR(discard_idle_interval, interval_time[DISCARD_TIME]);
++F2FS_SBI_RW_ATTR(gc_idle_interval, interval_time[GC_TIME]);
++F2FS_SBI_RW_ATTR(umount_discard_timeout, interval_time[UMOUNT_DISCARD_TIMEOUT]);
++F2FS_SBI_RW_ATTR(gc_pin_file_thresh, gc_pin_file_threshold);
++F2FS_SBI_RW_ATTR(gc_reclaimed_segments, gc_reclaimed_segs);
++F2FS_SBI_GENERAL_RW_ATTR(max_victim_search);
++F2FS_SBI_GENERAL_RW_ATTR(migration_granularity);
++F2FS_SBI_GENERAL_RW_ATTR(dir_level);
++#ifdef CONFIG_F2FS_IOSTAT
++F2FS_SBI_GENERAL_RW_ATTR(iostat_enable);
++F2FS_SBI_GENERAL_RW_ATTR(iostat_period_ms);
++#endif
++F2FS_SBI_GENERAL_RW_ATTR(readdir_ra);
++F2FS_SBI_GENERAL_RW_ATTR(max_io_bytes);
++F2FS_SBI_GENERAL_RW_ATTR(data_io_flag);
++F2FS_SBI_GENERAL_RW_ATTR(node_io_flag);
++F2FS_SBI_GENERAL_RW_ATTR(gc_remaining_trials);
++F2FS_SBI_GENERAL_RW_ATTR(seq_file_ra_mul);
++F2FS_SBI_GENERAL_RW_ATTR(gc_segment_mode);
++F2FS_SBI_GENERAL_RW_ATTR(max_fragment_chunk);
++F2FS_SBI_GENERAL_RW_ATTR(max_fragment_hole);
++#ifdef CONFIG_F2FS_FS_COMPRESSION
++F2FS_SBI_GENERAL_RW_ATTR(compr_written_block);
++F2FS_SBI_GENERAL_RW_ATTR(compr_saved_block);
++F2FS_SBI_GENERAL_RW_ATTR(compr_new_inode);
++F2FS_SBI_GENERAL_RW_ATTR(compress_percent);
++F2FS_SBI_GENERAL_RW_ATTR(compress_watermark);
++#endif
++/* atomic write */
++F2FS_SBI_GENERAL_RO_ATTR(current_atomic_write);
++F2FS_SBI_GENERAL_RW_ATTR(peak_atomic_write);
++F2FS_SBI_GENERAL_RW_ATTR(committed_atomic_block);
++F2FS_SBI_GENERAL_RW_ATTR(revoked_atomic_block);
++/* block age extent cache */
++F2FS_SBI_GENERAL_RW_ATTR(hot_data_age_threshold);
++F2FS_SBI_GENERAL_RW_ATTR(warm_data_age_threshold);
++F2FS_SBI_GENERAL_RW_ATTR(last_age_weight);
++#ifdef CONFIG_BLK_DEV_ZONED
++F2FS_SBI_GENERAL_RO_ATTR(unusable_blocks_per_sec);
++#endif
++
++/* STAT_INFO ATTR */
++#ifdef CONFIG_F2FS_STAT_FS
++STAT_INFO_RO_ATTR(cp_foreground_calls, cp_count);
++STAT_INFO_RO_ATTR(cp_background_calls, bg_cp_count);
++STAT_INFO_RO_ATTR(gc_foreground_calls, call_count);
++STAT_INFO_RO_ATTR(gc_background_calls, bg_gc);
++#endif
++
++/* FAULT_INFO ATTR */
+ #ifdef CONFIG_F2FS_FAULT_INJECTION
+-F2FS_RW_ATTR(FAULT_INFO_RATE, f2fs_fault_info, inject_rate, inject_rate);
+-F2FS_RW_ATTR(FAULT_INFO_TYPE, f2fs_fault_info, inject_type, inject_type);
++FAULT_INFO_GENERAL_RW_ATTR(FAULT_INFO_RATE, inject_rate);
++FAULT_INFO_GENERAL_RW_ATTR(FAULT_INFO_TYPE, inject_type);
+ #endif
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, data_io_flag, data_io_flag);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, node_io_flag, node_io_flag);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_remaining_trials, gc_remaining_trials);
+-F2FS_RW_ATTR(CPRC_INFO, ckpt_req_control, ckpt_thread_ioprio, ckpt_thread_ioprio);
++
++/* RESERVED_BLOCKS ATTR */
++RESERVED_BLOCKS_GENERAL_RW_ATTR(reserved_blocks);
++
++/* CPRC_INFO ATTR */
++CPRC_INFO_GENERAL_RW_ATTR(ckpt_thread_ioprio);
++
++/* ATGC_INFO ATTR */
++ATGC_INFO_RW_ATTR(atgc_candidate_ratio, candidate_ratio);
++ATGC_INFO_RW_ATTR(atgc_candidate_count, max_candidate_count);
++ATGC_INFO_RW_ATTR(atgc_age_weight, age_weight);
++ATGC_INFO_RW_ATTR(atgc_age_threshold, age_threshold);
++
+ F2FS_GENERAL_RO_ATTR(dirty_segments);
+ F2FS_GENERAL_RO_ATTR(free_segments);
+ F2FS_GENERAL_RO_ATTR(ovp_segments);
+@@ -917,10 +1009,6 @@ F2FS_GENERAL_RO_ATTR(main_blkaddr);
+ F2FS_GENERAL_RO_ATTR(pending_discard);
+ F2FS_GENERAL_RO_ATTR(gc_mode);
+ #ifdef CONFIG_F2FS_STAT_FS
+-F2FS_STAT_ATTR(STAT_INFO, f2fs_stat_info, cp_foreground_calls, cp_count);
+-F2FS_STAT_ATTR(STAT_INFO, f2fs_stat_info, cp_background_calls, bg_cp_count);
+-F2FS_STAT_ATTR(STAT_INFO, f2fs_stat_info, gc_foreground_calls, call_count);
+-F2FS_STAT_ATTR(STAT_INFO, f2fs_stat_info, gc_background_calls, bg_gc);
+ F2FS_GENERAL_RO_ATTR(moved_blocks_background);
+ F2FS_GENERAL_RO_ATTR(moved_blocks_foreground);
+ F2FS_GENERAL_RO_ATTR(avg_vblocks);
+@@ -935,8 +1023,6 @@ F2FS_FEATURE_RO_ATTR(encrypted_casefold);
+ #endif /* CONFIG_FS_ENCRYPTION */
+ #ifdef CONFIG_BLK_DEV_ZONED
+ F2FS_FEATURE_RO_ATTR(block_zoned);
+-F2FS_RO_ATTR(F2FS_SBI, f2fs_sb_info, unusable_blocks_per_sec,
+-					unusable_blocks_per_sec);
+ #endif
+ F2FS_FEATURE_RO_ATTR(atomic_write);
+ F2FS_FEATURE_RO_ATTR(extra_attr);
+@@ -956,37 +1042,9 @@ F2FS_FEATURE_RO_ATTR(casefold);
+ F2FS_FEATURE_RO_ATTR(readonly);
+ #ifdef CONFIG_F2FS_FS_COMPRESSION
+ F2FS_FEATURE_RO_ATTR(compression);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_written_block, compr_written_block);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_saved_block, compr_saved_block);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_new_inode, compr_new_inode);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compress_percent, compress_percent);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compress_watermark, compress_watermark);
+ #endif
+ F2FS_FEATURE_RO_ATTR(pin_file);
+ 
+-/* For ATGC */
+-F2FS_RW_ATTR(ATGC_INFO, atgc_management, atgc_candidate_ratio, candidate_ratio);
+-F2FS_RW_ATTR(ATGC_INFO, atgc_management, atgc_candidate_count, max_candidate_count);
+-F2FS_RW_ATTR(ATGC_INFO, atgc_management, atgc_age_weight, age_weight);
+-F2FS_RW_ATTR(ATGC_INFO, atgc_management, atgc_age_threshold, age_threshold);
+-
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, seq_file_ra_mul, seq_file_ra_mul);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_segment_mode, gc_segment_mode);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_reclaimed_segments, gc_reclaimed_segs);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_fragment_chunk, max_fragment_chunk);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_fragment_hole, max_fragment_hole);
+-
+-/* For atomic write */
+-F2FS_RO_ATTR(F2FS_SBI, f2fs_sb_info, current_atomic_write, current_atomic_write);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, peak_atomic_write, peak_atomic_write);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, committed_atomic_block, committed_atomic_block);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, revoked_atomic_block, revoked_atomic_block);
+-
+-/* For block age extent cache */
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, hot_data_age_threshold, hot_data_age_threshold);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, warm_data_age_threshold, warm_data_age_threshold);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, last_age_weight, last_age_weight);
+-
+ #define ATTR_LIST(name) (&f2fs_attr_##name.attr)
+ static struct attribute *f2fs_attrs[] = {
+ 	ATTR_LIST(gc_urgent_sleep_time),
 -- 
-2.27.0
+2.39.0
 
