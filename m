@@ -2,35 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9226F9105
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 11:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7306F910B
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 11:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbjEFJtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 05:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
+        id S231190AbjEFJ5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 05:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjEFJtE (ORCPT
+        with ESMTP id S230000AbjEFJ5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 05:49:04 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0480883ED;
-        Sat,  6 May 2023 02:49:02 -0700 (PDT)
-Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QD2hD4bQqzTjxm;
-        Sat,  6 May 2023 17:44:28 +0800 (CST)
+        Sat, 6 May 2023 05:57:18 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFD946AA;
+        Sat,  6 May 2023 02:57:16 -0700 (PDT)
+Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QD2ws0ZtNzsRBP;
+        Sat,  6 May 2023 17:55:25 +0800 (CST)
 Received: from [10.67.101.126] (10.67.101.126) by
  dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sat, 6 May 2023 17:49:00 +0800
-Message-ID: <0b4dee69-347f-4a53-d41d-5a0de96d9b2f@huawei.com>
-Date:   Sat, 6 May 2023 17:49:00 +0800
+ 15.1.2507.23; Sat, 6 May 2023 17:57:13 +0800
+Message-ID: <c4f4bc15-09b7-ffee-8e56-c857fc1431a1@huawei.com>
+Date:   Sat, 6 May 2023 17:57:13 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.1
 Subject: Re: [PATCH v2] ata: libata-scsi: Fix get identity data failed
 Content-Language: en-CA
-To:     Jason Yan <yanaijie@huawei.com>,
-        John Garry <john.g.garry@oracle.com>,
+To:     John Garry <john.g.garry@oracle.com>,
         Damien Le Moal <dlemoal@kernel.org>, <jejb@linux.ibm.com>,
         <martin.petersen@oracle.com>, <damien.lemoal@opensource.wdc.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -40,9 +39,9 @@ References: <20230505025712.19438-1-yangxingui@huawei.com>
  <291f1d97-9195-45ac-8e12-058f5c797277@kernel.org>
  <b13c9445-39c5-f207-d5d0-d6c86eee54ae@oracle.com>
  <1b703656-e966-63f8-19dd-33e4e9914676@huawei.com>
- <4364409d-e63c-f87f-0484-f170e92d44c5@huawei.com>
+ <cae0ac63-f391-08c0-c646-23037485c189@oracle.com>
 From:   yangxingui <yangxingui@huawei.com>
-In-Reply-To: <4364409d-e63c-f87f-0484-f170e92d44c5@huawei.com>
+In-Reply-To: <cae0ac63-f391-08c0-c646-23037485c189@oracle.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.67.101.126]
@@ -60,41 +59,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/5/6 10:11, Jason Yan wrote:
-> On 2023/5/5 17:14, yangxingui wrote:
->>
->>
->> On 2023/5/5 16:25, John Garry wrote:
->>> On 05/05/2023 09:17, Damien Le Moal wrote:
->>>>> --- a/drivers/ata/libata-scsi.c
->>>>> +++ b/drivers/ata/libata-scsi.c
->>>>> @@ -26,6 +26,7 @@
->>>>>   #include <scsi/scsi_device.h>
->>>>>   #include <scsi/scsi_tcq.h>
->>>>>   #include <scsi/scsi_transport.h>
->>>>> +#include <scsi/libsas.h>
->>>
+On 2023/5/5 17:51, John Garry wrote:
+> On 05/05/2023 10:14, yangxingui wrote:
 >>> hmmm... is it really acceptable that libata is referencing libsas? I 
 >>> didn't think that it would be. libsas uses libata, not the other way 
 >>> around.
 >> Yeah, I didn't expect that either. Is there any other way? If so, is 
 >> patch v1 OK?
 > 
-> Hi Xingui,
+> I still think that we can do better than v1.
+OK
 > 
-> Libsas should follow the standard way of libata to manage the ata 
-> structures. Not the opposite way. So what you should do is to find a way 
-> for libsas to behave as a normal ata driver. It's not good to make 
-> libata aware of libsas or referencing libsas.
+>>>
+>>>>>   #include <linux/libata.h>
+>>>>>   #include <linux/hdreg.h>
+>>>>>   #include <linux/uaccess.h>
+>>>>> @@ -2745,10 +2746,17 @@ static struct ata_device 
+>>>>> *__ata_scsi_find_dev(struct ata_port *ap,
+>>>>>    *    Associated ATA device, or %NULL if not found.
+>>>>>    */
+>>>>>   struct ata_device *
+>>>>> -ata_scsi_find_dev(struct ata_port *ap, const struct scsi_device 
+>>>>> *scsidev)
+>>>> Why drop the const ?
+>>>>
+>>>>> +ata_scsi_find_dev(struct ata_port *ap, struct scsi_device *scsidev)
+>>>>>   {
+>>>>> -    struct ata_device *dev = __ata_scsi_find_dev(ap, scsidev);
+>>>>> +    struct ata_device *dev;
+>>>>> +
+>>>>> +    if (ap->flags & ATA_FLAG_SAS_HOST) {
+>>>
+>>> And this is SAS host. Not necessarily libsas (even though with ipr 
+>>> libata usage gone, it would be the only user).
+>> Add a new flag only for libsas?
 > 
-> If you have detailed questions you can ask me internally(which will be 
-> faster) or publicly through the maillist(which may have some delay).
+> No, because of previous reason.
 > 
-ok
+> Please remind me - at what point do we error within ata_scsi_find_dev() 
+> and return NULL for a libsas host?
+The scsi_host_template filled by libsas and call ata_scsi_find_dev() has 
+this problem. After sas_change_queue_depth() is fixed, only sas_ioctl() 
+has this problem now.
+> 
+> Note: it would be good to include that commit message for future reference.
+> 
+> Maybe we could add a method to ata_port_operations to do this lookup. I 
+> assume that is abusing ata_port_operations purpose, since it's mostly 
+> for HW methods.
+> 
+> Or do we actually use sdev->hostdata for libata or libsas? If not, maybe 
+> we could store the struct ata_device pointer there.
+Well, it might be a way.
 
 Thanks,
 Xingui
 .
+> 
+> I'm just thinking out loud now...
+> 
 > Thanks,
-> Jason
+> John
+> 
+> 
 > .
