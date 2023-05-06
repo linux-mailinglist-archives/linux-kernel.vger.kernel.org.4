@@ -2,155 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4816F914F
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 12:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F46E6F9153
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 12:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231986AbjEFKwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 06:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
+        id S232041AbjEFKxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 06:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjEFKwU (ORCPT
+        with ESMTP id S231316AbjEFKxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 06:52:20 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9384F4C1E;
-        Sat,  6 May 2023 03:52:16 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-52caed90d17so920379a12.0;
-        Sat, 06 May 2023 03:52:16 -0700 (PDT)
+        Sat, 6 May 2023 06:53:12 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1663055B2
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 03:53:11 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-94ef0a8546fso440539866b.1
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 03:53:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683370336; x=1685962336;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=linaro.org; s=google; t=1683370389; x=1685962389;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2WPWQzoKyocx4jwyrEWsU5/Mb3QtUt6PFyws4Xy1T9Y=;
-        b=Y02N91RBlzP2MsrhYJsjugMSEbfcZeRHNsSeyLH0V4jJ25bvKsKxum9+cfrKRdmtyE
-         2jatmgCyio0UXbdC5JSLlzi8onHkp8ZHKZZn/iLsDX8mWZKwY6PFx1qPx7x/NJZ8rYbm
-         KxrX+GYTu+U36gmbDb55e+PAqY6n2+SMxQ1x9yCiI/l/76xBikEFrFFYU8t+TYJM2kbd
-         sJB5bKMu/Xu3nppT0lSI4csaJQ8m86fKjwN+ZwE5VCDsAhEsVMsbhGyKHh4oBCOSM1c6
-         5ZEYz2hvMQTPDuVgNKp9LKmVynKqFqtITxT1OE3W8fUW5cd/82N15gDukM3QRmhdqkY2
-         rAxw==
+        bh=R+UErNxwinHQ3Gbr526y3MMdqkGlpH1N4yA85BQu/jQ=;
+        b=ZnnPcnv8ZBylQRbOhTSgc7oOzcDTDJvIepvAiTQC79+MygS56SCqReDEyF0mvUhgHU
+         EAjNO5d0xcDcvPJabqJsnAvQaB4wF4QVBi/aoMWpjjFAalyT0lHrai5RZ/TN6WliMMso
+         QseBxIY0eDXDKpjBxfWhXaCbikTrNjNX5O13OFwA91j+X0fvUMozhhUNwauaZyGmrm/R
+         RF9YD7HZZ8Va24bLly+sx7TTMY2iILIkmn4YRe4mRCXesg2TvuetmkZbiSNw5YUD8CQi
+         w0uE57IQnBinE+2+RppNVO/9dqxOYxDYLvBaa2u4MkEliXG8mo0JBb3Fc68/O9RiT5ZV
+         yvzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683370336; x=1685962336;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1683370389; x=1685962389;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2WPWQzoKyocx4jwyrEWsU5/Mb3QtUt6PFyws4Xy1T9Y=;
-        b=b0PFRd/85KlJwKgdyeKkuJNmlERlRjBwht6R4oI0Kz7dGk4LB8yxfpiIf9iSE6mASh
-         1PQTu40cQW2bCXOXLsrVJURkYXiz57WuaK4vc2lSosAzQq7ioCzI32QVyA2a9Butn3Yl
-         fdiJ/pR1Xo+Sp5NTcZAgxjnR9bpQoZSflCGN9/RzPm2kWVOkvmo+xOhoy9js6K9rLCQC
-         8XNa++lYCfMaRSpU1nwCBeKp86me2qeoQCpuEP5E5a6NQd3/rwPYMELKYTCSpA4iUuCy
-         lDwSrNevWk4cO49jxr/cH3+Lta9EuaAat34sb+IkrAqVV1SM++kT+T7OpOlYqXH2gpIu
-         6KMA==
-X-Gm-Message-State: AC+VfDwj4uqQobc0FJ/Ma2DkwPLuW4II3F0O8p8H6u2UD6+e1+8EHhTM
-        8L8MsF/cwVdBe3Eii5FS2DN3DCj/EkP5zKVs
-X-Google-Smtp-Source: ACHHUZ64Hd99wZVk+p30c+4tID1J1V+hd30DeVjfmgF0X5yIzsDDwYEdecW6dcmGNDwQPN+e5WT1Rw==
-X-Received: by 2002:a17:902:d4c3:b0:1ab:14da:981 with SMTP id o3-20020a170902d4c300b001ab14da0981mr5141456plg.35.1683370335839;
-        Sat, 06 May 2023 03:52:15 -0700 (PDT)
-Received: from yoga ([2400:1f00:13:6324:7c97:8040:5b6b:bbd5])
-        by smtp.gmail.com with ESMTPSA id h12-20020a170902748c00b001a9581d3ef5sm3322457pll.97.2023.05.06.03.52.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 May 2023 03:52:15 -0700 (PDT)
-Date:   Sat, 6 May 2023 16:22:09 +0530
-From:   Anup Sharma <anupnewsmail@gmail.com>
-To:     robh@kernel.org
-Cc:     lgirdwood@gmail.com, broonie@kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        KCHSU0@nuvoton.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ASoC: dt-bindings: nau8540: Convert to dtschema
-Message-ID: <ZFYxWVdE9YkMKvXv@yoga>
+        bh=R+UErNxwinHQ3Gbr526y3MMdqkGlpH1N4yA85BQu/jQ=;
+        b=DYF130kfh2I8E5iGASRPl8gaZAV8Iprpqr2Mg0kmcQHMOtSa00sTYPdUZRbeDalmVG
+         hUQgqLYn+0UaoTIwEoxfmNpp1gpKZzgmFCN9UPiHgCBLCbnnYiuK7NzqPU9i2FOG0DBi
+         V+lKFlgmKKaZTKneh3oA4MzEJfFFDmuDnt3+UuXlBO5DEbTJYl1HcP+zkD5SZosDOUYl
+         HRTkt4w++KWkVTC246sHf+H5pufrUFPyzInqWeNuYmys5TcPYGjTn2eKV4o8CavMVimn
+         L9tfZHn3An8zAmxRxJvy32tWLwNEJCqNkNndY0Sed44BGpQd4Zab6eyNvmm6GcCcg+5J
+         Y5xA==
+X-Gm-Message-State: AC+VfDwPvaxhAH3MiHv90tAyYz4ZCkT00YixlFXcrBKzxtdvRFx27gP3
+        LnlepYAlw4YewrrdXh+857/jZw==
+X-Google-Smtp-Source: ACHHUZ6i+Y7zVINwjFBxl6CnKYAnCnn/zV1ojQVX9NQ093UjfJjxB0nkCiJ8/BQ6zNwikObpGIENCw==
+X-Received: by 2002:a17:907:60c9:b0:965:c42d:ac71 with SMTP id hv9-20020a17090760c900b00965c42dac71mr4128109ejc.51.1683370389513;
+        Sat, 06 May 2023 03:53:09 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:efe5:7c03:a10a:7a40? ([2a02:810d:15c0:828:efe5:7c03:a10a:7a40])
+        by smtp.gmail.com with ESMTPSA id ig2-20020a1709072e0200b00959b810efcbsm2142263ejc.36.2023.05.06.03.53.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 May 2023 03:53:08 -0700 (PDT)
+Message-ID: <e38cbcdf-5963-fb00-d7b2-66d4129f9fce@linaro.org>
+Date:   Sat, 6 May 2023 12:53:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 1/6] dt-bindings: spi: sun6i: add DT bindings for
+ Allwinner R329 SPI
+Content-Language: en-US
+To:     Maksim Kiselev <bigunclemax@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     Icenowy Zheng <icenowy@aosc.io>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20230506073018.1411583-1-bigunclemax@gmail.com>
+ <20230506073018.1411583-2-bigunclemax@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230506073018.1411583-2-bigunclemax@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the NAU8540 audio CODEC bindings to DT schema
+On 06/05/2023 09:30, Maksim Kiselev wrote:
+> From: Icenowy Zheng <icenowy@aosc.io>
+> 
+> Allwinner R329 SPI has two controllers, and the second one has helper
+> functions for MIPI-DBI Type C.
 
-Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+I wonder what is the difference of DBI compatible. You refer to "helper
+functions", which sounds like driver... do you mean some parts of SPI
+controller?
 
-Changes:
-V1 -> V2: Adhere to the correct procedure by including the maintainer's name.
-          Drop Mark from maintainer.
----
- .../devicetree/bindings/sound/nau8540.txt     | 16 --------
- .../bindings/sound/nuvoton,nau8540.yaml       | 40 +++++++++++++++++++
- 2 files changed, 40 insertions(+), 16 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/sound/nau8540.txt
- create mode 100644 Documentation/devicetree/bindings/sound/nuvoton,nau8540.yaml
+> 
+> Add compatible strings for these controllers
+> 
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> ---
+>  .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml        | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> index de36c6a34a0f..2c1b8da35339 100644
+> --- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> @@ -21,6 +21,8 @@ properties:
+>      oneOf:
+>        - const: allwinner,sun6i-a31-spi
+>        - const: allwinner,sun8i-h3-spi
+> +      - const: allwinner,sun50i-r329-spi
+> +      - const: allwinner,sun50i-r329-spi-dbi
 
-diff --git a/Documentation/devicetree/bindings/sound/nau8540.txt b/Documentation/devicetree/bindings/sound/nau8540.txt
-deleted file mode 100644
-index 307a76528320..000000000000
---- a/Documentation/devicetree/bindings/sound/nau8540.txt
-+++ /dev/null
-@@ -1,16 +0,0 @@
--NAU85L40 audio CODEC
--
--This device supports I2C only.
--
--Required properties:
--
--  - compatible : "nuvoton,nau8540"
--
--  - reg : the I2C address of the device.
--
--Example:
--
--codec: nau8540@1c {
--       compatible = "nuvoton,nau8540";
--       reg = <0x1c>;
--};
-diff --git a/Documentation/devicetree/bindings/sound/nuvoton,nau8540.yaml b/Documentation/devicetree/bindings/sound/nuvoton,nau8540.yaml
-new file mode 100644
-index 000000000000..7ccfbb8d8b04
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/nuvoton,nau8540.yaml
-@@ -0,0 +1,40 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/nuvoton,nau8540.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Nuvoton Technology Corporation NAU85L40 Audio CODEC
-+
-+maintainers:
-+  - John Hsu <KCHSU0@nuvoton.com>
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: nuvoton,nau8540
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#sound-dai-cells":
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        codec@1c {
-+            compatible = "nuvoton,nau8540";
-+            reg = <0x1c>;
-+        };
-+    };
--- 
-2.34.1
+As Conor pointed out, nothing improved here.
+
+Best regards,
+Krzysztof
 
