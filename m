@@ -2,79 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012C86F8D0A
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 02:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E906F8D08
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 02:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjEFAIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 20:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
+        id S231143AbjEFAI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 20:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbjEFAIw (ORCPT
+        with ESMTP id S229803AbjEFAI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 20:08:52 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B446A41
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 17:08:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kfouKqifwfLU/fnGvsNmjf5j86ymKkHEurgeg0D3djY=; b=jD/PGhWF+MopHUzZCAmBl5jADh
-        Th4Ps0MGfcgL/FMbqVjKjKg2KNoK56gTxClNdRvwShVti7Wtr1XOmuZPkQ1iv5dObsMMGzGhlz2DD
-        NGlHaaKXzZrdTMSlNLSgUw3fI3lSge3nO4032uswOAdIXiwul2NRNcFTEOhvMjs2KahbrkXNzh4QD
-        WqEshVcKSemAwmCYKTD9JL3YNLY+3R2QhadKAfqsrzhiQSuwoo6k6M2L8NS7KRWbo89tBi1mzYNbi
-        0jxeLTXPxLXJqbwBfNXnQU+PNTsS1eJ/Lkg786jSbsRlM45IyiUfxTBj4GxjGkyDo2lAMTwRxUy0k
-        0z6/QUlw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pv5TG-003PTy-1U;
-        Sat, 06 May 2023 00:08:18 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 27379306028;
-        Sat,  6 May 2023 02:08:16 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F40FD23937D99; Sat,  6 May 2023 02:08:15 +0200 (CEST)
-Date:   Sat, 6 May 2023 02:08:15 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        naveen.n.rao@linux.vnet.ibm.com,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: Re: [PATCH 4/6] sched/fair: Skip prefer sibling move between SMT
- group and non-SMT group
-Message-ID: <20230506000815.GA1824020@hirez.programming.kicks-ass.net>
-References: <cover.1683156492.git.tim.c.chen@linux.intel.com>
- <b20517e3986bfdde8a605afa19d144ec411c7a42.1683156492.git.tim.c.chen@linux.intel.com>
- <20230505132211.GQ83892@hirez.programming.kicks-ass.net>
- <7c5ad793fe0195f7129156b67a043df18b46d732.camel@linux.intel.com>
- <20230505233836.GB1821641@hirez.programming.kicks-ass.net>
+        Fri, 5 May 2023 20:08:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CD419B0;
+        Fri,  5 May 2023 17:08:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFD6563C72;
+        Sat,  6 May 2023 00:08:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAD13C433EF;
+        Sat,  6 May 2023 00:08:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683331704;
+        bh=7+4RZ/Snpwvb0zzhi2RjjXRKKk3ABC6o+jcKXRjDTg4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uJ4CUV1iru3AnzNtA79biymZMjwlHUzSgyfnsWmqGPjDok6TGCQSj9uC7b3O3oPJJ
+         7hYekNdQmu7P41mSRVxUZKoW7l4b2DBxXauxvQJ5VcutuHeMtpvZQrN2ZvYFBY8C0w
+         cFwasIhIocEciWso+pgv0fKmhODCmMTdicFt3Zbm+IEEHYWZteSMzg5HUaEWh1wYsS
+         n6woXHFNKHnn6crfiO3t2IWj/U18s5SnVAkRwJYqfkT4yzROMYiHzuA22rvffXunMJ
+         gSApl7UVcU5tNNRz9aag+tq4sRGFtmNYW7vA1PrXzNDpkEpBxiGadFRA0LlgL6wbC/
+         NAGXWNH4WT4Sw==
+Date:   Sat, 6 May 2023 00:08:22 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     John Garry <john.g.garry@oracle.com>, axboe@kernel.dk,
+        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com, djwong@kernel.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
+        jejb@linux.ibm.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com,
+        Himanshu Madhani <himanshu.madhani@oracle.com>
+Subject: Re: [PATCH RFC 01/16] block: Add atomic write operations to
+ request_queue limits
+Message-ID: <ZFWadsMT0xck9lYQ@gmail.com>
+References: <20230503183821.1473305-1-john.g.garry@oracle.com>
+ <20230503183821.1473305-2-john.g.garry@oracle.com>
+ <20230503213925.GD3223426@dread.disaster.area>
+ <fc91aa12-1707-9825-a77e-9d5a41d97808@oracle.com>
+ <20230504222623.GI3223426@dread.disaster.area>
+ <ZFWHdxgWie/C02OA@gmail.com>
+ <20230505233152.GN3223426@dread.disaster.area>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230505233836.GB1821641@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20230505233152.GN3223426@dread.disaster.area>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,107 +70,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 06, 2023 at 01:38:36AM +0200, Peter Zijlstra wrote:
-> On Fri, May 05, 2023 at 04:07:39PM -0700, Tim Chen wrote:
-> > On Fri, 2023-05-05 at 15:22 +0200, Peter Zijlstra wrote:
-> > > On Thu, May 04, 2023 at 09:09:54AM -0700, Tim Chen wrote:
-> > > > From: Tim C Chen <tim.c.chen@linux.intel.com>
-> > > > 
-> > > > Do not try to move tasks between non SMT sched group and SMT sched
-> > > > group for "prefer sibling" load balance.
-> > > > Let asym_active_balance_busiest() handle that case properly.
-> > > > Otherwise we could get task bouncing back and forth between
-> > > > the SMT sched group and non SMT sched group.
-> > > > 
-> > > > Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > > > Signed-off-by: Tim Chen <tim.c.chen@linux.intel.com>
-> > > > ---
-> > > >  kernel/sched/fair.c | 4 ++++
-> > > >  1 file changed, 4 insertions(+)
-> > > > 
-> > > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > > > index 8a325db34b02..58ef7d529731 100644
-> > > > --- a/kernel/sched/fair.c
-> > > > +++ b/kernel/sched/fair.c
-> > > > @@ -10411,8 +10411,12 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
-> > > >  	/*
-> > > >  	 * Try to move all excess tasks to a sibling domain of the busiest
-> > > >  	 * group's child domain.
-> > > > +	 *
-> > > > +	 * Do not try to move between non smt sched group and smt sched
-> > > > +	 * group. Let asym active balance properly handle that case.
-> > > >  	 */
-> > > >  	if (sds.prefer_sibling && local->group_type == group_has_spare &&
-> > > > +	    !asymmetric_groups(sds.busiest, sds.local) &&
-> > > >  	    busiest->sum_nr_running > local->sum_nr_running + 1)
-> > > >  		goto force_balance;
+On Sat, May 06, 2023 at 09:31:52AM +1000, Dave Chinner wrote:
+> On Fri, May 05, 2023 at 10:47:19PM +0000, Eric Biggers wrote:
+> > On Fri, May 05, 2023 at 08:26:23AM +1000, Dave Chinner wrote:
+> > > > ok, we can do that but would also then make statx field 64b. I'm fine with
+> > > > that if it is wise to do so - I don't don't want to wastefully use up an
+> > > > extra 2 x 32b in struct statx.
 > > > 
-> > > This seems to have the hidden assumption that a !SMT core is somehow
-> > > 'less' that an SMT code. Should this not also look at
-> > > sched_asym_prefer() to establush this is so?
+> > > Why do we need specific varibles for DIO atomic write alignment
+> > > limits? We already have direct IO alignment and size constraints in statx(),
+> > > so why wouldn't we just reuse those variables when the user requests
+> > > atomic limits for DIO?
 > > > 
-> > > I mean, imagine I have a regular system and just offline one smt sibling
-> > > for giggles.
+> > > i.e. if STATX_DIOALIGN is set, we return normal DIO alignment
+> > > constraints. If STATX_DIOALIGN_ATOMIC is set, we return the atomic
+> > > DIO alignment requirements in those variables.....
+> > > 
+> > > Yes, we probably need the dio max size to be added to statx for
+> > > this. Historically speaking, I wanted statx to support this in the
+> > > first place because that's what we were already giving userspace
+> > > with XFS_IOC_DIOINFO and we already knew that atomic IO when it came
+> > > along would require a bound maximum IO size much smaller than normal
+> > > DIO limits.  i.e.:
+> > > 
+> > > struct dioattr {
+> > >         __u32           d_mem;          /* data buffer memory alignment */
+> > >         __u32           d_miniosz;      /* min xfer size                */
+> > >         __u32           d_maxiosz;      /* max xfer size                */
+> > > };
+> > > 
+> > > where d_miniosz defined the alignment and size constraints for DIOs.
+> > > 
+> > > If we simply document that STATX_DIOALIGN_ATOMIC returns minimum
+> > > (unit) atomic IO size and alignment in statx->dio_offset_align (as
+> > > per STATX_DIOALIGN) and the maximum atomic IO size in
+> > > statx->dio_max_iosize, then we don't burn up anywhere near as much
+> > > space in the statx structure....
 > > 
-> > I don't quite follow your point as asymmetric_groups() returns false even
-> > one smt sibling is offlined.
-> > 
-> > Even say sds.busiest has 1 SMT and sds.local has 2 SMT, both sched groups still
-> > have SD_SHARE_CPUCAPACITY flag turned on.  So asymmetric_groups() return
-> > false and the load balancing logic is not changed for regular non-hybrid system.
-> > 
-> > I may be missing something.
+> > I don't think that's how statx() is meant to work.  The request mask is a bitmask, and the user can
+> > request an arbitrary combination of different items.  For example, the user could request both
+> > STATX_DIOALIGN and STATX_WRITE_ATOMIC at the same time.  That doesn't work if different items share
+> > the same fields.
 > 
-> What's the difference between the two cases? That is, if the remaining
-> sibling will have SD_SHARE_CPUCAPACIY from the degenerate SMT domain
-> that's been reaped, then why doesn't the same thing apply to the atoms
-> in the hybrid muck?
+> Sure it does - what is contained in the field on return is defined
+> by the result mask. In this case, whatever the filesystem puts in
+> the DIO fields will match which flag it asserts in the result mask.
 > 
-> Those two cases *should* be identical, both cases you have cores with
-> and cores without SMT.
+> i.e. if the application wants RWF_ATOMIC and so asks for STATX_DIOALIGN |
+> STATX_DIOALIGN_ATOMIC in the request mask then:
+> 
+> - if the filesystem does not support RWF_ATOMIC it fills in the
+>   normal DIO alingment values and puts STATX_DIOALIGN in the result
+>   mask.
+> 
+>   Now the application knows that it can't use RWF_ATOMIC, and it
+>   doesn't need to do another statx() call to get the dio alignment
+>   values it needs.
+> 
+> - if the filesystem supports RWF_ATOMIC, it fills in the values with
+>   the atomic DIO constraints and puts STATX_DIOALIGN_ATOMIC in the
+>   result mask.
+> 
+>   Now the application knows it can use RWF_ATOMIC and has the atomic
+>   DIO constraints in the dio alignment fields returned.
+> 
+> This uses the request/result masks exactly as intended, yes?
+> 
 
-On my alderlake:
+We could certainly implement some scheme like that, but I don't think that was
+how statx() was intended to work.  I think that each bit in the mask was
+intended to correspond to an independent piece of information.
 
-[  202.222019] CPU0 attaching sched-domain(s):
-[  202.222509]  domain-0: span=0-1 level=SMT
-[  202.222707]   groups: 0:{ span=0 }, 1:{ span=1 }
-[  202.222945]   domain-1: span=0-23 level=MC
-[  202.223148]    groups: 0:{ span=0-1 cap=2048 }, 2:{ span=2-3 cap=2048 }, 4:{ span=4-5 cap=2048 }, 6:{ span=6-7 cap=2048 }, 8:{ span=8-9 cap=2048 }, 10:{ span=10-11 cap=2048 },12:{ span=12-13 cap=2048 }, 14:{ span=14-15 cap=2048 }, 16:{ span=16 }, 17:{ span=17 }, 18:{ span=18 }, 19:{ span=19 }, 20:{ span=20 }, 21:{ span=21 }, 22:{ span=22 }, 23:{ span=23 }
-...
-[  202.249979] CPU23 attaching sched-domain(s):
-[  202.250127]  domain-0: span=0-23 level=MC
-[  202.250198]   groups: 23:{ span=23 }, 0:{ span=0-1 cap=2048 }, 2:{ span=2-3 cap=2048 }, 4:{ span=4-5 cap=2048 }, 6:{ span=6-7 cap=2048 }, 8:{ span=8-9 cap=2048 }, 10:{ span=10-11 cap=2048 }, 12:{ span=12-13 cap=2048 }, 14:{ span=14-15 cap=2048 }, 16:{ span=16 }, 17:{ span=17 }, 18:{ span=18 }, 19:{ span=19 }, 20:{ span=20 }, 21:{ span=21 }, 22:{ span=22 }
-
-$ echo 0 > /sys/devices/system/cpu/cpu1/online
-[  251.213848] CPU0 attaching sched-domain(s):
-[  251.214376]  domain-0: span=0,2-23 level=MC
-[  251.214580]   groups: 0:{ span=0 }, 2:{ span=2-3 cap=2048 }, 4:{ span=4-5 cap=2048 }, 6:{ span=6-7 cap=2048 }, 8:{ span=8-9 cap=2048 }, 10:{ span=10-11 cap=2048 }, 12:{ span=12-13 cap=2048 }, 14:{ span=14-15 cap=2048 }, 16:{ span=16 }, 17:{ span=17 }, 18:{ span=18 }, 19:{ span=19 }, 20:{ span=20 }, 21:{ span=21 }, 22:{ span=22 }, 23:{ span=23 }
-...
-[  251.239511] CPU23 attaching sched-domain(s):
-[  251.239656]  domain-0: span=0,2-23 level=MC
-[  251.239727]   groups: 23:{ span=23 }, 0:{ span=0 }, 2:{ span=2-3 cap=2048 }, 4:{ span=4-5 cap=2048 }, 6:{ span=6-7 cap=2048 }, 8:{ span=8-9 cap=2048 }, 10:{ span=10-11 cap=2048 }, 12:{ span=12-13 cap=2048 }, 14:{ span=14-15 cap=2048 }, 16:{ span=16 }, 17:{ span=17 }, 18:{ span=18 }, 19:{ span=19 }, 20:{ span=20 }, 21:{ span=21 }, 22:{ span=22 }
-
-$ cat /debug/sched/domains/cpu0/domain0/groups_flags
-
-$ cat /debug/sched/domains/cpu23/domain0/groups_flags
-
-
-IOW, neither the big core with SMT with one sibling offline, nor the
-little core with no SMT on at all have the relevant flags set on their
-domain0 groups.
-
-
-
----
-diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-index 98bfc0f4ec94..e408b2889186 100644
---- a/kernel/sched/debug.c
-+++ b/kernel/sched/debug.c
-@@ -427,6 +427,7 @@ static void register_sd(struct sched_domain *sd, struct dentry *parent)
- #undef SDM
- 
- 	debugfs_create_file("flags", 0444, parent, &sd->flags, &sd_flags_fops);
-+	debugfs_create_file("groups_flags", 0444, parent, &sd->groups->flags, &sd_flags_fops);
- }
- 
- void update_sched_domain_debugfs(void)
+- Eric
