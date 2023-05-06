@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4513D6F94EA
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 01:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 782CB6F94ED
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 01:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjEFX11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 19:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S229948AbjEFX1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 19:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjEFX1X (ORCPT
+        with ESMTP id S229918AbjEFX1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 19:27:23 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A7B44B0;
-        Sat,  6 May 2023 16:27:21 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f41d087b3bso6476285e9.0;
-        Sat, 06 May 2023 16:27:21 -0700 (PDT)
+        Sat, 6 May 2023 19:27:39 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB8F1A1E6;
+        Sat,  6 May 2023 16:27:31 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f19ab994ccso31812695e9.2;
+        Sat, 06 May 2023 16:27:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683415640; x=1686007640;
+        d=gmail.com; s=20221208; t=1683415649; x=1686007649;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=77wc1d6atkrSEJWlP3Ir0nLtSYker340vhK9d9PW+mI=;
-        b=htlYjx58sfYfqUSXlNWMUwZdBb22bNBlNiRAf/CRTYXgdYQh2iKZc7QNwQrd73/26U
-         ykpF5/fcZDPP+7g2/45uXpnI6Bq7FKknfXiPABUSTf/o6c+BjrI2Qub4WP6w/p2JmnKC
-         1C6F/MXp18Gq6r6eZs4upDXCS67raF2FnJEu4SkxuGEeWl/lCrI5Ufuc8c7uPXK+WGPc
-         vRp68gst2Z50XksNb4lKmjNNB8zVc+pS2oYqLAllRSOfckHRa2LSFRuH9Yl08lpTzbKl
-         4JRHBBmr+HCxhOfrPqxq/3d81iHk1Ea1ZguQDkcBZkl5EtL5bLCkXSHn55qnllKs7lnx
-         Tlvg==
+        bh=Sz+u5N4kcArj/4/4O+XvKmG7yrDykhccEDf8daX3ZbA=;
+        b=h0dREcW8aiCUpfPiBMA01W4AdvM5HxHH/X9SFFeYN3dxrTbGzf0w02Zj9XIrp0vhF+
+         g3ONrCGrCxn/6Y/0PXq0G3apgo70GDqhEV5N9hl5w2EMlZ5vK0JF3t4oRB0w+Xg/RdY7
+         /kF3K2gtDGYpZOse3BHg/uGTr+JO7kfEXw2cD3t6hhIciKANHnaxih6+xtIzMGJVUF8w
+         b4N07hxDVc56sS/xQFJL7Kh+yYMbv+xV6uymxdH3V+ihcRno+wARarxt/Acjro2pDOPv
+         PeI/CZF/SdhA0qynwWViNElbAupMJGd0LOCSWSsMXMasdCwzb4LGf/WtkxfYYWpBAHu3
+         hL3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683415640; x=1686007640;
+        d=1e100.net; s=20221208; t=1683415649; x=1686007649;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=77wc1d6atkrSEJWlP3Ir0nLtSYker340vhK9d9PW+mI=;
-        b=Tzlh39DzZ0QcRJccrmhPxGNXGUfVXEpOUAtBRwX+1kzPkiAJ6nybNc1EmmNmNCbfw0
-         oPa2448sSVudRhApV2GrrK+mwZMhclfnRtjIF1fiaestEebayItgML/R8+wVe5lfAfUn
-         8DCrpymDFb+zIZh7cUqCuVoYuJtSbyc+xHQPkM+abPtAb33z+UsFCIxNhK3T16ERlsNl
-         3E6KhwALaFUFFbTYOo0Sxd1k2awXehWjUh3EIJt//E/sBGCiJQwBlATjq2tpv8+8ksuO
-         XeDOt15LjDFfYtDi4SgjMl30uxg2bVpSCnsTa/f5TfJx1SS8iCPpL/HNJUnGgjA2zcbn
-         QNgw==
-X-Gm-Message-State: AC+VfDyA8E6fTdO4tPeSR4soWlxm87qNSMsR8+j3UTZf5CPtSn+0OtPL
-        Nn6pFEvB3YphxWT00xVFrwU=
-X-Google-Smtp-Source: ACHHUZ7eOJkv41Uz6Bjs2UsKXTpCwH/2AaHJ7q98bu4Voane946A3QUcNvLa3Hs19fS6LJji8k5idg==
-X-Received: by 2002:a1c:cc14:0:b0:3f4:20bd:ba46 with SMTP id h20-20020a1ccc14000000b003f420bdba46mr1199340wmb.5.1683415640049;
-        Sat, 06 May 2023 16:27:20 -0700 (PDT)
+        bh=Sz+u5N4kcArj/4/4O+XvKmG7yrDykhccEDf8daX3ZbA=;
+        b=Eh+SZXCNvuB6pflHwfo4FFSjs+AOxrms0eoaneFmfYEjcs+JbUA9OKU/lMrYALNAyG
+         34zMVDwdhm365VOOluQwPp2MgiGeuzM3oxIj+FXccZVgSs/ypoXYUacZa8+tqzE7WPRP
+         LGTFlw8NYtzQASya3eEkTpdv3048VZTH8XiQ2wcuOP5MRNn4g5KDv+X8hQn7RAo7riji
+         J2JgoYbv+0OjzxOT2YSbGS09YD0LkgQiFbVFkPkN0sgvlqHQU4T1d+PJs/3ELuG3HoZA
+         jjx6YfW5QifNvhyPnOF46vZg+mHOuOIP54L9THr7bMZz0azAaxuFZ6/tZOtmtukfSwWH
+         CqBA==
+X-Gm-Message-State: AC+VfDzJW3AWdSFqdGEIxjPLgeMPGh7W8c675vyVv6RgwKP1ZtJOOLSK
+        e97hDTOj82fJC/JqZCJHXJt8EZahgEAwIQ==
+X-Google-Smtp-Source: ACHHUZ558Vn2BHGt7HPcyoo/dxzfQ/bcKey8DMqGxSRedZ+6NdT67o63GCejna/hoVRU+xuhhRs00Q==
+X-Received: by 2002:a1c:7712:0:b0:3f4:1dd9:e9e0 with SMTP id t18-20020a1c7712000000b003f41dd9e9e0mr1526884wmi.7.1683415648950;
+        Sat, 06 May 2023 16:27:28 -0700 (PDT)
 Received: from localhost.localdomain ([176.221.215.212])
-        by smtp.gmail.com with ESMTPSA id p4-20020a1c7404000000b003f1739a0116sm12098655wmc.33.2023.05.06.16.27.17
+        by smtp.gmail.com with ESMTPSA id p4-20020a1c7404000000b003f1739a0116sm12098655wmc.33.2023.05.06.16.27.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 May 2023 16:27:19 -0700 (PDT)
+        Sat, 06 May 2023 16:27:28 -0700 (PDT)
 From:   Maksim Kiselev <bigunclemax@gmail.com>
 To:     Andre Przywara <andre.przywara@arm.com>
 Cc:     Icenowy Zheng <icenowy@aosc.io>,
         Maksim Kiselev <bigunclemax@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
         Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v3 2/5] spi: sun6i: change OF match data to a struct
-Date:   Sun,  7 May 2023 02:26:05 +0300
-Message-Id: <20230506232616.1792109-3-bigunclemax@gmail.com>
+Subject: [PATCH v3 3/5] spi: sun6i: add quirk for in-controller clock divider
+Date:   Sun,  7 May 2023 02:26:06 +0300
+Message-Id: <20230506232616.1792109-4-bigunclemax@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230506232616.1792109-1-bigunclemax@gmail.com>
 References: <20230506232616.1792109-1-bigunclemax@gmail.com>
@@ -88,119 +88,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Icenowy Zheng <icenowy@aosc.io>
+Previously SPI controllers in Allwinner SoCs has a clock divider inside.
+However now the clock divider is removed and to set the transfer clock
+rate it's only needed to set the SPI module clock to the target value
+and configure a proper work mode.
 
-As we're adding more properties to the OF match data, convert it to a
-struct now.
+According to the datasheet there are three work modes:
 
-Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+| SPI Sample Mode         | SDM(bit13) | SDC(bit11) | Run Clock |
+|-------------------------|------------|------------|-----------|
+| normal sample           |      1     |      0     | <= 24 MHz |
+| delay half cycle sample |      0     |      0     | <= 40 MHz |
+| delay one cycle sample  |      0     |      1     | >= 80 MHz |
+
+Add a quirk for this kind of SPI controllers.
+
+Co-developed-by: Icenowy Zheng <icenowy@aosc.io>
 Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 ---
- drivers/spi/spi-sun6i.c | 32 ++++++++++++++++++++++----------
- 1 file changed, 22 insertions(+), 10 deletions(-)
+ drivers/spi/spi-sun6i.c | 92 +++++++++++++++++++++++++++--------------
+ 1 file changed, 62 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-index 7532c85a352c..01a01cd86db5 100644
+index 01a01cd86db5..1e9e9a8159d9 100644
 --- a/drivers/spi/spi-sun6i.c
 +++ b/drivers/spi/spi-sun6i.c
-@@ -85,6 +85,10 @@
- #define SUN6I_TXDATA_REG		0x200
- #define SUN6I_RXDATA_REG		0x300
+@@ -42,7 +42,9 @@
+ #define SUN6I_TFR_CTL_CS_MANUAL			BIT(6)
+ #define SUN6I_TFR_CTL_CS_LEVEL			BIT(7)
+ #define SUN6I_TFR_CTL_DHB			BIT(8)
++#define SUN6I_TFR_CTL_SDC			BIT(11)
+ #define SUN6I_TFR_CTL_FBS			BIT(12)
++#define SUN6I_TFR_CTL_SDM			BIT(13)
+ #define SUN6I_TFR_CTL_XCH			BIT(31)
  
-+struct sun6i_spi_cfg {
-+	unsigned long		fifo_depth;
-+};
-+
+ #define SUN6I_INT_CTL_REG		0x10
+@@ -87,6 +89,7 @@
+ 
+ struct sun6i_spi_cfg {
+ 	unsigned long		fifo_depth;
++	bool			has_clk_ctl;
+ };
+ 
  struct sun6i_spi {
- 	struct spi_master	*master;
- 	void __iomem		*base_addr;
-@@ -99,7 +103,7 @@ struct sun6i_spi {
- 	const u8		*tx_buf;
- 	u8			*rx_buf;
- 	int			len;
--	unsigned long		fifo_depth;
-+	const struct sun6i_spi_cfg *cfg;
- };
+@@ -260,7 +263,7 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
+ 				  struct spi_transfer *tfr)
+ {
+ 	struct sun6i_spi *sspi = spi_master_get_devdata(master);
+-	unsigned int mclk_rate, div, div_cdr1, div_cdr2, timeout;
++	unsigned int div, div_cdr1, div_cdr2, timeout;
+ 	unsigned int start, end, tx_time;
+ 	unsigned int trig_level;
+ 	unsigned int tx_len = 0, rx_len = 0;
+@@ -350,39 +353,66 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
  
- static inline u32 sun6i_spi_read(struct sun6i_spi *sspi, u32 reg)
-@@ -156,7 +160,7 @@ static inline void sun6i_spi_fill_fifo(struct sun6i_spi *sspi)
- 	u8 byte;
+ 	sun6i_spi_write(sspi, SUN6I_TFR_CTL_REG, reg);
  
- 	/* See how much data we can fit */
--	cnt = sspi->fifo_depth - sun6i_spi_get_tx_fifo_count(sspi);
-+	cnt = sspi->cfg->fifo_depth - sun6i_spi_get_tx_fifo_count(sspi);
+-	/* Ensure that we have a parent clock fast enough */
+-	mclk_rate = clk_get_rate(sspi->mclk);
+-	if (mclk_rate < (2 * tfr->speed_hz)) {
+-		clk_set_rate(sspi->mclk, 2 * tfr->speed_hz);
+-		mclk_rate = clk_get_rate(sspi->mclk);
+-	}
++	if (sspi->cfg->has_clk_ctl) {
++		unsigned int mclk_rate = clk_get_rate(sspi->mclk);
  
- 	len = min((int)cnt, sspi->len);
- 
-@@ -289,14 +293,14 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 		 * the hardcoded value used in old generation of Allwinner
- 		 * SPI controller. (See spi-sun4i.c)
- 		 */
--		trig_level = sspi->fifo_depth / 4 * 3;
-+		trig_level = sspi->cfg->fifo_depth / 4 * 3;
+-	/*
+-	 * Setup clock divider.
+-	 *
+-	 * We have two choices there. Either we can use the clock
+-	 * divide rate 1, which is calculated thanks to this formula:
+-	 * SPI_CLK = MOD_CLK / (2 ^ cdr)
+-	 * Or we can use CDR2, which is calculated with the formula:
+-	 * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
+-	 * Wether we use the former or the latter is set through the
+-	 * DRS bit.
+-	 *
+-	 * First try CDR2, and if we can't reach the expected
+-	 * frequency, fall back to CDR1.
+-	 */
+-	div_cdr1 = DIV_ROUND_UP(mclk_rate, tfr->speed_hz);
+-	div_cdr2 = DIV_ROUND_UP(div_cdr1, 2);
+-	if (div_cdr2 <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
+-		reg = SUN6I_CLK_CTL_CDR2(div_cdr2 - 1) | SUN6I_CLK_CTL_DRS;
+-		tfr->effective_speed_hz = mclk_rate / (2 * div_cdr2);
++		/* Ensure that we have a parent clock fast enough */
++		if (mclk_rate < (2 * tfr->speed_hz)) {
++			clk_set_rate(sspi->mclk, 2 * tfr->speed_hz);
++			mclk_rate = clk_get_rate(sspi->mclk);
++		}
++
++		/*
++		 * Setup clock divider.
++		 *
++		 * We have two choices there. Either we can use the clock
++		 * divide rate 1, which is calculated thanks to this formula:
++		 * SPI_CLK = MOD_CLK / (2 ^ cdr)
++		 * Or we can use CDR2, which is calculated with the formula:
++		 * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
++		 * Whether we use the former or the latter is set through the
++		 * DRS bit.
++		 *
++		 * First try CDR2, and if we can't reach the expected
++		 * frequency, fall back to CDR1.
++		 */
++		div_cdr1 = DIV_ROUND_UP(mclk_rate, tfr->speed_hz);
++		div_cdr2 = DIV_ROUND_UP(div_cdr1, 2);
++		if (div_cdr2 <= (SUN6I_CLK_CTL_CDR2_MASK + 1)) {
++			reg = SUN6I_CLK_CTL_CDR2(div_cdr2 - 1) | SUN6I_CLK_CTL_DRS;
++			tfr->effective_speed_hz = mclk_rate / (2 * div_cdr2);
++		} else {
++			div = min(SUN6I_CLK_CTL_CDR1_MASK, order_base_2(div_cdr1));
++			reg = SUN6I_CLK_CTL_CDR1(div);
++			tfr->effective_speed_hz = mclk_rate / (1 << div);
++		}
++
++		sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
  	} else {
- 		/*
- 		 * Setup FIFO DMA request trigger level
- 		 * We choose 1/2 of the full fifo depth, that value will
- 		 * be used as DMA burst length.
- 		 */
--		trig_level = sspi->fifo_depth / 2;
-+		trig_level = sspi->cfg->fifo_depth / 2;
- 
- 		if (tfr->tx_buf)
- 			reg |= SUN6I_FIFO_CTL_TF_DRQ_EN;
-@@ -410,9 +414,9 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 	reg = SUN6I_INT_CTL_TC;
- 
- 	if (!use_dma) {
--		if (rx_len > sspi->fifo_depth)
-+		if (rx_len > sspi->cfg->fifo_depth)
- 			reg |= SUN6I_INT_CTL_RF_RDY;
--		if (tx_len > sspi->fifo_depth)
-+		if (tx_len > sspi->cfg->fifo_depth)
- 			reg |= SUN6I_INT_CTL_TF_ERQ;
+-		div = min(SUN6I_CLK_CTL_CDR1_MASK, order_base_2(div_cdr1));
+-		reg = SUN6I_CLK_CTL_CDR1(div);
+-		tfr->effective_speed_hz = mclk_rate / (1 << div);
++		clk_set_rate(sspi->mclk, tfr->speed_hz);
++		tfr->effective_speed_hz = clk_get_rate(sspi->mclk);
++
++		/*
++		 * Configure work mode.
++		 *
++		 * There are three work modes depending on the controller clock
++		 * frequency:
++		 * - normal sample mode           : CLK <= 24MHz SDM=1 SDC=0
++		 * - delay half-cycle sample mode : CLK <= 40MHz SDM=0 SDC=0
++		 * - delay one-cycle sample mode  : CLK >= 80MHz SDM=0 SDC=1
++		 */
++		reg = sun6i_spi_read(sspi, SUN6I_TFR_CTL_REG);
++
++		if (tfr->effective_speed_hz <= 24000000)
++			reg |= SUN6I_TFR_CTL_SDM;
++		else if (tfr->effective_speed_hz >= 80000000)
++			reg |= SUN6I_TFR_CTL_SDC;
++		else
++			reg &= ~(SUN6I_TFR_CTL_SDM | SUN6I_TFR_CTL_SDC);
++
++		sun6i_spi_write(sspi, SUN6I_TFR_CTL_REG, reg);
  	}
  
-@@ -543,7 +547,7 @@ static bool sun6i_spi_can_dma(struct spi_master *master,
- 	 * the fifo length we can just fill the fifo and wait for a single
- 	 * irq, so don't bother setting up dma
- 	 */
--	return xfer->len > sspi->fifo_depth;
-+	return xfer->len > sspi->cfg->fifo_depth;
- }
+-	sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
+ 	/* Finally enable the bus - doing so before might raise SCK to HIGH */
+ 	reg = sun6i_spi_read(sspi, SUN6I_GBL_CTL_REG);
+ 	reg |= SUN6I_GBL_CTL_BUS_ENABLE;
+@@ -701,10 +731,12 @@ static void sun6i_spi_remove(struct platform_device *pdev)
  
- static int sun6i_spi_probe(struct platform_device *pdev)
-@@ -582,7 +586,7 @@ static int sun6i_spi_probe(struct platform_device *pdev)
- 	}
- 
- 	sspi->master = master;
--	sspi->fifo_depth = (unsigned long)of_device_get_match_data(&pdev->dev);
-+	sspi->cfg = of_device_get_match_data(&pdev->dev);
- 
- 	master->max_speed_hz = 100 * 1000 * 1000;
- 	master->min_speed_hz = 3 * 1000;
-@@ -695,9 +699,17 @@ static void sun6i_spi_remove(struct platform_device *pdev)
- 		dma_release_channel(master->dma_rx);
- }
- 
-+static const struct sun6i_spi_cfg sun6i_a31_spi_cfg = {
-+	.fifo_depth	= SUN6I_FIFO_DEPTH,
-+};
-+
-+static const struct sun6i_spi_cfg sun8i_h3_spi_cfg = {
-+	.fifo_depth	= SUN8I_FIFO_DEPTH,
-+};
-+
- static const struct of_device_id sun6i_spi_match[] = {
--	{ .compatible = "allwinner,sun6i-a31-spi", .data = (void *)SUN6I_FIFO_DEPTH },
--	{ .compatible = "allwinner,sun8i-h3-spi",  .data = (void *)SUN8I_FIFO_DEPTH },
-+	{ .compatible = "allwinner,sun6i-a31-spi", .data = &sun6i_a31_spi_cfg },
-+	{ .compatible = "allwinner,sun8i-h3-spi",  .data = &sun8i_h3_spi_cfg },
- 	{}
+ static const struct sun6i_spi_cfg sun6i_a31_spi_cfg = {
+ 	.fifo_depth	= SUN6I_FIFO_DEPTH,
++	.has_clk_ctl	= true,
  };
- MODULE_DEVICE_TABLE(of, sun6i_spi_match);
+ 
+ static const struct sun6i_spi_cfg sun8i_h3_spi_cfg = {
+ 	.fifo_depth	= SUN8I_FIFO_DEPTH,
++	.has_clk_ctl	= true,
+ };
+ 
+ static const struct of_device_id sun6i_spi_match[] = {
 -- 
 2.39.2
 
