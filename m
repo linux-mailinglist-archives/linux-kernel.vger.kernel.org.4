@@ -2,42 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 740B16F8DD8
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 04:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE88F6F8DDA
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 04:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjEFCIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 22:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
+        id S230083AbjEFCLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 22:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjEFCIC (ORCPT
+        with ESMTP id S229460AbjEFCLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 22:08:02 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D945274;
-        Fri,  5 May 2023 19:07:59 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VhrSoEj_1683338876;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VhrSoEj_1683338876)
-          by smtp.aliyun-inc.com;
-          Sat, 06 May 2023 10:07:57 +0800
-Message-ID: <1683338663.2120674-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH v4] virtio_net: suppress cpu stall when free_unused_bufs
-Date:   Sat, 6 May 2023 10:04:23 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, zhengqi.arch@bytedance.com,
-        willemdebruijn.kernel@gmail.com,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Wenliang Wang <wangwenliang.1995@bytedance.com>
-References: <1683167226-7012-1-git-send-email-wangwenliang.1995@bytedance.com>
- <CACGkMEs_4kUzc6iSBWvhZA1+U70Pp0o+WhE0aQnC-5pECW7QXA@mail.gmail.com>
-In-Reply-To: <CACGkMEs_4kUzc6iSBWvhZA1+U70Pp0o+WhE0aQnC-5pECW7QXA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        Fri, 5 May 2023 22:11:06 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE9A59C3;
+        Fri,  5 May 2023 19:11:05 -0700 (PDT)
+Received: from canpemm100004.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QCrXK3msXzZfqM;
+        Sat,  6 May 2023 10:06:57 +0800 (CST)
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm100004.china.huawei.com (7.192.105.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sat, 6 May 2023 10:11:02 +0800
+Subject: Re: [PATCH v2] ata: libata-scsi: Fix get identity data failed
+To:     yangxingui <yangxingui@huawei.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Damien Le Moal <dlemoal@kernel.org>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <damien.lemoal@opensource.wdc.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
+        <kangfenglong@huawei.com>
+References: <20230505025712.19438-1-yangxingui@huawei.com>
+ <291f1d97-9195-45ac-8e12-058f5c797277@kernel.org>
+ <b13c9445-39c5-f207-d5d0-d6c86eee54ae@oracle.com>
+ <1b703656-e966-63f8-19dd-33e4e9914676@huawei.com>
+From:   Jason Yan <yanaijie@huawei.com>
+Message-ID: <4364409d-e63c-f87f-0484-f170e92d44c5@huawei.com>
+Date:   Sat, 6 May 2023 10:11:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
+MIME-Version: 1.0
+In-Reply-To: <1b703656-e966-63f8-19dd-33e4e9914676@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.14]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm100004.china.huawei.com (7.192.105.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,63 +57,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 5 May 2023 11:28:25 +0800, Jason Wang <jasowang@redhat.com> wrote:
-> On Thu, May 4, 2023 at 10:27=E2=80=AFAM Wenliang Wang
-> <wangwenliang.1995@bytedance.com> wrote:
-> >
-> > For multi-queue and large ring-size use case, the following error
-> > occurred when free_unused_bufs:
-> > rcu: INFO: rcu_sched self-detected stall on CPU.
-> >
-> > Fixes: 986a4f4d452d ("virtio_net: multiqueue support")
-> > Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
-> > ---
-> > v2:
-> > -add need_resched check.
-> > -apply same logic to sq.
-> > v3:
-> > -use cond_resched instead.
-> > v4:
-> > -add fixes tag
-> > ---
-> >  drivers/net/virtio_net.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > index 8d8038538fc4..a12ae26db0e2 100644
-> > --- a/drivers/net/virtio_net.c
-> > +++ b/drivers/net/virtio_net.c
-> > @@ -3560,12 +3560,14 @@ static void free_unused_bufs(struct virtnet_inf=
-o *vi)
-> >                 struct virtqueue *vq =3D vi->sq[i].vq;
-> >                 while ((buf =3D virtqueue_detach_unused_buf(vq)) !=3D N=
-ULL)
-> >                         virtnet_sq_free_unused_buf(vq, buf);
-> > +               cond_resched();
->
-> Does this really address the case when the virtqueue is very large?
+On 2023/5/5 17:14, yangxingui wrote:
+> 
+> 
+> On 2023/5/5 16:25, John Garry wrote:
+>> On 05/05/2023 09:17, Damien Le Moal wrote:
+>>>> --- a/drivers/ata/libata-scsi.c
+>>>> +++ b/drivers/ata/libata-scsi.c
+>>>> @@ -26,6 +26,7 @@
+>>>>   #include <scsi/scsi_device.h>
+>>>>   #include <scsi/scsi_tcq.h>
+>>>>   #include <scsi/scsi_transport.h>
+>>>> +#include <scsi/libsas.h>
+>>
+>> hmmm... is it really acceptable that libata is referencing libsas? I 
+>> didn't think that it would be. libsas uses libata, not the other way 
+>> around.
+> Yeah, I didn't expect that either. Is there any other way? If so, is 
+> patch v1 OK?
 
-Yes, I also have this question. I think cond_resched() should be called eve=
-ry
-time a certain number of buffers are processed.
+Hi Xingui,
 
-Thanks.
+Libsas should follow the standard way of libata to manage the ata 
+structures. Not the opposite way. So what you should do is to find a way 
+for libsas to behave as a normal ata driver. It's not good to make 
+libata aware of libsas or referencing libsas.
 
->
-> Thanks
->
-> >         }
-> >
-> >         for (i =3D 0; i < vi->max_queue_pairs; i++) {
-> >                 struct virtqueue *vq =3D vi->rq[i].vq;
-> >                 while ((buf =3D virtqueue_detach_unused_buf(vq)) !=3D N=
-ULL)
-> >                         virtnet_rq_free_unused_buf(vq, buf);
-> > +               cond_resched();
-> >         }
-> >  }
-> >
-> > --
-> > 2.20.1
-> >
->
+If you have detailed questions you can ask me internally(which will be 
+faster) or publicly through the maillist(which may have some delay).
+
+Thanks,
+Jason
