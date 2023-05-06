@@ -2,110 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E93596F8E2E
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 05:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1353C6F8E30
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 05:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjEFDCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 23:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
+        id S229986AbjEFDFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 23:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231891AbjEFDCi (ORCPT
+        with ESMTP id S229602AbjEFDFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 23:02:38 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED687D9E
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 20:02:25 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-55a5a830238so23093887b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 20:02:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683342144; x=1685934144;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FQpKNgXO2ZnIB2b0oZRLkuUeVp2jvRipev1uBl4QDDI=;
-        b=QfrsLV2t2I5DB3yrzgisfEkevBro4pFmIcQZeyOd1FWLLI5I8RMyksfenSbIPJyxqP
-         BDzLy22a7mYPBrFqWPXs/bOA4R7nq23QQc9vh7Z/kUR9RGcNvfRJw9JzsygDuFR8edYh
-         m2ZlVfzko5TbNKZyLVrWNLzyjrmw9bE40g9tJFgj6XTCtYi3YnJMp6q7lLh8b1l3rORO
-         BFyedo97C+TRAXLRzj6J3A1Igk8SfmVO6j7L6+40P8Bp5VZIHCLdPfkD/EgRy6T0NBhv
-         2e4lZg0glALu1QNRnBPIXWW6uttY+llVPej7av/dA2GJgqGJYa/i5Gf9x9Ks7ljPUcGj
-         MFKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683342144; x=1685934144;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FQpKNgXO2ZnIB2b0oZRLkuUeVp2jvRipev1uBl4QDDI=;
-        b=SScRacIpMZqCZmhbCdH97exu0/Ekwd2C9JThJKjxKAr+cB/ovl15q3RtIwJD5bRhmB
-         bkeg6HY3mXOwOSg9bY0XeJVAiaBMPEB3L5cFLNZ4LcjcAQVsYvUVdWCEEWBFbovK/zSY
-         4WR9xOhuAarS+kpMH66b5MLN0s4It94MOwJ09bSrnHpZsICmXXcDDtJPflywJWEHNt74
-         sC2ICOSfri+oOdGI8Ip/DDqIZF1Tkp89eqq5tj1mU5h9ZsBUNtjooIeDinC4gdpu7yl6
-         3j2sPhW5i9DT/5wLjtK1nKfaVpDIKBK9OfT8uDO5AEoD8u7eNMn9k5bg2HzP/AIOmf4J
-         w9iA==
-X-Gm-Message-State: AC+VfDx+QvATXyeTZUUTCgmVg+ZAmFNCnxvl9to6nLI9X+pFzCzo9o4Q
-        uryBHT20hgZe04i1wuMRrCcn9SgmpgJmYKzI62FkmQ==
-X-Google-Smtp-Source: ACHHUZ6Trnz+womVZTZ1dupvzPcHfLUjonREgIxizP/WjFW6+oCAoVKD+b2h/SGGfPErR7G0qy02oN684Hi1cNvlgfI=
-X-Received: by 2002:a25:cc5:0:b0:b9a:663b:eced with SMTP id
- 188-20020a250cc5000000b00b9a663becedmr3152907ybm.36.1683342144514; Fri, 05
- May 2023 20:02:24 -0700 (PDT)
+        Fri, 5 May 2023 23:05:13 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C3644AD;
+        Fri,  5 May 2023 20:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683342312; x=1714878312;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lBF+bPVRCpsw9+RxW6+0dovFS6dJNrvwSuV3p38PHKs=;
+  b=OtuF6ARlAyUuFfVFZibkTTr1d8XmmYhCqGOCcGh07TnRdiEDEsBrpill
+   EAqqdL/2RbrpNVqPapcIraIJBBxFA0nPtYb9yfAXJDzS4nhgWY1xEQK7/
+   afmOlT2skL8MAlPij1mJ+f9rTNPoUTWXVpeSWSxoH/vxHv9hMBh8BiMd8
+   QzS92k3Un3+TDwP2yw7+i8LjiI/Ez5BTUOCK8koALEN1Pj1uJ0WXVTIFf
+   e2behek6/Wu5zQ51/GjTBGJrv9eWO+EB0O3mpH2n6ABpZMGjrqLGrUHp1
+   Ee33AJZGkjHdfzapTSBZMr62ddS1v3uavnpXSXqjAWvPLCn5X8+iHjTug
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="329690813"
+X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
+   d="scan'208";a="329690813"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 20:05:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="842020225"
+X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
+   d="scan'208";a="842020225"
+Received: from spr.sh.intel.com ([10.239.53.106])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 20:05:08 -0700
+From:   Chao Gao <chao.gao@intel.com>
+To:     kvm@vger.kernel.org
+Cc:     Chao Gao <chao.gao@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
+Date:   Sat,  6 May 2023 11:04:35 +0800
+Message-Id: <20230506030435.80262-1-chao.gao@intel.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <00000000000016552c05f1d7e734@google.com> <00000000000014678c05faf51958@google.com>
-In-Reply-To: <00000000000014678c05faf51958@google.com>
-From:   Jiaqi Yan <jiaqiyan@google.com>
-Date:   Fri, 5 May 2023 20:02:13 -0700
-Message-ID: <CACw3F53T=bbn6f6db_T_5=udLq-cvChYALhmmpQ1QOkjH-7gpg@mail.gmail.com>
-Subject: Re: [syzbot] [mm?] WARNING in shmem_evict_inode
-To:     syzbot <syzbot+3d4aa0d3e784b29b1520@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, hughd@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        shy828301@gmail.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It seems commit 12904d953364 caused the WARNING  when MADV_COLLAPSE on
-shmem memory, but right now the root cause is still unclear to me
-after some digging. Will keep digging and/or try to repro over the
-weekend.
+to avoid computing the supported value at runtime every time.
 
-On Fri, May 5, 2023 at 9:51=E2=80=AFAM syzbot
-<syzbot+3d4aa0d3e784b29b1520@syzkaller.appspotmail.com> wrote:
->
-> syzbot has bisected this issue to:
->
-> commit 12904d953364e3bd21789a45137bf90df7cc78ee
-> Author: Jiaqi Yan <jiaqiyan@google.com>
-> Date:   Wed Mar 29 15:11:21 2023 +0000
->
->     mm/khugepaged: recover from poisoned file-backed memory
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D14f6703228=
-0000
-> start commit:   3c4aa4434377 Merge tag 'ceph-for-6.4-rc1' of https://gith=
-u..
-> git tree:       upstream
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D16f6703228=
-0000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D12f6703228000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dc1d541e02d3fa=
-ec
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D3d4aa0d3e784b29=
-b1520
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D14d1973c280=
-000
->
-> Reported-by: syzbot+3d4aa0d3e784b29b1520@syzkaller.appspotmail.com
-> Fixes: 12904d953364 ("mm/khugepaged: recover from poisoned file-backed me=
-mory")
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
-ion
+No functional change intended.
+
+Signed-off-by: Chao Gao <chao.gao@intel.com>
+---
+
+A new call site of kvm_get_arch_capabilities() is added by [1]. It should be
+replaced with the cached value in kvm_caps.
+
+[1] https://lore.kernel.org/all/20230504181827.130532-1-mizhang@google.com/
+
+
+ arch/x86/kvm/x86.c | 5 +++--
+ arch/x86/kvm/x86.h | 1 +
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 523c39a03c00..94aa70ec169c 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -1670,7 +1670,7 @@ static int kvm_get_msr_feature(struct kvm_msr_entry *msr)
+ {
+ 	switch (msr->index) {
+ 	case MSR_IA32_ARCH_CAPABILITIES:
+-		msr->data = kvm_get_arch_capabilities();
++		msr->data = kvm_caps.supported_arch_cap;
+ 		break;
+ 	case MSR_IA32_PERF_CAPABILITIES:
+ 		msr->data = kvm_caps.supported_perf_cap;
+@@ -9523,6 +9523,7 @@ static int __kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
+ 		kvm_caps.max_guest_tsc_khz = max;
+ 	}
+ 	kvm_caps.default_tsc_scaling_ratio = 1ULL << kvm_caps.tsc_scaling_ratio_frac_bits;
++	kvm_caps.supported_arch_cap = kvm_get_arch_capabilities();
+ 	kvm_init_msr_lists();
+ 	return 0;
+ 
+@@ -11879,7 +11880,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+ 	if (r)
+ 		goto free_guest_fpu;
+ 
+-	vcpu->arch.arch_capabilities = kvm_get_arch_capabilities();
++	vcpu->arch.arch_capabilities = kvm_caps.supported_arch_cap;
+ 	vcpu->arch.msr_platform_info = MSR_PLATFORM_INFO_CPUID_FAULT;
+ 	kvm_xen_init_vcpu(vcpu);
+ 	kvm_vcpu_mtrr_init(vcpu);
+diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+index c544602d07a3..d3e524bcc169 100644
+--- a/arch/x86/kvm/x86.h
++++ b/arch/x86/kvm/x86.h
+@@ -29,6 +29,7 @@ struct kvm_caps {
+ 	u64 supported_xcr0;
+ 	u64 supported_xss;
+ 	u64 supported_perf_cap;
++	u64 supported_arch_cap;
+ };
+ 
+ void kvm_spurious_fault(void);
+
+base-commit: b3c98052d46948a8d65d2778c7f306ff38366aac
+-- 
+2.40.0
+
