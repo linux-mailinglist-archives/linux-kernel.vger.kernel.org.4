@@ -2,80 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E22FF6F8EC6
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 07:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF47D6F8EE5
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 07:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjEFFv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 01:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S230285AbjEFF4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 01:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjEFFvy (ORCPT
+        with ESMTP id S230221AbjEFF4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 01:51:54 -0400
+        Sat, 6 May 2023 01:56:12 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FAB4C1A;
-        Fri,  5 May 2023 22:51:53 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 135CB5C00BC;
-        Sat,  6 May 2023 01:51:50 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AF37ECA;
+        Fri,  5 May 2023 22:56:11 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 74B7B5C0088;
+        Sat,  6 May 2023 01:56:10 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sat, 06 May 2023 01:51:50 -0400
+  by compute5.internal (MEProxy); Sat, 06 May 2023 01:56:10 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
         :cc:content-type:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1683352310; x=1683438710; bh=NF
-        ynHyiGKZDQAJtL0CirqWpcs9b5k8E5/94VkrnAK0Y=; b=TxHbFunhGnMOZFmzpU
-        NI84NUJG+kOjg7yvn/y/lI5HNE7nnaFGuUCJEDbHoeqN3pWciIjsmgP6uYUn/5rj
-        ehzwbGwgd96B+DIzZuVO2eiR/fNsVfLH3EGEa3eZaNA78SVLVKGt5wAwNlHhPpHt
-        IAmkmXb48eXaOttVLYnZmF8i4oZJuT75/Gdf5X++2nS212m0LOO779hdZqBlq01Y
-        lypyxlsV1Ff8C6mzMeJGWUV3qqqUhSYo0ZwZSfY/IohDeJx9Go6lUulJB1qP8Rwn
-        3Cxrt9NjNDsBd+vmWCfoEDCprfhWPKjtZV8xN5ccTum4MmQhtaw+pJlx9/qUALfn
-        Jamg==
+        :subject:subject:to:to; s=fm3; t=1683352570; x=1683438970; bh=EG
+        S5hZyAL9I43PGeKYKJIudiB349boLUw0HVlFIo3AQ=; b=tVyeQUA+MP9z3eOiSJ
+        CbCDeX/CmDAJLaBykdXzTvPnjxnVzH3lYWd0uTPKAs0HVu6gIVlgjRrpty5ypJWb
+        lzV2PCwX5egBJM/2X4qSNnF8l3oM/tzbisuZ/h+OqjI/FUEQtpvfRUH/3FJ/GhgO
+        rbcq3y5VDdKWBjtyWEWRYBRZnQrEXS+z/2BOfp+CusjSwSoTtKfoZnWO4Mio/Shw
+        p5R38mgA0AgfPvFLVxdRc45n2zfV4Xwphc2yVhX7jAtjdIIXRf10vWxsX1gl0VcH
+        oImHFNOjEfOLvQuIKZwT+UEycWU6TWQL9mnZPsBr8K/msgBfofCbJezUSXTygL3k
+        j0DQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683352310; x=1683438710; bh=NFynHyiGKZDQA
-        JtL0CirqWpcs9b5k8E5/94VkrnAK0Y=; b=gjApKP1B6PISDjnXXQ5WCHKSvLban
-        +W5LbG1tpZqQbq78JJldOBq0cknhOglB+hm1jjg63QFVRWe+WdskGxOyeEH6S2UG
-        cg80USiIpigwI40hAPHbIKzAzziAhfhDuNlxiHE3/+kCArDWt+lG/CJRifNdhlSp
-        3hzLI7guegbsmajOldcRkjUwKe5jxv3spIyDyruY8RxrnRuFCictDC/DvsGebLjh
-        yaS4FmU8utC01B5/a/rHSUJIvFAub2zSFnJu3RRBj/vt+iNRq0zT9PTCYrVyaH1j
-        XVh5q3GUSVt1uOgpcLDzHo6MDq0YzaiIJ7ufxys4W2DbcVIxd3b+zKQhw==
-X-ME-Sender: <xms:9epVZNGhyRvNvSLzD1YGW32eB2CVXxOGC9HJmCUtYnByVj4DGqi7JA>
-    <xme:9epVZCXI3a5O1ZSSuNfMpH1PFBvSXzjYe7NZKsjQfj_luBDhpiht2YLJUKdOgOXaD
-    S7kpwdVw2aHRQ>
-X-ME-Received: <xmr:9epVZPLNu0XlIwejzkHVZnRA8b4YqoizF-yTNdX66UD2YcRrK469mJXq-Ik1RQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeffedguddtudcutefuodetggdotefrod
+        :x-sasl-enc; s=fm3; t=1683352570; x=1683438970; bh=EGS5hZyAL9I43
+        PGeKYKJIudiB349boLUw0HVlFIo3AQ=; b=fCk8zsDaqA/oZLRtVBG1pcijz8cOw
+        LfZRwDUUBra1euNIhrb9FtiH9eF3c7+GqVB/6cYH650FWmnbNdWrkVnkVOO9UxQy
+        /Pb/qs8XSIOYr2wnhkEd0d5NuvBqflUdkGE4n/2J1ohjI/LVTAulHfWuVkxWVrqR
+        M/wY6x6CoMS1sXEHfCnfJW6MvN2SPIFaNocXjVMngCi3MlgG9/VXtBL7701TSJnK
+        HazjBVDqF+UQ2GQrHo/bDhniCdP865TZSa8F4tQ5ib99COw8TpL0J76yIyE4CDIY
+        LsD9irx4/0C5NYDoFNJpOmYEvLdRUi0P5VfQXeGIg0pMQRjLqPHQ5DDkw==
+X-ME-Sender: <xms:-utVZLYpKk0c1uXdWbPclUY4ZcemhsLirLwvP632Fp3F_yM-MZCEjw>
+    <xme:-utVZKZiK0zPoz3JxEaJhMhjetrpyZNe3UehfFB1fFLpGD8aq6XebR8q9oi3V6Ma3
+    ob6WSwB8RROSw>
+X-ME-Received: <xmr:-utVZN98gkUJSJp5i3_Wt2-PwsqH7CnHzgn99SYP4uF57JmUa5_yU43zOfNCtQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeffedguddtvdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesth
-    dtredttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtgho
-    mheqnecuggftrfgrthhtvghrnhepheegvdevvdeljeeugfdtudduhfekledtiefhveejke
-    ejuefhtdeufefhgfehkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehm
-    rghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:9epVZDGI-WfJZ_0djySNO1gpih0fuHz9fPlc25KELsk56q_dkXm_Ew>
-    <xmx:9epVZDXHCr0vLH4Xy7objqRLr5fCO3-LsyriJ0fxBs-bhcvTB-hfoA>
-    <xmx:9epVZOMLU0j3lJC7bu6h_kVnqhrjJF7BWRXJ2-XnKdn79Xs_Prhklg>
-    <xmx:9upVZA16M2MzOwTTNM79_8ZrKEdlsN5Z_IkRKLaf0FOFwHTyLK9-LQ>
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeeghe
+    euhefgtdeluddtleekfeegjeetgeeikeehfeduieffvddufeefleevtddtvdenucffohhm
+    rghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:-utVZBrxNpm4DBNCWgzB0Ih2ZiKPqW70OhYgLrELqKpLM287VdC3Gg>
+    <xmx:-utVZGrIPaVi09bP7UmAtrfFcsuqvkS_0KhMf7LAhJFB2qQvhUDkug>
+    <xmx:-utVZHQt_AuizuH-P38OjyNpRd7epwVW5RabTNd_0oj6NbJCBOx9Eg>
+    <xmx:-utVZPZW9PJNqmvsvZb-hYYmwBIuI6IRh8XfORQJsrd7abfimEtCyQ>
 Feedback-ID: i787e41f1:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 6 May 2023 01:51:48 -0400 (EDT)
-Date:   Sat, 6 May 2023 09:58:41 +0900
+ 6 May 2023 01:56:08 -0400 (EDT)
+Date:   Sat, 6 May 2023 11:09:57 +0900
 From:   Greg KH <greg@kroah.com>
-To:     Yue Zhao <findns94@gmail.com>
-Cc:     stable@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, tytso@mit.edu, adilger.kernel@dilger.ca,
-        jack@suse.cz, yi.zhang@huawei.com, tangyeechou@gmail.com
-Subject: Re: [PATCH 0/1][For stable 5.4] mm: migrate:
- buffer_migrate_page_norefs() fallback migrate not uptodate pages
-Message-ID: <2023050612-thee-chafe-569c@gregkh>
-References: <20230503163426.5538-1-findns94@gmail.com>
+To:     yixuanjiang <yixuanjiang@google.com>
+Cc:     tiwai@suse.com, lgirdwood@gmail.com, broonie@kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Takashi Iwai <tiwai@suse.de>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] ASoC: soc-pcm: Fix and cleanup DPCM locking
+Message-ID: <2023050644-dwarf-shabby-d44d@gregkh>
+References: <20230504092142.4190069-1-yixuanjiang@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230503163426.5538-1-findns94@gmail.com>
+In-Reply-To: <20230504092142.4190069-1-yixuanjiang@google.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
@@ -87,42 +91,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 12:34:25AM +0800, Yue Zhao wrote:
-> Recently we found a bug related with ext4 buffer head is fixed by
-> commit 0b73284c564d("ext4: ext4_read_bh_lock() should submit IO if the
-> buffer isn't uptodate")[1].
+On Thu, May 04, 2023 at 05:21:42PM +0800, yixuanjiang wrote:
+> From: Takashi Iwai <tiwai@suse.de>
 > 
-> This bug is fixed on some kernel long term versions, such as 5.10 and 5.15.
-> However, on 5.4 stable version, we can still easily reproduce this bug by
-> adding some delay after buffer_migrate_lock_buffers() in __buffer_migrate_page()
-> and do fsstress on the ext4 filesystem. We can get some errors in dmesg like:
+> The existing locking for DPCM has several issues
+> a) a confusing mix of card->mutex and card->pcm_mutex.
+> b) a dpcm_lock spinlock added inconsistently and on paths that could
+> be recursively taken. The use of irqsave/irqrestore was also overkill.
 > 
->   EXT4-fs error (device pmem1): __ext4_find_entry:1658: inode #73193:
->   comm fsstress: reading directory lblock 0
->   EXT4-fs error (device pmem1): __ext4_find_entry:1658: inode #75334:
->   comm fsstress: reading directory lblock 0
+> The suggested model is:
 > 
-> About how to fix this bug in 5.4 version, currently I have three ideas.
-> But I don't know which one is better or is there any other feasible way to
-> fix this bug elegantly based on the 5.4 stable branch?
+> 1) The pcm_mutex is the top-most protection of BE links in the FE. The
+> pcm_mutex is applied always on either the top PCM callbacks or the
+> external call from DAPM, not taken in the internal functions.
 > 
-> The first idea comes from this thread[2]. In __buffer_migrate_page(),
-> we can let it fallback to migrate_page that are not uptodate like 
-> fallback_migrate_page(), those pages that has buffers may probably do
-> read operation soon. From [3], we can see this solution is not good enough
-> because there are other places that lock the buffer without doing IO.
-> I think this solution can be a candidate option to fix if we do not want to
-> change a lot. Also based on my test results, the ext4 filesystem remains
-> stable after one week stress test with this patch applied.
+> 2) the FE stream lock is taken in higher levels before invoking
+> dpcm_be_dai_trigger()
 > 
-> The second idea is backport a series of commits from upstream, such as
+> 3) when adding and deleting a BE, both the pcm_mutex and FE stream
+> lock are taken.
 > 
->   2d069c0889ef ("ext4: use common helpers in all places reading metadata buffers")
->   0b73284c564d ("ext4: ext4_read_bh_lock() should submit IO if the buffer isn't uptodate")
->   79f597842069 ("fs/buffer: remove ll_rw_block() helper")
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> [clarification of commit message by plbossart]
+> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+> Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> Link: https://lore.kernel.org/r/20211207173745.15850-4-pierre-louis.bossart@linux.intel.com
+> Cc: stable@vger.kernel.org # 5.15.x
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
 
-Backporting the original upstream commits is almost always the correct
-solution.  Please try doing that instead of a one-off patch like this.
+What is the git commit id of this patch in Linus's tree?
 
 thanks,
 
