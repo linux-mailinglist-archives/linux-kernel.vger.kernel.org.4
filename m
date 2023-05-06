@@ -2,206 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0144C6F91F6
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 14:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC826F91CE
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 14:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbjEFMYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 08:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+        id S232203AbjEFMDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 08:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbjEFMYb (ORCPT
+        with ESMTP id S232151AbjEFMDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 08:24:31 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3044914E7F;
-        Sat,  6 May 2023 05:24:30 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f19afc4fbfso27836935e9.2;
-        Sat, 06 May 2023 05:24:30 -0700 (PDT)
+        Sat, 6 May 2023 08:03:10 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB25611562
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 05:03:07 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2a7af0cb2e6so30825081fa.0
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 05:03:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683375868; x=1685967868;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZXMu9XhyUgA5r3iTebqKjw72HhkdRp9Ey4llH49+JM0=;
-        b=W2b+Ywaawz6z8MAH/a2AOjPLUJ6jWy9pL6gIUHhAcxhI19CGysYfookylTFfB+/mui
-         5ykH+LAnxZPJWrGhVFZw+Re4s4Tvg027+Ev7WYMhFRr0K+1ca/+27ajTlMKd6skKIJIz
-         kVA2zagn7v6Z621aP7eJynCz8VYNDOiFCPABHCQM5hj6A5u5rUU4YVQ2asQnMh7kq0Oh
-         NNIfTzfLTnXez6+qIvT4RhTRmShQlZ9Q7ACJD+v0VQ6j3N/gfJTW+sG9zykqt0RqyRct
-         kk0+kbPEgplbEtt2g8xaBx2l0UZqMFtZoT5URpLz7AC0Mv3NvKCJ+0MUss4QBvYEgCeq
-         nSXg==
+        d=linaro.org; s=google; t=1683374586; x=1685966586;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LqckTjKTfIM8bi9e0TYeW5j9DGnhHcptl3P/WnkXQ8g=;
+        b=qP9WeiDqZYvqeBXaJ6sF23csHfH+xrYe3gSr1KeIid24zxAMGELBpts49yQ/DKvnAe
+         tbeLxayrnT3Y4W7wk/NaMqocaRA4GtgGXwLU/1VGbMDeqVRWJOQUdkQKL/tnA50BGGm9
+         RibfpyPV53YIL0zGC24y1kqjIFyrCOKWi6DBN3sIof6NOGhS9cOY9fU9dh4y2W9Mvywt
+         NLCPlKw5BrXsF8mSGdAa5ZRRIXdy/+HlrBSyezyiAF6rmXtA5s7c4jJ1vnqWUSP0g83O
+         p+ovKVdY2GIHvv89zj3IMI7hhk3SI/rljv1WZc6wZzqsTXA7LZO4V9ey7SoM/szcvUh4
+         6XfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683375868; x=1685967868;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZXMu9XhyUgA5r3iTebqKjw72HhkdRp9Ey4llH49+JM0=;
-        b=lNOno/WqEFKJip0Bg9h/WBMQZLrhdWpY78yLW2GItxo8zhJ5c9w6w1riAkOm+3t6ak
-         QnssmdsPYHI2nj+ASHfD0Jp0q32IncOwMQC2s1iyRxPySzMsNXlwuzBFeNorfVVyVuCj
-         mSVCFmFSn+Up7FH7z+hBOD5rgagbcVDz30EbWgFo/lUVg8ZnyEGuLVdwiFKDRmcF97e/
-         2MNT/leynMai863HMBiKvStxkQ8SVRMIM1823XhfxQyKQcXqbERUqbZK2LZ4TnTTPpEb
-         9fbXwPuzEbNeCDTku0A1PIbGEuB3airIxnpU8y/08+ntWI7BAb8aaCpJ/ZhETr0NFDz+
-         1Xcw==
-X-Gm-Message-State: AC+VfDy7Lan0T895PhWQCsKW03H69SA6gzKychk30vB0l2jr5+2mZgcs
-        YGGu3H/thb51FjNsyaQ+JNY=
-X-Google-Smtp-Source: ACHHUZ7lL8EH4fH1fY3FNvefzXrML8HRfgPHvYaPc2W9+3uw2WRmJW+RavMeJGer3IydXL41cytAxw==
-X-Received: by 2002:a7b:c30d:0:b0:3f1:745d:821 with SMTP id k13-20020a7bc30d000000b003f1745d0821mr3149884wmj.23.1683375868405;
-        Sat, 06 May 2023 05:24:28 -0700 (PDT)
-Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.googlemail.com with ESMTPSA id y24-20020a05600c365800b003f31da39b62sm10680788wmq.18.2023.05.06.05.24.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 May 2023 05:24:28 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Fabian Frederick <fabf@skynet.be>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Christian Brauner <brauner@kernel.org>,
-        KaiGai Kohei <kaigai@ak.jp.nec.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Tim Gardner <tim.gardner@canonical.com>,
-        kernel test robot <lkp@intel.com>,
-        Ron Economos <re@w6rz.net>,
-        Nathan Chancellor <nathan@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] jffs2: reduce stack usage in jffs2_build_xattr_subsystem()
-Date:   Sat,  6 May 2023 06:56:12 +0200
-Message-Id: <20230506045612.16616-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20221208; t=1683374586; x=1685966586;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LqckTjKTfIM8bi9e0TYeW5j9DGnhHcptl3P/WnkXQ8g=;
+        b=gKidTRxt8iK7CtriMUDxP1DLDzaknatbIhzm9gtjzqgAawZKJz3yj3V/QsLfEB5j3N
+         lfTDJGeB/k+MMZX1ATT8VZTGhAGJQVs2HgCh3AUNh5OfdJv+KlUphaX0rp1349tm0JzP
+         dyTpI5WytUONoExNx+ypvDrMl8Lud6CE1FHOcFzRAF5xHnNKg0bfOxrUuBnDsOBbk28U
+         IFWvyBQ8pauAGRCaPop0+xFoHtfOh+HiWuIXVZIS1tknT4EV6azqRbrHQqHDsGK3QNsg
+         MfQi90SJF22daVOa1fAywOfkCJRBfbLM1b6J6S/qoRIXVirgQE1i4KAmAeI+FuSPTGef
+         2eVg==
+X-Gm-Message-State: AC+VfDwPQCTwhE/+no2UZqc6o44yUCCw1ToIfWEFGE2rX/86UMXH9xt+
+        y5JvMVZJXpqT+Gf9RZ6AGFSZLw==
+X-Google-Smtp-Source: ACHHUZ5vuD9oicd6ZZ/GS97yQDfSo/yzWgXR5BzTzQNv4q9B9n9iZWDYdKmTPiPZGKSJZAMJWoseeA==
+X-Received: by 2002:a2e:6e02:0:b0:2a7:f1e8:b08 with SMTP id j2-20020a2e6e02000000b002a7f1e80b08mr1229274ljc.19.1683374585927;
+        Sat, 06 May 2023 05:03:05 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id u24-20020a2e8558000000b002a7746800d0sm359066ljj.130.2023.05.06.05.03.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 May 2023 05:03:05 -0700 (PDT)
+Message-ID: <b204875e-3122-6af1-d9a4-6f57e96e5016@linaro.org>
+Date:   Sat, 6 May 2023 15:03:04 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/8] PCI: qcom: Disable write access to read only
+ registers for IP v2.9.0
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com
+Cc:     robh@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, steev@kali.org,
+        quic_srichara@quicinc.com
+References: <20230506073139.8789-1-manivannan.sadhasivam@linaro.org>
+ <20230506073139.8789-3-manivannan.sadhasivam@linaro.org>
+ <56da1bb2-86ea-e31e-15f3-5eb50e3000e1@linaro.org>
+In-Reply-To: <56da1bb2-86ea-e31e-15f3-5eb50e3000e1@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabian Frederick <fabf@skynet.be>
+On 06/05/2023 14:44, Dmitry Baryshkov wrote:
+> On 06/05/2023 10:31, Manivannan Sadhasivam wrote:
+>> In the post init sequence of v2.9.0, write access to read only registers
+>> are not disabled after updating the registers. Fix it by disabling the
+>> access after register update.
+>>
+>> Fixes: 0cf7c2efe8ac ("PCI: qcom: Add IPQ60xx support")
+>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>> ---
+>>   drivers/pci/controller/dwc/pcie-qcom.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@gmail.com>
+> 
 
-Use kcalloc() for allocation/flush of 128 pointers table to
-reduce stack usage.
+Of course:
 
-Function now returns -ENOMEM or 0 on success.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-stackusage
-Before:
-./fs/jffs2/xattr.c:775  jffs2_build_xattr_subsystem     1208
-dynamic,bounded
 
-After:
-./fs/jffs2/xattr.c:775  jffs2_build_xattr_subsystem     192
-dynamic,bounded
-
-Also update definition when CONFIG_JFFS2_FS_XATTR is not enabled
-
-Tested with an MTD mount point and some user set/getfattr.
-
-Many current target on OpenWRT also suffer from a compilation warning
-(that become an error with CONFIG_WERROR) with the following output:
-
-fs/jffs2/xattr.c: In function 'jffs2_build_xattr_subsystem':
-fs/jffs2/xattr.c:887:1: error: the frame size of 1088 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-  887 | }
-      | ^
-
-Using dynamic allocation fix this compilation warning.
-
-Fixes: c9f700f840bd ("[JFFS2][XATTR] using 'delete marker' for xdatum/xref deletion")
-Reported-by: Tim Gardner <tim.gardner@canonical.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Ron Economos <re@w6rz.net>
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Fabian Frederick <fabf@skynet.be>
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Cc: stable@vger.kernel.org
----
- fs/jffs2/build.c |  5 ++++-
- fs/jffs2/xattr.c | 13 +++++++++----
- fs/jffs2/xattr.h |  4 ++--
- 3 files changed, 15 insertions(+), 7 deletions(-)
-
-diff --git a/fs/jffs2/build.c b/fs/jffs2/build.c
-index 837cd55fd4c5..6ae9d6fefb86 100644
---- a/fs/jffs2/build.c
-+++ b/fs/jffs2/build.c
-@@ -211,7 +211,10 @@ static int jffs2_build_filesystem(struct jffs2_sb_info *c)
- 		ic->scan_dents = NULL;
- 		cond_resched();
- 	}
--	jffs2_build_xattr_subsystem(c);
-+	ret = jffs2_build_xattr_subsystem(c);
-+	if (ret)
-+		goto exit;
-+
- 	c->flags &= ~JFFS2_SB_FLAG_BUILDING;
- 
- 	dbg_fsbuild("FS build complete\n");
-diff --git a/fs/jffs2/xattr.c b/fs/jffs2/xattr.c
-index aa4048a27f31..3b6bdc9a49e1 100644
---- a/fs/jffs2/xattr.c
-+++ b/fs/jffs2/xattr.c
-@@ -772,10 +772,10 @@ void jffs2_clear_xattr_subsystem(struct jffs2_sb_info *c)
- }
- 
- #define XREF_TMPHASH_SIZE	(128)
--void jffs2_build_xattr_subsystem(struct jffs2_sb_info *c)
-+int jffs2_build_xattr_subsystem(struct jffs2_sb_info *c)
- {
- 	struct jffs2_xattr_ref *ref, *_ref;
--	struct jffs2_xattr_ref *xref_tmphash[XREF_TMPHASH_SIZE];
-+	struct jffs2_xattr_ref **xref_tmphash;
- 	struct jffs2_xattr_datum *xd, *_xd;
- 	struct jffs2_inode_cache *ic;
- 	struct jffs2_raw_node_ref *raw;
-@@ -784,9 +784,12 @@ void jffs2_build_xattr_subsystem(struct jffs2_sb_info *c)
- 
- 	BUG_ON(!(c->flags & JFFS2_SB_FLAG_BUILDING));
- 
-+	xref_tmphash = kcalloc(XREF_TMPHASH_SIZE,
-+			       sizeof(struct jffs2_xattr_ref *), GFP_KERNEL);
-+	if (!xref_tmphash)
-+		return -ENOMEM;
-+
- 	/* Phase.1 : Merge same xref */
--	for (i=0; i < XREF_TMPHASH_SIZE; i++)
--		xref_tmphash[i] = NULL;
- 	for (ref=c->xref_temp; ref; ref=_ref) {
- 		struct jffs2_xattr_ref *tmp;
- 
-@@ -884,6 +887,8 @@ void jffs2_build_xattr_subsystem(struct jffs2_sb_info *c)
- 		     "%u of xref (%u dead, %u orphan) found.\n",
- 		     xdatum_count, xdatum_unchecked_count, xdatum_orphan_count,
- 		     xref_count, xref_dead_count, xref_orphan_count);
-+	kfree(xref_tmphash);
-+	return 0;
- }
- 
- struct jffs2_xattr_datum *jffs2_setup_xattr_datum(struct jffs2_sb_info *c,
-diff --git a/fs/jffs2/xattr.h b/fs/jffs2/xattr.h
-index 720007b2fd65..1b5030a3349d 100644
---- a/fs/jffs2/xattr.h
-+++ b/fs/jffs2/xattr.h
-@@ -71,7 +71,7 @@ static inline int is_xattr_ref_dead(struct jffs2_xattr_ref *ref)
- #ifdef CONFIG_JFFS2_FS_XATTR
- 
- extern void jffs2_init_xattr_subsystem(struct jffs2_sb_info *c);
--extern void jffs2_build_xattr_subsystem(struct jffs2_sb_info *c);
-+extern int jffs2_build_xattr_subsystem(struct jffs2_sb_info *c);
- extern void jffs2_clear_xattr_subsystem(struct jffs2_sb_info *c);
- 
- extern struct jffs2_xattr_datum *jffs2_setup_xattr_datum(struct jffs2_sb_info *c,
-@@ -103,7 +103,7 @@ extern ssize_t jffs2_listxattr(struct dentry *, char *, size_t);
- #else
- 
- #define jffs2_init_xattr_subsystem(c)
--#define jffs2_build_xattr_subsystem(c)
-+#define jffs2_build_xattr_subsystem(c)		(0)
- #define jffs2_clear_xattr_subsystem(c)
- 
- #define jffs2_xattr_do_crccheck_inode(c, ic)
 -- 
-2.39.2
+With best wishes
+Dmitry
 
