@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A773A6F94F3
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 01:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D986F951B
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 01:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjEFX2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 19:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40334 "EHLO
+        id S230048AbjEFXel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 19:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbjEFX2J (ORCPT
+        with ESMTP id S229653AbjEFXej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 19:28:09 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62E21AEE1;
-        Sat,  6 May 2023 16:27:47 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f19afc4f60so20635995e9.1;
-        Sat, 06 May 2023 16:27:47 -0700 (PDT)
+        Sat, 6 May 2023 19:34:39 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081489D;
+        Sat,  6 May 2023 16:34:38 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so38197523a12.0;
+        Sat, 06 May 2023 16:34:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683415666; x=1686007666;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6aWNeOXwnkGXx7BWbyXaj7Kul1oiC8tUChPKVcUGoAU=;
-        b=hqBI5AfOQOQd86X8mkaZPkW/VEcSlmA4PGHENrf374QREkEIM45HC5HiV9T6St+Ol9
-         L+Z73x/dc4oo7oWgjad8xZXH4eN5TH+0SyRBktv5r0Srl8Fvu7otgt10ZGBJYiLPxEM6
-         EgqlXZvWGYllVgMEzgOKLIhC0VNANn0LrNFjDJgmzg0BTt8ow+gn6t1wuLeuAtFBrzc3
-         92eek28suumx+hJ7ZjxgUJ/Sc2J8eRroFAEJ7I4h9nzEEcmEQEfTbimX685sW95CEOgr
-         3OCX5KcftyL2ce9y2tltYrPuuH06OzzYlTXN7GAZhn2nAmwNWHxXztLeJVHlPXbyfH9f
-         rDUA==
+        d=gmail.com; s=20221208; t=1683416076; x=1686008076;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=d9CMRNtxtAY+iVGmS9Nhh6aBEK5BkbQct2dEiCYBRLY=;
+        b=REqdkMLCTy5UbebEqan+d2erjtQW+iSjh884sXj1Iqi4KYxB131TlOq+KW3UENuDWX
+         THEXQaq1WHPMypuFmc4Ml820f1CQcnJiRhg6tIzULFl0U7XUdt/BtJkTqvBlwVHTKmZo
+         RrSbBWgY5Z/a+YK/iUZyJUaxTyRDa7mKvcJHTFETzU4XSaLZ732eP3d9cicNn1c/FHPN
+         C+JXs5T4yrUw/3HFnYtgw6Wf5giKRXIvUIVVXxDtuo2MW2/ES9apApq6gqqD8xswEo9j
+         zbpg1K+6pf1+scu4m7KByOUFr/PIsJColgxbgMqpEgGBOkmBp8U6eoMr4U4Ufiv3pJG6
+         9psA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683415666; x=1686007666;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6aWNeOXwnkGXx7BWbyXaj7Kul1oiC8tUChPKVcUGoAU=;
-        b=Iw/hygGyw4h47HFY7Mb7shl4qQaV+0uhWnMOh8GrX8qejgFoDJOUeMFD212J/h3I9p
-         k2FkbWhcPXHT9iCGQRxtLdmhn4gZYETAx7z9UqGhtxOOPknpmq53SrSM/5We7JKJKj0z
-         xsUbZRo/TLQgaZR33fOO+IKZV9WDPboFEGK7v9fPoQXCVqNJnkOESRsslxT8CPqGOAuQ
-         2Ruuz/PnF1zPv9tuvht4yRYTqx63OmMQZMTIjUomWGmlMgggVN6HD9+eow+K3E5rcvXM
-         wZDbkJIQZjK0Yrf/e3UL/+YcY3esk3TwaD3W73DeaPOAElmp57+b/zvs0aVU45f4Z8BK
-         dDUg==
-X-Gm-Message-State: AC+VfDwsSJrdCtTYymfuzYEvmOxFU1otp/+jPhjUwbCAn3tmjsLES4jB
-        NrzZ9TWpKqXBf3D/HjEtKAg=
-X-Google-Smtp-Source: ACHHUZ7FTYmJxCyZm2ZCulaucrLFWOmqwq91uFwSGOBEAyYGzAOiOr1CSWhB+1vUVvzDTMOTN3LASA==
-X-Received: by 2002:adf:db84:0:b0:306:28dd:5fb with SMTP id u4-20020adfdb84000000b0030628dd05fbmr3881083wri.62.1683415666151;
-        Sat, 06 May 2023 16:27:46 -0700 (PDT)
-Received: from localhost.localdomain ([176.221.215.212])
-        by smtp.gmail.com with ESMTPSA id p4-20020a1c7404000000b003f1739a0116sm12098655wmc.33.2023.05.06.16.27.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 May 2023 16:27:45 -0700 (PDT)
-From:   Maksim Kiselev <bigunclemax@gmail.com>
+        d=1e100.net; s=20221208; t=1683416076; x=1686008076;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d9CMRNtxtAY+iVGmS9Nhh6aBEK5BkbQct2dEiCYBRLY=;
+        b=PdsvNdGlUoRbXcbbZgMmFu+Iyi1BqLfcrBEooC4jalQH4tm1FP+Sptesf4uuME0bF/
+         d221ERnLS58MemaHLvl+nhJGRczw7tdOPSqfW4SVXX7aXGIjpfBC1J48TGIfjBjmrWLu
+         /Tk0ievhjH88D+2zyr9k5lbbecWyGaDrzIo1JDxZ/FRXynZJD5Z1RrEXqY8OXJPyXhGV
+         pICUv2aPoNJQ1MTxcXuFMl6iXIn7yTxAAk/a5WTulGx7Iue1J8iLNCepCWh6jx8CZv7G
+         0d47lJh9MQlIzU7KXxXsTkTmhs+R4sUhIqhgDd8nUJZbFil7VTtoW2uEnf1f40QekobQ
+         3gXg==
+X-Gm-Message-State: AC+VfDyn8PaBYPf98pIO+4rFISBYNvpIceYYf1Eug6KBjwzNfaqlrAWM
+        BOtPHFrdVbRpWgDrGHUSnVeun878lvFFs5qecE8=
+X-Google-Smtp-Source: ACHHUZ5pLbXef8h/yugyYWaRiTv4z9p+9JV6clL+Ey23A/L6IzrVNYFXYzqgEhKueJGdu7i1soJsP6surAam4+MVHnM=
+X-Received: by 2002:a17:906:6a03:b0:933:4d47:55b7 with SMTP id
+ qw3-20020a1709066a0300b009334d4755b7mr4790270ejc.2.1683416076334; Sat, 06 May
+ 2023 16:34:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230506073018.1411583-1-bigunclemax@gmail.com>
+ <20230506073018.1411583-4-bigunclemax@gmail.com> <20230506225848.3278d7ab@slackpad.lan>
+In-Reply-To: <20230506225848.3278d7ab@slackpad.lan>
+From:   Maxim Kiselev <bigunclemax@gmail.com>
+Date:   Sun, 7 May 2023 02:34:24 +0300
+Message-ID: <CALHCpMg31VLy7=epEs4LTpUcWT+gLDJ-9bWGJMgYrTP1ozOX_w@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] spi: sun6i: add quirk for in-controller clock divider
 To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Icenowy Zheng <icenowy@aosc.io>,
-        Maksim Kiselev <bigunclemax@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
+Cc:     Icenowy Zheng <icenowy@aosc.io>, Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
@@ -66,18 +66,12 @@ Cc:     Icenowy Zheng <icenowy@aosc.io>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
         Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v3 5/5] riscv: dts: allwinner: d1: Add SPI controllers node
-Date:   Sun,  7 May 2023 02:26:08 +0300
-Message-Id: <20230506232616.1792109-6-bigunclemax@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230506232616.1792109-1-bigunclemax@gmail.com>
-References: <20230506232616.1792109-1-bigunclemax@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -88,75 +82,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some boards form the MangoPi family (MQ\MQ-Dual\MQ-R) may have
-an optional SPI flash that connects to the SPI0 controller.
+> Don't we need to set tfr->effective_speed_hz to the actually programmed
+> clock rate here?
 
-This controller is the same for R329/D1/R528/T113s SoCs and
-should be supported by the sun50i-r329-spi driver.
+Yes, we should. Also we need to configure SPI sample mode by setting
+SDM and SDC bits in the SPI_TCR register.
 
-So let's add its DT nodes.
-
-Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
----
- .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
-
-diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-index 922e8e0e2c09..1bb1e5cae602 100644
---- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-+++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-@@ -108,6 +108,12 @@ rmii_pe_pins: rmii-pe-pins {
- 				function = "emac";
- 			};
- 
-+			/omit-if-no-ref/
-+			spi0_pins: spi0-pins {
-+				pins = "PC2", "PC3", "PC4", "PC5";
-+				function = "spi0";
-+			};
-+
- 			/omit-if-no-ref/
- 			uart1_pg6_pins: uart1-pg6-pins {
- 				pins = "PG6", "PG7";
-@@ -447,6 +453,37 @@ mmc2: mmc@4022000 {
- 			#size-cells = <0>;
- 		};
- 
-+		spi0: spi@4025000 {
-+			compatible = "allwinner,sun20i-d1-spi",
-+				     "allwinner,sun50i-r329-spi";
-+			reg = <0x04025000 0x1000>;
-+			interrupts = <SOC_PERIPHERAL_IRQ(15) IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_SPI0>, <&ccu CLK_SPI0>;
-+			clock-names = "ahb", "mod";
-+			dmas = <&dma 22>, <&dma 22>;
-+			dma-names = "rx", "tx";
-+			resets = <&ccu RST_BUS_SPI0>;
-+			status = "disabled";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+
-+		spi1: spi@4026000 {
-+			compatible = "allwinner,sun20i-d1-spi-dbi",
-+				     "allwinner,sun50i-r329-spi-dbi",
-+				     "allwinner,sun50i-r329-spi";
-+			reg = <0x04026000 0x1000>;
-+			interrupts = <SOC_PERIPHERAL_IRQ(16) IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_SPI1>, <&ccu CLK_SPI1>;
-+			clock-names = "ahb", "mod";
-+			dmas = <&dma 23>, <&dma 23>;
-+			dma-names = "rx", "tx";
-+			resets = <&ccu RST_BUS_SPI1>;
-+			status = "disabled";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+
- 		usb_otg: usb@4100000 {
- 			compatible = "allwinner,sun20i-d1-musb",
- 				     "allwinner,sun8i-a33-musb";
--- 
-2.39.2
-
+Please check a new version of this patch.
+https://lore.kernel.org/linux-arm-kernel/20230506232616.1792109-5-bigunclemax@gmail.com/
