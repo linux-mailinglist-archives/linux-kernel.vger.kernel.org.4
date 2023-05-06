@@ -2,91 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C55C6F8E66
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 05:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D700F6F8E6B
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 05:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjEFDs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 23:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
+        id S231286AbjEFDwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 23:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjEFDsu (ORCPT
+        with ESMTP id S229803AbjEFDv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 23:48:50 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247366597;
-        Fri,  5 May 2023 20:48:48 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 2AC53320095B;
-        Fri,  5 May 2023 23:48:46 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 05 May 2023 23:48:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1683344925; x=1683431325; bh=6dNus2w/PdbSqkjCMuflAQuC2pjwRBEoWih
-        N+3akq/k=; b=OdespJ5KKidOXILqqw+C/bn/OJ/uZywC8Ijt+J6+uHEhNR/rIVQ
-        HDqb3ljH7lgoYoH2bOeKEjoCd8SFFbswXyG2yGIPYsfVXOgtMd2V6xyASLw+TkHA
-        t+mN5Pqgnhs9/CJ4W8Nt2KttxNXjXda8Jl/08xe7UJ6wdMkJx6U57/vn+g6sbm5X
-        90wF4xKCpJ/azytWWSxBv9Lio1gE5oikRNi4YxuETZ0o04esPHboOUtk0+b7jRh2
-        yArMewVp/ALK+6B34Yrw0j+qJxWCoMC2aO1pmphufPO5rU9EWv/qdAHIKdwJSEcp
-        6u6/aYH9GiJuyIl22zbajVGn+A404wv8sGA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1683344925; x=1683431325; bh=6dNus2w/PdbSqkjCMuflAQuC2pjwRBEoWih
-        N+3akq/k=; b=WOhjwtZ82Tkd1JoCSBHiWwBg+b3QbL/nNinoY4+t+MIDWUqBEks
-        QXH6i0R/VK6ofIiCLrWftwX/+teD1WMGcGYWIcgC9u+Ij9kOcgLRJhfMWng6moT5
-        RvDEAX+Q8k+o1YsdwhriVxlF1dGecAnF/SDMSNoeKCAZtjSZxsw2WqyBjK9lZK3Z
-        JmnqBNKOqyr+KpWqxeXu7ERpj/WYiFq64Nouf6Rs5tscBVaGawnii//SbDd7qNUY
-        u6SCW6y9kSw4R8ZSv+xZYHDA5fD6rN04kMF8REEdz9ovJO9CyI42ooK+VK6ymrYi
-        KF/3TrS/qQqTymHhkZObpUVHf7OwT2MEKkw==
-X-ME-Sender: <xms:Hc5VZAuThYO0KgaNKhNCkaC-3ARjPhiH5ChLU3JFp0bGuOVTkKL5mA>
-    <xme:Hc5VZNeZFWL1wCSaBvFdhUX34a-b9XXLcajvDV2tNvLydXQHjKMe5uZiyTJmi-Yxe
-    jyf1XtVyJE0Cg1Fw8I>
-X-ME-Received: <xmr:Hc5VZLwC_maDBbqLcK5vT8TR2ZXrDgNhtb-8G0gynY3xoNI8RFarCKSTGNKq-JaksNa6rQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeffedgjeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhuffvvefkjghfofggtgfgsehtqhertdertddunecuhfhrohhmpefnuhhk
-    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
-    hnpeetteeigefhteffhfevgfffueejffevteffueekhfevjeethefhgfekffevjeehheen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
-    eslhhjohhnvghsrdguvghv
-X-ME-Proxy: <xmx:Hc5VZDN-z-J5r7LpA_r_r1oD2UTIqc6Pf62ZQKUWg4Kkeq7EwDE8Bg>
-    <xmx:Hc5VZA9SAstu_ApR1v73LIxMo9wGWFsmnEA8_AurOxbsd68zbA8-Hw>
-    <xmx:Hc5VZLUGca4jNPte0oRRDUCkB7vF1pN9efMFmqLPZ2PAkOIQDKPDkQ>
-    <xmx:Hc5VZAzRedxwJmXjM2GDLuwsdIFnIgoA1IcpiytNjBDuptuqCJbXjw>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 May 2023 23:48:38 -0400 (EDT)
-Date:   Sat, 06 May 2023 15:48:22 +1200
-From:   Luke Jones <luke@ljones.dev>
-Subject: Re: [PATCH v2 1/1] platform/x86: asus-wmi: add support for ASUS
- screenpad
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Ilpo =?iso-8859-1?q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net, hdegoede@redhat.com,
-        corentin.chary@gmail.com, markgross@kernel.org, jdelvare@suse.com
-Message-Id: <M8X7UR.MPEZYPQ0PU4F1@ljones.dev>
-In-Reply-To: <f1f8ff7a-6f23-e284-b494-7df2f0dce1a4@roeck-us.net>
-References: <20230505043013.2622603-1-luke@ljones.dev>
-        <20230505043013.2622603-2-luke@ljones.dev>
-        <9f77e8fd-38fe-818f-2fee-ca3bf4243576@linux.intel.com>
-        <TWL7UR.KE812U8BYMG8@ljones.dev>
-        <f1f8ff7a-6f23-e284-b494-7df2f0dce1a4@roeck-us.net>
-X-Mailer: geary/43.0
+        Fri, 5 May 2023 23:51:58 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4385F7695;
+        Fri,  5 May 2023 20:51:55 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-51f1b6e8179so1683323a12.3;
+        Fri, 05 May 2023 20:51:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683345115; x=1685937115;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lntOibfeThJPpn1VJ7xfamv/ry4wwbglMlCIgAw/SuQ=;
+        b=KsAu+SR+0lyn3VqoKAZIBZeGRpu2Mrb+jVusCwgtPeRHwbO92SgJpOSO7Oy5UAJexe
+         7y6v6Uw3RCZ7e6eqZBg9bPcKtQA/GyMoz0kkybZFlT9ctFBBQLFf8wbiXbIbVDIjtK+c
+         lQEAaTHYixT8SD1MDhdlg5VtGU2pOJn7ND93nK5pPMoUkjzUe4Gs8iQLi13q9CZMXOSj
+         nY/UJ54CAwvG27njWZtoXwKPZ84Sc6nmUBE4yfgam/dGvAp9M9O49DLQ5tBTgbLrguSm
+         MRiqk8fwlEEQ7ZWE+7rzKly3dl4NjNggmZKzh9enV6u3XXYiFP9VS5daBjNfZBVqvZQl
+         SpWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683345115; x=1685937115;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lntOibfeThJPpn1VJ7xfamv/ry4wwbglMlCIgAw/SuQ=;
+        b=Pgi/bKDeLvDYvDhrJfiI2OzhLIZvl4JRP+D8mXLlMNKQvi8Wh+Scfp0R+Aku6IeTrq
+         4pT/5J6BGxtyuLK4e3inXWPvbnwe7ZPE52eeCb5bIWUviwMiYeJY1GrQ98CbVvmzOJM2
+         0OzuOHo6CwM6ChgQ0OqmQOCMmD2J1R7c9pu4YGdHx5DCpCJI7Lrlf2VyUWyn3pthRkoc
+         f+tM3tVlmJwzeYSIkGiwMcPMLylyS1jKSPVf7kTKcfmH5rsMi+3zmZgggI57HCB9EnVf
+         HFVoIeFWcrNbZguNsuppJKspu0z9DomeOTE3Mtv2IVrFKqI1SLW0evgWNAChdyxn2nyC
+         9izg==
+X-Gm-Message-State: AC+VfDxUFwH2jYf8Fh2NDUg8clH9EGpYXA2MYBz+OhYptiA/Bi4SYXAl
+        qHY8UWlmaszuumeUzsnErn4=
+X-Google-Smtp-Source: ACHHUZ5zj0iukVw0Wp6lKsVZ8izr5sCbXHEPIoKgZMiu/WjkBSbE8RdqI9SBwEBeJTRBDcPanyiuhA==
+X-Received: by 2002:a17:902:8695:b0:19c:a9b8:4349 with SMTP id g21-20020a170902869500b0019ca9b84349mr3168517plo.32.1683345114610;
+        Fri, 05 May 2023 20:51:54 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-14.three.co.id. [180.214.232.14])
+        by smtp.gmail.com with ESMTPSA id g5-20020a170902740500b001ab09f5ca61sm2482665pll.55.2023.05.05.20.51.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 20:51:54 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id BE241106849; Sat,  6 May 2023 10:51:50 +0700 (WIB)
+Date:   Sat, 6 May 2023 10:51:50 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Grant Likely <grant.likely@linaro.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linux Documentation <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v2] docs: dt: Make references and mention kernel
+ abstractions
+Message-ID: <ZFXO1pRq4/fNw33/@debian.me>
+References: <20230505-dt-docs-refresh-v2-1-56bf359c53b4@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4FC0DSTJcODP+zd/"
+Content-Disposition: inline
+In-Reply-To: <20230505-dt-docs-refresh-v2-1-56bf359c53b4@linaro.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -94,146 +79,83 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--4FC0DSTJcODP+zd/
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 5 2023 at 18:30:36 -0700, Guenter Roeck=20
-<linux@roeck-us.net> wrote:
-> On 5/5/23 16:43, Luke Jones wrote:
->>=20
->>=20
->> On Fri, May 5 2023 at 16:08:16 +0300, Ilpo J=E4rvinen=20
->> <ilpo.jarvinen@linux.intel.com> wrote:
->>> On Fri, 5 May 2023, Luke D. Jones wrote:
->>>=20
->>>>  Add support for the WMI methods used to turn off and adjust the
->>>>  brightness of the secondary "screenpad" device found on some=20
->>>> high-end
->>>>  ASUS laptops like the GX650P series and others.
->>>>=20
->>>>  These methods are utilised in a new backlight device named:
->>>>  - asus_screenpad
->>>>=20
->>>>  Signed-off-by: Luke D. Jones <luke@ljones.dev>
->>>>  ---
->>>>   .../ABI/testing/sysfs-platform-asus-wmi       |   2 +-
->>>>   drivers/platform/x86/asus-wmi.c               | 132=20
->>>> ++++++++++++++++++
->>>>   drivers/platform/x86/asus-wmi.h               |   1 +
->>>>   include/linux/platform_data/x86/asus-wmi.h    |   4 +
->>>>   4 files changed, 138 insertions(+), 1 deletion(-)
->>>>=20
->>>>  diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi=20
->>>> b/Documentation/ABI/testing/sysfs-platform-asus-wmi
->>>>  index a77a004a1baa..df9817c6233a 100644
->>>>  --- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
->>>>  +++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
->>>>  @@ -97,4 +97,4 @@ Contact:    "Luke Jones" <luke@ljones.dev>
->>>>   Description:
->>>>           Enable an LCD response-time boost to reduce or remove=20
->>>> ghosting:
->>>>               * 0 - Disable,
->>>>  -            * 1 - Enable
->>>>  +            * 1 - Enable
->>>>  \ No newline at end of file
->>>=20
->>> Spurious change?
->>=20
->> Indeed it is. Not sure how that occurred.
->>=20
->>>=20
->>>>  diff --git a/drivers/platform/x86/asus-wmi.c=20
->>>> b/drivers/platform/x86/asus-wmi.c
->>>>  index 1038dfdcdd32..0528eef02ef7 100644
->>>>  --- a/drivers/platform/x86/asus-wmi.c
->>>>  +++ b/drivers/platform/x86/asus-wmi.c
->>>>  @@ -200,6 +200,7 @@ struct asus_wmi {
->>>>=20
->>>>       struct input_dev *inputdev;
->>>>       struct backlight_device *backlight_device;
->>>>  +    struct backlight_device *screenpad_backlight_device;
->>>>       struct platform_device *platform_device;
->>>>=20
->>>>       struct led_classdev wlan_led;
->>>>  @@ -3208,6 +3209,129 @@ static int is_display_toggle(int code)
->>>>       return 0;
->>>>   }
->>>>=20
->>>>  +/* Screenpad backlight */
->>>>  +
->>>>  +static int read_screenpad_backlight_power(struct asus_wmi *asus)
->>>>  +{
->>>>  +    int ret =3D asus_wmi_get_devstate_simple(asus,=20
->>>> ASUS_WMI_DEVID_SCREENPAD_POWER);
->>>=20
->>> Please move this to own line because now you have the extra newline
->>> in between the call and error handling.
->>=20
->> I don't understand what you mean sorry. Remove the new line or:
->> int ret;
->> ret =3D asus_wmi_get_devstate_simple(asus,=20
->> ASUS_WMI_DEVID_SCREENPAD_POWER);
->>=20
->>>=20
->>>>  +
->>>>  +    if (ret < 0)
->>>>  +        return ret;
->>>>  +    /* 1 =3D=3D powered */
->>>>  +    return ret ? FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
->>>>  +}
->>>>  +
->>>>  +static int read_screenpad_brightness(struct backlight_device *bd)
->>>>  +{
->>>>  +    struct asus_wmi *asus =3D bl_get_data(bd);
->>>>  +    u32 retval;
->>>>  +    int err;
->>>>  +
->>>>  +    err =3D read_screenpad_backlight_power(asus);
->>>>  +    if (err < 0)
->>>>  +        return err;
->>>>  +    /* The device brightness can only be read if powered, so=20
->>>> return stored */
->>>>  +    if (err =3D=3D FB_BLANK_POWERDOWN)
->>>>  +        return asus->driver->screenpad_brightness;
->>>>  +
->>>>  +    err =3D asus_wmi_get_devstate(asus,=20
->>>> ASUS_WMI_DEVID_SCREENPAD_LIGHT, &retval);
->>>>  +    if (err < 0)
->>>>  +        return err;
->>>>  +
->>>>  +    return retval & ASUS_WMI_DSTS_BRIGHTNESS_MASK;
->>>>  +}
->>>>  +
->>>>  +static int update_screenpad_bl_status(struct backlight_device=20
->>>> *bd)
->>>>  +{
->>>>  +    struct asus_wmi *asus =3D bl_get_data(bd);
->>>>  +    int power, err =3D 0;
->>>>  +    u32 ctrl_param;
->>>>  +
->>>>  +    power =3D read_screenpad_backlight_power(asus);
->>>>  +    if (power =3D=3D -ENODEV)
->>>>  +        return err;
->>>=20
->>> Just return 0. Or is there perhaps something wrong/missing here?
->>=20
->> I thought the correct thing was to return any possible error state=20
->> (here, anything less than 0 would be an error, right?)
->>=20
->=20
-> Well, yes, but you are not returning an error. You are returning 'err'
-> which is 0 at this point. So, at the very least, this code is (very)
-> misleading since it suggests that it would return some error
-> (as saved in the 'err' variable) when it doesn't.
->=20
-> Guenter
+On Fri, May 05, 2023 at 02:43:53PM +0200, Linus Walleij wrote:
+> This document is named "Linux and Devicetree" so I think we
+> should write a bit more about how the device tree fits into
+> the Linux kernel frameworks these days after we have created
+> the fwnode and swnode.
 >=20
 
-Oh! Right I see it now, I'm sorry, I just kept skipping over it somehow.
+Also Cc: linux-doc list.
 
-So I should change to:
-	power =3D read_screenpad_backlight_power(asus);
-	if (power < 0)
-		return power;
+> +The Linux kernel supports several different hardware description
+> +frameworks and DT is just one of them. The closest sibling is the
+> +:ref:`Documentation/firmware-guide/acpi/index.rst ACPI`
+> +DSDT (Differentiated System Description Table).
+> <snipped>...
+> +Further, when the DT core register devices these need to fold into the
+> +Linux device driver model, which essentially means that some kind of
+> +``struct device`` has to be created to match a corresponding
+> +``struct device_driver``. This API can be explored in
+> +detail in :ref:`Documentation/driver-api/driver-model/index.rst the driv=
+er API documentation`
+> +but what you need to know is that the Linux DT parser code will on its
+> +own mostly spawn platform devices and AMBA devices on the platform
+> +and AMBA bus respectively, and apart from that it will augment devices
+> +spawn on other buses where applicable.
+> +
 
-Is that acceptable?
+Anchor text for :ref: links above don't mix well, so I have to override
+them (also specifying intended doc target - correct me if these are wrong):
 
+diff --git a/Documentation/devicetree/usage-model.rst b/Documentation/devic=
+etree/usage-model.rst
+index 37605cb549cf59..87f522d5feba81 100644
+--- a/Documentation/devicetree/usage-model.rst
++++ b/Documentation/devicetree/usage-model.rst
+@@ -80,8 +80,7 @@ then go read it now.  It's okay, I'll wait....
+=20
+ The Linux kernel supports several different hardware description
+ frameworks and DT is just one of them. The closest sibling is the
+-:ref:`Documentation/firmware-guide/acpi/index.rst ACPI`
+-DSDT (Differentiated System Description Table).
++:doc:`DSDT (Differentiated System Description Table) from ACPI </firmware-=
+guide/acpi/namespace>`.
+=20
+ To make it possible to write a device driver that will adapt to DT
+ or other hardware description models, the kernel has grown some
+@@ -101,7 +100,7 @@ Further, when the DT core register devices these need t=
+o fold into the
+ Linux device driver model, which essentially means that some kind of
+ ``struct device`` has to be created to match a corresponding
+ ``struct device_driver``. This API can be explored in
+-detail in :ref:`Documentation/driver-api/driver-model/index.rst the driver=
+ API documentation`
++detail in :doc:`the driver API documentation </driver-api/driver-model/ove=
+rview>`
+ but what you need to know is that the Linux DT parser code will on its
+ own mostly spawn platform devices and AMBA devices on the platform
+ and AMBA bus respectively, and apart from that it will augment devices
 
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--4FC0DSTJcODP+zd/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFXO0QAKCRD2uYlJVVFO
+o1ADAP0U4Eqkto8ez70YgMni5+n70+3PXK2Djzh36Qxvq/oLfgD/ZqqHP4lXarNA
+2qxmUqeGfJ78jWC2apff2dUzqklVLAw=
+=2tz4
+-----END PGP SIGNATURE-----
+
+--4FC0DSTJcODP+zd/--
