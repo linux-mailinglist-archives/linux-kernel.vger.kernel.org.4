@@ -2,132 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB3E6F937C
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 20:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC36E6F9389
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 20:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjEFSAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 14:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
+        id S229819AbjEFSMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 14:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjEFSAq (ORCPT
+        with ESMTP id S229454AbjEFSM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 14:00:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D101890C;
-        Sat,  6 May 2023 11:00:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DAE560B75;
-        Sat,  6 May 2023 18:00:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E337C433D2;
-        Sat,  6 May 2023 18:00:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683396043;
-        bh=x7C6StQwkhrvjqLJn5ntISyGPSl4P0DVufrOryv/hDE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=J4KJQXUQfj9GTtSQshhVWmwIFBMWdLi0QEbfNHfHvDki1UY71iSz8sQ7Mcaq/VI/c
-         uQ1xET7RzP8+PB+rGFFyGcTk/xJUiV7nj+kZc6NMVn8oKKWXHrzNRvDKf4KKE6Yt6N
-         1gbWcvmfx8TtVwfsUuZvgNAO9ytZPSTKXm6gy2F9Ulv50VoOahEKbxfi3dtEner+Bc
-         h4CvuE92JPUq3FqY7zQpCc+NvPChe2aX1w9qPMbmD82uhNpg8LNFWtcNhXt+O35Lg+
-         7k6P4M/PkhJQDKH2UyDQDyjPNEdXZr0rZmgAoIwbbip6vLwZXh9xZlDxsn75gLT+De
-         g8aG+alyPayqQ==
-Date:   Sat, 6 May 2023 19:16:36 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: addac: ad74413: don't set DIN_SINK for functions
- other than digital input
-Message-ID: <20230506191636.3cff4b24@jic23-huawei>
-In-Reply-To: <6fcf4997-9d88-7e86-70f7-52f9d296bc6e@rasmusvillemoes.dk>
-References: <20230503105042.453755-1-linux@rasmusvillemoes.dk>
-        <27fe41e402ea0d6ef42aa0ac80aa3d1488862cd8.camel@gmail.com>
-        <6fcf4997-9d88-7e86-70f7-52f9d296bc6e@rasmusvillemoes.dk>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 6 May 2023 14:12:27 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0B811B74;
+        Sat,  6 May 2023 11:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683396746; x=1714932746;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YngAekiyMFQcAH087yL/A1vfWTMr5bD0St58aYn+lAc=;
+  b=MIfrrhm0go25i+vKnZvlkr2NS245FLl63Hq3o5CeLizef1m0X2hjmHEd
+   ua+rCWGW0ryDtlDUxQhjcgTDDAnQJi0kLDEQJVBjAe7CPkxiR6CNYSbXY
+   tOsnTRCPQQOccdhjPqc61JzF8JCtDxt2JF3ZoWRR+cHF0PUJoW7iCPuMK
+   9DWRMiWbQaCtC2TMy+cSNx7o8bqU2XvZsgNoOfSW8F/wicMAcb0j02Yy4
+   QZB1Zrckg0kndldjcz5lEYpavrsWj583TDSz7QdNnoQfAke+J7d98VXjt
+   vp6h+rcMx1RsW5obtMTCaifetc4uOlX8g8UZnTLfqMvTcxmlQe3iSvHt0
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10702"; a="329030127"
+X-IronPort-AV: E=Sophos;i="5.99,255,1677571200"; 
+   d="scan'208";a="329030127"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2023 11:12:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10702"; a="822147827"
+X-IronPort-AV: E=Sophos;i="5.99,255,1677571200"; 
+   d="scan'208";a="822147827"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 06 May 2023 11:12:22 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pvMOL-0000RF-1n;
+        Sat, 06 May 2023 18:12:21 +0000
+Date:   Sun, 7 May 2023 02:12:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Adam Ford <aford173@gmail.com>, linux-clk@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
+Message-ID: <202305070235.r9bEq3U8-lkp@intel.com>
+References: <20230506162403.375212-1-aford173@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230506162403.375212-1-aford173@gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 4 May 2023 12:08:53 +0200
-Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
+Hi Adam,
 
-> On 04/05/2023 09.28, Nuno S=C3=A1 wrote:
-> > Hi Rasmus,
-> >  =20
->=20
-> > So, I'm not really that familiar with this part and, at this stage, I'm=
- being
-> > lazy to check the datasheet.  =20
->=20
-> Well, the data sheet is not particularly helpful here, which is why I
-> ended up with this mess.
->=20
-> > My concern is about breaking some other users... =20
->=20
-> I highly doubt there are users yet (other than my customer); this
-> binding+driver implementation only just landed.
->=20
-> > So, does it make any sense for having drive-strength-microamp in a non =
-digital
-> > input at all? =20
->=20
-> That's the problem with the data sheet, it doesn't really say that the
-> DIN_SINK register has any effect whatsoever when the channel function is
-> set to something other than digital input (either flavor). Perhaps it
-> does hint that setting it to something non-zero is probably not a good
-> idea, because DIN_SINK is automatically set to 0 whenever the channel
-> function is set/changed, so one needs a good reason to change DIN_SINK
-> afterwards.
->=20
-> We just experimentally found out that when we added the DIN_SINK to fix
-> the digital input functions, when we got around to testing the
-> resistance measurement function that ended up broken due to the non-zero
-> DIN_SINK.
->=20
-> > Can anyone have a working device by specifying that dt parameter
-> > on a non digital channel (or expect something from having that paramete=
-r set)?
-> > Or the only effect is to actually have some functions misbehaving? =20
->=20
-> The data sheet doesn't say that the DIN_SINK should have any effect for
-> other functions, so I'm pretty sure it's only the latter: some functions
-> misbehave.
->=20
-> > On the driver side, if it's never right to have
-> > these settings together, then the patch is valid since if someone has t=
-his, his
-> > configuration is broken anyways (maybe that's also a valid point for the
-> > bindings)... =20
->=20
-> Yes, I do believe that it's a broken description (whether or not the
-> bindings specify that), and drivers don't need to go out of their way to
-> validate or fixup such brokenness. But in this particular case, there's
-> really no extra burden on the driver to not put garbage in DIN_SINK when
-> a not-digital-input function has been chosen (the patch is a two-liner
-> with 'git show -w').
+kernel test robot noticed the following build warnings:
 
-If we can tighten the DT binding to rule out something that should not be
-set than that would be good.  Tightening bindings is fine - we don't mind
-validation of bindings failing on peoples DTs as long as we didn't 'break'
-them actually working.
+[auto build test WARNING on clk/clk-next]
+[also build test WARNING on v6.3 next-20230505]
+[cannot apply to abelvesa/clk/imx linus/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Jonathan
+url:    https://github.com/intel-lab-lkp/linux/commits/Adam-Ford/clk-imx-composite-8m-Add-imx8m_divider_determine_rate/20230507-002453
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20230506162403.375212-1-aford173%40gmail.com
+patch subject: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
+config: powerpc-randconfig-r012-20230507 (https://download.01.org/0day-ci/archive/20230507/202305070235.r9bEq3U8-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/d92df3b38fc20beb735cb3b75f118b45d1ae304b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Adam-Ford/clk-imx-composite-8m-Add-imx8m_divider_determine_rate/20230507-002453
+        git checkout d92df3b38fc20beb735cb3b75f118b45d1ae304b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/clk/imx/
 
->=20
-> Rasmus
->=20
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305070235.r9bEq3U8-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/imx/clk-composite-8m.c:122:5: warning: no previous prototype for function 'imx8m_divider_determine_rate' [-Wmissing-prototypes]
+   int imx8m_divider_determine_rate(struct clk_hw *hw,
+       ^
+   drivers/clk/imx/clk-composite-8m.c:122:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int imx8m_divider_determine_rate(struct clk_hw *hw,
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/imx8m_divider_determine_rate +122 drivers/clk/imx/clk-composite-8m.c
+
+   121	
+ > 122	int imx8m_divider_determine_rate(struct clk_hw *hw,
+   123					      struct clk_rate_request *req)
+   124	{
+   125		struct clk_divider *divider = to_clk_divider(hw);
+   126		int prediv_value;
+   127		int div_value;
+   128	
+   129		/* if read only, just return current value */
+   130		if (divider->flags & CLK_DIVIDER_READ_ONLY) {
+   131			u32 val;
+   132	
+   133			val = readl(divider->reg);
+   134			prediv_value = val >> divider->shift;
+   135			prediv_value &= clk_div_mask(divider->width);
+   136	
+   137			div_value = val >> PCG_DIV_SHIFT;
+   138			div_value &= clk_div_mask(PCG_DIV_WIDTH);
+   139	
+   140			return divider_ro_determine_rate(hw, req, divider->table,
+   141							 PCG_PREDIV_WIDTH + PCG_DIV_WIDTH,
+   142							 divider->flags, prediv_value * div_value);
+   143		}
+   144	
+   145		return divider_determine_rate(hw, req, divider->table,
+   146					      PCG_PREDIV_WIDTH + PCG_DIV_WIDTH,
+   147					      divider->flags);
+   148	}
+   149	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
