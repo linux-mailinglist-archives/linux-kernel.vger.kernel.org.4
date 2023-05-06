@@ -2,75 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99F96F8DCE
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 03:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 740B16F8DD8
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 04:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbjEFB5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 21:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        id S229897AbjEFCIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 22:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232953AbjEFB5r (ORCPT
+        with ESMTP id S229460AbjEFCIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 21:57:47 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14094EC5;
-        Fri,  5 May 2023 18:57:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683338262; x=1714874262;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b+C4AYP9JU2KJ1hzN20KFohvea7hRzEwFH1d9gSgAOU=;
-  b=dKvYkPMW2b1Ln2FfGxPQu/EuqMdNXDeSWZi8RnK+Q/yJASLYOimJmTfL
-   O/a8HToCoUQpkYqWwIlAtlQM8MSdD80zQj+v0BeUsMGgvT27PGKWXxJM6
-   Nz1Nl6+sEuQzx9CJiR+PGe+u4mQBNMNpBczfaja4M1aEyPs5Skngw5GGo
-   OIGkHPXlIhGU9fd7UjVPnAw4L1qAlMl0X4Ig/F8ub1r2olpwd73E8hGsL
-   WdWtDs+0ex+9nYY0xB23vN6a62lh3t+CguFpGbXTewW74hQXD3V/yFbfT
-   UribIfdsLydt2At04JkEnXZ083BPfLKBrG/yYJ2Gf6kgq1xu7M8CPLh7K
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="349368877"
-X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
-   d="scan'208";a="349368877"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 18:57:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="841998191"
-X-IronPort-AV: E=Sophos;i="5.99,253,1677571200"; 
-   d="scan'208";a="841998191"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga001.fm.intel.com with ESMTP; 05 May 2023 18:57:39 -0700
-Date:   Sat, 6 May 2023 17:57:49 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Vladimir Georgiev <v.georgiev@metrotek.ru>
-Cc:     conor.dooley@microchip.com, devicetree@vger.kernel.org,
-        hao.wu@intel.com, i.bornyakov@metrotek.ru,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mdf@kernel.org, robh+dt@kernel.org,
-        system@metrotek.ru, trix@redhat.com
-Subject: Re: [PATCH v3 1/2] MAINTAINERS: update Microchip MPF FPGA reviewers
-Message-ID: <ZFYknSDsJBp2vG7s@yilunxu-OptiPlex-7050>
-References: <ZFOYQgA6TYa8hCjS@yilunxu-OptiPlex-7050>
- <20230504102524.314791-1-v.georgiev@metrotek.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230504102524.314791-1-v.georgiev@metrotek.ru>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 5 May 2023 22:08:02 -0400
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D945274;
+        Fri,  5 May 2023 19:07:59 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VhrSoEj_1683338876;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VhrSoEj_1683338876)
+          by smtp.aliyun-inc.com;
+          Sat, 06 May 2023 10:07:57 +0800
+Message-ID: <1683338663.2120674-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH v4] virtio_net: suppress cpu stall when free_unused_bufs
+Date:   Sat, 6 May 2023 10:04:23 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, zhengqi.arch@bytedance.com,
+        willemdebruijn.kernel@gmail.com,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Wenliang Wang <wangwenliang.1995@bytedance.com>
+References: <1683167226-7012-1-git-send-email-wangwenliang.1995@bytedance.com>
+ <CACGkMEs_4kUzc6iSBWvhZA1+U70Pp0o+WhE0aQnC-5pECW7QXA@mail.gmail.com>
+In-Reply-To: <CACGkMEs_4kUzc6iSBWvhZA1+U70Pp0o+WhE0aQnC-5pECW7QXA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-04 at 13:25:24 +0300, Vladimir Georgiev wrote:
-> Hi Xu!
-> 
-> Acked-by: Vladimir Georgiev <v.georgiev@metrotek.ru>
+On Fri, 5 May 2023 11:28:25 +0800, Jason Wang <jasowang@redhat.com> wrote:
+> On Thu, May 4, 2023 at 10:27=E2=80=AFAM Wenliang Wang
+> <wangwenliang.1995@bytedance.com> wrote:
+> >
+> > For multi-queue and large ring-size use case, the following error
+> > occurred when free_unused_bufs:
+> > rcu: INFO: rcu_sched self-detected stall on CPU.
+> >
+> > Fixes: 986a4f4d452d ("virtio_net: multiqueue support")
+> > Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
+> > ---
+> > v2:
+> > -add need_resched check.
+> > -apply same logic to sq.
+> > v3:
+> > -use cond_resched instead.
+> > v4:
+> > -add fixes tag
+> > ---
+> >  drivers/net/virtio_net.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > index 8d8038538fc4..a12ae26db0e2 100644
+> > --- a/drivers/net/virtio_net.c
+> > +++ b/drivers/net/virtio_net.c
+> > @@ -3560,12 +3560,14 @@ static void free_unused_bufs(struct virtnet_inf=
+o *vi)
+> >                 struct virtqueue *vq =3D vi->sq[i].vq;
+> >                 while ((buf =3D virtqueue_detach_unused_buf(vq)) !=3D N=
+ULL)
+> >                         virtnet_sq_free_unused_buf(vq, buf);
+> > +               cond_resched();
+>
+> Does this really address the case when the virtqueue is very large?
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+Yes, I also have this question. I think cond_resched() should be called eve=
+ry
+time a certain number of buffers are processed.
 
-Sent pull request for this series.
-> 
+Thanks.
+
+>
+> Thanks
+>
+> >         }
+> >
+> >         for (i =3D 0; i < vi->max_queue_pairs; i++) {
+> >                 struct virtqueue *vq =3D vi->rq[i].vq;
+> >                 while ((buf =3D virtqueue_detach_unused_buf(vq)) !=3D N=
+ULL)
+> >                         virtnet_rq_free_unused_buf(vq, buf);
+> > +               cond_resched();
+> >         }
+> >  }
+> >
+> > --
+> > 2.20.1
+> >
+>
