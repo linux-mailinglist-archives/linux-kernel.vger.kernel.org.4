@@ -2,160 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D700F6F8E6B
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 05:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A946F8E5A
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 05:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbjEFDwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 23:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
+        id S229751AbjEFDix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 23:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjEFDv6 (ORCPT
+        with ESMTP id S229698AbjEFDiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 23:51:58 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4385F7695;
-        Fri,  5 May 2023 20:51:55 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-51f1b6e8179so1683323a12.3;
-        Fri, 05 May 2023 20:51:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683345115; x=1685937115;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lntOibfeThJPpn1VJ7xfamv/ry4wwbglMlCIgAw/SuQ=;
-        b=KsAu+SR+0lyn3VqoKAZIBZeGRpu2Mrb+jVusCwgtPeRHwbO92SgJpOSO7Oy5UAJexe
-         7y6v6Uw3RCZ7e6eqZBg9bPcKtQA/GyMoz0kkybZFlT9ctFBBQLFf8wbiXbIbVDIjtK+c
-         lQEAaTHYixT8SD1MDhdlg5VtGU2pOJn7ND93nK5pPMoUkjzUe4Gs8iQLi13q9CZMXOSj
-         nY/UJ54CAwvG27njWZtoXwKPZ84Sc6nmUBE4yfgam/dGvAp9M9O49DLQ5tBTgbLrguSm
-         MRiqk8fwlEEQ7ZWE+7rzKly3dl4NjNggmZKzh9enV6u3XXYiFP9VS5daBjNfZBVqvZQl
-         SpWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683345115; x=1685937115;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lntOibfeThJPpn1VJ7xfamv/ry4wwbglMlCIgAw/SuQ=;
-        b=Pgi/bKDeLvDYvDhrJfiI2OzhLIZvl4JRP+D8mXLlMNKQvi8Wh+Scfp0R+Aku6IeTrq
-         4pT/5J6BGxtyuLK4e3inXWPvbnwe7ZPE52eeCb5bIWUviwMiYeJY1GrQ98CbVvmzOJM2
-         0OzuOHo6CwM6ChgQ0OqmQOCMmD2J1R7c9pu4YGdHx5DCpCJI7Lrlf2VyUWyn3pthRkoc
-         f+tM3tVlmJwzeYSIkGiwMcPMLylyS1jKSPVf7kTKcfmH5rsMi+3zmZgggI57HCB9EnVf
-         HFVoIeFWcrNbZguNsuppJKspu0z9DomeOTE3Mtv2IVrFKqI1SLW0evgWNAChdyxn2nyC
-         9izg==
-X-Gm-Message-State: AC+VfDxUFwH2jYf8Fh2NDUg8clH9EGpYXA2MYBz+OhYptiA/Bi4SYXAl
-        qHY8UWlmaszuumeUzsnErn4=
-X-Google-Smtp-Source: ACHHUZ5zj0iukVw0Wp6lKsVZ8izr5sCbXHEPIoKgZMiu/WjkBSbE8RdqI9SBwEBeJTRBDcPanyiuhA==
-X-Received: by 2002:a17:902:8695:b0:19c:a9b8:4349 with SMTP id g21-20020a170902869500b0019ca9b84349mr3168517plo.32.1683345114610;
-        Fri, 05 May 2023 20:51:54 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-14.three.co.id. [180.214.232.14])
-        by smtp.gmail.com with ESMTPSA id g5-20020a170902740500b001ab09f5ca61sm2482665pll.55.2023.05.05.20.51.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 20:51:54 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id BE241106849; Sat,  6 May 2023 10:51:50 +0700 (WIB)
-Date:   Sat, 6 May 2023 10:51:50 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Grant Likely <grant.likely@linaro.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linux Documentation <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v2] docs: dt: Make references and mention kernel
- abstractions
-Message-ID: <ZFXO1pRq4/fNw33/@debian.me>
-References: <20230505-dt-docs-refresh-v2-1-56bf359c53b4@linaro.org>
+        Fri, 5 May 2023 23:38:51 -0400
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836B15BAD
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 20:38:48 -0700 (PDT)
+X-ASG-Debug-ID: 1683344322-086e237e53681e0001-xx1T2L
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id fBt37mRKNQNNOLBX (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Sat, 06 May 2023 11:38:43 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sat, 6 May
+ 2023 11:38:42 +0800
+Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sat, 6 May
+ 2023 11:38:41 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Message-ID: <6fc202dd-9dcf-187e-98dc-abd034874655@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.21
+Date:   Sat, 6 May 2023 19:38:39 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4FC0DSTJcODP+zd/"
-Content-Disposition: inline
-In-Reply-To: <20230505-dt-docs-refresh-v2-1-56bf359c53b4@linaro.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 3/4] xhci: Show zhaoxin xHCI root hub speed correctly
+Content-Language: en-US
+X-ASG-Orig-Subj: Re: [PATCH v2 3/4] xhci: Show zhaoxin xHCI root hub speed correctly
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+References: <20230421203853.387210-1-WeitaoWang-oc@zhaoxin.com>
+ <20230421203853.387210-4-WeitaoWang-oc@zhaoxin.com>
+ <f6689241-9749-28a2-6da4-842f3253c678@linux.intel.com>
+From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <f6689241-9749-28a2-6da4-842f3253c678@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1683344322
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 7025
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.108386
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---4FC0DSTJcODP+zd/
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, May 05, 2023 at 02:43:53PM +0200, Linus Walleij wrote:
-> This document is named "Linux and Devicetree" so I think we
-> should write a bit more about how the device tree fits into
-> the Linux kernel frameworks these days after we have created
-> the fwnode and swnode.
->=20
-
-Also Cc: linux-doc list.
-
-> +The Linux kernel supports several different hardware description
-> +frameworks and DT is just one of them. The closest sibling is the
-> +:ref:`Documentation/firmware-guide/acpi/index.rst ACPI`
-> +DSDT (Differentiated System Description Table).
-> <snipped>...
-> +Further, when the DT core register devices these need to fold into the
-> +Linux device driver model, which essentially means that some kind of
-> +``struct device`` has to be created to match a corresponding
-> +``struct device_driver``. This API can be explored in
-> +detail in :ref:`Documentation/driver-api/driver-model/index.rst the driv=
-er API documentation`
-> +but what you need to know is that the Linux DT parser code will on its
-> +own mostly spawn platform devices and AMBA devices on the platform
-> +and AMBA bus respectively, and apart from that it will augment devices
-> +spawn on other buses where applicable.
+On 2023/5/5 18:52, Mathias Nyman wrote:
+> On 21.4.2023 23.38, Weitao Wang wrote:
+>> Some zhaoxin xHCI controllers follow usb3.1 spec,
+>> but only support gen1 speed 5G. While in Linux kernel,
+>> if xHCI suspport usb3.1,root hub speed will show on 10G.
+>> To fix this issue of zhaoxin xHCI platforms, read usb speed ID
+>> supported by xHCI to determine root hub speed.
+>>
+>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+>> ---
+>>   drivers/usb/host/xhci.c | 22 ++++++++++++++++++++++
+>>   1 file changed, 22 insertions(+)
+>>
+>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>> index 6307bae9cddf..31d6ace9cace 100644
+>> --- a/drivers/usb/host/xhci.c
+>> +++ b/drivers/usb/host/xhci.c
+>> @@ -5294,6 +5294,7 @@ static void xhci_hcd_init_usb2_data(struct xhci_hcd *xhci, struct 
+>> usb_hcd *hcd)
+>>   static void xhci_hcd_init_usb3_data(struct xhci_hcd *xhci, struct usb_hcd *hcd)
+>>   {
+>>       unsigned int minor_rev;
+>> +    unsigned int i, j;
+>>       /*
+>>        * Early xHCI 1.1 spec did not mention USB 3.1 capable hosts
+>> @@ -5323,6 +5324,27 @@ static void xhci_hcd_init_usb3_data(struct xhci_hcd *xhci, struct 
+>> usb_hcd *hcd)
+>>           hcd->self.root_hub->ssp_rate = USB_SSP_GEN_2x1;
+>>           break;
+>>       }
+>> +
+>> +    /* Usb3.1 has gen1 and gen2, Some zhaoxin's xHCI controller
+>> +     * that follow usb3.1 spec but only support gen1.
+>> +     */
+>> +    if (xhci->quirks & XHCI_ZHAOXIN_HOST) {
+>> +        minor_rev = 0;
+>> +        for (j = 0; j < xhci->num_port_caps; j++) {
+>> +            for (i = 0; i < xhci->port_caps[j].psi_count; i++) {
+>> +                if (XHCI_EXT_PORT_PSIV(xhci->port_caps[j].psi[i]) >= 5) {
+>> +                    minor_rev = 1;
+>> +                    break;
+>> +                }
+>> +            }
+>> +            if (minor_rev)
+>> +                break;
+>> +        }
+>> +        if (minor_rev != 1) {
+>> +            hcd->speed = HCD_USB3;
+>> +            hcd->self.root_hub->speed = USB_SPEED_SUPER;
+>> +        }
+>> +    }
+>>       xhci_info(xhci, "Host supports USB 3.%x %sSuperSpeed\n",
+>>             minor_rev, minor_rev ? "Enhanced " : "");
+> 
+> How about checking if port support over 5Gbps (psiv >= 5) when we parse the protocol speed ID
+> entries the first time? This way we could avoid looping through all the port_cap psiv values.
+> 
+> Something like:
+> 
+> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> index c4170421bc9c..2e4c80eb4972 100644
+> --- a/drivers/usb/host/xhci-mem.c
+> +++ b/drivers/usb/host/xhci-mem.c
+> @@ -1961,7 +1961,7 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int 
+> num_ports,
+>   {
+>          u32 temp, port_offset, port_count;
+>          int i;
+> -       u8 major_revision, minor_revision;
+> +       u8 major_revision, minor_revision, tmp_minor_revision;
+>          struct xhci_hub *rhub;
+>          struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+>          struct xhci_port_cap *port_cap;
+> @@ -1981,6 +1981,11 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int 
+> num_ports,
+>                   */
+>                  if (minor_revision > 0x00 && minor_revision < 0x10)
+>                          minor_revision <<= 4;
+> +               if (xhci->quirks & XHCI_ZHAOXIN_HOST) {
+> +                       tmp_minor_revision = minor_revision;
+> +                       minor_revision = 0;
+> +               }
+> +
+>          } else if (major_revision <= 0x02) {
+>                  rhub = &xhci->usb2_rhub;
+>          } else {
+> @@ -1989,10 +1994,6 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int 
+> num_ports,
+>                  /* Ignoring port protocol we can't understand. FIXME */
+>                  return;
+>          }
+> -       rhub->maj_rev = XHCI_EXT_PORT_MAJOR(temp);
+> -
+> -       if (rhub->min_rev < minor_revision)
+> -               rhub->min_rev = minor_revision;
+> 
+>          /* Port offset and count in the third dword, see section 7.2 */
+>          temp = readl(addr + 2);
+> @@ -2010,8 +2011,6 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int 
+> num_ports,
+>          if (xhci->num_port_caps > max_caps)
+>                  return;
+> 
+> -       port_cap->maj_rev = major_revision;
+> -       port_cap->min_rev = minor_revision;
+>          port_cap->psi_count = XHCI_EXT_PORT_PSIC(temp);
+> 
+>          if (port_cap->psi_count) {
+> @@ -2032,6 +2031,10 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int 
+> num_ports,
+>                                    XHCI_EXT_PORT_PSIV(port_cap->psi[i - 1])))
+>                                  port_cap->psi_uid_count++;
+> 
+> +                       if (xhci->quirks & XHCI_ZHAOXIN_HOST &&
+> +                           XHCI_EXT_PORT_PSIV(port_cap->psi[i]) >= 5)
+> +                               minor_revision = tmp_minor_revision;
+> +
+>                          xhci_dbg(xhci, "PSIV:%d PSIE:%d PLT:%d PFD:%d LP:%d PSIM:%d\n",
+>                                    XHCI_EXT_PORT_PSIV(port_cap->psi[i]),
+>                                    XHCI_EXT_PORT_PSIE(port_cap->psi[i]),
+> @@ -2041,6 +2044,15 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int 
+> num_ports,
+>                                    XHCI_EXT_PORT_PSIM(port_cap->psi[i]));
+>                  }
+>          }
+> +
+> +       rhub->maj_rev = major_revision;
+> +
+> +       if (rhub->min_rev < minor_revision)
+> +               rhub->min_rev = minor_revision;
+> +
+> +       port_cap->maj_rev = major_revision;
+> +       port_cap->min_rev = minor_revision;
 > +
 
-Anchor text for :ref: links above don't mix well, so I have to override
-them (also specifying intended doc target - correct me if these are wrong):
+This patch solution is effective and concise. Thanks for your suggestion.
+I'll adopt it in next patch version after other patches of this patch set
+are reviewed or suggested.
 
-diff --git a/Documentation/devicetree/usage-model.rst b/Documentation/devic=
-etree/usage-model.rst
-index 37605cb549cf59..87f522d5feba81 100644
---- a/Documentation/devicetree/usage-model.rst
-+++ b/Documentation/devicetree/usage-model.rst
-@@ -80,8 +80,7 @@ then go read it now.  It's okay, I'll wait....
-=20
- The Linux kernel supports several different hardware description
- frameworks and DT is just one of them. The closest sibling is the
--:ref:`Documentation/firmware-guide/acpi/index.rst ACPI`
--DSDT (Differentiated System Description Table).
-+:doc:`DSDT (Differentiated System Description Table) from ACPI </firmware-=
-guide/acpi/namespace>`.
-=20
- To make it possible to write a device driver that will adapt to DT
- or other hardware description models, the kernel has grown some
-@@ -101,7 +100,7 @@ Further, when the DT core register devices these need t=
-o fold into the
- Linux device driver model, which essentially means that some kind of
- ``struct device`` has to be created to match a corresponding
- ``struct device_driver``. This API can be explored in
--detail in :ref:`Documentation/driver-api/driver-model/index.rst the driver=
- API documentation`
-+detail in :doc:`the driver API documentation </driver-api/driver-model/ove=
-rview>`
- but what you need to know is that the Linux DT parser code will on its
- own mostly spawn platform devices and AMBA devices on the platform
- and AMBA bus respectively, and apart from that it will augment devices
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---4FC0DSTJcODP+zd/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFXO0QAKCRD2uYlJVVFO
-o1ADAP0U4Eqkto8ez70YgMni5+n70+3PXK2Djzh36Qxvq/oLfgD/ZqqHP4lXarNA
-2qxmUqeGfJ78jWC2apff2dUzqklVLAw=
-=2tz4
------END PGP SIGNATURE-----
-
---4FC0DSTJcODP+zd/--
+Best Regards,
+Weitao
+>          /* cache usb2 port capabilities */
+>          if (major_revision < 0x03 && xhci->num_ext_caps < max_caps)
+>                  xhci->ext_caps[xhci->num_ext_caps++] = temp;
+> 
+> Thanks
+> Mathias
+> .
