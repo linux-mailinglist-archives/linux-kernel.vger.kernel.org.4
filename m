@@ -2,239 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D4C6F8E98
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 06:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B0F6F8EC0
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 07:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjEFEnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 00:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S230131AbjEFFvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 01:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjEFEnu (ORCPT
+        with ESMTP id S229983AbjEFFvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 00:43:50 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1745A7DA7;
-        Fri,  5 May 2023 21:43:48 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ab01bf474aso18923755ad.1;
-        Fri, 05 May 2023 21:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683348227; x=1685940227;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QLFj+Rqu5xZsAW8YHESfBkUXV4V21xk8dfAw+uAOJpQ=;
-        b=Fx4DLwtUTCthG8rNM12V0N3dNiZjrP+yO8BfSPkoDGBdvFNMUsyMY/UoVvncU+H7oW
-         XCIphik346VXuLMtYuY7n8cHOXPT3oNdx/5P2m+FuANPqXUuWYVv6i9aSj9iE2hXSOmm
-         SCyDQmVo9TMAtOxrxxS5qc7BUuzZpulQRLs/MsITAZDiza/CxCjCfueO5BToaQMPQ3rQ
-         AgQK8of4xQ6ogldWUAZro8XiAQt7MTAI83rDdf2K+sdo7UR5OO8oLk321GRbynbhPPrG
-         B7MIbzZylilTNTrqZ6SZemQFlwrJpTLkOJq904j9Vu595WbyaBpLdz7T9vjLWxiDCq+r
-         fiNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683348227; x=1685940227;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QLFj+Rqu5xZsAW8YHESfBkUXV4V21xk8dfAw+uAOJpQ=;
-        b=YBctSDWHjSGnvu8f3jjsbOwDyvtiX09k3FNG4+1/09Pn7gpEtxBHaph89J7dCbRiOT
-         X1Hkd8PL0v2NqzOBtSLvMCKXc/2LaHVISVPLRt/t65EixpR8rO/3QQxHRFoRvoJmPNpp
-         VFT25YlUgYk9X3pIkx5mYcyiUyQnqNW92ce2frCbOqzTtvY1ulbLOOpDtCxX3K/MvZTR
-         XcRgIWa8d3EF4lCzEX5WfTcKzT0IMYcY0Ho7P2gP9VOb3lAKz/6+YVfSVJrwk/OpuQWP
-         E8/m1rqXpZ2stRGhM/GZ8I5DaOnBorf8Z+BLcbPu7MnUwXsAk9l+LlT1h73FUfr89/di
-         8EJQ==
-X-Gm-Message-State: AC+VfDxFIbmaM/DAt1xGLT+/ttj+kTfxfiFNCTXAs5DgMAjESEsA9xgp
-        hssCR3+z1/ceOi9v0dkbDcI=
-X-Google-Smtp-Source: ACHHUZ7+6kHnfhJnhP6dBiE8cadcyhTH58bD77rKsZXjeN4YrycRUdV51IdO1n56B05aLdp0+aWQEw==
-X-Received: by 2002:a17:903:1110:b0:1ab:74c:bdf2 with SMTP id n16-20020a170903111000b001ab074cbdf2mr4840636plh.28.1683348227336;
-        Fri, 05 May 2023 21:43:47 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q16-20020a170902dad000b001ac381f1ce9sm2581998plx.185.2023.05.05.21.43.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 21:43:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <17fb02ff-e2d8-9c0b-3de6-670c82fee997@roeck-us.net>
-Date:   Fri, 5 May 2023 21:43:44 -0700
+        Sat, 6 May 2023 01:51:18 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C8883C9;
+        Fri,  5 May 2023 22:51:15 -0700 (PDT)
+Date:   Sat, 6 May 2023 07:51:12 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1683352273; bh=UGjeWoNcTEu6bjLhkAAMXAwPdSa3fyu7dz5n787ajXA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A7jtBcYUpal4DCzeHiI6KPE8LzmIFF1wGItpLAHgc9TradZ2aEJctniZS1f8SpwBi
+         hUwdJvDSiEQ5IQ/KDRcpquJLHow/jkz/T7QjBzYbR9+Z+qRLOr8/Zh/qRJh4zkzBt7
+         BzsWZm5xf8pLzqG+2WhyjMA0pz4NHL5VTHsvLTSY=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Jorge Lopez <jorgealtxwork@gmail.com>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 05/14] HP BIOSCFG driver - ordered-attributes
+Message-ID: <daf6a6e0-69cd-48a6-b61b-c893324323ff@t-8ch.de>
+References: <20230420165454.9517-1-jorge.lopez2@hp.com>
+ <20230420165454.9517-6-jorge.lopez2@hp.com>
+ <24fb56f9-49c6-432d-8c2f-17df7f7e37b2@t-8ch.de>
+ <CAOOmCE-HR205R2vjyZedDocZLwvMdk7B1w7w9HgdXaypTrBK+A@mail.gmail.com>
+ <34539db1-98a4-4696-934b-af04d74720cc@t-8ch.de>
+ <CAOOmCE_9fmLKgum9hYxPpa_BrX0FyFFz_dRUX8sNm9T2EUABMg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Luke Jones <luke@ljones.dev>
-Cc:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net, hdegoede@redhat.com,
-        corentin.chary@gmail.com, markgross@kernel.org, jdelvare@suse.com
-References: <20230505043013.2622603-1-luke@ljones.dev>
- <20230505043013.2622603-2-luke@ljones.dev>
- <9f77e8fd-38fe-818f-2fee-ca3bf4243576@linux.intel.com>
- <TWL7UR.KE812U8BYMG8@ljones.dev>
- <f1f8ff7a-6f23-e284-b494-7df2f0dce1a4@roeck-us.net>
- <M8X7UR.MPEZYPQ0PU4F1@ljones.dev>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 1/1] platform/x86: asus-wmi: add support for ASUS
- screenpad
-In-Reply-To: <M8X7UR.MPEZYPQ0PU4F1@ljones.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAOOmCE_9fmLKgum9hYxPpa_BrX0FyFFz_dRUX8sNm9T2EUABMg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/23 20:48, Luke Jones wrote:
+On 2023-05-05 16:57:59-0500, Jorge Lopez wrote:
+> On Fri, May 5, 2023 at 4:11 PM Thomas Weißschuh <thomas@t-8ch.de> wrote:
+> >
+> > On 2023-05-05 11:09:55-0500, Jorge Lopez wrote:
+> > > On Sun, Apr 23, 2023 at 1:55 AM <thomas@t-8ch.de> wrote:
+> > > >
+> > > > On 2023-04-20 11:54:45-0500, Jorge Lopez wrote:
+> > > > >  .../x86/hp/hp-bioscfg/ordered-attributes.c    | 563 ++++++++++++++++++
+> > > > >  1 file changed, 563 insertions(+)
+> > > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/ordered-attributes.c
+> > > > >
+> > > > > diff --git a/drivers/platform/x86/hp/hp-bioscfg/ordered-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/ordered-attributes.c
+> > > > > new file mode 100644
+> > > > > index 000000000000..5e5d540f728d
+> > > > > --- /dev/null
+> > > > > +++ b/drivers/platform/x86/hp/hp-bioscfg/ordered-attributes.c
+> > > > > @@ -0,0 +1,563 @@
+> > > > > +// SPDX-License-Identifier: GPL-2.0
+> > > > > +/*
+> > > > > + * Functions corresponding to ordered list type attributes under
+> > > > > + * BIOS ORDERED LIST GUID for use with hp-bioscfg driver.
+> > > > > + *
+> > > > > + *  Copyright (c) 2022 HP Development Company, L.P.
+> > > > > + */
+> > > > > +
+> > > > > +#include "bioscfg.h"
+> > > > > +
+> > > > > +GET_INSTANCE_ID(ordered_list);
+> > > > > +
+> > > > > +static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
+> > > > > +{
+> > > > > +
+> > > > > +     int instance_id = get_ordered_list_instance_id(kobj);
+> > > > > +
+> > > > > +     if (instance_id < 0)
+> > > > > +             return -EIO;
+> > > > > +
+> > > > > +     return sysfs_emit(buf, "%s\n",
+> > > > > +                      bioscfg_drv.ordered_list_data[instance_id].current_value);
+> > > > > +}
+> > > > > +
+> > > > > +/*
+> > > > > + * validate_ordered_list_value -
+> > > > > + * Validate input of current_value against possible values
+> > > >
+> > > > Does the firmware not also validate this?
+> > > >
+> > > > If so it may be easier to just let it do so and remove the validations
+> > > > from the driver.
+> > >
+> > > Yes.  the firmware validates the data.
+> > > Will remove the validation
+> > > >
+> > > > > + *
+> > > > > + * @instance_id: The instance on which input is validated
+> > > > > + * @buf: Input value
+> > > > > + */
+> > > > > +static int validate_ordered_list_values(int instance_id, const char *buf)
+> > > > > +{
+> > > > > +     int ret = 0;
+> > > > > +     int found = 0;
+> > > > > +     char *new_values = NULL;
+> > > > > +     char *value;
+> > > > > +     int elem;
+> > > > > +     int elem_found = 0;
+> > > > > +
+> > > > > +     /* Is it a read only attribute */
+> > > > > +     if (bioscfg_drv.ordered_list_data[instance_id].common.is_readonly)
+> > > > > +             return -EIO;
+> > > > > +
+> > > > > +     new_values = kstrdup(buf, GFP_KERNEL);
+> > > > > +
+> > > > > +     /*
+> > > > > +      * Changes to ordered list values require checking that new
+> > > > > +      * values are found in the list of elements.
+> > > > > +      */
+> > > > > +     elem_found = 0;
+> > > > > +     while (elem_found < bioscfg_drv.ordered_list_data[instance_id].elements_size) {
+> > > > > +
+> > > > > +             value = strsep(&new_values, ",");
+> > > >
+> > > > The docs say the separator is semicolon.
+> > >
+> > > BIOS reports the current value using ',' as separator instead of ";".
+> > >
+> > > ./hp-bioscfg/attributes/UEFI Boot Order/current_value
+> > > HDD:M.2:3,HDD:USB:1(Disabled),HDD:M.2:4,HDD:M.2:1,HDD:M.2:2,NETWORK
+> > > IPV4:EMBEDDED:1,NETWORK IPV6:EMBEDDED:1,NETWORK
+> > > IPV4:EXPANSION:1,NETWORK IPV6:EXPANSION:1
+> > >
+> > > To avoid having to convert from "," to ";" and vice versa, I will
+> > > update the documentation to reflect the use of  "'," commas as the
+> > > separator
+> >
+> > The enum data format uses ";". Therefore it makes sense to also stick to
+> > ";".
+> > The implementation detail of the BIOS using ',' should not matter to
+> > users.
 > 
+> The use of ',' does matter because BIOS expects the updated string to
+> use commas as separators
+> current_value is reported by BIOS using commas.  Any changes to the
+> order of items in that string needs to use commas.
 > 
-> On Fri, May 5 2023 at 18:30:36 -0700, Guenter Roeck <linux@roeck-us.net> wrote:
->> On 5/5/23 16:43, Luke Jones wrote:
->>>
->>>
->>> On Fri, May 5 2023 at 16:08:16 +0300, Ilpo Järvinen <ilpo.jarvinen@linux.intel.com> wrote:
->>>> On Fri, 5 May 2023, Luke D. Jones wrote:
->>>>
->>>>>  Add support for the WMI methods used to turn off and adjust the
->>>>>  brightness of the secondary "screenpad" device found on some high-end
->>>>>  ASUS laptops like the GX650P series and others.
->>>>>
->>>>>  These methods are utilised in a new backlight device named:
->>>>>  - asus_screenpad
->>>>>
->>>>>  Signed-off-by: Luke D. Jones <luke@ljones.dev>
->>>>>  ---
->>>>>   .../ABI/testing/sysfs-platform-asus-wmi       |   2 +-
->>>>>   drivers/platform/x86/asus-wmi.c               | 132 ++++++++++++++++++
->>>>>   drivers/platform/x86/asus-wmi.h               |   1 +
->>>>>   include/linux/platform_data/x86/asus-wmi.h    |   4 +
->>>>>   4 files changed, 138 insertions(+), 1 deletion(-)
->>>>>
->>>>>  diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
->>>>>  index a77a004a1baa..df9817c6233a 100644
->>>>>  --- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
->>>>>  +++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
->>>>>  @@ -97,4 +97,4 @@ Contact:    "Luke Jones" <luke@ljones.dev>
->>>>>   Description:
->>>>>           Enable an LCD response-time boost to reduce or remove ghosting:
->>>>>               * 0 - Disable,
->>>>>  -            * 1 - Enable
->>>>>  +            * 1 - Enable
->>>>>  \ No newline at end of file
->>>>
->>>> Spurious change?
->>>
->>> Indeed it is. Not sure how that occurred.
->>>
->>>>
->>>>>  diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
->>>>>  index 1038dfdcdd32..0528eef02ef7 100644
->>>>>  --- a/drivers/platform/x86/asus-wmi.c
->>>>>  +++ b/drivers/platform/x86/asus-wmi.c
->>>>>  @@ -200,6 +200,7 @@ struct asus_wmi {
->>>>>
->>>>>       struct input_dev *inputdev;
->>>>>       struct backlight_device *backlight_device;
->>>>>  +    struct backlight_device *screenpad_backlight_device;
->>>>>       struct platform_device *platform_device;
->>>>>
->>>>>       struct led_classdev wlan_led;
->>>>>  @@ -3208,6 +3209,129 @@ static int is_display_toggle(int code)
->>>>>       return 0;
->>>>>   }
->>>>>
->>>>>  +/* Screenpad backlight */
->>>>>  +
->>>>>  +static int read_screenpad_backlight_power(struct asus_wmi *asus)
->>>>>  +{
->>>>>  +    int ret = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_SCREENPAD_POWER);
->>>>
->>>> Please move this to own line because now you have the extra newline
->>>> in between the call and error handling.
->>>
->>> I don't understand what you mean sorry. Remove the new line or:
->>> int ret;
->>> ret = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_SCREENPAD_POWER);
->>>
->>>>
->>>>>  +
->>>>>  +    if (ret < 0)
->>>>>  +        return ret;
->>>>>  +    /* 1 == powered */
->>>>>  +    return ret ? FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
->>>>>  +}
->>>>>  +
->>>>>  +static int read_screenpad_brightness(struct backlight_device *bd)
->>>>>  +{
->>>>>  +    struct asus_wmi *asus = bl_get_data(bd);
->>>>>  +    u32 retval;
->>>>>  +    int err;
->>>>>  +
->>>>>  +    err = read_screenpad_backlight_power(asus);
->>>>>  +    if (err < 0)
->>>>>  +        return err;
->>>>>  +    /* The device brightness can only be read if powered, so return stored */
->>>>>  +    if (err == FB_BLANK_POWERDOWN)
->>>>>  +        return asus->driver->screenpad_brightness;
->>>>>  +
->>>>>  +    err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT, &retval);
->>>>>  +    if (err < 0)
->>>>>  +        return err;
->>>>>  +
->>>>>  +    return retval & ASUS_WMI_DSTS_BRIGHTNESS_MASK;
->>>>>  +}
->>>>>  +
->>>>>  +static int update_screenpad_bl_status(struct backlight_device *bd)
->>>>>  +{
->>>>>  +    struct asus_wmi *asus = bl_get_data(bd);
->>>>>  +    int power, err = 0;
->>>>>  +    u32 ctrl_param;
->>>>>  +
->>>>>  +    power = read_screenpad_backlight_power(asus);
->>>>>  +    if (power == -ENODEV)
->>>>>  +        return err;
->>>>
->>>> Just return 0. Or is there perhaps something wrong/missing here?
->>>
->>> I thought the correct thing was to return any possible error state (here, anything less than 0 would be an error, right?)
->>>
->>
->> Well, yes, but you are not returning an error. You are returning 'err'
->> which is 0 at this point. So, at the very least, this code is (very)
->> misleading since it suggests that it would return some error
->> (as saved in the 'err' variable) when it doesn't.
->>
->> Guenter
->>
+> The difference with enum is the fact the user needs to  enter only one
+> value out of those possible values available and no separators are
+> needed.
+> For ordered attributes...
 > 
-> Oh! Right I see it now, I'm sorry, I just kept skipping over it somehow.
-> 
-> So I should change to:
->      power = read_screenpad_backlight_power(asus);
->      if (power < 0)
->          return power;
-> 
-> Is that acceptable?
-> 
+> when the current value  is "foo,bar,baz".   the user provides a string
+> which items are ordered differently.  i.e. "baz,bar,foo"
+> if the new string is using semicolon instead of comma for the
+> separator, BIOS will reject the data.
 
-That depends on what the code is supposed to do. Right now it is
-"If read_screenpad_backlight_power() returns -ENODEV, stop and return
-no error (let the rest of the code continue). If it returns another error,
-return it".
-Changing the code as suggested above changes the semantics to
-"If read_screenpad_backlight_power() returns an error, always return it".
+Of course the BIOS expects the format with comma.
 
-Looking at the patch, I don't have a definite answer.
-asus_screenpad_init() happily registers the backlight if
-read_screenpad_backlight_power() returns -ENODEV. One could argue that
-the other functions should thus handle that situation gracefully as well,
-but read_screenpad_brightness() does return -ENODEV in that situation.
-I think you should decide how you want to handle that case and handle
-it consistently across all functions.
+But the users of this API should not have to care about implementation
+details like that.
+They want a consistent API. As the ordered-list type is fairly general
+it may be promoted to be a general attribute type later.
 
-Either case, there is another problem in asus_screenpad_init():
-If read_screenpad_brightness() fails, the function returns an error,
-but does not unregister the backlight device.
+If this happens the API can't be changed as that would break users of
+hp-bioscfg. So either there would be two APIs for the ordered-list, one
+for hp-bioscfg and one for all other drivers, or different attribute
+types would use different kinds of separators.
 
-Guenter
+Was there an issue with the previous replacement logic?
 
+The whole point of device drivers is to translate general kernel APIs
+into whatever a specific device needs, switching around ',' and ';'
+seems not so bad.
+
+> > > > > +             if (value != NULL) {
+> > > > > +                     if (!*value)
+> > > > > +                             continue;
+> > > > > +                     elem_found++;
+> > > > > +             }
+> > > > > +
+> > > > > +             found = 0;
+> > > > > +             for (elem = 0; elem < bioscfg_drv.ordered_list_data[instance_id].elements_size; elem++) {
+> > > > > +                     if (!strcasecmp(bioscfg_drv.ordered_list_data[instance_id].elements[elem], value)) {
+> > > >
+> > > > It's surprising that this is case-insensitive.
+> > >
+> > > As validated in earlier reviews,  BIOS rejects strings that do not
+> > > match the internal values.
+> > >
+> > > >
+> > > > > +                             found = 1;
+> > > > > +                             break;
+> > > > > +                     }
+> > > > > +             }
+> > > > > +
+> > > > > +
+> > > > > +             if (!found) {
+> > > > > +                     ret = -EINVAL;
+> > > > > +                     goto out_list_value;
+> > > > > +             }
+> > > > > +     }
+> > > > > +
+> > > > > +     if (elem_found == bioscfg_drv.ordered_list_data[instance_id].elements_size) {
+> > > > > +             pr_warn("Number of new values is not equal to number of ordered list elements (%d)\n",
+> > > > > +                     bioscfg_drv.ordered_list_data[instance_id].elements_size);
+> > > > > +             ret = -EINVAL;
+> > > > > +             goto out_list_value;
+> > > > > +     }
+> > > > > +
+> > > > > +out_list_value:
+> > > > > +     kfree(new_values);
+> > > > > +     return ret;
+> > > > > +}
+> > > >
+> > > > This algorithm does not seem to validate that different values are
+> > > > provided.
+> > > >
+> > > > So if "possible_values" is "foo,bar,baz" this function would accept
+> > > > "foo,foo,foo".
+> > > >
+> > >
+> > > BIOS will reject strings such as "foo,foo,foo" when the current value
+> > > is "foo,bar,baz".   It is ok to provide a string which items are
+> > > ordered differently.  i.e. "baz,bar,foo"
+> > > validate_ordered_list_values() function will be removed as indicated earlier.
+> > >
+> > > > > +
+> > > > > +/*
+> > > > > + * validate_ordered_input() -
+> > > > > + * Validate input of current_value against possible values
+> > > > > + *
+> > > > > + * @instance_id: The instance on which input is validated
+> > > > > + * @buf: Input value
+> > > > > + */
+> > > > > +static int validate_ordered_list_input(int instance_id, const char *buf)
+> > > > > +{
+> > > > > +     int ret = 0;
+> > > > > +
+> > > > > +     ret = validate_ordered_list_values(instance_id, buf);
+> > > > > +     if (ret < 0)
+> > > > > +             return -EINVAL;
+> > > > > +
+> > > > > +     /*
+> > > > > +      * set pending reboot flag depending on
+> > > > > +      * "RequiresPhysicalPresence" value
+> > > > > +      */
+> > > > > +     if (bioscfg_drv.ordered_list_data[instance_id].common.requires_physical_presence)
+> > > > > +             bioscfg_drv.pending_reboot = true;
+> > > > > +
+> > > > > +     return ret;
+> > > > > +}
+> > > > > +
+> > > > > +static void update_ordered_list_value(int instance_id, char *attr_value)
+> > > > > +{
+> > > > > +     strscpy(bioscfg_drv.ordered_list_data[instance_id].current_value,
+> > > > > +             attr_value,
+> > > > > +             sizeof(bioscfg_drv.ordered_list_data[instance_id].current_value));
+> > > > > +}
+> > > > > +
+> > > > > +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name_language_code, ordered_list);
+> > > > > +static struct kobj_attribute ordered_list_display_langcode =
+> > > > > +     __ATTR_RO(display_name_language_code);
+> > > > > +
+> > > > > +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name, ordered_list);
+> > > > > +static struct kobj_attribute ordered_list_display_name =
+> > > > > +     __ATTR_RO(display_name);
+> > > > > +
+> > > > > +ATTRIBUTE_PROPERTY_STORE(current_value, ordered_list);
+> > > > > +static struct kobj_attribute ordered_list_current_val =
+> > > > > +     __ATTR_RW_MODE(current_value, 0644);
+> > > > > +
+> > > > > +
+> > > > > +ATTRIBUTE_N_COMMON_PROPERTY_SHOW(prerequisites_size, ordered_list);
+> > > > > +static struct kobj_attribute  ordered_list_prerequisites_size_val =
+> > > > > +     __ATTR_RO(prerequisites_size);
+> > > > > +
+> > > > > +ATTRIBUTE_V_COMMON_PROPERTY_SHOW(prerequisites, ordered_list);
+> > > > > +static struct kobj_attribute  ordered_list_prerequisites_val =
+> > > > > +     __ATTR_RO(prerequisites);
+> > > > > +
+> > > > > +ATTRIBUTE_N_PROPERTY_SHOW(elements_size, ordered_list);
+> > > > > +static struct kobj_attribute  ordered_list_elements_size_val =
+> > > > > +     __ATTR_RO(elements_size);
+> > > >
+> > > > "size" and "length" attributes are fairly useless to userspace.
+> > > > They can't be trusted to provide information about another attribute as
+> > > > the information can be out of date when the other attribute is read.
+> > > >
+> > >
+> > > Prerequisites, prerequisites_size and elements_size will be removed
+> > >
+> > > > > +
+> > > > > +ATTRIBUTE_VALUES_PROPERTY_SHOW(elements, ordered_list);
+> > > > > +static struct kobj_attribute  ordered_list_elements_val =
+> > > > > +     __ATTR_RO(elements);
+> > > > > +
+> > >
+> > > <snip>
+> > >
+> > > > > +
+> > > > > +
+> > > > > +int populate_ordered_list_elements_from_package(union acpi_object *order_obj,
+> > > > > +                                             int order_obj_count,
+> > > > > +                                             int instance_id)
+> > > > > +{
+> > > > > +     char *str_value = NULL;
+> > > > > +     int value_len;
+> > > > > +     int ret = 0;
+> > > > > +     u32 size = 0;
+> > > > > +     u32 int_value;
+> > > > > +     int elem = 0;
+> > > > > +     int reqs;
+> > > > > +     int eloc;
+> > > > > +     char *tmpstr = NULL;
+> > > > > +     char *part_tmp = NULL;
+> > > > > +     int tmp_len = 0;
+> > > > > +     char *part = NULL;
+> > > > > +
+> > > > > +     if (!order_obj)
+> > > > > +             return -EINVAL;
+> > > > > +
+> > > > > +     strscpy(bioscfg_drv.ordered_list_data[instance_id].common.display_name_language_code,
+> > > > > +             LANG_CODE_STR,
+> > > > > +             sizeof(bioscfg_drv.ordered_list_data[instance_id].common.display_name_language_code));
+> > > >
+> > > > This seems to be the same for every type. Can it not be moved into
+> > > > common code?
+> > >
+> > > Each instance requires to report 'display_name_language_code' hence it
+> > > cannot be moved to a common code.
+> >
+> > Can it every be different from LANG_CODE_STR?
+> 
+> Yes.   The string currently is LANG_CODE_STR (en_US.UTF-8)  but it
+> will change as the BIOS provides additional translations at a later
+> time.
+> This is a future enhancement for the driver.
+
+Is this planned for the near future?
+And/Or already implemented in the BIOS?
+
+If there are no concrete plans to implement this soon, in my opinion,
+it would be better to only introduce this code when it does something
+useful.
+
+> > If not instead of having one kobj_attribute diplay_langcode for each
+> > string/enum/integer/etc you could have one kobj_attribute defined in
+> > bioscfg.c and then added to each string_attrs, enum_attrs...
+> >
+> > The _show() callback for this attribute would just return the constant
+> > string.
+> >
+> > This removes the need for many attribute definition, members in the data
+> > struct, initialization of these member...
