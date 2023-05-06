@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF516F8D16
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 02:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD9D6F8D21
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 02:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjEFAOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 20:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
+        id S231886AbjEFASZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 20:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjEFANv (ORCPT
+        with ESMTP id S229925AbjEFASX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 20:13:51 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58E56E86;
-        Fri,  5 May 2023 17:13:50 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 6E1B232009C0;
-        Fri,  5 May 2023 20:13:49 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 05 May 2023 20:13:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683332029; x=1683418429; bh=gDkdPLFGHEgwB
-        a8neDNDtTbJzRE+q/3RtYLzD+Pf+P8=; b=Q8XG2AWQgyCMi09ZyMm+KsQ0hhprv
-        mpooklDQKeung+QWuBSAj/oCp/IpivM2K7XnXh3Qvn8lhOiJOYAxClS/rU1xwfwl
-        9dGWxnIg16hEvLdtmI/FetfUGGPZpda4XCQrrmaOZPxJfuDg9NuFQq3OY3pYceFb
-        nSdkV0WKCNuVg1u7V5B8bZok6hBXsOVjmSxeze5cGpq0tN+o78IZzjqnxwqf04uy
-        8EBcx3yLS09+94+6vwFIdokFBhtS+BY3E4hh2mxo7dOWvNWUOpIkEyXYg4VeQ46X
-        auuC21N7RCmqsHgckHBJyd0kMyFOJaOhquTZCyFSFOXRUdQR9l9YL9Sjw==
-X-ME-Sender: <xms:vJtVZBVPnIqEOgCqg_3spi5O9XaYxlINvSVNPFF-6wMKYr8Tw6NYvQ>
-    <xme:vJtVZBmm7NgizshS73-0dCWFNwuHp4CDeHi5diuKl0O-TnpNZWTzKGPczmba8BN6G
-    MGl9-c1RHZf7B1UFCY>
-X-ME-Received: <xmr:vJtVZNaGab57ZUrcx3TfzKo09FoQAHfp3DD3zs27ubhW4Gei8IZbs_IOq3mhtMYPDq5FYqzPW1yyGuMo1U0xnqZ_K_yr-n0wzgE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeffedgfedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcu
-    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeelueehleehkefgueevtdevteejkefhffekfeffffdtgfejveekgeefvdeu
-    heeuleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
-X-ME-Proxy: <xmx:vJtVZEUZPgiEpg2x6w3Azv88oWdLHzeSPodKg674KG6mwKHRCi23mA>
-    <xmx:vJtVZLmEBKuMujz-5ZtXZOhtAcSnvFTfGlAeINZX6f1jUJCmS2fvdw>
-    <xmx:vJtVZBdVnSljclkUTxiHxNm_nvOyJbxx-vRCuoAgJM7aubXmZK3AKQ>
-    <xmx:vZtVZN7Qf7xlD-4-tjP1jkpQMKvw0AMBmVdG21SE5EYlSVA1Qa-i4w>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 May 2023 20:13:45 -0400 (EDT)
-Date:   Sat, 6 May 2023 10:17:44 +1000 (AEST)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux SCSI <linux-scsi@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>,
-        Oliver Neukum <oliver@neukum.org>,
-        Ali Akcaagac <aliakc@web.de>,
-        Jamie Lenehan <lenehan@twibble.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH 3/3] Documentation: scsi: dc395x: Remove reference to
- 2.4 driver
-In-Reply-To: <87pm7enbpo.fsf@meer.lwn.net>
-Message-ID: <3ad2962e-ff1f-4fe6-76e9-21c3936578a9@linux-m68k.org>
-References: <20230505082704.16228-1-bagasdotme@gmail.com> <20230505082704.16228-4-bagasdotme@gmail.com> <d919a2e1-5749-13f8-7867-1f17277190f4@linux-m68k.org> <87pm7enbpo.fsf@meer.lwn.net>
+        Fri, 5 May 2023 20:18:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035A91981
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 17:18:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9273564086
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 00:18:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D717C433EF;
+        Sat,  6 May 2023 00:18:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683332302;
+        bh=Wq0uGoHIP/oC3SNCCfNBqoARzJspGboo0f4dLlaH48g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZakMqozcPnAVeR3QlITmFublG819sNyzB7WvPia0MG8vZWHRLFaPfwdqzG9rIfUzE
+         OwfT3sChp9+LFK8l3adjIopvYk3XNI+71qbWNW0EfWJtOb5DMY4JmtqGX4RhP3Yq7g
+         XyhKbz90RASM0WXGzDzj0BnwGY1aJks4BsH7ySUeSh0beXR2oqlI3dU1g3Hvo0GJiQ
+         E5LkYGGyZJ0X9ZrQpra8BpirRw1DcLzVc7hUkbln8071p8p8s6HmplHhs2eceUvAHs
+         teG5fh13MM/CxaYUHthdYMLHvbl+UNtlixd0aW1XQZIK1tYeQsFbkOyrirSZUJKHlT
+         gbKnnYK6fQ17g==
+Date:   Sat, 6 May 2023 09:18:19 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, alexis.lothore@bootlin.com
+Subject: Re: [PATCH] regmap: don't check for alignment when using reg_shift
+Message-ID: <ZFWcy/Z19vffsAg+@finisterre.sirena.org.uk>
+References: <20230420150617.381922-1-maxime.chevallier@bootlin.com>
+ <ZEKwxhJJNkuX7VTr@colin-ia-desktop>
+ <bb836be3-456c-48fd-9b19-62279fee6b8d@sirena.org.uk>
+ <20230428093010.07e61080@pc-7.home>
+ <20230428094745.63677228@pc-7.home>
+ <ZFU6oepWPoYDJczo@euler>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="A0YcxnbFi5Tgizgo"
+Content-Disposition: inline
+In-Reply-To: <ZFU6oepWPoYDJczo@euler>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 5 May 2023, Jonathan Corbet wrote:
 
-> 
-> Most of the 2.4 code has indeed been deleted *from current kernels*. 
+--A0YcxnbFi5Tgizgo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Is it okay to delete old code from -stable kernels?
+On Fri, May 05, 2023 at 10:19:29AM -0700, Colin Foster wrote:
 
-> It's not clear to me why 2.4 documentation should be immune to that same 
-> process.
+> Sorry for a really delayed response, but I just got back around to
+> thinking about this. Crazy busy times for me.
 
-My message argued for removing 2.5 documentation and retaining the link 
-that gives credit to prior contributions.
+> What about an explicit parameter in regmap_config that will disable
+> alignment checks? That seems like it might be a welcome feature
+> addition.
 
-> If we keep every 20-year-old reference, our docs will be even cruftier 
-> and less useful than they are now.
-> 
+You can already just not specify an alignment requirement - if you can
+configure the regmap to specify some new flag you could also just not
+specify the alignment requirement in the first place.
 
-Since you're obviously being facetious, it's tempting to respond that 
-"churn is good because it reduces the average age of the code". But that 
-kind of exchange gets us nowhere.
+--A0YcxnbFi5Tgizgo
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I'd be curious to see an age histogram of the commentary in the source 
-code in the mainline kernel repository (or any other long-lived project). 
-I wonder if that has ever been measured.
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRVnMoACgkQJNaLcl1U
+h9BilQf/ZUDRU4B0h43glhDU+ROceH8YP/1WU9LBIhwtzttgtOqjQC2NKPwu322c
+I6r/9/FTXG2k969ejy1S4Dc+O80h5iR3ggmWAsvZ8g3Y13lWml2KM5/HfQdtJ63u
+1OYqOpli6iN3y5RSGxPJpR6VVOtT3JLJm/MJvLsctqtaOjPcVjnHkSyAm34Vc6Zk
+oDMO/Mbnnt+dsh7oH9+m61faEnLoBy1z5lvKOrq2Vnm2tutZiKmktY0N1fK20TjL
+DwvaM0NKwxC2TSM4idK+CaXjYTMDzaUIjurhN2uiN0Rm7T3KzQafUEPgBlzKz/y1
+YBfMPPTrwv/RbC6yRScb2wHwCbPGtw==
+=NTMu
+-----END PGP SIGNATURE-----
+
+--A0YcxnbFi5Tgizgo--
