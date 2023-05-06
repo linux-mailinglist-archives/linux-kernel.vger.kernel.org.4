@@ -2,105 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4646F94CE
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 00:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156796F94D3
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 00:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbjEFWrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 18:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S229989AbjEFW7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 18:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjEFWrV (ORCPT
+        with ESMTP id S229454AbjEFW7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 18:47:21 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901541816D
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 15:47:19 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f389c21fe8so1848471cf.3
-        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 15:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683413238; x=1686005238;
-        h=content-disposition:mime-version:mail-followup-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YO27Se99ehD/Ym8yzls9yQjFi3VcwamKc/L6zoQXd2g=;
-        b=iEKimL+6GK+44PyKoWWpQVZS2Cn0EAvEw052FCmOUb1SDDb2+q8yKaZVLGVYN/T3j3
-         j/vrqbCU+OlKc0HO9RHYruIKUsZdjdgIvL0szOXy1ZtoHRjxYCMq9dp5g/sv74r4vcqZ
-         6eTyn+6xClqMfRIYaV9HOSmdR0i+z7sbYg2bnCzNORvKhFkKyV7hBg95ixtdOHgFd9TC
-         EClIblYNdiwWSNp7n12Qk4vZfDmWa2RThqmtWRRHZURL7r45ZnxG4yxS7q0UTiXSKp21
-         HNxKqJyr3iDda455dnKigD4xuJ47cqh09MrvGqsQzjjWFirKsRBLuwsDnAlJjxqqiP7C
-         Vbpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683413238; x=1686005238;
-        h=content-disposition:mime-version:mail-followup-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YO27Se99ehD/Ym8yzls9yQjFi3VcwamKc/L6zoQXd2g=;
-        b=ACzGLmGl/LpYn1XFzTB/RKysufn+KTYVwTVicVUkwTDhj0oeE3LzxaQmz1dAK1UM6E
-         J4uPZ19MmBnnQba1D+2L4er3bBoznPObC3rsG2MBmQZgy7kaBlibgX8P9339DexqCHz2
-         d3jfPh+vhu09NfDpSVqtaMvMmKNTflKJYffYxsnVrldOHTkopWTEfoWJSl9LrEmbrfk9
-         np3DRmCjlt1FTUY77q4dfR5IiFqC+sODjb4rmw8Bljn5lbxhfkCoI/CKiQhTBnvaKXek
-         xc7TO4mZUfk3uoiLmO2+NIrI8Dibm+JB4DlvJGv4nwUdL4vP05Ia4Sj3G6ZCpTw1jxa0
-         FF5Q==
-X-Gm-Message-State: AC+VfDxp5kIb6vhW5DRRyxVsrqS2wCNcl1jZaxziXUZTZd192eNiiqNg
-        WEyr8dWuce+cbA4SStleD2ApgJDDxhS+1pMS
-X-Google-Smtp-Source: ACHHUZ6AhXC00JwOB9ov6AP8sELlqrWfrN8q91SYClA/RfPNRdKCE/T5xxkeHn/YxTXJIjM5S3BkCA==
-X-Received: by 2002:ac8:5b0e:0:b0:3ef:4a0f:96ed with SMTP id m14-20020ac85b0e000000b003ef4a0f96edmr7659998qtw.6.1683413238088;
-        Sat, 06 May 2023 15:47:18 -0700 (PDT)
-Received: from debian ([191.96.227.48])
-        by smtp.gmail.com with ESMTPSA id w22-20020ac843d6000000b003edf043048bsm1781242qtn.9.2023.05.06.15.47.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 May 2023 15:47:17 -0700 (PDT)
-Date:   Sun, 7 May 2023 04:17:10 +0530
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     LinuxKernel <linux-kernel@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Debian package build from upstream source need git repo?? Failing...
-Message-ID: <ZFbY7siXjm9hhpUB@debian>
-Mail-Followup-To: Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        LinuxKernel <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
+        Sat, 6 May 2023 18:59:05 -0400
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEA219D4E;
+        Sat,  6 May 2023 15:59:03 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mx.kolabnow.com (Postfix) with ESMTP id 77BE243580;
+        Sun,  7 May 2023 00:59:01 +0200 (CEST)
+Authentication-Results: ext-mx-out003.mykolab.com (amavisd-new);
+        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
+        header.d=kolabnow.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
+        content-transfer-encoding:organization:mime-version:message-id
+        :date:date:subject:subject:from:from:received:received:received;
+         s=dkim20160331; t=1683413938; x=1685228339; bh=NGmi/Yp30yWXlFgp
+        Ioa4xyZmRtWwzedF9jz+aQrN8TU=; b=XmB8K0mJQvNWRyUSw2uYjz/x1IuvgXIV
+        NhHH7nxBFKtJl8AHr/lDmQE8AXR2a5GWhd1t376d0vfaXU2tSnT53gA7BloNc74B
+        b6BKMzMRDJFtxWLrzs9dkzf4P5N04psvFkDcDtE99I0RwvoqJn/Z1brUxJVNSMZa
+        8ad3X+Y55VX8LkEXyUbvt2GoSFAnOjyZhuqyNc7ALUdBEiLuKR6ybSkdDnLEBHBn
+        kREj3jfdSnry8uRVQUbohIlmvPEsWAZDCg+ZQp5NIrq17RcvrV/Yhc2dPeoCFZxa
+        oq2zhDFEpQFnZ5peJxxZXBWk8vH7xsiQlk6v6H1grHgnKCXxrrXROTj1CHN/UN1O
+        h4idy+1y948HdqZlhyVo8agxAeeBXRHr3zvhAv3IDPyygTb+cGO/Nw+iFDPe65uo
+        J+tq3L6EWxHWrCrv6o7r8jWn26DuUFNrDkNxcqCm6VM385y68YrZRlGTNfp2jiuK
+        IRng3rh8G046IRxwKIJMvYiLw4wK4YFzbwz5yIuCcp4r9L8ohpzttgdVRjtgq4+9
+        JhLWXWs/VqTfaeHV+V1EowSQ38I91y7V8GShynyP0xeeT0L0W7C1YR3ybFiSJXGT
+        nVPPBCRGlCQbesfciQ3OxMYOPdejWz9eR0Iuc8+YzBN0u0ZxsWyulxe+0pW3DOdb
+        kQS4o5LdgIo=
+X-Virus-Scanned: amavisd-new at mykolab.com
+X-Spam-Score: -1.9
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+Received: from mx.kolabnow.com ([127.0.0.1])
+        by localhost (ext-mx-out003.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id F-QQ4ALpNP_Z; Sun,  7 May 2023 00:58:58 +0200 (CEST)
+Received: from int-mx001.mykolab.com (unknown [10.9.13.1])
+        by mx.kolabnow.com (Postfix) with ESMTPS id 2C5A94357D;
+        Sun,  7 May 2023 00:58:56 +0200 (CEST)
+Received: from ext-subm002.mykolab.com (unknown [10.9.6.2])
+        by int-mx001.mykolab.com (Postfix) with ESMTPS id 6F869D201;
+        Sun,  7 May 2023 00:58:56 +0200 (CEST)
+From:   alison@she-devel.com
+To:     johan@kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alison@she-devel.com,
+        achaiken@aurora.tech, kernel test robot <lkp@intel.com>
+Subject: [PATCH v4 0/2]  support config of U-Blox Zed-F9P GNSS
+Date:   Sat,  6 May 2023 15:58:47 -0700
+Message-Id: <20230506225849.2752103-1-alison@she-devel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Organization: Aurora Innovation
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
-While building the customary kernel from from source with my frivolous script
-and it is now failing with this error:
+From: Alison Chaiken <alison@she-devel.com>
 
-/usr/bin/make -f ./scripts/Makefile.package deb-pkg
-# GEN     debian
-   ./scripts/package/mkdebian --need-source
-   error: creating source package requires git repository
-   make[1]: *** [scripts/Makefile.package:40: check-git] Error 1
-   make[1]: *** Waiting for unfinished jobs....
-   warning: Not a git repository. Use --no-index to compare two paths outside a
-   working tree
+Add generalized support for setting arbitrary configuration of the
+U-Blox Zed-F9P GNSS.  Employ the new functionality to set the baud rate
+of the Zed-F9P if the devicetree specifies a non-default value.
 
-  I can vividly remember that it was working fine few months back...in fact
-  building the 6.2.2 kernel. I am certainly missing the updated information of
-  change. The damn script just untar the tarball and build.
+Tested with 6.1.22, only on a U-Blox Zed-F9P GNSS.
 
-  Masahiro?? Git repo requirement is mandatory to build from source, why? Was
-  it the case??
+V4 -> V3 Lookup device-specific properties by matching driver data.
+V2 -> V3 Add email recipients whom I foolishly missed the first two times.
+V1 -> V2 Fixes error identified by kernel test robot:
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202304300819.u0hfUj33-lkp@intel.com/
 
-  Or I probably doing something horrendous, but I can assure you that I haven't
-  change a single word in my script, as I mentioned it works file with last
-  release build.
+Alison Chaiken (2):
+  gnss: ubx: customize serial device open to set U-Blox Zed-F9P baud
+  dt-bindings: gnss: Add U-Blox Zed-F9
 
-  Please shed some light.
---
-Thanks,
-Bhaskar
+ .../bindings/gnss/u-blox,neo-6m.yaml          |   1 +
+ drivers/gnss/ubx.c                            | 237 +++++++++++++++++-
+ 2 files changed, 228 insertions(+), 10 deletions(-)
 
-"Here's looking at you kid"-- Casablanca
-https://about.me/unixbhaskar
+
+base-commit: dd9e11d6477a52ede9ebe575c83285e79e823889
+-- 
+2.39.2
+
