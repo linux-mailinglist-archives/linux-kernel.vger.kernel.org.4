@@ -2,73 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512D16F91FC
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 14:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742816F9200
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 14:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231986AbjEFM3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 08:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
+        id S232273AbjEFMa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 08:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbjEFM3T (ORCPT
+        with ESMTP id S230493AbjEFMaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 08:29:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE8A1492A;
-        Sat,  6 May 2023 05:29:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 806EA60BA4;
-        Sat,  6 May 2023 12:29:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD99C433D2;
-        Sat,  6 May 2023 12:29:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683376157;
-        bh=j9cwmY9NtG4amTk4a1qT7ubgf5DFih5T9cNOvPsUREo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DDGwKoT2T+sm25/C41iscfEklYGdMPO2/m7kBvX7NRAY2tOC7W1HxXhgTbyzUjVmx
-         7iGm9YorpstFOvxTU+wgJNziVqNJRp8QMOVJgS4FMtHtGxKKhQpMl62HrQQtMZN4Xv
-         phPG3bhMyp0UvPphAjPv+/9e9QJIwUaYqSDdlQpSVgyEHWun/mqm+mLLxafR9Rn68R
-         M5a6tszAzniyQOO5YSFdmo1eC2ecrEhJrfE67JdJ5eF12WO4CiJW3Cv5eXe8GiMR7r
-         0m49OmDn20L7GHo9ODuO7W/f+xG8YMzdZrcn3hfBAWmo/WbNkbe5BPiRdEPuoYI6Ll
-         D8muthNC0cHJA==
-Date:   Sat, 6 May 2023 13:29:12 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sat, 6 May 2023 08:30:55 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F34C1569D
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 05:30:52 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f13dafd5dcso3090605e87.3
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 05:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683376251; x=1685968251;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vDXewRHi5DlLcSO63aqmmvYj2924AUE72JCjILEK6/Y=;
+        b=eTnvcg84EUWceDD5VenapU8oXm4MmitRSwyhCKw5qoTZYqzJWetFR5LI4Xc2cI/KS2
+         pZwpPeQ4G/vM44jcYO+QmJwcvKfc8pCUp24i4VfX68ZRgES80LPVQWFDVyxGJ8kVoS1w
+         OMnXJnWumapfAMiVGVJGIXMDsoY+3UmlKU9FI4O9DI0UQRf+2e+oEPcOgxnq1v/T9qrS
+         jm+5TAKUKA/Mg7bIDZcFl71i/EVNhdA7/fnlCoLLL1rqEee2qFxcWGn7fADE0EceWdAb
+         ceUTBycfhnGH3PPUzFJvgJd9A/Y9C4MgAO0nhHMtL6k4qMBTd0NctxQ5OsWRJqxMfzMl
+         yGug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683376251; x=1685968251;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vDXewRHi5DlLcSO63aqmmvYj2924AUE72JCjILEK6/Y=;
+        b=Wk9XTV1NQ15oBbDZ6k14JtBBERFB25e0rsmQ4zl62mjAL4WDVCQBkrOb3A2xHmhI5I
+         fJ1nKGAdvBFWFcMERv8Mc65VCsFXSLD/ehNuEIMPRMgrpng1J2uo1LuC3MeT1o/vXCjb
+         kmkGfsI2ei00smsahK11zeVc26aVrOPklHVenEmW4IFwDdTcQXC0SkIRR4mNmSTHOOrG
+         6m1JXKY2diX0E2Z0j3ADrgitO9LnkcNnspZ4w0+R/Kv27T/61En268tdtJEvdXcfZ9Cz
+         R42y+YsqL9h2K+MEMKrzywckH+H3zdqodwC2L2hOn75Qsxo8LbwgaPAdY3m6sXu+YOaW
+         uj0w==
+X-Gm-Message-State: AC+VfDzeSG+wKuhwPtsqGqkqDBIOQZpPsSXgRbUhbfM67C5cAzSG9Kdg
+        IDzoHCxFxBRCBKkT0FvMpLo2mw==
+X-Google-Smtp-Source: ACHHUZ7UHIlGtIjZEeMM1KAFJBGYWneO79iZuPL8x+BgJN1fSofMUbXweuxepgg8pzkUMeAkjxbwrw==
+X-Received: by 2002:ac2:425a:0:b0:4ed:b4f9:28c7 with SMTP id m26-20020ac2425a000000b004edb4f928c7mr1104103lfl.6.1683376250653;
+        Sat, 06 May 2023 05:30:50 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id w12-20020a056512098c00b004f13c3cb9ffsm637877lft.200.2023.05.06.05.30.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 May 2023 05:30:50 -0700 (PDT)
+Message-ID: <c70fc9de-4e47-b00c-276c-7a4a5ebce594@linaro.org>
+Date:   Sat, 6 May 2023 14:30:48 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 1/2] arm64: dts: qcom: Add Fxtec Pro1X (QX1050) DTS
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Dang Huynh <danct12@riseup.net>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, vkoul@kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
-Message-ID: <20230506-foil-basis-31724c50b30b@spud>
-References: <1ac26c1a-1726-515d-6598-849a07ed0b86@linaro.org>
- <5adda0ad-965c-fbf0-878c-9d41d28b5c39@starfivetech.com>
- <86693969-59bf-5bcc-42a3-b6e94a0d6f3e@linaro.org>
- <fcfc8ba4-40a7-da43-3375-712bd7e7f4d5@starfivetech.com>
- <20230504-worshiper-ongoing-5581e1f2c2c4@wendy>
- <2f473307-2219-61a4-fa66-5848fe566cf0@starfivetech.com>
- <20230505-magician-poet-724c96020c2f@wendy>
- <ba6a1a47-d3b1-ee16-4785-f5c61d593127@starfivetech.com>
- <20230506-dating-twiddling-b364de21ed2b@spud>
- <b1965ae2-af2d-b11c-3e34-8129c29333b8@starfivetech.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="p9EN/m3kyGka2NQK"
-Content-Disposition: inline
-In-Reply-To: <b1965ae2-af2d-b11c-3e34-8129c29333b8@starfivetech.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230505-fxtec-pro1x-support-v2-0-0ea2378ba9ae@riseup.net>
+ <20230505-fxtec-pro1x-support-v2-1-0ea2378ba9ae@riseup.net>
+ <abae55ef-172b-036f-40a9-b27c38e850ec@linaro.org>
+ <CAA8EJprxyHSQqoeNpiLGbx7v+CUgh7Tezw8D3RRY01izywckBg@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAA8EJprxyHSQqoeNpiLGbx7v+CUgh7Tezw8D3RRY01izywckBg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,26 +83,112 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---p9EN/m3kyGka2NQK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Sat, May 06, 2023 at 08:26:01PM +0800, Changhuang Liang wrote:
+On 6.05.2023 13:48, Dmitry Baryshkov wrote:
+> On Fri, 5 May 2023 at 21:41, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>>
+>>
+>> On 5.05.2023 19:12, Dang Huynh wrote:
+>>> The F(x)tec Pro1X is a mobile phone released by FX Technologies Ltd
+>>> in 2022.
+>>>
+>>> The phone is exactly the same as the Pro1 released in 2019 with some
+>>> changes:
+>>> - MSM8998 -> SM6115
+>>> - Camera button is no longer multistate
+>>> - Only one 48MP back camera
+>>> - A new keyboard layout picked by the community.
+>>>
+>>> This commit has the following features working:
+>>> - Display (using simplefb)
+>>> - UFS
+>>> - Power and volume buttons
+>>> - Pinctrl
+>>> - RPM Regulators
+>>> - USB (Device Mode)
+>>>
+>>> To get a successful boot run:
+>>>
+>>> cat arch/arm64/boot/Image.gz arch/arm64/boot/dts/qcom/\
+>>> sm6115-fxtec-pro1x.dtb  > .Image.gz-dtb
+>>>
+>>> mkbootimg --kernel .Image.gz-dtb \
+>>> --ramdisk initrd.img \
+>>> --base 0x0 \
+>>> --kernel_offset 0x8000 \
+>>> --ramdisk_offset 0x1000000 \
+>>> --second_offset 0xf00000 \
+>>> --tags_offset 0x100 \
+>>> --pagesize 4096 \
+>>> --cmdline "CMDLINE HERE" \
+>>> -o qx1050-boot.img
+>>>
+>>> fastboot flash boot qx1050-boot.img
+>>> fastboot erase dtbo
+>>> fastboot reboot
+>>>
+>>> Signed-off-by: Dang Huynh <danct12@riseup.net>
+>>> ---
+>>>  arch/arm64/boot/dts/qcom/Makefile               |   1 +
+>>>  arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts | 248 ++++++++++++++++++++++++
+>>>  2 files changed, 249 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>>> index d42c59572ace..e311ba675f35 100644
+>>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>>> @@ -174,6 +174,7 @@ dtb-$(CONFIG_ARCH_QCOM)   += sdm845-shift-axolotl.dtb
+>>>  dtb-$(CONFIG_ARCH_QCOM)      += sdm850-lenovo-yoga-c630.dtb
+>>>  dtb-$(CONFIG_ARCH_QCOM)      += sdm850-samsung-w737.dtb
+>>>  dtb-$(CONFIG_ARCH_QCOM)      += sm4250-oneplus-billie2.dtb
+>>> +dtb-$(CONFIG_ARCH_QCOM)      += sm6115-fxtec-pro1x.dtb
+>>>  dtb-$(CONFIG_ARCH_QCOM)      += sm6115p-lenovo-j606f.dtb
+>>>  dtb-$(CONFIG_ARCH_QCOM)      += sm6125-sony-xperia-seine-pdx201.dtb
+>>>  dtb-$(CONFIG_ARCH_QCOM)      += sm6125-xiaomi-laurel-sprout.dtb
+>>> diff --git a/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts b/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
+>>> new file mode 100644
+>>> index 000000000000..a9ff1d9534ae
+>>> --- /dev/null
+>>> +++ b/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
+>>> @@ -0,0 +1,248 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>> I'm not a licensing expert, but fyi sm6115.dtsi uses (GPL2+ & BSD3)
+> 
+> Yes, we usually ask for the DTs to be dual-licensed, since they may be
+> e.g. used or distributed as a part of the bootloader.
+> 
+>>
+> 
+> [skipped]
+> 
+>>> +
+>>> +&rpm_requests {
+>>> +     pm6125-regulators {
+>>> +             compatible = "qcom,rpm-pm6125-regulators";
+>>> +
+>>> +             vreg_s6a: s6 {
+>> You can keep the PMIC name apparent by renaming vreg_s6a to
+>> pm6125_s6 etc.
+> 
+> Hmm, we were usually using the resource-name here,
+Yeah, but on smd rpm a "resource name" is a very vague concept,
+you have a "path" to a resource (which is resolved internally by RPM),
+then there's a "type", "key" and "id"
 
-> OK, will replace "starfive,jh7110-aon-pmu" with "starfive,jh100-aon-syscon" in this series.
-                                                            ^^^^^
-Just make sure you don't propagate my typo here in the process.
+ so vreg_s6a is fine
+> (usually it would be vreg_s6a_0p3 or vreg_s6a_1p5).
+That naming is *very* problematic if your device isn't a dragonboard/RBx
+where you can look up the schematics and leads to a lot of confusion, as
+you can't really be sure what voltages are correct until you can confirm
+everything works properly on the board :/
 
 
---p9EN/m3kyGka2NQK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFZIGAAKCRB4tDGHoIJi
-0tkdAQDGePU71+pVWUcZa08uxLkEJ5SwKW4PyDZ4uHsqXFegWQEAzoJbhsGCFcjN
-83Bp4hlpjAGUO/5CJiD3fGavYjrZ+gY=
-=oSlD
------END PGP SIGNATURE-----
-
---p9EN/m3kyGka2NQK--
+Konrad
+> 
+>>
+>> Konrad
+>>> +                     regulator-min-microvolt = <304000>;
+>>> +                     regulator-max-microvolt = <1456000>;
+>>> +             };
+> 
