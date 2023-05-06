@@ -2,154 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E1E6F919E
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 13:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093876F91A1
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 13:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231933AbjEFLkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 07:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
+        id S232067AbjEFLma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 07:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjEFLkr (ORCPT
+        with ESMTP id S229872AbjEFLm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 07:40:47 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2134.outbound.protection.outlook.com [40.107.255.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFB88A53
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 04:40:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W8FLliVo5YUd7lgzFlAVWeE6Ua36Z2XCH1AX4yqhb1A3VX9kFyFyfeme8z/ZN1/CT61ivzCpVuoSpC8jaIsA6WXJc+pHEwgbPk2I4OIrfR5PhuxrIRn16fJsGNEWbgiQb8kzcleMshzBW36Pr1QsGHQHzicTaVoxncghsdO8yJoSHDwYnjRcGi4gXJn7WCXDSlUEyB8TYCVPk1ZvKSMAX2N80M2PFFEFgUXy55Ovjep7oU2e1cwDZmrFpU4X9fLCwbnAq4P/7Pd9Ujbo3jTLo+Sz7w4Un/NG77JVD7b/V3StgeSzIaZniSZORpknOaLcme1ot9IfGLA+dV3nYHnzUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a+mL6onjwYJFYgpqq2TyBD9eQM5EOD34JMpHoZzZFIk=;
- b=IdtQESIdNjqHGZU+TWr7A9Brr9mKhxI63ZrsprmftFcUNpTbCoQLc0j9tL15J0cFGPzPmXHv+jmeA9PN+6hkOeNzq6NMD2OG9nTj0KxDaK5YzlW4kziRUJ7RCyq3rNUwhVOdmXSWcaG38vZ4eLNS2oE6a8KqpIjYJyyrAdCbYOj6WDcDBhuPLJiLiBdDjQ/UDnr7YZDCz5Zqy88byzmC1SoUoMRQ/8ypOUhM+MlgWpeDBEfyjK6aAjxHOiQIbjUyLI/ZnEVqz5ZEiuSOikyLJRUOzHXHPG1qJn9C1vpUyPpOAtWy7fc2ufg+QIlrxDnBcdRYewYFUDZoyBmMd8RQLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a+mL6onjwYJFYgpqq2TyBD9eQM5EOD34JMpHoZzZFIk=;
- b=ly4mqEAMqy0KdHA7N0nM82QoAFQvDlWHBLp1j7AWcwtZ+OMw4GcxzuIxIFC4bGnVHYPcf5Xrbt01FSmoXeImJ+NjeJoQiwaAvSk46q6ZIV+te7hAM4vo2tL83FXgXp0i92Ob2INapTT/Nq2re/nBBKfLB+BGdsmr/Hn2SlUCaX2w76P/6+5EsAH8Za9TB1i/njdzE1bUmzMlKRC5iyx/KvNevmDh1sDnrS9CGNXQ40SlMFh88YY1VWmVwmgNWSusn+RbYSOVPyA6bGEA1ZtdmS04Hp5fv+2S09sbLq8fvaQ7AjfckS3lDNnfXQj/h3luLQdblwaxrJxckXrhYezYJA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SI2PR06MB4267.apcprd06.prod.outlook.com (2603:1096:4:15e::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.29; Sat, 6 May
- 2023 11:40:43 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::76d6:4828:7e80:2965%7]) with mapi id 15.20.6363.029; Sat, 6 May 2023
- 11:40:43 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH 2/2] f2fs: move the conditional statement after holding the inode lock in f2fs_fallocate()
-Date:   Sat,  6 May 2023 19:40:33 +0800
-Message-Id: <20230506114033.23908-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2P153CA0023.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::10)
- To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+        Sat, 6 May 2023 07:42:28 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F157D8A51
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 04:42:27 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bd875398dso4192493a12.1
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 04:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683373346; x=1685965346;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=H75PoJkxbOlPB4LFyu3WB9LkrwkEzPSes0MNQZlIJVE=;
+        b=FFG+JzBDXCE4V66Nq+Qs4CKHVBMKk1NeUkFlsWQzFBYEI1BfCDF7hlZ69+klwZRUW3
+         ByDi9BLoTkFzpZOOM5siv4iDE0jHnwyXlGfyzeqTYqnlOdcBmIIBJ5gG2PYI1ymNy248
+         Jx9//euPaVkE9mpmtGoS3k8rtGCLE6RBua3dY+eKzP18sKX/J/R8zv54tF92lsJI5Lqw
+         p6Ns0KCOhUj5fO4OxBscUNT37ukZBWpjgWBUbBRh7QvUUqsj/ExRs6mDglkFUR6WB8HF
+         +m7yUxSMPaArZ43pJ74gMISbxTVgUKHmaQ4ivoeLmZFyF4RsPWpip/YA7G6kCfwDbdOa
+         lN1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683373346; x=1685965346;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H75PoJkxbOlPB4LFyu3WB9LkrwkEzPSes0MNQZlIJVE=;
+        b=aksRyBtshFz87Lt+zDpgWYPCwjE1GfUE4SpyBXCYk+E4i0YMxEr6hVr4X5/fxGnG0h
+         1gPBqMcILEpgAMurAc9usDkJ6dSrTxmSgUzqHKtqeHDQ9fBhhQA4LQl2N+QW5kLHE6AP
+         JgrliOTXnLgrnCVhUcDGoiU0W4SB/1MQBqSYg8kzaiPiF9yqIvk9CWHX9zs8zfx2+sq2
+         yBSjJtEkNT1FJqCxEV2CXk8o56QOwAtbmUWA3ROPbYK8lVnw1RPILysZzqxE3rJISTbU
+         8n2anVbc6Owz/fGf827JdK021kDNyivwLUD35eo16mwRkim4/JCukO9v+Fo595ti3sYO
+         jPWA==
+X-Gm-Message-State: AC+VfDzkR380FeLMMjjtcNecAbYNdbm8DY6Bl6xmQ9xfVmQMa6PbT9Jq
+        Z28N+0Ke3w5MEE7EH0NKez4=
+X-Google-Smtp-Source: ACHHUZ4rCt2YIWM5HEzOyXxJ+Rl0PemqrqACUaPvPybqYObIDfli0GQUYQe9vH40kwydEojfmro0ZA==
+X-Received: by 2002:a17:907:1c05:b0:930:f953:9608 with SMTP id nc5-20020a1709071c0500b00930f9539608mr4760174ejc.0.1683373346270;
+        Sat, 06 May 2023 04:42:26 -0700 (PDT)
+Received: from pc636 ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id hv6-20020a17090760c600b00965eb608a28sm1798783ejc.40.2023.05.06.04.42.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 May 2023 04:42:25 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Sat, 6 May 2023 13:42:24 +0200
+To:     liuwf <liuwf@mailbox.org>
+Cc:     linux-kernel@vger.kernel.org, joern@purestorage.com,
+        torvalds@linux-foundation.org, urezki@gmail.com
+Subject: Re: Library: [RFC PATCH] btree_blue - A simple btree with fast
+ linear travesal and more. V4. and test data
+Message-ID: <ZFY9IFM9zjFhvyPF@pc636>
+References: <48d6f5a9788af056a212d0d5ba08219fdd592fbb.camel@mailbox.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4267:EE_
-X-MS-Office365-Filtering-Correlation-Id: f6ae0b3b-672c-43bf-1748-08db4e26b97c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3s1OXUyG11T8Nbc0kqREN5C9DbwxT+t++zCc1w4H2z4GOihTiNv+9vo9MBFUxNbmYhic5QlleevxsTAFcbJPpIwektH8VweJ+3X8C2UaAi+qAmgrBDPfLSozwRuChKBWUEKJbFDZxLHRWEfPoHdW1FJa6q3M8E/IeuDRyy4OScrqkMSE+sKYSFmV2ZzsbPyIv0wURNeY1khgdvfKGzQjA5uyIb4HPDQkxyHrs8cSZWGS/qmD+y9Yi+y59iO15eL0HrBYgmTo26KJpWpwWgI0/XAVIxcW/3CNvA6mksfRTjf81cvKnrz9qSacYwKx23daIyXMVjKnnnOv0Qd1+wmEp+jsrnB7vEVvTa8dgd+eAFjbn/tpP9bG36yDQAtqntPYW0MCUDdIXsUk448dhPWX11YfgY3oAUD2zA9ST+0sj/F3HS6weWVAZsTspzcDV2XUaxt8qg69UTc2c39hjNWRmxcyK/BWr6uHSpZvSENSouLczJl4OLvG01Y/+6Qkgk2CAX/GhFgSUa22PJ6pcv96wu2XjKiB10eT2dmQvgcQWYz4iZJU43e501g6ZpxY+xywf4OK+x6iTbkFv6fsW5iErWBJOI7KVuK0sAVP8vhkgnzYNX4JzeIqqh/88wPCiUgS
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(346002)(136003)(366004)(451199021)(86362001)(8676002)(8936002)(6486002)(52116002)(66946007)(66476007)(66556008)(4326008)(5660300002)(36756003)(38100700002)(38350700002)(478600001)(83380400001)(2616005)(26005)(107886003)(41300700001)(2906002)(186003)(316002)(6512007)(6506007)(1076003)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?O3uCt/znlm2VovrEeZartlhp/FXn++rMCQP8wthnoojZG4buaC0TYGjr+l0r?=
- =?us-ascii?Q?IJPY+iAC/M3DO+6tE2aRKttbKdsjp4GCpN3OZmgHMytQz7NqiRBS7ypMVbtX?=
- =?us-ascii?Q?V3Sp3vHQbd7WcKYzuiW2qmm2YldUghYLtIAX141AJCkfBWuF1SEia6buJNXd?=
- =?us-ascii?Q?7GonhV7VC6CitKKq0SpNpkbF2Xu7lyD82x16AOPf5fq2NdQMx3QolU1cBWDP?=
- =?us-ascii?Q?1s8ypug7sWPR6kpKHPukvKZ/SlpNuEUWlfL61hYmEwiT62noQkLmD0lzIZ9h?=
- =?us-ascii?Q?celfYFj33TFdKwBkpSr6XCGUe6GFL8V6cdyAxAPLdeXY+EoB9USauqrwF5Nf?=
- =?us-ascii?Q?4vf0Iw3qjx+/Zj/V8OgQS2CxbvUp9ay6tIM7VcLwcDiYDCARutlu6qKifI20?=
- =?us-ascii?Q?hMO/zLjuePJBtS98k0cYmzyIZ/dFc44ScbiYjUoM20wJeUwIGDZyBbtfJM0H?=
- =?us-ascii?Q?2Gw9jqphg1buCdJrXw5ru5LYsAYt6um/xIay772Hh+Wpiyz+25HA/S/Th0SK?=
- =?us-ascii?Q?pRDgE4I1P6EutTMtUOaIgQEC/+b4OGC1ZxF/hczqRjiKbQpv8I3/f91otwcj?=
- =?us-ascii?Q?8AgpkWli4GaTXuX+s7t7G9SiUtGLbVn6FNLZkrp5QtQTvLzJl+RnWEh5Lhr5?=
- =?us-ascii?Q?8g2XWSuoWfmU/CScI/jruNmk4MjVkKBdTN45RG4RCDAwF2+a7tqZNgb0BL7T?=
- =?us-ascii?Q?KVRLfiu9cVT4BNMkM2m4y/4aWzLzDBbng54oc9qsmwRCqcSFek4Ja7Ba2fSk?=
- =?us-ascii?Q?HQmGlckiohacoxFEh1hZ2Na+cFAlOo7GD5JRU2eB9XuvSXF3EcULxcNCQBE+?=
- =?us-ascii?Q?AyXWPgpFC/bY7qFvP7z0egTc1+SUKpyQhoTGwfui7xkwe7MTavTXjQyhOXyU?=
- =?us-ascii?Q?cD/PeajXWtB2Urn7EeyXOpnF7W2y4jl6M/RTEEdS6HHDx0GT3p9Oq6Nulee2?=
- =?us-ascii?Q?+DwyJkXgzYm7LjRFd2r45iPyrT1dlyNEFtCZ6A6a0uPn6CHsWZk3CGV3C7Aw?=
- =?us-ascii?Q?Iudffpi5JAyUFu3mnimcy/ZvTcp8jVbdd85treUggX5ekiOo6CXKy0pi8jVl?=
- =?us-ascii?Q?9AV+hcXs8nVxg0q+g9FJGMK8rbT3izcC4ZZGehUJdXo/NTJrTs0wR2H+STOW?=
- =?us-ascii?Q?tI18R/zpV7cSKIioP56vS1bllZ5s7wr25pDSDXqBklWW/wUZ9dcbvLoV9dtF?=
- =?us-ascii?Q?b3MP9Nwjbg3RfcKaqibaszWqUpiqfSMukIbngrGPFFaBAG6YGMeHObe7l3RF?=
- =?us-ascii?Q?ZLpr7b9vtZxprCAAWuXSxbno2Ovid6zqKftQ2ArSBF7XQhcsCtPaXnz9q84a?=
- =?us-ascii?Q?RtblbqjAwPATSOYmkoO4G2+U18i4jvJW3MOx6V93qVzneo2D33V2RYc0wrOh?=
- =?us-ascii?Q?mLXKg3uYoCNaL/+XONARnuFGDg+9agCaRIUZcfiiR+7ZGp0+bQDYVEGXxZiJ?=
- =?us-ascii?Q?LexViP+njZ5I8F7YaZg0gN//64hqd9hhvAzKlc3JMzwTmxL5fLFgkFhPvguT?=
- =?us-ascii?Q?N+cyuFADJbl3Z+mK/kDg3syH1GuO3P945g1Cx9NlR0z3Nc7gu8vsoTjhYxBx?=
- =?us-ascii?Q?zbeNpRhjbXQCDdiufuY5b5TK8mnlV/amYM4dun8Z?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6ae0b3b-672c-43bf-1748-08db4e26b97c
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2023 11:40:43.2974
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: F+1QFZ+OQJ76Xpsn9c66cPfQKEm/BjPfTzrlL1cQU1NEgWq6FMuIJuccb8lls2Sz6WF1DEUoJdDDwIgGDNSTpA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4267
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48d6f5a9788af056a212d0d5ba08219fdd592fbb.camel@mailbox.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For judging the inode flag state, the inode lock must be held.
+Hello, Liu.
 
-Fixes: fcc85a4d86b5 ("f2fs crypto: activate encryption support for fs APIs")
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/file.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Just one question. I tried to run your test-suite that compares
+mapple_tree, btree, rb-tree and btree_blue. Also i wanted to have a
+look at its performance in other workloads. Thus, i have one question:
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 850e745ecf88..0837c500b990 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -1801,6 +1801,13 @@ static long f2fs_fallocate(struct file *file, int mode,
- 	if (!S_ISREG(inode->i_mode))
- 		return -EINVAL;
+>
+> +void *btree_blue_remove(struct btree_blue_head *head, unsigned long *key)
+> +{
+> +	if (head->height == 0)
+> +		return NULL;
+> +
+> +	return btree_blue_remove_level(head, key, 1);
+> +}
+> +EXPORT_SYMBOL_GPL(btree_blue_remove);
+>
+I added a small change:
+
+<snip>
+diff --git a/lib/btree_blue_test.c b/lib/btree_blue_test.c
+index b0a73836523d..9dfbe9e6b8d5 100644
+--- a/lib/btree_blue_test.c
++++ b/lib/btree_blue_test.c
+@@ -530,6 +530,7 @@ static int btree_blue_test_init(void)
  
-+	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE |
-+			FALLOC_FL_COLLAPSE_RANGE | FALLOC_FL_ZERO_RANGE |
-+			FALLOC_FL_INSERT_RANGE))
-+		return -EOPNOTSUPP;
+        t0 = ktime_get_ns();
+        for (long i = 0; i < RANDOM_NR; i++) {
++               unsigned long *tmp_ptr;
+                val_ptr =
+                        btree_blue_remove(&btree_blue_root, &(data_set_2[i].k));
+                if (!val_ptr) {
+@@ -539,6 +540,14 @@ static int btree_blue_test_init(void)
+                               i);
+                        goto exit;
+                }
 +
-+	inode_lock(inode);
-+
- 	if (IS_ENCRYPTED(inode) &&
- 		(mode & (FALLOC_FL_COLLAPSE_RANGE | FALLOC_FL_INSERT_RANGE)))
- 		return -EOPNOTSUPP;
-@@ -1814,13 +1821,6 @@ static long f2fs_fallocate(struct file *file, int mode,
- 			FALLOC_FL_ZERO_RANGE | FALLOC_FL_INSERT_RANGE)))
- 		return -EOPNOTSUPP;
- 
--	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE |
--			FALLOC_FL_COLLAPSE_RANGE | FALLOC_FL_ZERO_RANGE |
--			FALLOC_FL_INSERT_RANGE))
--		return -EOPNOTSUPP;
--
--	inode_lock(inode);
--
- 	ret = file_modified(file);
- 	if (ret)
- 		goto out;
--- 
-2.39.0
++               tmp_ptr = btree_blue_remove(&btree_blue_root, &(data_set_2[i].k));
++               if (tmp_ptr) {
++                       err = -1;
++                       pr_err("btree_blue_remove %ld, val_ptr: 0x%lu, tmp_ptr: 0x%lu\n",
++                               i, (unsigned long) val_ptr, (unsigned long) tmp_ptr);
++                       goto exit;
++               }
+        }
+        t0 = ktime_get_ns() - t0;
+        printk(KERN_EMERG "btree_blue %lu deletes use time: %lu ns\n",
+<snip>
 
+it removes two times same key. On a second removal i suspect
+a ptr_val to be NULL but it is not:
+
+<snip>
+[   20.598023] btree 1000000 deletes use time: 251484314 ns
+[   20.599360] btree_blue_remove 0, val_ptr: 0x17259549162592618731, tmp_ptr: 0x18273237390749509852
+<snip>
+
+Any thoughts?
+
+Thanks!
+
+--
+Uladzislau Rezki
