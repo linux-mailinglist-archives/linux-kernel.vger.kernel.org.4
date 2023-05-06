@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075676F8E1B
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 04:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C956F8E1D
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 04:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbjEFCo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 22:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
+        id S231664AbjEFCrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 22:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjEFCox (ORCPT
+        with ESMTP id S229649AbjEFCrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 22:44:53 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B0A7AB2
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 19:44:52 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f13a72ff53so2806900e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 19:44:52 -0700 (PDT)
+        Fri, 5 May 2023 22:47:19 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3367D421D
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 19:47:19 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1aaf2ede38fso24050435ad.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 19:47:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683341091; x=1685933091;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y7UB2nW/Jj+U4yffAwPMogyKSJLrjsqdpipIiYsI+rw=;
-        b=BdC8aAp7RX1CCo+JSpU8/7he3ffh2rtnXbhhKWzuiqVxu5gR2Zru/TPBHOBw3ZpPve
-         YisP0v5BewuWDBsRyOLCLVkuJPQCop0ZhcETYAc++YrzZaiyUi/wiZ/YXQEF077B+A0H
-         6ksKOzZ4SyAL/Qa7TkS2vw+Jkt9CGw24StbzkplEbQX3pOmOs+rg/DTA4uYDMV5oLjB3
-         u4j125MjLwu7gnuLm8A/hVLTRlIU+0v0jbnwZz4NoOpYfl51Sda4E336XACMu981Or0l
-         DMLKpaLZEEGL6MK2rN0MZG1BAHZn1eceEI7zyUNp3F/hoTHagtL+IFdeNbNBVwL9gb7v
-         hOKg==
+        d=chromium.org; s=google; t=1683341238; x=1685933238;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DhRc7hxJK3NflZ5uLGJt/010eV74i1aoQ3Uj4u0l88w=;
+        b=eyXNX2kQL11K66q87Ej5uZ7syf6xfwhRO+NdWSA/RSRGtqxYTZV9sAsfmHEp8Cgin9
+         1OjAfa0OFgoFgNVkgrATzij4T/zNAPj5LXI9WgUgpDnhgrIwn+d9E64L47HQMul/xpfp
+         9SdBXScQ8LoEd+91R1Mcpvd/V/oIS8LHFgTBU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683341091; x=1685933091;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y7UB2nW/Jj+U4yffAwPMogyKSJLrjsqdpipIiYsI+rw=;
-        b=ehBYkYF8VpfS4FkzkPMBjYr4kHBTxfz/PMR7/SFB1BGCehgRISMnZE8bHPways2SRV
-         srO6tD/PZEoJwuRmEie+d1q+XsS+TngqD2ALBUjx3Ula4rT7zGsMregbGTHpqqmE9UH0
-         h4s/wIThA0cAmSOJMga3Wkoteforkrl2iVvS2/BtaXEMA7ytTOKaaGzB8yiblLbgAMhL
-         Fo1gF7sLuHX7WBwx0pEHwwOgb0gOIQxBUz/Rk/a3yoiHYuMEzC4mrdtY5Gb2136/miIJ
-         vek4SSADrEPLUENqm8/+o4A6Ot2Zjww8H1yKj5PRFmBTWv06CeYDvFCnqHrSOE3NPxAb
-         3+3Q==
-X-Gm-Message-State: AC+VfDwR9lWJPwTdzCDlIMDfECEYYFR0zY87wiFe7wkvjD6UysUJ+UgI
-        5hXoHotrp0+ZNul/5XmSE+fhnDRyH3V4nXgKkW0=
-X-Google-Smtp-Source: ACHHUZ5zg5zXHtMT2LQnYg3Mr3XsMKlJsai1xG1XWuHffg3dqgmpSSqTWYSHB6Lm33JMYkSqD53rGNgfDyE1NuKMzdA=
-X-Received: by 2002:a19:f008:0:b0:4d5:a689:7f9d with SMTP id
- p8-20020a19f008000000b004d5a6897f9dmr989833lfc.57.1683341090737; Fri, 05 May
- 2023 19:44:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683341238; x=1685933238;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DhRc7hxJK3NflZ5uLGJt/010eV74i1aoQ3Uj4u0l88w=;
+        b=kHAz5byHzpCNJNSopJjr3LBE75oNs6SXNZwVx5h1s7/t8UCv+L/UnscI8moK8req4s
+         u1/gO3Ync4rLS+BWD9e0yWYA76gbj+d0fl7ul3aKIGP9kbYVBAXN1oTih99JpO7rDaNS
+         jvq5RvSF1KKCVvdhxSDaCvjCCRNIas11IsHOpYx80rq60F3SKekrQS4y7K91Q4kSk3FH
+         /WQ66hhBssapsnkrqG4Zmcblm75VfIjFq37dOuOsqWPDa89e1G7IoJWGKste3q4VU7W0
+         PMJ2BWKV7voj+dBpbs9XU/rZjHrTqBhtGq2tt9ttCMDQ1iWoDGpPxk38v2ZFMZVTkMIZ
+         G67w==
+X-Gm-Message-State: AC+VfDzZi5lCieABq2LBj9M6XV7HOPHcEY4cE8OAVmiW4/tCX9orDrRd
+        OH4txOQKUPMu88BiyxT1WZfFwg==
+X-Google-Smtp-Source: ACHHUZ64bANpxYNZ66wYuGU8H8p6zZwlPlSUxo0POK60VJ+/C3NB6KwGAgsEhXrbS8QP9Js4Yo3M4w==
+X-Received: by 2002:a17:903:244c:b0:1a1:bf22:2b6e with SMTP id l12-20020a170903244c00b001a1bf222b6emr4446652pls.43.1683341238689;
+        Fri, 05 May 2023 19:47:18 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id y14-20020a1709029b8e00b001a687c505e6sm2420783plp.232.2023.05.05.19.47.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 19:47:18 -0700 (PDT)
+Date:   Sat, 6 May 2023 11:47:13 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        maple-tree@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH v2 18/36] mm: Update vma_iter_store() to use MAS_WARN_ON()
+Message-ID: <20230506024713.GB3281499@google.com>
+References: <20230505174204.2665599-1-Liam.Howlett@oracle.com>
+ <20230505174204.2665599-19-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-References: <1683194994-3070-1-git-send-email-zhaoyang.huang@unisoc.com> <ZFWDKCJ5n55Y5eq4@P9FQF9L96D.lan>
-In-Reply-To: <ZFWDKCJ5n55Y5eq4@P9FQF9L96D.lan>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Sat, 6 May 2023 10:44:28 +0800
-Message-ID: <CAGWkznH+89v1cDn6PxE-cZ97jnn+QPkuCQHu1ujc-3=c0iVdKw@mail.gmail.com>
-Subject: Re: [PATCHv2] mm: optimization on page allocation when CMA enabled
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230505174204.2665599-19-Liam.Howlett@oracle.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,91 +71,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 6, 2023 at 6:29=E2=80=AFAM Roman Gushchin <roman.gushchin@linux=
-.dev> wrote:
->
-> On Thu, May 04, 2023 at 06:09:54PM +0800, zhaoyang.huang wrote:
-> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> >
-> > Let us look at the series of scenarios below with WMARK_LOW=3D25MB,WMAR=
-K_MIN=3D5MB
-> > (managed pages 1.9GB). We can know that current 'fixed 1/2 ratio' start=
- to use
-> > CMA since C which actually has caused U&R lower than WMARK_LOW (this sh=
-ould be
-> > deemed as against current memory policy, that is, U&R should either sta=
-y around
-> > WATERMARK_LOW when no allocation or do reclaim via enter slowpath)
-> >
-> > free_cma/free_pages(MB)      A(12/30)     B(12/25)     C(12/20)
-> > fixed 1/2 ratio                 N             N           Y
-> > this commit                     Y             Y           Y
-> >
-> > Suggested-by: Roman Gushchin <roman.gushchin@linux.dev>
->
-> I didn't suggest it in this form, please, drop this tag.
->
-> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > ---
-> > v2: do proportion check when zone_watermark_ok, update commit message
-> > ---
-> > ---
-> >  mm/page_alloc.c | 36 ++++++++++++++++++++++++++++++++----
-> >  1 file changed, 32 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index 0745aed..d0baeab 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -3071,6 +3071,34 @@ static bool unreserve_highatomic_pageblock(const=
- struct alloc_context *ac,
-> >
-> >  }
-> >
-> > +#ifdef CONFIG_CMA
-> > +static bool __if_use_cma_first(struct zone *zone, unsigned int order, =
-unsigned int alloc_flags)
-> > +{
-> > +     unsigned long cma_proportion =3D 0;
-> > +     unsigned long cma_free_proportion =3D 0;
-> > +     unsigned long watermark =3D 0;
-> > +     long count =3D 0;
-> > +     bool cma_first =3D false;
-> > +
-> > +     watermark =3D wmark_pages(zone, alloc_flags & ALLOC_WMARK_MASK);
-> > +     /*check if GFP_MOVABLE pass previous watermark check via the help=
- of CMA*/
-> > +     if (!zone_watermark_ok(zone, order, watermark, 0, alloc_flags & (=
-~ALLOC_CMA)))
-> > +             /* WMARK_LOW failed lead to using cma first, this helps U=
-&R stay
-> > +              * around low when being drained by GFP_MOVABLE
-> > +              */
-> > +             cma_first =3D true;
->
-> This part looks reasonable to me.
->
-> > +     else {
-> > +             /*check proportion when zone_watermark_ok*/
-> > +             count =3D atomic_long_read(&zone->managed_pages);
-> > +             cma_proportion =3D zone->cma_pages * 100 / count;
-> > +             cma_free_proportion =3D zone_page_state(zone, NR_FREE_CMA=
-_PAGES) * 100
-> > +                     /  zone_page_state(zone, NR_FREE_PAGES);
-> > +             cma_first =3D (cma_free_proportion >=3D cma_proportion * =
-2
->
-> Why *2? Please, explain.
-It is a magic number here which aims at avoiding late use of cma when
-free pages near to WMARK_LOW by periodically using them in advance.
->
-> > +                             || cma_free_proportion >=3D 50);
->
-> It will heavily boost the use of cma at early stages of uptime, when ther=
-e is a lot of !cma
-> memory, making continuous (e.g. hugetlb) allocations fail more often. Not=
- a good idea.
-Actually, it is equal to "zone_page_state(zone, NR_FREE_CMA_PAGES) >
-zone_page_state(zone, NR_FREE_PAGES) / 2"
->
-> Thanks!
+On (23/05/05 13:41), Liam R. Howlett wrote:
+>  #if defined(CONFIG_DEBUG_VM_MAPLE_TREE)
+> -	if (WARN_ON(vmi->mas.node != MAS_START && vmi->mas.index > vma->vm_start)) {
+> -		printk("%lu > %lu\n", vmi->mas.index, vma->vm_start);
+> -		printk("store of vma %lu-%lu", vma->vm_start, vma->vm_end);
+> -		printk("into slot    %lu-%lu", vmi->mas.index, vmi->mas.last);
+> -		vma_iter_dump_tree(vmi);
+> +	if (MAS_WARN_ON(&vmi->mas, vmi->mas.node != MAS_START &&
+> +			vmi->mas.index > vma->vm_start)) {
+> +		pr_warn("%lx > %lx\n"
+> +		       "store of vma %lx-%lx\n"
+> +		       "into slot    %lx-%lx\n",
+
+A minor side note: we usually prefer to avoid breaking printk() format
+strings because it makes grep-ing difficult. But in this particular case
+it's fine, since all the format sub-strings end with a new line character.
