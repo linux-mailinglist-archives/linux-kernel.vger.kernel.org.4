@@ -2,135 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E406F925F
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 16:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1016F91EA
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 14:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbjEFOBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 10:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
+        id S232203AbjEFMP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 08:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbjEFOBt (ORCPT
+        with ESMTP id S231569AbjEFMPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 10:01:49 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899534226
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 07:01:47 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2ac8d9399d5so13768801fa.1
-        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 07:01:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683381706; x=1685973706;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y4DzjlZSH6nUvcn3yg/CmFvBAUv8qZ8KUHAYOuwz40M=;
-        b=TlKVg/Q9RGDcTgVwI1FpDsBjFqZjY++atrfrGLMQ4Kbzt+enaSvf2ffa8XyiZt09pK
-         QZvmextn3fHLuSZxUjHSqCJ/sQV4El3jv8GW7tMXo/95tqFB3M3fx1FMjpOkdHhRCXPV
-         OXVt6d1ZmPxP9PeQLayCmoBc3WA/WTCuqsITyeFdRCiGGWxIHMy3H5h7FogD4r3Ydb2Z
-         eyLfucARANW/ZWeZ1y2lpZ8CXIaf16nVRt89JvU/sim94EesrY8oDlVR/YmlYw9SOPFw
-         n0/l8tBJyR2koo0hiUvpgd0da/rkT8ETY+3NEbszDCst5gTasqiXdf0+YU01Bj009Xs5
-         XBMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683381706; x=1685973706;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y4DzjlZSH6nUvcn3yg/CmFvBAUv8qZ8KUHAYOuwz40M=;
-        b=S+2WRvgctrmJhnT0qj12WZfYcopjWrWTtHoEDUMzn3jIKlib0NcbRTVbWq03EVYgk1
-         yG2IStgoWDkhpMqxxv0iLHrSsKjyl0L29Mxyqouqo0wAsH7KyjCk5YPvdkd6ol4Qptzg
-         dd1MVLIVjRO0WMzsB2PhJw3Ku9nF6FtatV0YMqNXKA0yrlQpa1jLB17mD4APvi+7ceQ7
-         iX3+a9o4jH3YdjIiJuY6mWh63IqCTjTvn7oOEd5Ofc4obBmgkEXQIDcwVyGBPrd7ipLu
-         1jiYJsaQwVnfN4f3FrPcm06tozH7qEBqsrgWMOSDmPk/umR8CEY7FiXxjhNruL1oFz6z
-         lRBA==
-X-Gm-Message-State: AC+VfDwLkGYGCLMenl6x5yyAkDBk5lp2rPUUkRMfiY7ntY/2TW1dH5GY
-        wqdHtsB2alF7FS9hjJ2jcEfzZw==
-X-Google-Smtp-Source: ACHHUZ6kydKKYDxYP/jL4fIKX7Ow4JqB/L+OWGR4KGqCG7BzxOGJfABXqLnZiwRDfcjFlowDL+SzDA==
-X-Received: by 2002:a2e:9d47:0:b0:2ac:bd28:d457 with SMTP id y7-20020a2e9d47000000b002acbd28d457mr494079ljj.14.1683381705805;
-        Sat, 06 May 2023 07:01:45 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id x13-20020a2e9c8d000000b002ac833114besm400487lji.47.2023.05.06.07.01.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 May 2023 07:01:45 -0700 (PDT)
-Message-ID: <0e5f9f6b-eb67-38f8-2719-06aa8fe296bd@linaro.org>
-Date:   Sat, 6 May 2023 16:01:43 +0200
+        Sat, 6 May 2023 08:15:44 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F76713852
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 05:15:42 -0700 (PDT)
+X-ASG-Debug-ID: 1683375338-1eb14e6386684a0001-xx1T2L
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id 74sUtzsctUhxTJ9q (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Sat, 06 May 2023 20:15:38 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sat, 6 May
+ 2023 20:15:38 +0800
+Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sat, 6 May
+ 2023 20:15:37 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+Subject: [PATCH v3 0/4] Fix some issues of xHCI for zhaoxin
+Date:   Sun, 7 May 2023 04:15:32 +0800
+X-ASG-Orig-Subj: [PATCH v3 0/4] Fix some issues of xHCI for zhaoxin
+Message-ID: <20230506201536.7362-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 5/8] PCI: qcom: Do not advertise hotplug capability for IP
- v2.3.2
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com
-Cc:     robh@kernel.org, andersson@kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        steev@kali.org, quic_srichara@quicinc.com
-References: <20230506073139.8789-1-manivannan.sadhasivam@linaro.org>
- <20230506073139.8789-6-manivannan.sadhasivam@linaro.org>
- <bc3ce44f-745a-bbad-32ac-67f8baa49483@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <bc3ce44f-745a-bbad-32ac-67f8baa49483@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1683375338
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 570
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0804 1.0000 -1.5111
+X-Barracuda-Spam-Score: 1.60
+X-Barracuda-Spam-Status: No, SCORE=1.60 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.108401
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix some issues of xHCI for zhaoxin.
 
+Weitao Wang (4):
+  xhci: Add some quirks for zhaoxin xhci to fix issues
+  xhci: fix issue of cross page boundary in TRB prefetch
+  xhci: Show zhaoxin xHCI root hub speed correctly
+  xhci: Add zhaoxin xHCI U1/U2 feature support
 
-On 6.05.2023 14:04, Dmitry Baryshkov wrote:
-> On 06/05/2023 10:31, Manivannan Sadhasivam wrote:
->> SoCs making use of Qcom PCIe controller IP v2.3.2 do not support hotplug
->> functionality. But the hotplug capability bit is set by default in the
->> hardware. This causes the kernel PCI core to register hotplug service for
->> the controller and send hotplug commands to it. But those commands will
->> timeout generating messages as below during boot and suspend/resume.
->>
->> [    5.782159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
->> [    5.810161] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2048 msec ago)
->> [    7.838162] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2020 msec ago)
->> [    7.870159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2052 msec ago)
->>
->> This not only spams the console output but also induces a delay of a
->> couple of seconds. To fix this issue, let's clear the HPC bit in
->> PCI_EXP_SLTCAP register as a part of the post init sequence to not
->> advertise the hotplug capability for the controller.
->>
->> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->> ---
->>   drivers/pci/controller/dwc/pcie-qcom.c | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
->> index 3d5b3ce9e2da..33353be396ec 100644
->> --- a/drivers/pci/controller/dwc/pcie-qcom.c
->> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
->> @@ -579,6 +579,8 @@ static int qcom_pcie_init_2_3_2(struct qcom_pcie *pcie)
->>     static int qcom_pcie_post_init_2_3_2(struct qcom_pcie *pcie)
->>   {
->> +    struct dw_pcie *pci = pcie->pci;
->> +    u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
->>       u32 val;
->>         /* enable PCIe clocks and resets */
->> @@ -602,6 +604,14 @@ static int qcom_pcie_post_init_2_3_2(struct qcom_pcie *pcie)
->>       val |= EN;
->>       writel(val, pcie->parf + PARF_AXI_MSTR_WR_ADDR_HALT_V2);
->>   +    dw_pcie_dbi_ro_wr_en(pci);
->> +
->> +    val = readl(pci->dbi_base + offset + PCI_EXP_SLTCAP);
->> +    val &= ~PCI_EXP_SLTCAP_HPC;
->> +    writel(val, pci->dbi_base + offset + PCI_EXP_SLTCAP);
->> +
->> +    dw_pcie_dbi_ro_wr_dis(pci);
->> +
-> 
-> Seeing this code again and again makes me wonder if we should have a separate function for this.
-Moreover, is there no generic rmw type function for readl+writel?
+ drivers/usb/host/xhci-mem.c | 38 ++++++++++++++++++++++++--------
+ drivers/usb/host/xhci-pci.c | 12 +++++++++++
+ drivers/usb/host/xhci.c     | 43 ++++++++++++++++---------------------
+ drivers/usb/host/xhci.h     |  2 ++
+ 4 files changed, 61 insertions(+), 34 deletions(-)
 
-Konrad
-> 
+-- 
+2.32.0
+
