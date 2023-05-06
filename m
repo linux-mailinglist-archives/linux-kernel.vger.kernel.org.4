@@ -2,73 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7826F8D65
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 03:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5964D6F8D6B
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 03:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjEFBNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 21:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        id S230471AbjEFBPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 21:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjEFBNp (ORCPT
+        with ESMTP id S229742AbjEFBPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 21:13:45 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38B61FDE;
-        Fri,  5 May 2023 18:13:43 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QCqHd0n6qzLnbF;
-        Sat,  6 May 2023 09:10:53 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sat, 6 May 2023 09:13:40 +0800
-Subject: Re: BPF skels in perf .Re: [GIT PULL] perf tools changes for v6.4
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Hao Luo <haoluo@google.com>, Ian Rogers <irogers@google.com>,
-        James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Roman Lozko <lozko.roma@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        bpf <bpf@vger.kernel.org>
-References: <20230503211801.897735-1-acme@kernel.org>
- <CAHk-=wjY_3cBELRSLMpqCt6Eb71Qei2agfKSNsrr5KcpdEQCaA@mail.gmail.com>
- <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
- <ZFOSUab5XEJD0kxj@kernel.org>
- <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
- <ZFPw0scDq1eIzfHr@kernel.org>
- <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
- <ZFQCccsx6GK+gY0j@kernel.org> <ZFQoQjCNtyMIulp+@kernel.org>
- <ZFQrT42SyEbCj4om@kernel.org> <ZFUCDVpqXkpGjXBK@kernel.org>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <bf082a2a-f360-95fd-9d18-0702c421b296@huawei.com>
-Date:   Sat, 6 May 2023 09:13:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Fri, 5 May 2023 21:15:14 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DB42688
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 18:15:12 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 345HhJV4028056;
+        Sat, 6 May 2023 01:14:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2023-03-30;
+ bh=JDuz/VeuZiQAuHVcAApGDXGQHVaYjWzEaW9gtLdp2u0=;
+ b=gkYQrVsiUOkoGqyUq3Y0cdpnc/rgMNx2Oafeya2ixWw9+RqPHj4eZEJG+W9KSFfH35va
+ DHnD8U5zRNPRurMv2cVo6QzQXI9TlmI8hsgZO3uQHCSeuJ8w9xQpL0ijx7t55D6Oy+6W
+ Ua1Tgxh7Hi9KFVQBRK76m42Bq2Vfb1wBWHhdc5qWIeq2f56Lp4/olRzSa1643UI52MvK
+ kXcRxrpGK9CfWHMFnXAWJUzyxatKskBUX0hQmGAy/wEy9MSsJRhZihlPnS2GNwY1NbP8
+ pxcX1QaD+v9m5c07hLknvMQSIaPZXwpvKY3NCLjnKNjbtMGB+JN/OwOm6oEAnjo8MrjZ 5g== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q8t1464e4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 06 May 2023 01:14:53 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 345MTBfr027240;
+        Sat, 6 May 2023 01:14:52 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3q8spgtjfk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 06 May 2023 01:14:52 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FocXXLn6uYAhvvb21HJ39/EhyADu5Q8qnFC+Bt1BqobwL2uShtZcsgq7yHZuKxIKvCWlFCBKpvXBs7y92f/kRsuA/1NhgUYOszZ6Xy086fU9esEuZATmbbWHfKbRVVWrbZEuXvCDIacNUaqALg/g6pMvFeCqtfxADzcGGufNOvjrvIXeGDXVOEYisWeQYptqfmAxGkyu01SAhblXgLp2t30gH5qF1IeNPv/nrAs0szxHDoRInK0M0ATA3CgTFCOP2MksNAP+IBzItJL1mpvawgL4CKLuK167zg1DI3X30P0Xzhnlhh0kHxrld+hHxeiVgi+lavkw/GSxdrNB51ocLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JDuz/VeuZiQAuHVcAApGDXGQHVaYjWzEaW9gtLdp2u0=;
+ b=eHS6thvYFgq2JBiogEYYGbZC3NUc6t5fiM/doycjPRvq8V5+H9wGBxtgKzO/dv0h3odLusUkYdhOFTnFiJyou5ePB+yKjeD8TUEJyRlhW0DFoi+SxIE965qzKmNM403UIwtGHMavtH9TFdrWK4g3C0lkf/4IVpikmXOn2Eea3BU3sKewBC5M3lXi9ht/9ztjztfAHvpP+cDa83SZpIcDRbvKx9u2PRGftdIlPdf0gokWdFLV0edPuU4ecDDT46sVCJIUGtNSBuTPi/2Q84GB4zwGfP+ogWAsUs2ogL9XhkrA0RpNmF0pVBqnNl2SxJivinQGXDDqaW8X/QPbQmswrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JDuz/VeuZiQAuHVcAApGDXGQHVaYjWzEaW9gtLdp2u0=;
+ b=R+CF8z6UJdN2/RqB9KpKvvG23gPvY6ZVDmxCPktB7R4YJq8r5J89KsHkgQmIoMyLZLwRxtsbmepgaiN7iR6rvBsPJKoHv2Vu0ODhpvFS6W63tjhhhqevpSY8y/Cb2T8gbOOrEVSFq2XHl6t/nQvhHq1D9tWaP7uFXuEuyVYvHrw=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by CYYPR10MB7652.namprd10.prod.outlook.com (2603:10b6:930:bd::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Sat, 6 May
+ 2023 01:14:50 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8bb9:2bb7:3930:b5da]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8bb9:2bb7:3930:b5da%7]) with mapi id 15.20.6363.022; Sat, 6 May 2023
+ 01:14:50 +0000
+Date:   Fri, 5 May 2023 21:14:47 -0400
+From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+To:     Peng Zhang <zhangpeng.00@bytedance.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org
+Subject: Re: [PATCH] maple_tree: Fix potential out-of-bounds access in
+ mas_wr_end_piv()
+Message-ID: <20230506011447.2e47mf5kwwo4yz4r@revolver>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Peng Zhang <zhangpeng.00@bytedance.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        maple-tree@lists.infradead.org
+References: <20230504031422.47506-1-zhangpeng.00@bytedance.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504031422.47506-1-zhangpeng.00@bytedance.com>
+User-Agent: NeoMutt/20220429
+X-ClientProxiedBy: YT4PR01CA0345.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:fc::26) To SN6PR10MB3022.namprd10.prod.outlook.com
+ (2603:10b6:805:d8::25)
 MIME-Version: 1.0
-In-Reply-To: <ZFUCDVpqXkpGjXBK@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|CYYPR10MB7652:EE_
+X-MS-Office365-Filtering-Correlation-Id: 27db184a-062e-4994-88dd-08db4dcf4a12
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sXyUoCXJwgik3p/xjurgGYBCaBUGrjfbkZCTTe6SUZAPVl7sJSbSLKE+YGrteMskfoYFKU8JPAITjdc+gSohJop7J5dJDhd+9ON4s0lEZKRXpmJV3qicEGQAP8G6hvqnVVxAo1MQFDw89vFfTxTfnWqMjBTtBEtc4dJqWLFIu6b+Po2ivc5vR1ImPtAILcmxIy9tLh7Ae2t+mxGGCM0pEYjC01P+eejQTtMG4IzOBmr4/k0qh6xQI53H4hkGbGwt8XGfqpGOqQ9mF57wxA7Qee1g8VKPGXPMt63FU1iVFktx+wZZNygmGLRobMKXomtn4vG0yeK3k5LROzLnOX2bhqNH6KMJ0IHGzUW+bw/Oy3BfhakoFMQn3s5us5jIBaTirBp41k3pNvAfk8wfl/Jzse14ODcFVTsWIAjNUrWHQYyaNvFAL0VhfxpwtNt87uT2w7W3maF7I2UtDYhmzm4hF/9G+BZFmPthjVNmsvZa+66UBMMIMWITm/B6wZn0FbZNZtWBY0vUgM0AmGkqmlsjRvLdfK/6rOrlRtQYpqyVKs7Yg3NPOFfSwiXQk74SXxJ5
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(346002)(396003)(366004)(39860400002)(376002)(451199021)(2906002)(8936002)(41300700001)(5660300002)(8676002)(4326008)(66946007)(6916009)(66476007)(66556008)(316002)(478600001)(86362001)(38100700002)(6666004)(83380400001)(33716001)(6486002)(26005)(9686003)(6506007)(6512007)(186003)(1076003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xnKtgghOuPHuBIX4O9IAgfsuSB2bqI5n+cK8wm9It+AH8t85ghE80tQ3wP3t?=
+ =?us-ascii?Q?C+2r07DU5DOGZJX+4dhhizh4YZyuWkq7lF8/ZldwJGUGP4qI/ry5XVMz104S?=
+ =?us-ascii?Q?n+XaACll5IWRi2JaiyCaOyDwY2JVnbWn3FgCAHhBRShyTVJlRBqp1UIVmfZp?=
+ =?us-ascii?Q?k+BMWl58W4DNkn9iXqbOd+YbMEYOGhDTJwFp4cT+dr7sQ8N20NzRwAoEYU6M?=
+ =?us-ascii?Q?Qgx7jRhU+t3ml9utuF182iofQD1YTFsUADfK8Bmsp+wlJkxT1Mwy1h7DMFo4?=
+ =?us-ascii?Q?927Ayx+FjBpYNd/CGfPqvPWykXynwMktvtfgp7HtHmtTUe9eMkIEksLWq2MG?=
+ =?us-ascii?Q?XXh5yRm9hRnSOt7XXxTGbyeqS13M6czocuZO3duuX1/Vdl+SEuh25dwKTtyQ?=
+ =?us-ascii?Q?Smzn0T4mGN6JYRVT7PsYZxSs/erEXm8QRgj5Jz0gdkz43sc+5KDRHsHY38IY?=
+ =?us-ascii?Q?RkE8qDUfNDZ33cdPSuv7l/OBgaktQKHCtJ17Wjf68UfxQzmbablDXMp4PSyJ?=
+ =?us-ascii?Q?xlp59YzYPtO+dxv8kHcdbnqSfK6NvU0VMelTtZ/ZbP4iBJXu4uC8vFA5AAnD?=
+ =?us-ascii?Q?ropgdrHjPCLQMxxvPnBtA9TnUpEJVBpZVE+ZXtIKpuvqwfHlXrGqpcePNjyc?=
+ =?us-ascii?Q?Ddu6+cWc3dv3ge8DI0Q79TeDnDMIRfrg19gDs46pmLEMlfcTddeZWxgWgpPb?=
+ =?us-ascii?Q?c2gZ8FtI3Rdjr6lVcsF1Mcr5aB/5VTCCzu79DJtRF9/FHuWlafwA64ow/KGa?=
+ =?us-ascii?Q?AgVCGBlCpBzIisGQEEs5CT+OI4gt0ngVIwV13RLR+aCtiPqm1pTt5A+fFysL?=
+ =?us-ascii?Q?ZM6ZalZk6GeyuKHFlV/9z+VFemITbYp86ypBsb7PIu8cin9qFHrOKrOPRPC5?=
+ =?us-ascii?Q?fqeavOpcONNpoOty5JzRoA5kQcrWXeoANIXuVH1ByYDpM9niBxsida+06ILL?=
+ =?us-ascii?Q?9J43fIt3MmPFZJrlVAEfc9hqsuDUqJbueMRDBkxaBgJSJ1LlXcxy5505rj+Y?=
+ =?us-ascii?Q?x4gedKRTRYO/820iqrcM4ir6YsbOCbbkfNZShHsuP5dbQ5AjBT4mambFDdUb?=
+ =?us-ascii?Q?rqbZZZz0dlJevwNtaivQQHgnRadck06qeRz00EqYr/qJiJAxnLuFq+OTMbKo?=
+ =?us-ascii?Q?fRZtK+43k8SDjX4I+LVXEgyY/jkYY6U0wj2XPHsuFqEr4EIoOPLUaWH/0g+x?=
+ =?us-ascii?Q?yj8p8ZVIvvLKDirx6zqicPlzSGvvzIhBUn6UDR+jlchOmqxyFGDuJMS2ANaK?=
+ =?us-ascii?Q?+miOpGLVRfhbpPHe+wNfQS2JR/I+XkgWhYlCid96JGYaVfApVmZBqQWQEbj+?=
+ =?us-ascii?Q?ViNglhS0/B/K+5PmG5F5z1yhN8VKzP4Gfqx+30QfDyvXDGTR5xyq1CkvxhQJ?=
+ =?us-ascii?Q?9yOOr1OD6eF3m7Ag2LLcUQQGrB4d+zl7UkU23eohehkapFPLq7PPWost9lh6?=
+ =?us-ascii?Q?jeAofntR/k4bQS7FrCCHrRW2fnn7/F9V1jrwO533wW4RDdHmM7j8Ie5nxLtX?=
+ =?us-ascii?Q?mCrFLXnlMQ5AiU2gsB+Ar/TVS2n7OPC2fUAUKwgmlIhOqs/jf8tqg2fVk64q?=
+ =?us-ascii?Q?WhvTZS7a7GvTx/fRpT9tTOUG+FcoK93KFRZyOhbnXsVJV6AGd+8U3vFbsq8W?=
+ =?us-ascii?Q?yA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?rsXnTGTdhYyw8XVCmRJJnm5Uj5v9BS1UTvtoJdiIwM8Pb1gfFpQigoi0gF6k?=
+ =?us-ascii?Q?Xsx7Kj2v6HDyh2IweJxOBLy5PxrldG+fExJZvGD7YZU+KfGzQKrp6bfiiQJ0?=
+ =?us-ascii?Q?+9q6ggKnANn8IgFyYY9PNm6I9jAfvq/5U/YlxZdAB4gafv7ZQwnfn+EPpttO?=
+ =?us-ascii?Q?6Izd5txKyVHR4PPERY9xcW89Q9XeHVll9DRUPgKRYSHyBDMhvpbWFEPkFh4R?=
+ =?us-ascii?Q?yoBK+/z4CoQgN9376wLQ/a7/s5UYuSIR3Rl4A3QFo90avi9c6zB2XPtXD0WW?=
+ =?us-ascii?Q?+e5h/P4j8Z1rLAaZAH1MXw83t3cXN6tcpnUTZ1coYnd0zMQ+dGSwxqEhxiGf?=
+ =?us-ascii?Q?mRlPed7qr+NbvfQQxtOSp8c6SUJyBChjqsCyV9fQ1oBqfOeSogR0lpOAfIzF?=
+ =?us-ascii?Q?IZrqdkrL3MsgWr7WhtcqHIYSgrVC4z8n+j6LncQD7hviHPVaER4AaDI47129?=
+ =?us-ascii?Q?zbKGqAeNdju03ccAG9k1IYz82BwTB//DY1dWCebWCdkJjocuQLKjsrDWhIMH?=
+ =?us-ascii?Q?r69N7Th+09qZ0YfwAaA8kS/PKl3ar+hac404BmJyghsJOInJkSg2RDrKbBpW?=
+ =?us-ascii?Q?7VV8RE0cvGmuu8cn5hOo2VH0swGDtH9I+UX/xxHJR3nAvcKICFVbzLF4MNdd?=
+ =?us-ascii?Q?lTip+JkfXxHXQ3dotPg5QCrdCsrWt5MZ4VCG1fnJ+LeIVxyfcA9hMv6xj1Zk?=
+ =?us-ascii?Q?V3xtZdNZQcSZDhXhaoVpdqIwk1aP9o0YinwJe1gckUq5ZsxVvpcw7gmhBnTo?=
+ =?us-ascii?Q?q1ua/q5dSw8q9p7tUup/2hMy5/x8hCLPBbEB+qTX5tgeHf35JbMATXPbxnIW?=
+ =?us-ascii?Q?LD8PAsZf4+sXK/hA8UuS/hKePazK8+kJcbl4aUjN14yrq4CbqLztjT9/Mp0e?=
+ =?us-ascii?Q?6e5aitH2gjsq8YC8bcOCmQenHZSWCBMh4kjwU/3ufggA4joTNCNtn3SgAArI?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27db184a-062e-4994-88dd-08db4dcf4a12
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2023 01:14:50.3309
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: moWGo6e2TNayCnPc5LW8l61cJwFhQvvpMtORmSsULLIU0xyycXDBSmOfvOJyvNyGTqv/vbZPK5lsxu0yWX4f6w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR10MB7652
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-05_29,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 spamscore=0
+ mlxlogscore=999 mlxscore=0 adultscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2305060007
+X-Proofpoint-GUID: Wlll3ncvefuu9Hh25UTVm9dUwNRILEEB
+X-Proofpoint-ORIG-GUID: Wlll3ncvefuu9Hh25UTVm9dUwNRILEEB
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,172 +167,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+* Peng Zhang <zhangpeng.00@bytedance.com> [230503 23:14]:
+> Access to the pivots array may be out of bounds. Fix it by changing the
+> code to ensure that the index of the pivots does not go out of bounds.
+> It is difficult to assess user-visible impact.
 
-On 2023/5/5 21:18, Arnaldo Carvalho de Melo wrote:
-> Em Thu, May 04, 2023 at 07:01:51PM -0300, Arnaldo Carvalho de Melo escreveu:
->> Em Thu, May 04, 2023 at 06:48:50PM -0300, Arnaldo Carvalho de Melo escreveu:
->>> Em Thu, May 04, 2023 at 04:07:29PM -0300, Arnaldo Carvalho de Melo escreveu:
->>>> Em Thu, May 04, 2023 at 11:50:07AM -0700, Andrii Nakryiko escreveu:
->>>>> On Thu, May 4, 2023 at 10:52 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
->>>>>> Andrii, can you add some more information about the usage of vmlinux.h
->>>>>> instead of using kernel headers?
->>>>   
->>>>> I'll just say that vmlinux.h is not a hard requirement to build BPF
->>>>> programs, it's more a convenience allowing easy access to definitions
->>>>> of both UAPI and kernel-internal structures for tracing needs and
->>>>> marking them relocatable using BPF CO-RE machinery. Lots of real-world
->>>>> applications just check-in pregenerated vmlinux.h to avoid build-time
->>>>> dependency on up-to-date host kernel and such.
->>>>   
->>>>> If vmlinux.h generation and usage is causing issues, though, given
->>>>> that perf's BPF programs don't seem to be using many different kernel
->>>>> types, it might be a better option to just use UAPI headers for public
->>>>> kernel type definitions, and just define CO-RE-relocatable minimal
->>>>> definitions locally in perf's BPF code for the other types necessary.
->>>>> E.g., if perf needs only pid and tgid from task_struct, this would
->>>>> suffice:
->>>>   
->>>>> struct task_struct {
->>>>>      int pid;
->>>>>      int tgid;
->>>>> } __attribute__((preserve_access_index));
->>>>
->>>> Yeah, that seems like a way better approach, no vmlinux involved, libbpf
->>>> CO-RE notices that task_struct changed from this two integers version
->>>> (of course) and does the relocation to where it is in the running kernel
->>>> by using /sys/kernel/btf/vmlinux.
->>>
->>> Doing it for one of the skels, build tested, runtime untested, but not
->>> using any vmlinux, BTF to help, not that bad, more verbose, but at least
->>> we state what are the fields we actually use, have those attribute
->>> documenting that those offsets will be recorded for future use, etc.
+This is indeed an issue.  There isn't any user-visible impact for
+current node types, since the overflow will access the slots and be
+corrected in the next if clause, but it's certainly better to fix this.
+
+The commit message is also not as descriptive as necessary, perhaps
+something like:
+
+Check the write offset end bounds before using it as the offset into the
+pivot array.  This avoids a possible out-of-bounds access on the pivot
+array if the write extends to the last slot in the node, in which case
+the node maximum should be used as the end pivot.
+
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+
 > 
-> Yang, can you please check that this works?
+> Fixes: 54a611b60590 ("Maple Tree: add new data structure")
+
+Cc stable ?
+
+> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+> ---
+>  lib/maple_tree.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
 > 
-Yes, I've tested this patch and it works :)
-
-Tested-by: Yang Jihong <yangjihong1@huawei.com>
-
-# perf kwork report -b
-Starting trace, Hit <Ctrl+C> to stop and report
-^C
-   Kwork Name                     | Cpu  | Total Runtime | Count     | 
-Max runtime   | Max runtime start   | Max runtime end     |
- 
---------------------------------------------------------------------------------------------------------------------------------
-   (s)SCHED:7                     | 0005 |      1.440 ms |         3 | 
-     1.377 ms |     165822.963188 s |     165822.964565 s |
-   (s)SCHED:7                     | 0001 |      1.388 ms |         2 | 
-     1.377 ms |     165822.963188 s |     165822.964565 s |
-   (w)e1000_watchdog              | 0002 |      0.532 ms |         1 | 
-     0.532 ms |     165823.806777 s |     165823.807309 s |
-   (w)flush_to_ldisc              | 0005 |      0.524 ms |         1 | 
-     0.524 ms |     165824.255219 s |     165824.255743 s |
-   (s)NET_RX:3                    | 0002 |      0.512 ms |         4 | 
-     0.247 ms |     165824.254103 s |     165824.254350 s |
-   (w)wq_barrier_func             | 0003 |      0.394 ms |         1 | 
-     0.394 ms |     165822.964179 s |     165822.964573 s |
-   eth0:10                        | 0002 |      0.250 ms |         4 | 
-     0.115 ms |     165822.964814 s |     165822.964929 s |
-   (w)wb_workfn                   | 0005 |      0.208 ms |         1 | 
-     0.208 ms |     165823.998558 s |     165823.998766 s |
-   (s)TIMER:1                     | 0002 |      0.205 ms |         4 | 
-     0.077 ms |     165823.806548 s |     165823.806626 s |
-   (s)SCHED:7                     | 0002 |      0.185 ms |         5 | 
-     0.049 ms |     165824.255119 s |     165824.255168 s |
-   (s)TIMER:1                     | 0003 |      0.167 ms |         4 | 
-     0.079 ms |     165823.998326 s |     165823.998405 s |
-   (s)SCHED:7                     | 0000 |      0.165 ms |         4 | 
-     0.073 ms |     165823.807235 s |     165823.807308 s |
-   (w)flush_to_ldisc              | 0003 |      0.156 ms |         1 | 
-     0.156 ms |     165824.255723 s |     165824.255879 s |
-   (s)TIMER:1                     | 0007 |      0.152 ms |         2 | 
-     0.100 ms |     165823.358416 s |     165823.358517 s |
-   (w)vmstat_update               | 0001 |      0.094 ms |         1 | 
-     0.094 ms |     165824.256460 s |     165824.256554 s |
-   (s)RCU:9                       | 0001 |      0.088 ms |         4 | 
-     0.040 ms |     165822.964728 s |     165822.964768 s |
-   (w)vmstat_shepherd             | 0000 |      0.078 ms |         1 | 
-     0.078 ms |     165824.256321 s |     165824.256399 s |
-   (s)SCHED:7                     | 0007 |      0.066 ms |         2 | 
-     0.038 ms |     165823.358528 s |     165823.358566 s |
-   (s)SCHED:7                     | 0003 |      0.057 ms |         2 | 
-     0.034 ms |     165823.998412 s |     165823.998446 s |
-   virtio0-requests:25            | 0000 |      0.056 ms |         1 | 
-     0.056 ms |     165824.255959 s |     165824.256016 s |
-   (s)TIMER:1                     | 0000 |      0.055 ms |         1 | 
-     0.055 ms |     165824.256164 s |     165824.256219 s |
-   (s)RCU:9                       | 0005 |      0.045 ms |         3 | 
-     0.023 ms |     165822.964728 s |     165822.964751 s |
-   (s)RCU:9                       | 0002 |      0.028 ms |         2 | 
-     0.017 ms |     165823.174539 s |     165823.174556 s |
-   (s)RCU:9                       | 0007 |      0.016 ms |         1 | 
-     0.016 ms |     165823.358571 s |     165823.358587 s |
-   (s)RCU:9                       | 0000 |      0.013 ms |         1 | 
-     0.013 ms |     165824.256264 s |     165824.256278 s |
-   (s)RCU:9                       | 0003 |      0.011 ms |         1 | 
-     0.011 ms |     165822.973142 s |     165822.973153 s |
- 
---------------------------------------------------------------------------------------------------------------------------------
-
-# perf kwork lat -b
-Starting trace, Hit <Ctrl+C> to stop and report
-^C
-   Kwork Name                     | Cpu  | Avg delay     | Count     | 
-Max delay     | Max delay start     | Max delay end       |
- 
---------------------------------------------------------------------------------------------------------------------------------
-   (w)neigh_periodic_work         | 0001 |      0.568 ms |         1 | 
-     0.568 ms |     165839.038372 s |     165839.038941 s |
-   (s)RCU:9                       | 0000 |      0.292 ms |         1 | 
-     0.292 ms |     165840.176224 s |     165840.176515 s |
-   (s)TIMER:1                     | 0000 |      0.260 ms |         1 | 
-     0.260 ms |     165840.176206 s |     165840.176466 s |
-   (w)disk_events_workfn          | 0001 |      0.256 ms |         1 | 
-     0.256 ms |     165839.038327 s |     165839.038583 s |
-   (s)RCU:9                       | 0001 |      0.204 ms |         1 | 
-     0.204 ms |     165839.038213 s |     165839.038417 s |
-   (s)SCHED:7                     | 0001 |      0.153 ms |         1 | 
-     0.153 ms |     165839.038231 s |     165839.038384 s |
-   (s)NET_RX:3                    | 0002 |      0.132 ms |         3 | 
-     0.184 ms |     165840.175984 s |     165840.176168 s |
-   (w)ata_sff_pio_task            | 0001 |      0.124 ms |         1 | 
-     0.124 ms |     165839.038852 s |     165839.038976 s |
-   (s)SCHED:7                     | 0000 |      0.122 ms |         2 | 
-     0.193 ms |     165840.176244 s |     165840.176437 s |
-   (s)RCU:9                       | 0007 |      0.106 ms |         1 | 
-     0.106 ms |     165838.982220 s |     165838.982326 s |
-   (s)RCU:9                       | 0003 |      0.092 ms |         1 | 
-     0.092 ms |     165839.040098 s |     165839.040189 s |
-   (s)TIMER:1                     | 0001 |      0.085 ms |         1 | 
-     0.085 ms |     165839.038179 s |     165839.038264 s |
-   (s)SCHED:7                     | 0007 |      0.078 ms |         3 | 
-     0.086 ms |     165839.990180 s |     165839.990265 s |
-   (s)TIMER:1                     | 0007 |      0.077 ms |         3 | 
-     0.081 ms |     165839.990136 s |     165839.990216 s |
-   (s)TIMER:1                     | 0003 |      0.076 ms |         1 | 
-     0.076 ms |     165839.040066 s |     165839.040142 s |
-   (s)RCU:9                       | 0002 |      0.075 ms |         2 | 
-     0.088 ms |     165839.118209 s |     165839.118297 s |
-   (w)flush_to_ldisc              | 0006 |      0.070 ms |         1 | 
-     0.070 ms |     165840.175332 s |     165840.175402 s |
-   (s)TIMER:1                     | 0006 |      0.067 ms |         2 | 
-     0.085 ms |     165838.908056 s |     165838.908142 s |
-   (s)TIMER:1                     | 0002 |      0.067 ms |         2 | 
-     0.074 ms |     165840.175076 s |     165840.175149 s |
-   (s)SCHED:7                     | 0006 |      0.065 ms |         1 | 
-     0.065 ms |     165838.908107 s |     165838.908171 s |
-   (s)SCHED:7                     | 0003 |      0.051 ms |         1 | 
-     0.051 ms |     165839.040115 s |     165839.040166 s |
-   (s)SCHED:7                     | 0002 |      0.046 ms |         2 | 
-     0.048 ms |     165840.175123 s |     165840.175171 s |
-   (s)RCU:9                       | 0006 |      0.035 ms |         2 | 
-     0.036 ms |     165838.913051 s |     165838.913087 s |
-   (s)BLOCK:4                     | 0001 |      0.023 ms |         1 | 
-     0.023 ms |     165839.039281 s |     165839.039303 s |
- 
---------------------------------------------------------------------------------------------------------------------------------
-
-Thanks,
-Yang
+> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+> index 110a36479dced..5a49327444d76 100644
+> --- a/lib/maple_tree.c
+> +++ b/lib/maple_tree.c
+> @@ -4263,11 +4263,13 @@ static inline bool mas_wr_slot_store(struct ma_wr_state *wr_mas)
+>  
+>  static inline void mas_wr_end_piv(struct ma_wr_state *wr_mas)
+>  {
+> -	while ((wr_mas->mas->last > wr_mas->end_piv) &&
+> -	       (wr_mas->offset_end < wr_mas->node_end))
+> -		wr_mas->end_piv = wr_mas->pivots[++wr_mas->offset_end];
+> +	while ((wr_mas->offset_end < wr_mas->node_end) &&
+> +	       (wr_mas->mas->last > wr_mas->pivots[wr_mas->offset_end]))
+> +		wr_mas->offset_end++;
+>  
+> -	if (wr_mas->mas->last > wr_mas->end_piv)
+> +	if (wr_mas->offset_end < wr_mas->node_end)
+> +		wr_mas->end_piv = wr_mas->pivots[wr_mas->offset_end];
+> +	else
+>  		wr_mas->end_piv = wr_mas->mas->max;
+>  }
+>  
+> @@ -4424,7 +4426,6 @@ static inline void *mas_wr_store_entry(struct ma_wr_state *wr_mas)
+>  	}
+>  
+>  	/* At this point, we are at the leaf node that needs to be altered. */
+> -	wr_mas->end_piv = wr_mas->r_max;
+>  	mas_wr_end_piv(wr_mas);
+>  
+>  	if (!wr_mas->entry)
+> -- 
+> 2.20.1
+> 
