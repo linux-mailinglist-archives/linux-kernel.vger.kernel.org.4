@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4DC6F92EA
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 17:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4366F92E2
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 17:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbjEFPzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 11:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
+        id S232784AbjEFPzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 11:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233074AbjEFPzI (ORCPT
+        with ESMTP id S232515AbjEFPzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 11:55:08 -0400
-Received: from sonic308-18.consmr.mail.ir2.yahoo.com (sonic308-18.consmr.mail.ir2.yahoo.com [77.238.178.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EE614912
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 08:55:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1683388504; bh=y7nBXmAWn5fuyd+W51PTlojU0wcY54lQ2u9CMVZDNDM=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=FSXHaszpe8+R06HwaygqEkYEfX7+Iq7O7n6qn401LgxnRVwHb1+xIfLh5qEYPDOU500F9JeVBHsN2dO5/QmPM9U60HdeVN/FsCZ1yMmrVSXrxuDkPHQs94sS1FXZHur9YokW1kBz7lgeyoOC79KnhRvi51qhpSheIbfmx3EiPYKAynpgp96N6n5rPkc0zZgI9JtY5hKAljWu5uYhIJ7NLKyFPqzm3Ko8rRQTaeHGcn9/XrJwWWpHp3fSIBfmYISA2Zpbm5d56OZWF0bzle3pm5OaxtG9QVxrGY8DVqy/qum6CueZ1sfxUpvmAg8DskyxHOV6rG/Me1yyBlCk14IuHw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1683388504; bh=2c79bSUIPeqc9Dq8xpVCJZHfY2WUKKcDRxbkbXTnXMh=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=J69PiyJF62vvD999Ey8vFKY8WFjIi9+CLn+V4SJiH/PivN71Z7iPj/e8jiovsH5zoLJ9Zb074mb4Q5M964OivqGs/cV/nZEDG91JhDpNqzqwUznqRHeGHDv4pH5/C1j/Q5SFNi5CE7ynT6v2/ZxDDWOF/rIX/biFcDwjnTtYUZgVDtnrjtpNAqeD8LWZmJIUZYaSxS6YFLveoR0evunlDzAnsrmKbkUdX8BhZs/GRhPuIwccqK7qMVIc4Ac3h3ZUQl260IgpJjMtJXBhEbGve1sDbhubv8CNhFub1G6uviYeD0TPC/Ubbvih5AJATt2lOo/aY295bJlRJ1HeeSkmzA==
-X-YMail-OSG: 6OfztBUVM1nY7FVNWl5VY.t1.2I4VdE1d395fhfkyug2dqm9QCw7tUDSlJdjQ5P
- zGLLwixQU69lyc6KJWoRhRLwsIdlriUsma13st.MTbQ_kyYcnzWZDK0czMotKVuR4eiB2eXnheCa
- Q6OnrWhwaPM2ezGXpYK2DwVR9jinKADglvT_GnTk9HeCnRJO7h32UMfk84oTegm7xMRlPsFwH9H7
- OPA1SWOKJm8tiG3OHIVLcJ5NtWRsDCie6H8O_JUVAe.Gi_7MdQxSI8HIKmo1yHgWG3SmOtRwOwEq
- PQ_JumWVBcc4CVk5r3Md_YYZp1DX_pyI88L3oZVR5k6LH9FtwrxQIJi_71R7K6GhnOg516JsMdJ1
- 0KJ4zS1rhuS96d0oMLnL3_3CIlojDfNcnRB_6nsScXrlgtInfGiZ7GyjnIp6MzcFBZlPCfmhtAtJ
- siVnKuJotcM0MJzbX6Bfk2JLjL_7Kd9XHHswdSiei_Q5DDv2srbpNc9tgnHBLnPIRHYp1u7eXFSH
- 76OnWUoEGw5Z5vSUcLHE3VftdXd3_53Ku_fmYvt.fI.vM4BRQCPjE75URHAxbbuqF_EArQaLtNYB
- _8NNq0PiXVVg5GG_eLYLBOWKMYHWvdZ2lwBjj43ESRmDWiq4UaN4HWRI5dfCiVGeudg7stL_7q7a
- btk9YNfVuUKWbXiUS_qM5Xau51mihhAgjIpC3.k5hQ_2a8gNes.C.AEYD22Zu14JiKI7E4rSNh_A
- rSV4dMHOcahqTNqLn91dqUMhFNsejg__f4Rb.Jtp1kAEy706epOuZgIoit5Rv14ZGPjYl3LFscoY
- TAqmWOrPbmNRcaT3Kgmo5GJt4Is15E3Kf21qJcQj5l0XVgNPpgbRkr_UDmSkNsAyz4GfllLpVFOW
- NZWkVvafFv8C8rnC6J9oDlDAm_K9Q_cxhg2BB.YNdHGU7iHeeWnzghi7WVlaYEL_ennEpKEMgI8a
- qQ.83QuoX_.HTq9sCeQwsB2pH6_Hf7vitzCdxVXzwL8j0uQpAbL22UZGADghrbCE0.oXfx8KuPPx
- p3kdwzSkhhrRATjrJjEQcsfDlIFXawRpClES14ID1plXtOjT11uK1GQSQcnJ89_RPmqgfY8KIRxJ
- GRTYBXJeqbxqjIDripcEzMaxLtrsHxmkwpsC23gGaXWMDdWuKR4.NRn8K2uIFbX6zIDqdTUFDf1b
- s9PUwXgjg27A.HjQR.A78FM7vr6G05CHGqSVDy3.mpfb5AwIdUevelHiSh1POf_8Wd5SfqtfO2Iz
- INCJjERoKKljqwR0eP9aex3ZUX0y23w5CBRkQW4xupgPfr57qKcQI6kM53Qto_0NHUMVtI_cocEd
- Vw5vV3zcZtBrenvjEiP4Q4jRyQ1IyleM1EI_dfTK3cRoTV5ct0lZ6e1wzt4h3KpyBtfJHIf3Hzfs
- 6EOjeBO8nekXahq3Zd2UIjGKwi4gyslgVbzabiwU7LbR_4goNQV9WmwaVPXJjqmCB8gKJ3UfXrMU
- rHf2JmRhKR65fPVcNKjEe3FpDP5ynuFEoZP27CX6m0VjthFrww.tPUJjGW2dWGDxn2YIunDAicto
- riDHm9sRLn5ih9IV3i7LI5Uak2AcRoGEhuRy4ntgdRwBjRav6vqysjXnK3vDOcTKMTlqd7_gRo_7
- tamHsAMmDpZ7Hsy7Ld27_jPRoEkLvcUrziyEcBCka3UK2uUzDM9oeBa_3oIzW2L4ri9NXjfKTTp.
- nmbhDOIbReSpf6j.PU4E4NrLON3XuBX_Iboq71YKtScB0r.stZzPGZYwEDZlWWWluWwk._8Eg5wh
- orEomx.njNsnD1vbmFpU12OBXhhCAhnRAZoMJNYN_XGhe1kT1S7.Pkcs6x6FOkBsK5Xu71V6bQOF
- KkWVc56Eh6tCxZCj170PHjdti7UIXOphyThNPFQmZXZ5Cn3w9lEsSGPYroOmMo4kAgFmeHNZTo.Q
- x5nMr1HSf_YyfZ4DXIwmnx..H7pfhXjIAKzL3HGfhS_9DQUbjVl9fOD1Jky_pDD7LmGWLzFKd7sW
- vnW0v6J_mjmsW9mCYIFVln0pwxzg7PdnLdDeizoszuZ5KFHxHHYHi865ioPLdsmUUhe_PyKmAtFQ
- 8NCpXKYY9kDm6HksCxptNhVzqzpyr_qoLTAouze2J0QbFdUXfQr2LZxrCe8.tl_UdUJDa8ajJNbi
- ahfH99WszOWSv6vi16WOqsemdGqK29roRUiiM8aRtG5JDb80fKU8eR4ld07GKSr.0OyXRXzcPj7f
- .Uhtv8_vTpyB1.RahxG568uLrxC5mgbs_s97oTobksRulGJ74i6VrubWUc2rqPkDTzBYzfMA9z5M
- CvXjRbVpVbuzZMrXa0WE-
+        Sat, 6 May 2023 11:55:04 -0400
+Received: from sonic310-11.consmr.mail.ir2.yahoo.com (sonic310-11.consmr.mail.ir2.yahoo.com [77.238.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00045132B7
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 08:55:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1683388501; bh=tWxmac8mwRjMj71krRu9An5Rypa20FdRhR7NzHl2dAk=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=VfYr0cM+yaLPyGdTSGsZMqnJsHDtFbdEIIo0YpCZ8FFvXEro2Z7hgsihmrbv/CTc9xGch2uo0nTavOZ3cuokBqaSpMhoofVTUZhiuRGRHcZ27PHurKzxhbljpI6nzMfX+y1o1MGjVI9OXQDCgPAuVzhULH8FHvmC0wUZ1ocb8Vx/+dyvolZQBtAjiRUw1lOq7enW7QPAa1KBhDOSo8Ft3gdhm55mxb/9m2HapoFYRTU8LkPBDT6zTO6/+wgG+aXI68NfOhxfJAc4fVoel4u86ACSquYY9RIl2fez5Nx39ET7u2L9eK7v3pt4JOeTryII47nFnjtxS2m+FHLW73Uvfg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1683388501; bh=Dofz7rZvy+y1wJTPXrvrExRqp9e6TNBficVFBrb8CYt=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=t4BNbBIz3LRkM+clqcoUjyIKJCz2BHD8gQdWAN3wGI5mu57Uv/XdWg/ygbUvPISOfMIvekmmGZwwHPit0Ud9jCFdukRdrm/9JzYOlez26Nr5Ik1jS7IUhgQqmlCzpfowbVF6GcFF2a4JGYl7WRBg/+nCH6K3Q762Dth7HYWz7G09BbKdeiNrv8R0FdeM6fTPnNJ1InaeUkOiywiOixbip5MwEnPRmzT62899YSg/s3zEYgN9jVwJxqkIqfbfF2Lf/fAdnIDoXXVOSSqeRXquvgRCbItu9lu25rO7v0NkA7EotG6ycLql74AgHj0rT+J0tcWkKI5Cxa8QkvV1tvzPsg==
+X-YMail-OSG: oTQl4q0VM1mO3qmSCen1yrGYpNQmRP5Obj4MLZZxVietX0B05dEVPIMQ9BuBIN0
+ pDNfxIndd.bTZ3LGKhP4.xqNs3GhzOHMeiLh2nDP7oshVo.QePCAmrX0gaanxlyJhEG3yS2eHxmI
+ X.yin1yWw3WxAsv81nOOa2oZiEXy03J3U2UybRMPlnWDyguKNGDUjxfiBRfSXo4JIz6S5pN8lTYI
+ P.l9ASYDW3BFXAwPvU3btXTF8hoNQJnMV6QvjWgvWt6Mf0zRtWHn6CqRxbJ2ZjZpVNWT57iHTKt8
+ iEKxpY9GLz2OCgkIgR1b8E.PeIcNIiLn15TyS_cLP.EhaTc2ITKK8OV0urkQLfjYn_eKaAbBY81w
+ 6vpmxPmGY9hLbhbirgtfsDYdRyzbonK3LxC0fXSQO5iPzipV3w_THRSJ_mEZt3o8X3QW8IL1l3ir
+ y3DFrRnfzvUhnvzKPBHG08h8FNp1ik0cW4fJSmoqtxCF.7blqmuAsCYU1NNx0I6OFLQTB0fm_waM
+ pKtZ64yYuX4oOod4y5OLngSLSp1wHKxpLGE3nC2.N88Hc7FCjAHrrh8e33hfEpxEQhAKzNscgpJO
+ Lzpdwd46uQDnDaIuW_I99_FlzbqiG0EaWNNaWlcg7pBOOdnrBDknQbqpe7_sLA8UdiW23xDdrBtS
+ J1q.2jMMfXLE4uqQl.I9I_ovrGcNdYj1E9S8IqZ08NT1Gh7sB6fOvNjQFgbaG0AaBCWDoXqAGl2f
+ 8zgja4bS7uCbdFNpAXO4Pz4jw47ig7wWZZQQ5nuacb.xJrpQCVR9xfXZNwAX0_0HyQkbn_umxEcr
+ k_lRioJyDTBQbwyjnEpr0y2ypfmgXGRsnjqarEeMmGBIDLMPS9vWR3U.2I33Kph4PtpxyWy.CFQF
+ wQgb.k7q3eS1cYQn2yoeQ.gYir7S8AbVYk72ucAityR8dN6eJ5fWIepD9BxXmoMokG0173wqwkTt
+ Err2Qutmz_NTepCKShZRV9CUCGKF8t_yhpu6lv16zDnY2JN5KeLpnfesoBmjS62QTP4JQmURGUs1
+ uSfNojhYcbzI3sDC1cobU4YGdVXyjvhlLJCxkQJm8_3qMaJmy1Ai6D.F0YXmmxxuf_DDoMqnSeI5
+ TH757yH8Tx8O7gGTdNIOR9qKO7EVkYCPv8oxJsCyk5FqYpzwAmg3T8l20jFZ270If0qMmZSZLhgA
+ G.3DwlSCjWsqd9WcgwLVoP76N_sTYnJrSK32ZGCYX2o6MY1XI6KWIPdViZIzreN3ehs.sPwEUyzc
+ uBAqFuj7195FcM90RkUvbehrcjdiblVJV5oc1wmrWC2ZxcOpV4VGY6NwGXx.iDBgUzucnI4slMxC
+ CjEnjcNCgVx3__g5RQKb0nvoVU1MM4T_7tjVnZ9.7YS9gGOjGc2O8tQYah6UU29raHZvEiNRZZzd
+ iS.PAiAbOGZy4HfYYJP5K5Sk4JWAlPzofymqSdC9gjU.kjSWeyQaUzA.TttzGiC1eq0hVPjG5DYs
+ y3tdZW9F0nnOEH0Nk06JAQwEBNJX3OTLE8.CDAnahH_5AtiYBPVHPV57zlMzOTWqgQ.CmX1jehF3
+ 909_EsPOmqciYo1h7Ec17biFPJaY0LS3xYwjGnqeZotkAmof5eFbabdjZXNohUPXGI6hxdc1_9Ed
+ vyN4s2fDYrRUrfgMdMnou3p8ycvpat7WOjqv_6OMlxCzyG0XAz6SSXzdEFIxSoYnxtpS1Np_oswl
+ jw_e_lNs5wmRhs.tjJcsZP9BHydHfLyN5zBdZi75bKsidJ.r11N68I_QZvyhpb1WhPEdiXV7n4r9
+ 7sl1P7TJOdp6LsPRbj2HzPUHe9aM78QcYz.KeWYPQKIu7w5OaX254fdFBvjZDP1QxTIk6czITxhY
+ 2RrJi6zOsRkvwyE4BQxF3T2T4aJXs5G0b8xGRaztBaSApCyxhFFN77n8BIFBK8bhVV8fClR86Bed
+ eg0ql9fDT.4CIPzzUvtKem9Vb0S1b2Y72Ln_ghzbsUuFD2OhE2s6kwMfbsoJR1ma_oCYwrVvsVou
+ 1ejpbCwD_I1sB.Ynan.C3fGgI5EmaFs.B.MMdEaTyGC0K3s_LGKympafP2pDyNO.V7K3glB5zeNp
+ rnsAyiVKlnwsl6kPW8qKAlZTFUuKUnGYIWnp1Z9DZjpTbxSI3caVvmfbZkeKeomh7jDTQ1QpyvNB
+ f0Do_O9Yfe8DvLYcuQHlsBqAXTjdX0FSG5c4v9u7LHk9ofAWHLtmEfRH2jBkCw6pBVrODGWpWLZo
+ vm4hz4egTCfQI0eMkrhhTi5O4QYco5ULxPqMsbFAH0CyH7wIOyecaJxnYbCuD8RIKsHUyBTrPVN4
+ 7C2Ps9stbMXH4BG8qSiHMZqPj
 X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: 9852f431-f38e-4c96-bd14-9c7684c2562e
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ir2.yahoo.com with HTTP; Sat, 6 May 2023 15:55:04 +0000
+X-Sonic-ID: ab311099-0d73-4560-b71a-6aa2d6f391b0
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ir2.yahoo.com with HTTP; Sat, 6 May 2023 15:55:01 +0000
 Received: by hermes--production-ir2-74cd8fc864-s5qrx (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 2f796affa0781b2e3002453351a4dea5;
-          Sat, 06 May 2023 15:54:59 +0000 (UTC)
+          Sat, 06 May 2023 15:55:00 +0000 (UTC)
 From:   Jakob Hauser <jahau@rocketmail.com>
 To:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -70,72 +70,56 @@ Cc:     Beomho Seo <beomho.seo@samsung.com>,
         Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v4 0/8] Add RT5033 charger device driver
-Date:   Sat,  6 May 2023 17:54:27 +0200
-Message-Id: <20230506155435.3005-1-jahau@rocketmail.com>
+Subject: [PATCH v4 1/8] mfd: rt5033: Drop rt5033-battery sub-device
+Date:   Sat,  6 May 2023 17:54:28 +0200
+Message-Id: <20230506155435.3005-2-jahau@rocketmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230506155435.3005-1-jahau@rocketmail.com>
+References: <20230506155435.3005-1-jahau@rocketmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-References: <20230506155435.3005-1-jahau.ref@rocketmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset adds the charger driver "rt5033-charger". It is part of the
-multifunction device rt5033. The patchset is based on an older version by
-Beomho Seo of March 2015. For more information on the history and setup of
-the patchset see the cover sheet of version v1, there is a link further down
-below the changelog.
+From: Stephan Gerhold <stephan@gerhold.net>
 
-Changes in v4:
- - Rebased to next-20230505
- - Patch 6: Towards the end of the patch, where getting the extcon device, the
-   procedure was changed to first get the connector node and than go one level
-   up to get the extcon.
- - Patch 8: For rt5033-charger changed the "extcon" phandle into a "connector"
-   phandle. Updated the connector property description (in charger) and
-   examples (charger and mfd) accordingly.
+The fuel gauge in the RT5033 PMIC (rt5033-battery) has its own I2C bus
+and interrupt lines. Therefore, it is not part of the MFD device
+and needs to be specified separately in the device tree.
 
-v1: https://lore.kernel.org/linux-pm/cover.1677620677.git.jahau@rocketmail.com/T/#t
-v2: https://lore.kernel.org/linux-pm/cover.1681646904.git.jahau@rocketmail.com/T/#t
-v3: https://lore.kernel.org/linux-pm/cover.1682636929.git.jahau@rocketmail.com/T/#t
+Cc: Beomho Seo <beomho.seo@samsung.com>
+Cc: Chanwoo Choi <cw00.choi@samsung.com>
+Fixes: 0b271258544b ("mfd: rt5033: Add Richtek RT5033 driver core.")
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+Acked-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/mfd/rt5033.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-The result of the patchset v4 can be seen at:
-https://github.com/Jakko3/linux/blob/rt5033-charger_v4/drivers/power/supply/rt5033_charger.c
-
-Jakob Hauser (7):
-  mfd: rt5033: Fix chip revision readout
-  mfd: rt5033: Fix STAT_MASK, HZ_MASK and AICR defines
-  mfd: rt5033: Apply preparatory changes before adding rt5033-charger
-    driver
-  power: supply: rt5033_charger: Add RT5033 charger device driver
-  power: supply: rt5033_charger: Add cable detection and USB OTG supply
-  power: supply: rt5033_battery: Adopt status property from charger
-  dt-bindings: Add rt5033 mfd, regulator and charger
-
-Stephan Gerhold (1):
-  mfd: rt5033: Drop rt5033-battery sub-device
-
- .../bindings/mfd/richtek,rt5033.yaml          | 113 +++
- .../power/supply/richtek,rt5033-charger.yaml  |  64 ++
- drivers/mfd/rt5033.c                          |   8 +-
- drivers/power/supply/Kconfig                  |   8 +
- drivers/power/supply/Makefile                 |   1 +
- drivers/power/supply/rt5033_battery.c         |  24 +
- drivers/power/supply/rt5033_charger.c         | 728 ++++++++++++++++++
- include/linux/mfd/rt5033-private.h            |  64 +-
- include/linux/mfd/rt5033.h                    |  10 +-
- 9 files changed, 993 insertions(+), 27 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
- create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
- create mode 100644 drivers/power/supply/rt5033_charger.c
-
+diff --git a/drivers/mfd/rt5033.c b/drivers/mfd/rt5033.c
+index a5e520fe50a1..8029d444b794 100644
+--- a/drivers/mfd/rt5033.c
++++ b/drivers/mfd/rt5033.c
+@@ -40,9 +40,6 @@ static const struct mfd_cell rt5033_devs[] = {
+ 	{
+ 		.name = "rt5033-charger",
+ 		.of_compatible = "richtek,rt5033-charger",
+-	}, {
+-		.name = "rt5033-battery",
+-		.of_compatible = "richtek,rt5033-battery",
+ 	}, {
+ 		.name = "rt5033-led",
+ 		.of_compatible = "richtek,rt5033-led",
 -- 
 2.39.2
 
