@@ -2,85 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C166F92D4
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 17:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E726F92D7
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 17:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbjEFPqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 11:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S233367AbjEFPqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 11:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233161AbjEFPqE (ORCPT
+        with ESMTP id S233232AbjEFPqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 11:46:04 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12FF22F71
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 08:45:58 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-171-X7vGXre8OyyMNo80uHBv3A-1; Sat, 06 May 2023 16:45:56 +0100
-X-MC-Unique: X7vGXre8OyyMNo80uHBv3A-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 6 May
- 2023 16:45:54 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Sat, 6 May 2023 16:45:54 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-Subject: RE: [RFC PATCH 12/13] blk-mq.h: Fix parentheses around macro
- parameter use
-Thread-Topic: [RFC PATCH 12/13] blk-mq.h: Fix parentheses around macro
- parameter use
-Thread-Index: AQHZf4t9cLtoLLvx6keJPHYbi8Xxca9NYqJw
-Date:   Sat, 6 May 2023 15:45:54 +0000
-Message-ID: <71d4279ca9524b2382059cd2f723e20e@AcuMS.aculab.com>
-References: <20230504200527.1935944-1-mathieu.desnoyers@efficios.com>
- <20230504200527.1935944-13-mathieu.desnoyers@efficios.com>
- <3b017a9f-220d-4da8-2cf6-7f0d6175b30c@efficios.com>
- <CAHk-=wjzpHjqhybyEhkTzGgTdBP3LZ1FmOw8=1MMXr=-j5OPxQ@mail.gmail.com>
- <3cc72a67-d648-0040-6f60-37663797e360@efficios.com>
- <CAHk-=wh-x1PL=UUGD__Dv6kd+kyCHjNF-TCHGG9ayLnysf-PdQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wh-x1PL=UUGD__Dv6kd+kyCHjNF-TCHGG9ayLnysf-PdQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 6 May 2023 11:46:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5662D1A1EE;
+        Sat,  6 May 2023 08:46:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36FFD6103C;
+        Sat,  6 May 2023 15:46:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9B9C1C4339B;
+        Sat,  6 May 2023 15:46:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683387964;
+        bh=gJiabGseQmuYgZafSb6SWwlitqRWvem2Cby0eDbSweU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=pI5ep2KQ8E9x/CeHbwIBgBkmAmFZIox/yMVgZF73J0td5jZ7j1v/Zl+OoxetQSUqh
+         lQv4OoAzOh2a1MSzuUOvvTLi8clNO5ZDqBR6bWUWEzIBVIxoPqrSz0+Eg3drrrx5Wy
+         Mg8kIMqeM/kpXIqk7lYRhIbtJ2sG+nMU+JL0rOjYuoXEhmrnN0OQnGd587XRtEeX+j
+         bAegWtBByOuOGSCpw0DB3yRTjM3GpA0c0TvF6U6s1FtZsGgjfAO8M+c53dI3flFcna
+         +cJhIa782nTvVY7wdRVjC+pr5jktNzUWo/LxZOF2fwKkKP2MM+RNl7cW6/Klh0Rz2H
+         WKopaA519iJww==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 884A2C41677;
+        Sat,  6 May 2023 15:46:04 +0000 (UTC)
+Subject: Re: [GIT PULL] Pipe FMODE_NOWAIT support
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <26aba1b5-8393-a20a-3ce9-f82425673f4d@kernel.dk>
+References: <26aba1b5-8393-a20a-3ce9-f82425673f4d@kernel.dk>
+X-PR-Tracked-List-Id: <linux-fsdevel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <26aba1b5-8393-a20a-3ce9-f82425673f4d@kernel.dk>
+X-PR-Tracked-Remote: git://git.kernel.dk/linux.git tags/pipe-nonblock-2023-05-06
+X-PR-Tracked-Commit-Id: afed6271f5b0d78ca1a3739c1da4aa3629b26bba
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7644c8231987288e7aae378d2ff3c56a980d1988
+Message-Id: <168338796454.28822.4066762564187422370.pr-tracker-bot@kernel.org>
+Date:   Sat, 06 May 2023 15:46:04 +0000
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMDUgTWF5IDIwMjMgMjA6NTUNCi4uLi4NCj4g
-PiBUaGUgb3RoZXIgZXhjZXB0aW9uIEkgd291bGQgYWRkIGlzIHdoZW4gYSBwYXJhbWV0ZXIgaXMg
-dXNlZCBhcyBhbg0KPiA+IGx2YWx1ZSwgYXM6DQo+ID4NCj4gPiAjZGVmaW5lIG0oeCkgZG8geyB4
-ID0gMjsgfSB3aGlsZSAoMCkNCj4gDQo+IEkgcmVhbGx5IGRvbid0IHVuZGVyc3RhbmQgd2h5IHlv
-dSB0aGluayAnPScgaXMgc28gc3BlY2lhbC4gSXQncyB2ZXJ5DQo+IG11Y2ggbm90IHNwZWNpYWwu
-DQo+IA0KPiBJdCBoYXBwZW5zIHRvIGhhdmUgdGhlIGxvd2VzdCBwcmVjZWRlbmNlLCBzdXJlLCBi
-dXQgdGhlIGtleXdvcmQgaXMgImhhcHBlbnMiLg0KDQpBbmQgY29uc2lkZXIgd2hhdCBoYXBwZW5z
-IGlmIHlvdSB0cnk6DQoJbShhID8gYiA6IGMpDQoNClBlcnNvbmFsbHkgSSdkIGF2b2lkIHVzaW5n
-IHBhcmFtZXRlcnMgYXMgbHZhbHVlcyBpZiBhdCBhbGwgcG9zc2libGUuDQpJdCBpcyBtdWNoIGJl
-dHRlciB0byBoYXZlOg0KCSNkZWZpbmUgbSh4KSBkbyB7ICooeCkgPSAyOyB9IHdoaWxlICgwKQ0K
-YW5kIHJlcXVpcmUgdGhlIGNhbGxlciBkbyBtKCZmb28pIHRvIG1ha2UgaXQgb2J2aW91cyB0aGUg
-dmFsdWUgaXMgY2hhbmdlZC4NCihBcGFydCBmcm9tIGxvb3AgZGVmaW5pdGlvbnMuLi4pDQoNClRo
-aW5ncyBsaWtlIHRoZSBDKysgJ2ludCAmYXJnJyBtYWtlIGl0IGhhcmQgdG8gc2NhbiByZWFkL3Nl
-YXJjaA0KY29kZSBmb3IgcGxhY2VzIHdoZXJlIHZhcmlhYmxlcyBnZXQgY2hhbmdlZC4NCg0KCURh
-dmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3Vu
-dCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3
-Mzg2IChXYWxlcykNCg==
+The pull request you sent on Sat, 6 May 2023 04:33:17 -0600:
 
+> git://git.kernel.dk/linux.git tags/pipe-nonblock-2023-05-06
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7644c8231987288e7aae378d2ff3c56a980d1988
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
