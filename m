@@ -2,680 +2,660 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C776F90E4
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 11:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D48A6F90EB
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 11:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbjEFJ34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 05:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
+        id S230229AbjEFJdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 05:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjEFJ3y (ORCPT
+        with ESMTP id S229872AbjEFJc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 05:29:54 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D10407D82;
-        Sat,  6 May 2023 02:29:50 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.120])
-        by gateway (Coremail) with SMTP id _____8CxPusNHlZkt7cFAA--.9306S3;
-        Sat, 06 May 2023 17:29:49 +0800 (CST)
-Received: from [10.20.42.120] (unknown [10.20.42.120])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxddELHlZkC1tNAA--.10023S3;
-        Sat, 06 May 2023 17:29:48 +0800 (CST)
-Subject: Re: [PATCH v8 05/30] LoongArch: KVM: Add vcpu related header files
-To:     Huacai Chen <chenhuacai@kernel.org>
-References: <20230427071109.3367258-1-zhaotianrui@loongson.cn>
- <20230427071109.3367258-6-zhaotianrui@loongson.cn>
- <CAAhV-H5cpPxKCEZ+QqPBbyAn00AAqAo5jek9QahsVkDBF6voQw@mail.gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-Message-ID: <d44e8510-60ee-0c18-6368-27e79c036d56@loongson.cn>
-Date:   Sat, 6 May 2023 17:29:47 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Sat, 6 May 2023 05:32:56 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F9A9ECB
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 02:32:54 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64115e652eeso24669993b3a.0
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 02:32:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=huaqin-corp-partner-google-com.20221208.gappssmtp.com; s=20221208; t=1683365574; x=1685957574;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sECiGbZksYkv4TQMefnoALSIrTkCHrwfdiJVAH6EWLo=;
+        b=ekVk4eS97Bi/9lAfVuWkGzzAxdOWW515szCnPWt+20YfMGVJ1Kz0hlj8DuwZVxIzQv
+         9QUokUMbCQaIOsWpeinMtSDn/2Qgwu2iNjKmNk+2OomeqanxdBlNwPv+iJb8gUzfbgRh
+         fd2mil/6Tm4nYh9MvrrcEMmhw4tBft5U5IxVVEdrasKcY4mGKaY8xIW4MoStxuHUSy7g
+         9hWOQYFmo1s2z/A+NWU48PGRMJp5i97Ow97jC0VPC5gQ7gvIa6D55PQXh9HRXtB5c8Up
+         sU93/wAS7xsqev4Y+ac1ydYkWok1KQ4cBe+MOcLmLiQh6eFycx195d/0OleoBCuzavxY
+         F/Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683365574; x=1685957574;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sECiGbZksYkv4TQMefnoALSIrTkCHrwfdiJVAH6EWLo=;
+        b=WsgbQd7OKBg/eFdJw7oBP2pZhqlf3V1uIu2CNz3e/wjShD8LYxoIlnKFM4ajyd+pvU
+         saSuChp5AbZe7/gw/QVU5dhYH3UnXsHnevCoMbJmTzrg0vK71KysDFD55LpFPF312zlQ
+         f5iKXEs3p0LZIdHyHMy1xKymQEE47bsMQMGjNzUTCSw3/HlvCEBVgCwmlws9RWq4F1Jt
+         6d7DWOvBEAjrShkq+R2FTJQFudza2vvNF1YBrGIHA7SncX9Amte7EaQtDMc9TSMMhK60
+         uGg2avUUTmUifBDsQtUbEaaEuPP+wWiuEKoYGUiGMQmEnXsmVVUaKfSVFLSrWYsV/gKC
+         12aQ==
+X-Gm-Message-State: AC+VfDybcdiI0eOguxnl/tiaxhWNzDk/O3QBwy1PS4kknK7xDxQHyeMB
+        qPUauBgpbHasa+6KfCjuwrcQ3A==
+X-Google-Smtp-Source: ACHHUZ7xT094O80aSbuQElXy0bgmVPv9ZT+b+mV6ly7aLWRGLoRdVrAhaKwmFlO39vOTuFw4PY8gbw==
+X-Received: by 2002:a17:902:e746:b0:1ac:4b76:29a1 with SMTP id p6-20020a170902e74600b001ac4b7629a1mr3330306plf.29.1683365573591;
+        Sat, 06 May 2023 02:32:53 -0700 (PDT)
+Received: from yc.huaqin.com ([101.78.151.214])
+        by smtp.gmail.com with ESMTPSA id x14-20020a1709027c0e00b001a24e2eec75sm3155445pll.193.2023.05.06.02.32.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 May 2023 02:32:53 -0700 (PDT)
+From:   Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+To:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
+        daniel@ffwll.ch, dianders@google.com, hsinyi@google.com
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Subject: [PATCH] drm/panel: Modify innolux hj110iz panel inital code
+Date:   Sat,  6 May 2023 17:32:43 +0800
+Message-Id: <20230506093243.540406-1-yangcong5@huaqin.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H5cpPxKCEZ+QqPBbyAn00AAqAo5jek9QahsVkDBF6voQw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxddELHlZkC1tNAA--.10023S3
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvAXoWfuw47XrW3Xw1xuFWfZrWrXwb_yoW5GrWrWo
-        W3Ja1fG3Z5Jw42yF4qga42q3WDZryYkFs8Zr45CrW0v34DJ3Z8Wr47tayrXr43Xryqga43
-        CF1Igas8ua4Fyws8n29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UUPSb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
-        0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWl
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU8_gA5UUUUU==
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Optimize flickering problem and power off sequence GOP timing at sleep in mode.
+When display sleep in raise the potential of all GOP signals to VGHO and then
+lower to GND.
 
+Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+---
+ .../gpu/drm/panel/panel-boe-tv101wum-nl6.c    | 397 +++++++++++-------
+ 1 file changed, 235 insertions(+), 162 deletions(-)
 
-在 2023年05月06日 16:20, Huacai Chen 写道:
-> Hi, Tianrui,
->
-> On Thu, Apr 27, 2023 at 3:11 PM Tianrui Zhao <zhaotianrui@loongson.cn> wrote:
->> Add LoongArch vcpu related header files, including vcpu csr
->> information, irq number defines, and some vcpu interfaces.
->>
->> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
->> ---
->>   arch/loongarch/include/asm/kvm_vcpu.h  | 113 +++++++++++++
->>   arch/loongarch/include/asm/loongarch.h | 213 ++++++++++++++++++++++++-
->>   arch/loongarch/kvm/trace.h             | 168 +++++++++++++++++++
->>   3 files changed, 488 insertions(+), 6 deletions(-)
->>   create mode 100644 arch/loongarch/include/asm/kvm_vcpu.h
->>   create mode 100644 arch/loongarch/kvm/trace.h
->>
->> diff --git a/arch/loongarch/include/asm/kvm_vcpu.h b/arch/loongarch/include/asm/kvm_vcpu.h
->> new file mode 100644
->> index 000000000000..d196e5b820e7
->> --- /dev/null
->> +++ b/arch/loongarch/include/asm/kvm_vcpu.h
->> @@ -0,0 +1,113 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
->> + */
->> +
->> +#ifndef __ASM_LOONGARCH_KVM_VCPU_H__
->> +#define __ASM_LOONGARCH_KVM_VCPU_H__
->> +
->> +#include <linux/kvm_host.h>
->> +#include <asm/loongarch.h>
->> +
->> +#define LARCH_INT_SIP0                 (EXCCODE_SIP0  - EXCCODE_INT_START)
->> +#define LARCH_INT_SIP1                 (EXCCODE_SIP1  - EXCCODE_INT_START)
->> +#define LARCH_INT_IP0                  (EXCCODE_IP0   - EXCCODE_INT_START)
->> +#define LARCH_INT_IP1                  (EXCCODE_IP1   - EXCCODE_INT_START)
->> +#define LARCH_INT_IP2                  (EXCCODE_IP2   - EXCCODE_INT_START)
->> +#define LARCH_INT_IP3                  (EXCCODE_IP3   - EXCCODE_INT_START)
->> +#define LARCH_INT_IP4                  (EXCCODE_IP4   - EXCCODE_INT_START)
->> +#define LARCH_INT_IP5                  (EXCCODE_IP5   - EXCCODE_INT_START)
->> +#define LARCH_INT_IP6                  (EXCCODE_IP6   - EXCCODE_INT_START)
->> +#define LARCH_INT_IP7                  (EXCCODE_IP7   - EXCCODE_INT_START)
->> +#define LARCH_INT_PMU                  (EXCCODE_PMC   - EXCCODE_INT_START)
->> +#define LARCH_INT_TIMER                        (EXCCODE_TIMER - EXCCODE_INT_START)
->> +#define LARCH_INT_IPI                  (EXCCODE_IPI   - EXCCODE_INT_START)
->> +#define LOONGARCH_EXC_MAX              (LARCH_INT_IPI + 1)
->> +#define LOONGARCH_EXC_IPNUM            (LOONGARCH_EXC_MAX)
-> Some of these macros have been renamed recently, please update.
->
->
-> Huacai
-Thanks, I will update these macros.
-
-Thanks
-Tianrui Zhao
->> +
->> +/* Controlled by 0x5 guest exst */
->> +#define CPU_SIP0                       (_ULCAST_(1))
->> +#define CPU_SIP1                       (_ULCAST_(1) << 1)
->> +#define CPU_PMU                                (_ULCAST_(1) << 10)
->> +#define CPU_TIMER                      (_ULCAST_(1) << 11)
->> +#define CPU_IPI                                (_ULCAST_(1) << 12)
->> +
->> +/* Controlled by 0x52 guest exception VIP
->> + * aligned to exst bit 5~12
->> + */
->> +#define CPU_IP0                                (_ULCAST_(1))
->> +#define CPU_IP1                                (_ULCAST_(1) << 1)
->> +#define CPU_IP2                                (_ULCAST_(1) << 2)
->> +#define CPU_IP3                                (_ULCAST_(1) << 3)
->> +#define CPU_IP4                                (_ULCAST_(1) << 4)
->> +#define CPU_IP5                                (_ULCAST_(1) << 5)
->> +#define CPU_IP6                                (_ULCAST_(1) << 6)
->> +#define CPU_IP7                                (_ULCAST_(1) << 7)
->> +
->> +#define MNSEC_PER_SEC                  (NSEC_PER_SEC >> 20)
->> +
->> +/* KVM_IRQ_LINE irq field index values */
->> +#define KVM_LOONGSON_IRQ_TYPE_SHIFT    24
->> +#define KVM_LOONGSON_IRQ_TYPE_MASK     0xff
->> +#define KVM_LOONGSON_IRQ_VCPU_SHIFT    16
->> +#define KVM_LOONGSON_IRQ_VCPU_MASK     0xff
->> +#define KVM_LOONGSON_IRQ_NUM_SHIFT     0
->> +#define KVM_LOONGSON_IRQ_NUM_MASK      0xffff
->> +
->> +/* Irq_type field */
->> +#define KVM_LOONGSON_IRQ_TYPE_CPU_IP   0
->> +#define KVM_LOONGSON_IRQ_TYPE_CPU_IO   1
->> +#define KVM_LOONGSON_IRQ_TYPE_HT       2
->> +#define KVM_LOONGSON_IRQ_TYPE_MSI      3
->> +#define KVM_LOONGSON_IRQ_TYPE_IOAPIC   4
->> +#define KVM_LOONGSON_IRQ_TYPE_ROUTE    5
->> +
->> +/* Out-of-kernel GIC cpu interrupt injection irq_number field */
->> +#define KVM_LOONGSON_IRQ_CPU_IRQ       0
->> +#define KVM_LOONGSON_IRQ_CPU_FIQ       1
->> +#define KVM_LOONGSON_CPU_IP_NUM                8
->> +
->> +typedef union loongarch_instruction  larch_inst;
->> +typedef int (*exit_handle_fn)(struct kvm_vcpu *);
->> +
->> +int  _kvm_emu_mmio_write(struct kvm_vcpu *vcpu, larch_inst inst);
->> +int  _kvm_emu_mmio_read(struct kvm_vcpu *vcpu, larch_inst inst);
->> +int  _kvm_complete_mmio_read(struct kvm_vcpu *vcpu, struct kvm_run *run);
->> +int  _kvm_complete_iocsr_read(struct kvm_vcpu *vcpu, struct kvm_run *run);
->> +int  _kvm_emu_idle(struct kvm_vcpu *vcpu);
->> +int  _kvm_handle_pv_hcall(struct kvm_vcpu *vcpu);
->> +int  _kvm_pending_timer(struct kvm_vcpu *vcpu);
->> +int  _kvm_handle_fault(struct kvm_vcpu *vcpu, int fault);
->> +void _kvm_deliver_intr(struct kvm_vcpu *vcpu);
->> +
->> +void kvm_own_fpu(struct kvm_vcpu *vcpu);
->> +void kvm_lose_fpu(struct kvm_vcpu *vcpu);
->> +void kvm_save_fpu(struct loongarch_fpu *fpu);
->> +void kvm_restore_fpu(struct loongarch_fpu *fpu);
->> +void kvm_restore_fcsr(struct loongarch_fpu *fpu);
->> +
->> +void kvm_acquire_timer(struct kvm_vcpu *vcpu);
->> +void kvm_reset_timer(struct kvm_vcpu *vcpu);
->> +enum hrtimer_restart kvm_count_timeout(struct kvm_vcpu *vcpu);
->> +void kvm_init_timer(struct kvm_vcpu *vcpu, unsigned long hz);
->> +void kvm_restore_timer(struct kvm_vcpu *vcpu);
->> +void kvm_save_timer(struct kvm_vcpu *vcpu);
->> +
->> +int kvm_vcpu_ioctl_interrupt(struct kvm_vcpu *vcpu,
->> +                       struct kvm_loongarch_interrupt *irq);
->> +/*
->> + * Loongarch KVM guest interrupt handling
->> + */
->> +static inline void _kvm_queue_irq(struct kvm_vcpu *vcpu, unsigned int irq)
->> +{
->> +       set_bit(irq, &vcpu->arch.irq_pending);
->> +       clear_bit(irq, &vcpu->arch.irq_clear);
->> +}
->> +
->> +static inline void _kvm_dequeue_irq(struct kvm_vcpu *vcpu, unsigned int irq)
->> +{
->> +       clear_bit(irq, &vcpu->arch.irq_pending);
->> +       set_bit(irq, &vcpu->arch.irq_clear);
->> +}
->> +
->> +#endif /* __ASM_LOONGARCH_KVM_VCPU_H__ */
->> diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
->> index 83da5d29e2d1..ce0da4e33247 100644
->> --- a/arch/loongarch/include/asm/loongarch.h
->> +++ b/arch/loongarch/include/asm/loongarch.h
->> @@ -236,6 +236,62 @@ static __always_inline u64 csr_xchg64(u64 val, u64 mask, u32 reg)
->>          return __csrxchg_d(val, mask, reg);
->>   }
->>
->> +/* GCSR */
->> +static __always_inline u64 gcsr_read(u32 reg)
->> +{
->> +       u64 val = 0;
->> +
->> +       BUILD_BUG_ON(!__builtin_constant_p(reg));
->> +       /* Instructions will be available in binutils later */
->> +       asm volatile (
->> +               "parse_r __reg, %[val]\n\t"
->> +               /*
->> +                * read val from guest csr register %[reg]
->> +                * gcsrrd %[val], %[reg]
->> +                */
->> +               ".word 0x5 << 24 | %[reg] << 10 | 0 << 5 | __reg\n\t"
->> +               : [val] "+r" (val)
->> +               : [reg] "i" (reg)
->> +               : "memory");
->> +
->> +       return val;
->> +}
->> +
->> +static __always_inline void gcsr_write(u64 val, u32 reg)
->> +{
->> +       BUILD_BUG_ON(!__builtin_constant_p(reg));
->> +       /* Instructions will be available in binutils later */
->> +       asm volatile (
->> +               "parse_r __reg, %[val]\n\t"
->> +               /*
->> +                * write val to guest csr register %[reg]
->> +                * gcsrwr %[val], %[reg]
->> +                */
->> +               ".word 0x5 << 24 | %[reg] << 10 | 1 << 5 | __reg\n\t"
->> +               : [val] "+r" (val)
->> +               : [reg] "i" (reg)
->> +               : "memory");
->> +}
->> +
->> +static __always_inline u64 gcsr_xchg(u64 val, u64 mask, u32 reg)
->> +{
->> +       BUILD_BUG_ON(!__builtin_constant_p(reg));
->> +       /* Instructions will be available in binutils later */
->> +       asm volatile (
->> +               "parse_r __rd, %[val]\n\t"
->> +               "parse_r __rj, %[mask]\n\t"
->> +               /*
->> +                * replace masked bits of guest csr register %[reg] with val
->> +                * gcsrxchg %[val], %[mask], %[reg]
->> +                */
->> +               ".word 0x5 << 24 | %[reg] << 10 | __rj << 5 | __rd\n\t"
->> +               : [val] "+r" (val)
->> +               : [mask] "r" (mask), [reg] "i" (reg)
->> +               : "memory");
->> +
->> +       return val;
->> +}
->> +
->>   /* IOCSR */
->>   static __always_inline u32 iocsr_read32(u32 reg)
->>   {
->> @@ -309,6 +365,7 @@ static __always_inline void iocsr_write64(u64 val, u32 reg)
->>   #define LOONGARCH_CSR_ECFG             0x4     /* Exception config */
->>   #define  CSR_ECFG_VS_SHIFT             16
->>   #define  CSR_ECFG_VS_WIDTH             3
->> +#define  CSR_ECFG_VS_SHIFT_END         (CSR_ECFG_VS_SHIFT + CSR_ECFG_VS_WIDTH - 1)
->>   #define  CSR_ECFG_VS                   (_ULCAST_(0x7) << CSR_ECFG_VS_SHIFT)
->>   #define  CSR_ECFG_IM_SHIFT             0
->>   #define  CSR_ECFG_IM_WIDTH             13
->> @@ -397,13 +454,14 @@ static __always_inline void iocsr_write64(u64 val, u32 reg)
->>   #define  CSR_TLBLO1_V                  (_ULCAST_(0x1) << CSR_TLBLO1_V_SHIFT)
->>
->>   #define LOONGARCH_CSR_GTLBC            0x15    /* Guest TLB control */
->> -#define  CSR_GTLBC_RID_SHIFT           16
->> -#define  CSR_GTLBC_RID_WIDTH           8
->> -#define  CSR_GTLBC_RID                 (_ULCAST_(0xff) << CSR_GTLBC_RID_SHIFT)
->> +#define  CSR_GTLBC_TGID_SHIFT          16
->> +#define  CSR_GTLBC_TGID_WIDTH          8
->> +#define  CSR_GTLBC_TGID_SHIFT_END      (CSR_GTLBC_TGID_SHIFT + CSR_GTLBC_TGID_WIDTH - 1)
->> +#define  CSR_GTLBC_TGID                        (_ULCAST_(0xff) << CSR_GTLBC_TGID_SHIFT)
->>   #define  CSR_GTLBC_TOTI_SHIFT          13
->>   #define  CSR_GTLBC_TOTI                        (_ULCAST_(0x1) << CSR_GTLBC_TOTI_SHIFT)
->> -#define  CSR_GTLBC_USERID_SHIFT                12
->> -#define  CSR_GTLBC_USERID              (_ULCAST_(0x1) << CSR_GTLBC_USERID_SHIFT)
->> +#define  CSR_GTLBC_USETGID_SHIFT       12
->> +#define  CSR_GTLBC_USETGID             (_ULCAST_(0x1) << CSR_GTLBC_USETGID_SHIFT)
->>   #define  CSR_GTLBC_GMTLBSZ_SHIFT       0
->>   #define  CSR_GTLBC_GMTLBSZ_WIDTH       6
->>   #define  CSR_GTLBC_GMTLBSZ             (_ULCAST_(0x3f) << CSR_GTLBC_GMTLBSZ_SHIFT)
->> @@ -555,6 +613,7 @@ static __always_inline void iocsr_write64(u64 val, u32 reg)
->>   #define LOONGARCH_CSR_GSTAT            0x50    /* Guest status */
->>   #define  CSR_GSTAT_GID_SHIFT           16
->>   #define  CSR_GSTAT_GID_WIDTH           8
->> +#define  CSR_GSTAT_GID_SHIFT_END       (CSR_GSTAT_GID_SHIFT + CSR_GSTAT_GID_WIDTH - 1)
->>   #define  CSR_GSTAT_GID                 (_ULCAST_(0xff) << CSR_GSTAT_GID_SHIFT)
->>   #define  CSR_GSTAT_GIDBIT_SHIFT                4
->>   #define  CSR_GSTAT_GIDBIT_WIDTH                6
->> @@ -605,6 +664,12 @@ static __always_inline void iocsr_write64(u64 val, u32 reg)
->>   #define  CSR_GCFG_MATC_GUEST           (_ULCAST_(0x0) << CSR_GCFG_MATC_SHITF)
->>   #define  CSR_GCFG_MATC_ROOT            (_ULCAST_(0x1) << CSR_GCFG_MATC_SHITF)
->>   #define  CSR_GCFG_MATC_NEST            (_ULCAST_(0x2) << CSR_GCFG_MATC_SHITF)
->> +#define  CSR_GCFG_MATP_NEST_SHIFT      2
->> +#define  CSR_GCFG_MATP_NEST            (_ULCAST_(0x1) << CSR_GCFG_MATP_NEST_SHIFT)
->> +#define  CSR_GCFG_MATP_ROOT_SHIFT      1
->> +#define  CSR_GCFG_MATP_ROOT            (_ULCAST_(0x1) << CSR_GCFG_MATP_ROOT_SHIFT)
->> +#define  CSR_GCFG_MATP_GUEST_SHIFT     0
->> +#define  CSR_GCFG_MATP_GUEST           (_ULCAST_(0x1) << CSR_GCFG_MATP_GUEST_SHIFT)
->>
->>   #define LOONGARCH_CSR_GINTC            0x52    /* Guest interrupt control */
->>   #define  CSR_GINTC_HC_SHIFT            16
->> @@ -1276,6 +1341,131 @@ static inline void write_csr_tlbrefill_pagesize(unsigned int size)
->>   #define write_csr_perfctrl3(val)       csr_write64(val, LOONGARCH_CSR_PERFCTRL3)
->>   #define write_csr_perfcntr3(val)       csr_write64(val, LOONGARCH_CSR_PERFCNTR3)
->>
->> +/* Guest related CSRs */
->> +#define read_csr_gtlbc()               csr_read64(LOONGARCH_CSR_GTLBC)
->> +#define write_csr_gtlbc(val)           csr_write64(val, LOONGARCH_CSR_GTLBC)
->> +#define read_csr_trgp()                        csr_read64(LOONGARCH_CSR_TRGP)
->> +#define read_csr_gcfg()                        csr_read64(LOONGARCH_CSR_GCFG)
->> +#define write_csr_gcfg(val)            csr_write64(val, LOONGARCH_CSR_GCFG)
->> +#define read_csr_gstat()               csr_read64(LOONGARCH_CSR_GSTAT)
->> +#define write_csr_gstat(val)           csr_write64(val, LOONGARCH_CSR_GSTAT)
->> +#define read_csr_gintc()               csr_read64(LOONGARCH_CSR_GINTC)
->> +#define write_csr_gintc(val)           csr_write64(val, LOONGARCH_CSR_GINTC)
->> +#define read_csr_gcntc()               csr_read64(LOONGARCH_CSR_GCNTC)
->> +#define write_csr_gcntc(val)           csr_write64(val, LOONGARCH_CSR_GCNTC)
->> +
->> +/* Guest CSRs read and write */
->> +#define read_gcsr_crmd()               gcsr_read(LOONGARCH_CSR_CRMD)
->> +#define write_gcsr_crmd(val)           gcsr_write(val, LOONGARCH_CSR_CRMD)
->> +#define read_gcsr_prmd()               gcsr_read(LOONGARCH_CSR_PRMD)
->> +#define write_gcsr_prmd(val)           gcsr_write(val, LOONGARCH_CSR_PRMD)
->> +#define read_gcsr_euen()               gcsr_read(LOONGARCH_CSR_EUEN)
->> +#define write_gcsr_euen(val)           gcsr_write(val, LOONGARCH_CSR_EUEN)
->> +#define read_gcsr_misc()               gcsr_read(LOONGARCH_CSR_MISC)
->> +#define write_gcsr_misc(val)           gcsr_write(val, LOONGARCH_CSR_MISC)
->> +#define read_gcsr_ecfg()               gcsr_read(LOONGARCH_CSR_ECFG)
->> +#define write_gcsr_ecfg(val)           gcsr_write(val, LOONGARCH_CSR_ECFG)
->> +#define read_gcsr_estat()              gcsr_read(LOONGARCH_CSR_ESTAT)
->> +#define write_gcsr_estat(val)          gcsr_write(val, LOONGARCH_CSR_ESTAT)
->> +#define read_gcsr_era()                        gcsr_read(LOONGARCH_CSR_ERA)
->> +#define write_gcsr_era(val)            gcsr_write(val, LOONGARCH_CSR_ERA)
->> +#define read_gcsr_badv()               gcsr_read(LOONGARCH_CSR_BADV)
->> +#define write_gcsr_badv(val)           gcsr_write(val, LOONGARCH_CSR_BADV)
->> +#define read_gcsr_badi()               gcsr_read(LOONGARCH_CSR_BADI)
->> +#define write_gcsr_badi(val)           gcsr_write(val, LOONGARCH_CSR_BADI)
->> +#define read_gcsr_eentry()             gcsr_read(LOONGARCH_CSR_EENTRY)
->> +#define write_gcsr_eentry(val)         gcsr_write(val, LOONGARCH_CSR_EENTRY)
->> +
->> +#define read_gcsr_tlbidx()             gcsr_read(LOONGARCH_CSR_TLBIDX)
->> +#define write_gcsr_tlbidx(val)         gcsr_write(val, LOONGARCH_CSR_TLBIDX)
->> +#define read_gcsr_tlbhi()              gcsr_read(LOONGARCH_CSR_TLBEHI)
->> +#define write_gcsr_tlbhi(val)          gcsr_write(val, LOONGARCH_CSR_TLBEHI)
->> +#define read_gcsr_tlblo0()             gcsr_read(LOONGARCH_CSR_TLBELO0)
->> +#define write_gcsr_tlblo0(val)         gcsr_write(val, LOONGARCH_CSR_TLBELO0)
->> +#define read_gcsr_tlblo1()             gcsr_read(LOONGARCH_CSR_TLBELO1)
->> +#define write_gcsr_tlblo1(val)         gcsr_write(val, LOONGARCH_CSR_TLBELO1)
->> +
->> +#define read_gcsr_asid()               gcsr_read(LOONGARCH_CSR_ASID)
->> +#define write_gcsr_asid(val)           gcsr_write(val, LOONGARCH_CSR_ASID)
->> +#define read_gcsr_pgdl()               gcsr_read(LOONGARCH_CSR_PGDL)
->> +#define write_gcsr_pgdl(val)           gcsr_write(val, LOONGARCH_CSR_PGDL)
->> +#define read_gcsr_pgdh()               gcsr_read(LOONGARCH_CSR_PGDH)
->> +#define write_gcsr_pgdh(val)           gcsr_write(val, LOONGARCH_CSR_PGDH)
->> +#define write_gcsr_pgd(val)            gcsr_write(val, LOONGARCH_CSR_PGD)
->> +#define read_gcsr_pgd()                        gcsr_read(LOONGARCH_CSR_PGD)
->> +#define read_gcsr_pwctl0()             gcsr_read(LOONGARCH_CSR_PWCTL0)
->> +#define write_gcsr_pwctl0(val)         gcsr_write(val, LOONGARCH_CSR_PWCTL0)
->> +#define read_gcsr_pwctl1()             gcsr_read(LOONGARCH_CSR_PWCTL1)
->> +#define write_gcsr_pwctl1(val)         gcsr_write(val, LOONGARCH_CSR_PWCTL1)
->> +#define read_gcsr_stlbpgsize()         gcsr_read(LOONGARCH_CSR_STLBPGSIZE)
->> +#define write_gcsr_stlbpgsize(val)     gcsr_write(val, LOONGARCH_CSR_STLBPGSIZE)
->> +#define read_gcsr_rvacfg()             gcsr_read(LOONGARCH_CSR_RVACFG)
->> +#define write_gcsr_rvacfg(val)         gcsr_write(val, LOONGARCH_CSR_RVACFG)
->> +
->> +#define read_gcsr_cpuid()              gcsr_read(LOONGARCH_CSR_CPUID)
->> +#define write_gcsr_cpuid(val)          gcsr_write(val, LOONGARCH_CSR_CPUID)
->> +#define read_gcsr_prcfg1()             gcsr_read(LOONGARCH_CSR_PRCFG1)
->> +#define write_gcsr_prcfg1(val)         gcsr_write(val, LOONGARCH_CSR_PRCFG1)
->> +#define read_gcsr_prcfg2()             gcsr_read(LOONGARCH_CSR_PRCFG2)
->> +#define write_gcsr_prcfg2(val)         gcsr_write(val, LOONGARCH_CSR_PRCFG2)
->> +#define read_gcsr_prcfg3()             gcsr_read(LOONGARCH_CSR_PRCFG3)
->> +#define write_gcsr_prcfg3(val)         gcsr_write(val, LOONGARCH_CSR_PRCFG3)
->> +
->> +#define read_gcsr_kscratch0()          gcsr_read(LOONGARCH_CSR_KS0)
->> +#define write_gcsr_kscratch0(val)      gcsr_write(val, LOONGARCH_CSR_KS0)
->> +#define read_gcsr_kscratch1()          gcsr_read(LOONGARCH_CSR_KS1)
->> +#define write_gcsr_kscratch1(val)      gcsr_write(val, LOONGARCH_CSR_KS1)
->> +#define read_gcsr_kscratch2()          gcsr_read(LOONGARCH_CSR_KS2)
->> +#define write_gcsr_kscratch2(val)      gcsr_write(val, LOONGARCH_CSR_KS2)
->> +#define read_gcsr_kscratch3()          gcsr_read(LOONGARCH_CSR_KS3)
->> +#define write_gcsr_kscratch3(val)      gcsr_write(val, LOONGARCH_CSR_KS3)
->> +#define read_gcsr_kscratch4()          gcsr_read(LOONGARCH_CSR_KS4)
->> +#define write_gcsr_kscratch4(val)      gcsr_write(val, LOONGARCH_CSR_KS4)
->> +#define read_gcsr_kscratch5()          gcsr_read(LOONGARCH_CSR_KS5)
->> +#define write_gcsr_kscratch5(val)      gcsr_write(val, LOONGARCH_CSR_KS5)
->> +#define read_gcsr_kscratch6()          gcsr_read(LOONGARCH_CSR_KS6)
->> +#define write_gcsr_kscratch6(val)      gcsr_write(val, LOONGARCH_CSR_KS6)
->> +#define read_gcsr_kscratch7()          gcsr_read(LOONGARCH_CSR_KS7)
->> +#define write_gcsr_kscratch7(val)      gcsr_write(val, LOONGARCH_CSR_KS7)
->> +
->> +#define read_gcsr_timerid()            gcsr_read(LOONGARCH_CSR_TMID)
->> +#define write_gcsr_timerid(val)                gcsr_write(val, LOONGARCH_CSR_TMID)
->> +#define read_gcsr_timercfg()           gcsr_read(LOONGARCH_CSR_TCFG)
->> +#define write_gcsr_timercfg(val)       gcsr_write(val, LOONGARCH_CSR_TCFG)
->> +#define read_gcsr_timertick()          gcsr_read(LOONGARCH_CSR_TVAL)
->> +#define write_gcsr_timertick(val)      gcsr_write(val, LOONGARCH_CSR_TVAL)
->> +#define read_gcsr_timeroffset()                gcsr_read(LOONGARCH_CSR_CNTC)
->> +#define write_gcsr_timeroffset(val)    gcsr_write(val, LOONGARCH_CSR_CNTC)
->> +
->> +#define read_gcsr_llbctl()             gcsr_read(LOONGARCH_CSR_LLBCTL)
->> +#define write_gcsr_llbctl(val)         gcsr_write(val, LOONGARCH_CSR_LLBCTL)
->> +
->> +#define read_gcsr_tlbrentry()          gcsr_read(LOONGARCH_CSR_TLBRENTRY)
->> +#define write_gcsr_tlbrentry(val)      gcsr_write(val, LOONGARCH_CSR_TLBRENTRY)
->> +#define read_gcsr_tlbrbadv()           gcsr_read(LOONGARCH_CSR_TLBRBADV)
->> +#define write_gcsr_tlbrbadv(val)       gcsr_write(val, LOONGARCH_CSR_TLBRBADV)
->> +#define read_gcsr_tlbrera()            gcsr_read(LOONGARCH_CSR_TLBRERA)
->> +#define write_gcsr_tlbrera(val)                gcsr_write(val, LOONGARCH_CSR_TLBRERA)
->> +#define read_gcsr_tlbrsave()           gcsr_read(LOONGARCH_CSR_TLBRSAVE)
->> +#define write_gcsr_tlbrsave(val)       gcsr_write(val, LOONGARCH_CSR_TLBRSAVE)
->> +#define read_gcsr_tlbrelo0()           gcsr_read(LOONGARCH_CSR_TLBRELO0)
->> +#define write_gcsr_tlbrelo0(val)       gcsr_write(val, LOONGARCH_CSR_TLBRELO0)
->> +#define read_gcsr_tlbrelo1()           gcsr_read(LOONGARCH_CSR_TLBRELO1)
->> +#define write_gcsr_tlbrelo1(val)       gcsr_write(val, LOONGARCH_CSR_TLBRELO1)
->> +#define read_gcsr_tlbrehi()            gcsr_read(LOONGARCH_CSR_TLBREHI)
->> +#define write_gcsr_tlbrehi(val)                gcsr_write(val, LOONGARCH_CSR_TLBREHI)
->> +#define read_gcsr_tlbrprmd()           gcsr_read(LOONGARCH_CSR_TLBRPRMD)
->> +#define write_gcsr_tlbrprmd(val)       gcsr_write(val, LOONGARCH_CSR_TLBRPRMD)
->> +
->> +#define read_gcsr_directwin0()         gcsr_read(LOONGARCH_CSR_DMWIN0)
->> +#define write_gcsr_directwin0(val)     gcsr_write(val, LOONGARCH_CSR_DMWIN0)
->> +#define read_gcsr_directwin1()         gcsr_read(LOONGARCH_CSR_DMWIN1)
->> +#define write_gcsr_directwin1(val)     gcsr_write(val, LOONGARCH_CSR_DMWIN1)
->> +#define read_gcsr_directwin2()         gcsr_read(LOONGARCH_CSR_DMWIN2)
->> +#define write_gcsr_directwin2(val)     gcsr_write(val, LOONGARCH_CSR_DMWIN2)
->> +#define read_gcsr_directwin3()         gcsr_read(LOONGARCH_CSR_DMWIN3)
->> +#define write_gcsr_directwin3(val)     gcsr_write(val, LOONGARCH_CSR_DMWIN3)
->> +
->>   /*
->>    * Manipulate bits in a register.
->>    */
->> @@ -1318,15 +1508,26 @@ change_##name(unsigned long change, unsigned long val)          \
->>   }
->>
->>   #define __BUILD_CSR_OP(name)   __BUILD_CSR_COMMON(csr_##name)
->> +#define __BUILD_GCSR_OP(name)  __BUILD_CSR_COMMON(gcsr_##name)
->>
->>   __BUILD_CSR_OP(euen)
->>   __BUILD_CSR_OP(ecfg)
->>   __BUILD_CSR_OP(tlbidx)
->> +__BUILD_CSR_OP(gcfg)
->> +__BUILD_CSR_OP(gstat)
->> +__BUILD_CSR_OP(gtlbc)
->> +__BUILD_CSR_OP(gintc)
->> +__BUILD_GCSR_OP(llbctl)
->> +__BUILD_GCSR_OP(tlbidx)
->>
->>   #define set_csr_estat(val)     \
->>          csr_xchg32(val, val, LOONGARCH_CSR_ESTAT)
->>   #define clear_csr_estat(val)   \
->>          csr_xchg32(~(val), val, LOONGARCH_CSR_ESTAT)
->> +#define set_gcsr_estat(val)    \
->> +       gcsr_xchg(val, val, LOONGARCH_CSR_ESTAT)
->> +#define clear_gcsr_estat(val)  \
->> +       gcsr_xchg(~(val), val, LOONGARCH_CSR_ESTAT)
->>
->>   #endif /* __ASSEMBLY__ */
->>
->> @@ -1411,7 +1612,7 @@ __BUILD_CSR_OP(tlbidx)
->>   #define EXCCODE_WATCH          19      /* Watch address reference */
->>   #define EXCCODE_BTDIS          20      /* Binary Trans. Disabled */
->>   #define EXCCODE_BTE            21      /* Binary Trans. Exception */
->> -#define EXCCODE_PSI            22      /* Guest Privileged Error */
->> +#define EXCCODE_GSPR           22      /* Guest Privileged Error */
->>   #define EXCCODE_HYP            23      /* Hypercall */
->>   #define EXCCODE_GCM            24      /* Guest CSR modified */
->>          #define EXCSUBCODE_GCSC         0       /* Software caused */
->> diff --git a/arch/loongarch/kvm/trace.h b/arch/loongarch/kvm/trace.h
->> new file mode 100644
->> index 000000000000..17b28d94d569
->> --- /dev/null
->> +++ b/arch/loongarch/kvm/trace.h
->> @@ -0,0 +1,168 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
->> + */
->> +
->> +#if !defined(_TRACE_KVM_H) || defined(TRACE_HEADER_MULTI_READ)
->> +#define _TRACE_KVM_H
->> +
->> +#include <linux/tracepoint.h>
->> +#include <asm/kvm_csr.h>
->> +
->> +#undef TRACE_SYSTEM
->> +#define TRACE_SYSTEM   kvm
->> +
->> +/*
->> + * Tracepoints for VM enters
->> + */
->> +DECLARE_EVENT_CLASS(kvm_transition,
->> +       TP_PROTO(struct kvm_vcpu *vcpu),
->> +       TP_ARGS(vcpu),
->> +       TP_STRUCT__entry(
->> +               __field(unsigned long, pc)
->> +       ),
->> +
->> +       TP_fast_assign(
->> +               __entry->pc = vcpu->arch.pc;
->> +       ),
->> +
->> +       TP_printk("PC: 0x%08lx",
->> +                 __entry->pc)
->> +);
->> +
->> +DEFINE_EVENT(kvm_transition, kvm_enter,
->> +            TP_PROTO(struct kvm_vcpu *vcpu),
->> +            TP_ARGS(vcpu));
->> +
->> +DEFINE_EVENT(kvm_transition, kvm_reenter,
->> +            TP_PROTO(struct kvm_vcpu *vcpu),
->> +            TP_ARGS(vcpu));
->> +
->> +DEFINE_EVENT(kvm_transition, kvm_out,
->> +            TP_PROTO(struct kvm_vcpu *vcpu),
->> +            TP_ARGS(vcpu));
->> +
->> +/* Further exit reasons */
->> +#define KVM_TRACE_EXIT_IDLE            64
->> +#define KVM_TRACE_EXIT_CACHE           65
->> +#define KVM_TRACE_EXIT_SIGNAL          66
->> +
->> +/* Tracepoints for VM exits */
->> +#define kvm_trace_symbol_exit_types                    \
->> +       { KVM_TRACE_EXIT_IDLE,          "IDLE" },       \
->> +       { KVM_TRACE_EXIT_CACHE,         "CACHE" },      \
->> +       { KVM_TRACE_EXIT_SIGNAL,        "Signal" }
->> +
->> +TRACE_EVENT(kvm_exit_gspr,
->> +           TP_PROTO(struct kvm_vcpu *vcpu, unsigned int inst_word),
->> +           TP_ARGS(vcpu, inst_word),
->> +           TP_STRUCT__entry(
->> +                       __field(unsigned int, inst_word)
->> +           ),
->> +
->> +           TP_fast_assign(
->> +                       __entry->inst_word = inst_word;
->> +           ),
->> +
->> +           TP_printk("inst word: 0x%08x",
->> +                     __entry->inst_word)
->> +);
->> +
->> +
->> +DECLARE_EVENT_CLASS(kvm_exit,
->> +           TP_PROTO(struct kvm_vcpu *vcpu, unsigned int reason),
->> +           TP_ARGS(vcpu, reason),
->> +           TP_STRUCT__entry(
->> +                       __field(unsigned long, pc)
->> +                       __field(unsigned int, reason)
->> +           ),
->> +
->> +           TP_fast_assign(
->> +                       __entry->pc = vcpu->arch.pc;
->> +                       __entry->reason = reason;
->> +           ),
->> +
->> +           TP_printk("[%s]PC: 0x%08lx",
->> +                     __print_symbolic(__entry->reason,
->> +                                      kvm_trace_symbol_exit_types),
->> +                     __entry->pc)
->> +);
->> +
->> +DEFINE_EVENT(kvm_exit, kvm_exit_idle,
->> +            TP_PROTO(struct kvm_vcpu *vcpu, unsigned int reason),
->> +            TP_ARGS(vcpu, reason));
->> +
->> +DEFINE_EVENT(kvm_exit, kvm_exit_cache,
->> +            TP_PROTO(struct kvm_vcpu *vcpu, unsigned int reason),
->> +            TP_ARGS(vcpu, reason));
->> +
->> +DEFINE_EVENT(kvm_exit, kvm_exit,
->> +            TP_PROTO(struct kvm_vcpu *vcpu, unsigned int reason),
->> +            TP_ARGS(vcpu, reason));
->> +
->> +#define KVM_TRACE_AUX_RESTORE          0
->> +#define KVM_TRACE_AUX_SAVE             1
->> +#define KVM_TRACE_AUX_ENABLE           2
->> +#define KVM_TRACE_AUX_DISABLE          3
->> +#define KVM_TRACE_AUX_DISCARD          4
->> +
->> +#define KVM_TRACE_AUX_FPU              1
->> +
->> +#define kvm_trace_symbol_aux_op                                \
->> +       { KVM_TRACE_AUX_RESTORE,        "restore" },    \
->> +       { KVM_TRACE_AUX_SAVE,           "save" },       \
->> +       { KVM_TRACE_AUX_ENABLE,         "enable" },     \
->> +       { KVM_TRACE_AUX_DISABLE,        "disable" },    \
->> +       { KVM_TRACE_AUX_DISCARD,        "discard" }
->> +
->> +#define kvm_trace_symbol_aux_state                     \
->> +       { KVM_TRACE_AUX_FPU,     "FPU" }
->> +
->> +TRACE_EVENT(kvm_aux,
->> +           TP_PROTO(struct kvm_vcpu *vcpu, unsigned int op,
->> +                    unsigned int state),
->> +           TP_ARGS(vcpu, op, state),
->> +           TP_STRUCT__entry(
->> +                       __field(unsigned long, pc)
->> +                       __field(u8, op)
->> +                       __field(u8, state)
->> +           ),
->> +
->> +           TP_fast_assign(
->> +                       __entry->pc = vcpu->arch.pc;
->> +                       __entry->op = op;
->> +                       __entry->state = state;
->> +           ),
->> +
->> +           TP_printk("%s %s PC: 0x%08lx",
->> +                     __print_symbolic(__entry->op,
->> +                                      kvm_trace_symbol_aux_op),
->> +                     __print_symbolic(__entry->state,
->> +                                      kvm_trace_symbol_aux_state),
->> +                     __entry->pc)
->> +);
->> +
->> +TRACE_EVENT(kvm_vpid_change,
->> +           TP_PROTO(struct kvm_vcpu *vcpu, unsigned long vpid),
->> +           TP_ARGS(vcpu, vpid),
->> +           TP_STRUCT__entry(
->> +                       __field(unsigned long, vpid)
->> +           ),
->> +
->> +           TP_fast_assign(
->> +                       __entry->vpid = vpid;
->> +           ),
->> +
->> +           TP_printk("vpid: 0x%08lx",
->> +                     __entry->vpid)
->> +);
->> +
->> +#endif /* _TRACE_LOONGARCH64_KVM_H */
->> +
->> +#undef TRACE_INCLUDE_PATH
->> +#define TRACE_INCLUDE_PATH ../../arch/loongarch/kvm
->> +#undef TRACE_INCLUDE_FILE
->> +#define TRACE_INCLUDE_FILE trace
->> +
->> +/* This part must be outside protection */
->> +#include <trace/define_trace.h>
->> --
->> 2.31.1
->>
+diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
+index 783234ae0f57..4aebb20d5ff8 100644
+--- a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
++++ b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
+@@ -451,11 +451,14 @@ static const struct panel_init_cmd inx_hj110iz_init_cmd[] = {
+ 	_INIT_DCS_CMD(0xFF, 0x20),
+ 	_INIT_DCS_CMD(0xFB, 0x01),
+ 	_INIT_DCS_CMD(0x05, 0xD1),
+-	_INIT_DCS_CMD(0x0D, 0x63),
+-	_INIT_DCS_CMD(0x07, 0x8C),
++	_INIT_DCS_CMD(0x06, 0xC0),
++	_INIT_DCS_CMD(0x07, 0x87),
+ 	_INIT_DCS_CMD(0x08, 0x4B),
++
++	_INIT_DCS_CMD(0x0D, 0x63),
+ 	_INIT_DCS_CMD(0x0E, 0x91),
+ 	_INIT_DCS_CMD(0x0F, 0x69),
++	_INIT_DCS_CMD(0x94, 0x00),
+ 	_INIT_DCS_CMD(0x95, 0xF5),
+ 	_INIT_DCS_CMD(0x96, 0xF5),
+ 	_INIT_DCS_CMD(0x9D, 0x00),
+@@ -463,98 +466,96 @@ static const struct panel_init_cmd inx_hj110iz_init_cmd[] = {
+ 	_INIT_DCS_CMD(0x69, 0x98),
+ 	_INIT_DCS_CMD(0x75, 0xA2),
+ 	_INIT_DCS_CMD(0x77, 0xB3),
++
++	_INIT_DCS_CMD(0x58, 0x43),
+ 	_INIT_DCS_CMD(0xFF, 0x24),
+ 	_INIT_DCS_CMD(0xFB, 0x01),
+ 	_INIT_DCS_CMD(0x91, 0x44),
+-	_INIT_DCS_CMD(0x92, 0x7A),
+-	_INIT_DCS_CMD(0x93, 0x1A),
+-	_INIT_DCS_CMD(0x94, 0x40),
+-	_INIT_DCS_CMD(0x9A, 0x08),
++	_INIT_DCS_CMD(0x92, 0x4C),
++	_INIT_DCS_CMD(0x94, 0x86),
+ 	_INIT_DCS_CMD(0x60, 0x96),
+ 	_INIT_DCS_CMD(0x61, 0xD0),
+ 	_INIT_DCS_CMD(0x63, 0x70),
+-	_INIT_DCS_CMD(0xC2, 0xCF),
+-	_INIT_DCS_CMD(0x9B, 0x0F),
+-	_INIT_DCS_CMD(0x9A, 0x08),
++	_INIT_DCS_CMD(0xC2, 0xCA),
++
+ 	_INIT_DCS_CMD(0x00, 0x03),
+ 	_INIT_DCS_CMD(0x01, 0x03),
+ 	_INIT_DCS_CMD(0x02, 0x03),
+-	_INIT_DCS_CMD(0x03, 0x03),
+-	_INIT_DCS_CMD(0x04, 0x03),
+-	_INIT_DCS_CMD(0x05, 0x03),
+-	_INIT_DCS_CMD(0x06, 0x22),
+-	_INIT_DCS_CMD(0x07, 0x06),
+-	_INIT_DCS_CMD(0x08, 0x00),
+-	_INIT_DCS_CMD(0x09, 0x1D),
+-	_INIT_DCS_CMD(0x0A, 0x1C),
+-	_INIT_DCS_CMD(0x0B, 0x13),
+-	_INIT_DCS_CMD(0x0C, 0x12),
+-	_INIT_DCS_CMD(0x0D, 0x11),
+-	_INIT_DCS_CMD(0x0E, 0x10),
+-	_INIT_DCS_CMD(0x0F, 0x0F),
+-	_INIT_DCS_CMD(0x10, 0x0E),
+-	_INIT_DCS_CMD(0x11, 0x0D),
+-	_INIT_DCS_CMD(0x12, 0x0C),
++	_INIT_DCS_CMD(0x03, 0x29),
++	_INIT_DCS_CMD(0x04, 0x22),
++	_INIT_DCS_CMD(0x05, 0x22),
++	_INIT_DCS_CMD(0x06, 0x0B),
++	_INIT_DCS_CMD(0x07, 0x1D),
++	_INIT_DCS_CMD(0x08, 0x1C),
++	_INIT_DCS_CMD(0x09, 0x05),
++	_INIT_DCS_CMD(0x0A, 0x08),
++	_INIT_DCS_CMD(0x0B, 0x09),
++	_INIT_DCS_CMD(0x0C, 0x0A),
++	_INIT_DCS_CMD(0x0D, 0x0C),
++	_INIT_DCS_CMD(0x0E, 0x0D),
++	_INIT_DCS_CMD(0x0F, 0x0E),
++	_INIT_DCS_CMD(0x10, 0x0F),
++	_INIT_DCS_CMD(0x11, 0x10),
++	_INIT_DCS_CMD(0x12, 0x11),
+ 	_INIT_DCS_CMD(0x13, 0x04),
+-	_INIT_DCS_CMD(0x14, 0x03),
++	_INIT_DCS_CMD(0x14, 0x00),
+ 	_INIT_DCS_CMD(0x15, 0x03),
+ 	_INIT_DCS_CMD(0x16, 0x03),
+ 	_INIT_DCS_CMD(0x17, 0x03),
+ 	_INIT_DCS_CMD(0x18, 0x03),
+-	_INIT_DCS_CMD(0x19, 0x03),
+-	_INIT_DCS_CMD(0x1A, 0x03),
+-	_INIT_DCS_CMD(0x1B, 0x03),
+-	_INIT_DCS_CMD(0x1C, 0x22),
+-	_INIT_DCS_CMD(0x1D, 0x06),
+-	_INIT_DCS_CMD(0x1E, 0x00),
+-	_INIT_DCS_CMD(0x1F, 0x1D),
+-	_INIT_DCS_CMD(0x20, 0x1C),
+-	_INIT_DCS_CMD(0x21, 0x13),
+-	_INIT_DCS_CMD(0x22, 0x12),
+-	_INIT_DCS_CMD(0x23, 0x11),
+-	_INIT_DCS_CMD(0x24, 0x10),
+-	_INIT_DCS_CMD(0x25, 0x0F),
+-	_INIT_DCS_CMD(0x26, 0x0E),
+-	_INIT_DCS_CMD(0x27, 0x0D),
+-	_INIT_DCS_CMD(0x28, 0x0C),
++	_INIT_DCS_CMD(0x19, 0x29),
++	_INIT_DCS_CMD(0x1A, 0x22),
++	_INIT_DCS_CMD(0x1B, 0x22),
++	_INIT_DCS_CMD(0x1C, 0x0B),
++	_INIT_DCS_CMD(0x1D, 0x1D),
++	_INIT_DCS_CMD(0x1E, 0x1C),
++	_INIT_DCS_CMD(0x1F, 0x05),
++	_INIT_DCS_CMD(0x20, 0x08),
++	_INIT_DCS_CMD(0x21, 0x09),
++	_INIT_DCS_CMD(0x22, 0x0A),
++	_INIT_DCS_CMD(0x23, 0x0C),
++	_INIT_DCS_CMD(0x24, 0x0D),
++	_INIT_DCS_CMD(0x25, 0x0E),
++	_INIT_DCS_CMD(0x26, 0x0F),
++	_INIT_DCS_CMD(0x27, 0x10),
++	_INIT_DCS_CMD(0x28, 0x11),
+ 	_INIT_DCS_CMD(0x29, 0x04),
+-	_INIT_DCS_CMD(0x2A, 0x03),
++	_INIT_DCS_CMD(0x2A, 0x00),
+ 	_INIT_DCS_CMD(0x2B, 0x03),
+ 
+-	_INIT_DCS_CMD(0x2F, 0x05),
+-	_INIT_DCS_CMD(0x30, 0x32),
+-	_INIT_DCS_CMD(0x31, 0x43),
+-	_INIT_DCS_CMD(0x33, 0x05),
+-	_INIT_DCS_CMD(0x34, 0x32),
+-	_INIT_DCS_CMD(0x35, 0x43),
+-	_INIT_DCS_CMD(0x37, 0x44),
+-	_INIT_DCS_CMD(0x38, 0x40),
++	_INIT_DCS_CMD(0x2F, 0x0A),
++	_INIT_DCS_CMD(0x30, 0x35),
++	_INIT_DCS_CMD(0x37, 0xA7),
+ 	_INIT_DCS_CMD(0x39, 0x00),
+-	_INIT_DCS_CMD(0x3A, 0x18),
+-	_INIT_DCS_CMD(0x3B, 0x00),
+-	_INIT_DCS_CMD(0x3D, 0x93),
+-	_INIT_DCS_CMD(0xAB, 0x44),
+-	_INIT_DCS_CMD(0xAC, 0x40),
++	_INIT_DCS_CMD(0x3A, 0x46),
++	_INIT_DCS_CMD(0x3B, 0x32),
++	_INIT_DCS_CMD(0x3D, 0x12),
++
++	_INIT_DCS_CMD(0x3F, 0x33),
++	_INIT_DCS_CMD(0x40, 0x31),
++	_INIT_DCS_CMD(0x41, 0x40),
++	_INIT_DCS_CMD(0x42, 0x42),
++	_INIT_DCS_CMD(0x47, 0x77),
++	_INIT_DCS_CMD(0x48, 0x77),
++	_INIT_DCS_CMD(0x4A, 0x45),
++	_INIT_DCS_CMD(0x4B, 0x45),
++	_INIT_DCS_CMD(0x4C, 0x14),
+ 
+ 	_INIT_DCS_CMD(0x4D, 0x21),
+ 	_INIT_DCS_CMD(0x4E, 0x43),
+ 	_INIT_DCS_CMD(0x4F, 0x65),
+-	_INIT_DCS_CMD(0x50, 0x87),
+-	_INIT_DCS_CMD(0x51, 0x78),
+-	_INIT_DCS_CMD(0x52, 0x56),
+-	_INIT_DCS_CMD(0x53, 0x34),
+-	_INIT_DCS_CMD(0x54, 0x21),
+-	_INIT_DCS_CMD(0x55, 0x83),
+-	_INIT_DCS_CMD(0x56, 0x08),
++	_INIT_DCS_CMD(0x55, 0x06),
++	_INIT_DCS_CMD(0x56, 0x06),
+ 	_INIT_DCS_CMD(0x58, 0x21),
+-	_INIT_DCS_CMD(0x59, 0x40),
+-	_INIT_DCS_CMD(0x5A, 0x00),
+-	_INIT_DCS_CMD(0x5B, 0x2C),
+-	_INIT_DCS_CMD(0x5E, 0x00, 0x10),
++	_INIT_DCS_CMD(0x59, 0x70),
++	_INIT_DCS_CMD(0x5A, 0x46),
++	_INIT_DCS_CMD(0x5B, 0x32),
++	_INIT_DCS_CMD(0x5C, 0x88),
++	_INIT_DCS_CMD(0x5E, 0x00, 0x00),
+ 	_INIT_DCS_CMD(0x5F, 0x00),
+ 
+-	_INIT_DCS_CMD(0x7A, 0x00),
+-	_INIT_DCS_CMD(0x7B, 0x00),
++	_INIT_DCS_CMD(0x7A, 0xFF),
++	_INIT_DCS_CMD(0x7B, 0xFF),
+ 	_INIT_DCS_CMD(0x7C, 0x00),
+ 	_INIT_DCS_CMD(0x7D, 0x00),
+ 	_INIT_DCS_CMD(0x7E, 0x20),
+@@ -564,152 +565,183 @@ static const struct panel_init_cmd inx_hj110iz_init_cmd[] = {
+ 	_INIT_DCS_CMD(0x82, 0x08),
+ 	_INIT_DCS_CMD(0x97, 0x02),
+ 	_INIT_DCS_CMD(0xC5, 0x10),
++
++	_INIT_DCS_CMD(0xD7, 0x55),
++	_INIT_DCS_CMD(0xD8, 0x55),
++	_INIT_DCS_CMD(0xD9, 0x23),
+ 	_INIT_DCS_CMD(0xDA, 0x05),
+ 	_INIT_DCS_CMD(0xDB, 0x01),
+-	_INIT_DCS_CMD(0xDC, 0x7A),
++	_INIT_DCS_CMD(0xDC, 0x65),
+ 	_INIT_DCS_CMD(0xDD, 0x55),
+ 	_INIT_DCS_CMD(0xDE, 0x27),
+ 	_INIT_DCS_CMD(0xDF, 0x01),
+-	_INIT_DCS_CMD(0xE0, 0x7A),
++	_INIT_DCS_CMD(0xE0, 0x65),
+ 	_INIT_DCS_CMD(0xE1, 0x01),
+-	_INIT_DCS_CMD(0xE2, 0x7A),
++	_INIT_DCS_CMD(0xE2, 0x65),
+ 	_INIT_DCS_CMD(0xE3, 0x01),
+-	_INIT_DCS_CMD(0xE4, 0x7A),
++	_INIT_DCS_CMD(0xE4, 0x65),
+ 	_INIT_DCS_CMD(0xE5, 0x01),
+-	_INIT_DCS_CMD(0xE6, 0x7A),
++	_INIT_DCS_CMD(0xE6, 0x65),
+ 	_INIT_DCS_CMD(0xE7, 0x00),
+ 	_INIT_DCS_CMD(0xE8, 0x00),
+ 	_INIT_DCS_CMD(0xE9, 0x01),
+-	_INIT_DCS_CMD(0xEA, 0x7A),
++	_INIT_DCS_CMD(0xEA, 0x65),
+ 	_INIT_DCS_CMD(0xEB, 0x01),
+-	_INIT_DCS_CMD(0xEE, 0x7A),
++	_INIT_DCS_CMD(0xEE, 0x65),
+ 	_INIT_DCS_CMD(0xEF, 0x01),
+-	_INIT_DCS_CMD(0xF0, 0x7A),
+-
++	_INIT_DCS_CMD(0xF0, 0x65),
+ 	_INIT_DCS_CMD(0xB6, 0x05, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x05, 0x00, 0x00),
++
+ 	_INIT_DCS_CMD(0xFF, 0x25),
+-	_INIT_DCS_CMD(0xFB, 0x01),
+ 
++	_INIT_DCS_CMD(0xFB, 0x01),
+ 	_INIT_DCS_CMD(0x05, 0x00),
+-
+-	_INIT_DCS_CMD(0x13, 0x02),
+-	_INIT_DCS_CMD(0x14, 0xDF),
+ 	_INIT_DCS_CMD(0xF1, 0x10),
++
+ 	_INIT_DCS_CMD(0x1E, 0x00),
+-	_INIT_DCS_CMD(0x1F, 0x00),
+-	_INIT_DCS_CMD(0x20, 0x2C),
++	_INIT_DCS_CMD(0x1F, 0x46),
++	_INIT_DCS_CMD(0x20, 0x32),
++
+ 	_INIT_DCS_CMD(0x25, 0x00),
+-	_INIT_DCS_CMD(0x26, 0x00),
+-	_INIT_DCS_CMD(0x27, 0x2C),
++	_INIT_DCS_CMD(0x26, 0x46),
++	_INIT_DCS_CMD(0x27, 0x32),
++
+ 	_INIT_DCS_CMD(0x3F, 0x80),
+ 	_INIT_DCS_CMD(0x40, 0x00),
+ 	_INIT_DCS_CMD(0x43, 0x00),
+ 
+-	_INIT_DCS_CMD(0x44, 0x18),
+-	_INIT_DCS_CMD(0x45, 0x00),
++	_INIT_DCS_CMD(0x44, 0x46),
++	_INIT_DCS_CMD(0x45, 0x46),
++
++	_INIT_DCS_CMD(0x48, 0x46),
++	_INIT_DCS_CMD(0x49, 0x32),
+ 
+-	_INIT_DCS_CMD(0x48, 0x00),
+-	_INIT_DCS_CMD(0x49, 0x2C),
+ 	_INIT_DCS_CMD(0x5B, 0x80),
++
+ 	_INIT_DCS_CMD(0x5C, 0x00),
+-	_INIT_DCS_CMD(0x5D, 0x00),
+-	_INIT_DCS_CMD(0x5E, 0x00),
+-	_INIT_DCS_CMD(0x61, 0x00),
+-	_INIT_DCS_CMD(0x62, 0x2C),
+-	_INIT_DCS_CMD(0x68, 0x10),
++	_INIT_DCS_CMD(0x5D, 0x46),
++	_INIT_DCS_CMD(0x5E, 0x32),
++
++	_INIT_DCS_CMD(0x5F, 0x46),
++	_INIT_DCS_CMD(0x60, 0x32),
++
++	_INIT_DCS_CMD(0x61, 0x46),
++	_INIT_DCS_CMD(0x62, 0x32),
++	_INIT_DCS_CMD(0x68, 0x0C),
++
++	_INIT_DCS_CMD(0x6C, 0x0D),
++	_INIT_DCS_CMD(0x6E, 0x0D),
++	_INIT_DCS_CMD(0x78, 0x00),
++	_INIT_DCS_CMD(0x79, 0xC5),
++	_INIT_DCS_CMD(0x7A, 0x0C),
++	_INIT_DCS_CMD(0x7B, 0xB0),
++
+ 	_INIT_DCS_CMD(0xFF, 0x26),
+ 	_INIT_DCS_CMD(0xFB, 0x01),
+ 
+ 	_INIT_DCS_CMD(0x00, 0xA1),
+ 	_INIT_DCS_CMD(0x02, 0x31),
+-	_INIT_DCS_CMD(0x0A, 0xF2),
+-	_INIT_DCS_CMD(0x04, 0x28),
++	_INIT_DCS_CMD(0x0A, 0xF4),
++	_INIT_DCS_CMD(0x04, 0x50),
+ 	_INIT_DCS_CMD(0x06, 0x30),
+ 	_INIT_DCS_CMD(0x0C, 0x16),
+ 	_INIT_DCS_CMD(0x0D, 0x0D),
+ 	_INIT_DCS_CMD(0x0F, 0x00),
+ 	_INIT_DCS_CMD(0x11, 0x00),
+ 	_INIT_DCS_CMD(0x12, 0x50),
+-	_INIT_DCS_CMD(0x13, 0x56),
+-	_INIT_DCS_CMD(0x14, 0x57),
++	_INIT_DCS_CMD(0x13, 0x40),
++	_INIT_DCS_CMD(0x14, 0x58),
+ 	_INIT_DCS_CMD(0x15, 0x00),
+ 	_INIT_DCS_CMD(0x16, 0x10),
+ 	_INIT_DCS_CMD(0x17, 0xA0),
+ 	_INIT_DCS_CMD(0x18, 0x86),
+ 	_INIT_DCS_CMD(0x22, 0x00),
+ 	_INIT_DCS_CMD(0x23, 0x00),
+-	_INIT_DCS_CMD(0x19, 0x0D),
+-	_INIT_DCS_CMD(0x1A, 0x7F),
+-	_INIT_DCS_CMD(0x1B, 0x0C),
+-	_INIT_DCS_CMD(0x1C, 0xBF),
+-	_INIT_DCS_CMD(0x2A, 0x0D),
+-	_INIT_DCS_CMD(0x2B, 0x7F),
+-	_INIT_DCS_CMD(0x20, 0x00),
++
++	_INIT_DCS_CMD(0x19, 0x0E),
++	_INIT_DCS_CMD(0x1A, 0x31),
++	_INIT_DCS_CMD(0x1B, 0x0D),
++	_INIT_DCS_CMD(0x1C, 0x29),
++	_INIT_DCS_CMD(0x2A, 0x0E),
++	_INIT_DCS_CMD(0x2B, 0x31),
+ 
+ 	_INIT_DCS_CMD(0x1D, 0x00),
+-	_INIT_DCS_CMD(0x1E, 0x78),
+-	_INIT_DCS_CMD(0x1F, 0x78),
++	_INIT_DCS_CMD(0x1E, 0x62),
++	_INIT_DCS_CMD(0x1F, 0x62),
+ 
+-	_INIT_DCS_CMD(0x2F, 0x03),
+-	_INIT_DCS_CMD(0x30, 0x78),
+-	_INIT_DCS_CMD(0x33, 0x78),
+-	_INIT_DCS_CMD(0x34, 0x66),
+-	_INIT_DCS_CMD(0x35, 0x11),
++	_INIT_DCS_CMD(0x2F, 0x06),
++	_INIT_DCS_CMD(0x30, 0x62),
++	_INIT_DCS_CMD(0x31, 0x06),
++	_INIT_DCS_CMD(0x32, 0x7F),
++	_INIT_DCS_CMD(0x33, 0x11),
++	_INIT_DCS_CMD(0x34, 0x89),
++	_INIT_DCS_CMD(0x35, 0x67),
+ 
+-	_INIT_DCS_CMD(0x39, 0x10),
+-	_INIT_DCS_CMD(0x3A, 0x78),
++	_INIT_DCS_CMD(0x39, 0x0B),
++	_INIT_DCS_CMD(0x3A, 0x62),
+ 	_INIT_DCS_CMD(0x3B, 0x06),
+ 
+ 	_INIT_DCS_CMD(0xC8, 0x04),
+-	_INIT_DCS_CMD(0xC9, 0x84),
++	_INIT_DCS_CMD(0xC9, 0x89),
+ 	_INIT_DCS_CMD(0xCA, 0x4E),
+ 	_INIT_DCS_CMD(0xCB, 0x00),
++	_INIT_DCS_CMD(0xA9, 0x3F),
++	_INIT_DCS_CMD(0xAA, 0x3E),
++	_INIT_DCS_CMD(0xAB, 0x3D),
++	_INIT_DCS_CMD(0xAC, 0x3C),
++	_INIT_DCS_CMD(0xAD, 0x3B),
++	_INIT_DCS_CMD(0xAE, 0x3A),
++	_INIT_DCS_CMD(0xAF, 0x39),
++	_INIT_DCS_CMD(0xB0, 0x38),
+ 
+-	_INIT_DCS_CMD(0xA9, 0x50),
+-	_INIT_DCS_CMD(0xAA, 0x4F),
+-	_INIT_DCS_CMD(0xAB, 0x4D),
+-	_INIT_DCS_CMD(0xAC, 0x4A),
+-	_INIT_DCS_CMD(0xAD, 0x48),
+-	_INIT_DCS_CMD(0xAE, 0x46),
+ 	_INIT_DCS_CMD(0xFF, 0x27),
+ 	_INIT_DCS_CMD(0xFB, 0x01),
++
++	_INIT_DCS_CMD(0xD0, 0x11),
++	_INIT_DCS_CMD(0xD1, 0x54),
++	_INIT_DCS_CMD(0xDE, 0x43),
++	_INIT_DCS_CMD(0xDF, 0x02),
++
+ 	_INIT_DCS_CMD(0xC0, 0x18),
+ 	_INIT_DCS_CMD(0xC1, 0x00),
+ 	_INIT_DCS_CMD(0xC2, 0x00),
++	_INIT_DCS_CMD(0x00, 0x00),
++	_INIT_DCS_CMD(0xC3, 0x00),
+ 	_INIT_DCS_CMD(0x56, 0x06),
++
+ 	_INIT_DCS_CMD(0x58, 0x80),
+-	_INIT_DCS_CMD(0x59, 0x75),
++	_INIT_DCS_CMD(0x59, 0x78),
+ 	_INIT_DCS_CMD(0x5A, 0x00),
+-	_INIT_DCS_CMD(0x5B, 0x02),
++	_INIT_DCS_CMD(0x5B, 0x18),
+ 	_INIT_DCS_CMD(0x5C, 0x00),
+-	_INIT_DCS_CMD(0x5D, 0x00),
++	_INIT_DCS_CMD(0x5D, 0x01),
+ 	_INIT_DCS_CMD(0x5E, 0x20),
+ 	_INIT_DCS_CMD(0x5F, 0x10),
+ 	_INIT_DCS_CMD(0x60, 0x00),
+-	_INIT_DCS_CMD(0x61, 0x2E),
++	_INIT_DCS_CMD(0x61, 0x1C),
+ 	_INIT_DCS_CMD(0x62, 0x00),
+ 	_INIT_DCS_CMD(0x63, 0x01),
+-	_INIT_DCS_CMD(0x64, 0x43),
+-	_INIT_DCS_CMD(0x65, 0x2D),
++	_INIT_DCS_CMD(0x64, 0x44),
++	_INIT_DCS_CMD(0x65, 0x1B),
+ 	_INIT_DCS_CMD(0x66, 0x00),
+ 	_INIT_DCS_CMD(0x67, 0x01),
+-	_INIT_DCS_CMD(0x68, 0x43),
++	_INIT_DCS_CMD(0x68, 0x44),
++
+ 	_INIT_DCS_CMD(0x98, 0x01),
+ 	_INIT_DCS_CMD(0xB4, 0x03),
+-	_INIT_DCS_CMD(0x9B, 0xBD),
+-	_INIT_DCS_CMD(0xA0, 0x90),
+-	_INIT_DCS_CMD(0xAB, 0x1B),
+-	_INIT_DCS_CMD(0xBC, 0x0C),
++	_INIT_DCS_CMD(0x9B, 0xBE),
++
++	_INIT_DCS_CMD(0xAB, 0x14),
++	_INIT_DCS_CMD(0xBC, 0x08),
+ 	_INIT_DCS_CMD(0xBD, 0x28),
+ 
+ 	_INIT_DCS_CMD(0xFF, 0x2A),
+ 	_INIT_DCS_CMD(0xFB, 0x01),
+-
+ 	_INIT_DCS_CMD(0x22, 0x2F),
+ 	_INIT_DCS_CMD(0x23, 0x08),
+ 
+ 	_INIT_DCS_CMD(0x24, 0x00),
+-	_INIT_DCS_CMD(0x25, 0x65),
++	_INIT_DCS_CMD(0x25, 0x62),
+ 	_INIT_DCS_CMD(0x26, 0xF8),
+ 	_INIT_DCS_CMD(0x27, 0x00),
+ 	_INIT_DCS_CMD(0x28, 0x1A),
+@@ -719,18 +751,29 @@ static const struct panel_init_cmd inx_hj110iz_init_cmd[] = {
+ 	_INIT_DCS_CMD(0x2D, 0x1A),
+ 
+ 	_INIT_DCS_CMD(0x64, 0x96),
+-	_INIT_DCS_CMD(0x65, 0x00),
++	_INIT_DCS_CMD(0x65, 0x10),
+ 	_INIT_DCS_CMD(0x66, 0x00),
++	_INIT_DCS_CMD(0x67, 0x96),
++	_INIT_DCS_CMD(0x68, 0x10),
++	_INIT_DCS_CMD(0x69, 0x00),
+ 	_INIT_DCS_CMD(0x6A, 0x96),
+-	_INIT_DCS_CMD(0x6B, 0x00),
++	_INIT_DCS_CMD(0x6B, 0x10),
+ 	_INIT_DCS_CMD(0x6C, 0x00),
+ 	_INIT_DCS_CMD(0x70, 0x92),
+-	_INIT_DCS_CMD(0x71, 0x00),
++	_INIT_DCS_CMD(0x71, 0x10),
+ 	_INIT_DCS_CMD(0x72, 0x00),
+-	_INIT_DCS_CMD(0xA2, 0x33),
++	_INIT_DCS_CMD(0x79, 0x96),
++	_INIT_DCS_CMD(0x7A, 0x10),
++	_INIT_DCS_CMD(0x88, 0x96),
++	_INIT_DCS_CMD(0x89, 0x10),
++
++	_INIT_DCS_CMD(0xA2, 0x3F),
+ 	_INIT_DCS_CMD(0xA3, 0x30),
+ 	_INIT_DCS_CMD(0xA4, 0xC0),
++	_INIT_DCS_CMD(0xA5, 0x03),
++
+ 	_INIT_DCS_CMD(0xE8, 0x00),
++
+ 	_INIT_DCS_CMD(0x97, 0x3C),
+ 	_INIT_DCS_CMD(0x98, 0x02),
+ 	_INIT_DCS_CMD(0x99, 0x95),
+@@ -739,38 +782,68 @@ static const struct panel_init_cmd inx_hj110iz_init_cmd[] = {
+ 	_INIT_DCS_CMD(0x9C, 0x0B),
+ 	_INIT_DCS_CMD(0x9D, 0x0A),
+ 	_INIT_DCS_CMD(0x9E, 0x90),
++
++	_INIT_DCS_CMD(0xFF, 0x25),
++	_INIT_DCS_CMD(0x13, 0x02),
++	_INIT_DCS_CMD(0x14, 0xD7),
++	_INIT_DCS_CMD(0xDB, 0x02),
++	_INIT_DCS_CMD(0xDC, 0xD7),
++	_INIT_DCS_CMD(0x17, 0xCF),
++	_INIT_DCS_CMD(0x19, 0x0F),
++	_INIT_DCS_CMD(0x1B, 0x5B),
++
++	_INIT_DCS_CMD(0xFF, 0x20),
++
++	_INIT_DCS_CMD(0xB0, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x24, 0x00, 0x38, 0x00, 0x4C, 0x00, 0x5E, 0x00, 0x6F, 0x00, 0x7E),
++	_INIT_DCS_CMD(0xB1, 0x00, 0x8C, 0x00, 0xBE, 0x00, 0xE5, 0x01, 0x27, 0x01, 0x58, 0x01, 0xA8, 0x01, 0xE8, 0x01, 0xEA),
++	_INIT_DCS_CMD(0xB2, 0x02, 0x28, 0x02, 0x71, 0x02, 0x9E, 0x02, 0xDA, 0x03, 0x00, 0x03, 0x31, 0x03, 0x40, 0x03, 0x51),
++	_INIT_DCS_CMD(0xB3, 0x03, 0x62, 0x03, 0x75, 0x03, 0x89, 0x03, 0x9C, 0x03, 0xAA, 0x03, 0xB2),
++
++	_INIT_DCS_CMD(0xB4, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x27, 0x00, 0x3D, 0x00, 0x52, 0x00, 0x64, 0x00, 0x75, 0x00, 0x84),
++	_INIT_DCS_CMD(0xB5, 0x00, 0x93, 0x00, 0xC5, 0x00, 0xEC, 0x01, 0x2C, 0x01, 0x5D, 0x01, 0xAC, 0x01, 0xEC, 0x01, 0xEE),
++	_INIT_DCS_CMD(0xB6, 0x02, 0x2B, 0x02, 0x73, 0x02, 0xA0, 0x02, 0xDB, 0x03, 0x01, 0x03, 0x31, 0x03, 0x41, 0x03, 0x51),
++	_INIT_DCS_CMD(0xB7, 0x03, 0x63, 0x03, 0x75, 0x03, 0x89, 0x03, 0x9C, 0x03, 0xAA, 0x03, 0xB2),
++
++	_INIT_DCS_CMD(0xB8, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x2A, 0x00, 0x40, 0x00, 0x56, 0x00, 0x68, 0x00, 0x7A, 0x00, 0x89),
++	_INIT_DCS_CMD(0xB9, 0x00, 0x98, 0x00, 0xC9, 0x00, 0xF1, 0x01, 0x30, 0x01, 0x61, 0x01, 0xB0, 0x01, 0xEF, 0x01, 0xF1),
++	_INIT_DCS_CMD(0xBA, 0x02, 0x2E, 0x02, 0x76, 0x02, 0xA3, 0x02, 0xDD, 0x03, 0x02, 0x03, 0x32, 0x03, 0x42, 0x03, 0x53),
++	_INIT_DCS_CMD(0xBB, 0x03, 0x66, 0x03, 0x75, 0x03, 0x89, 0x03, 0x9C, 0x03, 0xAA, 0x03, 0xB2),
++
++	_INIT_DCS_CMD(0xFF, 0x21),
++	_INIT_DCS_CMD(0xB0, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x24, 0x00, 0x38, 0x00, 0x4C, 0x00, 0x5E, 0x00, 0x6F, 0x00, 0x7E),
++	_INIT_DCS_CMD(0xB1, 0x00, 0x8C, 0x00, 0xBE, 0x00, 0xE5, 0x01, 0x27, 0x01, 0x58, 0x01, 0xA8, 0x01, 0xE8, 0x01, 0xEA),
++	_INIT_DCS_CMD(0xB2, 0x02, 0x28, 0x02, 0x71, 0x02, 0x9E, 0x02, 0xDA, 0x03, 0x00, 0x03, 0x31, 0x03, 0x40, 0x03, 0x51),
++	_INIT_DCS_CMD(0xB3, 0x03, 0x62, 0x03, 0x77, 0x03, 0x90, 0x03, 0xAC, 0x03, 0xCA, 0x03, 0xDA),
++
++	_INIT_DCS_CMD(0xB4, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x27, 0x00, 0x3D, 0x00, 0x52, 0x00, 0x64, 0x00, 0x75, 0x00, 0x84),
++	_INIT_DCS_CMD(0xB5, 0x00, 0x93, 0x00, 0xC5, 0x00, 0xEC, 0x01, 0x2C, 0x01, 0x5D, 0x01, 0xAC, 0x01, 0xEC, 0x01, 0xEE),
++	_INIT_DCS_CMD(0xB6, 0x02, 0x2B, 0x02, 0x73, 0x02, 0xA0, 0x02, 0xDB, 0x03, 0x01, 0x03, 0x31, 0x03, 0x41, 0x03, 0x51),
++	_INIT_DCS_CMD(0xB7, 0x03, 0x63, 0x03, 0x77, 0x03, 0x90, 0x03, 0xAC, 0x03, 0xCA, 0x03, 0xDA),
++
++	_INIT_DCS_CMD(0xB8, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x2A, 0x00, 0x40, 0x00, 0x56, 0x00, 0x68, 0x00, 0x7A, 0x00, 0x89),
++	_INIT_DCS_CMD(0xB9, 0x00, 0x98, 0x00, 0xC9, 0x00, 0xF1, 0x01, 0x30, 0x01, 0x61, 0x01, 0xB0, 0x01, 0xEF, 0x01, 0xF1),
++	_INIT_DCS_CMD(0xBA, 0x02, 0x2E, 0x02, 0x76, 0x02, 0xA3, 0x02, 0xDD, 0x03, 0x02, 0x03, 0x32, 0x03, 0x42, 0x03, 0x53),
++	_INIT_DCS_CMD(0xBB, 0x03, 0x66, 0x03, 0x77, 0x03, 0x90, 0x03, 0xAC, 0x03, 0xCA, 0x03, 0xDA),
++
+ 	_INIT_DCS_CMD(0xFF, 0xF0),
+ 	_INIT_DCS_CMD(0xFB, 0x01),
+ 	_INIT_DCS_CMD(0x3A, 0x08),
+-	_INIT_DCS_CMD(0xFF, 0xD0),
+-	_INIT_DCS_CMD(0xFB, 0x01),
+-	_INIT_DCS_CMD(0x00, 0x33),
+-	_INIT_DCS_CMD(0x08, 0x01),
+-	_INIT_DCS_CMD(0x09, 0xBF),
+-	_INIT_DCS_CMD(0x2F, 0x33),
+-	_INIT_DCS_CMD(0xFF, 0x23),
+-	_INIT_DCS_CMD(0xFB, 0x01),
+-	_INIT_DCS_CMD(0x00, 0x80),
+-	_INIT_DCS_CMD(0x07, 0x00),
+-	_INIT_DCS_CMD(0xFF, 0x20),
+-	_INIT_DCS_CMD(0xFB, 0x01),
+-	_INIT_DCS_CMD(0x30, 0x00),
+-	_INIT_DCS_CMD(0xFF, 0x24),
+-	_INIT_DCS_CMD(0x5C, 0x88),
+-	_INIT_DCS_CMD(0x5D, 0x08),
++
+ 	_INIT_DCS_CMD(0xFF, 0x10),
+ 	_INIT_DCS_CMD(0xB9, 0x01),
++
+ 	_INIT_DCS_CMD(0xFF, 0x20),
++
+ 	_INIT_DCS_CMD(0x18, 0x40),
+ 	_INIT_DCS_CMD(0xFF, 0x10),
++
+ 	_INIT_DCS_CMD(0xB9, 0x02),
+ 	_INIT_DCS_CMD(0xFF, 0x10),
++
+ 	_INIT_DCS_CMD(0xFB, 0x01),
+-	_INIT_DCS_CMD(0xBB, 0x13),
+-	_INIT_DCS_CMD(0x3B, 0x03, 0x96, 0x1A, 0x04, 0x04),
++	_INIT_DCS_CMD(0xB0, 0x01),
+ 	_INIT_DCS_CMD(0x35, 0x00),
+-	_INIT_DCS_CMD(0x51, 0x0F, 0xFF),
+-	_INIT_DCS_CMD(0x53, 0x24),
++	_INIT_DCS_CMD(0x3B, 0x03, 0xAE, 0x1A, 0x04, 0x04),
+ 	_INIT_DELAY_CMD(100),
+ 	_INIT_DCS_CMD(0x11),
+ 	_INIT_DELAY_CMD(200),
+@@ -1431,15 +1504,15 @@ static const struct panel_desc boe_tv110c9m_desc = {
+ };
+ 
+ static const struct drm_display_mode inx_hj110iz_default_mode = {
+-	.clock = 166594,
++	.clock = 168432,
+ 	.hdisplay = 1200,
+ 	.hsync_start = 1200 + 40,
+ 	.hsync_end = 1200 + 40 + 8,
+ 	.htotal = 1200 + 40 + 8 + 28,
+ 	.vdisplay = 2000,
+ 	.vsync_start = 2000 + 26,
+-	.vsync_end = 2000 + 26 + 1,
+-	.vtotal = 2000 + 26 + 1 + 149,
++	.vsync_end = 2000 + 26 + 2,
++	.vtotal = 2000 + 26 + 2 + 172,
+ 	.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
+ };
+ 
+-- 
+2.25.1
 
