@@ -2,201 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0786F8DC5
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 03:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA9E6F8DC8
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 03:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232800AbjEFBxC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 5 May 2023 21:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
+        id S232911AbjEFBx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 21:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjEFBw7 (ORCPT
+        with ESMTP id S229739AbjEFBx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 21:52:59 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1605A4C01;
-        Fri,  5 May 2023 18:52:58 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 97AB324DEBC;
-        Sat,  6 May 2023 09:52:55 +0800 (CST)
-Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 6 May
- 2023 09:52:55 +0800
-Received: from [192.168.120.40] (171.223.208.138) by EXMBX062.cuchost.com
- (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 6 May
- 2023 09:52:54 +0800
-Message-ID: <cda098be-eb4a-75dc-ea12-977766e9e843@starfivetech.com>
-Date:   Sat, 6 May 2023 09:52:52 +0800
+        Fri, 5 May 2023 21:53:56 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9744C01
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 18:53:54 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bcae898b2so4392594a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 18:53:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1683338032; x=1685930032;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=maiOZWo4uY15gUQWerfOM/hHk3V4D/czecwW7zDGBv8=;
+        b=eP7zF8JvpJEWwdEy7XvVkJqia2mB+7OOkkYGqPG/L6bxWMZ0NXh7A0mClq91MYEYeT
+         G2YhjkJ7BZEhOL5lguyZ48DHvkBzs2W4i2Rqzp0Ky+OuSByrmj05sGMyMVZrPfLRKs+p
+         +JFA32F8uyqKGJkH9XeERsVJlc0wJiJ6JE9bM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683338032; x=1685930032;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=maiOZWo4uY15gUQWerfOM/hHk3V4D/czecwW7zDGBv8=;
+        b=N1aYUVHzb4qONyBOluSxFvusW1Acy7rz5HGsFuBCtCAUlQQUnUnyjBB0mMYHdUGXRg
+         jeEbR8d3kCSx5xEvTFNFENfL4V3unTJmedkzljLu5Kw/YGG4mF1XBMwBCA8vNv+Dojfq
+         rqNWArP23EepzAUYRfey1tTJUvp13s1gA8o093BUMENrW8A8kpgi1b8mc1ACCzkXXKyh
+         TfxsAlIr2Fmdh8YtpEPoSYojzstUGTUbZeX3FtU2A+i686miWZbqk/L+OJ2lRtjQlewy
+         w1ba/5CAQPJ7h+cFjlM8fz9rzosC7VnaA0I3GBsXxy4Et2dn18nD9zYO4t9P9uUPctZ5
+         nZlg==
+X-Gm-Message-State: AC+VfDyUcJUp/Sd7FwQsrrZ+ZZSRNXARegnfGJEdTmtSISDqFoOa+gaI
+        GW9JMObrnWDvz8YmhnfIlF4e0Kmo/SXqsDdEtG6kFQ==
+X-Google-Smtp-Source: ACHHUZ5LnT+Psy0rxV0uG9FPF92CQUHRLq6yiX3Z7uiuK1CW33Nyt8Oww7Ch8hoIqA6fI557AsKkuw==
+X-Received: by 2002:aa7:d59a:0:b0:50b:5dbe:e0f6 with SMTP id r26-20020aa7d59a000000b0050b5dbee0f6mr2912539edq.25.1683338032449;
+        Fri, 05 May 2023 18:53:52 -0700 (PDT)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
+        by smtp.gmail.com with ESMTPSA id j13-20020a17090686cd00b00965bf86c00asm1624303ejy.143.2023.05.05.18.53.49
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 May 2023 18:53:50 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-9660af2499dso62501366b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 18:53:49 -0700 (PDT)
+X-Received: by 2002:a17:907:9345:b0:94e:c4b:4d95 with SMTP id
+ bv5-20020a170907934500b0094e0c4b4d95mr2455003ejc.69.1683338029657; Fri, 05
+ May 2023 18:53:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/2] net: phy: motorcomm: Add pad drive strength cfg
- support
-Content-Language: en-US
-To:     Frank Sae <Frank.Sae@motor-comm.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, Peter Geis <pgwipeout@gmail.com>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "Heiner Kallweit" <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-References: <20230505090558.2355-1-samin.guo@starfivetech.com>
- <20230505090558.2355-3-samin.guo@starfivetech.com>
- <ba94f81c-3fc0-303c-f0f9-8fd0ab7d33fe@motor-comm.com>
-From:   Guo Samin <samin.guo@starfivetech.com>
-In-Reply-To: <ba94f81c-3fc0-303c-f0f9-8fd0ab7d33fe@motor-comm.com>
+References: <20230202232517.8695-1-michael.christie@oracle.com>
+ <20230202232517.8695-9-michael.christie@oracle.com> <aba6cca4-e66c-768f-375c-b38c8ba5e8a8@6wind.com>
+ <CAHk-=wgadfsCnKHLON7op=Qs5t3w3PVz5ZDbvbKsfb=yBg=yjQ@mail.gmail.com> <78c5e150-26cf-7724-74ee-4a0b16b944b1@oracle.com>
+In-Reply-To: <78c5e150-26cf-7724-74ee-4a0b16b944b1@oracle.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 5 May 2023 18:53:33 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wifMNUnnuqXWjuSq2jM3VOKmKNjyW9FAsi3aEtV5PFcVg@mail.gmail.com>
+Message-ID: <CAHk-=wifMNUnnuqXWjuSq2jM3VOKmKNjyW9FAsi3aEtV5PFcVg@mail.gmail.com>
+Subject: Re: [PATCH v11 8/8] vhost: use vhost_tasks for worker threads
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     nicolas.dichtel@6wind.com, Christian Brauner <brauner@kernel.org>,
+        hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
+        mst@redhat.com, sgarzare@redhat.com,
+        virtualization@lists.linux-foundation.org, ebiederm@xmission.com,
+        konrad.wilk@oracle.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX062.cuchost.com
- (172.16.6.62)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-data: Re: [PATCH v2 2/2] net: phy: motorcomm: Add pad drive strength cfg support
-From: Frank Sae <Frank.Sae@motor-comm.com>
-to: Samin Guo <samin.guo@starfivetech.com>, <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>, Peter Geis <pgwipeout@gmail.com>
-data: 2023/5/6
+On Fri, May 5, 2023 at 3:38=E2=80=AFPM Mike Christie
+<michael.christie@oracle.com> wrote:
+>
+> If it's ok to change the behavior of "ps -u root", then we can do this pa=
+tch:
 
-> 
-> 
-> On 2023/5/5 17:05, Samin Guo wrote:
->> The motorcomm phy (YT8531) supports the ability to adjust the drive
->> strength of the rx_clk/rx_data, and the default strength may not be
->> suitable for all boards. So add configurable options to better match
->> the boards.(e.g. StarFive VisionFive 2)
->>
->> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
->> ---
->>  drivers/net/phy/motorcomm.c | 46 +++++++++++++++++++++++++++++++++++++
->>  1 file changed, 46 insertions(+)
->>
->> diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
->> index 2fa5a90e073b..191650bb1454 100644
->> --- a/drivers/net/phy/motorcomm.c
->> +++ b/drivers/net/phy/motorcomm.c
->> @@ -236,6 +236,7 @@
->>   */
->>  #define YTPHY_WCR_TYPE_PULSE			BIT(0)
->>  
->> +#define YTPHY_PAD_DRIVE_STRENGTH_REG		0xA010
->>  #define YTPHY_SYNCE_CFG_REG			0xA012
->>  #define YT8521_SCR_SYNCE_ENABLE			BIT(5)
->>  /* 1b0 output 25m clock
->> @@ -260,6 +261,14 @@
->>  #define YT8531_SCR_CLK_SRC_REF_25M		4
->>  #define YT8531_SCR_CLK_SRC_SSC_25M		5
->>  
->> +#define YT8531_RGMII_RXC_DS_DEFAULT		0x3
->> +#define YT8531_RGMII_RXC_DS_MAX			0x7
->> +#define YT8531_RGMII_RXC_DS			GENMASK(15, 13)
->> +#define YT8531_RGMII_RXD_DS_DEFAULT		0x3
->> +#define YT8531_RGMII_RXD_DS_MAX			0x7
->> +#define YT8531_RGMII_RXD_DS_LOW			GENMASK(5, 4) /* Bit 1/0 of rxd_ds */
->> +#define YT8531_RGMII_RXD_DS_HI			BIT(12) /* Bit 2 of rxd_ds */
-> 
-> 
-> YT8531_RGMII_xxx is bit define for YTPHY_PAD_DRIVE_STRENGTH_REG, so it is better to put it under the define of YTPHY_PAD_DRIVE_STRENGTH_REG.
-> 
-> YT8531_RGMII_xxx bit define as reverse order:
-> #define YTPHY_PAD_DRIVE_STRENGTH_REG		0xA010
-> #define YT8531_RGMII_RXC_DS			GENMASK(15, 13)
-> #define YT8531_RGMII_RXD_DS_HI			BIT(12) /* Bit 2 of rxd_ds */     <-------
-> #define YT8531_RGMII_RXD_DS_LOW			GENMASK(5, 4) /* Bit 1/0 of rxd_ds */
-> ...
-> 
-Hi Frank,
+I think this is the right thing to do.
 
-Ok, will fix it next version.
-btw, do you have any information you can provide about Andrew's mention of using real unit uA/mA  instead of magic numbers?
-(I couldn't find any information about current in the YT8531's datasheet other than the magic numbers.)
+Making the user worker threads show up as threads with the vhost
+process as the parent really seems like a much better model, and more
+accurate.
 
+Yes, they used to show up as random kernel threads, and you'd see them
+as such (not just for "ps -u root", but simply also with just a normal
+"ps ax" kind of thing). But that isn't all that helpful, and it's
+really just annoying to see our kernel threads in "ps ax" output, and
+I've often wished we didn't do that (it think of all the random
+"kworker/xyz-kcryptd" etc things that show up).
 
-Below is all the relevant information I found：
+So I think showing them as the threaded children of the vhost process
+is much nicer, and probably the best option.
 
-Pad Drive Strength Cfg (EXT_0xA010)
+Because I don't thin kanything is going to get the *old* behavior of
+showing them as the '[vhost-xyz]' system threads (or whatever the old
+output ended up being in 'ps ax'), but hopefully nothing wants that
+horror anyway.
 
-Bit   |  Symbol           |  Access |  Default |  Description
-15:13 |  Rgmii_sw_dr_rx   |  RW     |  0x3     |  Drive strenght of rx_clk pad.
-                                               |  3'b111: strongest; 3'b000: weakest.
+At a minimum, the parenting is fundamentally going to look different
+in the new model.
 
-12    |  Rgmii_sw_dr[2]   |  RW     |  0x0     |  Bit 2 of Rgmii_sw_dr[2:0], refer to ext A010[5:4]
-
-5:4   |  Rgmii_sw_dr[1:0] |  RW     |  0x3     |  Bit 1 and 0 of Rgmii_sw_dr, Drive strenght of rxd/rx_ctl rgmii pad.
-                                               |  3'b111: strongest; 3'b000: weakest
-
-
-Best regards,
-Samin
-
->> +
->>  /* Extended Register  end */
->>  
->>  #define YTPHY_DTS_OUTPUT_CLK_DIS		0
->> @@ -1495,6 +1504,7 @@ static int yt8531_config_init(struct phy_device *phydev)
->>  {
->>  	struct device_node *node = phydev->mdio.dev.of_node;
->>  	int ret;
->> +	u32 ds, val;
->>  
->>  	ret = ytphy_rgmii_clk_delay_config_with_lock(phydev);
->>  	if (ret < 0)
->> @@ -1518,6 +1528,42 @@ static int yt8531_config_init(struct phy_device *phydev)
->>  			return ret;
->>  	}
->>  
->> +	ds = YT8531_RGMII_RXC_DS_DEFAULT;
->> +	if (!of_property_read_u32(node, "motorcomm,rx-clk-driver-strength", &val)) {
->> +		if (val > YT8531_RGMII_RXC_DS_MAX)
->> +			return -EINVAL;
->> +
->> +		ds = val;
->> +	}
->> +
->> +	ret = ytphy_modify_ext_with_lock(phydev,
->> +					 YTPHY_PAD_DRIVE_STRENGTH_REG,
->> +					 YT8531_RGMII_RXC_DS,
->> +					 FIELD_PREP(YT8531_RGMII_RXC_DS, ds));
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	ds = FIELD_PREP(YT8531_RGMII_RXD_DS_LOW, YT8531_RGMII_RXD_DS_DEFAULT);
->> +	if (!of_property_read_u32(node, "motorcomm,rx-data-driver-strength", &val)) {
->> +		if (val > YT8531_RGMII_RXD_DS_MAX)
->> +			return -EINVAL;
->> +
->> +		if (val > FIELD_MAX(YT8531_RGMII_RXD_DS_LOW)) {
->> +			ds = val & FIELD_MAX(YT8531_RGMII_RXD_DS_LOW);
->> +			ds = FIELD_PREP(YT8531_RGMII_RXD_DS_LOW, ds);
->> +			ds |= YT8531_RGMII_RXD_DS_HI;
->> +		} else {
->> +			ds = FIELD_PREP(YT8531_RGMII_RXD_DS_LOW, val);
->> +		}
->> +	}
->> +
->> +	ret = ytphy_modify_ext_with_lock(phydev,
->> +					 YTPHY_PAD_DRIVE_STRENGTH_REG,
->> +					 YT8531_RGMII_RXD_DS_LOW | YT8531_RGMII_RXD_DS_HI,
->> +					 ds);
->> +	if (ret < 0)
->> +		return ret;
->> +
->>  	return 0;
->>  }
->>  
-
-
+                   Linus
