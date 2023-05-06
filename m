@@ -2,122 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441DB6F9386
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 20:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600116F939A
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 20:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjEFSLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 14:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        id S229714AbjEFS2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 14:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjEFSLL (ORCPT
+        with ESMTP id S229527AbjEFS16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 14:11:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6352512E8D;
-        Sat,  6 May 2023 11:11:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3BA960920;
-        Sat,  6 May 2023 18:11:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 561E3C433EF;
-        Sat,  6 May 2023 18:11:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683396669;
-        bh=QjZcL8y5D7KAx3x7BxWOJfEfiy6Po3Zh5Efa6SNbl3o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fLVEDIbyoo3limReVYuSDFg4elF9sc8kS56S7SCksH57mSM982cFrhCTag1QuG8Qb
-         cosPKH8AHrOUarVjx/BLBkSij8TKBdkkq25AXLx2jyOQqSZ7FT31TeISkVNlUZ0QAx
-         d96ETMDugSZA9Sd1/JceZFr2A+++ccRAL3/I9ERRxgTp+ahoM6AQ5igU6CgrcJPCDF
-         YbqkKjHKsJaU8f/ZEkVqVX5knUh7LG6jIRx9Oy2grdtcs/Szr+2tcsCzwJOsGKmIf6
-         QMR26BUxrFJx5QPgRXa/FKyFks8hlwG8fz/tynePAsbQzDP4s6juleJoTKg26KVfvT
-         zKIkCzrLXVbsw==
-Date:   Sat, 6 May 2023 19:27:02 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] iio: bu27034: Ensure reset is written
-Message-ID: <20230506192702.57ebf533@jic23-huawei>
-In-Reply-To: <ZFIw/KdApZe1euN8@fedora>
-References: <ZFIw/KdApZe1euN8@fedora>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 6 May 2023 14:27:58 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09D540C3
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 11:27:57 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-52c6504974dso2678253a12.2
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 11:27:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683397677; x=1685989677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t/WwOrZJ5JRzyY6p6wiuOMAhVag97atAR6Wjafb+S2A=;
+        b=Ed0WNNwC5JVc/UevED/FuEHi+jsrMHibsAXB7n0Hv6KblssEN8GuVTTkx3Jbl8zlne
+         ifBfne1EIZ0L2ZEaowjD216ZVUWg8L4ItBmrxzS6sEbA31bCOzRvOMKRXshU3SiUU57N
+         UJKp8EOaPvg4hrgAnrbeRf4yMMdbPlqTyghbQwrx/7GK62MefqKXuuaSs91fwA32Yjeq
+         v4182toBBPBGXBJ+A+fes6LALCH2gP8JpwJdZ0I5CtVI8/Kr11V7B3BVeyn9jlW/Qpwt
+         Tpk++Jr5DlDwk4y+EjpiKpd7BIALwuIsTUDP5MOSe8T+Qurrmr8Tfy08BZ1lCsBoYyoJ
+         0MFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683397677; x=1685989677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t/WwOrZJ5JRzyY6p6wiuOMAhVag97atAR6Wjafb+S2A=;
+        b=DLpCHzJpJkETVuwQdYJzWmRI5Vi5ad1yLrrrTODSWDOAbQs7w3kmohQ9aaoFNAkUPY
+         cMGyoweLTN23Iuoa7dkCzQzWX99XvoiF33A5PLnFBHieLuXcgwlqV3BAA8/OBGlhXBmW
+         fGI3sJKuj7F72QRMOpC9otkck3hFPP5QAzjH/sJgYb2xVrmL0LcTpaGkHYMl1x2Scp9c
+         uV+399VxZ9HuzUUR869npdSs+DN/RmKUcN3VEZEllLUChzcFP4JwZmjfAxOrVDDujYCx
+         n5B1HgNYHs8xkFESFo8+craX3o5ldUiT846nHXDPyyMYtGNnmdoNTAA1ohEzmHX09KK+
+         15jQ==
+X-Gm-Message-State: AC+VfDxmAEFWQz4FyQEYg5Rt4Uz9ZIDPIypUhyPi88Lfh8Lxhu2KDXNf
+        ETjifjz6xANJ76xf0d205fc6dGC4A1J1yvRf/qY=
+X-Google-Smtp-Source: ACHHUZ4dhBfjviOJchXZhn3Bir28JhXsuvyGtA7iNiGJcSNaCo4NTvQnwHDdb/5h9wBmDdh6jHp/AFrFotWfZQm4Pd8=
+X-Received: by 2002:a17:90a:9307:b0:24d:ef6a:dd0a with SMTP id
+ p7-20020a17090a930700b0024def6add0amr5444552pjo.5.1683397677239; Sat, 06 May
+ 2023 11:27:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230506010933.170939-1-aford173@gmail.com> <20230506010933.170939-4-aford173@gmail.com>
+In-Reply-To: <20230506010933.170939-4-aford173@gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Sat, 6 May 2023 13:27:45 -0500
+Message-ID: <CAHCN7xLQaqP19zeMy27uUjFxgigKgh8vDRRM1P_uEXzuw5bN=g@mail.gmail.com>
+Subject: Re: [PATCH V4 3/6] drm: bridge: samsung-dsim: Fetch
+ pll-clock-frequency automatically
+To:     dri-devel@lists.freedesktop.org
+Cc:     aford@beaconembedded.com, Chen-Yu Tsai <wenst@chromium.org>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 3 May 2023 13:01:32 +0300
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+On Fri, May 5, 2023 at 8:09=E2=80=AFPM Adam Ford <aford173@gmail.com> wrote=
+:
+>
+> Make the pll-clock-frequency optional.  If it's present, use it
+> to maintain backwards compatibility with existing hardware.  If it
+> is absent, read clock rate of "sclk_mipi" to determine the rate.
+>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-> The reset bit must be always written to the hardware no matter what value
-> is in a cache or register. Ensure this by using regmap_write_bits()
-> instead of the regmap_update_bits(). Furthermore, the RESET bit may be
-> self-clearing, so mark the SYSTEM_CONTROL register volatile to guarantee
-> we do also read the right state - should we ever need to read it.
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> Fixes: e52afbd61039 ("iio: light: ROHM BU27034 Ambient Light Sensor")
 
-This obviously interacts with the regcache update.
+Sorry for the noise.  I forgot to merge in the suggested updates for
+the messages so they don't look like errors.  A V5 is coming once I
+merge and test the changes.
 
-Fun question is whether a register is volatile if it results in all
-registers (including itself) resetting.  In my view, no it isn't volatile.
-So fixing the regcache stuff as in your other patch is more appropriate.
-
-Jonathan
-
-> 
+adam
 > ---
-> Changelog:
-> v1 => v2:
->   - Fix SoB tag
-> 
-> 
-> I haven't verified if the reset bit is self-clearin as I did temporarily
-> give away the HW.
-> 
-> In worst case the bit is not self clearing - but we don't really
-> get performance penalty even if we set the register volatile because the
-> SYSTEM_CONTROL register only has the part-ID and the reset fields. The
-> part-id is only read once at probe.
-> 
-> ---
->  drivers/iio/light/rohm-bu27034.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iio/light/rohm-bu27034.c b/drivers/iio/light/rohm-bu27034.c
-> index 25c9b79574a5..740ebd86b6e5 100644
-> --- a/drivers/iio/light/rohm-bu27034.c
-> +++ b/drivers/iio/light/rohm-bu27034.c
-> @@ -231,6 +231,9 @@ struct bu27034_result {
->  
->  static const struct regmap_range bu27034_volatile_ranges[] = {
->  	{
-> +		.range_min = BU27034_REG_SYSTEM_CONTROL,
-> +		.range_max = BU27034_REG_SYSTEM_CONTROL,
-> +	}, {
->  		.range_min = BU27034_REG_MODE_CONTROL4,
->  		.range_max = BU27034_REG_MODE_CONTROL4,
->  	}, {
-> @@ -1272,7 +1275,7 @@ static int bu27034_chip_init(struct bu27034_data *data)
->  	int ret, sel;
->  
->  	/* Reset */
-> -	ret = regmap_update_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
-> +	ret = regmap_write_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
->  			   BU27034_MASK_SW_RESET, BU27034_MASK_SW_RESET);
->  	if (ret)
->  		return dev_err_probe(data->dev, ret, "Sensor reset failed\n");
-> 
-> base-commit: 7fcbd72176076c44b47e8f68f0223c02c411f420
-
+>  drivers/gpu/drm/bridge/samsung-dsim.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/brid=
+ge/samsung-dsim.c
+> index bf4b33d2de76..2dc02a9e37c0 100644
+> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
+> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+> @@ -1726,12 +1726,20 @@ static int samsung_dsim_parse_dt(struct samsung_d=
+sim *dsi)
+>  {
+>         struct device *dev =3D dsi->dev;
+>         struct device_node *node =3D dev->of_node;
+> +       struct clk *pll_clk;
+>         int ret;
+>
+>         ret =3D samsung_dsim_of_read_u32(node, "samsung,pll-clock-frequen=
+cy",
+>                                        &dsi->pll_clk_rate);
+> -       if (ret < 0)
+> -               return ret;
+> +
+> +       /* If it doesn't exist, read it from the clock instead of failing=
+ */
+> +       if (ret < 0) {
+> +               pll_clk =3D devm_clk_get(dev, "sclk_mipi");
+> +               if (!IS_ERR(pll_clk))
+> +                       dsi->pll_clk_rate =3D clk_get_rate(pll_clk);
+> +               else
+> +                       return PTR_ERR(pll_clk);
+> +       }
+>
+>         ret =3D samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequ=
+ency",
+>                                        &dsi->burst_clk_rate);
+> --
+> 2.39.2
+>
