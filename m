@@ -2,111 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EACA66F8FAE
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3C66F8FAF
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbjEFHLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 03:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
+        id S230238AbjEFHLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 03:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjEFHL2 (ORCPT
+        with ESMTP id S230136AbjEFHL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 03:11:28 -0400
+        Sat, 6 May 2023 03:11:29 -0400
 Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F9E1156A
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 00:11:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9908C11577
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 00:11:28 -0700 (PDT)
 Received: from pop-os.home ([86.243.2.178])
         by smtp.orange.fr with ESMTPA
-        id vC4bpnvtnGGqgvC4bpbPWL; Sat, 06 May 2023 09:11:23 +0200
+        id vC4bpnvtnGGqgvC4kpbPX0; Sat, 06 May 2023 09:11:27 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1683357083;
-        bh=LCwtFRx+YxY+EmtN+x8N93lmLUJnBu1GrjughYec7hk=;
-        h=From:To:Cc:Subject:Date;
-        b=dPDRr9NJWUcumThQ3K8vmGoeFthoe40EmUuljc44kB6Db1/nur+r3j+irmyyDY6fJ
-         FmKTLTebxollA+5WkjbG2hHYBh5hFwz3qxCz8BDkV87L2Wuu23WF7DKfRW1Ial90IE
-         nbOfhNAHOwV+1ohcE2SbHWbX2vvLqqkeXTFS9yu0Rty0IZZgHs4RQpkMXHpBuPSZlQ
-         EYiSdWajeq+wLrAAIe8ZbciQvBNHEWi02kTHh2743MgdarwyrNThgKMAXI8MQ5WFbx
-         bpdXtTSUSISBEm98bDhfFG5cIyjrNgJIaKWxKHfQIhn1LYLohibYm2U8NrvfMspNZN
-         gChnjeggQqtTw==
+        s=t20230301; t=1683357087;
+        bh=hARn2U5Ck8gsaGekp7/R1Pqh66Ft8Q75GW6ULFlZglk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=jCzkfsS+JENGKpeRh4/VY6mz+f9xHy5jKatmWS04zuwGUv9WRlBqrvl/zlOZJYp7M
+         zNnKHEUPsQopJd4vvX/Tn9tSHcr4HqzeDvGHRbRL8PpMx/HlhZNryCERxcM3pzfCtb
+         mZxm19jDJyvK9C26UCXEW8nVgKEk+ve1wU4nx6Wgr7ezd6QzZ5NreCKmzrU/adE8qk
+         Q3ylq+2ffYcHYFLTM7N8HGkQEqfFVU5dZJgdXym7MKnf7wgr5dWBj/+Bfh1wYC5ua+
+         2d0MmoIyRMD4Z0GleiADFS++dIWnjc3g41YjJvVdv/yCKrrucTLC4ScWjbj4DEqPsR
+         xZrPrPGglryxQ==
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 06 May 2023 09:11:23 +0200
+X-ME-Date: Sat, 06 May 2023 09:11:27 +0200
 X-ME-IP: 86.243.2.178
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     Bjorn Helgaas <bhelgaas@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
+        "H. Peter Anvin" <hpa@zytor.com>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         linux-pci@vger.kernel.org
-Subject: [PATCH 1/2] x86/PCI: Fix a sanity check in pirq_convert_irt_table()
-Date:   Sat,  6 May 2023 09:11:09 +0200
-Message-Id: <bc8422a8bf3ff99809413eb62dd12aacc85a9950.1683356951.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 2/2] x86/PCI: Slightly simplify pirq_convert_irt_table()
+Date:   Sat,  6 May 2023 09:11:10 +0200
+Message-Id: <84bf047b01452a72642dbe355b02ef016c985a91.1683356951.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <bc8422a8bf3ff99809413eb62dd12aacc85a9950.1683356951.git.christophe.jaillet@wanadoo.fr>
+References: <bc8422a8bf3ff99809413eb62dd12aacc85a9950.1683356951.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We compare the size in bytes of a struct (and its ending flexible array)
-with the number of elements in a flexible array.
+'size' if computed twice. *ir and *it being the same, the result is the
+same as well.
 
-This is wrong and "ir->size < ir->used" is likely to be always false.
+While at it, also use struct_size() which is less verbose, more robust and
+more informative.
 
-Compute the number of possible entries instead, as already done in other
-places, and compare it to the number of used entries.
-
-Fixes: b584db0c84db ("x86/PCI: Add $IRT PIRQ routing table support")
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-
-/!\  This patch is speculative. Review with care  /!\
-
-
-I'm not sure that this sanity check is needed at all.
-
-If 'used' was the size of the flexible array, I think it would simplify
-the code in other places. It will also help scripts when __counted_by macro
-will be added.
-See [1].
-
-[1]: https://lore.kernel.org/all/6453f739.170a0220.62695.7785@mx.google.com/
----
- arch/x86/pci/irq.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/x86/pci/irq.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/arch/x86/pci/irq.c b/arch/x86/pci/irq.c
-index a498b847d740..e29b487cc069 100644
+index e29b487cc069..6bc51f80eec2 100644
 --- a/arch/x86/pci/irq.c
 +++ b/arch/x86/pci/irq.c
-@@ -128,12 +128,16 @@ static inline struct irq_routing_table *pirq_convert_irt_table(u8 *addr,
- {
- 	struct irt_routing_table *ir;
- 	struct irq_routing_table *rt;
-+	int entries;
- 	u16 size;
- 	u8 sum;
- 	int i;
- 
- 	ir = (struct irt_routing_table *)addr;
--	if (ir->signature != IRT_SIGNATURE || !ir->used || ir->size < ir->used)
-+	entries = (ir->size - sizeof(struct irq_routing_table)) /
-+		sizeof(struct irq_info);
-+
-+	if (ir->signature != IRT_SIGNATURE || !ir->used || entries < ir->used)
+@@ -140,14 +140,13 @@ static inline struct irq_routing_table *pirq_convert_irt_table(u8 *addr,
+ 	if (ir->signature != IRT_SIGNATURE || !ir->used || entries < ir->used)
  		return NULL;
  
- 	size = sizeof(*ir) + ir->used * sizeof(ir->slots[0]);
+-	size = sizeof(*ir) + ir->used * sizeof(ir->slots[0]);
++	size = struct_size(ir, slots, ir->used);
+ 	if (size > limit - addr)
+ 		return NULL;
+ 
+ 	DBG(KERN_DEBUG "PCI: $IRT Interrupt Routing Table found at 0x%lx\n",
+ 	    __pa(ir));
+ 
+-	size = sizeof(*rt) + ir->used * sizeof(rt->slots[0]);
+ 	rt = kzalloc(size, GFP_KERNEL);
+ 	if (!rt)
+ 		return NULL;
 -- 
 2.34.1
 
