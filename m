@@ -2,144 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5266F93B9
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 21:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 184C76F93BD
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 21:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjEFTEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 15:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
+        id S229670AbjEFTLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 15:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjEFTEO (ORCPT
+        with ESMTP id S229446AbjEFTLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 15:04:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3CB1637D;
-        Sat,  6 May 2023 12:04:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05D7D60FE6;
-        Sat,  6 May 2023 19:04:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BACEC433EF;
-        Sat,  6 May 2023 19:04:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1683399852;
-        bh=s5rAmNl7PRvWvOwuownC2bCo8Ucqs7SYfDCXJJHVOBI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rA1bKG2h8MT+6DHFW8Neba7nVFgRp1TyA8jvJyZFjfdJ5knoHo4+h3fvDvrL+u5ij
-         Mn2729tiHOUeJMWNrY7eI7OwodqFg2lWivqc8gjbR0H0jBAiY173CwJaUrS8s0Pgzg
-         aaTAKRPvh/4tpMmunYlFQN2yqT7mtrKTJVAS2w+0=
-Date:   Sat, 6 May 2023 12:04:11 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
+        Sat, 6 May 2023 15:11:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2750F19B3
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 12:11:16 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683400273;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/5qxPxJdjuzi5qhtVxwUOhNdmUZonUWqsXS+jNUmuk0=;
+        b=glbdR3nQy0v0FmLLwbJPzJIr/nC8Ko4NHF3xbdxGHAbLZqP/SjinMYpsXgaHt2WXRPM6IQ
+        AdZXWxogLrUI0phpw71gTb7vlVQDYbEhaWDV39mqE861xiV/bRInlBfZquJowH9+NEkdsZ
+        2t+1cJSpoTUhqgoyw0oCIi9x+259iE+iz3NEkKHMsqZwW5ZVLwjzwDupdUgCJZeC16y+nV
+        wCoHrimKSWsPZlsPMZzMq7ySnVbulJXJVgsDHGWwj2a/hTuCC7bGfA8Wc7GxuwhDUlYDHT
+        BMKFM8/g8HqU7d0Q0T56XATQaqyk7F2+SEjOj63dQFUl5cbe0c+zJr8pE4BCoQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683400273;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/5qxPxJdjuzi5qhtVxwUOhNdmUZonUWqsXS+jNUmuk0=;
+        b=QJBJMPLk0h6VCOZ4WHml9TEXWtpTP0e1JLuMsBr6EbUsF9qO8GtSNASEW7ev8tZ1+z/Yuw
+        Xd1u6PpZFk97YsDA==
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Keith Busch <kbusch@kernel.org>
-Subject: Re: [GIT PULL] dmapool updates for 6.4-rc1
-Message-Id: <20230506120411.588729735420b57c1e0ce9b5@linux-foundation.org>
-In-Reply-To: <CAHk-=wheZHs+15jtg68=Fjf0==xvfZ5rvTE00ii+MDUhWzxfgw@mail.gmail.com>
-References: <20230506105054.0155139b3d3a7f249ead37be@linux-foundation.org>
-        <CAHk-=wheZHs+15jtg68=Fjf0==xvfZ5rvTE00ii+MDUhWzxfgw@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [GIT pull] core/debugobjects for v6.4-rc1
+Message-ID: <168340025919.2105360.9722828595496474732.tglx@xen13>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Date:   Sat,  6 May 2023 21:11:13 +0200 (CEST)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 6 May 2023 11:53:16 -0700 Linus Torvalds <torvalds@linux-foundation.org> wrote:
+Linus,
 
-> On Sat, May 6, 2023 at 10:50 AM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > Reinstate the dmapool changes which were accidentally removed by
-> > 2d55c16c0c54 ("dmapool: create/destroy cleanup").
-> 
-> Hmm. So this series is exactly the same as def8574308ed..2d55c16c0c54,
-> except for not having that last broken one.
-> 
-> Which is fine, but I'm a bit surprised. Why?
-> 
-> Because it's also missing the _real_ "dmapool: create/destroy cleanup"
-> patch, ie this one:
-> 
->    https://lore.kernel.org/linux-mm/20230126215125.4069751-13-kbusch@meta.com/
-> 
-> and I realize you somehow corrupted it last time, but I did expect it
-> to show up (perhaps folded into another patch, but in _some_ form).
-> 
-> Anyway, I've pulled this, but I think the end result of all this
-> confusion was still a tad broken.
-> 
+please pull the latest core/debugobjects branch from:
 
-Yes, it's just a little cleanup so I figured I'd restore the
-non-messed-up patches that make functional changes and hold this one
-off for the next merge window.
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core-debugobject=
+s-2023-05-06
+
+up to:  0af462f19e63: debugobject: Ensure pool refill (again)
 
 
-From: Keith Busch <kbusch@kernel.org>
-Subject: dmapool: create/destroy cleanup
-Date: Thu, 26 Jan 2023 13:51:25 -0800
+A single fix for debugobjects:
 
-Set the 'empty' bool directly from the result of the function that
-determines its value instead of adding additional logic.
+  The recent fix to ensure atomicity of lookup and allocation inadvertently
+  broke the pool refill mechanism, so that debugobject OOMs now in certain
+  situations. The reason is that the functions which got updated no longer
+  invoke debug_objecs_init(), which is now the only place to care about
+  refilling the tracking object pool.
 
-Link: https://lkml.kernel.org/r/20230126215125.4069751-13-kbusch@meta.com
-Fixes: 2d55c16c0c54 ("dmapool: create/destroy cleanup")
-Signed-off-by: Keith Busch <kbusch@kernel.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Tony Battersby <tonyb@cybernetics.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
+  Restore the original behaviour by adding explicit refill opportunities to
+  those places.
 
- mm/dmapool.c |   10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+Thanks,
 
---- a/mm/dmapool.c~dmapool-create-destroy-cleanup
-+++ a/mm/dmapool.c
-@@ -226,7 +226,7 @@ struct dma_pool *dma_pool_create(const c
+	tglx
+
+------------------>
+Thomas Gleixner (1):
+      debugobject: Ensure pool refill (again)
+
+
+ lib/debugobjects.c | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/lib/debugobjects.c b/lib/debugobjects.c
+index b796799fadb2..003edc5ebd67 100644
+--- a/lib/debugobjects.c
++++ b/lib/debugobjects.c
+@@ -587,6 +587,16 @@ static struct debug_obj *lookup_object_or_alloc(void *ad=
+dr, struct debug_bucket
+ 	return NULL;
+ }
+=20
++static void debug_objects_fill_pool(void)
++{
++	/*
++	 * On RT enabled kernels the pool refill must happen in preemptible
++	 * context:
++	 */
++	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || preemptible())
++		fill_pool();
++}
++
+ static void
+ __debug_object_init(void *addr, const struct debug_obj_descr *descr, int ons=
+tack)
  {
- 	struct dma_pool *retval;
- 	size_t allocation;
--	bool empty = false;
-+	bool empty;
- 
- 	if (!dev)
- 		return NULL;
-@@ -276,8 +276,7 @@ struct dma_pool *dma_pool_create(const c
- 	 */
- 	mutex_lock(&pools_reg_lock);
- 	mutex_lock(&pools_lock);
--	if (list_empty(&dev->dma_pools))
--		empty = true;
-+	empty = list_empty(&dev->dma_pools);
- 	list_add(&retval->pools, &dev->dma_pools);
- 	mutex_unlock(&pools_lock);
- 	if (empty) {
-@@ -361,7 +360,7 @@ static struct dma_page *pool_alloc_page(
- void dma_pool_destroy(struct dma_pool *pool)
- {
- 	struct dma_page *page, *tmp;
--	bool empty = false, busy = false;
-+	bool empty, busy = false;
- 
- 	if (unlikely(!pool))
+@@ -595,12 +605,7 @@ __debug_object_init(void *addr, const struct debug_obj_d=
+escr *descr, int onstack
+ 	struct debug_obj *obj;
+ 	unsigned long flags;
+=20
+-	/*
+-	 * On RT enabled kernels the pool refill must happen in preemptible
+-	 * context:
+-	 */
+-	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || preemptible())
+-		fill_pool();
++	debug_objects_fill_pool();
+=20
+ 	db =3D get_bucket((unsigned long) addr);
+=20
+@@ -685,6 +690,8 @@ int debug_object_activate(void *addr, const struct debug_=
+obj_descr *descr)
+ 	if (!debug_objects_enabled)
+ 		return 0;
+=20
++	debug_objects_fill_pool();
++
+ 	db =3D get_bucket((unsigned long) addr);
+=20
+ 	raw_spin_lock_irqsave(&db->lock, flags);
+@@ -894,6 +901,8 @@ void debug_object_assert_init(void *addr, const struct de=
+bug_obj_descr *descr)
+ 	if (!debug_objects_enabled)
  		return;
-@@ -369,8 +368,7 @@ void dma_pool_destroy(struct dma_pool *p
- 	mutex_lock(&pools_reg_lock);
- 	mutex_lock(&pools_lock);
- 	list_del(&pool->pools);
--	if (list_empty(&pool->dev->dma_pools))
--		empty = true;
-+	empty = list_empty(&pool->dev->dma_pools);
- 	mutex_unlock(&pools_lock);
- 	if (empty)
- 		device_remove_file(pool->dev, &dev_attr_pools);
-_
+=20
++	debug_objects_fill_pool();
++
+ 	db =3D get_bucket((unsigned long) addr);
+=20
+ 	raw_spin_lock_irqsave(&db->lock, flags);
 
