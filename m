@@ -2,134 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E7B6F8DB3
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 03:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FE66F8DB6
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 03:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbjEFBnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 21:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32906 "EHLO
+        id S231324AbjEFBoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 21:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjEFBnH (ORCPT
+        with ESMTP id S232140AbjEFBn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 21:43:07 -0400
-Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32B6349E2;
-        Fri,  5 May 2023 18:43:03 -0700 (PDT)
-Received: from jleng.ambarella.net (unknown [116.246.37.178])
-        by mail-app3 (Coremail) with SMTP id cC_KCgD3_w+ZsFVkOBEAAg--.23024S2;
-        Sat, 06 May 2023 09:43:00 +0800 (CST)
-From:   Jing Leng <3090101217@zju.edu.cn>
-To:     pawell@cadence.com, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Jing Leng <3090101217@zju.edu.cn>
-Subject: [PATCH] usb: cdnsp: fix kernel crash when usb_ep_dequeue
-Date:   Sat,  6 May 2023 09:42:42 +0800
-Message-Id: <20230506014242.21912-1-3090101217@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgD3_w+ZsFVkOBEAAg--.23024S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxur4kAr1rAr4xZFW3Kw45Jrb_yoW5Ar18pF
-        48GFWakr48Z390qrs7Kr4UZr4rJan2yasrKrZ7Ka4fZFZ3J3yku3W8GFyYqF47Gry8Zr47
-        t3WIgw40gr4agaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
-        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
-        rcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUb0PfJUUUU
-        U==
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIHBWRVG1wHPAAAsO
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 5 May 2023 21:43:58 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B03B49E7
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 18:43:56 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-763646b324aso325874939f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 18:43:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683337436; x=1685929436;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GEAVY+G+dyIbuZjjPxrcrCEx2E1ib4FojCVjLcKiTGM=;
+        b=LnyfTCfkCQY0xdHyDu9aKy+ppFYW6KMuwzFmo1z1XoEI8qKmYGiEYhQY4+/dme6Qck
+         0wIeACXYjavUGNyo+W8BcCl95UvSIFOPKZSWHrtPTtYR2P8L+iTDjVxyi+xK3uyh3eLH
+         LTsBg0p3APLor9wo8eq7rrfS9l8PeWjVhz4ZZRB7JGB84dNqSEzWaygj6mRX2jr9V7cE
+         WLiucE4MnsIgXWiPott0W5cmf9wG8TC2nT+u+W36xvjNQ28poG8U7MJcBdwsvc2MtkQz
+         eFX8WA49ePTXCk8BGseQXKQbEPGNbVD3JkPq6OZIyWG96Gyj+Rmfd7uCZv3ZTf/+rgcn
+         68XQ==
+X-Gm-Message-State: AC+VfDz8ntXF6VFjSsHYfhYxG+fltrcQa9uQM37BumsRl1h/pmEYMJ2p
+        gKGtxCs9ZEAMyM3vMXlGMzDI9Zk15AKnTjY3psmL/DqKIeb8
+X-Google-Smtp-Source: ACHHUZ40r2kaXH+BdAcVW2IrF2fQz/wl0ztSgOji8xFrvl6Nr86JnqB8W8mKq8kyxy3Df6TYZbXqDfgrF5+Rb0GcYZGqsOqdPfSQ
+MIME-Version: 1.0
+X-Received: by 2002:a02:84c1:0:b0:40f:ae69:a144 with SMTP id
+ f59-20020a0284c1000000b0040fae69a144mr1384969jai.5.1683337435893; Fri, 05 May
+ 2023 18:43:55 -0700 (PDT)
+Date:   Fri, 05 May 2023 18:43:55 -0700
+In-Reply-To: <000000000000725cab05f55f1bb0@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e7582c05fafc8901@google.com>
+Subject: Re: [syzbot] [btrfs?] kernel BUG in btrfs_exclop_balance (2)
+From:   syzbot <syzbot+5e466383663438b99b44@syzkaller.appspotmail.com>
+To:     chris@chrisdown.name, clm@fb.com, dsterba@suse.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The crash appears in the following situations:
-1. Call usb_ep_dequeue without calling usb_ep_queue first
-2. Repeated call usb_ep_dequeue
+syzbot has found a reproducer for the following issue on:
 
-Below is the log of kernel crash when stopping USB FFS device:
-[ 1044.732419] Unable to handle kernel NULL pointer dereference
-               at virtual address 0000000000000000
-...
-[ 1044.946689] Call trace:
-[ 1044.949133]  cdnsp_trb_in_td.constprop.0+0x4/0xd0 [cdns3]
-[ 1044.954545]  cdnsp_gadget_ep_dequeue+0x88/0xf0 [cdns3]
-[ 1044.959695]  usb_ep_dequeue+0x18/0x24
-[ 1044.963366]  functionfs_unbind+0x2c/0xb4 [usb_f_fs]
-[ 1044.968256]  ffs_func_unbind+0x110/0x124 [usb_f_fs]
-[ 1044.973144]  purge_configs_funcs+0x9c/0x124 [libcomposite]
-[ 1044.978646]  configfs_composite_unbind+0x5c/0xbc [libcomposite]
-[ 1044.984581]  usb_gadget_remove_driver+0x60/0xf4
-[ 1044.989120]  usb_gadget_unregister_driver+0x70/0xe4
-[ 1044.994008]  unregister_gadget_item+0x30/0x58 [libcomposite]
-[ 1044.999682]  ffs_data_clear+0x144/0x158 [usb_f_fs]
-[ 1045.004483]  ffs_data_closed+0xdc/0x174 [usb_f_fs]
-[ 1045.009283]  ffs_ep0_release+0x14/0x24 [usb_f_fs]
+HEAD commit:    7163a2111f6c Merge tag 'acpi-6.4-rc1-3' of git://git.kerne..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=175bb84c280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
+dashboard link: https://syzkaller.appspot.com/bug?extid=5e466383663438b99b44
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12048338280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ff7314280000
 
-Signed-off-by: Jing Leng <3090101217@zju.edu.cn>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/01051811f2fe/disk-7163a211.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a26c68e4c8a6/vmlinux-7163a211.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/17380fb8dad4/bzImage-7163a211.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/b30a249e8609/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5e466383663438b99b44@syzkaller.appspotmail.com
+
+assertion failed: fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE_PAUSED, in fs/btrfs/ioctl.c:463
+------------[ cut here ]------------
+kernel BUG at fs/btrfs/messages.c:259!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 8630 Comm: syz-executor102 Not tainted 6.3.0-syzkaller-13225-g7163a2111f6c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+RIP: 0010:btrfs_assertfail+0x18/0x20 fs/btrfs/messages.c:259
+Code: df e8 2c 05 36 f7 e9 50 fb ff ff e8 b2 90 01 00 66 90 66 0f 1f 00 89 d1 48 89 f2 48 89 fe 48 c7 c7 80 32 2c 8b e8 c8 60 ff ff <0f> 0b 66 0f 1f 44 00 00 66 0f 1f 00 53 48 89 fb e8 73 31 de f6 48
+RSP: 0018:ffffc9000ae27e48 EFLAGS: 00010246
+RAX: 0000000000000066 RBX: 1ffff1100fa13c18 RCX: e812ce05a9b3c300
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 0000000000000002 R08: ffffffff816f0fec R09: fffff520015c4f7d
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88807d09e0c0
+R13: ffff88807d09c000 R14: ffff88807d09c678 R15: dffffc0000000000
+FS:  00007f2bb10a8700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f2bb0c90000 CR3: 0000000028447000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btrfs_exclop_balance+0x153/0x1f0 fs/btrfs/ioctl.c:463
+ btrfs_ioctl_balance+0x482/0x7c0 fs/btrfs/ioctl.c:3562
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f2bb853ec69
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f2bb10a82f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f2bb85c87c0 RCX: 00007f2bb853ec69
+RDX: 0000000020000540 RSI: 00000000c4009420 RDI: 0000000000000004
+RBP: 00007f2bb85951d0 R08: 00007f2bb10a8700 R09: 0000000000000000
+R10: 00007f2bb10a8700 R11: 0000000000000246 R12: 7fffffffffffffff
+R13: 0000000100000001 R14: 8000000000000001 R15: 00007f2bb85c87c8
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:btrfs_assertfail+0x18/0x20 fs/btrfs/messages.c:259
+Code: df e8 2c 05 36 f7 e9 50 fb ff ff e8 b2 90 01 00 66 90 66 0f 1f 00 89 d1 48 89 f2 48 89 fe 48 c7 c7 80 32 2c 8b e8 c8 60 ff ff <0f> 0b 66 0f 1f 44 00 00 66 0f 1f 00 53 48 89 fb e8 73 31 de f6 48
+RSP: 0018:ffffc9000ae27e48 EFLAGS: 00010246
+RAX: 0000000000000066 RBX: 1ffff1100fa13c18 RCX: e812ce05a9b3c300
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 0000000000000002 R08: ffffffff816f0fec R09: fffff520015c4f7d
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88807d09e0c0
+R13: ffff88807d09c000 R14: ffff88807d09c678 R15: dffffc0000000000
+FS:  00007f2bb10a8700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f2bb0c90000 CR3: 0000000028447000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
 ---
- drivers/usb/cdns3/cdnsp-gadget.c | 11 +++++++++--
- drivers/usb/cdns3/cdnsp-ring.c   |  5 +++++
- 2 files changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-index fff9ec9c391f..160680a56e1d 100644
---- a/drivers/usb/cdns3/cdnsp-gadget.c
-+++ b/drivers/usb/cdns3/cdnsp-gadget.c
-@@ -1072,6 +1072,7 @@ static struct usb_request *cdnsp_gadget_ep_alloc_request(struct usb_ep *ep,
- 
- 	preq->epnum = pep->number;
- 	preq->pep = pep;
-+	INIT_LIST_HEAD(&preq->td.td_list);
- 
- 	trace_cdnsp_alloc_request(preq);
- 
-@@ -1120,11 +1121,17 @@ static int cdnsp_gadget_ep_queue(struct usb_ep *ep,
- static int cdnsp_gadget_ep_dequeue(struct usb_ep *ep,
- 				   struct usb_request *request)
- {
--	struct cdnsp_ep *pep = to_cdnsp_ep(ep);
--	struct cdnsp_device *pdev = pep->pdev;
-+	struct cdnsp_ep *pep;
-+	struct cdnsp_device *pdev;
- 	unsigned long flags;
- 	int ret;
- 
-+	if (!request || !ep)
-+		return -EINVAL;
-+
-+	pep = to_cdnsp_ep(ep);
-+	pdev = pep->pdev;
-+
- 	if (!pep->endpoint.desc) {
- 		dev_err(pdev->dev,
- 			"%s: can't dequeue to disabled endpoint\n",
-diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-index 07f6068342d4..12dc3fb100e9 100644
---- a/drivers/usb/cdns3/cdnsp-ring.c
-+++ b/drivers/usb/cdns3/cdnsp-ring.c
-@@ -705,6 +705,11 @@ int cdnsp_remove_request(struct cdnsp_device *pdev,
- 	trace_cdnsp_remove_request_td(preq);
- 
- 	cur_td = &preq->td;
-+
-+	/* Prevent kernel crash caused by re-running usb_ep_dequeue */
-+	if (list_empty(&cur_td->td_list))
-+		return ret;
-+
- 	ep_ring = cdnsp_request_to_transfer_ring(pdev, preq);
- 
- 	/*
--- 
-2.17.1
-
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
