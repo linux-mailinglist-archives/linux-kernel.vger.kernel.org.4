@@ -2,109 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E336F8F71
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 08:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E3F6F8F7C
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 08:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbjEFGnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 02:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        id S230308AbjEFGrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 02:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjEFGnE (ORCPT
+        with ESMTP id S229602AbjEFGq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 02:43:04 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AA59EFE
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 23:43:01 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50bcc565280so3933108a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 23:43:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683355380; x=1685947380;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CK6Hha4S+ymoMFaX86nTLwUb9e5d5dlAPNIoyxTLm24=;
-        b=vaKUAo95kZe1ke86mFL+IhWZKbgxuV99GMcvRIFAvSeBZkN1VF1e2xtYoy8yxDliIe
-         RgiqvHSWuY5kzZrsKSk00YQ2GfBxPLBwsrDWw5G9tI2dxHM5fehKtY53GSnfW5JQjezL
-         vBd4WhKtVLgNuxrT0lutszhiMQZPCs1lPwa9MWmLdguKHtchzabP8r+EWWISZF68Znc5
-         p/uAsonPkNjjoWfQeyXeAnPcLzGTFi6dlDyQFWnuiiGCiBR5LH3VB21MLRFOGCF/DtK9
-         Nr/jvL4uEjMynq1YO3xxCueZJBVH0pl2GnLgFX6x6BCdfHEK0dIYO5IN9UEiL1r5Jz38
-         aHug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683355380; x=1685947380;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CK6Hha4S+ymoMFaX86nTLwUb9e5d5dlAPNIoyxTLm24=;
-        b=cLGWtY95SKP0qOo5nTxxoEn8JTnp7mtpTqwmLUMcg0ytOnZXLXGhjKcHq6SzagH9Pd
-         /wtJHp82FuhCpe3XoFEavoysbPl6aOuvuYtu+8M6raMm98roTskQzvuHCURR66yxVeuh
-         UC+oQ9+by4RmFEnIwF24nuFTBCYDtx6MrPsXtRRaN8sLBiSH85DhKHvER3xaCX1RnFwN
-         PnXaBMRCLdraRUAq/TAkbgpOlaYJhXNoh4gYiVOZT93u0Y4FMGFu72JaQ+8ubei32kzc
-         TjuLtlzVesHW7igq/4w+FgYuLNJEJbDfTHNsNBbLe0vXbKdIDAPog1cZ6NxgIUWd6XBc
-         sp4w==
-X-Gm-Message-State: AC+VfDxWI4qMXo0LL9QrYL3Igy1o5zVs9PV2e52UZHu9mfDJFO1TV+XM
-        XtYZmrdiGaPCmMgVRaKEWZ6bLj5ZB38y6y0eQCw=
-X-Google-Smtp-Source: ACHHUZ5PO0xFJsbtnP2qeemE7wg+ozaEsp+6Y9dZmq4+kpYlxHj598hqmh0/WtyMbmT82N5cplT//A==
-X-Received: by 2002:a17:906:eecd:b0:965:8edf:8028 with SMTP id wu13-20020a170906eecd00b009658edf8028mr3329753ejb.42.1683355379759;
-        Fri, 05 May 2023 23:42:59 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:efe5:7c03:a10a:7a40])
-        by smtp.gmail.com with ESMTPSA id hx25-20020a170906847900b00965ff04f9f6sm910719ejc.161.2023.05.05.23.42.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 23:42:59 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH] ARM: dts: imx7ulp: add address/size-cells to OCOTP
-Date:   Sat,  6 May 2023 08:42:55 +0200
-Message-Id: <20230506064255.34290-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sat, 6 May 2023 02:46:58 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B2B30FD
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 23:46:55 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTP id 3466k8e5050232;
+        Sat, 6 May 2023 14:46:09 +0800 (+08)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Sat, 6 May 2023 14:46:06 +0800
+From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, <ke.wang@unisoc.com>
+Subject: [PATCHv3] mm: optimization on page allocation when CMA enabled
+Date:   Sat, 6 May 2023 14:45:47 +0800
+Message-ID: <1683355547-10524-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.65]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 3466k8e5050232
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The OCOTP node should have address/size-cells so the cells can have unit
-address:
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-  imx7ulp-evk.dtb: efuse@410a6000: '#address-cells' is a required property
-  imx7ulp-evk.dtb: efuse@410a6000: '#size-cells' is a required property
+Let us look at the series of scenarios below with WMARK_LOW=25MB,WMARK_MIN=5MB
+(managed pages 1.9GB). We can know that current 'fixed 1/2 ratio' start to use
+CMA since C which actually has caused U&R lower than WMARK_LOW (this should be
+deemed as against current memory policy, that is, UNMOVABLE & RECLAIMABLE should
+either stay around WATERMARK_LOW when no allocation or do reclaim via entering
+slowpath)
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+-- Free_pages
+|
+|
+-- WMARK_LOW
+|
+-- Free_CMA
+|
+|
+--
 
+Free_CMA/Free_pages(MB)      A(12/30)     B(12/25)     C(12/20)
+fixed 1/2 ratio                 N             N           Y
+this commit                     Y             Y           Y
+
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 ---
-
-Cc: Peng Fan <peng.fan@nxp.com>
+v2: do proportion check when zone_watermark_ok, update commit message
+v3: update coding style and simplify the logic when zone_watermark_ok
 ---
- arch/arm/boot/dts/imx7ulp.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+---
+ mm/page_alloc.c | 46 ++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 40 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx7ulp.dtsi b/arch/arm/boot/dts/imx7ulp.dtsi
-index f91bf719d4e2..b01ddda7bd9e 100644
---- a/arch/arm/boot/dts/imx7ulp.dtsi
-+++ b/arch/arm/boot/dts/imx7ulp.dtsi
-@@ -459,6 +459,8 @@ ocotp: efuse@410a6000 {
- 			compatible = "fsl,imx7ulp-ocotp", "syscon";
- 			reg = <0x410a6000 0x4000>;
- 			clocks = <&scg1 IMX7ULP_CLK_DUMMY>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
- 		};
- 	};
- };
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 0745aed..7aca49d 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3071,6 +3071,41 @@ static bool unreserve_highatomic_pageblock(const struct alloc_context *ac,
+ 
+ }
+ 
++#ifdef CONFIG_CMA
++/*
++ * GFP_MOVABLE allocation could drain UNMOVABLE & RECLAIMABLE page blocks via
++ * the help of CMA which makes GFP_KERNEL failed. Checking if zone_watermark_ok
++ * again without ALLOC_CMA to see if to use CMA first.
++ */
++static bool __if_use_cma_first(struct zone *zone, unsigned int order, unsigned int alloc_flags)
++{
++	unsigned long watermark;
++	bool cma_first = false;
++
++	watermark = wmark_pages(zone, alloc_flags & ALLOC_WMARK_MASK);
++	/* check if GFP_MOVABLE pass previous zone_watermark_ok via the help of CMA */
++	if (!zone_watermark_ok(zone, order, watermark, 0, alloc_flags & (~ALLOC_CMA)))
++		/*
++		 * watermark failed means UNMOVABLE & RECLAIMBLE is not enough
++		 * now, we should use cma first to keep them stay around the
++		 * corresponding watermark
++		 */
++		cma_first = true;
++	else
++		/*
++		 * remain previous fixed 1/2 logic when watermark ok as we have
++		 * above protection now
++		 */
++		cma_first = (zone_page_state(zone, NR_FREE_CMA_PAGES) >
++				zone_page_state(zone, NR_FREE_PAGES) / 2);
++	return cma_first;
++}
++#else
++static bool __if_use_cma_first(struct zone *zone, unsigned int order, unsigned int alloc_flags)
++{
++	return false;
++}
++#endif
+ /*
+  * Do the hard work of removing an element from the buddy allocator.
+  * Call me with the zone->lock already held.
+@@ -3084,13 +3119,12 @@ static bool unreserve_highatomic_pageblock(const struct alloc_context *ac,
+ 	if (IS_ENABLED(CONFIG_CMA)) {
+ 		/*
+ 		 * Balance movable allocations between regular and CMA areas by
+-		 * allocating from CMA when over half of the zone's free memory
+-		 * is in the CMA area.
++		 * allocating from CMA base on judging zone_watermark_ok again
++		 * to see if the latest check got pass via the help of CMA
+ 		 */
+-		if (alloc_flags & ALLOC_CMA &&
+-		    zone_page_state(zone, NR_FREE_CMA_PAGES) >
+-		    zone_page_state(zone, NR_FREE_PAGES) / 2) {
+-			page = __rmqueue_cma_fallback(zone, order);
++		if (migratetype == MIGRATE_MOVABLE) {
++			page = __if_use_cma_first(zone, order, alloc_flags) ?
++				__rmqueue_cma_fallback(zone, order) : NULL;
+ 			if (page)
+ 				return page;
+ 		}
 -- 
-2.34.1
+1.9.1
 
