@@ -2,70 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23D16F91F0
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 14:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6F36F9261
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 16:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbjEFMQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 08:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
+        id S232626AbjEFOC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 10:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231960AbjEFMPr (ORCPT
+        with ESMTP id S232594AbjEFOCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 08:15:47 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB7C1385F
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 05:15:45 -0700 (PDT)
-X-ASG-Debug-ID: 1683375338-1eb14e6386684a0005-xx1T2L
-Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id jzhc1VO9m8LxqMUL (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Sat, 06 May 2023 20:15:40 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
- (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sat, 6 May
- 2023 20:15:39 +0800
-Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Sat, 6 May
- 2023 20:15:38 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
-To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v3 4/4] xhci: Add zhaoxin xHCI U1/U2 feature support
-Date:   Sun, 7 May 2023 04:15:36 +0800
-X-ASG-Orig-Subj: [PATCH v3 4/4] xhci: Add zhaoxin xHCI U1/U2 feature support
-Message-ID: <20230506201536.7362-5-WeitaoWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20230506201536.7362-1-WeitaoWang-oc@zhaoxin.com>
-References: <20230506201536.7362-1-WeitaoWang-oc@zhaoxin.com>
+        Sat, 6 May 2023 10:02:55 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC509EDB
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 07:02:54 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-33142b54417so41053115ab.3
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 07:02:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683381773; x=1685973773;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PjR+zB20hfPaM34wxDG6cz5i7+lLGlLgpjJu8mR5MAU=;
+        b=Yki+bfxbn9wLPojRKxQJ1kYZ8VjVP1NvrBNTxfSxiHARLWOQTinwIfMa92AjvFRniX
+         iaiEhIczYv3lbKUSKnhX8ugpBq7rDtb3hx07D2dfPqT5Dwp9nGsbExdVxr5OR9NAL0fe
+         JKt80TM626lDTSdat1WpmHtwBEsuENNyPqNFrasKHuc+i6G9u5tLIO44k+N0sYiirMOY
+         pvDFzDPTcq5T7ngLgIbdmQnOOQmymE3jAzM5qujNzuDJp7/9z8lEI7GHUC+mLH/KuHKY
+         dxJ55uqQRXDgPx2MB0ncLyuwbZvldqKACiOZskN0sigEVNKXWYgi33d99DbjliijtkJ6
+         J3XQ==
+X-Gm-Message-State: AC+VfDy7wwWZJ/f+zTXtYp+c1kBsr0pv7apz3RBfHNjWXhgkkuAofcEo
+        r7AfILNR81IuzeBqoLLJQWI59/+/f1WPNXtmEJEBSKk5FSYN
+X-Google-Smtp-Source: ACHHUZ5jfxcWYqqQMHpfyqsPt9wwjskRJH7dSGTNTCJ4Hdd8e/52t9WxQ+iDLNmwvIatK5QsEXggl3CU/JNYhKV7ybj0whJDKfb1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.29.8.21]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
-X-Barracuda-Start-Time: 1683375340
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 3086
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.108401
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:d7c5:0:b0:310:9fc1:a92b with SMTP id
+ g5-20020a92d7c5000000b003109fc1a92bmr2382461ilq.0.1683381773594; Sat, 06 May
+ 2023 07:02:53 -0700 (PDT)
+Date:   Sat, 06 May 2023 07:02:53 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a2feae05fb06dcee@google.com>
+Subject: [syzbot] Monthly fs report (May 2023)
+From:   syzbot <syzbot+liste501264b47eec817042f@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,96 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add U1/U2 feature support of xHCI for zhaoxin.
+Hello fs maintainers/developers,
 
-Since both Intel and Zhaoxin need to check the tier where the device is
-located to determine whether to enabled U1/U2, remove the previous Intel
-U1/U2 tier policy and add common policy in xhci_check_tier_policy.
-If vendor has specific U1/U2 enable policy,quirks can be add to declare.
+This is a 31-day syzbot report for the fs subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/fs
 
-Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+During the period, 7 new issues were detected and 0 were fixed.
+In total, 66 issues are still open and 321 have been fixed so far.
+
+Some of the still happening issues:
+
+Ref Crashes Repro Title
+<1> 1895    Yes   BUG: sleeping function called from invalid context in __getblk_gfp
+                  https://syzkaller.appspot.com/bug?extid=69b40dc5fd40f32c199f
+<2> 1768    Yes   WARNING in firmware_fallback_sysfs
+                  https://syzkaller.appspot.com/bug?extid=95f2e2439b97575ec3c0
+<3> 179     Yes   BUG: sleeping function called from invalid context in __bread_gfp
+                  https://syzkaller.appspot.com/bug?extid=5869fb71f59eac925756
+<4> 80      No    possible deadlock in quotactl_fd
+                  https://syzkaller.appspot.com/bug?extid=cdcd444e4d3a256ada13
+<5> 37      Yes   INFO: task hung in filename_create (4)
+                  https://syzkaller.appspot.com/bug?extid=72c5cf124089bc318016
+<6> 13      Yes   INFO: rcu detected stall in sys_clock_adjtime
+                  https://syzkaller.appspot.com/bug?extid=25b7addb06e92c482190
+<7> 5       No    BUG: unable to handle kernel NULL pointer dereference in filemap_read_folio (2)
+                  https://syzkaller.appspot.com/bug?extid=41ee2d2dcc4fc2f2f60c
+<8> 5       No    possible deadlock in evdev_pass_values (2)
+                  https://syzkaller.appspot.com/bug?extid=13d3cb2a3dc61e6092f5
+<9> 1       Yes   INFO: rcu detected stall in sys_newfstatat (4)
+                  https://syzkaller.appspot.com/bug?extid=1c02a56102605204445c
+
 ---
- drivers/usb/host/xhci.c | 43 +++++++++++++++++------------------------
- 1 file changed, 18 insertions(+), 25 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 78790dc13c5f..cae57f0207a4 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4604,7 +4604,7 @@ static u16 xhci_calculate_u1_timeout(struct xhci_hcd *xhci,
- 		}
- 	}
- 
--	if (xhci->quirks & XHCI_INTEL_HOST)
-+	if (xhci->quirks & (XHCI_INTEL_HOST | XHCI_ZHAOXIN_HOST))
- 		timeout_ns = xhci_calculate_intel_u1_timeout(udev, desc);
- 	else
- 		timeout_ns = udev->u1_params.sel;
-@@ -4668,7 +4668,7 @@ static u16 xhci_calculate_u2_timeout(struct xhci_hcd *xhci,
- 		}
- 	}
- 
--	if (xhci->quirks & XHCI_INTEL_HOST)
-+	if (xhci->quirks & (XHCI_INTEL_HOST | XHCI_ZHAOXIN_HOST))
- 		timeout_ns = xhci_calculate_intel_u2_timeout(udev, desc);
- 	else
- 		timeout_ns = udev->u2_params.sel;
-@@ -4740,37 +4740,30 @@ static int xhci_update_timeout_for_interface(struct xhci_hcd *xhci,
- 	return 0;
- }
- 
--static int xhci_check_intel_tier_policy(struct usb_device *udev,
-+static int xhci_check_tier_policy(struct xhci_hcd *xhci,
-+		struct usb_device *udev,
- 		enum usb3_link_state state)
- {
--	struct usb_device *parent;
--	unsigned int num_hubs;
-+	struct usb_device *parent = udev->parent;
-+	int tier = 1; /* roothub is tier1 */
- 
--	/* Don't enable U1 if the device is on a 2nd tier hub or lower. */
--	for (parent = udev->parent, num_hubs = 0; parent->parent;
--			parent = parent->parent)
--		num_hubs++;
-+	while (parent) {
-+		parent = parent->parent;
-+		tier++;
-+	}
- 
--	if (num_hubs < 2)
--		return 0;
-+	if (xhci->quirks & XHCI_INTEL_HOST && tier > 3)
-+		goto fail;
-+	if (xhci->quirks & XHCI_ZHAOXIN_HOST && tier > 2)
-+		goto fail;
- 
--	dev_dbg(&udev->dev, "Disabling U1/U2 link state for device"
--			" below second-tier hub.\n");
--	dev_dbg(&udev->dev, "Plug device into first-tier hub "
--			"to decrease power consumption.\n");
-+	return 0;
-+fail:
-+	dev_dbg(&udev->dev, "Tier policy prevents U1/U2 LPM states for devices at tier %d\n",
-+			tier);
- 	return -E2BIG;
- }
- 
--static int xhci_check_tier_policy(struct xhci_hcd *xhci,
--		struct usb_device *udev,
--		enum usb3_link_state state)
--{
--	if (xhci->quirks & XHCI_INTEL_HOST)
--		return xhci_check_intel_tier_policy(udev, state);
--	else
--		return 0;
--}
--
- /* Returns the U1 or U2 timeout that should be enabled.
-  * If the tier check or timeout setting functions return with a non-zero exit
-  * code, that means the timeout value has been finalized and we shouldn't look
--- 
-2.32.0
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
