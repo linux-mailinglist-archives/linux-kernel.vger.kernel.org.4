@@ -2,157 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C6C6F90F0
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 11:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2836F9102
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 11:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbjEFJgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 05:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
+        id S231450AbjEFJqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 05:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbjEFJgP (ORCPT
+        with ESMTP id S230493AbjEFJqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 05:36:15 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCB79ECB;
-        Sat,  6 May 2023 02:36:13 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 362C85C00A2;
-        Sat,  6 May 2023 05:36:13 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sat, 06 May 2023 05:36:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1683365773; x=1683452173; bh=NNMPU2Iwo3E/oDPyGzoZDXLN88FMheBU22I
-        UKmk/Qxw=; b=IwkeCaiTtdug92xe8O6UVmVESA16y/NUTar2UgYIYSw8d7I17mK
-        Ll447AJ96QQAfTRFIzIGt0iVLq/J7NhOsdCo+/nT1Vadpn+WKB+MjjwecvIJRly8
-        SFK5noC+jf8YmwFa+7wr6FJqZOr4VVED0ZN1TOBW8nq3XTjprDEOfUymysp4Z7Ij
-        rLG1cfJpM+Sp8rgW773vE3rcjza9xZk9nuOJ/ez/s6KgvXlEIrq1WPXPnT2OJwzt
-        w7Nj364f7Y4XLYS8xK1gz0mutcLrUtuKR/JZWCJe/Dz26i1xti0/swKMYh+TygSk
-        2FThcDnUvBenNsAZtIHaeyQyImw/KLbGa3w==
-X-ME-Sender: <xms:jB9WZLbZJsa6sS1uHrNxUOZ9QJ_hgo9mIs1VMN07ojTjlJ2GL6kJig>
-    <xme:jB9WZKZS4hW_q6ZArx4VwjsFopzH3L6Ebq71rPCaMuBooIX7UI9AaJvGZKw3-y3St
-    MBK8zMBhO4mmyd-nJo>
-X-ME-Received: <xmr:jB9WZN-sBsSbq0sDrVivZ8qv9-UbU5wacs1_DCnXmdJXR_wqVpHTg72DTJjw92A9TwZRiQmHsQ6Y8e4bNs7vyXRbDsEmUjfa4eo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeffedgudegjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefvvefkjghfhffuffestddtredttddttdenucfhrhhomhephfhinhhnucfv
-    hhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrth
-    htvghrnhepheekudffheejvdeiveekleelgeffieduvdegleeuhfeuudegkeekheffkefg
-    gfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfthhhrghinheslhhinhhugidqmheikehk
-    rdhorhhg
-X-ME-Proxy: <xmx:jB9WZBphn3o7OoGavHDnBHhaVKL_2xcMxpTNuajjEnXk1J5ntsdFUQ>
-    <xmx:jB9WZGp4VbOmAyDWijN87rP7h2T5aWi48Hc3L_Adc6sn4VDIKi7EgA>
-    <xmx:jB9WZHQdMpQntbA1t8O2eHU6HGcpyjvRzpG4ndU9b9GVJGwuOZvHlQ>
-    <xmx:jR9WZJU9LW5s2bTbAc_E5VZ-gQeVS6MXNf1KogBdF_6e4TGbuQ5W2g>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 6 May 2023 05:36:11 -0400 (EDT)
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "Michael Schmitz" <schmitzmic@gmail.com>,
-        "Andreas Schwab" <schwab@linux-m68k.org>, stable@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-Message-Id: <9e66262a754fcba50208aa424188896cc52a1dd1.1683365892.git.fthain@linux-m68k.org>
-In-Reply-To: <cover.1683365892.git.fthain@linux-m68k.org>
-References: <cover.1683365892.git.fthain@linux-m68k.org>
-From:   Finn Thain <fthain@linux-m68k.org>
-Subject: [PATCH v1 1/1] m68k: Move signal frame following exception on
- 68020/030
-Date:   Sat, 06 May 2023 19:38:12 +1000
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 6 May 2023 05:46:16 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F3361BC
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 02:46:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683366374; x=1714902374;
+  h=date:from:to:cc:subject:message-id;
+  bh=oq7ONrSV1it95ufd2306WvSce4kRSrBQM6SELWA6ck0=;
+  b=UOtwYU+eQxwWTkz89wzAw2uckxbmI0Ol1Fw256RiE7uKtAo6VRLuhrmv
+   Q+VqleO1yN2UkDd7lsp3T/mTHRYK8cQAQF5ptYPCIbyiinqN3vdewxwLH
+   NrjjeJrAGEaebI8AMC/occ5cMbR7w8uDVy9Xzunx7I2bAnNYupaZmYzfK
+   m7+kV32MbMlANgMQiHwTrenDL4GdMI0Y1TkDndoTOFesjsgQpzvvN07To
+   V5u4rE8EAjLRxWnY4SiKOisWCPNnkOba+hbeXEmJ+oySJOdieVkNxvHkx
+   +f0R4iqaZU/m/cblvy+o7kxiQvcSpw9yVRbhcBW2ldARiATiXbjf1TGLm
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="377449703"
+X-IronPort-AV: E=Sophos;i="5.99,254,1677571200"; 
+   d="scan'208";a="377449703"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2023 02:46:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="691989668"
+X-IronPort-AV: E=Sophos;i="5.99,254,1677571200"; 
+   d="scan'208";a="691989668"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 06 May 2023 02:46:12 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pvEUR-00006N-0c;
+        Sat, 06 May 2023 09:46:07 +0000
+Date:   Sat, 06 May 2023 17:45:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.05.03a] BUILD SUCCESS
+ d3d734216c88fb7c13205dc62178ff5011da415b
+Message-ID: <20230506094543.OUsXC%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 68030/020, an instruction such as, moveml %a2-%a3/%a5,%sp@- may cause
-a stack page fault during instruction execution (i.e. not at an
-instruction boundary) and produce a format 0xB exception frame.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.05.03a
+branch HEAD: d3d734216c88fb7c13205dc62178ff5011da415b  rcu: Add missing parentheses around rcu_dereference() "p" parameter
 
-In this situation, the value of USP will be unreliable. If a signal is to
-be delivered following the exception, this USP value is used to calculate
-the location for a signal frame. This can result in a corrupted user
-stack.
+elapsed time: 722m
 
-The corruption was detected in dash (actually in glibc) where it showed
-up as an intermittent "stack smashing detected" message and crash
-following signal delivery for SIGCHLD.
+configs tested: 148
+configs skipped: 18
 
-It was hard to reproduce that failure because delivery of the signal
-raced with the page fault and because the kernel places an unpredictable
-gap of up to 7 bytes between the USP and the signal frame.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-A format 0xB exception frame can be produced by a bus error or an address
-error. The 68030 Users Manual says that address errors occur immediately
-upon detection during instruction prefetch. The instruction pipeline
-allows prefetch to overlap with other instructions, which means an
-address error can arise during the execution of a different instruction.
-So it seems likely that this patch may help in the address error case also.
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r001-20230502   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r011-20230430   gcc  
+alpha                randconfig-r021-20230502   gcc  
+alpha                randconfig-r022-20230501   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r006-20230502   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r004-20230501   gcc  
+arc                  randconfig-r012-20230502   gcc  
+arc                  randconfig-r025-20230430   gcc  
+arc                  randconfig-r043-20230430   gcc  
+arc                  randconfig-r043-20230501   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r013-20230502   clang
+arm                  randconfig-r016-20230430   gcc  
+arm                  randconfig-r022-20230430   gcc  
+arm                  randconfig-r025-20230502   clang
+arm                  randconfig-r046-20230430   gcc  
+arm                  randconfig-r046-20230501   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r005-20230430   gcc  
+arm64                randconfig-r026-20230502   gcc  
+csky         buildonly-randconfig-r001-20230505   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r001-20230505   gcc  
+csky                 randconfig-r003-20230501   gcc  
+csky                 randconfig-r006-20230502   gcc  
+csky                 randconfig-r021-20230430   gcc  
+csky                 randconfig-r022-20230502   gcc  
+hexagon              randconfig-r036-20230502   clang
+hexagon              randconfig-r041-20230430   clang
+hexagon              randconfig-r041-20230501   clang
+hexagon              randconfig-r045-20230430   clang
+hexagon              randconfig-r045-20230501   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                 randconfig-a011-20230501   clang
+i386                 randconfig-a012-20230501   clang
+i386                 randconfig-a013-20230501   clang
+i386                 randconfig-a014-20230501   clang
+i386                 randconfig-a015-20230501   clang
+i386                 randconfig-a016-20230501   clang
+i386                 randconfig-r025-20230501   clang
+i386                 randconfig-r026-20230501   clang
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r014-20230430   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r023-20230501   gcc  
+loongarch            randconfig-r026-20230430   gcc  
+loongarch            randconfig-r033-20230502   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r001-20230501   gcc  
+m68k                 randconfig-r001-20230502   gcc  
+m68k                 randconfig-r013-20230430   gcc  
+microblaze   buildonly-randconfig-r003-20230505   gcc  
+microblaze           randconfig-r013-20230501   gcc  
+microblaze           randconfig-r016-20230502   gcc  
+microblaze           randconfig-r016-20230504   gcc  
+microblaze           randconfig-r024-20230502   gcc  
+microblaze           randconfig-r031-20230502   gcc  
+microblaze           randconfig-r032-20230502   gcc  
+microblaze           randconfig-r035-20230502   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r006-20230501   clang
+mips                 randconfig-r015-20230504   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r002-20230505   gcc  
+nios2                randconfig-r015-20230430   gcc  
+nios2                randconfig-r016-20230501   gcc  
+openrisc             randconfig-r004-20230502   gcc  
+openrisc             randconfig-r034-20230502   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r003-20230430   gcc  
+parisc               randconfig-r003-20230502   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r006-20230505   gcc  
+powerpc              randconfig-r012-20230501   clang
+powerpc              randconfig-r014-20230504   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r005-20230505   clang
+riscv                               defconfig   gcc  
+riscv                randconfig-r002-20230430   gcc  
+riscv                randconfig-r002-20230502   clang
+riscv                randconfig-r003-20230505   gcc  
+riscv                randconfig-r004-20230430   gcc  
+riscv                randconfig-r013-20230504   gcc  
+riscv                randconfig-r042-20230430   clang
+riscv                randconfig-r042-20230501   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390         buildonly-randconfig-r005-20230502   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r015-20230502   gcc  
+s390                 randconfig-r044-20230430   clang
+s390                 randconfig-r044-20230501   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r005-20230502   gcc  
+sh                   randconfig-r011-20230502   gcc  
+sh                   randconfig-r021-20230501   gcc  
+sh                   randconfig-r024-20230430   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r001-20230430   gcc  
+sparc64              randconfig-r002-20230501   gcc  
+sparc64              randconfig-r023-20230430   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230501   gcc  
+x86_64               randconfig-a002-20230501   gcc  
+x86_64               randconfig-a003-20230501   gcc  
+x86_64               randconfig-a004-20230501   gcc  
+x86_64               randconfig-a005-20230501   gcc  
+x86_64               randconfig-a006-20230501   gcc  
+x86_64               randconfig-a011-20230501   clang
+x86_64               randconfig-a012-20230501   clang
+x86_64               randconfig-a013-20230501   clang
+x86_64               randconfig-a014-20230501   clang
+x86_64               randconfig-a015-20230501   clang
+x86_64               randconfig-a016-20230501   clang
+x86_64               randconfig-r005-20230501   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r004-20230505   gcc  
+xtensa               randconfig-r012-20230504   gcc  
+xtensa               randconfig-r023-20230502   gcc  
 
-Reported-and-tested-by: Stan Johnson <userm57@yahoo.com>
-Link: https://lore.kernel.org/all/CAMuHMdW3yD22_ApemzW_6me3adq6A458u1_F0v-1EYwK_62jPA@mail.gmail.com/
-Cc: Michael Schmitz <schmitzmic@gmail.com>
-Cc: Andreas Schwab <schwab@linux-m68k.org>
-Cc: stable@vger.kernel.org
-Co-developed-by: Michael Schmitz <schmitzmic@gmail.com>
-Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
-Signed-off-by: Finn Thain <fthain@linux-m68k.org>
----
-This is the same patch that was posted previously. The commit log has
-been revised and tags added.
----
- arch/m68k/kernel/signal.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/arch/m68k/kernel/signal.c b/arch/m68k/kernel/signal.c
-index b9f6908a31bc..8aeafbb083f7 100644
---- a/arch/m68k/kernel/signal.c
-+++ b/arch/m68k/kernel/signal.c
-@@ -858,11 +858,16 @@ static inline int rt_setup_ucontext(struct ucontext __user *uc, struct pt_regs *
- }
- 
- static inline void __user *
--get_sigframe(struct ksignal *ksig, size_t frame_size)
-+get_sigframe(struct ksignal *ksig, struct pt_regs *tregs, size_t frame_size)
- {
- 	unsigned long usp = sigsp(rdusp(), ksig);
-+	unsigned long gap = 0;
- 
--	return (void __user *)((usp - frame_size) & -8UL);
-+	if (CPU_IS_020_OR_030 && tregs->format == 0xb)
-+		/* USP is unreliable so use worst-case value */
-+		gap = 256;
-+
-+	return (void __user *)((usp - gap - frame_size) & -8UL);
- }
- 
- static int setup_frame(struct ksignal *ksig, sigset_t *set,
-@@ -880,7 +885,7 @@ static int setup_frame(struct ksignal *ksig, sigset_t *set,
- 		return -EFAULT;
- 	}
- 
--	frame = get_sigframe(ksig, sizeof(*frame) + fsize);
-+	frame = get_sigframe(ksig, tregs, sizeof(*frame) + fsize);
- 
- 	if (fsize)
- 		err |= copy_to_user (frame + 1, regs + 1, fsize);
-@@ -952,7 +957,7 @@ static int setup_rt_frame(struct ksignal *ksig, sigset_t *set,
- 		return -EFAULT;
- 	}
- 
--	frame = get_sigframe(ksig, sizeof(*frame));
-+	frame = get_sigframe(ksig, tregs, sizeof(*frame));
- 
- 	if (fsize)
- 		err |= copy_to_user (&frame->uc.uc_extra, regs + 1, fsize);
 -- 
-2.37.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
