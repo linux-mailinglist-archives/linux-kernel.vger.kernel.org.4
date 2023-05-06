@@ -2,75 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 534E36F904C
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4996F9050
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbjEFHnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 03:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S230418AbjEFHo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 03:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjEFHnD (ORCPT
+        with ESMTP id S231444AbjEFHoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 03:43:03 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883B9E46
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 00:43:02 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f19afc4fd8so16941275e9.2
-        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 00:43:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683358981; x=1685950981;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fW4KRIYUMRVsD5UctMtgx/S9KUAXGGFHwiF8ujkNxLM=;
-        b=aafNNnNg3WETWSnrpa2zXFujk6MCMhxzi/+xAHoyg6PlXfPHNnnc0gYXK2171mT2cz
-         5DsjTcEWGKhu7nVn23M8T8V/3vrb5F6Z5ZzESgcJxBkaSkxzO31v1wflW4qXVyeU3xak
-         Go1j3XCxgmdqoSWWYk9LKCWVXxFtIPTtEuiwEczJqW6tByz9BOE/LMGZSpeSbWMROq9u
-         XOkGZOtOW0z42kvPgsARNjFixrDfmNZ49QVP/deCXzfuHQFJn1zIj8p6nF0/MHOrmNHS
-         H/OPnpdlLOguj4ZAiNERbzwIsDYBzEI0CCmBELYwuW+7ZYBBTvwC+xdzZ6WHMjpPsbuO
-         juCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683358981; x=1685950981;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fW4KRIYUMRVsD5UctMtgx/S9KUAXGGFHwiF8ujkNxLM=;
-        b=CQdhi2rpQj1DWAVEoG3EvgDgVdXDw+ulaJdVxCXjksZKEjohOPJW1h5ohT31FSXckq
-         5Kz+PAMukLSqyrb2mrsrGDKBQEqg2MGMpq/ooYo/XWdBBxmsuw9hWJAEsozOYhrckYat
-         gQCTtIZI319+44kZ/GyAqK+8JCunA7FNTLfWc3j0kieJdkNOZTOSM7AGm44Y4kHJBWk5
-         6Q1SUxhz60s6f92gId38JWCU2Jn5Q58XQONeAYzSe+ChNX1MKu7pARWSFv0ENh8676RF
-         G1gng6fyznCL6L/FvuBiUAUZjSXwV9n94yFow9t/qPTjJLl2jX+ezZYnTR3MmTNJTq/l
-         zbqg==
-X-Gm-Message-State: AC+VfDx3s8DYegt+kBM0PH8X21bieWIlHpwdXmp3RryWX2zPvvKMU+it
-        4zyhH/8hamMAd0XzIFmbJ3DRzQ==
-X-Google-Smtp-Source: ACHHUZ605kDOxqkmkZRMGKiOsisZf8+xAmQJT2IqoRzmIBY9Zxj+uSKlW43jZ7WJHJR5CY76pECKBA==
-X-Received: by 2002:a05:6000:c:b0:306:32fa:6737 with SMTP id h12-20020a056000000c00b0030632fa6737mr2892704wrx.8.1683358981048;
-        Sat, 06 May 2023 00:43:01 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id o17-20020a5d4091000000b003078a3f3a24sm702366wrp.114.2023.05.06.00.42.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 May 2023 00:43:00 -0700 (PDT)
-Message-ID: <4823a770-f3c4-695f-5699-4c8d8179b507@linaro.org>
-Date:   Sat, 6 May 2023 08:42:58 +0100
+        Sat, 6 May 2023 03:44:54 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3551E46;
+        Sat,  6 May 2023 00:44:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5B82A22316;
+        Sat,  6 May 2023 07:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1683359091; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fIDvcIp0irJ9nejo79mAMo8eZX7vhyfnB/9sV4I6BVc=;
+        b=UZV+c3hiyyOkfV/XezlgAfmyyo/QUMnJEhP4WzWXfiaKANzoCNt5LA/dQb5h/oPNdB+r0r
+        0+6pGoMUr5MZYrNQL4dHdFXmTco0B5rROt1idt3GO+qquSE4iH/ByLsUIbjKHjlIMmJ27m
+        rjTkGLuTXK8Zg03go7YkM99O+IvuUiY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1683359091;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fIDvcIp0irJ9nejo79mAMo8eZX7vhyfnB/9sV4I6BVc=;
+        b=dQGIBY9s2MYs2o/JzZcBaikk819IihoO+S/GdXDCBW824SyAsNLgrFKK+HdzfcAnGbZOBO
+        OR27gVT3dPS8+WCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0C252134FB;
+        Sat,  6 May 2023 07:44:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KSY+AnMFVmRHXgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Sat, 06 May 2023 07:44:51 +0000
+Message-ID: <3b0ec3da-ba18-7b9f-4e84-1cc30e78aed7@suse.cz>
+Date:   Sat, 6 May 2023 09:44:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/3] ALSA: pcm: add snd_pcm_add_chmap_ctls_with_prefix
+ Thunderbird/102.10.1
+Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
+ KVM: mm: fd-based approach for supporting KVM)
+To:     David Hildenbrand <david@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        tabba@google.com, Michael Roth <michael.roth@amd.com>,
+        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <ZD1oevE8iHsi66T2@google.com>
+ <658018f9-581c-7786-795a-85227c712be0@redhat.com>
+ <CS465PQZS77J.J1RP6AJX1CWZ@suppilovahvero>
+ <6db68140-0612-a7a3-2cec-c583b2ed3a61@redhat.com>
 Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     broonie@kernel.org, tiwai@suse.com, perex@perex.cz,
-        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
-        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org
-References: <20230505165514.4666-1-srinivas.kandagatla@linaro.org>
- <20230505165514.4666-2-srinivas.kandagatla@linaro.org>
- <87ttwqgfxh.wl-tiwai@suse.de>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <87ttwqgfxh.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <6db68140-0612-a7a3-2cec-c583b2ed3a61@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,31 +95,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 06/05/2023 06:57, Takashi Iwai wrote:
-> On Fri, 05 May 2023 18:55:12 +0200,
-> Srinivas Kandagatla wrote:
->>
->> On Qualcomm SoC which has multiple Display Port controllers, using
->> snd_pcm_add_chmap_ctls() to add chmap controls from every ASoC hdmi codec
->> instance for a give card fails while adding second instance as the control
->> with same name "Playback Channel Map" already exists from the first instance.
->>
->> Fix this by adding a new api wrapper to pass ASoC component name prefix to
->> avoid such duplicate control naming.
+On 5/5/23 22:00, David Hildenbrand wrote:
+> On 23.04.23 15:28, Jarkko Sakkinen wrote:
+>> On Mon Apr 17, 2023 at 6:48 PM EEST, David Hildenbrand wrote:
+>>> On 17.04.23 17:40, Sean Christopherson wrote:
+>>>> What do y'all think about renaming "restrictedmem" to "guardedmem"?
+>>>
+>>> Yeay, let's add more confusion :D
+>>>
+>>> If we're at renaming, I'd appreciate if we could find a terminology that
+>>> does look/sound less horrible.
+>>>
+>>>>
+>>>> I want to start referring to the code/patches by its syscall/implementation name
+>>>> instead of "UPM", as "UPM" is (a) very KVM centric, (b) refers to the broader effort
+>>>> and not just the non-KVM code, and (c) will likely be confusing for future reviewers
+>>>> since there's nothing in the code that mentions "UPM" in any way.
+>>>>
+>>>> But typing out restrictedmem is quite tedious, and git grep shows that "rmem" is
+>>>> already used to refer to "reserved memory".
+>>>>
+>>>> Renaming the syscall to "guardedmem"...
+>>>
+>>> restrictedmem, guardedmem, ... all fairly "suboptimal" if you'd ask me ...
+>> 
+>> In the world of TEE's and confidential computing it is fairly common to
+>> call memory areas enclaves, even outside SGX context. So in that sense
+>> enclave memory would be the most correct terminology.
 > 
-> It implies that you have conflicting PCM objects with the same PCM
-> device number from the same card.  How can it be?
-Thanks for the inputs, this is only issue with my local changes, Sorry 
-for the noise, Please ignore this series.
-
-I had some local changes to debug an issue around pcm device numbering 
-with backend dailinks from device tree and frontend dailinks from tplg.
-Will start a new thread to discuss this issue.
-
-thanks,
-srini
+> I was also thinking along the lines of isolated_mem or imem ... 
+> essentially, isolated from (unprivileged) user space.
 > 
-> 
-> Takashi
+> ... if we still want to have a common syscall for it.
+
+I'm fan of the ioctl, if it has a chance of working out.
+
