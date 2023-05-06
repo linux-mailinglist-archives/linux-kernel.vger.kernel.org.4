@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4110A6F92E9
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 17:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00236F92F0
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 17:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjEFPzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 11:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
+        id S233341AbjEFPzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 11:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233066AbjEFPzH (ORCPT
+        with ESMTP id S233169AbjEFPzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 11:55:07 -0400
+        Sat, 6 May 2023 11:55:14 -0400
 Received: from sonic308-18.consmr.mail.ir2.yahoo.com (sonic308-18.consmr.mail.ir2.yahoo.com [77.238.178.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252FE14913
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 08:55:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1683388504; bh=BgnxKccDW0hD4wBKD/wGrzdwGz4y7GQfSjWtC1jgF84=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=UfadBhbI9VtF1wxEGJ3H7hb766TB7uvihxuyKpmC3klAR+V0OihCmdcmXJi+1INZ075veT8BwnerMbfHioyE6KLycf7QROMGvf67pAc74uz+PEsFeKmiG2pKtqnvyT/0QCLGnbeUd42Q3YXioU7+SbuFaJSiSeCN6QsjHY8BjWCrOCawxTPRw0CLmWWs+rKBq2e9I3D+nYsuA4lOpFOsDwSB/p3yX7yk3OKw+sbKifu29a5Zyr5XS/NclN4K3EAnUTbJOMFuDm8kOZ+olqz6GfhHynysULcZnDzgF8NwSaUMULsO96caXTPBsNBWXKBjTU86j0E8cbI1zCa28vD+tQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1683388504; bh=RNV/JCjeLztT9viv2T43hMVNespAeCRByTEg8dNf8wi=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=oCY6/0FeqsIDyjjgnHnzar6t3qKAWIT6grM1BiI0xvsYsAA2ciA9nAD61jN7xFXEUwQZ0eHHkBDbWcmsO6AmkGP7bfEZMwhFfMBNajIx8NJwXPFmYUy59pjHkdRj9wVn6Q0cQPjI4wQ2bWCXc6M5Lh6n8avDIqq7FlAOPcZBxyGNbU0e8XKxaTLJYIPFORfSH/P6D/aWoLXWSTFv03yba9dbsRks/zY7GZhx98mWKQvDaztmkxHxhOx6N2giWTH9MdUelHt45UyUYyee6cxPeK1R0/5PT1w2LkcVOydIcMeuHP2j0jqeNPO1CKmF/ZEICyX6nQT/1wHHMM0CGHMh0w==
-X-YMail-OSG: .EoXj1sVM1lMET6iIQaEh88oWOhfkp1zUO.qZIYIPaOOOQlFDITJUuvI7TlEeow
- ftUouzjxfcP64YFDzg_nH01EeAbzH_a_sWyEY_hZBqBISXRn6ppZ6j0YLZIjBMVfGmUL81z71wcf
- EucITv7Pt_4Y0EPoBudH_EpIEOKKYD7hPlF7CApX9vNbEaPbsQPP8wd3OEAwcDSeVEOn5DsTFrXc
- FF2ZtSnrUyVDSrvFOQdBoylq9eGolfPiN7YoGUBH6B1u4C5VyeaocAIcIBFMJVTkSUpvjKJzn0c4
- XyOkRXiVWycp7UrK0QrnzwTBjr2UIpoWzYXS7UYVnmpewfYz05S9yb.XRGi2xJUo0o41ea1R_ZAq
- PYMVWcAGJJzVu9Yg0ViZoo0_LRRmL2AyT79KdcG2F5DK.m6V2D0X1IrM3h3A26hXaevldFSo7vc9
- dfZYuwqrldiLBkth7qcBMrYtcIhUO3Fkov.NjXxMgBaCDdTv4kSBr6e8VslJp20uVilcRBepNtYm
- xVGyNK7dTHziPLI6G.VcgE_jNcesVWFZuVZw35MkSjEnP6IGLD3ZIX6gTo3SL6fwyFRSmyrAZRQZ
- a2LbnDy73qMbTwEIen4mHsaoT2GExtEW42BDww_A1.GG4nqNhjTIQ4x5Kn3dZ0eUW79h3.qr1sor
- 6n.S7yIcVXyjkL7I6MRjb6d8DW6Jj044QxB8d80TZ2Tt8Au0zqpee2NhXjYsrdkVwddv1Uxm.b0e
- I4ETvnubwQ27wiEVlAYL7CItfc0XLuy50.o1K..S36LLeI53OvVcKP6okOx5WLreRBJ6pefevFlH
- mXPx20yigbs.XmehUNkFMsoUnuZMf9R_FbGF5z69NUTOZRB42oTLrWEt2VdieRXuCNOAQmofWLiZ
- egrBczNYPpbF6xIjybXcid2Nat56tWhBRIx8L4axfNNVU_MZc_93pNNV4TjVSh5SiS5SKjs0qprw
- OpeH_FuLtUYhRz2_kespTNDARGKhAuoDpzv3KkRNJM8GfxdXUtC1lpSnjGWuFMtcNqirupLFWMbP
- yFJ1278LUoUseNrPDVowmcDGSoj7KRQ0jlsSJ_mhXlOE2WodV8a_kGJZzVdNgtw3U6UQtnR290.X
- oZTtEnCRtdEBo1NFHu83eNbBSBFDakAcpQWj1BwhqyaUfSGa8fz_hTCkVJRRinlmVluLPrvYpOHm
- VVNBLIDEr4vrlXXaZs8.GY.36qVc7a1KqZ6xXvOfJSjFo6l98YDLS_NVEMwH6i2y8nPAV9f6JuqJ
- lfOCJ_9SVbpN6pi4GI4L5AJLIsvMqzhy2jqUYqXpHbO5OjIcWvvHll8hm8Rvkoi26gkTjF1RH9r2
- _1NJaWr4UUbM2Oi7zhOfJ_IKtYBzPTJculMuNlniEwSarNWFdOHyEsX8v2eGs.H9rHlYTN39kngo
- xpjWByL7Y33MDeTchwoWSRX5UmQwjbAZR6lCPPhM20lphRodWv8tITwYkqh5m6UpqZx3e0Rl6TZT
- VEwPQwYZqVBKwm7fx3MSfa1SI.8yIjoEareTG2j6HB1Sj8JMDKmmYe9__qp37_f4eC5LFA1kSID5
- _IxZ.JihJBY95XIU4bNTohbFbYuSlIYtllfNMrLarQxWWIz_ADvIRZpasQyG07MyWy19sE8AKT8N
- l7mVNWFZoe8sZOHKemen5NEl6N8v47UoUjbmfvmtD2jO47OVyiyNGdIs0GQGkwyIQa9RAxOZUjeB
- FXxCrjOJDD_tSJZnnvICIk298SBqXX5LWXrXoyO9RchixFuqfkPXW47fLl8zQFE1zw3crFOGx6hT
- s.0aSbdkidbPHVzLEbmQ7kSpfVPBmBLQgKKuZIB5wdO_XMzfizONwR0IdTpBaFyHFW3C0P4pK0np
- dVOzKLDo1_EzTvNFnpTRnLGZ1CaO3m8um7muaVy2NW3DH3bBZueeF6w_CNlVD1mVu7WSCekCeq7J
- 6QioTa3Qt3SGDDdhBi_aoSNbm7Eg6QN9xV1nnLHVorM_a8S80a51G8sCuD7afnClzBFezfHpVfwZ
- ttxuM1nsWLEUPwQ4fOy8yk2.WxgdLdfyIwtGzItvwGVDx4n3le0oo9qHeweWhlqUle.Q_ftZ0Oqu
- 3vu2HMc3tV1ld1goQQmm3Z8tMN5s7e949q71m7yA4QbksbjC_awy5GpZrhXriQXdRjL6kyBRi1MP
- yBFcrfJrHKymrRX5shaXcehN0J3nNryw.16l0khD7XzZnHhB3W02Bcm3Po3sCMfU_S0wBmdcT7BR
- XEgWriYjDSDzc3NsxJvLTNb1.TX9R4PeGJveNwSmG3aZnBetNu0LdsI7eQN.Gs5_99zWQXW6hTnX
- sF3_Kyc33mgrgaF5eeH9RsA--
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384541A1ED
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 08:55:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1683388509; bh=5w6Shyycf9TKW8fxiIBkdZ0V7BL6iy8PZMl/Ylzmv2k=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=WjtMOxC2dsc0p8kTu4GIcF/vXtuZBsBMCbO8EWRq3ppJVcPjvQfFOARAgqyccaVoqz8+d0IiP2Xkeq8e7qaZreZpx29YlfHfI8HZM5XDYL+vGsjXaXHk/UzgyBcSex4SaYqowIPMO8lB3130K8G7z68j3gTGXuOOSvvBf2CZNgy91zvcrSmaiRtiPwMQCwDonFVblKr6yZWZO3ypEGJES/QIkqtfnBkVYnVQXc6Etze4lkkeA8iXNnix75+zFmbpMJ0oKbrtWXEbfLJpP35pmhFBo2JMIc/1FUO/kwSQaPFY9+MeubDlqWaK9CdlQ5arxcVBkzN4Vtiwy6FoaENuQw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1683388509; bh=E9c5uOZZSLSVF9QVsVRgo1wlJZnWL3QoMbBYCfuuE8u=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=Z9ZSHZlQw80RO612hozs4Npw/c56p8xBiLPYZkFEgHAFtghqhecoTteZK4hony6YU73iBxMBmXxgNXUeBz7Dw7jA+44THAUxzPog8XfnqgrJ/cSmqvOdGrN+gMfrNrBryVEI2NZabyu9O9rMlzuOyKZ5JczrCyZxBIq1cVArDsJfvzQk8fiRHV9F8aL3R/+O7VXAE/StSouU+iTHo1LMxQyEK9bg2AdtwRafTRe9J+kdCXE4iwTtvdeW2+eotGPnnaLXLRmfar/mkQpbF8IncL1z45hbkfNW95uoygyEa6W2BKmDuUC1EOSsneph8Yh9ktpb68067djJEfk5sw/2+w==
+X-YMail-OSG: PPmJTegVM1kyu8K6rSAS_0EHi8iB2UPrHkuOhb4rm4pjeTZ1dOWyQ6T92XEURKW
+ zAIKafmLl5jlRlEFa7fhbgnd3j.AFbUgBepWQ2QQol7YWJ0y4dIsfhN_nxO4nzN5ZcHD2zmK0evf
+ IdES3JvkC2jciZby9lf4os_VQYEE7FfeTKE0TdTaukK2L1nDeIB8PFBkEPKU_KIHm5YlYdTNeGp1
+ O5plzwH7GZ6DidQQZjVu33zg.KK1g907wlO_TIbaF5DUUrwQoExqTiDQ904qFY596UKiBEoZhHkI
+ .eH_4EDz4AX1aLYIsP7bi__sJigKScvDwS16vuQ78vuG3JxBmhPel4b7C8ZIKWcRD26dySI2njW4
+ mNLvofbOYG_TTbeGIQWdWCRMHwA1JLaEXrz2N3AYSOBQ2KXOFpW8NYppJNhh.XqMMv3XkxGfPAeY
+ CQHmLQsCYFNc_yZhyd2HIcwxd3jhAxDj9sIoLeEaZXRd2QNNeWlNu919HKH4PmKs2tcmnsQX59xf
+ YPSWHDW9JhBxru5nHKyhZl6b5KBFNcQPTlwi3ps1ca.5170z7987s1PSoDobV.NFGCqLI5Nvy9dp
+ d8uQ6LV_VWcIe0o3ASgzF8ougAS1l19iUdrKl98AAr7zDOv97zxaFNPM5IHZxNdneDYaoQkhKS4d
+ O_6zC0Ee7jQRg5Er_b4PWxLRcz2w4cRM0Rh6Y0i8qNktZ2JpHZzyPO73p5Xqg_rq4eB1PP9At4Qh
+ l7CDLS1DLmbawZ2vVM6z74Khce5bLkBDkW3_CDsbhv.sCQmWkPyLFyGisotWGhyBsbcFiV1JWY2M
+ w5TIBc60xan8Mb1NyyXAEbsuiQISFMTqIuK_B8DZLSy_UsyvAcYwjQ6hx01Ax0RiGuR.I.UwOsbN
+ DYp64JXsQeWCM6pfxeHhz7791jbjDVwBL7dwPA_VLSkJXaHTZYh8drJ2yEbdez9WCztlEBLXjRaY
+ KWzrumShiZza3yGGBvRo6NIFDo77FECp4QHg7AmpBTWvJhbdqQM2bKnaECXxeWAyDRby6oUKcCvT
+ aed7KnCwsOQZnK1MhHkuc4kTtlvdmJADOhswJPfcmNGo9BqQ7UwBhPr3QJHoSJ9r3gzRhfPnPuOS
+ GAd1G5OYtrbsNBZN2EeDD7_ddV9M3wWg4W16NOBC9zvZ.r.JdWuuhICi_IFgEgPpXhQloJGvBuep
+ oPzCaB6t4XDtjwVngz3czHpXgeiRY8NN._70LaEfVhqwWBnQdy4Os7CJLnL6AzMpJhDeBDUYGdAi
+ o.9HxhAMibvlqHgHVAzhn.LJepTq4ceVRVBIN4b9BSF37sxRmA21GeludsfVtw8mKfyar.ptbUBt
+ x1VsRTwXia.4iESv8OSS6ksCfhGcPn0AAD4Ub7UTW._z9c7WelV0e2R7qBOBRNw2mFCwn4hmh2Lj
+ E7QOPTG7la0Gh5sApA_LE326uXgvQL4xH3xbT6xyKyiTXgx5tLW_8_08opnpUifh8jkkSHSrSbds
+ zjkzCdcjnKSLWndOtXmVwC1XDQZPvSSdFZnM6rTfBvzII0TwtNOXz6ZFdmv7QzP_u.BNkDcVvj.g
+ B7HsioJT_DodWHH7bdQCIXVtQjTuQHXxISPbiHd11Ga_xHWY649m0m4WtQfkG6vkoYDqHZnNo7Ds
+ lgTst6q8FbD1zi_MEMP.qEHMmOgBl9z6.DDCNOSpEiPdb4KdW9Ix7AdY1dvFFu1iWr_LaLMe7qDP
+ brP6aWNCcKGYWmG3gRWVMP6Vdzeodwp5YaF_zu252b08t8tc6XBkNpzi1Ca6F6QvVhHYqLkBgNUo
+ UV3iMxhGO6JKkUexB_QXpreZkw_TKLLJYKSEfIezeedrQUQsvitqDi_bDSUwS9KgeH.WeYxlgwWH
+ VAYtcAvuQDR1evl4CkH8PfWn.s3QZwNGI6YLnYBGh1BVmDuVS.1jg2l7rp0DBJyLuD0EZfhQ0Biy
+ UCFpmzt9Or194YUQfuBrV3Fm_ULCDkMRkLifq4g5Zi4Vp2AcESpxzva.pLdpV9kS3ajYErYRxaLz
+ LzUbL9ho8DxKoB7Zj5GmN3ezoK2muqPYR6wneiiB6O2gjKm1CwfLGNuJdbsxD2kiGplAa70MeEYn
+ 56KqyiIekm_PbchzpY5ela.Q8VSUnnem0AI_pJVgvxtsLwkP7rVeFcnVdQ70qZgonvcsjyv_TJ13
+ N98bj1mogXNITEHpU5SyZDAzqjklHSJ1nabmRzOZr3viAKN64Zo.TIw7zGI8PG7WDsKovHi.5tGB
+ DA8zssfXBJ.YU_Srg0UJeNtxYcMftR_HFwDrhrkuakCY354ieTCVL6uom_klnh0SJgSFPM8RtuaI
+ 6GfBiBJ3KFKUrTKge4EuJ7Fm5lO0-
 X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: daf1be99-739a-4c97-bd31-81579ac28943
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ir2.yahoo.com with HTTP; Sat, 6 May 2023 15:55:04 +0000
+X-Sonic-ID: 58e56979-5dc3-4900-8e22-1045e7b3417e
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ir2.yahoo.com with HTTP; Sat, 6 May 2023 15:55:09 +0000
 Received: by hermes--production-ir2-74cd8fc864-s5qrx (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 2f796affa0781b2e3002453351a4dea5;
-          Sat, 06 May 2023 15:55:03 +0000 (UTC)
+          Sat, 06 May 2023 15:55:05 +0000 (UTC)
 From:   Jakob Hauser <jahau@rocketmail.com>
 To:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -70,9 +70,9 @@ Cc:     Beomho Seo <beomho.seo@samsung.com>,
         Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v4 3/8] mfd: rt5033: Fix STAT_MASK, HZ_MASK and AICR defines
-Date:   Sat,  6 May 2023 17:54:30 +0200
-Message-Id: <20230506155435.3005-4-jahau@rocketmail.com>
+Subject: [PATCH v4 4/8] mfd: rt5033: Apply preparatory changes before adding rt5033-charger driver
+Date:   Sat,  6 May 2023 17:54:31 +0200
+Message-Id: <20230506155435.3005-5-jahau@rocketmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230506155435.3005-1-jahau@rocketmail.com>
 References: <20230506155435.3005-1-jahau@rocketmail.com>
@@ -81,93 +81,194 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The charger state mask RT5033_CHG_STAT_MASK should be 0x30 [1][2].
+Order the register blocks to have the masks in descending manner.
 
-The high impedance mask RT5033_RT_HZ_MASK is actually value 0x02 [3] and is
-assosiated to the RT5033 CHGCTRL1 register [4]. Accordingly also change
-RT5033_CHARGER_HZ_ENABLE to 0x02 to avoid the need of a bit shift upon
-application.
+Add new defines for constant voltage shift (RT5033_CHGCTRL2_CV_SHIFT),
+MIVR mask (RT5033_CHGCTRL4_MIVR_MASK), pre-charge current shift
+(RT5033_CHGCTRL4_IPREC_SHIFT), internal timer disable
+(RT5033_INT_TIMER_DISABLE), termination disable (RT5033_TE_DISABLE),
+CFO disable (RT5033_CFO_DISABLE), UUG disable (RT5033_CHARGER_UUG_DISABLE).
 
-For input current limiting AICR mode, the define for the 1000 mA step was
-missing [5]. Additionally add the define for DISABLE option. Concerning the
-mask, remove RT5033_AICR_MODE_MASK because there is already
-RT5033_CHGCTRL1_IAICR_MASK further up. They are redundant and the upper one
-makes more sense to have the masks of a register colleted there as an
-overview.
+The fast charge timer type needs to be written on mask 0x38
+(RT5033_CHGCTRL3_TIMER_MASK). To avoid a bit shift on application, change the
+values of the timer types to fit the mask. Added the timout duration as a
+comment. And the timer between TIMER8 and TIMER12 is most likely TIMER10, see
+e.g. RT5036 [1] page 28 bottom.
 
-[1] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/drivers/battery/rt5033_charger.c#L669-L682
-[2] https://github.com/torvalds/linux/blob/v6.0/include/linux/mfd/rt5033-private.h#L59-L62
-[3] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/include/linux/battery/charger/rt5033_charger.h#L44
-[4] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/drivers/battery/rt5033_charger.c#L223
-[5] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/drivers/battery/rt5033_charger.c#L278
+Add value options for MIVR (Minimum Input Voltage Regulation).
+
+Move RT5033_TE_ENABLE_MASK to the block "RT5033 CHGCTRL1 register", in order
+to have the masks of the register collected there. To fit the naming scheme,
+rename it to RT5033_CHGCTRL1_TE_EN_MASK.
+
+Move RT5033_CHG_MAX_CURRENT to the block "RT5033 charger fast-charge current".
+
+Add new defines RT5033_CV_MAX_VOLTAGE and RT5033_CHG_MAX_PRE_CURRENT to the
+blocks "RT5033 charger constant charge voltage" and "RT5033 charger pre-charge
+current limits".
+
+In include/linux/mfd/rt5033.h, turn power_supply "psy" into a pointer in order
+to use it in devm_power_supply_register().
+
+[1] https://media.digikey.com/pdf/Data%20Sheets/Richtek%20PDF/RT5036%20%20Preliminary.pdf
 
 Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
-Acked-for-MFD-by: Lee Jones <lee@kernel.org>
 ---
- include/linux/mfd/rt5033-private.h | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ include/linux/mfd/rt5033-private.h | 53 ++++++++++++++++++++----------
+ include/linux/mfd/rt5033.h         |  2 +-
+ 2 files changed, 36 insertions(+), 19 deletions(-)
 
 diff --git a/include/linux/mfd/rt5033-private.h b/include/linux/mfd/rt5033-private.h
-index b035a67cec73..b6773ebf4e6b 100644
+index b6773ebf4e6b..0221f806d139 100644
 --- a/include/linux/mfd/rt5033-private.h
 +++ b/include/linux/mfd/rt5033-private.h
-@@ -55,7 +55,7 @@ enum rt5033_reg {
+@@ -55,22 +55,24 @@ enum rt5033_reg {
  };
  
  /* RT5033 Charger state register */
--#define RT5033_CHG_STAT_MASK		0x20
-+#define RT5033_CHG_STAT_MASK		0x30
++#define RT5033_CHG_STAT_TYPE_MASK	0x60
++#define RT5033_CHG_STAT_TYPE_PRE	0x20
++#define RT5033_CHG_STAT_TYPE_FAST	0x60
+ #define RT5033_CHG_STAT_MASK		0x30
  #define RT5033_CHG_STAT_DISCHARGING	0x00
  #define RT5033_CHG_STAT_FULL		0x10
  #define RT5033_CHG_STAT_CHARGING	0x20
-@@ -67,6 +67,7 @@ enum rt5033_reg {
+ #define RT5033_CHG_STAT_NOT_CHARGING	0x30
+-#define RT5033_CHG_STAT_TYPE_MASK	0x60
+-#define RT5033_CHG_STAT_TYPE_PRE	0x20
+-#define RT5033_CHG_STAT_TYPE_FAST	0x60
+ 
  /* RT5033 CHGCTRL1 register */
  #define RT5033_CHGCTRL1_IAICR_MASK	0xe0
- #define RT5033_CHGCTRL1_MODE_MASK	0x01
-+#define RT5033_CHGCTRL1_HZ_MASK		0x02
+-#define RT5033_CHGCTRL1_MODE_MASK	0x01
++#define RT5033_CHGCTRL1_TE_EN_MASK	0x08
+ #define RT5033_CHGCTRL1_HZ_MASK		0x02
++#define RT5033_CHGCTRL1_MODE_MASK	0x01
  
  /* RT5033 CHGCTRL2 register */
  #define RT5033_CHGCTRL2_CV_MASK		0xfc
-@@ -92,7 +93,6 @@ enum rt5033_reg {
++#define RT5033_CHGCTRL2_CV_SHIFT	0x02
+ 
+ /* RT5033 DEVICE_ID register */
+ #define RT5033_VENDOR_ID_MASK		0xf0
+@@ -82,14 +84,15 @@ enum rt5033_reg {
+ #define RT5033_CHGCTRL3_TIMER_EN_MASK	0x01
+ 
+ /* RT5033 CHGCTRL4 register */
+-#define RT5033_CHGCTRL4_EOC_MASK	0x07
++#define RT5033_CHGCTRL4_MIVR_MASK	0xe0
+ #define RT5033_CHGCTRL4_IPREC_MASK	0x18
++#define RT5033_CHGCTRL4_IPREC_SHIFT	0x03
++#define RT5033_CHGCTRL4_EOC_MASK	0x07
+ 
+ /* RT5033 CHGCTRL5 register */
+-#define RT5033_CHGCTRL5_VPREC_MASK	0x0f
+ #define RT5033_CHGCTRL5_ICHG_MASK	0xf0
+ #define RT5033_CHGCTRL5_ICHG_SHIFT	0x04
+-#define RT5033_CHG_MAX_CURRENT		0x0d
++#define RT5033_CHGCTRL5_VPREC_MASK	0x0f
  
  /* RT5033 RT CTRL1 register */
  #define RT5033_RT_CTRL1_UUG_MASK	0x02
--#define RT5033_RT_HZ_MASK		0x01
- 
- /* RT5033 control register */
- #define RT5033_CTRL_FCCM_BUCK_MASK		BIT(0)
-@@ -119,13 +119,14 @@ enum rt5033_reg {
-  * register), AICR mode limits the input current. For example, the AIRC 100
-  * mode limits the input current to 100 mA.
-  */
-+#define RT5033_AICR_DISABLE			0x00
- #define RT5033_AICR_100_MODE			0x20
- #define RT5033_AICR_500_MODE			0x40
- #define RT5033_AICR_700_MODE			0x60
- #define RT5033_AICR_900_MODE			0x80
-+#define RT5033_AICR_1000_MODE			0xa0
+@@ -128,20 +131,28 @@ enum rt5033_reg {
  #define RT5033_AICR_1500_MODE			0xc0
  #define RT5033_AICR_2000_MODE			0xe0
--#define RT5033_AICR_MODE_MASK			0xe0
  
- /* RT5033 use internal timer need to set time */
- #define RT5033_FAST_CHARGE_TIMER4		0x00
-@@ -195,7 +196,7 @@ enum rt5033_reg {
+-/* RT5033 use internal timer need to set time */
+-#define RT5033_FAST_CHARGE_TIMER4		0x00
+-#define RT5033_FAST_CHARGE_TIMER6		0x01
+-#define RT5033_FAST_CHARGE_TIMER8		0x02
+-#define RT5033_FAST_CHARGE_TIMER9		0x03
+-#define RT5033_FAST_CHARGE_TIMER12		0x04
+-#define RT5033_FAST_CHARGE_TIMER14		0x05
+-#define RT5033_FAST_CHARGE_TIMER16		0x06
++/* RT5033 charger minimum input voltage regulation */
++#define RT5033_CHARGER_MIVR_DISABLE		0x00
++#define RT5033_CHARGER_MIVR_4200MV		0x20
++#define RT5033_CHARGER_MIVR_4300MV		0x40
++#define RT5033_CHARGER_MIVR_4400MV		0x60
++#define RT5033_CHARGER_MIVR_4500MV		0x80
++#define RT5033_CHARGER_MIVR_4600MV		0xa0
++#define RT5033_CHARGER_MIVR_4700MV		0xc0
++#define RT5033_CHARGER_MIVR_4800MV		0xe0
+ 
++/* RT5033 use internal timer need to set time */
++#define RT5033_FAST_CHARGE_TIMER4		0x00 /*  4 hrs */
++#define RT5033_FAST_CHARGE_TIMER6		0x08 /*  6 hrs */
++#define RT5033_FAST_CHARGE_TIMER8		0x10 /*  8 hrs */
++#define RT5033_FAST_CHARGE_TIMER10		0x18 /* 10 hrs */
++#define RT5033_FAST_CHARGE_TIMER12		0x20 /* 12 hrs */
++#define RT5033_FAST_CHARGE_TIMER14		0x28 /* 14 hrs */
++#define RT5033_FAST_CHARGE_TIMER16		0x30 /* 16 hrs */
++
++#define RT5033_INT_TIMER_DISABLE		0x00
+ #define RT5033_INT_TIMER_ENABLE			0x01
+ 
+-/* RT5033 charger termination enable mask */
+-#define RT5033_TE_ENABLE_MASK			0x08
+-
+ /*
+  * RT5033 charger opa mode. RT5033 has two opa modes for OTG: charger mode
+  * and boost mode.
+@@ -150,25 +161,30 @@ enum rt5033_reg {
+ #define RT5033_BOOST_MODE			0x01
+ 
+ /* RT5033 charger termination enable */
++#define RT5033_TE_DISABLE			0x00
+ #define RT5033_TE_ENABLE			0x08
+ 
+ /* RT5033 charger CFO enable */
++#define RT5033_CFO_DISABLE			0x00
+ #define RT5033_CFO_ENABLE			0x40
+ 
+ /* RT5033 charger constant charge voltage (as in CHGCTRL2 register), uV */
+ #define RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MIN	3650000U
+ #define RT5033_CHARGER_CONST_VOLTAGE_STEP_NUM   25000U
+ #define RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MAX	4400000U
++#define RT5033_CV_MAX_VOLTAGE			0x1e
+ 
+ /* RT5033 charger pre-charge current limits (as in CHGCTRL4 register), uA */
+ #define RT5033_CHARGER_PRE_CURRENT_LIMIT_MIN	350000U
+ #define RT5033_CHARGER_PRE_CURRENT_STEP_NUM	100000U
+ #define RT5033_CHARGER_PRE_CURRENT_LIMIT_MAX	650000U
++#define RT5033_CHG_MAX_PRE_CURRENT		0x03
+ 
+ /* RT5033 charger fast-charge current (as in CHGCTRL5 register), uA */
+ #define RT5033_CHARGER_FAST_CURRENT_MIN		700000U
+ #define RT5033_CHARGER_FAST_CURRENT_STEP_NUM	100000U
+ #define RT5033_CHARGER_FAST_CURRENT_MAX		2000000U
++#define RT5033_CHG_MAX_CURRENT			0x0d
+ 
+ /*
+  * RT5033 charger const-charge end of charger current (
+@@ -192,6 +208,7 @@ enum rt5033_reg {
+  * RT5033 charger UUG. It enables MOS auto control by H/W charger
+  * circuit.
+  */
++#define RT5033_CHARGER_UUG_DISABLE		0x00
+ #define RT5033_CHARGER_UUG_ENABLE		0x02
  
  /* RT5033 charger high impedance mode */
- #define RT5033_CHARGER_HZ_DISABLE		0x00
--#define RT5033_CHARGER_HZ_ENABLE		0x01
-+#define RT5033_CHARGER_HZ_ENABLE		0x02
+diff --git a/include/linux/mfd/rt5033.h b/include/linux/mfd/rt5033.h
+index 8f306ac15a27..e99e2ab0c1c1 100644
+--- a/include/linux/mfd/rt5033.h
++++ b/include/linux/mfd/rt5033.h
+@@ -51,7 +51,7 @@ struct rt5033_charger_data {
+ struct rt5033_charger {
+ 	struct device			*dev;
+ 	struct rt5033_dev		*rt5033;
+-	struct power_supply		psy;
++	struct power_supply		*psy;
+ 	struct rt5033_charger_data	*chg;
+ };
  
- /* RT5033 regulator BUCK output voltage uV */
- #define RT5033_REGULATOR_BUCK_VOLTAGE_MIN		1000000U
 -- 
 2.39.2
 
