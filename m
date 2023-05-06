@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6112A6F922B
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 15:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A866F922D
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 15:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbjEFNFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 09:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
+        id S231960AbjEFNGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 09:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbjEFNFM (ORCPT
+        with ESMTP id S231892AbjEFNGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 09:05:12 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5BE19434
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 06:05:10 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-55a829411b5so25601487b3.1
-        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 06:05:10 -0700 (PDT)
+        Sat, 6 May 2023 09:06:13 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4FD1942E
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 06:06:12 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-55a26b46003so42125467b3.1
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 06:06:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683378309; x=1685970309;
+        d=linaro.org; s=google; t=1683378371; x=1685970371;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
         bh=dS8atcxZJwQbExVYUG7qwyvLFr0woVdllJ5J88pacr0=;
-        b=DCykVX2iDtsYcneW4PPWteSHTcPeriDOFOHPt6gDdO8MbW//UGK+mHF0NPClFjniVY
-         u4hPje+y+Lzg4vuJe9Urcz60CHyL7gaX854Kdr2Lrl3z1H7UxB03xAm/e1MtGzrJp3Fc
-         dkL1XlndlpEYEdFSrRRtJA+j4/1pOtm14S0u5/KiFdCcoj9bYDqPreHA4LZg1HaBRYLz
-         +7r2Lfq1Be9ptUmjiQgTD82dV9DMuDsKrNV2E+CGEDgmC0AfUXXY1CFjQd2gKZcI/m5J
-         Vg9QhZx1IFZt9ps58NfkozIjwds75g/fwhwKjRnaSaKygHa85H7nFJ9q/6wZgSVlSS6+
-         Zt5Q==
+        b=pZOMDYoBn4KKHsvhQqVVJVM1Jc2zPRMExhIMEZggmJ3tb7Yol4pPYD978e83PXvMlR
+         kDUo55uvlrqZOdbHy7Lxnw1qk37kDBF6zWER0i7xFS5W7hKIy+48SYcnKm04uHLzJOAr
+         z6HrWc4oF2MdBcQYX5CckSP3Q+QosRLBPuWQpeJmmqx/TPR1Vs1Vio/2hCSBHrYzDp/d
+         Plz+1KHV8fKN87g8NgjWzskuWde1Pjb8LeWZoDdsJpEIGJvCPqwwA2Ju1jZz2Su/6yox
+         Y0EgAG3/2Y1gyiVJPkaDrsGzH3cDu2EqaQkVFWScwhTk2pyzB8GHCCFzNNRZEKkeoRWd
+         9oTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683378309; x=1685970309;
+        d=1e100.net; s=20221208; t=1683378371; x=1685970371;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=dS8atcxZJwQbExVYUG7qwyvLFr0woVdllJ5J88pacr0=;
-        b=b2xVw4fk7/lQMN3LpKJokZY751KcrYhDtmhkcdVNApd/S8iinfU24O9yrBtL33IktN
-         hPZDDe2MCKFYYhIpUVF+owSaSwftDkWA98Z/CvMCGGigXQAOaQJW10x85+4gdsFQtrQs
-         q6SBp0Ig+HJd+APKLclLCnRa+HOXCK+9qP8T/6neiYBhdHwXhKfcplySJhlU5QRSki0W
-         1tMsRLfP7kLqbJmaiCqW8FYqN3GsirEVAqs3s//y9MX3SLENzKYfaBz2RRioBCnbiTBB
-         1uNcu8WMNnZVQtO46qD8gRr86zJt3wyxZcsXvbbnvbbTgXFC7M9q0qovnQeMiu2mhcA6
-         Gjsw==
-X-Gm-Message-State: AC+VfDy4SLluR7JZ4vVbsrBxti/T6pcOsfxdof8JOvVGpCksbuYAyTFD
-        pafMQBoH07aFlJtm4oRU6kopoz5JYDAslyc9hxIsrCX8aPjCxtfn
-X-Google-Smtp-Source: ACHHUZ6rFGSTb20HGZ4YRsYPn++p+CYHLbDboEdLCfyzgV+VBdsiBJ48Dzhm4uy73zYYfmP6l2duieVJod/40FcKKYw=
-X-Received: by 2002:a81:4ed8:0:b0:55a:a625:cd22 with SMTP id
- c207-20020a814ed8000000b0055aa625cd22mr4941600ywb.30.1683378309515; Sat, 06
- May 2023 06:05:09 -0700 (PDT)
+        b=KjvZvYfdl93QSXSuexdNwJvJDRTJALYeFdFOIrL9880M70sECnYILW+EHFBRnGhFwt
+         WyMEjtdgYGhJ4eDmvwql3HO2C4DQft9lu8p8TZYz50nPQ7cAcSAvjsWwu6WdzLXh8yJ/
+         hbVBnh6gu+JNpgvhUKctKzonn6NvbkIsR5R7BhpfZRBoFd3oLqGhdmuNjwWqUj+dbiMi
+         9R+BbofP1peb9ABRjFA27mwfTl0tiP/FhlLzjbwBCDqezpw8zTEwkc7PBTTDejK7rjKh
+         lHq4I4vLqNl539yGV5Iw13a+zIecRVtOJY2Q9M8wFPQwD1Yx+y4wz/oeMdaPfoGmnvIj
+         5juQ==
+X-Gm-Message-State: AC+VfDxb0TPOVAxhjnHBdWiWh0P4xO2nL2Uc3IJQ/5ECMyxjA1QKoGpV
+        1NjdHzV6cO092jXk/XZYhYUvLqZPyciwLi9mJvMG6A==
+X-Google-Smtp-Source: ACHHUZ6MBhrjWIjpjNrtTBusrqWiBc1pp5i+0QA/EWcmAuKOLfnMBJbFYUX3yCk+qmOdn50UX6EKKAamK59BWwSVw/0=
+X-Received: by 2002:a81:8449:0:b0:55a:6917:ee1b with SMTP id
+ u70-20020a818449000000b0055a6917ee1bmr5454648ywf.43.1683378371734; Sat, 06
+ May 2023 06:06:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230506085928.933737-1-haibo.chen@nxp.com>
-In-Reply-To: <20230506085928.933737-1-haibo.chen@nxp.com>
+References: <20230506085928.933737-1-haibo.chen@nxp.com> <20230506085928.933737-2-haibo.chen@nxp.com>
+In-Reply-To: <20230506085928.933737-2-haibo.chen@nxp.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 6 May 2023 15:04:58 +0200
-Message-ID: <CACRpkdZDTxxNn2CDSBu5yKnw0qVuWH-a+dPYXdHndLZbxmyFAw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] gpio: vf610: switch to dynamic allocat GPIO base
+Date:   Sat, 6 May 2023 15:06:00 +0200
+Message-ID: <CACRpkdYUGwEn-4T+Ay-KckO3ChFNqOrdVuP93u=gs5uc9fY0yw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] gpio: mxc: switch to dynamic allocat GPIO base
 To:     haibo.chen@nxp.com
 Cc:     brgl@bgdev.pl, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-imx@nxp.com,
