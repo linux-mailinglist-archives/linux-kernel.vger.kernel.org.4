@@ -2,119 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4466F9098
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 10:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12046F909B
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 10:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbjEFIce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 04:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
+        id S231553AbjEFIfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 04:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjEFIcc (ORCPT
+        with ESMTP id S229872AbjEFIf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 04:32:32 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E987B659F;
-        Sat,  6 May 2023 01:32:30 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:57024.1397785887
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id DF90A1002B5;
-        Sat,  6 May 2023 16:32:27 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-85667d6c59-6qwzn with ESMTP id 0da97246ee464bcaad97b2a1e31af4c9 for chenhuacai@kernel.org;
-        Sat, 06 May 2023 16:32:28 CST
-X-Transaction-ID: 0da97246ee464bcaad97b2a1e31af4c9
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <7764c60c-371a-89f7-c9a8-6727551926ae@189.cn>
-Date:   Sat, 6 May 2023 16:32:26 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v12 1/2] MAINTAINERS: add maintainers for DRM LOONGSON
- driver
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        nathan@kernel.org, linux-media@vger.kernel.org
-References: <20230504080406.1213623-1-suijingfeng@loongson.cn>
- <20230504080406.1213623-2-suijingfeng@loongson.cn>
- <CAAhV-H4zKGkd2JUyYTDKBEGFEO5V+oRz8iuzF9w+ivz0t6+CFw@mail.gmail.com>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <CAAhV-H4zKGkd2JUyYTDKBEGFEO5V+oRz8iuzF9w+ivz0t6+CFw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 6 May 2023 04:35:29 -0400
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412F9659F
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 01:35:28 -0700 (PDT)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4QD18Z4Cwvz8RTWg;
+        Sat,  6 May 2023 16:35:26 +0800 (CST)
+Received: from xaxapp02.zte.com.cn ([10.88.97.241])
+        by mse-fl1.zte.com.cn with SMTP id 3468ZJaB010724;
+        Sat, 6 May 2023 16:35:19 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Sat, 6 May 2023 16:35:22 +0800 (CST)
+Date:   Sat, 6 May 2023 16:35:22 +0800 (CST)
+X-Zmail-TransId: 2afa6456114affffffffb0e-6c46c
+X-Mailer: Zmail v1.0
+Message-ID: <202305061635221161194@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <linux@armlinux.org.uk>
+Cc:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBBUk06IG1tOiB1c2UgYml0bWFwX3plcm8oKSBBUEk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 3468ZJaB010724
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6456114E.000/4QD18Z4Cwvz8RTWg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Ye Xingchen <ye.xingchen@zte.com.cn>
 
+bitmap_zero() is faster than bitmap_clear(), so use bitmap_zero()
+instead of bitmap_clear().
 
-Ah, I did't notice this.
+Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+---
+ arch/arm/mm/context.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The disorder is because during developing phase,
+diff --git a/arch/arm/mm/context.c b/arch/arm/mm/context.c
+index 4204ffa2d104..2e95a707eb93 100644
+--- a/arch/arm/mm/context.c
++++ b/arch/arm/mm/context.c
+@@ -139,7 +139,7 @@ static void flush_context(unsigned int cpu)
+ 	u64 asid;
 
-it is more easy amend new changes to the top of the commits.
-
-So, I put another patch of this series on the top of this.
-
-Will be fixed at next version, thanks for you point out that.
-
-
-On 2023/5/6 11:09, Huacai Chen wrote:
-> Hi, Jingfeng,
->
-> I think you should exchange the order of these two patches.
->
->
-> Huacai
->
-> On Thu, May 4, 2023 at 4:04 PM Sui Jingfeng <suijingfeng@loongson.cn> wrote:
->>   This patch add myself as maintainer to drm loongson driver
->>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   MAINTAINERS | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 73b3298b7232..1f5aa8756d87 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -6922,6 +6922,13 @@ T:       git git://anongit.freedesktop.org/drm/drm-misc
->>   F:     drivers/gpu/drm/lima/
->>   F:     include/uapi/drm/lima_drm.h
->>
->> +DRM DRIVERS FOR LOONGSON
->> +M:     Sui Jingfeng <suijingfeng@loongson.cn>
->> +L:     dri-devel@lists.freedesktop.org
->> +S:     Supported
->> +T:     git git://anongit.freedesktop.org/drm/drm-misc
->> +F:     drivers/gpu/drm/loongson/
->> +
->>   DRM DRIVERS FOR MEDIATEK
->>   M:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
->>   M:     Philipp Zabel <p.zabel@pengutronix.de>
->> --
->> 2.25.1
->>
+ 	/* Update the list of reserved ASIDs and the ASID bitmap. */
+-	bitmap_clear(asid_map, 0, NUM_USER_ASIDS);
++	bitmap_zero(asid_map, NUM_USER_ASIDS);
+ 	for_each_possible_cpu(i) {
+ 		asid = atomic64_xchg(&per_cpu(active_asids, i), 0);
+ 		/*
+-- 
+2.25.1
