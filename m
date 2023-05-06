@@ -2,97 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54FD16F9065
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A096F9067
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjEFH4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 03:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S231172AbjEFH66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 03:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjEFH4i (ORCPT
+        with ESMTP id S230461AbjEFH6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 03:56:38 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129339ED5;
-        Sat,  6 May 2023 00:56:38 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6434e65d808so2913123b3a.3;
-        Sat, 06 May 2023 00:56:38 -0700 (PDT)
+        Sat, 6 May 2023 03:58:47 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7E855B3
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 00:58:45 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64395e2a715so2583278b3a.3
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 00:58:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683359797; x=1685951797;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aSXqKKL2DM5ohMjcHFVamqTpkCqxvyAHPkfC2Zw2f2Y=;
-        b=ICQZu93FaTdOWK1lWtPwQ6fV3se+udSFcWL+PX02WV5hmUCuWM1vm69LM2Ew0WtkAG
-         AYwB/VBtO9q9nBrGgXxxp/P7t4YJjwxxloHfy+W2rj6QtoooYwfzSw4FG30PhManLORX
-         Dobl3L47/V0W4e3uq5DXNhAonfv5CuHhePYN2W1AWFVaSOSJpcLz0TP09p6VUgCRl5nE
-         WtzDFfac+YTPQ4y17OXd+J/Kv7YF4lyiR+QElUsHM/w6FjjThXGnbkK74JFI9fJtNEfZ
-         KSnk6rzR6p0+/iN64StLdRR4o5D9Z9HMDD4Q9H3y+lIKkXnFm1GJftui1DejIzFwB1OQ
-         A9kA==
+        d=linaro.org; s=google; t=1683359925; x=1685951925;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9N1rc/5Fi1FR3PRXTb19F/ZGifHjTtA2q2Cae30+mlA=;
+        b=NQRCz43CT3Am3q/I02DZVA0uqVsD/A7hjEDQjanb1XYTXvdhgJhATgrvGC/pEKtZ53
+         czw2fdaLr3ZB76Bw6/1H9YubH2IK2ap/hVjLZcCwc/Bs75xT96EizfONWjqYhcfQUGXl
+         lwraI32bJREv8kOJ2O8aNUuSAN2Npeh9AFDoCzk6Nlrl4/YOkHEEPkdab4MOEyVV13gA
+         pmRSW3ebFAApIF65wN8wyLf6i/mlBP2PvkqKZPsRG6iXzCyGZPKW9aKEANwVLl3jNrBy
+         J2m0/s23etfyiSjR/Cbz+ylvBLzFaJBuHXbotkrFPdknOMrr4M6Na5Hoo2hysHuhtF81
+         kgLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683359797; x=1685951797;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1683359925; x=1685951925;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aSXqKKL2DM5ohMjcHFVamqTpkCqxvyAHPkfC2Zw2f2Y=;
-        b=GN0fS0s9KRfj9T6ECCJHv3qe5tjnM7wK8lGM0BG2Fie2tRoFauOGvxgHGc2Uxw8Gf9
-         Tus5arpXfKpJazGAKceJbRB7x/x0xU7l0pYB/UoCEeSCK8RE4fz3AZpUFzxrPpfthGS/
-         qm+uzXoe59qnrzY+Rkd04UkmaAYpcvsgPB0mN7BR7ygbs41qw02AdnMsCeVnUuVvdz0o
-         jQDkJfGjKdiLzn4GM02e0AkBgULhL6Jx+wpdIEgdhYJs1E02rec/lK9bgDRZwGffNv8I
-         5jpgnZtOGwEgb5S+5P9ZkCP7fhl2szuOZq9haV0URNDqN7xGU3TVhK7WpQPUuw35sXMo
-         Icsw==
-X-Gm-Message-State: AC+VfDwK88u+16Q9HHmwHvJtnV2Favgjag+WriqoQ1MRIjw3epB1fUMQ
-        phke0VXsoYqRGcVtH9B5fdI=
-X-Google-Smtp-Source: ACHHUZ4RWbkiR7mdDfiHmHp/BQEz0RuV+uOOFyLTWkWCNB+y/nFFtdZpPV2V1ex8dOzmoZa/+razmA==
-X-Received: by 2002:a05:6a00:1483:b0:63b:89a9:529f with SMTP id v3-20020a056a00148300b0063b89a9529fmr5038706pfu.14.1683359797435;
-        Sat, 06 May 2023 00:56:37 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-66.three.co.id. [180.214.233.66])
-        by smtp.gmail.com with ESMTPSA id e19-20020aa78253000000b0063b96574b8bsm2648811pfn.220.2023.05.06.00.56.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 May 2023 00:56:37 -0700 (PDT)
-Message-ID: <0f62ff02-f601-e629-6524-972441035129@gmail.com>
-Date:   Sat, 6 May 2023 14:56:30 +0700
+        bh=9N1rc/5Fi1FR3PRXTb19F/ZGifHjTtA2q2Cae30+mlA=;
+        b=jVKE9/4hbJnQElV0gZFov3z3XXjky4DCoKMPVSvGgVBNBk0ut9fT8+K9ITmQ7dMJTe
+         H74DR6Gdbj4Ury6/HaGW8St387xpn06Cxh0gn5SGxImZaynJC9OLlPGDfF87xW4dthVL
+         ysenxuGL28QytKZIgRJhTsNid6v+LV0fN73M3HuybDFTd+GschfAbpfoGrmuLSSNdv1m
+         kjS/AEVZRFUjLYBBlD9sEtn7IqiE8spa+pOYT7xQ/ZGe9M4L37+v+STU8pwzFwivFfyM
+         NQ4qI52JeYIh3ztO6rJ2MEcMh/0ytoaKyiJRCSDO1keoaF4T1HPFcuvIwVvJ2wAMcAai
+         LbFw==
+X-Gm-Message-State: AC+VfDxMxLPjqPW4L4+Sq/jYKRHYJw3Cx1xn5qzpajKdACc1CJiFF8pH
+        7hfPNSXoyVIQYF4VsXDIyFT2
+X-Google-Smtp-Source: ACHHUZ6s1Jzex0YPfLJUb6h3oibL3F+U2pv0j40QoSsQ4BhKF3WctKGX8jpyOyBkUm482uYZcTvusw==
+X-Received: by 2002:a05:6a00:1686:b0:643:a35d:b8dc with SMTP id k6-20020a056a00168600b00643a35db8dcmr5053349pfc.28.1683359924874;
+        Sat, 06 May 2023 00:58:44 -0700 (PDT)
+Received: from thinkpad ([120.138.12.87])
+        by smtp.gmail.com with ESMTPSA id h16-20020aa786d0000000b0063b8f33cb81sm2728451pfo.93.2023.05.06.00.58.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 May 2023 00:58:44 -0700 (PDT)
+Date:   Sat, 6 May 2023 13:28:37 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     Minghuan Lian <minghuan.Lian@nxp.com>,
+        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-pci@vger.kernel.org>,
+        "moderated list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
+Subject: Re: [PATCH v2 1/1] PCI: layerscape: Add the endpoint linkup notifier
+ support
+Message-ID: <20230506075837.GA9238@thinkpad>
+References: <20230501144807.1616244-1-Frank.Li@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 00/14] x86: Trenchboot secure dynamic launch Linux
- kernel support
-Content-Language: en-US
-To:     Ross Philipson <ross.philipson@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org
-Cc:     dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, ardb@kernel.org, mjg59@srcf.ucam.org,
-        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
-        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
-        trenchboot-devel@googlegroups.com
-References: <20230504145023.835096-1-ross.philipson@oracle.com>
- <ZFTA0kg98XxeP2Hh@debian.me>
- <765a94ac-ed2c-267d-0ee9-be21757ceb16@oracle.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <765a94ac-ed2c-267d-0ee9-be21757ceb16@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230501144807.1616244-1-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/23 22:45, Ross Philipson wrote:
-> Sorry about that. In the future I will include a base-commit field. It is based off of torvolds/master as of 5/1/2023. The branch where the patches came from is now pushed to the TrenchBoot repository here:
-> 
-> https://github.com/TrenchBoot/linux/tree/linux-sl-master-5-1-23-v6
-> 
+On Mon, May 01, 2023 at 10:48:06AM -0400, Frank Li wrote:
+> Layerscape has PME interrupt, which can be used as linkup notifier.
+> Set CFG_READY bit when linkup detected.
 
-Pulled, thanks!
+Where are you setting this bit?
+
+> 
+> Signed-off-by: Xiaowei Bao <xiaowei.bao@nxp.com>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+> Change from v1 to v2
+> - pme -> PME
+> - irq -> IRQ
+> - update dev_info message according to Bjorn's suggestion
+> - remove '.' at error message
+> 	
+>  .../pci/controller/dwc/pci-layerscape-ep.c    | 104 +++++++++++++++++-
+>  1 file changed, 103 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pci-layerscape-ep.c b/drivers/pci/controller/dwc/pci-layerscape-ep.c
+> index c640db60edc6..e974fbe3b6d8 100644
+> --- a/drivers/pci/controller/dwc/pci-layerscape-ep.c
+> +++ b/drivers/pci/controller/dwc/pci-layerscape-ep.c
+> @@ -18,6 +18,20 @@
+>  
+>  #include "pcie-designware.h"
+>  
+> +#define PEX_PF0_CONFIG			0xC0014
+> +#define PEX_PF0_CFG_READY		BIT(0)
+> +
+> +/* PEX PFa PCIE PME and message interrupt registers*/
+> +#define PEX_PF0_PME_MES_DR		0xC0020
+> +#define PEX_PF0_PME_MES_DR_LUD		BIT(7)
+> +#define PEX_PF0_PME_MES_DR_LDD		BIT(9)
+> +#define PEX_PF0_PME_MES_DR_HRD		BIT(10)
+> +
+> +#define PEX_PF0_PME_MES_IER		0xC0028
+> +#define PEX_PF0_PME_MES_IER_LUDIE	BIT(7)
+> +#define PEX_PF0_PME_MES_IER_LDDIE	BIT(9)
+> +#define PEX_PF0_PME_MES_IER_HRDIE	BIT(10)
+> +
+>  #define to_ls_pcie_ep(x)	dev_get_drvdata((x)->dev)
+>  
+>  struct ls_pcie_ep_drvdata {
+> @@ -30,8 +44,88 @@ struct ls_pcie_ep {
+>  	struct dw_pcie			*pci;
+>  	struct pci_epc_features		*ls_epc;
+>  	const struct ls_pcie_ep_drvdata *drvdata;
+> +	bool				big_endian;
+> +	int				irq;
+>  };
+>  
+> +static u32 ls_lut_readl(struct ls_pcie_ep *pcie, u32 offset)
+> +{
+> +	struct dw_pcie *pci = pcie->pci;
+> +
+> +	if (pcie->big_endian)
+> +		return ioread32be(pci->dbi_base + offset);
+> +	else
+> +		return ioread32(pci->dbi_base + offset);
+> +}
+> +
+> +static void ls_lut_writel(struct ls_pcie_ep *pcie, u32 offset,
+> +			  u32 value)
+
+Above function argument could be wrapped within 80 columns.
+
+> +{
+> +	struct dw_pcie *pci = pcie->pci;
+> +
+> +	if (pcie->big_endian)
+> +		iowrite32be(value, pci->dbi_base + offset);
+> +	else
+> +		iowrite32(value, pci->dbi_base + offset);
+> +}
+> +
+> +static irqreturn_t ls_pcie_ep_event_handler(int irq, void *dev_id)
+> +{
+> +	struct ls_pcie_ep *pcie = (struct ls_pcie_ep *)dev_id;
+
+No need to do explicit typecase for void pointer.
+
+> +	struct dw_pcie *pci = pcie->pci;
+> +	u32 val, cfg;
+> +
+> +	val = ls_lut_readl(pcie, PEX_PF0_PME_MES_DR);
+> +	if (!val)
+> +		return IRQ_NONE;
+> +
+> +	if (val & PEX_PF0_PME_MES_DR_LUD) {
+> +		cfg = ls_lut_readl(pcie, PEX_PF0_CONFIG);
+> +		cfg |= PEX_PF0_CFG_READY;
+> +		ls_lut_writel(pcie, PEX_PF0_CONFIG, cfg);
+> +		dw_pcie_ep_linkup(&pci->ep);
+> +
+> +		dev_info(pci->dev, "Link up\n");
+
+These messages could be demoted to dev_dbg() logs.
+
+> +	} else if (val & PEX_PF0_PME_MES_DR_LDD) {
+> +		dev_info(pci->dev, "Link down\n");
+> +	} else if (val & PEX_PF0_PME_MES_DR_HRD) {
+> +		dev_info(pci->dev, "Hot reset\n");
+> +	}
+> +
+> +	ls_lut_writel(pcie, PEX_PF0_PME_MES_DR, val);
+
+You should clear the interrupts before processing.
+
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int ls_pcie_ep_interrupt_init(struct ls_pcie_ep *pcie,
+> +				     struct platform_device *pdev)
+> +{
+> +	u32 val;
+> +	int ret;
+> +
+> +	pcie->irq = platform_get_irq_byname(pdev, "pme");
+> +	if (pcie->irq < 0) {
+> +		dev_err(&pdev->dev, "Can't get 'pme' IRQ\n");
+
+PME
+
+> +		return pcie->irq;
+> +	}
+> +
+> +	ret = devm_request_irq(&pdev->dev, pcie->irq,
+> +			       ls_pcie_ep_event_handler, IRQF_SHARED,
+> +			       pdev->name, pcie);
+
+Again, please wrap to fit the 80 column width.
+
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Can't register PCIe IRQ\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Enable interrupts */
+> +	val = ls_lut_readl(pcie, PEX_PF0_PME_MES_IER);
+> +	val |=  PEX_PF0_PME_MES_IER_LDDIE | PEX_PF0_PME_MES_IER_HRDIE |
+> +		PEX_PF0_PME_MES_IER_LUDIE;
+> +	ls_lut_writel(pcie, PEX_PF0_PME_MES_IER, val);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct pci_epc_features*
+>  ls_pcie_ep_get_features(struct dw_pcie_ep *ep)
+>  {
+> @@ -125,6 +219,7 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
+>  	struct ls_pcie_ep *pcie;
+>  	struct pci_epc_features *ls_epc;
+>  	struct resource *dbi_base;
+> +	int ret;
+>  
+>  	pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
+>  	if (!pcie)
+> @@ -144,6 +239,7 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
+>  	pci->ops = pcie->drvdata->dw_pcie_ops;
+>  
+>  	ls_epc->bar_fixed_64bit = (1 << BAR_2) | (1 << BAR_4);
+> +	ls_epc->linkup_notifier = true;
+>  
+>  	pcie->pci = pci;
+>  	pcie->ls_epc = ls_epc;
+> @@ -155,9 +251,15 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
+>  
+>  	pci->ep.ops = &ls_pcie_ep_ops;
+>  
+> +	pcie->big_endian = of_property_read_bool(dev->of_node, "big-endian");
+> +
+>  	platform_set_drvdata(pdev, pcie);
+>  
+> -	return dw_pcie_ep_init(&pci->ep);
+> +	ret = dw_pcie_ep_init(&pci->ep);
+> +	if (ret)
+> +		return  ret;
+
+Double space after return.
+
+> +
+> +	return  ls_pcie_ep_interrupt_init(pcie, pdev);
+
+Double space after return.
+
+- Mani
+
+>  }
+>  
+>  static struct platform_driver ls_pcie_ep_driver = {
+> -- 
+> 2.34.1
+> 
 
 -- 
-An old man doll... just what I always wanted! - Clara
-
+மணிவண்ணன் சதாசிவம்
