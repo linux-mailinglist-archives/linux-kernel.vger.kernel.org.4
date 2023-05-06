@@ -2,192 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66396F93CF
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 21:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A636F93D5
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 21:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjEFTZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 15:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
+        id S229596AbjEFTfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 15:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjEFTZb (ORCPT
+        with ESMTP id S229441AbjEFTfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 15:25:31 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CFE18DD9
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 12:25:29 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-766692684c6so65055039f.2
-        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 12:25:29 -0700 (PDT)
+        Sat, 6 May 2023 15:35:14 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807D2150CB
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 12:35:13 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50c8d87c775so3090692a12.3
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 12:35:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683401129; x=1685993129;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linux-foundation.org; s=google; t=1683401712; x=1685993712;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=F+jdPRHPNZecxppiqvpxaH4jO4aRXCVPuKLqtE0Zolk=;
-        b=ChfCBtxl2QqV4MVQGPRqPVuqZd5rQiNo/V6xQY7jf09NctjLRvG335IEKcl5mhwvKE
-         Gs1fS3j+XoxB1eQpFGadYrdqo1Lseg8z7qUY/6PL6MdaR4DZqb/VHHHVMvsHGMrOsZP5
-         hwhopotDnqenbQobyRM8txddusrE9qYdVfzB3Begy337ORRxXzgSw7LgE19gWYPc0UXV
-         OZESW/51WX/wl9m2HWDS9F0aaMyq5t9OLf/2ASOto4qdETfthcGLvqTlf6ujNcq2382e
-         tlKPyb51ygp+qkpsslzbkr1i4M3YYKAAzXEfWzxIwxmSxZg183+kkiWAysTnP48wEgjB
-         hEvQ==
+        bh=5Bt+lLwGV/jHjdmZshGXn94cRDllqEXa12GkeEe4Dfk=;
+        b=TDzEgGFajZaz3kxsx4jCXX2lSrt5ZN0q0vS+SvVrSrIS0KoxpehlqH9Mq07/FSa9mX
+         mABtd55rXO64CqG2SfZcPff2tMMK8npaG2HZI4e25oiRX5rrwy8Ra5lmkEDm0Cye/clH
+         c/W5jPfHBlZYHRbr8Cd5aaxc5bEcZFZH6bqSQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683401129; x=1685993129;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683401712; x=1685993712;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=F+jdPRHPNZecxppiqvpxaH4jO4aRXCVPuKLqtE0Zolk=;
-        b=QLyzd/fX25IKWCxlIC+1FEyAUqaOweoJHtmumF4DNbuLfAffFeHUVPy/20ar8+oOZm
-         Z/XhVIGXKLrZYmeYujSsYu+3/xlr8ZuzEyrZhsjoBG9AN8Nkgza75GguWeNBkRtWNae/
-         4qDfbq/uX+t08UKO20aWQpcTPORID5sBZZl/DzqQn0XB+SKcduziLXEYh1rDEnGWxpsk
-         N6hc16oJ4E67unjcjUi0huT7kmC8Ht4YxbQYdTqWf39bOBA5PS/ikKnozBIs1VHEFcI/
-         JSRYVF+giqxffc2WHKih5v2ldcn4ZF5AMSy9clszKGUHxL8RP5e1YUA2wGRFWvDvCdjQ
-         o9Zg==
-X-Gm-Message-State: AC+VfDwFh3TcIpuVB7pEYtst4gu8d7awPlS7vdwNamnHmgv8qbGHRTVx
-        jAnOfKTfIowRshutFhEldR5IqRLx3LAacA==
-X-Google-Smtp-Source: ACHHUZ6MOewNncTk3Cc+Mw4Hxz+pNDQGCvS+oc4Dnx/JSrwAXMcBYBoCtn1pEyNJscQ0VP2IuqryeQ==
-X-Received: by 2002:a5e:dd05:0:b0:766:41fa:e26f with SMTP id t5-20020a5edd05000000b0076641fae26fmr3518860iop.10.1683401128704;
-        Sat, 06 May 2023 12:25:28 -0700 (PDT)
-Received: from aford-B741.lan ([2601:447:d001:897f:5e49:1bed:79d0:5c25])
-        by smtp.gmail.com with ESMTPSA id z18-20020a05663822b200b0041631393ac9sm847824jas.18.2023.05.06.12.25.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 May 2023 12:25:28 -0700 (PDT)
-From:   Adam Ford <aford173@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V5 6/6] drm: bridge: samsung-dsim: Support non-burst mode
-Date:   Sat,  6 May 2023 14:24:53 -0500
-Message-Id: <20230506192453.725621-7-aford173@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230506192453.725621-1-aford173@gmail.com>
-References: <20230506192453.725621-1-aford173@gmail.com>
+        bh=5Bt+lLwGV/jHjdmZshGXn94cRDllqEXa12GkeEe4Dfk=;
+        b=KuE2jJAOStvBi3UypR5zBJCJ3blGnbZTL8z+rdGFLWVp3wPFOcQ8weFk/VPgfIG/ev
+         LuXYePLIs6Y3Jh4Y/asLL948oFouFUF+izRjiV/Mc+sH3I6AYy5mqLOvbpQwmpTWVYRq
+         vDomzetpKqn7UcGcvpZIjYp/MumshwNg44YQ/JPIxlafsRRx6nU/Z1fhbbg+zRIHAwa+
+         P3smTvxiN9tZjAYdnp4fQuSWzUX4imEEHRbtP/Bq5rXEsN03Qaeb0GrLvuQxkSt9jtV1
+         c65ByLL27yK1+DbZMWUeGIj78T8sps1mnJRuhea9tPsg1ErRALdiFdFOcH+LiLdpdFiY
+         aajg==
+X-Gm-Message-State: AC+VfDw0WMBKaiGDtsJNCP4LSiiio84L+FThaNkNNL12UuMr9bZyfayF
+        p9rAIMiELqbkZ3JirLlbVINZqSp1C8STjUfQ04M4/g==
+X-Google-Smtp-Source: ACHHUZ7sq7i5tr2ujChWV3qBJrbSl6b3f0YO+ZXJd1NiWi4O0kpjgBDxhb871ubIvP+CxetPbj0E+A==
+X-Received: by 2002:a17:907:608c:b0:94e:6a24:9463 with SMTP id ht12-20020a170907608c00b0094e6a249463mr5135363ejc.28.1683401711629;
+        Sat, 06 May 2023 12:35:11 -0700 (PDT)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
+        by smtp.gmail.com with ESMTPSA id f11-20020a170906560b00b009662b4230cesm666189ejq.148.2023.05.06.12.35.10
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 May 2023 12:35:11 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-9619095f479so481456266b.1
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 12:35:10 -0700 (PDT)
+X-Received: by 2002:a17:907:3207:b0:957:48c8:b081 with SMTP id
+ xg7-20020a170907320700b0095748c8b081mr3484007ejb.24.1683401710579; Sat, 06
+ May 2023 12:35:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230424212130.590684-1-dave.hansen@linux.intel.com>
+ <CAHk-=whn3F1k263SZNUVQK195tcCMAo5E_WbmjUE0qFC5rWg=w@mail.gmail.com>
+ <4433c3595db23f7c779b69b222958151b69ddd70.camel@intel.com> <148b3edb-b056-11a0-1684-6273a4a2d39a@intel.com>
+In-Reply-To: <148b3edb-b056-11a0-1684-6273a4a2d39a@intel.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 6 May 2023 12:34:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiuVXTfgapmjYQvrEDzn3naF2oYnHuky+feEJSj_G_yFQ@mail.gmail.com>
+Message-ID: <CAHk-=wiuVXTfgapmjYQvrEDzn3naF2oYnHuky+feEJSj_G_yFQ@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/shstk for 6.4
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The high-speed clock is hard-coded to the burst-clock
-frequency specified in the device tree.  However, when
-using devices like certain bridge chips without burst mode
-and varying resolutions and refresh rates, it may be
-necessary to set the high-speed clock dynamically based
-on the desired pixel clock for the connected device.
+On Fri, Apr 28, 2023 at 5:40=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
+ wrote:
+>
+> I'd be happy to prepare another pull request for the pile up to there if
+> it sounds sane to everyone else.
 
-This also removes the need to set a clock speed from
-the device tree for non-burst mode operation, since the
-pixel clock rate is the rate requested from the attached
-device like a bridge chip.  This should have no impact
-for people using burst-mode and setting the burst clock
-rate is still required for those users.  If the burst
-clock is not present, change the error message to
-dev_info indicating the clock use the pixel clock.
+So I'm going through the original pull request now - I was really
+hoping to have been able to do that earlier, but there kept being all
+these small pending other issues.
 
-Lastly, cache the clock rate configured from
-samsung_dsim_set_pll in order to properly calculate
-the blanking regardless of whether or not the burst
-clock is set.
+And I'm about a quarter in, haven't even gotten to the meat yet, and
+I've already found a bug.
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
----
- drivers/gpu/drm/bridge/samsung-dsim.c | 27 +++++++++++++++++++++------
- include/drm/bridge/samsung-dsim.h     |  1 +
- 2 files changed, 22 insertions(+), 6 deletions(-)
+Commit 74fd30bd28e4 ("mm: Make pte_mkwrite() take a VMA") seems to be
+just completely broken at least on arm 3-level page tables:
 
-diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
-index d19a5c87b749..97872ffb903d 100644
---- a/drivers/gpu/drm/bridge/samsung-dsim.c
-+++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-@@ -654,16 +654,28 @@ static unsigned long samsung_dsim_set_pll(struct samsung_dsim *dsi,
- 		reg = samsung_dsim_read(dsi, DSIM_STATUS_REG);
- 	} while ((reg & DSIM_PLL_STABLE) == 0);
- 
-+	dsi->hs_clock = fout;
-+
- 	return fout;
- }
- 
- static int samsung_dsim_enable_clock(struct samsung_dsim *dsi)
- {
--	unsigned long hs_clk, byte_clk, esc_clk;
-+	unsigned long hs_clk, byte_clk, esc_clk, pix_clk;
- 	unsigned long esc_div;
- 	u32 reg;
-+	struct drm_display_mode *m = &dsi->mode;
-+	int bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
-+
-+	/* m->clock is in KHz */
-+	pix_clk = m->clock * 1000;
-+
-+	/* Use burst_clk_rate if available, otherwise use the pix_clk */
-+	if (dsi->burst_clk_rate)
-+		hs_clk = samsung_dsim_set_pll(dsi, dsi->burst_clk_rate);
-+	else
-+		hs_clk = samsung_dsim_set_pll(dsi, DIV_ROUND_UP(pix_clk * bpp, dsi->lanes));
- 
--	hs_clk = samsung_dsim_set_pll(dsi, dsi->burst_clk_rate);
- 	if (!hs_clk) {
- 		dev_err(dsi->dev, "failed to configure DSI PLL\n");
- 		return -EFAULT;
-@@ -952,7 +964,7 @@ static void samsung_dsim_set_display_mode(struct samsung_dsim *dsi)
- 	u32 reg;
- 
- 	if (dsi->mode_flags & MIPI_DSI_MODE_VIDEO) {
--		int byte_clk_khz = dsi->burst_clk_rate / 1000 / 8;
-+		int byte_clk_khz = dsi->hs_clock / 1000 / 8;
- 		int hfp = (m->hsync_start - m->hdisplay) * byte_clk_khz / m->clock;
- 		int hbp = (m->htotal - m->hsync_end) * byte_clk_khz / m->clock;
- 		int hsa = (m->hsync_end - m->hsync_start) * byte_clk_khz / m->clock;
-@@ -1802,10 +1814,13 @@ static int samsung_dsim_parse_dt(struct samsung_dsim *dsi)
- 			return PTR_ERR(pll_clk);
- 	}
- 
-+	/* If it doesn't exist, use pixel clock instead of failing */
- 	ret = samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequency",
--				       &dsi->burst_clk_rate, 0);
--	if (ret < 0)
--		return ret;
-+				       &dsi->burst_clk_rate, 1);
-+	if (ret < 0) {
-+		dev_info(dev, "Using pixel clock for HS clock frequency\n");
-+		dsi->burst_clk_rate = 0;
-+	}
- 
- 	ret = samsung_dsim_of_read_u32(node, "samsung,esc-clock-frequency",
- 				       &dsi->esc_clk_rate, 0);
-diff --git a/include/drm/bridge/samsung-dsim.h b/include/drm/bridge/samsung-dsim.h
-index 76ea8a1720cc..14176e6e9040 100644
---- a/include/drm/bridge/samsung-dsim.h
-+++ b/include/drm/bridge/samsung-dsim.h
-@@ -94,6 +94,7 @@ struct samsung_dsim {
- 
- 	u32 pll_clk_rate;
- 	u32 burst_clk_rate;
-+	u32 hs_clock;
- 	u32 esc_clk_rate;
- 	u32 lanes;
- 	u32 mode_flags;
--- 
-2.39.2
+Spot the problem when I distill it down to just a few lines):
 
+    -PMD_BIT_FUNC(mkwrite,   &=3D ~L_PMD_SECT_RDONLY);
+    +static inline pmd_t pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma)
+    +{
+    +       pmd_val(pmd) |=3D L_PMD_SECT_RDONLY;
+    +       return pmd;
+    +}
+
+and I think this whole area was done entirely incorrectly - and that
+incorrect approach is then why this bug happened.
+
+I think the first patch should have just have completely mindlessly
+renamed every architecture "pmd/pte_mkwrite()" function as
+"pmd/pte_mkwrite_kernel()", and added a single
+
+    #ifndef pte_mkwrite
+    static inline pte_t pte_mkwrite(pte_t pte)
+    { return pte_mkwrite_kernel(pte); }
+    #endif
+
+in <linux/pgtable.h>.
+
+IOW, it should make it *completely* obvious that absolutely no
+semantic changes happened, and all that happened that it added that
+single wrapper layer. And all those architecture changes would be
+trivial one-liners.
+
+The only possibly subtle thing would be that some existing
+
+   #include <asm/pgtable.h>
+
+include might need to be changed to
+
+   #include <linux/pgtable.h>
+
+instead, because we do have a number of users that seem to include
+just the bare asm version.
+
+From some quick grepping, I don't think any of them use 'pte_dirty()'
+or 'pmd_dirty()', but it needs *checking*.
+
+Then, the "add vma" thing would change the above wrapper to literally
+just have the 'vma', but to not use it, and still just call
+'pte_mkwrite_kernel(pte)'.
+
+Again, absolutely obvious that there are zero semantic changes to any
+architectures that don't care.
+
+And finally - for the only architecture that *does* care, ie x86, do
+implement the new pte_mkwrite(vma,pte), and do a
+
+  #define pte_mkwrite pte_mkwrite
+
+to let the generic header know that there's now an
+architecture-specific version for it, and it shouldn't do that wrapper
+that just falls back on the "kernel" version.
+
+End result: all those architectures that do *not* want the vma
+argument don't need to do any extra work, and they just implement the
+old version, and the only thing that happened was that it was renamed.
+
+Because I really don't want to pull this series as-is, when I found
+what looks like a "this broke an architecture that DOES NOT EVEN CARE"
+bug in the series.
+
+And yes, my bad for not getting to this earlier to notice this.
+
+Or alternatively - your bad for not going through this with a fine
+comb like I started doing.
+
+             Linus
