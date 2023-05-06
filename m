@@ -2,158 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457E26F8FD4
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84F06F8FE4
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjEFHWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 03:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S230145AbjEFHZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 03:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjEFHWN (ORCPT
+        with ESMTP id S229714AbjEFHZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 03:22:13 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7F29EEA
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 00:22:11 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f37a36b713so26469325e9.1
-        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 00:22:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683357730; x=1685949730;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fU8R1W3uogRJdDg/JWNdRA3Ig28vXMtcdzNpjKyBWIM=;
-        b=gPkq3wpwgrS/A42ZKMHL1vRn5ZFM+mgclPQcIjyISVniLUPVSR/+bsR2Lv+O8+cmyG
-         YWZTD+B5j8Tt0exVG8JXqwuMdZOivCrHchdGPIAs3ajpZmDQno7L8O6NlZbHXmy/ix+o
-         E83Q23nGpCLZVF+w3Gly9tAvQzymNEAtCzT1D9+6dcssA6jgR3sEHqQInxqFqt9w2OLa
-         ZavMxycHFQc3+HTms2teIGblYS6s7F/Qg8puK+K6ASKd5Xirbn2bDYKYYvE7fFebAjLz
-         96JvC1BzZmUQj0rh+Zgwo88JQa9gnEuGYpcjOPNXjIq4m1exRyHFW5kl0cZFr5+tYeT4
-         c3EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683357730; x=1685949730;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fU8R1W3uogRJdDg/JWNdRA3Ig28vXMtcdzNpjKyBWIM=;
-        b=lENPLpM8AUl8CDeHkZ7thD9eRKK4bOQRK5n+gDqydEBFOKTQC620ZDwIZsjevYgEsP
-         Vzg1kksSRmrVge690ZwXIDjdICvEKOaFMPzxvq/0pRwm5IzLTfHgLzdWXqHYF5T18eWb
-         T1alDa7hVKwF1hEBiCivAfhGLqLh1wSxy5jTRd58TC7+8b88OJ7EKinUFFQREga4f37t
-         wCBocV5vHKVNYNr0SXWvPsxKcbq2woYmn+wvkyUA+vun7w3m/A+DoCJcpjvmFVla+C61
-         tWkd39+dCJWuwV4HxvmlhJh1UtIqaKz4kYc6B8NXUwACSvqA1yXlUMnhbW+74XxxIKHw
-         ttDQ==
-X-Gm-Message-State: AC+VfDwJ69Rf4JLZGS1FVlY4doSq83PgDbZH1hhkSRbH08/AgUk0OehH
-        3jjlufHbyF9GSjEANszxirlYng==
-X-Google-Smtp-Source: ACHHUZ7oqPu5QkfMYeUvctqCAVp7tcfmTRNn8dSDVaG/rX3gdu3RFZzbOmtZr7HaMTXiOi/BkRaD/g==
-X-Received: by 2002:a1c:ed13:0:b0:3f0:b095:15d9 with SMTP id l19-20020a1ced13000000b003f0b09515d9mr2466239wmh.40.1683357730343;
-        Sat, 06 May 2023 00:22:10 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id l9-20020a1c7909000000b003f193d7c6b7sm9856630wme.41.2023.05.06.00.22.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 May 2023 00:22:07 -0700 (PDT)
-Date:   Sat, 6 May 2023 10:22:04 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev, "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: kernel/rcu/srcutree.c:1644 srcu_advance_state() warn: inconsistent
- returns '&ssp->srcu_sup->srcu_gp_mutex'.
-Message-ID: <c0937326-1cf1-429a-9883-30d9d79b01d0@kili.mountain>
+        Sat, 6 May 2023 03:25:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD04A267;
+        Sat,  6 May 2023 00:25:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCE6361827;
+        Sat,  6 May 2023 07:25:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41CA8C433B0;
+        Sat,  6 May 2023 07:25:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683357955;
+        bh=/pqLqv84J2jWuKl1Lk7AhETw9xQvFqEdpB7kxyH6fI8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cUPgDdY7WBdR+obN6ZVonxD9+AqvTjDLZek6hO8Bh5anvhOs4TmU67zRl7ySmPvBp
+         i8FRz1KX+mzHYYI+Z/y0wYNkkGVlDZfw2wNSyJH6w3yIBsRuEiCKsmGiGIf/pZsEal
+         texLImmTg/gCpVHUuWvn14o5Lgf+f1wOysFff2gp10PJHZgoXw6iwYzAwIUxisqWfw
+         u5jsEnyW3YFcIFUx6RL4jWbXoqzOfY/dd8vIcdt+Xq68Ux5KJCIYvI2XApR9C23Nmm
+         Sgkh2cUCXwwJKLy4JCAVy999KDS8Et5jkyt2gkH/o90zp2F9JCGMHuMQgxIkMklZJH
+         mmsRI+wgR/9MQ==
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-50bc4ba28cbso4764522a12.0;
+        Sat, 06 May 2023 00:25:55 -0700 (PDT)
+X-Gm-Message-State: AC+VfDx1fH+AarEJBfLItd5cBE1oD/OYqmgTHedz96Mhy7/Sz0wG3gD+
+        8pXZX7UAVq9WS4X4inu9EdKBwRF8HD2z5O2lsMI=
+X-Google-Smtp-Source: ACHHUZ4qS4i5Im7J3Ox7v0tb1ueCK3xmeH5uM44ArLR4roviIMhnWXngkOBBuBeiDbJ5qp2UGTwR6EkhF28IpBmVniU=
+X-Received: by 2002:a17:907:3d9f:b0:959:5454:1db7 with SMTP id
+ he31-20020a1709073d9f00b0095954541db7mr3511012ejc.3.1683357953246; Sat, 06
+ May 2023 00:25:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230327121317.4081816-1-arnd@kernel.org> <20230327121317.4081816-10-arnd@kernel.org>
+ <CAJF2gTT2VCVMJs1NvgK66uD+BhObjM2WNxf2RY7wTZsho4sjVA@mail.gmail.com> <f460ad77-aa76-43bb-b2bb-e3b6dbcd8b03@app.fastmail.com>
+In-Reply-To: <f460ad77-aa76-43bb-b2bb-e3b6dbcd8b03@app.fastmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 6 May 2023 15:25:41 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSRuj3-AgynXxZeXc2vGSH8Ohn5eP2hsuKi8rTzSPLhRQ@mail.gmail.com>
+Message-ID: <CAJF2gTSRuj3-AgynXxZeXc2vGSH8Ohn5eP2hsuKi8rTzSPLhRQ@mail.gmail.com>
+Subject: Re: [PATCH 09/21] riscv: dma-mapping: skip invalidation before
+ bidirectional DMA
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        linux-kernel@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-oxnas@groups.io" <linux-oxnas@groups.io>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org,
+        "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   418d5c98319f67b9ae651babea031b5394425c18
-commit: e3a6ab25cfa0fcdcb31c346b9871a566d440980d srcu: Move ->srcu_gp_mutex from srcu_struct to srcu_usage
-config: x86_64-randconfig-m001-20230501 (https://download.01.org/0day-ci/archive/20230506/202305060951.I8mz6eHt-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+On Fri, May 5, 2023 at 9:19=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, May 5, 2023, at 07:47, Guo Ren wrote:
+> > On Mon, Mar 27, 2023 at 8:15=E2=80=AFPM Arnd Bergmann <arnd@kernel.org>=
+ wrote:
+>
+> >>
+> >> riscv also invalidates the caches before the transfer, which does
+> >> not appear to serve any purpose.
+> > Yes, we can't guarantee the CPU pre-load cache lines randomly during
+> > dma working.
+> >
+> > But I've two purposes to keep invalidates before dma transfer:
+> >  - We clearly tell the CPU these cache lines are invalid. The caching
+> > algorithm would use these invalid slots first instead of replacing
+> > valid ones.
+> >  - Invalidating is very cheap. Actually, flush and clean have the same
+> > performance in our machine.
+>
+> The main purpose of the series was to get consistent behavior on
+> all machines, so I really don't want a custom optimization on
+> one architecture. You make a good point about cacheline reuse
+> after invalidation, but if we do that, I'd suggest doing this
+> across all architectures.
+Yes, invalidation of DMA_FROM_DEVICE-for_device is a proposal for all
+architectures.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202305060951.I8mz6eHt-lkp@intel.com/
+>
+> > So, how about:
+> >
+> > diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoh=
+erent.c
+> > index d919efab6eba..2c52fbc15064 100644
+> > --- a/arch/riscv/mm/dma-noncoherent.c
+> > +++ b/arch/riscv/mm/dma-noncoherent.c
+> > @@ -22,8 +22,6 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size=
+_t size,
+> >                 ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+> >                 break;
+> >         case DMA_FROM_DEVICE:
+> > -               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+> > -               break;
+> >         case DMA_BIDIRECTIONAL:
+> >                 ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+> >                 break;
+>
+> This is something we can consider. Unfortunately, this is something
+> that no architecture (except pa-risc, which has other problems)
+> does at the moment, so we'd probably need to have a proper debate
+> about this.
+>
+> We already have two conflicting ways to handle DMA_FROM_DEVICE,
+> either invalidate/invalidate, or clean/invalidate. I can see
+I vote to invalidate/invalidate.
 
-smatch warnings:
-kernel/rcu/srcutree.c:1644 srcu_advance_state() warn: inconsistent returns '&ssp->srcu_sup->srcu_gp_mutex'.
+My key point is to let DMA_FROM_DEVICE-for_device invalidate, and
+DMA_BIDIRECTIONAL contains DMA_FROM_DEVICE.
+So I also agree:
+@@ -22,8 +22,6 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t s=
+ize,
+                 ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+                 break;
+         case DMA_FROM_DEVICE:
+ -               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+ +              ALT_CMO_OP(invalidate, vaddr, size, riscv_cbom_block_size);
+                 break;
+         case DMA_BIDIRECTIONAL:
+                 ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+                 break;
 
-vim +1644 kernel/rcu/srcutree.c
+> that flush/invalidate may be a sensible option as well, but I'd
+> want to have that discussion after the series is complete, so
+> we can come to a generic solution that has the same documented
+> behavior across all architectures.
+Yes, I agree to unify them into a generic solution first. My proposal
+could be another topic in the future.
+For that purpose, I give
+Acked-by: Guo Ren <guoren@kernel.org>
 
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1584  static void srcu_advance_state(struct srcu_struct *ssp)
-dad81a2026841b Paul E. McKenney 2017-03-25  1585  {
-dad81a2026841b Paul E. McKenney 2017-03-25  1586  	int idx;
-dad81a2026841b Paul E. McKenney 2017-03-25  1587  
-e3a6ab25cfa0fc Paul E. McKenney 2023-03-17  1588  	mutex_lock(&ssp->srcu_sup->srcu_gp_mutex);
-da915ad5cf25b5 Paul E. McKenney 2017-04-05  1589  
-dad81a2026841b Paul E. McKenney 2017-03-25  1590  	/*
-dad81a2026841b Paul E. McKenney 2017-03-25  1591  	 * Because readers might be delayed for an extended period after
-da915ad5cf25b5 Paul E. McKenney 2017-04-05  1592  	 * fetching ->srcu_idx for their index, at any point in time there
-dad81a2026841b Paul E. McKenney 2017-03-25  1593  	 * might well be readers using both idx=0 and idx=1.  We therefore
-dad81a2026841b Paul E. McKenney 2017-03-25  1594  	 * need to wait for readers to clear from both index values before
-dad81a2026841b Paul E. McKenney 2017-03-25  1595  	 * invoking a callback.
-dad81a2026841b Paul E. McKenney 2017-03-25  1596  	 *
-dad81a2026841b Paul E. McKenney 2017-03-25  1597  	 * The load-acquire ensures that we see the accesses performed
-dad81a2026841b Paul E. McKenney 2017-03-25  1598  	 * by the prior grace period.
-dad81a2026841b Paul E. McKenney 2017-03-25  1599  	 */
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1600  	idx = rcu_seq_state(smp_load_acquire(&ssp->srcu_gp_seq)); /* ^^^ */
-dad81a2026841b Paul E. McKenney 2017-03-25  1601  	if (idx == SRCU_STATE_IDLE) {
-b3fb11f7e9c3c6 Paul E. McKenney 2023-03-17  1602  		spin_lock_irq_rcu_node(ssp->srcu_sup);
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1603  		if (ULONG_CMP_GE(ssp->srcu_gp_seq, ssp->srcu_gp_seq_needed)) {
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1604  			WARN_ON_ONCE(rcu_seq_state(ssp->srcu_gp_seq));
-b3fb11f7e9c3c6 Paul E. McKenney 2023-03-17  1605  			spin_unlock_irq_rcu_node(ssp->srcu_sup);
-e3a6ab25cfa0fc Paul E. McKenney 2023-03-17  1606  			mutex_unlock(&ssp->srcu_sup->srcu_gp_mutex);
-dad81a2026841b Paul E. McKenney 2017-03-25  1607  			return;
-dad81a2026841b Paul E. McKenney 2017-03-25  1608  		}
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1609  		idx = rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq));
-dad81a2026841b Paul E. McKenney 2017-03-25  1610  		if (idx == SRCU_STATE_IDLE)
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1611  			srcu_gp_start(ssp);
-b3fb11f7e9c3c6 Paul E. McKenney 2023-03-17  1612  		spin_unlock_irq_rcu_node(ssp->srcu_sup);
-da915ad5cf25b5 Paul E. McKenney 2017-04-05  1613  		if (idx != SRCU_STATE_IDLE) {
-e3a6ab25cfa0fc Paul E. McKenney 2023-03-17  1614  			mutex_unlock(&ssp->srcu_sup->srcu_gp_mutex);
-dad81a2026841b Paul E. McKenney 2017-03-25  1615  			return; /* Someone else started the grace period. */
-dad81a2026841b Paul E. McKenney 2017-03-25  1616  		}
-da915ad5cf25b5 Paul E. McKenney 2017-04-05  1617  	}
-dad81a2026841b Paul E. McKenney 2017-03-25  1618  
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1619  	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)) == SRCU_STATE_SCAN1) {
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1620  		idx = 1 ^ (ssp->srcu_idx & 1);
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1621  		if (!try_check_zero(ssp, idx, 1)) {
-e3a6ab25cfa0fc Paul E. McKenney 2023-03-17  1622  			mutex_unlock(&ssp->srcu_sup->srcu_gp_mutex);
-dad81a2026841b Paul E. McKenney 2017-03-25  1623  			return; /* readers present, retry later. */
-da915ad5cf25b5 Paul E. McKenney 2017-04-05  1624  		}
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1625  		srcu_flip(ssp);
-b3fb11f7e9c3c6 Paul E. McKenney 2023-03-17  1626  		spin_lock_irq_rcu_node(ssp->srcu_sup);
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1627  		rcu_seq_set_state(&ssp->srcu_gp_seq, SRCU_STATE_SCAN2);
-282d8998e9979c Paul E. McKenney 2022-03-08  1628  		ssp->srcu_n_exp_nodelay = 0;
-b3fb11f7e9c3c6 Paul E. McKenney 2023-03-17  1629  		spin_unlock_irq_rcu_node(ssp->srcu_sup);
-dad81a2026841b Paul E. McKenney 2017-03-25  1630  	}
-dad81a2026841b Paul E. McKenney 2017-03-25  1631  
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1632  	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)) == SRCU_STATE_SCAN2) {
+>
+> In particular, if we end up moving arm64 and riscv back to the
+> traditional invalidate/invalidate for DMA_FROM_DEVICE and
+> document that driver must not rely on buffers getting cleaned
+After invalidation, the cache lines are also cleaned, right? So why do
+we need to document it additionally?
 
-We don't mutex_unlock(&ssp->srcu_sup->srcu_gp_mutex) if this if
-statement is false.
+> before a partial DMA_FROM_DEVICE, the question between clean
+> or flush becomes moot as well.
+>
+> > @@ -42,7 +40,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t =
+size,
+> >                 break;
+> >         case DMA_FROM_DEVICE:
+> >         case DMA_BIDIRECTIONAL:
+> >                 /* I'm not sure all drivers have guaranteed cacheline
+> > alignment. If not, this inval would cause problems */
+> > -               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+> > +               ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
+> >                 break;
+>
+> This is my original patch, and I would not mix it with the other
+> change. The problem with non-aligned DMA_BIDIRECTIONAL buffers in
+> is that both flush and inval would be wrong if you get simultaneous
+> writes from device and cpu to the same cache line, so there is
+> no way to win this. Using inval instead of flush would at least
+> work if the CPU data in the cacheline is read-only from the CPU,
+> so that seems better than something that is always wrong.
+If CPU data in the cacheline is read-only, the cacheline would never
+be dirty. Yes, It's always safe.
+Okay, I agree we must keep cache-line-aligned. I comment it here, just
+worry some dirty drivers couldn't work with the "invalid mechanism"
+because of the CPU data corruption, and device data in the cacheline
+is useless.
 
-dad81a2026841b Paul E. McKenney 2017-03-25  1633  
-dad81a2026841b Paul E. McKenney 2017-03-25  1634  		/*
-dad81a2026841b Paul E. McKenney 2017-03-25  1635  		 * SRCU read-side critical sections are normally short,
-dad81a2026841b Paul E. McKenney 2017-03-25  1636  		 * so check at least twice in quick succession after a flip.
-dad81a2026841b Paul E. McKenney 2017-03-25  1637  		 */
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1638  		idx = 1 ^ (ssp->srcu_idx & 1);
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1639  		if (!try_check_zero(ssp, idx, 2)) {
-e3a6ab25cfa0fc Paul E. McKenney 2023-03-17  1640  			mutex_unlock(&ssp->srcu_sup->srcu_gp_mutex);
-da915ad5cf25b5 Paul E. McKenney 2017-04-05  1641  			return; /* readers present, retry later. */
-da915ad5cf25b5 Paul E. McKenney 2017-04-05  1642  		}
-282d8998e9979c Paul E. McKenney 2022-03-08  1643  		ssp->srcu_n_exp_nodelay = 0;
-aacb5d91ab1bfb Paul E. McKenney 2018-10-28 @1644  		srcu_gp_end(ssp);  /* Releases ->srcu_gp_mutex. */
-dad81a2026841b Paul E. McKenney 2017-03-25  1645  	}
-dad81a2026841b Paul E. McKenney 2017-03-25  1646  }
+>
+> The documented API is that sharing the cache line is not allowed
+> at all, so anything that would observe a difference between the
+> two is also a bug. One idea that we have considered already is
+> that we could overwrite the unused bits of the cacheline with
+> poison values and/or mark them as invalid using KASAN for debugging
+> purposes, to find drivers that already violate this.
+>
+>       Arnd
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
 
+
+--=20
+Best Regards
+ Guo Ren
