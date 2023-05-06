@@ -2,134 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616B66F8E8C
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 06:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D4C6F8E98
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 06:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjEFE1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 00:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
+        id S230010AbjEFEnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 00:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjEFE1l (ORCPT
+        with ESMTP id S229822AbjEFEnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 00:27:41 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8857DAD
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 21:27:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683347260; x=1714883260;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HmfWaeU0aFJnkRQl+Fn9eJRDVTAOl6JP0JdVj0Kyo2k=;
-  b=IQwkYZ8glDsdy1+48+nI+hAUBVBEu4tNuESfuW+tAqae18KsNbNVKuFM
-   rjpVw/3ZHUvPLL3mT4D+d2sKolAmLsnRIZW9B2kE+71Jp86CiRlSV5tfk
-   zxuk7nqnga9NTHm1amDHvmYhxWYmh7eyfq2ar4Fx1EqVvzl7M8HPfmEW4
-   uOAFNlqxcY5gESwo7fuM5xzZWZ6X4Mh0/6YvXY4epWoTqi9nrMpXgx/s4
-   HZekoVZk4/wBGh0AI/F3mJhHQMR1fGE+9gD54rK8pZacDr/qYM3uLNS8w
-   vZpJBjYDodk7UswQVrBonKspKTxodWJYFxdMCKUGbYC+Abpi3Np0wn2cb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="412587644"
-X-IronPort-AV: E=Sophos;i="5.99,254,1677571200"; 
-   d="scan'208";a="412587644"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 21:27:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="728370673"
-X-IronPort-AV: E=Sophos;i="5.99,254,1677571200"; 
-   d="scan'208";a="728370673"
-Received: from lkp-server01.sh.intel.com (HELO fe5d646e317d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 05 May 2023 21:27:38 -0700
-Received: from kbuild by fe5d646e317d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pv9WD-00019J-1h;
-        Sat, 06 May 2023 04:27:37 +0000
-Date:   Sat, 6 May 2023 12:27:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ondrej Zary <linux@zary.sk>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: drivers/ata/pata_parport/frpw.c:234 frpw_test_proto() warn:
- inconsistent indenting
-Message-ID: <202305061212.EPgEMLXl-lkp@intel.com>
+        Sat, 6 May 2023 00:43:50 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1745A7DA7;
+        Fri,  5 May 2023 21:43:48 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ab01bf474aso18923755ad.1;
+        Fri, 05 May 2023 21:43:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683348227; x=1685940227;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QLFj+Rqu5xZsAW8YHESfBkUXV4V21xk8dfAw+uAOJpQ=;
+        b=Fx4DLwtUTCthG8rNM12V0N3dNiZjrP+yO8BfSPkoDGBdvFNMUsyMY/UoVvncU+H7oW
+         XCIphik346VXuLMtYuY7n8cHOXPT3oNdx/5P2m+FuANPqXUuWYVv6i9aSj9iE2hXSOmm
+         SCyDQmVo9TMAtOxrxxS5qc7BUuzZpulQRLs/MsITAZDiza/CxCjCfueO5BToaQMPQ3rQ
+         AgQK8of4xQ6ogldWUAZro8XiAQt7MTAI83rDdf2K+sdo7UR5OO8oLk321GRbynbhPPrG
+         B7MIbzZylilTNTrqZ6SZemQFlwrJpTLkOJq904j9Vu595WbyaBpLdz7T9vjLWxiDCq+r
+         fiNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683348227; x=1685940227;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QLFj+Rqu5xZsAW8YHESfBkUXV4V21xk8dfAw+uAOJpQ=;
+        b=YBctSDWHjSGnvu8f3jjsbOwDyvtiX09k3FNG4+1/09Pn7gpEtxBHaph89J7dCbRiOT
+         X1Hkd8PL0v2NqzOBtSLvMCKXc/2LaHVISVPLRt/t65EixpR8rO/3QQxHRFoRvoJmPNpp
+         VFT25YlUgYk9X3pIkx5mYcyiUyQnqNW92ce2frCbOqzTtvY1ulbLOOpDtCxX3K/MvZTR
+         XcRgIWa8d3EF4lCzEX5WfTcKzT0IMYcY0Ho7P2gP9VOb3lAKz/6+YVfSVJrwk/OpuQWP
+         E8/m1rqXpZ2stRGhM/GZ8I5DaOnBorf8Z+BLcbPu7MnUwXsAk9l+LlT1h73FUfr89/di
+         8EJQ==
+X-Gm-Message-State: AC+VfDxFIbmaM/DAt1xGLT+/ttj+kTfxfiFNCTXAs5DgMAjESEsA9xgp
+        hssCR3+z1/ceOi9v0dkbDcI=
+X-Google-Smtp-Source: ACHHUZ7+6kHnfhJnhP6dBiE8cadcyhTH58bD77rKsZXjeN4YrycRUdV51IdO1n56B05aLdp0+aWQEw==
+X-Received: by 2002:a17:903:1110:b0:1ab:74c:bdf2 with SMTP id n16-20020a170903111000b001ab074cbdf2mr4840636plh.28.1683348227336;
+        Fri, 05 May 2023 21:43:47 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q16-20020a170902dad000b001ac381f1ce9sm2581998plx.185.2023.05.05.21.43.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 May 2023 21:43:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <17fb02ff-e2d8-9c0b-3de6-670c82fee997@roeck-us.net>
+Date:   Fri, 5 May 2023 21:43:44 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Luke Jones <luke@ljones.dev>
+Cc:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net, hdegoede@redhat.com,
+        corentin.chary@gmail.com, markgross@kernel.org, jdelvare@suse.com
+References: <20230505043013.2622603-1-luke@ljones.dev>
+ <20230505043013.2622603-2-luke@ljones.dev>
+ <9f77e8fd-38fe-818f-2fee-ca3bf4243576@linux.intel.com>
+ <TWL7UR.KE812U8BYMG8@ljones.dev>
+ <f1f8ff7a-6f23-e284-b494-7df2f0dce1a4@roeck-us.net>
+ <M8X7UR.MPEZYPQ0PU4F1@ljones.dev>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 1/1] platform/x86: asus-wmi: add support for ASUS
+ screenpad
+In-Reply-To: <M8X7UR.MPEZYPQ0PU4F1@ljones.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2e1e1337881b0e9844d687982aa54b31b1269b11
-commit: 5f1145d8304f93286be774482db6298c40dfe812 ata: pata_parport: use dev_* instead of printk
-date:   6 weeks ago
-config: x86_64-randconfig-m001-20230501 (https://download.01.org/0day-ci/archive/20230506/202305061212.EPgEMLXl-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+On 5/5/23 20:48, Luke Jones wrote:
+> 
+> 
+> On Fri, May 5 2023 at 18:30:36 -0700, Guenter Roeck <linux@roeck-us.net> wrote:
+>> On 5/5/23 16:43, Luke Jones wrote:
+>>>
+>>>
+>>> On Fri, May 5 2023 at 16:08:16 +0300, Ilpo Järvinen <ilpo.jarvinen@linux.intel.com> wrote:
+>>>> On Fri, 5 May 2023, Luke D. Jones wrote:
+>>>>
+>>>>>  Add support for the WMI methods used to turn off and adjust the
+>>>>>  brightness of the secondary "screenpad" device found on some high-end
+>>>>>  ASUS laptops like the GX650P series and others.
+>>>>>
+>>>>>  These methods are utilised in a new backlight device named:
+>>>>>  - asus_screenpad
+>>>>>
+>>>>>  Signed-off-by: Luke D. Jones <luke@ljones.dev>
+>>>>>  ---
+>>>>>   .../ABI/testing/sysfs-platform-asus-wmi       |   2 +-
+>>>>>   drivers/platform/x86/asus-wmi.c               | 132 ++++++++++++++++++
+>>>>>   drivers/platform/x86/asus-wmi.h               |   1 +
+>>>>>   include/linux/platform_data/x86/asus-wmi.h    |   4 +
+>>>>>   4 files changed, 138 insertions(+), 1 deletion(-)
+>>>>>
+>>>>>  diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+>>>>>  index a77a004a1baa..df9817c6233a 100644
+>>>>>  --- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
+>>>>>  +++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+>>>>>  @@ -97,4 +97,4 @@ Contact:    "Luke Jones" <luke@ljones.dev>
+>>>>>   Description:
+>>>>>           Enable an LCD response-time boost to reduce or remove ghosting:
+>>>>>               * 0 - Disable,
+>>>>>  -            * 1 - Enable
+>>>>>  +            * 1 - Enable
+>>>>>  \ No newline at end of file
+>>>>
+>>>> Spurious change?
+>>>
+>>> Indeed it is. Not sure how that occurred.
+>>>
+>>>>
+>>>>>  diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+>>>>>  index 1038dfdcdd32..0528eef02ef7 100644
+>>>>>  --- a/drivers/platform/x86/asus-wmi.c
+>>>>>  +++ b/drivers/platform/x86/asus-wmi.c
+>>>>>  @@ -200,6 +200,7 @@ struct asus_wmi {
+>>>>>
+>>>>>       struct input_dev *inputdev;
+>>>>>       struct backlight_device *backlight_device;
+>>>>>  +    struct backlight_device *screenpad_backlight_device;
+>>>>>       struct platform_device *platform_device;
+>>>>>
+>>>>>       struct led_classdev wlan_led;
+>>>>>  @@ -3208,6 +3209,129 @@ static int is_display_toggle(int code)
+>>>>>       return 0;
+>>>>>   }
+>>>>>
+>>>>>  +/* Screenpad backlight */
+>>>>>  +
+>>>>>  +static int read_screenpad_backlight_power(struct asus_wmi *asus)
+>>>>>  +{
+>>>>>  +    int ret = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_SCREENPAD_POWER);
+>>>>
+>>>> Please move this to own line because now you have the extra newline
+>>>> in between the call and error handling.
+>>>
+>>> I don't understand what you mean sorry. Remove the new line or:
+>>> int ret;
+>>> ret = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_SCREENPAD_POWER);
+>>>
+>>>>
+>>>>>  +
+>>>>>  +    if (ret < 0)
+>>>>>  +        return ret;
+>>>>>  +    /* 1 == powered */
+>>>>>  +    return ret ? FB_BLANK_UNBLANK : FB_BLANK_POWERDOWN;
+>>>>>  +}
+>>>>>  +
+>>>>>  +static int read_screenpad_brightness(struct backlight_device *bd)
+>>>>>  +{
+>>>>>  +    struct asus_wmi *asus = bl_get_data(bd);
+>>>>>  +    u32 retval;
+>>>>>  +    int err;
+>>>>>  +
+>>>>>  +    err = read_screenpad_backlight_power(asus);
+>>>>>  +    if (err < 0)
+>>>>>  +        return err;
+>>>>>  +    /* The device brightness can only be read if powered, so return stored */
+>>>>>  +    if (err == FB_BLANK_POWERDOWN)
+>>>>>  +        return asus->driver->screenpad_brightness;
+>>>>>  +
+>>>>>  +    err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_SCREENPAD_LIGHT, &retval);
+>>>>>  +    if (err < 0)
+>>>>>  +        return err;
+>>>>>  +
+>>>>>  +    return retval & ASUS_WMI_DSTS_BRIGHTNESS_MASK;
+>>>>>  +}
+>>>>>  +
+>>>>>  +static int update_screenpad_bl_status(struct backlight_device *bd)
+>>>>>  +{
+>>>>>  +    struct asus_wmi *asus = bl_get_data(bd);
+>>>>>  +    int power, err = 0;
+>>>>>  +    u32 ctrl_param;
+>>>>>  +
+>>>>>  +    power = read_screenpad_backlight_power(asus);
+>>>>>  +    if (power == -ENODEV)
+>>>>>  +        return err;
+>>>>
+>>>> Just return 0. Or is there perhaps something wrong/missing here?
+>>>
+>>> I thought the correct thing was to return any possible error state (here, anything less than 0 would be an error, right?)
+>>>
+>>
+>> Well, yes, but you are not returning an error. You are returning 'err'
+>> which is 0 at this point. So, at the very least, this code is (very)
+>> misleading since it suggests that it would return some error
+>> (as saved in the 'err' variable) when it doesn't.
+>>
+>> Guenter
+>>
+> 
+> Oh! Right I see it now, I'm sorry, I just kept skipping over it somehow.
+> 
+> So I should change to:
+>      power = read_screenpad_backlight_power(asus);
+>      if (power < 0)
+>          return power;
+> 
+> Is that acceptable?
+> 
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305061212.EPgEMLXl-lkp@intel.com/
+That depends on what the code is supposed to do. Right now it is
+"If read_screenpad_backlight_power() returns -ENODEV, stop and return
+no error (let the rest of the code continue). If it returns another error,
+return it".
+Changing the code as suggested above changes the semantics to
+"If read_screenpad_backlight_power() returns an error, always return it".
 
-New smatch warnings:
-drivers/ata/pata_parport/frpw.c:234 frpw_test_proto() warn: inconsistent indenting
+Looking at the patch, I don't have a definite answer.
+asus_screenpad_init() happily registers the backlight if
+read_screenpad_backlight_power() returns -ENODEV. One could argue that
+the other functions should thus handle that situation gracefully as well,
+but read_screenpad_brightness() does return -ENODEV in that situation.
+I think you should decide how you want to handle that case and handle
+it consistently across all functions.
 
-Old smatch warnings:
-drivers/ata/pata_parport/frpw.c:239 frpw_test_proto() warn: inconsistent indenting
+Either case, there is another problem in asus_screenpad_init():
+If read_screenpad_brightness() fails, the function returns an error,
+but does not unregister the backlight device.
 
-vim +234 drivers/ata/pata_parport/frpw.c
+Guenter
 
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  225  
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  226  {       int     j, k, r;
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  227  	int	e[2] = {0,0};
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  228  
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  229  	if ((pi->private>>1) != pi->port)
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  230  	   pi->private = frpw_test_pnp(pi) + 2*pi->port;
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  231  
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  232  	if (((pi->private%2) == 0) && (pi->mode > 2)) {
-5f1145d8304f93 drivers/ata/pata_parport/frpw.c Ondrej Zary    2023-02-18  233  		dev_dbg(&pi->dev, "frpw: Xilinx does not support mode %d\n", pi->mode);
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16 @234  	   return 1;
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  235  	}
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  236  
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  237  	if (((pi->private%2) == 1) && (pi->mode == 2)) {
-5f1145d8304f93 drivers/ata/pata_parport/frpw.c Ondrej Zary    2023-02-18  238  		dev_dbg(&pi->dev, "frpw: ASIC does not support mode 2\n");
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  239  	   return 1;
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  240  	}
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  241  
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  242  	frpw_connect(pi);
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  243  	for (j=0;j<2;j++) {
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  244                  frpw_write_regr(pi,0,6,0xa0+j*0x10);
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  245                  for (k=0;k<256;k++) {
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  246                          frpw_write_regr(pi,0,2,k^0xaa);
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  247                          frpw_write_regr(pi,0,3,k^0x55);
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  248                          if (frpw_read_regr(pi,0,2) != (k^0xaa)) e[j]++;
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  249                          }
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  250                  }
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  251  	frpw_disconnect(pi);
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  252  
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  253  	frpw_connect(pi);
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  254          frpw_read_block_int(pi,scratch,512,0x10);
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  255          r = 0;
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  256          for (k=0;k<128;k++) if (scratch[k] != k) r++;
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  257  	frpw_disconnect(pi);
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  258  
-5f1145d8304f93 drivers/ata/pata_parport/frpw.c Ondrej Zary    2023-02-18  259  	dev_dbg(&pi->dev, "frpw: port 0x%x, chip %ld, mode %d, test=(%d,%d,%d)\n",
-a4f2ff92ed4a03 drivers/ata/pata_parport/frpw.c Ondrej Zary    2023-02-18  260  	       pi->port, (pi->private%2), pi->mode, e[0], e[1], r);
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  261  
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  262          return (r || (e[0] && e[1]));
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  263  }
-^1da177e4c3f41 drivers/block/paride/frpw.c     Linus Torvalds 2005-04-16  264  
-
-:::::: The code at line 234 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
