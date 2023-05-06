@@ -2,117 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE606F9427
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 23:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76FEE6F942C
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 23:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjEFVWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 17:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
+        id S229996AbjEFV2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 17:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjEFVWh (ORCPT
+        with ESMTP id S229446AbjEFV2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 17:22:37 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4531491A;
-        Sat,  6 May 2023 14:22:35 -0700 (PDT)
-Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 3DE85CECA7;
-        Sat,  6 May 2023 21:22:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1683408123; bh=Mgla0FqG6s0rTpF9FbXF74aYR+zs9h7SWW7n4ppNO+c=;
-        h=From:Date:Subject:To:Cc;
-        b=vu5rWWRHgQolokSXPm5u5BG9PWOMJ2H/w8f6f4HnEH/M1GxK2YdFW1zveaYeHU0t0
-         mH1bhpJY2qpaTDVo6jQ91RSU4igUFbwEVeNhyXlCjqnQJ03SEU9ERsS/QtVH+rVsap
-         2nNGJue4nE3IDMRIn683Wejv9px/gdF3dzKoHpso=
-From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Sat, 06 May 2023 23:20:05 +0200
-Subject: [PATCH] clk: qcom: mmcc-msm8974: Add OXILICX_GDSC for msm8226
+        Sat, 6 May 2023 17:28:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5681155E;
+        Sat,  6 May 2023 14:28:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8788E60F08;
+        Sat,  6 May 2023 21:28:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D49B5C433D2;
+        Sat,  6 May 2023 21:28:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683408491;
+        bh=RFhHQs458u3Qp1xbSCl1n0jO2N9ZgZ97gT8J33I1Nmg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AQtxcUktNQBisfpphnbxb4MoQtZFau70RrpVnPWa7onAXoTZK6Z+81oX5t/QkLxkm
+         IGE613r6Gn0dG6J5GhRaIGFAeCuIrvNKy8xH2dOCW/E/EkkESFOyjVcgM9TGeMXafE
+         RA09ZW5YyjyRZuUoJ8tbUiNmj9SHzE/ls64qMwaIyqSRMwSxv2vHayG78ExAn4IM6G
+         UAjgvg08D2soxV2uh9ERk/OioqgsssGxGfoMDDLZXc9Q+2ZapxtMyY72upwM60FXNi
+         6otnSVwYzVeVR7odlxwx0IRhykFZMBeFRHhmcUD59ZFzZzfvP1f3uf8dv9vb4Zmae1
+         nEjDKaJG2DwrA==
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Hao Luo <haoluo@google.com>, Ian Rogers <irogers@google.com>,
+        James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Roman Lozko <lozko.roma@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>
+Subject: [GIT PULL 0/2] perf tools changes for v6.4: Disable BPF based features in the default build
+Date:   Sat,  6 May 2023 18:27:58 -0300
+Message-Id: <20230506212758.1201184-1-acme@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230506-msm8226-oxilicx-v1-1-52e34b94ff22@z3ntu.xyz>
-X-B4-Tracking: v=1; b=H4sIAITEVmQC/x2NywqDMBAAf0X23IUYrY/+Sukhxo0uxChZWgLiv
- 7v0OAPDnCCUmQRe1QmZfiy8J4X6UYFfXVoIeVYGa2xjnqbDTbbB2g73wpF9wT40wYSB2rGeQav
- JCeGUXfKrdukbo8ojU+Dy37w/13UDLVTSVXYAAAA=
-To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bartosz Dudziak <bartosz.dudziak@snejp.pl>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1373; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=Mgla0FqG6s0rTpF9FbXF74aYR+zs9h7SWW7n4ppNO+c=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkVsT6XiIg7hNY3hv51IzCTbp3r+ZwiSqhd8idr
- 45PSjANRtiJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZFbE+gAKCRBy2EO4nU3X
- VsjID/9SIt93I9xubBMFtSW5Bq3kj2RM/bh2bBsUrE9Z63S0oK2mvT0B6wUo02A9Xij0S5PNu/J
- 5gc6T78kuuM0EtkVz1HiBDfHRvB6TnNAuPu+u7orS/BZeTJdyS+1H8cxXJIdSTRLfxXL0w5gSzw
- 2e9y8glSGaeUTmWjZ2wnpBYDT+mdu2CQ+WbMJbx9eSWnYU/ZRiYHN64zs9QgZyjz+D2S8pOQT3E
- PH2mFgoZGmUmgNgDW8wMNl9r8t3DwpiBqIKQ/5BoJJZa2gHloW/pBOyXipGh52HmyY1jCnVGDFg
- R4u0xhzIP/yEZET0xDT1OCaV+NzZRyEho9Qkqx7INZBRrsv5clkuVD08lYtF/FBfZRZKQnnceYZ
- ynlLd+aYFYcD9z5/5kLyM507UPlBbs4oF5TLoTRT0uIdFoBgX651ViTqaQCijKmR2dK797gVxdv
- 3a1EZKzjuSbsOLQy83g/8DPvbIyLGk8GquSi1MiQZOt/WXWIlPLUQ5nMGHXOwwevYxs0noXZga5
- cc3nDFKM7U3LTuNCvRz49BCe/mGszfEDOL+OZZpn3ur6wKZImr5x4GiladYO/WZ6QOAiOUH+Fwc
- 9uNLWuLH1VUDcl1Bra1c+nw8eBqTJY6WWEUJy7WZ7gGnvX5CLVcn7GI7sgC7vz/Ett40ygbBiYF
- 1M4tyWkA+w8C1gQ==
-X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On msm8226 we also have OXILICX_GDSC but we need a slighly different
-config, with a .cxcs defined for clock but with no parent.
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- drivers/clk/qcom/mmcc-msm8974.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Hi Linus,
 
-diff --git a/drivers/clk/qcom/mmcc-msm8974.c b/drivers/clk/qcom/mmcc-msm8974.c
-index 4273fce9a4a4..39ee3953567c 100644
---- a/drivers/clk/qcom/mmcc-msm8974.c
-+++ b/drivers/clk/qcom/mmcc-msm8974.c
-@@ -2443,6 +2443,16 @@ static struct gdsc oxilicx_gdsc = {
- 	.pwrsts = PWRSTS_OFF_ON,
- };
- 
-+static struct gdsc oxilicx_gdsc_msm8226 = {
-+	.gdscr = 0x4034,
-+	.cxcs = (unsigned int []){ 0x4028 },
-+	.cxc_count = 1,
-+	.pd = {
-+		.name = "oxilicx",
-+	},
-+	.pwrsts = PWRSTS_OFF_ON,
-+};
-+
- static struct clk_regmap *mmcc_msm8226_clocks[] = {
- 	[MMSS_AHB_CLK_SRC] = &mmss_ahb_clk_src.clkr,
- 	[MMSS_AXI_CLK_SRC] = &mmss_axi_clk_src.clkr,
-@@ -2533,6 +2543,7 @@ static struct gdsc *mmcc_msm8226_gdscs[] = {
- 	[MDSS_GDSC] = &mdss_gdsc,
- 	[CAMSS_JPEG_GDSC] = &camss_jpeg_gdsc,
- 	[CAMSS_VFE_GDSC] = &camss_vfe_gdsc,
-+	[OXILICX_GDSC] = &oxilicx_gdsc_msm8226,
- };
- 
- static const struct regmap_config mmcc_msm8226_regmap_config = {
+	I did further tests and realised I made a mistake in trying to
+make this the default now, we need to polish it further before this
+becomes acceptable for a default build.
 
----
-base-commit: dd9e11d6477a52ede9ebe575c83285e79e823889
-change-id: 20230506-msm8226-oxilicx-7f3f0f8e491d
+	This is on top of the previous two requests.
 
-Best regards,
--- 
-Luca Weiss <luca@z3ntu.xyz>
+	I apologize for wasting your time,
 
+- Arnaldo
+
+The following changes since commit 6c73f819b6b6d6f052e8dbe3f66f0693554ddf48:
+
+  perf metrics: Fix SEGV with --for-each-cgroup (2023-05-05 19:18:55 -0300)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-for-v6.4-3-2023-05-06
+
+for you to fetch changes up to 9a2d5178b9d51e1c5f9e08989ff97fc8d4893f31:
+
+  Revert "perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL" (2023-05-06 18:07:37 -0300)
+
+----------------------------------------------------------------
+Disable building BPF based features by default for v6.4.
+
+We need to better polish building with BPF skels, so revert back to
+making it an experimental feature that has to be explicitely enabled
+using BUILD_BPF_SKEL=1.
+
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+----------------------------------------------------------------
+Arnaldo Carvalho de Melo (2):
+      Revert "perf build: Warn for BPF skeletons if endian mismatches"
+      Revert "perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL"
+
+ tools/perf/Makefile.config              | 14 +++-----------
+ tools/perf/Makefile.perf                |  8 ++++----
+ tools/perf/builtin-lock.c               |  2 +-
+ tools/perf/builtin-record.c             |  2 +-
+ tools/perf/builtin-version.c            |  1 -
+ tools/perf/tests/shell/record_offcpu.sh |  2 +-
+ 6 files changed, 10 insertions(+), 19 deletions(-)
