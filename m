@@ -2,142 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5576F9187
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 13:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5065A6F919C
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 13:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbjEFLd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 07:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
+        id S231978AbjEFLjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 07:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231848AbjEFLdZ (ORCPT
+        with ESMTP id S229872AbjEFLjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 07:33:25 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9CB7681
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 04:33:22 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-55d2e87048cso41601087b3.1
-        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 04:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683372802; x=1685964802;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MrqXLh+CItgFF8Zvf5m1YwKEXaRzb+PkDECyM11LKHc=;
-        b=MkpaBYkwpacXiQBX9wyxjvYYFhGVLUxRS4ZMAZXGcRR4Luhc/XHR5TCixlZ+4iPdcy
-         08I6/h04LJUx9ANZTDKYso31rEC8zHUN+eWh+w+zXvWsSdzKFKAU44kGggGZ3ExZA3Em
-         hPJvpUvN4N8e7S2oceXGmbgHY9t0KQ+c68+WTq6CDPrcNFWg4BSOETxEi1jkXITVOOlS
-         NkiUIK1GH5LidQIvdm85bwzlz4aDpBuInpuGoeFMEwpoeHcvvUAEaQpIK7srb9HUbuES
-         z+AxvQh6HxFy6TgIntSemLXYwPHU6pgBJtGyWoKpdgptPTpJ1WivKjv7FfWwJ9dMWhf2
-         W/4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683372802; x=1685964802;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MrqXLh+CItgFF8Zvf5m1YwKEXaRzb+PkDECyM11LKHc=;
-        b=EsBb7Zq7hhMZRFlxJfqE6GGBbZGwJiohcHCajj96kC8k56kImA8o36RcJBgKsFDIJ8
-         XcKSC6VU2ZHLmEjfUWr85mwGmYD36ciOHGweobNMiGnuCIUVdBIm2Wm9Rg00dtvBC49J
-         /lFdVo28Z3B78KgB+9Toc0UUO8PQNwPiB6jbFdnX7tp0uvPgjC4SeJVhHquJSsJWNDIg
-         wcJtg+O5pr+E2O4t7H9TWDzRYkaUQlWpj2kcf+9lTU9CuDe/WZdxAPiD/1PTgfoj74HZ
-         4FwruvoQi/huN/Uo/7/UibOQIf3v68KXJRYHUI+097dcSbbTIwFZ9Bl6WgMDK7GZTTeC
-         koXg==
-X-Gm-Message-State: AC+VfDyKfQWHfvBd8Kq181q2iUuUldxEM2N5i+nTI8bXRJ5TYOGjAPJw
-        BKxC7D5PA243P5WFVJKJAcKoPt9mBK1CFenHd8TMvA==
-X-Google-Smtp-Source: ACHHUZ7fly9ZcKfeuDxgPgDWv+YnXLTE4ah466Q9irFBlHZd5XhcGu/UinZknE20fN8kbaJnxJSwuRR/WUWwRP2VVzc=
-X-Received: by 2002:a0d:d487:0:b0:55a:5dce:aa19 with SMTP id
- w129-20020a0dd487000000b0055a5dceaa19mr4648937ywd.51.1683372802023; Sat, 06
- May 2023 04:33:22 -0700 (PDT)
+        Sat, 6 May 2023 07:39:47 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2134.outbound.protection.outlook.com [40.107.255.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030028A51
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 04:39:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eIcaWmt3sjR+1jqTSM0C7dFvgMiFyFrjPz4BeFlCXjjJQdKbDPyL0xF42asQcLenb2RwOGqLNeRwxUKwVjttW3y1hYPZlHWTdhJiEIYTcBqJN6xVg0+mMHx5bRHWMIdfzLuSc2Vl/Ih4sFe0me6OiYQunZxTBHsojIL13QGEnxEs7mPrSogZcZ1E+F60CXc0yGfWBGollNHsjGDhvM9tsY5cVhZjNPqVvolIefYDr51NigywOwPPKPFM34hDEnK0Mlzw/rc6BEts8jWhsMOzFgDln3TbZ46FJz0HqCWnHMZletpSfZ79wjbZhWIXEtKgAxt5RpEsjp45HfbcxjAZlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZvK1aHZNaaaO9H16uLBWIMIWtfrCjWUZq0GRWdRdX/0=;
+ b=YY16dfG/gAatZ6lQHVdrcXhl7XbSyvN8uHAJN90aUL3xr0oPNA2PUchhPR1RnwylhNcnXbNmrr5LVZg3OzDVviqnwVuwZoWS6imnJWJy06G9ycMQugC368hiSYVaMjDhmx8RFHDrWM6FiQCjK32cgkkjHwwEIRE21323e9jjlZ/Awsd+D3TRNDE1r+ZpNXRH8jhEAzBD1zOkHe+rdxbbwOn3bKNfOSh/S7kJtI+P7baqeLawAPLu7jLdfLJ3i5yJ0d9109Mn7sV9swvHNlS8UFnEuNbvy/xON4HIjY/um8eiVdZKlUc1c9wjnqQuUeaMApmcT0FqlzXrZ1qcrF+few==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZvK1aHZNaaaO9H16uLBWIMIWtfrCjWUZq0GRWdRdX/0=;
+ b=JfCKDEToaabJUPimpHgJcs8WWMtfD7xKvFy2ruuzhJAj2TfcN9vrZgpkZoYV7lIIsR1xwduR90iKtsQZAFSpm4u9tLuAH96of8sDF/XkEcJ4e2XHdEzpW63AaYQuP4wCjgHYsV4bUo7i+rhFEUL+UOMw8Uv857zvcTlJDXHMhRXV3seEACqLSaRJkYBrBM7agRxfBqamjMMILH3YyA4GRdDQ+25uRNG/q3/2xqLfNLFpcQo4erPnnPujEpkIf/oX0dOxWPjM0XUhLOR1i5dOWItCzc3vYA2qmYqcRDFf28MlqMrYqzR8j+9gB/F0oUM64DhCRzclom+L50xjSvn1Cw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SI2PR06MB4267.apcprd06.prod.outlook.com (2603:1096:4:15e::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.29; Sat, 6 May
+ 2023 11:39:41 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965%7]) with mapi id 15.20.6363.029; Sat, 6 May 2023
+ 11:39:40 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] f2fs: move the conditional statement after holding the inode lock in f2fs_move_file_range()
+Date:   Sat,  6 May 2023 19:39:14 +0800
+Message-Id: <20230506113914.23419-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0006.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:191::14) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-References: <cover.1683183860.git.quic_varada@quicinc.com> <8894bf2c44eaf4959c7a1966b66229e6cf5cda96.1683183860.git.quic_varada@quicinc.com>
- <CAA8EJppvj2nzqwdsC+Xct4cJg2-_yPpiGDELjHJG4HyAH3zGMA@mail.gmail.com> <20230506110918.GC10918@varda-linux.qualcomm.com>
-In-Reply-To: <20230506110918.GC10918@varda-linux.qualcomm.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 6 May 2023 14:33:11 +0300
-Message-ID: <CAA8EJpqg2htfa2QZ7q6SP58N5YAABa8knBn4c5eYqYOU6HQNiA@mail.gmail.com>
-Subject: Re: [PATCH v10 8/9] arm64: dts: qcom: ipq9574: Add LDO regulator node
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4267:EE_
+X-MS-Office365-Filtering-Correlation-Id: ccbf2e5b-6f21-41dd-1d98-08db4e2693cd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DlAUOEZKz3SqsrZkYylc05OArb3CyftySeQX1tfD6yd16RhTQzGOjCMDhPUsw6u7iW/2Bwzh6DgxRex2NDdZAahsKZYWa1ohX8tpz0rHLVHfbKoF5V3PIbdGX7W7UeNwfzRU2GbwNhkjO6d0ZYuIaJyU3rhnTEaCt9EaThBSWLN4fFaeGgrMksxAhcWj1oHWBrqAHAQtMeC1NChhq0Z5FYNx6nu0Dcol+8dRC7iUY1qaPoRCBh6Q1Q2HG4H85GxH9G3v3BIhYo8TUSqz7Fn3FNmGeNI1Eu1MxtxdeIwc2YlqY0PrLFF1kK9tmdDIohpbLMrAJcxeLy7PWcCDE9fDnXYWmbO1JMpjLFC6EPSNRnXLmv/X5osdHHp3/1TStjigtVFqcRPnsiojcbQ8/FXr5tCTLII1I86ZnMVd9PviKZ+ezpEM07wdq6L8arEsX7ZSNFxWZomiEEja3D8p1flfdBLxJ0BhMD1x8dCYF4ViNCpB8tYhhQVAfzxOGaiwmEYWB+RXnJgaZp92hGFAK9c4vESEMpl1YF96i0K3sF6smDfYQrMtfKhM+Pe4onbro4kqXzjgL32kq91XxKcSORyJr3NNV3wdryM2gwMXIzlw5r5KoE+U2/bw2dKED9uhKrFc
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(346002)(136003)(366004)(451199021)(86362001)(8676002)(8936002)(6486002)(52116002)(66946007)(66476007)(66556008)(4326008)(5660300002)(36756003)(38100700002)(38350700002)(478600001)(83380400001)(110136005)(2616005)(26005)(41300700001)(2906002)(186003)(316002)(6512007)(6506007)(1076003)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YIFOUjaqWaDji8kICHwLtiCrIfKMPgwkAi9g+HN3vwqvVWpK6d31K2ChuaT2?=
+ =?us-ascii?Q?zD52UyvapBT7DKjZYzyAWVfcafbqPEDx1wyfQ3eVLuWd+V/daLpGu85AYzeD?=
+ =?us-ascii?Q?qhFr+uO/RXOR57trCezKrA5Tom776w/vXFJo6KAVWyZLNYiMs/7fWA89zYXt?=
+ =?us-ascii?Q?B2iTqFXH6l6jE7RT7viGPdyN7zkFs1GbD2AAfNOFpD81rFUFRirPX7iE4lvb?=
+ =?us-ascii?Q?WkFfLZRhY9XGVB2B5O7p9SO2jB860lAga4lIbvkkP+ZH1Ctiln1FsBoIPE0t?=
+ =?us-ascii?Q?gWslvRuCW4tcxl+V03UrfNsdclIFx0YbonIfLS8j1AVJVFoWOmlkhJGu2TWl?=
+ =?us-ascii?Q?GqdQmi7maMhiqNUdG7U65R9GSp4L2vsjwEkAWGHbOxIZg3xo4uw+IGg1PQsq?=
+ =?us-ascii?Q?kopdTnNr5qtEnmJEz1y+cUsqSydAdd3DW/hevf4ezXGK9B1FLV1XEiYB7qda?=
+ =?us-ascii?Q?ByMUj4xAAVLWLe5yod2+mkNzyKXoGomKGMs7YpQUiXhbIhtXDkMsQtRyuAhA?=
+ =?us-ascii?Q?+46Pdwxp84Yr8eG+EeQp5xkpYczOxpkz7pMV6VX2qvSYr7Uqftli2SBVYGOq?=
+ =?us-ascii?Q?FHSCdggrtJGsQ24ygBl7pEKTJEP1dVyOA0lByEBefFA2hYv+D9gzvvnO92BP?=
+ =?us-ascii?Q?rZ8BMWHXTjrP5qIWuTdAGUGvSdyY4eX7CqfttYK2bdQIl3ODW3gGR6FoB90k?=
+ =?us-ascii?Q?TaWqKvorncHazcVJrPGAuWP/OllSUFWM/X2bHas6/u9Ccm1tKzGMZiEf4rHM?=
+ =?us-ascii?Q?CdROjU86Q1qh1PSf4mNkcLtNy17JlI+jdfsU47ovY5Cjk+uIWMcUJLT9I6ki?=
+ =?us-ascii?Q?13a+X1qLdl51BV1jeJmtx6RnWi1gvqiaNT2lQNCe+lL3WhFI7+ITwLWCyBwG?=
+ =?us-ascii?Q?XLt0tV9t+vTsqjEw6haQbV9W7H4SVoLI5b4ANwaAX96cZnXPxLMtAf4gbb4J?=
+ =?us-ascii?Q?w4e7awaEhmBDel+4Vny64qQ+nKUndO3PfPDo5o9VIiOywM19zS9CtWe6jyVj?=
+ =?us-ascii?Q?Uiq1/4WoFtJ079eldTR59v/cxklRYf0kIGY9Ht20dc9kSiWZuN0J9yU0VQ07?=
+ =?us-ascii?Q?wpNP3quEqMAOwx19oOwGL6tSCA+6QMgGZtoTW9IgxnZgK/VEP5190P23AP/0?=
+ =?us-ascii?Q?AZ3N+spFfP825XzDgfABmCCsmNvelAyVaq/TUM4VADPDQYhyvf9mKI0goBk0?=
+ =?us-ascii?Q?Lmml6/3kYV0IVIMNJm1qCRreQInqISTOHn+lY3K7LhAwn4zL9/86Cr0ptTLm?=
+ =?us-ascii?Q?TaJGqsuwD/7RfMz/BtrDmSaL1BbvyxFwM9qEVvE3RKrWJLuM4ibMZe26/b7Q?=
+ =?us-ascii?Q?FdN9nMiF5fQZhk0sg7DryaFCaml04TvbKo2K2hLAGh0NJpZjmrFRvifGHbMo?=
+ =?us-ascii?Q?GcP9jJSVxfiYrP7Z4i3vTbfriQ1DkymNk+z0bwtAZcDe/CxsHMBvhTS2tIOo?=
+ =?us-ascii?Q?mv5SdmttUaOOYz8Kqx87p8Nj855i6ubTwmZn4MB+lyhRxuMIZmFmYi005cTY?=
+ =?us-ascii?Q?yR4CzC41ywNujJl7G/G4u4pVtMIUTz/vcT0ie5DXhe1QU0KVnhY3eG6oGuUi?=
+ =?us-ascii?Q?HYxqyNCEiC5juiDRxxkc7mX6VqIrT0rJR3isp3Nf?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ccbf2e5b-6f21-41dd-1d98-08db4e2693cd
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2023 11:39:40.3248
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5UNTw9ksArxb6hFcqmlsYBk4PQKpv09WRYwz29RJkHoRAcmXf8/eJ2UJAGa0AtW5r9VNVj8hPLOrpIqSQwrI4Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4267
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 6 May 2023 at 14:09, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
->
-> On Fri, May 05, 2023 at 12:29:54PM +0300, Dmitry Baryshkov wrote:
-> > On Fri, 5 May 2023 at 11:23, Varadarajan Narayanan
-> > <quic_varada@quicinc.com> wrote:
-> > >
-> > > Add LDO regulator node
-> >
-> > As this LDO is provided by the PMIC, it would be nice to know why it
-> > is modelled as an always-on regulator instead of the proper PMIC
-> > regulator. Up to now we were doing this only for the outstanding power
-> > rails like CX/MX or EBI.
->
-> These are always ON because USB phy doesn't support power
-> collapse, and there is a chance that other IP blocks might be
-> sharing the rail.
+For judging the inode flag state, the inode lock must be held.
+BTW, add compressd file check and to avoid 'if' nesting.
 
-You are describing the software side here. From the hardware point of
-view, it is an I2C regulator, which is probably also exported as an
-SMD_RPM regulator. Unless you have a good reason not to do so, there
-should be a node under rpm-requests, which describes mp5496 regulators
-exported via RPM. then USB should refer to those regulators.
+Fixes: 4dd6f977fc77 ("f2fs: support an ioctl to move a range of data blocks")
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/file.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
->
-> Thanks
-> Varada
->
-> > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > ---
-> > >  Changes in v10:
-> > >         - Add LDO regulator node
-> > > ---
-> > >  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 7 +++++++
-> > >  1 file changed, 7 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> > > index bdc1434..1f5d14f 100644
-> > > --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> > > +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> > > @@ -60,6 +60,13 @@
-> > >                         regulator-min-microvolt = <725000>;
-> > >                         regulator-max-microvolt = <1075000>;
-> > >                 };
-> > > +
-> > > +               mp5496_l2: l2 {
-> > > +                       regulator-min-microvolt = <1800000>;
-> > > +                       regulator-max-microvolt = <1800000>;
-> > > +                       regulator-boot-on;
-> > > +                       regulator-always-on;
-> > > +               };
-> > >         };
-> > >  };
-> > >
-> > > --
-> > > 2.7.4
-> > >
-> >
-> >
-> > --
-> > With best wishes
-> > Dmitry
-
-
-
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 78aa8cff4b41..850e745ecf88 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -2790,9 +2790,6 @@ static int f2fs_move_file_range(struct file *file_in, loff_t pos_in,
+ 	if (!S_ISREG(src->i_mode) || !S_ISREG(dst->i_mode))
+ 		return -EINVAL;
+ 
+-	if (IS_ENCRYPTED(src) || IS_ENCRYPTED(dst))
+-		return -EOPNOTSUPP;
+-
+ 	if (pos_out < 0 || pos_in < 0)
+ 		return -EINVAL;
+ 
+@@ -2804,12 +2801,17 @@ static int f2fs_move_file_range(struct file *file_in, loff_t pos_in,
+ 	}
+ 
+ 	inode_lock(src);
+-	if (src != dst) {
++	if (src != dst && !inode_trylock(dst)) {
+ 		ret = -EBUSY;
+-		if (!inode_trylock(dst))
+-			goto out;
++		goto out;
+ 	}
+ 
++	if (IS_ENCRYPTED(src) || IS_ENCRYPTED(dst))
++		return -EOPNOTSUPP;
++
++	if (f2fs_compressed_file(src) || f2fs_compressed_file(dst))
++		return -EOPNOTSUPP;
++
+ 	ret = -EINVAL;
+ 	if (pos_in + len > src->i_size || pos_in + len < pos_in)
+ 		goto out_unlock;
 -- 
-With best wishes
-Dmitry
+2.39.0
+
