@@ -2,97 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37DD6F8DF0
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 04:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495ED6F8DFF
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 04:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjEFCWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 22:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
+        id S232431AbjEFC0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 22:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjEFCWB (ORCPT
+        with ESMTP id S231278AbjEFC0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 22:22:01 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693645BBF;
-        Fri,  5 May 2023 19:22:00 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1aae5c2423dso23935245ad.3;
-        Fri, 05 May 2023 19:22:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683339720; x=1685931720;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+FxmBS7vEJe0OVAA86LRv6d0E9ry7bbdeZBgxQdXBzQ=;
-        b=a/mMHM6bkbRka4DJw8dmRS67IB4IYDi9APMMCfUbNLTVHPJxts6AyKMB0KPil1+pPQ
-         BLLQCOYVf2AlrPRxYBX/Mi/Cc6A5chFuacfqZv1qtCJPCdnWwiy0xrbp1cz6Wf4EC8T6
-         eHgQjlI/ZeK16qLQbEajbThyBXZFqX/PnkHb01Ctr0XMqL46u9XPQQP7j0jwnGmI51XD
-         bkILdJQmyzNZVV8w/tWamUrnigpFlackGhEGabuV4uOvHcuHaFU8EKkh5uSlk8F8O009
-         uTnYchGFcPFsv0GYnEzyO/rucJO1pgbvN0iH7PQa7Nx4YyDkHRoiKS2b4pEej0SRRz3E
-         T87g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683339720; x=1685931720;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+FxmBS7vEJe0OVAA86LRv6d0E9ry7bbdeZBgxQdXBzQ=;
-        b=CJmRdARuMTEhO4LeVVauPvt7j562hZWGW2I7b2gNI3ArwbMTdovNs3c68wKM3mtumR
-         Vvl5AjZKAwAItDzuOwS0MBHjqZthJy7azPiD5Pa9OUWmcRkainZTTi6AU3BkIDNvu+Tp
-         342MFogNfytyTLChK5ooF/p9eka/2v1JEhJ3wE20fOuwoS49X6Kl1yrHWICUQOdOTV/2
-         zE0KMdbRTXzpPM7r4n8weRhIICk9EgyEIfNSKtJkRGoOHmydD8IHEoe9X7YrQRE2IIX+
-         m02eYqWwVdlfAsRgVv6uqkW8ZWulZYB6iJtlipiHEDd/tcwWy11r35XrbdhId94OE2cz
-         KOHA==
-X-Gm-Message-State: AC+VfDzjqyuA4VhUcnmpGzmCKYdN863IBW2hLMs/CZUpe0VcA15teGFF
-        BnlhTuy482nZIHLkSICNBC4gCkp/IZoZ8w==
-X-Google-Smtp-Source: ACHHUZ44ar1a/lCGZfPX03Vc9Q5AlYWOIMXh+tJx1xkSRn6+Q37HVXsuWb2aXf7zP1UH8PcxZm4eTg==
-X-Received: by 2002:a17:902:d4c1:b0:1a5:167f:620f with SMTP id o1-20020a170902d4c100b001a5167f620fmr2714178plg.15.1683339719750;
-        Fri, 05 May 2023 19:21:59 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-14.three.co.id. [180.214.232.14])
-        by smtp.gmail.com with ESMTPSA id x15-20020a170902820f00b001aaefe48b93sm2372304pln.295.2023.05.05.19.21.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 19:21:59 -0700 (PDT)
-Message-ID: <8f5aee17-510c-ed1b-c854-e6dc00c7095a@gmail.com>
-Date:   Sat, 6 May 2023 09:21:49 +0700
+        Fri, 5 May 2023 22:26:01 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5419976AA;
+        Fri,  5 May 2023 19:25:42 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5C2937F8A;
+        Sat,  6 May 2023 10:25:35 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 6 May
+ 2023 10:25:35 +0800
+Received: from [192.168.60.114] (180.164.60.184) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 6 May
+ 2023 10:25:34 +0800
+Message-ID: <84b67a9f-d6d3-f584-3160-8edccc6bef83@starfivetech.com>
+Date:   Sat, 6 May 2023 10:25:34 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 1/3] MAINTAINERS: Drop DC395x list and site
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Linux SCSI <linux-scsi@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>,
-        Oliver Neukum <oliver@neukum.org>,
-        Ali Akcaagac <aliakc@web.de>,
-        Jamie Lenehan <lenehan@twibble.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-References: <20230505082704.16228-1-bagasdotme@gmail.com>
- <20230505082704.16228-2-bagasdotme@gmail.com>
- <b86a4837-3c31-4bf4-aff3-67abd7a4f5f2@kili.mountain>
+Subject: Re: [PATCH v4 0/8] Add StarFive Camera Subsystem driver
 Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <b86a4837-3c31-4bf4-aff3-67abd7a4f5f2@kili.mountain>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        "Todor Tomov" <todor.too@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@collabora.com>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <changhuang.liang@starfivetech.com>
+References: <20230413035541.62129-1-jack.zhu@starfivetech.com>
+ <14c06503-621f-2477-7b15-b17f1890ecfe@starfivetech.com>
+ <7bd29805-11e7-68ee-aa47-68bae2a2fb38@starfivetech.com>
+ <925bf170-bb54-b427-976a-87e0dca230da@linaro.org>
+ <817b8919-e9dd-cf2a-41e0-9b50747ab4cf@starfivetech.com>
+ <ef7ab2dd-8f6c-a7f2-7aa6-90fe1caa96b4@linaro.org>
+From:   Jack Zhu <jack.zhu@starfivetech.com>
+In-Reply-To: <ef7ab2dd-8f6c-a7f2-7aa6-90fe1caa96b4@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/23 16:16, Dan Carpenter wrote:
-> Other people do this too, but is there really any reason to include
-> the linux-scsi@vger.kernel.org list?  drivers/scsi/ will already
-> include it.
+
+
+On 2023/5/5 20:24, Krzysztof Kozlowski wrote:
+> On 05/05/2023 10:14, Jack Zhu wrote:
+>> 
+>> 
+>> On 2023/5/5 14:40, Krzysztof Kozlowski wrote:
+>>> On 05/05/2023 07:57, Jack Zhu wrote:
+>>>>
+>>>>
+>>>> On 2023/4/24 19:19, Jack Zhu wrote:
+>>>>>
+>>>>>
+>>>>> On 2023/4/13 11:55, Jack Zhu wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>> This patch series adds support for the StarFive Camera Subsystem
+>>>>>> found on StarFive JH7110 SoC.
+>>>>>>
+>>>>>> The driver implements V4L2, Media controller and V4L2 subdev interfaces.
+>>>>>> Camera sensor using V4L2 subdev interface in the kernel is supported.
+>>>>>>
+>>>>>> The driver is tested on VisionFive V2 board with IMX219 camera sensor.
+>>>>>> GStreamer 1.18.5 with v4l2src plugin is supported.
+>>>>>>
+>>>>>> Changes since v3:
+>>>>>> Patch 1:
+>>>>>> - Modified port@0 and port@1 properties.
+>>>>>> - Extended the port@0 example with appropriate properties.
+>>>>>> - Added 'port@0' for 'required'
+>>>>>> Patch 2:
+>>>>>> - Modified spelling errors.
+>>>>>> Patch 3:
+>>>>>> - Merged patch 5 into the patch with an explanation for compatible in
+>>>>>>   commit msg.
+>>>>>> Patch 6:
+>>>>>> - Asserted pixel_rst[i] reset in the loop after the err_disable_pixclk
+>>>>>>   label.
+>>>>>> - Modified Code Style for getting sys_rst and p_rst.
+>>>>>> - Renamed clk_name to name and modified the relevant code.
+>>>>>> Patch 9:
+>>>>>> - Added static for stfcamss_get_mem_res function.
+>>>>>> - Added static for isp_close function.
+>>>>>> - Fixed implicit conversion warning for stf_vin_map_isp_pad function.
+>>>>>> - Dropped unused variables.
+>>>>>>
+>>>>>>   v3: https://lore.kernel.org/all/20230331121826.96973-1-jack.zhu@starfivetech.com/
+>>>>>>
+>>>>>
+>>>>> Hello everyone,
+>>>>>
+>>>>> From the current review status, the patches related to the CSI module
+>>>>> have 'reviewed-by' tags. I would like to know if it is okay to add
+>>>>> patches 1-5 from this series to a PR first.
+>>>>>
+>>>>> Thank you!
+>>>>>
+>>>>> Jack
+>>>>>
+>>>>
+>>>> Hello Mauro, Laurent, Maxime, Rob, Krzysztof, Robert, Todor and Philipp,
+>>>>
+>>>> Can you give me some suggestions and comments on the previous request
+>>>> to commit CSI related patches first? Thank you for your time.
+>>>
+>>> You received very specific feedback, so know you decided to ignore it?
+>>>
+>>> No, implement what you were asked for.
+>>>
+>> 
+>> Hi Krzysztof,
+>> 
+>> Thank you for your comments.
+>> 
+>> I am talking about CSI-related patches 1-5, not including the patches
+>> 6-8. The CSI module is a relatively functionally independent hardware
+>> module. The CSI-related patches 1-5 already have 'reviewed-by' tags,
+>> and there are no unprocessed comments left. So, made the previous
+>> request. Please let me know if I understand something wrong.
+> 
+> You pinged also me, so we talk about bindings. You got comments to fix,
+
+Hello Krzysztof,
+
+Sorry, I'm not sure, the 'comments to fix' refers to your comments in
+patch 6?
+
+> so if you are not going to fix them, the patches will not get accepted.
+> 
+>> I don't want to ignore any comments, I will continue to modify the isp
+>> patches 6-8 in subsequent versions according to your comments. The
+>> ISP-related patches are being prepared.
+> 
+> And how are these patches related to me and Rob?
 > 
 
-I prefer to be explicit in this case.
+Yes, there are bindings files related to ISP.
 
--- 
-An old man doll... just what I always wanted! - Clara
+Maybe I need to split the series into two separate series, a CSI
+series(patches 1-5) and an ISP series(patches 6-8). Does this make it
+easier for the CSI patches 1-5 to integrate into the main line?
 
+> Best regards,
+> Krzysztof
+> 
