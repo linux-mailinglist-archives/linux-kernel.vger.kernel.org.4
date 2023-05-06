@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980CB6F8D53
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 03:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713D16F8D55
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 03:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjEFBBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 21:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        id S229751AbjEFBHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 21:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjEFBBJ (ORCPT
+        with ESMTP id S229441AbjEFBG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 21:01:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0814EDC
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 18:01:08 -0700 (PDT)
+        Fri, 5 May 2023 21:06:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124CF10E6
+        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 18:06:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B302641C5
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 01:01:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8B1DC433EF
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 01:01:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A5B6641C7
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 01:06:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB138C433D2
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 01:06:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683334867;
-        bh=Q3itPhUCs9C8rwLmk0xSA05Z3HnEQP/E/Xa+mK368uQ=;
+        s=k20201202; t=1683335209;
+        bh=UEmzadnfn7+/6cZeDjikdevPjT9T7IYVnjcaT9lRak8=;
         h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=qohq5184waisTvURiKc/qTLZtuE10ShoVo0X5ASfso52UABo3CEt3xc9oZQit4Ct0
-         dlcyW5MJgFEToEIUYIeHDD4H8ywU4yExgDSTNKGIyKYx5iZU527edWoh70EcQGBoDf
-         KRoeX99HbB5qveNhwwNip0cWPuwln87tapnVamJmFNK6cwsohYw5jq/n4KB9esQcTQ
-         BcX8ZBOkp8td9jN02aGkg2Etep0er9sDCHh+6KKzYq9R53NmnwV++6e9htY3g1J9Rn
-         73iMMeWGkHsSEIFmwWIIkHZS9DkYHKZ3Bx/W2lUenLbOMKIyNWC+1O8yL55Kp5fa2M
-         hrFN5Wy1yROvQ==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1928860f63eso1605347fac.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 18:01:07 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzZXdecv7yEZDCFfTnX2eKFgLIh/hCV0iFdlcDCCN957W7ftzNg
-        e4qsy5yVO5tR4xTCk9azyVnd2rK+HD13mplhjQE=
-X-Google-Smtp-Source: ACHHUZ4R3+T3mFgQcs1GyVO9GuU4qBBlPzOU6JLDANY67SB91DgOqdAGEej8ejI+9fvVhTUMYfHYw3CRPXix7+PfSmI=
-X-Received: by 2002:a05:6808:b11:b0:38e:e022:7a02 with SMTP id
- s17-20020a0568080b1100b0038ee0227a02mr1300383oij.10.1683334866989; Fri, 05
- May 2023 18:01:06 -0700 (PDT)
+        b=eBR2693Lkf2GJv6J3m5AIrAU1926dHM8NkD6Apkpq/NY+XtfL4g7QFLybBAquY4W7
+         pDMjOg5t6C6lKyiEOI7nMWrFtkZKO3ApD26AcMg7AI35G4eYUPQpHWiKS2O9DJwPw7
+         EN3EQRlc6YZgudWLIINLj68B3JEbwo1QXfytX+J5U5zt94BJsS0N2EJFhEMZ/eXWAt
+         n++JEKoXvE9MlRmAQat9b196ulnToza02G72MBckZ8IgFwyjYtovAGqSx1dmhWUTfM
+         xk4QZmqYdZOQWMBMUrd2ptVdZ6A7GsSPfRQO5D5kFSrWyVxEdqmEel8d15tB0oqfAX
+         GLSjIHp2eiGBg==
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-192adab8f0eso2137655fac.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 18:06:48 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxY2DWOU34QmQWmn8junQjja/EtU+eK7ONM27KAdq2r4duDAwt3
+        Ge+H7lYr+9jwwYTkKTHumzdEyGkNsVvriBtvMq8=
+X-Google-Smtp-Source: ACHHUZ60qg4+wWWnFhmcxT/U2Cqt34csJhDM3qhOq6rpVeCAaIFBJfLe0cRmTbVezoq81ynKjMd825k0hPycTmjtPYg=
+X-Received: by 2002:a05:6870:d895:b0:17e:a21c:8983 with SMTP id
+ dv21-20020a056870d89500b0017ea21c8983mr2109271oab.57.1683335208139; Fri, 05
+ May 2023 18:06:48 -0700 (PDT)
 MIME-Version: 1.0
 Received: by 2002:a8a:981:0:b0:4d3:d9bf:b562 with HTTP; Fri, 5 May 2023
- 18:01:06 -0700 (PDT)
-In-Reply-To: <20230206091815.1687-1-wangdeming@inspur.com>
-References: <20230206091815.1687-1-wangdeming@inspur.com>
+ 18:06:47 -0700 (PDT)
+In-Reply-To: <20221105153135.5975-1-dengshaomin@cdjrlc.com>
+References: <20221105153135.5975-1-dengshaomin@cdjrlc.com>
 From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Sat, 6 May 2023 10:01:06 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd_LnFMEEXWncTA=Y9xbHwh+GmZETM6WBQQ2hqPO6fZuZg@mail.gmail.com>
-Message-ID: <CAKYAXd_LnFMEEXWncTA=Y9xbHwh+GmZETM6WBQQ2hqPO6fZuZg@mail.gmail.com>
-Subject: Re: [PATCH] ntfs: Correct spelling
-To:     Deming Wang <wangdeming@inspur.com>
+Date:   Sat, 6 May 2023 10:06:47 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd9zOgsdsRTLYRxw8B0O25LdsX-Yn6FM8u1LJdpH+tB3eA@mail.gmail.com>
+Message-ID: <CAKYAXd9zOgsdsRTLYRxw8B0O25LdsX-Yn6FM8u1LJdpH+tB3eA@mail.gmail.com>
+Subject: Re: [PATCH] ntfs: Remove unneeded semicolon
+To:     Shaomin Deng <dengshaomin@cdjrlc.com>
 Cc:     anton@tuxera.com, linux-ntfs-dev@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Christian Brauner <brauner@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,8 +65,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-02-06 18:18 GMT+09:00, Deming Wang <wangdeming@inspur.com>:
-> We should use this replace thie.
+2022-11-06 0:31 GMT+09:00, Shaomin Deng <dengshaomin@cdjrlc.com>:
+> Remove the unneeded semicolon after curly braces.
 >
-> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+> Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
 Reviewed-by: Namjae Jeon <linkinjeon@kernel.org>
+
+> ---
+>  fs/ntfs/super.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/ntfs/super.c b/fs/ntfs/super.c
+> index 001f4e053c85..6165fe7d0ac6 100644
+> --- a/fs/ntfs/super.c
+> +++ b/fs/ntfs/super.c
+> @@ -1612,7 +1612,7 @@ static bool load_and_init_attrdef(ntfs_volume *vol)
+>  		memcpy((u8*)vol->attrdef + (index++ << PAGE_SHIFT),
+>  				page_address(page), size);
+>  		ntfs_unmap_page(page);
+> -	};
+> +	}
+>  	if (size == PAGE_SIZE) {
+>  		size = i_size & ~PAGE_MASK;
+>  		if (size)
+> @@ -1681,7 +1681,7 @@ static bool load_and_init_upcase(ntfs_volume *vol)
+>  		memcpy((char*)vol->upcase + (index++ << PAGE_SHIFT),
+>  				page_address(page), size);
+>  		ntfs_unmap_page(page);
+> -	};
+> +	}
+>  	if (size == PAGE_SIZE) {
+>  		size = i_size & ~PAGE_MASK;
+>  		if (size)
+> --
+> 2.35.1
+>
+>
