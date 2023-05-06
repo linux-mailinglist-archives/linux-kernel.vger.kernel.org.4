@@ -2,97 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5916F94D8
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 00:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CBC6F94E4
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 01:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbjEFW7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 18:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35014 "EHLO
+        id S229628AbjEFX1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 19:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjEFW7R (ORCPT
+        with ESMTP id S229446AbjEFX1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 18:59:17 -0400
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2431CFF8;
-        Sat,  6 May 2023 15:59:16 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mx.kolabnow.com (Postfix) with ESMTP id 9F2F714E6;
-        Sun,  7 May 2023 00:59:14 +0200 (CEST)
-Authentication-Results: ext-mx-out002.mykolab.com (amavisd-new);
-        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
-        header.d=kolabnow.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
-        content-transfer-encoding:organization:mime-version:references
-        :in-reply-to:message-id:date:date:subject:subject:from:from
-        :received:received:received; s=dkim20160331; t=1683413954; x=
-        1685228355; bh=IeHcnYGT8x5oIMpt7vaj6WJo5TzDUMMrc5PAh+gHWeM=; b=z
-        fgKWJa8uV1RgS2NdN8w0kuxjfjMP3YHg7U/v8JIyuDfD/k+c7jQNe3WPVAd2+DtN
-        F6wlcewrN+yGmYV+11IjBmpkuQD4Jx/eX7DTg8m5++L2aMbj1YgQroF6VS/TfEb0
-        1K2JESO3ZiBok7mXWJQuZ4PgZYHOlQPBnPNMzZ7dIf1wXklKgZq70BZxxitg5kYs
-        H9x161EE2MMT20+SfYie2r+EJJBgsrvYrl1GkWjNn0yVzYlwDR02UhIsz+PjcPhe
-        D5pnm+5qxp2ZOW9plfduf/F57eISCy5H8TpdX6pAS45IJ738f60oCZABOZTA0EvX
-        9mq6ctDRi9GFYXdwA8IF5VrbRa+tSUjGX6beCNOjllSohUVYzrQZPayI9twCUEdH
-        SqDQHLSV+naAWwRsNFYOsz2B1u4/AAJkr46TfageRkp09IpTWsz6eMbqwBYP3ZxM
-        SBQHadbyJYNOseYKJUqPO4Xs9Hqx9LUgny+LD/yBkJdOLnz3NLlebQY9Duk43Cwh
-        YoHC0vKr6NWg4LibETsn64phiQHuxbOGCTMrYAS5AIFUM8mWX/a7P/UToPONNOAi
-        sGs4FJJCS9r6sGd8NQ2FggLv5FcIkLfHAWsfiJ4R3wq8UnETe9VSoWwgrFcbVKz2
-        6PUvNV5IstS7IEH1ceM/5AfSezKPYfUqC8VzXBKcdU=
-X-Virus-Scanned: amavisd-new at mykolab.com
-X-Spam-Score: -1.9
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from mx.kolabnow.com ([127.0.0.1])
-        by localhost (ext-mx-out002.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id RXbxy0783O9m; Sun,  7 May 2023 00:59:14 +0200 (CEST)
-Received: from int-mx001.mykolab.com (unknown [10.9.13.1])
-        by mx.kolabnow.com (Postfix) with ESMTPS id 975D9821;
-        Sun,  7 May 2023 00:59:13 +0200 (CEST)
-Received: from ext-subm002.mykolab.com (unknown [10.9.6.2])
-        by int-mx001.mykolab.com (Postfix) with ESMTPS id 02698D202;
-        Sun,  7 May 2023 00:59:12 +0200 (CEST)
-From:   alison@she-devel.com
-To:     johan@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alison@she-devel.com,
-        achaiken@aurora.tech
-Subject: [PATCH 2/2] dt-bindings: gnss: Add U-Blox Zed-F9
-Date:   Sat,  6 May 2023 15:58:49 -0700
-Message-Id: <20230506225849.2752103-3-alison@she-devel.com>
-In-Reply-To: <20230506225849.2752103-1-alison@she-devel.com>
-References: <20230506225849.2752103-1-alison@she-devel.com>
+        Sat, 6 May 2023 19:27:03 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5660B3C10;
+        Sat,  6 May 2023 16:27:02 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3063208beedso2998348f8f.1;
+        Sat, 06 May 2023 16:27:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683415621; x=1686007621;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y2FeWgpYGVgw05x9NXcehpvxe6YOrGKp5PKb2y+cAxE=;
+        b=aclnyCppp/OmsCpCe1DSKh3rn0yYLZ2xnsF55M4+R7iOOYjFgjr53u1m2Z9zIrGbzX
+         NlAByOYA2QZ9Jmsqw7IgqtddayGPyJCz6vv9QczyU1B/WEl7NJ+VPYK1yV6h5xgq1SCM
+         kHozxKV8JynSHihZodBoR5voiy2okjHCZu6s6/H3QSag40kw+gCfD71GUuAr/pusuYtY
+         yVJgaKWGyrKKjG7wiSbQr3z6yjvErhE5veGYqSQ8m05r0xpBjBupIIZjPcn/OzF+I1NQ
+         iUhN7u+g2qiSZUfRcvzh31anBjVA2xOcsFp3bmJw/OIQ16IBHFZn+z6tTiK/OG0bNKIp
+         3Kjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683415621; x=1686007621;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y2FeWgpYGVgw05x9NXcehpvxe6YOrGKp5PKb2y+cAxE=;
+        b=XegDF3/5McwNKtef7Z1x8v1bciIV1oCVoJSCN0B4l1I8BJslo5UgMoN4oCJULMxkK9
+         IH4P2nSny8jOwswY5OgPFP/9LKd8tpNouRchwNZsbO1FIjbATLPEXnl28OHJze5d6H3P
+         7h5OReQ6C39wNqyJq74DmxPaAfu08c7RA9PphIo6ShCqkk/mvF68aNU+9XU73Egucfnz
+         d51ob6M8ZJezVaUivb7WJUQ0AvjPn6Xp09nJmIOkQT00R4Gpx8WmZsg7gpaNbmsSGqle
+         LyIOkZ2YpoXmjHLQTH6k3zJCVDODkP8s05qHHA5bA4TndDfZKLC6CFm8qa1OUAltN4o4
+         37LA==
+X-Gm-Message-State: AC+VfDzFQbPaeaIIVvYnVgZy9iyQ4iz7zkYf9tY3e3wtTlS06efuTb9Q
+        nc/rl+ly6Mn/7/LwvPQvjXg=
+X-Google-Smtp-Source: ACHHUZ6aXW+eEEp0ETGPH/k3zEH3JlzcT1+1ZrNspVjJp7yeJW1KVWql3w4Lr8zfryZlzHKsOOYuUg==
+X-Received: by 2002:adf:fccb:0:b0:306:3899:ccbf with SMTP id f11-20020adffccb000000b003063899ccbfmr4455889wrs.14.1683415620621;
+        Sat, 06 May 2023 16:27:00 -0700 (PDT)
+Received: from localhost.localdomain ([176.221.215.212])
+        by smtp.gmail.com with ESMTPSA id p4-20020a1c7404000000b003f1739a0116sm12098655wmc.33.2023.05.06.16.26.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 May 2023 16:27:00 -0700 (PDT)
+From:   Maksim Kiselev <bigunclemax@gmail.com>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Icenowy Zheng <icenowy@aosc.io>,
+        Maksim Kiselev <bigunclemax@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v3 0/5] Allwinner R329/D1/R528/T113s SPI support
+Date:   Sun,  7 May 2023 02:26:03 +0300
+Message-Id: <20230506232616.1792109-1-bigunclemax@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Organization: Aurora Innovation
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alison Chaiken <achaiken@aurora.tech>
+This series is attempt to revive previous work to add support for SPI
+controller which is used in newest Allwinner's SOCs R329/D1/R528/T113s
+https://lore.kernel.org/lkml/BYAPR20MB2472E8B10BFEF75E7950BBC0BCF79@BYAPR20MB2472.namprd20.prod.outlook.com/
 
-Add support for the U-Blox Zed-F9P GNSS device.
+v3:
+  - fixed effective_speed_hz setup and added SPI sample mode configuration
+  - merged DT bindings for R329 and D1 SPI controllers
+  - added SPI_DBI node to sunxi-d1s-t113.dtsi
 
-Signed-off-by: Alison Chaiken <achaiken@aurora.tech>
----
- Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml | 1 +
- 1 file changed, 1 insertion(+)
+v2:
+  - added DT bindings and node for D1/T113s
 
-diff --git a/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml b/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
-index 4835a280b3bf..86b65d4d9266 100644
---- a/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
-+++ b/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
-@@ -21,6 +21,7 @@ properties:
-       - u-blox,neo-6m
-       - u-blox,neo-8
-       - u-blox,neo-m8
-+      - u-blox,zed-f9p
- 
-   reg:
-     description: >
+Icenowy Zheng (1):
+  spi: sun6i: change OF match data to a struct
+
+Maksim Kiselev (4):
+  dt-bindings: spi: sun6i: add DT bindings for Allwinner
+    R329/D1/R528/T113s SPI
+  spi: sun6i: add quirk for in-controller clock divider
+  spi: sun6i: add support for R329/D1/R528/T113s SPI controllers
+  riscv: dts: allwinner: d1: Add SPI controllers node
+
+ .../bindings/spi/allwinner,sun6i-a31-spi.yaml |   7 +
+ .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    |  37 +++++
+ drivers/spi/spi-sun6i.c                       | 132 ++++++++++++------
+ 3 files changed, 136 insertions(+), 40 deletions(-)
+
 -- 
 2.39.2
 
