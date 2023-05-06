@@ -2,138 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578086F9169
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 13:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7806F9172
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 13:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbjEFLJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 07:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
+        id S231978AbjEFLR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 07:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjEFLJt (ORCPT
+        with ESMTP id S231539AbjEFLRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 07:09:49 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D59930FA;
-        Sat,  6 May 2023 04:09:45 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 346B9XSc011530;
-        Sat, 6 May 2023 11:09:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=bFOvm6d2WAwvct5dnT+/MXYvREcJO/aMBHCrcd8Vu7I=;
- b=FT1s9LQrnqBxPatbfRxr5jeRjbYs0oo/pimEFhjSz1s7GfGfXsb1ux0c5CLqv3v7wmjF
- wHU2rFBBiPc+zNW2Om43lNAjUJ8odQg9GCeVk01rkt1FQAsiPPzcWp1pPiHGD8tRvohy
- zdYXy95k1uW6DgXYibfGwQ6ToBsv6KepuQK09Z1096wnA0ODlbx1EsyAkxnMDOHclfTT
- 1gakmC6SL96Gl1i146pFr3GOZv0a5yXOZR386RsMmiXxzfedjIcS1hlAhnPYwmJxChdw
- Q5lpIO1efWTWLwVA+dDnBkhgvE9aSEKwP/UZAr/uuumW3YZQXGvN0a6S2rp05LPMLkq4 pw== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qdega0es1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 06 May 2023 11:09:32 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 346B9Vbu020326
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 6 May 2023 11:09:31 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Sat, 6 May 2023 04:09:26 -0700
-Date:   Sat, 6 May 2023 16:39:22 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v10 8/9] arm64: dts: qcom: ipq9574: Add LDO regulator node
-Message-ID: <20230506110918.GC10918@varda-linux.qualcomm.com>
-References: <cover.1683183860.git.quic_varada@quicinc.com>
- <8894bf2c44eaf4959c7a1966b66229e6cf5cda96.1683183860.git.quic_varada@quicinc.com>
- <CAA8EJppvj2nzqwdsC+Xct4cJg2-_yPpiGDELjHJG4HyAH3zGMA@mail.gmail.com>
+        Sat, 6 May 2023 07:17:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61BE6E8F
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 04:16:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683371798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=yca3Gg7ytayCiDGhSp4C5p2xO7St49hDWqj6wZA0jQo=;
+        b=hJYEeTpqn7q2FmICnbpBsHzMjtt9Jcup60IZ7JUSyfaDg9UZ/YkqstBQYZ3x/y1c7VBk5l
+        73wQM0AiV63pNVjLabZPVJGLDEXXIDY5NrjX3HOB34OiwfeH0CqQmVac4Zoki0bstoFp4Q
+        HFDOMkAvbsiP2j5l95BsehNMhdfGC00=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-369-vBMkYY6UNqqdgoYbJDLgQQ-1; Sat, 06 May 2023 07:16:34 -0400
+X-MC-Unique: vBMkYY6UNqqdgoYbJDLgQQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 77A3C185A78B;
+        Sat,  6 May 2023 11:16:34 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-46.pek2.redhat.com [10.72.12.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 657C52166B31;
+        Sat,  6 May 2023 11:16:31 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, schnelle@linux.ibm.com,
+        linux-s390@vger.kernel.org, Baoquan He <bhe@redhat.com>
+Subject: [PATCH RESEND 0/2] Make PCMCIA and QCOM_HIDMA depend on HAS_IOMEM
+Date:   Sat,  6 May 2023 19:16:26 +0800
+Message-Id: <20230506111628.712316-1-bhe@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAA8EJppvj2nzqwdsC+Xct4cJg2-_yPpiGDELjHJG4HyAH3zGMA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: O7vbE5WDZtvf-sGePS9Vjkneo8pkuFva
-X-Proofpoint-ORIG-GUID: O7vbE5WDZtvf-sGePS9Vjkneo8pkuFva
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-06_07,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 phishscore=0 clxscore=1015 adultscore=0 bulkscore=0
- mlxlogscore=825 spamscore=0 suspectscore=0 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305060085
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 12:29:54PM +0300, Dmitry Baryshkov wrote:
-> On Fri, 5 May 2023 at 11:23, Varadarajan Narayanan
-> <quic_varada@quicinc.com> wrote:
-> >
-> > Add LDO regulator node
->
-> As this LDO is provided by the PMIC, it would be nice to know why it
-> is modelled as an always-on regulator instead of the proper PMIC
-> regulator. Up to now we were doing this only for the outstanding power
-> rails like CX/MX or EBI.
+This is suggested by Niklas when he reviewed patches related to s390
+part:
+https://lore.kernel.org/all/d78edb587ecda0aa09ba80446d0f1883e391996d.camel@linux.ibm.com/T/#u
 
-These are always ON because USB phy doesn't support power
-collapse, and there is a chance that other IP blocks might be
-sharing the rail.
+v1 link:
+https://lore.kernel.org/all/20230216073403.451455-1-bhe@redhat.com/T/#u
 
-Thanks
-Varada
+This resend v1 with Niklas and Arnd's ack tags added.
 
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> >  Changes in v10:
-> >         - Add LDO regulator node
-> > ---
-> >  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> > index bdc1434..1f5d14f 100644
-> > --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> > +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> > @@ -60,6 +60,13 @@
-> >                         regulator-min-microvolt = <725000>;
-> >                         regulator-max-microvolt = <1075000>;
-> >                 };
-> > +
-> > +               mp5496_l2: l2 {
-> > +                       regulator-min-microvolt = <1800000>;
-> > +                       regulator-max-microvolt = <1800000>;
-> > +                       regulator-boot-on;
-> > +                       regulator-always-on;
-> > +               };
-> >         };
-> >  };
-> >
-> > --
-> > 2.7.4
-> >
->
->
-> --
-> With best wishes
-> Dmitry
+
+Baoquan He (2):
+  pcmcia : make PCMCIA depend on HAS_IOMEM
+  dmaengine: make QCOM_HIDMA depend on HAS_IOMEM
+
+ drivers/dma/qcom/Kconfig | 1 +
+ drivers/pcmcia/Kconfig   | 1 +
+ 2 files changed, 2 insertions(+)
+
+-- 
+2.34.1
+
