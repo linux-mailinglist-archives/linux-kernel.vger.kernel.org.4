@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5FF6F902E
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D666F9031
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbjEFHdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 03:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39026 "EHLO
+        id S231555AbjEFHeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 03:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjEFHdR (ORCPT
+        with ESMTP id S231683AbjEFHd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 03:33:17 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0BE12085;
-        Sat,  6 May 2023 00:32:44 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f4000ec6ecso26353205e9.0;
-        Sat, 06 May 2023 00:32:44 -0700 (PDT)
+        Sat, 6 May 2023 03:33:26 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904E89008;
+        Sat,  6 May 2023 00:32:56 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-307664010fdso2164155f8f.0;
+        Sat, 06 May 2023 00:32:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683358362; x=1685950362;
+        d=gmail.com; s=20221208; t=1683358373; x=1685950373;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=J+gJSA9KlwYKmHRtBzH4uVO77NzvF1saoblSPNiiNsM=;
-        b=qA6gUHbwstdpIjn8F6SxFuw2gF8TnBRl6Utbnn5nKnIN1dc6yiW4Kggxs98iH2B2TI
-         LIgMeQP0wpeR8uxOcHWEjOqO77jW8dOatD34+yk+VMpZcpGU/1coDkwpM1qXi5NcoaPw
-         VfLOVfsZUEF2u+BG3NieHGrpjmKzmDwjn7mGfjfV8IVOChpF1/rxMRj4Gm3vY908feCA
-         rl3hcqWY++Wx1lJjkJXwE+yzZMH/9xGkNTcbxMjLZUwflRdT/E70DUE1HsaQ2vO3NuFn
-         i3LoscS9nH6gBh0ONq9B5djETjhbT62hU/7C53l3PWjKXHVH3ELC4cu4Ibnav2HpyVa6
-         wN6A==
+        bh=YWuJ3928FeRTXQHnTSMxeQkrFwzW1lu8cWO5/HghD9g=;
+        b=SxlItSYNZ/2N62zQ8HfucNmvZcoo/BQ4uyVe4rxcCiyML65I125OynPbPBNPH3zYiL
+         yPg6jxtKxtCPSdyVoOkztDZ6/RMNvOlkAnO1EREyP9+eXaoqHxfsetThSDFthHdWeddJ
+         l+14hEIcR9ZJtg3tZQ+QFVU75bRNgHcNwSUCH5EvYzUbTNodGUQkLh3Ai/bUzhN/WG15
+         uL23qvhTXUo+Iq5qNsZG2H/70+M9qBOi6XH3v4A9TsebybJJiezSTnqM2WqLRqCC8opk
+         wId8FaN/uvkZ7k8Lq//3xBclUyATUr0Mc/VPhlvR/1YcMw6ryBp8342rOZQ8VTdymWGv
+         22dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683358362; x=1685950362;
+        d=1e100.net; s=20221208; t=1683358373; x=1685950373;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=J+gJSA9KlwYKmHRtBzH4uVO77NzvF1saoblSPNiiNsM=;
-        b=P+hhlNwYSeihmVGI2aIksHfnoHf6JBmOJNFbZQXu0jS7iJkLEii3sGSsjVk7UFVn4E
-         QwQPV34gUwFwlcgQxbDKRHqCP3FZ0kNSd4RZ7SCzHpySI3C9fFGmc3D1Dc4LyngMN0uM
-         ZJFCUo8U6/1D8TXijsIQe2FtWYx+FqgUmhzD501pZxoPqfL5MG1iOb/5pNOZkZEzzD+z
-         EXunPKTeX9oS42nFQPitKLYg7NfjIVx4wHRWdM6XlNT09GYavQefbV+1gVP11dPwevDP
-         axNWaeKlqv3L/Jycx+fvBsvB6Oqrw0s0gFcODTirKkXVtE5TDMZkKd4WVjDS/gUkovhC
-         CGyw==
-X-Gm-Message-State: AC+VfDxBjmU0BJG88VcAaorFDuOQBsNl5hhzG2rAAgs+8a7pO3XyrzzR
-        h+ATCgMSVPblsLEfpvZar+c=
-X-Google-Smtp-Source: ACHHUZ6VgW5RfMKlfXefD5nobAzpG2CP/3myjrgVEXnND0iEFu+mWT1BCJgrUUE+j5IM/f/vxmW0fg==
-X-Received: by 2002:a7b:c8c3:0:b0:3f1:8aaa:c212 with SMTP id f3-20020a7bc8c3000000b003f18aaac212mr2828550wml.33.1683358362207;
-        Sat, 06 May 2023 00:32:42 -0700 (PDT)
+        bh=YWuJ3928FeRTXQHnTSMxeQkrFwzW1lu8cWO5/HghD9g=;
+        b=EducXnx5PhOPYrtnHyi30YBIi5LQ2zUTRlUCc7UwYOrnfrE4WiAKHm220ZL+DG8phc
+         yGha+szFl5DidgVyqZipCyIdDYS+b9ZS8vBJkji8W7jekxPYu2eR7rZkOkBHR00zlQUp
+         VJ6I8MU9C5LvUZiYomlWxLQ5D/l5ABkDkBMCwo1AQ9sIK4zWiJNPuYZsqlKfTWwEKDR3
+         pJefHQpKIGQwOtjYimTMJbKSnzf8c0Pdf0TMp7ItkuSvVk16tu/o1c2JgIiGIpWqNHNs
+         6X3Y5FTGVXdyXCSdj8zmGXEvepG74dVDl+IzgneKhtysEt2NWzUobjTMae3cXjtU4Yc4
+         sJEg==
+X-Gm-Message-State: AC+VfDycWmB3jedBdWy6OPxKpCUvHeSu4dbEaDYusU1WPAV/YVTIUyQc
+        L/S5rhl2wasVJXDPEBgvhmg=
+X-Google-Smtp-Source: ACHHUZ4CkzM5IntmGzc8H9/kN5AIgGpbIpiHnLmq347VIXPzfjwWlxjDpZCmmsWECMktlC6y4X8xEw==
+X-Received: by 2002:adf:f552:0:b0:306:772:5c2e with SMTP id j18-20020adff552000000b0030607725c2emr2669948wrp.70.1683358372892;
+        Sat, 06 May 2023 00:32:52 -0700 (PDT)
 Received: from localhost.localdomain ([176.221.215.212])
-        by smtp.gmail.com with ESMTPSA id q14-20020a7bce8e000000b003f182a10106sm10071944wmj.8.2023.05.06.00.32.39
+        by smtp.gmail.com with ESMTPSA id q14-20020a7bce8e000000b003f182a10106sm10071944wmj.8.2023.05.06.00.32.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 May 2023 00:32:41 -0700 (PDT)
+        Sat, 06 May 2023 00:32:52 -0700 (PDT)
 From:   Maksim Kiselev <bigunclemax@gmail.com>
 To:     Andre Przywara <andre.przywara@arm.com>
 Cc:     Icenowy Zheng <icenowy@aosc.io>,
@@ -69,9 +69,9 @@ Cc:     Icenowy Zheng <icenowy@aosc.io>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v2 5/6] dt-bindings: spi: sun6i: add DT bindings for Allwinner D1/R528/T113s SPI
-Date:   Sat,  6 May 2023 10:30:13 +0300
-Message-Id: <20230506073018.1411583-6-bigunclemax@gmail.com>
+Subject: [PATCH v2 6/6] riscv: dts: allwinner: d1: Add SPI0 controller node
+Date:   Sat,  6 May 2023 10:30:14 +0300
+Message-Id: <20230506073018.1411583-7-bigunclemax@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230506073018.1411583-1-bigunclemax@gmail.com>
 References: <20230506073018.1411583-1-bigunclemax@gmail.com>
@@ -87,30 +87,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allwinner D1/R528/T113s SPI has the same as R329 controllers
+Some boards form the MangoPi family (MQ\MQ-Dual\MQ-R) may have
+an optional SPI flash that connects to the SPI0 controller.
 
-Add compatible string for this controller
+This controller is the same for R329/D1/R528/T113s SoCs and
+should be supported by the sun50i-r329-spi driver.
+
+So let's add its DT node.
 
 Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
 ---
- .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml      | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-index 2c1b8da35339..164bd6af9299 100644
---- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-@@ -30,6 +30,10 @@ properties:
-               - allwinner,sun50i-h616-spi
-               - allwinner,suniv-f1c100s-spi
-           - const: allwinner,sun8i-h3-spi
-+      - items:
-+          - enum:
-+              - allwinner,sun20i-d1-spi
-+          - const: allwinner,sun50i-r329-spi
+diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+index 922e8e0e2c09..a52999240a8e 100644
+--- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
++++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+@@ -108,6 +108,12 @@ rmii_pe_pins: rmii-pe-pins {
+ 				function = "emac";
+ 			};
  
-   reg:
-     maxItems: 1
++			/omit-if-no-ref/
++			spi0_pins: spi0-pins {
++				pins = "PC2", "PC3", "PC4", "PC5";
++				function = "spi0";
++			};
++
+ 			/omit-if-no-ref/
+ 			uart1_pg6_pins: uart1-pg6-pins {
+ 				pins = "PG6", "PG7";
+@@ -447,6 +453,21 @@ mmc2: mmc@4022000 {
+ 			#size-cells = <0>;
+ 		};
+ 
++		spi0: spi@4025000 {
++			compatible = "allwinner,sun20i-d1-spi",
++				     "allwinner,sun50i-r329-spi";
++			reg = <0x04025000 0x300>;
++			interrupts = <SOC_PERIPHERAL_IRQ(15) IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_SPI0>, <&ccu CLK_SPI0>;
++			clock-names = "ahb", "mod";
++			dmas = <&dma 22>, <&dma 22>;
++			dma-names = "rx", "tx";
++			resets = <&ccu RST_BUS_SPI0>;
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
+ 		usb_otg: usb@4100000 {
+ 			compatible = "allwinner,sun20i-d1-musb",
+ 				     "allwinner,sun8i-a33-musb";
 -- 
 2.39.2
 
