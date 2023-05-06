@@ -2,143 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D666F9031
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777746F9007
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbjEFHeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 03:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
+        id S230000AbjEFHb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 03:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231683AbjEFHd0 (ORCPT
+        with ESMTP id S229460AbjEFHbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 03:33:26 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904E89008;
-        Sat,  6 May 2023 00:32:56 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-307664010fdso2164155f8f.0;
-        Sat, 06 May 2023 00:32:56 -0700 (PDT)
+        Sat, 6 May 2023 03:31:53 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2A661B8
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 00:31:49 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-643a1fed360so964848b3a.3
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 00:31:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683358373; x=1685950373;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YWuJ3928FeRTXQHnTSMxeQkrFwzW1lu8cWO5/HghD9g=;
-        b=SxlItSYNZ/2N62zQ8HfucNmvZcoo/BQ4uyVe4rxcCiyML65I125OynPbPBNPH3zYiL
-         yPg6jxtKxtCPSdyVoOkztDZ6/RMNvOlkAnO1EREyP9+eXaoqHxfsetThSDFthHdWeddJ
-         l+14hEIcR9ZJtg3tZQ+QFVU75bRNgHcNwSUCH5EvYzUbTNodGUQkLh3Ai/bUzhN/WG15
-         uL23qvhTXUo+Iq5qNsZG2H/70+M9qBOi6XH3v4A9TsebybJJiezSTnqM2WqLRqCC8opk
-         wId8FaN/uvkZ7k8Lq//3xBclUyATUr0Mc/VPhlvR/1YcMw6ryBp8342rOZQ8VTdymWGv
-         22dQ==
+        d=linaro.org; s=google; t=1683358308; x=1685950308;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZWU7+3l9MN86IsyDHTUEnafJOEk6Gbhr7uhiM01UMBI=;
+        b=zpnHt2Fk931G4JgIg29mWsXwuXBLqfecJPsLVdZbEWj60hUF0ipA+Ha2jQw8FJ0GeM
+         zkWZfQJJkFJ3lT5gsrplSAaaDDNxKT31Uo63FJko1xmkLhCO433j/8d0qEF07Etr8lQn
+         Gh71qD/gEqOtXI+Wzn5FQkPYc2hKdvEM2iGn3fmjxOA8uqhPTXRK/n0K4RZrc7/JV5Ah
+         cdqQNKs5C7FhvRIe/M0OsUdzd//pjo5CweN6cqjwZXv7Y56jboXja0MoCrkAZKo51wRZ
+         FYpr9HJaozjOtzpc50ZOIxk7viGu37YqIRwVWUHj4ejwJe5j6Me6xHy0kETXAs0EcJk5
+         iTiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683358373; x=1685950373;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YWuJ3928FeRTXQHnTSMxeQkrFwzW1lu8cWO5/HghD9g=;
-        b=EducXnx5PhOPYrtnHyi30YBIi5LQ2zUTRlUCc7UwYOrnfrE4WiAKHm220ZL+DG8phc
-         yGha+szFl5DidgVyqZipCyIdDYS+b9ZS8vBJkji8W7jekxPYu2eR7rZkOkBHR00zlQUp
-         VJ6I8MU9C5LvUZiYomlWxLQ5D/l5ABkDkBMCwo1AQ9sIK4zWiJNPuYZsqlKfTWwEKDR3
-         pJefHQpKIGQwOtjYimTMJbKSnzf8c0Pdf0TMp7ItkuSvVk16tu/o1c2JgIiGIpWqNHNs
-         6X3Y5FTGVXdyXCSdj8zmGXEvepG74dVDl+IzgneKhtysEt2NWzUobjTMae3cXjtU4Yc4
-         sJEg==
-X-Gm-Message-State: AC+VfDycWmB3jedBdWy6OPxKpCUvHeSu4dbEaDYusU1WPAV/YVTIUyQc
-        L/S5rhl2wasVJXDPEBgvhmg=
-X-Google-Smtp-Source: ACHHUZ4CkzM5IntmGzc8H9/kN5AIgGpbIpiHnLmq347VIXPzfjwWlxjDpZCmmsWECMktlC6y4X8xEw==
-X-Received: by 2002:adf:f552:0:b0:306:772:5c2e with SMTP id j18-20020adff552000000b0030607725c2emr2669948wrp.70.1683358372892;
-        Sat, 06 May 2023 00:32:52 -0700 (PDT)
-Received: from localhost.localdomain ([176.221.215.212])
-        by smtp.gmail.com with ESMTPSA id q14-20020a7bce8e000000b003f182a10106sm10071944wmj.8.2023.05.06.00.32.50
+        d=1e100.net; s=20221208; t=1683358308; x=1685950308;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZWU7+3l9MN86IsyDHTUEnafJOEk6Gbhr7uhiM01UMBI=;
+        b=WmjBSUf3YNEPRVpfZfaV9fVAJ2i2YIwAUYNmmmfrHp0wvaoE4kjG5KL6Nvg+0md9lD
+         m6ixMIdnp6uD4CsbCEj3Iy7R6x48UrXqEkm2dER2yvSK/RgWiDvqdz8dVAbwK+I5QBY1
+         f1eZzpG/oH7TEpuRu8S4wGXBkyBKT/tGrwwP1+7jR9r0WrHUsb2NqKP80lBmW+aZgfOj
+         e/UvsqywKpEip6cx2XGpi4eRLb0reu65gA8lQIrtT5iZyn8nfyJM0rQWhuwW+Ykh9h4G
+         wXMgbg3OlEF8Qso1er2uZ+yjI+f55LFpanfxrFDMYX29wFR4RYX/GwaAm0M52iIsgTp9
+         AU6A==
+X-Gm-Message-State: AC+VfDwO09uY8T+jKK7W+xlJhoXvk53lLlc3dCswDYHBGlHtT/Gf2S/A
+        4MQ8SrNK5Iq7Bv974mUPJRDk
+X-Google-Smtp-Source: ACHHUZ65d5V+Jqxabv8rKD5glj0EJUE/2Bu6isc1uK/W7BUVySAipuSFuG2RBvz+4QmMoaU292AZEg==
+X-Received: by 2002:a05:6a00:23c3:b0:637:f1ae:d3e with SMTP id g3-20020a056a0023c300b00637f1ae0d3emr5736555pfc.25.1683358308446;
+        Sat, 06 May 2023 00:31:48 -0700 (PDT)
+Received: from localhost.localdomain ([120.138.12.87])
+        by smtp.gmail.com with ESMTPSA id z16-20020aa785d0000000b0062a56e51fd7sm2627373pfn.188.2023.05.06.00.31.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 May 2023 00:32:52 -0700 (PDT)
-From:   Maksim Kiselev <bigunclemax@gmail.com>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Icenowy Zheng <icenowy@aosc.io>,
-        Maksim Kiselev <bigunclemax@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v2 6/6] riscv: dts: allwinner: d1: Add SPI0 controller node
-Date:   Sat,  6 May 2023 10:30:14 +0300
-Message-Id: <20230506073018.1411583-7-bigunclemax@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230506073018.1411583-1-bigunclemax@gmail.com>
-References: <20230506073018.1411583-1-bigunclemax@gmail.com>
+        Sat, 06 May 2023 00:31:47 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com
+Cc:     robh@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, steev@kali.org,
+        quic_srichara@quicinc.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 0/8] PCI: qcom: Do not advertise hotplug capability
+Date:   Sat,  6 May 2023 13:01:31 +0530
+Message-Id: <20230506073139.8789-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some boards form the MangoPi family (MQ\MQ-Dual\MQ-R) may have
-an optional SPI flash that connects to the SPI0 controller.
+Hi,
 
-This controller is the same for R329/D1/R528/T113s SoCs and
-should be supported by the sun50i-r329-spi driver.
+The SoCs making use of Qualcomm PCIe controllers do not support the PCIe hotplug
+functionality. But the hotplug capability bit is set by default in the hardware.
+This causes the kernel PCI core to register hotplug service for the controller
+and send hotplug commands to it. But those commands will timeout generating
+messages as below during boot and suspend/resume.
+    
+[    5.782159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
+[    5.810161] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2048 msec ago)
+[    7.838162] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2020 msec ago)
+[    7.870159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2052 msec ago)
+    
+This not only spams the console output but also induces a delay of a couple of
+seconds. To fix this issue, this series clears the HPC bit in PCI_EXP_SLTCAP
+register as a part of the post init sequence for all IP versions to not
+advertise the hotplug capability for the controller.
 
-So let's add its DT node.
+Testing
+=======
 
-Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
----
- .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    | 21 +++++++++++++++++++
- 1 file changed, 21 insertions(+)
+This series has been tested on DB845c (SDM845 SoC) and Lenovo Thinkpad X13s
+(SC8280XP SoC).
 
-diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-index 922e8e0e2c09..a52999240a8e 100644
---- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-+++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-@@ -108,6 +108,12 @@ rmii_pe_pins: rmii-pe-pins {
- 				function = "emac";
- 			};
- 
-+			/omit-if-no-ref/
-+			spi0_pins: spi0-pins {
-+				pins = "PC2", "PC3", "PC4", "PC5";
-+				function = "spi0";
-+			};
-+
- 			/omit-if-no-ref/
- 			uart1_pg6_pins: uart1-pg6-pins {
- 				pins = "PG6", "PG7";
-@@ -447,6 +453,21 @@ mmc2: mmc@4022000 {
- 			#size-cells = <0>;
- 		};
- 
-+		spi0: spi@4025000 {
-+			compatible = "allwinner,sun20i-d1-spi",
-+				     "allwinner,sun50i-r329-spi";
-+			reg = <0x04025000 0x300>;
-+			interrupts = <SOC_PERIPHERAL_IRQ(15) IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_SPI0>, <&ccu CLK_SPI0>;
-+			clock-names = "ahb", "mod";
-+			dmas = <&dma 22>, <&dma 22>;
-+			dma-names = "rx", "tx";
-+			resets = <&ccu RST_BUS_SPI0>;
-+			status = "disabled";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+
- 		usb_otg: usb@4100000 {
- 			compatible = "allwinner,sun20i-d1-musb",
- 				     "allwinner,sun8i-a33-musb";
+Thanks,
+Mani
+
+Manivannan Sadhasivam (8):
+  PCI: qcom: Use DWC helpers for modifying the read-only DBI registers
+  PCI: qcom: Disable write access to read only registers for IP v2.9.0
+  PCI: qcom: Do not advertise hotplug capability for IPs v2.7.0 and
+    v1.9.0
+  PCI: qcom: Do not advertise hotplug capability for IPs v2.3.3 and
+    v2.9.0
+  PCI: qcom: Do not advertise hotplug capability for IP v2.3.2
+  PCI: qcom: Use post init sequence of IP v2.3.2 for v2.4.0
+  PCI: qcom: Do not advertise hotplug capability for IP v1.0.0
+  PCI: qcom: Do not advertise hotplug capability for IP v2.1.0
+
+ drivers/pci/controller/dwc/pcie-qcom.c | 97 ++++++++++++++++----------
+ 1 file changed, 60 insertions(+), 37 deletions(-)
+
 -- 
-2.39.2
+2.25.1
 
