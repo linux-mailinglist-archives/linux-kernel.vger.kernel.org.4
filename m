@@ -2,153 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B920C6F8CF5
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 02:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DECA6F8CF9
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 02:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjEFAAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 20:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
+        id S229906AbjEFABx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 20:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbjEFAAS (ORCPT
+        with ESMTP id S229668AbjEFABv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 20:00:18 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3485BA5
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 17:00:17 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 6069132009C8;
-        Fri,  5 May 2023 20:00:16 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 05 May 2023 20:00:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1683331215; x=1683417615; bh=+E
-        HGl6UIEJr2mYgMnf4UBP4D5+0Gvo5H618eeD5wk4k=; b=kwFzADU6IH0eOjaLEp
-        CBLtDD2fkyU4BQ7VLurCa0VAZncUb5EGnM5VGPbBMWbjnb4FIcQpLCMNLXt4XQzU
-        hF7SBbHXFynrmfncg4vlcxFJMTMNz5Q7FYp3jCl8Nc04ZG4cA/sGxZujAiSi+0A5
-        RVD9snX8wZFEoGpJcHJ2Y+bok920Izu+eW1wCL0qAhupSIo1FsOT1ZynOz3EyzyO
-        qDPikeHOqKYAYTHBZmk4JiIuL0QapwxLp/VQvRT8v3xw5FsgUKMNAwo4bontibeR
-        oJ0w7zZqqJsZ49pNIBAF91vce5PyvIENZVt7Ua8o8qkc3Sa9jLSK3m3HRE7JWSJG
-        6tCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683331215; x=1683417615; bh=+EHGl6UIEJr2m
-        YgMnf4UBP4D5+0Gvo5H618eeD5wk4k=; b=El2efMC0Dy0nnub3kQF65f5yP+ogk
-        A8V3J99HPT3E3TmlnecNPnBNMc8YiCVoJwuE7FZi/1yc77ol4kYdjAabbcQ6U0M3
-        92laCh+pFVHURiMvkIiVio3SvXAuDA5Xo/hhtyVSI74f0j5+JBMp+rnjbdKSdczp
-        f3oCR2co5jmAa39OZOqYKKn8Mpszx4RC1EcFtI76q3qR2rOW6tdp9eKy1beKkRTo
-        xbzuQ7PsqVGjaRqTrlAAO7hPmMX1Y2BBGm8EiryqNpEDxlzZA/BuZYe36kDzRdIP
-        3sulgdWlAJogG5wd4N9s9q4H86xKy0YnTONmNmd+1Uwto2a/pFFqbL3ZQ==
-X-ME-Sender: <xms:j5hVZDQw-ZHOJxkw0D8BvskdWPWMSi5I2dmno7lsURvkobbliCaGLA>
-    <xme:j5hVZExaTthxu3GpyEcR05PbgbI6_6-bwRp30aJ8-pzPeQk7LOZaWGUU6Fc5mUDhm
-    a7fRRWqFdeAFVoFkaI>
-X-ME-Received: <xmr:j5hVZI0S7ZtNDvpIoNF8DvrkvcYa046wm6jkauzCDgUT3xth1-w_tZvxKjjpDpdebWH0gg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeffedgvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhuffvvefkjghfofggtgesthdtredtredtvdenucfhrhhomhepnfhukhgv
-    ucflohhnvghsuceolhhukhgvsehljhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnh
-    epvddvgeeltdehfeeijefgveegfeeihfdtveetfeetudfhvedtfeeltefhteegledunecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvse
-    hljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:j5hVZDAAeweZKePUSJDrOuYXponq0SJoTqoLTZoQ_sUy4LYeTBk-Iw>
-    <xmx:j5hVZMj4Dbrt1LifcutxlJIV4AcwWq9nZmGm2MAGOok2xh9tvGmFfw>
-    <xmx:j5hVZHo5vQ4lQ88C80HGsQ5xoMqCpTuvRAH6X4gSV-01ddqV_OMdiw>
-    <xmx:j5hVZPtWBJN24GvKuDA6KOCg2ViSNuZMbAyrkuZOFG5H8-PhDyjSrw>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 May 2023 20:00:10 -0400 (EDT)
-Date:   Sat, 06 May 2023 11:59:56 +1200
-From:   Luke Jones <luke@ljones.dev>
-Subject: Re: [PATCH] ALSA: hda/realtek: Add quirk for 2nd ASUS GU603
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        perex@perex.cz, tiwai@suse.com
-Message-Id: <WNM7UR.C0XH9EHBJ0ID2@ljones.dev>
-In-Reply-To: <87a5yiizcj.wl-tiwai@suse.de>
-References: <20230503035035.254346-1-luke@ljones.dev>
-        <87h6sune0i.wl-tiwai@suse.de> <L8Z3UR.OO4MSH3SX5VD3@ljones.dev>
-        <87a5yiizcj.wl-tiwai@suse.de>
-X-Mailer: geary/43.0
+        Fri, 5 May 2023 20:01:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEF65FE0;
+        Fri,  5 May 2023 17:01:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04D59615D4;
+        Sat,  6 May 2023 00:01:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA4BEC433D2;
+        Sat,  6 May 2023 00:01:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683331309;
+        bh=QsO73mPrM5vKsvjhH2dwYFe32pVRTPoPfaa85S1KdnA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NfVPZbtV2V3DoseQezuTESztq+VvO/83tHYbI8XcmmBODYMvqEB7YMaxz4+7RXFEE
+         3c25xRVeBgGXCErUdq1MSICUO5FpYPdMNqt4gu9apY918PfI0b92jjygzG+YZcV22f
+         C5QH+0Ui2Wost33jN/uaBWBgwPfG4cbbeXMcVFpw5CsuQMUytaHfOYknMWey89GFt8
+         /M78hOBEw1SkzQe6ORz2yVBOzG+98rDne+CaRKHkaneM/act46b01/gSy2yFDuYNDr
+         fjzuKmY9fpTY1oiIj8z2IcHyjZ9SuUsPn/EZb0tjPZUr1uiro+0lT3jC7i+7BcMvzf
+         IK4ln/rl0kMMw==
+Date:   Sat, 6 May 2023 00:01:47 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dm-devel@redhat.com, gmazyland@gmail.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, tglx@linutronix.de, bp@suse.de,
+        mingo@kernel.org, x86@kernel.org, herbert@gondor.apana.org.au,
+        ardb@kernel.org, dan.j.williams@intel.com, bernie.keany@intel.com,
+        charishma1.gairuboyina@intel.com,
+        lalithambika.krishnakumar@intel.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH v6 11/12] crypto: x86/aes-kl - Support AES algorithm
+ using Key Locker instructions
+Message-ID: <ZFWY6/VelArVYy1F@gmail.com>
+References: <20220112211258.21115-1-chang.seok.bae@intel.com>
+ <20230410225936.8940-1-chang.seok.bae@intel.com>
+ <20230410225936.8940-12-chang.seok.bae@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230410225936.8940-12-chang.seok.bae@intel.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 10, 2023 at 03:59:35PM -0700, Chang S. Bae wrote:
+> [PATCH v6 11/12] crypto: x86/aes-kl - Support AES algorithm using Key Locker instructions
 
+Thanks for dropping the unnecessary modes of operation (CBC, ECB, CTR).  It
+simplified the patchset quite a bit!
 
-On Fri, May 5 2023 at 17:15:24 +0200, Takashi Iwai <tiwai@suse.de> 
-wrote:
-> On Thu, 04 May 2023 02:41:09 +0200,
-> Luke Jones wrote:
->> 
->>  On Wed, May 3 2023 at 08:08:13 +0200, Takashi Iwai <tiwai@suse.de>
->>  wrote:
->>  > On Wed, 03 May 2023 05:50:35 +0200,
->>  > Luke D. Jones wrote:
->>  >>
->>  >>  Add quirk for GU603 with 0x1c62 variant of codec.
->>  >>
->>  >>  Signed-off-by: Luke D. Jones <luke@ljones.dev>
->>  >>  ---
->>  >>   sound/pci/hda/patch_realtek.c | 1 +
->>  >>   1 file changed, 1 insertion(+)
->>  >>
->>  >>  diff --git a/sound/pci/hda/patch_realtek.c
->>  >> b/sound/pci/hda/patch_realtek.c
->>  >>  index 3b9f077a227f..4a585050edc3 100644
->>  >>  --- a/sound/pci/hda/patch_realtek.c
->>  >>  +++ b/sound/pci/hda/patch_realtek.c
->>  >>  @@ -9501,6 +9501,7 @@ static const struct snd_pci_quirk
->>  >> alc269_fixup_tbl[] = {
->>  >>   	SND_PCI_QUIRK(0x1043, 0x1517, "Asus Zenbook UX31A",
->>  >> ALC269VB_FIXUP_ASUS_ZENBOOK_UX31A),
->>  >>   	SND_PCI_QUIRK(0x1043, 0x1662, "ASUS GV301QH",
->>  >> ALC294_FIXUP_ASUS_DUAL_SPK),
->>  >>   	SND_PCI_QUIRK(0x1043, 0x16b2, "ASUS GU603",
->>  >> ALC289_FIXUP_ASUS_GA401),
->>  >>  +	SND_PCI_QUIRK(0x1043, 0x1c62, "ASUS GU603",
->>  >> ALC289_FIXUP_ASUS_GA401),
->>  >>   	SND_PCI_QUIRK(0x1043, 0x16e3, "ASUS UX50",
->>  >> ALC269_FIXUP_STEREO_DMIC),
->>  >>   	SND_PCI_QUIRK(0x1043, 0x1740, "ASUS UX430UA",
->>  >> ALC295_FIXUP_ASUS_DACS),
->>  >>   	SND_PCI_QUIRK(0x1043, 0x17d1, "ASUS UX431FL",
->>  >> ALC294_FIXUP_ASUS_DUAL_SPK),
->>  >
->>  > Could you try to put the new entry at the right place?
->>  > The table is sorted in the PCI SSID order.
->>  >
->>  >
->>  > thanks,
->>  >
->>  > Takashi
->> 
->>  Sure no problem. Sorry, seems I read `0x1c62` and `0x16c2` :(
-> 
-> So, which number is correct?  Isn't it 0x16c2?  This sounds more
-> reasonable.
-> 
-> In anyway, please resubmit a proper patch after confirming that it's
-> really working.
-> 
-> 
-> thanks,
-> 
-> Takashi
+Now that only AES-XTS is included, can you please also merge this patch with the
+following patch?  As-is, this patch is misleading since it doesn't actually add
+"support" for anything at all.  It actually just adds an unfinished AES-XTS
+implementation, which patch 12 then finishes.  I assume that the current
+patchset organization is left over from when you were trying to support multiple
+modes of operation.  IMO, it would be much easier to review if patches 11-12
+were merged into one patch that adds the new AES-XTS implementation.
 
-0x1c62 is the correct hex, I've submitted V2 with the line in the right 
-order.
+> For disk encryption, storage bandwidth may be the bottleneck
+> before encryption bandwidth, but the potential performance difference is
+> why AES-KL is advertised as a distinct cipher in /proc/crypto rather than
+> the kernel transparently replacing AES-NI usage with AES-KL.
 
+This does not correctly describe what is going on.  Actually, this patchset
+registers the AES-KL XTS algorithm with the usual name "xts(aes)".  So, it can
+potentially be used by any AES-XTS user.  It seems that you're actually relying
+on the algorithm priorities to prioritize AES-NI, as you've assigned priority
+200 to AES-KL, whereas AES-NI has priority 401.  Is that what you intend, and if
+so can you please update your explanation to properly explain this?
 
+The alternative would be to use a unique algorithm name, such as
+"keylocker-xts(aes)".  I'm not sure that would be better, given that the
+algorithms are compatible.  However, that actually would seem to match the
+explanation you gave more closely, so perhaps that's what you actually intended?
+
+> diff --git a/arch/x86/crypto/aeskl-intel_asm.S b/arch/x86/crypto/aeskl-intel_asm.S
+[...]
+> +#ifdef __x86_64__
+> +#define AREG	%rax
+> +#define HANDLEP	%rdi
+> +#define OUTP	%rsi
+> +#define KLEN	%r9d
+> +#define INP	%rdx
+> +#define T1	%r10
+> +#define LEN	%rcx
+> +#define IVP	%r8
+> +#else
+> +#define AREG	%eax
+> +#define HANDLEP	%edi
+> +#define OUTP	AREG
+> +#define KLEN	%ebx
+> +#define INP	%edx
+> +#define T1	%ecx
+> +#define LEN	%esi
+> +#define IVP	%ebp
+> +#endif
+
+I strongly recommend skipping the 32-bit support, as it's unlikely to be worth
+the effort.
+
+And actually, aeskl-intel_glue.c only registers the algorithm for 64-bit
+anyway...  So the 32-bit code paths are untested dead code.
+
+> +static inline int aeskl_enc(const void *ctx, u8 *out, const u8 *in)
+> +{
+> +	if (unlikely(keylength(ctx) == AES_KEYSIZE_192))
+> +		return -EINVAL;
+> +	else if (!valid_keylocker())
+> +		return -ENODEV;
+> +	else if (_aeskl_enc(ctx, out, in))
+> +		return -EINVAL;
+> +	else
+> +		return 0;
+> +}
+> +
+> +static inline int aeskl_dec(const void *ctx, u8 *out, const u8 *in)
+> +{
+> +	if (unlikely(keylength(ctx) == AES_KEYSIZE_192))
+> +		return -EINVAL;
+> +	else if (!valid_keylocker())
+> +		return -ENODEV;
+> +	else if (_aeskl_dec(ctx, out, in))
+> +		return -EINVAL;
+> +	else
+> +		return 0;
+> +}
+
+I don't think the above two functions should exist.  keylength() and
+valid_keylocker() should be checked before calling xts_crypt_common(), and the
+assembly functions should just return the correct error code (-EINVAL,
+apparently) instead of an unspecified nonzero value.  That would leave nothing
+for a wrapper function to do.
+
+Note: if you take this suggestion, the assembly functions would need to use
+SYM_TYPED_FUNC_START instead of SYM_FUNC_START.
+
+- Eric
