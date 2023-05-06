@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C09B6F8E77
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 06:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED356F8E83
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 06:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjEFEEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 00:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
+        id S229787AbjEFEO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 00:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjEFEEj (ORCPT
+        with ESMTP id S229446AbjEFEO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 00:04:39 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17464729A
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 21:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683345878; x=1714881878;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ed3akQEIL1crzDxXFl10Zc/WGefAeiNqKCh0SoU+1S0=;
-  b=eMQF3fEOw49H5TLm+e4M/ZqcVReoQfcGCwPbQaLoSMFg2akvkgkgtfDS
-   pYQZT+sNSdH50zoEeD1OUtQWrXvklOARch63fsXCs3MApmg3qHdECl6Oz
-   1XO1vWeNmae1bW8mcrNBaxtFPFYK/v+RresynL3FoCCFXml4JP4APRbQ5
-   sqi2k7HxKuLqMvQaFSKmOMD1NhrqCqUjYdqK1H3aKhJXunj6TflfPRN/u
-   0cc6xpspsySwvQPtuq3qVgYedP2U+WUft4hfbcr3mPyeOVJ/o1d25YMT8
-   cSvpSLzgmtwXMzctElS5Rm48gGxxqWdCr/Kb8FMppBM06+T+c1QsdgwXq
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="338547821"
-X-IronPort-AV: E=Sophos;i="5.99,254,1677571200"; 
-   d="scan'208";a="338547821"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 21:04:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="697829696"
-X-IronPort-AV: E=Sophos;i="5.99,254,1677571200"; 
-   d="scan'208";a="697829696"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 21:04:37 -0700
-Date:   Fri, 5 May 2023 21:09:00 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [git pull] IOMMU Updates for Linux v6.4
-Message-ID: <20230505210900.0764fa83@jacob-builder>
-In-Reply-To: <ZE70doFi8X3KgfrV@ziepe.ca>
-References: <ZE5NR5Ml8I2/Ze0f@8bytes.org>
-        <CAHk-=wiriLmq6OgLLF9seANqCJqjCrgUC384zcJUFtv3xJgVkQ@mail.gmail.com>
-        <ZE70doFi8X3KgfrV@ziepe.ca>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Sat, 6 May 2023 00:14:57 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7356476A1;
+        Fri,  5 May 2023 21:14:54 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3464Ee0oA002832, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3464Ee0oA002832
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Sat, 6 May 2023 12:14:41 +0800
+Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Sat, 6 May 2023 12:14:46 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Sat, 6 May 2023 12:14:45 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Sat, 6 May 2023 12:14:45 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v6] usb: dwc3: core: add support for realtek SoCs custom's global register start address
+Thread-Topic: [PATCH v6] usb: dwc3: core: add support for realtek SoCs
+ custom's global register start address
+Thread-Index: AQHZfvxzwn149jVs0EaS9yoI48utba9L8vMAgACxUKA=
+Date:   Sat, 6 May 2023 04:14:45 +0000
+Message-ID: <c2ddb17c182a42be9fc22afa85669695@realtek.com>
+References: <20230505025104.18321-1-stanley_chang@realtek.com>
+ <20230506013842.7iu4hq35uyamt6np@synopsys.com>
+In-Reply-To: <20230506013842.7iu4hq35uyamt6np@synopsys.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,26 +68,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
-
-On Sun, 30 Apr 2023 20:06:30 -0300, Jason Gunthorpe <jgg@ziepe.ca> wrote:
-
-> We've had this longstanding confusion in the iommu layer that SVA and
-> PASID are one and the same thing, we are slowly reorganizing it.. For
-> now it is fine for IOMMU_SVA to cover the PASID allocator as the only
-> drivers that support PASID also support SVA.
-> 
-> Arguably the design is backwards and IOMMU_SVA should be user
-> selectable and it should turn off the SVA code entirely including the
-> driver code.
-> 
-> > Somebody should double-check my result, in other words.  
-> 
-> I didn't notice anything wrong, I'm sure Lu and Yi will test it!
-FWIW, I did a quick test with SVA ENQCMD on an Intel Data Streaming
-Accelerator (DSA) shared work queue, seems to work fine. Code looks good to
-me too.
-
-Thanks,
-
-Jacob
+SGkgVGhpbmgsDQoNCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZHdjMy9jb3JlLmMgYi9k
+cml2ZXJzL3VzYi9kd2MzL2NvcmUuYyBpbmRleA0KPiA+IDBiZWFhYjkzMmU3ZC4uMjc4Y2QxYzMz
+ODQxIDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvdXNiL2R3YzMvY29yZS5jDQo+ID4gKysrIGIv
+ZHJpdmVycy91c2IvZHdjMy9jb3JlLmMNCj4gPiBAQCAtMTgwMCw2ICsxODAwLDE3IEBAIHN0YXRp
+YyBpbnQgZHdjM19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlDQo+ICpwZGV2KQ0KPiA+ICAg
+ICAgIGR3Y19yZXMgPSAqcmVzOw0KPiA+ICAgICAgIGR3Y19yZXMuc3RhcnQgKz0gRFdDM19HTE9C
+QUxTX1JFR1NfU1RBUlQ7DQo+ID4NCj4gPiArICAgICBpZiAoZGV2LT5vZl9ub2RlKSB7DQo+ID4g
+KyAgICAgICAgICAgICBzdHJ1Y3QgZGV2aWNlX25vZGUgKnBhcmVudCA9DQo+ID4gKyBvZl9nZXRf
+cGFyZW50KGRldi0+b2Zfbm9kZSk7DQo+ID4gKw0KPiA+ICsgICAgICAgICAgICAgaWYgKG9mX2Rl
+dmljZV9pc19jb21wYXRpYmxlKHBhcmVudCwgInJlYWx0ZWsscnRkLWR3YzMiKSkNCj4gPiArIHsN
+Cj4gDQo+IElzIHlvdXIgcGxhdGZvcm0gYWxyZWFkeSByZWxlYXNlZCBvciBpcyBpdCBzdGlsbCB1
+bmRlciBkZXZlbG9wbWVudD8gSnVzdCBjdXJpb3VzDQo+IHNpbmNlIHRoZSBjb21wYXRpYmxlIHN0
+cmluZyBpc24ndCBmaXhlZC4gSXMgaXQgZ29pbmcgdG8gYmUgY2hhbmdlZCBpbiB0aGUgZnV0dXJl
+Pw0KDQpZZXMsIG91ciBwbGF0Zm9ybSBpcyByZWxlYXNlZC4NCkluIG91ciBkcml2ZXIgKHRoZSBw
+YXJlbnQgb2YgdGhlIGR3YzMgZHJpdmVyKSwgd2UgdXNlZCB0aGUgY29tcGF0aWJsZSBuYW1lICJS
+ZWFsdGVrLGR3YzMiLg0KVG8gc3VwcG9ydCB0aGlzIHBhdGNoLCBJIHdpbGwgYWRkIGFuIGFsdGVy
+bmF0aXZlIG5hbWUgIlJlYWx0ZWsscnRkLWR3YzMiIHRvIG91ciBkcml2ZXIuDQoNClRoYW5rcywN
+ClN0YW5sZXkNCg==
