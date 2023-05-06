@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CCA06F900A
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C346F9016
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 09:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjEFHcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 03:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
+        id S231285AbjEFHcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 03:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjEFHby (ORCPT
+        with ESMTP id S231253AbjEFHcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 03:31:54 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8B472BA;
-        Sat,  6 May 2023 00:31:53 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f315735514so120034305e9.1;
-        Sat, 06 May 2023 00:31:53 -0700 (PDT)
+        Sat, 6 May 2023 03:32:16 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33EC11B7B;
+        Sat,  6 May 2023 00:32:06 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f4000ec71dso17630405e9.2;
+        Sat, 06 May 2023 00:32:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683358312; x=1685950312;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=phdCEqZu3n0Q0Wg7bdC8dDiY0m/BBOG9trxmvJBnuV0=;
-        b=EmYJDALXFxdDPFsrmRDu+d/XkHAg5PrzsgGsu7gdmUPud/ECs6SeQyohi3vUiNJhf1
-         3nRrANbV+2MRtwrT99zmzM17zc7S0pDrMd/MF/XCBu0McLhkDk4GVEdbK5U9Y3UCBqRx
-         0DhzxinyLRO5fNf9MxvVHEdTNY3n4yJ0c3nG5+Y3Y2vPZ+ILKiC+1lUIoUQ8ku1v0wz8
-         E7U0dVgDtJezUZwtAN6DMU8bONc/GbGyINwsvjCfRGVwHJwN4m3oUWRKqZMxR61D7hXN
-         z8uTpjqwgdZ6iTk4hJsD+/UqWUjKHQARk6zAsmcHGN6RGY+rUke8efCi0pSFddgAbdJN
-         zkkQ==
+        d=gmail.com; s=20221208; t=1683358325; x=1685950325;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0/p1ytnQh6YEGVhEhqDXJrPOG30ZOWl4FCmbFIXesQs=;
+        b=bHsdH9QLBx95JODO+aI3BTZ9JpWH80AULgNrIwX35ln3QWMnNrfyonN+IEHO3a2qXT
+         zQayMOl3UCEcpbg7SLIxbGxSaxH7wpxwpx3k6GfGLVqIOq34mTLj/N+WmeALlM/BV8QJ
+         1Yg5TejIXbppSec1n7g550mo+9+Ow80CwC8KhpOwO5B33fezYPoOP1ue2+MnAAhZR7aN
+         JYTD8eG2esMfafDyBkIrl8YCg2DAoQqQYOlOqcRt0aAiXAXbBP9eR0f06G21todRHxqn
+         emMzyrfrkGuzCNT+6qaxL0Pc0Ktrb3COiRtiFN7x/LlK6Ftkp/pBQI9OGoIAW5IOERVy
+         l0fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683358312; x=1685950312;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=phdCEqZu3n0Q0Wg7bdC8dDiY0m/BBOG9trxmvJBnuV0=;
-        b=PUI3DyHtleTD3X27TUq3kJKL/SIs/CpqiiQUOg1mRWmdWUK5XciklwH6pFUT9PD5Jq
-         dLGY8smDRy/7uk/W1yeMj9KkLWI+vOaLtrMaLSe2Um2TiwHhUMjNL+ZOkdXZWajyPfAj
-         UxMsc9kJqmLTsh2bPEl7Dd3Qph4qsd3qUUr9V01ZONkOTAXRKRs9AiaNDIDQJncTNQZ2
-         Lu+J0c1Hu8IIsaUYkXA6iJ+Zey2Kz7DajWUx7AfCn3L3i7jCctYVgnDjW8A+IfGOgjcw
-         JJrEmLgeG3uRY4HsJSA/nSZghBLc7H5K9D8Aq55vG++KjeW7InaDvawXWv47FRn/7sS2
-         SfbQ==
-X-Gm-Message-State: AC+VfDxT6kDjk4zT2lc4hH4hveT+u9mIpy1KL0jziOuhJtVvYZDE/U/S
-        ovI6jf8v55IeLzmMt0p+Fl4=
-X-Google-Smtp-Source: ACHHUZ6uYqqHl1zE5ssDd0SB9fMCXSY/0N7JQuBfmBIoG8JTeduQMOsvb99MhYcItZ9oquxrH0l3tA==
-X-Received: by 2002:a05:600c:35ce:b0:3f1:96a8:3560 with SMTP id r14-20020a05600c35ce00b003f196a83560mr3424900wmq.10.1683358311473;
-        Sat, 06 May 2023 00:31:51 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683358325; x=1685950325;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0/p1ytnQh6YEGVhEhqDXJrPOG30ZOWl4FCmbFIXesQs=;
+        b=MbJ39SrwMDx6Y0V+47CqUU1VwXu/V1pJGTCMRKNwHXbmZOqhGgkXBuLSnenGxklBRy
+         jMHBKJTKTSnSgDaIWlQgDNt+Vih42lfK0tDfiR+kgy5CimlBLZhjQwCfuCn3iGIdxLrx
+         B41IQXdqz9WsGKaIwOs64Q70ksea8pXQ02WNg1fQnQusDUD/K0bQ4TmxDsEYaqC+wToK
+         njdQNU/vibBhZi0EN7NuQmbAkvAnZqqItbXFglSgbXoHEyuzHGwJBAJBiHg7GRZIydI+
+         rv+EBF3Yqgj9p2M4k7ke3vmH5cV1RQFkOoFrj8m5L3r1vjxVSZXX47ykKdYKkqgFMdiL
+         5tnw==
+X-Gm-Message-State: AC+VfDzaqgevYnwcVfundZnREjXL2trrez6S+BC6OHjIosaUjnRdjgpm
+        ih3L3fW2oMuMCiIaXH7/FiE=
+X-Google-Smtp-Source: ACHHUZ6JTn71OUBh2OirtFdnyg6dCjdW09TDzjxul9OlyXa2r6klaU6in0h6LXx3WvVWtVJrCWb40w==
+X-Received: by 2002:a7b:cb53:0:b0:3f2:53a5:d308 with SMTP id v19-20020a7bcb53000000b003f253a5d308mr2586133wmj.6.1683358324784;
+        Sat, 06 May 2023 00:32:04 -0700 (PDT)
 Received: from localhost.localdomain ([176.221.215.212])
-        by smtp.gmail.com with ESMTPSA id q14-20020a7bce8e000000b003f182a10106sm10071944wmj.8.2023.05.06.00.31.47
+        by smtp.gmail.com with ESMTPSA id q14-20020a7bce8e000000b003f182a10106sm10071944wmj.8.2023.05.06.00.32.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 May 2023 00:31:51 -0700 (PDT)
+        Sat, 06 May 2023 00:32:04 -0700 (PDT)
 From:   Maksim Kiselev <bigunclemax@gmail.com>
 To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Icenowy Zheng <icenowy@aosc.io>,
-        Maksim Kiselev <bigunclemax@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+Cc:     Icenowy Zheng <icenowy@aosc.io>, Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
@@ -64,14 +63,18 @@ Cc:     Icenowy Zheng <icenowy@aosc.io>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Maksim Kiselev <bigunclemax@gmail.com>,
         Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v2 0/6] Allwinner R329/D1/R528/T113s SPI support
-Date:   Sat,  6 May 2023 10:30:08 +0300
-Message-Id: <20230506073018.1411583-1-bigunclemax@gmail.com>
+Subject: [PATCH v2 1/6] dt-bindings: spi: sun6i: add DT bindings for Allwinner R329 SPI
+Date:   Sat,  6 May 2023 10:30:09 +0300
+Message-Id: <20230506073018.1411583-2-bigunclemax@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230506073018.1411583-1-bigunclemax@gmail.com>
+References: <20230506073018.1411583-1-bigunclemax@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,32 +87,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series is attempt to revive previous work to add support for SPI
-controller which is used in newest Allwinner's SOCs R329/D1/R528/T113s
-https://lore.kernel.org/lkml/BYAPR20MB2472E8B10BFEF75E7950BBC0BCF79@BYAPR20MB2472.namprd20.prod.outlook.com/
+From: Icenowy Zheng <icenowy@aosc.io>
 
-Previous discussion about D1/T113s support
-https://lore.kernel.org/linux-arm-kernel/20230505224611.00c281f6@slackpad.lan/T/
+Allwinner R329 SPI has two controllers, and the second one has helper
+functions for MIPI-DBI Type C.
 
-v2:
-  - added DT bindings and node for D1/T113s
+Add compatible strings for these controllers
 
-Icenowy Zheng (4):
-  dt-bindings: spi: sun6i: add DT bindings for Allwinner R329 SPI
-  spi: sun6i: change OF match data to a struct
-  spi: sun6i: add quirk for in-controller clock divider
-  spi: sun6i: add support for R329 SPI controllers
+Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+---
+ .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml        | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Maksim Kiselev (2):
-  dt-bindings: spi: sun6i: add DT bindings for Allwinner D1/R528/T113s
-    SPI
-  riscv: dts: allwinner: d1: Add SPI0 controller node
-
- .../bindings/spi/allwinner,sun6i-a31-spi.yaml |   6 +
- .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    |  21 ++++
- drivers/spi/spi-sun6i.c                       | 112 +++++++++++-------
- 3 files changed, 99 insertions(+), 40 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+index de36c6a34a0f..2c1b8da35339 100644
+--- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+@@ -21,6 +21,8 @@ properties:
+     oneOf:
+       - const: allwinner,sun6i-a31-spi
+       - const: allwinner,sun8i-h3-spi
++      - const: allwinner,sun50i-r329-spi
++      - const: allwinner,sun50i-r329-spi-dbi
+       - items:
+           - enum:
+               - allwinner,sun8i-r40-spi
 -- 
 2.39.2
 
