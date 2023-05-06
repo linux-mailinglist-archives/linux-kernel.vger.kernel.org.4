@@ -2,63 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FEE6F942C
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 23:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085386F9447
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 23:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjEFV2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 17:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
+        id S229655AbjEFV6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 17:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjEFV2O (ORCPT
+        with ESMTP id S229441AbjEFV6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 17:28:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5681155E;
-        Sat,  6 May 2023 14:28:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8788E60F08;
-        Sat,  6 May 2023 21:28:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D49B5C433D2;
-        Sat,  6 May 2023 21:28:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683408491;
-        bh=RFhHQs458u3Qp1xbSCl1n0jO2N9ZgZ97gT8J33I1Nmg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AQtxcUktNQBisfpphnbxb4MoQtZFau70RrpVnPWa7onAXoTZK6Z+81oX5t/QkLxkm
-         IGE613r6Gn0dG6J5GhRaIGFAeCuIrvNKy8xH2dOCW/E/EkkESFOyjVcgM9TGeMXafE
-         RA09ZW5YyjyRZuUoJ8tbUiNmj9SHzE/ls64qMwaIyqSRMwSxv2vHayG78ExAn4IM6G
-         UAjgvg08D2soxV2uh9ERk/OioqgsssGxGfoMDDLZXc9Q+2ZapxtMyY72upwM60FXNi
-         6otnSVwYzVeVR7odlxwx0IRhykFZMBeFRHhmcUD59ZFzZzfvP1f3uf8dv9vb4Zmae1
-         nEjDKaJG2DwrA==
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Hao Luo <haoluo@google.com>, Ian Rogers <irogers@google.com>,
-        James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Roman Lozko <lozko.roma@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Richter <tmricht@linux.ibm.com>
-Subject: [GIT PULL 0/2] perf tools changes for v6.4: Disable BPF based features in the default build
-Date:   Sat,  6 May 2023 18:27:58 -0300
-Message-Id: <20230506212758.1201184-1-acme@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Sat, 6 May 2023 17:58:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13D0F191E6;
+        Sat,  6 May 2023 14:58:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC8FC1FB;
+        Sat,  6 May 2023 14:59:14 -0700 (PDT)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 364DF3F5A1;
+        Sat,  6 May 2023 14:58:27 -0700 (PDT)
+Date:   Sat, 6 May 2023 22:58:11 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Maksim Kiselev <bigunclemax@gmail.com>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 1/6] dt-bindings: spi: sun6i: add DT bindings for
+ Allwinner R329 SPI
+Message-ID: <20230506225811.4e928e46@slackpad.lan>
+In-Reply-To: <e38cbcdf-5963-fb00-d7b2-66d4129f9fce@linaro.org>
+References: <20230506073018.1411583-1-bigunclemax@gmail.com>
+        <20230506073018.1411583-2-bigunclemax@gmail.com>
+        <e38cbcdf-5963-fb00-d7b2-66d4129f9fce@linaro.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,50 +63,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
+On Sat, 6 May 2023 12:53:07 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Hi Linus,
+Hi Maksim,
 
-	I did further tests and realised I made a mistake in trying to
-make this the default now, we need to polish it further before this
-becomes acceptable for a default build.
+> On 06/05/2023 09:30, Maksim Kiselev wrote:
+> > From: Icenowy Zheng <icenowy@aosc.io>
+> > 
+> > Allwinner R329 SPI has two controllers, and the second one has helper
+> > functions for MIPI-DBI Type C.  
+> 
+> I wonder what is the difference of DBI compatible. You refer to "helper
+> functions", which sounds like driver... do you mean some parts of SPI
+> controller?
 
-	This is on top of the previous two requests.
+So I checked the manuals, all of the D1, T113-s and R329 are the same
+in this respect:
+- There are two SPI controllers, the "first" one is what this series
+  fully supports.
+- The second SPI controller has some additional registers and two
+  extra bits in the control register to drive the DBI extension, but is
+  otherwise compatible to the first one:
 
-	I apologize for wasting your time,
+So I'd suggest to introduce the following compatible string
+combinations to the binding *now*. We don't support the DBI bits (yet),
+but this would be the correct hardware description:
 
-- Arnaldo
+For the R329:
+spi0: spi@4025000 {
+	compatible = "allwinner,sun50i-r329-spi";
+	....
+spi1: spi@4026000 {
+	compatible = "allwinner,sun50i-r329-spi-dbi",
+		     "allwinner,sun50i-r329-spi";
+For the D1/T113s:
+spi0: spi@4025000 {
+	compatible = "allwinner,sun20i-d1-spi",
+		     "allwinner,sun50i-r329-spi";
+	....
+spi1: spi@4026000 {
+	compatible = "allwinner,sun20i-d1-spi-dbi",
+		     "allwinner,sun50i-r329-spi-dbi",
+		     "allwinner,sun50i-r329-spi";
 
-The following changes since commit 6c73f819b6b6d6f052e8dbe3f66f0693554ddf48:
+I leave that as an exercise to the reader to convert that into the
+minimal set of DT schema lines ;-)
+I would suggest to add both the D1/T113s and the R329 bindings in this
+one patch, to reduce the churn. I guess if you do this, you could even
+drop Icenowy's authorship on this patch, since it has not much to do
+with the original version anymore.
 
-  perf metrics: Fix SEGV with --for-each-cgroup (2023-05-05 19:18:55 -0300)
+Cheers,
+Andre
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-for-v6.4-3-2023-05-06
+> > Add compatible strings for these controllers
+> > 
+> > Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+>
+> > ---
+> >  .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml        | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> > index de36c6a34a0f..2c1b8da35339 100644
+> > --- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> > +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+> > @@ -21,6 +21,8 @@ properties:
+> >      oneOf:
+> >        - const: allwinner,sun6i-a31-spi
+> >        - const: allwinner,sun8i-h3-spi
+> > +      - const: 
+> > +      - const: allwinner,sun50i-r329-spi-dbi  
+> 
+> As Conor pointed out, nothing improved here.
+> 
+> Best regards,
+> Krzysztof
+> 
 
-for you to fetch changes up to 9a2d5178b9d51e1c5f9e08989ff97fc8d4893f31:
-
-  Revert "perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL" (2023-05-06 18:07:37 -0300)
-
-----------------------------------------------------------------
-Disable building BPF based features by default for v6.4.
-
-We need to better polish building with BPF skels, so revert back to
-making it an experimental feature that has to be explicitely enabled
-using BUILD_BPF_SKEL=1.
-
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-
-----------------------------------------------------------------
-Arnaldo Carvalho de Melo (2):
-      Revert "perf build: Warn for BPF skeletons if endian mismatches"
-      Revert "perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL"
-
- tools/perf/Makefile.config              | 14 +++-----------
- tools/perf/Makefile.perf                |  8 ++++----
- tools/perf/builtin-lock.c               |  2 +-
- tools/perf/builtin-record.c             |  2 +-
- tools/perf/builtin-version.c            |  1 -
- tools/perf/tests/shell/record_offcpu.sh |  2 +-
- 6 files changed, 10 insertions(+), 19 deletions(-)
