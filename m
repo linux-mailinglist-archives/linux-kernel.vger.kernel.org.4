@@ -2,146 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839CD6F9114
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 12:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 977656F9118
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 12:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbjEFKD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 06:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        id S231705AbjEFKJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 06:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjEFKDZ (ORCPT
+        with ESMTP id S230229AbjEFKJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 06:03:25 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481AFE7;
-        Sat,  6 May 2023 03:03:24 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3078a3f3b5fso247383f8f.0;
-        Sat, 06 May 2023 03:03:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1683367403; x=1685959403;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ueELjeyb07hK7s0pC0O3S1xswXDm+l4FhQ/cLtbQFdY=;
-        b=ijgf9H6u0z6xvbCdR6MZliCOCpcFyulCuDDqJbfsi5cRetTdQZNeeBzg9uVx7zd3R5
-         dbKjGB2xKxR6anv7BwvUMbIX2VjKHp1q0qHsqu0H+9DvTBgP4kAcZBzeAF+tw/JJ0y5v
-         8rLmf8jaJDC3rgrSSh/AOk9NzDB8JEa75yHn/VCAuutucEezZdDH4emw7Gh2WiKeLwDn
-         61slkDJbr8YqcgSCmq1UZvwPgnK9Ug7HZeizlX2eqoUVvUUkO2/o0HpwDenct4Wh2xZb
-         q7yoAQ/EwsW/WDTdEBWw1EMAGJ2OzoR5f27I+pc/zg8kXP/TG/Pdo/zWng8+6Y56Xg0q
-         N7jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683367403; x=1685959403;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ueELjeyb07hK7s0pC0O3S1xswXDm+l4FhQ/cLtbQFdY=;
-        b=j++h3mQ1sqWW0dMSD0Ef7pY3ZV1Dd5eunOj+pmFvDfheIHcQHmo/hjmGs/w+e4z4+P
-         rBfX6tHIKbeGspE7hbYKA8uut30mt0RS3k+gsNiY1TCCgTgoOc1LAQOihRSSzVWlJnua
-         dqVag/R24eZ7WbENHZS8VVN5wIAvY3WELB7HEOBknJpkZvlfiPI5SEhtts7+k0rPp3p2
-         x18noYNR2sY/GKfOSGk9otiyoZ+jsW09GmJdLUkmhjHcnK15Evn1bZfzzkGUltaPG7aT
-         mKB240NPb+YzcziuGD+EZOnp94K/oiOd8S3nSOPtQDUdQaS8gVGzNOzBgptUTS+64j0y
-         +NKw==
-X-Gm-Message-State: AC+VfDzW2H/KGiAQXyl6LscF4qN3RJePeRUYq6LA8w4JIs/TPtBDMBH+
-        W0nl6sAYXeFplHHVWGtaGW8=
-X-Google-Smtp-Source: ACHHUZ4exEZlHERpphG3smZebUsKKHHZB3izbZ3aFCuxqcJ6NrJnviwY90uDJOlr70D+IwhHZyoV2w==
-X-Received: by 2002:a5d:4a86:0:b0:306:2aea:3dff with SMTP id o6-20020a5d4a86000000b003062aea3dffmr3587169wrq.31.1683367402553;
-        Sat, 06 May 2023 03:03:22 -0700 (PDT)
-Received: from [192.168.1.10] (95f1f744.skybroadband.com. [149.241.247.68])
-        by smtp.googlemail.com with ESMTPSA id h14-20020a5d6e0e000000b0030631dcbea6sm4935067wrz.77.2023.05.06.03.03.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 May 2023 03:03:21 -0700 (PDT)
-Message-ID: <8f00f1a8-5f5a-44f2-088a-6f7d5c595d18@googlemail.com>
-Date:   Sat, 6 May 2023 11:03:18 +0100
+        Sat, 6 May 2023 06:09:06 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8304C04;
+        Sat,  6 May 2023 03:09:03 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 346A8iqt097916;
+        Sat, 6 May 2023 05:08:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683367724;
+        bh=ZcGs+6i6xW4Yu7JgT5yx4TaDMr7IDnOHdOmGqI71KKE=;
+        h=From:To:CC:Subject:Date;
+        b=q7NV2Kl9IHFFShNgd9OZoDYL1x39PLuxG4GFBiiMc1qTzWYcMkhwI4hm81v46R6+M
+         4d7xL7wVX1eoQ+9VlqUCUVNvf5Ps209LisemW9C7BEG5yso8RlhlgyuuhPcToGtuy0
+         9DSfSPpdaQLSsol8V+WDVXXGOWDJzD6yWHMCquK4=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 346A8iew118434
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sat, 6 May 2023 05:08:44 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sat, 6
+ May 2023 05:08:43 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Sat, 6 May 2023 05:08:43 -0500
+Received: from udit-HP-Z2-Tower-G9-Workstation-Desktop-PC.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 346A8eAu025949;
+        Sat, 6 May 2023 05:08:40 -0500
+From:   Udit Kumar <u-kumar1@ti.com>
+To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <afd@ti.com>, <n-francis@ti.com>
+CC:     Udit Kumar <u-kumar1@ti.com>
+Subject: [RFC PATCH v2] arm64: dts: ti: k3-j721s2: Add reserved status in msmc node.
+Date:   Sat, 6 May 2023 15:38:26 +0530
+Message-ID: <20230506100826.1525641-1-u-kumar1@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: Linux 6.3.1
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
-        jslaby@suse.cz
-References: <2023050123-resubmit-silica-ac32@gregkh>
- <c2ac55a4-aaf5-2f49-be08-d326fe0c17f8@googlemail.com>
- <2023050202-slouchy-princess-e7dd@gregkh>
- <2023050225-brutishly-enlarging-c54e@gregkh>
- <2023050201-bluish-habitable-474a@gregkh>
- <c7842e46-fc41-c989-b5e7-ec504cd0c8f2@googlemail.com>
- <2023050612-failing-headset-0d9c@gregkh>
-Content-Language: en-GB
-From:   Chris Clayton <chris2553@googlemail.com>
-In-Reply-To: <2023050612-failing-headset-0d9c@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+TI K3 SOCs have msmc sram, part of it can be configured as L3 cache
+depending upon system firmware configuration file.
+
+This could be possible to have no L3 cache or variable size of
+L3 cache.
+In either case top of 64KB of SRAM has to be reserved for system
+firmware called tifs.
+
+https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/general/core.html?highlight=msmc
+Section: TISCI_MSG_QUERY_MSMC.
+
+But u-boot as part of fix up is deleting sysfw and l3cache node
+before passing DT to OS
+https://github.com/u-boot/u-boot/blob/master/arch/arm/mach-k3/common.c#L412
+
+But keeping tifs subnode as is, tifs subnode memory region is also not
+accessible to OS.
+
+In my view we can handle in two ways
+1) delete tifs node as well
+In this case, only accessible sram will be visible to OS
+https://lore.kernel.org/all/20230420081128.3617214-1-u-kumar1@ti.com/
+
+2) make these nodes (tifs, atf and l3cache) as reserved,
+so that OS has complete view of memory.
+
+This is patch for option 2 to mark atf, l3-cache and tifs as
+reserved. and let u-boot to set correct size for these nodes
+as part of runtime fixup.
+
+Nishanth suggested to discuss in k.org group
+https://lore.kernel.org/all/20230502230022.5pjywy6h7oqrkmwh@elusive/
+
+So sending this patch for suggestion for selection right option.
+Also other options are welcome.
 
 
-On 06/05/2023 01:52, Greg Kroah-Hartman wrote:
-> On Tue, May 02, 2023 at 02:12:58PM +0100, Chris Clayton wrote:
->> Hi Greg
->>
->> On 02/05/2023 08:31, Greg Kroah-Hartman wrote:
->>> On Tue, May 02, 2023 at 08:43:47AM +0900, Greg Kroah-Hartman wrote:
->>>> On Tue, May 02, 2023 at 06:40:03AM +0900, Greg Kroah-Hartman wrote:
->>>>> On Mon, May 01, 2023 at 07:22:56AM +0100, Chris Clayton wrote:
->>>>>> 6.3.1 FTBFS thusly:
->>>>>
->>>>> What is "FTBFS"?
->>>>>
->>>>>> drivers/net/wireguard/timers.c: In function 'wg_expired_retransmit_handshake':
->>>>>> <command-line>: error: format '%d' expects argument of type 'int', but argument 6 has type 'long unsigned int'
->>>>>> [-Werror=format=]
->>>>>> <command-line>: note: in expansion of macro 'KBUILD_MODNAME'
->>>>>> ./include/linux/dynamic_debug.h:223:29: note: in expansion of macro 'pr_fmt'
->>>>>>   223 |                 func(&id, ##__VA_ARGS__);                       \
->>>>>>       |                             ^~~~~~~~~~~
->>>>>
->>>>> <snip>
->>>>>
->>>>>> There's a patch to drivers/net/wireguard/timers.c that fixes these errors and you can find it at
->>>>>> 2d4ee16d969c97996e80e4c9cb6de0acaff22c9f in Linus' tree.
->>>>>
->>>>> Thanks for this report, we'll queue it up soon.
->>>>
->>>> Odd, that commit is in 6.2 already, so how are you applying this to
->>>> 6.3.y?
->>>
->>> And this is only a gcc13 issue, right?  So it's not a regression, it's
->>> always been there, nothing new caused it in this release from what I can
->>> tell.
->>>
->>> Actually I don't see how this is an issue in 6.3.1 anyway, as again, the
->>> proposed fix you gave is in 6.2, so what really is happening here?
->>
->> You seem not to have seen the email I sent shortly after my original report. In that email I apologised for the noise
->> because, due to a caffeine deficiency, I had reported the problem against the wrong kernel version and that it actually
->> occurs 6.1.27. gcc13 spits it out as a warning, but kernel build system is setbup to treat warnings as errors, so the
->> build fails.
-> 
-> Ok, but this is not a new issue, right?  6.1.26 should have had the same
-> problem from what I can tell.
-> 
+Signed-off-by: Udit Kumar <u-kumar1@ti.com>
+---
+Changes since v1:
+https://lore.kernel.org/all/20230503144706.1265672-1-u-kumar1@ti.com/
+- remove cover letter for 1 patch
 
-I don't know. I haven't tried to build 6.1.26 with gcc13. The commit message for the patch in Linus' tree says that this
-is a new warning in gcc13.  The kernel build system configures gcc to treat warnings as errors so, with gcc13, the build
-failed and I reported the failure in the initial email of this thread. Looking at that patch submission
-(https://lore.kernel.org/all/20221213225208.3343692-2-Jason@zx2c4.com/), it appears not to have been tagged for or
-copied to stable.
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Once I'd realised that I had reported the problem against the wrong kernel version, I sent my apologetic email and sent
-a new email reporting the problem against 6.1.27. In response to that (I assume), you've queued the patch for 6.1 stable
-and for 5.15 and 5.10, so everything seems to be in order.
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+index 2dd7865f7654..791993060f44 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+@@ -14,14 +14,17 @@ msmc_ram: sram@70000000 {
+ 		ranges = <0x0 0x0 0x70000000 0x400000>;
+ 
+ 		atf-sram@0 {
++			status = "reserved";
+ 			reg = <0x0 0x20000>;
+ 		};
+ 
+ 		tifs-sram@1f0000 {
++			status = "reserved";
+ 			reg = <0x1f0000 0x10000>;
+ 		};
+ 
+ 		l3cache-sram@200000 {
++			status = "reserved";
+ 			reg = <0x200000 0x200000>;
+ 		};
+ 	};
+-- 
+2.34.1
 
-Chris
-
-
-> greg k-h
