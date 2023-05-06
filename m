@@ -2,138 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FE66F8DB6
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 03:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 963026F8DBA
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 03:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbjEFBoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 21:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
+        id S232784AbjEFBpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 21:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232140AbjEFBn6 (ORCPT
+        with ESMTP id S231936AbjEFBpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 21:43:58 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B03B49E7
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 18:43:56 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-763646b324aso325874939f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 May 2023 18:43:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683337436; x=1685929436;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GEAVY+G+dyIbuZjjPxrcrCEx2E1ib4FojCVjLcKiTGM=;
-        b=LnyfTCfkCQY0xdHyDu9aKy+ppFYW6KMuwzFmo1z1XoEI8qKmYGiEYhQY4+/dme6Qck
-         0wIeACXYjavUGNyo+W8BcCl95UvSIFOPKZSWHrtPTtYR2P8L+iTDjVxyi+xK3uyh3eLH
-         LTsBg0p3APLor9wo8eq7rrfS9l8PeWjVhz4ZZRB7JGB84dNqSEzWaygj6mRX2jr9V7cE
-         WLiucE4MnsIgXWiPott0W5cmf9wG8TC2nT+u+W36xvjNQ28poG8U7MJcBdwsvc2MtkQz
-         eFX8WA49ePTXCk8BGseQXKQbEPGNbVD3JkPq6OZIyWG96Gyj+Rmfd7uCZv3ZTf/+rgcn
-         68XQ==
-X-Gm-Message-State: AC+VfDz8ntXF6VFjSsHYfhYxG+fltrcQa9uQM37BumsRl1h/pmEYMJ2p
-        gKGtxCs9ZEAMyM3vMXlGMzDI9Zk15AKnTjY3psmL/DqKIeb8
-X-Google-Smtp-Source: ACHHUZ40r2kaXH+BdAcVW2IrF2fQz/wl0ztSgOji8xFrvl6Nr86JnqB8W8mKq8kyxy3Df6TYZbXqDfgrF5+Rb0GcYZGqsOqdPfSQ
+        Fri, 5 May 2023 21:45:13 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id CA0C249D4;
+        Fri,  5 May 2023 18:45:11 -0700 (PDT)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id E76F8180104BD0;
+        Sat,  6 May 2023 09:44:55 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   Su Hui <suhui@nfschina.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Baisong Zhong <zhongbaisong@huawei.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Su Hui <suhui@nfschina.com>
+Subject: [PATCH]  media: dvb-usb: remove unnecessary (void*) conversions
+Date:   Sat,  6 May 2023 09:44:47 +0800
+Message-Id: <20230506014447.32746-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Received: by 2002:a02:84c1:0:b0:40f:ae69:a144 with SMTP id
- f59-20020a0284c1000000b0040fae69a144mr1384969jai.5.1683337435893; Fri, 05 May
- 2023 18:43:55 -0700 (PDT)
-Date:   Fri, 05 May 2023 18:43:55 -0700
-In-Reply-To: <000000000000725cab05f55f1bb0@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e7582c05fafc8901@google.com>
-Subject: Re: [syzbot] [btrfs?] kernel BUG in btrfs_exclop_balance (2)
-From:   syzbot <syzbot+5e466383663438b99b44@syzkaller.appspotmail.com>
-To:     chris@chrisdown.name, clm@fb.com, dsterba@suse.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+No need cast (void*) to (struct az6027_device_state *) or
+(struct dw2102_state *).
 
-HEAD commit:    7163a2111f6c Merge tag 'acpi-6.4-rc1-3' of git://git.kerne..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=175bb84c280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
-dashboard link: https://syzkaller.appspot.com/bug?extid=5e466383663438b99b44
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12048338280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ff7314280000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/01051811f2fe/disk-7163a211.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a26c68e4c8a6/vmlinux-7163a211.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/17380fb8dad4/bzImage-7163a211.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/b30a249e8609/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5e466383663438b99b44@syzkaller.appspotmail.com
-
-assertion failed: fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE_PAUSED, in fs/btrfs/ioctl.c:463
-------------[ cut here ]------------
-kernel BUG at fs/btrfs/messages.c:259!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 8630 Comm: syz-executor102 Not tainted 6.3.0-syzkaller-13225-g7163a2111f6c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:btrfs_assertfail+0x18/0x20 fs/btrfs/messages.c:259
-Code: df e8 2c 05 36 f7 e9 50 fb ff ff e8 b2 90 01 00 66 90 66 0f 1f 00 89 d1 48 89 f2 48 89 fe 48 c7 c7 80 32 2c 8b e8 c8 60 ff ff <0f> 0b 66 0f 1f 44 00 00 66 0f 1f 00 53 48 89 fb e8 73 31 de f6 48
-RSP: 0018:ffffc9000ae27e48 EFLAGS: 00010246
-RAX: 0000000000000066 RBX: 1ffff1100fa13c18 RCX: e812ce05a9b3c300
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: 0000000000000002 R08: ffffffff816f0fec R09: fffff520015c4f7d
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88807d09e0c0
-R13: ffff88807d09c000 R14: ffff88807d09c678 R15: dffffc0000000000
-FS:  00007f2bb10a8700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2bb0c90000 CR3: 0000000028447000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_exclop_balance+0x153/0x1f0 fs/btrfs/ioctl.c:463
- btrfs_ioctl_balance+0x482/0x7c0 fs/btrfs/ioctl.c:3562
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f2bb853ec69
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f2bb10a82f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f2bb85c87c0 RCX: 00007f2bb853ec69
-RDX: 0000000020000540 RSI: 00000000c4009420 RDI: 0000000000000004
-RBP: 00007f2bb85951d0 R08: 00007f2bb10a8700 R09: 0000000000000000
-R10: 00007f2bb10a8700 R11: 0000000000000246 R12: 7fffffffffffffff
-R13: 0000000100000001 R14: 8000000000000001 R15: 00007f2bb85c87c8
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:btrfs_assertfail+0x18/0x20 fs/btrfs/messages.c:259
-Code: df e8 2c 05 36 f7 e9 50 fb ff ff e8 b2 90 01 00 66 90 66 0f 1f 00 89 d1 48 89 f2 48 89 fe 48 c7 c7 80 32 2c 8b e8 c8 60 ff ff <0f> 0b 66 0f 1f 44 00 00 66 0f 1f 00 53 48 89 fb e8 73 31 de f6 48
-RSP: 0018:ffffc9000ae27e48 EFLAGS: 00010246
-RAX: 0000000000000066 RBX: 1ffff1100fa13c18 RCX: e812ce05a9b3c300
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: 0000000000000002 R08: ffffffff816f0fec R09: fffff520015c4f7d
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88807d09e0c0
-R13: ffff88807d09c000 R14: ffff88807d09c678 R15: dffffc0000000000
-FS:  00007f2bb10a8700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2bb0c90000 CR3: 0000000028447000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
+Signed-off-by: Su Hui <suhui@nfschina.com>
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+ drivers/media/usb/dvb-usb/az6027.c | 16 ++++++++--------
+ drivers/media/usb/dvb-usb/dw2102.c |  4 ++--
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/media/usb/dvb-usb/az6027.c b/drivers/media/usb/dvb-usb/az6027.c
+index 7d78ee09be5e..f7a6ab29e530 100644
+--- a/drivers/media/usb/dvb-usb/az6027.c
++++ b/drivers/media/usb/dvb-usb/az6027.c
+@@ -408,7 +408,7 @@ static int az6027_ci_read_attribute_mem(struct dvb_ca_en50221 *ca,
+ 					int address)
+ {
+ 	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
+-	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
++	struct az6027_device_state *state = d->priv;
+ 
+ 	int ret;
+ 	u8 req;
+@@ -481,7 +481,7 @@ static int az6027_ci_read_cam_control(struct dvb_ca_en50221 *ca,
+ 				      u8 address)
+ {
+ 	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
+-	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
++	struct az6027_device_state *state = d->priv;
+ 
+ 	int ret;
+ 	u8 req;
+@@ -527,7 +527,7 @@ static int az6027_ci_write_cam_control(struct dvb_ca_en50221 *ca,
+ 				       u8 value)
+ {
+ 	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
+-	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
++	struct az6027_device_state *state = d->priv;
+ 
+ 	int ret;
+ 	u8 req;
+@@ -589,7 +589,7 @@ static int CI_CamReady(struct dvb_ca_en50221 *ca, int slot)
+ static int az6027_ci_slot_reset(struct dvb_ca_en50221 *ca, int slot)
+ {
+ 	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
+-	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
++	struct az6027_device_state *state = d->priv;
+ 
+ 	int ret, i;
+ 	u8 req;
+@@ -645,7 +645,7 @@ static int az6027_ci_slot_shutdown(struct dvb_ca_en50221 *ca, int slot)
+ static int az6027_ci_slot_ts_enable(struct dvb_ca_en50221 *ca, int slot)
+ {
+ 	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
+-	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
++	struct az6027_device_state *state = d->priv;
+ 
+ 	int ret;
+ 	u8 req;
+@@ -674,7 +674,7 @@ static int az6027_ci_slot_ts_enable(struct dvb_ca_en50221 *ca, int slot)
+ static int az6027_ci_poll_slot_status(struct dvb_ca_en50221 *ca, int slot, int open)
+ {
+ 	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
+-	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
++	struct az6027_device_state *state = d->priv;
+ 	int ret;
+ 	u8 req;
+ 	u16 value;
+@@ -719,7 +719,7 @@ static void az6027_ci_uninit(struct dvb_usb_device *d)
+ 	if (NULL == d)
+ 		return;
+ 
+-	state = (struct az6027_device_state *)d->priv;
++	state = d->priv;
+ 	if (NULL == state)
+ 		return;
+ 
+@@ -735,7 +735,7 @@ static void az6027_ci_uninit(struct dvb_usb_device *d)
+ static int az6027_ci_init(struct dvb_usb_adapter *a)
+ {
+ 	struct dvb_usb_device *d = a->dev;
+-	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
++	struct az6027_device_state *state = d->priv;
+ 	int ret;
+ 
+ 	deb_info("%s", __func__);
+diff --git a/drivers/media/usb/dvb-usb/dw2102.c b/drivers/media/usb/dvb-usb/dw2102.c
+index 0ca764282c76..d34d53c651c2 100644
+--- a/drivers/media/usb/dvb-usb/dw2102.c
++++ b/drivers/media/usb/dvb-usb/dw2102.c
+@@ -903,7 +903,7 @@ static int su3000_streaming_ctrl(struct dvb_usb_adapter *adap, int onoff)
+ 
+ static int su3000_power_ctrl(struct dvb_usb_device *d, int i)
+ {
+-	struct dw2102_state *state = (struct dw2102_state *)d->priv;
++	struct dw2102_state *state = d->priv;
+ 	int ret = 0;
+ 
+ 	info("%s: %d, initialized %d", __func__, i, state->initialized);
+@@ -2576,7 +2576,7 @@ static int dw2102_probe(struct usb_interface *intf,
+ static void dw2102_disconnect(struct usb_interface *intf)
+ {
+ 	struct dvb_usb_device *d = usb_get_intfdata(intf);
+-	struct dw2102_state *st = (struct dw2102_state *)d->priv;
++	struct dw2102_state *st = d->priv;
+ 	struct i2c_client *client;
+ 
+ 	/* remove I2C client for tuner */
+-- 
+2.30.2
+
