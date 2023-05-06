@@ -2,99 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD9D6F8D21
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 02:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3086F8D23
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 02:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbjEFASZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 May 2023 20:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
+        id S232085AbjEFATS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 May 2023 20:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjEFASX (ORCPT
+        with ESMTP id S229792AbjEFATP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 May 2023 20:18:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035A91981
-        for <linux-kernel@vger.kernel.org>; Fri,  5 May 2023 17:18:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9273564086
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 00:18:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D717C433EF;
-        Sat,  6 May 2023 00:18:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683332302;
-        bh=Wq0uGoHIP/oC3SNCCfNBqoARzJspGboo0f4dLlaH48g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZakMqozcPnAVeR3QlITmFublG819sNyzB7WvPia0MG8vZWHRLFaPfwdqzG9rIfUzE
-         OwfT3sChp9+LFK8l3adjIopvYk3XNI+71qbWNW0EfWJtOb5DMY4JmtqGX4RhP3Yq7g
-         XyhKbz90RASM0WXGzDzj0BnwGY1aJks4BsH7ySUeSh0beXR2oqlI3dU1g3Hvo0GJiQ
-         E5LkYGGyZJ0X9ZrQpra8BpirRw1DcLzVc7hUkbln8071p8p8s6HmplHhs2eceUvAHs
-         teG5fh13MM/CxaYUHthdYMLHvbl+UNtlixd0aW1XQZIK1tYeQsFbkOyrirSZUJKHlT
-         gbKnnYK6fQ17g==
-Date:   Sat, 6 May 2023 09:18:19 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, alexis.lothore@bootlin.com
-Subject: Re: [PATCH] regmap: don't check for alignment when using reg_shift
-Message-ID: <ZFWcy/Z19vffsAg+@finisterre.sirena.org.uk>
-References: <20230420150617.381922-1-maxime.chevallier@bootlin.com>
- <ZEKwxhJJNkuX7VTr@colin-ia-desktop>
- <bb836be3-456c-48fd-9b19-62279fee6b8d@sirena.org.uk>
- <20230428093010.07e61080@pc-7.home>
- <20230428094745.63677228@pc-7.home>
- <ZFU6oepWPoYDJczo@euler>
+        Fri, 5 May 2023 20:19:15 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A83AF7;
+        Fri,  5 May 2023 17:19:14 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f11d267d8bso2696068e87.2;
+        Fri, 05 May 2023 17:19:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683332352; x=1685924352;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5zJbT9seqOr610GSQPlm/KBZDSeZR99v0XHRcyfZsL4=;
+        b=Wy214gXS09ETUO442Xq6Q9xy8yO5zx3NwJ80gbhp9l8mJvTnqZxBYLtiZHkUg365E6
+         iYJAHc/wr7eQ9n0HjOBlfCkA1xbNa/wFj0YLUFI5JgToiDLX/RNwAxvj3UZdE2Bm+d6C
+         T6XehCFIFV/4yIjzAGwlzfU65fwf8Hmudt6KSOq81SDIDnzol1+NvK6vFjZIXgvBCy67
+         uBHgt8HbyKp4whqMUjL2adkG42wVc0H1Dl9lzPL/Mvkz68YGaQvflSnGXBjdGSPZEmqe
+         qK35OobtnpVC194sJGe6lImafdwLyMuakxRyngXqlkVeoMUy3wKgdoug+zxlK4GO4nZJ
+         4kTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683332352; x=1685924352;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5zJbT9seqOr610GSQPlm/KBZDSeZR99v0XHRcyfZsL4=;
+        b=CVo+/nvLQ1B3rXGMr8DMl2IvLzK+3190lpYm85puROhqtvI9k7J5oYSxG9nmLmN+Sc
+         HSxVJUMt1fr2X2T1izNd1q+8aGrva3Xtyjw2Co9LysqtD3cmBAj4TkKOdfZiDd48dLRU
+         /Z6k58JmRD/LRl4T1k96PIEy9tE4mCHok0eF6mJ278lB1Eu+BSBe2HwFhkWjSDIQYqFA
+         TKd+/MM2MsJj3x0sFh8nrkUnFSP+IJFxNzgTQcwCI8KXtylew/pqPF3uDgnPLoQoQ583
+         fZ6Cd8kl13hS3xwhfl7/qdf27twTv7NbPQktVVZ53D2llbHwQgmn2L9awzy4Xt/VBJxV
+         dE4Q==
+X-Gm-Message-State: AC+VfDyF20n7UFPvkAMLlLas4qksiJoKScsysv/5R6Z0pDnsuiiSS03r
+        b3luWvVkiI/an9+eR1xopvCVOWCf6QdRNvSrhnPPQJImv8A=
+X-Google-Smtp-Source: ACHHUZ4A99RCn0qy34YbIPZUTbTx4Fx64p6VPUhpMYdbTtJtj8dj4wJi/OLnFnebB3J35wBSRqKHObv+423QrsG+xLc=
+X-Received: by 2002:a05:6512:3c2:b0:4b6:eca8:f6ca with SMTP id
+ w2-20020a05651203c200b004b6eca8f6camr973158lfp.67.1683332352005; Fri, 05 May
+ 2023 17:19:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="A0YcxnbFi5Tgizgo"
-Content-Disposition: inline
-In-Reply-To: <ZFU6oepWPoYDJczo@euler>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 5 May 2023 19:19:00 -0500
+Message-ID: <CAH2r5msXNvALwEwtEyQuX_VjN=aNgfPZkvMbR74GeBHZyTDO_A@mail.gmail.com>
+Subject: [GIT PULL] ksmbd server fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Namjae Jeon <linkinjeon@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Please pull the following changes since commit
+1ae78a14516b9372e4c90a89ac21b259339a3a3a:
 
---A0YcxnbFi5Tgizgo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+  Merge tag '6.4-rc-ksmbd-server-fixes' of git://git.samba.org/ksmbd
+(2023-04-29 11:10:39 -0700)
 
-On Fri, May 05, 2023 at 10:19:29AM -0700, Colin Foster wrote:
+are available in the Git repository at:
 
-> Sorry for a really delayed response, but I just got back around to
-> thinking about this. Crazy busy times for me.
+  git://git.samba.org/ksmbd.git tags/6.4-rc-ksmbd-server-fixes-part2
 
-> What about an explicit parameter in regmap_config that will disable
-> alignment checks? That seems like it might be a welcome feature
-> addition.
+for you to fetch changes up to eb307d09fe15844fdaebeb8cc8c9b9e925430aa5:
 
-You can already just not specify an alignment requirement - if you can
-configure the regmap to specify some new flag you could also just not
-specify the alignment requirement in the first place.
+  ksmbd: call rcu_barrier() in ksmbd_server_exit() (2023-05-03 23:03:02 -0500)
 
---A0YcxnbFi5Tgizgo
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+Ten ksmbd server fixes, including some important security fixes
+- Two use after free fixes
+- Fix RCU callback race
+- Deadlock fix
+- Three patches to prevent session setup attacks
+- Prevent guest users from establishing multichannel sessions
+- Fix null pointer dereference in query FS info
+- Memleak fix
+----------------------------------------------------------------
+Namjae Jeon (10):
+      ksmbd: fix memleak in session setup
+      ksmbd: fix NULL pointer dereference in smb2_get_info_filesystem()
+      ksmbd: fix racy issue from session setup and logoff
+      ksmbd: destroy expired sessions
+      ksmbd: block asynchronous requests when making a delay on session setup
+      ksmbd: fix deadlock in ksmbd_find_crypto_ctx()
+      ksmbd: not allow guest user on multichannel
+      ksmbd: fix racy issue from smb2 close and logoff with multichannel
+      ksmbd: fix racy issue under cocurrent smb2 tree disconnect
+      ksmbd: call rcu_barrier() in ksmbd_server_exit()
 
------BEGIN PGP SIGNATURE-----
+ fs/ksmbd/auth.c              |  19 +++++++++++--------
+ fs/ksmbd/connection.c        |  68
+++++++++++++++++++++++++++++++++++++++++++++++++--------------------
+ fs/ksmbd/connection.h        |  58
++++++++++++++++++++++++++++++++++++++++-------------------
+ fs/ksmbd/mgmt/tree_connect.c |  13 ++++++++++++-
+ fs/ksmbd/mgmt/tree_connect.h |   3 +++
+ fs/ksmbd/mgmt/user_session.c |  81
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------
+ fs/ksmbd/mgmt/user_session.h |   1 +
+ fs/ksmbd/server.c            |   4 +++-
+ fs/ksmbd/smb2pdu.c           | 109
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------------------------
+ fs/ksmbd/smb2pdu.h           |   2 ++
+ fs/ksmbd/transport_tcp.c     |   2 +-
+ 11 files changed, 250 insertions(+), 110 deletions(-)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRVnMoACgkQJNaLcl1U
-h9BilQf/ZUDRU4B0h43glhDU+ROceH8YP/1WU9LBIhwtzttgtOqjQC2NKPwu322c
-I6r/9/FTXG2k969ejy1S4Dc+O80h5iR3ggmWAsvZ8g3Y13lWml2KM5/HfQdtJ63u
-1OYqOpli6iN3y5RSGxPJpR6VVOtT3JLJm/MJvLsctqtaOjPcVjnHkSyAm34Vc6Zk
-oDMO/Mbnnt+dsh7oH9+m61faEnLoBy1z5lvKOrq2Vnm2tutZiKmktY0N1fK20TjL
-DwvaM0NKwxC2TSM4idK+CaXjYTMDzaUIjurhN2uiN0Rm7T3KzQafUEPgBlzKz/y1
-YBfMPPTrwv/RbC6yRScb2wHwCbPGtw==
-=NTMu
------END PGP SIGNATURE-----
+-- 
+Thanks,
 
---A0YcxnbFi5Tgizgo--
+Steve
