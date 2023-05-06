@@ -2,140 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600116F939A
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 20:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2FD6F939E
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 20:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjEFS2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 14:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
+        id S229816AbjEFSbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 14:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjEFS16 (ORCPT
+        with ESMTP id S229527AbjEFSbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 14:27:58 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09D540C3
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 11:27:57 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-52c6504974dso2678253a12.2
-        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 11:27:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683397677; x=1685989677;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t/WwOrZJ5JRzyY6p6wiuOMAhVag97atAR6Wjafb+S2A=;
-        b=Ed0WNNwC5JVc/UevED/FuEHi+jsrMHibsAXB7n0Hv6KblssEN8GuVTTkx3Jbl8zlne
-         ifBfne1EIZ0L2ZEaowjD216ZVUWg8L4ItBmrxzS6sEbA31bCOzRvOMKRXshU3SiUU57N
-         UJKp8EOaPvg4hrgAnrbeRf4yMMdbPlqTyghbQwrx/7GK62MefqKXuuaSs91fwA32Yjeq
-         v4182toBBPBGXBJ+A+fes6LALCH2gP8JpwJdZ0I5CtVI8/Kr11V7B3BVeyn9jlW/Qpwt
-         Tpk++Jr5DlDwk4y+EjpiKpd7BIALwuIsTUDP5MOSe8T+Qurrmr8Tfy08BZ1lCsBoYyoJ
-         0MFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683397677; x=1685989677;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t/WwOrZJ5JRzyY6p6wiuOMAhVag97atAR6Wjafb+S2A=;
-        b=DLpCHzJpJkETVuwQdYJzWmRI5Vi5ad1yLrrrTODSWDOAbQs7w3kmohQ9aaoFNAkUPY
-         cMGyoweLTN23Iuoa7dkCzQzWX99XvoiF33A5PLnFBHieLuXcgwlqV3BAA8/OBGlhXBmW
-         fGI3sJKuj7F72QRMOpC9otkck3hFPP5QAzjH/sJgYb2xVrmL0LcTpaGkHYMl1x2Scp9c
-         uV+399VxZ9HuzUUR869npdSs+DN/RmKUcN3VEZEllLUChzcFP4JwZmjfAxOrVDDujYCx
-         n5B1HgNYHs8xkFESFo8+craX3o5ldUiT846nHXDPyyMYtGNnmdoNTAA1ohEzmHX09KK+
-         15jQ==
-X-Gm-Message-State: AC+VfDxmAEFWQz4FyQEYg5Rt4Uz9ZIDPIypUhyPi88Lfh8Lxhu2KDXNf
-        ETjifjz6xANJ76xf0d205fc6dGC4A1J1yvRf/qY=
-X-Google-Smtp-Source: ACHHUZ4dhBfjviOJchXZhn3Bir28JhXsuvyGtA7iNiGJcSNaCo4NTvQnwHDdb/5h9wBmDdh6jHp/AFrFotWfZQm4Pd8=
-X-Received: by 2002:a17:90a:9307:b0:24d:ef6a:dd0a with SMTP id
- p7-20020a17090a930700b0024def6add0amr5444552pjo.5.1683397677239; Sat, 06 May
- 2023 11:27:57 -0700 (PDT)
+        Sat, 6 May 2023 14:31:06 -0400
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9C53C00;
+        Sat,  6 May 2023 11:31:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:MIME-Version
+        :Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=LfQNvT8H4D9rjb0SPnNWYAHLtyQ02TVfsmKU8Ox/okM=; b=lT4MqoKgZ/hrrbrvj+z8CyC1Iq
+        L+GZI6lC/epdVrXrEwUzXsyyahHXXkTMtOJBQ1QewyL38nv4Xiv4GuS7UjlCYRSHWos7YfvN3JSkx
+        UgbA0jdaP744HubPc+kFub6sNi2FQybTdfrfsk665FKc2/KjawgoFVdp0TG1YUMu2Ip63qa2vkGCk
+        FDLYfwFsZwDKACjIxNyNjhfTcLxhUZ2lz/Pi0IVljPoR3Dfzdc7XEHv4INJvNm3tV0yOZSM3NZ/Kq
+        OxdzBSUM+xDcoU0PsjAYX4tgaY5FT3iUagDzfaF6hUsoD0lEYlYA6/mm1ACFF8zCQOEUG99wKoerh
+        xKHaemjw==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <anuradha@debian.org>)
+        id 1pvMg8-006Idn-FK; Sat, 06 May 2023 18:30:44 +0000
+From:   Anuradha Weeraman <anuradha@debian.org>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     anuradha@debian.org
+Subject: [PATCH] fs/open.c: Fix W=1 kernel doc warnings
+Date:   Sat,  6 May 2023 23:59:27 +0530
+Message-Id: <20230506182928.384105-1-anuradha@debian.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230506010933.170939-1-aford173@gmail.com> <20230506010933.170939-4-aford173@gmail.com>
-In-Reply-To: <20230506010933.170939-4-aford173@gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sat, 6 May 2023 13:27:45 -0500
-Message-ID: <CAHCN7xLQaqP19zeMy27uUjFxgigKgh8vDRRM1P_uEXzuw5bN=g@mail.gmail.com>
-Subject: Re: [PATCH V4 3/6] drm: bridge: samsung-dsim: Fetch
- pll-clock-frequency automatically
-To:     dri-devel@lists.freedesktop.org
-Cc:     aford@beaconembedded.com, Chen-Yu Tsai <wenst@chromium.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1983; i=anuradha@debian.org; h=from:subject; bh=MRs99HIyR+zaAgLmQG7AKOrC7Pt3I10oWZjroXWkqZw=; b=owEBbQKS/ZANAwAKAWNttaHZGGD9AcsmYgBkVpyIJES2GogU87hL5uzQKHFwaebfNS79m8XZ3 nJ846fnOlGJAjMEAAEKAB0WIQT1a48U4BTN710Ef8FjbbWh2Rhg/QUCZFaciAAKCRBjbbWh2Rhg /RY/EACKnoZ9qR6/hlJUVJEycxLf3UE1mXP2z+0+N7AVHZz1rn/9/Jr7moRuCmmp2OeSDQRKLbL jZie3E0ZLs7+YmvMKX+4SjVcmQqnj06q3H2n6otKH3xuxPI/WXo0GK3YNe3vXr+8jyOIA99Di8M +RQVA9Hnm++C1XTodSmAwHWUXsVr+O+9E94Wqdw5VzkRyQuRQq74SWrCWhjjCwbmi7N+BiDqAfX n/shlfZw9iZ9/G+FJ/CzIANdb8f9YZcDVYaDeLCJeQRpR6/OZ5+Y6Qo6jvsWYxfoiRlDTywx36h kz66tumIAl/OgiyFEmISWNlpgvwS4tBsBE5uBXUiA9JVv8XYLkPqTEZH5iMRlZ+2xuSDqT7upzn l5MAFsEs7PJbxS3j7Qgj9lwA0dRZCX6aFb0qoO7AafQoX1k9waGV5EhrORFUp8Hn0O68/hU+Vs3 ExINAu4NLzUh9KV3Nc0vx07H0U6J0JkCBYFzlk7ljFsNpIdpPnYZcOgyS9oQUgf5aah8HSKIhI5 J2mLpndtDBZ3uSBEmr3Se67JVQ0NdDgcFIrWZHrc8vKxiQ8BdQfGyLmnBk8GNdmVV6ay6mDRyF7 I4dnQJ5MfX2IYL68F2vPgtxsTeS6tSO4hAyrkb/nFVbySV4enSe/Qhr4I91eYWU1BoFwfUQID5g gPjZFvjWxAaY8Eg==
+X-Developer-Key: i=anuradha@debian.org; a=openpgp; fpr=F56B8F14E014CDEF5D047FC1636DB5A1D91860FD
+Content-Transfer-Encoding: 8bit
+X-Debian-User: anuradha
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 8:09=E2=80=AFPM Adam Ford <aford173@gmail.com> wrote=
-:
->
-> Make the pll-clock-frequency optional.  If it's present, use it
-> to maintain backwards compatibility with existing hardware.  If it
-> is absent, read clock rate of "sclk_mipi" to determine the rate.
->
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+fs/open.c: In functions 'setattr_vfsuid' and 'setattr_vfsgid':
+ warning: Function parameter or member 'attr' not described
+ - Fix warning by removing kernel-doc for these as they are static
+   inline functions and not required to be exposed via kernel-doc.
 
+fs/open.c:
+ warning: Excess function parameter 'opened' description in 'finish_open'
+ warning: Excess function parameter 'cred' description in 'vfs_open'
+ - Fix by removing the parameters from the kernel-doc as they are no
+   longer required by the function.
 
-Sorry for the noise.  I forgot to merge in the suggested updates for
-the messages so they don't look like errors.  A V5 is coming once I
-merge and test the changes.
+Signed-off-by: Anuradha Weeraman <anuradha@debian.org>
+---
+ fs/open.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-adam
-> ---
->  drivers/gpu/drm/bridge/samsung-dsim.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/brid=
-ge/samsung-dsim.c
-> index bf4b33d2de76..2dc02a9e37c0 100644
-> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
-> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-> @@ -1726,12 +1726,20 @@ static int samsung_dsim_parse_dt(struct samsung_d=
-sim *dsi)
->  {
->         struct device *dev =3D dsi->dev;
->         struct device_node *node =3D dev->of_node;
-> +       struct clk *pll_clk;
->         int ret;
->
->         ret =3D samsung_dsim_of_read_u32(node, "samsung,pll-clock-frequen=
-cy",
->                                        &dsi->pll_clk_rate);
-> -       if (ret < 0)
-> -               return ret;
-> +
-> +       /* If it doesn't exist, read it from the clock instead of failing=
- */
-> +       if (ret < 0) {
-> +               pll_clk =3D devm_clk_get(dev, "sclk_mipi");
-> +               if (!IS_ERR(pll_clk))
-> +                       dsi->pll_clk_rate =3D clk_get_rate(pll_clk);
-> +               else
-> +                       return PTR_ERR(pll_clk);
-> +       }
->
->         ret =3D samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequ=
-ency",
->                                        &dsi->burst_clk_rate);
-> --
-> 2.39.2
->
+diff --git a/fs/open.c b/fs/open.c
+index 4401a73d4032..fd8fa5936b51 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -700,10 +700,7 @@ SYSCALL_DEFINE2(chmod, const char __user *, filename, umode_t, mode)
+ 	return do_fchmodat(AT_FDCWD, filename, mode);
+ }
+ 
+-/**
+- * setattr_vfsuid - check and set ia_fsuid attribute
+- * @kuid: new inode owner
+- *
++/*
+  * Check whether @kuid is valid and if so generate and set vfsuid_t in
+  * ia_vfsuid.
+  *
+@@ -718,10 +715,7 @@ static inline bool setattr_vfsuid(struct iattr *attr, kuid_t kuid)
+ 	return true;
+ }
+ 
+-/**
+- * setattr_vfsgid - check and set ia_fsgid attribute
+- * @kgid: new inode owner
+- *
++/*
+  * Check whether @kgid is valid and if so generate and set vfsgid_t in
+  * ia_vfsgid.
+  *
+@@ -989,7 +983,6 @@ static int do_dentry_open(struct file *f,
+  * @file: file pointer
+  * @dentry: pointer to dentry
+  * @open: open callback
+- * @opened: state of open
+  *
+  * This can be used to finish opening a file passed to i_op->atomic_open().
+  *
+@@ -1043,7 +1036,6 @@ EXPORT_SYMBOL(file_path);
+  * vfs_open - open the file at the given path
+  * @path: path to open
+  * @file: newly allocated file with f_flag initialized
+- * @cred: credentials to use
+  */
+ int vfs_open(const struct path *path, struct file *file)
+ {
+-- 
+2.39.2
+
