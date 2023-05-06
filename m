@@ -2,149 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765896F915B
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 13:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D746F9163
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 13:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbjEFLGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 07:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
+        id S232178AbjEFLIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 07:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232076AbjEFLGS (ORCPT
+        with ESMTP id S232123AbjEFLIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 07:06:18 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCDE59D7
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 04:06:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683371177; x=1714907177;
-  h=date:from:to:cc:subject:message-id;
-  bh=l/mLo5wSmeydMiLIpGEPwWAJuw3k6Mwlk4IVVnyRG44=;
-  b=H+vk2+Ms5CiwSezNKuNIpYlKo6yBkyNbFqxL/Ye8B0uA8nmeJs2h+XAx
-   x+nDgNe248Q21eYe0nvUm0sdGKqis638cKTU4rU/W5qX0J4NWD/DMd7c5
-   YYUHnY51cU5N/EFSJ2P/Z5M9z2y/7NXfOGtQkJNdkc3dGOs9wjs6rx9wc
-   P1nEuRlzF5J3o3gFtzEJBOYrlMYUabWIXsOQvWhbssS0Vt2a+xcJgWfnR
-   TS2gN0X5asKP9BBzIAo00H2zMf9dMyoZuWsoz+MEnoltFitVwikb+OeCA
-   NE2O5HmYfSzobVWwIlwh7uSLcjx1tiGchKZdMbyBTb1nc6YA3F46KXxiY
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="412621194"
-X-IronPort-AV: E=Sophos;i="5.99,254,1677571200"; 
-   d="scan'208";a="412621194"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2023 04:06:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="822070211"
-X-IronPort-AV: E=Sophos;i="5.99,254,1677571200"; 
-   d="scan'208";a="822070211"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 06 May 2023 04:06:11 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pvFju-0000Bt-2l;
-        Sat, 06 May 2023 11:06:10 +0000
-Date:   Sat, 06 May 2023 19:05:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2023.05.05a] BUILD SUCCESS WITH WARNING
- e217254079020832da33e19179438f4f5dcf81c8
-Message-ID: <20230506110547.CiaNt%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 6 May 2023 07:08:10 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C254530FA
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 04:08:07 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-55a26b46003so41314397b3.1
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 04:08:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683371287; x=1685963287;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=j5XlcbqFrzQXxIYxdf0VxKIx0ZoUFzqDbvv5tK0E9jE=;
+        b=cNdP/pr/9KcytvLHAV2KR7Egci52zCTCKkiPfBelrMkxfVg2Xrji0fuF9zAV7yv3vg
+         hs5EOpYp+wSYnwJCPDcDdrTmBGWmO+CHCoMHp4mo6VBaFvPm+y/NSFnT6bXajfjMmtuz
+         ojWMmcXun5Fqk94LvGIUcYHfYQRLtXQ2YhVZpXjl9MQmB4w/DAPX0TWFS+tqEs+VIwDQ
+         RVGBIjOgPqNOSXkXTNs7ThOqqZv3rPNZjJhrH6weBkHpICKta7n9r15dF/DsuyhmJoUf
+         2e+2Uqg53HIDmIXS5+OpDq139GlOVBHCnD+yI1MrIu9gCpsjL57l1AKEN7e5JbFRUk+q
+         zNlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683371287; x=1685963287;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j5XlcbqFrzQXxIYxdf0VxKIx0ZoUFzqDbvv5tK0E9jE=;
+        b=QUk1+AbspwNWwxjL80d4BlKUuqeixfTKOjzQp+CLsboX877+5GU/2LrAZYn0HNLQA3
+         n1WqEVpc4s4vNppkBdQXTbvVacGE4bNY9EY07RVDwf1L6afdtztn/34TpS9VWwGp883v
+         gyY88FW+R9yeeSvTeFfoh96We+PGxKd//VUo/Ij26SKIPhXSoATxQR8vLy1Rq6Yj1SvY
+         MlMeJOCfed5WZyzNDKv6iVS9VUo248WWwDLuHKLgIytknQz5u/lzXfV4j5dko+++fZNP
+         4xNKFlgkLmJp24WIbBZfKhO/YaImqN+X3PAa8TI6cYXA72T78HiEAIao8GlWxgDnd/Y5
+         T6ag==
+X-Gm-Message-State: AC+VfDxbpQUnKQ2ayxk8ki2F4j53LVeNXIp1Un8xHQs3qQA8PlXhskGk
+        eXUy03b+FXbHfgRPgehcmx6v9sLcnur8TbAzwRKheqsOZbhD46Cd
+X-Google-Smtp-Source: ACHHUZ6iGINkfuXu3mA7YpSLZ0z+S5X733K8fJ48YS7ZTvxkCFk9w0Uq/7dKFQuiu1WU6SIM6RHjU1LUAVNNM2nfp/M=
+X-Received: by 2002:a0d:cc09:0:b0:55a:5870:3d47 with SMTP id
+ o9-20020a0dcc09000000b0055a58703d47mr4375122ywd.26.1683371286931; Sat, 06 May
+ 2023 04:08:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1683183860.git.quic_varada@quicinc.com> <8894bf2c44eaf4959c7a1966b66229e6cf5cda96.1683183860.git.quic_varada@quicinc.com>
+ <CAA8EJppvj2nzqwdsC+Xct4cJg2-_yPpiGDELjHJG4HyAH3zGMA@mail.gmail.com> <958fec66-2978-1d45-baad-c735fab85108@linaro.org>
+In-Reply-To: <958fec66-2978-1d45-baad-c735fab85108@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 6 May 2023 14:07:56 +0300
+Message-ID: <CAA8EJpqEk=dQkChFh3HaTuTpO3wsebS8_p4RH-1_JrWoS_HbeQ@mail.gmail.com>
+Subject: Re: [PATCH v10 8/9] arm64: dts: qcom: ipq9574: Add LDO regulator node
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, vkoul@kernel.org, kishon@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.05.05a
-branch HEAD: e217254079020832da33e19179438f4f5dcf81c8  fixup! locking/atomic: Script to auto-generate acquire and release headers
+On Fri, 5 May 2023 at 22:26, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+>
+>
+> On 5.05.2023 11:29, Dmitry Baryshkov wrote:
+> > On Fri, 5 May 2023 at 11:23, Varadarajan Narayanan
+> > <quic_varada@quicinc.com> wrote:
+> >>
+> >> Add LDO regulator node
+> >
+> > As this LDO is provided by the PMIC, it would be nice to know why it
+> > is modelled as an always-on regulator instead of the proper PMIC
+> > regulator. Up to now we were doing this only for the outstanding power
+> > rails like CX/MX or EBI.
+> (which we then stopped registering as regulators and started
+> to manage through rpm(h)pd drivers and the genpd framework)
 
-Warning reports:
+I mean having regulator-fixed s4a on sm8250 in addition to the CX
+genpd, because some of the parts really expect to have a regulator.
+But anyway, we are getting away from the subj. Let's wait for the
+answer from Varadarajan.
 
-https://lore.kernel.org/oe-kbuild-all/202305061006.icKxQPqN-lkp@intel.com
-
-Warning: (recently discovered and may have been fixed)
-
-arch/csky/kernel/smp.c:320:1: warning: 'noreturn' function does return
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-`-- csky-randconfig-r001-20230505
-    `-- arch-csky-kernel-smp.c:warning:noreturn-function-does-return
-
-elapsed time: 727m
-
-configs tested: 61
-configs skipped: 3
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a011-20230501   clang
-i386                 randconfig-a012-20230501   clang
-i386                 randconfig-a013-20230501   clang
-i386                 randconfig-a014-20230501   clang
-i386                 randconfig-a015-20230501   clang
-i386                 randconfig-a016-20230501   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sparc                               defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230501   gcc  
-x86_64               randconfig-a002-20230501   gcc  
-x86_64               randconfig-a003-20230501   gcc  
-x86_64               randconfig-a004-20230501   gcc  
-x86_64               randconfig-a005-20230501   gcc  
-x86_64               randconfig-a006-20230501   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                               rhel-8.3   gcc  
+>
+> Konrad
+> >
+> >>
+> >> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> >> ---
+> >>  Changes in v10:
+> >>         - Add LDO regulator node
+> >> ---
+> >>  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 7 +++++++
+> >>  1 file changed, 7 insertions(+)
+> >>
+> >> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> >> index bdc1434..1f5d14f 100644
+> >> --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> >> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> >> @@ -60,6 +60,13 @@
+> >>                         regulator-min-microvolt = <725000>;
+> >>                         regulator-max-microvolt = <1075000>;
+> >>                 };
+> >> +
+> >> +               mp5496_l2: l2 {
+> >> +                       regulator-min-microvolt = <1800000>;
+> >> +                       regulator-max-microvolt = <1800000>;
+> >> +                       regulator-boot-on;
+> >> +                       regulator-always-on;
+> >> +               };
+> >>         };
+> >>  };
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+With best wishes
+Dmitry
