@@ -2,150 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FA26F9369
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 19:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF1F6F935E
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 19:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjEFRm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 13:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
+        id S229694AbjEFRbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 13:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjEFRm0 (ORCPT
+        with ESMTP id S229441AbjEFRbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 13:42:26 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF59617FD0;
-        Sat,  6 May 2023 10:42:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683394945; x=1714930945;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oT8CwAw0/pgt47zXZltnYILo21BzxQh30+v5OGLUHNI=;
-  b=l/fFlR0cyAglwDYrvgPKFMUYL4BC9EMgjpf9y5eQxXmn9+9EDYRRPVy3
-   3mT15tV9c3+vZGqzZlwI64sTPc06AxNzQ7kvdj1X/0jjudAhzHxcD/lfJ
-   riFScC7Xu3xreAdleRLlwMpD6Ld4+ljY0aPhjt8tuODtEo1b3VO+TwpXU
-   B1m0dCQz5xnVjR3G9umXWP6X006o+KXy8FDbeaPZD3ftT2VyQV7AfDMKw
-   wSCvatUM3qoJV3Lq5QREAQhTWihdd3P1jLHgGFPai69Pv19rVVoA9sIwx
-   tqV4hpsiVMknF3z9mKQ+aXvJTwoEWLwv8B7iMlhUEWoB9KNL2Q+dL2yyF
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10702"; a="329760996"
-X-IronPort-AV: E=Sophos;i="5.99,255,1677571200"; 
-   d="scan'208";a="329760996"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2023 10:42:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10702"; a="872289514"
-X-IronPort-AV: E=Sophos;i="5.99,255,1677571200"; 
-   d="scan'208";a="872289514"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 06 May 2023 10:42:21 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pvLvJ-0000QR-0i;
-        Sat, 06 May 2023 17:42:21 +0000
-Date:   Sun, 7 May 2023 01:41:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Adam Ford <aford173@gmail.com>, linux-clk@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, aford@beaconembedded.com,
-        Adam Ford <aford173@gmail.com>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
-Message-ID: <202305070143.iTqgbS75-lkp@intel.com>
-References: <20230506162403.375212-1-aford173@gmail.com>
+        Sat, 6 May 2023 13:31:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02911608D;
+        Sat,  6 May 2023 10:31:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CE6560677;
+        Sat,  6 May 2023 17:31:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDADFC4339B;
+        Sat,  6 May 2023 17:31:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683394293;
+        bh=amJno4QQ+jgFZXOzLKev1VatVyFZZh6AJVwPxwidzCQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e4GRKIBv7AReNH3O3yt+BylmGeICX1l0+Vm/AIQ0FwIeH20fBKOq9BlBcARXl7TtX
+         K0/yajora7/QBt14gcsWvJO80xgvhORu/jY9zWAZzUhQT+B9vZNTXlt2pssGuijG6k
+         G+LmIRSkQEfhzysmUCdcC9bFMxrDd9cXXa0VWSxdJPYJvioNfb7Aw+6IBUdrEK9BBH
+         F2lxjVFd3TQg7aRBdF4bNoxWOff3sW+ZoWviZjINTfpx3zvwR9iGcMqiuHkhrjc/C8
+         ZejZKtRapaNBjoRlkjsNcDA5NUzruJ+mpW2IK1F3MKBCnenw++MuaphUYa1t4alELl
+         oDkJskRI77u8g==
+Date:   Sat, 6 May 2023 18:47:27 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/3] ROHM Sensor async probing
+Message-ID: <20230506184727.344086c5@jic23-huawei>
+In-Reply-To: <cover.1683185765.git.mazziesaccount@gmail.com>
+References: <cover.1683185765.git.mazziesaccount@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230506162403.375212-1-aford173@gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
+On Thu, 4 May 2023 10:56:13 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-kernel test robot noticed the following build warnings:
+> Devices which may take a while to initialize during probe and which have
+> no strong reason to probe synchronously can request asynchronous probing
+> as default probe strategy. This can speed-up start times on some
+> platforms.
+> 
+> There is however some caveats listed for asynchronous probing for
+> example here:
+> https://lore.kernel.org/all/06db017f-e985-4434-8d1d-02ca2100cca0@sirena.org.uk/
+> 
+> I don't know how tolerant IIO users are what comes to asynchronous
+> probing but I _guess_ this is (and should be) handled pretty well.
+> Still, guessing could be said to be somewhat sub-optimal when doing
+> kernel development :) Hence this RFC - if someone has better
+> understanding on async probing when using IIO, please let me know!
+> 
+> As far as I know these drivers do not currently have in-tree users.
+> Furthemore, they are so new they don't probably have many user-space
+> users either. In fact, the BU27034 is not yet in any official releases
+> and BU27008 is not merged in any official trees yet. Thus, testing out
+> async probing with them should not break existing users. KX022A is also
+> relatively new and I don't think it has yet been widely used either.
+> 
+> Finally, if asynchronous probing does break things, then:
+> a) We should try fix the thing preventing async probe.
+> b) We can pretty easily revert back to synchronous probing.
+> 
+> Please note that the patch 2 depends on
+> https://lore.kernel.org/lkml/cover.1683105758.git.mazziesaccount@gmail.com/
+> which is not yet in-tree. If the feed-back from this RFC is positive,
+> then I will squash this change to that series when re-spinning it next
+> time.
+> 
+> Please note that the patch 3 depends on bu27034 series which is expected
+> to land on 6.4-rc1.
 
-[auto build test WARNING on clk/clk-next]
-[also build test WARNING on v6.3 next-20230505]
-[cannot apply to abelvesa/clk/imx linus/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Generally it should be fine, but given that weird things sometimes happen
+we don't apply a blanket policy and it's up to individual driver maintainers
+to give it a go.  Also it's only worth doing if a driver is significantly
+slow for some reason..
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Adam-Ford/clk-imx-composite-8m-Add-imx8m_divider_determine_rate/20230507-002453
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20230506162403.375212-1-aford173%40gmail.com
-patch subject: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230507/202305070143.iTqgbS75-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d92df3b38fc20beb735cb3b75f118b45d1ae304b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Adam-Ford/clk-imx-composite-8m-Add-imx8m_divider_determine_rate/20230507-002453
-        git checkout d92df3b38fc20beb735cb3b75f118b45d1ae304b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/clk/
+I've hit problems with async probe before (usually showing up bugs that
+weren't visible before), but not in IIO drivers.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305070143.iTqgbS75-lkp@intel.com/
+So I've applied patches 1 and 3.  Plenty of time for people to shout if they
+can see a problem though.
 
-All warnings (new ones prefixed by >>):
+Jonathan
 
->> drivers/clk/imx/clk-composite-8m.c:122:5: warning: no previous prototype for 'imx8m_divider_determine_rate' [-Wmissing-prototypes]
-     122 | int imx8m_divider_determine_rate(struct clk_hw *hw,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> ---
+> 
+> Matti Vaittinen (3):
+>   iio: bu27034: Probe asynchronously
+>   iio: bu27008: Probe asynchronously
+>   iio: kx022a: Probe asynchronously
+> 
+>  drivers/iio/accel/kionix-kx022a-i2c.c | 1 +
+>  drivers/iio/accel/kionix-kx022a-spi.c | 1 +
+>  drivers/iio/light/rohm-bu27008.c      | 1 +
+>  drivers/iio/light/rohm-bu27034.c      | 1 +
+>  4 files changed, 4 insertions(+)
+> 
 
-
-vim +/imx8m_divider_determine_rate +122 drivers/clk/imx/clk-composite-8m.c
-
-   121	
- > 122	int imx8m_divider_determine_rate(struct clk_hw *hw,
-   123					      struct clk_rate_request *req)
-   124	{
-   125		struct clk_divider *divider = to_clk_divider(hw);
-   126		int prediv_value;
-   127		int div_value;
-   128	
-   129		/* if read only, just return current value */
-   130		if (divider->flags & CLK_DIVIDER_READ_ONLY) {
-   131			u32 val;
-   132	
-   133			val = readl(divider->reg);
-   134			prediv_value = val >> divider->shift;
-   135			prediv_value &= clk_div_mask(divider->width);
-   136	
-   137			div_value = val >> PCG_DIV_SHIFT;
-   138			div_value &= clk_div_mask(PCG_DIV_WIDTH);
-   139	
-   140			return divider_ro_determine_rate(hw, req, divider->table,
-   141							 PCG_PREDIV_WIDTH + PCG_DIV_WIDTH,
-   142							 divider->flags, prediv_value * div_value);
-   143		}
-   144	
-   145		return divider_determine_rate(hw, req, divider->table,
-   146					      PCG_PREDIV_WIDTH + PCG_DIV_WIDTH,
-   147					      divider->flags);
-   148	}
-   149	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
