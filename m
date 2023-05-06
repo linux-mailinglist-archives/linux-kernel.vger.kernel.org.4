@@ -2,188 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7676F93EA
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 22:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B276F93ED
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 22:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjEFUJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 16:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
+        id S229685AbjEFUMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 16:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjEFUJ3 (ORCPT
+        with ESMTP id S229441AbjEFUMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 16:09:29 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5901059D4
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 13:09:28 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-94f910ea993so472894366b.3
-        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 13:09:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1683403766; x=1685995766;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AwRLCx9kSJiq/oBRkJ5x/MOv84iMNB8Ap5t+0Owv3hs=;
-        b=M8/McN8qnWEdt7fNUEDKypfGRsll7Ebk+X+RfEiyJ1lH4qnYomB7O/oaKjtG2oViCm
-         pNidoS9UX7Y7grbbG85A72puofXuJwqKzJzJkcs5iUSxucqk+KZWGN9/PfVA9JglgIvd
-         sMM4jefIeEG8d1VVQLoZOsHAEa7eSAfxnK0uA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683403766; x=1685995766;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AwRLCx9kSJiq/oBRkJ5x/MOv84iMNB8Ap5t+0Owv3hs=;
-        b=loUW4xP+sWbs4CL5LlzZMOn0G8CwiPxL9dfBzpFUi1myw3DfmPq8q7V+fBgbuaOlS1
-         7ATm5CqvAhVzFB5eh57V+LAGLvdtoakK/vw1gWWjcg5SC5pNxPCSE/R+DKq5FUPQ5fTO
-         qWEpbi3XzQwn0EAgy8iTAjtNFfvZnplurwfg0Xs5r8Yye/IGKEGy0k6yw7CP5A1vJork
-         x0S9zkAlEf7hW4tJcV6hHxPQ26rYmEST2Qz8XgCBH0w1ADTiln1LdQrB9X9PU7JNcrVS
-         oVt43u7+YhKphixMj0SJbBocra0YDvhFtGQKXegZIrqkWhik+bTyhrAVTf00wyFz7s+L
-         CDdQ==
-X-Gm-Message-State: AC+VfDymzFwHZMgYPasRaUt23ELNa1sfBQrcoTdUnyVlzeqt9rjljBaJ
-        iU0DMgOd2A+AVK2QBEcbxgKvZbXVFf1eHVa8+HZpvw==
-X-Google-Smtp-Source: ACHHUZ6ZXoNCeEnSpDC/yhpH26BePrXCLv9bbuwFbmy9DMMfHBxl9p8EVAPSw03NkvZPPgUUGtJv3w==
-X-Received: by 2002:a17:906:9750:b0:961:979d:a598 with SMTP id o16-20020a170906975000b00961979da598mr5932346ejy.23.1683403766367;
-        Sat, 06 May 2023 13:09:26 -0700 (PDT)
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com. [209.85.218.45])
-        by smtp.gmail.com with ESMTPSA id gv23-20020a170906f11700b00965fdb90801sm1799518ejb.153.2023.05.06.13.09.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 May 2023 13:09:24 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-965d2749e2eso361781166b.1
-        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 13:09:24 -0700 (PDT)
-X-Received: by 2002:a17:907:7ea7:b0:965:57d0:9ca5 with SMTP id
- qb39-20020a1709077ea700b0096557d09ca5mr4814315ejc.51.1683403764379; Sat, 06
- May 2023 13:09:24 -0700 (PDT)
+        Sat, 6 May 2023 16:12:16 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3A2E43;
+        Sat,  6 May 2023 13:12:14 -0700 (PDT)
+Received: from [192.168.178.23] (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id B7C81CECA7;
+        Sat,  6 May 2023 20:11:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1683403902; bh=UxjuILMhubHneGZUmQeFeUolQx/NHIfVA3+XfK69Uj4=;
+        h=From:Date:Subject:To:Cc;
+        b=g0GKdvapFiwGdq90l8srl0399ddU6ZdU6WMHEC7H3jgSy4O3Cs9Jk0h/WE2WqaDK+
+         L/yQsIScZJAdoEVcnbS5buH3TCHJSsH7jSpGfy8vJni6l0l79G4+5+AQu83ohC/c+g
+         NJNXMd9Wd3SREsp66GjDZJq1MVR05NT0k1fKA6xk=
+From:   Luca Weiss <luca@z3ntu.xyz>
+Date:   Sat, 06 May 2023 22:10:32 +0200
+Subject: [PATCH] clk: qcom: smd-rpm: conditionally enable scaling before
+ doing handover
 MIME-Version: 1.0
-References: <20230424212130.590684-1-dave.hansen@linux.intel.com>
- <CAHk-=whn3F1k263SZNUVQK195tcCMAo5E_WbmjUE0qFC5rWg=w@mail.gmail.com>
- <4433c3595db23f7c779b69b222958151b69ddd70.camel@intel.com>
- <148b3edb-b056-11a0-1684-6273a4a2d39a@intel.com> <CAHk-=wiuVXTfgapmjYQvrEDzn3naF2oYnHuky+feEJSj_G_yFQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wiuVXTfgapmjYQvrEDzn3naF2oYnHuky+feEJSj_G_yFQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 6 May 2023 13:09:07 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiB0wy6oXOsPtYU4DSbqJAY8z5iNBKdjdOp2LP23khUoA@mail.gmail.com>
-Message-ID: <CAHk-=wiB0wy6oXOsPtYU4DSbqJAY8z5iNBKdjdOp2LP23khUoA@mail.gmail.com>
-Subject: Re: [GIT PULL] x86/shstk for 6.4
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230506-rpmcc-scaling-handover-v1-1-374338a8dfd9@z3ntu.xyz>
+X-B4-Tracking: v=1; b=H4sIADe0VmQC/x2NQQqDMBAAvyJ77kpMaKj9SvEQN1sNNNHugrSIf
+ 2/scWCG2UFZEivcmx2Et6RpKRW6SwM0hzIxplgZrLHOXI1HWTMRKoVXKhNWJS4bCwbvjO059rF
+ zUOMxKOMoodB85m9aMmbNN2s9+ta131NahZ/p878/huP4AfixEwKNAAAA
+To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2241; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=UxjuILMhubHneGZUmQeFeUolQx/NHIfVA3+XfK69Uj4=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkVrRyLZWFssqnJHHtJ1HqB2nvu0fC09tj9rXe0
+ X6Uj3EodpOJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZFa0cgAKCRBy2EO4nU3X
+ VuxOD/9sFRP4HphYYzYvnlVI6K933cKINbjyWVqlYf7ACq8YJxKgA0kMmoRNYXoosl/9EoamYab
+ BsXq98V4RA8/CUSjVbcBcM5ix8uIEB9Plbhy/rRrwJVAbag4aTm/rjtLViAkdU2IykeAXE+7rwV
+ IBwvdg9YZp3hms1KZ3sFx5jE0YhkxakregjIaxJMKRvc0L9blD4X5Q1yAClO6mQ0FD3Iei1YI9T
+ 3yP42GBfoBEsx+1eiVEpNNCJOtqp4SLM1gIpiRsHjTRRgl3MVZD+vHNUWmZ1nBLaR9Trbv08Kzt
+ XRfimTkuR5H0dGt8xCPLbEiil3wDCCIpnsBXyEzh7/NenyRnmGxDmWk+vAHMOfD1VaTVvJMmEj7
+ +EufbtZe0+ylYhRyfZd7g0nErOe8NSNZGAqDSejBKtMSjrlM2/rXnxce3IhFxsjEbt0rq9VMeXG
+ x2KkGphEdTFNMVcM4GDZatGyxpaNgsIJz5SewM4Mct1A4EfyORMe4+0YjlxQevQ9n2nHGzVFijh
+ BqHuptbMp5txUaXhIaVSMM/serLP864F1PUULfkOZyTZ8b4upYM1FHFEKsCYjoxogPQIwc9HgdU
+ k+lWvGmznkcY3CZZEcXZ9hVl2V+ABvBnMYfCqzDpUJbTW584SZQbCHDtdOtxXRViVpq1+b8DzQv
+ x8iuHbRZXrT70hQ==
+X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
+ fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 6, 2023 at 12:34=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> And I'm about a quarter in, haven't even gotten to the meat yet, and
-> I've already found a bug.
+On older platforms like msm8226, msm8974 and msm8916 the driver in the
+downstream kernel enables scaling first before doing the handover of the
+clocks.
 
-Ok, so despite this I'm going a bit further, just to familiarize
-myself with this even if I can't pull it.
+While this normally doesn't seem to cause noticeable problems, on
+apq8026-asus-sparrow this causes the device to immediately reboot,
+perhaps due to older rpm firmware that becomes unhappy.
 
-And this is horrendous: pte_wrprotect() doing
+On newer platforms the order has swapped and enabling scaling is done
+after the handover, so let's introduce this behavior only conditionally
+for msm8226 and msm8974 for now.
 
-    if (pte_dirty(pte))
-        pte =3D pte_mksaveddirty(pte);
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ drivers/clk/qcom/clk-smd-rpm.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-which actually has two fundamental problems:
+diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+index 887b945a6fb7..6d5476afc4d1 100644
+--- a/drivers/clk/qcom/clk-smd-rpm.c
++++ b/drivers/clk/qcom/clk-smd-rpm.c
+@@ -178,6 +178,7 @@ struct clk_smd_rpm_req {
+ struct rpm_smd_clk_desc {
+ 	struct clk_smd_rpm **clks;
+ 	size_t num_clks;
++	bool scaling_before_handover;
+ };
+ 
+ static DEFINE_MUTEX(rpm_smd_clk_lock);
+@@ -693,6 +694,7 @@ static struct clk_smd_rpm *msm8974_clks[] = {
+ static const struct rpm_smd_clk_desc rpm_clk_msm8974 = {
+ 	.clks = msm8974_clks,
+ 	.num_clks = ARRAY_SIZE(msm8974_clks),
++	.scaling_before_handover = true,
+ };
+ 
+ static struct clk_smd_rpm *msm8976_clks[] = {
+@@ -1318,6 +1320,12 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
+ 	rpm_smd_clks = desc->clks;
+ 	num_clks = desc->num_clks;
+ 
++	if (desc->scaling_before_handover) {
++		ret = clk_smd_rpm_enable_scaling(rpm);
++		if (ret)
++			goto err;
++	}
++
+ 	for (i = 0; i < num_clks; i++) {
+ 		if (!rpm_smd_clks[i])
+ 			continue;
+@@ -1329,9 +1337,11 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
+ 			goto err;
+ 	}
+ 
+-	ret = clk_smd_rpm_enable_scaling(rpm);
+-	if (ret)
+-		goto err;
++	if (!desc->scaling_before_handover) {
++		ret = clk_smd_rpm_enable_scaling(rpm);
++		if (ret)
++			goto err;
++	}
+ 
+ 	for (i = 0; i < num_clks; i++) {
+ 		if (!rpm_smd_clks[i])
 
- (a) it shouldn't be a conditional thing at all, it should just be bit
-operations
+---
+base-commit: dd9e11d6477a52ede9ebe575c83285e79e823889
+change-id: 20230506-rpmcc-scaling-handover-a63029ed9d13
 
- (b) "pte_dirty()" isn't even the right thing to use, since it
-includes the SW dirty bit.
+Best regards,
+-- 
+Luca Weiss <luca@z3ntu.xyz>
 
-so what this *should* do is likely to just do
-
-   pte.val |=3D (pte.val >> _PAGE_BIT_DIRTY) & 1) << _PAGE_BIT_SOFT_DIRTY;
-   pte.val &=3D ~_PAGE_DIRTY;
-
-which the compiler should be able to turn into a nice unconditional
-series. Smaller than any conditional.
-
-(You could simplify the above by just using fixed bit numbers - the
-above is written with two shifts just to work with "any bit pair", but
-obviously it could be written to be simpler and more straightforward
-by just shifting the bit right into place)
-
-I think the compilers may be able to do that all the simplification
-for you even with a
-
-    if (pte.val & _PAGE_DIRTY)
-        pte.val |=3D _PAGE_SOFT_DIRTY;
-    pte.val &=3D ~_PAGE_DIRTY;
-
-but that is only true when there are *not* things like those
-cpu_feature_enabled() tests in between those operations.
-
-So I strongly suspect that all those
-
-     if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
-
-around this area are only making things worse. You're replacing a
-couple of simple bit operations with jump-arounds (and then doing the
-bit operations anyway in one side). And you are limited the compiler
-from doing obvious simplifications in the process.
-
-Conditionals are really bad, even when they can be turned into static jumps=
-.
-
-As static jumps they just cause odd code flow, and lack of testing.
-And compiler barriers.
-
-All these bit operations are actually cheaper - and would get more
-test coverage - if they are just done unconditionally with a couple of
-shift-and-mask operations.
-
-Now, my reaction here is
-
- - the whole shadow stack notion of "dirty but not writable is a magic
-marker" is *DISGUSTING*. It's wrong.
-
-   Whatever Intel designer that came up with that - instead of just
-picking another bit for the *HARDWARE* to check - should be ashamed.
-
-   Now we have to pick a software bit instead, and play games for
-this. BAD BAD BAD.
-
-   I'm assuming this is something where Microsoft went "we already
-don't have that, and we want all the sw bits for sw, so do this". But
-from a design standpoint it's just nasty.
-
- - But if we have to play those games, just *play* them. Do it all
-unconditionally, and make the x86-64 rules be that "dirty but not
-writable" is something we should never have.
-
-   Having two different rules, and conditionals for them, is both more
-complex for maintainers, *and* for compilers.
-
-So just make that _PAGE_BIT_SOFT_DIRTY be unconditional, and let's
-just live with it. But make the bit operations efficient.
-
-Maybe I'm missing something, and the people who have been working on
-this have a really good reason for this mess. But it really looks
-horrible to me.
-
-So maybe you can explain in small words why I'm wrong, but right now
-my feeling is that not only did I find an arm bug in the series
-(trivially fixed with a one-liner, but worrying, and triggered by the
-series being done in a particularly fragile way).
-
-But I also think there are some x86 things that are just not done the
-way they should have been done.
-
-But again: maybe I don't understand some of the problems.
-
-                   Linus
