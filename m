@@ -2,114 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376906F90B0
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 10:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD446F90B6
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 10:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbjEFI4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 04:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41142 "EHLO
+        id S230471AbjEFI7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 04:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjEFI4p (ORCPT
+        with ESMTP id S229837AbjEFI7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 04:56:45 -0400
-Received: from out28-100.mail.aliyun.com (out28-100.mail.aliyun.com [115.124.28.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645C78A45;
-        Sat,  6 May 2023 01:56:43 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07761823|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0977971-0.00181422-0.900389;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047188;MF=chenh@yusur.tech;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.SZt-zKM_1683363395;
-Received: from 10.2.24.238(mailfrom:chenh@yusur.tech fp:SMTPD_---.SZt-zKM_1683363395)
-          by smtp.aliyun-inc.com;
-          Sat, 06 May 2023 16:56:37 +0800
-Message-ID: <07b6b325-9a15-222f-e618-d149b57cbac2@yusur.tech>
-Date:   Sat, 6 May 2023 16:56:35 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] virtio_net: set default mtu to 1500 when 'Device maximum
- MTU' bigger than 1500
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     huangml@yusur.tech, zy@yusur.tech,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Sat, 6 May 2023 04:59:45 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10C549E8
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 01:59:19 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1aaf91ae451so24722545ad.1
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 01:59:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1683363559; x=1685955559;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/yFOZs9UBviVnHJO1aVdELp7g3Y/8jlve773AyEi+qo=;
+        b=KQpgaYXFK2A85M/RCva4x3AfDUaf3aYrBM1vsRUfoQGIOH6c3V9XLfWSprpd258rLw
+         K/I75OR1FFIASPpdBEm/wO86r5MVhUCo8Ql1YcRoZSqowa+pzJsNLCZpldnKKeOBmbka
+         jtodE6583Ef9EOMk/CiVC0TaVEB+hD2dc+1sx6qGYH7zTkQe8qKK5F8wCWIZHdld3PoC
+         oY6FoWpcysb/+4lkQrM1bndqmTgOWum2LB9S5ItLRmfX87whljQXk4tY7nH4hqfHRT7w
+         BV2GpAdZunJBx/IJQgFaT8Q99ptNpnpFTkehb/CthD7fTpO9+0sDNUpffNp8FnJuqApw
+         pm9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683363559; x=1685955559;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/yFOZs9UBviVnHJO1aVdELp7g3Y/8jlve773AyEi+qo=;
+        b=CRJ1bmruLo6QL3bsgfIl14WAtqMgUMGTkMZwdLJkVs4lCJ9OLKQVNXETeF5VpK/CvH
+         lADp0TO29EVXpGSZigGxQV0uC4m6ZeSudFZg6OlVnO3aBGHeKNoznPBTgRzbe9rV/VSQ
+         UGODbblTmqlctNN4MEIaMsPhou1g1xdkH0H1tntldCIDbT19I/EgWrZ/Ol8UBDp1nJRG
+         nHpNNELNSH1yZ/TS69s45eKjAMY44xBZr2AG2BHCITjjSSYF68q3mxdJoFDcbHydE+74
+         asfGJsSSdmsdOGVeZC3yxq2bhuJgLXM8SlmhyhCOUxhpSMI1Ck+vqjRUcPZ0PztgwdMK
+         Mv7Q==
+X-Gm-Message-State: AC+VfDy+PX0eLlhmulMkstUk1FJEjfvqU84BeOVmZ11rrJvxwGG+Qxbk
+        M8OkgaSklZ889YK+ZSJv06U2fw==
+X-Google-Smtp-Source: ACHHUZ6AgOAs6K75h6psskFE61rfVFqoB/jeU15IOwds4ac9MR35NBruz5ueGPNh/FkckpCITsDYCw==
+X-Received: by 2002:a17:903:6ce:b0:1a6:3799:ec2a with SMTP id kj14-20020a17090306ce00b001a63799ec2amr3451130plb.35.1683363559334;
+        Sat, 06 May 2023 01:59:19 -0700 (PDT)
+Received: from C02DV8HUMD6R.bytedance.net ([139.177.225.224])
+        by smtp.gmail.com with ESMTPSA id g2-20020a170902740200b001aaf2172418sm3083332pll.95.2023.05.06.01.59.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 May 2023 01:59:18 -0700 (PDT)
+From:   Abel Wu <wuyun.abel@bytedance.com>
+To:     "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230506021529.396812-1-chenh@yusur.tech>
- <1683341417.0965195-4-xuanzhuo@linux.alibaba.com>
-From:   Hao Chen <chenh@yusur.tech>
-In-Reply-To: <1683341417.0965195-4-xuanzhuo@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abel Wu <wuyun.abel@bytedance.com>
+Subject: [PATCH] sock: Fix misuse of sk_under_memory_pressure()
+Date:   Sat,  6 May 2023 16:59:03 +0800
+Message-Id: <20230506085903.96133-1-wuyun.abel@bytedance.com>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The commit 180d8cd942ce ("foundations of per-cgroup memory pressure
+controlling") wrapped proto::memory_pressure status into an accessor
+named sk_under_memory_pressure(), and in the next commit e1aab161e013
+("socket: initial cgroup code") added the consideration of net-memcg
+pressure into this accessor.
 
+But with the former patch applied, not all of the call sites of
+sk_under_memory_pressure() are interested in net-memcg's pressure.
+The __sk_mem_{raise,reduce}_allocated() only focus on proto/netns
+pressure rather than net-memcg's. IOW this accessor are generally
+used for deciding whether should reclaim or not.
 
-在 2023/5/6 10:50, Xuan Zhuo 写道:
-> On Sat,  6 May 2023 10:15:29 +0800, Hao Chen <chenh@yusur.tech> wrote:
->> When VIRTIO_NET_F_MTU(3) Device maximum MTU reporting is supported.
->> If offered by the device, device advises driver about the value of its
->> maximum MTU. If negotiated, the driver uses mtu as the maximum
->> MTU value. But there the driver also uses it as default mtu,
->> some devices may have a maximum MTU greater than 1500, this may
->> cause some large packages to be discarded,
-> 
-> You mean tx packet?
-Yes.
-> 
-> If yes, I do not think this is the problem of driver.
-> 
-> Maybe you should give more details about the discard.
-> 
-In the current code, if the maximum MTU supported by the virtio net 
-hardware is 9000, the default MTU of the virtio net driver will also be 
-set to 9000. When sending packets through "ping -s 5000", if the peer 
-router does not support negotiating a path MTU through ICMP packets, the 
-packets will be discarded. If the peer router supports negotiating path 
-mtu through ICMP packets, the host side will perform packet sharding 
-processing based on the negotiated path mtu, which is generally within 1500.
-This is not a bugfix patch, I think setting the default mtu to within 
-1500 would be more suitable here.Thanks.
->> so I changed the MTU to a more
->> general 1500 when 'Device maximum MTU' bigger than 1500.
->>
->> Signed-off-by: Hao Chen <chenh@yusur.tech>
->> ---
->>   drivers/net/virtio_net.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
->> index 8d8038538fc4..e71c7d1b5f29 100644
->> --- a/drivers/net/virtio_net.c
->> +++ b/drivers/net/virtio_net.c
->> @@ -4040,7 +4040,10 @@ static int virtnet_probe(struct virtio_device *vdev)
->>   			goto free;
->>   		}
->>
->> -		dev->mtu = mtu;
->> +		if (mtu > 1500)
-> 
-> s/1500/ETH_DATA_LEN/
-> 
-> Thanks.
-> 
->> +			dev->mtu = 1500;
->> +		else
->> +			dev->mtu = mtu;
->>   		dev->max_mtu = mtu;
->>   	}
->>
->> --
->> 2.27.0
->>
+Fixes: e1aab161e013 ("socket: initial cgroup code")
+Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+---
+ include/net/sock.h |  5 -----
+ net/core/sock.c    | 17 +++++++++--------
+ 2 files changed, 9 insertions(+), 13 deletions(-)
+
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 8b7ed7167243..752d51030c5a 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -1404,11 +1404,6 @@ static inline int sk_under_cgroup_hierarchy(struct sock *sk,
+ #endif
+ }
+ 
+-static inline bool sk_has_memory_pressure(const struct sock *sk)
+-{
+-	return sk->sk_prot->memory_pressure != NULL;
+-}
+-
+ static inline bool sk_under_memory_pressure(const struct sock *sk)
+ {
+ 	if (!sk->sk_prot->memory_pressure)
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 5440e67bcfe3..8d215f821ea6 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -3017,13 +3017,14 @@ int __sk_mem_raise_allocated(struct sock *sk, int size, int amt, int kind)
+ 		}
+ 	}
+ 
+-	if (sk_has_memory_pressure(sk)) {
+-		u64 alloc;
+-
+-		if (!sk_under_memory_pressure(sk))
+-			return 1;
+-		alloc = sk_sockets_allocated_read_positive(sk);
+-		if (sk_prot_mem_limits(sk, 2) > alloc *
++	if (prot->memory_pressure) {
++		/*
++		 * If under global pressure, allow the sockets that are below
++		 * average memory usage to raise, trying to be fair between all
++		 * the sockets under global constrains.
++		 */
++		if (!*prot->memory_pressure ||
++		    sk_prot_mem_limits(sk, 2) > sk_sockets_allocated_read_positive(sk) *
+ 		    sk_mem_pages(sk->sk_wmem_queued +
+ 				 atomic_read(&sk->sk_rmem_alloc) +
+ 				 sk->sk_forward_alloc))
+@@ -3095,7 +3096,7 @@ void __sk_mem_reduce_allocated(struct sock *sk, int amount)
+ 	if (mem_cgroup_sockets_enabled && sk->sk_memcg)
+ 		mem_cgroup_uncharge_skmem(sk->sk_memcg, amount);
+ 
+-	if (sk_under_memory_pressure(sk) &&
++	if (sk->sk_prot->memory_pressure && *sk->sk_prot->memory_pressure &&
+ 	    (sk_memory_allocated(sk) < sk_prot_mem_limits(sk, 0)))
+ 		sk_leave_memory_pressure(sk);
+ }
+-- 
+2.37.3
+
