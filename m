@@ -2,129 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB996F91BA
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 13:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4B96F91B4
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 May 2023 13:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232319AbjEFLwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 07:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S232418AbjEFLuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 07:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbjEFLwM (ORCPT
+        with ESMTP id S232390AbjEFLuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 07:52:12 -0400
-X-Greylist: delayed 125 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 06 May 2023 04:52:11 PDT
-Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id F056A2D4A;
-        Sat,  6 May 2023 04:52:09 -0700 (PDT)
-Received: from mail.didiglobal.com (unknown [10.79.71.35])
-        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 662B511004C01A;
-        Sat,  6 May 2023 19:50:04 +0800 (CST)
-Received: from localhost.localdomain (10.79.64.102) by
- ZJY03-ACTMBX-05.didichuxing.com (10.79.71.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 6 May 2023 19:50:03 +0800
-X-MD-Sfrom: chengkaitao@didiglobal.com
-X-MD-SrcIP: 10.79.71.35
-From:   chengkaitao <chengkaitao@didiglobal.com>
-To:     <tj@kernel.org>, <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>,
-        <corbet@lwn.net>, <mhocko@kernel.org>, <roman.gushchin@linux.dev>,
-        <shakeelb@google.com>, <akpm@linux-foundation.org>,
-        <brauner@kernel.org>, <muchun.song@linux.dev>
-CC:     <viro@zeniv.linux.org.uk>, <zhengqi.arch@bytedance.com>,
-        <ebiederm@xmission.com>, <Liam.Howlett@Oracle.com>,
-        <chengzhihao1@huawei.com>, <pilgrimtao@gmail.com>,
-        <haolee.swjtu@gmail.com>, <yuzhao@google.com>,
-        <willy@infradead.org>, <vasily.averin@linux.dev>, <vbabka@suse.cz>,
-        <surenb@google.com>, <sfr@canb.auug.org.au>, <mcgrof@kernel.org>,
-        <sujiaxun@uniontech.com>, <feng.tang@intel.com>,
-        <cgroups@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-mm@kvack.org>
-Subject: [PATCH v3 2/2] memcg: add oom_kill_inherit event indicator
-Date:   Sat, 6 May 2023 19:49:48 +0800
-Message-ID: <20230506114948.6862-3-chengkaitao@didiglobal.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20230506114948.6862-1-chengkaitao@didiglobal.com>
+        Sat, 6 May 2023 07:50:07 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EC19036
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 04:50:04 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-55a829411b5so25207067b3.1
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 04:50:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683373804; x=1685965804;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=W0CQW1o+U6+NILna+LXJ6vdvZ0BkUTno5y+llmnMQyo=;
+        b=dPe2CSLoV7+FcVOrSoBizhbLXI/ZLBJ7RTaokfwOtGBTZeSTeYLGxR5uo9fELcry5s
+         LjhkhKLm24iZteGxoktGLRgmELDQgh5dNlcPeyGuk5sDq1G+uRRCrDjHus72ClJr/jlN
+         Ygj8wwQxJkpI0NiUvyWR8zSEsmn7rI8HLRq7PX54EoRwn1p+A3gFgHEi+yB4uztdr1JV
+         /96WWH4Ph/4/DsPGZSncbenn9NXikntnF6iXN69jEyqz0Zn+JG/vxusicCalOspcWmzA
+         pyHRt+NJNNIdW6RHALL/qgR/rI2RWyrjE1x52v0lj5qHj31p4GSzyvfrDe74ngZyKJ/8
+         RRdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683373804; x=1685965804;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W0CQW1o+U6+NILna+LXJ6vdvZ0BkUTno5y+llmnMQyo=;
+        b=cmFHZFlUwGHQi6iO7Fz4iQVvhfJoRrZZXaO4pHAaJwRxnoNwaB155KHe/YWhgEOrBq
+         NvHtZamoi2uKlSwWfsXcBlovVoSn7nNK/n/L2Pa7c2VMFsk+XBUN8+NAvU2h4Xq/A8hN
+         DLMCMDPVDAbV8SQhZfo6eie9NMPJD8pbKob1FOuGv2bNpnz+q+UQRNDPplrr+3Qz6wbx
+         L7TQKxKLsno05xdA0O76BE+TWIeN93rXbJXcgZrYdNlqwH7aKqUi/q8dRjqCXUXyu9qX
+         QK5u08NW2ykpPAc8YJkvPbANtdT/0ljFuUFDJNl3ZPnuhVKBkOx69mUZfcKZI8QSDla1
+         SHfw==
+X-Gm-Message-State: AC+VfDzuqcogDUgpfRliOlRBfVmV6ijVDR23VclCprjzfGxtE7wJWMEi
+        quY+RM6+7cxchSsuWfhJXx+T1+7yBbjpbvSdG7+eKQ==
+X-Google-Smtp-Source: ACHHUZ4FLSZFOD5iz4AdA7hPnjx4FpdcbO5UyUNag9PEgw0B19CDn88OXA+iOtElC4PtdoFYeYS+cG2LAV28KYiPCHE=
+X-Received: by 2002:a81:6d04:0:b0:55a:abf7:636e with SMTP id
+ i4-20020a816d04000000b0055aabf7636emr4510017ywc.24.1683373804150; Sat, 06 May
+ 2023 04:50:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.79.64.102]
-X-ClientProxiedBy: ZJY01-PUBMBX-01.didichuxing.com (10.79.64.32) To
- ZJY03-ACTMBX-05.didichuxing.com (10.79.71.35)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230506111628.712316-1-bhe@redhat.com> <20230506111628.712316-3-bhe@redhat.com>
+In-Reply-To: <20230506111628.712316-3-bhe@redhat.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 6 May 2023 14:49:53 +0300
+Message-ID: <CAA8EJppqxN6WktBJYou+xCbb4HOy7=yre5DXkLy9F5AA5_UQzg@mail.gmail.com>
+Subject: Re: [PATCH RESEND 2/2] dmaengine: make QCOM_HIDMA depend on HAS_IOMEM
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        schnelle@linux.ibm.com, linux-s390@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: chengkaitao <pilgrimtao@gmail.com>
+On Sat, 6 May 2023 at 14:17, Baoquan He <bhe@redhat.com> wrote:
+>
+> On s390 systems (aka mainframes), it has classic channel devices for
+> networking and permanent storage that are currently even more common
+> than PCI devices. Hence it could have a fully functional s390 kernel
+> with CONFIG_PCI=n, then the relevant iomem mapping functions
+> [including ioremap(), devm_ioremap(), etc.] are not available.
+>
+> Here let QCOM_HIDMA depend on HAS_IOMEM so that it won't be built to
+> cause below compiling error if PCI is unset.
+>
+> --------------------------------------------------------
+> ld: drivers/dma/qcom/hidma.o: in function `hidma_probe':
+> hidma.c:(.text+0x4b46): undefined reference to `devm_ioremap_resource'
+> ld: hidma.c:(.text+0x4b9e): undefined reference to `devm_ioremap_resource'
+> make[1]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
+> make: *** [Makefile:1264: vmlinux] Error 2
+>
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: dmaengine@vger.kernel.org
+> ---
+>  drivers/dma/qcom/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
-Oom_kill_inherit can reflect the number of child cgroups selected by
-the parent cgroup's OOM killer. We can refer to the proportion of the
-indicator to adjust the value of oom_protect. The larger oom_protect,
-the smaller oom_kill_inherit.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@gmail.com>
 
-Signed-off-by: chengkaitao <pilgrimtao@gmail.com>
----
- Documentation/admin-guide/cgroup-v2.rst | 4 ++++
- include/linux/memcontrol.h              | 1 +
- mm/memcontrol.c                         | 6 ++++++
- 3 files changed, 11 insertions(+)
-
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 51e9a84d508a..e6f56443d049 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -1358,6 +1358,10 @@ PAGE_SIZE multiple when read back.
- 		The number of processes belonging to this cgroup
- 		killed by any kind of OOM killer.
- 
-+	  oom_kill_inherit
-+		The number of processes belonging to this cgroup
-+		killed by all Ancestral memcg's OOM killer.
-+
-           oom_group_kill
-                 The number of times a group OOM has occurred.
- 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 23ea28d98c0e..d7797f9a0605 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -46,6 +46,7 @@ enum memcg_memory_event {
- 	MEMCG_MAX,
- 	MEMCG_OOM,
- 	MEMCG_OOM_KILL,
-+	MEMCG_OOM_INHERIT,
- 	MEMCG_OOM_GROUP_KILL,
- 	MEMCG_SWAP_HIGH,
- 	MEMCG_SWAP_MAX,
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 5a382359ed49..47e7647d8d7e 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -2129,6 +2129,10 @@ struct mem_cgroup *mem_cgroup_get_oom_group(struct task_struct *victim,
- 
- 		if (memcg == oom_domain)
- 			break;
-+		/* we use oom.group's logic to update the OOM_INHERIT indicator,
-+		 * but OOM_INHERIT and oom.group are independent of each other.
-+		 */
-+		memcg_memory_event(memcg, MEMCG_OOM_INHERIT);
- 	}
- 
- 	if (oom_group)
-@@ -6622,6 +6626,8 @@ static void __memory_events_show(struct seq_file *m, atomic_long_t *events)
- 	seq_printf(m, "oom %lu\n", atomic_long_read(&events[MEMCG_OOM]));
- 	seq_printf(m, "oom_kill %lu\n",
- 		   atomic_long_read(&events[MEMCG_OOM_KILL]));
-+	seq_printf(m, "oom_kill_inherit %lu\n",
-+		   atomic_long_read(&events[MEMCG_OOM_INHERIT]));
- 	seq_printf(m, "oom_group_kill %lu\n",
- 		   atomic_long_read(&events[MEMCG_OOM_GROUP_KILL]));
- }
 -- 
-2.14.1
-
+With best wishes
+Dmitry
