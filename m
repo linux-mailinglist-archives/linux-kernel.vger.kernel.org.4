@@ -2,152 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9366F95BE
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69ED6F95B2
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjEGAhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 20:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
+        id S232019AbjEGAgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 20:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbjEGAhM (ORCPT
+        with ESMTP id S231970AbjEGAgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 20:37:12 -0400
+        Sat, 6 May 2023 20:36:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E052E6AB;
-        Sat,  6 May 2023 17:35:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE34170C;
+        Sat,  6 May 2023 17:34:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 337B4614D4;
-        Sun,  7 May 2023 00:34:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D888C4339B;
-        Sun,  7 May 2023 00:34:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5D29614E9;
+        Sun,  7 May 2023 00:34:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D814C4339C;
+        Sun,  7 May 2023 00:34:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419670;
-        bh=OR4wLaTrbIV/TdmtFN5d/6fnAcy9vhCzHuKrbvT5koQ=;
+        s=k20201202; t=1683419675;
+        bh=FSScn70I0FrCmoPEWpXBnjE7oYUiMOfDx7KbUz8by2E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f1mmf8p3qRJWF7O7L6qJO/jkcOXvpsekLvd5ncSCthFuTKGFm/Cbi/5IzdwCNkCJv
-         8z0utbD+OaLI7cpVJKwx6wRBCsaF4sge1WNSR+QaBd683DgpduOVdnk+l02lbHX9em
-         63cJR5KId9PlzcRzcn6xtMIOr7GQgVudVnv4o2XZshTXRxU5fldB2qeTtJBnEbyR+P
-         POmcmQgwamPdbp7qscmJzCaKLjlY/AFfq4NyjRTjKxGrFGiLaoNFloQ+O8gnYeGf26
-         ibFoWgWrY/UlB9O0Htm3CiWot7WfjxHpQvXZTxNe1Mum7doQYwvq62YJ+ePEHMGCuB
-         G/h5g0+s1VpEg==
+        b=DzYFl3C1+fqRx5sozKEQ0KgsMjSmvfICHOOwIqt7o1646b+ctLSkM+eMimjFzrFji
+         pVH8aukYjAuwD8eaEX42XvtJEsChwQQgrQpJDbuM0A2RuyhphKo53fxd21b8gRdf9C
+         k5lF/UYP+6QamHla2TPrrdqhMlRnvJb2HvVZXHC/gMbO/XOBTV+/wTXVOvvAQ2CnZn
+         v4gY0PHh2ezlsxcDZFCHx6oBAHugc+uVMOiOe5Td+uTsk3LSlCjT75B3rIkxqSii2Z
+         +WT1eJZJyPUJcqPn/R8/4w/xFsJKngbw32ZHZDGCyUwEaT+V2a60ElrGbmF4MN4JJg
+         8HFfhGWnCAj3A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alex Henrie <alexhenrie24@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
-        jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 03/19] HID: apple: Set the tilde quirk flag on the Geyser 4 and later
-Date:   Sat,  6 May 2023 20:34:01 -0400
-Message-Id: <20230507003417.4077259-3-sashal@kernel.org>
+Cc:     Khadija Kamran <kamrankhadijadj@gmail.com>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        u.kleine-koenig@pengutronix.de, linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.1 04/19] staging: axis-fifo: initialize timeouts in init only
+Date:   Sat,  6 May 2023 20:34:02 -0400
+Message-Id: <20230507003417.4077259-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230507003417.4077259-1-sashal@kernel.org>
 References: <20230507003417.4077259-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Henrie <alexhenrie24@gmail.com>
+From: Khadija Kamran <kamrankhadijadj@gmail.com>
 
-[ Upstream commit c3388ddc74a863466c7c3fa24d3a9cea9c9bca53 ]
+[ Upstream commit 752cbd8f191678e86aa754f795546b7f06b7f171 ]
 
-I recently tested several old MacBooks and as far as I can tell, all
-MacBooks that have an ISO keyboard have the tilde key quirk:
+Initialize the module parameters, read_timeout and write_timeout once in
+init().
 
-Product    Model  Year  System      CPU    Shape  Labels     Country  Quirky
-============================================================================
-05ac:021b  A1181  2006  MacBook2,1  T5600  ISO    British    13       Yes
-05ac:021b  A1181  2007  MacBook2,1  T7200  ISO    Québécois  13       Yes
-05ac:0229  A1181  2007  MacBook4,1  T8300  ANSI   Usonian    33       No
-05ac:022a  A1181  2007  MacBook4,1  T8100  ISO    English    13       Yes
-05ac:022a  A1181  2007  MacBook5,2  P7350  ISO    Québécois  13       Yes
-05ac:0237  A1278  2008  MacBook5,1  P7350  ISO    Dutch      13       Yes
-05ac:0237  A1278  2009  MacBook5,5  P7550  ISO    British    13       Yes
+Module parameters can only be set once and cannot be modified later, so we
+don't need to evaluate them again when passing the parameters to
+wait_event_interruptible_timeout().
 
-The model number and year are from the laptop case. Since Apple printed
-the same model and year on many different laptops, the system name (as
-reported in the SMBIOS tables) and CPU form a more precise identifier.
+Convert datatype of {read,write}_timeout from 'int' to 'long int' because
+implicit conversion of 'long int' to 'int' in statement
+'{read,write}_timeout = MAX_SCHEDULE_TIMEOUT' results in an overflow.
 
-Signed-off-by: Alex Henrie <alexhenrie24@gmail.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Change format specifier for {read,write}_timeout from %i to %li.
+
+Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+Link: https://lore.kernel.org/r/ZBN3XAsItCiTk7CV@khadija-virtual-machine
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-apple.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ drivers/staging/axis-fifo/axis-fifo.c | 28 ++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
-index c671ce94671ca..f21b1c4ca8254 100644
---- a/drivers/hid/hid-apple.c
-+++ b/drivers/hid/hid-apple.c
-@@ -861,7 +861,8 @@ static const struct hid_device_id apple_devices[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER4_ANSI),
- 		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER4_ISO),
--		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN },
-+		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN |
-+			APPLE_ISO_TILDE_QUIRK },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER4_JIS),
- 		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN |
- 			APPLE_RDESC_JIS },
-@@ -880,7 +881,8 @@ static const struct hid_device_id apple_devices[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER4_HF_ANSI),
- 		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER4_HF_ISO),
--		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN },
-+		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN |
-+			APPLE_ISO_TILDE_QUIRK },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER4_HF_JIS),
- 		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN |
- 			APPLE_RDESC_JIS },
-@@ -921,31 +923,31 @@ static const struct hid_device_id apple_devices[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING_ANSI),
- 		.driver_data = APPLE_HAS_FN },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING_ISO),
--		.driver_data = APPLE_HAS_FN },
-+		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING_JIS),
- 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING2_ANSI),
- 		.driver_data = APPLE_HAS_FN },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING2_ISO),
--		.driver_data = APPLE_HAS_FN },
-+		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING2_JIS),
- 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING3_ANSI),
- 		.driver_data = APPLE_HAS_FN },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING3_ISO),
--		.driver_data = APPLE_HAS_FN },
-+		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING3_JIS),
- 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING4_ANSI),
- 		.driver_data = APPLE_HAS_FN },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING4_ISO),
--		.driver_data = APPLE_HAS_FN },
-+		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING4_JIS),
- 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING4A_ANSI),
- 		.driver_data = APPLE_HAS_FN },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING4A_ISO),
--		.driver_data = APPLE_HAS_FN },
-+		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING4A_JIS),
- 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING5_ANSI),
+diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
+index dfd2b357f484b..0a85ea667a1b5 100644
+--- a/drivers/staging/axis-fifo/axis-fifo.c
++++ b/drivers/staging/axis-fifo/axis-fifo.c
+@@ -103,17 +103,17 @@
+  *           globals
+  * ----------------------------
+  */
+-static int read_timeout = 1000; /* ms to wait before read() times out */
+-static int write_timeout = 1000; /* ms to wait before write() times out */
++static long read_timeout = 1000; /* ms to wait before read() times out */
++static long write_timeout = 1000; /* ms to wait before write() times out */
+ 
+ /* ----------------------------
+  * module command-line arguments
+  * ----------------------------
+  */
+ 
+-module_param(read_timeout, int, 0444);
++module_param(read_timeout, long, 0444);
+ MODULE_PARM_DESC(read_timeout, "ms to wait before blocking read() timing out; set to -1 for no timeout");
+-module_param(write_timeout, int, 0444);
++module_param(write_timeout, long, 0444);
+ MODULE_PARM_DESC(write_timeout, "ms to wait before blocking write() timing out; set to -1 for no timeout");
+ 
+ /* ----------------------------
+@@ -384,9 +384,7 @@ static ssize_t axis_fifo_read(struct file *f, char __user *buf,
+ 		mutex_lock(&fifo->read_lock);
+ 		ret = wait_event_interruptible_timeout(fifo->read_queue,
+ 			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
+-				 (read_timeout >= 0) ?
+-				  msecs_to_jiffies(read_timeout) :
+-				  MAX_SCHEDULE_TIMEOUT);
++			read_timeout);
+ 
+ 		if (ret <= 0) {
+ 			if (ret == 0) {
+@@ -528,9 +526,7 @@ static ssize_t axis_fifo_write(struct file *f, const char __user *buf,
+ 		ret = wait_event_interruptible_timeout(fifo->write_queue,
+ 			ioread32(fifo->base_addr + XLLF_TDFV_OFFSET)
+ 				 >= words_to_write,
+-				 (write_timeout >= 0) ?
+-				  msecs_to_jiffies(write_timeout) :
+-				  MAX_SCHEDULE_TIMEOUT);
++			write_timeout);
+ 
+ 		if (ret <= 0) {
+ 			if (ret == 0) {
+@@ -948,7 +944,17 @@ static struct platform_driver axis_fifo_driver = {
+ 
+ static int __init axis_fifo_init(void)
+ {
+-	pr_info("axis-fifo driver loaded with parameters read_timeout = %i, write_timeout = %i\n",
++	if (read_timeout >= 0)
++		read_timeout = msecs_to_jiffies(read_timeout);
++	else
++		read_timeout = MAX_SCHEDULE_TIMEOUT;
++
++	if (write_timeout >= 0)
++		write_timeout = msecs_to_jiffies(write_timeout);
++	else
++		write_timeout = MAX_SCHEDULE_TIMEOUT;
++
++	pr_info("axis-fifo driver loaded with parameters read_timeout = %li, write_timeout = %li\n",
+ 		read_timeout, write_timeout);
+ 	return platform_driver_register(&axis_fifo_driver);
+ }
 -- 
 2.39.2
 
