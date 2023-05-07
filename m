@@ -2,65 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4BD6F98EB
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 16:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741046F98CC
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 16:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbjEGOY4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 7 May 2023 10:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
+        id S229653AbjEGOGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 10:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbjEGOYy (ORCPT
+        with ESMTP id S229454AbjEGOGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 10:24:54 -0400
-X-Greylist: delayed 560 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 07 May 2023 07:24:48 PDT
-Received: from server27.webgo24.de (server27.webgo24.de [185.30.32.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA7A5242
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 07:24:48 -0700 (PDT)
-Received: from xsteinebach.net (unknown [41.79.217.118])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        Sun, 7 May 2023 10:06:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B2BF0;
+        Sun,  7 May 2023 07:06:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by server27.webgo24.de (Postfix) with ESMTPSA id 3EB4B5DF4A9C
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 16:14:42 +0200 (CEST)
-Reply-To: judithparker754@gmail.com
-From:   Judith Parker <judithp1@xsteinebach.net>
-To:     linux-kernel@vger.kernel.org
-Subject: =?UTF-8?B?QUNIVFVORzogQmVnw7xuc3RpZ3Rlcjo=?=
-Date:   07 May 2023 15:14:41 +0100
-Message-ID: <20230507151439.6BF90F67F38510EB@xsteinebach.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AB0E60C37;
+        Sun,  7 May 2023 14:06:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB48C433D2;
+        Sun,  7 May 2023 14:06:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683468404;
+        bh=uKRagPtWPQ0otbYUeeaNhIlFQq3x79fkP54v0RwfeSE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aqIvBdJFSifhBSTGjV+4U1jcoHF3YkabGzCxyItuaS3a2unzlekx17EdYbwh1Zoq+
+         VyeI1QkVivhNk22h9t2UgzBZi5z8ehsobCehwxNH+H95LmdMBeFiVIAPsObH67V4UB
+         vCg3JJLdx/gJm/zT0cFk6pbUULUJdiv6qcydon5x54o+82JXnqUMGhzSNSGModCroH
+         Xho3IEz84uyiefBi/VK4yLCvEtKS+IBjHrlJls92+7E5gQgJFzyxtRUCDli8tRtSrL
+         zcbXnfi0kIRIbblO/UWQQD1+8ztKgtXwzNTVTpUq8l2PlXU9q3cCR6lJvsHMF0Wflh
+         t5FKioIELNv1Q==
+Date:   Sun, 7 May 2023 15:22:36 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH v3 4/5] iio: light: ROHM BU27008 color sensor
+Message-ID: <20230507152236.46aba096@jic23-huawei>
+In-Reply-To: <91463df1-5aba-484a-92ea-f8979ec30535@fi.rohmeurope.com>
+References: <cover.1682495921.git.mazziesaccount@gmail.com>
+        <fb35de40a3908988f5f83e25d17119e6944d289b.1682495921.git.mazziesaccount@gmail.com>
+        <20230501152014.7789aa42@jic23-huawei>
+        <91463df1-5aba-484a-92ea-f8979ec30535@fi.rohmeurope.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_SBL,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ACHTUNG: Begünstigter:
-Ich schreibe Ihnen, um Sie darüber zu informieren, dass Ihre 
-Vergütungszahlung heute vom Vorstand und den Direktoren des 
-Ausschusses der Vereinten Nationen für Vergütung und Vergütung 
-genehmigt wurde.
 
-Es wird daher empfohlen, Ihre Angaben erneut zu bestätigen, damit 
-die Finanzabteilung Ihre Zahlung ohne Verzögerung an Sie 
-freigeben kann.
-Bestätigen Sie daher Folgendes:
+> >   
+> >> +
+> >> +	if (i2c->irq) {
+> >> +		ret = devm_iio_triggered_buffer_setup(dev, idev,
+> >> +						      &iio_pollfunc_store_time,
+> >> +						      bu27008_trigger_handler,
+> >> +						      &bu27008_buffer_ops);
+> >> +		if (ret)
+> >> +			return dev_err_probe(dev, ret,
+> >> +				     "iio_triggered_buffer_setup_ext FAIL\n");
+> >> +
+> >> +		itrig = devm_iio_trigger_alloc(dev, "%sdata-rdy-dev%d",
+> >> +					       idev->name, iio_device_id(idev));
+> >> +		if (!itrig)
+> >> +			return -ENOMEM;
+> >> +
+> >> +		data->trig = itrig;
+> >> +
+> >> +		itrig->ops = &bu27008_trigger_ops;
+> >> +		iio_trigger_set_drvdata(itrig, data);
+> >> +
+> >> +		name = devm_kasprintf(dev, GFP_KERNEL, "%s-bu27008",
+> >> +				      dev_name(dev));
+> >> +
+> >> +		ret = devm_request_threaded_irq(dev, i2c->irq,
+> >> +						iio_pollfunc_store_time,  
+> > 
+> > This is on the wrong irq.   
+> 
+> Seems like I have some homework to do :)
+> 
+> Right. I now see I pass the iio_pollfunc_store_time() as top half for 
+> both the "real IRQ" generated by the device (here), as well as a 
+> top-half for the devm_iio_triggered_buffer_setup(). Ideally I like the 
+> idea of taking the timestamp in the top half for the device-generated 
+> IRQ as it is closer the moment HW did acquire the sample - but it really 
+> would make no difference here (even if I did it correctly).
 
-1. Ihr vollständiger Name:
-2. Ihre Wohnadresse:
-3. Ihre direkte Telefonnummer:
+It's the matter of few function calls later.  So trivial timing wise.
 
-Wir freuen uns auf Ihre zeitnahe Antwort.
+> 
+>   iio_pollfunc_store_time is used with the trigger not
+> > here.  Basically what happens is the caller of iio_poll_trigger() fires the input
+> > to a software irq chip that then signals all the of the downstream irqs (which
+> > are the individual consumers of the triggers).  If that's triggered from the
+> > top half / non threaded bit of the interrupt the iio_pollfunc_store_time()
+> > will be called in that non threaded context before the individual threads
+> > for the trigger consumer are started.  
+> 
+> Oh. So, you mean the iio_pollfunc_store_time() is automatically called 
+> already before kicking the SW-IRQ? So we don't need it in 
+> devm_iio_triggered_buffer_setup() anymore?
 
-Danke schön.
+No.  Whatever you register as the top half of the poll_func in the call
+to devm_iio_triggered_buffer_setup() will be called as part of the SW irq
+chip handling - not this isn't a SW-IRQ at all, it's just some demultiplexing
+code.  The top half of an IIO poll func runs in the the trigger interrupt handler
+(under iio_trigger_poll) before those in turn start their own interrupt threads
+to handle whatever you registered as the threads in devm_iio_trigger_buffer_setup()
 
-Frau Judith Parker
-Zahlungsdirektor,
-UN-Außenministerium
+> 
+> > If there is nothing to do in the actual interrupt as it's a data ready
+> > only signal, then you should just call iio_trigger_poll() in the top half and
+> > use devm_request_irq() only as there is no thread in this interrupt (though
+> > there is one for the interrupt below the software interrupt chip).  
+> 
+> I haven't tested this yet so please ignore me if I am writing nonsense - 
+> but... The BU27008 will keep the IRQ line asserted until a register is 
+> read. We can't read the register form HW-IRQ so we need to keep the IRQ 
+> disabled until the threaded trigger handler is ran. With the setup we 
+> have here, the IRQF_ONESHOT, took care of this. I assume that changing 
+> to call the iio_poll_trigger() from top-half means I need to explicitly 
+> disable the IRQ and re-enable it at the end of the trigger thread after 
+> reading the register which debounces the IRQ line?
+
+Hmm. I'm trying to remember how this works (wrote this a very long time ago).
+I'm fairly sure it's not an issue because we use IRQF_ONESHOT down one level
+so exercise the same prevention of the threads triggering multiple times etc.
+https://elixir.bootlin.com/linux/latest/source/drivers/iio/buffer/industrialio-triggered-buffer.c#L57
+
+It doesn't matter if the device interrupt fires again as it will still be masked
+at our software irqchip level and will then get queued up and the thread will
+run again.
+
+> 
+> > 
+> >   
+> >> +						&bu27008_irq_thread_handler,
+> >> +						IRQF_ONESHOT, name, idev->pollfunc);
+> >> +		if (ret)
+> >> +			return dev_err_probe(dev, ret,
+> >> +					     "Could not request IRQ\n");
+> >> +
+> >> +
+> >> +		ret = devm_iio_trigger_register(dev, itrig);
+> >> +		if (ret)
+> >> +			return dev_err_probe(dev, ret,
+> >> +					     "Trigger registration failed\n");
+> >> +	} else {
+> >> +		dev_warn(dev, "No IRQ configured\n");  
+> > 
+> > Why is it a warning?  Either driver works without an IRQ, or it doesn't.
+> > dev_dbg() or dev_info() at most.  
+> 
+> Some of it works. Well, maybe I'll change it to tell that device works 
+> in raw_read only mode.
+> 
+> Thanks again for the help!
+> 
+> Yours,
+> 	-- Matti
+> 
+
