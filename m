@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A0E6F95C2
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 917846F95CB
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbjEGAhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 20:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58244 "EHLO
+        id S232087AbjEGAh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 20:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbjEGAhQ (ORCPT
+        with ESMTP id S231991AbjEGAhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 20:37:16 -0400
+        Sat, 6 May 2023 20:37:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B72D2382F;
-        Sat,  6 May 2023 17:35:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3AA2269D;
+        Sat,  6 May 2023 17:36:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38CAF61527;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8912961530;
+        Sun,  7 May 2023 00:35:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27CDDC433D2;
         Sun,  7 May 2023 00:35:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1635FC433EF;
-        Sun,  7 May 2023 00:35:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419730;
-        bh=w0/VlWq2cmv0raL1yTyE3NLrzjCf+QVPRk0dF2iGjqQ=;
+        s=k20201202; t=1683419732;
+        bh=qthCPBfY2wP7lOEL6UkdVpBSLFAuLbFQlXttDAI38ac=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AjWluKTt6hEqpBZhmmMfl3ryl+v28q0jqISJ0hEBjbMn0OhK1pd03jQJij76C5ddB
-         gSkRPGDlEYm3soJqAx0DTDFmAazjrHJ94RyUebmqojNJerxYHxnDEAuHv/sW9LCBIn
-         XGQ6B4EYGQ+SygoATkdN0YZ3COnZujkCV4SJ9zRGd88Xfef8/YluC9N8P6NUV7er+Y
-         DB7ZKjbO/+JNyH1BllLAyfI2e7VthIwNtwdytx3GmbMDHSD+Mb7aTj6m2NxFzQukEf
-         OXaCMcy8XDvtVbEmqnP1hiPG7Uy9Pig27zCTVT800/AsFWN76J2Q0lPab0qFKfi/hB
-         8GtrkN7xqjVwA==
+        b=OsBggR233qDq7X+DSbY1etz82d3+/wQr7cVZ0nJ+LZMj4GrEAzZ3hu+8PjgIKEs9P
+         Mcl0UurodUefCymilvxsBybnaLrk6/BX5IveneX29XkYMH2n+O3H738U335gV8h9O7
+         vDrWhPvWq+kKKljlYCK6FCgty5C0Y5dpL5St2S7iz+i6Uq2x/2AKnCVaj/BayAZXM5
+         YZPzwr85C9PgvJRov1bvga0h0HYJkvWVg7HW1Zu8MZb+jNXK1hR6YaMHmcAVUFyPZS
+         MCQjbVInaHaQOhZdeF5cYUE2tP/exEB88PN8zG3iv0WKXypu60gL9ATyEL5I6pYzEx
+         +pA4Q9EVwlQDg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Svyatoslav Ryhel <clamor95@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, ion@agorria.com,
-        jiapeng.chong@linux.alibaba.com, robh@kernel.org,
-        alsa-devel@alsa-project.org, linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 03/10] ASoC: tegra: Support coupled mic-hp detection
-Date:   Sat,  6 May 2023 20:35:09 -0400
-Message-Id: <20230507003517.4078384-3-sashal@kernel.org>
+Cc:     Bastien Nocera <hadess@hadess.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, jikos@kernel.org,
+        linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 04/10] HID: logitech-hidpp: Don't use the USB serial for USB devices
+Date:   Sat,  6 May 2023 20:35:10 -0400
+Message-Id: <20230507003517.4078384-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230507003517.4078384-1-sashal@kernel.org>
 References: <20230507003517.4078384-1-sashal@kernel.org>
@@ -61,61 +58,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Svyatoslav Ryhel <clamor95@gmail.com>
+From: Bastien Nocera <hadess@hadess.net>
 
-[ Upstream commit eb0b8481c2e03a5ae01f6bea60b42109bd12b6fe ]
+[ Upstream commit 7ad1fe0da0fa91bf920b79ab05ae97bfabecc4f4 ]
 
-This quirk is used for cases when there is GPIO which detects
-any type of 3.5 Jack insertion and actual type of jack is defined
-by other GPIO. 3.5 Jack GPIO generates interrupt and MIC GPIO
-indicates type of Jack only if 3.5 Jack GPIO is active.
+For devices that support the 0x0003 feature (Device Information) version 4,
+set the serial based on the output of that feature, rather than relying
+on the usbhid code setting the USB serial.
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-Link: https://lore.kernel.org/r/20230308073502.5421-3-clamor95@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+This should allow the serial when connected through USB to (nearly)
+match the one when connected through a unifying receiver.
+
+For example, on the serials on a G903 wired/wireless mouse:
+- Unifying: 4067-e8-ce-cd-45
+- USB before patch: 017C385C3837
+- USB after patch: c086-e8-ce-cd-45
+
+Signed-off-by: Bastien Nocera <hadess@hadess.net>
+Link: https://lore.kernel.org/r/20230302130117.3975-1-hadess@hadess.net
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/tegra/tegra_asoc_machine.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/hid/hid-logitech-hidpp.c | 51 ++++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/sound/soc/tegra/tegra_asoc_machine.c b/sound/soc/tegra/tegra_asoc_machine.c
-index 2e549b69061ca..21ae1dd5191ca 100644
---- a/sound/soc/tegra/tegra_asoc_machine.c
-+++ b/sound/soc/tegra/tegra_asoc_machine.c
-@@ -51,6 +51,17 @@ static struct snd_soc_jack_gpio tegra_machine_headset_jack_gpio = {
- };
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index 601ab673727dc..5eb25812e9479 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -928,6 +928,55 @@ static int hidpp_root_get_protocol_version(struct hidpp_device *hidpp)
+ 	return 0;
+ }
  
- /* Mic Jack */
-+static int coupled_mic_hp_check(void *data)
-+{
-+	struct tegra_machine *machine = (struct tegra_machine *)data;
++/* -------------------------------------------------------------------------- */
++/* 0x0003: Device Information                                                 */
++/* -------------------------------------------------------------------------- */
 +
-+	/* Detect mic insertion only if 3.5 jack is in */
-+	if (gpiod_get_value_cansleep(machine->gpiod_hp_det) &&
-+	    gpiod_get_value_cansleep(machine->gpiod_mic_det))
-+		return SND_JACK_MICROPHONE;
++#define HIDPP_PAGE_DEVICE_INFORMATION			0x0003
++
++#define CMD_GET_DEVICE_INFO				0x00
++
++static int hidpp_get_serial(struct hidpp_device *hidpp, u32 *serial)
++{
++	struct hidpp_report response;
++	u8 feature_type;
++	u8 feature_index;
++	int ret;
++
++	ret = hidpp_root_get_feature(hidpp, HIDPP_PAGE_DEVICE_INFORMATION,
++				     &feature_index,
++				     &feature_type);
++	if (ret)
++		return ret;
++
++	ret = hidpp_send_fap_command_sync(hidpp, feature_index,
++					  CMD_GET_DEVICE_INFO,
++					  NULL, 0, &response);
++	if (ret)
++		return ret;
++
++	/* See hidpp_unifying_get_serial() */
++	*serial = *((u32 *)&response.rap.params[1]);
++	return 0;
++}
++
++static int hidpp_serial_init(struct hidpp_device *hidpp)
++{
++	struct hid_device *hdev = hidpp->hid_dev;
++	u32 serial;
++	int ret;
++
++	ret = hidpp_get_serial(hidpp, &serial);
++	if (ret)
++		return ret;
++
++	snprintf(hdev->uniq, sizeof(hdev->uniq), "%04x-%4phD",
++		 hdev->product, &serial);
++	dbg_hid("HID++ DeviceInformation: Got serial: %s\n", hdev->uniq);
 +
 +	return 0;
 +}
- 
- static struct snd_soc_jack tegra_machine_mic_jack;
- 
-@@ -183,8 +194,15 @@ int tegra_asoc_machine_init(struct snd_soc_pcm_runtime *rtd)
- 			return err;
- 		}
- 
-+		tegra_machine_mic_jack_gpio.data = machine;
- 		tegra_machine_mic_jack_gpio.desc = machine->gpiod_mic_det;
- 
-+		if (of_property_read_bool(card->dev->of_node,
-+					  "nvidia,coupled-mic-hp-det")) {
-+			tegra_machine_mic_jack_gpio.desc = machine->gpiod_hp_det;
-+			tegra_machine_mic_jack_gpio.jack_status_check = coupled_mic_hp_check;
-+		};
 +
- 		err = snd_soc_jack_add_gpios(&tegra_machine_mic_jack, 1,
- 					     &tegra_machine_mic_jack_gpio);
- 		if (err)
+ /* -------------------------------------------------------------------------- */
+ /* 0x0005: GetDeviceNameType                                                  */
+ /* -------------------------------------------------------------------------- */
+@@ -4141,6 +4190,8 @@ static int hidpp_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 
+ 	if (hidpp->quirks & HIDPP_QUIRK_UNIFYING)
+ 		hidpp_unifying_init(hidpp);
++	else if (hid_is_usb(hidpp->hid_dev))
++		hidpp_serial_init(hidpp);
+ 
+ 	connected = hidpp_root_get_protocol_version(hidpp) == 0;
+ 	atomic_set(&hidpp->connected, connected);
 -- 
 2.39.2
 
