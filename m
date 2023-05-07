@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169A36F9B25
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 21:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00426F9B38
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 21:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbjEGTVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 15:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S229533AbjEGTxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 15:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjEGTVk (ORCPT
+        with ESMTP id S229619AbjEGTxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 15:21:40 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFC2421E
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 12:21:38 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f13d8f74abso4240739e87.0
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 12:21:38 -0700 (PDT)
+        Sun, 7 May 2023 15:53:20 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA65911562
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 12:53:16 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-559eae63801so56450387b3.2
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 12:53:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683487297; x=1686079297;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ilIaaUgGIe/T7VjBbDBUFv46HH+1cV1VktC13wAxqEM=;
-        b=g8cXPVF3pEcCTTAy3eb0rCKWBlCxNp6qmWHuZTFdU/+q3z2PgtqroklmpF+v/9JC1Z
-         JUYFHn0L3VebnZ5hp+5P+HPJgZjLE1DgMXAZWR6GPhwHwmzHLTSjkqj8n2A0mKzNLfDL
-         Trv7Ct1xARNspxDPn26WJyA0Au/2nlAxwCEMLnd2TVmdHSI0h3yUhFWxaR3MyZuboTU4
-         iP+M5baSMnTWBM0aNsrxhfBkC5zKBaSca2ku4hiQlYomsTwGK2Wran66j+CSm5taUeko
-         jn9pVFaLPgtws/qmDswrOXKNo1/+UahwjDMzRGf2oGUsSq32Z1vfUvikHszcp+apqC23
-         JOhw==
+        d=paul-moore.com; s=google; t=1683489196; x=1686081196;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zyj2EiCvdTduHLqcmu7mXgIBGvXlvMB1pane2tqkF7E=;
+        b=HovbGonvcX5N33ZjAIXpk4nBo33sAlxq1QGT9NpuhVKTsJ+IPtEw9Cp0pK3vMQqZCX
+         yMERRh6IsK8ylRf73EWSXkyxzpndyvw9zupn3p6xHJtD6gh6YQnVVMmrhzQzNnp/3k82
+         WvBn7PioMWALD9g+ebvbodFgl7/8Zdu91Kkz7apHZvluX0naIRyiebich3A8BibOJ5ud
+         x4u598AtsP929aBszW6HtQkOJeQzHnv9lc7PiAdtQJiyGXVl7j2NvQew1QYm2We4ZngS
+         cmO8wXENruc4TD8Z4g4R0Ngf5MD+xWtep2Y3ix0agt9ARcjjDYtovnqY7/J87qqW4DWg
+         MMMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683487297; x=1686079297;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ilIaaUgGIe/T7VjBbDBUFv46HH+1cV1VktC13wAxqEM=;
-        b=IybZx1GmMgLi3kH3PdVREFgpfQVNe1BvWTZTKXKwDFAj1OyJu3D5hcjrGO9uOYJflm
-         IXAEMYUk/5vRLAzosoeriPhdn/R3Asjw2cXXNlAoMLrq28K4n2Xi9aSwNIALuwRgYuZW
-         fPLCMoXMvWcP4PSU4hsAERi90EE92msNn2HhNppB9H9RYGN5kFTRVbV9izEmeKW79CcG
-         xR6kHn7Hj8pdF5s1BHw1XM52Pz3qvsWn3c1RzZ1zQVReMosDGtzhzsaJGoAPFfMCwzkp
-         MZ5SQZ703/JBjG7rsI0jJejUpwMiykfxH2iQ2oMl/Ug36EzoBdD7ACJgUUNpd5ZD1bQa
-         DElg==
-X-Gm-Message-State: AC+VfDwNDdaq+I7/aE6elSt8sR0UQOfIATmFb/u53adSB+8Lg3mRZPRf
-        QdkQBqYpMbmPVboKnEQkCTBEtQ==
-X-Google-Smtp-Source: ACHHUZ6u2ZsMf3oCE1a5P4CYAeq5aTNQK5jMk9qfQFgQnY1Ies56vQm401hwNCETK25KSohQcUeWYQ==
-X-Received: by 2002:a19:ae1a:0:b0:4f2:4d0a:7bdf with SMTP id f26-20020a19ae1a000000b004f24d0a7bdfmr469302lfc.52.1683487296869;
-        Sun, 07 May 2023 12:21:36 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id k8-20020ac24568000000b004efeaaabdcdsm1047700lfm.30.2023.05.07.12.21.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 May 2023 12:21:36 -0700 (PDT)
-Message-ID: <a5748e3d-3f8d-b1ff-c40b-ee40dcfe6f2e@linaro.org>
-Date:   Sun, 7 May 2023 22:21:35 +0300
+        d=1e100.net; s=20221208; t=1683489196; x=1686081196;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Zyj2EiCvdTduHLqcmu7mXgIBGvXlvMB1pane2tqkF7E=;
+        b=FgZYdR7r37Y8GWbPinMFLQ1ripsIB3bli+dvnVxsd3hLT4harlS0W5sp9DVIn/hipT
+         ESOT2usNjSit9vwij4vB6dWUdYBRytIrcw1+XTyCEC1rB56D2Le1xbzcPMmja58HZK8u
+         LPWh7gSR+R2xQeJzLK4IfJxvvnZmYmZu2b3ng6DXARXN5CQYIAVr7u3zKyTiq8JlceyB
+         pR6qP92Z125gj+lGJyVDmjacGB5Lc5iUnxUvOdGt8Iw1aBKDItDMpA4A3Xt8ZTITZLSv
+         EfH+qE+DAwm19H8fY4oU93ELLKkBqdOv/NXxzbSXPvtqUJQ3coeyyNV5HWi75VosVEmt
+         SAIw==
+X-Gm-Message-State: AC+VfDwq/T62b/zMYeAXyTZSpQ7sScJFEOnBLkA3DthRGLysNoUyL98A
+        u/D1bhFpa0XpavLndLmT34SieXV5fpyNUYMgbw+W
+X-Google-Smtp-Source: ACHHUZ7pNs3NaZ4FLiSZ/VNIGrR4CzLJdGR6zgvUQNMJX+pul+3P3AfyeKE5TmTF6NGa13Y4VaviefX/KFQw2NkRUEs=
+X-Received: by 2002:a0d:ea4b:0:b0:55a:20a1:4ba6 with SMTP id
+ t72-20020a0dea4b000000b0055a20a14ba6mr8815170ywe.25.1683489196101; Sun, 07
+ May 2023 12:53:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 3/4] drm/msm/dpu: Add DPU_INTF_DATA_COMPRESS feature
- flag
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230405-add-dsc-support-v2-0-1072c70e9786@quicinc.com>
- <20230405-add-dsc-support-v2-3-1072c70e9786@quicinc.com>
- <i6i2xj2tuy5mcxsj674d77kfdb3ne6immkmrzw5f6u4bfx2sth@ef7fzrhdyypx>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <i6i2xj2tuy5mcxsj674d77kfdb3ne6immkmrzw5f6u4bfx2sth@ef7fzrhdyypx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230504213002.56803-1-michael.mccracken@gmail.com>
+ <fbf37518-328d-c08c-7140-5d09d7a2674f@redhat.com> <87pm7f9q3q.fsf@gentoo.org>
+ <c50ac5e4-3f84-c52a-561d-de6530e617d7@redhat.com> <CAHC9VhTX3ohxL0i3vT8sObQ+v+-TOK95+EH1DtJZdyMmrm3A2A@mail.gmail.com>
+ <CAPDLWs-=C_UTKPTqwRbx70h=DaodF8LVV3-8n=J3u=L+kJ_1sg@mail.gmail.com>
+In-Reply-To: <CAPDLWs-=C_UTKPTqwRbx70h=DaodF8LVV3-8n=J3u=L+kJ_1sg@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Sun, 7 May 2023 15:53:05 -0400
+Message-ID: <CAHC9VhSfrAUJaP-MbTXFyLgAz5P3McjD0eouj+-7QwOrrYt8MQ@mail.gmail.com>
+Subject: Re: [PATCH] sysctl: add config to make randomize_va_space RO
+To:     Kaiwan N Billimoria <kaiwan@kaiwantech.com>
+Cc:     David Hildenbrand <david@redhat.com>, Sam James <sam@gentoo.org>,
+        Michael McCracken <michael.mccracken@gmail.com>,
+        linux-kernel@vger.kernel.org, serge@hallyn.com, tycho@tycho.pizza,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        kernel-hardening@lists.openwall.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,96 +79,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/05/2023 19:00, Marijn Suijten wrote:
-> On 2023-05-05 14:23:50, Jessica Zhang wrote:
->> Add DATA_COMPRESS feature flag to DPU INTF block.
->>
->> In DPU 7.x and later, DSC/DCE enablement registers have been moved from
->> PINGPONG to INTF.
->>
->> As core_rev (and related macros) was removed from the dpu_kms struct, the
->> most straightforward way to indicate the presence of this register would be
->> to have a feature flag.
-> 
-> Irrelevant.  Even though core_rev was still in mainline until recently,
-> we always hardcoded the features in the catalog and only used core_rev
-> to select a dpu_mdss_cfg catalog entry.  There is no "if version >= X
-> then enable feature Y" logic, this manually-enabled feature flag is the
-> only, correct way to do it.
-> 
->> Changes in v2:
->> - Changed has_data_compress dpu_cap to a DATA_COMPRESS INTF feature flag
->>
->> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-> 
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> 
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 2 +-
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
->>   2 files changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> index 7944481d0a33..c74051906d05 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> @@ -104,7 +104,7 @@
->>   #define INTF_SC7180_MASK \
->>   	(BIT(DPU_INTF_INPUT_CTRL) | BIT(DPU_INTF_TE) | BIT(DPU_INTF_STATUS_SUPPORTED))
->>   
->> -#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
->> +#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN) | BIT(DPU_INTF_DATA_COMPRESS)
-> 
-> Konrad: Your SM6350/SM6375 series v3 [1] switched from INTF_SC7180_MASK
-> to INTF_SC7280_MASK to enable HCTL on SM6375, but that will now
-> erroneously also receive this feature flag and write the new
-> DATA_COMPESS mask even if it's DPU 6.9 (< 7.x where it got added).
+On Sat, May 6, 2023 at 3:05=E2=80=AFAM Kaiwan N Billimoria
+<kaiwan@kaiwantech.com> wrote:
+> On Fri, May 5, 2023 at 8:53=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
+rote:
+> >
+> > On Fri, May 5, 2023 at 11:15=E2=80=AFAM David Hildenbrand <david@redhat=
+.com> wrote:
+> > > On 05.05.23 09:46, Sam James wrote:
+> > > > David Hildenbrand <david@redhat.com> writes:
+> > > >> On 04.05.23 23:30, Michael McCracken wrote:
+> > > >>> Add config RO_RANDMAP_SYSCTL to set the mode of the randomize_va_=
+space
+> > > >>> sysctl to 0444 to disallow all runtime changes. This will prevent
+> > > >>> accidental changing of this value by a root service.
+> > > >>> The config is disabled by default to avoid surprises.
+> >
+> > ...
+> >
+> > > If we really care, not sure what's better: maybe we want to disallow
+> > > disabling it only in a security lockdown kernel?
+> >
+> > If we're bringing up the idea of Lockdown, controlling access to
+> > randomize_va_space is possible with the use of LSMs.  One could easily
+> > remove write access to randomize_va_space, even for tasks running as
+> > root.
+>
+> IMO, don't _move_ the sysctl to LSM(s).
 
-Yeah, that's why I had the idea of including at least the DPU major in 
-the mask name.
+There is nothing to move, the ability to restrict access to
+randomize_va_space exists today, it is simply a matter of if the
+security policy author or admin wants to enable it.
 
-It looks like we should enable DPU_DATA_HCTL_EN at least for 
-sm8150/sm8250 (and other DPU 6.x) too. I am not sure if it is present on 
-sdm845.
+If you are like Michael and you want to block write access, even when
+running as root, you can do so with an LSM.  You can also allow write
+access.  With SELinux you can allow/disallow the privilege on a
+task-by-task basis to meet individual usability and security
+requirements.
 
-> 
-> [1]: https://lore.kernel.org/linux-arm-msm/80b46fcb-d6d0-1998-c273-5401fa924c7d@linaro.org/T/#u
-> 
-> Depending on who lands first, this flag should be split.
-> 
-> I still see value in inlining and removing these defines, though that
-> brings a host of other complexity.
-> 
-> - Marijn
-> 
->>   #define WB_SM8250_MASK (BIT(DPU_WB_LINE_MODE) | \
->>   			 BIT(DPU_WB_UBWC) | \
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> index 4eda2cc847ef..01c65f940f2a 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> @@ -185,6 +185,7 @@ enum {
->>    * @DPU_DATA_HCTL_EN                Allows data to be transferred at different rate
->>    *                                  than video timing
->>    * @DPU_INTF_STATUS_SUPPORTED       INTF block has INTF_STATUS register
->> + * @DPU_INTF_DATA_COMPRESS          INTF block has DATA_COMPRESS register
->>    * @DPU_INTF_MAX
->>    */
->>   enum {
->> @@ -192,6 +193,7 @@ enum {
->>   	DPU_INTF_TE,
->>   	DPU_DATA_HCTL_EN,
->>   	DPU_INTF_STATUS_SUPPORTED,
->> +	DPU_INTF_DATA_COMPRESS,
->>   	DPU_INTF_MAX
->>   };
->>   
->>
->> -- 
->> 2.40.1
->>
-
--- 
-With best wishes
-Dmitry
-
+--=20
+paul-moore.com
