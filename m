@@ -2,97 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5BF6F9CC6
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 01:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06D36F9CCA
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 01:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjEGXiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 19:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S231971AbjEGXkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 19:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjEGXiv (ORCPT
+        with ESMTP id S229507AbjEGXkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 19:38:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763CA1BF7;
-        Sun,  7 May 2023 16:38:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 7 May 2023 19:40:40 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5222E1BD8
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 16:40:39 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04D1161017;
-        Sun,  7 May 2023 23:38:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13EC8C433EF;
-        Sun,  7 May 2023 23:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683502729;
-        bh=WmmGaEaDKGwBE2JtCM7J4OMGZbrbtEfQo53Aio6mxLw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lKufYhEJvGRZrv9rtyK9CX6lt1XhzPJ0jCW+mBWu0ovohMHGsODOuJ4PeypDLyXm1
-         yF8ENUuOXKaDuLTzTjU+0OICsRkc1OaFrhc1J/ZALBvYiOSh+l2nl4cBH0PF3fcmQ/
-         ZTaLJjzxeCoixomjbRL2/209wSiK/bQlGUnmfa+i+gEWCEJrZqZFdMQNbvkscaYT/+
-         kNaV/T1mWTUzp9aaztyA7PH/0FnL/+Pcr3atssBwDYwlJb55HsaxO8A48xZQPEVx/W
-         Xs+t3r27Snzf0Y5KGdQeMa/TAIrXl+oNv5bUsn6EymPU3w4ViMdpebLAnmUogHHhAO
-         c4Xm+TmjOkU8Q==
-Date:   Mon, 8 May 2023 08:38:44 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Svyatoslav Ryhel <clamor95@gmail.com>, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jiapeng.chong@linux.alibaba.com,
-        ion@agorria.com, robh@kernel.org, alsa-devel@alsa-project.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.3 06/24] ASoC: tegra: Support coupled mic-hp
- detection
-Message-ID: <ZFg2hP9ed1hz+tAl@finisterre.sirena.org.uk>
-References: <20230507003022.4070535-1-sashal@kernel.org>
- <20230507003022.4070535-6-sashal@kernel.org>
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 7A6D684698;
+        Mon,  8 May 2023 01:40:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1683502837;
+        bh=V2j1mqxhsFE0MNfvXOxfbRhdErYoMOVzUrNHlj9GSGY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=tKQeIs2xifkoi4rflT9AePNxN/oHomRv/f58GgKrcNNKj+lPaWDTzWAi00fhhcO3g
+         wRLJmcGYUBaVYqllV36BG+yvqGTBH9ZxndnGFxvVajQzqE4S1Gkl1YRerS/bL+zjAK
+         ox/yOCRS9meOtjkzuJhKjTHd6lkLolqNsyeQi3gxmJoPIS2XJn09cO9jB5QOq1U11t
+         p3Mkxd/zVqMIvQvKhBxerQ1OGJprumnl40bHYiqbhm76sdWG7Gphf0mgJ7Gh9wlW3N
+         yr4tS0wwugHGguunoZC8BJ2tDFDMHQ3niYmzI3EKTTRWxi0Rtnp3IXnkBaqGF36LZr
+         T7ErV0h6sDViA==
+Message-ID: <02349503-4542-cbfd-2a2f-379fe8284cca@denx.de>
+Date:   Mon, 8 May 2023 01:40:35 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="y59NH35YlGEIWGGV"
-Content-Disposition: inline
-In-Reply-To: <20230507003022.4070535-6-sashal@kernel.org>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V4 3/3] regulator: da9062: Make the use of IRQ optional
+Content-Language: en-US
+To:     DLG Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Cc:     Support Opensource <support.opensource@diasemi.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        kernel <kernel@dh-electronics.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230309092254.56279-1-cniedermaier@dh-electronics.com>
+ <20230309092254.56279-3-cniedermaier@dh-electronics.com>
+ <bb6f5cf8afd54836959ebfb0455b81dc@dh-electronics.com>
+ <TYCPR01MB847111D756F520761D720716C26A9@TYCPR01MB8471.jpnprd01.prod.outlook.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <TYCPR01MB847111D756F520761D720716C26A9@TYCPR01MB8471.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/27/23 12:50, DLG Adam Ward wrote:
+> On 18 April 2023 21:00, Christoph Niedermaier wrote:
+>> In V3 of this patch the kernel test robot found an issue. A fix is important, because otherwise the normal path with IRQ could have problems. So I fixed it in V4. Any comments or is it OK how I fixed it?
+> 
+> Hi Christoph,
+> 
+> It looks fine now; sorry I didn't notice before.
 
---y59NH35YlGEIWGGV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think a formal Reviewed-by / Acked-by would be nice.
 
-On Sat, May 06, 2023 at 08:30:02PM -0400, Sasha Levin wrote:
-> From: Svyatoslav Ryhel <clamor95@gmail.com>
->=20
-> [ Upstream commit eb0b8481c2e03a5ae01f6bea60b42109bd12b6fe ]
->=20
-> This quirk is used for cases when there is GPIO which detects
-> any type of 3.5 Jack insertion and actual type of jack is defined
-> by other GPIO. 3.5 Jack GPIO generates interrupt and MIC GPIO
-> indicates type of Jack only if 3.5 Jack GPIO is active.
-
-This is also a new feature and obviously out of scope for stable.
-
---y59NH35YlGEIWGGV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRYNoQACgkQJNaLcl1U
-h9DUfAf/fJSrvAFvB2PEgnbZ7+HVKFhP+DVHDcWAPVfRTxH65rP2P7zHxSCvw2bl
-io/USGxVZvTVnbsIp/rn/SLjv0SuLrazlhSuWED4ejyX9OsZQa4H0bRHOqRPmVjw
-001Af8uWmnAScDqUc/aL7H90QpkEqeLA+K/QKn0xS4hIdTp22mW+fY3YV2J72EMc
-VYb6vlxT9Pf0lLKYYUrKmUXsodwPiG0kggfdRlNg6iTR65+ZKI/JcuZAR9p7jAyf
-jn4JxG34aEhZ8p9dqA/OxJx/KQPik76KZKE/ECDGRzYDbBPdQgSSkxqUve9y/dwI
-oplIizRdi8O8D6jw+CbfEH6UjCXvZA==
-=rKBH
------END PGP SIGNATURE-----
-
---y59NH35YlGEIWGGV--
+But maybe Mark can pick this 3/3 patch now either way ?
