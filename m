@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5AFC6F963D
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA4A6F963F
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232637AbjEGAlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 20:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38946 "EHLO
+        id S232643AbjEGAl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 20:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbjEGAja (ORCPT
+        with ESMTP id S232678AbjEGAjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 20:39:30 -0400
+        Sat, 6 May 2023 20:39:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9EA2E06E;
-        Sat,  6 May 2023 17:37:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D1A30166;
+        Sat,  6 May 2023 17:37:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13F49614E2;
-        Sun,  7 May 2023 00:37:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA858C433EF;
-        Sun,  7 May 2023 00:37:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65C95614D6;
+        Sun,  7 May 2023 00:37:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03FDCC4339E;
+        Sun,  7 May 2023 00:37:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419833;
-        bh=WCDkNsUG6O6kzoOSpg+xE7gLvYMvIYK0BNQ31HEB0sE=;
+        s=k20201202; t=1683419834;
+        bh=7ADUiHZS/SIeohP0AoapQcEWSWTEIvGy4MJC2Le0n7o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HMtwJ4JybTQfsMeDAQb4zYvXRa6WMTbw5HVUiA2m0vEZJlV37BqcmCXPCcidpPgcp
-         9JmwBXuPQTTBuvKrGbsCoIFfxflGlDTm/IQpPHpp6il2eRtMZDHJCaxPOqkzWVRlxp
-         eCZ/FFFkIz1QNyGNilYWnx5zFDTYJAeZ0pI/esbBcHSFfrpAzeNKs3CbcTwKdsAh1m
-         Yjm45ZmpEBOZUgoJM97B2qhQd0KcGjkg9lMzRV9s18ukLJyD24/cITZgk9iKaR7NhD
-         FknlzcFY6Pw+t/F6i3KevZ+cu0oNQvz7dSWOmQyvIwaBvj8CpIhffvc5xJAwBSAPKL
-         YpIooQYmQaaPA==
+        b=FhCg3R0elkWyVx0l2yW/1oJ9Dy9zE2y2pH0iJP79GbczMHfKMMg3Za4JekdcbgaGq
+         iAW0kLwOZ+vBY7Y0JlMATrV5WIOkCrd9aKtlyIUfBJiCknx8u5d7PXzOHa6lw79sZU
+         AyQFNe3Xp/DYcawKVBa+k4E1cviZNpUuoDHwBRXWUgi8IzIJt6K9jzSlz7+zO9zGmp
+         VdVl+A8Kv+s+XVZTi8cp6YJgU8oDqsEtQFzksECxnKonHxjy9X5NbTO6zcxPQcgQ/K
+         jTXHbGfFlSpTobgnLjXwOvNlF14CzY+wKcPPtdqYi4I82zgatp93CrNWdiRLZhhPLJ
+         B+6TiS+r1GCVA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.14 2/8] staging: rtl8192e: Replace macro RTL_PCI_DEVICE with PCI_DEVICE
-Date:   Sat,  6 May 2023 20:36:57 -0400
-Message-Id: <20230507003704.4081392-2-sashal@kernel.org>
+Cc:     Bastien Nocera <hadess@hadess.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, jikos@kernel.org,
+        linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 3/8] HID: logitech-hidpp: Don't use the USB serial for USB devices
+Date:   Sat,  6 May 2023 20:36:58 -0400
+Message-Id: <20230507003704.4081392-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230507003704.4081392-1-sashal@kernel.org>
 References: <20230507003704.4081392-1-sashal@kernel.org>
@@ -57,55 +58,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+From: Bastien Nocera <hadess@hadess.net>
 
-[ Upstream commit fda2093860df4812d69052a8cf4997e53853a340 ]
+[ Upstream commit 7ad1fe0da0fa91bf920b79ab05ae97bfabecc4f4 ]
 
-Replace macro RTL_PCI_DEVICE with PCI_DEVICE to get rid of rtl819xp_ops
-which is empty.
+For devices that support the 0x0003 feature (Device Information) version 4,
+set the serial based on the output of that feature, rather than relying
+on the usbhid code setting the USB serial.
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Link: https://lore.kernel.org/r/8b45ee783fa91196b7c9d6fc840a189496afd2f4.1677133271.git.philipp.g.hortmann@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This should allow the serial when connected through USB to (nearly)
+match the one when connected through a unifying receiver.
+
+For example, on the serials on a G903 wired/wireless mouse:
+- Unifying: 4067-e8-ce-cd-45
+- USB before patch: 017C385C3837
+- USB after patch: c086-e8-ce-cd-45
+
+Signed-off-by: Bastien Nocera <hadess@hadess.net>
+Link: https://lore.kernel.org/r/20230302130117.3975-1-hadess@hadess.net
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 6 +++---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 5 -----
- 2 files changed, 3 insertions(+), 8 deletions(-)
+ drivers/hid/hid-logitech-hidpp.c | 51 ++++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index e1ede9fd4920b..1a5218e61ec91 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -61,9 +61,9 @@ static const struct rtl819x_ops rtl819xp_ops = {
- };
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index 6ad776b4711b7..e2db4731eb825 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -777,6 +777,55 @@ static bool hidpp_is_connected(struct hidpp_device *hidpp)
+ 	return ret == 0;
+ }
  
- static struct pci_device_id rtl8192_pci_id_tbl[] = {
--	{RTL_PCI_DEVICE(0x10ec, 0x8192, rtl819xp_ops)},
--	{RTL_PCI_DEVICE(0x07aa, 0x0044, rtl819xp_ops)},
--	{RTL_PCI_DEVICE(0x07aa, 0x0047, rtl819xp_ops)},
-+	{PCI_DEVICE(0x10ec, 0x8192)},
-+	{PCI_DEVICE(0x07aa, 0x0044)},
-+	{PCI_DEVICE(0x07aa, 0x0047)},
- 	{}
- };
++/* -------------------------------------------------------------------------- */
++/* 0x0003: Device Information                                                 */
++/* -------------------------------------------------------------------------- */
++
++#define HIDPP_PAGE_DEVICE_INFORMATION			0x0003
++
++#define CMD_GET_DEVICE_INFO				0x00
++
++static int hidpp_get_serial(struct hidpp_device *hidpp, u32 *serial)
++{
++	struct hidpp_report response;
++	u8 feature_type;
++	u8 feature_index;
++	int ret;
++
++	ret = hidpp_root_get_feature(hidpp, HIDPP_PAGE_DEVICE_INFORMATION,
++				     &feature_index,
++				     &feature_type);
++	if (ret)
++		return ret;
++
++	ret = hidpp_send_fap_command_sync(hidpp, feature_index,
++					  CMD_GET_DEVICE_INFO,
++					  NULL, 0, &response);
++	if (ret)
++		return ret;
++
++	/* See hidpp_unifying_get_serial() */
++	*serial = *((u32 *)&response.rap.params[1]);
++	return 0;
++}
++
++static int hidpp_serial_init(struct hidpp_device *hidpp)
++{
++	struct hid_device *hdev = hidpp->hid_dev;
++	u32 serial;
++	int ret;
++
++	ret = hidpp_get_serial(hidpp, &serial);
++	if (ret)
++		return ret;
++
++	snprintf(hdev->uniq, sizeof(hdev->uniq), "%04x-%4phD",
++		 hdev->product, &serial);
++	dbg_hid("HID++ DeviceInformation: Got serial: %s\n", hdev->uniq);
++
++	return 0;
++}
++
+ /* -------------------------------------------------------------------------- */
+ /* 0x0005: GetDeviceNameType                                                  */
+ /* -------------------------------------------------------------------------- */
+@@ -3039,6 +3088,8 @@ static int hidpp_probe(struct hid_device *hdev, const struct hid_device_id *id)
  
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index 9d3089cb6a5af..ff9b544edf875 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -67,11 +67,6 @@
- #define IS_HARDWARE_TYPE_8192SE(_priv)		\
- 	(((struct r8192_priv *)rtllib_priv(dev))->card_8192 == NIC_8192SE)
+ 	if (hidpp->quirks & HIDPP_QUIRK_UNIFYING)
+ 		hidpp_unifying_init(hidpp);
++	else if (hid_is_usb(hidpp->hid_dev))
++		hidpp_serial_init(hidpp);
  
--#define RTL_PCI_DEVICE(vend, dev, cfg) \
--	.vendor = (vend), .device = (dev), \
--	.subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID, \
--	.driver_data = (kernel_ulong_t)&(cfg)
--
- #define TOTAL_CAM_ENTRY		32
- #define CAM_CONTENT_COUNT	8
- 
+ 	connected = hidpp_is_connected(hidpp);
+ 	atomic_set(&hidpp->connected, connected);
 -- 
 2.39.2
 
