@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E876F9AB6
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 19:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7161E6F9AC9
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 20:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjEGRqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 13:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
+        id S231833AbjEGSMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 14:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjEGRqM (ORCPT
+        with ESMTP id S231685AbjEGSMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 13:46:12 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA3C14369
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 10:45:47 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-96622bca286so233094566b.1
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 10:45:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683481546; x=1686073546;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dBqbH1+Z/yG5/u58VKF5l00D91rsZqi2F+V+kyJbRdc=;
-        b=RpDW5Vi3uTdoyCjyi53VzpkqVQaNrS40tYTDxbxN9kUakAZNq4qVOJTSuh3RHz/ggm
-         KU3J2EdpqTqZD+IOwwMKe2M6gpQKXQKMBnJ1Y47q/bVip9GCzTMtKAaaGyyuvF7MQOT3
-         YjK/D+sSTPW/vNKoSlrbrCxS7ZQ4WVmki1Xheqok/VhjyNk4hmdRYYUogfHOU8vKzh8f
-         MV/ULu7RRUnxrspXFf/YirAreJJVzhUpmOZnyAaxVr+4JxUxYJPDsbqSEnKxk7J2nWA/
-         yAwu2DhwRn0XC+XNC+a1kx5nHBJIen7vznQiujaiFyhqq54uJMDmDyRbKLduUk+KWjgI
-         e4YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683481546; x=1686073546;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dBqbH1+Z/yG5/u58VKF5l00D91rsZqi2F+V+kyJbRdc=;
-        b=Sb3hFCJd1wOCI83cSjqg+L8Wx3Ji/TkZmkQRjvOOcR3wz0BvPnYvgn+OaiYaHkPIH7
-         nvUJPm6rIRHFhZrVA+U7ifY/4zStd/D0/V+qiqsWN/QQYEamPy3+RfhDrLK0j/Rqbaqu
-         tscAA9WkIffwLr3aQEkLShUMb0T8mkeXY39i1K7tNFumBf5UAJnbNEVFsD94kQzt7zvx
-         cZ+nV+lZOIqsoqsBI50tDdbRJm2rLKEf8zIB+9EtPXRNqloZOBHUrhiBBulNnKnJZK3V
-         izw0DTJMqGDxgAiECPtdvFwTAzzhrdwLl0fzASnvhC4fQRIqNyco2Ib3ZWUpGE7zmST6
-         glgw==
-X-Gm-Message-State: AC+VfDzetOmUzRjQm76RKF2KtD/iUgBu/rlx4i5qeKY096W7eP1Ozkum
-        9ZCofweAlbZNgKnM3lzY2ZJ4Ag==
-X-Google-Smtp-Source: ACHHUZ5nFUVIAjPvidnpQiyRlIFWqFXgGzJU+QS95ur+bwGnLQ0VHfJA9T3y/aUGsZ06MePHXwR8gg==
-X-Received: by 2002:a17:907:2d0b:b0:94a:6953:602d with SMTP id gs11-20020a1709072d0b00b0094a6953602dmr8408613ejc.37.1683481545978;
-        Sun, 07 May 2023 10:45:45 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:1757:b51a:9965:e81])
-        by smtp.gmail.com with ESMTPSA id d7-20020a1709067a0700b009662d0e637esm1828849ejo.155.2023.05.07.10.45.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 10:45:45 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rohit kumar <rohitkr@codeaurora.org>,
-        Cheng-Yi Chiang <cychiang@chromium.org>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ASoC: dt-bindings: google,sc7180-trogdor: allow up to four codec DAIs
-Date:   Sun,  7 May 2023 19:45:43 +0200
-Message-Id: <20230507174543.264987-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Sun, 7 May 2023 14:12:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EB340C1;
+        Sun,  7 May 2023 11:12:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B227761234;
+        Sun,  7 May 2023 18:12:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1E4BAC433D2;
+        Sun,  7 May 2023 18:12:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683483125;
+        bh=hV5wKgT1Grye95s2Xy/mi+6KaUCW4PA6/wlQyfFwJQA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=U0d3Dll7eyj9jIy48UTUokVr9BqAq7JnEJ9K0AJkU/Ip4GziEnW8CaeIneEqd+UDp
+         /7JDbymCN8Xjsz5/SGs/wetx+tG2L1g6mt7CPhqXkXsgDwkbDH7KzjCe6pgGijGx+V
+         Wq/hY3aQXmXXF8o7zgor4xs3XAZwRqQ243jcVXuBMTko1hhfGGG3/AkWL37v1PrnQ4
+         EH07RxUheV4iJOBQDpRNn7IR2h2RwegADze01OC9a0SFK27PBTU2i1TA3IFMT1Bzd+
+         KKZc5XZ9G+U98Gk5xHAd4QVqVZLRZ3mETyzvA9h1tT6bi5bPmEpQAuitaSJW8HggSX
+         RNv9fSw1Iw1DQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0ADC0C395FD;
+        Sun,  7 May 2023 18:12:05 +0000 (UTC)
+Subject: Re: [GIT PULL] Crypto Fixes for 6.4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ZFeldCJcieIlXKJ8@gondor.apana.org.au>
+References: <YgMn+1qQPQId50hO@gondor.apana.org.au>
+ <YjE5yThYIzih2kM6@gondor.apana.org.au>
+ <YkUdKiJflWqxBmx5@gondor.apana.org.au>
+ <YpC1/rWeVgMoA5X1@gondor.apana.org.au>
+ <Yqw7bf7ln6vtU/VH@gondor.apana.org.au>
+ <Yr1XPJsAH2l1cx3A@gondor.apana.org.au>
+ <Y0zcWCmNmdXnX8RP@gondor.apana.org.au>
+ <Y1thZ/+Gh/ONyf7x@gondor.apana.org.au>
+ <Y7fmtJHWT1Zx+A1j@gondor.apana.org.au>
+ <ZARrt99wJb7IhoY4@gondor.apana.org.au> <ZFeldCJcieIlXKJ8@gondor.apana.org.au>
+X-PR-Tracked-List-Id: <linux-crypto.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZFeldCJcieIlXKJ8@gondor.apana.org.au>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git v6.4-p2
+X-PR-Tracked-Commit-Id: b8969a1b69672b163d057e7745ebc915df689211
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 6f69c981811c8b019d7882839e31c34ea8330860
+Message-Id: <168348312503.16669.16856484399666238691.pr-tracker-bot@kernel.org>
+Date:   Sun, 07 May 2023 18:12:05 +0000
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SC7180 Trogdor sound cards come with multiple audio amplifiers, so allow
-up to four of them to fix dtbs_check warnings like:
+The pull request you sent on Sun, 7 May 2023 21:19:48 +0800:
 
-  sc7180-trogdor-homestar-r3.dtb: sound: dai-link@1:codec:sound-dai: [[275], [276], [277], [278]] is too long
+> git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git v6.4-p2
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/sound/google,sc7180-trogdor.yaml       | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/6f69c981811c8b019d7882839e31c34ea8330860
 
-diff --git a/Documentation/devicetree/bindings/sound/google,sc7180-trogdor.yaml b/Documentation/devicetree/bindings/sound/google,sc7180-trogdor.yaml
-index 67ccddd44489..666a95ac22c8 100644
---- a/Documentation/devicetree/bindings/sound/google,sc7180-trogdor.yaml
-+++ b/Documentation/devicetree/bindings/sound/google,sc7180-trogdor.yaml
-@@ -74,7 +74,8 @@ patternProperties:
- 
-         properties:
-           sound-dai:
--            maxItems: 1
-+            minItems: 1
-+            maxItems: 4
- 
-     required:
-       - link-name
+Thank you!
+
 -- 
-2.34.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
