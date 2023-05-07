@@ -2,75 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00426F9B38
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 21:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76FF86F9B40
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 22:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjEGTxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 15:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
+        id S231644AbjEGUCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 16:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjEGTxU (ORCPT
+        with ESMTP id S231491AbjEGUCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 15:53:20 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA65911562
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 12:53:16 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-559eae63801so56450387b3.2
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 12:53:16 -0700 (PDT)
+        Sun, 7 May 2023 16:02:52 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9907911574
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 13:02:50 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4eed764a10cso4157513e87.0
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 13:02:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1683489196; x=1686081196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zyj2EiCvdTduHLqcmu7mXgIBGvXlvMB1pane2tqkF7E=;
-        b=HovbGonvcX5N33ZjAIXpk4nBo33sAlxq1QGT9NpuhVKTsJ+IPtEw9Cp0pK3vMQqZCX
-         yMERRh6IsK8ylRf73EWSXkyxzpndyvw9zupn3p6xHJtD6gh6YQnVVMmrhzQzNnp/3k82
-         WvBn7PioMWALD9g+ebvbodFgl7/8Zdu91Kkz7apHZvluX0naIRyiebich3A8BibOJ5ud
-         x4u598AtsP929aBszW6HtQkOJeQzHnv9lc7PiAdtQJiyGXVl7j2NvQew1QYm2We4ZngS
-         cmO8wXENruc4TD8Z4g4R0Ngf5MD+xWtep2Y3ix0agt9ARcjjDYtovnqY7/J87qqW4DWg
-         MMMw==
+        d=linaro.org; s=google; t=1683489769; x=1686081769;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PQhq52xRNYtqts2gsugzLIYd5kNgCRwD8Uhl0jHSj+g=;
+        b=NspMOV3cTCQenr2aybm6qV23DvGXZf4IfJft3qSmCItVDv4jCc1pYxl1tkkMfnLP64
+         MKxVD+1F4b3v+jXlsx3RwGMEJX2WDjzWhXr6XteIKF6spuXHQwLX744APPo9REfv3+oA
+         NhkuNENtYhPAtQarSgVkQ4G1mS5b1ujnPFAB1limZdzMYQs4ppN1/lpkqmKz4R5oPui+
+         8GeAJISRKBlqZ/ZOhhjsTgVddKRUVjMH1zuH6/Ol0xTXC8XnuVqTw3gIVqyQTGh+bz4E
+         LvORw2q5PLqkhXXa3fCOAO3Ns6E4W52RhYwRRwjc4fIb2XY0arsAkpkbK/F1nEQ6/Zps
+         U9qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683489196; x=1686081196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zyj2EiCvdTduHLqcmu7mXgIBGvXlvMB1pane2tqkF7E=;
-        b=FgZYdR7r37Y8GWbPinMFLQ1ripsIB3bli+dvnVxsd3hLT4harlS0W5sp9DVIn/hipT
-         ESOT2usNjSit9vwij4vB6dWUdYBRytIrcw1+XTyCEC1rB56D2Le1xbzcPMmja58HZK8u
-         LPWh7gSR+R2xQeJzLK4IfJxvvnZmYmZu2b3ng6DXARXN5CQYIAVr7u3zKyTiq8JlceyB
-         pR6qP92Z125gj+lGJyVDmjacGB5Lc5iUnxUvOdGt8Iw1aBKDItDMpA4A3Xt8ZTITZLSv
-         EfH+qE+DAwm19H8fY4oU93ELLKkBqdOv/NXxzbSXPvtqUJQ3coeyyNV5HWi75VosVEmt
-         SAIw==
-X-Gm-Message-State: AC+VfDwq/T62b/zMYeAXyTZSpQ7sScJFEOnBLkA3DthRGLysNoUyL98A
-        u/D1bhFpa0XpavLndLmT34SieXV5fpyNUYMgbw+W
-X-Google-Smtp-Source: ACHHUZ7pNs3NaZ4FLiSZ/VNIGrR4CzLJdGR6zgvUQNMJX+pul+3P3AfyeKE5TmTF6NGa13Y4VaviefX/KFQw2NkRUEs=
-X-Received: by 2002:a0d:ea4b:0:b0:55a:20a1:4ba6 with SMTP id
- t72-20020a0dea4b000000b0055a20a14ba6mr8815170ywe.25.1683489196101; Sun, 07
- May 2023 12:53:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683489769; x=1686081769;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PQhq52xRNYtqts2gsugzLIYd5kNgCRwD8Uhl0jHSj+g=;
+        b=ADam8HBiI7dxJsnpR1Nq+39pJkWNi44NXJWT9DbFIeBlqcMZWEk3ArtVKjhgEA0+13
+         0eQfZFbE9T4HwsnCWY70wFYLtLm/QsRVKowGClGEbPfRj9g+ulLGcVXe8MEqWO5sDv5Z
+         2uM8jIrEjvao22b9IDcTtVmpfOSQr5damnA6RUURntjYZ/xnYGdrFKW7c6HhHEsWNaHb
+         NzxRGTj+mzYFOyx2BFHehJKbTW5r+QKluKoN6PFD1ipGlHwoRZcAaaMD4kJzdXQIJxhP
+         Ry58TaJIrwvfu34Vq0dEpzq3MiFHykFnaKyuMEdz2zdE7qOOCO7EBPew3Nngy8aar0Rx
+         ynIw==
+X-Gm-Message-State: AC+VfDysPxiygo8wDbVQWX+lPfNEh5t0P3YIwty2FRpNCd7HR8vDDgn1
+        xmBXY/IpweO7Z417N4Xf8iXZEw==
+X-Google-Smtp-Source: ACHHUZ4co2LDTbe1bUzcD/qXHDSNHJPI4fyZBebjAIOEP453SE+RtJkIZBsDphZfONR0a+q+nP9CMw==
+X-Received: by 2002:a2e:9818:0:b0:2a7:b0b4:4fa with SMTP id a24-20020a2e9818000000b002a7b0b404famr2255627ljj.12.1683489768828;
+        Sun, 07 May 2023 13:02:48 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id v24-20020a2e9918000000b002aa39dd9ad3sm919263lji.125.2023.05.07.13.02.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 May 2023 13:02:48 -0700 (PDT)
+Message-ID: <4216540c-75b2-c08b-0147-d86632b493c0@linaro.org>
+Date:   Sun, 7 May 2023 23:02:47 +0300
 MIME-Version: 1.0
-References: <20230504213002.56803-1-michael.mccracken@gmail.com>
- <fbf37518-328d-c08c-7140-5d09d7a2674f@redhat.com> <87pm7f9q3q.fsf@gentoo.org>
- <c50ac5e4-3f84-c52a-561d-de6530e617d7@redhat.com> <CAHC9VhTX3ohxL0i3vT8sObQ+v+-TOK95+EH1DtJZdyMmrm3A2A@mail.gmail.com>
- <CAPDLWs-=C_UTKPTqwRbx70h=DaodF8LVV3-8n=J3u=L+kJ_1sg@mail.gmail.com>
-In-Reply-To: <CAPDLWs-=C_UTKPTqwRbx70h=DaodF8LVV3-8n=J3u=L+kJ_1sg@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sun, 7 May 2023 15:53:05 -0400
-Message-ID: <CAHC9VhSfrAUJaP-MbTXFyLgAz5P3McjD0eouj+-7QwOrrYt8MQ@mail.gmail.com>
-Subject: Re: [PATCH] sysctl: add config to make randomize_va_space RO
-To:     Kaiwan N Billimoria <kaiwan@kaiwantech.com>
-Cc:     David Hildenbrand <david@redhat.com>, Sam James <sam@gentoo.org>,
-        Michael McCracken <michael.mccracken@gmail.com>,
-        linux-kernel@vger.kernel.org, serge@hallyn.com, tycho@tycho.pizza,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        kernel-hardening@lists.openwall.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 08/12] drm/msm/dpu: Add SM6375 support
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev
+References: <20230411-topic-straitlagoon_mdss-v3-0-9837d6b3516d@linaro.org>
+ <20230411-topic-straitlagoon_mdss-v3-8-9837d6b3516d@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230411-topic-straitlagoon_mdss-v3-8-9837d6b3516d@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,43 +89,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 6, 2023 at 3:05=E2=80=AFAM Kaiwan N Billimoria
-<kaiwan@kaiwantech.com> wrote:
-> On Fri, May 5, 2023 at 8:53=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
-rote:
-> >
-> > On Fri, May 5, 2023 at 11:15=E2=80=AFAM David Hildenbrand <david@redhat=
-.com> wrote:
-> > > On 05.05.23 09:46, Sam James wrote:
-> > > > David Hildenbrand <david@redhat.com> writes:
-> > > >> On 04.05.23 23:30, Michael McCracken wrote:
-> > > >>> Add config RO_RANDMAP_SYSCTL to set the mode of the randomize_va_=
-space
-> > > >>> sysctl to 0444 to disallow all runtime changes. This will prevent
-> > > >>> accidental changing of this value by a root service.
-> > > >>> The config is disabled by default to avoid surprises.
-> >
-> > ...
-> >
-> > > If we really care, not sure what's better: maybe we want to disallow
-> > > disabling it only in a security lockdown kernel?
-> >
-> > If we're bringing up the idea of Lockdown, controlling access to
-> > randomize_va_space is possible with the use of LSMs.  One could easily
-> > remove write access to randomize_va_space, even for tasks running as
-> > root.
->
-> IMO, don't _move_ the sysctl to LSM(s).
+On 06/05/2023 00:40, Konrad Dybcio wrote:
+> Add basic SM6375 support to the DPU1 driver to enable display output.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h | 152 +++++++++++++++++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   1 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   1 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   1 +
+>   4 files changed, 155 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
+> new file mode 100644
+> index 000000000000..c7f303b0557e
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
+> @@ -0,0 +1,152 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
+> + * Copyright (c) 2015-2018, 2020 The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023, Linaro Limited
+> + */
+> +
+> +#ifndef _DPU_6_9_SM6375_H
+> +#define _DPU_6_9_SM6375_H
+> +
+> +static const struct dpu_caps sm6375_dpu_caps = {
+> +	.max_mixer_width = DEFAULT_DPU_LINE_WIDTH,
+> +	.max_mixer_blendstages = 0x4,
+> +	.qseed_type = DPU_SSPP_SCALER_QSEED4,
+> +	.has_dim_layer = true,
+> +	.has_idle_pc = true,
+> +	.max_linewidth = 2160,
+> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
+> +};
+> +
+> +static const struct dpu_ubwc_cfg sm6375_ubwc_cfg = {
+> +	.ubwc_version = DPU_HW_UBWC_VER_20,
+> +	.ubwc_swizzle = 6,
+> +	.highest_bank_bit = 1,
+> +};
+> +
+> +static const struct dpu_mdp_cfg sm6375_mdp[] = {
+> +	{
+> +	.name = "top_0", .id = MDP_TOP,
+> +	.base = 0x0, .len = 0x494,
+> +	.features = 0,
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
+> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = { .reg_off = 0x2ac, .bit_off = 8 },
+> +	},
+> +};
+> +
+> +static const struct dpu_ctl_cfg sm6375_ctl[] = {
+> +	{
+> +	.name = "ctl_0", .id = CTL_0,
+> +	.base = 0x1000, .len = 0x1dc,
+> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
+> +	},
+> +};
+> +
+> +static const struct dpu_sspp_cfg sm6375_sspp[] = {
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x1f8, VIG_SC7180_MASK,
+> +		sm6115_vig_sblk_0, 0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, 0x1f8, DMA_SDM845_MASK,
+> +		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> +};
+> +
+> +static const struct dpu_lm_cfg sm6375_lm[] = {
+> +	LM_BLK("lm_0", LM_0, 0x44000, MIXER_QCM2290_MASK,
+> +		&qcm2290_lm_sblk, PINGPONG_0, 0, DSPP_0),
+> +};
+> +
+> +static const struct dpu_dspp_cfg sm6375_dspp[] = {
+> +	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
+> +		&sm8150_dspp_sblk),
+> +};
+> +
+> +static const struct dpu_pingpong_cfg sm6375_pp[] = {
+> +	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
+> +		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+> +		-1),
+> +};
+> +
+> +static const struct dpu_intf_cfg sm6375_intf[] = {
+> +	INTF_BLK("intf_0", INTF_0, 0x00000, 0x2c0, INTF_NONE, 0, 0, 0, 0, 0),
+> +	INTF_BLK_DSI_TE("intf_1", INTF_1, 0x6a800, 0x2c0, INTF_DSI, 0, 24, INTF_SC7280_MASK,
 
-There is nothing to move, the ability to restrict access to
-randomize_va_space exists today, it is simply a matter of if the
-security policy author or admin wants to enable it.
+If I understand correctly, all 5.x and 6.x DPU also have 
+HCTL/DATA_ACTIVE/etc. registers. (I do not know about the sdm845, if it 
+has that reg or not). So a proper fix would be to add DPU_DATA_HCTL_EN 
+to sc7180 mask rather than upgrading sm6375 to use sc7280 mask.
 
-If you are like Michael and you want to block write access, even when
-running as root, you can do so with an LSM.  You can also allow write
-access.  With SELinux you can allow/disallow the privilege on a
-task-by-task basis to meet individual usability and security
-requirements.
+> +		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 26),
+> +		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 27),
+> +		DPU_IRQ_IDX(MDP_INTF1_TEAR_INTR, 2)),
+> +};
+> +
+> +static const struct dpu_vbif_cfg sm6375_vbif[] = {
+> +	{
+> +	.name = "vbif_0", .id = VBIF_RT,
+> +	.base = 0, .len = 0x2008,
+> +	.features = BIT(DPU_VBIF_QOS_REMAP),
+> +	.xin_halt_timeout = 0x4000,
+> +	.qos_rp_remap_size = 0x40,
+> +	.qos_rt_tbl = {
+> +		.npriority_lvl = ARRAY_SIZE(sdm845_rt_pri_lvl),
+> +		.priority_lvl = sdm845_rt_pri_lvl,
+> +		},
+> +	.qos_nrt_tbl = {
+> +		.npriority_lvl = ARRAY_SIZE(sdm845_nrt_pri_lvl),
+> +		.priority_lvl = sdm845_nrt_pri_lvl,
+> +		},
+> +	.memtype_count = 14,
+> +	.memtype = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+> +	},
+> +};
+> +
+> +static const struct dpu_perf_cfg sm6375_perf_data = {
+> +	.max_bw_low = 5200000,
+> +	.max_bw_high = 6200000,
+> +	.min_core_ib = 2500000,
+> +	.min_llcc_ib = 0, /* No LLCC on this SoC */
+> +	.min_dram_ib = 1600000,
+> +	.min_prefill_lines = 24,
+> +	/* TODO: confirm danger_lut_tbl */
+> +	.danger_lut_tbl = {0xffff, 0xffff, 0x0, 0x0, 0xffff},
+> +	.qos_lut_tbl = {
+> +		{.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
+> +		.entries = sm6350_qos_linear_macrotile
+> +		},
+> +		{.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
+> +		.entries = sm6350_qos_linear_macrotile
+> +		},
+> +		{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
+> +		.entries = sc7180_qos_nrt
+> +		},
+> +	},
+> +	.cdp_cfg = {
+> +		{.rd_enable = 1, .wr_enable = 1},
+> +		{.rd_enable = 1, .wr_enable = 0}
+> +	},
+> +	.clk_inefficiency_factor = 105,
+> +	.bw_inefficiency_factor = 120,
+> +};
+> +
+> +const struct dpu_mdss_cfg dpu_sm6375_cfg = {
+> +	.caps = &sm6375_dpu_caps,
+> +	.ubwc = &sm6375_ubwc_cfg,
+> +	.mdp_count = ARRAY_SIZE(sm6375_mdp),
+> +	.mdp = sm6375_mdp,
+> +	.ctl_count = ARRAY_SIZE(sm6375_ctl),
+> +	.ctl = sm6375_ctl,
+> +	.sspp_count = ARRAY_SIZE(sm6375_sspp),
+> +	.sspp = sm6375_sspp,
+> +	.mixer_count = ARRAY_SIZE(sm6375_lm),
+> +	.mixer = sm6375_lm,
+> +	.dspp_count = ARRAY_SIZE(sm6375_dspp),
+> +	.dspp = sm6375_dspp,
+> +	.pingpong_count = ARRAY_SIZE(sm6375_pp),
+> +	.pingpong = sm6375_pp,
+> +	.intf_count = ARRAY_SIZE(sm6375_intf),
+> +	.intf = sm6375_intf,
+> +	.vbif_count = ARRAY_SIZE(sm6375_vbif),
+> +	.vbif = sm6375_vbif,
+> +	.perf = &sm6375_perf_data,
+> +	.mdss_irqs = BIT(MDP_SSPP_TOP0_INTR) | \
+> +		     BIT(MDP_SSPP_TOP0_INTR2) | \
+> +		     BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> +		     BIT(MDP_INTF1_INTR) | \
+> +		     BIT(MDP_INTF1_TEAR_INTR),
+> +};
+> +
+> +#endif
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index 5ef1dffc27dc..7577572a5ef4 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -809,6 +809,7 @@ static const struct dpu_qos_lut_entry sc7180_qos_nrt[] = {
+>   #include "catalog/dpu_6_3_sm6115.h"
+>   #include "catalog/dpu_6_4_sm6350.h"
+>   #include "catalog/dpu_6_5_qcm2290.h"
+> +#include "catalog/dpu_6_9_sm6375.h"
+>   
+>   #include "catalog/dpu_7_0_sm8350.h"
+>   #include "catalog/dpu_7_2_sc7280.h"
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index 56af77353b1e..96a8ec02b5b8 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -884,6 +884,7 @@ extern const struct dpu_mdss_cfg dpu_sc7180_cfg;
+>   extern const struct dpu_mdss_cfg dpu_sm6115_cfg;
+>   extern const struct dpu_mdss_cfg dpu_sm6350_cfg;
+>   extern const struct dpu_mdss_cfg dpu_qcm2290_cfg;
+> +extern const struct dpu_mdss_cfg dpu_sm6375_cfg;
+>   extern const struct dpu_mdss_cfg dpu_sm8350_cfg;
+>   extern const struct dpu_mdss_cfg dpu_sc7280_cfg;
+>   extern const struct dpu_mdss_cfg dpu_sc8280xp_cfg;
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index 46be7ad8d615..980c3c8f8269 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -1287,6 +1287,7 @@ static const struct of_device_id dpu_dt_match[] = {
+>   	{ .compatible = "qcom,sc8280xp-dpu", .data = &dpu_sc8280xp_cfg, },
+>   	{ .compatible = "qcom,sm6115-dpu", .data = &dpu_sm6115_cfg, },
+>   	{ .compatible = "qcom,sm6350-dpu", .data = &dpu_sm6350_cfg, },
+> +	{ .compatible = "qcom,sm6375-dpu", .data = &dpu_sm6375_cfg, },
+>   	{ .compatible = "qcom,sm8150-dpu", .data = &dpu_sm8150_cfg, },
+>   	{ .compatible = "qcom,sm8250-dpu", .data = &dpu_sm8250_cfg, },
+>   	{ .compatible = "qcom,sm8350-dpu", .data = &dpu_sm8350_cfg, },
+> 
 
---=20
-paul-moore.com
+-- 
+With best wishes
+Dmitry
+
