@@ -2,58 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 421336F9658
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780356F960E
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232812AbjEGAzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 20:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
+        id S232505AbjEGAj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 20:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbjEGAzQ (ORCPT
+        with ESMTP id S231639AbjEGAiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 20:55:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BEF1993F;
-        Sat,  6 May 2023 17:53:42 -0700 (PDT)
+        Sat, 6 May 2023 20:38:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722892D402;
+        Sat,  6 May 2023 17:36:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C97E461548;
-        Sun,  7 May 2023 00:35:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC7EC433D2;
-        Sun,  7 May 2023 00:35:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 227CF61541;
+        Sun,  7 May 2023 00:35:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A23B3C433EF;
+        Sun,  7 May 2023 00:35:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419743;
-        bh=U1T2evskaLiklMZRE+CQy1wv86bZejcZV645N5cjG6c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HYMUFoxBxACx/eOJ81CeR5m8DET6Mg9Rx14VoKHZm/pWhN+vAd7KkjsxM0elGj6BW
-         FgJoVa5prRUo+osNvWUIGrCFeYsEznYk4vIxKYUsCg3UbhbwkPhNMaQv45wfkCcrM5
-         12FTVrYC9W5xF4JnqyyRdvVGPSyP/NXx+Iob0q8+6x8UhQd/5VVuK0JRDln3wqtQRb
-         gC3sJ5hFAoKM59+olcpW64crLh6F9aj4llMIU3ENGyTSbujewsvXWZKoBNdMTGotvt
-         M3GQ5pTC1vK5zxdbOgpTEdOakvdE3UaLwY+Nhm1ZQ/I2BLPFSWq3S1KmNikFsq6f+1
-         Gmw5cot49PjFw==
+        s=k20201202; t=1683419748;
+        bh=5CQOot99bgT3aKqeqRjlHZKZa9QDb3C9aFcoUOjABQI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pmP+K+Zl2zSQa8N3v/YOa3Ez9iuO5V640bQTg+542dgj/tVczU+yYD8PvQJt93qbO
+         7BeHMLckEWavAeeLT1EzRDxS/agA7y0wPzYIdPLCxPdt4gJa85IXRbV2Hg1MnwZRbQ
+         yJ1ryX2kJgQXyv1Pr8GzzwdvkVFkK50zS+nDcaaEw72I474ALTEb09ztLCRmf6GcOI
+         ywFnLST/flrNIm7/S9UeYVvzqhkVSw8MF6An5k/gFGHngLqpbWUQnIvyQcDwQ7u1q/
+         iD2I5sX3GlTos6Va6FBttzWZ9LWe1UBW06QjXmANZgtlhqaYfeL/0URIVExCJPl3SL
+         llAG0xc0Tyn9w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Rodr=C3=ADguez=20Barbarin=2C=20Jos=C3=A9=20Javier?= 
-        <JoseJavier.Rodriguez@duagon.com>,
-        Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>,
-        Javier Rodriguez <josejavier.rodriguez@duagon.com>,
-        Johannes Thumshirn <jth@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, morbidrsa@gmail.com
-Subject: [PATCH AUTOSEL 5.15 10/10] mcb-pci: Reallocate memory region to avoid memory overlapping
-Date:   Sat,  6 May 2023 20:35:16 -0400
-Message-Id: <20230507003517.4078384-10-sashal@kernel.org>
+Cc:     Svyatoslav Ryhel <clamor95@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.10 1/9] ASoC: jack: allow multiple interrupt per gpio
+Date:   Sat,  6 May 2023 20:35:37 -0400
+Message-Id: <20230507003545.4078941-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230507003517.4078384-1-sashal@kernel.org>
-References: <20230507003517.4078384-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,73 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rodríguez Barbarin, José Javier <JoseJavier.Rodriguez@duagon.com>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
 
-[ Upstream commit 9be24faadd085c284890c3afcec7a0184642315a ]
+[ Upstream commit a2d4051b0bd6dffcd736888ae89a550d6f60b060 ]
 
-mcb-pci requests a fixed-size memory region to parse the chameleon
-table, however, if the chameleon table is smaller that the allocated
-region, it could overlap with the IP Cores' memory regions.
+This feature is required for coupled hp-mic quirk used
+by some Nvidia Tegra 3 based devices work properly.
 
-After parsing the chameleon table, drop/reallocate the memory region
-with the actual chameleon table size.
-
-Co-developed-by: Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>
-Signed-off-by: Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>
-Signed-off-by: Javier Rodriguez <josejavier.rodriguez@duagon.com>
-Signed-off-by: Johannes Thumshirn <jth@kernel.org>
-Link: https://lore.kernel.org/r/20230411083329.4506-3-jth@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+Link: https://lore.kernel.org/r/20230221183211.21964-3-clamor95@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mcb/mcb-pci.c | 27 +++++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+ sound/soc/soc-jack.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/mcb/mcb-pci.c b/drivers/mcb/mcb-pci.c
-index dc88232d9af83..53d9202ff9a7c 100644
---- a/drivers/mcb/mcb-pci.c
-+++ b/drivers/mcb/mcb-pci.c
-@@ -31,7 +31,7 @@ static int mcb_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- {
- 	struct resource *res;
- 	struct priv *priv;
--	int ret;
-+	int ret, table_size;
- 	unsigned long flags;
+diff --git a/sound/soc/soc-jack.c b/sound/soc/soc-jack.c
+index 0f1820f36b4d7..80ea4408e6ad6 100644
+--- a/sound/soc/soc-jack.c
++++ b/sound/soc/soc-jack.c
+@@ -368,6 +368,7 @@ int snd_soc_jack_add_gpios(struct snd_soc_jack *jack, int count,
  
- 	priv = devm_kzalloc(&pdev->dev, sizeof(struct priv), GFP_KERNEL);
-@@ -90,7 +90,30 @@ static int mcb_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	if (ret < 0)
- 		goto out_mcb_bus;
- 
--	dev_dbg(&pdev->dev, "Found %d cells\n", ret);
-+	table_size = ret;
-+
-+	if (table_size < CHAM_HEADER_SIZE) {
-+		/* Release the previous resources */
-+		devm_iounmap(&pdev->dev, priv->base);
-+		devm_release_mem_region(&pdev->dev, priv->mapbase, CHAM_HEADER_SIZE);
-+
-+		/* Then, allocate it again with the actual chameleon table size */
-+		res = devm_request_mem_region(&pdev->dev, priv->mapbase,
-+						table_size,
-+						KBUILD_MODNAME);
-+		if (!res) {
-+			dev_err(&pdev->dev, "Failed to request PCI memory\n");
-+			ret = -EBUSY;
-+			goto out_mcb_bus;
-+		}
-+
-+		priv->base = devm_ioremap(&pdev->dev, priv->mapbase, table_size);
-+		if (!priv->base) {
-+			dev_err(&pdev->dev, "Cannot ioremap\n");
-+			ret = -ENOMEM;
-+			goto out_mcb_bus;
-+		}
-+	}
- 
- 	mcb_bus_add_devices(priv->bus);
- 
+ 		ret = request_any_context_irq(gpiod_to_irq(gpios[i].desc),
+ 					      gpio_handler,
++					      IRQF_SHARED |
+ 					      IRQF_TRIGGER_RISING |
+ 					      IRQF_TRIGGER_FALLING,
+ 					      gpios[i].name,
 -- 
 2.39.2
 
