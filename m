@@ -2,62 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3766F991B
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74BD26F9920
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbjEGPDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 11:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
+        id S231396AbjEGPF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 11:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjEGPDG (ORCPT
+        with ESMTP id S229533AbjEGPFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 11:03:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3298B7EF5;
-        Sun,  7 May 2023 08:03:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B935560E09;
-        Sun,  7 May 2023 15:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C08C433EF;
-        Sun,  7 May 2023 15:03:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683471784;
-        bh=tyMJVdXEq4oCoHCPYlSJKEY5GmMz0MTWHInscNM+1lk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=H6dE5fi1rymlSBMXaQgjrnyB6XL8gL1nhUcKsuTdU+L738FJFQwmr0jep1lWcJ9ce
-         LV8XZLoxoyfZ+WwCbWZem7y7gk4vX9QNSE1dwN1SU96xEpHS8vtOb0nCOEAo5mczHx
-         l4P9rKuo6xMl2PmsmZSj8Mv00zwGGEpOjteA7Yg5WHVSGZyBlvkWUfVm72417pnhV5
-         opArf7LoWpdQ2N30BQEufwt7A3e10Rn5DmqHa/u9winMRQNGw/98rINJZtB5JSSHfp
-         wtsfqUH/BZWFKxaPkbQZeypjX2R+KbhOHMgv8VielJaU3qkVUJaRZy2Fdjj2jf/7/9
-         9mjUni4tRpVXQ==
-Message-ID: <087b77f8-3ff2-87ce-d197-e238b8ad9047@kernel.org>
-Date:   Mon, 8 May 2023 00:02:59 +0900
+        Sun, 7 May 2023 11:05:25 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDC17EF5;
+        Sun,  7 May 2023 08:05:23 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f41dceb9d4so10763605e9.1;
+        Sun, 07 May 2023 08:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683471922; x=1686063922;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=u1gOIjKe06QTC2zFJd76oybW6RyS2NvpPacxfKSj0+o=;
+        b=qfI8xnweP237OM6kO0nttjGF/sPZ1FyaqS37OyLfJUkMl26Q8P/D7/t3H2ZUcN+3hY
+         NkzI4xWQibUtdLJgaN5pg5zu7cRkiZEUvqa0h6FeInj2IY1hyiHec/2nwhEvsHJKdx36
+         D7c80OfSJf2jRa5fbHjAA+WpN00egLzqo4IYONlqPEKs+JjBlJeQPQKAS3qInBf0o6N/
+         JBCJBkr4ReYTtOXXRHdGdGEpbdENxHw4DDIm6IWg9mPt4uNNtly92dbbrPscfT4rqJar
+         +0IJz67j9SsHNBDAa1DxACr0LJUZSSWGtdsEmz8m6xxik9MUl7PC9xZawXL4BN/51PC5
+         4/DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683471922; x=1686063922;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u1gOIjKe06QTC2zFJd76oybW6RyS2NvpPacxfKSj0+o=;
+        b=W/gdKyXq1/5dq9ljVu3Ja06HlRPa/i6hW/2E8jgV9mocy9/Q043S++ObGaZa4BbQ9d
+         ikNATF+ArOAHAnroJhxPj2aGcW5MpXus/7rU4z86QsH1IZa2RXSsAY3eVvckAh3jjL2m
+         IVzH7Uwq0e9WnSM9PNl8NJiWmjsaelVD2BifIaH8Li4JrhqWhZkStHkEYM6+QvvHfL+G
+         lPgAewiPngrzEUEM7UQISgS7RvHjHpJvt6pCPrTPHlHshjS3SQmjy0bsJSYP//ztGNLP
+         UZAYwtMGYqd7G5eqqU0JcTzI+1tlfiQXhkhkZdrdwVn8UDmBcZHGdIa5r3Ml3C07jVCG
+         BpKA==
+X-Gm-Message-State: AC+VfDxq4unru/E/a4Htn1VQJf2AxHNv0C98ZNgeVhxu14ZexcpxJyju
+        GjHSQ8qjuEhDVtKXp2vysY8=
+X-Google-Smtp-Source: ACHHUZ49sAKwYQSdkkwmMAeCU56EtVFg4Uecv9K3y8A0Pd7XH4negQYK2N3mKJ+yafcQ5q+Af0p9lw==
+X-Received: by 2002:a5d:53c7:0:b0:306:2db9:a33a with SMTP id a7-20020a5d53c7000000b003062db9a33amr5647820wrw.33.1683471922170;
+        Sun, 07 May 2023 08:05:22 -0700 (PDT)
+Received: from localhost.localdomain ([176.221.215.212])
+        by smtp.gmail.com with ESMTPSA id e15-20020a5d594f000000b0030771c6e443sm8437998wri.42.2023.05.07.08.05.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 May 2023 08:05:21 -0700 (PDT)
+From:   Maksim Kiselev <bigunclemax@gmail.com>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Icenowy Zheng <icenowy@aosc.io>,
+        Maksim Kiselev <bigunclemax@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v4 0/5] Allwinner R329/D1/R528/T113s SPI support
+Date:   Sun,  7 May 2023 18:03:32 +0300
+Message-Id: <20230507150345.1971083-1-bigunclemax@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v2] ata: libata-scsi: Fix get identity data failed
-Content-Language: en-US
-To:     John Garry <john.g.garry@oracle.com>,
-        yangxingui <yangxingui@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, prime.zeng@hisilicon.com,
-        kangfenglong@huawei.com
-References: <20230505025712.19438-1-yangxingui@huawei.com>
- <291f1d97-9195-45ac-8e12-058f5c797277@kernel.org>
- <b13c9445-39c5-f207-d5d0-d6c86eee54ae@oracle.com>
- <1b703656-e966-63f8-19dd-33e4e9914676@huawei.com>
- <cae0ac63-f391-08c0-c646-23037485c189@oracle.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <cae0ac63-f391-08c0-c646-23037485c189@oracle.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,62 +84,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/05/05 18:51, John Garry wrote:
-> On 05/05/2023 10:14, yangxingui wrote:
->>> hmmm... is it really acceptable that libata is referencing libsas? I 
->>> didn't think that it would be. libsas uses libata, not the other way 
->>> around.
->> Yeah, I didn't expect that either. Is there any other way? If so, is 
->> patch v1 OK?
-> 
-> I still think that we can do better than v1.
-> 
->>>
->>>>>   #include <linux/libata.h>
->>>>>   #include <linux/hdreg.h>
->>>>>   #include <linux/uaccess.h>
->>>>> @@ -2745,10 +2746,17 @@ static struct ata_device 
->>>>> *__ata_scsi_find_dev(struct ata_port *ap,
->>>>>    *    Associated ATA device, or %NULL if not found.
->>>>>    */
->>>>>   struct ata_device *
->>>>> -ata_scsi_find_dev(struct ata_port *ap, const struct scsi_device 
->>>>> *scsidev)
->>>> Why drop the const ?
->>>>
->>>>> +ata_scsi_find_dev(struct ata_port *ap, struct scsi_device *scsidev)
->>>>>   {
->>>>> -    struct ata_device *dev = __ata_scsi_find_dev(ap, scsidev);
->>>>> +    struct ata_device *dev;
->>>>> +
->>>>> +    if (ap->flags & ATA_FLAG_SAS_HOST) {
->>>
->>> And this is SAS host. Not necessarily libsas (even though with ipr 
->>> libata usage gone, it would be the only user).
->> Add a new flag only for libsas?
-> 
-> No, because of previous reason.
-> 
-> Please remind me - at what point do we error within ata_scsi_find_dev() 
-> and return NULL for a libsas host?
-> 
-> Note: it would be good to include that commit message for future reference.
-> 
-> Maybe we could add a method to ata_port_operations to do this lookup. I 
-> assume that is abusing ata_port_operations purpose, since it's mostly 
-> for HW methods.
-> 
-> Or do we actually use sdev->hostdata for libata or libsas? If not, maybe 
-> we could store the struct ata_device pointer there.
-> 
-> I'm just thinking out loud now...
+This series is attempt to revive previous work to add support for SPI
+controller which is used in newest Allwinner's SOCs R329/D1/R528/T113s
+https://lore.kernel.org/lkml/BYAPR20MB2472E8B10BFEF75E7950BBC0BCF79@BYAPR20MB2472.namprd20.prod.outlook.com/
 
-Agree. Ideally, libasas should not be any different than a for a drive used with
-ahci/sata/pata adapters. After all, all of them are scsi devices as well. So we
-need to understand why this happens only with libsas and correct the device
-setup there.
+v4:
+  - fixed SPI sample mode configuration
+  - sorted DT bindings list
+
+v3:
+  - fixed effective_speed_hz setup and added SPI sample mode configuration
+  - merged DT bindings for R329 and D1 SPI controllers
+  - added SPI_DBI node to sunxi-d1s-t113.dtsi
+
+v2:
+  - added DT bindings and node for D1/T113s
+
+Icenowy Zheng (1):
+  spi: sun6i: change OF match data to a struct
+
+Maksim Kiselev (4):
+  dt-bindings: spi: sun6i: add DT bindings for Allwinner
+    R329/D1/R528/T113s SPI
+  spi: sun6i: add quirk for in-controller clock divider
+  spi: sun6i: add support for R329/D1/R528/T113s SPI controllers
+  riscv: dts: allwinner: d1: Add SPI controllers node
+
+ .../bindings/spi/allwinner,sun6i-a31-spi.yaml |   7 +
+ .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    |  37 +++++
+ drivers/spi/spi-sun6i.c                       | 131 ++++++++++++------
+ 3 files changed, 135 insertions(+), 40 deletions(-)
 
 -- 
-Damien Le Moal
-Western Digital Research
+2.39.2
 
