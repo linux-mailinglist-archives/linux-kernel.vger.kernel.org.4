@@ -2,158 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98F96F9837
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 12:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBBE6F9839
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 12:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbjEGKay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 06:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
+        id S231245AbjEGKc4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 7 May 2023 06:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbjEGKau (ORCPT
+        with ESMTP id S229980AbjEGKcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 06:30:50 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF62100DC
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 03:30:45 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-766655c2cc7so216000839f.3
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 03:30:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683455445; x=1686047445;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R3i9BTrrWyZRXgDeCeh8X6ei2ZhGQwyd2lT0wG6mo5w=;
-        b=GVtIQpe4edyv0bfdX2d8o+jmVOWNCxRXdtFouzIvCHV5c9jm4RGAcIFuTMDYbJ4DrF
-         VGhDadQCN5ITPhS4shHi0RumDs7FfTD/G36hYBJJJofLGqBbu42vF18ppOzBzCicRisq
-         FJla0W3bhelrb9YDaHctYUGFN4sWYuKGyypEFovTZfLJA8HEv7+JmaQDp+l4dWd2z5L6
-         O+9nG41lnO0Ra5k/6fhHGUywuDI3DgXzQ83LlwkwmJ+0nfejxY0wMSkgD09uB/8Ykf6W
-         e/pMxhDM00x/PPhZ//K+93ts3dW/NX5kpruD9YvW5aVQVYzJIyxTzKjWWS8j2h5qQBjF
-         bJXQ==
-X-Gm-Message-State: AC+VfDxvcRV707cVN9bEbvvwDO20p6Jt+XDWbKq6lbod+XdhSb0IAAYA
-        LIPhtW3K9HU2z7NaOp6BBfmcZxKbgP6tpNLzzbk6sXdal9kt
-X-Google-Smtp-Source: ACHHUZ5Rd77fpRngyXkiOdx+onEX7USaI4BFCY474UTVlAA9W9+UqdhbdJjiaq2c97eFhsMb9/oJippPnBdxq5iRihDWpe/X6G6Y
-MIME-Version: 1.0
-X-Received: by 2002:a6b:d915:0:b0:760:d92a:2f4a with SMTP id
- r21-20020a6bd915000000b00760d92a2f4amr3121680ioc.2.1683455445150; Sun, 07 May
- 2023 03:30:45 -0700 (PDT)
-Date:   Sun, 07 May 2023 03:30:45 -0700
-In-Reply-To: <000000000000b0cabf05f90bcb15@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cdb0e805fb180316@google.com>
-Subject: Re: [syzbot] [ntfs3?] general protection fault in ni_readpage_cmpr
-From:   syzbot <syzbot+af224b63e76b2d869bc3@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
+        Sun, 7 May 2023 06:32:54 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244AB100C1;
+        Sun,  7 May 2023 03:32:53 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pvbh8-001twK-Oi; Sun, 07 May 2023 12:32:46 +0200
+Received: from p57bd9c27.dip0.t-ipconnect.de ([87.189.156.39] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pvbh8-003hBo-Hc; Sun, 07 May 2023 12:32:46 +0200
+Message-ID: <ef8a4c361255303359b003185e50f47cf3b422f0.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 1/2] sh: dma: fix `dmaor_read_reg`/`dmaor_write_reg`
+ macros
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Artur Rojek <contact@artur-rojek.eu>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sun, 07 May 2023 12:32:45 +0200
+In-Reply-To: <2f73b2ac1ec15a6b0f78d8d3a7f12266@artur-rojek.eu>
+References: <20230506141703.65605-1-contact@artur-rojek.eu>
+         <20230506141703.65605-2-contact@artur-rojek.eu>
+         <65f873585db0cd9f79a84eb48707413775a9ba5b.camel@physik.fu-berlin.de>
+         <2f73b2ac1ec15a6b0f78d8d3a7f12266@artur-rojek.eu>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.1 
+MIME-Version: 1.0
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.156.39
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Sun, 2023-05-07 at 11:34 +0200, Artur Rojek wrote:
+> Hi Adrian,
+> 
+> On 2023-05-07 10:39, John Paul Adrian Glaubitz wrote:
+> > On Sat, 2023-05-06 at 16:17 +0200, Artur Rojek wrote:
+> > > Squash two bugs introduced into said macros in 7f47c7189b3e, 
+> > > preventing
+> > > them from proper operation:
+> > > 1) Add DMAOR register offset into the address of the hw reg access,
+> > > 2) Correct a nasty typo in the DMAOR base calculation for
+> > >    `dmaor_write_reg`.
+> > > 
+> > > Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+> > > ---
+> > >  arch/sh/drivers/dma/dma-sh.c | 7 +++++--
+> > >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/arch/sh/drivers/dma/dma-sh.c 
+> > > b/arch/sh/drivers/dma/dma-sh.c
+> > > index 96c626c2cd0a..14c18ebda400 100644
+> > > --- a/arch/sh/drivers/dma/dma-sh.c
+> > > +++ b/arch/sh/drivers/dma/dma-sh.c
+> > > @@ -254,8 +254,11 @@ static int sh_dmac_get_dma_residue(struct 
+> > > dma_channel *chan)
+> > >   * DMAOR bases are broken out amongst channel groups. DMAOR0 manages
+> > >   * channels 0 - 5, DMAOR1 6 - 11 (optional).
+> > >   */
+> > > -#define dmaor_read_reg(n)		__raw_readw(dma_find_base((n)*6))
+> > > -#define dmaor_write_reg(n, data)	__raw_writew(data, 
+> > > dma_find_base(n)*6)
+> > > +#define dmaor_read_reg(n)		__raw_readw(dma_find_base((n) * 6) + \
+> > > +						    DMAOR)
+> > > +#define dmaor_write_reg(n, data)	__raw_writew(data, \
+> > > +						     dma_find_base((n) * 6) + \
+> > > +						     DMAOR)
+> > > 
+> > >  static inline int dmaor_reset(int no)
+> > >  {
+> > 
+> > I have looked through the changes and the code and I agree that there 
+> > is a typo
+> > in dmaor_write_regn() that needs to be fixed and that the DMAOR offset
+> > is missing
+> > although I don't understand why that didn't break the kernel on other
+> > SuperH systems
+> > such as my SH-7785LCR evaluation board or the LANDISK board which Geert 
+> > uses.
+> 
+> I also wondered that. On SH7709 it's a hard panic, it should be the same
+> elsewhere.
 
-HEAD commit:    14f8db1c0f9a Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=14ecc3b0280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a837a8ba7e88bb45
-dashboard link: https://syzkaller.appspot.com/bug?extid=af224b63e76b2d869bc3
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=168ce182280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1308c522280000
+I will give the patch a spin on my SH-7785LCR and see if it breaks anything.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ad6ce516eed3/disk-14f8db1c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1f38c2cc7667/vmlinux-14f8db1c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d795115eee39/Image-14f8db1c.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/8a3eac658458/mount_0.gz
+Maybe Geert can test it on his LANDISK board as well as Rob on the J2 Turtleboard,
+just to be safe.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+af224b63e76b2d869bc3@syzkaller.appspotmail.com
+> > What I also don't understand is the factor 6 the DMA channel number is
+> > multiplied
+> > with. When looking at the definition of dma_find_base(), it seems that
+> > every channel
+> > equal to 6 or higher will return SH_DMAC_BASE1 as DMA base address.
+> > But if we multiply
+> > the parameter with 6, this will apply to every n > 0. Is that correct?
+> 
+> As confusing as they look, those macros take dmaor index (a number in
+> range 0 <= n < NR_DMAOR) as parameter, then multiply it by 6 to convert
+> it to a format compatible with `dma_find_base` (which expects a channel
+> index). In practice `n` will be either 0 or 1, so dma_find_base(0 * 6)
+> will return SH_DMAC_BASE0, while dma_find_base(1 * 6) SH_DMAC_BASE1.
 
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-Unable to handle kernel paging request at virtual address dfff800000000001
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-[dfff800000000001] address between user and kernel address ranges
-Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 5930 Comm: syz-executor385 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : _compound_head include/linux/page-flags.h:251 [inline]
-pc : unlock_page+0x28/0x74 mm/folio-compat.c:21
-lr : unlock_page+0x18/0x74 mm/folio-compat.c:20
-sp : ffff80001e4d6fa0
-x29: ffff80001e4d6fa0 x28: 0000000000000007 x27: 00000000fffffff4
-x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-x23: ffff0000d9371208 x22: 0000000000000001 x21: dfff800000000000
-x20: 0000000000000008 x19: 0000000000000000 x18: 1fffe0003684a5b6
-x17: 0000000000000000 x16: ffff8000084fa124 x15: 0000000000000001
-x14: 0000000000000000 x13: 0000000000000001 x12: 0000000000000001
-x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000001
-x8 : dfff800000000000 x7 : 0000000000000001 x6 : 0000000000000001
-x5 : ffff80001e4d61d8 x4 : ffff800015e4ccc0 x3 : ffff80000968c944
-x2 : 0000000000000001 x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- _compound_head include/linux/page-flags.h:251 [inline]
- unlock_page+0x28/0x74 mm/folio-compat.c:21
- ni_readpage_cmpr+0x474/0x798 fs/ntfs3/frecord.c:2149
- ntfs_read_folio+0x14c/0x1c0 fs/ntfs3/inode.c:703
- filemap_read_folio+0x14c/0x39c mm/filemap.c:2424
- filemap_create_folio mm/filemap.c:2552 [inline]
- filemap_get_pages+0xb3c/0x1640 mm/filemap.c:2605
- filemap_read+0x354/0xc98 mm/filemap.c:2693
- generic_file_read_iter+0xa0/0x450 mm/filemap.c:2840
- ntfs_file_read_iter+0x184/0x1e0 fs/ntfs3/file.c:758
- call_read_iter include/linux/fs.h:1845 [inline]
- generic_file_splice_read+0x1e0/0x508 fs/splice.c:402
- do_splice_to fs/splice.c:885 [inline]
- splice_direct_to_actor+0x30c/0x944 fs/splice.c:956
- do_splice_direct+0x1f4/0x334 fs/splice.c:1065
- do_sendfile+0x4bc/0xc70 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1323 [inline]
- __se_sys_sendfile64 fs/read_write.c:1309 [inline]
- __arm64_sys_sendfile64+0x160/0x3b4 fs/read_write.c:1309
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-Code: d2d00008 91002274 f2fbffe8 d343fe89 (38686928) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	d2d00008 	mov	x8, #0x800000000000        	// #140737488355328
-   4:	91002274 	add	x20, x19, #0x8
-   8:	f2fbffe8 	movk	x8, #0xdfff, lsl #48
-   c:	d343fe89 	lsr	x9, x20, #3
-* 10:	38686928 	ldrb	w8, [x9, x8] <-- trapping instruction
+OK, thanks for the clarification. Let's wait what Geert has to say on this
+next week when he is back online.
 
+Adrian
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
