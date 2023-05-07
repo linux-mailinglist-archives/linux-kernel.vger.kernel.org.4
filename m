@@ -2,73 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7136F986A
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 13:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A5A6F986E
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 13:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbjEGLnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 07:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
+        id S231318AbjEGL7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 07:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjEGLnQ (ORCPT
+        with ESMTP id S230132AbjEGL7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 07:43:16 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9C91328A
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 04:43:14 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-b8bf64a4999so476320276.1
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 04:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1683459794; x=1686051794;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q/KgkHs9lVvBm3xpb5mpBL1jon6g+T6CYo/zJAttVKI=;
-        b=X+S1hIRGux8FkzjG1b6iz6Wrftbum7bA4vvigJOyjZ6R67A/op0wFLouauDdw3Spbq
-         IRCi6Q6CVIyXRLOtBfM8NHKC7ullVNGgmSL8/uCCITIKrYUtXQgeEGq6ijZZC29hWrWE
-         c/SnXgUmorJm3ymr1YgbnPK2vOHEaFrBCEfctfPCx3BtCvTmu7iQA8InOaQRaS1IBP/8
-         A28tpcPbAqrbzzskUie389+fEgOA5NDA2Q7ooljoKuX2i9/GlFtlaC4vZone/MsT069i
-         M6SmOAk/Brvm32NcFe4lwnizGWJajFdpRgV6Y/cQPFoWSVmEsnDPcK51Rre20+Weg/us
-         kkWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683459794; x=1686051794;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q/KgkHs9lVvBm3xpb5mpBL1jon6g+T6CYo/zJAttVKI=;
-        b=aEVBLxDl95HQonxdPdp0fXi22tbMxt3UlQPdjlXTw2Bxm8hM5tRlSWRXeys/qCKYGq
-         vUa6JwNuFl512rIOL6O5ohkJR2+TYHWF+QhNIbc9RASwZhedO8Qg/KzHz1II7yKiPUs6
-         LUNiv0DHSP/318uPiXycyokNpSFRDWKqHlKz67AiP2AWgpj5DhNmp163UnNbs2l8oC9o
-         kl0+qglktVeJRPZyD6oaaXnpOVddYjv6/B+HCHnUu0fthNS+2vB1q9Ek18uuvfnm7fcS
-         BDmil/TZlmlqwrrRh3E8mJ/cJCqDkfXLpna+JA8bBc03Tp3vQWymW5GQBA4+WOqLa9/n
-         4QOg==
-X-Gm-Message-State: AC+VfDzp/PPVqfvvOAETaSATKAl3a0/fvIMmnOfcl+WFC04pMsMcM3jE
-        HWdtGQ77RWQQbUTP7vSuIHV8IQ==
-X-Google-Smtp-Source: ACHHUZ6eN2R5iv72lVClZy2r8Jl7KPPR4R0d0mK8ZhY+OVDGabIxojEOhbqMCpi3LJZVFh+JGHl77g==
-X-Received: by 2002:a25:aac3:0:b0:b9e:76b4:df36 with SMTP id t61-20020a25aac3000000b00b9e76b4df36mr6977968ybi.5.1683459794046;
-        Sun, 07 May 2023 04:43:14 -0700 (PDT)
-Received: from [172.20.2.186] ([12.153.103.3])
-        by smtp.gmail.com with ESMTPSA id r15-20020a255d0f000000b00b9f4343547csm1630950ybb.41.2023.05.07.04.43.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 May 2023 04:43:13 -0700 (PDT)
-Message-ID: <92f0bb80-0dce-b679-4b51-ad3f0d466abf@kernel.dk>
-Date:   Sun, 7 May 2023 05:43:12 -0600
+        Sun, 7 May 2023 07:59:44 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7963C100;
+        Sun,  7 May 2023 04:59:42 -0700 (PDT)
+Received: from zn.tnic (p5de8e8ea.dip0.t-ipconnect.de [93.232.232.234])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 285591EC04DA;
+        Sun,  7 May 2023 13:59:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1683460780;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=V90JBxldz2a6J8icT88EVrG0cGl5lWlT59Ohw8HkYEM=;
+        b=dnFO0t5MmwnFoXKC3H8quu1XtDB62RXIUzNFDx5Htc1N+1H99Ld8ZLnkrM6aLCUXbIcxAn
+        qmkjMwFgqg8bqvQ68FWOR53qhI0HIYCjUu4/Ge9ICrThddsp5shEMw+vwkynf6HiKe9l3z
+        JA93XQxvZliblUMjxLWDJrMeWhpAAKs=
+Date:   Sun, 7 May 2023 13:59:34 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Xin Li <xin3.li@intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        hpa@zytor.com, peterz@infradead.org, andrew.cooper3@citrix.com,
+        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com,
+        jiangshanlai@gmail.com, shan.kang@intel.com
+Subject: Re: [PATCH v8 01/33] x86/traps: let common_interrupt() handle
+ IRQ_MOVE_CLEANUP_VECTOR
+Message-ID: <20230507115934.GCZFeSpqnO5pPkAzwB@fat_crate.local>
+References: <20230410081438.1750-1-xin3.li@intel.com>
+ <20230410081438.1750-2-xin3.li@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] Documentation/block: request: delete the unused FIXME
- comment
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     linux-block@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-References: <20230507045012.15172-1-rdunlap@infradead.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230507045012.15172-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230410081438.1750-2-xin3.li@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,15 +56,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/23 10:50?PM, Randy Dunlap wrote:
-> This FIXME comment looks like it could be a local file contents
-> attempt, but this file is short and does not needs its own contents
-> block, so drop it completely.
+On Mon, Apr 10, 2023 at 01:14:06AM -0700, Xin Li wrote:
+> From: "H. Peter Anvin (Intel)" <hpa@zytor.com>
+> 
+> IRQ_MOVE_CLEANUP_VECTOR is the only one of the system IRQ vectors that
+> is *below* FIRST_SYSTEM_VECTOR. It is a slow path, so just push it
+> into common_interrupt() just before the spurious interrupt handling.
 
-I had a quick look at that file (which I didn't even remember existed),
-and let's just burn it down. It's way out dated at this point, should
-just be removed.
+I'm missing here the "why":
+
+I can go forward into the set and see that you're splitting the handling
+based on vector types and there's event classification and the lowest
+prio vector is not going to be hardwired to 0x20, yadda yadda...
+
+but some of that should be in the text here so that it is clear why it
+is being done.
+
+Thx.
 
 -- 
-Jens Axboe
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
