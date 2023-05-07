@@ -2,152 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2E36F9764
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 09:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5C36F976E
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 10:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjEGHw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 03:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
+        id S230494AbjEGIE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 04:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjEGHw2 (ORCPT
+        with ESMTP id S230458AbjEGIEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 03:52:28 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50209008;
-        Sun,  7 May 2023 00:52:26 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-52c30fbccd4so3045946a12.0;
-        Sun, 07 May 2023 00:52:26 -0700 (PDT)
+        Sun, 7 May 2023 04:04:22 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040BD11B6A
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 01:04:17 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bc25f0c7dso6516314a12.3
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 01:04:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683445946; x=1686037946;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=linaro.org; s=google; t=1683446656; x=1686038656;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=cRfrrqx50vxG99XcLjNcRWo5z2zDSYMRqUZuG5jBIKY=;
-        b=jaecR1OGwoXjjVTs+NKSvVFbeszPfjN+tLv/5l8vwUfQ7vVFuLIRdKn2w747nJ6H/w
-         atFTxveoqIlG9h1FBOHyApFscKv/6YQAVa1RumtGUH0xcdRGIQKefDtMgtVF0K4L0iZE
-         OFwmoX1tAD0dXcrPoB2urTJHVXOcwCMwIaMhp8bww4DJE3zpAN+kLzBfAHUX++0bNBqH
-         V+5Dp9uxlbKc0i0+oH0XfzApOcef+spYJnIMuiLY44i+SRBZoc5orLhMYMfxcmtZPvia
-         Ef1gsKeOt+q1txp1AQejxblXDU9NKi5JcPXh9XIQPm5D4/10fp+GAQ2MhRjfx5fQEEIa
-         4sng==
+        bh=BzBNd9mB5wevctFzDqblL5y/HaLP/sCPOrJ09H89d90=;
+        b=MVCuZl35RQPJZR23/XADAkTbybkeimBpPbbp8bfmqQUcSLKaLhQuJZK302ughK2VIb
+         DFudRcnVlJvbpmMiSjCbF+v0h7V6T8OO7vVtU3SHmAEuprimh+U7b/Yds9oS1ZbK0o/q
+         DNi/lkutV2coLlKQkgwWyKcloMOrme0Eil4ngwyrNn2isXzxQYbE5mTXI9vAwsnQ8Wq5
+         8JTQoVE2357eL6P2AuWcGRSyq3VzGKG1FbrR+Db6W0kFmkSbB+FovQ5FqmJHct/pkZuj
+         YJJS5nx+2+pKo5z5u3Jk4q0EoisFMZ06elsOKvYQUXS0zKokx5ZUt5Xs5gwmIWWT0KoT
+         uaYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683445946; x=1686037946;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1683446656; x=1686038656;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cRfrrqx50vxG99XcLjNcRWo5z2zDSYMRqUZuG5jBIKY=;
-        b=jpuDTsysBGr4b/DQO4OkM+aiBvFD7G1TMqUB4O8iaS/D3KHjFfH/R9DpwXI1mOkt2y
-         cxXiqDk9EpmiNLn815VLST3S0ALhW00SCK6twfQ4jligYazONmf0mrrraScRXlcYaYWR
-         RN/bPTpl9GDZv/6ZKoKj0hFhawDoTplqrpwSO5T/wgNsAtK4IuU/+tsKtPkqCDuCdBmt
-         WOiAONl2O2YzF/2EXodGnsVVetzgCfRvK/R21vQdOuaSbLxAM9EtD4KM3GrfZxCMA70y
-         JlpLloy+4CVTLd77Y4rB42qwXDGNovdJHENz/rYJhIzSBa06sU30Lf7PAyyaMmLPb2xm
-         iDvw==
-X-Gm-Message-State: AC+VfDx9ekyygslYMIOHwT7MKwP7pa+D6co3bCFfFuTbF1TC5XfEXDCA
-        RdVWvMNbiM3a/Etz3v6oMDDoMSPDrNkY2t4y
-X-Google-Smtp-Source: ACHHUZ6n2q2Ih1X8tUu22B7REItZVx5TmnaDIb/HEDPxtiLHUddtxsFMYP8x7Lbr8SxZi9py9GRH4g==
-X-Received: by 2002:a17:902:7782:b0:1aa:fdef:2a93 with SMTP id o2-20020a170902778200b001aafdef2a93mr6391203pll.7.1683445945979;
-        Sun, 07 May 2023 00:52:25 -0700 (PDT)
-Received: from yoga ([202.131.133.188])
-        by smtp.gmail.com with ESMTPSA id t11-20020a170902a5cb00b001a043e84bf0sm4675147plq.209.2023.05.07.00.52.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 00:52:25 -0700 (PDT)
-Date:   Sun, 7 May 2023 13:22:19 +0530
-From:   Anup Sharma <anupnewsmail@gmail.com>
-To:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: megaraid: Use sysfs_emit in show function callsbacks
-Message-ID: <ZFdYszGYVRQQA7LP@yoga>
+        bh=BzBNd9mB5wevctFzDqblL5y/HaLP/sCPOrJ09H89d90=;
+        b=eNkLo4iTSZcSv03YQGCM6nWEjiqNdfotTj4lyfgMSv5beZIkTDYm6tFLOR7idPVqhA
+         hsXNy2xysWr/NlB7uMIAEHNRW1Qe70cqtxWgUGWGl2/qi4Xwvvw3W8SJXE/NzXHwsppN
+         xnofFUOENNc0iWr46Ecp7I158FsDyAolKThbbBlWMFpnBHmFPIYvfEuop7wWTv/GFe6y
+         56AjQnZNe+ohVPC7X6iGP3rNsHvQ3Fuu92dATM05cISiQg8rm8wIAvNoITocbEPT+y8x
+         GZ/236mpeEXEHUWpYlb3ZjvgeF0gn+gQgjIIV6csOPVl075kmPRzhqJskCFEkdyVf+MT
+         N6jg==
+X-Gm-Message-State: AC+VfDwBZGd3UwN4dmn88JYmMpC4OSPwZpgyo2JjEm/WA0NIBiG48vjT
+        8T0jPPflU4HycjplV6cqYHTibw==
+X-Google-Smtp-Source: ACHHUZ4vXTIy9jC51n4f4/F0174cdi8EwNzCcxOibShQXTs4ABy9qn7IdCrVQ2DUkSbtGpqA2QsFeA==
+X-Received: by 2002:aa7:dd4e:0:b0:50b:fc7f:b281 with SMTP id o14-20020aa7dd4e000000b0050bfc7fb281mr5478735edw.1.1683446656431;
+        Sun, 07 May 2023 01:04:16 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:183b:950f:b4d5:135a? ([2a02:810d:15c0:828:183b:950f:b4d5:135a])
+        by smtp.gmail.com with ESMTPSA id d12-20020a056402516c00b0050bd2f16ef5sm4861843ede.84.2023.05.07.01.04.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 May 2023 01:04:15 -0700 (PDT)
+Message-ID: <99343862-6b6a-30ba-40e5-7f984434b1dc@linaro.org>
+Date:   Sun, 7 May 2023 10:04:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v4 2/3] dt-bindings: arm: Add Coresight Dummy Trace
+To:     Hao Zhang <quic_hazha@quicinc.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-doc@vger.kernel.org
+References: <20230505092422.32217-1-quic_hazha@quicinc.com>
+ <20230505092422.32217-3-quic_hazha@quicinc.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230505092422.32217-3-quic_hazha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As stated in the Documentation/filesystems/sysfs.rst file, it
-is recommended that the show() callback function for kobject
-attributes strictly utilizes sysfs_emit instead of the sprintf
-family of functions.
-Issue identified using the coccinelle device_attr_show.cocci script.
+On 05/05/2023 11:24, Hao Zhang wrote:
+> Add new coresight-dummy.yaml file describing the bindings required
+> to define coresight dummy trace in the device trees.
+> 
+> Signed-off-by: Hao Zhang <quic_hazha@quicinc.com>
+> ---
+>  .../bindings/arm/arm,coresight-dummy.yaml     | 102 ++++++++++++++++++
+>  1 file changed, 102 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
+> new file mode 100644
+> index 000000000000..126518863eea
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
+> @@ -0,0 +1,102 @@
+> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/arm,coresight-dummy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ARM Coresight Dummy component
+> +
+> +description: |
+> +  Coresight Dummy Trace Module is for the specific devices that kernel
+> +  don't have permission to access or configure, e.g., CoreSight TPDMs
+> +  on Qualcomm platforms. So there need driver to register dummy devices
+> +  as Coresight devices. It may also be used to define components that
+> +  may not have any programming interfaces (e.g, static links), so that
+> +  paths can be established in the driver. Provide Coresight API for
+> +  dummy device operations, such as enabling and disabling dummy devices.
+> +  Build the Coresight path for dummy sink or dummy source for debugging.
+> +
+> +  The primary use case of the coresight dummy is to build path in kernel
+> +  side for dummy sink and dummy source.
+> +
+> +maintainers:
+> +  - Mao Jinlong <quic_jinlmao@quicinc.com>
+> +  - Tao Zhang <quic_taozha@quicinc.com>
+> +  - Hao Zhang <quic_hazha@quicinc.com>
+> +  - Yuanfang Zhang <quic_yuanfang@quicinc.com>
+> +
+> +properties:
+> +  compatible:
+> +    items:
 
-Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
----
- drivers/scsi/megaraid/megaraid_sas_base.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+You were asked to drop oneOf, not to replace with items. Drop items.
+Drop oneOf. It's just enum.
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 317c944c68e3..44e8d39b9b76 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -3335,7 +3335,7 @@ fw_crash_buffer_size_show(struct device *cdev,
- 	struct megasas_instance *instance =
- 		(struct megasas_instance *) shost->hostdata;
- 
--	return snprintf(buf, PAGE_SIZE, "%ld\n", (unsigned long)
-+	return sysfs_emit(buf, "%ld\n", (unsigned long)
- 		((instance->fw_crash_buffer_size) * 1024 * 1024)/PAGE_SIZE);
- }
- 
-@@ -3382,14 +3382,14 @@ fw_crash_state_show(struct device *cdev,
- 	struct megasas_instance *instance =
- 		(struct megasas_instance *) shost->hostdata;
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n", instance->fw_crash_state);
-+	return sysfs_emit(buf, "%d\n", instance->fw_crash_state);
- }
- 
- static ssize_t
- page_size_show(struct device *cdev,
- 	struct device_attribute *attr, char *buf)
- {
--	return snprintf(buf, PAGE_SIZE, "%ld\n", (unsigned long)PAGE_SIZE - 1);
-+	return sysfs_emit(buf, "%ld\n", (unsigned long)PAGE_SIZE - 1);
- }
- 
- static ssize_t
-@@ -3399,7 +3399,7 @@ ldio_outstanding_show(struct device *cdev, struct device_attribute *attr,
- 	struct Scsi_Host *shost = class_to_shost(cdev);
- 	struct megasas_instance *instance = (struct megasas_instance *)shost->hostdata;
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n", atomic_read(&instance->ldio_outstanding));
-+	return sysfs_emit(buf, "%d\n", atomic_read(&instance->ldio_outstanding));
- }
- 
- static ssize_t
-@@ -3409,7 +3409,7 @@ fw_cmds_outstanding_show(struct device *cdev,
- 	struct Scsi_Host *shost = class_to_shost(cdev);
- 	struct megasas_instance *instance = (struct megasas_instance *)shost->hostdata;
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n", atomic_read(&instance->fw_outstanding));
-+	return sysfs_emit(buf, "%d\n", atomic_read(&instance->fw_outstanding));
- }
- 
- static ssize_t
-@@ -3419,7 +3419,8 @@ enable_sdev_max_qd_show(struct device *cdev,
- 	struct Scsi_Host *shost = class_to_shost(cdev);
- 	struct megasas_instance *instance = (struct megasas_instance *)shost->hostdata;
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n", instance->enable_sdev_max_qd);
-+	return sysfs_emit(buf, "%d\n",
-+			instance->enable_sdev_max_qd);
- }
- 
- static ssize_t
-@@ -3473,7 +3474,7 @@ raid_map_id_show(struct device *cdev, struct device_attribute *attr,
- 	struct megasas_instance *instance =
- 			(struct megasas_instance *)shost->hostdata;
- 
--	return snprintf(buf, PAGE_SIZE, "%ld\n",
-+	return sysfs_emit(buf, "%ld\n",
- 			(unsigned long)instance->map_id);
- }
- 
--- 
-2.34.1
+> +      - enum:
+> +          - arm,coresight-dummy-sink
+> +          - arm,coresight-dummy-source
+> +
+> +  out-ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port:
+> +        description: Output connection from the source to Coresight
+> +          Trace bus.
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +
+> +  in-ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port:
+> +        description: Input connection from the Coresight Trace bus to
+> +          dummy sink, such as Embedded USB debugger(EUD).
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +
+> +required:
+> +  - compatible
+> +
+> +if:
+> +  # If the compatible contains the below value
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: arm,coresight-dummy-sink
+> +
+> +then:
+> +  required:
+> +    - in-ports
+> +
+> +else:
+> +  required:
+> +    - out-ports
+
+No improvements. Implement Rob's comments.
+
+Best regards,
+Krzysztof
 
