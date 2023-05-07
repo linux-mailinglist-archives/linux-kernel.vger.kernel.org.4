@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A78B66F98DB
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 16:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57ADE6F98E1
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 16:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbjEGOOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 10:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S231415AbjEGOTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 10:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjEGOOO (ORCPT
+        with ESMTP id S229446AbjEGOTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 10:14:14 -0400
+        Sun, 7 May 2023 10:19:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806A05273;
-        Sun,  7 May 2023 07:14:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99AC4C25;
+        Sun,  7 May 2023 07:19:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 136DC60C67;
-        Sun,  7 May 2023 14:14:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EDFBC433EF;
-        Sun,  7 May 2023 14:14:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FEDC60C5E;
+        Sun,  7 May 2023 14:19:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87675C433EF;
+        Sun,  7 May 2023 14:19:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683468852;
-        bh=I3Y8wMsWRPaekrCJ/2rQji7fk4OHU8l/ZeZRBFYLhf4=;
+        s=k20201202; t=1683469144;
+        bh=bWgS6xVM0twb9Tsnumkxrs/bEwi5vgZbTfEs1wm2qpE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mSScxPdd/chNzxXj83p5eHeUOHSymgonau+25cW0+s33hDFkjK/r2Qp6UEULJlea6
-         gUqqE46HpHMlXSYtnbKY6ZkQzlyVRzlRIu8/OHRNU1OTJuGIOCew0ae7/6hwnYfDZJ
-         hNjIkkXOiQO68OSwIt8mjFDcHpflcaomBoeP7pG3fm7uO13aeX3KfHhGzHt+5rXP1v
-         kYNit7JFp/jG9o7gA7ysdsy36szMA8fJhTEqQaJFyCgkX4Lv2oOEMhwP8zBqzHyz+l
-         lLZFgsCK3zzd0gAdKX8RiVeaDsHsigyyXbHWSksNgqBU2L1EAZPdCfffTM84tvNBWG
-         PFoJfVv7NhRcw==
-Date:   Sun, 7 May 2023 15:30:04 +0100
+        b=KZtfAxBTe1PzHtVUjKhzGpl/THFP1BusGfi3cHxlTOrlwR1wmEPpsxD7LW/4kO7gx
+         B/z3nQtF7CjX2SJ/R19g7ujBU1b+Qq6nGNMeIn2cBJKAOvuc8fjdDAxsXINz2TMsKr
+         zMQOSCjOhSC1d8JHnEvbMDKQBwN4cjO6W2u+YuW5xYrvZROsyjRxdIsGwDtk9LyqeY
+         VfjMEybKv/lqHC/V0j9IbgGvoXdIfyevsJ/XnmIIUEz+P4XxcZFJX4gXCSGqytasEd
+         lCWTk5f9FJC3eRoRD7cibRb09kqZfAqROOtkJ5F2wnGcQ5j1iOVWnmqegblgQi0uKo
+         HKgCpK6aT7slw==
+Date:   Sun, 7 May 2023 15:34:57 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 0/5] iio: adc: qcom-spmi-vadc: Propagate fw
- node  label to userspace
-Message-ID: <20230507153004.3461eccd@jic23-huawei>
-In-Reply-To: <20230502-iio-adc-propagate-fw-node-label-v3-0-6be5db6e6b5a@somainline.org>
-References: <20230502-iio-adc-propagate-fw-node-label-v3-0-6be5db6e6b5a@somainline.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] iio: trigger: Add simple trigger_validation
+ helper
+Message-ID: <20230507153457.3b6bbfed@jic23-huawei>
+In-Reply-To: <dab917aa8f2442ad10aa2a266395edd3cd7ce1d7.1683105758.git.mazziesaccount@gmail.com>
+References: <cover.1683105758.git.mazziesaccount@gmail.com>
+        <dab917aa8f2442ad10aa2a266395edd3cd7ce1d7.1683105758.git.mazziesaccount@gmail.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -65,56 +66,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  2 May 2023 01:17:32 +0200
-Marijn Suijten <marijn.suijten@somainline.org> wrote:
+On Wed, 3 May 2023 12:48:57 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-> Implement read_label in qcom-spmi-vadc to see DT-specified label names
-> in userspace.  At the same time clear up some documentation around
-> extend_name to promote read_label, and normalize similar code in
-> qcom-spmi-adc5.
+> Some triggers can only be attached to the IIO device that corresponds to
+> the same physical device. Implement generic helper which can be used as
+> a validate_trigger callback for such devices.
+> 
+> Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
 
-Whole series looks good to me. I'd like some review from QCOM focused
-folk though before I take it.
-
-Thanks,
+Noticed a trivial capitalisation issue inline.
 
 Jonathan
 
-> 
-> v3 resend: added missing to/cc addresses via b4 prep --auto-to-cc.
-> 
-> Changes since v2:
-> - Dropped RFC tag;
-> - Reworded @extend_name deprecation comment.
-> 
-> v2: https://lore.kernel.org/r/20230116220909.196926-1-marijn.suijten@somainline.org
-> 
-> Changes since v1:
-> - qcom-spmi-vadc: Use read_label instead of extend_name.
-> 
-> New since v1:
-> - core: Point users of extend_name field to read_label callback
-> - qcom-spmi-adc5: Use datasheet_name string literal for
->   iio_chan_spec::datasheet_name;
-> - qcom-spmi-adc5: Fall back to datasheet_name instead of
->   fwnode_get_name() for iio_chan_spec::extend_name (gets rid of @xx in
->   sysfs filenames and labels);
-> - qcom-spmi-adc5: Remove unnecessary datasheet_name NULL check.
-> 
-> v1: https://lore.kernel.org/linux-arm-msm/20221106193018.270106-1-marijn.suijten@somainline.org/
 > ---
-> Marijn Suijten (5):
->       iio: core: Point users of extend_name field to read_label callback
->       iio: adc: qcom-spmi-adc5: Use driver datasheet_name instead of DT label
->       iio: adc: qcom-spmi-adc5: Fall back to datasheet_name instead of fwnode name
->       iio: adc: qcom-spmi-adc5: Remove unnecessary datasheet_name NULL check
->       iio: adc: qcom-spmi-vadc: Propagate fw node label to userspace
-> 
->  drivers/iio/adc/qcom-spmi-adc5.c | 15 +++++++--------
->  drivers/iio/adc/qcom-spmi-vadc.c | 19 ++++++++++++++++++-
->  include/linux/iio/iio.h          |  3 +++
->  3 files changed, 28 insertions(+), 9 deletions(-)
+> Revision history
+> v2: => v3:
+>  - Fix title (space after iio:)
+> v2: New patch
 > ---
-> base-commit: 92e815cf07ed24ee1c51b122f24ffcf2964b4b13
-> change-id: 20230502-iio-adc-propagate-fw-node-label-b1fff2e63ae8
+>  drivers/iio/industrialio-trigger.c | 22 +++++++++++++++++++++-
+>  include/linux/iio/trigger.h        |  1 +
+>  2 files changed, 22 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
+> index 784dc1e00310..c616297aa754 100644
+> --- a/drivers/iio/industrialio-trigger.c
+> +++ b/drivers/iio/industrialio-trigger.c
+> @@ -322,7 +322,7 @@ int iio_trigger_attach_poll_func(struct iio_trigger *trig,
+>  	 * this is the case if the IIO device and the trigger device share the
+>  	 * same parent device.
+>  	 */
+> -	if (pf->indio_dev->dev.parent == trig->dev.parent)
+> +	if (iio_validate_own_trigger(pf->indio_dev, trig))
+>  		trig->attached_own_device = true;
+>  
+>  	return ret;
+> @@ -728,6 +728,26 @@ bool iio_trigger_using_own(struct iio_dev *indio_dev)
+>  }
+>  EXPORT_SYMBOL(iio_trigger_using_own);
+>  
+> +/**
+> + * iio_validate_own_trigger - Check if a trigger and IIO device belong to
+> + *  the same device
+> + * @idev: the IIO device to check
+> + * @trig: The IIO trigger to check
+
+The / the consistency needs fixing. I'm not sure on the local / file convention, but
+it hopefully isn't a random mixture!
+
+> + *
+> + * This function can be used as the validate_trigger callback for triggers that
+> + * can only be attached to their own device.
+> + *
+> + * Return: 0 if both the trigger and the IIO device belong to the same
+> + * device, -EINVAL otherwise.
+> + */
+> +int iio_validate_own_trigger(struct iio_dev *idev, struct iio_trigger *trig)
+> +{
+> +	if (idev->dev.parent != trig->dev.parent)
+> +		return -EINVAL;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(iio_validate_own_trigger);
+> +
+>  /**
+>   * iio_trigger_validate_own_device - Check if a trigger and IIO device belong to
+>   *  the same device
+> diff --git a/include/linux/iio/trigger.h b/include/linux/iio/trigger.h
+> index 51f52c5c6092..bce3b1788199 100644
+> --- a/include/linux/iio/trigger.h
+> +++ b/include/linux/iio/trigger.h
+> @@ -171,6 +171,7 @@ void iio_trigger_free(struct iio_trigger *trig);
+>   */
+>  bool iio_trigger_using_own(struct iio_dev *indio_dev);
+>  
+> +int iio_validate_own_trigger(struct iio_dev *idev, struct iio_trigger *trig);
+>  int iio_trigger_validate_own_device(struct iio_trigger *trig,
+>  				     struct iio_dev *indio_dev);
+>  
 
