@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2339C6F964E
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB686F965E
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbjEGAok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 20:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
+        id S231682AbjEGA4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 20:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231437AbjEGAoV (ORCPT
+        with ESMTP id S232054AbjEGA4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 20:44:21 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C532ABD9
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 17:39:48 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bc570b4a3so6166042a12.1
-        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 17:39:48 -0700 (PDT)
+        Sat, 6 May 2023 20:56:20 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6FA100DC
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 17:55:06 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94a342f7c4cso567674966b.0
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 17:55:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1683419919; x=1686011919;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+        d=linux-foundation.org; s=google; t=1683420881; x=1686012881;
+        h=content-transfer-encoding:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9oefhNWACgbXm60OpHlDQ3iOhZA3LWhd0ouQCK/fPjo=;
-        b=bOH9N5ucrIgjyq9SGDKf7JSrvIlZAzP3jzq2lj/HxJZlk9C83NUy4oRcY6BCV9Ykhv
-         ABJHGffn89ueoDxyP0c9MHByE73rE+Haf6JhvXDSlEhlPTeu5jn0jjAJ+abKLuPffuhd
-         ilFK1tfFbRIklQ3cxXPM1VlLOVcNwJxfmFG2M=
+        bh=GpiOavQ+gXchfKmR1zFFxlUEn+ftnKF3TyEQDre8v2A=;
+        b=BpnhwTtrQMIkHv+Q4TzR7PnHWBLP+3S7l1XhgPWOHidvZmqtu6SIqpPyX8VSTK/+mZ
+         /I5VJoPB+aj4rXDPXSHiBjx5HdvozQgAEZP/PkDX9/nk3m8GCsn7S+3COnWUi0Py3nYP
+         vpXZ5bYQX7ROzO0qoNwtaJXzMnlXeXJaSUsm0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683419919; x=1686011919;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+        d=1e100.net; s=20221208; t=1683420881; x=1686012881;
+        h=content-transfer-encoding:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9oefhNWACgbXm60OpHlDQ3iOhZA3LWhd0ouQCK/fPjo=;
-        b=BPd0/2pKusV39wVPN2bw3TxqvTYpQBtYbYhezeuez4Nl2wKjZ8rZAkzKULYor22num
-         ZBUiACRSuIRwHpZxtD7mx4p4XZ5EIoHwD0Z5HRjN7PsFaA4t6ItwfcW1rcEfl1gEM+SA
-         mAZrSuov3e6Bz8ttFuZGyocMDgmAXtKeq+ju1QtlB6bGs5PZIZJS5i3/JXH6Bf9S/P2c
-         MN890MH0gTSFY//mT696kNEVjmTFFubSK+jAwJi/ebOPHPWVMsTDxhuZ7c4OU/5Qo1wZ
-         Wlfg4k8eCSsc8kU3SQatjcaYo6945mMGSP0jBOwE/YK4fQfPUK4nmUTjErExn9tnGVaf
-         dt3Q==
-X-Gm-Message-State: AC+VfDxGQ7goUwHITYjC9tOQVZmMODV4yLQrRcTjFrfWe4ylVb5wDfAZ
-        xpNYbQaf6DULyHsjzA8iCjqghZWDrjBuz0LR9d7njg==
-X-Google-Smtp-Source: ACHHUZ5UO8AVgO2mZkzqDnu2dumLvQMbf0F2tj1SWwmpfnzeQpnKOr6Mr5ZoalcO/0+ZgjfOmbnAtw==
-X-Received: by 2002:aa7:c059:0:b0:50d:9b57:842a with SMTP id k25-20020aa7c059000000b0050d9b57842amr77588edo.9.1683419919310;
-        Sat, 06 May 2023 17:38:39 -0700 (PDT)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id s3-20020a056402014300b0050d83a39e6fsm1658198edu.4.2023.05.06.17.38.38
+        bh=GpiOavQ+gXchfKmR1zFFxlUEn+ftnKF3TyEQDre8v2A=;
+        b=XVbRjIci5UFcDcOputip4JCvIkDObqNB3pXNcG75LVW3ESqG/nK5HzzwA1KQn5fN11
+         NoHAOhUwaotCc+slDwA6Zdq+Ej87YSgEvlYXqVOEMT9jyUIGNHB3hcpf9LbnlPpRMpBS
+         /9ibtZgLFKqjiJL/bBHvty/f24z7BFj/am5pKOiu/g3UGGKu75D4Nd2hUGuU+w7qXOa+
+         hBFNSxz8bnm58r1/HKYDQnLIuB1roZ2TxNn2UDxgqW7zBd3APHd05kpykph2htZhOBkH
+         +yGlNB7ChUxxbujVYCLAboWv9FdCkzTmHxfq6T1jNDRGnZZIlCt4Mn0R0iaeOiIgccG/
+         /tAg==
+X-Gm-Message-State: AC+VfDzD4QRgUy3eyRWcE/6IvZccSbMxGV2IarOMqRqs2glIW5gFgXOU
+        d8sSsshtUq7hUVOAa6zr35ge4ZVXQ2PEFmuBXXtP1Q==
+X-Google-Smtp-Source: ACHHUZ47v546ZliMi1stX0oietWtmiKPf1C0PbYTUdY3cYsCiJG2u7YbCsXuxIHgBkaU/4GMk23s2g==
+X-Received: by 2002:a17:906:974b:b0:957:943e:7416 with SMTP id o11-20020a170906974b00b00957943e7416mr5885583ejy.15.1683420881300;
+        Sat, 06 May 2023 17:54:41 -0700 (PDT)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
+        by smtp.gmail.com with ESMTPSA id nr1-20020a1709068b8100b0096621340285sm1228373ejc.198.2023.05.06.17.54.40
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 May 2023 17:38:38 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-956ff2399c9so592862966b.3
-        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 17:38:38 -0700 (PDT)
-X-Received: by 2002:a17:907:94d1:b0:959:9d8d:e992 with SMTP id
- dn17-20020a17090794d100b009599d8de992mr5804253ejc.8.1683419917753; Sat, 06
- May 2023 17:38:37 -0700 (PDT)
+        Sat, 06 May 2023 17:54:40 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-9659f452148so566878766b.1
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 17:54:40 -0700 (PDT)
+X-Received: by 2002:a17:907:944d:b0:94e:fa56:a74f with SMTP id
+ dl13-20020a170907944d00b0094efa56a74fmr4763145ejc.14.1683420879818; Sat, 06
+ May 2023 17:54:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230424212130.590684-1-dave.hansen@linux.intel.com>
- <CAHk-=whn3F1k263SZNUVQK195tcCMAo5E_WbmjUE0qFC5rWg=w@mail.gmail.com>
- <4433c3595db23f7c779b69b222958151b69ddd70.camel@intel.com>
- <148b3edb-b056-11a0-1684-6273a4a2d39a@intel.com> <CAHk-=wiuVXTfgapmjYQvrEDzn3naF2oYnHuky+feEJSj_G_yFQ@mail.gmail.com>
- <CAHk-=wiB0wy6oXOsPtYU4DSbqJAY8z5iNBKdjdOp2LP23khUoA@mail.gmail.com> <085834410eb66433c414f2b81589d45edf1eaf3b.camel@intel.com>
-In-Reply-To: <085834410eb66433c414f2b81589d45edf1eaf3b.camel@intel.com>
+References: <ZFbY7siXjm9hhpUB@debian>
+In-Reply-To: <ZFbY7siXjm9hhpUB@debian>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 6 May 2023 17:38:21 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgCM+o1vm4pS_9=1E9XkOn6c1jiiKLJS2710ncEL+43tQ@mail.gmail.com>
-Message-ID: <CAHk-=wgCM+o1vm4pS_9=1E9XkOn6c1jiiKLJS2710ncEL+43tQ@mail.gmail.com>
-Subject: Re: [GIT PULL] x86/shstk for 6.4
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
+Date:   Sat, 6 May 2023 17:54:23 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiA=7uuzs-JEDDrPtPbFqULGDtEYiV=K+ZW9n_BftUrSw@mail.gmail.com>
+Message-ID: <CAHk-=wiA=7uuzs-JEDDrPtPbFqULGDtEYiV=K+ZW9n_BftUrSw@mail.gmail.com>
+Subject: Re: Debian package build from upstream source need git repo?? Failing...
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        LinuxKernel <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,64 +77,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 6, 2023 at 5:18=E2=80=AFPM Edgecombe, Rick P
-<rick.p.edgecombe@intel.com> wrote:
->
-> On Sat, 2023-05-06 at 13:09 -0700, Linus Torvalds wrote:
-> > >
-> > >  (b) "pte_dirty()" isn't even the right thing to use, since it
-> > > includes the SW dirty bit.
->
-> pte_dirty() actually doesn't check the the SW dirty bit
+On Sat, May 6, 2023 at 3:47=E2=80=AFPM Bhaskar Chowdhury <unixbhaskar@gmail=
+.com> wrote:
+>>
+>   I can vividly remember that it was working fine few months back...in fa=
+ct
+>   building the 6.2.2 kernel. I am certainly missing the updated informati=
+on of
+>   change. The damn script just untar the tarball and build.
 
-It really does.
+Yes, please just use git if you build packages.
 
-See commit "x86/mm: Start actually marking _PAGE_SAVED_DIRTY", where
-the patch is:
+We've been using git for almost 20 years now, it's become the most
+widely used SCM in the world, it's time you just laid tar-balls to
+rest as a way to distribute kernel sources.
 
-  -static inline int pte_dirty(pte_t pte)
-  +static inline bool pte_dirty(pte_t pte)
-   {
-  -     return pte_flags(pte) & _PAGE_DIRTY;
-  +     return pte_flags(pte) & _PAGE_DIRTY_BITS;
-   }
-
-and that  _PAGE_DIRTY_BITS is a combination of _PAGE_DIRTY | _PAGE_SAVED_DI=
-RTY.
-
-So that means that the
-
-        if (pte_dirty(pte))
-                pte =3D pte_mksaveddirty(pte);
-
-in pte_wrprotect() is just nonsensical, and basically says "if either
-the real dirty or the SW dirty bit is set, set the SW dirty bit". But
-that's entirely redundant wrt the old state of the dirty bit.
-
-It reality should just 'or' the HW dirty bit into the SW dirty bit and
-be done with it.
-
-Of course, maybe I confused the issue by talking about HW dirty and SW
-dirty, because we *also* have that entirely *other* legacy
-"SOFT_DIRTY" bit that is different from the new SW dirty bit
-("SAVED_DIRTY").
-
-Which certainly doesn't make things clearer.  The "soft" in the soft
-dirty bit isn't about software, (although it's obviously done *in*
-software), it's literally "soft" not as in software, but as in just
-"not a hard bit": you can clear it for tracking which pages people
-write to.
-
-So we end up with two bits that are maintained by software: SOFT and
-SAVED, and then it's really easy to just call the "SAVED" bit the "SW
-dirty" bit as I did as opposed to the "HW dirty" bit, because it
-really is a secondary very of the *hard* HW dirty bit.
-
-I have this fleeting suspicion that we could actually merge the SOFT
-and SAVED bits, in that the "SOFT" bit doesn't make much sense if the
-pte is read-only, and the SAVED bit in turn doesn't matter if the pte
-is RW.
-
-But that's a separate headache, not worth worrying about now.
-
-           Linus
+                   Linus
