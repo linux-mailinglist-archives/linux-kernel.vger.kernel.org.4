@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DC46F992C
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8A66F992F
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbjEGPGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 11:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
+        id S231685AbjEGPGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 11:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbjEGPGO (ORCPT
+        with ESMTP id S231627AbjEGPG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 11:06:14 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99726191C0;
-        Sun,  7 May 2023 08:05:58 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-3078fa679a7so609657f8f.3;
-        Sun, 07 May 2023 08:05:58 -0700 (PDT)
+        Sun, 7 May 2023 11:06:26 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB1416344;
+        Sun,  7 May 2023 08:06:08 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30639daee76so2271012f8f.1;
+        Sun, 07 May 2023 08:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683471957; x=1686063957;
+        d=gmail.com; s=20221208; t=1683471967; x=1686063967;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=J7busPrq4Ix2D0XVL7/yDg+1KY42O5SIQ2uX5rrJTys=;
-        b=WJviFBiRpKKdvo1AbdVorv1k0LHGOVJgpFX4nC2Bi+cMQlqBqyIvX4pWyPQ9zWDuU5
-         bCfrjfVXnvCwV1yFR20U13u10aFZqJIv1e8E7idIxkNWP+oP3RPNIeZDFxbywq0ALqFO
-         XccX3TebqOKg04UsHzW12VyT9FdtC2x1cMNTeSzFW4ZAuu2UoRb32QFv4/E/DPmO6lbv
-         g/mm3cYM97lkrjN0F3nIQN1/SCU15/Uqc0p9v+SzQevYcmUwiNGJmVdmmS01sL/q4rx2
-         RxVFvOiun6xporcGtN8DaG7QRxYfkpA4E3SAEtvDkSTBsC7FHXxQbtrJSfND19PilENn
-         lkDg==
+        bh=Ziv+62Y+GAylpM/ibpSxQKGKhNzMiq6MRDwumNWDsYk=;
+        b=sRTmU8JbDncgX6NXneNlIuiUj6m6ACDXUTCTvC8rFEGY/QPS4SM8iQwXH/DSfPKc/K
+         JQYtiAT+eOKtjCqorW6x+aQpfPEPIDq9FZiSVgNPkymU+XzUMkNki17jRHfHPQjfltWE
+         2FrvxzITEUZo/8nOnTmTxLc+Ghh0dXdKALZR7E1GyEXJkQVGQe3F34+mvWpeeTaJ0B4i
+         2DFcnEvEvVCBtSNWKA6EX2ZcrwFdlV32CV4Ij7HVvJEqIm5pvWDQ/LluaNxstTTMWYhO
+         EgM7gNmxO2KFZBqBlHKhjmyvL2I6mYn/95rj85cljFIjkqIbRYV091+oNPDqRiPMFq2v
+         CTrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683471957; x=1686063957;
+        d=1e100.net; s=20221208; t=1683471967; x=1686063967;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=J7busPrq4Ix2D0XVL7/yDg+1KY42O5SIQ2uX5rrJTys=;
-        b=cS39Ip3ziUZqrRGkr/i4uaSKL5czOBI78i8H1yk7m1xJGPaj+a6u48TVCUM67cMi0C
-         CmBf3SQMuOWDmajdH7kHcnMhhLx7WvBQsH74TY9N/LXXz7StrpwD8ahtxQKN6tEG0Min
-         r/RUicNk3LKd5NG6lXYJcR1PMBWrTcZa+Lp+MzOf9nwzcg7cGBa7pnrw+8ExjLRtkHN/
-         DDGBGXSafAKy2WEY6Aue0ExgygjNZgapeyG88V9kb0BBGAgOrTL+vGVWPxV5FChJiJy4
-         uCj1uejwq4vw2cMKE8BZgLBaCHH/fsnZMLJzWkxXPm+tStr+Q5N3i0+ks4tpv7l5hHP1
-         9o5w==
-X-Gm-Message-State: AC+VfDy3maD+mHVHfvv44pksImIEDCXEa/HWDGRZwX/M34/3HnPa5VgM
-        ZgeIR7fVZtQNjbkNPMlE5Go=
-X-Google-Smtp-Source: ACHHUZ6Tgq00goUGd6cc5bfJap5ngrn1ZPs4mrdlVseReHkslpgNcCs6pqxjKm3kGw5VrEUK/xif5w==
-X-Received: by 2002:adf:f84b:0:b0:307:8b6f:dcff with SMTP id d11-20020adff84b000000b003078b6fdcffmr2923274wrq.37.1683471957047;
-        Sun, 07 May 2023 08:05:57 -0700 (PDT)
+        bh=Ziv+62Y+GAylpM/ibpSxQKGKhNzMiq6MRDwumNWDsYk=;
+        b=dH5qlWkfTQjkK19QM9S2nXYDF+qHx+a5VvVUJmLqM8vS5P33yv+dwYZt43jeilsW0+
+         g9Q6Pv3bsv+R7QS/uVUWKaeiYEUr9W6TFq/DPzT/WZ5sJb/5sTWdmwUwG+UUQmCEILb1
+         jStoqTkaNHglBSXZrVC9MOUIieH0PmcE41u+JItStmP+F40Ch3M/i69TTXQRe2grGBXo
+         sQe4KJwApnkZJpOM1noFYSEIxcV4wpnPlA5K23GJttZudZQX0RLWGC0JJfdnQOIov8QA
+         OOes8GJH+K7PGQPqdmhhkDsB5oluNQxW38bmUZfc9aP0wfSCI/I9NHoV3xJKMNORf1LH
+         qJBA==
+X-Gm-Message-State: AC+VfDx4AQjiIWJLOhAaxHaovWdxkrNCENhjOFKoKP1m5kGt445NRbed
+        /IzRGdZR4HseEDBOJplVsYg=
+X-Google-Smtp-Source: ACHHUZ6j8yqhFjZ0rqUBjPV5gzZfUrJxy8WXKvBq6Dbeit0CPEpd8ylflGfJYynkyLbuiKrRSZ46TA==
+X-Received: by 2002:adf:e341:0:b0:307:5097:ab60 with SMTP id n1-20020adfe341000000b003075097ab60mr5133166wrj.63.1683471966755;
+        Sun, 07 May 2023 08:06:06 -0700 (PDT)
 Received: from localhost.localdomain ([176.221.215.212])
-        by smtp.gmail.com with ESMTPSA id e15-20020a5d594f000000b0030771c6e443sm8437998wri.42.2023.05.07.08.05.54
+        by smtp.gmail.com with ESMTPSA id e15-20020a5d594f000000b0030771c6e443sm8437998wri.42.2023.05.07.08.06.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 08:05:56 -0700 (PDT)
+        Sun, 07 May 2023 08:06:06 -0700 (PDT)
 From:   Maksim Kiselev <bigunclemax@gmail.com>
 To:     Andre Przywara <andre.przywara@arm.com>
 Cc:     Icenowy Zheng <icenowy@aosc.io>,
         Maksim Kiselev <bigunclemax@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
         Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -69,9 +70,9 @@ Cc:     Icenowy Zheng <icenowy@aosc.io>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v4 4/5] spi: sun6i: add support for R329/D1/R528/T113s SPI controllers
-Date:   Sun,  7 May 2023 18:03:36 +0300
-Message-Id: <20230507150345.1971083-5-bigunclemax@gmail.com>
+Subject: [PATCH v4 5/5] riscv: dts: allwinner: d1: Add SPI controllers node
+Date:   Sun,  7 May 2023 18:03:37 +0300
+Message-Id: <20230507150345.1971083-6-bigunclemax@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230507150345.1971083-1-bigunclemax@gmail.com>
 References: <20230507150345.1971083-1-bigunclemax@gmail.com>
@@ -87,43 +88,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These SoCs has two SPI controllers. One of it is quite similar to previous
-ones, but with internal clock divider removed; the other added MIPI DBI
-Type-C offload based on the first one.
+Some boards form the MangoPi family (MQ\MQ-Dual\MQ-R) may have
+an optional SPI flash that connects to the SPI0 controller.
 
-Add basical support for these controllers. As we're not going to
-support the DBI functionality now, just implement the two kinds of
-controllers as the same.
+This controller is the same for R329/D1/R528/T113s SoCs and
+should be supported by the sun50i-r329-spi driver.
 
-Co-developed-by: Icenowy Zheng <icenowy@aosc.io>
+So let's add its DT nodes.
+
 Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 ---
- drivers/spi/spi-sun6i.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-index e4efab310469..02a3a4f2b3a0 100644
---- a/drivers/spi/spi-sun6i.c
-+++ b/drivers/spi/spi-sun6i.c
-@@ -738,9 +738,17 @@ static const struct sun6i_spi_cfg sun8i_h3_spi_cfg = {
- 	.has_clk_ctl	= true,
- };
+diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+index 922e8e0e2c09..1bb1e5cae602 100644
+--- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
++++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+@@ -108,6 +108,12 @@ rmii_pe_pins: rmii-pe-pins {
+ 				function = "emac";
+ 			};
  
-+static const struct sun6i_spi_cfg sun50i_r329_spi_cfg = {
-+	.fifo_depth	= SUN8I_FIFO_DEPTH,
-+};
++			/omit-if-no-ref/
++			spi0_pins: spi0-pins {
++				pins = "PC2", "PC3", "PC4", "PC5";
++				function = "spi0";
++			};
 +
- static const struct of_device_id sun6i_spi_match[] = {
- 	{ .compatible = "allwinner,sun6i-a31-spi", .data = &sun6i_a31_spi_cfg },
- 	{ .compatible = "allwinner,sun8i-h3-spi",  .data = &sun8i_h3_spi_cfg },
-+	{
-+		.compatible = "allwinner,sun50i-r329-spi",
-+		.data = &sun50i_r329_spi_cfg
-+	},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, sun6i_spi_match);
+ 			/omit-if-no-ref/
+ 			uart1_pg6_pins: uart1-pg6-pins {
+ 				pins = "PG6", "PG7";
+@@ -447,6 +453,37 @@ mmc2: mmc@4022000 {
+ 			#size-cells = <0>;
+ 		};
+ 
++		spi0: spi@4025000 {
++			compatible = "allwinner,sun20i-d1-spi",
++				     "allwinner,sun50i-r329-spi";
++			reg = <0x04025000 0x1000>;
++			interrupts = <SOC_PERIPHERAL_IRQ(15) IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_SPI0>, <&ccu CLK_SPI0>;
++			clock-names = "ahb", "mod";
++			dmas = <&dma 22>, <&dma 22>;
++			dma-names = "rx", "tx";
++			resets = <&ccu RST_BUS_SPI0>;
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		spi1: spi@4026000 {
++			compatible = "allwinner,sun20i-d1-spi-dbi",
++				     "allwinner,sun50i-r329-spi-dbi",
++				     "allwinner,sun50i-r329-spi";
++			reg = <0x04026000 0x1000>;
++			interrupts = <SOC_PERIPHERAL_IRQ(16) IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_SPI1>, <&ccu CLK_SPI1>;
++			clock-names = "ahb", "mod";
++			dmas = <&dma 23>, <&dma 23>;
++			dma-names = "rx", "tx";
++			resets = <&ccu RST_BUS_SPI1>;
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
+ 		usb_otg: usb@4100000 {
+ 			compatible = "allwinner,sun20i-d1-musb",
+ 				     "allwinner,sun8i-a33-musb";
 -- 
 2.39.2
 
