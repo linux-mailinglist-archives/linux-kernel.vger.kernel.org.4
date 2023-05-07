@@ -2,207 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5836F9B8D
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 22:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC406F9B90
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 22:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbjEGUbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 16:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
+        id S232098AbjEGUi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 16:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231861AbjEGUbE (ORCPT
+        with ESMTP id S229757AbjEGUi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 16:31:04 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AE335BF;
-        Sun,  7 May 2023 13:31:03 -0700 (PDT)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id CA3DBCC041;
-        Sun,  7 May 2023 20:31:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1683491461; bh=MIZ1vBEG5eV2XQXddU637jFQ3/w6ZYtze5ewofEx6BE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=MYo9ayUyC5MRGY0rOvExJK8SX4oCSmhf/DJt+aUk3FnSbFNu6UUDNz1hfgTQJU5+8
-         34xi1SPDGuRDhBR8Hr5ZEnQc0Nz4wIU2zUymxIzSMVXOeT2X5+LrIr+GKhrOtJluVU
-         1yHL5T9jL7QHjQ+tZWBT/RRHTJoi6fjH4jHZaXS0=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Matti =?ISO-8859-1?Q?Lehtim=E4ki?= <matti.lehtimaki@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matti =?ISO-8859-1?Q?Lehtim=E4ki?= <matti.lehtimaki@gmail.com>
-Subject: Re: [PATCH 5/6] ARM: dts: msm8226: Add tsens node and related nvmem cells
-Date:   Sun, 07 May 2023 22:31:01 +0200
-Message-ID: <2503068.irdbgypaU6@z3ntu.xyz>
-In-Reply-To: <20230507201225.89694-6-matti.lehtimaki@gmail.com>
-References: <20230507201225.89694-1-matti.lehtimaki@gmail.com>
- <20230507201225.89694-6-matti.lehtimaki@gmail.com>
+        Sun, 7 May 2023 16:38:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 463C66A6D;
+        Sun,  7 May 2023 13:38:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 482AE4B3;
+        Sun,  7 May 2023 13:39:37 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 914253F663;
+        Sun,  7 May 2023 13:38:51 -0700 (PDT)
+Date:   Sun, 7 May 2023 21:38:49 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Peng Fan <peng.fan@oss.nxp.com>,
+        Michal Simek <michal.simek@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        cristian.marussi@arm.com
+Subject: Re: [RFC v2 1/3] firmware: arm_scmi: Add SCMI v3.2 pincontrol
+ protocol basic support
+Message-ID: <ZFgMWYexdQL5p788@e120937-lin>
+References: <cover.1682513390.git.oleksii_moisieiev@epam.com>
+ <b4d60f3408f8fe839933fa3938ecdc9bfceb75d7.1682513390.git.oleksii_moisieiev@epam.com>
+ <ZFVeY3jVNfAkW1G9@e120937-lin>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFVeY3jVNfAkW1G9@e120937-lin>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sonntag, 7. Mai 2023 22:12:23 CEST Matti Lehtim=E4ki wrote:
-> Specify pre-parsed per-sensor calibration nvmem cells in the qfprom
-> device node rather than parsing the whole data blob in the driver.
+On Fri, May 05, 2023 at 08:52:03PM +0100, Cristian Marussi wrote:
+> On Wed, Apr 26, 2023 at 01:26:37PM +0000, Oleksii Moisieiev wrote:
+> > scmi: Introduce pinctrl SCMI protocol driver
+> > 
+> > Add basic implementation of the SCMI v3.2 pincontrol protocol
+> > excluding GPIO support. All pinctrl related callbacks and operations
+> > are exposed in the include/linux/scmi_protocol.h
+> > 
+> 
+> Hi Oleksii,
 
-I haven't double checked all the qfprom offsets but since you verified it
-twice on your side, I believe you ;)
+Hi Oleksii,
 
-Reviewed-by: Luca Weiss <luca@z3ntu.xyz>
+mostly replying to myself here really (O_o) ... see below.
 
->=20
-> Signed-off-by: Matti Lehtim=E4ki <matti.lehtimaki@gmail.com>
-> ---
->  arch/arm/boot/dts/qcom-msm8226.dtsi | 113 ++++++++++++++++++++++++++++
->  1 file changed, 113 insertions(+)
->=20
-> diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi
-> b/arch/arm/boot/dts/qcom-msm8226.dtsi index c34b8f3139ae..a0c3d25eea65
-> 100644
-> --- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-> +++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-> @@ -500,6 +500,34 @@ data-pins {
->  			};
->  		};
->=20
-> +		tsens: thermal-sensor@fc4a9000 {
-> +			compatible =3D "qcom,msm8226-tsens", "qcom,tsens-v0_1";
-> +			reg =3D <0xfc4a9000 0x1000>, /* TM */
-> +			      <0xfc4a8000 0x1000>; /* SROT */
-> +			nvmem-cells =3D <&tsens_mode>,
-> +				      <&tsens_base1>, <&tsens_base2>,
-> +				      <&tsens_s0_p1>, <&tsens_s0_p2>,
-> +				      <&tsens_s1_p1>, <&tsens_s1_p2>,
-> +				      <&tsens_s2_p1>, <&tsens_s2_p2>,
-> +				      <&tsens_s3_p1>, <&tsens_s3_p2>,
-> +				      <&tsens_s4_p1>, <&tsens_s4_p2>,
-> +				      <&tsens_s5_p1>, <&tsens_s5_p2>,
-> +				      <&tsens_s6_p1>, <&tsens_s6_p2>;
-> +			nvmem-cell-names =3D "mode",
-> +					   "base1", "base2",
-> +					   "s0_p1", "s0_p2",
-> +					   "s1_p1", "s1_p2",
-> +					   "s2_p1", "s2_p2",
-> +					   "s3_p1", "s3_p2",
-> +					   "s4_p1", "s4_p2",
-> +					   "s5_p1", "s5_p2",
-> +					   "s6_p1", "s6_p2";
-> +			#qcom,sensors =3D <6>;
-> +			interrupts =3D <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names =3D "uplow";
-> +			#thermal-sensor-cells =3D <1>;
-> +		};
-> +
->  		restart@fc4ab000 {
->  			compatible =3D "qcom,pshold";
->  			reg =3D <0xfc4ab000 0x4>;
-> @@ -510,6 +538,91 @@ qfprom: qfprom@fc4bc000 {
->  			reg =3D <0xfc4bc000 0x1000>;
->  			#address-cells =3D <1>;
->  			#size-cells =3D <1>;
-> +
-> +			tsens_base1: base1@1c1 {
-> +				reg =3D <0x1c1 0x2>;
-> +				bits =3D <5 8>;
-> +			};
-> +
-> +			tsens_s0_p1: s0-p1@1c2 {
-> +				reg =3D <0x1c2 0x2>;
-> +				bits =3D <5 6>;
-> +			};
-> +
-> +			tsens_s1_p1: s1-p1@1c4 {
-> +				reg =3D <0x1c4 0x1>;
-> +				bits =3D <0 6>;
-> +			};
-> +
-> +			tsens_s2_p1: s2-p1@1c4 {
-> +				reg =3D <0x1c4 0x2>;
-> +				bits =3D <6 6>;
-> +			};
-> +
-> +			tsens_s3_p1: s3-p1@1c5 {
-> +				reg =3D <0x1c5 0x2>;
-> +				bits =3D <4 6>;
-> +			};
-> +
-> +			tsens_s4_p1: s4-p1@1c6 {
-> +				reg =3D <0x1c6 0x1>;
-> +				bits =3D <2 6>;
-> +			};
-> +
-> +			tsens_s5_p1: s5-p1@1c7 {
-> +				reg =3D <0x1c7 0x1>;
-> +				bits =3D <0 6>;
-> +			};
-> +
-> +			tsens_s6_p1: s6-p1@1ca {
-> +				reg =3D <0x1ca 0x2>;
-> +				bits =3D <4 6>;
-> +			};
-> +
-> +			tsens_base2: base2@1cc {
-> +				reg =3D <0x1cc 0x1>;
-> +				bits =3D <0 8>;
-> +			};
-> +
-> +			tsens_s0_p2: s0-p2@1cd {
-> +				reg =3D <0x1cd 0x1>;
-> +				bits =3D <0 6>;
-> +			};
-> +
-> +			tsens_s1_p2: s1-p2@1cd {
-> +				reg =3D <0x1cd 0x2>;
-> +				bits =3D <6 6>;
-> +			};
-> +
-> +			tsens_s2_p2: s2-p2@1ce {
-> +				reg =3D <0x1ce 0x2>;
-> +				bits =3D <4 6>;
-> +			};
-> +
-> +			tsens_s3_p2: s3-p2@1cf {
-> +				reg =3D <0x1cf 0x1>;
-> +				bits =3D <2 6>;
-> +			};
-> +
-> +			tsens_s4_p2: s4-p2@446 {
-> +				reg =3D <0x446 0x2>;
-> +				bits =3D <4 6>;
-> +			};
-> +
-> +			tsens_s5_p2: s5-p2@447 {
-> +				reg =3D <0x447 0x1>;
-> +				bits =3D <2 6>;
-> +			};
-> +
-> +			tsens_s6_p2: s6-p2@44e {
-> +				reg =3D <0x44e 0x1>;
-> +				bits =3D <1 6>;
-> +			};
-> +
-> +			tsens_mode: mode@44f {
-> +				reg =3D <0x44f 0x1>;
-> +				bits =3D <5 3>;
-> +			};
->  		};
->=20
->  		spmi_bus: spmi@fc4cf000 {
+[snip]
+
+> > +
+> > +static int scmi_pinctrl_attributes_get(const struct scmi_protocol_handle *ph,
+> > +				       struct scmi_pinctrl_info *pi)
+> > +{
+> > +	int ret;
+> > +	struct scmi_xfer *t;
+> > +	struct scmi_msg_pinctrl_protocol_attributes *attr;
+> > +
+> > +	if (!pi)
+> > +		return -EINVAL;
+> > +
+> > +	ret = ph->xops->xfer_get_init(ph, PROTOCOL_ATTRIBUTES,
+> > +				      0, sizeof(*attr), &t);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	attr = t->rx.buf;
+> > +
+> > +	ret = ph->xops->do_xfer(ph, t);
+> > +	if (!ret) {
+> > +		pi->nr_functions =
+> > +			le16_to_cpu(GET_FUNCTIONS_NR(attr->attributes_high));
+> > +		pi->nr_groups = le16_to_cpu(GET_GROUPS_NR(attr->attributes_low));
+> > +		pi->nr_pins = le16_to_cpu(GET_PINS_NR(attr->attributes_low));
+> 
+> I see a couple of issues here present in general all across this patch when
+> you use these macros;
+> 
+> You should take care of the endianity in the RX msg payload BEFORE and THEN
+> DISSECT the bitfields AND as a consequence use also an _le helper that fits
+> the size of the type that you are processing as in (being attributes 32 bit
+> little endian in the msg payload):
+> 
+> 	pi->nr_pins = GET_PINS_NR(le32_to_cpu(attr->attributes_low));
+> 
+> Now all works just because everything is little endian really so nothing
+> is done by these macros....
+>
+
+Re-thinking about this, it turns out that the above advice of mine is
+just plain wrong :< ... being a bitfield access you cannot do what I
+badly advised you:
+
+	GET_PINS_NR(le32_to_cpu(attr->attributes_low));
+
+the right way is indeed how you did it originally...my bad...
+
+... BUT at the same time if you check your original solution:
+
+	le16_to_cpu(GET_FUNCTIONS_NR(attr->attributes_high))
+
+with a static analyzer like sparse, which dutifully checks that __le32
+style labeled are accessed in a congruent manner, I get a lot of:
+
+drivers/firmware/arm_scmi/pinctrl.c:136:25: warning: cast to restricted __le32           
+drivers/firmware/arm_scmi/pinctrl.c:136:25: warning: restricted __le32 degrades to integer
+drivers/firmware/arm_scmi/pinctrl.c:136:25: warning: restricted __le32 degrades to integer
+drivers/firmware/arm_scmi/pinctrl.c:136:25: warning: cast to restricted __le16          
+
+with your original solution and no errors with my broken proposal... :O
+
+...this is due to the fact that indeed FIELD_GET & C. are not meant to
+be used on such __le32 endian-styled vars, so sparse warns you about that
+(but my bad advice remain broken even though fine for the static analyzer...)
+
+Digging into bitfield.h, indeed, turns out that near the end, there are
+defined some LE dedicated bitfield macros (https://lwn.net/Articles/741762/)
+like:
+
+	u32 le32_get_bits(__le32 val, u32 field)
+
+So you can just convert your macros to use le32_get_bits (insted of FIELD_GET) and
+use those macros directly without the need for the additional le32_to_cpu conversion
+as in the example below. (that indeed gives me no more sparse errors)
+
+Hope not to have made to much noise :P
+
+Thanks,
+Cristian
+
+P.S.: I would also drop the RFC on V3 so that maybe a few more public check-bots
+will engage with your series
 
 
+->8---
 
+diff --git a/drivers/firmware/arm_scmi/pinctrl.c b/drivers/firmware/arm_scmi/pinctrl.c
+index 1392d15b3a58..66ea51606f46 100644
+--- a/drivers/firmware/arm_scmi/pinctrl.c
++++ b/drivers/firmware/arm_scmi/pinctrl.c
+@@ -14,15 +14,15 @@
+ #define REG_TYPE_BITS GENMASK(9, 8)
+ #define REG_CONFIG GENMASK(7, 0)
+ 
+-#define GET_GROUPS_NR(x) FIELD_GET(GENMASK(31, 16), (x))
+-#define GET_PINS_NR(x) FIELD_GET(GENMASK(15, 0), (x))
+-#define GET_FUNCTIONS_NR(x) FIELD_GET(GENMASK(15, 0), (x))
++#define GET_GROUPS_NR(x)       le32_get_bits((x), GENMASK(31, 16))
++#define GET_PINS_NR(x)         le32_get_bits((x), GENMASK(15, 0))
++#define GET_FUNCTIONS_NR(x)    le32_get_bits((x), GENMASK(15, 0))
+ 
+-#define EXT_NAME_FLAG(x) FIELD_GET(BIT(31), (x))
+-#define NUM_ELEMS(x) FIELD_GET(GENMASK(15, 0), (x))
++#define EXT_NAME_FLAG(x)       le32_get_bits((x), BIT(31))
++#define NUM_ELEMS(x)           le32_get_bits((x) ,GENMASK(15, 0))
+ 
+-#define REMAINING(x) FIELD_GET(GENMASK(31, 16), (x))
+-#define RETURNED(x) FIELD_GET(GENMASK(11, 0), (x))
++#define REMAINING(x)           le32_get_bits((x), GENMASK(31, 16))
++#define RETURNED(x)            le32_get_bits((x), GENMASK(11, 0))
+ 
+ enum scmi_pinctrl_protocol_cmd {
+        PINCTRL_ATTRIBUTES = 0x3,
+@@ -132,10 +132,9 @@ static int scmi_pinctrl_attributes_get(const struct scmi_protocol_handle *ph,
+ 
+        ret = ph->xops->do_xfer(ph, t);
+        if (!ret) {
+-               pi->nr_functions =
+-                       le16_to_cpu(GET_FUNCTIONS_NR(attr->attributes_high));
+-               pi->nr_groups = le16_to_cpu(GET_GROUPS_NR(attr->attributes_low));
+-               pi->nr_pins = le16_to_cpu(GET_PINS_NR(attr->attributes_low));
++               pi->nr_functions = GET_FUNCTIONS_NR(attr->attributes_high);
++               pi->nr_groups = GET_GROUPS_NR(attr->attributes_low);
++               pi->nr_pins = GET_PINS_NR(attr->attributes_low);
+        }
+ 
+        ph->xops->xfer_put(ph, t);
+@@ -209,7 +208,7 @@ static int scmi_pinctrl_attributes(const struct scmi_protocol_handle *ph,
+        ret = ph->xops->do_xfer(ph, t);
+        if (!ret) {
+                if (n_elems)
+-                       *n_elems = le32_to_cpu(NUM_ELEMS(rx->attributes));
++                       *n_elems = NUM_ELEMS(rx->attributes);
+                strscpy(name, rx->name, SCMI_SHORT_NAME_MAX_SIZE);
+        }
+ 
+@@ -253,8 +252,8 @@ static int iter_pinctrl_assoc_update_state(struct scmi_iterator_state *st,
+ {
+        const struct scmi_resp_pinctrl_list_assoc *r = response;
+ 
+-       st->num_returned = le32_to_cpu(RETURNED(r->flags));
+-       st->num_remaining = le32_to_cpu(REMAINING(r->flags));
++       st->num_returned = RETURNED(r->flags);
++       st->num_remaining = REMAINING(r->flags);
+ 
+        return 0;
+ }
+
+-8<---
 
