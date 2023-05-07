@@ -2,111 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8676F98FF
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 16:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F6A6F9902
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 16:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbjEGOsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 10:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        id S229472AbjEGOsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 10:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjEGOr7 (ORCPT
+        with ESMTP id S231636AbjEGOsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 10:47:59 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041931208D
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 07:47:58 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50be17a1eceso7036687a12.2
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 07:47:57 -0700 (PDT)
+        Sun, 7 May 2023 10:48:15 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F84513C28
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 07:48:12 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bceaf07b8so6886785a12.3
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 07:48:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683470876; x=1686062876;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PBw+x9bvNtvt7zmxEBMLA8rMP4RbJHux+PW551gPw/Y=;
-        b=AwInZtYbyq8MwNv/nmioV0/vEWMEkbmPYAXUNEB0pSDGTtmJrkEJirty3CUOkW0L6Q
-         i/LwNUWeJZ7LAq22+3vPajyEeXdRjOHUWMv7Gf0fFmkjM0ipTyK6NWG+ch9bAdoNLY0U
-         IURXOWqoQkWthEWtaYaZatybZDSHLg+EsGTHPzgTSGMgNVgXhhxhMvCGUgXzKRRJZA1J
-         jLteEs5cBokvh1Yxd5m1vcTKZlfksAArtrZGr4fUy+VsiqjB2wLVCpq1cugD4qiARq1f
-         T9r/21qTg4pWhVPVF81JXGhU7ryq/IlGoL9N1DJ1dKv6O8cXNEfVKeC6f6vAmxB+NoDc
-         FvxQ==
+        d=linaro.org; s=google; t=1683470890; x=1686062890;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wplxTHTVB9HUbrWkpWAx80baJV0+a3dgBkqhq/tTrmc=;
+        b=z3tcJabPZmqgYOsepbBPE9X732VUJN4dtEFcCBLwiAJeBcMBSXvVw6An53aUI1eoyg
+         FbybVNty4XwpQAk8tD5o2Mdc+b/mWukTpSIZbNddQSQLz5LRMNLaLNwlrxiAy/6QNxHw
+         u//n967Hlk/50EZ3Fd1+cARF1fWfGEoWPceaaFWgfK78SO2YyZJ9dL0d8XWn3Z90dk7q
+         zrhhYwL5fQkarFBrzcHpLFiHSn5UIwaORzgXyLRb4bnRgt3Za/aGQOosImHiYTSEdUQC
+         FDr3teKGDnJG0DB2QP9LoMDC/+UqU5q1OMUceFuQc5cnJ6Y/o7/u6NwvJbGt+bz5/0Lq
+         rPQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683470876; x=1686062876;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PBw+x9bvNtvt7zmxEBMLA8rMP4RbJHux+PW551gPw/Y=;
-        b=fZIMssiQXAhLmzXRS5mXuduwlvhizeitMQt/v6Oi++n/EZkRPd+ZBBt5It1z1a6MOl
-         9yZsZfRmO0M6VMvGvCYY46BzUvcTv3QOvgBu7A1r4EzODOCnLWfRvqGs8wuSbmmk3VSj
-         01i2CMVm2bw1Qqj4wgzgu2+3DuH8u889d2JSe7sYfyvQ09byAGKUqoAwtiyoQaxdV45k
-         acusLxHjzXCOpmHSHRErckQKmOzJOI/6q9LILASGC1MC1txcDbBNUgrYp/eHltki2UXz
-         rKV28aIjIiohIUfSdgM6X5itdXuFx1ZZl6BsmToA3iUftMcGaukMPMEx7swyDSldupMI
-         IQCQ==
-X-Gm-Message-State: AC+VfDwT+Y3jw2Zvt1UdoCI+ZNSVbSBxjB41COcZ+RVNV3iO9BF0V+fa
-        h9W+QMFjBOp+mEd3AFkGNKXVaw==
-X-Google-Smtp-Source: ACHHUZ6TCPbXEZFv7aTp7aqWDp1eF0qYHjb6r45RdoMNpf0N9RbftBDpLEB9W6gEbGIkLV9Aqg2awQ==
-X-Received: by 2002:a17:907:3e8a:b0:94e:c142:df98 with SMTP id hs10-20020a1709073e8a00b0094ec142df98mr7721629ejc.60.1683470876419;
-        Sun, 07 May 2023 07:47:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683470890; x=1686062890;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wplxTHTVB9HUbrWkpWAx80baJV0+a3dgBkqhq/tTrmc=;
+        b=M4tzbtcrlXc9sjGFjJ8Bi2Txy8J1VG4H8J+GHYjJx5I3miXTyfUd6FtFZN/UIz5BUb
+         MPTyvcHkmHhVAKqdztyVv/zsaJE5+ET8Ozpn6pbbgKUfqU26fvi5DYCCpdDY44hoLO0u
+         Duoyq/b+/fcaWcz6or+ktkr8Jpq7zHHF7LVIBzQXhQwCNqInjxxT+EHMTGo2tr7AkwQ9
+         kW9CopiTcmhv1M94G/Qj85LlpBTeat6dFulqWA9ZQ/Mb1zGJSNUyHLMwmAerEgzSMAcK
+         VvXnNlrrDQ6+qNxKlPxua1cIE2kQAXaxSmbVzvexVxX6k7CxSGek1KpRHrxFNOhxnuPp
+         i5cQ==
+X-Gm-Message-State: AC+VfDxYLn+UztXcGLzxj/GfOchZZABQ5SnI7CS3iQOB348T9nS8oHwn
+        OGs0/U7pd5Vz41wct1owRELA3Olhq1ddoIjPHBnP/g==
+X-Google-Smtp-Source: ACHHUZ5aZq3T+cKaBVve2ZSIlJTcikeOnFMzoxYFpV8zPQHL6HeFofj6o/3qbh7GbO6bfb6uKIPjTQ==
+X-Received: by 2002:a17:907:971d:b0:966:d59a:4ba6 with SMTP id jg29-20020a170907971d00b00966d59a4ba6mr57178ejc.43.1683470890593;
+        Sun, 07 May 2023 07:48:10 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:1757:b51a:9965:e81])
-        by smtp.gmail.com with ESMTPSA id j23-20020a170906051700b00960005e09a3sm3752899eja.61.2023.05.07.07.47.55
+        by smtp.gmail.com with ESMTPSA id t2-20020a1709067c0200b00965c529f103sm3659685ejo.86.2023.05.07.07.48.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 07:47:55 -0700 (PDT)
+        Sun, 07 May 2023 07:48:10 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/exynos: g2d: staticize stubs in header
-Date:   Sun,  7 May 2023 16:47:53 +0200
-Message-Id: <20230507144753.192959-1-krzysztof.kozlowski@linaro.org>
+To:     Keerthy <j-keerthy@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] gpio: davinci: correct non-kerneldoc comment
+Date:   Sun,  7 May 2023 16:48:07 +0200
+Message-Id: <20230507144807.193009-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stubs for !CONFIG_DRM_EXYNOS_G2D case in the header should be static
-inline:
+Drop kerneldoc annotation from regular comment to fix:
 
-  drivers/gpu/drm/exynos/exynos_drm_g2d.h:37:5: warning: no previous prototype for ‘g2d_open’ [-Wmissing-prototypes]
-  drivers/gpu/drm/exynos/exynos_drm_g2d.h:42:6: warning: no previous prototype for ‘g2d_close’ [-Wmissing-prototypes]
+  gpio-davinci.c:716: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
 
-Fixes: eb4d9796fa34 ("drm/exynos: g2d: Convert to driver component API")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/gpu/drm/exynos/exynos_drm_g2d.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpio/gpio-davinci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/exynos/exynos_drm_g2d.h b/drivers/gpu/drm/exynos/exynos_drm_g2d.h
-index 74ea3c26dead..1a5ae781b56c 100644
---- a/drivers/gpu/drm/exynos/exynos_drm_g2d.h
-+++ b/drivers/gpu/drm/exynos/exynos_drm_g2d.h
-@@ -34,11 +34,11 @@ static inline int exynos_g2d_exec_ioctl(struct drm_device *dev, void *data,
- 	return -ENODEV;
- }
+diff --git a/drivers/gpio/gpio-davinci.c b/drivers/gpio/gpio-davinci.c
+index aaaf61dc2632..3063e57a4174 100644
+--- a/drivers/gpio/gpio-davinci.c
++++ b/drivers/gpio/gpio-davinci.c
+@@ -712,7 +712,7 @@ static struct platform_driver davinci_gpio_driver = {
+ 	},
+ };
  
--int g2d_open(struct drm_device *drm_dev, struct drm_file *file)
-+static inline int g2d_open(struct drm_device *drm_dev, struct drm_file *file)
- {
- 	return 0;
- }
- 
--void g2d_close(struct drm_device *drm_dev, struct drm_file *file)
-+static inline void g2d_close(struct drm_device *drm_dev, struct drm_file *file)
- { }
- #endif
+-/**
++/*
+  * GPIO driver registration needs to be done before machine_init functions
+  * access GPIO. Hence davinci_gpio_drv_reg() is a postcore_initcall.
+  */
 -- 
 2.34.1
 
