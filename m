@@ -2,173 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE376F9986
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B056F998A
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbjEGPtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 11:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
+        id S231656AbjEGPzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 11:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbjEGPtQ (ORCPT
+        with ESMTP id S230399AbjEGPzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 11:49:16 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9369444B7;
-        Sun,  7 May 2023 08:49:14 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2ac8ee9cf7aso20869501fa.2;
-        Sun, 07 May 2023 08:49:13 -0700 (PDT)
+        Sun, 7 May 2023 11:55:18 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573DD6A5B;
+        Sun,  7 May 2023 08:55:17 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64115eef620so29325663b3a.1;
+        Sun, 07 May 2023 08:55:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683474550; x=1686066550;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yXVmMTlzGpsqwxVNqIgVPdFj3pbPWyuy+sB1it/GnoM=;
-        b=f9lJpX2arNLau6lrCSNLSgUcb/dKOh/FKQUW8blzJBTu5MnOzOt3TFDwqjqKL+xP7R
-         vQ06yP/zvy/cjxbtQKYQ236AAAdO7O6WfB1seEBSNn5lmiHLIsu9UIkl/iFFp/0yzuDd
-         pc5g3712gdGD1AUwmXUFK4NR9u0qt3l+xR+hukEodFLoI73v+Ocw8+VIu8CfqqSeZqEB
-         Vclh5jS55crFtnbDeXd2AIOvp8lC5tNfe5XMNsyXDzj5Jrftn7/zletbQvZz1QPj1YYJ
-         x0+3JMySJ4dzaZf8os5pcVtFfGlVfhMRIiS2suh0bBGpRknlpt5tRmuVlr+qkttnQPA6
-         zyxg==
+        d=gmail.com; s=20221208; t=1683474917; x=1686066917;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=GYb3dk460XgtsVCvhsWMRMsftl/DXZ2mh7rVvkm2EDw=;
+        b=k7CifHgNsCWx5LvdF7fIHaYUiiTtEulUmBd6XZrJknUjjn9gzQN56bL4M435r+xkMl
+         7Yt8MHg/JaTgzNMCV+lz1ELsQYjd49CRYEKKVe9vOEex0DnO/VaYVcdtRt/Iw3j6QwDn
+         0waaqU1MtlaJkvTS9RvbFJEZxngjIqnvlpuhfjazqsq948lSgvrGNMSkIWxi75d1mVZr
+         CV3nvxtJ27sEBAVqxFlP6UGkO2huCjmsP1foSNdsysFbKizFLU0X1aHJ9DI4uLJsojuu
+         sJ0jUHkxAlfbmUF5++5TTfO/Pyy1ODG/jh9WzpPDgiBA4r2ay23mwY8zbWWIshHXuRXI
+         Pq6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683474550; x=1686066550;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yXVmMTlzGpsqwxVNqIgVPdFj3pbPWyuy+sB1it/GnoM=;
-        b=gNAeJjYhcqMQwqK+a8P4yavi2BU1Y9OTJ3NSHpLHcq4zhByQ2b0p5y6RmC63VjBXCM
-         2+t5dwfN2uoBfe/joQLjQI3m2k/Zh+qNWX/fGvAZhk+2pfxdlj3IccWNQ7gRfkuREm0J
-         SBgEmtO5fB4e+vLBjET62w0b4qQ5k4A0ZcaXjvpANQtymuWvAFJg4NqQUWyyRXsoyE/w
-         EjaM3+JDT55bjdGo1w+zJepbE40yGvdY7ijHA+cVQBjlJfI1Dv22EUstxIXNewI8eiuu
-         IGCAH+xMnoVCxa0aIqP4uX++Te5r0gAaX6p+Qwk3JfAhV1dO2NIM5LyUDOO2ukXgbjBc
-         yiVA==
-X-Gm-Message-State: AC+VfDz+1g/WLG2b2Wo1phfQ6mkgxklCd45UV9pKJJNJhzTaTbWZxSKG
-        ef0tYhgrqLUh7FmZegZ0qZU=
-X-Google-Smtp-Source: ACHHUZ6Jm4w6vQZ+oNrNLJOiZriMuE7yGRQggT7eTwiriv3/sTn/k90vt5Thejo2Cg+t6vP2mZHqQQ==
-X-Received: by 2002:a2e:938c:0:b0:2a7:6fee:2503 with SMTP id g12-20020a2e938c000000b002a76fee2503mr2093662ljh.14.1683474550519;
-        Sun, 07 May 2023 08:49:10 -0700 (PDT)
-Received: from [192.168.1.111] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id w8-20020a2e9588000000b002a77583b718sm847073ljh.12.2023.05.07.08.49.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 May 2023 08:49:10 -0700 (PDT)
-Message-ID: <84a732f4-0890-307d-2b08-d7d545f1fc42@gmail.com>
-Date:   Sun, 7 May 2023 18:49:09 +0300
+        d=1e100.net; s=20221208; t=1683474917; x=1686066917;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GYb3dk460XgtsVCvhsWMRMsftl/DXZ2mh7rVvkm2EDw=;
+        b=Ip9m4hFq+Ny0GimrYuM5nZq2RQhhowJwZyGz6Ywz4suLcpLw2NeAY2JC6Oat9lQDZe
+         uI+aa5eY7g7tA4fEkSw31wCzCUcUTi3yjVgKEYWREQCg5SnHqYbfS/DUk7u/oNzqdNtL
+         KC4gt26w/OmdHtuSIPoJnUgeg10u8fa3AqzB27izekd2mspOSApPLCk4PX4Z0qc+w3Ot
+         FU+axNUnEUjGYqZdmu7DVUpxn7ayJ4psqLGb0emBfHCs0OvgkMDBqHSNmVqGZTZ1BFHI
+         4Id/DQaX5SZSw8wyA3fjF0NBgtkbeOzErMPOLA1N1kR3jCwACRngqr/CgWjpF0Dqm2B9
+         hc3A==
+X-Gm-Message-State: AC+VfDwymy9lWglVJ+Ko43kq4lWlkd/IXy5ZbMV8vBr+qdpI1wlsvXgC
+        jOAPkaZwFzDvJJ2Y7S0QVBE=
+X-Google-Smtp-Source: ACHHUZ6gBz4FXcclZPm+RTBXlHXIsHpELQy7700mjt1mMbOqWvrSVyTfrE1uE5Cp9knWG/+eauqCAA==
+X-Received: by 2002:a17:902:f685:b0:1ac:731b:bc9a with SMTP id l5-20020a170902f68500b001ac731bbc9amr1448873plg.27.1683474916488;
+        Sun, 07 May 2023 08:55:16 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id z6-20020a170903018600b001a3d041ca71sm5338360plg.275.2023.05.07.08.55.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 May 2023 08:55:16 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Marek Vasut <marex@denx.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] can: length: add definitions for frame lengths in bits
+Date:   Mon,  8 May 2023 00:55:06 +0900
+Message-Id: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 4/5] iio: light: ROHM BU27008 color sensor
-Content-Language: en-US, en-GB
-To:     Jonathan Cameron <jic23@kernel.org>,
-        "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>
-References: <cover.1682495921.git.mazziesaccount@gmail.com>
- <fb35de40a3908988f5f83e25d17119e6944d289b.1682495921.git.mazziesaccount@gmail.com>
- <ZFF1NMaR1RYThcSB@smile.fi.intel.com>
- <307cc8ce-6178-7a86-2c90-eaf0ac8c122d@fi.rohmeurope.com>
- <20230507152443.754f2fab@jic23-huawei>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230507152443.754f2fab@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/7/23 17:24, Jonathan Cameron wrote:
-> On Wed, 3 May 2023 05:11:53 +0000
-> "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com> wrote:
-> 
->> Hi Andy
->>
->> Thanks for the review.
->>
->> On 5/2/23 23:40, Andy Shevchenko wrote:
->>> On Wed, Apr 26, 2023 at 11:08:17AM +0300, Matti Vaittinen wrote:
->>>> The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
->>>> and IR) with four configurable channels. Red and green being always
->>>> available and two out of the rest three (blue, clear, IR) can be
->>>> selected to be simultaneously measured. Typical application is adjusting
->>>> LCD backlight of TVs, mobile phones and tablet PCs.
->>>>
->>>> Add initial support for the ROHM BU27008 color sensor.
->>>>    - raw_read() of RGB and clear channels
->>>>    - triggered buffer w/ DRDY interrtupt
->>>
->>> ...
->>>    
->>>> +enum {
->>>> +	BU27008_RED,	/* Always data0 */
->>>> +	BU27008_GREEN,	/* Always data1 */
->>>> +	BU27008_BLUE,	/* data2, configurable (blue / clear) */
->>>> +	BU27008_CLEAR,	/* data2 or data3 */
->>>> +	BU27008_IR,	/* data3 */
->>>> +	BU27008_NUM_CHANS
->>>
->>> Why not converting comments to a kernel-doc?
->>>    
->>>> +};
->>>> +
->>>> +enum {
->>>> +	BU27008_DATA0, /* Always RED */
->>>> +	BU27008_DATA1, /* Always GREEN */
->>>> +	BU27008_DATA2, /* Blue or Clear */
->>>> +	BU27008_DATA3, /* IR or Clear */
->>>> +	BU27008_NUM_HW_CHANS
->>>> +};
->>>
->>> Ditto.
->>
->> I see no value having entities which are not intended to be used outside
->> this file documented in any "global" documentation. One who is ever
->> going to use these or wonder what these are - will most likely be
->> watching this file. My personal view is that the generated docs should
->> be kept lean. In my opinion the problem of the day is the time we spend
->> looking for a needle hidden in a haystack. In my opinion adding this to
->> kernel-doc just adds hay :)
-> 
->>
->> I still can do this if no-one else objects. I almost never look at the
->> generated docs myself. Usually I just look the docs from code files -
->> and kernel-doc format is not any worse for me to read. Still, I can
->> imagine including this type of stuff to generic doc just bloats them and
->> my not serve well those who use them.
-> 
-> 
-> Unless someone specifically adds this doc to the main docs build, the
-> kernel-doc won't end up in the docs anyway.
+When created in [1], frames length definitions were added to implement
+byte queue limits (bql). Because bql expects lengths in bytes, bit
+length definitions were not considered back then.
 
-Ah! This makes sense. Thanks for correcting me!
+Recently, a need to refer to the exact frame length in bits, with CAN
+bit stuffing, appeared in [2].
 
-> It just provides a nice
-> bit of consistent formatting. Even if they do add this for some reason,
-> there are controls on internal vs external (exported stuff) being added
-> to the docs.
+Add 9 frames length definitions:
 
-I'll use kernel-doc for this then.
+ - CAN_FRAME_OVERHEAD_SFF_BITS:
+ - CAN_FRAME_OVERHEAD_EFF_BITS
+ - CANFD_FRAME_OVERHEAD_SFF_BITS
+ - CANFD_FRAME_OVERHEAD_EFF_BITS
+ - CAN_BIT_STUFFING_OVERHEAD
+ - CAN_FRAME_LEN_MAX_BITS_NO_STUFFING
+ - CAN_FRAME_LEN_MAX_BITS_STUFFING
+ - CANFD_FRAME_LEN_MAX_BITS_NO_STUFFING
+ - CANFD_FRAME_LEN_MAX_BITS_STUFFING
 
+CAN_FRAME_LEN_MAX_BITS_STUFFING and CANFD_FRAME_LEN_MAX_BITS_STUFFING
+define respectively the maximum number of bits in a classical CAN and
+CAN-FD frame including bit stuffing. The other definitions are
+intermediate values.
 
-Yours,
-	-- Matti
+In addition to the above:
 
+ - Include linux/bits.h and then replace the value 8 by BITS_PER_BYTE
+   whenever relevant.
+ - Include linux/math.h because of DIV_ROUND_UP(). N.B: the use of
+   DIV_ROUND_UP() is not new to this patch, but the include was
+   previously omitted.
+ - Update the existing length definitions to use the newly defined values.
+ - Add myself as copyright owner for 2020 (as coauthor of the initial
+   version, c.f. [1]) and for 2023 (this patch).
+
+[1] commit 85d99c3e2a13 ("can: length: can_skb_get_frame_len(): introduce
+    function to get data length of frame in data link layer")
+Link: https://git.kernel.org/torvalds/c/85d99c3e2a13
+
+[2] RE: [PATCH] can: mcp251xfd: Increase poll timeout
+Link: https://lore.kernel.org/linux-can/BL3PR11MB64846C83ACD04E9330B0FE66FB729@BL3PR11MB6484.namprd11.prod.outlook.com/
+
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+As always, let me know if you have better inspiration than me for the
+naming.
+---
+ include/linux/can/length.h | 84 ++++++++++++++++++++++++++++++++------
+ 1 file changed, 72 insertions(+), 12 deletions(-)
+
+diff --git a/include/linux/can/length.h b/include/linux/can/length.h
+index 6995092b774e..60492fcbe34d 100644
+--- a/include/linux/can/length.h
++++ b/include/linux/can/length.h
+@@ -1,13 +1,17 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /* Copyright (C) 2020 Oliver Hartkopp <socketcan@hartkopp.net>
+  * Copyright (C) 2020 Marc Kleine-Budde <kernel@pengutronix.de>
++ * Copyright (C) 2020, 2023 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+  */
+ 
+ #ifndef _CAN_LENGTH_H
+ #define _CAN_LENGTH_H
+ 
++#include <linux/bits.h>
++#include <linux/math.h>
++
+ /*
+- * Size of a Classical CAN Standard Frame
++ * Size of a Classical CAN Standard Frame in bits
+  *
+  * Name of Field			Bits
+  * ---------------------------------------------------------
+@@ -25,12 +29,19 @@
+  * End-of-frame (EOF)			7
+  * Inter frame spacing			3
+  *
+- * rounded up and ignoring bitstuffing
++ * ignoring bitstuffing
+  */
+-#define CAN_FRAME_OVERHEAD_SFF DIV_ROUND_UP(47, 8)
++#define CAN_FRAME_OVERHEAD_SFF_BITS 47
+ 
+ /*
+- * Size of a Classical CAN Extended Frame
++ * Size of a Classical CAN Standard Frame
++ * (rounded up and ignoring bitstuffing)
++ */
++#define CAN_FRAME_OVERHEAD_SFF \
++	DIV_ROUND_UP(CAN_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
++
++/*
++ * Size of a Classical CAN Extended Frame in bits
+  *
+  * Name of Field			Bits
+  * ---------------------------------------------------------
+@@ -50,12 +61,19 @@
+  * End-of-frame (EOF)			7
+  * Inter frame spacing			3
+  *
+- * rounded up and ignoring bitstuffing
++ * ignoring bitstuffing
+  */
+-#define CAN_FRAME_OVERHEAD_EFF DIV_ROUND_UP(67, 8)
++#define CAN_FRAME_OVERHEAD_EFF_BITS 67
+ 
+ /*
+- * Size of a CAN-FD Standard Frame
++ * Size of a Classical CAN Extended Frame
++ * (rounded up and ignoring bitstuffing)
++ */
++#define CAN_FRAME_OVERHEAD_EFF \
++	DIV_ROUND_UP(CAN_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
++
++/*
++ * Size of a CAN-FD Standard Frame in bits
+  *
+  * Name of Field			Bits
+  * ---------------------------------------------------------
+@@ -77,12 +95,19 @@
+  * End-of-frame (EOF)			7
+  * Inter frame spacing			3
+  *
+- * assuming CRC21, rounded up and ignoring bitstuffing
++ * assuming CRC21 and ignoring bitstuffing
+  */
+-#define CANFD_FRAME_OVERHEAD_SFF DIV_ROUND_UP(61, 8)
++#define CANFD_FRAME_OVERHEAD_SFF_BITS 61
+ 
+ /*
+- * Size of a CAN-FD Extended Frame
++ * Size of a CAN-FD Standard Frame
++ * (assuming CRC21, rounded up and ignoring bitstuffing)
++ */
++#define CANFD_FRAME_OVERHEAD_SFF \
++	DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
++
++/*
++ * Size of a CAN-FD Extended Frame in bits
+  *
+  * Name of Field			Bits
+  * ---------------------------------------------------------
+@@ -106,9 +131,32 @@
+  * End-of-frame (EOF)			7
+  * Inter frame spacing			3
+  *
+- * assuming CRC21, rounded up and ignoring bitstuffing
++ * assuming CRC21 and ignoring bitstuffing
++ */
++#define CANFD_FRAME_OVERHEAD_EFF_BITS 80
++
++/*
++ * Size of a CAN-FD Extended Frame
++ * (assuming CRC21, rounded up and ignoring bitstuffing)
++ */
++#define CANFD_FRAME_OVERHEAD_EFF \
++	DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
++
++/* CAN bit stuffing overhead multiplication factor */
++#define CAN_BIT_STUFFING_OVERHEAD 1.2
++
++/*
++ * Maximum size of a Classical CAN frame in bits, ignoring bitstuffing
+  */
+-#define CANFD_FRAME_OVERHEAD_EFF DIV_ROUND_UP(80, 8)
++#define CAN_FRAME_LEN_MAX_BITS_NO_STUFFING \
++	(CAN_FRAME_OVERHEAD_EFF_BITS + CAN_MAX_DLEN * BITS_PER_BYTE)
++
++/*
++ * Maximum size of a Classical CAN frame in bits, including bitstuffing
++ */
++#define CAN_FRAME_LEN_MAX_BITS_STUFFING				\
++	((unsigned int)(CAN_FRAME_LEN_MAX_BITS_NO_STUFFING *	\
++			CAN_BIT_STUFFING_OVERHEAD))
+ 
+ /*
+  * Maximum size of a Classical CAN frame
+@@ -116,6 +164,18 @@
+  */
+ #define CAN_FRAME_LEN_MAX (CAN_FRAME_OVERHEAD_EFF + CAN_MAX_DLEN)
+ 
++/*
++ * Maximum size of a CAN-FD frame in bits, ignoring bitstuffing
++ */
++#define CANFD_FRAME_LEN_MAX_BITS_NO_STUFFING \
++	(CANFD_FRAME_OVERHEAD_EFF_BITS + CANFD_MAX_DLEN * BITS_PER_BYTE)
++
++/*
++ * Maximum size of a CAN-FD frame in bits, ignoring bitstuffing
++ */
++#define CANFD_FRAME_LEN_MAX_BITS_STUFFING			\
++	((unsigned int)(CANFD_FRAME_LEN_MAX_BITS_NO_STUFFING *	\
++			CAN_BIT_STUFFING_OVERHEAD))
+ /*
+  * Maximum size of a CAN-FD frame
+  * (rounded up and ignoring bitstuffing)
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.39.3
 
