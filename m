@@ -2,253 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2806F97DD
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 11:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 498446F97DF
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 11:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjEGJLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 05:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
+        id S231152AbjEGJMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 05:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjEGJLN (ORCPT
+        with ESMTP id S230489AbjEGJMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 05:11:13 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED922D41
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 02:11:11 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50b383222f7so5146527a12.3
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 02:11:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683450670; x=1686042670;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WJVeF+6z9/ggAVBD2uz3HdoqI651ez6nvvs/Z94Hn3E=;
-        b=ge34Tv1nacy0JlU4TMCDkcjgWKAcwLxMPJ2dqttvd5QDmlGBDNjo3SDaU8jS089GVp
-         97aXexc5Ub/WBVBLBKqwau9eKg4cPpITPJiu9XBXVv4sWtFkODGN+fZRYn0+Lwj78Wr9
-         fOCcWeplDjReFtG1ZWY+8Gg2ComYyfme+ZItmqx1XGp1d+YGrInfxG3ssasguj6Cmj4I
-         UTuYDaGVfumJ4RzEE9sZ+/IqtW0M5spGQAofcgx5AzDbXSrirbcMKLuMiR+Wcl3xBsCV
-         HiX+k/H4PkUKmHdfKesGyx5UbqayeiVibn5DjwZLthhz+4P6ExoNcTFTN5AuH7Pamixs
-         JCxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683450670; x=1686042670;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WJVeF+6z9/ggAVBD2uz3HdoqI651ez6nvvs/Z94Hn3E=;
-        b=Zci37I/kPBIkSfdAbvcFs4Nn9tV83TxRKVhL2O7H30UgKT2/A043iggHjolA2QiUwG
-         4EF38QZiGjRXcBt2mhWF/HFboYanmbQtH+qskxNWe7rAujvQFwQvHkwOFgaX6isDd08a
-         623SnbtPjb/Bx10LolzSdyCNjWT3g+PSO8bxcHZ1qVC2cN+tP2FBdVjncm4Lh+SsEpuc
-         nVZAupNTO1lKyqZlRtGr3Z7OJ2F4Y+3m05ZrdxO6ZoimKILOQD4oY6C0F8qcqwrt0ScG
-         oY8Fqe/PyVrc7t8WncpwlyNidSPVrcELZfHm8KpPmCLYxwHjCw2cHTMinL69qD4XQaeX
-         9eyA==
-X-Gm-Message-State: AC+VfDyeEuViutWVnYcIAtaSBvEmfl9JhmxnMVxpyv9sz09FmH0soFR/
-        /KveVHw5bndsJnig4zfv6JtVzg==
-X-Google-Smtp-Source: ACHHUZ56Cj45M5bkDI2Qkj+cfrrqHrRXimMDzax69r9LP0DJegFaXQGg0XWQuxCR+n66BEZ9LerK4Q==
-X-Received: by 2002:a17:907:6d01:b0:957:29e5:1695 with SMTP id sa1-20020a1709076d0100b0095729e51695mr5594140ejc.65.1683450669593;
-        Sun, 07 May 2023 02:11:09 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:183b:950f:b4d5:135a? ([2a02:810d:15c0:828:183b:950f:b4d5:135a])
-        by smtp.gmail.com with ESMTPSA id ze16-20020a170906ef9000b00965ec1faf27sm3024164ejb.74.2023.05.07.02.11.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 May 2023 02:11:08 -0700 (PDT)
-Message-ID: <10b32e55-4d28-5405-035e-c73a514c95e4@linaro.org>
-Date:   Sun, 7 May 2023 11:11:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [Patch v7 1/8] memory: tegra: add interconnect support for DRAM
- scaling in Tegra234
-Content-Language: en-US
-To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org, helgaas@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
-        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
-        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
-References: <20230424131337.20151-1-sumitg@nvidia.com>
- <20230424131337.20151-2-sumitg@nvidia.com>
- <7c6c6584-204a-ada1-d669-2e8bef50e5e5@linaro.org>
- <3071273b-b03b-5fc8-ffa1-9b18311a3a5d@nvidia.com>
- <5ab9687e-756d-f94b-b085-931d4ea534c1@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5ab9687e-756d-f94b-b085-931d4ea534c1@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 7 May 2023 05:12:21 -0400
+Received: from mail-m127104.qiye.163.com (mail-m127104.qiye.163.com [115.236.127.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EDB93EF
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 02:12:19 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPV6:240e:3b7:3277:3e50:d9d7:3dc:49c3:c0bf])
+        by mail-m127104.qiye.163.com (Hmail) with ESMTPA id 36F23A4010E;
+        Sun,  7 May 2023 17:12:14 +0800 (CST)
+From:   Ding Hui <dinghui@sangfor.com.cn>
+To:     chuck.lever@oracle.com, jlayton@kernel.org,
+        trond.myklebust@hammerspace.com, anna@kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, bfields@redhat.com, linux-nfs@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dinghui@sangfor.com.cn
+Subject: [RFC PATCH] SUNRPC: Fix UAF in svc_tcp_listen_data_ready()
+Date:   Sun,  7 May 2023 17:11:31 +0800
+Message-Id: <20230507091131.23540-1-dinghui@sangfor.com.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDSB5LVh1MHkNLSE0aSx9PT1UTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlPSx5BSBlMQUhJTExBSB5OS0EfQh9MQUgfGEFPQhhIQRhLGR1ZV1kWGg8SFR0UWU
+        FZT0tIVUpKS0hKTFVKS0tVS1kG
+X-HM-Tid: 0a87f57ba7f5b282kuuu36f23a4010e
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PQg6HAw*DD0KCTErOhU*OAwu
+        LDJPCwxVSlVKTUNIT05LTEhOS0xCVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlJT0seQUgZTEFISUxMQUgeTktBH0IfTEFIHxhBT0IYSEEYSxkdWVdZCAFZQU1LTEM3Bg++
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/04/2023 17:21, Sumit Gupta wrote:
-> 
-> 
-> On 24/04/23 20:30, Sumit Gupta wrote:
->>
->>
->> On 24/04/23 19:18, Krzysztof Kozlowski wrote:
->>> External email: Use caution opening links or attachments
->>>
->>>
->>> On 24/04/2023 15:13, Sumit Gupta wrote:
->>>> Add Interconnect framework support to dynamically set the DRAM
->>>> bandwidth from different clients. Both the MC and EMC drivers are
->>>> added as ICC providers. The path for any request is:
->>>>   MC-Client[1-n] -> MC -> EMC -> EMEM/DRAM
->>>>
->>> Thank you for your patch. There is something to discuss/improve.
->>>
->>>
->>>> +static int tegra_emc_interconnect_init(struct tegra186_emc *emc)
->>>> +{
->>>> +     struct tegra_mc *mc = dev_get_drvdata(emc->dev->parent);
->>>> +     const struct tegra_mc_soc *soc = mc->soc;
->>>> +     struct icc_node *node;
->>>> +     int err;
->>>> +
->>>> +     emc->provider.dev = emc->dev;
->>>> +     emc->provider.set = tegra_emc_icc_set_bw;
->>>> +     emc->provider.data = &emc->provider;
->>>> +     emc->provider.aggregate = soc->icc_ops->aggregate;
->>>> +     emc->provider.xlate = tegra_emc_of_icc_xlate;
->>>> +     emc->provider.get_bw = tegra_emc_icc_get_init_bw;
->>>> +
->>>> +     icc_provider_init(&emc->provider);
->>>> +
->>>> +     /* create External Memory Controller node */
->>>> +     node = icc_node_create(TEGRA_ICC_EMC);
->>>> +     if (IS_ERR(node)) {
->>>> +             err = PTR_ERR(node);
->>>> +             goto err_msg;
->>>> +     }
->>>> +
->>>> +     node->name = "External Memory Controller";
->>>> +     icc_node_add(node, &emc->provider);
->>>> +
->>>> +     /* link External Memory Controller to External Memory (DRAM) */
->>>> +     err = icc_link_create(node, TEGRA_ICC_EMEM);
->>>> +     if (err)
->>>> +             goto remove_nodes;
->>>> +
->>>> +     /* create External Memory node */
->>>> +     node = icc_node_create(TEGRA_ICC_EMEM);
->>>> +     if (IS_ERR(node)) {
->>>> +             err = PTR_ERR(node);
->>>> +             goto remove_nodes;
->>>> +     }
->>>> +
->>>> +     node->name = "External Memory (DRAM)";
->>>> +     icc_node_add(node, &emc->provider);
->>>> +
->>>> +     err = icc_provider_register(&emc->provider);
->>>> +     if (err)
->>>> +             goto remove_nodes;
->>>> +
->>>> +     return 0;
->>>> +
->>>> +remove_nodes:
->>>> +     icc_nodes_remove(&emc->provider);
->>>> +err_msg:
->>>> +     dev_err(emc->dev, "failed to initialize ICC: %d\n", err);
->>>> +
->>>> +     return err;
->>>> +}
->>>> +
->>>>   static int tegra186_emc_probe(struct platform_device *pdev)
->>>>   {
->>>> +     struct tegra_mc *mc = dev_get_drvdata(pdev->dev.parent);
->>>>        struct mrq_emc_dvfs_latency_response response;
->>>>        struct tegra_bpmp_message msg;
->>>>        struct tegra186_emc *emc;
->>>> @@ -236,6 +339,29 @@ static int tegra186_emc_probe(struct 
->>>> platform_device *pdev)
->>>>        debugfs_create_file("max_rate", S_IRUGO | S_IWUSR, 
->>>> emc->debugfs.root,
->>>>                            emc, &tegra186_emc_debug_max_rate_fops);
->>>>
->>>> +     if (mc && mc->soc->icc_ops) {
->>>> +             /*
->>>> +              * Initialize the ICC even if BPMP-FW doesn't support 
->>>> 'MRQ_BWMGR_INT'.
->>>> +              * Use the flag 'mc->bwmgr_mrq_supported' within MC 
->>>> driver and return
->>>> +              * EINVAL instead of passing the request to BPMP-FW 
->>>> later when the BW
->>>> +              * request is made by client with 'icc_set_bw()' call.
->>>> +              */
->>>> +             err = tegra_emc_interconnect_init(emc);
->>>> +             if (err)
->>>> +                     goto put_bpmp;
->>>> +
->>>> +             if (tegra_bpmp_mrq_is_supported(emc->bpmp, 
->>>> MRQ_BWMGR_INT)) {
->>>> +                     mc->bwmgr_mrq_supported = true;
->>>> +
->>>> +                     /*
->>>> +                      * MC driver probe can't get BPMP reference as 
->>>> it gets probed
->>>> +                      * earlier than BPMP. So, save the BPMP ref got 
->>>> from the EMC
->>>> +                      * DT node in the mc->bpmp and use it in MC's 
->>>> icc_set hook.
->>>> +                      */
->>>> +                     mc->bpmp = emc->bpmp;
->>>
->>> This (and ()) are called without any locking. You register first the
->>> interconnect, so set() callback can be used, right? Then set() could be
->>> called anytime between tegra_emc_interconnect_init() and assignment
->>> above. How do you synchronize these?
->>>
->>> Best regards,
->>> Krzysztof
->>>
->>
->> Currently, the tegra234_mc_icc_set() has NULL check. So, it will give 
->> this error.
->>   if (!mc->bpmp) {
+After the listener svc_sock freed, and before invoking svc_tcp_accept()
+for the established child sock, there is a window that the newsock
+retaining a freed listener svc_sock in sk_user_data which cloning from
+parent. In the race windows if data is received on the newsock, we will
+observe use-after-free report in svc_tcp_listen_data_ready().
 
-How does it solve concurrent accesses and re-ordering of instructions by
-compiler or CPU?
+Reproduce by two tasks:
 
->>           dev_err(mc->dev, "BPMP reference NULL\n");
->>           return -ENOENT;
->>   }
->>
->> To fix, we can do the below change and swap the order. Please let me 
->> know if this sounds fine ?
->>   if (mc && mc->soc->icc_ops) {
->>           if (tegra_bpmp_mrq_is_supported(emc->bpmp, MRQ_BWMGR_INT)) {
->>                   mc->bwmgr_mrq_supported = true;
->>                   mc->bpmp = emc->bpmp;
->>           }
->>
->>           err = tegra_emc_interconnect_init(emc);
->>           if (err)
->>                   goto put_bpmp;
->>
->>   }
-> Sorry, replied too soon. Missed setting "mc->bpmp" to NULL. Sharing new 
-> proposed change. Please let me know if this looks OK.
-> 
->   if (mc && mc->soc->icc_ops) {
->      if (tegra_bpmp_mrq_is_supported(emc->bpmp, MRQ_BWMGR_INT)) {
->              mc->bwmgr_mrq_supported = true;
->              mc->bpmp = emc->bpmp;
->      }
-> 
->      err = tegra_emc_interconnect_init(emc);
->      if (err) {
->              mc->bpmp = NULL;
->              goto put_bpmp;
+1. while :; do rpc.nfsd 0 ; rpc.nfsd; done
+2. while :; do echo "" | ncat -4 127.0.0.1 2049 ; done
 
-Sorry, I didn't check the code. I assume you should do it...
+KASAN report:
 
-Best regards,
-Krzysztof
+  ==================================================================
+  BUG: KASAN: slab-use-after-free in svc_tcp_listen_data_ready+0x1cf/0x1f0 [sunrpc]
+  Read of size 8 at addr ffff888139d96228 by task nc/102553
+  CPU: 7 PID: 102553 Comm: nc Not tainted 6.3.0+ #18
+  Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
+  Call Trace:
+   <IRQ>
+   dump_stack_lvl+0x33/0x50
+   print_address_description.constprop.0+0x27/0x310
+   print_report+0x3e/0x70
+   kasan_report+0xae/0xe0
+   svc_tcp_listen_data_ready+0x1cf/0x1f0 [sunrpc]
+   tcp_data_queue+0x9f4/0x20e0
+   tcp_rcv_established+0x666/0x1f60
+   tcp_v4_do_rcv+0x51c/0x850
+   tcp_v4_rcv+0x23fc/0x2e80
+   ip_protocol_deliver_rcu+0x62/0x300
+   ip_local_deliver_finish+0x267/0x350
+   ip_local_deliver+0x18b/0x2d0
+   ip_rcv+0x2fb/0x370
+   __netif_receive_skb_one_core+0x166/0x1b0
+   process_backlog+0x24c/0x5e0
+   __napi_poll+0xa2/0x500
+   net_rx_action+0x854/0xc90
+   __do_softirq+0x1bb/0x5de
+   do_softirq+0xcb/0x100
+   </IRQ>
+   <TASK>
+   ...
+   </TASK>
+
+  Allocated by task 102371:
+   kasan_save_stack+0x1e/0x40
+   kasan_set_track+0x21/0x30
+   __kasan_kmalloc+0x7b/0x90
+   svc_setup_socket+0x52/0x4f0 [sunrpc]
+   svc_addsock+0x20d/0x400 [sunrpc]
+   __write_ports_addfd+0x209/0x390 [nfsd]
+   write_ports+0x239/0x2c0 [nfsd]
+   nfsctl_transaction_write+0xac/0x110 [nfsd]
+   vfs_write+0x1c3/0xae0
+   ksys_write+0xed/0x1c0
+   do_syscall_64+0x38/0x90
+   entry_SYSCALL_64_after_hwframe+0x72/0xdc
+
+  Freed by task 102551:
+   kasan_save_stack+0x1e/0x40
+   kasan_set_track+0x21/0x30
+   kasan_save_free_info+0x2a/0x50
+   __kasan_slab_free+0x106/0x190
+   __kmem_cache_free+0x133/0x270
+   svc_xprt_free+0x1e2/0x350 [sunrpc]
+   svc_xprt_destroy_all+0x25a/0x440 [sunrpc]
+   nfsd_put+0x125/0x240 [nfsd]
+   nfsd_svc+0x2cb/0x3c0 [nfsd]
+   write_threads+0x1ac/0x2a0 [nfsd]
+   nfsctl_transaction_write+0xac/0x110 [nfsd]
+   vfs_write+0x1c3/0xae0
+   ksys_write+0xed/0x1c0
+   do_syscall_64+0x38/0x90
+   entry_SYSCALL_64_after_hwframe+0x72/0xdc
+
+In this RFC patch, I try to fix the UAF by skipping dereferencing
+svsk for all child socket in svc_tcp_listen_data_ready(), it is
+easy to backport for stable.
+
+However I'm not sure if there are other potential risks in the race
+window, so I thought another fix which depends on SK_USER_DATA_NOCOPY
+introduced in commit f1ff5ce2cd5e ("net, sk_msg: Clear sk_user_data
+pointer on clone if tagged").
+
+Saving svsk into sk_user_data with SK_USER_DATA_NOCOPY tag in
+svc_setup_socket() like this:
+
+  __rcu_assign_sk_user_data_with_flags(inet, svsk, SK_USER_DATA_NOCOPY);
+
+Obtaining svsk in callbacks like this:
+
+  struct svc_sock *svsk = rcu_dereference_sk_user_data(sk);
+
+This will avoid copying sk_user_data for sunrpc svc_sock in
+sk_clone_lock(), so the sk_user_data of child sock before accepted
+will be NULL.
+
+Appreciate any comment and suggestion, thanks.
+
+Fixes: fa9251afc33c ("SUNRPC: Call the default socket callbacks instead of open coding")
+Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+---
+ net/sunrpc/svcsock.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
+
+diff --git a/net/sunrpc/svcsock.c b/net/sunrpc/svcsock.c
+index a51c9b989d58..9aca6e1e78e4 100644
+--- a/net/sunrpc/svcsock.c
++++ b/net/sunrpc/svcsock.c
+@@ -825,12 +825,6 @@ static void svc_tcp_listen_data_ready(struct sock *sk)
+ 
+ 	trace_sk_data_ready(sk);
+ 
+-	if (svsk) {
+-		/* Refer to svc_setup_socket() for details. */
+-		rmb();
+-		svsk->sk_odata(sk);
+-	}
+-
+ 	/*
+ 	 * This callback may called twice when a new connection
+ 	 * is established as a child socket inherits everything
+@@ -839,13 +833,18 @@ static void svc_tcp_listen_data_ready(struct sock *sk)
+ 	 *    when one of child sockets become ESTABLISHED.
+ 	 * 2) data_ready method of the child socket may be called
+ 	 *    when it receives data before the socket is accepted.
+-	 * In case of 2, we should ignore it silently.
++	 * In case of 2, we should ignore it silently and DO NOT
++	 * dereference svsk.
+ 	 */
+-	if (sk->sk_state == TCP_LISTEN) {
+-		if (svsk) {
+-			set_bit(XPT_CONN, &svsk->sk_xprt.xpt_flags);
+-			svc_xprt_enqueue(&svsk->sk_xprt);
+-		}
++	if (sk->sk_state != TCP_LISTEN)
++		return;
++
++	if (svsk) {
++		/* Refer to svc_setup_socket() for details. */
++		rmb();
++		svsk->sk_odata(sk);
++		set_bit(XPT_CONN, &svsk->sk_xprt.xpt_flags);
++		svc_xprt_enqueue(&svsk->sk_xprt);
+ 	}
+ }
+ 
+-- 
+2.17.1
 
