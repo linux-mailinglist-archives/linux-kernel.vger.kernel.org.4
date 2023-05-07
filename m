@@ -2,136 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D829E6F9916
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 16:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3ED6F98F9
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 16:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbjEGO71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 10:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S231594AbjEGOpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 10:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjEGO7Z (ORCPT
+        with ESMTP id S229472AbjEGOpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 10:59:25 -0400
+        Sun, 7 May 2023 10:45:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1951991;
-        Sun,  7 May 2023 07:59:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0A611D89;
+        Sun,  7 May 2023 07:45:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6A3A61045;
-        Sun,  7 May 2023 14:59:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BEB2C433EF;
-        Sun,  7 May 2023 14:59:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5151760FF9;
+        Sun,  7 May 2023 14:45:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C5BC433EF;
+        Sun,  7 May 2023 14:45:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683471563;
-        bh=NeAOdMPVtUbV6szYveAYO+EqW1OkvAu1L9rmW8uT9u4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=M/TzFL/qt16WRTKQlMCUu/IZS+drjx9iCT6VhRbscxJFkaeuM6eW+QDFcvTNLWQgy
-         ICl+fxmZgxA6MLLx48O06/HKNR/qODbpvQ1L/CtwdvaaiMsCKh/vhdpOp9q0ooRfFM
-         w/gAEw6bdUDX+zcMZgJ1A9usOSW41y79w9eWOedoZIuah7toVDO10cOV8MoV3E2b6a
-         4LwOuSh++NIHJ42Sb3qmX7gpnq9SaSC2hHOZMO0DZiWj5BxQqY+aoV8TlI9/cbbxoe
-         j2VATwA0Ikt0X4pBm0J5PDya/XMOZBwVq5Iso2ur1AMhZtKKD2MeDgZgstkKcjyZfT
-         qXdRcQPmbjqXA==
-Message-ID: <50bd90dc-d66a-ba7a-4b05-b2455d97e1ee@kernel.org>
-Date:   Sun, 7 May 2023 23:59:17 +0900
+        s=k20201202; t=1683470710;
+        bh=f3AxfwqEtAr5VZd9yHfGJdkHrsRn7CJ/CJ1thpUvEUQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Od2gsyxzXbSQBBRpPLRVAiujAEjY/fkZGyHrC+o2g1bK2ZrxBCI7+By+b7y4r3PU6
+         fdWMl6QYhI8CUytNTl+AQGblExCMj1v0+5D7ZlzyEitLGUFCak6TlrrUi5qQ/1U1WJ
+         P9+Z6rx00FpS8ojUjvzv6CTitQUzqPndbZ3sOxivw+iYkKQeWyEO6nW1HRDW78D2oW
+         lUJDA6EvG1gC3q53C9kkyK5ejsV5Hhvku97cym7N4/5eupfkfllYrtitijlwAj5nbJ
+         ZbNeXYAYNJn1vkjhtBNvUQF+QOJWtFJ66oqBc1WExFGWkwz1c03WSU1/da2VPLrcV9
+         PB1GXJ85b1aPA==
+Date:   Sun, 7 May 2023 16:01:04 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>
+Cc:     Masahiro Honda <honda@mechatrax.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] Fix IRQ issue by setting IRQ_DISABLE_UNLAZY flag
+Message-ID: <20230507160104.1d6e8bb8@jic23-huawei>
+In-Reply-To: <f83adfd4df5cd23176721087a4fcd9a0225c3483.camel@gmail.com>
+References: <20230502102930.773-1-honda@mechatrax.com>
+        <f83adfd4df5cd23176721087a4fcd9a0225c3483.camel@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v2] ata: libata-scsi: Fix get identity data failed
-Content-Language: en-US
-To:     yangxingui <yangxingui@huawei.com>,
-        John Garry <john.g.garry@oracle.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, prime.zeng@hisilicon.com,
-        kangfenglong@huawei.com
-References: <20230505025712.19438-1-yangxingui@huawei.com>
- <291f1d97-9195-45ac-8e12-058f5c797277@kernel.org>
- <b13c9445-39c5-f207-d5d0-d6c86eee54ae@oracle.com>
- <1b703656-e966-63f8-19dd-33e4e9914676@huawei.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <1b703656-e966-63f8-19dd-33e4e9914676@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/05/05 18:14, yangxingui wrote:
-> 
-> 
-> On 2023/5/5 16:25, John Garry wrote:
->> On 05/05/2023 09:17, Damien Le Moal wrote:
->>>> --- a/drivers/ata/libata-scsi.c
->>>> +++ b/drivers/ata/libata-scsi.c
->>>> @@ -26,6 +26,7 @@
->>>>   #include <scsi/scsi_device.h>
->>>>   #include <scsi/scsi_tcq.h>
->>>>   #include <scsi/scsi_transport.h>
->>>> +#include <scsi/libsas.h>
->>
->> hmmm... is it really acceptable that libata is referencing libsas? I 
->> didn't think that it would be. libsas uses libata, not the other way 
->> around.
-> Yeah, I didn't expect that either. Is there any other way? If so, is 
-> patch v1 OK?
->>
->>>>   #include <linux/libata.h>
->>>>   #include <linux/hdreg.h>
->>>>   #include <linux/uaccess.h>
->>>> @@ -2745,10 +2746,17 @@ static struct ata_device 
->>>> *__ata_scsi_find_dev(struct ata_port *ap,
->>>>    *    Associated ATA device, or %NULL if not found.
->>>>    */
->>>>   struct ata_device *
->>>> -ata_scsi_find_dev(struct ata_port *ap, const struct scsi_device 
->>>> *scsidev)
->>> Why drop the const ?
->>>
->>>> +ata_scsi_find_dev(struct ata_port *ap, struct scsi_device *scsidev)
->>>>   {
->>>> -    struct ata_device *dev = __ata_scsi_find_dev(ap, scsidev);
->>>> +    struct ata_device *dev;
->>>> +
->>>> +    if (ap->flags & ATA_FLAG_SAS_HOST) {
->>
->> And this is SAS host. Not necessarily libsas (even though with ipr 
->> libata usage gone, it would be the only user).
-> Add a new flag only for libsas?
+On Wed, 03 May 2023 10:09:28 +0200
+Nuno S=C3=A1 <noname.nuno@gmail.com> wrote:
 
-ATA_FLAG_SAS_HOST is now only used by libsas. So we should rename this flag to
-ATA_FLAG_LIBSAS_HOST to be clear about it. And looking at how the flag is used
-(in only 2 places), I wonder if we could get rid of it entirely...
+Patch title should be something like the following so it's easy to see what
+is affected when looking at a long list of patches.
 
-With the ipr driver gone, there is a lot of cleanup in libata that can be done,
-especially around EH code. Will be working on that.
+iio: adc: ad_sigma_delta: Fix IRQ issue by setting IRQ_DISABLE_UNLAZY flag.
 
-> 
-> Thanks,
-> Xingui
-> .
->>
->>>> +        struct domain_device *ddev = sdev_to_domain_dev(scsidev);
->>>> +
->>>> +        return sas_to_ata_dev(ddev);
->>> Do you really need the ddev variable ? Also, this really should be a 
->>> libsas
->>> helper. I beleive this pattern is repeated in several places in 
->>> libsas, so that
->>> would nicely clean things up.
->>>
->> Thanks,
->> John
->> .
 
--- 
-Damien Le Moal
-Western Digital Research
+> On Tue, 2023-05-02 at 19:29 +0900, Masahiro Honda wrote:
+> > The Sigma-Delta ADCs supported by this driver can use SDO as an interru=
+pt
+> > line to indicate the completion of a conversion. However, some devices
+> > cannot properly detect the completion of a conversion by an interrupt.
+> > This is for the reason mentioned in the following commit.
+> >=20
+> > commit e9849777d0e2 ("genirq: Add flag to force mask in
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 disable_irq[_nosy=
+nc]()")
+> >=20
+> > A read operation is performed by an extra interrupt before the completi=
+on
+> > of a conversion. This patch fixes the issue by setting IRQ_DISABLE_UNLA=
+ZY
+> > flag.
+> >=20
+> > Signed-off-by: Masahiro Honda <honda@mechatrax.com>
+> > --- =20
+>=20
+> Reviewed-by: Nuno S=C3=A1 <nuno.sa@analog.com>
+
+Fixes tag?  We'll want to know how far to backport this.  I assume it's
+limited by the above commit as these drivers are older than that.=20
+
+I'm also not totally sure what this 'looks like' for a user.  What happens?
+Fail to read, wrong value, lock up or something else?  It would be helpful
+to include that information in case anyone else runs into this.
+
+Actual change looks right to me.
+
+Thanks,
+
+Jonathan
+
+
+>=20
+> > v4:
+> > =C2=A0- Remove the callback.
+> > v3:
+> > https://lore.kernel.org/linux-iio/20230420102316.757-1-honda@mechatrax.=
+com/
+> > =C2=A0- Remove the Kconfig option.
+> > v2:
+> > https://lore.kernel.org/linux-iio/20230414102744.150-1-honda@mechatrax.=
+com/
+> > =C2=A0- Rework commit message.
+> > =C2=A0- Add a new entry in the Kconfig.
+> > =C2=A0- Call irq_clear_status_flags(irq, IRQ_DISABLE_UNLAZY) when freei=
+ng the IRQ.
+> > v1:
+> > https://lore.kernel.org/linux-iio/20230306044737.862-1-honda@mechatrax.=
+com/
+> >=20
+> > =C2=A0drivers/iio/adc/ad_sigma_delta.c | 4 ++++
+> > =C2=A01 file changed, 4 insertions(+)
+> >=20
+> > diff --git a/drivers/iio/adc/ad_sigma_delta.c
+> > b/drivers/iio/adc/ad_sigma_delta.c
+> > index d8570f6207..7e21928707 100644
+> > --- a/drivers/iio/adc/ad_sigma_delta.c
+> > +++ b/drivers/iio/adc/ad_sigma_delta.c
+> > @@ -584,6 +584,10 @@ static int devm_ad_sd_probe_trigger(struct device =
+*dev,
+> > struct iio_dev *indio_de
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0init_completion(&sigma_=
+delta->completion);
+> > =C2=A0
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sigma_delta->irq_dis =
+=3D true;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* the IRQ core clears IRQ_D=
+ISABLE_UNLAZY flag when freeing an IRQ */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq_set_status_flags(sigma_d=
+elta->spi->irq, IRQ_DISABLE_UNLAZY);
+> > +
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D devm_request_ir=
+q(dev, sigma_delta->spi->irq,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ad_sd_data_rdy_trig_poll,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sigma_delta->info->irq_flags | IRQF_NO=
+_AUTOEN, =20
+>=20
 
