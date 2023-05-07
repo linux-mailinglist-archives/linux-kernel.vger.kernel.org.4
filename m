@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744136F9AEE
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 20:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5966F9AF0
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 20:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbjEGSeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 14:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+        id S231491AbjEGSeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 14:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjEGSeR (ORCPT
+        with ESMTP id S231472AbjEGSeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 14:34:17 -0400
+        Sun, 7 May 2023 14:34:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024D36E82;
-        Sun,  7 May 2023 11:34:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096EA9EE8;
+        Sun,  7 May 2023 11:34:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C0C460FB1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FAF86119E;
+        Sun,  7 May 2023 18:34:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F993C433D2;
         Sun,  7 May 2023 18:34:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F72FC433A1;
-        Sun,  7 May 2023 18:34:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683484456;
-        bh=BANIf+ASt30mN5iS/NWLlkQ2ov0wGoxCBBMNfEgEvLk=;
+        s=k20201202; t=1683484459;
+        bh=Cwi9G0RC9sDhCBbFheRaOVgx+rmiAvtJuPLG5ht1r7Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iI2gauWXX+FpvZGeuZivJ5XIu/c/TN8lfj5WAK9mc72mvIoGhJH2S9uYQDOJymWlE
-         LulXx6JEDOKWhOmWkm7ja3YdWQHbNavQi1lD0RN7dvxG8QSXcuyUX0ecMFHWUJ8HTO
-         OoN3SPK/P+sGNQHeOzRFx4kXJmF/y3Gr2muWMdu2FKCJWiJSK0jsnib5zH5siuLnOO
-         7HITT5jeGH4riYtTIBC35hmL1GsO0GU0ZlnKYhCbOJcrp/xXMa7bgArhNC9LnfHqXh
-         tNUJe8EbpWaj8kXhIthunrRBkly54fbXcirV3z//8Z9Ol1HTI4LTT7FyVxoiJxahnq
-         iw3IQNL5k9ZwA==
+        b=uNMPk3ntZAVS8YwlGv7g0/1DxLS+CXoeUiidi4/241Adf5EX2uPx2Ky9DwASPEh9P
+         tlnzGdYjzsgWdMnSbcVsFbQBkNwMNDiI4ceLzELguWR78J0trAbI/463xvg2mGEKSz
+         bUdNrvv8fgJ7YTZYWyWPg5bPNCyr7rMZyvkSM4VEzTtEX2/1HjNb7bq8J4HL9Hl83z
+         SEaXt+7YLPVlPuSIBZ6vLJEZFk75f2J/oqpDKppyCOxKVxYoOd9z/H5zbisZ0NmT2P
+         5XW600//wLg/3j+ctQVwLf0s7QvgsztjxL+oa3vs58PktKJBcGCOY6YdVjk/GD7Hl8
+         pdupIoJGBLpbQ==
 From:   Jisheng Zhang <jszhang@kernel.org>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
@@ -43,9 +43,9 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         Albert Ou <aou@eecs.berkeley.edu>
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>
-Subject: [PATCH 1/5] irqchip/sifive-plic: Support T-HEAD's C910 PLIC
-Date:   Mon,  8 May 2023 02:23:00 +0800
-Message-Id: <20230507182304.2934-2-jszhang@kernel.org>
+Subject: [PATCH 2/5] riscv: Add the T-HEAD SoC family Kconfig option
+Date:   Mon,  8 May 2023 02:23:01 +0800
+Message-Id: <20230507182304.2934-3-jszhang@kernel.org>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230507182304.2934-1-jszhang@kernel.org>
 References: <20230507182304.2934-1-jszhang@kernel.org>
@@ -61,42 +61,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The T-HEAD's C910 PLIC still needs the delegation bit settingto allow
-access from S-mode, but it doesn't need the edge quirk.
+The first SoC in the T-HEAD series is light(a.k.a th1520), containing
+quad T-HEAD C910 cores.
 
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 ---
- .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml      | 4 ++++
- drivers/irqchip/irq-sifive-plic.c                             | 1 +
- 2 files changed, 5 insertions(+)
+ arch/riscv/Kconfig.socs | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-index f75736a061af..64b43a3c3748 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-@@ -62,6 +62,10 @@ properties:
-               - starfive,jh7110-plic
-               - canaan,k210-plic
-           - const: sifive,plic-1.0.0
-+      - items:
-+          - enum:
-+              - thead,light-plic
-+          - const: thead,c910-plic
-       - items:
-           - enum:
-               - allwinner,sun20i-d1-plic
-diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
-index e1484905b7bd..71afa2a584d9 100644
---- a/drivers/irqchip/irq-sifive-plic.c
-+++ b/drivers/irqchip/irq-sifive-plic.c
-@@ -569,6 +569,7 @@ static int __init plic_init(struct device_node *node,
- }
+diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+index 1cf69f958f10..ce10a38dff37 100644
+--- a/arch/riscv/Kconfig.socs
++++ b/arch/riscv/Kconfig.socs
+@@ -41,6 +41,12 @@ config ARCH_SUNXI
+ 	  This enables support for Allwinner sun20i platform hardware,
+ 	  including boards based on the D1 and D1s SoCs.
  
- IRQCHIP_DECLARE(sifive_plic, "sifive,plic-1.0.0", plic_init);
-+IRQCHIP_DECLARE(thead_c910_plic, "thead,c910-plic", plic_init);
- IRQCHIP_DECLARE(riscv_plic0, "riscv,plic0", plic_init); /* for legacy systems */
++config ARCH_THEAD
++	bool "T-HEAD RISC-V SoCs"
++	select ERRATA_THEAD
++	help
++	  This enables support for the RISC-V based T-HEAD SoCs.
++
+ config ARCH_VIRT
+ 	def_bool SOC_VIRT
  
- static int __init plic_edge_init(struct device_node *node,
 -- 
 2.40.0
 
