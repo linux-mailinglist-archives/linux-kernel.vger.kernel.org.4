@@ -2,156 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE466F9B99
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 22:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CBA6F9B9B
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 22:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbjEGUp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 16:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
+        id S232157AbjEGUpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 16:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjEGUp0 (ORCPT
+        with ESMTP id S229920AbjEGUpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 16:45:26 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BCE2717;
-        Sun,  7 May 2023 13:45:25 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bcc565280so5809949a12.2;
-        Sun, 07 May 2023 13:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683492323; x=1686084323;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fuy2z4Dft0GSgy8+sD4LMQQuOcR+sqxTgE7CAkMSATk=;
-        b=Wp4ZIH1lgNQTbaCd9KuNSzvMA6DHDLCrcvTIlWCIHSi9s91FtIh1e57JM0o/dREjiI
-         JTKVzjQMfBj/mrDfcaWWGfnvY0E56HcJFkPNTO7uzDcGXwUDxNpq8mp2RUopfJ2OEM5i
-         /PGp/CUaWxN64eR42hRsl3SGX3g0JwP2fSHpGrN+SdgFQMsaYn2Yv35Qn3SJeLhlpWT5
-         kdYImUMxiUyL4r1+Ou6q7zMymrUYwQVRiAVRJv+kKA19yznwSQTi7SdnGiUb5cH/ep5F
-         phdodg7McH5v7PK4FU9BgUfee1oevLZWKHE+RLJkDC6c8Wgoj31Htwo/8UkzPtHaUSn9
-         6s+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683492323; x=1686084323;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fuy2z4Dft0GSgy8+sD4LMQQuOcR+sqxTgE7CAkMSATk=;
-        b=NEaujN2HqcGdKPzuPzzuQMW/wG+Mdm6wdC/DVU+Li4rIFyt3YfMwk8AwQr96nde4B0
-         SK3+zErW8oxZQP2GD6WcLGKB4g/+ObzEtTjE2GCvZ9P+ZYO4RuhY8goFZdOK6ZoC8wuP
-         J6ND0A7nPVcUHcAtHNF4RFEY4TCoZJA9t5Hhrtk6E6tUfeapKctPBN5ySVqstIa+jrAD
-         2nbnnnnnAle62gTWXkYZqxze9FIdWZeEHfayO+e/2aHHnnJlWM+41SR6LtPPBEUxE4IJ
-         0uLH/ZiC7Wnq54rXdmap+/0oiYAoiBeHowPsMzuc1TPbBxmUaVdxYRiey/IpIWkh2djP
-         RYvg==
-X-Gm-Message-State: AC+VfDyVztWjDkaXhx6z3rmPcCgjvvWeeLPUkPQGbpqhS85IOP8qY6qn
-        M2sjwyayNNj/zS5PLKZDBcI=
-X-Google-Smtp-Source: ACHHUZ6ZbnXAWhJWciL0Fg+ARcApk1N/a7t7/xNIsGHgEZEJETOpZYjZovejAe56QeyusHWXVGzdgw==
-X-Received: by 2002:a17:907:26c2:b0:94f:788:6bc with SMTP id bp2-20020a17090726c200b0094f078806bcmr7513662ejc.37.1683492323380;
-        Sun, 07 May 2023 13:45:23 -0700 (PDT)
-Received: from carbian ([2a02:8109:aa3f:ead8::5908])
-        by smtp.gmail.com with ESMTPSA id de38-20020a1709069be600b0094e1344ddfdsm4026297ejc.34.2023.05.07.13.45.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 13:45:23 -0700 (PDT)
-Date:   Sun, 7 May 2023 22:45:20 +0200
-From:   Mehdi Djait <mehdi.djait.k@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     jic23@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
-        lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 5/7] iio: accel: kionix-kx022a: Refactor driver and
- add chip_info structure
-Message-ID: <ZFgN4MGXpfbcaXTG@carbian>
-References: <cover.1682373451.git.mehdi.djait.k@gmail.com>
- <bf0269aff66483f2323914170707203749b33f0f.1682373451.git.mehdi.djait.k@gmail.com>
- <867ac7b4-b666-854f-69f7-2d7d7d92c94e@gmail.com>
- <ZEeAGN3TBcao3CNA@carbian>
- <c0958e31-b477-34e0-d824-b017efadd0df@gmail.com>
+        Sun, 7 May 2023 16:45:49 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF591120BE;
+        Sun,  7 May 2023 13:45:43 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1683492341;
+        bh=patFs8wTXMMBz2l3cb0i9Y4TO2h4Wx7Ot9XUJWY2bvw=;
+        h=From:Date:Subject:To:Cc:From;
+        b=XOZ0755shgO6yqlNBCggMYAvYfcoi2nxMKLLJiUy/iMXsDWVrW3l0U3y5mlP6c9I5
+         fENUHgWSqvcmBBsIZk2bXgKXGkuefABgncrwwd6vIIrwOW9TrsDeDnK9eCBu7ayTQH
+         dqAInBqdE9lCgeh9Gzd8m6wzK22BTR6hj1+lG+Kk=
+Date:   Sun, 07 May 2023 22:45:36 +0200
+Subject: [PATCH v2] platform/x86: gigabyte-wmi: remove allowlist
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0958e31-b477-34e0-d824-b017efadd0df@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230325-gigabyte-wmi-unrestrict-v2-1-0a54bc8e70d2@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAPANWGQC/4WNSw6CMBQAr0K69pl+UIIr72FYlPKkL8Fi+gpIC
+ He3cgGXM8lkNsEYCVncik1EnIlpDBn0qRDO29AjUJdZaKmNNPoCPfW2XRPC8iKYQkROkVyCSpe
+ l0dKpur6KXLeWEdpog/O5D9MwZPmO+KTPsXs0mT1xGuN63Gf1s/9HswIF2lSVMrK2ZWfuCxIzO
+ z/5c8Akmn3fv0gvFNTYAAAA
+To:     =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1683492340; l=3727;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=patFs8wTXMMBz2l3cb0i9Y4TO2h4Wx7Ot9XUJWY2bvw=;
+ b=CXp+t+4VN1fA3eQ1gi+iorksxh6UyD2VI3amST6XUvqzYGWLd+LV1LjMlLKYEAr9pSkgoBXNL
+ IEfKN9SRXstCvMVKMoPdTi3aozNVleLGBRypUrrTJHiQjilxTOnfAN6
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Matti,
+Having to maintain a per-system allowlist is burdensome and confusing
+for users, drop it.
 
-On Tue, Apr 25, 2023 at 11:12:11AM +0300, Matti Vaittinen wrote:
-> > > > +const struct kx022a_chip_info kx022a_chip_info = {
-> > > > +	.name		  = "kx022-accel",
-> > > > +	.regmap_config	  = &kx022a_regmap_config,
-> > > > +	.channels	  = kx022a_channels,
-> > > > +	.num_channels	  = ARRAY_SIZE(kx022a_channels),
-> > > > +	.fifo_length	  = KX022A_FIFO_LENGTH,
-> > > > +	.who		  = KX022A_REG_WHO,
-> > > > +	.id		  = KX022A_ID,
-> > > > +	.cntl		  = KX022A_REG_CNTL,
-> > > > +	.cntl2		  = KX022A_REG_CNTL2,
-> > > > +	.odcntl		  = KX022A_REG_ODCNTL,
-> > > > +	.buf_cntl1	  = KX022A_REG_BUF_CNTL1,
-> > > > +	.buf_cntl2	  = KX022A_REG_BUF_CNTL2,
-> > > > +	.buf_clear	  = KX022A_REG_BUF_CLEAR,
-> > > > +	.buf_status1	  = KX022A_REG_BUF_STATUS_1,
-> > > > +	.buf_read	  = KX022A_REG_BUF_READ,
-> > > > +	.inc1		  = KX022A_REG_INC1,
-> > > > +	.inc4		  = KX022A_REG_INC4,
-> > > > +	.inc5		  = KX022A_REG_INC5,
-> > > > +	.inc6		  = KX022A_REG_INC6,
-> > > > +	.xout_l		  = KX022A_REG_XOUT_L,
-> > > > +};
-> > > > +EXPORT_SYMBOL_NS_GPL(kx022a_chip_info, IIO_KX022A);
-> > > 
-> > > Do you think the fields (or at least some of them) in this struct could be
-> > > named based on the (main) functionality being used, not based on the
-> > > register name? Something like "watermark_reg", "buf_en_reg", "reset_reg",
-> > > "output_rate_reg", "int1_pinconf_reg", "int1_src_reg", "int2_pinconf_reg",
-> > > "int1_src_reg" ...
-> > > 
-> > > I would not be at all surprized to see for example some IRQ control to be
-> > > shifted from INC<X> to INC<Y> or cntl<X> / buf_cntl<X> stuff to be moved to
-> > > cntl<Y> or to buf_cntl<Y> for next sensor we want to support. Especially
-> > > when new cool feature is added to next sensor, resulting also adding a new
-> > > cntl<Z> or buf_cntl<Z> or INC<Z>.
-> > > 
-> > > I, however, believe the _functionality_ will be there (in some register) -
-> > > at least for the ICs for which we can re-use this driver. Hence, it might be
-> > > nice - and if you can think of better names for these fields - to rename
-> > > them based on the _functionality_ we use.
-> > > 
-> > > Another benefit would be added clarity to the code. Writing a value to
-> > > "buf_en_reg", "watermark_reg" or to "int1_src_reg" is much clearer (to me)
-> > > than writing a value to "buf_cntl1", "buf_cntl2" or "INC4". Especially if
-> > > you don't have a datasheet at your hands.
-> > > 
-> > > I am not "demanding" this (at least not for now :]) because it seems these
-> > > two Kionix sensors have been pretty consistent what comes to maintaining the
-> > > same functionality in the registers with same naming - but I believe this is
-> > > something that may in any case be lurking around the corner.
-> > 
-> > I agree, this seems to be the better solution. I will look into this.
-> > 
-> 
-> Thanks for going the extra mile :)
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Changes in v2:
+- Rebase on 6.4-rc1
+- Remove RFC status
+- Drop #include <linux/dmi.h>
+- Link to v1: https://lore.kernel.org/r/20230325-gigabyte-wmi-unrestrict-v1-1-23771309a4d3@weissschuh.net
+---
 
-I am reconsidering the renaming of the fields 
+As discussed in v1 this is based on 6.4-rc1.
+---
+ drivers/platform/x86/gigabyte-wmi.c | 44 -------------------------------------
+ 1 file changed, 44 deletions(-)
 
-1. inc{1,4,5,6} get assigned once to data->{ien_reg,inc_reg} in the probe 
-function and then never used again
+diff --git a/drivers/platform/x86/gigabyte-wmi.c b/drivers/platform/x86/gigabyte-wmi.c
+index 2a426040f749..8aa665e866b8 100644
+--- a/drivers/platform/x86/gigabyte-wmi.c
++++ b/drivers/platform/x86/gigabyte-wmi.c
+@@ -5,7 +5,6 @@
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+ #include <linux/acpi.h>
+-#include <linux/dmi.h>
+ #include <linux/hwmon.h>
+ #include <linux/module.h>
+ #include <linux/wmi.h>
+@@ -13,10 +12,6 @@
+ #define GIGABYTE_WMI_GUID	"DEADBEEF-2001-0000-00A0-C90629100000"
+ #define NUM_TEMPERATURE_SENSORS	6
+ 
+-static bool force_load;
+-module_param(force_load, bool, 0444);
+-MODULE_PARM_DESC(force_load, "Force loading on unknown platform");
+-
+ static u8 usable_sensors_mask;
+ 
+ enum gigabyte_wmi_commandtype {
+@@ -133,49 +128,10 @@ static u8 gigabyte_wmi_detect_sensor_usability(struct wmi_device *wdev)
+ 	return r;
+ }
+ 
+-#define DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME(name) \
+-	{ .matches = { \
+-		DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."), \
+-		DMI_EXACT_MATCH(DMI_BOARD_NAME, name), \
+-	}}
+-
+-static const struct dmi_system_id gigabyte_wmi_known_working_platforms[] = {
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("A320M-S2H V2-CF"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B450M DS3H-CF"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B450M DS3H WIFI-CF"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B450M S2H V2"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550 AORUS ELITE AX V2"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550 AORUS ELITE"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550 AORUS ELITE V2"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550 GAMING X V2"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550I AORUS PRO AX"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550M AORUS PRO-P"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550M DS3H"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B650 AORUS ELITE AX"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B660 GAMING X DDR4"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B660I AORUS PRO DDR4"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("Z390 I AORUS PRO WIFI-CF"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("Z490 AORUS ELITE AC"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("X570 AORUS ELITE"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("X570 AORUS ELITE WIFI"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("X570 GAMING X"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("X570 I AORUS PRO WIFI"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("X570 UD"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("X570S AORUS ELITE"),
+-	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("Z690M AORUS ELITE AX DDR4"),
+-	{ }
+-};
+-
+ static int gigabyte_wmi_probe(struct wmi_device *wdev, const void *context)
+ {
+ 	struct device *hwmon_dev;
+ 
+-	if (!dmi_check_system(gigabyte_wmi_known_working_platforms)) {
+-		if (!force_load)
+-			return -ENODEV;
+-		dev_warn(&wdev->dev, "Forcing load on unknown platform");
+-	}
+-
+ 	usable_sensors_mask = gigabyte_wmi_detect_sensor_usability(wdev);
+ 	if (!usable_sensors_mask) {
+ 		dev_info(&wdev->dev, "No temperature sensors usable");
 
-2. buf_cntl2 is used for enabling the buffer and changing the resolution
-to 16bits, so which name is better than buf_cntl ? 
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+change-id: 20230325-gigabyte-wmi-unrestrict-7244320c1996
 
-3. cntl seems the most appropriate name, again different functions and the same 
-reg
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
-4. who, id, xout_l, odcntl, buf_{clear, status, read} are quite straightforward
-
-Anyway this is my opinion, what do you think ? 
-
---
-Kind Regards,
-Mehdi Djait
