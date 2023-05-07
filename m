@@ -2,110 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A816F98B0
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 15:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCED26F98AC
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 15:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjEGNjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 09:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S230381AbjEGNed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 09:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjEGNjH (ORCPT
+        with ESMTP id S229472AbjEGNec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 09:39:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B1415684
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 06:38:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683466700;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uS0RstiP8T7ZH+Gobo8YpS9JLxcIWNZn7s+bIcTHKj0=;
-        b=WSq2DSmoVjbQDTrdAFvn9J8kxStrSKiZo6eEOIUF57yypali3opguO/cIm+460bB5rNMlH
-        pxkdMzHlwjA43nFHgON2UeaI57zBX7hdmLu4MDUtMnMgTC+jsFhSf+A0CbXNK54UFJjwV/
-        ZQb/Dmx+pcM8epBQzyGLDbiu4sxyyH4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-160-SF9Gd3OJMVSG__gEFZg64Q-1; Sun, 07 May 2023 09:38:18 -0400
-X-MC-Unique: SF9Gd3OJMVSG__gEFZg64Q-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30467a7020eso2029692f8f.2
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 06:38:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683466697; x=1686058697;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uS0RstiP8T7ZH+Gobo8YpS9JLxcIWNZn7s+bIcTHKj0=;
-        b=SUOCV1IY7+Eph6Imr38v/3q7hOZ0OBUnCu1W8eoaUfDQCr/bbK0kM+GVWItz61bSas
-         e/GSfAH6qtH1B+8ZA9yBuMXp+1hs8GHwRvsr999xhC4fYw01suJphKUIZxxga9GN3D5w
-         ImRpD2vazbTsodE0aed5fduLmWfN/I8IsjKLEEtRfGUzZByWFSafsGeDCM2XXYFWKqcL
-         y4z6CklYi7ivULJBcPoWwcjO7sA2A6eWTlpsq4Iy9Q6R8m9dHfCuNuV/4Uv0g/Qg42ct
-         CTcOfQtp8Cmbx7XmB/15sTMKmtIBftPcIPe66/ZjwRQrqPWvMEcIa63KDmVWpKezOon5
-         pw6A==
-X-Gm-Message-State: AC+VfDyZ3Yi9LmwpWkaWpIgZ0j7dJZASiFB1xZEWopl25WOFzoVyDiym
-        kjWyqsFseXM4nX/fUObI9+kZ+mDROX+xAm42HFKFmNaA3VxASjhX9zcXVe4n+H1VgI4Ifjr1VIp
-        uytphr62yCi8wDPPSPv+YnWy9
-X-Received: by 2002:adf:e3cd:0:b0:306:2bff:aad8 with SMTP id k13-20020adfe3cd000000b003062bffaad8mr5217168wrm.35.1683466697639;
-        Sun, 07 May 2023 06:38:17 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7raV+1H23nZQQyJsfP3v5WDmwROkIJoLbvrcVTI1UBSNcA2EkWNlsLTJqPAmKBYRZa7JSNpg==
-X-Received: by 2002:adf:e3cd:0:b0:306:2bff:aad8 with SMTP id k13-20020adfe3cd000000b003062bffaad8mr5217160wrm.35.1683466697361;
-        Sun, 07 May 2023 06:38:17 -0700 (PDT)
-Received: from redhat.com ([2.52.158.28])
-        by smtp.gmail.com with ESMTPSA id l11-20020adfe58b000000b002f22c44e974sm8247506wrm.102.2023.05.07.06.38.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 06:38:16 -0700 (PDT)
-Date:   Sun, 7 May 2023 09:38:13 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Hao Chen <chenh@yusur.tech>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>, huangml@yusur.tech,
-        zy@yusur.tech, Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] virtio_net: set default mtu to 1500 when 'Device maximum
- MTU' bigger than 1500
-Message-ID: <20230507093502-mutt-send-email-mst@kernel.org>
-References: <20230506021529.396812-1-chenh@yusur.tech>
- <1683341417.0965195-4-xuanzhuo@linux.alibaba.com>
- <07b6b325-9a15-222f-e618-d149b57cbac2@yusur.tech>
- <49455AA8-0606-447E-B455-F905EA184E42@infradead.org>
+        Sun, 7 May 2023 09:34:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC75150CD;
+        Sun,  7 May 2023 06:34:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95E5560ED3;
+        Sun,  7 May 2023 13:34:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B702C433EF;
+        Sun,  7 May 2023 13:34:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683466470;
+        bh=qeewV7R2Z6nha4ADLSckFtdAh5rT3VHQDSGqNbrAmF8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Oe66ZkrC46pqwo1MLneM2Lgjvke8ZaBe57WVLloxiMR/ZYTbmu2U+c1GWxeWNL+Tc
+         heWZUvoYZwl5oy6cBnfFcmmK3kQBe5ZdTty5CoTh7b0WAiDR+u2rlvyP2sshvIlWQx
+         hQpKP4FZFqbZU2BqudKUkTG+lGz4HNgRA+08gWSeFadinMqtKUsLQzgftVTtds39HB
+         0H9Es7Rg84zVxivOIwBjok3WbrslfBMCKwZI4lYLG/yiqTp32AD2VBUsguiC4+CDcL
+         ufS+sZ1Im8ypAT6CXHUYe6EkwEy6ViYAu4675Xi3Hl+HVBeOn0zIs1rktXOGldvL2R
+         qWx1I0DzCfAiA==
+Date:   Sun, 7 May 2023 14:50:22 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Marius Hoch <mail@mariushoch.de>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Denis Ciocca <denis.ciocca@st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Marius Hoch <marius@mariushoch.de>
+Subject: Re: [PATCH v3 4/6] iio: st_sensors: Add ACPI support for lsm303d to
+ the LSM9DS0 IMU driver
+Message-ID: <20230507145022.1465b89d@jic23-huawei>
+In-Reply-To: <e669d656-1474-ad95-4667-3a6ae79605e3@mariushoch.de>
+References: <20230415231130.115094-1-mail@mariushoch.de>
+        <20230415231130.115094-5-mail@mariushoch.de>
+        <e669d656-1474-ad95-4667-3a6ae79605e3@mariushoch.de>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <49455AA8-0606-447E-B455-F905EA184E42@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 07, 2023 at 10:31:34AM +0100, David Woodhouse wrote:
-> 
-> 
-> On 6 May 2023 09:56:35 BST, Hao Chen <chenh@yusur.tech> wrote:
-> >In the current code, if the maximum MTU supported by the virtio net hardware is 9000, the default MTU of the virtio net driver will also be set to 9000. When sending packets through "ping -s 5000", if the peer router does not support negotiating a path MTU through ICMP packets, the packets will be discarded.
-> 
-> That router is just plain broken, and it's going to break all kinds of traffic. Hacking the virtio-net MTU is only a partial workaround.
-> 
-> Surely the correct fix here is to apply percussive education to whatever idiot thought it was OK to block ICMP. Not to hack the default MTU of one device to the lowest common denominator. 
+On Tue, 2 May 2023 16:51:42 +0200
+Marius Hoch <mail@mariushoch.de> wrote:
 
-Yea I don't understand what does path MTU have to do with it.
-MTU has to be set the same for all endpoints on LAN, that's
-a fundamental assumption that ethernet makes. Going outside LAN
-all best are off.
+> Hi,
+> 
+> On 16/04/2023 01:11, Marius Hoch wrote:
+> <snip>
+> > diff --git a/drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c b/drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c
+> > index 997b5ff792be..55f3738193af 100644
+> > --- a/drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c
+> > +++ b/drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c
+> > @@ -37,6 +37,12 @@ static const struct spi_device_id st_lsm9ds0_id_table[] = {
+> >   };
+> >   MODULE_DEVICE_TABLE(spi, st_lsm9ds0_id_table);
+> >   
+> > +static const struct acpi_device_id st_lsm9ds0_acpi_match[] = {
+> > +	{"ACCL0001", (kernel_ulong_t)LSM303D_IMU_DEV_NAME},
+> > +	{ },
+> > +};
+> > +MODULE_DEVICE_TABLE(acpi, st_lsm9ds0_acpi_match);
+> > +
+> >   static const struct regmap_config st_lsm9ds0_regmap_config = {
+> >   	.reg_bits	= 8,
+> >   	.val_bits	= 8,
+> > @@ -72,6 +78,7 @@ static struct spi_driver st_lsm9ds0_driver = {
+> >   	.driver = {
+> >   		.name = "st-lsm9ds0-spi",
+> >   		.of_match_table = st_lsm9ds0_of_match,
+> > +		.acpi_match_table = st_lsm9ds0_acpi_match,
+> >   	},
+> >   	.probe = st_lsm9ds0_spi_probe,
+> >   	.id_table = st_lsm9ds0_id_table,  
+> I just realized that these changes (the SPI ones, not the I2C ones) are 
+> entirely superfluous, and I'm not sure why I added this in the first 
+> place. In the Lenovo Yoga Tablet 2 series (which seem to be the only 
+> devices exposing this as "ACCL0001"), the device is accessible via I2C. 
+> Just to make sure, I re-tested the patch chain without this change.
+> 
+> @Jonathan: Shall I upload an entirely new patch set (v4), do this in a 
+> separate new clean up commit, or do you want to just drop these changes 
+> to drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c? I'm fine with any of 
+> these options.
 
+I'll drop it and push out a new version of the togreg tree.
 
--- 
-MST
+Thanks for pointing this out.
+
+Jonathan
+
+> 
+> Cheers,
+> Marius
 
