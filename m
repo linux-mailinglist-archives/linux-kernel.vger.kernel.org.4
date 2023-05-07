@@ -2,107 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0F66F9A7C
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 19:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523766F9A88
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 19:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbjEGRMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 13:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
+        id S231574AbjEGRVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 13:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbjEGRMm (ORCPT
+        with ESMTP id S229533AbjEGRVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 13:12:42 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16455100D9;
-        Sun,  7 May 2023 10:12:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683479559; x=1715015559;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xadsDlIqSLYDH8jAUQJ+rU/bh9AyzgsU04VnNDkPNZk=;
-  b=UwySByN+YkfSAk6pK1Oydz5lI4I53iHIoPty4SiLewuSURi7QhMFP7wK
-   XlMjkw+mt7iIFUjnxMwqa48Y5uDSIq88PgE9Vq79VtBuqOEwN5emMtWUE
-   LBYycJ5thV3HhRleCYnYlXemCbyK29p4vtDPBdAzvXahdS+Z+CS1yyIz4
-   u+Ts4o4fO7fUA3AE9oewIkQohzyBmTmBZsz8G5cSs+uFXoqJ6Ok87Gmq1
-   cmcGE6Mw8VdCiZF3kf6zTJiHo7gF6Rjjv3yweMe+QLT5WeO3uMYC9BDRT
-   D3A5MB7UwnXYQgYzwTuu+V2tLi1WmVKEc18LwNvZJQZVUDarlbCrQrZVv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="333933231"
-X-IronPort-AV: E=Sophos;i="5.99,257,1677571200"; 
-   d="scan'208";a="333933231"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2023 10:12:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="842466547"
-X-IronPort-AV: E=Sophos;i="5.99,257,1677571200"; 
-   d="scan'208";a="842466547"
-Received: from tassilo.jf.intel.com (HELO tassilo) ([10.54.38.190])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2023 10:12:37 -0700
-Date:   Sun, 7 May 2023 10:12:29 -0700
-From:   Andi Kleen <ak@linux.intel.com>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Ian Rogers <irogers@google.com>, ravi.v.shankar@intel.com,
-        ricardo.neri@intel.com, Stephane Eranian <eranian@google.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        linux-arm-kernel@lists.infradead.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        Marc Zyngier <maz@kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        Will Deacon <will@kernel.org>, ito-yuichi@fujitsu.com,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Colin Cross <ccross@android.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Alexander Potapenko <glider@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ingo Molnar <mingo@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Marco Elver <elver@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] hardlockup: detect hard lockups using secondary (buddy)
- cpus
-Message-ID: <ZFfb/bTi22RQwaol@tassilo>
-References: <20230421155255.1.I6bf789d21d0c3d75d382e7e51a804a7a51315f2c@changeid>
- <CAP-5=fUB1e=bJk-w0i8+MEo4sLOZtb_Eb7FMy4u7ky7D2AZm6A@mail.gmail.com>
- <CAD=FV=Xuuefi9XBQA7z7sbe+Qw0=WeZ956gLGCoFGHBg6GBftg@mail.gmail.com>
+        Sun, 7 May 2023 13:21:12 -0400
+Received: from out-17.mta0.migadu.com (out-17.mta0.migadu.com [IPv6:2001:41d0:1004:224b::11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2945AD01
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 10:21:10 -0700 (PDT)
+Date:   Sun, 7 May 2023 13:20:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683480068;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hurdbnJwUJqK07Lm+4BMc/GcG+c58gJSfQAtVR+cBkY=;
+        b=t9HPg37zepSR1RnzhSUKFRxBUu28FVu1Yi23jFUki7ZMbwLSC/NiT3n7wFBZNUFaL6UoyB
+        zJPC7zS/i2KkcdGtaRgLAJgrWe5jboQdCOvInvXLMeR4wfr6JjMe/ufK6pDB5akkqqXdTQ
+        ldiDYd0e9CxSI40mvUKNrcXC5Ki5rqQ=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
+        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+        pasha.tatashin@soleen.com, yosryahmed@google.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <ZFfd99w9vFTftB8D@moria.home.lan>
+References: <20230501165450.15352-1-surenb@google.com>
+ <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+ <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com>
+ <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=Xuuefi9XBQA7z7sbe+Qw0=WeZ956gLGCoFGHBg6GBftg@mail.gmail.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -111,26 +76,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Mon, Apr 24, 2023 at 08:23:59AM -0700, Doug Anderson wrote:
-> HPET system seems to have a single CPU in charge of processing the
-> main NMI and then that single CPU is in charge of checking all the
-> others. If that single CPU goes out to lunch then the system couldn't
-> detect hard lockups.
+On Thu, May 04, 2023 at 11:07:22AM +0200, Michal Hocko wrote:
+> No. I am mostly concerned about the _maintenance_ overhead. For the
+> bare tracking (without profiling and thus stack traces) only those
+> allocations that are directly inlined into the consumer are really
+> of any use. That increases the code impact of the tracing because any
+> relevant allocation location has to go through the micro surgery. 
 > 
-> In any case, I'm happy to let others debate about the HPET system. For
-> now, I'll take my action items to be:
+> e.g. is it really interesting to know that there is a likely memory
+> leak in seq_file proper doing and allocation? No as it is the specific
+> implementation using seq_file that is leaking most likely. There are
+> other examples like that See?
 
-We don't really seem to make any progress on the HPET series, so even
-if it is better in some way a series that is never merged is always
-worse than one that is.
+So this is a rather strange usage of "maintenance overhead" :)
 
-My experience is that cases where everything locks up are very rare.
-I suspect as long as we cover the garden variety single CPU lockup case well
-it is likely very diminishing returns to handle more complex cases. So whatever
-gets the job done is fine.
+But it's something we thought of. If we had to plumb around a _RET_IP_
+parameter, or a codetag pointer, it would be a hassle annotating the
+correct callsite.
 
-Yes freeing the Perfmon resources is big advantage of either.
+Instead, alloc_hooks() wraps a memory allocation function and stashes a
+pointer to a codetag in task_struct for use by the core slub/buddy
+allocator code.
 
--Andi
+That means that in your example, to move tracking to a given seq_file
+function, we just:
+ - hook the seq_file function with alloc_hooks
+ - change the seq_file function to call non-hooked memory allocation
+   functions.
 
+> It would have been more convincing if you had some numbers at hands.
+> E.g. this is a typical workload we are dealing with. With the compile
+> time tags we are able to learn this with that much of cost. With a dynamic
+> tracing we are able to learn this much with that cost. See? As small as
+> possible is a rather vague term that different people will have a very
+> different idea about.
+
+Engineers don't prototype and benchmark everything as a matter of
+course, we're expected to have the rough equivealent of a CS education
+and an understanding of big O notation, cache architecture, etc.
+
+The slub fast path is _really_ fast - double word non locked cmpxchg.
+That's what we're trying to compete with. Adding a big globally
+accessible hash table is going to tank performance compared to that.
+
+I believe the numbers we already posted speak for themselves. We're
+considerably faster than memcg, fast enough to run in production.
+
+I'm not going to be switching to a design that significantly regresses
+performance, sorry :)
+
+> TBH I am much more concerned about the maintenance burden on the MM side
+> than the actual code tagging itslef which is much more self contained. I
+> haven't seen other potential applications of the same infrastructure and
+> maybe the code impact would be much smaller than in the MM proper. Our
+> allocator API is really hairy and convoluted.
+
+You keep saying "maintenance burden", but this is a criticism that can
+be directed at _any_ patchset that adds new code; it's generally
+understood that that is the accepted cost for new functionality.
+
+If you have specific concerns where you think we did something that
+makes the code harder to maintain, _please point them out in the
+appropriate patch_. I don't think you'll find too much - the
+instrumentation in the allocators simply generalizes what memcg was
+already doing, and the hooks themselves are a bit boilerplaty but hardly
+the sort of thing people will be tripping over later.
+
+TL;DR - put up or shut up :)
