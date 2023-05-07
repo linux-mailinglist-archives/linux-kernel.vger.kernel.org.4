@@ -2,205 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C661D6F993F
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B356F9941
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbjEGPQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 11:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
+        id S229948AbjEGPUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 11:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbjEGPQE (ORCPT
+        with ESMTP id S229472AbjEGPUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 11:16:04 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68806124A7;
-        Sun,  7 May 2023 08:16:03 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id ca18e2360f4ac-768d75b2369so283612739f.0;
-        Sun, 07 May 2023 08:16:03 -0700 (PDT)
+        Sun, 7 May 2023 11:20:40 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2C57AA2
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 08:20:39 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1ab0c697c2bso34300705ad.1
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 08:20:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683472563; x=1686064563;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Myks9ibscFfLfkvDsV+jBK2okCgS5xjyuH4qT5dxmZ0=;
-        b=onyWJMmFOO1TQOmJseYcIWCtrQBEiplRPkAB9WIdvl5+kyG8S9ge3IF2L46VZ7KKm1
-         yFhmuTtY52l9OTE/zBZZKTRMc2yl+N2aUpEFmxOmFax3IsOQD9MNgLwctwZcN3Ci5I8o
-         OktDqnAlxKcvyWi+Jo/x78AaM5jMxMpPY5/vU7qeiqxYsu9XgljVYy1qkjR/6C/YygEF
-         SO8D2/L7N/ai6zjD4n2dHtWuC4YhXNZsJNEUXGWhmC5LIYEO+Qihqu59DEDZ8p3IcW5u
-         4OcBfjrZ6toWObcWdn78qUtMF22lPDUvNpkpURA7ADUgXPo9BY43NjaL35yxRsJvW1Ou
-         rO7A==
+        d=chromium.org; s=google; t=1683472838; x=1686064838;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zpz7HOvQ4sbM65oc1RHD60Zy17J1MPnakrLeLIsq2CQ=;
+        b=M4Z7QCpBi8ZXwuooS/eX+qNSdz3KypQirIzggSbfO50pBYzVJN+m0wXBv0C48wRFV1
+         UVfAIs4kKtCF03a3wVYkVgntgNpIV35k4SS4f50751iv5e09msjGB8uN67ZQRxYXhVc3
+         r0w4DCYgLzwXafkL2yrZZkrlJUjIJUhaeIHLo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683472563; x=1686064563;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Myks9ibscFfLfkvDsV+jBK2okCgS5xjyuH4qT5dxmZ0=;
-        b=ZTS2AR/PdV75jyLjhVUM41Rvi7J7iN/MjXQD4a1PdsUNhEnTa1O6gD+JnmfTsAnr1F
-         WHLO8YyLyafSx0NGLaobjgCpmnghuwRUqY12Srsjy3fwBb2UvCMiWcogYG9Hs3SleBeb
-         XrfTPWZEKq/t4Ml5csw6hl79S0Xs3Iq6VVzW79WkKaJGwVS9Tzyz7Jmjz3HKFCjgYkVL
-         POTXSITJAFexuCfokG8NMx60ZZkV2syHraavBa1066wQYUlfolVa2BTYiwRABCWxC1md
-         0aImbZWQICcqJRlfc/OrM63viyymd6i8o7FhX+zuiUmwVqiQoWKGW17qmfE3K0IN9c8Q
-         PvFg==
-X-Gm-Message-State: AC+VfDx9h9M4XPRI07al2QdAcLENryrAWQxxL1bG9y9hCSOVHmFQ8l66
-        7dFfAuTYiw8ipQEsINnlgAM=
-X-Google-Smtp-Source: ACHHUZ5EW+UX337znXIuV+VfxGZaiPOGCaaj+iujviYeC29RLMN38vohJNQq5Vi2M2qpiuXKCvlD+w==
-X-Received: by 2002:a92:c04d:0:b0:331:3fe4:f2ec with SMTP id o13-20020a92c04d000000b003313fe4f2ecmr5082583ilf.26.1683472562627;
-        Sun, 07 May 2023 08:16:02 -0700 (PDT)
-Received: from aford-B741.lan ([2601:447:d001:897f:32f2:3dc9:fe53:5220])
-        by smtp.gmail.com with ESMTPSA id s1-20020a02b141000000b0040faf05071asm1293566jah.156.2023.05.07.08.16.00
+        d=1e100.net; s=20221208; t=1683472838; x=1686064838;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zpz7HOvQ4sbM65oc1RHD60Zy17J1MPnakrLeLIsq2CQ=;
+        b=dg9Kg3JrdxiELsl1PxbrY1IFV2N9mQ/GVbtp8ip0bBDMtOZogNk/tlGCBoycPxgCjl
+         sgnfBeGaOdQpipU4CakxRtk/K5HrXyr0mfkgJMPT+8vcy1IpyAluEZVcHEYt584yL7OA
+         4mLFme5EGA2lNhG4eb8zja4JqDs7uSJBjLH5g15VliKWywo46jeBq+ILl+5ayQEBe8bm
+         Fh8HwfiDZAvzcQ2CVQEh08XsSfu4iLmwy5mqmETVm1FxtVEiudriDy9jpNDKcagPxqBo
+         sDb4jVy1ntQSANflFtWU5wnN+p4myUFOma+NDdRk+9qJSChc7mgtwRW4VHEy9TLdN/HW
+         UTTQ==
+X-Gm-Message-State: AC+VfDyn8JyjXCt6Hk519ur+6lWTcsiELaHI2uYqhnj0ZFQZyN4cG02E
+        uc1iSTqFbGXmJwrOeI6MbzjfQg==
+X-Google-Smtp-Source: ACHHUZ5iczZH9IUaSLs91dVgHohXAqrhze6RILukG1s65EnShELl45vuFv2gSidDE+1nOlw5G8yU5A==
+X-Received: by 2002:a17:903:48f:b0:1a6:4cbc:14dd with SMTP id jj15-20020a170903048f00b001a64cbc14ddmr7160987plb.8.1683472838646;
+        Sun, 07 May 2023 08:20:38 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id g14-20020a1709029f8e00b001a4fe00a8d4sm5302064plq.90.2023.05.07.08.20.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 08:16:01 -0700 (PDT)
-From:   Adam Ford <aford173@gmail.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH V2 3/3] arm64: dts: imx8mn-beacon:  Add support for OV5640 Camera
-Date:   Sun,  7 May 2023 10:15:48 -0500
-Message-Id: <20230507151549.1216019-3-aford173@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230507151549.1216019-1-aford173@gmail.com>
-References: <20230507151549.1216019-1-aford173@gmail.com>
+        Sun, 07 May 2023 08:20:37 -0700 (PDT)
+Message-ID: <6457c1c5.170a0220.36712.8d84@mx.google.com>
+X-Google-Original-Message-ID: <202305070820.@keescook>
+Date:   Sun, 7 May 2023 08:20:37 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-hardening@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Puyou Lu <puyou.lu@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Yury Norov <yury.norov@gmail.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        Eric Biggers <ebiggers@google.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH v2 01/10] kunit: tool: Enable CONFIG_FORTIFY_SOURCE under
+ UML
+References: <20230407191904.gonna.522-kees@kernel.org>
+ <20230407192717.636137-1-keescook@chromium.org>
+ <CAKwvOdk5JjB21FU85Zxubs+LV8bTY-az598V1hvewndAfhohQA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAKwvOdk5JjB21FU85Zxubs+LV8bTY-az598V1hvewndAfhohQA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The baseboard has a very specific pinout for the TD Next 5640
-camera which uses an OV5640 sensor.  Enable it as part of the
-deveopment kit baseboard instead of an overlay.
+On Fri, Apr 07, 2023 at 04:33:43PM -0700, Nick Desaulniers wrote:
+> On Fri, Apr 7, 2023 at 12:27 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > Since commit ba38961a069b ("um: Enable FORTIFY_SOURCE"), it's possible
+> > to run the FORTIFY tests under UML. Enable CONFIG_FORTIFY_SOURCE when
+> > running with --altests to gain additional coverage, and by default under
+> 
+> two L's in alltest?
 
-Enable the camera with the following
-  media-ctl -l "'ov5640 1-0010':0 -> 'csis-32e30000.mipi-csi':0 [1]"
-  media-ctl -v -V "'ov5640 1-0010':0 [fmt:UYVY8_1X16/640x480 field:none]"
-  media-ctl -v -V "'crossbar':0 [fmt:UYVY8_1X16/640x480 field:none]"
-  media-ctl -v -V "'mxc_isi.0':0 [fmt:UYVY8_1X16/640x480 field:none]"
+Oops. Fixed. :)
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
----
-V2:  New to series, since Laurent asked me to add a board which supports
-     the previous two commits.
-     
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-beacon-baseboard.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-beacon-baseboard.dtsi
-index 9e82069c941f..6dce77a6114c 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-beacon-baseboard.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-beacon-baseboard.dtsi
-@@ -43,6 +43,17 @@ reg_audio: regulator-audio {
- 		enable-active-high;
- 	};
- 
-+	reg_camera: regulator-camera {
-+		compatible = "regulator-fixed";
-+		regulator-name = "mipi_pwr";
-+		regulator-min-microvolt = <2800000>;
-+		regulator-max-microvolt = <2800000>;
-+		gpio = <&pca6416_1 0 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		startup-delay-us = <100000>;
-+		regulator-always-on;
-+	};
-+
- 	reg_usdhc2_vmmc: regulator-usdhc2 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vsd_3v3";
-@@ -96,6 +107,36 @@ eeprom@0 {
- 	};
- };
- 
-+&i2c2 {
-+	clock-frequency = <384000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c2>;
-+	status = "okay";
-+
-+	camera@10 {
-+		compatible = "ovti,ov5640";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_ov5640>;
-+		reg = <0x10>;
-+		clocks = <&clk IMX8MN_CLK_CLKO1>;
-+		clock-names = "xclk";
-+		assigned-clocks = <&clk IMX8MN_CLK_CLKO1>;
-+		assigned-clock-parents = <&clk IMX8MN_CLK_24M>;
-+		assigned-clock-rates = <24000000>;
-+		AVDD-supply = <&reg_camera>;  /* 2.8v */
-+		powerdown-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
-+		reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
-+
-+		port {
-+			/* MIPI CSI-2 bus endpoint */
-+			ov5640_to_mipi_csi2: endpoint {
-+				remote-endpoint = <&mipi_csi_in>;
-+				clock-lanes = <0>;
-+				data-lanes = <1 2>;
-+			};
-+		};
-+	};
-+};
- &i2c4 {
- 	clock-frequency = <400000>;
- 	pinctrl-names = "default";
-@@ -145,11 +186,28 @@ wm8962: audio-codec@1a {
- 	};
- };
- 
-+&isi {
-+	status = "okay";
-+};
-+
- &easrc {
- 	fsl,asrc-rate = <48000>;
- 	status = "okay";
- };
- 
-+&mipi_csi {
-+	status = "okay";
-+
-+	ports {
-+		port@0 {
-+			mipi_csi_in: endpoint {
-+				remote-endpoint = <&ov5640_to_mipi_csi2>;
-+				data-lanes = <1 2>;
-+			};
-+		};
-+	};
-+};
-+
- &sai3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_sai3>;
-@@ -226,6 +284,14 @@ MX8MN_IOMUXC_SAI3_RXFS_GPIO4_IO28	0x41
- 		>;
- 	};
- 
-+	pinctrl_ov5640: ov5640grp {
-+		fsl,pins = <
-+			MX8MN_IOMUXC_GPIO1_IO07_GPIO1_IO7		0x19
-+			MX8MN_IOMUXC_GPIO1_IO06_GPIO1_IO6		0x19
-+			MX8MN_IOMUXC_GPIO1_IO14_CCMSRCGPCMIX_CLKO1	0x59
-+		>;
-+	};
-+
- 	pinctrl_pcal6414: pcal6414-gpiogrp {
- 		fsl,pins = <
- 			MX8MN_IOMUXC_SAI2_MCLK_GPIO4_IO27		0x19
 -- 
-2.39.2
-
+Kees Cook
