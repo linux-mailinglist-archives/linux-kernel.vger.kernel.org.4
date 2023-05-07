@@ -2,88 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A546F9933
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049EC6F9937
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjEGPKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 11:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S230494AbjEGPMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 11:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEGPKA (ORCPT
+        with ESMTP id S229533AbjEGPMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 11:10:00 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A0CB9;
-        Sun,  7 May 2023 08:09:59 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-956ff2399c9so675277866b.3;
-        Sun, 07 May 2023 08:09:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683472198; x=1686064198;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6k7of+oD7aUsR3ZuT5Ha6yGbmcWNRVYGMihlsEz0Xhg=;
-        b=cN8WCKzL3z0UDeYh32zhcfq6BPnbBq/473XGNaamAepsq0ySGTjyRZYn8xTBDG2mrx
-         QYm9QwRYg8Z85CR6gGPTGK4GULfL8f+pKD68yRYQdXIAGUV3LBBHTnfMYJ8nYBT4jzVU
-         Kn9p81vKiVi6kP10iYxs+NageUXik6ESyKb5ARp1JRLGmPNGA49Sd+KTCRZvAdso4I/f
-         mKl6RD5w6Af+0s1ur//68pdNLm94Ol78n13MZ6N1Get+dRZGYcgDpqnGSWYnldDkRTnh
-         fZkeXR5FGvujWH1pM8KZkj3kxKQWmSeIJMIfQgHkiDteGeqvZO31cZlUcdMTWKnGAx+i
-         F5oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683472198; x=1686064198;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6k7of+oD7aUsR3ZuT5Ha6yGbmcWNRVYGMihlsEz0Xhg=;
-        b=aGv4dL/ZDZkP0x+TcdafnycY/L0Tvkg46Na9CISz1n/a2yWV/n04zOsTeMlEzSpQAR
-         +dmoOOhW1ukQnGhCAF7C7dEJ4zMrtRe8YAWp2m985rmRe8zFZQxKW4ADQVnMRxcZ30rX
-         7IEo5rOO7Liss6+Gx7SkYirvYVFy/eBbYivlOs/mQWTX5Ra7K0zsHca58DyFykUpG0lH
-         t7x9Pjy9Cj5xPq0MOIjs72bh9+Vdk7yefNXAaRCCsho0EkXSePH6xsGVF77bmIS+eIIQ
-         Fokl24OAGrXTS9j2oxJCy4dT4ZwMadN1lbh2MGXK64VcilfpLMYLbZAfs8eXsvv8D6t7
-         TIgw==
-X-Gm-Message-State: AC+VfDwreMo/Yq1Wkwxuz168Kvu5y7PwJgChHslg46gIoPW37KgjJAw1
-        W/Smq3OKvIwKbC1gp1LktKRX5W9uXwArinixDEE=
-X-Google-Smtp-Source: ACHHUZ6+VFC93AW7h4sZdYiyaPqZUGGXGfe8vKSCHC7hQOOltYg0zJcH53vc/h7kUSkTyJjHMOz1gnBQknP7XOjm+v4=
-X-Received: by 2002:a17:906:7955:b0:94f:9f76:c74f with SMTP id
- l21-20020a170906795500b0094f9f76c74fmr7323137ejo.52.1683472197958; Sun, 07
- May 2023 08:09:57 -0700 (PDT)
+        Sun, 7 May 2023 11:12:36 -0400
+Received: from m228-4.mailgun.net (m228-4.mailgun.net [159.135.228.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224CF124A7
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 08:12:34 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
+ s=mx; t=1683472353; x=1683479553; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Subject: Cc: To: To: From: From: Sender: Sender;
+ bh=iEF9ELS6y2W+KeqiETl7W+iS9hegD/SWm2vaKhD9F68=;
+ b=duUY3MfTS8g1jvqeei1CWG8l8Br3fOHgZEqCe41NdcPmV7p3+uOL0xStWdzOf04fzht8iY0mrLNxBLs44NtcuMVqhqiF8U3Bkal6UsXiQ9/ezZgo8CSLtZnPXjBY4NLV6jCLjjCEKst93D+JSUSpXxps/94+501M1dDfY36B8btdTlSiD4n9Bm9/WwNQyrIJrgeeA2Z87ww3tZL7nsyVcssUT9XOvzYp5/OZJI3HW3H3gxaPxCDnBXteyUTIDRF2h8pCWetp9oNiJixJebRRLgBZKdU4jHq8wEIP1LRCydObZ0pFbQ+zbyPCPXVlMRdkq+zSELjKyHmx+2aVIXRlPg==
+X-Mailgun-Sending-Ip: 159.135.228.4
+X-Mailgun-Sid: WyI4ZWI3MiIsImxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmciLCI5M2Q1YWIiXQ==
+Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by ffb17371f780 with SMTP id
+ 6457bfe1621871856c131dc5 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sun, 07 May 2023 15:12:33 GMT
+Sender: james@equiv.tech
+From:   James Seo <james@equiv.tech>
+Cc:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (core) Finish renaming groups parameter in API to extra_groups
+Date:   Sun,  7 May 2023 08:10:53 -0700
+Message-Id: <20230507151051.1861929-1-james@equiv.tech>
 MIME-Version: 1.0
-References: <20230506232616.1792109-1-bigunclemax@gmail.com>
- <20230506232616.1792109-4-bigunclemax@gmail.com> <20230507105150.31643b87@slackpad.lan>
-In-Reply-To: <20230507105150.31643b87@slackpad.lan>
-From:   Maxim Kiselev <bigunclemax@gmail.com>
-Date:   Sun, 7 May 2023 18:09:45 +0300
-Message-ID: <CALHCpMgxsLzRF0FfazMXYiWK1fV99dbxYNDvoj+a0S-RvZP9Hg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] spi: sun6i: add quirk for in-controller clock divider
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Icenowy Zheng <icenowy@aosc.io>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This case assumes that the SDM bit is zero already. I think just
-> masking both bits off above, right after the read, is the easiest, then
-> you can also lose the else branch below entirely.
+Commit 848ba0a2f20dc121a3ef5272a24641d2bd963d8b renames the
+'groups' parameter of devm_hwmon_device_register_with_info()
+to 'extra_groups' in hwmon-kernel-api.txt (later .rst) and
+hwmon.h, but this change was not propagated to the function
+code itself in hwmon.c. Finish the job.
 
-Thanks for this remark. I fixed it in the next revision.
+Note that hwmon_device_register_with_info() has the same
+parameter, and the name of that parameter was changed in all
+three files. Harmonizing the name between these related
+functions also removes a potential source of confusion.
+
+Signed-off-by: James Seo <james@equiv.tech>
+---
+
+Changes from RFC:
+* Rewrote commit message
+
+History:
+RFC: https://lore.kernel.org/linux-hwmon/20230504075752.1320967-3-james@equiv.tech/
+
+---
+ drivers/hwmon/hwmon.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 573b83b6c08c..5f205686065e 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -1029,7 +1029,7 @@ EXPORT_SYMBOL_GPL(devm_hwmon_device_register_with_groups);
+  * @name:	hwmon name attribute
+  * @drvdata:	driver data to attach to created device
+  * @chip:	pointer to hwmon chip information
+- * @groups:	pointer to list of driver specific attribute groups
++ * @extra_groups: pointer to list of driver specific attribute groups
+  *
+  * Returns the pointer to the new device. The new device is automatically
+  * unregistered with the parent device.
+@@ -1038,7 +1038,7 @@ struct device *
+ devm_hwmon_device_register_with_info(struct device *dev, const char *name,
+ 				     void *drvdata,
+ 				     const struct hwmon_chip_info *chip,
+-				     const struct attribute_group **groups)
++				     const struct attribute_group **extra_groups)
+ {
+ 	struct device **ptr, *hwdev;
+ 
+@@ -1050,7 +1050,7 @@ devm_hwmon_device_register_with_info(struct device *dev, const char *name,
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	hwdev = hwmon_device_register_with_info(dev, name, drvdata, chip,
+-						groups);
++						extra_groups);
+ 	if (IS_ERR(hwdev))
+ 		goto error;
+ 
+-- 
+2.34.1
+
