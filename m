@@ -2,69 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B056F998A
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5146F998C
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231656AbjEGPzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 11:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
+        id S231234AbjEGP5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 11:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbjEGPzS (ORCPT
+        with ESMTP id S230187AbjEGP5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 11:55:18 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573DD6A5B;
-        Sun,  7 May 2023 08:55:17 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64115eef620so29325663b3a.1;
-        Sun, 07 May 2023 08:55:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683474917; x=1686066917;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=GYb3dk460XgtsVCvhsWMRMsftl/DXZ2mh7rVvkm2EDw=;
-        b=k7CifHgNsCWx5LvdF7fIHaYUiiTtEulUmBd6XZrJknUjjn9gzQN56bL4M435r+xkMl
-         7Yt8MHg/JaTgzNMCV+lz1ELsQYjd49CRYEKKVe9vOEex0DnO/VaYVcdtRt/Iw3j6QwDn
-         0waaqU1MtlaJkvTS9RvbFJEZxngjIqnvlpuhfjazqsq948lSgvrGNMSkIWxi75d1mVZr
-         CV3nvxtJ27sEBAVqxFlP6UGkO2huCjmsP1foSNdsysFbKizFLU0X1aHJ9DI4uLJsojuu
-         sJ0jUHkxAlfbmUF5++5TTfO/Pyy1ODG/jh9WzpPDgiBA4r2ay23mwY8zbWWIshHXuRXI
-         Pq6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683474917; x=1686066917;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GYb3dk460XgtsVCvhsWMRMsftl/DXZ2mh7rVvkm2EDw=;
-        b=Ip9m4hFq+Ny0GimrYuM5nZq2RQhhowJwZyGz6Ywz4suLcpLw2NeAY2JC6Oat9lQDZe
-         uI+aa5eY7g7tA4fEkSw31wCzCUcUTi3yjVgKEYWREQCg5SnHqYbfS/DUk7u/oNzqdNtL
-         KC4gt26w/OmdHtuSIPoJnUgeg10u8fa3AqzB27izekd2mspOSApPLCk4PX4Z0qc+w3Ot
-         FU+axNUnEUjGYqZdmu7DVUpxn7ayJ4psqLGb0emBfHCs0OvgkMDBqHSNmVqGZTZ1BFHI
-         4Id/DQaX5SZSw8wyA3fjF0NBgtkbeOzErMPOLA1N1kR3jCwACRngqr/CgWjpF0Dqm2B9
-         hc3A==
-X-Gm-Message-State: AC+VfDwymy9lWglVJ+Ko43kq4lWlkd/IXy5ZbMV8vBr+qdpI1wlsvXgC
-        jOAPkaZwFzDvJJ2Y7S0QVBE=
-X-Google-Smtp-Source: ACHHUZ6gBz4FXcclZPm+RTBXlHXIsHpELQy7700mjt1mMbOqWvrSVyTfrE1uE5Cp9knWG/+eauqCAA==
-X-Received: by 2002:a17:902:f685:b0:1ac:731b:bc9a with SMTP id l5-20020a170902f68500b001ac731bbc9amr1448873plg.27.1683474916488;
-        Sun, 07 May 2023 08:55:16 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id z6-20020a170903018600b001a3d041ca71sm5338360plg.275.2023.05.07.08.55.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 08:55:16 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Marek Vasut <marex@denx.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH] can: length: add definitions for frame lengths in bits
-Date:   Mon,  8 May 2023 00:55:06 +0900
-Message-Id: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.39.3
+        Sun, 7 May 2023 11:57:15 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10A1132A6
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 08:57:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683475031; x=1715011031;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=XctkZ+2SGulzsn6lrFCG2/0nx5aF/tSVCrGDT3O3VHM=;
+  b=N0oNT5tXGjwcUORzG634qNsLMN+WEBOOdFmqGYwVJwZb5Qaig9hEuetl
+   uy7Etcg+l36N16ncKiSBQzCl9o+SZ/pKJJhnbiZoDb10kDwOyx775GJkp
+   4ljehpJfywZjcFK3wKqM7FP2vNaLMrfdK/ig6Vr5tov6CyLyW9ZRg4hyQ
+   hOXy55qI257GxwnDLv8YRao4q18cTl+MNUWeYRUWtCCoiuZtzGNV9j1tG
+   JRk6iZOZDSN4BXK+9z1bcxgDZHHkRlkQF7XBqAmS5uNSfX8RTV/lr2Y6a
+   n88KdtyKP+x8hPQz1CszMiFr9XQir7FGqGIsa9gqDHu97q3jsVplnrEH8
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="338715661"
+X-IronPort-AV: E=Sophos;i="5.99,257,1677571200"; 
+   d="scan'208";a="338715661"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2023 08:57:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="822397672"
+X-IronPort-AV: E=Sophos;i="5.99,257,1677571200"; 
+   d="scan'208";a="822397672"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga004.jf.intel.com with ESMTP; 07 May 2023 08:57:10 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sun, 7 May 2023 08:57:10 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Sun, 7 May 2023 08:57:10 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.49) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Sun, 7 May 2023 08:57:10 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bwU/byopTUULDdYqPJ4AvjdW/NuVzyEd04swJGzCg8kyaPmH8OjORPU0EWzB0Wz7NWLuDUXMcCdjLV3iNLBUEZwcYfRTSuPWp8N9RxT/AETaR2DGERr1y01+cWnnMeNb8ELsG+kdh07k1gpQAFCyr+sfg0z1BNFgbzPQbMp+k445hFpl0O91MUP8m0gFs18EA6iIEYDRR/0Ppth/vUen3VSEPe4luz+Zh53bWQgRfl5VUnHLHTB+M1Ril84tMM7MNeFhoLx5e55mF+Lyl/RWH1wUNljTbquoV49PpJVfHJW3PKOoyig5nI2o/exjSnAdsAJxJ2aKzso51tyZbozrWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XctkZ+2SGulzsn6lrFCG2/0nx5aF/tSVCrGDT3O3VHM=;
+ b=ROwoPh3myqepjhq+WU9keiANB6LVoWLO4BFuFPxa0vR4Yn0ajxMGa/oS8IDvJJeFKcz5MuiP4dNKC0i7G1SVT1goegzmcil4ei9F63AmLahx8QqSnQEKk391jGEZVUEVXtJ6lAMnOGBBHXUB/Qi2vJuDDRu/QmvjPlVYo1MgbgrC7pwjg2JPHilZgHmjBzckv2Otkh2O0+VuYXVwZ+XHCaXcYRXibJrs7OeCrboYKa8fufWYHeULxKBeOteK/dXwCra5XASfw18Yo8iW5VYhaStuNBrtGQYNvmGWLcCu46o22WbsW6FaHmO11ezTdWTrvR2AZVwQBqrJtTmETfI/Uw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
+ by CY8PR11MB7082.namprd11.prod.outlook.com (2603:10b6:930:52::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Sun, 7 May
+ 2023 15:57:07 +0000
+Received: from MN0PR11MB5963.namprd11.prod.outlook.com
+ ([fe80::33bf:d30c:12fd:b7e3]) by MN0PR11MB5963.namprd11.prod.outlook.com
+ ([fe80::33bf:d30c:12fd:b7e3%7]) with mapi id 15.20.6363.032; Sun, 7 May 2023
+ 15:57:07 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "Torvalds, Linus" <torvalds@linux-foundation.org>
+CC:     "keescook@chromium.org" <keescook@chromium.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Subject: Re: [GIT PULL] x86/shstk for 6.4
+Thread-Topic: [GIT PULL] x86/shstk for 6.4
+Thread-Index: AQHZdvLFwdOoBiNv3EeiRW4XzF36M69BDVuAgABnQwCAAAPJgIAMPVyAgAAJkYCAAEWaAIAABZ+AgAEAsgA=
+Date:   Sun, 7 May 2023 15:57:07 +0000
+Message-ID: <061cd3573d105969e4c439d61f74134fbc78d2db.camel@intel.com>
+References: <20230424212130.590684-1-dave.hansen@linux.intel.com>
+         <CAHk-=whn3F1k263SZNUVQK195tcCMAo5E_WbmjUE0qFC5rWg=w@mail.gmail.com>
+         <4433c3595db23f7c779b69b222958151b69ddd70.camel@intel.com>
+         <148b3edb-b056-11a0-1684-6273a4a2d39a@intel.com>
+         <CAHk-=wiuVXTfgapmjYQvrEDzn3naF2oYnHuky+feEJSj_G_yFQ@mail.gmail.com>
+         <CAHk-=wiB0wy6oXOsPtYU4DSbqJAY8z5iNBKdjdOp2LP23khUoA@mail.gmail.com>
+         <085834410eb66433c414f2b81589d45edf1eaf3b.camel@intel.com>
+         <CAHk-=wgCM+o1vm4pS_9=1E9XkOn6c1jiiKLJS2710ncEL+43tQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wgCM+o1vm4pS_9=1E9XkOn6c1jiiKLJS2710ncEL+43tQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR11MB5963:EE_|CY8PR11MB7082:EE_
+x-ms-office365-filtering-correlation-id: ccc96e9a-397a-46eb-f2ad-08db4f13b580
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kvJAhoQnnfr+9hJpDj/58Pq/N361/KMvmRy08zbYV7waAT1ehWrSlJzBUhh5SVByd7AUoW/Ls/LKFM6g0RoLAeqUUGggv3WQKpmUjTsgNP7quMuJ8n7g557/0/Rj0OcIL8bLgJVTQ7jWth53jRqPC1ZlfrcSAgvLHIHLJkZGOLDr+76XRNKlB4JeGmr4OzoEB62DqjnPwGg5kMLnhnpEVl7xO9P399qmeTj99I2euq8chl5ICHzkxBxZja0OArVJU8chtMxexxSE8+FpEAmg/PP0XrBE9yW0R9aAur+3vPyP1hRT069IvY03XrQHK7tH3K/tG1J+xUfjynAQjbyznk/+nkrLuIMYtQSOuALWOPRfCiFXD0ctRx5E71AfXN9jGftAxncD3sfWMB+6ZmW+iWdjycw+FiV9tikyb2NgL13FooQJFbTFNPx+BrrbNvLlESwFL/m+yNtPZvK5nNSTcIXSzUcb+NoZk2VN7GGwqE9JWzZsQUFLwOXSQAup2nwCagysMUD7cv6kzDx0Go4xJp5mWFLX6coms9/2Ox0eZeQczbgkAUqIi3mEG6mmDa3LROOGGRnYjFH18EjC4m1HvHTZzwgdSM31HJZIU/a5T7/3/ZQeC/JM9nVbOu9KbHPv
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(376002)(346002)(366004)(396003)(39860400002)(451199021)(91956017)(478600001)(6486002)(71200400001)(54906003)(2616005)(6512007)(6506007)(26005)(186003)(2906002)(36756003)(38100700002)(64756008)(66446008)(66476007)(66556008)(66946007)(76116006)(6916009)(122000001)(82960400001)(4326008)(41300700001)(5660300002)(8676002)(8936002)(38070700005)(86362001)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WHNJZitnTnR6bCtYSURISmg4RDRUeUtaRzRseDhCOUd5RTZKaW9Wd3k2TTB5?=
+ =?utf-8?B?TWJ6UjNiUDZZL2gvSFIydHdtaXJRVEt1NTFXdVlrUklzV1NUTm8xWUsyVkdt?=
+ =?utf-8?B?VG1sTGxvTmhnbTA2K1FBbW9JQytTWFEwbWhFWkU2MUo4cVVkMWxCRFpFYTJ1?=
+ =?utf-8?B?ZVdFL3hXMndpL2FwSFVsTXJWV29hVnNCUkp0T1JHem9DbU9HeDEzRlFqaWt2?=
+ =?utf-8?B?eWZ6amVDMXBlSFR4aHYxeEZGTUZRZ0xuSm96a2VkZ3pVTWRkT2pPQXVWckVn?=
+ =?utf-8?B?ZWd4NUlzNlRhY1RmZWlvWGgrRkhrUk03U0NZMGhZOFN1WWtKeUwrWEJKbThH?=
+ =?utf-8?B?dzhMQXVuMEVKVXprd2VadTJlMmVEeUpDMHgzUWRFSUcvcUJoNGIwR3dlYmNT?=
+ =?utf-8?B?aVgwY0w1MVptUjg3UHo4N3h4MHBXZ1FVWllDVTUzTlJnVlJENXNxbHl4aXVi?=
+ =?utf-8?B?RDlJcVovTnp5R0RKbFZzZWthZzE4YXNVREtUanc1R0pJZHA4UlNRMjhrVzUz?=
+ =?utf-8?B?dzNIUmpUUFpGdWRlWHBXQUcxZHVYRXQrbDk4cEM2MVhvdzk3Qndkak50SURB?=
+ =?utf-8?B?bDFpeWV4ek0vazVOMGhmZUUzL2xRZXpUZmZVRTN5ZW5yRmtRSkg3KzNPcExn?=
+ =?utf-8?B?eDZ1UlV0WmE5YithVUozeFMyVXU0ZS83MWtZbVhCS28wU3k4bzNuNThaUDZz?=
+ =?utf-8?B?amZhamlYTU9lK1htaVVBYVNNQkx4eHNXZzlWd1NtSGJmYzAyckNqNndONU9R?=
+ =?utf-8?B?L2RNam03bzJFL28xYWdhbS8wMElNeTIwRFpYelN2T1kySExIMGU2MERlWCtT?=
+ =?utf-8?B?R1J4MkQreGdaRUJMRlFvU1VXWW53ckl2ZWRMTDdwZ1phZnMxUGtrcTFlaWRQ?=
+ =?utf-8?B?Y3NOTDVMMjJyYVRqMVNuejJkQndGZ2N0cm1ndC9UZlNCV0NDZktSNlFIQVo1?=
+ =?utf-8?B?cjNtMk9SWWtmb1RrOU4vVjNlOE5LTEhCSHpMa29idmtFc1VCWGdSL3BaZEdS?=
+ =?utf-8?B?RjM0K0V4SllOd0ZmQzNnMVdLU0RmQlBCaG9nZk81Sk1EOWZBKzJnSUhOTHMv?=
+ =?utf-8?B?b0FMYU9TSHFPQzdtTWRPNGNuZUx4NXdQSy8rdTFUNC9yUnZDeVd4YjZXL2xS?=
+ =?utf-8?B?dmVXdzZsSnBsSS9DTTNRWFhseUZzRW5pNDJjdHloMVFJdW9wbWtORGF2dUdJ?=
+ =?utf-8?B?eE9rRmVBNVc1WU9UdnRRdG9ZTmtMcEtCNzI3dEFicExHR0F5VFNGNEIvZzEr?=
+ =?utf-8?B?YUNGQ2pWTEZQMTFrb2U0QWhpVmM2VkxMdGFxc1RmYXl3L01DdnVyeVM2ODFV?=
+ =?utf-8?B?U0loOU5VdC9lNUJoVnZEWW1jU0hmVUJ2akIySUE1aGFOUWgwWWRYNVRoSFhT?=
+ =?utf-8?B?akZ2R1gxaTFyVjlkdFRrMmxFQWhWRHRYYndaTDJRMndlM1o4QjRYM1F0UUVZ?=
+ =?utf-8?B?U2xwZTN3MW1HM1dialJPZU5VWktPNk0zRE9yMUNjNEhMUW1LZ1lJUEh6SllU?=
+ =?utf-8?B?OTkrbUxnM2xNaFlQMllEeXAvYmFjOTMwYXVjMVRwa0JQR2Fld21BVVJrV3RO?=
+ =?utf-8?B?ejd5OENCc2N2VktNY25YVlJBVit5U2VoaEVLRFNFdkY2aE92RUt2dk5BMG9Q?=
+ =?utf-8?B?T0xpNDRlanJyU2F2WVdMWmtER0sxZ0kxNlNKTisxYjFtMDAvV1FsWmNVYTI0?=
+ =?utf-8?B?Y3VsR09tWHhINHhDbzRGcU1BMkUvSnNjUTVqSkp5Ti9mZFc5WHpBUHoxS1d1?=
+ =?utf-8?B?T1Vya3Rmc2xzeE9EVkkwT291QjI1ZldLK2FRWjBZcHhzRFZWcy8zK1AzcG1w?=
+ =?utf-8?B?blNGRFNHWjRwS0dubHdCYjNGM09iRlVSeTduZE0vbHpvWXEyYTRBTnUrb0NT?=
+ =?utf-8?B?TTlZWDFqRjRnVXcrWVpMN2pEYWdmZTRubENsNW9YdjFKeHV2U3ptZWdoY09y?=
+ =?utf-8?B?aU5uNXhqcUsweWRBYnhLdXRzZGdxUXh5NDZmZUpEUEdidDRIUktZK2gxa3Y5?=
+ =?utf-8?B?MjJpQ3gyc0xZSXdFWGxUMXI4YXhEY1R1aTVUNmF2ZFdOa2tiYzIvU1NkVXlu?=
+ =?utf-8?B?eWNteEwrd0xiNTF0MllqbGh5aEpPZk00eHlEY2RydmNMR0loazBicWZOUVRz?=
+ =?utf-8?B?Sk1zcmRuNUFZR1o2Z1Ywbnpmc3lhcE5IN3Jza1UwdmNzRjJ6K3pBMXpzdWRX?=
+ =?utf-8?B?cWc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <00E626A8EFB20242A8D3F1620226845D@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5963.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ccc96e9a-397a-46eb-f2ad-08db4f13b580
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 May 2023 15:57:07.0656
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5+NJ3E1OeSlyf2ZT0z+JGfl2tirRDS6O3ggzbsMbeXQkDbYzGEql2n+GwARvRzn6QzXdSdhI/aT1eeA5DofOi/aejj5A/2eRCAQEQypsmLE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7082
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,202 +173,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When created in [1], frames length definitions were added to implement
-byte queue limits (bql). Because bql expects lengths in bytes, bit
-length definitions were not considered back then.
-
-Recently, a need to refer to the exact frame length in bits, with CAN
-bit stuffing, appeared in [2].
-
-Add 9 frames length definitions:
-
- - CAN_FRAME_OVERHEAD_SFF_BITS:
- - CAN_FRAME_OVERHEAD_EFF_BITS
- - CANFD_FRAME_OVERHEAD_SFF_BITS
- - CANFD_FRAME_OVERHEAD_EFF_BITS
- - CAN_BIT_STUFFING_OVERHEAD
- - CAN_FRAME_LEN_MAX_BITS_NO_STUFFING
- - CAN_FRAME_LEN_MAX_BITS_STUFFING
- - CANFD_FRAME_LEN_MAX_BITS_NO_STUFFING
- - CANFD_FRAME_LEN_MAX_BITS_STUFFING
-
-CAN_FRAME_LEN_MAX_BITS_STUFFING and CANFD_FRAME_LEN_MAX_BITS_STUFFING
-define respectively the maximum number of bits in a classical CAN and
-CAN-FD frame including bit stuffing. The other definitions are
-intermediate values.
-
-In addition to the above:
-
- - Include linux/bits.h and then replace the value 8 by BITS_PER_BYTE
-   whenever relevant.
- - Include linux/math.h because of DIV_ROUND_UP(). N.B: the use of
-   DIV_ROUND_UP() is not new to this patch, but the include was
-   previously omitted.
- - Update the existing length definitions to use the newly defined values.
- - Add myself as copyright owner for 2020 (as coauthor of the initial
-   version, c.f. [1]) and for 2023 (this patch).
-
-[1] commit 85d99c3e2a13 ("can: length: can_skb_get_frame_len(): introduce
-    function to get data length of frame in data link layer")
-Link: https://git.kernel.org/torvalds/c/85d99c3e2a13
-
-[2] RE: [PATCH] can: mcp251xfd: Increase poll timeout
-Link: https://lore.kernel.org/linux-can/BL3PR11MB64846C83ACD04E9330B0FE66FB729@BL3PR11MB6484.namprd11.prod.outlook.com/
-
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-As always, let me know if you have better inspiration than me for the
-naming.
----
- include/linux/can/length.h | 84 ++++++++++++++++++++++++++++++++------
- 1 file changed, 72 insertions(+), 12 deletions(-)
-
-diff --git a/include/linux/can/length.h b/include/linux/can/length.h
-index 6995092b774e..60492fcbe34d 100644
---- a/include/linux/can/length.h
-+++ b/include/linux/can/length.h
-@@ -1,13 +1,17 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /* Copyright (C) 2020 Oliver Hartkopp <socketcan@hartkopp.net>
-  * Copyright (C) 2020 Marc Kleine-Budde <kernel@pengutronix.de>
-+ * Copyright (C) 2020, 2023 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
- #ifndef _CAN_LENGTH_H
- #define _CAN_LENGTH_H
- 
-+#include <linux/bits.h>
-+#include <linux/math.h>
-+
- /*
-- * Size of a Classical CAN Standard Frame
-+ * Size of a Classical CAN Standard Frame in bits
-  *
-  * Name of Field			Bits
-  * ---------------------------------------------------------
-@@ -25,12 +29,19 @@
-  * End-of-frame (EOF)			7
-  * Inter frame spacing			3
-  *
-- * rounded up and ignoring bitstuffing
-+ * ignoring bitstuffing
-  */
--#define CAN_FRAME_OVERHEAD_SFF DIV_ROUND_UP(47, 8)
-+#define CAN_FRAME_OVERHEAD_SFF_BITS 47
- 
- /*
-- * Size of a Classical CAN Extended Frame
-+ * Size of a Classical CAN Standard Frame
-+ * (rounded up and ignoring bitstuffing)
-+ */
-+#define CAN_FRAME_OVERHEAD_SFF \
-+	DIV_ROUND_UP(CAN_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
-+
-+/*
-+ * Size of a Classical CAN Extended Frame in bits
-  *
-  * Name of Field			Bits
-  * ---------------------------------------------------------
-@@ -50,12 +61,19 @@
-  * End-of-frame (EOF)			7
-  * Inter frame spacing			3
-  *
-- * rounded up and ignoring bitstuffing
-+ * ignoring bitstuffing
-  */
--#define CAN_FRAME_OVERHEAD_EFF DIV_ROUND_UP(67, 8)
-+#define CAN_FRAME_OVERHEAD_EFF_BITS 67
- 
- /*
-- * Size of a CAN-FD Standard Frame
-+ * Size of a Classical CAN Extended Frame
-+ * (rounded up and ignoring bitstuffing)
-+ */
-+#define CAN_FRAME_OVERHEAD_EFF \
-+	DIV_ROUND_UP(CAN_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
-+
-+/*
-+ * Size of a CAN-FD Standard Frame in bits
-  *
-  * Name of Field			Bits
-  * ---------------------------------------------------------
-@@ -77,12 +95,19 @@
-  * End-of-frame (EOF)			7
-  * Inter frame spacing			3
-  *
-- * assuming CRC21, rounded up and ignoring bitstuffing
-+ * assuming CRC21 and ignoring bitstuffing
-  */
--#define CANFD_FRAME_OVERHEAD_SFF DIV_ROUND_UP(61, 8)
-+#define CANFD_FRAME_OVERHEAD_SFF_BITS 61
- 
- /*
-- * Size of a CAN-FD Extended Frame
-+ * Size of a CAN-FD Standard Frame
-+ * (assuming CRC21, rounded up and ignoring bitstuffing)
-+ */
-+#define CANFD_FRAME_OVERHEAD_SFF \
-+	DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
-+
-+/*
-+ * Size of a CAN-FD Extended Frame in bits
-  *
-  * Name of Field			Bits
-  * ---------------------------------------------------------
-@@ -106,9 +131,32 @@
-  * End-of-frame (EOF)			7
-  * Inter frame spacing			3
-  *
-- * assuming CRC21, rounded up and ignoring bitstuffing
-+ * assuming CRC21 and ignoring bitstuffing
-+ */
-+#define CANFD_FRAME_OVERHEAD_EFF_BITS 80
-+
-+/*
-+ * Size of a CAN-FD Extended Frame
-+ * (assuming CRC21, rounded up and ignoring bitstuffing)
-+ */
-+#define CANFD_FRAME_OVERHEAD_EFF \
-+	DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
-+
-+/* CAN bit stuffing overhead multiplication factor */
-+#define CAN_BIT_STUFFING_OVERHEAD 1.2
-+
-+/*
-+ * Maximum size of a Classical CAN frame in bits, ignoring bitstuffing
-  */
--#define CANFD_FRAME_OVERHEAD_EFF DIV_ROUND_UP(80, 8)
-+#define CAN_FRAME_LEN_MAX_BITS_NO_STUFFING \
-+	(CAN_FRAME_OVERHEAD_EFF_BITS + CAN_MAX_DLEN * BITS_PER_BYTE)
-+
-+/*
-+ * Maximum size of a Classical CAN frame in bits, including bitstuffing
-+ */
-+#define CAN_FRAME_LEN_MAX_BITS_STUFFING				\
-+	((unsigned int)(CAN_FRAME_LEN_MAX_BITS_NO_STUFFING *	\
-+			CAN_BIT_STUFFING_OVERHEAD))
- 
- /*
-  * Maximum size of a Classical CAN frame
-@@ -116,6 +164,18 @@
-  */
- #define CAN_FRAME_LEN_MAX (CAN_FRAME_OVERHEAD_EFF + CAN_MAX_DLEN)
- 
-+/*
-+ * Maximum size of a CAN-FD frame in bits, ignoring bitstuffing
-+ */
-+#define CANFD_FRAME_LEN_MAX_BITS_NO_STUFFING \
-+	(CANFD_FRAME_OVERHEAD_EFF_BITS + CANFD_MAX_DLEN * BITS_PER_BYTE)
-+
-+/*
-+ * Maximum size of a CAN-FD frame in bits, ignoring bitstuffing
-+ */
-+#define CANFD_FRAME_LEN_MAX_BITS_STUFFING			\
-+	((unsigned int)(CANFD_FRAME_LEN_MAX_BITS_NO_STUFFING *	\
-+			CAN_BIT_STUFFING_OVERHEAD))
- /*
-  * Maximum size of a CAN-FD frame
-  * (rounded up and ignoring bitstuffing)
--- 
-2.39.3
-
+T24gU2F0LCAyMDIzLTA1LTA2IGF0IDE3OjM4IC0wNzAwLCBMaW51cyBUb3J2YWxkcyB3cm90ZToN
+Cj4gU28gdGhhdCBtZWFucyB0aGF0IHRoZQ0KPiANCj4gwqDCoMKgwqDCoMKgwqAgaWYgKHB0ZV9k
+aXJ0eShwdGUpKQ0KPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcHRlID0gcHRlX21r
+c2F2ZWRkaXJ0eShwdGUpOw0KPiANCj4gaW4gcHRlX3dycHJvdGVjdCgpIGlzIGp1c3Qgbm9uc2Vu
+c2ljYWwsIGFuZCBiYXNpY2FsbHkgc2F5cyAiaWYgZWl0aGVyDQo+IHRoZSByZWFsIGRpcnR5IG9y
+IHRoZSBTVyBkaXJ0eSBiaXQgaXMgc2V0LCBzZXQgdGhlIFNXIGRpcnR5IGJpdCIuIEJ1dA0KPiB0
+aGF0J3MgZW50aXJlbHkgcmVkdW5kYW50IHdydCB0aGUgb2xkIHN0YXRlIG9mIHRoZSBkaXJ0eSBi
+aXQuDQo+IA0KPiBJdCByZWFsaXR5IHNob3VsZCBqdXN0ICdvcicgdGhlIEhXIGRpcnR5IGJpdCBp
+bnRvIHRoZSBTVyBkaXJ0eSBiaXQNCj4gYW5kDQo+IGJlIGRvbmUgd2l0aCBpdC4NCj4gDQo+IE9m
+IGNvdXJzZSwgbWF5YmUgSSBjb25mdXNlZCB0aGUgaXNzdWUgYnkgdGFsa2luZyBhYm91dCBIVyBk
+aXJ0eSBhbmQNCj4gU1cNCj4gZGlydHksIGJlY2F1c2Ugd2UgKmFsc28qIGhhdmUgdGhhdCBlbnRp
+cmVseSAqb3RoZXIqIGxlZ2FjeQ0KPiAiU09GVF9ESVJUWSIgYml0IHRoYXQgaXMgZGlmZmVyZW50
+IGZyb20gdGhlIG5ldyBTVyBkaXJ0eSBiaXQNCj4gKCJTQVZFRF9ESVJUWSIpLg0KDQpTb3JyeSwg
+SSBkaWQgdGhpbmsgeW91IG1lYW50IHRoZSBvbGQgX1BBR0VfU09GVF9ESVJUWSB3aGVuIHlvdSB3
+ZXJlDQp0YWxraW5nIGFib3V0IHRoZSBTVyBkaXJ0eSBiaXQgaGVyZS4NCg0KWWVhLCBpZiBvbmx5
+IF9QQUdFX1NBVkVEX0RJUlRZIGlzIHNldCwgYW5kIG5vdCBfUEFHRV9ESVJUWSwgdGhlbiBpdCdz
+DQpwb2ludGxlc3MgdG8gZG8gcHRlX21rc2F2ZWRkaXJ0eSgpIGhlcmUuIFNvIEkgZ3Vlc3MgeW91
+IHdlcmUgcG9pbnRpbmcNCm91dCBhbiBleGFtcGxlIG9mIHRoZSBnZW5lcmFsIHdyb25nbmVzcyB5
+b3UgZWxhYm9yYXRlZCBvbi4gSSB0aG91Z2h0DQp5b3Ugd2VyZSBzYXlpbmcgaXQgd2FzIGEgZnVu
+Y3Rpb25hbCBidWcuDQo=
