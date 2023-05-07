@@ -2,132 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1CAA6F9B05
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 20:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E986F9B1F
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 21:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbjEGSwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 14:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48548 "EHLO
+        id S232869AbjEGTPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 15:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjEGSwl (ORCPT
+        with ESMTP id S232813AbjEGTP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 14:52:41 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB71311575
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 11:52:38 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-966287b0f72so210885466b.0
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 11:52:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1683485557; x=1686077557;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CsECona4C2RMdk3QW+3sdWBFtOEdxVYIeVifcSTdEsg=;
-        b=f3T3Ss59UYf1A43P0XnpjLpdzh/a4SHNSrMbQ65KI7KjixLSd+OHBp0Gu7iKCOREKK
-         TQ3y6pKxYRDsui4RmRJOTIYQN2KpowovI/UEinQNlL7vGTN63/PkzuicIXJpLjgnL9is
-         OlEHm6vZxizfz2V1FXJFZJptZghw9u1ndKIj4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683485557; x=1686077557;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CsECona4C2RMdk3QW+3sdWBFtOEdxVYIeVifcSTdEsg=;
-        b=M6JcBx4aOQcHTqgpylTG5USOoGXThWQ3Ray8juSjjyk+P1+b7jKwZrB6gy5kp5VkVq
-         J/6LqlqOKkjjkXYnF/CfLmRWzHaXkthw9oeynHF+XmvUV0yCIu0kqfuSeLPtY/WtwPzQ
-         0wRyTlyn0JVX6GRT7V/w18QRq6W+8hNea84fPmduVSyjhn65OCGC3XDV1KEvkZunGczG
-         3Ta+4BOR/sCfVamB50sadbjSXUwyWdXp21yXtOoGDdcb8zippPjOrX1d/3Tbmjs4ndWS
-         0klbrywiwgU4Ni+UurC/q1VfYxgSZq5YcrJY8V9v/+Hs05CGR9UJ+fCeR7RO0QNLVloW
-         8Ihg==
-X-Gm-Message-State: AC+VfDyc7I1SP9IpGHjnckW+Mb+xISrnJxT3kF98BeAGj4RBv7tVBAF+
-        IEHT/QhDUbkVxviSuxxXHDJxbS+HXfSZOlxyyDhZaA==
-X-Google-Smtp-Source: ACHHUZ7auicqhEBiYJJVwiz26sVErxIaJKHX0gPmjNSYgSuEP17HH0AIjc/z06JjikkUsGtxfeF5UA==
-X-Received: by 2002:a17:907:9304:b0:94a:7716:e649 with SMTP id bu4-20020a170907930400b0094a7716e649mr6956393ejc.13.1683485557215;
-        Sun, 07 May 2023 11:52:37 -0700 (PDT)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
-        by smtp.gmail.com with ESMTPSA id k13-20020a17090632cd00b00957dad777c1sm3952997ejk.107.2023.05.07.11.52.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 May 2023 11:52:36 -0700 (PDT)
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-965e4be7541so496836866b.1
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 11:52:35 -0700 (PDT)
-X-Received: by 2002:a17:907:7da7:b0:94f:764e:e311 with SMTP id
- oz39-20020a1709077da700b0094f764ee311mr6746310ejc.16.1683485555608; Sun, 07
- May 2023 11:52:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230506133134.1492395-1-jacob.jun.pan@linux.intel.com>
- <CAHk-=wgUiAtiszwseM1p2fCJ+sC4XWQ+YN4TanFhUgvUqjr9Xw@mail.gmail.com> <20230506150741.2e3d2dcc@jacob-builder>
-In-Reply-To: <20230506150741.2e3d2dcc@jacob-builder>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 7 May 2023 11:52:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjmOAQnqJF-pW=fzMXb_Rk_J_Oi4ESBLmVPhxwBK4xfGg@mail.gmail.com>
-Message-ID: <CAHk-=wjmOAQnqJF-pW=fzMXb_Rk_J_Oi4ESBLmVPhxwBK4xfGg@mail.gmail.com>
-Subject: Re: [PATCH] iommu: Add Kconfig help text for IOMMU_SVA
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>, Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        Sun, 7 May 2023 15:15:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014B53C33;
+        Sun,  7 May 2023 12:15:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59C4461CC5;
+        Sun,  7 May 2023 19:15:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AEE20C4339B;
+        Sun,  7 May 2023 19:15:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683486918;
+        bh=uAkBkpziuUWcOgdfZLvVqNGAnIysDNBbHL+PBQ11zjY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=YZVheqeHlApuC95UrfRFT36ijSQ3FpBqpfo7Do3pNzrD9iJkLAHKLHjhYIrutVeU3
+         XqYkMNAYPYy8zJdfRDfGBNlkmTB/aZMRxuCFneFFHE0jfitvXwlLkbjGQi33y11It1
+         h9pVIsJ2AoGShIO34+D2YzRPHkHEN/FBMta3WYXgf46HVuPLp79+wNOH4OxiQBLx0v
+         yQrVximKokgxEi32POH6pu2e3AbTNPwUZ7+AUh2a1qgcmEEeye0Pg+GMI5607pvri2
+         VDBffVPBrIseco3z7O0CPzl6q2ZhMsIU1tbNkIZi9dEYtIkxOQPr3wDOfo0A54j1hT
+         8vtuILDvPeTxw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9408FC395FD;
+        Sun,  7 May 2023 19:15:18 +0000 (UTC)
+Subject: Re: [GIT PULL] perf tools changes for v6.4: 2nd attempt
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230505230831.1084855-1-acme@kernel.org>
+References: <20230505230831.1084855-1-acme@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230505230831.1084855-1-acme@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-for-v6.4-2-2023-05-05
+X-PR-Tracked-Commit-Id: 6c73f819b6b6d6f052e8dbe3f66f0693554ddf48
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c3e6df97fa25ff310c3d5e7f1644248e072e3cb0
+Message-Id: <168348691860.15765.16548461476435203750.pr-tracker-bot@kernel.org>
+Date:   Sun, 07 May 2023 19:15:18 +0000
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Hao Luo <haoluo@google.com>, Ian Rogers <irogers@google.com>,
+        James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Roman Lozko <lozko.roma@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 6, 2023 at 3:03=E2=80=AFPM Jacob Pan <jacob.jun.pan@linux.intel=
-.com> wrote:
->
-> Right, how about IOMMU_SHARING_CPU_PGTABLE?
+The pull request you sent on Fri,  5 May 2023 20:08:31 -0300:
 
-I think from a VM / process angle, I'd actually prefer calling the
-"pasid" part just that: IOMMU_PASID.
+> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-for-v6.4-2-2023-05-05
 
-The VM code certainly understands about address space IDs, even if
-people have called them different things: normal people called them
-ASID's long ago, then Intel at some pointed decided that "PCID" made
-sense as a name (narrator: "no it didn't"), and then you got that
-combined "PASID" thing.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c3e6df97fa25ff310c3d5e7f1644248e072e3cb0
 
-Now, it may be that this then goes hand-in-hand with other IOMMU code
-that isn't *about* PASID itself, but that depends on PASID's being
-present, and so I'd just expect IOMMU_PASID to be one of those options
-that are selected by other options.
+Thank you!
 
-So maybe there is some part of IOMMU_SVA that is not about PASID
-itself, but I really think that the PASID code itself should just have
-that CONFIG_PASID around it.
-
-End result: from a legibility standpoint, I think it could be as
-simple as having that
-
-    config IOMMU_SVA
-
-option have a "select IOMMU_PASID".
-
-Then make the VM/process PASID code depend on that. Maybe the "struct
-device *" stuff makes more sense under CONFIG_IOMMU_SVA, ie things
-like iopf_queue_add_device() and friends.
-
-How does that sound? Maybe those two options then always end up going
-together, but even if that is the case, I think from a VM/process
-standpoint it makes a lot more sense to simply have a "PASID enabled"
-option. It's much more understandable in that context, while something
-like "IOMMU_SVA" really is just a random jumble of letters to a VM
-person.
-
-And while the individual words in IOMMU_SHARING_CPU_PGTABLE all make
-sense, it's not clear what the combination means, and why it should
-have anything to do with then having an address space identifier for
-it.
-
-                  Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
