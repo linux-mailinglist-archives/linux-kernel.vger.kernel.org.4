@@ -2,134 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89266F96A1
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 04:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B206F96BC
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 05:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjEGC5M convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 6 May 2023 22:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S230109AbjEGDlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 23:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjEGC5L (ORCPT
+        with ESMTP id S229462AbjEGDlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 22:57:11 -0400
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6B0100FC;
-        Sat,  6 May 2023 19:57:10 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-ba2362d4ea9so658480276.3;
-        Sat, 06 May 2023 19:57:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683428229; x=1686020229;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y27uBZQDxoMMmtt5dKQE+mflLBajPhR2V/YDaYqpNNc=;
-        b=A90SH9+Br6HbaXDq8LUAqmiSeIlDsq262SOZN+mwQwpJKmeMHQrtByTfQpMc2nhdnC
-         jfAyvJzN87Y6cfhHKuZWG+26fO6jjNJu+1497FIwuL0IKiMewIQvUYSiPiqEJwx8XK6i
-         rE8vp5S3RqZ4Q2aZbnOBY9sBR2GKW37gK/q5nwoK1brYVSFiI1UvMbdJINPRjxdXw7ze
-         Iesd09+Z0Dm+6erB/0uItWl6yRuqQQzrjcCq3LfYM44iJzV+CHKyLdgMUxSmQmsWRgmY
-         Vfvc/4FX+a6jO5m5oyRJdU/1aXkrh98Dqm9/+XeUKFS9asrRlHJ4absiejtyFsIAD/fR
-         QXNw==
-X-Gm-Message-State: AC+VfDwSXVIm6nqoGl2xbQYUEXrlisoYE0nSHt0FXKPS35Qe3gsRtjhI
-        A8NNh/JBRhLn+gknh7fgjA1ZbmyS+kaAQARwRoQ=
-X-Google-Smtp-Source: ACHHUZ5KYd+Vp866GdYz32Yb8G1anYuwcXULbK3NRkDd6T9rO6BPZvKgFiMbj5mIdsFH380Y3SgiWsJzPH/v6x/8GkQ=
-X-Received: by 2002:a25:e648:0:b0:b9e:712f:4a17 with SMTP id
- d69-20020a25e648000000b00b9e712f4a17mr6602071ybh.6.1683428229058; Sat, 06 May
- 2023 19:57:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230506021450.3499232-1-irogers@google.com>
-In-Reply-To: <20230506021450.3499232-1-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Sat, 6 May 2023 19:56:56 -0700
-Message-ID: <CAM9d7cieo+cF9uNfgQq=R1BofNN5Ae69sjz80rV8-TxXPZFasg@mail.gmail.com>
-Subject: Re: [PATCH v1] perf build: Add system include paths to BPF builds
-To:     Ian Rogers <irogers@google.com>
-Cc:     Song Liu <songliubraving@meta.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Sat, 6 May 2023 23:41:42 -0400
+Received: from mail-m127104.qiye.163.com (mail-m127104.qiye.163.com [115.236.127.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BE9132BE;
+        Sat,  6 May 2023 20:41:39 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPV6:240e:3b7:3277:3e50:d9d7:3dc:49c3:c0bf])
+        by mail-m127104.qiye.163.com (Hmail) with ESMTPA id A44EFA40198;
+        Sun,  7 May 2023 11:41:34 +0800 (CST)
+From:   Ding Hui <dinghui@sangfor.com.cn>
+To:     bhelgaas@google.com
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, vidyas@nvidia.com,
+        david.e.box@linux.intel.com, kai.heng.feng@canonical.com,
+        michael.a.bottini@linux.intel.com, rajatja@google.com,
+        refactormyself@gmail.com, qinzongquan@sangfor.com.cn,
+        dinghui@sangfor.com.cn, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] PCI/ASPM: Fix UAF by disabling ASPM for link when child function is removed
+Date:   Sun,  7 May 2023 11:40:57 +0800
+Message-Id: <20230507034057.20970-1-dinghui@sangfor.com.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDSE5LVktLH0IfSkpDHUMeS1UTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlPSx5BSBlMQUhJTExBSB5OS0EfQh9MQUgfGEFPQhhIQRhLGR1ZV1kWGg8SFR0UWU
+        FZT0tIVUpKS0hKTFVKS0tVS1kG
+X-HM-Tid: 0a87f44cee36b282kuuua44efa40198
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PC46Vhw5Hj0OTjJJGD0ZKA4L
+        HUwaFFFVSlVKTUNIT0hLQ0JOTUpIVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlJT0seQUgZTEFISUxMQUgeTktBH0IfTEFIHxhBT0IYSEEYSxkdWVdZCAFZQU9NTU43Bg++
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+If the Function 0 of a Multi-Function device is software removed,
+a freed downstream pointer will be left in struct pcie_link_state,
+and then when pcie_config_aspm_link() be invoked from any path,
+we will trigger use-after-free, e.g.:
 
-On Fri, May 5, 2023 at 7:15 PM Ian Rogers <irogers@google.com> wrote:
->
-> There are insufficient headers in tools/include to satisfy building
-> BPF programs and their header dependencies. Add the system include
-> paths from the non-BPF clang compile so that these headers can be
-> found.
->
-> This code was taken from:
-> tools/testing/selftests/bpf/Makefile
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
+Reproducer:
 
-Thanks, this fixes the BPF build failure on my machine.
+  [root@host ~]# cat repro.sh
+  #!/bin/bash
+  DEV_F0="0000:03:00.0"
+  echo 1 > /sys/bus/pci/devices/$DEV_F0/remove
+  echo powersave > /sys/module/pcie_aspm/parameters/policy
 
-Tested-by: Namhyung Kim <namhyung@kernel.org>
+Result:
 
-Thanks,
-Namhyung
+  ==================================================================
+  BUG: KASAN: slab-use-after-free in pcie_config_aspm_link+0x42d/0x500
+  Read of size 4 at addr ffff8881070c80a0 by task repro.sh/2056
+  CPU: 3 PID: 2056 Comm: repro.sh Not tainted 6.3.0+ #15
+  Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x33/0x50
+   print_address_description.constprop.0+0x27/0x310
+   print_report+0x3e/0x70
+   kasan_report+0xae/0xe0
+   pcie_config_aspm_link+0x42d/0x500
+   pcie_aspm_set_policy+0x8e/0x1a0
+   param_attr_store+0x162/0x2c0
+   module_attr_store+0x3e/0x80
+   kernfs_fop_write_iter+0x2d5/0x460
+   vfs_write+0x72e/0xae0
+   ksys_write+0xed/0x1c0
+   do_syscall_64+0x38/0x90
+   entry_SYSCALL_64_after_hwframe+0x72/0xdc
 
+As per PCIe spec r6.0, sec 7.5.3.7, it is recommended that software
+program the same value in all Functions for Multi-Function Devices
+(including ARI Devices). For ARI Devices, ASPM Control is determined
+solely by the setting in Function 0.
 
-> ---
->  tools/perf/Makefile.perf | 20 +++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index 61c33d100b2b..37befdfa8ac8 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -1057,7 +1057,25 @@ $(SKEL_TMP_OUT) $(LIBAPI_OUTPUT) $(LIBBPF_OUTPUT) $(LIBPERF_OUTPUT) $(LIBSUBCMD_
->
->  ifndef NO_BPF_SKEL
->  BPFTOOL := $(SKEL_TMP_OUT)/bootstrap/bpftool
-> -BPF_INCLUDE := -I$(SKEL_TMP_OUT)/.. -I$(LIBBPF_INCLUDE)
-> +
-> +# Get Clang's default includes on this system, as opposed to those seen by
-> +# '-target bpf'. This fixes "missing" files on some architectures/distros,
-> +# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
-> +#
-> +# Use '-idirafter': Don't interfere with include mechanics except where the
-> +# build would have failed anyways.
-> +define get_sys_includes
-> +$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
-> +       | sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
-> +$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
-> +endef
-> +
-> +ifneq ($(CROSS_COMPILE),)
-> +CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
-> +endif
-> +
-> +CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
-> +BPF_INCLUDE := -I$(SKEL_TMP_OUT)/.. -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES)
->
->  $(BPFTOOL): | $(SKEL_TMP_OUT)
->         $(Q)CFLAGS= $(MAKE) -C ../bpf/bpftool \
-> --
-> 2.40.1.521.gf1e218fcd8-goog
->
+So we can just disable ASPM of the whole component if any child
+function is removed, the downstream pointer will be avoided from
+use-after-free, that will also avoid other potential corner cases.
+
+Fixes: b5a0a9b59c81 ("PCI/ASPM: Read and set up L1 substate capabilities")
+Debugged-by: Zongquan Qin <qinzongquan@sangfor.com.cn>
+Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
+Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+---
+v2:
+  - better commit title and message
+  - update comment
+  - add reproduction steps
+
+v1: https://lore.kernel.org/lkml/20230504123418.4438-1-dinghui@sangfor.com.cn/
+
+Link: https://lore.kernel.org/lkml/20230429132604.31853-1-dinghui@sangfor.com.cn/
+
+---
+ drivers/pci/pcie/aspm.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+index 66d7514ca111..06152cc39fea 100644
+--- a/drivers/pci/pcie/aspm.c
++++ b/drivers/pci/pcie/aspm.c
+@@ -1010,18 +1010,15 @@ void pcie_aspm_exit_link_state(struct pci_dev *pdev)
+ 
+ 	down_read(&pci_bus_sem);
+ 	mutex_lock(&aspm_lock);
+-	/*
+-	 * All PCIe functions are in one slot, remove one function will remove
+-	 * the whole slot, so just wait until we are the last function left.
+-	 */
+-	if (!list_empty(&parent->subordinate->devices))
+-		goto out;
+ 
+ 	link = parent->link_state;
+ 	root = link->root;
+ 	parent_link = link->parent;
+ 
+-	/* All functions are removed, so just disable ASPM for the link */
++	/*
++	 * For any function removed, disable ASPM for the link. See PCIe r6.0,
++	 * sec 7.7.3.7 for details.
++	 */
+ 	pcie_config_aspm_link(link, 0);
+ 	list_del(&link->sibling);
+ 	/* Clock PM is for endpoint device */
+@@ -1032,7 +1029,7 @@ void pcie_aspm_exit_link_state(struct pci_dev *pdev)
+ 		pcie_update_aspm_capable(root);
+ 		pcie_config_aspm_path(parent_link);
+ 	}
+-out:
++
+ 	mutex_unlock(&aspm_lock);
+ 	up_read(&pci_bus_sem);
+ }
+-- 
+2.17.1
+
