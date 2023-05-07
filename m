@@ -2,160 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3386F9997
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 18:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 570066F999B
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 18:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbjEGQG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 12:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
+        id S231684AbjEGQNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 12:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjEGQG6 (ORCPT
+        with ESMTP id S229472AbjEGQNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 12:06:58 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CF88A4C;
-        Sun,  7 May 2023 09:06:49 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 248A23F1F3;
-        Sun,  7 May 2023 18:06:46 +0200 (CEST)
-Date:   Sun, 7 May 2023 18:06:44 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Jessica Zhang <quic_jesszhan@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] drm/msm/dpu: Set DATA_COMPRESS for command mode
-Message-ID: <j5wa45g4v6swvsiakl23azu7qgxtdllf2gav5wdc7s7zukxe4c@jkcu2wnyn6rn>
-References: <20230405-add-dsc-support-v2-0-1072c70e9786@quicinc.com>
- <20230405-add-dsc-support-v2-4-1072c70e9786@quicinc.com>
+        Sun, 7 May 2023 12:13:44 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF738A4C;
+        Sun,  7 May 2023 09:13:41 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f139de8cefso23812422e87.0;
+        Sun, 07 May 2023 09:13:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683476020; x=1686068020;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JQ+ZIAc03rR20rZw4pK+Hn7hNpvlDRNOeK5+8sWq7gQ=;
+        b=E0cGtgx5xeYvapC0HmolkBj/Ti1JOQYogvNV+D0dQSTZuWUdNxC7TBL1k3HjtnBRNp
+         fYI+R8K/P8h/ykZBW8XpgsRSGkgtH7C/QwVU9ON8f73q/B1gBVvyV2QAtyG0t0xnjCqZ
+         B4VNDzObfZYu0MNhrhA7GSlq2XbGTUNLUD88cNOeuz3sp1Oqhn5fpi7O3pToafYUFBYf
+         0nXlhJIiPgGaB1orIyZmTA6VAgOaa3JHt+RRdYCC8hjvPN0qsQ8le6nnIS3vN+4PA5Uf
+         5K1m6SH0HKNnY0/np33j+3v9/FXc2vDlXd42iyEFhhMJ6XYxE7jRrLAR6B8HraTXpZSA
+         +JxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683476020; x=1686068020;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JQ+ZIAc03rR20rZw4pK+Hn7hNpvlDRNOeK5+8sWq7gQ=;
+        b=FGCTQHzOAgD/qLAaoMCoFe6BgMA1VcBclxBzaTOqsUPdZiJc0nGzQhypjhOLUHn8AQ
+         qQjXmmUNaS2qbty44DILtGfIpGszukP7mublVxaBmrlpKiii4nbFlZkTQEE37UFKb95h
+         Fm6Z4F+N5EEZKImtBtLW8WgAUxmPl5yHN/XrryKa0hAQ+oME6jksRFwDcik9jI9wDEC9
+         z60rvlAI9i+yBXHy0q21fXEnvPv/ZZ//4m5YBXICD/8KiZxpTTdSsUoS/2ei7QQo3BO6
+         uA8o2UHHNH1YzT7rWfQUJ6hOgl+yTiq6ZcB0NJL8J+vL/cM2dkBq9QnWz81rsrAPc76y
+         NFXw==
+X-Gm-Message-State: AC+VfDz5I8AbklIhmIMKXevt/ZQt7ig3E1OSDemTS/E+Au5/jbh1dbs8
+        5L0H5DWtWBohtkRXVkGq0fA=
+X-Google-Smtp-Source: ACHHUZ6C66+Tx/PdPCAPL1nJo49oU1OpJmr2lkOiVdtQcbkkLtM6i7BmF9w7AY3zT5qeR0TKzd4sEQ==
+X-Received: by 2002:a05:651c:483:b0:2a8:e46b:9410 with SMTP id s3-20020a05651c048300b002a8e46b9410mr2047315ljc.15.1683476019938;
+        Sun, 07 May 2023 09:13:39 -0700 (PDT)
+Received: from [192.168.1.111] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id l4-20020a2e99c4000000b002ad9057fd00sm219525ljj.85.2023.05.07.09.13.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 May 2023 09:13:39 -0700 (PDT)
+Message-ID: <7cafafd3-e7a7-96db-0f8f-ac5c8bc94d13@gmail.com>
+Date:   Sun, 7 May 2023 19:13:38 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230405-add-dsc-support-v2-4-1072c70e9786@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US, en-GB
+To:     Jonathan Cameron <jic23@kernel.org>,
+        "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+References: <cover.1682495921.git.mazziesaccount@gmail.com>
+ <fb35de40a3908988f5f83e25d17119e6944d289b.1682495921.git.mazziesaccount@gmail.com>
+ <20230501152014.7789aa42@jic23-huawei>
+ <91463df1-5aba-484a-92ea-f8979ec30535@fi.rohmeurope.com>
+ <20230507152236.46aba096@jic23-huawei>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v3 4/5] iio: light: ROHM BU27008 color sensor
+In-Reply-To: <20230507152236.46aba096@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-05 14:23:51, Jessica Zhang wrote:
-> Add a DPU INTF op to set DATA_COMPRESS register for command mode panels if
-> the DPU_INTF_DATA_COMPRESS feature flag is set. This flag needs to be
-> enabled in order for DSC v1.2 to work.
+On 5/7/23 17:22, Jonathan Cameron wrote:
+
+>>> If there is nothing to do in the actual interrupt as it's a data ready
+>>> only signal, then you should just call iio_trigger_poll() in the top half and
+>>> use devm_request_irq() only as there is no thread in this interrupt (though
+>>> there is one for the interrupt below the software interrupt chip).
+>>
+>> I haven't tested this yet so please ignore me if I am writing nonsense -
+>> but... The BU27008 will keep the IRQ line asserted until a register is
+>> read. We can't read the register form HW-IRQ so we need to keep the IRQ
+>> disabled until the threaded trigger handler is ran. With the setup we
+>> have here, the IRQF_ONESHOT, took care of this. I assume that changing
+>> to call the iio_poll_trigger() from top-half means I need to explicitly
+>> disable the IRQ and re-enable it at the end of the trigger thread after
+>> reading the register which debounces the IRQ line?
 > 
-> Note: These changes are for command mode only. Video mode changes will
-> be posted along with the DSC v1.2 support for DP.
-
-Nit: the "command mode" parts of both paragraphs only apply to the call
-in dpu_encoder_phys_cmd, right?  If so, and the INTF op remains the same
-for video mode (but only the call needs to be added to the
-dpu_encoder_phy_vid), make this a bit more clear in your commit message.
-
-> Changes in v2:
-> - Fixed whitespace issue in macro definition
-> - Read INTF_CONFIG2 before writing to DATA_COMPRESS bit
-> - Only set dpu_hw_intf_ops.data_compress if DATA_COMPRESS feature is set
-> - Removed `inline` from dpu_hw_intf_enable_compression declaration
+> Hmm. I'm trying to remember how this works (wrote this a very long time ago).
+> I'm fairly sure it's not an issue because we use IRQF_ONESHOT down one level
+> so exercise the same prevention of the threads triggering multiple times etc > 
+https://elixir.bootlin.com/linux/latest/source/drivers/iio/buffer/industrialio-triggered-buffer.c#L57
 > 
-> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c |  3 +++
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c          | 11 +++++++++++
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h          |  2 ++
->  3 files changed, 16 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-> index d8ed85a238af..1a4c20f02312 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-> @@ -68,6 +68,9 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
->  				phys_enc->hw_intf,
->  				true,
->  				phys_enc->hw_pp->idx);
-> +
-> +	if (phys_enc->hw_intf->ops.enable_compression)
-> +		phys_enc->hw_intf->ops.enable_compression(phys_enc->hw_intf);
->  }
->  
->  static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int irq_idx)
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-> index 6485500eedb8..322c55a5042c 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-> @@ -91,6 +91,14 @@
->  
->  #define INTF_CFG2_DATABUS_WIDEN	BIT(0)
->  #define INTF_CFG2_DATA_HCTL_EN	BIT(4)
-> +#define INTF_CFG2_DCE_DATA_COMPRESS     BIT(12)
-> +
-> +static void dpu_hw_intf_enable_compression(struct dpu_hw_intf *ctx)
-> +{
-> +	u32 intf_cfg2 = DPU_REG_READ(&ctx->hw, INTF_CONFIG2);
-> +
-> +	DPU_REG_WRITE(&ctx->hw, INTF_CONFIG2, intf_cfg2 | INTF_CFG2_DCE_DATA_COMPRESS);
+> It doesn't matter if the device interrupt fires again as it will still be masked
+> at our software irqchip level and will then get queued up and the thread will
+> run again.
 
-I'm not sure if it's more idiomatic to write:
+After reading this I am not at all sure I am using the trigger 
+correctly. I see the iio_trigger_attach_poll_func() registering threaded 
+handler with the IRQF_ONESHOT which is stored in the 
+iio_alloc_pollfunc() as you pointed above.
 
-    intf_cfg2 |= INTF_CFG2_DCE_DATA_COMPRESS;
+The iio_trigger_attach_poll_func() is called from sysfs callback when 
+trigger is enabled. So, if this is supposed to be the device IRQ, then I 
+am not at all sure the driver should be requesting the IRQ at the 
+probe(). If it is not the device's IRQ, then I guess the IRQF_ONESHOT 
+passed in here won't help. I need to try seeing some examples how other 
+drivers are using the triggers. Getting back to this tomorrow...
 
-On a separate line.
+Yours,
+	-- Matti.
 
-> +}
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-Move the function close to the bottom of this file.  Right now all the
-functions are defined approximately in the same order as they're listed
-in the header and assigned in _setup_intf_ops().
+~~ When things go utterly wrong vim users can always type :help! ~~
 
->  
->  static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
->  		const struct intf_timing_params *p,
-> @@ -542,6 +550,9 @@ static void _setup_intf_ops(struct dpu_hw_intf_ops *ops,
->  		ops->vsync_sel = dpu_hw_intf_vsync_sel;
->  		ops->disable_autorefresh = dpu_hw_intf_disable_autorefresh;
->  	}
-> +
-> +	if (cap & BIT(DPU_INTF_DATA_COMPRESS))
-> +		ops->enable_compression = dpu_hw_intf_enable_compression;
->  }
->  
->  struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-> index 73b0885918f8..a8def68a5ec2 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
-> @@ -70,6 +70,7 @@ struct intf_status {
->   * @get_autorefresh:            Retrieve autorefresh config from hardware
->   *                              Return: 0 on success, -ETIMEDOUT on timeout
->   * @vsync_sel:                  Select vsync signal for tear-effect configuration
-> + * @enable_compression: Enable data compression
-
-Indent to match above.
-
-- Marijn
-
->   */
->  struct dpu_hw_intf_ops {
->  	void (*setup_timing_gen)(struct dpu_hw_intf *intf,
-> @@ -107,6 +108,7 @@ struct dpu_hw_intf_ops {
->  	 * Disable autorefresh if enabled
->  	 */
->  	void (*disable_autorefresh)(struct dpu_hw_intf *intf, uint32_t encoder_id, u16 vdisplay);
-> +	void (*enable_compression)(struct dpu_hw_intf *intf);
->  };
->  
->  struct dpu_hw_intf {
-> 
-> -- 
-> 2.40.1
-> 
