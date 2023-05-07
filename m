@@ -2,103 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCCA6F99FB
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 18:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCBC6F9A15
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 18:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbjEGQ2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 12:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
+        id S229793AbjEGQf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 12:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjEGQ16 (ORCPT
+        with ESMTP id S229518AbjEGQf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 12:27:58 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F07A5FC;
-        Sun,  7 May 2023 09:27:52 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id ffacd0b85a97d-3063208beedso3497951f8f.1;
-        Sun, 07 May 2023 09:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683476871; x=1686068871;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LH7Gskf0JBlpJmh8+F9VpZ1h6y3N33yjdkZhVHwbcas=;
-        b=n0WcNb6RrINFMqnVPb2zmYiu7XPmXKRLRfUTweUgs2tCCPq3TgZHo3HwjXzpEWgKH1
-         MgtyN2XbKe890EIZJ9mDQ/k5im1rxH2X2PskXRJfIFA+iDo4/aBqRNEq8XeSa6V/Tzpk
-         GgVFUmyx08KggByVpAA3ptvQ7s7c4+8DdKpheochEtKTyIFtOKwHWTFBNsJgTPVjR/8z
-         ADWiimnekR4pQk30WlGy6rRQ3F++7IrtecmYp2ebw29IMt5f9n1TIZkz3AKfNFgJUWOs
-         3tQ1YkURRn7QfUWyZIa2LaRGh+AgfwT3MPH8Aod2K+ygXrr06D15O/16s1aKdLwN0I3W
-         Vtfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683476871; x=1686068871;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LH7Gskf0JBlpJmh8+F9VpZ1h6y3N33yjdkZhVHwbcas=;
-        b=kiuBv0IqTph3LWBfDBUJu1w0vD68HLNEMEGBHSZQlbSS3y6VThkuUHz5en65s+KLHz
-         xUn3XCfWSG8lVyos/xBnBbLLIIFxJkfmWt88J57JL/63K7yrJveLgo2+j2ZnXeRwtaM6
-         q40I2uqqEiOPBmJkAhXpAdeCtB3Vl41X7X4waLEnJmFumSD5/nmlLrupV0EE5zPQ31it
-         L6T57jLG26rtd8k+xR3CVnb/gYmap54R69cpNe0Xyu66VGY76uEbX+gdqCezYDYepQ1Y
-         SN4LNkxjVyNm1kfOKmsxD7Ve87HhwDVguo5HRO3qYjF1FNjeSTjZJxpDga1bpyHg42xh
-         wZZw==
-X-Gm-Message-State: AC+VfDzXsEPuH13fwPIJeOP0m0OYU9YDL9BXa0B9Rlrjf+RG0SKPrKOP
-        YJF17OgEt/Pk8vrOHh4MXQY=
-X-Google-Smtp-Source: ACHHUZ5AY4yMv7lBXwF2AMsU1MfeUUj8HA/N9Y8FIQJdVsb6ddEsilpecArcuHegkFLe4ZTEWVS2Mw==
-X-Received: by 2002:a5d:40c3:0:b0:306:2b2b:8c56 with SMTP id b3-20020a5d40c3000000b003062b2b8c56mr5306981wrq.37.1683476871003;
-        Sun, 07 May 2023 09:27:51 -0700 (PDT)
-Received: from localhost.localdomain ([2.222.93.88])
-        by smtp.gmail.com with ESMTPSA id n3-20020a5d4843000000b003047d5b8817sm8695318wrs.80.2023.05.07.09.27.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 09:27:50 -0700 (PDT)
-From:   Ben Gooding <ben.gooding.dev@gmail.com>
-To:     alice@ryhl.io
-Cc:     alex.gaynor@gmail.com, ben.gooding.dev@gmail.com,
-        benno.lossin@proton.me, bjorn3_gh@protonmail.com,
-        boqun.feng@gmail.com, gary@garyguo.net,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com,
-        yakoyoku@gmail.com
-Subject: [PATCH] rust: lock: Reflow long documentation line
-Date:   Sun,  7 May 2023 17:27:39 +0100
-Message-Id: <20230507162739.17392-1-ben.gooding.dev@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <7f464c01-d4ec-d632-fa40-0c3f18c2ffca@ryhl.io>
-References: <7f464c01-d4ec-d632-fa40-0c3f18c2ffca@ryhl.io>
+        Sun, 7 May 2023 12:35:56 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D983E120B5
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 09:35:53 -0700 (PDT)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230507163550epoutp0100cb39b98ee934d68b17586a08839bfd~c6bseNz4U1819018190epoutp01r
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 16:35:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230507163550epoutp0100cb39b98ee934d68b17586a08839bfd~c6bseNz4U1819018190epoutp01r
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683477350;
+        bh=0Hn8Y0nrtRj/g9D5t6VfEF2rA99xx2VKGtzyVVS+j7U=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=vPtZs8HaKMny2gYH8WS7yIkPIunLlwfgTf8rpWqfXPrv+VqM0oG+3xVfubYxtk1xT
+         jPPQb0JtsZVBQi7ah1Yp5+CziUJrB7Dsnu4SUT9gMRU2j8gnODfv5lGFt2RJ9ySirf
+         yMeNLTPejRzTgp3537LzrhFdfjl2eql1WRnCkbNY=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20230507163550epcas5p35b83960e8c6bf87520af178d8b6cee0d~c6br8yCg50863908639epcas5p3K;
+        Sun,  7 May 2023 16:35:50 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.179]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4QDqmN5h5lz4x9Pr; Sun,  7 May
+        2023 16:35:48 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F9.B4.55646.463D7546; Mon,  8 May 2023 01:35:48 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20230507163548epcas5p46ca31e821ecf88679180933f66f895ed~c6bqTinWQ1276912769epcas5p4l;
+        Sun,  7 May 2023 16:35:48 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230507163548epsmtrp2d87b445c5df8deec136dcd29f23d1ea2~c6bqSq1mQ0344903449epsmtrp2J;
+        Sun,  7 May 2023 16:35:48 +0000 (GMT)
+X-AuditID: b6c32a4b-b71fa7000001d95e-bc-6457d3640d9f
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D2.43.28392.463D7546; Mon,  8 May 2023 01:35:48 +0900 (KST)
+Received: from alimakhtar04 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230507163546epsmtip2223526e757a22c1ece5cf65a830f7efe~c6bowb0AI0363803638epsmtip2N;
+        Sun,  7 May 2023 16:35:46 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        "'Inki Dae'" <inki.dae@samsung.com>,
+        "'Seung-Woo Kim'" <sw0312.kim@samsung.com>,
+        "'Kyungmin Park'" <kyungmin.park@samsung.com>,
+        "'David Airlie'" <airlied@gmail.com>,
+        "'Daniel Vetter'" <daniel@ffwll.ch>,
+        "'Marek Szyprowski'" <m.szyprowski@samsung.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <20230507144753.192959-1-krzysztof.kozlowski@linaro.org>
+Subject: RE: [PATCH] drm/exynos: g2d: staticize stubs in header
+Date:   Sun, 7 May 2023 22:05:45 +0530
+Message-ID: <004001d98101$fa5ed690$ef1c83b0$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHMQF+KV7mnVACdrNHe1vibu+C8KwKtLaCmr1QYABA=
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGJsWRmVeSWpSXmKPExsWy7bCmum7K5fAUg6dTtC1OXF/EZPF/20Rm
+        iytf37NZTLo/gcVi7+ut7BZnm96wW2x6fI3V4vKuOWwWM87vY7JYe+Quu8WMyS/ZHLg99n5b
+        wOKxc9Zddo871/awedzvPs7ksXlJvUffllWMHp83yQWwR2XbZKQmpqQWKaTmJeenZOal2yp5
+        B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gDdqKRQlphTChQKSCwuVtK3synKLy1JVcjI
+        Ly6xVUotSMkpMCnQK07MLS7NS9fLSy2xMjQwMDIFKkzIztj07RNbwU+RiqOLv7I0MN4Q7mLk
+        5JAQMJF4+LqFsYuRi0NIYDejxLedl1ghnE+MEpcWPmeGcD4zSqz995gNpuXb/69QiV2MEjfW
+        t7NBOC8ZJf7dWMwMUsUmoCuxY3EbWIeIwBVmiasnWUBsTgFXiXMP/7GD2MIC9hLLLrxi6mLk
+        4GARUJGYckgAJMwrYCkxfc0kJghbUOLkzCdgrcwC2hLLFr5mhjhCQeLn02WsEOOtJG5u+sIO
+        USMu8fLoEXaQeyQEdnBILPv4iQ1kvoSAi8TZy0EQvcISr45vYYewpSQ+v9sLVeIhseiPFEQ4
+        Q+Lt8vWMELa9xIErc1hASpgFNCXW79KH2MQn0fv7CRNEJ69ER5sQRLWqRPO7qywQtrTExO5u
+        VgjbQ2LJtjNMkICawShx9cEaxgmMCrOQPDkLyZOzkDwzC2HzAkaWVYySqQXFuempxaYFxnmp
+        5fDoTs7P3cQITsBa3jsYHz34oHeIkYmD8RCjBAezkgjvqoSwFCHelMTKqtSi/Pii0pzU4kOM
+        psCAn8gsJZqcD8wBeSXxhiaWBiZmZmYmlsZmhkrivOq2J5OFBNITS1KzU1MLUotg+pg4OKUa
+        mKZoddjF7zyzjnV5nKuVHrvrwjXPLgZaHI/x/pW6IPV3ks4q1qM+hpsl5v1cx/Dwx/sCTX62
+        9XW5Hjt+JHySPfWi8eVVv0lX9xb99SoV3azG6i61vrnXiC9ka3W/7LnF0WEnXn9eojDN0G2T
+        3DSHdKnyqPgrIkYfenYUXM3N67i86/St2kbFi6a1pnvUz+UIba3rSau4UtVV/jvUPa3DKDRT
+        KfzePflvbXPfaoqcOrOyidNyj/sBL1+J1RKvH8flNSo+6/l00FZqpmUNg+azG6Jvdh/KWrYx
+        Xs5tLeMkbb27T/IP+xkrTNE+LPw80lrxiubT7hzvg/+W/C6YIxi4ONarp9drvmvQEfcUsU+m
+        SizFGYmGWsxFxYkAwNsGyEkEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprCIsWRmVeSWpSXmKPExsWy7bCSvG7K5fAUg923uC1OXF/EZPF/20Rm
+        iytf37NZTLo/gcVi7+ut7BZnm96wW2x6fI3V4vKuOWwWM87vY7JYe+Quu8WMyS/ZHLg99n5b
+        wOKxc9Zddo871/awedzvPs7ksXlJvUffllWMHp83yQWwR3HZpKTmZJalFunbJXBlTJ42g7Hg
+        m0DFpk+/2RsY9/B1MXJySAiYSHz7/5W5i5GLQ0hgB6PE7VkLWSAS0hLXN05gh7CFJVb+ew5m
+        Cwk8Z5RoXp8PYrMJ6ErsWNzGBtIsInCHWWLd/Y+MEJOmMUr8vviWGaSKU8BV4tzDf2DdwgL2
+        EssuvGLqYuTgYBFQkZhySAAkzCtgKTF9zSQmCFtQ4uTMJ2BHMAtoS/Q+bGWEsZctfM0McZCC
+        xM+ny1hBbBEBK4mbm76wQ9SIS7w8eoR9AqPQLCSjZiEZNQvJqFlIWhYwsqxilEwtKM5Nzy02
+        LDDKSy3XK07MLS7NS9dLzs/dxAiOOC2tHYx7Vn3QO8TIxMF4iFGCg1lJhHdVQliKEG9KYmVV
+        alF+fFFpTmrxIUZpDhYlcd4LXSfjhQTSE0tSs1NTC1KLYLJMHJxSDUx6l9NYbk23PGOyyZpr
+        hvntWSZixZcl2FatLPl/gr+cvaz1krxipaKX6dRIwZQqbWXe/nV1urZ2hp5fw9Ps97aEr7+q
+        nlOR0PVL7fT2jQu8fs9RPsNZ4LPKv5mV+9kcfv/jC3LlRMXz9E+Idn+9avXwmoL9B9WrE3e7
+        SIR76Ll3puw9/SXff+qiYx3Bdi6M1ixckftXsa5wC7XlV31gWcEQfFFR+3TNhE9y3MY+fXNi
+        px1cz1ky08aFVy37zI3t8Wk89m2Mew/lqlpWhkjlcO1cOuGrnHV1r9avOWr7QqQ3ZB2/96pr
+        jf+RzTvurQ3Lu6jxrGbnLxsvOX3Lk4nLDl8O3L3b1/CVR6CYpnmvEktxRqKhFnNRcSIAS5O6
+        jCcDAAA=
+X-CMS-MailID: 20230507163548epcas5p46ca31e821ecf88679180933f66f895ed
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230507144800epcas5p219717e5bf06b91772ee877c8dcee0940
+References: <CGME20230507144800epcas5p219717e5bf06b91772ee877c8dcee0940@epcas5p2.samsung.com>
+        <20230507144753.192959-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Suggested-by: Alice Ryhl <alice@ryhl.io>
-Signed-off-by: Ben Gooding <ben.gooding.dev@gmail.com>
----
- rust/kernel/sync/lock.rs | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Hi Krzysztof,
 
-diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
-index 95466201dab7..04413f6f145a 100644
---- a/rust/kernel/sync/lock.rs
-+++ b/rust/kernel/sync/lock.rs
-@@ -72,8 +72,10 @@ pub unsafe trait Backend {
- 
- /// A mutual exclusion primitive.
- ///
--/// Exposes one of the kernel locking primitives. Which one is exposed depends on the lock [backend](Backend)
--/// specified as the generic parameter `B`.
-+/// Exposes one of the kernel locking primitives. Which one is exposed depends on the lock
-+/// [backend] specified as the generic parameter `B`.
-+/// 
-+/// [backend]: Backend
- #[pin_data]
- pub struct Lock<T: ?Sized, B: Backend> {
-     /// The kernel lock object.
--- 
-2.34.1
-
+> -----Original Message-----
+> From: Krzysztof Kozlowski <krzysztof.kozlowski=40linaro.org>
+> Sent: Sunday, May 7, 2023 8:18 PM
+> To: Inki Dae <inki.dae=40samsung.com>; Seung-Woo Kim
+> <sw0312.kim=40samsung.com>; Kyungmin Park
+> <kyungmin.park=40samsung.com>; David Airlie <airlied=40gmail.com>; Daniel
+> Vetter <daniel=40ffwll.ch>; Krzysztof Kozlowski
+> <krzysztof.kozlowski=40linaro.org>; Alim Akhtar <alim.akhtar=40samsung.co=
+m>;
+> Marek Szyprowski <m.szyprowski=40samsung.com>; dri-
+> devel=40lists.freedesktop.org; linux-arm-kernel=40lists.infradead.org; li=
+nux-
+> samsung-soc=40vger.kernel.org; linux-kernel=40vger.kernel.org
+> Subject: =5BPATCH=5D drm/exynos: g2d: staticize stubs in header
+>=20
+> Stubs for =21CONFIG_DRM_EXYNOS_G2D case in the header should be static
+> inline:
+>=20
+>   drivers/gpu/drm/exynos/exynos_drm_g2d.h:37:5: warning: no previous
+> prototype for =E2=80=98g2d_open=E2=80=99=20=5B-Wmissing-prototypes=5D=0D=
+=0A>=20=20=20drivers/gpu/drm/exynos/exynos_drm_g2d.h:42:6:=20warning:=20no=
+=20previous=0D=0A>=20prototype=20for=20=E2=80=98g2d_close=E2=80=99=20=5B-Wm=
+issing-prototypes=5D=0D=0A>=20=0D=0A>=20Fixes:=20eb4d9796fa34=20(=22drm/exy=
+nos:=20g2d:=20Convert=20to=20driver=20component=20API=22)=0D=0A>=20Signed-o=
+ff-by:=20Krzysztof=20Kozlowski=20<krzysztof.kozlowski=40linaro.org>=0D=0A>=
+=20---=0D=0A=0D=0AReviewed-by:=20Alim=20Akhtar=20<alim.akhtar=40samsung.com=
+>=0D=0A=0D=0A=0D=0A>=20=20drivers/gpu/drm/exynos/exynos_drm_g2d.h=20=7C=204=
+=20++--=0D=0A>=20=201=20file=20changed,=202=20insertions(+),=202=20deletion=
+s(-)=0D=0A>=20=0D=0A>=20diff=20--git=20a/drivers/gpu/drm/exynos/exynos_drm_=
+g2d.h=0D=0A>=20b/drivers/gpu/drm/exynos/exynos_drm_g2d.h=0D=0A>=20index=207=
+4ea3c26dead..1a5ae781b56c=20100644=0D=0A>=20---=20a/drivers/gpu/drm/exynos/=
+exynos_drm_g2d.h=0D=0A>=20+++=20b/drivers/gpu/drm/exynos/exynos_drm_g2d.h=
+=0D=0A>=20=40=40=20-34,11=20+34,11=20=40=40=20static=20inline=20int=20exyno=
+s_g2d_exec_ioctl(struct=0D=0A>=20drm_device=20*dev,=20void=20*data,=0D=0A>=
+=20=20=09return=20-ENODEV;=0D=0A>=20=20=7D=0D=0A>=20=0D=0A>=20-int=20g2d_op=
+en(struct=20drm_device=20*drm_dev,=20struct=20drm_file=20*file)=0D=0A>=20+s=
+tatic=20inline=20int=20g2d_open(struct=20drm_device=20*drm_dev,=20struct=20=
+drm_file=20*file)=0D=0A>=20=20=7B=0D=0A>=20=20=09return=200;=0D=0A>=20=20=
+=7D=0D=0A>=20=0D=0A>=20-void=20g2d_close(struct=20drm_device=20*drm_dev,=20=
+struct=20drm_file=20*file)=0D=0A>=20+static=20inline=20void=20g2d_close(str=
+uct=20drm_device=20*drm_dev,=20struct=20drm_file=20*file)=0D=0A>=20=20=7B=
+=20=7D=0D=0A>=20=20=23endif=0D=0A>=20--=0D=0A>=202.34.1=0D=0A=0D=0A=0D=0A
