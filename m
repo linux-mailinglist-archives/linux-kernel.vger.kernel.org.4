@@ -2,156 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019276F96F5
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 07:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3CA6F971D
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 08:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbjEGFRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 01:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53064 "EHLO
+        id S229683AbjEGGAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 02:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjEGFRk (ORCPT
+        with ESMTP id S229441AbjEGGAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 01:17:40 -0400
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339FF6E8F
-        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 22:17:39 -0700 (PDT)
-Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-334d63a10e9so7072395ab.0
-        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 22:17:39 -0700 (PDT)
+        Sun, 7 May 2023 02:00:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C783D11D86
+        for <linux-kernel@vger.kernel.org>; Sat,  6 May 2023 22:59:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683439183;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f3vnav72jiBSDlUv6QQjHr2dDSLqhQhKBN44HYd9MYY=;
+        b=V6yiGzwKQRHbxyDoAKV4RMaRREhkIoAMSc+Fq7m/x/THyHx+wPVO1xSIeUaxynPRvaj9t/
+        CJX6JBrqckFAofviaid+Ptmumsve3XbiKWfeSCGT7fSYEhPP19yDy3mXy5OCZ+HkD9h0z2
+        fRpbdWxye5uetHHqOcH+WX/c0JeC93I=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-350-ms1R44aONqGtFIkwVGzzRA-1; Sun, 07 May 2023 01:59:42 -0400
+X-MC-Unique: ms1R44aONqGtFIkwVGzzRA-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f321e60feaso12380615e9.0
+        for <linux-kernel@vger.kernel.org>; Sat, 06 May 2023 22:59:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683436658; x=1686028658;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nQEIoXH7rI2rkjwK+Q3rGkXe8qUJqhRvHYWEBWQWkwQ=;
-        b=Plf0a/DtLS/crRvGR69Iip+lTRdBXo9KzDZF/8MBUoPzY4VZcKcHr5022QDdTNdXIo
-         Vx5sD5STNDV9zBvQtjb/WCscUpJDYzFfXBJS63raXjucwR9TZNNySwnrP6sXeZLtc9r6
-         kox7X8F+TmVB5S+TeEaC+uRmQ4OcW0eesl4zwtFocVN0y8hnHKHYguMmGcBjMUB86cV9
-         rjisZo3ZQPAPD8eL4dfZpjy+WvpVRcGEEbyhfhoAzcDTrb7jeZ2WzES6jL/ojkLwi0h9
-         GSqDxqStiJHS8o13mJRFswNBdupd0XGitvqzlDHlIgupFm5HC1LSYIVL1bXYP3ngQA+c
-         klkQ==
-X-Gm-Message-State: AC+VfDxYAk3GxV/3nwecbvE5d+Lsm7c3yuTDFOcxWYxnCl+ezIZ+Ny1M
-        bQApoCLopVJm1pvZALE+fRfHZoNDoaAFBmgiLL7Ee9k6IQ9E
-X-Google-Smtp-Source: ACHHUZ6q0fO6ZGps2gW9lc74ojab2R1y51uBFIbGNd0dwIWcAhHZZNiEPiixMxE4UQxQ5JZv4TxmdO/W5HdhDIibMNHfJDx+nfvQ
+        d=1e100.net; s=20221208; t=1683439181; x=1686031181;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f3vnav72jiBSDlUv6QQjHr2dDSLqhQhKBN44HYd9MYY=;
+        b=YbkH7NNRezg9QGp4kr7wkuJLd98ItCqN3VvOBnqPxqcSIjwkiZtDhGcu27nvtYhVi6
+         OmndoOw6SwB02gYdbXkwD/Z/4IhPS4arMt+jaykmSwUacSvy8X9iFeA3saqWhPBdvqcp
+         dJ4YwS5e/M5Q2RZ+703OevHOnM/X28G4UsRZBSWVLvDCViKlokUBlgxDMyX5YAy6rnUv
+         T9Rijc7A9R/OaBYBupIWkdeLx11XPbCP0SeOg/XDmbTTUC0Fj4lyb8gJRD/xCuD97mlw
+         3UiDv0xBRki6UgWMF4yIuctsQ2zAXG5D5aiW9rYykJLcQrt5pjRNuZRkPq5dA1k35D/c
+         43vw==
+X-Gm-Message-State: AC+VfDyJ11nPl5Slnqxzr/0WmiW4mrH09SHz2n2PMrbPL0YjEDqS3AHn
+        FpTp/5a3rXpKD1ESZ4E4ne0SKcB/jjOL5c8cPVjoz660tnSolj/OiQeptJC//NiWNXcKFv88+oR
+        3Xiy1uV5PWx7OJztEsRmWMlxA
+X-Received: by 2002:a7b:c3cf:0:b0:3f4:21cf:b4a4 with SMTP id t15-20020a7bc3cf000000b003f421cfb4a4mr793832wmj.20.1683439181082;
+        Sat, 06 May 2023 22:59:41 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5DUhiBqArpzzgosy6y74xywVU2Y2452GBQMAxT+LK1BKQwrXh1Hycvooc6PGiDtpgWSWRPyQ==
+X-Received: by 2002:a7b:c3cf:0:b0:3f4:21cf:b4a4 with SMTP id t15-20020a7bc3cf000000b003f421cfb4a4mr793825wmj.20.1683439180804;
+        Sat, 06 May 2023 22:59:40 -0700 (PDT)
+Received: from redhat.com ([2.52.158.28])
+        by smtp.gmail.com with ESMTPSA id k22-20020a05600c0b5600b003f40049a65bsm11545710wmr.21.2023.05.06.22.59.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 May 2023 22:59:40 -0700 (PDT)
+Date:   Sun, 7 May 2023 01:59:35 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Hao Chen <chenh@yusur.tech>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:VIRTIO CORE AND NET DRIVERS" 
+        <virtualization@lists.linux-foundation.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, huangml@yusur.tech,
+        zy@yusur.tech
+Subject: Re: [PATCH] virtio_net: set default mtu to 1500 when 'Device maximum
+ MTU' bigger than 1500
+Message-ID: <20230507015819-mutt-send-email-mst@kernel.org>
+References: <20230506021529.396812-1-chenh@yusur.tech>
 MIME-Version: 1.0
-X-Received: by 2002:a02:2a89:0:b0:40b:c2f7:1ef9 with SMTP id
- w131-20020a022a89000000b0040bc2f71ef9mr2863548jaw.0.1683436658534; Sat, 06
- May 2023 22:17:38 -0700 (PDT)
-Date:   Sat, 06 May 2023 22:17:38 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000008aee505fb13a425@google.com>
-Subject: [syzbot] [mm?] [ntfs3?] kernel panic: stack is corrupted in save_stack
-From:   syzbot <syzbot+b58594b2f7f31155af24@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org,
-        almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230506021529.396812-1-chenh@yusur.tech>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, May 06, 2023 at 10:15:29AM +0800, Hao Chen wrote:
+> When VIRTIO_NET_F_MTU(3) Device maximum MTU reporting is supported.
+> If offered by the device, device advises driver about the value of its
+> maximum MTU. If negotiated, the driver uses mtu as the maximum
+> MTU value. But there the driver also uses it as default mtu,
+> some devices may have a maximum MTU greater than 1500, this may
+> cause some large packages to be discarded, so I changed the MTU to a more
+> general 1500 when 'Device maximum MTU' bigger than 1500.
+> 
+> Signed-off-by: Hao Chen <chenh@yusur.tech>
 
-syzbot found the following issue on:
+I don't see why not use the maximum. Bigger packets = better
+performance.
 
-HEAD commit:    92e815cf07ed Add linux-next specific files for 20230428
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1732ed8c280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c8c8ae4d47d23592
-dashboard link: https://syzkaller.appspot.com/bug?extid=b58594b2f7f31155af24
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=122a8fdbc80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ed8e2c280000
+> ---
+>  drivers/net/virtio_net.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 8d8038538fc4..e71c7d1b5f29 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -4040,7 +4040,10 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  			goto free;
+>  		}
+>  
+> -		dev->mtu = mtu;
+> +		if (mtu > 1500)
+> +			dev->mtu = 1500;
+> +		else
+> +			dev->mtu = mtu;
+>  		dev->max_mtu = mtu;
+>  	}
+>  
+> -- 
+> 2.27.0
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c9e94856e6c9/disk-92e815cf.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/4c1c05a548a7/vmlinux-92e815cf.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/2a1bff6a133b/bzImage-92e815cf.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/91d376f7ef76/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b58594b2f7f31155af24@syzkaller.appspotmail.com
-
-Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: save_stack+0x1c8/0x1e0 mm/page_owner.c:135
-CPU: 1 PID: 5038 Comm: syz-executor216 Not tainted 6.3.0-next-20230428-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- panic+0x686/0x730 kernel/panic.c:340
- __stack_chk_fail+0x19/0x20 kernel/panic.c:759
- save_stack+0x1c8/0x1e0 mm/page_owner.c:135
- __set_page_owner+0x1f/0x60 mm/page_owner.c:192
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook+0x2db/0x350 mm/page_alloc.c:1731
- prep_new_page mm/page_alloc.c:1738 [inline]
- get_page_from_freelist+0xf7c/0x2aa0 mm/page_alloc.c:3502
- __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:4768
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2277
- push_anon lib/iov_iter.c:245 [inline]
- append_pipe+0x19a/0x660 lib/iov_iter.c:302
- copy_pipe_to_iter lib/iov_iter.c:479 [inline]
- _copy_to_iter+0x463/0x1370 lib/iov_iter.c:533
- copy_page_to_iter lib/iov_iter.c:740 [inline]
- copy_page_to_iter+0xe8/0x170 lib/iov_iter.c:727
- copy_folio_to_iter include/linux/uio.h:197 [inline]
- filemap_read+0x682/0xc70 mm/filemap.c:2742
- generic_file_read_iter+0x3ad/0x5b0 mm/filemap.c:2837
- ntfs_file_read_iter+0x1b8/0x270 fs/ntfs3/file.c:744
- call_read_iter include/linux/fs.h:1862 [inline]
- generic_file_splice_read+0x182/0x4b0 fs/splice.c:422
- do_splice_to+0x1b9/0x240 fs/splice.c:905
- splice_direct_to_actor+0x2ab/0x8a0 fs/splice.c:976
- do_splice_direct+0x1ab/0x280 fs/splice.c:1085
- do_sendfile+0xb19/0x12c0 fs/read_write.c:1254
- __do_sys_sendfile64 fs/read_write.c:1322 [inline]
- __se_sys_sendfile64 fs/read_write.c:1308 [inline]
- __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1308
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5c56defc49
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff58272038 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 000000000001419a RCX: 00007f5c56defc49
-RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 00007fff58272060 R09: 00007fff58272060
-R10: 00008400fffffffa R11: 0000000000000246 R12: 00007fff5827205c
-R13: 00007fff58272090 R14: 00007fff58272070 R15: 0000000000000004
- </TASK>
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
