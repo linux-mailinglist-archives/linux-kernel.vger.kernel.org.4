@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F55A6F9570
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92E86F9572
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbjEGAd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 20:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
+        id S231553AbjEGAeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 20:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbjEGAdn (ORCPT
+        with ESMTP id S231341AbjEGAdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 20:33:43 -0400
+        Sat, 6 May 2023 20:33:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D95B1A1C4;
-        Sat,  6 May 2023 17:33:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0E91E98B;
+        Sat,  6 May 2023 17:33:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0415860EBA;
-        Sun,  7 May 2023 00:33:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09087C433D2;
-        Sun,  7 May 2023 00:33:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADF69614C9;
+        Sun,  7 May 2023 00:33:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF9C6C433D2;
+        Sun,  7 May 2023 00:33:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419584;
-        bh=40z2ZpojbXuP6tB3+OAoSZu6KHvjy/jbjRj5UZ9K8Nw=;
+        s=k20201202; t=1683419588;
+        bh=ZhqomB73I32kP61xKVm31O65xmH95OhFb7cvG67S7Q4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qjfVFoE4RPhkELOCVf9rbOFEKk19Q1zv2OSTY+qTucKOlD3IScSBpXO5y90EEysDY
-         QinuuxuXsgPKr979gvP/OLKFgyqXF/s90xEgylJ01v1SNkhKf3qsTu7Vt98s+lPJGN
-         tI6jepOTVZh1zk3RMla8sgleR81nINkxuAioAUNtPjoWP88XjQk3WqqZIi9f9GqWVZ
-         2s3mDEbGZ9KOW3RefuY8zHDHL3Dci9PHKzcDPSI4HoPm24NUdjYJMRx+TKFbIQ2ATp
-         y7awlCJR5SViFtzD3gXezxtigfY4IQ4eSY7kzu01enTJWJQpnzcHh0vCFpLDgrlvbB
-         k1AMZBjE3vXFQ==
+        b=kY1jwuHhnVv3JmHFxOGeHnJbu8p0SMYXHdkiOX/84lK4avRHY4PWwjc6SDJivShkz
+         pdwmi6CATAJKWdkR1Qq39qgqyrB5FtV4lEphjl4xtarpPpACqdK2Byf1Jbc6Xp6fs2
+         /xBeuQ6GJPWFZAUxB/kZbzzrTlqin+0Hd0sX6afGtV9+9uWlkhNYG0Sv4lYHk7Sa4Z
+         HtE34Dq/AzpLWvL22VOMggzcd6nkwCqAg4F+8j+DpaWiBHJBDXynYTd6X1aYRfSCDT
+         OxhaF8XaA+CjD2YviEXxs4tTmpqmvFG51UuRIFtz5qfbosYDZHhHvCuKajx2srxTic
+         laWAGEN8fKWdA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Svyatoslav Ryhel <clamor95@gmail.com>,
+Cc:     Prajna Sariputra <putr4.s@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, ion@agorria.com,
-        jiapeng.chong@linux.alibaba.com, robh@kernel.org,
-        alsa-devel@alsa-project.org, linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.2 06/20] ASoC: tegra: Support coupled mic-hp detection
-Date:   Sat,  6 May 2023 20:32:21 -0400
-Message-Id: <20230507003237.4074305-6-sashal@kernel.org>
+        perex@perex.cz, tiwai@suse.com, mario.limonciello@amd.com,
+        Syed.SabaKareem@amd.com, dukzcry@ya.ru, fengwk94@gmail.com,
+        lub.the.studio@gmail.com, xazrael@hotmail.com,
+        alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 6.2 07/20] ASoC: amd: yc: Add DMI entries to support HP OMEN 16-n0xxx (8A42)
+Date:   Sat,  6 May 2023 20:32:22 -0400
+Message-Id: <20230507003237.4074305-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230507003237.4074305-1-sashal@kernel.org>
 References: <20230507003237.4074305-1-sashal@kernel.org>
@@ -61,61 +61,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Svyatoslav Ryhel <clamor95@gmail.com>
+From: Prajna Sariputra <putr4.s@gmail.com>
 
-[ Upstream commit eb0b8481c2e03a5ae01f6bea60b42109bd12b6fe ]
+[ Upstream commit ee4281de4d60288b9c802bb0906061ec355ecef2 ]
 
-This quirk is used for cases when there is GPIO which detects
-any type of 3.5 Jack insertion and actual type of jack is defined
-by other GPIO. 3.5 Jack GPIO generates interrupt and MIC GPIO
-indicates type of Jack only if 3.5 Jack GPIO is active.
+This model requires an additional detection quirk to enable the internal microphone.
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-Link: https://lore.kernel.org/r/20230308073502.5421-3-clamor95@gmail.com
+Signed-off-by: Prajna Sariputra <putr4.s@gmail.com>
+Link: https://lore.kernel.org/r/2283110.ElGaqSPkdT@n0067ax-linux62
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/tegra/tegra_asoc_machine.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ sound/soc/amd/yc/acp6x-mach.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/sound/soc/tegra/tegra_asoc_machine.c b/sound/soc/tegra/tegra_asoc_machine.c
-index 78faa8bcae274..7b6d5d90c3a2d 100644
---- a/sound/soc/tegra/tegra_asoc_machine.c
-+++ b/sound/soc/tegra/tegra_asoc_machine.c
-@@ -51,6 +51,17 @@ static struct snd_soc_jack_gpio tegra_machine_headset_jack_gpio = {
- };
- 
- /* Mic Jack */
-+static int coupled_mic_hp_check(void *data)
-+{
-+	struct tegra_machine *machine = (struct tegra_machine *)data;
-+
-+	/* Detect mic insertion only if 3.5 jack is in */
-+	if (gpiod_get_value_cansleep(machine->gpiod_hp_det) &&
-+	    gpiod_get_value_cansleep(machine->gpiod_mic_det))
-+		return SND_JACK_MICROPHONE;
-+
-+	return 0;
-+}
- 
- static struct snd_soc_jack tegra_machine_mic_jack;
- 
-@@ -183,8 +194,15 @@ int tegra_asoc_machine_init(struct snd_soc_pcm_runtime *rtd)
- 			return err;
+diff --git a/sound/soc/amd/yc/acp6x-mach.c b/sound/soc/amd/yc/acp6x-mach.c
+index 4a69ce702360c..ce6630318858e 100644
+--- a/sound/soc/amd/yc/acp6x-mach.c
++++ b/sound/soc/amd/yc/acp6x-mach.c
+@@ -262,6 +262,13 @@ static const struct dmi_system_id yc_acp_quirk_table[] = {
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "OMEN by HP Gaming Laptop 16z-n000"),
  		}
- 
-+		tegra_machine_mic_jack_gpio.data = machine;
- 		tegra_machine_mic_jack_gpio.desc = machine->gpiod_mic_det;
- 
-+		if (of_property_read_bool(card->dev->of_node,
-+					  "nvidia,coupled-mic-hp-det")) {
-+			tegra_machine_mic_jack_gpio.desc = machine->gpiod_hp_det;
-+			tegra_machine_mic_jack_gpio.jack_status_check = coupled_mic_hp_check;
-+		};
-+
- 		err = snd_soc_jack_add_gpios(&tegra_machine_mic_jack, 1,
- 					     &tegra_machine_mic_jack_gpio);
- 		if (err)
+ 	},
++	{
++		.driver_data = &acp6x_card,
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "HP"),
++			DMI_MATCH(DMI_BOARD_NAME, "8A42"),
++		}
++	},
+ 	{
+ 		.driver_data = &acp6x_card,
+ 		.matches = {
 -- 
 2.39.2
 
