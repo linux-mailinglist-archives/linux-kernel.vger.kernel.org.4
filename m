@@ -2,112 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D633D6F97EB
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 11:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8366F9803
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 11:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbjEGJNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 05:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
+        id S231322AbjEGJah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 05:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231335AbjEGJNH (ORCPT
+        with ESMTP id S229628AbjEGJad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 05:13:07 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E13192;
-        Sun,  7 May 2023 02:13:06 -0700 (PDT)
-Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id E953CCED46;
-        Sun,  7 May 2023 09:13:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1683450783; bh=N+w7jq7XeEONyTDg1iFjOZ+41A3wQL7SjMniFaAAMjs=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=GHogfyBMCuCtPytpym6kxvbfXYmQXgXanqBqynOJVkWth/f4zfqNZbdwzsCG0vjow
-         YrAPawq8dO4j58PRmrEOZ+UiNIwSj8DHMU32w5dnCpsuBzh4wBltuw1eQlWrfjH5hB
-         r8HStf/Y9IB8WR8WerI3QEgxzWAcfHYb5dvbtS/Y=
-From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Sun, 07 May 2023 11:12:23 +0200
-Subject: [PATCH 6/6] ARM: dts: qcom: msm8226: Add ocmem
+        Sun, 7 May 2023 05:30:33 -0400
+X-Greylist: delayed 185 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 07 May 2023 02:30:31 PDT
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAD511556
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 02:30:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1683451465; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=WPB39i+Pzfc102z7n4oaQgZKljJEXRaQdM1TztlQVauQYzS42OmvQTGLr1Q0tN5JN8
+    ClSe/G6E0cT5sAbq9L9lEBsZ5GHun7xxh6L3JhAkNhWhsLwYsADcdweGzIBRAjght0jc
+    aVwFCH7f1SqX877ya7uEzv1tH2x9MWLsSkkcTHLUNoajAMfg78KN7IOSWMRYaNGn5ELI
+    HDMHLZkR1kIYfCxnKKbrX2/gOk57OaH6Ns0ES49+xqPsJL4yv+Da8ITfP1DY3PwmB81H
+    NIVUzf1lammF+3cDgRvJWOATcQNd3n+p/qSaJGrMRLghyV1itInHiC4gsz8ULc6TwMw6
+    hZxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1683451465;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=WhzhEPW3IuSAbhMuYgA0QH0NqDdyN/a5WuPdo7pOvWQ=;
+    b=ZnWtpIn5wv+8tsObH22QNOKHgdnurIAzYqlqKOc486Lc03zL7pGj/TP4ncI/V7+Ek1
+    FrdgnL0wSb8lEZiCd9SxJ66EJMVqnX8BHtntJ/7uWW4ummUb/gOtOpWrRgU9N5THm8Jz
+    VuYVkLteIYXrTYzg6hq0wlD/v/FDVP30lYW/1rbQoIA4zD6kY1DOMyoxYl6i4A7wDajB
+    UVjT38v69/d0TN3Zi6cPhtPvnXP3HDl4WxyzwP/+h0zQyRyJEkTPhoqK+j3AfHphF/M8
+    8QiiQkoxt+Uevaq+KdZ/JB9FSc5gnS81AkFoD2Mc+eWg7Cn5sMFBMmLIoXrxNMLGPObN
+    BkiQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1683451465;
+    s=strato-dkim-0002; d=xenosoft.de;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=WhzhEPW3IuSAbhMuYgA0QH0NqDdyN/a5WuPdo7pOvWQ=;
+    b=K92uH6AtiM3p0+WoyoJj2HHWCEReRvnIgjQzJjR1kIPM/PFP/on18xoxSKNYxzGNmS
+    NtPINN8icjKfe12PACPBbbgAZBPokWjd5VI9UvyTYqegeGEvgrw16uFjW3f561yCy9/0
+    D8q/v2sXRXXx/6OkVhqhl44ajKNUPXmcMVD8nrrFfUi8BWDvi+o3ito9V7BHKTAYxLky
+    kGwJGrtYYMOC9V98wMKtR9a1H3YMwinEqDhuWCKbuwMCsEsuSQABpX7PWXh2330M+GKO
+    QctS0CmDPeWeYNMSNi+xVO7yEAYxx5vapT4OTgwPI1b5tc7k10hKfd1NVRioekzJQQI2
+    Nn6A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1683451465;
+    s=strato-dkim-0003; d=xenosoft.de;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=WhzhEPW3IuSAbhMuYgA0QH0NqDdyN/a5WuPdo7pOvWQ=;
+    b=RyGwuNbxXKaAmCdsEN/385LI1bt3W6E9Y3rXVTV+aAFOuo30lvkl1swTUI79Nqo9Up
+    e/T19gqFHc3o1kzG9PCw==
+X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHfJ+Dkjp5DdBfio0GngadwiAuo0nkh/QkTJY0F5KivYZg6rg"
+Received: from [IPV6:2a02:8109:8980:4474:ec95:ca11:b696:829]
+    by smtp.strato.de (RZmta 49.4.0 AUTH)
+    with ESMTPSA id w2b3aez479ONXom
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 7 May 2023 11:24:23 +0200 (CEST)
+Message-ID: <3cbe9734-265e-d9f0-fcf8-433ef306a46f@xenosoft.de>
+Date:   Sun, 7 May 2023 11:24:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH] powerpc: isa-bridge: Fix ISA mmapping when "ranges" is
+ not present
+To:     Rob Herring <robh@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Darren Stevens <darren@stevens-zone.net>,
+        "R.T.Dickinson" <rtd2@xtra.co.nz>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Christian Zigotzky <info@xenosoft.de>
+References: <20230505171816.3175865-1-robh@kernel.org>
+Content-Language: de-DE
+From:   Christian Zigotzky <chzigotzky@xenosoft.de>
+In-Reply-To: <20230505171816.3175865-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230506-msm8226-ocmem-v1-6-3e24e2724f01@z3ntu.xyz>
-References: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
-In-Reply-To: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
-To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Brian Masney <masneyb@onstation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=952; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=N+w7jq7XeEONyTDg1iFjOZ+41A3wQL7SjMniFaAAMjs=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkV2ucx1260XKj8iQgsWYL36Tvoz+ZL22ms9O5o
- rVY2Mfy/hKJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZFdrnAAKCRBy2EO4nU3X
- Vn5FD/0fq/DQTw7hQB267BiTXJXPrsDu27z82VephJ8RV7XK0yP8uaNrk81MYLqxVa+pZD3cjY6
- /GdYfgwJ4+rRROyDQZGuEie11ZXeBePhmSosg3yFPwouuHuUJ9HKXjWRXGf1mbU86Ha2zydygMZ
- 4dcRd+Qzf+saRnIWFJYL8/SlQ7sdsp+ce5LcT53wN/3UwAzvuNl2zf+hyAvKKkhaB7pPw3uxsVr
- HC3fSWoFpQax3xLuHLDnMfEDfzwn76NPBHLhVCAI3zbT2CW77jB62Yc49SXt7EuoHeGYWvROaPj
- m+J0haDtJ/tE955gAEpnJ4OlauK4fCcBLf8OR9XP0N2z7JXordyg0zS2QKgnJG6YRs4HbRzPcD6
- SPNxUXS6m7IkdcNd1HEHs5/xDI+F+tPrZdyYlh+aEm+e3pJN5BWbkbIKJGxM7+DyJpYjRdMCERX
- B/C0pVErf0tNi8Lx7U3Q6GXFtpyXDXFRYco7ZbNphr0zwh8/pHDArX5Uo28RzPtZKzJ2/rD6Kbd
- csMDRV6p+gENv0qs22YWy0y3xnhUK/h6qefY+zmkV67KrWMzzcMrtu1EN5R/mzRKbAIny/QpP3W
- rXp9bCZZya4WDcAG0I1HMMMpJbufUIhSGLXjMOVN/IWsZdNLxC7vfefwkq8zrQHzDDCQcmhzw/O
- IEjF8MF8I9YufMg==
-X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a node for the ocmem found on msm8226. It contains one region, used
-as gmu_ram.
+On 05 May 2023 at 07:18 pm, Rob Herring wrote:
+> Commit e4ab08be5b49 ("powerpc/isa-bridge: Remove open coded "ranges"
+> parsing") broke PASemi Nemo board booting. The issue is the ISA I/O
+> range was not getting mapped as the logic to handle no "ranges" was
+> inverted. If phb_io_base_phys is non-zero, then the ISA range defaults
+> to the first 64K of the PCI I/O space. phb_io_base_phys should only be 0
+> when looking for a non-PCI ISA region.
+>
+> Fixes: e4ab08be5b49 ("powerpc/isa-bridge: Remove open coded "ranges" parsing")
+> Link: https://lore.kernel.org/all/301595ad-0edf-2113-b55f-f5b8051ed24c@xenosoft.de/
+> Reported-by: Christian Zigotzky <chzigotzky@xenosoft.de>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Untested, but I think this should fix the issue.
+>
+>   arch/powerpc/kernel/isa-bridge.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/powerpc/kernel/isa-bridge.c b/arch/powerpc/kernel/isa-bridge.c
+> index 85bdd7d3652f..48e0eaf1ad61 100644
+> --- a/arch/powerpc/kernel/isa-bridge.c
+> +++ b/arch/powerpc/kernel/isa-bridge.c
+> @@ -93,11 +93,12 @@ static int process_ISA_OF_ranges(struct device_node *isa_node,
+>   	}
+>   
+>   inval_range:
+> -	if (!phb_io_base_phys) {
+> +	if (phb_io_base_phys) {
+>   		pr_err("no ISA IO ranges or unexpected isa range, mapping 64k\n");
+>   		remap_isa_base(phb_io_base_phys, 0x10000);
+> +		return 0;
+>   	}
+> -	return 0;
+> +	return -EINVAL;
+>   }
+>   
+>   
+The Nemo board boots with this patch. Thanks a lot for your help!
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- arch/arm/boot/dts/qcom-msm8226.dtsi | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
-index 42acb9ddb8cc..7ad073eb85c8 100644
---- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-@@ -636,6 +636,23 @@ smd-edge {
- 				label = "lpass";
- 			};
- 		};
-+
-+		sram@fdd00000 {
-+			compatible = "qcom,msm8226-ocmem";
-+			reg = <0xfdd00000 0x2000>,
-+			      <0xfec00000 0x20000>;
-+			reg-names = "ctrl", "mem";
-+			ranges = <0 0xfec00000 0x20000>;
-+			clocks = <&rpmcc RPM_SMD_OCMEMGX_CLK>;
-+			clock-names = "core";
-+
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			gmu_sram: gmu-sram@0 {
-+				reg = <0x0 0x20000>;
-+			};
-+		};
- 	};
- 
- 	timer {
-
--- 
-2.40.1
-
+Tested-by: Christian Zigotzky <chzigotzky@xenosoft.de>
