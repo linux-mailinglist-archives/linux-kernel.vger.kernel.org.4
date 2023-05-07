@@ -2,88 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F17E6F975F
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 09:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2E36F9764
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 09:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjEGHoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 03:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
+        id S230399AbjEGHw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 03:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbjEGHoE (ORCPT
+        with ESMTP id S229619AbjEGHw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 03:44:04 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC6712082
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 00:44:01 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-965f7bdab6bso381794266b.3
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 00:44:01 -0700 (PDT)
+        Sun, 7 May 2023 03:52:28 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50209008;
+        Sun,  7 May 2023 00:52:26 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-52c30fbccd4so3045946a12.0;
+        Sun, 07 May 2023 00:52:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683445440; x=1686037440;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1683445946; x=1686037946;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8X7J0rVubekG+DrRrQuBm6C1ywPBgjwPpumVcwGX+HQ=;
-        b=rWcUEwlQJpV+ycrxz/+0KJoAxqQmMQrWo5GfzIqEGoPRyDBz2d+L+9XPBTpuPW1BEE
-         7inHPMTKghSfeJUSlzMt86K5tsOSxTMXP5xgRr5v6RQZr+XoSBXOqu0tVMfEK8indjkg
-         amJt97l/vCXBHr5voY09o91QhrNvuqv/COZGiDHzxQQlFvzA7LT7lr6Pn+MdmiDIt81r
-         SmO8prh7tQTVsEGg7Iws7vQJGL1joiSAYJG8VVopngkhm0M4Ed4Mr4vSpYHTU5riPO9C
-         6jrsbrvwvYYrMbkqolOpSF9y+nTjtI7KUM28I9V8gQNZCiZ2roM+GHncS/R2ljPwVSZg
-         qmNg==
+        bh=cRfrrqx50vxG99XcLjNcRWo5z2zDSYMRqUZuG5jBIKY=;
+        b=jaecR1OGwoXjjVTs+NKSvVFbeszPfjN+tLv/5l8vwUfQ7vVFuLIRdKn2w747nJ6H/w
+         atFTxveoqIlG9h1FBOHyApFscKv/6YQAVa1RumtGUH0xcdRGIQKefDtMgtVF0K4L0iZE
+         OFwmoX1tAD0dXcrPoB2urTJHVXOcwCMwIaMhp8bww4DJE3zpAN+kLzBfAHUX++0bNBqH
+         V+5Dp9uxlbKc0i0+oH0XfzApOcef+spYJnIMuiLY44i+SRBZoc5orLhMYMfxcmtZPvia
+         Ef1gsKeOt+q1txp1AQejxblXDU9NKi5JcPXh9XIQPm5D4/10fp+GAQ2MhRjfx5fQEEIa
+         4sng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683445440; x=1686037440;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1683445946; x=1686037946;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8X7J0rVubekG+DrRrQuBm6C1ywPBgjwPpumVcwGX+HQ=;
-        b=KqVSUpZK46rBOYjZ29oFANNJX5pUP3XGJysuFVGETi/zq5SIN6971MqDQrVSENzpJA
-         0xWcaqM1iKYRO9OLL+Is+KhSdE975CfiXROGIxve4udnUIyOnh/lbmRQPTDOZx8Kgi4H
-         FIJ8bhSKDnBqRDItW8Z3JWYMmXTHWX9/0rkxSMG+6ZTe2k5uDtIxnfa4HTROCUbSIqlB
-         szC3DvyeOcrMNGpJPHk8+RRCt43a5bC70mhcfplUWbpmc/KIagyPCDFnr0sUPUJScwtw
-         2CD62+8S0zQLQvHSXs/W/oDEL/BJ7LcqvmGrbIoYSglbGVP5NyMuuKcvPtVhKEKxpPZQ
-         jS8A==
-X-Gm-Message-State: AC+VfDwpuddjttKVwyOWUAxBntt+hRcXm2HFe9Z9/ENVCNF2jVZh5bnR
-        +m2Tj/jIDGJ4pB4xlrX+FtOg1g==
-X-Google-Smtp-Source: ACHHUZ5JGEdSovi3dxyHchKR/hKO87oq5KWsTOg10yOhk2jCXZqX6mRsswt41WqNAgRTvqy5CBpc2A==
-X-Received: by 2002:a17:907:360c:b0:94a:845c:3528 with SMTP id bk12-20020a170907360c00b0094a845c3528mr5491362ejc.45.1683445439836;
-        Sun, 07 May 2023 00:43:59 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:183b:950f:b4d5:135a? ([2a02:810d:15c0:828:183b:950f:b4d5:135a])
-        by smtp.gmail.com with ESMTPSA id g4-20020a170906348400b009659cdb2f98sm3319965ejb.23.2023.05.07.00.43.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 May 2023 00:43:59 -0700 (PDT)
-Message-ID: <ec31e502-6b40-ca5d-1294-2e5f174a37b9@linaro.org>
-Date:   Sun, 7 May 2023 09:43:58 +0200
+        bh=cRfrrqx50vxG99XcLjNcRWo5z2zDSYMRqUZuG5jBIKY=;
+        b=jpuDTsysBGr4b/DQO4OkM+aiBvFD7G1TMqUB4O8iaS/D3KHjFfH/R9DpwXI1mOkt2y
+         cxXiqDk9EpmiNLn815VLST3S0ALhW00SCK6twfQ4jligYazONmf0mrrraScRXlcYaYWR
+         RN/bPTpl9GDZv/6ZKoKj0hFhawDoTplqrpwSO5T/wgNsAtK4IuU/+tsKtPkqCDuCdBmt
+         WOiAONl2O2YzF/2EXodGnsVVetzgCfRvK/R21vQdOuaSbLxAM9EtD4KM3GrfZxCMA70y
+         JlpLloy+4CVTLd77Y4rB42qwXDGNovdJHENz/rYJhIzSBa06sU30Lf7PAyyaMmLPb2xm
+         iDvw==
+X-Gm-Message-State: AC+VfDx9ekyygslYMIOHwT7MKwP7pa+D6co3bCFfFuTbF1TC5XfEXDCA
+        RdVWvMNbiM3a/Etz3v6oMDDoMSPDrNkY2t4y
+X-Google-Smtp-Source: ACHHUZ6n2q2Ih1X8tUu22B7REItZVx5TmnaDIb/HEDPxtiLHUddtxsFMYP8x7Lbr8SxZi9py9GRH4g==
+X-Received: by 2002:a17:902:7782:b0:1aa:fdef:2a93 with SMTP id o2-20020a170902778200b001aafdef2a93mr6391203pll.7.1683445945979;
+        Sun, 07 May 2023 00:52:25 -0700 (PDT)
+Received: from yoga ([202.131.133.188])
+        by smtp.gmail.com with ESMTPSA id t11-20020a170902a5cb00b001a043e84bf0sm4675147plq.209.2023.05.07.00.52.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 May 2023 00:52:25 -0700 (PDT)
+Date:   Sun, 7 May 2023 13:22:19 +0530
+From:   Anup Sharma <anupnewsmail@gmail.com>
+To:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: megaraid: Use sysfs_emit in show function callsbacks
+Message-ID: <ZFdYszGYVRQQA7LP@yoga>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 1/5] dt-bindings: spi: sun6i: add DT bindings for
- Allwinner R329/D1/R528/T113s SPI
-Content-Language: en-US
-To:     Maksim Kiselev <bigunclemax@gmail.com>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     Icenowy Zheng <icenowy@aosc.io>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20230506232616.1792109-1-bigunclemax@gmail.com>
- <20230506232616.1792109-2-bigunclemax@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230506232616.1792109-2-bigunclemax@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,47 +70,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/05/2023 01:26, Maksim Kiselev wrote:
-> Listed above Allwinner SoCs has two SPI controllers. First is the regular
-> SPI controller and the second one has additional functionality for
-> MIPI-DBI Type C.
-> 
-> Add compatible strings for these controllers
-> 
-> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-> ---
->  .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml   | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> index de36c6a34a0f..807dde457e3b 100644
-> --- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> @@ -21,6 +21,7 @@ properties:
->      oneOf:
->        - const: allwinner,sun6i-a31-spi
->        - const: allwinner,sun8i-h3-spi
-> +      - const: allwinner,sun50i-r329-spi
+As stated in the Documentation/filesystems/sysfs.rst file, it
+is recommended that the show() callback function for kobject
+attributes strictly utilizes sysfs_emit instead of the sprintf
+family of functions.
+Issue identified using the coccinelle device_attr_show.cocci script.
 
-Keep the list ordered.
+Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+---
+ drivers/scsi/megaraid/megaraid_sas_base.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
->        - items:
->            - enum:
->                - allwinner,sun8i-r40-spi
-> @@ -28,6 +29,12 @@ properties:
->                - allwinner,sun50i-h616-spi
->                - allwinner,suniv-f1c100s-spi
->            - const: allwinner,sun8i-h3-spi
-> +      - items:
-> +          - enum:
-> +              - allwinner,sun20i-d1-spi
-> +              - allwinner,sun20i-d1-spi-dbi
-> +              - allwinner,sun50i-r329-spi-dbi
-> +          - const: allwinner,sun50i-r329-spi
-
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+index 317c944c68e3..44e8d39b9b76 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_base.c
++++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+@@ -3335,7 +3335,7 @@ fw_crash_buffer_size_show(struct device *cdev,
+ 	struct megasas_instance *instance =
+ 		(struct megasas_instance *) shost->hostdata;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%ld\n", (unsigned long)
++	return sysfs_emit(buf, "%ld\n", (unsigned long)
+ 		((instance->fw_crash_buffer_size) * 1024 * 1024)/PAGE_SIZE);
+ }
+ 
+@@ -3382,14 +3382,14 @@ fw_crash_state_show(struct device *cdev,
+ 	struct megasas_instance *instance =
+ 		(struct megasas_instance *) shost->hostdata;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", instance->fw_crash_state);
++	return sysfs_emit(buf, "%d\n", instance->fw_crash_state);
+ }
+ 
+ static ssize_t
+ page_size_show(struct device *cdev,
+ 	struct device_attribute *attr, char *buf)
+ {
+-	return snprintf(buf, PAGE_SIZE, "%ld\n", (unsigned long)PAGE_SIZE - 1);
++	return sysfs_emit(buf, "%ld\n", (unsigned long)PAGE_SIZE - 1);
+ }
+ 
+ static ssize_t
+@@ -3399,7 +3399,7 @@ ldio_outstanding_show(struct device *cdev, struct device_attribute *attr,
+ 	struct Scsi_Host *shost = class_to_shost(cdev);
+ 	struct megasas_instance *instance = (struct megasas_instance *)shost->hostdata;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", atomic_read(&instance->ldio_outstanding));
++	return sysfs_emit(buf, "%d\n", atomic_read(&instance->ldio_outstanding));
+ }
+ 
+ static ssize_t
+@@ -3409,7 +3409,7 @@ fw_cmds_outstanding_show(struct device *cdev,
+ 	struct Scsi_Host *shost = class_to_shost(cdev);
+ 	struct megasas_instance *instance = (struct megasas_instance *)shost->hostdata;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", atomic_read(&instance->fw_outstanding));
++	return sysfs_emit(buf, "%d\n", atomic_read(&instance->fw_outstanding));
+ }
+ 
+ static ssize_t
+@@ -3419,7 +3419,8 @@ enable_sdev_max_qd_show(struct device *cdev,
+ 	struct Scsi_Host *shost = class_to_shost(cdev);
+ 	struct megasas_instance *instance = (struct megasas_instance *)shost->hostdata;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", instance->enable_sdev_max_qd);
++	return sysfs_emit(buf, "%d\n",
++			instance->enable_sdev_max_qd);
+ }
+ 
+ static ssize_t
+@@ -3473,7 +3474,7 @@ raid_map_id_show(struct device *cdev, struct device_attribute *attr,
+ 	struct megasas_instance *instance =
+ 			(struct megasas_instance *)shost->hostdata;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%ld\n",
++	return sysfs_emit(buf, "%ld\n",
+ 			(unsigned long)instance->map_id);
+ }
+ 
+-- 
+2.34.1
 
