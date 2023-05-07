@@ -2,132 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4D46F9640
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B38C6F95E5
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbjEGAla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 20:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
+        id S231920AbjEGAii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 20:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbjEGAjg (ORCPT
+        with ESMTP id S232129AbjEGAhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 20:39:36 -0400
+        Sat, 6 May 2023 20:37:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067122273A;
-        Sat,  6 May 2023 17:37:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2FA191E0;
+        Sat,  6 May 2023 17:36:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D95B61500;
-        Sun,  7 May 2023 00:35:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF781C4339C;
-        Sun,  7 May 2023 00:35:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC49B6153B;
+        Sun,  7 May 2023 00:35:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16718C433A0;
+        Sun,  7 May 2023 00:35:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419734;
-        bh=5TVU2snfYcPfUBD5Cbq4M63d1gK9hmx4m051XmHw8K8=;
+        s=k20201202; t=1683419736;
+        bh=IF9GwtDXJnWrlpsw/SG99WAAxsTQuN/kbPk3ix0P1Es=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hOEGpUEL/yMN1bWgB9HPqpE3HJXL+tmEKcpQ3DybS4PYMQsX/W44UpC0dSdXHwOsR
-         qzy3O40VEHG8fCzXtmffcBE4KqHWAuWnCcCMO7rF36GMvtfdY1jxl1LKb0ojCe3oU2
-         WTy7Cvg6O3teyNNB3vZREcUty9HilGVjSzSr0qzi41e6FP3wd0oZEJfMgHbqQf3eTe
-         QtiK/I6DE0aTzTziUg4pffPjP60Jqv9p4guri7W9KG8IiJ6Y1Cm8yunHa2sxvpb0dR
-         Zp4A8Moxk1wOC4eFJP7Hd0cAhWxyagodw53T0OkcXxJkWiPF79uSmu2Kfzt1ztJJh6
-         zkCWjqC14IMXQ==
+        b=FppkqMTmC3hQ8qjlIKFXZQKFOyoFicT+7C+PprTyH9tBI0T4/db4BMeiiXAz5g1Q+
+         GXjI3DD8quBf7w2sOev2fO9xROrRavNIE/8oNSWG4XScke6XLk09aElLXjxfAapJoB
+         wSsQt/Th9yYZekEHw2KKEIP/CDmomjCX2J1r3eWo3vvIbkFGk9SQQ+iywpbei62XfO
+         k90sXW2koycuqiHeKPku9Vo1iZ5NGwqXXeF2OT8Q9YeeLKSqG1izharLaWdYcvbe8c
+         nq1K+Kijzx7uFd2ytrqvL0fl/u2chZtZ3Dy+P3lakDTsmejKbtEY3gKlFcqDRr4Vgw
+         hZstHTUBqk/zg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kevin Groeneveld <kgroeneveld@lenbrook.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, shawnguo@kernel.org,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.15 06/10] spi: spi-imx: fix MX51_ECSPI_* macros when cs > 3
-Date:   Sat,  6 May 2023 20:35:12 -0400
-Message-Id: <20230507003517.4078384-6-sashal@kernel.org>
+Cc:     Jason Gerecke <killertofu@gmail.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
+        ping.cheng@wacom.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 07/10] HID: wacom: generic: Set battery quirk only when we see battery data
+Date:   Sat,  6 May 2023 20:35:13 -0400
+Message-Id: <20230507003517.4078384-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230507003517.4078384-1-sashal@kernel.org>
 References: <20230507003517.4078384-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kevin Groeneveld <kgroeneveld@lenbrook.com>
+From: Jason Gerecke <killertofu@gmail.com>
 
-[ Upstream commit 87c614175bbf28d3fd076dc2d166bac759e41427 ]
+[ Upstream commit bea407a427baa019758f29f4d31b26f008bb8cc6 ]
 
-When using gpio based chip select the cs value can go outside the range
-0 – 3. The various MX51_ECSPI_* macros did not take this into consideration
-resulting in possible corruption of the configuration.
+Some devices will include battery status usages in the HID descriptor
+but we won't see that battery data for one reason or another. For example,
+AES sensors won't send battery data unless an AES pen is in proximity.
+If a user does not have an AES pen but instead only interacts with the
+AES touchscreen with their fingers then there is no need for us to create
+a battery object. Similarly, if a family of peripherals shares the same
+HID descriptor between wired-only and wireless-capable SKUs, users of the
+former may never see a battery event and will not want a power_supply
+object created.
 
-For example for any cs value over 3 the SCLKPHA bits would not be set and
-other values in the register possibly corrupted.
-
-One way to fix this is to just mask the cs bits to 2 bits. This still
-allows all 4 native chip selects to work as well as gpio chip selects
-(which can use any of the 4 chip select configurations).
-
-Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
-Link: https://lore.kernel.org/r/20230318222132.3373-1-kgroeneveld@lenbrook.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217062
+Link: https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/2354
+Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
+Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-imx.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ drivers/hid/wacom_wac.c | 33 +++++++++++----------------------
+ 1 file changed, 11 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 890b2cf02149c..61730d3bf592f 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -247,6 +247,18 @@ static bool spi_imx_can_dma(struct spi_master *master, struct spi_device *spi,
- 	return true;
+diff --git a/drivers/hid/wacom_wac.c b/drivers/hid/wacom_wac.c
+index 546aaaaec016e..e63cd6b9aa7cb 100644
+--- a/drivers/hid/wacom_wac.c
++++ b/drivers/hid/wacom_wac.c
+@@ -1891,18 +1891,7 @@ static void wacom_map_usage(struct input_dev *input, struct hid_usage *usage,
+ static void wacom_wac_battery_usage_mapping(struct hid_device *hdev,
+ 		struct hid_field *field, struct hid_usage *usage)
+ {
+-	struct wacom *wacom = hid_get_drvdata(hdev);
+-	struct wacom_wac *wacom_wac = &wacom->wacom_wac;
+-	struct wacom_features *features = &wacom_wac->features;
+-	unsigned equivalent_usage = wacom_equivalent_usage(usage->hid);
+-
+-	switch (equivalent_usage) {
+-	case HID_DG_BATTERYSTRENGTH:
+-	case WACOM_HID_WD_BATTERY_LEVEL:
+-	case WACOM_HID_WD_BATTERY_CHARGING:
+-		features->quirks |= WACOM_QUIRK_BATTERY;
+-		break;
+-	}
++	return;
  }
  
-+/*
-+ * Note the number of natively supported chip selects for MX51 is 4. Some
-+ * devices may have less actual SS pins but the register map supports 4. When
-+ * using gpio chip selects the cs values passed into the macros below can go
-+ * outside the range 0 - 3. We therefore need to limit the cs value to avoid
-+ * corrupting bits outside the allocated locations.
-+ *
-+ * The simplest way to do this is to just mask the cs bits to 2 bits. This
-+ * still allows all 4 native chip selects to work as well as gpio chip selects
-+ * (which can use any of the 4 chip select configurations).
-+ */
-+
- #define MX51_ECSPI_CTRL		0x08
- #define MX51_ECSPI_CTRL_ENABLE		(1 <<  0)
- #define MX51_ECSPI_CTRL_XCH		(1 <<  2)
-@@ -255,16 +267,16 @@ static bool spi_imx_can_dma(struct spi_master *master, struct spi_device *spi,
- #define MX51_ECSPI_CTRL_DRCTL(drctl)	((drctl) << 16)
- #define MX51_ECSPI_CTRL_POSTDIV_OFFSET	8
- #define MX51_ECSPI_CTRL_PREDIV_OFFSET	12
--#define MX51_ECSPI_CTRL_CS(cs)		((cs) << 18)
-+#define MX51_ECSPI_CTRL_CS(cs)		((cs & 3) << 18)
- #define MX51_ECSPI_CTRL_BL_OFFSET	20
- #define MX51_ECSPI_CTRL_BL_MASK		(0xfff << 20)
+ static void wacom_wac_battery_event(struct hid_device *hdev, struct hid_field *field,
+@@ -1923,18 +1912,21 @@ static void wacom_wac_battery_event(struct hid_device *hdev, struct hid_field *f
+ 			wacom_wac->hid_data.bat_connected = 1;
+ 			wacom_wac->hid_data.bat_status = WACOM_POWER_SUPPLY_STATUS_AUTO;
+ 		}
++		wacom_wac->features.quirks |= WACOM_QUIRK_BATTERY;
+ 		break;
+ 	case WACOM_HID_WD_BATTERY_LEVEL:
+ 		value = value * 100 / (field->logical_maximum - field->logical_minimum);
+ 		wacom_wac->hid_data.battery_capacity = value;
+ 		wacom_wac->hid_data.bat_connected = 1;
+ 		wacom_wac->hid_data.bat_status = WACOM_POWER_SUPPLY_STATUS_AUTO;
++		wacom_wac->features.quirks |= WACOM_QUIRK_BATTERY;
+ 		break;
+ 	case WACOM_HID_WD_BATTERY_CHARGING:
+ 		wacom_wac->hid_data.bat_charging = value;
+ 		wacom_wac->hid_data.ps_connected = value;
+ 		wacom_wac->hid_data.bat_connected = 1;
+ 		wacom_wac->hid_data.bat_status = WACOM_POWER_SUPPLY_STATUS_AUTO;
++		wacom_wac->features.quirks |= WACOM_QUIRK_BATTERY;
+ 		break;
+ 	}
+ }
+@@ -1950,18 +1942,15 @@ static void wacom_wac_battery_report(struct hid_device *hdev,
+ {
+ 	struct wacom *wacom = hid_get_drvdata(hdev);
+ 	struct wacom_wac *wacom_wac = &wacom->wacom_wac;
+-	struct wacom_features *features = &wacom_wac->features;
  
- #define MX51_ECSPI_CONFIG	0x0c
--#define MX51_ECSPI_CONFIG_SCLKPHA(cs)	(1 << ((cs) +  0))
--#define MX51_ECSPI_CONFIG_SCLKPOL(cs)	(1 << ((cs) +  4))
--#define MX51_ECSPI_CONFIG_SBBCTRL(cs)	(1 << ((cs) +  8))
--#define MX51_ECSPI_CONFIG_SSBPOL(cs)	(1 << ((cs) + 12))
--#define MX51_ECSPI_CONFIG_SCLKCTL(cs)	(1 << ((cs) + 20))
-+#define MX51_ECSPI_CONFIG_SCLKPHA(cs)	(1 << ((cs & 3) +  0))
-+#define MX51_ECSPI_CONFIG_SCLKPOL(cs)	(1 << ((cs & 3) +  4))
-+#define MX51_ECSPI_CONFIG_SBBCTRL(cs)	(1 << ((cs & 3) +  8))
-+#define MX51_ECSPI_CONFIG_SSBPOL(cs)	(1 << ((cs & 3) + 12))
-+#define MX51_ECSPI_CONFIG_SCLKCTL(cs)	(1 << ((cs & 3) + 20))
+-	if (features->quirks & WACOM_QUIRK_BATTERY) {
+-		int status = wacom_wac->hid_data.bat_status;
+-		int capacity = wacom_wac->hid_data.battery_capacity;
+-		bool charging = wacom_wac->hid_data.bat_charging;
+-		bool connected = wacom_wac->hid_data.bat_connected;
+-		bool powered = wacom_wac->hid_data.ps_connected;
++	int status = wacom_wac->hid_data.bat_status;
++	int capacity = wacom_wac->hid_data.battery_capacity;
++	bool charging = wacom_wac->hid_data.bat_charging;
++	bool connected = wacom_wac->hid_data.bat_connected;
++	bool powered = wacom_wac->hid_data.ps_connected;
  
- #define MX51_ECSPI_INT		0x10
- #define MX51_ECSPI_INT_TEEN		(1 <<  0)
+-		wacom_notify_battery(wacom_wac, status, capacity, charging,
+-				     connected, powered);
+-	}
++	wacom_notify_battery(wacom_wac, status, capacity, charging,
++			     connected, powered);
+ }
+ 
+ static void wacom_wac_pad_usage_mapping(struct hid_device *hdev,
 -- 
 2.39.2
 
