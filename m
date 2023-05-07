@@ -2,137 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DE56F98A4
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 15:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C756F9898
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 15:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjEGN3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 09:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
+        id S230265AbjEGNPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 09:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbjEGN32 (ORCPT
+        with ESMTP id S230387AbjEGNO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 09:29:28 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37121635F;
-        Sun,  7 May 2023 06:29:26 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1aaf21bb427so24794555ad.1;
-        Sun, 07 May 2023 06:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683466166; x=1686058166;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yEE4rFRcXmS59YkgFdCPJqdlH6NtKCZ8BAGKDvTzowA=;
-        b=FHNzQR+I5eORzc0RHGXsRbCVlQW8SbqnyW8Z2xPFjiaz/gIMW+NGJ+WTRkWsMSMoEh
-         fGPoPW794d8jyDZsV9kbYufbYcR6HAMYUX3vFKav/HxCZLZVqIhW2DFQODYBMifrNMHe
-         EhZIpnXYFUcm4C6CnPJeYwNbGEK5RtFYX+r2yUAZcZf7n2pctqg0RC42hVK5tyxlg3iy
-         9iLH3uztwfSZy3PUt46KbGZ6+T0mMn3L/cx4MN0ulTnZD69OPUbqOLMqrdDuX1z9Ap6M
-         uhJJSAvFQym9/UrV4UrKBJqJR4WO/2/a1QNgmuvi2tbpg8KuYzVRxvijDJ/Be/Ck0QHn
-         gusA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683466166; x=1686058166;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yEE4rFRcXmS59YkgFdCPJqdlH6NtKCZ8BAGKDvTzowA=;
-        b=ObPYo3xAAM+T+Q5GCBtgkjIBzMImTDLB005RvoMR6W/WjPAwKTIFC6Gvk4xF0N3DIj
-         IIqsNmb1Sy74jmSLQ95gy9RvQ6/3+y47eIMucCq9byD3YrAicoe9d3yyM1ND9Gj3Iw/m
-         MzZduBisHMmdFZIomj/wxCGudOpkICgbk4jMO8wi/Fb82O7CwaBcywVvdKI/bAMuAyMQ
-         N1yOj7Ci8dbc/Er8SiWZakUJIYINxiJxGtr4spRs2w5TjGM1cMT2TTuOmF2dWofLfAnc
-         aLkzhkKwjIiXvpwAzVFRbQGLuiAPyNXiVRxnOC/TXBmdDODbzmg9ADG5n47pfEB5YfbV
-         nutQ==
-X-Gm-Message-State: AC+VfDyfsZebwzYicR1XDuuNVQkxom/cvEEU+VxKFE/GLxJQFXp+nwPb
-        ezg4fKmIksVBqEmcRidl2V5DwZQv+jk=
-X-Google-Smtp-Source: ACHHUZ7P+KwUoR20+BmPPshdJfqIyGfWEcEyV5Xmu+2O8TtoKUxE8hlBnrM0SKp43+3+eE0TALOEqg==
-X-Received: by 2002:a17:902:7881:b0:19e:6cb9:4c8f with SMTP id q1-20020a170902788100b0019e6cb94c8fmr6214043pll.41.1683466166140;
-        Sun, 07 May 2023 06:29:26 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-59.three.co.id. [116.206.12.59])
-        by smtp.gmail.com with ESMTPSA id jw19-20020a170903279300b001a9ac65ca7csm5125038plb.309.2023.05.07.06.29.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 May 2023 06:29:25 -0700 (PDT)
-Message-ID: <db732251-b6fe-c2c5-a0db-bac77dc84314@gmail.com>
-Date:   Sun, 7 May 2023 20:29:22 +0700
+        Sun, 7 May 2023 09:14:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9391059C1;
+        Sun,  7 May 2023 06:14:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A38161BA3;
+        Sun,  7 May 2023 13:14:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0EBEC433EF;
+        Sun,  7 May 2023 13:14:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683465295;
+        bh=fYvEHxQMIB0EcK3zgyNt2wrMgeUzXp92rklzMGqAThs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JfBCIRChqqyEAusGtFrq9rrCebvXREKJsHjlPGRJYIdDWeAYwE4IdTxHn7KatpJpC
+         ri/mAZnnT86Jjkztls4gwt4V+CgL6q4YE+VVKByuyiT5ucfVRrbZ6Yhtjz5F1P05+9
+         F/7jDRLqN0U63FWtV6HnSpaYKq/boUJwZ6+sWY4wxIzZQ4rzz1zhcVZY/8mHfI52Qf
+         UvXrQJTsFdvzjx4HYcJHjRFUzPopK0aorrCHmvGCldUWp5oB6Ne8yHm2+7EIXCEq7r
+         5RdnE2VxzvyENbofaQrHArLnDIy/Ia35Au1e84/rXoSNLuuMnq/MZW/KB4dreaL9A8
+         sKjjoeM6Fadkg==
+Date:   Sun, 7 May 2023 14:30:49 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] iio: bu27034: Ensure reset is written
+Message-ID: <20230507143049.4407c06e@jic23-huawei>
+In-Reply-To: <b8c19793-8650-b997-e868-3efd1e119b9a@gmail.com>
+References: <ZFIw/KdApZe1euN8@fedora>
+        <20230506192702.57ebf533@jic23-huawei>
+        <b8c19793-8650-b997-e868-3efd1e119b9a@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kernel Build System <linux-kbuild@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: syntax error in prepare target of main Makefile
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun, 7 May 2023 12:58:52 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-I notice a year old bug in bugzilla [1]. As many developers don't
-take a look on it, I decided to forward the bug by mail. And
-to reach the reporter, you must log in to bugzilla.
+> On 5/6/23 21:27, Jonathan Cameron wrote:
+> > On Wed, 3 May 2023 13:01:32 +0300
+> > Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+> >  =20
+> >> The reset bit must be always written to the hardware no matter what va=
+lue
+> >> is in a cache or register. Ensure this by using regmap_write_bits()
+> >> instead of the regmap_update_bits(). Furthermore, the RESET bit may be
+> >> self-clearing, so mark the SYSTEM_CONTROL register volatile to guarant=
+ee
+> >> we do also read the right state - should we ever need to read it.
+> >>
+> >> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> >> Fixes: e52afbd61039 ("iio: light: ROHM BU27034 Ambient Light Sensor") =
+=20
+> >=20
+> > This obviously interacts with the regcache update.
+> >=20
+> > Fun question is whether a register is volatile if it results in all
+> > registers (including itself) resetting.  In my view, no it isn't volati=
+le.
+> > So fixing the regcache stuff as in your other patch is more appropriate=
+. =20
+>=20
+> Hi Jonathan,
+>=20
+> I think the key thing here is to ensure writing the reset-bit will=20
+> always be performed no matter what value is found from cache/hardware. I=
+=20
+> guess marking the register as volatile is indeed unnecessary, although I=
+=20
+> don't think it is wrong though, as it underlines we have something=20
+> special in this register. However, using the write_bits() instead of=20
+> update_bits() is in my opinion very much "the right thing" to do :)
 
-Quoting from the bug report:
+It's a reasonable change, but whether it's fixing a bug is more complex.
+If we handle the cache correctly so it always says the bits need writing
+then there will be no difference between update_bits() and write_bits().
 
->  Christian 2022-04-08 10:44:17 UTC
-> 
-> Symptom:
-> 
-> make[2]: Entering directory '/usr/src/kernels/5.17.1-1.el8.elrepo.x86_64'
-> Makefile:729: target 'include/config/auto.conf' does not exist
-> test -e include/generated/autoconf.h -a -e include/config/auto.conf || (                \
-> echo >&2;                                                       \
-> echo >&2 "  ERROR: Kernel configuration is invalid.";           \
-> echo >&2 "         include/generated/autoconf.h or include/config/auto.conf are missing.";\
-> echo >&2 "         Run 'make oldconfig && make prepare' on kernel src to fix it.";      \
-> echo >&2 ;                                                      \
-> /bin/false)
-> Makefile:1717: target 'prepare' does not exist
-> if [ "gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4)" != ""gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4)"" ]; then \
->         echo >&2 "warning: the compiler differs from the one used to build the kernel"; \
->         echo >&2 "  The kernel was built by: "gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4)""; \
->         echo >&2 "  You are using:           gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4)"; \
-> fi
-> /bin/sh: -c: line 0: syntax error near unexpected token `('
-> /bin/sh: -c: line 0: `if [ "gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4)" != ""gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4)"" ]; then \'
-> make[2]: *** [Makefile:1717: prepare] Error 1
-> make[2]: Leaving directory '/usr/src/kernels/5.17.1-1.el8.elrepo.x86_64'
-> 
-> 
-> Note the double double-quotes in the GCC Version comparison !
-> 
-> This happens to me when I try to compile vmware kernel modules with mainline kernel from elrepo on AlamLinux8.
-> 
-> Since it is coming from the Makefile of the Kernel, I suppose this is the proper upstream tracker to be used. Please advise if not.
-> 
-> 
-> This is the potion of the Makefile that fails (line 1717..) : 
-> prepare:
-> 	@if [ "$(CC_VERSION_TEXT)" != "$(CONFIG_CC_VERSION_TEXT)" ]; then \
-> 		echo >&2 "warning: the compiler differs from the one used to build the kernel"; \
-> 		echo >&2 "  The kernel was built by: $(CONFIG_CC_VERSION_TEXT)"; \
-> 		echo >&2 "  You are using:           $(CC_VERSION_TEXT)"; \
-> 	fi
-> 
-> 
-> 
-> I don't know where CONFIG_CC_VERSION_TEXT is defined. Which apparently contains "...", but shouldn't.
-> 
-> 	
+Meh, better safe than sorry.
 
-To the reporter: It is helpful to try compiling your third-party modules
-against latest mainline kernel.
+Jonathan
 
-Thanks.
+>=20
+> Yours=C2=B8
+> 	-- Matti
+>=20
+> >=20
+> > Jonathan
+> >  =20
+> >>
+> >> ---
+> >> Changelog:
+> >> v1 =3D> v2:
+> >>    - Fix SoB tag
+> >>
+> >>
+> >> I haven't verified if the reset bit is self-clearin as I did temporari=
+ly
+> >> give away the HW.
+> >>
+> >> In worst case the bit is not self clearing - but we don't really
+> >> get performance penalty even if we set the register volatile because t=
+he
+> >> SYSTEM_CONTROL register only has the part-ID and the reset fields. The
+> >> part-id is only read once at probe.
+> >>
+> >> ---
+> >>   drivers/iio/light/rohm-bu27034.c | 5 ++++-
+> >>   1 file changed, 4 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/iio/light/rohm-bu27034.c b/drivers/iio/light/rohm=
+-bu27034.c
+> >> index 25c9b79574a5..740ebd86b6e5 100644
+> >> --- a/drivers/iio/light/rohm-bu27034.c
+> >> +++ b/drivers/iio/light/rohm-bu27034.c
+> >> @@ -231,6 +231,9 @@ struct bu27034_result {
+> >>  =20
+> >>   static const struct regmap_range bu27034_volatile_ranges[] =3D {
+> >>   	{
+> >> +		.range_min =3D BU27034_REG_SYSTEM_CONTROL,
+> >> +		.range_max =3D BU27034_REG_SYSTEM_CONTROL,
+> >> +	}, {
+> >>   		.range_min =3D BU27034_REG_MODE_CONTROL4,
+> >>   		.range_max =3D BU27034_REG_MODE_CONTROL4,
+> >>   	}, {
+> >> @@ -1272,7 +1275,7 @@ static int bu27034_chip_init(struct bu27034_data=
+ *data)
+> >>   	int ret, sel;
+> >>  =20
+> >>   	/* Reset */
+> >> -	ret =3D regmap_update_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
+> >> +	ret =3D regmap_write_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
+> >>   			   BU27034_MASK_SW_RESET, BU27034_MASK_SW_RESET);
+> >>   	if (ret)
+> >>   		return dev_err_probe(data->dev, ret, "Sensor reset failed\n");
+> >>
+> >> base-commit: 7fcbd72176076c44b47e8f68f0223c02c411f420 =20
+> >  =20
+>=20
 
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=215820
-
--- 
-An old man doll... just what I always wanted! - Clara
