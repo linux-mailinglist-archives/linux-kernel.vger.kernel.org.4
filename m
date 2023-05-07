@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8108F6F95A2
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F55A6F9570
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbjEGAft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 20:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
+        id S231393AbjEGAd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 20:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231851AbjEGAet (ORCPT
+        with ESMTP id S231290AbjEGAdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 20:34:49 -0400
+        Sat, 6 May 2023 20:33:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6BF23A3F;
-        Sat,  6 May 2023 17:34:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D95B1A1C4;
+        Sat,  6 May 2023 17:33:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B84D61458;
-        Sun,  7 May 2023 00:33:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36A15C433D2;
-        Sun,  7 May 2023 00:32:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0415860EBA;
+        Sun,  7 May 2023 00:33:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09087C433D2;
+        Sun,  7 May 2023 00:33:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419580;
-        bh=FSScn70I0FrCmoPEWpXBnjE7oYUiMOfDx7KbUz8by2E=;
+        s=k20201202; t=1683419584;
+        bh=40z2ZpojbXuP6tB3+OAoSZu6KHvjy/jbjRj5UZ9K8Nw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JTLmSjwsW9IjaMfkKOTqZPuwABN68BCR05ll+twXO19u7DCxven0FP+hEgTnHvr7L
-         8EKzTlIBR24QeSlCiBfhVZj40ZzTIakSlFHf9SpgYeBjN6kzpMIH/xelpfAa2DUQSX
-         7rEImSY/owHUTViyjFreV4qWL+7GWJfJa9UXeTF6qZiBHgw7XigxTTw9vq0VLnQKT2
-         3brf4z6TOix3Y9y4hcXNtole7B6X7Cq86xr7X9OZ7H7Qgt13CgTRtevfihbKMexvM/
-         3iAkowD9oMDCl/toU8JJeVa2qd6sRELaCASbBQunSz2ggvPZiXmEzJtp1uVs9WP53z
-         t4Ml3wZ46bnig==
+        b=qjfVFoE4RPhkELOCVf9rbOFEKk19Q1zv2OSTY+qTucKOlD3IScSBpXO5y90EEysDY
+         QinuuxuXsgPKr979gvP/OLKFgyqXF/s90xEgylJ01v1SNkhKf3qsTu7Vt98s+lPJGN
+         tI6jepOTVZh1zk3RMla8sgleR81nINkxuAioAUNtPjoWP88XjQk3WqqZIi9f9GqWVZ
+         2s3mDEbGZ9KOW3RefuY8zHDHL3Dci9PHKzcDPSI4HoPm24NUdjYJMRx+TKFbIQ2ATp
+         y7awlCJR5SViFtzD3gXezxtigfY4IQ4eSY7kzu01enTJWJQpnzcHh0vCFpLDgrlvbB
+         k1AMZBjE3vXFQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Khadija Kamran <kamrankhadijadj@gmail.com>,
-        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        u.kleine-koenig@pengutronix.de, linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.2 05/20] staging: axis-fifo: initialize timeouts in init only
-Date:   Sat,  6 May 2023 20:32:20 -0400
-Message-Id: <20230507003237.4074305-5-sashal@kernel.org>
+Cc:     Svyatoslav Ryhel <clamor95@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, ion@agorria.com,
+        jiapeng.chong@linux.alibaba.com, robh@kernel.org,
+        alsa-devel@alsa-project.org, linux-tegra@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 06/20] ASoC: tegra: Support coupled mic-hp detection
+Date:   Sat,  6 May 2023 20:32:21 -0400
+Message-Id: <20230507003237.4074305-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230507003237.4074305-1-sashal@kernel.org>
 References: <20230507003237.4074305-1-sashal@kernel.org>
@@ -59,100 +61,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Khadija Kamran <kamrankhadijadj@gmail.com>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
 
-[ Upstream commit 752cbd8f191678e86aa754f795546b7f06b7f171 ]
+[ Upstream commit eb0b8481c2e03a5ae01f6bea60b42109bd12b6fe ]
 
-Initialize the module parameters, read_timeout and write_timeout once in
-init().
+This quirk is used for cases when there is GPIO which detects
+any type of 3.5 Jack insertion and actual type of jack is defined
+by other GPIO. 3.5 Jack GPIO generates interrupt and MIC GPIO
+indicates type of Jack only if 3.5 Jack GPIO is active.
 
-Module parameters can only be set once and cannot be modified later, so we
-don't need to evaluate them again when passing the parameters to
-wait_event_interruptible_timeout().
-
-Convert datatype of {read,write}_timeout from 'int' to 'long int' because
-implicit conversion of 'long int' to 'int' in statement
-'{read,write}_timeout = MAX_SCHEDULE_TIMEOUT' results in an overflow.
-
-Change format specifier for {read,write}_timeout from %i to %li.
-
-Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-Link: https://lore.kernel.org/r/ZBN3XAsItCiTk7CV@khadija-virtual-machine
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+Link: https://lore.kernel.org/r/20230308073502.5421-3-clamor95@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/axis-fifo/axis-fifo.c | 28 ++++++++++++++++-----------
- 1 file changed, 17 insertions(+), 11 deletions(-)
+ sound/soc/tegra/tegra_asoc_machine.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
-index dfd2b357f484b..0a85ea667a1b5 100644
---- a/drivers/staging/axis-fifo/axis-fifo.c
-+++ b/drivers/staging/axis-fifo/axis-fifo.c
-@@ -103,17 +103,17 @@
-  *           globals
-  * ----------------------------
-  */
--static int read_timeout = 1000; /* ms to wait before read() times out */
--static int write_timeout = 1000; /* ms to wait before write() times out */
-+static long read_timeout = 1000; /* ms to wait before read() times out */
-+static long write_timeout = 1000; /* ms to wait before write() times out */
+diff --git a/sound/soc/tegra/tegra_asoc_machine.c b/sound/soc/tegra/tegra_asoc_machine.c
+index 78faa8bcae274..7b6d5d90c3a2d 100644
+--- a/sound/soc/tegra/tegra_asoc_machine.c
++++ b/sound/soc/tegra/tegra_asoc_machine.c
+@@ -51,6 +51,17 @@ static struct snd_soc_jack_gpio tegra_machine_headset_jack_gpio = {
+ };
  
- /* ----------------------------
-  * module command-line arguments
-  * ----------------------------
-  */
- 
--module_param(read_timeout, int, 0444);
-+module_param(read_timeout, long, 0444);
- MODULE_PARM_DESC(read_timeout, "ms to wait before blocking read() timing out; set to -1 for no timeout");
--module_param(write_timeout, int, 0444);
-+module_param(write_timeout, long, 0444);
- MODULE_PARM_DESC(write_timeout, "ms to wait before blocking write() timing out; set to -1 for no timeout");
- 
- /* ----------------------------
-@@ -384,9 +384,7 @@ static ssize_t axis_fifo_read(struct file *f, char __user *buf,
- 		mutex_lock(&fifo->read_lock);
- 		ret = wait_event_interruptible_timeout(fifo->read_queue,
- 			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
--				 (read_timeout >= 0) ?
--				  msecs_to_jiffies(read_timeout) :
--				  MAX_SCHEDULE_TIMEOUT);
-+			read_timeout);
- 
- 		if (ret <= 0) {
- 			if (ret == 0) {
-@@ -528,9 +526,7 @@ static ssize_t axis_fifo_write(struct file *f, const char __user *buf,
- 		ret = wait_event_interruptible_timeout(fifo->write_queue,
- 			ioread32(fifo->base_addr + XLLF_TDFV_OFFSET)
- 				 >= words_to_write,
--				 (write_timeout >= 0) ?
--				  msecs_to_jiffies(write_timeout) :
--				  MAX_SCHEDULE_TIMEOUT);
-+			write_timeout);
- 
- 		if (ret <= 0) {
- 			if (ret == 0) {
-@@ -948,7 +944,17 @@ static struct platform_driver axis_fifo_driver = {
- 
- static int __init axis_fifo_init(void)
- {
--	pr_info("axis-fifo driver loaded with parameters read_timeout = %i, write_timeout = %i\n",
-+	if (read_timeout >= 0)
-+		read_timeout = msecs_to_jiffies(read_timeout);
-+	else
-+		read_timeout = MAX_SCHEDULE_TIMEOUT;
+ /* Mic Jack */
++static int coupled_mic_hp_check(void *data)
++{
++	struct tegra_machine *machine = (struct tegra_machine *)data;
 +
-+	if (write_timeout >= 0)
-+		write_timeout = msecs_to_jiffies(write_timeout);
-+	else
-+		write_timeout = MAX_SCHEDULE_TIMEOUT;
++	/* Detect mic insertion only if 3.5 jack is in */
++	if (gpiod_get_value_cansleep(machine->gpiod_hp_det) &&
++	    gpiod_get_value_cansleep(machine->gpiod_mic_det))
++		return SND_JACK_MICROPHONE;
 +
-+	pr_info("axis-fifo driver loaded with parameters read_timeout = %li, write_timeout = %li\n",
- 		read_timeout, write_timeout);
- 	return platform_driver_register(&axis_fifo_driver);
- }
++	return 0;
++}
+ 
+ static struct snd_soc_jack tegra_machine_mic_jack;
+ 
+@@ -183,8 +194,15 @@ int tegra_asoc_machine_init(struct snd_soc_pcm_runtime *rtd)
+ 			return err;
+ 		}
+ 
++		tegra_machine_mic_jack_gpio.data = machine;
+ 		tegra_machine_mic_jack_gpio.desc = machine->gpiod_mic_det;
+ 
++		if (of_property_read_bool(card->dev->of_node,
++					  "nvidia,coupled-mic-hp-det")) {
++			tegra_machine_mic_jack_gpio.desc = machine->gpiod_hp_det;
++			tegra_machine_mic_jack_gpio.jack_status_check = coupled_mic_hp_check;
++		};
++
+ 		err = snd_soc_jack_add_gpios(&tegra_machine_mic_jack, 1,
+ 					     &tegra_machine_mic_jack_gpio);
+ 		if (err)
 -- 
 2.39.2
 
