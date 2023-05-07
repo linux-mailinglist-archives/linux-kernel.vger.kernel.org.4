@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B376F9611
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB276F9615
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbjEGAjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 20:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
+        id S232814AbjEGAjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 20:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232346AbjEGAiR (ORCPT
+        with ESMTP id S232365AbjEGAiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 20:38:17 -0400
+        Sat, 6 May 2023 20:38:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEAA2E067;
-        Sat,  6 May 2023 17:36:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E43E3015F;
+        Sat,  6 May 2023 17:36:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 817F061553;
-        Sun,  7 May 2023 00:36:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC16DC433D2;
-        Sun,  7 May 2023 00:36:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2297761551;
+        Sun,  7 May 2023 00:36:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAE0EC433D2;
+        Sun,  7 May 2023 00:36:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419772;
-        bh=/MwxodUsnOCosigMHWlcCh9n43hKa0+brc5oZinDzj4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fuou76S+V1mo9uGrsqCD/ROASRMNFZejmTgojM6gcjINExNwVphL5TQNB+PTupz9M
-         0Ye3jMIFU0r9Y86iuHOJpAM6sB35VsjRA4yPfZMbycfcOydwPYRV5kIeOY0JkthvI0
-         UdTYwqfQfgJntJnDMrWCjd23hFPs5lb7WMZuQ09O5odyfdmHxmn9RVlIwaREOiMMIn
-         VT/1meneIzaTH+KuuQjR6yf2tjbT/oJnFRqCXZkb/QcNSsMMa2+xr3+gjm8n4mLXOB
-         zGUP0gsgtmy3Q4I8UY0RgLHPBxuR2cIcSBMzAQSH0EZwKqB6wRhQQvc/xNj6U8F7sy
-         9HdCdam3WJ9OA==
+        s=k20201202; t=1683419779;
+        bh=MIvPxjcmKdltahsy4kdgddZDQ3d9UoS46j9QmEXBL/A=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iDD0dMrYnMbwx1vSvIv1fu3HNPfcXrOCICxRVKLYkrvpD10RCqQCt28oygnXfcczK
+         bZICzvOFg5SCJUk3mLUOhzuk1o+kIG/ujcMTelruFHpvNnXMT/NfupK1H+PJAZQypU
+         Cnmap3d/vh6dU0OkbOYlsEogaCvxSxZ8S3NO0aDNFUAuBu3ACrikojCbZ/20cC84dl
+         q3bPcOrG8h8D6ySzi3VZaHDf7Au2KcdElnCIRgKtAuUte7GPUCx65Yap62R54n9XxU
+         OplEkhSLh0YSujjDJimeVqAQ4gkIcSECrrHcmValq/yPE9HBgLZzLyqTCqYlGl53BB
+         SJCJ2CNPc0yJg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Svyatoslav Ryhel <clamor95@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 5.4 1/9] ASoC: jack: allow multiple interrupt per gpio
-Date:   Sat,  6 May 2023 20:36:01 -0400
-Message-Id: <20230507003609.4079746-1-sashal@kernel.org>
+Cc:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.4 2/9] staging: rtl8192e: Replace macro RTL_PCI_DEVICE with PCI_DEVICE
+Date:   Sat,  6 May 2023 20:36:02 -0400
+Message-Id: <20230507003609.4079746-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230507003609.4079746-1-sashal@kernel.org>
+References: <20230507003609.4079746-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,33 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Svyatoslav Ryhel <clamor95@gmail.com>
+From: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 
-[ Upstream commit a2d4051b0bd6dffcd736888ae89a550d6f60b060 ]
+[ Upstream commit fda2093860df4812d69052a8cf4997e53853a340 ]
 
-This feature is required for coupled hp-mic quirk used
-by some Nvidia Tegra 3 based devices work properly.
+Replace macro RTL_PCI_DEVICE with PCI_DEVICE to get rid of rtl819xp_ops
+which is empty.
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-Link: https://lore.kernel.org/r/20230221183211.21964-3-clamor95@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Link: https://lore.kernel.org/r/8b45ee783fa91196b7c9d6fc840a189496afd2f4.1677133271.git.philipp.g.hortmann@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-jack.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 6 +++---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 5 -----
+ 2 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/sound/soc/soc-jack.c b/sound/soc/soc-jack.c
-index b5748dcd490f2..e83f9a2541cab 100644
---- a/sound/soc/soc-jack.c
-+++ b/sound/soc/soc-jack.c
-@@ -406,6 +406,7 @@ int snd_soc_jack_add_gpios(struct snd_soc_jack *jack, int count,
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index bcbf0c8cd4209..eb46b14069bb1 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -50,9 +50,9 @@ static const struct rtl819x_ops rtl819xp_ops = {
+ };
  
- 		ret = request_any_context_irq(gpiod_to_irq(gpios[i].desc),
- 					      gpio_handler,
-+					      IRQF_SHARED |
- 					      IRQF_TRIGGER_RISING |
- 					      IRQF_TRIGGER_FALLING,
- 					      gpios[i].name,
+ static struct pci_device_id rtl8192_pci_id_tbl[] = {
+-	{RTL_PCI_DEVICE(0x10ec, 0x8192, rtl819xp_ops)},
+-	{RTL_PCI_DEVICE(0x07aa, 0x0044, rtl819xp_ops)},
+-	{RTL_PCI_DEVICE(0x07aa, 0x0047, rtl819xp_ops)},
++	{PCI_DEVICE(0x10ec, 0x8192)},
++	{PCI_DEVICE(0x07aa, 0x0044)},
++	{PCI_DEVICE(0x07aa, 0x0047)},
+ 	{}
+ };
+ 
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+index 736f1a824cd2e..7bbd884aa5f13 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+@@ -55,11 +55,6 @@
+ #define IS_HARDWARE_TYPE_8192SE(_priv)		\
+ 	(((struct r8192_priv *)rtllib_priv(dev))->card_8192 == NIC_8192SE)
+ 
+-#define RTL_PCI_DEVICE(vend, dev, cfg) \
+-	.vendor = (vend), .device = (dev), \
+-	.subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID, \
+-	.driver_data = (kernel_ulong_t)&(cfg)
+-
+ #define TOTAL_CAM_ENTRY		32
+ #define CAM_CONTENT_COUNT	8
+ 
 -- 
 2.39.2
 
