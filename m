@@ -2,97 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43E96F9BA2
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 22:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8E86F9BAA
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 22:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbjEGUu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 16:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        id S232063AbjEGU5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 16:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbjEGUuz (ORCPT
+        with ESMTP id S229814AbjEGU5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 16:50:55 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E81A5DE
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 13:50:53 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2ac7707e34fso44401901fa.1
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 13:50:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683492651; x=1686084651;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HjBrxK8qc3xLnnr2R60HyqhiwwpGTFeasR6j9aUXl18=;
-        b=wIqNDsfN0z6yBX/VVpdrkPMvJGlRY10siClhXAPgQGqvQ5AfmZZ640ida1ZiyToIr+
-         NQbDzhWRuOLUOI+XZAC8fCj30+5jVzF3KNzHFUFYkk5XBmiec/f9tau5yajJZ1A9qjX7
-         jn+8tN6YJBfy3nE5spTLIKh0fcNma5ArIevbfx+fSTzcV4fGC54WB1hN3yXcLLjJn3+d
-         1kwENGSIJa3Ti7/xyjv5Ctv4e4/L1lTaoqvB/d6rYjSy/Nn6Xr2hfIk365QcKd0KEq/i
-         ECLmuaI9AQGfROn4zE04bDvKNMp1dPnm64ZajXReLmQfSZ3b0IAPucNwu1v2RM635/ms
-         6h/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683492651; x=1686084651;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HjBrxK8qc3xLnnr2R60HyqhiwwpGTFeasR6j9aUXl18=;
-        b=hXobQoHNjLXHQoxmeC2IJKavgM4Azp0xDnRlbzj/ipmPzSVSTtYm9w8SM82vh4pgkm
-         wbVCteck9z8fCi5+Te6ciCj1W8oR7ybCngUiG0KPKBuDNc9opHmjdr3CQ0db+UE/NcpV
-         OL2BJa9vQoDWQvxJqsHMfZuCMtGnMioRU589CLghkb5dh12d+Lu1FmBMqSWkBygtEOEH
-         cJKb8FEWjY9pN9iemUNBc8t+Dl7Ti6bM/qEn/Z8XJ2lyD6TMz6bICjWT3dclzVDRwwBf
-         HQdMNZQ3EoDjgxeHWyusVCYQBDJflpXm33NVYxZz5N7FVLRJ5CjpwYxSdlaAeOs88yUN
-         TOqQ==
-X-Gm-Message-State: AC+VfDwv8VjNnM1AHBf47Zsr9lfBYqjyiI4odKD3DCqEsc3WdM8ZYQEo
-        WxCGmqey74UTOzs9axEh4IP+EA==
-X-Google-Smtp-Source: ACHHUZ6CJi6Oe3pMcbkYpstoXB9PUlE7AlvcRdkEhZs6+g0ljHXjs5PiFlQTNvpZ1wHUwDn4oeg12w==
-X-Received: by 2002:a2e:9c99:0:b0:2ac:8db5:a717 with SMTP id x25-20020a2e9c99000000b002ac8db5a717mr1877948lji.1.1683492651260;
-        Sun, 07 May 2023 13:50:51 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id f4-20020a2e3804000000b002a634bfa224sm929889lja.40.2023.05.07.13.50.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 May 2023 13:50:50 -0700 (PDT)
-Message-ID: <45492699-9e1c-2a45-372f-5ce467de8f7a@linaro.org>
-Date:   Sun, 7 May 2023 23:50:50 +0300
+        Sun, 7 May 2023 16:57:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B1386BB;
+        Sun,  7 May 2023 13:56:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA22661CFE;
+        Sun,  7 May 2023 20:56:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9FEAC433D2;
+        Sun,  7 May 2023 20:55:50 +0000 (UTC)
+Date:   Sun, 7 May 2023 16:55:38 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, bristot@redhat.com,
+        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+        elver@google.com, dvyukov@google.com, shakeelb@google.com,
+        songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+        minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <20230507165538.3c8331be@rorschach.local.home>
+In-Reply-To: <ZFfd99w9vFTftB8D@moria.home.lan>
+References: <20230501165450.15352-1-surenb@google.com>
+        <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+        <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com>
+        <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
+        <ZFfd99w9vFTftB8D@moria.home.lan>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 4/6] ARM: dts: msm8226: Add qfprom node
-Content-Language: en-GB
-To:     =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230507201225.89694-1-matti.lehtimaki@gmail.com>
- <20230507201225.89694-5-matti.lehtimaki@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230507201225.89694-5-matti.lehtimaki@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/05/2023 23:12, Matti Lehtimäki wrote:
-> Add missing QFPROM definition for MSM8226 SoC.
+On Sun, 7 May 2023 13:20:55 -0400
+Kent Overstreet <kent.overstreet@linux.dev> wrote:
+
+> On Thu, May 04, 2023 at 11:07:22AM +0200, Michal Hocko wrote:
+> > No. I am mostly concerned about the _maintenance_ overhead. For the
+> > bare tracking (without profiling and thus stack traces) only those
+> > allocations that are directly inlined into the consumer are really
+> > of any use. That increases the code impact of the tracing because any
+> > relevant allocation location has to go through the micro surgery. 
+> > 
+> > e.g. is it really interesting to know that there is a likely memory
+> > leak in seq_file proper doing and allocation? No as it is the specific
+> > implementation using seq_file that is leaking most likely. There are
+> > other examples like that See?  
 > 
-> Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-> ---
->   arch/arm/boot/dts/qcom-msm8226.dtsi | 7 +++++++
->   1 file changed, 7 insertions(+)
+> So this is a rather strange usage of "maintenance overhead" :)
+> 
+> But it's something we thought of. If we had to plumb around a _RET_IP_
+> parameter, or a codetag pointer, it would be a hassle annotating the
+> correct callsite.
+> 
+> Instead, alloc_hooks() wraps a memory allocation function and stashes a
+> pointer to a codetag in task_struct for use by the core slub/buddy
+> allocator code.
+> 
+> That means that in your example, to move tracking to a given seq_file
+> function, we just:
+>  - hook the seq_file function with alloc_hooks
+>  - change the seq_file function to call non-hooked memory allocation
+>    functions.
+> 
+> > It would have been more convincing if you had some numbers at hands.
+> > E.g. this is a typical workload we are dealing with. With the compile
+> > time tags we are able to learn this with that much of cost. With a dynamic
+> > tracing we are able to learn this much with that cost. See? As small as
+> > possible is a rather vague term that different people will have a very
+> > different idea about.  
+> 
+> Engineers don't prototype and benchmark everything as a matter of
+> course, we're expected to have the rough equivealent of a CS education
+> and an understanding of big O notation, cache architecture, etc.
+> 
+> The slub fast path is _really_ fast - double word non locked cmpxchg.
+> That's what we're trying to compete with. Adding a big globally
+> accessible hash table is going to tank performance compared to that.
+> 
+> I believe the numbers we already posted speak for themselves. We're
+> considerably faster than memcg, fast enough to run in production.
+> 
+> I'm not going to be switching to a design that significantly regresses
+> performance, sorry :)
+> 
+> > TBH I am much more concerned about the maintenance burden on the MM side
+> > than the actual code tagging itslef which is much more self contained. I
+> > haven't seen other potential applications of the same infrastructure and
+> > maybe the code impact would be much smaller than in the MM proper. Our
+> > allocator API is really hairy and convoluted.  
+> 
+> You keep saying "maintenance burden", but this is a criticism that can
+> be directed at _any_ patchset that adds new code; it's generally
+> understood that that is the accepted cost for new functionality.
+> 
+> If you have specific concerns where you think we did something that
+> makes the code harder to maintain, _please point them out in the
+> appropriate patch_. I don't think you'll find too much - the
+> instrumentation in the allocators simply generalizes what memcg was
+> already doing, and the hooks themselves are a bit boilerplaty but hardly
+> the sort of thing people will be tripping over later.
+> 
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
--- 
-With best wishes
-Dmitry
+> TL;DR - put up or shut up :)
+
+Your email would have been much better if you left the above line out. :-/
+Comments like the above do not go over well via text. Even if you add the ":)"
+
+Back to the comment about this being a burden. I just applied all the
+patches and did a diff (much easier than to wade through 40 patches!)
+
+One thing we need to get rid of, and this isn't your fault but this
+series is extending it, is the use of the damn underscores to
+differentiate functions. This is one of the abominations of the early
+Linux kernel code base. I admit, I'm guilty of this too. But today I
+have learned and avoid it at all cost. Underscores are meaningless and
+error prone, not to mention confusing to people coming onboard. Let's
+use something that has some meaning.
+
+What's the difference between:
+
+  _kmem_cache_alloc_node() and __kmem_cache_alloc_node()?
+
+And if every allocation function requires a double hook, that is a
+maintenance burden. We do this for things like system calls, but
+there's a strong rationale for that. I'm guessing that Michal's concern
+is that he and other mm maintainers will need to make sure any new
+allocation function has this double call and is done properly. This
+isn't just new code that needs to be maintained, it's something that
+needs to be understood when adding any new interface to page
+allocations.
+
+It's true that all new code has a maintenance burden, and unless the
+maintainer feels the burden is worth their time, they have the right to
+complain about it.
+
+I've given talks about how to get code into open source projects, and
+the title is "Commits are pulled and never pushed". Where basically I
+talk about convincing the maintainers that they want your change, and
+not by pushing it because you want it.
+
+-- Steve
 
