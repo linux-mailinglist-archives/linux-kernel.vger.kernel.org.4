@@ -2,112 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5776F9974
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8156F9978
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 17:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbjEGPnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 11:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        id S231415AbjEGPpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 11:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjEGPnW (ORCPT
+        with ESMTP id S230265AbjEGPpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 11:43:22 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B39213856
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 08:43:19 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f13c577e36so3992725e87.1
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 08:43:19 -0700 (PDT)
+        Sun, 7 May 2023 11:45:21 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0072913856;
+        Sun,  7 May 2023 08:45:19 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f1fe1208a4so1177580e87.2;
+        Sun, 07 May 2023 08:45:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683474198; x=1686066198;
+        d=gmail.com; s=20221208; t=1683474318; x=1686066318;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6fr2hGT93hwoVDFpT4bMl3C3u2Y9uTIfICyFQ19Ymcs=;
-        b=S4WbRtV/yws6OmSwy5J3YrByyqF/zD6ZZDGyBEas1XKrBvApLMbaPxjJlMoJ1oaHBx
-         Sapx8GwmWrL+PhI+Lix2ULUzGA6fdoU4mvtDAf5IXapt6OzxOr27f3U5n6KgpBh3ZYU7
-         YK2QNN54DLFYzfnMukK8DVZawKvfXXo7n1eTr1ptdPelLgD4NkSIwzM5rgd7HTkd7rdn
-         E+KS9QSWimQRcmlqzPlTnI+iCv+gMRytUVB9u4gyP7calKjL/N93rM2G5bZX9Sg6WX4G
-         YZdHBPYBNJesiYI5NYr6DTcF/qPda9P3amyiM2scY81cJKuzvVwjbaBTyd0EWJ5tDSxf
-         gtrw==
+        bh=6cwLaiqaYx45levWACx9ZFz+HjMEh0/Q11DboFD6gYw=;
+        b=bH+5sOpAeRoHmX1TnwEBS+wDE/f3xhHXj68z74KlY38CU5hYclw2iktZvgq7YpqKgq
+         BIBEr904rYbas3cu7KCuqiye6npn8GPIdFVP/Kjoc990tvEmKf5Jn81nF5Wraf97+Zgn
+         UzBd7HiGkE1rUrVoz0Dr3YaqbH7Ub8qqq6ADY32bVZ2b1aZzsVR7PYIxx2iZUcowRrEs
+         drQEfxDTVazgcZeiPz9Do89gtwEN/PejQxEavS/ZRdur8wocYIhh4mJqMqxpNLcQ5pc3
+         5AN6kX4F5hyz8gfwOyozLMo36OD0pQPUWTZgrvQYhSlfvifkL3KPnbYspY1SSnGoCsrS
+         74lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683474198; x=1686066198;
+        d=1e100.net; s=20221208; t=1683474318; x=1686066318;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6fr2hGT93hwoVDFpT4bMl3C3u2Y9uTIfICyFQ19Ymcs=;
-        b=j11JnWUsbgisWBWWzYeLKLQqhvxMbDzNSLgjqyHv+R0M+Bdoc7KWIQUVPDaZ5k6ZdB
-         qNo2V6RfKx1Jjoh9RY+Zh/2LQjcy4+Zw9nn3rM12QlSRT7h/aT3UvlN7J3O5lL16tqMw
-         4ykyVT8AnTTMlfoT9LgUlqzSCRQgcYUw7/1pDjzCNYCW44kPzUJRMdSg6sUdgnTLQr48
-         +v12yQdyHOnB6hf/k45xDFdv28F+iWkk2qRTjCbD8pDho8UdCfiC8RdPvBHgtUtMxHY3
-         Vx1G4LZvBgcaYg9h8GsnfvoEaenGI8Kp7NHlG9Xgr9YsJKirfj7lO0nxP56PW2QscsYM
-         a9lw==
-X-Gm-Message-State: AC+VfDzb4IqYfkdx03TPT1nUUKg8TmphY5bPMB3Y+fEWomKiaXIynjYK
-        0iFxM45p9GEXUno0QZKFVcb7bg==
-X-Google-Smtp-Source: ACHHUZ7JwMKlF16an5fKAAhKtWGc3XJ/p+7XO2tbUyGsNJ3hOPNiI2RbyXln+FYT7cYlhi/hsXylDg==
-X-Received: by 2002:ac2:568d:0:b0:4ef:f4ef:a1cc with SMTP id 13-20020ac2568d000000b004eff4efa1ccmr2026719lfr.14.1683474197789;
-        Sun, 07 May 2023 08:43:17 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id q2-20020ac25fc2000000b004b55ddeb7e3sm1012158lfg.309.2023.05.07.08.43.17
+        bh=6cwLaiqaYx45levWACx9ZFz+HjMEh0/Q11DboFD6gYw=;
+        b=bcUaB5WoCJBFRRuCgCCkTPGQgv/RIkdI9RhjkZDSV9Ev2bVjU2TLdgsTs2GmHAakZF
+         kT1mXoFuSjZm9EvfZP4ei96R7m4mWTgMa3XTPpiCIVTwJuGqVpvBU7b/uAd1kYjQ0oSe
+         Ffx4ceHqYUg8nO556pGf39RYga3+S/sTsaPmO7jDfWzmqRORR7ujJxSwxZwDjfilDQ9q
+         nfpPYXbm9mjw3zh9PtcYO+WYdxZnUTqdcbdyThKyGkeSnPZpGqcALgs5URaEXFGKd+9o
+         vIbxktFtFGbk5np3/3slLrBpKGS8qNlkTLvkyg6D4fIWMZYVGgKrg3jPF89+RDOUD+gt
+         4d8Q==
+X-Gm-Message-State: AC+VfDy4FexM1TQx8NohpBiQe+26jj5iSlCNsNDKe2Moe6leDPBTC7hX
+        NSMIIkLDcbo5Myq6tstS8xLGn1+yLl8=
+X-Google-Smtp-Source: ACHHUZ5+BUHndmjFMBXFqWQxPpADU0+M7qdyueWRcvghHEVH9JNvP0lacfx6/qDMBNrBrnLwDBv5Bg==
+X-Received: by 2002:ac2:5443:0:b0:4ec:a4b4:4731 with SMTP id d3-20020ac25443000000b004eca4b44731mr1802957lfn.68.1683474317967;
+        Sun, 07 May 2023 08:45:17 -0700 (PDT)
+Received: from [192.168.1.111] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id z14-20020ac24f8e000000b004e843d6244csm1016481lfs.99.2023.05.07.08.45.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 May 2023 08:43:17 -0700 (PDT)
-Message-ID: <55538c42-b348-71ab-4aff-7cccfb14f8ab@linaro.org>
-Date:   Sun, 7 May 2023 18:43:16 +0300
+        Sun, 07 May 2023 08:45:17 -0700 (PDT)
+Message-ID: <1a18a026-6674-b838-ade4-9cff385e6007@gmail.com>
+Date:   Sun, 7 May 2023 18:45:16 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH RESEND v3 5/5] iio: adc: qcom-spmi-vadc: Propagate fw node
- label to userspace
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jonathan Cameron <jic23@kernel.org>,
+Subject: Re: [PATCH] iio: bu27034: Reinit regmap cache after reset
+Content-Language: en-US, en-GB
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230502-iio-adc-propagate-fw-node-label-v3-0-6be5db6e6b5a@somainline.org>
- <20230502-iio-adc-propagate-fw-node-label-v3-5-6be5db6e6b5a@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230502-iio-adc-propagate-fw-node-label-v3-5-6be5db6e6b5a@somainline.org>
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <ZFM7lE4ZuDrUTspH@fedora> <20230506190738.0b6e4b45@jic23-huawei>
+ <453da7af-8a83-f302-eea6-159e6222f430@gmail.com>
+ <20230507143602.08a11f12@jic23-huawei>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20230507143602.08a11f12@jic23-huawei>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/05/2023 02:17, Marijn Suijten wrote:
-> Set the read_label() callback to return a friendly name provided in DT
-> (firmware), in order to make in_{therm,voltage}X_label attributes show
-> up in sysfs for userspace to consume a channel name.  This is
-> particularly useful for custom thermistors being attached to otherwise
-> generically named GPIOs, where the name is known by the board DT.
+On 5/7/23 16:36, Jonathan Cameron wrote:
+> On Sun, 7 May 2023 13:16:57 +0300
+> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 > 
-> If the channel name isn't set in DT, use the datasheet_name hardcoded in
-> the driver instead.
+>> On 5/6/23 21:07, Jonathan Cameron wrote:
+>>> On Thu, 4 May 2023 07:59:00 +0300
+>>> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+>>
+>> I think I've never temporarily bypassed the cache when I've used one :)
+>> I need to check how this is done :)
+>>
 > 
-> Note that this doesn't fall back to fwnode_get_name() as that provides
-> suboptimally readable names, with an @xx address suffix from board DT.
-> 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->   drivers/iio/adc/qcom-spmi-vadc.c | 19 ++++++++++++++++++-
->   1 file changed, 18 insertions(+), 1 deletion(-)
+> regcache_cache_bypass(map, true / false);
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Thanks! This is a nice tool to have in my toolbox ;)
+
+> 
+> Combine this with the other patch into one clean fix / tidy up though.
+
+Sure, thanks!
 
 -- 
-With best wishes
-Dmitry
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
