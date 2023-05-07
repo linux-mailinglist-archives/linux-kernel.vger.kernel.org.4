@@ -2,198 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498446F97DF
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 11:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3926F97E4
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 11:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbjEGJMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 05:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
+        id S231322AbjEGJNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 05:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbjEGJMV (ORCPT
+        with ESMTP id S229980AbjEGJNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 05:12:21 -0400
-Received: from mail-m127104.qiye.163.com (mail-m127104.qiye.163.com [115.236.127.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EDB93EF
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 02:12:19 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPV6:240e:3b7:3277:3e50:d9d7:3dc:49c3:c0bf])
-        by mail-m127104.qiye.163.com (Hmail) with ESMTPA id 36F23A4010E;
-        Sun,  7 May 2023 17:12:14 +0800 (CST)
-From:   Ding Hui <dinghui@sangfor.com.cn>
-To:     chuck.lever@oracle.com, jlayton@kernel.org,
-        trond.myklebust@hammerspace.com, anna@kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, bfields@redhat.com, linux-nfs@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dinghui@sangfor.com.cn
-Subject: [RFC PATCH] SUNRPC: Fix UAF in svc_tcp_listen_data_ready()
-Date:   Sun,  7 May 2023 17:11:31 +0800
-Message-Id: <20230507091131.23540-1-dinghui@sangfor.com.cn>
-X-Mailer: git-send-email 2.17.1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDSB5LVh1MHkNLSE0aSx9PT1UTARMWGhIXJBQOD1
-        lXWRgSC1lBWUlPSx5BSBlMQUhJTExBSB5OS0EfQh9MQUgfGEFPQhhIQRhLGR1ZV1kWGg8SFR0UWU
-        FZT0tIVUpKS0hKTFVKS0tVS1kG
-X-HM-Tid: 0a87f57ba7f5b282kuuu36f23a4010e
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PQg6HAw*DD0KCTErOhU*OAwu
-        LDJPCwxVSlVKTUNIT05LTEhOS0xCVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
-        QVlJT0seQUgZTEFISUxMQUgeTktBH0IfTEFIHxhBT0IYSEEYSxkdWVdZCAFZQU1LTEM3Bg++
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 7 May 2023 05:13:05 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0274F3AB6;
+        Sun,  7 May 2023 02:13:03 -0700 (PDT)
+Received: from [192.168.178.23] (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 44226C70AF;
+        Sun,  7 May 2023 09:13:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1683450781; bh=jvJNwlKthS3/mkOJOwGgF7mnK8b7h/R3pEVKlDmWcPA=;
+        h=From:Subject:Date:To:Cc;
+        b=GTjPS31zvw/UUzBFfUcjZ9AShGiCivevEjcTWd8p+02P2+vBDOomB4G6Rmviw3hN7
+         xSQ4YmDF+J/JWOLWFG23REBeNQ6tSy6CSydVDkqXQz73U/bkaqQrUUtwJgBqLGPwa0
+         8UgyX85Pylzp6F5Pnkxg/PyZoO25vqSMj0TmaYaI=
+From:   Luca Weiss <luca@z3ntu.xyz>
+Subject: [PATCH 0/6] Add MSM8226 OCMEM support plus some extra OCMEM driver
+ fixes
+Date:   Sun, 07 May 2023 11:12:17 +0200
+Message-Id: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHFrV2QC/x2NzQrCMBAGX6Xs2YUk0h98FfGQxE+70KSSRRFK3
+ 71LjzMwzEaKJlC6dRs1/ERlrQb+0lGeY32D5WlMwYWr693ARcsUwsBrLiicAD/2o8eERNakqOD
+ UYs2zVfW7LCY/DS/5n5P7Y98P/JYXA3QAAAA=
+To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Brian Masney <masneyb@onstation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1099; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=jvJNwlKthS3/mkOJOwGgF7mnK8b7h/R3pEVKlDmWcPA=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkV2t6Rf/j2PCgD+0bT7X74gHOu71WOltn5mXNo
+ 5cDD40Zbk2JAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZFdregAKCRBy2EO4nU3X
+ VmEKD/9crh4orNCRzsbIgSEvhq44x9UsW4USeE7tbH5lsaZLd46lI2VZ7B6zXPg0CCMLTSHrCy+
+ OuLzAUyOLR/JoYfb99lBG9PK4cwPlbW3iu85SG3qGZwOXnlvEFy9gpEskrB+PPo4NUS74HNU7PD
+ LOff5zYo8OYnJbe0HtTn3C+v62okCerz2sTsq7tQRl/Uv7zmtRt0k25PPYqrCBCepwLUyvQlj86
+ izk3WyG/uAoFpGTKlW7nPKMXWYyD1z7UD1HNUqUk4DPvTEWvMSuI2K7AenFAwqw1RUWpXi0PY1i
+ BNqYTgI15GkfBw9GzeYlWFIjk6AkKqETEKtROltmII4nl0I76V4g9bWDoRMQkpZZ+lpZMpDqzDz
+ R551/h9E/oqTJL8OAnekYaBekFKw3ZBmf9m+zAaQdp2BIxQTW6W3rxRcpSkmEn+78CxYxYEgeFE
+ fd9aTaTHjGZ5zEf+HsLUtcMIM36IXTg1f451CfHVWUwsh+Aim/Kvtp7za8n2Jn0L8u3TErKaIG/
+ TQPROP5odqiJ9JibFRvCincZKMcshYUkcsCiQWEzgtkaZ95loD0qfEnFx5Ztir1zhFl5cKb/Ill
+ 3NBxVvNOIMx/8FsqS302yMiuwPWUdM1pRmtdeSW2eiPmxxCPrKwWNTydzKjhhgRG17nXoygWpCp
+ r/ZRNWnk8WwtBWA==
+X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
+ fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After the listener svc_sock freed, and before invoking svc_tcp_accept()
-for the established child sock, there is a window that the newsock
-retaining a freed listener svc_sock in sk_user_data which cloning from
-parent. In the race windows if data is received on the newsock, we will
-observe use-after-free report in svc_tcp_listen_data_ready().
+Like MSM8974 the MSM8226 SoC also contains some OCMEM but it has just
+one region for graphics compared to 8974.
 
-Reproduce by two tasks:
+While adding support I found a bug in the existing driver that is being
+fixed in this series also and the rest of the matches are mostly
+preparations for MSM8226 support.
 
-1. while :; do rpc.nfsd 0 ; rpc.nfsd; done
-2. while :; do echo "" | ncat -4 127.0.0.1 2049 ; done
-
-KASAN report:
-
-  ==================================================================
-  BUG: KASAN: slab-use-after-free in svc_tcp_listen_data_ready+0x1cf/0x1f0 [sunrpc]
-  Read of size 8 at addr ffff888139d96228 by task nc/102553
-  CPU: 7 PID: 102553 Comm: nc Not tainted 6.3.0+ #18
-  Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
-  Call Trace:
-   <IRQ>
-   dump_stack_lvl+0x33/0x50
-   print_address_description.constprop.0+0x27/0x310
-   print_report+0x3e/0x70
-   kasan_report+0xae/0xe0
-   svc_tcp_listen_data_ready+0x1cf/0x1f0 [sunrpc]
-   tcp_data_queue+0x9f4/0x20e0
-   tcp_rcv_established+0x666/0x1f60
-   tcp_v4_do_rcv+0x51c/0x850
-   tcp_v4_rcv+0x23fc/0x2e80
-   ip_protocol_deliver_rcu+0x62/0x300
-   ip_local_deliver_finish+0x267/0x350
-   ip_local_deliver+0x18b/0x2d0
-   ip_rcv+0x2fb/0x370
-   __netif_receive_skb_one_core+0x166/0x1b0
-   process_backlog+0x24c/0x5e0
-   __napi_poll+0xa2/0x500
-   net_rx_action+0x854/0xc90
-   __do_softirq+0x1bb/0x5de
-   do_softirq+0xcb/0x100
-   </IRQ>
-   <TASK>
-   ...
-   </TASK>
-
-  Allocated by task 102371:
-   kasan_save_stack+0x1e/0x40
-   kasan_set_track+0x21/0x30
-   __kasan_kmalloc+0x7b/0x90
-   svc_setup_socket+0x52/0x4f0 [sunrpc]
-   svc_addsock+0x20d/0x400 [sunrpc]
-   __write_ports_addfd+0x209/0x390 [nfsd]
-   write_ports+0x239/0x2c0 [nfsd]
-   nfsctl_transaction_write+0xac/0x110 [nfsd]
-   vfs_write+0x1c3/0xae0
-   ksys_write+0xed/0x1c0
-   do_syscall_64+0x38/0x90
-   entry_SYSCALL_64_after_hwframe+0x72/0xdc
-
-  Freed by task 102551:
-   kasan_save_stack+0x1e/0x40
-   kasan_set_track+0x21/0x30
-   kasan_save_free_info+0x2a/0x50
-   __kasan_slab_free+0x106/0x190
-   __kmem_cache_free+0x133/0x270
-   svc_xprt_free+0x1e2/0x350 [sunrpc]
-   svc_xprt_destroy_all+0x25a/0x440 [sunrpc]
-   nfsd_put+0x125/0x240 [nfsd]
-   nfsd_svc+0x2cb/0x3c0 [nfsd]
-   write_threads+0x1ac/0x2a0 [nfsd]
-   nfsctl_transaction_write+0xac/0x110 [nfsd]
-   vfs_write+0x1c3/0xae0
-   ksys_write+0xed/0x1c0
-   do_syscall_64+0x38/0x90
-   entry_SYSCALL_64_after_hwframe+0x72/0xdc
-
-In this RFC patch, I try to fix the UAF by skipping dereferencing
-svsk for all child socket in svc_tcp_listen_data_ready(), it is
-easy to backport for stable.
-
-However I'm not sure if there are other potential risks in the race
-window, so I thought another fix which depends on SK_USER_DATA_NOCOPY
-introduced in commit f1ff5ce2cd5e ("net, sk_msg: Clear sk_user_data
-pointer on clone if tagged").
-
-Saving svsk into sk_user_data with SK_USER_DATA_NOCOPY tag in
-svc_setup_socket() like this:
-
-  __rcu_assign_sk_user_data_with_flags(inet, svsk, SK_USER_DATA_NOCOPY);
-
-Obtaining svsk in callbacks like this:
-
-  struct svc_sock *svsk = rcu_dereference_sk_user_data(sk);
-
-This will avoid copying sk_user_data for sunrpc svc_sock in
-sk_clone_lock(), so the sk_user_data of child sock before accepted
-will be NULL.
-
-Appreciate any comment and suggestion, thanks.
-
-Fixes: fa9251afc33c ("SUNRPC: Call the default socket callbacks instead of open coding")
-Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- net/sunrpc/svcsock.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+Luca Weiss (6):
+      soc: qcom: ocmem: Fix NUM_PORTS & NUM_MACROS macros
+      soc: qcom: ocmem: Use dev_err_probe where appropriate
+      soc: qcom: ocmem: make iface clock optional
+      dt-bindings: sram: qcom,ocmem: Add msm8226 support
+      soc: qcom: ocmem: Add support for msm8226
+      ARM: dts: qcom: msm8226: Add ocmem
 
-diff --git a/net/sunrpc/svcsock.c b/net/sunrpc/svcsock.c
-index a51c9b989d58..9aca6e1e78e4 100644
---- a/net/sunrpc/svcsock.c
-+++ b/net/sunrpc/svcsock.c
-@@ -825,12 +825,6 @@ static void svc_tcp_listen_data_ready(struct sock *sk)
- 
- 	trace_sk_data_ready(sk);
- 
--	if (svsk) {
--		/* Refer to svc_setup_socket() for details. */
--		rmb();
--		svsk->sk_odata(sk);
--	}
--
- 	/*
- 	 * This callback may called twice when a new connection
- 	 * is established as a child socket inherits everything
-@@ -839,13 +833,18 @@ static void svc_tcp_listen_data_ready(struct sock *sk)
- 	 *    when one of child sockets become ESTABLISHED.
- 	 * 2) data_ready method of the child socket may be called
- 	 *    when it receives data before the socket is accepted.
--	 * In case of 2, we should ignore it silently.
-+	 * In case of 2, we should ignore it silently and DO NOT
-+	 * dereference svsk.
- 	 */
--	if (sk->sk_state == TCP_LISTEN) {
--		if (svsk) {
--			set_bit(XPT_CONN, &svsk->sk_xprt.xpt_flags);
--			svc_xprt_enqueue(&svsk->sk_xprt);
--		}
-+	if (sk->sk_state != TCP_LISTEN)
-+		return;
-+
-+	if (svsk) {
-+		/* Refer to svc_setup_socket() for details. */
-+		rmb();
-+		svsk->sk_odata(sk);
-+		set_bit(XPT_CONN, &svsk->sk_xprt.xpt_flags);
-+		svc_xprt_enqueue(&svsk->sk_xprt);
- 	}
- }
- 
+ .../devicetree/bindings/sram/qcom,ocmem.yaml       |  6 +-
+ arch/arm/boot/dts/qcom-msm8226.dtsi                | 17 ++++++
+ drivers/soc/qcom/ocmem.c                           | 67 ++++++++++++----------
+ 3 files changed, 58 insertions(+), 32 deletions(-)
+---
+base-commit: 2e210278b67c67e76aeefc1a16d18a692d15c847
+change-id: 20230506-msm8226-ocmem-bee17571e8eb
+
+Best regards,
 -- 
-2.17.1
+Luca Weiss <luca@z3ntu.xyz>
 
