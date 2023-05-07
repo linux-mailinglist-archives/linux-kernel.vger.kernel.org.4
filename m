@@ -2,144 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523766F9A88
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 19:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C7F6F9A8F
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 19:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbjEGRVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 13:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
+        id S231612AbjEGR1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 13:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEGRVM (ORCPT
+        with ESMTP id S229881AbjEGR1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 13:21:12 -0400
-Received: from out-17.mta0.migadu.com (out-17.mta0.migadu.com [IPv6:2001:41d0:1004:224b::11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2945AD01
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 10:21:10 -0700 (PDT)
-Date:   Sun, 7 May 2023 13:20:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683480068;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hurdbnJwUJqK07Lm+4BMc/GcG+c58gJSfQAtVR+cBkY=;
-        b=t9HPg37zepSR1RnzhSUKFRxBUu28FVu1Yi23jFUki7ZMbwLSC/NiT3n7wFBZNUFaL6UoyB
-        zJPC7zS/i2KkcdGtaRgLAJgrWe5jboQdCOvInvXLMeR4wfr6JjMe/ufK6pDB5akkqqXdTQ
-        ldiDYd0e9CxSI40mvUKNrcXC5Ki5rqQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
-        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFfd99w9vFTftB8D@moria.home.lan>
-References: <20230501165450.15352-1-surenb@google.com>
- <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
- <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com>
- <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
+        Sun, 7 May 2023 13:27:45 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B8211603;
+        Sun,  7 May 2023 10:27:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1683480449; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=W+LLSETWCi1mByV/GeyyJMSiW3CVyJAGSb+5klwZB8TWYQCuzn1oUCFSdK5mM7y3yE
+    G1vgcOKjZ45FzDVh4I0OMjda89JCwcyHY4aED04xHF26/omKVsZDSn4f9uVw2e9tnf6P
+    hBd9rOC63xN8amQvIBgnViiKQiBOanJ7F4C5uicswEkL3Y5vUz3Gogqus5htgI8ivPzI
+    Yaf6pXtdkdzdKNoRwWoztjM4oYL0PeR4wuJGu9gTT5TDyWgGYwgpzdTPQiSm0iS77m5p
+    C5DZBIswfxzAWqXGjqr5HgDx8BzIRZqyV7KmmArSLpqJqBF+wFCeYWsZFHv0EqR17Apm
+    ktwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1683480449;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=t5hLg0/TYuDHYjqBME7pnGaSHDpGH89BUEWNio2GmRg=;
+    b=UVIeDU0prfQvgkwQRnrDfROdTxR0aLPQjrmxvgguwAd1Gj6UTrrNnWV1qT07f4O+2b
+    A9GLj1Zt5hPJHXYqpzrFBqdBpfc/RXH5BkcoOjD2L5N2ZRVG5BCcoBbhoLe+PQxkQVzC
+    gErpMdrtTuN17Mqm3ZkLBAwBmbC/jprjJXuv7z760574WXk7IMsCzXbh1AaWmJgEe3Ji
+    XA+caPBYYHJZro3m8eG426qI1kiTFfpjQq0zNeDptKLo2jmDzCyd3sGYtrGZVAd3E9Pe
+    ICz3JfMurIHjf2SxZxhYprab3LWPltyzsSN3kN3Vs3/iSU3elpvLk1zzBpXYPFZR0jHW
+    1xvg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1683480449;
+    s=strato-dkim-0002; d=garloff.de;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=t5hLg0/TYuDHYjqBME7pnGaSHDpGH89BUEWNio2GmRg=;
+    b=XNm9B60T9AENbiY59+L3Q8QOeeX6t24Qxbhk0SuWd5x4xXwhLQVhzg9lasVOoidZbs
+    tXw1IaNi0lGPfMv+t1XmlTHYMcgxK28oNlERUfHfkt6Xwp59abNWyHP4ZWEB7Q+w1pXF
+    +NxvlaLk5DK0E4glPFaovRs0S2JdmYgnsbWdjZVxr0jh6eBHVafGeEq/C7e2RzWIIiCi
+    rQeE6mYxxUYcar9PCmmxMaUL6wqAemdJNySQAj3zZ/mkTPNpJNtCugYPdxdLEYeNgSHX
+    Zx/bFNI9BQWReAQEqIlJW+4zu23esrislLIFd29z5A00t7QKoowtTkEvwPwCTaAc3x7U
+    k+Lg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1683480449;
+    s=strato-dkim-0003; d=garloff.de;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=t5hLg0/TYuDHYjqBME7pnGaSHDpGH89BUEWNio2GmRg=;
+    b=RYacnpf7Dvysw936ofs7ApLUlA59lKbbnapHBKCUdQl2egUhNgb660VZbN3sADEnjm
+    0Tt6PuYAWrFDBl4cFVAA==
+X-RZG-AUTH: ":J3kWYWCveu3U88BfwGxYwcN+YZ41GOdzWdTW9IJoHV1zocjVWQKKeekN8j6tdegf6Miq"
+Received: from mail.garloff.de
+    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
+    with ESMTPSA id D69cfaz47HRStmo
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 7 May 2023 19:27:28 +0200 (CEST)
+Received: from [192.168.155.218] (ap5.garloff.de [192.168.155.10])
+        by mail.garloff.de (Postfix) with ESMTPSA id 8AFDE5FC23;
+        Sun,  7 May 2023 19:27:28 +0200 (CEST)
+Message-ID: <0978a8ca-f813-06f5-05d7-2c414ebe6721@garloff.de>
+Date:   Sun, 7 May 2023 19:27:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: 6.1.23: 0fc6fea41c71 breaks GPD Pocket 3 modeset
+Content-Language: en-US
+To:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org
+References: <4115dc28-45b6-cad1-1e38-39e5a0484a8a@garloff.de>
+ <ZFEMkypQy1I4vprK@intel.com>
+From:   Kurt Garloff <kurt@garloff.de>
+In-Reply-To: <ZFEMkypQy1I4vprK@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 11:07:22AM +0200, Michal Hocko wrote:
-> No. I am mostly concerned about the _maintenance_ overhead. For the
-> bare tracking (without profiling and thus stack traces) only those
-> allocations that are directly inlined into the consumer are really
-> of any use. That increases the code impact of the tracing because any
-> relevant allocation location has to go through the micro surgery. 
-> 
-> e.g. is it really interesting to know that there is a likely memory
-> leak in seq_file proper doing and allocation? No as it is the specific
-> implementation using seq_file that is leaking most likely. There are
-> other examples like that See?
+Hi Ville,
 
-So this is a rather strange usage of "maintenance overhead" :)
+thanks for your response!
 
-But it's something we thought of. If we had to plumb around a _RET_IP_
-parameter, or a codetag pointer, it would be a hassle annotating the
-correct callsite.
+On 02/05/2023 15:13, Ville Syrjälä wrote:
+> On Sat, Apr 29, 2023 at 09:55:45PM +0200, Kurt Garloff wrote:
+>> Hi Ville,
+>>
+>> While
+>> 0fc6fea41c71 drm/i915: Disable DC states for all commits
+>> (cherry picked from commit 41b4c7fe72b6105a4b49395eea9aa40cef94288d)
+>> does look correct to me, it does break modesetting on the GPD Pocket 3,
+>> a i7-1195G7 laptop. I run the kernel with
+>> fbcon=rotate:1 video=DSI-1:panel_orientation=right_side_up \
+>> mem_sleep_default=s2idle
+Note that the mem_sleep_default parm has been dropped meanwhile.
+It used to be required as the laptop would show a black screen
+after resuming from S3 until 6.1.5 or so.
+>> No special i915 parameters.
+>> Hardware is described here:
+>> https://wiki.archlinux.org/title/GPD_Pocket_3
+>>
+>> I disected this patch which was merged (backported) for 6.1.23.
+>> I currently run 6.1.26 with it reverted.
+>>
+>> Without reverting it, when fbcon is switched to show the splash
+>> screen (GPD logo with Ubuntu added in on working kernels), the
+>> screen remains black (backlight on, but nothing displayed) and
+>> nothing happens any more.
+> Please file a bug at
+> https://gitlab.freedesktop.org/drm/intel/issues/new
+Find a bug report at
 
-Instead, alloc_hooks() wraps a memory allocation function and stashes a
-pointer to a codetag in task_struct for use by the core slub/buddy
-allocator code.
+https://gitlab.freedesktop.org/drm/intel/-/issues/8419
 
-That means that in your example, to move tracking to a given seq_file
-function, we just:
- - hook the seq_file function with alloc_hooks
- - change the seq_file function to call non-hooked memory allocation
-   functions.
+> Boot both kernels (revert vs. no revert), passing
+> 'drm.debug=0xe log_buf_len=4M' to the kernel cmdline,
+> and attach the resulting dmesg from each to the bug.
 
-> It would have been more convincing if you had some numbers at hands.
-> E.g. this is a typical workload we are dealing with. With the compile
-> time tags we are able to learn this with that much of cost. With a dynamic
-> tracing we are able to learn this much with that cost. See? As small as
-> possible is a rather vague term that different people will have a very
-> different idea about.
+Getting a boot log out of the crashing laptop required
+me to find a cable and get netconsole working.
+(If you know better ways, I'm open to learn.)
+Thus the delay ...
 
-Engineers don't prototype and benchmark everything as a matter of
-course, we're expected to have the rough equivealent of a CS education
-and an understanding of big O notation, cache architecture, etc.
+> Also would be good if you try to reproduce on the
+> latest drm-tip (git://anongit.freedesktop.org/drm-tip drm-tip)
+> as well.
 
-The slub fast path is _really_ fast - double word non locked cmpxchg.
-That's what we're trying to compete with. Adding a big globally
-accessible hash table is going to tank performance compared to that.
+I'll test drm-tip as requested and see what happens.
+I'll attach the info to the bug report, let nme know
+if you want eMail in addition.
 
-I believe the numbers we already posted speak for themselves. We're
-considerably faster than memcg, fast enough to run in production.
+Best,
 
-I'm not going to be switching to a design that significantly regresses
-performance, sorry :)
+-- 
 
-> TBH I am much more concerned about the maintenance burden on the MM side
-> than the actual code tagging itslef which is much more self contained. I
-> haven't seen other potential applications of the same infrastructure and
-> maybe the code impact would be much smaller than in the MM proper. Our
-> allocator API is really hairy and convoluted.
+Kurt Garloff <kurt@garloff.de>
+Cologne, Germany
 
-You keep saying "maintenance burden", but this is a criticism that can
-be directed at _any_ patchset that adds new code; it's generally
-understood that that is the accepted cost for new functionality.
-
-If you have specific concerns where you think we did something that
-makes the code harder to maintain, _please point them out in the
-appropriate patch_. I don't think you'll find too much - the
-instrumentation in the allocators simply generalizes what memcg was
-already doing, and the hooks themselves are a bit boilerplaty but hardly
-the sort of thing people will be tripping over later.
-
-TL;DR - put up or shut up :)
