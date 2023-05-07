@@ -2,112 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA586F9647
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47F26F965C
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 02:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbjEGAm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 May 2023 20:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S232867AbjEGAzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 May 2023 20:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbjEGAlH (ORCPT
+        with ESMTP id S231286AbjEGAz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 May 2023 20:41:07 -0400
+        Sat, 6 May 2023 20:55:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8B92CD2F;
-        Sat,  6 May 2023 17:38:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDD723A3F;
+        Sat,  6 May 2023 17:54:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CDADE6149D;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3937961514;
+        Sun,  7 May 2023 00:37:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3E15C4339E;
         Sun,  7 May 2023 00:37:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24038C433D2;
-        Sun,  7 May 2023 00:37:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419843;
-        bh=w2P8zCXlmj9XKHnGNvTTidmEFyumzqoo8BTsU6WQlS8=;
+        s=k20201202; t=1683419844;
+        bh=BTuyMiPP+Z5fEgCMkZiuq7KWbXYYMtTR0aUw4/clvtw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AIRvpNJuZjXnmGDTR5up/oEjFjpBUSfBH0YUaXzVCM66ngt1sshs/ggBTstGt2jHm
-         Xuau0rXYt8H0gXxKyDzEWbQHrqUTJ/WmlhTM9p0q4Agco/zhpqnkcy8KYU8hfqjErI
-         VmRwiYA105luGLUqWdTM31s8CGzLatzt0CGHSYkCtWEitIzilKwVWv5hfeB6Sk091i
-         DcrBeJcT+S7k+uJlbgn92pZTPyYV2LWSujzbM0nL4s9HIumivi59tjUedn1J0SgZ/g
-         +3T/MN0EWKmhw43J2LP5mTkAfXj5NlkWxt6FKsAOYBff3oSRq85O84pJjFonGCF0sK
-         wOE1Tc1MmFhng==
+        b=tLlpGCXWiSO4K7JW6Z4Pa8KiSKb+iykmhCpDHAEpn3F5DJj3Jb8KA1KgTdEFO3TdG
+         bi0G0KAbj3pIl2p1RAZhG/72U2nJw9h3Qi31S3G7od2ucJqJIefxF2v5nFIjHdZpNA
+         ZhoK7dLURgR80A4omkpJrxHoyWTkKgKOD3LAt0wKwlkNJ9/P6hz/mKwc+pCSy5EuVK
+         tpOJedPEqcMJEVwHMKMSBHtrV3kFA7ablPnw+TJyt/7eE4L7L88Sahsf/hTt9VtnxR
+         d6zi0muMlZ/+1et78Q1wFH0gfJKt9eXPYdqesIXAhbqUn6GuDB2DI3IeEDpYlYdOVb
+         O+hEd/cNZLbbQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tony Lindgren <tony@atomide.com>,
+Cc:     =?UTF-8?q?Rodr=C3=ADguez=20Barbarin=2C=20Jos=C3=A9=20Javier?= 
+        <JoseJavier.Rodriguez@duagon.com>,
+        Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>,
+        Javier Rodriguez <josejavier.rodriguez@duagon.com>,
+        Johannes Thumshirn <jth@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        pmladek@suse.com, john.ogness@linutronix.de,
-        linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 7/8] serial: 8250: Reinit port->pm on port specific driver unbind
-Date:   Sat,  6 May 2023 20:37:02 -0400
-Message-Id: <20230507003704.4081392-7-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, morbidrsa@gmail.com
+Subject: [PATCH AUTOSEL 4.14 8/8] mcb-pci: Reallocate memory region to avoid memory overlapping
+Date:   Sat,  6 May 2023 20:37:03 -0400
+Message-Id: <20230507003704.4081392-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230507003704.4081392-1-sashal@kernel.org>
 References: <20230507003704.4081392-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Lindgren <tony@atomide.com>
+From: Rodríguez Barbarin, José Javier <JoseJavier.Rodriguez@duagon.com>
 
-[ Upstream commit 04e82793f068d2f0ffe62fcea03d007a8cdc16a7 ]
+[ Upstream commit 9be24faadd085c284890c3afcec7a0184642315a ]
 
-When we unbind a serial port hardware specific 8250 driver, the generic
-serial8250 driver takes over the port. After that we see an oops about 10
-seconds later. This can produce the following at least on some TI SoCs:
+mcb-pci requests a fixed-size memory region to parse the chameleon
+table, however, if the chameleon table is smaller that the allocated
+region, it could overlap with the IP Cores' memory regions.
 
-Unhandled fault: imprecise external abort (0x1406)
-Internal error: : 1406 [#1] SMP ARM
+After parsing the chameleon table, drop/reallocate the memory region
+with the actual chameleon table size.
 
-Turns out that we may still have the serial port hardware specific driver
-port->pm in use, and serial8250_pm() tries to call it after the port
-specific driver is gone:
-
-serial8250_pm [8250_base] from uart_change_pm+0x54/0x8c [serial_base]
-uart_change_pm [serial_base] from uart_hangup+0x154/0x198 [serial_base]
-uart_hangup [serial_base] from __tty_hangup.part.0+0x328/0x37c
-__tty_hangup.part.0 from disassociate_ctty+0x154/0x20c
-disassociate_ctty from do_exit+0x744/0xaac
-do_exit from do_group_exit+0x40/0x8c
-do_group_exit from __wake_up_parent+0x0/0x1c
-
-Let's fix the issue by calling serial8250_set_defaults() in
-serial8250_unregister_port(). This will set the port back to using
-the serial8250 default functions, and sets the port->pm to point to
-serial8250_pm.
-
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Link: https://lore.kernel.org/r/20230418101407.12403-1-tony@atomide.com
+Co-developed-by: Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>
+Signed-off-by: Jorge Sanjuan Garcia <jorge.sanjuangarcia@duagon.com>
+Signed-off-by: Javier Rodriguez <josejavier.rodriguez@duagon.com>
+Signed-off-by: Johannes Thumshirn <jth@kernel.org>
+Link: https://lore.kernel.org/r/20230411083329.4506-3-jth@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mcb/mcb-pci.c | 27 +++++++++++++++++++++++++--
+ 1 file changed, 25 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-index 8d46bd612888f..3cc3fab510912 100644
---- a/drivers/tty/serial/8250/8250_core.c
-+++ b/drivers/tty/serial/8250/8250_core.c
-@@ -1128,6 +1128,7 @@ void serial8250_unregister_port(int line)
- 		uart->port.type = PORT_UNKNOWN;
- 		uart->port.dev = &serial8250_isa_devs->dev;
- 		uart->capabilities = 0;
-+		serial8250_init_port(uart);
- 		serial8250_apply_quirks(uart);
- 		uart_add_one_port(&serial8250_reg, &uart->port);
- 	} else {
+diff --git a/drivers/mcb/mcb-pci.c b/drivers/mcb/mcb-pci.c
+index af4d2f26f1c62..b0ec3bbf1b76d 100644
+--- a/drivers/mcb/mcb-pci.c
++++ b/drivers/mcb/mcb-pci.c
+@@ -34,7 +34,7 @@ static int mcb_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ {
+ 	struct resource *res;
+ 	struct priv *priv;
+-	int ret;
++	int ret, table_size;
+ 	unsigned long flags;
+ 
+ 	priv = devm_kzalloc(&pdev->dev, sizeof(struct priv), GFP_KERNEL);
+@@ -93,7 +93,30 @@ static int mcb_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (ret < 0)
+ 		goto out_mcb_bus;
+ 
+-	dev_dbg(&pdev->dev, "Found %d cells\n", ret);
++	table_size = ret;
++
++	if (table_size < CHAM_HEADER_SIZE) {
++		/* Release the previous resources */
++		devm_iounmap(&pdev->dev, priv->base);
++		devm_release_mem_region(&pdev->dev, priv->mapbase, CHAM_HEADER_SIZE);
++
++		/* Then, allocate it again with the actual chameleon table size */
++		res = devm_request_mem_region(&pdev->dev, priv->mapbase,
++						table_size,
++						KBUILD_MODNAME);
++		if (!res) {
++			dev_err(&pdev->dev, "Failed to request PCI memory\n");
++			ret = -EBUSY;
++			goto out_mcb_bus;
++		}
++
++		priv->base = devm_ioremap(&pdev->dev, priv->mapbase, table_size);
++		if (!priv->base) {
++			dev_err(&pdev->dev, "Cannot ioremap\n");
++			ret = -ENOMEM;
++			goto out_mcb_bus;
++		}
++	}
+ 
+ 	mcb_bus_add_devices(priv->bus);
+ 
 -- 
 2.39.2
 
