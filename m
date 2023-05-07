@@ -2,149 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AD16F9776
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 10:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA1F6F9784
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 May 2023 10:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbjEGILC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 04:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51592 "EHLO
+        id S231160AbjEGIOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 04:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjEGILA (ORCPT
+        with ESMTP id S230350AbjEGIOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 04:11:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3C71161E;
-        Sun,  7 May 2023 01:10:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA45760F85;
-        Sun,  7 May 2023 08:10:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D1E3C433D2;
-        Sun,  7 May 2023 08:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683447058;
-        bh=14gt07e2i3xEmFnLE+5SPgbvGJF6N9cFNjqQFSOAoWw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f0fLK7L6ZqGuFLkVQVQMw5hbM4Yjj2QAgpv3mHx/kycnIyYy20xe/apIZLbRehQ+e
-         QJoi8a0X2LmQnJtWV568Hpj6cTGPEbIZKnSykR7YflPQaOlIazkQGx6wI0YIPNJYNv
-         Ppn3Wjyoh4b3RMNv8qD/0CAnkiRuJdpvwg8wrRF8qyde/M4BTMCjqSKV9kvuvu4pIM
-         +dnzHAM7bC1FlcbSGHMPbnn9D84iX4pelRrCg2F7+Qu30mTngWD5gp6Y58LzsNePFi
-         36GauoyVbhfRyhHejBWLYoPv9Jq6ZZEiLwqPNMdruDGC+SBLTs9Bw0N2IsG4BhTz8T
-         y5NPpUb8uei8Q==
-Date:   Sun, 7 May 2023 11:10:53 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     longli@microsoft.com
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-rdma@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RDMA/mana_ib: Use v2 version of cfg_rx_steer_req to
- enable RX coalescing
-Message-ID: <20230507081053.GD525452@unreal>
-References: <1683312708-24872-1-git-send-email-longli@linuxonhyperv.com>
+        Sun, 7 May 2023 04:14:43 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F1210D
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 01:14:40 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50bc3a2d333so5173921a12.0
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 01:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683447279; x=1686039279;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BxVB0qLFtd7CR9jihrYp0GNvnYgnGOXU77sZFAD78Ko=;
+        b=lQ8wbMLMxVi1VNeZmvEyGYzKpbgaxtJnY28HvxU+BEBpZ8FeBnSDRICXtW3enFRIZA
+         pr/+2Dbc42LGRxoVvPzwJ5MB2NCNxi6pnP6yDOw5nkjObjBpevlnW9dKBoPn/K1SXCNT
+         pkhW5N+8wz+VhFeGfFiIIRLNp+7qS/lEHO9IdaIr/LJt5W3vVc/ac9xyDy6bHIbnAhwP
+         LPOExGfZozKbRdkDhUGQScJcMXCnWvVSJKZIfus1RCMuOw9jTFa5bLdAwgZ0XGBmXNHJ
+         7Po5KPeAc60TPxTfQhevXE2pqJwaxwip5zQNhfxwMTO9LZDKT9D1zxUgiob69Al82Kcc
+         JqLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683447279; x=1686039279;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BxVB0qLFtd7CR9jihrYp0GNvnYgnGOXU77sZFAD78Ko=;
+        b=ikk8RKZEpqMeb92ReX5RyJWibJUOY7l33VaHObK8MmJ/Obm2KjtkWSAcX68iisHyMs
+         RR6gX0xER+9YQkv5/Uua4Hy/BungtzGTMwKtqlmvagmKWxZsZWPV4PrqZQhmO8C436NQ
+         fWTvtg/8hWOBYxiTDtDJNh3/lTqo9ODcYZPGdC6xuDDIye0TXaU4t2FfAtmGtl8BH8wV
+         p7EYHD95ai/eobROjysm5u814OelpKrZyY3J5n/AoHi8p+kUrt68DxylGbOEW06wtgUd
+         BlVn+adgyhhro7OoNZc2dVBIJqlHBVpFksTj/4mV3IfihZQ/70KNOZGdMEkjEA++ks/V
+         t4Ig==
+X-Gm-Message-State: AC+VfDzByQhJkS+GftJJe4tBKqHY2HkivOwONdeLJdfwDDiFwsreyRC/
+        HK6x5HqhkO/rOi2YBvmUMPga/A==
+X-Google-Smtp-Source: ACHHUZ6ylY1jyYRHzSyEND1iTejr0FcmzoLeOjgWmgkYfOXU4kIRdEKQmFEebU76i+rY1fPhrd2i9Q==
+X-Received: by 2002:a17:907:9444:b0:966:5730:c3fe with SMTP id dl4-20020a170907944400b009665730c3femr377381ejc.52.1683447279207;
+        Sun, 07 May 2023 01:14:39 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:183b:950f:b4d5:135a? ([2a02:810d:15c0:828:183b:950f:b4d5:135a])
+        by smtp.gmail.com with ESMTPSA id h13-20020a1709070b0d00b0094efdfe60dcsm3287860ejl.206.2023.05.07.01.14.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 May 2023 01:14:38 -0700 (PDT)
+Message-ID: <31147c6d-e77a-8abd-0b55-73ead2385bb9@linaro.org>
+Date:   Sun, 7 May 2023 10:14:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1683312708-24872-1-git-send-email-longli@linuxonhyperv.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 03/12] dt-bindings: display/msm: sc7180-dpu: Describe
+ SM6350 and SM6375
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev
+References: <20230411-topic-straitlagoon_mdss-v3-0-9837d6b3516d@linaro.org>
+ <20230411-topic-straitlagoon_mdss-v3-3-9837d6b3516d@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230411-topic-straitlagoon_mdss-v3-3-9837d6b3516d@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 11:51:48AM -0700, longli@linuxonhyperv.com wrote:
-> From: Long Li <longli@microsoft.com>
+On 05/05/2023 23:40, Konrad Dybcio wrote:
+> SC7180, SM6350 and SM6375 use a rather similar hw setup for DPU, with
+> the main exception being that the last one requires an additional
+> throttle clock.
 > 
-> With RX coalescing, one CQE entry can be used to indicate multiple packets
-> on the receive queue. This saves processing time and PCI bandwidth over
-> the CQ.
+> It is not well understood yet, but failing to toggle it on makes the
+> display hardware stall and not output any frames.
 > 
-> Signed-off-by: Long Li <longli@microsoft.com>
+> Document SM6350 and SM6375 DPU.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  drivers/infiniband/hw/mana/qp.c |  5 ++++-
->  include/net/mana/mana.h         | 17 +++++++++++++++++
->  2 files changed, 21 insertions(+), 1 deletion(-)
-
-Why didn't you change mana_cfg_vport_steering() too?
-
+>  .../bindings/display/msm/qcom,sc7180-dpu.yaml      | 23 +++++++++++++++++++++-
+>  1 file changed, 22 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/infiniband/hw/mana/qp.c b/drivers/infiniband/hw/mana/qp.c
-> index 54b61930a7fd..83c768f96506 100644
-> --- a/drivers/infiniband/hw/mana/qp.c
-> +++ b/drivers/infiniband/hw/mana/qp.c
-> @@ -13,7 +13,7 @@ static int mana_ib_cfg_vport_steering(struct mana_ib_dev *dev,
->  				      u8 *rx_hash_key)
->  {
->  	struct mana_port_context *mpc = netdev_priv(ndev);
-> -	struct mana_cfg_rx_steer_req *req = NULL;
-> +	struct mana_cfg_rx_steer_req_v2 *req = NULL;
-
-There is no need in NULL here, req is going to be overwritten almost
-immediately.
-
-Thanks
-
->  	struct mana_cfg_rx_steer_resp resp = {};
->  	mana_handle_t *req_indir_tab;
->  	struct gdma_context *gc;
-> @@ -33,6 +33,8 @@ static int mana_ib_cfg_vport_steering(struct mana_ib_dev *dev,
->  	mana_gd_init_req_hdr(&req->hdr, MANA_CONFIG_VPORT_RX, req_buf_size,
->  			     sizeof(resp));
+> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
+> index 1fb8321d9ee8..630b11480496 100644
+> --- a/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
+> @@ -13,7 +13,10 @@ $ref: /schemas/display/msm/dpu-common.yaml#
 >  
-> +	req->hdr.req.msg_version = GDMA_MESSAGE_V2;
+>  properties:
+>    compatible:
+> -    const: qcom,sc7180-dpu
+> +    enum:
+> +      - qcom,sc7180-dpu
+> +      - qcom,sm6350-dpu
+> +      - qcom,sm6375-dpu
+>  
+>    reg:
+>      items:
+> @@ -26,6 +29,7 @@ properties:
+>        - const: vbif
+>  
+>    clocks:
+> +    minItems: 6
+>      items:
+>        - description: Display hf axi clock
+>        - description: Display ahb clock
+> @@ -33,8 +37,10 @@ properties:
+>        - description: Display lut clock
+>        - description: Display core clock
+>        - description: Display vsync clock
+> +      - description: Display core throttle clock
+>  
+>    clock-names:
+> +    minItems: 6
+>      items:
+>        - const: bus
+>        - const: iface
+> @@ -42,6 +48,7 @@ properties:
+>        - const: lut
+>        - const: core
+>        - const: vsync
+> +      - const: throttle
+>  
+>  required:
+>    - compatible
+> @@ -52,6 +59,20 @@ required:
+>  
+>  unevaluatedProperties: false
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          const: qcom,sm6375-dpu
+
+And the two other variants? Is the clock valid there or not? If not
+really, then you should have else: with maxItems: 6.
+
 > +
->  	req->vport = mpc->port_handle;
->  	req->rx_enable = 1;
->  	req->update_default_rxobj = 1;
-> @@ -46,6 +48,7 @@ static int mana_ib_cfg_vport_steering(struct mana_ib_dev *dev,
->  	req->num_indir_entries = MANA_INDIRECT_TABLE_SIZE;
->  	req->indir_tab_offset = sizeof(*req);
->  	req->update_indir_tab = true;
-> +	req->cqe_coalescing_enable = true;
->  
->  	req_indir_tab = (mana_handle_t *)(req + 1);
->  	/* The ind table passed to the hardware must have
-> diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
-> index cd386aa7c7cc..f8314b7c386c 100644
-> --- a/include/net/mana/mana.h
-> +++ b/include/net/mana/mana.h
-> @@ -596,6 +596,23 @@ struct mana_cfg_rx_steer_req {
->  	u8 hashkey[MANA_HASH_KEY_SIZE];
->  }; /* HW DATA */
->  
-> +struct mana_cfg_rx_steer_req_v2 {
-> +	struct gdma_req_hdr hdr;
-> +	mana_handle_t vport;
-> +	u16 num_indir_entries;
-> +	u16 indir_tab_offset;
-> +	u32 rx_enable;
-> +	u32 rss_enable;
-> +	u8 update_default_rxobj;
-> +	u8 update_hashkey;
-> +	u8 update_indir_tab;
-> +	u8 reserved;
-> +	mana_handle_t default_rxobj;
-> +	u8 hashkey[MANA_HASH_KEY_SIZE];
-> +	u8 cqe_coalescing_enable;
-> +	u8 reserved2[7];
-> +}; /* HW DATA */
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 7
 > +
->  struct mana_cfg_rx_steer_resp {
->  	struct gdma_resp_hdr hdr;
->  }; /* HW DATA */
-> -- 
-> 2.17.1
+> +        clock-names:
+> +          minItems: 7
+
+If there is going new version - put allOf: before
+unevaluatedProperties:. Otherwise it is fine.
+
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/clock/qcom,dispcc-sc7180.h>
 > 
+
+Best regards,
+Krzysztof
+
