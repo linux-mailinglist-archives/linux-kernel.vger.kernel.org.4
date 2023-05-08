@@ -2,71 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8056F9E92
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 06:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4276A6F9E95
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 06:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjEHEIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 00:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
+        id S232455AbjEHEJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 00:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjEHEIo (ORCPT
+        with ESMTP id S229448AbjEHEJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 00:08:44 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E501F6EB5;
-        Sun,  7 May 2023 21:08:42 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50be0d835aaso7406430a12.3;
-        Sun, 07 May 2023 21:08:42 -0700 (PDT)
+        Mon, 8 May 2023 00:09:29 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2526EB5;
+        Sun,  7 May 2023 21:09:28 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-965ac4dd11bso814618466b.2;
+        Sun, 07 May 2023 21:09:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683518921; x=1686110921;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1683518967; x=1686110967;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=418lmDvsSwaR5hPOcnBAQZAbghEwqMzFRELtnuxfpVc=;
-        b=WM48MUrgQ8nDrO/xcJbziZYeEJIYKJ+lsqBG5g5X/M3QfyNsy8Zp0JnPxtCfngt9o4
-         mUXFB3keoT+bry4xcLN3YHZFV1qbfuK7R1SvymDYF6QNCR+ojbXKkQ1jq08YPmVpOkk9
-         7Nx5DtP3rWm1T0hpcw/e6M2A3squvqmwdDE51oDaXeXJWSZJCEMoFNIKU8Fkhw7uIUBk
-         3a+2cnpSTeuTw7HNLm3OEoYauDKYWea3CxCQecN9No7QPJgUnT51B2yO0RunQEAfnKlx
-         PDMAhI1h1pBIUYRStRuC99P7bfCzoeCspk6mZ0UZXl2/XPWadRpEThfj6GQs/83QMpIa
-         F4Xw==
+        bh=/stI2xLuu/+Bk6mWcj3fMw5988PC9cZKxhWWqcngefs=;
+        b=mndtmghHF96zxCkNPDH6VwIjXKnoqgwMjPfLFKD/dUxB0glA3xAfF2p1khIxjmE8qr
+         BdrL2dWgtian5sbp8iFlVxtrWB7so2gIYt/3RZVhCYJO+fJGHy39GgrkBpBpkslLtuAL
+         giVbUmj9KM2X795y53Neve9sU2sqy8z9CMgtsDOOWxUwBItQyzG7bw2rDZQ0UfTLw/XK
+         XMvu5QcyN815kquC13wN/TpcWvizsuVdV31Wev9nU12dFPSc4QtvBjo+IdyLL43H4g39
+         LKfaqd5OBbO/8lR17GyXSV+WvDEztieHhgwIdzPxCkI3Stxl+htge11G6Y45Mop5K+/f
+         bDVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683518921; x=1686110921;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683518967; x=1686110967;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=418lmDvsSwaR5hPOcnBAQZAbghEwqMzFRELtnuxfpVc=;
-        b=Svw9l9fN9G25HkTmy70H45i5COdSuMG/pUTPfIUlUWE+zlxqKoJ/H20R33PvFCr2Ue
-         oQnfRKGrvQYJK8KnSzgJkkg9rJpBu7ueqYJi01ZvX8SulT2kDKVeYwQy1vOobYR0PajN
-         +XbILV4CbGCEnJkOhzHBRuMbUgOGNXkyVtM6MNXQ8aeQ0aebU1FF2af74ex+I8cNPp4x
-         dC2a0XkgvRvu5e1OZl0LEHVLpRXCUHAR4CYBiQUvuBIv7ZDZxdWQoY8Q7SoGqrBLBuHD
-         RYXtDGcKfZDqJfogUe15PfkAlxr3lEf1XVTA6BzRylkJ2axJ5UAUvMHGNbdc8yYqcF7P
-         1ivQ==
-X-Gm-Message-State: AC+VfDwKRTPtkCIAYGJ2eVoCku3YSrYSNJg9qHyXmPIv6+HUvNoe8qT8
-        MUrWVMCkt71CdhTkck4NQhv6tICaRSfKM7AblAE=
-X-Google-Smtp-Source: ACHHUZ4IPERXtNJef1vvKhMOH/D3B+M3LH79PgUudG1dBoi9d1doeo709yH83md5swCmQ/LygaVdGk3TZgPTcg9HZhk=
-X-Received: by 2002:aa7:ca57:0:b0:50c:1e2:4a42 with SMTP id
- j23-20020aa7ca57000000b0050c01e24a42mr7368607edt.15.1683518921019; Sun, 07
- May 2023 21:08:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230505113315.3307723-1-liujian56@huawei.com> <20230505113315.3307723-3-liujian56@huawei.com>
-In-Reply-To: <20230505113315.3307723-3-liujian56@huawei.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Mon, 8 May 2023 12:08:04 +0800
-Message-ID: <CAL+tcoDY11sSO8_h1DKCWgAXOjQwM1JR5cx7cpmotWVj28m_fg@mail.gmail.com>
-Subject: Re: [PATCH 2/9] softirq: Use sched_clock() based timeout
-To:     Liu Jian <liujian56@huawei.com>
-Cc:     corbet@lwn.net, paulmck@kernel.org, frederic@kernel.org,
-        quic_neeraju@quicinc.com, joel@joelfernandes.org,
-        josh@joshtriplett.org, boqun.feng@gmail.com, rostedt@goodmis.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        qiang1.zhang@intel.com, jstultz@google.com, tglx@linutronix.de,
-        sboyd@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, peterz@infradead.org,
-        frankwoo@google.com, Rhinewuwu@google.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rcu@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        bh=/stI2xLuu/+Bk6mWcj3fMw5988PC9cZKxhWWqcngefs=;
+        b=KjMJGAEqgqVdKsGxBx04XXfJPdqdrZzOyL1YOaeyukARs8oNS8nZsPu7F7Tr8YbNJB
+         PF/uD7rDe1khYBuWsyQ0uC8Q9t4RhojohFrHP9zpdc7Jgmqy631x8Ff3Dze3GIM/Vp19
+         iHUfWjhYhxdCBFpnQOHIhlS/wz/pWzGjnxH9ViR/aewl6G53/AMFIM12xph8OnzK9DBm
+         0x/Ph9veNKPfkq8YXgZdNg+7rR2j5xjKBSiSR6u9LJBX/Q7mIPYCpp3vmRtHS/Tlg+St
+         GenRyAuo5oxhA7fuazz0FhvFCAEedJMIzWfrdcmxsOwdz6QXgqN3Y4RLgmoiIhzRK2xB
+         boUA==
+X-Gm-Message-State: AC+VfDydpb2rbJELGlyimqHCnfnN/c0RsL6YV3WVKI7cMNUJnj6qwkCe
+        uQNswcXBpZdrn3WIU5Wvqio=
+X-Google-Smtp-Source: ACHHUZ5Dr2OhNvFUs+sEGJt4AGYVYn1QPnGShhbOuQHlv02lNyCrmoMRYODTfIKd9tYYio1GPProyA==
+X-Received: by 2002:a17:907:a41e:b0:94a:4b7a:9886 with SMTP id sg30-20020a170907a41e00b0094a4b7a9886mr8664774ejc.12.1683518967237;
+        Sun, 07 May 2023 21:09:27 -0700 (PDT)
+Received: from felia.fritz.box ([2a02:810d:7e40:14b0:8906:f99a:ce33:2033])
+        by smtp.gmail.com with ESMTPSA id h23-20020a17090619d700b008cecb8f374asm4372475ejd.0.2023.05.07.21.09.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 May 2023 21:09:26 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] s390/Kconfig: remove obsolete configs SCHED_{BOOK,DRAWER}
+Date:   Mon,  8 May 2023 06:09:16 +0200
+Message-Id: <20230508040916.16733-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -77,71 +70,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 7:25=E2=80=AFPM Liu Jian <liujian56@huawei.com> wrot=
-e:
->
-> From: Peter Zijlstra <peterz@infradead.org>
->
-> Replace the jiffies based timeout with a sched_clock() based one.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Liu Jian <liujian56@huawei.com>
-> ---
->  kernel/softirq.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/softirq.c b/kernel/softirq.c
-> index bff5debf6ce6..59f16a9af5d1 100644
-> --- a/kernel/softirq.c
-> +++ b/kernel/softirq.c
-> @@ -27,6 +27,7 @@
->  #include <linux/tick.h>
->  #include <linux/irq.h>
->  #include <linux/wait_bit.h>
-> +#include <linux/sched/clock.h>
->
->  #include <asm/softirq_stack.h>
->
-> @@ -489,7 +490,7 @@ asmlinkage __visible void do_softirq(void)
->   * we want to handle softirqs as soon as possible, but they
->   * should not be able to lock up the box.
->   */
-> -#define MAX_SOFTIRQ_TIME  msecs_to_jiffies(2)
-> +#define MAX_SOFTIRQ_TIME       (2 * NSEC_PER_MSEC)
+Commit f1045056c726 ("topology/sysfs: rework book and drawer topology
+ifdefery") activates the book and drawer topology, previously activated by
+CONFIG_SCHED_{BOOK,DRAWER}, dependent on the existence of certain macro
+definitions. Hence, since then, CONFIG_SCHED_{BOOK,DRAWER} have no effect
+and any further purpose.
 
-I wonder if it affects those servers that set HZ to some different
-values rather than 1000 as default.
+Remove the obsolete configs SCHED_{BOOK,DRAWER}.
 
-Thanks,
-Jason
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ arch/s390/Kconfig | 8 --------
+ 1 file changed, 8 deletions(-)
 
->  #define MAX_SOFTIRQ_RESTART 10
->
->  #ifdef CONFIG_TRACE_IRQFLAGS
-> @@ -527,9 +528,9 @@ static inline void lockdep_softirq_end(bool in_hardir=
-q) { }
->
->  asmlinkage __visible void __softirq_entry __do_softirq(void)
->  {
-> -       unsigned long end =3D jiffies + MAX_SOFTIRQ_TIME;
->         unsigned long old_flags =3D current->flags;
->         int max_restart =3D MAX_SOFTIRQ_RESTART;
-> +       u64 start =3D sched_clock();
->         struct softirq_action *h;
->         unsigned long pending;
->         unsigned int vec_nr;
-> @@ -584,7 +585,7 @@ asmlinkage __visible void __softirq_entry __do_softir=
-q(void)
->
->         pending =3D local_softirq_pending();
->         if (pending) {
-> -               if (time_before(jiffies, end) && !need_resched() &&
-> +               if (sched_clock() - start < MAX_SOFTIRQ_TIME && !need_res=
-ched() &&
->                     --max_restart)
->                         goto restart;
->
-> --
-> 2.34.1
->
->
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index 548b5b587003..1627c7f841d3 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -468,19 +468,11 @@ config SCHED_SMT
+ config SCHED_MC
+ 	def_bool n
+ 
+-config SCHED_BOOK
+-	def_bool n
+-
+-config SCHED_DRAWER
+-	def_bool n
+-
+ config SCHED_TOPOLOGY
+ 	def_bool y
+ 	prompt "Topology scheduler support"
+ 	select SCHED_SMT
+ 	select SCHED_MC
+-	select SCHED_BOOK
+-	select SCHED_DRAWER
+ 	help
+ 	  Topology scheduler support improves the CPU scheduler's decision
+ 	  making when dealing with machines that have multi-threading,
+-- 
+2.17.1
+
