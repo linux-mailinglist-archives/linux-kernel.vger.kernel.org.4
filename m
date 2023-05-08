@@ -2,264 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3819C6FAFC8
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E2F6FAFCA
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234077AbjEHMUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 08:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
+        id S233987AbjEHMVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 08:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234036AbjEHMUN (ORCPT
+        with ESMTP id S233016AbjEHMVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 08:20:13 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A30E2E3D8
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 05:20:12 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pvzqb-0007PM-Va; Mon, 08 May 2023 14:20:10 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5451C1C00B5;
-        Mon,  8 May 2023 12:20:09 +0000 (UTC)
-Date:   Mon, 8 May 2023 14:20:08 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] can: length: add definitions for frame lengths in bits
-Message-ID: <20230508-sprint-cause-80b4172d5a5a-mkl@pengutronix.de>
-References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
+        Mon, 8 May 2023 08:21:16 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9F324017;
+        Mon,  8 May 2023 05:21:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K9HbNINB2IGGDOTTZdC9uLU6mhOQts77G9eHTXOhR13NVwr9yIW4H6lD8p8OmQHAm+arfi3rYH7WpLs9AtKXVGPsr45P/w/8TV2VGg8x12wgHSJvdWPhYeZ7DTnF+gdJ46PCyyMJkobCH0W4Kvrd/GqyeyFRXpEru1pZLaf2G72JpD0pn+MFkvBqjVuQ1RfKwep7qle1MQqUqB7eDTUXQUI6ugQIUw3K+2OFzprK8BkVCQchfL1eHKEX0ZhGugm/6ge7Zih+RKF+u264F4FekMSvll4fpu2BqrAdOC1m/sNxsypY/L8lIvQIvdQf3WPdca7Yb+qhKxu8Ldasc9kf2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yiGajE/tyfNw2Gj6cNmKQrOCU2LeRVZNZiFrmxuz8z0=;
+ b=K8PAXiJxG1Adoidtwg7SRXFqoxqIO11xiDF3pfb9Pjm9I0k/ky2cJK7PluhMSSHKk0A+mY454VD8cA9mRVNh+mFjOC3cop82fct/ALGeQatKwSeqTDjtblZbxy/D5s4OxmOfAOKVw9chb7JCfI3pWVXWYTP6lwH55WcGZiu98O9V9MlHYxNGkcuZXjjr05zXMb9ECQueCHm4FNOLV/Qd9i3I8yI1HBF8hYPu27BwINyx01TJyYZtZTBFalUPrrc0tIRejpdimRpNwW3gfAjoA1udZrNxrV0PjXx9kjKjMhcG6NDew4sKVxT6nXRMcwUUW2Y8RdiCB5PYFl7BgS2sdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yiGajE/tyfNw2Gj6cNmKQrOCU2LeRVZNZiFrmxuz8z0=;
+ b=oDga4qUSsKVO+y0kYIgWTwH3sMhTNSvzvmCjR4E6FpLdULwPcKoMKlfMmGWqDzjTh1j6pwdRur9OdXYdcAwxaZqQw8KJgwYoj6UgfXThlLBtIADxnCn2GTUJ8Idkelu8DlmWL9HIh5mmxyvVwcmZWbMrY/h5n+n266v/pju2v89y80oUs5WHJqIIIKgoWi10iNtcaA8v7XHBv8oXtY4Jmr5g31qs3nCrTH5/9k9UD8wjKCPxchwzzFB0dXj23kXzG0Z+N1OVTtCxJ/RrNzVzCCgkNAVWb+ZOOGweIN4/8pYD6Ho8vuJbSRQkYzuezEYnsrdrooNCn8EuvXvZXU6Ygw==
+Received: from BLAPR03CA0040.namprd03.prod.outlook.com (2603:10b6:208:32d::15)
+ by DM8PR12MB5415.namprd12.prod.outlook.com (2603:10b6:8:25::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6363.32; Mon, 8 May 2023 12:21:12 +0000
+Received: from BL02EPF000145B8.namprd05.prod.outlook.com
+ (2603:10b6:208:32d:cafe::74) by BLAPR03CA0040.outlook.office365.com
+ (2603:10b6:208:32d::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32 via Frontend
+ Transport; Mon, 8 May 2023 12:21:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BL02EPF000145B8.mail.protection.outlook.com (10.167.241.208) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6387.18 via Frontend Transport; Mon, 8 May 2023 12:21:11 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 8 May 2023
+ 05:20:57 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 8 May 2023
+ 05:20:57 -0700
+Received: from mallet.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Mon, 8 May 2023 05:20:55 -0700
+From:   Peter De Schrijver <pdeschrijver@nvidia.com>
+To:     Peter De Schrijver <pdeschrijver@nvidia.com>, <stefank@nvidia.com>
+CC:     <jassisinghbrar@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>
+Subject: [PATCH 0/5] firmware: tegra: Add MRQ support for Tegra264
+Date:   Mon, 8 May 2023 15:20:43 +0300
+Message-ID: <20230508122048.99953-1-pdeschrijver@nvidia.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uabosgyhmp5zyosz"
-Content-Disposition: inline
-In-Reply-To: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF000145B8:EE_|DM8PR12MB5415:EE_
+X-MS-Office365-Filtering-Correlation-Id: 38edcc5b-926f-44dd-16a7-08db4fbeb5e8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1Ws6VOzsoFMK6oXuT4Vu4NpbzBlkCU9w8Uk+OHUCOfhyUeCBA2wzmm0R6pLEaxJpiYmljb/fMG7rRD4hk+c09PwzEppc4V1wo1hHoI9mJGeCzCX64VCZFdv+faRVHpoSyLXlmhKL0ZelRW3rIkxgwCogjuYtlLjayvAXhp7zEU1XAxr4DSPrOD3xfIiTKaX0nyUf2m3AJZ1WDcSX/y+tPk6AHwNC9YIE/yEFwygXH9CJ2ybSRYSmsTUGU29QMk/C5yWt6lQu04sB4FfC3GreTV/RuaEs1KZgZ9fXtQG0ZLMrq7xuX+ouSky/GPub3hdfZExIb0E3sJ/7uTeHsFTQ5LqW6snE4s0AjvECsB+PbEzqdEg6QW1Avp0bMUjYvfsXun0+4aZ0r7Ke7jUe3bRSsiPAVaoufjd9UKuRuRNOoP2jyuDNnqU2xamazSTUUg+hRZ8X56ODDIWlXZgxHfy5eRYv80yTk4hD6n4dQRELBj6FPoPl2m4ItT1xSz5zxnM+Dlga04AoeSBFPmglLBvfx8uDL0zrEettL7hfRvLp22UtRpEDaN0N/23xNKcGh0LSkQspzeNjlIvD0bBtAXR54CU6ABwI+8vcYXkqyJuJ9m3AZ1HJpTh3jYJiZChZmnJ12zJnY06j1HGZ09LydLKO/N1nwteS99qfXzmnaWMiXcnCoSxh1xoU6p9YS0F7TJ00SE9uCK/B4uKQYYMe/IoO7g==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(376002)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(1076003)(40480700001)(26005)(7696005)(83380400001)(336012)(426003)(2616005)(36860700001)(47076005)(36756003)(82310400005)(86362001)(7636003)(356005)(82740400003)(186003)(40460700003)(110136005)(478600001)(6636002)(54906003)(2906002)(316002)(41300700001)(8936002)(8676002)(70586007)(5660300002)(4326008)(70206006)(6666004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 12:21:11.5448
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 38edcc5b-926f-44dd-16a7-08db4fbeb5e8
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000145B8.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5415
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In Tegra264 the carveouts (GSCs) used to communicate between BPMP and
+CPU-NS may reside in DRAM. The location will be signalled using reserved
+memory node in DT. Additionally some minor updates to the HSP driver are
+done to support the new chip.
 
---uabosgyhmp5zyosz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Peter De Schrijver (3):
+  dt-bindings: mailbox: tegra: Document Tegra264 HSP
+  dt-bindings: Add bindings to support DRAM MRQ GSCs
+  firmware: tegra: bpmp: Add support for DRAM MRQ GSCs
 
-On 08.05.2023 00:55:06, Vincent Mailhol wrote:
-> When created in [1], frames length definitions were added to implement
-> byte queue limits (bql). Because bql expects lengths in bytes, bit
-> length definitions were not considered back then.
->=20
-> Recently, a need to refer to the exact frame length in bits, with CAN
-> bit stuffing, appeared in [2].
->=20
-> Add 9 frames length definitions:
->=20
->  - CAN_FRAME_OVERHEAD_SFF_BITS:
->  - CAN_FRAME_OVERHEAD_EFF_BITS
->  - CANFD_FRAME_OVERHEAD_SFF_BITS
->  - CANFD_FRAME_OVERHEAD_EFF_BITS
->  - CAN_BIT_STUFFING_OVERHEAD
->  - CAN_FRAME_LEN_MAX_BITS_NO_STUFFING
->  - CAN_FRAME_LEN_MAX_BITS_STUFFING
->  - CANFD_FRAME_LEN_MAX_BITS_NO_STUFFING
->  - CANFD_FRAME_LEN_MAX_BITS_STUFFING
->=20
-> CAN_FRAME_LEN_MAX_BITS_STUFFING and CANFD_FRAME_LEN_MAX_BITS_STUFFING
-> define respectively the maximum number of bits in a classical CAN and
-> CAN-FD frame including bit stuffing. The other definitions are
-> intermediate values.
->=20
-> In addition to the above:
->=20
->  - Include linux/bits.h and then replace the value 8 by BITS_PER_BYTE
->    whenever relevant.
->  - Include linux/math.h because of DIV_ROUND_UP(). N.B: the use of
->    DIV_ROUND_UP() is not new to this patch, but the include was
->    previously omitted.
->  - Update the existing length definitions to use the newly defined values.
->  - Add myself as copyright owner for 2020 (as coauthor of the initial
->    version, c.f. [1]) and for 2023 (this patch).
->=20
-> [1] commit 85d99c3e2a13 ("can: length: can_skb_get_frame_len(): introduce
->     function to get data length of frame in data link layer")
-> Link: https://git.kernel.org/torvalds/c/85d99c3e2a13
->=20
-> [2] RE: [PATCH] can: mcp251xfd: Increase poll timeout
-> Link: https://lore.kernel.org/linux-can/BL3PR11MB64846C83ACD04E9330B0FE66=
-FB729@BL3PR11MB6484.namprd11.prod.outlook.com/
->=20
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
-> As always, let me know if you have better inspiration than me for the
-> naming.
-> ---
->  include/linux/can/length.h | 84 ++++++++++++++++++++++++++++++++------
->  1 file changed, 72 insertions(+), 12 deletions(-)
->=20
-> diff --git a/include/linux/can/length.h b/include/linux/can/length.h
-> index 6995092b774e..60492fcbe34d 100644
-> --- a/include/linux/can/length.h
-> +++ b/include/linux/can/length.h
-> @@ -1,13 +1,17 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
->  /* Copyright (C) 2020 Oliver Hartkopp <socketcan@hartkopp.net>
->   * Copyright (C) 2020 Marc Kleine-Budde <kernel@pengutronix.de>
-> + * Copyright (C) 2020, 2023 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->   */
-> =20
->  #ifndef _CAN_LENGTH_H
->  #define _CAN_LENGTH_H
-> =20
-> +#include <linux/bits.h>
-> +#include <linux/math.h>
-> +
->  /*
-> - * Size of a Classical CAN Standard Frame
-> + * Size of a Classical CAN Standard Frame in bits
->   *
->   * Name of Field			Bits
->   * ---------------------------------------------------------
-> @@ -25,12 +29,19 @@
->   * End-of-frame (EOF)			7
->   * Inter frame spacing			3
->   *
-> - * rounded up and ignoring bitstuffing
-> + * ignoring bitstuffing
->   */
-> -#define CAN_FRAME_OVERHEAD_SFF DIV_ROUND_UP(47, 8)
-> +#define CAN_FRAME_OVERHEAD_SFF_BITS 47
-> =20
->  /*
-> - * Size of a Classical CAN Extended Frame
-> + * Size of a Classical CAN Standard Frame
-> + * (rounded up and ignoring bitstuffing)
-> + */
-> +#define CAN_FRAME_OVERHEAD_SFF \
-> +	DIV_ROUND_UP(CAN_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
-> +
-> +/*
-> + * Size of a Classical CAN Extended Frame in bits
->   *
->   * Name of Field			Bits
->   * ---------------------------------------------------------
-> @@ -50,12 +61,19 @@
->   * End-of-frame (EOF)			7
->   * Inter frame spacing			3
->   *
-> - * rounded up and ignoring bitstuffing
-> + * ignoring bitstuffing
->   */
-> -#define CAN_FRAME_OVERHEAD_EFF DIV_ROUND_UP(67, 8)
-> +#define CAN_FRAME_OVERHEAD_EFF_BITS 67
-> =20
->  /*
-> - * Size of a CAN-FD Standard Frame
-> + * Size of a Classical CAN Extended Frame
-> + * (rounded up and ignoring bitstuffing)
-> + */
-> +#define CAN_FRAME_OVERHEAD_EFF \
-> +	DIV_ROUND_UP(CAN_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
-> +
-> +/*
-> + * Size of a CAN-FD Standard Frame in bits
->   *
->   * Name of Field			Bits
->   * ---------------------------------------------------------
-> @@ -77,12 +95,19 @@
->   * End-of-frame (EOF)			7
->   * Inter frame spacing			3
->   *
-> - * assuming CRC21, rounded up and ignoring bitstuffing
-> + * assuming CRC21 and ignoring bitstuffing
->   */
-> -#define CANFD_FRAME_OVERHEAD_SFF DIV_ROUND_UP(61, 8)
-> +#define CANFD_FRAME_OVERHEAD_SFF_BITS 61
-> =20
->  /*
-> - * Size of a CAN-FD Extended Frame
-> + * Size of a CAN-FD Standard Frame
-> + * (assuming CRC21, rounded up and ignoring bitstuffing)
-> + */
-> +#define CANFD_FRAME_OVERHEAD_SFF \
-> +	DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
-> +
-> +/*
-> + * Size of a CAN-FD Extended Frame in bits
->   *
->   * Name of Field			Bits
->   * ---------------------------------------------------------
-> @@ -106,9 +131,32 @@
->   * End-of-frame (EOF)			7
->   * Inter frame spacing			3
->   *
-> - * assuming CRC21, rounded up and ignoring bitstuffing
-> + * assuming CRC21 and ignoring bitstuffing
-> + */
-> +#define CANFD_FRAME_OVERHEAD_EFF_BITS 80
-> +
-> +/*
-> + * Size of a CAN-FD Extended Frame
-> + * (assuming CRC21, rounded up and ignoring bitstuffing)
-> + */
-> +#define CANFD_FRAME_OVERHEAD_EFF \
-> +	DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
-> +
-> +/* CAN bit stuffing overhead multiplication factor */
-> +#define CAN_BIT_STUFFING_OVERHEAD 1.2
-> +
-> +/*
-> + * Maximum size of a Classical CAN frame in bits, ignoring bitstuffing
->   */
-> -#define CANFD_FRAME_OVERHEAD_EFF DIV_ROUND_UP(80, 8)
-> +#define CAN_FRAME_LEN_MAX_BITS_NO_STUFFING \
-> +	(CAN_FRAME_OVERHEAD_EFF_BITS + CAN_MAX_DLEN * BITS_PER_BYTE)
-> +
-> +/*
-> + * Maximum size of a Classical CAN frame in bits, including bitstuffing
-> + */
-> +#define CAN_FRAME_LEN_MAX_BITS_STUFFING				\
-> +	((unsigned int)(CAN_FRAME_LEN_MAX_BITS_NO_STUFFING *	\
-> +			CAN_BIT_STUFFING_OVERHEAD))
+Stefan Kristiansson (2):
+  mailbox: tegra: add support for Tegra264
+  soc: tegra: fuse: add support for Tegra264
 
-The 1.2 overhead doesn't apply to the whole frame, according to
-https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=3D&arnumber=3D8338047.
+ .../firmware/nvidia,tegra186-bpmp.yaml        |  69 +++++-
+ .../bindings/mailbox/nvidia,tegra186-hsp.yaml |   1 +
+ .../nvidia,tegra264-bpmp-shmem.yaml           |  40 ++++
+ drivers/firmware/tegra/bpmp-tegra186.c        | 208 +++++++++++++-----
+ drivers/firmware/tegra/bpmp.c                 |   4 +-
+ drivers/mailbox/tegra-hsp.c                   |  16 +-
+ drivers/soc/tegra/fuse/tegra-apbmisc.c        |   3 +-
+ include/soc/tegra/fuse.h                      |   3 +-
+ 8 files changed, 275 insertions(+), 69 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/reserved-memory/nvidia,tegra264-bpmp-shmem.yaml
 
-Marc
+-- 
+2.40.0
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---uabosgyhmp5zyosz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRY6PYACgkQvlAcSiqK
-BOhO+gf/apC8fM4dkkLelSSMAduJ4D0siAbWcbAA3IlVAMmm3ukEDvGngpci52tk
-qX3z5vGJ+mqBqCOO046wnqSAu9f+ee77b77t6rtu2LF3dQRzzc0zfaf9v9EQ+tg2
-MtsRD+2Zde7Il1w06KZgc+yFR0/aSMUllrICctcZ6vXtmyC82jU6ByU3r9SqVAJF
-iZ7grREqYiqfRPw554Sdnzxv52//FX6H7Ld/7bTmhMSoe/vsqq+VBADc6BMrraYp
-rbU/XuLrj5sVE43sj4D40fv1p4KN3DEGZJEQINFKY+/rXM+XDTdP4VSWx1Ie00ld
-ImbeJwAaCLMd6lL6ck6B1RF01EGLRw==
-=VPxl
------END PGP SIGNATURE-----
-
---uabosgyhmp5zyosz--
