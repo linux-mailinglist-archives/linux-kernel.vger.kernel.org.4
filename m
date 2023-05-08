@@ -2,267 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6F76FB3F3
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76A56FB409
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233108AbjEHPhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 11:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
+        id S234607AbjEHPn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 11:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234501AbjEHPhb (ORCPT
+        with ESMTP id S234439AbjEHPnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 11:37:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62016E8A;
-        Mon,  8 May 2023 08:37:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F4436254C;
-        Mon,  8 May 2023 15:37:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C9CFC433EF;
-        Mon,  8 May 2023 15:37:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683560239;
-        bh=qel2kewVtsWY2T8P8nd4z4jo4QGJjpzs3QivQR26XnU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BFpzuOPxLR7YpgCaQn1Qyzm7HajYuF8kDSIUFBxHW6XKzeXc4SJcbptiQWGrVF9tK
-         9+TPanXeI85eM12C+vQWxoO9n/g4MCnMqVpYjKYH9340zEgYiCwefB6tEo13hofdzM
-         droRdHz5COjR8pYAc4YTf8h1g2b2KSp+EDk6aUF2vNfm62dcTDqosiJH2C3pyWzOYU
-         39Vnao3Gzl+dEYC4Qp7vk2o6oyaIFmc6Twm5FyR2ugVtPk12bxzpG7JMtNOtUsftKr
-         ygcZyzrCOso78EuXUbc2xLZbaV/QsT4kWsZzGj2Yr+Vvt/pIQ61B1J5/wHTJFjriei
-         VHz1jXZAC0rfQ==
-Date:   Mon, 8 May 2023 21:07:06 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_ipkumar@quicinc.com
-Subject: Re: [PATCH V3 6/6] PCI: qcom: Add support for IPQ9574
-Message-ID: <20230508153706.GA14969@thinkpad>
-References: <20230421124938.21974-1-quic_devipriy@quicinc.com>
- <20230421124938.21974-7-quic_devipriy@quicinc.com>
- <20230508122109.GC4190@thinkpad>
- <CAA8EJppKUwfatdNoQPD4QbEPXyv1cEz3cDLfND+70Veq5Bcf8Q@mail.gmail.com>
+        Mon, 8 May 2023 11:43:19 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 970529006;
+        Mon,  8 May 2023 08:42:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=weABc
+        fwPfTFz49Ysejg6Ozz6T7XVNrerGmHs9xcKMbw=; b=Gkca7KTTOR5QTQ4SVGopI
+        3Ovv8wusCTQO6CzWWyY9CSOzDvbAXGpZs+tz2+0u7PoAMciyS16uP439Vfm4r7lU
+        DG44Ww5zTpepdOVw4UjhW8/IU+mGQHO41zASLb3YUILnnJI0Zvm85gFP0vt3q0c7
+        zJ4mpls25HtHRgb1U6h14Y=
+Received: from lizhe.. (unknown [120.245.132.9])
+        by zwqz-smtp-mta-g3-0 (Coremail) with SMTP id _____wBXLFX9F1lkWLGdAw--.17901S4;
+        Mon, 08 May 2023 23:41:16 +0800 (CST)
+From:   Lizhe <sensor1010@163.com>
+To:     marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
+        linus.walleij@linaro.org, neil.armstrong@linaro.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        daniel@zonque.org, haojian.zhuang@gmail.com, robert.jarzmik@free.fr
+Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-oxnas@groups.io, linux-stm32@st-md-mailman.stormreply.com,
+        Lizhe <sensor1010@163.com>
+Subject: [PATCH] dirvers/pinctrl.c : using pinctrl_dev->dev to obtain struct device * dev
+Date:   Mon,  8 May 2023 23:40:43 +0800
+Message-Id: <20230508154043.11859-1-sensor1010@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAA8EJppKUwfatdNoQPD4QbEPXyv1cEz3cDLfND+70Veq5Bcf8Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wBXLFX9F1lkWLGdAw--.17901S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Ww4UXFy3KF47Zw1xXFW8JFb_yoWxuryDpa
+        1fXay5Kr17JF4xJry5A3yUuFy3Kan7J3yxG34UKasrZa15XF97J3y5KF40yFs5KFWkAw43
+        Xa15XryY9w1UAFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR8OzxUUUUU=
+X-Originating-IP: [120.245.132.9]
+X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/xtbBdBxpq1gi6EszigAAsK
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 03:46:53PM +0300, Dmitry Baryshkov wrote:
-> On Mon, 8 May 2023 at 15:21, Manivannan Sadhasivam <mani@kernel.org> wrote:
-> >
-> > On Fri, Apr 21, 2023 at 06:19:38PM +0530, Devi Priya wrote:
-> > > The IPQ9574 platform has 4 Gen3 PCIe controllers: two single-lane
-> > > and two dual-lane based on SNPS core 5.70a
-> > > The Qcom IP rev is 1.27.0 and Synopsys IP rev is 5.80a
-> > > Added a new compatible 'qcom,pcie-ipq9574' and 'ops_1_27_0'
-> > > which reuses all the members of 'ops_2_9_0' except for the post_init
-> > > as the SLV_ADDR_SPACE_SIZE configuration differs between 2_9_0
-> > > and 1_27_0.
-> > > Also, modified get_resources of 'ops 2_9_0' to get the clocks
-> > > from the device tree and modelled the post init sequence as
-> > > a common function to avoid code redundancy.
-> > >
-> > > Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> > > Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> > > Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> >
-> > One comment below. With that fixed,
-> >
-> > Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-> >
-> > - Mani
-> >
-> > > ---
-> > >  Changes in V3:
-> > >       - Rebased on top of linux-next/master
-> > >
-> > >  drivers/pci/controller/dwc/pcie-qcom.c | 61 ++++++++++++++++++--------
-> > >  1 file changed, 43 insertions(+), 18 deletions(-)
-> > >
-> > > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > index 4ab30892f6ef..3682ecdead1f 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > @@ -107,6 +107,7 @@
-> > >
-> > >  /* PARF_SLV_ADDR_SPACE_SIZE register value */
-> > >  #define SLV_ADDR_SPACE_SZ                    0x10000000
-> > > +#define SLV_ADDR_SPACE_SZ_1_27_0             0x08000000
-> > >
-> > >  /* PARF_MHI_CLOCK_RESET_CTRL register fields */
-> > >  #define AHB_CLK_EN                           BIT(0)
-> > > @@ -202,10 +203,10 @@ struct qcom_pcie_resources_2_7_0 {
-> > >       struct reset_control *rst;
-> > >  };
-> > >
-> > > -#define QCOM_PCIE_2_9_0_MAX_CLOCKS           5
-> > >  struct qcom_pcie_resources_2_9_0 {
-> > > -     struct clk_bulk_data clks[QCOM_PCIE_2_9_0_MAX_CLOCKS];
-> > > +     struct clk_bulk_data *clks;
-> > >       struct reset_control *rst;
-> > > +     int num_clks;
-> > >  };
-> > >
-> > >  union qcom_pcie_resources {
-> > > @@ -1050,17 +1051,10 @@ static int qcom_pcie_get_resources_2_9_0(struct qcom_pcie *pcie)
-> > >       struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
-> > >       struct dw_pcie *pci = pcie->pci;
-> > >       struct device *dev = pci->dev;
-> > > -     int ret;
-> > >
-> > > -     res->clks[0].id = "iface";
-> > > -     res->clks[1].id = "axi_m";
-> > > -     res->clks[2].id = "axi_s";
-> > > -     res->clks[3].id = "axi_bridge";
-> > > -     res->clks[4].id = "rchng";
-> > > -
-> > > -     ret = devm_clk_bulk_get(dev, ARRAY_SIZE(res->clks), res->clks);
-> > > -     if (ret < 0)
-> > > -             return ret;
-> > > +     res->num_clks = devm_clk_bulk_get_all(dev, &res->clks);
-> > > +     if (res->clks < 0)
-> > > +             return res->num_clks;
-> >
-> > Why not return proper error no?
-> 
-> Instead the question should be, why not the proper condition: it tells
-> `if (res->clks < 0)', while it should be `if (res->num_clks < 0)'.
-> 
+After the execution of the devm_pinctrl_register() function,
+the member 'dev' in the 'pinctrl_dev' points to the
+'struct device' structure. see pinctrl_init_controller().
 
-Heh. I completely overlooked that part. Yes, the if condition itself should be
-fixed.
+Signed-off-by: Lizhe <sensor1010@163.com>
+---
+ drivers/pinctrl/pinctrl-apple-gpio.c |  2 +-
+ drivers/pinctrl/pinctrl-oxnas.c      | 12 ++++++------
+ drivers/pinctrl/pinctrl-pic32.c      | 12 ++++++------
+ drivers/pinctrl/pinctrl-stmfx.c      |  6 +++---
+ drivers/pinctrl/pxa/pinctrl-pxa2xx.c |  4 ++--
+ 5 files changed, 18 insertions(+), 18 deletions(-)
 
-- Mani
-
-> >
-> > >
-> > >       res->rst = devm_reset_control_array_get_exclusive(dev);
-> > >       if (IS_ERR(res->rst))
-> > > @@ -1073,7 +1067,7 @@ static void qcom_pcie_deinit_2_9_0(struct qcom_pcie *pcie)
-> > >  {
-> > >       struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
-> > >
-> > > -     clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
-> > > +     clk_bulk_disable_unprepare(res->num_clks, res->clks);
-> > >  }
-> > >
-> > >  static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
-> > > @@ -1102,19 +1096,16 @@ static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
-> > >
-> > >       usleep_range(2000, 2500);
-> > >
-> > > -     return clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
-> > > +     return clk_bulk_prepare_enable(res->num_clks, res->clks);
-> > >  }
-> > >
-> > > -static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
-> > > +static int qcom_pcie_post_init(struct qcom_pcie *pcie)
-> > >  {
-> > >       struct dw_pcie *pci = pcie->pci;
-> > >       u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> > >       u32 val;
-> > >       int i;
-> > >
-> > > -     writel(SLV_ADDR_SPACE_SZ,
-> > > -             pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
-> > > -
-> > >       val = readl(pcie->parf + PARF_PHY_CTRL);
-> > >       val &= ~PHY_TEST_PWR_DOWN;
-> > >       writel(val, pcie->parf + PARF_PHY_CTRL);
-> > > @@ -1151,6 +1142,26 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
-> > >       return 0;
-> > >  }
-> > >
-> > > +static int qcom_pcie_post_init_1_27_0(struct qcom_pcie *pcie)
-> > > +{
-> > > +     writel(SLV_ADDR_SPACE_SZ_1_27_0,
-> > > +            pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
-> > > +
-> > > +     qcom_pcie_post_init(pcie);
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
-> > > +{
-> > > +     writel(SLV_ADDR_SPACE_SZ,
-> > > +            pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
-> > > +
-> > > +     qcom_pcie_post_init(pcie);
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > >  static int qcom_pcie_link_up(struct dw_pcie *pci)
-> > >  {
-> > >       u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> > > @@ -1291,6 +1302,15 @@ static const struct qcom_pcie_ops ops_2_9_0 = {
-> > >       .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
-> > >  };
-> > >
-> > > +/* Qcom IP rev.: 1.27.0  Synopsys IP rev.: 5.80a */
-> > > +static const struct qcom_pcie_ops ops_1_27_0 = {
-> > > +     .get_resources = qcom_pcie_get_resources_2_9_0,
-> > > +     .init = qcom_pcie_init_2_9_0,
-> > > +     .post_init = qcom_pcie_post_init_1_27_0,
-> > > +     .deinit = qcom_pcie_deinit_2_9_0,
-> > > +     .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
-> > > +};
-> > > +
-> > >  static const struct qcom_pcie_cfg cfg_1_0_0 = {
-> > >       .ops = &ops_1_0_0,
-> > >  };
-> > > @@ -1323,6 +1343,10 @@ static const struct qcom_pcie_cfg cfg_2_9_0 = {
-> > >       .ops = &ops_2_9_0,
-> > >  };
-> > >
-> > > +static const struct qcom_pcie_cfg cfg_1_27_0 = {
-> > > +     .ops = &ops_1_27_0,
-> > > +};
-> > > +
-> > >  static const struct dw_pcie_ops dw_pcie_ops = {
-> > >       .link_up = qcom_pcie_link_up,
-> > >       .start_link = qcom_pcie_start_link,
-> > > @@ -1607,6 +1631,7 @@ static const struct of_device_id qcom_pcie_match[] = {
-> > >       { .compatible = "qcom,pcie-ipq8064-v2", .data = &cfg_2_1_0 },
-> > >       { .compatible = "qcom,pcie-ipq8074", .data = &cfg_2_3_3 },
-> > >       { .compatible = "qcom,pcie-ipq8074-gen3", .data = &cfg_2_9_0 },
-> > > +     { .compatible = "qcom,pcie-ipq9574", .data = &cfg_1_27_0 },
-> > >       { .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
-> > >       { .compatible = "qcom,pcie-qcs404", .data = &cfg_2_4_0 },
-> > >       { .compatible = "qcom,pcie-sa8540p", .data = &cfg_1_9_0 },
-> > > --
-> > > 2.17.1
-> > >
-> >
-> > --
-> > மணிவண்ணன் சதாசிவம்
-> 
-> 
-> 
-> -- 
-> With best wishes
-> Dmitry
-
+diff --git a/drivers/pinctrl/pinctrl-apple-gpio.c b/drivers/pinctrl/pinctrl-apple-gpio.c
+index 3751c7de37aa..9dac920a3619 100644
+--- a/drivers/pinctrl/pinctrl-apple-gpio.c
++++ b/drivers/pinctrl/pinctrl-apple-gpio.c
+@@ -119,7 +119,7 @@ static int apple_gpio_dt_node_to_map(struct pinctrl_dev *pctldev,
+ 
+ 	ret = of_property_count_u32_elems(node, "pinmux");
+ 	if (ret <= 0) {
+-		dev_err(pctl->dev,
++		dev_err(pctldev->dev,
+ 			"missing or empty pinmux property in node %pOFn.\n",
+ 			node);
+ 		return ret ? ret : -EINVAL;
+diff --git a/drivers/pinctrl/pinctrl-oxnas.c b/drivers/pinctrl/pinctrl-oxnas.c
+index fb10a8473ebe..88b03bd9f4dc 100644
+--- a/drivers/pinctrl/pinctrl-oxnas.c
++++ b/drivers/pinctrl/pinctrl-oxnas.c
+@@ -596,7 +596,7 @@ static int oxnas_ox810se_pinmux_enable(struct pinctrl_dev *pctldev,
+ 
+ 	while (functions->name) {
+ 		if (!strcmp(functions->name, fname)) {
+-			dev_dbg(pctl->dev,
++			dev_dbg(pctldev->dev,
+ 				"setting function %s bank %d pin %d fct %d mask %x\n",
+ 				fname, pg->bank, pg->pin,
+ 				functions->fct, mask);
+@@ -647,7 +647,7 @@ static int oxnas_ox820_pinmux_enable(struct pinctrl_dev *pctldev,
+ 
+ 	while (functions->name) {
+ 		if (!strcmp(functions->name, fname)) {
+-			dev_dbg(pctl->dev,
++			dev_dbg(pctldev->dev,
+ 				"setting function %s bank %d pin %d fct %d mask %x\n",
+ 				fname, pg->bank, pg->pin,
+ 				functions->fct, mask);
+@@ -697,7 +697,7 @@ static int oxnas_ox810se_gpio_request_enable(struct pinctrl_dev *pctldev,
+ 	struct oxnas_gpio_bank *bank = gpiochip_get_data(range->gc);
+ 	u32 mask = BIT(offset - bank->gpio_chip.base);
+ 
+-	dev_dbg(pctl->dev, "requesting gpio %d in bank %d (id %d) with mask 0x%x\n",
++	dev_dbg(pctldev->dev, "requesting gpio %d in bank %d (id %d) with mask 0x%x\n",
+ 		offset, bank->gpio_chip.base, bank->id, mask);
+ 
+ 	regmap_write_bits(pctl->regmap,
+@@ -909,7 +909,7 @@ static int oxnas_ox810se_pinconf_set(struct pinctrl_dev *pctldev,
+ 	u32 offset = pin - bank->gpio_chip.base;
+ 	u32 mask = BIT(offset);
+ 
+-	dev_dbg(pctl->dev, "setting pin %d bank %d mask 0x%x\n",
++	dev_dbg(pctldev->dev, "setting pin %d bank %d mask 0x%x\n",
+ 		pin, bank->gpio_chip.base, mask);
+ 
+ 	for (i = 0; i < num_configs; i++) {
+@@ -946,7 +946,7 @@ static int oxnas_ox820_pinconf_set(struct pinctrl_dev *pctldev,
+ 	u32 offset = pin - bank->gpio_chip.base;
+ 	u32 mask = BIT(offset);
+ 
+-	dev_dbg(pctl->dev, "setting pin %d bank %d mask 0x%x\n",
++	dev_dbg(pctldev->dev, "setting pin %d bank %d mask 0x%x\n",
+ 		pin, bank->gpio_chip.base, mask);
+ 
+ 	for (i = 0; i < num_configs; i++) {
+@@ -960,7 +960,7 @@ static int oxnas_ox820_pinconf_set(struct pinctrl_dev *pctldev,
+ 					  mask, mask);
+ 			break;
+ 		default:
+-			dev_err(pctl->dev, "Property %u not supported\n",
++			dev_err(pctldev->dev, "Property %u not supported\n",
+ 				param);
+ 			return -ENOTSUPP;
+ 		}
+diff --git a/drivers/pinctrl/pinctrl-pic32.c b/drivers/pinctrl/pinctrl-pic32.c
+index dad05294fa72..bc98888acb7c 100644
+--- a/drivers/pinctrl/pinctrl-pic32.c
++++ b/drivers/pinctrl/pinctrl-pic32.c
+@@ -1937,23 +1937,23 @@ static int pic32_pinconf_set(struct pinctrl_dev *pctldev, unsigned pin,
+ 
+ 		switch (param) {
+ 		case PIN_CONFIG_BIAS_PULL_UP:
+-			dev_dbg(pctl->dev, "   pullup\n");
++			dev_dbg(pctldev->dev, "   pullup\n");
+ 			writel(mask, bank->reg_base +PIC32_SET(CNPU_REG));
+ 			break;
+ 		case PIN_CONFIG_BIAS_PULL_DOWN:
+-			dev_dbg(pctl->dev, "   pulldown\n");
++			dev_dbg(pctl_dev->dev, "   pulldown\n");
+ 			writel(mask, bank->reg_base + PIC32_SET(CNPD_REG));
+ 			break;
+ 		case PIN_CONFIG_MICROCHIP_DIGITAL:
+-			dev_dbg(pctl->dev, "   digital\n");
++			dev_dbg(pctl_dev->dev, "   digital\n");
+ 			writel(mask, bank->reg_base + PIC32_CLR(ANSEL_REG));
+ 			break;
+ 		case PIN_CONFIG_MICROCHIP_ANALOG:
+-			dev_dbg(pctl->dev, "   analog\n");
++			dev_dbg(pctldev->dev, "   analog\n");
+ 			writel(mask, bank->reg_base + PIC32_SET(ANSEL_REG));
+ 			break;
+ 		case PIN_CONFIG_DRIVE_OPEN_DRAIN:
+-			dev_dbg(pctl->dev, "   opendrain\n");
++			dev_dbg(pctldev->dev, "   opendrain\n");
+ 			writel(mask, bank->reg_base + PIC32_SET(ODCU_REG));
+ 			break;
+ 		case PIN_CONFIG_INPUT_ENABLE:
+@@ -1964,7 +1964,7 @@ static int pic32_pinconf_set(struct pinctrl_dev *pctldev, unsigned pin,
+ 						    offset, arg);
+ 			break;
+ 		default:
+-			dev_err(pctl->dev, "Property %u not supported\n",
++			dev_err(pctldev->dev, "Property %u not supported\n",
+ 				param);
+ 			return -ENOTSUPP;
+ 		}
+diff --git a/drivers/pinctrl/pinctrl-stmfx.c b/drivers/pinctrl/pinctrl-stmfx.c
+index ab23d7ac3107..396996201856 100644
+--- a/drivers/pinctrl/pinctrl-stmfx.c
++++ b/drivers/pinctrl/pinctrl-stmfx.c
+@@ -711,7 +711,7 @@ static int stmfx_pinctrl_probe(struct platform_device *pdev)
+ 
+ 	ret = devm_gpiochip_add_data(pctl->dev, &pctl->gpio_chip, pctl);
+ 	if (ret) {
+-		dev_err(pctl->dev, "gpio_chip registration failed\n");
++		dev_err(pctldev->dev, "gpio_chip registration failed\n");
+ 		return ret;
+ 	}
+ 
+@@ -724,11 +724,11 @@ static int stmfx_pinctrl_probe(struct platform_device *pdev)
+ 					IRQF_ONESHOT,
+ 					dev_name(pctl->dev), pctl);
+ 	if (ret) {
+-		dev_err(pctl->dev, "cannot request irq%d\n", irq);
++		dev_err(pctldev->dev, "cannot request irq%d\n", irq);
+ 		return ret;
+ 	}
+ 
+-	dev_info(pctl->dev,
++	dev_info(pctldev->dev,
+ 		 "%ld GPIOs available\n", hweight_long(pctl->gpio_valid_mask));
+ 
+ 	return 0;
+diff --git a/drivers/pinctrl/pxa/pinctrl-pxa2xx.c b/drivers/pinctrl/pxa/pinctrl-pxa2xx.c
+index d2568dab8c78..f997cc26f01f 100644
+--- a/drivers/pinctrl/pxa/pinctrl-pxa2xx.c
++++ b/drivers/pinctrl/pxa/pinctrl-pxa2xx.c
+@@ -91,7 +91,7 @@ static int pxa2xx_pmx_gpio_set_direction(struct pinctrl_dev *pctldev,
+ 	void __iomem *gpdr;
+ 
+ 	gpdr = pctl->base_gpdr[pin / 32];
+-	dev_dbg(pctl->dev, "set_direction(pin=%d): dir=%d\n",
++	dev_dbg(pctldev->dev, "set_direction(pin=%d): dir=%d\n",
+ 		pin, !input);
+ 
+ 	spin_lock_irqsave(&pctl->lock, flags);
+@@ -156,7 +156,7 @@ static int pxa2xx_pmx_set_mux(struct pinctrl_dev *pctldev, unsigned function,
+ 	gafr = pctl->base_gafr[pin / 16];
+ 	gpdr = pctl->base_gpdr[pin / 32];
+ 	shift = (pin % 16) << 1;
+-	dev_dbg(pctl->dev, "set_mux(pin=%d): af=%d dir=%d\n",
++	dev_dbg(pctldev->dev, "set_mux(pin=%d): af=%d dir=%d\n",
+ 		pin, df->muxval >> 1, df->muxval & 0x1);
+ 
+ 	spin_lock_irqsave(&pctl->lock, flags);
 -- 
-மணிவண்ணன் சதாசிவம்
+2.34.1
+
