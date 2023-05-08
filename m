@@ -2,109 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0AA6FB856
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA826FB85B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbjEHUeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 16:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
+        id S233462AbjEHUhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 16:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjEHUee (ORCPT
+        with ESMTP id S232941AbjEHUhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 16:34:34 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3839D
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 13:34:33 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-643912bca6fso3954912b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 13:34:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683578073; x=1686170073;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r2TXVO3Qn0ZnUGYp0raU3hg8EYGwwYic/8hFVnmbHWs=;
-        b=lS4HXOrdVEKBi/R0Q75reRHIeEjldMgx+0TeJj1PlEuFDUJyd4StX+cIDF4S72tYTI
-         d8FHPYc3fN2VewD7Ysi/qz1FFyaVqSCyEdA4pGxmnY27Mr8y0uNMDK8C1hwGXzok73Jq
-         IdJxQ/XO9a5X9z50ENag+UYuJdwAsTPsuy1Coxcjg3rWTqT8nX72k50Dd3GxuB/sdk3i
-         US2/uHM4lgUOcBjEATwOGVKqk/pDt8bI6iasZa2Z0VhnZUF9gPC2UX0OI9vBOQPtu0mt
-         L47VEd5D1lqFNPnw514tAgHEiaMvjfEgDKkIANdBwabdDBBtrCymrsyttxyg6mrqImVM
-         /W3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683578073; x=1686170073;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r2TXVO3Qn0ZnUGYp0raU3hg8EYGwwYic/8hFVnmbHWs=;
-        b=Q6vY9DJ6/djwmCAbaSlPWChNHog7Kr1UdoYWN6RNLsU1vCMmo6QykNDbBfi7rvsKYD
-         lo8ZDdsLtduHKgBetjlwzspHxf4OFBHe3z4ZE0qLtUDk2V7ncHHab49sP2+x/dEQ5Ikw
-         DDHMK5VyeLkLdJNnklgr+jak21S8YJgPJawijGU/RUYYSFhRRRSO+xGslW6kJBq75S9u
-         uxKqN/YwrAkwGXcob+K0oCEhu8VgeRynhsOfLk3o95LCtk3LUtDb8ZUG3GeVmBCvyUl4
-         R6Q+ag5Z0YHZy6G7Ph3WS3PSIYmPfOkwwF793rSiZV8je9fQCwAWQieSkQOIamlOo6Px
-         gjgg==
-X-Gm-Message-State: AC+VfDwUwbhDOJaslDoSDF38RZR1s0Uns3zN5QqpJepAGA36IFWf7f8F
-        t/p9zbtMPnAPWty3JYj09QJDysKe2dY=
-X-Google-Smtp-Source: ACHHUZ68Z82cnITJjjL6eVxbTPM9vzkvLiktkeW5JkC4MrpQwn+V+0vBurDAzgpm/3aj+dRO/t3R0w==
-X-Received: by 2002:a05:6a20:4325:b0:100:ac13:9a57 with SMTP id h37-20020a056a20432500b00100ac139a57mr4739887pzk.55.1683578072970;
-        Mon, 08 May 2023 13:34:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n1-20020aa78a41000000b0064550f76efesm396383pfa.29.2023.05.08.13.34.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 13:34:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 8 May 2023 13:34:30 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: Linux 6.4-rc1
-Message-ID: <3b2e90bb-c28f-447a-abf8-2b5453da8092@roeck-us.net>
-References: <CAHk-=wiUxm-NZ1si8dXWVTTJ9n3c+1SRTC0V+Lk7hOE4bDVwJQ@mail.gmail.com>
+        Mon, 8 May 2023 16:37:09 -0400
+Received: from sonic312-26.consmr.mail.ir2.yahoo.com (sonic312-26.consmr.mail.ir2.yahoo.com [77.238.178.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D96D558F
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 13:37:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1683578226; bh=t4+SrCPMdRcrKZEemyCVdw3uY83K6P9r2Nkbak5C0J0=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=UmZU77EogypVMy21ccwpymNjkFS/Sg+PiTuzjfAr21uubAbLTRqUvrpSz+Sr+YjStisMbgAi+TNxL1kQh8QGNWAcvhWs39zsVfcagjYbF2MJqDCY+hh045m8Xl1tms5y+ALSS3u9TdYxCfye0tjIDzP1Dh3u3vnC93aKiij/iW84p3IApPMCGv1eOcnBxFd43Fkw3v5frsE4tKvwYPaKTCtBu3Xjxal3jYX5nILzk/tOY9bxDKU6CkCglaLgslrB3P/+FypojXj5pb8Qa7QT3ukyguuH2NCqrYIvvlKW5TAqZoxZ5gkxRm5+XWv9F4OHF0RrNCh+/6vs0cFyNarcLQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1683578226; bh=C4tr815zQmBO8Wf0Gsz6npblhY+d2wq3Ptw7Slh6ZGN=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=ZOlYJESBaTs/42RQbRxOih1RJUn1huBjkNq68sFaE+bgYDTYiNPPYDkFkQPa/BBf6RamJy+waGaZaCQOdIzLwdQ4hca/om5SyXwNYcasxxWI7P8lyH48bE4l815xc94C+H90d/MqhJ2TdDWa60adS/UeUveTocT5UHH1CXab3eEt0UtEQR4onc+8hCOomS9N7MgKRuGrcRZRCIJM+VTuQNskl3vkWDK17qYhN2KPHCu5fiEjo4GPXoMj+v+O6aoKBxTz8qyxCgGMUBrcW+FaUDG4loNBXpqUGMHHnyGK4/i+FNJRUpCvZW73NHtV52H91oxXyUf3E4TSzCSUVOms+g==
+X-YMail-OSG: NuhPGH8VM1kycUfNI86TPRU.19yU3NIJso6_CaXPB062ZVMYAhxAnpsr..JxcWD
+ 9tGvzkYTWHZQRbATAt29w07korQT1LG3.2mrvy5zZJtfMkczj_CxnNVlbgjhAf2ciqIRzIHW0j6N
+ SqNaQzkmYWCY.wIj.QjEeeJx6OZjUWyq3xXgouDOSdFIj3PFVhMZypwV99CjkS3nYznLhUg4Kq5G
+ PgknInjRbhCqd9ikPHLEj.KBWRjy2Q.OxEkqwcnLFMV1cl5D8o0Tbqs0fhx5DFVVzPjO4XQVsFuM
+ 0V1UP46dg5wQ24E_YGZAqW_kPPGE8PHWFuIL692__LHHMeL_o3J7EYZzo2AYRQPm26fZi8Ui07AP
+ gqpLtREajirYzdSBuIcDVgF9bzGhHwczG5D3wjsfkq58cIgqbgKDz7uIPmFL16gbpSUoIKUzLHN4
+ 9faAuqSbgUAg.Za4ONB6xM6aLB4rcyDYoSnO5gDdrEOF9.8iQ9mFXrXdbQ3p2Z6xYiUNVEzoBo28
+ tv.MllwHwwWSH2zYXyueTlF1.AbnTzFAxWYlg3YFgxg5dQl5uq0FQAy9ZeIUlxkK935jEteOXPdt
+ Mqpfr.JQUWT2.J6OPEN_i9KzXLR9r9jfAnCwBSAq6z9Thw1d1VILzCB1esCMWS85S3EH6Srj.oQh
+ otBFYJaraGdwM4bwDQ3rdPj1e8RgpRR6H7YLgybcMlyT82hXyMWs5kh_dnIiCT9PKkWDGZAMyecN
+ L.FuM_2PSfHksfVnRK1wx_L_bKoC3t.IcO1qQaxXwlNNvj6.X5dQNDXXrYBhoc9C965JTP0PdNhs
+ 8fIMae3rAFGAtL1nTI6O9as2e0xSCP0N5rcQezI6iGODg3leo4N6a.k7sBrtV3xSAMyxzC_1IeHO
+ wxlnGcxVjoEwUnDneBMDwwtOnUhAF.K_2IEFzt313EaNY9_K19b2nq.uya3pPLmPR6sfSc3N0j5X
+ vsL5IgXOBwuzTORL11wHZrC8wp9O0KubmK8YCPHzNhIW59ktBC6mKATVoU.lkkRJF3RHe9uNgjGT
+ 2hjq.x4Jr0ZmpkIM_H9tl9btM1o4uQwkkcuxpRYssU5Ti5WYf0z3NrXm_tKmw4jSyw4qswQR4_ID
+ 3FlxGKeav_qnI9VGIv4P9h7Upq.Odg.Zmz9.YD1IAaFzpuQtcFv237J7s6VTh1a3G0urxU8E.LQt
+ gMrrxGPqyR5QAmk6MqrePcdOCowg9cCA5.xvuXbvsZEcUdwFa7Y_kWsvmJBuzbWT4NLvWyblwEjL
+ 4vBLSsNy0pyUVEWrI4AVT7szjIbiQtvzJ8sokkPaPGHEIL2K.nLpaMKgsrq3dHHUuzXzWawYjfxt
+ dH6eRr7bbZrM12Xs3NFMcYL7GQBRAGcEF1CNmbOemkZnTGbkqgBCnAH9qqG_GuI_R86_xPXrvX7.
+ i6aviylJGdmhoe6pFCZ6s7gXi.u19.sY42yvWf1VAG3LZdcoumEu3nsNeUSGoA8Eo8PpjnDTikol
+ 5RpGZS7k7ARFMB737TGAppfEJb8xi8rVRavbLMNlfvGTtWRjhMSHj3UTw8vHcu.B3rO0skcvj5Nf
+ NiuGixfrGE7xoa8G_z4kjPS7kyGjShV3WMPpSbDuGvIOxMKwY.mK9XjBQF40QA7cWDnkEX2nBLYK
+ aBmb_6YoQHtB8UFcZpcH5bXKQJAf2U0rTiTNTJCwctIPqV.A6Y0MB7bh_jsxd__dSKbAhuM2tncy
+ zY5q8BKvgvtbOtUL3Q6mcnR86Sel6fFSrs3Bi1PwemzWLFVSqwXUC9.yAMs04pNA05sdxxDVqpZ8
+ Tnu52m04ecHxzyHtMLBr_bjzfMt4_m5CPJmbI.Z0H2E5BWf.VMJvmmXigby12iE.DjuBq32JbMzf
+ isTOcgQUmhj_rNB8mEjZ34ZIQwcelwYMsXnJz60rjVLbIyDiwaEe1vLBUuQ5eY_L7GOlkZJ8XEtj
+ 4Jr.0dzQolwh9MWKRw4YC1Hnm7pOzBU3rf4oKEnGTWznydtM5Y9tqkkpAqt.veJYuG_mjeBWv5F2
+ DP.RnfVBrTnViDKssEs7iuDtltbx9wfqp_oEPapWNcAQgnylUY_l.iTgkVj7zQEil8v6yk0MHlW6
+ C9YVIzlW0DbXn_XVga52PRXxVz5AOiIjW0NWqc533GrZQjGNMEY.VcYay7F9tErftiyq6rpPy7VC
+ s0y9UD1MfgzzNlE.IZwwa3geCH5zBFWQPzEtcG7VU59Wm7SvMYaVN3pxyCqTWdpml65AgGwmPXas
+ gQrRWPRJ8VuvDcx7KmPbJlP0EDJmCUPRVy3PkEmCYROf883IZbGme2rpldKaythu.hjc8ukR_zDC
+ LQOc5Ih8-
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: 8660b609-22ca-44ba-9f7d-d2ad45bf4bc0
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.ir2.yahoo.com with HTTP; Mon, 8 May 2023 20:37:06 +0000
+Received: by hermes--production-ir2-74cd8fc864-w4pg2 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 0defa889196eb91511a25a6013c239c4;
+          Mon, 08 May 2023 20:37:01 +0000 (UTC)
+Message-ID: <c76035f3-3b7d-4a28-b218-8ed9e3f11014@rocketmail.com>
+Date:   Mon, 8 May 2023 22:36:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiUxm-NZ1si8dXWVTTJ9n3c+1SRTC0V+Lk7hOE4bDVwJQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 6/8] power: supply: rt5033_charger: Add cable detection
+ and USB OTG supply
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <20230506155435.3005-1-jahau@rocketmail.com>
+ <20230506155435.3005-7-jahau@rocketmail.com>
+ <20230508114323.rzqbp2isvczzg3wx@mercury.elektranox.org>
+Content-Language: en-US
+From:   Jakob Hauser <jahau@rocketmail.com>
+In-Reply-To: <20230508114323.rzqbp2isvczzg3wx@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21417 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 07, 2023 at 02:18:22PM -0700, Linus Torvalds wrote:
-> So here we are, two weeks later, with the merge window over, and -rc1
-> tagged and pushed out.
+Hi Sebastian,
+
+On 08.05.23 13:43, Sebastian Reichel wrote:
+> On Sat, May 06, 2023 at 05:54:33PM +0200, Jakob Hauser wrote:
+
+...
+
+>> diff --git a/include/linux/mfd/rt5033.h b/include/linux/mfd/rt5033.h
+>> index e99e2ab0c1c1..d2c613764756 100644
+>> --- a/include/linux/mfd/rt5033.h
+>> +++ b/include/linux/mfd/rt5033.h
+>> @@ -53,6 +53,14 @@ struct rt5033_charger {
+>>   	struct rt5033_dev		*rt5033;
+>>   	struct power_supply		*psy;
+>>   	struct rt5033_charger_data	*chg;
+>> +	struct extcon_dev		*edev;
+>> +	struct notifier_block		extcon_nb;
+>> +	struct work_struct		extcon_work;
+>> +	struct mutex			lock;
+>> +	bool online;
+>> +	bool otg;
+>> +	bool mivr_enabled;
+>> +	u8 cv_regval;
+>>   };
 > 
-[ ... ]
-> 
-> Anyway, please do go test it all out,
-> 
+> Please move 'struct rt5033_charger' and 'struct rt5033_charger_data'
+> to drivers/power/supply/rt5033_charger.c; they are not supposed to
+> be used directly by others. Making it private helps to avoid
+> cross-subsystem series for future maintanence patches.
 
-Build results:
-	total: 152 pass: 146 fail: 6
-Failed builds:
-	arm:allmodconfig
-	i386:allyesconfig
-	i386:allmodconfig
-	mips:allmodconfig
-	powerpc:ppc32_allmodconfig
-	xtensa:allmodconfig
-Qemu test results:
-	total: 520 pass: 520 fail: 0
+Makes sense, I'll change that.
 
-The build failure is
+For completeness, I'll add an additional patch to move the 'struct 
+rt5033_battery' [1] to drivers/power/supply/rt5033_battery.c.
 
-drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c:
-	In function 'mxc_isi_channel_set_inbuf':
-drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c:33:5: error:
-	"CONFIG_ARCH_DMA_ADDR_T_64BIT" is not defined, evaluates to 0
+[1] 
+https://github.com/torvalds/linux/blob/v6.4-rc1/include/linux/mfd/rt5033.h#L35-L40
 
-The problem has been fixed in -next since April 18 with commit 9829ed20b019
-("media: nxp: imx8-isi: fix buiding on 32-bit"). Hopefully that commit
-should find its way into mainline in the near future.
-
-Guenter
+Kind regards,
+Jakob
