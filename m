@@ -2,146 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF2D6F9D95
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 04:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F516F9DA8
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 04:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232339AbjEHCD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 22:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
+        id S232218AbjEHCL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 22:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbjEHCD6 (ORCPT
+        with ESMTP id S229744AbjEHCL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 22:03:58 -0400
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F2F14926;
-        Sun,  7 May 2023 19:03:55 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R491e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vhyt-XW_1683511431;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vhyt-XW_1683511431)
-          by smtp.aliyun-inc.com;
-          Mon, 08 May 2023 10:03:52 +0800
-Message-ID: <1683511319.099806-2-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH] virtio_net: set default mtu to 1500 when 'Device maximum MTU' bigger than 1500
-Date:   Mon, 8 May 2023 10:01:59 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     huangml@yusur.tech, zy@yusur.tech,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Hao Chen <chenh@yusur.tech>, <hengqi@linux.alibaba.com>
-References: <20230506021529.396812-1-chenh@yusur.tech>
- <1683341417.0965195-4-xuanzhuo@linux.alibaba.com>
- <07b6b325-9a15-222f-e618-d149b57cbac2@yusur.tech>
- <20230507045627-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230507045627-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 7 May 2023 22:11:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3441982;
+        Sun,  7 May 2023 19:11:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B96861DF5;
+        Mon,  8 May 2023 02:11:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F4EEC433EF;
+        Mon,  8 May 2023 02:11:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683511915;
+        bh=W+BDWcTwbvNWQBCgt9uZZKh6zOCIi71k2crWd1L3W+k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SwpOfcoQzugMTe6nrRk10AeVJ9UQT/ItdgdISy7DTqoikrRz7Vrv19tbRp/olkgV8
+         UBkjm8j7t9GSZPAgHoCls3WCNgnbSQXRf3ZhOdMELvr3rXsYAfpcEYG5Br5ho9atNt
+         Z55/nHxH0BlmftEffctJVa/X4ADi1yAzrawwLAglJRzFJ1EUHjOYOlcV4FxZiBgXjU
+         0q3LdRMHxvI7Yt17Ip2XdG0QclnuZjPEgGo93iPi4NuG6a3nBDbIl/QjhmTvpSv4fa
+         RbizSWsueFK5ilHy2NvIztJrlGKzTk0eSEzrxhiJOKmAOBO7LUTWPxCnr8zjyMscRS
+         2i8vHZAd7BNVw==
+Date:   Sun, 7 May 2023 19:15:36 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Leonard Lausen <leonard@lausen.nl>
+Cc:     regressions@lists.linux.dev,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>
+Subject: Re: [PATCH] Revert "drm/msm/dp: Remove INIT_SETUP delay"
+Message-ID: <20230508021536.txtamifw2vkfncnx@ripper>
+References: <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 7 May 2023 04:58:58 -0400, "Michael S. Tsirkin" <mst@redhat.com> wr=
-ote:
-> On Sat, May 06, 2023 at 04:56:35PM +0800, Hao Chen wrote:
-> >
-> >
-> > =E5=9C=A8 2023/5/6 10:50, Xuan Zhuo =E5=86=99=E9=81=93:
-> > > On Sat,  6 May 2023 10:15:29 +0800, Hao Chen <chenh@yusur.tech> wrote:
-> > > > When VIRTIO_NET_F_MTU(3) Device maximum MTU reporting is supported.
-> > > > If offered by the device, device advises driver about the value of =
-its
-> > > > maximum MTU. If negotiated, the driver uses mtu as the maximum
-> > > > MTU value. But there the driver also uses it as default mtu,
-> > > > some devices may have a maximum MTU greater than 1500, this may
-> > > > cause some large packages to be discarded,
-> > >
-> > > You mean tx packet?
-> > Yes.
-> > >
-> > > If yes, I do not think this is the problem of driver.
-> > >
-> > > Maybe you should give more details about the discard.
-> > >
-> > In the current code, if the maximum MTU supported by the virtio net har=
-dware
-> > is 9000, the default MTU of the virtio net driver will also be set to 9=
-000.
-> > When sending packets through "ping -s 5000", if the peer router does not
-> > support negotiating a path MTU through ICMP packets, the packets will be
-> > discarded. If the peer router supports negotiating path mtu through ICMP
-> > packets, the host side will perform packet sharding processing based on=
- the
-> > negotiated path mtu, which is generally within 1500.
-> > This is not a bugfix patch, I think setting the default mtu to within 1=
-500
-> > would be more suitable here.Thanks.
->
-> I don't think VIRTIO_NET_F_MTU is appropriate for support for jumbo packe=
-ts.
-> The spec says:
-> 	The device MUST forward transmitted packets of up to mtu (plus low level=
- ethernet header length) size with
-> 	gso_type NONE or ECN, and do so without fragmentation, after VIRTIO_NET_=
-F_MTU has been success-
-> 	fully negotiated.
-> VIRTIO_NET_F_MTU has been designed for all kind of tunneling devices,
-> and this is why we set mtu to max by default.
->
-> For things like jumbo frames where MTU might or might not be available,
-> a new feature would be more appropriate.
+On Mon, May 08, 2023 at 01:06:13AM +0000, Leonard Lausen wrote:
+> This reverts commit e17af1c9d861dc177e5b56009bd4f71ace688d97.
+> 
+> Removing the delay of 100 units broke hot plug detection for USB-C displays on
+> qcom sc7180 lazor devices. Lazor uses mdss for hot plug detection and declares
+> dp_hot_plug_det in the dts. Other sc7180 based devices like aspire1 were not
+> affected by the regression, as they do not rely on mdss and dp_hot_plug_det for
+> hot plug detection.
+> 
+> Signed-off-by: Leonard Lausen <leonard@lausen.nl>
+> Tested-by: Leonard Lausen <leonard@lausen.nl> # Trogdor (sc7180)
+> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> 
+> ---
+>  drivers/gpu/drm/msm/dp/dp_display.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index bde1a7ce442f..db9783ffd5cf 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1506,7 +1506,7 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+>         dp = container_of(dp_display, struct dp_display_private, dp_display);
+>  
+>         if (!dp_display->is_edp)
+> -               dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 0);
+> +               dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
 
+When booting with the cable connected on my X13s, 100 is long enough for
+my display to time out and require me to disconnect and reconnect the
+cable again.
 
-So for jumbo frame, what is the problem?
+Do we have any idea of why the reduction to 0 is causing an issue when
+using the internal HPD?
 
-We are trying to do this. @Heng
+Regards,
+Bjorn
 
-Thanks.
-
-
->
-> > > > so I changed the MTU to a more
-> > > > general 1500 when 'Device maximum MTU' bigger than 1500.
-> > > >
-> > > > Signed-off-by: Hao Chen <chenh@yusur.tech>
-> > > > ---
-> > > >   drivers/net/virtio_net.c | 5 ++++-
-> > > >   1 file changed, 4 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > index 8d8038538fc4..e71c7d1b5f29 100644
-> > > > --- a/drivers/net/virtio_net.c
-> > > > +++ b/drivers/net/virtio_net.c
-> > > > @@ -4040,7 +4040,10 @@ static int virtnet_probe(struct virtio_devic=
-e *vdev)
-> > > >   			goto free;
-> > > >   		}
-> > > >
-> > > > -		dev->mtu =3D mtu;
-> > > > +		if (mtu > 1500)
-> > >
-> > > s/1500/ETH_DATA_LEN/
-> > >
-> > > Thanks.
-> > >
-> > > > +			dev->mtu =3D 1500;
-> > > > +		else
-> > > > +			dev->mtu =3D mtu;
-> > > >   		dev->max_mtu =3D mtu;
-> > > >   	}
-> > > >
-> > > > --
-> > > > 2.27.0
-> > > >
->
+>  }
+>  
+>  bool msm_dp_wide_bus_available(const struct msm_dp *dp_display)
+> -- 
+> 2.30.2
