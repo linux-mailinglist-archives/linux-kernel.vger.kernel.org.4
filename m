@@ -2,112 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488626FB9BA
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8856FB9C4
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbjEHVbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 17:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
+        id S233981AbjEHVbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 17:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjEHVbL (ORCPT
+        with ESMTP id S233705AbjEHVbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 17:31:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF4A10EC;
-        Mon,  8 May 2023 14:31:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03559642AC;
-        Mon,  8 May 2023 21:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31388C433EF;
-        Mon,  8 May 2023 21:31:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683581468;
-        bh=T0A52YhbVC0xShcDektXWFKw+mqnN3k3AY2OPTdnEjg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=SOAlUBWI1RiZWt4v/no1jMnVz5vsHRWC2dBBSgu+0aa6liSOZwgEjQbPrfmfwkHHd
-         ILaGwcnaIIg7BHxDSihUs3mN3XnskViXm/8m651NE0q+h5VHuJzKgHP4u/+gNjTRjB
-         8+ko+NbXdY43bHh3j6RNCenshzNAOK2waDgHlP4c92mJ/DJb6y1CK4NNgSWpdhtEgc
-         ysOmHf1sL7Vio+P+ydRnTNaP2wOCN+2a5C2gVVI8JLWQX10LIiffiHx40GFLUcMUSs
-         aUsd3zbTFdYjBRhT4u/2xvwZ1jpzG9pzddicUmBXu8z+kTVhbLQnwU9At99GnQoFgx
-         QdT91TV03NtRQ==
-Date:   Mon, 8 May 2023 16:31:06 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Frank Li <frank.li@nxp.com>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        Rob Herring <robh@kernel.org>,
-        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
-        <linux-pci@vger.kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "M.H. Lian" <minghuan.lian@nxp.com>,
-        "moderated list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Roy Zang <roy.zang@nxp.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
-        <linuxppc-dev@lists.ozlabs.org>, Mingkai Hu <mingkai.hu@nxp.com>
-Subject: Re: [EXT] Re: [PATCH v2 1/1] PCI: layerscape: Add the endpoint
- linkup notifier support
-Message-ID: <20230508213106.GA1192065@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AM6PR04MB4838D92748AD426DA1661C0C88719@AM6PR04MB4838.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 8 May 2023 17:31:44 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E106783E5
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 14:31:33 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b9a6eeea78cso37023993276.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 14:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683581493; x=1686173493;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZbgAGNI+jtBJ6/C5+rY59MHLdq0bPiPylAp1nQ6EvFY=;
+        b=1rR6+YSoVSx99at6wdoEphzxoMCPRs1p1vKXaAj3dOvy/esrEuCHCWNAQyN34rrpEe
+         ztL6dd7bkVl40gfKoU3Ryx/CyfGQYYJysHx5bZpTX+DMzBbG7YMLeuLbgbp+3a8a0KZH
+         2UG7bvIMYa/3sfu4AuPUWzo71BA733QFqvqmtdf5CBNrOaXzSpY5zGGCcZ2pmXnanHou
+         3pSIBvQ33YJYyBWeynsooEzQVM3gPU6nMzvYw3/Smjn8sQHXfzZf5KwhvURrx+c/B5sU
+         iyoQtJ4z0iKNSdCQUbn6HGZI390BFipfac59wfNGPSTsu4ndRxaX8AvTaubq+8RctLsg
+         C9zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683581493; x=1686173493;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZbgAGNI+jtBJ6/C5+rY59MHLdq0bPiPylAp1nQ6EvFY=;
+        b=LYOLDJYDEfCV5s0LCjpSJMJhlbFoEw4BEK2E9wqEncjNpn1c2vKiaHcXznAp46vE62
+         d6Tid+1woNVjaI94xEgVND/vCbUWDuqhv+bfqVtVk4HLTLsR1DNVgunt1mIMoX6gcLms
+         AbanbFkoKaAJIEzt/PyfcNkMOHQ+s2jgwHLYQsrJw6EmixnRLDJt7zXb5ftiWKvLbdX7
+         KVbD7ytVWl2H8/XG/j6+VwWCKcRhokmyGnX2el11CgJ6cW2VH+esm/TxJf1cl9648bJb
+         q/DfQpzAfi5W+c8OMWbXhZdf++bGGAiSQpKrzfqicUjiDKufVybj7dmOjXZLzCDZM/Je
+         lm5g==
+X-Gm-Message-State: AC+VfDyPtSz7U4q903FEjYWQlAR6HjbMbWl0XzZaHGeRYCHnDiYK4uuX
+        lMgvJDnXFxsP32YyZZFRswUMDoUIiqqX
+X-Google-Smtp-Source: ACHHUZ7Y0TBeQX2fd8lGvisO3nhb1pLzb0aA5uKxiANiaOdr2vJEWbJRrVvcs/WRCIT2N6iql56deytoA2V+
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:9cc5:6f12:98dc:d684])
+ (user=irogers job=sendgmr) by 2002:a25:5404:0:b0:b8b:f5fb:598d with SMTP id
+ i4-20020a255404000000b00b8bf5fb598dmr7276423ybb.6.1683581493105; Mon, 08 May
+ 2023 14:31:33 -0700 (PDT)
+Date:   Mon,  8 May 2023 14:31:28 -0700
+Message-Id: <20230508213128.3622268-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
+Subject: [PATCH v1] perf arm: Fix include path
+From:   Ian Rogers <irogers@google.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 01:31:26PM +0000, Frank Li wrote:
-> > -----Original Message-----
-> > From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > Sent: Saturday, May 6, 2023 2:59 AM
-> > To: Frank Li <frank.li@nxp.com>
-> > Cc: M.H. Lian <minghuan.lian@nxp.com>; Mingkai Hu
-> > <mingkai.hu@nxp.com>; Roy Zang <roy.zang@nxp.com>; Lorenzo Pieralisi
-> > <lpieralisi@kernel.org>; Rob Herring <robh@kernel.org>; Krzysztof
-> > Wilczyński <kw@linux.com>; Bjorn Helgaas <bhelgaas@google.com>; open
-> > list:PCI DRIVER FOR FREESCALE LAYERSCAPE <linuxppc-dev@lists.ozlabs.org>;
-> > open list:PCI DRIVER FOR FREESCALE LAYERSCAPE <linux-
-> > pci@vger.kernel.org>; moderated list:PCI DRIVER FOR FREESCALE
-> > LAYERSCAPE <linux-arm-kernel@lists.infradead.org>; open list <linux-
-> > kernel@vger.kernel.org>; imx@lists.linux.dev
-> > Subject: [EXT] Re: [PATCH v2 1/1] PCI: layerscape: Add the endpoint linkup
-> > notifier support
+Change "../cs-etm.h" to just "cs-etm.h" as ../cs-etm.h doesn't exist.
 
-All these quoted headers are redundant clutter since we've already
-seen them when Manivannan sent his comments.  It would be nice if your
-mailer could be configured to omit them.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/arch/arm/util/pmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > > +static int ls_pcie_ep_interrupt_init(struct ls_pcie_ep *pcie,
-> > > +                                  struct platform_device *pdev)
-> > > +{
-> > > +     u32 val;
-> > > +     int ret;
-> > > +
-> > > +     pcie->irq = platform_get_irq_byname(pdev, "pme");
-> > > +     if (pcie->irq < 0) {
-> > > +             dev_err(&pdev->dev, "Can't get 'pme' IRQ\n");
-> > 
-> > PME
-> 
-> Here should be dts property `pme`, suppose should match
-> platform_get_irq_byname(pdev, "pme");
+diff --git a/tools/perf/arch/arm/util/pmu.c b/tools/perf/arch/arm/util/pmu.c
+index 860a8b42b4b5..46154c226fbb 100644
+--- a/tools/perf/arch/arm/util/pmu.c
++++ b/tools/perf/arch/arm/util/pmu.c
+@@ -12,7 +12,7 @@
+ #include "arm-spe.h"
+ #include "hisi-ptt.h"
+ #include "../../../util/pmu.h"
+-#include "../cs-etm.h"
++#include "cs-etm.h"
+ 
+ struct perf_event_attr
+ *perf_pmu__get_default_config(struct perf_pmu *pmu __maybe_unused)
+-- 
+2.40.1.521.gf1e218fcd8-goog
 
-You can also edit out all the other context and questions if you're
-not responding to them.
-
-There were a lot of other comments that were useful but are not
-relevant to this reply.
-
-Bjorn
