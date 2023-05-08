@@ -2,288 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6596FB99E
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A047B6FB99C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233856AbjEHV17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 17:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
+        id S233877AbjEHV1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 17:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233808AbjEHV1x (ORCPT
+        with ESMTP id S233808AbjEHV1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 17:27:53 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE0086B6
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 14:27:47 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3ef35d44612so55693111cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 14:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1683581266; x=1686173266;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s/5gK8M/80HK8akrc9oY1kCgNbVpDxReudipYj/RHew=;
-        b=h9wTM9A3kRp296JOqWRdtFZsmFCLrV//rkDQ5mNp3/81MH/u/k3AbXvduaze1n0KOZ
-         Fmcls8qNSK65RyrERO17Ikvy7XDqm0F2xprpI2fZzZtOMdX90Iswwrf3DSlWQ5CGZC6q
-         q6l1CxpqXg7Fg8FednkfmBfslns/vSxKC5MdynBw9Vcb25CLiUaGxp8d4UPYHvSQk8mG
-         b3Q8x2noIidSFm/NJRACxqSkr/E6hLNNDwMWB3K41EZW/Ebk7Ls1iuCft6EXyK6skt8H
-         y0YD14ym9WKA8/Idt8TkJhi+uID38vPBPX6LLirbSdTgfF7n1Kk+KxzkNAZtIYcdV2Mk
-         iykA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683581266; x=1686173266;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s/5gK8M/80HK8akrc9oY1kCgNbVpDxReudipYj/RHew=;
-        b=j7ciwbmeiKtMQV+FHEhWJ9IrxTGATLyX42X7EyfNdP03/GRoQY/PBGCldi5A56gJNd
-         +LNQhOwFS0u1ubAmzIt15URDcLNl4rrtzgvM4QMkvfgL2T2pqnFjf4ogqlXKIinIb529
-         cVgySeQ3iA9WfQhe7XQeJBOAuuXz1vVxfext9T8rhb9+rX201JxwkQMr1Hc0a2q9G3K/
-         FfMTowGhysFV6h7ZAqh1naSnL+WYadfupSb9SrBAOYPYzhBicCuPeBXbkLXKXNuo4LsM
-         j4OumMNJwdifC/VP51l15nCHFOhtJa7wa9lCT1BUUXxj3KgHrp8gDdTJ1ZTcconro8z/
-         S3lw==
-X-Gm-Message-State: AC+VfDwjIN+zMvIGu4zPQrsINLybxb1wL1fpuS7zWQhttAAlE0DrfmdP
-        0zDqOgB/Lz9j4qDoBOGjPR9zsxpAk/i5Eyw8WZWlcw==
-X-Google-Smtp-Source: ACHHUZ7eJmXTKgNxS7TlldFQiPMEyTLJrp5S1je99UhtwyLP0ced9iIZHSU/DouaWZf/D7YzYuHfH940tUMV2iTdnys=
-X-Received: by 2002:ac8:59c1:0:b0:3ec:490b:ce6e with SMTP id
- f1-20020ac859c1000000b003ec490bce6emr18145645qtf.48.1683581266624; Mon, 08
- May 2023 14:27:46 -0700 (PDT)
+        Mon, 8 May 2023 17:27:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2FFF3;
+        Mon,  8 May 2023 14:27:25 -0700 (PDT)
+Date:   Mon, 08 May 2023 21:27:23 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683581244;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s7kRYJ2sTswKFD58XBJXwq5aIG7wh5l9VISQ2RiK5QA=;
+        b=1u+vFkosP1AsA/sIBmgH4gJtPjPS8AJ0S+yVjIZMQdTQuSBCtUu7E9oTzoUk/o+ytxTz9c
+        9J8GCdhPGnAOx2o+OGDcHTNxwau4BiYBkBtk9X3lZ3nMYuYNdj0/hZhDjQOGF7+qLLcTMt
+        WB1D8K7t6l2APX1IBQ82gDGxubYQ3oT9DBPqgdakmT6oP5+Zz3HmqqW/PMaUx9VowHD0sN
+        tCjBOzua6mIUrAyPKrvrVzBvsFscoT1nVypAX1N+77SecCM1VyfwDtRB9hvqsgtbV2sorE
+        aEqphPrmLQB8VxqkoRDn4tHyE0CQrNiKi6sB2gXpNte3X184VLzVAwN/ZBkszQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683581244;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s7kRYJ2sTswKFD58XBJXwq5aIG7wh5l9VISQ2RiK5QA=;
+        b=9IeKUKAFh9KuNznLgSyq9vEOCF2eYhRgvCm60Ah/CxG26d6C1aEB8lJAeikIy4tsOw8oyk
+        HasALIB5cgGxbdCw==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: timers/urgent] tick/broadcast: Make broadcast device
+ replacement work correctly
+Cc:     Victor Hassan <victor@allwinnertech.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <87pm7d2z1i.ffs@tglx>
+References: <87pm7d2z1i.ffs@tglx>
 MIME-Version: 1.0
-References: <000000000000258e5e05fae79fc1@google.com> <20230507135844.1231056-1-lrh2000@pku.edu.cn>
-In-Reply-To: <20230507135844.1231056-1-lrh2000@pku.edu.cn>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Mon, 8 May 2023 17:27:10 -0400
-Message-ID: <CA+CK2bBe2YKYM3rUTCnZ0RF=NFUR9VqO-QYn3ygPsFJWLY1MUA@mail.gmail.com>
-Subject: Re: usbdev_mmap causes type confusion in page_table_check
-To:     Ruihan Li <lrh2000@pku.edu.cn>
-Cc:     syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Message-ID: <168358124386.404.12087069170395150328.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 7, 2023 at 9:58=E2=80=AFAM Ruihan Li <lrh2000@pku.edu.cn> wrote=
-:
->
-> Hi all,
+The following commit has been merged into the timers/urgent branch of tip:
 
-Hi Ruihan,
+Commit-ID:     f9d36cf445ffff0b913ba187a3eff78028f9b1fb
+Gitweb:        https://git.kernel.org/tip/f9d36cf445ffff0b913ba187a3eff78028f9b1fb
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Sat, 06 May 2023 18:40:57 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Mon, 08 May 2023 23:18:16 +02:00
 
-Thank you for bisecting, and great analysis of the problem.
+tick/broadcast: Make broadcast device replacement work correctly
 
-> Recently, syzbot reported [1] ("kernel BUG in page_table_check_clear"). A=
-fter
-> some bisection, I found out that when usbdev_mmap calls remap_pfn_range o=
-n
-> kmalloc'ed memory, it causes type confusion between struct folio and slab=
- in
-> page_table_check. As I will explain below, it seems that both usb-side an=
-d
-> mm-side need some fixes. So I have cc'd linux-usb and linux-mm here, as w=
-ell
-> as their maintainers, to see whether there are any comments on the propos=
-ed
-> way to fix.
->
->  [1] https://lore.kernel.org/all/000000000000258e5e05fae79fc1@google.com/
->
-> To handle mmap requests for /dev/bus/usb/XXX/YYY, usbdev_mmap first alloc=
-ates
-> memory by calling usb_alloc_coherent and then maps it into the user space
-> using remap_pfn_range:
->
-> static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
-> {
->         // ...
->         mem =3D usb_alloc_coherent(ps->dev, size, GFP_USER | __GFP_NOWARN=
-,
->                         &dma_handle);
->         // ...
->         if (hcd->localmem_pool || !hcd_uses_dma(hcd)) {
->                 if (remap_pfn_range(vma, vma->vm_start,
->                                     virt_to_phys(usbm->mem) >> PAGE_SHIFT=
-,
->                                     size, vma->vm_page_prot) < 0) {
->                         // ...
->                 }
->         }
->         // ...
-> }
->
-> Note that in this case, we consider the DMA-unavailable scenario, which, =
-to be
-> honest, is rare in practice. However, syzbot emulates USB devices using a
-> module named dummy_hcd, and since these devices are emulated, DMA is not
-> available at all.
->
-> Meanwhile, usb_alloc_coherent calls hcd_buffer_alloc, which uses kmalloc =
-for
-> memory allocation:
->
-> void *hcd_buffer_alloc(
->         struct usb_bus          *bus,
->         size_t                  size,
->         gfp_t                   mem_flags,
->         dma_addr_t              *dma
-> )
-> {
->         // ...
->         if (!hcd_uses_dma(hcd)) {
->                 *dma =3D ~(dma_addr_t) 0;
->                 return kmalloc(size, mem_flags);
->         }
->         // ...
-> }
->
-> However, during the update of the page table to map the kmalloc'd page in=
-to
-> the user space, page_table_check_set attempts to determine whether the pa=
-ge is
-> anonymous using PageAnon:
->
-> static void page_table_check_set(struct mm_struct *mm, unsigned long addr=
-,
->                                  unsigned long pfn, unsigned long pgcnt,
->                                  bool rw)
-> {
->         // ...
->         anon =3D PageAnon(page);
->         for (i =3D 0; i < pgcnt; i++) {
->                 // ...
->                 if (anon) {
->                         BUG_ON(atomic_read(&ptc->file_map_count));
->                         BUG_ON(atomic_inc_return(&ptc->anon_map_count) > =
-1 && rw);
->                 } else {
->                         BUG_ON(atomic_read(&ptc->anon_map_count));
->                         BUG_ON(atomic_inc_return(&ptc->file_map_count) < =
-0);
->                 }
->                 // ...
->         }
->         // ...
-> }
->
-> This call to PageAnon is invalid for slab pages because slab reuses the b=
-its
-> in struct page/folio to store its internal states, and the anonymity bit =
-only
-> exists in struct page/folio. As a result, the counters are incorrectly up=
-dated
-> and checked in page_table_check_set and page_table_check_clear, leading t=
-o the
-> bug being raised.
+When a tick broadcast clockevent device is initialized for one shot mode
+then tick_broadcast_setup_oneshot() OR's the periodic broadcast mode
+cpumask into the oneshot broadcast cpumask.
 
-We should change anon boolean to be:
+This is required when switching from periodic broadcast mode to oneshot
+broadcast mode to ensure that CPUs which are waiting for periodic
+broadcast are woken up on the next tick.
 
-anon =3D !PageSlab(page) && PageAnon(page);
+But it is subtly broken, when an active broadcast device is replaced and
+the system is already in oneshot (NOHZ/HIGHRES) mode. Victor observed
+this and debugged the issue.
 
-This way, we will have a correct way to determine anon pages, and the
-rest will fall into file_map_count. The file (non-anon) PTEs are OK to
-be double mapped, so there won't be any problems from page_table_check
-point of view even if it is a slab page.
+Then the OR of the periodic broadcast CPU mask is wrong as the periodic
+cpumask bits are sticky after tick_broadcast_enable() set it for a CPU
+unless explicitly cleared via tick_broadcast_disable().
 
-> Intuitively, I don't think it's reasonable to call remap_pfn_range to map
-> kmalloc'd pages into the user space. In the past, kmalloc'd pages might h=
-ave
-> had alignment issues when certain memory debugging options were enabled.
-> Although this has been fixed in commit 59bb47985c1d ("mm, sl[aou]b: guara=
-ntee
-> natural alignment for kmalloc(power-of-two)"), it has been shown that
-> performing such mapping is still buggy, as demonstrated by the type confu=
-sion
-> in page_table_check. Therefore, I propose adding a new function,
-> hcd_buffer_alloc_pages, to guarantee the page requirements (i.e., no
-> intermediate allocators, such as slab/slub). Below is a diff as a quick
-> example:
->
-> diff --git a/drivers/usb/core/buffer.c b/drivers/usb/core/buffer.c
-> index fbb087b72..514bdc949 100644
-> --- a/drivers/usb/core/buffer.c
-> +++ b/drivers/usb/core/buffer.c
-> @@ -112,7 +112,7 @@ void hcd_buffer_destroy(struct usb_hcd *hcd)
->   * better sharing and to leverage mm/slab.c intelligence.
->   */
->
-> -void *hcd_buffer_alloc(
-> +void *hcd_buffer_alloc_pages(
->         struct usb_bus          *bus,
->         size_t                  size,
->         gfp_t                   mem_flags,
-> @@ -126,12 +126,13 @@ void *hcd_buffer_alloc(
->                 return NULL;
->
->         if (hcd->localmem_pool)
-> -               return gen_pool_dma_alloc(hcd->localmem_pool, size, dma);
-> +               return gen_pool_dma_alloc_align(hcd->localmem_pool, size,
-> +                                               dma, PAGE_SIZE);
->
->         /* some USB hosts just use PIO */
->         if (!hcd_uses_dma(hcd)) {
->                 *dma =3D ~(dma_addr_t) 0;
-> -               return kmalloc(size, mem_flags);
-> +               return (void *)__get_free_pages(mem_flags, get_order(size=
-));
->         }
->
->         for (i =3D 0; i < HCD_BUFFER_POOLS; i++) {
->
-> (There appears to be another issue. In cases where hcd->localmem_pool is
-> non-null, I suspect that remap_pfn_range should not be used. This is a DM=
-A
-> scenario, and the DMA handle is properly returned, so dma_mmap_coherent s=
-hould
-> be used instead. Am I correct?)
->
-> This does not actually fix the type confusion bug in page_table_check_*. =
-It
-> should be noted that by leveraging /dev/mem, users can map arbitrary phys=
-ical
-> memory regions into the user space, which is also achieved through
-> remap_pfn_range. I'm not 100% certain whether a fix is necessary, as one =
-may
-> argue that using page table checks (a kernel hardening technique, which m=
-eans
-> security is important) and /dev/mem (clearly insecure and potentially
+That means that this sets all other CPUs which have tick broadcasting
+enabled at that point unconditionally in the oneshot broadcast mask.
 
-Yes, /dev/mem device is a security problem, and would not work with a
-hardern kernel.
+If the affected CPUs were already idle and had their bits set in the
+oneshot broadcast mask then this does no harm. But for non idle CPUs
+which were not set this corrupts their state.
 
-> exploitable) together is completely unreasonable.
->
-> If a fix is deemed necessary, I think taking the flag VM_PFNMAP into
-> consideration is a reasonable solution, that said, in page_table_check_*,
->  * when the VM_PFNMAP flag is set, all operations and checks on
->    file_map_count and anon_map_count counters should be bypassed;
->  * when the VM_PFNMAP flag is not set, an additionally check to ensure
->    folio_test_slab evaluates to false should be performed.
->
-> The implementation should be straightforward. However, I noticed that the
-> page_table_check_* hooks are called in arch/* instead of mm/*, which not =
-only
-> limits its supported architectures (currently x86_64, arm64, and risc-v) =
-but
-> also makes it difficult to get the struct vm_area_struct as a parameter, =
-since
-> the struct vm_area_struct is not passed from mm/* to arch/* when mapping =
-or
-> unmapping pages. I have looked at d283d422c6c4 ("x86: mm: add x86_64 supp=
-ort
-> for page table check"), but I don't see a valid reason. Perhaps Pasha can
-> provide some explanation about this implementation choice?
+On their next invocation of tick_broadcast_enable() they observe the bit
+set, which indicates that the broadcast for the CPU is already set up.
+As a consequence they fail to update the broadcast event even if their
+earliest expiring timer is before the actually programmed broadcast
+event.
 
-We specifically decided not to use VMA information in order to avoid
-relying on MM state (except for limited "struct page" info). The
-page_table_check is a separate from Linux-MM state machine that
-verifies that the user accessible pages are not falsely shared.
+If the programmed broadcast event is far in the future, then this can
+cause stalls or trigger the hung task detector.
 
-Pasha
+Avoid this by telling tick_broadcast_setup_oneshot() explicitly whether
+this is the initial switch over from periodic to oneshot broadcast which
+must take the periodic broadcast mask into account. In the case of
+initialization of a replacement device this prevents that the broadcast
+oneshot mask is modified.
+
+There is a second problem with broadcast device replacement in this
+function. The broadcast device is only armed when the previous state of
+the device was periodic.
+
+That is correct for the switch from periodic broadcast mode to oneshot
+broadcast mode as the underlying broadcast device could operate in
+oneshot state already due to lack of periodic state in hardware. In that
+case it is already armed to expire at the next tick.
+
+For the replacement case this is wrong as the device is in shutdown
+state. That means that any already pending broadcast event will not be
+armed.
+
+This went unnoticed because any CPU which goes idle will observe that
+the broadcast device has an expiry time of KTIME_MAX and therefore any
+CPUs next timer event will be earlier and cause a reprogramming of the
+broadcast device. But that does not guarantee that the events of the
+CPUs which were already in idle are delivered on time.
+
+Fix this by arming the newly installed device for an immediate event
+which will reevaluate the per CPU expiry times and reprogram the
+broadcast device accordingly. This is simpler than caching the last
+expiry time in yet another place or saving it before the device exchange
+and handing it down to the setup function. Replacement of broadcast
+devices is not a frequent operation and usually happens once somewhere
+late in the boot process.
+
+Fixes: 9c336c9935cf ("tick/broadcast: Allow late registered device to enter oneshot mode")
+Reported-by: Victor Hassan <victor@allwinnertech.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+Link: https://lore.kernel.org/r/87pm7d2z1i.ffs@tglx
+
+---
+ kernel/time/tick-broadcast.c | 120 ++++++++++++++++++++++++----------
+ 1 file changed, 88 insertions(+), 32 deletions(-)
+
+diff --git a/kernel/time/tick-broadcast.c b/kernel/time/tick-broadcast.c
+index 93bf2b4..771d1e0 100644
+--- a/kernel/time/tick-broadcast.c
++++ b/kernel/time/tick-broadcast.c
+@@ -35,14 +35,15 @@ static __cacheline_aligned_in_smp DEFINE_RAW_SPINLOCK(tick_broadcast_lock);
+ #ifdef CONFIG_TICK_ONESHOT
+ static DEFINE_PER_CPU(struct clock_event_device *, tick_oneshot_wakeup_device);
+ 
+-static void tick_broadcast_setup_oneshot(struct clock_event_device *bc);
++static void tick_broadcast_setup_oneshot(struct clock_event_device *bc, bool from_periodic);
+ static void tick_broadcast_clear_oneshot(int cpu);
+ static void tick_resume_broadcast_oneshot(struct clock_event_device *bc);
+ # ifdef CONFIG_HOTPLUG_CPU
+ static void tick_broadcast_oneshot_offline(unsigned int cpu);
+ # endif
+ #else
+-static inline void tick_broadcast_setup_oneshot(struct clock_event_device *bc) { BUG(); }
++static inline void
++tick_broadcast_setup_oneshot(struct clock_event_device *bc, bool from_periodic) { BUG(); }
+ static inline void tick_broadcast_clear_oneshot(int cpu) { }
+ static inline void tick_resume_broadcast_oneshot(struct clock_event_device *bc) { }
+ # ifdef CONFIG_HOTPLUG_CPU
+@@ -264,7 +265,7 @@ int tick_device_uses_broadcast(struct clock_event_device *dev, int cpu)
+ 		if (tick_broadcast_device.mode == TICKDEV_MODE_PERIODIC)
+ 			tick_broadcast_start_periodic(bc);
+ 		else
+-			tick_broadcast_setup_oneshot(bc);
++			tick_broadcast_setup_oneshot(bc, false);
+ 		ret = 1;
+ 	} else {
+ 		/*
+@@ -500,7 +501,7 @@ void tick_broadcast_control(enum tick_broadcast_mode mode)
+ 			if (tick_broadcast_device.mode == TICKDEV_MODE_PERIODIC)
+ 				tick_broadcast_start_periodic(bc);
+ 			else
+-				tick_broadcast_setup_oneshot(bc);
++				tick_broadcast_setup_oneshot(bc, false);
+ 		}
+ 	}
+ out:
+@@ -1020,48 +1021,101 @@ static inline ktime_t tick_get_next_period(void)
+ /**
+  * tick_broadcast_setup_oneshot - setup the broadcast device
+  */
+-static void tick_broadcast_setup_oneshot(struct clock_event_device *bc)
++static void tick_broadcast_setup_oneshot(struct clock_event_device *bc,
++					 bool from_periodic)
+ {
+ 	int cpu = smp_processor_id();
++	ktime_t nexttick = 0;
+ 
+ 	if (!bc)
+ 		return;
+ 
+-	/* Set it up only once ! */
+-	if (bc->event_handler != tick_handle_oneshot_broadcast) {
+-		int was_periodic = clockevent_state_periodic(bc);
+-
+-		bc->event_handler = tick_handle_oneshot_broadcast;
+-
++	/*
++	 * When the broadcast device was switched to oneshot by the first
++	 * CPU handling the NOHZ change, the other CPUs will reach this
++	 * code via hrtimer_run_queues() -> tick_check_oneshot_change()
++	 * too. Set up the broadcast device only once!
++	 */
++	if (bc->event_handler == tick_handle_oneshot_broadcast) {
+ 		/*
+-		 * We must be careful here. There might be other CPUs
+-		 * waiting for periodic broadcast. We need to set the
+-		 * oneshot_mask bits for those and program the
+-		 * broadcast device to fire.
++		 * The CPU which switched from periodic to oneshot mode
++		 * set the broadcast oneshot bit for all other CPUs which
++		 * are in the general (periodic) broadcast mask to ensure
++		 * that CPUs which wait for the periodic broadcast are
++		 * woken up.
++		 *
++		 * Clear the bit for the local CPU as the set bit would
++		 * prevent the first tick_broadcast_enter() after this CPU
++		 * switched to oneshot state to program the broadcast
++		 * device.
++		 *
++		 * This code can also be reached via tick_broadcast_control(),
++		 * but this cannot avoid the tick_broadcast_clear_oneshot()
++		 * as that would break the periodic to oneshot transition of
++		 * secondary CPUs. But that's harmless as the below only
++		 * clears already cleared bits.
+ 		 */
++		tick_broadcast_clear_oneshot(cpu);
++		return;
++	}
++
++
++	bc->event_handler = tick_handle_oneshot_broadcast;
++	bc->next_event = KTIME_MAX;
++
++	/*
++	 * When the tick mode is switched from periodic to oneshot it must
++	 * be ensured that CPUs which are waiting for periodic broadcast
++	 * get their wake-up at the next tick.  This is achieved by ORing
++	 * tick_broadcast_mask into tick_broadcast_oneshot_mask.
++	 *
++	 * For other callers, e.g. broadcast device replacement,
++	 * tick_broadcast_oneshot_mask must not be touched as this would
++	 * set bits for CPUs which are already NOHZ, but not idle. Their
++	 * next tick_broadcast_enter() would observe the bit set and fail
++	 * to update the expiry time and the broadcast event device.
++	 */
++	if (from_periodic) {
+ 		cpumask_copy(tmpmask, tick_broadcast_mask);
++		/* Remove the local CPU as it is obviously not idle */
+ 		cpumask_clear_cpu(cpu, tmpmask);
+-		cpumask_or(tick_broadcast_oneshot_mask,
+-			   tick_broadcast_oneshot_mask, tmpmask);
++		cpumask_or(tick_broadcast_oneshot_mask, tick_broadcast_oneshot_mask, tmpmask);
+ 
+-		if (was_periodic && !cpumask_empty(tmpmask)) {
+-			ktime_t nextevt = tick_get_next_period();
++		/*
++		 * Ensure that the oneshot broadcast handler will wake the
++		 * CPUs which are still waiting for periodic broadcast.
++		 */
++		nexttick = tick_get_next_period();
++		tick_broadcast_init_next_event(tmpmask, nexttick);
+ 
+-			clockevents_switch_state(bc, CLOCK_EVT_STATE_ONESHOT);
+-			tick_broadcast_init_next_event(tmpmask, nextevt);
+-			tick_broadcast_set_event(bc, cpu, nextevt);
+-		} else
+-			bc->next_event = KTIME_MAX;
+-	} else {
+ 		/*
+-		 * The first cpu which switches to oneshot mode sets
+-		 * the bit for all other cpus which are in the general
+-		 * (periodic) broadcast mask. So the bit is set and
+-		 * would prevent the first broadcast enter after this
+-		 * to program the bc device.
++		 * If the underlying broadcast clock event device is
++		 * already in oneshot state, then there is nothing to do.
++		 * The device was already armed for the next tick
++		 * in tick_handle_broadcast_periodic()
+ 		 */
+-		tick_broadcast_clear_oneshot(cpu);
++		if (clockevent_state_oneshot(bc))
++			return;
+ 	}
++
++	/*
++	 * When switching from periodic to oneshot mode arm the broadcast
++	 * device for the next tick.
++	 *
++	 * If the broadcast device has been replaced in oneshot mode and
++	 * the oneshot broadcast mask is not empty, then arm it to expire
++	 * immediately in order to reevaluate the next expiring timer.
++	 * @nexttick is 0 and therefore in the past which will cause the
++	 * clockevent code to force an event.
++	 *
++	 * For both cases the programming can be avoided when the oneshot
++	 * broadcast mask is empty.
++	 *
++	 * tick_broadcast_set_event() implicitly switches the broadcast
++	 * device to oneshot state.
++	 */
++	if (!cpumask_empty(tick_broadcast_oneshot_mask))
++		tick_broadcast_set_event(bc, cpu, nexttick);
+ }
+ 
+ /*
+@@ -1070,14 +1124,16 @@ static void tick_broadcast_setup_oneshot(struct clock_event_device *bc)
+ void tick_broadcast_switch_to_oneshot(void)
+ {
+ 	struct clock_event_device *bc;
++	enum tick_device_mode oldmode;
+ 	unsigned long flags;
+ 
+ 	raw_spin_lock_irqsave(&tick_broadcast_lock, flags);
+ 
++	oldmode = tick_broadcast_device.mode;
+ 	tick_broadcast_device.mode = TICKDEV_MODE_ONESHOT;
+ 	bc = tick_broadcast_device.evtdev;
+ 	if (bc)
+-		tick_broadcast_setup_oneshot(bc);
++		tick_broadcast_setup_oneshot(bc, oldmode == TICKDEV_MODE_PERIODIC);
+ 
+ 	raw_spin_unlock_irqrestore(&tick_broadcast_lock, flags);
+ }
