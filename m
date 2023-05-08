@@ -2,496 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659086F9F07
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7D46F9F0C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232637AbjEHF25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 01:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
+        id S232645AbjEHF3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 01:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbjEHF2w (ORCPT
+        with ESMTP id S229662AbjEHF3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 01:28:52 -0400
-Received: from out-54.mta0.migadu.com (out-54.mta0.migadu.com [91.218.175.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFB7525B
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 22:28:49 -0700 (PDT)
-Date:   Mon, 8 May 2023 13:28:43 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683523727;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z0Dx9RYmPDwV1Qt3NexOcMd4dEq70AmaHoEH0q8Dqlw=;
-        b=oBF7E7LQnImVIHnM+SeBDcM88CPfqLb5ZA68/lc5iDtcULJICN15JJpM5TjggcMNgBuP1O
-        MJ9T3WSRmN4Mn0h6f2Ss6x9+tpWktDcj3u4odXHo1qLl+aundf5Mrby40SqkoN6YxalJPD
-        uRaZ+PXR1Jx57B6CbSKdFGzolbRkE/4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     Ohad Sharabi <osharabi@habana.ai>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] accel/habanalabs: Make use of rhashtable
-Message-ID: <ZFiIiwbyHi+dU3hm@chq-MS-7D45>
-References: <20230428144903.26048-1-cai.huoqing@linux.dev>
- <CAFCwf13cqApEckT89kJdtNZppMNjDVJQtOCL_3hchY7oYDvrUQ@mail.gmail.com>
- <ZFMfu7BuMXdNReLy@chq-MS-7D45>
- <CAFCwf13zp78dKKAU+KcWs+4jC+jdd5dU8n8N0NfHg+AXOGR5aw@mail.gmail.com>
- <ZFYdCgWi9Io+bdvv@chq-MS-7D45>
- <CAFCwf13Pb-eRU=KuKS4eN87p6VnGivH71On3S4QW2U=JJJJFMA@mail.gmail.com>
+        Mon, 8 May 2023 01:29:51 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD43A5D7;
+        Sun,  7 May 2023 22:29:49 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3485TPVo043363;
+        Mon, 8 May 2023 00:29:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683523765;
+        bh=pQ0TgZRCQgJhRr1DJoN+C7+TJSytbKAikGHfK/voFrI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=CdkdToo6SPQAuJso8YGUtKdgbYpGqYWBAcKyM/J+EQRl9j/qXu5K2MkqLKplMbWUj
+         8awUh9rMu/DnE7SZTOWDSfuIpMB9oHZG9luUeIpbrJbxG/88S2CE7dGcEm18VSbf3c
+         9xaP3ArSA1Gt1YFNCg+Dss37/Xf9gJeB9wSEANmI=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3485TPYW059921
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 8 May 2023 00:29:25 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 8
+ May 2023 00:29:25 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 8 May 2023 00:29:25 -0500
+Received: from [10.24.69.26] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3485TMf4081139;
+        Mon, 8 May 2023 00:29:22 -0500
+Message-ID: <11c63702-cd25-67c9-d0bc-21ec47e14c98@ti.com>
+Date:   Mon, 8 May 2023 10:59:21 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFCwf13Pb-eRU=KuKS4eN87p6VnGivH71On3S4QW2U=JJJJFMA@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: RE: [PATCH v2 4/4] spi: cadence-quadspi: use STIG mode for small
+ reads
+To:     Yoshitaka Ikeda <ikeda@nskint.co.jp>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vaishnav Achath <vaishnav.a@ti.com>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "Takahiro.Kuwano@infineon.com" <Takahiro.Kuwano@infineon.com>,
+        Pratyush Yadav <ptyadav@amazon.de>,
+        Mark Brown <broonie@kernel.org>
+References: <20230125081023.1573712-1-d-gole@ti.com>
+ <20230125081023.1573712-5-d-gole@ti.com>
+ <OSZPR01MB70048CE259A3D63C4179199A8B659@OSZPR01MB7004.jpnprd01.prod.outlook.com>
+ <044a723e-b81e-f6f2-8bf7-3680a10abc86@ti.com>
+ <OSZPR01MB7004D229048A950C93B40CC88B6A9@OSZPR01MB7004.jpnprd01.prod.outlook.com>
+ <b1d30948-ba3d-a4cc-e1ed-851a9dedba7c@ti.com>
+ <OSZPR01MB7004907B2FB95F45E9B83FEC8B719@OSZPR01MB7004.jpnprd01.prod.outlook.com>
+Content-Language: en-US
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <OSZPR01MB7004907B2FB95F45E9B83FEC8B719@OSZPR01MB7004.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07 5月 23 16:17:55, Oded Gabbay wrote:
-> On Sat, May 6, 2023 at 12:25 PM Cai Huoqing <cai.huoqing@linux.dev> wrote:
-> >
-> > On 04 5月 23 09:12:40, Oded Gabbay wrote:
-> > > On Thu, May 4, 2023 at 6:00 AM Cai Huoqing <cai.huoqing@linux.dev> wrote:
-> > > >
-> > > > On 30 4月 23 09:36:29, Oded Gabbay wrote:
-> > > > > On Fri, Apr 28, 2023 at 5:49 PM Cai Huoqing <cai.huoqing@linux.dev> wrote:
-> > > > > >
-> > > > > > Using rhashtable to accelerate the search for userptr by address,
-> > > > > > instead of using a list.
-> > > > > >
-> > > > > > Preferably, the lookup complexity of a hash table is O(1).
-> > > > > >
-> > > > > > This patch will speedup the method
-> > > > > > hl_userptr_is_pinned by rhashtable_lookup_fast.
-> > > > > >
-> > > > > > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-> > > > >
-> > > > > Thanks for the patch, but the reason we never optimized this path is
-> > > > > because this code path is only relevant for Goya, which we don't want
-> > > > > to change the code for anymore.
-> > > > > For Gaudi we don't pin the memory in the host during submission. It is
-> > > > > done much earlier, when the user maps the memory to the device. The
-> > > > > code path in Gaudi is only in case the device is loaded with its MMU
-> > > > > disabled. This mode was used only for debug/bring-up of the ASIC many
-> > > > > years ago. As you can see in Gaudi2, that mode was dropped even for
-> > > >
-> > > > Do you mean that the userspace directly call HL_MEM_OP_MAP/HL_MEM_OP_UNMAP
-> > > > with a flag HL_MEM_USERPTR instead of pin host mem in submissmion?
-> > > Yes, correct.
-> >
-> > BTW,
-> >
-> > Another question,
-> >
-> > I found the PMMU in the driver code, does it support for like CudaHostAlloc
-> > and hostMap?
-> In Habana, you allocate host memory by yourself, not through the
-> driver. Just do malloc in your application.
-> Then you need to map it to the device to get a virtual address that
-> the device is familiar with.
-> This is done by calling the MEMORY ioctl with the MAP opcode.
+
+
+On 08/05/23 06:06, Yoshitaka Ikeda wrote:
+> Hi Dhruva,
 > 
-> >
-> > gaudi seems can access host memory by pcie, some kernel can compute data
-> > in host directly, right?
-> In theory, yes. However, we don't do that. We move data into the HBM
-> and then the kernels work on the data.
-> Oded
-Agree, but What is the purpose of designing pmmu,
-do you think using the pagetable in PMMU can speed up memcpy
-H2D/D2H  or some memory notity between CPU and device ?
+> Sorry for the late reply as I was on a long vacation.
+> 
+>> Thanks for sharing, I went through and couldn't really find any major changes
+>> at the controller level.
+>> So I am wondering if some specific sequence of flash operations on your
+>> device is exposing some issues in the driver's STIG reads.
+> 
+> Thank you for looking into this.
+> 
+>> Please can you share some logs with the following patch:
+>> I am trying to see a pattern that may be causing issues.
+>> I am unable to reproduce this on my end at the moment.
+> 
+> The logs obtained with the patch applied are as follows:
 
-Thanks
-Cai-
+Thanks for sharing the logs. It has made me concerned about something,
 
-> >
-> > But accessing via PCIE(64GB/s), compared to accessing HBM(3T/s),
-> > has too low bandwidth.
-> >
-> > for nvidia, it has NVLINK.
-> >
-> > Thank,
-> > Cai-
-> >
-> > >
-> > > >
-> > > > > debug/bring-up.
-> > > > >
-> > > > > Therefore, I prefer not to take this patch as validation for both
-> > > > > functionality and performance will take time which will be better
-> > > > > spent elsewhere.
-> > > > >
-> > > > > Thanks,
-> > > > > Oded
-> > > > >
-> > > > > > ---
-> > > > > > v1->v2:
-> > > > > > Use rhashtable_free_and_destroy in hl_userptr_delete_list.
-> > > > > >
-> > > > > >  .../habanalabs/common/command_submission.c    | 16 ++++++--
-> > > > > >  drivers/accel/habanalabs/common/habanalabs.h  | 19 +++++----
-> > > > > >  drivers/accel/habanalabs/common/memory.c      | 39 +++++++++++--------
-> > > > > >  drivers/accel/habanalabs/gaudi/gaudi.c        | 16 +++++---
-> > > > > >  drivers/accel/habanalabs/goya/goya.c          | 14 ++++---
-> > > > > >  5 files changed, 65 insertions(+), 39 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/accel/habanalabs/common/command_submission.c b/drivers/accel/habanalabs/common/command_submission.c
-> > > > > > index af9d2e22c6e7..35c2ab934396 100644
-> > > > > > --- a/drivers/accel/habanalabs/common/command_submission.c
-> > > > > > +++ b/drivers/accel/habanalabs/common/command_submission.c
-> > > > > > @@ -312,7 +312,7 @@ static int cs_parser(struct hl_fpriv *hpriv, struct hl_cs_job *job)
-> > > > > >         parser.job_id = job->id;
-> > > > > >
-> > > > > >         parser.hw_queue_id = job->hw_queue_id;
-> > > > > > -       parser.job_userptr_list = &job->userptr_list;
-> > > > > > +       parser.job_userptr_ht = &job->userptr_ht;
-> > > > > >         parser.patched_cb = NULL;
-> > > > > >         parser.user_cb = job->user_cb;
-> > > > > >         parser.user_cb_size = job->user_cb_size;
-> > > > > > @@ -351,7 +351,7 @@ static void hl_complete_job(struct hl_device *hdev, struct hl_cs_job *job)
-> > > > > >         struct hl_cs *cs = job->cs;
-> > > > > >
-> > > > > >         if (is_cb_patched(hdev, job)) {
-> > > > > > -               hl_userptr_delete_list(hdev, &job->userptr_list);
-> > > > > > +               hl_userptr_delete_list(hdev, &job->userptr_ht);
-> > > > > >
-> > > > > >                 /*
-> > > > > >                  * We might arrive here from rollback and patched CB wasn't
-> > > > > > @@ -1284,6 +1284,7 @@ struct hl_cs_job *hl_cs_allocate_job(struct hl_device *hdev,
-> > > > > >                 enum hl_queue_type queue_type, bool is_kernel_allocated_cb)
-> > > > > >  {
-> > > > > >         struct hl_cs_job *job;
-> > > > > > +       int rc;
-> > > > > >
-> > > > > >         job = kzalloc(sizeof(*job), GFP_ATOMIC);
-> > > > > >         if (!job)
-> > > > > > @@ -1296,13 +1297,20 @@ struct hl_cs_job *hl_cs_allocate_job(struct hl_device *hdev,
-> > > > > >         job->queue_type = queue_type;
-> > > > > >         job->is_kernel_allocated_cb = is_kernel_allocated_cb;
-> > > > > >
-> > > > > > -       if (is_cb_patched(hdev, job))
-> > > > > > -               INIT_LIST_HEAD(&job->userptr_list);
-> > > > > > +       if (is_cb_patched(hdev, job)) {
-> > > > > > +               rc = rhashtable_init(&job->userptr_ht, &hl_userptr_rht_params);
-> > > > > > +               if (rc)
-> > > > > > +                       goto free_job;
-> > > > > > +       }
-> > > > > >
-> > > > > >         if (job->queue_type == QUEUE_TYPE_EXT)
-> > > > > >                 INIT_WORK(&job->finish_work, job_wq_completion);
-> > > > > >
-> > > > > >         return job;
-> > > > > > +
-> > > > > > +free_job:
-> > > > > > +       kfree(job);
-> > > > > > +       return NULL;
-> > > > > >  }
-> > > > > >
-> > > > > >  static enum hl_cs_type hl_cs_get_cs_type(u32 cs_type_flags)
-> > > > > > diff --git a/drivers/accel/habanalabs/common/habanalabs.h b/drivers/accel/habanalabs/common/habanalabs.h
-> > > > > > index eaae69a9f817..9c876d1480d2 100644
-> > > > > > --- a/drivers/accel/habanalabs/common/habanalabs.h
-> > > > > > +++ b/drivers/accel/habanalabs/common/habanalabs.h
-> > > > > > @@ -19,6 +19,7 @@
-> > > > > >  #include <linux/dma-direction.h>
-> > > > > >  #include <linux/scatterlist.h>
-> > > > > >  #include <linux/hashtable.h>
-> > > > > > +#include <linux/rhashtable.h>
-> > > > > >  #include <linux/debugfs.h>
-> > > > > >  #include <linux/rwsem.h>
-> > > > > >  #include <linux/eventfd.h>
-> > > > > > @@ -540,6 +541,8 @@ struct hl_hints_range {
-> > > > > >         u64 end_addr;
-> > > > > >  };
-> > > > > >
-> > > > > > +extern const struct rhashtable_params hl_userptr_rht_params;
-> > > > > > +
-> > > > > >  /**
-> > > > > >   * struct asic_fixed_properties - ASIC specific immutable properties.
-> > > > > >   * @hw_queues_props: H/W queues properties.
-> > > > > > @@ -1915,7 +1918,7 @@ struct hl_ctx_mgr {
-> > > > > >  /**
-> > > > > >   * struct hl_userptr - memory mapping chunk information
-> > > > > >   * @vm_type: type of the VM.
-> > > > > > - * @job_node: linked-list node for hanging the object on the Job's list.
-> > > > > > + * @job_node: hashtable node for hanging the object on the Job's list.
-> > > > > >   * @pages: pointer to struct page array
-> > > > > >   * @npages: size of @pages array
-> > > > > >   * @sgt: pointer to the scatter-gather table that holds the pages.
-> > > > > > @@ -1928,7 +1931,7 @@ struct hl_ctx_mgr {
-> > > > > >   */
-> > > > > >  struct hl_userptr {
-> > > > > >         enum vm_type            vm_type; /* must be first */
-> > > > > > -       struct list_head        job_node;
-> > > > > > +       struct rhash_head       job_node;
-> > > > > >         struct page             **pages;
-> > > > > >         unsigned int            npages;
-> > > > > >         struct sg_table         *sgt;
-> > > > > > @@ -2028,7 +2031,7 @@ struct hl_cs {
-> > > > > >   * @patched_cb: in case of patching, this is internal CB which is submitted on
-> > > > > >   *             the queue instead of the CB we got from the IOCTL.
-> > > > > >   * @finish_work: workqueue object to run when job is completed.
-> > > > > > - * @userptr_list: linked-list of userptr mappings that belong to this job and
-> > > > > > + * @userptr_ht: hashtable of userptr mappings that belong to this job and
-> > > > > >   *                     wait for completion.
-> > > > > >   * @debugfs_list: node in debugfs list of command submission jobs.
-> > > > > >   * @refcount: reference counter for usage of the CS job.
-> > > > > > @@ -2056,7 +2059,7 @@ struct hl_cs_job {
-> > > > > >         struct hl_cb            *user_cb;
-> > > > > >         struct hl_cb            *patched_cb;
-> > > > > >         struct work_struct      finish_work;
-> > > > > > -       struct list_head        userptr_list;
-> > > > > > +       struct rhashtable       userptr_ht;
-> > > > > >         struct list_head        debugfs_list;
-> > > > > >         struct kref             refcount;
-> > > > > >         enum hl_queue_type      queue_type;
-> > > > > > @@ -2075,7 +2078,7 @@ struct hl_cs_job {
-> > > > > >   * @user_cb: the CB we got from the user.
-> > > > > >   * @patched_cb: in case of patching, this is internal CB which is submitted on
-> > > > > >   *             the queue instead of the CB we got from the IOCTL.
-> > > > > > - * @job_userptr_list: linked-list of userptr mappings that belong to the related
-> > > > > > + * @job_userptr_ht: hashtable of userptr mappings that belong to the related
-> > > > > >   *                     job and wait for completion.
-> > > > > >   * @cs_sequence: the sequence number of the related CS.
-> > > > > >   * @queue_type: the type of the H/W queue this job is submitted to.
-> > > > > > @@ -2098,7 +2101,7 @@ struct hl_cs_job {
-> > > > > >  struct hl_cs_parser {
-> > > > > >         struct hl_cb            *user_cb;
-> > > > > >         struct hl_cb            *patched_cb;
-> > > > > > -       struct list_head        *job_userptr_list;
-> > > > > > +       struct rhashtable       *job_userptr_ht;
-> > > > > >         u64                     cs_sequence;
-> > > > > >         enum hl_queue_type      queue_type;
-> > > > > >         u32                     ctx_id;
-> > > > > > @@ -3760,9 +3763,9 @@ int hl_pin_host_memory(struct hl_device *hdev, u64 addr, u64 size,
-> > > > > >                         struct hl_userptr *userptr);
-> > > > > >  void hl_unpin_host_memory(struct hl_device *hdev, struct hl_userptr *userptr);
-> > > > > >  void hl_userptr_delete_list(struct hl_device *hdev,
-> > > > > > -                               struct list_head *userptr_list);
-> > > > > > +                               struct rhashtable *userptr_ht);
-> > > > > >  bool hl_userptr_is_pinned(struct hl_device *hdev, u64 addr, u32 size,
-> > > > > > -                               struct list_head *userptr_list,
-> > > > > > +                               struct rhashtable *userptr_ht,
-> > > > > >                                 struct hl_userptr **userptr);
-> > > > > >
-> > > > > >  int hl_mmu_init(struct hl_device *hdev);
-> > > > > > diff --git a/drivers/accel/habanalabs/common/memory.c b/drivers/accel/habanalabs/common/memory.c
-> > > > > > index a7b6a273ce21..fa2104e33639 100644
-> > > > > > --- a/drivers/accel/habanalabs/common/memory.c
-> > > > > > +++ b/drivers/accel/habanalabs/common/memory.c
-> > > > > > @@ -23,6 +23,13 @@ MODULE_IMPORT_NS(DMA_BUF);
-> > > > > >
-> > > > > >  #define MEM_HANDLE_INVALID     ULONG_MAX
-> > > > > >
-> > > > > > +const struct rhashtable_params hl_userptr_rht_params = {
-> > > > > > +       .head_offset = offsetof(struct hl_userptr, job_node),
-> > > > > > +       .key_offset = offsetof(struct hl_userptr, addr),
-> > > > > > +       .key_len = sizeof(u64),
-> > > > > > +       .automatic_shrinking = true,
-> > > > > > +};
-> > > > > > +
-> > > > > >  static int allocate_timestamps_buffers(struct hl_fpriv *hpriv,
-> > > > > >                         struct hl_mem_in *args, u64 *handle);
-> > > > > >
-> > > > > > @@ -2483,7 +2490,6 @@ int hl_pin_host_memory(struct hl_device *hdev, u64 addr, u64 size,
-> > > > > >         userptr->size = size;
-> > > > > >         userptr->addr = addr;
-> > > > > >         userptr->dma_mapped = false;
-> > > > > > -       INIT_LIST_HEAD(&userptr->job_node);
-> > > > > >
-> > > > > >         rc = get_user_memory(hdev, addr, size, npages, start, offset,
-> > > > > >                                 userptr);
-> > > > > > @@ -2522,32 +2528,32 @@ void hl_unpin_host_memory(struct hl_device *hdev, struct hl_userptr *userptr)
-> > > > > >         unpin_user_pages_dirty_lock(userptr->pages, userptr->npages, true);
-> > > > > >         kvfree(userptr->pages);
-> > > > > >
-> > > > > > -       list_del(&userptr->job_node);
-> > > > > > -
-> > > > > >         sg_free_table(userptr->sgt);
-> > > > > >         kfree(userptr->sgt);
-> > > > > >  }
-> > > > > >
-> > > > > > +static void hl_userptr_free_cb(void *ptr, void *arg)
-> > > > > > +{
-> > > > > > +       struct hl_userptr *userptr = ptr;
-> > > > > > +       struct hl_device *hdev = (struct hl_device *)arg;
-> > > > > > +
-> > > > > > +       hl_unpin_host_memory(hdev, userptr);
-> > > > > > +       kfree(userptr);
-> > > > > > +}
-> > > > > > +
-> > > > > >  /**
-> > > > > >   * hl_userptr_delete_list() - clear userptr list.
-> > > > > >   * @hdev: pointer to the habanalabs device structure.
-> > > > > > - * @userptr_list: pointer to the list to clear.
-> > > > > > + * @userptr_ht: pointer to the hashtable to clear.
-> > > > > >   *
-> > > > > >   * This function does the following:
-> > > > > >   * - Iterates over the list and unpins the host memory and frees the userptr
-> > > > > >   *   structure.
-> > > > > >   */
-> > > > > >  void hl_userptr_delete_list(struct hl_device *hdev,
-> > > > > > -                               struct list_head *userptr_list)
-> > > > > > +                               struct rhashtable *userptr_ht)
-> > > > > >  {
-> > > > > > -       struct hl_userptr *userptr, *tmp;
-> > > > > > -
-> > > > > > -       list_for_each_entry_safe(userptr, tmp, userptr_list, job_node) {
-> > > > > > -               hl_unpin_host_memory(hdev, userptr);
-> > > > > > -               kfree(userptr);
-> > > > > > -       }
-> > > > > > -
-> > > > > > -       INIT_LIST_HEAD(userptr_list);
-> > > > > > +       rhashtable_free_and_destroy(userptr_ht, hl_userptr_free_cb, hdev);
-> > > > > >  }
-> > > > > >
-> > > > > >  /**
-> > > > > > @@ -2555,7 +2561,7 @@ void hl_userptr_delete_list(struct hl_device *hdev,
-> > > > > >   * @hdev: pointer to the habanalabs device structure.
-> > > > > >   * @addr: user address to check.
-> > > > > >   * @size: user block size to check.
-> > > > > > - * @userptr_list: pointer to the list to clear.
-> > > > > > + * @userptr_ht: pointer to the hashtable to clear.
-> > > > > >   * @userptr: pointer to userptr to check.
-> > > > > >   *
-> > > > > >   * This function does the following:
-> > > > > > @@ -2563,10 +2569,11 @@ void hl_userptr_delete_list(struct hl_device *hdev,
-> > > > > >   *   pinned. If so, returns true, otherwise returns false.
-> > > > > >   */
-> > > > > >  bool hl_userptr_is_pinned(struct hl_device *hdev, u64 addr,
-> > > > > > -                               u32 size, struct list_head *userptr_list,
-> > > > > > +                               u32 size, struct rhashtable *userptr_ht,
-> > > > > >                                 struct hl_userptr **userptr)
-> > > > > >  {
-> > > > > > -       list_for_each_entry((*userptr), userptr_list, job_node) {
-> > > > > > +       (*userptr) = rhashtable_lookup_fast(userptr_ht, &addr, hl_userptr_rht_params);
-> > > > > > +       if (*userptr) {
-> > > > > >                 if ((addr == (*userptr)->addr) && (size == (*userptr)->size))
-> > > > > >                         return true;
-> > > > > >         }
-> > > > > > diff --git a/drivers/accel/habanalabs/gaudi/gaudi.c b/drivers/accel/habanalabs/gaudi/gaudi.c
-> > > > > > index a29aa8f7b6f3..1e1433042413 100644
-> > > > > > --- a/drivers/accel/habanalabs/gaudi/gaudi.c
-> > > > > > +++ b/drivers/accel/habanalabs/gaudi/gaudi.c
-> > > > > > @@ -1031,7 +1031,7 @@ static int _gaudi_init_tpc_mem(struct hl_device *hdev,
-> > > > > >         }
-> > > > > >
-> > > > > >  free_job:
-> > > > > > -       hl_userptr_delete_list(hdev, &job->userptr_list);
-> > > > > > +       hl_userptr_delete_list(hdev, &job->userptr_ht);
-> > > > > >         hl_debugfs_remove_job(hdev, job);
-> > > > > >         kfree(job);
-> > > > > >         atomic_dec(&cb->cs_cnt);
-> > > > > > @@ -4901,7 +4901,7 @@ static int gaudi_pin_memory_before_cs(struct hl_device *hdev,
-> > > > > >         int rc;
-> > > > > >
-> > > > > >         if (hl_userptr_is_pinned(hdev, addr, le32_to_cpu(user_dma_pkt->tsize),
-> > > > > > -                       parser->job_userptr_list, &userptr))
-> > > > > > +                       parser->job_userptr_ht, &userptr))
-> > > > > >                 goto already_pinned;
-> > > > > >
-> > > > > >         userptr = kzalloc(sizeof(*userptr), GFP_KERNEL);
-> > > > > > @@ -4913,7 +4913,10 @@ static int gaudi_pin_memory_before_cs(struct hl_device *hdev,
-> > > > > >         if (rc)
-> > > > > >                 goto free_userptr;
-> > > > > >
-> > > > > > -       list_add_tail(&userptr->job_node, parser->job_userptr_list);
-> > > > > > +       rc = rhashtable_insert_fast(parser->job_userptr_ht,
-> > > > > > +                                   &userptr->job_node, hl_userptr_rht_params);
-> > > > > > +       if (rc)
-> > > > > > +               goto unpin_memory;
-> > > > > >
-> > > > > >         rc = hdev->asic_funcs->asic_dma_map_sgtable(hdev, userptr->sgt, dir);
-> > > > > >         if (rc) {
-> > > > > > @@ -4931,7 +4934,8 @@ static int gaudi_pin_memory_before_cs(struct hl_device *hdev,
-> > > > > >         return 0;
-> > > > > >
-> > > > > >  unpin_memory:
-> > > > > > -       list_del(&userptr->job_node);
-> > > > > > +       rhashtable_remove_fast(parser->job_userptr_ht,
-> > > > > > +                              &userptr->job_node, hl_userptr_rht_params);
-> > > > > >         hl_unpin_host_memory(hdev, userptr);
-> > > > > >  free_userptr:
-> > > > > >         kfree(userptr);
-> > > > > > @@ -5175,7 +5179,7 @@ static int gaudi_patch_dma_packet(struct hl_device *hdev,
-> > > > > >         if ((!skip_host_mem_pin) &&
-> > > > > >                 (!hl_userptr_is_pinned(hdev, addr,
-> > > > > >                                         le32_to_cpu(user_dma_pkt->tsize),
-> > > > > > -                                       parser->job_userptr_list, &userptr))) {
-> > > > > > +                                       parser->job_userptr_ht, &userptr))) {
-> > > > > >                 dev_err(hdev->dev, "Userptr 0x%llx + 0x%x NOT mapped\n",
-> > > > > >                                 addr, user_dma_pkt->tsize);
-> > > > > >                 return -EFAULT;
-> > > > > > @@ -5472,7 +5476,7 @@ static int gaudi_parse_cb_no_mmu(struct hl_device *hdev,
-> > > > > >
-> > > > > >  free_userptr:
-> > > > > >         if (rc)
-> > > > > > -               hl_userptr_delete_list(hdev, parser->job_userptr_list);
-> > > > > > +               hl_userptr_delete_list(hdev, parser->job_userptr_ht);
-> > > > > >         return rc;
-> > > > > >  }
-> > > > > >
-> > > > > > diff --git a/drivers/accel/habanalabs/goya/goya.c b/drivers/accel/habanalabs/goya/goya.c
-> > > > > > index fb0ac9df841a..bfcbb9e8b126 100644
-> > > > > > --- a/drivers/accel/habanalabs/goya/goya.c
-> > > > > > +++ b/drivers/accel/habanalabs/goya/goya.c
-> > > > > > @@ -3347,7 +3347,7 @@ static int goya_pin_memory_before_cs(struct hl_device *hdev,
-> > > > > >         int rc;
-> > > > > >
-> > > > > >         if (hl_userptr_is_pinned(hdev, addr, le32_to_cpu(user_dma_pkt->tsize),
-> > > > > > -                       parser->job_userptr_list, &userptr))
-> > > > > > +                       parser->job_userptr_ht, &userptr))
-> > > > > >                 goto already_pinned;
-> > > > > >
-> > > > > >         userptr = kzalloc(sizeof(*userptr), GFP_KERNEL);
-> > > > > > @@ -3359,7 +3359,10 @@ static int goya_pin_memory_before_cs(struct hl_device *hdev,
-> > > > > >         if (rc)
-> > > > > >                 goto free_userptr;
-> > > > > >
-> > > > > > -       list_add_tail(&userptr->job_node, parser->job_userptr_list);
-> > > > > > +       rc = rhashtable_insert_fast(parser->job_userptr_ht,
-> > > > > > +                                   &userptr->job_node, hl_userptr_rht_params);
-> > > > > > +       if (rc)
-> > > > > > +               goto unpin_memory;
-> > > > > >
-> > > > > >         rc = hdev->asic_funcs->asic_dma_map_sgtable(hdev, userptr->sgt, dir);
-> > > > > >         if (rc) {
-> > > > > > @@ -3377,7 +3380,8 @@ static int goya_pin_memory_before_cs(struct hl_device *hdev,
-> > > > > >         return 0;
-> > > > > >
-> > > > > >  unpin_memory:
-> > > > > > -       list_del(&userptr->job_node);
-> > > > > > +       rhashtable_remove_fast(parser->job_userptr_ht,
-> > > > > > +                              &userptr->job_node, hl_userptr_rht_params);
-> > > > > >         hl_unpin_host_memory(hdev, userptr);
-> > > > > >  free_userptr:
-> > > > > >         kfree(userptr);
-> > > > > > @@ -3806,7 +3810,7 @@ static int goya_patch_dma_packet(struct hl_device *hdev,
-> > > > > >         if ((!skip_host_mem_pin) &&
-> > > > > >                 (hl_userptr_is_pinned(hdev, addr,
-> > > > > >                         le32_to_cpu(user_dma_pkt->tsize),
-> > > > > > -                       parser->job_userptr_list, &userptr) == false)) {
-> > > > > > +                       parser->job_userptr_ht, &userptr) == false)) {
-> > > > > >                 dev_err(hdev->dev, "Userptr 0x%llx + 0x%x NOT mapped\n",
-> > > > > >                                 addr, user_dma_pkt->tsize);
-> > > > > >                 return -EFAULT;
-> > > > > > @@ -4104,7 +4108,7 @@ static int goya_parse_cb_no_mmu(struct hl_device *hdev,
-> > > > > >
-> > > > > >  free_userptr:
-> > > > > >         if (rc)
-> > > > > > -               hl_userptr_delete_list(hdev, parser->job_userptr_list);
-> > > > > > +               hl_userptr_delete_list(hdev, parser->job_userptr_ht);
-> > > > > >         return rc;
-> > > > > >  }
-> > > > > >
-> > > > > > --
-> > > > > > 2.34.1
-> > > > > >
+> 
+> - Error at startup
+>    - Kernel log
+> [    0.980598] **********spi_mem_op dump**************
+> [    0.980613] addr: nbytes:0x0 , buswidth 0x0, dtr 0x0, val 0x0
+> [    0.984223] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x9F
+> [    0.988656] data: nbytes:0x6 , buswidth 0x1, dtr 0x0, data dir 0x1
+> [    0.993362] ***************************************
+> [    0.998329] spi-nor spi0.0: found mt25ql512a, expected n25q512a
+> [    1.006574] **********spi_mem_op dump**************
+> [    1.006583] addr: nbytes:0x3 , buswidth 0x1, dtr 0x0, val 0x0
+> [    1.010150] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x5A
+> [    1.014596] data: nbytes:0x10 , buswidth 0x1, dtr 0x0, data dir 0x1
+> [    1.019285] ***************************************
+> [    1.524271] cadence-qspi ff705000.flash: Flash command execution timed out.
+
+This print message is from cqspi_exec_flash_cmd. This function should
+only be called from cqspi_command_read/write .
+
+However, from spi_mem_op dump that you have provided above,
+where addr.nbytes is 3 and data.nbytes is 0x10 (which is > 8)
+it should never have entered the cqspi_command_read function.
+
+> [    1.533483] **********spi_mem_op dump**************
+> [    1.533489] addr: nbytes:0x3 , buswidth 0x1, dtr 0x0, val 0x10
+> [    1.537055] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x5A
+> [    1.541579] data: nbytes:0x8 , buswidth 0x1, dtr 0x0, data dir 0x1
+> [    1.546266] ***************************************
+> [    1.551123] spi-nor spi0.0: operation failed with -110
+> [    1.558531] spi-nor spi0.0: mt25ql512a (65536 Kbytes)
+> 
+
+Anything after the Flash command execution timed out step seems
+irrelevant because at that point the controller is in some weird state 
+that it never again comes out of.
+
+
+Please can you share the exact output of uname -a where you observe this
+error?
+
+I am now wondering why atall would the following conditions be satisfied
+in your case:
+
+if (!op->addr.nbytes || op->data.nbytes <= CQSPI_STIG_DATA_LEN_MAX)
+
+either addr.nbytes needs to be 0, which it isn't.
+or data has to be <= 8 (which again doesn't seem to be the case here)
+
+So it should never enter the above "if" chunk.
+
+My logs for reference:
+https://gist.github.com/DhruvaG2000/7185a84de5757e4988f93478f6b75289
+
+
+Are you carrying any sort of local patches? Can you make sure that the
+CQSPI_STIG_DATA_LEN_MAX is 8 in your case too?
+Any other delta from linux-next that I am using in the logs I gave
+above?
+
+-- 
+Thanks and Regards,
+Dhruva Gole
