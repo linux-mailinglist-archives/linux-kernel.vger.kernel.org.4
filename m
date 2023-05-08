@@ -2,203 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AD06FB48E
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0946FB48F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234122AbjEHQAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
+        id S234274AbjEHQCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233108AbjEHQAa (ORCPT
+        with ESMTP id S233108AbjEHQCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 12:00:30 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C8540D4
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:00:28 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id af79cd13be357-757756e2eefso72086785a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 09:00:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683561628; x=1686153628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+pB2YUBbkkhRqdEuS86bLaceZppwl5VGLTAnx/EHATw=;
-        b=pS50okJn+DEj1FhKDW07zXVSpLfpXPb/fBXu4OCYGcVBBjkLHrJ4kZfooEZvcXP9rp
-         0r1p5nAfrYx3zKpDb378iLebIlAjdrbzyWuA3S+bip2eB7QW9rgKCIMNkS9/xKjy/PsL
-         SlSbI2PQ0ofEYV5cCMDDLftwf25XD3w2FGW6tI55Ka0+/K2uR3qaqrz8Ue0paqd3jc9l
-         hmNsCbMTEyq9N06q3jW0texS/Zmou8gS7BhWp07lP+Jr9+rsLT1H5QViG3UMNnXPMCBg
-         Jfwt6zsLNRcrTH3KIdrSxBbOp2dH9nDVtntlvvwzuVxH06ysu3XImTp41a9v5emfoPa/
-         jTaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683561628; x=1686153628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+pB2YUBbkkhRqdEuS86bLaceZppwl5VGLTAnx/EHATw=;
-        b=jZk86Zy5ooFVynja1oQuXb6xJDVdQTq2vuLORUIN6+RmeWOai9PedL942A+FCc3k9g
-         2caYLM6iQQT08aro7EjLqEb8ANfTcKk5q51j2YaO3ga2Vti4CsodTd9IOfPZ0whw7enI
-         m6lKB8I6CiCKm164SujAzUY0IO91aybE3z9kPoZ4647WKQf7MrnxUolGFDgBmI2P/6c7
-         99XfpQuITAur1NVj8OJqYW1O2vh3Q4ad6OnvGTxm5O4x3cCJfS461nOOgnuHylqrXGGv
-         P6KCPFQ0ZLHe6VvoCGbQcCAQLgY8S9r1L82Aoopi+EIyAVaBsst77LcJrnQZX7ebb9kl
-         SONw==
-X-Gm-Message-State: AC+VfDxbnqB9wEvB3evvn1l0Fpe0mTyYQfDgQUVK+uLprUEg+TnkVSUd
-        HQrKfxFd+3px5rUNSalMhG8XfwNAR/BPYTZEe40=
-X-Google-Smtp-Source: ACHHUZ4+YaRzP/2WFqgxw9MEO6lRKxnBbuXGeKO0JmvxRM5A20ZI9JXGXms558Gyu90FkMXNicwXp1YM+KyUP5eGb9c=
-X-Received: by 2002:a05:6214:2427:b0:61a:c2bf:9f0b with SMTP id
- gy7-20020a056214242700b0061ac2bf9f0bmr18496822qvb.6.1683561627381; Mon, 08
- May 2023 09:00:27 -0700 (PDT)
+        Mon, 8 May 2023 12:02:07 -0400
+Received: from alln-iport-3.cisco.com (alln-iport-3.cisco.com [173.37.142.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9BD526F
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:02:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=8626; q=dns/txt; s=iport;
+  t=1683561724; x=1684771324;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iJ7pjBaNjs4nBD8BQAS6E6wbv4xaISl93uvUv2wL+mU=;
+  b=TzUkBfYp/ekWFt2FFhSXVsAGB8AQizGiXODQ6+gcCl6wbfb7DnzpH84X
+   lwAA8MbTp/s8/+NeoIu37o/IRlGBJ94awB8IeaJDZEDo3TZWZsAw/Z6Uk
+   P14QlALtSckhIEWNNZp5ENBjIwyrmAGR2tHWqvO9zzSxnzpVnmkGFd2qV
+   Q=;
+X-CSE-ConnectionGUID: UNsUyunNSXGIzwu/FdLTww==
+X-CSE-MsgGUID: aWtlM5KBQUWKjpQqOWhJ+A==
+X-IronPort-AV: E=Sophos;i="5.99,259,1677542400"; 
+   d="scan'208";a="84758450"
+Received: from alln-core-10.cisco.com ([173.36.13.132])
+  by alln-iport-3.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 16:02:04 +0000
+Received: from sjc-ads-7449.cisco.com (sjc-ads-7449.cisco.com [10.30.220.234])
+        by alln-core-10.cisco.com (8.15.2/8.15.2) with ESMTPS id 348G1wdS002688
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 8 May 2023 16:02:02 GMT
+Received: by sjc-ads-7449.cisco.com (Postfix, from userid 1777032)
+        id 7B01BCCD0B1; Mon,  8 May 2023 09:01:57 -0700 (PDT)
+From:   Marcin Wierzbicki <mawierzb@cisco.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Marcin Wierzbicki <mawierzb@cisco.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Roger Quadros <rogerq@kernel.org>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     xe-linux-external@cisco.com, danielwa@cisco.com, olicht@cisco.com,
+        Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+Subject: [PATCH v2] phy: cadence: Sierra: Add single link SGMII register configuration
+Date:   Mon,  8 May 2023 16:01:40 +0000
+Message-Id: <20230508160142.2489365-1-mawierzb@cisco.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <20230505185054.2417128-1-nphamcs@gmail.com> <20230506030140.GC3281499@google.com>
- <20230508140658.GA3421@cmpxchg.org>
-In-Reply-To: <20230508140658.GA3421@cmpxchg.org>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Mon, 8 May 2023 09:00:16 -0700
-Message-ID: <CAKEwX=MtunOe6A--SG3ud-gUFg3bXFJgG4csgwHeZFAEqjCgHg@mail.gmail.com>
-Subject: Re: [PATCH] zsmalloc: move LRU update from zs_map_object() to zs_malloc()
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        ngupta@vflare.org, sjenning@redhat.com, ddstreet@ieee.org,
-        vitaly.wool@konsulko.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 10.30.220.234, sjc-ads-7449.cisco.com
+X-Outbound-Node: alln-core-10.cisco.com
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023 at 7:07=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.org>=
- wrote:
->
-> On Sat, May 06, 2023 at 12:01:40PM +0900, Sergey Senozhatsky wrote:
-> > On (23/05/05 11:50), Nhat Pham wrote:
-> > > Under memory pressure, we sometimes observe the following crash:
-> > >
-> > > [ 5694.832838] ------------[ cut here ]------------
-> > > [ 5694.842093] list_del corruption, ffff888014b6a448->next is LIST_PO=
-ISON1 (dead000000000100)
-> > > [ 5694.858677] WARNING: CPU: 33 PID: 418824 at lib/list_debug.c:47 __=
-list_del_entry_valid+0x42/0x80
-> > > [ 5694.961820] CPU: 33 PID: 418824 Comm: fuse_counters.s Kdump: loade=
-d Tainted: G S                5.19.0-0_fbk3_rc3_hoangnhatpzsdynshrv41_10870=
-_g85a9558a25de #1
-> > > [ 5694.990194] Hardware name: Wiwynn Twin Lakes MP/Twin Lakes Passive=
- MP, BIOS YMM16 05/24/2021
-> > > [ 5695.007072] RIP: 0010:__list_del_entry_valid+0x42/0x80
-> > > [ 5695.017351] Code: 08 48 83 c2 22 48 39 d0 74 24 48 8b 10 48 39 f2 =
-75 2c 48 8b 51 08 b0 01 48 39 f2 75 34 c3 48 c7 c7 55 d7 78 82 e8 4e 45 3b =
-00 <0f> 0b eb 31 48 c7 c7 27 a8 70 82 e8 3e 45 3b 00 0f 0b eb 21 48 c7
-> > > [ 5695.054919] RSP: 0018:ffffc90027aef4f0 EFLAGS: 00010246
-> > > [ 5695.065366] RAX: 41fe484987275300 RBX: ffff888008988180 RCX: 00000=
-00000000000
-> > > [ 5695.079636] RDX: ffff88886006c280 RSI: ffff888860060480 RDI: ffff8=
-88860060480
-> > > [ 5695.093904] RBP: 0000000000000002 R08: 0000000000000000 R09: ffffc=
-90027aef370
-> > > [ 5695.108175] R10: 0000000000000000 R11: ffffffff82fdf1c0 R12: 00000=
-00010000002
-> > > [ 5695.122447] R13: ffff888014b6a448 R14: ffff888014b6a420 R15: 00000=
-000138dc240
-> > > [ 5695.136717] FS:  00007f23a7d3f740(0000) GS:ffff888860040000(0000) =
-knlGS:0000000000000000
-> > > [ 5695.152899] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > [ 5695.164388] CR2: 0000560ceaab6ac0 CR3: 000000001c06c001 CR4: 00000=
-000007706e0
-> > > [ 5695.178659] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 00000=
-00000000000
-> > > [ 5695.192927] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 00000=
-00000000400
-> > > [ 5695.207197] PKRU: 55555554
-> > > [ 5695.212602] Call Trace:
-> > > [ 5695.217486]  <TASK>
-> > > [ 5695.221674]  zs_map_object+0x91/0x270
-> > > [ 5695.229000]  zswap_frontswap_store+0x33d/0x870
-> > > [ 5695.237885]  ? do_raw_spin_lock+0x5d/0xa0
-> > > [ 5695.245899]  __frontswap_store+0x51/0xb0
-> > > [ 5695.253742]  swap_writepage+0x3c/0x60
-> > > [ 5695.261063]  shrink_page_list+0x738/0x1230
-> > > [ 5695.269255]  shrink_lruvec+0x5ec/0xcd0
-> > > [ 5695.276749]  ? shrink_slab+0x187/0x5f0
-> > > [ 5695.284240]  ? mem_cgroup_iter+0x6e/0x120
-> > > [ 5695.292255]  shrink_node+0x293/0x7b0
-> > > [ 5695.299402]  do_try_to_free_pages+0xea/0x550
-> > > [ 5695.307940]  try_to_free_pages+0x19a/0x490
-> > > [ 5695.316126]  __folio_alloc+0x19ff/0x3e40
-> > > [ 5695.323971]  ? __filemap_get_folio+0x8a/0x4e0
-> > > [ 5695.332681]  ? walk_component+0x2a8/0xb50
-> > > [ 5695.340697]  ? generic_permission+0xda/0x2a0
-> > > [ 5695.349231]  ? __filemap_get_folio+0x8a/0x4e0
-> > > [ 5695.357940]  ? walk_component+0x2a8/0xb50
-> > > [ 5695.365955]  vma_alloc_folio+0x10e/0x570
-> > > [ 5695.373796]  ? walk_component+0x52/0xb50
-> > > [ 5695.381634]  wp_page_copy+0x38c/0xc10
-> > > [ 5695.388953]  ? filename_lookup+0x378/0xbc0
-> > > [ 5695.397140]  handle_mm_fault+0x87f/0x1800
-> > > [ 5695.405157]  do_user_addr_fault+0x1bd/0x570
-> > > [ 5695.413520]  exc_page_fault+0x5d/0x110
-> > > [ 5695.421017]  asm_exc_page_fault+0x22/0x30
-> > >
-> > > After some investigation, I have found the following issue: unlike ot=
-her
-> > > zswap backends, zsmalloc performs the LRU list update at the object
-> > > mapping time, rather than when the slot for the object is allocated.
-> > > This deviation was discussed and agreed upon during the review proces=
-s
-> > > of the zsmalloc writeback patch series:
-> > >
-> > > https://lore.kernel.org/lkml/Y3flcAXNxxrvy3ZH@cmpxchg.org/
-> > >
-> > > Unfortunately, this introduces a subtle bug that occurs when there is=
- a
-> > > concurrent store and reclaim, which interleave as follows:
-> > >
-> > > zswap_frontswap_store()            shrink_worker()
-> > >   zs_malloc()                        zs_zpool_shrink()
-> > >     spin_lock(&pool->lock)             zs_reclaim_page()
-> > >     zspage =3D find_get_zspage()
-> > >     spin_unlock(&pool->lock)
-> > >                                          spin_lock(&pool->lock)
-> > >                                          zspage =3D list_first_entry(=
-&pool->lru)
-> > >                                          list_del(&zspage->lru)
-> > >                                            zspage->lru.next =3D LIST_=
-POISON1
-> > >                                            zspage->lru.prev =3D LIST_=
-POISON2
-> >
-> >                                       Will list_del_init() there do the=
- trick?
-> >
-> > >                                          spin_unlock(&pool->lock)
-> > >   zs_map_object()
-> > >     spin_lock(&pool->lock)
-> > >     if (!list_empty(&zspage->lru))
-> > >       list_del(&zspage->lru)
-> >
-> >       list_del_init()
->
-> The deeper bug here is that zs_map_object() tries to add the page to
-> the LRU list while the shrinker has it isolated for reclaim. This is
-> way too sutble and error prone. Even if it worked now, it'll cause
-> corruption issues down the line.
->
-> For example, Nhat is adding a secondary entry point to reclaim.
-> Reclaim expects that a page that's on the LRU is also on the fullness
-> list, so this would lead to a double remove_zspage() and BUG_ON().
->
-> This patch doesn't just fix the crash, it eliminates the deeper LRU
-> isolation issue and makes the code more robust and simple.
+Add single link SGMII register configuration for no SSC for
+cdns,sierra-phy-t0 compatibility string.
+The configuration is based on Sierra Programmer's Guide and
+validated in Cisco CrayAR SoC.
 
-I agree. IMO, less unnecessary concurrent interaction is always a
-win for developers' and maintainers' cognitive load.
+Co-developed-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+Signed-off-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+Signed-off-by: Marcin Wierzbicki <mawierzb@cisco.com>
+Change-Id: Id4c093a1bbf409f3176736b5326854a1396391c1
+---
+ drivers/phy/cadence/phy-cadence-sierra.c | 103 +++++++++++++++++++++++
+ 1 file changed, 103 insertions(+)
 
-As a side benefit - this also gets rid of the inelegant check
-(mm =3D=3D ZS_MM_WO). The fact that we had to include a
-a multi-paragraph explanation for a 3-line piece of code
-should have been a red flag.
+diff --git a/drivers/phy/cadence/phy-cadence-sierra.c b/drivers/phy/cadence/phy-cadence-sierra.c
+index 13fcd3a65fe9..6c3870a6b236 100644
+--- a/drivers/phy/cadence/phy-cadence-sierra.c
++++ b/drivers/phy/cadence/phy-cadence-sierra.c
+@@ -30,28 +30,40 @@
+ #define SIERRA_COMMON_CDB_OFFSET			0x0
+ #define SIERRA_MACRO_ID_REG				0x0
+ #define SIERRA_CMN_PLLLC_GEN_PREG			0x42
++#define SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG		0x43
++#define SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG		0x45
++#define SIERRA_CMN_PLLLC_INIT_PREG			0x46
++#define SIERRA_CMN_PLLLC_ITERTMR_PREG			0x47
+ #define SIERRA_CMN_PLLLC_MODE_PREG			0x48
+ #define SIERRA_CMN_PLLLC_LF_COEFF_MODE1_PREG		0x49
+ #define SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG		0x4A
+ #define SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG		0x4B
++#define SIERRA_CMN_PLLLC_LOCKSEARCH_PREG		0x4C
+ #define SIERRA_CMN_PLLLC_CLK1_PREG			0x4D
++#define SIERRA_CMN_PLLLC_CLK0_PREG			0x4E
+ #define SIERRA_CMN_PLLLC_BWCAL_MODE1_PREG		0x4F
+ #define SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG		0x50
+ #define SIERRA_CMN_PLLLC_DSMCORR_PREG			0x51
+ #define SIERRA_CMN_PLLLC_SS_PREG			0x52
+ #define SIERRA_CMN_PLLLC_SS_AMP_STEP_SIZE_PREG		0x53
+ #define SIERRA_CMN_PLLLC_SSTWOPT_PREG			0x54
++#define SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG		0x5D
++#define SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG		0x5E
+ #define SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG	0x62
+ #define SIERRA_CMN_PLLLC_LOCK_DELAY_CTRL_PREG		0x63
++#define SIERRA_SDOSCCAL_CLK_CNT_PREG			0x6E
+ #define SIERRA_CMN_REFRCV_PREG				0x98
++#define SIERRA_CMN_RESCAL_CTRLA_PREG			0xA0
+ #define SIERRA_CMN_REFRCV1_PREG				0xB8
+ #define SIERRA_CMN_PLLLC1_GEN_PREG			0xC2
+ #define SIERRA_CMN_PLLLC1_FBDIV_INT_PREG		0xC3
++#define SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG		0xC5
+ #define SIERRA_CMN_PLLLC1_LF_COEFF_MODE0_PREG		0xCA
+ #define SIERRA_CMN_PLLLC1_CLK0_PREG			0xCE
+ #define SIERRA_CMN_PLLLC1_BWCAL_MODE0_PREG		0xD0
+ #define SIERRA_CMN_PLLLC1_SS_TIME_STEPSIZE_MODE_PREG	0xE2
+ 
++
+ #define SIERRA_LANE_CDB_OFFSET(ln, block_offset, reg_offset)	\
+ 				((0x4000 << (block_offset)) + \
+ 				 (((ln) << 9) << (reg_offset)))
+@@ -86,6 +98,7 @@
+ #define SIERRA_DFE_BIASTRIM_PREG			0x04C
+ #define SIERRA_DRVCTRL_ATTEN_PREG			0x06A
+ #define SIERRA_DRVCTRL_BOOST_PREG			0x06F
++#define SIERRA_LANE_TX_RECEIVER_DETECT_PREG		0x071
+ #define SIERRA_TX_RCVDET_OVRD_PREG			0x072
+ #define SIERRA_CLKPATHCTRL_TMR_PREG			0x081
+ #define SIERRA_RX_CREQ_FLTR_A_MODE3_PREG		0x085
+@@ -101,6 +114,8 @@
+ #define SIERRA_CREQ_SPARE_PREG				0x096
+ #define SIERRA_CREQ_EQ_OPEN_EYE_THRESH_PREG		0x097
+ #define SIERRA_CTLELUT_CTRL_PREG			0x098
++#define SIERRA_DEQ_BLK_TAU_CTRL1_PREG			0x0AC
++#define SIERRA_DEQ_BLK_TAU_CTRL4_PREG			0x0AF
+ #define SIERRA_DFE_ECMP_RATESEL_PREG			0x0C0
+ #define SIERRA_DFE_SMP_RATESEL_PREG			0x0C1
+ #define SIERRA_DEQ_PHALIGN_CTRL				0x0C4
+@@ -129,6 +144,9 @@
+ #define SIERRA_DEQ_GLUT14				0x0F6
+ #define SIERRA_DEQ_GLUT15				0x0F7
+ #define SIERRA_DEQ_GLUT16				0x0F8
++#define SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG		0x0F9
++#define SIERRA_TAU_EN_CEPH2TO0_PREG			0x0FB
++#define SIERRA_TAU_EN_CEPH5TO3_PREG			0x0FC
+ #define SIERRA_DEQ_ALUT0				0x108
+ #define SIERRA_DEQ_ALUT1				0x109
+ #define SIERRA_DEQ_ALUT2				0x10A
+@@ -143,6 +161,7 @@
+ #define SIERRA_DEQ_ALUT11				0x113
+ #define SIERRA_DEQ_ALUT12				0x114
+ #define SIERRA_DEQ_ALUT13				0x115
++#define SIERRA_OEPH_EN_CTRL_PREG			0x124
+ #define SIERRA_DEQ_DFETAP_CTRL_PREG			0x128
+ #define SIERRA_DEQ_DFETAP0				0x129
+ #define SIERRA_DEQ_DFETAP1				0x12B
+@@ -157,6 +176,7 @@
+ #define SIERRA_DEQ_TAU_CTRL2_PREG			0x151
+ #define SIERRA_DEQ_TAU_CTRL3_PREG			0x152
+ #define SIERRA_DEQ_OPENEYE_CTRL_PREG			0x158
++#define SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG		0x159
+ #define SIERRA_DEQ_PICTRL_PREG				0x161
+ #define SIERRA_CPICAL_TMRVAL_MODE1_PREG			0x170
+ #define SIERRA_CPICAL_TMRVAL_MODE0_PREG			0x171
+@@ -165,6 +185,7 @@
+ #define SIERRA_CPI_RESBIAS_BIN_PREG			0x17E
+ #define SIERRA_CPI_TRIM_PREG				0x17F
+ #define SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG		0x183
++#define SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG		0x184
+ #define SIERRA_EPI_CTRL_PREG				0x187
+ #define SIERRA_LFPSDET_SUPPORT_PREG			0x188
+ #define SIERRA_LFPSFILT_NS_PREG				0x18A
+@@ -176,6 +197,7 @@
+ #define SIERRA_RXBUFFER_CTLECTRL_PREG			0x19E
+ #define SIERRA_RXBUFFER_RCDFECTRL_PREG			0x19F
+ #define SIERRA_RXBUFFER_DFECTRL_PREG			0x1A0
++#define SIERRA_LN_SPARE_REG_PREG			0x1B0
+ #define SIERRA_DEQ_TAU_CTRL1_FAST_MAINT_PREG		0x14F
+ #define SIERRA_DEQ_TAU_CTRL1_SLOW_MAINT_PREG		0x150
+ 
+@@ -2401,6 +2423,77 @@ static struct cdns_sierra_vals usb_100_ext_ssc_ln_vals = {
+ 	.num_regs = ARRAY_SIZE(cdns_usb_ln_regs_ext_ssc),
+ };
+ 
++/* SGMII PHY common configuration */
++static const struct cdns_reg_pairs sgmii_cmn_regs[] = {
++	{0x0180, SIERRA_SDOSCCAL_CLK_CNT_PREG},
++	{0x6000, SIERRA_CMN_REFRCV_PREG},
++	{0x0031, SIERRA_CMN_RESCAL_CTRLA_PREG},
++	{0x001C, SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG},
++	{0x2106, SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG},
++	{0x0000, SIERRA_CMN_PLLLC_LOCKSEARCH_PREG},
++	{0x8103, SIERRA_CMN_PLLLC_CLK0_PREG},
++	{0x0000, SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG},
++	{0x0027, SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG},
++	{0x0062, SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG},
++	{0x0800, SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG},
++	{0x0000, SIERRA_CMN_PLLLC_INIT_PREG},
++	{0x0000, SIERRA_CMN_PLLLC_ITERTMR_PREG},
++	{0x0020, SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG},
++	{0x0013, SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG},
++	{0x0013, SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG},
++};
++
++static struct cdns_sierra_vals sgmii_cmn_vals = {
++	.reg_pairs = sgmii_cmn_regs,
++	.num_regs = ARRAY_SIZE(sgmii_cmn_regs),
++};
++
++/* SGMII PHY lane configuration */
++static const struct cdns_reg_pairs sgmii_ln_regs[] = {
++	{0x691E, SIERRA_DET_STANDEC_D_PREG},
++	{0x0FFE, SIERRA_PSC_RX_A0_PREG},
++	{0x0104, SIERRA_PLLCTRL_FBDIV_MODE01_PREG},
++	{0x0013, SIERRA_PLLCTRL_SUBRATE_PREG},
++	{0x0106, SIERRA_PLLCTRL_GEN_D_PREG},
++	{0x5234, SIERRA_PLLCTRL_CPGAIN_MODE_PREG},
++	{0x0000, SIERRA_DRVCTRL_ATTEN_PREG},
++	{0x00AB, SIERRA_RX_CREQ_FLTR_A_MODE0_PREG},
++	{0x3C0E, SIERRA_CREQ_CCLKDET_MODE01_PREG},
++	{0x3220, SIERRA_CREQ_FSMCLK_SEL_PREG},
++	{0x0000, SIERRA_CREQ_EQ_CTRL_PREG},
++	{0x6320, SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG},
++	{0x0000, SIERRA_CPI_OUTBUF_RATESEL_PREG},
++	{0x15A2, SIERRA_LN_SPARE_REG_PREG},
++	{0x7900, SIERRA_DEQ_BLK_TAU_CTRL1_PREG},
++	{0x2202, SIERRA_DEQ_BLK_TAU_CTRL4_PREG},
++	{0x2206, SIERRA_DEQ_TAU_CTRL2_PREG},
++	{0x0005, SIERRA_LANE_TX_RECEIVER_DETECT_PREG},
++	{0x8001, SIERRA_CREQ_SPARE_PREG},
++	{0x0000, SIERRA_DEQ_CONCUR_CTRL1_PREG},
++	{0xD004, SIERRA_DEQ_CONCUR_CTRL2_PREG},
++	{0x0101, SIERRA_DEQ_GLUT9},
++	{0x0101, SIERRA_DEQ_GLUT10},
++	{0x0101, SIERRA_DEQ_GLUT11},
++	{0x0101, SIERRA_DEQ_GLUT12},
++	{0x0000, SIERRA_DEQ_GLUT13},
++	{0x0000, SIERRA_DEQ_GLUT16},
++	{0x0000, SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG},
++	{0x0000, SIERRA_TAU_EN_CEPH2TO0_PREG},
++	{0x0003, SIERRA_TAU_EN_CEPH5TO3_PREG},
++	{0x0101, SIERRA_DEQ_ALUT8},
++	{0x0101, SIERRA_DEQ_ALUT9},
++	{0x0100, SIERRA_DEQ_ALUT10},
++	{0x0000, SIERRA_OEPH_EN_CTRL_PREG},
++	{0x5425, SIERRA_DEQ_OPENEYE_CTRL_PREG},
++	{0x7458, SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG},
++	{0x321F, SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG},
++};
++
++static struct cdns_sierra_vals sgmii_ln_vals = {
++	.reg_pairs = sgmii_ln_regs,
++	.num_regs = ARRAY_SIZE(sgmii_ln_regs),
++};
++
+ static const struct cdns_sierra_data cdns_map_sierra = {
+ 	.id_value = SIERRA_MACRO_ID,
+ 	.block_offset_shift = 0x2,
+@@ -2461,6 +2554,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
+ 				[INTERNAL_SSC] = &qsgmii_100_no_ssc_plllc1_cmn_vals,
+ 			},
+ 		},
++		[TYPE_SGMII] = {
++			[TYPE_NONE] = {
++				[NO_SSC] = &sgmii_cmn_vals,
++			},
++		},
+ 	},
+ 	.pma_ln_vals = {
+ 		[TYPE_PCIE] = {
+@@ -2499,6 +2597,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
+ 				[INTERNAL_SSC] = &qsgmii_100_no_ssc_plllc1_ln_vals,
+ 			},
+ 		},
++		[TYPE_SGMII] = {
++			[TYPE_NONE] = {
++				[NO_SSC] = &sgmii_ln_vals,
++			},
++		},
+ 	},
+ };
+ 
+-- 
+2.28.0
+
