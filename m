@@ -2,145 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5EE6FB04B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC5F6FB05C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234779AbjEHMjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 08:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
+        id S234784AbjEHMlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 08:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234426AbjEHMjg (ORCPT
+        with ESMTP id S234613AbjEHMlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 08:39:36 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D647DC41;
-        Mon,  8 May 2023 05:39:20 -0700 (PDT)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 51A9A21C3;
-        Mon,  8 May 2023 12:34:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1683549272;
-        bh=RZn6MEBLEPB8PODbTWpyKrutKazvJ93u3sSJUo2QDe0=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=J8R8cYIvFDJzrpNRE3G922qcYFnnI/bBOt8ad0u0N5q6Er9X6MnYLf7IE68IgRSGr
-         Cq0289oRYMayQVh4ydPTBa2Qt13pQMsi88iGtZZzOCwK2xRbpSrg8q3xKdZZdanJ5+
-         bxFPnNDaGTF7QL2IBC2zfx2Q/H/bNWwDos1xmuuY=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 017652191;
-        Mon,  8 May 2023 12:39:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1683549559;
-        bh=RZn6MEBLEPB8PODbTWpyKrutKazvJ93u3sSJUo2QDe0=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=LrMJkh4GqzhuNnEemwuNCNXOfSOiHzgcWJI5IDQnK+hU1RVOjLaFxFSFe/rwqSK1e
-         GEMmkGr8V+GZb5edstNj+eeqb45lPijVKaqK/s2sWD+E0MOOXZtLB4hnD3upKqzdR8
-         mKk7xAzkrW1WThUpFmZrffB4C/F6/rsqJGr/42/w=
-Received: from [192.168.211.146] (192.168.211.146) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+        Mon, 8 May 2023 08:41:22 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7C438F0F;
+        Mon,  8 May 2023 05:41:04 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QFLSw0tyHzsRLP;
+        Mon,  8 May 2023 20:39:12 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 8 May 2023 15:39:17 +0300
-Message-ID: <39d06f0d-f30d-c7c7-39e6-e4a566e6d5f4@paragon-software.com>
-Date:   Mon, 8 May 2023 16:39:17 +0400
+ 15.1.2507.23; Mon, 8 May 2023 20:41:02 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <netdev@vger.kernel.org>
+CC:     <linux-rdma@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <xen-devel@lists.xenproject.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <edumazet@google.com>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <alexanderduyck@fb.com>, <jbrouer@redhat.com>,
+        <ilias.apalodimas@linaro.org>
+Subject: [PATCH RFC 0/2] introduce skb_frag_fill_page_desc()
+Date:   Mon, 8 May 2023 20:39:20 +0800
+Message-ID: <20230508123922.39284-1-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: [PATCH 08/10] fs/ntfs3: Add ability to format new mft records with
- bigger/smaller header
-Content-Language: en-US
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-To:     <ntfs3@lists.linux.dev>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>
-References: <b21a4bc9-166d-2631-d73b-cb4e802ff69e@paragon-software.com>
-In-Reply-To: <b21a4bc9-166d-2631-d73b-cb4e802ff69e@paragon-software.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.211.146]
-X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just define in ntfs.h
-     #define MFTRECORD_FIXUP_OFFSET  MFTRECORD_FIXUP_OFFSET_1
-or
-     #define MFTRECORD_FIXUP_OFFSET  MFTRECORD_FIXUP_OFFSET_3
+Most users use __skb_frag_set_page()/skb_frag_off_set()/
+skb_frag_size_set() to fill the page desc for a skb frag.
+It does not make much sense to calling __skb_frag_set_page()
+without calling skb_frag_off_set(), as the offset may depend
+on whether the page is head page or tail page, so add
+skb_frag_fill_page_desc() to fill the page desc for a skb
+frag.
 
-Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
----
-  fs/ntfs3/ntfs.h   | 9 +++++++++
-  fs/ntfs3/record.c | 2 ++
-  fs/ntfs3/super.c  | 6 +++---
-  3 files changed, 14 insertions(+), 3 deletions(-)
+In the future, we can make sure the page in the frag is
+head page of compound page or a base page, if not, we
+may warn about that and convert the tail page to head
+page and update the offset accordingly, if we see a warning
+about that, we also fix the caller to fill the head page
+in the frag. when the fixing is done, we may remove the
+warning and converting.
 
-diff --git a/fs/ntfs3/ntfs.h b/fs/ntfs3/ntfs.h
-index 3ec2eaf31996..98b76d1b09e7 100644
---- a/fs/ntfs3/ntfs.h
-+++ b/fs/ntfs3/ntfs.h
-@@ -288,6 +288,15 @@ struct MFT_REC {
+In this way, we can remove the compound_head() or use
+page_ref_*() like the below case:
+https://elixir.bootlin.com/linux/latest/source/net/core/page_pool.c#L881
+https://elixir.bootlin.com/linux/latest/source/include/linux/skbuff.h#L3383
 
-  #define MFTRECORD_FIXUP_OFFSET_1 offsetof(struct MFT_REC, res)
-  #define MFTRECORD_FIXUP_OFFSET_3 offsetof(struct MFT_REC, fixups)
-+/*
-+ * define MFTRECORD_FIXUP_OFFSET as MFTRECORD_FIXUP_OFFSET_3 (0x30)
-+ * to format new mft records with bigger header (as current ntfs.sys does)
-+ *
-+ * define MFTRECORD_FIXUP_OFFSET as MFTRECORD_FIXUP_OFFSET_1 (0x2A)
-+ * to format new mft records with smaller header (as old ntfs.sys did)
-+ * Both variants are valid.
-+ */
-+#define MFTRECORD_FIXUP_OFFSET  MFTRECORD_FIXUP_OFFSET_1
+It may also convert stack to use the folio easier.
 
-  static_assert(MFTRECORD_FIXUP_OFFSET_1 == 0x2A);
-  static_assert(MFTRECORD_FIXUP_OFFSET_3 == 0x30);
-diff --git a/fs/ntfs3/record.c b/fs/ntfs3/record.c
-index e73ca2df42eb..c12ebffc94da 100644
---- a/fs/ntfs3/record.c
-+++ b/fs/ntfs3/record.c
-@@ -388,6 +388,8 @@ int mi_format_new(struct mft_inode *mi, struct 
-ntfs_sb_info *sbi, CLST rno,
 
-      rec->seq = cpu_to_le16(seq);
-      rec->flags = RECORD_FLAG_IN_USE | flags;
-+    if (MFTRECORD_FIXUP_OFFSET == MFTRECORD_FIXUP_OFFSET_3)
-+        rec->mft_record = cpu_to_le32(rno);
+Yunsheng Lin (2):
+  net: introduce and use skb_frag_fill_page_desc()
+  net: remove __skb_frag_set_page()
 
-      mi->dirty = true;
+ .../net/ethernet/aquantia/atlantic/aq_ring.c  |  6 +--
+ drivers/net/ethernet/broadcom/bnx2.c          |  1 -
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  6 +--
+ drivers/net/ethernet/chelsio/cxgb3/sge.c      |  5 +--
+ drivers/net/ethernet/emulex/benet/be_main.c   | 30 +++++++-------
+ drivers/net/ethernet/freescale/enetc/enetc.c  |  5 +--
+ .../net/ethernet/fungible/funeth/funeth_rx.c  |  5 +--
+ drivers/net/ethernet/marvell/mvneta.c         |  5 +--
+ .../net/ethernet/mellanox/mlx5/core/en_rx.c   |  4 +-
+ drivers/net/ethernet/sun/cassini.c            |  8 +---
+ drivers/net/virtio_net.c                      |  4 +-
+ drivers/net/vmxnet3/vmxnet3_drv.c             |  4 +-
+ drivers/net/xen-netback/netback.c             |  4 +-
+ include/linux/skbuff.h                        | 39 +++++--------------
+ net/bpf/test_run.c                            |  3 +-
+ net/core/gro.c                                |  4 +-
+ net/core/pktgen.c                             | 13 ++++---
+ net/core/skbuff.c                             |  7 ++--
+ net/tls/tls_device.c                          | 10 ++---
+ net/xfrm/xfrm_ipcomp.c                        |  5 +--
+ 20 files changed, 62 insertions(+), 106 deletions(-)
 
-diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-index 12019bfe1325..7ab0a79c7d84 100644
---- a/fs/ntfs3/super.c
-+++ b/fs/ntfs3/super.c
-@@ -867,7 +867,7 @@ static int ntfs_init_from_boot(struct super_block 
-*sb, u32 sector_size,
-      }
-
-      sbi->max_bytes_per_attr =
--        record_size - ALIGN(MFTRECORD_FIXUP_OFFSET_1, 8) -
-+        record_size - ALIGN(MFTRECORD_FIXUP_OFFSET, 8) -
-          ALIGN(((record_size >> SECTOR_SHIFT) * sizeof(short)), 8) -
-          ALIGN(sizeof(enum ATTR_TYPE), 8);
-
-@@ -909,10 +909,10 @@ static int ntfs_init_from_boot(struct super_block 
-*sb, u32 sector_size,
-
-      sbi->new_rec = rec;
-      rec->rhdr.sign = NTFS_FILE_SIGNATURE;
--    rec->rhdr.fix_off = cpu_to_le16(MFTRECORD_FIXUP_OFFSET_1);
-+    rec->rhdr.fix_off = cpu_to_le16(MFTRECORD_FIXUP_OFFSET);
-      fn = (sbi->record_size >> SECTOR_SHIFT) + 1;
-      rec->rhdr.fix_num = cpu_to_le16(fn);
--    ao = ALIGN(MFTRECORD_FIXUP_OFFSET_1 + sizeof(short) * fn, 8);
-+    ao = ALIGN(MFTRECORD_FIXUP_OFFSET + sizeof(short) * fn, 8);
-      rec->attr_off = cpu_to_le16(ao);
-      rec->used = cpu_to_le32(ao + ALIGN(sizeof(enum ATTR_TYPE), 8));
-      rec->total = cpu_to_le32(sbi->record_size);
 -- 
-2.34.1
+2.33.0
 
