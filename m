@@ -2,110 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9226FB33D
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FACB6FB340
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234092AbjEHOtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 10:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56182 "EHLO
+        id S234178AbjEHOuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 10:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234227AbjEHOtD (ORCPT
+        with ESMTP id S234044AbjEHOue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 10:49:03 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C2F72A6;
-        Mon,  8 May 2023 07:48:56 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1929818d7faso31929077fac.0;
-        Mon, 08 May 2023 07:48:56 -0700 (PDT)
+        Mon, 8 May 2023 10:50:34 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DC6C5
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 07:50:32 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-94f4b911570so715782666b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 07:50:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683557335; x=1686149335;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=04DgYL9ZmEKaOVbUM4T7mAu34s7OhOg8hMlDmx91xxc=;
-        b=kYnsHzNbR1qG49sGNL1PXh2+Zlj+RgCIFyEXKDff56OhszMSee14AKlklmCWAScd9Q
-         zDRxPh0O5sQhykgRgzyBKJ/34sn8gDAAZnsYK+/6q1mn4TY8bMcQlg/Lvm8LZLy3+R7r
-         sMYljHaVKy3B39wEtUVFYdhIhKfhvOKXG1KpE3xqE5BN38AFGodiMZ3o74hkkv448irY
-         piLnoEnf6l/zg/uEYgnZfp6bC+fF8yLbFMOBpFBzecculsyj2gEMsRanL04l/ySbLldj
-         7i7atqVlypl5Pqo2sKoptt8NoeRwWUzpXdubYghD+cAWPvVeJAXrOnQ2qiIogfn8wsww
-         0pVA==
+        d=linaro.org; s=google; t=1683557431; x=1686149431;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gMmZCKvPSgtFZs9o13Tig/KfWa59Ms4zy6g+NjJ0joQ=;
+        b=XjHfVTNS7RPgE5uMNqBQZYYU1GHP/gHYtMXKaN3iX9Wr5HwDo9N9A3ire6KDFgWwQx
+         nlbUP6YRublx+RB4abMEZRBoYIte1TlgktsGloqxjFzctwAIo0jBLqcc+cGpEit5gmKc
+         nTlteuP2thrdZKg4xeRcw7FsfOtz/L/5d66s6FZj7DNmu6ppfkG2gwoo0ZQz2cxnJmXF
+         pL4qcygEEQGKMQiEQzJ8R9UV38DVSIKsBMOqWTzJNLl3/JtgiYFmdT6MIzoU97qG0MiX
+         2+kzQOVLtcpDBdL9q64Ej8uPgan4p5jpX/m6T83XRFnKRZa+OYlNRrQIICAC+NLaiXds
+         tMKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683557335; x=1686149335;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=04DgYL9ZmEKaOVbUM4T7mAu34s7OhOg8hMlDmx91xxc=;
-        b=UlS/J7pbnIRKkAxSZLwNTYrvrt/UEwlXlkf15xTpKzo6EubUV7RggjQfF4zy9Pe/Uz
-         uTlipVhT9S1CT1RH1VAnA9zPV+sxSjz6cLEeSGIkEsLfdEIh9zijwgLBoehLcmQauBa1
-         b3/1f4DlBZoh1SuqYiGuLpn8b4cCe/nlZiVMqQR3HyaZym1YqU1AulHxF4WB/20p5nmQ
-         6hO2EDEUcp5iYpMfO9jDmoKdXpTzmD743so0b4w4bWgX/ogYk3SpoHyxyJVEBktibxA+
-         3WdvSWIO6uhuIJ7dP/Mvp4k/QtewtLhXleGbS/TTBIdWW9LSimPGOT6nDztPSu4LsRbH
-         Tf7g==
-X-Gm-Message-State: AC+VfDz9hiCb2+VRdM/8R1X7wIG4ZUVPVrWQ2/Afg5I/1Ufgy6kocVi4
-        vCK9Glh1NWDOR3CnYoC/JyxU6hPmfFSIgAUArhs=
-X-Google-Smtp-Source: ACHHUZ5uFtaaZR1vMZ02+lkLzojO4L4M4UVAAAwwix4mKnkizhVuz2ka1KhN5RWUbkjK0YLdJfR0IvFX1S/fG8H60ys=
-X-Received: by 2002:aca:df03:0:b0:38c:2c79:37e with SMTP id
- w3-20020acadf03000000b0038c2c79037emr7844626oig.20.1683557335416; Mon, 08 May
- 2023 07:48:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683557431; x=1686149431;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gMmZCKvPSgtFZs9o13Tig/KfWa59Ms4zy6g+NjJ0joQ=;
+        b=gZETbVkcJ6bCN702NPynqHdJaLo1q80UdnnFCQujC+779JmM8wd76/CEClYWfsmfi+
+         KzJ+730zUbOrdptTERv1oLDn2oDssEOfOC1nbSf/Uz0lLu2PxaEoxyiLbFdv5dydOK4h
+         kO/0vShKPDOQluFgGxiELyJ/ZFG76ui7ctsZWwnb2QXXb2s3WJHxxRu3IZNBJKqWeV8O
+         GCzYaf/Nzx6H8xH38tv0NpmIpoBtV9LBedPbtmS14j3+cMO1uIhbfxxl7IIms14mIG9i
+         nweoQSMw1wdNL21IUC8mZzUNw8HKkBHYbZzw7/89U7UuQmRdRdFMhOciR7DeVa0Hcwi4
+         LWvA==
+X-Gm-Message-State: AC+VfDyVMI8W5K7d6ERrpRKwNzMoIcUBgHM6y0zR3NCtxHGYJrmG7nS+
+        aaTvwmdsA4e9nHgrGYGskAEM2w==
+X-Google-Smtp-Source: ACHHUZ5SG0QojaChuSrchOK7fGRM4vlmbcHOXVXAIXai8UkeYvgifoSmigtg9gE8tLFTKRugSiG76g==
+X-Received: by 2002:a17:907:3faa:b0:966:17b2:5b15 with SMTP id hr42-20020a1709073faa00b0096617b25b15mr7285332ejc.7.1683557431048;
+        Mon, 08 May 2023 07:50:31 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
+        by smtp.gmail.com with ESMTPSA id rq12-20020a17090788cc00b0094f0f0de1bcsm46430ejc.200.2023.05.08.07.50.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 07:50:30 -0700 (PDT)
+Message-ID: <9e637c7e-c7b5-6eb6-c3e0-c7842d2756ac@linaro.org>
+Date:   Mon, 8 May 2023 16:50:27 +0200
 MIME-Version: 1.0
-References: <20230506081043.73456-1-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20230506081043.73456-1-jiapeng.chong@linux.alibaba.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 8 May 2023 10:48:43 -0400
-Message-ID: <CADnq5_PCdwi_d_gPjH0uBngHanzzC1nk8vfTRMO=ZrP6dSVY2Q@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: Remove the unused variable golden_settings_gc_9_4_3
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     alexander.deucher@amd.com, Xinhui.Pan@amd.com,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        sumit.semwal@linaro.org, linaro-mm-sig@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, christian.koenig@amd.com,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/4] ARM: dts: Add .dts files missing from the build
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Lars Persson <lars.persson@axis.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Daniel Palmer <daniel@thingy.jp>,
+        Romain Perier <romain.perier@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Barker <paul.barker@sancloud.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@axis.com
+References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
+ <20230504-arm-dts-mv-v1-2-2c8e51a2b6c4@kernel.org>
+ <CACRpkdbfKdR=ru8dCJL0Tincu2-Smsi56vt=C7OW3K9JuQ=47Q@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CACRpkdbfKdR=ru8dCJL0Tincu2-Smsi56vt=C7OW3K9JuQ=47Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On 08/05/2023 16:48, Linus Walleij wrote:
+> On Fri, May 5, 2023 at 5:29 AM Rob Herring <robh@kernel.org> wrote:
+> 
+>> Comparing .dts files to built .dtb files yielded a few .dts files which
+>> are never built. Add them to the build.
+>>
+>> Signed-off-by: Rob Herring <robh@kernel.org>
+> 
+> Wow weird.
 
-On Sat, May 6, 2023 at 4:11=E2=80=AFAM Jiapeng Chong
-<jiapeng.chong@linux.alibaba.com> wrote:
->
-> Variable golden_settings_gc_9_4_3 is not effectively used, so delete it.
->
-> drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c:48:38: warning: =E2=80=98golden_s=
-ettings_gc_9_4_3=E2=80=99 defined but not used.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D4877
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c b/drivers/gpu/drm/am=
-d/amdgpu/gfx_v9_4_3.c
-> index 312491455382..74be46d382f4 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c
-> @@ -45,10 +45,6 @@ MODULE_FIRMWARE("amdgpu/gc_9_4_3_rlc.bin");
->  #define GFX9_MEC_HPD_SIZE 4096
->  #define RLCG_UCODE_LOADING_START_ADDRESS 0x00002000L
->
-> -static const struct soc15_reg_golden golden_settings_gc_9_4_3[] =3D {
-> -
-> -};
-> -
->  static void gfx_v9_4_3_set_ring_funcs(struct amdgpu_device *adev);
->  static void gfx_v9_4_3_set_irq_funcs(struct amdgpu_device *adev);
->  static void gfx_v9_4_3_set_gds_init(struct amdgpu_device *adev);
-> --
-> 2.20.1.7.g153144c
->
+I wonder now whether there are such *.c files as well...
+
+Best regards,
+Krzysztof
+
