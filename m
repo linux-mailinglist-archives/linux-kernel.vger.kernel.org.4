@@ -2,52 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4886FA029
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35F16FA02D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232632AbjEHGwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 02:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
+        id S232957AbjEHGwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 02:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjEHGwG (ORCPT
+        with ESMTP id S232956AbjEHGwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 02:52:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6539DA5DE;
-        Sun,  7 May 2023 23:52:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CADB861F40;
-        Mon,  8 May 2023 06:52:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF37DC433EF;
-        Mon,  8 May 2023 06:52:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1683528723;
-        bh=M/Q12ygS5Lrso8R9nyop81hg2ZlhKYBSdWRe3nCpEIs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s1wCHauNi5QLiaRL7SmSfre0aQrIAGFFqov50dna9lXBk/7pSoVI9eRnBXwZzMdrQ
-         /VScc7UusH7//9LI82fHs10l9D48+fBVNESueKcztNFHd/1jgNNCSBjbKBWKgcnyTm
-         4gnThDjhSUMZr8ar7DRis3JjAu82X5vIRqvMFs7I=
-Date:   Mon, 8 May 2023 08:51:55 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>
-Subject: Re: [BUG] Kmemleak, possibly hiddev_connect(), in 6.3.0+ torvalds
- tree commit gfc4354c6e5c2
-Message-ID: <2023050824-juiciness-catching-9290@gregkh>
-References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
+        Mon, 8 May 2023 02:52:50 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646DE11628;
+        Sun,  7 May 2023 23:52:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1683528769; x=1715064769;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jmyhl5KhhfscLfRNmqFrjA+USTYyDadaT89tqH5yj9c=;
+  b=si8BPrZhlVrHr9U9UacDS+Npvj+zdbyvBxmHDyQ9nJSCodJ2DOk2DNVL
+   0nk4iw38sPwHEnSl5szhbrIK2QPVOlY+eZGklnIh9rtF/iBq+MKtSxDDQ
+   2UN4e/tuGklP/AuXA6EfkEF/wegNyv5pZcq7tzlmKl346SCgik5bLKhPi
+   V50DhbJKBRs9X52NGceBXX8j2yEOcVmoNGfJM0kpsnkPgSPejFTcIFiuc
+   bU8W3eogzqlIA+LfGv1Ukz/2PppEjFwQFXwVvz7CmSYP+dSd7DGWUxguH
+   E2H4165Yl4OvRX/8MSFr9npTP30v1Vts3hSwky3F3uSBD9x3XG/Y1dk2m
+   w==;
+X-IronPort-AV: E=Sophos;i="5.99,258,1677567600"; 
+   d="asc'?scan'208";a="212854013"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 May 2023 23:52:47 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Sun, 7 May 2023 23:52:46 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Sun, 7 May 2023 23:52:43 -0700
+Date:   Mon, 8 May 2023 07:52:24 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Guo Ren <guoren@kernel.org>
+CC:     Conor Dooley <conor@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH 2/5] riscv: Add the T-HEAD SoC family Kconfig option
+Message-ID: <20230508-splashed-voicing-bc6e91aeb053@wendy>
+References: <20230507182304.2934-1-jszhang@kernel.org>
+ <20230507182304.2934-3-jszhang@kernel.org>
+ <20230507-sleeve-tacky-21e817e31fb2@spud>
+ <CAJF2gTTSRQUX8C3C-tgq4o5iGJqKTja7-1Dv8epG_qZizUvSow@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="WAjmQ6ZL3drTJadU"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <CAJF2gTTSRQUX8C3C-tgq4o5iGJqKTja7-1Dv8epG_qZizUvSow@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,76 +78,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
-> Hi,
-> 
-> There seems to be a kernel memory leak in the USB keyboard driver.
-> 
-> The leaked memory allocs are 96 and 512 bytes.
-> 
-> The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
-> Lightning mobo,
-> and Genius SlimStar i220 GK-080012 keyboard.
-> 
-> (Logitech M100 HID mouse is not affected by the bug.)
-> 
-> BIOS is:
-> 
->      *-firmware
->           description: BIOS
->           vendor: American Megatrends International, LLC.
->           physical id: 0
->           version: 1.21
->           date: 04/26/2023
->           size: 64KiB
-> 
-> The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
-> 
-> The keyboard is recognised as Chicony:
-> 
->                  *-usb
->                       description: Keyboard
->                       product: CHICONY USB Keyboard
->                       vendor: CHICONY
->                       physical id: 2
->                       bus info: usb@5:2
->                       logical name: input35
->                       logical name: /dev/input/event4
->                       logical name: input35::capslock
->                       logical name: input35::numlock
->                       logical name: input35::scrolllock
->                       logical name: input36
->                       logical name: /dev/input/event5
->                       logical name: input37
->                       logical name: /dev/input/event6
->                       logical name: input38
->                       logical name: /dev/input/event8
->                       version: 2.30
->                       capabilities: usb-2.00 usb
->                       configuration: driver=usbhid maxpower=100mA
-> speed=1Mbit/s
-> 
-> The bug is easily reproduced by unplugging the USB keyboard, waiting about a
-> couple of seconds,
-> and then reconnect and scan for memory leaks twice.
-> 
-> The kmemleak log is as follows [edited privacy info]:
-> 
-> root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
-> unreferenced object 0xffff8dd020037c00 (size 96):
->   comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
->   hex dump (first 32 bytes):
->     5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
->   backtrace:
->     [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
->     [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
->     [<ffffffffb87543d9>] class_create+0x29/0x80
->     [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
+--WAjmQ6ZL3drTJadU
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As the call to class_create() in this path is now gone in 6.4-rc1, can
-you retry that release to see if this is still there or not?
+On Mon, May 08, 2023 at 02:42:10PM +0800, Guo Ren wrote:
+> On Mon, May 8, 2023 at 5:22=E2=80=AFAM Conor Dooley <conor@kernel.org> wr=
+ote:
+> >
+> > On Mon, May 08, 2023 at 02:23:01AM +0800, Jisheng Zhang wrote:
+> > > The first SoC in the T-HEAD series is light(a.k.a th1520), containing
+> > > quad T-HEAD C910 cores.
+> > >
+> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > ---
+> > >  arch/riscv/Kconfig.socs | 6 ++++++
+> > >  1 file changed, 6 insertions(+)
+> > >
+> > > diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+> > > index 1cf69f958f10..ce10a38dff37 100644
+> > > --- a/arch/riscv/Kconfig.socs
+> > > +++ b/arch/riscv/Kconfig.socs
+> > > @@ -41,6 +41,12 @@ config ARCH_SUNXI
+> > >         This enables support for Allwinner sun20i platform hardware,
+> > >         including boards based on the D1 and D1s SoCs.
+> > >
+> > > +config ARCH_THEAD
+> >
+> > Could you please add a defconfig patch, adding this option, so that we
+> > build support for this platform by default?
 
-thanks,
+> Yes, but it's another patch, see: 'commit eb20e7cb91ba ("riscv:
+> defconfig: Enable the Allwinner D1 platform and drivers")'
 
-greg k-h
+But that's ARCH_SUNXI for the Allwinner D1. If the TH1520 is a
+first-party SoC, and not an Allwinner product, it needs a new Kconfig
+entry etc.=20
+If it is an Allwinner, then the dts etc should be in the Allwinner
+directory too.
+
+Cheers,
+Conor.
+
+--WAjmQ6ZL3drTJadU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFicGQAKCRB4tDGHoIJi
+0pjPAP0S/tHQSJAG9NJlAJoKtXSJqHqgGe4uxJHLZs3z9WuyGQEA+7omrh/Hz8AJ
+5GT8mkA0HjL61HBgDk4yjXhRCjOZfQw=
+=kbWE
+-----END PGP SIGNATURE-----
+
+--WAjmQ6ZL3drTJadU--
