@@ -2,115 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1EC6FB84D
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0AA6FB856
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbjEHU3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 16:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
+        id S232429AbjEHUeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 16:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjEHU3I (ORCPT
+        with ESMTP id S229560AbjEHUee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 16:29:08 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B3149C3;
-        Mon,  8 May 2023 13:29:05 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5C8025C0121;
-        Mon,  8 May 2023 16:29:04 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 08 May 2023 16:29:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
-        :content-transfer-encoding:content-type:content-type:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1683577744; x=1683664144; bh=G+jMg55hOCbbocEq58MWNDAQoerhosGi6pJ
-        guyIM6MA=; b=UUMbwrGeXkFMipqOEKf0dX+bYnqTaHbps0bjOM5+1ODVYLW5Sxv
-        Ig+gcOoNtgT9js4RcUG4lY3bnS+O4v2cQXUP3PLuGETZWYDfood/lfgvht+Ld0I2
-        /gt4D7eJFLQEeVMdm1rTAjzZajhnkqkMmvbZ4kiQGtgdHdqpmRSJrcpdDXhna+lk
-        t3ijAC2QcJzFvJLG7PI3Tr/5qmye3CY3n/7uKcXpqOxtY4zBGbep2Fjk8bug9cRo
-        +FTWjLcr8ebvts1IJMJI3j1OefQ5uqUj94iy0rLljhIxukZvnla1FvZiOat6xuom
-        LsRD7iYmTcZXFr4XCp/JXmrsWiJdWfLQa+A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1683577744; x=1683664144; bh=G+jMg55hOCbbocEq58MWNDAQoerhosGi6pJ
-        guyIM6MA=; b=T39FrWc6UnUy+llTJ+G4RR7R1tsi13odoejvkqf1fTWTgFcwIwm
-        /W/7dl789lCqMOe3fc+jOeeSJ2GKlLH7Sp6BCM7TJbRtuXa5m6wLo1iYjrHxP81K
-        1NYjvE8jq585Oq6M/lc+kbWOOiHt8LUbg86K8G5U5NV2HzoTCMB0ay29JpWh/h/E
-        ui0vFOhuNtqzTlNltrjA+pxIMH8ugwwtx0Ji5Y9vYV4IqSORlkmyeKJk+6aCLo6y
-        EYI13qNgkwRF1gTfA+VeQxbndH4u5xV9qZpM0KidNvV2QGb1ZKqe2U8Ay7+plXig
-        04TIiJo9hyY3sP/NkcoBFPRzzPEhXVQAFZw==
-X-ME-Sender: <xms:kFtZZADVOmLUocTraxTqeX5QsZQHAwKxtyeTflTGvFrjNZWgXf2QDw>
-    <xme:kFtZZCjNYFK9MlPUvLG-0XKRUixXu2H_0-NjJQB0ei5AmlTA6WF0cyN_KaRKuHrFk
-    YgBzfpMv3qkopIc0A>
-X-ME-Received: <xmr:kFtZZDmiydNh-eopV4dsbBixKxCRdEpGyveTx0_0YCvw0wlnIngcZk0K8h25wMUOrtogX0yWWboZSFwsDJknOqVUtw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeefkedgudeglecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomheptehl
-    ihgtvgcutfihhhhluceorghlihgtvgesrhihhhhlrdhioheqnecuggftrfgrthhtvghrnh
-    epheduuddvteekvdektdduledugfffhfdugeejgeeuvdevtdetveejheehiefffeegnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvg
-    esrhihhhhlrdhioh
-X-ME-Proxy: <xmx:kFtZZGy0CJTOlI3pPKxIIMSdNEWnI2iaxyh5QgUMu6h8xDRJ_qZkRQ>
-    <xmx:kFtZZFSeoRGNRwYEAqLKFUtY_Cafveb4dVyxKcPC92zy37S6yXW28Q>
-    <xmx:kFtZZBZ-ZgQ2_hhfGfOaJ-YdiKCLRBykxZBRGUfM55Cxseg2Egb63Q>
-    <xmx:kFtZZC_IowVBjXMV4LBDPYE9oSFd-wbnmAk0lg7WjHeePUSDjMf47w>
-Feedback-ID: i56684263:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 8 May 2023 16:29:01 -0400 (EDT)
-Message-ID: <bb3bfbfb-0761-23b2-24e9-e5b4cb3ffac6@ryhl.io>
-Date:   Mon, 8 May 2023 22:29:00 +0200
+        Mon, 8 May 2023 16:34:34 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3839D
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 13:34:33 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-643912bca6fso3954912b3a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 13:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683578073; x=1686170073;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r2TXVO3Qn0ZnUGYp0raU3hg8EYGwwYic/8hFVnmbHWs=;
+        b=lS4HXOrdVEKBi/R0Q75reRHIeEjldMgx+0TeJj1PlEuFDUJyd4StX+cIDF4S72tYTI
+         d8FHPYc3fN2VewD7Ysi/qz1FFyaVqSCyEdA4pGxmnY27Mr8y0uNMDK8C1hwGXzok73Jq
+         IdJxQ/XO9a5X9z50ENag+UYuJdwAsTPsuy1Coxcjg3rWTqT8nX72k50Dd3GxuB/sdk3i
+         US2/uHM4lgUOcBjEATwOGVKqk/pDt8bI6iasZa2Z0VhnZUF9gPC2UX0OI9vBOQPtu0mt
+         L47VEd5D1lqFNPnw514tAgHEiaMvjfEgDKkIANdBwabdDBBtrCymrsyttxyg6mrqImVM
+         /W3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683578073; x=1686170073;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r2TXVO3Qn0ZnUGYp0raU3hg8EYGwwYic/8hFVnmbHWs=;
+        b=Q6vY9DJ6/djwmCAbaSlPWChNHog7Kr1UdoYWN6RNLsU1vCMmo6QykNDbBfi7rvsKYD
+         lo8ZDdsLtduHKgBetjlwzspHxf4OFBHe3z4ZE0qLtUDk2V7ncHHab49sP2+x/dEQ5Ikw
+         DDHMK5VyeLkLdJNnklgr+jak21S8YJgPJawijGU/RUYYSFhRRRSO+xGslW6kJBq75S9u
+         uxKqN/YwrAkwGXcob+K0oCEhu8VgeRynhsOfLk3o95LCtk3LUtDb8ZUG3GeVmBCvyUl4
+         R6Q+ag5Z0YHZy6G7Ph3WS3PSIYmPfOkwwF793rSiZV8je9fQCwAWQieSkQOIamlOo6Px
+         gjgg==
+X-Gm-Message-State: AC+VfDwUwbhDOJaslDoSDF38RZR1s0Uns3zN5QqpJepAGA36IFWf7f8F
+        t/p9zbtMPnAPWty3JYj09QJDysKe2dY=
+X-Google-Smtp-Source: ACHHUZ68Z82cnITJjjL6eVxbTPM9vzkvLiktkeW5JkC4MrpQwn+V+0vBurDAzgpm/3aj+dRO/t3R0w==
+X-Received: by 2002:a05:6a20:4325:b0:100:ac13:9a57 with SMTP id h37-20020a056a20432500b00100ac139a57mr4739887pzk.55.1683578072970;
+        Mon, 08 May 2023 13:34:32 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n1-20020aa78a41000000b0064550f76efesm396383pfa.29.2023.05.08.13.34.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 13:34:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 8 May 2023 13:34:30 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: Linux 6.4-rc1
+Message-ID: <3b2e90bb-c28f-447a-abf8-2b5453da8092@roeck-us.net>
+References: <CAHk-=wiUxm-NZ1si8dXWVTTJ9n3c+1SRTC0V+Lk7hOE4bDVwJQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2] rust: str: add conversion from `CStr` to `CString`
-To:     Gary Guo <gary@garyguo.net>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-References: <20230503141016.683634-1-aliceryhl@google.com>
- <20230508124127.77a97c54.gary@garyguo.net>
-Content-Language: en-US-large
-From:   Alice Ryhl <alice@ryhl.io>
-In-Reply-To: <20230508124127.77a97c54.gary@garyguo.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiUxm-NZ1si8dXWVTTJ9n3c+1SRTC0V+Lk7hOE4bDVwJQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/8/23 13:41, Gary Guo wrote:
-> On Wed,  3 May 2023 14:10:16 +0000
-> Alice Ryhl <aliceryhl@google.com> wrote:
+On Sun, May 07, 2023 at 02:18:22PM -0700, Linus Torvalds wrote:
+> So here we are, two weeks later, with the merge window over, and -rc1
+> tagged and pushed out.
 > 
->> These methods can be used to copy the data in a temporary c string into
->> a separate allocation, so that it can be accessed later even if the
->> original is deallocated.
->>
->> The API in this change mirrors the standard library API for the `&str`
->> and `String` types. The `ToOwned` trait is not implemented because it
->> assumes that allocations are infallible.
+[ ... ]
 > 
-> How about add a `TryToOwned` trait to the kernel crate and implement
-> that trait for `CStr` instead?
+> Anyway, please do go test it all out,
+> 
 
-Eh, I don't think it's worth it. It doesn't give anything new to the 
-CStr api, and I think it's rather unlikely that someone will actually 
-need to be generic over such a trait any time soon.
+Build results:
+	total: 152 pass: 146 fail: 6
+Failed builds:
+	arm:allmodconfig
+	i386:allyesconfig
+	i386:allmodconfig
+	mips:allmodconfig
+	powerpc:ppc32_allmodconfig
+	xtensa:allmodconfig
+Qemu test results:
+	total: 520 pass: 520 fail: 0
+
+The build failure is
+
+drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c:
+	In function 'mxc_isi_channel_set_inbuf':
+drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c:33:5: error:
+	"CONFIG_ARCH_DMA_ADDR_T_64BIT" is not defined, evaluates to 0
+
+The problem has been fixed in -next since April 18 with commit 9829ed20b019
+("media: nxp: imx8-isi: fix buiding on 32-bit"). Hopefully that commit
+should find its way into mainline in the near future.
+
+Guenter
