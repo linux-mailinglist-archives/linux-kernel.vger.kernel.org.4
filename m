@@ -2,105 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F0D6FB9B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405B86FB9BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233750AbjEHVaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 17:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
+        id S229492AbjEHVbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 17:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233450AbjEHVaD (ORCPT
+        with ESMTP id S233705AbjEHVbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 17:30:03 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0681994
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 14:30:02 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-76c56d0e265so1533639f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 14:30:02 -0700 (PDT)
+        Mon, 8 May 2023 17:31:20 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7951994
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 14:31:18 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so27425103276.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 14:31:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1683581401; x=1686173401;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4aWrgKo0KCjqs44bpXAfvA4ZqQoaxuHBLhlatswZ7io=;
-        b=bh94yh6SgENk3JX/j5hSR2YoTFILkcgMWznMypE2g+k1ZmURDVX+2Its+1G434XqcQ
-         z9M88J8Q6kXsfJBKgbQNB5TGLVDk8NEQpX5PXJ32RO2ftGo7xkAmixc0YFtFTTRvOvhN
-         9vUtJ4xgRMq+kc+htuQ6HgFusR+OsXK7w1EeQ=
+        d=linaro.org; s=google; t=1683581477; x=1686173477;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mOJR/20LVKyz48EAyeHc1+jVArD8eFRaiPVz2llKJYw=;
+        b=xnPwIs1cwDo2FfYER/sCJ/da+7w70ojR2vcIjoTIwWXCv32mMF1zm1BD4+lfb2YBZM
+         a2JVJMgplb8WbXqgCdHgK8Kp72gs89jO2wf+8i72UAlWKsMEO+QAvE2kzbL6W+zsK4XX
+         5Z8iTG2eG+u2fgFxWPNmnpwDmCvRMpfx0fMcptbYfNamY9350JY8Gd4qdqq2mPQh9kC0
+         +x56ZfIKBMwAlE8P63WHOLZVXUP3U77r1pEjelQEPWycVNYaZZsW7RV6EqwWY1pIciet
+         mUJNXjEV6P9b/N9Sms+auwR08F+s4xsHpxn7JhrpRdBY15Z66VnYReC0HO7LXkTpsCWj
+         0ulg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683581401; x=1686173401;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4aWrgKo0KCjqs44bpXAfvA4ZqQoaxuHBLhlatswZ7io=;
-        b=Zbq7oD6wPubilBKvpl54jBL8N15M1SuXOjArMnfA0tlr2WMcqu2vDxcoWvynRkK9Wu
-         UbfdTROv7OzDC3HSAa02lV5P7stR/jpL1NoPqGzihi4LNB/77DcT9QiP9qBkcGqvycy+
-         L/g9L3P4B2wz3P3KgVPRS+4NUxYD0aIbjMncFVR6LMIwZb9NrRnpBzSZ4GsuF8f8fZQ9
-         fdoExTMV1KDBAaB0IvBdCLXTkmQ6eH13hFr2LJoBsWCwSBXJYdS01nTqHaaKgRMNES6w
-         mRh6dI4Ef4ckklTjCedS9FOFb17iydL77KL4hpl95IclDPUAaEXlU6w0Jd1pMPiEvIaK
-         nD5g==
-X-Gm-Message-State: AC+VfDzttsb7lcakqE/XuRVFwBcg5icv8bVM9YWLoq4smZppxXqhu1fa
-        9z+pvXMSfmZR20SVDajIuOzwpg==
-X-Google-Smtp-Source: ACHHUZ5wg5Glntzt6FEJOgeM9pJxKb98jumhL21u83nHb2Qz7T8eZzlRBm0MyFziU9TYc1r9rfDrUw==
-X-Received: by 2002:a05:6e02:1541:b0:32a:a8d7:f099 with SMTP id j1-20020a056e02154100b0032aa8d7f099mr5773464ilu.3.1683581401679;
-        Mon, 08 May 2023 14:30:01 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id x14-20020a02948e000000b0040fa3029857sm2308720jah.128.2023.05.08.14.30.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 14:30:01 -0700 (PDT)
-Message-ID: <b23432a1-593d-73d5-6bcf-bacd16f0bc10@linuxfoundation.org>
-Date:   Mon, 8 May 2023 15:30:00 -0600
+        d=1e100.net; s=20221208; t=1683581477; x=1686173477;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mOJR/20LVKyz48EAyeHc1+jVArD8eFRaiPVz2llKJYw=;
+        b=EqFgZZGtCFDP7zWiljO7OklSfEq4mVUK3xI41ZtNfgXLyUeq3k9srOn1qymg6GjR4S
+         FVa2hpRUZVu7tV9amXQA1DdZOYNiRU+L68fdlntJ6L63/68Go35geH0SrerGsdRFH6vh
+         WWRM0WIkz9JI8n90eDCWuO3WR97lYocVih6zxo/JNQ2D6zxkMCRJRQP5H0pZgLGiB988
+         bo2AMshopraqky9WxHwVUOZOoQOEzteBHZBRPZkXn7oX+Kpb6iJBk7e89LW3MH1QqZqr
+         +fWKBlT2au5vgfjCDW0GNZ3wPhkZDkkjDGC3S0ytt8AqYDByTrzEYFQO7rx7DFxxdOIe
+         En+Q==
+X-Gm-Message-State: AC+VfDxdcPjqf2SnSvY29NY3s8Abw2oMMYhr0GcTVKTdekuvB9+mNrQG
+        NB9Cvd0bKAZK46VG1ASJnElGXVqIJX3NUQHPl+fYXA==
+X-Google-Smtp-Source: ACHHUZ58fReQQ4pRCBtoCz9Lw0P3GVuCrDW/FKsG0+nk/YgPWCXp8EO7CBeqYU//QyxCun6JDuY2iPWmdeq6/W2Qfd0=
+X-Received: by 2002:a81:4c4c:0:b0:54f:54c5:70d with SMTP id
+ z73-20020a814c4c000000b0054f54c5070dmr13840092ywa.20.1683581477497; Mon, 08
+ May 2023 14:31:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 5.15 000/371] 5.15.111-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230508094811.912279944@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230508094811.912279944@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230430-nokia770-regression-v3-0-a6d0a89ffa8b@linaro.org>
+ <20230430-nokia770-regression-v3-1-a6d0a89ffa8b@linaro.org>
+ <ZFVGMiuRT+e2eVXw@google.com> <CACRpkdZUXOTOK9CObdXuHQx4PMD3ykMKco8X5ijchkZ8cEmQvA@mail.gmail.com>
+ <ZFlpYff6I5V6JiH1@google.com>
+In-Reply-To: <ZFlpYff6I5V6JiH1@google.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 8 May 2023 23:31:06 +0200
+Message-ID: <CACRpkdae4+0vsJS71G6dR5PEpMw13JGJAJr9Jyf2T+Z8gOgoxQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] Input: ads7846 - Convert to use software nodes
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Helge Deller <deller@gmx.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/8/23 03:43, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.111 release.
-> There are 371 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 10 May 2023 09:47:07 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.111-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Mon, May 8, 2023 at 11:28=E2=80=AFPM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+> On Mon, May 08, 2023 at 11:23:44PM +0200, Linus Walleij wrote:
 
-Compiled and booted on my test system. No dmesg regressions.
+> > > This needs to be
+> > >
+> > >         return !gpiod_get_value_raw(ts->gpio_pendown);
+> >
+> > There is no such function. The gpio descriptor runpath simply assumes t=
+hat
+> > device trees can be trusted.
+>
+> Sorry, this was supposed to be gpiod_get_raw_value():
+>
+> https://elixir.bootlin.com/linux/latest/source/drivers/gpio/gpiolib.c#L28=
+54
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+I missed it, I should have very well understood you meant that one...
+I just read the file too sloppily.
 
-thanks,
--- Shuah
+> Yeah, we we can land the DT fixes ahead of the driver change that would
+> be great. Otherwise we need a temporary application of
+> gpiod_get_raw_value().
+
+If the patch is fine I will send it to the SoC tree and ask for it to be
+applied as a fix.
+
+Yours,
+Linus Walleij
