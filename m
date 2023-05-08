@@ -2,176 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459F96FBB50
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD226FBB5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234016AbjEHXNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 19:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
+        id S234148AbjEHXS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 19:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjEHXNw (ORCPT
+        with ESMTP id S230022AbjEHXS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 19:13:52 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8406249FE;
-        Mon,  8 May 2023 16:13:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683587630; x=1715123630;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UpsSTff8/0ZXEy+QYlfFYcdPyMTh1FDGgu5tOGHwm04=;
-  b=KvguI4bktPpyYQuKGuMO3HJJQ4z5GOEy6n5udFyl6S8YCz//4YKnqrdX
-   kThhm+btaG1KFbw9PjukUzBf4RCEEfCzoIVt6T8fAKPDaaHxfzkQV3iKY
-   tdpNj1sl9/viNGZsP9AE+HrRvBcEY4YsInuV0VE4Zi01EH+K7lcwi5pOI
-   KS4R68Uf3bNsFJ/sYYCyzf7HM+eNouswoRAGlcNwVZYNkrXFycdw4a+3T
-   evk2kWHkci2Hh4185evYnDACEH+ohKD0YABHNcO0VelsN1VaP07mshsKH
-   8Mh6LsKJkEhmzoTnSDa9RugSDsmHDTUlIRbdkWma3umzJtBdFeZ9Nj/Yh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="351937836"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="351937836"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 16:13:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="788295124"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="788295124"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 May 2023 16:13:46 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pwA37-0001SX-09;
-        Mon, 08 May 2023 23:13:45 +0000
-Date:   Tue, 9 May 2023 07:13:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tony Lindgren <tony@atomide.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v10 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Message-ID: <202305090752.w4XZxmsN-lkp@intel.com>
-References: <20230508110339.38699-1-tony@atomide.com>
+        Mon, 8 May 2023 19:18:26 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42AC5FD2
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 16:18:17 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3ef2f81a96cso54588021cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 16:18:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1683587896; x=1686179896;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/T/3Ju9SHl8z4dLQUIePgnInKHbkru1zT7Bm+NgMbgE=;
+        b=YjCqBe4H69i+u3EZfBSFGDslkoVk6ESjXBUsfo3bBJcSijKdyGbUw2rlbiF4Q2kltk
+         KYlkUZmDfdRgdBkm2/wANH/1CdBPWyMJLePwEwQFoDTAm1UG7q3rKk2ZC60QrK6k4BoU
+         d2E8i133QbGfRKji4irFPihLHJxCeL2NjM9J8oS/4plNfSwcfO5N/T2fTfkPEcBRs8eL
+         LcE1LKtZTG/XZC+HMRqgifG0sPiE7hg0M/qtLpTyXdf/5gNv72NwYnjnlw8pgRmj8Y+F
+         D3Cwc0BfCR2L9/A7farDfLgxef2rt2KAjj7bHiQeBamifpkuK665mjRwFBAHat2RI1hM
+         qcmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683587896; x=1686179896;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/T/3Ju9SHl8z4dLQUIePgnInKHbkru1zT7Bm+NgMbgE=;
+        b=WKvL8jbqa8avHycO6ZVE86ru5jIIitWNbUNAMKJHFSIgXPXneAdu5YCaPHTpExMl46
+         1LlY9tICrsFLH5SdiugMpaS1GY+vfenvvuLKNAVSqGgsUEJDgj10FcSsrpRMN4MLCuDs
+         Y76EvyzAXsf3ccNl6wJYbRc48ApsZHZlWHPE0X0XDoVDOwV2Hamms0E8n4ix3MpV9Dh3
+         MOcFZ4/vYgUR8DLWGXLrD2xVMnLSSs7Zn/d3tI4W6UaMXhrOnpxqfx/TlQ4yX0Lw+eWd
+         rYgVvHC1PVw9i6Gk/tkaxcm1HszEIIORhvd+8d4KjCFT8dJHRqthvRMX7RfngDDgxEIr
+         cL9w==
+X-Gm-Message-State: AC+VfDzNSAPEJKWha8vGhB9TUuY7elA9qjrt2li6y3mEmk0g2TpSRc6S
+        cCzuIP8oipuYWxyqGOXiBZWFqHoGkHBpDe8Wqlga9w==
+X-Google-Smtp-Source: ACHHUZ6JYT/f+xJv653TO3g1x1rKedNi30qh/tkDkBep9kUsaxwnKE66YY9XdCW3vRn6BmH3IcrOLBUwksfg+O2m7Bs=
+X-Received: by 2002:ac8:7e84:0:b0:3f0:a336:afc4 with SMTP id
+ w4-20020ac87e84000000b003f0a336afc4mr15610437qtj.48.1683587896414; Mon, 08
+ May 2023 16:18:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508110339.38699-1-tony@atomide.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000258e5e05fae79fc1@google.com> <20230507135844.1231056-1-lrh2000@pku.edu.cn>
+ <CA+CK2bBe2YKYM3rUTCnZ0RF=NFUR9VqO-QYn3ygPsFJWLY1MUA@mail.gmail.com>
+ <ZFlrbDft1QfMyIDc@casper.infradead.org> <CA+CK2bDVjovwB9v-Zv4Fn7EUfp5FV2XK36iJKYKY7pYNOFfOGA@mail.gmail.com>
+ <ZFlvJEfs1ufh1UUD@casper.infradead.org> <CA+CK2bDC-FVv1tZg9MDn-N735Ak3OAtdZPf+LEYM-JHsO90YcQ@mail.gmail.com>
+ <fa1dac7a-406e-30ea-6aba-ded2e0e871fa@redhat.com>
+In-Reply-To: <fa1dac7a-406e-30ea-6aba-ded2e0e871fa@redhat.com>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Mon, 8 May 2023 16:17:39 -0700
+Message-ID: <CA+CK2bAHbHHwLUoGJkz8n6mrM5dy7oMojeNksdVOMYn+qFYngA@mail.gmail.com>
+Subject: Re: usbdev_mmap causes type confusion in page_table_check
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Ruihan Li <lrh2000@pku.edu.cn>,
+        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony,
+On Mon, May 8, 2023 at 3:46=E2=80=AFPM David Hildenbrand <david@redhat.com>=
+ wrote:
+>
+> On 08.05.23 23:55, Pasha Tatashin wrote:
+> > On Mon, May 8, 2023 at 2:52=E2=80=AFPM Matthew Wilcox <willy@infradead.=
+org> wrote:
+> >>
+> >> On Mon, May 08, 2023 at 02:48:59PM -0700, Pasha Tatashin wrote:
+> >>> On Mon, May 8, 2023 at 2:36=E2=80=AFPM Matthew Wilcox <willy@infradea=
+d.org> wrote:
+> >>>>
+> >>>> On Mon, May 08, 2023 at 05:27:10PM -0400, Pasha Tatashin wrote:
+> >>>>>> static void page_table_check_set(struct mm_struct *mm, unsigned lo=
+ng addr,
+> >>>>>>                                   unsigned long pfn, unsigned long=
+ pgcnt,
+> >>>>>>                                   bool rw)
+> >>>>>> {
+> >>>>>>          // ...
+> >>>>>>          anon =3D PageAnon(page);
+> >>>>>>          for (i =3D 0; i < pgcnt; i++) {
+> >>>>>>                  // ...
+> >>>>>>                  if (anon) {
+> >>>>>>                          BUG_ON(atomic_read(&ptc->file_map_count))=
+;
+> >>>>>>                          BUG_ON(atomic_inc_return(&ptc->anon_map_c=
+ount) > 1 && rw);
+> >>>>>>                  } else {
+> >>>>>>                          BUG_ON(atomic_read(&ptc->anon_map_count))=
+;
+> >>>>>>                          BUG_ON(atomic_inc_return(&ptc->file_map_c=
+ount) < 0);
+> >>>>>>                  }
+> >>>>>>                  // ...
+> >>>>>>          }
+> >>>>>>          // ...
+> >>>>>> }
+> >>>>>>
+> >>>>>> This call to PageAnon is invalid for slab pages because slab reuse=
+s the bits
+> >>>>>> in struct page/folio to store its internal states, and the anonymi=
+ty bit only
+> >>>>>> exists in struct page/folio. As a result, the counters are incorre=
+ctly updated
+> >>>>>> and checked in page_table_check_set and page_table_check_clear, le=
+ading to the
+> >>>>>> bug being raised.
+> >>>>>
+> >>>>> We should change anon boolean to be:
+> >>>>>
+> >>>>> anon =3D !PageSlab(page) && PageAnon(page);
+> >>>>
+> >>>> No.  Slab pages are not elegible for mapping into userspace.  That's
+> >>>
+> >>> Sure, I can add BUG_ON(PageSlab(page)); to page_table_check_set.
+> >>>
+> >>>> all.  There should be a BUG() for that.  And I do mean BUG(), not
+> >>>> "return error to user".  Something has gone horribly wrong, and it's
+> >>>> time to crash.
+> >>>
+> >>>   It is just too easy to make slab available via remap_pfn_range(), b=
+ut
+> >>> I do not think we want to add BUG() into the remap function, otherwis=
+e
+> >>> we will break devices such as /dev/mem.
+> >>
+> >> Slab pages can't be mmaped.  Really, no matter what interface you're
+> >> using.  page->_mapcount is necessarily incremented by mapping to
+> >> userspace, and slab uses that space for its own purposes (and has
+> >> for decades).  It's similar for page tables and other allocations that
+> >> use PageType.
+> >
+> > Mapping random memory in /dev/mem can cause mapping slab pages in to
+> > userspace, the page->_mapcount is not incremented (and other fields
+> > are not accessed) in that case, as we are using VM_PFNMAP type VMA,
+> > which does not access "struct page".
+>
+> We should be using vm_normal_page() to identify if we should be looking
+> at the struct page or not, no?
 
-kernel test robot noticed the following build warnings:
+For normal Kernel-MM operations, vm_normal_page() should be used to
+get "struct page" based on vma+addr+pte combination, but
+page_table_check does not use vma for its operation in order to
+strengthen the verification of no invalid page sharing. But, even
+vm_normal_page() can cause access to the "struct page" for VM_PFNMAP
+if pfn_valid(pfn) is true. So, vm_normal_page() can return a struct
+page for a user mapped slab page.
 
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on tty/tty-next tty/tty-linus usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.4-rc1 next-20230508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Pasha
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tony-Lindgren/serial-core-Start-managing-serial-controllers-to-enable-runtime-PM/20230508-190805
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20230508110339.38699-1-tony%40atomide.com
-patch subject: [PATCH v10 1/1] serial: core: Start managing serial controllers to enable runtime PM
-config: x86_64-randconfig-a001-20230508 (https://download.01.org/0day-ci/archive/20230509/202305090752.w4XZxmsN-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2f298f9dbe3a1d9550e1f15bb1415aeaf9ce4311
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tony-Lindgren/serial-core-Start-managing-serial-controllers-to-enable-runtime-PM/20230508-190805
-        git checkout 2f298f9dbe3a1d9550e1f15bb1415aeaf9ce4311
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/tty/serial/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305090752.w4XZxmsN-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/tty/serial/serial_base_bus.c:97:13: warning: variable 'id' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (type == &serial_port_type) {
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/tty/serial/serial_base_bus.c:102:77: note: uninitialized use occurs here
-           err = dev_set_name(&sbd->dev, "%s.%s.%d", type->name, dev_name(port->dev), id);
-                                                                                      ^~
-   drivers/tty/serial/serial_base_bus.c:97:9: note: remove the 'if' if its condition is always true
-           } else if (type == &serial_port_type) {
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/tty/serial/serial_base_bus.c:83:13: note: initialize the variable 'id' to silence this warning
-           int err, id;
-                      ^
-                       = 0
-   1 warning generated.
-
-
-vim +97 drivers/tty/serial/serial_base_bus.c
-
-    77	
-    78	static struct device *serial_base_device_add(struct uart_port *port,
-    79						     struct device *parent_dev,
-    80						     const struct device_type *type)
-    81	{
-    82		struct serial_base_device *sbd;
-    83		int err, id;
-    84	
-    85		sbd = kzalloc(sizeof(*sbd), GFP_KERNEL);
-    86		if (!sbd)
-    87			return NULL;
-    88	
-    89		device_initialize(&sbd->dev);
-    90		sbd->dev.type = type;
-    91		sbd->dev.parent = parent_dev;
-    92		sbd->dev.bus = &serial_base_bus_type;
-    93		sbd->dev.release = &serial_base_release;
-    94	
-    95		if (type == &serial_ctrl_type) {
-    96			id = port->ctrl_id;
-  > 97		} else if (type == &serial_port_type) {
-    98			id = port->line;
-    99			sbd->port = port;
-   100		}
-   101	
-   102		err = dev_set_name(&sbd->dev, "%s.%s.%d", type->name, dev_name(port->dev), id);
-   103		if (err)
-   104			goto err_free_dev;
-   105	
-   106		err = device_add(&sbd->dev);
-   107		if (err)
-   108			goto err_put_device;
-   109	
-   110		return &sbd->dev;
-   111	
-   112	err_put_device:
-   113		put_device(&sbd->dev);
-   114	
-   115	err_free_dev:
-   116		kfree(sbd);
-   117	
-   118		return NULL;
-   119	}
-   120	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>
