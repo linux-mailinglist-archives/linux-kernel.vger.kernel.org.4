@@ -2,179 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2048C6FA05C
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961326FA05E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjEHG60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 02:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
+        id S233027AbjEHG6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 02:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232580AbjEHG6S (ORCPT
+        with ESMTP id S233203AbjEHG6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 02:58:18 -0400
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B25AA27E
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 23:58:00 -0700 (PDT)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 8 May 2023 02:58:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D271A62E;
+        Sun,  7 May 2023 23:58:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4QFBtZ5Z9sz9sbv;
-        Mon,  8 May 2023 08:57:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1683529046;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XtmaYEfhkK+ur5naimltvQ4iqVq57t4hjPHSqtkEcow=;
-        b=xB9Jx8VLgZAlpCoPZLpqC5O2aKUuP18Lhn2kgotfbfZnKanZ9WMuGV4domG/79dUM5gaEF
-        ikjBALJB2mlbwY8zHBfMcmtT8gYV6RU+99i9Uqnemngy9soX343R7ds5yPK4WQtF5SMFJP
-        KwQGvebLAfy/kB59YW4bJJfUjvNxusGBImCuxBiTwoL1EW+PPg+bDCztc7JgCkJg2di+Oh
-        KulvYJpfVXPd++bihCV135c8C6W4kGleJ1gzIMoEaMnKobETJzUqZ3ravBF9uUvhLALMpM
-        gXgnQcsf9wKDLmoUf76aDuSqCO4876JtycNJcUlVBM/kj9K0nbvxBNoWCLi2tA==
-References: <20230418074008.69752-1-me@crly.cz>
- <87cz3uzpx1.fsf@oltmanns.dev> <87mt2o9njh.fsf@oltmanns.dev>
- <CSCPKPC8OB80.1TTBCM3YDVJQ5@void.crly.cz>
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     Roman Beranek <me@crly.cz>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Samuel Holland <samuel@sholland.org>,
-        Ondrej Jirman <megi@xff.cz>, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] drm: sun4i: set proper TCON0 DCLK rate in DSI mode
-Date:   Mon, 08 May 2023 08:54:28 +0200
-In-reply-to: <CSCPKPC8OB80.1TTBCM3YDVJQ5@void.crly.cz>
-Message-ID: <87o7mvpayj.fsf@oltmanns.dev>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E8BA61F37;
+        Mon,  8 May 2023 06:58:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3668C433EF;
+        Mon,  8 May 2023 06:58:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683529095;
+        bh=3NvGzGZUDejWf2Tsc/ruVQPX/c2lUYLZP2mcCabAqpE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NXE7z5SvCZ/k3TCIBRogKFdMhzfn0wpJbvPqtyXIAyoSti38t5Ep2rO3WqDfUkUW+
+         bwzb6RlFG6+pPCquLjxl0Ch/Rgj699XEnKTCwLKJS3pbRLhiBILtp2ALPR7wYAVcBk
+         /Yb7dLOLcZ8qiRavKbYNrnDsGSbCmfalUyBRXHjG671oGchEFI9RNKwR756GnA0VFM
+         dq9TWjCJWKAGyo/055cMy1R3rso1RqSSB/hyKdPpyVVnYkpb+lYtPig2u7BlJeTdsu
+         lBRCKks+Pz76u1WU5tEb9aM4V6FHEsz8AWjAFKLW/2xDoj9p6czkGMRZUIyF8JkhJN
+         s1HsirNbBRpEg==
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-965d2749e2eso528401566b.1;
+        Sun, 07 May 2023 23:58:15 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxY9RtB3CjPo8TBBKkEWl1kFPwqnj7+1MKtA5kvXszksNOCMvY9
+        x6jCSCnnhqZJeVLhvVeXFmZR1meGNSBrOr3a6lE=
+X-Google-Smtp-Source: ACHHUZ4eTiPCDomhQD8cUrrT/3bGwzPZ7F4C644pKdOt1JjzD5ZlEtq5hNlN2UT0wNlBk1g+j/KrEa+J7Swd/5aMHM4=
+X-Received: by 2002:a17:906:7304:b0:94c:ea3b:27a with SMTP id
+ di4-20020a170906730400b0094cea3b027amr9183323ejc.16.1683529093952; Sun, 07
+ May 2023 23:58:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230507182304.2934-1-jszhang@kernel.org> <20230507182304.2934-3-jszhang@kernel.org>
+ <20230507-sleeve-tacky-21e817e31fb2@spud> <CAJF2gTTSRQUX8C3C-tgq4o5iGJqKTja7-1Dv8epG_qZizUvSow@mail.gmail.com>
+ <20230508-splashed-voicing-bc6e91aeb053@wendy>
+In-Reply-To: <20230508-splashed-voicing-bc6e91aeb053@wendy>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 8 May 2023 14:58:02 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSZmjScBERVxxsEJ-q-HdXn+daT5-H-QvGt2iWxPCaT3g@mail.gmail.com>
+Message-ID: <CAJF2gTSZmjScBERVxxsEJ-q-HdXn+daT5-H-QvGt2iWxPCaT3g@mail.gmail.com>
+Subject: Re: [PATCH 2/5] riscv: Add the T-HEAD SoC family Kconfig option
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Roman,
-
-On 2023-05-03 at 16:22:32 +0200, "Roman Beranek" <me@crly.cz> wrote:
-> Hello everyone,
+On Mon, May 8, 2023 at 2:53=E2=80=AFPM Conor Dooley <conor.dooley@microchip=
+.com> wrote:
 >
-> I apologize for my absence from the discussion during past week, I got
-> hit with tonsillitis.
-
-I hope you feel better!
-
-> On Mon May 1, 2023 at 3:40 PM CEST, Frank Oltmanns wrote:
->> Looking at ccu_nkm_determine_rate(), we've found our culprit because it
->> does not try parent clock rates other than the current one. The same
->> applies to all other ccu_nkm_* functions.
+> On Mon, May 08, 2023 at 02:42:10PM +0800, Guo Ren wrote:
+> > On Mon, May 8, 2023 at 5:22=E2=80=AFAM Conor Dooley <conor@kernel.org> =
+wrote:
+> > >
+> > > On Mon, May 08, 2023 at 02:23:01AM +0800, Jisheng Zhang wrote:
+> > > > The first SoC in the T-HEAD series is light(a.k.a th1520), containi=
+ng
+> > > > quad T-HEAD C910 cores.
+> > > >
+> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > > ---
+> > > >  arch/riscv/Kconfig.socs | 6 ++++++
+> > > >  1 file changed, 6 insertions(+)
+> > > >
+> > > > diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+> > > > index 1cf69f958f10..ce10a38dff37 100644
+> > > > --- a/arch/riscv/Kconfig.socs
+> > > > +++ b/arch/riscv/Kconfig.socs
+> > > > @@ -41,6 +41,12 @@ config ARCH_SUNXI
+> > > >         This enables support for Allwinner sun20i platform hardware=
+,
+> > > >         including boards based on the D1 and D1s SoCs.
+> > > >
+> > > > +config ARCH_THEAD
+> > >
+> > > Could you please add a defconfig patch, adding this option, so that w=
+e
+> > > build support for this platform by default?
 >
-> Yes, that's why I dropped CLK_SET_RATE_PARENT from pll-mipi in v3.
+> > Yes, but it's another patch, see: 'commit eb20e7cb91ba ("riscv:
+> > defconfig: Enable the Allwinner D1 platform and drivers")'
 >
->>  b. Add functionality to ccu_nkm_* to also update the parent clock rate.
->>
->> I'm actually interested in tackling b, but I can't make any promises as
->> to if and when I'll be able to solve it. I'm not certain about any side
->> effects this might have.
->
-> It sounds like an interesting exercise. But what if HDMI is then added
-> to the mix?
+> But that's ARCH_SUNXI for the Allwinner D1. If the TH1520 is a
+> first-party SoC, and not an Allwinner product, it needs a new Kconfig
+> entry etc.
+> If it is an Allwinner, then the dts etc should be in the Allwinner
+> directory too.
+Do you mean?
+config ARCH_THEAD
+        def_bool SOC_THEAD
 
-Thanks for interest in this discussion! I really appreciate it!
+config SOC_THEAD
+        bool "T-HEAD SoCs"
 
-First of all, let me admit that I'm no expert on this. But nobody else
-has replied so far, and I want to keep this conversation going, so let
-me share my view.
-
-My understanding is that pll-mipi being able to set pll-video0's rate
-should not have an impact on HDMI, neither positive nor negative. If I'm
-not mistaken those two things are orthogonal.
-
-The relevant part of the clk_summary with your v4 [1] patch on top of
-drm-next looks like this:
-
-                                 enable  protect              hardware
-   clock                          count    count        rate    enable
-----------------------------------------------------------------------
-    pll-video0                        1        1   294000000         Y
-       hdmi                           0        0   294000000         N
-       tcon1                          0        0   294000000         N
-       pll-mipi                       1        1   431200000         Y
-          tcon0                       2        1   431200000         Y
-             tcon-data-clock          1        1   107800000         Y
-       pll-video0-2x                  0        0   588000000         Y
-
-Note, that pll-video0 is protected.
-
-I don't own any boards that support HDMI in mainline. For the pinephone
-this support is added e.g. in megi's kernel, where connecting an HDMI
-output results in pll-video0's rate being set to 297MHz, even though it
-is 294MHz after boot.
-
-So, for reference, this is the same part of the clk_summary with megi's
-6.3.0 kernel, USB-C dock unplugged:
-
-                                 enable  protect              hardware
-   clock                          count    count        rate    enable
-----------------------------------------------------------------------
-    pll-video0                        3        0   294000000         Y
-       hdmi-phy-clk                   1        0    73500000         Y
-       hdmi                           1        0   294000000         Y
-       tcon1                          0        0   294000000         N
-       pll-mipi                       1        0   431200000         Y
-          tcon0                       2        0   431200000         Y
-             tcon-pixel-clock         1        0   107800000         Y
-       pll-video0-2x                  0        0   588000000         Y
-
-pll-video0 is not protected. When plugging in the USB-C dock with an HDMI
-monitor connected, the situation looks like this:
-
-                                 enable  protect              hardware
-   clock                          count    count        rate    enable
-----------------------------------------------------------------------
-    pll-video0                        4        1   297000000         Y
-       hdmi-phy-clk                   1        0   148500000         Y
-       hdmi                           1        0   148500000         Y
-       tcon1                          1        1   148500000         Y
-       pll-mipi                       1        0   424285714         Y
-          tcon0                       2        0   424285714         Y
-             tcon-pixel-clock         1        0   106071428         Y
-       pll-video0-2x                  0        0   594000000         Y
-
-As you can see, pll-video0 is updated to 297 MHz. My understanding is
-(again: not an expert here) this is only possible due to the missing
-protection.
-
-What I'm trying to say is that I don't see a connection between HDMI and
-having the functionality in ccu_nkm_* to update the parent clock rate.
-
-But I do think it would be preferable to have pll-video0 at 297 MHz
-after boot on the pinephone. We could achieve this with my two previous
-proposals:
-
- a) Set pll-video0 to 297 MHz on boot
- b) Add functionality to ccu_nkm_* to also update the parent clock rate.
-
-If solution b is viable, the goal for the pinephone (and any other
-boards supporting HDMI) would then be to select a pixel-data-clock so
-that the rate for pll-video0 is set to 297 MHz (by selecting an
-appropriate clock speed for the internal panel).
-
-Maybe I'm misunderstanding something. If so, I'd appreciate any
-corrections.
-
-Thanks,
-  Frank
-
-[1]: https://lore.kernel.org/all/20230505052110.67514-1-me@crly.cz/
+In defconfig:
++CONFIG_SOC_THEAD=3Dy
 
 >
-> Best regards
-> Roman
+> Cheers,
+> Conor.
+
+
+
+--=20
+Best Regards
+ Guo Ren
