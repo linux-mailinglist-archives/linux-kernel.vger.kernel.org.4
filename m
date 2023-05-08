@@ -2,52 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E57A6FBB43
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB896FBB47
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233978AbjEHXHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 19:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
+        id S234062AbjEHXI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 19:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbjEHXHA (ORCPT
+        with ESMTP id S233900AbjEHXI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 19:07:00 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668C644BD
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 16:06:57 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-333eb36e510so24469205ab.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 16:06:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683587216; x=1686179216;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        Mon, 8 May 2023 19:08:57 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD76849FE
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 16:08:55 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4efe8b3f3f7so5902730e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 16:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683587334; x=1686179334;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KGTxV02oDpoXmYT9QqyGUuZjQyrxrQMBqWahyhOa9N8=;
-        b=LELAV3rvCKPrK802xLnlECFnwO8812dErPFm2jtxmP0aRZi+C6DGy3QIgtquCFyaOL
-         LN8nwvFPFPzil7cTQw/or6lAvAtkHaoCsbUK7cWGlbGrwMQ0Qh4+TG9WTGh9QNw1qJuo
-         Q2zixwpahsbtag0p/NvVv4UmDnnmj/4dOqJwHOPgr5kMFNe5y5oGQesi6a+ggCfxga3R
-         yU7lj1iqNoKsC0CybWWV788wTapAm4BG6d20s5lnXQ9jt3Fi1W+WO7L9yFMjs+WlG/Q3
-         SWy9QqogVRAbtoYPkHgFRDBXLRZji0sCG1ecj+N6Vd7xV52/cgFiHrjwI5r3/uKlyMRY
-         eZVg==
-X-Gm-Message-State: AC+VfDxb3jkFN4pHZ7ONrSET5nKuGcZwugAsDALoGtiGgwzsKHTgTBSp
-        e1igxqQdwCzLddQjZ3c78x2YrdZXTdGhE2lLESWYj7ygDR5M
-X-Google-Smtp-Source: ACHHUZ6mGxdu+oKvQum/2hUq8mig0bm5LSD51FmLjuz6i/mY7i5ZpUPydkC+n/J/vJbuJHu92v74clY1n7FNsRHJ6rZdwXBlL8FW
+        bh=b48s8mcAPXAqywC5BMS6eAKj5imZxHgkpEOozlPTbFE=;
+        b=vsiZxbslapGTm+ygq4pII2b5i0YjKhtHvSZzFAomQ5+okHqhOBo/okWenjB1uvO42W
+         rM0irmVWK0ieIkW8r7x2suoHSe77DrQvQ0HEL4bX5q9PyPOKC/43v8U8cH+auDhoL0js
+         LF1XWQf7qDv/Uyai7sJ0VZMYQtRWK3FU3Gr7LDiCQpYFyjcFF3EHILJnoZHGipZKLcTl
+         jCF9T3zjbZnW7XNzg8mVfyOp/C0UOqbtM3c3z0XRvZIAfTOitbhjC70sPKLRrD+UjFqo
+         jHKUy3mWba9bDy853PHOW5Bl9fA/H31yqcl5JjP0KM+FgV+po7OmYe+ZwZmEZF84+mQP
+         RFww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683587334; x=1686179334;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b48s8mcAPXAqywC5BMS6eAKj5imZxHgkpEOozlPTbFE=;
+        b=g3bd1Rxg+/1KDNkPJ4fTRiFVpP7/g/0sMsI+pMYHw9wQcRKzGk52Val2r5uNGI9gge
+         cJQN4A+qGA5rlQk/pZ3otHtvru5mu5pmsLXpGFke6TGbZjt5F2QQYNIQsigI7c5RJPTA
+         wejPs5RhZeaxCD+S3dVmSKydpQW3nIsFIoXy/7K2kQplCy8JSRreKPpTkQbx0h2WBlPJ
+         su5IepQEZPHMn1UJv3XGS6bfe4av+HM0zjKWt5h7tr4nQXAkGVQuw3aGrb16yUTnFxbV
+         pMXYcKORVPEcySXPLhwRXjIUpoI43lx0b7JWn0TxtkhN8RVY0AwPl2sp3tAHPNurc78C
+         BYjg==
+X-Gm-Message-State: AC+VfDyA+zZVeiQy+f1bwEiXRahVlT+/PvHrZstJ7yCwC09OWw/xHiH/
+        /Xipdt5aZiOdAeJYoTYBOz5Cgw==
+X-Google-Smtp-Source: ACHHUZ4ViOeyL+Un82hufdNmJAboZeTOF6Q6XeG29tPl179/V3Hgsg9bG2GD/UP0jWcWX/Eq8yto7g==
+X-Received: by 2002:ac2:488c:0:b0:4f1:4086:9384 with SMTP id x12-20020ac2488c000000b004f140869384mr153611lfc.61.1683587333966;
+        Mon, 08 May 2023 16:08:53 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id w9-20020ac25989000000b004db3900da02sm125532lfn.73.2023.05.08.16.08.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 16:08:53 -0700 (PDT)
+Message-ID: <0aa4130d-bb37-4743-10e5-fd518276f4a2@linaro.org>
+Date:   Tue, 9 May 2023 02:08:52 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a92:d245:0:b0:32b:766c:850e with SMTP id
- v5-20020a92d245000000b0032b766c850emr6240509ilg.1.1683587216742; Mon, 08 May
- 2023 16:06:56 -0700 (PDT)
-Date:   Mon, 08 May 2023 16:06:56 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000000a12d05fb36b2eb@google.com>
-Subject: [syzbot] [ext4?] WARNING: locking bug in ext4_xattr_inode_iget
-From:   syzbot <syzbot+e44749b6ba4d0434cd47@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 3/4] drm/msm/dpu: Add DPU_INTF_DATA_COMPRESS feature
+ flag
+Content-Language: en-GB
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230405-add-dsc-support-v2-0-1072c70e9786@quicinc.com>
+ <20230405-add-dsc-support-v2-3-1072c70e9786@quicinc.com>
+ <i6i2xj2tuy5mcxsj674d77kfdb3ne6immkmrzw5f6u4bfx2sth@ef7fzrhdyypx>
+ <1d7ccb5f-55c2-3b3a-df97-2c17beffabfc@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1d7ccb5f-55c2-3b3a-df97-2c17beffabfc@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,107 +85,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 09/05/2023 00:46, Jessica Zhang wrote:
+> 
+> 
+> On 5/7/2023 9:00 AM, Marijn Suijten wrote:
+>> On 2023-05-05 14:23:50, Jessica Zhang wrote:
+>>> Add DATA_COMPRESS feature flag to DPU INTF block.
+>>>
+>>> In DPU 7.x and later, DSC/DCE enablement registers have been moved from
+>>> PINGPONG to INTF.
+>>>
+>>> As core_rev (and related macros) was removed from the dpu_kms struct, 
+>>> the
+>>> most straightforward way to indicate the presence of this register 
+>>> would be
+>>> to have a feature flag.
+>>
+>> Irrelevant.  Even though core_rev was still in mainline until recently,
+>> we always hardcoded the features in the catalog and only used core_rev
+>> to select a dpu_mdss_cfg catalog entry.  There is no "if version >= X
+>> then enable feature Y" logic, this manually-enabled feature flag is the
+>> only, correct way to do it.
+> 
+> Hi Marijn,
+> 
+> Understood. FWIW, if we do find more register bit-level differences 
+> between HW versions in the future, it might make more sense to keep the 
+> HW catalog small and bring core_rev back, rather than keep adding these 
+> kinds of small differences to caps.
 
-syzbot found the following issue on:
+Let's see how it goes. Abhinav suggested that there might be feature 
+differences inside the DPU generations (and even inside the single DPU 
+major/minor combo). So I'm not sure what core_rev will bring us.
 
-HEAD commit:    1a5304fecee5 Merge tag 'parisc-for-6.4-1' of git://git.ker..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=17680612280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
-dashboard link: https://syzkaller.appspot.com/bug?extid=e44749b6ba4d0434cd47
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=124dd084280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1266af88280000
+Let's land the platforms which are ready (or if there is anything close 
+to be submitted). I'll post the next proposal for the catalog cleanups 
+close to -rc4, when the dust settles then we can have one or two weaks 
+for the discussion and polishing.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/dd767dde3306/disk-1a5304fe.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/21e0fbeccd39/vmlinux-1a5304fe.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/dada79d4407c/bzImage-1a5304fe.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/96c8988d43c2/mount_0.gz
+I'd like to consider:
+- inlining foo_BLK macros, if that makes adding new features easier
+- reformat of clk_ctrls
+- maybe reintroduction of per-generation feature masks instead of 
+keeping them named after the random SoC
+- maybe a rework of mdss_irqs / INTFn_INTR. We already have this info in 
+hw catalog.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e44749b6ba4d0434cd47@syzkaller.appspotmail.com
-
-EXT4-fs error (device loop0): ext4_xattr_inode_iget:436: inode #12: comm syz-executor308: casefold flag without casefold feature
-------------[ cut here ]------------
-Looking for class "&ea_inode->i_rwsem" with key ext4_fs_type, but found a different class "&type->i_mutex_dir_key" with the same key
-WARNING: CPU: 1 PID: 4993 at kernel/locking/lockdep.c:941 look_up_lock_class+0xc2/0x140 kernel/locking/lockdep.c:938
-Modules linked in:
-CPU: 1 PID: 4993 Comm: syz-executor308 Not tainted 6.3.0-syzkaller-13027-g1a5304fecee5 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:look_up_lock_class+0xc2/0x140 kernel/locking/lockdep.c:938
-Code: 8b 16 48 c7 c0 60 91 1e 90 48 39 c2 74 46 f6 05 92 87 92 03 01 75 3d c6 05 89 87 92 03 01 48 c7 c7 40 af ea 8a e8 ee 29 a4 f6 <0f> 0b eb 26 e8 15 2f 81 f9 48 c7 c7 80 ae ea 8a 89 de e8 37 ca fd
-RSP: 0018:ffffc90003b7f090 EFLAGS: 00010046
-RAX: adf3f2136120b500 RBX: ffffffff9005c4e0 RCX: ffff88802d63d940
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc90003b7f190 R08: ffffffff81531182 R09: ffffed1017325163
-R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000001
-R13: 1ffff9200076fe20 R14: ffff888078b36800 R15: ffffffff8d0df979
-FS:  0000555555f12300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000005fdeb8 CR3: 000000002c0ce000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- register_lock_class+0x104/0x990 kernel/locking/lockdep.c:1290
- lockdep_init_map_type+0x37a/0x8e0 kernel/locking/lockdep.c:4875
- ext4_xattr_inode_set_class fs/ext4/xattr.c:124 [inline]
- ext4_xattr_inode_iget+0x2fa/0x5e0 fs/ext4/xattr.c:461
- ext4_xattr_inode_get+0x164/0x430 fs/ext4/xattr.c:551
- ext4_xattr_move_to_block fs/ext4/xattr.c:2640 [inline]
- ext4_xattr_make_inode_space fs/ext4/xattr.c:2742 [inline]
- ext4_expand_extra_isize_ea+0xf28/0x1d10 fs/ext4/xattr.c:2834
- __ext4_expand_extra_isize+0x2f7/0x3d0 fs/ext4/inode.c:5769
- ext4_try_to_expand_extra_isize fs/ext4/inode.c:5812 [inline]
- __ext4_mark_inode_dirty+0x53e/0x870 fs/ext4/inode.c:5890
- ext4_evict_inode+0x839/0xf20 fs/ext4/inode.c:251
- evict+0x2a4/0x620 fs/inode.c:665
- ext4_orphan_cleanup+0xb1e/0x13c0 fs/ext4/orphan.c:474
- __ext4_fill_super fs/ext4/super.c:5556 [inline]
- ext4_fill_super+0x62f7/0x6bd0 fs/ext4/super.c:5672
- get_tree_bdev+0x405/0x620 fs/super.c:1303
- vfs_get_tree+0x8c/0x270 fs/super.c:1510
- do_new_mount+0x28f/0xae0 fs/namespace.c:3039
- do_mount fs/namespace.c:3382 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f63b52faf0a
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff577b2cd8 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f63b52faf0a
-RDX: 0000000020000180 RSI: 00000000200000c0 RDI: 00007fff577b2cf0
-RBP: 00007fff577b2cf0 R08: 00007fff577b2d30 R09: 0000000000000435
-R10: 0000000000800700 R11: 0000000000000206 R12: 0000000000000004
-R13: 0000555555f122c0 R14: 0000000000800700 R15: 00007fff577b2d30
- </TASK>
+Comments are appreciated.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> Thanks,
+> 
+> Jessica Zhang
+> 
+>>
+>>> Changes in v2:
+>>> - Changed has_data_compress dpu_cap to a DATA_COMPRESS INTF feature flag
+>>>
+>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>>
+>> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>
+>>> ---
+>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 2 +-
+>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
+>>>   2 files changed, 3 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
+>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>> index 7944481d0a33..c74051906d05 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>> @@ -104,7 +104,7 @@
+>>>   #define INTF_SC7180_MASK \
+>>>       (BIT(DPU_INTF_INPUT_CTRL) | BIT(DPU_INTF_TE) | 
+>>> BIT(DPU_INTF_STATUS_SUPPORTED))
+>>> -#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
+>>> +#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN) | 
+>>> BIT(DPU_INTF_DATA_COMPRESS)
+>>
+>> Konrad: Your SM6350/SM6375 series v3 [1] switched from INTF_SC7180_MASK
+>> to INTF_SC7280_MASK to enable HCTL on SM6375, but that will now
+>> erroneously also receive this feature flag and write the new
+>> DATA_COMPESS mask even if it's DPU 6.9 (< 7.x where it got added).
+>>
+>> [1]: 
+>> https://lore.kernel.org/linux-arm-msm/80b46fcb-d6d0-1998-c273-5401fa924c7d@linaro.org/T/#u
+>>
+>> Depending on who lands first, this flag should be split.
+>>
+>> I still see value in inlining and removing these defines, though that
+>> brings a host of other complexity.
+>>
+>> - Marijn
+>>
+>>>   #define WB_SM8250_MASK (BIT(DPU_WB_LINE_MODE) | \
+>>>                BIT(DPU_WB_UBWC) | \
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h 
+>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>> index 4eda2cc847ef..01c65f940f2a 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>> @@ -185,6 +185,7 @@ enum {
+>>>    * @DPU_DATA_HCTL_EN                Allows data to be transferred 
+>>> at different rate
+>>>    *                                  than video timing
+>>>    * @DPU_INTF_STATUS_SUPPORTED       INTF block has INTF_STATUS 
+>>> register
+>>> + * @DPU_INTF_DATA_COMPRESS          INTF block has DATA_COMPRESS 
+>>> register
+>>>    * @DPU_INTF_MAX
+>>>    */
+>>>   enum {
+>>> @@ -192,6 +193,7 @@ enum {
+>>>       DPU_INTF_TE,
+>>>       DPU_DATA_HCTL_EN,
+>>>       DPU_INTF_STATUS_SUPPORTED,
+>>> +    DPU_INTF_DATA_COMPRESS,
+>>>       DPU_INTF_MAX
+>>>   };
+>>>
+>>> -- 
+>>> 2.40.1
+>>>
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+With best wishes
+Dmitry
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
