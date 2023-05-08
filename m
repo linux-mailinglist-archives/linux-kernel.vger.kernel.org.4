@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433896FA096
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2257A6FA084
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233168AbjEHHG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
+        id S229577AbjEHHFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233251AbjEHHFo (ORCPT
+        with ESMTP id S233293AbjEHHFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:05:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447441A130;
-        Mon,  8 May 2023 00:05:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5200561F9A;
-        Mon,  8 May 2023 07:05:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00AB2C4339E;
-        Mon,  8 May 2023 07:05:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683529504;
-        bh=KZW/tFXMGGOj2MJEPl8J+2P+ukf3gwy/b1cibtTCM2Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uf9hBgxspbXNuKRQ9B4q9XpoSMSLjSdoiefyJe+4fLr53ld0LEmyMir5tgEUB+8HO
-         ihtNDLO99Om+BN0l2EIaNTf28T38A89nuurh4Gq3ZO3PSnmnqo/ZkhanANhpiL6Lv9
-         VnANpc7xZKswhVu5JOXoEFrli2SWP33nVNvKuJEu4U9fHphQwbNSJroipu138ygFdl
-         TLvsrMCWbbwAtB3gMlal2hivCmn0Gg3d+4q0UTVIBYt0bC9L2EAD/JexgStlSV55P4
-         TCGcfpc95pAelaMk0qrm9VKUEWJvD0uL/5EDqRU4UAg/NkbHdY+2yz/52L2sKz39LD
-         I0wHIywDBkyfg==
-From:   Ard Biesheuvel <ardb@kernel.org>
-To:     linux-efi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH v2 20/20] x86: decompressor: Avoid magic offsets for EFI handover entrypoint
-Date:   Mon,  8 May 2023 09:03:30 +0200
-Message-Id: <20230508070330.582131-21-ardb@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230508070330.582131-1-ardb@kernel.org>
-References: <20230508070330.582131-1-ardb@kernel.org>
+        Mon, 8 May 2023 03:05:02 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAFA1E991;
+        Mon,  8 May 2023 00:04:26 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3487440J112127;
+        Mon, 8 May 2023 02:04:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683529444;
+        bh=chEfS61x65xMVhUCjFBAUnEr02zz7hnvBnAi5qM39/g=;
+        h=From:To:CC:Subject:Date;
+        b=WfL/Z/Yom0nFGVEtslS333Z+GMddMog0YwPxr42Pfv+UtJNi4eZTKm/qePqzh+wq6
+         /SrSRiwhxRs6CDbo64FmWtqGHvI2xOeV5Xj/TJG4ztIFfdmYk/35cTrvNdUzb5K4eJ
+         k3h1IWoa8Z84GmVPRO/D6us0BVWV9OV3ToRlFZ6s=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3487440V029859
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 8 May 2023 02:04:04 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 8
+ May 2023 02:04:03 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 8 May 2023 02:04:03 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34873xcx035885;
+        Mon, 8 May 2023 02:04:00 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH net-next] net: phy: dp83869: support mii mode when rgmii strap cfg is used
+Date:   Mon, 8 May 2023 12:33:59 +0530
+Message-ID: <20230508070359.357474-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1804; i=ardb@kernel.org; h=from:subject; bh=KZW/tFXMGGOj2MJEPl8J+2P+ukf3gwy/b1cibtTCM2Y=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JISVi3qGjnOc+6p4w7IvRl16U8PaWTNCHn46utT2aORHdY S+ytyzuKGVhEONgkBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABORXMXw39s9e6/ke4FMA8+V s61Wbzs+zTLtwNnHa0ULH04/23lGnI/hr0BX3XSPOGfOzRmrq3Y6v3kzfRLr0od2gr6O1vvU25t DWQA=
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,52 +65,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The special EFI handover protocol entrypoint offset wrt to the
-startup_XX address is described in struct boot_params as
-handover_offset, so that the special Linux/x86 aware EFI loader can find
-it there.
+From: Grygorii Strashko <grygorii.strashko@ti.com>
 
-When mixed mode is enabled, this single field has to describe this
-offset for both the 32-bit and 64-bit entrypoints, so their respective
-relative offsets have to be identical.
+The DP83869 PHY on TI's k3-am642-evm supports both MII and RGMII
+interfaces and is configured by default to use RGMII interface (strap).
+However, the board design allows switching dynamically to MII interface
+for testing purposes by applying different set of pinmuxes.
 
-Currently, we use hard-coded fixed offsets to ensure this, but the only
-requirement is that the entrypoints are 0x200 bytes apart, and this only
-matters when EFI mixed mode is configured to begin with.
+To support switching to MII interface, update the DP83869 PHY driver to
+configure OP_MODE_DECODE.RGMII_MII_SEL(bit 5) properly when MII PHY
+interface mode is requested.
 
-So just set the required offset directly. This could potentially result
-in a build error if the 32-bit startup code is much smaller than the
-64-bit code but this is currently far from the case, and easily fixed
-when that situation does arise.
-
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 ---
- arch/x86/boot/compressed/head_64.S | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-index b7599cbbd2ea1136..72780644a2272af8 100644
---- a/arch/x86/boot/compressed/head_64.S
-+++ b/arch/x86/boot/compressed/head_64.S
-@@ -282,7 +282,6 @@ SYM_FUNC_START(startup_32)
- SYM_FUNC_END(startup_32)
+RFC patch at:
+https://lore.kernel.org/r/20230425054429.3956535-3-s-vadapalli@ti.com/
+
+Changes since RFC patch:
+- Change patch subject to PATCH net-next.
+- Reword commit message to indicate that the patch adds new support and
+  is not intended to be a bug fix.
+- Add check to ensure that MII mode is requested only with valid operational
+  modes.
+
+
+ drivers/net/phy/dp83869.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/phy/dp83869.c b/drivers/net/phy/dp83869.c
+index 9ab5eff502b7..fa8c6fdcf301 100644
+--- a/drivers/net/phy/dp83869.c
++++ b/drivers/net/phy/dp83869.c
+@@ -692,8 +692,19 @@ static int dp83869_configure_mode(struct phy_device *phydev,
+ 	/* Below init sequence for each operational mode is defined in
+ 	 * section 9.4.8 of the datasheet.
+ 	 */
++	phy_ctrl_val = dp83869->mode;
++	if (phydev->interface == PHY_INTERFACE_MODE_MII) {
++		if (dp83869->mode == DP83869_100M_MEDIA_CONVERT ||
++		    dp83869->mode == DP83869_RGMII_100_BASE) {
++			phy_ctrl_val |= DP83869_OP_MODE_MII;
++		} else {
++			phydev_err(phydev, "selected op-mode is not valid with MII mode\n");
++			return -EINVAL;
++		}
++	}
++
+ 	ret = phy_write_mmd(phydev, DP83869_DEVADDR, DP83869_OP_MODE,
+-			    dp83869->mode);
++			    phy_ctrl_val);
+ 	if (ret)
+ 		return ret;
  
- #if IS_ENABLED(CONFIG_EFI_MIXED) && IS_ENABLED(CONFIG_EFI_HANDOVER_PROTOCOL)
--	.org 0x190
- SYM_FUNC_START(efi32_stub_entry)
- 	add	$0x4, %esp		/* Discard return address */
- 	popl	%ecx
-@@ -455,7 +454,9 @@ SYM_CODE_START(startup_64)
- SYM_CODE_END(startup_64)
- 
- #ifdef CONFIG_EFI_HANDOVER_PROTOCOL
--	.org 0x390
-+#ifdef CONFIG_EFI_MIXED
-+	.org	efi32_stub_entry + 0x200
-+#endif
- SYM_FUNC_START(efi64_stub_entry)
- 	and	$~0xf, %rsp			/* realign the stack */
- 	call	efi_handover_entry
 -- 
-2.39.2
+2.25.1
 
