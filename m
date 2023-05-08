@@ -2,87 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BA46FBB63
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8C76FBB65
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233230AbjEHXWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 19:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
+        id S233752AbjEHXYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 19:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjEHXWg (ORCPT
+        with ESMTP id S229690AbjEHXYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 19:22:36 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AFF93E6
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 16:22:34 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-757756e2eefso102226585a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 16:22:34 -0700 (PDT)
+        Mon, 8 May 2023 19:24:20 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7B44C0F;
+        Mon,  8 May 2023 16:24:19 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1ab13da70a3so50719635ad.1;
+        Mon, 08 May 2023 16:24:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1683588153; x=1686180153;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=J20KJD8UUGIZf35RzyX4QJCStx2hC/zK71qAj+ED4BU=;
-        b=TNMGn3m6WEBl4N8JuGwvWyR7WctTWHrVftC5hiZc+tYMbbctCLn9sos4hh8iEGyDm5
-         5110E/Ts3cuwWgtVQzy6GgZQvFIuUQmm5K7wnEGtbGLk6sT8A1VO8cg1Im+govrADMOV
-         Cy3Q+TEYXLHygksHb/uhHTtC/wyU5d4TaivEarWakk+ul7Rnm1CztBxTQhPcqPm7c15k
-         NmY7elOhiRuBr5r94CHdVN1p+F/ne2xVcpGTtVJdluQqWcjPcftUAajG1zyCm6iqVxV7
-         nI+lYGjD842cyiWHZcP+QWXu19HTR2CEZIUESzAJTGZKgwxs62NdbD+juBhTQ29gzj3t
-         uKNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683588153; x=1686180153;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1683588259; x=1686180259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=J20KJD8UUGIZf35RzyX4QJCStx2hC/zK71qAj+ED4BU=;
-        b=DCcaNZMjworQVaP+XSxKeIQbwVldfJdZ1XzUjiuwkKbL3915q3HxV0wSttfOZsYIZl
-         yOQSbhil6zXgbK3vSbEOut0wpQ+y+ldiwnrzIoDw1N6hDgFzrLQ/F7IIecvYx37CrBp8
-         UpF8lIpPEmtIizXPU4BR0f1cDhimcGENYgOeKQW5xcUuua0FGNvneTD4JBm3mRydOu9r
-         ck3v49ZJiuZ7/4WjkwUVIXBkefTkdodqr5sXs8CArHUsOPrw/SNR2qJNCUhDMdaXCoCu
-         9DkZLq4Pgam08zkwh4DowIHhWWXRzfcKYRzOkE8f7kBsCG8sDJXK28sTpUPfAisVEdH5
-         cWXQ==
-X-Gm-Message-State: AC+VfDzWdAy39Uq5MTqWIGcZhyYFx2Nw+fUroTbi7mASQSpT3hTUXr9F
-        QOp5j8NQWmXSITjAv1zkqlV/EB6mWP7JUf07ACSZhQ==
-X-Google-Smtp-Source: ACHHUZ4DeQtgBYpWTCa9YUWXWDlEycg+YX2NYUxENmkf0GpGHlt+us2Dpq7iHJUuTDYh8Df6ApBq8rf1ewCUs5TI9Fo=
-X-Received: by 2002:a05:6214:2427:b0:61a:c2bf:9f0b with SMTP id
- gy7-20020a056214242700b0061ac2bf9f0bmr20819167qvb.6.1683588153435; Mon, 08
- May 2023 16:22:33 -0700 (PDT)
+        bh=xWUewLtyjjleyCE27N0mgy++XbZ3xZJBSp9FQArDlQU=;
+        b=cMgyvKzfMRZ5F6dobb+hxpXJmFiFNPdymS/AneW1qDN9sWCmT/PL8mluUI+VSw0I7L
+         yLOTKnHDqulRpFgPTlbgJ068wRQv3ph93VqvAylgj0TBV9hjoWcIyVwstwcQo6JoKuBf
+         GfmMQ9iDoviqnYAGxX0P1lj/KwdXQcJk+6KOxAIbdfgXgu9sNn0HBGqbnRIvJ30Wm0fG
+         gDB/Txt23JlWHtP7he4FGgXwIz+m1WwbgFCcKj6sXoBdsA9RU8kz5nsushGnw8lEzrBQ
+         JDOGRmm5Sj7o913tB4WBuCs3EcWn7K50tzAM96peisZmCKkOYcTUdyN0crppKzcxCPco
+         89bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683588259; x=1686180259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xWUewLtyjjleyCE27N0mgy++XbZ3xZJBSp9FQArDlQU=;
+        b=Ypf0qFB/mmaBOeSBGzNjh+MyoXDnLKWFMSbCqTnOMAsC/vS2o9cVzLm5gEipvoawHm
+         gpwYfDbumGuR2jfDz5gBoVtpn563vnUbGU/UhFylBn4wr+4ZHxOqKZH2mYdIpgz2/0XA
+         wSRVIuCyVSq8OPPEyWGYsJT46xL+lL4bnn5kIpB5FsQhqrCHbOzGfZRLQ3apZRuFKspw
+         SzoRoemxkCUjVUlL/cn3c6P/tRBkrZyII/a+j7cyYaN2831E69gRMZrwbi3yEqDXQ+GH
+         mZgAUzpvD6K+glFkdwQfgdVBOhBAbyvuR5nBLro7ebdTg1ayy0/3LP805X2Ex7OlzmSF
+         TLRA==
+X-Gm-Message-State: AC+VfDzslq4mEHimEgzUFVsG3VWK5pywXB2HcIsIcIchG03irSydyHBg
+        6zcmqv7hzkZxYkJ0dF/An/NJF2TYuyI=
+X-Google-Smtp-Source: ACHHUZ7Ywzg5sOXXcxQByghXAZO4WL2DDYhOxV9eqxNVmgAEUcQow7sUQy+/dUNbzjCenv4IHOqiPg==
+X-Received: by 2002:a17:902:ec83:b0:1ac:4d01:dff8 with SMTP id x3-20020a170902ec8300b001ac4d01dff8mr14216942plg.45.1683588258763;
+        Mon, 08 May 2023 16:24:18 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id s13-20020a170902988d00b001aaff9be643sm32647plp.89.2023.05.08.16.24.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 16:24:18 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 8 May 2023 13:24:16 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Juri Lelli <juri.lelli@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hao Luo <haoluo@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v3 0/6] sched/deadline: cpuset: Rework DEADLINE bandwidth
+ restoration
+Message-ID: <ZFmEoBoX15FIpyW1@slm.duckdns.org>
+References: <20230508075854.17215-1-juri.lelli@redhat.com>
 MIME-Version: 1.0
-References: <000000000000258e5e05fae79fc1@google.com> <20230507135844.1231056-1-lrh2000@pku.edu.cn>
- <CA+CK2bBe2YKYM3rUTCnZ0RF=NFUR9VqO-QYn3ygPsFJWLY1MUA@mail.gmail.com>
- <ZFlrbDft1QfMyIDc@casper.infradead.org> <CA+CK2bDVjovwB9v-Zv4Fn7EUfp5FV2XK36iJKYKY7pYNOFfOGA@mail.gmail.com>
- <ZFlvJEfs1ufh1UUD@casper.infradead.org> <CA+CK2bDC-FVv1tZg9MDn-N735Ak3OAtdZPf+LEYM-JHsO90YcQ@mail.gmail.com>
- <fa1dac7a-406e-30ea-6aba-ded2e0e871fa@redhat.com> <CA+CK2bAHbHHwLUoGJkz8n6mrM5dy7oMojeNksdVOMYn+qFYngA@mail.gmail.com>
-In-Reply-To: <CA+CK2bAHbHHwLUoGJkz8n6mrM5dy7oMojeNksdVOMYn+qFYngA@mail.gmail.com>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Mon, 8 May 2023 16:21:57 -0700
-Message-ID: <CA+CK2bD=bv1vPGZaNcxDy-uUFj2ZAKkdPmAtJaweXhgTe91oEw@mail.gmail.com>
-Subject: Re: usbdev_mmap causes type confusion in page_table_check
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508075854.17215-1-juri.lelli@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> For normal Kernel-MM operations, vm_normal_page() should be used to
-> get "struct page" based on vma+addr+pte combination, but
-> page_table_check does not use vma for its operation in order to
-> strengthen the verification of no invalid page sharing. But, even
-> vm_normal_page() can cause access to the "struct page" for VM_PFNMAP
-> if pfn_valid(pfn) is true. So, vm_normal_page() can return a struct
-> page for a user mapped slab page.
+On Mon, May 08, 2023 at 09:58:48AM +0200, Juri Lelli wrote:
+> Qais reported [1] that iterating over all tasks when rebuilding root
+> domains for finding out which ones are DEADLINE and need their bandwidth
+> correctly restored on such root domains can be a costly operation (10+
+> ms delays on suspend-resume). He proposed we skip rebuilding root
+> domains for certain operations, but that approach seemed arch specific
+> and possibly prone to errors, as paths that ultimately trigger a rebuild
+> might be quite convoluted (thanks Qais for spending time on this!).
+> 
+> This is v3 of an alternative approach (v2 at [4]) to fix the problem.
+> 
+>  01/06 - Rename functions deadline with DEADLINE accounting (cleanup
+>          suggested by Qais) - no functional change
+>  02/06 - Bring back cpuset_mutex (so that we have write access to cpusets
+>          from scheduler operations - and we also fix some problems
+>          associated to percpu_cpuset_rwsem)
+>  03/06 - Keep track of the number of DEADLINE tasks belonging to each cpuset
+>  04/06 - Use this information to only perform the costly iteration if
+>          DEADLINE tasks are actually present in the cpuset for which a
+>          corresponding root domain is being rebuilt
+>  05/06 - Create DL BW alloc, free & check overflow interface for bulk
+>          bandwidth allocation/removal - no functional change 
+>  06/06 - Fix bandwidth allocation handling for cgroup operation
+>          involving multiple tasks
+> 
+> With respect to the v2 posting [4]
+> 
+>  1 - rebase on top of Linus' tree as of today (ac9a78681b92)
+>  2 - add the 'why' to 5/6 changelog - Peter
+>  3 - explicitly say that we need to keep cpuset_mutex a mutex for PI on
+>      2/6 - Peter
+> 
+> This set is also available from
+> 
+> https://github.com/jlelli/linux.git deadline/rework-cpusets
 
-Only for !ARCH_HAS_PTE_SPECIAL case, otherwise NULL is returned.
+Applied to cgroup/for-6.5.
 
-Pasha
+Thanks.
+
+-- 
+tejun
