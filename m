@@ -2,293 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895CF6FBA46
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60AE76FBA44
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234197AbjEHVxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 17:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33466 "EHLO
+        id S234099AbjEHVwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 17:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234134AbjEHVw6 (ORCPT
+        with ESMTP id S233098AbjEHVws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 17:52:58 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2078.outbound.protection.outlook.com [40.107.7.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3064D5257;
-        Mon,  8 May 2023 14:52:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N1LNal4wTx/Tc0xdkNR6OBbR/oLkkgkLtVx65OxUIiCM9w+KCoiwDFerba4aAm15NZ+SGOyx754/vgNG78s+Stj+my/IWOP37yEabOeF+EhG/6C4vYohOXYSc+5X/C8yz31k0wZFSPIBZI9N1WbGY9ZpeS8a4UBN+ut/+2Hfl3WEYOdQWezYWeHJtlII0G9ySdPNDJrif5h6EQ7T4tpq1qHTu6BHZZcm+p86alc7NJCwDzFhkjhqYILpXPR681/h7Bz4ygIimNAY3FFk5+T7nxOKuhukZTqARiSo7ALcogvlJ8XkCr00LPPMFA3rnY3OSkYz2kDO7XW/23T/vNlI0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y4qZYxl+LgAGFwIEgrMn7JTkJdlFkYk8bwwrX0ndO3Q=;
- b=DUSglFnRF/HMPOty1tFq5wEE4DE0M/dYQCn1oNbC0FVTlBLOfa2wMNvrVAm5FL5bOWNXruWobDJTVZiHEAMkJH5m/7+hbj/E3QG2fNiT1dSXaKdSpfpDXr2oI42s5oPacgFrEC/TkATq1cQL+lej0HJkwXzukMGjHFrnmOP3JHwJfyHnnrus+wH49nSJcWNI9BKIg/TbtewpEp4mryx9rrmEmwQ7FkxJ7s2cnQr52r7jmR/Jgcg6wI9IR2aRW4SObx0WmrL5UIcfdNK09d1l1mSn6haPk+uJi0VoeNikmxjvO6t+e5qaNZMo8Og6OqA8NLxKEgtUDXtQLGmtZnBlwA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y4qZYxl+LgAGFwIEgrMn7JTkJdlFkYk8bwwrX0ndO3Q=;
- b=eTx9w+Ifm1yz07YwY7CXnmWdolmNg1SwGtQYJbbd5KzyLDAV6/Zd+QU9Ta8YNxvEi17p9WYhDIS3NWWcseIskhrNdptiKu/MLEUtIOU6ExUFGEVgHGdDKjjg/c0FVg+6dyBjgSgJPONkXfEdqtMHiy+cLHOsIl2CxVtJNhTeUzM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by AM7PR04MB6983.eurprd04.prod.outlook.com (2603:10a6:20b:102::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Mon, 8 May
- 2023 21:52:53 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::bcdd:75c9:176c:39ed]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::bcdd:75c9:176c:39ed%4]) with mapi id 15.20.6363.032; Mon, 8 May 2023
- 21:52:53 +0000
-From:   Frank Li <Frank.Li@nxp.com>
-To:     Minghuan Lian <minghuan.Lian@nxp.com>,
-        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linuxppc-dev@lists.ozlabs.org (open list:PCI DRIVER FOR FREESCALE
-        LAYERSCAPE),
-        linux-pci@vger.kernel.org (open list:PCI DRIVER FOR FREESCALE
-        LAYERSCAPE),
-        linux-arm-kernel@lists.infradead.org (moderated list:PCI DRIVER FOR
-        FREESCALE LAYERSCAPE), linux-kernel@vger.kernel.org (open list)
-Cc:     imx@lists.linux.dev
-Subject: [PATCH v3 1/1] PCI: layerscape: Add the endpoint linkup notifier support
-Date:   Mon,  8 May 2023 17:52:35 -0400
-Message-Id: <20230508215235.1994348-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0058.namprd05.prod.outlook.com
- (2603:10b6:a03:33f::33) To AM6PR04MB4838.eurprd04.prod.outlook.com
- (2603:10a6:20b:4::16)
+        Mon, 8 May 2023 17:52:48 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235A8422A;
+        Mon,  8 May 2023 14:52:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=eRQGnZvNHAr7ZLmQ2c/n160+Xuj4wnfU8/X1ZrpT+os=; b=bzbCx8ugyvY+QOYywH7H37/+g2
+        L3UlTqZW4KEM6EjuOdAfAU9Clp7mjXnEOgUUQ52/5zLYoeSyG1mVamDlE4ZmxQBbkk5oAaHlr/YQD
+        jcVjXjqh+lvf1A7HdoLOIt11lp6coTQeTsfl1lZMJ/tXzABh2bohq0wr4Br3GWKXwkFc01y1X0zOX
+        aSvz7xjzo1gA1P96FZqIRKqmVblm40fIVzM11Fa8VoE3+27G7tS5PDYsfR7f8tATYEglIgJx40eVL
+        463E8gCJm4q5Nu8exndie2IYIGB8uVSEC/4SfWlYim5/J0N69aTSVni9d0c76uX+XYfhBHa0bwmYQ
+        NaCs/FLw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pw8ma-00EXAU-Mn; Mon, 08 May 2023 21:52:36 +0000
+Date:   Mon, 8 May 2023 22:52:36 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc:     Ruihan Li <lrh2000@pku.edu.cn>,
+        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: usbdev_mmap causes type confusion in page_table_check
+Message-ID: <ZFlvJEfs1ufh1UUD@casper.infradead.org>
+References: <000000000000258e5e05fae79fc1@google.com>
+ <20230507135844.1231056-1-lrh2000@pku.edu.cn>
+ <CA+CK2bBe2YKYM3rUTCnZ0RF=NFUR9VqO-QYn3ygPsFJWLY1MUA@mail.gmail.com>
+ <ZFlrbDft1QfMyIDc@casper.infradead.org>
+ <CA+CK2bDVjovwB9v-Zv4Fn7EUfp5FV2XK36iJKYKY7pYNOFfOGA@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|AM7PR04MB6983:EE_
-X-MS-Office365-Filtering-Correlation-Id: 20b37225-fa76-48c4-23fc-08db500e9353
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iXjd9aN3zriVvn7rzGDXLcKIS7KmpEjtdUWvWYDVlDBNlOpU5croPXJLNmU0T9G9cQamkFy1u5lU+/6OzRrT7TzBH6eiIB66JIrkyP3uwfr+TeH3ab9B8rArpUyOqrnDOTVnXhkJK4PWjmcJjcWSHfI0hSon4+NAE5/naz33/112RJhyynCKBWES2iIVphOD+8K/LCTbe2Z8parYW0Iyar6IWpcTMKoQAVDV8aIzt21PNcIV7DgvUkSpSYDCtQ9jRKS+62mXCYKMosGmHhb4ACSojZG4nMFAYDEBhxlXYKI48TOOWtwlqYYdZUfXvso5YQEIzHN1lMXFOx2DJj8czrRATdK5qQwfQofW3EQzuzrWOHMIGUYEi1gGMi1fQpFYok9L0XJE9IXnVCz9Wyo0cD7q7wTtXJPJMxaTxrxsm7Zij34DVuue7itlG91VCqEnbZ+VnkudQXhtEaQTgRLPGB5Lq2ufAR490nj/ylpf0zrsde9I5Q1aWSn2tmorxu8ZrqmHA/2lPTJVnOhxvrxzQpmOMeapm3H7jQlMFJjyqL5a+ljQGmfUcIiMAPLaCm09vKwv56AFgxfILndKOaNKFDd7CQesQmUtu6u3LEbLuhBOy398L7H48fHdtYVubMbvLRiYKHMKsPdKuXmlEvsgVA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(376002)(396003)(346002)(39860400002)(451199021)(83380400001)(316002)(66946007)(4326008)(66476007)(66556008)(478600001)(6486002)(6666004)(2616005)(52116002)(186003)(6512007)(6506007)(1076003)(26005)(110136005)(86362001)(2906002)(36756003)(41300700001)(921005)(5660300002)(8676002)(8936002)(38350700002)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ukELYIx6zBhpNHFWknftDhvt6l9cHKQVM11suUYMHlLMqIYfqfqso9/o6rJg?=
- =?us-ascii?Q?CoN67BywPOhANNxWj7GoCgKxTQ5zE7Q+6JlZx+m4lI/F++c1L4uzk1LVAsNU?=
- =?us-ascii?Q?DA1j/gex67lT9PUZ3BxH7LT30dgOSONPMo9IGzf+TqLc2lmq9lA0GWWEfvHm?=
- =?us-ascii?Q?+gvcq4RRyomFgTvF+r2kNM7NEHihB54M9kiyG2Hr+9HATtcRAmvn2LpXPvL1?=
- =?us-ascii?Q?833xncf1+gsX5p4ubX/LYRmd7BHx747ousaCByBjiDGCf8VvM0q9WJuBpqcs?=
- =?us-ascii?Q?g8nt/cW1TF5kD0LDeaksZYDQL8x24P6l/1vs8HpFSwQvczpYFWXdpnnQereg?=
- =?us-ascii?Q?wAl+DLzlxeedyf9eRyrKjflElbwAnpYsLb8v88MhqYmNaeM8gJfL80DetW0q?=
- =?us-ascii?Q?s+2Ud5Bc1yKAm6jb37HILHgbklJeIgl8ySb963c8XADIwxSDP3NbkXw0ALYT?=
- =?us-ascii?Q?6BzXp9PeYXwcKmbjee2w+PvB6HF3bTTQGW1PO+aAqzkvMQjqbpHI8vLcP22w?=
- =?us-ascii?Q?cLkTdzmzVXShV1sQgZ1iS8vUNU+gAgcuJLX19Gx3A3vz0I7/Faxju8n9RLQk?=
- =?us-ascii?Q?2RArPl6DrVx77fi3DzGJaXYNCXtJkyJBpZJsa0bnmOpO0iN7fTnWi+d4Hp0S?=
- =?us-ascii?Q?n9da6uITD8HLS7v2R/JxI4dIQKhZs2e6r1xi62UlrvePbsDe8uAjZtsGx2eq?=
- =?us-ascii?Q?dJNeeawdjWwi4RLuW+rB/aXA5AnrVc6doFfqvpRIi6PjzM2dSaY5ilPMUf0r?=
- =?us-ascii?Q?M8Msx8//sYk8p/+QRiPlIuMWklWVrmrHZwsUxHTl/KO9qI0WOJBnAMWA9SZt?=
- =?us-ascii?Q?p0svBFBVXzXn7BkGC1GZiAMIbDIIfKLFDOlNv5Gs3XBmxOcBE8VzIvYpp1WF?=
- =?us-ascii?Q?xDmYhLaNgKai3dlyd6Pv79rTPX1NhC3B1lS3kZKF2T5XCyCDF7W2YRHe+wEZ?=
- =?us-ascii?Q?sl0UbBL9IqYScdzrSyobg+w4g10GP0u8hJpsbcldtOGCDrt2oGSQ3kw6R+LY?=
- =?us-ascii?Q?MdShqX9x3lzjyvkMpfBykOh0CiM9X/QLtVvfGLrCY+oN0DJOH2xjWILLVani?=
- =?us-ascii?Q?2Xq5DvWhKLTVZUruO3qHPy9fLi3ThFqNiKn0oChmWDieWuzjMBa7DN1D3N8N?=
- =?us-ascii?Q?93uUfRQjanRWTgoMeGQhA64n6cNxhPZvTc/ebJSSaoNDBAnqsgNjwbuuvzcf?=
- =?us-ascii?Q?ywFLPtLVS6AqmOpo4DqqSRjY2x1Aih+eIb7fT0z/eB0IVIMrfy7N5kOQ4q73?=
- =?us-ascii?Q?8S4kcS2rSqloBlkOVFruq/PW/1TPnpKTHfzGzP3cdzj8Qxp178IAEG6FAmIH?=
- =?us-ascii?Q?kJ2nB8MA9+X4mpaXNUf2vmTLpABlDGdClwRtAvSAcy5NCnf+5x+UukAiiu9A?=
- =?us-ascii?Q?kVJZP4DVuziM06GGikv59MXhrOesVFvyOxaTlBCnbCDiuBrAblyp4ShwjSCe?=
- =?us-ascii?Q?DqTuW2rrGF/KuKGUnbvF++S7UlQNKdiirhpHAjPk1/oLjjFIadnKAXZvDqX4?=
- =?us-ascii?Q?gA7x2AWxGwmdMP/OsdPNhGSmJKf+cvb6OYL7XG6LQ48fRV4CvcM64Hq0Bi7r?=
- =?us-ascii?Q?FXxgTe6s7TWGEYReo7Q=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20b37225-fa76-48c4-23fc-08db500e9353
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 21:52:53.6576
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1/8smuSQXbRaXHkO1DATLMFh5zRsnlN2GlVBk1KxBQPYJ1cAlp1iClch84A7L8svu7bA0FAL1ifbkZbTcOYkdA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6983
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+CK2bDVjovwB9v-Zv4Fn7EUfp5FV2XK36iJKYKY7pYNOFfOGA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Layerscape has PME interrupt, which can be used as linkup notifier.
-Set CFG_READY bit of PEX_PF0_CONFIG to enable accesses from root complex
-when linkup detected.
+On Mon, May 08, 2023 at 02:48:59PM -0700, Pasha Tatashin wrote:
+> On Mon, May 8, 2023 at 2:36 PM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Mon, May 08, 2023 at 05:27:10PM -0400, Pasha Tatashin wrote:
+> > > > static void page_table_check_set(struct mm_struct *mm, unsigned long addr,
+> > > >                                  unsigned long pfn, unsigned long pgcnt,
+> > > >                                  bool rw)
+> > > > {
+> > > >         // ...
+> > > >         anon = PageAnon(page);
+> > > >         for (i = 0; i < pgcnt; i++) {
+> > > >                 // ...
+> > > >                 if (anon) {
+> > > >                         BUG_ON(atomic_read(&ptc->file_map_count));
+> > > >                         BUG_ON(atomic_inc_return(&ptc->anon_map_count) > 1 && rw);
+> > > >                 } else {
+> > > >                         BUG_ON(atomic_read(&ptc->anon_map_count));
+> > > >                         BUG_ON(atomic_inc_return(&ptc->file_map_count) < 0);
+> > > >                 }
+> > > >                 // ...
+> > > >         }
+> > > >         // ...
+> > > > }
+> > > >
+> > > > This call to PageAnon is invalid for slab pages because slab reuses the bits
+> > > > in struct page/folio to store its internal states, and the anonymity bit only
+> > > > exists in struct page/folio. As a result, the counters are incorrectly updated
+> > > > and checked in page_table_check_set and page_table_check_clear, leading to the
+> > > > bug being raised.
+> > >
+> > > We should change anon boolean to be:
+> > >
+> > > anon = !PageSlab(page) && PageAnon(page);
+> >
+> > No.  Slab pages are not elegible for mapping into userspace.  That's
+> 
+> Sure, I can add BUG_ON(PageSlab(page)); to page_table_check_set.
+> 
+> > all.  There should be a BUG() for that.  And I do mean BUG(), not
+> > "return error to user".  Something has gone horribly wrong, and it's
+> > time to crash.
+> 
+>  It is just too easy to make slab available via remap_pfn_range(), but
+> I do not think we want to add BUG() into the remap function, otherwise
+> we will break devices such as /dev/mem.
 
-Signed-off-by: Xiaowei Bao <xiaowei.bao@nxp.com>
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
-Change from v2 to v3
- - align 80 column
- - clear irq firstly
- - dev_info to dev_dbg
- - remove double space
- - update commit message
-
-Change from v1 to v2
-- pme -> PME
-- irq -> IRQ
-- update dev_info message according to Bjorn's suggestion
-- remove '.' at error message
-
- .../pci/controller/dwc/pci-layerscape-ep.c    | 102 +++++++++++++++++-
- 1 file changed, 101 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/pci/controller/dwc/pci-layerscape-ep.c b/drivers/pci/controller/dwc/pci-layerscape-ep.c
-index c640db60edc6..1a431a9be91e 100644
---- a/drivers/pci/controller/dwc/pci-layerscape-ep.c
-+++ b/drivers/pci/controller/dwc/pci-layerscape-ep.c
-@@ -18,6 +18,20 @@
- 
- #include "pcie-designware.h"
- 
-+#define PEX_PF0_CONFIG			0xC0014
-+#define PEX_PF0_CFG_READY		BIT(0)
-+
-+/* PEX PFa PCIE PME and message interrupt registers*/
-+#define PEX_PF0_PME_MES_DR		0xC0020
-+#define PEX_PF0_PME_MES_DR_LUD		BIT(7)
-+#define PEX_PF0_PME_MES_DR_LDD		BIT(9)
-+#define PEX_PF0_PME_MES_DR_HRD		BIT(10)
-+
-+#define PEX_PF0_PME_MES_IER		0xC0028
-+#define PEX_PF0_PME_MES_IER_LUDIE	BIT(7)
-+#define PEX_PF0_PME_MES_IER_LDDIE	BIT(9)
-+#define PEX_PF0_PME_MES_IER_HRDIE	BIT(10)
-+
- #define to_ls_pcie_ep(x)	dev_get_drvdata((x)->dev)
- 
- struct ls_pcie_ep_drvdata {
-@@ -30,8 +44,86 @@ struct ls_pcie_ep {
- 	struct dw_pcie			*pci;
- 	struct pci_epc_features		*ls_epc;
- 	const struct ls_pcie_ep_drvdata *drvdata;
-+	bool				big_endian;
-+	int				irq;
- };
- 
-+static u32 ls_lut_readl(struct ls_pcie_ep *pcie, u32 offset)
-+{
-+	struct dw_pcie *pci = pcie->pci;
-+
-+	if (pcie->big_endian)
-+		return ioread32be(pci->dbi_base + offset);
-+	else
-+		return ioread32(pci->dbi_base + offset);
-+}
-+
-+static void ls_lut_writel(struct ls_pcie_ep *pcie, u32 offset, u32 value)
-+{
-+	struct dw_pcie *pci = pcie->pci;
-+
-+	if (pcie->big_endian)
-+		iowrite32be(value, pci->dbi_base + offset);
-+	else
-+		iowrite32(value, pci->dbi_base + offset);
-+}
-+
-+static irqreturn_t ls_pcie_ep_event_handler(int irq, void *dev_id)
-+{
-+	struct ls_pcie_ep *pcie = dev_id;
-+	struct dw_pcie *pci = pcie->pci;
-+	u32 val, cfg;
-+
-+	val = ls_lut_readl(pcie, PEX_PF0_PME_MES_DR);
-+	ls_lut_writel(pcie, PEX_PF0_PME_MES_DR, val);
-+
-+	if (!val)
-+		return IRQ_NONE;
-+
-+	if (val & PEX_PF0_PME_MES_DR_LUD) {
-+		cfg = ls_lut_readl(pcie, PEX_PF0_CONFIG);
-+		cfg |= PEX_PF0_CFG_READY;
-+		ls_lut_writel(pcie, PEX_PF0_CONFIG, cfg);
-+		dw_pcie_ep_linkup(&pci->ep);
-+
-+		dev_dbg(pci->dev, "Link up\n");
-+	} else if (val & PEX_PF0_PME_MES_DR_LDD) {
-+		dev_dbg(pci->dev, "Link down\n");
-+	} else if (val & PEX_PF0_PME_MES_DR_HRD) {
-+		dev_dbg(pci->dev, "Hot reset\n");
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int ls_pcie_ep_interrupt_init(struct ls_pcie_ep *pcie,
-+				     struct platform_device *pdev)
-+{
-+	u32 val;
-+	int ret;
-+
-+	pcie->irq = platform_get_irq_byname(pdev, "pme");
-+	if (pcie->irq < 0) {
-+		dev_err(&pdev->dev, "Can't get 'pme' IRQ\n");
-+		return pcie->irq;
-+	}
-+
-+	ret = devm_request_irq(&pdev->dev, pcie->irq, ls_pcie_ep_event_handler,
-+			       IRQF_SHARED, pdev->name, pcie);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Can't register PCIe IRQ\n");
-+		return ret;
-+	}
-+
-+	/* Enable interrupts */
-+	val = ls_lut_readl(pcie, PEX_PF0_PME_MES_IER);
-+	val |=  PEX_PF0_PME_MES_IER_LDDIE | PEX_PF0_PME_MES_IER_HRDIE |
-+		PEX_PF0_PME_MES_IER_LUDIE;
-+	ls_lut_writel(pcie, PEX_PF0_PME_MES_IER, val);
-+
-+	return 0;
-+}
-+
- static const struct pci_epc_features*
- ls_pcie_ep_get_features(struct dw_pcie_ep *ep)
- {
-@@ -125,6 +217,7 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
- 	struct ls_pcie_ep *pcie;
- 	struct pci_epc_features *ls_epc;
- 	struct resource *dbi_base;
-+	int ret;
- 
- 	pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
- 	if (!pcie)
-@@ -144,6 +237,7 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
- 	pci->ops = pcie->drvdata->dw_pcie_ops;
- 
- 	ls_epc->bar_fixed_64bit = (1 << BAR_2) | (1 << BAR_4);
-+	ls_epc->linkup_notifier = true;
- 
- 	pcie->pci = pci;
- 	pcie->ls_epc = ls_epc;
-@@ -155,9 +249,15 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
- 
- 	pci->ep.ops = &ls_pcie_ep_ops;
- 
-+	pcie->big_endian = of_property_read_bool(dev->of_node, "big-endian");
-+
- 	platform_set_drvdata(pdev, pcie);
- 
--	return dw_pcie_ep_init(&pci->ep);
-+	ret = dw_pcie_ep_init(&pci->ep);
-+	if (ret)
-+		return ret;
-+
-+	return ls_pcie_ep_interrupt_init(pcie, pdev);
- }
- 
- static struct platform_driver ls_pcie_ep_driver = {
--- 
-2.34.1
-
+Slab pages can't be mmaped.  Really, no matter what interface you're
+using.  page->_mapcount is necessarily incremented by mapping to
+userspace, and slab uses that space for its own purposes (and has
+for decades).  It's similar for page tables and other allocations that
+use PageType.
