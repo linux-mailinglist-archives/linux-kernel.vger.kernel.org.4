@@ -2,151 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4736FBB7B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEB76FBB81
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbjEHXlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 19:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
+        id S233170AbjEHXsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 19:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjEHXlF (ORCPT
+        with ESMTP id S230101AbjEHXsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 19:41:05 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1338D4C31
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 16:41:04 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3ef302a642eso26898611cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 16:41:04 -0700 (PDT)
+        Mon, 8 May 2023 19:48:09 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EAD72B7
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 16:48:08 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-965fc25f009so639794566b.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 16:48:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1683589263; x=1686181263;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gXyotAzP+VPxO7VVOPWj4wSwSUrdQsmucc2QXoXVneg=;
-        b=NTno1hBVsyYnrek/PMyx+m0tZ4K6xLpWDC5gWFZAj5BshzMxsP27OcOq9NTagyo2CV
-         hGa+Qmu7sVB7GX5230dpYckispNBjEyXREQoEFQfu7B0uTZR9iDtw5oX/hbAYSci3Sz0
-         cqncSiXX0P+NmbipJgflFGAOCQ618y+daoGrNS5F2/b+IX1QZkmxqQjFcn8pG1+kv7uT
-         gi0kJ7wnJlyDCkutOEAcs3/BgT2JHla/snfnbtSVw5EVkSbtucoLHsNhhsKNvjKCQIl9
-         MDAshjNqjW6Zp3oeQIqS+Jji2ZAQ7Skk7zk1AcMEa2Egpv3ts99audqtXnm/RJHqbaqW
-         lKPg==
+        d=linux-foundation.org; s=google; t=1683589687; x=1686181687;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F8t+saJAbUSVL4ue1y2IEMbLMFyq3GQP269CpYlGUPA=;
+        b=Wh57UW3RuUlEG2otI7UPvSHXwsD/JsyyHfRXmSij9Vz3Et3LPe4Ey6y6I0DxpkJpZa
+         WEANGIHJf4f9mbYbaRITBmj3Mtb5Q84iquTdm4BMeRnOSfSIqTr95/DeWeQCtVBuOdMq
+         adlGL6QzsmcbRaDNYlqlEZJILjJUF4IJLOTBM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683589263; x=1686181263;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gXyotAzP+VPxO7VVOPWj4wSwSUrdQsmucc2QXoXVneg=;
-        b=HVkVGUu02gbyQg996UngfkrVtoRXHqBVbk2UV4QicQ2YLLHmxvwwsd73dd08CGamvu
-         2J3rh76K4pOaJF8zhY4/GHiOD35y2qunRP2/c+1icERQXV6YS/1yYbyrksf9wLtwqsU6
-         R5Xl2yjyUJG8qhCAinJRDd+m4Zu1XfowWIqi8T4OCsrC6oAHuW4sbYxvESuTP71oI2Ru
-         RLFQD2yDR1KhtqeEa+6YrpyewP3q7qU1jOheUUhaBntNXFPbAQ7dfSFJNln/dAJtIfsr
-         WAZpCVQ9aU0t0aMFppMJVJoNTi27d7E0SEXOrwaoE13GI1TORPVaBbBE/F42B/T7B13U
-         /hZg==
-X-Gm-Message-State: AC+VfDxmufmIekoyeon3CT6urI5A27Jit5pr3i+tC6UJbZzv9mK1dcC6
-        P+zxKS4CpTkxycUMbNouVbYTGA==
-X-Google-Smtp-Source: ACHHUZ5K/IMkHlHxC6ISgy6AEyScv8HjSVfJbJ1Lzy2TT/TOP0WrdHo7hSGOMDmQcFxJTwRpeksFKg==
-X-Received: by 2002:a05:622a:1708:b0:3ef:3f51:dad5 with SMTP id h8-20020a05622a170800b003ef3f51dad5mr18505310qtk.20.1683589263162;
-        Mon, 08 May 2023 16:41:03 -0700 (PDT)
-Received: from soleen.c.googlers.com.com (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
-        by smtp.gmail.com with ESMTPSA id j29-20020a05620a001d00b0074411b03972sm1357415qki.51.2023.05.08.16.41.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 16:41:02 -0700 (PDT)
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org,
-        mike.kravetz@oracle.com, mhocko@suse.com, muchun.song@linux.dev,
-        rientjes@google.com, souravpanda@google.com
-Subject: [PATCH v3] mm: hugetlb_vmemmap: provide stronger vmemmap allocation guarantees
-Date:   Mon,  8 May 2023 23:40:59 +0000
-Message-ID: <20230508234059.2529638-1-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
+        d=1e100.net; s=20221208; t=1683589687; x=1686181687;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F8t+saJAbUSVL4ue1y2IEMbLMFyq3GQP269CpYlGUPA=;
+        b=ik2pYjT/2mI+/w6BzDz01HqH9pf+KJ9FFr05RsCfGYbONcZuLf/PcsZ4gTz/dLX5tw
+         e/E7aKs3oW/KyvoMy3Glb7omAMsmA4U1yqIbDXI0Ot370QmkiH0vhKuAdgb6WHQNOIJW
+         BCxeb2nMFsFvoOWqB59AAaAMJjr5NKMp7R4S1n1plO4l4lb+bfGUDU6yzMulgWnFOfD6
+         lda9awIaIuYV/+TkcnI07AGgjJGJg0xA0cJmo6fCkQmSrag/xaFPVzzk7gnCXAPgTAZS
+         E8VPGJHNvZI4GhxEJ4jlkGHxNPm6T1TFglLGZmeqdk959RWyfvKAW0Mt3XmRFD27Ug3w
+         71+g==
+X-Gm-Message-State: AC+VfDw4pn+3T8x0ZIvzWjtOchZAs+OccH5Dw0Q59oilX47xn7eiEeej
+        Iieo22+lyO1XXbsZKTReADhwOpH+IoVaHEouEeOFqw==
+X-Google-Smtp-Source: ACHHUZ58A+Smm+h5KS37lyPipB5mS1/JI3MdnKxzL+tzuf2WecHaIGo6d+kwAuQDOktVLLUBlPm8Vw==
+X-Received: by 2002:a17:907:8692:b0:967:142b:ff07 with SMTP id qa18-20020a170907869200b00967142bff07mr4280428ejc.21.1683589686960;
+        Mon, 08 May 2023 16:48:06 -0700 (PDT)
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
+        by smtp.gmail.com with ESMTPSA id e9-20020a170906648900b0094f3d700868sm576183ejm.80.2023.05.08.16.48.05
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 16:48:05 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-50bc075d6b2so9875316a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 16:48:05 -0700 (PDT)
+X-Received: by 2002:a17:907:9482:b0:968:4d51:800b with SMTP id
+ dm2-20020a170907948200b009684d51800bmr3242793ejc.1.1683589685292; Mon, 08 May
+ 2023 16:48:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230424212130.590684-1-dave.hansen@linux.intel.com>
+ <CAHk-=whn3F1k263SZNUVQK195tcCMAo5E_WbmjUE0qFC5rWg=w@mail.gmail.com>
+ <4433c3595db23f7c779b69b222958151b69ddd70.camel@intel.com>
+ <148b3edb-b056-11a0-1684-6273a4a2d39a@intel.com> <CAHk-=wiuVXTfgapmjYQvrEDzn3naF2oYnHuky+feEJSj_G_yFQ@mail.gmail.com>
+ <CAHk-=wiB0wy6oXOsPtYU4DSbqJAY8z5iNBKdjdOp2LP23khUoA@mail.gmail.com>
+ <4171c4b0-e24b-a7e2-9928-030cc14f1d8d@intel.com> <CAHk-=wiVLvz3RdZiSjLNGKKgR3s-=2goRPnNWg6cbrcwMVvndQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wiVLvz3RdZiSjLNGKKgR3s-=2goRPnNWg6cbrcwMVvndQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 8 May 2023 16:47:48 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg4vpYz+xRtd+PsdmQ9gtNGbXrFKW3ndvXcrLEEDN0hyw@mail.gmail.com>
+Message-ID: <CAHk-=wg4vpYz+xRtd+PsdmQ9gtNGbXrFKW3ndvXcrLEEDN0hyw@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/shstk for 6.4
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HugeTLB pages have a struct page optimizations where struct pages for tail
-pages are freed. However, when HugeTLB pages are destroyed, the memory for
-struct pages (vmemmap) need to be allocated again.
+On Mon, May 8, 2023 at 4:31=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Yeah, right now the non-shadow-stack ptep_set_wrprotect() can just be
+> an atomic clear_bit(), which turns into just
+>
+>         lock andb $-3, (%reg)
+>
+> and I guess that would inevitably become a horror of a cmpxchg loop
+> when you need to move the dirty bit to the SW dirty on CPU's where the
+> dirty bit can come in late.
+>
+> How very very horrid.
 
-Currently, __GFP_NORETRY flag is used to allocate the memory for vmemmap,
-but given that this flag makes very little effort to actually reclaim
-memory the returning of huge pages back to the system can be problem. Lets
-use __GFP_RETRY_MAYFAIL instead. This flag is also performs graceful
-reclaim without causing ooms, but at least it may perform a few retries,
-and will fail only when there is genuinely little amount of unused memory
-in the system.
+Oh, maybe not.
 
-Freeing a 1G page requires 16M of free memory. A machine might need to be
-reconfigured from one task to another, and release a large number of 1G pages
-back to the system if allocating 16M fails, the release won't work.
+So the nice thing here is that we actually *do* have the old value
+(although we don't pass it in to ptep_set_wrprotect(), so while the
 
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Suggested-by: David Rientjes <rientjes@google.com>
----
- mm/hugetlb_vmemmap.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+        lock andb $-3,(%reg)
 
-Changelog:
-v3
-  - updated patch log to include details about when the failure can happen.
-v2
-  - removed gfp_mask argument from alloc_vmemmap_page_list as suggested by
-    David Rientjes.
-  - Fixed spelling in the patch title.
+looks simple and efficient, I do think that it wouldn't necessarily be
+any worse to replace it with a
 
-diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-index 27f001e0f0a2..f42079b73f82 100644
---- a/mm/hugetlb_vmemmap.c
-+++ b/mm/hugetlb_vmemmap.c
-@@ -384,8 +384,9 @@ static int vmemmap_remap_free(unsigned long start, unsigned long end,
- }
- 
- static int alloc_vmemmap_page_list(unsigned long start, unsigned long end,
--				   gfp_t gfp_mask, struct list_head *list)
-+				   struct list_head *list)
- {
-+	gfp_t gfp_mask = GFP_KERNEL | __GFP_RETRY_MAYFAIL | __GFP_THISNODE;
- 	unsigned long nr_pages = (end - start) >> PAGE_SHIFT;
- 	int nid = page_to_nid((struct page *)start);
- 	struct page *page, *next;
-@@ -413,12 +414,11 @@ static int alloc_vmemmap_page_list(unsigned long start, unsigned long end,
-  * @end:	end address of the vmemmap virtual address range that we want to
-  *		remap.
-  * @reuse:	reuse address.
-- * @gfp_mask:	GFP flag for allocating vmemmap pages.
-  *
-  * Return: %0 on success, negative error code otherwise.
-  */
- static int vmemmap_remap_alloc(unsigned long start, unsigned long end,
--			       unsigned long reuse, gfp_t gfp_mask)
-+			       unsigned long reuse)
- {
- 	LIST_HEAD(vmemmap_pages);
- 	struct vmemmap_remap_walk walk = {
-@@ -430,7 +430,7 @@ static int vmemmap_remap_alloc(unsigned long start, unsigned long end,
- 	/* See the comment in the vmemmap_remap_free(). */
- 	BUG_ON(start - reuse != PAGE_SIZE);
- 
--	if (alloc_vmemmap_page_list(start, end, gfp_mask, &vmemmap_pages))
-+	if (alloc_vmemmap_page_list(start, end, &vmemmap_pages))
- 		return -ENOMEM;
- 
- 	mmap_read_lock(&init_mm);
-@@ -476,8 +476,7 @@ int hugetlb_vmemmap_restore(const struct hstate *h, struct page *head)
- 	 * When a HugeTLB page is freed to the buddy allocator, previously
- 	 * discarded vmemmap pages must be allocated and remapping.
- 	 */
--	ret = vmemmap_remap_alloc(vmemmap_start, vmemmap_end, vmemmap_reuse,
--				  GFP_KERNEL | __GFP_NORETRY | __GFP_THISNODE);
-+	ret = vmemmap_remap_alloc(vmemmap_start, vmemmap_end, vmemmap_reuse);
- 	if (!ret) {
- 		ClearHPageVmemmapOptimized(head);
- 		static_branch_dec(&hugetlb_optimize_vmemmap_key);
--- 
-2.40.1.521.gf1e218fcd8-goog
+        lock cmpxchg %new,%old,(%reg)
 
+and a well-predicted branch for the (very very unlikely) failure case.
+
+So maybe unifying these two areas wouldn't be too bad.
+
+In fact, looking at this code a bit more made me realize that we
+probably should always have special-cased the common "is the source MM
+single-threaded" case.
+
+Pretty much nobody does "fork()" from a threaded app, because it's not
+portable anyway.
+
+So:
+
+ - the nasty racy case is already exceedingly rare, and we're wasting
+huge amounts of time on using a locked access here when in 99% of all
+cases we shouldn't do that at all!
+
+ - we would probably be *much* better off with a "if (mm->count =3D=3D 1)"
+test that goes off and does *not* do the atomic case (which also
+doesn't have any worries about dirty bits). I'll take a well-predicted
+conditional branch over an atomic op any day of the week
+
+ - once you do that, the nasty racy case isn't even in the critical
+path any more, so it might as well do the unconditional "cmpxchg" loop
+that works on all CPU's.
+
+And yes, old CPU's may still set the dirty bit *later*, but we can
+indeed make the rule be that the *kernel* never sets that "read-only
+and dirty" combination, and then on new CPU's the HW guarantees it
+doesn't set it either.
+
+How does that sound? I think we'd potentially speed up fork() quite
+noticeably by not doing the locked accesses.
+
+Maybe I just think I'm clever, but I'm actually very stupid and am not
+thinking of some obvious problem case.
+
+For example, maybe the mm count doesn't end up being 1 commonly after
+all, because we're sharing it with the idle thread or something like
+that.
+
+Or maybe there's something even more obviously wrong with the above idea.
+
+                  Linus
