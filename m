@@ -2,150 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F4D6FB5E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 19:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C542B6FB5E9
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 19:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbjEHRYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 13:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
+        id S233446AbjEHR00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 13:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232748AbjEHRYw (ORCPT
+        with ESMTP id S229691AbjEHR0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 13:24:52 -0400
-Received: from sonic314-26.consmr.mail.ne1.yahoo.com (sonic314-26.consmr.mail.ne1.yahoo.com [66.163.189.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018125243
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 10:24:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1683566690; bh=W47C2Am1ASDpCiBJiSpeDsiHDjaCuY8JMXwH1J8T4uQ=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=qZ1Z/5xpc6q+ZzMITc6QKwS1dA86zkwdUKLLGMXwfGPGHNEqkUF9FNslgwbE1NX9/w2S1YvfhwpO3PTlPuYJFmScV7W2zofLw1wFUpETFNS034ZV9oZXepk3NbS6tUDCaDL3H2sbtEQMY5AQuJhmm5quS3Lz6s4khQ5bF0JT4aWkXtdmFgYkelUm8LnlQFfuShtX01hv7srnYv8Z+KEWtOvSK7Q7blP/wu2plhCAYX7aJpRAgLqWT8TO6cRI5U/aQpo9bINEk7PY4e3mMdTZ064P+Pxr5rUhnvsejrJNYb5p95EvgvKTcjTVEUgJa01JPpBNCG8oTTNktfA9pwcoyQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1683566690; bh=r7s1S+IuTN5a5zaCQ4yEeLm9SRVgtDyCtgVNqwW4YFi=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=JFo2j/jaPXzOoU5W1l0V3jAnqbHsVz9mzJ7BBcXyGg64uY3UylrD5AZukipFe8VwiHGK42jwBK2nkqO6m4MnWBVAXcvG2+jfJZKSmKrAgUks6W+nNIAJ/WoC7KqAaWEmyTaKkiDuqezvbiEGvyrZ1aGReJ5GKQvQOV6rA/LpDOlIfQWiJgtqpqrULh2QKWQ7C1QvuJTKoC6kzX/Al0PPMopSk91cL1+bPMC3G31amg0YuTb54rnlnkpsii/AysoyDt7Ws4LSEcLdLZjB0ytxEcNuaKMvp/5ib1Dsv+lOeMq+nb+1Xq/bSsnZdq+1GMsvC1uBa47ARf3jhDkoD88RHQ==
-X-YMail-OSG: b9bomroVM1nnoXuVUhrJmulhFsXUZmDllzLu.hlGYUs49GZAxyLNBdPrDg5jcWG
- .Tnbtae1QPy95Fg1AnC6sMHFy1BCge0QPUx22Php9efG7jnigTiaFS6MUIaf_4YOYrFORr2fnSpX
- Q02knVJ_W578_ga7vdZfi4C3z4wPTC901ofyNbB.rQ0S9OgmSnEW_VPS_9u7jKVbkYAp7ARY3Hih
- 0k8o3Ld.ZU7nHaEZVFfqfJF7eeAbHsjk9jNFpCc0Yg3hfwq19aoIuneZnv4c2HMBcZ2f7RqjX61q
- IGtKcNSsOLLIlLw5pZw4NeL8J2U4jX7caB28gDZ4BIJj_SVCkxq3sDE3i4p2TJJXeE5fyl5Y3b5Z
- EOrestSNmXEC1L8xxKCrZx4sJpLw6Wsr4BZjS74FMZ8TIwtNUw.Y2pyvaixiPant026XaC8U0RY9
- H2rB7wg890zJ0xUxHLhVXcC3z8Pei50NWNtpbkbDRraRiZmFdyrzqcFO2YaS_Nnj3uzXpJkwNdtZ
- ZZAsJeHhVfUtqsjuxFz3n0OsMB0EuCW7hBWnXZFaF1KhTEq24K1J0t5pro76WWRzksU2mfRxj9R2
- dADeLa0dRUw.0Z.D8MuterhiiWoa4vMHiX3pbmF0DSQdVPM9L8KyFNUA8huT.8HMNW2FNpLBqs39
- Pbx7PH7N6iDISFQgXOWEvwA3CAc.q_mZKsDS86BRqswRTHB7y.DjwNNv3c1SvYazFoJtOmDWFftr
- 4mcbHKiIqWhYtrqHpK1CbyDzKrApHmG9eViTvftsgBUXoQLdhynK0pUUWzoL8M_Va0ccIUHPrvBB
- onqG2vTB8HAs_EEwpuxZUOnDiey8BLGfaPqutg.xar_xpo.VSpgVGY1yluRxD.adCPYZjs7ZorXM
- QCJltyRTK9TIeF0VGGPwHmBAesVhkPDlnP0J7FHS7.4Q8UX5fTU467yXmsJgnWgPtYEoAUiXWMR5
- 3RF_fIgbcyFcV4XxMOFY0bnuS3BnqY2vp9ralzF_85wXkz_Ci4fvfIHiapkh3fbAM.7ltXlQ4JwJ
- 6dA6LY1.xlfJEtXnrylHC_yoZJNwjoRHLD7C1ylGoQOacZJJp7skuFRt7RJURAZvARwLBQG.3OSO
- QO39eSvkJhECob0pH_mR32.HsTQnYwdyP1yrmMfQ8Gxo43m.xY.xrOq2WAes63Ylkx2reyAvlG2t
- MGIUxfXIpaeNhktn0ChPykfC49hn3oSxLWJJrspeIPu7X9GURBSnB0b65NDNfWr1DbrUOLEqieMH
- 07A0Mhe8VFQPFcWorIWWVtNVaXh.q3cAXbUWRMI7lg3P.D2qug3Mcx4O7xTms7E54ax2Wq_1tmLd
- ta3_glkvL5pmc4Wp9QsZe6.fCTK0cQDHQZBHdpI48LcHGg6hSOx5siI.RcdPRwgSU5GSvj2WIYp3
- RYCELc5qxawEiHEYiJ30U9gxLjF6g0lF9dMYV9nfBI2E92w7B7W4HBvVU5DvtEzdZ0leP98PYXJI
- nVvmQ1dDy_m7Tzj3bIJ0nLHsyKObrhD5bjhIA28LxLHXhU8F9LfjRQYej69mvmzbosyfidaFKEPp
- zFI66HRrd9L6qBpX7pbXXIkmW4av2rdK.3.IGteXzpB1DQoPd7Zk.5tCJAdQBllQx1hSTtspsYW_
- Ru2SN7B1faHNwZEo9C9dy86Al8tlqkG91uCqnKPE7sjGGVtYc4eGoG3jJzaBFlWWsAVnVBPbVMlC
- lBK8U4UBTRMyVsr.eiCgYbGSUA_cVTth.fiDCkHaEJGLYbjbgRhFywUOv.hi0uNCix7PpodPOK2i
- QMHhd9TCpXXbbQ1WAgPG_O_4pBFArZJd6JfLYTlqEOFo4AIN447vH.pB0adJ4QsKdZt0Q91XhQxB
- JHTAUZbowubLpUTeJuDH7moyCjzYMrNLNH818iqL.TF4BqBNPD1.zHxX6LaCwGLKalMyRl_N9ETb
- G3.GCfZ1KNCnS9PLNQGLRzOGZ0GSXUx_Q14E7kV3q7Wi.RuAnuZxSJn3Kp59xL8ckCgrrjSe8uVv
- hN0nazNMaIGNUjFetv7vXdWnItEwb73SR5dflFe6ohSFxT8o.VX1Tv4.j7iJEXrYI_eliH5HRWVn
- uXMKWUiPGwwGf9tc7LNFYxpv.Qbnmv3Yh5tpzvRxPHFGk5RRogS5qoNiTmWHxdOcGd0Pd4syXDMr
- 9.2Y0PE6gaITOCey0q2DBIm9vUOfKXN4r4t0q2xeJeejgetP7KIvOvp7QhsCEd5SzU3Oogdvd5gh
- JYldzOmtD03YU143SjpXTSsZO1h5_.GnsGFCtyA--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 9dff67b1-6bf2-4781-85fe-dfe7e6f4485d
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Mon, 8 May 2023 17:24:50 +0000
-Received: by hermes--production-bf1-5f9df5c5c4-wvm2h (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 94c432530f44b25806002d2ec2a8c8da;
-          Mon, 08 May 2023 17:24:46 +0000 (UTC)
-Message-ID: <84e400ac-fb52-4305-e3c4-204e2c2b91b8@schaufler-ca.com>
-Date:   Mon, 8 May 2023 10:24:43 -0700
+        Mon, 8 May 2023 13:26:24 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813E0526F;
+        Mon,  8 May 2023 10:26:21 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 5BEB660189;
+        Mon,  8 May 2023 19:26:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.hr; s=mail;
+        t=1683566779; bh=B2QfO25Gzot6S0sPndd2xgHlr+IbNt2ib75yKweDZz0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=I1apZMqK+Hs4XFwKv3koRqIO3QJbKq4Uy6YiwIwE8mpj9Sbhf+jNFtKyW0HsCQSOA
+         xWplRJMdL0eoWA+8UBdlYiawG6+zB9yYL12FwAONB9onHZkZJ3lUQpIkNoENLb67o5
+         5eW8E5JEtkNIsBHMEDqtfxrSUyDW/HkN560WXqs1EUarksrTBQok67AGb08k7NYbzm
+         xs3dT1hDK9VfwZoqjpiaJ/xd+qLrIsx5kxcGdHNHuEi4+JVv7kgS6vLtpF7OOHyn89
+         IfF9GMJqsPjhva4mg5Z24ynxVOVxOttmz/9gsJLINPiyUKnFntbSs0PykOFO/LFh3w
+         49WIvHMneYQzw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id msNPEWbRQ8ua; Mon,  8 May 2023 19:26:16 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [77.237.113.62])
+        by domac.alu.hr (Postfix) with ESMTPSA id E009E60187;
+        Mon,  8 May 2023 19:26:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1683566776; bh=B2QfO25Gzot6S0sPndd2xgHlr+IbNt2ib75yKweDZz0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YRYGamMquQHitXJZK2ELXhGFTgujiT0WduQLRL6TLhcwjG6/xNb+MoAyJHHSYADto
+         C/cki6l5xzsM80gUZ5/u8zY8M/KPaTAtymHE0TG/f65cww9s86tPoETUJ4GIXQ/LRh
+         Ym4FjVE7Hb99LxT2BPijF4YOER/jvVV6bF07cj+8Cejpin1hkxMGhQ9k7S7ifLG9rU
+         NYE2Ange3yQvqIB/+/N9pXzAQee7HdlCIRMBr7m//Zwb3if/7IXbGvGamH12m3jYVI
+         JIbSCvNbJcUDKbZElSRIGEw/JEQKZMATvJJvef9tsiceg+s/asFqk07nnkfFU6+R4P
+         JS9Nt9yVcXpmg==
+Message-ID: <34d52b94-6fb2-10d1-575e-df4eeaf54ca7@alu.unizg.hr>
+Date:   Mon, 8 May 2023 19:26:10 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [RFC][PATCH 1/2] smack: Retrieve transmuting information in
- smack_inode_getsecurity()
+Subject: Re: [BUG] Kmemleak, possibly hiddev_connect(), in 6.3.0+ torvalds
+ tree commit gfc4354c6e5c2
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
+ <2023050824-juiciness-catching-9290@gregkh>
+ <2023050854-collage-dreamt-660c@gregkh>
 Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
-        yoonjaeh@amazon.com, kamatam@amazon.com, mengcc@amazon.com,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20230508170234.3595105-1-roberto.sassu@huaweicloud.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20230508170234.3595105-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21417 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
+In-Reply-To: <2023050854-collage-dreamt-660c@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/8/2023 10:02 AM, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Enhance smack_inode_getsecurity() to retrieve the value for
-> SMACK64TRANSMUTE from the inode security blob, similarly to SMACK64.
->
-> This helps to display accurate values in the situation where the security
-> labels come from mount options and not from xattrs.
+On 08. 05. 2023. 16:01, Greg Kroah-Hartman wrote:
 
-I will kick the tires on these patches. They look good at first glance.
+> On Mon, May 08, 2023 at 08:51:55AM +0200, Greg Kroah-Hartman wrote:
+>> On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
+>>> Hi,
+>>>
+>>> There seems to be a kernel memory leak in the USB keyboard driver.
+>>>
+>>> The leaked memory allocs are 96 and 512 bytes.
+>>>
+>>> The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
+>>> Lightning mobo,
+>>> and Genius SlimStar i220 GK-080012 keyboard.
+>>>
+>>> (Logitech M100 HID mouse is not affected by the bug.)
+>>>
+>>> BIOS is:
+>>>
+>>>       *-firmware
+>>>            description: BIOS
+>>>            vendor: American Megatrends International, LLC.
+>>>            physical id: 0
+>>>            version: 1.21
+>>>            date: 04/26/2023
+>>>            size: 64KiB
+>>>
+>>> The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
+>>>
+>>> The keyboard is recognised as Chicony:
+>>>
+>>>                   *-usb
+>>>                        description: Keyboard
+>>>                        product: CHICONY USB Keyboard
+>>>                        vendor: CHICONY
+>>>                        physical id: 2
+>>>                        bus info: usb@5:2
+>>>                        logical name: input35
+>>>                        logical name: /dev/input/event4
+>>>                        logical name: input35::capslock
+>>>                        logical name: input35::numlock
+>>>                        logical name: input35::scrolllock
+>>>                        logical name: input36
+>>>                        logical name: /dev/input/event5
+>>>                        logical name: input37
+>>>                        logical name: /dev/input/event6
+>>>                        logical name: input38
+>>>                        logical name: /dev/input/event8
+>>>                        version: 2.30
+>>>                        capabilities: usb-2.00 usb
+>>>                        configuration: driver=usbhid maxpower=100mA
+>>> speed=1Mbit/s
+>>>
+>>> The bug is easily reproduced by unplugging the USB keyboard, waiting about a
+>>> couple of seconds,
+>>> and then reconnect and scan for memory leaks twice.
+>>>
+>>> The kmemleak log is as follows [edited privacy info]:
+>>>
+>>> root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
+>>> unreferenced object 0xffff8dd020037c00 (size 96):
+>>>    comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
+>>>    hex dump (first 32 bytes):
+>>>      5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
+>>>      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+>>>    backtrace:
+>>>      [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
+>>>      [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
+>>>      [<ffffffffb87543d9>] class_create+0x29/0x80
+>>>      [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
+>> As the call to class_create() in this path is now gone in 6.4-rc1, can
+>> you retry that release to see if this is still there or not?
+> No, wait, it's still there, I was looking at a development branch of
+> mine that isn't sent upstream yet.  And syzbot just reported the same
+> thing:
+> 	https://lore.kernel.org/r/00000000000058d15f05fb264013@google.com
+>
+> So something's wrong here, let me dig into it tomorrow when I get a
+> chance...
 
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  security/smack/smack_lsm.c | 22 ++++++++++++++++++----
->  1 file changed, 18 insertions(+), 4 deletions(-)
->
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index 7a3e9ab137d..c7e37ed2799 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
-> @@ -1463,10 +1463,19 @@ static int smack_inode_getsecurity(struct mnt_idmap *idmap,
->  	struct super_block *sbp;
->  	struct inode *ip = inode;
->  	struct smack_known *isp;
-> +	struct inode_smack *ispp;
-> +	size_t label_len;
-> +	char *label = NULL;
->  
-> -	if (strcmp(name, XATTR_SMACK_SUFFIX) == 0)
-> +	if (strcmp(name, XATTR_SMACK_SUFFIX) == 0) {
->  		isp = smk_of_inode(inode);
-> -	else {
-> +	} else if (strcmp(name, XATTR_SMACK_TRANSMUTE) == 0) {
-> +		ispp = smack_inode(inode);
-> +		if (ispp->smk_flags & SMK_INODE_TRANSMUTE)
-> +			label = TRANS_TRUE;
-> +		else
-> +			label = "";
-> +	} else {
->  		/*
->  		 * The rest of the Smack xattrs are only on sockets.
->  		 */
-> @@ -1488,13 +1497,18 @@ static int smack_inode_getsecurity(struct mnt_idmap *idmap,
->  			return -EOPNOTSUPP;
->  	}
->  
-> +	if (!label)
-> +		label = isp->smk_known;
-> +
-> +	label_len = strlen(label);
-> +
->  	if (alloc) {
-> -		*buffer = kstrdup(isp->smk_known, GFP_KERNEL);
-> +		*buffer = kstrdup(label, GFP_KERNEL);
->  		if (*buffer == NULL)
->  			return -ENOMEM;
->  	}
->  
-> -	return strlen(isp->smk_known);
-> +	return label_len;
->  }
->  
->  
+Hi,
+
+I can confirm that the leak is still present in 6.4-rc1:
+
+root@host:/home/user# cat /sys/kernel/debug/kmemleak
+unreferenced object 0xffff9e6b57bd8ea0 (size 96):
+   comm "systemd-udevd", pid 322, jiffies 4294892584 (age 123.516s)
+   hex dump (first 32 bytes):
+     a4 90 ee b6 ff ff ff ff 00 00 00 00 00 00 00 00 ................
+     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+   backtrace:
+     [<ffffffffb5ba74be>] __kmem_cache_alloc_node+0x22e/0x2b0
+     [<ffffffffb5b27b6e>] kmalloc_trace+0x2e/0xa0
+     [<ffffffffb6154959>] class_create+0x29/0x80
+     [<ffffffffb62812a4>] usb_register_dev+0x1d4/0x2e0
+     [<ffffffffc066ebab>] hiddev_connect+0x11b/0x1b0 [usbhid]
+     [<ffffffffc0629d4e>] hid_connect+0xde/0x580 [hid]
+     [<ffffffffc062a24c>] hid_hw_start+0x4c/0x70 [hid]
+     [<ffffffffc05e8092>] hid_generic_probe+0x32/0x40 [hid_generic]
+     [<ffffffffc062a450>] hid_device_probe+0x100/0x170 [hid]
+     [<ffffffffb6152602>] really_probe+0x1b2/0x420
+     [<ffffffffb61528fe>] __driver_probe_device+0x7e/0x170
+     [<ffffffffb6152a23>] driver_probe_device+0x23/0xa0
+     [<ffffffffb6152cc8>] __driver_attach+0xe8/0x1e0
+     [<ffffffffb614fe6e>] bus_for_each_dev+0x7e/0xd0
+     [<ffffffffb6151da2>] driver_attach+0x22/0x30
+     [<ffffffffb61513f0>] bus_add_driver+0x120/0x220
+unreferenced object 0xffff9e6b58d75800 (size 512):
+   comm "systemd-udevd", pid 322, jiffies 4294892584 (age 123.516s)
+   hex dump (first 32 bytes):
+     00 58 d7 58 6b 9e ff ff 00 58 d7 58 6b 9e ff ff .X.Xk....X.Xk...
+     00 00 00 00 00 00 00 00 a4 90 ee b6 ff ff ff ff ................
+   backtrace:
+     [<ffffffffb5ba74be>] __kmem_cache_alloc_node+0x22e/0x2b0
+     [<ffffffffb5b27b6e>] kmalloc_trace+0x2e/0xa0
+     [<ffffffffb6154812>] class_register+0x32/0x140
+     [<ffffffffb6154974>] class_create+0x44/0x80
+     [<ffffffffb62812a4>] usb_register_dev+0x1d4/0x2e0
+     [<ffffffffc066ebab>] hiddev_connect+0x11b/0x1b0 [usbhid]
+     [<ffffffffc0629d4e>] hid_connect+0xde/0x580 [hid]
+     [<ffffffffc062a24c>] hid_hw_start+0x4c/0x70 [hid]
+     [<ffffffffc05e8092>] hid_generic_probe+0x32/0x40 [hid_generic]
+     [<ffffffffc062a450>] hid_device_probe+0x100/0x170 [hid]
+     [<ffffffffb6152602>] really_probe+0x1b2/0x420
+     [<ffffffffb61528fe>] __driver_probe_device+0x7e/0x170
+     [<ffffffffb6152a23>] driver_probe_device+0x23/0xa0
+     [<ffffffffb6152cc8>] __driver_attach+0xe8/0x1e0
+     [<ffffffffb614fe6e>] bus_for_each_dev+0x7e/0xd0
+     [<ffffffffb6151da2>] driver_attach+0x22/0x30
+root@host:/home/user#
+
+Would you need a bisect on this one? Maybe it would help.
+
+Best regards,
+Mirsad
+
+
