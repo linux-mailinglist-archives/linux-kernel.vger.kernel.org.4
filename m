@@ -2,72 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B934E6FBBB7
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D74E6FBBBA
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233932AbjEHX7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 19:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
+        id S233912AbjEHX7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 19:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233934AbjEHX7M (ORCPT
+        with ESMTP id S233530AbjEHX7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 19:59:12 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B39A83EA
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 16:59:10 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a5197f00e9so36499875ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 16:59:10 -0700 (PDT)
+        Mon, 8 May 2023 19:59:32 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A676683E2;
+        Mon,  8 May 2023 16:59:28 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1ab0c697c84so39335395ad.3;
+        Mon, 08 May 2023 16:59:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683590350; x=1686182350;
+        d=gmail.com; s=20221208; t=1683590368; x=1686182368;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
         bh=2YJeCVahMakSFFIeHkE0L5vaAYWzeS9qst+vBo++bi0=;
-        b=TPN5cpDiUj++UaBuLClkHYKSZJQANDd2z/20VxIZVWHMxUq8xHaiESgezp9rxD7Gua
-         kwQsYUXcUlV+z/TE10zkBILwoSSFW9HIsSnlJiytJoJy7FpjLcJSkMTQ5FwrG0ZhPqpv
-         mNklxZ3suiwvDBCj7EVZBtRDY5IACqgNnR8WuwKVGfhpG2I7i1f+Mkf7pj595ha9os6j
-         TJJUiDx5lGMYJli6SFP6m5BzTEv5qxMT9T42KuwnS05NEL9gk7D+TTxRe4Ne2ObBXqzJ
-         tDju3HLcbYeZK1v2hcxZ5e6OH+eh3geSlD4uCw+dEJXNmHBvdg/GJYTwaPZT50EygaGc
-         RMPg==
+        b=slvl90ejJvhpDMuKfei9ERvwSDS95akB18grdXbOMaqtHTpIsgRO169MWKDhVO+u0N
+         MiyytkrGDe1BzBeJ7OsaGMrPjgyvApqwZl182E4cd7ToHBde/EN4EgPrWiqXwu+0HXEd
+         V8ZuB1s9z/CNkhLBkjQHAEhEnchbea3wasKUZexsOmyICez64PdUbBdmYzv6WppxNr0p
+         KksAAPhqGoJJ8zTwX+be11upEuqmmxAPjF3hqK2fWyMlAjivNzRFKWpSVRDClqdxOAzW
+         0RMq5s92qneOYGR8cSwy+fpRwEWtD7XB66ELfIRpZhNuzWL9q4dkg+aKOVhr2jH71IJa
+         Igxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683590350; x=1686182350;
+        d=1e100.net; s=20221208; t=1683590368; x=1686182368;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=2YJeCVahMakSFFIeHkE0L5vaAYWzeS9qst+vBo++bi0=;
-        b=ah4MO8QOLTF/4zAMBwKQh6sxjFTBllNp0kEftlYIym1W2Yfa64BZHsJ+XBHTODRqqy
-         cz1fP0Oq07gRWwVgMmrP6WXWjHJBWyMOsaQz4eCqEJT6FYzT0zesu/rAigAXFSbqTEFu
-         mxCsZ/FFh8uoIXbHOK2oWwzKohe9OdYOw1oQCg8Hb90oTHK3BK4CjkRM0Eab9rXh/5bN
-         5gNjKiQNNy4AarZ12o7WqFEubHhQx58tyXwLpdXF8dJ2HjAhl6PTNQ5TUZ/QIdSd79np
-         vjApyNA99oh/ZjMZK6/cx+VMNcttiGfXKzgVNtinZy7AKZlm9lTRS6I39Fn6PuR3yxCq
-         7KAA==
-X-Gm-Message-State: AC+VfDyHznS6j30gDOPl479KmRLamhL1ahjJrQvlpNFYjxBmCbZdfhRK
-        MOFkwVPqkb+CP1KTpW6G6CA=
-X-Google-Smtp-Source: ACHHUZ7b+WkCZIE72n5uctblOVhF8S4nx7C/p93x2y2+UjUpxZ3gKtCgsPeB10q3QmlKSF1IQOuFjA==
-X-Received: by 2002:a17:902:a583:b0:1aa:f818:7a23 with SMTP id az3-20020a170902a58300b001aaf8187a23mr12371985plb.27.1683590349547;
-        Mon, 08 May 2023 16:59:09 -0700 (PDT)
+        b=DqkZL0JaenqKxHVMP3AsMgMwbk1lDLu8j3JVZk/dmZdt+AOCbI+C1Ea7PsWbdsEBE5
+         7srtfH/5dPbde9VLBJSmQtNcVYfWcHYbRwCIwlH7zjccd7ASCCdjWeW+eJ9PHJzWTbzp
+         wb63ggQ2mTBOierybVGKsthNO0DLwayNGjPTsbF3TWkq6/pODcOfiC50m5JkGuEGzTYy
+         7j1YU18wbgS9O8R91q7tG934s3wdzHN7mUXCMZeXKkuby5IUVySVwFod6HRMa19gp1Oc
+         iX71+AvNn5gnNVkUtwFiRYT0TDfu+qU6Y5v+jJnS/OAE4QF6ITB6VTYM06/MuLHIaaLE
+         wWuQ==
+X-Gm-Message-State: AC+VfDy/+QSzhWcvXk3KL+nLpBKgG42ezSVu1CCj6KWIR/O5CLH3FZX/
+        HkzY06eiYvMa8VsrTojEDiw=
+X-Google-Smtp-Source: ACHHUZ7fkJE1M47Pe1lvUaHuLXKJ6X2K8ZXhyVkwcgQruuVvN94s7C2qtyHrBGLLHUGGaS7OcT+A4A==
+X-Received: by 2002:a17:902:6b86:b0:1a6:9f85:9437 with SMTP id p6-20020a1709026b8600b001a69f859437mr10384836plk.67.1683590367846;
+        Mon, 08 May 2023 16:59:27 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id t24-20020a170902b21800b001a505f04a06sm45882plr.190.2023.05.08.16.59.08
+        by smtp.gmail.com with ESMTPSA id x5-20020a170902b40500b001a922d43779sm72451plr.27.2023.05.08.16.59.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 16:59:09 -0700 (PDT)
+        Mon, 08 May 2023 16:59:27 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 8 May 2023 13:59:07 -1000
+Date:   Mon, 8 May 2023 13:59:26 -1000
 From:   Tejun Heo <tj@kernel.org>
 To:     jiangshanlai@gmail.com
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH 15/22] xen/pvcalls: Use alloc_ordered_workqueue() to
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Avraham Stern <avraham.stern@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mordechay Goodstein <mordechay.goodstein@intel.com>,
+        "Haim, Dreyfuss" <haim.dreyfuss@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 09/22] wifi: iwlwifi: Use alloc_ordered_workqueue() to
  create ordered workqueues
-Message-ID: <ZFmMy_QxaOzIoy0P@slm.duckdns.org>
+Message-ID: <ZFmM3taSTiq7Mv4L@slm.duckdns.org>
 References: <20230421025046.4008499-1-tj@kernel.org>
- <20230421025046.4008499-16-tj@kernel.org>
+ <20230421025046.4008499-10-tj@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230421025046.4008499-16-tj@kernel.org>
+In-Reply-To: <20230421025046.4008499-10-tj@kernel.org>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
