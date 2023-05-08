@@ -2,136 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF54E6FA29B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321666FA29D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233297AbjEHIwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 04:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
+        id S233346AbjEHIxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 04:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjEHIwi (ORCPT
+        with ESMTP id S233309AbjEHIxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 04:52:38 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C4D4234;
-        Mon,  8 May 2023 01:52:37 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id D7A3D32002E2;
-        Mon,  8 May 2023 04:52:32 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 08 May 2023 04:52:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1683535952; x=1683622352; bh=iJ
-        dvc4SRQrLz+3W/Ez8+i72AurjuOlLDf24cELwYcVE=; b=pnJ0mn5Pa/QzV8ZIaM
-        SRbHsFrI9iqt/gq2ptRf7jKyTxVwaTK69qoRXP1rgps2xX3U0RXmYPC1IZ2LHTgW
-        pu9bi28FR+JI3j/Urvw75XRPf8JXoeXE44CVskN1L8laOSSJRefqZdEC522Irwc9
-        W/plnnBQKyozVG/bMVRIPbkkziSP56XzjGwiXkSWge++GOrHcNxjUm2nf6J4Dg01
-        Hsuh4pXa66FhryZxOycnQJ5OrMm119+yiCe4hpaF1Bnhm1cZGMPspXxofSxdX5Si
-        /29C8NsP9yQrn+mXinIr0qLXuQlcXzJrx5jqO7k9EZzc1cLhGSWxYPi6rlz2aizS
-        fNvg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683535952; x=1683622352; bh=iJdvc4SRQrLz+
-        3W/Ez8+i72AurjuOlLDf24cELwYcVE=; b=SgDJPcdzZzknasipJlIz/AHKCTPE+
-        4PdbFI+yda23wf8OKl5GJPIwLycT6p1dYp0C/zcOky7Hxim6GZEcgdeciW/YLBHf
-        slHORB546oVXtKGUXQQ8sLiFec1eBfkr466qoagbjPxHAfJbU+2LQxeRYMLn4jbr
-        9pxlabN50OOq/PoGByfDegIKI9mlrTbHQ+IrjMISALEOz07BQIXMJ4SPiZ5ayJlL
-        93dw8oZyw3R0lkOISE64Gr4iZgaCrPbGlcSUha8JYvRgKFdsilDGs6/aHikT32P4
-        8kJ8Mik45kP4NhbRzGl4tf0mxvmHHnYYdJixq6xLlKpwMTYP04ku6FqgQ==
-X-ME-Sender: <xms:ULhYZPJFmqn4J9UETLTJLNH8DtkPV_V_YoCQTCfBFDaim3kOcrqt6w>
-    <xme:ULhYZDJQlXAdYjy9W4se8h-D_UIVvF4Efk3Ps0o5qq8PuViTDzrZM0INfUATDH5go
-    ANZh3tGcIdn95uScFw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeefkedgtdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:ULhYZHtpGFdF_240rDsYEjyS1GGrw_MlViAB2BwQtKnuI3-0hEfnHA>
-    <xmx:ULhYZIbXcDDXy_Eu-P90z1fN-2OlNNPPK57dR2UdEC8iamrVqmUbhw>
-    <xmx:ULhYZGbseSHMBtETCdUBuKStSE6RJtB3OwcjRYDVkZcuIH-RQMaNgg>
-    <xmx:ULhYZOqO-DWRySw_E1PrXJiso16T58m0yr7AqYfJxU784pQZkXD33A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 0DCB5B60086; Mon,  8 May 2023 04:52:31 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-386-g2404815117-fm-20230425.001-g24048151
-Mime-Version: 1.0
-Message-Id: <504c5a7d-0bfd-4b1e-a7f0-65d072657e0a@app.fastmail.com>
-In-Reply-To: <87ttwnnrer.fsf@kernel.org>
-References: <20230417205447.1800912-1-arnd@kernel.org>
- <87ttwnnrer.fsf@kernel.org>
-Date:   Mon, 08 May 2023 10:52:11 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Kalle Valo" <kvalo@kernel.org>, "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Johannes Berg" <johannes.berg@intel.com>,
-        "Manikanta Pubbisetty" <quic_mpubbise@quicinc.com>,
-        "Wen Gong" <quic_wgong@quicinc.com>,
-        "Baochen Qiang" <quic_bqiang@quicinc.com>,
-        "Sowmiya Sree Elavalagan" <quic_ssreeela@quicinc.com>,
-        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        ath12k@lists.infradead.org
-Subject: Re: [PATCH] wireless: ath: work around false-positive stringop-overread
- warning
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 8 May 2023 04:53:09 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A491E98B;
+        Mon,  8 May 2023 01:53:05 -0700 (PDT)
+Received: from zn.tnic (p5de8e8ea.dip0.t-ipconnect.de [93.232.232.234])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C8CA71EC03CA;
+        Mon,  8 May 2023 10:53:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1683535983;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Hlh/0E7Q4CdHlZhbiQKpJN0ADMtYynZ5fuJZeTP4DJU=;
+        b=CxBF7YhrLnTGndPBNdaro/UfEQ9q97287hu0HOdmTusH/AauqwTm3uMnN3vQ38sMj4nC2B
+        pHICRCTLsRhcOZb2vTyHkMrLSBu48LRMRa8vBcQ+9C0uqLeNvdb6Qq4hJutJy67u4B8a8t
+        9yvIt3agS0IJ/Vc7xLGfwOT77q0ztaE=
+Date:   Mon, 8 May 2023 10:52:58 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Sanket Goswami <Sanket.Goswami@amd.com>,
+        Richard gong <richard.gong@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 1/2] amd_nb: Add PCI ID for family 19h model 78h
+Message-ID: <20230508085258.GAZFi4ahlTvuPKxz0Y@fat_crate.local>
+References: <20230427053338.16653-2-mario.limonciello@amd.com>
+ <20230427164816.GA255750@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230427164816.GA255750@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023, at 10:44, Kalle Valo wrote:
-> Arnd Bergmann <arnd@kernel.org> writes:
->
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> In a rare arm64 randconfig build, I got multiple warnings for ath11k
->> and ath12k:
->>
->> In function 'ath11k_peer_assoc_h_ht',
->>     inlined from 'ath11k_peer_assoc_prepare' at drivers/net/wireless/ath/ath11k/mac.c:2665:2:
->> drivers/net/wireless/ath/ath11k/mac.c:1709:13: error: 'ath11k_peer_assoc_h_ht_masked' reading 10 bytes from a region of size 0 [-Werror=stringop-overread]
->>  1709 |         if (ath11k_peer_assoc_h_ht_masked(ht_mcs_mask))
->>       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> This happens whenever gcc-13 fails to inline one of the functions
->> that take a fixed-length array argument but gets passed a pointer.
->>
->> Change these functions to all take a regular pointer argument
->> instead.
->>
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> s/wireless:/wifi:/ but I can fix that.
+On Thu, Apr 27, 2023 at 11:48:16AM -0500, Bjorn Helgaas wrote:
+> Grudgingly, because this really isn't a maintainable strategy:
+> 
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>  # pci_ids.h
 
-Ok, thanks!
+I was wondering whether that define should even go into pci_ids.h  but
+there's a patch 2 which uses it and which is *not* in my mbox.
 
-> In a awat it's a shame to lose the explicit length but I guess there's
-> no other way to fix this?
+Mario, please CC everybody on all patches in the future.
 
-There might be, but I couldn't figure out a way that works.
+I'll take the k10temp one too so that there's no cross-tree deps.
 
-> Also I hope you find the time to add GCC 13 to crosstool :) Related to
-> this
+Thx.
 
-I uploaded gcc-13.1.0 binaries last week, but still need to
-update the html page, so it's not yet linked. You can navigate
-the directories from the gcc-12 builds.
+-- 
+Regards/Gruss,
+    Boris.
 
-     Arnd
+https://people.kernel.org/tglx/notes-about-netiquette
