@@ -2,150 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4E96F9EEA
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54C66F9EF7
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbjEHFQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 01:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
+        id S232632AbjEHFRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 01:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjEHFQ1 (ORCPT
+        with ESMTP id S232580AbjEHFR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 01:16:27 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D8D6E82
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 22:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683522985; x=1715058985;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=4lp1uTOss7ptF3vkv+6Y1UQ22aeHUmbrl85yaow0b3o=;
-  b=In0A7CwY7zJqFw4DmFPkuFC3zpkAcEazqC1VaKNmM60WGrBnr4jSx/UY
-   hol8MCpXPEnxSjWz8GqdilUSSbwKFw6KL5n46WJ0y3WWhMscgD0PjkPpS
-   b3K0bOSfhso7wtHemeNf5AijEPybqmi1w+7gK54YhpQoDVcHw67HAFXZr
-   C0DupqWHPzlt8ZKHSUqq4w2Ive8ZMQ2PODoxxo1BEP0aZpqeMRYWPvzLV
-   xo/EsNRGXj2uO03fzEVSE4ORbN3LTlGrw3OpHVA1M0waT8RCna0G/1TKU
-   hfyPpqzfmg1rr+jqmfGtXOaQy9tYEM7c6gBjsViJGfMRTk6REA9VLPDxg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="349591538"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="349591538"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2023 22:16:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="648737662"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="648737662"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2023 22:16:23 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Mika =?utf-8?Q?Penttil=C3=A4?= <mpenttil@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        apopple@nvidia.com, jhubbard@nvidia.com, rcampbell@nvidia.com
-Subject: Re: [PATCH] mm/migrate_device: Try to handle swapcache pages.
-References: <20230507061726.13422-1-mpenttil@redhat.com>
-        <87wn1ja793.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <f93c14f6-024d-4abc-7598-fa82cc3ea1a5@redhat.com>
-Date:   Mon, 08 May 2023 13:14:47 +0800
-In-Reply-To: <f93c14f6-024d-4abc-7598-fa82cc3ea1a5@redhat.com> ("Mika
-        =?utf-8?Q?Penttil=C3=A4=22's?= message of "Mon, 8 May 2023 05:59:46 +0300")
-Message-ID: <87sfc79zg8.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 8 May 2023 01:17:28 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A1AAD0E;
+        Sun,  7 May 2023 22:17:25 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3485H9Zc024000;
+        Mon, 8 May 2023 05:17:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=TYmfJr7HHvsCMYz1MiZH4pwIzylWNmQxGfoSFBWza8I=;
+ b=fF4abupXW4DeZCHGNHsgY95T+i5anWG2nDbBlO9LL/fM/FUk+L9L4keLAxnqJ0lZTzmR
+ wPhcD2LFW/4xGxJm+c9Dr3ysODTh0q7O18Wd+MoDyXaCOV3/qmEq/dx4hfndPQHhAxpg
+ /rT0tDqMiHGuZ2WQkbF5Iet3CraXPl2Fl5tiZrzlfE3nWLdf1NTKTwiF5MyrUDSXRNTe
+ pEAfzr0PgqI3WNeTBe/FGc+aBMNERUcodioPR/wXOa3mVNx/pnuYVwVUrSm8VcEBd/bW
+ VT2Lp5S+pHMO5F6WNNZaEPbLIqIlZQNtN9qL29EM6XbTNLgWEQhMWrj+/bS2L6EB5CBZ og== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qddwhjtcm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 05:17:08 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3485H7fT007437
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 8 May 2023 05:17:07 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Sun, 7 May 2023 22:17:02 -0700
+Date:   Mon, 8 May 2023 10:46:58 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v10 8/9] arm64: dts: qcom: ipq9574: Add LDO regulator node
+Message-ID: <20230508051657.GA24472@varda-linux.qualcomm.com>
+References: <cover.1683183860.git.quic_varada@quicinc.com>
+ <8894bf2c44eaf4959c7a1966b66229e6cf5cda96.1683183860.git.quic_varada@quicinc.com>
+ <CAA8EJppvj2nzqwdsC+Xct4cJg2-_yPpiGDELjHJG4HyAH3zGMA@mail.gmail.com>
+ <20230506110918.GC10918@varda-linux.qualcomm.com>
+ <CAA8EJpqg2htfa2QZ7q6SP58N5YAABa8knBn4c5eYqYOU6HQNiA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpqg2htfa2QZ7q6SP58N5YAABa8knBn4c5eYqYOU6HQNiA@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rai6O2lzCM5Y5S4XD8ywvDXPGmLwmYiT
+X-Proofpoint-ORIG-GUID: rai6O2lzCM5Y5S4XD8ywvDXPGmLwmYiT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-08_02,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ adultscore=0 impostorscore=0 mlxscore=0 phishscore=0 priorityscore=1501
+ bulkscore=0 spamscore=0 clxscore=1015 lowpriorityscore=0 mlxlogscore=844
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2305080036
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mika Penttil=C3=A4 <mpenttil@redhat.com> writes:
+On Sat, May 06, 2023 at 02:33:11PM +0300, Dmitry Baryshkov wrote:
+> On Sat, 6 May 2023 at 14:09, Varadarajan Narayanan
+> <quic_varada@quicinc.com> wrote:
+> >
+> > On Fri, May 05, 2023 at 12:29:54PM +0300, Dmitry Baryshkov wrote:
+> > > On Fri, 5 May 2023 at 11:23, Varadarajan Narayanan
+> > > <quic_varada@quicinc.com> wrote:
+> > > >
+> > > > Add LDO regulator node
+> > >
+> > > As this LDO is provided by the PMIC, it would be nice to know why it
+> > > is modelled as an always-on regulator instead of the proper PMIC
+> > > regulator. Up to now we were doing this only for the outstanding power
+> > > rails like CX/MX or EBI.
+> >
+> > These are always ON because USB phy doesn't support power
+> > collapse, and there is a chance that other IP blocks might be
+> > sharing the rail.
+>
+> You are describing the software side here. From the hardware point of
+> view, it is an I2C regulator, which is probably also exported as an
+> SMD_RPM regulator. Unless you have a good reason not to do so, there
+> should be a node under rpm-requests, which describes mp5496 regulators
+> exported via RPM. then USB should refer to those regulators.
 
-> H,
+Yes. It is a part of rpm-requests. That is why have mentioned V10
+is dependent on
+https://lore.kernel.org/lkml/20230407155727.20615-1-quic_devipriy@quicinc.com/T/.
+The 4th patch of the above series
+(https://lore.kernel.org/lkml/20230407155727.20615-1-quic_devipriy@quicinc.com/T/#mea3f0ea37c53cf5e39e10cd6cf3bed5243cec629)
+adds the rpm_requests node and this regulator definition is added
+to it. Hope that is ok.
+
+Thanks
+Varada
+
+> > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > > ---
+> > > >  Changes in v10:
+> > > >         - Add LDO regulator node
+> > > > ---
+> > > >  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 7 +++++++
+> > > >  1 file changed, 7 insertions(+)
+> > > >
+> > > > diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> > > > index bdc1434..1f5d14f 100644
+> > > > --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> > > > +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> > > > @@ -60,6 +60,13 @@
+> > > >                         regulator-min-microvolt = <725000>;
+> > > >                         regulator-max-microvolt = <1075000>;
+> > > >                 };
+> > > > +
+> > > > +               mp5496_l2: l2 {
+> > > > +                       regulator-min-microvolt = <1800000>;
+> > > > +                       regulator-max-microvolt = <1800000>;
+> > > > +                       regulator-boot-on;
+> > > > +                       regulator-always-on;
+> > > > +               };
+> > > >         };
+> > > >  };
+> > > >
+> > > > --
+> > > > 2.7.4
+> > > >
+> > >
+> > >
+> > > --
+> > > With best wishes
+> > > Dmitry
 >
 >
-> On 8.5.2023 5.26, Huang, Ying wrote:
->> mpenttil@redhat.com writes:
->>=20
->>> From: Mika Penttil <mpenttil@redhat.com>
->>>
->>> Migrating file pages and swapcache pages into device memory is not supp=
-orted.
->>> The decision is done based on page_mapping(). For now, swapcache pages =
-are not migrated.
->>>
->>> Things can however be improved, for swapcache pages. Try to get rid of =
-the swap cache,
->>> and if successful, go ahead as with other anonymous pages.
->>>
->>> As a detail, do not mess with shmem pages, as they handle swap internal=
-ly.
->>>
->>> Cc: Alistair Popple <apopple@nvidia.com>
->>> Cc: John Hubbard <jhubbard@nvidia.com>
->>> Cc: Ralph Campbell <rcampbell@nvidia.com>
->>> Signed-off-by: Mika Penttil <mpenttil@redhat.com>
->>> ---
->>>   mm/migrate_device.c | 12 ++++++++++--
->>>   1 file changed, 10 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
->>> index d30c9de60b0d..e8169c58c341 100644
->>> --- a/mm/migrate_device.c
->>> +++ b/mm/migrate_device.c
->>> @@ -12,6 +12,7 @@
->>>   #include <linux/mmu_notifier.h>
->>>   #include <linux/oom.h>
->>>   #include <linux/pagewalk.h>
->>> +#include <linux/shmem_fs.h>
->>>   #include <linux/rmap.h>
->>>   #include <linux/swapops.h>
->>>   #include <asm/tlbflush.h>
->>> @@ -750,10 +751,17 @@ static void __migrate_device_pages(unsigned long =
-*src_pfns,
->>>   			/*
->>>   			 * For now only support anonymous memory migrating to
->>>   			 * device private or coherent memory.
->>> +			 *
->>> +			 * Try to get rid of swap cache if possible.
->>> +			 * Leave shmem pages alone, they handle swap internally
->>> +			 *
->>>   			 */
->>>   			if (mapping) {
->>> -				src_pfns[i] &=3D ~MIGRATE_PFN_MIGRATE;
->>> -				continue;
->>> +				if (shmem_mapping(mapping) ||
->>> +				    !folio_free_swap(page_folio(page))) {
->> Should we filter out file pages firstly?
 >
-> folio_free_swap() checks first and returns false if not swapcache page
-> (ie including normal file pages) so think that is enough,
-
-You are right.  folio_free_swap() will call folio_test_swapcache(), and
-which will check folio_test_swapbacked().
-
-And, IIUC, we don't need to check shmem too.  Because folio_free_swap()
-will not return true for shmem pages.
-
-> but maybe for clarity and not depending on it, could be good
-> explicitly check for swapcache before calling folio_free_swap().
-
-Yes.  That will be more clear.  I suggest to use folio_test_anon(), that
-will filter out shmem pages too.
-
->>=20
->>> +					src_pfns[i] &=3D ~MIGRATE_PFN_MIGRATE;
->>> +					continue;
->>> +				}
->>>   			}
->>>   		} else if (is_zone_device_page(newpage)) {
->>>   			/*
-
-Best Regards,
-Huang, Ying
+> --
+> With best wishes
+> Dmitry
