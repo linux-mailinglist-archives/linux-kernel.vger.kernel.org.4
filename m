@@ -2,48 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0585D6FBB2E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 00:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC74F6FBAC7
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 00:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233988AbjEHWwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 18:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
+        id S234599AbjEHWDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 18:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjEHWwf (ORCPT
+        with ESMTP id S234614AbjEHWDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 18:52:35 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8668A40;
-        Mon,  8 May 2023 15:52:34 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QFc4c2bbfz4x4J;
-        Tue,  9 May 2023 08:52:32 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1683586352;
-        bh=kr+Oumow8u22GYtFI/u0jVmTHf09hXu3paGAh53EgLQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TObrQiRRJzrP3B4+k0IoaVIeufvqbGOU3KNpRWv9gNT683aL66SEpMtQYp11JrsiA
-         fAgA2b61OyUW4RrWrx2X797gzsLNYOEXPx3hCz2Gld8S+JdfUq1U+aMBZnhpBJvZzS
-         hxGS3CgY+pFY/MUCCqOcgMzhEiyLgzWnoM6+028FA0Hogic2Uxsx11v5IFoqCEAs2U
-         WiXDKVGlCK1xieUCL1EQjVZMyPQsOtpYOlde1QjkCc7uV98K1fNbH3AXQzLCYLmDFY
-         Z/ygHN1GwlIjwk7p0Ivcf8DdSPEXqO8K5DvzVxgSwnkuvSAWs99aHqpIegDUjpwZM3
-         z2fi4wqq7Xcnw==
-Date:   Tue, 9 May 2023 06:34:58 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the v4l-dvb-fixes
- tree
-Message-ID: <20230509063458.5fe8ab5b@canb.auug.org.au>
+        Mon, 8 May 2023 18:03:18 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2425BA249;
+        Mon,  8 May 2023 15:02:50 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-643bb9cdd6eso2615787b3a.1;
+        Mon, 08 May 2023 15:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683583366; x=1686175366;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Qlnr5oZ798Dp1EZMGpti0ehqEKK4rRlASm74064GQ28=;
+        b=DBQ96v9+cwwnPwQm5flrXCUQlqA7FDUbGwQDa0hEmMV2l4LZ3Pjxm6ovo8vnd6mM+R
+         RVOrza7WZJ18xmj5IGjRxTXIFh/v0lxQPbY8WpcB/51/3XBnPpVj9FipqPRsQv7DDpKS
+         p67tuHGqQ4AkooidL/K2fIJT1a30npjMuexayyCB5ijHmxqm1K1PgnKgpgRPLIrPqewN
+         L+0bx+HvaBOOob5jX7Tv81x/2zi4QRex250FIuror26843FbTIH9fti3lkkvPiQI3apk
+         fPcZfDESQTO3IyA0fivp82PtKi61X4CKhhX/jjDg5KoLoUm0bDnwwu/ZoAbEeqgrSlpH
+         iqsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683583366; x=1686175366;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qlnr5oZ798Dp1EZMGpti0ehqEKK4rRlASm74064GQ28=;
+        b=GhHY2uIcI32Zf6cVN1L0aX/ATrretWn+nvVTMxeiX1T7sot/QUm2uNXge8YpmuDw82
+         DmWqTM6Fabp003bRU3rXc8QD7EBqVrE8YZA3dQb5l/EjbGovYH/12E2V8WyolM0AYoCu
+         npxJ7CAaRFrw02ZOSRguXny2FZwIw9ZRrsciFzW3671kwsFFi6VZ0rviPuVRx4PmIfKY
+         /u7wYl8szKzaZ2o3kHSZyUsSRTOPw54qufDkvvdpQb89bCUUkRqeWGLnPTW/JqI9vWBw
+         dAfzbZY/Dtri1cJgJ1luM0YDcFGZz7aRFE98H23MJaoOy+0zC0E5XazMfwrurT8ueDc3
+         GkWA==
+X-Gm-Message-State: AC+VfDwSw6t984FWREvnSoHwCbhvNIhYcCgUXEYY3+SeA5BjfkQL5kzp
+        T/QZQHUlzDQ1GpKtIi62Kh8=
+X-Google-Smtp-Source: ACHHUZ6IdVOO24eIHsRcMM9HeVwQq6ppdhsJIgB+3uUUNGytdsdyE1WVWv0JfTwvPCZ7vDzX71YZqQ==
+X-Received: by 2002:a05:6a00:190c:b0:63d:47c8:856e with SMTP id y12-20020a056a00190c00b0063d47c8856emr15966391pfi.2.1683583365871;
+        Mon, 08 May 2023 15:02:45 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id h9-20020a654689000000b00528e0b1dd0bsm6403733pgr.82.2023.05.08.15.02.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 15:02:45 -0700 (PDT)
+Message-ID: <1d2fae0b-271f-522f-e37d-849d22c0b374@gmail.com>
+Date:   Mon, 8 May 2023 15:02:42 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/O8bd.08Cvns5=0zc0C48hFh";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v5 5/5] PCI: brcmstb: Remove stale comment
+Content-Language: en-US
+To:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230508220126.16241-1-jim2101024@gmail.com>
+ <20230508220126.16241-6-jim2101024@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230508220126.16241-6-jim2101024@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,43 +88,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/O8bd.08Cvns5=0zc0C48hFh
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 5/8/23 15:01, Jim Quinlan wrote:
+> A comment says that Multi-MSI is not supported by the driver.
+> A past commit [1] added this feature, so the comment is
+> incorrect and is removed.
+> 
+> [1] commit 198acab1772f22f2 ("PCI: brcmstb: Enable Multi-MSI")
+> 
+> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
 
-Hi all,
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-Commits
-
-  6b854bb90d23 ("media: platform: mtk-mdp3: work around unused-variable war=
-ning")
-  814fb7f94d70 ("media: nxp: ignore unused suspend operations")
-  4ab0bfe3badf ("media: nxp: imx8-isi: fix buiding on 32-bit")
-  97e814237417 ("media: rcar-vin: Select correct interrupt mode for V4L2_FI=
-ELD_ALTERNATE")
-  07ea2bc2f320 ("media: rcar-vin: Fix NV12 size alignment")
-  60ddb2e1a331 ("media: rcar-vin: Gen3 can not scale NV12")
-
-are missing a Signed-off-by from their committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/O8bd.08Cvns5=0zc0C48hFh
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRZXPIACgkQAVBC80lX
-0GyIUQgAm0NoP9/AySKbQ8mTUGZJcmeZ01/69BiSLbdf7ygEcRzgeZF2406pUtuH
-YOvngvr8SPqxHS5Sj1v9fYBR4P+aWcjz3M5BM2m7EXh6eHslDZB7VVRnlytWhQ8b
-NYqd3A88oPCrxwblrNSvXrpUzs/+T4vW7vCULUTqC+v3LoPqcFXWtkbXvzSRBYTn
-fD+JEiqn8eVmXu3hR4D2LN6U2SsoTZ2DBJOXvNMFdT0p+2XOlje7MPo/0LuShJLl
-KqDaUmn7zNJWgjeDQ3SffxpEs3OlDwOPtAFhyZBTlsO3eR53d/Rt+7zYiYRP2AH6
-gGL9hMTREkJt2n3S/F3yMhobkRaQMg==
-=WRkg
------END PGP SIGNATURE-----
-
---Sig_/O8bd.08Cvns5=0zc0C48hFh--
