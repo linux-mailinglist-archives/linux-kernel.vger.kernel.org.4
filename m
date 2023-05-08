@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38096FA0C2
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB03F6FA0BE
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232438AbjEHHOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S232975AbjEHHNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEHHOO (ORCPT
+        with ESMTP id S232968AbjEHHNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:14:14 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688951AEEA;
-        Mon,  8 May 2023 00:13:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683530030; x=1715066030;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=RoOthzliZsr3LKOZyuzYp5kyWs7Vrsjx6KCun+y22zw=;
-  b=G+oFRIYip8JS+qeZSod05+V1+svlgBYRKhT02qQjZMuHNvpLzC8hgRPr
-   dBibw+yl18b/dUZVMsiYX31Gf0JXCchUQNCwrGE4omDqPsiJRSCR6MRMz
-   Bp/4Bxxy1E9yiQeFOg6ZbuIFbN+d3XfaC/QEF+OwPJziEVY/qEtZAky6C
-   0TNjFhgY1DdwuYRgbOeDjqLHt5IenrIUsGFQvSN5pRslzV8DK+boqo0XC
-   BVDgfMBMgRoLroqKC2R9yua5Xy/zVu1pE+eQY6EeuXstcPkyGjkMVJYiZ
-   e1nBlf3vOgYnTQ85GiwJJHnoJAF3b7lyno+c5BVgAxtnY/aToFOzg9s6Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="329937467"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="329937467"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 00:13:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="698419425"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="698419425"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 00:13:13 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>, <linux-mm@kvack.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH 03/12] mm: page_alloc: move set_zone_contiguous() into
- mm_init.c
-References: <20230508071200.123962-1-wangkefeng.wang@huawei.com>
-        <20230508071200.123962-4-wangkefeng.wang@huawei.com>
-Date:   Mon, 08 May 2023 15:12:08 +0800
-In-Reply-To: <20230508071200.123962-4-wangkefeng.wang@huawei.com> (Kefeng
-        Wang's message of "Mon, 8 May 2023 15:11:51 +0800")
-Message-ID: <87jzxj9u0n.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 8 May 2023 03:13:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19EB1A1DC
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:12:39 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D112921D4A;
+        Mon,  8 May 2023 07:12:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683529957; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=t9nbsSPBx5UbLEUugNvV+0zHxmB47zd7t9MZkauFl0k=;
+        b=Oz7NIvFKojxCPuH04QnTz3x4BAy9Zef3FYI6N4pmVzXdRQb7dRDRnL492vnLOKEis2kBuf
+        I/mBDmHWCbEuGTiffYerCo4GXSMQ3O3qPK4TfrDLL4wcDBvWGd/5VellEuo86NzvgqaTwP
+        Y+Eq+qR4kY2hq+yU1g5nqlz+JYPg38g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683529957;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=t9nbsSPBx5UbLEUugNvV+0zHxmB47zd7t9MZkauFl0k=;
+        b=a1dZMkp7o/zHI9tM6ZjV5SIzjHxk2dawHSuhs2YuWUDkyLStotIwy5hNkoD0bmWYKu556m
+        X0zzPvCS0VYu+dBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A52821346B;
+        Mon,  8 May 2023 07:12:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id MSlUJ+WgWGRiLQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 08 May 2023 07:12:37 +0000
+Message-ID: <fec178d3-6b42-7caa-844d-c9cfdfd43526@suse.de>
+Date:   Mon, 8 May 2023 09:12:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 RESEND] drm/vram-helper: fix function names in vram
+ helper doc
+Content-Language: en-US
+To:     Luc Ma <onion0709@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <64583db2.630a0220.eb75d.8f51@mx.google.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <64583db2.630a0220.eb75d.8f51@mx.google.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------5Ra3rHOGbCIVhbRnWW4J8rsV"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,234 +78,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kefeng Wang <wangkefeng.wang@huawei.com> writes:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------5Ra3rHOGbCIVhbRnWW4J8rsV
+Content-Type: multipart/mixed; boundary="------------h6TlGLATF5qdMsxaIQRnbX9K";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Luc Ma <onion0709@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Sam Ravnborg <sam@ravnborg.org>,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Message-ID: <fec178d3-6b42-7caa-844d-c9cfdfd43526@suse.de>
+Subject: Re: [PATCH v2 RESEND] drm/vram-helper: fix function names in vram
+ helper doc
+References: <64583db2.630a0220.eb75d.8f51@mx.google.com>
+In-Reply-To: <64583db2.630a0220.eb75d.8f51@mx.google.com>
 
-> set_zone_contiguous() is only used in mm init/hotplug, and
-> clear_zone_contiguous() only used in hotplug, move them from
-> page_alloc.c to the more appropriate file.
->
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->  include/linux/memory_hotplug.h |  3 --
->  mm/internal.h                  |  7 +++
->  mm/mm_init.c                   | 74 +++++++++++++++++++++++++++++++
->  mm/page_alloc.c                | 79 ----------------------------------
->  4 files changed, 81 insertions(+), 82 deletions(-)
->
-> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-> index 9fcbf5706595..04bc286eed42 100644
-> --- a/include/linux/memory_hotplug.h
-> +++ b/include/linux/memory_hotplug.h
-> @@ -326,9 +326,6 @@ static inline int remove_memory(u64 start, u64 size)
->  static inline void __remove_memory(u64 start, u64 size) {}
->  #endif /* CONFIG_MEMORY_HOTREMOVE */
->  
-> -extern void set_zone_contiguous(struct zone *zone);
-> -extern void clear_zone_contiguous(struct zone *zone);
-> -
->  #ifdef CONFIG_MEMORY_HOTPLUG
->  extern void __ref free_area_init_core_hotplug(struct pglist_data *pgdat);
->  extern int __add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags);
-> diff --git a/mm/internal.h b/mm/internal.h
-> index e28442c0858a..9482862b28cc 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -371,6 +371,13 @@ static inline struct page *pageblock_pfn_to_page(unsigned long start_pfn,
->  	return __pageblock_pfn_to_page(start_pfn, end_pfn, zone);
->  }
->  
-> +void set_zone_contiguous(struct zone *zone);
-> +
-> +static inline void clear_zone_contiguous(struct zone *zone)
-> +{
-> +	zone->contiguous = false;
-> +}
-> +
->  extern int __isolate_free_page(struct page *page, unsigned int order);
->  extern void __putback_isolated_page(struct page *page, unsigned int order,
->  				    int mt);
-> diff --git a/mm/mm_init.c b/mm/mm_init.c
-> index 15201887f8e0..1f30b9e16577 100644
-> --- a/mm/mm_init.c
-> +++ b/mm/mm_init.c
-> @@ -2330,6 +2330,80 @@ void __init init_cma_reserved_pageblock(struct page *page)
->  }
->  #endif
->  
-> +/*
-> + * Check that the whole (or subset of) a pageblock given by the interval of
-> + * [start_pfn, end_pfn) is valid and within the same zone, before scanning it
-> + * with the migration of free compaction scanner.
-> + *
-> + * Return struct page pointer of start_pfn, or NULL if checks were not passed.
-> + *
-> + * It's possible on some configurations to have a setup like node0 node1 node0
-> + * i.e. it's possible that all pages within a zones range of pages do not
-> + * belong to a single zone. We assume that a border between node0 and node1
-> + * can occur within a single pageblock, but not a node0 node1 node0
-> + * interleaving within a single pageblock. It is therefore sufficient to check
-> + * the first and last page of a pageblock and avoid checking each individual
-> + * page in a pageblock.
-> + *
-> + * Note: the function may return non-NULL struct page even for a page block
-> + * which contains a memory hole (i.e. there is no physical memory for a subset
-> + * of the pfn range). For example, if the pageblock order is MAX_ORDER, which
-> + * will fall into 2 sub-sections, and the end pfn of the pageblock may be hole
-> + * even though the start pfn is online and valid. This should be safe most of
-> + * the time because struct pages are still initialized via init_unavailable_range()
-> + * and pfn walkers shouldn't touch any physical memory range for which they do
-> + * not recognize any specific metadata in struct pages.
-> + */
-> +struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
-> +				     unsigned long end_pfn, struct zone *zone)
+--------------h6TlGLATF5qdMsxaIQRnbX9K
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-__pageblock_pfn_to_page() is also called by compaction code too (e.g.,
-isolate_freepages_range() -> pageblock_pfn_to_page() ->
-__pageblock_pfn_to_page()).
+SGkNCg0KQW0gMDguMDUuMjMgdW0gMDI6MDkgc2NocmllYiBMdWMgTWE6DQo+IEZyb206IEx1
+YyBNYSA8bHVjQHNpZXRpdW0uY29tPg0KPiANCj4gUmVmZXIgdG8gZHJtbV92cmFtX2hlbHBl
+cl9pbml0KCkgaW5zdGVhZCBvZiB0aGUgbm9uLWV4aXN0ZW50DQo+IGRybW1fdnJhbV9oZWxw
+ZXJfYWxsb2NfbW0oKS4NCj4gDQo+IEZpeGVzOiBhNWYyM2E3MjM1NWQgKCJkcm0vdnJhbS1o
+ZWxwZXI6IE1hbmFnZWQgdnJhbSBoZWxwZXJzIikNCj4gU2lnbmVkLW9mZi1ieTogTHVjIE1h
+IDxsdWNAc2lldGl1bS5jb20+DQoNClJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8
+dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0KVGhhbmtzIGZvciB0aGUgcGF0Y2guIEknbGwgYWRk
+IGl0IHRvIGRybS1taXNjLW5leHQuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gLS0t
+DQo+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fdnJhbV9oZWxwZXIuYyB8IDYgKysrLS0t
+DQo+ICAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkN
+Cj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbV92cmFtX2hlbHBl
+ci5jIGIvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fdnJhbV9oZWxwZXIuYw0KPiBpbmRleCBk
+NDBiM2VkYjUyZDAuLmYxNTM5ZDQ0NDhjNiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUv
+ZHJtL2RybV9nZW1fdnJhbV9oZWxwZXIuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJt
+X2dlbV92cmFtX2hlbHBlci5jDQo+IEBAIC00NSw3ICs0NSw3IEBAIHN0YXRpYyBjb25zdCBz
+dHJ1Y3QgZHJtX2dlbV9vYmplY3RfZnVuY3MgZHJtX2dlbV92cmFtX29iamVjdF9mdW5jczsN
+Cj4gICAgKiB0aGUgZnJhbWUncyBzY2Fub3V0IGJ1ZmZlciBvciB0aGUgY3Vyc29yIGltYWdl
+LiBJZiB0aGVyZSdzIG5vIG1vcmUgc3BhY2UNCj4gICAgKiBsZWZ0IGluIFZSQU0sIGluYWN0
+aXZlIEdFTSBvYmplY3RzIGNhbiBiZSBtb3ZlZCB0byBzeXN0ZW0gbWVtb3J5Lg0KPiAgICAq
+DQo+IC0gKiBUbyBpbml0aWFsaXplIHRoZSBWUkFNIGhlbHBlciBsaWJyYXJ5IGNhbGwgZHJt
+bV92cmFtX2hlbHBlcl9hbGxvY19tbSgpLg0KPiArICogVG8gaW5pdGlhbGl6ZSB0aGUgVlJB
+TSBoZWxwZXIgbGlicmFyeSBjYWxsIGRybW1fdnJhbV9oZWxwZXJfaW5pdCgpLg0KPiAgICAq
+IFRoZSBmdW5jdGlvbiBhbGxvY2F0ZXMgYW5kIGluaXRpYWxpemVzIGFuIGluc3RhbmNlIG9m
+ICZzdHJ1Y3QgZHJtX3ZyYW1fbW0NCj4gICAgKiBpbiAmc3RydWN0IGRybV9kZXZpY2UudnJh
+bV9tbSAuIFVzZSAmRFJNX0dFTV9WUkFNX0RSSVZFUiB0byBpbml0aWFsaXplDQo+ICAgICog
+JnN0cnVjdCBkcm1fZHJpdmVyIGFuZCAgJkRSTV9WUkFNX01NX0ZJTEVfT1BFUkFUSU9OUyB0
+byBpbml0aWFsaXplDQo+IEBAIC03Myw3ICs3Myw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3Qg
+ZHJtX2dlbV9vYmplY3RfZnVuY3MgZHJtX2dlbV92cmFtX29iamVjdF9mdW5jczsNCj4gICAg
+KgkJLy8gc2V0dXAgZGV2aWNlLCB2cmFtIGJhc2UgYW5kIHNpemUNCj4gICAgKgkJLy8gLi4u
+DQo+ICAgICoNCj4gLSAqCQlyZXQgPSBkcm1tX3ZyYW1faGVscGVyX2FsbG9jX21tKGRldiwg
+dnJhbV9iYXNlLCB2cmFtX3NpemUpOw0KPiArICoJCXJldCA9IGRybW1fdnJhbV9oZWxwZXJf
+aW5pdChkZXYsIHZyYW1fYmFzZSwgdnJhbV9zaXplKTsNCj4gICAgKgkJaWYgKHJldCkNCj4g
+ICAgKgkJCXJldHVybiByZXQ7DQo+ICAgICoJCXJldHVybiAwOw0KPiBAQCAtODYsNyArODYs
+NyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGRybV9nZW1fb2JqZWN0X2Z1bmNzIGRybV9nZW1f
+dnJhbV9vYmplY3RfZnVuY3M7DQo+ICAgICogdG8gdXNlcnNwYWNlLg0KPiAgICAqDQo+ICAg
+ICogWW91IGRvbid0IGhhdmUgdG8gY2xlYW4gdXAgdGhlIGluc3RhbmNlIG9mIFZSQU0gTU0u
+DQo+IC0gKiBkcm1tX3ZyYW1faGVscGVyX2FsbG9jX21tKCkgaXMgYSBtYW5hZ2VkIGludGVy
+ZmFjZSB0aGF0IGluc3RhbGxzIGENCj4gKyAqIGRybW1fdnJhbV9oZWxwZXJfaW5pdCgpIGlz
+IGEgbWFuYWdlZCBpbnRlcmZhY2UgdGhhdCBpbnN0YWxscyBhDQo+ICAgICogY2xlYW4tdXAg
+aGFuZGxlciB0byBydW4gZHVyaW5nIHRoZSBEUk0gZGV2aWNlJ3MgcmVsZWFzZS4NCj4gICAg
+Kg0KPiAgICAqIEZvciBkcmF3aW5nIG9yIHNjYW5vdXQgb3BlcmF0aW9ucywgcnNwLiBidWZm
+ZXIgb2JqZWN0cyBoYXZlIHRvIGJlIHBpbm5lZA0KDQotLSANClRob21hcyBaaW1tZXJtYW5u
+DQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBH
+ZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5iZXJnLCBHZXJt
+YW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0RvbmFsZCwgQm91
+ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
 
-So, it is used not only by initialization and hotplug?
+--------------h6TlGLATF5qdMsxaIQRnbX9K--
 
-Best Regards,
-Huang, Ying
+--------------5Ra3rHOGbCIVhbRnWW4J8rsV
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> +{
-> +	struct page *start_page;
-> +	struct page *end_page;
-> +
-> +	/* end_pfn is one past the range we are checking */
-> +	end_pfn--;
-> +
-> +	if (!pfn_valid(end_pfn))
-> +		return NULL;
-> +
-> +	start_page = pfn_to_online_page(start_pfn);
-> +	if (!start_page)
-> +		return NULL;
-> +
-> +	if (page_zone(start_page) != zone)
-> +		return NULL;
-> +
-> +	end_page = pfn_to_page(end_pfn);
-> +
-> +	/* This gives a shorter code than deriving page_zone(end_page) */
-> +	if (page_zone_id(start_page) != page_zone_id(end_page))
-> +		return NULL;
-> +
-> +	return start_page;
-> +}
-> +
-> +void set_zone_contiguous(struct zone *zone)
-> +{
-> +	unsigned long block_start_pfn = zone->zone_start_pfn;
-> +	unsigned long block_end_pfn;
-> +
-> +	block_end_pfn = pageblock_end_pfn(block_start_pfn);
-> +	for (; block_start_pfn < zone_end_pfn(zone);
-> +			block_start_pfn = block_end_pfn,
-> +			 block_end_pfn += pageblock_nr_pages) {
-> +
-> +		block_end_pfn = min(block_end_pfn, zone_end_pfn(zone));
-> +
-> +		if (!__pageblock_pfn_to_page(block_start_pfn,
-> +					     block_end_pfn, zone))
-> +			return;
-> +		cond_resched();
-> +	}
-> +
-> +	/* We confirm that there is no hole */
-> +	zone->contiguous = true;
-> +}
-> +
->  void __init page_alloc_init_late(void)
->  {
->  	struct zone *zone;
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 4f094ba7c8fb..fe7c1ee5becd 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1480,85 +1480,6 @@ void __free_pages_core(struct page *page, unsigned int order)
->  	__free_pages_ok(page, order, FPI_TO_TAIL);
->  }
->  
-> -/*
-> - * Check that the whole (or subset of) a pageblock given by the interval of
-> - * [start_pfn, end_pfn) is valid and within the same zone, before scanning it
-> - * with the migration of free compaction scanner.
-> - *
-> - * Return struct page pointer of start_pfn, or NULL if checks were not passed.
-> - *
-> - * It's possible on some configurations to have a setup like node0 node1 node0
-> - * i.e. it's possible that all pages within a zones range of pages do not
-> - * belong to a single zone. We assume that a border between node0 and node1
-> - * can occur within a single pageblock, but not a node0 node1 node0
-> - * interleaving within a single pageblock. It is therefore sufficient to check
-> - * the first and last page of a pageblock and avoid checking each individual
-> - * page in a pageblock.
-> - *
-> - * Note: the function may return non-NULL struct page even for a page block
-> - * which contains a memory hole (i.e. there is no physical memory for a subset
-> - * of the pfn range). For example, if the pageblock order is MAX_ORDER, which
-> - * will fall into 2 sub-sections, and the end pfn of the pageblock may be hole
-> - * even though the start pfn is online and valid. This should be safe most of
-> - * the time because struct pages are still initialized via init_unavailable_range()
-> - * and pfn walkers shouldn't touch any physical memory range for which they do
-> - * not recognize any specific metadata in struct pages.
-> - */
-> -struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
-> -				     unsigned long end_pfn, struct zone *zone)
-> -{
-> -	struct page *start_page;
-> -	struct page *end_page;
-> -
-> -	/* end_pfn is one past the range we are checking */
-> -	end_pfn--;
-> -
-> -	if (!pfn_valid(end_pfn))
-> -		return NULL;
-> -
-> -	start_page = pfn_to_online_page(start_pfn);
-> -	if (!start_page)
-> -		return NULL;
-> -
-> -	if (page_zone(start_page) != zone)
-> -		return NULL;
-> -
-> -	end_page = pfn_to_page(end_pfn);
-> -
-> -	/* This gives a shorter code than deriving page_zone(end_page) */
-> -	if (page_zone_id(start_page) != page_zone_id(end_page))
-> -		return NULL;
-> -
-> -	return start_page;
-> -}
-> -
-> -void set_zone_contiguous(struct zone *zone)
-> -{
-> -	unsigned long block_start_pfn = zone->zone_start_pfn;
-> -	unsigned long block_end_pfn;
-> -
-> -	block_end_pfn = pageblock_end_pfn(block_start_pfn);
-> -	for (; block_start_pfn < zone_end_pfn(zone);
-> -			block_start_pfn = block_end_pfn,
-> -			 block_end_pfn += pageblock_nr_pages) {
-> -
-> -		block_end_pfn = min(block_end_pfn, zone_end_pfn(zone));
-> -
-> -		if (!__pageblock_pfn_to_page(block_start_pfn,
-> -					     block_end_pfn, zone))
-> -			return;
-> -		cond_resched();
-> -	}
-> -
-> -	/* We confirm that there is no hole */
-> -	zone->contiguous = true;
-> -}
-> -
-> -void clear_zone_contiguous(struct zone *zone)
-> -{
-> -	zone->contiguous = false;
-> -}
-> -
->  /*
->   * The order of subdivision here is critical for the IO subsystem.
->   * Please do not alter this order without good reasons and regression
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRYoOUFAwAAAAAACgkQlh/E3EQov+BT
+KBAAmeH7sAld0RN7j3f2Yf61c316mUU0HBHwmoPbvVTDOhkM9j7slnD4PpCWxEF5tppsyXeZeMxS
+QlCrdDJ1GepPjjlRkOXulgJli5jWeFh9Xme5J0DRaSjG4YtpkDdKnDWrAV/HzVVv2n8Blqc3lO5p
+Xus0bu2x9ShA9c+JEUneqno0zq1quFN240GxfwEc3AiOkeU/MLjwDMdmVWpmgP3pVw++zdbiNrGF
+94u4Qa/YDLCkQHboWWcRRAsnh2w10hSZwq7ogkht7G0RWe833M7DeMfqv3trdG2IQBM/KSJ6BVhc
+gxxyAvLuZrQTe/Lt8br7w8VJx9dJqJTleokf0vRsYaL19Z6y6T4k852rzPwMlw7XeeXbjROhUM57
+dkexf3Cq2xxIkyxmHl2UDOiQNx5ekqwVsT48TthVluc30QUKicQmztmGkr23LG+BMXIh34/b/7NS
+jvahRZnQvl6z1FY0Y1jYgtUJDYGbySmKzNxx5rmp8AqL1hte9BEnlVV9sMcn+8X7NFaySHKW+L2q
+dgx5lapbfGwIGVNAjwom0u70DwgGMn7y/EJZZ1+kkFzPnd8FAicJPdy85806/AwT4+qw6wIRo/7e
+kceipUmc0fQk00Thbtp/f4sQ1JfNNawopKfs733CMKHc6iSixq+qxcWmOO0/D6LNKigbk+o5KKld
+W5g=
+=D3Fc
+-----END PGP SIGNATURE-----
+
+--------------5Ra3rHOGbCIVhbRnWW4J8rsV--
