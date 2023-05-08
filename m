@@ -2,271 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D8A6F9D7D
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 03:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD646F9D7E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 03:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbjEHBot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 21:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
+        id S232564AbjEHBpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 21:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjEHBoq (ORCPT
+        with ESMTP id S229662AbjEHBo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 21:44:46 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289F083FD
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 18:44:43 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230508014440epoutp04fe4f3541d0e6cf1c08980ad5cb536a59~dB64yJhzm2141421414epoutp04G
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 01:44:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230508014440epoutp04fe4f3541d0e6cf1c08980ad5cb536a59~dB64yJhzm2141421414epoutp04G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683510280;
-        bh=VMbyO2NgYAIXy4+h0cOhx721nE7JCLzEfchB8xU0VBA=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=S3q0MRCGPw0uvTNuMnZuNAad1OmuViamgJ4xVvc+B3LMlSFuThJW8yap/HuwHrVyF
-         VStajfSouguXdH6bYVRZEvsIHn20vhASM/fx/vPjMQ6JTNJybHwtG+C9H5FTUFIY+l
-         biOFnx5Jt6AaaypqujJVlNTGjYlRjbk/eB5IEDZw=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230508014438epcas2p4eaa0543e12020fd896df98d23c2a1ca2~dB63Po95_0862908629epcas2p4w;
-        Mon,  8 May 2023 01:44:38 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.97]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4QF3xf06zsz4x9Q1; Mon,  8 May
-        2023 01:44:38 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        17.E7.08199.50458546; Mon,  8 May 2023 10:44:37 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230508014437epcas2p3078ac91705aba3019cbad406a5bf2cef~dB62HLt271205912059epcas2p3Q;
-        Mon,  8 May 2023 01:44:37 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230508014437epsmtrp29d7fb3656d9cc1a00cb5dd7c6687301e~dB62Gjph40870408704epsmtrp2X;
-        Mon,  8 May 2023 01:44:37 +0000 (GMT)
-X-AuditID: b6c32a47-e99fd70000002007-d0-64585405a293
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5A.CA.28392.50458546; Mon,  8 May 2023 10:44:37 +0900 (KST)
-Received: from [10.229.8.168] (unknown [10.229.8.168]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230508014437epsmtip2abb7d743f3c27bccb759e4d1aba4a164~dB613xSPa0503305033epsmtip2v;
-        Mon,  8 May 2023 01:44:37 +0000 (GMT)
-Message-ID: <b93d7b1f-c0b1-7704-2beb-c574f87a06e8@samsung.com>
-Date:   Mon, 8 May 2023 10:42:12 +0900
+        Sun, 7 May 2023 21:44:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4714711DA1
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 18:44:56 -0700 (PDT)
+Received: from kwepemm600017.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QF3s922mwzpTk1;
+        Mon,  8 May 2023 09:40:45 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 8 May 2023 09:44:52 +0800
+From:   Tong Tiangen <tongtiangen@huawei.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>,
+        Tong Tiangen <tongtiangen@huawei.com>
+Subject: [PATCH -next v9 0/5]arm64: add machine check safe support
+Date:   Mon, 8 May 2023 09:44:31 +0800
+Message-ID: <20230508014436.198717-1-tongtiangen@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.10.0
-Subject: Re: [PATCH v3 3/3] spi: s3c64xx: support interrupt based pio mode
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-Content-Language: en-US
-From:   Jaewon Kim <jaewon02.kim@samsung.com>
-In-Reply-To: <53b60eca-e8ab-3ff3-61a4-019ccac6cd65@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEJsWRmVeSWpSXmKPExsWy7bCmhS5rSESKwd2TFhYP5m1js1j84zmT
-        xdSHT9gsLu/Xttj7eiu7xabH11gtLu+aw2Yx4/w+JovGjzfZHTg9ri/5xOyxaVUnm8eda3vY
-        PDYvqffo27KK0ePzJrkAtqhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE
-        3FRbJRefAF23zBygm5QUyhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BeYFesWJucWl
-        eel6eaklVoYGBkamQIUJ2Rlvm/6yFOxUrtg4YTVLA2OzdBcjJ4eEgIlEf8NU5i5GLg4hgR2M
-        Evu6J7GCJIQEPjFK7FgVAJH4zChx9/UeNpiOY482M0EU7WKUmL9EAqLoNaPEjGePmEESvAJ2
-        EguPtLOD2CwCKhIv3n9lhIgLSpyc+YQFxBYViJZYvG8KmC0s4CXxZ3cTE8ggEYHFjBILru5k
-        B3GYBTYySmxumgo2iVlAXOLWk/lgq9kEtCW+r18MdCsHByfQtgsXJSBK5CW2v50D9o+EwFwO
-        ifYPk9ghznaR6F/7AcoWlnh1fAuULSXx+d1eqNeyJdqn/2GFsCskLm6YDRU3lpj1rJ0RZBez
-        gKbE+l36IKaEgLLEkVssEGv5JDoO/2WHCPNKdLQJQTSqSdyfeg5qiIzEpCMrmSBKPCSm7Cud
-        wKg4CylQZiF5cRaSX2YhrF3AyLKKUSy1oDg3PbXYqMAYHtXJ+bmbGMGJVct9B+OMtx/0DjEy
-        cTAeYpTgYFYS4V2VEJYixJuSWFmVWpQfX1Sak1p8iNEUGDUTmaVEk/OBqT2vJN7QxNLAxMzM
-        0NzI1MBcSZxX2vZkspBAemJJanZqakFqEUwfEwenVAOTVMyXZi+Wq/+zdqz6sfxn83m/M2tK
-        ZNk6V91efZJdUGPpp83TKiTOn9QW3249S2S+iMSPqL/n2BsW5G9SlrOvuSMvser+BWO1f1N/
-        nv59R2fVPY6LFxfcX67YLqZu3V86y2u9Zq360Xtp1qG9hoZ9V7/y2+5xfytmHH3zsseh2T41
-        x737+7/Unv6rZdGxXNDEmGH9rq8ffvumenSEmqz5Ymc65UjLS9eYT++eF1U6rr9f+ebe/9yF
-        X5ljeEu4J62+7fWo+/yZ36sdlod7yX83qF8XayX9znSz1WsJUdHk05EVu0Kn7Y7f9Mrl4dFN
-        X78Gn3jM4+wToun5w+ekU8jG5c3Ju/8vSLP/8/mEjcJUPiWW4oxEQy3mouJEABtd3J41BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphkeLIzCtJLcpLzFFi42LZdlhJXpc1JCLF4PgmGYsH87axWSz+8ZzJ
-        YurDJ2wWl/drW+x9vZXdYtPja6wWl3fNYbOYcX4fk0Xjx5vsDpwe15d8YvbYtKqTzePOtT1s
-        HpuX1Hv0bVnF6PF5k1wAWxSXTUpqTmZZapG+XQJXxtumvywFO5UrNk5YzdLA2CzdxcjJISFg
-        InHs0WYmEFtIYAejxKb3lhBxGYnlz/rYIGxhifstR1ghal4ySsyaFg9i8wrYSSw80s4OYrMI
-        qEi8eP+VESIuKHFy5hMWEFtUIFrixvJvYPOFBbwk/uxuArK5OEQEFjNKTGzcBuYwC2xklFh5
-        fT0ziCMk8JtR4vetx2CjmAXEJW49mQ/WziagLfF9/WKgMzg4OIFWX7goAVFiJtG1tQuqXF5i
-        +9s5zBMYhWYhOWQWkkmzkLTMQtKygJFlFaNkakFxbnpusWGBUV5quV5xYm5xaV66XnJ+7iZG
-        cERpae1g3LPqg94hRiYOxkOMEhzMSiK8qxLCUoR4UxIrq1KL8uOLSnNSiw8xSnOwKInzXug6
-        GS8kkJ5YkpqdmlqQWgSTZeLglGpgWljBdktOOpWnOSvD47OZY2p70+nsjpSw9p23+hRWrIq/
-        kmHeG2rLZPPscfcf0+l7VfdKi+S0zghNnl9r86rV3sXy3kL9X1enhW2dNKM7t1uC/+ebu/0f
-        LxSnH/rzen72MrkFu3x1FtlJ6v1e8/XffLvjua5/64QswnWOH35h86pkmkBuk/aNiz6LjvRW
-        tbyN1a5wWbF5ruC8U5aKPH9rz66rcX6hLOb4ckr1jw6+Z4dPTuSJPSQh2Mvwa2mNW0/Y3t/b
-        T8uuZ1pR6Mm7gT3rd0hS7yGdFxlCJ9f1t7Hf49l37yjHVBehl0bTG9sSo8o3rJEQuhdpnfb5
-        4oeWKQ8NN6w8w75lj3iiQLVVCr+dEktxRqKhFnNRcSIATjDzQRcDAAA=
-X-CMS-MailID: 20230508014437epcas2p3078ac91705aba3019cbad406a5bf2cef
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230502065025epcas2p34507ffad60b32e091ff0efeced9bc12f
-References: <20230502062813.112434-1-jaewon02.kim@samsung.com>
-        <CGME20230502065025epcas2p34507ffad60b32e091ff0efeced9bc12f@epcas2p3.samsung.com>
-        <20230502062813.112434-4-jaewon02.kim@samsung.com>
-        <53b60eca-e8ab-3ff3-61a4-019ccac6cd65@linaro.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+With the increase of memory capacity and density, the probability of memory
+error also increases. The increasing size and density of server RAM in data
+centers and clouds have shown increased uncorrectable memory errors.
 
-On 23. 5. 5. 18:47, Krzysztof Kozlowski wrote:
-> On 02/05/2023 08:28, Jaewon Kim wrote:
->> Support interrupt based pio mode to optimize cpu usage.
->> When transmitting data size is larget than 32 bytes, operates with
->> interrupt based pio mode.
->>
->> By using the FIFORDY INT, an interrupt can be triggered when
->> the desired size of data has been received. Using this, we can support
->> interrupt based pio mode.
->>
->> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
->> ---
->>   drivers/spi/spi-s3c64xx.c | 66 ++++++++++++++++++++++++++++++++++-----
->>   1 file changed, 58 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
->> index 2a8304678df9..323c6da9730b 100644
->> --- a/drivers/spi/spi-s3c64xx.c
->> +++ b/drivers/spi/spi-s3c64xx.c
->> @@ -58,6 +58,8 @@
->>   #define S3C64XX_SPI_MODE_BUS_TSZ_HALFWORD	(1<<17)
->>   #define S3C64XX_SPI_MODE_BUS_TSZ_WORD		(2<<17)
->>   #define S3C64XX_SPI_MODE_BUS_TSZ_MASK		(3<<17)
->> +#define S3C64XX_SPI_MODE_RX_RDY_LVL		GENMASK(16, 11)
->> +#define S3C64XX_SPI_MODE_RX_RDY_LVL_SHIFT	11
->>   #define S3C64XX_SPI_MODE_SELF_LOOPBACK		(1<<3)
->>   #define S3C64XX_SPI_MODE_RXDMA_ON		(1<<2)
->>   #define S3C64XX_SPI_MODE_TXDMA_ON		(1<<1)
->> @@ -114,6 +116,8 @@
->>   
->>   #define S3C64XX_SPI_TRAILCNT		S3C64XX_SPI_MAX_TRAILCNT
->>   
->> +#define S3C64XX_SPI_POLLING_SIZE	32
->> +
->>   #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
->>   #define is_polling(x)	(x->cntrlr_info->polling)
->>   
->> @@ -552,7 +556,7 @@ static int s3c64xx_wait_for_dma(struct s3c64xx_spi_driver_data *sdd,
->>   }
->>   
->>   static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
->> -				struct spi_transfer *xfer)
->> +				struct spi_transfer *xfer, bool use_irq)
->>   {
->>   	void __iomem *regs = sdd->regs;
->>   	unsigned long val;
->> @@ -573,6 +577,12 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
->>   	if (RX_FIFO_LVL(status, sdd) < xfer->len)
->>   		usleep_range(time_us / 2, time_us);
->>   
->> +	if (use_irq) {
->> +		val = msecs_to_jiffies(ms);
->> +		if (!wait_for_completion_timeout(&sdd->xfer_completion, val))
->> +			return -EIO;
->> +	}
->> +
->>   	val = msecs_to_loops(ms);
->>   	do {
->>   		status = readl(regs + S3C64XX_SPI_STATUS);
->> @@ -735,10 +745,13 @@ static int s3c64xx_spi_transfer_one(struct spi_master *master,
->>   	void *rx_buf = NULL;
->>   	int target_len = 0, origin_len = 0;
->>   	int use_dma = 0;
->> +	bool use_irq = false;
->>   	int status;
->>   	u32 speed;
->>   	u8 bpw;
->>   	unsigned long flags;
->> +	u32 rdy_lv;
->> +	u32 val;
->>   
->>   	reinit_completion(&sdd->xfer_completion);
->>   
->> @@ -759,17 +772,46 @@ static int s3c64xx_spi_transfer_one(struct spi_master *master,
->>   	    sdd->rx_dma.ch && sdd->tx_dma.ch) {
->>   		use_dma = 1;
->>   
->> -	} else if (xfer->len > fifo_len) {
->> +	} else if (xfer->len >= fifo_len) {
-> I don't fully understand this. If len equals to fifo_len, everything
-> would fit into FIFO so no need for all this?
+Currently, the kernel has mechanism to recover from hardware memory errors.
+This patchset provides a new recovery mechanism.
 
-If the FIFO is filled with data, TX Overrun & RX Underrun interrupts 
-will occur.
+For arm64, the hardware memory error handling in do_sea(), which is divided
+into two cases:
+ 1. If the user state consumed the memory errors, the solution is to kill
+    the user process and isolate the error page.
+ 2. If the kernel state consumed the memory errors, the solution is to
+    panic.
 
-In CPU polling, there is no such issue because data is read before an 
-interrupt occurs.
+For case 2, Undifferentiated panic may not be the optimal choice, as it can
+be handled better. In some scenarios, we can avoid panic, such as uaccess,
+if the uaccess fails due to memory error, only the user process will be
+affected, killing the user process and isolating the user page with
+hardware memory errors is a better choice.
 
-And, RDY_LVL has only 6 bits.(max. 63). we cannot set trigger level on 
-the FIFO max size.
+Since V8:
+ 1. Rebase to latest kernel version and fix topo in some of the patches.
+ 2. According to the suggestion of Catalin, I attempted to modify the
+    return value of function copy_mc_[user]_highpage() to bytes not copied.
+    During the modification process, I found that it would be more
+    reasonable to return -EFAULT when copy error occurs (referring to the
+    newly added patch 4). 
 
+    For ARM64, the implementation of copy_mc_[user]_highpage() needs to
+    consider MTE. Considering the scenario where data copying is successful
+    but the MTE tag copying fails, it is also not reasonable to return
+    bytes not copied.
+ 3. Considering the recent addition of machine check safe support for
+    multiple scenarios, modify commit message for patch 5 (patch 4 for V8).
 
->>   		tx_buf = xfer->tx_buf;
->>   		rx_buf = xfer->rx_buf;
->>   		origin_len = xfer->len;
->> -
->>   		target_len = xfer->len;
->> -		if (xfer->len > fifo_len)
->> -			xfer->len = fifo_len;
->> +		xfer->len = fifo_len - 1;
->>   	}
->>   
->>   	do {
->> +		/* transfer size is greater than 32, change to IRQ mode */
->> +		if (xfer->len > S3C64XX_SPI_POLLING_SIZE)
->> +			use_irq = true;
->> +
->> +		if (use_irq) {
->> +			reinit_completion(&sdd->xfer_completion);
->> +
->> +			rdy_lv = xfer->len;
-> Style is:
->
-> /*
->   *
->
->> +			/* Setup RDY_FIFO trigger Level
->> +			 * RDY_LVL =
->> +			 * fifo_lvl up to 64 byte -> N bytes
->> +			 *               128 byte -> RDY_LVL * 2 bytes
->> +			 *               256 byte -> RDY_LVL * 4 bytes
-> I don't understand it. Based on this equation for 256 bytes,
-> RDY_LVL = RDY_LVL * 4?
-> Didn't you mean xfer->len?
+Since V7:
+ Currently, there are patches supporting recover from poison
+ consumption for the cow scenario[1]. Therefore, Supporting cow
+ scenario under the arm64 architecture only needs to modify the relevant
+ code under the arch/.
+ [1]https://lore.kernel.org/lkml/20221031201029.102123-1-tony.luck@intel.com/
 
-In v4, I will change it to the following
+Since V6:
+ Resend patches that are not merged into the mainline in V6.
 
-/*
-  * Trigger Level =
-  * (N = value of RDY_LVL field)
-  * fifo_lvl up to 64 byte -> N bytes
-  *               128 byte -> N * 2 bytes
-  *               256 byte -> N * 4 bytes
-  */
+Since V5:
+ 1. Add patch2/3 to add uaccess assembly helpers.
+ 2. Optimize the implementation logic of arm64_do_kernel_sea() in patch8.
+ 3. Remove kernel access fixup in patch9.
+ All suggestion are from Mark. 
 
->
->
-> Best regards,
-> Krzysztof
->
->
+Since V4:
+ 1. According Michael's suggestion, add patch5.
+ 2. According Mark's suggestiog, do some restructuring to arm64
+ extable, then a new adaptation of machine check safe support is made based
+ on this.
+ 3. According Mark's suggestion, support machine check safe in do_mte() in
+ cow scene.
+ 4. In V4, two patches have been merged into -next, so V5 not send these
+ two patches.
 
-Thanks
+Since V3:
+ 1. According to Robin's suggestion, direct modify user_ldst and
+ user_ldp in asm-uaccess.h and modify mte.S.
+ 2. Add new macro USER_MC in asm-uaccess.h, used in copy_from_user.S
+ and copy_to_user.S.
+ 3. According to Robin's suggestion, using micro in copy_page_mc.S to
+ simplify code.
+ 4. According to KeFeng's suggestion, modify powerpc code in patch1.
+ 5. According to KeFeng's suggestion, modify mm/extable.c and some code
+ optimization.
 
-Jaewon Kim
+Since V2:
+ 1. According to Mark's suggestion, all uaccess can be recovered due to
+    memory error.
+ 2. Scenario pagecache reading is also supported as part of uaccess
+    (copy_to_user()) and duplication code problem is also solved. 
+    Thanks for Robin's suggestion.
+ 3. According Mark's suggestion, update commit message of patch 2/5.
+ 4. According Borisllav's suggestion, update commit message of patch 1/5.
+
+Since V1:
+ 1.Consistent with PPC/x86, Using CONFIG_ARCH_HAS_COPY_MC instead of
+   ARM64_UCE_KERNEL_RECOVERY.
+ 2.Add two new scenes, cow and pagecache reading.
+ 3.Fix two small bug(the first two patch).
+
+V1 in here:
+https://lore.kernel.org/lkml/20220323033705.3966643-1-tongtiangen@huawei.com/
+
+Tong Tiangen (5):
+  uaccess: add generic fallback version of copy_mc_to_user()
+  arm64: add support for machine check error safe
+  arm64: add uaccess to machine check safe
+  mm/hwpoison: return -EFAULT when copy fail in
+    copy_mc_[user]_highpage()
+  arm64: support copy_mc_[user]_highpage()
+
+ arch/arm64/Kconfig                   |  1 +
+ arch/arm64/include/asm/asm-extable.h | 15 +++++
+ arch/arm64/include/asm/assembler.h   |  4 ++
+ arch/arm64/include/asm/extable.h     |  1 +
+ arch/arm64/include/asm/mte.h         |  5 ++
+ arch/arm64/include/asm/page.h        | 10 ++++
+ arch/arm64/lib/Makefile              |  2 +
+ arch/arm64/lib/copy_mc_page.S        | 89 ++++++++++++++++++++++++++++
+ arch/arm64/lib/mte.S                 | 27 +++++++++
+ arch/arm64/mm/copypage.c             | 64 +++++++++++++++++---
+ arch/arm64/mm/extable.c              | 21 ++++++-
+ arch/arm64/mm/fault.c                | 29 ++++++++-
+ arch/powerpc/include/asm/uaccess.h   |  1 +
+ arch/x86/include/asm/uaccess.h       |  1 +
+ include/linux/highmem.h              | 12 ++--
+ include/linux/uaccess.h              |  9 +++
+ mm/khugepaged.c                      |  4 +-
+ 17 files changed, 279 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm64/lib/copy_mc_page.S
+
+-- 
+2.25.1
 
