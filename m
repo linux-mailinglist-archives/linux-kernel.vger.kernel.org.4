@@ -2,83 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF8F6FB17F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FD76FB185
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234067AbjEHN2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
+        id S234018AbjEHN3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233699AbjEHN22 (ORCPT
+        with ESMTP id S234291AbjEHN3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:28:28 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FBC33FCC;
-        Mon,  8 May 2023 06:28:06 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-24df4ecdb87so3106387a91.0;
-        Mon, 08 May 2023 06:28:06 -0700 (PDT)
+        Mon, 8 May 2023 09:29:19 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189342BCF0;
+        Mon,  8 May 2023 06:29:12 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1aad6f2be8eso42390825ad.3;
+        Mon, 08 May 2023 06:29:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683552485; x=1686144485;
+        d=gmail.com; s=20221208; t=1683552551; x=1686144551;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hJL7on47Y+qnReWK+RN8hsZ4/lRT/GdxonZVZJkZNFc=;
-        b=L0wSaMX47AxHW+5mwIPiPG/LQyY070h6LJllIePcS0Sv63IYnmEKAxprG7ulLTB+bH
-         Bi04krbmZ+1+aUPcvtl38Rf+WNUx2fuZje/fD6QlJ67/Kc5/1U6kkA7vqW/KJ//OBLHV
-         bwKg2UF6Gl5ahTvzQSjbAi3IpW0EGnxZ27tXmzgk8bokLmeEZTQitq+Yf30EBJ65kBqC
-         pMytV3CruCfrvMZWAx4uGdYJYC75WEjWjnUQZN6eqf4f79g68YqPLCOBfMBuFwfALXr+
-         m+CSnYPXFzT2O8djZ58xoWOKYQM0gYAssrTjzx23YiE2o4aiiUxGjrsLsVIVHNLsKnwj
-         xf3g==
+        bh=v3PaC+u4I8/xCvBzjXljSbT+ExOFEPX4hvoclskNFFw=;
+        b=MWzI31C4XaHMcFzzVuAi/60gb6uwvtco6/TBowcdMuXPSg6ouaWHsUC+w3hk0vsXS6
+         oPTulJVX1PGaYLCMzcH3+8oB8oL6BeHvikIF2RUuD8i87DyMG4PNHYh6Z2Ue8r+V/LO4
+         4+SpbLukuQnI/I/HwQtnPFwDtuQ15FAhlMf2Uwry1bPCxSzZ23nAsjh8ONAQObnmWMZ9
+         PYMtxSD454r+qxmt021fSN5+vt7owtGLGVc/NwhGChX6bn9RWyQe6MCrEzPSANGHkeeX
+         em9zjjCOXakgtbHs6pbRHIsAlOQ8q974MBE6f7as19Vz+C21I3sbbgtVOo4hoAnCHtHQ
+         f9mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683552485; x=1686144485;
+        d=1e100.net; s=20221208; t=1683552551; x=1686144551;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hJL7on47Y+qnReWK+RN8hsZ4/lRT/GdxonZVZJkZNFc=;
-        b=D6/WkAGlDAmmxQFoAGTucFpX48Cb0Y8Qj7V5NfL93PWKpm8WuwixNm35bKSx6nesq0
-         h3QFXQw4xcKrVXGNwqI2ZSP8zvK/kV+wwuJH4PEn28EBMCVYooxJkjaekSHC4v21LLPx
-         EQGUcwOXEcP5RWWQkaBYVz0wJHXQo7ShxQNuu61/2Hk0AOFkn79/2FsfePwB7aweB0/q
-         wlKVbhInSudAqZlsikgkGJjx9dc8VIsziF0HaxnXTigvH+BFHpaiY7ahBeB1U9GP7o7r
-         BBIzbF8jplqJ5d+ctH3xoSBiWWlosg2EKIpfoMcAi+Di94pUJUJUxXtBpjJjTiFl8S10
-         fRlw==
-X-Gm-Message-State: AC+VfDx16dhtlHpdiuvLBvVTiKoO0Le2xnF8bVkd3yGjCftWItuCQXo5
-        1hD6EXmYoJ9uuYkW6/26TcM=
-X-Google-Smtp-Source: ACHHUZ7SfPi65V3zWt309n46kENPv3m7W6VlKo6duJegzYEYg4ZrHDn5RTJrY1k/8sJlgWcvVxtxpg==
-X-Received: by 2002:a17:90b:a48:b0:24d:f2f5:f571 with SMTP id gw8-20020a17090b0a4800b0024df2f5f571mr10606107pjb.36.1683552485567;
-        Mon, 08 May 2023 06:28:05 -0700 (PDT)
+        bh=v3PaC+u4I8/xCvBzjXljSbT+ExOFEPX4hvoclskNFFw=;
+        b=NXQn1n3QVjc9ilpFkgZhS1iMk5wmIsfS2s0nwo1g7iO8ZHXmTquLkiCKL1s+ZqaNHx
+         +zFJag+fGjf2HyT7P0FrYV9G8aTvSLQ8RyJBBuL3rKKzw8wgTkFzv57zSBcYMsGlBiI8
+         LvzwK3hW6UaQNRv5TJh1lvCgz242b8x9WDzy90P/Jn4H+MBWhsazBxOj6G5GsQ+lGtUf
+         OrvRb4pa/KU8UQrj0/liXvJaNp1ntUaSPW3DnMUqtANvfYwYunNF8ZyH58xDkJSVEGZY
+         6/oTEtf4tBRQh+3rT2/prEcbZhKuen7+e/q56A+TSUBWu43tAlQp5IBsPGorUzHHx0Nu
+         fj6g==
+X-Gm-Message-State: AC+VfDzEWlyAZzTJZ/llpri3blYzd4DOMFFkgjWAEUiXzWclnuFPuRvv
+        yTy7R/0fw/C8fu8LfCjSzeo=
+X-Google-Smtp-Source: ACHHUZ7KAFR45h+/U8HBtUfGhPJcOvkhRnZ3gz7CGtsMf4W1x4+mYkZaOv9TKK1YDMVLKRQ2r39hPw==
+X-Received: by 2002:a17:902:8a95:b0:1aa:cddd:57d8 with SMTP id p21-20020a1709028a9500b001aacddd57d8mr9863298plo.30.1683552551322;
+        Mon, 08 May 2023 06:29:11 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id fs9-20020a17090af28900b002470f179b92sm9869455pjb.43.2023.05.08.06.28.04
+        by smtp.gmail.com with ESMTPSA id v13-20020a170903238d00b001aafdf8063dsm7253193plh.157.2023.05.08.06.29.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 06:28:04 -0700 (PDT)
+        Mon, 08 May 2023 06:29:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 8 May 2023 06:28:03 -0700
+Date:   Mon, 8 May 2023 06:29:09 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Sanket Goswami <Sanket.Goswami@amd.com>,
-        Richard gong <richard.gong@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH 1/2] amd_nb: Add PCI ID for family 19h model 78h
-Message-ID: <a8b29619-f1da-4cb9-a5bd-a396b52e159f@roeck-us.net>
-References: <20230427053338.16653-1-mario.limonciello@amd.com>
- <20230427053338.16653-2-mario.limonciello@amd.com>
- <7b74c389-97b7-4f56-851b-6ce17950a4d1@roeck-us.net>
- <f2b81356-e702-3026-660f-d9a88edff632@amd.com>
- <084837c4-72c8-be92-fd1c-5ccbd805c559@leemhuis.info>
- <20230508112543.GBZFjcN2oxk4do31w4@fat_crate.local>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH 1/3] watchdog: rzg2l_wdt: Fix reboot for RZ/V2M
+Message-ID: <7d3b2991-f755-42e5-87ca-727fd8fb9164@roeck-us.net>
+References: <20221103223956.50575-1-fabrizio.castro.jz@renesas.com>
+ <20221103223956.50575-2-fabrizio.castro.jz@renesas.com>
+ <20221115132811.GA4189373@roeck-us.net>
+ <TYWPR01MB87753203F46FA9C744FEF7E6C2069@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+ <20230507153625.GA3135@www.linux-watchdog.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230508112543.GBZFjcN2oxk4do31w4@fat_crate.local>
+In-Reply-To: <20230507153625.GA3135@www.linux-watchdog.org>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -90,56 +92,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 01:25:43PM +0200, Borislav Petkov wrote:
-> On Mon, May 08, 2023 at 01:13:14PM +0200, Thorsten Leemhuis wrote:
-> > Which afaics means that users of -rc1 are now affected by this and might
-> > waste time bisecting a known issue that could easily have been fixed
-> > already. :-/ That doesn't feel right. Or am I missing something?
+On Sun, May 07, 2023 at 05:36:25PM +0200, Wim Van Sebroeck wrote:
+> Hi Fabrizio,
 > 
-> -rc1 is pretty much the most broken tree there is. And it is not an
-> officially released tree but a, well, the first release candidate. So
-> fixes are trickling in, there's lag between what gets found, when the
-> maintainers pick it up and when it ends up upstream and so on and so on.
-> 
-> Some fixes need longer testing because there have been cases where a fix
-> breaks something else.
-> 
-> And yes, maintainers can always expedite a fix or Linus will pick it up
-> directly if it breaks a lot of boxes in a nasty way.
-> 
-> So, long story short, I don't think you should track -rcs. You are
-> tracking the reports already and you're tracking where their fixes land
-> so I guess that's good enough.
-> 
+> Based on below e-mail I excluded this patch from the merge window.
+> I saw that Guenter still has it in his branch.
 
-I absolutely disagree. Without Thorsten's tracking, Linus would have no
-idea what the status of the kernel is.
-
-> > /me wonders I he should start tracking regressions more closely during
-> > the merge window to catch and prevent situations like this...
-> 
-> I don't see a "situation" here. rcs can be broken for some use cases and
-> that is fine as long as that breakage doesn't get released.
-> 
-
-Again, I disagree. The whole point of testing release candidates is to get
-problems fixed. If issues are not fixed timely, they just pile up on top
-of each other and make it difficult to identify new issues (and, in many
-cases, to test the kernel in the first place).
-
-I find it quite annoying that problems are identfied, often even in -next,
-the patch intoducing them is applied to mainline anyway, and then
-it sometimes takes until -rc5 or even later to get the fix applied (even if
-the fix has been known for weeks or even months). It sometimes even takes
-Linus' intervention to get fixes applied to the upstream kernel. That
-really should not be necessary. Telling those who track regressions
-to stay away from release candidates is absolutely the wrong thing to do
-and would only serve to make release candidates quite pointless.
-
-v6.4-rc1 is a good example. Fixes for all build breakages were published
-before the commit window opened, yet at least one of them did not make
-it into -rc1. Together with this patch there are now at least two
-regressions if -rc1 whch could have been avoided and may impact testability
-on affected systems.
+Thanks for the note. I'll drop it.
 
 Guenter
+
+> So can we have an update on this please?
+> 
+> Thanks in advance,
+> Wim.
+> 
+> > Hi Geert and Guenter,
+> > 
+> > Thank you for your reviews!
+> > 
+> > As it turns out, the rzg2l_wdt driver has some reset related issues
+> > (currently not addressed by the driver) for the RZ/V2M and RZ/Five
+> > SoCs. More specifically to this patch, there is a better way to fix
+> > the restart callback by addressing the way the reset is handled
+> > for the watchdog IP.
+> > 
+> > I am dropping this patch, and I'll send out a series to address
+> > the above concerns (which will tackle the issues with the restart
+> > callback in a better way).
+> > 
+> > 
+> > Thanks,
+> > Fab
+> > 
+> > 
+> > > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+> > > Sent: 15 November 2022 13:28
+> > > Subject: Re: [PATCH 1/3] watchdog: rzg2l_wdt: Fix reboot for RZ/V2M
+> > > 
+> > > On Thu, Nov 03, 2022 at 10:39:54PM +0000, Fabrizio Castro wrote:
+> > > > The setting for the RZ/V2M watchdog cannot be changed once
+> > > > the watchdog has been enabled, unless the IP gets reset.
+> > > > The current implementation of the restart callback assumes
+> > > > that the watchdog is not enabled, but that's not always the
+> > > > case, and it leads to longer than necessary reboot times if
+> > > > the watchdog is already running.
+> > > >
+> > > > Always reset the RZ/V2M watchdog first, so that we can always
+> > > > restart quickly.
+> > > >
+> > > > Fixes: ec122fd94eeb ("watchdog: rzg2l_wdt: Add rzv2m support")
+> > > > Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> > > 
+> > > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> > > 
+> > > > ---
+> > > >  drivers/watchdog/rzg2l_wdt.c | 11 ++++++++---
+> > > >  1 file changed, 8 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+> > > > index 974a4194a8fd..00438ceed17a 100644
+> > > > --- a/drivers/watchdog/rzg2l_wdt.c
+> > > > +++ b/drivers/watchdog/rzg2l_wdt.c
+> > > > @@ -145,10 +145,10 @@ static int rzg2l_wdt_restart(struct
+> > > watchdog_device *wdev,
+> > > >  {
+> > > >  	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> > > >
+> > > > -	clk_prepare_enable(priv->pclk);
+> > > > -	clk_prepare_enable(priv->osc_clk);
+> > > > -
+> > > >  	if (priv->devtype == WDT_RZG2L) {
+> > > > +		clk_prepare_enable(priv->pclk);
+> > > > +		clk_prepare_enable(priv->osc_clk);
+> > > > +
+> > > >  		/* Generate Reset (WDTRSTB) Signal on parity error */
+> > > >  		rzg2l_wdt_write(priv, 0, PECR);
+> > > >
+> > > > @@ -157,6 +157,11 @@ static int rzg2l_wdt_restart(struct watchdog_device
+> > > *wdev,
+> > > >  	} else {
+> > > >  		/* RZ/V2M doesn't have parity error registers */
+> > > >
+> > > > +		reset_control_reset(priv->rstc);
+> > > > +
+> > > > +		clk_prepare_enable(priv->pclk);
+> > > > +		clk_prepare_enable(priv->osc_clk);
+> > > > +
+> > > >  		wdev->timeout = 0;
+> > > >
+> > > >  		/* Initialize time out */
+> > > > --
+> > > > 2.34.1
+> > > >
