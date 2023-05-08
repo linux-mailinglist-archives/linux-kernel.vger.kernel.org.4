@@ -2,501 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987E86FB6BF
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9BF6FB6CD
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233355AbjEHTal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 15:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S233053AbjEHTi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 15:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjEHTaj (ORCPT
+        with ESMTP id S232746AbjEHTix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 15:30:39 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B0359C1;
-        Mon,  8 May 2023 12:30:37 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2ac733b813fso54427661fa.1;
-        Mon, 08 May 2023 12:30:37 -0700 (PDT)
+        Mon, 8 May 2023 15:38:53 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2123.outbound.protection.outlook.com [40.107.243.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D1C59E7;
+        Mon,  8 May 2023 12:38:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MeSN7wdWA8GSlsyHAnB0Z/H6HNPYnrWpWiqRqT3Dba0u/fP45HwzJmZG4U3BP49HF+ywU130wAL9+6ftZVlp5ci2l2slbCy81AdabaqUyn8eQerKTyZGIgrB0rMTYL7TQs719IYqv9Vw9SW8kN+kaWS1auCGUHu0BdWhdLiw2WNletp+DMc9QhnqPbiboVQ5SQIE3owg6tQlUUeZWOJT3vDI/6woqovtp6++bieXolN5sYaKD4OctYsk+43mZuK+H9y99SUbcyHRk8r/k0mLFvZJN50zXa6/I+/zkQwGADMvOYrmExfOoRPCx4EPSOMcgxq9eLAz4PAgvXuZ0nmHLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XCj105DBMZJMcHWuI8klk8gQgMO6WYsLNnsGMx2SBCQ=;
+ b=BBwoOq6q+RcqLAqWYqos2/Qlc5cs3mQFsRoU0eeKR7L4U+GmXnR2isiK7riwFr/gT3oKmUv8FuoiAiqMnL/VbqKgFjW/R2ojhRFRLfDSiNxa1P/hLDu4bnINDNrict9yfPoUTbAAzBIjYGaWwRAI28/KkMzHk50AKGhrtES6jRWAGMS41c4d8FKugwQTxIagVNEoJz9du16L16hN6P3oQ4/OqmbbkjIeCauewPPUfvcODZWVJR/dpD4a+1pCKyYMuygtvnMi1x42QH4iJjjhu95iEDpkJbXBdA9nvN7vtavHz9/S1KeCpjRz3ZzKxuovlu3TJscqk8e+1iqbTyn5Og==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683574236; x=1686166236;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RpFHmWTSO87snqsRDFQuOr7PS8NeITU+H8E5Qf2YRbk=;
-        b=cgbFpOKrBrd11Zhos3+dwntw02ytm8nVOxOtp7uTUYjNx4Xo/v1oCkyhm6+ZH7WZsv
-         QexMgoCxRQzU9IAva7BevB2aTXWFfdwJiJ2WpXlaYGGwm/o2TnGVJ9Nx3p9LgU21MhQS
-         L8T6LhIuHSiuheq6RSLsl5h4Q0RILfpuN73uqqAwZZOjFOoRlZVXftLMbyizqRi4Tcat
-         BVNu029oKHcOZHjCRwoALv5bsy7Zi8OcdgnydSsi9PuVS872zrIZkX/HLFwMD370+6jB
-         1bbIv7PeuDfwqVGOL0bZ7slX9lEatiITtWowphuQ99oUzeDmLY41RJMosrH+Ksh3qKVD
-         xUWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683574236; x=1686166236;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RpFHmWTSO87snqsRDFQuOr7PS8NeITU+H8E5Qf2YRbk=;
-        b=JIAMn1WqHbQUiKDi8YbT7IDncNgtu0RXIBUuqoYfHThsJV2vC4LYb3G1VOcLp+VFgL
-         NjKLJDP8WbRqC60NJWBl5ZPHT0fKMqXAvU9C44Y3MINAaAVSK9BUyTDYgK90ME9iTB03
-         GfAxUVZJT8kOpbGBTAxo+zMVGc+baio8hADDqOzsW5ep679TaoOZv2rTDB50/+WCnJEo
-         bE9B6QM2r+e42kSPScmd8zJ0uSl3mMzvobz5J9Puw9BlkrLIGr7MG8mCMzW2JlDcKV0P
-         mF23mXftwbyN2C1EGum00Y3C5m7BLQuwRHc+4zwtn67byZ9/rMdyZeqfbeHOpJkrVYi8
-         RfgQ==
-X-Gm-Message-State: AC+VfDxv7RrjruGW6qcD9MTLyhKYJg5EtQdPKKxedF1K7KQcHDNnb3in
-        aWE2MU/LYNVykvMLAAuNb8bbT33h90iojCfXzGvoy1dz
-X-Google-Smtp-Source: ACHHUZ6w+XyOOEFGVf3IYSwWT5GrQg+yjLSZEGJIkk/BVXQnHiqrtCi5Y12Sqn/WmjtzbcofbQ7Ez+81k53R/fcRBr0=
-X-Received: by 2002:a2e:a16f:0:b0:2a8:ea22:28ab with SMTP id
- u15-20020a2ea16f000000b002a8ea2228abmr57794ljl.25.1683574235396; Mon, 08 May
- 2023 12:30:35 -0700 (PDT)
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XCj105DBMZJMcHWuI8klk8gQgMO6WYsLNnsGMx2SBCQ=;
+ b=Iy0Bl2VpLRCcqRPcqLspXLTCdT7d3yUYqbFZtOD9gK6rqa9AdF48M6qZJx/z3EjwUWsctuax/kivdFl+EiHEqX9fgEoX5zg9qaXYST/XsRdBsrsoH9z8tDbvAcEMQ51jSfJkrBu9l+GszJvcw9eXaes/fsF5ObcK3Z4EDNAf58E=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from BY3PR13MB4834.namprd13.prod.outlook.com (2603:10b6:a03:36b::10)
+ by SA0PR13MB4046.namprd13.prod.outlook.com (2603:10b6:806:95::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
+ 2023 19:38:49 +0000
+Received: from BY3PR13MB4834.namprd13.prod.outlook.com
+ ([fe80::d98b:da1b:b1f0:d4d7]) by BY3PR13MB4834.namprd13.prod.outlook.com
+ ([fe80::d98b:da1b:b1f0:d4d7%7]) with mapi id 15.20.6363.032; Mon, 8 May 2023
+ 19:38:49 +0000
+Date:   Mon, 8 May 2023 21:38:41 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Teoh Ji Sheng <ji.sheng.teoh@intel.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 1/1] net: stmmac: xgmac: add ethtool per-queue
+ irq statistic support
+Message-ID: <ZFlPwdx3lDwe6O2r@corigine.com>
+References: <20230508144339.3014402-1-ji.sheng.teoh@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508144339.3014402-1-ji.sheng.teoh@intel.com>
+X-ClientProxiedBy: AS4P251CA0026.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d3::15) To BY3PR13MB4834.namprd13.prod.outlook.com
+ (2603:10b6:a03:36b::10)
 MIME-Version: 1.0
-References: <1683001400-29905-1-git-send-email-quic_saluvala@quicinc.com>
-In-Reply-To: <1683001400-29905-1-git-send-email-quic_saluvala@quicinc.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 8 May 2023 12:30:23 -0700
-Message-ID: <CABBYNZ+QLkWhiWfZt0tb50zagsKA8VjtNZ7jefd8iOeMyfCRBA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] Bluetooth: hci_qca: Add qcomm devcoredump support
-To:     Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        quic_hemantg@quicinc.com, quic_bgodavar@quicinc.com,
-        jiangzp@google.com, mmandlik@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY3PR13MB4834:EE_|SA0PR13MB4046:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9fc19f63-dcdb-4d37-149c-08db4ffbd860
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: erjB13s5ZRdGeV/akX418EVLnJxnXhOEhGtuOfSsFj1ppqFFkmkcyYqBpfUQKj8AIDbV8RbldqkiqknZacnVIXe+K56CGvUtjhWnEsjTWvoewp4NIIRt8ahfuLu5aoBgkKapPCAtkupRjd9wTHJOE+eTbb2gwIxW9Wpky0aASWsTMulvBc8KeEOTl112qQt10TzfyL1GJdrYkbpktePTmLXiZyu5xrTuHqVOj2OikAbPHKONxWUsoj7b9FArMsmmzW8zpjWGS6EKeMmczAup/tOoVjMU4SJM7/LlG427hJjlwFIajIm8ZBZFxCfMXxraPi6jsDHG5xlG2wnbg2K08Ap6xS9j1Qnnkh+uzReq9fxo5C5DNE0btoGL9ZrnRZDf2UjFi/RW7KOulocDSqRShUWOvSdfgED6iMner8aavsenVGtTavBMs7UwO7S7yPPxtI+BmBfTOBIBClwGZxiuBymv/hfucbILbqktlL2KTOVF/iptHj404J5MQ4wj5PHetsDnmWdu+qJVxZiaWvY4hI9gkNxRYoZGAvpKVotZri69pxxQ3URhsx1Pn0SpfQEq
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR13MB4834.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(366004)(136003)(376002)(346002)(396003)(451199021)(4744005)(54906003)(2906002)(4326008)(8936002)(316002)(478600001)(66476007)(6916009)(5660300002)(66556008)(8676002)(41300700001)(6666004)(7416002)(44832011)(66946007)(6486002)(6512007)(6506007)(186003)(2616005)(36756003)(38100700002)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ShX4wom+HtamfeKuud1xeT8ZNRhEdbKI2LUjhnTnoty0asiVisXEvuMxGAl7?=
+ =?us-ascii?Q?Y6ujQMr81vJbF7TwJNJvqWLzBwclbWggmxvWIlhE6tchiGkxPe8LVXuskgKw?=
+ =?us-ascii?Q?SiEnxi49wTRWv7qT+EfQC3xFtMw+OYogcU859Qnxi30dUZDua+BFtskWpgU6?=
+ =?us-ascii?Q?+8N6rmW2FssaPc3xv9pE+H5XJePSLALXAVkQzU+gE71bln1TojLFLXLxeX2r?=
+ =?us-ascii?Q?9wexy3bjQKX/XRY0a0xsS5Gga0fNxzpdPam/tlhgVWztnPaFswg6n2fqs2/t?=
+ =?us-ascii?Q?09omPdvXmOnp9fNJZGOm6v483zLtCGLGbGJSXA85HICUBdRmCCqUJ4xYv7v6?=
+ =?us-ascii?Q?hpTrrlLpKhOcyvObYzsjfD8Vw+Hif099Ui/fWptjb3SOjmUbwe+3inRgmib7?=
+ =?us-ascii?Q?S7uKf2ivwwfYkzTtBAjN++1NpdOFs89430pDbRttWUWL+pS4zlL+RYjuoyJp?=
+ =?us-ascii?Q?XVBscyn2Sb/Ed/2Ze1aFL80q6oMqD3DvZMn5poEzbDYZksDyKLxIA9+sRaIX?=
+ =?us-ascii?Q?uGteDVLa95A3fsnyzG8+n25hLDAqF9Diwo77sjzv3wtfjhJkMaRZOPB0sopu?=
+ =?us-ascii?Q?JNKDSfnePY4bDqmYPXEP5EnTbSBbepKLQy90W5qKVFkw5SkEIkhcjDx4XNrh?=
+ =?us-ascii?Q?L30ZxtZvWlj+NarC4G+gQ0YUsCcrhLWZWu+ycYscEsfsXIKBq7s0ecemmnmW?=
+ =?us-ascii?Q?x1cQ6RGjTQbRqqzloLn+pomIHVXvEOQrqNiDU/CufE+C02n57PXH6eljlP+d?=
+ =?us-ascii?Q?7OJTgnCHGgxUkGOmk7C57yTGZrJ5Dfbe8ZdSif0jXT5/H6XQYfqimQj1JJcB?=
+ =?us-ascii?Q?iaK2ITCzFtJ0kDYAoCPnyGeoiYyjW9RNwtQlzN2es1J4meIw+V0rvjnvhNAF?=
+ =?us-ascii?Q?ht79Nt0hnpZtG0Z3J11s0HzmJAvYlhkFgg4orWD82ncOL8/fYtu6XQLSz/M0?=
+ =?us-ascii?Q?+VTIWiU3BEIp4OzIccQ+X5vPhdcQN2akPrUe08qfZ2mm/ABc0n8mfRhowXQp?=
+ =?us-ascii?Q?w7WJon73qanrfcu7+yedcJ34oajRkSkhaqdgB/9gRKj5wAdS/kG6YSuzB2eU?=
+ =?us-ascii?Q?hZax7wOXbeGmpFA+9C8NPJzps5vk8yxsSg0phcALNib60esnIZhhjUPLVc/6?=
+ =?us-ascii?Q?cVKrwwA7PEZuBx3vtSSUow/Vz2qTRdSxkdurCAmWo5iDCg2mGfoIEIU+V/eo?=
+ =?us-ascii?Q?uGYQiFnoG5uUFXnbxuztMZcN1UyxvSoz42JST59CLAPBne1wUKDuopDsDeZn?=
+ =?us-ascii?Q?H6t8wlOcMaqTmrs3E50Ld0nYnqxwDtV6QP22RSXY2eYYK0/xTzHBLPbYeBAm?=
+ =?us-ascii?Q?mrPxS4ANcWfoiTJE/F2Nh1ALmk8h0rg0/jkPd7G02CM2seNhjhR1+yDjHVNI?=
+ =?us-ascii?Q?AgaNpMpkQTR1Azo+P666lROx7bY7qJIMFzP67cEpBWmFlq8Ud6V3/pmUMAQW?=
+ =?us-ascii?Q?JvEYnRrtob4Hdv1VgTAcQH6m1lxBDYxewUeYxZbq4NkvU3eBStDn3Yeq/5YJ?=
+ =?us-ascii?Q?26+X+dv7NRSF4P+EPYlM3A5+gjnZN2QwE8rxr7T8g7vYqXsEu9YDxcavaIeH?=
+ =?us-ascii?Q?7cR3bPvDS02Ww/u0Z/s1VAiry3SSAuW7aJLFreYjhrJJdlHRGA3Jyf3WUTit?=
+ =?us-ascii?Q?+DkGo/wQGXFEz9NFHSaHFTsunMvbOClDv36KioU35j49khlJIGbO2fBkugxH?=
+ =?us-ascii?Q?vZENsQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9fc19f63-dcdb-4d37-149c-08db4ffbd860
+X-MS-Exchange-CrossTenant-AuthSource: BY3PR13MB4834.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 19:38:49.0621
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9lzLTxVpcxZbSMG3dagJV0I+KBSA91vydwqJU8ha7gcfO5PHSktj7qbYvuzCvvaWwQWMnXKXOxgO0fuZUCTeSiMMVj8otYN+O6f7Tj4Z57k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR13MB4046
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sai,
+On Mon, May 08, 2023 at 10:43:40PM +0800, Teoh Ji Sheng wrote:
+> Commit af9bf70154eb ("net: stmmac: add ethtool per-queue irq statistic
+> support") introduced ethtool per-queue statistics support to display
+> number of interrupts generated by DMA tx and DMA rx for DWMAC4 core.
+> This patch extend the support to XGMAC core.
+> 
+> Signed-off-by: Teoh Ji Sheng <ji.sheng.teoh@intel.com>
 
-On Mon, May 1, 2023 at 9:23=E2=80=AFPM Sai Teja Aluvala
-<quic_saluvala@quicinc.com> wrote:
->
-> Intercept debug exception events from QCA controller and put them into
-> a devcoredump using hci devcoredump APIs of hci_core
->
-> Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
-> Reviewed-by: Manish Mandlik <mmandlik@google.com>
->
-> V2:
-> --
-> Updated to work with the updated HCI devcoredump API.
->
-> V1:
-> --
-> Initial Patch
-> ---
->  drivers/bluetooth/hci_qca.c | 190 ++++++++++++++++++++++++++++++++------=
-------
->  1 file changed, 138 insertions(+), 52 deletions(-)
->
-> diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-> index ca98f6d..c94a414 100644
-> --- a/drivers/bluetooth/hci_qca.c
-> +++ b/drivers/bluetooth/hci_qca.c
-> @@ -77,6 +77,7 @@ enum qca_flags {
->         QCA_MEMDUMP_COLLECTION,
->         QCA_HW_ERROR_EVENT,
->         QCA_SSR_TRIGGERED,
-> +       QCA_COREDUMP_TRIGGERED,
->         QCA_BT_OFF,
->         QCA_ROM_FW
->  };
-> @@ -116,9 +117,7 @@ enum qca_memdump_states {
->         QCA_MEMDUMP_TIMEOUT,
->  };
->
-> -struct qca_memdump_data {
-> -       char *memdump_buf_head;
-> -       char *memdump_buf_tail;
-> +struct qca_memdump_info {
->         u32 current_seq_no;
->         u32 received_dump;
->         u32 ram_dump_size;
-> @@ -159,13 +158,15 @@ struct qca_data {
->         struct work_struct ws_tx_vote_off;
->         struct work_struct ctrl_memdump_evt;
->         struct delayed_work ctrl_memdump_timeout;
-> -       struct qca_memdump_data *qca_memdump;
-> +       struct qca_memdump_info *qca_memdump;
->         unsigned long flags;
->         struct completion drop_ev_comp;
->         wait_queue_head_t suspend_wait_q;
->         enum qca_memdump_states memdump_state;
->         struct mutex hci_memdump_lock;
->
-> +       u16 fw_version;
-> +       u16 controller_id;
->         /* For debugging purpose */
->         u64 ibs_sent_wacks;
->         u64 ibs_sent_slps;
-> @@ -232,6 +233,7 @@ static void qca_regulator_disable(struct qca_serdev *=
-qcadev);
->  static void qca_power_shutdown(struct hci_uart *hu);
->  static int qca_power_off(struct hci_dev *hdev);
->  static void qca_controller_memdump(struct work_struct *work);
-> +static void qca_dmp_hdr(struct hci_dev *hdev, struct sk_buff *skb);
->
->  static enum qca_btsoc_type qca_soc_type(struct hci_uart *hu)
->  {
-> @@ -543,7 +545,8 @@ static void qca_controller_memdump_timeout(struct wor=
-k_struct *work)
->         mutex_lock(&qca->hci_memdump_lock);
->         if (test_bit(QCA_MEMDUMP_COLLECTION, &qca->flags)) {
->                 qca->memdump_state =3D QCA_MEMDUMP_TIMEOUT;
-> -               if (!test_bit(QCA_HW_ERROR_EVENT, &qca->flags)) {
-> +               if ((!test_bit(QCA_HW_ERROR_EVENT, &qca->flags)) ||
-> +                       (!test_bit(QCA_COREDUMP_TRIGGERED, &qca->flags)))=
- {
->                         /* Inject hw error event to reset the device
->                          * and driver.
->                          */
-> @@ -976,6 +979,28 @@ static int qca_recv_acl_data(struct hci_dev *hdev, s=
-truct sk_buff *skb)
->         return hci_recv_frame(hdev, skb);
->  }
->
-> +static void qca_dmp_hdr(struct hci_dev *hdev, struct sk_buff *skb)
-> +{
-> +       struct hci_uart *hu =3D hci_get_drvdata(hdev);
-> +       struct qca_data *qca =3D hu->priv;
-> +       char buf[80];
-> +
-> +       snprintf(buf, sizeof(buf), "Controller Name: 0x%x\n",
-> +               qca->controller_id);
-> +       skb_put_data(skb, buf, strlen(buf));
-> +
-> +       snprintf(buf, sizeof(buf), "Firmware Version: 0x%x\n",
-> +               qca->fw_version);
-> +       skb_put_data(skb, buf, strlen(buf));
-> +
-> +       snprintf(buf, sizeof(buf), "Vendor:Qualcomm\n");
-> +       skb_put_data(skb, buf, strlen(buf));
-> +
-> +       snprintf(buf, sizeof(buf), "Driver: %s\n",
-> +               hu->serdev->dev.driver->name);
-> +       skb_put_data(skb, buf, strlen(buf));
-> +}
-> +
->  static void qca_controller_memdump(struct work_struct *work)
->  {
->         struct qca_data *qca =3D container_of(work, struct qca_data,
-> @@ -983,13 +1008,11 @@ static void qca_controller_memdump(struct work_str=
-uct *work)
->         struct hci_uart *hu =3D qca->hu;
->         struct sk_buff *skb;
->         struct qca_memdump_event_hdr *cmd_hdr;
-> -       struct qca_memdump_data *qca_memdump =3D qca->qca_memdump;
-> +       struct qca_memdump_info *qca_memdump =3D qca->qca_memdump;
->         struct qca_dump_size *dump;
-> -       char *memdump_buf;
-> -       char nullBuff[QCA_DUMP_PACKET_SIZE] =3D { 0 };
->         u16 seq_no;
-> -       u32 dump_size;
->         u32 rx_size;
-> +       int ret =3D 0;
->         enum qca_btsoc_type soc_type =3D qca_soc_type(hu);
->
->         while ((skb =3D skb_dequeue(&qca->rx_memdump_q))) {
-> @@ -1005,7 +1028,7 @@ static void qca_controller_memdump(struct work_stru=
-ct *work)
->                 }
->
->                 if (!qca_memdump) {
-> -                       qca_memdump =3D kzalloc(sizeof(struct qca_memdump=
-_data),
-> +                       qca_memdump =3D kzalloc(sizeof(struct qca_memdump=
-_info),
->                                               GFP_ATOMIC);
->                         if (!qca_memdump) {
->                                 mutex_unlock(&qca->hci_memdump_lock);
-> @@ -1031,44 +1054,49 @@ static void qca_controller_memdump(struct work_st=
-ruct *work)
->                         set_bit(QCA_IBS_DISABLED, &qca->flags);
->                         set_bit(QCA_MEMDUMP_COLLECTION, &qca->flags);
->                         dump =3D (void *) skb->data;
-> -                       dump_size =3D __le32_to_cpu(dump->dump_size);
-> -                       if (!(dump_size)) {
-> +                       qca_memdump->ram_dump_size =3D __le32_to_cpu(dump=
-->dump_size);
-> +                       if (!(qca_memdump->ram_dump_size)) {
->                                 bt_dev_err(hu->hdev, "Rx invalid memdump =
-size");
->                                 kfree(qca_memdump);
->                                 kfree_skb(skb);
-> -                               qca->qca_memdump =3D NULL;
->                                 mutex_unlock(&qca->hci_memdump_lock);
->                                 return;
->                         }
->
-> -                       bt_dev_info(hu->hdev, "QCA collecting dump of siz=
-e:%u",
-> -                                   dump_size);
->                         queue_delayed_work(qca->workqueue,
->                                            &qca->ctrl_memdump_timeout,
-> -                                          msecs_to_jiffies(MEMDUMP_TIMEO=
-UT_MS)
-> -                                         );
-> -
-> -                       skb_pull(skb, sizeof(dump_size));
-> -                       memdump_buf =3D vmalloc(dump_size);
-> -                       qca_memdump->ram_dump_size =3D dump_size;
-> -                       qca_memdump->memdump_buf_head =3D memdump_buf;
-> -                       qca_memdump->memdump_buf_tail =3D memdump_buf;
-> -               }
-> +                                          msecs_to_jiffies(MEMDUMP_TIMEO=
-UT_MS));
-> +                       skb_pull(skb, sizeof(qca_memdump->ram_dump_size))=
-;
-> +                       qca_memdump->current_seq_no =3D 0;
-> +                       qca_memdump->received_dump =3D 0;
-> +                       ret =3D hci_devcd_init(hu->hdev, qca_memdump->ram=
-_dump_size);
-> +                       bt_dev_info(hu->hdev, "hci_devcd_init Return:%d",
-> +                                   ret);
-> +                       if (ret < 0) {
-> +                               kfree(qca->qca_memdump);
-> +                               qca->qca_memdump =3D NULL;
-> +                               qca->memdump_state =3D QCA_MEMDUMP_COLLEC=
-TED;
-> +                               cancel_delayed_work(&qca->ctrl_memdump_ti=
-meout);
-> +                               clear_bit(QCA_MEMDUMP_COLLECTION, &qca->f=
-lags);
-> +                               mutex_unlock(&qca->hci_memdump_lock);
-> +                               return;
-> +                       }
->
-> -               memdump_buf =3D qca_memdump->memdump_buf_tail;
-> +                       bt_dev_info(hu->hdev, "QCA collecting dump of siz=
-e:%u",
-> +                                   qca_memdump->ram_dump_size);
-> +
-> +               }
->
->                 /* If sequence no 0 is missed then there is no point in
->                  * accepting the other sequences.
->                  */
-> -               if (!memdump_buf) {
-> +               if (!test_bit(QCA_MEMDUMP_COLLECTION, &qca->flags)) {
->                         bt_dev_err(hu->hdev, "QCA: Discarding other packe=
-ts");
->                         kfree(qca_memdump);
->                         kfree_skb(skb);
-> -                       qca->qca_memdump =3D NULL;
->                         mutex_unlock(&qca->hci_memdump_lock);
->                         return;
->                 }
-> -
->                 /* There could be chance of missing some packets from
->                  * the controller. In such cases let us store the dummy
->                  * packets in the buffer.
-> @@ -1078,8 +1106,8 @@ static void qca_controller_memdump(struct work_stru=
-ct *work)
->                  * bits, so skip this checking for missing packet.
->                  */
->                 while ((seq_no > qca_memdump->current_seq_no + 1) &&
-> -                      (soc_type !=3D QCA_QCA6390) &&
-> -                      seq_no !=3D QCA_LAST_SEQUENCE_NUM) {
-> +                       (soc_type !=3D QCA_QCA6390) &&
-> +                       seq_no !=3D QCA_LAST_SEQUENCE_NUM) {
->                         bt_dev_err(hu->hdev, "QCA controller missed packe=
-t:%d",
->                                    qca_memdump->current_seq_no);
->                         rx_size =3D qca_memdump->received_dump;
-> @@ -1090,43 +1118,38 @@ static void qca_controller_memdump(struct work_st=
-ruct *work)
->                                            qca_memdump->received_dump);
->                                 break;
->                         }
-> -                       memcpy(memdump_buf, nullBuff, QCA_DUMP_PACKET_SIZ=
-E);
-> -                       memdump_buf =3D memdump_buf + QCA_DUMP_PACKET_SIZ=
-E;
-> +                       hci_devcd_append_pattern(hu->hdev, 0x00,
-> +                               QCA_DUMP_PACKET_SIZE);
->                         qca_memdump->received_dump +=3D QCA_DUMP_PACKET_S=
-IZE;
->                         qca_memdump->current_seq_no++;
->                 }
->
-> -               rx_size =3D qca_memdump->received_dump + skb->len;
-> +               rx_size =3D qca_memdump->received_dump  + skb->len;
->                 if (rx_size <=3D qca_memdump->ram_dump_size) {
->                         if ((seq_no !=3D QCA_LAST_SEQUENCE_NUM) &&
-> -                           (seq_no !=3D qca_memdump->current_seq_no))
-> +                           (seq_no !=3D qca_memdump->current_seq_no)) {
->                                 bt_dev_err(hu->hdev,
->                                            "QCA memdump unexpected packet=
- %d",
->                                            seq_no);
-> +                       }
->                         bt_dev_dbg(hu->hdev,
->                                    "QCA memdump packet %d with length %d"=
-,
->                                    seq_no, skb->len);
-> -                       memcpy(memdump_buf, (unsigned char *)skb->data,
-> -                              skb->len);
-> -                       memdump_buf =3D memdump_buf + skb->len;
-> -                       qca_memdump->memdump_buf_tail =3D memdump_buf;
-> -                       qca_memdump->current_seq_no =3D seq_no + 1;
-> -                       qca_memdump->received_dump +=3D skb->len;
-> +                       hci_devcd_append(hu->hdev, skb);
-> +                       qca_memdump->current_seq_no +=3D 1;
-> +                       qca_memdump->received_dump =3D rx_size;
->                 } else {
->                         bt_dev_err(hu->hdev,
-> -                                  "QCA memdump received %d, no space for=
- packet %d",
-> -                                  qca_memdump->received_dump, seq_no);
-> +                                  "QCA memdump received no space for pac=
-ket %d",
-> +                                   qca_memdump->current_seq_no);
->                 }
-> -               qca->qca_memdump =3D qca_memdump;
-> -               kfree_skb(skb);
-> +
->                 if (seq_no =3D=3D QCA_LAST_SEQUENCE_NUM) {
->                         bt_dev_info(hu->hdev,
-> -                                   "QCA memdump Done, received %d, total=
- %d",
-> -                                   qca_memdump->received_dump,
-> -                                   qca_memdump->ram_dump_size);
-> -                       memdump_buf =3D qca_memdump->memdump_buf_head;
-> -                       dev_coredumpv(&hu->serdev->dev, memdump_buf,
-> -                                     qca_memdump->received_dump, GFP_KER=
-NEL);
-> +                               "QCA memdump Done, received %d, total %d"=
-,
-> +                               qca_memdump->received_dump,
-> +                               qca_memdump->ram_dump_size);
-> +                       hci_devcd_complete(hu->hdev);
->                         cancel_delayed_work(&qca->ctrl_memdump_timeout);
->                         kfree(qca->qca_memdump);
->                         qca->qca_memdump =3D NULL;
-> @@ -1537,8 +1560,8 @@ static void qca_hw_error(struct hci_dev *hdev, u8 c=
-ode)
->         mutex_lock(&qca->hci_memdump_lock);
->         if (qca->memdump_state !=3D QCA_MEMDUMP_COLLECTED) {
->                 bt_dev_err(hu->hdev, "clearing allocated memory due to me=
-mdump timeout");
-> +               hci_devcd_abort(hu->hdev);
->                 if (qca->qca_memdump) {
-> -                       vfree(qca->qca_memdump->memdump_buf_head);
->                         kfree(qca->qca_memdump);
->                         qca->qca_memdump =3D NULL;
->                 }
-> @@ -1577,7 +1600,8 @@ static void qca_cmd_timeout(struct hci_dev *hdev)
->         mutex_lock(&qca->hci_memdump_lock);
->         if (qca->memdump_state !=3D QCA_MEMDUMP_COLLECTED) {
->                 qca->memdump_state =3D QCA_MEMDUMP_TIMEOUT;
-> -               if (!test_bit(QCA_HW_ERROR_EVENT, &qca->flags)) {
-> +               if ((!test_bit(QCA_HW_ERROR_EVENT, &qca->flags)) ||
-> +                       (!test_bit(QCA_COREDUMP_TRIGGERED, &qca->flags)))=
- {
->                         /* Inject hw error event to reset the device
->                          * and driver.
->                          */
-> @@ -1702,6 +1726,65 @@ static int qca_power_on(struct hci_dev *hdev)
->         return ret;
->  }
->
-> +static void hci_coredump_qca(struct hci_dev *hdev)
-> +{
-> +       struct hci_uart *hu =3D hci_get_drvdata(hdev);
-> +       struct qca_data *qca =3D hu->priv;
-> +       struct sk_buff *skb;
-> +
-> +
-> +       set_bit(QCA_COREDUMP_TRIGGERED, &qca->flags);
-> +       bt_dev_info(hdev, "Enter mem_dump_status: %d", qca->memdump_state=
-);
-> +
-> +       if (qca->memdump_state =3D=3D QCA_MEMDUMP_IDLE) {
-> +               /* we need to crash the SOC
-> +                * and wait here for 8 seconds to get the dump packets.
-> +                * This will block main thread to be on hold until we
-> +                * collect dump.
-> +                */
-> +               set_bit(QCA_SSR_TRIGGERED, &qca->flags);
-> +               set_bit(QCA_MEMDUMP_COLLECTION, &qca->flags);
-> +
-> +               skb =3D bt_skb_alloc(QCA_CRASHBYTE_PACKET_LEN, GFP_KERNEL=
-);
-> +               if (!skb) {
-> +                       bt_dev_err(hu->hdev, "Failed to allocate memory f=
-or skb packet");
-> +                       return;
-> +               }
-> +
-> +               /* We forcefully crash the controller, by sending 0xfb by=
-te for
-> +                * 1024 times. We also might have chance of losing data, =
-To be
-> +                * on safer side we send 1096 bytes to the SoC.
-> +                */
-> +               memset(skb_put(skb, QCA_CRASHBYTE_PACKET_LEN), QCA_MEMDUM=
-P_BYTE,
-> +                       QCA_CRASHBYTE_PACKET_LEN);
-> +               hci_skb_pkt_type(skb) =3D HCI_COMMAND_PKT;
-> +               bt_dev_info(hu->hdev, "crash the soc to collect controlle=
-r dump");
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-This seem awkward, the purpose of devcd is to collect coredumps not to
-force the controller to crash to then collect it, so if the controller
-hasn't crashed it shall not call into devcd, if you doing this as part
-of handling a hardware error Id recommend doing it as part of hw_error
-callback, that said be aware that you are probably exposing a
-vulnerability to your firmware with the code above.
-
-> +
-> +               switch (qca->tx_ibs_state) {
-> +               case HCI_IBS_TX_WAKING:
-> +                       /* Transient state; just keep packet for later */
-> +                       skb_queue_tail(&qca->tx_wait_q, skb);
-> +                       break;
-> +               case HCI_IBS_TX_AWAKE:
-> +                       skb_queue_tail(&qca->txq, skb);
-> +                       hci_uart_tx_wakeup(hu);
-> +                       break;
-> +               case HCI_IBS_TX_ASLEEP:
-> +                       skb_queue_tail(&qca->tx_wait_q, skb);
-> +                       qca->tx_ibs_state =3D HCI_IBS_TX_WAKING;
-> +                       /* Schedule a work queue to wake up device */
-> +                       queue_work(qca->workqueue, &qca->ws_awake_device)=
-;
-> +                       break;
-> +               }
-> +       } else if (qca->memdump_state =3D=3D QCA_MEMDUMP_COLLECTING) {
-> +               /* Let us wait here until memory dump collected or
-> +                * memory dump timer expired.
-> +                */
-> +               bt_dev_info(hdev, "waiting for dump to complete");
-> +       }
-> +       clear_bit(QCA_COREDUMP_TRIGGERED, &qca->flags);
-> +}
-> +
->  static int qca_setup(struct hci_uart *hu)
->  {
->         struct hci_dev *hdev =3D hu->hdev;
-> @@ -1816,6 +1899,9 @@ static int qca_setup(struct hci_uart *hu)
->                 hu->hdev->set_bdaddr =3D qca_set_bdaddr_rome;
->         else
->                 hu->hdev->set_bdaddr =3D qca_set_bdaddr;
-> +       qca->fw_version =3D le16_to_cpu(ver.patch_ver);
-> +       qca->controller_id =3D le16_to_cpu(ver.rom_ver);
-> +       hci_devcd_register(hdev, hci_coredump_qca, qca_dmp_hdr, NULL);
->
->         return ret;
->  }
-> --
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
->
-
-
---=20
-Luiz Augusto von Dentz
