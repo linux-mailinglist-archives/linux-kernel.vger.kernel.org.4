@@ -2,151 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C202F6F9E43
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6619B6F9E49
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjEHDcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 23:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
+        id S232080AbjEHDh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 23:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjEHDcm (ORCPT
+        with ESMTP id S229716AbjEHDh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 23:32:42 -0400
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5392040FC;
-        Sun,  7 May 2023 20:32:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1683516745; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=RBTuCgMHRK2gfh8llovAYCPGNBvmstD+1XFvCqwc4ASaeoG328ZYM6CZ/YYf70QZKS9+OJovRVXQkslOUfAhICMW7XCF9qc8axN1K4R5fzHLBhEpI+1GDGwAotfQKmVaXPG2nzieIy+aivxmKILCVAY5THQQBjYeihc9sfDwfpA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1683516745; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=oRGcZerxA6Lwws1tmfxkffu7f7raQvcnx2Pon0KubIU=; 
-        b=INXBlqKVSz6gV7x3LLpuzqpnUX5g0HEa61FAGTg+IE4E7kxf1k1jiduQ43Dlcah/9p7KadCo8rrx04W2WfiQDoxV/vwMUbUmc+Z1FThSrY8JaknQeo7NDqAcX8aihgkhlDje6oaA6btmbVjiF3abSVY+IFOfzLUnQwan5bzqcYE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1683516745;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=oRGcZerxA6Lwws1tmfxkffu7f7raQvcnx2Pon0KubIU=;
-        b=G20n1ds2gW6n9QfjxJ4ksfKQ7GldodmljuT8fMjiDjNSJLqO/MoTSJ9PqAyvpMGw
-        Ibb4vQrYEeICFzAZto3jW+guJ7BlJqPSHPuwIWXav7tHUGJcwtfLLPwMKWAlTvTH/VN
-        Jk0Y/T/uTmc4zKvIJwlRl0ylxmyhAncjQPrqQhCQ=
-Received: from edelgard.fodlan.icenowy.me (120.85.98.36 [120.85.98.36]) by mx.zohomail.com
-        with SMTPS id 1683516743648863.2035343610653; Sun, 7 May 2023 20:32:23 -0700 (PDT)
-Message-ID: <394696a52bf1d767044e3f990cebfbaf69dabe70.camel@icenowy.me>
-Subject: Re: [PATCH 3/5] riscv: dts: add initial T-HEAD light SoC device tree
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Conor Dooley <conor@kernel.org>, Jisheng Zhang <jszhang@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>,
-        heiko@sntech.de
-Date:   Mon, 08 May 2023 11:32:17 +0800
-In-Reply-To: <20230507-calamari-gentleman-bbe62af06f92@spud>
-References: <20230507182304.2934-1-jszhang@kernel.org>
-         <20230507182304.2934-4-jszhang@kernel.org>
-         <20230507-calamari-gentleman-bbe62af06f92@spud>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4 
+        Sun, 7 May 2023 23:37:26 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4024483;
+        Sun,  7 May 2023 20:37:22 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QF6QK2JbgzpW6Q;
+        Mon,  8 May 2023 11:36:09 +0800 (CST)
+Received: from [10.174.176.93] (10.174.176.93) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 8 May 2023 11:37:19 +0800
+Message-ID: <a1bd617b-c3ae-f2df-b643-aaa7b6eaf531@huawei.com>
+Date:   Mon, 8 May 2023 11:37:19 +0800
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 4/9] softirq: Allow early break
+To:     Eric Dumazet <edumazet@google.com>
+CC:     <corbet@lwn.net>, <paulmck@kernel.org>, <frederic@kernel.org>,
+        <quic_neeraju@quicinc.com>, <joel@joelfernandes.org>,
+        <josh@joshtriplett.org>, <boqun.feng@gmail.com>,
+        <rostedt@goodmis.org>, <mathieu.desnoyers@efficios.com>,
+        <jiangshanlai@gmail.com>, <qiang1.zhang@intel.com>,
+        <jstultz@google.com>, <tglx@linutronix.de>, <sboyd@kernel.org>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <peterz@infradead.org>, <frankwoo@google.com>,
+        <Rhinewuwu@google.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <rcu@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20230505113315.3307723-1-liujian56@huawei.com>
+ <20230505113315.3307723-5-liujian56@huawei.com>
+ <CANn89iJL3ywLwig8U6JKG6itL7Fr=ab_dv7Pz1YDiDvCiR-Fog@mail.gmail.com>
+From:   "liujian (CE)" <liujian56@huawei.com>
+In-Reply-To: <CANn89iJL3ywLwig8U6JKG6itL7Fr=ab_dv7Pz1YDiDvCiR-Fog@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.93]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-5ZyoIDIwMjMtMDUtMDfmmJ/mnJ/ml6XnmoQgMjI6MzUgKzAxMDDvvIxDb25vciBEb29sZXnlhpnp
-gZPvvJoKPiBIZXkgSmlzaGVuZywKPiAKPiBPbiBNb24sIE1heSAwOCwgMjAyMyBhdCAwMjoyMzow
-MkFNICswODAwLCBKaXNoZW5nIFpoYW5nIHdyb3RlOgo+IAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoGM5MTBfMDogY3B1QDAgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb21wYXRpYmxlID0gInRoZWFkLGM5MTAiLCAicmlzY3Yi
-Owo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkZXZp
-Y2VfdHlwZSA9ICJjcHUiOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqByaXNjdixpc2EgPSAicnY2NGltYWZkYyI7Cj4gCj4gRG9lcyB0aGlzIHN1cHBv
-cnQgbW9yZSB0aGFuICJydjY0aW1hZmRjIj8KPiBJIGFzc3VtZSB0aGVyZSdzIHNvbWUgX3h0aGVh
-ZGZvbyBleHRlbnNpb25zIHRoYXQgaXQgZG9lcyBzdXBwb3J0LAo+IGFsdGhvdWdoIEkgYW0gbm90
-IHN1cmUgaG93IHdlIGFyZSBwcm9jZWVkaW5nIHdpdGggdGhvc2UgLSBIZWlrbyBtaWdodAo+IGhh
-dmUgYSBtb3JlIG51YW5jZWQgdGFrZS4KPiAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqByZXNldDogcmVzZXQtc2FtcGxlIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgY29tcGF0aWJsZSA9ICJ0aGVhZCxyZXNldC1zYW1wbGUiOwo+
-IAo+IFdoYXQgaXMgYSAicmVzZXQtc2FtcGxlIj8KPiAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZW50cnktcmVnID0gPDB4ZmYgMHhmZjAxOTA1MD47
-Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGVudHJ5
-LWNudCA9IDw0PjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgY29udHJvbC1yZWcgPSA8MHhmZiAweGZmMDE1MDA0PjsKPiA+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29udHJvbC12YWwgPSA8MHgxYz47Cj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNzci1jb3B5
-ID0gPDB4N2YzIDB4N2MwIDB4N2MxIDB4N2MyIDB4N2MzCj4gPiAweDdjNSAweDdjYz47Cj4gPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqBwbGljOiBpbnRlcnJ1cHQtY29udHJvbGxlckBmZmQ4MDAwMDAwIHsK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29tcGF0
-aWJsZSA9ICJ0aGVhZCxjOTEwLXBsaWMiOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqByZWcgPSA8MHhmZiAweGQ4MDAwMDAwIDB4MCAweDAxMDAwMDAw
-PjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaW50
-ZXJydXB0cy1leHRlbmRlZCA9IDwmY3B1MF9pbnRjIDExPiwKPiA+IDwmY3B1MF9pbnRjIDk+LAo+
-ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgPCZjcHUxX2ludGMgMTE+LAo+ID4g
-PCZjcHUxX2ludGMgOT4sCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA8JmNw
-dTJfaW50YyAxMT4sCj4gPiA8JmNwdTJfaW50YyA5PiwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIDwmY3B1M19pbnRjIDExPiwKPiA+IDwmY3B1M19pbnRjIDk+Owo+ID4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnRlcnJ1cHQtY29u
-dHJvbGxlcjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgI2ludGVycnVwdC1jZWxscyA9IDwxPjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgcmlzY3YsbmRldiA9IDwyNDA+Owo+ID4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoH07Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgY2xpbnQ6IHRpbWVyQGZmZGMwMDAwMDAgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb21wYXRpYmxlID0gInRoZWFkLGM5MDAtY2xpbnQi
-Owo+IAo+ICJjOTAwIj8gVGhhdCBhIHR5cG8gb3IgaW50ZW50aW9uYWwuIEhhcmQgdG8gdGVsbCBz
-aW5jZSB0aGlzCj4gY29tcGF0aWJsZQo+IGlzIHVuZG9jdW1lbnRlZCA7KQoKSW50ZW50aW9uYWws
-IGZvciBzdXBwb3J0aW5nIGJvdGggQzkwNiBhbmQgQzkxMC4KCkhvd2V2ZXIsIGFzIHdlIGRpc2N1
-c3NlZCBpbiBzb21lIGJpbmRpbmcgcGF0Y2hlcywgdGhlcmUgc2hvdWxkIGJlIGEgRFQKYmluZGlu
-ZyBzdHJpbmcgcGVyIGNoaXAuCgpTbyBoZXJlIHNob3VsZCBiZSAidGhlYWQsbGlnaHQtY2xpbnQi
-LCAidGhlYWQsYzkwMC1jbGludCIuCgooT3IgdXNlIHRoMTUyMCwgdGhlIG1hcmtldGluZyBuYW1l
-LCBpbnN0ZWFkIG9mIGxpZ2h0LCB0aGUgY29kZW5hbWUpCgpQLlMuIHdoaWNoIG9uZSBpcyBwcmVm
-ZXJyZWQgYnkgRFQgYmluZGluZyBtYWludGFpbmVycywgdGhlIG1hcmtldGluZwpuYW1lIG9yIHRo
-ZSBjb2RlbmFtZT8KCj4gCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoHJlZyA9IDwweGZmIDB4ZGMwMDAwMDAgMHgwIDB4MDAwMTAwMDA+Owo+ID4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnRlcnJ1cHRzLWV4
-dGVuZGVkID0gPCZjcHUwX2ludGMgMz4sCj4gPiA8JmNwdTBfaW50YyA3PiwKPiA+ICvCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDwmY3B1MV9pbnRjIDM+LAo+ID4gPCZjcHUxX2ludGMg
-Nz4sCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCA8JmNwdTJfaW50YyAzPiwK
-PiA+IDwmY3B1Ml9pbnRjIDc+LAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-PCZjcHUzX2ludGMgMz4sCj4gPiA8JmNwdTNfaW50YyA3PjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqB9Owo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oHVhcnQwOiBzZXJpYWxAZmZlNzAxNDAwMCB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNvbXBhdGlibGUgPSAic25wcyxkdy1hcGItdWFydCI7Cj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlZyA9IDww
-eGZmIDB4ZTcwMTQwMDAgMHgwIDB4NDAwMD47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGludGVycnVwdHMgPSA8MzY+Owo+ID4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbG9ja3MgPSA8JnVhcnRfc2Nsaz47
-Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNsb2Nr
-LW5hbWVzID0gImJhdWRjbGsiOwo+IAo+IGR0YnNfY2hlY2sgY29tcGxhaW5zIGFib3V0IHRoaXMg
-Y2xvY2sgbmFtZS4KPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkbWFj
-MDogZG1hY0BmZmVmYzAwMDAwIHsKPiAKPiBkbWEtY29udHJvbGxlckAKPiAKPiBBcyBJIG1lbnRp
-b25lZCBpbiB0aGUgb3RoZXIgcGF0Y2gsIHBsZWFzZSBjbGVhbiB1cCB0aGUgZHRic19jaGVjawo+
-IGNvbXBsYWludHMgZm9yIHYyLgo+IAo+IENoZWVycywKPiBDb25vci4KPiAKPiBfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGxpbnV4LXJpc2N2IG1haWxp
-bmcgbGlzdAo+IGxpbnV4LXJpc2N2QGxpc3RzLmluZnJhZGVhZC5vcmcKPiBodHRwOi8vbGlzdHMu
-aW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LXJpc2N2Cgo=
 
+
+On 2023/5/5 20:10, Eric Dumazet wrote:
+> On Fri, May 5, 2023 at 1:24 PM Liu Jian <liujian56@huawei.com> wrote:
+>>
+>> From: Peter Zijlstra <peterz@infradead.org>
+>>
+>> Allow terminating the softirq processing loop without finishing the
+>> vectors.
+>>
+>> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>> Signed-off-by: Liu Jian <liujian56@huawei.com>
+>> ---
+>>   kernel/softirq.c | 16 ++++++++++------
+>>   1 file changed, 10 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/kernel/softirq.c b/kernel/softirq.c
+>> index 48a81d8ae49a..e2cad5d108c8 100644
+>> --- a/kernel/softirq.c
+>> +++ b/kernel/softirq.c
+>> @@ -582,6 +582,9 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
+>>                                 prev_count, preempt_count());
+>>                          preempt_count_set(prev_count);
+>>                  }
+>> +
+>> +               if (pending && __softirq_needs_break(start))
+>> +                       break;
+> 
+> This means that some softirq may starve, because
+> 
+> for_each_set_bit(vec_nr, &pending, NR_SOFTIRQS)
+> 
+> Always iterate using the same order (of bits)
+> 
+> 
+Yes, we need to record the softirq that is not executed and continue 
+next time. I will fix it in next version.
+Thanks.
+> 
+> 
+>>          }
+>>
+>>          if (!IS_ENABLED(CONFIG_PREEMPT_RT) &&
+>> @@ -590,13 +593,14 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
+>>
+>>          local_irq_disable();
+>>
+>> -       pending = local_softirq_pending();
+>> -       if (pending) {
+>> -               if (!__softirq_needs_break(start) && --max_restart)
+>> -                       goto restart;
+>> +       if (pending)
+>> +               or_softirq_pending(pending);
+>> +       else if ((pending = local_softirq_pending()) &&
+>> +                !__softirq_needs_break(start) &&
+>> +                --max_restart)
+>> +               goto restart;
+>>
+>> -               wakeup_softirqd();
+>> -       }
+>> +       wakeup_softirqd();
+>>
+>>          account_softirq_exit(current);
+>>          lockdep_softirq_end(in_hardirq);
+>> --
+>> 2.34.1
+>>
