@@ -2,67 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677F66FB121
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 255246FB12E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234060AbjEHNP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
+        id S233442AbjEHNRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233267AbjEHNPu (ORCPT
+        with ESMTP id S232748AbjEHNRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:15:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636ED2D797;
-        Mon,  8 May 2023 06:15:48 -0700 (PDT)
+        Mon, 8 May 2023 09:17:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC3B31550;
+        Mon,  8 May 2023 06:16:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE25B62D42;
-        Mon,  8 May 2023 13:15:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9469AC433D2;
-        Mon,  8 May 2023 13:15:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA59060C25;
+        Mon,  8 May 2023 13:16:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9609C433EF;
+        Mon,  8 May 2023 13:16:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683551747;
-        bh=Yx/d/vlSfUg1A+0BfdmAMW65S4eMBXSw23P4c1Qdsuo=;
-        h=From:Date:Subject:To:Cc:From;
-        b=iewibZCA5YkX7wJ83jSl3W8R0qv8D7QY5v6Foef7NOoPbVys+aKiLmQsFIi057WBF
-         vPXV8WD+H2T0/7H8XVXLqFOU0UOcCLb2HYNvJFyqJSbTWVVXleKZ0JmWZyE9AkYImI
-         42UuVnOVAavP2zUUR7BPEtF43uzD9CD08LZ3NmEpQDpbHpsCAkigTU6IS2hT6bOoK6
-         r79yUENbru7DXGzkUA5POfFRRvo88oQRoLjXlwdi67FUuxTQdC8IEM8qEfRUp9AK4q
-         RE6XKQf7BRUYUiseog1RHrNwGvjjy8v90DzZnSdLPH2I+Zpt5nJl1by12t8LoGEGxI
-         UCrusKl1xFVQA==
+        s=k20201202; t=1683551813;
+        bh=R4utE4p7M/FGOlEKuEcHVCRfypcxabbL4ucFlAuJ6Ng=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fKd2gOTa4jrv8aDPg/0HEhGJrpoWpGEFWblwpG8gXAom3JGZ/4lmK98r91J4L4qzN
+         fy+JT5x7fN+FYJWvmyS+pWgx0paN9NIu2pweN2GpnT0Po1cIEo7gJO6RWEZKL5oTgx
+         AGyrzenZOdtJS6o6SsvRZMnNjARtb7btrigm7kLiFSEk7m8vR1LdUahGseWcGbQymp
+         hhOhILpaio7f58g+DSB2+M6qQ1ljfGyUiZmmk7gwY/gVH5i/sRHiCm4VcDOW/B360w
+         o2Kl20sHepbK/5SPCuyIYxo7RaRtYBY56vTSOl7Qw3K6k/bCNten47ls6awxzy9HLs
+         6/lJk9njWQTjQ==
+Date:   Mon, 8 May 2023 22:16:50 +0900
 From:   Mark Brown <broonie@kernel.org>
-Date:   Mon, 08 May 2023 22:15:42 +0900
-Subject: [PATCH v2] selftests/ftrace: Improve integration with kselftest
- runner
+To:     Joy Chakraborty <joychakr@google.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, rohitner@google.com
+Subject: Re: [PATCH v9 4/5] spi: dw: Add DMA address widths capability check
+Message-ID: <ZFj2QraXvNqBRwqM@finisterre.sirena.org.uk>
+References: <20230427123314.1997152-1-joychakr@google.com>
+ <20230427123314.1997152-5-joychakr@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230302-ftrace-kselftest-ktap-v2-1-ecc482212729@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAP31WGQC/4WNQQqDMBAAvyI5d0sSq1FP/UfxsOqqQRtlE6RF/
- HujH+hxBobZhSe25EWV7IJps94uLoK+JaId0Q0EtosstNSpTKWGPjC2BJOnuQ/kA0wBVyg7U5g
- iL1WWGRHbBj1Bw+ja8azDez3tytTbz3V71ZFH68PC32u+qdP++2wKFGDxQGnyrDHYPSdiR/N94
- UHUx3H8AMmk61HRAAAA
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-bfdf5
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7774; i=broonie@kernel.org;
- h=from:subject:message-id; bh=Yx/d/vlSfUg1A+0BfdmAMW65S4eMBXSw23P4c1Qdsuo=;
- b=owEBbAGT/pANAwAKASTWi3JdVIfQAcsmYgBkWPYAg3dhyoXZ+y4LAlxspmifvOKuzUu+/DSKz
- CpmYMVjlNqJATIEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZFj2AAAKCRAk1otyXVSH
- 0OHwB/joun9Ln9Cw6ohgcgBT0CTtYOUHOJPFeqT96+uRYUcmXVaxZ2rpeXD/oBkxxqJvoHfNd/V
- Iqb+iWkk1Yy9lc1N9TAzxntQCNQZEnok1EkpyDVxlk7x25Z/qOBF6HdM22LlPdAzN0Nbs9Y64gL
- 05PtmxL10DbgCr8uwaL9NBz3d3EXKvWlK1jFj6UqhUNuAidS9zne5AGoV7OzAqAWgBuJ3prCLXV
- YwsqmO36bqWD1zc2dwZui4XK4KJrDbC/0h14cAbB1R+2tR3DgDE9YgfLQ0STE3e0jf+oYfzYRPb
- Y9vQ3lxujIiIscn2VVz6bew0Dide6jL/9OS6uLSySQ0KUrs=
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="srztywi96yxDAX5Z"
+Content-Disposition: inline
+In-Reply-To: <20230427123314.1997152-5-joychakr@google.com>
+X-Cookie: You're using a keyboard!  How quaint!
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,243 +59,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ftrace selftests do not currently produce KTAP output, they produce a
-custom format much nicer for human consumption. This means that when run in
-automated test systems we just get a single result for the suite as a whole
-rather than recording results for individual test cases, making it harder
-to look at the test data and masking things like inappropriate skips.
 
-Address this by adding support for KTAP output to the ftracetest script and
-providing a trivial wrapper which will be invoked by the kselftest runner
-to generate output in this format by default, users using ftracetest
-directly will continue to get the existing output.
+--srztywi96yxDAX5Z
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This is not the most elegant solution but it is simple and effective. I
-did consider implementing this by post processing the existing output
-format but that felt more complex and likely to result in all output being
-lost if something goes seriously wrong during the run which would not be
-helpful. I did also consider just writing a separate runner script but
-there's enough going on with things like the signal handling for that to
-seem like it would be duplicating too much.
+On Thu, Apr 27, 2023 at 12:33:13PM +0000, Joy Chakraborty wrote:
+> Store address width capabilities of DMA controller during init and check
+> the same per transfer to make sure the bits/word requirement can be met.
+>=20
+> Current DW DMA driver requires both tx and rx channel to be configured
+> and functional hence a subset of both tx and rx channel address width
+> capability is checked with the width requirement(n_bytes) for a
+> transfer.
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
-It might make sense to merge this via the ftrace tree - kselftests often
-get merged with the code they test.
+This breaks an x86 allmodconfig build:
 
-Changes in v2:
-- Rebase onto v6.4-rc1.
-- Link to v1: https://lore.kernel.org/r/20230302-ftrace-kselftest-ktap-v1-1-a84a0765b7ad@kernel.org
----
- tools/testing/selftests/ftrace/Makefile        |  3 +-
- tools/testing/selftests/ftrace/ftracetest      | 63 ++++++++++++++++++++++++--
- tools/testing/selftests/ftrace/ftracetest-ktap |  8 ++++
- 3 files changed, 70 insertions(+), 4 deletions(-)
+/build/stage/linux/drivers/spi/spi-dw-dma.c: In function =E2=80=98dw_spi_dm=
+a_caps_init=E2=80=99:
+/build/stage/linux/drivers/spi/spi-dw-dma.c:100:1: error: control reaches e=
+nd of non-void function [-Werror=3Dreturn-type]
+  100 | }
+      | ^
+cc1: some warnings being treated as errors
 
-diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
-index d6e106fbce11..a1e955d2de4c 100644
---- a/tools/testing/selftests/ftrace/Makefile
-+++ b/tools/testing/selftests/ftrace/Makefile
-@@ -1,7 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- all:
- 
--TEST_PROGS := ftracetest
-+TEST_PROGS_EXTENDED := ftracetest
-+TEST_PROGS := ftracetest-ktap
- TEST_FILES := test.d settings
- EXTRA_CLEAN := $(OUTPUT)/logs/*
- 
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index c3311c8c4089..2506621e75df 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
- echo " Options:"
- echo "		-h|--help  Show help message"
- echo "		-k|--keep  Keep passed test logs"
-+echo "		-K|--ktap  Output in KTAP format"
- echo "		-v|--verbose Increase verbosity of test messages"
- echo "		-vv        Alias of -v -v (Show all results in stdout)"
- echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
-@@ -85,6 +86,10 @@ parse_opts() { # opts
-       KEEP_LOG=1
-       shift 1
-     ;;
-+    --ktap|-K)
-+      KTAP=1
-+      shift 1
-+    ;;
-     --verbose|-v|-vv|-vvv)
-       if [ $VERBOSE -eq -1 ]; then
- 	usage "--console can not use with --verbose"
-@@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
- TEST_CASES=`find_testcases $TEST_DIR`
- LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
- KEEP_LOG=0
-+KTAP=0
- DEBUG=0
- VERBOSE=0
- UNSUPPORTED_RESULT=0
-@@ -229,7 +235,7 @@ prlog() { # messages
-     newline=
-     shift
-   fi
--  printf "$*$newline"
-+  [ "$KTAP" != "1" ] && printf "$*$newline"
-   [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
- }
- catlog() { #file
-@@ -260,11 +266,11 @@ TOTAL_RESULT=0
- 
- INSTANCE=
- CASENO=0
-+CASENAME=
- 
- testcase() { # testfile
-   CASENO=$((CASENO+1))
--  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
--  prlog -n "[$CASENO]$INSTANCE$desc"
-+  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
- }
- 
- checkreq() { # testfile
-@@ -277,40 +283,68 @@ test_on_instance() { # testfile
-   grep -q "^#[ \t]*flags:.*instance" $1
- }
- 
-+ktaptest() { # result comment
-+  if [ "$KTAP" != "1" ]; then
-+    return
-+  fi
-+
-+  local result=
-+  if [ "$1" = "1" ]; then
-+    result="ok"
-+  else
-+    result="not ok"
-+  fi
-+  shift
-+
-+  local comment=$*
-+  if [ "$comment" != "" ]; then
-+    comment="# $comment"
-+  fi
-+
-+  echo $CASENO $result $INSTANCE$CASENAME $comment
-+}
-+
- eval_result() { # sigval
-   case $1 in
-     $PASS)
-       prlog "	[${color_green}PASS${color_reset}]"
-+      ktaptest 1
-       PASSED_CASES="$PASSED_CASES $CASENO"
-       return 0
-     ;;
-     $FAIL)
-       prlog "	[${color_red}FAIL${color_reset}]"
-+      ktaptest 0
-       FAILED_CASES="$FAILED_CASES $CASENO"
-       return 1 # this is a bug.
-     ;;
-     $UNRESOLVED)
-       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
-+      ktaptest 0 UNRESOLVED
-       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
-       return $UNRESOLVED_RESULT # depends on use case
-     ;;
-     $UNTESTED)
-       prlog "	[${color_blue}UNTESTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNTESTED_CASES="$UNTESTED_CASES $CASENO"
-       return 0
-     ;;
-     $UNSUPPORTED)
-       prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
-       return $UNSUPPORTED_RESULT # depends on use case
-     ;;
-     $XFAIL)
-       prlog "	[${color_green}XFAIL${color_reset}]"
-+      ktaptest 1 XFAIL
-       XFAILED_CASES="$XFAILED_CASES $CASENO"
-       return 0
-     ;;
-     *)
-       prlog "	[${color_blue}UNDEFINED${color_reset}]"
-+      ktaptest 0 error
-       UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
-       return 1 # this must be a test bug
-     ;;
-@@ -371,6 +405,7 @@ __run_test() { # testfile
- run_test() { # testfile
-   local testname=`basename $1`
-   testcase $1
-+  prlog -n "[$CASENO]$INSTANCE$CASENAME"
-   if [ ! -z "$LOG_FILE" ] ; then
-     local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
-   else
-@@ -405,6 +440,17 @@ run_test() { # testfile
- # load in the helper functions
- . $TEST_DIR/functions
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo "TAP version 13"
-+
-+  casecount=`echo $TEST_CASES | wc -w`
-+  for t in $TEST_CASES; do
-+    test_on_instance $t || continue
-+    casecount=$((casecount+1))
-+  done
-+  echo "1..${casecount}"
-+fi
-+
- # Main loop
- for t in $TEST_CASES; do
-   run_test $t
-@@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
- prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
- prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo -n "# Totals:"
-+  echo -n " pass:"`echo $PASSED_CASES | wc -w`
-+  echo -n " faii:"`echo $FAILED_CASES | wc -w`
-+  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
-+  echo -n " xpass:0"
-+  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
-+  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
-+  echo
-+fi
-+
- cleanup
- 
- # if no error, return 0
-diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
-new file mode 100755
-index 000000000000..b3284679ef3a
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/ftracetest-ktap
-@@ -0,0 +1,8 @@
-+#!/bin/sh -e
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
-+#
-+# Copyright (C) Arm Ltd., 2023
-+
-+./ftracetest -K
+--srztywi96yxDAX5Z
+Content-Type: application/pgp-signature; name="signature.asc"
 
----
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
-change-id: 20230302-ftrace-kselftest-ktap-9d7878691557
+-----BEGIN PGP SIGNATURE-----
 
-Best regards,
--- 
-Mark Brown,,, <broonie@kernel.org>
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRY9j8ACgkQJNaLcl1U
+h9CmgAf/Y1S/7Ur9OhwH8FO3pfxB5IWmD7SfXUW738hjNQGzCWtM7wCPUI0lOpL9
+5QDQR/HDwjHuJfsM+6dZPr/CIqAT8PQKe3DU9tDzcfIbZX2UOGcpO/HJkCDdI4y5
+F0uJRNPIZpgjhb/MVa0pBT59Jbud5UDzfXpiSm3lij0LuKDUpW2gxlJ5N+cbDKdP
+genA3UeLi9szDRIAxfytoA/8lwYqi42uUiaFGlGAYzoLKrql/TyvuGov3EzJLVuk
+cjLHSfcuqEUeW87VMGX6GtMqVRpIPwSB5QJBx+OgoAvKQ4gm4z7CWzPjro+tEuFI
+nVOhaIn08Iz+WQWRbfHiLpYfCfUJVg==
+=xyvi
+-----END PGP SIGNATURE-----
 
+--srztywi96yxDAX5Z--
