@@ -2,118 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394856FBB79
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4736FBB7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233680AbjEHXjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 19:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
+        id S233752AbjEHXlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 19:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbjEHXjF (ORCPT
+        with ESMTP id S229677AbjEHXlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 19:39:05 -0400
-Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B08E7
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 16:39:04 -0700 (PDT)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 61B7110047D92
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 23:39:02 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id wARappwd6THoywARap0IVM; Mon, 08 May 2023 23:39:02 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=bviJuGWi c=1 sm=1 tr=0 ts=64598816
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=P0xRbXHiH_UA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=02JnnbRlxNRManKLejWQHu92WH6KRpl84R40dJMMIHE=; b=MVlS7pe2KrM/tb13pbGA4Vr4dI
-        KVipgHUTe6zxm68sq/taWqcO3/HB90DcpWesv0Hnnl5rmtLlY+fLlta33Sbc/EtfHwP4STnkaLwoQ
-        Ms2UJsecJc/SPUFazamJ7LIt8CoKzLOs+PY4yYWJI8UUIlxF0NYKa+qUNxIOBzq2SShV/H//04scU
-        xaOCvrUgGjGJjebsb3nM0+dHOFYQHynGcwDagtHY1jzmxNLH0U1dQf0tAhsgKVHUoOkhp0coRcVrs
-        zX2Tp0ri0z03GDjWAGxCM7JQ7WvHNLsMcgJnPH2SGtVFppeuYT680o4OX+MCDGwIlDwQlE+NqRR+J
-        ZHdQzhKg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:37624 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pwARZ-003bqU-Bj;
-        Mon, 08 May 2023 17:39:01 -0600
-Subject: Re: [PATCH 6.1 000/611] 6.1.28-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230508094421.513073170@linuxfoundation.org>
-In-Reply-To: <20230508094421.513073170@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <0c7b15fc-1ca1-a4d6-e677-15479a077d6c@w6rz.net>
-Date:   Mon, 8 May 2023 16:38:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 8 May 2023 19:41:05 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1338D4C31
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 16:41:04 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3ef302a642eso26898611cf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 16:41:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1683589263; x=1686181263;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gXyotAzP+VPxO7VVOPWj4wSwSUrdQsmucc2QXoXVneg=;
+        b=NTno1hBVsyYnrek/PMyx+m0tZ4K6xLpWDC5gWFZAj5BshzMxsP27OcOq9NTagyo2CV
+         hGa+Qmu7sVB7GX5230dpYckispNBjEyXREQoEFQfu7B0uTZR9iDtw5oX/hbAYSci3Sz0
+         cqncSiXX0P+NmbipJgflFGAOCQ618y+daoGrNS5F2/b+IX1QZkmxqQjFcn8pG1+kv7uT
+         gi0kJ7wnJlyDCkutOEAcs3/BgT2JHla/snfnbtSVw5EVkSbtucoLHsNhhsKNvjKCQIl9
+         MDAshjNqjW6Zp3oeQIqS+Jji2ZAQ7Skk7zk1AcMEa2Egpv3ts99audqtXnm/RJHqbaqW
+         lKPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683589263; x=1686181263;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gXyotAzP+VPxO7VVOPWj4wSwSUrdQsmucc2QXoXVneg=;
+        b=HVkVGUu02gbyQg996UngfkrVtoRXHqBVbk2UV4QicQ2YLLHmxvwwsd73dd08CGamvu
+         2J3rh76K4pOaJF8zhY4/GHiOD35y2qunRP2/c+1icERQXV6YS/1yYbyrksf9wLtwqsU6
+         R5Xl2yjyUJG8qhCAinJRDd+m4Zu1XfowWIqi8T4OCsrC6oAHuW4sbYxvESuTP71oI2Ru
+         RLFQD2yDR1KhtqeEa+6YrpyewP3q7qU1jOheUUhaBntNXFPbAQ7dfSFJNln/dAJtIfsr
+         WAZpCVQ9aU0t0aMFppMJVJoNTi27d7E0SEXOrwaoE13GI1TORPVaBbBE/F42B/T7B13U
+         /hZg==
+X-Gm-Message-State: AC+VfDxmufmIekoyeon3CT6urI5A27Jit5pr3i+tC6UJbZzv9mK1dcC6
+        P+zxKS4CpTkxycUMbNouVbYTGA==
+X-Google-Smtp-Source: ACHHUZ5K/IMkHlHxC6ISgy6AEyScv8HjSVfJbJ1Lzy2TT/TOP0WrdHo7hSGOMDmQcFxJTwRpeksFKg==
+X-Received: by 2002:a05:622a:1708:b0:3ef:3f51:dad5 with SMTP id h8-20020a05622a170800b003ef3f51dad5mr18505310qtk.20.1683589263162;
+        Mon, 08 May 2023 16:41:03 -0700 (PDT)
+Received: from soleen.c.googlers.com.com (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
+        by smtp.gmail.com with ESMTPSA id j29-20020a05620a001d00b0074411b03972sm1357415qki.51.2023.05.08.16.41.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 16:41:02 -0700 (PDT)
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org,
+        mike.kravetz@oracle.com, mhocko@suse.com, muchun.song@linux.dev,
+        rientjes@google.com, souravpanda@google.com
+Subject: [PATCH v3] mm: hugetlb_vmemmap: provide stronger vmemmap allocation guarantees
+Date:   Mon,  8 May 2023 23:40:59 +0000
+Message-ID: <20230508234059.2529638-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pwARZ-003bqU-Bj
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:37624
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/8/23 2:37 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.28 release.
-> There are 611 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 10 May 2023 09:42:40 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.28-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+HugeTLB pages have a struct page optimizations where struct pages for tail
+pages are freed. However, when HugeTLB pages are destroyed, the memory for
+struct pages (vmemmap) need to be allocated again.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Currently, __GFP_NORETRY flag is used to allocate the memory for vmemmap,
+but given that this flag makes very little effort to actually reclaim
+memory the returning of huge pages back to the system can be problem. Lets
+use __GFP_RETRY_MAYFAIL instead. This flag is also performs graceful
+reclaim without causing ooms, but at least it may perform a few retries,
+and will fail only when there is genuinely little amount of unused memory
+in the system.
 
-Tested-by: Ron Economos <re@w6rz.net>
+Freeing a 1G page requires 16M of free memory. A machine might need to be
+reconfigured from one task to another, and release a large number of 1G pages
+back to the system if allocating 16M fails, the release won't work.
+
+Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Suggested-by: David Rientjes <rientjes@google.com>
+---
+ mm/hugetlb_vmemmap.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+Changelog:
+v3
+  - updated patch log to include details about when the failure can happen.
+v2
+  - removed gfp_mask argument from alloc_vmemmap_page_list as suggested by
+    David Rientjes.
+  - Fixed spelling in the patch title.
+
+diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
+index 27f001e0f0a2..f42079b73f82 100644
+--- a/mm/hugetlb_vmemmap.c
++++ b/mm/hugetlb_vmemmap.c
+@@ -384,8 +384,9 @@ static int vmemmap_remap_free(unsigned long start, unsigned long end,
+ }
+ 
+ static int alloc_vmemmap_page_list(unsigned long start, unsigned long end,
+-				   gfp_t gfp_mask, struct list_head *list)
++				   struct list_head *list)
+ {
++	gfp_t gfp_mask = GFP_KERNEL | __GFP_RETRY_MAYFAIL | __GFP_THISNODE;
+ 	unsigned long nr_pages = (end - start) >> PAGE_SHIFT;
+ 	int nid = page_to_nid((struct page *)start);
+ 	struct page *page, *next;
+@@ -413,12 +414,11 @@ static int alloc_vmemmap_page_list(unsigned long start, unsigned long end,
+  * @end:	end address of the vmemmap virtual address range that we want to
+  *		remap.
+  * @reuse:	reuse address.
+- * @gfp_mask:	GFP flag for allocating vmemmap pages.
+  *
+  * Return: %0 on success, negative error code otherwise.
+  */
+ static int vmemmap_remap_alloc(unsigned long start, unsigned long end,
+-			       unsigned long reuse, gfp_t gfp_mask)
++			       unsigned long reuse)
+ {
+ 	LIST_HEAD(vmemmap_pages);
+ 	struct vmemmap_remap_walk walk = {
+@@ -430,7 +430,7 @@ static int vmemmap_remap_alloc(unsigned long start, unsigned long end,
+ 	/* See the comment in the vmemmap_remap_free(). */
+ 	BUG_ON(start - reuse != PAGE_SIZE);
+ 
+-	if (alloc_vmemmap_page_list(start, end, gfp_mask, &vmemmap_pages))
++	if (alloc_vmemmap_page_list(start, end, &vmemmap_pages))
+ 		return -ENOMEM;
+ 
+ 	mmap_read_lock(&init_mm);
+@@ -476,8 +476,7 @@ int hugetlb_vmemmap_restore(const struct hstate *h, struct page *head)
+ 	 * When a HugeTLB page is freed to the buddy allocator, previously
+ 	 * discarded vmemmap pages must be allocated and remapping.
+ 	 */
+-	ret = vmemmap_remap_alloc(vmemmap_start, vmemmap_end, vmemmap_reuse,
+-				  GFP_KERNEL | __GFP_NORETRY | __GFP_THISNODE);
++	ret = vmemmap_remap_alloc(vmemmap_start, vmemmap_end, vmemmap_reuse);
+ 	if (!ret) {
+ 		ClearHPageVmemmapOptimized(head);
+ 		static_branch_dec(&hugetlb_optimize_vmemmap_key);
+-- 
+2.40.1.521.gf1e218fcd8-goog
 
