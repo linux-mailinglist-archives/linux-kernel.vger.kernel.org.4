@@ -2,80 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065246FA316
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8EFE6FA31A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbjEHJQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 05:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
+        id S232967AbjEHJR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 05:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232273AbjEHJQn (ORCPT
+        with ESMTP id S233072AbjEHJR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 05:16:43 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BBF203FC
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 02:16:41 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9661a1ff1e9so270931666b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 02:16:41 -0700 (PDT)
+        Mon, 8 May 2023 05:17:26 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAFA21558
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 02:17:18 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bc075d6b2so8192358a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 02:17:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683537400; x=1686129400;
+        d=linaro.org; s=google; t=1683537437; x=1686129437;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/T10afqTW6daMTYjhrYC+yDv3aZ7k6tzWV/gJ72nsvg=;
-        b=mdRluXxsgs9NgrPR6YCXEZXlM7wuNompAfvEV3zT6FIDODHHPibHG3RZQOdD9OH0fc
-         vayPSdJR0Gl76Rg3IpcIViArkQK6w8P1zd3rc7KXtu7b6LW/9ZtlM6lwHPswojJ0Jl56
-         gBXmoH5FnrkOaH9LoJJQjXadiNNVfCrrdQJPbXShMBQcQavip4AulrJ7FSSZdq2zepxl
-         xNm3D0uRiyBXKenrMDHZy2Aq3B/EuWReX3FJGi9PSDOxjN9GSBIjb7MHpaWAIcr3BA2m
-         E5ju47qgGcTArmFlj5pI7i3OQldohn1coZoziDf65E0KskxVvO5Nf092w6MH3sItIUm+
-         6xKg==
+        bh=aT/uFog44v7hpe9khQhwWHiG/nU5zZuhtL/MLZy+P0w=;
+        b=KFBWvKtd8EkCKNFrYmQPvtrs8JoO+F4vhM5jslgPgiFIxcsG6/OTdhe8GQkrEqjM72
+         Q5Wbd7d1G+mf1VwHBuNK+wW0c1XRSvB7Nt565PeJ4bdiJwZFMhMIseHbTZ8rfsTqzJgq
+         rs79IL8R2r6o0XPY39KZ95lVZTgU7pjdM42/TLnlqV6F6cn7Ih1jyOm7kMD0WbGFp1HR
+         2SOpbS6RVms+lWJI5U3dxbK4Lx3C7uIcWfJ9cOKYqlP/Kf2z3KQjVe4jWHauMSgPZPXK
+         MuRiVC+aZTUlIDJnkLnn/SLZHjFSQObUfRPhkpx7rtk0zG3ApLY3K9K6uxgPKVhE/4bw
+         sPqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683537400; x=1686129400;
+        d=1e100.net; s=20221208; t=1683537437; x=1686129437;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/T10afqTW6daMTYjhrYC+yDv3aZ7k6tzWV/gJ72nsvg=;
-        b=TbO4vFcE1sBwZvk2eJr/8VeQgdzBMitvEwiQhyOSRxXdsPr8aO1FVzN9/bCUyn9LqB
-         hsnFfp3EKXNLTLuE9GKY89/jTC9i/4x3fdBKqskd7bxBzfqOsEdL6UuDC3e0ZQX+GR8p
-         XlJLFVxsEXV0Wm58hpphvrxm2O4AyUTCkSxz/SMosVNUkhDJKvGenxrJ9POYKDWE8Q3G
-         +/eLzSu2ZFKplqzBkFGFKEZfS1bdq61GKvR4nfTp6M+VKRGRD/5rXOD/Hm2kBOqjl3np
-         rnE0lJIYQuBo/itE1EWHWctWOQ0Xz+ssyCuKOR3p/GcFqUibPV0JYNyYlnT78/CrUklN
-         o6rg==
-X-Gm-Message-State: AC+VfDx7A6ap1YMnHQrWa1p/AWsPUfiFOZhJ9Uv5WSiJLri9Z4fXY+fN
-        e4H9g2bkhdhJm3ZU/AFCBDryYQ==
-X-Google-Smtp-Source: ACHHUZ7UhEbSqRlodHaeyDCKERtf8Tglu4oLOw6KXMPPRxp7f3mU6Viid9v1zp4McZLtWQ92hmN/CA==
-X-Received: by 2002:a17:907:3e83:b0:953:7bb2:28d8 with SMTP id hs3-20020a1709073e8300b009537bb228d8mr8813817ejc.21.1683537400452;
-        Mon, 08 May 2023 02:16:40 -0700 (PDT)
+        bh=aT/uFog44v7hpe9khQhwWHiG/nU5zZuhtL/MLZy+P0w=;
+        b=kgjkPkwf3Fgc21BAsnu2PpDhn27MU+WaexZK9fvV0l6FW0b9g77BoHsc8h8sTiIXJ5
+         QIbVqGq5L6tTMRkzWgQ51tge5BrzKUPn1jWwu3on/cdqZDpcyrFKz8IuEp/XFd24kr8v
+         Wzq8buoMBXgxaEEyVGnSBxNP6vIoT1ZR01zg9PTFskB2nHEup2kn1pHXJ7zgFaAgxJuK
+         i4c867Da2fJN1xfHU26RBqwGsku/AvV+YKwOfQpXJ5HToCVppA9jvxkL3Olr7G5tK6pv
+         N4X6CMxVDk+YhEPQeXRymqErOu+ioH4fAcCfXkXOph49cacijnSB2SrdNw3JL56Gy5M0
+         RL9A==
+X-Gm-Message-State: AC+VfDyuSIQbM6YnLNmzkIP1v3tg6ZxLBFkLNlh9vXIGMjGSoMkwHjeg
+        RroWxC3pW+/0bCa4fF+Ombzctw==
+X-Google-Smtp-Source: ACHHUZ5w7QnqTgHovRPNxpPaDJe6uCeFRlRxrvq/cwBsXBwk1T2v4ljWDc/la/6PD4AxiWyiwYXCzA==
+X-Received: by 2002:a17:907:6e93:b0:962:582d:89bf with SMTP id sh19-20020a1709076e9300b00962582d89bfmr9026804ejc.55.1683537436956;
+        Mon, 08 May 2023 02:17:16 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
-        by smtp.gmail.com with ESMTPSA id t16-20020a1709064f1000b009571293d6acsm4661301eju.59.2023.05.08.02.16.39
+        by smtp.gmail.com with ESMTPSA id ze16-20020a170906ef9000b00965ec1faf27sm4341570ejb.74.2023.05.08.02.17.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 02:16:40 -0700 (PDT)
-Message-ID: <de4c60af-1e7b-1354-ea76-457601b1ec22@linaro.org>
-Date:   Mon, 8 May 2023 11:16:38 +0200
+        Mon, 08 May 2023 02:17:16 -0700 (PDT)
+Message-ID: <4375d93e-a21b-3dff-9d1e-44aa9637eefb@linaro.org>
+Date:   Mon, 8 May 2023 11:17:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH] dt-bindings: pwm: brcm,kona-pwm: convert to YAML
+Subject: Re: [PATCH 1/5] irqchip/sifive-plic: Support T-HEAD's C910 PLIC
 Content-Language: en-US
-To:     Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+To:     Jisheng Zhang <jszhang@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230508085727.GA7252@standask-GA-A55M-S2HP>
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>
+References: <20230507182304.2934-1-jszhang@kernel.org>
+ <20230507182304.2934-2-jszhang@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230508085727.GA7252@standask-GA-A55M-S2HP>
+In-Reply-To: <20230507182304.2934-2-jszhang@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,19 +84,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/05/2023 10:57, Stanislav Jakubek wrote:
-> Convert Broadcom Kona family PWM controller bindings to DT schema.
-
-Please mention in the commit log changes to original binding. You added
-new compatible.
-
+On 07/05/2023 20:23, Jisheng Zhang wrote:
+> The T-HEAD's C910 PLIC still needs the delegation bit settingto allow
+> access from S-mode, but it doesn't need the edge quirk.
 > 
-> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 > ---
->  .../devicetree/bindings/pwm/brcm,kona-pwm.txt | 21 --------
->  .../bindings/pwm/brcm,kona-pwm.yaml           | 51 +++++++++++++++++++
->  2 files changed, 51 insertions(+), 21 deletions(-)
+>  .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml      | 4 ++++
+>  drivers/irqchip/irq-sifive-plic.c                             | 1 +
 
+Bindings are always separate patches.
+
+Please run scripts/checkpatch.pl and fix reported warnings.
 
 Best regards,
 Krzysztof
