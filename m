@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9286FBB58
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BA46FBB63
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234134AbjEHXSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 19:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
+        id S233230AbjEHXWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 19:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjEHXSF (ORCPT
+        with ESMTP id S229969AbjEHXWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 19:18:05 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3D959D5;
-        Mon,  8 May 2023 16:18:03 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 348MpGSa011632;
-        Mon, 8 May 2023 23:17:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=2S/JvWbRe7wfchHGc0JcrfFf1R7m1YVrYv1Sf3TcO1M=;
- b=RJ9lq9I1iLSLUBSrx9T9M8Lsr61BagKdyr6/4HS7dkimUCwofYt9nl1WUuuWYgSr7s0o
- Y7cFalYwpsVM9ri0N0xfW2kTpupmTGKBYnA/qbX0+0FFoGrEcm/jkSb4ll1jAJCznRO7
- YRuRYv7bKpUQpjkCn3p1zl7Mc7jLYerBksFd5AeVeVWd9dI5jYnpwzZZ74YPGVGMEf2A
- WM1pGy8aTnnbNuDPPkCnMuTXJrrWGGxkP3KNoM3wr2Rwc+XcqA6RYAYDGr3DRUtcBd8i
- iwawT1rBKOv4Zw0wsiT9iq+TkNk9EIyn9I5eup2oo3tlJ5SMIWn2hquQHE0r2hz2Yqad Uw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf77f0awg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 May 2023 23:17:56 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 348NHt3n024386
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 8 May 2023 23:17:55 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 8 May 2023
- 16:17:55 -0700
-Message-ID: <baa25817-4a0d-551d-a351-21cc1525a932@quicinc.com>
-Date:   Mon, 8 May 2023 16:17:54 -0700
+        Mon, 8 May 2023 19:22:36 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AFF93E6
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 16:22:34 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-757756e2eefso102226585a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 16:22:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1683588153; x=1686180153;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=J20KJD8UUGIZf35RzyX4QJCStx2hC/zK71qAj+ED4BU=;
+        b=TNMGn3m6WEBl4N8JuGwvWyR7WctTWHrVftC5hiZc+tYMbbctCLn9sos4hh8iEGyDm5
+         5110E/Ts3cuwWgtVQzy6GgZQvFIuUQmm5K7wnEGtbGLk6sT8A1VO8cg1Im+govrADMOV
+         Cy3Q+TEYXLHygksHb/uhHTtC/wyU5d4TaivEarWakk+ul7Rnm1CztBxTQhPcqPm7c15k
+         NmY7elOhiRuBr5r94CHdVN1p+F/ne2xVcpGTtVJdluQqWcjPcftUAajG1zyCm6iqVxV7
+         nI+lYGjD842cyiWHZcP+QWXu19HTR2CEZIUESzAJTGZKgwxs62NdbD+juBhTQ29gzj3t
+         uKNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683588153; x=1686180153;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J20KJD8UUGIZf35RzyX4QJCStx2hC/zK71qAj+ED4BU=;
+        b=DCcaNZMjworQVaP+XSxKeIQbwVldfJdZ1XzUjiuwkKbL3915q3HxV0wSttfOZsYIZl
+         yOQSbhil6zXgbK3vSbEOut0wpQ+y+ldiwnrzIoDw1N6hDgFzrLQ/F7IIecvYx37CrBp8
+         UpF8lIpPEmtIizXPU4BR0f1cDhimcGENYgOeKQW5xcUuua0FGNvneTD4JBm3mRydOu9r
+         ck3v49ZJiuZ7/4WjkwUVIXBkefTkdodqr5sXs8CArHUsOPrw/SNR2qJNCUhDMdaXCoCu
+         9DkZLq4Pgam08zkwh4DowIHhWWXRzfcKYRzOkE8f7kBsCG8sDJXK28sTpUPfAisVEdH5
+         cWXQ==
+X-Gm-Message-State: AC+VfDzWdAy39Uq5MTqWIGcZhyYFx2Nw+fUroTbi7mASQSpT3hTUXr9F
+        QOp5j8NQWmXSITjAv1zkqlV/EB6mWP7JUf07ACSZhQ==
+X-Google-Smtp-Source: ACHHUZ4DeQtgBYpWTCa9YUWXWDlEycg+YX2NYUxENmkf0GpGHlt+us2Dpq7iHJUuTDYh8Df6ApBq8rf1ewCUs5TI9Fo=
+X-Received: by 2002:a05:6214:2427:b0:61a:c2bf:9f0b with SMTP id
+ gy7-20020a056214242700b0061ac2bf9f0bmr20819167qvb.6.1683588153435; Mon, 08
+ May 2023 16:22:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 4/4] drm/msm/dpu: Set DATA_COMPRESS for command mode
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     <freedreno@lists.freedesktop.org>, Sean Paul <sean@poorly.run>,
-        "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20230405-add-dsc-support-v2-0-1072c70e9786@quicinc.com>
- <20230405-add-dsc-support-v2-4-1072c70e9786@quicinc.com>
- <j5wa45g4v6swvsiakl23azu7qgxtdllf2gav5wdc7s7zukxe4c@jkcu2wnyn6rn>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <j5wa45g4v6swvsiakl23azu7qgxtdllf2gav5wdc7s7zukxe4c@jkcu2wnyn6rn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: YX-fttudjvb0muIfc-sSLL9i2vgy4x-U
-X-Proofpoint-GUID: YX-fttudjvb0muIfc-sSLL9i2vgy4x-U
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-08_16,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 priorityscore=1501 spamscore=0 phishscore=0
- mlxlogscore=999 suspectscore=0 malwarescore=0 adultscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305080156
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+References: <000000000000258e5e05fae79fc1@google.com> <20230507135844.1231056-1-lrh2000@pku.edu.cn>
+ <CA+CK2bBe2YKYM3rUTCnZ0RF=NFUR9VqO-QYn3ygPsFJWLY1MUA@mail.gmail.com>
+ <ZFlrbDft1QfMyIDc@casper.infradead.org> <CA+CK2bDVjovwB9v-Zv4Fn7EUfp5FV2XK36iJKYKY7pYNOFfOGA@mail.gmail.com>
+ <ZFlvJEfs1ufh1UUD@casper.infradead.org> <CA+CK2bDC-FVv1tZg9MDn-N735Ak3OAtdZPf+LEYM-JHsO90YcQ@mail.gmail.com>
+ <fa1dac7a-406e-30ea-6aba-ded2e0e871fa@redhat.com> <CA+CK2bAHbHHwLUoGJkz8n6mrM5dy7oMojeNksdVOMYn+qFYngA@mail.gmail.com>
+In-Reply-To: <CA+CK2bAHbHHwLUoGJkz8n6mrM5dy7oMojeNksdVOMYn+qFYngA@mail.gmail.com>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Mon, 8 May 2023 16:21:57 -0700
+Message-ID: <CA+CK2bD=bv1vPGZaNcxDy-uUFj2ZAKkdPmAtJaweXhgTe91oEw@mail.gmail.com>
+Subject: Re: usbdev_mmap causes type confusion in page_table_check
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Ruihan Li <lrh2000@pku.edu.cn>,
+        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,132 +75,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> For normal Kernel-MM operations, vm_normal_page() should be used to
+> get "struct page" based on vma+addr+pte combination, but
+> page_table_check does not use vma for its operation in order to
+> strengthen the verification of no invalid page sharing. But, even
+> vm_normal_page() can cause access to the "struct page" for VM_PFNMAP
+> if pfn_valid(pfn) is true. So, vm_normal_page() can return a struct
+> page for a user mapped slab page.
 
+Only for !ARCH_HAS_PTE_SPECIAL case, otherwise NULL is returned.
 
-On 5/7/2023 9:06 AM, Marijn Suijten wrote:
-> On 2023-05-05 14:23:51, Jessica Zhang wrote:
->> Add a DPU INTF op to set DATA_COMPRESS register for command mode panels if
->> the DPU_INTF_DATA_COMPRESS feature flag is set. This flag needs to be
->> enabled in order for DSC v1.2 to work.
->>
->> Note: These changes are for command mode only. Video mode changes will
->> be posted along with the DSC v1.2 support for DP.
-> 
-> Nit: the "command mode" parts of both paragraphs only apply to the call
-> in dpu_encoder_phys_cmd, right?  If so, and the INTF op remains the same
-> for video mode (but only the call needs to be added to the
-> dpu_encoder_phy_vid), make this a bit more clear in your commit message.
-> 
->> Changes in v2:
->> - Fixed whitespace issue in macro definition
->> - Read INTF_CONFIG2 before writing to DATA_COMPRESS bit
->> - Only set dpu_hw_intf_ops.data_compress if DATA_COMPRESS feature is set
->> - Removed `inline` from dpu_hw_intf_enable_compression declaration
->>
->> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c |  3 +++
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c          | 11 +++++++++++
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h          |  2 ++
->>   3 files changed, 16 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
->> index d8ed85a238af..1a4c20f02312 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
->> @@ -68,6 +68,9 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
->>   				phys_enc->hw_intf,
->>   				true,
->>   				phys_enc->hw_pp->idx);
->> +
->> +	if (phys_enc->hw_intf->ops.enable_compression)
->> +		phys_enc->hw_intf->ops.enable_compression(phys_enc->hw_intf);
->>   }
->>   
->>   static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int irq_idx)
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->> index 6485500eedb8..322c55a5042c 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->> @@ -91,6 +91,14 @@
->>   
->>   #define INTF_CFG2_DATABUS_WIDEN	BIT(0)
->>   #define INTF_CFG2_DATA_HCTL_EN	BIT(4)
->> +#define INTF_CFG2_DCE_DATA_COMPRESS     BIT(12)
->> +
->> +static void dpu_hw_intf_enable_compression(struct dpu_hw_intf *ctx)
->> +{
->> +	u32 intf_cfg2 = DPU_REG_READ(&ctx->hw, INTF_CONFIG2);
->> +
->> +	DPU_REG_WRITE(&ctx->hw, INTF_CONFIG2, intf_cfg2 | INTF_CFG2_DCE_DATA_COMPRESS);
-> 
-> I'm not sure if it's more idiomatic to write:
-> 
->      intf_cfg2 |= INTF_CFG2_DCE_DATA_COMPRESS;
-> 
-> On a separate line.
-
-Hi Marijn,
-
-Sounds good.
-
-> 
->> +}
-> 
-> Move the function close to the bottom of this file.  Right now all the
-> functions are defined approximately in the same order as they're listed
-> in the header and assigned in _setup_intf_ops().
-
-Acked.
-
-> 
->>   
->>   static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
->>   		const struct intf_timing_params *p,
->> @@ -542,6 +550,9 @@ static void _setup_intf_ops(struct dpu_hw_intf_ops *ops,
->>   		ops->vsync_sel = dpu_hw_intf_vsync_sel;
->>   		ops->disable_autorefresh = dpu_hw_intf_disable_autorefresh;
->>   	}
->> +
->> +	if (cap & BIT(DPU_INTF_DATA_COMPRESS))
->> +		ops->enable_compression = dpu_hw_intf_enable_compression;
->>   }
->>   
->>   struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->> index 73b0885918f8..a8def68a5ec2 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->> @@ -70,6 +70,7 @@ struct intf_status {
->>    * @get_autorefresh:            Retrieve autorefresh config from hardware
->>    *                              Return: 0 on success, -ETIMEDOUT on timeout
->>    * @vsync_sel:                  Select vsync signal for tear-effect configuration
->> + * @enable_compression: Enable data compression
-> 
-> Indent to match above.
-
-Sure, is the plan to correct the whitespace in the first half of the 
-comment block in the future?
-
-Thanks,
-
-Jessica Zhang
-
-> 
-> - Marijn
-> 
->>    */
->>   struct dpu_hw_intf_ops {
->>   	void (*setup_timing_gen)(struct dpu_hw_intf *intf,
->> @@ -107,6 +108,7 @@ struct dpu_hw_intf_ops {
->>   	 * Disable autorefresh if enabled
->>   	 */
->>   	void (*disable_autorefresh)(struct dpu_hw_intf *intf, uint32_t encoder_id, u16 vdisplay);
->> +	void (*enable_compression)(struct dpu_hw_intf *intf);
->>   };
->>   
->>   struct dpu_hw_intf {
->>
->> -- 
->> 2.40.1
->>
+Pasha
