@@ -2,109 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAC36FB86F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B0B6FB87E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbjEHUoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 16:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
+        id S233354AbjEHUsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 16:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233842AbjEHUn7 (ORCPT
+        with ESMTP id S232991AbjEHUsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 16:43:59 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C543B1BF5;
-        Mon,  8 May 2023 13:43:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683578636; x=1715114636;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+j2VG8K37FuYmxJ/yfGPvStthf7F4tgUlNY05wghgQw=;
-  b=EqpvZk5YKy8JNqY42+w1//BoJ6dgCBVpoR/uah54MSYyVoNeo23yHXOA
-   R0qqOQg/27FGbX4h2qqCyjtzLtV9OqS7BaR3fEPGHg7lsgtTRwPw8N2ks
-   F50NbZRdIACTR9KWSir4hSrUi/8j2zZ8hWXqeYKbkBiqYgPXzvOxekhDq
-   IV+zpNpN1YuR4XTQDKbly71mC2/eGx9weYlD3XvGrRYmVHpUlPsbV8FJQ
-   pZhYC3smx8Tv5btXGP1WGIswYUXB8PYlePfFR87Gp09zTOfA8/w/upyZ2
-   FETUqyQLtZpm9YyzzDm8KuHpVGrxDsEP/94eo0tYeIozR1eCx4cchaHLP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="347219110"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="347219110"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 13:43:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="698648011"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="698648011"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.213.172.228]) ([10.213.172.228])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 13:43:50 -0700
-Message-ID: <2618f557-01a5-f76b-ad09-6eb0871cdf00@intel.com>
-Date:   Mon, 8 May 2023 13:43:49 -0700
+        Mon, 8 May 2023 16:48:45 -0400
+Received: from out-38.mta1.migadu.com (out-38.mta1.migadu.com [IPv6:2001:41d0:203:375::26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B075BAA;
+        Mon,  8 May 2023 13:48:42 -0700 (PDT)
+Date:   Mon, 8 May 2023 16:48:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683578919;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=T9yUrg/v5raybQi2xKwTXiJDyugUh7KFNSbnsbVf1ko=;
+        b=JlOqRkPdzk5AJhxPMwu8AlexUvrKA9kXRniMs6KXFAxkkCykU6KjHBDIF+g4xO4yC/3Xao
+        +RuScEMByhVbOYP7Nl+Ojs+6ZTV4KDzSfRqi3slN82Zdtt1OUgviKekasieY9DgexpymM2
+        tFWfTgTgTslrvfQsG/FcZTuRpfPmr6I=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <ZFlgG02A87qPNIn1@moria.home.lan>
+References: <20230501165450.15352-1-surenb@google.com>
+ <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+ <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com>
+ <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
+ <ZFfd99w9vFTftB8D@moria.home.lan>
+ <20230508175206.7dc3f87c@meshulam.tesarici.cz>
+ <ZFkb1p80vq19rieI@moria.home.lan>
+ <20230508180913.6a018b21@meshulam.tesarici.cz>
+ <ZFkjRBCExpXfI+O5@moria.home.lan>
+ <20230508205939.0b5b485c@meshulam.tesarici.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v4 06/15] dmaengine: idxd: Add wq private data accessors
-Content-Language: en-US
-To:     Tom Zanussi <tom.zanussi@linux.intel.com>,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        fenghua.yu@intel.com, vkoul@kernel.org
-Cc:     tony.luck@intel.com, wajdi.k.feghali@intel.com,
-        james.guilford@intel.com, kanchana.p.sridhar@intel.com,
-        giovanni.cabiddu@intel.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org
-References: <cover.1683573703.git.zanussi@kernel.org>
- <038db785a87dc59c0073989633eee0205958cb67.1683573703.git.zanussi@kernel.org>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <038db785a87dc59c0073989633eee0205958cb67.1683573703.git.zanussi@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230508205939.0b5b485c@meshulam.tesarici.cz>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/8/23 1:07 PM, Tom Zanussi wrote:
-> Add the accessors set_idxd_wq_private() and idxd_wq_private() allowing
-> users to set and retrieve a private void * associated with an idxd_wq.
+On Mon, May 08, 2023 at 08:59:39PM +0200, Petr Tesařík wrote:
+> On Mon, 8 May 2023 12:28:52 -0400
+> Kent Overstreet <kent.overstreet@linux.dev> wrote:
 > 
-> The private data is stored in the idxd_dev.conf_dev associated with
-> each idxd_wq.
+> > On Mon, May 08, 2023 at 06:09:13PM +0200, Petr Tesařík wrote:
+> > > Sure, although AFAIK the index does not cover all possible config
+> > > options (so non-x86 arch code is often forgotten). However, that's the
+> > > less important part.
+> > > 
+> > > What do you do if you need to hook something that does conflict with an
+> > > existing identifier?  
+> > 
+> > As already happens in this patchset, rename the other identifier.
+> > 
+> > But this is C, we avoid these kinds of conflicts already because the
+> > language has no namespacing
 > 
-> Signed-off-by: Tom Zanussi <tom.zanussi@linux.intel.com>
-> ---
->   drivers/dma/idxd/idxd.h | 10 ++++++++++
->   1 file changed, 10 insertions(+)
+> This statement is not accurate, but I agree there's not much. Refer to
+> section 6.2.3 of ISO/IEC9899:2018 (Name spaces of identifiers).
 > 
-> diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
-> index 193552dea224..71cd4ca7d27a 100644
-> --- a/drivers/dma/idxd/idxd.h
-> +++ b/drivers/dma/idxd/idxd.h
-> @@ -552,6 +552,16 @@ static inline int idxd_wq_refcount(struct idxd_wq *wq)
->   	return wq->client_count;
->   };
->   
-> +static inline void set_idxd_wq_private(struct idxd_wq *wq, void *private)
+> More importantly, macros also interfere with identifier scoping, e.g.
+> you cannot even have a local variable with the same name as a macro.
+> That's why I dislike macros so much.
 
-I would go with the same kernel naming convention:
+Shadowing a global identifier like that would at best be considered poor
+style, so I don't see this as a major downside.
 
-idxd_wq_set_private() and idxd_wq_get_private()?
-> +{
-> +	dev_set_drvdata(wq_confdev(wq), private);
-> +}
-> +
-> +static inline void *idxd_wq_private(struct idxd_wq *wq)
-> +{
-> +	return dev_get_drvdata(wq_confdev(wq));
-> +}
-> +
->   /*
->    * Intel IAA does not support batch processing.
->    * The max batch size of device, max batch size of wq and
+> But since there's no clear policy regarding macros in the kernel, I'm
+> merely showing a downside; it's perfectly fine to write kernel code
+> like this as long as the maintainers agree that the limitation is
+> acceptable and outweighed by the benefits.
+
+Macros do have lots of tricky downsides, but in general we're not shy
+about using them for things that can't be done otherwise; see
+wait_event(), all of tracing...
+
+I think we could in general do a job of making the macros _themselves_
+more managable, when writing things that need to be macros I'll often
+have just the wrapper as a macro and write the bulk as inline functions.
+See the generic radix tree code for example.
+
+Reflection is a major use case for macros, and the underlying mechanism
+here - code tagging - is something worth talking about more, since it's
+codifying something that's been done ad-hoc in the kernel for a long
+time and something we hope to refactor other existing code to use,
+including tracing - I've got a patch already written to convert the
+dynamic debug code to code tagging; it's a nice -200 loc cleanup.
+
+Regarding the alloc_hooks() macro itself specifically, I've got more
+plans for it. I have another patch series after this one that implements
+code tagging based fault injection, which is _far_ more ergonomic to use
+than our existing fault injection capabilities (and this matters! Fault
+injection is a really important tool for getting good test coverage, but
+tools that are a pain in the ass to use don't get used) - and with the
+alloc_hooks() macro already in place, we'll be able to turn _every
+individual memory allocation callsite_ into a distinct, individually
+selectable fault injection point - which is something our existing fault
+injection framework attempts at but doesn't really manage.
+
+If we can get this in, it'll make it really easy to write unit tests
+that iterate over every memory allocation site in a given module,
+individually telling them to fail, run a workload until they hit, and
+verify that the code path being tested was executed. It'll nicely
+complement the fuzz testing capabilities that we've been working on,
+particularly in filesystem land.
