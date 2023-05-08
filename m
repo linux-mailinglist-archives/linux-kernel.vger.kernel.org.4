@@ -2,436 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E156FA108
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AEBA6FA10C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbjEHHao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
+        id S233368AbjEHHbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjEHHak (ORCPT
+        with ESMTP id S233355AbjEHHbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:30:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5731FCA;
-        Mon,  8 May 2023 00:30:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85BFF615AC;
-        Mon,  8 May 2023 07:30:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5B7CC433D2;
-        Mon,  8 May 2023 07:30:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683531035;
-        bh=M9Gp4XYXDUvrXLJSIBBU5HWRNqkwCmnPdpch7gGzxZ0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ECW8/wsOkZgFlukZU7Py5T9UKG3cO0ozWVXEEcB1uVwZcnQDZUF/4xrL+LD+uZ408
-         fPnydBEnn5gmEtciZb/EBLEN7XtLJqOrPhqe+jnOPaZUWdWP3U9tJ7A3zr/fxcLnP3
-         fZl3YnvOr615Amt3hxlMqcwsgnMCQt8q33yqgKUXmdEakZsfbB0z07Gtw2lGq6RcEE
-         qFPPMoIakqJs6LOzmGNX4gSBPUltp/JybBLwn4IGEeiTse5hLVdd6/HOb8I6H8Y4iz
-         GzvRV8/4jd/funez3oSakrm4CdTzOgGuVuUxMTZWIrpXPdF76XUSjzBvXOtVWIeirl
-         HdAYesvSy5LFQ==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2ad714536cfso16847641fa.0;
-        Mon, 08 May 2023 00:30:35 -0700 (PDT)
-X-Gm-Message-State: AC+VfDw7q1OeqzxtR3u5S0hEzUdgRwzU57BFOO6vSn5EVvvaFhKnrCge
-        DSkWFR992BNKrDTrBhRXdGtpeGjHspLt6JL1fiE=
-X-Google-Smtp-Source: ACHHUZ4nO7dApCsYrfdeUXX8ZNgXOCesYONc/XIkF0LLCKgR15dqxmoCIiV7mzYT+O6cROIaRMRMt/4uZxdWLeEYops=
-X-Received: by 2002:a2e:9d87:0:b0:2a8:a629:c203 with SMTP id
- c7-20020a2e9d87000000b002a8a629c203mr2618680ljj.32.1683531033749; Mon, 08 May
- 2023 00:30:33 -0700 (PDT)
+        Mon, 8 May 2023 03:31:05 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5617E1FE4;
+        Mon,  8 May 2023 00:31:00 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:41576.483453701
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 622BA102969;
+        Mon,  8 May 2023 15:30:55 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-85667d6c59-lhcrq with ESMTP id e5e8dd04bc2a4d75b9eff924284dd407 for maarten.lankhorst@linux.intel.com;
+        Mon, 08 May 2023 15:30:59 CST
+X-Transaction-ID: e5e8dd04bc2a4d75b9eff924284dd407
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <33622b9a-52a0-8498-ce23-48bb912665e1@189.cn>
+Date:   Mon, 8 May 2023 15:30:54 +0800
 MIME-Version: 1.0
-References: <20230507234618.18067-1-kirill.shutemov@linux.intel.com> <20230507234618.18067-5-kirill.shutemov@linux.intel.com>
-In-Reply-To: <20230507234618.18067-5-kirill.shutemov@linux.intel.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 8 May 2023 09:30:22 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXE26G=HgqBHoJOWF+FyXs7Ryj7VFFY9A+xG7HmUXnb5bg@mail.gmail.com>
-Message-ID: <CAMj1kXE26G=HgqBHoJOWF+FyXs7Ryj7VFFY9A+xG7HmUXnb5bg@mail.gmail.com>
-Subject: Re: [PATCHv10 04/11] efi/x86: Implement support for unaccepted memory
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v12 0/2] drm: add kms driver for loongson display
+ controller
+Content-Language: en-US
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-media@vger.kernel.org
+References: <20230504080406.1213623-1-suijingfeng@loongson.cn>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <20230504080406.1213623-1-suijingfeng@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Kirill,
-
-On Mon, 8 May 2023 at 01:46, Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> UEFI Specification version 2.9 introduces the concept of memory
-> acceptance: Some Virtual Machine platforms, such as Intel TDX or AMD
-> SEV-SNP, requiring memory to be accepted before it can be used by the
-> guest. Accepting happens via a protocol specific for the Virtual
-> Machine platform.
->
-> Accepting memory is costly and it makes VMM allocate memory for the
-> accepted guest physical address range. It's better to postpone memory
-> acceptance until memory is needed. It lowers boot time and reduces
-> memory overhead.
->
-> The kernel needs to know what memory has been accepted. Firmware
-> communicates this information via memory map: a new memory type --
-> EFI_UNACCEPTED_MEMORY -- indicates such memory.
->
-> Range-based tracking works fine for firmware, but it gets bulky for
-> the kernel: e820 has to be modified on every page acceptance. It leads
-> to table fragmentation, but there's a limited number of entries in the
-> e820 table
->
-> Another option is to mark such memory as usable in e820 and track if the
-> range has been accepted in a bitmap. One bit in the bitmap represents
-> 2MiB in the address space: one 4k page is enough to track 64GiB or
-> physical address space.
->
-> In the worst-case scenario -- a huge hole in the middle of the
-> address space -- It needs 256MiB to handle 4PiB of the address
-> space.
->
-> Any unaccepted memory that is not aligned to 2M gets accepted upfront.
->
-> The bitmap is allocated and constructed in the EFI stub and passed down
-> to the kernel via boot_params. allocate_e820() allocates the bitmap if
-> unaccepted memory is present, according to the maximum address in the
-> memory map.
->
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
->  Documentation/arch/x86/zero-page.rst     |  1 +
->  arch/x86/boot/compressed/Makefile        |  1 +
->  arch/x86/boot/compressed/mem.c           | 73 ++++++++++++++++++++++++
->  arch/x86/include/asm/unaccepted_memory.h | 10 ++++
->  arch/x86/include/uapi/asm/bootparam.h    |  2 +-
->  drivers/firmware/efi/Kconfig             | 14 +++++
->  drivers/firmware/efi/efi.c               |  1 +
->  drivers/firmware/efi/libstub/x86-stub.c  | 65 +++++++++++++++++++++
->  include/linux/efi.h                      |  3 +-
->  9 files changed, 168 insertions(+), 2 deletions(-)
->  create mode 100644 arch/x86/boot/compressed/mem.c
->  create mode 100644 arch/x86/include/asm/unaccepted_memory.h
->
-> diff --git a/Documentation/arch/x86/zero-page.rst b/Documentation/arch/x86/zero-page.rst
-> index 45aa9cceb4f1..f21905e61ade 100644
-> --- a/Documentation/arch/x86/zero-page.rst
-> +++ b/Documentation/arch/x86/zero-page.rst
-> @@ -20,6 +20,7 @@ Offset/Size   Proto   Name                    Meaning
->  060/010                ALL     ist_info                Intel SpeedStep (IST) BIOS support information
->                                                 (struct ist_info)
->  070/008                ALL     acpi_rsdp_addr          Physical address of ACPI RSDP table
-> +078/008                ALL     unaccepted_memory       Bitmap of unaccepted memory (1bit == 2M)
-
-Unaccepted memory is a generic EFI feature, and will need to be
-supported on other architectures as well.
-
-Could we perhaps use a EFI configuration table to pass the bitmap to
-the core kernel, instead of adding more cruft to this archaic header?
-That could be implemented in a arch-agnostic manner, even in cases
-where the bootloader is the agent that calls ExitBootServices(), as it
-would be the loader that allocates and populates the bitmap in that
-case.
+Hi,
 
 
->  080/010                ALL     hd0_info                hd0 disk parameter, OBSOLETE!!
->  090/010                ALL     hd1_info                hd1 disk parameter, OBSOLETE!!
->  0A0/010                ALL     sys_desc_table          System description table (struct sys_desc_table),
-> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-> index 6b6cfe607bdb..f62c02348f9a 100644
-> --- a/arch/x86/boot/compressed/Makefile
-> +++ b/arch/x86/boot/compressed/Makefile
-> @@ -107,6 +107,7 @@ endif
+
+If there are bugs, We will take the responsibility to fix.
+
+Is there any chance to merge this patch?
+
+comments and review are also welcome, help please!
+
+
+On 2023/5/4 16:04, Sui Jingfeng wrote:
+> Loongson display controller IP has been integrated in both Loongson north
+> bridge chipset(ls7a1000/ls7a2000) and Loongson SoCs(ls2k1000/ls2k2000), it
+> has been even included in Loongson self-made BMC products.
 >
->  vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
->  vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdcall.o
-> +vmlinux-objs-$(CONFIG_UNACCEPTED_MEMORY) += $(obj)/bitmap.o $(obj)/mem.o
+> This display controller is a PCI device. It has two display pipes and each
+> display pipe support a primary plane and a cursor plane. For the DC in the
+> ls7a1000 and ls2k1000, each display pipe has a DVO output interface which
+> provide RGB888 signals, vertical & horizontal synchronisations and pixel
+> clock. Each CRTC is able to support 1920x1080@60Hz, the maximum resolution
+> of each display pipe is 2048x2048 according to the hardware spec.
 >
->  vmlinux-objs-$(CONFIG_EFI) += $(obj)/efi.o
->  vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_mixed.o
-> diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
-> new file mode 100644
-> index 000000000000..6b15a0ed8b54
-> --- /dev/null
-> +++ b/arch/x86/boot/compressed/mem.c
-> @@ -0,0 +1,73 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include "../cpuflags.h"
-> +#include "bitmap.h"
-> +#include "error.h"
-> +#include "math.h"
-> +
-> +#define PMD_SHIFT      21
-> +#define PMD_SIZE       (_AC(1, UL) << PMD_SHIFT)
-> +#define PMD_MASK       (~(PMD_SIZE - 1))
-> +
-> +static inline void __accept_memory(phys_addr_t start, phys_addr_t end)
-> +{
-> +       /* Platform-specific memory-acceptance call goes here */
-> +       error("Cannot accept memory");
-> +}
-> +
-> +/*
-> + * The accepted memory bitmap only works at PMD_SIZE granularity.  Take
-> + * unaligned start/end addresses and either:
-> + *  1. Accepts the memory immediately and in its entirety
-> + *  2. Accepts unaligned parts, and marks *some* aligned part unaccepted
-> + *
-> + * The function will never reach the bitmap_set() with zero bits to set.
-> + */
-> +void process_unaccepted_memory(struct boot_params *params, u64 start, u64 end)
-> +{
-> +       /*
-> +        * Ensure that at least one bit will be set in the bitmap by
-> +        * immediately accepting all regions under 2*PMD_SIZE.  This is
-> +        * imprecise and may immediately accept some areas that could
-> +        * have been represented in the bitmap.  But, results in simpler
-> +        * code below
-> +        *
-> +        * Consider case like this:
-> +        *
-> +        * | 4k | 2044k |    2048k   |
-> +        * ^ 0x0        ^ 2MB        ^ 4MB
-> +        *
-> +        * Only the first 4k has been accepted. The 0MB->2MB region can not be
-> +        * represented in the bitmap. The 2MB->4MB region can be represented in
-> +        * the bitmap. But, the 0MB->4MB region is <2*PMD_SIZE and will be
-> +        * immediately accepted in its entirety.
-> +        */
-> +       if (end - start < 2 * PMD_SIZE) {
-> +               __accept_memory(start, end);
-> +               return;
-> +       }
-> +
-> +       /*
-> +        * No matter how the start and end are aligned, at least one unaccepted
-> +        * PMD_SIZE area will remain to be marked in the bitmap.
-> +        */
-> +
-> +       /* Immediately accept a <PMD_SIZE piece at the start: */
-> +       if (start & ~PMD_MASK) {
-> +               __accept_memory(start, round_up(start, PMD_SIZE));
-> +               start = round_up(start, PMD_SIZE);
-> +       }
-> +
-> +       /* Immediately accept a <PMD_SIZE piece at the end: */
-> +       if (end & ~PMD_MASK) {
-> +               __accept_memory(round_down(end, PMD_SIZE), end);
-> +               end = round_down(end, PMD_SIZE);
-> +       }
-> +
-> +       /*
-> +        * 'start' and 'end' are now both PMD-aligned.
-> +        * Record the range as being unaccepted:
-> +        */
-> +       bitmap_set((unsigned long *)params->unaccepted_memory,
-> +                  start / PMD_SIZE, (end - start) / PMD_SIZE);
-> +}
-> diff --git a/arch/x86/include/asm/unaccepted_memory.h b/arch/x86/include/asm/unaccepted_memory.h
-> new file mode 100644
-> index 000000000000..df0736d32858
-> --- /dev/null
-> +++ b/arch/x86/include/asm/unaccepted_memory.h
-> @@ -0,0 +1,10 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright (C) 2020 Intel Corporation */
-> +#ifndef _ASM_X86_UNACCEPTED_MEMORY_H
-> +#define _ASM_X86_UNACCEPTED_MEMORY_H
-> +
-> +struct boot_params;
-> +
-> +void process_unaccepted_memory(struct boot_params *params, u64 start, u64 num);
-> +
-> +#endif
-> diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
-> index 01d19fc22346..630a54046af0 100644
-> --- a/arch/x86/include/uapi/asm/bootparam.h
-> +++ b/arch/x86/include/uapi/asm/bootparam.h
-> @@ -189,7 +189,7 @@ struct boot_params {
->         __u64  tboot_addr;                              /* 0x058 */
->         struct ist_info ist_info;                       /* 0x060 */
->         __u64 acpi_rsdp_addr;                           /* 0x070 */
-> -       __u8  _pad3[8];                                 /* 0x078 */
-> +       __u64 unaccepted_memory;                        /* 0x078 */
->         __u8  hd0_info[16];     /* obsolete! */         /* 0x080 */
->         __u8  hd1_info[16];     /* obsolete! */         /* 0x090 */
->         struct sys_desc_table sys_desc_table; /* obsolete! */   /* 0x0a0 */
-> diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
-> index 043ca31c114e..231f1c70d1db 100644
-> --- a/drivers/firmware/efi/Kconfig
-> +++ b/drivers/firmware/efi/Kconfig
-> @@ -269,6 +269,20 @@ config EFI_COCO_SECRET
->           virt/coco/efi_secret module to access the secrets, which in turn
->           allows userspace programs to access the injected secrets.
+> For the DC in LS7A2000, each display pipe is equipped with a built-in HDMI
+> encoder which is compliant with the HDMI 1.4 specification, thus it support
+> 3840x2160@30Hz. The first display pipe is also equipped with a transparent
+> vga encoder which is parallel with the HDMI encoder. The DC in LS7A2000 is
+> more complete compare with the one in old chips, besides above feature, it
+> has two hardware cursors, two hardware vblank counter and two scanout
+> position recorders unit. It also support tiled framebuffer format which
+> can be scanout the tiled framebuffer rendered by the LoongGPU directly.
 >
-> +config UNACCEPTED_MEMORY
-> +       bool
-> +       depends on EFI_STUB
-> +       help
-> +          Some Virtual Machine platforms, such as Intel TDX, require
-> +          some memory to be "accepted" by the guest before it can be used.
-> +          This mechanism helps prevent malicious hosts from making changes
-> +          to guest memory.
-> +
-> +          UEFI specification v2.9 introduced EFI_UNACCEPTED_MEMORY memory type.
-> +
-> +          This option adds support for unaccepted memory and makes such memory
-> +          usable by the kernel.
-> +
->  config EFI_EMBEDDED_FIRMWARE
->         bool
->         select CRYPTO_LIB_SHA256
-> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-> index abeff7dc0b58..7dce06e419c5 100644
-> --- a/drivers/firmware/efi/efi.c
-> +++ b/drivers/firmware/efi/efi.c
-> @@ -843,6 +843,7 @@ static __initdata char memory_type_name[][13] = {
->         "MMIO Port",
->         "PAL Code",
->         "Persistent",
-> +       "Unaccepted",
->  };
+> v1 -> v2:
+>   1) Use hpd status reg when polling for ls7a2000
+>   2) Fix all warnings emerged when compile with W=1
 >
->  char * __init efi_md_typeattr_format(char *buf, size_t size,
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index fff81843169c..1643ddbde249 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -15,6 +15,7 @@
->  #include <asm/setup.h>
->  #include <asm/desc.h>
->  #include <asm/boot.h>
-> +#include <asm/unaccepted_memory.h>
+> v2 -> v3:
+>   1) Add COMPILE_TEST in Kconfig and make the driver off by default
+>   2) Alphabetical sorting headers (Thomas)
+>   3) Untangle register access functions as much as possible (Thomas)
+>   4) Switch to TTM based memory manager and prefer cached mapping
+>      for Loongson SoC (Thomas)
+>   5) Add chip id detection method, now all models are distinguishable.
+>   6) Revise builtin HDMI phy driver, nearly all main stream mode
+>      below 4K@30Hz is tested, this driver supported these mode very
+>      well including clone display mode and extend display mode.
 >
->  #include "efistub.h"
+> v3 -> v4:
+>   1) Quickly fix a small mistake.
 >
-> @@ -613,6 +614,16 @@ setup_e820(struct boot_params *params, struct setup_data *e820ext, u32 e820ext_s
->                         e820_type = E820_TYPE_PMEM;
->                         break;
+> v4 -> v5:
+>   1) Drop potential support for Loongson 2K series SoC temporary,
+>      this part should be resend with the DT binding patch in the future.
+>   2) Add per display pipe debugfs support to the builtin HDMI encoder.
+>   3) Rewrite atomic_update() for hardware cursors plane(Thomas)
+>   4) Rewrite encoder and connector initialization part, untangle it
+>      according to the chip(Thomas).
 >
-> +               case EFI_UNACCEPTED_MEMORY:
-> +                       if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY)) {
-> +                               efi_warn_once(
-> +"The system has unaccepted memory,  but kernel does not support it\nConsider enabling CONFIG_UNACCEPTED_MEMORY\n");
-> +                               continue;
-> +                       }
-> +                       e820_type = E820_TYPE_RAM;
-> +                       process_unaccepted_memory(params, d->phys_addr,
-> +                                                 d->phys_addr + PAGE_SIZE * d->num_pages);
-> +                       break;
->                 default:
->                         continue;
->                 }
-> @@ -677,6 +688,57 @@ static efi_status_t alloc_e820ext(u32 nr_desc, struct setup_data **e820ext,
->         return status;
->  }
+> v5 -> v6:
+>   1) Remove stray code which didn't get used, say lsdc_of_get_reserved_ram
+>   2) Fix all typos I could found, make sentences and code more readable
+>   3) Untangle lsdc_hdmi*_connector_detect() function according to the pipe
+>   4) After a serious consideration, we rename this driver as loongson.
+>      Because we also have drivers toward the LoongGPU IP in LS7A2000 and
+>      LS2K2000. Besides, there are also drivers about the external encoder,
+>      HDMI audio driver and vbios support etc. This patch only provide DC
+>      driver part, my teammate Li Yi believe that loongson will be more
+>      suitable for loongson graphics than lsdc in the long run.
 >
-> +static efi_status_t allocate_unaccepted_bitmap(struct boot_params *params,
-> +                                              __u32 nr_desc,
-> +                                              struct efi_boot_memmap *map)
-> +{
-> +       unsigned long *mem = NULL;
-> +       u64 size, max_addr = 0;
-> +       efi_status_t status;
-> +       bool found = false;
-> +       int i;
-> +
-> +       /* Check if there's any unaccepted memory and find the max address */
-> +       for (i = 0; i < nr_desc; i++) {
-> +               efi_memory_desc_t *d;
-> +               unsigned long m = (unsigned long)map->map;
-> +
-> +               d = efi_early_memdesc_ptr(m, map->desc_size, i);
-> +               if (d->type == EFI_UNACCEPTED_MEMORY)
-> +                       found = true;
-> +               if (d->phys_addr + d->num_pages * PAGE_SIZE > max_addr)
-> +                       max_addr = d->phys_addr + d->num_pages * PAGE_SIZE;
-> +       }
-> +
-> +       if (!found) {
-> +               params->unaccepted_memory = 0;
-> +               return EFI_SUCCESS;
-> +       }
-> +
-> +       /*
-> +        * If unaccepted memory is present, allocate a bitmap to track what
-> +        * memory has to be accepted before access.
-> +        *
-> +        * One bit in the bitmap represents 2MiB in the address space:
-> +        * A 4k bitmap can track 64GiB of physical address space.
-> +        *
-> +        * In the worst case scenario -- a huge hole in the middle of the
-> +        * address space -- It needs 256MiB to handle 4PiB of the address
-> +        * space.
-> +        *
-> +        * The bitmap will be populated in setup_e820() according to the memory
-> +        * map after efi_exit_boot_services().
-> +        */
-> +       size = DIV_ROUND_UP(max_addr, PMD_SIZE * BITS_PER_BYTE);
-> +       status = efi_allocate_pages(size, (unsigned long *)&mem, ULONG_MAX);
-> +       if (status == EFI_SUCCESS) {
-> +               memset(mem, 0, size);
-> +               params->unaccepted_memory = (unsigned long)mem;
-> +       }
-> +
-> +       return status;
-> +}
-> +
->  static efi_status_t allocate_e820(struct boot_params *params,
->                                   struct setup_data **e820ext,
->                                   u32 *e820ext_size)
-> @@ -697,6 +759,9 @@ static efi_status_t allocate_e820(struct boot_params *params,
->                 status = alloc_e820ext(nr_e820ext, e820ext, e820ext_size);
->         }
+>      loongson.ko = LSDC + LoongGPU + encoders driver + vbios/DT ...
 >
-> +       if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY) && status == EFI_SUCCESS)
-> +               status = allocate_unaccepted_bitmap(params, nr_desc, map);
-> +
->         efi_bs_call(free_pool, map);
->         return status;
->  }
-> diff --git a/include/linux/efi.h b/include/linux/efi.h
-> index 7aa62c92185f..efbe14641638 100644
-> --- a/include/linux/efi.h
-> +++ b/include/linux/efi.h
-> @@ -108,7 +108,8 @@ typedef     struct {
->  #define EFI_MEMORY_MAPPED_IO_PORT_SPACE        12
->  #define EFI_PAL_CODE                   13
->  #define EFI_PERSISTENT_MEMORY          14
-> -#define EFI_MAX_MEMORY_TYPE            15
-> +#define EFI_UNACCEPTED_MEMORY          15
-> +#define EFI_MAX_MEMORY_TYPE            16
+> v6 -> v7:
+>   1) Add prime support, self-sharing is works. sharing buffer with etnaviv
+>      is also tested, and its works with limitation.
+>   2) Implement buffer objects tracking with list_head.
+>   3) S3(sleep to RAM) is tested on ls3a5000+ls7a2000 evb and it works.
+>   4) Rewrite lsdc_bo_move, since ttm core stop allocating resources
+>      during BO creation. Patch V1 ~ V6 of this series no longer works
+>      on latest kernel. Thus, we send V7 to revival them.
 >
->  /* Attribute values: */
->  #define EFI_MEMORY_UC          ((u64)0x0000000000000001ULL)    /* uncached */
-> --
-> 2.39.3
+> v7 -> v8:
+>   1) Zero a compile warnnings on 32-bit platform, compile with W=1
+>   2) Revise lsdc_bo_gpu_offset() and minor cleanup
+>   3) Pageflip tested on the virtual terminal with following commands
+>
+>      modetest -M loongson -s 32:1920x1080 -v
+>      modetest -M loongson -s 34:1920x1080 -v -F tiles
+>
+>     It works like a charm, when running pageflip test with dual screnn
+>     configuration, another two additional bo created by the modetest
+>     emerged, VRAM usage up to 40+MB, well we have at least 64MB, still
+>     enough.
+>
+>     # cat bos
+>
+>         bo[0000]: size:     8112kB VRAM
+>         bo[0001]: size:       16kB VRAM
+>         bo[0002]: size:       16kB VRAM
+>         bo[0003]: size:    16208kB VRAM
+>         bo[0004]: size:     8112kB VRAM
+>         bo[0005]: size:     8112kB VRAM
+>
+> v8 -> v9:
+>   1) Select I2C and I2C_ALGOBIT in Kconfig and should depend on MMU.
+>   2) Using pci_get_domain_bus_and_slot to get the GPU device.
+>   3) Other minor improvements.
+>
+>   Those patches are tested on ls3a5000 + ls7a1000 CRB, ls3a5000 + ls7a2000
+>   evb, and lemote a1901 board(ls3a4000 + ls7a1000). On loongson mips CPU,
+>   the write combine support should be enabled, to get a decent performance
+>   for writing framebuffer data to the VRAM.
+>
+> v9 -> v10:
+>   1) Revise lsdc_drm_freeze() to implement S3 completely and correctly.
+>      I suddenly realized that pinned buffer can not move and VRAM lost
+>      power when sleep to RAM. Thus, the data in the buffer who is pinned
+>      in VRAM will get lost when resume. Yet it's not big problem because
+>      we are software rendering solution which relay on the CPU update the
+>      front framebuffer. We can see the garbage data when resume from S3,
+>      but the screen will show correct image as I move the cursor. This is
+>      due to the cpu repaint. v10 of this patch make S3 perfect by unpin
+>      all of BOs in VRAM, evict them all to system RAM.
+>
+> v10 -> v11:
+>   1) On double screen case, the single giant framebuffer is referenced by
+>      two GEM object, hence, it will be pinned by prepare_fb() at lease two
+>      times. This cause its pin count > 1. V10 of this patch only unpin VRAM
+>      BOs once when suspend, which is not correct on double screen case. V11
+>      of this patch unpin BOs until its pin count reach to zero when suspend.
+>      Then, we make the S3 support complete finally. With v11, I can't see
+>      any garbage data after resume. Teste on both ls7a1000 and ls7a2000
+>      platform, with single screen and double screen configuration tested.
+>   2) Fix vblank wait timeout when disable CRTC.
+>   3) Test against IGT, at least fbdev test and kms_flip test of it passed,
+>      while most tests of it passed.
+>   4) Rewrite pixel PLL update function, magic numbers eliminated (Emil)
+>   5) Drop a few common hardware features description in lsdc_desc (Emil)
+>   6) Drop lsdc_mode_config_mode_valid(), instead add restrictions in dumb
+>      create function. (Emil)
+>   7) Untangle the ls7a1000 case and ls7a2000 case completely (Thomas)
+>
+> v11 -> v12:
+>   none
+>
+> Sui Jingfeng (2):
+>    MAINTAINERS: add maintainers for DRM LOONGSON driver
+>    drm: add kms driver for loongson display controller
+>
+>   MAINTAINERS                                 |    7 +
+>   drivers/gpu/drm/Kconfig                     |    2 +
+>   drivers/gpu/drm/Makefile                    |    1 +
+>   drivers/gpu/drm/loongson/Kconfig            |   17 +
+>   drivers/gpu/drm/loongson/Makefile           |   19 +
+>   drivers/gpu/drm/loongson/ls7a1000_outputs.c |  160 +++
+>   drivers/gpu/drm/loongson/ls7a2000_outputs.c |  534 ++++++++++
+>   drivers/gpu/drm/loongson/lsdc_crtc.c        | 1064 +++++++++++++++++++
+>   drivers/gpu/drm/loongson/lsdc_debugfs.c     |   78 ++
+>   drivers/gpu/drm/loongson/lsdc_device.c      |  104 ++
+>   drivers/gpu/drm/loongson/lsdc_drv.c         |  484 +++++++++
+>   drivers/gpu/drm/loongson/lsdc_drv.h         |  485 +++++++++
+>   drivers/gpu/drm/loongson/lsdc_gem.c         |  319 ++++++
+>   drivers/gpu/drm/loongson/lsdc_gem.h         |   37 +
+>   drivers/gpu/drm/loongson/lsdc_gfxpll.c      |  199 ++++
+>   drivers/gpu/drm/loongson/lsdc_gfxpll.h      |   52 +
+>   drivers/gpu/drm/loongson/lsdc_i2c.c         |  179 ++++
+>   drivers/gpu/drm/loongson/lsdc_i2c.h         |   29 +
+>   drivers/gpu/drm/loongson/lsdc_irq.c         |   81 ++
+>   drivers/gpu/drm/loongson/lsdc_irq.h         |   16 +
+>   drivers/gpu/drm/loongson/lsdc_output.h      |   21 +
+>   drivers/gpu/drm/loongson/lsdc_pixpll.c      |  485 +++++++++
+>   drivers/gpu/drm/loongson/lsdc_pixpll.h      |   86 ++
+>   drivers/gpu/drm/loongson/lsdc_plane.c       |  639 +++++++++++
+>   drivers/gpu/drm/loongson/lsdc_probe.c       |   56 +
+>   drivers/gpu/drm/loongson/lsdc_probe.h       |   12 +
+>   drivers/gpu/drm/loongson/lsdc_regs.h        |  400 +++++++
+>   drivers/gpu/drm/loongson/lsdc_ttm.c         |  547 ++++++++++
+>   drivers/gpu/drm/loongson/lsdc_ttm.h         |   88 ++
+>   29 files changed, 6201 insertions(+)
+>   create mode 100644 drivers/gpu/drm/loongson/Kconfig
+>   create mode 100644 drivers/gpu/drm/loongson/Makefile
+>   create mode 100644 drivers/gpu/drm/loongson/ls7a1000_outputs.c
+>   create mode 100644 drivers/gpu/drm/loongson/ls7a2000_outputs.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_crtc.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_debugfs.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_device.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_gfxpll.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_gfxpll.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_output.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_pixpll.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_pixpll.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_plane.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_regs.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.h
 >
