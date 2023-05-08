@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474B36FB2E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD0D6FB2E9
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235246AbjEHOa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 10:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
+        id S234637AbjEHOa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 10:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234591AbjEHO35 (ORCPT
+        with ESMTP id S234623AbjEHO37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 10:29:57 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1137C2120
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 07:29:35 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64384274895so3208671b3a.2
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 07:29:35 -0700 (PDT)
+        Mon, 8 May 2023 10:29:59 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C470F65AC
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 07:29:39 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-6439b410679so2651596b3a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 07:29:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1683556174; x=1686148174;
+        d=ventanamicro.com; s=google; t=1683556179; x=1686148179;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2E+vPnkV/6+u4KNq32vBTTiL8TGRt65LegkILCc8n2k=;
-        b=KT3ZEhjc9ES8ZVsBr2ikNMw73wtSWzh4Z47d8zPtu1lgyPuFMqA7VwwV9vGZ5SW37y
-         MBSQZQzUOXlqyAH/WPlhJEruUeA6vRH09JsKCeJloRHHdGN+44VRCKznMVlqb6dAACEX
-         rY4QqvEig87kN7V+kDf9uNihu9VwP08GNpbHcAv0sxuZ3WEs8RWfd34N6igOBg/yTMoe
-         7GNzMzfOxpE93Y/1poLdOn9sU0wwciXW+YTUPjnu+jExlWcVkXq8tQ5iwF61Ewdy1p/y
-         7+yJleoMtrVZAc9UDgmKmrkwOMZww8DaLoH7t7SGqTiSON85DurBae5XHh9Q+JFPQp27
-         qWBw==
+        bh=gulDdhHMZRSrLXU3iHwqBSdOOAUh5cBhxAXZTyp6yp4=;
+        b=GzUgbjK2FUWi8gDMJBV0XJUciYOiIyt5d9RrZk+TfhgBZoDqKJc1FznkgqIk7ptZTS
+         aWa0mTmryvNxQ7tlRkfXhyruNQaL+4KamL+M1isNxAAN2yZ4DZbIJex5oHoKifz/MVmI
+         O10tPe31ve+KgIR8T2C3S27/3Bv+igVxvfOlSu924IFlg0I50x4MRJYWDsQA50zjwnsW
+         7NX0G4KrLMfAiBGr+UH8xsQ5bYzVRbdhrkTpRINqXUbO7U8c6QKe/H/FntNkOZKO+Gp4
+         r/hY3d2o1UblKsNdsqjdp897n519YAp1cznFj1bpNA9jqT9ZpmdtECPwIIORcCHtD6LV
+         xijQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683556174; x=1686148174;
+        d=1e100.net; s=20221208; t=1683556179; x=1686148179;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2E+vPnkV/6+u4KNq32vBTTiL8TGRt65LegkILCc8n2k=;
-        b=I4GLUBDVHKb4xqQ6jx1G9nctMZGsWdJTPdQJWA/E/spfqes1+hggqFegSqZSHvt+iK
-         m/C2eCaE4PU7IXkoUqCNK6WDm3TR/KKpwPtb+C0DmaEoaxIK1lfOz2WaQ6OxPFIWre7w
-         /4cQPCqDxUexB4e3hVaq3b4DvHYf9bWJu2KobZCxKwDngXjU4LNznru6L5WmnieDgXcO
-         QiaIs9IvJNkAKIoAHYnGL+10mIUX56uCxC8zPM+OwvPYUjNy+4nXVRRbpiB+Y3meCVcn
-         2ZfbJdhdx/JMEFUUz0qF3BughRXXK6lIQiqpjoZIKA+sJf3BqJMW0zAWtd/kBp37g5Iy
-         feVw==
-X-Gm-Message-State: AC+VfDxyeEdZJkGr693iXgQsTWzQyc6GTG9FjQqIqUdAShIoxozPH6Ly
-        6/bxnS6yO7mIqDW7NwAAYqbuHg==
-X-Google-Smtp-Source: ACHHUZ79hH5wFhuoEuXBKu2QARKi88tLOJJxJ8szDy+oplzBOr9aNkt51Kezumakz3nwNJJ1uxt6YA==
-X-Received: by 2002:a05:6a00:b8a:b0:646:663a:9d60 with SMTP id g10-20020a056a000b8a00b00646663a9d60mr2974528pfj.10.1683556174393;
-        Mon, 08 May 2023 07:29:34 -0700 (PDT)
+        bh=gulDdhHMZRSrLXU3iHwqBSdOOAUh5cBhxAXZTyp6yp4=;
+        b=OyWthrc/bgkbL6JoSQ6Zd0gW5kTPXZC0WfYqgimZ8sCP4J+biy5RH964LxLLL2GkQv
+         Fc+gIorS4jDbppORY/gYlwt7kX4hz3/Zhx1UkV6TwybcnQAdwDBNYnQRuxlGDwZMgeFF
+         ci5ZI0tTtBYdAm7xPY/cQlnCi4NhPdSqm0vxPNBK6e8r0XV7/vN8w+B4HklCGksebN/A
+         ybMtJirQFg3YzRltgq8maCVAdhxLI/PKv7VUVWRXWZOFxI54BUk34IH1Nu7BRHIPg8q4
+         nH7Vej1Dv2mGYLf1kZTxyfw6KPLvBV2NcwEAb31ATZYV1Z2U8EMOrteeoDkeq60Dwx8+
+         HIyw==
+X-Gm-Message-State: AC+VfDwY03MLMRJALPQPJ9OCkU5aJiQQdmH4+oLdVmw4ntuij+z4H1zi
+        tYNSHssDqB38wVygr81LnXideQ==
+X-Google-Smtp-Source: ACHHUZ4IShxOvNiQ2UXoUBiESmy8vRDR1OTpKRVCe0zPk6I3gW+S5bpqh1ip9HIj5SmafyGeBqu8LA==
+X-Received: by 2002:a05:6a00:cc8:b0:644:d220:64ac with SMTP id b8-20020a056a000cc800b00644d22064acmr8720065pfv.2.1683556179130;
+        Mon, 08 May 2023 07:29:39 -0700 (PDT)
 Received: from anup-ubuntu-vm.localdomain ([171.76.84.206])
-        by smtp.gmail.com with ESMTPSA id k3-20020aa790c3000000b0063d46ec5777sm6082pfk.158.2023.05.08.07.29.29
+        by smtp.gmail.com with ESMTPSA id k3-20020aa790c3000000b0063d46ec5777sm6082pfk.158.2023.05.08.07.29.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 07:29:34 -0700 (PDT)
+        Mon, 08 May 2023 07:29:38 -0700 (PDT)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -65,11 +65,10 @@ Cc:     Atish Patra <atishp@atishpatra.org>,
         Anup Patel <anup@brainfault.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, iommu@lists.linux.dev,
-        Anup Patel <apatel@ventanamicro.com>,
-        Vincent Chen <vincent.chen@sifive.com>
-Subject: [PATCH v3 07/11] irqchip/riscv-imsic: Improve IOMMU DMA support
-Date:   Mon,  8 May 2023 19:58:38 +0530
-Message-Id: <20230508142842.854564-8-apatel@ventanamicro.com>
+        Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v3 08/11] dt-bindings: interrupt-controller: Add RISC-V advanced PLIC
+Date:   Mon,  8 May 2023 19:58:39 +0530
+Message-Id: <20230508142842.854564-9-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230508142842.854564-1-apatel@ventanamicro.com>
 References: <20230508142842.854564-1-apatel@ventanamicro.com>
@@ -77,7 +76,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,168 +84,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have a separate RISC-V IMSIC MSI address for each CPU so changing
-MSI (or IRQ) affinity results in re-programming of MSI address in
-the PCIe (or platform) device.
+We add DT bindings document for RISC-V advanced platform level interrupt
+controller (APLIC) defined by the RISC-V advanced interrupt architecture
+(AIA) specification.
 
-Currently, the iommu_dma_prepare_msi() is called only once at the
-time of IRQ allocation so IOMMU DMA domain will only have mapping
-for one MSI page. This means iommu_dma_compose_msi_msg() called
-by imsic_irq_compose_msi_msg() will always use the same MSI page
-irrespective to target CPU MSI address. In other words, changing
-MSI (or IRQ) affinity for device using IOMMU DMA domain will not
-work.
-
-To address above issue, we do the following:
-1) Map MSI pages for all CPUs in imsic_irq_domain_alloc()
-   using iommu_dma_prepare_msi().
-2) Add a new iommu_dma_select_msi() API to select a specific
-   MSI page from a set of already mapped MSI pages.
-3) Use iommu_dma_select_msi() to select a specific MSI page
-   before calling iommu_dma_compose_msi_msg() in
-   imsic_irq_compose_msi_msg().
-
-Reported-by: Vincent Chen <vincent.chen@sifive.com>
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 ---
- drivers/iommu/dma-iommu.c         | 38 +++++++++++++++++++++++++++++++
- drivers/irqchip/irq-riscv-imsic.c | 27 ++++++++++++----------
- include/linux/iommu.h             |  6 +++++
- 3 files changed, 59 insertions(+), 12 deletions(-)
+ .../interrupt-controller/riscv,aplic.yaml     | 162 ++++++++++++++++++
+ 1 file changed, 162 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 7a9f0b0bddbd..07782c77a6eb 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -1677,6 +1677,44 @@ int iommu_dma_prepare_msi(struct msi_desc *desc, phys_addr_t msi_addr)
- 	return 0;
- }
- 
-+/**
-+ * iommu_dma_select_msi() - Select a MSI page from a set of
-+ * already mapped MSI pages in the IOMMU domain.
-+ *
-+ * @desc: MSI descriptor prepared by iommu_dma_prepare_msi()
-+ * @msi_addr: physical address of the MSI page to be selected
-+ *
-+ * Return: 0 on success or negative error code if the select failed.
-+ */
-+int iommu_dma_select_msi(struct msi_desc *desc, phys_addr_t msi_addr)
-+{
-+	struct device *dev = msi_desc_to_dev(desc);
-+	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
-+	const struct iommu_dma_msi_page *msi_page;
-+	struct iommu_dma_cookie *cookie;
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
+new file mode 100644
+index 000000000000..b47a7987b774
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
+@@ -0,0 +1,162 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/riscv,aplic.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	if (!domain || !domain->iova_cookie) {
-+		desc->iommu_cookie = NULL;
-+		return 0;
-+	}
++title: RISC-V Advanced Platform Level Interrupt Controller (APLIC)
 +
-+	cookie = domain->iova_cookie;
-+	msi_addr &= ~(phys_addr_t)(cookie_msi_granule(cookie) - 1);
++maintainers:
++  - Anup Patel <anup@brainfault.org>
 +
-+	msi_page = msi_desc_get_iommu_cookie(desc);
-+	if (msi_page && msi_page->phys == msi_addr)
-+		return 0;
++description:
++  The RISC-V advanced interrupt architecture (AIA) defines an advanced
++  platform level interrupt controller (APLIC) for handling wired interrupts
++  in a RISC-V platform. The RISC-V AIA specification can be found at
++  https://github.com/riscv/riscv-aia.
 +
-+	list_for_each_entry(msi_page, &cookie->msi_page_list, list) {
-+		if (msi_page->phys == msi_addr) {
-+			msi_desc_set_iommu_cookie(desc, msi_page);
-+			return 0;
-+		}
-+	}
++  The RISC-V APLIC is implemented as hierarchical APLIC domains where all
++  interrupt sources connect to the root domain which can further delegate
++  interrupts to child domains. There is one device tree node for each APLIC
++  domain.
 +
-+	return -ENOENT;
-+}
++allOf:
++  - $ref: /schemas/interrupt-controller.yaml#
 +
- /**
-  * iommu_dma_compose_msi_msg() - Apply translation to an MSI message
-  * @desc: MSI descriptor prepared by iommu_dma_prepare_msi()
-diff --git a/drivers/irqchip/irq-riscv-imsic.c b/drivers/irqchip/irq-riscv-imsic.c
-index 30247c84a6b0..ec61c599e0c5 100644
---- a/drivers/irqchip/irq-riscv-imsic.c
-+++ b/drivers/irqchip/irq-riscv-imsic.c
-@@ -446,6 +446,10 @@ static void imsic_irq_compose_msi_msg(struct irq_data *d,
- 	if (WARN_ON(err))
- 		return;
- 
-+	err = iommu_dma_select_msi(desc, msi_addr);
-+	if (WARN_ON(err))
-+		return;
++properties:
++  compatible:
++    items:
++      - enum:
++          - qemu,aplic
++      - const: riscv,aplic
 +
- 	msg->address_hi = upper_32_bits(msi_addr);
- 	msg->address_lo = lower_32_bits(msi_addr);
- 	msg->data = d->hwirq;
-@@ -493,11 +497,18 @@ static int imsic_irq_domain_alloc(struct irq_domain *domain,
- 	int i, hwirq, err = 0;
- 	unsigned int cpu;
- 
--	err = imsic_get_cpu(&imsic->lmask, false, &cpu);
--	if (err)
--		return err;
-+	/* Map MSI address of all CPUs */
-+	for_each_cpu(cpu, &imsic->lmask) {
-+		err = imsic_cpu_page_phys(cpu, 0, &msi_addr);
-+		if (err)
-+			return err;
- 
--	err = imsic_cpu_page_phys(cpu, 0, &msi_addr);
-+		err = iommu_dma_prepare_msi(info->desc, msi_addr);
-+		if (err)
-+			return err;
-+	}
++  reg:
++    maxItems: 1
 +
-+	err = imsic_get_cpu(&imsic->lmask, false, &cpu);
- 	if (err)
- 		return err;
- 
-@@ -505,10 +516,6 @@ static int imsic_irq_domain_alloc(struct irq_domain *domain,
- 	if (hwirq < 0)
- 		return hwirq;
- 
--	err = iommu_dma_prepare_msi(info->desc, msi_addr);
--	if (err)
--		goto fail;
--
- 	for (i = 0; i < nr_irqs; i++) {
- 		imsic_id_set_target(hwirq + i, cpu);
- 		irq_domain_set_info(domain, virq + i, hwirq + i,
-@@ -528,10 +535,6 @@ static int imsic_irq_domain_alloc(struct irq_domain *domain,
- 	}
- 
- 	return 0;
--
--fail:
--	imsic_ids_free(hwirq, get_count_order(nr_irqs));
--	return err;
- }
- 
- static void imsic_irq_domain_free(struct irq_domain *domain,
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index e8c9a7da1060..41e8613832ab 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -1117,6 +1117,7 @@ void iommu_setup_dma_ops(struct device *dev, u64 dma_base, u64 dma_limit);
- int iommu_get_msi_cookie(struct iommu_domain *domain, dma_addr_t base);
- 
- int iommu_dma_prepare_msi(struct msi_desc *desc, phys_addr_t msi_addr);
-+int iommu_dma_select_msi(struct msi_desc *desc, phys_addr_t msi_addr);
- void iommu_dma_compose_msi_msg(struct msi_desc *desc, struct msi_msg *msg);
- 
- #else /* CONFIG_IOMMU_DMA */
-@@ -1138,6 +1139,11 @@ static inline int iommu_dma_prepare_msi(struct msi_desc *desc, phys_addr_t msi_a
- 	return 0;
- }
- 
-+static inline int iommu_dma_select_msi(struct msi_desc *desc, phys_addr_t msi_addr)
-+{
-+	return 0;
-+}
++  interrupt-controller: true
 +
- static inline void iommu_dma_compose_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
- {
- }
++  "#interrupt-cells":
++    const: 2
++
++  interrupts-extended:
++    minItems: 1
++    maxItems: 16384
++    description:
++      Given APLIC domain directly injects external interrupts to a set of
++      RISC-V HARTS (or CPUs). Each node pointed to should be a riscv,cpu-intc
++      node, which has a riscv node (i.e. RISC-V HART) as parent.
++
++  msi-parent:
++    description:
++      Given APLIC domain forwards wired interrupts as MSIs to a AIA incoming
++      message signaled interrupt controller (IMSIC). If both "msi-parent" and
++      "interrupts-extended" properties are present then it means the APLIC
++      domain supports both MSI mode and Direct mode in HW. In this case, the
++      APLIC driver has to choose between MSI mode or Direct mode.
++
++  riscv,num-sources:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 1
++    maximum: 1023
++    description:
++      Specifies the number of wired interrupt sources supported by this
++      APLIC domain.
++
++  riscv,children:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    minItems: 1
++    maxItems: 1024
++    items:
++      maxItems: 1
++    description:
++      A list of child APLIC domains for the given APLIC domain. Each child
++      APLIC domain is assigned a child index in increasing order, with the
++      first child APLIC domain assigned child index 0. The APLIC domain child
++      index is used by firmware to delegate interrupts from the given APLIC
++      domain to a particular child APLIC domain.
++
++  riscv,delegate:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    minItems: 1
++    maxItems: 1024
++    items:
++      items:
++        - description: child APLIC domain phandle
++        - description: first interrupt number of this APLIC domain (inclusive)
++        - description: last interrupt number of this APLIC domain (inclusive)
++    description:
++      A interrupt delegation list where each entry is a triple consisting of
++      child APLIC domain phandle, first interrupt number of this APLIC domain,
++      and last interrupt number of this APLIC domain. Firmware must configure
++      interrupt delegation registers based on interrupt delegation list.
++
++required:
++  - compatible
++  - reg
++  - interrupt-controller
++  - "#interrupt-cells"
++  - riscv,num-sources
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    // Example 1 (APLIC domains directly injecting interrupt to HARTs):
++
++    interrupt-controller@c000000 {
++      compatible = "qemu,aplic", "riscv,aplic";
++      interrupts-extended = <&cpu1_intc 11>,
++                            <&cpu2_intc 11>,
++                            <&cpu3_intc 11>,
++                            <&cpu4_intc 11>;
++      reg = <0xc000000 0x4080>;
++      interrupt-controller;
++      #interrupt-cells = <2>;
++      riscv,num-sources = <63>;
++      riscv,children = <&aplic1>, <&aplic2>;
++      riscv,delegate = <&aplic1 1 63>;
++    };
++
++    aplic1: interrupt-controller@d000000 {
++      compatible = "qemu,aplic", "riscv,aplic";
++      interrupts-extended = <&cpu1_intc 9>,
++                            <&cpu2_intc 9>;
++      reg = <0xd000000 0x4080>;
++      interrupt-controller;
++      #interrupt-cells = <2>;
++      riscv,num-sources = <63>;
++    };
++
++    aplic2: interrupt-controller@e000000 {
++      compatible = "qemu,aplic", "riscv,aplic";
++      interrupts-extended = <&cpu3_intc 9>,
++                            <&cpu4_intc 9>;
++      reg = <0xe000000 0x4080>;
++      interrupt-controller;
++      #interrupt-cells = <2>;
++      riscv,num-sources = <63>;
++    };
++
++  - |
++    // Example 2 (APLIC domains forwarding interrupts as MSIs):
++
++    interrupt-controller@c000000 {
++      compatible = "qemu,aplic", "riscv,aplic";
++      msi-parent = <&imsic_mlevel>;
++      reg = <0xc000000 0x4000>;
++      interrupt-controller;
++      #interrupt-cells = <2>;
++      riscv,num-sources = <63>;
++      riscv,children = <&aplic3>;
++      riscv,delegate = <&aplic3 1 63>;
++    };
++
++    aplic3: interrupt-controller@d000000 {
++      compatible = "qemu,aplic", "riscv,aplic";
++      msi-parent = <&imsic_slevel>;
++      reg = <0xd000000 0x4000>;
++      interrupt-controller;
++      #interrupt-cells = <2>;
++      riscv,num-sources = <63>;
++    };
++...
 -- 
 2.34.1
 
