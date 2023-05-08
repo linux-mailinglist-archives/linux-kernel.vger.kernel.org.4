@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184756F9FD4
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F976F9FD0
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232817AbjEHG1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 02:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232388AbjEHG1A (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232649AbjEHG1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 8 May 2023 02:27:00 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF06A30E8;
-        Sun,  7 May 2023 23:26:58 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-195ee1be41aso1168524fac.1;
-        Sun, 07 May 2023 23:26:58 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229621AbjEHG05 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 8 May 2023 02:26:57 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BB930E8;
+        Sun,  7 May 2023 23:26:56 -0700 (PDT)
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6a5e905e15aso1513260a34.1;
+        Sun, 07 May 2023 23:26:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683527218; x=1686119218;
+        d=1e100.net; s=20221208; t=1683527216; x=1686119216;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=zA2dOrgpR+LAShw4lI3fM62PxuKc8EjiFypsxPezBTE=;
-        b=lf0FFkvBpGxl4IS3wCnkrJa8CMwaC5ViIFPSlh3k0FdRl0m2s7fvPV7gG17TZVn9XL
-         rzu1rpHGNYPvZdrIBFVz5xRpwnl14SzVjEYZhrkyckU588P8HoGBl6iPCSkt+Ly0VADN
-         D2GgVpMxbEGyGCJrlvjtXsMAjl0fy8wsNQ8+n/HlpZFfQLfyqxj4UcLvinE1aksCbEOt
-         37smaY4HPgDZFZGVscv3IgyOEWFKtit+1Yj8TwE/yvjTqQWEniInvupvqL3pO1U5u3Cm
-         30TX/S4kQuvlgRCzt7U5Gj9Xrkg3CEcyFeWRICdM8mXE8jBNgwFk6DrphllCvQ0D/hrr
-         buZQ==
-X-Gm-Message-State: AC+VfDy5yKkWz0UpcjC9tea7z3Zab6WonuFHvGoElO8L815vPU74VgBP
-        ToowMo0l3gSKd0rhc14GAQ==
-X-Google-Smtp-Source: ACHHUZ79sO6V/lar1ARUIsYqRQiGqHQtNQzJC5YOgirC6ArGbU6WU1wCuu4pynsdBPC15daXAVoiyw==
-X-Received: by 2002:a05:6870:2201:b0:192:b536:259 with SMTP id i1-20020a056870220100b00192b5360259mr4424969oaf.19.1683527218009;
-        Sun, 07 May 2023 23:26:58 -0700 (PDT)
+        bh=VIIsg81nx2YWfo/hbvJ1Tg3wCjn3Krug/S2LD6RUpvM=;
+        b=WzPmJeV8FCQl+GhVT9+Y8oSguA9mZRWVPCjxkWmpmuy4HQm39ep7vAg+C6Zii0RDEB
+         s2ozymDoraMeTbFCmG/SxM6Xn8jyjPSicliqbeO7WcNzBC5PXx0reM7uAn8HxOfRPRiC
+         GANdGNjcfVocMChnQVtadUjYC74vTre0zwyQciPesyYGFScbzB1mkV1zr+Y4OPABk0JE
+         Nj5wOBGWN3wRimaTY47ceNseDF499nscbdTNA8J2F4ldJQyH+MKPiNugCQVXLGq4V6ow
+         3G9bn0goChIvAquASA11kmNOm3iiHnq+JPqLWlrYta0nmF5QbGZtRWMkbDsg5G3ujDCh
+         cIfg==
+X-Gm-Message-State: AC+VfDx5PHpEjATxUnIBcxlkhdDJeXQdE1ozdTThYMoHvHwEiS0AN8ME
+        wslbedKdN1w/ZzSYfITrAA==
+X-Google-Smtp-Source: ACHHUZ55oI53CjZWp9/PJbct2mXVHCl8NxRuxFEVisaxgWEGvdmnVDTw+6ugeAENdSEW5Gn0o4pQrg==
+X-Received: by 2002:aca:d19:0:b0:38d:15c7:367e with SMTP id 25-20020aca0d19000000b0038d15c7367emr3853213oin.49.1683527215578;
+        Sun, 07 May 2023 23:26:55 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a19-20020a056870e35300b0018456166c7asm4635438oae.39.2023.05.07.23.26.56
+        by smtp.gmail.com with ESMTPSA id e17-20020a05680809b100b0038cabfcb3ccsm5256956oig.15.2023.05.07.23.26.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 23:26:57 -0700 (PDT)
-Received: (nullmailer pid 213417 invoked by uid 1000);
+        Sun, 07 May 2023 23:26:54 -0700 (PDT)
+Received: (nullmailer pid 213412 invoked by uid 1000);
         Mon, 08 May 2023 06:26:53 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
-        marex@denx.de, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, krzysztof.kozlowski+dt@linaro.org,
-        festevam@gmail.com, airlied@gmail.com, robh+dt@kernel.org,
-        stefan@agner.ch, conor+dt@kernel.org,
-        dri-devel@lists.freedesktop.org, krzysztof.kozlowski@linaro.org,
-        LW@karo-electronics.de, alexander.stein@ew.tq-group.com,
-        daniel@ffwll.ch, s.hauer@pengutronix.de
-In-Reply-To: <20230508055740.635256-2-victor.liu@nxp.com>
-References: <20230508055740.635256-1-victor.liu@nxp.com>
- <20230508055740.635256-2-victor.liu@nxp.com>
-Message-Id: <168352721348.213381.2072764987425735233.robh@kernel.org>
-Subject: Re: [PATCH v5 1/6] dt-bindings: lcdif: Add i.MX93 LCDIF support
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     rui.zhang@intel.com, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, amitk@kernel.org,
+        Praveenkumar I <quic_ipkumar@quicinc.com>,
+        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
+        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org
+In-Reply-To: <345a61f6cd56e504e1f82ac2328ffa6d89e2d510.1683523370.git.quic_varada@quicinc.com>
+References: <cover.1683523370.git.quic_varada@quicinc.com>
+ <345a61f6cd56e504e1f82ac2328ffa6d89e2d510.1683523370.git.quic_varada@quicinc.com>
+Message-Id: <168352721179.213297.4966890333203565240.robh@kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: thermal: tsens: Add ipq9574
+ compatible
 Date:   Mon, 08 May 2023 01:26:53 -0500
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -72,54 +72,46 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 08 May 2023 13:57:35 +0800, Liu Ying wrote:
-> There is one LCDIF embedded in i.MX93 SoC to connect with
-> MIPI DSI controller through LCDIF cross line pattern(controlled
-> by mediamix blk-ctrl) or connect with LVDS display bridge(LDB)
-> directly or connect with a parallel display through parallel
-> display format(also controlled by mediamix blk-ctrl).  i.MX93
-> LCDIF IP is essentially the same to i.MX8MP LCDIF IP.  Add device
-> tree binding for i.MX93 LCDIF.
+On Mon, 08 May 2023 11:02:38 +0530, Varadarajan Narayanan wrote:
+> From: Praveenkumar I <quic_ipkumar@quicinc.com>
 > 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Marek Vasut <marex@denx.de>
-> Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> Qualcomm IPQ9574 has tsens v2.3.1 block, which is similar to IPQ8074 tsens.
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 > ---
-> v4->v5:
-> * No change.
-> 
-> v3->v4:
-> * Add Alexander's R-b tag.
-> 
-> v2->v3:
-> * No change.
-> 
-> v1->v2:
-> * Add Krzysztof's A-b and Marek's R-b tags.
-> 
->  Documentation/devicetree/bindings/display/fsl,lcdif.yaml | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+> [v2]:
+> 	Thanks to Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 	for the tip to make qcom,ipq8074-tsens as fallback.
+> ---
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:67:9: [error] syntax error: expected <block end>, but found '-' (syntax)
+./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:69:11: [warning] wrong indentation: expected 12 but found 10 (indentation)
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.example.dtb: camera-sensor@3c: port:endpoint:data-lanes: [[1]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: port:endpoint:data-lanes: [[1]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.example.dtb: pcie-ep@33800000: Unevaluated properties are not allowed ('assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.yaml
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/thermal/qcom-tsens.example.dts'
+Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:67:9: did not find expected key
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/thermal/qcom-tsens.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/thermal/qcom-tsens.yaml
+./Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/thermal/qcom-tsens.yaml
+./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:67:9: did not find expected key
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml: ignoring, error parsing file
+make: *** [Makefile:1512: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 Documentation/usb/gadget_uvc.rst: Documentation/userspace-api/media/v4l/pixfmt-packed.yuv.rst
 MAINTAINERS: Documentation/devicetree/bindings/pwm/pwm-apple.yaml
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230508055740.635256-2-victor.liu@nxp.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/345a61f6cd56e504e1f82ac2328ffa6d89e2d510.1683523370.git.quic_varada@quicinc.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
