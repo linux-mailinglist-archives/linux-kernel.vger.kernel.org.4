@@ -2,111 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58ED56F9DB8
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 04:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FAD6F9DBB
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 04:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbjEHC0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 22:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60000 "EHLO
+        id S232364AbjEHC1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 22:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjEHC0V (ORCPT
+        with ESMTP id S229744AbjEHC1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 22:26:21 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF85F2697;
-        Sun,  7 May 2023 19:26:19 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6aaffc866c4so219471a34.2;
-        Sun, 07 May 2023 19:26:19 -0700 (PDT)
+        Sun, 7 May 2023 22:27:05 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF37C40E3
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 19:27:04 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id ada2fe7eead31-43478543ad0so1065057137.1
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 19:27:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683512824; x=1686104824;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NIGaI7AoRYU4CptNG22N3Xgj/+0h3Xejz8PTM4bg9mY=;
+        b=cBA6vAuO8LJez7PdckNifF4buIJQwn0a0dc5Wz/GSw9bSYwmfJvhxb8Idnsp7T6OMy
+         hZL/ZPvA2533OMdcL+f1k3MCPucJhefBcGSBwCRbEu6k5WoGxazYFdIP63QhYj5UbVQc
+         3DRW/1rCElBfe+wOsslxXnnq7xrnf25wf3GuA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683512779; x=1686104779;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=h0nAj/yiEXbegcbKIRioBYUBmK7Tsw8tqmlINwwUydQ=;
-        b=eyMewFlnIes/BMKgcL+bTbQ0qwBWALoi5Oi1OLnNG/jXHVA9onfeeF45RGpWxLJyPm
-         8npmPGePS79lEUXtYV/vw3pMdVy83P5JsHBBcw4c49HeJ+t4pm8fag542exDEZ9W6aYu
-         FtsGn+wnnYjrB1cQXn0wButJVNjFxnD7pCs14nnb/fqKk8hoEX+nFxH5roN283K5pCot
-         oNcOZ2ZHuIwpN9HQLSPVZZ/wYQab9ZKEaZaSJmLhkmH2SZQnfPG2qGx07AIAkjVZoxlx
-         DEtYyz3QIKY6HoMgx904LW3hbNw4WOoJ9zK7zk/5+B9pdwiiXYC7wy9wc6mOiXC4WiYz
-         Pncg==
-X-Gm-Message-State: AC+VfDytIuAaxhMU9SsNq54tS5cE0TNYyXGDf5YHNEkB/8Jg8OlDysLY
-        k5FksbP8TelE2J4njlQsNn/5UIK6Z3SF
-X-Google-Smtp-Source: ACHHUZ6m668jF63TDZnUEWWGd+LLclja4qzSD5cV0i+7Pi8lrfJxUZb9w6fQgcVTo0AqWBMF8tKVZw==
-X-Received: by 2002:a05:6830:130c:b0:6ab:8a:1cd9 with SMTP id p12-20020a056830130c00b006ab008a1cd9mr1217921otq.12.1683512778911;
-        Sun, 07 May 2023 19:26:18 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m22-20020a9d7e96000000b0069faa14e99fsm461803otp.10.2023.05.07.19.26.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 19:26:18 -0700 (PDT)
-Received: (nullmailer pid 3963898 invoked by uid 1000);
-        Mon, 08 May 2023 02:26:17 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20221208; t=1683512824; x=1686104824;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NIGaI7AoRYU4CptNG22N3Xgj/+0h3Xejz8PTM4bg9mY=;
+        b=GuenzHBQnqSuCaXkriUoJgSPNVfmyJVfHzXSFvSsx6lGaq4LS+srylkAA68ThzfIXn
+         xdiuKTQ2kMwC/+vq/4mRTBi763Tgp3N7b994sUCwp67Jaovs3fc1vAhlUTCS5qZWimRo
+         EtHGM4SBl7ohaxEy2SEY6uXz0cChmpGGIPyBPMGUfgu1OR5hg9ebc4en8siHjiQ33uxu
+         9BZReIIwKk2s/stdONgZbD3s3v+U4bblFHCQFkXnFH9HwTJrJZSNoES+salebxMoARuo
+         nUlRfDI/elt2RJ7t+aj2jylUVKN/edlrpmtlveqGVPHoaC2fK6tAqmFaXou5lWLVFmi0
+         kW/A==
+X-Gm-Message-State: AC+VfDwoCIz2YdRaHPeqAL4GM7ph+8i1U/MaL4xeRhHtL+eIR9B2woSx
+        PYV1iJ6oDF/mcAoPynlL7R7eUTBVWCC+4BKfPESIhA==
+X-Google-Smtp-Source: ACHHUZ6TS2ol1t6UooR5qGJfNvnT2PxdKXiffL9hVv+balRGgS96GUFpCOf1xMIUrvIL749QC5ZcR6JGiAD5thV5h7c=
+X-Received: by 2002:a67:f8cf:0:b0:426:2a37:4a6b with SMTP id
+ c15-20020a67f8cf000000b004262a374a6bmr3098252vsp.25.1683512823989; Sun, 07
+ May 2023 19:27:03 -0700 (PDT)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     alison@she-devel.com
-Cc:     johan@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        achaiken@aurora.tech, devicetree@vger.kernel.org,
-        conor+dt@kernel.org
-In-Reply-To: <20230508011159.263322-3-alison@she-devel.com>
-References: <20230508011159.263322-1-alison@she-devel.com>
- <20230508011159.263322-3-alison@she-devel.com>
-Message-Id: <168351277733.3963882.1322894926524708728.robh@kernel.org>
-Subject: Re: [PATCH 2/2] dt-bindings: gnss: Add U-Blox Zed-F9
-Date:   Sun, 07 May 2023 21:26:17 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230506192453.725621-1-aford173@gmail.com> <20230506192453.725621-5-aford173@gmail.com>
+In-Reply-To: <20230506192453.725621-5-aford173@gmail.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 8 May 2023 10:26:52 +0800
+Message-ID: <CAGXv+5Hi=Oh9u6QB8_7h4P2zq9GLSS59g+fJsJfaXuhubuP=VA@mail.gmail.com>
+Subject: Re: [PATCH V5 4/6] drm: bridge: samsung-dsim: Select GENERIC_PHY_MIPI_DPHY
+To:     Adam Ford <aford173@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-kernel@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, May 7, 2023 at 3:25=E2=80=AFAM Adam Ford <aford173@gmail.com> wrote=
+:
+>
+> In order to support variable DPHY timings, it's necessary
+> to enable GENERIC_PHY_MIPI_DPHY so phy_mipi_dphy_get_default_config
+> can be used to determine the nominal values for a given resolution
+> and refresh rate.
+>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-On Sun, 07 May 2023 18:11:59 -0700, alison@she-devel.com wrote:
-> From: Alison Chaiken <achaiken@aurora.tech>
-> 
-> Add support for the U-Blox Zed-F9P GNSS device.
-> 
-> Signed-off-by: Alison Chaiken <achaiken@aurora.tech>
-> ---
->  Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.example.dtb: camera-sensor@3c: port:endpoint:data-lanes: [[1]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: port:endpoint:data-lanes: [[1]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.example.dtb: pcie-ep@33800000: Unevaluated properties are not allowed ('assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.yaml
-
-doc reference errors (make refcheckdocs):
-Documentation/usb/gadget_uvc.rst: Documentation/userspace-api/media/v4l/pixfmt-packed.yuv.rst
-MAINTAINERS: Documentation/devicetree/bindings/pwm/pwm-apple.yaml
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230508011159.263322-3-alison@she-devel.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
