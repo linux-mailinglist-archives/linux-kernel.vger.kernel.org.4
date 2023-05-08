@@ -2,44 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9DD6F9D84
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 03:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865EA6F9D8C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 03:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjEHBsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 21:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
+        id S232075AbjEHByM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 21:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjEHBsS (ORCPT
+        with ESMTP id S229960AbjEHByK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 21:48:18 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EDD26BD;
-        Sun,  7 May 2023 18:48:15 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0Vhymz9._1683510491;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vhymz9._1683510491)
-          by smtp.aliyun-inc.com;
-          Mon, 08 May 2023 09:48:12 +0800
-Message-ID: <1683510351.569717-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH net v3] virtio_net: Fix error unwinding of XDP initialization
-Date:   Mon, 8 May 2023 09:45:51 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Feng Liu <feliu@nvidia.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Bodong Wang <bodong@nvidia.com>, William Tu <witu@nvidia.com>,
-        Parav Pandit <parav@nvidia.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20230503003525.48590-1-feliu@nvidia.com>
- <1683340417.612963-3-xuanzhuo@linux.alibaba.com>
- <559ad341-2278-5fad-6805-c7f632e9894e@nvidia.com>
-In-Reply-To: <559ad341-2278-5fad-6805-c7f632e9894e@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        Sun, 7 May 2023 21:54:10 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59952A257;
+        Sun,  7 May 2023 18:54:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683510851; x=1715046851;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NlwA/JGEa3cJXZJD2KYsrvTLSGrKWeh48+hlqUZVXFk=;
+  b=VEgWZLslP4rpLTqs5YLRun2C5BY/D7kGCHGx39r0IFHa2UJPQRHpVlfx
+   G2c2m82NNtP3wMWZODyIYG9oFJOkD/H5o3aLxQ9cpsIzUR1BQEb1djAft
+   CpL4rNMMqoN8sdbLFXDqs1lJNW1CD+vF4Fp62kYzZ/JHTWtpuQVfZgPjR
+   ny7rbTlXMDzsolPdcWqQWf6ZQQxkZp2Zx0xs4EztUwutZ4v7bnNl+evpv
+   74OufD/0HSP+4aL8ddAc1w8HhEtAZuMA5xZtJNb/lIUB1avwQtS1ct8d4
+   uDxa4LZYYMvp9Vstjv2L+1msizU1IIP0Q2jwqpC/kDDYv/chXmAI1J9qu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="351696401"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="351696401"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2023 18:54:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="872609592"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="872609592"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.254.208.84]) ([10.254.208.84])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2023 18:54:06 -0700
+Message-ID: <c9090d80-46da-ed88-bad9-5a2e6d33d77b@intel.com>
+Date:   Mon, 8 May 2023 09:54:04 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.1
+Subject: Re: [PATCH v2] KVM: VMX: add MSR_IA32_TSX_CTRL into msrs_to_save
+To:     Mingwei Zhang <mizhang@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>
+References: <20230504181827.130532-1-mizhang@google.com>
+Content-Language: en-US
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20230504181827.130532-1-mizhang@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,131 +67,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 6 May 2023 08:08:02 -0400, Feng Liu <feliu@nvidia.com> wrote:
->
->
-> On 2023-05-05 p.m.10:33, Xuan Zhuo wrote:
-> > External email: Use caution opening links or attachments
-> >
-> >
-> > On Tue, 2 May 2023 20:35:25 -0400, Feng Liu <feliu@nvidia.com> wrote:
-> >> When initializing XDP in virtnet_open(), some rq xdp initialization
-> >> may hit an error causing net device open failed. However, previous
-> >> rqs have already initialized XDP and enabled NAPI, which is not the
-> >> expected behavior. Need to roll back the previous rq initialization
-> >> to avoid leaks in error unwinding of init code.
-> >>
-> >> Also extract a helper function of disable queue pairs, and use newly
-> >> introduced helper function in error unwinding and virtnet_close;
-> >>
-> >> Issue: 3383038
-> >> Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
-> >> Signed-off-by: Feng Liu <feliu@nvidia.com>
-> >> Reviewed-by: William Tu <witu@nvidia.com>
-> >> Reviewed-by: Parav Pandit <parav@nvidia.com>
-> >> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> >> Acked-by: Michael S. Tsirkin <mst@redhat.com>
-> >> Change-Id: Ib4c6a97cb7b837cfa484c593dd43a435c47ea68f
-> >> ---
-> >>   drivers/net/virtio_net.c | 30 ++++++++++++++++++++----------
-> >>   1 file changed, 20 insertions(+), 10 deletions(-)
-> >>
-> >> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> >> index 8d8038538fc4..3737cf120cb7 100644
-> >> --- a/drivers/net/virtio_net.c
-> >> +++ b/drivers/net/virtio_net.c
-> >> @@ -1868,6 +1868,13 @@ static int virtnet_poll(struct napi_struct *nap=
-i, int budget)
-> >>        return received;
-> >>   }
-> >>
-> >> +static void virtnet_disable_qp(struct virtnet_info *vi, int qp_index)
-> >> +{
-> >> +     virtnet_napi_tx_disable(&vi->sq[qp_index].napi);
-> >> +     napi_disable(&vi->rq[qp_index].napi);
-> >> +     xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
-> >> +}
-> >> +
-> >>   static int virtnet_open(struct net_device *dev)
-> >>   {
-> >>        struct virtnet_info *vi =3D netdev_priv(dev);
-> >> @@ -1883,20 +1890,26 @@ static int virtnet_open(struct net_device *dev)
-> >>
-> >>                err =3D xdp_rxq_info_reg(&vi->rq[i].xdp_rxq, dev, i, vi=
-->rq[i].napi.napi_id);
-> >>                if (err < 0)
-> >> -                     return err;
-> >> +                     goto err_xdp_info_reg;
-> >>
-> >>                err =3D xdp_rxq_info_reg_mem_model(&vi->rq[i].xdp_rxq,
-> >>                                                 MEM_TYPE_PAGE_SHARED, =
-NULL);
-> >> -             if (err < 0) {
-> >> -                     xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
-> >> -                     return err;
-> >> -             }
-> >> +             if (err < 0)
-> >> +                     goto err_xdp_reg_mem_model;
-> >>
-> >>                virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
-> >>                virtnet_napi_tx_enable(vi, vi->sq[i].vq, &vi->sq[i].nap=
-i);
-> >>        }
-> >>
-> >>        return 0;
-> >> +
-> >> +err_xdp_reg_mem_model:
-> >> +     xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
-> >> +err_xdp_info_reg:
-> >> +     for (i =3D i - 1; i >=3D 0; i--)
-> >> +             virtnet_disable_qp(vi, i);
-> >
-> >
-> > I would to know should we handle for these:
-> >
-> >          disable_delayed_refill(vi);
-> >          cancel_delayed_work_sync(&vi->refill);
-> >
-> >
-> > Maybe we should call virtnet_close() with "i" directly.
-> >
-> > Thanks.
-> >
-> >
-> Can=E2=80=99t use i directly here, because if xdp_rxq_info_reg fails, nap=
-i has
-> not been enabled for current qp yet, I should roll back from the queue
-> pairs where napi was enabled before(i--), otherwise it will hang at napi
-> disable api
+On 5/5/2023 2:18 AM, Mingwei Zhang wrote:
+> Add MSR_IA32_TSX_CTRL into msrs_to_save[] to explicitly tell userspace to
+> save/restore the register value during migration. Missing this may cause
+> userspace that relies on KVM ioctl(KVM_GET_MSR_INDEX_LIST) fail to port the
+> value to the target VM.
+> 
+> In addition, there is no need to add MSR_IA32_TSX_CTRL when
+> ARCH_CAP_TSX_CTRL_MSR is not supported in guest. So add the checking in
+> kvm_probe_msr_to_save().
+> 
+> Fixes: b07a5c53d42a ("KVM: vmx: use MSR_IA32_TSX_CTRL to hard-disable TSX on guest that lack it")
 
-This is not the point, the key is whether we should handle with:
+I wonder it's the fix for this commit.
 
-          disable_delayed_refill(vi);
-          cancel_delayed_work_sync(&vi->refill);
+Apart from this,
 
-Thanks.
+Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
 
+> Reported-by: Jim Mattson <jmattson@google.com>
+> Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> ---
+>   arch/x86/kvm/x86.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 237c483b1230..c8accbd6c861 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -1431,7 +1431,7 @@ static const u32 msrs_to_save_base[] = {
+>   #endif
+>   	MSR_IA32_TSC, MSR_IA32_CR_PAT, MSR_VM_HSAVE_PA,
+>   	MSR_IA32_FEAT_CTL, MSR_IA32_BNDCFGS, MSR_TSC_AUX,
+> -	MSR_IA32_SPEC_CTRL,
+> +	MSR_IA32_SPEC_CTRL, MSR_IA32_TSX_CTRL,
+>   	MSR_IA32_RTIT_CTL, MSR_IA32_RTIT_STATUS, MSR_IA32_RTIT_CR3_MATCH,
+>   	MSR_IA32_RTIT_OUTPUT_BASE, MSR_IA32_RTIT_OUTPUT_MASK,
+>   	MSR_IA32_RTIT_ADDR0_A, MSR_IA32_RTIT_ADDR0_B,
+> @@ -7077,6 +7077,10 @@ static void kvm_probe_msr_to_save(u32 msr_index)
+>   		if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
+>   			return;
+>   		break;
+> +	case MSR_IA32_TSX_CTRL:
+> +		if (!(kvm_get_arch_capabilities() & ARCH_CAP_TSX_CTRL_MSR))
+> +			return;
+> +		break;
+>   	default:
+>   		break;
+>   	}
 
->
-> >> +
-> >> +     return err;
-> >>   }
-> >>
-> >>   static int virtnet_poll_tx(struct napi_struct *napi, int budget)
-> >> @@ -2305,11 +2318,8 @@ static int virtnet_close(struct net_device *dev)
-> >>        /* Make sure refill_work doesn't re-enable napi! */
-> >>        cancel_delayed_work_sync(&vi->refill);
-> >>
-> >> -     for (i =3D 0; i < vi->max_queue_pairs; i++) {
-> >> -             virtnet_napi_tx_disable(&vi->sq[i].napi);
-> >> -             napi_disable(&vi->rq[i].napi);
-> >> -             xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
-> >> -     }
-> >> +     for (i =3D 0; i < vi->max_queue_pairs; i++)
-> >> +             virtnet_disable_qp(vi, i);
-> >>
-> >>        return 0;
-> >>   }
-> >> --
-> >> 2.37.1 (Apple Git-137.1)
-> >>
