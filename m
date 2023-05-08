@@ -2,67 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03BC6F9EF2
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6606F9F04
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjEHFRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 01:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
+        id S232626AbjEHF06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 01:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232492AbjEHFRV (ORCPT
+        with ESMTP id S231779AbjEHF04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 01:17:21 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8260D86B4
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 22:17:19 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30626f4d74aso2486482f8f.0
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 22:17:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683523038; x=1686115038;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9KYglp3kw7swqe4P9gBCkBVoMI7DDROvV1rnisE0mxc=;
-        b=zbK76cthw6CpCDBJzpd77slGZkZq3JjiRcPjRULAAL8HgCYthR8xC2M33ADWM1HN5H
-         bErWByPxkfRelooRQKPzfWcyKDPwfPJKTmDjapz9+h91VraBDGhWv/YBnw+ETp5gyhhE
-         0XWP0VE+gOXav1vDlHELm4Q1jg3xALGjhzZvKhsWAkGIec24aOuTg3DMCw9kBoFjen8p
-         TSdMMMtDsRr4w+4ivjNeqd9dLHSy7YdgzWzBsL3w/S+AQonkflh9WUE3S7Oy7EIojggH
-         rfdrTZDlKfnqsmnHVcLhJUisni+8t5Ab3tdD6ZLVzhX+bFLx3cKYlTyoH4ggrpO2Tmj5
-         xtLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683523038; x=1686115038;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9KYglp3kw7swqe4P9gBCkBVoMI7DDROvV1rnisE0mxc=;
-        b=cB147MuodzPWAxMncsjbmSkVv6uizLsZnX7wrHjuiAGCw0aOxxiyAORNsda+ckEyHa
-         u9P2RI05rFv0/Uqm2v4pUf2Ne+k7qkZaqZRDMynDT1D6XFQ2Ed1YEOyLsFxUlJA5eH0C
-         R8VRzxy6WMzXtL/lZnFLcRRsl9QRq9bBw4q0wWrHYYgixmoD3FawDT5taPxRIXVt4KdV
-         Gu8zW6yKCJLLn5KNQ5vrQ4bMR9QHtBrRnjRxy9S/N1OJO7Gv+JaKwqPCn8t7DcxVtvkA
-         PnRgBJxRCa9kuCQKZ6eCMk7d7A1dxaFKRDe4r3Fnie35MufS5NneRxKZJPptryvF6fB0
-         kiVQ==
-X-Gm-Message-State: AC+VfDzW1g0ZiTSxvMX+ILCxhpLWq+y5WbNWH8it7aFYoYFYsnyz2bia
-        dl31Nv/WHFO8Ld5RJ6a2V3bX3GWe/C5iNfp8qIs=
-X-Google-Smtp-Source: ACHHUZ5imPXkgCHamZWK6HDTNjnpkkYezN5qeMQCNrna9YvUZ7mATrotlYjZfOei6vh6ZMcqPcPpmg==
-X-Received: by 2002:adf:db0c:0:b0:307:9d2a:fd35 with SMTP id s12-20020adfdb0c000000b003079d2afd35mr86070wri.53.1683523038026;
-        Sun, 07 May 2023 22:17:18 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id r15-20020a5d694f000000b00306415ac69asm10047173wrw.15.2023.05.07.22.17.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 22:17:15 -0700 (PDT)
-Date:   Mon, 8 May 2023 08:17:09 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: kernel/trace/fprobe.c:59 fprobe_handler() error: uninitialized
- symbol 'ret'.
-Message-ID: <d3467332-3d5f-488a-b156-064cbd3d7873@kili.mountain>
+        Mon, 8 May 2023 01:26:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DBD525B;
+        Sun,  7 May 2023 22:26:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FC3761E82;
+        Mon,  8 May 2023 05:26:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68ADFC4339B;
+        Mon,  8 May 2023 05:26:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683523614;
+        bh=I8Vtnbk71cpCQ1gWhDeCHyHdySfH1lmtP1KJyo1/G7A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=afVxbwRKkQ0sZechYGOL41fsmBU8wlYoN1AoaWQmC63GyYX9ICJ2SZauW29GtqVEs
+         FdPOTgjH2dp6H39eM+zwVjUCHBTy37mlEErMqVaDqDM7rV83Uo8tseoqO6j4/E/5mp
+         Pp4dQvlFHoBBKGoKMLvpMAuoJuTiq1iOaOuizzxVPq5f3Na/y+0sS3u68W33y4Ybhb
+         WDMnbHiyRKWET5JXMmUzWksqxJH4jolU5lcJISnqElOUUjTxuboAlqN/Cx01aTwT4n
+         aESIevhAWAwdHy89qiwkC+rHFhFdS5AQqT8K5CnfpR1jjrbRqXPfURb4LEleXLK6eE
+         YM99nd3RMjzTw==
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-38e3228d120so1955055b6e.3;
+        Sun, 07 May 2023 22:26:54 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyyoyeX4SDEl4fgIq8+9acgpwLktkTVGDctOPX3nSf/bfvsx9Ae
+        j59brw7XN3VuVyhfnQGZDiVoK4SBzbN9deHT9lU=
+X-Google-Smtp-Source: ACHHUZ7y9DMSkYJuu3hlNaPuR++o+sR9Vrm0YlPJQFhUKVggSaC4rMTF2WMvdAw+FRmxda0gnWmFqHiflbi4yCBSSA0=
+X-Received: by 2002:a54:408e:0:b0:38d:ec3f:311a with SMTP id
+ i14-20020a54408e000000b0038dec3f311amr4388206oii.2.1683523613719; Sun, 07 May
+ 2023 22:26:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <db732251-b6fe-c2c5-a0db-bac77dc84314@gmail.com>
+In-Reply-To: <db732251-b6fe-c2c5-a0db-bac77dc84314@gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 8 May 2023 14:26:17 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ5VsFxvJ+Ac1TgraBrFK53N2qsZ4Jd88GMx4oTNWid9g@mail.gmail.com>
+Message-ID: <CAK7LNAQ5VsFxvJ+Ac1TgraBrFK53N2qsZ4Jd88GMx4oTNWid9g@mail.gmail.com>
+Subject: Re: syntax error in prepare target of main Makefile
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kernel Build System <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,73 +63,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2e1e1337881b0e9844d687982aa54b31b1269b11
-commit: 39d954200bf6ad503c722e44d0be80c7b826fa42 fprobe: Skip exit_handler if entry_handler returns !0
-config: i386-randconfig-m041-20230501 (https://download.01.org/0day-ci/archive/20230506/202305061702.6h3JzCPA-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+On Sun, May 7, 2023 at 10:29=E2=80=AFPM Bagas Sanjaya <bagasdotme@gmail.com=
+> wrote:
+>
+> Hi,
+>
+> I notice a year old bug in bugzilla [1]. As many developers don't
+> take a look on it, I decided to forward the bug by mail. And
+> to reach the reporter, you must log in to bugzilla.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202305061702.6h3JzCPA-lkp@intel.com/
+I believe it was already fixed.
 
-smatch warnings:
-kernel/trace/fprobe.c:59 fprobe_handler() error: uninitialized symbol 'ret'.
+See the bug tracker in the ELRepo.
 
-vim +/ret +59 kernel/trace/fprobe.c
+https://elrepo.org/bugs/view.php?id=3D1215
 
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  23  static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  24  			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  25  {
-5b0ab78998e325 Masami Hiramatsu          2022-03-15  26  	struct fprobe_rethook_node *fpr;
-76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  27) 	struct rethook_node *rh = NULL;
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  28  	struct fprobe *fp;
-76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  29) 	void *entry_data = NULL;
-39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  30) 	int bit, ret;
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  31  
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  32  	fp = container_of(ops, struct fprobe, ops);
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  33  	if (fprobe_disabled(fp))
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  34  		return;
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  35  
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  36  	bit = ftrace_test_recursion_trylock(ip, parent_ip);
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  37  	if (bit < 0) {
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  38  		fp->nmissed++;
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  39  		return;
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  40  	}
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  41  
-5b0ab78998e325 Masami Hiramatsu          2022-03-15  42  	if (fp->exit_handler) {
-5b0ab78998e325 Masami Hiramatsu          2022-03-15  43  		rh = rethook_try_get(fp->rethook);
-5b0ab78998e325 Masami Hiramatsu          2022-03-15  44  		if (!rh) {
-5b0ab78998e325 Masami Hiramatsu          2022-03-15  45  			fp->nmissed++;
-5b0ab78998e325 Masami Hiramatsu          2022-03-15  46  			goto out;
-5b0ab78998e325 Masami Hiramatsu          2022-03-15  47  		}
-5b0ab78998e325 Masami Hiramatsu          2022-03-15  48  		fpr = container_of(rh, struct fprobe_rethook_node, node);
-5b0ab78998e325 Masami Hiramatsu          2022-03-15  49  		fpr->entry_ip = ip;
-76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  50) 		if (fp->entry_data_size)
-76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  51) 			entry_data = fpr->data;
-5b0ab78998e325 Masami Hiramatsu          2022-03-15  52  	}
-5b0ab78998e325 Masami Hiramatsu          2022-03-15  53  
-76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  54) 	if (fp->entry_handler)
-39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  55) 		ret = fp->entry_handler(fp, ip, ftrace_get_regs(fregs), entry_data);
-76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  56) 
-39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  57) 	/* If entry_handler returns !0, nmissed is not counted. */
-39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  58) 	if (rh) {
-39d954200bf6ad Masami Hiramatsu (Google  2023-02-02 @59) 		if (ret)
+It was a bug in ELRepo (and Fedora as well).
 
-I reported this one earlier.  The code assumes that if there is an
--exit_handler there is also an ->entry_handler().  You had said you
-would just initialized ret = 0;
 
-39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  60) 			rethook_recycle(rh);
-39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  61) 		else
-76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  62) 			rethook_hook(rh, ftrace_get_regs(fregs), true);
-39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  63) 	}
-5b0ab78998e325 Masami Hiramatsu          2022-03-15  64  out:
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  65  	ftrace_test_recursion_unlock(bit);
-cad9931f64dc7f Masami Hiramatsu          2022-03-15  66  }
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Masahiro
 
+
+
+
+
+
+
+
+
+>
+> Quoting from the bug report:
+>
+> >  Christian 2022-04-08 10:44:17 UTC
+> >
+> > Symptom:
+> >
+> > make[2]: Entering directory '/usr/src/kernels/5.17.1-1.el8.elrepo.x86_6=
+4'
+> > Makefile:729: target 'include/config/auto.conf' does not exist
+> > test -e include/generated/autoconf.h -a -e include/config/auto.conf || =
+(                \
+> > echo >&2;                                                       \
+> > echo >&2 "  ERROR: Kernel configuration is invalid.";           \
+> > echo >&2 "         include/generated/autoconf.h or include/config/auto.=
+conf are missing.";\
+> > echo >&2 "         Run 'make oldconfig && make prepare' on kernel src t=
+o fix it.";      \
+> > echo >&2 ;                                                      \
+> > /bin/false)
+> > Makefile:1717: target 'prepare' does not exist
+> > if [ "gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4)" !=3D ""gcc (GCC) 8.5.=
+0 20210514 (Red Hat 8.5.0-4)"" ]; then \
+> >         echo >&2 "warning: the compiler differs from the one used to bu=
+ild the kernel"; \
+> >         echo >&2 "  The kernel was built by: "gcc (GCC) 8.5.0 20210514 =
+(Red Hat 8.5.0-4)""; \
+> >         echo >&2 "  You are using:           gcc (GCC) 8.5.0 20210514 (=
+Red Hat 8.5.0-4)"; \
+> > fi
+> > /bin/sh: -c: line 0: syntax error near unexpected token `('
+> > /bin/sh: -c: line 0: `if [ "gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4)"=
+ !=3D ""gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4)"" ]; then \'
+> > make[2]: *** [Makefile:1717: prepare] Error 1
+> > make[2]: Leaving directory '/usr/src/kernels/5.17.1-1.el8.elrepo.x86_64=
+'
+> >
+> >
+> > Note the double double-quotes in the GCC Version comparison !
+> >
+> > This happens to me when I try to compile vmware kernel modules with mai=
+nline kernel from elrepo on AlamLinux8.
+> >
+> > Since it is coming from the Makefile of the Kernel, I suppose this is t=
+he proper upstream tracker to be used. Please advise if not.
+> >
+> >
+> > This is the potion of the Makefile that fails (line 1717..) :
+> > prepare:
+> >       @if [ "$(CC_VERSION_TEXT)" !=3D "$(CONFIG_CC_VERSION_TEXT)" ]; th=
+en \
+> >               echo >&2 "warning: the compiler differs from the one used=
+ to build the kernel"; \
+> >               echo >&2 "  The kernel was built by: $(CONFIG_CC_VERSION_=
+TEXT)"; \
+> >               echo >&2 "  You are using:           $(CC_VERSION_TEXT)";=
+ \
+> >       fi
+> >
+> >
+> >
+> > I don't know where CONFIG_CC_VERSION_TEXT is defined. Which apparently =
+contains "...", but shouldn't.
+> >
+> >
+>
+> To the reporter: It is helpful to try compiling your third-party modules
+> against latest mainline kernel.
+>
+> Thanks.
+>
+> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=3D215820
+>
+> --
+> An old man doll... just what I always wanted! - Clara
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
