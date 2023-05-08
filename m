@@ -2,142 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C786FA13F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150C46FA13C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233549AbjEHHmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
+        id S233477AbjEHHmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233471AbjEHHmd (ORCPT
+        with ESMTP id S233424AbjEHHmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:42:33 -0400
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F5F19920
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:42:29 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id vvVppzG33MVk3vvVppHiv1; Mon, 08 May 2023 09:42:27 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1683531747;
-        bh=40maiApoVL/VucoidkRFV2whGpUtUx6B9fd6pg++S/k=;
-        h=From:To:Cc:Subject:Date;
-        b=D2QwQF0t8cox0Q93u6udOg/olj4OPRQGaaAENj0UmMDsvgDLzBWCH3cE6bmbAyuKQ
-         bvLaFuAkqOKH/UwLzQFofyuseYHHIh+TA+MUVCaSVTLx3TuPKXWqOKJxZC0ATO2BT2
-         vKTMCE0F86h72lgVM7tUmYr/WN8a5SEcOBm0uRCqRXO4M2AoejHdP3KuiwPRxS1LSX
-         KYzGSXcJDCZdTAc1gETCk/6dLjZMtrDBzat/2hCe9ugYjAYQbwk9URoZkw+oFwSFE/
-         i7zzY14k74ruBB3uDB9LpJ1EGsrC5cMGm3VsQnqTkymlqiIpnnZTC8xLjPOM+VDF7B
-         iWBgEmEjapEZg==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 08 May 2023 09:42:27 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] PM / devfreq: Reorder fields in 'struct devfreq_dev_status'
-Date:   Mon,  8 May 2023 09:42:15 +0200
-Message-Id: <6b1611f1440c8b73feb475723ad25f390cad3480.1683531691.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Mon, 8 May 2023 03:42:21 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476FBA5E9
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:42:19 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f13ef4ad91so4794893e87.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 00:42:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683531737; x=1686123737;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gffsMC5tKiPhlpHpP8KgpHzg+d0NHyCkcFBsaTzuAQk=;
+        b=h08IenH+ZC6UY+utZkFK6hbkNrEySaynLsS0kzHezKew1D9ubuvA3WyAaIip9xgG3V
+         9NgA1Ph2fnzjbMR7ExoYzQ1I/G6r689nJRFQsqXJI4k1wnscu8ZeBbzR9dnhkb/RBuyV
+         vZ/n9oTkage/jBtwAdv/+sWEY3q3nWPJNttd1I86e5gSWirb8A4GbYb6bW33SmqBy+bE
+         XU+PwuONFDkSz/X33cubQF4iluIFBvV9As6Mgu0V6WvXlTh8/7GZGJdz/rnhFiVlsBBS
+         MPm6o82B1hoT9k/vBYAqdAKRYu0A+2ZgLEEEH3XEq662PRgVt+4N/O/uqTWavqNO98oe
+         Tw1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683531737; x=1686123737;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gffsMC5tKiPhlpHpP8KgpHzg+d0NHyCkcFBsaTzuAQk=;
+        b=lALVHUAgP8GRS7Ey/1iLURhx7rrI7NnSmetjqliGQDBPdeDa/k6suNAZIBbOLDq7RI
+         AjjqnaCyUq5zgoILLWRdM5P339KBFWEUwcXZsiCt5lnERi3xxPnBnpU0dKQoG7Bed8qa
+         jifBlVyfZ6CeNZ7IFK4eUGRtfRGuq+DrWcSCy6i7FG8geISwIDCxsn/hablw07o75/zf
+         aXJ9N66CK1IFTY6GHWSL/roH/D0LwguAJjxHhv9Aj2pH74ckh5duI1CLABR9hCn2PO5M
+         IwJqoHRna7B6ah5olE3K/beEAdiaPobpVzp0HrD0Gy5tebiV0zZlJKnZpi07el0+UjDK
+         sOBw==
+X-Gm-Message-State: AC+VfDz7yEiNPCRQoJ6hxu9xoF5CQBh4WqjiCXH+tpLzfMF5OuwdwjyK
+        CsbnrK0WDGEEBuXWw1GAY7MADg==
+X-Google-Smtp-Source: ACHHUZ63TYuPvAGlamFDwVqcicngnKW3teRc1FlxvNTT7nNCGhrKNee4AHg5RFHuhOMeUCOPmqH/bA==
+X-Received: by 2002:ac2:4357:0:b0:4ec:8e7e:46f1 with SMTP id o23-20020ac24357000000b004ec8e7e46f1mr2358472lfl.66.1683531737490;
+        Mon, 08 May 2023 00:42:17 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id a17-20020ac25211000000b004f002961a96sm1203912lfl.230.2023.05.08.00.42.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 00:42:17 -0700 (PDT)
+Message-ID: <39f89f7d-77e2-3f73-940d-1891008279bc@linaro.org>
+Date:   Mon, 8 May 2023 09:42:15 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 5/6] soc: qcom: ocmem: Add support for msm8226
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Brian Masney <masneyb@onstation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
+ <20230506-msm8226-ocmem-v1-5-3e24e2724f01@z3ntu.xyz>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230506-msm8226-ocmem-v1-5-3e24e2724f01@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Group some variables based on their sizes to reduce holes.
-On x86_64, this shrinks the size of 'struct devfreq_dev_status' from 72 to
-64 bytes.
-
-This structure is used both to allocate static variables or is embedded in
-some other structures. In both cases, reducing its size is nice to have.
-
-Moreover, the whole structure now fits in a single cache line on x86_64.
-
-Finally, it makes the order of code match the order of the above kernel
-doc.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Using pahole
-
-Before:
-======
-struct devfreq_dev_profile {
-	long unsigned int          initial_freq;         /*     0     8 */
-	unsigned int               polling_ms;           /*     8     4 */
-	enum devfreq_timer         timer;                /*    12     4 */
-	bool                       is_cooling_device;    /*    16     1 */
-
-	/* XXX 7 bytes hole, try to pack */
-
-	int                        (*target)(struct device *, long unsigned int *, u32); /*    24     8 */
-	int                        (*get_dev_status)(struct device *, struct devfreq_dev_status *); /*    32     8 */
-	int                        (*get_cur_freq)(struct device *, long unsigned int *); /*    40     8 */
-	void                       (*exit)(struct device *); /*    48     8 */
-	long unsigned int *        freq_table;           /*    56     8 */
-	/* --- cacheline 1 boundary (64 bytes) --- */
-	unsigned int               max_state;            /*    64     4 */
-
-	/* size: 72, cachelines: 2, members: 10 */
-	/* sum members: 61, holes: 1, sum holes: 7 */
-	/* padding: 4 */
-	/* last cacheline: 8 bytes */
-};
 
 
-After:
-=====
-struct devfreq_dev_profile {
-	long unsigned int          initial_freq;         /*     0     8 */
-	unsigned int               polling_ms;           /*     8     4 */
-	enum devfreq_timer         timer;                /*    12     4 */
-	int                        (*target)(struct device *, long unsigned int *, u32); /*    16     8 */
-	int                        (*get_dev_status)(struct device *, struct devfreq_dev_status *); /*    24     8 */
-	int                        (*get_cur_freq)(struct device *, long unsigned int *); /*    32     8 */
-	void                       (*exit)(struct device *); /*    40     8 */
-	long unsigned int *        freq_table;           /*    48     8 */
-	unsigned int               max_state;            /*    56     4 */
-	bool                       is_cooling_device;    /*    60     1 */
+On 7.05.2023 11:12, Luca Weiss wrote:
+> The msm8226 SoC also contains OCMEM but with one region only.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-	/* size: 64, cachelines: 1, members: 10 */
-	/* padding: 3 */
-};
----
- include/linux/devfreq.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index 7fd704bb8f3d..d312ffbac4dd 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -108,7 +108,6 @@ struct devfreq_dev_profile {
- 	unsigned long initial_freq;
- 	unsigned int polling_ms;
- 	enum devfreq_timer timer;
--	bool is_cooling_device;
- 
- 	int (*target)(struct device *dev, unsigned long *freq, u32 flags);
- 	int (*get_dev_status)(struct device *dev,
-@@ -118,6 +117,8 @@ struct devfreq_dev_profile {
- 
- 	unsigned long *freq_table;
- 	unsigned int max_state;
-+
-+	bool is_cooling_device;
- };
- 
- /**
--- 
-2.34.1
-
+Konrad
+>  drivers/soc/qcom/ocmem.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
+> index 6235065d3bc9..d5892ce999c9 100644
+> --- a/drivers/soc/qcom/ocmem.c
+> +++ b/drivers/soc/qcom/ocmem.c
+> @@ -413,12 +413,18 @@ static int ocmem_dev_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +static const struct ocmem_config ocmem_8226_config = {
+> +	.num_regions = 1,
+> +	.macro_size = SZ_128K,
+> +};
+> +
+>  static const struct ocmem_config ocmem_8974_config = {
+>  	.num_regions = 3,
+>  	.macro_size = SZ_128K,
+>  };
+>  
+>  static const struct of_device_id ocmem_of_match[] = {
+> +	{ .compatible = "qcom,msm8226-ocmem", .data = &ocmem_8226_config },
+>  	{ .compatible = "qcom,msm8974-ocmem", .data = &ocmem_8974_config },
+>  	{ }
+>  };
+> 
