@@ -2,143 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E071C6FAE09
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F4A6FADFD
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236202AbjEHLkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 07:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
+        id S236008AbjEHLkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 07:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236273AbjEHLkE (ORCPT
+        with ESMTP id S236190AbjEHLjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 07:40:04 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2973E3F2D1
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 04:40:00 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-5144043d9d1so2911828a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 04:40:00 -0700 (PDT)
+        Mon, 8 May 2023 07:39:53 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D4D411A1
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 04:39:43 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2ac80ed7f26so47725881fa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 04:39:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683545999; x=1686137999;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kmAYIf46oy/MCRbmsdr/75KTlDluVcR5KB1IRJNuPTE=;
-        b=DLhswwcXJUtMfYkQWkUrkyw7G+tNOTzprdPxpN6YrJZ43FC6nNElcPg7rz/1j4rNNY
-         ChijJg/BYsrYJr7c50w//eZNmFouHs8k18Qkh/EeO2Eu1xA5shzxrMdDwympLd294yja
-         36Kc2bZv4faPtMSdv0rt2h+dAZYaCp5Sk89OGw7GRkVJQWhA/pFIUXM8w23CpVU2Bm0b
-         U31YQLKnHBQ2KZXXEMSE79f/VZkpslMCHaVlL0yZvA2aoqmdMY+P8GZumkIb8mYZ0VfV
-         bRYFnqT7Tg4FQMTIpzpMybja7bBK6iEhFFv7Zmy8QNxK2/dwsoqmToYGW6tiNYkbCb0f
-         bnyg==
+        d=linaro.org; s=google; t=1683545982; x=1686137982;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MexXMEnvHcUnDYaMqmVY/MSHM/LherZWjP+20kmXVqY=;
+        b=WCaDKEpWxQvYqhKslJuI6E4qcU2uFvPbdI0djxGp1xxik6KdDtp3q/nCsmctEdIW4j
+         vY4QK6uYYiF5F1KhSwXAJklU7araihN5GvHeR+hKFACwW351mpY3IPEGlIXEvc1aqYml
+         Xf/dahyqCmciWP+mgnmI92CcOLnQ80BN/gAMzqMti9qX+qswfnOAaQ20DZ0tZ2xWjSbZ
+         iQM/QCHgaAz3oCANYf2DdpwZmGten6ADoW0ZeIRICeOvwv1042ybx8TIZAwjM8xQBcFx
+         PSkLN66PUh8Z6Xp3v/loqrmTIdSvwxnaMgCHMaoJtiDOkT1YLsj8s8Kg3C9tCt9sy31a
+         0ZxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683545999; x=1686137999;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kmAYIf46oy/MCRbmsdr/75KTlDluVcR5KB1IRJNuPTE=;
-        b=CGDVfz8Re2nOPaEEYzoXTiSrcWs3ahBfE9dTnKBXfjAtG/DG9pCbVP4lpTJNH6rBhm
-         7//04f0oVBUjjuz/w3QZ2X9zLL6O1Aydd4FLHTfgste7Wrh5bsWwahLwrXywS8NoMlBQ
-         Wo5S37fk4OPZnkBX3KF7LBb9kJ1NXQw2L29KVIopIIiWdYvyDP60Okh+L++esxtj80m3
-         2TCKUGEKDk3wt6vXaWMC80Auu9PzIjqU+9F58npMs99RGd8Znzm291eR6W8wOPpgNffe
-         kxiRQ7hNKV5vah5BUavTd2fTeldeocQFGL7SV8+6hByfE/YFhtR4H4lg+AdHaxpPJb+i
-         xtzQ==
-X-Gm-Message-State: AC+VfDzFG8TJmsfUmj6Bp9qR6HJXrSvPGYlx5A4aUWlMRPLs7GEteNMZ
-        Pz3v94tqHT17HfoOClpQdC1W1aNwnhVPNPNq7xmDBBnNeidM5YqqBcs=
-X-Google-Smtp-Source: ACHHUZ59zLfpKIouF6UsmRef0qI79/2OLMkLOJFCZGj7vb0eEAJTU31HUMiKoCG1IuM5GeB7IjB1Bhck1UsFKDrpnoc=
-X-Received: by 2002:a17:90a:6b4e:b0:24e:4dad:d8ab with SMTP id
- x14-20020a17090a6b4e00b0024e4dadd8abmr10184245pjl.0.1683545999370; Mon, 08
- May 2023 04:39:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683545982; x=1686137982;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MexXMEnvHcUnDYaMqmVY/MSHM/LherZWjP+20kmXVqY=;
+        b=H8m0RTpR/ox4rvmn+FOyrkF4kSwvCL5vEJjHek9fguB4Z4jqdvuSNpkevOcAYMWJ0P
+         e2i+aQLdAjVAXIYbUiZOj04Knx1m0kFEk+lzjhhiJbW1BYk9ecUeVRdQvvgN1aWZVHYi
+         CP567YSjS5bav+86AhNQZlNDe8uRnVU4RWLcgtipieVYz35YMQqr0n4mMY7h4X/5WGdl
+         gaI7griVhmxY3aHrXKGPxGBoPdCUae6QGuY7+3/lM1J+yKYyRcKT0WhpagvSdh+byfwD
+         yYApX6YNOuHUE67qdGiWzZnEn5hsYQqxVg/qQhXavKVhy+uhIN8IjYsZVH1oUJKv/+bx
+         K4fg==
+X-Gm-Message-State: AC+VfDxXAXOkF4ivnTFQny43khKwV4Clg6VswKd1q8qmge2p6bPqILMi
+        GkdmdMyQ9XnpsDGvC2Mk6uBqXA==
+X-Google-Smtp-Source: ACHHUZ66251TTq/ybOlW2YVgnvnqHsTExmFa9F/UDFJGUqL7omt0e4DgRvnmXKm0af1SqwTOmRcpOA==
+X-Received: by 2002:a2e:900d:0:b0:2a8:c7f8:58ef with SMTP id h13-20020a2e900d000000b002a8c7f858efmr2638998ljg.22.1683545981956;
+        Mon, 08 May 2023 04:39:41 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id o13-20020a2e9b4d000000b002ad92dff470sm377803ljj.134.2023.05.08.04.39.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 04:39:41 -0700 (PDT)
+Message-ID: <fdf697c1-16a3-6b8c-90fa-51ef7137d546@linaro.org>
+Date:   Mon, 8 May 2023 14:39:40 +0300
 MIME-Version: 1.0
-References: <20230507154615.793942-1-mmyangfl@gmail.com> <ZFinwhFphe71VeLk@matsya>
-In-Reply-To: <ZFinwhFphe71VeLk@matsya>
-From:   Yangfl <mmyangfl@gmail.com>
-Date:   Mon, 8 May 2023 19:39:22 +0800
-Message-ID: <CAAXyoMN2CvVkL+=wT=Q4zJZJa-qUiyiVS4SZquVQ1LUfDmoM5Q@mail.gmail.com>
-Subject: Re: [PATCH] phy: hisilicon: Adopt phy-hisi-inno-usb2 to Hi3798MV100
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     linux-phy@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V3 5/6] arm64: dts: qcom: ipq9574: Enable PCIe PHYs and
+ controllers
+Content-Language: en-GB
+To:     Devi Priya <quic_devipriy@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, mani@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_ipkumar@quicinc.com
+References: <20230421124938.21974-1-quic_devipriy@quicinc.com>
+ <20230421124938.21974-6-quic_devipriy@quicinc.com>
+ <CAA8EJpqx1jv_xEnS-2rOOGCtEB=1vo477H7XLGGvH=o7NHJD7w@mail.gmail.com>
+ <6c962760-d81c-af52-bce2-49090f66f4ee@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <6c962760-d81c-af52-bce2-49090f66f4ee@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vinod Koul <vkoul@kernel.org> =E4=BA=8E2023=E5=B9=B45=E6=9C=888=E6=97=A5=E5=
-=91=A8=E4=B8=80 15:41=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 07-05-23, 23:46, David Yang wrote:
-> > Hisilicon also uses phy-hisi-inno-usb2 on Hi3798MV100, with a slightly
-> > different register convention.
->
-> OK, so what should I expect from this patch, pls document that here...
+On 08/05/2023 13:55, Devi Priya wrote:
+> 
+> 
+> On 4/22/2023 5:43 AM, Dmitry Baryshkov wrote:
+>> On Fri, 21 Apr 2023 at 15:51, Devi Priya <quic_devipriy@quicinc.com> 
+>> wrote:
+>>>
+>>> Enable the PCIe controller and PHY nodes corresponding to
+>>> RDP 433.
+>>>
+>>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>>> ---
+>>>   Changes in V3:
+>>>          - No change
+>>>
+>>>   arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 62 +++++++++++++++++++++
+>>>   1 file changed, 62 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts 
+>>> b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+>>> index 7be578017bf7..3ae38cf327ea 100644
+>>> --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+>>> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+>>> @@ -8,6 +8,7 @@
+>>>
+>>>   /dts-v1/;
+>>>
+>>> +#include <dt-bindings/gpio/gpio.h>
+>>>   #include "ipq9574.dtsi"
+>>>
+>>>   / {
+>>> @@ -43,6 +44,42 @@
+>>>          };
+>>>   };
+>>>
+>>> +&pcie1_phy {
+>>> +       status = "okay";
+>>> +};
+>>> +
+>>> +&pcie1 {
+>>> +       pinctrl-names = "default";
+>>> +       pinctrl-0 = <&pcie_1_pin>;
+>>> +
+>>> +       perst-gpios = <&tlmm 26 GPIO_ACTIVE_LOW>;
+>>
+>> Usually qcom PCIe hosts also define wake-gpios.
+> In IPQ9574, we do not have hot plug support and host always starts the
+> enumeration for the device. Hence no wake pin is required.
 
-Hi3798MV100 usb2 phy. Which kind of document should I put here?
+None of the qcom PCIe hosts support hotplug, if I remember correctly. 
+This is not a reason not to describe the hardware.
 
->
-> >
-> > Signed-off-by: David Yang <mmyangfl@gmail.com>
-> > ---
-> >  drivers/phy/hisilicon/Kconfig              |  2 +-
-> >  drivers/phy/hisilicon/phy-hisi-inno-usb2.c | 67 ++++++++++++++++------
-> >  2 files changed, 51 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/drivers/phy/hisilicon/Kconfig b/drivers/phy/hisilicon/Kcon=
-fig
-> > index d3b92c288554..6c89136fc8c2 100644
-> > --- a/drivers/phy/hisilicon/Kconfig
-> > +++ b/drivers/phy/hisilicon/Kconfig
-> > @@ -54,7 +54,7 @@ config PHY_HISTB_COMBPHY
-> >
-> >  config PHY_HISI_INNO_USB2
-> >       tristate "HiSilicon INNO USB2 PHY support"
-> > -     depends on (ARCH_HISI && ARM64) || COMPILE_TEST
-> > +     depends on ARCH_HISI || COMPILE_TEST
->
-> why this change?
+>>
+>>> +       status = "okay";
+>>> +};
+>>> +
+>>> +&pcie2_phy {
+>>> +       status = "okay";
+>>> +};
+>>> +
+>>> +&pcie2 {
+>>> +       pinctrl-names = "default";
+>>> +       pinctrl-0 = <&pcie_2_pin>;
+>>> +
+>>> +       perst-gpios = <&tlmm 29 GPIO_ACTIVE_LOW>;
+>>> +       status = "okay";
+>>> +};
+>>> +
+>>> +&pcie3_phy {
+>>> +       status = "okay";
+>>> +};
+>>> +
+>>> +&pcie3 {
+>>> +       pinctrl-names = "default";
+>>> +       pinctrl-0 = <&pcie_3_pin>;
+>>> +
+>>> +       perst-gpios = <&tlmm 32 GPIO_ACTIVE_LOW>;
+>>> +       status = "okay";
+>>> +};
+>>> +
+>>>   &sdhc_1 {
+>>>          pinctrl-0 = <&sdc_default_state>;
+>>>          pinctrl-names = "default";
+>>> @@ -60,6 +97,31 @@
+>>>   };
+>>>
+>>>   &tlmm {
+>>> +
+>>> +       pcie_1_pin: pcie-1-state {
+>>> +               pins = "gpio26";
+>>> +               function = "gpio";
+>>> +               drive-strength = <8>;
+>>> +               bias-pull-down;
+>>> +               output-low;
+>>
+>> No clkreq and no wake gpios?
+> We do not use any PCIe low power states and link is always in L0.
 
-Hi3798MV100 is a A9 ARM32 only soc.
+Again. We = software. Please describe the hardware here.
 
->
-> >       select GENERIC_PHY
-> >       select MFD_SYSCON
-> >       help
-> > diff --git a/drivers/phy/hisilicon/phy-hisi-inno-usb2.c b/drivers/phy/h=
-isilicon/phy-hisi-inno-usb2.c
-> > index b133ae06757a..b5d006f38934 100644
-> > --- a/drivers/phy/hisilicon/phy-hisi-inno-usb2.c
-> > +++ b/drivers/phy/hisilicon/phy-hisi-inno-usb2.c
-> > @@ -9,7 +9,7 @@
-> >  #include <linux/delay.h>
-> >  #include <linux/io.h>
-> >  #include <linux/module.h>
-> > -#include <linux/platform_device.h>
-> > +#include <linux/of_device.h>
-> >  #include <linux/phy/phy.h>
-> >  #include <linux/reset.h>
-> >
-> > @@ -20,12 +20,28 @@
-> >  #define PHY_CLK_STABLE_TIME  2       /* unit:ms */
-> >  #define UTMI_RST_COMPLETE_TIME       2       /* unit:ms */
-> >  #define POR_RST_COMPLETE_TIME        300     /* unit:us */
-> > -#define PHY_TEST_DATA                GENMASK(7, 0)
-> > -#define PHY_TEST_ADDR                GENMASK(15, 8)
-> > -#define PHY_TEST_PORT                GENMASK(18, 16)
-> > -#define PHY_TEST_WREN                BIT(21)
-> > -#define PHY_TEST_CLK         BIT(22) /* rising edge active */
-> > -#define PHY_TEST_RST         BIT(23) /* low active */
-> > +
-> > +#define PHY_TYPE_0   0
-> > +#define PHY_TYPE_1   1
-> > +
-> > +#define PHY0_TEST_DATA               GENMASK(7, 0)
->
-> same as previous what changed??
+> 
+> Thanks,
+> Devi Priya
+>>
+>>> +       };
+>>> +
+>>> +       pcie_2_pin: pcie-2-state {
+>>> +               pins = "gpio29";
+>>> +               function = "gpio";
+>>> +               drive-strength = <8>;
+>>> +               bias-pull-down;
+>>> +               output-low;
+>>> +       };
+>>> +
+>>> +       pcie_3_pin: pcie-3-state {
+>>> +               pins = "gpio32";
+>>> +               function = "gpio";
+>>> +               drive-strength = <8>;
+>>> +               bias-pull-up;
+>>> +               output-low;
+>>> +       };
+>>> +
+>>>          sdc_default_state: sdc-default-state {
+>>>                  clk-pins {
+>>>                          pins = "gpio5";
+>>> -- 
+>>> 2.17.1
+>>>
+>>
+>>
 
-Register convention for PHY1 below, as mentioned in commit message.
+-- 
+With best wishes
+Dmitry
+
