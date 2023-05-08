@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB396FB766
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B297B6FB76B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234080AbjEHTqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 15:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S229457AbjEHTqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 15:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233106AbjEHTox (ORCPT
+        with ESMTP id S233715AbjEHToz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 15:44:53 -0400
+        Mon, 8 May 2023 15:44:55 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2C66A48;
-        Mon,  8 May 2023 12:44:21 -0700 (PDT)
-Message-ID: <20230508185218.909138139@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE17265A4;
+        Mon,  8 May 2023 12:44:23 -0700 (PDT)
+Message-ID: <20230508185218.962208640@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683575056;
+        s=2020; t=1683575057;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=kwmqj85oJPkZidDSe6wGXZxA0ULq99wzodNu0T1h+kk=;
-        b=wg1uBLGtSoxcaJSU0iEE4x0UcfBChTrLt0gyE4M5PDuGfK5fjT22t8ZTBBC2tynpzI6HHh
-        6Y7wX0lp4t6osRCyrG3TT1YgnOHCxIFJnJkEGdJWSzb30rEUBKI5nxlG8O7tNjZVGxOjHb
-        SANeefFOJGw6DUXAVXM56kO2xHkef7AW/0tPOsy0YwgLmgzJMjuxG1N7Phieoka0kZqbc+
-        SwamRLfl76kZk/gDSsJbzFLV/CAY9FezjErFfEBAxnMp56mRQxgPmpsjeFT7Dxl3HIxRAN
-        Y1+kfoeoNJM9pmRMjeHWlK/tpJMX+RNO6kr+gmNFYozmaU/eCEE9q4itJyCt1A==
+         references:references; bh=7J6qDuLCrgdvR1kG/InEcQTSLCUqJ2Io10qHE6FCHaM=;
+        b=0Hv0AspymKyYz8qW0hj6Fb0vUtVHsdGmkvWcUakIBtshYh+zVy/vlvZHR1/vJJLPlas4D8
+        PRzzSySwBkg1+JPbOBNLLdT/hp7seWkZBvoftuEF+vw8QuQjWUJ4K4oLdS5xDTwEjJHE7A
+        gNOv1k4J4BrzZeGVnOAKkMmcblUqN/FYihcmxHZv2nEClm+/K+rhv+En8fpkOo6ZMhekbP
+        fp0J8Mycqhuh4vaLIP3ZaeDDy7dR7H2M1G6jiZF8zqKNY6sfFE8cTQVtJvDtVzZmYHGBDI
+        A83cW4yHAFFLmlY1u2nMBkF0J3x6Dy2QTQscDGxCprr2i8ihRMilmaPq8wHcbw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683575056;
+        s=2020e; t=1683575057;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=kwmqj85oJPkZidDSe6wGXZxA0ULq99wzodNu0T1h+kk=;
-        b=hBj0Uqf6QiSA9MqtLkZVoZtNNYgv3nBK9gQda39ezyZ0ekHS2uiMmy5gmQpbYtX4lR0BfY
-        +Xmymckx4LlMyoDw==
+         references:references; bh=7J6qDuLCrgdvR1kG/InEcQTSLCUqJ2Io10qHE6FCHaM=;
+        b=3bCOAPoiV1ViDB0Ns+pjgu6fuq8OhbzSh5tZOLe9PQ/YwBWzawJVTSPOhF+994y0l1r8Gv
+        bZKIMX08LnDG7gCA==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
@@ -67,11 +67,11 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: [patch v3 30/36] x86/smpboot: Enable split CPU startup
+Subject: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
 References: <20230508181633.089804905@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Mon,  8 May 2023 21:44:15 +0200 (CEST)
+Date:   Mon,  8 May 2023 21:44:17 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -84,135 +84,145 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-The x86 CPU bringup state currently does AP wake-up, wait for AP to
-respond and then release it for full bringup.
-
-It is safe to be split into a wake-up and and a separate wait+release
-state.
-
-Provide the required functions and enable the split CPU bringup, which
-prepares for parallel bringup, where the bringup of the non-boot CPUs takes
-two iterations: One to prepare and wake all APs and the second to wait and
-release them. Depending on timing this can eliminate the wait time
-completely.
+Make the primary thread tracking CPU mask based in preparation for simpler
+handling of parallel bootup.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
 
 
 ---
- arch/x86/Kconfig           |    2 +-
- arch/x86/include/asm/smp.h |    9 ++-------
- arch/x86/kernel/smp.c      |    2 +-
- arch/x86/kernel/smpboot.c  |    8 ++++----
- arch/x86/xen/smp_pv.c      |    4 ++--
- 5 files changed, 10 insertions(+), 15 deletions(-)
+ arch/x86/include/asm/apic.h     |    2 --
+ arch/x86/include/asm/topology.h |   19 +++++++++++++++----
+ arch/x86/kernel/apic/apic.c     |   20 +++++++++-----------
+ arch/x86/kernel/smpboot.c       |   12 +++---------
+ 4 files changed, 27 insertions(+), 26 deletions(-)
 ---
 
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -274,8 +274,8 @@ config X86
- 	select HAVE_UNSTABLE_SCHED_CLOCK
- 	select HAVE_USER_RETURN_NOTIFIER
- 	select HAVE_GENERIC_VDSO
--	select HOTPLUG_CORE_SYNC_FULL		if SMP
- 	select HOTPLUG_SMT			if SMP
-+	select HOTPLUG_SPLIT_STARTUP		if SMP
- 	select IRQ_FORCED_THREADING
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
- 	select NEED_PER_CPU_PAGE_FIRST_CHUNK
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -40,7 +40,7 @@ struct smp_ops {
+--- a/arch/x86/include/asm/apic.h
++++ b/arch/x86/include/asm/apic.h
+@@ -506,10 +506,8 @@ extern int default_check_phys_apicid_pre
+ #endif /* CONFIG_X86_LOCAL_APIC */
  
- 	void (*cleanup_dead_cpu)(unsigned cpu);
- 	void (*poll_sync_state)(void);
--	int (*cpu_up)(unsigned cpu, struct task_struct *tidle);
-+	int (*kick_ap_alive)(unsigned cpu, struct task_struct *tidle);
- 	int (*cpu_disable)(void);
- 	void (*cpu_die)(unsigned int cpu);
- 	void (*play_dead)(void);
-@@ -80,11 +80,6 @@ static inline void smp_cpus_done(unsigne
- 	smp_ops.smp_cpus_done(max_cpus);
+ #ifdef CONFIG_SMP
+-bool apic_id_is_primary_thread(unsigned int id);
+ void apic_smt_update(void);
+ #else
+-static inline bool apic_id_is_primary_thread(unsigned int id) { return false; }
+ static inline void apic_smt_update(void) { }
+ #endif
+ 
+--- a/arch/x86/include/asm/topology.h
++++ b/arch/x86/include/asm/topology.h
+@@ -31,9 +31,9 @@
+  * CONFIG_NUMA.
+  */
+ #include <linux/numa.h>
++#include <linux/cpumask.h>
+ 
+ #ifdef CONFIG_NUMA
+-#include <linux/cpumask.h>
+ 
+ #include <asm/mpspec.h>
+ #include <asm/percpu.h>
+@@ -139,9 +139,20 @@ static inline int topology_max_smt_threa
+ int topology_update_package_map(unsigned int apicid, unsigned int cpu);
+ int topology_update_die_map(unsigned int dieid, unsigned int cpu);
+ int topology_phys_to_logical_pkg(unsigned int pkg);
+-bool topology_is_primary_thread(unsigned int cpu);
+ bool topology_smt_supported(void);
+-#else
++
++extern struct cpumask __cpu_primary_thread_mask;
++#define cpu_primary_thread_mask ((const struct cpumask *)&__cpu_primary_thread_mask)
++
++/**
++ * topology_is_primary_thread - Check whether CPU is the primary SMT thread
++ * @cpu:	CPU to check
++ */
++static inline bool topology_is_primary_thread(unsigned int cpu)
++{
++	return cpumask_test_cpu(cpu, cpu_primary_thread_mask);
++}
++#else /* CONFIG_SMP */
+ #define topology_max_packages()			(1)
+ static inline int
+ topology_update_package_map(unsigned int apicid, unsigned int cpu) { return 0; }
+@@ -152,7 +163,7 @@ static inline int topology_max_die_per_p
+ static inline int topology_max_smt_threads(void) { return 1; }
+ static inline bool topology_is_primary_thread(unsigned int cpu) { return true; }
+ static inline bool topology_smt_supported(void) { return false; }
+-#endif
++#endif /* !CONFIG_SMP */
+ 
+ static inline void arch_fix_phys_package_id(int num, u32 slot)
+ {
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -2386,20 +2386,16 @@ bool arch_match_cpu_phys_id(int cpu, u64
  }
  
--static inline int __cpu_up(unsigned int cpu, struct task_struct *tidle)
--{
--	return smp_ops.cpu_up(cpu, tidle);
--}
--
- static inline int __cpu_disable(void)
+ #ifdef CONFIG_SMP
+-/**
+- * apic_id_is_primary_thread - Check whether APIC ID belongs to a primary thread
+- * @apicid: APIC ID to check
+- */
+-bool apic_id_is_primary_thread(unsigned int apicid)
++static void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid)
  {
- 	return smp_ops.cpu_disable();
-@@ -124,7 +119,7 @@ void native_smp_prepare_cpus(unsigned in
- void calculate_max_logical_packages(void);
- void native_smp_cpus_done(unsigned int max_cpus);
- int common_cpu_up(unsigned int cpunum, struct task_struct *tidle);
--int native_cpu_up(unsigned int cpunum, struct task_struct *tidle);
-+int native_kick_ap(unsigned int cpu, struct task_struct *tidle);
- int native_cpu_disable(void);
- void __noreturn hlt_play_dead(void);
- void native_play_dead(void);
---- a/arch/x86/kernel/smp.c
-+++ b/arch/x86/kernel/smp.c
-@@ -268,7 +268,7 @@ struct smp_ops smp_ops = {
+-	u32 mask;
+-
+-	if (smp_num_siblings == 1)
+-		return true;
+ 	/* Isolate the SMT bit(s) in the APICID and check for 0 */
+-	mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
+-	return !(apicid & mask);
++	u32 mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
++
++	if (smp_num_siblings == 1 || !(apicid & mask))
++		cpumask_set_cpu(cpu, &__cpu_primary_thread_mask);
+ }
++#else
++static inline void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid) { }
  #endif
- 	.smp_send_reschedule	= native_smp_send_reschedule,
  
--	.cpu_up			= native_cpu_up,
-+	.kick_ap_alive		= native_kick_ap,
- 	.cpu_disable		= native_cpu_disable,
- 	.play_dead		= native_play_dead,
+ /*
+@@ -2544,6 +2540,8 @@ int generic_processor_info(int apicid, i
+ 	set_cpu_present(cpu, true);
+ 	num_processors++;
+ 
++	cpu_mark_primary_thread(cpu, apicid);
++
+ 	return cpu;
+ }
  
 --- a/arch/x86/kernel/smpboot.c
 +++ b/arch/x86/kernel/smpboot.c
-@@ -1058,7 +1058,7 @@ static int do_boot_cpu(int apicid, int c
- 	return ret;
+@@ -102,6 +102,9 @@ EXPORT_PER_CPU_SYMBOL(cpu_die_map);
+ DEFINE_PER_CPU_READ_MOSTLY(struct cpuinfo_x86, cpu_info);
+ EXPORT_PER_CPU_SYMBOL(cpu_info);
+ 
++/* CPUs which are the primary SMT threads */
++struct cpumask __cpu_primary_thread_mask __read_mostly;
++
+ /* Representing CPUs for which sibling maps can be computed */
+ static cpumask_var_t cpu_sibling_setup_mask;
+ 
+@@ -283,15 +286,6 @@ static void notrace start_secondary(void
  }
  
--static int native_kick_ap(unsigned int cpu, struct task_struct *tidle)
-+int native_kick_ap(unsigned int cpu, struct task_struct *tidle)
- {
- 	int apicid = apic->cpu_present_to_apicid(cpu);
- 	int err;
-@@ -1094,15 +1094,15 @@ static int native_kick_ap(unsigned int c
- 	return err;
- }
- 
--int native_cpu_up(unsigned int cpu, struct task_struct *tidle)
-+int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct *tidle)
- {
--	return native_kick_ap(cpu, tidle);
-+	return smp_ops.kick_ap_alive(cpu, tidle);
- }
- 
- void arch_cpuhp_cleanup_kick_cpu(unsigned int cpu)
- {
- 	/* Cleanup possible dangling ends... */
--	if (smp_ops.cpu_up == native_cpu_up && x86_platform.legacy.warm_reset)
-+	if (smp_ops.kick_ap_alive == native_kick_ap && x86_platform.legacy.warm_reset)
- 		smpboot_restore_warm_reset_vector();
- }
- 
---- a/arch/x86/xen/smp_pv.c
-+++ b/arch/x86/xen/smp_pv.c
-@@ -314,7 +314,7 @@ cpu_initialize_context(unsigned int cpu,
- 	return 0;
- }
- 
--static int xen_pv_cpu_up(unsigned int cpu, struct task_struct *idle)
-+static int xen_pv_kick_ap(unsigned int cpu, struct task_struct *idle)
- {
- 	int rc;
- 
-@@ -438,7 +438,7 @@ static const struct smp_ops xen_smp_ops
- 	.smp_prepare_cpus = xen_pv_smp_prepare_cpus,
- 	.smp_cpus_done = xen_smp_cpus_done,
- 
--	.cpu_up = xen_pv_cpu_up,
-+	.kick_ap_alive = xen_pv_kick_ap,
- 	.cpu_die = xen_pv_cpu_die,
- 	.cleanup_dead_cpu = xen_pv_cleanup_dead_cpu,
- 	.poll_sync_state = xen_pv_poll_sync_state,
+ /**
+- * topology_is_primary_thread - Check whether CPU is the primary SMT thread
+- * @cpu:	CPU to check
+- */
+-bool topology_is_primary_thread(unsigned int cpu)
+-{
+-	return apic_id_is_primary_thread(per_cpu(x86_cpu_to_apicid, cpu));
+-}
+-
+-/**
+  * topology_smt_supported - Check whether SMT is supported by the CPUs
+  */
+ bool topology_smt_supported(void)
 
 
