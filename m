@@ -2,120 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82356FA9F0
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650FE6FAA19
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235417AbjEHK5L convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 8 May 2023 06:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
+        id S235317AbjEHK7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 06:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235199AbjEHK4m (ORCPT
+        with ESMTP id S235444AbjEHK6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 06:56:42 -0400
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888C43157F;
-        Mon,  8 May 2023 03:55:42 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-55a2cb9788dso63753777b3.2;
-        Mon, 08 May 2023 03:55:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683543341; x=1686135341;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rXVuozGjMiMrWrjFu+9+evbmgi0blgVrHrZxBs8JQ6Y=;
-        b=OIKb6Fmmqc5E0y418umAhcu50WRuPv2pK/9I9uGszd+O+b7u5w6sJqRQZV/NZQrjQo
-         cMIvNbUe7FrFrTw6idbQQZTIXDFUIuCsuZRc3xs3/wcoyB2yweS2X9akLLpx9zTk2Mca
-         +c927eof0zDmKV27objm+i/M/IVAqvY/ep8PB3TVL55uPXu4IqD02KKAxnuhinuDNZeM
-         Dz9iJMK60EdOIi/oXLDcaKo7sY2jo/PAxx1IfMsStnU+5/zo/pDIgC0hy1Ob+uzzI+of
-         1FMttsqyE9e5km28974KSywqXeo+eCtzdYOVjcxMYVJ65Mn/pz/fGOcXxySPCJOMQWyR
-         9TOw==
-X-Gm-Message-State: AC+VfDzeB/fIBYmjOtEmlHQEMLwg4ZoNuHW/MBVJ/+WWyxSMkOnvWrlO
-        drisJINJV3lLG3b1vtf56D2l7eP12IVDSg==
-X-Google-Smtp-Source: ACHHUZ48DOf4liGxzXgh47S0pFjMdqBh2oF9xYeueImJ7FgSnlCPdwlCmeNb9nk5W+2yKSa1aERFhQ==
-X-Received: by 2002:a81:9e01:0:b0:55a:9b89:4eff with SMTP id m1-20020a819e01000000b0055a9b894effmr10493076ywj.13.1683543341406;
-        Mon, 08 May 2023 03:55:41 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id q188-20020a8180c5000000b0054f9e7fed7asm2413053ywf.137.2023.05.08.03.55.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 03:55:40 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-559e317eef1so64016527b3.0;
-        Mon, 08 May 2023 03:55:40 -0700 (PDT)
-X-Received: by 2002:a81:d510:0:b0:559:fad8:322f with SMTP id
- i16-20020a81d510000000b00559fad8322fmr11658525ywj.24.1683543339883; Mon, 08
- May 2023 03:55:39 -0700 (PDT)
+        Mon, 8 May 2023 06:58:47 -0400
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [5.144.164.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F44A3489E
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 03:57:36 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C177D3F1FF;
+        Mon,  8 May 2023 12:57:19 +0200 (CEST)
+Date:   Mon, 8 May 2023 12:57:18 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kalyan Thota <quic_kalyant@quicinc.com>,
+        Shubhashree Dhar <dhar@codeaurora.org>,
+        Raviteja Tamatam <travitej@codeaurora.org>,
+        Rob Clark <robdclark@chromium.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/msm/dpu: Set DPU_DATA_HCTL_EN for in INTF_SC7180_MASK
+Message-ID: <vonnkr34hogk3r54pg5wqw3xv5ood4zkdojehcr5stonvqev6u@nnezyvphwo5k>
+References: <20230508-topic-hctl_en-v1-1-0f8b5df60ed5@linaro.org>
 MIME-Version: 1.0
-References: <20230506141703.65605-1-contact@artur-rojek.eu> <20230506141703.65605-3-contact@artur-rojek.eu>
-In-Reply-To: <20230506141703.65605-3-contact@artur-rojek.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 8 May 2023 12:55:28 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV4hDULr43_4Z=Q9EHEvbzGStMRY45d4Ja1ixqSvMd2Cg@mail.gmail.com>
-Message-ID: <CAMuHMdV4hDULr43_4Z=Q9EHEvbzGStMRY45d4Ja1ixqSvMd2Cg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] sh: dma: Correct the number of DMA channels in SH7709
-To:     Artur Rojek <contact@artur-rojek.eu>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508-topic-hctl_en-v1-1-0f8b5df60ed5@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 6, 2023 at 4:22 PM Artur Rojek <contact@artur-rojek.eu> wrote:
-> According to the PM, the DMAC found in SH7709 features only 4 channels.
->
-> Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+On 2023-05-08 12:29:32, Konrad Dybcio wrote:
+> DPU5 and newer targets enable this unconditionally. Move it from the
+> SC7280 mask to the SC7180 one.
+> 
+> Fixes: 7bdc0c4b8126 ("msm:disp:dpu1: add support for display for SC7180 target")
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+The flag only exists since 591e34a091d17 ("drm/msm/disp/dpu1: add
+support for display for SC7280 target"), and I don't know how bad it is
+if it was lacking when SC7180 was added?
 
-> --- a/arch/sh/drivers/dma/Kconfig
-> +++ b/arch/sh/drivers/dma/Kconfig
-> @@ -28,8 +28,9 @@ config SH_DMA_API
->  config NR_ONCHIP_DMA_CHANNELS
->         int
->         depends on SH_DMA
-> -       default "4" if CPU_SUBTYPE_SH7750  || CPU_SUBTYPE_SH7751  || \
-> -                      CPU_SUBTYPE_SH7750S || CPU_SUBTYPE_SH7091
-> +       default "4" if CPU_SUBTYPE_SH7709 || CPU_SUBTYPE_SH7750  || \
-> +                      CPU_SUBTYPE_SH7751 || CPU_SUBTYPE_SH7750S || \
-> +                      CPU_SUBTYPE_SH7091
->         default "8" if CPU_SUBTYPE_SH7750R || CPU_SUBTYPE_SH7751R || \
->                        CPU_SUBTYPE_SH7760
->         default "12" if CPU_SUBTYPE_SH7723 || CPU_SUBTYPE_SH7780  || \
-> @@ -37,8 +38,9 @@ config NR_ONCHIP_DMA_CHANNELS
->         default "6"
->         help
->           This allows you to specify the number of channels that the on-chip
-> -         DMAC supports. This will be 4 for SH7750/SH7751/Sh7750S/SH7091 and 8 for the
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Might be a good opportunity to s/Sh7750S/SH7750S/
+I wonder if this needs any Reported-by/Suggested-by, given that I found
+the DATA_COMPRESS discrepancy for your SM6375 patch (which was using
+SC7280 to have the HCTL mask) and Dmitry pointing out that HCTL needs to
+be in SC7180 entirely.
 
-> -         SH7750R/SH7751R/SH7760, 12 for the SH7723/SH7780/SH7785/SH7724, default is 6.
-> +         DMAC supports. This will be 4 for SH7709/SH7750/SH7751/Sh7750S/SH7091
-> +         and 8 for the SH7750R/SH7751R/SH7760, 12 for the SH7723/SH7780/SH7785/SH7724,
+Fortunately none of this affects cmdmode :)
 
-... and sort the list for SoCs with 12 channels.
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
 
-> +         default is 6.
->
->  config SH_DMABRG
->         bool "SH7760 DMABRG support"
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+> Depends on:
+> https://lore.kernel.org/linux-arm-msm/20230405-add-dsc-support-v2-0-1072c70e9786@quicinc.com/
+> ---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index 27420fc863d6..7ea8fd69d5fd 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -98,9 +98,12 @@
+>  #define INTF_SDM845_MASK (0)
+>  
+>  #define INTF_SC7180_MASK \
+> -	(BIT(DPU_INTF_INPUT_CTRL) | BIT(DPU_INTF_TE) | BIT(DPU_INTF_STATUS_SUPPORTED))
+> +	(BIT(DPU_INTF_INPUT_CTRL) | \
+> +	 BIT(DPU_INTF_TE) | \
+> +	 BIT(DPU_INTF_STATUS_SUPPORTED) | \
+> +	 BIT(DPU_DATA_HCTL_EN))
+>  
+> -#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN) | BIT(DPU_INTF_DATA_COMPRESS)
+> +#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_INTF_DATA_COMPRESS)
+>  
+>  #define WB_SM8250_MASK (BIT(DPU_WB_LINE_MODE) | \
+>  			 BIT(DPU_WB_UBWC) | \
+> 
+> ---
+> base-commit: c47189dee0decd9ecc1e65ae376ad6d4b0b7f1f2
+> change-id: 20230508-topic-hctl_en-3abb999a6c99
+> 
+> Best regards,
+> -- 
+> Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
