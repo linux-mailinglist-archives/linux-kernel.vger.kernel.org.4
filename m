@@ -2,60 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E413E6FB4E3
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD336FB4E5
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233557AbjEHQNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
+        id S234006AbjEHQPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233871AbjEHQNp (ORCPT
+        with ESMTP id S233993AbjEHQPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 12:13:45 -0400
-Received: from m228-13.mailgun.net (m228-13.mailgun.net [159.135.228.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5EB49EE
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:13:43 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
- s=mx; t=1683562422; x=1683569622; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date:
- Sender: Sender; bh=hLUctUNuRMNIWC7TGpkyun0GttzEEowczu+MhwkqfZ4=;
- b=DuPu0feSQgBaI52SfabX0Q0nUWn5MyhHGjUzSAof7zg694fOu0KS58vQfeINQELxvZqmYvqTgclAp0iS9vgS9IViKg7BqUitP2KsUWNTKS1Q13bQUB7U70dBzSsJH0BbB1+FRaOaD9HbhAfuAoy7+9jlJNF5mb/xMLtAttLXc9HCI3Z3wnhGcsckvfrV8vWHphzdq7oRPS+NLKU9CkQTa3qanh3dQBwQxbMZizRpZtEreyONzzewualr7YA/ysb4axQVMjN2kt0q5d1F18RFaB9jL+iziyOGQk7JPH26tX4vVZSx9BeNOb0+52RqJgSTWoSaUEJHWbG+A+6nWorwug==
-X-Mailgun-Sending-Ip: 159.135.228.13
-X-Mailgun-Sid: WyI4ZWI3MiIsImxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmciLCI5M2Q1YWIiXQ==
-Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by e56841f6d002 with SMTP id
- 64591fb6692de41d454a82a9 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 08 May 2023 16:13:42 GMT
-Sender: james@equiv.tech
-Date:   Mon, 8 May 2023 09:13:41 -0700
-From:   James Seo <james@equiv.tech>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     James Seo <james@equiv.tech>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] driver core: device.h: add some missing kerneldocs
-Message-ID: <ZFkftcxqQRblDgzX@equiv.tech>
-References: <20230508154849.1946589-1-james@equiv.tech>
+        Mon, 8 May 2023 12:15:11 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEAB49EC
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:15:09 -0700 (PDT)
+Received: from letrec.thunk.org (vancouverconventioncentre.com [72.28.92.215] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 348GEt8W000886
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 8 May 2023 12:14:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1683562498; bh=3yxhxZv//0lwbrrlJ0FBf69IOB3kNLzDF0lKVItgTQE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=el0V0w3tN9DyVl8Jbyg2HyL1S2OiLV2X+ZXkRvxcQW7rHlfkvQjNDXz+JP5r1Fa9g
+         22stNJE3wOYgqqtiD3DL8F5KpEp9+DiFHsyfaYtnmJblmxJe0BMHk2W2WlqGqK2WYA
+         2bkx7pb9Io+QgKAGK5Bw+wQcBp3LCxH4PM6221qDXjTK2q7udaLHIuB9ssnN1+aGCQ
+         8FpZNzjqpZvzDkuVIgMCW0ww64VKi39jGJdbhVutO4hCjsPzvPjx773OojarX6guxc
+         ogcJyEHAMeM6oQM4snEz4opKtxZfu77+4jTxPv9n2YSixi/qO1sqdHkx62C5YK/K0g
+         rU26k1jr5JFAw==
+Received: by letrec.thunk.org (Postfix, from userid 15806)
+        id ABF8C8C03A6; Mon,  8 May 2023 12:14:54 -0400 (EDT)
+Date:   Mon, 8 May 2023 12:14:54 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joneslee@google.com,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] ext4: remove superfluous check that pointer is not NULL
+Message-ID: <ZFkf/oJnCLZSWgYr@mit.edu>
+References: <20230508151337.79304-1-tudor.ambarus@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230508154849.1946589-1-james@equiv.tech>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230508151337.79304-1-tudor.ambarus@linaro.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,MAY_BE_FORGED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 08:48:50AM -0700, James Seo wrote:
-> Add the missing kerneldocs (except for DEVICE_ATTR_IGNORE_LOCKDEP(),
-> which is only meaningful on debug builds with CONFIG_DEBUG_LOCK_ALLOC
-> not #defined, and is aliased to DEVICE_ATTR() otherwise).
+On Mon, May 08, 2023 at 03:13:37PM +0000, Tudor Ambarus wrote:
+> If @buffer is NULL, no operation is performed for kvfree(buffer),
+> remove superfluous check.
 > 
-> Signed-off-by: James Seo <james@equiv.tech>
-> ---
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-I just noticed that there shouldn't be a "not" before "#defined" in the
-last line of the commit message. Apologies.
+I was looking at this just a few weeks ago, and I couldn't find any
+actual *documentation* that it was safe to call vfree(NIILL) or
+kvfree(NULL).  The problem is there are a lot of architecture-specific
+functions, and unlike with kfree() there is no top-level "if (ptr ==
+NULL) return;" in the top-level vfree() and kvfree().
 
+So I thought about removing the NULL check for kvfree(), and
+ultimately chickened out, since I was afraid that there might be
+crashes for some obscure architecture or kernel CONFIG setup.
+
+I've added linux-mm@ for their comments, and for a plea that if it
+is safe to pass NULL to vfree, kvfree, kvfree_rcu, etc. that it
+actually be *documented* somewhere.
+
+						- Ted
