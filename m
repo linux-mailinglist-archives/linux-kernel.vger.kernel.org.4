@@ -2,46 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277A56FA162
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 706F66FA168
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233157AbjEHHrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
+        id S233483AbjEHHsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbjEHHrh (ORCPT
+        with ESMTP id S232521AbjEHHsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:47:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E5CE62
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:47:35 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pvvan-0002lg-T8; Mon, 08 May 2023 09:47:33 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pvvam-001wDU-MW; Mon, 08 May 2023 09:47:32 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pvval-002Kt8-VO; Mon, 08 May 2023 09:47:31 +0200
-Date:   Mon, 8 May 2023 09:47:31 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Joe Perches <joe@perches.com>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: get_maintainer broken for a few entries in MAINTAINERS
-Message-ID: <20230508074731.jlzuvx6yr336xmvp@pengutronix.de>
+        Mon, 8 May 2023 03:48:23 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38C41BCB
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:48:21 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4eff50911bfso4594817e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 00:48:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683532100; x=1686124100;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Kre6qWKGNcjeM+iThCvTDJwFCUHgVmlK0SAmHcQy0AE=;
+        b=hOzGiR18dYlNKOaD0IWoyHPQVtb5yxUQLPG/xCrxGx/JvtgvNH4mIy3oJIncWALBTv
+         N/eFB5Yh79rgBINFL7807kaoQBJhP4axsXBO7H1fv3SOloLDsRL2GfsnwVoS2PRSBLyr
+         kyuRF9n2nbAZixqZa6j6gITS/FMQ0sDaCjxNHcgtmSxTy6+c7p66y9arFJgnIWhXHuIh
+         88G029UcMnh/N0XPxS/mAiaXL0mfNdb9O/Z45OMKalCR1R2NmlkujSv8/EqwqE42S7ZP
+         SMtlVtJRlXcDd1gH7VfntypcVpkyqP5dxrJnjWZgqVCEBd9a6Dl8iwmjJYVeQxQ69mUf
+         4VYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683532100; x=1686124100;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kre6qWKGNcjeM+iThCvTDJwFCUHgVmlK0SAmHcQy0AE=;
+        b=LT5maYPdnwdTylPWdQEKr4hmh/Qg7znyEuwYGRSfrCHwXysdWV6rTVUhQE/rPaR8IX
+         3gOzIaf1Ol5pSOhIcV6UXYjlwmo1e/Q43sjkKSylSPn0ZJby//pIfhlUW9vVtDIvLRVW
+         ZPaKW143ltANAmdo7pGOWFfGZp+5c6Nzoqw1YHYWjBJBKY4wR1ZHPrq4xieuRwDzWPo8
+         2GNK6E9rwxNN/7Cb+BKzxfjYt3n3fceVEU7CTT0tHeeuF+CsLKPgqIy9eK510YwDZczD
+         +E+2cjQSkbu3dosByLNJ2UpMTq6h83K7opFt8PEKruJZgyDuqumatqCiN1FcuJCznUwq
+         fHFA==
+X-Gm-Message-State: AC+VfDzBLBPDzL5bjUrjCnkvfuX82vhFWPGmd75w5dFQrYWUfXf/rMtX
+        tUgWiLA5scN/2IsdUTAPBh4g4A==
+X-Google-Smtp-Source: ACHHUZ4Sy9seY2TUtAfRj+f9YmJ3Jrb1VAY5uFb/4F86HCNYKlD3iDZgKj6hxFBEbyvFrfeXuzCE5w==
+X-Received: by 2002:ac2:54a3:0:b0:4e8:5e39:6238 with SMTP id w3-20020ac254a3000000b004e85e396238mr1990707lfk.42.1683532100166;
+        Mon, 08 May 2023 00:48:20 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id h14-20020ac25d6e000000b004d8546456c6sm1199876lft.195.2023.05.08.00.48.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 00:48:19 -0700 (PDT)
+Message-ID: <7bf5a2c1-ae97-ae8c-5621-25e06d186a65@linaro.org>
+Date:   Mon, 8 May 2023 09:48:18 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a7coq2w4czmxmb4d"
-Content-Disposition: inline
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 2/3] arm64: dts: qcom: msm8996: correct MMCC clocks order
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230507174516.264936-1-krzysztof.kozlowski@linaro.org>
+ <20230507174516.264936-2-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230507174516.264936-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,55 +81,42 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---a7coq2w4czmxmb4d
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On 7.05.2023 19:45, Krzysztof Kozlowski wrote:
+> Re-order the clocks for MMCC clock controller node to match the bindings (Linux
+> driver takes by name):
+> 
+>   msm8996-mtp.dtb: clock-controller@8c0000: clock-names:1: 'gpll0' was expected
+>   msm8996-mtp.dtb: clock-controller@8c0000: clock-names:2: 'gcc_mmss_noc_cfg_ahb_clk' was expected
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-on v6.3 and v6.4-rc1 I experience:
-
-	$ scripts/get_maintainer.pl -f drivers/gpu/drm/arm/display/komeda
-	"James (Qian) Wang" <james.qian.wang@arm.com> (supporter:ARM KOMEDA DRM-KM=
-S DRIVER)
-	Liviu Dudau <liviu.dudau@arm.com> (supporter:ARM KOMEDA DRM-KMS DRIVER)
-	Mihail Atanassov <mihail.atanassov@arm.com> (supporter:ARM KOMEDA DRM-KMS =
-DRIVER)
-	Brian Starkey <brian.starkey@arm.com> (supporter:ARM MALI-DP DRM DRIVER)
-	David Airlie <airlied@gmail.com> (maintainer:DRM DRIVERS)
-	Daniel Vetter <daniel@ffwll.ch> (maintainer:DRM DRIVERS)
-	 (open list:ARM KOMEDA DRM-KMS DRIVER)
-	dri-devel@lists.freedesktop.org (open list:DRM DRIVERS)
-	linux-kernel@vger.kernel.org (open list)
-
-The 7th entry is broken. I didn't try to debug that in the script. Doing
-
--L:     Mali DP Maintainers <malidp@foss.arm.com>
-+L:     malidp@foss.arm.com
-
-(twice) in MAINTAINTERS fixes the output.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---a7coq2w4czmxmb4d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRYqRMACgkQj4D7WH0S
-/k4Nzwf/e2tIWWq5osNUowVOK+ribh2SdoMT+bBVf3mM83eU1pwrf7mJbqf0hTuu
-QmWYLKlOAHF0QQuXpRDTE4WoAwaBeMaFYS0EURQzB8v7v6gKb74GB96v/Pty7g3M
-rZE7zvThPoT1YzzhYMgsS5zF8u3Ve5HNzck7CLNB9hK34Ig6L8FsmiidVQqVWatE
-gmScROWawj5hQ6GcxTMMWKAA4PD0ornzA9a5porxQWHWB7Axfo/gX/IEep77Anof
-++41FUxpnwBELILGOEhkYpk32xAuG6CWBKbZKJ0pMFWRJ6LARTb4gOOnalB+a0Vl
-E3NA4uX/IeipwNXiBCJhTvmvuozuVA==
-=KnG2
------END PGP SIGNATURE-----
-
---a7coq2w4czmxmb4d--
+Konrad
+>  arch/arm64/boot/dts/qcom/msm8996.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> index fe9e1cb12a73..718007cfb10e 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> @@ -939,16 +939,16 @@ mmcc: clock-controller@8c0000 {
+>  			#power-domain-cells = <1>;
+>  			reg = <0x008c0000 0x40000>;
+>  			clocks = <&xo_board>,
+> -				 <&gcc GCC_MMSS_NOC_CFG_AHB_CLK>,
+>  				 <&gcc GPLL0>,
+> +				 <&gcc GCC_MMSS_NOC_CFG_AHB_CLK>,
+>  				 <&dsi0_phy 1>,
+>  				 <&dsi0_phy 0>,
+>  				 <&dsi1_phy 1>,
+>  				 <&dsi1_phy 0>,
+>  				 <&hdmi_phy>;
+>  			clock-names = "xo",
+> -				      "gcc_mmss_noc_cfg_ahb_clk",
+>  				      "gpll0",
+> +				      "gcc_mmss_noc_cfg_ahb_clk",
+>  				      "dsi0pll",
+>  				      "dsi0pllbyte",
+>  				      "dsi1pll",
