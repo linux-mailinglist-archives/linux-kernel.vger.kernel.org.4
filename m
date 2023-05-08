@@ -2,121 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68586FA62D
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC266FA631
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234341AbjEHKRB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 8 May 2023 06:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
+        id S234370AbjEHKRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 06:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234335AbjEHKQ7 (ORCPT
+        with ESMTP id S234347AbjEHKRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 06:16:59 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C431BCB
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 03:16:57 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-262-zOQH_hTdOyKBqVginv_Wrg-1; Mon, 08 May 2023 11:16:54 +0100
-X-MC-Unique: zOQH_hTdOyKBqVginv_Wrg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 8 May
- 2023 11:16:53 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 8 May 2023 11:16:53 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Peter Zijlstra' <peterz@infradead.org>,
-        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: RE: [GIT PULL] pipe: nonblocking rw for io_uring
-Thread-Topic: [GIT PULL] pipe: nonblocking rw for io_uring
-Thread-Index: AQHZgYiwlyUplQwnoEaMYF5kgipU769QJzcQ
-Date:   Mon, 8 May 2023 10:16:53 +0000
-Message-ID: <cdc5a86a8e6549ff90bb09b99d4cb651@AcuMS.aculab.com>
-References: <6882b74e-874a-c116-62ac-564104c5ad34@kernel.dk>
- <CAHk-=wiQ8g+B0bCPJ9fxZ+Oa0LPAUAyryw9i+-fBUe72LoA+QQ@mail.gmail.com>
- <CAHk-=wgGzwaz2yGO9_PFv4O1ke_uHg25Ab0UndK+G9vJ9V4=hw@mail.gmail.com>
- <2e7d4f63-7ddd-e4a6-e7eb-fd2a305d442e@kernel.dk>
- <69ec222c-1b75-cdc1-ac1b-0e9e504db6cb@kernel.dk>
- <CAHk-=wiaFUoHpztu6Zf_4pyzH-gzeJhdCU0MYNw9LzVg1-kx8g@mail.gmail.com>
- <CAHk-=wjSuGTLrmygUSNh==u81iWUtVzJ5GNSz0A-jbr4WGoZyw@mail.gmail.com>
- <20230425194910.GA1350354@hirez.programming.kicks-ass.net>
- <CAHk-=wjNfkT1oVLGbe2=Vymp66Ht=tk+YKa9gUL4T=_hA_JLjg@mail.gmail.com>
- <978690c4-1d25-46e8-3375-45940ec1ea51@huaweicloud.com>
- <20230508083929.GT83892@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230508083929.GT83892@hirez.programming.kicks-ass.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 8 May 2023 06:17:04 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B2435136
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 03:17:02 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so47315490a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 03:17:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683541021; x=1686133021;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Eamanx1KJACdi9DNwbkhTPL5GyLPrO4Q5CTX3PDzSSs=;
+        b=rDoVVgj6g8dGQBKtiiG3TjrN0RNNMQjrIE7ntP2QQtrB65Ank2DLy/tE6JYNs6H8kp
+         rwrZDDXpKcb/GH+g7Sb09KV1kDhleUT5H+ly1tA43sQPqT8hVCOqXzLoHUlKWMKhfps2
+         t1BuZM3gI3g+DBgWrmw883A71ht7xOcUzB8xJH1WoNNBTRVh/XUcuiPbo4SIYqbxjzZ/
+         i9h1s5uOG+2j8E9s/wjHPd1GOE8U2oewKlGsQPO2kncy8Cdpv0qBtBM1dZLxcBpxLqM5
+         C8gDmw2JJ5f5s3fXu+Q3XcoFg0O7/wFVZ8T6sCGKWc1VLrW744UNXENCVXqBhlvAXwLF
+         caYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683541021; x=1686133021;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Eamanx1KJACdi9DNwbkhTPL5GyLPrO4Q5CTX3PDzSSs=;
+        b=ZDGb7YraINomaXoEjh+ULtrlMy/Ih2WkfQoxDa4xPKmWzBeKlke17PCKsCdIPJ8Ynd
+         kHupvdINF0q2Cn1aB/sWeIdXjbKqSQioreS6FhAhFAPS+dmIpV2KAGayIRkI3mN3cnpv
+         G5kuMp6uxOoMal96Hj+dTFNJHC1GZMWXhbC+dot1UFP73cgem++Ca+hi6ARhZ8zKs497
+         EaeGl0nJu3Fu3ZD8dCP55cMGiAxnSm4KRERxdVWAcZz48mqdp3+4Gq/CdmZ5Tq9Z9BR0
+         dSppN+Vs0DgNrNHakpsxqk/pWvMexEf+FRyGkgbZWkjlL07Swahb/ro5RG3eyjpPSDzP
+         F35Q==
+X-Gm-Message-State: AC+VfDyC8AJolVxr3ZLBEGwRx4/911etvbdVAsopsL3Nk4zHmr+tOVMO
+        xeu7PZT4AQARdd1plijAnbTzJg==
+X-Google-Smtp-Source: ACHHUZ4jVt9VSalC7+i2XLrKfdFmg8jK8keTNZboYumyjsjfOk86hmqKeMTjK1DfTxI0coxKgG71gQ==
+X-Received: by 2002:a17:907:3d89:b0:94e:4285:390c with SMTP id he9-20020a1709073d8900b0094e4285390cmr8508706ejc.10.1683541021035;
+        Mon, 08 May 2023 03:17:01 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
+        by smtp.gmail.com with ESMTPSA id jz28-20020a17090775fc00b0094ee3e4c934sm4775251ejc.221.2023.05.08.03.16.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 03:17:00 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Evgeniy Polyakov <zbr@ioremap.net>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] w1: therm: constify pointers to hwmon_channel_info
+Date:   Mon,  8 May 2023 12:16:57 +0200
+Message-Id: <168354101435.103686.11373365810956263515.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230407150121.79887-1-krzysztof.kozlowski@linaro.org>
+References: <20230407150121.79887-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra
-> Sent: 08 May 2023 09:39
-> 
-> On Sun, May 07, 2023 at 04:04:23PM +0200, Jonas Oberhauser wrote:
-> >
-> > Am 4/25/2023 um 9:58 PM schrieb Linus Torvalds:
-> > > Yes, I think Mark is right. It's not that 'old' might be wrong - that
-> > > doesn't matter because cmpxchg will work it out - it's just that 'new'
-> > > might not be consistent with the old value we then use.
-> >
-> > In the general pattern, besides the potential issue raised by Mark, tearing
-> > may also be an issue (longer example inspired by a case we met at the end of
-> > the mail) where 'old' being wrong matters.
-> 
-> There is yet another pattern where it actually matters:
-> 
-> 	old = READ_ONCE(*ptr);
-> 	do {
-> 		if (cond(old))
-> 			return false;
-> 
-> 		new = func(old);
-> 	} while (!try_cmpxchg(ptr, &old, new));
-> 
-> 	return true;
-> 
-> In this case we rely on old being 'coherent'. The more obvious case is
-> where it returns old (also not uncommon), but even if it just checks a
-> (multi-bit) condition on old you don't want tearing.
 
-It isn't as though READ_ONCE() is expensive.
+On Fri, 07 Apr 2023 17:01:21 +0200, Krzysztof Kozlowski wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be made
+> const for safety.
+> 
+> 
 
-For kernel/device driver code, while CSE is useful, you pretty
-much always want the compiler to always do loads into local
-variables.
-It is rather a shame there isn't a compiler option that
-avoids these unusual any annoying operations.
+Applied, thanks!
 
-Since the current 'rules' seem to require READ_ONCE() and
-WRITE_ONCE() be used as pairs, why not make the data 'volatile'?
-That ought to be the same as using volatile casts on all accesses.
+[1/1] w1: therm: constify pointers to hwmon_channel_info
+      https://git.kernel.org/krzk/linux-w1/c/0df2a5e99d0cb10a3da93fd71dd6753af5adc79f
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
