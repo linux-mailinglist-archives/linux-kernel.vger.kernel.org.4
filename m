@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AFE6FA2CB
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B646FA2CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbjEHJAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 05:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
+        id S233666AbjEHJBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 05:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233052AbjEHJAg (ORCPT
+        with ESMTP id S233548AbjEHJAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 05:00:36 -0400
+        Mon, 8 May 2023 05:00:47 -0400
 Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E7822709
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 02:00:09 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50be17a1eceso8290091a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 02:00:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBFD22F7E
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 02:00:29 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bc3088b7aso8300002a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 02:00:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683536408; x=1686128408;
+        d=linaro.org; s=google; t=1683536409; x=1686128409;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Nl/BPBGh2VygeBbr5k4Z8jCelLG5j/WEtxJHo5ILE74=;
-        b=pVkY2f45E2qpSEv3mENat/NYpgfS/SMgf0Gy4hgv+o+9FwBz9uBTRRBVZWHFQbdi1e
-         um4UXUIDHxfHIgi3gF/SnFSXHDeaItGF4bb3RkRo8OGEeuQ7Sh8EOGgo3kw7/uqaE1ZJ
-         PyBqOwZJrSLfNJwy9AudjzRfo5rtmGGnCstpmGt5jI36dlpIbc6wOKkujrJ5VxdN3lY9
-         HHjEYQ95DP3xDduTr0gCmBswNQ97S6T3nzptV6iZRiGV4iktmHQ6xcPfInO5uDLel6e9
-         5vaCubwsHWgkW7I7eIJwQIOASL+TdwP/nGbekHI/xjfl8Y2Gti9WT0bIFG5IR9AOIz7n
-         sEGQ==
+        bh=d/H1upgtCnHxzYSl1fYJ5Hrcg82PV/hD+4RG2T5Tx/w=;
+        b=ga1H6kuCSUMPNPsnReAPq1IRKBwHxhimLQqfDZ8m0VbslqMYFHv0Et08HvVCaziidR
+         NeKaIp1yrLKZrVk3mRNwOoxuX0gtd7QQYKloBMkGIEy/VV1gLsPnVMZd79oAZ75aglVI
+         FtW9AwxK2HhVjSPrp5CrIV6c7i0B0VXHjJqKD7z1ublzlNGmYKq7g4cKzk++JZ/JVejg
+         CTjDcRThxud5rkz7kXbZ6y20exW1Myh8k9utj6OhNuTBnBlco56VKVHV/CjnR2+6yM6T
+         eDFzfap+PdUZbPOAb4aJV5ZKWr+vVycglndWv+vnfV4cKAqP8pfP2sKsP3GQkOhxF/8P
+         Tcgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683536408; x=1686128408;
+        d=1e100.net; s=20221208; t=1683536409; x=1686128409;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Nl/BPBGh2VygeBbr5k4Z8jCelLG5j/WEtxJHo5ILE74=;
-        b=aN7C429geCOLo+t8wBJygtsNf1vm4i371Rx37SaFyrwSdRf7v2/vrd8wMpCsVByuia
-         eWyi8Zeg89g5xUHVDjIaNVbvPpoXu0gw5N3WiUKuo+9l4Z4Q1+OnHtG+XFVUh9hCfNde
-         rex1tnYZEna++mMGHOnLKO/G6DXwnQ+E/LFvA7P7IONQ37IcC+XFNnbmJuFJ08WjBIHG
-         XBzLHnwH+h7B7TsVUlSiRm5IyiulYgdD5r9AfV1kRbCdNw97HJ2HJB8i5BgwWAkZjXTe
-         uFbWtAneG+YMCesSAnjHMSKptJfwzxZRzd0m6jg9c1B8tbRP/KZBKeqAmpjwACP5RBdo
-         nNHQ==
-X-Gm-Message-State: AC+VfDxJbxjANWfKKNIhZNiDwJn11uY1jWMr8wef1pysk271aY80giNm
-        W+DepQKhEV8Bw31S12wXM/36ZA==
-X-Google-Smtp-Source: ACHHUZ4ACNqi+WNJEe29c9Fkz0U+3NBY2+EEUqiFEvZxU7lXwKkgJ8Wn33fSAijXsV7uvgdK+ipQYg==
-X-Received: by 2002:a17:906:fd8e:b0:961:a67:28d with SMTP id xa14-20020a170906fd8e00b009610a67028dmr7641831ejb.22.1683536408385;
-        Mon, 08 May 2023 02:00:08 -0700 (PDT)
+        bh=d/H1upgtCnHxzYSl1fYJ5Hrcg82PV/hD+4RG2T5Tx/w=;
+        b=VseFvvlM9aOniokSqtvq6akvJrhpXfqlmRwKyVteytpsEWaSFOA11aO2A7K1D0Hf/o
+         bkoEuyqkajH1OnaRX9vKL4iHx12B+oRKmk3ek8yW7hny4xaGvjqNpRJHPk28MtXuH/7Z
+         N3d0eVxx1IkZaHR6U3PhYSNFarcub3AjQz3Mqo0BlFJ+pL5WekmVBGPziB/gONPGrKNc
+         +KbXyxw9u3atbDbllChvtSDDzqUoD+pjwoF0TtZ7QYzvAt/aiJBjm4O/tvpkY4Ag2CkD
+         ccQVycc06gqqDYLD3xQYtp9bTIhV7RiTil2Vr/4e49IM29Qh/9MSNO4NBFmdyYsBY0iA
+         j/6Q==
+X-Gm-Message-State: AC+VfDwLx62bHnejrjkxAufTBfQtOfP/wrWDuPaxzw6QBWPbC7h3eqgT
+        yacAEmJayg8moNj6+7Alaok/Lw==
+X-Google-Smtp-Source: ACHHUZ5bR0r6/D+EbmZ9e8NdsDz+4DsY5Ca1EO0SkffalMfYbwaO/MadLDP88tpBNiR8Qkl/9LfGrQ==
+X-Received: by 2002:a17:907:9705:b0:953:1f45:3ced with SMTP id jg5-20020a170907970500b009531f453cedmr8751279ejc.8.1683536409402;
+        Mon, 08 May 2023 02:00:09 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
-        by smtp.gmail.com with ESMTPSA id jz4-20020a170906bb0400b0094bb4c75695sm4718953ejb.194.2023.05.08.02.00.07
+        by smtp.gmail.com with ESMTPSA id jz4-20020a170906bb0400b0094bb4c75695sm4718953ejb.194.2023.05.08.02.00.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 08 May 2023 02:00:08 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Evgeniy Polyakov <zbr@ioremap.net>,
-        Dan Carpenter <error27@gmail.com>
+        Julia Lawall <Julia.Lawall@inria.fr>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@suse.de>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: (subset) [PATCH] w1: fix loop in w1_fini()
-Date:   Mon,  8 May 2023 10:59:41 +0200
-Message-Id: <168353638586.78189.7497040406891984516.b4-ty@linaro.org>
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] w1: w1_therm: fix typo in comment
+Date:   Mon,  8 May 2023 10:59:42 +0200
+Message-Id: <168353638586.78189.1389224210896468946.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <YKUeCfjQqt5NuSta@mwanda>
-References: <YKUeCfjQqt5NuSta@mwanda>
+In-Reply-To: <20220521111145.81697-6-Julia.Lawall@inria.fr>
+References: <20220521111145.81697-6-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -76,20 +75,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 19 May 2021 17:17:45 +0300, Dan Carpenter wrote:
-> The __w1_remove_master_device() function calls:
-> 
-> 	list_del(&dev->w1_master_entry);
-> 
-> So presumably this can cause an endless loop.
+On Sat, 21 May 2022 13:10:16 +0200, Julia Lawall wrote:
+> Spelling mistake (triple letters) in comment.
+> Detected with the help of Coccinelle.
 > 
 > 
-> [...]
 
 Applied, thanks!
 
-[1/1] w1: fix loop in w1_fini()
-      https://git.kernel.org/krzk/linux-w1/c/83f3fcf96fcc7e5405b37d9424c7ef26bfa203f8
+[1/1] w1: w1_therm: fix typo in comment
+      https://git.kernel.org/krzk/linux-w1/c/7f25058c96a0631f4a1ccb4c70831c52e71decf2
 
 Best regards,
 -- 
