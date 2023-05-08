@@ -2,135 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F2D6FBAFE
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 00:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14416FBB00
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 00:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233856AbjEHWYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 18:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
+        id S233911AbjEHWYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 18:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233120AbjEHWY2 (ORCPT
+        with ESMTP id S233120AbjEHWYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 18:24:28 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151BF5B92;
-        Mon,  8 May 2023 15:24:28 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-38e04d1b2b4so2648340b6e.3;
-        Mon, 08 May 2023 15:24:28 -0700 (PDT)
+        Mon, 8 May 2023 18:24:32 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AEF5B94
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 15:24:29 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6ab087111faso545892a34.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 15:24:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683584667; x=1686176667;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GqRriGRUbsesORv9FIQ/f84+f/Gs1+ORAutqa65QH14=;
-        b=E7+nTuciqBm47StC0rsNq9xDODx9s6mdK4NuOJ/+uuIxD//Be9a4lIbJnR7RQkdbZu
-         aQARlloe4sbIv0WX5Qw0sdIUOvp7mYMF7fkK49LCxW/0Xbs9NaEbFuz1NsceCos/yEmC
-         5sUQAG6pRmJ3vik+/gX6mQyECBzfc5FqVgR1ZAh/97pEfY1RKlVSo0KTxuMjRXiXYrRY
-         YZMxfBycAalaXenJ0YsenBUaiHN8MqcjzJgrOpdRx2DC0RleJm3mpFoz30RBcmShGNF/
-         7LOouncK3XsGdIUy0T9qQLdlCTC6dUOBGMq2q6tGKZxvGKNyYFHPqQnvMvCbBqo10+ny
-         mJlQ==
+        d=linuxtx.org; s=google; t=1683584669; x=1686176669;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oh4cYdpA3zHXGiDsi1iCqMmPF0iLCUhn6fPa0sIu8Zo=;
+        b=U8XflA4Ds1uBfVg3LgIiAcij7LJm2QUNFOuwudW7z8kRPYj08VO00fJq6FHWN/GX+g
+         xTNe8UK/UfssfW+36rNaZAFPHbtZ/KL4qxhXgcbL71EftF411Z7BwB5pQvGSc9MEPTjV
+         niwHqGSfPmgAKfRD7RkooV25see+Bll9ZPIQM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683584667; x=1686176667;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GqRriGRUbsesORv9FIQ/f84+f/Gs1+ORAutqa65QH14=;
-        b=bIAYwHORojWWxqePtuQmaXGkI9hwcjf/OIL1Z5YXv17dLAC0xGLSZ4qsWMXxh7oCo4
-         GijHgmiGfub0YWchpmhJ+kVCL5KeufRc52Vdx/foZtaZhp0QB4Khn+3dbVFt7/oBEERu
-         +zkU9kno+YgnQtuDdTkE7pwBnaMemIsN3mcSrIch9sJlrqPhI7ueQHCyfxZrJnJnKPiu
-         yePu4L+Rsy9w1WeDn6UW5C2kbKZQTruSR2JRTCTewPA2OIcKh86/42RK3LwvXN4JCC7k
-         Y0qzy9WoDgXZg2bRyeymYkmMtsCHPbXkZQ3Jk7XwPXyJlMaojuhiUmP1kRfYxfcOPCC0
-         bEkA==
-X-Gm-Message-State: AC+VfDzMjZrAVafWS8jsXxpH8GzCEe7xr4GDkCPn2vu9iaQASak7IC+x
-        WEyplSa0A2k8D9RXZJy48g==
-X-Google-Smtp-Source: ACHHUZ5npzY/0UAHqyGJlzv2f0Br7mJ1G14p+7z9e/woQK/Nkn7sMQk5hflbkNdfWRrzmwgxxgxcYw==
-X-Received: by 2002:aca:220e:0:b0:384:3f55:ab96 with SMTP id b14-20020aca220e000000b003843f55ab96mr238988oic.25.1683584667276;
-        Mon, 08 May 2023 15:24:27 -0700 (PDT)
-Received: from C02FL77VMD6R ([208.184.112.130])
-        by smtp.gmail.com with ESMTPSA id bm13-20020a0568081a8d00b0038bffe1332dsm472529oib.57.2023.05.08.15.24.25
+        d=1e100.net; s=20221208; t=1683584669; x=1686176669;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oh4cYdpA3zHXGiDsi1iCqMmPF0iLCUhn6fPa0sIu8Zo=;
+        b=XYyUIOJf2Ue4GE0+nbv7smPNrLFJAhN1zcRQW18v3dVj6n75jTSufHh6lrE5qMBI0m
+         frAZJTsxkXcwkxmHikWCI/Vk2gLnGRkUDGdYAi2XESpXjqiXnKVZKHZesEl8SQXb+ba+
+         tQTbTDSFoK+4zFmNgiPJH8O0CnXMK3QslHqiFTbYQ8jH3+s81z7aNmzNMs0odPFabYkh
+         8cGV/f/ndcKTkpsLsM9NeQoVgAlhWNA73dRLU//1O5TCF/PogN2aepr7wtLeQ01UgCiT
+         exwOdzqD27pN7NsovHgZ+O/TDBJ9zLU7Pl05nSJ+lUUSs9nG6/rKM4SERq90hf3A8mnX
+         lbkw==
+X-Gm-Message-State: AC+VfDwd0PejmRFIaTGLyagEWQGFh5c5YKbS1ke3dlWEzXxuzXG/IZNh
+        j9Rf8aGQQFBKVbYlALVaH/2tQA==
+X-Google-Smtp-Source: ACHHUZ6fh4mln5pueUK+qoRPhTaeDwiikEpVkQqwS0rtLgF0Zfs3eVhYT2bLEsjbijyGYAUEYQjE4w==
+X-Received: by 2002:a54:4187:0:b0:38d:ea6c:66a1 with SMTP id 7-20020a544187000000b0038dea6c66a1mr283720oiy.35.1683584668998;
+        Mon, 08 May 2023 15:24:28 -0700 (PDT)
+Received: from fedora64.linuxtx.org ([99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id p186-20020acabfc3000000b0039235300211sm516948oif.24.2023.05.08.15.24.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 15:24:26 -0700 (PDT)
-Date:   Mon, 8 May 2023 15:24:22 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Jamal Hadi Salim <jhs@mojatatu.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCH net 5/6] net/sched: Refactor qdisc_graft() for ingress
- and clsact Qdiscs
-Message-ID: <ZFl2ltqtVM5o8UpE@C02FL77VMD6R>
-References: <cover.1683326865.git.peilin.ye@bytedance.com>
- <1cd15c879d51e38f6b189d41553e67a8a1de0250.1683326865.git.peilin.ye@bytedance.com>
- <CAM0EoM=o862LdMEwmqpCSOFT=dMM8LhxgY3QUvpAow1rHSe7DA@mail.gmail.com>
+        Mon, 08 May 2023 15:24:28 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Mon, 8 May 2023 17:24:26 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.3 000/694] 6.3.2-rc1 review
+Message-ID: <ZFl2mkJPTOoz3TgU@fedora64.linuxtx.org>
+References: <20230508094432.603705160@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAM0EoM=o862LdMEwmqpCSOFT=dMM8LhxgY3QUvpAow1rHSe7DA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <20230508094432.603705160@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 07:29:26AM -0400, Jamal Hadi Salim wrote:
-> On Fri, May 5, 2023 at 8:15 PM Peilin Ye <yepeilin.cs@gmail.com> wrote:
-> >
-> > Grafting ingress and clsact Qdiscs does not need a for-loop in
-> > qdisc_graft().  Refactor it.  No functional changes intended.
+On Mon, May 08, 2023 at 11:37:15AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.2 release.
+> There are 694 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> This one i am not so sure;  num_q = 1 implies it will run on the for
-> loop only once. I am not sure it improves readability either. Anyways
-> for the effort you put into it i am tossing a coin and saying:
-> Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
-> Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+> Responses should be made by Wed, 10 May 2023 09:42:40 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.2-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Yeah, it doesn't make much difference itself.  I'm just afraid that,
-without [5/6], [6/6] would look like:
+Tested rc1 against the Fedora build system (aarch64, ppc64le, s390x,
+x86_64), and boot tested x86_64. No regressions noted.
 
-		for (i = 0; i < num_q; i++) {
-			if (!ingress) {
-				dev_queue = netdev_get_tx_queue(dev, i);
-				old = dev_graft_qdisc(dev_queue, new);
-			else {
-				old = dev_graft_qdisc(dev_queue, NULL);
-			}
-
-			if (new && i > 0)
-				qdisc_refcount_inc(new);
-
-			if (!ingress) {
-				qdisc_put(old);
-			} else {
-                                /* {ingress,clsact}_destroy() "old" before grafting "new" to avoid
-                                 * unprotected concurrent accesses to net_device::miniq_{in,e}gress
-                                 * pointer(s) in mini_qdisc_pair_swap().
-                                 */
-				qdisc_notify(net, skb, n, classid, old, new, extack);
-				qdisc_destroy(old);
-			}
-
-			if (ingress)
-				dev_graft_qdisc(dev_queue, new);
-		}
-
-The "!ingress" path doesn't share a single line with "ingress", which
-looks a bit weird to me.  Personally I'd like to keep [5/6].
-
-Thanks,
-Peilin Ye
-
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
