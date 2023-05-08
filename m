@@ -2,129 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0042C6FBA3D
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11FF6FBA3A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233883AbjEHVtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 17:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
+        id S233970AbjEHVtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 17:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233701AbjEHVti (ORCPT
+        with ESMTP id S232784AbjEHVtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 17:49:38 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FB84EDF
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 14:49:36 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-75131c2997bso1967790285a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 14:49:36 -0700 (PDT)
+        Mon, 8 May 2023 17:49:13 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622C52704
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 14:49:12 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-38e692c0918so2505475b6e.1
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 14:49:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1683582575; x=1686174575;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0DypN5RvXqLksPcW5ZvZG8k610j2dukEwh9kpzephRg=;
-        b=ETJ34Wf/9zLKeq59gMLCgQHLRI7YW6QtfbJup0HcbTCctOJQh8hMmvaYxxEVf/7l17
-         7xmIplHvezxEj1B81WZebQIMesvgjhhApaWWrdmQAGBU6594T5+Nfak7JtcFkHcYFzqy
-         iVM6adANYtGxwDBm7yFGxCL1Kit8d0aktIGUHd7Hg2gJR+cjssaUv0RH5UKzo1RYIwFE
-         xBhQHCDO4UfGJdrS89Baus4y656qCIF1ORPYUU83HiN8lelvHvaRcid379ZFRHMSVavv
-         UWaNdQ0dwLnNu6AJ1PT1C3wyW5+dyCrsqijoL3Ni94sFqV9z1q10sIQqfes9anRtOQCB
-         tVKw==
+        d=linuxtx.org; s=google; t=1683582551; x=1686174551;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fehA/P0nQb9AOIPJIL+h5u2kmPqGkpBLIR0S5RMmSKI=;
+        b=JFgseqpeK7kU17cYODycdW5zMKCclYUit04E0+ylKKwaMoR9PROe3bQ7HM7L38PXns
+         a902OkAH0fPnD4P/9Z4t7BvqN8A/Q04woEy3McO/b/NIMTL1Q1CAaGyCMFv4HlXMi8xj
+         QjvlLsOUcG4q9nT6ebGMv99tTCzTXFvHbvfkU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683582575; x=1686174575;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683582551; x=1686174551;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0DypN5RvXqLksPcW5ZvZG8k610j2dukEwh9kpzephRg=;
-        b=Vqp6zLgekLoOpfwkF0qXQ6F8LfXtH8BS1v4TDWaBIEd6W2RVjUaI4Jr95VFkUeKz+b
-         RdWq56uDNWVn1zohQ1HNEKLcep70fg+8nf4PnQIWwmXOTOzanEcmoG0STPCEMSmTiRGH
-         wVkG6BO9rSQGXXTY4o3yJBlBwZXW42k+LiTVudf8DOhPWfl4qOvEiRuCf1pYg8N4Julg
-         RYB8H6qdJX/KQHUltqwgQTJLHpsrGXXjL/H4b/RLw85hX2rjegZEXF/UwPImbRjJTB84
-         bNbYJ+WAf1Th4s+TPztxLgr7zHchY8frw43vlCkus+KA3fvG2e8aZdmJC41BMJncaCYK
-         RvLg==
-X-Gm-Message-State: AC+VfDy51Xki13TQQtgZS58UEjjF5YYtlTLBTR3FO5WKDWoIbjr/BZOJ
-        MOfOYCq8QupdP8wz2pwZqGWQ9ZDiQYBG7HXz1zK5yw==
-X-Google-Smtp-Source: ACHHUZ7zyXFkqgEsccPWkZHFOJor+dQhIH8qZ6gWsgckZggtSV9wyrSoA3DX33fkwKpQlFPhlzUoJmhPPcN2ZkvOapA=
-X-Received: by 2002:ac8:5c14:0:b0:3f2:1f63:2b24 with SMTP id
- i20-20020ac85c14000000b003f21f632b24mr18176160qti.2.1683582575351; Mon, 08
- May 2023 14:49:35 -0700 (PDT)
+        bh=fehA/P0nQb9AOIPJIL+h5u2kmPqGkpBLIR0S5RMmSKI=;
+        b=hDzoU4HNklfB72MJnLphYJzZo/v6BVPz8dUOx52pRjDptCSe/Z+jVhxVxOJ/HMBU7G
+         /lboS9vuJaeIEO6CmzEOm3YVMMKars4sGonUBxPuJiMm17H31apuZ2A/58Z3AP5jaCCn
+         8SySYry17T21I8OfzBtWnrWf6eJpSOFrKFRQ4VzgrMp6vlNG/8tkS9UvZ+I5qGZ3f5t7
+         wbTt8b0H5BmuKEf7djegthnDIfZjD5akMfHO1fGO6y8oZcVsOokNbh6mccGZKhQJJ2Q+
+         so2+S9Ne79t+JShSIrSte/p9chXyvd/ftnz0zepqi53eJoneu0ztpvEDPWBX2PI/muWp
+         eoUg==
+X-Gm-Message-State: AC+VfDzc/5AxU9HmuwOVFkQMA0FpbmM5C9TxH9NBrDP4rQTsCU70Er6t
+        39ybeDU1GZ//onlbkfAqetkENg==
+X-Google-Smtp-Source: ACHHUZ6GXb//BsLxdDYdHqYWGIQYHQX09BeAL9X247lAM3+D6OTn9XN2RfPNoqJoB1J7oHi7q/8WLw==
+X-Received: by 2002:a54:4499:0:b0:387:4984:ea81 with SMTP id v25-20020a544499000000b003874984ea81mr278633oiv.17.1683582551378;
+        Mon, 08 May 2023 14:49:11 -0700 (PDT)
+Received: from fedora64.linuxtx.org ([99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id s11-20020acac20b000000b003895430852dsm466559oif.54.2023.05.08.14.49.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 14:49:10 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Mon, 8 May 2023 16:49:09 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 000/663] 6.2.15-rc1 review
+Message-ID: <ZFluVYBfjfyS8eLd@fedora64.linuxtx.org>
+References: <20230508094428.384831245@linuxfoundation.org>
 MIME-Version: 1.0
-References: <000000000000258e5e05fae79fc1@google.com> <20230507135844.1231056-1-lrh2000@pku.edu.cn>
- <CA+CK2bBe2YKYM3rUTCnZ0RF=NFUR9VqO-QYn3ygPsFJWLY1MUA@mail.gmail.com> <ZFlrbDft1QfMyIDc@casper.infradead.org>
-In-Reply-To: <ZFlrbDft1QfMyIDc@casper.infradead.org>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Mon, 8 May 2023 14:48:59 -0700
-Message-ID: <CA+CK2bDVjovwB9v-Zv4Fn7EUfp5FV2XK36iJKYKY7pYNOFfOGA@mail.gmail.com>
-Subject: Re: usbdev_mmap causes type confusion in page_table_check
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Ruihan Li <lrh2000@pku.edu.cn>,
-        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508094428.384831245@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023 at 2:36=E2=80=AFPM Matthew Wilcox <willy@infradead.org>=
- wrote:
->
-> On Mon, May 08, 2023 at 05:27:10PM -0400, Pasha Tatashin wrote:
-> > > static void page_table_check_set(struct mm_struct *mm, unsigned long =
-addr,
-> > >                                  unsigned long pfn, unsigned long pgc=
-nt,
-> > >                                  bool rw)
-> > > {
-> > >         // ...
-> > >         anon =3D PageAnon(page);
-> > >         for (i =3D 0; i < pgcnt; i++) {
-> > >                 // ...
-> > >                 if (anon) {
-> > >                         BUG_ON(atomic_read(&ptc->file_map_count));
-> > >                         BUG_ON(atomic_inc_return(&ptc->anon_map_count=
-) > 1 && rw);
-> > >                 } else {
-> > >                         BUG_ON(atomic_read(&ptc->anon_map_count));
-> > >                         BUG_ON(atomic_inc_return(&ptc->file_map_count=
-) < 0);
-> > >                 }
-> > >                 // ...
-> > >         }
-> > >         // ...
-> > > }
-> > >
-> > > This call to PageAnon is invalid for slab pages because slab reuses t=
-he bits
-> > > in struct page/folio to store its internal states, and the anonymity =
-bit only
-> > > exists in struct page/folio. As a result, the counters are incorrectl=
-y updated
-> > > and checked in page_table_check_set and page_table_check_clear, leadi=
-ng to the
-> > > bug being raised.
-> >
-> > We should change anon boolean to be:
-> >
-> > anon =3D !PageSlab(page) && PageAnon(page);
->
-> No.  Slab pages are not elegible for mapping into userspace.  That's
+On Mon, May 08, 2023 at 11:37:06AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.15 release.
+> There are 663 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 10 May 2023 09:42:40 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.15-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Sure, I can add BUG_ON(PageSlab(page)); to page_table_check_set.
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-> all.  There should be a BUG() for that.  And I do mean BUG(), not
-> "return error to user".  Something has gone horribly wrong, and it's
-> time to crash.
-
- It is just too easy to make slab available via remap_pfn_range(), but
-I do not think we want to add BUG() into the remap function, otherwise
-we will break devices such as /dev/mem.
-
-Pasha
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
