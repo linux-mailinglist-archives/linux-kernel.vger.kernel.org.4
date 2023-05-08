@@ -2,79 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13B46F9E10
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8EC26F9E17
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232456AbjEHDBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 23:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
+        id S231833AbjEHDJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 23:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbjEHDAp (ORCPT
+        with ESMTP id S230114AbjEHDJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 23:00:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0457EE4
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 19:59:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683514793;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hf0y8biX1fmWFzJdwC/6/gmCOXFL3ymrq+8iff3P/gA=;
-        b=FXueB92N4oF11Y1CYCefgt5ZW3WAp/ONdN5y7pYZqFWQjXskGVkOlZIINOZKzO4Icd8ffB
-        6urzkFyImcQNWshLPLN9cVv/24XfD2OlhWXYnsRUEDEWLpPGF23yaj3IpHaiB1qDIw/oD/
-        +jx0rLqTrJvaoEVZkoQKcXHOdI23EOg=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-461-0oyq4yv8MVqacQzqYNBB-Q-1; Sun, 07 May 2023 22:59:51 -0400
-X-MC-Unique: 0oyq4yv8MVqacQzqYNBB-Q-1
-Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2ad93fa7132so2258571fa.0
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 19:59:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683514790; x=1686106790;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hf0y8biX1fmWFzJdwC/6/gmCOXFL3ymrq+8iff3P/gA=;
-        b=c+D4ouzT+Z7Cpvf3azilrQMEXxuz+Mg6pVSBVzA4Kv8VXSwVp9H9qDhlbxgkG7naqe
-         /F9LKzbDYsttmbD18YhAKh4ggO4iiXS+ytEUzZB/zFlrFJVVLClqOC51dOZ8ZND6fOga
-         cZ5qaAr4iqqBrOabD6HP0fysmlGpnEDwWkWs5toqMuwkCXsig5vueckwKh0Lnajchj4q
-         QuPrWGV15DQh9eftvBbUMrGKf0S4Mno3zWFCHGDfbH0K5tOy14eJ0w6z1D3JHVp3Yvy1
-         qh5hd3FAsv+cC5eTP9eRWkeWYReV7Fk33Brkf+wZ6dSMcFWs2rhRDsP+7NLZL+JYV0o+
-         mtzA==
-X-Gm-Message-State: AC+VfDyLg5mXTrsiriDKl20si3gghn1ALttyNd0EzwbszCZosJjJW082
-        wMDfFoC8V/2sB70R+1nKgssq+uVro18O8TKFBGxmyUHHiFuXSB1vPXf9fajHdR9f2OBhNhROTpT
-        AH7XOp2LcQq4btePG7C6JYWQ=
-X-Received: by 2002:ac2:548f:0:b0:4ea:fabb:4db1 with SMTP id t15-20020ac2548f000000b004eafabb4db1mr2061462lfk.1.1683514790281;
-        Sun, 07 May 2023 19:59:50 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5JxCpWUmBpdpbkhI6qHC3tfE841A1miI1aAw8ej/Hti23WwvWnwBjH/zfGx5yEpi+SOjHlcg==
-X-Received: by 2002:ac2:548f:0:b0:4ea:fabb:4db1 with SMTP id t15-20020ac2548f000000b004eafabb4db1mr2061455lfk.1.1683514789992;
-        Sun, 07 May 2023 19:59:49 -0700 (PDT)
-Received: from [192.168.1.121] (85-23-48-202.bb.dnainternet.fi. [85.23.48.202])
-        by smtp.gmail.com with ESMTPSA id t21-20020ac24c15000000b004cc8196a308sm1136305lfq.98.2023.05.07.19.59.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 May 2023 19:59:49 -0700 (PDT)
-Message-ID: <f93c14f6-024d-4abc-7598-fa82cc3ea1a5@redhat.com>
-Date:   Mon, 8 May 2023 05:59:46 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] mm/migrate_device: Try to handle swapcache pages.
-Content-Language: en-US
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        apopple@nvidia.com, jhubbard@nvidia.com, rcampbell@nvidia.com
-References: <20230507061726.13422-1-mpenttil@redhat.com>
- <87wn1ja793.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   =?UTF-8?Q?Mika_Penttil=c3=a4?= <mpenttil@redhat.com>
-In-Reply-To: <87wn1ja793.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Sun, 7 May 2023 23:09:14 -0400
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270157ED0
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 20:09:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Vhz46DB_1683515348;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vhz46DB_1683515348)
+          by smtp.aliyun-inc.com;
+          Mon, 08 May 2023 11:09:08 +0800
+Message-ID: <1683515269.507076-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH V2] tools/virtio: fix build break for aarch64
+Date:   Mon, 8 May 2023 11:07:49 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
+        Peng Fan <peng.fan@nxp.com>, mst@redhat.com,
+        jasowang@redhat.com, mie@igel.co.jp,
+        virtualization@lists.linux-foundation.org
+References: <20230323040024.3809108-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20230323040024.3809108-1-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,76 +40,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-H,
+On Thu, 23 Mar 2023 12:00:24 +0800, "Peng Fan (OSS)" <peng.fan@oss.nxp.com> wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> "-mfunction-return=thunk -mindirect-branch-register" are only valid
+> for x86. So introduce compiler operation check to avoid such issues
+>
+> Fixes: 0d0ed4006127 ("tools/virtio: enable to build with retpoline")
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>
+> V2:
+>  Use /dev/null as output dest
+>  Move call cc-option to the original CFLAGS
+>
+>  tools/virtio/Makefile | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/virtio/Makefile b/tools/virtio/Makefile
+> index 7b7139d97d74..d128925980e0 100644
+> --- a/tools/virtio/Makefile
+> +++ b/tools/virtio/Makefile
+> @@ -4,7 +4,18 @@ test: virtio_test vringh_test
+>  virtio_test: virtio_ring.o virtio_test.o
+>  vringh_test: vringh_test.o vringh.o virtio_ring.o
+>
+> -CFLAGS += -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h -mfunction-return=thunk -fcf-protection=none -mindirect-branch-register
+> +try-run = $(shell set -e;		\
+> +	if ($(1)) >/dev/null 2>&1;	\
+> +	then echo "$(2)";		\
+> +	else echo "$(3)";		\
+> +	fi)
+> +
+> +__cc-option = $(call try-run,\
+> +	$(1) -Werror $(2) -c -x c /dev/null -o /dev/null,$(2),)
+> +cc-option = $(call __cc-option, $(CC),$(1))
 
+Can we sqush these to one function?
 
-On 8.5.2023 5.26, Huang, Ying wrote:
-> mpenttil@redhat.com writes:
-> 
->> From: Mika Penttilä <mpenttil@redhat.com>
->>
->> Migrating file pages and swapcache pages into device memory is not supported.
->> The decision is done based on page_mapping(). For now, swapcache pages are not migrated.
->>
->> Things can however be improved, for swapcache pages. Try to get rid of the swap cache,
->> and if successful, go ahead as with other anonymous pages.
->>
->> As a detail, do not mess with shmem pages, as they handle swap internally.
->>
->> Cc: Alistair Popple <apopple@nvidia.com>
->> Cc: John Hubbard <jhubbard@nvidia.com>
->> Cc: Ralph Campbell <rcampbell@nvidia.com>
->> Signed-off-by: Mika Penttilä <mpenttil@redhat.com>
->> ---
->>   mm/migrate_device.c | 12 ++++++++++--
->>   1 file changed, 10 insertions(+), 2 deletions(-)
->>
->> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
->> index d30c9de60b0d..e8169c58c341 100644
->> --- a/mm/migrate_device.c
->> +++ b/mm/migrate_device.c
->> @@ -12,6 +12,7 @@
->>   #include <linux/mmu_notifier.h>
->>   #include <linux/oom.h>
->>   #include <linux/pagewalk.h>
->> +#include <linux/shmem_fs.h>
->>   #include <linux/rmap.h>
->>   #include <linux/swapops.h>
->>   #include <asm/tlbflush.h>
->> @@ -750,10 +751,17 @@ static void __migrate_device_pages(unsigned long *src_pfns,
->>   			/*
->>   			 * For now only support anonymous memory migrating to
->>   			 * device private or coherent memory.
->> +			 *
->> +			 * Try to get rid of swap cache if possible.
->> +			 * Leave shmem pages alone, they handle swap internally
->> +			 *
->>   			 */
->>   			if (mapping) {
->> -				src_pfns[i] &= ~MIGRATE_PFN_MIGRATE;
->> -				continue;
->> +				if (shmem_mapping(mapping) ||
->> +				    !folio_free_swap(page_folio(page))) {
-> 
-> Should we filter out file pages firstly?
+> +
+> +CFLAGS += -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h $(call cc-option,-mfunction-return=thunk) $(call cc-option,-fcf-protection=none) $(call cc-option,-mindirect-branch-register)
 
-folio_free_swap() checks first and returns false if not swapcache page 
-(ie including normal file pages) so think that is enough, but maybe for 
-clarity and not depending on it, could be good explicitly check for 
-swapcache before calling folio_free_swap().
+nit: this line is too long. Can we split it?
 
-> 
->> +					src_pfns[i] &= ~MIGRATE_PFN_MIGRATE;
->> +					continue;
->> +				}
->>   			}
->>   		} else if (is_zone_device_page(newpage)) {
->>   			/*
-> 
-> Best Regards,
-> Huang, Ying
-> 
+Thanks.
 
-Thanks,
-Mika
-
+> +
+>  CFLAGS += -pthread
+>  LDFLAGS += -pthread
+>  vpath %.c ../../drivers/virtio ../../drivers/vhost
+> --
+> 2.37.1
+>
