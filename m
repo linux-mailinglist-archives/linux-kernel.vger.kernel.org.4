@@ -2,141 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74DF6F9FBC
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFDF6F9FC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232779AbjEHGVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 02:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
+        id S232546AbjEHGWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 02:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232649AbjEHGVJ (ORCPT
+        with ESMTP id S229475AbjEHGWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 02:21:09 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2601D5599
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 23:21:03 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50b37f3e664so7506081a12.1
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 23:21:03 -0700 (PDT)
+        Mon, 8 May 2023 02:22:31 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DB511B71;
+        Sun,  7 May 2023 23:22:30 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-965a68abfd4so777001566b.2;
+        Sun, 07 May 2023 23:22:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683526861; x=1686118861;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=a0zCtbvyuCZv5ZDHktClt14M1N3Yn1Kq3aOXWGII3Xk=;
-        b=obRN4lQ7yHzsItWJG4sNNHmfey7iO95l0VBtNkqyNMnl86G7pjomhab75YLbaKbRKD
-         d7J1yxq+fKLj4/sPDMuDIXjxAo+SUv5eDxcWFbjTkhF4YWwuvaabWmEy4FhxjwvGo5Wa
-         kIsTsi5TImn74gKb5GZs00vVaOQFMt7OBK3FnzxmzS6qRN/koqzTeZ6wtAyJs8u+qhVb
-         XMuUo7E/lgFVbOdcPWdUUXwiF3kHyGJ147q+SuJyTul+JVYJ6NxNu0xQPEEJBoc4jRdH
-         qQr9j3XOsFF8lSiK+LDLQfUSWjNDTbsSlk6mZv+slmqmJmSh+gIR82sZNW2/xsjw6VCj
-         yvjA==
+        d=gmail.com; s=20221208; t=1683526949; x=1686118949;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vw8CSw8/kqkr/nW0ZHKrE8vFpeahAapoWHjswcPuL9E=;
+        b=koEemG7vRAfynkdz9DNrQOAF6Jwa+C7C3q15nv2adIoHYNGLxSoPfHQq7C2pbgZzSg
+         yzEv0NjsvAihk42RnJupvuFhKYcgs7+Lh7CM0D0ND2QE5D3lGuwq0GylR/H5GjBjRKKP
+         RDh/ebS6b24gcGS8Ni5z8Yxgt2/vEYVVEkiiN0Y6S/7s8etmhFVyMvZ0Qea9L63SirDZ
+         v91QCTGQANoXukJZSuzkT74qnAoLR3PcKbdFz5nXXsRT8cCbdK4hfoJzhoAB5K741I5t
+         sdF7sVetn88njXsnaSnlVrEHKCP85oJXdN+lMRu3DXa7Z0WflRiAS0jpFZPCocby8cA4
+         EM7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683526861; x=1686118861;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a0zCtbvyuCZv5ZDHktClt14M1N3Yn1Kq3aOXWGII3Xk=;
-        b=YJRQ8gwfhaoXlIijHcZAExDuBAxvnDHraJ6NSkWOQ4fO46/Rp2cHFA5/R/saM4Yc6G
-         TqqCwrWl6PcEepPCLkX8of4wDDTpA+MmgN6ra0lNNUXCzd7/r895QJeOJrf2BAL60Cjr
-         sVfPy4w19YFCVLPHBVEQCjIxjFXUeShmMJqRE7P8ujRVgzNEPusgkOGLBfQ+RKAhpSOI
-         nvjhMaIzNnnXzM769aHQEdUupQ/OwWt6qtnbkbWIcwgBeQAcnbTRTGxJV1EvB+uSX00I
-         1C3hrYShw9TRNiMDFY6TCrEBxQhifRLOs6RpPPhgUUUHWKiDGZuZQ7E0mD+3JMCMj4RQ
-         +M1Q==
-X-Gm-Message-State: AC+VfDzOa7/CwwaepSChCaBG1oEViutYDTd1TVXidx7s6pi2eFVVAYS+
-        COQNIUBiCUyxQdi+/0lToiXm9Q==
-X-Google-Smtp-Source: ACHHUZ7imTk2GtOBXkQpqz9YJxyQfy/GWd7QwSAHeIMqTup1BE9EF/jBA4+9QziBnqdNtVPsmJ/Q3w==
-X-Received: by 2002:a17:906:58c5:b0:966:58ad:d934 with SMTP id e5-20020a17090658c500b0096658add934mr2980785ejs.0.1683526861596;
-        Sun, 07 May 2023 23:21:01 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
-        by smtp.gmail.com with ESMTPSA id kg20-20020a17090776f400b0094f3e169ca5sm4511506ejc.158.2023.05.07.23.20.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 May 2023 23:21:00 -0700 (PDT)
-Message-ID: <df471efa-9ec5-f323-3892-2505ba782512@linaro.org>
-Date:   Mon, 8 May 2023 08:20:59 +0200
+        d=1e100.net; s=20221208; t=1683526949; x=1686118949;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vw8CSw8/kqkr/nW0ZHKrE8vFpeahAapoWHjswcPuL9E=;
+        b=OPN7pOuBY60dIZQu5N3jvBbanLsLEHZ2a98xaifcl2kiDZfy6gS6559ALGUwfATLDa
+         dOvwBQfyVtob3+5cKt5ZVHhWp/i4KI/qeeo43+EuQd+osHmHJ23cVR/ewBqVp9nwDRuT
+         0KA62dhPO+mlQrxY+f8SCinO9vj11xpuB6YuYsIzjgD1f2D9SGm6lKPeXcZ/KToG7vQ7
+         NIppSE6MTimL45ofOtV4RYGVyaclhAgBTkJpo8eF38ygafGSuLRi255tQ6FXKvPkR23L
+         ce92Ve8kzZX2Zh/m2f420cdHiet5nqQ/f0VyJEe8RHhKt0PY5H2m3NE2nXIu3iPFj5cC
+         PMRw==
+X-Gm-Message-State: AC+VfDz1h47rZAe6mgteGYP1Ahp7B4AKTluEUM6UiaNqIHzUWObR8cP2
+        rorYu4rjzqLwDSNUU59XE13nshci1oUZmWLwY5A=
+X-Google-Smtp-Source: ACHHUZ5328pDEz0a5JABi/wRllwutYN11eMceJJKBtx2CcdIcWeEs7l0hVe0ErW7kOxexcCvXxfuf+f0bwj4UE25KCc=
+X-Received: by 2002:a17:907:26c6:b0:91f:b13f:a028 with SMTP id
+ bp6-20020a17090726c600b0091fb13fa028mr6728320ejc.34.1683526948612; Sun, 07
+ May 2023 23:22:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v7 1/3] dt-bindings: ufs: qcom: Add ICE phandle
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-References: <20230408214041.533749-1-abel.vesa@linaro.org>
- <20230408214041.533749-2-abel.vesa@linaro.org>
- <316e9ee5-fccc-e199-f727-7b8187e965ff@linaro.org>
-Content-Language: en-US
-In-Reply-To: <316e9ee5-fccc-e199-f727-7b8187e965ff@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230505113315.3307723-1-liujian56@huawei.com> <20230505113315.3307723-8-liujian56@huawei.com>
+In-Reply-To: <20230505113315.3307723-8-liujian56@huawei.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Mon, 8 May 2023 14:21:52 +0800
+Message-ID: <CAL+tcoCKBcM8PnZ3_u-TFs8EyAGtuu7be7_akXBCX-gq0R2-+A@mail.gmail.com>
+Subject: Re: [PATCH 7/9] softirq,net: Use softirq_needs_break()
+To:     Liu Jian <liujian56@huawei.com>
+Cc:     corbet@lwn.net, paulmck@kernel.org, frederic@kernel.org,
+        quic_neeraju@quicinc.com, joel@joelfernandes.org,
+        josh@joshtriplett.org, boqun.feng@gmail.com, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        qiang1.zhang@intel.com, jstultz@google.com, tglx@linutronix.de,
+        sboyd@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, peterz@infradead.org,
+        frankwoo@google.com, Rhinewuwu@google.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rcu@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2023 20:47, Krzysztof Kozlowski wrote:
-> On 08/04/2023 23:40, Abel Vesa wrote:
->> Starting with SM8550, the ICE will have its own devicetree node
->> so add the qcom,ice property to reference it.
->>
->> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->> ---
->>
->> The v6 is here:
->> https://lore.kernel.org/all/20230407105029.2274111-3-abel.vesa@linaro.org/
->>
->> Changes since v6:
->>  * Dropped the minItems for both the qcom,ice and the reg in the
->>    qcom,ice compatile subschema, like Krzysztof suggested
->>
->> Changes since v5:
->>  * dropped the sm8550 specific subschema and replaced it with one that
->>    mutually excludes the qcom,ice vs both the ICE specific reg range
->>    and the ICE clock
->>
->> Changes since v4:
->>  * Added check for sm8550 compatible w.r.t. qcom,ice in order to enforce
->>    it while making sure none of the other platforms are allowed to use it
->>
->> Changes since v3:
->>  * dropped the "and drop core clock" part from subject line
->>
->> Changes since v2:
->>  * dropped all changes except the qcom,ice property
->>
->>
->>  .../devicetree/bindings/ufs/qcom,ufs.yaml     | 24 +++++++++++++++++++
->>  1 file changed, 24 insertions(+)
->>
-> 
-> I see dt_binding_check errors after applying this patch. Are you sure
-> this was tested?
+On Fri, May 5, 2023 at 7:27=E2=80=AFPM Liu Jian <liujian56@huawei.com> wrot=
+e:
+>
+> From: Peter Zijlstra <peterz@infradead.org>
+>
+> SoftIRQs provide their own timeout/break code now, use that.
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Liu Jian <liujian56@huawei.com>
+> ---
+>  Documentation/admin-guide/sysctl/net.rst | 11 +----------
+>  net/core/dev.c                           |  6 +-----
+>  net/core/dev.h                           |  1 -
+>  net/core/sysctl_net_core.c               |  8 --------
+>  4 files changed, 2 insertions(+), 24 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/sysctl/net.rst b/Documentation/adm=
+in-guide/sysctl/net.rst
+> index 466c560b0c30..095c60788c61 100644
+> --- a/Documentation/admin-guide/sysctl/net.rst
+> +++ b/Documentation/admin-guide/sysctl/net.rst
+> @@ -267,16 +267,7 @@ netdev_budget
+>
+>  Maximum number of packets taken from all interfaces in one polling cycle=
+ (NAPI
+>  poll). In one polling cycle interfaces which are registered to polling a=
+re
+> -probed in a round-robin manner. Also, a polling cycle may not exceed
+> -netdev_budget_usecs microseconds, even if netdev_budget has not been
+> -exhausted.
+> -
+> -netdev_budget_usecs
+> ----------------------
+> -
+> -Maximum number of microseconds in one NAPI polling cycle. Polling
+> -will exit when either netdev_budget_usecs have elapsed during the
+> -poll cycle or the number of packets processed reaches netdev_budget.
+> +probed in a round-robin manner.
+>
+>  netdev_max_backlog
+>  ------------------
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 735096d42c1d..70b6726beee6 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -4321,7 +4321,6 @@ int netdev_tstamp_prequeue __read_mostly =3D 1;
+>  unsigned int sysctl_skb_defer_max __read_mostly =3D 64;
+>  int netdev_budget __read_mostly =3D 300;
+>  /* Must be at least 2 jiffes to guarantee 1 jiffy timeout */
+> -unsigned int __read_mostly netdev_budget_usecs =3D 2 * USEC_PER_SEC / HZ=
+;
+>  int weight_p __read_mostly =3D 64;           /* old backlog weight */
+>  int dev_weight_rx_bias __read_mostly =3D 1;  /* bias for backlog weight =
+*/
+>  int dev_weight_tx_bias __read_mostly =3D 1;  /* bias for output_queue qu=
+ota */
+> @@ -6659,8 +6658,6 @@ static int napi_threaded_poll(void *data)
+>  static __latent_entropy void net_rx_action(struct softirq_action *h)
+>  {
+>         struct softnet_data *sd =3D this_cpu_ptr(&softnet_data);
+> -       unsigned long time_limit =3D jiffies +
+> -               usecs_to_jiffies(READ_ONCE(netdev_budget_usecs));
+>         int budget =3D READ_ONCE(netdev_budget);
+>         LIST_HEAD(list);
+>         LIST_HEAD(repoll);
+> @@ -6699,8 +6696,7 @@ static __latent_entropy void net_rx_action(struct s=
+oftirq_action *h)
+>                  * Allow this to run for 2 jiffies since which will allow
+>                  * an average latency of 1.5/HZ.
+>                  */
+> -               if (unlikely(budget <=3D 0 ||
+> -                            time_after_eq(jiffies, time_limit))) {
+> +               if (unlikely(budget <=3D 0 || softirq_needs_break(h))) {
+>                         sd->time_squeeze++;
+>                         break;
+>                 }
+> diff --git a/net/core/dev.h b/net/core/dev.h
+> index e075e198092c..e64a60c767ab 100644
+> --- a/net/core/dev.h
+> +++ b/net/core/dev.h
+> @@ -39,7 +39,6 @@ void dev_addr_check(struct net_device *dev);
+>
+>  /* sysctls not referred to from outside net/core/ */
+>  extern int             netdev_budget;
+> -extern unsigned int    netdev_budget_usecs;
+>  extern unsigned int    sysctl_skb_defer_max;
+>  extern int             netdev_tstamp_prequeue;
+>  extern int             netdev_unregister_timeout_secs;
+> diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
+> index 782273bb93c2..59765c805f5b 100644
+> --- a/net/core/sysctl_net_core.c
+> +++ b/net/core/sysctl_net_core.c
+> @@ -595,14 +595,6 @@ static struct ctl_table net_core_table[] =3D {
+>                 .extra1         =3D SYSCTL_ONE,
+>                 .extra2         =3D &max_skb_frags,
+>         },
+> -       {
+> -               .procname       =3D "netdev_budget_usecs",
+> -               .data           =3D &netdev_budget_usecs,
+> -               .maxlen         =3D sizeof(unsigned int),
+> -               .mode           =3D 0644,
+> -               .proc_handler   =3D proc_dointvec_minmax,
+> -               .extra1         =3D SYSCTL_ZERO,
+> -       },
 
-False alarm, it was other patch in my tree.
+I cannot help asking whether we really need to remove the sysctl knob
+because it can let some users tune this. It's useful for some cases, I
+believe. Do you have any evidence/number to prove we can get rid of
+this?
 
-This one is good.
+Thanks,
+Jason
 
-Best regards,
-Krzysztof
-
+>         {
+>                 .procname       =3D "fb_tunnels_only_for_init_net",
+>                 .data           =3D &sysctl_fb_tunnels_only_for_init_net,
+> --
+> 2.34.1
+>
+>
