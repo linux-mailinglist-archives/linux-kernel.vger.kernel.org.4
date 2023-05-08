@@ -2,76 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DE86FA700
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD186FA763
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234549AbjEHK0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 06:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54712 "EHLO
+        id S234596AbjEHK34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 06:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234494AbjEHKZe (ORCPT
+        with ESMTP id S234562AbjEHK3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 06:25:34 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0CA25243
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 03:25:20 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-52079a12451so2975935a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 03:25:20 -0700 (PDT)
+        Mon, 8 May 2023 06:29:41 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B675D4C07
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 03:29:39 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2acb6571922so22523801fa.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 03:29:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683541520; x=1686133520;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nISMZiLCgK5YExKIQaILcEjGV16PHjAVE+2qzwjdP9U=;
-        b=FbheN73E2lrXhsYBVfExIkulRcJsveu8T76D/gxtNyfkFnhnqnm9e16eyEyHZxJjRG
-         4llS324c4dTAgVhKktSs6Ap+deaORCAgB4X9GM4zusQ4IL0+SBWarlIeGL+nW999K/qk
-         kSHNmj/R4zrZzZUfUw5PqJvRfvzBdp++3JrGEOKdSFhpC529Y2wdFrg0t0Qv+vVysam2
-         Lu4Gao+GJh8agNCwStXEIHpZtCjPyqzX59fHPV3rAqB///I9mN5EQvg7IDP4nIrcAn+w
-         KiUevOCg+oEtOn0Jx8/lAEx9Ys8pye7+CzafnnzHuraWWHlSOQjRdY2b2IOOJizaOFUj
-         fb7Q==
+        d=linaro.org; s=google; t=1683541778; x=1686133778;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=D+x6UPkFapUFCRgp8EmleOOtaKQHjt0FTvIoOtvEJ8c=;
+        b=x9DNmoHffvz9zkyXfNz2/5QNP84c89e2grqLhtW70Ul+DK7SudOXKuS7qhRtjDTV90
+         zctPufr265A5UcOsAbEa+TAu4LmoL3BYLY/J/yujg9TZAzM5B8jTqoOKZuYB4fbpH5g2
+         X3ghXIz21oCoM8oxwoCj75m86/E7E8sPgDSi5UgqzWUK1k3Hoi6yqT223N/IBxH2RqSQ
+         Bm/E6mQMUkCRXPJoXqM/5iWsNsFjdGoBuxA/vVwDqhXdBrmanyEyq69YnWhTGkEWbHk3
+         GQQfDTthdX2iKYbT5qGHTD9NmYZiKBkyDNlyHEiA/3PB3NRrPAUXwO1bvqL4e1E98F6q
+         ScAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683541520; x=1686133520;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nISMZiLCgK5YExKIQaILcEjGV16PHjAVE+2qzwjdP9U=;
-        b=Th9vkMvyOvoV+4MtsONQnl2EafitSrWdjFvGBxj7avzE7DSYjbmUDFM7lmZow5eP6B
-         vOwfym210Xwug2s1k5IJUSXkp6BoZw3vu5nLNz976RgNnQOAFb3L+QTpp0lT+BpS40G3
-         eQGlo47HLtNBTK10sljR4wGIjIAd9o48wqUbo4jCbhAlWCzo08qRMdTZnoCldu460VfB
-         30cPJYCwVKQo0XnU9jTcLKosp6R3wEO7imuRYJRP2P05dvcQgUeSlO3wGzdp9KwIN2ja
-         q3XFoHosujTazq52vX+tGpyhdfdqaYKsx8AJtzQfKEfMhwJgu0GbfkxdD81IqT0Q1+Yw
-         tyGQ==
-X-Gm-Message-State: AC+VfDw4s3FwhgkOCqphaw7b+mI+RtNeMRE7Zx6Q7+HwfvsD9xy0ytRs
-        fYRIY5Gkj5cAELK8Ngc/tmLM
-X-Google-Smtp-Source: ACHHUZ6FNAT5+l7kub+yrj1pmu7hxSfwhD4xjzHQKhOQXYMSJu1KJnmXI8Q3p67Vujx1Ksa3TqLa8A==
-X-Received: by 2002:a17:902:c1cd:b0:1a9:40d5:b0ae with SMTP id c13-20020a170902c1cd00b001a940d5b0aemr10165029plc.12.1683541519738;
-        Mon, 08 May 2023 03:25:19 -0700 (PDT)
-Received: from thinkpad ([59.92.97.45])
-        by smtp.gmail.com with ESMTPSA id u11-20020a17090282cb00b001a1ccb37847sm6847233plz.146.2023.05.08.03.25.14
+        d=1e100.net; s=20221208; t=1683541778; x=1686133778;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D+x6UPkFapUFCRgp8EmleOOtaKQHjt0FTvIoOtvEJ8c=;
+        b=F8lvtO8S3IgBvQRQtp3+nJXdcd7WaAeaXAhtYffikmxryYP2HpijAU4LLlqxUH/6qk
+         A8KPhKCoQBq4lsBUrGtUXHCrFwaEnVpBBK1zbCuRVZVEIaBdFYV2TQ8rssj2cI7psrT+
+         qvtYiP/GRa67GVS/d6enb7YXZKYk/vFdKcXqquQQJilb5aKmrlDHE7x3OvqCASSf+q5G
+         jiwXK0SOVxyyadn/K+mm0O/km0EzdaotU+GiwMNpY7aRRQmd5dWRjXacKpy2eRgfMQ3L
+         h4oIWI4xkS2ysyoNs4WBUyz4z0sw8feeyrCfhlDesS4pkVxzY8J8VWii6au4W9nVuut0
+         fLag==
+X-Gm-Message-State: AC+VfDyPlLelfvdXsOaSqV6kQyOSEprNQXM7mxyHRHUcCYwMiHi2JgfX
+        Fm/6K5nxzmodFiqli/+XIgCYFQHCMddygkDl0k8=
+X-Google-Smtp-Source: ACHHUZ7VDiqCjyo3fLmZa9rwILRO8VviOXoaz18OXnBtbVeMGRKy/jU75LouvcT07DA3jHoPD19dsg==
+X-Received: by 2002:a2e:b61b:0:b0:2a7:8b35:8270 with SMTP id r27-20020a2eb61b000000b002a78b358270mr2914716ljn.35.1683541778035;
+        Mon, 08 May 2023 03:29:38 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id w5-20020a2e9985000000b002ad8fc8dda6sm547230lji.17.2023.05.08.03.29.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 03:25:19 -0700 (PDT)
-Date:   Mon, 8 May 2023 15:55:05 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
-        robh@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, steev@kali.org,
-        quic_srichara@quicinc.com
-Subject: Re: [PATCH 5/8] PCI: qcom: Do not advertise hotplug capability for
- IP v2.3.2
-Message-ID: <20230508102505.GA4190@thinkpad>
-References: <20230506073139.8789-1-manivannan.sadhasivam@linaro.org>
- <20230506073139.8789-6-manivannan.sadhasivam@linaro.org>
- <bc3ce44f-745a-bbad-32ac-67f8baa49483@linaro.org>
+        Mon, 08 May 2023 03:29:37 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Mon, 08 May 2023 12:29:32 +0200
+Subject: [PATCH] drm/msm/dpu: Set DPU_DATA_HCTL_EN for in INTF_SC7180_MASK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bc3ce44f-745a-bbad-32ac-67f8baa49483@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230508-topic-hctl_en-v1-1-0f8b5df60ed5@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAAvPWGQC/x2N0QrCMAwAf2Xk2ULdUIy/IiJpjDZQstFuMhj79
+ wUf7+C4DZpUlQb3boMqP206msP51AFnsq8EfTtDH/shXuItzOOkHDLP5SUWBkoJEenKiOBNoiY
+ hVTLOXtlSisupykfX/+Tx3PcDIbuao3QAAAA=
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kalyan Thota <quic_kalyant@quicinc.com>,
+        Shubhashree Dhar <dhar@codeaurora.org>,
+        Raviteja Tamatam <travitej@codeaurora.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@chromium.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1683541776; l=1453;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=0xMxdhEkVRQ4tosyFddMHyURiJ2JW3BVZyyPB80D7FU=;
+ b=UXLtqK0g6TOe8dOVFKhJB+Ssr8/cqY2ihdagjOKGWJg2LMrp0OIaCr02aMw7UXqQl/G38cbGY
+ 7qBA7bdZbzzDTotoYkoFNw3gO+nLQUlHBNeDKCqfLjMf06A8xLCJTV1
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,64 +90,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 06, 2023 at 03:04:42PM +0300, Dmitry Baryshkov wrote:
-> On 06/05/2023 10:31, Manivannan Sadhasivam wrote:
-> > SoCs making use of Qcom PCIe controller IP v2.3.2 do not support hotplug
-> > functionality. But the hotplug capability bit is set by default in the
-> > hardware. This causes the kernel PCI core to register hotplug service for
-> > the controller and send hotplug commands to it. But those commands will
-> > timeout generating messages as below during boot and suspend/resume.
-> > 
-> > [    5.782159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
-> > [    5.810161] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2048 msec ago)
-> > [    7.838162] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2020 msec ago)
-> > [    7.870159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2052 msec ago)
-> > 
-> > This not only spams the console output but also induces a delay of a
-> > couple of seconds. To fix this issue, let's clear the HPC bit in
-> > PCI_EXP_SLTCAP register as a part of the post init sequence to not
-> > advertise the hotplug capability for the controller.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >   drivers/pci/controller/dwc/pcie-qcom.c | 10 ++++++++++
-> >   1 file changed, 10 insertions(+)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > index 3d5b3ce9e2da..33353be396ec 100644
-> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > @@ -579,6 +579,8 @@ static int qcom_pcie_init_2_3_2(struct qcom_pcie *pcie)
-> >   static int qcom_pcie_post_init_2_3_2(struct qcom_pcie *pcie)
-> >   {
-> > +	struct dw_pcie *pci = pcie->pci;
-> > +	u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> >   	u32 val;
-> >   	/* enable PCIe clocks and resets */
-> > @@ -602,6 +604,14 @@ static int qcom_pcie_post_init_2_3_2(struct qcom_pcie *pcie)
-> >   	val |= EN;
-> >   	writel(val, pcie->parf + PARF_AXI_MSTR_WR_ADDR_HALT_V2);
-> > +	dw_pcie_dbi_ro_wr_en(pci);
-> > +
-> > +	val = readl(pci->dbi_base + offset + PCI_EXP_SLTCAP);
-> > +	val &= ~PCI_EXP_SLTCAP_HPC;
-> > +	writel(val, pci->dbi_base + offset + PCI_EXP_SLTCAP);
-> > +
-> > +	dw_pcie_dbi_ro_wr_dis(pci);
-> > +
-> 
-> Seeing this code again and again makes me wonder if we should have a
-> separate function for this.
-> 
+DPU5 and newer targets enable this unconditionally. Move it from the
+SC7280 mask to the SC7180 one.
 
-Makes sense!
+Fixes: 7bdc0c4b8126 ("msm:disp:dpu1: add support for display for SC7180 target")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Depends on:
+https://lore.kernel.org/linux-arm-msm/20230405-add-dsc-support-v2-0-1072c70e9786@quicinc.com/
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-- Mani
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+index 27420fc863d6..7ea8fd69d5fd 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+@@ -98,9 +98,12 @@
+ #define INTF_SDM845_MASK (0)
+ 
+ #define INTF_SC7180_MASK \
+-	(BIT(DPU_INTF_INPUT_CTRL) | BIT(DPU_INTF_TE) | BIT(DPU_INTF_STATUS_SUPPORTED))
++	(BIT(DPU_INTF_INPUT_CTRL) | \
++	 BIT(DPU_INTF_TE) | \
++	 BIT(DPU_INTF_STATUS_SUPPORTED) | \
++	 BIT(DPU_DATA_HCTL_EN))
+ 
+-#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN) | BIT(DPU_INTF_DATA_COMPRESS)
++#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_INTF_DATA_COMPRESS)
+ 
+ #define WB_SM8250_MASK (BIT(DPU_WB_LINE_MODE) | \
+ 			 BIT(DPU_WB_UBWC) | \
 
-> -- 
-> With best wishes
-> Dmitry
-> 
+---
+base-commit: c47189dee0decd9ecc1e65ae376ad6d4b0b7f1f2
+change-id: 20230508-topic-hctl_en-3abb999a6c99
 
+Best regards,
 -- 
-மணிவண்ணன் சதாசிவம்
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
