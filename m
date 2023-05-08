@@ -2,216 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB796FB833
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353DE6FB836
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjEHUQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 16:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
+        id S233710AbjEHURL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 16:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbjEHUQI (ORCPT
+        with ESMTP id S232274AbjEHURJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 16:16:08 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152E4E44;
-        Mon,  8 May 2023 13:16:08 -0700 (PDT)
+        Mon, 8 May 2023 16:17:09 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5C6C1
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 13:17:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683576968; x=1715112968;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ctCmlpD7x7JJyvf9349qJVVapEHgckh+soNzGwPgizc=;
-  b=KhITDvyP5fN+3kninXkZavPq9f2nRr5IpTN6dVq9vgO+K689svXo7KXc
-   IPL7BMlNDgKz7+4kgF1BYhEupEx+uPp+lOFfcbgUQ53BSbANQX0luG8Bz
-   Cy0q+w827Q5dvsdRJ0d/oozSklOY0SP3MAztRpYjq+/8Ben60pl8w/L2G
-   xJUyyreq4w1sa2yI/9dlikNgnFh55yfwGhlde0JptY1O/aPFKbT5Vd6Qn
-   PHSMPwYASrkeGnDQaAoSoT563SVrXJnFABlpryRGjlaUB6z+qY3tDQbT4
-   Kvu4PsNrbNj/smyat3VRGMV7cZ2OY6p4nm+T4TIk8NQ3XBja22jJ8eQZ/
+  t=1683577026; x=1715113026;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KZlDXXAwo1WtNfImJAMiXHOP6+jiRZhJDK8h1GAtwQ0=;
+  b=njLDymkBFAwtCI8MMapTZlJxwamitbQIwFrwR3E0NVbMZj+7zAyUXXnp
+   eUFeh+1FASMX3ovAhgsQdgaiilv5afZwQpaODRLoagXv5pG1yK2ukF3Jd
+   xrp45Ysf8lcZOPP3HEWMkjTeQ+g+TJmVdEhenhpNFiBI1m1+/a6Mj8GTs
+   0DflH3Bg1rCCttC+hENUCXDcA2vTyBhQUFMFOAnrbbWqCvxdJtrfWAT/+
+   TvEBAjs+EumE9jvpDXmJuT8eQNAfdqknR6mu2oENYzO+SNUqG+uRxxZZI
+   H0U2gvmovzI5tsa1RGAebFdsB4IssGiKjAsLUfGxPyaYF1iq0hzPjD6L0
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="330108167"
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="352807002"
 X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="330108167"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 13:16:07 -0700
+   d="scan'208";a="352807002"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 13:17:05 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="701553546"
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="842836102"
 X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="701553546"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga007.fm.intel.com with ESMTP; 08 May 2023 13:16:07 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 8 May 2023 13:16:06 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 8 May 2023 13:16:06 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 8 May 2023 13:16:05 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JZDMIg4QsPcrovyDwHUY86S9VvHnDEJ22d2WQ5idZDvBmaBtyxkgDCCti+FEY1pg7m65jtihgT+RMvrUFZMSPtLzfRwggVWRJYOVhQG3ri+21xonLo+iyZZhK/X4Y5B5iu0d7Tn+Ev8IatkEFjiAgG5pzTPihGya8CrdYWaHyzNKzFBKnHHOl893ssjQvV/BCryk1/qoXGknOypKlyr8FhoVIEsxYbKhelLGqTwVL9hoUFyfEjKKKEZkIOvimqBQW8ADHq7GRl28wwNJ1o7tfhDJdm7Yo8X+5KClHfQg3DWFbddl9uL+IX+LJqrcxl+seMpH7BfKI3NUvwf10tm16g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k7BCM/4DJsw1UMRd3ZrOY1ui2LF7prWcl/6AN6S4GtA=;
- b=QSM4QoF7cZmg8fnbGV2tZnSP33IVI5onvA7s+SSD3dNAUV59FAsb55UwyTG8STDYUF78LkhmG1wpEsuy88+TxMCtmm+mGio7srIl/h8Qw5A7ExqHPhidNwANwYKblJhH6GPiib+0CvKqYmAOMM5rImlfbeuX2hb3YMkNN+LQePx7zC/Xm4hewZFkDSNiTcuzD76eDiuY6PrKlU8dptmdv5JlPtdf3tZo+dCkfiDpYO/Rqb4kbYIbPMVgskIJjw9UeUh4Ljv2zEFkDvS/5LbQWzDSGELzT0N125gwlsPW8ZHewe28vuPZiJ7Hct8EOhN0KRTxX2vFlj5Kq2mG2Iji3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
- by SJ2PR11MB8585.namprd11.prod.outlook.com (2603:10b6:a03:56b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
- 2023 20:16:02 +0000
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::cfb2:e73:907d:cb77]) by PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::cfb2:e73:907d:cb77%5]) with mapi id 15.20.6363.032; Mon, 8 May 2023
- 20:16:01 +0000
-Message-ID: <ac5de854-d274-92ab-a0fa-9a0e738a68fa@intel.com>
-Date:   Mon, 8 May 2023 13:15:59 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v6 07/12] x86/cpu/keylocker: Load an internal wrapping key
- at boot-time
-Content-Language: en-US
-To:     "Elliott, Robert (Servers)" <elliott@hpe.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>
-CC:     "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "gmazyland@gmail.com" <gmazyland@gmail.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@suse.de" <bp@suse.de>, "mingo@kernel.org" <mingo@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Keany, Bernie" <bernie.keany@intel.com>,
-        "Gairuboyina, Charishma1" <charishma1.gairuboyina@intel.com>,
-        "Krishnakumar, Lalithambika" <lalithambika.krishnakumar@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20220112211258.21115-1-chang.seok.bae@intel.com>
- <20230410225936.8940-1-chang.seok.bae@intel.com>
- <20230410225936.8940-8-chang.seok.bae@intel.com>
- <MW5PR84MB184225DA6EA0FA7A9191C057AB719@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-In-Reply-To: <MW5PR84MB184225DA6EA0FA7A9191C057AB719@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR01CA0057.prod.exchangelabs.com (2603:10b6:a03:94::34)
- To PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
+   d="scan'208";a="842836102"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 13:17:06 -0700
+Date:   Mon, 8 May 2023 13:21:30 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>, Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        jacob.jun.pan@linux.intel.com,
+        Jean-Philippe Brucker <jean-philippe.brucker@arm.com>
+Subject: Re: [PATCH] iommu: Add Kconfig help text for IOMMU_SVA
+Message-ID: <20230508132130.5a6feb0b@jacob-builder>
+In-Reply-To: <CAHk-=wiv=Dm5diw2N-4Mx3k8iYWNfyvjzrQxB3JxVLC_7cuY+g@mail.gmail.com>
+References: <20230506133134.1492395-1-jacob.jun.pan@linux.intel.com>
+        <CAHk-=wgUiAtiszwseM1p2fCJ+sC4XWQ+YN4TanFhUgvUqjr9Xw@mail.gmail.com>
+        <20230506150741.2e3d2dcc@jacob-builder>
+        <CAHk-=wjmOAQnqJF-pW=fzMXb_Rk_J_Oi4ESBLmVPhxwBK4xfGg@mail.gmail.com>
+        <20230508094014.53913cf3@jacob-builder>
+        <CAHk-=wgobPe0U=Sc-PH08vF-ZbG00KrzftEpQMQ=n0LLNn7y6A@mail.gmail.com>
+        <ZFkpk8y8mUZuZjkV@nvidia.com>
+        <CAHk-=wiv=Dm5diw2N-4Mx3k8iYWNfyvjzrQxB3JxVLC_7cuY+g@mail.gmail.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4855:EE_|SJ2PR11MB8585:EE_
-X-MS-Office365-Filtering-Correlation-Id: ff4baf35-66c9-43f3-53bd-08db50010b17
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dmyaWzxbE9BjlmjFqMq65/tl6UKgcgUvBbyGEEvbjnON1MSjfAtlDUjsaQFVkudrVRXqP00wpX3h/HjcZQSrksIsxgkjrJC4Ycxjw/5LqT2WA0jUi+7HFo/6y4nXHFQ6xbKZSzWAs60mjpRKsNdYvyQR1WErbEIYiySAGEWd3rDmd+qCS+cmSvBS1HSYOUbpHOZFdsm17gsb9SnrJTVpDeiwihuzox1fv2sBNYnLX/G+Fp/ybizDBoWMahIxEQntTpIqMuA4n+L222WFaULc+NCrWzksiU96d3BKIzJUVqxWBs1ipcxYJA+ZuLNbwvHhg1lPhYVn3kt/P6rZbc5iOvpJZC8FxEI/8tFkgmHm5fA7/UidOFkA9nh7X4PwwBh1SaOWJ75RtHjyokXo4fIyU595CNxXKWOzt3tPq2REXIgamOgrpc2DlQdS+DAJJXd6tVSK3le5C27QtovUwNES8UT0Jeh01Ot3XzN+nqQHEQepfn91xh/5PPAhwtJUwB04GSHlVj5xDS0Nk7ddRVu8WeEPRA5U/2mD83e2ZJSRF24rr+AEC/N9Mf6BAPwvATcAKAXvv+Ac4MtAyAp/IrfDReBIzssKUx7+Hzw0pgCpaK3QnE1au35p3q2mBMFEdv5wUbPyk1lXDcyOf+0VuoScrA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(39860400002)(366004)(376002)(136003)(396003)(451199021)(31696002)(86362001)(66556008)(36756003)(296002)(110136005)(54906003)(4326008)(316002)(478600001)(66476007)(66946007)(6486002)(8676002)(5660300002)(41300700001)(8936002)(7416002)(2906002)(186003)(38100700002)(82960400001)(26005)(6512007)(6506007)(53546011)(83380400001)(2616005)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K1Y1RHo5YXVoUGRZMmE0bmhXdmE4TmtHaEd1Q3F5MDRIUVgxaXB4UmdieWV3?=
- =?utf-8?B?TmtBR3dPOExsRzgxVGVibzJLWGN3TkRya0lyOXJjSG1DV1ZsZ0MzbjhMYTFX?=
- =?utf-8?B?S21Zb05mRHMwZEo5QzV3dVY4ekN3cHNQN1lkQjJUaHB5UEc1YXJZSDhUQmd3?=
- =?utf-8?B?UXQ1dTlVM2dheFV0M2g5TTVPdG9EQkQ2MWswWG9NZnJpYU40WXBaS1RmNFNH?=
- =?utf-8?B?OURLc2RUSXZSZ2wvNUF6Y2xqL3VRc3BCcGhJRng5K0VRSGVlUmZFN0VuSUNM?=
- =?utf-8?B?akYwSzA3bm9HalJ3VUVGbTlkK1VyR1VCdHNYakhZV051MXBSUTdjVE9TOXlp?=
- =?utf-8?B?NkxXWWdhWWtEcmpOaVl1bWQrcGlod2daV1U3SWNSbTNmVGk3dStDcHFlaTlJ?=
- =?utf-8?B?NElUc2xjTmNPcCtacEhJUlhCMnVkd2NvUDBYU2lsQlNlNFB4Q0Q3L0p0bE5l?=
- =?utf-8?B?RTh0VXluTG1wN2NaTW5uQVVyRTJTdzJqZ2ZrS3BsSklLZnNEcHNrdnNtTjZC?=
- =?utf-8?B?b3hFRi93U2ZFUjN3c2VxeWJOZGlQN25WSWpjQUVTUWdCaCtHeFJ1MGdrOFBG?=
- =?utf-8?B?Q1FNN3JRRnVic0toWWZ6cDB0NC9JcXZsTmRlUjRHOGtGVDBDNy90dXFKR3pO?=
- =?utf-8?B?eUFTcko2a2NXZS9lUWlaNHFVSkw0eVI1WUhmcmVtTjBpK0lYQlU3aUdOcVVy?=
- =?utf-8?B?THJGWmdjV3dJRkxqa3Uzam9zc204ZDQ1OW84QWVPejN3RzRMOUJyNEdJWDlq?=
- =?utf-8?B?eCtmTTlnb2NTbkRta2sraUt2RDBmMVBENXBTOEEvMlgvNDNqVmc0VDBMOGZh?=
- =?utf-8?B?bFdNWFFSQlZRdG41eDJYZ0xKUUtBdDMyZWV0Q2hBZkJtNXhPMFJ0VmNpZXlE?=
- =?utf-8?B?dEV6dDVMWEdJQXJESEs1MzlCUUJ5S09OWVMvTEhCdGVRbWxINS9PcVRNMEZU?=
- =?utf-8?B?Qjdka3RjUkt4TjJldlg3MU1CaWtwKzZtOU15dzdhVEt6SVR5VHFtZHlBV0p3?=
- =?utf-8?B?WXM5TU14eGc1cnhsbFQwZXptWVhIR3F4UXg4ZThVemxnZjZNWTJpVUNsQ21G?=
- =?utf-8?B?TWEzVzVVNytGdW9kcHYxeUZqNDUxendmMVJteCtXRlJ3dU9QTWVUZDNyRitR?=
- =?utf-8?B?VkcrTzVjVzJBZTYwcWE4eVkrR1VSMEN0M2l6Rlk2M0l2bitESEhxZGFFdGdF?=
- =?utf-8?B?NkJPZUJnRm14OEEybDRZZkxINmhnc0F2QUpWMlRXb20yTkRveE9Cd21CQ0Nj?=
- =?utf-8?B?T1plOGJwVW81ZU05MElBeUdXQlN1SWdzUUxZWUFwOFVaWmcxZGhKajd3c2My?=
- =?utf-8?B?SEhEaTZ0THhPM0g1YlViMmJlYXUrQWJkZVZBeXoxZm9IL0RKMElYeDRmbkd6?=
- =?utf-8?B?bUwwRFhhaVNJVyt0OCtCa05FUEtiM0FpTXJsNElEcDFaWmZQUE1zZXJPWWdW?=
- =?utf-8?B?MkRpc3Q3Ujg4Y1h3TFN0MkpodWI1UDRaUTZ4cXNQUnRYSkxIcFF3dElKRGhU?=
- =?utf-8?B?bjNOMFQrM3VhWkZsZ0Z4RE5iV29Qcy9Bd0tMODhWQ29TRFFacnJ1cWYrSlV5?=
- =?utf-8?B?NnptLzMvZU1YTzE4N3NXZ21WRDlpdlBENDF2blRhSG1mS0VETG1TTXpUTk0y?=
- =?utf-8?B?bm9DaW5BNEZ3UUhkWG1XTUdKTXhvZ0p2aGdoQ1ExVytOZFBRMW5xWC9iUmR1?=
- =?utf-8?B?b29mNzNQcXZMcWtEUkFQeDRxSzd5Z1ZnWGpxbmxmR3Q5dHZ0b2xYQ1daL3lM?=
- =?utf-8?B?SVplR1ZSbFhadkFjY0NXQVJKYWZKMlBOenFJNUJCb0JORkxhN2pnWmlJVDJ2?=
- =?utf-8?B?S1NmNVl2YlFlRGVMQXlXWVlSS1d2OEQvaEZ0b01iVkluQWJwQW5Rbm1DZEpq?=
- =?utf-8?B?YkpMQU5OUVBielF5NktkSXlGang3bUYybStLWjZzS1hXQnRVejJxM2x4VkVM?=
- =?utf-8?B?ZER2SVFKSnZ0cVRXVHFRK0ViNitONCswNTlpZlk1VVFTWjhEUHZxdjBkbWRG?=
- =?utf-8?B?Q2tta3Q0NGJpakJvVFRlcWlydytLdS8xUlR4T2JrK3FMbUFYbGlhblNScThh?=
- =?utf-8?B?L0dSNmxjRGNtTjdIOWk0NlV1cG1iVkEwWWRoVzFKQ1hibHJwQ25US21PZTVj?=
- =?utf-8?B?RElCK3NCN2ZoY2tKSkdHV1JaL25XNzhwVjh0Z0huSWpCYzY3R3M3VnlWVU1i?=
- =?utf-8?B?elE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff4baf35-66c9-43f3-53bd-08db50010b17
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 20:16:01.8431
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: H/zXW3EWrEDFirrgcxz0qceLaiwo3XK/4bmtEDE5IT50E+Vif86oUyNP/Z5jGk/cJMPelqTZYoOvmh2FNJ99xO8thdXsAxPiUqy7UnZDtb8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB8585
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/8/2023 12:18 PM, Elliott, Robert (Servers) wrote:
-> 
->> diff --git a/arch/x86/kernel/keylocker.c b/arch/x86/kernel/keylocker.c
-> ...
->> +void __init destroy_keylocker_data(void)
->> +{
->> +     memset(&kl_setup.key, KEY_DESTROY, sizeof(kl_setup.key));
->> +}
-> 
-> That's a special value for garbage collected keyring keys assigned
-> a keytype of ".dead". memzero() or memzero_explicit() might be better
-> for this use case.
-memzero() looks to be the same as memset() in x86:
+Hi Linus,
 
-$ git grep memzero arch/x86/ | grep define
-arch/x86/boot/compressed/misc.c:#define memzero(s, n)   memset((s), 0, (n))
+On Mon, 8 May 2023 10:17:53 -0700, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 
-Instead, memzero_explicit() looks to be about the right call here:
+> On Mon, May 8, 2023 at 9:55=E2=80=AFAM Jason Gunthorpe <jgg@nvidia.com> w=
+rote:
+> >
+> > CONFIG_IOMMU_MM_PASID perhaps? Says what it does without a clue about
+> > why it does it. x86 arch code could select it ideally? =20
+>=20
+> Maybe we don't even need the "IOMMU" part. It's a core x86
+> architecture feature. Maybe it usually (always?) gets used within the
+> framework of some IOMMU work, but I guess ENCQCMD could be used in
+> some hardwired way even without that (ie is it possible to have just
+> some "basic PASID set up by VMM environment" thing?)
+>=20
+> I don't actually know who uses it and how, so I'm probably not the
+> right person to name it, but just looking at the x86 code that sets
+> it, the PASID code technically has no connection to any iommu code,
+> it's literally a core CPU feature with an MSR and some magic faulting
+> thing, and seems to be possibly usable as-is.
+>=20
+> That existing
+>=20
+>     #ifdef CONFIG_IOMMU_SVA
+>=20
+> in the x86 traps.c code just looks odd, and making it be
+> CONFIG_IOMMU_MM_PASID sounds better to me. I'm just not sure about the
+> "IOMMU" part either. Just "MM_PASID"?
+>=20
+> That said, the arm-smmu-v3-sva.c code clearly *also* uses pasid,
+> except it seems to really want to call it "ssid".
+>=20
+> So "having a per-mm ASID for IO" is clearly a common feature. But
+> naming seems hard, with x86 calling it PASID, arm64 seemingly calling
+> it "SSID".
+>=20
+> Right now the only user *does* seem to be through the IOMMU SVA code,
+> but that may or may not be fundamental.
+>=20
+> Now, "SSID" is a completely horrible name, as I immediately realized
+> when I tried to google for it. So arm64 is just wrong, and we're most
+> definitely continuing to call it PASID.
+>=20
+> I'd lean towards just "CONFIG_MM_PASID" or something, but at some
+> point this is bikeshedding, and I don't know about any possible
+> non-iommu direct uses?
++Jean who has mentioned potential use of PASID without IOMMU. But I don't
+think there is anything in the current kernel.
+Leave the name MM_PASID aside, I am trying to capture the discussion with a
+patch below. I am struggling to get a clean solution since SVA code is
+common as you said "having a per-mm ASID for IO". Having x86 Kconfig select
+MM_PASID would be redundant if it is already selected by IOMMU_SVA. Perhaps
+I am totally missing the point.
 
-/**
-  * memzero_explicit - Fill a region of memory (e.g. sensitive
-  *		      keying data) with 0s.
-  ...
-  * Note: usually using memset() is just fine (!), but in cases
-  * where clearing out _local_ data at the end of a scope is
-  * necessary, memzero_explicit() should be used instead in
-  * order to prevent the compiler from optimising away zeroing.
-  ...
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index 58b1f208eff5..d69acc69bbbb 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -652,7 +652,7 @@ static bool fixup_iopl_exception(struct pt_regs *regs)
+  */
+ static bool try_fixup_enqcmd_gp(void)
+ {
+-#ifdef CONFIG_IOMMU_SVA
++#ifdef CONFIG_IOMMU_MM_PASID
+ 	u32 pasid;
+=20
+ 	/*
+diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
+index db98c3f86e8c..7106f3af74ee 100644
+--- a/drivers/iommu/Kconfig
++++ b/drivers/iommu/Kconfig
+@@ -153,9 +153,13 @@ config IOMMU_DMA
+ 	select IRQ_MSI_IOMMU
+ 	select NEED_SG_DMA_LENGTH
+=20
++config IOMMU_MM_PASID
++	bool
++
+ # Shared Virtual Addressing
+ config IOMMU_SVA
+ 	bool
++	select IOMMU_MM_PASID
+=20
+ config FSL_PAMU
+ 	bool "Freescale IOMMU support"
+diff --git a/drivers/iommu/intel/Kconfig b/drivers/iommu/intel/Kconfig
+index 2e56bd79f589..b4d7bd68a911 100644
+--- a/drivers/iommu/intel/Kconfig
++++ b/drivers/iommu/intel/Kconfig
+@@ -50,6 +50,7 @@ config INTEL_IOMMU_SVM
+ 	depends on X86_64
+ 	select MMU_NOTIFIER
+ 	select IOMMU_SVA
++	select IOMMU_MM_PASID
+ 	help
+ 	  Shared Virtual Memory (SVM) provides a facility for devices
+ 	  to access DMA resources through process address space by
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index e8c9a7da1060..bdd7f4c1b9ad 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -1166,22 +1166,12 @@ static inline bool tegra_dev_iommu_get_stream_id(st=
+ruct device *dev, u32 *stream
+ }
+=20
+ #ifdef CONFIG_IOMMU_SVA
+-static inline void mm_pasid_init(struct mm_struct *mm)
+-{
+-	mm->pasid =3D IOMMU_PASID_INVALID;
+-}
+-static inline bool mm_valid_pasid(struct mm_struct *mm)
+-{
+-	return mm->pasid !=3D IOMMU_PASID_INVALID;
+-}
+-void mm_pasid_drop(struct mm_struct *mm);
+ struct iommu_sva *iommu_sva_bind_device(struct device *dev,
+ 					struct mm_struct *mm);
+ void iommu_sva_unbind_device(struct iommu_sva *handle);
+ u32 iommu_sva_get_pasid(struct iommu_sva *handle);
+ #else
+-static inline struct iommu_sva *
+-iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
++static inline struct iommu_sva *iommu_sva_bind_device(struct device *dev, =
+struct mm_struct *mm)
+ {
+ 	return NULL;
+ }
+@@ -1194,9 +1184,22 @@ static inline u32 iommu_sva_get_pasid(struct iommu_s=
+va *handle)
+ {
+ 	return IOMMU_PASID_INVALID;
+ }
++#endif /* CONFIG_IOMMU_SVA */
++
++#ifdef CONFIG_IOMMU_MM_PASID
++static inline void mm_pasid_init(struct mm_struct *mm)
++{
++	mm->pasid =3D IOMMU_PASID_INVALID;
++}
++static inline bool mm_valid_pasid(struct mm_struct *mm)
++{
++	return mm->pasid !=3D IOMMU_PASID_INVALID;
++}
++void mm_pasid_drop(struct mm_struct *mm);
++#else
+ static inline void mm_pasid_init(struct mm_struct *mm) {}
+ static inline bool mm_valid_pasid(struct mm_struct *mm) { return false; }
+ static inline void mm_pasid_drop(struct mm_struct *mm) {}
+-#endif /* CONFIG_IOMMU_SVA */
++#endif /* CONFIG_IOMMU_MM_PASID */
+=20
+ #endif /* __LINUX_IOMMU_H */
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 306a3d1a0fa6..70740a4ab58a 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -771,7 +771,7 @@ struct mm_struct {
+ #endif
+ 		struct work_struct async_put_work;
+=20
+-#ifdef CONFIG_IOMMU_SVA
++#ifdef CONFIG_IOMMU_MM_PASID
+ 		u32 pasid;
+ #endif
+ #ifdef CONFIG_KSM
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index eed5d65b8d1f..0b6498eafb0c 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -945,7 +945,7 @@ struct task_struct {
+ 	/* Recursion prevention for eventfd_signal() */
+ 	unsigned			in_eventfd:1;
+ #endif
+-#ifdef CONFIG_IOMMU_SVA
++#ifdef CONFIG_IOMMU_MM_PASID
+ 	unsigned			pasid_activated:1;
+ #endif
+ #ifdef	CONFIG_CPU_SUP_INTEL
+diff --git a/kernel/fork.c b/kernel/fork.c
+index ed4e01daccaa..cb02ddadd6fb 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1177,7 +1177,7 @@ static struct task_struct *dup_task_struct(struct tas=
+k_struct *orig, int node)
+ 	tsk->use_memdelay =3D 0;
+ #endif
+=20
+-#ifdef CONFIG_IOMMU_SVA
++#ifdef CONFIG_IOMMU_MM_PASID
+ 	tsk->pasid_activated =3D 0;
+ #endif
+=20
+diff --git a/mm/init-mm.c b/mm/init-mm.c
+index efa97b57acfd..b97414c2b2f7 100644
+--- a/mm/init-mm.c
++++ b/mm/init-mm.c
+@@ -42,7 +42,7 @@ struct mm_struct init_mm =3D {
+ #endif
+ 	.user_ns	=3D &init_user_ns,
+ 	.cpu_bitmap	=3D CPU_BITS_NONE,
+-#ifdef CONFIG_IOMMU_SVA
++#ifdef CONFIG_IOMMU_MM_PASID
+ 	.pasid		=3D IOMMU_PASID_INVALID,
+ #endif
+ 	INIT_MM_CONTEXT(init_mm)
 
-Then,
 
-void __init destroy_keylocker_data(void)
-{
-	memzero_explicit(&kl_setup.key, sizeof(kl_setup.key));
-}
 
 Thanks,
-Chang
+
+Jacob
