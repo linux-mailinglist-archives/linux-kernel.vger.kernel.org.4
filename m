@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30336FB0B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F506FB0F7
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233806AbjEHNAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
+        id S233746AbjEHNMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbjEHNAS (ORCPT
+        with ESMTP id S232161AbjEHNMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:00:18 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14B335B2C;
-        Mon,  8 May 2023 06:00:16 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id d2e1a72fcca58-64384c6797eso3607679b3a.2;
-        Mon, 08 May 2023 06:00:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683550816; x=1686142816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e8dlsQ2CwmNO7wfwJytQqAVyx7gIUYGLIcScY05pJUU=;
-        b=NyWAEC0fnznRXTC4DtRIIkKzkIm/1m7MLZYu7hkwFiZfu3TJcwv/ghlR1ZGi3KAEXi
-         i3pyhB0QyRq383PB3jJBae8v/RLPWd2TmPUyL+Um4O3Eh7CKm+ImQcdWyOgWUBfK3ePL
-         v81os/n/d8cr1PqvEaDrfaG/E3w2EueJLFCi5caLkNInssVvkz1yvnxdK5NsZmlZ775N
-         HENZvYx90UgR0CFpOON3swIvLhXgnT6i3/ncd3NQh6hsIo2aWDn/ePqaVykZCHJw0Xnt
-         Kw8nRYSECqQXNeZzBF0K8odGEjdO14bJnK1xMX/WacD1niF5Ic21yWBtibzwACcqQTTU
-         9Y/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683550816; x=1686142816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e8dlsQ2CwmNO7wfwJytQqAVyx7gIUYGLIcScY05pJUU=;
-        b=ZpVog3VcSS2iRv4Q7lXzo3XhQ4RDrR/wmDn0Xx7EdrNiRJUxzAmGGxuHDptKmhKKrS
-         6xl8oqIhBletT1LOba5gA1Uz6AK+GO8tJFJACR7TfvJr9SfsTywDeERz7N9nkwkoBvRS
-         xpW39pw9MgRo74/1In40EyPFIzIr7bs57gYy0mskQ8nE3nBjVtmdzqxYrg53mUBLvJd5
-         uo70sZlOOf1CXVLHqK3s/Wrbo8VYgPv+lRpLGQ2cHzz2sW+ZdPQpoWThwfczZomZrQt7
-         Xat9CRXBSxqXaC607BBg+45yBivwA1HCm5ATjZ6PDksfJGKP3Fd3RWsS0cwuWKYtZTgs
-         /o3g==
-X-Gm-Message-State: AC+VfDx4G9ItDR4e/bTP0LXcMbuxXQC9IX9QY3RG2lmnOEG21islUtAN
-        CgQ9h6/r6QiQWf2svwoD8AHrWUs599yskyMG2/Q=
-X-Google-Smtp-Source: ACHHUZ5BlhTTpgXl7d19lzo59cLz8865HsCq/XLKKxmwEt6g82Je8ChFuu2vk29C8N48WYQ4iLf9IIRGL0N+vDblejc=
-X-Received: by 2002:a05:6a00:190e:b0:646:2ec8:3360 with SMTP id
- y14-20020a056a00190e00b006462ec83360mr2972330pfi.23.1683550816074; Mon, 08
- May 2023 06:00:16 -0700 (PDT)
+        Mon, 8 May 2023 09:12:09 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83BA1FF3;
+        Mon,  8 May 2023 06:12:08 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 348D1sYn003279;
+        Mon, 8 May 2023 09:11:58 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3qdkt9b82y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 09:11:58 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 348DBvJn020329
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 8 May 2023 09:11:57 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 8 May 2023 09:11:56 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 8 May 2023 09:11:56 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 8 May 2023 09:11:56 -0400
+Received: from IST-LT-42339.ad.analog.com ([10.158.19.231])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 348DBdTJ009014;
+        Mon, 8 May 2023 09:11:42 -0400
+From:   Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+To:     <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <sre@kernel.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>
+CC:     <Zeynep.Arslanbenzer@analog.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v3 0/7] Add MAX77643/MAX77654/MAX77658/MAX77659 PMIC Support
+Date:   Mon, 8 May 2023 16:10:38 +0300
+Message-ID: <20230508131045.9399-1-Zeynep.Arslanbenzer@analog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAEm4hYUdkoZkdVg9tQ=fZoCk-1DYrNrDxmPc=+ZyRJaSnGOxwA@mail.gmail.com>
- <20230505160759.GA955334@bhelgaas>
-In-Reply-To: <20230505160759.GA955334@bhelgaas>
-From:   Xinghui Li <korantwork@gmail.com>
-Date:   Mon, 8 May 2023 21:01:31 +0800
-Message-ID: <CAEm4hYU5o43UqXT69o-uUYEu8k0jbtSbeVUO214VWo+gM+d+Zg@mail.gmail.com>
-Subject: Re: [PATCH v5] PCI: vmd: Add the module param to adjust MSI mode
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     nirmal.patel@linux.intel.com, kbusch@kernel.org,
-        jonathan.derrick@linux.dev, lpieralisi@kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xinghui Li <korantli@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: LkDOQoopkfvGDBVlK7Z9k9yMa5vS8X9Z
+X-Proofpoint-ORIG-GUID: LkDOQoopkfvGDBVlK7Z9k9yMa5vS8X9Z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-08_09,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ adultscore=0 mlxlogscore=832 mlxscore=0 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 clxscore=1015
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2305080089
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,114 +73,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 6, 2023 at 12:08=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> =
-wrote:
->
-> > I am fine with these two ways naming of the param. Adjusting from
-> > enable_msi_remaping to disable_msi_bypass was aimed to trying address
-> > your comment about dealing with the device not supporting bypass.
-> > And in vmd drivers, the vmd bypass feature is enabled by adding the fla=
-g
-> > "VMD_FEAT_CAN_BYPASS_MSI_REMAP".  Therefore, I think disabling
-> > bypass seems more appropriate. This patch aims to provide a convenient
-> > way to remove that flag in a specific case.
->
-> Users don't care about the name of VMD_FEAT_CAN_BYPASS_MSI_REMAP.  I
-> don't think that's a very good name either (in my opinion
-> "VMD_FEAT_MSI_REMAP_DISABLE" would be more descriptive, and
-> VMCONFIG_MSI_REMAP is even worse since setting it *disables* MSI
-> remapping), but in any case these are internal to the driver.
->
-> > On Sat, Apr 29, 2023 at 2:40=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.o=
-rg> wrote:
-> > > The "disable_msi_bypass" parameter name also leads to some complicate=
-d
-> > > logic.  IIUC, "disable_msi_bypass=3D0" means "do not disable MSI rema=
-p
-> > > bypassing" or, in other words, "do not remap MSIs."  This is only
-> > > supported by some VMDs.  Using "disable_msi_bypass=3D0" to *enable* t=
-he
-> > > bypass feature is confusing.
-> >
-> > However, as you said, it does lead to some complicated logic.  So, I
-> > also believe that these two approaches have their own pros and cons.
-> >
-> > > I still don't understand what causes the performance problem here.  I
-> > > guess you see higher performance when the VMD remaps child MSIs?  So
-> > > adding the VMD MSI-X domain interrupt handler and squashing all the
-> > > child MSI vectors into the VMD MSI vector space makes things better?
-> > > That seems backwards.  Is this because of cache effects or something?
-> >
-> > > What does "excessive pressure on the PCIe node" mean?  I assume the
-> > > PCIe node means the VMD?  It receives the same number of child
-> > > interrupts in either case.
-> >
-> > What I mean is that there will be performance issues when a PCIe domain
-> > is fully loaded with 4 Gen4 NVMe devices.  like this:
-> >  +-[10002:00]-+-01.0-[01]----00.0  device0
-> >  |                     +-03.0-[02]----00.0  device1
-> >  |                     +-05.0-[03]----00.0  device2
-> >  |                      \-07.0-[04]----00.0  device3
-> >
-> > According to the perf/irqtop tool, we found the os does get the same
-> > counts of interrupts in different modes. However, when the above
-> > situation occurs, we observed a significant increase in CPU idle
-> > time. Besides, the data and performance when using the bypass VMD
-> > feature were identical to when VMD was disabled. And after the
-> > devices mounted on a domain are reduced, the IOPS of individual
-> > devices will rebound somewhat. Therefore, we speculate that VMD can
-> > play a role in balancing and buffering interrupt loads. Therefore,
-> > in this situation, we believe that VMD ought to not be bypassed to
-> > handle MSI.
->
-> The proposed text was:
->
->   Use this when multiple NVMe devices are mounted on the same PCIe
->   node with a high volume of 4K random I/O. It mitigates excessive
->   pressure on the PCIe node caused by numerous interrupts from NVMe
->   drives, resulting in improved I/O performance. Such as:
->
-> The NVMe configuration and workload you mentioned works better with
-> MSI-X remapping.  But I don't know *why*, and I don't know that NVMe
-> is the only device affected.  So it's hard to write useful guidance
-> for users, other than "sometimes it helps."
->
-> Straw man proposal:
->
->   msi_remap=3D0
->
->     Disable VMD MSI-X remapping, which improves interrupt performance
->     because child device interrupts avoid the VMD MSI-X domain
->     interrupt handler.  Not all VMD devices support this, but for
->     those that do, this is the default.
->
->   msi_remap=3D1
->
->     Remap child MSI-X interrupts into VMD MSI-X interrupts.  This
->     limits the number of MSI-X vectors available to the whole child
->     device domain to the number of VMD MSI-X interrupts.
->
->     This may be required in some virtualization scenarios.
->
->     This may improve performance in some I/O topologies, e.g., several
->     NVMe devices doing lots of random I/O, but we don't know why.
->
-> I hate the idea of "we don't know why."  If you *do* know why, it
-> would be much better to outline the mechanism because that would help
-> users know when to use this.  But if we don't know why, admitting that
-> straight out is better than hand-waving about excessive pressure, etc.
->
-I completely agree with you. I discovered this issue using the bisect metho=
-d.
-Based on the observed data and experiments, I drew the above conclusions.
-We deduced the cause from the observed results. However, I have not yet
-been able to determine the precise cause of this issue.
+Changes in v3:
+* Remove regulator adi,max77658-regulator.yaml
+* Patch 1: "mfd: max77658: Add ADI MAX77643/54/58/59 MFD Support"
+  * Use MAX77643/54/58/59 instead of listing every device
+  * Move max77658_pmic_setup function body to probe function
+  * Remove dev from max77658_dev struct
+  * Fix error explanations
+  * Drop chip structure, use only id
+  * Fix the wrong indentations
+* Patch 2: "dt-bindings: mfd: max77658: Add ADI MAX77658"
+  * Decrease the example count
+* Patch 3: "power: supply: max77658: Add ADI MAX77658 Battery Support"
+  * Use default values to initialize SALRT min-max thresholds
+* Patch 4: "dt-bindings: power: supply: max77658: Add ADI MAX77658 Battery"
+  * Fix syntax
+  * Remove SALRT properties from the device tree
+  * State monitored-battery as required
+  * Remove reg
+* PATCH 5: "power: supply: max77658: Add ADI MAX77654/58/59 Charger Support"
+  * Use MAX77643/54/58/59 instead of listing every device
+  * Use sysfs entries for fast-charge-timer and topoff-timer    
+* Patch 6: "dt-bindings: power: supply: max77658: Add ADI MAX77654/58/59 Charger"
+  * Remove fast-charge-timer and topoff-timer properties from the device tree
+* PATCH 7: "regulator: max77658: Add ADI MAX77643/54/58/59 Regulator Support"
+  * Use MAX77643/54/58/59 instead of listing every device
+  * Use only one entry id id_table
 
-> The same applies to the virtualization caveat.  The text above is not
-> actionable -- how do users know whether their particular
-> virtualization scenario requires this option?
->
-I will add a note to make it clear that bypass mode will not work in guest
-passthrought mode, only remapping mode can be used.
+Changes in v2:
+* Add MAX77643, MAX77654, MAX77658 device support
 
-Thanks
+Zeynep Arslanbenzer (7):
+  regulator: max77658: Add ADI MAX77643/54/58/59 Regulator Support
+  dt-bindings: power: supply: max77658: Add ADI MAX77654/58/59 Charger
+  power: supply: max77658: Add ADI MAX77654/58/59 Charger Support
+  dt-bindings: power: supply: max77658: Add ADI MAX77658 Battery
+  power: supply: max77658: Add ADI MAX77658 Battery Support
+  dt-bindings: mfd: max77658: Add ADI MAX77658
+  mfd: max77658: Add ADI MAX77643/54/58/59 MFD Support
+
+ .../devicetree/bindings/mfd/adi,max77658.yaml | 160 ++++
+ .../power/supply/adi,max77658-battery.yaml    |  47 +
+ .../power/supply/adi,max77658-charger.yaml    |  53 ++
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/max77658.c                        | 426 +++++++++
+ drivers/power/supply/Kconfig                  |  14 +
+ drivers/power/supply/Makefile                 |   2 +
+ drivers/power/supply/max77658-battery.c       | 633 +++++++++++++
+ drivers/power/supply/max77658-charger.c       | 844 ++++++++++++++++++
+ drivers/regulator/Kconfig                     |   8 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/max77658-regulator.c        | 170 ++++
+ include/linux/mfd/max77658.h                  |  80 ++
+ 14 files changed, 2452 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77658.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/adi,max77658-battery.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/adi,max77658-charger.yaml
+ create mode 100644 drivers/mfd/max77658.c
+ create mode 100644 drivers/power/supply/max77658-battery.c
+ create mode 100644 drivers/power/supply/max77658-charger.c
+ create mode 100644 drivers/regulator/max77658-regulator.c
+ create mode 100644 include/linux/mfd/max77658.h
+
+-- 
+2.25.1
+
