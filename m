@@ -2,1102 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCDBA6F9F32
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CADD56F9F34
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbjEHFrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 01:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
+        id S232266AbjEHFrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 01:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjEHFrV (ORCPT
+        with ESMTP id S229540AbjEHFrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 01:47:21 -0400
-Received: from n169-112.mail.139.com (n169-112.mail.139.com [120.232.169.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3EA18916;
-        Sun,  7 May 2023 22:46:34 -0700 (PDT)
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM:                                                                                        
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost.localdomain (unknown[117.136.79.133])
-        by rmsmtp-lg-appmail-20-12023 (RichMail) with SMTP id 2ef764588cad0a3-3439f;
-        Mon, 08 May 2023 13:46:24 +0800 (CST)
-X-RM-TRANSID: 2ef764588cad0a3-3439f
-From:   Shenghao Ding <13916275206@139.com>
-To:     broonie@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        lgirdwood@gmail.com, perex@perex.cz,
-        pierre-louis.bossart@linux.intel.com
-Cc:     kevin-lu@ti.com, shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
-        navada@ti.com, gentuser@gmail.com, Ryan_Chu@wistron.com,
-        Sam_Wu@wistron.com, Shenghao Ding <13916275206@139.com>
-Subject: [PATCH v2 5/5] ALSA: hda/tas2781: Add tas2781 HDA driver
-Date:   Mon,  8 May 2023 13:46:15 +0800
-Message-Id: <20230508054615.776-1-13916275206@139.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 8 May 2023 01:47:51 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2068.outbound.protection.outlook.com [40.107.113.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EDC150CE;
+        Sun,  7 May 2023 22:47:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JK3i3i9CRlFy2AvoDBvBKk2dcxEC75vfmz/3ZS0vpM+tANz2/Z3WF9/GWOPEBkZu+D3T8ilBlJWSy9vYiTEkrlvSZqH4g9Uv5nWy5/d+l/RRAKNnRpq8Mj6uxZyfk6r8ixrWodpP8etWJ5o0vcJLZFWWOnxcfHpNz+NMlqVaGYtTcie+VTW53bCS26r30VCXw8n5yGPpyhCOCMu0xA1jTh0msrHEb6DDOZbDZJChpBKwA+rGz0S99WHYttAaki2xqikuxCUZBXjsBmk9dUN2Sruge3JO/yVfAxQo+7eDBgWYsqcrlCSqcYYZqg9BTQLMqN5QSSBPW8lKvR3EVjvghQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6srNRNKRz3P3B1To2wFU5lAhRQ8laBxOEkYwWS1Sw4c=;
+ b=oUCA6TJqd58NXk3f9JDKTuh3aN/lmGoWcb5ANBNt8VrZGPyWxrWp9vBDeBOhM5do0tQtexAifQuZOjRAo7pYow7qoec+qNOo8INxuUYHs2Qxv55sfZbmJo8hV7TYvoB/8NnL5nbi9mlGlC/RstJvpsjyX9E2v7HH7+PqLo/GXcBHow1DXMzrHhFlwQvhcgvR6UVCfZ2d9ewOt1lWwCYMhrhr+E1hN0PW1YDY0OrwCrl6BtG9O2D7dRd87rIvIO1TKksLMmbX7pVC+N8WJ3olHQOyG6tjnX9KLbL8u3b0QcjEP7rqSaUeQlkbiT/FWph/E9LLZ5ARUppeJPdaEgTcKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
+ header.d=nec.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6srNRNKRz3P3B1To2wFU5lAhRQ8laBxOEkYwWS1Sw4c=;
+ b=kMDiEziib9gwFEpWHTXZmZqQPSGtakrY6+CWISiPn25IbzmuWIvmjvLx8/vLpMaCIUkERZTxVBWrFIjSnKSsSZ5R4ykvhC36NNgkgwslA6PSFTSGuxJpr3K5pSwwKMc85LPxOWoe4cQfIuBxFfjU7MyQ2mrb3B23dvQsmysGRTA=
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
+ by TY3PR01MB10337.jpnprd01.prod.outlook.com (2603:1096:400:251::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
+ 2023 05:47:36 +0000
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::15c9:309c:d898:c0f5]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::15c9:309c:d898:c0f5%3]) with mapi id 15.20.6363.032; Mon, 8 May 2023
+ 05:47:36 +0000
+From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
+        <naoya.horiguchi@nec.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+CC:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>
+Subject: Re: [PATCH] x86/mce: set MCE_IN_KERNEL_COPYIN for all MC-Safe Copy
+Thread-Topic: [PATCH] x86/mce: set MCE_IN_KERNEL_COPYIN for all MC-Safe Copy
+Thread-Index: AQHZgVIgy8kgO6+s7kO2RJLMgjQtp69P3ogA
+Date:   Mon, 8 May 2023 05:47:36 +0000
+Message-ID: <20230508054734.GA4086583@hori.linux.bs1.fc.nec.co.jp>
+References: <20230508022233.13890-1-wangkefeng.wang@huawei.com>
+In-Reply-To: <20230508022233.13890-1-wangkefeng.wang@huawei.com>
+Accept-Language: ja-JP, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nec.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYWPR01MB8591:EE_|TY3PR01MB10337:EE_
+x-ms-office365-filtering-correlation-id: a5559b68-5436-49d5-b0f2-08db4f87ba04
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: U5eaAVLxwmr9k+VID2BROnKbwSboPrV6xdma66J3gZQOFJHoRBcBLAoyYcXfIMI3PGNsMNARTDEC/WXkfwQlI/1wjuUrdTXKSw7T8fHPjmgGWggAza5IaQVIYbuKeXVKvdNA+aJB4j0/OQfLVLdtzVheW8GM020RliiNBrWaXWxuiiGCC/6noQiO1hrZ7DYErwYt/2mUF7otU7MpfyJKyoJjkXAd6s5hmwHDwIJZ1s6zOUebjKBPZBbKKp+FbTTOpWXkg6gGmVZ4byQnIOlQp/ocy/uN3VGlW8Yh9cohCITYyvoJo/CQe6AzlUqHqsI/p1JP2LNK5TIoBNxih2kV1Wb7DJBFGc/pqcjQmQw2hoHAyaVlCYFjmgVtfXKEVdA9Y0mMbF7GNklgLdgxntsqpN1oIoHkkDpw3r7SMpbG+22xaHVMKQ5lzyQRDu7/PIRTMuup1E+Ov1wBqK3mrfjT6rCGq+NYGibrA4khrq0dj5bk/Mx+HyASeeE87GqSB9vD1Lg3qHMy7TKGA/pctkM9qr8qNW5iII9MHHoYyMCnLbQTWqufIQ11RTDsJghd82oDD4vgNgYk3L7EQuTrL64meaNX21eYn6hfym+gA5bAQR84oXb6KfrKAWX2ZOCUpyrnp6VwAiSZZec/2mnM9Zkz9A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(136003)(396003)(39860400002)(376002)(451199021)(83380400001)(966005)(6486002)(478600001)(54906003)(71200400001)(9686003)(6512007)(6506007)(1076003)(26005)(186003)(55236004)(85182001)(2906002)(7416002)(33656002)(38100700002)(66476007)(66556008)(66946007)(76116006)(64756008)(6916009)(82960400001)(4326008)(122000001)(41300700001)(66446008)(8676002)(8936002)(38070700005)(86362001)(5660300002)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UDc4VFl3amdPODhoS2d6dUI3KzFvTEZtbE8vVGd3NkNhV1JMSGxtOGdwQysz?=
+ =?utf-8?B?OTEvYmlURE5hSXhDeFZnc3ZXOTJybkUvWDZrNDNZRFdYN2xQM09GL0cvaEht?=
+ =?utf-8?B?UlVNa3ljUmhENFduZVc5K3I1YlA5RnRiZFI1K1g2MFVlcDFycGNsN1V1bzJo?=
+ =?utf-8?B?ZWhadVBQZGppbFY4d25sR09YWmVTbTZDeWtlRE1ZdlpnWUU2YjFpTUx3NlVS?=
+ =?utf-8?B?SExUWjEwOXFyYzNoQU90aXhXcGplOU1WVVpYd1dmQjlhOVRkQW9lTGU0TXNZ?=
+ =?utf-8?B?OC9uS2hIcE4yaFlINUxyQ0tSSzU2TUNWRWtGT002QTBLM1dzSWRZT3cyMWlj?=
+ =?utf-8?B?WWJVbk0zRlNPN1ZLcEpPRlJienJ0K3VaS0NiV1ZjZkNQN0p1cXJpbHRQYVo4?=
+ =?utf-8?B?M0hPNFRmejBYWjg2b21SUHJZOFVDdEkrVnlPdUJaZ2lqdmQvNzZHeUVEMDBs?=
+ =?utf-8?B?UGRhTlJBcnN3dUo4Y2s1U09nWEsxdFdnaUhCU3ZjSFZmN296YXZBKzNNWlpo?=
+ =?utf-8?B?bzNyVXdMdFJ5bFFBd2tsblNacEFnMXIyY0NZME1DR0VxZ1pjWXJReE5mTnlL?=
+ =?utf-8?B?MHVmd1VZV1B4MDRud1NyREdSR0JpODBiRjdKV0tIMmoyUzRPOTFwcjJSRVhj?=
+ =?utf-8?B?YzFSd0pNSmpMdTdLUjNxZ3hnaE43MktYaWJIVkY3a3FOR3doazdRc0JnS0d2?=
+ =?utf-8?B?RUl2c1VzbWRSdStzbVRSdmFFN1Z0VkFnejB0ZU5jSklxdi9jQWxHQ1h3bUtJ?=
+ =?utf-8?B?aEZ0aUpnOUI2bEtUckxUN05FQnVaWmVzQTcveVQvL0wxUmovMk1Ya2l6NHhK?=
+ =?utf-8?B?ZlhxaFR2YzJSTHptNjBXOXJrZW5LTGdaa3RSemVYblJJT1VSL0t2TVpkV3V0?=
+ =?utf-8?B?MFpyZGRvZitOQXNEaHdRME01cXNHQXprSEpBTWJxeGFRV3Vta3dSZmE4bk1V?=
+ =?utf-8?B?cUQ1T1h2RmpUVjJiaUhYUjZCOGlQaHhUWEQySThjbU9NQWZabFVFNXRjVDhW?=
+ =?utf-8?B?YWl1V2hOQmg2S3hFVHoxZW1GUjBOU0lCRERMZldkY0orKzZobVptS21ranFa?=
+ =?utf-8?B?M3VndWNSeTJZUFlsOTlnSnJPa2daODBnVDl1RFJQZEhYaGZQRWxaMVoxbis3?=
+ =?utf-8?B?cnV5YlcxSDNGWFJZZjlsL1REZi9EK1NxWENDNVQwdzVRcVRPZVQzT0hSYzJk?=
+ =?utf-8?B?NCtVMmFTNjY1dDRJQk80Vm1NZHZZdkh2VVU1S3M5WUhPN3N6RE0zcHZIUHVt?=
+ =?utf-8?B?VzZVRnRWcFVBRzNpbWNUMzBQc0tzOHp4ZTRlS2dvengrTmc0NFJlNi9tWUJU?=
+ =?utf-8?B?ZkRiUzNDMnl6eVpQWkdoM1dhNVlVQ0VZZmFLeWNxK0p0MmdERXhHb2R2WU1E?=
+ =?utf-8?B?ZVhlWHRIejJrcTYrd3pja1paeGlFQlFRTUVrei9EbCt2eFJic0hLUXdrQmVY?=
+ =?utf-8?B?VG8vS09mRGpWWlZrL0VseWxsYm80cytWWG9pWmpscCtKcG51eHdnL1ZTbGk4?=
+ =?utf-8?B?QWZ2L0FJbjRDbExwNHJDN0VYTGVZVW55YlB6NlptbnpkS1BnU2kxL01xaVhm?=
+ =?utf-8?B?ZExYWG9pSWJxOTY1SVFwQ3d2dDBIMXNUNEVodE9aR0FsTHVIUHd5M2hldTJJ?=
+ =?utf-8?B?YkYyaklsNTkwQXg4MitMcWVYRmkrTkxVVElBdzBpNlYvSjJEWDcyemJReWtv?=
+ =?utf-8?B?ajlkak91MjhSd3R3QXkzc1JiRzFyS2ZrWE1oWnNDTUpGT0F4cTFNY3c1Y2NO?=
+ =?utf-8?B?Z0pWK1BqSHZiMW1KVHF3cEViSDc4cVBOZWk4Wkw2MTl4Vjl0a0RITjJmelVL?=
+ =?utf-8?B?VXVjSkNuOGxCN0RMK2FaNEttSEJrenNNSmRMek13RnUrcCt6NVFPc29kNnFm?=
+ =?utf-8?B?V1VMZHhucVRTUlhmc3UzYURqdjcwa2ozVEZpZmRYL3VXS25HeHB3QS9OVFZF?=
+ =?utf-8?B?Q2podDc5NDVoOStlWlNKZm51VFBwWmJ0US84V1MyOE1icHMzbnJIR0pSb2VM?=
+ =?utf-8?B?ZjV3dUp0eFNNblcxR1IybnVYdE5lbTJjYXVmcHlEbW9scmxhTEliUDZLS2JG?=
+ =?utf-8?B?bG8za2pPYmNETHF1VTdGQXI5OUhheVZ5YjVBMDdpWmc1V3lqR1VsbVdsQjQ0?=
+ =?utf-8?B?dlBpV29RT0tYblJNZHV5enB5NWpkT1d3dko1RHEvbVJoUnhxWDllanBqRzcv?=
+ =?utf-8?B?Z0E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8626473D3892784480A7D68D402D77E2@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: nec.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5559b68-5436-49d5-b0f2-08db4f87ba04
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2023 05:47:36.3019
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: AlG+7kuTnjK7LxYmhk0PG6v9YeBGpCMc4mZpfoOPLpClK0QHX10EzaIXX2nRFONuic+uJ1iJvMXOddV9ndx01g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB10337
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create tas2781 HDA driver.
-
-Signed-off-by: Shenghao Ding <13916275206@139.com>
-
----
-Changes in v2:
- - fixed issue | Reported-by: kernel test robot <lkp@intel.com>
-   | Link: https://lore.kernel.org/oe-kbuild-all/202305022033.LiI7Ojm4-lkp@intel.com/
- Changes to be committed:
-	modified:   sound/pci/hda/Kconfig
-	modified:   sound/pci/hda/Makefile
-	modified:   sound/pci/hda/patch_realtek.c
-	new file:   sound/pci/hda/tas2781_hda_i2c.c
----
- sound/pci/hda/Kconfig           |  15 +
- sound/pci/hda/Makefile          |   2 +
- sound/pci/hda/patch_realtek.c   | 106 ++++-
- sound/pci/hda/tas2781_hda_i2c.c | 806 ++++++++++++++++++++++++++++++++
- 4 files changed, 926 insertions(+), 3 deletions(-)
- create mode 100644 sound/pci/hda/tas2781_hda_i2c.c
-
-diff --git a/sound/pci/hda/Kconfig b/sound/pci/hda/Kconfig
-index 886255a03e8b..e66257277492 100644
---- a/sound/pci/hda/Kconfig
-+++ b/sound/pci/hda/Kconfig
-@@ -130,6 +130,21 @@ config SND_HDA_SCODEC_CS35L41_SPI
- comment "Set to Y if you want auto-loading the side codec driver"
- 	depends on SND_HDA=y && SND_HDA_SCODEC_CS35L41_SPI=m
- 
-+config SND_HDA_SCODEC_TAS2781_I2C
-+	tristate "Build TAS2781 HD-audio side codec support for I2C Bus"
-+	depends on I2C
-+	depends on ACPI
-+	depends on SND_SOC
-+	select SND_SOC_TAS2781_COMLIB
-+	select SND_SOC_TAS2781_FMWLIB
-+	select CRC32_SARWATE
-+	help
-+	  Say Y or M here to include TAS2781 I2C HD-audio side codec support
-+	  in snd-hda-intel driver, such as ALC287.
-+
-+comment "Set to Y if you want auto-loading the side codec driver"
-+	depends on SND_HDA=y && SND_HDA_SCODEC_TAS2781_I2C=m
-+
- config SND_HDA_CODEC_REALTEK
- 	tristate "Build Realtek HD-audio codec support"
- 	select SND_HDA_GENERIC
-diff --git a/sound/pci/hda/Makefile b/sound/pci/hda/Makefile
-index 00d306104484..1c76609690d6 100644
---- a/sound/pci/hda/Makefile
-+++ b/sound/pci/hda/Makefile
-@@ -32,6 +32,7 @@ snd-hda-scodec-cs35l41-objs :=		cs35l41_hda.o
- snd-hda-scodec-cs35l41-i2c-objs :=	cs35l41_hda_i2c.o
- snd-hda-scodec-cs35l41-spi-objs :=	cs35l41_hda_spi.o
- snd-hda-cs-dsp-ctls-objs :=		hda_cs_dsp_ctl.o
-+snd-hda-scodec-tas2781-i2c-objs :=	tas2781_hda_i2c.o
- 
- # common driver
- obj-$(CONFIG_SND_HDA) := snd-hda-codec.o
-@@ -56,6 +57,7 @@ obj-$(CONFIG_SND_HDA_SCODEC_CS35L41) += snd-hda-scodec-cs35l41.o
- obj-$(CONFIG_SND_HDA_SCODEC_CS35L41_I2C) += snd-hda-scodec-cs35l41-i2c.o
- obj-$(CONFIG_SND_HDA_SCODEC_CS35L41_SPI) += snd-hda-scodec-cs35l41-spi.o
- obj-$(CONFIG_SND_HDA_CS_DSP_CONTROLS) += snd-hda-cs-dsp-ctls.o
-+obj-$(CONFIG_SND_HDA_SCODEC_TAS2781_I2C) += snd-hda-scodec-tas2781-i2c.o
- 
- # this must be the last entry after codec drivers;
- # otherwise the codec patches won't be hooked before the PCI probe
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 172ffc2c332b..f5b912f90018 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -6705,7 +6705,7 @@ static void comp_generic_playback_hook(struct hda_pcm_stream *hinfo, struct hda_
- 	}
- }
- 
--struct cs35l41_dev_name {
-+struct scodec_dev_name {
- 	const char *bus;
- 	const char *hid;
- 	int index;
-@@ -6714,7 +6714,7 @@ struct cs35l41_dev_name {
- /* match the device name in a slightly relaxed manner */
- static int comp_match_cs35l41_dev_name(struct device *dev, void *data)
- {
--	struct cs35l41_dev_name *p = data;
-+	struct scodec_dev_name *p = data;
- 	const char *d = dev_name(dev);
- 	int n = strlen(p->bus);
- 	char tmp[32];
-@@ -6730,12 +6730,31 @@ static int comp_match_cs35l41_dev_name(struct device *dev, void *data)
- 	return !strcmp(d + n, tmp);
- }
- 
-+static int comp_match_tas2781_dev_name(struct device *dev, void *data)
-+{
-+	struct scodec_dev_name *p = data;
-+	const char *d = dev_name(dev);
-+	int n = strlen(p->bus);
-+	char tmp[32];
-+
-+	/* check the bus name */
-+	if (strncmp(d, p->bus, n))
-+		return 0;
-+	/* skip the bus number */
-+	if (isdigit(d[n]))
-+		n++;
-+	/* the rest must be exact matching */
-+	snprintf(tmp, sizeof(tmp), "-%s:00", p->hid);
-+
-+	return !strcmp(d + n, tmp);
-+}
-+
- static void cs35l41_generic_fixup(struct hda_codec *cdc, int action, const char *bus,
- 				  const char *hid, int count)
- {
- 	struct device *dev = hda_codec_dev(cdc);
- 	struct alc_spec *spec = cdc->spec;
--	struct cs35l41_dev_name *rec;
-+	struct scodec_dev_name *rec;
- 	int ret, i;
- 
- 	switch (action) {
-@@ -6760,6 +6779,40 @@ static void cs35l41_generic_fixup(struct hda_codec *cdc, int action, const char
- 	}
- }
- 
-+static void tas2781_generic_fixup(struct hda_codec *cdc, int action,
-+	const char *bus, const char *hid, int count)
-+{
-+	struct device *dev = hda_codec_dev(cdc);
-+	struct alc_spec *spec = cdc->spec;
-+	struct scodec_dev_name *rec;
-+	int ret, i;
-+
-+	switch (action) {
-+	case HDA_FIXUP_ACT_PRE_PROBE:
-+		for (i = 0; i < count; i++) {
-+			rec = devm_kmalloc(dev, sizeof(*rec), GFP_KERNEL);
-+			if (!rec)
-+				return;
-+			rec->bus = bus;
-+			rec->hid = hid;
-+			rec->index = i;
-+			spec->comps[i].codec = cdc;
-+			component_match_add(dev, &spec->match,
-+				comp_match_tas2781_dev_name, rec);
-+		}
-+		ret = component_master_add_with_match(dev, &comp_master_ops,
-+			spec->match);
-+		if (ret)
-+			codec_err(cdc,
-+				"Fail to register component aggregator %d\n",
-+				ret);
-+		else
-+			spec->gen.pcm_playback_hook =
-+				comp_generic_playback_hook;
-+		break;
-+	}
-+}
-+
- static void cs35l41_fixup_i2c_two(struct hda_codec *cdc, const struct hda_fixup *fix, int action)
- {
- 	cs35l41_generic_fixup(cdc, action, "i2c", "CSC3551", 2);
-@@ -6787,6 +6840,12 @@ static void alc287_fixup_legion_16ithg6_speakers(struct hda_codec *cdc, const st
- 	cs35l41_generic_fixup(cdc, action, "i2c", "CLSA0101", 2);
- }
- 
-+static void tas2781_fixup_i2c(struct hda_codec *cdc,
-+	const struct hda_fixup *fix, int action)
-+{
-+	 tas2781_generic_fixup(cdc, action, "i2c", "TIAS2781", 1);
-+}
-+
- /* for alc295_fixup_hp_top_speakers */
- #include "hp_x360_helper.c"
- 
-@@ -7201,6 +7260,8 @@ enum {
- 	ALC287_FIXUP_YOGA9_14IAP7_BASS_SPK_PIN,
- 	ALC295_FIXUP_DELL_INSPIRON_TOP_SPEAKERS,
- 	ALC236_FIXUP_DELL_DUAL_CODECS,
-+	ALC287_FIXUP_TAS2781_I2C_2,
-+	ALC287_FIXUP_TAS2781_I2C_4
- };
- 
- /* A special fixup for Lenovo C940 and Yoga Duet 7;
-@@ -9189,6 +9250,18 @@ static const struct hda_fixup alc269_fixups[] = {
- 		.chained = true,
- 		.chain_id = ALC255_FIXUP_DELL1_MIC_NO_PRESENCE,
- 	},
-+	[ALC287_FIXUP_TAS2781_I2C_2] = {
-+		.type = HDA_FIXUP_FUNC,
-+		.v.func = tas2781_fixup_i2c,
-+		.chained = true,
-+		.chain_id = ALC269_FIXUP_THINKPAD_ACPI,
-+	},
-+	[ALC287_FIXUP_TAS2781_I2C_4] = {
-+		.type = HDA_FIXUP_FUNC,
-+		.v.func = tas2781_fixup_i2c,
-+		.chained = true,
-+		.chain_id = ALC269_FIXUP_THINKPAD_ACPI,
-+	},
- };
- 
- static const struct snd_pci_quirk alc269_fixup_tbl[] = {
-@@ -9725,6 +9798,33 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x17aa, 0x3853, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3855, "Legion 7 16ITHG6", ALC287_FIXUP_LEGION_16ITHG6),
- 	SND_PCI_QUIRK(0x17aa, 0x3869, "Lenovo Yoga7 14IAL7", ALC287_FIXUP_YOGA9_14IAP7_BASS_SPK_PIN),
-+	SND_PCI_QUIRK(0x17aa, 0x387d, "Yoga S780-16 pro Quad AAC",
-+		ALC287_FIXUP_TAS2781_I2C_4),
-+	SND_PCI_QUIRK(0x17aa, 0x387e, "Yoga S780-16 pro Quad YC",
-+		ALC287_FIXUP_TAS2781_I2C_4),
-+	SND_PCI_QUIRK(0x17aa, 0x3881, "YB9 dual powe mode2 YC",
-+		ALC287_FIXUP_TAS2781_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x3884, "Y780 YG DUAL",
-+		ALC287_FIXUP_TAS2781_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x3886, "Y780 VECO DUAL",
-+		ALC287_FIXUP_TAS2781_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x38a7, "Y780P AMD YG dual",
-+		ALC287_FIXUP_TAS2781_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x38a8, "Y780P AMD VECO dual",
-+		ALC287_FIXUP_TAS2781_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x38ba, "Yoga S780-14.5 Air AMD quad YC",
-+		ALC287_FIXUP_TAS2781_I2C_4),
-+	SND_PCI_QUIRK(0x17aa, 0x38bb, "Yoga S780-14.5 Air AMD quad AAC",
-+		ALC287_FIXUP_TAS2781_I2C_4),
-+	SND_PCI_QUIRK(0x17aa, 0x38be, "Yoga S980-14.5 proX YC Dual",
-+		ALC287_FIXUP_TAS2781_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x38bf, "Yoga S980-14.5 proX LX Dual",
-+		ALC287_FIXUP_TAS2781_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x38c3, "Y980 DUAL", ALC287_FIXUP_TAS2781_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x38cb, "Y790 YG DUAL",
-+		ALC287_FIXUP_TAS2781_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x38cd, "Y790 VECO DUAL",
-+		ALC287_FIXUP_TAS2781_I2C_2),
- 	SND_PCI_QUIRK(0x17aa, 0x3902, "Lenovo E50-80", ALC269_FIXUP_DMIC_THINKPAD_ACPI),
- 	SND_PCI_QUIRK(0x17aa, 0x3977, "IdeaPad S210", ALC283_FIXUP_INT_MIC),
- 	SND_PCI_QUIRK(0x17aa, 0x3978, "Lenovo B50-70", ALC269_FIXUP_DMIC_THINKPAD_ACPI),
-diff --git a/sound/pci/hda/tas2781_hda_i2c.c b/sound/pci/hda/tas2781_hda_i2c.c
-new file mode 100644
-index 000000000000..a742805b749b
---- /dev/null
-+++ b/sound/pci/hda/tas2781_hda_i2c.c
-@@ -0,0 +1,806 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// TAS2781 HDA I2C driver
-+//
-+// Copyright 2023 Texas Instruments, Inc.
-+//
-+// Author: Shenghao Ding <shenghao-ding@ti.com>
-+
-+#include <linux/acpi.h>
-+#include <linux/crc8.h>
-+#include <linux/crc32.h>
-+#include <linux/efi.h>
-+#include <linux/firmware.h>
-+#include <linux/i2c.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/regmap.h>
-+#include <sound/hda_codec.h>
-+#include <sound/soc.h>
-+#include <sound/tas2781.h>
-+#include <sound/tlv.h>
-+#include <sound/tas2781-tlv.h>
-+
-+#include "hda_local.h"
-+#include "hda_auto_parser.h"
-+#include "hda_component.h"
-+#include "hda_jack.h"
-+#include "hda_generic.h"
-+
-+#define TASDEVICE_SPEAKER_CALIBRATION_SIZE	20
-+
-+#define ACARD_SINGLE_RANGE_EXT_TLV(xname, xreg, xshift, xmin, xmax, xinvert, \
-+				 xhandler_get, xhandler_put, tlv_array) \
-+{	.iface = SNDRV_CTL_ELEM_IFACE_CARD, .name = (xname),\
-+	.access = SNDRV_CTL_ELEM_ACCESS_TLV_READ |\
-+		 SNDRV_CTL_ELEM_ACCESS_READWRITE,\
-+	.tlv.p = (tlv_array), \
-+	.info = snd_soc_info_volsw_range, \
-+	.get = xhandler_get, .put = xhandler_put, \
-+	.private_value = (unsigned long)&(struct soc_mixer_control) \
-+		{.reg = xreg, .rreg = xreg, .shift = xshift, \
-+		 .rshift = xshift, .min = xmin, .max = xmax, \
-+		 .invert = xinvert} }
-+
-+enum calib_data {
-+	R0_VAL = 0,
-+	INV_R0,
-+	R0LOW,
-+	POWER,
-+	TLIM,
-+	CALIB_MAX
-+};
-+
-+static int tas2781_acpi_get_i2c_resource(struct acpi_resource
-+	*ares, void *data)
-+{
-+	struct tasdevice_priv *tas_priv = (struct tasdevice_priv *)data;
-+	struct acpi_resource_i2c_serialbus *sb;
-+
-+	if (i2c_acpi_get_i2c_resource(ares, &sb)) {
-+		if (sb->slave_address != TAS2781_GLOBAL_ADDR) {
-+			tas_priv->tasdevice[tas_priv->ndev].dev_addr =
-+				(unsigned int) sb->slave_address;
-+			tas_priv->ndev++;
-+		} else
-+			tas_priv->glb_addr.dev_addr = TAS2781_GLOBAL_ADDR;
-+
-+	}
-+
-+	return 1;
-+}
-+
-+static int tas2781_hda_read_acpi(struct tasdevice_priv *tas_priv,
-+	const char *hid)
-+{
-+	struct acpi_device *adev;
-+	struct device *physdev;
-+	LIST_HEAD(resources);
-+	const char *sub;
-+	int ret;
-+
-+	adev = acpi_dev_get_first_match_dev(hid, NULL, -1);
-+	if (!adev) {
-+		dev_err(tas_priv->dev,
-+			"Failed to find an ACPI device for %s\n", hid);
-+		return -ENODEV;
-+	}
-+	strcpy(tas_priv->dev_name, hid);
-+	physdev = get_device(acpi_get_first_physical_node(adev));
-+	acpi_dev_put(adev);
-+
-+	sub = acpi_get_subsystem_id(ACPI_HANDLE(physdev));
-+	if (IS_ERR(sub))
-+		sub = NULL;
-+	dev_info(tas_priv->dev, "subid = %s\n", sub);
-+
-+	tas_priv->acpi_subsystem_id = sub;
-+
-+	ret = acpi_dev_get_resources(adev, &resources,
-+		tas2781_acpi_get_i2c_resource, tas_priv);
-+	if (ret < 0)
-+		goto err;
-+	acpi_dev_free_resource_list(&resources);
-+
-+	put_device(physdev);
-+	dev_info(tas_priv->dev, "global addr: 0x%02x devcnt = %d\n",
-+		tas_priv->glb_addr.dev_addr, tas_priv->ndev);
-+
-+	return 0;
-+
-+err:
-+	dev_err(tas_priv->dev, "Failed acpi ret: %d\n", ret);
-+	put_device(physdev);
-+
-+	return ret;
-+}
-+
-+static void tas2781_hda_playback_hook(struct device *dev, int action)
-+{
-+	struct tasdevice_priv *tas_priv = dev_get_drvdata(dev);
-+	int ret = 0;
-+
-+	dev_info(tas_priv->dev, "%s: action = %d\n", __func__, action);
-+	switch (action) {
-+	case HDA_GEN_PCM_ACT_OPEN:
-+		pm_runtime_get_sync(dev);
-+		mutex_lock(&tas_priv->codec_lock);
-+		tas_priv->cur_conf = 0;
-+		tas_priv->rcabin.profile_cfg_id = 1;
-+		tasdevice_tuning_switch(tas_priv, 0);
-+		mutex_unlock(&tas_priv->codec_lock);
-+		break;
-+	case HDA_GEN_PCM_ACT_CLOSE:
-+		mutex_lock(&tas_priv->codec_lock);
-+		tasdevice_tuning_switch(tas_priv, 1);
-+		mutex_unlock(&tas_priv->codec_lock);
-+
-+		pm_runtime_mark_last_busy(dev);
-+		pm_runtime_put_autosuspend(dev);
-+		break;
-+	default:
-+		dev_warn(tas_priv->dev, "Playback action not supported: %d\n",
-+			action);
-+		break;
-+	}
-+
-+	if (ret)
-+		dev_err(tas_priv->dev, "Regmap access fail: %d\n", ret);
-+}
-+
-+static int tasdevice_info_profile(struct snd_kcontrol *kcontrol,
-+			struct snd_ctl_elem_info *uinfo)
-+{
-+	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-+
-+	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
-+	uinfo->count = 1;
-+	uinfo->value.integer.min = 1;
-+	uinfo->value.integer.max = max(0, tas_priv->rcabin.ncfgs);
-+
-+	return 0;
-+}
-+
-+static int tasdevice_get_profile_id(struct snd_kcontrol *kcontrol,
-+			struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-+
-+	ucontrol->value.integer.value[0] = tas_priv->rcabin.profile_cfg_id;
-+
-+	return 0;
-+}
-+
-+static int tasdevice_set_profile_id(struct snd_kcontrol *kcontrol,
-+		struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-+
-+	tas_priv->rcabin.profile_cfg_id = ucontrol->value.integer.value[0];
-+
-+	return 1;
-+}
-+
-+static int tasdevice_create_control(struct tasdevice_priv *tas_priv)
-+{
-+	char prof_ctrl_name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
-+	struct hda_codec *codec = tas_priv->codec;
-+	struct snd_kcontrol_new prof_ctrl = {
-+		.name = prof_ctrl_name,
-+		.iface = SNDRV_CTL_ELEM_IFACE_CARD,
-+		.info = tasdevice_info_profile,
-+		.get = tasdevice_get_profile_id,
-+		.put = tasdevice_set_profile_id,
-+	};
-+	int ret;
-+
-+	/* Create a mixer item for selecting the active profile */
-+	scnprintf(prof_ctrl_name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN,
-+		"tasdev-profile-id");
-+	ret = snd_ctl_add(codec->card, snd_ctl_new1(&prof_ctrl, tas_priv));
-+	if (ret) {
-+		dev_err(tas_priv->dev, "Failed to add KControl %s = %d\n",
-+			prof_ctrl.name, ret);
-+		goto out;
-+	}
-+
-+	dev_dbg(tas_priv->dev, "Added Control %s\n", prof_ctrl.name);
-+
-+out:
-+	return ret;
-+}
-+
-+static int tasdevice_info_programs(struct snd_kcontrol *kcontrol,
-+			struct snd_ctl_elem_info *uinfo)
-+{
-+	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-+	struct tasdevice_fw *tas_fw = tas_priv->fmw;
-+
-+	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
-+	uinfo->count = 1;
-+	uinfo->value.integer.min = 0;
-+	uinfo->value.integer.max = (int)tas_fw->nr_programs;
-+
-+	return 0;
-+}
-+
-+static int tasdevice_info_configurations(
-+	struct snd_kcontrol *kcontrol, struct snd_ctl_elem_info *uinfo)
-+{
-+	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-+	struct tasdevice_fw *tas_fw = tas_priv->fmw;
-+
-+	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
-+	uinfo->count = 1;
-+	uinfo->value.integer.min = 0;
-+	uinfo->value.integer.max = (int)tas_fw->nr_configurations - 1;
-+
-+	return 0;
-+}
-+
-+static int tasdevice_program_get(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-+
-+	ucontrol->value.integer.value[0] = tas_priv->cur_prog;
-+
-+	return 0;
-+}
-+
-+static int tasdevice_program_put(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-+	unsigned int nr_program = ucontrol->value.integer.value[0];
-+
-+	tas_priv->cur_prog = nr_program;
-+
-+	return 1;
-+}
-+
-+static int tasdevice_config_get(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+
-+	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-+
-+	ucontrol->value.integer.value[0] = tas_priv->cur_conf;
-+
-+	return 0;
-+}
-+
-+static int tasdevice_config_put(
-+	struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-+	unsigned int nr_configuration = ucontrol->value.integer.value[0];
-+
-+	tas_priv->cur_conf = nr_configuration;
-+
-+	return 1;
-+}
-+
-+/**
-+ * tas2781_digital_getvol - get the volum control
-+ * @kcontrol: control pointer
-+ * @ucontrol: User data
-+ * Customer Kcontrol for tas2781 is primarily for regmap booking, paging
-+ * depends on internal regmap mechanism.
-+ * tas2781 contains book and page two-level register map, especially
-+ * book switching will set the register BXXP00R7F, after switching to the
-+ * correct book, then leverage the mechanism for paging to access the
-+ * register.
-+ */
-+static int tas2781_digital_getvol(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-+	struct soc_mixer_control *mc =
-+		(struct soc_mixer_control *)kcontrol->private_value;
-+
-+	return tasdevice_digital_getvol(tas_priv, ucontrol, mc);
-+}
-+
-+static int tas2781_amp_getvol(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-+	struct soc_mixer_control *mc =
-+		(struct soc_mixer_control *)kcontrol->private_value;
-+
-+	return tasdevice_amp_getvol(tas_priv, ucontrol, mc);
-+}
-+
-+static int tas2781_digital_putvol(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-+	struct soc_mixer_control *mc =
-+		(struct soc_mixer_control *)kcontrol->private_value;
-+
-+	return tasdevice_digital_putvol(tas_priv, ucontrol, mc);
-+}
-+
-+static int tas2781_amp_putvol(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-+	struct soc_mixer_control *mc =
-+		(struct soc_mixer_control *)kcontrol->private_value;
-+
-+	return tasdevice_amp_putvol(tas_priv, ucontrol, mc);
-+}
-+
-+static const struct snd_kcontrol_new tas2781_snd_controls[] = {
-+	ACARD_SINGLE_RANGE_EXT_TLV("Amp Gain Volume", TAS2781_AMP_LEVEL,
-+		1, 0, 20, 0, tas2781_amp_getvol,
-+		tas2781_amp_putvol, amp_vol_tlv),
-+	ACARD_SINGLE_RANGE_EXT_TLV("Digital Volume", TAS2781_DVC_LVL,
-+		0, 0, 200, 1, tas2781_digital_getvol,
-+		tas2781_digital_putvol, dvc_tlv),
-+};
-+
-+static int tasdevice_dsp_create_ctrls(struct tasdevice_priv
-+	*tas_priv)
-+{
-+	char prog_name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
-+	char conf_name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
-+	struct hda_codec *codec = tas_priv->codec;
-+	struct snd_kcontrol_new prog_ctl = {
-+		.name = prog_name,
-+		.iface = SNDRV_CTL_ELEM_IFACE_CARD,
-+		.info = tasdevice_info_programs,
-+		.get = tasdevice_program_get,
-+		.put = tasdevice_program_put,
-+	};
-+	struct snd_kcontrol_new conf_ctl = {
-+		.name = conf_name,
-+		.iface = SNDRV_CTL_ELEM_IFACE_CARD,
-+		.info = tasdevice_info_configurations,
-+		.get = tasdevice_config_get,
-+		.put = tasdevice_config_put,
-+	};
-+	int ret;
-+
-+	scnprintf(prog_name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN, "tasdev-prog-id");
-+	scnprintf(conf_name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN, "tasdev-conf-id");
-+
-+	ret = snd_ctl_add(codec->card, snd_ctl_new1(&prog_ctl, tas_priv));
-+	if (ret) {
-+		dev_err(tas_priv->dev, "Failed to add KControl %s = %d\n",
-+			prog_ctl.name, ret);
-+		goto out;
-+	}
-+
-+	dev_dbg(tas_priv->dev, "Added Control %s\n", prog_ctl.name);
-+
-+	ret = snd_ctl_add(codec->card, snd_ctl_new1(&conf_ctl, tas_priv));
-+	if (ret) {
-+		dev_err(tas_priv->dev, "Failed to add KControl %s = %d\n",
-+			conf_ctl.name, ret);
-+		goto out;
-+	}
-+
-+	dev_dbg(tas_priv->dev, "Added Control %s\n", conf_ctl.name);
-+out:
-+	return ret;
-+}
-+
-+static void tas2781_apply_calib(struct tasdevice_priv *tas_priv)
-+{
-+	unsigned char page_array[CALIB_MAX] = {0x17, 0x18, 0x18, 0x0d, 0x18};
-+	unsigned char rgno_array[CALIB_MAX] = {0x74, 0x0c, 0x14, 0x3c, 0x7c};
-+	unsigned char *data;
-+	int i, j, rc;
-+
-+	for (i = 0; i < tas_priv->ndev; i++) {
-+		data = tas_priv->cali_data.data +
-+			i * TASDEVICE_SPEAKER_CALIBRATION_SIZE;
-+		for (j = 0; j < CALIB_MAX; j++) {
-+			rc = tasdevice_dev_bulk_write(tas_priv, i,
-+				TASDEVICE_REG(0, page_array[j], rgno_array[j]),
-+				&(data[4 * j]), 4);
-+			if (rc < 0)
-+				dev_err(tas_priv->dev,
-+					"chn %d calib %d bulk_wr err = %d\n",
-+					i, j, rc);
-+		}
-+	}
-+}
-+
-+static int tas2781_save_calibration(struct tasdevice_priv *tas_priv)
-+{
-+	efi_guid_t efi_guid = EFI_GUID(0x02f9af02, 0x7734, 0x4233, 0xb4, 0x3d,
-+		0x93, 0xfe, 0x5a, 0xa3, 0x5d, 0xb3);
-+	static efi_char16_t efi_name[] = L"CALI_DATA";
-+	struct hda_codec *codec = tas_priv->codec;
-+	unsigned int subid = codec->core.subsystem_id & 0xFFFF;
-+	struct tm *tm = &tas_priv->tm;
-+	unsigned int attr, crc;
-+	unsigned int *tmp_val;
-+	efi_status_t status;
-+	int ret = 0;
-+
-+	//Lenovo devices
-+	if ((subid == 0x387d) || (subid == 0x387e) || (subid == 0x3881)
-+		|| (subid == 0x3884) || (subid == 0x3886) || (subid == 0x38a7)
-+		|| (subid == 0x38a8) || (subid == 0x38ba) || (subid == 0x38bb)
-+		|| (subid == 0x38be) || (subid == 0x38bf) || (subid == 0x38c3)
-+		|| (subid == 0x38cb) || (subid == 0x38cd))
-+		efi_guid = EFI_GUID(0x1f52d2a1, 0xbb3a, 0x457d, 0xbc, 0x09,
-+			0x43, 0xa3, 0xf4, 0x31, 0x0a, 0x92);
-+	tas_priv->cali_data.total_sz = 0;
-+	/* Get real size of UEFI variable */
-+	status = efi.get_variable(efi_name, &efi_guid, &attr,
-+		&tas_priv->cali_data.total_sz, tas_priv->cali_data.data);
-+	if (status == EFI_BUFFER_TOO_SMALL) {
-+		ret = -ENODEV;
-+		/* Allocate data buffer of data_size bytes */
-+		tas_priv->cali_data.data = devm_kzalloc(tas_priv->dev,
-+			tas_priv->cali_data.total_sz, GFP_KERNEL);
-+		if (!tas_priv->cali_data.data)
-+			return -ENOMEM;
-+		/* Get variable contents into buffer */
-+		status = efi.get_variable(efi_name, &efi_guid, &attr,
-+			&tas_priv->cali_data.total_sz,
-+			tas_priv->cali_data.data);
-+		if (status != EFI_SUCCESS) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+	}
-+
-+	tmp_val = (unsigned int *)tas_priv->cali_data.data;
-+
-+	crc = crc32(~0, tas_priv->cali_data.data, 84) ^ ~0;
-+	dev_info(tas_priv->dev, "cali crc 0x%08x PK tmp_val 0x%08x\n",
-+		crc, tmp_val[21]);
-+
-+	if (crc == tmp_val[21]) {
-+		time64_to_tm(tmp_val[20], 0, tm);
-+		dev_info(tas_priv->dev, "%4ld-%2d-%2d, %2d:%2d:%2d\n",
-+			tm->tm_year, tm->tm_mon, tm->tm_mday,
-+			tm->tm_hour, tm->tm_min, tm->tm_sec);
-+		tas2781_apply_calib(tas_priv);
-+	}
-+out:
-+	return ret;
-+}
-+
-+static void tasdevice_fw_ready(const struct firmware *fmw,
-+	void *context)
-+{
-+	struct tasdevice_priv *tas_priv = (struct tasdevice_priv *)context;
-+	struct hda_codec *codec = tas_priv->codec;
-+	int i, ret = 0;
-+
-+	pm_runtime_get_sync(tas_priv->dev);
-+	mutex_lock(&tas_priv->codec_lock);
-+
-+	ret = tasdevice_rca_parser(tas_priv, fmw);
-+	if (ret)
-+		goto out;
-+	tasdevice_create_control(tas_priv);
-+
-+	for (i = 0; i < ARRAY_SIZE(tas2781_snd_controls); i++) {
-+		ret = snd_ctl_add(codec->card,
-+			snd_ctl_new1(&tas2781_snd_controls[i], tas_priv));
-+		if (ret) {
-+			dev_err(tas_priv->dev,
-+				"Failed to add KControl %s = %d\n",
-+				tas2781_snd_controls[i].name, ret);
-+			goto out;
-+		}
-+	}
-+
-+	tasdevice_dsp_remove(tas_priv);
-+
-+	tas_priv->fw_state = TASDEVICE_DSP_FW_PENDING;
-+	scnprintf(tas_priv->coef_binaryname, 64, "TAS2XXX%04X.bin",
-+		codec->core.subsystem_id & 0xffff);
-+	ret = tasdevice_dsp_parser(tas_priv);
-+	if (ret) {
-+		dev_err(tas_priv->dev, "dspfw load %s error\n",
-+			tas_priv->coef_binaryname);
-+		tas_priv->fw_state = TASDEVICE_DSP_FW_FAIL;
-+		goto out;
-+	}
-+	tasdevice_dsp_create_ctrls(tas_priv);
-+
-+	tas_priv->fw_state = TASDEVICE_DSP_FW_ALL_OK;
-+	tasdevice_prmg_load(tas_priv, 0);
-+	tas_priv->cur_prog = 0;
-+
-+	/* If calibrated data occurs error, dsp will still works with default
-+	 * calibrated data inside algo.
-+	 */
-+	tas2781_save_calibration(tas_priv);
-+
-+out:
-+	if (tas_priv->fw_state == TASDEVICE_DSP_FW_FAIL) {
-+		/*If DSP FW fail, kcontrol won't be created */
-+		tasdevice_config_info_remove(tas_priv);
-+		tasdevice_dsp_remove(tas_priv);
-+	}
-+	mutex_unlock(&tas_priv->codec_lock);
-+	if (fmw)
-+		release_firmware(fmw);
-+	pm_runtime_mark_last_busy(tas_priv->dev);
-+	pm_runtime_put_autosuspend(tas_priv->dev);
-+}
-+
-+static int tas2781_hda_bind(struct device *dev, struct device *master,
-+	void *master_data)
-+{
-+	struct tasdevice_priv *tas_priv = dev_get_drvdata(dev);
-+	struct hda_component *comps = master_data;
-+	int ret = 0;
-+
-+	if (!comps || tas_priv->index < 0 ||
-+		tas_priv->index >= HDA_MAX_COMPONENTS)
-+		return -EINVAL;
-+
-+	comps = &comps[tas_priv->index];
-+	if (comps->dev)
-+		return -EBUSY;
-+
-+	pm_runtime_get_sync(dev);
-+
-+	comps->dev = dev;
-+
-+	strscpy(comps->name, dev_name(dev), sizeof(comps->name));
-+
-+	ret = tascodec_init(tas_priv, comps->codec, tasdevice_fw_ready);
-+
-+	comps->playback_hook = tas2781_hda_playback_hook;
-+
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
-+
-+	return ret;
-+}
-+
-+static void tas2781_hda_unbind(struct device *dev,
-+	struct device *master, void *master_data)
-+{
-+	struct tasdevice_priv *tas_priv = dev_get_drvdata(dev);
-+	struct hda_component *comps = master_data;
-+
-+	if (comps[tas_priv->index].dev == dev)
-+		memset(&comps[tas_priv->index], 0, sizeof(*comps));
-+
-+	tasdevice_config_info_remove(tas_priv);
-+	tasdevice_dsp_remove(tas_priv);
-+
-+	tas_priv->fw_state = TASDEVICE_DSP_FW_PENDING;
-+}
-+
-+static const struct component_ops tas2781_hda_comp_ops = {
-+	.bind = tas2781_hda_bind,
-+	.unbind = tas2781_hda_unbind,
-+};
-+
-+static void tas2781_hda_remove(struct device *dev)
-+{
-+	struct tasdevice_priv *tas_priv = dev_get_drvdata(dev);
-+
-+	pm_runtime_get_sync(tas_priv->dev);
-+	pm_runtime_disable(tas_priv->dev);
-+
-+
-+	component_del(tas_priv->dev, &tas2781_hda_comp_ops);
-+
-+	pm_runtime_put_noidle(tas_priv->dev);
-+
-+	tasdevice_remove(tas_priv);
-+}
-+
-+static int tas2781_hda_i2c_probe(struct i2c_client *clt)
-+{
-+	struct tasdevice_priv *tas_priv;
-+	const char *device_name;
-+	int ret;
-+
-+	if (strstr(dev_name(&clt->dev), "TIAS2781"))
-+		device_name = "TIAS2781";
-+	else
-+		return -ENODEV;
-+
-+	tas_priv = tasdevice_kzalloc(clt);
-+	if (!tas_priv)
-+		return -ENOMEM;
-+
-+	tas_priv->irq_info.irq = clt->irq;
-+	ret = tas2781_hda_read_acpi(tas_priv, device_name);
-+	if (ret)
-+		return dev_err_probe(tas_priv->dev, ret,
-+			"Platform not supported\n");
-+
-+	ret = tasdevice_init(tas_priv);
-+	if (ret)
-+		goto err;
-+
-+	pm_runtime_set_autosuspend_delay(tas_priv->dev, 3000);
-+	pm_runtime_use_autosuspend(tas_priv->dev);
-+	pm_runtime_mark_last_busy(tas_priv->dev);
-+	pm_runtime_set_active(tas_priv->dev);
-+	pm_runtime_get_noresume(tas_priv->dev);
-+	pm_runtime_enable(tas_priv->dev);
-+
-+	pm_runtime_put_autosuspend(tas_priv->dev);
-+
-+	ret = component_add(tas_priv->dev, &tas2781_hda_comp_ops);
-+	if (ret) {
-+		dev_err(tas_priv->dev, "Register component failed: %d\n", ret);
-+		pm_runtime_disable(tas_priv->dev);
-+	}
-+
-+err:
-+	if (ret)
-+		tas2781_hda_remove(&clt->dev);
-+	return ret;
-+}
-+
-+static void tas2781_hda_i2c_remove(struct i2c_client *clt)
-+{
-+	tas2781_hda_remove(&clt->dev);
-+}
-+
-+static int tas2781_runtime_suspend(struct device *dev)
-+{
-+	struct tasdevice_priv *tas_priv = dev_get_drvdata(dev);
-+	int i, ret = 0;
-+
-+	dev_info(tas_priv->dev, "Runtime Suspend\n");
-+
-+	mutex_lock(&tas_priv->codec_lock);
-+
-+	if (tas_priv->playback_started) {
-+		tasdevice_tuning_switch(tas_priv, 1);
-+		tas_priv->playback_started = false;
-+	}
-+
-+	tas_priv->cur_prog = -1;
-+	tas_priv->cur_conf = -1;
-+
-+	for (i = 0; i < tas_priv->ndev; i++) {
-+		tas_priv->tasdevice[i].cur_book = -1;
-+		tas_priv->tasdevice[i].cur_prog = -1;
-+		tas_priv->tasdevice[i].cur_conf = -1;
-+	}
-+
-+	regcache_cache_only(tas_priv->regmap, true);
-+	regcache_mark_dirty(tas_priv->regmap);
-+
-+	mutex_unlock(&tas_priv->codec_lock);
-+
-+	return ret;
-+}
-+
-+static int tas2781_runtime_resume(struct device *dev)
-+{
-+	struct tasdevice_priv *tas_priv = dev_get_drvdata(dev);
-+	unsigned long calib_data_sz =
-+		tas_priv->ndev * TASDEVICE_SPEAKER_CALIBRATION_SIZE;
-+	int ret = 0;
-+
-+	dev_info(tas_priv->dev, "Runtime Resume\n");
-+
-+	mutex_lock(&tas_priv->codec_lock);
-+
-+	regcache_cache_only(tas_priv->regmap, false);
-+	ret = regcache_sync(tas_priv->regmap);
-+	if (ret) {
-+		dev_err(tas_priv->dev,
-+			"Failed to restore register cache: %d\n", ret);
-+		goto out;
-+	}
-+
-+	tasdevice_prmg_load(tas_priv, 0);
-+	tas_priv->cur_prog = 0;
-+
-+	/* If calibrated data occurs error, dsp will still works with default
-+	 * calibrated data inside algo.
-+	 */
-+	if (tas_priv->cali_data.total_sz > calib_data_sz)
-+		tas2781_apply_calib(tas_priv);
-+
-+out:
-+	mutex_unlock(&tas_priv->codec_lock);
-+
-+	return ret;
-+}
-+
-+static int tas2781_system_suspend(struct device *dev)
-+{
-+	struct tasdevice_priv *tas_priv = dev_get_drvdata(dev);
-+	int ret;
-+
-+	dev_info(tas_priv->dev, "System Suspend\n");
-+
-+	ret = pm_runtime_force_suspend(dev);
-+	if (ret)
-+		return ret;
-+
-+	/* Shutdown chip before system suspend */
-+	regcache_cache_only(tas_priv->regmap, false);
-+	tasdevice_tuning_switch(tas_priv, 1);
-+	regcache_cache_only(tas_priv->regmap, true);
-+	regcache_mark_dirty(tas_priv->regmap);
-+	/*
-+	 * Reset GPIO may be shared, so cannot reset here.
-+	 * However beyond this point, amps may be powered down.
-+	 */
-+	return 0;
-+}
-+
-+static int tas2781_system_resume(struct device *dev)
-+{
-+	struct tasdevice_priv *tas_priv = dev_get_drvdata(dev);
-+	unsigned long calib_data_sz =
-+		tas_priv->ndev * TASDEVICE_SPEAKER_CALIBRATION_SIZE;
-+	int i, ret;
-+
-+	dev_info(tas_priv->dev, "System Resume\n");
-+
-+	ret = pm_runtime_force_resume(dev);
-+
-+	mutex_lock(&tas_priv->codec_lock);
-+	tas_priv->cur_prog = -1;
-+	tas_priv->cur_conf = -1;
-+
-+	for (i = 0; i < tas_priv->ndev; i++) {
-+		tas_priv->tasdevice[i].cur_book = -1;
-+		tas_priv->tasdevice[i].cur_prog = -1;
-+		tas_priv->tasdevice[i].cur_conf = -1;
-+	}
-+	tas2781_reset(tas_priv);
-+	tasdevice_prmg_load(tas_priv, 0);
-+	tas_priv->cur_prog = 0;
-+
-+	/* If calibrated data occurs error, dsp will still works with default
-+	 * calibrated data inside algo.
-+	 */
-+	if (tas_priv->cali_data.total_sz > calib_data_sz)
-+		tas2781_apply_calib(tas_priv);
-+	mutex_unlock(&tas_priv->codec_lock);
-+
-+	return ret;
-+}
-+
-+static const struct dev_pm_ops tas2781_hda_pm_ops = {
-+	RUNTIME_PM_OPS(tas2781_runtime_suspend, tas2781_runtime_resume,
-+		NULL)
-+	SYSTEM_SLEEP_PM_OPS(tas2781_system_suspend, tas2781_system_resume)
-+};
-+
-+static const struct i2c_device_id tas2781_hda_i2c_id[] = {
-+	{ "tas2781-hda", 0 },
-+	{}
-+};
-+
-+static const struct acpi_device_id tas2781_acpi_hda_match[] = {
-+	{"TIAS2781", 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(acpi, tas2781_acpi_hda_match);
-+
-+static struct i2c_driver tas2781_hda_i2c_driver = {
-+	.driver = {
-+		.name		= "tas2781-hda",
-+		.acpi_match_table = tas2781_acpi_hda_match,
-+		.pm		= &tas2781_hda_pm_ops,
-+	},
-+	.id_table	= tas2781_hda_i2c_id,
-+	.probe_new	= tas2781_hda_i2c_probe,
-+	.remove		= tas2781_hda_i2c_remove,
-+};
-+module_i2c_driver(tas2781_hda_i2c_driver);
-+
-+MODULE_DESCRIPTION("TAS2781 HDA Driver");
-+MODULE_AUTHOR("Shenghao Ding, TI, <shenghao-ding@ti.com>");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(SND_SOC_TAS2781_FMWLIB);
--- 
-2.34.1
-
-
+T24gTW9uLCBNYXkgMDgsIDIwMjMgYXQgMTA6MjI6MzNBTSArMDgwMCwgS2VmZW5nIFdhbmcgd3Jv
+dGU6DQo+IEJvdGggRVhfVFlQRV9GQVVMVF9NQ0VfU0FGRSBhbmQgRVhfVFlQRV9ERUZBVUxUX01D
+RV9TQUZFIGV4Y2VwdGlvbg0KPiBmaXh1cCB0eXBlcyBhcmUgdXNlZCB0byBpZGVudGlmeSBmaXh1
+cHMgd2hpY2ggYWxsb3cgaW4ga2VybmVsICNNQw0KPiByZWNvdmVyeSwgdGhhdCBpcyB0aGUgTWFj
+aGluZSBDaGVjayBTYWZlIENvcHkuDQo+IA0KPiBGb3Igbm93LCB0aGUgTUNFX0lOX0tFUk5FTF9D
+T1BZSU4gZmxhZyBpcyBvbmx5IHNldCBmb3IgRVhfVFlQRV9DT1BZDQo+IGFuZCBFWF9UWVBFX1VB
+Q0NFU1Mgd2hlbiBjb3B5IGZyb20gdXNlciwgYW5kIGNvcnJ1cHRlZCBwYWdlIGlzDQo+IGlzb2xh
+dGVkIGluIHRoaXMgY2FzZSwgZm9yIE1DLXNhZmUgY29weSwgbWVtb3J5X2ZhaWx1cmUoKSBpcyBu
+b3QNCj4gYWx3YXlzIGNhbGxlZCwgc29tZSBwbGFjZXMsIGxpa2UgX193cF9wYWdlX2NvcHlfdXNl
+ciwgY29weV9zdWJwYWdlLA0KPiBjb3B5X3VzZXJfZ2lnYW50aWNfcGFnZSBhbmQga3NtX21pZ2h0
+X25lZWRfdG9fY29weSBtYW51YWxseSBjYWxsDQo+IG1lbW9yeV9mYWlsdXJlX3F1ZXVlKCkgdG8g
+Y29wZSB3aXRoIHN1Y2ggdW5oYW5kbGVkIGVycm9yIHBhZ2VzLA0KPiByZWNlbnRseSBjb3JlZHVt
+cCBod3Bvc2lvbiByZWNvdmVyeSBzdXBwb3J0WzFdIGlzIGFza2VkIHRvIGRvIHRoZQ0KPiBzYW1l
+IHRoaW5nLCBhbmQgdGhlcmUgYXJlIHNvbWUgb3RoZXIgYWxyZWFkeSBleGlzdGVkIE1DLXNhZmUg
+Y29weQ0KPiBzY2VuYXJpb3MsIGVnLCBudmRpbW0sIGRtLXdyaXRlY2FjaGUsIGRheCwgd2hpY2gg
+aGFzIHNpbWlsYXIgaXNzdWUuDQo+IA0KPiBUaGUgYmVzdCB3YXkgdG8gZml4IHRoZW0gaXMgc2V0
+IE1DRV9JTl9LRVJORUxfQ09QWUlOIHRvIE1DRV9TQUZFDQo+IGV4Y2VwdGlvbiwgdGhlbiBraWxs
+X21lX25ldmVyKCkgd2lsbCBiZSBxdWV1ZWQgdG8gY2FsbCBtZW1vcnlfZmFpbHVyZSgpDQo+IGlu
+IGRvX21hY2hpbmVfY2hlY2soKSB0byBpc29sYXRlIGNvcnJ1cHRlZCBwYWdlLCB3aGljaCBhdm9p
+ZCBjYWxsaW5nDQo+IG1lbW9yeV9mYWlsdXJlX3F1ZXVlKCkgYWZ0ZXIgZXZlcnkgTUMtc2FmZSBj
+b3B5IHJldHVybi4NCj4gDQo+IFsxXSBodHRwczovL2xrbWwua2VybmVsLm9yZy9yLzIwMjMwNDE3
+MDQ1MzIzLjExMDU0LTEtd2FuZ2tlZmVuZy53YW5nQGh1YXdlaS5jb20NCj4gDQo+IFNpZ25lZC1v
+ZmYtYnk6IEtlZmVuZyBXYW5nIDx3YW5na2VmZW5nLndhbmdAaHVhd2VpLmNvbT4NCg0KTG9va3Mg
+Z29vZCB0byBtZSwgdGhhbmsgeW91Lg0KDQpSZXZpZXdlZC1ieTogTmFveWEgSG9yaWd1Y2hpIDxu
+YW95YS5ob3JpZ3VjaGlAbmVjLmNvbT4=
