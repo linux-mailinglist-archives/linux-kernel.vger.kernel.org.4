@@ -2,187 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54116FA256
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE4C6FA26A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233289AbjEHIeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 04:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        id S233122AbjEHIiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 04:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232973AbjEHId7 (ORCPT
+        with ESMTP id S230415AbjEHIix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 04:33:59 -0400
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2089.outbound.protection.outlook.com [40.107.241.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A4A1FA97;
-        Mon,  8 May 2023 01:33:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jjau6VUHUJ5zSyue4ZOFML3MUD2nyj8dP9mkrR+Gj+O1WcoRWsw0T/ots7/+6ZNLrMpz42yUiHFrcQ0HAXDAg01b9pE7OsWVGf+qdZOxnNtQ5Um4bgBKOR2tN4E+FJljR6llRnvPNqJsc7uSkCu3XxfgL2R7pVvAP15g4wbQ7YbtaTtpByR7pw6NL/WRe31gxrfeLVZruAdAzcqgDBKoGKtywQQPVsS0AyRgznAd/0/rmxPQhyFJnQfnb9xIei2o9fxy44tcjmfV257YH4mWiUNe8AXkS+cUIxex9HQM6k2TS1qK4g1s/6OkP7kfQSvzMLpwJQsoOd9KgaSH2bra4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r38yO2aFobbeCk+6Kx6gDraupdhosV9aBXEcTHppYeo=;
- b=Hq4q7UsfRZ8hJSeibvAk+GSLZrTrvvh3I/nzvaqMoZf/8Vh46ozpA/dprgwDxATQXLH0jBWo4IO4FxWyIU8YJgfVbf/Zez7RVJvBoh37kCjiPTeUSdGxUrYJep7PzsQhrlec8DFSqdiPMi07D6Q6dbJ2/nBiis6HUPSksS2ya0VleIWJhFs74ZUvnPQP9a8U7+UFL3sFyHPyJBleI5xkVNZSBBJCyHbqgv1B6F5h/oEg1TLXGWReCAhnF0jDmPMoaM6pjjWkvD9zqHynYFNlIbxUm6BYDoUoDp88woWqwyPdZ3dxL2m7Iuan4zK2kOy64BdlpYt9q8mY7k9V8Vh/zg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r38yO2aFobbeCk+6Kx6gDraupdhosV9aBXEcTHppYeo=;
- b=q4tjLYEKnsBNEdUeCbaNQs9yMdGQnuovnJOlFrMSJPeOx5S39UJqyn3owEQGOGYq0D4wNkLDikIXbWD6A8rWQFs2C5zJeq2xRhk8Onio1DrTpzmbjllGYrYB1D7lZsel+smYfiH1lYsx2Pg3XchmS6s3mQN/rwOlLp2M/2XqPSE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by AS1PR04MB9408.eurprd04.prod.outlook.com (2603:10a6:20b:4d8::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
- 2023 08:33:54 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::60e3:2297:61f1:4d1d]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::60e3:2297:61f1:4d1d%4]) with mapi id 15.20.6363.032; Mon, 8 May 2023
- 08:33:54 +0000
-From:   Liu Ying <victor.liu@nxp.com>
-To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        thierry.reding@gmail.com, linux-imx@nxp.com,
-        krzysztof.kozlowski@linaro.org
-Subject: [PATCH v2 2/2] drm/panel: panel-simple: Add BOE EV121WXM-N10-1850 panel support
-Date:   Mon,  8 May 2023 16:38:26 +0800
-Message-Id: <20230508083826.1016206-3-victor.liu@nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230508083826.1016206-1-victor.liu@nxp.com>
-References: <20230508083826.1016206-1-victor.liu@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2P153CA0045.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::14)
- To AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+        Mon, 8 May 2023 04:38:53 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF89100EB
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 01:38:51 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4effb818c37so4802886e87.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 01:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683535130; x=1686127130;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7M+LYvpo0uL6DRxOtraYhuPAgoiRvl+qFGnzZSo79f4=;
+        b=w3GXeMtyzwuRY7sysKSaMD++ZLTRpHQQAxAhiRO+cBGtPVZwBPcfj+CVxdPugtuHtj
+         e0jGozykIPHw5c9oZwVLX8uwlyUdbj2k8HVOcEaKtDonm73JFiFk0vOZ5QpvC/lbEJjZ
+         gNw9+uexlJCgR0LjtLiJy4hcGh2PNmrb91VcwpuP4LKMNMiJTjIdEVIOKJMm7Ah7Vdva
+         UZ0Ukpm0CB3oJ9RMa82eQ8RCq4FLpyjPIy6iF6bXapEF92JcVGEFZY9jpyX5pJVij2h1
+         bwcvGE7KevjjBG1wbaIWnL4K4Hh7bdXdH499QfbJ0qKzJFa/P2oOJye7I9Y1IMX46t/m
+         3GCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683535130; x=1686127130;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7M+LYvpo0uL6DRxOtraYhuPAgoiRvl+qFGnzZSo79f4=;
+        b=jWbs8xln7FcsW38HAwP0f/DO1VkCESpfCjbdUSx29wKCm6I+0BVbZXUP0XsDBh47Lm
+         VKK8msvPy4rv2MAiwkAgZNF77Fb/4B7gfZrKBsq7NYtTeAaT4g7QKcvxMlvkCs3oI9uA
+         woYBLE7+ECZVipZN/2EqQNZODhEFddNK7f1aa16AAcYLPQM45NZfWTc0J/wVSiN8BWti
+         fdpaBDXLxqIvudJMKDcbmfGhmGtN1ad6qrjsYxQbykCKgAPGEEc7gsO6VcZyNiH+w4oM
+         jKIvCeyfFSk+PqIsLC7mjQZluJeCKCN6wFM2OqhidOoFhi7nwtnQWaBA7U2l0xwkR2DU
+         B90A==
+X-Gm-Message-State: AC+VfDynUjlS8ooeuO3PRjx6zvqtWVu3KYPYUa77uQJmCjfbUyhoCxpg
+        zdq8tBhLvsWvysfUIcUmzvYZ3A==
+X-Google-Smtp-Source: ACHHUZ7BOe90sL4z+719tAJbqmfFOlSnY6F/doGifg/JqPAqaNHcSKmqP/u6JkByUE0L1pZ0R1Ag1g==
+X-Received: by 2002:ac2:52a9:0:b0:4f1:4602:fb63 with SMTP id r9-20020ac252a9000000b004f14602fb63mr2201009lfm.41.1683535130246;
+        Mon, 08 May 2023 01:38:50 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id c5-20020a05651221a500b004f143c11cbcsm1227074lft.51.2023.05.08.01.38.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 01:38:49 -0700 (PDT)
+Message-ID: <faa64d3d-48bd-b6db-535e-05d6d50aebd7@linaro.org>
+Date:   Mon, 8 May 2023 10:38:47 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AS1PR04MB9408:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2fd79155-76d3-4e0d-f6f5-08db4f9ef554
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2BrIiWo5Dn7rNb9oiR8icHoRIi/04IcYUxUjZ3ceyZ0CVltCHYAxn2DpoVEC+r6NboZV0JQPaWkuxReg08fEl8ojgscct4SEGRABtZLMoJUMy0XqGI+XB9FkJc0/rBVqbklkNg5riAlng6BrWI290VBbEVtyBvjfd9tF2CneN7CANGEQsI94XrS9TiVzgcMseA5dQGfhOqo6XnhCsXW83fA2ltWvXGQEkoUwIeopw34cNngOztdXPh6QGydz9d+tCD1o/UO7TT5y+oRfmE/2PoM9ImCwFQHlGgFKzLOD4qbFk+G9uwJpgw7TSiDrB5aDFP8OkwXDiEvQADRZrwSA02VnXJwJVc1gK9WXo4ltIsQX38ntjwZU2Aynmcqn4RZPAezrkyBMYpnPuX0yGsdrGZMOn279yxhn/GVq9dO15Y41WhKT7sU77K1VtTkS2VkXypagKwOsKM69kDaVfznCuG58iUltzh+ktWMG3fdAws/V0jkhdP11lAw6UAbDWq9qR3ucSygQDFCeyqC+naXlmCYPDRHFRGB8SWFpdprOVnHtpxYv1pTi2aot0nYGLD4q
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(346002)(39860400002)(366004)(451199021)(966005)(52116002)(66946007)(66556008)(66476007)(4326008)(478600001)(6486002)(316002)(6666004)(86362001)(36756003)(83380400001)(2616005)(6512007)(6506007)(1076003)(26005)(8676002)(8936002)(5660300002)(41300700001)(7416002)(2906002)(186003)(38350700002)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FiFhHUHEBoFdLCuGgrcrACA6w2xykOT2YSzHH0a/cGfispRQaV6PTss1yjF5?=
- =?us-ascii?Q?sg22mJg9EAgPBB5dYYTnkTYXZhnI8IJ7UJXZ9Rn6AKdNGINEdRal14f7Mqpl?=
- =?us-ascii?Q?Zup7RI19Q0wJ1VWS+CCj3MRf0Z5TBdCpv7dnuKPpeKSvQBLqGSWv+Bj6Iv0u?=
- =?us-ascii?Q?5JGm1dhiy9oB6yKiRM9OPOUf+zh906SJU6JE3VZysf9FWLV07+px5lxktSGN?=
- =?us-ascii?Q?TNDFgmvfQGRSa7zpL6f4TzJ1prPhVHz38HczHlLrNh+Hf8c+hgDC0gyoCDn7?=
- =?us-ascii?Q?stu+QLcvqB+x+bsWvVeb98jHouuq9HAPnvUCsC9q5htnDHzlqoQZP4Dq2S9n?=
- =?us-ascii?Q?IrMcRqFwvZJgVntzExNdsC44AtrzJNhxIOBQpHkiJ01x0chtNEby/BiqI0bH?=
- =?us-ascii?Q?+S1ZY4iMhXjgg9ZxuF+oAKI6RLu0d978zHhXLWRYSL16Axjxv31/2W9sQi5s?=
- =?us-ascii?Q?dMxTFqoRUkebTaeS2WRLVO7GgUNUWysCdhwEtU8Tf6W3+Zq98JCA1WeGkOO6?=
- =?us-ascii?Q?pnjFbUuf80Ykf6tAhQtKa6DLYReDB5lWCD07qIUimapOIGnQWpvGvWETJvSL?=
- =?us-ascii?Q?w41UTfyu8nt3mbaDMVIuKo0x0XD41C7m2ojVVx6Gn5RRS4YdFUhExlr+0lgb?=
- =?us-ascii?Q?vrvHM+fsM2M2rsXLLxWg2nVCplklahufTf6WOJouplmSRENtmHifCPYVhgdS?=
- =?us-ascii?Q?NSrbyafhKnP5i6/OiztXMPubXsAxFO1rzz184FMUTw1X+KWE/CyUFcIms1pr?=
- =?us-ascii?Q?CBBRx7WwsLgIIN8HEw8D1yBkHzvI+MdSXxRTktIjqWO3Ki5+Ad+f1Z1Se7ur?=
- =?us-ascii?Q?GUwwRPs/P0SPPBIVjhOYHCKdqT1bNFmj9SfUgc1O0Edo5vj2qJ4FFXZTYvox?=
- =?us-ascii?Q?1e9WurQQ9buSRRejmUUlXt6b1EgB74Cjc0pcRILzBP8VFkelCQm8e+SfuqSO?=
- =?us-ascii?Q?D1szv8VsE4ke3sA9n4P39r16JH/eIrSpysAbd4qacXU7S2T1JN5VFW4NS/c1?=
- =?us-ascii?Q?O+Usc4duGWmW+9Px5A9zvAbtukXy2oPhQgHF3PgnaKgcS/zQDsYCEQnDe4x2?=
- =?us-ascii?Q?jH60wgv3OeSRuxBsoIhYJ53ZBpLXp2/HFpgoFkLX51qkskiPvxD1CUArsR2O?=
- =?us-ascii?Q?3qr56QNk3zBgSne6eJbztemQYhBnhz+aAKY161duRs4KpSade03xdps7625D?=
- =?us-ascii?Q?ADdVomn7l41yPDiOwfI51Yecoeqb+dtvCUNWDNShf9rDIeHZyyM1W+uNZFwH?=
- =?us-ascii?Q?hjF43y8Fw3uReMQWcriz/dRr+MovEzz7sMPYgnb9ImdPKBUNbWY7Klo4z6xw?=
- =?us-ascii?Q?zEHmQT+F8fVEnN2dFBd/JdTmv1Ye3ZmL4fNeNc+MOKgS4Nmc+LoerQ/Eydid?=
- =?us-ascii?Q?X3h/35U8neUjgt+0M9srTKDqIrBZ58ewl/DW7gWz+pr2VaGwr+NZo3ALBS+G?=
- =?us-ascii?Q?/1vFrA5zYrDziyJjLpBPxPFpWJjuQ6n+7aBiA2+uT77iLB1wcql4P7Zwc0d9?=
- =?us-ascii?Q?ZvbW7grGwynNlmFJENyh8rJ/B6soV+cUPf/HTuI8gaiYcipKIcJD/mXckkWL?=
- =?us-ascii?Q?wXd1SZ8Q7ziB8LnJeGeQBc7eNA34o+e+qm1FAcsa?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2fd79155-76d3-4e0d-f6f5-08db4f9ef554
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 08:33:54.4907
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LEMrYJAKIWmx8H3yRaC5Dqh/6ZdeuJyH9pxqTZpO0exiNr9o+58kdW9VOEUj10tDGqWXCVkzjaNVLqbv+Yb6qQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9408
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 03/12] dt-bindings: display/msm: sc7180-dpu: Describe
+ SM6350 and SM6375
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev
+References: <20230411-topic-straitlagoon_mdss-v3-0-9837d6b3516d@linaro.org>
+ <20230411-topic-straitlagoon_mdss-v3-3-9837d6b3516d@linaro.org>
+ <31147c6d-e77a-8abd-0b55-73ead2385bb9@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <31147c6d-e77a-8abd-0b55-73ead2385bb9@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add BOE EV121WXM-N10-1850 12.1" WXGA (1280x800) TFT LCD panel support.
-The panel has a LVDS display interface.
 
-The panel's product specification can be found at:
-http://www.onetech.com.tw/files/EV121WXM-N10-1850ProductSpecification_20180801.pdf
 
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
----
-v1->v2:
-* Use struct display_timing to tell minimum and maximum pixel clock rates.
-* Set bus_flags to DRM_BUS_FLAG_DE_HIGH in struct panel_desc.
+On 7.05.2023 10:14, Krzysztof Kozlowski wrote:
+> On 05/05/2023 23:40, Konrad Dybcio wrote:
+>> SC7180, SM6350 and SM6375 use a rather similar hw setup for DPU, with
+>> the main exception being that the last one requires an additional
+>> throttle clock.
+>>
+>> It is not well understood yet, but failing to toggle it on makes the
+>> display hardware stall and not output any frames.
+>>
+>> Document SM6350 and SM6375 DPU.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  .../bindings/display/msm/qcom,sc7180-dpu.yaml      | 23 +++++++++++++++++++++-
+>>  1 file changed, 22 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
+>> index 1fb8321d9ee8..630b11480496 100644
+>> --- a/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
+>> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
+>> @@ -13,7 +13,10 @@ $ref: /schemas/display/msm/dpu-common.yaml#
+>>  
+>>  properties:
+>>    compatible:
+>> -    const: qcom,sc7180-dpu
+>> +    enum:
+>> +      - qcom,sc7180-dpu
+>> +      - qcom,sm6350-dpu
+>> +      - qcom,sm6375-dpu
+>>  
+>>    reg:
+>>      items:
+>> @@ -26,6 +29,7 @@ properties:
+>>        - const: vbif
+>>  
+>>    clocks:
+>> +    minItems: 6
+>>      items:
+>>        - description: Display hf axi clock
+>>        - description: Display ahb clock
+>> @@ -33,8 +37,10 @@ properties:
+>>        - description: Display lut clock
+>>        - description: Display core clock
+>>        - description: Display vsync clock
+>> +      - description: Display core throttle clock
+>>  
+>>    clock-names:
+>> +    minItems: 6
+>>      items:
+>>        - const: bus
+>>        - const: iface
+>> @@ -42,6 +48,7 @@ properties:
+>>        - const: lut
+>>        - const: core
+>>        - const: vsync
+>> +      - const: throttle
+>>  
+>>  required:
+>>    - compatible
+>> @@ -52,6 +59,20 @@ required:
+>>  
+>>  unevaluatedProperties: false
+>>  
+>> +allOf:
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          const: qcom,sm6375-dpu
+> 
+> And the two other variants? Is the clock valid there or not? If not
+> really, then you should have else: with maxItems: 6.
+Oh right!
 
- drivers/gpu/drm/panel/panel-simple.c | 34 ++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+> 
+>> +
+>> +    then:
+>> +      properties:
+>> +        clocks:
+>> +          minItems: 7
+>> +
+>> +        clock-names:
+>> +          minItems: 7
+> 
+> If there is going new version - put allOf: before
+> unevaluatedProperties:. Otherwise it is fine.
+Thanks!
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index 065f378bba9d..b1590a7e2cda 100644
---- a/drivers/gpu/drm/panel/panel-simple.c
-+++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -1211,6 +1211,37 @@ static const struct panel_desc bananapi_s070wv20_ct16 = {
- 	},
- };
- 
-+static const struct display_timing boe_ev121wxm_n10_1850_timing = {
-+	.pixelclock = { 69922000, 71000000, 72293000 },
-+	.hactive = { 1280, 1280, 1280 },
-+	.hfront_porch = { 48, 48, 48 },
-+	.hback_porch = { 80, 80, 80 },
-+	.hsync_len = { 32, 32, 32 },
-+	.vactive = { 800, 800, 800 },
-+	.vfront_porch = { 3, 3, 3 },
-+	.vback_porch = { 14, 14, 14 },
-+	.vsync_len = { 6, 6, 6 },
-+};
-+
-+static const struct panel_desc boe_ev121wxm_n10_1850 = {
-+	.timings = &boe_ev121wxm_n10_1850_timing,
-+	.num_timings = 1,
-+	.bpc = 8,
-+	.size = {
-+		.width = 261,
-+		.height = 163,
-+	},
-+	.delay = {
-+		.prepare = 9,
-+		.enable = 300,
-+		.unprepare = 300,
-+		.disable = 560,
-+	},
-+	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
-+	.bus_flags = DRM_BUS_FLAG_DE_HIGH,
-+	.connector_type = DRM_MODE_CONNECTOR_LVDS,
-+};
-+
- static const struct drm_display_mode boe_hv070wsa_mode = {
- 	.clock = 42105,
- 	.hdisplay = 1024,
-@@ -3984,6 +4015,9 @@ static const struct of_device_id platform_of_match[] = {
- 	}, {
- 		.compatible = "bananapi,s070wv20-ct16",
- 		.data = &bananapi_s070wv20_ct16,
-+	}, {
-+		.compatible = "boe,ev121wxm-n10-1850",
-+		.data = &boe_ev121wxm_n10_1850,
- 	}, {
- 		.compatible = "boe,hv070wsa-100",
- 		.data = &boe_hv070wsa
--- 
-2.37.1
-
+Konrad
+> 
+>> +
+>>  examples:
+>>    - |
+>>      #include <dt-bindings/clock/qcom,dispcc-sc7180.h>
+>>
+> 
+> Best regards,
+> Krzysztof
+> 
