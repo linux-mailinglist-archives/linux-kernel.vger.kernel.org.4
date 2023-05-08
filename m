@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE1A6FB971
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D9D6FB970
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233953AbjEHVUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 17:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
+        id S233855AbjEHVUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 17:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233815AbjEHVUj (ORCPT
+        with ESMTP id S233833AbjEHVUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 8 May 2023 17:20:39 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365515590
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 14:20:21 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f14f266b72so3396958e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 14:20:21 -0700 (PDT)
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0D47EE8
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 14:20:23 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f11d267d8bso5668716e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 14:20:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683580820; x=1686172820;
+        d=linaro.org; s=google; t=1683580821; x=1686172821;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dK03E2M8l7bVCBNTqzVE5mVLTLIW5dP3PvhMkmEu44I=;
-        b=LQvB+8ogRPv04y19WvA4bz7w/wJIcDWbnDtyZLlF61s4C3dXWsHviBgL1vZ0d8vTnQ
-         iJTyC75PunKIctxUTawEGv6+kVpOsf5er8fGH700MPbKWcLhpODaZ93OyuL4lcRn7UZe
-         yFKv2dnS3Me3T7gE5qoha4EG0IAvrgRQ9NHBCByMHoGLDdWoPoDX6JSnXPboi6ILpT+0
-         zYkoVFwxzISejMGf9FEwFuPsuQ6x78BajEOx208y++QUiNA9PcQLlLuAXQfUtaL4lXx7
-         LMigrZvibVzhQ+H5SUeQz9tseL99XDg0kfbiiE+hP7ldQeTKnG8o+3ev89OcHyzlVZj2
-         8RFw==
+        bh=At6naKZm43llnrS+PRA3z4g6G36SPwXH3KoMiA41EGY=;
+        b=m6szLoANC/Gtyv38bXCLISYaLnW5vlsF/dJGDbfMjQA8xNRYvh5MhhDwCaj0LQy1C6
+         71ivsLE7rytcOReBolVM9eAOhT70qBtAb1ZL4HAzJEZRdYu1Pe/0djLtYDmYdMEGwP1y
+         33VqEUAmGw1k4+f5LKYH2INyHez9dk2Z9WqjRZ5ibez1RRdFtl2FFFthRuXwJf7ViLJs
+         H4Lf3wX05mfs+UJIR/W9OmcgKULcTjck1WXnyniApteet46egah0HWS0nmYhd25+yOld
+         L1KF0fvIyqIKYbWngldm/DevRmdl70i+FeiP/re3c0qeJ0ywRN4p7Ke6DBOewqlmMxgp
+         rP3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683580820; x=1686172820;
+        d=1e100.net; s=20221208; t=1683580821; x=1686172821;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dK03E2M8l7bVCBNTqzVE5mVLTLIW5dP3PvhMkmEu44I=;
-        b=Yz9y9gdaGgj1Gjl/lcIeFjC3fZaVMpmRAoDIahkrJNNDVJPk7NxGBrRDYPqcHb9cOw
-         JbFr5mC5OJYq6gYDZT+qTPsvGbzc44UORtHpI8ZoSTiSps83Aimz5GtCjSPXHH/Ba919
-         trsBZxUGgaNppaUVp9xjQ6ZTpWUO/LNvadVfAvcOjCbdW5HG1rlkyCkOHUdJ3xqBuORt
-         8lIAppj0T7agZgLMSYJ4jtk6aNQ9Kh1m2VMi9cJkvQENqyaEHoOIjN59DpgYxjMhDZc3
-         96lRYQhqG5292RF60XCCztPA+bmaaZdV92X1OqAJR9kr18YPznMgD5jLXg8Cpt0gAmF3
-         vXlg==
-X-Gm-Message-State: AC+VfDxeE38ZT5xNx0KA2mQo8EnZ3vg+j41hqDZ3gwVa0HCMOv2xYDrk
-        DpWoQxjsT/oqirC/Q20sTj96nw==
-X-Google-Smtp-Source: ACHHUZ5h9zB+DF+SzOXMLkK9IEaMkoFaP5oV3ZE8LadUTKk9C4V94+SoqeKCIiPG3/AYEn/7ujSn7w==
-X-Received: by 2002:a19:550d:0:b0:4ef:d742:4dfe with SMTP id n13-20020a19550d000000b004efd7424dfemr124116lfe.65.1683580820134;
-        Mon, 08 May 2023 14:20:20 -0700 (PDT)
+        bh=At6naKZm43llnrS+PRA3z4g6G36SPwXH3KoMiA41EGY=;
+        b=VkcrbsF726hh383JtsDyywDGmy3MOvx597zM3V6742hS8iOCeRkQA0IRRxGYcMBpV2
+         r3tcntgY3VFaBnq2ffwXYj7aB52DgdF8wAqTaly4XJs+WzXNQyIS0sFoJeuRq/U4L70p
+         RZ0aCDT3wqmtsZqbpmDz1vlv8zZicMev980gj7RV/BVE/EetYwTGYFSk/jVxrWTXQ6MY
+         nGkQDYhAYf3MNeTEe5lAGJs+Kez3phcR+O0341WTIJ3boJP4hF9NAIa74+iNhlusn549
+         MIGgHNewEZ8pVru9GS/5qx72PZKaAmqv0/XCvgmIRF0SWPU+3KkNqN/dFjk8cQRDNknS
+         hoiQ==
+X-Gm-Message-State: AC+VfDwVZAkXu26rE7BU/DPXDce5AgKm5S2b3g4u16XJllTDbOCdN6bs
+        1j3KnCC1n+pkaplK4dRdASEwsQ==
+X-Google-Smtp-Source: ACHHUZ6f0YxldyYYY+NP6Xi33YaOtWU2TSzAo1gjiwNA0CASbU+E9uch7we8DEeyNupjq53+3SZymw==
+X-Received: by 2002:ac2:4102:0:b0:4f1:4cdc:ec03 with SMTP id b2-20020ac24102000000b004f14cdcec03mr128495lfi.18.1683580821313;
+        Mon, 08 May 2023 14:20:21 -0700 (PDT)
 Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id 4-20020ac24844000000b004edc3bd7fa1sm102164lfy.201.2023.05.08.14.20.19
+        by smtp.gmail.com with ESMTPSA id 4-20020ac24844000000b004edc3bd7fa1sm102164lfy.201.2023.05.08.14.20.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 14:20:19 -0700 (PDT)
+        Mon, 08 May 2023 14:20:20 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 08 May 2023 23:20:08 +0200
-Subject: [PATCH v4 3/4] ARM: omap1: Fix up the Nokia 770 board device IRQs
+Date:   Mon, 08 May 2023 23:20:09 +0200
+Subject: [PATCH v4 4/4] ARM: dts: Fix erroneous ADS touchscreen polarities
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230430-nokia770-regression-v4-3-9b6dc5536b17@linaro.org>
+Message-Id: <20230430-nokia770-regression-v4-4-9b6dc5536b17@linaro.org>
 References: <20230430-nokia770-regression-v4-0-9b6dc5536b17@linaro.org>
 In-Reply-To: <20230430-nokia770-regression-v4-0-9b6dc5536b17@linaro.org>
 To:     Aaro Koskinen <aaro.koskinen@iki.fi>,
@@ -89,115 +89,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The platform devices on the Nokia 770 is using some
-board-specific IRQs that get statically assigned to platform
-devices in the boardfile.
+Several device tree files get the polarity of the pendown-gpios
+wrong: this signal is active low. Fix up all incorrect flags, so
+that operating systems can rely on the flag being correctly set.
 
-This does not work with dynamic IRQ chip bases.
-
-Utilize the NULL device to define some board-specific
-GPIO lookups and use these to immediately look up the
-same GPIOs, convert to IRQ numbers and pass as resources
-to the devices. This is ugly but should work.
-
-Fixes: 92bf78b33b0b ("gpio: omap: use dynamic allocation of base")
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- arch/arm/mach-omap1/board-nokia770.c | 57 ++++++++++++++++++++++++++++--------
- 1 file changed, 44 insertions(+), 13 deletions(-)
+ChangeLog ->v4
+- New patch as issue was pointed out by Dmitry. Can be merged
+  separately.
+---
+ arch/arm/boot/dts/am57xx-cl-som-am57x.dts          | 2 +-
+ arch/arm/boot/dts/at91sam9261ek.dts                | 2 +-
+ arch/arm/boot/dts/imx7d-pico-hobbit.dts            | 2 +-
+ arch/arm/boot/dts/imx7d-sdb.dts                    | 2 +-
+ arch/arm/boot/dts/omap3-cm-t3x.dtsi                | 2 +-
+ arch/arm/boot/dts/omap3-devkit8000-lcd-common.dtsi | 2 +-
+ arch/arm/boot/dts/omap3-lilly-a83x.dtsi            | 2 +-
+ arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi    | 2 +-
+ arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi    | 2 +-
+ arch/arm/boot/dts/omap3-pandora-common.dtsi        | 2 +-
+ arch/arm/boot/dts/omap5-cm-t54.dts                 | 2 +-
+ 11 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm/mach-omap1/board-nokia770.c b/arch/arm/mach-omap1/board-nokia770.c
-index 218c928f71b3..8965df2c250d 100644
---- a/arch/arm/mach-omap1/board-nokia770.c
-+++ b/arch/arm/mach-omap1/board-nokia770.c
-@@ -6,7 +6,7 @@
-  */
- #include <linux/clkdev.h>
- #include <linux/irq.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/gpio/machine.h>
- #include <linux/gpio/property.h>
- #include <linux/kernel.h>
-@@ -250,19 +250,25 @@ static struct i2c_board_info nokia770_i2c_board_info_2[] __initdata = {
+diff --git a/arch/arm/boot/dts/am57xx-cl-som-am57x.dts b/arch/arm/boot/dts/am57xx-cl-som-am57x.dts
+index 2fc9a5d5e0c0..625b9b311b49 100644
+--- a/arch/arm/boot/dts/am57xx-cl-som-am57x.dts
++++ b/arch/arm/boot/dts/am57xx-cl-som-am57x.dts
+@@ -527,7 +527,7 @@ touchscreen@1 {
  
- static void __init nokia770_cbus_init(void)
- {
--	const int retu_irq_gpio = 62;
--	const int tahvo_irq_gpio = 40;
--
--	if (gpio_request_one(retu_irq_gpio, GPIOF_IN, "Retu IRQ"))
--		return;
--	if (gpio_request_one(tahvo_irq_gpio, GPIOF_IN, "Tahvo IRQ")) {
--		gpio_free(retu_irq_gpio);
--		return;
-+	struct gpio_desc *d;
-+	int irq;
-+
-+	d = gpiod_get(NULL, "retu_irq", GPIOD_IN);
-+	if (IS_ERR(d)) {
-+		pr_err("Unable to get CBUS Retu IRQ GPIO descriptor\n");
-+	} else {
-+		irq = gpiod_to_irq(d);
-+		irq_set_irq_type(irq, IRQ_TYPE_EDGE_RISING);
-+		nokia770_i2c_board_info_2[0].irq = irq;
-+	}
-+	d = gpiod_get(NULL, "tahvo_irq", GPIOD_IN);
-+	if (IS_ERR(d)) {
-+		pr_err("Unable to get CBUS Tahvo IRQ GPIO descriptor\n");
-+	} else {
-+		irq = gpiod_to_irq(d);
-+		irq_set_irq_type(irq, IRQ_TYPE_EDGE_RISING);
-+		nokia770_i2c_board_info_2[1].irq = irq;
- 	}
--	irq_set_irq_type(gpio_to_irq(retu_irq_gpio), IRQ_TYPE_EDGE_RISING);
--	irq_set_irq_type(gpio_to_irq(tahvo_irq_gpio), IRQ_TYPE_EDGE_RISING);
--	nokia770_i2c_board_info_2[0].irq = gpio_to_irq(retu_irq_gpio);
--	nokia770_i2c_board_info_2[1].irq = gpio_to_irq(tahvo_irq_gpio);
- 	i2c_register_board_info(2, nokia770_i2c_board_info_2,
- 				ARRAY_SIZE(nokia770_i2c_board_info_2));
- 	device_create_managed_software_node(&nokia770_cbus_device.dev,
-@@ -275,8 +281,25 @@ static void __init nokia770_cbus_init(void)
- }
- #endif /* CONFIG_I2C_CBUS_GPIO */
+ 		interrupt-parent = <&gpio1>;
+ 		interrupts = <31 0>;
+-		pendown-gpio = <&gpio1 31 0>;
++		pendown-gpio = <&gpio1 31 GPIO_ACTIVE_LOW>;
  
-+static struct gpiod_lookup_table nokia770_irq_gpio_table = {
-+	.dev_id = NULL,
-+	.table = {
-+		/* GPIO used by SPI device 1 */
-+		GPIO_LOOKUP("gpio-0-15", 15, "ads7846_irq",
-+			    GPIO_ACTIVE_HIGH),
-+		/* GPIO used for retu IRQ */
-+		GPIO_LOOKUP("gpio-48-63", 15, "retu_irq",
-+			    GPIO_ACTIVE_HIGH),
-+		/* GPIO used for tahvo IRQ */
-+		GPIO_LOOKUP("gpio-32-47", 8, "tahvo_irq",
-+			    GPIO_ACTIVE_HIGH),
-+	},
-+};
-+
- static void __init omap_nokia770_init(void)
- {
-+	struct gpio_desc *d;
-+
- 	/* On Nokia 770, the SleepX signal is masked with an
- 	 * MPUIO line by default.  It has to be unmasked for it
- 	 * to become functional */
-@@ -288,6 +311,14 @@ static void __init omap_nokia770_init(void)
  
- 	software_node_register_node_group(nokia770_gpiochip_nodes);
- 	platform_add_devices(nokia770_devices, ARRAY_SIZE(nokia770_devices));
-+
-+	gpiod_add_lookup_table(&nokia770_irq_gpio_table);
-+	d = gpiod_get(NULL, "ads7846_irq", GPIOD_IN);
-+	if (IS_ERR(d))
-+		pr_err("Unable to get ADS7846 IRQ GPIO descriptor\n");
-+	else
-+		nokia770_spi_board_info[1].irq = gpiod_to_irq(d);
-+
- 	spi_register_board_info(nokia770_spi_board_info,
- 				ARRAY_SIZE(nokia770_spi_board_info));
- 	omap_serial_init();
+ 		ti,x-min = /bits/ 16 <0x0>;
+diff --git a/arch/arm/boot/dts/at91sam9261ek.dts b/arch/arm/boot/dts/at91sam9261ek.dts
+index 88869ca874d1..045cb253f23a 100644
+--- a/arch/arm/boot/dts/at91sam9261ek.dts
++++ b/arch/arm/boot/dts/at91sam9261ek.dts
+@@ -156,7 +156,7 @@ tsc2046@2 {
+ 					compatible = "ti,ads7843";
+ 					interrupts-extended = <&pioC 2 IRQ_TYPE_EDGE_BOTH>;
+ 					spi-max-frequency = <3000000>;
+-					pendown-gpio = <&pioC 2 GPIO_ACTIVE_HIGH>;
++					pendown-gpio = <&pioC 2 GPIO_ACTIVE_LOW>;
+ 
+ 					ti,x-min = /bits/ 16 <150>;
+ 					ti,x-max = /bits/ 16 <3830>;
+diff --git a/arch/arm/boot/dts/imx7d-pico-hobbit.dts b/arch/arm/boot/dts/imx7d-pico-hobbit.dts
+index d917dc4f2f22..6ad39dca7009 100644
+--- a/arch/arm/boot/dts/imx7d-pico-hobbit.dts
++++ b/arch/arm/boot/dts/imx7d-pico-hobbit.dts
+@@ -64,7 +64,7 @@ ads7846@0 {
+ 		interrupt-parent = <&gpio2>;
+ 		interrupts = <7 0>;
+ 		spi-max-frequency = <1000000>;
+-		pendown-gpio = <&gpio2 7 0>;
++		pendown-gpio = <&gpio2 7 GPIO_ACTIVE_LOW>;
+ 		vcc-supply = <&reg_3p3v>;
+ 		ti,x-min = /bits/ 16 <0>;
+ 		ti,x-max = /bits/ 16 <4095>;
+diff --git a/arch/arm/boot/dts/imx7d-sdb.dts b/arch/arm/boot/dts/imx7d-sdb.dts
+index f483bc0afe5e..234e5fc647b2 100644
+--- a/arch/arm/boot/dts/imx7d-sdb.dts
++++ b/arch/arm/boot/dts/imx7d-sdb.dts
+@@ -205,7 +205,7 @@ tsc2046@0 {
+ 		pinctrl-0 = <&pinctrl_tsc2046_pendown>;
+ 		interrupt-parent = <&gpio2>;
+ 		interrupts = <29 0>;
+-		pendown-gpio = <&gpio2 29 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio2 29 GPIO_ACTIVE_LOW>;
+ 		touchscreen-max-pressure = <255>;
+ 		wakeup-source;
+ 	};
+diff --git a/arch/arm/boot/dts/omap3-cm-t3x.dtsi b/arch/arm/boot/dts/omap3-cm-t3x.dtsi
+index e61b8a2bfb7d..51baedf1603b 100644
+--- a/arch/arm/boot/dts/omap3-cm-t3x.dtsi
++++ b/arch/arm/boot/dts/omap3-cm-t3x.dtsi
+@@ -227,7 +227,7 @@ ads7846@0 {
+ 
+ 		interrupt-parent = <&gpio2>;
+ 		interrupts = <25 0>;		/* gpio_57 */
+-		pendown-gpio = <&gpio2 25 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio2 25 GPIO_ACTIVE_LOW>;
+ 
+ 		ti,x-min = /bits/ 16 <0x0>;
+ 		ti,x-max = /bits/ 16 <0x0fff>;
+diff --git a/arch/arm/boot/dts/omap3-devkit8000-lcd-common.dtsi b/arch/arm/boot/dts/omap3-devkit8000-lcd-common.dtsi
+index 3decc2d78a6c..a7f99ae0c1fe 100644
+--- a/arch/arm/boot/dts/omap3-devkit8000-lcd-common.dtsi
++++ b/arch/arm/boot/dts/omap3-devkit8000-lcd-common.dtsi
+@@ -54,7 +54,7 @@ ads7846@0 {
+ 
+ 		interrupt-parent = <&gpio1>;
+ 		interrupts = <27 0>;		/* gpio_27 */
+-		pendown-gpio = <&gpio1 27 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio1 27 GPIO_ACTIVE_LOW>;
+ 
+ 		ti,x-min = /bits/ 16 <0x0>;
+ 		ti,x-max = /bits/ 16 <0x0fff>;
+diff --git a/arch/arm/boot/dts/omap3-lilly-a83x.dtsi b/arch/arm/boot/dts/omap3-lilly-a83x.dtsi
+index c595afe4181d..d310b5c7bac3 100644
+--- a/arch/arm/boot/dts/omap3-lilly-a83x.dtsi
++++ b/arch/arm/boot/dts/omap3-lilly-a83x.dtsi
+@@ -311,7 +311,7 @@ tsc2046@0 {
+ 		interrupt-parent = <&gpio1>;
+ 		interrupts = <8 0>;   /* boot6 / gpio_8 */
+ 		spi-max-frequency = <1000000>;
+-		pendown-gpio = <&gpio1 8 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio1 8 GPIO_ACTIVE_LOW>;
+ 		vcc-supply = <&reg_vcc3>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&tsc2048_pins>;
+diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
+index 1d6e88f99eb3..c3570acc35fa 100644
+--- a/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
+@@ -149,7 +149,7 @@ ads7846@0 {
+ 
+ 		interrupt-parent = <&gpio4>;
+ 		interrupts = <18 0>;			/* gpio_114 */
+-		pendown-gpio = <&gpio4 18 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio4 18 GPIO_ACTIVE_LOW>;
+ 
+ 		ti,x-min = /bits/ 16 <0x0>;
+ 		ti,x-max = /bits/ 16 <0x0fff>;
+diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
+index 7e30f9d45790..d95a0e130058 100644
+--- a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
+@@ -160,7 +160,7 @@ ads7846@0 {
+ 
+ 		interrupt-parent = <&gpio4>;
+ 		interrupts = <18 0>;			/* gpio_114 */
+-		pendown-gpio = <&gpio4 18 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio4 18 GPIO_ACTIVE_LOW>;
+ 
+ 		ti,x-min = /bits/ 16 <0x0>;
+ 		ti,x-max = /bits/ 16 <0x0fff>;
+diff --git a/arch/arm/boot/dts/omap3-pandora-common.dtsi b/arch/arm/boot/dts/omap3-pandora-common.dtsi
+index 559853764487..4c3b6bab179c 100644
+--- a/arch/arm/boot/dts/omap3-pandora-common.dtsi
++++ b/arch/arm/boot/dts/omap3-pandora-common.dtsi
+@@ -651,7 +651,7 @@ tsc2046@0 {
+ 		pinctrl-0 = <&penirq_pins>;
+ 		interrupt-parent = <&gpio3>;
+ 		interrupts = <30 IRQ_TYPE_NONE>;	/* GPIO_94 */
+-		pendown-gpio = <&gpio3 30 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio3 30 GPIO_ACTIVE_LOW>;
+ 		vcc-supply = <&vaux4>;
+ 
+ 		ti,x-min = /bits/ 16 <0>;
+diff --git a/arch/arm/boot/dts/omap5-cm-t54.dts b/arch/arm/boot/dts/omap5-cm-t54.dts
+index 2d87b9fc230e..af288d63a26a 100644
+--- a/arch/arm/boot/dts/omap5-cm-t54.dts
++++ b/arch/arm/boot/dts/omap5-cm-t54.dts
+@@ -354,7 +354,7 @@ ads7846@0 {
+ 
+ 		interrupt-parent = <&gpio1>;
+ 		interrupts = <15 0>;			/* gpio1_wk15 */
+-		pendown-gpio = <&gpio1 15 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio1 15 GPIO_ACTIVE_LOW>;
+ 
+ 
+ 		ti,x-min = /bits/ 16 <0x0>;
 
 -- 
 2.34.1
