@@ -2,151 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598076FAA24
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 561C56FAA75
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235472AbjEHK7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 06:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S233849AbjEHLDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 07:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235347AbjEHK7Q (ORCPT
+        with ESMTP id S235455AbjEHLCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 06:59:16 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376A72BCC1
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 03:57:57 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-769036b47a7so293886139f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 03:57:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683543469; x=1686135469;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z4qQuGB5Gd1At6RmxvPzh/+T+MZCmyfXc4a+BLM5Q9w=;
-        b=N2l0ZlQFTpXoJJIMQvoawKLvH/WcVUC0wzAquSk+Tmwe3SAERmAuFPDuS3JrnMP2Ud
-         UFRR75EvCbCE4BJ8FM4wvaihZmIuLQH5m74d4RlyMVKtlKEgm+4nIwaZFuR/TGN/ZuUu
-         E7KlxJ8pbYmSEW7zJxJpMmf+NxOolMlmmavzcNuJQQNzg0qC9dPF2Chit/9nabgB1oYX
-         WwJoaf0DcZY8QMvX5YtWE0ThmRow5WQydRXbNXAO9PrinoanWnMYn85xUgtqR6+vqKbH
-         mss73odkdKe2qVqLkB8kZuDI5Uft4E7v4e2lXXslf1Vh0ssMDwB6yoAQQpQdUHCfeOmj
-         xJiQ==
-X-Gm-Message-State: AC+VfDwFbkXcLO2+TgU2niB7rhhBeqHOjcllj7v/z0GjLG8ERCZs3yXv
-        9/mfSoCl49AEjnx6RR2H7VxH/wUpUbmSGZKu1pjhmACdw8XJ
-X-Google-Smtp-Source: ACHHUZ7hRUvohGuXcxsd/2ky5NLQqnBo134yJZYBac/reMymj4KJ2Q+G6mM31hEWJ78rrVBaNvo2gykcXUW0yO4C6kwJ93Y7EVvB
+        Mon, 8 May 2023 07:02:38 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E367F2E814;
+        Mon,  8 May 2023 04:01:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683543686; x=1715079686;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=LjfkfoKDufvFptmjnU8Tpr/miNBczjPxAPKLfzlZzdI=;
+  b=gmF/MTiwnEnSvrJ8lxfKxTtC/KvhQ4Fhyx3ktWO4cuebN8aT1n6BF07X
+   fyjDZBTZkwEdeJo1r/pXXDWx+G+RMW8xnZqycss6C39T3CNb7aSwMUfxb
+   RmzHO2IIMq0nkJGThASqlAuFMN/VZ+sy/deVquGLxgzehRleU1Eh/hgaY
+   UbBa31qz0FifMHONYdvJf7pN3x4Chw96VBoXNwFOCYgE+ZQZbX/ysMQUQ
+   HL1BWBKBtSHMeP8D4AYFNeywWXa8lrvd4b8qWZ63Xbw/He8CrgcYW2kdk
+   +/6CIBjQUlgsvQA/zT2ZssauS6Qbw7QfjFgQZlOZM1C4uAyVJbbzCvtoN
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="329237302"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="329237302"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 04:01:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="698489829"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="698489829"
+Received: from cciobanu-mobl1.ger.corp.intel.com ([10.249.37.159])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 04:00:58 -0700
+Date:   Mon, 8 May 2023 14:00:56 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jacky Huang <ychuang570808@gmail.com>
+cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, tmaimon77@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-serial <linux-serial@vger.kernel.org>, arnd@arndb.de,
+        schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v10 09/10] reset: Add Nuvoton ma35d1 reset driver
+ support
+In-Reply-To: <20230508025936.36776-10-ychuang570808@gmail.com>
+Message-ID: <1ec43550-9aee-3a36-6ca5-ed56e98628f@linux.intel.com>
+References: <20230508025936.36776-1-ychuang570808@gmail.com> <20230508025936.36776-10-ychuang570808@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:93c7:0:b0:414:401d:b69a with SMTP id
- z65-20020a0293c7000000b00414401db69amr5076647jah.3.1683543469395; Mon, 08 May
- 2023 03:57:49 -0700 (PDT)
-Date:   Mon, 08 May 2023 03:57:49 -0700
-In-Reply-To: <0000000000002e17d105f02be919@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000751a2d05fb2c824a@google.com>
-Subject: Re: [syzbot] [ext4?] WARNING in print_tainted
-From:   syzbot <syzbot+5aed6c3aaba661f5b917@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
-        gregkh@linuxfoundation.org, hawk@kernel.org,
-        john.fastabend@gmail.com, kernel@pengutronix.de, kuba@kernel.org,
-        linux-can@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
-        patches@lists.linux.dev, sashal@kernel.org, socketcan@hartkopp.net,
-        stable-commits@vger.kernel.org, stable@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1035541048-1683543664=:1790"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-HEAD commit:    457391b03803 Linux 6.3
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=118e0b90280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=385e197a58ca4afe
-dashboard link: https://syzkaller.appspot.com/bug?extid=5aed6c3aaba661f5b917
-compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=178650b8280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1646075a280000
+--8323329-1035541048-1683543664=:1790
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/c35b5b2731d2/non_bootable_disk-457391b0.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2a1bf3bafeb6/vmlinux-457391b0.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/21f1e3b4a5a9/zImage-457391b0.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/bd66e85f728b/mount_0.gz
+On Mon, 8 May 2023, Jacky Huang wrote:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5aed6c3aaba661f5b917@syzkaller.appspotmail.com
+> From: Jacky Huang <ychuang3@nuvoton.com>
+> 
+> This driver supports individual IP reset for ma35d1. The reset
+> control registers is a subset of system control registers.
 
-EXT4-fs (loop0): 1 truncate cleaned up
-EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: writeback.
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 2947 at mm/slab_common.c:935 free_large_kmalloc+0x94/0xd0 mm/slab_common.c:935
-Modules linked in:
-Kernel panic - not syncing: kernel: panic_on_warn set ...
-CPU: 0 PID: 2947 Comm: syz-executor216 Not tainted 6.3.0-syzkaller #0
-Hardware name: ARM-Versatile Express
-Backtrace: 
-[<817b2528>] (dump_backtrace) from [<817b261c>] (show_stack+0x18/0x1c arch/arm/kernel/traps.c:256)
- r7:81d81ac0 r6:82422c04 r5:60000093 r4:81d901cc
-[<817b2604>] (show_stack) from [<817cec84>] (__dump_stack lib/dump_stack.c:88 [inline])
-[<817b2604>] (show_stack) from [<817cec84>] (dump_stack_lvl+0x48/0x54 lib/dump_stack.c:106)
-[<817cec3c>] (dump_stack_lvl) from [<817ceca8>] (dump_stack+0x18/0x1c lib/dump_stack.c:113)
- r5:00000000 r4:8264dd14
-[<817cec90>] (dump_stack) from [<817b3110>] (panic+0x11c/0x36c kernel/panic.c:340)
-[<817b2ff4>] (panic) from [<802422ec>] (print_tainted+0x0/0xa0 kernel/panic.c:236)
- r3:8240c488 r2:00000001 r1:81d79fcc r0:81d81ac0
- r7:80436a2c
-[<80242268>] (check_panic_on_warn) from [<802424e0>] (__warn+0x7c/0x180 kernel/panic.c:673)
-[<80242464>] (__warn) from [<802426bc>] (warn_slowpath_fmt+0xd8/0x1d8 kernel/panic.c:697)
- r8:00000009 r7:000003a7 r6:81da3124 r5:8240c954 r4:822ab6bc
-[<802425e8>] (warn_slowpath_fmt) from [<80436a2c>] (free_large_kmalloc+0x94/0xd0 mm/slab_common.c:935)
- r10:823e75a4 r9:00000704 r8:8436d7c0 r7:825dfc70 r6:823e75a4 r5:dde49c7c
- r4:dde49c7c
-[<80436998>] (free_large_kmalloc) from [<80436bb0>] (kfree+0x148/0x14c mm/slab_common.c:1013)
- r7:8436d880 r6:804292ac r5:dde49c7c r4:823e75a4
-[<80436a68>] (kfree) from [<804292ac>] (kvfree+0x2c/0x30 mm/util.c:649)
- r7:8436d880 r6:8436d700 r5:00000400 r4:823e75a4
-[<80429280>] (kvfree) from [<80619f90>] (ext4_xattr_move_to_block fs/ext4/xattr.c:2680 [inline])
-[<80429280>] (kvfree) from [<80619f90>] (ext4_xattr_make_inode_space fs/ext4/xattr.c:2743 [inline])
-[<80429280>] (kvfree) from [<80619f90>] (ext4_expand_extra_isize_ea+0x558/0x808 fs/ext4/xattr.c:2835)
- r5:00000400 r4:823e75a4
-[<80619a38>] (ext4_expand_extra_isize_ea) from [<805c514c>] (__ext4_expand_extra_isize+0xdc/0x148 fs/ext4/inode.c:5960)
- r10:8455e368 r9:8455e360 r8:00000001 r7:8455e5e4 r6:823e7500 r5:8455e3e8
- r4:00000040
-[<805c5070>] (__ext4_expand_extra_isize) from [<805cc188>] (ext4_try_to_expand_extra_isize fs/ext4/inode.c:6003 [inline])
-[<805c5070>] (__ext4_expand_extra_isize) from [<805cc188>] (__ext4_mark_inode_dirty+0x158/0x270 fs/ext4/inode.c:6081)
- r8:00000040 r7:00000cb7 r6:df969df4 r5:00000001 r4:8455e3e8
-[<805cc030>] (__ext4_mark_inode_dirty) from [<805ee79c>] (__ext4_unlink+0x2e0/0x370 fs/ext4/namei.c:3255)
- r10:df969e58 r9:82c9ac50 r8:00000000 r7:836ee3c0 r6:00000001 r5:8455e3e8
- r4:8455f0a8
-[<805ee4bc>] (__ext4_unlink) from [<805ee980>] (ext4_unlink+0x154/0x1e4 fs/ext4/namei.c:3298)
- r10:82c9ac38 r9:8455f130 r8:df969f3c r7:8455f0a8 r6:82c9ac38 r5:8455e3e8
- r4:00000000
-[<805ee82c>] (ext4_unlink) from [<804cc41c>] (vfs_unlink+0x13c/0x2e0 fs/namei.c:4250)
- r7:8455f0a8 r6:8455e3e8 r5:82c9ac38 r4:00000000
-[<804cc2e0>] (vfs_unlink) from [<804d0fa8>] (do_unlinkat+0x198/0x2b4 fs/namei.c:4316)
- r9:df969f38 r8:00000003 r7:8290b000 r6:00000000 r5:8455f0a8 r4:00000000
-[<804d0e10>] (do_unlinkat) from [<804d10fc>] (__do_sys_unlinkat fs/namei.c:4359 [inline])
-[<804d0e10>] (do_unlinkat) from [<804d10fc>] (sys_unlinkat+0x38/0x5c fs/namei.c:4352)
- r10:00000148 r9:831bae00 r8:80200288 r7:00000148 r6:00000000 r5:00000000
- r4:00000003
-[<804d10c4>] (sys_unlinkat) from [<80200060>] (ret_fast_syscall+0x0/0x1c arch/arm/mm/proc-v7.S:66)
-Exception stack(0xdf969fa8 to 0xdf969ff0)
-9fa0:                   00000000 00000000 00000003 20000000 00000000 00001015
-9fc0: 00000000 00000000 00000000 00000148 00000000 200002a2 20000276 00000000
-9fe0: 7ecdec50 7ecdec40 0001085c 0002bb80
- r5:00000000 r4:00000000
-Rebooting in 86400 seconds..
+registers are 
+
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> ---
+
+> diff --git a/drivers/reset/reset-ma35d1.c b/drivers/reset/reset-ma35d1.c
+> new file mode 100644
+> index 000000000000..19ed323981df
+> --- /dev/null
+> +++ b/drivers/reset/reset-ma35d1.c
+> @@ -0,0 +1,234 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2023 Nuvoton Technology Corp.
+> + * Author: Chi-Fang Li <cfli0@nuvoton.com>
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/container_of.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reboot.h>
+> +#include <linux/reset-controller.h>
+> +#include <linux/spinlock.h>
+> +#include <dt-bindings/reset/nuvoton,ma35d1-reset.h>
+> +
+> +struct ma35d1_reset_data {
+> +	struct reset_controller_dev rcdev;
+> +	struct notifier_block restart_handler;
+> +	void __iomem *base;
+> +	spinlock_t lock;
+
+Please add a comment about what this protects. After adding that, feel 
+free to add also:
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+-- 
+ i.
+
+--8323329-1035541048-1683543664=:1790--
