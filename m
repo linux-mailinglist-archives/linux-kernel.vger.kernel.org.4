@@ -2,158 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1FE6F9F4F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445046F9F54
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbjEHFyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 01:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
+        id S232520AbjEHF64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 01:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232241AbjEHFy3 (ORCPT
+        with ESMTP id S229852AbjEHF6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 01:54:29 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2076.outbound.protection.outlook.com [40.107.20.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FBB18FE0;
-        Sun,  7 May 2023 22:53:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mhsgXbob9433aY1gkz3qOMH6X1UpeEKl5t4+6nrGAp4JcFzMH/t2NSU4dNxjFpMSaaK4wYneWdCv1hmDrbxgJPjsNh0EPr3Pz1LZz9pU05QTP7UwrUaRVu+WokSEQW1IKrUGsW/v3wpC0eHpOWmnICcPRp62008ridedPBBVk1Lwanrp86AdxFm+IChWLslvGTZkhTR8qwUDx0q9gbbYh0zS0Vbob8yLd3cjssbsigqq/40j2EXyTNBMTll1z7fE/3oYxp5Q53VF1ShxIPa3hoemk/yXpxVcZCtKZCRO0yyn3tAmSsTFMuY50oTQ7sVcuJyY/w6fUrP1hnNlEMTRfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VP6Xu+Q6I0NhGFzHaSBqhkZ5B2t0WOMmGD7Fe3t9iCQ=;
- b=i+o8WZJCbYhXLcdXBQkHr59BFh1iq+/hITYaduBJk2XD0yjXIb4rcjLBW8V7psTJLHeBzoDACuTuAK8vlpCwWWhDPzFLd8KVSoiLZ040OqeraUjW0wzZGnQzNBSoSFSuTBRR+SIbH2mYbeIDpjVGajesUlEFF28AskW/POOMjEA3cB9tOcxG7Bydg4otv/D82Wn4TkRYmT5jWykRooaunfzkpDI1gTAFcc2GTtaAkoocqoXRM4AlmMpmNqJixum4TPp0UsHDl/168+KLr29+JrlWr+Hzj8mbTivtXOv3CbKAVnOu2b65/ZbvSn4hGpUDEqxxHH21Sdx1LoF8C/j1jw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VP6Xu+Q6I0NhGFzHaSBqhkZ5B2t0WOMmGD7Fe3t9iCQ=;
- b=mWFJ/CkFWUUHq9PoF/jCeG3+iaaJ04do2VJp9yeHAyS9nUulsg+Qi+Hygqq5EuEesz3dD8eiU6Yky+CRFS9jqaJVSDtEcQmGEQo0FhiR8qmgi3cCVfm81JSb8aCwP5YWpQkWG/Cxgno1dM2rCi55eRAqNkqMFcJkoSSZVTSxSUU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by AM9PR04MB8523.eurprd04.prod.outlook.com (2603:10a6:20b:432::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
- 2023 05:53:39 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::60e3:2297:61f1:4d1d]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::60e3:2297:61f1:4d1d%4]) with mapi id 15.20.6363.032; Mon, 8 May 2023
- 05:53:39 +0000
-From:   Liu Ying <victor.liu@nxp.com>
-To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        krzysztof.kozlowski@linaro.org, LW@karo-electronics.de,
-        alexander.stein@ew.tq-group.com
-Subject: [PATCH v5 6/6] drm: lcdif: Add i.MX93 LCDIF compatible string
-Date:   Mon,  8 May 2023 13:57:40 +0800
-Message-Id: <20230508055740.635256-7-victor.liu@nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230508055740.635256-1-victor.liu@nxp.com>
-References: <20230508055740.635256-1-victor.liu@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2P153CA0030.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:190::15) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
+        Mon, 8 May 2023 01:58:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214994ED7
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 22:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683525486;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gC9s5ZRywHkmOsVozu0TaiLrTE/2gzpB0d9O9rvv8yk=;
+        b=FNmoS216puNN2kHr7SeoGb+YEHBjzmI4Nf5WDObcNJFbsTfisFy9SHc8OnalzpUNP9X49f
+        RFyTGd7YCjzHvirgJ6EqtpQpBRgdDTA7jSY7ifQys6ijX+vcNBgwKffUZ2pgJAgu/0xd4v
+        BH/KL0jLkWLpHiSTH6Ua8t7sPTwF06g=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-26-i-6AB85yMtWMsKJp81VnIQ-1; Mon, 08 May 2023 01:58:05 -0400
+X-MC-Unique: i-6AB85yMtWMsKJp81VnIQ-1
+Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-4ef455ba5feso2115541e87.3
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 22:58:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683525483; x=1686117483;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gC9s5ZRywHkmOsVozu0TaiLrTE/2gzpB0d9O9rvv8yk=;
+        b=JaOWPgPZOVDtd+kwRgf4WCG0Lh3zg9ptOgKLsy2yOdVurD+YLNiK/1aEcBTLEmgu1a
+         vkrKImeCpgow+uY8yOe8X3SukV8kq8ewd8qxRWrSXdy3nnCrPXYvmmE0dn5iFvfcG+ag
+         elEFInjlCkcgvVOx5ymWTI1P+9i5T8HVo12wKZegqiZPQQwS9yI2fhom9GGJJDNdQbmP
+         SvPprT6qqdx1qSNqhypcHBkiQBSAgk2jw7yrAgWz5hziFDe1SAVShRuUpl/ouBDKC7AQ
+         Ml4QUjxojaRHkBnaGU3pILdhphqk2Wzhbz200z9hTONii91ICVHMMEcSci7knr7jN9uG
+         Fh/A==
+X-Gm-Message-State: AC+VfDy7hrqrJUJwltcoCyV5MeNX5txZUkz9C+aHpBlS2zDxeUF6Lu5P
+        YxFQk1AGxXT6/4JdDOoTY2zBflR4miwofb3AKEnknKwDsnNOErg3BV1hMjAtqHSZ3hPqBajEysZ
+        QLA8K2N4ipO6K9FvW7C1ikBc=
+X-Received: by 2002:ac2:4556:0:b0:4f1:38f3:3769 with SMTP id j22-20020ac24556000000b004f138f33769mr2160565lfm.2.1683525483760;
+        Sun, 07 May 2023 22:58:03 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7/kOqMxfdOovc+AFvhciNXhZ1+H4MrFFq7DPX+hsFVb1Pw5b9R+Kh1rveUXByRmCBkIofTBg==
+X-Received: by 2002:ac2:4556:0:b0:4f1:38f3:3769 with SMTP id j22-20020ac24556000000b004f138f33769mr2160525lfm.2.1683525480489;
+        Sun, 07 May 2023 22:58:00 -0700 (PDT)
+Received: from [192.168.1.121] (85-23-48-202.bb.dnainternet.fi. [85.23.48.202])
+        by smtp.gmail.com with ESMTPSA id u28-20020ac24c3c000000b004f13cd61ebbsm1184679lfq.175.2023.05.07.22.57.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 May 2023 22:57:59 -0700 (PDT)
+Message-ID: <90bb07c3-6365-8dcf-7d0e-ef2c0163614f@redhat.com>
+Date:   Mon, 8 May 2023 08:57:57 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AM9PR04MB8523:EE_
-X-MS-Office365-Filtering-Correlation-Id: c753e2f5-4c24-4999-5353-08db4f889206
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FOYQGQRC6Fq42/rOk9sr/d6UFC0bemZ0DpWNtML5S/1l7B1FgicyHk/ysvR92lj2zvrBIOrWYp+6QjAHX7h6fSrkvlyvFeibawCOnubS2B2E8ntdGRa9j0Rp03xFBB/+yrfFLKREeq5AErB/zdeyV/hkmp4YSY+BTzRcFU2rAAMYHU/s9XX3k6VYobbsM5VUNlRehkvxXaPA4ZgTnIkIH8qfiKhR73mnrA5ioeZIONm4Qe5SXkgzyCNHSP1VTgfmYBoQ9i/t9z9ZlBsV9ewSV5rbNRSiLGSkIwwH94SYqdxZeqapIXrfrqRCblmAWN8ZA52EMtf0xx8haDGXbmPRuOajcVfhHXocQ9hNBpg6Zk/YEF8bsHT/geZjk7SU6KrOHPVmWwOZdFTjzoaDt9ws5zqSliUeA7op0t0Tr69DvLGuUgXmQmRNr89HBorTD5IhXXvHq868LDGuj4jEYZ2dM3J6JpvnK6G2yaV18qamnOBKojpVp7FwooxLkHxJQoyoZm5O+/a0FdKRiAwuI/POcJsswLQiMOrr6Ox8ajY3Mjhwaf93lTLCqOhks624YAU/l2NWTyvrIC3GWh8dXOxSez9mYgLHcZNJYh6b+g8HLfWcOX0fhYb28V+bM0/lA8Ak
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(136003)(396003)(39860400002)(376002)(451199021)(83380400001)(6666004)(52116002)(6486002)(478600001)(2616005)(6512007)(6506007)(1076003)(26005)(186003)(2906002)(7416002)(36756003)(38100700002)(38350700002)(66476007)(66556008)(66946007)(4326008)(41300700001)(8676002)(8936002)(86362001)(5660300002)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8gQr7hBC+KyqqEKwEQNHIyX7RtK5vGFvwDzD17IK6eQHOWTNIanZf8EnWWug?=
- =?us-ascii?Q?QUAan2K1gi4XAHVP9W3w9Q24iZppQcTW6TiwdWZiH86dX+qSbUafBKhzK5CV?=
- =?us-ascii?Q?DAFXasiiXZJWirBx+L+9+omTZSQjHwXyD5uru7ZtZCWzvYJiqiDFXVOZxnKx?=
- =?us-ascii?Q?kBBMOAHZaEp41tMj0ZRdHkNav1MU44pFxdEM04SwYPHaFv/zTwsuT5oGjZBI?=
- =?us-ascii?Q?xOwPvnxEACSQwIEo6KZly7eDlMGGLK/xAk801b0Jm6daXOFgzqZVm74eiRDJ?=
- =?us-ascii?Q?SEiVNcUqgoYlo0l28MEE5sygWuiU8gHferxbwVdYf456HRblzh0YzkOx2Bbr?=
- =?us-ascii?Q?HTvLa51d6JFOipIBsl3nBFGytk0h24eYVpyZjRqzEXUn55UiL8s72+fssjzF?=
- =?us-ascii?Q?LeAyBiyvsCVBN+L32DErh0d544jRYQ7BFtFHcz+Q6BQ3uKHdIofT9z+l0fui?=
- =?us-ascii?Q?+XvwPo2Njde6cubCnJjOaK25qxL0NrrTQ9WZ3l6H2g26NqQRFsqsUzw/yoQg?=
- =?us-ascii?Q?0dLzlvXIIrmIt4xvnhd0rR30xi9RmWpfAjUqFZIdU7doOGwEtE//8o1AOgbo?=
- =?us-ascii?Q?bw/+j6CvZYhC0djMfu+ImnvOwcZHWkqq/5t0OnSc6EikKcBdo6wonDf9DpYP?=
- =?us-ascii?Q?PsRBFabArdZL9IS+vN1zFr9CCrN8aH8G2xpJTfgLzBJrkHXKaniHN/IYxh2Q?=
- =?us-ascii?Q?q714nEB70IEX+7HiGa7PlqZDdy1MUEBgnmpb3kraRb30Kdp659wYlZ20uOnE?=
- =?us-ascii?Q?CwPNZ2o7KuQtYcz1VW9gzAJg6RlVJ3JguLi8oFU2TWQ5OMIimyDQlsu0eblP?=
- =?us-ascii?Q?WAgx+Exy4X00hrOwjpU3/elg5sZyt56ZO7YZvtW9ltci5NiLh+km4UQ7h/pE?=
- =?us-ascii?Q?bAyfJjJNdvI2NPhU1yG9e6dVYA/qFO1DYl1iL+3B4pSSG0XkgPSsObfF3lJH?=
- =?us-ascii?Q?YOeGElZGfgQpBQPNzjMKVmHEbxMOg7UyopQr4EFkxduyVzOiveK6SdyZINOk?=
- =?us-ascii?Q?dVu4m5YtYiRwfAixH9l0a3SP0ACAA/VmzbATbqVCrnwJjnP8VcMBIkH1Vpva?=
- =?us-ascii?Q?53b3p7CzAI6hpGcJOF7+Cl9n3+lCKRoRMh+96SyKDqClINRzdf4XxHkLjHhm?=
- =?us-ascii?Q?EJjYhwTZIJ4EFZbkoBr6giIAu/v/NXoEuZcxkcBVtxQ4sImNoumB/a6F2+vN?=
- =?us-ascii?Q?9XGHvT8OkDBs7jIv13/cC10AcpKdDbAtokopTbWI2IsOv5uPhC3guiNlAxZ5?=
- =?us-ascii?Q?hLCisUkz083Z3RD/zMDVGuU+HgnVHZcGqzbFZ0eTHLcyQu1feX9Rz1HbiOP1?=
- =?us-ascii?Q?OVBXP2q5bjIgj2qBuL+CCKG+VTS/1ITGxm+oJHrYZnLF3f5OF9sW+z4xLh38?=
- =?us-ascii?Q?VDEGvQkz6i0O6zKQ43EDS9KFEonFgJuKaEtK9fZYpwnKp440aYNFgxYMDlSp?=
- =?us-ascii?Q?4bea9Ri2zEwQ+hzVTQtWXKYO7G6xCNqtPEpsi3XX+HloqLXmRKLxmeZNQUVH?=
- =?us-ascii?Q?mjQcLV0s0jsFLhbonw7ME8hBLrg0U2JbODPA6zU/XQENtZybyk1oXBs0fa5r?=
- =?us-ascii?Q?GAjMw+dgK3oL6OBIR0xY1Sl5pninbgOk5YCHgfC3?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c753e2f5-4c24-4999-5353-08db4f889206
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 05:53:39.0655
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rxm7xt11BDjsNmkrRNBWx9qkQv4+RZt6aW+7yEde9VUeTDvmgHG9uWx7ljeh9suQCuKfCyozgQdJrKCD2rxFWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8523
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] mm/migrate_device: Try to handle swapcache pages.
+Content-Language: en-US
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        apopple@nvidia.com, jhubbard@nvidia.com, rcampbell@nvidia.com
+References: <20230507061726.13422-1-mpenttil@redhat.com>
+ <87wn1ja793.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <f93c14f6-024d-4abc-7598-fa82cc3ea1a5@redhat.com>
+ <87sfc79zg8.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   =?UTF-8?Q?Mika_Penttil=c3=a4?= <mpenttil@redhat.com>
+In-Reply-To: <87sfc79zg8.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With all previous preparations done to make it possible for the
-single LCDIF embedded in i.MX93 SoC to drive multiple displays
-simultaneously, add i.MX93 LCDIF compatible string as the last
-step of adding i.MX93 LCDIF support.
+Hi,
 
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
----
-v4->v5:
-* Add Alexander's T-b tag.
 
-v3->v4:
-* Add Alexander's R-b tag.
+On 8.5.2023 8.14, Huang, Ying wrote:
+> Mika Penttilä <mpenttil@redhat.com> writes:
+> 
+>> H,
+>>
+>>
+>> On 8.5.2023 5.26, Huang, Ying wrote:
+>>> mpenttil@redhat.com writes:
+>>>
+>>>> From: Mika Penttil <mpenttil@redhat.com>
+>>>>
+>>>> Migrating file pages and swapcache pages into device memory is not supported.
+>>>> The decision is done based on page_mapping(). For now, swapcache pages are not migrated.
+>>>>
+>>>> Things can however be improved, for swapcache pages. Try to get rid of the swap cache,
+>>>> and if successful, go ahead as with other anonymous pages.
+>>>>
+>>>> As a detail, do not mess with shmem pages, as they handle swap internally.
+>>>>
+>>>> Cc: Alistair Popple <apopple@nvidia.com>
+>>>> Cc: John Hubbard <jhubbard@nvidia.com>
+>>>> Cc: Ralph Campbell <rcampbell@nvidia.com>
+>>>> Signed-off-by: Mika Penttil <mpenttil@redhat.com>
+>>>> ---
+>>>>    mm/migrate_device.c | 12 ++++++++++--
+>>>>    1 file changed, 10 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
+>>>> index d30c9de60b0d..e8169c58c341 100644
+>>>> --- a/mm/migrate_device.c
+>>>> +++ b/mm/migrate_device.c
+>>>> @@ -12,6 +12,7 @@
+>>>>    #include <linux/mmu_notifier.h>
+>>>>    #include <linux/oom.h>
+>>>>    #include <linux/pagewalk.h>
+>>>> +#include <linux/shmem_fs.h>
+>>>>    #include <linux/rmap.h>
+>>>>    #include <linux/swapops.h>
+>>>>    #include <asm/tlbflush.h>
+>>>> @@ -750,10 +751,17 @@ static void __migrate_device_pages(unsigned long *src_pfns,
+>>>>    			/*
+>>>>    			 * For now only support anonymous memory migrating to
+>>>>    			 * device private or coherent memory.
+>>>> +			 *
+>>>> +			 * Try to get rid of swap cache if possible.
+>>>> +			 * Leave shmem pages alone, they handle swap internally
+>>>> +			 *
+>>>>    			 */
+>>>>    			if (mapping) {
+>>>> -				src_pfns[i] &= ~MIGRATE_PFN_MIGRATE;
+>>>> -				continue;
+>>>> +				if (shmem_mapping(mapping) ||
+>>>> +				    !folio_free_swap(page_folio(page))) {
+>>> Should we filter out file pages firstly?
+>>
+>> folio_free_swap() checks first and returns false if not swapcache page
+>> (ie including normal file pages) so think that is enough,
+> 
+> You are right.  folio_free_swap() will call folio_test_swapcache(), and
+> which will check folio_test_swapbacked().
+> 
+> And, IIUC, we don't need to check shmem too.  Because folio_free_swap()
+> will not return true for shmem pages.
 
-v2->v3:
-* Fix a trivial typo in commit message.
+Ah yes true, for not written out shmem page folio_free_swap() returns 
+false (because !swapcache). And written out (but in swap cache) returns 
+false because folio_swapped() == true
 
-v1->v2:
-* Split from patch 2/2 in v1. (Marek, Alexander)
+> 
+>> but maybe for clarity and not depending on it, could be good
+>> explicitly check for swapcache before calling folio_free_swap().
+> 
+> Yes.  That will be more clear.  I suggest to use folio_test_anon(), that
+> will filter out shmem pages too.
 
- drivers/gpu/drm/mxsfb/lcdif_drv.c | 1 +
- 1 file changed, 1 insertion(+)
+Agreed.
 
-diff --git a/drivers/gpu/drm/mxsfb/lcdif_drv.c b/drivers/gpu/drm/mxsfb/lcdif_drv.c
-index cf27b63b1899..d1bd0f51f451 100644
---- a/drivers/gpu/drm/mxsfb/lcdif_drv.c
-+++ b/drivers/gpu/drm/mxsfb/lcdif_drv.c
-@@ -249,6 +249,7 @@ static const struct drm_driver lcdif_driver = {
- 
- static const struct of_device_id lcdif_dt_ids[] = {
- 	{ .compatible = "fsl,imx8mp-lcdif" },
-+	{ .compatible = "fsl,imx93-lcdif" },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, lcdif_dt_ids);
--- 
-2.37.1
+> 
+>>>
+>>>> +					src_pfns[i] &= ~MIGRATE_PFN_MIGRATE;
+>>>> +					continue;
+>>>> +				}
+>>>>    			}
+>>>>    		} else if (is_zone_device_page(newpage)) {
+>>>>    			/*
+> 
+> Best Regards,
+> Huang, Ying
+> 
+
+Thanks,
+Mika
 
