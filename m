@@ -2,106 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599606FBA4F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851A96FBA51
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbjEHVy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 17:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
+        id S234099AbjEHV4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 17:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234265AbjEHVyY (ORCPT
+        with ESMTP id S233835AbjEHV4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 17:54:24 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E4659C4;
-        Mon,  8 May 2023 14:54:11 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id 6a1803df08f44-61b60d0c5b8so24106466d6.0;
-        Mon, 08 May 2023 14:54:11 -0700 (PDT)
+        Mon, 8 May 2023 17:56:21 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859FB4C1A
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 14:56:18 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3f389c519e5so11595711cf.2
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 14:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683582851; x=1686174851;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dtAzQzES9I7yNwBqIfwbZWRv7FD60/LkD0fvdz+X1d8=;
-        b=CIf1JSnYYmsFIJlhk4/NzzeglTtB+d0mZwmuhQC6ECCTliVYouVKf+YTOlkvvIP0Wr
-         Zob9QA43bAD+lk1jJaxYx5Bgl6s730KfkuL9qUqBH2sk1ppZ9bf4EdiyzbqMy5KSpjAp
-         lKsB0EpaVBtFs9iISSEm4p2CnpQG3tfP7wFKQxYyLspN72+gO2XbDJLovNZq7YoMXHw3
-         YyrQFLmrnh42UJ5lXjFNc403wWR2gyPh6pWgvD20ZEgB10oiAvTjDyAW+9ZKepL6Ut3S
-         g68jGhDYWiRVBwlKp4mDqDDwh017bLBPa5Byi5QMcAgp3Q2dDImxDTWAjqS9E4kiXNUQ
-         JkWg==
+        d=soleen.com; s=google; t=1683582977; x=1686174977;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V4mzgv/y3OfYfwIc0/6GlRmAjz7CSTG9XA2gBScB7hY=;
+        b=lykGcBFs/LGISWRbS6e916zC4DSVZBoV7zF2VTNqZTeWEF1p/vL4i48U5jn4B9fuVp
+         rECBef+jTeQV0mPTRcR3ZdRpv+HGBHRfDppl2QvCBeyWZyyNKUeyt4MCQV1ztO3GyNSl
+         JObpMeAYvZ9aBKRZHlpT33ZFyK+Zz1gI2bThrGaaiULBklE4v/MeUJUyDBN6jc21U4p8
+         iLrk2B4dQ5GUW1fAJjpPnool1DJwfnTAeJ/faVm1jJjkgHTYKNLkzwk3mx8YQ6sxIG7c
+         wvEIek1+U5jBpUeY9ajQZCm8xm2nyRw09BAEHbiC6WKD5FrktfDIMKtoSsBt5l+hgjyf
+         OddA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683582851; x=1686174851;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dtAzQzES9I7yNwBqIfwbZWRv7FD60/LkD0fvdz+X1d8=;
-        b=IF4fG86KulWw0GDQRu3Ksm4lCsB4kxQmPXzxcigxzCiezDF/nEUiYIZ/9fci0o+L4b
-         Y7BqstgRx+10TkVOdiILxgF5wF4Uf78PZv5NVO2G9ya4IOYaqSEhrAmxjS9Lzjm59Nbq
-         Hwzlr32qN74MdFg4zMxmGOxBXNKkZJojsvlFvEWI1Un7Y3TGvt9Tp9aoydzxHxg8h1Ox
-         j3cqmJUmJybsUCB66C+WQ5EejOBhkFahcBtOPTEeMf0SLrTx9BjTSYI7z6XBxLYudJd8
-         9HaNkdX5To0O0tc2yGGk4AJDASuktnzAmthUoYVXgEZFtucjcQq4QefzGNx+lJy9FQdo
-         PIpQ==
-X-Gm-Message-State: AC+VfDwk8cW3w7GaWwurgqzAkL37pfwd8umH5OtKrtqvymKuNQUCmXM0
-        rLXXmPlINhOiksdLpWR/jA4=
-X-Google-Smtp-Source: ACHHUZ5ybom6RrSpzq1VYoTnDCdZYCzJWdBq24QpSo2V4yvKhHbc0LizO4RGX3O4ncfCrXa24q9GPQ==
-X-Received: by 2002:a05:6214:4011:b0:61e:800b:4fcc with SMTP id kd17-20020a056214401100b0061e800b4fccmr18449504qvb.25.1683582850910;
-        Mon, 08 May 2023 14:54:10 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id n7-20020a056214008700b005ef5f8dc89esm284571qvr.88.2023.05.08.14.54.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 14:54:10 -0700 (PDT)
-Message-ID: <7f899e9b-5a3d-7150-9b47-aef6280ab3c4@gmail.com>
-Date:   Mon, 8 May 2023 14:54:07 -0700
+        d=1e100.net; s=20221208; t=1683582977; x=1686174977;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V4mzgv/y3OfYfwIc0/6GlRmAjz7CSTG9XA2gBScB7hY=;
+        b=YsDYiHtymh8UjID79o910QGGSGBzc4Dal3vTEp04jGgqvwiWDsZoDcaXzxYTdg68Qb
+         obMrY7OANCj3TRBsIHExW6TRZ54pYVAnmznih6llKb51nSoMZVoHnxzB5Xz+YA8CdSHu
+         VAZcx3VPy2pTxLgsfjPBVp5+uHeYFHHfL0qgK1E+f/6Aa35hBGoMXlYrlUYydD3FsPo3
+         UlEAAqHjauJB1kk/iVJRk8vyyFZW33dTZVi2xWJq88wnaqDQLYzvbSi+UpVJD7udcB5U
+         ryxaVb7zonHSK3d90WE6TA+CA+/PXF+urApJdev0MdpJqgAtvCIEpPxgFlEcPYQzSmsL
+         MCSA==
+X-Gm-Message-State: AC+VfDwaABKJGNEGLuKqi+RNXxD41uuWUwdfTlMGRW7oBI4mY+K4nyxi
+        +pCE0JuyBXqDAtvlUbmkNPLt3XWZUZs+ewDN9899zQ==
+X-Google-Smtp-Source: ACHHUZ70Q7luqF/zFtkwQXaYjHI+kxk2SoxZ+/DCsZhIgUHBDYbrgX+T93wMBA0hNzTZ0RZLab29r3MH+gRk0ljphH4=
+X-Received: by 2002:a05:622a:1756:b0:3f2:28fd:c64d with SMTP id
+ l22-20020a05622a175600b003f228fdc64dmr18597188qtk.40.1683582977630; Mon, 08
+ May 2023 14:56:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 6.1 000/611] 6.1.28-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230508094421.513073170@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230508094421.513073170@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000258e5e05fae79fc1@google.com> <20230507135844.1231056-1-lrh2000@pku.edu.cn>
+ <CA+CK2bBe2YKYM3rUTCnZ0RF=NFUR9VqO-QYn3ygPsFJWLY1MUA@mail.gmail.com>
+ <ZFlrbDft1QfMyIDc@casper.infradead.org> <CA+CK2bDVjovwB9v-Zv4Fn7EUfp5FV2XK36iJKYKY7pYNOFfOGA@mail.gmail.com>
+ <ZFlvJEfs1ufh1UUD@casper.infradead.org>
+In-Reply-To: <ZFlvJEfs1ufh1UUD@casper.infradead.org>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Mon, 8 May 2023 14:55:41 -0700
+Message-ID: <CA+CK2bDC-FVv1tZg9MDn-N735Ak3OAtdZPf+LEYM-JHsO90YcQ@mail.gmail.com>
+Subject: Re: usbdev_mmap causes type confusion in page_table_check
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Ruihan Li <lrh2000@pku.edu.cn>,
+        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/8/23 02:37, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.28 release.
-> There are 611 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 10 May 2023 09:42:40 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.28-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Mon, May 8, 2023 at 2:52=E2=80=AFPM Matthew Wilcox <willy@infradead.org>=
+ wrote:
+>
+> On Mon, May 08, 2023 at 02:48:59PM -0700, Pasha Tatashin wrote:
+> > On Mon, May 8, 2023 at 2:36=E2=80=AFPM Matthew Wilcox <willy@infradead.=
+org> wrote:
+> > >
+> > > On Mon, May 08, 2023 at 05:27:10PM -0400, Pasha Tatashin wrote:
+> > > > > static void page_table_check_set(struct mm_struct *mm, unsigned l=
+ong addr,
+> > > > >                                  unsigned long pfn, unsigned long=
+ pgcnt,
+> > > > >                                  bool rw)
+> > > > > {
+> > > > >         // ...
+> > > > >         anon =3D PageAnon(page);
+> > > > >         for (i =3D 0; i < pgcnt; i++) {
+> > > > >                 // ...
+> > > > >                 if (anon) {
+> > > > >                         BUG_ON(atomic_read(&ptc->file_map_count))=
+;
+> > > > >                         BUG_ON(atomic_inc_return(&ptc->anon_map_c=
+ount) > 1 && rw);
+> > > > >                 } else {
+> > > > >                         BUG_ON(atomic_read(&ptc->anon_map_count))=
+;
+> > > > >                         BUG_ON(atomic_inc_return(&ptc->file_map_c=
+ount) < 0);
+> > > > >                 }
+> > > > >                 // ...
+> > > > >         }
+> > > > >         // ...
+> > > > > }
+> > > > >
+> > > > > This call to PageAnon is invalid for slab pages because slab reus=
+es the bits
+> > > > > in struct page/folio to store its internal states, and the anonym=
+ity bit only
+> > > > > exists in struct page/folio. As a result, the counters are incorr=
+ectly updated
+> > > > > and checked in page_table_check_set and page_table_check_clear, l=
+eading to the
+> > > > > bug being raised.
+> > > >
+> > > > We should change anon boolean to be:
+> > > >
+> > > > anon =3D !PageSlab(page) && PageAnon(page);
+> > >
+> > > No.  Slab pages are not elegible for mapping into userspace.  That's
+> >
+> > Sure, I can add BUG_ON(PageSlab(page)); to page_table_check_set.
+> >
+> > > all.  There should be a BUG() for that.  And I do mean BUG(), not
+> > > "return error to user".  Something has gone horribly wrong, and it's
+> > > time to crash.
+> >
+> >  It is just too easy to make slab available via remap_pfn_range(), but
+> > I do not think we want to add BUG() into the remap function, otherwise
+> > we will break devices such as /dev/mem.
+>
+> Slab pages can't be mmaped.  Really, no matter what interface you're
+> using.  page->_mapcount is necessarily incremented by mapping to
+> userspace, and slab uses that space for its own purposes (and has
+> for decades).  It's similar for page tables and other allocations that
+> use PageType.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+Mapping random memory in /dev/mem can cause mapping slab pages in to
+userspace, the page->_mapcount is not incremented (and other fields
+are not accessed) in that case, as we are using VM_PFNMAP type VMA,
+which does not access "struct page".
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
-
+Pasha
