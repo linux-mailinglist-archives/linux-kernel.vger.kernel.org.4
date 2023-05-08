@@ -2,121 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A316FB47F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C18366FB48B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234721AbjEHP5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 11:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
+        id S234585AbjEHP6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 11:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234406AbjEHP52 (ORCPT
+        with ESMTP id S234080AbjEHP6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 11:57:28 -0400
-Received: from out-18.mta1.migadu.com (out-18.mta1.migadu.com [IPv6:2001:41d0:203:375::12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187E86A64
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 08:57:26 -0700 (PDT)
-Date:   Mon, 8 May 2023 11:57:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683561443;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=647sHPv4B7hFuK57ZzB2dzj7RoLmpQ+nMy5wXGAldL0=;
-        b=pAEukJarAZ9zfpJQyxkLYirHPfIniZoUfqNC9brusyZBZ09sv28sxhM4k4em4nlQvaS5Do
-        IxU3+yZoRUn8u1GNjUqpuj/xVZafV+nob5RQGwT3otweRNMnXRavTo5ic8BMQRHWe2z5mG
-        jLofy7PdFoubJwBsB9N6rzDM0Y35kcU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFkb1p80vq19rieI@moria.home.lan>
-References: <20230501165450.15352-1-surenb@google.com>
- <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
- <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com>
- <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
- <ZFfd99w9vFTftB8D@moria.home.lan>
- <20230508175206.7dc3f87c@meshulam.tesarici.cz>
+        Mon, 8 May 2023 11:58:40 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6E040D4;
+        Mon,  8 May 2023 08:58:39 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f00d41df22so29644816e87.1;
+        Mon, 08 May 2023 08:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683561517; x=1686153517;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qoKeBGVLOBu4DrLK/qM8cN/bO+eEqfiWPQ9nbUj9vHo=;
+        b=njc2uBhQTwCCXVHXm/oE2IOFTW4zhdBqaTkEe+Jkvty3fbq0HmDNIHQ+Dtnov5JE5B
+         DlCRgIXF4wRZsVTIxt/In6dIIJjr93rvVkJbdIsGM0WJCVM2PkZZP6nK3YzraVbSFXZ/
+         y1axOGjBwCE6LLrV2/3hb3EdM9u2ked3GmCe5fNpfHcYDPSYlh20egY3TJDc/69WfH/S
+         JxsccU+FleZQKxQ98hjZKKI9ARdJDrE+RaZG1h0IycyLct/DXTCWhglMwDQ/8TryxT10
+         x6tdLtYXTIzB2e7w21vFDYkqfD65okleWow13EfeXpkPHi+Q2wdW6Wp9I8giWU6MD12i
+         BE7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683561517; x=1686153517;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qoKeBGVLOBu4DrLK/qM8cN/bO+eEqfiWPQ9nbUj9vHo=;
+        b=VU3FADEDuY01raMw91lD/L4S9sUuOURItKEASwE1vIWy/6GSoOiGuy/KSa6gWCvRbT
+         8AwJvpMIXqW+XY3nRMi2sWEfUzh7YAiokIWiG0rUxgHwqILQAM0AoCX663rHo1ZOJ0M2
+         eOOAaqSGmQwUqs0b3+8Bq/r7WoRuZfcfU3vXEs97ZBZasFuFEiwRBZl0KWQqbH5gs1AJ
+         Vew9rY7K/vd35NDgDzQ4psPwlb6WDDWpaBgUpyFA9AYLis1BrtyYW67pa0nHOETs3Hrr
+         d23hQttWWUSlM5ZXQFVclDbJLUl7DiMVkAasDU5ZF850J9eKecRXtPAo1C6uQeJQmKz6
+         IE8w==
+X-Gm-Message-State: AC+VfDyIYnfKRXbu6jOBF84j6s0GTpAQ+8utGr55Wrf+UFY+EJKMn4oP
+        0yzXiQPgUDlYbRyQLb2cOFY=
+X-Google-Smtp-Source: ACHHUZ6pT3RD+p8XzST+vQ2EfJpmtSMjPL9zzBcCqUFO+eXzEx90tVk4CD3LshCQFBxntLgVrASleA==
+X-Received: by 2002:a05:6512:3b14:b0:4f1:b38d:bfb8 with SMTP id f20-20020a0565123b1400b004f1b38dbfb8mr1765747lfv.24.1683561517097;
+        Mon, 08 May 2023 08:58:37 -0700 (PDT)
+Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
+        by smtp.gmail.com with ESMTPSA id b29-20020ac25e9d000000b004edce1d338csm30878lfq.89.2023.05.08.08.58.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 08:58:36 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Felix Fietkau <nbd@nbd.name>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH] dt-bindings: mt76: support pointing to EEPROM using NVMEM cell
+Date:   Mon,  8 May 2023 17:58:20 +0200
+Message-Id: <20230508155820.9963-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230508175206.7dc3f87c@meshulam.tesarici.cz>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 05:52:06PM +0200, Petr Tesařík wrote:
-> On Sun, 7 May 2023 13:20:55 -0400
-> Kent Overstreet <kent.overstreet@linux.dev> wrote:
-> 
-> > On Thu, May 04, 2023 at 11:07:22AM +0200, Michal Hocko wrote:
-> > > No. I am mostly concerned about the _maintenance_ overhead. For the
-> > > bare tracking (without profiling and thus stack traces) only those
-> > > allocations that are directly inlined into the consumer are really
-> > > of any use. That increases the code impact of the tracing because any
-> > > relevant allocation location has to go through the micro surgery. 
-> > > 
-> > > e.g. is it really interesting to know that there is a likely memory
-> > > leak in seq_file proper doing and allocation? No as it is the specific
-> > > implementation using seq_file that is leaking most likely. There are
-> > > other examples like that See?  
-> > 
-> > So this is a rather strange usage of "maintenance overhead" :)
-> > 
-> > But it's something we thought of. If we had to plumb around a _RET_IP_
-> > parameter, or a codetag pointer, it would be a hassle annotating the
-> > correct callsite.
-> > 
-> > Instead, alloc_hooks() wraps a memory allocation function and stashes a
-> > pointer to a codetag in task_struct for use by the core slub/buddy
-> > allocator code.
-> > 
-> > That means that in your example, to move tracking to a given seq_file
-> > function, we just:
-> >  - hook the seq_file function with alloc_hooks
-> 
-> Thank you. That's exactly what I was trying to point out. So you hook
-> seq_buf_alloc(), just to find out it's called from traverse(), which
-> is not very helpful either. So, you hook traverse(), which sounds quite
-> generic. Yes, you're lucky, because it is a static function, and the
-> identifier is not actually used anywhere else (right now), but each
-> time you want to hook something, you must make sure it does not
-> conflict with any other identifier in the kernel...
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Cscope makes quick and easy work of this kind of stuff.
+All kind of calibration data should be described as NVMEM cells of NVMEM
+devices. That is more generic solution than "mediatek,mtd-eeprom" which
+is MTD specific.
+
+Add support for EEPROM NVMEM cells and deprecate existing MTD-based
+property.
+
+Cc: Christian Marangi <ansuelsmth@gmail.com>
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+Ansuel is working on mt76 driver support for NVMEM based EEPROM access:
+https://github.com/openwrt/mt76/pull/765
+
+I took the liberty to propose this binding patch.
+
+One important difference: my binding uses "eeprom" while Ansuel went
+with "precal". I found a lot of "eeprom" references and only one
+"precal". If you think however "precal" fits better please comment.
+---
+ .../bindings/net/wireless/mediatek,mt76.yaml         | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+index 67b63f119f64..0500caa4107c 100644
+--- a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
++++ b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+@@ -71,6 +71,14 @@ properties:
+ 
+   ieee80211-freq-limit: true
+ 
++  nvmem-cells:
++    items:
++      - description: NVMEM cell with EEPROM
++
++  nvmem-cell-names:
++    items:
++      - const: eeprom
++
+   mediatek,eeprom-data:
+     $ref: /schemas/types.yaml#/definitions/uint32-array
+     description:
+@@ -84,6 +92,7 @@ properties:
+           - description: offset containing EEPROM data
+     description:
+       Phandle to a MTD partition + offset containing EEPROM data
++    deprecated: true
+ 
+   big-endian:
+     $ref: /schemas/types.yaml#/definitions/flag
+@@ -258,7 +267,8 @@ examples:
+       interrupt-parent = <&cpuintc>;
+       interrupts = <6>;
+ 
+-      mediatek,mtd-eeprom = <&factory 0x0>;
++      nvmem-cells = <&eeprom>;
++      nvmem-cell-names = "eeprom";
+     };
+ 
+   - |
+-- 
+2.35.3
+
