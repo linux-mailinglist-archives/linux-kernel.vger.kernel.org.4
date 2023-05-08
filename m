@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150C46FA13C
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 924186FA141
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233477AbjEHHmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
+        id S233463AbjEHHnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233424AbjEHHmV (ORCPT
+        with ESMTP id S230113AbjEHHnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:42:21 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476FBA5E9
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:42:19 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f13ef4ad91so4794893e87.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 00:42:19 -0700 (PDT)
+        Mon, 8 May 2023 03:43:12 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47FE19D44
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:43:10 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f13c577e36so4596728e87.1
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 00:43:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683531737; x=1686123737;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1683531789; x=1686123789;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gffsMC5tKiPhlpHpP8KgpHzg+d0NHyCkcFBsaTzuAQk=;
-        b=h08IenH+ZC6UY+utZkFK6hbkNrEySaynLsS0kzHezKew1D9ubuvA3WyAaIip9xgG3V
-         9NgA1Ph2fnzjbMR7ExoYzQ1I/G6r689nJRFQsqXJI4k1wnscu8ZeBbzR9dnhkb/RBuyV
-         vZ/n9oTkage/jBtwAdv/+sWEY3q3nWPJNttd1I86e5gSWirb8A4GbYb6bW33SmqBy+bE
-         XU+PwuONFDkSz/X33cubQF4iluIFBvV9As6Mgu0V6WvXlTh8/7GZGJdz/rnhFiVlsBBS
-         MPm6o82B1hoT9k/vBYAqdAKRYu0A+2ZgLEEEH3XEq662PRgVt+4N/O/uqTWavqNO98oe
-         Tw1w==
+        bh=yjPjUX6thVjPgXrjPxb0/l9T4dtUU8406KHku7EBQZ4=;
+        b=ZeKxaXoi5CHooTpR4LwMv0OIjiPAVGbKuZewfE3aRNaodtDtfO2QlRVHjksX1c37pe
+         RufXVfDsYbhFt2KfxDvO3NXltmU/YnR7CdIynoLYYkwDCI2H+p3W4cm3zTUf6eZuyUB5
+         T+9KadaAl5+xbhhlK8RgLakgaiagsphC5XWAZ+QyazYj/9el8lzFt6oymsoJUgWw2Phd
+         UE+QLS6p0mwJcrtADU4/9f7KGP6n84tNWPYSACwlb0vhD4nrV4eF3wJ8HRgTjFjRlKJF
+         uEmyZ1knxtGD+dwMavu00I7ZNPMAvT0RE5ssVZh7EhD9KCEKU8QvV4P1/fEXVl2f/ZIU
+         bU/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683531737; x=1686123737;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1683531789; x=1686123789;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gffsMC5tKiPhlpHpP8KgpHzg+d0NHyCkcFBsaTzuAQk=;
-        b=lALVHUAgP8GRS7Ey/1iLURhx7rrI7NnSmetjqliGQDBPdeDa/k6suNAZIBbOLDq7RI
-         AjjqnaCyUq5zgoILLWRdM5P339KBFWEUwcXZsiCt5lnERi3xxPnBnpU0dKQoG7Bed8qa
-         jifBlVyfZ6CeNZ7IFK4eUGRtfRGuq+DrWcSCy6i7FG8geISwIDCxsn/hablw07o75/zf
-         aXJ9N66CK1IFTY6GHWSL/roH/D0LwguAJjxHhv9Aj2pH74ckh5duI1CLABR9hCn2PO5M
-         IwJqoHRna7B6ah5olE3K/beEAdiaPobpVzp0HrD0Gy5tebiV0zZlJKnZpi07el0+UjDK
-         sOBw==
-X-Gm-Message-State: AC+VfDz7yEiNPCRQoJ6hxu9xoF5CQBh4WqjiCXH+tpLzfMF5OuwdwjyK
-        CsbnrK0WDGEEBuXWw1GAY7MADg==
-X-Google-Smtp-Source: ACHHUZ63TYuPvAGlamFDwVqcicngnKW3teRc1FlxvNTT7nNCGhrKNee4AHg5RFHuhOMeUCOPmqH/bA==
-X-Received: by 2002:ac2:4357:0:b0:4ec:8e7e:46f1 with SMTP id o23-20020ac24357000000b004ec8e7e46f1mr2358472lfl.66.1683531737490;
-        Mon, 08 May 2023 00:42:17 -0700 (PDT)
+        bh=yjPjUX6thVjPgXrjPxb0/l9T4dtUU8406KHku7EBQZ4=;
+        b=FNmLV/sTwPypgOI2RMOdnbXlY6R5BheHg3bFS2gW6ekxNojTRB2vx+2mBYamTSu6EA
+         Ek9kiQgu6slhE0KbdJTYqlxnIIL9BrJDNJfaZY6qNI9s2ime5yseL64m8yJl8LdZz5tE
+         b6bnaI2tC75CG5fEq6m27dOzedIaSmg6Oi1tg8G8YlPedkbPJOou1/noPxO00faTNJTv
+         ylwhOIVW/HSZCcVOsGE7uOPST7qwaPvghLzIKAH2uq9pd6gDNKLkvWeR62EGV+XVKp4o
+         OrzR10GxooioJgssJyb+Ka2qzP/7FRa087M0p/Pnkj5UzrIuA3Rn+H2kk5SK6EzD50xx
+         oJIg==
+X-Gm-Message-State: AC+VfDwtmg4u+mzjvUT9sdCJT2KCDpRKsiwRMtcbyATUAdCHpV9bIi8T
+        CMfb3ZoNoEQJ+oaYqq12bxy32b6gevSj7WerOOo=
+X-Google-Smtp-Source: ACHHUZ7OaFgjePxKESMjrvWmiIUT6T7Lf3ly+wgSUjhBZGM66sMPyngZrO40+mH0uOgwwHHXIlA0SA==
+X-Received: by 2002:ac2:5289:0:b0:4ee:e10f:8e5d with SMTP id q9-20020ac25289000000b004eee10f8e5dmr2573826lfm.4.1683531788938;
+        Mon, 08 May 2023 00:43:08 -0700 (PDT)
 Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id a17-20020ac25211000000b004f002961a96sm1203912lfl.230.2023.05.08.00.42.16
+        by smtp.gmail.com with ESMTPSA id r7-20020a19ac47000000b004edc9e9eec5sm1207616lfc.138.2023.05.08.00.43.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 00:42:17 -0700 (PDT)
-Message-ID: <39f89f7d-77e2-3f73-940d-1891008279bc@linaro.org>
-Date:   Mon, 8 May 2023 09:42:15 +0200
+        Mon, 08 May 2023 00:43:08 -0700 (PDT)
+Message-ID: <272c9d42-a107-6743-ec40-cf934be12f90@linaro.org>
+Date:   Mon, 8 May 2023 09:43:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH 5/6] soc: qcom: ocmem: Add support for msm8226
+Subject: Re: [PATCH] phy: qcom-snps: correct struct qcom_snps_hsphy kerneldoc
 Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Brian Masney <masneyb@onstation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
- <20230506-msm8226-ocmem-v1-5-3e24e2724f01@z3ntu.xyz>
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230507144818.193039-1-krzysztof.kozlowski@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230506-msm8226-ocmem-v1-5-3e24e2724f01@z3ntu.xyz>
+In-Reply-To: <20230507144818.193039-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,38 +81,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 7.05.2023 11:12, Luca Weiss wrote:
-> The msm8226 SoC also contains OCMEM but with one region only.
+On 7.05.2023 16:48, Krzysztof Kozlowski wrote:
+> Update kerneldoc of struct qcom_snps_hsphy to fix:
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+>   drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c:135: warning: Function parameter or member 'update_seq_cfg' not described in 'qcom_snps_hsphy'
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  drivers/soc/qcom/ocmem.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
-> index 6235065d3bc9..d5892ce999c9 100644
-> --- a/drivers/soc/qcom/ocmem.c
-> +++ b/drivers/soc/qcom/ocmem.c
-> @@ -413,12 +413,18 @@ static int ocmem_dev_remove(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> +static const struct ocmem_config ocmem_8226_config = {
-> +	.num_regions = 1,
-> +	.macro_size = SZ_128K,
-> +};
-> +
->  static const struct ocmem_config ocmem_8974_config = {
->  	.num_regions = 3,
->  	.macro_size = SZ_128K,
->  };
->  
->  static const struct of_device_id ocmem_of_match[] = {
-> +	{ .compatible = "qcom,msm8226-ocmem", .data = &ocmem_8226_config },
->  	{ .compatible = "qcom,msm8974-ocmem", .data = &ocmem_8974_config },
->  	{ }
->  };
-> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c b/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
+> index a59063596214..6c237f3cc66d 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
+> @@ -115,11 +115,11 @@ struct phy_override_seq {
+>   *
+>   * @cfg_ahb_clk: AHB2PHY interface clock
+>   * @ref_clk: phy reference clock
+> - * @iface_clk: phy interface clock
+>   * @phy_reset: phy reset control
+>   * @vregs: regulator supplies bulk data
+>   * @phy_initialized: if PHY has been initialized correctly
+>   * @mode: contains the current mode the PHY is in
+> + * @update_seq_cfg: tuning parameters for phy init
+>   */
+>  struct qcom_snps_hsphy {
+>  	struct phy *phy;
