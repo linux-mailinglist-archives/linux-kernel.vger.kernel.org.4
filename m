@@ -2,69 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB51D6FBAF7
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 00:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F2D6FBAFE
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 00:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234047AbjEHWTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 18:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        id S233856AbjEHWYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 18:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjEHWTD (ORCPT
+        with ESMTP id S233120AbjEHWY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 18:19:03 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A383C3B
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 15:19:01 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-3f396606ab0so29321cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 15:19:01 -0700 (PDT)
+        Mon, 8 May 2023 18:24:28 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151BF5B92;
+        Mon,  8 May 2023 15:24:28 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-38e04d1b2b4so2648340b6e.3;
+        Mon, 08 May 2023 15:24:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683584341; x=1686176341;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jCuWEM+/+k0Hql5FRWsc3HAhfzT+UCFW3skGrNQX8f4=;
-        b=e+mULCFJup7aF/lsiFIA3sBlACIq57LfMbhbMU9KOLEGIRmmaL0VhThoYBUqmsQCoW
-         2bVUheXFY188eVOylaxzgBIEfFbyQU0rHwUJiWM91ufEOl0pjRAGl83+vJAiWyZiXGxn
-         L/gGYuHKkSg5b5lAZ8y609ULUUNBQG5Zr2cDT6Kr2KkHea6CcYEvqknLQsm9WIUIO322
-         SS8EvqP/eFAB0YKKJivFgTUv3w6moh+QRzhUjnZDglyGhOkATvCYkysUT8Oz2kmXwmbx
-         BgnPTtqIHopBMDWHXUTFu6LhHGWrd/kAfHiDFjixobV1bAJkFT829weK9+F1lwmK+g1i
-         ztUw==
+        d=gmail.com; s=20221208; t=1683584667; x=1686176667;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GqRriGRUbsesORv9FIQ/f84+f/Gs1+ORAutqa65QH14=;
+        b=E7+nTuciqBm47StC0rsNq9xDODx9s6mdK4NuOJ/+uuIxD//Be9a4lIbJnR7RQkdbZu
+         aQARlloe4sbIv0WX5Qw0sdIUOvp7mYMF7fkK49LCxW/0Xbs9NaEbFuz1NsceCos/yEmC
+         5sUQAG6pRmJ3vik+/gX6mQyECBzfc5FqVgR1ZAh/97pEfY1RKlVSo0KTxuMjRXiXYrRY
+         YZMxfBycAalaXenJ0YsenBUaiHN8MqcjzJgrOpdRx2DC0RleJm3mpFoz30RBcmShGNF/
+         7LOouncK3XsGdIUy0T9qQLdlCTC6dUOBGMq2q6tGKZxvGKNyYFHPqQnvMvCbBqo10+ny
+         mJlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683584341; x=1686176341;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jCuWEM+/+k0Hql5FRWsc3HAhfzT+UCFW3skGrNQX8f4=;
-        b=Yyhqi2vAVYRzns7dgfWPmzkj5TDTuzPY6MRKtULImK89k7lGa/3eaNC4VRe8njgulj
-         iOEq15zIr2jBUJ3CCub3h7EMJR7A4kYd7aLkgzUO5Sfb1ZFH1vz89wiXQsdUj5VEEHVX
-         xzn59pNG/5VM6vgv/pqi2TMVySv8T6IG6wb1axLYrqDmp9ztWwJGy9Sib5zGtFZaVTfv
-         jg0LXxBb0qArVhC5BB+IG8paUHJfXg+r4X4wS9jbxM6eFe6koLj3q5xhDFX4i+7PaJGN
-         dgqXgb41MFL0q8C+CjWFZ/tjcgJ49aYftFWZMnsTW2M/aMn/pWhnSoXliR31D93dJngt
-         INoQ==
-X-Gm-Message-State: AC+VfDy4dNM7JDhPSlkRO6c0JEO8uQBtWUw748Hl45PRSxqHBJmGtI8i
-        r6VEm9opXyB0pkcs2E3LLShTkLLueu0n45bcxc8p5g==
-X-Google-Smtp-Source: ACHHUZ5JLTSWsJkp9+NFuKURcp3h9dUzP2f50CpOOyBRuG7HynNsWaE935rN7Q3GxhqvUGSg0FKsexIKDI63lyCfVS0=
-X-Received: by 2002:a05:622a:4a:b0:3f3:8d17:ab9 with SMTP id
- y10-20020a05622a004a00b003f38d170ab9mr15885qtw.13.1683584340774; Mon, 08 May
- 2023 15:19:00 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683584667; x=1686176667;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GqRriGRUbsesORv9FIQ/f84+f/Gs1+ORAutqa65QH14=;
+        b=bIAYwHORojWWxqePtuQmaXGkI9hwcjf/OIL1Z5YXv17dLAC0xGLSZ4qsWMXxh7oCo4
+         GijHgmiGfub0YWchpmhJ+kVCL5KeufRc52Vdx/foZtaZhp0QB4Khn+3dbVFt7/oBEERu
+         +zkU9kno+YgnQtuDdTkE7pwBnaMemIsN3mcSrIch9sJlrqPhI7ueQHCyfxZrJnJnKPiu
+         yePu4L+Rsy9w1WeDn6UW5C2kbKZQTruSR2JRTCTewPA2OIcKh86/42RK3LwvXN4JCC7k
+         Y0qzy9WoDgXZg2bRyeymYkmMtsCHPbXkZQ3Jk7XwPXyJlMaojuhiUmP1kRfYxfcOPCC0
+         bEkA==
+X-Gm-Message-State: AC+VfDzMjZrAVafWS8jsXxpH8GzCEe7xr4GDkCPn2vu9iaQASak7IC+x
+        WEyplSa0A2k8D9RXZJy48g==
+X-Google-Smtp-Source: ACHHUZ5npzY/0UAHqyGJlzv2f0Br7mJ1G14p+7z9e/woQK/Nkn7sMQk5hflbkNdfWRrzmwgxxgxcYw==
+X-Received: by 2002:aca:220e:0:b0:384:3f55:ab96 with SMTP id b14-20020aca220e000000b003843f55ab96mr238988oic.25.1683584667276;
+        Mon, 08 May 2023 15:24:27 -0700 (PDT)
+Received: from C02FL77VMD6R ([208.184.112.130])
+        by smtp.gmail.com with ESMTPSA id bm13-20020a0568081a8d00b0038bffe1332dsm472529oib.57.2023.05.08.15.24.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 15:24:26 -0700 (PDT)
+Date:   Mon, 8 May 2023 15:24:22 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Jamal Hadi Salim <jhs@mojatatu.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: Re: [PATCH net 5/6] net/sched: Refactor qdisc_graft() for ingress
+ and clsact Qdiscs
+Message-ID: <ZFl2ltqtVM5o8UpE@C02FL77VMD6R>
+References: <cover.1683326865.git.peilin.ye@bytedance.com>
+ <1cd15c879d51e38f6b189d41553e67a8a1de0250.1683326865.git.peilin.ye@bytedance.com>
+ <CAM0EoM=o862LdMEwmqpCSOFT=dMM8LhxgY3QUvpAow1rHSe7DA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230508093952.27482-1-adrian.hunter@intel.com> <20230508093952.27482-3-adrian.hunter@intel.com>
-In-Reply-To: <20230508093952.27482-3-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 8 May 2023 15:18:49 -0700
-Message-ID: <CAP-5=fU-Ud7=o52VG_oJ6roQNkxTMC-LpiMFDj7CJuqFiEiihQ@mail.gmail.com>
-Subject: Re: [PATCH V2 2/2] perf parse-events: Do not break up AUX event group
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAM0EoM=o862LdMEwmqpCSOFT=dMM8LhxgY3QUvpAow1rHSe7DA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,108 +87,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023 at 2:40=E2=80=AFAM Adrian Hunter <adrian.hunter@intel.c=
-om> wrote:
->
-> Do not assume which events may have a PMU name, allowing the logic to
-> keep an AUX event group together.
->
-> Example:
->
->  Before:
->
->     $ perf record --no-bpf-event -c 10 -e '{intel_pt//,tlb_flush.stlb_any=
-/aux-sample-size=3D8192/pp}:u' -- sleep 0.1
->     WARNING: events were regrouped to match PMUs
->     Cannot add AUX area sampling to a group leader
->
->  After:
->
->     $ perf record --no-bpf-event -c 10 -e '{intel_pt//,tlb_flush.stlb_any=
-/aux-sample-size=3D8192/pp}:u' -- sleep 0.1
->     [ perf record: Woken up 1 times to write data ]
->     [ perf record: Captured and wrote 0.078 MB perf.data ]
->     $ perf script -F-dso,+addr | grep -C5 tlb_flush.stlb_any | head -11
->     sleep 20444 [003]  7939.510243:  1  branches:uH:  7f5350cc82a2 dl_mai=
-n+0x9a2 =3D> 7f5350cb38f0 _dl_add_to_namespace_list+0x0
->     sleep 20444 [003]  7939.510243:  1  branches:uH:  7f5350cb3908 _dl_ad=
-d_to_namespace_list+0x18 =3D> 7f5350cbb080 rtld_mutex_dummy+0x0
->     sleep 20444 [003]  7939.510243:  1  branches:uH:  7f5350cc8350 dl_mai=
-n+0xa50 =3D> 0 [unknown]
->     sleep 20444 [003]  7939.510244:  1  branches:uH:  7f5350cc83ca dl_mai=
-n+0xaca =3D> 7f5350caeb60 _dl_process_pt_gnu_property+0x0
->     sleep 20444 [003]  7939.510245:  1  branches:uH:  7f5350caeb60 _dl_pr=
-ocess_pt_gnu_property+0x0 =3D> 0 [unknown]
->     sleep 20444  7939.510245:       10 tlb_flush.stlb_any/aux-sample-size=
-=3D8192/pp: 0 7f5350caeb60 _dl_process_pt_gnu_property+0x0
->     sleep 20444 [003]  7939.510254:  1  branches:uH:  7f5350cc87fe dl_mai=
-n+0xefe =3D> 7f5350ccd240 strcmp+0x0
->     sleep 20444 [003]  7939.510254:  1  branches:uH:  7f5350cc8862 dl_mai=
-n+0xf62 =3D> 0 [unknown]
->     sleep 20444 [003]  7939.510255:  1  branches:uH:  7f5350cc9cdc dl_mai=
-n+0x23dc =3D> 0 [unknown]
->     sleep 20444 [003]  7939.510257:  1  branches:uH:  7f5350cc89f6 dl_mai=
-n+0x10f6 =3D> 7f5350cb9530 _dl_setup_hash+0x0
->     sleep 20444 [003]  7939.510257:  1  branches:uH:  7f5350cc8a2d dl_mai=
-n+0x112d =3D> 7f5350cb3990 _dl_new_object+0x0
->
-> Suggested-by: Ian Rogers <irogers@google.com>
-> Fixes: 347c2f0a0988 ("perf parse-events: Sort and group parsed events")
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+On Mon, May 08, 2023 at 07:29:26AM -0400, Jamal Hadi Salim wrote:
+> On Fri, May 5, 2023 at 8:15 PM Peilin Ye <yepeilin.cs@gmail.com> wrote:
+> >
+> > Grafting ingress and clsact Qdiscs does not need a for-loop in
+> > qdisc_graft().  Refactor it.  No functional changes intended.
+> 
+> This one i am not so sure;  num_q = 1 implies it will run on the for
+> loop only once. I am not sure it improves readability either. Anyways
+> for the effort you put into it i am tossing a coin and saying:
+> Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
+> Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
 
-Tested-by: Ian Rogers <irogers@google.com>
+Yeah, it doesn't make much difference itself.  I'm just afraid that,
+without [5/6], [6/6] would look like:
 
-Thanks!
-Ian
+		for (i = 0; i < num_q; i++) {
+			if (!ingress) {
+				dev_queue = netdev_get_tx_queue(dev, i);
+				old = dev_graft_qdisc(dev_queue, new);
+			else {
+				old = dev_graft_qdisc(dev_queue, NULL);
+			}
 
-> ---
->  tools/perf/util/evsel.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index e18752fd9245..9fdcde5471df 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -828,11 +828,9 @@ bool evsel__name_is(struct evsel *evsel, const char =
-*name)
->
->  const char *evsel__group_pmu_name(const struct evsel *evsel)
->  {
-> -       struct evsel *leader, *pos;
-> +       struct evsel *leader =3D evsel__leader(evsel);
-> +       struct evsel *pos;
->
-> -       /* If the pmu_name is set use it. pmu_name isn't set for CPU and =
-software events. */
-> -       if (evsel->pmu_name)
-> -               return evsel->pmu_name;
->         /*
->          * Software events may be in a group with other uncore PMU events=
-. Use
->          * the pmu_name of the first non-software event to avoid breaking=
- the
-> @@ -841,7 +839,6 @@ const char *evsel__group_pmu_name(const struct evsel =
-*evsel)
->          * Aux event leaders, like intel_pt, expect a group with events f=
-rom
->          * other PMUs, so substitute the AUX event's PMU in this case.
->          */
-> -       leader  =3D evsel__leader(evsel);
->         if (evsel->core.attr.type =3D=3D PERF_TYPE_SOFTWARE || evsel__is_=
-aux_event(leader)) {
->                 /* Starting with the leader, find the first event with a =
-named PMU. */
->                 for_each_group_evsel(pos, leader) {
-> @@ -850,7 +847,7 @@ const char *evsel__group_pmu_name(const struct evsel =
-*evsel)
->                 }
->         }
->
-> -       return "cpu";
-> +       return evsel->pmu_name ?: "cpu";
->  }
->
->  const char *evsel__metric_id(const struct evsel *evsel)
-> --
-> 2.34.1
->
+			if (new && i > 0)
+				qdisc_refcount_inc(new);
+
+			if (!ingress) {
+				qdisc_put(old);
+			} else {
+                                /* {ingress,clsact}_destroy() "old" before grafting "new" to avoid
+                                 * unprotected concurrent accesses to net_device::miniq_{in,e}gress
+                                 * pointer(s) in mini_qdisc_pair_swap().
+                                 */
+				qdisc_notify(net, skb, n, classid, old, new, extack);
+				qdisc_destroy(old);
+			}
+
+			if (ingress)
+				dev_graft_qdisc(dev_queue, new);
+		}
+
+The "!ingress" path doesn't share a single line with "ingress", which
+looks a bit weird to me.  Personally I'd like to keep [5/6].
+
+Thanks,
+Peilin Ye
+
