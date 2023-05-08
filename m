@@ -2,170 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF866FAFBA
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C59F6FAFBC
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234068AbjEHMO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 08:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
+        id S233223AbjEHMQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 08:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233927AbjEHMOs (ORCPT
+        with ESMTP id S233792AbjEHMQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 08:14:48 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A90394B1
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 05:14:46 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pvzlI-0006qX-3S; Mon, 08 May 2023 14:14:40 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B3F361C00AC;
-        Mon,  8 May 2023 12:14:38 +0000 (UTC)
-Date:   Mon, 8 May 2023 14:14:38 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Thomas.Kopp@microchip.com
-Cc:     mailhol.vincent@wanadoo.fr, linux-can@vger.kernel.org,
-        marex@denx.de, linux-kernel@vger.kernel.org
-Subject: Re: RE: [PATCH] can: length: add definitions for frame lengths in
- bits
-Message-ID: <20230508-paralysis-disarm-fecee3f8a625-mkl@pengutronix.de>
-References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
- <BL3PR11MB64842FA5ECB64DD2C6C9FA76FB719@BL3PR11MB6484.namprd11.prod.outlook.com>
+        Mon, 8 May 2023 08:16:43 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B6E37C4C
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 05:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683548202; x=1715084202;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1TRcGmemRzctXjRrFvBetfH0znJQWjfV8lCXlG5tDDQ=;
+  b=UZyVFuCVZWRCK/cC68QjNf3N19tQswu+mIcQf8r6yoV7vsSxHi5MmYM6
+   ytcLnaLynZsamBW7Hv71hlSL/PIATH8JYpODzY76mOqJvobzIh5MPXHzi
+   0TARZzpWs17i9l+2qB+KdCWpSK9C2Y8HH2DZ9fRm4QHft4HQTZWgSIoj5
+   Xh3C1SdMjoVxyDRm5CDPzP3zakCz0bCjZ1ZFb1G1igEDLmUzy+ROJdX4V
+   9UNKOCo7M0srsq5IgH6qCKZafDua+BZ0l4h+x9Ue6utns0YafNntDL7r+
+   igC7JMVtLENeOB3MGhBxa7ef4ejeJN0bgxV5piQBqpiKR3HVNw8P2wvhM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="349660209"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="349660209"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 05:16:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="788075011"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="788075011"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 May 2023 05:16:40 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pvznC-00Aqvh-1e;
+        Mon, 08 May 2023 15:16:38 +0300
+Date:   Mon, 8 May 2023 15:16:38 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Ricardo Martinez <ricardo.martinez@linux.intel.com>
+Subject: Re: [RFC PATCH 05/13] list.h: Fix parentheses around macro pointer
+ parameter use
+Message-ID: <ZFjoJqbDn/BL1GQT@smile.fi.intel.com>
+References: <20230504200527.1935944-1-mathieu.desnoyers@efficios.com>
+ <20230504200527.1935944-6-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rhe3bfto7rzywosp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BL3PR11MB64842FA5ECB64DD2C6C9FA76FB719@BL3PR11MB6484.namprd11.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230504200527.1935944-6-mathieu.desnoyers@efficios.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 04, 2023 at 04:05:19PM -0400, Mathieu Desnoyers wrote:
+> Add missing parentheses around use of macro argument "pos" in those
+> patterns to ensure operator precedence behaves as expected:
+> 
+> - typeof(*pos)
+> - pos->member
+> - "x = y" is changed for "x = (y)", because "y" can be an expression
+>   containing a comma if it is the result of the expansion of a macro such
+>   as #define eval(...) __VA_ARGS__, which would cause unexpected operator
+>   precedence. This use-case is far-fetched, but we have to choose one
+>   way or the other (with or without parentheses) for consistency,
+> - x && y is changed for (x) && (y).
+> 
+> Remove useless parentheses around use of macro parameter (head) in the
+> following pattern:
+> 
+> - list_is_head(pos, (head))
+> 
+> Because comma is the lowest priority operator already, so the extra pair
+> of parentheses is redundant.
 
---rhe3bfto7rzywosp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+But strictly speaking it might be something like
 
-On 08.05.2023 08:54:18, Thomas.Kopp@microchip.com wrote:
-> I was working on the same thing on Friday but didn't get around to
-> sending it off, so here are a couple thoughts I had when working on
-> the defines in length.h
->=20
-> The definitions for IFS in here are called intermission in the
-> standard
+	list_...(..., (a, b))
 
-ACK, and IMF seems to be a common abbreviation.
+where (a, b) is the head. No?
 
-> and I'd argue they shouldn't be part of the frame at all.
+> This corrects the following usage pattern where operator precedence is
+> unexpected:
+> 
+>   LIST_HEAD(testlist);
+> 
+>   struct test {
+>           struct list_head node;
+>           int a;
+>   };
+> 
+>   // pos->member issue
+>   void f(void)
+>   {
+>           struct test *t1;
+>           struct test **t2 = &t1;
+> 
+>           list_for_each_entry((*t2), &testlist, node) {   /* works */
+>                   //...
+>           }
+>           list_for_each_entry(*t2, &testlist, node) {     /* broken */
+>                   //...
 
-The diagram in https://www.can-cia.org/can-knowledge/can/can-fd/
-suggests that IMF is part of the frame.
+Me still in doubt. But it's up to maintainers.
 
-> To
-> quote the ISO: "DFs and RFs shall be separated from preceding frames,
-> whatever frame type they are (DF, RF, EF, OF), by a time period called
-> inter-frame space."
->=20
-> So, my suggestion would be to pull out the 3 bit IFS definition that's
-> currently in and introduce 11 bit Bus idle and if necessary 3 bit
-> Intermission separately.
->=20
-> index 6995092b774ec..62e92c1553376 100644
-> --- a/include/linux/can/length.h
-> +++ b/include/linux/can/length.h
-> @@ -6,6 +6,26 @@
->  #ifndef _CAN_LENGTH_H
->  #define _CAN_LENGTH_H
->=20
-> +/*
-> + * First part of the Inter Frame Space
-> + */
-> +#define CAN_INTERMISSION_BITS 3
-> +
-> +/*
-> + * Number of consecutive recessive bits on the bus for integration etc.
-> + */
-> +#define CAN_IDLE_CONDITION_BITS 11
-> +
->=20
-> The field currently called Stuff bit count (SBC) is also not correct
-> I'd say. I'm not sure about the history but given that this is
-> dependent on the DLC I think what's meant is the number of Fixed Stuff
-> bits (FSB) . The ISO does not define a term for the Stuff bit Count
-> but the CiA did define/document it this way. What's meant though is
-> not the number of fixed stuff bits (FSB) which the comment implies
-> here but the modulo 8 3 bit gray-code followed by the parity bit. So
-> for the FD frame definitions I'd propose something like this: Renaming
-> the current SBC to FSB and adding the SBC.
+>           }
+>   }
+> 
+>   // typeof(*pos) issue
+>   void f2(void)
+>   {
+>           struct test *t1 = NULL, *t2;
+> 
+>           t2 = list_prepare_entry((0 + t1), &testlist, node);     /* works */
+>           t2 = list_prepare_entry(0 + t1, &testlist, node);       /* broken */
+>   }
+> 
+> Note that the macros in which "pos" is also used as an lvalue probably
+> don't suffer from the lack of parentheses around "pos" in typeof(*pos),
+> but add those nevertheless to keep everything consistent.
 
-> /*
->   * Size of a CAN-FD Standard Frame
-> @@ -69,17 +87,17 @@
->   * Error Status Indicator (ESI)                1
->   * Data length code (DLC)              4
->   * Data field                          0...512
-> - * Stuff Bit Count (SBC)               0...16: 4 20...64:5
-> + * Stuff Bit Count (SBC)               4
+-- 
+With Best Regards,
+Andy Shevchenko
 
-ACK
 
->   * CRC                                 0...16: 17 20...64:21
->   * CRC delimiter (CD)                  1
-> + * Fixed Stuff bits (FSB)              0...16: 6 20...64:7
-
-As far as I understand
-https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=3D&arnumber=3D8338047 the FSB
-is 5 or 6.
-
->   * ACK slot (AS)                       1
->   * ACK delimiter (AD)                  1
->   * End-of-frame (EOF)                  7
-> - * Inter frame spacing                 3
->   *
-> - * assuming CRC21, rounded up and ignoring bitstuffing
-> + * assuming CRC21, rounded up and ignoring dynamic bitstuffing
->   */
->=20
-> Best Regards,
-> Thomas
->=20
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---rhe3bfto7rzywosp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRY56sACgkQvlAcSiqK
-BOjP1AgAo2VKxVkGab/BWPGjlHnmenWeZkqYikbOl54hoC8Mtv4VmnAJpOxprZ4I
-jgrEuAnxA/8qDZwsB4lRN4Axd2KZPQPg9AeA/gg+qMyoLUtMwXIB/Rb92RJ+uTW1
-BJ++Jv8A930dF9gg42OGRXlkv8BaP8VowazsbVDTaieq8KcfFhjSe99clL722PAT
-8Yi2Rt8X+sJ8++FUrKa2XasT7/KrWVTYl62lvavyrCgf03bsUpIwsEOtCwuw7w8p
-krR5wkU7jYZVZbzBcORib/m32YlOcJ7fOOWs4vpYjyqHd3AoFal88N5mLgoc54OX
-Y7O/MEYDKQ5jKyRRo+BxEN7wiB0cSQ==
-=l4SA
------END PGP SIGNATURE-----
-
---rhe3bfto7rzywosp--
