@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2A66FA2DB
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297F16FA2DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233627AbjEHJBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 05:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
+        id S233518AbjEHJB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 05:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233610AbjEHJBA (ORCPT
+        with ESMTP id S233613AbjEHJBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 8 May 2023 05:01:00 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06D921573
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 02:00:38 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-965d73eb65fso601613566b.2
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 02:00:38 -0700 (PDT)
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574902269D
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 02:00:39 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so46614124a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 02:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683536416; x=1686128416;
+        d=linaro.org; s=google; t=1683536417; x=1686128417;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RVKixy+mgDLymkCUNyZjB//d9yzyxwzawgrosR9PBRU=;
-        b=lWS2c7uXSXl2jeOTACiY97CPYtg4swtpNnqoiWrtWghpnwX9EXCIc/qmCW6x1EEffz
-         7qzckFgGXBqEYnf/FBuuZFVXSG+btN6jJmI7K48kJTg89I01yg6EXdqZ7tWNH7XLjGzq
-         wouGLwN7vc3uBpPGy5lDrQPAmPUWisFfkOvg2t0ghby0vL/Fjr0koWvDexZZhhO+4WHK
-         nCFq2hwYuJnNqQuV/i5TliCNmXCJQOwSDg9dsIMycG437llnA42FQawZbbG1JxGpytyg
-         qC8k0pOE6DTlXG+ZBFEDc60tZm2IEBVRYHwpoC6u/sRiAGCQGthKlhwMqZm1b1KGYA9p
-         XWHQ==
+        bh=iF+PxD13TGSqnU6lSyQS7ji225exjvT3ubojGrSPdPE=;
+        b=CMcjmwi2x/o72L+x7uFsvDgzbCFatcpOt2G8s5R2Wc8OKr0n9z++wvw44KWbqYP6eY
+         UsFiqrmPJCUA7bOcgoXE0lN0OrgOYq+0ozuvrYuf7peCQCK5Gy53rGcYUtbF1wC53ecZ
+         xvNMUR97OdnDdKRPx4Bo1HnqV5PPOadfvPcyayEfv7I84nmC4iyD35ps1pObIkm0i6mk
+         viIrRlIzqpjoRIWp34TKczd+39P9HNk493zHUHKDGE93euAHiig8CBsSQtw1ezRJCt45
+         gr+JEOAqAGdXVTtmk86xGWacviyLTv2+P7PenfC8mdjLp1yRwKMPNuOSYVJUo/ZRK/L/
+         /A6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683536416; x=1686128416;
+        d=1e100.net; s=20221208; t=1683536417; x=1686128417;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RVKixy+mgDLymkCUNyZjB//d9yzyxwzawgrosR9PBRU=;
-        b=VjdaZMlw0VUaJAxyF+FlhZX4N3QAD5b3Z+m7rgEIfdkS0ba22dvzFXTcs04FOpY/vl
-         cz2x9xuKm5jFDlwyCu5cOfJUxL2V40fXM2Z6ZxTQuZlj8yq273ql7oz8ywhC0j/mr4hw
-         +gfBi0xfK+5WA4dPVSk1mx9oYg+hxvZD1BOr0kGMZID32At+Syd4qhDD8ZUtqSpf5P9r
-         eWkOhmVq4UmGle8NSTnH1LJT2AbtFCB6Xxa0Nw2tNonFE7KaCoBwRZdp5mETm5XYRFkF
-         UVqNR8p7Vv2W9d0O3naJEuMBLrPSstMIPqs6OFda0928bLy4LX/+Ye98dlWYa+haGP5f
-         XsxA==
-X-Gm-Message-State: AC+VfDyICDip5XvJK5F0baCrdPJXWcXfMoH9B/PgwRqNgx7R4zMuLjZk
-        TW6cuLCNGUrofsXPJ9TucgZOM7o9s5rumPvy5uh2ug==
-X-Google-Smtp-Source: ACHHUZ6nl3MEQTpJDsOGpnOt2HKOOJkO76RFSFnqeUIRS8OQo0eJHODUCMf5WU9TJRCZ/ImLiOJjTA==
-X-Received: by 2002:a17:907:843:b0:94f:5847:8ac with SMTP id ww3-20020a170907084300b0094f584708acmr7246589ejb.51.1683536416440;
-        Mon, 08 May 2023 02:00:16 -0700 (PDT)
+        bh=iF+PxD13TGSqnU6lSyQS7ji225exjvT3ubojGrSPdPE=;
+        b=lGM7Z5/10KnAnPre14g5irM0I4Xp9C/ePzp6U120DGX0ZX/qvCWcREHgzxh7GoDg3X
+         PLss7p2HyDymXvnX3PWPb3mgzdkIdt/9h0Hhu8hofjrSIHxtdH/fiayQ6mTg8Mckurji
+         pgf1RixaZZrb7jTJ1SWUu52evaZN8Db8iNMFRAltVj+shdvYO7VYO9dse4V3sYl/1Hhd
+         r6uUf75HCLUyd1ZUwAZZ8EGzrN/CIL1OGz4T0bHyRdrkBfOBr4duGO4wbb/BUVSKrZ+P
+         QOAnEZKst36bwh2jzXOudwsTyFsq+STMNt4RMF09dsW67DbLKzRucqEtJTvgVeOgV86C
+         nowQ==
+X-Gm-Message-State: AC+VfDyBsF0DdSgMQljDBB+ekIbk/HHf3rcAnMpurWCpLJS9jdjg0JZC
+        uDzo9xjinzH8LonDYYBOBjztGQyzz0Dn6g9+MT4Gmw==
+X-Google-Smtp-Source: ACHHUZ7ME19G+aaJMBypZm89uEqraVT8Ky1L19j9mIeAOxM98vo/ScfzpTP8TbiQRgQCV7qO4faRew==
+X-Received: by 2002:a17:907:a429:b0:94a:8e19:6aba with SMTP id sg41-20020a170907a42900b0094a8e196abamr7454835ejc.21.1683536417560;
+        Mon, 08 May 2023 02:00:17 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
-        by smtp.gmail.com with ESMTPSA id jz4-20020a170906bb0400b0094bb4c75695sm4718953ejb.194.2023.05.08.02.00.15
+        by smtp.gmail.com with ESMTPSA id jz4-20020a170906bb0400b0094bb4c75695sm4718953ejb.194.2023.05.08.02.00.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 02:00:15 -0700 (PDT)
+        Mon, 08 May 2023 02:00:17 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     zbr@ioremap.net, zuoqilin1@163.com
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Evgeniy Polyakov <zbr@ioremap.net>
-Subject: Re: [PATCH] w1: move from strlcpy with unused retval to strscpy
-Date:   Mon,  8 May 2023 10:59:48 +0200
-Message-Id: <168353638584.78189.15996286121575985073.b4-ty@linaro.org>
+        linux-kernel@vger.kernel.org, zuoqilin <zuoqilin@yulong.com>
+Subject: Re: [PATCH] wl: Simplify the steps
+Date:   Mon,  8 May 2023 10:59:49 +0200
+Message-Id: <168353638585.78189.7110378892615296338.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220818210121.7589-1-wsa+renesas@sang-engineering.com>
-References: <20220818210121.7589-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20210618092418.1424-1-zuoqilin1@163.com>
+References: <20210618092418.1424-1-zuoqilin1@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -75,17 +74,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 18 Aug 2022 23:01:21 +0200, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
+On Fri, 18 Jun 2021 17:24:18 +0800, zuoqilin1@163.com wrote:
+> There is no necessary to define variable assignment, return directly.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] w1: move from strlcpy with unused retval to strscpy
-      https://git.kernel.org/krzk/linux-w1/c/5dfd3c73ff81618fee0ef682b6fd7779863f41e4
+[1/1] wl: Simplify the steps
+      https://git.kernel.org/krzk/linux-w1/c/a8c4dda94115c4079d3aaa35ba238f2376b6aa53
 
 Best regards,
 -- 
