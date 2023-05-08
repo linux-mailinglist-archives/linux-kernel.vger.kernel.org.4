@@ -2,117 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FF86FB2FE
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5C86FB301
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234034AbjEHOdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 10:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40966 "EHLO
+        id S234406AbjEHOdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 10:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjEHOdA (ORCPT
+        with ESMTP id S234326AbjEHOdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 10:33:00 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2070a.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::70a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1E5198E;
-        Mon,  8 May 2023 07:32:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JOPnvtcWRS00h2H1ELQximqgO0pZdIvZXY6u1deEUuC//PltgduwnDCGdKZZArok2EVEDmfyLhb7b5YqaCLYBN0GUitpjBKi/PWuQASYSjQ31i1jKwxrFNO60orrSlp6BUpIhnUd9HZGvRhVeRIEr7hypPXGtlAvnLlk8OXZEUs0aS+cNIJpRUUlmtW0fCKlOpMQZtczLbHt7KCPutJ7PzJtLDrNWGkEQ7LzuJygSlhx3d6pS9qeHzNyt0suI+AjsZMMUkThrFeq66m/e8lImKVbRNNhL94l+rtbyExYq0R5kkDbY8t7iZUEraMZA10e80ksSL1a15BBEPwMXnUktQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QWHFB7hQg4+3+Z/Kov4mvbp9ZaOMHz+OyvOUtUL64qU=;
- b=O6wj9HG0SuckzQ6nfabxIDbVQPSBah283PxlOayQ2YTpeuIDbvSlK9dDvidWpVhR6wXXe88LKyEqSjzygdbEKSTWnQ/5F+juT3tN1xGN5xrM8DjTyy6bamk8VcSnopf4liQbknCTURS7fAmDAbQTNBL4Io6qOyx1xLO/sIUqzFp/0+OOorf3JErUhSX4K2qLJrXAVb96Yz6DhSodLdNM/49gJVIvCVf6taovKT/DsFMM9UEkxOxOfjIEenb+z7n0LQzTSsAJP2BgsDXo7p25eKald2Sl+PdfDMWVGEjbOOXU2/rJv2UQ7qD/8IeHFHdEtT6N6vf7eS0CEU07Q6m74A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Mon, 8 May 2023 10:33:12 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC96106
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 07:32:43 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50c8d87c775so5509121a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 07:32:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QWHFB7hQg4+3+Z/Kov4mvbp9ZaOMHz+OyvOUtUL64qU=;
- b=UZ1kFLh6N/UUZaysCnvKi1HOrNlAY8XLjlJMKi3hV0cwb3kaxDDHzEDpBUlelrlm8CMmqqLEgYJWsh7t0gKlJdrWpFX3MaWjDKcW0Or7ZAIBEvz8gsP3Z4pEu2agITrfDlavuFsttW5cx4FZn1nqfMr56cmxrEGe4vW0JzFkiOQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BY3PR13MB4913.namprd13.prod.outlook.com (2603:10b6:a03:364::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
- 2023 14:31:29 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6363.032; Mon, 8 May 2023
- 14:31:29 +0000
-Date:   Mon, 8 May 2023 16:31:22 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, edumazet@google.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        alexanderduyck@fb.com, jbrouer@redhat.com,
-        ilias.apalodimas@linaro.org
-Subject: Re: [PATCH RFC 2/2] net: remove __skb_frag_set_page()
-Message-ID: <ZFkHulUs7d1xWKSa@corigine.com>
-References: <20230508123922.39284-1-linyunsheng@huawei.com>
- <20230508123922.39284-3-linyunsheng@huawei.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508123922.39284-3-linyunsheng@huawei.com>
-X-ClientProxiedBy: AS4PR10CA0014.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:5dc::18) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google; t=1683556334; x=1686148334;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rEv+z5GVdo2fQSYihfhkSqRDiOLayeUJlpv8lAfiwYM=;
+        b=Kaf9fWxY6VO630xBlmIB0J1+uTcjZtM4DCx4GNCDMfcSuetv/mBM/pBJGw9ncMz1M5
+         qY/P7/UpMLSzessGqJTNY4ZWuU7Ot/3GgKzhH6AT2J8eSXNT7kGbIcG1Y2UB9usLWrzx
+         f8985Zy4yMLH0qHxkFvcyND/1cwi3X2eSx43vth7pRpTN26ZWKPD05HuMUWtdf3X0agA
+         d2NCAsnxqp+U6TZ1Pd5wJqWAzaTGbJwYaAZp/nuU81G/V+e3ZjT3HBtGTuQLPwqc0wJ5
+         /0hkl1Bw/QpGEVrunLyA0PNH/h95r6HN1dTUzHUOopZb2eEBIGAP/NizByct99GIYkAd
+         GvWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683556334; x=1686148334;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rEv+z5GVdo2fQSYihfhkSqRDiOLayeUJlpv8lAfiwYM=;
+        b=K3BQv5CAjulE+G7/G+j1uKcnI4CvQihRjAfaeFE/kmFsocQTbwWA7hdP5+rHbzthhG
+         Qrd2bkghWjyrBfbqmKq+gpDSKhL9BoxO6pxmn3kVN5g4TyyusvkEZkl4hPEWkBaw5So1
+         4VnbOUaiVwIcTdJlFPn++u/+8HJPIDZrHkTo3wV0VhVvb1AN+YBNyHybXLBuSpHSYZtS
+         HY0thjLXh1cbp1BK+jCJ8yv/vll/xus76CGkp7NNekCdepNCQLuZxTPqO4fUWE7NHEoz
+         4WUVDoUQEMuLxqtf4N38WsV1FQ/X9p02+uAGS4juhwDMUvlyQeb96rxAhDaRfkEeOxJ/
+         nmTw==
+X-Gm-Message-State: AC+VfDxavDTgKdrM4DwulWlGSK1dZQ3bX2vENoeqmTxpnnwajQsSTI+u
+        OaQsUu/X39e40freBU2necsPJA==
+X-Google-Smtp-Source: ACHHUZ77Q52W7qX/Tx9LySY6H2jF/m5IuGtO1D9kQCz/B/KU3e37fc6N+T2OpiLHlJ8HaPUpTRAWmg==
+X-Received: by 2002:aa7:d659:0:b0:508:14f2:399c with SMTP id v25-20020aa7d659000000b0050814f2399cmr9763316edr.10.1683556333872;
+        Mon, 08 May 2023 07:32:13 -0700 (PDT)
+Received: from krzk-bin ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
+        by smtp.gmail.com with ESMTPSA id j14-20020a50ed0e000000b0050bc4600d38sm6129103eds.79.2023.05.08.07.32.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 07:32:04 -0700 (PDT)
+Date:   Mon, 8 May 2023 16:31:59 +0200
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+Cc:     robh+dt@kernel.org, sre@kernel.org, broonie@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Nurettin Bolucu <Nurettin.Bolucu@analog.com>, lee@kernel.org,
+        linux-pm@vger.kernel.org, lgirdwood@gmail.com
+Subject: Re: [PATCH v3 6/7] dt-bindings: mfd: max77658: Add ADI MAX77658
+Message-ID: <20230508143159.xr3zrlsgtilxd7ha@krzk-bin>
+References: <20230508131045.9399-1-Zeynep.Arslanbenzer@analog.com>
+ <20230508131045.9399-7-Zeynep.Arslanbenzer@analog.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY3PR13MB4913:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9731ce74-4abe-44d5-f641-08db4fd0e9a0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5dNvbxKWS9XzMLeoQtaatZgxcWBBz0PUQmxiJb5DU6EhqHZYM/maOgqjTbW1wWVVQCn7N2FpD3XUVNS01jpdjX3ZCRfMFB1GCr+Th+UbTe2B3sc0d3JgLpFpmCFklegFCmxtbazSb9gRkgpFZU31nxG3h9XixQuTCo8Mz5vgJMq9dTQUg2Z9BnFoougkMrjdt5/dHqIT766496PQMXBoc3BbyMpmfupZFfC7n/rfy7FnpmBBC+lPMwutxg6HSHMQMDF82PxrJ5LaQUJG8T0pVNYwhE3Vc3+2W4B4jOBK5hwYTsIjXWjFHOmy2whe7MWrcvLfnobwONoBx6lBl1NtV7F7JcwYz47SUYhl83P2Xi0oE8/ybKWgdZVmRcEdLipIAuqfWXNZD9EXMSbPxSrMmxosTjtETuTl0c2/VgbQ8b99vs82/snW3GrGNCi1RgbeJ2Gx+7NEY8Tppqu0t1MxYwxfXIvitcq4tFNmGAjt9Sh82tZIhhYz5g9sSF0FoQeaGRa6TS3VWZcI9MCF7VjrVH2eqpOkyN8bVeDkD/Upgk2AAizzhxc1GlFyQ/7KBkn/Q097geVLTF1AL/JE8wAkq4d7RHSojIHeGfJ5reJM07w=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39840400004)(376002)(396003)(346002)(366004)(451199021)(2616005)(186003)(36756003)(38100700002)(86362001)(2906002)(6486002)(8936002)(8676002)(316002)(6666004)(41300700001)(4744005)(7416002)(5660300002)(66946007)(6916009)(66556008)(4326008)(66476007)(478600001)(44832011)(6506007)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cN84bJh2d6pjo0zorxwYHiIln/mvP1cDBKvJYx3LiRZBb2LQFvS6Sb4Mc6ha?=
- =?us-ascii?Q?vGMVsIiRmKzBcrt8yZIjX18ZdrWyLoIXExonKUj4/k4IdkJdCNe447+wL8b5?=
- =?us-ascii?Q?ahXgms2O0O12VPiGtrGlxnnoJ5KfxhnwOHqOjwBgbIvlFPTHiXMutDAPi8YX?=
- =?us-ascii?Q?Pub8/S1Urv2UTYiDgUL00tGIINYWWMn7HotskbgaqFJUvJMkXflsFaskbUs2?=
- =?us-ascii?Q?+5Z4zQHoqIij9U9qn0jwjnzIzv+0ioLxQRTp5mZfDpKSMpTjNSUNbEE6Aa/q?=
- =?us-ascii?Q?I3RR58AjwQKz+mb8KjK1pBPcpsz7+VTjYKAv3wVD6B+UHLVd/9bYQ2AwnGQd?=
- =?us-ascii?Q?wdAjbSL6NO9wTjvPGPmA7QOmEMG/DWRvuEBJGfJcMpGU972nbJtwrZ9+aMHt?=
- =?us-ascii?Q?M5mAeVmc+5Dc7/Syx1ZIE1NUUS/skhEJAUUhJofS1KUrC4/SQMJ0T9tbC6tN?=
- =?us-ascii?Q?YfWihH40Q7asygFRlRMJPtjuMcpwbP0+2WVZILJeg61DToT9zLGs9S3cmK+2?=
- =?us-ascii?Q?B7i+d0qkWE3uL7Wki5pfpJrxxVNMCcr7icPdVvMpon3QSXb3PAbUzdmnu15E?=
- =?us-ascii?Q?o5njwCeA2P/yMg9qxxEj4xik4GlgXSaSsOK0YjyG8D3hCjB1lDMYia7kVChg?=
- =?us-ascii?Q?kl+VcngiXTZunIU2eBAA2/JjlT0UC7XkmwgC2O1z8Ou+CbbLFE6PSz2hQraC?=
- =?us-ascii?Q?qGouR+rDsi5plrNZhLN861PdMsP0jYdNrEqUAzlxhE36sOToQFiAeKGATnAB?=
- =?us-ascii?Q?fevHO3bqjE3saHpYqXNrANdn7wQLJnzpOAeU8PFt94ApXGjfFcdkzbiTQxrR?=
- =?us-ascii?Q?XOPmoUlTeJD1fwzi+fpS5WIDUJ7kaXuAVgBZ1RB1+O/S+qFKwi4qPMz3GpU6?=
- =?us-ascii?Q?ab6vA/LYAx3JjgHTjNLXLs4AntbbjGSXyn5iAtxELhpQgCmOAruhmQGVYRHZ?=
- =?us-ascii?Q?qP4ZuGBeV0eBT71zotsyaBgY/Krm8nvLc0s9IFd16Vr8ogBmO49J2pnwlpIH?=
- =?us-ascii?Q?Vz873wyoLbMAbYqKJnk+cbG9nfHwVn/nvxGRhI4L750q3o+0vBtUwgDceaPt?=
- =?us-ascii?Q?/KdA7uHiuOreiVAYb/RAMMiylSAjX52Ktm5M2ZmbJEXJXYtSDe70JE3tIeKz?=
- =?us-ascii?Q?UnxvNtWB8UKjRw3BFL+arxq0Fej8lT0UyuuJRwihQm9mdag5C82Iq/ZJidUE?=
- =?us-ascii?Q?9U/QMOCJXW06ByoK9WdjYYEfn24zhgE187lcH5ce7xQv9cVg2CqW9UUbhnmH?=
- =?us-ascii?Q?1qFOGd0tpM6Yj7Eq7Crm6qTXzbMTstKE5Ub2hVtIEIgYI20+NK075z6iLRSf?=
- =?us-ascii?Q?ux3bIATB+1NInBgGd1GZqEB7abQdmqfeyLcLuaGFmYXHu47Z+3mYZDObuk8/?=
- =?us-ascii?Q?2Mzs1FatRNSYF5UIoxnxXpZklLGEN+i3j3jWPS1fKlQtGUF1ZLM7egYWknwb?=
- =?us-ascii?Q?Oy9Pgvril1LAQOAXwp9HG/3QH2LisP7PKgcZwbreiHkNUOA8sAJ2vf40cr4K?=
- =?us-ascii?Q?J7gjpcti57++EJgcmXwfTf8Khtnhgh8PLeqAT6dR43XTFNg3xawHsPhTTWfZ?=
- =?us-ascii?Q?TNFidIuQqtCldx2Mdoqf7PgkJ/ZmyvGxhZckJean4Fj81Z2LDvYfA7kbHqXb?=
- =?us-ascii?Q?Fj7UDQXbqY6n6IPfqcksqcGghpacO97ACz+saMfiTZKcPY7akUDAaokSl9s6?=
- =?us-ascii?Q?Ryvtxg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9731ce74-4abe-44d5-f641-08db4fd0e9a0
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 14:31:29.6325
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: u6hSWBRqOay5n8SVgV3DO8Jpj+AO+w/kQ2MhQ0MC5eFU8Many1hPg/r4wpMpQTXka5VdQx+3HXd4ZAJ+v+eaNix/d8aRuy1JBKZ02wKUGvE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR13MB4913
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230508131045.9399-7-Zeynep.Arslanbenzer@analog.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,31 +75,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 08:39:22PM +0800, Yunsheng Lin wrote:
-> The remaining users calling __skb_frag_set_page() with
-> page being NULL seems to doing defensive programming, as
-> shinfo->nr_frags is already decremented, so remove them.
+On Mon, 08 May 2023 16:10:44 +0300, Zeynep Arslanbenzer wrote:
+> Add ADI MAX77658 devicetree document.
 > 
-> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> ---
+>  .../devicetree/bindings/mfd/adi,max77658.yaml | 160 ++++++++++++++++++
+>  1 file changed, 160 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77658.yaml
+> 
 
-...
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> index efaff5018af8..f3f08660ec30 100644
-> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> @@ -1105,7 +1105,6 @@ static u32 __bnxt_rx_agg_pages(struct bnxt *bp,
->  			unsigned int nr_frags;
->  
->  			nr_frags = --shinfo->nr_frags;
+yamllint warnings/errors:
 
-Hi Yunsheng,
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/mfd/adi,max77658.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/power/supply/adi,max77658-charger.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77658.example.dtb: pmic@48: charger: False schema does not allow {'compatible': ['adi,max77658-charger'], 'monitored-battery': [[2]], 'adi,input-current-limit-microamp': [[475000]]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77658.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77658.example.dtb: pmic@48: fuel-gauge: False schema does not allow {'compatible': ['adi,max77658-battery'], 'monitored-battery': [[2]], 'adi,valrt-min-microvolt': [[0]], 'adi,valrt-max-microvolt': [[5100000]], 'adi,ialrt-min-microamp': [[4294962296]], 'adi,ialrt-max-microamp': [[5000]]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77658.yaml
+Documentation/devicetree/bindings/mfd/adi,max77658.example.dtb: /example-0/i2c/pmic@48/charger: failed to match any schema with compatible: ['adi,max77658-charger']
+Documentation/devicetree/bindings/mfd/adi,max77658.example.dtb: /example-0/i2c/pmic@48/fuel-gauge: failed to match any schema with compatible: ['adi,max77658-battery']
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77658.example.dtb: pmic@40: charger: False schema does not allow {'compatible': ['adi,max77659-charger'], 'monitored-battery': [[2]]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77658.yaml
+Documentation/devicetree/bindings/mfd/adi,max77658.example.dtb: /example-1/i2c/pmic@40/charger: failed to match any schema with compatible: ['adi,max77659-charger']
 
-nr_frags is now  unused, other than being set on the line above.
-Probably this local variable can be removed.
+See https://patchwork.ozlabs.org/patch/1778414
 
-> -			__skb_frag_set_page(&shinfo->frags[nr_frags], NULL);
->  			cons_rx_buf->page = page;
->  
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-...
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
