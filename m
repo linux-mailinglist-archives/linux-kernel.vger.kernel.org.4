@@ -2,236 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D76A56FB409
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C800B6FB3FE
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234607AbjEHPn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 11:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
+        id S234551AbjEHPmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 11:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234439AbjEHPnT (ORCPT
+        with ESMTP id S233708AbjEHPmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 11:43:19 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 970529006;
-        Mon,  8 May 2023 08:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=weABc
-        fwPfTFz49Ysejg6Ozz6T7XVNrerGmHs9xcKMbw=; b=Gkca7KTTOR5QTQ4SVGopI
-        3Ovv8wusCTQO6CzWWyY9CSOzDvbAXGpZs+tz2+0u7PoAMciyS16uP439Vfm4r7lU
-        DG44Ww5zTpepdOVw4UjhW8/IU+mGQHO41zASLb3YUILnnJI0Zvm85gFP0vt3q0c7
-        zJ4mpls25HtHRgb1U6h14Y=
-Received: from lizhe.. (unknown [120.245.132.9])
-        by zwqz-smtp-mta-g3-0 (Coremail) with SMTP id _____wBXLFX9F1lkWLGdAw--.17901S4;
-        Mon, 08 May 2023 23:41:16 +0800 (CST)
-From:   Lizhe <sensor1010@163.com>
-To:     marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
-        linus.walleij@linaro.org, neil.armstrong@linaro.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        daniel@zonque.org, haojian.zhuang@gmail.com, robert.jarzmik@free.fr
-Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-oxnas@groups.io, linux-stm32@st-md-mailman.stormreply.com,
-        Lizhe <sensor1010@163.com>
-Subject: [PATCH] dirvers/pinctrl.c : using pinctrl_dev->dev to obtain struct device * dev
-Date:   Mon,  8 May 2023 23:40:43 +0800
-Message-Id: <20230508154043.11859-1-sensor1010@163.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 8 May 2023 11:42:39 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C6B8A48
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 08:42:37 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f24cfb8539so1691817e87.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 08:42:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683560556; x=1686152556;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/k9mXeLq47jt42cr5C/5Uc1LW2DaBuDnesO/cJRWcvM=;
+        b=BscybJtUZ9QX8GUfeknwxReMN3x3VDKuIe/SS+YwPMjM3NybAL9ZEQcoIqPzOxXOqE
+         g4o4ab0OL53G10jRFbs4Vx9qtxWzO9Y7zbiBHPiYF7ytGSiBZjx8ulgnbHG+1PoOQkjz
+         J8+P5m75lab04gxJNZVrZan/tD3wiTK/b+KoIY2vj9UghDI1t1zG1Mr3Wfi9puU/zobv
+         0epJpsm1yVJK4WuV19r/aKSEjgQFazC/zuCkO3qdLuGURnKnrufo/T5OZCVVHONAyJZa
+         RZxfvicXJ/UubdefaCFT4RcdtLmeRV1/LPSB7/YnsIsYDvpgb+xE618mSwZhsk2QBV2H
+         NHOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683560556; x=1686152556;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/k9mXeLq47jt42cr5C/5Uc1LW2DaBuDnesO/cJRWcvM=;
+        b=kOnwEcCO+8f/CogMKYCU81a1KKSGXaw3MNIEYhDsLSVgi0Q1KIvkI9fnaAjLhmbPM6
+         PRw5XTyFCm6NdF/1h9S4AbrJoPK5WjT/ZqdAdI83W6bPkkdvZIrMEjK6yctofGKW/o2+
+         iYUwPppiuzrdfcSVFnMiEHX/G/oAeF5RqKP3cioLatg1wtrS+EkMJ1xVLW/ZsZfCU4zQ
+         9uIlMFc/W3aKoNwPWCwU29qdkIOkarr8kYnJuIL1TjBBfIKYRcdi6Xy9BIHhodoLTPWp
+         51g+0KovggUeFbYAbfmz/FjDlp9puDODq0FVci10GJf5aKIr9g7VMf3e+wmzTwBROn4I
+         TtHQ==
+X-Gm-Message-State: AC+VfDwe1368TDcOqeXYQsb77lRR1Y1PpDc1UoDH7qf8qCmOz3zo2v6Q
+        W1CaPw74K1P8U27xhaHVUUwSWg==
+X-Google-Smtp-Source: ACHHUZ7Qo3PGwyGqRifkVme2GcUiS1DV5DY9Q0J/1o9pRvjyoiN9e8F2ZqjpW2xMy9tCL2YWOme9Sw==
+X-Received: by 2002:a2e:a30c:0:b0:2a8:ea22:28a8 with SMTP id l12-20020a2ea30c000000b002a8ea2228a8mr3163016lje.15.1683560555861;
+        Mon, 08 May 2023 08:42:35 -0700 (PDT)
+Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
+        by smtp.gmail.com with ESMTPSA id a21-20020a2e9815000000b002ad9b741959sm17720ljj.76.2023.05.08.08.42.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 08:42:35 -0700 (PDT)
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     tytso@mit.edu
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joneslee@google.com,
+        Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [RESEND PATCH v2 0/5] ext4: fsmap: Consolidate fsmap_head checks
+Date:   Mon,  8 May 2023 15:42:25 +0000
+Message-ID: <20230508154230.159654-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBXLFX9F1lkWLGdAw--.17901S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Ww4UXFy3KF47Zw1xXFW8JFb_yoWxuryDpa
-        1fXay5Kr17JF4xJry5A3yUuFy3Kan7J3yxG34UKasrZa15XF97J3y5KF40yFs5KFWkAw43
-        Xa15XryY9w1UAFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR8OzxUUUUU=
-X-Originating-IP: [120.245.132.9]
-X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/xtbBdBxpq1gi6EszigAAsK
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After the execution of the devm_pinctrl_register() function,
-the member 'dev' in the 'pinctrl_dev' points to the
-'struct device' structure. see pinctrl_init_controller().
+The sanity checks on user provided data were scattered along three
+representations of the keys. This is not only difficult to follow but
+also inefficient in case one of the checks returns an error because we
+waste CPU cycles by copying data and preparing other local structures
+that won't be used in case of errors.
+Consolidate the logic around fsmap sanity checks.
 
-Signed-off-by: Lizhe <sensor1010@163.com>
----
- drivers/pinctrl/pinctrl-apple-gpio.c |  2 +-
- drivers/pinctrl/pinctrl-oxnas.c      | 12 ++++++------
- drivers/pinctrl/pinctrl-pic32.c      | 12 ++++++------
- drivers/pinctrl/pinctrl-stmfx.c      |  6 +++---
- drivers/pinctrl/pxa/pinctrl-pxa2xx.c |  4 ++--
- 5 files changed, 18 insertions(+), 18 deletions(-)
+No functional change in the code. Tested with the ext4 fsmap xfstests
+027, 028, 029. All passed, see the summary reports below.
 
-diff --git a/drivers/pinctrl/pinctrl-apple-gpio.c b/drivers/pinctrl/pinctrl-apple-gpio.c
-index 3751c7de37aa..9dac920a3619 100644
---- a/drivers/pinctrl/pinctrl-apple-gpio.c
-+++ b/drivers/pinctrl/pinctrl-apple-gpio.c
-@@ -119,7 +119,7 @@ static int apple_gpio_dt_node_to_map(struct pinctrl_dev *pctldev,
- 
- 	ret = of_property_count_u32_elems(node, "pinmux");
- 	if (ret <= 0) {
--		dev_err(pctl->dev,
-+		dev_err(pctldev->dev,
- 			"missing or empty pinmux property in node %pOFn.\n",
- 			node);
- 		return ret ? ret : -EINVAL;
-diff --git a/drivers/pinctrl/pinctrl-oxnas.c b/drivers/pinctrl/pinctrl-oxnas.c
-index fb10a8473ebe..88b03bd9f4dc 100644
---- a/drivers/pinctrl/pinctrl-oxnas.c
-+++ b/drivers/pinctrl/pinctrl-oxnas.c
-@@ -596,7 +596,7 @@ static int oxnas_ox810se_pinmux_enable(struct pinctrl_dev *pctldev,
- 
- 	while (functions->name) {
- 		if (!strcmp(functions->name, fname)) {
--			dev_dbg(pctl->dev,
-+			dev_dbg(pctldev->dev,
- 				"setting function %s bank %d pin %d fct %d mask %x\n",
- 				fname, pg->bank, pg->pin,
- 				functions->fct, mask);
-@@ -647,7 +647,7 @@ static int oxnas_ox820_pinmux_enable(struct pinctrl_dev *pctldev,
- 
- 	while (functions->name) {
- 		if (!strcmp(functions->name, fname)) {
--			dev_dbg(pctl->dev,
-+			dev_dbg(pctldev->dev,
- 				"setting function %s bank %d pin %d fct %d mask %x\n",
- 				fname, pg->bank, pg->pin,
- 				functions->fct, mask);
-@@ -697,7 +697,7 @@ static int oxnas_ox810se_gpio_request_enable(struct pinctrl_dev *pctldev,
- 	struct oxnas_gpio_bank *bank = gpiochip_get_data(range->gc);
- 	u32 mask = BIT(offset - bank->gpio_chip.base);
- 
--	dev_dbg(pctl->dev, "requesting gpio %d in bank %d (id %d) with mask 0x%x\n",
-+	dev_dbg(pctldev->dev, "requesting gpio %d in bank %d (id %d) with mask 0x%x\n",
- 		offset, bank->gpio_chip.base, bank->id, mask);
- 
- 	regmap_write_bits(pctl->regmap,
-@@ -909,7 +909,7 @@ static int oxnas_ox810se_pinconf_set(struct pinctrl_dev *pctldev,
- 	u32 offset = pin - bank->gpio_chip.base;
- 	u32 mask = BIT(offset);
- 
--	dev_dbg(pctl->dev, "setting pin %d bank %d mask 0x%x\n",
-+	dev_dbg(pctldev->dev, "setting pin %d bank %d mask 0x%x\n",
- 		pin, bank->gpio_chip.base, mask);
- 
- 	for (i = 0; i < num_configs; i++) {
-@@ -946,7 +946,7 @@ static int oxnas_ox820_pinconf_set(struct pinctrl_dev *pctldev,
- 	u32 offset = pin - bank->gpio_chip.base;
- 	u32 mask = BIT(offset);
- 
--	dev_dbg(pctl->dev, "setting pin %d bank %d mask 0x%x\n",
-+	dev_dbg(pctldev->dev, "setting pin %d bank %d mask 0x%x\n",
- 		pin, bank->gpio_chip.base, mask);
- 
- 	for (i = 0; i < num_configs; i++) {
-@@ -960,7 +960,7 @@ static int oxnas_ox820_pinconf_set(struct pinctrl_dev *pctldev,
- 					  mask, mask);
- 			break;
- 		default:
--			dev_err(pctl->dev, "Property %u not supported\n",
-+			dev_err(pctldev->dev, "Property %u not supported\n",
- 				param);
- 			return -ENOTSUPP;
- 		}
-diff --git a/drivers/pinctrl/pinctrl-pic32.c b/drivers/pinctrl/pinctrl-pic32.c
-index dad05294fa72..bc98888acb7c 100644
---- a/drivers/pinctrl/pinctrl-pic32.c
-+++ b/drivers/pinctrl/pinctrl-pic32.c
-@@ -1937,23 +1937,23 @@ static int pic32_pinconf_set(struct pinctrl_dev *pctldev, unsigned pin,
- 
- 		switch (param) {
- 		case PIN_CONFIG_BIAS_PULL_UP:
--			dev_dbg(pctl->dev, "   pullup\n");
-+			dev_dbg(pctldev->dev, "   pullup\n");
- 			writel(mask, bank->reg_base +PIC32_SET(CNPU_REG));
- 			break;
- 		case PIN_CONFIG_BIAS_PULL_DOWN:
--			dev_dbg(pctl->dev, "   pulldown\n");
-+			dev_dbg(pctl_dev->dev, "   pulldown\n");
- 			writel(mask, bank->reg_base + PIC32_SET(CNPD_REG));
- 			break;
- 		case PIN_CONFIG_MICROCHIP_DIGITAL:
--			dev_dbg(pctl->dev, "   digital\n");
-+			dev_dbg(pctl_dev->dev, "   digital\n");
- 			writel(mask, bank->reg_base + PIC32_CLR(ANSEL_REG));
- 			break;
- 		case PIN_CONFIG_MICROCHIP_ANALOG:
--			dev_dbg(pctl->dev, "   analog\n");
-+			dev_dbg(pctldev->dev, "   analog\n");
- 			writel(mask, bank->reg_base + PIC32_SET(ANSEL_REG));
- 			break;
- 		case PIN_CONFIG_DRIVE_OPEN_DRAIN:
--			dev_dbg(pctl->dev, "   opendrain\n");
-+			dev_dbg(pctldev->dev, "   opendrain\n");
- 			writel(mask, bank->reg_base + PIC32_SET(ODCU_REG));
- 			break;
- 		case PIN_CONFIG_INPUT_ENABLE:
-@@ -1964,7 +1964,7 @@ static int pic32_pinconf_set(struct pinctrl_dev *pctldev, unsigned pin,
- 						    offset, arg);
- 			break;
- 		default:
--			dev_err(pctl->dev, "Property %u not supported\n",
-+			dev_err(pctldev->dev, "Property %u not supported\n",
- 				param);
- 			return -ENOTSUPP;
- 		}
-diff --git a/drivers/pinctrl/pinctrl-stmfx.c b/drivers/pinctrl/pinctrl-stmfx.c
-index ab23d7ac3107..396996201856 100644
---- a/drivers/pinctrl/pinctrl-stmfx.c
-+++ b/drivers/pinctrl/pinctrl-stmfx.c
-@@ -711,7 +711,7 @@ static int stmfx_pinctrl_probe(struct platform_device *pdev)
- 
- 	ret = devm_gpiochip_add_data(pctl->dev, &pctl->gpio_chip, pctl);
- 	if (ret) {
--		dev_err(pctl->dev, "gpio_chip registration failed\n");
-+		dev_err(pctldev->dev, "gpio_chip registration failed\n");
- 		return ret;
- 	}
- 
-@@ -724,11 +724,11 @@ static int stmfx_pinctrl_probe(struct platform_device *pdev)
- 					IRQF_ONESHOT,
- 					dev_name(pctl->dev), pctl);
- 	if (ret) {
--		dev_err(pctl->dev, "cannot request irq%d\n", irq);
-+		dev_err(pctldev->dev, "cannot request irq%d\n", irq);
- 		return ret;
- 	}
- 
--	dev_info(pctl->dev,
-+	dev_info(pctldev->dev,
- 		 "%ld GPIOs available\n", hweight_long(pctl->gpio_valid_mask));
- 
- 	return 0;
-diff --git a/drivers/pinctrl/pxa/pinctrl-pxa2xx.c b/drivers/pinctrl/pxa/pinctrl-pxa2xx.c
-index d2568dab8c78..f997cc26f01f 100644
---- a/drivers/pinctrl/pxa/pinctrl-pxa2xx.c
-+++ b/drivers/pinctrl/pxa/pinctrl-pxa2xx.c
-@@ -91,7 +91,7 @@ static int pxa2xx_pmx_gpio_set_direction(struct pinctrl_dev *pctldev,
- 	void __iomem *gpdr;
- 
- 	gpdr = pctl->base_gpdr[pin / 32];
--	dev_dbg(pctl->dev, "set_direction(pin=%d): dir=%d\n",
-+	dev_dbg(pctldev->dev, "set_direction(pin=%d): dir=%d\n",
- 		pin, !input);
- 
- 	spin_lock_irqsave(&pctl->lock, flags);
-@@ -156,7 +156,7 @@ static int pxa2xx_pmx_set_mux(struct pinctrl_dev *pctldev, unsigned function,
- 	gafr = pctl->base_gafr[pin / 16];
- 	gpdr = pctl->base_gpdr[pin / 32];
- 	shift = (pin % 16) << 1;
--	dev_dbg(pctl->dev, "set_mux(pin=%d): af=%d dir=%d\n",
-+	dev_dbg(pctldev->dev, "set_mux(pin=%d): af=%d dir=%d\n",
- 		pin, df->muxval >> 1, df->muxval & 0x1);
- 
- 	spin_lock_irqsave(&pctl->lock, flags);
+v2:
+- ext4: fsmap: Consolidate fsmap_head checks
+  - split patch for easier review
+  - rewrite commit message
+  - new patches {1, 2, 4}/5
+v1:
+https://lore.kernel.org/linux-ext4/20230222131211.3898066-1-tudor.ambarus@linaro.org/
+
+-------------------- Summary report
+KERNEL:    kernel 6.2.0-rc5-xfstests-00005-gf59f84395275 #16 SMP PREEMPT_DYNAMIC Wed Mar 15 11:06:14 UTC 2023 x86_64
+CMDLINE:   ext4/027
+CPUS:      2
+MEM:       1975.31
+
+ext4/4k: 1 tests, 1 seconds
+  ext4/027     Pass     1s
+ext4/1k: 1 tests, 1 seconds
+  ext4/027     Pass     0s
+ext4/ext3: 1 tests, 1 seconds
+  ext4/027     Pass     0s
+ext4/encrypt: 1 tests, 1 seconds
+  ext4/027     Pass     1s
+ext4/nojournal: 1 tests, 0 seconds
+  ext4/027     Pass     0s
+ext4/ext3conv: 1 tests, 1 seconds
+  ext4/027     Pass     0s
+ext4/adv: 1 tests, 1 seconds
+  ext4/027     Pass     1s
+ext4/dioread_nolock: 1 tests, 1 seconds
+  ext4/027     Pass     1s
+ext4/data_journal: 1 tests, 0 seconds
+  ext4/027     Pass     0s
+ext4/bigalloc: 1 tests, 0 seconds
+  ext4/027     Pass     0s
+ext4/bigalloc_1k: 1 tests, 1 seconds
+  ext4/027     Pass     0s
+Totals: 11 tests, 0 skipped, 0 failures, 0 errors, 4s
+
+FSTESTVER: blktests 4e07b0c (Fri, 15 Jul 2022 14:40:03 +0900)
+FSTESTVER: fio  fio-3.31 (Tue, 9 Aug 2022 14:41:25 -0600)
+FSTESTVER: fsverity v1.5 (Sun, 6 Feb 2022 10:59:13 -0800)
+FSTESTVER: ima-evm-utils v1.3.2 (Wed, 28 Oct 2020 13:18:08 -0400)
+FSTESTVER: nvme-cli v1.16 (Thu, 11 Nov 2021 13:09:06 -0800)
+FSTESTVER: quota  v4.05-43-gd2256ac (Fri, 17 Sep 2021 14:04:16 +0200)
+FSTESTVER: util-linux v2.38.1 (Thu, 4 Aug 2022 11:06:21 +0200)
+FSTESTVER: xfsprogs v5.19.0 (Fri, 12 Aug 2022 13:45:01 -0500)
+FSTESTVER: xfstests v2022.08.21-8-g289f50f8 (Sun, 21 Aug 2022 15:21:34 -0400)
+FSTESTVER: xfstests-bld bb566bcf (Wed, 24 Aug 2022 23:07:24 -0400)
+FSTESTVER: zz_build-distro bullseye
+FSTESTCFG: all
+FSTESTSET: ext4/027
+FSTESTOPT: aex
+[   59.850894] ACPI: PM: Preparing to enter system sleep state S5
+[   59.855495] reboot: Power down
+
+-------------------- Summary report
+KERNEL:    kernel 6.2.0-rc5-xfstests-00005-gf59f84395275 #16 SMP PREEMPT_DYNAMIC Wed Mar 15 11:06:14 UTC 2023 x86_64
+CMDLINE:   ext4/028
+CPUS:      2
+MEM:       1975.31
+
+ext4/4k: 1 tests, 5 seconds
+  ext4/028     Pass     5s
+ext4/1k: 1 tests, 2 seconds
+  ext4/028     Pass     2s
+ext4/ext3: 1 tests, 1 skipped, 1 seconds
+  ext4/028     Skipped  0s
+ext4/encrypt: 0 tests, 0 seconds
+ext4/nojournal: 1 tests, 4 seconds
+  ext4/028     Pass     4s
+ext4/ext3conv: 1 tests, 4 seconds
+  ext4/028     Pass     4s
+ext4/adv: 1 tests, 4 seconds
+  ext4/028     Pass     4s
+ext4/dioread_nolock: 1 tests, 1 seconds
+  ext4/028     Pass     0s
+ext4/data_journal: 1 tests, 1 seconds
+  ext4/028     Pass     0s
+ext4/bigalloc: 1 tests, 5 seconds
+  ext4/028     Pass     5s
+ext4/bigalloc_1k: 1 tests, 2 seconds
+  ext4/028     Pass     2s
+Totals: 10 tests, 1 skipped, 0 failures, 0 errors, 26s
+
+FSTESTVER: blktests 4e07b0c (Fri, 15 Jul 2022 14:40:03 +0900)
+FSTESTVER: fio  fio-3.31 (Tue, 9 Aug 2022 14:41:25 -0600)
+FSTESTVER: fsverity v1.5 (Sun, 6 Feb 2022 10:59:13 -0800)
+FSTESTVER: ima-evm-utils v1.3.2 (Wed, 28 Oct 2020 13:18:08 -0400)
+FSTESTVER: nvme-cli v1.16 (Thu, 11 Nov 2021 13:09:06 -0800)
+FSTESTVER: quota  v4.05-43-gd2256ac (Fri, 17 Sep 2021 14:04:16 +0200)
+FSTESTVER: util-linux v2.38.1 (Thu, 4 Aug 2022 11:06:21 +0200)
+FSTESTVER: xfsprogs v5.19.0 (Fri, 12 Aug 2022 13:45:01 -0500)
+FSTESTVER: xfstests v2022.08.21-8-g289f50f8 (Sun, 21 Aug 2022 15:21:34 -0400)
+FSTESTVER: xfstests-bld bb566bcf (Wed, 24 Aug 2022 23:07:24 -0400)
+FSTESTVER: zz_build-distro bullseye
+FSTESTCFG: all
+FSTESTSET: ext4/028
+FSTESTOPT: aex
+[   79.583715] ACPI: PM: Preparing to enter system sleep state S5
+[   79.588092] reboot: Power down
+
+-------------------- Summary report
+KERNEL:    kernel 6.2.0-rc5-xfstests-00005-gf59f84395275 #16 SMP PREEMPT_DYNAMIC Wed Mar 15 11:06:14 UTC 2023 x86_64
+CMDLINE:   -c logdev ext4/029
+CPUS:      2
+MEM:       1975.31
+
+ext4/logdev: 1 tests, 1 seconds
+  ext4/029     Pass     1s
+Totals: 1 tests, 0 skipped, 0 failures, 0 errors, 1s
+
+FSTESTVER: blktests 4e07b0c (Fri, 15 Jul 2022 14:40:03 +0900)
+FSTESTVER: fio  fio-3.31 (Tue, 9 Aug 2022 14:41:25 -0600)
+FSTESTVER: fsverity v1.5 (Sun, 6 Feb 2022 10:59:13 -0800)
+FSTESTVER: ima-evm-utils v1.3.2 (Wed, 28 Oct 2020 13:18:08 -0400)
+FSTESTVER: nvme-cli v1.16 (Thu, 11 Nov 2021 13:09:06 -0800)
+FSTESTVER: quota  v4.05-43-gd2256ac (Fri, 17 Sep 2021 14:04:16 +0200)
+FSTESTVER: util-linux v2.38.1 (Thu, 4 Aug 2022 11:06:21 +0200)
+FSTESTVER: xfsprogs v5.19.0 (Fri, 12 Aug 2022 13:45:01 -0500)
+FSTESTVER: xfstests v2022.08.21-8-g289f50f8 (Sun, 21 Aug 2022 15:21:34 -0400)
+FSTESTVER: xfstests-bld bb566bcf (Wed, 24 Aug 2022 23:07:24 -0400)
+FSTESTVER: zz_build-distro bullseye
+FSTESTCFG: logdev
+FSTESTSET: ext4/029
+FSTESTOPT: aex
+[    8.712254] reboot: Power down
+
+Tudor Ambarus (5):
+  ext4: ioctl: Add missing linux/string.h header
+  ext4: fsmap: Check fmh_iflags value directly on the user copied data
+  ext4: fsmap: Consolidate fsmap_head checks
+  ext4: fsmap: Do the validation checks on constified fsmap data
+  ext4: fsmap: Remove duplicated initialization
+
+ fs/ext4/fsmap.c | 52 ++++++++++++++++++++++++++++++++++---------------
+ fs/ext4/fsmap.h |  3 +++
+ fs/ext4/ioctl.c | 18 ++++-------------
+ 3 files changed, 43 insertions(+), 30 deletions(-)
+
 -- 
-2.34.1
+2.40.1.521.gf1e218fcd8-goog
 
