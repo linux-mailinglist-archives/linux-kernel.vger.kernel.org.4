@@ -2,106 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0436FA373
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B886FA374
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbjEHJgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 05:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        id S233776AbjEHJgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 05:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233766AbjEHJgg (ORCPT
+        with ESMTP id S233764AbjEHJgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 05:36:36 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B072348D
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 02:36:33 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bc37e1525so8367426a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 02:36:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683538591; x=1686130591;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+gQynKHq/j0rouitkQ61mRMZDG5anZgmqsztbwdlNZc=;
-        b=DymGYpSMNyruICBmlBVGENxrUAxCQg/9cXLgCRaamSdE/dEF2PWDcI2NMgDIRJyj0k
-         AiDSeiLGwe73bHrNxQwjuoRCedlA2Yal3AQs/a4zdKuNhJDj6FOpRSWRybzpa3q9yppa
-         +6MwAuSI8a26ybP1A3zGDXHJ/8ehNfai1ak7usI0MarlRYSoOOKoX3CP++uMCQHkckTB
-         6/TfU7klsLFfkBTZylAh3wU4x8ZIoNloePBOYGxoc8QRhqNcfEvKc14v8pEagcyo6SJG
-         voc7He/24Y+xohlSkDq2rH+Bz57fvqz51ITqXFlyKTsYLwLADR1wROlLMbTlnGJu1Q2V
-         2bzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683538591; x=1686130591;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+gQynKHq/j0rouitkQ61mRMZDG5anZgmqsztbwdlNZc=;
-        b=DuSZLGcwLAun1xrVlC8Eo2JalGv4eVsVedTAT69XTQ8hPBw+6GJWHSeNpdb66zoX5L
-         JCrFkfmLpBLxN5X6IR19/OkelzhrSm9JcNlLSoPB/bt9AJX98GsuZz/7z4DZf5p8ocQs
-         1exJppj5Bz7peYVC51Z+iUK3V0F8GDmOr+l9tZKp+OwSrr1g6sXxC156BRVI3HYhnWOx
-         +7db2aSsUecdN9yHRA57JudkTgiRin+amCFCvw3HJgCJVMMVx5Q+sRBaEgZIaGNLojgB
-         pKuCxXR4dQrACKK8ZM5ygfswkQZGff+uK4yWiy5KvggyhipmBB2QckkLcU3pIvHeqNpo
-         bX5g==
-X-Gm-Message-State: AC+VfDy0iYEk48UePx+z6uwdGbinJGO4zLjVmEgjXefdu2WF+OD/WqoF
-        X8If+kSeDSabBYQjl7rvbjlkIA==
-X-Google-Smtp-Source: ACHHUZ5UdACRM4IQ+9A7GHj+UIVY449LpLW4cKn7SLTKxOHi6oMQ6t5zDTtgkejS5Yu2tSpaPeYsQQ==
-X-Received: by 2002:a17:906:fe07:b0:953:8249:1834 with SMTP id wy7-20020a170906fe0700b0095382491834mr7734490ejb.16.1683538591535;
-        Mon, 08 May 2023 02:36:31 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
-        by smtp.gmail.com with ESMTPSA id f12-20020a05640214cc00b005068fe6f3d8sm5921749edx.87.2023.05.08.02.36.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 02:36:30 -0700 (PDT)
-Message-ID: <7fcdfc56-3dc6-b103-afd5-21984940c495@linaro.org>
-Date:   Mon, 8 May 2023 11:36:29 +0200
+        Mon, 8 May 2023 05:36:42 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46927FD
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 02:36:40 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683538597;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0ZRUhoNxuRJv4YAvsY/1F29817RKjKvWUYqtqHUK5nw=;
+        b=sw0DXDwRLeE9JXz87pVhj7ptI298gSDHmExy5/saBvXFiiaYy8DeAXvlSiE2t/b3P0t32w
+        Oh6KqoIK2rTxp2x0OAo/xWAb1e8IqT1gM2MC2+NfXrjXU55SjtTEidH576juIx1GNGo4/Q
+        OIi8ShSlAwsI5z268c9/3uR3UOtuzlQYE/zqEp1ipoj/kZL08l1rcX1v5b/a9jDkgvZNM3
+        rqgaU+KO9KgjPvjVl7MzXE8hK0lLRmY3dG41M7OVIGliBX9Iznnkls0HMkyy1hrw+cZYfy
+        h5U9JmWz+6QELXErUEB1ZVQqY5gK3RH8TdGDRxLDmXlxOmd8BRDQy969BljDjg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683538597;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0ZRUhoNxuRJv4YAvsY/1F29817RKjKvWUYqtqHUK5nw=;
+        b=KbRqTQNVPno/h+fP+QmlD76fDUNKCvn/x879FxGUHIf+lpymgZhcHVvfOiocNIcRc2oEtJ
+        flDsy4Ct/nZst8Bg==
+To:     Yujie Liu <yujie.liu@intel.com>
+Cc:     Shanker Donthineni <sdonthineni@nvidia.com>,
+        oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Michael Walle <michael@walle.cc>,
+        Vikram Sethi <vsethi@nvidia.com>
+Subject: Re: [PATCH v3 3/3] genirq: Use the maple tree for IRQ descriptors
+ management
+In-Reply-To: <ZFdbtipfTsIF0u6z@yujie-X299>
+References: <202304251035.19367560-yujie.liu@intel.com>
+ <87a5yuzvzd.ffs@tglx> <ZEsiYbi8dorXTI5t@yujie-X299> <877ctw5mdp.ffs@tglx>
+ <ZFdbtipfTsIF0u6z@yujie-X299>
+Date:   Mon, 08 May 2023 11:36:37 +0200
+Message-ID: <87mt2f2mhm.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RESEND v9 5/5] MAINTAINERS: Add entries for Apple PWM
- driver
-Content-Language: en-US
-To:     fnkl.kernel@gmail.com, Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        - <asahi@lists.linux.dev>, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230214-fpwm-v9-0-f3094107b16b@gmail.com>
- <20230214-fpwm-v9-5-f3094107b16b@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230214-fpwm-v9-5-f3094107b16b@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/04/2023 16:19, Sasha Finkelstein via B4 Relay wrote:
-> From: Sasha Finkelstein <fnkl.kernel@gmail.com>
-> 
-> Add the MAINTAINERS entries for the driver
-> 
-> Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
-> Acked-by: Sven Peter <sven@svenpeter.dev>
+Yujie!
 
-Sasha,
+On Sun, May 07 2023 at 16:05, Yujie Liu wrote:
+> Sorry for late reply as we were on public holiday earlier this week.
 
-You got here report of warning:
-https://lore.kernel.org/all/202304041117.YfOAPGQc-lkp@intel.com/
+Holidays are more important and the problems do not run away :)
 
-Don't ignore it, but send a new version which fixes it. Since Thierry
-was not Cced on docs build failure, he applied entire patch. In such
-case it is expected that you will do something about it, not just skip it.
+> On Fri, Apr 28, 2023 at 12:31:14PM +0200, Thomas Gleixner wrote:
+>> Under the assumption that the code is correct, then the effect of this
+>> patch is that it changes the timing. Sigh.
+>> 
+>>   1) Does this happen with a 64-bit kernel too?
+>
+> It doesn't happen on a 64-bit kernel:
 
-I'll apply the fix from Lukas.
+Ok. So one difference might be that a 64 bit kernel enables interrupt
+rempping. Can you add 'intremap=off' to the kernel command line please?
 
-Best regards,
-Krzysztof
+>>   2) Can you enable the irq_vector:vector_*.* tracepoints and provide
+>>      the trace?
+>
+> I'm a beginner of kernel and not sure if I'm doing this correctly. Here
+> are my test steps:
+
+They are perfectly fine.
+
+> # check the trace
+> # cat /sys/kernel/debug/tracing/trace
+> # tracer: nop
+> #
+> # entries-in-buffer/entries-written: 0/0   #P:4
+> #
+> #                                _-----=> irqs-off/BH-disabled
+> #                               / _----=> need-resched
+> #                              | / _---=> hardirq/softirq
+> #                              || / _--=> preempt-depth
+> #                              ||| / _-=> migrate-disable
+> #                              |||| /     delay
+> #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> #              | |         |   |||||     |         |
+>
+> Nothing was written to trace buffer, seems like no irq_vector events
+> were captured during this test.
+
+Stupid me. I completely forgot that this happens on the outgoing CPU at
+a point where the tracer for that CPU is already shut down.
+
+Can you please apply the patch below? No need to enable the irq_vector
+events. It just dumps the information into dmesg.
+
+Thanks,
+
+        tglx
+---
+--- a/kernel/irq/cpuhotplug.c
++++ b/kernel/irq/cpuhotplug.c
+@@ -57,7 +57,8 @@ static bool migrate_one_irq(struct irq_d
+ 	bool maskchip = !irq_can_move_pcntxt(d) && !irqd_irq_masked(d);
+ 	const struct cpumask *affinity;
+ 	bool brokeaff = false;
+-	int err;
++	int err, irq = d->irq;
++	bool move_pending;
+ 
+ 	/*
+ 	 * IRQ chip might be already torn down, but the irq descriptor is
+@@ -101,10 +102,16 @@ static bool migrate_one_irq(struct irq_d
+ 	 * there is no move pending or the pending mask does not contain
+ 	 * any online CPU, use the current affinity mask.
+ 	 */
+-	if (irq_fixup_move_pending(desc, true))
++	move_pending = irqd_is_setaffinity_pending(d);
++	if (irq_fixup_move_pending(desc, true)) {
+ 		affinity = irq_desc_get_pending_mask(desc);
+-	else
++		pr_info("IRQ %3d: move_pending=%d pending mask: %*pbl\n",
++			irq, move_pending, cpumask_pr_args(affinity));
++	} else {
+ 		affinity = irq_data_get_affinity_mask(d);
++		pr_info("IRQ %3d: move_pending=%d affinity mask: %*pbl\n",
++			irq, move_pending, cpumask_pr_args(affinity));
++	}
+ 
+ 	/* Mask the chip for interrupts which cannot move in process context */
+ 	if (maskchip && chip->irq_mask)
+@@ -136,6 +143,9 @@ static bool migrate_one_irq(struct irq_d
+ 		brokeaff = false;
+ 	}
+ 
++	affinity = irq_data_get_effective_affinity_mask(d);
++	pr_info("IRQ %3d: Done: %*pbl\n", irq, cpumask_pr_args(affinity));
++
+ 	if (maskchip && chip->irq_unmask)
+ 		chip->irq_unmask(d);
+ 
+
 
