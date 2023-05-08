@@ -2,124 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6EA6FB90D
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F9B6FB910
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233701AbjEHU4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 16:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
+        id S229621AbjEHU6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 16:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbjEHU41 (ORCPT
+        with ESMTP id S229452AbjEHU6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 16:56:27 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AF986BD;
-        Mon,  8 May 2023 13:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683579370; x=1715115370;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=QFP9WhtbudiCSMqQuH58GiD4k9Fn38XJ8vfoggmT+YM=;
-  b=V5MUXSN/n/e412Wxu9pnrAonkIJkS+DOcagxLBGTEvbbpQ1QaIPU0T2h
-   yq/Yme2IAXBTqlEcGigLgBoeVOx3jb1hXJ+k/rncbV0o3GgHKGvLoeaT3
-   Sz26fMAIwkGpKgewGhAK0azIfhuS03ykN4mbTCauwaMvWaVZi2pq29f5G
-   t2dNRmijpqKa3UMNUc63uUQStBGOheKfaDvtHS/fAhtV3zIIDkG8b9FTe
-   JldvZWLnPr/h+KlOzpvaCTPbZHSz/ro9Heg62TAt1TXz+dspEjWqD3l6p
-   OgPJkEL2q0hxFsig4v1W1Mb0Jy32YPdENdy5iGPznsS5qKUJ5oU0P8i82
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="413017336"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="413017336"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 13:55:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="872921730"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="872921730"
-Received: from aadepoju-mobl1.amr.corp.intel.com ([10.212.34.185])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 13:55:56 -0700
-Message-ID: <5c2f8cd03b03627ca726ca2782887e501827ea7b.camel@linux.intel.com>
-Subject: Re: [PATCH v4 06/15] dmaengine: idxd: Add wq private data accessors
-From:   Tom Zanussi <tom.zanussi@linux.intel.com>
-To:     Dave Jiang <dave.jiang@intel.com>, herbert@gondor.apana.org.au,
-        davem@davemloft.net, fenghua.yu@intel.com, vkoul@kernel.org
-Cc:     tony.luck@intel.com, wajdi.k.feghali@intel.com,
-        james.guilford@intel.com, kanchana.p.sridhar@intel.com,
-        giovanni.cabiddu@intel.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org
-Date:   Mon, 08 May 2023 15:55:55 -0500
-In-Reply-To: <2618f557-01a5-f76b-ad09-6eb0871cdf00@intel.com>
-References: <cover.1683573703.git.zanussi@kernel.org>
-         <038db785a87dc59c0073989633eee0205958cb67.1683573703.git.zanussi@kernel.org>
-         <2618f557-01a5-f76b-ad09-6eb0871cdf00@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Mon, 8 May 2023 16:58:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BA1210B
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 13:57:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683579441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PF08ivr9oSEP89wN8+cQKlEYL8DT1MNWzBoIvN2S2Vw=;
+        b=JVvPnwS1ujUdY0iuzTgEh9R+HeZlAN0Vg0j+jYVcWsPO/P33rfcbOKJxnrXZWpWK8H9Iz6
+        LVsmX1h2RP/vaamWOt6kS+UHR60KLRv3P+pQ7ldBwLtCcX7uja6JMB1Ps8nyUt5GI7dchJ
+        N3OtL3HURQZrnt2Z3VCpBw4QlLKVs88=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-164-cop6NB-9NLGhJozsMQk97Q-1; Mon, 08 May 2023 16:57:18 -0400
+X-MC-Unique: cop6NB-9NLGhJozsMQk97Q-1
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-763646b324aso747876239f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 13:57:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683579437; x=1686171437;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PF08ivr9oSEP89wN8+cQKlEYL8DT1MNWzBoIvN2S2Vw=;
+        b=hPtFhgUEX3Q9efEc1oXN8x3+k6F40DQ2NsCSau1sZ9T+/UlE9ORe1KsUwXsYH5R+UB
+         fAteaRF6zW3Lt8ICnWR/baKW2mkY/vVZxSYpRpIQ4iH6ineiD2Wof/ulMx38feDbTGaC
+         CiRUWPmfIwz2cD5iK6vnjz9uKUOBmsRGBdfgYsi7fm1a8W9VbEHYDXGFiFj8qdMfSclP
+         DBHJAY2451BzIoIoYis9DZSiQsQAs3xjaq5mVECLzIJncUhNx9+vtFqA74glAsXhWgwL
+         X+WdZjo8dg53NdJUSxIbaOVs/oBU8RzvH7xb8x8vfzEJu0ynNIXsmtyG/hYXcCCc2K8j
+         iCrQ==
+X-Gm-Message-State: AC+VfDwLfWLPcerEWAjAj84vt1fiJmRkfmFKplTgBPeAwLyNQaH1kDFQ
+        +rmlmzdgHJKIGITJFWvyh+z6I9PKY5agUwuPa2/52dzB5kUkKVuLLDzCgBDrj7oXx21JOi7rs5L
+        XLwyWk/kFdFRzzqM8k2PK1H/W
+X-Received: by 2002:a5e:8d13:0:b0:760:d6d2:fa61 with SMTP id m19-20020a5e8d13000000b00760d6d2fa61mr8286933ioj.7.1683579437206;
+        Mon, 08 May 2023 13:57:17 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7YrMvnzexkIVya3O7RAWT/SHW6i9D8O1Nxy6GIXjeV8l8JY5b9qa8AlPCuaTDeX/E2NibREw==
+X-Received: by 2002:a5e:8d13:0:b0:760:d6d2:fa61 with SMTP id m19-20020a5e8d13000000b00760d6d2fa61mr8286926ioj.7.1683579436982;
+        Mon, 08 May 2023 13:57:16 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id cc6-20020a056602424600b0076c3189a8d9sm1890274iob.38.2023.05.08.13.57.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 13:57:16 -0700 (PDT)
+Date:   Mon, 8 May 2023 14:57:15 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Yan Zhao <yan.y.zhao@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kevin.tian@intel.com,
+        yishaih@nvidia.com, shameerali.kolothum.thodi@huawei.com,
+        =?UTF-8?B?Q8OpZHJpYw==?= Le Goater <clg@redhat.com>
+Subject: Re: [PATCH] vfio/pci: take mmap write lock for io_remap_pfn_range
+Message-ID: <20230508145715.630fe3ae.alex.williamson@redhat.com>
+In-Reply-To: <ZFkn3q45RUJXMS+P@nvidia.com>
+References: <20230508125842.28193-1-yan.y.zhao@intel.com>
+        <ZFkn3q45RUJXMS+P@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-05-08 at 13:43 -0700, Dave Jiang wrote:
->=20
->=20
-> On 5/8/23 1:07 PM, Tom Zanussi wrote:
-> > Add the accessors set_idxd_wq_private() and idxd_wq_private()
-> > allowing
-> > users to set and retrieve a private void * associated with an
-> > idxd_wq.
-> >=20
-> > The private data is stored in the idxd_dev.conf_dev associated with
-> > each idxd_wq.
-> >=20
-> > Signed-off-by: Tom Zanussi <tom.zanussi@linux.intel.com>
+On Mon, 8 May 2023 13:48:30 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
+
+> On Mon, May 08, 2023 at 08:58:42PM +0800, Yan Zhao wrote:
+> > In VFIO type1, vaddr_get_pfns() will try fault in MMIO PFNs after
+> > pin_user_pages_remote() returns -EFAULT.
+> > 
+> > follow_fault_pfn
+> >  fixup_user_fault
+> >   handle_mm_fault
+> >    handle_mm_fault
+> >     do_fault
+> >      do_shared_fault
+> >       do_fault
+> >        __do_fault
+> >         vfio_pci_mmap_fault
+> >          io_remap_pfn_range
+> >           remap_pfn_range
+> >            track_pfn_remap
+> >             vm_flags_set         ==> mmap_assert_write_locked(vma->vm_mm)
+> >            remap_pfn_range_notrack
+> >             vm_flags_set         ==> mmap_assert_write_locked(vma->vm_mm)
+> > 
+> > As io_remap_pfn_range() will call vm_flags_set() to update vm_flags [1],
+> > holding of mmap write lock is required.
+> > So, update vfio_pci_mmap_fault() to drop mmap read lock and take mmap
+> > write lock.
+> > 
+> > [1] https://lkml.kernel.org/r/20230126193752.297968-3-surenb@google.com
+> > commit bc292ab00f6c ("mm: introduce vma->vm_flags wrapper functions")
+> > commit 1c71222e5f23
+> > ("mm: replace vma->vm_flags direct modifications with modifier calls")
+> > 
+> > Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
 > > ---
-> > =C2=A0 drivers/dma/idxd/idxd.h | 10 ++++++++++
-> > =C2=A0 1 file changed, 10 insertions(+)
-> >=20
-> > diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
-> > index 193552dea224..71cd4ca7d27a 100644
-> > --- a/drivers/dma/idxd/idxd.h
-> > +++ b/drivers/dma/idxd/idxd.h
-> > @@ -552,6 +552,16 @@ static inline int idxd_wq_refcount(struct
-> > idxd_wq *wq)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return wq->client_count=
-;
-> > =C2=A0 };
-> > =C2=A0=20
-> > +static inline void set_idxd_wq_private(struct idxd_wq *wq, void
-> > *private)
->=20
-> I would go with the same kernel naming convention:
->=20
-> idxd_wq_set_private() and idxd_wq_get_private()?
-
-
-Yeah, makes sense, will change.
-
-Thanks,
-
-Tom
-
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_set_drvdata(wq_confdev(w=
-q), private);
-> > +}
+> >  drivers/vfio/pci/vfio_pci_core.c | 17 +++++++++++++++++
+> >  1 file changed, 17 insertions(+)
+> > 
+> > diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> > index a5ab416cf476..5082f89152b3 100644
+> > --- a/drivers/vfio/pci/vfio_pci_core.c
+> > +++ b/drivers/vfio/pci/vfio_pci_core.c
+> > @@ -1687,6 +1687,12 @@ static vm_fault_t vfio_pci_mmap_fault(struct vm_fault *vmf)
+> >  	struct vfio_pci_mmap_vma *mmap_vma;
+> >  	vm_fault_t ret = VM_FAULT_NOPAGE;
+> >  
+> > +	mmap_assert_locked(vma->vm_mm);
+> > +	mmap_read_unlock(vma->vm_mm);
 > > +
-> > +static inline void *idxd_wq_private(struct idxd_wq *wq)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return dev_get_drvdata(wq_co=
-nfdev(wq));
-> > +}
-> > +
-> > =C2=A0 /*
-> > =C2=A0=C2=A0 * Intel IAA does not support batch processing.
-> > =C2=A0=C2=A0 * The max batch size of device, max batch size of wq and
+> > +	if (mmap_write_lock_killable(vma->vm_mm))
+> > +		return VM_FAULT_RETRY;  
+> 
+> Certainly not..
+> 
+> I'm not sure how to resolve this properly, set the flags in advance?
+> 
+> The address space conversion?
+
+We already try to set the flags in advance, but there are some
+architectural flags like VM_PAT that make that tricky.  Cedric has been
+looking at inserting individual pages with vmf_insert_pfn(), but that
+incurs a lot more faults and therefore latency vs remapping the entire
+vma on fault.  I'm not convinced that we shouldn't just attempt to
+remove the fault handler entirely, but I haven't tried it yet to know
+what gotchas are down that path.  Thanks,
+
+Alex
 
