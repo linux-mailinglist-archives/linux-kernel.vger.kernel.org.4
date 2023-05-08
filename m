@@ -2,77 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CD56FB1D0
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C199A6FB1EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbjEHNjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
+        id S234285AbjEHNo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233984AbjEHNi6 (ORCPT
+        with ESMTP id S232748AbjEHNo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:38:58 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073CE348AE
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 06:38:29 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so48872850a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 06:38:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683553105; x=1686145105;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=woKzPWZT/bQSuEEeDupLjbOBc2IuLWiAC/fQ+9W0OtI=;
-        b=kGzUI9TQxP4vUqGf/83SQ5eteFqkoIq0DD3BYuMSzAXrkrAWNXLTJ2yx/CQv+JOL0M
-         ZbJqouOliaaIy0PARFAkl50UN3mMJwpO+QmPJJfwqVTkLlStTUz0JpJRuvtKGsk5Si4r
-         pgGgOJ8uOCf/N2vf0wVVf3uENMeFdNmZlk/ymyynW2WiZI4WAhjZFWyA11Kwc4vwqkaL
-         tVVvPz6ylKNWs6Hj8Wy1PWcOYNE4eKeYz8Gv00dP7xeoRq+OgSmudCLfQLC2MuBr/hGe
-         PDTUo3HbUtZVy+qgdug9jTtahc+mbeW5bQ1vfuh+d5sDZiRh5BePysFJRG8TmqqWeXHf
-         jNNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683553105; x=1686145105;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=woKzPWZT/bQSuEEeDupLjbOBc2IuLWiAC/fQ+9W0OtI=;
-        b=ChvfejPg98XdD0YrqLzHnJLK/JtzgGB7dJl7rWjxVL5QAsiCG4iAyTo+78+GDXu23z
-         DSS+sj5aERANZdIK6WTml+1sCL+VwNB1nxEs99a6Eas39MhLMEz/ps9pfIYaZRAhOio8
-         rJRbuIyXWSvdyKrcGzWwwvf3tZi955lUDuspnaTgaUXZPuOW021+0zpHbQrs4VMyX8pH
-         4F01NYhzexw24Cx0jgakVdIVgh5hHJWkoivrrh9ROlVYILW/JcymW+1Yl6RnXCJXcq2b
-         NbjdBL+p4Lt6XsVGqEnIJaH4se6InmhakNUWsB89vC4Qv8Ls7FEOUKPt9By2wgNxY9qv
-         rQUg==
-X-Gm-Message-State: AC+VfDy1Hx7dpaBb5RJx6s0bSsYqoT0M0tva5a4uFZDooldUEOs3m1Rl
-        e+Qw7JFHzI3aVxbPg5Vo/kkQPQ==
-X-Google-Smtp-Source: ACHHUZ7BnzceJki9gY6p43DrLwhLeql78EWxr7Z52cBHEZ9rzdtRloV/MTGFSk9tsxJyym80qdPtdw==
-X-Received: by 2002:a17:907:1691:b0:94e:b3a1:a3d5 with SMTP id hc17-20020a170907169100b0094eb3a1a3d5mr9651469ejc.21.1683553105062;
-        Mon, 08 May 2023 06:38:25 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
-        by smtp.gmail.com with ESMTPSA id j13-20020a17090686cd00b00965bf86c00asm5048403ejy.143.2023.05.08.06.38.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 06:38:24 -0700 (PDT)
-Message-ID: <0e46c212-28a3-e8dd-db38-6233176b699e@linaro.org>
-Date:   Mon, 8 May 2023 15:38:23 +0200
+        Mon, 8 May 2023 09:44:56 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB95C25276;
+        Mon,  8 May 2023 06:44:54 -0700 (PDT)
+Received: from [IPV6:2001:250:4000:5122:23cb:1d84:8ee4:cdb3] ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=PLAIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 348DheMI007261-348DheMJ007261
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Mon, 8 May 2023 21:43:40 +0800
+Message-ID: <b7154e2c-0438-87d1-9edc-7eb1aad40cd1@hust.edu.cn>
+Date:   Mon, 8 May 2023 21:40:41 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 1/2] regulator: dt-bindings: Add bindings for TPS6287x
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drivers: mpt3sas: mpt3sas_debugfs: return value check of
+ `mpt3sas_debugfs_root`
 Content-Language: en-US
-To:     =?UTF-8?Q?M=c3=a5rten_Lindahl?= <marten.lindahl@axis.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel@axis.com
-References: <20230502-tps6287x-driver-v3-0-e25140a023f5@axis.com>
- <20230502-tps6287x-driver-v3-1-e25140a023f5@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230502-tps6287x-driver-v3-1-e25140a023f5@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+To:     Dan Carpenter <dan.carpenter@linaro.org>,
+        Tomas Henzl <thenzl@redhat.com>
+Cc:     Jing Xu <U202112064@hust.edu.cn>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        hust-os-kernel-patches@googlegroups.com,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230423122535.31019-1-U202112064@hust.edu.cn>
+ <6e69b57c-80ae-8b6e-cb5f-9e05da46ecd6@redhat.com>
+ <1484408f-f68e-4354-ab59-56af9cd1ef14@kili.mountain>
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <1484408f-f68e-4354-ab59-56af9cd1ef14@kili.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,17 +57,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/05/2023 15:14, Mårten Lindahl wrote:
-> Add bindings for the TPS62870/TPS62871/TPS62872/TPS62873 voltage
-> regulators.
+
+
+On 5/3/23 01:06, Dan Carpenter wrote:
+> On Tue, May 02, 2023 at 05:53:10PM +0200, Tomas Henzl wrote:
+>> On 4/23/23 14:25, Jing Xu wrote:
+>>> Smatch complains that:
+>>> mpt3sas_init_debugfs() warn: 'mpt3sas_debugfs_root' is an error
+>>> pointer or valid
+>>>
+>>> There is no need to check the return value of the debugfs_create_dir()
+>>> function, just delete the dead code.
+>>>
+>>> Fixes: 2b01b293f359 ("scsi: mpt3sas: Capture IOC data for debugging purposes")
+>>> Signed-off-by: Jing Xu <U202112064@hust.edu.cn>
+>>> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+>>> ---
+>>>   drivers/scsi/mpt3sas/mpt3sas_debugfs.c | 2 --
+>>>   1 file changed, 2 deletions(-)
+>>>
+>>> diff --git a/drivers/scsi/mpt3sas/mpt3sas_debugfs.c b/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
+>>> index a6ab1db81167..c92e08c130b9 100644
+>>> --- a/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
+>>> +++ b/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
+>>> @@ -99,8 +99,6 @@ static const struct file_operations mpt3sas_debugfs_iocdump_fops = {
+>>>   void mpt3sas_init_debugfs(void)
+>>>   {
+>>>   	mpt3sas_debugfs_root = debugfs_create_dir("mpt3sas", NULL);
+>>> -	if (!mpt3sas_debugfs_root)
+>>> -		pr_info("mpt3sas: Cannot create debugfs root\n");
+>> Hi Jing,
+>> most drivers just ignore the return value but here the author wanted to
+>> have the information logged.
+>> Can you instead of removing the message modify the 'if' condition so it
+>> suits the author's intention?
 > 
-> Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
-> ---
->  .../devicetree/bindings/regulator/ti,tps62870.yaml | 52 ++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
+> This code was always just wrong.
+> 
+> The history of this is slightly complicated and boring.  These days it's
+> harmless dead code so I guess it's less bad than before.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi Dan and Tomas,
 
-Best regards,
-Krzysztof
+Any conclusion about this patch? The student Jing Xu is not sure about 
+how to revise this patch.
 
+> 
+> 
+> regards,
+> dan carpenter
