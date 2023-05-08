@@ -2,109 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFABB6FB3AE
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 993CB6FB3B2
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234454AbjEHPXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 11:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
+        id S234478AbjEHP0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 11:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjEHPXU (ORCPT
+        with ESMTP id S229995AbjEHP0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 11:23:20 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB872128
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 08:23:19 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30796c0cbcaso1096430f8f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 08:23:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683559397; x=1686151397;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UIqlbvBpKNHDcdBlMehVEfriFGPu86aKbtxQbd1EvP8=;
-        b=Z2pjaqI5TeuW80dRPj7WDVOmeTxvEh65GHYS5YL8i5gpVEL/vjYQFvTGCjwE44TKdT
-         elmk+FhRPzqAqFQqvWN/kcw+GURmAJ8tw5c2YuYogfqC2LWHSb9FmDXuEIci0oN82gk6
-         GvQT71XZurkFhWh+Zx3APsMzOkgN0Lh/bsT9vUDZFbFVREcE3k+rllWBpx5IdopXH+ZY
-         +Z9b4Bl8zKkj3VnfNYHSOEMclhREHBBJTQ6qTm/KN6MDRh3TbEtySg6AND6curNsQ78Y
-         kbs6D+VS9iFjqeaIG5kAl4MNkKQv1MPtEIbrWkWC9WGyFR8Gbd5H5Uaq7fiIE7u6nLQw
-         Uf7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683559397; x=1686151397;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UIqlbvBpKNHDcdBlMehVEfriFGPu86aKbtxQbd1EvP8=;
-        b=JuO2iUgWcDbdXadWT1OrPw9BOaGJl4IH/AVX53YDxfMU6P+PfP5lGERW31d5lLlbSn
-         TBnHePqBvHuizxtJhEdOvOsebGF7SFu2oCfmDssNUiT4OC0DoaqG5AO6E8tdvqgfMf7L
-         Shrf5fiE19FaUqDwM+/ozjrRp1/4BmK69d6f3tAbIWVt4wIuaQoUtZqHJP4OjWeFS3ok
-         7aDjeu8Zvtt3oTfj6HiodJdwptW9pDlYgGgKWnXxU844POtDy5zAKWEBiriSmN1+4v3q
-         Gm9Dc+yTA2w464n6JwGD36/dE1AmTP/XVF7DSqDAuCzU/+gAYWPnkXRVLFbo59Jv7CRZ
-         C09A==
-X-Gm-Message-State: AC+VfDyZ4k1XHwtUAta/E9/12JWhNdA+FvSzmsSXfFq7LDQVH4T5t5JZ
-        tnerUbxbavHJiEevezzpYA6PESe8Xlg1GWwrfeI=
-X-Google-Smtp-Source: ACHHUZ75D9K90XmdX0sBvwPuQdxjBVdmv+VWAEcRGjXj/SWygfADYv77PY4xM3LSROge4a4r1/nobBHmF785AXz+kjo=
-X-Received: by 2002:adf:e70a:0:b0:2cf:f01f:ed89 with SMTP id
- c10-20020adfe70a000000b002cff01fed89mr7227713wrm.24.1683559397428; Mon, 08
- May 2023 08:23:17 -0700 (PDT)
+        Mon, 8 May 2023 11:26:07 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E842644B8;
+        Mon,  8 May 2023 08:26:05 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 348Ee8Sc026871;
+        Mon, 8 May 2023 15:26:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=xw6Asnoh1Eu3iEL9PkfCPf17D5sUHKlrNoH1SbQGAjg=;
+ b=DXZsWqINNBL36e2JsuIRz9EQfRdQV/rJk1mhTyQT7l8uU3rVTJkMntTwA9Q/mVulu946
+ QCfeExrqMIj5kPdQforzzlzfrzpfMIsVWAT3Itc8PtUbzaJk0JkdszW12iBYhji8pu3O
+ MGBtDqfkOK/mGvSWQRNkc6VwcDaaqOR6gpE2RniXViI+yDnPy5OC9X4gnYiLL5dYvyOB
+ hUfXzdXAL73S0e8RG45xQ/ngeUfK4NASqKXCxLY0n9+vHzWe4dV8yT/WkEWa084r55TR
+ 0dPxUMxxIah1bu7Zl30MVPlsgf49TD+vFkp6D9VRAMD+STgr9z143JfkBZBBRzOevkwy JQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qey390p0p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 15:26:02 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 348FQ1Do001401
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 8 May 2023 15:26:01 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 8 May 2023 08:25:57 -0700
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH 0/2] Add SoC ID for IPQ5312 and IPQ5302
+Date:   Mon, 8 May 2023 20:55:41 +0530
+Message-ID: <20230508152543.14969-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230117164041.1207412-1-arnd@kernel.org>
-In-Reply-To: <20230117164041.1207412-1-arnd@kernel.org>
-From:   Thierry Reding <thierry.reding@gmail.com>
-Date:   Mon, 8 May 2023 17:23:06 +0200
-Message-ID: <CA+PwDYdmSZE8ip3C7W_7CH4+74MzLf3nO-JTJu1xhQxRBauvVw@mail.gmail.com>
-Subject: Re: [PATCH] workqueue: fix enum type for gcc-13
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Tejun Heo <tj@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Richard Clark <richard.xnu.clark@gmail.com>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _yPMdOdWmBKwT9uK7cIf_WcBpq_9x_I7
+X-Proofpoint-GUID: _yPMdOdWmBKwT9uK7cIf_WcBpq_9x_I7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-08_11,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ spamscore=0 suspectscore=0 bulkscore=0 malwarescore=0 adultscore=0
+ mlxscore=0 mlxlogscore=518 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305080102
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 6:00=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
-te:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> In gcc-13, the WORK_STRUCT_WQ_DATA_MASK constant is a signed 64-bit
-> type on 32-bit architectures because the enum definition has both
-> negative numbers and numbers above LONG_MAX in it:
->
-> kernel/workqueue.c: In function 'get_work_pwq':
-> kernel/workqueue.c:709:24: error: cast to pointer from integer of differe=
-nt size [-Werror=3Dint-to-pointer-cast]
->   709 |                 return (void *)(data & WORK_STRUCT_WQ_DATA_MASK);
->       |                        ^
-> kernel/workqueue.c: In function 'get_work_pool':
-> kernel/workqueue.c:737:25: error: cast to pointer from integer of differe=
-nt size [-Werror=3Dint-to-pointer-cast]
->   737 |                 return ((struct pool_workqueue *)
->       |                         ^
-> kernel/workqueue.c: In function 'get_work_pool_id':
-> kernel/workqueue.c:759:25: error: cast to pointer from integer of differe=
-nt size [-Werror=3Dint-to-pointer-cast]
->   759 |                 return ((struct pool_workqueue *)
->       |                         ^
->
-> Change the enum definition to ensure all values can fit into
-> the range of 'unsigned long' on all architectures.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  include/linux/workqueue.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Kathiravan T (2):
+  dt-bindings: arm: qcom,ids: add SoC ID for IPQ5312 and IPQ5302
+  soc: qcom: socinfo: Add Soc ID for IPQ5312 and IPQ5302
 
-Tested-by: Thierry Reding <treding@nvidia.com>
+ drivers/soc/qcom/socinfo.c         | 2 ++
+ include/dt-bindings/arm/qcom,ids.h | 2 ++
+ 2 files changed, 4 insertions(+)
+
+-- 
+2.17.1
+
