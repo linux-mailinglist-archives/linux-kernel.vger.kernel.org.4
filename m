@@ -2,134 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B9C6FB5D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 19:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1FC6FB5D0
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 19:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233057AbjEHRSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 13:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
+        id S232911AbjEHRSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 13:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbjEHRSO (ORCPT
+        with ESMTP id S233053AbjEHRSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 13:18:14 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E06A6A71
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 10:18:13 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-965d2749e2eso631516166b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 10:18:13 -0700 (PDT)
+        Mon, 8 May 2023 13:18:05 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C275E44A6
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 10:18:03 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-763970c9a9eso15931139f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 10:18:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1683566291; x=1686158291;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aPLrilJOpAfCtWH73NaWni8pY2sG/Rz0VNe7OUxyQPg=;
-        b=QBa5klLYRx6s5xUdv17wPOIXHSVMOnDCRRV+kMDzkp10mpOn414lUE7CKd2DD5xOlG
-         TEDhSJgzAMKYbKS0U31N33AjJY6Yiwr0vbD2vo93Z1FHmSMqjtWDTXsrR4Jnoq2ooFvj
-         v5sCzUMeR+r8Gj8N3ozf7y2nYwYqTJ44YIFS8=
+        d=linuxfoundation.org; s=google; t=1683566283; x=1686158283;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w8qlp5XghttjEan5YOKeJGzJQmCiegmZ3khpFvV4ZPs=;
+        b=AO1hRYtglviVhhGSoTuSJwmjPi3RErsHCMTxnnQap1CnXC6UFQWMjmYvvxAatKg9VR
+         bkFSRlXrZOcFkVtIKyfLw+2PA6OKDphDtHeWdBqfxY1g+tGLMOkpkejSjKwV/sUJxi4X
+         cT0YryWbViHXgSNQO+9ytmYt7C8F8yvEhDTD8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683566291; x=1686158291;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aPLrilJOpAfCtWH73NaWni8pY2sG/Rz0VNe7OUxyQPg=;
-        b=KKHYxEIj0gHd1Mq52PSE6m0k2MkEk9S5AU2ec0fW9bWy8orjYmayPvXOG8UJGahTw5
-         maQrTceHa6/aZAs8yq+n2A+OyeDhjd2RQAkdrxE6yJag66HeBOoXy/kbCWUORw2/sgk5
-         FnhQbu/x+iwNJd3nDYZLaKbafs9SxrOqAdklasPHYkmUf0cOrWFJ47n59DTcIkPNWuJ+
-         ukZCvKokE7nhihNZBr4UDcTGBTrroXF50RcCv2kc8/zdEyoJ5uCYOKqBbW9bWS9DfItW
-         vN1AB1nZPVEPfYygGglLhfPzHs/mF+SmXtIFUWRfh+4696dOy3EcF57hBKvbJHFy0NE+
-         hyNw==
-X-Gm-Message-State: AC+VfDyZ4oiUs1OlfDSkmVergl0029AVf6FcJETQVsCNniv9jKh9yiLN
-        Iuy4S3QlvwqLwllXjIisa1aAyDWFSKOaK5ge+gh1xA==
-X-Google-Smtp-Source: ACHHUZ4Ul6gx/73kWBmqSBe7N/AkNAeoQZzcp6jY1Q6sIoA5Lmz61QLa12x3ajFMZ6s/MW9MUVsP8Q==
-X-Received: by 2002:a17:907:5ca:b0:965:6cb9:b768 with SMTP id wg10-20020a17090705ca00b009656cb9b768mr7747964ejb.31.1683566291589;
-        Mon, 08 May 2023 10:18:11 -0700 (PDT)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id jx26-20020a170907761a00b0096629607bb2sm213746ejc.98.2023.05.08.10.18.10
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1683566283; x=1686158283;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w8qlp5XghttjEan5YOKeJGzJQmCiegmZ3khpFvV4ZPs=;
+        b=MYGTE2H4HljhuSiJaKL/qGb6KBeW5DRjPutHlUqZQk9m9Sl7uqjMXPePvDjedT8oRs
+         0qRfzObR6QjvdppWFrpKaN1xDbZEYSTGTm3+e5loSx2MUnhaeTxCK+xjWgZo5kQB9jBc
+         9B9WsGUOEFhyGFZSnwxbBYkfPRvLRwarL0WX5eTDgpGnfJGQKJcpqIwjB7HhuulTFtcA
+         RdxGEeAvt2xlWH++NzPFS/X4AxEKHU3OsxShIKzfnw1h7vjJECwqfAQdbM0v9TqjVeLR
+         sagTQrgUc/K6k61ezjuBo3ansapipxUK4My+cW3028k73ES51iPP81kuHcghlXb6cw80
+         WlOQ==
+X-Gm-Message-State: AC+VfDx4gs5MQ2J5RjQ9CzmtmlCO07P+2ysAs6huMo7Vm37nIiVrI69N
+        EJc/aIjpbUIc4Gdebt2bTBZLCg==
+X-Google-Smtp-Source: ACHHUZ63FdKEvsQgOvOAIVrabDVRnQT5Xqa4b68JbCg4HQ9KHodRuCp9TmxxO1eWiLYMXUkpIl3nog==
+X-Received: by 2002:a05:6e02:1d05:b0:331:1129:b8a9 with SMTP id i5-20020a056e021d0500b003311129b8a9mr5643487ila.1.1683566283068;
+        Mon, 08 May 2023 10:18:03 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id a14-20020a92d34e000000b0032732e7c25esm2541449ilh.36.2023.05.08.10.18.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 10:18:11 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-50bc2feb320so7648165a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 10:18:10 -0700 (PDT)
-X-Received: by 2002:a17:907:2cc4:b0:94f:3338:12a2 with SMTP id
- hg4-20020a1709072cc400b0094f333812a2mr9978465ejc.33.1683566290229; Mon, 08
- May 2023 10:18:10 -0700 (PDT)
+        Mon, 08 May 2023 10:18:02 -0700 (PDT)
+Message-ID: <e886a835-f2d1-4fd0-8e02-82cc3a878870@linuxfoundation.org>
+Date:   Mon, 8 May 2023 11:18:01 -0600
 MIME-Version: 1.0
-References: <20230506133134.1492395-1-jacob.jun.pan@linux.intel.com>
- <CAHk-=wgUiAtiszwseM1p2fCJ+sC4XWQ+YN4TanFhUgvUqjr9Xw@mail.gmail.com>
- <20230506150741.2e3d2dcc@jacob-builder> <CAHk-=wjmOAQnqJF-pW=fzMXb_Rk_J_Oi4ESBLmVPhxwBK4xfGg@mail.gmail.com>
- <20230508094014.53913cf3@jacob-builder> <CAHk-=wgobPe0U=Sc-PH08vF-ZbG00KrzftEpQMQ=n0LLNn7y6A@mail.gmail.com>
- <ZFkpk8y8mUZuZjkV@nvidia.com>
-In-Reply-To: <ZFkpk8y8mUZuZjkV@nvidia.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 8 May 2023 10:17:53 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiv=Dm5diw2N-4Mx3k8iYWNfyvjzrQxB3JxVLC_7cuY+g@mail.gmail.com>
-Message-ID: <CAHk-=wiv=Dm5diw2N-4Mx3k8iYWNfyvjzrQxB3JxVLC_7cuY+g@mail.gmail.com>
-Subject: Re: [PATCH] iommu: Add Kconfig help text for IOMMU_SVA
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>, Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] selftests/ftrace: Improve integration with kselftest
+ runner
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230302-ftrace-kselftest-ktap-v2-1-ecc482212729@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230302-ftrace-kselftest-ktap-v2-1-ecc482212729@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023 at 9:55=E2=80=AFAM Jason Gunthorpe <jgg@nvidia.com> wro=
-te:
->
-> CONFIG_IOMMU_MM_PASID perhaps? Says what it does without a clue about
-> why it does it. x86 arch code could select it ideally?
+On 5/8/23 07:15, Mark Brown wrote:
+> The ftrace selftests do not currently produce KTAP output, they produce a
+> custom format much nicer for human consumption. This means that when run in
+> automated test systems we just get a single result for the suite as a whole
+> rather than recording results for individual test cases, making it harder
+> to look at the test data and masking things like inappropriate skips.
+> 
+> Address this by adding support for KTAP output to the ftracetest script and
+> providing a trivial wrapper which will be invoked by the kselftest runner
+> to generate output in this format by default, users using ftracetest
+> directly will continue to get the existing output.
+> 
+> This is not the most elegant solution but it is simple and effective. I
+> did consider implementing this by post processing the existing output
+> format but that felt more complex and likely to result in all output being
+> lost if something goes seriously wrong during the run which would not be
+> helpful. I did also consider just writing a separate runner script but
+> there's enough going on with things like the signal handling for that to
+> seem like it would be duplicating too much.
+> 
+> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
 
-Maybe we don't even need the "IOMMU" part. It's a core x86
-architecture feature. Maybe it usually (always?) gets used within the
-framework of some IOMMU work, but I guess ENCQCMD could be used in
-some hardwired way even without that (ie is it possible to have just
-some "basic PASID set up by VMM environment" thing?)
+Applied now to linux-kselftest fixes for Linux 6.4-rc2
 
-I don't actually know who uses it and how, so I'm probably not the
-right person to name it, but just looking at the x86 code that sets
-it, the PASID code technically has no connection to any iommu code,
-it's literally a core CPU feature with an MSR and some magic faulting
-thing, and seems to be possibly usable as-is.
+thanks,
+-- Shuah
 
-That existing
-
-    #ifdef CONFIG_IOMMU_SVA
-
-in the x86 traps.c code just looks odd, and making it be
-CONFIG_IOMMU_MM_PASID sounds better to me. I'm just not sure about the
-"IOMMU" part either. Just "MM_PASID"?
-
-That said, the arm-smmu-v3-sva.c code clearly *also* uses pasid,
-except it seems to really want to call it "ssid".
-
-So "having a per-mm ASID for IO" is clearly a common feature. But
-naming seems hard, with x86 calling it PASID, arm64 seemingly calling
-it "SSID".
-
-Right now the only user *does* seem to be through the IOMMU SVA code,
-but that may or may not be fundamental.
-
-Now, "SSID" is a completely horrible name, as I immediately realized
-when I tried to google for it. So arm64 is just wrong, and we're most
-definitely continuing to call it PASID.
-
-I'd lean towards just "CONFIG_MM_PASID" or something, but at some
-point this is bikeshedding, and I don't know about any possible
-non-iommu direct uses?
-
-           Linus
