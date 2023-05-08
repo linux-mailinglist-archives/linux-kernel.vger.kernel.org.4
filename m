@@ -2,55 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E92736FB654
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 20:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A97B6FB65D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 20:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbjEHSec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 14:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        id S230176AbjEHSmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 14:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjEHSe3 (ORCPT
+        with ESMTP id S229539AbjEHSmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 14:34:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839AE59FC
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 11:34:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0E5E61F50
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 18:34:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3854EC433D2;
-        Mon,  8 May 2023 18:34:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683570867;
-        bh=Dn7+e8seK6/zwfLvdedKADC/j3PIr8QfOPcWNlmROtU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=D8gF7m1nvfltldXU0tUm0i9BzkC0+M4VLhXZRrDUDCjs1mxxe02T9VXg1d8MW49yN
-         HFqIVWnZEe6XUQOXRZ/vZCxjh3c4iZqBCCIrSl8MoSPs59YOwPiqsaBfcn4JLz1f1U
-         O5agOHtKQ6XK5Q9X6h0xUWO1NwI7l5zSiJjMht4ZWQtEDvj2j+yGPUIDRKLcb5EHzy
-         izTpIkCDm+m74FPEgUEZTvpbegUo3IDUUp3riV2rnl6Iq8TuFEDTll9FKEY9i3vo7B
-         Wu88ENKVdcy60gCWZhFOD3ERo1FitJCJgNIJiAWM6+nhbEoJcM+tv0ZNhPWSS4T+pb
-         jzV+1wuzP5saA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1698CC39562;
-        Mon,  8 May 2023 18:34:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 8 May 2023 14:42:02 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D486759E8
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 11:42:00 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-760f040ecccso30630139f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 11:42:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1683571320; x=1686163320;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aOiU3DLL+j/h0VrJ9+wvAaTjkIuW4uAfTjBeqaSp4Eo=;
+        b=WEzGqoAEbT6ufIzeocePwcRLqyqOAwDUbz1aeiAq8ka5altBg2TIH8wdDBSIVLGakU
+         TenOwH1KUa29IV+YriaxxOi0b2+QY8DXDQ2jLjzl6NfsGCrwYJ/imEO051R66hicp1cS
+         jckgQWHP3tBunnW0OMTHId0y/hskXiAT7E5xnUTTJtmVX+kbWe2mm+CVpdT85WuXBGXK
+         mdVMg0E4+lULG5RhkBhzDgUULv7YxLMK9T5MfaLZ4QBtRoR9E57JUzO4Eq7kYsc9zfzI
+         vJ96eTMghjXib1tYCre7HMKc3jmlTLrMtDmh3saKxTHEgkI4c0+q9TLALeBO0lwLiX8l
+         zCMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683571320; x=1686163320;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aOiU3DLL+j/h0VrJ9+wvAaTjkIuW4uAfTjBeqaSp4Eo=;
+        b=JQDz30JbesSKBYx8lmLGgPXUanPev2y/E/97ltl9wOcWddPchcu6vVgK/7IFWebXzB
+         zATB4ww0wARTm2EDlpj7J31cEFacjCGXI7pmdS3CJeThxzeAmO/LpBXP6NgUdeO8Ys5Y
+         FSfrdfazuAOa5xj1wsA1L3NoCieZeTC10hG5nIicctpR5AGUffIdbbaiycp+Esv/DWrU
+         DkF8gYEMO7mZlXCmU5lMbJ4QYd9wkWIQCL7Zi07negHVWZK9fjwVmUyBCbcXkhMx3I5c
+         ngBYkQbU2o70fQeBqkORJOyHf8geNcmQkl/1vo8f6uEpakn3C+pjAjSZcbnILYGLqUim
+         CQJA==
+X-Gm-Message-State: AC+VfDyxXchiTjE7OZEyvYW+9upsyrryjdaEDDohXVCfvVqyjjE68sPg
+        AaOKhJKCKAJndvSiXq2hkity7RMdljACEU2QQAY=
+X-Google-Smtp-Source: ACHHUZ4H4cFhAfzI82v/JZ4s3Wl91ECSwQyoqKml28c/cb3Nx2n/sxwnrl+SjAhPBOJHqUY/Daf9yg==
+X-Received: by 2002:a05:6602:14d6:b0:76c:54b1:3e7 with SMTP id b22-20020a05660214d600b0076c54b103e7mr547936iow.0.1683571320128;
+        Mon, 08 May 2023 11:42:00 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id n14-20020a92d9ce000000b0030c0dce44b1sm2598205ilq.15.2023.05.08.11.41.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 11:41:59 -0700 (PDT)
+Message-ID: <fb84f054-517c-77d4-eb11-d3df61f53701@kernel.dk>
+Date:   Mon, 8 May 2023 12:41:58 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [f2fs-dev] [PATCH v2] f2fs: add sanity check for proc_mkdir
-From:   patchwork-bot+f2fs@kernel.org
-Message-Id: <168357086708.2764.4303615885378186638.git-patchwork-notify@kernel.org>
-Date:   Mon, 08 May 2023 18:34:27 +0000
-References: <20230425160611.79848-1-frank.li@vivo.com>
-In-Reply-To: <20230425160611.79848-1-frank.li@vivo.com>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     jaegeuk@kernel.org, chao@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [GIT PULL] Final io_uring updates for 6.4-rc1
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     io-uring <io-uring@vger.kernel.org>, linux-kernel@vger.kernel.org
+References: <9b2e791d-aeba-a2c7-1877-797ff5c680a3@kernel.dk>
+ <20230508031852.GA4029098@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230508031852.GA4029098@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_CSS_A autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,28 +76,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to jaegeuk/f2fs.git (dev)
-by Jaegeuk Kim <jaegeuk@kernel.org>:
-
-On Wed, 26 Apr 2023 00:06:11 +0800 you wrote:
-> Return -ENOMEM when proc_mkdir failed.
+On 5/7/23 9:18?PM, Chen-Yu Tsai wrote:
+> Hi,
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
-> v2:
-> -removing check for proc in f2fs_unregister_sysfs and f2fs_register_sysfs
->  fs/f2fs/sysfs.c | 39 +++++++++++++++++++++++----------------
->  1 file changed, 23 insertions(+), 16 deletions(-)
+> On Sun, May 07, 2023 at 06:00:48AM -0600, Jens Axboe wrote:
+>> Hi Linus,
+>>
+>> Nothing major in here, just two different parts:
+>>
+>> - Small series from Breno that enables passing the full SQE down
+>>   for ->uring_cmd(). This is a prerequisite for enabling full network
+>>   socket operations. Queued up a bit late because of some stylistic
+>>   concerns that got resolved, would be nice to have this in 6.4-rc1
+>>   so the dependent work will be easier to handle for 6.5.
+>>
+>> - Fix for the huge page coalescing, which was a regression introduced
+>>   in the 6.3 kernel release (Tobias).
+>>
+>> Note that this will throw a merge conflict in the ublk_drv code, due
+>> to this branch still being based off the original for-6.4/io_uring
+>> branch. Resolution is pretty straight forward, I'm including it below
+>> for reference.
+>>
+>> Please pull!
+>>
+>>
+>> The following changes since commit 3c85cc43c8e7855d202da184baf00c7b8eeacf71:
+>>
+>>   Revert "io_uring/rsrc: disallow multi-source reg buffers" (2023-04-20 06:51:48 -0600)
+>>
+>> are available in the Git repository at:
+>>
+>>   git://git.kernel.dk/linux.git tags/for-6.4/io_uring-2023-05-07
+>>
+>> for you to fetch changes up to d2b7fa6174bc4260e496cbf84375c73636914641:
+>>
+>>   io_uring: Remove unnecessary BUILD_BUG_ON (2023-05-04 08:19:05 -0600)
+>>
+>> ----------------------------------------------------------------
+>> for-6.4/io_uring-2023-05-07
+>>
+>> ----------------------------------------------------------------
+>> Breno Leitao (3):
+>>       io_uring: Create a helper to return the SQE size
+>>       io_uring: Pass whole sqe to commands
+> 
+> This commit causes broken builds when IO_URING=n and NVME_CORE=y, as
+> io_uring_sqe_cmd(), called in drivers/nvme/host/ioctl.c, ends up being
+> undefined. This was also reported [1] by 0-day bot on your branch
+> yesterday, but it's worse now that Linus merged the pull request.
+> 
+> Not sure what the better fix would be. Move io_uring_sqe_cmd() outside
+> of the "#if defined(CONFIG_IO_URING)" block?
 
-Here is the summary with links:
-  - [f2fs-dev,v2] f2fs: add sanity check for proc_mkdir
-    https://git.kernel.org/jaegeuk/f2fs/c/888ca6edac81
+Queued up a patch for this:
 
-You are awesome, thank you!
+https://git.kernel.dk/cgit/linux/commit/?h=io_uring-6.4&id=5d371b2f2b0d1a047582563ee36af8ffb5022847
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Jens Axboe
 
