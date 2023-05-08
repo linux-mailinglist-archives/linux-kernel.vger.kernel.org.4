@@ -2,137 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A97B6FB65D
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 20:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB2F6FB65F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 20:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjEHSmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 14:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
+        id S232288AbjEHSnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 14:43:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjEHSmC (ORCPT
+        with ESMTP id S229464AbjEHSni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 14:42:02 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D486759E8
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 11:42:00 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-760f040ecccso30630139f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 11:42:00 -0700 (PDT)
+        Mon, 8 May 2023 14:43:38 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFE859E8;
+        Mon,  8 May 2023 11:43:34 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3ef35d44612so53994731cf.1;
+        Mon, 08 May 2023 11:43:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1683571320; x=1686163320;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aOiU3DLL+j/h0VrJ9+wvAaTjkIuW4uAfTjBeqaSp4Eo=;
-        b=WEzGqoAEbT6ufIzeocePwcRLqyqOAwDUbz1aeiAq8ka5altBg2TIH8wdDBSIVLGakU
-         TenOwH1KUa29IV+YriaxxOi0b2+QY8DXDQ2jLjzl6NfsGCrwYJ/imEO051R66hicp1cS
-         jckgQWHP3tBunnW0OMTHId0y/hskXiAT7E5xnUTTJtmVX+kbWe2mm+CVpdT85WuXBGXK
-         mdVMg0E4+lULG5RhkBhzDgUULv7YxLMK9T5MfaLZ4QBtRoR9E57JUzO4Eq7kYsc9zfzI
-         vJ96eTMghjXib1tYCre7HMKc3jmlTLrMtDmh3saKxTHEgkI4c0+q9TLALeBO0lwLiX8l
-         zCMA==
+        d=gmail.com; s=20221208; t=1683571413; x=1686163413;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2UzQiNfm6F693fNlkyZs8eRSlihgAocz7zYCdB/eyQg=;
+        b=OBRskowUlanHVwjbRBW3VChc6Q8gWvBc2Y34J3nXb3Kx03wXi0ylavATFS07jeUtbk
+         XDr85B+eRqs8dAptutJ7JzTa3veAfrGgN6G/0vlmBX02nLPCn8HeMToiZh+A6u1NW8Cf
+         ttA3hyl7vgZeXUux+86EVXohf4WK2cyyxJotaPyMkQk7ESdB/cqx0TZLSX6Vx2BewHzP
+         BPsZwtOQZRmvf6c0dtmEgszds3QXZcb5QL1pPEdT7He2gG0y1KeFclkPddjETvLQLzyU
+         0dpDWQFohFMJffdN+Kmi+TGMsP8IVuhscVxc4hPpLo69YbgcGouO8Z34b8isFGYYltif
+         GDwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683571320; x=1686163320;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aOiU3DLL+j/h0VrJ9+wvAaTjkIuW4uAfTjBeqaSp4Eo=;
-        b=JQDz30JbesSKBYx8lmLGgPXUanPev2y/E/97ltl9wOcWddPchcu6vVgK/7IFWebXzB
-         zATB4ww0wARTm2EDlpj7J31cEFacjCGXI7pmdS3CJeThxzeAmO/LpBXP6NgUdeO8Ys5Y
-         FSfrdfazuAOa5xj1wsA1L3NoCieZeTC10hG5nIicctpR5AGUffIdbbaiycp+Esv/DWrU
-         DkF8gYEMO7mZlXCmU5lMbJ4QYd9wkWIQCL7Zi07negHVWZK9fjwVmUyBCbcXkhMx3I5c
-         ngBYkQbU2o70fQeBqkORJOyHf8geNcmQkl/1vo8f6uEpakn3C+pjAjSZcbnILYGLqUim
-         CQJA==
-X-Gm-Message-State: AC+VfDyxXchiTjE7OZEyvYW+9upsyrryjdaEDDohXVCfvVqyjjE68sPg
-        AaOKhJKCKAJndvSiXq2hkity7RMdljACEU2QQAY=
-X-Google-Smtp-Source: ACHHUZ4H4cFhAfzI82v/JZ4s3Wl91ECSwQyoqKml28c/cb3Nx2n/sxwnrl+SjAhPBOJHqUY/Daf9yg==
-X-Received: by 2002:a05:6602:14d6:b0:76c:54b1:3e7 with SMTP id b22-20020a05660214d600b0076c54b103e7mr547936iow.0.1683571320128;
-        Mon, 08 May 2023 11:42:00 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id n14-20020a92d9ce000000b0030c0dce44b1sm2598205ilq.15.2023.05.08.11.41.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 11:41:59 -0700 (PDT)
-Message-ID: <fb84f054-517c-77d4-eb11-d3df61f53701@kernel.dk>
-Date:   Mon, 8 May 2023 12:41:58 -0600
+        d=1e100.net; s=20221208; t=1683571413; x=1686163413;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2UzQiNfm6F693fNlkyZs8eRSlihgAocz7zYCdB/eyQg=;
+        b=k6KT42GPuIph77HUD4tIVIZWcojovB3ReF5hC6qtb6sdCkBYJZIC3MpZqa95F4XA+d
+         HDzmIOy51au4+TtD02h/Ed2rZZi11CL2XzAk/0mlZpNs0Bntf88Au7l98XAztKz8tkD0
+         poo3ZEs+F0vnccgtYO62vJ6hwXIsqsNgZjF5kEc8jVR/pBR7mrOBWPQoFjrixujM7+br
+         UkKmCi95GfJktkq93C92qCSGJWKyl3V+Xghei9a+BjQt7h1LIKQ9qg2HCBc0noqTJ4Bs
+         DqvPxjwZFEfcY2xYUBwzd6WMkCnP1E89Tk98mO67A5ASgPhhBkmMhm+4EdtjzmvqjuYS
+         cjeQ==
+X-Gm-Message-State: AC+VfDypTTCd/HnYdujzXxNHJLSMnLa1FkkUjy1LFlBMZFRuH4iS4hFy
+        MPMC6rCYrOp0PLWr4oyg8GyUgMIjqac=
+X-Google-Smtp-Source: ACHHUZ7Qsu3F0OpI4nsrU34NhHs1ifu6OoO1xuDeW7+1kbSpLXxVWbQL2iziPHA/PotC+tfskOrHAw==
+X-Received: by 2002:ac8:5786:0:b0:3ec:489c:defb with SMTP id v6-20020ac85786000000b003ec489cdefbmr16366217qta.9.1683571413285;
+        Mon, 08 May 2023 11:43:33 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id v26-20020ac83d9a000000b003d3a34d2eb2sm3193988qtf.41.2023.05.08.11.43.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 11:43:32 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Frank <Frank.Sae@motor-comm.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net-next 0/3] Support for Wake-on-LAN for Broadcom PHYs
+Date:   Mon,  8 May 2023 11:43:06 -0700
+Message-Id: <20230508184309.1628108-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [GIT PULL] Final io_uring updates for 6.4-rc1
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     io-uring <io-uring@vger.kernel.org>, linux-kernel@vger.kernel.org
-References: <9b2e791d-aeba-a2c7-1877-797ff5c680a3@kernel.dk>
- <20230508031852.GA4029098@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230508031852.GA4029098@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_CSS_A autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/7/23 9:18?PM, Chen-Yu Tsai wrote:
-> Hi,
-> 
-> On Sun, May 07, 2023 at 06:00:48AM -0600, Jens Axboe wrote:
->> Hi Linus,
->>
->> Nothing major in here, just two different parts:
->>
->> - Small series from Breno that enables passing the full SQE down
->>   for ->uring_cmd(). This is a prerequisite for enabling full network
->>   socket operations. Queued up a bit late because of some stylistic
->>   concerns that got resolved, would be nice to have this in 6.4-rc1
->>   so the dependent work will be easier to handle for 6.5.
->>
->> - Fix for the huge page coalescing, which was a regression introduced
->>   in the 6.3 kernel release (Tobias).
->>
->> Note that this will throw a merge conflict in the ublk_drv code, due
->> to this branch still being based off the original for-6.4/io_uring
->> branch. Resolution is pretty straight forward, I'm including it below
->> for reference.
->>
->> Please pull!
->>
->>
->> The following changes since commit 3c85cc43c8e7855d202da184baf00c7b8eeacf71:
->>
->>   Revert "io_uring/rsrc: disallow multi-source reg buffers" (2023-04-20 06:51:48 -0600)
->>
->> are available in the Git repository at:
->>
->>   git://git.kernel.dk/linux.git tags/for-6.4/io_uring-2023-05-07
->>
->> for you to fetch changes up to d2b7fa6174bc4260e496cbf84375c73636914641:
->>
->>   io_uring: Remove unnecessary BUILD_BUG_ON (2023-05-04 08:19:05 -0600)
->>
->> ----------------------------------------------------------------
->> for-6.4/io_uring-2023-05-07
->>
->> ----------------------------------------------------------------
->> Breno Leitao (3):
->>       io_uring: Create a helper to return the SQE size
->>       io_uring: Pass whole sqe to commands
-> 
-> This commit causes broken builds when IO_URING=n and NVME_CORE=y, as
-> io_uring_sqe_cmd(), called in drivers/nvme/host/ioctl.c, ends up being
-> undefined. This was also reported [1] by 0-day bot on your branch
-> yesterday, but it's worse now that Linus merged the pull request.
-> 
-> Not sure what the better fix would be. Move io_uring_sqe_cmd() outside
-> of the "#if defined(CONFIG_IO_URING)" block?
+This patch series adds support for Wake-on-LAN to the Broadcom PHY
+driver. Specifically the BCM54210E/B50212E are capable of supporting
+Wake-on-LAN using an external pin typically wired up to a system's GPIO.
 
-Queued up a patch for this:
+These PHY operate a programmable Ethernet MAC destination address
+comparator which will fire up an interrupt whenever a match is received.
+Because of that, it was necessary to introduce patch #1 which allows the
+PHY driver's ->suspend() routine to be called unconditionally. This is
+necessary in our case because we need a hook point into the device
+suspend/resume flow to enable the wake-up interrupt as late as possible.
 
-https://git.kernel.dk/cgit/linux/commit/?h=io_uring-6.4&id=5d371b2f2b0d1a047582563ee36af8ffb5022847
+Patch #2 adds support for the Broadcom PHY library and driver for
+Wake-on-LAN proper with the WAKE_UCAST, WAKE_MCAST, WAKE_BCAST,
+WAKE_MAGIC and WAKE_MAGICSECURE. Note that WAKE_FILTER is supportable,
+however this will require further discussions and be submitted as a RFC
+series later on.
+
+Patch #3 updates the GENET driver to defer to the PHY for Wake-on-LAN if
+the PHY supports it, thus allowing the MAC to be powered down to
+conserve power.
+
+Florian Fainelli (3):
+  net: phy: Let drivers check Wake-on-LAN status
+  net: phy: broadcom: Add support for Wake-on-LAN
+  net: bcmgenet: Add support for PHY-based Wake-on-LAN
+
+ .../ethernet/broadcom/genet/bcmgenet_wol.c    |  14 ++
+ drivers/net/phy/aquantia_main.c               |   3 +
+ drivers/net/phy/at803x.c                      |  10 +
+ drivers/net/phy/bcm-phy-lib.c                 | 212 ++++++++++++++++++
+ drivers/net/phy/bcm-phy-lib.h                 |   5 +
+ drivers/net/phy/bcm7xxx.c                     |   3 +
+ drivers/net/phy/broadcom.c                    | 128 ++++++++++-
+ drivers/net/phy/dp83822.c                     |   2 +-
+ drivers/net/phy/dp83867.c                     |   3 +
+ drivers/net/phy/dp83tc811.c                   |   2 +-
+ drivers/net/phy/marvell-88x2222.c             |   3 +
+ drivers/net/phy/marvell.c                     |   3 +
+ drivers/net/phy/marvell10g.c                  |   3 +
+ drivers/net/phy/micrel.c                      |   3 +
+ drivers/net/phy/microchip.c                   |   4 +-
+ drivers/net/phy/motorcomm.c                   |   2 +-
+ drivers/net/phy/phy-c45.c                     |   3 +
+ drivers/net/phy/phy_device.c                  |   7 +-
+ drivers/net/phy/realtek.c                     |   3 +
+ include/linux/brcmphy.h                       |  55 +++++
+ include/linux/phy.h                           |   3 +
+ 21 files changed, 460 insertions(+), 11 deletions(-)
 
 -- 
-Jens Axboe
+2.34.1
 
