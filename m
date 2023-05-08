@@ -2,79 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F06C96FB7D0
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30746FB7D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233120AbjEHTzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 15:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
+        id S232792AbjEHT4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 15:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjEHTzp (ORCPT
+        with ESMTP id S230027AbjEHT4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 15:55:45 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD09B76BA
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 12:55:20 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so52236210a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 12:55:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683575715; x=1686167715;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T6K8tZRHm3ktbeHIa7Lnv7wLaqb40G7qOij8yLE39M0=;
-        b=HFQbA/Rp4/5v4RTxWhltNJ+enPCVmZ0mOdENcDnhdh75dD7SDjs9AS2C+A1dDEGEDM
-         czgk20ZOaoEl+dmKGAWJ4hdxgsCNct9v2VHGNxrj8x/nfG2MdRHyErmkRfPI60itdcQD
-         eduWo+/Egv3YtARV2Rkt5jitJxjbD5RrE7aFkG0RHCKeVB5LQNn/AWoWywuvFPMiUhAH
-         gVCJN/zV+acQANIH3o83420zdctQZtpNl5uYi8SBi4L19BayPTcrXBEOtRWxwiC6s3Sj
-         c2tRnOCGz++7c4MseTyioH63xRs2Jdy52lUPFemSRlSQcgsvnWrsGaYPPuGJnpOAuiCy
-         AsZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683575715; x=1686167715;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T6K8tZRHm3ktbeHIa7Lnv7wLaqb40G7qOij8yLE39M0=;
-        b=ZYjbaV0MhZ1qOWE/CHm/Sb7CCcOJsPKFqRUBsquIZXBo0k61RfCkFq8HnrgrGf1DS0
-         HiMZrfgMM+ZNdQdlY173b4qgcGxFxmOV6N5GO8n/HnBwxBMn+mKNK8Cu5s6QIxZ+YgID
-         ETlDNQGFJuOGKDmGwqtai2kxdAzsP7l1ZobuPAWa24EbaCS1c4/BeLLeSIxeNT7vOmnS
-         XYKViC1qAlB3WMZGMpYEZqtmtH5iap3KuzvxOiy6HtrwfvRAasNkP3AK0ocGXqDmyJ/5
-         w92F6cckwguDY18AHW9LhQvCiDXMsdcC85+XWEw8hoXSfIuOnIiQaVTLXmbttQPgND7z
-         nmSw==
-X-Gm-Message-State: AC+VfDydm3yAKXqsrYs4jcL5As7aWzzLI0jbTI9H5STDusdwaKHPSWP4
-        kz8/IEkFVGVn53fBB74NaOKsbg==
-X-Google-Smtp-Source: ACHHUZ7Jjn3I+hqyy58I0ppJxc2pCFSnM+O7DU4Mz6qp5o5RVfk+JoJq3v6bNCtOXITFMgbwEPsHsQ==
-X-Received: by 2002:a50:ed95:0:b0:50d:a804:423 with SMTP id h21-20020a50ed95000000b0050da8040423mr3155042edr.10.1683575714964;
-        Mon, 08 May 2023 12:55:14 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac? ([2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac])
-        by smtp.gmail.com with ESMTPSA id c19-20020aa7d613000000b0050488d1d376sm6461191edr.0.2023.05.08.12.55.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 12:55:14 -0700 (PDT)
-Message-ID: <186bc2b0-21e6-9fae-a273-ec71268bf95c@linaro.org>
-Date:   Mon, 8 May 2023 21:55:13 +0200
+        Mon, 8 May 2023 15:56:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99181449F;
+        Mon,  8 May 2023 12:56:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81B7864228;
+        Mon,  8 May 2023 19:56:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8E1C433D2;
+        Mon,  8 May 2023 19:56:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683575771;
+        bh=ltJDojvCNNaKUmHf67mg4itsVJG4A+kiE3jK368sh/g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JKqxt7yI/HwKC+CiPqt7/Ymw1In8Cfy8sUKQ/N7Y5GOPm5L2ABrTm9Dq1nq41eKmA
+         AHTe3dJ4GZjFimrFv+fDk/u/+RUWcoT5MUOqKMxtEMUEGuTjd6fu/fgM5xxHQsYTJn
+         2HGkpIohveBZGoI/TNxjP5JokEHzmUgSCY476/9BTTVAr9RXgcUrfl1qZ1808BRITo
+         LoxutEU2zLJb5KwB1WD3QO6jkj4KXEimqgHysuWKLttqzvJQ7fBdVxFJspaZqRUdEY
+         TOYjF1/9ux3HNq2T+/zI1zlbxNWr6xGoNzEPn1KGiSMEwlBi0eTJB8Bw8C8Cp/Zpy5
+         bUNNKgVeYmjKQ==
+Date:   Mon, 8 May 2023 20:56:07 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Stanislav Jakubek <stano.jakubek@gmail.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: mmc: brcm,kona-sdhci: convert to YAML
+Message-ID: <20230508-earwig-prance-a2f25f23551d@spud>
+References: <88c64da50a1af868d8b14054c440e5ff96a63399.1683548624.git.stano.jakubek@gmail.com>
+ <a1fd4092b8a31c2ee58a3cd4cca062db13197b45.1683548624.git.stano.jakubek@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/7] dt-bindings: power: supply: max77658: Add ADI
- MAX77654/58/59 Charger
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org,
-        lgirdwood@gmail.com, broonie@kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-References: <20230508131045.9399-1-Zeynep.Arslanbenzer@analog.com>
- <20230508131045.9399-3-Zeynep.Arslanbenzer@analog.com>
- <222ed4ee-4122-7ea8-5d94-69976f247599@linaro.org>
-In-Reply-To: <222ed4ee-4122-7ea8-5d94-69976f247599@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="LFCvaqCAlBvxkDQI"
+Content-Disposition: inline
+In-Reply-To: <a1fd4092b8a31c2ee58a3cd4cca062db13197b45.1683548624.git.stano.jakubek@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,65 +63,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/05/2023 21:45, Krzysztof Kozlowski wrote:
-> On 08/05/2023 15:10, Zeynep Arslanbenzer wrote:
->> Add ADI MAX77654/58/59 power supply devicetree document.
->>
->> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
->> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
->> ---
->>  .../power/supply/adi,max77658-charger.yaml    | 53 +++++++++++++++++++
->>  1 file changed, 53 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/power/supply/adi,max77658-charger.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/power/supply/adi,max77658-charger.yaml b/Documentation/devicetree/bindings/power/supply/adi,max77658-charger.yaml
->> new file mode 100644
->> index 000000000000..1b487d82cdbf
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/supply/adi,max77658-charger.yaml
->> @@ -0,0 +1,53 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/power/supply/adi,max77658-charger.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Battery charger for MAX77658 PMICs family from ADI
->> +
->> +maintainers:
->> +  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>
->> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
->> +
->> +description: |
->> +  This module is part of the MAX77658 MFD device. For more details
->> +  see Documentation/devicetree/bindings/mfd/adi,max77658.yaml.
->> +
->> +  The charger is represented as a sub-node of the PMIC node on the device tree.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - adi,max77654-charger
->> +      - adi,max77658-charger
->> +      - adi,max77659-charger
-> 
-> What are the differences between them? Driver suggests they are
-> compatible. Your match data is empty there.
-> 
->> +
->> +  adi,input-current-limit-microamp:
->> +    description: Input current limit value.
-> 
-> Your description is an exact copy of property name. That's not helpful.
-> What do you limit? Total current? Charging current? Top-off current?
-> 
-> You have default value, why it is not here? minimum/maximum?
-> 
 
-BTW,  this is duplicating constant-charge-current-max-microamp. If it
-has different meaning, you need to explain this in description, not just
-say what property name is saying.
+--LFCvaqCAlBvxkDQI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On Mon, May 08, 2023 at 02:46:03PM +0200, Stanislav Jakubek wrote:
+> Convert Broadcom Kona family SDHCI controller bindings to DT schema.
+>=20
+> Changes during conversion:
+>   - also mark reg and interrupts as required
+>   - drop deprecated compatible (it's been deprecated for ~10 years)
+>=20
+> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
 
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+> ---
+>  .../bindings/mmc/brcm,kona-sdhci.txt          | 21 --------
+>  .../bindings/mmc/brcm,kona-sdhci.yaml         | 48 +++++++++++++++++++
+>  2 files changed, 48 insertions(+), 21 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mmc/brcm,kona-sdhci=
+=2Etxt
+>  create mode 100644 Documentation/devicetree/bindings/mmc/brcm,kona-sdhci=
+=2Eyaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.txt b/=
+Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.txt
+> deleted file mode 100644
+> index 7f5dd83f5bd9..000000000000
+> --- a/Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.txt
+> +++ /dev/null
+> @@ -1,21 +0,0 @@
+> -Broadcom BCM281xx SDHCI
+> -
+> -This file documents differences between the core properties in mmc.txt
+> -and the properties present in the bcm281xx SDHCI
+> -
+> -Required properties:
+> -- compatible : Should be "brcm,kona-sdhci"
+> -- DEPRECATED: compatible : Should be "bcm,kona-sdhci"
+> -- clocks: phandle + clock specifier pair of the external clock
+> -
+> -Refer to clocks/clock-bindings.txt for generic clock consumer properties.
+> -
+> -Example:
+> -
+> -sdio2: sdio@3f1a0000 {
+> -	compatible =3D "brcm,kona-sdhci";
+> -	reg =3D <0x3f1a0000 0x10000>;
+> -	clocks =3D <&sdio3_clk>;
+> -	interrupts =3D <0x0 74 0x4>;
+> -};
+> -
+> diff --git a/Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.yaml b=
+/Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.yaml
+> new file mode 100644
+> index 000000000000..87711edf9b39
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.yaml
+> @@ -0,0 +1,48 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mmc/brcm,kona-sdhci.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom Kona family SDHCI controller
+> +
+> +maintainers:
+> +  - Florian Fainelli <f.fainelli@gmail.com>
+> +
+> +allOf:
+> +  - $ref: sdhci-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: brcm,kona-sdhci
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include "dt-bindings/clock/bcm281xx.h"
+> +
+> +    mmc@3f1a0000 {
+> +        compatible =3D "brcm,kona-sdhci";
+> +        reg =3D <0x3f1a0000 0x10000>;
+> +        clocks =3D <&master_ccu BCM281XX_MASTER_CCU_SDIO3>;
+> +        interrupts =3D <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
+> +    };
+> +...
+> --=20
+> 2.25.1
+>=20
+
+--LFCvaqCAlBvxkDQI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFlT1gAKCRB4tDGHoIJi
+0vqAAP45AkL/hMblRuxYevWDGHld8fxiCLO3SJe5wWE2IV+U6AD/c/sI1OW2syKr
+4Rfp9AR81dk0RssoLeVUOZi7tRpzQgM=
+=crpY
+-----END PGP SIGNATURE-----
+
+--LFCvaqCAlBvxkDQI--
