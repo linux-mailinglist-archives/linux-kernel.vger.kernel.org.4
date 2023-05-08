@@ -2,57 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5CE6FABCB
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 890B86FABF8
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235438AbjEHLR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 07:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
+        id S235541AbjEHLTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 07:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233955AbjEHLRZ (ORCPT
+        with ESMTP id S235523AbjEHLTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 07:17:25 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D72D32356;
-        Mon,  8 May 2023 04:17:21 -0700 (PDT)
-Received: from francesco-nb.int.toradex.com (31-10-206-125.static.upc.ch [31.10.206.125])
-        by mail11.truemail.it (Postfix) with ESMTPA id 4C53F202F9;
-        Mon,  8 May 2023 13:17:18 +0200 (CEST)
-Date:   Mon, 8 May 2023 13:17:11 +0200
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Jun Li <jun.li@nxp.com>
-Cc:     Francesco Dolcini <francesco@dolcini.it>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Xu Yang <xu.yang_2@nxp.com>
-Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
-Message-ID: <ZFjaNzY32x8o2XG7@francesco-nb.int.toradex.com>
-References: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
- <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
- <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
- <PA4PR04MB96403377F5E37C12AD8C25B389729@PA4PR04MB9640.eurprd04.prod.outlook.com>
- <20230505120618.2f4cf22c@booty>
- <ZFThyn/D/dDK9nk3@francesco-nb.int.toradex.com>
- <PA4PR04MB96405EE2468555EA900B340189739@PA4PR04MB9640.eurprd04.prod.outlook.com>
+        Mon, 8 May 2023 07:19:11 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61F0037C46;
+        Mon,  8 May 2023 04:19:10 -0700 (PDT)
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id 1F39D8111;
+        Mon,  8 May 2023 11:19:07 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org, Andrew Davis <afd@ti.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] serial: 8250: Allow using ports higher than SERIAL_8250_RUNTIME_UARTS
+Date:   Mon,  8 May 2023 14:19:02 +0300
+Message-Id: <20230508111903.39339-1-tony@atomide.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PA4PR04MB96405EE2468555EA900B340189739@PA4PR04MB9640.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,90 +44,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 06, 2023 at 09:02:39AM +0000, Jun Li wrote:
-> > -----Original Message-----
-> > From: Francesco Dolcini <francesco@dolcini.it>
-> > Sent: Friday, May 5, 2023 7:00 PM
-> > To: Luca Ceresoli <luca.ceresoli@bootlin.com>; Jun Li <jun.li@nxp.com>
-> > Cc: Francesco Dolcini <francesco@dolcini.it>; devicetree@vger.kernel.org;
-> > festevam@gmail.com; gregkh@linuxfoundation.org; kernel@pengutronix.de;
-> > linux-arm-kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>;
-> > linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
-> > peter.chen@nxp.com; robh+dt@kernel.org; s.hauer@pengutronix.de;
-> > shawnguo@kernel.org; Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>;
-> > Francesco Dolcini <francesco.dolcini@toradex.com>
-> > Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
-> > 
-> > On Fri, May 05, 2023 at 12:06:18PM +0200, Luca Ceresoli wrote:
-> > > On Fri, 5 May 2023 09:49:16 +0000
-> > > Jun Li <jun.li@nxp.com> wrote:
-> > > > Is your board design similar like Francesco's as below?
-> > >
-> > > Possibly, but I'm afraid I can't say: I am using the Toradex Colibri
-> > > i.MX6ULL SoM, whose schematics are not public.
-> > 
-> > I can confirm that it's the same.
-> 
-> Thanks Francesco for the confirmation, had a check with design team,
-> there is no status bit which can be used to judge the VDD_USB_CAP is
-> powered or not, so we have to add a board level dts property to tell
-> this usb phy driver to bypass MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS.
-> 
-> Before send a formal patch, I want to confirm this should work for your
-> HW design, like below simple hack:
+We already allocate CONFIG_SERIAL_8250_NR_UARTS, but only allow using
+CONFIG_SERIAL_8250_RUNTIME_UARTS uarts unless nr_uarts module params
+is set. This causes issues for using distro kernels on SoCs with a
+large number of serial ports.
 
-Thanks Li Jun, I tested it with v6.3.1 kernel and it's all good.
-I would be happy to test the patch as soon as you send it.
+Let's allow up to CONFIG_SERIAL_8250_NR_UARTS instead. To do this, we init
+the ports as needed if the initial uarts was too low. This way there's no
+need to set the value for CONFIG_SERIAL_8250_RUNTIME_UARTS to some SoC
+specific higher value. Typically the default value of 4 can be used as
+set for legacy reasons.
 
+Note that limiting the number of intial uarts still works as before
+unless a serial console on a higher port is specified. In this case we
+will increase the nr_ports up to the console port specified.
 
-With that said I had another issue that I assume is unrelated.
-In addition to the USB Host port, we have an additional OTG one. This
-interface has the same circuit WRT to the VBUS, however in this case
-it's possible to read the VBUS using extcon, e.g. a standard GPIO input.
+Suggested-by: Andrew Davis <afd@ti.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+---
+ drivers/tty/serial/8250/8250_core.c | 86 +++++++++++++++++++++--------
+ 1 file changed, 63 insertions(+), 23 deletions(-)
 
-With that setup, while doing a role switch, I had a couple of time this
-error:
-
-[  187.310421] ci_hdrc ci_hdrc.0: USB bus 2 deregistered
-[  192.351452] ci_hdrc ci_hdrc.0: timeout waiting for 00000800 in OTGSC
-
-that was recovered only doing an additional transition.
-
-More complete logs here:
-
-[  184.997619] usb 2-1: USB disconnect, device number 9
-[  185.019620] ci_hdrc ci_hdrc.0: remove, state 1
-[  185.024271] usb usb2: USB disconnect, device number 1
-[  185.334975] ci_hdrc ci_hdrc.0: USB bus 2 deregistered
-[  185.353857] ci_hdrc ci_hdrc.0: EHCI Host Controller
-[  185.389670] ci_hdrc ci_hdrc.0: new USB bus registered, assigned bus number 2
-[  185.470170] ci_hdrc ci_hdrc.0: USB 2.0 started, EHCI 1.00
-[  185.476097] usb usb2: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.01
-[  185.484527] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-[  185.491811] usb usb2: Product: EHCI Host Controller
-[  185.496704] usb usb2: Manufacturer: Linux 6.1.22-6.2.0+git.3b29299e5f60 ehci_hcd
-[  185.504148] usb usb2: SerialNumber: ci_hdrc.0
-[  185.531121] hub 2-0:1.0: USB hub found
-[  185.542636] hub 2-0:1.0: 1 port detected
-[  185.556586] mxs_phy 20c9000.usbphy: vbus is not valid
-[  187.271684] ci_hdrc ci_hdrc.0: remove, state 4
-[  187.276281] usb usb2: USB disconnect, device number 1
-[  187.310421] ci_hdrc ci_hdrc.0: USB bus 2 deregistered
-[  192.351452] ci_hdrc ci_hdrc.0: timeout waiting for 00000800 in OTGSC
-
-
-> diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
-> index e1a2b2ea098b..ec5ee790455e 100644
-> --- a/drivers/usb/phy/phy-mxs-usb.c
-> +++ b/drivers/usb/phy/phy-mxs-usb.c
-> @@ -178,7 +178,6 @@ static const struct mxs_phy_data imx6sx_phy_data = {
->  };
->  
->  static const struct mxs_phy_data imx6ul_phy_data = {
-> -       .flags = MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS,
->  };
->  
->  static const struct mxs_phy_data imx7ulp_phy_data = {
-
-Francesco
-
+diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+--- a/drivers/tty/serial/8250/8250_core.c
++++ b/drivers/tty/serial/8250/8250_core.c
+@@ -488,6 +488,34 @@ static inline void serial8250_apply_quirks(struct uart_8250_port *up)
+ 	up->port.quirks |= skip_txen_test ? UPQ_NO_TXEN_TEST : 0;
+ }
+ 
++static struct uart_8250_port *serial8250_setup_port(int index)
++{
++	struct uart_8250_port *up;
++
++	if (index >= UART_NR)
++		return NULL;
++
++	up = &serial8250_ports[index];
++	up->port.line = index;
++
++	serial8250_init_port(up);
++	if (!base_ops)
++		base_ops = up->port.ops;
++	up->port.ops = &univ8250_port_ops;
++
++	timer_setup(&up->timer, serial8250_timeout, 0);
++
++	up->ops = &univ8250_driver_ops;
++
++	if (IS_ENABLED(CONFIG_ALPHA_JENSEN) ||
++	    (IS_ENABLED(CONFIG_ALPHA_GENERIC) && alpha_jensen()))
++		up->port.set_mctrl = alpha_jensen_set_mctrl;
++
++	serial8250_set_defaults(up);
++
++	return up;
++}
++
+ static void __init serial8250_isa_init_ports(void)
+ {
+ 	struct uart_8250_port *up;
+@@ -501,26 +529,13 @@ static void __init serial8250_isa_init_ports(void)
+ 	if (nr_uarts > UART_NR)
+ 		nr_uarts = UART_NR;
+ 
+-	for (i = 0; i < nr_uarts; i++) {
+-		struct uart_8250_port *up = &serial8250_ports[i];
+-		struct uart_port *port = &up->port;
+-
+-		port->line = i;
+-		serial8250_init_port(up);
+-		if (!base_ops)
+-			base_ops = port->ops;
+-		port->ops = &univ8250_port_ops;
+-
+-		timer_setup(&up->timer, serial8250_timeout, 0);
+-
+-		up->ops = &univ8250_driver_ops;
+-
+-		if (IS_ENABLED(CONFIG_ALPHA_JENSEN) ||
+-		    (IS_ENABLED(CONFIG_ALPHA_GENERIC) && alpha_jensen()))
+-			port->set_mctrl = alpha_jensen_set_mctrl;
+-
+-		serial8250_set_defaults(up);
+-	}
++	/*
++	 * Set up initial isa ports based on nr_uart module param, or else
++	 * default to CONFIG_SERIAL_8250_RUNTIME_UARTS. Note that we do not
++	 * need to increase nr_uarts when setting up the initial isa ports.
++	 */
++	for (i = 0; i < nr_uarts; i++)
++		serial8250_setup_port(i);
+ 
+ 	/* chain base port ops to support Remote Supervisor Adapter */
+ 	univ8250_port_ops = *base_ops;
+@@ -586,16 +601,29 @@ static void univ8250_console_write(struct console *co, const char *s,
+ 
+ static int univ8250_console_setup(struct console *co, char *options)
+ {
++	struct uart_8250_port *up;
+ 	struct uart_port *port;
+-	int retval;
++	int retval, i;
+ 
+ 	/*
+ 	 * Check whether an invalid uart number has been specified, and
+ 	 * if so, search for the first available port that does have
+ 	 * console support.
+ 	 */
+-	if (co->index >= nr_uarts)
++	if (co->index >= UART_NR)
+ 		co->index = 0;
++
++	/*
++	 * If the console is past the initial isa ports, init more ports up to
++	 * co->index as needed and increment nr_uarts accordingly.
++	 */
++	for (i = nr_uarts; i <= co->index; i++) {
++		up = serial8250_setup_port(i);
++		if (!up)
++			return -ENODEV;
++		nr_uarts++;
++	}
++
+ 	port = &serial8250_ports[co->index].port;
+ 	/* link port to console */
+ 	port->cons = co;
+@@ -990,7 +1018,18 @@ int serial8250_register_8250_port(const struct uart_8250_port *up)
+ 	mutex_lock(&serial_mutex);
+ 
+ 	uart = serial8250_find_match_or_unused(&up->port);
+-	if (uart && uart->port.type != PORT_8250_CIR) {
++	if (!uart) {
++		/*
++		 * If the port is past the initial isa ports, initialize a new
++		 * port and increment nr_uarts accordingly.
++		 */
++		uart = serial8250_setup_port(nr_uarts);
++		if (!uart)
++			goto unlock;
++		nr_uarts++;
++	}
++
++	if (uart->port.type != PORT_8250_CIR) {
+ 		struct mctrl_gpios *gpios;
+ 
+ 		if (uart->port.dev)
+@@ -1120,6 +1159,7 @@ int serial8250_register_8250_port(const struct uart_8250_port *up)
+ 		}
+ 	}
+ 
++unlock:
+ 	mutex_unlock(&serial_mutex);
+ 
+ 	return ret;
+-- 
+2.40.1
