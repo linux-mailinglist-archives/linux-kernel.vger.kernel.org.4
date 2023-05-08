@@ -2,157 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9726FAA71
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE39A6FAA7B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235504AbjEHLCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 07:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
+        id S235518AbjEHLDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 07:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235451AbjEHLCh (ORCPT
+        with ESMTP id S235537AbjEHLCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 07:02:37 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE092E80E;
-        Mon,  8 May 2023 04:01:25 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3486Eqs2025662;
-        Mon, 8 May 2023 11:01:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=30YV3GSfUJH7uuAX8OaPEaPxhsD0B30A4xbCT71CEQo=;
- b=WGHVlF3BsyIuV/3SBrU26+mSJHJfuxCpxS0A4EPFCSIZPqVCmu2edkCUpANl261nQVDH
- IJKmmANwNZ2pWLDEwsGtr4OKjv/o5iPw/wWd56LwUGXjAhHaf5X5IY9GUfxY6ASRZ3m4
- S7VeeZMEx/2JaEV6u7tCLCLPL5fh10l2IXG1QMBk7b7gBL+rWaVfmeyX0jx029Uvhpo2
- oaV9CEdyxq5IbyNTvk1eM7ogRngQ2qIkQtKWrUafeBrHBRF/W8T80mvbJMvq9rFoKIuS
- +4wlbkvPEuvB6I/mHdNz7kKo1Oeaz+uzMy/4CCUpc/frjFVMKz7t+9SHL7Sxln39tOqz Lg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qdf4b3ce1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 May 2023 11:01:20 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 348B1J0P008879
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 8 May 2023 11:01:19 GMT
-Received: from [10.216.33.39] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 8 May 2023
- 04:01:14 -0700
-Message-ID: <62a80dec-91ff-8a07-9818-7207a08a35b3@quicinc.com>
-Date:   Mon, 8 May 2023 16:31:11 +0530
+        Mon, 8 May 2023 07:02:42 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017E434881;
+        Mon,  8 May 2023 04:01:41 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f24d4900bbso1310285e87.3;
+        Mon, 08 May 2023 04:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683543700; x=1686135700;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=emaLfDqfNji1wHcGzgZ0JEzgTkXF4yqdECX8DFHrBeQ=;
+        b=V0KakBYcXFaNHApKKoyS4LPMeoML66Ouc+LVpR69suB0GgqzrleJIrRFLRioegCtZX
+         WASlzjlAMVi7a0HCxEMsWldkEgeGUA06puIsb/9SUo1poXMhPmE9Rupmy6RIYn9UZ3kr
+         2nXcDAg8GxUpcViYYEf90TT6zDjpXdUDs9Eqw2EcxPUBUgejOiFCfFUkj0pNNbxSA1/X
+         eXaLBsynQeRqPl5lHtdytt7n45NbvUSycOuFu9mxsySWQb27Wx8T7GVqvye7zlAy3Dcy
+         NCQvgshxXdsUlEjBoHU2eiNzmxnyDF+i5n+LReiqfWFKwMRgxwRaA23yoFYwpfxdYLEG
+         QrZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683543700; x=1686135700;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=emaLfDqfNji1wHcGzgZ0JEzgTkXF4yqdECX8DFHrBeQ=;
+        b=MDgrCEMFqKN0KjEmq6wAOrOVW274hEWwWTxKhWZoso6n/AQaIxf5IAKTa8vNF9e0fV
+         FlGIkBfelndozt/dx/9TP9aIiOl4aC3TC0qAgc8sOYPIMMnp4Euuyon42OH7i80dzz1c
+         X0dWsfgB2oQzgOYEc0EfTsPtgkOUDFjJqH6InXWOkFjwirIJ/EBmBdMP/I3Rg7jz5xIb
+         JW1QyXPY9XT00CnfPtDo4uzSh0oiMM2QMxLTtGmyF7zlXHjnAtEZmtUSdBxbI0Bbp3o7
+         7HLqT89FEsMn5lkkwqf6N4PDNFDO72vkhXn3yrk6PBCgjhi7KsR97gXhgmnKmRtQJQ0Q
+         czkw==
+X-Gm-Message-State: AC+VfDwEZfnEwDl15IRfpZDxCwnWU0pEZl/yTMgtIbmhCz8/16sh/Jbv
+        1EvvYbwUamLRU7kaPchSKFA=
+X-Google-Smtp-Source: ACHHUZ6dG8Y0kgfDKQd70uztKs9K6rH+WNaZKQOl3nQqSZk2PyRg6Q6LSBY97tcH5RhG5f1EzaQOxg==
+X-Received: by 2002:a19:ae1a:0:b0:4f2:4d0a:7bdf with SMTP id f26-20020a19ae1a000000b004f24d0a7bdfmr908928lfc.52.1683543700112;
+        Mon, 08 May 2023 04:01:40 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id j1-20020ac25501000000b004f001b0eda2sm1262729lfk.56.2023.05.08.04.01.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 04:01:38 -0700 (PDT)
+Date:   Mon, 8 May 2023 14:01:25 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] iio: bu27034: Ensure reset is written
+Message-ID: <ZFjWhbfuN5XcKty+@fedora>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH 1/4] clk: qcom: branch: Extend the invert logic for
- branch2 clocks
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>
-CC:     <quic_skakitap@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohiagar@quicinc.com>, <netdev@vger.kernel.org>
-References: <20230419133013.2563-1-quic_tdas@quicinc.com>
- <20230419133013.2563-2-quic_tdas@quicinc.com>
- <0dc457cbd13ea76a3aa3c70b2a31a537.sboyd@kernel.org>
-From:   Taniya Das <quic_tdas@quicinc.com>
-In-Reply-To: <0dc457cbd13ea76a3aa3c70b2a31a537.sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: kQ3XYs3uLOipgrKCKIHyYStYliBRUIOY
-X-Proofpoint-GUID: kQ3XYs3uLOipgrKCKIHyYStYliBRUIOY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-08_08,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- clxscore=1015 priorityscore=1501 adultscore=0 impostorscore=0 bulkscore=0
- mlxscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2305080075
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zUN/p8D1oB8SxR7S"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Stephen,
 
-Thanks for your review.
+--zUN/p8D1oB8SxR7S
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 4/20/2023 3:07 AM, Stephen Boyd wrote:
-> Quoting Taniya Das (2023-04-19 06:30:10)
->> From: Imran Shaik <quic_imrashai@quicinc.com>
->>
->> Add support to handle the invert logic for branch2 clocks.
->> Invert branch halt would indicate the clock ON when CLK_OFF
->> bit is '1' and OFF when CLK_OFF bit is '0'.
->>
->> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
->> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
->> ---
->>   drivers/clk/qcom/clk-branch.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/clk-branch.c b/drivers/clk/qcom/clk-branch.c
->> index f869fc6aaed6..4b24d45be771 100644
->> --- a/drivers/clk/qcom/clk-branch.c
->> +++ b/drivers/clk/qcom/clk-branch.c
->> @@ -48,6 +48,7 @@ static bool clk_branch2_check_halt(const struct clk_branch *br, bool enabling)
->>   {
->>          u32 val;
->>          u32 mask;
->> +       bool invert = (br->halt_check == BRANCH_HALT_ENABLE);
->>   
->>          mask = BRANCH_NOC_FSM_STATUS_MASK << BRANCH_NOC_FSM_STATUS_SHIFT;
->>          mask |= BRANCH_CLK_OFF;
->> @@ -56,9 +57,16 @@ static bool clk_branch2_check_halt(const struct clk_branch *br, bool enabling)
->>   
->>          if (enabling) {
->>                  val &= mask;
->> +
->> +               if (invert)
->> +                       return (val & BRANCH_CLK_OFF) == BRANCH_CLK_OFF;
->> +
->>                  return (val & BRANCH_CLK_OFF) == 0 ||
->>                          val == BRANCH_NOC_FSM_STATUS_ON;
-> 
-> Do these clks have a NOC_FSM_STATUS bit? I think it would be better to
-> make a local variable for the val we're looking for, and then test for
-> that. We may need a mask as well, but the idea is to not duplicate the
-> test and return from multiple places.
-> 
+The reset bit must be always written to the hardware no matter what value
+is in a cache or register. Ensure this by using regmap_write_bits()
+instead of the regmap_update_bits(). Furthermore, the SWRESET bit may be
+self-clearing, so mark the SYSTEM_CONTROL register volatile to guarantee
+we do also read the right state - should we ever need to read it.
 
-Clocks which has invert status doesn't have NOC_FSM_STATUS bit.
-Will remove the multiple returns in next patch.
+Finally, writing the SWRESET bit will restore the default register
+values. This can cause register cache to be outdated if there are any
+register values cached.
 
->>          } else {
->> +               if (invert)
->> +                       return (val & BRANCH_CLK_OFF) == 0;
->> +
->>                  return val & BRANCH_CLK_OFF;
->>          }
-> 
-> While at it, I'd get rid of this else and de-indent the code because if
-> we're 'enabling' we'll return from the function regardless.
+Rebuild register cache after SWRESET and use regmap_update_bits() when
+performing the reset.
+
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Fixes: e52afbd61039 ("iio: light: ROHM BU27034 Ambient Light Sensor")
+
+---
+v3: Combined patches:
+("iio: bu27034: Ensure reset is written")
+https://lore.kernel.org/lkml/ZFIw%2FKdApZe1euN8@fedora/
+("iio: bu27034: Reinit regmap cache after reset")
+https://lore.kernel.org/lkml/ZFM7lE4ZuDrUTspH@fedora/
+---
+ drivers/iio/light/rohm-bu27034.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iio/light/rohm-bu27034.c b/drivers/iio/light/rohm-bu27=
+034.c
+index 25c9b79574a5..f85194fda6b0 100644
+--- a/drivers/iio/light/rohm-bu27034.c
++++ b/drivers/iio/light/rohm-bu27034.c
+@@ -231,6 +231,9 @@ struct bu27034_result {
+=20
+ static const struct regmap_range bu27034_volatile_ranges[] =3D {
+ 	{
++		.range_min =3D BU27034_REG_SYSTEM_CONTROL,
++		.range_max =3D BU27034_REG_SYSTEM_CONTROL,
++	}, {
+ 		.range_min =3D BU27034_REG_MODE_CONTROL4,
+ 		.range_max =3D BU27034_REG_MODE_CONTROL4,
+ 	}, {
+@@ -1272,12 +1275,19 @@ static int bu27034_chip_init(struct bu27034_data *d=
+ata)
+ 	int ret, sel;
+=20
+ 	/* Reset */
+-	ret =3D regmap_update_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
++	ret =3D regmap_write_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
+ 			   BU27034_MASK_SW_RESET, BU27034_MASK_SW_RESET);
+ 	if (ret)
+ 		return dev_err_probe(data->dev, ret, "Sensor reset failed\n");
+=20
+ 	msleep(1);
++
++	ret =3D regmap_reinit_cache(data->regmap, &bu27034_regmap);
++	if (ret) {
++		dev_err(data->dev, "Failed to reinit reg cache\n");
++		return ret;
++	}
++
+ 	/*
+ 	 * Read integration time here to ensure it is in regmap cache. We do
+ 	 * this to speed-up the int-time acquisition in the start of the buffer
+--=20
+2.40.1
 
 
-Yes, Stephen, will take care in the next patch.
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
--- 
-Thanks & Regards,
-Taniya Das.
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--zUN/p8D1oB8SxR7S
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRY1noACgkQeFA3/03a
+ocVEWgf/b+ePeCroBNw29JDeXSmCoyM+l+yLgNn2ymP9efCBdwIqRfUFkdPTj+u2
+8JRaNblOnR2wsZnu/XaHl0wW7wFjiqv/XSvBr20rpEPwDLBhiFCH8x2sNNGFINf9
+u/bPkIOnMIFOJcI8kdbcCJK9HGrxsMvoUUFlkmPpUAYJVcxOGJ+O+IYhz7NPD5HJ
+CtpvvbILLPIxUMtj7ZE9lYC/odXCGYyZcXgTGtpdLzs834VYO/CeIXaQF5uW7a5W
+hnYQovD7nLFRKHnhAf2Vo5dzmd66nfWvFqCkQTnqVGARiOUfuc4Zrb52M+ExS7gi
+KMLV7orU4EcdI2/QHyGdKFJGsCRU9w==
+=z93B
+-----END PGP SIGNATURE-----
+
+--zUN/p8D1oB8SxR7S--
