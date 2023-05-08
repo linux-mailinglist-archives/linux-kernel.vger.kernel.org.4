@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D026FBA13
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA086FBA17
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234143AbjEHVks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 17:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
+        id S234062AbjEHVlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 17:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234134AbjEHVkb (ORCPT
+        with ESMTP id S234369AbjEHVkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 17:40:31 -0400
+        Mon, 8 May 2023 17:40:43 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199019ED6;
-        Mon,  8 May 2023 14:40:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000EE93CB;
+        Mon,  8 May 2023 14:40:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683582009; x=1715118009;
+  t=1683582021; x=1715118021;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=3dRZzPxzLewIPgVj78LjUAdOR9w9k7vVpVmKgFwPjvo=;
-  b=lKUPLwqkmjHr2u1poazvaXAsAAkfSBrinVxUAchMEUS+R9rjrEnVwyp/
-   n3RKoxpLey/7vNSuxbQeD6qpJDL8j1HiFI94V+GhsfJNuDGlkiQIeNY7P
-   TA9Eng/1rvLcnw5P3SZGxgvtWrYrVueWkUiu8MAA2mzvb4mZcO3WNo1fX
-   /1Ek3wTBUIVvTvVsnCO8Djf9oIvj7+HY7UXIrLOTDzUq1OQQwytrvwdcA
-   nUFgdzyLbc8oc0/fHV6ZYh7sZGNMjAvVHnO9kGwCubu3MWHlUDPbwLMCH
-   T3mu8QIMCu3nmanBxX3r6K9OjOc6/4pb9luByl4VthNTZvBG9KpKeMjHY
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="349796697"
+  bh=hKHsoNGSMMtx6Q9tcu30hatw3LMK0bAjnC3I6pBAw90=;
+  b=kh1TJajYrqqOrsY/bqIBp3yTXEf0fsUSIt2lfh+DsIX5x3IUurUCE0kp
+   OAVgiq7YbAG0+CnNHLSoZSFgswLBlFEdFiEZ+A3Zcqx8VD9FAKDxUgdaY
+   TI6ijfhDu9f/Gnaatzhl/IWfZW2nPYJP/tcJlY8ujAtXvj5FyHGjCHS2Y
+   +jPZAHaOcNKLlrZax/3Cydrrdjse21jhT7Ey8w4QLKsoXLwD+IgmW9js5
+   i3Sg68mkvlKhY3Zxg9s+aBwN9lpMxXGatVP7O0/qy4b93uq2vrq/cMcgZ
+   GSL8indkKrfNy8Eo6nzTl49r6dj2EzjuPkqTOQJ7/xvaAjnKk0ztxtDmW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="349796708"
 X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="349796697"
+   d="scan'208";a="349796708"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 14:39:00 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 14:39:04 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="945018724"
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="945018727"
 X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="945018724"
+   d="scan'208";a="945018727"
 Received: from linux-builds1.an.intel.com ([10.122.105.32])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 14:38:59 -0700
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 14:39:00 -0700
 From:   dinh.nguyen@linux.intel.com
 To:     linux-hwmon@vger.kernel.org
 Cc:     dinguyen@kernel.org, devicetree@vger.kernel.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-kernel@vger.kernel.org, jdelvare@suse.com,
         linux@roeck-us.net, Dinh Nguyen <dinh.nguyen@linux.intel.com>
-Subject: [PATCHv2 5/6] dt-bindings: hwmon: intel: add hardware monitor bindings for SoCFPGA
-Date:   Mon,  8 May 2023 16:28:51 -0500
-Message-Id: <20230508212852.8413-5-dinh.nguyen@linux.intel.com>
+Subject: [PATCHv2 6/6] arm64: dts: socfpga: add hwmon properties
+Date:   Mon,  8 May 2023 16:28:52 -0500
+Message-Id: <20230508212852.8413-6-dinh.nguyen@linux.intel.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230508212852.8413-1-dinh.nguyen@linux.intel.com>
 References: <20230508212852.8413-1-dinh.nguyen@linux.intel.com>
@@ -65,282 +65,367 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dinh Nguyen <dinh.nguyen@linux.intel.com>
 
-Document the hardware monitoring bindings for SoCFPGA 64-bit platforms.
+Add the hardware monitoring properties for Stratix10 and Agilex.
 
 Signed-off-by: Dinh Nguyen <dinh.nguyen@linux.intel.com>
 ---
-v2: Add intel,socfpga-agilex-hwmon, intel,socfpga-n5x-hwmon and
-    intel,socfpga-stratix10-hwmon
-    Add patternProperties
+v2: add platform specific platforms to DTS files
 ---
- .../bindings/hwmon/intel,socfpga-hwmon.yaml   | 258 ++++++++++++++++++
- 1 file changed, 258 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/intel,socfpga-hwmon.yaml
+ .../boot/dts/altera/socfpga_stratix10.dtsi    |  4 ++
+ .../dts/altera/socfpga_stratix10_socdk.dts    | 31 +++++++++
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi |  4 ++
+ .../boot/dts/intel/socfpga_agilex_n6000.dts   | 66 +++++++++++++++++++
+ .../boot/dts/intel/socfpga_agilex_socdk.dts   | 66 +++++++++++++++++++
+ .../dts/intel/socfpga_agilex_socdk_nand.dts   | 66 +++++++++++++++++++
+ .../boot/dts/intel/socfpga_n5x_socdk.dts      | 47 +++++++++++++
+ 7 files changed, 284 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/intel,socfpga-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/intel,socfpga-hwmon.yaml
-new file mode 100644
-index 000000000000..e634311a0e81
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/intel,socfpga-hwmon.yaml
-@@ -0,0 +1,258 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/intel,socfpga-hwmon.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+index 41c9eb51d0ee..2526afa687d6 100644
+--- a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
++++ b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+@@ -633,6 +633,10 @@ svc {
+ 				fpga_mgr: fpga-mgr {
+ 					compatible = "intel,stratix10-soc-fpga-mgr";
+ 				};
 +
-+title: Intel SoCFPGA Hardware monitor
++				hwmon: temp-volt {
++					compatible = "intel,socfpga-stratix10-hwmon", "intel,socfpga-hwmon";
++				};
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
+index 38ae674f2f02..d506dcf8dc7c 100644
+--- a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
++++ b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
+@@ -212,3 +212,34 @@ qspi_rootfs: partition@3FE0000 {
+ 		};
+ 	};
+ };
 +
-+maintainers:
-+  - Dinh Nguyen <dinh.nguyen@linux.intel.com>
++&hwmon {
++	voltage {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		input@2 {
++			label = "0.8V VCC";
++			reg = <2>;
++		};
 +
-+description: |
-+  The Intel SoCFPGA hardware monitor unit provides on-chip voltage and
-+  temperature sensors. You can use these sensors to monitor external
-+  voltages and on-chip operating conditions such as internal power rails
-+  and on-chip junction temperatures.
++		input@3 {
++			label = "1.0V VCCIO";
++			reg = <3>;
++		};
 +
-+  The specific sensor configurations vary for each device family and
-+  each device within a family does not offer all potential sensor
-+  options. The information below attempts to illustrate the super set of
-+  possible sensor options that are potentially available within each
-+  device family, but the user should check the documentation for the
-+  specific device they are using to verify which sensor options it
-+  actually provides.
++		input@6 {
++			label = "0.9V VCCERAM";
++			reg = <6>;
++		};
++	};
 +
-+  Stratix 10 Device Family
++	temperature {
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
-+    Stratix 10 Voltage Sensors
++		input@0 {
++			label = "Main Die SDM";
++			reg = <0x0>;
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+index f9674cc46764..552f9a05d039 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+@@ -666,6 +666,10 @@ svc {
+ 				fpga_mgr: fpga-mgr {
+ 					compatible = "intel,agilex-soc-fpga-mgr";
+ 				};
 +
-+      page 0, channel 2 = 0.8V VCC
-+      page 0, channel 3 = 1.0V VCCIO
-+      page 0, channel 6 = 0.9V VCCERAM
++				hwmon: temp-volt {
++					compatible = "intel,socfpga-agilex-hwmon", "intel,socfpga-hwmon";
++				};
+ 			};
+ 		};
+ 	};
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
+index 6231a69204b1..c0642353b506 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
+@@ -64,3 +64,69 @@ &watchdog0 {
+ &fpga_mgr {
+ 	status = "disabled";
+ };
 +
-+    Stratix 10 Temperature Sensors
++&hwmon {
++	voltage {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		input@2 {
++			label = "0.8V VCC";
++			reg = <2>;
++		};
 +
-+      page 0, channel 0 = main die
-+      page 0, channel 1 = tile bottom left
-+      page 0, channel 2 = tile middle left
-+      page 0, channel 3 = tile top left
-+      page 0, channel 4 = tile bottom right
-+      page 0, channel 5 = tile middle right
-+      page 0, channel 6 = tile top right
-+      page 0, channel 7 = hbm2 bottom
-+      page 0, channel 8 = hbm2 top
++		input@3 {
++			label = "1.8V VCCIO_SDM";
++			reg = <3>;
++		};
 +
-+  Agilex Device Family
++		input@4 {
++			label = "1.8V VCCPT";
++			reg = <4>;
++		};
 +
-+    Agilex Voltage Sensors
++		input@5 {
++			label = "1.2V VCCCRCORE";
++			reg = <5>;
++		};
 +
-+      page 0, channel 2 = 0.8V VCC
-+      page 0, channel 3 = 1.8V VCCIO_SDM
-+      page 0, channel 4 = 1.8V VCCPT
-+      page 0, channel 5 = 1.2V VCCRCORE
-+      page 0, channel 6 = 0.9V VCCH
-+      page 0, channel 7 = 0.8V VCCL
++		input@6 {
++			label = "0.9V VCCH";
++			reg = <6>;
++		};
 +
-+    Agilex Temperature Sensors
++		input@7 {
++			label = "0.8V VCCL";
++			reg = <7>;
++		};
++	};
 +
-+      page 0, channel 0 = main die sdm max
-+      page 0, channel 1 = main die sdm 1
++	temperature {
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
-+      page 1, channel 0 = main die corner bottom left max
-+      page 1, channel 1 = main die corner bottom left 1
-+      page 1, channel 2 = main die corner bottom left 2
++		input@0 {
++			label = "Main Die SDM";
++			reg = <0x0>;
++		};
 +
-+      page 2, channel 0 = main die corner top left max
-+      page 2, channel 1 = main die corner top left 1
-+      page 2, channel 2 = main die corner top left 2
++		input@10000 {
++			label = "Main Die corner bottom left max";
++			reg = <0x10000>;
++		};
 +
-+      page 3, channel 0 = main die corner bottom right max
-+      page 3, channel 1 = main die corner bottom right 1
-+      page 3, channel 2 = main die corner bottom right 2
++		input@20000 {
++			label = "Main Die corner top left max";
++			reg = <0x20000>;
++		};
 +
-+      page 4, channel 0 = main die corner top right max
-+      page 4, channel 1 = main die corner top right 1
-+      page 4, channel 2 = main die corner top right 2
++		input@30000 {
++			label = "Main Die corner bottom right max";
++			reg = <0x30000>;
++		};
 +
-+      page 5, channel 0 = tile die bottom left max
-+      page 5, channel 1 = tile die bottom left 1
-+      page 5, channel 6..2 = tile die bottom left 6..2 R-tile only
-+      page 5, channel 5..2 = tile die bottom left 5..2 F-tile only
-+      page 5, channel 4..2 = tile die bottom left 4..2 E-tile only
++		input@40000 {
++			label = "Main Die corner top right max";
++			reg = <0x40000>;
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+index 07c3f8876613..4bd8cdd8a7ca 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+@@ -138,3 +138,69 @@ qspi_rootfs: partition@3FE0000 {
+ 		};
+ 	};
+ };
 +
-+      page 7, channel 0 = tile die top left max
-+      page 7, channel 1 = tile die top left 1
-+      page 7, channel 6..2 = tile die top left 6..2 R-tile only
-+      page 7, channel 5..2 = tile die top left 5..2 F-tile only
-+      page 7, channel 4..2 = tile die top left 4..2 E-tile only
++&hwmon {
++	voltage {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		input@2 {
++			label = "0.8V VCC";
++			reg = <2>;
++		};
 +
-+      page 8, channel 0 = tile die bottom right max
-+      page 8, channel 1 = tile die bottom right 1
-+      page 8, channel 6..2 = tile die bottom right 6..2 R-tile only
-+      page 8, channel 5..2 = tile die bottom right 5..2 F-tile only
-+      page 8, channel 4..2 = tile die bottom right 4..2 E-tile only
++		input@3 {
++			label = "1.8V VCCIO_SDM";
++			reg = <3>;
++		};
 +
-+      page 10, channel 0 = tile die top right max
-+      page 10, channel 1 = tile die top right 1
-+      page 10, channel 6..2 = tile die top right 6..2 R-tile only
-+      page 10, channel 5..2 = tile die top right 5..2 F-tile only
-+      page 10, channel 4..2 = tile die top right 4..2 E-tile only
++		input@4 {
++			label = "1.8V VCCPT";
++			reg = <4>;
++		};
 +
-+  N5X Device Family
++		input@5 {
++			label = "1.2V VCCCRCORE";
++			reg = <5>;
++		};
 +
-+    N5X Voltage Sensors
++		input@6 {
++			label = "0.9V VCCH";
++			reg = <6>;
++		};
 +
-+      page 0, channel 2 = 0.8V VDD
-+      page 0, channel 3 = 0.8V VDD_SDM
-+      page 0, channel 4 = 1.8V VCCADC
-+      page 0, channel 5 = 1.8V VCCPD
-+      page 0, channel 6 = 1.8V VCCIO_SDM
-+      page 0, channel 7 = 0.8V VDD_HPS
++		input@7 {
++			label = "0.8V VCCL";
++			reg = <7>;
++		};
++	};
 +
-+    N5X Temperature Sensors
++	temperature {
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
-+      page 0, channel 0 = main die
++		input@0 {
++			label = "Main Die SDM";
++			reg = <0x0>;
++		};
 +
-+properties:
-+  compatible:
-+    enum:
-+      - intel,socfpga-agilex-hwmon
-+      - intel,socfpga-n5x-hwmon
-+      - intel,socfpga-stratix10-hwmon
-+      - intel,socfpga-hwmon
++		input@10000 {
++			label = "Main Die corner bottom left max";
++			reg = <0x10000>;
++		};
 +
-+patternProperties:
-+  "^(voltage)|input@([2-7])$":
-+    type: object
-+    description: Specifies the possible mappings of the voltage sensors on the
-+      SoCFPGA analog to digital converter of the Secure Device Manager(SDM).
++		input@20000 {
++			label = "Main Die corner top left max";
++			reg = <0x20000>;
++		};
 +
-+    properties:
-+      reg:
-+        description:
-+          The bit mask of 0x1 represents channel 1. The supported
-+          page and channel is dependent on the SoCFPGA variant.
-+          Page number greater than 0 is only supported on the
-+          temperature sensors.
-+        items:
-+          minimum: 0
-+          maximum: 1
++		input@30000 {
++			label = "Main Die corner bottom right max";
++			reg = <0x30000>;
++		};
 +
-+      label:
-+        description: A descriptive name for this channel, i.e "0.8V VCC" or "1.8V VCCIO_SDM".
++		input@40000 {
++			label = "Main Die corner top right max";
++			reg = <0x40000>;
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
+index 51f83f96ec65..bfee1ca0bd6e 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
+@@ -114,3 +114,69 @@ &usb0 {
+ &watchdog0 {
+ 	status = "okay";
+ };
 +
-+  "^(temperature)|input@([10001-40002])$":
-+    type: object
-+    description: Specifies the possible mappings of the temperature sensors on
-+      the SoCFPGA analog to digital converter of the Secure Device Manager(SDM).
++&hwmon {
++	voltage {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		input@2 {
++			label = "0.8V VCC";
++			reg = <2>;
++		};
 +
-+    properties:
-+      reg:
-+        description:
-+          The sensor mapping address is denoted by the lower 16-bits being
-+          the channel mask location that defines the channel number.
-+          The upper 16-bits denotes the page number.
-+        items:
-+          minimum: 0
-+          maximum: 1
++		input@3 {
++			label = "1.8V VCCIO_SDM";
++			reg = <3>;
++		};
 +
-+      label:
-+        description: A descriptive name for this channel, i.e "Main Die SDM" or
-+          "Main Die corner bottom left 1".
++		input@4 {
++			label = "1.8V VCCPT";
++			reg = <4>;
++		};
 +
-+required:
-+  - compatible
++		input@5 {
++			label = "1.2V VCCCRCORE";
++			reg = <5>;
++		};
 +
-+additionalProperties: false
++		input@6 {
++			label = "0.9V VCCH";
++			reg = <6>;
++		};
 +
-+examples:
-+  - |
-+    hwmon {
-+      compatible = "intel,socfpga-hwmon";
++		input@7 {
++			label = "0.8V VCCL";
++			reg = <7>;
++		};
++	};
 +
-+      voltage {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++	temperature {
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
-+        input@2 {
-+          label = "0.8V VCC";
-+          reg = <2>;
-+        };
++		input@0 {
++			label = "Main Die SDM";
++			reg = <0x0>;
++		};
 +
-+        input@3 {
-+          label = "1.8V VCCIO_SDM";
-+          reg = <3>;
-+        };
++		input@10000 {
++			label = "Main Die corner bottom left max";
++			reg = <0x10000>;
++		};
 +
-+        input@4 {
-+          label = "1.8V VCCPT";
-+          reg = <4>;
-+        };
++		input@20000 {
++			label = "Main Die corner top left max";
++			reg = <0x20000>;
++		};
 +
-+        input@5 {
-+          label = "1.2V VCCCRCORE";
-+          reg = <5>;
-+        };
++		input@30000 {
++			label = "Main Die corner bottom right max";
++			reg = <0x30000>;
++		};
 +
-+        input@6 {
-+          label = "0.9V VCCH";
-+          reg = <6>;
-+        };
++		input@40000 {
++			label = "Main Die corner top right max";
++			reg = <0x40000>;
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
+index 08c088571270..090b0382db98 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
++++ b/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
+@@ -129,3 +129,50 @@ &usb0 {
+ &watchdog0 {
+ 	status = "okay";
+ };
 +
-+        input@7 {
-+          label = "0.8V VCCL";
-+          reg = <7>;
-+        };
-+      };
++&hwmon {
++	compatible = "intel,socfpga-n5x-hwmon", "intel,socfpga-hwmon";
++	voltage {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		input@2 {
++			label = "0.8V VDD";
++			reg = <2>;
++		};
 +
-+      temperature {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++		input@3 {
++			label = "0.8V VDD_SDM";
++			reg = <3>;
++		};
 +
-+        input@0 {
-+          label = "Main Die SDM";
-+          reg = <0x0>;
-+        };
++		input@4 {
++			label = "1.8V VCCADC";
++			reg = <4>;
++		};
 +
-+        input@10001 {
-+          label = "Main Die corner bottom left 1";
-+          reg = <0x10001>;
-+        };
++		input@5 {
++			label = "1.8V VCCPD";
++			reg = <5>;
++		};
 +
-+        input@10002 {
-+          label = "Main Die corner bottom left 2";
-+          reg = <0x10002>;
-+        };
++		input@6 {
++			label = "1.8V VCCIO_SDM";
++			reg = <6>;
++		};
 +
-+        input@20001 {
-+          label = "Main Die corner top left 1";
-+          reg = <0x20001>;
-+        };
++		input@7 {
++			label = "0.8V VDD_HPS";
++			reg = <7>;
++		};
++	};
 +
-+        input@20002 {
-+          label = "Main Die corner top left 2";
-+          reg = <0x20002>;
-+        };
++	temperature {
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
-+        input@30001 {
-+          label = "Main Die corner bottom right 1";
-+          reg = <0x30001>;
-+        };
-+
-+        input@30002 {
-+          label = "Main Die corner bottom right 2";
-+          reg = <0x30002>;
-+        };
-+
-+        input@40001 {
-+          label = "Main Die corner top right 1 HPS";
-+          reg = <0x40001>;
-+        };
-+
-+        input@40002 {
-+          label = "Main Die corner top right 2";
-+          reg = <0x40002>;
-+        };
-+      };
-+    };
++		input@0 {
++			label = "Main Die SDM";
++			reg = <0x0>;
++		};
++	};
++};
 -- 
 2.40.0
 
