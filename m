@@ -2,99 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DED6FB9AF
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1486FB9B2
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbjEHV2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 17:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
+        id S233921AbjEHV3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 17:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbjEHV2h (ORCPT
+        with ESMTP id S233815AbjEHV27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 17:28:37 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972DE4C3E
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 14:28:24 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-55a8e9e2c53so47865907b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 14:28:24 -0700 (PDT)
+        Mon, 8 May 2023 17:28:59 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED551BC9
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 14:28:47 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-760dff4b701so32020139f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 14:28:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683581304; x=1686173304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wX39yT2wbPEXqhXbtvNDzhgN+Xs4H/C0OIhg+3hztTI=;
-        b=m/CYRgdq2dBkpFW4z/bT+o2LoBRNAVnnUYugDPgWvmTxdepuXvA4jJOimRupVQcFL2
-         G8gZlt2+PPHd5gJJjR2xAZ1SYTEELx+AM5ZM2UzpEIUnP/nwGu/qSnqQ6Qe82+gd55py
-         OywnDgCGIqUZE6yc3BDUpDPvFSo/ZNIFDFN65pc2dI1kVo0NVuMZp42uEwA60ncQUbN/
-         Jy/w3whm5r+6gbxqk4h52P/jiNFwngAT5MpT1rqU/WQ8ErLHogo06zxPZr3PBoDp+BRP
-         AqZZxJhHoAFvqvWV3X+FqqPYj+98CpsyNOOasrjll8yOi5IAC9vdzMgvchUT0Y8NqDlF
-         R6jw==
+        d=linuxfoundation.org; s=google; t=1683581327; x=1686173327;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LdHfEQtLtNDQXgK0ROcb2pQ+ZbGp8ywADrDmw5EHPD8=;
+        b=BH7x4gf6827DTq+nNDr+4p/4dTFyOqjDVC5nSVY+1km3AnPfWvFFAQHpvdZq1twQOk
+         AgP9gLG8IAzJE1pft9Fng790hAEGz/jZ47TYL73eKGRi5J0WwgA7TJf61JYCRQpKnVyJ
+         M2t1TdUpm+wjed9SFDCA1uKS9XiQ5VrzB7lJI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683581304; x=1686173304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wX39yT2wbPEXqhXbtvNDzhgN+Xs4H/C0OIhg+3hztTI=;
-        b=bZUS2Ak81GL4ssjMr0MDKdOeMaBtqvbVTDanhxwAop8w9+etl7EiKgRFWoRWApevmD
-         id1FJqCeQlFYInw9ihXUGrhZ3bEx87fgKqcyqQyv5LLy3YkTsCKu4Zthlq0k98qRb7xB
-         IuXngPkDG4i8xZO0daQyOMW7CjCe7GdSHdJa8T1fj6jcHocPXpc6Oz/AeFzZoPpO0vcp
-         lmI3ZKJCTajqQAFdUdLRZm7jaPHHd3QeliPolqB+EV9z9YTXr8cIrwCmToME5R6g/3Q7
-         CeJu/75b9RHp+v2EKsRwHeCFAKsSddNd8Cc0p6GMVXADZYEW+Z63zazZbCX+jkRijjxF
-         CNUQ==
-X-Gm-Message-State: AC+VfDx5xOR+Uew7dSZ/kfCNE7s7p/OhomVeyF1ZVlH6wcvTpbxZ+IHX
-        KzJPDtA/dEFg9vySywbbQ39PDBPDrrjhqEhz4SyPIg==
-X-Google-Smtp-Source: ACHHUZ66w4x3Oj+W//CdKVXHR1RfBdoq9r0l7en1E+lsaBczgPEck7bAPv7q2ndrw1oeCZN0a1tiKTRdU1k/NFqyLGU=
-X-Received: by 2002:a81:84d0:0:b0:55a:1f2:ef6 with SMTP id u199-20020a8184d0000000b0055a01f20ef6mr12314719ywf.9.1683581303797;
- Mon, 08 May 2023 14:28:23 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683581327; x=1686173327;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LdHfEQtLtNDQXgK0ROcb2pQ+ZbGp8ywADrDmw5EHPD8=;
+        b=DfHDd9qXb6EbPXfoTkmRVHCr4OKqE1fYphtThJLqLG74iHGdtB3Y9VTKr1czwyJ5uM
+         A2XVgyxGOa2k6f7GaRj/eBQwEMHBHJoToxH0z1gZh2E83yPKgNA7d76vsoa1SKdH9RWq
+         UhKXxpNGGs5cVsRPGben73q0ptkdiLY2EfS9quo2wfB9w0RR99uZ0mOt6XmxrNVSv0R/
+         Plk+q7TrgF/C8uk2WL6Y9bwmy1klue2jni7diY5rIe+IzZqdpbTtn6JKLhOWogAKivwb
+         9Q+73VPWWv9rDwrDcoHHZ9EsxIXe0tlgiYbLcN3d64nknYFBBlUV+ce4CMK8RkIoynzt
+         XU1Q==
+X-Gm-Message-State: AC+VfDz+/iKKgaO4xi6s1NkasCQ5UB1SVO73WyiW1ZCkGyAXa6rPPMHu
+        4FJ0dTKSacoDjsxcE2fcSX9nvw==
+X-Google-Smtp-Source: ACHHUZ7h17gNHcSuwR609gd5cM+lScBgEdnF7oLgTBriBGKNYl4xiJXFoscS58xF/YfjzMkuutzf0g==
+X-Received: by 2002:a05:6602:2c81:b0:763:86b1:6111 with SMTP id i1-20020a0566022c8100b0076386b16111mr8286721iow.2.1683581326840;
+        Mon, 08 May 2023 14:28:46 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id y5-20020a6bd805000000b00704608527d1sm2444124iob.37.2023.05.08.14.28.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 14:28:46 -0700 (PDT)
+Message-ID: <23f8bbc9-19db-dc6c-8d59-f0eed757dcc6@linuxfoundation.org>
+Date:   Mon, 8 May 2023 15:28:45 -0600
 MIME-Version: 1.0
-References: <20230430-nokia770-regression-v3-0-a6d0a89ffa8b@linaro.org>
- <20230430-nokia770-regression-v3-3-a6d0a89ffa8b@linaro.org> <ZFkSiM9GRfN5n7n4@surfacebook>
-In-Reply-To: <ZFkSiM9GRfN5n7n4@surfacebook>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 8 May 2023 23:28:12 +0200
-Message-ID: <CACRpkdbk0b8e7M4DNjAnF3c466suLHeiRp9L3zDnbCUB=J8=FA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] ARM: omap1: Fix up the Nokia 770 board device IRQs
-To:     andy.shevchenko@gmail.com
-Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Helge Deller <deller@gmx.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mmc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 6.2 000/663] 6.2.15-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230508094428.384831245@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230508094428.384831245@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023 at 5:17=E2=80=AFPM <andy.shevchenko@gmail.com> wrote:
+On 5/8/23 03:37, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.15 release.
+> There are 663 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 10 May 2023 09:42:40 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.15-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-> > +             GPIO_LOOKUP("gpio-32-47", 8, "tahvo_irq",
-> > +                         GPIO_ACTIVE_HIGH),
->
-> Missing terminator.
+Compiled and booted on my test system. No dmesg regressions.
 
-Darn I missed this comment in v4, I have fixed it in my tree, I will see if
-there are more comments for v4 before I resend.
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Yours,
-Linus Walleij
+thanks,
+-- Shuah
