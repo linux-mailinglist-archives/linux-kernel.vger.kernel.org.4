@@ -2,143 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5564C6FB1FB
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1106FB200
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234346AbjEHNqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        id S233557AbjEHNuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234072AbjEHNqk (ORCPT
+        with ESMTP id S232968AbjEHNuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:46:40 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8562235D94
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 06:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1683553595;
-        bh=/cSiXhiFvMYAaJxpoDMBzGlk9C+yOlLOWY8dSayYoys=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VK/q15FGkAiLco+KoBE8oAHJcjYFf/TtUDsNNwMI9Jl0zuau0qNTm6Vtpji4u4kD9
-         q+iqfdc/W1mUBH/e62WmQOJEHuvO+JRlEoIYT/6eAOe2C5+C5uwu0NRQC4NkbwVw4W
-         zzinAn/Okanr05Jz72S/23u6n99Glvjv4w7VFrXKZowv7SxsnpmAI7NEXL4LenlKq1
-         0BpIarcybOrVS+MvTPQm6lKSEiD809UHwKL28sqqNb/E612JAdzJpAbk8gWKF2C6Z1
-         EvuziMvX+xXIqlcZY5/qKZAgkZ+yXXZHhYZEr0QPgGg2/V0pPo+tAhnSfqBNTxPbrp
-         keFAnDS++XU+g==
-Received: from [172.16.0.99] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QFMyg522Wz12Bt;
-        Mon,  8 May 2023 09:46:35 -0400 (EDT)
-Message-ID: <6971bfd0-b200-6cb8-7cd8-9973b72ef9ba@efficios.com>
-Date:   Mon, 8 May 2023 09:46:40 -0400
+        Mon, 8 May 2023 09:50:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D60D1BE
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 06:50:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3179362D5F
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 13:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52E55C433D2;
+        Mon,  8 May 2023 13:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683553814;
+        bh=BXgdn3NMjuyoP1sp3OyJ6vmKBZBzk1/LOYTIFOk5FaY=;
+        h=From:Subject:Date:To:Cc:From;
+        b=kfs29VyOOxBfwAl2UQcf4jRm5SWr6PqmwoTAmDltd/7CC5d31JmW2sXjJRz5QG4GK
+         +DvpWjkVvIOn5xgxHvdQ7GhE+hYbzDjw8uamqQ1Z/b5rnk+w9Hk43Cz9/zqdj2/k4i
+         qhNk/k0rdPreFHMlfCApyrl7B4FSKs57+3K5xSDCQ438LEdZmsxJlGebq0pNR5R5In
+         mqI4gnEakM50++O1aUMbZThMtGoaiQDfJ3pQKLTQAXaMXKAUE1aFQRFPQDQ17LnSpd
+         AjYsz/pFl0pqIt8stwFUZan4fBn3Ih9PhKm61WrtjU4egUoiaWy0lpwSAHHIda2e/C
+         hPiXJeJabSoAA==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/2] arm64: Add decode of ISS2 to data abort reports
+Date:   Mon, 08 May 2023 22:50:08 +0900
+Message-Id: <20230417-arm64-iss2-dabt-decode-v2-0-84e1c1463d30@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH 05/13] list.h: Fix parentheses around macro pointer
- parameter use
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Ricardo Martinez <ricardo.martinez@linux.intel.com>
-References: <20230504200527.1935944-1-mathieu.desnoyers@efficios.com>
- <20230504200527.1935944-6-mathieu.desnoyers@efficios.com>
- <ZFjoJqbDn/BL1GQT@smile.fi.intel.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <ZFjoJqbDn/BL1GQT@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-B4-Tracking: v=1; b=H4sIABD+WGQC/4WNSw6CMBQAr0K69hlasAVW3sOw6OcJDdqaV4Iaw
+ t0tXMDlTDKZlSUkj4l1xcoIF598DBnEqWB21GFA8C4zE6Woypor0PSUNfiUBDhtZnBoo0NA25p
+ a2rbRLWc5NjohGNLBjnv+jjTt+kV495/jd+szjz7Nkb7HfuG7/XtaOJQgeNWYi5SNUuo6IQV8n
+ CMNrN+27QdoHZIS1AAAAA==
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-bfdf5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1009; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=BXgdn3NMjuyoP1sp3OyJ6vmKBZBzk1/LOYTIFOk5FaY=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkWP4S0qHesN5RoqHoNY2TZH914Q7Vc/bHZDXMp
+ 7CTsjJ7Up2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZFj+EgAKCRAk1otyXVSH
+ 0DqpCACHDEU7HM5vegwNrvVMUJwXLlXsc/fDr5aRCNAQ+TjbivJjw3AMYqLmgydPxxZO1NZxqUf
+ vBfdqpTLe5/s4szrbXSSM10ZAOZmrUwD9+Loe27Wdx8e0Zrx3QWz82Fdo4ZpKEr0MjrymA1GWeZ
+ 3f/rXBxO6hw3zVsDnK6L0aUTGojKuiMqUO6it/icds/CyaEa/xsMhiQ5RmBjlK+Tvhaceedk+BT
+ H/V33vxZuIp4cZsB6g9OJe6FmuBrG0SikCfXpsCKUuO7AA2Or7JG/gC6Ae6K6Ywf+/w76R+hi8Z
+ rnEyJyHLmgzU36kuQORwjZfH3S48/JiWIvcpt5vB2vvTSBKE
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-08 08:16, Andy Shevchenko wrote:
-> On Thu, May 04, 2023 at 04:05:19PM -0400, Mathieu Desnoyers wrote:
->> Add missing parentheses around use of macro argument "pos" in those
->> patterns to ensure operator precedence behaves as expected:
->>
->> - typeof(*pos)
->> - pos->member
->> - "x = y" is changed for "x = (y)", because "y" can be an expression
->>    containing a comma if it is the result of the expansion of a macro such
->>    as #define eval(...) __VA_ARGS__, which would cause unexpected operator
->>    precedence. This use-case is far-fetched, but we have to choose one
->>    way or the other (with or without parentheses) for consistency,
->> - x && y is changed for (x) && (y).
->>
->> Remove useless parentheses around use of macro parameter (head) in the
->> following pattern:
->>
->> - list_is_head(pos, (head))
->>
->> Because comma is the lowest priority operator already, so the extra pair
->> of parentheses is redundant.
-> 
-> But strictly speaking it might be something like
-> 
-> 	list_...(..., (a, b))
-> 
-> where (a, b) is the head. No?
+We provide fairly detailed decode of ESR for data aborts but do not
+currently cover the information reported in ISS2 which has had quite a
+bit of additional information added to it by recent architecture
+extensions.  Add decode for this information to aid in debugging, for
+completeness including features we don't actually use yet.
 
-The following case still works after removing the extra parentheses 
-around "head" because the parentheses are present where the macro is used:
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v2:
+- Rebase onto v6.4-rc1.
+- Link to v1: https://lore.kernel.org/r/20230417-arm64-iss2-dabt-decode-v1-0-2138b5668777@kernel.org
 
-LIST_HEAD(testlist);
+---
+Mark Brown (2):
+      arm64/esr: Use GENMASK() for the ISS mask
+      arm64/esr: Add decode of ISS2 to data abort reporting
 
-int f2(void)
-{
-         return 1;
-}
+ arch/arm64/include/asm/esr.h | 19 ++++++++++++++++++-
+ arch/arm64/mm/fault.c        | 17 ++++++++++++++---
+ 2 files changed, 32 insertions(+), 4 deletions(-)
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+change-id: 20230417-arm64-iss2-dabt-decode-ec9b46c98a91
 
-void f(void)
-{
-    struct list_head *pos;
-
-    list_for_each(pos, (f2(), &testlist)) {
-            //...
-    }
-}
-
-The only use I found that would break is as follows:
-
-LIST_HEAD(testlist);
-
-int f2(void)
-{
-         return 1;
-}
-
-#define eval(...)       __VA_ARGS__
-
-void f(void)
-{
-    struct list_head *pos;
-
-    list_for_each(pos, eval(f2(), &testlist)) {
-            //...
-    }
-}
-
-Because "eval()" will evaluate "f(), &testlist" with comma and all, 
-without enclosing parentheses.
-
-So the question is: do we want to support this kind-of-odd macro 
-evaluation, considering that it requires adding parentheses around 
-pretty much all macro parameters when used as expressions between commas?
-
-Thanks,
-
-Mathieu
-
+Best regards,
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Mark Brown,,, <broonie@kernel.org>
 
