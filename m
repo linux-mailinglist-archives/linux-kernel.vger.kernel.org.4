@@ -2,81 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FFE6FB519
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 979056FB51C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234147AbjEHQ3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S234221AbjEHQ3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbjEHQ3h (ORCPT
+        with ESMTP id S234278AbjEHQ3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 12:29:37 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AEE6A5D
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:29:32 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-518d6f87a47so2138336a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 09:29:32 -0700 (PDT)
+        Mon, 8 May 2023 12:29:45 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7F46A4B
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:29:44 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so50469481a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 09:29:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683563371; x=1686155371;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NCAPmpxEboZRCp5DLfCJG8it89iaKWx8exXle5+fDgE=;
-        b=A+o0rLnAoFkcu74b0ZTyzM4ELOkmu/fubFOC43V3bUC8SI2ZLvAgDgdLvm7YpNb4iY
-         lkDovKqfkqWHqHpHROm2OpwUiBiwkFH0eq41npWZUl0Auxtvlm9TltesUV5gaGCOdjK6
-         YZeNqElzkzKVeM4q1kGcoXt0wC6fx/+T09iRE4HSSfLzQrMpX69Es2m2gFqj/lsccwA3
-         G+IDS9nQAaFgj/uLiCLVwBBL26UiAwRdZ+quQGoVCbC2LZugLCjsv3wveXeRpElvfrSt
-         rbOd8ZsetUR6aYFg8l/NOSvaQOYVs49lC//LrjyPaKtzsYZ8J1y4h8OQcDQgfnmQv9TE
-         Esuw==
+        d=linaro.org; s=google; t=1683563382; x=1686155382;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gPXDrt7IdOrTqCpkR1P8P9GF2BAzVLMP6fdtVkD62YU=;
+        b=VvP0og3f5cmbDGbGd1xw9V3u3C6S5YE2rrod9+pT2+E9v/AUMEw93icukbqxdZMTsh
+         ohSwWQIgiywbxOHp9e6FwjdxmUR7k9O013E1ipNNPgZ4T1sERNwkK7T9GfUErwesBWzA
+         svYyeKrOZeviLGBjpu6q/ISIPDLOfGNWA3GkAxZ90YXgVD/JcgEYPEJSDwVhJjrcZh2l
+         LCq+WGGNGTa+MGObb8jJUR22D1lblvCDGYslAoRTZIYbyNy3lTu+7wmM3CfaZcHi6Yhx
+         FrUMsKGkLo3X+5JPHfKXYz+4zALgHU872/2pSZmfToIVRsTEKJEzNcI7+kOfRoEo+5Nl
+         IM+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683563371; x=1686155371;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+        d=1e100.net; s=20221208; t=1683563382; x=1686155382;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NCAPmpxEboZRCp5DLfCJG8it89iaKWx8exXle5+fDgE=;
-        b=GpGDLHIhakKck5Q+Rt/LaqQ/tyygde+XuNJxW1LHvtAA5uaFMTczWPH5w3zIGzCXeq
-         LhrO3fJbbnhRprz+q8XX/Mbeaa5gRrjaKzeVJIF0zIzblMpwh6n6W1WEgcXkfUUnlUIY
-         im1FUQEOtFVOP5AYKkb1tdpe/UC9be3VvAIRBco4xFUweTVN79nPq9DkzpuDxHQy9Dka
-         YWSJH014PSrK60Xgm9Y2QNCbErZv+O9UJrqqpRvFIVyDiiTbn2qTKIPHopBeUqXgaBnt
-         uGphNm2FE7eWUssjZlJI2+sY93S0BeqltcNpZnhH8Qrpe3H0uyPyM/ySKZJq3/f0DSl3
-         AYFQ==
-X-Gm-Message-State: AC+VfDzp/8qmUdsuSJoLs7mAciXgYgztE5o+X7ULrx8UC1Zgjhx+Ba53
-        GXgY2eimtSD19aMgEruS6N965Dv+KUVLZBRl3w==
-X-Google-Smtp-Source: ACHHUZ76MdGRZaZii/Tb2tEloQqPEW6qT4wxUIpboq08Bq3SCocGXXbj1z+MFqhm9tKSr2oW8q4lKvAUY4lcbA5McQ==
-X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a63:2b04:0:b0:521:62ef:9b38 with SMTP
- id r4-20020a632b04000000b0052162ef9b38mr3198022pgr.3.1683563371206; Mon, 08
- May 2023 09:29:31 -0700 (PDT)
-Date:   Mon, 08 May 2023 16:29:29 +0000
-In-Reply-To: <20230504001409.GA104105@monkey> (message from Mike Kravetz on
- Wed, 3 May 2023 17:14:09 -0700)
-Mime-Version: 1.0
-Message-ID: <diqz5y92g51y.fsf@ackerleytng-ctop.c.googlers.com>
-Subject: Re: [PATCH 2/2] fs: hugetlbfs: Fix logic to skip allocation on hit in
- page cache
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     willy@infradead.org, sidhartha.kumar@oracle.com,
-        akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        muchun.song@linux.dev, jhubbard@nvidia.com, vannapurve@google.com,
-        erdemaktas@google.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        bh=gPXDrt7IdOrTqCpkR1P8P9GF2BAzVLMP6fdtVkD62YU=;
+        b=OG0MkYA4Zt5KVeCGYgFyBGiGQcT7Q9wt4Pyxc1pG3xGzMHlulBjUuxuD0f1VSaO1m6
+         xJ46E+A5MnxPxYpiFo0Sjfpcy3lIUAhR5XRNDuf//UeLMj0YPA+uSiUyHtVFezDB8dCA
+         7AkUgUWG7pTu93DAflfSXKADE7BYXb28OX6/9RrrcEFUUpg/HbAJmEsOHoBleDf/nWPj
+         LBomrvKP77s2QSP9fOWn7JdtX0jbSej5V78o/I5lrakdtVNQFTS/jBfwnZaDxbZxIOtV
+         0kXC/320PqYTtYgAUqGL8ojGe2jaXfXQJQXdr1MtYfSCCDaN9wnC/IaZ3MbDWqk0RlcB
+         t+Xg==
+X-Gm-Message-State: AC+VfDzTGv4d+oTm3aQE3H2EdCr1l3a2WZq2g0L++8o/pGDLNx1sIj/f
+        RiWBojZTEYnJDSGvr8cgTnTORYFVaA5NGj+EfGw=
+X-Google-Smtp-Source: ACHHUZ4XCLB7diXWh2eH6vQIehFRTxYyC4M/HACmt20ekY8CVuLLA9UmmTAZGeXfTQ2DmPkYY7iaYQ==
+X-Received: by 2002:a17:907:3dab:b0:94e:6edc:71bc with SMTP id he43-20020a1709073dab00b0094e6edc71bcmr9641816ejc.25.1683563382690;
+        Mon, 08 May 2023 09:29:42 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
+        by smtp.gmail.com with ESMTPSA id s19-20020a1709067b9300b00968a2286749sm168999ejo.77.2023.05.08.09.29.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 09:29:42 -0700 (PDT)
+Message-ID: <1231934e-04d2-7c63-1eac-64cf86a7a3fb@linaro.org>
+Date:   Mon, 8 May 2023 18:29:41 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom,ids: add SoC ID for IPQ5312
+ and IPQ5302
+Content-Language: en-US
+To:     Kathiravan T <quic_kathirav@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230508152543.14969-1-quic_kathirav@quicinc.com>
+ <20230508152543.14969-2-quic_kathirav@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230508152543.14969-2-quic_kathirav@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08/05/2023 17:25, Kathiravan T wrote:
+> Add the SoC ID for IPQ5312 and IPQ5302, which are belongs to the family
+> of IPQ5332 SoC.
 
+s/are belongs/belong/
 
-I wrote a selftest to verify the behavior of page_cache_next_miss() and
-indeed you are right about the special case.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I'll continue to look into this to figure out why it isn't hitting in
-the page cache.
+Best regards,
+Krzysztof
 
-Thanks Mike!
