@@ -2,174 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE39A6FAA7B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3426D6FAA8B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235518AbjEHLDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 07:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
+        id S233015AbjEHLDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 07:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235537AbjEHLCm (ORCPT
+        with ESMTP id S235525AbjEHLDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 07:02:42 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017E434881;
-        Mon,  8 May 2023 04:01:41 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f24d4900bbso1310285e87.3;
-        Mon, 08 May 2023 04:01:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683543700; x=1686135700;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=emaLfDqfNji1wHcGzgZ0JEzgTkXF4yqdECX8DFHrBeQ=;
-        b=V0KakBYcXFaNHApKKoyS4LPMeoML66Ouc+LVpR69suB0GgqzrleJIrRFLRioegCtZX
-         WASlzjlAMVi7a0HCxEMsWldkEgeGUA06puIsb/9SUo1poXMhPmE9Rupmy6RIYn9UZ3kr
-         2nXcDAg8GxUpcViYYEf90TT6zDjpXdUDs9Eqw2EcxPUBUgejOiFCfFUkj0pNNbxSA1/X
-         eXaLBsynQeRqPl5lHtdytt7n45NbvUSycOuFu9mxsySWQb27Wx8T7GVqvye7zlAy3Dcy
-         NCQvgshxXdsUlEjBoHU2eiNzmxnyDF+i5n+LReiqfWFKwMRgxwRaA23yoFYwpfxdYLEG
-         QrZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683543700; x=1686135700;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=emaLfDqfNji1wHcGzgZ0JEzgTkXF4yqdECX8DFHrBeQ=;
-        b=MDgrCEMFqKN0KjEmq6wAOrOVW274hEWwWTxKhWZoso6n/AQaIxf5IAKTa8vNF9e0fV
-         FlGIkBfelndozt/dx/9TP9aIiOl4aC3TC0qAgc8sOYPIMMnp4Euuyon42OH7i80dzz1c
-         X0dWsfgB2oQzgOYEc0EfTsPtgkOUDFjJqH6InXWOkFjwirIJ/EBmBdMP/I3Rg7jz5xIb
-         JW1QyXPY9XT00CnfPtDo4uzSh0oiMM2QMxLTtGmyF7zlXHjnAtEZmtUSdBxbI0Bbp3o7
-         7HLqT89FEsMn5lkkwqf6N4PDNFDO72vkhXn3yrk6PBCgjhi7KsR97gXhgmnKmRtQJQ0Q
-         czkw==
-X-Gm-Message-State: AC+VfDwEZfnEwDl15IRfpZDxCwnWU0pEZl/yTMgtIbmhCz8/16sh/Jbv
-        1EvvYbwUamLRU7kaPchSKFA=
-X-Google-Smtp-Source: ACHHUZ6dG8Y0kgfDKQd70uztKs9K6rH+WNaZKQOl3nQqSZk2PyRg6Q6LSBY97tcH5RhG5f1EzaQOxg==
-X-Received: by 2002:a19:ae1a:0:b0:4f2:4d0a:7bdf with SMTP id f26-20020a19ae1a000000b004f24d0a7bdfmr908928lfc.52.1683543700112;
-        Mon, 08 May 2023 04:01:40 -0700 (PDT)
-Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id j1-20020ac25501000000b004f001b0eda2sm1262729lfk.56.2023.05.08.04.01.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 04:01:38 -0700 (PDT)
-Date:   Mon, 8 May 2023 14:01:25 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] iio: bu27034: Ensure reset is written
-Message-ID: <ZFjWhbfuN5XcKty+@fedora>
+        Mon, 8 May 2023 07:03:14 -0400
+Received: from devico.uberspace.de (devico.uberspace.de [185.26.156.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5616A2BCEF
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 04:02:30 -0700 (PDT)
+Received: (qmail 3777 invoked by uid 990); 8 May 2023 11:02:29 -0000
+Authentication-Results: devico.uberspace.de;
+        auth=pass (plain)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zUN/p8D1oB8SxR7S"
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 08 May 2023 11:02:28 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+From:   "Leonard Lausen" <leonard@lausen.nl>
+Message-ID: <3802269cd54ce105ef6dece03b1b9af575b4fa06@lausen.nl>
+TLS-Required: No
+Subject: Re: [PATCH] Revert "drm/msm/dp: Remove INIT_SETUP delay"
+To:     "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
+        "Bjorn Andersson" <andersson@kernel.org>
+Cc:     regressions@lists.linux.dev,
+        "Bjorn Andersson" <quic_bjorande@quicinc.com>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        "Rob Clark" <robdclark@gmail.com>,
+        "Stephen Boyd" <swboyd@chromium.org>,
+        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
+        "Johan Hovold" <johan+linaro@kernel.org>,
+        "Sankeerth Billakanti" <quic_sbillaka@quicinc.com>,
+        "Sean Paul" <sean@poorly.run>, "David Airlie" <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, "Nikita Travkin" <nikita@trvn.ru>
+In-Reply-To: <b0cc40d5-6de1-91cc-e2cd-f47cc53551e4@quicinc.com>
+References: <b0cc40d5-6de1-91cc-e2cd-f47cc53551e4@quicinc.com>
+ <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
+ <20230508021536.txtamifw2vkfncnx@ripper>
+X-Rspamd-Bar: +
+X-Rspamd-Report: MIME_GOOD(-0.1) BAYES_HAM(-0.206001) SUSPICIOUS_RECIPS(1.5)
+X-Rspamd-Score: 1.193998
+Received: from unknown (HELO unkown) (::1)
+        by devico.uberspace.de (Haraka/3.0.1) with ESMTPSA; Mon, 08 May 2023 13:02:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=lausen.nl; s=uberspace;
+        h=from;
+        bh=AUdYfC/8BZ2sDiqNVoYRoy2QzAnTT60/s6WkT4FmufM=;
+        b=h9RKQUmsPd6uNaUCtteD/zTA9tbqUvFxDUJoAiwj6mrtP2hUMdMRNFcaYUzw4I+Om1fyOPtYph
+        ziVOVPFijR8exCJZqAZoE867ZdozilBrdURxrAZYWZaxH+wnknvH/AgHxOClqTmqPSbBRbtvDWpC
+        UrMZAYWXvZ5oRZHKG2ArGpXaI4X6WRnowoqz808Gz2SRvuldDPORgTx/BJ0uUvvqnCKbPBmb9ewT
+        7vpY+kMQK3MwaM/XJ0q+B7dEd2d/6Lf5YZkJrUhmSor36K1qSGSG7+XKaBkK4Nrj6jZa8WYJGz0Y
+        aq88Lk0v2DErb8oaPItKdcIunJD4UdHG0JlQ1EdfAJ7RIz40ffJZxBWdueoi9iZUsNnrvUdqc6Gy
+        KVLQ3SqHInMvgeqaaHcX5V4Y3XTcR2CYXNeyV9xbTTEZISJqMK3lCEqG8DJu51qJVQ9yS/tzMtUe
+        i/FQEZgY2fzFKduaoRoZn8nsqSxw5IrNmLbh1ND5EVk/NjPcCkJPV4Sxy4FL0WZ2P4Tx/CxIPhaY
+        A+sLjsFT1VzdCFcGJB/2RzvvKbffrvp904pyRmFTpcfcc/pzQm3Jftf/R7bOnkewVqFDwWzZ+GLc
+        9qCbLsq+TbhXikgVU5/WIndBQMNPVfcL9xvLw2JJz3QSda9SxyC4qBReQXho2gUrjWZWkt0fnNsn
+        4=
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Abhinav Kumar <quic_abhinavk@quicinc.com> writes:
+> On 5/7/2023 7:15 PM, Bjorn Andersson wrote:
+>> When booting with the cable connected on my X13s, 100 is long enough f=
+or
+>> my display to time out and require me to disconnect and reconnect the
+>> cable again.
+>>=20
+>>=20Do we have any idea of why the reduction to 0 is causing an issue wh=
+en
+>> using the internal HPD?
+>>=20
+>>=20Regards,
+>> Bjorn
+> Yes, we do know why this is causing an issue. The cleaner patch for thi=
+s=20
+>=20will be posted this week.
 
---zUN/p8D1oB8SxR7S
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Great!
 
-The reset bit must be always written to the hardware no matter what value
-is in a cache or register. Ensure this by using regmap_write_bits()
-instead of the regmap_update_bits(). Furthermore, the SWRESET bit may be
-self-clearing, so mark the SYSTEM_CONTROL register volatile to guarantee
-we do also read the right state - should we ever need to read it.
+> There is no need to add the 100ms delay back yet.
+>=20
+>=20thanks for posting this but NAK on this patch till we post the fix th=
+is=20
+>=20week.
+>
+> Appreciate a bit of patience till then.
 
-Finally, writing the SWRESET bit will restore the default register
-values. This can cause register cache to be outdated if there are any
-register values cached.
+This regression is already part of the 6.3 stable release series. Will
+the new patch qualify for inclusion in 6.3.y? Or will it be part of 6.4
+and this revert should go into 6.3.y?
 
-Rebuild register cache after SWRESET and use regmap_update_bits() when
-performing the reset.
+Even with this revert, there are additional regressions in 6.3 causing
+dpu errors and blank external display upon suspending and resuming the
+system while an external display is connected. Will your new patch also
+fix these regressions?
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Fixes: e52afbd61039 ("iio: light: ROHM BU27034 Ambient Light Sensor")
+[  275.025497] [drm:dpu_encoder_phys_vid_wait_for_commit_done:488] [dpu e=
+rror]vblank timeout
+[  275.025514] [drm:dpu_kms_wait_for_commit_done:510] [dpu error]wait for=
+ commit done returned -110
+[  275.064141] [drm:dpu_encoder_frame_done_timeout:2382] [dpu error]enc33=
+ frame done timeout
 
----
-v3: Combined patches:
-("iio: bu27034: Ensure reset is written")
-https://lore.kernel.org/lkml/ZFIw%2FKdApZe1euN8@fedora/
-("iio: bu27034: Reinit regmap cache after reset")
-https://lore.kernel.org/lkml/ZFM7lE4ZuDrUTspH@fedora/
----
- drivers/iio/light/rohm-bu27034.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+followed by a kernel panic if any modification to the display settings
+is done, such as disabling the external display:
 
-diff --git a/drivers/iio/light/rohm-bu27034.c b/drivers/iio/light/rohm-bu27=
-034.c
-index 25c9b79574a5..f85194fda6b0 100644
---- a/drivers/iio/light/rohm-bu27034.c
-+++ b/drivers/iio/light/rohm-bu27034.c
-@@ -231,6 +231,9 @@ struct bu27034_result {
-=20
- static const struct regmap_range bu27034_volatile_ranges[] =3D {
- 	{
-+		.range_min =3D BU27034_REG_SYSTEM_CONTROL,
-+		.range_max =3D BU27034_REG_SYSTEM_CONTROL,
-+	}, {
- 		.range_min =3D BU27034_REG_MODE_CONTROL4,
- 		.range_max =3D BU27034_REG_MODE_CONTROL4,
- 	}, {
-@@ -1272,12 +1275,19 @@ static int bu27034_chip_init(struct bu27034_data *d=
-ata)
- 	int ret, sel;
-=20
- 	/* Reset */
--	ret =3D regmap_update_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
-+	ret =3D regmap_write_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
- 			   BU27034_MASK_SW_RESET, BU27034_MASK_SW_RESET);
- 	if (ret)
- 		return dev_err_probe(data->dev, ret, "Sensor reset failed\n");
-=20
- 	msleep(1);
-+
-+	ret =3D regmap_reinit_cache(data->regmap, &bu27034_regmap);
-+	if (ret) {
-+		dev_err(data->dev, "Failed to reinit reg cache\n");
-+		return ret;
-+	}
-+
- 	/*
- 	 * Read integration time here to ensure it is in regmap cache. We do
- 	 * this to speed-up the int-time acquisition in the start of the buffer
---=20
-2.40.1
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---zUN/p8D1oB8SxR7S
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRY1noACgkQeFA3/03a
-ocVEWgf/b+ePeCroBNw29JDeXSmCoyM+l+yLgNn2ymP9efCBdwIqRfUFkdPTj+u2
-8JRaNblOnR2wsZnu/XaHl0wW7wFjiqv/XSvBr20rpEPwDLBhiFCH8x2sNNGFINf9
-u/bPkIOnMIFOJcI8kdbcCJK9HGrxsMvoUUFlkmPpUAYJVcxOGJ+O+IYhz7NPD5HJ
-CtpvvbILLPIxUMtj7ZE9lYC/odXCGYyZcXgTGtpdLzs834VYO/CeIXaQF5uW7a5W
-hnYQovD7nLFRKHnhAf2Vo5dzmd66nfWvFqCkQTnqVGARiOUfuc4Zrb52M+ExS7gi
-KMLV7orU4EcdI2/QHyGdKFJGsCRU9w==
-=z93B
------END PGP SIGNATURE-----
-
---zUN/p8D1oB8SxR7S--
+[  341.631287] Hardware name: Google Lazor (rev3 - 8) (DT)
+[  341.631290] pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYP=
+E=3D--)
+[  341.631296] pc : do_raw_spin_unlock+0xb8/0xc4
+[  341.631310] lr : do_raw_spin_unlock+0x78/0xc4
+[  341.631315] sp : ffffffc01100b880
+[  341.631317] x29: ffffffc01100b880 x28: 0000000000000028 x27: 000000000=
+0000038
+[  341.631326] x26: ffffff808c89e180 x25: ffffffef33e39920 x24: 000000000=
+0000000
+[  341.631333] x23: ffffffef33e3ca0c x22: 0000000000000002 x21: ffffff808=
+345ded8
+[  341.631339] x20: ffffff808345ded0 x19: 000000000000001e x18: 000000000=
+0000000
+[  341.631345] x17: 0048000000000460 x16: 0441043b04600438 x15: 043800000=
+89807d0
+[  341.631351] x14: 07b0089807800780 x13: 0000000000000068 x12: 000000000=
+0000001
+[  341.631357] x11: ffffffef3413bb76 x10: 0000000000000bb0 x9 : ffffffef3=
+3e3d6bc
+[  341.631363] x8 : ffffff808c89ed90 x7 : ffffff80b1c9f738 x6 : 000000000=
+0000001
+[  341.631370] x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffffff808=
+345def0
+[  341.631375] x2 : 00000000dead4ead x1 : 0000000000000003 x0 : 000000000=
+0000000
+[  341.631383] Kernel panic - not syncing: Asynchronous SError Interrupt
+[  341.631386] CPU: 3 PID: 1520 Comm: kwin_wayland Not tainted 6.3.0-stb-=
+cbq+ #2
+[  341.631390] Hardware name: Google Lazor (rev3 - 8) (DT)
+[  341.631393] Call trace:
+[  341.631395]  dump_backtrace+0xc8/0x104
+[  341.631402]  show_stack+0x20/0x30
+[  341.631407]  dump_stack_lvl+0x48/0x60
+[  341.631414]  dump_stack+0x18/0x24
+[  341.631419]  panic+0x130/0x2fc
+[  341.631425]  nmi_panic+0x54/0x78
+[  341.631428]  arm64_serror_panic+0x74/0x80
+[  341.631434]  arm64_is_fatal_ras_serror+0x6c/0x8c
+[  341.631439]  do_serror+0x48/0x60
+[  341.631444]  el1h_64_error_handler+0x30/0x48
+[  341.631450]  el1h_64_error+0x68/0x6c
+[  341.631455]  do_raw_spin_unlock+0xb8/0xc4
+[  341.631460]  _raw_spin_unlock_irq+0x18/0x38
+[  341.631466]  __wait_for_common+0xb8/0x154
+[  341.631472]  wait_for_completion_timeout+0x28/0x34
+[  341.631477]  dp_ctrl_push_idle+0x3c/0x88
+[  341.631483]  dp_bridge_disable+0x20/0x2c
+[  341.631488]  drm_atomic_bridge_chain_disable+0x8c/0xb8
+[  341.631495]  drm_atomic_helper_commit_modeset_disables+0x198/0x450
+[  341.631501]  msm_atomic_commit_tail+0x1c8/0x36c
+[  341.631507]  commit_tail+0x80/0x108
+[  341.631512]  drm_atomic_helper_commit+0x114/0x118
+[  341.631516]  drm_atomic_commit+0xb4/0xe0
+[  341.631522]  drm_mode_atomic_ioctl+0x6b0/0x890
+[  341.631527]  drm_ioctl_kernel+0xe4/0x164
+[  341.631534]  drm_ioctl+0x35c/0x3bc
+[  341.631539]  vfs_ioctl+0x30/0x50
+[  341.631547]  __arm64_sys_ioctl+0x80/0xb4
+[  341.631552]  invoke_syscall+0x84/0x11c
+[  341.631558]  el0_svc_common.constprop.0+0xc0/0xec
+[  341.631563]  do_el0_svc+0x94/0xa4
+[  341.631567]  el0_svc+0x2c/0x54
+[  341.631570]  el0t_64_sync_handler+0x94/0x100
+[  341.631575]  el0t_64_sync+0x194/0x198
+[  341.631580] SMP: stopping secondary CPUs
+[  341.831615] Kernel Offset: 0x2f2b200000 from 0xffffffc008000000
+[  341.831618] PHYS_OFFSET: 0x80000000
+[  341.831620] CPU features: 0x400000,61500506,3200720b
+[  341.831623] Memory Limit: none
