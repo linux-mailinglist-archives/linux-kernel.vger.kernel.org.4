@@ -2,128 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6619B6F9E49
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E26A6F9E4F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbjEHDh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 23:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
+        id S232176AbjEHDnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 23:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjEHDh0 (ORCPT
+        with ESMTP id S229814AbjEHDnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 23:37:26 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4024483;
-        Sun,  7 May 2023 20:37:22 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QF6QK2JbgzpW6Q;
-        Mon,  8 May 2023 11:36:09 +0800 (CST)
-Received: from [10.174.176.93] (10.174.176.93) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 8 May 2023 11:37:19 +0800
-Message-ID: <a1bd617b-c3ae-f2df-b643-aaa7b6eaf531@huawei.com>
-Date:   Mon, 8 May 2023 11:37:19 +0800
+        Sun, 7 May 2023 23:43:18 -0400
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4C559DA
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 20:42:46 -0700 (PDT)
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-331949eb356so27663075ab.0
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 20:42:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683517365; x=1686109365;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AD/Uj1Q/goXoaqsQL8mKoMpw3all4e+dW7FDARqYfq4=;
+        b=f4lVPxCbstBQO4PttH3CXpGjLawzI2/m1NqNnUnu7H3p8tIYisPYSxYN2zzbT1P5ej
+         c4OexJGT7yrX8lZ1V/L7Jz/F0Tpi4dvEu1+CxMDbh/6HaAgYmq1QD2U5AslcaeOWb2VH
+         Ifwzvm8aPHd3URRiuk/HpWRZCYVAqb2nC2Akp81wL7ELCwCL5Cdnzwrmv99FhM1+AWll
+         mZbehg1W+pnldqP/xSWMs1wsIbxsPlLLQ19o6oYl4TuRKO/NMJtsanKuIRwG2MeQZRf3
+         4LymJozIFq2C9e/m7/BAcEDlzf/gO0i+m4eTYIqubpAhNM5lw+Afm6u647j3PuYUdfeF
+         ZMig==
+X-Gm-Message-State: AC+VfDxnJpHfJaDCpf7wxY3Mv7z126KfKkh7m28aZWlo+A1JRpZ5gyn5
+        dn65SIVMmKs+jCSNrCVSWRlRMzdiqKdtJmcwl4sXjsre4Cak
+X-Google-Smtp-Source: ACHHUZ74DD54/wnbAWiVmUxISXDc7bGPfFZmLXF0c1G5UYocjb6eO3+WHWPNBBKT/FKFwgKOhGmGsWExOBU6q8HxQNGTqDwcOXEz
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 4/9] softirq: Allow early break
-To:     Eric Dumazet <edumazet@google.com>
-CC:     <corbet@lwn.net>, <paulmck@kernel.org>, <frederic@kernel.org>,
-        <quic_neeraju@quicinc.com>, <joel@joelfernandes.org>,
-        <josh@joshtriplett.org>, <boqun.feng@gmail.com>,
-        <rostedt@goodmis.org>, <mathieu.desnoyers@efficios.com>,
-        <jiangshanlai@gmail.com>, <qiang1.zhang@intel.com>,
-        <jstultz@google.com>, <tglx@linutronix.de>, <sboyd@kernel.org>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <peterz@infradead.org>, <frankwoo@google.com>,
-        <Rhinewuwu@google.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <rcu@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <20230505113315.3307723-1-liujian56@huawei.com>
- <20230505113315.3307723-5-liujian56@huawei.com>
- <CANn89iJL3ywLwig8U6JKG6itL7Fr=ab_dv7Pz1YDiDvCiR-Fog@mail.gmail.com>
-From:   "liujian (CE)" <liujian56@huawei.com>
-In-Reply-To: <CANn89iJL3ywLwig8U6JKG6itL7Fr=ab_dv7Pz1YDiDvCiR-Fog@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.93]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:dc45:0:b0:32b:1c9f:3c48 with SMTP id
+ x5-20020a92dc45000000b0032b1c9f3c48mr4933020ilq.1.1683517365516; Sun, 07 May
+ 2023 20:42:45 -0700 (PDT)
+Date:   Sun, 07 May 2023 20:42:45 -0700
+In-Reply-To: <000000000000e15c0905f8c5101b@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008b80c905fb266ec4@google.com>
+Subject: Re: [syzbot] [ext4?] possible deadlock in ext4_multi_mount_protect
+From:   syzbot <syzbot+6b7df7d5506b32467149@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
+
+HEAD commit:    14f8db1c0f9a Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1168e64c280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a837a8ba7e88bb45
+dashboard link: https://syzkaller.appspot.com/bug?extid=6b7df7d5506b32467149
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=159b92b8280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14355e4c280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ad6ce516eed3/disk-14f8db1c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1f38c2cc7667/vmlinux-14f8db1c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d795115eee39/Image-14f8db1c.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/36779692cd0c/mount_2.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6b7df7d5506b32467149@syzkaller.appspotmail.com
+
+EXT4-fs (loop0): 1 truncate cleaned up
+EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: writeback.
+======================================================
+WARNING: possible circular locking dependency detected
+6.3.0-rc7-syzkaller-g14f8db1c0f9a #0 Not tainted
+------------------------------------------------------
+syz-executor258/5925 is trying to acquire lock:
+ffff0000dba3c460 (sb_writers#3){.+.+}-{0:0}, at: ext4_multi_mount_protect+0x2f8/0x8c8 fs/ext4/mmp.c:343
+
+but task is already holding lock:
+ffff0000dba3c0e0 (&type->s_umount_key#29){++++}-{3:3}, at: vfs_fsconfig_locked fs/fsopen.c:253 [inline]
+ffff0000dba3c0e0 (&type->s_umount_key#29){++++}-{3:3}, at: __do_sys_fsconfig fs/fsopen.c:439 [inline]
+ffff0000dba3c0e0 (&type->s_umount_key#29){++++}-{3:3}, at: __se_sys_fsconfig fs/fsopen.c:314 [inline]
+ffff0000dba3c0e0 (&type->s_umount_key#29){++++}-{3:3}, at: __arm64_sys_fsconfig+0xa14/0xd18 fs/fsopen.c:314
+
+which lock already depends on the new lock.
 
 
-On 2023/5/5 20:10, Eric Dumazet wrote:
-> On Fri, May 5, 2023 at 1:24 PM Liu Jian <liujian56@huawei.com> wrote:
->>
->> From: Peter Zijlstra <peterz@infradead.org>
->>
->> Allow terminating the softirq processing loop without finishing the
->> vectors.
->>
->> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->> Signed-off-by: Liu Jian <liujian56@huawei.com>
->> ---
->>   kernel/softirq.c | 16 ++++++++++------
->>   1 file changed, 10 insertions(+), 6 deletions(-)
->>
->> diff --git a/kernel/softirq.c b/kernel/softirq.c
->> index 48a81d8ae49a..e2cad5d108c8 100644
->> --- a/kernel/softirq.c
->> +++ b/kernel/softirq.c
->> @@ -582,6 +582,9 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
->>                                 prev_count, preempt_count());
->>                          preempt_count_set(prev_count);
->>                  }
->> +
->> +               if (pending && __softirq_needs_break(start))
->> +                       break;
-> 
-> This means that some softirq may starve, because
-> 
-> for_each_set_bit(vec_nr, &pending, NR_SOFTIRQS)
-> 
-> Always iterate using the same order (of bits)
-> 
-> 
-Yes, we need to record the softirq that is not executed and continue 
-next time. I will fix it in next version.
-Thanks.
-> 
-> 
->>          }
->>
->>          if (!IS_ENABLED(CONFIG_PREEMPT_RT) &&
->> @@ -590,13 +593,14 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
->>
->>          local_irq_disable();
->>
->> -       pending = local_softirq_pending();
->> -       if (pending) {
->> -               if (!__softirq_needs_break(start) && --max_restart)
->> -                       goto restart;
->> +       if (pending)
->> +               or_softirq_pending(pending);
->> +       else if ((pending = local_softirq_pending()) &&
->> +                !__softirq_needs_break(start) &&
->> +                --max_restart)
->> +               goto restart;
->>
->> -               wakeup_softirqd();
->> -       }
->> +       wakeup_softirqd();
->>
->>          account_softirq_exit(current);
->>          lockdep_softirq_end(in_hardirq);
->> --
->> 2.34.1
->>
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&type->s_umount_key#29){++++}-{3:3}:
+       down_write+0x50/0xc0 kernel/locking/rwsem.c:1573
+       __do_sys_quotactl_fd fs/quota/quota.c:997 [inline]
+       __se_sys_quotactl_fd fs/quota/quota.c:972 [inline]
+       __arm64_sys_quotactl_fd+0x2fc/0x4a4 fs/quota/quota.c:972
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+       el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+       el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+-> #0 (sb_writers#3){.+.+}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3098 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3217 [inline]
+       validate_chain kernel/locking/lockdep.c:3832 [inline]
+       __lock_acquire+0x3338/0x764c kernel/locking/lockdep.c:5056
+       lock_acquire+0x238/0x718 kernel/locking/lockdep.c:5669
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1477 [inline]
+       sb_start_write include/linux/fs.h:1552 [inline]
+       write_mmp_block+0xe4/0xb70 fs/ext4/mmp.c:50
+       ext4_multi_mount_protect+0x2f8/0x8c8 fs/ext4/mmp.c:343
+       __ext4_remount fs/ext4/super.c:6543 [inline]
+       ext4_reconfigure+0x2180/0x2928 fs/ext4/super.c:6642
+       reconfigure_super+0x328/0x738 fs/super.c:956
+       vfs_fsconfig_locked fs/fsopen.c:254 [inline]
+       __do_sys_fsconfig fs/fsopen.c:439 [inline]
+       __se_sys_fsconfig fs/fsopen.c:314 [inline]
+       __arm64_sys_fsconfig+0xa1c/0xd18 fs/fsopen.c:314
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+       el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+       el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&type->s_umount_key#29);
+                               lock(sb_writers#3);
+                               lock(&type->s_umount_key#29);
+  lock(sb_writers#3);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor258/5925:
+ #0: ffff0000d5b8a470 (&fc->uapi_mutex){+.+.}-{3:3}, at: __do_sys_fsconfig fs/fsopen.c:437 [inline]
+ #0: ffff0000d5b8a470 (&fc->uapi_mutex){+.+.}-{3:3}, at: __se_sys_fsconfig fs/fsopen.c:314 [inline]
+ #0: ffff0000d5b8a470 (&fc->uapi_mutex){+.+.}-{3:3}, at: __arm64_sys_fsconfig+0x720/0xd18 fs/fsopen.c:314
+ #1: ffff0000dba3c0e0 (&type->s_umount_key#29){++++}-{3:3}, at: vfs_fsconfig_locked fs/fsopen.c:253 [inline]
+ #1: ffff0000dba3c0e0 (&type->s_umount_key#29){++++}-{3:3}, at: __do_sys_fsconfig fs/fsopen.c:439 [inline]
+ #1: ffff0000dba3c0e0 (&type->s_umount_key#29){++++}-{3:3}, at: __se_sys_fsconfig fs/fsopen.c:314 [inline]
+ #1: ffff0000dba3c0e0 (&type->s_umount_key#29){++++}-{3:3}, at: __arm64_sys_fsconfig+0xa14/0xd18 fs/fsopen.c:314
+
+stack backtrace:
+CPU: 0 PID: 5925 Comm: syz-executor258 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+Call trace:
+ dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
+ show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
+ dump_stack+0x1c/0x28 lib/dump_stack.c:113
+ print_circular_bug+0x150/0x1b8 kernel/locking/lockdep.c:2056
+ check_noncircular+0x2cc/0x378 kernel/locking/lockdep.c:2178
+ check_prev_add kernel/locking/lockdep.c:3098 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3217 [inline]
+ validate_chain kernel/locking/lockdep.c:3832 [inline]
+ __lock_acquire+0x3338/0x764c kernel/locking/lockdep.c:5056
+ lock_acquire+0x238/0x718 kernel/locking/lockdep.c:5669
+ percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+ __sb_start_write include/linux/fs.h:1477 [inline]
+ sb_start_write include/linux/fs.h:1552 [inline]
+ write_mmp_block+0xe4/0xb70 fs/ext4/mmp.c:50
+ ext4_multi_mount_protect+0x2f8/0x8c8 fs/ext4/mmp.c:343
+ __ext4_remount fs/ext4/super.c:6543 [inline]
+ ext4_reconfigure+0x2180/0x2928 fs/ext4/super.c:6642
+ reconfigure_super+0x328/0x738 fs/super.c:956
+ vfs_fsconfig_locked fs/fsopen.c:254 [inline]
+ __do_sys_fsconfig fs/fsopen.c:439 [inline]
+ __se_sys_fsconfig fs/fsopen.c:314 [inline]
+ __arm64_sys_fsconfig+0xa1c/0xd18 fs/fsopen.c:314
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+EXT4-fs warning (device loop0): ext4_enable_quotas:7001: Failed to enable quota tracking (type=2, err=-22, ino=15). Please run e2fsck to fix.
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
