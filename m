@@ -2,741 +2,663 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3171F6FB2B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582EE6FB543
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234268AbjEHOZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 10:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
+        id S234398AbjEHQhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234301AbjEHOZT (ORCPT
+        with ESMTP id S234258AbjEHQhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 10:25:19 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FF461B3;
-        Mon,  8 May 2023 07:25:14 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 348D1srN003279;
-        Mon, 8 May 2023 10:24:57 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3qdkt9bhtq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 May 2023 10:24:56 -0400
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 348EOtFB028253
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 8 May 2023 10:24:55 -0400
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 8 May 2023
- 10:24:54 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Mon, 8 May 2023 10:24:54 -0400
-Received: from daniel-Precision-5530.ad.analog.com ([10.48.65.214])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 348EOYCs012218;
-        Mon, 8 May 2023 10:24:48 -0400
-From:   Daniel Matyas <daniel.matyas@analog.com>
-CC:     Daniel Matyas <daniel.matyas@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Mon, 8 May 2023 12:37:35 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2688D6A6A;
+        Mon,  8 May 2023 09:37:32 -0700 (PDT)
+Received: from mercury (195-23-45-170.net.novis.pt [195.23.45.170])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4AB5266032B2;
+        Mon,  8 May 2023 17:37:30 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1683563850;
+        bh=ddUmLa5OsBzy+n3EvpSB4r53x/dHjJEqewcy7PBghac=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jLzUIr09suHFcpx6sYvlHX5Ithl4fuf6ispGh20kwgYR8X2JRZoiKGrfzZVK4IKj9
+         d2LsO6ATBaoyMMKQ9DufFnxeHN7rCg3Ya4wfp6pGvggHgd8UQv7/WYXA5+45j1VqB8
+         eQ8BED5rUaeIxgNhFKo7t+CcJlK2M3RIKg5IymPINuxs8zXbgAlHTeZPnv9t/6DS6Z
+         ttBYfTYYy2/vkcrp7gHKEHSt0H4ikpHM8s5e+UCQSBjtvY6cFdlyZQF4V0P3tUFmoi
+         4xp7/Zr9AVDKpW4C06L50CqNkmu03Vft+z02HbnkIRX1tEzj6fmzimRuIUBBR4sz/Z
+         bUQCezLgHqpdA==
+Received: by mercury (Postfix, from userid 1000)
+        id 849521066F9F; Mon,  8 May 2023 08:50:14 +0200 (CEST)
+Date:   Mon, 8 May 2023 08:50:14 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Jakob Hauser <jahau@rocketmail.com>
+Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
-Subject: [PATCH v7 2/2] hwmon: max31827: add MAX31827 driver
-Date:   Mon, 8 May 2023 20:24:24 +0300
-Message-ID: <20230508172427.23915-2-daniel.matyas@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230508172427.23915-1-daniel.matyas@analog.com>
-References: <20230508172427.23915-1-daniel.matyas@analog.com>
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v4 5/8] power: supply: rt5033_charger: Add RT5033 charger
+ device driver
+Message-ID: <20230508065014.xfftu6vorxgqdh7h@mercury.elektranox.org>
+References: <20230506155435.3005-1-jahau@rocketmail.com>
+ <20230506155435.3005-6-jahau@rocketmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: Ae2AJQAZcqrqBwvs7wcNakc8_UPfzrc6
-X-Proofpoint-ORIG-GUID: Ae2AJQAZcqrqBwvs7wcNakc8_UPfzrc6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-08_10,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- adultscore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 malwarescore=0 bulkscore=0 clxscore=1015
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2305080097
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hdnjxeig33un4pfn"
+Content-Disposition: inline
+In-Reply-To: <20230506155435.3005-6-jahau@rocketmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MAX31827 is a low-power temperature switch with I2C interface.
 
-The device is a ±1°C accuracy from -40°C to +125°C
-(12 bits) local temperature switch and sensor with I2C/SM-
-Bus interface. The combination of small 6-bump wafer-lev-
-el package (WLP) and high accuracy makes this temper-
-ature sensor/switch ideal for a wide range of applications.
+--hdnjxeig33un4pfn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
----
+Hi,
 
-v6 -> v7 : Used goto instead of return in write_alarm_val function.
-Unlocked mutex in goto label.
+On Sat, May 06, 2023 at 05:54:32PM +0200, Jakob Hauser wrote:
+> This patch adds device driver of Richtek RT5033 PMIC. The driver supports
+> switching charger. rt5033 charger provides three charging modes. The char=
+ging
+> modes are pre-charge mode, fast charge mode and constant voltage mode. Th=
+ey
+> vary in charge rate, the charge parameters can be controlled by i2c inter=
+face.
+>=20
+> Cc: Beomho Seo <beomho.seo@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Tested-by: Raymond Hackley <raymondhackley@protonmail.com>
+> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
 
-Used mutex for enable.
+Driver looks mostly good. I still found a couple of small things
+though. Please find them inline.
 
-Now update_interval can only be modified if the device is enabled. I did
-this, b.c. modifying the update interval, when the device is in shutdown
-mode, automatically enables the device.
+>  drivers/power/supply/Kconfig          |   8 +
+>  drivers/power/supply/Makefile         |   1 +
+>  drivers/power/supply/rt5033_charger.c | 464 ++++++++++++++++++++++++++
+>  3 files changed, 473 insertions(+)
+>  create mode 100644 drivers/power/supply/rt5033_charger.c
+>=20
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index c78be9f322e6..ea11797670ca 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -766,6 +766,14 @@ config BATTERY_RT5033
+>  	  The fuelgauge calculates and determines the battery state of charge
+>  	  according to battery open circuit voltage.
+> =20
+> +config CHARGER_RT5033
+> +	tristate "RT5033 battery charger support"
+> +	depends on MFD_RT5033
+> +	help
+> +	  This adds support for battery charger in Richtek RT5033 PMIC.
+> +	  The device supports pre-charge mode, fast charge mode and
+> +	  constant voltage mode.
+> +
+>  config CHARGER_RT9455
+>  	tristate "Richtek RT9455 battery charger driver"
+>  	depends on I2C
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+> index 4adbfba02d05..dfc624bbcf1d 100644
+> --- a/drivers/power/supply/Makefile
+> +++ b/drivers/power/supply/Makefile
+> @@ -54,6 +54,7 @@ obj-$(CONFIG_BATTERY_MAX17040)	+=3D max17040_battery.o
+>  obj-$(CONFIG_BATTERY_MAX17042)	+=3D max17042_battery.o
+>  obj-$(CONFIG_BATTERY_MAX1721X)	+=3D max1721x_battery.o
+>  obj-$(CONFIG_BATTERY_RT5033)	+=3D rt5033_battery.o
+> +obj-$(CONFIG_CHARGER_RT5033)	+=3D rt5033_charger.o
+>  obj-$(CONFIG_CHARGER_RT9455)	+=3D rt9455_charger.o
+>  obj-$(CONFIG_CHARGER_RT9467)	+=3D rt9467-charger.o
+>  obj-$(CONFIG_CHARGER_RT9471)	+=3D rt9471.o
+> diff --git a/drivers/power/supply/rt5033_charger.c b/drivers/power/supply=
+/rt5033_charger.c
+> new file mode 100644
+> index 000000000000..038530d2f0a0
+> --- /dev/null
+> +++ b/drivers/power/supply/rt5033_charger.c
+> @@ -0,0 +1,464 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Battery charger driver for RT5033
+> + *
+> + * Copyright (C) 2014 Samsung Electronics, Co., Ltd.
+> + * Author: Beomho Seo <beomho.seo@samsung.com>
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License version 2 as
+> + * published by the Free Software Foundation.
+> + */
 
- Documentation/hwmon/index.rst    |   1 +
- Documentation/hwmon/max31827.rst |  90 ++++++
- MAINTAINERS                      |   2 +
- drivers/hwmon/Kconfig            |  11 +
- drivers/hwmon/Makefile           |   2 +-
- drivers/hwmon/max31827.c         | 466 +++++++++++++++++++++++++++++++
- 6 files changed, 571 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/hwmon/max31827.rst
- create mode 100644 drivers/hwmon/max31827.c
+no need for the GPL2 text with SPDX license header
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index fa1208c62855..8cc0922f3b36 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -140,6 +140,7 @@ Hardware Monitoring Kernel Drivers
-    max31760
-    max31785
-    max31790
-+   max31827
-    max34440
-    max6620
-    max6639
-diff --git a/Documentation/hwmon/max31827.rst b/Documentation/hwmon/max31827.rst
-new file mode 100644
-index 000000000000..b0971d05b8a4
---- /dev/null
-+++ b/Documentation/hwmon/max31827.rst
-@@ -0,0 +1,90 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver max31827
-+======================
-+
-+Supported chips:
-+
-+  * Maxim MAX31827
-+
-+    Prefix: 'max31827'
-+
-+    Addresses scanned: I2C 0x40 - 0x5f
-+
-+    Datasheet: Publicly available at the Analog Devices website
-+
-+  * Maxim MAX31828
-+
-+    Prefix: 'max31828'
-+
-+    Addresses scanned: I2C 0x40 - 0x5f
-+
-+    Datasheet: Publicly available at the Analog Devices website
-+
-+  * Maxim MAX31829
-+
-+    Prefix: 'max31829'
-+
-+    Addresses scanned: I2C 0x40 - 0x5f
-+
-+    Datasheet: Publicly available at the Analog Devices website
-+
-+
-+Authors:
-+	- Daniel Matyas <daniel.matyas@analog.com>
-+
-+Description
-+-----------
-+
-+The chips supported by this driver are quite similar. The only difference
-+between them is found in the default power-on behaviour of the chips. While the
-+MAX31827's fault queue is set to 1, the other two chip's fault queue is set to
-+4. Besides this, the MAX31829's alarm active state is high, while the other two
-+chip's alarms are active on low. It is important to note that the chips can be
-+configured to operate in the same manner with 1 write operation to the
-+configuration register. From here on, we will refer to all these chips as
-+MAX31827.
-+
-+MAX31827 implements a temperature sensor with a 6 WLP packaging scheme. This
-+sensor measures the temperature of the chip itself.
-+
-+MAX31827 has low and over temperature alarms with an effective value and a
-+hysteresis value: -40 and -30 degrees for under temperature alarm and +100 and
-++90 degrees for over temperature alarm.
-+
-+The alarm can be configured in comparator and interrupt mode. Currently only
-+comparator mode is implemented. In Comparator mode, the OT/UT status bits have a
-+value of 1 when the temperature rises above the TH value or falls below TL,
-+which is also subject to the Fault Queue selection. OT status returns to 0 when
-+the temperature drops below the TH_HYST value or when shutdown mode is entered.
-+Similarly, UT status returns to 0 when the temperature rises above TL_HYST value
-+or when shutdown mode is entered.
-+
-+Putting the MAX31827 into shutdown mode also resets the OT/UT status bits. Note
-+that if the mode is changed while OT/UT status bits are set, an OT/UT status
-+reset may be required before it begins to behave normally. To prevent this,
-+it is recommended to perform a read of the configuration/status register to
-+clear the status bits before changing the operating mode.
-+
-+The conversions can be manual with the one-shot functionality and automatic with
-+a set frequency. When powered on, the chip measures temperatures with 1 conv/s.
-+Enabling the device when it is already enabled has the side effect of setting
-+the conversion frequency to 1 conv/s. The conversion time varies depending on
-+the resolution. The conversion time doubles with every bit of increased
-+resolution. For 10 bit resolution 35ms are needed, while for 12 bit resolution
-+(default) 140ms. When chip is in shutdown mode and a read operation is
-+requested, one-shot is triggered, the device waits for 140 (conversion time) + 1
-+(error) ms, and only after that is the temperature value register read.
-+
-+The LSB of the temperature values is 0.0625 degrees Celsius, but the values of
-+the temperatures are displayed in milli-degrees. This means, that some data is
-+lost. The step between 2 consecutive values is 62 or 63. This effect can be seen
-+in the writing of alarm values too. For positive numbers the user-input value
-+will always be rounded down to the nearest possible value, for negative numbers
-+the user-input will always be rounded up to the nearest possible value.
-+
-+Notes
-+-----
-+
-+Currently fault queue, alarm polarity and resolution cannot be modified.
-+PEC is not implemented either.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 91de1e95f11d..40504fc94db5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12624,6 +12624,8 @@ L:	linux-hwmon@vger.kernel.org
- S:	Supported
- W:	http://ez.analog.com/community/linux-device-drivers
- F:	Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-+F:	Documentation/hwmon/max31827.rst
-+F:	drivers/hwmon/max31827.c
- 
- MAX6650 HARDWARE MONITOR AND FAN CONTROLLER DRIVER
- L:	linux-hwmon@vger.kernel.org
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index fc640201a2de..12bd17075dc4 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1097,6 +1097,17 @@ config SENSORS_MAX31760
- 	  This driver can also be built as a module. If so, the module
- 	  will be called max31760.
- 
-+config MAX31827
-+	tristate "MAX31827 low-power temperature switch and similar devices"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  If you say yes here you get support for MAX31827, MAX31828 and
-+	  MAX31829 low-power temperature switches and sensors connected with I2C.
-+
-+	  This driver can also be built as a module.  If so, the module
-+	  will be called max31827.
-+
- config SENSORS_MAX6620
- 	tristate "Maxim MAX6620 fan controller"
- 	depends on I2C
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index cd8c568c80a9..8a8021f9ca9e 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -149,6 +149,7 @@ obj-$(CONFIG_SENSORS_MAX6642)	+= max6642.o
- obj-$(CONFIG_SENSORS_MAX6650)	+= max6650.o
- obj-$(CONFIG_SENSORS_MAX6697)	+= max6697.o
- obj-$(CONFIG_SENSORS_MAX31790)	+= max31790.o
-+obj-$(CONFIG_MAX31827) += max31827.o
- obj-$(CONFIG_SENSORS_MC13783_ADC)+= mc13783-adc.o
- obj-$(CONFIG_SENSORS_MC34VR500)	+= mc34vr500.o
- obj-$(CONFIG_SENSORS_MCP3021)	+= mcp3021.o
-@@ -224,4 +225,3 @@ obj-$(CONFIG_SENSORS_PECI)	+= peci/
- obj-$(CONFIG_PMBUS)		+= pmbus/
- 
- ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
--
-diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
-new file mode 100644
-index 000000000000..fce20f52a680
---- /dev/null
-+++ b/drivers/hwmon/max31827.c
-@@ -0,0 +1,466 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * max31827.c - Support for Maxim Low-Power Switch
-+ *
-+ * Copyright (c) 2023 Daniel Matyas <daniel.matyas@analog.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/bitops.h>
-+#include <linux/delay.h>
-+#include <linux/hwmon.h>
-+#include <linux/i2c.h>
-+#include <linux/mutex.h>
-+#include <linux/regmap.h>
-+
-+#define MAX31827_T_REG	0x0
-+#define MAX31827_CONFIGURATION_REG	0x2
-+#define MAX31827_TH_REG	0x4
-+#define MAX31827_TL_REG 0x6
-+#define MAX31827_TH_HYST_REG	0x8
-+#define MAX31827_TL_HYST_REG	0xA
-+
-+#define MAX31827_CONFIGURATION_1SHOT_MASK	BIT(0)
-+#define MAX31827_CONFIGURATION_CNV_RATE_MASK	GENMASK(3, 1)
-+#define MAX31827_CONFIGURATION_U_TEMP_STAT_MASK BIT(14)
-+#define MAX31827_CONFIGURATION_O_TEMP_STAT_MASK BIT(15)
-+
-+#define MAX31827_12_BIT_CNV_TIME	141
-+
-+#define MAX31827_CNV_1_DIV_64_HZ	0x1
-+#define MAX31827_CNV_1_DIV_32_HZ	0x2
-+#define MAX31827_CNV_1_DIV_16_HZ	0x3
-+#define MAX31827_CNV_1_DIV_4_HZ		0x4
-+#define MAX31827_CNV_1_HZ	0x5
-+#define MAX31827_CNV_4_HZ	0x6
-+#define MAX31827_CNV_8_HZ	0x7
-+
-+#define MAX31827_16_BIT_TO_M_DGR(x)	(sign_extend32(x, 15) * 1000 / 16)
-+#define MAX31827_M_DGR_TO_16_BIT(x)	(((x) << 4) / 1000)
-+#define MAX31827_DEVICE_ENABLE(x)	((x) ? 0xA : 0x0)
-+
-+struct max31827_state {
-+	/*
-+	 * Prevent simultaneous access to the i2c client.
-+	 */
-+	struct mutex lock;
-+	struct regmap *regmap;
-+	bool enable;
-+};
-+
-+static const struct regmap_config max31827_regmap = {
-+	.reg_bits = 8,
-+	.val_bits = 16,
-+	.max_register = 0xA,
-+};
-+
-+static int write_alarm_val(struct max31827_state *st, unsigned int reg,
-+			   long val)
-+{
-+	unsigned int cfg;
-+	unsigned int tmp;
-+	int ret;
-+
-+	val = MAX31827_M_DGR_TO_16_BIT(val);
-+
-+	/*
-+	 * Before the Temperature Threshold Alarm and Alarm Hysteresis Threshold
-+	 * register values are changed over I2C, the part must be in shutdown
-+	 * mode.
-+	 *
-+	 * Mutex is used to ensure, that some other process doesn't change the
-+	 * configuration register.
-+	 */
-+	mutex_lock(&st->lock);
-+
-+	if (!st->enable) {
-+		ret = regmap_write(st->regmap, reg, val);
-+		goto unlock;
-+	}
-+
-+	ret = regmap_read(st->regmap, MAX31827_CONFIGURATION_REG, &cfg);
-+	if (ret)
-+		goto unlock;
-+
-+	tmp = cfg & ~(MAX31827_CONFIGURATION_1SHOT_MASK |
-+		      MAX31827_CONFIGURATION_CNV_RATE_MASK);
-+	ret = regmap_write(st->regmap, MAX31827_CONFIGURATION_REG, tmp);
-+	if (ret)
-+		goto unlock;
-+
-+	ret = regmap_write(st->regmap, reg, val);
-+	if (ret)
-+		goto unlock;
-+
-+	ret = regmap_write(st->regmap, MAX31827_CONFIGURATION_REG, cfg);
-+
-+unlock:
-+	mutex_unlock(&st->lock);
-+	return ret;
-+}
-+
-+static umode_t max31827_is_visible(const void *state,
-+				   enum hwmon_sensor_types type, u32 attr,
-+				   int channel)
-+{
-+	if (type == hwmon_temp) {
-+		switch (attr) {
-+		case hwmon_temp_enable:
-+		case hwmon_temp_max:
-+		case hwmon_temp_min:
-+		case hwmon_temp_max_hyst:
-+		case hwmon_temp_min_hyst:
-+			return 0644;
-+		case hwmon_temp_input:
-+		case hwmon_temp_min_alarm:
-+		case hwmon_temp_max_alarm:
-+			return 0444;
-+		default:
-+			return 0;
-+		}
-+	} else if (type == hwmon_chip) {
-+		if (attr == hwmon_chip_update_interval)
-+			return 0644;
-+	}
-+
-+	return 0;
-+}
-+
-+static int max31827_read(struct device *dev, enum hwmon_sensor_types type,
-+			 u32 attr, int channel, long *val)
-+{
-+	struct max31827_state *st = dev_get_drvdata(dev);
-+	unsigned int uval;
-+	int ret;
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_enable:
-+			ret = regmap_read(st->regmap,
-+					  MAX31827_CONFIGURATION_REG, &uval);
-+			if (ret)
-+				break;
-+
-+			uval = FIELD_GET(MAX31827_CONFIGURATION_1SHOT_MASK |
-+					 MAX31827_CONFIGURATION_CNV_RATE_MASK,
-+					 uval);
-+			*val = !!uval;
-+
-+			break;
-+		case hwmon_temp_input:
-+			mutex_lock(&st->lock);
-+
-+			if (!st->enable) {
-+				/*
-+				 * This operation requires mutex protection,
-+				 * because the chip configuration should not
-+				 * be changed during the conversion process.
-+				 */
-+
-+				ret = regmap_update_bits(st->regmap,
-+							 MAX31827_CONFIGURATION_REG,
-+							 MAX31827_CONFIGURATION_1SHOT_MASK,
-+							 1);
-+				if (ret) {
-+					mutex_unlock(&st->lock);
-+					return ret;
-+				}
-+
-+				msleep(MAX31827_12_BIT_CNV_TIME);
-+			}
-+			ret = regmap_read(st->regmap, MAX31827_T_REG, &uval);
-+
-+			mutex_unlock(&st->lock);
-+
-+			if (ret)
-+				break;
-+
-+			*val = MAX31827_16_BIT_TO_M_DGR(uval);
-+
-+			break;
-+		case hwmon_temp_max:
-+			ret = regmap_read(st->regmap, MAX31827_TH_REG, &uval);
-+			if (ret)
-+				break;
-+
-+			*val = MAX31827_16_BIT_TO_M_DGR(uval);
-+			break;
-+		case hwmon_temp_max_hyst:
-+			ret = regmap_read(st->regmap, MAX31827_TH_HYST_REG,
-+					  &uval);
-+			if (ret)
-+				break;
-+
-+			*val = MAX31827_16_BIT_TO_M_DGR(uval);
-+			break;
-+		case hwmon_temp_max_alarm:
-+			ret = regmap_read(st->regmap,
-+					  MAX31827_CONFIGURATION_REG, &uval);
-+			if (ret)
-+				break;
-+
-+			*val = FIELD_GET(MAX31827_CONFIGURATION_O_TEMP_STAT_MASK,
-+					 uval);
-+			break;
-+		case hwmon_temp_min:
-+			ret = regmap_read(st->regmap, MAX31827_TL_REG, &uval);
-+			if (ret)
-+				break;
-+
-+			*val = MAX31827_16_BIT_TO_M_DGR(uval);
-+			break;
-+		case hwmon_temp_min_hyst:
-+			ret = regmap_read(st->regmap, MAX31827_TL_HYST_REG,
-+					  &uval);
-+			if (ret)
-+				break;
-+
-+			*val = MAX31827_16_BIT_TO_M_DGR(uval);
-+			break;
-+		case hwmon_temp_min_alarm:
-+			ret = regmap_read(st->regmap,
-+					  MAX31827_CONFIGURATION_REG, &uval);
-+			if (ret)
-+				break;
-+
-+			*val = FIELD_GET(MAX31827_CONFIGURATION_U_TEMP_STAT_MASK,
-+					 uval);
-+			break;
-+		default:
-+			ret = -EOPNOTSUPP;
-+			break;
-+		}
-+
-+		break;
-+
-+	case hwmon_chip:
-+		if (attr == hwmon_chip_update_interval) {
-+			ret = regmap_read(st->regmap,
-+					  MAX31827_CONFIGURATION_REG, &uval);
-+			if (ret)
-+				break;
-+
-+			uval = FIELD_GET(MAX31827_CONFIGURATION_CNV_RATE_MASK,
-+					 uval);
-+			switch (uval) {
-+			case MAX31827_CNV_1_DIV_64_HZ:
-+				*val = 64000;
-+				break;
-+			case MAX31827_CNV_1_DIV_32_HZ:
-+				*val = 32000;
-+				break;
-+			case MAX31827_CNV_1_DIV_16_HZ:
-+				*val = 16000;
-+				break;
-+			case MAX31827_CNV_1_DIV_4_HZ:
-+				*val = 4000;
-+				break;
-+			case MAX31827_CNV_1_HZ:
-+				*val = 1000;
-+				break;
-+			case MAX31827_CNV_4_HZ:
-+				*val = 250;
-+				break;
-+			case MAX31827_CNV_8_HZ:
-+				*val = 125;
-+				break;
-+			default:
-+				*val = 0;
-+				break;
-+			}
-+		}
-+		break;
-+
-+	default:
-+		ret = -EOPNOTSUPP;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int max31827_write(struct device *dev, enum hwmon_sensor_types type,
-+			  u32 attr, int channel, long val)
-+{
-+	struct max31827_state *st = dev_get_drvdata(dev);
-+	int ret;
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_enable:
-+			if (val >> 1)
-+				return -EOPNOTSUPP;
-+
-+			mutex_lock(&st->lock);
-+			/**
-+			 * The chip should not be enabled while a conversion is
-+			 * performed. Neither should the chip be enabled when
-+			 * the alarm values are changed.
-+			 */
-+
-+			st->enable = val;
-+
-+			ret = regmap_update_bits(st->regmap,
-+						 MAX31827_CONFIGURATION_REG,
-+						 MAX31827_CONFIGURATION_1SHOT_MASK |
-+						 MAX31827_CONFIGURATION_CNV_RATE_MASK,
-+						 MAX31827_DEVICE_ENABLE(val));
-+
-+			mutex_unlock(&st->lock);
-+
-+			return ret;
-+
-+		case hwmon_temp_max:
-+			return write_alarm_val(st, MAX31827_TH_REG, val);
-+
-+		case hwmon_temp_max_hyst:
-+			return write_alarm_val(st, MAX31827_TH_HYST_REG, val);
-+
-+		case hwmon_temp_min:
-+			return write_alarm_val(st, MAX31827_TL_REG, val);
-+
-+		case hwmon_temp_min_hyst:
-+			return write_alarm_val(st, MAX31827_TL_HYST_REG, val);
-+
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+
-+	case hwmon_chip:
-+		if (attr == hwmon_chip_update_interval) {
-+			if (!st->enable)
-+				return -EOPNOTSUPP;
-+
-+			switch (val) {
-+			case 125:
-+				val = MAX31827_CNV_8_HZ;
-+				break;
-+			case 250:
-+				val = MAX31827_CNV_4_HZ;
-+				break;
-+			case 1000:
-+				val = MAX31827_CNV_1_HZ;
-+				break;
-+			case 4000:
-+				val = MAX31827_CNV_1_DIV_4_HZ;
-+				break;
-+			case 16000:
-+				val = MAX31827_CNV_1_DIV_16_HZ;
-+				break;
-+			case 32000:
-+				val = MAX31827_CNV_1_DIV_32_HZ;
-+				break;
-+			case 64000:
-+				val = MAX31827_CNV_1_DIV_64_HZ;
-+				break;
-+			default:
-+				return -EOPNOTSUPP;
-+			}
-+
-+			val = FIELD_PREP(MAX31827_CONFIGURATION_CNV_RATE_MASK,
-+					 val);
-+
-+			return regmap_update_bits(st->regmap,
-+						  MAX31827_CONFIGURATION_REG,
-+						  MAX31827_CONFIGURATION_CNV_RATE_MASK,
-+						  val);
-+		}
-+		break;
-+
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static int max31827_init_client(struct max31827_state *st)
-+{
-+	st->enable = true;
-+
-+	return regmap_update_bits(st->regmap, MAX31827_CONFIGURATION_REG,
-+				  MAX31827_CONFIGURATION_1SHOT_MASK |
-+					  MAX31827_CONFIGURATION_CNV_RATE_MASK,
-+				  MAX31827_DEVICE_ENABLE(1));
-+}
-+
-+static const struct hwmon_channel_info *max31827_info[] = {
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_ENABLE | HWMON_T_INPUT | HWMON_T_MIN |
-+					 HWMON_T_MIN_HYST | HWMON_T_MIN_ALARM |
-+					 HWMON_T_MAX | HWMON_T_MAX_HYST |
-+					 HWMON_T_MAX_ALARM),
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
-+	NULL,
-+};
-+
-+static const struct hwmon_ops max31827_hwmon_ops = {
-+	.is_visible = max31827_is_visible,
-+	.read = max31827_read,
-+	.write = max31827_write,
-+};
-+
-+static const struct hwmon_chip_info max31827_chip_info = {
-+	.ops = &max31827_hwmon_ops,
-+	.info = max31827_info,
-+};
-+
-+static int max31827_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct device *hwmon_dev;
-+	struct max31827_state *st;
-+	int err;
-+
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WORD_DATA))
-+		return -EOPNOTSUPP;
-+
-+	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
-+	if (!st)
-+		return -ENOMEM;
-+
-+	mutex_init(&st->lock);
-+
-+	st->regmap = devm_regmap_init_i2c(client, &max31827_regmap);
-+	if (IS_ERR(st->regmap))
-+		return dev_err_probe(dev, PTR_ERR(st->regmap),
-+				     "Failed to allocate regmap.\n");
-+
-+	err = max31827_init_client(st);
-+	if (err)
-+		return err;
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, st,
-+							 &max31827_chip_info,
-+							 NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static const struct i2c_device_id max31827_i2c_ids[] = {
-+	{ "max31827", 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, max31827_i2c_ids);
-+
-+static const struct of_device_id max31827_of_match[] = {
-+	{ .compatible = "max31827" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, max31827_of_match);
-+
-+static struct i2c_driver max31827_driver = {
-+	.class = I2C_CLASS_HWMON,
-+	.driver = {
-+		.name = "max31827",
-+		.of_match_table = max31827_of_match,
-+	},
-+	.probe_new = max31827_probe,
-+	.id_table = max31827_i2c_ids,
-+};
-+module_i2c_driver(max31827_driver);
-+
-+MODULE_AUTHOR("Daniel Matyas <daniel.matyas@analog.com>");
-+MODULE_DESCRIPTION("Maxim MAX31827 low-power temperature switch driver");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
+> +
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/power_supply.h>
+> +#include <linux/mfd/rt5033-private.h>
+> +#include <linux/mfd/rt5033.h>
+> +
+> +static int rt5033_get_charger_state(struct rt5033_charger *charger)
+> +{
+> +	struct regmap *regmap =3D charger->rt5033->regmap;
+> +	unsigned int reg_data;
+> +	int state;
+> +
+> +	if (!regmap)
+> +		return POWER_SUPPLY_STATUS_UNKNOWN;
+> +
+> +	regmap_read(regmap, RT5033_REG_CHG_STAT, &reg_data);
+> +
+> +	switch (reg_data & RT5033_CHG_STAT_MASK) {
+> +	case RT5033_CHG_STAT_DISCHARGING:
+> +		state =3D POWER_SUPPLY_STATUS_DISCHARGING;
+> +		break;
+> +	case RT5033_CHG_STAT_CHARGING:
+> +		state =3D POWER_SUPPLY_STATUS_CHARGING;
+> +		break;
+> +	case RT5033_CHG_STAT_FULL:
+> +		state =3D POWER_SUPPLY_STATUS_FULL;
+> +		break;
+> +	case RT5033_CHG_STAT_NOT_CHARGING:
+> +		state =3D POWER_SUPPLY_STATUS_NOT_CHARGING;
+> +		break;
+> +	default:
+> +		state =3D POWER_SUPPLY_STATUS_UNKNOWN;
+> +	}
+> +
+> +	return state;
+> +}
+> +
+> +static int rt5033_get_charger_type(struct rt5033_charger *charger)
+> +{
+> +	struct regmap *regmap =3D charger->rt5033->regmap;
+> +	unsigned int reg_data;
+> +	int state;
+> +
+> +	regmap_read(regmap, RT5033_REG_CHG_STAT, &reg_data);
+> +
+> +	switch (reg_data & RT5033_CHG_STAT_TYPE_MASK) {
+> +	case RT5033_CHG_STAT_TYPE_FAST:
+> +		state =3D POWER_SUPPLY_CHARGE_TYPE_FAST;
+> +		break;
+> +	case RT5033_CHG_STAT_TYPE_PRE:
+> +		state =3D POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
+> +		break;
+> +	default:
+> +		state =3D POWER_SUPPLY_CHARGE_TYPE_NONE;
+> +	}
+> +
+> +	return state;
+> +}
+> +
+> +static int rt5033_get_charger_current_limit(struct rt5033_charger *charg=
+er)
+> +{
+> +	struct regmap *regmap =3D charger->rt5033->regmap;
+> +	unsigned int state, reg_data, data;
+> +
+> +	regmap_read(regmap, RT5033_REG_CHG_CTRL5, &reg_data);
+> +
+> +	state =3D (reg_data & RT5033_CHGCTRL5_ICHG_MASK)
+> +		 >> RT5033_CHGCTRL5_ICHG_SHIFT;
+> +
+> +	data =3D RT5033_CHARGER_FAST_CURRENT_MIN +
+> +		RT5033_CHARGER_FAST_CURRENT_STEP_NUM * state;
+> +
+> +	return data;
+> +}
+> +
+> +static int rt5033_get_charger_const_voltage(struct rt5033_charger *charg=
+er)
+> +{
+> +	struct regmap *regmap =3D charger->rt5033->regmap;
+> +	unsigned int state, reg_data, data;
+> +
+> +	regmap_read(regmap, RT5033_REG_CHG_CTRL2, &reg_data);
+> +
+> +	state =3D (reg_data & RT5033_CHGCTRL2_CV_MASK)
+> +		 >> RT5033_CHGCTRL2_CV_SHIFT;
+> +
+> +	data =3D RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MIN +
+> +		RT5033_CHARGER_CONST_VOLTAGE_STEP_NUM * state;
+> +
+> +	return data;
+> +}
+> +
+> +static inline int rt5033_init_const_charge(struct rt5033_charger *charge=
+r)
+> +{
+> +	struct rt5033_charger_data *chg =3D charger->chg;
+> +	int ret;
+> +	unsigned int val;
+> +	u8 reg_data;
+> +
+> +	/* Set constant voltage mode */
+> +	if (chg->const_uvolt < RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MIN ||
+> +	    chg->const_uvolt > RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MAX) {
+> +		dev_err(charger->dev,
+> +			"Value 'constant-charge-voltage-max-microvolt' out of range\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (chg->const_uvolt =3D=3D RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MIN)
+> +		reg_data =3D 0x00;
+> +	else if (chg->const_uvolt =3D=3D RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MAX)
+> +		reg_data =3D RT5033_CV_MAX_VOLTAGE;
+> +	else {
+> +		val =3D chg->const_uvolt;
+> +		val -=3D RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MIN;
+> +		val /=3D RT5033_CHARGER_CONST_VOLTAGE_STEP_NUM;
+> +		reg_data =3D val;
+> +	}
+> +
+> +	ret =3D regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL=
+2,
+> +			RT5033_CHGCTRL2_CV_MASK,
+> +			reg_data << RT5033_CHGCTRL2_CV_SHIFT);
+> +	if (ret) {
+> +		dev_err(charger->dev, "Failed regmap update\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Set end of charge current */
+> +	if (chg->eoc_uamp < RT5033_CHARGER_EOC_MIN ||
+> +	    chg->eoc_uamp > RT5033_CHARGER_EOC_MAX) {
+> +		dev_err(charger->dev,
+> +			"Value 'charge-term-current-microamp' out of range\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (chg->eoc_uamp =3D=3D RT5033_CHARGER_EOC_MIN)
+> +		reg_data =3D 0x01;
+> +	else if (chg->eoc_uamp =3D=3D RT5033_CHARGER_EOC_MAX)
+> +		reg_data =3D 0x07;
+> +	else {
+> +		val =3D chg->eoc_uamp;
+> +		if (val < RT5033_CHARGER_EOC_REF) {
+> +			val -=3D RT5033_CHARGER_EOC_MIN;
+> +			val /=3D RT5033_CHARGER_EOC_STEP_NUM1;
+> +			reg_data =3D 0x01 + val;
+> +		} else if (val > RT5033_CHARGER_EOC_REF) {
+> +			val -=3D RT5033_CHARGER_EOC_REF;
+> +			val /=3D RT5033_CHARGER_EOC_STEP_NUM2;
+> +			reg_data =3D 0x04 + val;
+> +		} else {
+> +			reg_data =3D 0x04;
+> +		}
+> +	}
+> +
+> +	ret =3D regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL=
+4,
+> +			RT5033_CHGCTRL4_EOC_MASK, reg_data);
+> +	if (ret) {
+> +		dev_err(charger->dev, "Failed regmap update\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static inline int rt5033_init_fast_charge(struct rt5033_charger *charger)
+> +{
+> +	struct rt5033_charger_data *chg =3D charger->chg;
+> +	int ret;
+> +	unsigned int val;
+> +	u8 reg_data;
+> +
+> +	/* Set limit input current */
+> +	ret =3D regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL=
+1,
+> +			RT5033_CHGCTRL1_IAICR_MASK, RT5033_AICR_2000_MODE);
+> +	if (ret) {
+> +		dev_err(charger->dev, "Failed regmap update\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Set fast-charge mode charging current */
+> +	if (chg->fast_uamp < RT5033_CHARGER_FAST_CURRENT_MIN ||
+> +	    chg->fast_uamp > RT5033_CHARGER_FAST_CURRENT_MAX) {
+> +		dev_err(charger->dev,
+> +			"Value 'constant-charge-current-max-microamp' out of range\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (chg->fast_uamp =3D=3D RT5033_CHARGER_FAST_CURRENT_MIN)
+> +		reg_data =3D 0x00;
+> +	else if (chg->fast_uamp =3D=3D RT5033_CHARGER_FAST_CURRENT_MAX)
+> +		reg_data =3D RT5033_CHG_MAX_CURRENT;
+> +	else {
+> +		val =3D chg->fast_uamp;
+> +		val -=3D RT5033_CHARGER_FAST_CURRENT_MIN;
+> +		val /=3D RT5033_CHARGER_FAST_CURRENT_STEP_NUM;
+> +		reg_data =3D val;
+> +	}
+> +
+> +	ret =3D regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL=
+5,
+> +			RT5033_CHGCTRL5_ICHG_MASK,
+> +			reg_data << RT5033_CHGCTRL5_ICHG_SHIFT);
+> +	if (ret) {
+> +		dev_err(charger->dev, "Failed regmap update\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static inline int rt5033_init_pre_charge(struct rt5033_charger *charger)
+> +{
+> +	struct rt5033_charger_data *chg =3D charger->chg;
+> +	int ret;
+> +	unsigned int val;
+> +	u8 reg_data;
+> +
+> +	/* Set pre-charge threshold voltage */
+> +	if (chg->pre_uvolt < RT5033_CHARGER_PRE_THRESHOLD_LIMIT_MIN ||
+> +	    chg->pre_uvolt > RT5033_CHARGER_PRE_THRESHOLD_LIMIT_MAX) {
+> +		dev_err(charger->dev,
+> +			"Value 'precharge-upper-limit-microvolt' out of range\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (chg->pre_uvolt =3D=3D RT5033_CHARGER_PRE_THRESHOLD_LIMIT_MIN)
+> +		reg_data =3D 0x00;
+> +	else if (chg->pre_uvolt =3D=3D RT5033_CHARGER_PRE_THRESHOLD_LIMIT_MAX)
+> +		reg_data =3D 0x0f;
+> +	else {
+> +		val =3D chg->pre_uvolt;
+> +		val -=3D RT5033_CHARGER_PRE_THRESHOLD_LIMIT_MIN;
+> +		val /=3D RT5033_CHARGER_PRE_THRESHOLD_STEP_NUM;
+> +		reg_data =3D val;
+> +	}
+> +
+> +	ret =3D regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL=
+5,
+> +			RT5033_CHGCTRL5_VPREC_MASK, reg_data);
+> +	if (ret) {
+> +		dev_err(charger->dev, "Failed regmap update\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Set pre-charge mode charging current */
+> +	if (chg->pre_uamp < RT5033_CHARGER_PRE_CURRENT_LIMIT_MIN ||
+> +	    chg->pre_uamp > RT5033_CHARGER_PRE_CURRENT_LIMIT_MAX) {
+> +		dev_err(charger->dev,
+> +			"Value 'precharge-current-microamp' out of range\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (chg->pre_uamp =3D=3D RT5033_CHARGER_PRE_CURRENT_LIMIT_MIN)
+> +		reg_data =3D 0x00;
+> +	else if (chg->pre_uamp =3D=3D RT5033_CHARGER_PRE_CURRENT_LIMIT_MAX)
+> +		reg_data =3D RT5033_CHG_MAX_PRE_CURRENT;
+> +	else {
+> +		val =3D chg->pre_uamp;
+> +		val -=3D RT5033_CHARGER_PRE_CURRENT_LIMIT_MIN;
+> +		val /=3D RT5033_CHARGER_PRE_CURRENT_STEP_NUM;
+> +		reg_data =3D val;
+> +	}
+> +
+> +	ret =3D regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL=
+4,
+> +			RT5033_CHGCTRL4_IPREC_MASK,
+> +			reg_data << RT5033_CHGCTRL4_IPREC_SHIFT);
+> +	if (ret) {
+> +		dev_err(charger->dev, "Failed regmap update\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int rt5033_charger_reg_init(struct rt5033_charger *charger)
+> +{
+> +	int ret =3D 0;
+> +
+> +	/* Enable charging termination */
+> +	ret =3D regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL=
+1,
+> +			RT5033_CHGCTRL1_TE_EN_MASK, RT5033_TE_ENABLE);
+> +	if (ret) {
+> +		dev_err(charger->dev, "Failed to enable charging termination.\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/*
+> +	 * Disable minimum input voltage regulation (MIVR), this improves
+> +	 * the charging performance.
+> +	 */
+> +	ret =3D regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL=
+4,
+> +			RT5033_CHGCTRL4_MIVR_MASK, RT5033_CHARGER_MIVR_DISABLE);
+> +	if (ret) {
+> +		dev_err(charger->dev, "Failed to disable MIVR.\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret =3D rt5033_init_pre_charge(charger);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret =3D rt5033_init_fast_charge(charger);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret =3D rt5033_init_const_charge(charger);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static enum power_supply_property rt5033_charger_props[] =3D {
+> +	POWER_SUPPLY_PROP_STATUS,
+> +	POWER_SUPPLY_PROP_CHARGE_TYPE,
+> +	POWER_SUPPLY_PROP_CURRENT_MAX,
+> +	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
+> +	POWER_SUPPLY_PROP_MODEL_NAME,
+> +	POWER_SUPPLY_PROP_MANUFACTURER,
+> +	POWER_SUPPLY_PROP_ONLINE,
+> +};
+> +
+> +static int rt5033_charger_get_property(struct power_supply *psy,
+> +			enum power_supply_property psp,
+> +			union power_supply_propval *val)
+> +{
+> +	struct rt5033_charger *charger =3D power_supply_get_drvdata(psy);
+> +	int ret =3D 0;
 
+ret is unused.
+
+> +
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_STATUS:
+> +		val->intval =3D rt5033_get_charger_state(charger);
+> +		break;
+> +	case POWER_SUPPLY_PROP_CHARGE_TYPE:
+> +		val->intval =3D rt5033_get_charger_type(charger);
+> +		break;
+> +	case POWER_SUPPLY_PROP_CURRENT_MAX:
+> +		val->intval =3D rt5033_get_charger_current_limit(charger);
+> +		break;
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+> +		val->intval =3D rt5033_get_charger_const_voltage(charger);
+> +		break;
+> +	case POWER_SUPPLY_PROP_MODEL_NAME:
+> +		val->strval =3D RT5033_CHARGER_MODEL;
+> +		break;
+> +	case POWER_SUPPLY_PROP_MANUFACTURER:
+> +		val->strval =3D RT5033_MANUFACTURER;
+> +		break;
+> +	case POWER_SUPPLY_PROP_ONLINE:
+> +		val->intval =3D (rt5033_get_charger_state(charger) =3D=3D
+> +				POWER_SUPPLY_STATUS_CHARGING);
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static struct rt5033_charger_data *rt5033_charger_dt_init(
+> +						struct rt5033_charger *charger)
+> +{
+> +	struct rt5033_charger_data *chg;
+> +	struct power_supply_battery_info *info;
+> +	int ret;
+> +
+> +	chg =3D devm_kzalloc(charger->dev, sizeof(*chg), GFP_KERNEL);
+> +	if (!chg)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	ret =3D power_supply_get_battery_info(charger->psy, &info);
+> +	if (ret) {
+> +		dev_err(charger->dev, "failed to get battery info\n");
+> +		return ERR_PTR(-EINVAL);
+> +	}
+
+You can use the battery_info from the power-supply core:
+
+info =3D charger->psy->battery_info;
+if (!info)
+    return dev_err_probe(charger->dev, -EINVAL, "missing battery info\n");
+
+> +	/* Assign data. Validity will be checked in the init functions. */
+> +	chg->pre_uamp =3D info->precharge_current_ua;
+> +	chg->fast_uamp =3D info->constant_charge_current_max_ua;
+> +	chg->eoc_uamp =3D info->charge_term_current_ua;
+> +	chg->pre_uvolt =3D info->precharge_voltage_max_uv;
+> +	chg->const_uvolt =3D info->constant_charge_voltage_max_uv;
+> +
+> +	return chg;
+> +}
+> +
+> +static const struct power_supply_desc rt5033_charger_desc =3D {
+> +	.name =3D "rt5033-charger",
+> +	.type =3D POWER_SUPPLY_TYPE_USB,
+> +	.properties =3D rt5033_charger_props,
+> +	.num_properties =3D ARRAY_SIZE(rt5033_charger_props),
+> +	.get_property =3D rt5033_charger_get_property,
+> +};
+> +
+> +static int rt5033_charger_probe(struct platform_device *pdev)
+> +{
+> +	struct rt5033_charger *charger;
+> +	struct rt5033_dev *rt5033 =3D dev_get_drvdata(pdev->dev.parent);
+> +	struct power_supply_config psy_cfg =3D {};
+> +	int ret;
+> +
+> +	charger =3D devm_kzalloc(&pdev->dev, sizeof(*charger), GFP_KERNEL);
+> +	if (!charger)
+> +		return -ENOMEM;
+> +
+> +	platform_set_drvdata(pdev, charger);
+> +	charger->dev =3D &pdev->dev;
+> +	charger->rt5033 =3D rt5033;
+
+You are only using the regmap, so just get and store that:
+
+charger->regmap =3D dev_get_regmap(pdev->dev.parent);
+
+> +	psy_cfg.of_node =3D pdev->dev.of_node;
+> +	psy_cfg.drv_data =3D charger;
+> +
+> +	charger->psy =3D devm_power_supply_register(&pdev->dev,
+> +						  &rt5033_charger_desc,
+> +						  &psy_cfg);
+> +	if (IS_ERR(charger->psy)) {
+> +		dev_err(&pdev->dev, "failed: power supply register\n");
+> +		return PTR_ERR(charger->psy);
+> +	}
+
+dev_err_probe()
+
+> +
+> +	charger->chg =3D rt5033_charger_dt_init(charger);
+> +	if (IS_ERR_OR_NULL(charger->chg))
+> +		return -ENODEV;
+> +
+> +	ret =3D rt5033_charger_reg_init(charger);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct platform_device_id rt5033_charger_id[] =3D {
+> +	{ "rt5033-charger", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(platform, rt5033_charger_id);
+> +
+> +static const struct of_device_id rt5033_charger_of_match[] =3D {
+> +	{ .compatible =3D "richtek,rt5033-charger", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, rt5033_charger_of_match);
+> +
+> +static struct platform_driver rt5033_charger_driver =3D {
+> +	.driver =3D {
+> +		.name =3D "rt5033-charger",
+> +		.of_match_table =3D rt5033_charger_of_match,
+> +	},
+> +	.probe =3D rt5033_charger_probe,
+> +	.id_table =3D rt5033_charger_id,
+> +};
+> +module_platform_driver(rt5033_charger_driver);
+> +
+> +MODULE_DESCRIPTION("Richtek RT5033 charger driver");
+> +MODULE_AUTHOR("Beomho Seo <beomho.seo@samsung.com>");
+> +MODULE_LICENSE("GPL v2");
+
+Thanks,
+
+-- Sebastian
+
+--hdnjxeig33un4pfn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRYm6IACgkQ2O7X88g7
++ppMYRAAoFVscs+pEDAHGSAZQs7bJpD+2RrGaRAkOcCmWDSN6pvXtOGseCNt/OrS
+L5LfGiERKM6qEzW5nfkFS1LNiWjZgah/THWJqZ/OUlWlZtt5WNyhaRi5g8YF3fIK
+YDchUq1zF+sbid/hCBbjmn8x5B/yd8lYHLOLnwVutbSRjfPum4e/1ShnqcYzEK/B
+FmH2b/VUYjXIeEvfr9RaPRKxCJGR3oyQXvFAcMvI5TvRNPw/J6UttbGgHTAXvAmM
+5ZO9fa5MHzb1j1J8vXplYP7VgywsFucZAZlkD8Yoo/wT3Av9xhaI22WTpR5+MGTn
+k/Gn7TInqxWgKvfXkS+n4yiO7zJQj9JJG9EWTvdJwZNzy2gaPYneFFvBOBSmGzQr
+E15z4Xj3cXb+28ZlprnwBZNACsoO/mCg3llba5YrBni2YV1QWWzml/oxy2pzaHpw
+iKPNXrlNpCVCUt3l1/0KdAIKGf5QMqw/7bPNb7APwNfl1kOTog4hxpPepmyGrYPu
+3RbGk5NypY28cTr3YF72esPTcIiAt/ivhK+3DIkgfw02kNuQ8mBdVAZG9PnDCqxn
+27S1wievSQ11IILA5qpW63UQbXK8J8py91r8aJ/559taUoLaSRU8Nuf6bDxpq3WT
+f62UxYl+jm2OOfyR/4M14r6yfGqvhw7ArqEtWEXuIC3LhUKKDAI=
+=CS5o
+-----END PGP SIGNATURE-----
+
+--hdnjxeig33un4pfn--
