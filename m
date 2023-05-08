@@ -2,98 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457F36FB908
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6EA6FB90D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233354AbjEHUzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 16:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        id S233701AbjEHU4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 16:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbjEHUzl (ORCPT
+        with ESMTP id S230168AbjEHU41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 16:55:41 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C237ECB;
-        Mon,  8 May 2023 13:55:08 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-55af4277904so77377507b3.1;
-        Mon, 08 May 2023 13:55:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683579307; x=1686171307;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iUL6bZHXpoha3XMlj2IGdVI2usoQwo+74wheB9tvv7w=;
-        b=NlliaNkYAzvtQ631h2coCUi6YwPr6BgDKergqt2miNrENMvgTETrafDuEd4Wp3wn5y
-         EGHZ42cX+7gp4SLeB/x057XCb0PoZodZl8LcfSOImGCl6Z3dSQYqk2nHr0XHTHCFffZ2
-         IrK9KkTuweFGxKvZXPLPwLpxAxdCIFIzOg3KL4chY7rwXnMJqI3tHxZGi4RnHaS8fn8T
-         U85MVPueSBQCiu0M77nGmYNfIfe1Yh6hd1Ea/ztzJ0bhjjBufuemxNGltpmb+6wy7zwz
-         uEdbWS7d+9f+5E5EmboS0Y7OOnp2CijDodnjRLwNxW40LCK/0XS4Kxnfj+2FTO+eKeuc
-         2Jsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683579307; x=1686171307;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iUL6bZHXpoha3XMlj2IGdVI2usoQwo+74wheB9tvv7w=;
-        b=hNCiVQSnQz7D2i0OCs0Je1AgS4DDJVwnAYNRlKjdEn3eQuh6tphqNdDI9ky3+2jCij
-         Xsgq3lHql0kcZE7N6FVnpr8he3AFhnxnql6i0dyg1tqArpyg6c5Ef+08yMxB39dsUbmC
-         B441FsU+/lOaXMPnTmtThgaXN6RFvthSBm00KwJv+cvuPd//dkIQ6czgr6BlfOfSpcGy
-         5maM/zHF0tL979eFYM7Ic2wSrJwdK+cK/lYQbeRMksA7eV00I+ARAboc3QKAqSRuNqJG
-         L7W28afMDgNWk4yXK+ZC19QcH7Fe4/0EN6FdQ5t+KkwJfoPfcEqt4LHegp3YVzTTYx61
-         h6tQ==
-X-Gm-Message-State: AC+VfDyJBwIex0zzuIj5T0SOFLaX+PRRfmF6BUc2z+phj0LgMOab4m2n
-        0g65NqKHRAdBGYnG/qIh9spwZqMU1NbLLslc1lM=
-X-Google-Smtp-Source: ACHHUZ5VzkKyzg6GV5YIytOoHQpWRqSwfq7/A38Cw1mMHo3rs77+MNQv0FdyUumN60IDWDW97pc2OwebGtw/DU6kSJw=
-X-Received: by 2002:a81:6007:0:b0:55a:9303:1fb4 with SMTP id
- u7-20020a816007000000b0055a93031fb4mr12043243ywb.32.1683579307639; Mon, 08
- May 2023 13:55:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230507152232.803-1-ben.gooding.dev@gmail.com>
-In-Reply-To: <20230507152232.803-1-ben.gooding.dev@gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 8 May 2023 22:54:56 +0200
-Message-ID: <CANiq72n-swO1L1zsPNDz=ZMMm=Ox5MOJHzXBbxgX0f_vWFWDmg@mail.gmail.com>
-Subject: Re: [PATCH] rust: lock: Add intra-doc links to the Backend trait
-To:     Ben Gooding <ben.gooding.dev@gmail.com>
-Cc:     Benno Lossin <benno.lossin@proton.me>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+        Mon, 8 May 2023 16:56:27 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AF986BD;
+        Mon,  8 May 2023 13:56:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683579370; x=1715115370;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=QFP9WhtbudiCSMqQuH58GiD4k9Fn38XJ8vfoggmT+YM=;
+  b=V5MUXSN/n/e412Wxu9pnrAonkIJkS+DOcagxLBGTEvbbpQ1QaIPU0T2h
+   yq/Yme2IAXBTqlEcGigLgBoeVOx3jb1hXJ+k/rncbV0o3GgHKGvLoeaT3
+   Sz26fMAIwkGpKgewGhAK0azIfhuS03ykN4mbTCauwaMvWaVZi2pq29f5G
+   t2dNRmijpqKa3UMNUc63uUQStBGOheKfaDvtHS/fAhtV3zIIDkG8b9FTe
+   JldvZWLnPr/h+KlOzpvaCTPbZHSz/ro9Heg62TAt1TXz+dspEjWqD3l6p
+   OgPJkEL2q0hxFsig4v1W1Mb0Jy32YPdENdy5iGPznsS5qKUJ5oU0P8i82
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="413017336"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="413017336"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 13:55:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="872921730"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="872921730"
+Received: from aadepoju-mobl1.amr.corp.intel.com ([10.212.34.185])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 13:55:56 -0700
+Message-ID: <5c2f8cd03b03627ca726ca2782887e501827ea7b.camel@linux.intel.com>
+Subject: Re: [PATCH v4 06/15] dmaengine: idxd: Add wq private data accessors
+From:   Tom Zanussi <tom.zanussi@linux.intel.com>
+To:     Dave Jiang <dave.jiang@intel.com>, herbert@gondor.apana.org.au,
+        davem@davemloft.net, fenghua.yu@intel.com, vkoul@kernel.org
+Cc:     tony.luck@intel.com, wajdi.k.feghali@intel.com,
+        james.guilford@intel.com, kanchana.p.sridhar@intel.com,
+        giovanni.cabiddu@intel.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org
+Date:   Mon, 08 May 2023 15:55:55 -0500
+In-Reply-To: <2618f557-01a5-f76b-ad09-6eb0871cdf00@intel.com>
+References: <cover.1683573703.git.zanussi@kernel.org>
+         <038db785a87dc59c0073989633eee0205958cb67.1683573703.git.zanussi@kernel.org>
+         <2618f557-01a5-f76b-ad09-6eb0871cdf00@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.44.1-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 7, 2023 at 5:23=E2=80=AFPM Ben Gooding <ben.gooding.dev@gmail.c=
-om> wrote:
->
-> Also fix a minor typo in one of the comments
+On Mon, 2023-05-08 at 13:43 -0700, Dave Jiang wrote:
+>=20
+>=20
+> On 5/8/23 1:07 PM, Tom Zanussi wrote:
+> > Add the accessors set_idxd_wq_private() and idxd_wq_private()
+> > allowing
+> > users to set and retrieve a private void * associated with an
+> > idxd_wq.
+> >=20
+> > The private data is stored in the idxd_dev.conf_dev associated with
+> > each idxd_wq.
+> >=20
+> > Signed-off-by: Tom Zanussi <tom.zanussi@linux.intel.com>
+> > ---
+> > =C2=A0 drivers/dma/idxd/idxd.h | 10 ++++++++++
+> > =C2=A0 1 file changed, 10 insertions(+)
+> >=20
+> > diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
+> > index 193552dea224..71cd4ca7d27a 100644
+> > --- a/drivers/dma/idxd/idxd.h
+> > +++ b/drivers/dma/idxd/idxd.h
+> > @@ -552,6 +552,16 @@ static inline int idxd_wq_refcount(struct
+> > idxd_wq *wq)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return wq->client_count=
+;
+> > =C2=A0 };
+> > =C2=A0=20
+> > +static inline void set_idxd_wq_private(struct idxd_wq *wq, void
+> > *private)
+>=20
+> I would go with the same kernel naming convention:
+>=20
+> idxd_wq_set_private() and idxd_wq_get_private()?
 
-"iff" is not a typo. Even if it were, it is best to avoid mixing
-different types of changes in commits, to keep them as small as
-possible (though sometimes there are exceptions).
 
-> -/// Exposes one of the kernel locking primitives. Which one is exposed d=
-epends on the lock backend
-> +/// Exposes one of the kernel locking primitives. Which one is exposed d=
-epends on the lock [backend](Backend)
+Yeah, makes sense, will change.
 
-What about simply:
+Thanks,
 
-    [`Backend`]
+Tom
 
-? (assuming it works).
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_set_drvdata(wq_confdev(w=
+q), private);
+> > +}
+> > +
+> > +static inline void *idxd_wq_private(struct idxd_wq *wq)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return dev_get_drvdata(wq_co=
+nfdev(wq));
+> > +}
+> > +
+> > =C2=A0 /*
+> > =C2=A0=C2=A0 * Intel IAA does not support batch processing.
+> > =C2=A0=C2=A0 * The max batch size of device, max batch size of wq and
 
-Cheers,
-Miguel
