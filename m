@@ -2,79 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85EA6FB56C
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B2B6FB56E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232968AbjEHQns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S233575AbjEHQoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbjEHQnp (ORCPT
+        with ESMTP id S233178AbjEHQoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 12:43:45 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8866112F
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:43:42 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bc37e1525so9292040a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 09:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683564221; x=1686156221;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gVoO+D6jh3uEddslJ9bTwv8yD6ZuVi0l1fM6VuhGGf4=;
-        b=GGaYfMk+0Uz0Wjd739Ki/QmYSPzGx3guAU2fZNDdGkf6iqbiGb8/53QsXPp/Qv7txH
-         cuW2Kf4lgzzAoJC+DL92mWsBw+vOBo/2csEN7ty+lfWavbmuLyS6PHFsU5jPW2+f3y4t
-         AqEw4/BrUNA059A+g0Xu0WAel96C2SP7urkQ7/6+eDYkqE3dzT/wrOGi4XlADi/xdfRd
-         Bm08pye6+7Ym6NKNejgb0CFyav2W5g7tuxWlYr4JFngODNDBYZkWI5RMCz0vMP26L5qI
-         BYP+4MjSDqREU2Xa1dCfgps3k5byF1ulu7cLRc/h6rpiDIWQ1uP7yjahTSYdzdgWSK1T
-         /kfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683564221; x=1686156221;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gVoO+D6jh3uEddslJ9bTwv8yD6ZuVi0l1fM6VuhGGf4=;
-        b=fRnQit2BL7uMQrYSOS804YjIKU1XSXY+9I4NV034HTNqkrt+JCy0M1Uh8UV+rk4394
-         bAeLb1lFm48nnXN4T8GiRZFgVxYzsxZnGcHXXmEyKoggdf7u1Jqm7nAURj+CJI5kEA6v
-         zlSF1Lsh+77nHOu/e7fU6auKCNN4NxKXkApAyhF8qfB28Cfi4VZlhVSDRO2fPQ9bIaZe
-         ZM+DAEGtD37qX1AjVV60K4R8PBBh5Nhg0pTgS3Ha0v5wBHjyjkFWxPwHd5/bRbSP2zIC
-         l/QeBC1rzVyqiGmvqbFT4t8bSFQ7QwtMpwOnX1htrDprLzd6HNCnRrQH3AqIBQppdszb
-         QI0A==
-X-Gm-Message-State: AC+VfDx0d/FsPGlg61pbSKBbdsiz4o44Cm21U2ivn4DsyZwJAQ/hVr2i
-        erv9LOWZV0qyW4KfmcirFDQtIw==
-X-Google-Smtp-Source: ACHHUZ6NwTw9mS39hZgf+cdt+NGK8MML5WdRhZ1Ve61AtKEij9hSPurRFgfb8LwTJJUcUlm+RlyWag==
-X-Received: by 2002:a17:906:58cd:b0:966:350f:f42d with SMTP id e13-20020a17090658cd00b00966350ff42dmr6191404ejs.23.1683564221030;
-        Mon, 08 May 2023 09:43:41 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
-        by smtp.gmail.com with ESMTPSA id m4-20020a17090679c400b00953381ea1b7sm179654ejo.90.2023.05.08.09.43.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 09:43:40 -0700 (PDT)
-Message-ID: <83b8d419-9d43-3c81-2014-a4380de45b88@linaro.org>
-Date:   Mon, 8 May 2023 18:43:39 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 7/7] dt-bindings: dmaengine: pl330: Add new quirks
-Content-Language: en-US
-To:     Joy Chakraborty <joychakr@google.com>
-Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Mon, 8 May 2023 12:44:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7E13C15;
+        Mon,  8 May 2023 09:44:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF3AC62E17;
+        Mon,  8 May 2023 16:44:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E4AC433D2;
+        Mon,  8 May 2023 16:44:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683564250;
+        bh=bfEBgQKWZzeEo35Bvckm2RInCVZk3NagszRRmsAUo84=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fmSnpb1rRnVd/dO0C57DZLRTEKBbSkHJ/M0dzc4AYqy9Tr5fPDhdEzYtDVoU90k9U
+         LS0Bk/i82G2ob1NhIS0C1dUl32rAjPRqFHJjE0lPrxSJaXzVcAe/w+IkXqSF8nnDza
+         EqFgkOWfDQp8H9LP4gtmxNJHUBEx3zSQNyXfsz/cTJvSczQ1keZVm+LJnJzjdom86c
+         r5qEKNJrDIt5otchrglakxktHX7HFfzVNWIdFvvp4SBTUbBNKA+4pxQIxTrXoI08HN
+         Q/mDxknGXSiLGyb2v30nab5oGsgC6iQeHAK+6oPzI3gOhk/4Yw9DmRQd0qeMGTW23N
+         MHQY83Ry9b8rg==
+Date:   Mon, 8 May 2023 17:44:04 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, manugautam@google.com,
-        danielmentz@google.com, sjadavani@google.com
-References: <20230504145737.286444-1-joychakr@google.com>
- <20230504145737.286444-8-joychakr@google.com>
- <78616bc1-8d9e-4a1c-70d6-ad62c2cfa8a8@linaro.org>
- <CAOSNQF15UN2Rckes55UHxbUvN1PJcbj9aWirVGSLDOs5Y5EPnQ@mail.gmail.com>
- <3d9d545d-a620-85f6-b7bd-d57a8729f818@linaro.org>
- <CAOSNQF0jJLc78_1aGYY3=csJc7WqqvydwxmQ22rvXpLruQ-XRg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAOSNQF0jJLc78_1aGYY3=csJc7WqqvydwxmQ22rvXpLruQ-XRg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>,
+        heiko@sntech.de
+Subject: Re: [PATCH 3/5] riscv: dts: add initial T-HEAD light SoC device tree
+Message-ID: <20230508-unmoved-unvocal-9a6c5fc0c629@spud>
+References: <20230507182304.2934-1-jszhang@kernel.org>
+ <20230507182304.2934-4-jszhang@kernel.org>
+ <20230507-calamari-gentleman-bbe62af06f92@spud>
+ <ZFkiotPacIMUghDP@xhacker>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="SF2X7dyBkYPnhHIF"
+Content-Disposition: inline
+In-Reply-To: <ZFkiotPacIMUghDP@xhacker>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,124 +67,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/05/2023 13:58, Joy Chakraborty wrote:
-> On Fri, May 5, 2023 at 5:53 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 05/05/2023 11:44, Joy Chakraborty wrote:
->>> On Thu, May 4, 2023 at 8:38 PM Krzysztof Kozlowski
->>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>
->>>> On 04/05/2023 16:57, Joy Chakraborty wrote:
->>>>> Add 2 new quirks added to the driver "arm,pl330-optimize-dev2mem-axsize"
->>>>> and "arm,pl330-periph-single-dregs"
->>>>
->>>> This we can see from the diff. You need to answer why?
->>>>
->>>
->>> Sure will change it to:
->>> "
->>> Addition of following quirks :
->>> - "arm,pl330-periph-use-diff-axsize"
->>>    AxSize of transactions to peripherals are limited by the peripheral
->>> address width which inturn limits the AxSize used for transactions
->>> towards memory.
->>>    This quirk will make transactions to memory use the maximum
->>> possible bus width(AxSize), store data in MFIFO and use narrow
->>> multi-beat transactions to move data to peripherals.
->>>    This only applies to transfers between memory and peripherals where
->>> bus widths available are different for memory and the peripheral.
->>> - "arm,pl330-periph-complete-with-singles" :
->>>    When transfer sizes are not a multiple of a block of burst
->>> transfers (AxLen * AxSize configured at the peripheral), certain
->>> peripherals might choose not to set the burst request at the
->>> peripheral request interface of the DMA.
->>>    This quirk moves the remaining bytes to the peripheral using single
->>> transactions.
->>> "
->>
->> This does not answer why. You just copied again the patch contents.
->>
-> Hi Krzysztof,
-> Both the changes could be useful for SOC's which have PL330 integrated
-> with a peripheral 
 
-What do you mean here by "PL330 integrated with a peripheral"?
+--SF2X7dyBkYPnhHIF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> but I am not sure if all SOC's need/want this change
-> hence wanted to keep it as a DT knob to avoid any regressions.
-> But like you say it might not be the right thing to do.
+On Tue, May 09, 2023 at 12:26:10AM +0800, Jisheng Zhang wrote:
+> On Sun, May 07, 2023 at 10:35:12PM +0100, Conor Dooley wrote:
+> > On Mon, May 08, 2023 at 02:23:02AM +0800, Jisheng Zhang wrote:
+> >=20
+> > > +		c910_0: cpu@0 {
+> > > +			compatible =3D "thead,c910", "riscv";
+> > > +			device_type =3D "cpu";
+> > > +			riscv,isa =3D "rv64imafdc";
+> >=20
+> > Does this support more than "rv64imafdc"?
+> > I assume there's some _xtheadfoo extensions that it does support,
+> > although I am not sure how we are proceeding with those - Heiko might
+> > have a more nuanced take.
+> >=20
+> > > +		reset: reset-sample {
+> > > +			compatible =3D "thead,reset-sample";
+> >=20
+> > What is a "reset-sample"?
+>=20
+> This node is only for opensbi. The compatible string is already in
+> opensbi. Do we also need to add dt-binding for it in linux?
 
-Devicetree is for describing hardware, not the contents of registers of
-a device. Your changes might fit or might not, I don't know this good
-enough, so I wait for your justification. Without justification this
-looks like controlling driver from DT...
+If it's to be included in the kernel's dts, then yes, you do need a
+dt-binding. If you remove it, then you don't :)
 
-> 
->>>
->>>>>
->>>>> Signed-off-by: Joy Chakraborty <joychakr@google.com>
->>>>> ---
->>>>>  Documentation/devicetree/bindings/dma/arm,pl330.yaml | 8 ++++++++
->>>>>  1 file changed, 8 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/dma/arm,pl330.yaml b/Documentation/devicetree/bindings/dma/arm,pl330.yaml
->>>>> index 4a3dd6f5309b..0499a7fba88d 100644
->>>>> --- a/Documentation/devicetree/bindings/dma/arm,pl330.yaml
->>>>> +++ b/Documentation/devicetree/bindings/dma/arm,pl330.yaml
->>>>> @@ -53,6 +53,14 @@ properties:
->>>>>      type: boolean
->>>>>      description: quirk for performing burst transfer only
->>>>>
->>>>> +  arm,pl330-optimize-dev2mem-axsize:
->>>>> +    type: boolean
->>>>> +    description: quirk for optimizing AxSize used between dev<->mem
->>>>
->>>> This tells me nothing... Neither what it is about nor why this is
->>>> property of a board or PL330 hardware implementation. Please describe
->>>> hardware, not drivers.
->>>>
->>>
->>> Will change the name to "arm,pl330-periph-use-diff-axsize" and add description:
->>> "
->>> Quirk to use different AxSize for bursts while accessing source and
->>> destination when moving data between memory and peripheral.
->>> Maximum possible bus width is used as AxSize for transactions towards
->>> memory and transactions towards peripherals use AxSize as per
->>> peripheral address width.
->>> "
->>
->> Still no answer. Why this is property of a board or PL330 hardware
->> implementation?
->> I also asked to describe hardware but I still see "quirk to ...". We use
->> "quirk" as concept in Linux driver. Describe the hardware, not Linux driver.
->>
-> 
-> This comes to use when the bus width requirement between peripheral
-> and memory is different, but buswidth is something we read from HW
-> registers so this can be enabled by default.
+That said, "thead,reset-sample" is a strangely named compatible, so if
+you do keep it it may end up needing a rename!
 
-Don't add discoverable stuff to DT.
-
-> 
->>
->>>
->>>>> +
->>>>> +  arm,pl330-periph-single-dregs:
->>>>> +    type: boolean
->>>>> +    description: quirk for using dma-singles for peripherals in _dregs()
->>>>
->>>> Same concerns.
->>>>
-> 
-> An example of such a case is given in the ARM TRM for PL330, so maybe
-> we can have this by default as well.
-> Link : https://developer.arm.com/documentation/ddi0424/d/functional-overview/peripheral-request-interface/dmac-length-management#:~:text=DMAC%20length%20management-,Example%202.3,-shows%20a%20DMAC
-
-I could not find here a case describing hardware. You pointed out some
-code. What does the code have anything to do with DT?
+Cheers,
+Conor.
 
 
-Best regards,
-Krzysztof
+--SF2X7dyBkYPnhHIF
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFkm1AAKCRB4tDGHoIJi
+0sW2AQDXJJbO5yD00A0FYT9OCSkvX0JlUUm5rAnhGLMxzDjE+QD/bkvjCep2sIjo
+fz26Q9tH3VixEleafSwINv87ub4bjAc=
+=ql70
+-----END PGP SIGNATURE-----
+
+--SF2X7dyBkYPnhHIF--
