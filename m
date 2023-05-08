@@ -2,212 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760F16FA9EA
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D82356FA9F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235317AbjEHK46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 06:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33454 "EHLO
+        id S235417AbjEHK5L convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 8 May 2023 06:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235332AbjEHK43 (ORCPT
+        with ESMTP id S235199AbjEHK4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 06:56:29 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BBD31576;
-        Mon,  8 May 2023 03:55:31 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3489RjBU016799;
-        Mon, 8 May 2023 10:55:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=wwGIVflxgcYEbSSfRt33GWz2bAD2ZPta9N/khOZxKJM=;
- b=Jg+uItN/CV+ZivaQF6nmXUHmJ6YoTPJuqQVBOb7VkTTxPzRJDjo2Z94ho0gUFUqJMOMd
- sed0+IOkCIRBk2pW+ikOsC49wmx19h1cU1CqKFRUmLcI9eNTwPY1YKm5qjEN6vcKyKo8
- zBkKb6F5CA7DD2k1XCdeG/pr1hBOdw23nTcsNUFflBfzRIpUr5PthM6a0K7dR6udKtJd
- h2kDEZmRX0e/OOWz7FUwK64+3xIVRkKEPsAASz7TDeMfB4W1hWFguqtlQC4KnkxbkwGq
- OmLegU3j0ohSk3x0dFcBnH/PzPRQjrSYhAkjbrhmYDaJSxjmEtFPPfBW0AYOnGH9+QHc zQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qexf1g5hj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 May 2023 10:55:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 348AtLUO010651
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 8 May 2023 10:55:21 GMT
-Received: from [10.216.51.233] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 8 May 2023
- 03:55:14 -0700
-Message-ID: <6c962760-d81c-af52-bce2-49090f66f4ee@quicinc.com>
-Date:   Mon, 8 May 2023 16:25:10 +0530
+        Mon, 8 May 2023 06:56:42 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888C43157F;
+        Mon,  8 May 2023 03:55:42 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-55a2cb9788dso63753777b3.2;
+        Mon, 08 May 2023 03:55:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683543341; x=1686135341;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rXVuozGjMiMrWrjFu+9+evbmgi0blgVrHrZxBs8JQ6Y=;
+        b=OIKb6Fmmqc5E0y418umAhcu50WRuPv2pK/9I9uGszd+O+b7u5w6sJqRQZV/NZQrjQo
+         cMIvNbUe7FrFrTw6idbQQZTIXDFUIuCsuZRc3xs3/wcoyB2yweS2X9akLLpx9zTk2Mca
+         +c927eof0zDmKV27objm+i/M/IVAqvY/ep8PB3TVL55uPXu4IqD02KKAxnuhinuDNZeM
+         Dz9iJMK60EdOIi/oXLDcaKo7sY2jo/PAxx1IfMsStnU+5/zo/pDIgC0hy1Ob+uzzI+of
+         1FMttsqyE9e5km28974KSywqXeo+eCtzdYOVjcxMYVJ65Mn/pz/fGOcXxySPCJOMQWyR
+         9TOw==
+X-Gm-Message-State: AC+VfDzeB/fIBYmjOtEmlHQEMLwg4ZoNuHW/MBVJ/+WWyxSMkOnvWrlO
+        drisJINJV3lLG3b1vtf56D2l7eP12IVDSg==
+X-Google-Smtp-Source: ACHHUZ48DOf4liGxzXgh47S0pFjMdqBh2oF9xYeueImJ7FgSnlCPdwlCmeNb9nk5W+2yKSa1aERFhQ==
+X-Received: by 2002:a81:9e01:0:b0:55a:9b89:4eff with SMTP id m1-20020a819e01000000b0055a9b894effmr10493076ywj.13.1683543341406;
+        Mon, 08 May 2023 03:55:41 -0700 (PDT)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
+        by smtp.gmail.com with ESMTPSA id q188-20020a8180c5000000b0054f9e7fed7asm2413053ywf.137.2023.05.08.03.55.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 03:55:40 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-559e317eef1so64016527b3.0;
+        Mon, 08 May 2023 03:55:40 -0700 (PDT)
+X-Received: by 2002:a81:d510:0:b0:559:fad8:322f with SMTP id
+ i16-20020a81d510000000b00559fad8322fmr11658525ywj.24.1683543339883; Mon, 08
+ May 2023 03:55:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V3 5/6] arm64: dts: qcom: ipq9574: Enable PCIe PHYs and
- controllers
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
-        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <mani@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <quic_srichara@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_ipkumar@quicinc.com>
-References: <20230421124938.21974-1-quic_devipriy@quicinc.com>
- <20230421124938.21974-6-quic_devipriy@quicinc.com>
- <CAA8EJpqx1jv_xEnS-2rOOGCtEB=1vo477H7XLGGvH=o7NHJD7w@mail.gmail.com>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <CAA8EJpqx1jv_xEnS-2rOOGCtEB=1vo477H7XLGGvH=o7NHJD7w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: zS8fFU3lxbkVpPV_L_0MxgUOIKW40EgJ
-X-Proofpoint-GUID: zS8fFU3lxbkVpPV_L_0MxgUOIKW40EgJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-08_08,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=971 priorityscore=1501 mlxscore=0 suspectscore=0 phishscore=0
- adultscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305080074
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230506141703.65605-1-contact@artur-rojek.eu> <20230506141703.65605-3-contact@artur-rojek.eu>
+In-Reply-To: <20230506141703.65605-3-contact@artur-rojek.eu>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 8 May 2023 12:55:28 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV4hDULr43_4Z=Q9EHEvbzGStMRY45d4Ja1ixqSvMd2Cg@mail.gmail.com>
+Message-ID: <CAMuHMdV4hDULr43_4Z=Q9EHEvbzGStMRY45d4Ja1ixqSvMd2Cg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] sh: dma: Correct the number of DMA channels in SH7709
+To:     Artur Rojek <contact@artur-rojek.eu>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, May 6, 2023 at 4:22 PM Artur Rojek <contact@artur-rojek.eu> wrote:
+> According to the PM, the DMAC found in SH7709 features only 4 channels.
+>
+> Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On 4/22/2023 5:43 AM, Dmitry Baryshkov wrote:
-> On Fri, 21 Apr 2023 at 15:51, Devi Priya <quic_devipriy@quicinc.com> wrote:
->>
->> Enable the PCIe controller and PHY nodes corresponding to
->> RDP 433.
->>
->> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->> ---
->>   Changes in V3:
->>          - No change
->>
->>   arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 62 +++++++++++++++++++++
->>   1 file changed, 62 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
->> index 7be578017bf7..3ae38cf327ea 100644
->> --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
->> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
->> @@ -8,6 +8,7 @@
->>
->>   /dts-v1/;
->>
->> +#include <dt-bindings/gpio/gpio.h>
->>   #include "ipq9574.dtsi"
->>
->>   / {
->> @@ -43,6 +44,42 @@
->>          };
->>   };
->>
->> +&pcie1_phy {
->> +       status = "okay";
->> +};
->> +
->> +&pcie1 {
->> +       pinctrl-names = "default";
->> +       pinctrl-0 = <&pcie_1_pin>;
->> +
->> +       perst-gpios = <&tlmm 26 GPIO_ACTIVE_LOW>;
-> 
-> Usually qcom PCIe hosts also define wake-gpios.
-In IPQ9574, we do not have hot plug support and host always starts the
-enumeration for the device. Hence no wake pin is required.
-> 
->> +       status = "okay";
->> +};
->> +
->> +&pcie2_phy {
->> +       status = "okay";
->> +};
->> +
->> +&pcie2 {
->> +       pinctrl-names = "default";
->> +       pinctrl-0 = <&pcie_2_pin>;
->> +
->> +       perst-gpios = <&tlmm 29 GPIO_ACTIVE_LOW>;
->> +       status = "okay";
->> +};
->> +
->> +&pcie3_phy {
->> +       status = "okay";
->> +};
->> +
->> +&pcie3 {
->> +       pinctrl-names = "default";
->> +       pinctrl-0 = <&pcie_3_pin>;
->> +
->> +       perst-gpios = <&tlmm 32 GPIO_ACTIVE_LOW>;
->> +       status = "okay";
->> +};
->> +
->>   &sdhc_1 {
->>          pinctrl-0 = <&sdc_default_state>;
->>          pinctrl-names = "default";
->> @@ -60,6 +97,31 @@
->>   };
->>
->>   &tlmm {
->> +
->> +       pcie_1_pin: pcie-1-state {
->> +               pins = "gpio26";
->> +               function = "gpio";
->> +               drive-strength = <8>;
->> +               bias-pull-down;
->> +               output-low;
-> 
-> No clkreq and no wake gpios?
-We do not use any PCIe low power states and link is always in L0.
+> --- a/arch/sh/drivers/dma/Kconfig
+> +++ b/arch/sh/drivers/dma/Kconfig
+> @@ -28,8 +28,9 @@ config SH_DMA_API
+>  config NR_ONCHIP_DMA_CHANNELS
+>         int
+>         depends on SH_DMA
+> -       default "4" if CPU_SUBTYPE_SH7750  || CPU_SUBTYPE_SH7751  || \
+> -                      CPU_SUBTYPE_SH7750S || CPU_SUBTYPE_SH7091
+> +       default "4" if CPU_SUBTYPE_SH7709 || CPU_SUBTYPE_SH7750  || \
+> +                      CPU_SUBTYPE_SH7751 || CPU_SUBTYPE_SH7750S || \
+> +                      CPU_SUBTYPE_SH7091
+>         default "8" if CPU_SUBTYPE_SH7750R || CPU_SUBTYPE_SH7751R || \
+>                        CPU_SUBTYPE_SH7760
+>         default "12" if CPU_SUBTYPE_SH7723 || CPU_SUBTYPE_SH7780  || \
+> @@ -37,8 +38,9 @@ config NR_ONCHIP_DMA_CHANNELS
+>         default "6"
+>         help
+>           This allows you to specify the number of channels that the on-chip
+> -         DMAC supports. This will be 4 for SH7750/SH7751/Sh7750S/SH7091 and 8 for the
 
-Thanks,
-Devi Priya
-> 
->> +       };
->> +
->> +       pcie_2_pin: pcie-2-state {
->> +               pins = "gpio29";
->> +               function = "gpio";
->> +               drive-strength = <8>;
->> +               bias-pull-down;
->> +               output-low;
->> +       };
->> +
->> +       pcie_3_pin: pcie-3-state {
->> +               pins = "gpio32";
->> +               function = "gpio";
->> +               drive-strength = <8>;
->> +               bias-pull-up;
->> +               output-low;
->> +       };
->> +
->>          sdc_default_state: sdc-default-state {
->>                  clk-pins {
->>                          pins = "gpio5";
->> --
->> 2.17.1
->>
-> 
-> 
+Might be a good opportunity to s/Sh7750S/SH7750S/
+
+> -         SH7750R/SH7751R/SH7760, 12 for the SH7723/SH7780/SH7785/SH7724, default is 6.
+> +         DMAC supports. This will be 4 for SH7709/SH7750/SH7751/Sh7750S/SH7091
+> +         and 8 for the SH7750R/SH7751R/SH7760, 12 for the SH7723/SH7780/SH7785/SH7724,
+
+... and sort the list for SoCs with 12 channels.
+
+> +         default is 6.
+>
+>  config SH_DMABRG
+>         bool "SH7760 DMABRG support"
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
