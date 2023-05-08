@@ -2,206 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93E76FA27E
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8136FA283
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233122AbjEHImh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 04:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
+        id S233204AbjEHInt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 04:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbjEHIme (ORCPT
+        with ESMTP id S233109AbjEHInq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 04:42:34 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2082.outbound.protection.outlook.com [40.107.102.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9520749F3
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 01:42:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WW2dD+fkzDawYaHsvB8vTHJeLUWfBoRsd+QO9g2xOlG4xZGzzGauSX4ZLSqXNyXiGSxpBOpVPic9DKJMQFfSng5uabaIK09tIN1EUfOOuteGZdLyuBfmXGvcMPewyyWg28SU6ESW0Q8CEP8VvJyJm6xz8Io1YdBXra14xlUfiWn11oIiN/PyB7bATo9VqybZQ4AiYnnQvCkO6xkjpSo4ql1dq0C/W6ILc8YA+HQ3JiGfXeeBWHUUPFqLwfGri0TNSjPFM9QRPOl3sVnp5XKbQSsmn+CiONA4McOGYeGvCjpOkLtHASrqLJ7L0nXx0xkrXOFL2w4gsUbBrrEgCqg5vw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h/4/depAAu7SHzKRfHzuG0A9ZYnJRjQ9+v3bBVZCieM=;
- b=GXkcu0Fmq2QQCBQ6xVj7aWVhybEhkRC7dKbsh+M8I/f61eP6CNacevU9KIGwuTVhkt0HaSm72nNQC71kuzadp4b6SmLYrA1VRHYFXqhsTyk635Zy5ShWtmTAxFO4uC5glIKty6XBKBCQY/t+/+3OlMCjfasIQyBET7+xeRiUY5DtQP4AZdwN449Zp8aCUf5mvW1DLSAKGCSeUIf8Q11+KWb/FxIjZOMjI4cjlyaF3uo6owWmg3kVJI6DiEHfcbzKBxEKq2jOJNWaD5C/8wyjm4NKS12wCIcywcXioCjY9lqMa1CE5dpDbuCgwoQCLh8mo8un8OSNBgRgNaZC82Pt4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h/4/depAAu7SHzKRfHzuG0A9ZYnJRjQ9+v3bBVZCieM=;
- b=IAxcWldF1nF3l6OuADxJYzoWaaq6BOFABg0y1EYuXFIChC2WkkF8YD6wNWgrlVA7RPcGM3Xo2PPZZAn3S6w1OgCugiW+ZQutXAaAnl194EOPp3ngZpyMkoG3clMxUC8hYf0RAKTltHsu3zH5eHeso+zMnUOWGT2GITk4R4nD0U4=
-Received: from SJ0PR03CA0300.namprd03.prod.outlook.com (2603:10b6:a03:39e::35)
- by BL1PR12MB5190.namprd12.prod.outlook.com (2603:10b6:208:31c::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
- 2023 08:42:31 +0000
-Received: from DM6NAM11FT062.eop-nam11.prod.protection.outlook.com
- (2603:10b6:a03:39e:cafe::79) by SJ0PR03CA0300.outlook.office365.com
- (2603:10b6:a03:39e::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32 via Frontend
- Transport; Mon, 8 May 2023 08:42:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT062.mail.protection.outlook.com (10.13.173.40) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6363.33 via Frontend Transport; Mon, 8 May 2023 08:42:30 +0000
-Received: from BLR5CG134614W.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 8 May
- 2023 03:42:26 -0500
-From:   K Prateek Nayak <kprateek.nayak@amd.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
-        <sudeep.holla@arm.com>, <yongxuan.wang@sifive.com>,
-        <pierre.gondois@arm.com>, <vincent.chen@sifive.com>,
-        <greentime.hu@sifive.com>, <yangyicong@huawei.com>,
-        <prime.zeng@hisilicon.com>, <palmer@rivosinc.com>, <puwen@hygon.cn>
-Subject: [PATCH 2/2] drivers: base: cacheinfo: Update cpu_map_populated during CPU Hotplug
-Date:   Mon, 8 May 2023 14:11:15 +0530
-Message-ID: <20230508084115.1157-3-kprateek.nayak@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230508084115.1157-1-kprateek.nayak@amd.com>
-References: <20230508084115.1157-1-kprateek.nayak@amd.com>
+        Mon, 8 May 2023 04:43:46 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F0049F3
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 01:43:43 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2ac836f4447so40670201fa.2
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 01:43:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683535422; x=1686127422;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5FnronlWtB81B9eT7wMn5tVsUUPANTsaFFHc9wvRSoM=;
+        b=ymGhoySxREEAj7gF4gW+oJEMmUWBi5XUF9fOQ/ypkZ642KMa9xEcId80S6xAswFWjE
+         /N8TAGfXF5ymRm/09BMjlQjiH0VOqbsVCEMThLtXduh9Na9zjTNvTyvArEyegd7+O5Z7
+         S/KS6iI3qBEQ8OvLyvpfjzbmUQuR5AfV/8NdO8h2Zmm5oKzlyAOL9eDAyCC0d1FZAI0n
+         i1khCJKLtpdEpqH9zicDlK81k2L9jqLko5r1eJki2jzjQjHJAXKKdaNS7+4Ve0HRbB8W
+         ycJW11TYYRRdnO1Ia6A2Qa5dj4NNeNcSIWUlKONK5F9oVqh/FlM3BnUdd4+97b+19qx5
+         FH3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683535422; x=1686127422;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5FnronlWtB81B9eT7wMn5tVsUUPANTsaFFHc9wvRSoM=;
+        b=AZOXQ72FKCb7S74dqBgG5SbxWDmN51dlIAybdA81cLPor1Gi8XTYzKJpjR/uSar8ME
+         pUfJsxx32ORIt4yEoXajH2u2M4ZGKB0639HL1o1dY47Nly7gsk6okl5+R2kZJaK5AC4K
+         1sP6mHf1MC1hXIgtecmT92RoJJEUCaeya3w5regLUpYqKyZNDv+V0FCcWaykGIZCYcZV
+         u+lDiBk1tITlBn7vif37gz/DB06G5FkNmPK9a2unz/7gJULVsTHvDMGB0tJ4hVeJgmcE
+         NFFZBwoWJ8Ri0o+yj7OTvRbE29c1XiNGNyyAACcO/nN6NlHjwQPn2CnmnWYQFs5CGezz
+         R/vg==
+X-Gm-Message-State: AC+VfDwjC09Bmoo46046ubO2FtVVsPDSB6Moz20CAr+KyOpyxeAa9DO5
+        yNMOZJ4VkxO1Fcdf/Jh3XZ70FQ==
+X-Google-Smtp-Source: ACHHUZ6NH0mMLCPPx7FiLdyh7IxeswWSHBuVj4XU74Rrqcf1ja+BuHgOFF54fz2Sq0K30lznaJeJ1A==
+X-Received: by 2002:a2e:95d7:0:b0:2ac:80cd:6c0d with SMTP id y23-20020a2e95d7000000b002ac80cd6c0dmr2843009ljh.19.1683535421700;
+        Mon, 08 May 2023 01:43:41 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id e16-20020a2e8190000000b002ab017899e8sm1098215ljg.39.2023.05.08.01.43.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 01:43:41 -0700 (PDT)
+Message-ID: <5ce4038f-2cf6-a3d4-89e8-fc8b085b508c@linaro.org>
+Date:   Mon, 8 May 2023 10:43:39 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 08/12] drm/msm/dpu: Add SM6375 support
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev
+References: <20230411-topic-straitlagoon_mdss-v3-0-9837d6b3516d@linaro.org>
+ <20230411-topic-straitlagoon_mdss-v3-8-9837d6b3516d@linaro.org>
+ <4216540c-75b2-c08b-0147-d86632b493c0@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <4216540c-75b2-c08b-0147-d86632b493c0@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT062:EE_|BL1PR12MB5190:EE_
-X-MS-Office365-Filtering-Correlation-Id: 92a553d2-90cd-4baf-dab5-08db4fa02956
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /m5CTdQz0ALcca30zbbDUMn3kiMxSwk9S4YJA68Trl6o1Nz7zhGRwcf68TZ7wjNbkFnRL0BzS+MlEr66t4Xa5k1/Q3vEPeTan9QFagsoBmybvj9TlBtecsWK3Vy7QXXyp+w3FJxCJRvS5ZQba8hjyg9gwZteDJvazAcFJ+X6+eVll+dEHBiXs3QmzOujBnIgtE3ieyBS4sDLFvJYNG8hFGxYShshZzDqSeq44+LZdgwbAcMt5MQhm3kt2Q9ddq8woE2RY+L2/wjwr6nPIYykUcx6+HPSDdteMD18JuWG9bSoVngOrlJAtEtx8NS8d5oujGajqwNGsrk8bxBj9nvYl4KWvH5h+S3TZM248CXOabTEj2OjDnWlLssx9LT4d/qHsXMTZHNDeFX1iguYA4amGfXtndjncofoVFP85F4F3a+9k5VTUHYXIo+L870o31nPN8i6qXB3oisJIMZBF+xy9BrYiTASABNmkDBF4KgsmfY3F8ciZk4J9JcGyaVvWstg0K8QAbjgY+nPpe1bu8pp9LMVLJ123+WrWbZww/laLyZgPujJVRvbjbdYrNiBL3f53JOs3i4qkyG0ALLGQAUcBS6xAr0+mKBtVp7eIQ9LuiHtgSllR/T/x+Ki0YZgVolNVrEDSpM/9fC45bOOndRLzfp259OtSTd+WJYPelm4gD6ArJLcXsHZc/T3PYHIxRFKsuBC3DMTNYH2QNrAmRORp7ozBuEC+jjfVvdd2upmR94=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(376002)(136003)(451199021)(46966006)(40470700004)(36840700001)(86362001)(36756003)(6666004)(54906003)(316002)(70206006)(6916009)(4326008)(70586007)(7696005)(478600001)(82310400005)(40480700001)(8936002)(5660300002)(8676002)(2906002)(7416002)(41300700001)(356005)(82740400003)(81166007)(16526019)(186003)(107886003)(1076003)(26005)(36860700001)(47076005)(336012)(83380400001)(426003)(2616005)(40460700003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 08:42:30.9039
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92a553d2-90cd-4baf-dab5-08db4fa02956
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT062.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5190
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Until commit 5c2712387d48 ("cacheinfo: Fix LLC is not exported through
-sysfs"), cacheinfo called populate_cache_leaves() for CPU coming online
-which let the arch specific functions handle (at least on x86)
-populating the shared_cpu_map. However, with the changes in the
-aforementioned commit, populate_cache_leaves() is not called when a CPU
-comes online as a result of hotplug since last_level_cache_is_valid()
-returns true as the cacheinfo data is not discarded. The CPU coming
-online is not present in shared_cpu_map, however, it will not be added
-since the cpu_cacheinfo->cpu_map_populated flag is set (it is set in
-populate_cache_leaves() when cacheinfo is first populated for x86)
 
-This can lead to inconsistencies in the shared_cpu_map when an offlined
-CPU comes online again. Example below depicts the inconsistency in the
-shared_cpu_list in cacheinfo when CPU8 is offlined and onlined again on
-a 3rd Generation EPYC processor:
 
-  # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
-    /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,136
-    /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,136
-    /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,136
-    /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8-15,136-143
+On 7.05.2023 22:02, Dmitry Baryshkov wrote:
+> On 06/05/2023 00:40, Konrad Dybcio wrote:
+>> Add basic SM6375 support to the DPU1 driver to enable display output.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h | 152 +++++++++++++++++++++
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   1 +
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   1 +
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   1 +
+>>   4 files changed, 155 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
+>> new file mode 100644
+>> index 000000000000..c7f303b0557e
+>> --- /dev/null
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
+>> @@ -0,0 +1,152 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
+>> + * Copyright (c) 2015-2018, 2020 The Linux Foundation. All rights reserved.
+>> + * Copyright (c) 2023, Linaro Limited
+>> + */
+>> +
+>> +#ifndef _DPU_6_9_SM6375_H
+>> +#define _DPU_6_9_SM6375_H
+>> +
+>> +static const struct dpu_caps sm6375_dpu_caps = {
+>> +    .max_mixer_width = DEFAULT_DPU_LINE_WIDTH,
+>> +    .max_mixer_blendstages = 0x4,
+>> +    .qseed_type = DPU_SSPP_SCALER_QSEED4,
+>> +    .has_dim_layer = true,
+>> +    .has_idle_pc = true,
+>> +    .max_linewidth = 2160,
+>> +    .pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
+>> +};
+>> +
+>> +static const struct dpu_ubwc_cfg sm6375_ubwc_cfg = {
+>> +    .ubwc_version = DPU_HW_UBWC_VER_20,
+>> +    .ubwc_swizzle = 6,
+>> +    .highest_bank_bit = 1,
+>> +};
+>> +
+>> +static const struct dpu_mdp_cfg sm6375_mdp[] = {
+>> +    {
+>> +    .name = "top_0", .id = MDP_TOP,
+>> +    .base = 0x0, .len = 0x494,
+>> +    .features = 0,
+>> +    .clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
+>> +    .clk_ctrls[DPU_CLK_CTRL_DMA0] = { .reg_off = 0x2ac, .bit_off = 8 },
+>> +    },
+>> +};
+>> +
+>> +static const struct dpu_ctl_cfg sm6375_ctl[] = {
+>> +    {
+>> +    .name = "ctl_0", .id = CTL_0,
+>> +    .base = 0x1000, .len = 0x1dc,
+>> +    .features = BIT(DPU_CTL_ACTIVE_CFG),
+>> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
+>> +    },
+>> +};
+>> +
+>> +static const struct dpu_sspp_cfg sm6375_sspp[] = {
+>> +    SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x1f8, VIG_SC7180_MASK,
+>> +        sm6115_vig_sblk_0, 0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+>> +    SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, 0x1f8, DMA_SDM845_MASK,
+>> +        sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+>> +};
+>> +
+>> +static const struct dpu_lm_cfg sm6375_lm[] = {
+>> +    LM_BLK("lm_0", LM_0, 0x44000, MIXER_QCM2290_MASK,
+>> +        &qcm2290_lm_sblk, PINGPONG_0, 0, DSPP_0),
+>> +};
+>> +
+>> +static const struct dpu_dspp_cfg sm6375_dspp[] = {
+>> +    DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
+>> +        &sm8150_dspp_sblk),
+>> +};
+>> +
+>> +static const struct dpu_pingpong_cfg sm6375_pp[] = {
+>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
+>> +        DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>> +        -1),
+>> +};
+>> +
+>> +static const struct dpu_intf_cfg sm6375_intf[] = {
+>> +    INTF_BLK("intf_0", INTF_0, 0x00000, 0x2c0, INTF_NONE, 0, 0, 0, 0, 0),
+>> +    INTF_BLK_DSI_TE("intf_1", INTF_1, 0x6a800, 0x2c0, INTF_DSI, 0, 24, INTF_SC7280_MASK,
+> 
+> If I understand correctly, all 5.x and 6.x DPU also have HCTL/DATA_ACTIVE/etc. registers. (I do not know about the sdm845, if it has that reg or not). So a proper fix would be to add DPU_DATA_HCTL_EN to sc7180 mask rather than upgrading sm6375 to use sc7280 mask.
+They're touched unconditionally on msm-4.14 (8150 /and 7180 I think/ release)
 
-  # echo 0 > /sys/devices/system/cpu/cpu8/online
-  # echo 1 > /sys/devices/system/cpu/cpu8/online
-
-  # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
-    /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8
-    /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8
-    /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8
-    /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8
-
-  # cat /sys/devices/system/cpu/cpu136/cache/index0/shared_cpu_list
-    136
-
-  # cat /sys/devices/system/cpu/cpu136/cache/index3/shared_cpu_list
-    9-15,136-143
-
-Clear the flag when the CPU is removed from shared_cpu_map when
-cache_shared_cpu_map_remove() is called during CPU hotplug. This will
-allow cache_shared_cpu_map_setup() to add the CPU coming back online in
-the shared_cpu_map. Set the flag again when the shared_cpu_map is setup.
-Following are results of performing the same test as described above with
-the changes:
-
-  # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
-    /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,136
-    /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,136
-    /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,136
-    /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8-15,136-143
-
-  # echo 0 > /sys/devices/system/cpu/cpu8/online
-  # echo 1 > /sys/devices/system/cpu/cpu8/online
-
-  # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
-    /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,136
-    /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,136
-    /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,136
-    /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8-15,136-143
-
-  # cat /sys/devices/system/cpu/cpu136/cache/index0/shared_cpu_list
-    8,136
-
-  # cat /sys/devices/system/cpu/cpu136/cache/index3/shared_cpu_list
-    8-15,136-143
-
-Fixes: 5c2712387d48 ("cacheinfo: Fix LLC is not exported through sysfs")
-Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
----
- drivers/base/cacheinfo.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
-index d1ae443fd7a0..cbae8be1fe52 100644
---- a/drivers/base/cacheinfo.c
-+++ b/drivers/base/cacheinfo.c
-@@ -410,11 +410,14 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
- 			coherency_max_size = this_leaf->coherency_line_size;
- 	}
- 
-+	/* shared_cpu_map is now populated for the cpu */
-+	this_cpu_ci->cpu_map_populated = true;
- 	return 0;
- }
- 
- static void cache_shared_cpu_map_remove(unsigned int cpu)
- {
-+	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
- 	struct cacheinfo *this_leaf, *sib_leaf;
- 	unsigned int sibling, index, sib_index;
- 
-@@ -447,6 +450,9 @@ static void cache_shared_cpu_map_remove(unsigned int cpu)
- 			}
- 		}
- 	}
-+
-+	/* cpu is no longer populated in the shared map */
-+	this_cpu_ci->cpu_map_populated = false;
- }
- 
- static void free_cache_attributes(unsigned int cpu)
--- 
-2.34.1
-
+Konrad
+> 
+>> +        DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 26),
+>> +        DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 27),
+>> +        DPU_IRQ_IDX(MDP_INTF1_TEAR_INTR, 2)),
+>> +};
+>> +
+>> +static const struct dpu_vbif_cfg sm6375_vbif[] = {
+>> +    {
+>> +    .name = "vbif_0", .id = VBIF_RT,
+>> +    .base = 0, .len = 0x2008,
+>> +    .features = BIT(DPU_VBIF_QOS_REMAP),
+>> +    .xin_halt_timeout = 0x4000,
+>> +    .qos_rp_remap_size = 0x40,
+>> +    .qos_rt_tbl = {
+>> +        .npriority_lvl = ARRAY_SIZE(sdm845_rt_pri_lvl),
+>> +        .priority_lvl = sdm845_rt_pri_lvl,
+>> +        },
+>> +    .qos_nrt_tbl = {
+>> +        .npriority_lvl = ARRAY_SIZE(sdm845_nrt_pri_lvl),
+>> +        .priority_lvl = sdm845_nrt_pri_lvl,
+>> +        },
+>> +    .memtype_count = 14,
+>> +    .memtype = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+>> +    },
+>> +};
+>> +
+>> +static const struct dpu_perf_cfg sm6375_perf_data = {
+>> +    .max_bw_low = 5200000,
+>> +    .max_bw_high = 6200000,
+>> +    .min_core_ib = 2500000,
+>> +    .min_llcc_ib = 0, /* No LLCC on this SoC */
+>> +    .min_dram_ib = 1600000,
+>> +    .min_prefill_lines = 24,
+>> +    /* TODO: confirm danger_lut_tbl */
+>> +    .danger_lut_tbl = {0xffff, 0xffff, 0x0, 0x0, 0xffff},
+>> +    .qos_lut_tbl = {
+>> +        {.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
+>> +        .entries = sm6350_qos_linear_macrotile
+>> +        },
+>> +        {.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
+>> +        .entries = sm6350_qos_linear_macrotile
+>> +        },
+>> +        {.nentry = ARRAY_SIZE(sc7180_qos_nrt),
+>> +        .entries = sc7180_qos_nrt
+>> +        },
+>> +    },
+>> +    .cdp_cfg = {
+>> +        {.rd_enable = 1, .wr_enable = 1},
+>> +        {.rd_enable = 1, .wr_enable = 0}
+>> +    },
+>> +    .clk_inefficiency_factor = 105,
+>> +    .bw_inefficiency_factor = 120,
+>> +};
+>> +
+>> +const struct dpu_mdss_cfg dpu_sm6375_cfg = {
+>> +    .caps = &sm6375_dpu_caps,
+>> +    .ubwc = &sm6375_ubwc_cfg,
+>> +    .mdp_count = ARRAY_SIZE(sm6375_mdp),
+>> +    .mdp = sm6375_mdp,
+>> +    .ctl_count = ARRAY_SIZE(sm6375_ctl),
+>> +    .ctl = sm6375_ctl,
+>> +    .sspp_count = ARRAY_SIZE(sm6375_sspp),
+>> +    .sspp = sm6375_sspp,
+>> +    .mixer_count = ARRAY_SIZE(sm6375_lm),
+>> +    .mixer = sm6375_lm,
+>> +    .dspp_count = ARRAY_SIZE(sm6375_dspp),
+>> +    .dspp = sm6375_dspp,
+>> +    .pingpong_count = ARRAY_SIZE(sm6375_pp),
+>> +    .pingpong = sm6375_pp,
+>> +    .intf_count = ARRAY_SIZE(sm6375_intf),
+>> +    .intf = sm6375_intf,
+>> +    .vbif_count = ARRAY_SIZE(sm6375_vbif),
+>> +    .vbif = sm6375_vbif,
+>> +    .perf = &sm6375_perf_data,
+>> +    .mdss_irqs = BIT(MDP_SSPP_TOP0_INTR) | \
+>> +             BIT(MDP_SSPP_TOP0_INTR2) | \
+>> +             BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>> +             BIT(MDP_INTF1_INTR) | \
+>> +             BIT(MDP_INTF1_TEAR_INTR),
+>> +};
+>> +
+>> +#endif
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> index 5ef1dffc27dc..7577572a5ef4 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> @@ -809,6 +809,7 @@ static const struct dpu_qos_lut_entry sc7180_qos_nrt[] = {
+>>   #include "catalog/dpu_6_3_sm6115.h"
+>>   #include "catalog/dpu_6_4_sm6350.h"
+>>   #include "catalog/dpu_6_5_qcm2290.h"
+>> +#include "catalog/dpu_6_9_sm6375.h"
+>>     #include "catalog/dpu_7_0_sm8350.h"
+>>   #include "catalog/dpu_7_2_sc7280.h"
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> index 56af77353b1e..96a8ec02b5b8 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> @@ -884,6 +884,7 @@ extern const struct dpu_mdss_cfg dpu_sc7180_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sm6115_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sm6350_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_qcm2290_cfg;
+>> +extern const struct dpu_mdss_cfg dpu_sm6375_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sm8350_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sc7280_cfg;
+>>   extern const struct dpu_mdss_cfg dpu_sc8280xp_cfg;
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>> index 46be7ad8d615..980c3c8f8269 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>> @@ -1287,6 +1287,7 @@ static const struct of_device_id dpu_dt_match[] = {
+>>       { .compatible = "qcom,sc8280xp-dpu", .data = &dpu_sc8280xp_cfg, },
+>>       { .compatible = "qcom,sm6115-dpu", .data = &dpu_sm6115_cfg, },
+>>       { .compatible = "qcom,sm6350-dpu", .data = &dpu_sm6350_cfg, },
+>> +    { .compatible = "qcom,sm6375-dpu", .data = &dpu_sm6375_cfg, },
+>>       { .compatible = "qcom,sm8150-dpu", .data = &dpu_sm8150_cfg, },
+>>       { .compatible = "qcom,sm8250-dpu", .data = &dpu_sm8250_cfg, },
+>>       { .compatible = "qcom,sm8350-dpu", .data = &dpu_sm8350_cfg, },
+>>
+> 
