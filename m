@@ -2,139 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FEB6FB220
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051736FB15B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234135AbjEHOBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 10:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
+        id S234184AbjEHNV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbjEHOBV (ORCPT
+        with ESMTP id S233408AbjEHNVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 10:01:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E330C348B5;
-        Mon,  8 May 2023 07:01:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78DF962D9B;
-        Mon,  8 May 2023 14:01:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BDCEC433EF;
-        Mon,  8 May 2023 14:01:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1683554475;
-        bh=O8tjsOi+oKea2wipKtbwhwqOEm7vtb389lfsVLc4ECo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ymgv1cowBjCfDf/5ikYFlNvu2+D2jnmp7vR8c95Fs+X+AO9Z9RAYUOf1OlPwVxept
-         XHDgQUFJxDL98IXbSNLc2U1JKnisBGWsYm51DJ4IHGYzDojlv1On+XTfmI4RPFvvN/
-         be00CmCOf7hXa1tkn7Ni0VP7Fa4OSn8dnJMw6SZQ=
-Date:   Mon, 8 May 2023 16:01:12 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>
-Subject: Re: [BUG] Kmemleak, possibly hiddev_connect(), in 6.3.0+ torvalds
- tree commit gfc4354c6e5c2
-Message-ID: <2023050854-collage-dreamt-660c@gregkh>
-References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
- <2023050824-juiciness-catching-9290@gregkh>
+        Mon, 8 May 2023 09:21:16 -0400
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BB73C3C4
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 06:21:03 -0700 (PDT)
+X-ASG-Debug-ID: 1683552059-086e237e536e4c0001-xx1T2L
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx1.zhaoxin.com with ESMTP id a7ZtYLEkqmnbBygs (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 08 May 2023 21:20:59 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 8 May
+ 2023 21:20:58 +0800
+Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 8 May
+ 2023 21:20:58 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <WeitaoWang@zhaoxin.com>
+Subject: [PATCH v4 0/4] Fix some issues for ZHAOXIN xHCI host
+Date:   Tue, 9 May 2023 05:20:54 +0800
+X-ASG-Orig-Subj: [PATCH v4 0/4] Fix some issues for ZHAOXIN xHCI host
+Message-ID: <20230508212058.6307-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2023050824-juiciness-catching-9290@gregkh>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1683552059
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 560
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0434 1.0000 -1.7415
+X-Barracuda-Spam-Score: 1.37
+X-Barracuda-Spam-Status: No, SCORE=1.37 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.108487
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 08:51:55AM +0200, Greg Kroah-Hartman wrote:
-> On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
-> > Hi,
-> > 
-> > There seems to be a kernel memory leak in the USB keyboard driver.
-> > 
-> > The leaked memory allocs are 96 and 512 bytes.
-> > 
-> > The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
-> > Lightning mobo,
-> > and Genius SlimStar i220 GK-080012 keyboard.
-> > 
-> > (Logitech M100 HID mouse is not affected by the bug.)
-> > 
-> > BIOS is:
-> > 
-> >      *-firmware
-> >           description: BIOS
-> >           vendor: American Megatrends International, LLC.
-> >           physical id: 0
-> >           version: 1.21
-> >           date: 04/26/2023
-> >           size: 64KiB
-> > 
-> > The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
-> > 
-> > The keyboard is recognised as Chicony:
-> > 
-> >                  *-usb
-> >                       description: Keyboard
-> >                       product: CHICONY USB Keyboard
-> >                       vendor: CHICONY
-> >                       physical id: 2
-> >                       bus info: usb@5:2
-> >                       logical name: input35
-> >                       logical name: /dev/input/event4
-> >                       logical name: input35::capslock
-> >                       logical name: input35::numlock
-> >                       logical name: input35::scrolllock
-> >                       logical name: input36
-> >                       logical name: /dev/input/event5
-> >                       logical name: input37
-> >                       logical name: /dev/input/event6
-> >                       logical name: input38
-> >                       logical name: /dev/input/event8
-> >                       version: 2.30
-> >                       capabilities: usb-2.00 usb
-> >                       configuration: driver=usbhid maxpower=100mA
-> > speed=1Mbit/s
-> > 
-> > The bug is easily reproduced by unplugging the USB keyboard, waiting about a
-> > couple of seconds,
-> > and then reconnect and scan for memory leaks twice.
-> > 
-> > The kmemleak log is as follows [edited privacy info]:
-> > 
-> > root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
-> > unreferenced object 0xffff8dd020037c00 (size 96):
-> >   comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
-> >   hex dump (first 32 bytes):
-> >     5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
-> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
-> >   backtrace:
-> >     [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
-> >     [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
-> >     [<ffffffffb87543d9>] class_create+0x29/0x80
-> >     [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
-> 
-> As the call to class_create() in this path is now gone in 6.4-rc1, can
-> you retry that release to see if this is still there or not?
+Fix some issues for ZHAOXIN xHCI host.
 
-No, wait, it's still there, I was looking at a development branch of
-mine that isn't sent upstream yet.  And syzbot just reported the same
-thing:
-	https://lore.kernel.org/r/00000000000058d15f05fb264013@google.com
+Weitao Wang (4):
+  xhci: Fix resume issue of some ZHAOXIN hosts
+  xhci: Fix TRB prefetch issue of ZHAOXIN hosts
+  xhci: Show ZHAOXIN xHCI root hub speed correctly
+  xhci: Add ZHAOXIN xHCI host U1/U2 feature support
 
-So something's wrong here, let me dig into it tomorrow when I get a
-chance...
+ drivers/usb/host/xhci-mem.c | 38 ++++++++++++++++++++++++--------
+ drivers/usb/host/xhci-pci.c | 13 +++++++++++
+ drivers/usb/host/xhci.c     | 43 ++++++++++++++++---------------------
+ drivers/usb/host/xhci.h     |  2 ++
+ 4 files changed, 62 insertions(+), 34 deletions(-)
 
-thanks,
+-- 
+2.32.0
 
-greg k-h
