@@ -2,181 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A866FB593
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1A66FB596
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233974AbjEHQxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
+        id S234233AbjEHQzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjEHQx3 (ORCPT
+        with ESMTP id S233298AbjEHQzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 12:53:29 -0400
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CCB049DE
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:53:25 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id w46xpAkeMfMwtw46xpf0cB; Mon, 08 May 2023 18:53:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1683564803;
-        bh=lm5x+NwYR0+zI73AdgqIwZ7OxGK1VHk4xnXiyrCtxyI=;
-        h=From:To:Cc:Subject:Date;
-        b=TffSdUf8plGRs/fzLhYW2m+zoyex7bE0y+J2jIt9i6EFeFdGap/wrfNTUt4hfOAD4
-         6hg7Rja0JgT98UjFX9lI6MgVAXfJiboQ01sQiV+qLQimAy6cwkQKY4Adg1/3BvV1Eq
-         Pe2qRSRCcKRv9jmq52vGIYVZpSvXRPAVQNa7qo7RBmglCKs8YvpWqTe7RaUhZ1sDfD
-         wGtE1gdhkYosYQlcn9jhjeQZUFOCPtfeyVpTuH7P/eqkdcw16IU/pllrekehtUXHme
-         iXKoxhMMWioWmwV/MGsDSmDLJ6df2NpYxfqA+pMTxJE1OyRoc3lrMQ2+6zh42oqw8s
-         9ZxmWry12MF5g==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 08 May 2023 18:53:23 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org
-Subject: [PATCH net-next] netfilter: Reorder fields in 'struct nf_conntrack_expect'
-Date:   Mon,  8 May 2023 18:53:14 +0200
-Message-Id: <5cdb1f50f2e9dc80dbf86cf8667056eacfd36a09.1683564754.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+        Mon, 8 May 2023 12:55:53 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2062.outbound.protection.outlook.com [40.107.102.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F10849EB
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:55:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AdT5t8xtIDJNZ7DAgq1SsNtOlcKotqZ5trvReJiZB7ZxPoDUWz25vd3QPlqBjH7dtKmmTEHn7MJuWzBnBx0IcYdJaFKm+b4xR+Rbn0sJrEesfeqa8AupA1Kj30nUjaBMBdEMC31n8Amu+PWYbnk2dcANqVq1xUFxh02P/QlHd6i1KECmby22YjEEfqlJHdYF/fgWTEKW77MMEqaQF3RLiad3seUhekdD+ujdKhbXB3rJoK4SQxwuhf40Nuj8ps0OdoCI+tq0TlbmNMxaBrYcrh2pItnXVsZZhycew1OSM55b/ueyZrPvm6cRTel1FT5vuDgF58i12ymIg7f2TRQ70A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GECgX87DjxOoM4At5iyedjU267eAGaeTOkqPELhMxHs=;
+ b=Bw4DzBmDlrIlmTexuABop2o+qjguKd4tYUIdJTDlfaz5S8UUmspV9nipb4em4AAVp0dIvdzBzi92/m8QbWBUAzd5S6CZFHCR4yWUr46udXCCx0qwwVrZ+Epg+q/GVZrcrKuDS2lFTC8pQtCZxnXabD9zE1rwDbREZ8hDSCxQ4+CKeRQILatv6NfcRb8d3ybIN+9FkPhNekFuAB7kqxQxTqnVQYsLnuL7r5OEzwp/9SzmCxTukhz0T+O4NuQAVKSaaCaSlUMtn2+oVycReFXvwtxrYp4xZBZJ7ptsfUPUtNYAOvTHLx8wcVDk1woAT1kMswrBOysx4oIQ/iUWlMb7mw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GECgX87DjxOoM4At5iyedjU267eAGaeTOkqPELhMxHs=;
+ b=I/Jk5FsEN7W+JJ0DlCrHSzeKbVhzfncJo8AFGPLWfOsyY+eS+QsboTvoqPutG4Qo7dHCfbdvKAfeY+MIbPzJL5ZnIOWZAadxo8MoE8aQ9VQyJWWeYLtEy6Mb0FlxWvWrCIBS8Lz7V5koaJK+2b4w0AzFGXJdQ3nYVIABlz8YK5KNNHOBgYsomiVsg+yQSHauMAzRt8yXU+Y2Mx7PJt41WI0dC3mRPP7qgaGHUkiIZ/5Ae1SCtCn1jmmWibouSkljaVZFiJQliB1QFOgzW6DvFNwW7XLgZu3BwZN1z0HfmIPJlR41Pu9dqxHWFPR1qfel3vr5GGA4+zbXQ0CgbyppRw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by PH7PR12MB5952.namprd12.prod.outlook.com (2603:10b6:510:1db::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
+ 2023 16:55:49 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6363.032; Mon, 8 May 2023
+ 16:55:49 +0000
+Date:   Mon, 8 May 2023 13:55:47 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>, Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>
+Subject: Re: [PATCH] iommu: Add Kconfig help text for IOMMU_SVA
+Message-ID: <ZFkpk8y8mUZuZjkV@nvidia.com>
+References: <20230506133134.1492395-1-jacob.jun.pan@linux.intel.com>
+ <CAHk-=wgUiAtiszwseM1p2fCJ+sC4XWQ+YN4TanFhUgvUqjr9Xw@mail.gmail.com>
+ <20230506150741.2e3d2dcc@jacob-builder>
+ <CAHk-=wjmOAQnqJF-pW=fzMXb_Rk_J_Oi4ESBLmVPhxwBK4xfGg@mail.gmail.com>
+ <20230508094014.53913cf3@jacob-builder>
+ <CAHk-=wgobPe0U=Sc-PH08vF-ZbG00KrzftEpQMQ=n0LLNn7y6A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHk-=wgobPe0U=Sc-PH08vF-ZbG00KrzftEpQMQ=n0LLNn7y6A@mail.gmail.com>
+X-ClientProxiedBy: MW4PR02CA0009.namprd02.prod.outlook.com
+ (2603:10b6:303:16d::20) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB5952:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a291cd4-2c62-49c6-1b18-08db4fe51369
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dbfhYYqawatpKAGdqdRCTo4tlnnLWBeUJRbBkkXK0Y5uMBrsZ+/DhS9f5KSI8YsihEzpTHPv77oqS94lJNVjY/bptLoTwhYb4c6Bo3pVoZ6DD5rwCGCgETjIa2vSgbrRv1UxUkX8wG1M5mz/fSf7ObO4bagtcKxyB1Ikn3ya2cn+5EEMp2Xi4vriJchTyWJP05hFuWoR2YRKZxPKfTRdJ3I8Io6ghFMUiBE2UuuQCRmfNIRAkIRBmN2ECj2p+DESuRpONP7DChMejedu91lzPTwkB+wvehVhjd3nRnXu8AcQdVhK40DHN+NgR9lASJhnqQp6WLvAEJ1h7kQF+hHyHhOxqhDsSbYCiD8q38V8/m3bsc0JC/tCAJ/3UHiUPzSD4EUnoScUJOJ8Qqt5+iVf7jQ2Sv6fRch7gBrHBwihtVrm17iOLxlBOlGP51HWRCNAoHLIGuGhrMxpLjbYBQr6eM0Mg0mm0btXfkrfbuJ/tf90c/PgDu0fhgKCWaZPFQrM0DKSi8e9/oGEsNJQOYSGOYziWTNZ7RBIA3XMA3vAaHDx7PYR3j/rPGl6oH9C4TXS
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(39860400002)(396003)(366004)(451199021)(66899021)(36756003)(38100700002)(4744005)(7416002)(2906002)(8676002)(8936002)(316002)(86362001)(5660300002)(6916009)(66946007)(66476007)(41300700001)(4326008)(66556008)(186003)(26005)(6506007)(53546011)(6512007)(6486002)(478600001)(2616005)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TnFJcHREZ3dEc1UxYTZwci9JUUhHUVBMZG4xUmNpYllXTnl3SzBidS9yY3NL?=
+ =?utf-8?B?YmVKenJUY0UrTjQ4ekNXemxFQU5sdDRzRkc0QmtQVkhSY0VlWm80VldXVXhG?=
+ =?utf-8?B?SFc3OGs0MUZtTXplYStXb1RGcytpWjB0Nm9IaGpYdFJNSU5RK1V3d0NqWFU4?=
+ =?utf-8?B?NXFwU0J0TUpaWEswQlRtcXhHK0xQY3ljcUJJcnFEOEVaOVVJZktXMmxuUity?=
+ =?utf-8?B?ZHBtRnJGRFZxMTBscHZHUkI5OUVua3lxem9aZzdmYmJMQVBSanNibE5OSlZZ?=
+ =?utf-8?B?VWxUcXpXL2pGdVZqQWV6Rk5KZk5JQnVwUlN0WVpiWG9FK3RWUy9xMDhkTm5m?=
+ =?utf-8?B?L1luc2Z6N1Y3MEFpTEIyV1N3S25vWmY1Z1pUakcyclo5WE1ITTZCRGFCZ0hD?=
+ =?utf-8?B?cjZoWHRFQXRvc3I0YWNCeDROYnRrbHEvc2IvVVlrWnZISUN2Zi9jckhxem1q?=
+ =?utf-8?B?VFI1dURqU3RjUUVpbGtmOW01VVRCcEdXZDVpT0ZLNGZPcWo1bEVTMHZqZDZG?=
+ =?utf-8?B?VWlSZUxhMHpqMUdpcW9Nby9Ba25NRHhKT3laanZRY1FOeVEvZ3JHSE5KVXBE?=
+ =?utf-8?B?VldyRnd3VmxRQzFkSlQxQ1hPNHVjbjlyL1FpVDd2TU91cytQQWgrT3hTdTFU?=
+ =?utf-8?B?SWVTNkZ5L2Y5WUdRRU1jSCt0SWhDRTBQS2pmaHJRTFcxQ3dSSDc4VlQzM05G?=
+ =?utf-8?B?WFZtOVBTN0VRS3IzWGRNRy8xN21JNFpmWkNVSGsxWHBjblphWTRRYXR0Vmpn?=
+ =?utf-8?B?K3Y2TDBOWHJtenBaOTVEL201Q3pER1BPZTZjSm5tRmRMejRrWjZrNllJTGYr?=
+ =?utf-8?B?SUFIZHN5azlpQmhET01xcUtUM2NseW5WQ2NjR3NjUDk2WTE5clR0Y1NCUWFJ?=
+ =?utf-8?B?NWFmczdER1VhTEpvbXZPWXRlT05VWVpkSGs5eTdBdU5udGhhWGJLZDBsVnNW?=
+ =?utf-8?B?Tk5KZGIyUWJaWDBhMmk1ZHJsVGQ0Rm1TWnJVM29ZTUFwRXZYU29GNERFTG0w?=
+ =?utf-8?B?cTZaM0pJeXRyd3B5bE5RSTBmVmpTMXp1UFp5QlpreURhQ044U2c2REtUUkNq?=
+ =?utf-8?B?N0ZGVGlXdE5QQWlrR05qU0hVV0orZHNMT1dabmZnOCt2RFloZy82Rk9ST1pv?=
+ =?utf-8?B?ZkNsU0ppNkw2bFZxWDR4ZTcwaDdDclU1bGsxejJrRURKRml6WTVDRHVnWmpv?=
+ =?utf-8?B?d3k5TGs2OU1PU0NZanN5TTMrRWk1NVRjcFVFd2JsTkUza1dmUlVRMlVlM1hr?=
+ =?utf-8?B?NDBNT0lVVEloaFJkUVluYjUwNVlDZE40ZVZRb3VtbXcvRnVBcy9pVUp0RVVz?=
+ =?utf-8?B?TWhNR3BqVVAxNTVmSFhYekNsdk9FRmlsZ2xzb1grb2REcDlrdmxQbkdaOVpW?=
+ =?utf-8?B?cnJPZldVd0FIWHdKQjBKMHdvYnNRa0h6em9wREhyanpzL1Jad0NpY0czRlFZ?=
+ =?utf-8?B?eEJVZkM3akNJbVV6VTdrOEZ5NGw0OWk0bVhNUnlEMkN0T0pVakZZZE5DdXhL?=
+ =?utf-8?B?cHV6b1drbFRjODExeVBvN0RFdXdrbEFiMnZTZERuUXBubHFHRlMyU2ptNUpu?=
+ =?utf-8?B?NzVSYXhiVzMwY3B4Yk9ra3JRTkZ6S3JUeGJDSFY0b2NWcXEwemlXTTZKRnI2?=
+ =?utf-8?B?UjlwY2djVURvdXh3MUFyUm5nbXlHNmkzNjRmVFNXTm8zRXhnclFuU3VQbWhv?=
+ =?utf-8?B?Yk9xY2VvbFdCT2VpOGhKQmpiUjhPSHFQNEhZRHZpbCtMRVFwUkRndXdrMlRD?=
+ =?utf-8?B?RTZ0SnFoYUxzM1pjeFdscHRmK2FrMVFLb1pBYUFIZUxGTDhsNjFxczQ0VEVO?=
+ =?utf-8?B?TWYwdDRKZE5YOC93VnBMU1VBd3VqSzJMME4rU29LS1cyM2hmamdibWdHWkgr?=
+ =?utf-8?B?cU03aHl5UkhrTWtXZlBOQmJRSW9MRkVJRlVXdFFuNng2QXlTeVpLcnJRNmdh?=
+ =?utf-8?B?YXlvaldSaW9zVWUyRW1mQjZTSkZiS0wxL0NRU1ArWjdCV0JJOGFsc0YvTXVm?=
+ =?utf-8?B?ZUF2TWFwNEtURWdSc1dZcnAvcjNIa1FqTjBYUHRNSHlnUEh2U2JrTndhcGZS?=
+ =?utf-8?B?YW1qbEtCaGJtRXdqMzVqK01rQnE2Q01WalIvMURFWExqaUhBSTJ5TWlJTHZt?=
+ =?utf-8?Q?Fujk=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a291cd4-2c62-49c6-1b18-08db4fe51369
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 16:55:49.6549
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ekBiZBUV2NtraLca6MtXMc7eMGuEEvgVFnrgbTvqJHJXSk1Gu4Ke0MA9Sa1mchJi
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5952
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Group some variables based on their sizes to reduce holes.
-On x86_64, this shrinks the size of 'struct nf_conntrack_expect' from 264
-to 256 bytes.
+On Mon, May 08, 2023 at 09:42:18AM -0700, Linus Torvalds wrote:
+> On Mon, May 8, 2023 at 9:35 AM Jacob Pan <jacob.jun.pan@linux.intel.com> wrote:
+> >
+> > Conversely, we could also have some part of PASID that is not about SVA.
+> 
+> If that's the case, then we should *definitely* have that IOMMU_PASID
+> kind of config option.
+> 
+> Then IOMMU_SVA - that needs PASID - can "select" it, but any other use
+> - that doesn't bother about SVA but might want PASID for its own
+> nefarious purposes - can also select it.
 
-This structure deserve a dedicated cache, so reducing its size looks nice.
+Yes, this has been unwinding slowly, but this mm part is about SVA,
+and specifically ENQCMD, and not about PASID, other than SVA and
+ENCQCMD are both using PASID.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Using pahole
+CONFIG_IOMMU_MM_PASID perhaps? Says what it does without a clue about
+why it does it. x86 arch code could select it ideally?
 
-Before:
-======
-struct nf_conntrack_expect {
-	struct hlist_node          lnode;                /*     0    16 */
-	struct hlist_node          hnode;                /*    16    16 */
-	struct nf_conntrack_tuple  tuple;                /*    32    40 */
-	/* --- cacheline 1 boundary (64 bytes) was 8 bytes ago --- */
-	struct nf_conntrack_tuple_mask mask;             /*    72    20 */
-
-	/* XXX 4 bytes hole, try to pack */
-
-	void                       (*expectfn)(struct nf_conn *, struct nf_conntrack_expect *); /*    96     8 */
-	struct nf_conntrack_helper * helper;             /*   104     8 */
-	struct nf_conn *           master;               /*   112     8 */
-	struct timer_list          timeout;              /*   120    88 */
-	/* --- cacheline 3 boundary (192 bytes) was 16 bytes ago --- */
-	refcount_t                 use;                  /*   208     4 */
-	unsigned int               flags;                /*   212     4 */
-	unsigned int               class;                /*   216     4 */
-	union nf_inet_addr         saved_addr;           /*   220    16 */
-	union nf_conntrack_man_proto saved_proto;        /*   236     2 */
-
-	/* XXX 2 bytes hole, try to pack */
-
-	enum ip_conntrack_dir      dir;                  /*   240     4 */
-
-	/* XXX 4 bytes hole, try to pack */
-
-	struct callback_head       rcu __attribute__((__aligned__(8))); /*   248    16 */
-
-	/* size: 264, cachelines: 5, members: 15 */
-	/* sum members: 254, holes: 3, sum holes: 10 */
-	/* forced alignments: 1, forced holes: 1, sum forced holes: 4 */
-	/* last cacheline: 8 bytes */
-} __attribute__((__aligned__(8)));
-
-
-After:
-=====
-struct nf_conntrack_expect {
-	struct hlist_node          lnode;                /*     0    16 */
-	struct hlist_node          hnode;                /*    16    16 */
-	struct nf_conntrack_tuple  tuple;                /*    32    40 */
-	/* --- cacheline 1 boundary (64 bytes) was 8 bytes ago --- */
-	struct nf_conntrack_tuple_mask mask;             /*    72    20 */
-	refcount_t                 use;                  /*    92     4 */
-	unsigned int               flags;                /*    96     4 */
-	unsigned int               class;                /*   100     4 */
-	void                       (*expectfn)(struct nf_conn *, struct nf_conntrack_expect *); /*   104     8 */
-	struct nf_conntrack_helper * helper;             /*   112     8 */
-	struct nf_conn *           master;               /*   120     8 */
-	/* --- cacheline 2 boundary (128 bytes) --- */
-	struct timer_list          timeout;              /*   128    88 */
-	/* --- cacheline 3 boundary (192 bytes) was 24 bytes ago --- */
-	union nf_inet_addr         saved_addr;           /*   216    16 */
-	union nf_conntrack_man_proto saved_proto;        /*   232     2 */
-
-	/* XXX 2 bytes hole, try to pack */
-
-	enum ip_conntrack_dir      dir;                  /*   236     4 */
-	struct callback_head       rcu __attribute__((__aligned__(8))); /*   240    16 */
-
-	/* size: 256, cachelines: 4, members: 15 */
-	/* sum members: 254, holes: 1, sum holes: 2 */
-	/* forced alignments: 1 */
-} __attribute__((__aligned__(8)));
----
- include/net/netfilter/nf_conntrack_expect.h | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/include/net/netfilter/nf_conntrack_expect.h b/include/net/netfilter/nf_conntrack_expect.h
-index 0855b60fba17..cf0d81be5a96 100644
---- a/include/net/netfilter/nf_conntrack_expect.h
-+++ b/include/net/netfilter/nf_conntrack_expect.h
-@@ -26,6 +26,15 @@ struct nf_conntrack_expect {
- 	struct nf_conntrack_tuple tuple;
- 	struct nf_conntrack_tuple_mask mask;
- 
-+	/* Usage count. */
-+	refcount_t use;
-+
-+	/* Flags */
-+	unsigned int flags;
-+
-+	/* Expectation class */
-+	unsigned int class;
-+
- 	/* Function to call after setup and insertion */
- 	void (*expectfn)(struct nf_conn *new,
- 			 struct nf_conntrack_expect *this);
-@@ -39,15 +48,6 @@ struct nf_conntrack_expect {
- 	/* Timer function; deletes the expectation. */
- 	struct timer_list timeout;
- 
--	/* Usage count. */
--	refcount_t use;
--
--	/* Flags */
--	unsigned int flags;
--
--	/* Expectation class */
--	unsigned int class;
--
- #if IS_ENABLED(CONFIG_NF_NAT)
- 	union nf_inet_addr saved_addr;
- 	/* This is the original per-proto part, used to map the
--- 
-2.34.1
-
+Jason
