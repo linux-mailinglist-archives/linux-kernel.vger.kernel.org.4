@@ -2,126 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999906FBB8A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892986FBB90
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233688AbjEHXuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 19:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54578 "EHLO
+        id S230129AbjEHXvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 19:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjEHXux (ORCPT
+        with ESMTP id S229455AbjEHXvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 19:50:53 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34F172B6;
-        Mon,  8 May 2023 16:50:52 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-643aad3bc41so3977155b3a.0;
-        Mon, 08 May 2023 16:50:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683589852; x=1686181852;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z/sVBMIi3LyN+gBOgZbUdsz1PScQ2i7SAG3MJlwaqE8=;
-        b=hxv6ke0dkQBYpgjSk/aWazczUaftm+EgIVZvHzmOSnpkhglwDMnxeY7Rhe7k+HbrBA
-         ia9wQQBwhXUAHFSj/ZINVGhbaH73oangsio2oGjGFPCQoEFPs9rQVoKabDrc8+S7Wrla
-         /0JUh2eLXJj/lQ8Opg1J/BK77lf4mNq7pyMACZbwVnMHmjnz0nvuNvRl84usT3vgTRXm
-         TcO88lEHhC2XuAalmsHOG9CZ3avzOHN4LFWxaFTsEhrW1wWF5BR33dOpwzymSbPbJnf+
-         fdcBgnWqPOi4LcshCx6AmPFZ3kdr5Q3qPznMI++MP8iTYL4p3RTskcuXpo8m6qtw1F9D
-         8MaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683589852; x=1686181852;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z/sVBMIi3LyN+gBOgZbUdsz1PScQ2i7SAG3MJlwaqE8=;
-        b=e7FxmHBlEjXMGJoYIw8OGIJ+nDnAaI2j5ql73OIrFzz3e8/n1w/K6qwOX5kDaHswha
-         66aouBJuQ0lNWa2CqgdQ8KpOZuQSeYCQfHZFMbzFh3fa9c0VQu80wO5aJHZkWSRoWAZV
-         2EQgI+z/xeu4shB54giq/BDuhO/WgnqPM+wE//DsJUkVJUyCsG5W5FlFapg/yw9ZKkgL
-         7V27QbhWrodHJ/rgZh6GDDdV2t6oN4YXepkRblM+rjldfov7aAcqVprOyBfhnNJ59N0t
-         dI3cALS85HhqNDN8pVHsQ1nnU315FSCzuUpBsUljh3jeYpqJRBPG4lLZQbkPg4IEIw7E
-         97eQ==
-X-Gm-Message-State: AC+VfDznNBOdDXfEQLXTTnrwhJaMMsUnerIk21Qgg5/WiLXgs/g3Siif
-        YdfvThBWjNasDddrXVxxeBY=
-X-Google-Smtp-Source: ACHHUZ5/P3WgrHY/BX9CiJGD8C5O1j/iMLzen9wjPbEON3UiMUwkA8YpqK9n9iTIxJ8xx037/EBd5g==
-X-Received: by 2002:a05:6a20:1048:b0:ff:1df3:51dd with SMTP id gt8-20020a056a20104800b000ff1df351ddmr13037298pzc.37.1683589852051;
-        Mon, 08 May 2023 16:50:52 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id t17-20020a639551000000b00519c3475f21sm46867pgn.46.2023.05.08.16.50.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 16:50:51 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 8 May 2023 13:50:50 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Wang Yugui <wangyugui@e16-tech.com>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH v2 16/22] btrfs: Use alloc_ordered_workqueue() to create
- ordered workqueues
-Message-ID: <ZFmK2uV6n8cJ1ec0@slm.duckdns.org>
-References: <20230430124006.49D2.409509F4@e16-tech.com>
- <ZFWKHRCDsaNDNXIj@slm.duckdns.org>
- <20230506094013.29A6.409509F4@e16-tech.com>
+        Mon, 8 May 2023 19:51:53 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025DD35A8;
+        Mon,  8 May 2023 16:51:49 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 52FEB60161;
+        Tue,  9 May 2023 01:51:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.hr; s=mail;
+        t=1683589904; bh=Kl5KwN2Hk4Bxo2MfCiVRdaQoK10KwhuHuwPofStqIdQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kxoHXML3Q4MK9fREL29E9q3FguFu3vkTh3RGKKsFbuuM/negVlKSnU62n+IpGDpQZ
+         8iKpMYH3Er7blzChupQNc+TOSTnToRVgfIGSF6IGjRq9n/RK15p/RIWdsmaOfJWxIN
+         hGcM5Sa73E+KA8J4ImQj11hEiT22cv21ZQLtUhBkAZcXtWSNURrfnu0LDAVmhsJAEd
+         vxreAxpIYq+Z2B0z49YTeB1xknEIjQaeZJBUz7pRlfVaR5gzOH/HnS8+XS5By499vQ
+         kUo4Kk7G1BGaEu/a2pz5zdxQbca73ptxvWN0Q2txaSzQthmrM9S2IMqkc1cFxYZ6nn
+         Arzn/11OBLyrw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id soHJW2JYGjeY; Tue,  9 May 2023 01:51:41 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [77.237.113.62])
+        by domac.alu.hr (Postfix) with ESMTPSA id E54F06015F;
+        Tue,  9 May 2023 01:51:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1683589901; bh=Kl5KwN2Hk4Bxo2MfCiVRdaQoK10KwhuHuwPofStqIdQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ClHpS4rUtQNzlASce7C18rGhzlg9RaNE1goK24E1RKfhHdevHYFEJSDaVvRjzNCDz
+         VAWfOeAaHbUAoDpYvur0fVyXoF9q8DbySGh62/LKv88cFGG6ET032W9oTYYd+m32zG
+         BIa2It8l8dtmo2BQrLjaJIDFi7fUS5rRh4gojfVy3caQH3aSvdSdJVIZz0w6viF19W
+         emMRYHVRJc2V5FY7z/5yfsK2y2inCTkE3M5qG02DjdiRTIDtfzSjODiF1Cv7UhiSba
+         oIfjyhV4EONHJye8c07n4UYEDO4vODvLm/AK7xxlNkqIzvt0o6B7R38k92HOvRCHCf
+         UoIrQsR5Rg1qQ==
+Message-ID: <c73471aa-522a-83a4-5614-506581604301@alu.unizg.hr>
+Date:   Tue, 9 May 2023 01:51:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230506094013.29A6.409509F4@e16-tech.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [BUG] Kmemleak, possibly hiddev_connect(), in 6.3.0+ torvalds
+ tree commit gfc4354c6e5c2
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
+ <2023050824-juiciness-catching-9290@gregkh>
+ <2023050854-collage-dreamt-660c@gregkh>
+From:   Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
+In-Reply-To: <2023050854-collage-dreamt-660c@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 06, 2023 at 09:40:14AM +0800, Wang Yugui wrote:
-> by test, I noticed some warning caused by
-> void workqueue_set_max_active(struct workqueue_struct *wq, int max_active)
-> 	if (WARN_ON(wq->flags & __WQ_ORDERED_EXPLICIT))
-> 		return;
-> 
-> so I tested again  with the flowing fix
-> 
-> diff --git a/fs/btrfs/async-thread.c b/fs/btrfs/async-thread.c
-> index 43c8995..e4b68e9 100644
-> --- a/fs/btrfs/async-thread.c
-> +++ b/fs/btrfs/async-thread.c
-> @@ -99,8 +99,11 @@ struct btrfs_workqueue *btrfs_alloc_workqueue(struct btrfs_fs_info *fs_info,
->  		ret->thresh = thresh;
->  	}
->  
-> -	ret->normal_wq = alloc_workqueue("btrfs-%s", flags, ret->current_active,
-> -					 name);
-> +	if(limit_active == 1)
-> +		ret->normal_wq = alloc_ordered_workqueue("btrfs-%s", flags, name);
-> +	else
-> +		ret->normal_wq = alloc_workqueue("btrfs-%s", flags,
-> +					 ret->current_active, name);
->  	if (!ret->normal_wq) {
->  		kfree(ret);
->  		return NULL;
-> @@ -139,7 +139,7 @@ static inline void thresh_exec_hook(struct btrfs_workqueue *wq)
->  	long pending;
->  	int need_change = 0;
->  
-> -	if (wq->thresh == NO_THRESHOLD)
-> +	if (wq->thresh == NO_THRESHOLD || wq->limit_active == 1)
->  		return;
->  
->  	atomic_dec(&wq->pending);
-> 
-> we need 'limit_active' at 2nd postition, so I used 'limit_active' and 1st
-> postition too.
 
-Oh, that most likely means that these workqueues don't need to and shouldn't
-be ordered. Will update the patch.
 
-Thanks.
+On 08. 05. 2023. 16:01, Greg Kroah-Hartman wrote:
+> On Mon, May 08, 2023 at 08:51:55AM +0200, Greg Kroah-Hartman wrote:
+>> On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
+>>> Hi,
+>>>
+>>> There seems to be a kernel memory leak in the USB keyboard driver.
+>>>
+>>> The leaked memory allocs are 96 and 512 bytes.
+>>>
+>>> The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
+>>> Lightning mobo,
+>>> and Genius SlimStar i220 GK-080012 keyboard.
+>>>
+>>> (Logitech M100 HID mouse is not affected by the bug.)
+>>>
+>>> BIOS is:
+>>>
+>>>       *-firmware
+>>>            description: BIOS
+>>>            vendor: American Megatrends International, LLC.
+>>>            physical id: 0
+>>>            version: 1.21
+>>>            date: 04/26/2023
+>>>            size: 64KiB
+>>>
+>>> The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
+>>>
+>>> The keyboard is recognised as Chicony:
+>>>
+>>>                   *-usb
+>>>                        description: Keyboard
+>>>                        product: CHICONY USB Keyboard
+>>>                        vendor: CHICONY
+>>>                        physical id: 2
+>>>                        bus info: usb@5:2
+>>>                        logical name: input35
+>>>                        logical name: /dev/input/event4
+>>>                        logical name: input35::capslock
+>>>                        logical name: input35::numlock
+>>>                        logical name: input35::scrolllock
+>>>                        logical name: input36
+>>>                        logical name: /dev/input/event5
+>>>                        logical name: input37
+>>>                        logical name: /dev/input/event6
+>>>                        logical name: input38
+>>>                        logical name: /dev/input/event8
+>>>                        version: 2.30
+>>>                        capabilities: usb-2.00 usb
+>>>                        configuration: driver=usbhid maxpower=100mA
+>>> speed=1Mbit/s
+>>>
+>>> The bug is easily reproduced by unplugging the USB keyboard, waiting about a
+>>> couple of seconds,
+>>> and then reconnect and scan for memory leaks twice.
+>>>
+>>> The kmemleak log is as follows [edited privacy info]:
+>>>
+>>> root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
+>>> unreferenced object 0xffff8dd020037c00 (size 96):
+>>>    comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
+>>>    hex dump (first 32 bytes):
+>>>      5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
+>>>      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+>>>    backtrace:
+>>>      [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
+>>>      [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
+>>>      [<ffffffffb87543d9>] class_create+0x29/0x80
+>>>      [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
+>>
+>> As the call to class_create() in this path is now gone in 6.4-rc1, can
+>> you retry that release to see if this is still there or not?
+> 
+> No, wait, it's still there, I was looking at a development branch of
+> mine that isn't sent upstream yet.  And syzbot just reported the same
+> thing:
+> 	https://lore.kernel.org/r/00000000000058d15f05fb264013@google.com
+> 
+> So something's wrong here, let me dig into it tomorrow when I get a
+> chance...
 
--- 
-tejun
+If this could help, here is the bisect of the bug (I could not discern 
+what could possibly be wrong):
+
+user@host:~/linux/kernel/linux_torvalds$ git bisect log
+git bisect start
+# bad: [ac9a78681b921877518763ba0e89202254349d1b] Linux 6.4-rc1
+git bisect bad ac9a78681b921877518763ba0e89202254349d1b
+# good: [c9c3395d5e3dcc6daee66c6908354d47bf98cb0c] Linux 6.2
+git bisect good c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+# good: [85496c9b3bf8dbe15e2433d3a0197954d323cadc] Merge branch 
+'net-remove-some-rcu_bh-cruft'
+git bisect good 85496c9b3bf8dbe15e2433d3a0197954d323cadc
+# good: [b68ee1c6131c540a62ecd443be89c406401df091] Merge tag 'scsi-misc' 
+of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+git bisect good b68ee1c6131c540a62ecd443be89c406401df091
+# bad: [888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0] Merge tag 
+'sysctl-6.4-rc1' of 
+git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux
+git bisect bad 888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0
+# good: [34b62f186db9614e55d021f8c58d22fc44c57911] Merge tag 
+'pci-v6.4-changes' of git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci
+git bisect good 34b62f186db9614e55d021f8c58d22fc44c57911
+# good: [34da76dca4673ab1819830b4924bb5b436325b26] Merge tag 
+'for-linus-2023042601' of 
+git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid
+git bisect good 34da76dca4673ab1819830b4924bb5b436325b26
+# good: [97b2ff294381d05e59294a931c4db55276470cb5] Merge tag 
+'staging-6.4-rc1' of 
+git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
+git bisect good 97b2ff294381d05e59294a931c4db55276470cb5
+# good: [2025b2ca8004c04861903d076c67a73a0ec6dfca] mcb-lpc: Reallocate 
+memory region to avoid memory overlapping
+git bisect good 2025b2ca8004c04861903d076c67a73a0ec6dfca
+# bad: [d06f5a3f7140921ada47d49574ae6fa4de5e2a89] cdx: fix build failure 
+due to sysfs 'bus_type' argument needing to be const
+git bisect bad d06f5a3f7140921ada47d49574ae6fa4de5e2a89
+# good: [dcfbb67e48a2becfce7990386e985b9c45098ee5] driver core: class: 
+use lock_class_key already present in struct subsys_private
+git bisect good dcfbb67e48a2becfce7990386e985b9c45098ee5
+# bad: [6f14c02220c791d5c46b0f965b9340c58f3d503d] driver core: create 
+class_is_registered()
+git bisect bad 6f14c02220c791d5c46b0f965b9340c58f3d503d
+# good: [2f9e87f5a2941b259336c7ea6c5a1499ede4554a] driver core: Add a 
+comment to set_primary_fwnode() on nullifying
+git bisect good 2f9e87f5a2941b259336c7ea6c5a1499ede4554a
+# bad: [02fe26f25325b547b7a31a65deb0326c04bb5174] firmware_loader: Add 
+debug message with checksum for FW file
+git bisect bad 02fe26f25325b547b7a31a65deb0326c04bb5174
+# good: [884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82] driver core: class: 
+implement class_get/put without the private pointer.
+git bisect good 884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82
+# bad: [3f84aa5ec052dba960baca4ab8a352d43d47028e] base: soc: populate 
+machine name in soc_device_register if empty
+git bisect bad 3f84aa5ec052dba960baca4ab8a352d43d47028e
+# bad: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core: class.c: 
+convert to only use class_to_subsys
+git bisect bad 7b884b7f24b42fa25e92ed724ad82f137610afaf
+# first bad commit: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver 
+core: class.c: convert to only use class_to_subsys
+user@host:~/linux/kernel/linux_torvalds$
+
+Have a nice day and God bless.
+
+Best regards,
+Mirsad
