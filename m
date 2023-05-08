@@ -2,124 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406A76FB40A
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 230186FB43F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234386AbjEHPoQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 8 May 2023 11:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
+        id S234653AbjEHPr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 11:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234178AbjEHPn5 (ORCPT
+        with ESMTP id S234436AbjEHPrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 11:43:57 -0400
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1B1AD2D
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 08:43:29 -0700 (PDT)
-Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay05.hostedemail.com (Postfix) with ESMTP id E480B401BD;
-        Mon,  8 May 2023 15:43:07 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf07.hostedemail.com (Postfix) with ESMTPA id 430332002E;
-        Mon,  8 May 2023 15:43:03 +0000 (UTC)
-Message-ID: <1802c0990c8928a430f32d5396d9bc403821551b.camel@perches.com>
-Subject: Re: [PATCH] MAINTAINERS: Drop realname for L: entries
-From:   Joe Perches <joe@perches.com>
-To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Liviu Dudau <liviu.dudau@arm.com>,
-        "james qian wang (Arm Technology China)" <james.qian.wang@arm.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexandru Vasile <acvasile96@gmail.com>,
-        Brian Starkey <brian.starkey@arm.com>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Date:   Mon, 08 May 2023 08:43:02 -0700
-In-Reply-To: <20230508144135.1450524-1-u.kleine-koenig@pengutronix.de>
-References: <20230508144135.1450524-1-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Mon, 8 May 2023 11:47:51 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0801EA266;
+        Mon,  8 May 2023 08:47:43 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 348Fl3jg054523;
+        Mon, 8 May 2023 10:47:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683560823;
+        bh=ThTMpPXBEPh4HdHzswHAKDf5fokfeMb5MpOdHcvdqgE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=cAwMBQtt+9p61ybgcF82DbpMQgD20dsGzxfdQiMdlKtBtnVK2UXR045dEAVRh0lw2
+         sTOwAqMYxGlLQJ385l3l0Bl8nRyL358LToNs2y2d5uPVKZa1Lk3e+hQ4572pQfyh7L
+         0GnxlXQCzr1YRXEg2m0XQFvatQYp7I0Uu4DaPNUU=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 348Fl3t3121784
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 8 May 2023 10:47:03 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 8
+ May 2023 10:47:03 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 8 May 2023 10:47:03 -0500
+Received: from [10.250.149.252] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 348FkvEU003096;
+        Mon, 8 May 2023 10:46:58 -0500
+Message-ID: <a80f540a-492a-0585-9ed1-de3397535e07@ti.com>
+Date:   Mon, 8 May 2023 21:16:56 +0530
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 430332002E
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Rspamd-Server: rspamout05
-X-Stat-Signature: ccjitddhoqoj7pw3tywqwencgpng6kau
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/P5CpkNWW06aar9BQCuMfqKhwperiBE3k=
-X-HE-Tag: 1683560583-715271
-X-HE-Meta: U2FsdGVkX1+kWSkxLYDh0I/86yfx9Nc+rbbG6LECZsAcZVgN/nvWjkNtjxwpUJIdS3w8sgSjeadqUv+ds9ANEQ==
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: Build regressions/improvements in v6.4-rc1
+Content-Language: en-US
+To:     Pratyush Yadav <pratyush@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        <linux-um@lists.infradead.org>, <linux-media@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <linux-xfs@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <sparclinux@vger.kernel.org>
+References: <CAHk-=wiUxm-NZ1si8dXWVTTJ9n3c+1SRTC0V+Lk7hOE4bDVwJQ@mail.gmail.com>
+ <20230508115727.2597864-1-geert@linux-m68k.org>
+ <749c2fc2-93dc-585-3826-dea581602d6e@linux-m68k.org>
+ <mafs035466ebk.fsf@amazon.de>
+From:   "Raghavendra, Vignesh" <vigneshr@ti.com>
+In-Reply-To: <mafs035466ebk.fsf@amazon.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-05-08 at 16:41 +0200, Uwe Kleine-König wrote:
-> The format of L: entries in the MAINTAINERS file are expected to just
-> contain the list's email address. get_maintainers doesn't cope well, if
-> a realname is specified:
-> 
-> 	$ scripts/get_maintainer.pl -f Documentation/devicetree/bindings/display/arm,komeda.yaml
-> 	...
-> 	 (open list:ARM KOMEDA DRM-KMS DRIVER)
-> 	...
-> 
-> So drop the realname (and the < >).
-> 
-> Fixes: ab6911b73493 ("MAINTAINERS: Add maintainer for Arm komeda driver")
-> Fixes: 6865788f5ad9 ("MAINTAINERS: Update entries from the Nitro Enclaves section")
-> Fixes: 3affaa5a7ca3 ("drm/afbc: Add AFBC modifier usage documentation")
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
-> Hello,
-> 
-> who will apply this patch? Joe?
 
-Andrew? Please apply.
 
-I do suspect though that these are non-public mailing lists/exploders
-and these would be better as M: entries with names.
+On 5/8/2023 8:49 PM, Pratyush Yadav wrote:
+> On Mon, May 08 2023, Geert Uytterhoeven wrote:
+> 
+>> On Mon, 8 May 2023, Geert Uytterhoeven wrote:
+>>> Below is the list of build error/warning regressions/improvements in
+>>> v6.4-rc1[1] compared to v6.3[2].
+>>>
+>>> Summarized:
+>>>  - build errors: +9/-16
+>>>  - build warnings: +1/-1439
+>>>
+>>> Happy fixing! ;-)
+>>>
+>>> Thanks to the linux-next team for providing the build service.
+>>>
+>>> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/ac9a78681b921877518763ba0e89202254349d1b/ (all 152 configs)
+>>> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/457391b0380335d5e9a5babdec90ac53928b23b4/ (all 152 configs)
+>>>
+>>>
+> [...]
+>>
+>>>  + /kisskb/src/drivers/mtd/spi-nor/spansion.c: error: 'op' is used uninitialized [-Werror=uninitialized]:  => 495:27, 364:27
+> 
+> Hmm, I don't get why we get this warning. Line 495 is in
+> s25fs256t_post_bfpt_fixup(). It declares 'op' and then it does
+> 
+>     op = (struct spi_mem_op)
+>         CYPRESS_NOR_RD_ANY_REG_OP(nor->params->addr_mode_nbytes,
+>                       SPINOR_REG_CYPRESS_ARCFN, 1,
+>                       nor->bouncebuf);
+>     ret = spi_nor_read_any_reg(nor, &op, nor->reg_proto);
+> 
 
-> Best regards
-> Uwe
+Not all the fields of struct get initialized if you assign later on in
+the function vs at the time of declaration... For example cmd.dtr isn't
+explicitly set to any value here and may have garbage?
 > 
->  MAINTAINERS | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> which initializes 'op' before using it. Same with line 364 which is in
+> the function cypress_nor_set_addr_mode_nbytes().
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 7e0b87d5aa2e..ae1d8e140a67 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1669,7 +1669,7 @@ ARM KOMEDA DRM-KMS DRIVER
->  M:	James (Qian) Wang <james.qian.wang@arm.com>
->  M:	Liviu Dudau <liviu.dudau@arm.com>
->  M:	Mihail Atanassov <mihail.atanassov@arm.com>
-> -L:	Mali DP Maintainers <malidp@foss.arm.com>
-> +L:	malidp@foss.arm.com
->  S:	Supported
->  T:	git git://anongit.freedesktop.org/drm/drm-misc
->  F:	Documentation/devicetree/bindings/display/arm,komeda.yaml
-> @@ -1691,7 +1691,7 @@ F:	include/uapi/drm/panfrost_drm.h
->  ARM MALI-DP DRM DRIVER
->  M:	Liviu Dudau <liviu.dudau@arm.com>
->  M:	Brian Starkey <brian.starkey@arm.com>
-> -L:	Mali DP Maintainers <malidp@foss.arm.com>
-> +L:	malidp@foss.arm.com
->  S:	Supported
->  T:	git git://anongit.freedesktop.org/drm/drm-misc
->  F:	Documentation/devicetree/bindings/display/arm,malidp.yaml
-> @@ -14825,7 +14825,7 @@ F:	arch/nios2/
->  NITRO ENCLAVES (NE)
->  M:	Alexandru Ciobotaru <alcioa@amazon.com>
->  L:	linux-kernel@vger.kernel.org
-> -L:	The AWS Nitro Enclaves Team <aws-nitro-enclaves-devel@amazon.com>
-> +L:	aws-nitro-enclaves-devel@amazon.com
->  S:	Supported
->  W:	https://aws.amazon.com/ec2/nitro/nitro-enclaves/
->  F:	Documentation/virt/ne_overview.rst
+> Even the compiler warnings [0] don't seem to make much sense to me:
 > 
-> base-commit: ac9a78681b921877518763ba0e89202254349d1b
-
+>     /kisskb/src/drivers/mtd/spi-nor/spansion.c: In function 's25fs256t_post_bfpt_fixup':
+>     /kisskb/src/drivers/mtd/spi-nor/spansion.c:495:27: error: 'op' is used uninitialized [-Werror=uninitialized]
+>     495 |         struct spi_mem_op op;
+>         |                           ^~
+>     /kisskb/src/drivers/mtd/spi-nor/spansion.c:495:27: note: 'op' declared here
+>     495 |         struct spi_mem_op op;
+>         |                           ^~
+> 
+> [0] http://kisskb.ellerman.id.au/kisskb/buildresult/14922057/
+> 
+>>
+>> um-x86_64-gcc12/um-allyesconfig
+>>
+> [...]
+> 
