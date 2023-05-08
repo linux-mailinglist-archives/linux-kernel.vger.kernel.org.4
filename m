@@ -2,151 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 222A86FAFDC
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0A26FAFDB
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233987AbjEHMX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 08:23:28 -0400
+        id S234123AbjEHMX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 08:23:26 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233692AbjEHMXY (ORCPT
+        with ESMTP id S233987AbjEHMXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 08:23:24 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE0A36118;
-        Mon,  8 May 2023 05:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683548594; x=1715084594;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zz7Se8uLfJ5do6eJ9dnQKSDFhvQo/6NrKd6fODnc9/Q=;
-  b=WmUa5swwOISjt0LbJjkSZqXjZSLEDgDOxvB5AzCYSZTTrIL8gvLlco0Q
-   HExdPz97pQZuZwUvTzXjGv4g58EcUeGgo6oBbagC6rb5+tc/dp2d4B34n
-   xDGsh+MeUh0GDNNoQbQBRA3PMkx1ZCebvvaUT4O/TJM70wtFRGRcyhYhr
-   Tb2jxgeKGBvuO+frM2/4cWhAfiyCLnA/kFS+UWktDk0Lg3CwwznnsULlA
-   i7TlQXqrYb3kuMW5eT7uGAplNaG+rmyBwGAQ3+Lsi2FfAVf8hz6j+j6YL
-   g16WCJUahVAmvPaT++bRiPnoEq6TnxGuef/M8woYgNAWneM8kolG/2lSK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="352685955"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="352685955"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 05:23:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="692589247"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="692589247"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 08 May 2023 05:23:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pvztT-00Ar4Y-1a;
-        Mon, 08 May 2023 15:23:07 +0300
-Date:   Mon, 8 May 2023 15:23:07 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 4/5] iio: light: ROHM BU27008 color sensor
-Message-ID: <ZFjpqwOo3DxnWahM@smile.fi.intel.com>
-References: <cover.1683105758.git.mazziesaccount@gmail.com>
- <6d1e37f95dd039d9c96a992b1855fd193bdded40.1683105758.git.mazziesaccount@gmail.com>
- <ZFPCUJ81aw/GkJgT@smile.fi.intel.com>
- <c63c5271-3973-3bd4-c683-ab9ab64b67e4@fi.rohmeurope.com>
+        Mon, 8 May 2023 08:23:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B8136109
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 05:23:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CA3CF1FE6F;
+        Mon,  8 May 2023 12:23:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1683548591; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JfEzsX5fFqzg3GqO4ASKIFVD991JJNu2nfu4iM95o4k=;
+        b=XFWpOEXY9ZVf8KJ5PIJ5o270Wf4qzrXja2wsutqT1u5mtdTqr9CvN/1SUdZsVNQDFIoQxJ
+        gGCupmNUTVbGhSzNKVjBEX1M1DjydDgF1wY/sDd8AXywAe4gYUuZu+sS/0jE5B3A4y+QaH
+        VehOE8Kmiih8Ql+bnCAkyAmeMVCX4Jk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9044913499;
+        Mon,  8 May 2023 12:23:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4FKFIa/pWGTjSQAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 08 May 2023 12:23:11 +0000
+Message-ID: <d90ee49b-bbd3-faf4-30be-0ed2cc9cb90d@suse.com>
+Date:   Mon, 8 May 2023 14:23:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c63c5271-3973-3bd4-c683-ab9ab64b67e4@fi.rohmeurope.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] x86/mm: fix __swp_entry_to_pte() for Xen PV guests
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20230306123259.12461-1-jgross@suse.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20230306123259.12461-1-jgross@suse.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------JaV9Rv4kS7mlwqX6vmj47y7E"
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 04:56:47AM +0000, Vaittinen, Matti wrote:
-> On 5/4/23 17:33, Andy Shevchenko wrote:
-> > On Wed, May 03, 2023 at 12:50:14PM +0300, Matti Vaittinen wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------JaV9Rv4kS7mlwqX6vmj47y7E
+Content-Type: multipart/mixed; boundary="------------UrDMQB0j5zAbZpAHvtC42DDR";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: linux-kernel@vger.kernel.org, x86@kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <d90ee49b-bbd3-faf4-30be-0ed2cc9cb90d@suse.com>
+Subject: Re: [PATCH] x86/mm: fix __swp_entry_to_pte() for Xen PV guests
+References: <20230306123259.12461-1-jgross@suse.com>
+In-Reply-To: <20230306123259.12461-1-jgross@suse.com>
 
-...
+--------------UrDMQB0j5zAbZpAHvtC42DDR
+Content-Type: multipart/mixed; boundary="------------0LN5Q0TgzrIHoNeC1a0ZPzpi"
 
-> >> +config ROHM_BU27008
-> >> +	tristate "ROHM BU27008 color (RGB+C/IR) sensor"
-> >> +	depends on I2C
-> >> +	select REGMAP_I2C
-> >> +	select IIO_GTS_HELPER
-> >> +	help
-> >> +	  Enable support for the ROHM BU27008 color sensor.
-> >> +	  The ROHM BU27008 is a sensor with 5 photodiodes (red, green,
-> >> +	  blue, clear and IR) with four configurable channels. Red and
-> >> +	  green being always available and two out of the rest three
-> >> +	  (blue, clear, IR) can be selected to be simultaneously measured.
-> >> +	  Typical application is adjusting LCD backlight of TVs,
-> >> +	  mobile phones and tablet PCs.
-> > 
-> > Module name?
-> 
-> We have discussed this several times already.
-> 
-> https://lore.kernel.org/all/10c4663b-dd65-a545-786d-10aed6e6e5e9@fi.rohmeurope.com/
-> 
-> Module name is completely irrelevant when selecting a kernel configuration.
+--------------0LN5Q0TgzrIHoNeC1a0ZPzpi
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-This option is also selectable by user.
+UElORyAoM3JkIG9uZSwgYWZ0ZXIgMiBtb250aHMgb2YgZ2V0dGluZyBubyBmZWVkYmFjaykh
+DQoNCkknbSBpbmNsaW5lZCB0byBjYXJyeSBpdCBqdXN0IHZpYSB0aGUgWGVuIHRyZWUgaWYg
+eDg2IG1haW50YWluZXJzIGNvbnRpbnVlDQp0byBpZ25vcmUgaXQgLi4uDQoNCg0KSnVlcmdl
+bg0KDQpPbiAwNi4wMy4yMyAxMzozMiwgSnVlcmdlbiBHcm9zcyB3cm90ZToNCj4gTm9ybWFs
+bHkgX19zd3BfZW50cnlfdG9fcHRlKCkgaXMgbmV2ZXIgY2FsbGVkIHdpdGggYSB2YWx1ZSB0
+cmFuc2xhdGluZw0KPiB0byBhIHZhbGlkIFBURS4gVGhlIG9ubHkga25vd24gZXhjZXB0aW9u
+IGlzIHB0ZV9zd2FwX3Rlc3RzKCksIHJlc3VsdGluZw0KPiBpbiBhIFdBUk4gc3BsYXQgaW4g
+WGVuIFBWIGd1ZXN0cywgYXMgX19wdGVfdG9fc3dwX2VudHJ5KCkgZGlkDQo+IHRyYW5zbGF0
+ZSB0aGUgUEZOIG9mIHRoZSB2YWxpZCBQVEUgdG8gYSBndWVzdCBsb2NhbCBQRk4sIHdoaWxl
+DQo+IF9fc3dwX2VudHJ5X3RvX3B0ZSgpIGRvZXNuJ3QgZG8gdGhlIG9wcG9zaXRlIHRyYW5z
+bGF0aW9uLg0KPiANCj4gRml4IHRoYXQgYnkgdXNpbmcgX19wdGUoKSBpbiBfX3N3cF9lbnRy
+eV90b19wdGUoKSBpbnN0ZWFkIG9mIG9wZW4NCj4gY29kaW5nIHRoZSBuYXRpdmUgdmFyaWFu
+dCBvZiBpdC4NCj4gDQo+IEZvciBjb3JyZWN0bmVzcyBkbyB0aGUgc2ltaWxhciBjb252ZXJz
+aW9uIGZvciBfX3N3cF9lbnRyeV90b19wbWQoKS4NCj4gDQo+IEZpeGVzOiAwNTI4OTQwMmQ3
+MTcgKCJtbS9kZWJ1Z192bV9wZ3RhYmxlOiBhZGQgdGVzdHMgdmFsaWRhdGluZyBhcmNoIGhl
+bHBlcnMgZm9yIGNvcmUgTU0gZmVhdHVyZXMiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBKdWVyZ2Vu
+IEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+IC0tLQ0KPiAgIGFyY2gveDg2L2luY2x1ZGUv
+YXNtL3BndGFibGVfNjQuaCB8IDQgKystLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2Vy
+dGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYv
+aW5jbHVkZS9hc20vcGd0YWJsZV82NC5oIGIvYXJjaC94ODYvaW5jbHVkZS9hc20vcGd0YWJs
+ZV82NC5oDQo+IGluZGV4IDc5MjkzMjdhYmUwMC4uYTYyOWIxYjlmNjVhIDEwMDY0NA0KPiAt
+LS0gYS9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9wZ3RhYmxlXzY0LmgNCj4gKysrIGIvYXJjaC94
+ODYvaW5jbHVkZS9hc20vcGd0YWJsZV82NC5oDQo+IEBAIC0yMzcsOCArMjM3LDggQEAgc3Rh
+dGljIGlubGluZSB2b2lkIG5hdGl2ZV9wZ2RfY2xlYXIocGdkX3QgKnBnZCkNCj4gICANCj4g
+ICAjZGVmaW5lIF9fcHRlX3RvX3N3cF9lbnRyeShwdGUpCQkoKHN3cF9lbnRyeV90KSB7IHB0
+ZV92YWwoKHB0ZSkpIH0pDQo+ICAgI2RlZmluZSBfX3BtZF90b19zd3BfZW50cnkocG1kKQkJ
+KChzd3BfZW50cnlfdCkgeyBwbWRfdmFsKChwbWQpKSB9KQ0KPiAtI2RlZmluZSBfX3N3cF9l
+bnRyeV90b19wdGUoeCkJCSgocHRlX3QpIHsgLnB0ZSA9ICh4KS52YWwgfSkNCj4gLSNkZWZp
+bmUgX19zd3BfZW50cnlfdG9fcG1kKHgpCQkoKHBtZF90KSB7IC5wbWQgPSAoeCkudmFsIH0p
+DQo+ICsjZGVmaW5lIF9fc3dwX2VudHJ5X3RvX3B0ZSh4KQkJKF9fcHRlKCh4KS52YWwpKQ0K
+PiArI2RlZmluZSBfX3N3cF9lbnRyeV90b19wbWQoeCkJCShfX3BtZCgoeCkudmFsKSkNCj4g
+ICANCj4gICBleHRlcm4gdm9pZCBjbGVhbnVwX2hpZ2htYXAodm9pZCk7DQo+ICAgDQoNCg==
 
-...
+--------------0LN5Q0TgzrIHoNeC1a0ZPzpi
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-> > Do you need regmap lock? If so, why (since you have mutex)?
-> 
-> I believe you know that regmap uses a default lock when no external lock 
-> is given. So, I assume you mean that maybe we could set 
-> 'disable_locking' for the regmap here.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-Correct.
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-> It's nice to be occasionally pushed to think "out of the box". And yes, 
-> disabling regmap lock is really out of my "normal box" :)
-> 
-> I didn't go through all of the code yet, but I think pretty much all of 
-> the sequences which end up to register writes are indeed protected by 
-> the mutex. (Well, probe is not but it is expected to only update one bit 
-> while rest of the register should stay fixed).
-> 
-> It may be we could live without regmap_lock when driver is in it's 
-> current state, but I am not convinced the performance improvement is 
-> worth the risk. Having regmap unprotected is not common, and it is also 
-> not easy to spot when making changes to the driver. In my opinion it is 
-> a bit like asking for a nose-bleed unless there is really heavy reasons 
-> to drop the lock... In this case, having the regmap_lock (which is 
-> pretty much never locked because we have the mutex as you said) is 
-> probably not a penalty that matters.
+--------------0LN5Q0TgzrIHoNeC1a0ZPzpi--
 
-Basically you try to justify a hidden mine field in case somebody will think
-"oh, we are protected by regmap lock, so why to bother call mutex_lock()" and
-at the end it become a subtle bugs in the code. With disable_locking = true
-I can see that code author _carefully thought through_ the locking schema and
-understands the hardware and the code.
+--------------UrDMQB0j5zAbZpAHvtC42DDR--
 
-P.S. I'm wondering why your lines of text have a single trailing whitespace
-but the last line.
+--------------JaV9Rv4kS7mlwqX6vmj47y7E
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
--- 
-With Best Regards,
-Andy Shevchenko
+-----BEGIN PGP SIGNATURE-----
 
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmRY6a8FAwAAAAAACgkQsN6d1ii/Ey9i
+xwf9FKWh0RZnx7cNg3pFU8zCWb3kfDXtdYMW/G3Wpfq5gsGTFuOTqVbRXETi0nu3zZd0wwrX5Fpu
+zu0tpk1n1ClD5zlqeBsqY0D/cmbMQxldhqZ6WO748YqAIde9+ptyo8bRS2kA/Ep12QEtirzkCg4o
+Go6hNa5YqZTl3TbFxTct+ZYzgAqCl0DjyweqLvqxGl6BQzzri9mCiz2ltmiy0nyhhtuMtAkX5NLq
+sMiWauA8pOamiDWo19dFAlm/iLU7JpK89wXWagpx8CpKj5aDZe3qxMKOqOuMRWCrR93Yv1yF1s8I
+K0VLHN2Mjkba3A1pFDsTSepx1j9Y2FTqU5DO+oU+Og==
+=I+Tg
+-----END PGP SIGNATURE-----
 
+--------------JaV9Rv4kS7mlwqX6vmj47y7E--
