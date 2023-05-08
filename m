@@ -2,160 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151A26FA1FA
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389DA6FA1FC
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbjEHIPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 04:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
+        id S233594AbjEHIQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 04:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233145AbjEHIPQ (ORCPT
+        with ESMTP id S232949AbjEHIQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 04:15:16 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7EF1A4B8;
-        Mon,  8 May 2023 01:15:14 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1aaf2ede38fso41590365ad.2;
-        Mon, 08 May 2023 01:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683533714; x=1686125714;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TJAuOZRANyE2SdinpFoEnHRS0xVw7wS0nXh6yXc7EkE=;
-        b=TaEm7orbd2vqSzVUeBmc39wJhi3Y3BH1uyCp1T9Vjq4L3WqatoZyLpJ1edfB7cb4Dx
-         mwjGj8hjI6wYyEO/KtUrDifm2JHCZk+DbtyrkHoEF5A0GbPXFCtxRYOsHOBfYKUrHn4T
-         uju8kq3hnh2VDSFeCh7IjBojfsIop+41Y1GZ3utrvn/tsB6/K+oMQd7WBCgETD5G/0bR
-         XTlst+Vci8UJz1ZferH/BxL6hKwdGUr9n7bXP+DRAABrZGiRx+BgfR73jTPlU8nkknez
-         7D7YtVmMweOWiZK9vyGwBKjC40v1jyFXeiDZ0sXXjVQEAcChAzrKhmcSqWu8fZVNv9+T
-         szSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683533714; x=1686125714;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TJAuOZRANyE2SdinpFoEnHRS0xVw7wS0nXh6yXc7EkE=;
-        b=azTq4JYqwiy0GD9WWCWLzgOwitITcO7u5ezA08nvLZscEOnp6o/7bRXW5NxnfFCBcp
-         mOTjDnEK9xJAQ6/YKcQ9QtJZUwdrv3dQJLtgRsYTi0gIMojo216hbVwv1i41qxcvKgYS
-         so0XXtCsav1WYq9nmHcoAkfwwinxaV9CrHqPmyckhqQ0aNfY1/k1C/+DOy1TLJUhIvDL
-         j5vSPvzYVuf5gKD3YDU/n/aIVorv8FFW5cnmk3SjjmFzwagjNa8KNDlltX9PjQbrY3gc
-         8li2i7bRHSWDpw9ThhZbDkhUdaz61PIN8maGvBeECHY6K25tg7Y5uMaIg6HlFgFZUyi5
-         xwKg==
-X-Gm-Message-State: AC+VfDx+c9UsH8C9spZ3JWgSMWscxQfEmAw7XHFfrQmJoJee23YVJCUn
-        LXp0q1ziJ4pWNZr+/hkWGNU=
-X-Google-Smtp-Source: ACHHUZ49w/3ofYSdXv92t8ck4l5FD0BG2GBqx4beQ/NDKaDR3mzlHm2/pDKmEN79+AHka17ez9cagA==
-X-Received: by 2002:a17:903:1d1:b0:19a:bbd0:c5cc with SMTP id e17-20020a17090301d100b0019abbd0c5ccmr10709173plh.60.1683533714188;
-        Mon, 08 May 2023 01:15:14 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id bi8-20020a170902bf0800b001ab1a737c8dsm6509331plb.285.2023.05.08.01.15.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 01:15:13 -0700 (PDT)
-Message-ID: <36c718d7-2ccf-f4ee-295a-97dd01fc66ca@gmail.com>
-Date:   Mon, 8 May 2023 16:15:09 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v10 06/10] dt-bindings: serial: Document ma35d1 uart
- controller
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     p.zabel@pengutronix.de, arnd@arndb.de, jirislaby@kernel.org,
-        schung@nuvoton.com, tmaimon77@gmail.com,
-        devicetree@vger.kernel.org, catalin.marinas@arm.com,
-        gregkh@linuxfoundation.org, sboyd@kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, will@kernel.org,
-        Jacky Huang <ychuang3@nuvoton.com>, lee@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        mjchen@nuvoton.com, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230508025936.36776-1-ychuang570808@gmail.com>
- <20230508025936.36776-7-ychuang570808@gmail.com>
- <168351638748.4154745.16515916544783600377.robh@kernel.org>
- <65914d45-95fb-9b44-daf2-5885ba62a180@linaro.org>
- <a62d278c-f47c-fa97-185e-b81ff4b28a4c@gmail.com>
- <25b2fcf6-6ba1-8e51-59e1-2dcf84b856bc@linaro.org>
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <25b2fcf6-6ba1-8e51-59e1-2dcf84b856bc@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 8 May 2023 04:16:04 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B798F3C34
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 01:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683533763; x=1715069763;
+  h=from:to:cc:subject:date:message-id;
+  bh=tLUH/bGNzy2lFq4ntkONNzY8WwFRfNEvq/WBkxI5uQM=;
+  b=F+rDdGqKmKHDcR/TdWJdDy2QarqklSzNiSGX1WllDOEY9+KNGAfldt1A
+   SkqCk5JsQHXo0tgtqY0970bLLdXff//i2Np4CdSkMcjTL5BMns3PuKFXK
+   0ePWOeZh70gNc3H26WjOuvWJxjhXvXhXRQFAonMzAdLUYP8bSAlhG6Jrr
+   PUgxP/xcsgw00lB8eF7zuJ3rw1HJRj5KYDQ+khAub76V6jUDdCJZ5cda3
+   YaYpoLFHRoyE/4yujbDmGruaoCRs6fmXomz/Pg73wJjl3J3XqAIADLfup
+   hvYBQdcDaWfIVTf6vnITMIZ1zBw6D82Kj37jelyUnTS642Q8szVc4cqPu
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="334027245"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="334027245"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 01:16:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="1028335675"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="1028335675"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 01:16:00 -0700
+From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
+Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] locking/qspinlock: Make the 1st spinner only spin on locked_pending bits
+Date:   Mon,  8 May 2023 16:15:32 +0800
+Message-Id: <20230508081532.36379-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The 1st spinner (header of the MCS queue) spins on the whole qspinlock
+variable to check whether the lock is released. For a contended qspinlock,
+this spinning is a hotspot as each CPU queued in the MCS queue performs
+the spinning when it becomes the 1st spinner (header of the MCS queue).
 
+The granularity among SMT h/w threads in the same core could be "byte"
+which the Load-Store Unit (LSU) inside the core handles. Making the 1st
+spinner only spin on locked_pending bits (not the whole qspinlock) can
+avoid the false dependency between the tail field and the locked_pending
+field. So this micro-optimization helps the h/w thread (the 1st spinner)
+stay in a low power state and prevents it from being woken up by other
+h/w threads in the same core when they perform xchg_tail() to update
+the tail field. Please see a similar discussion in the link [1].
 
-On 2023/5/8 下午 04:05, Krzysztof Kozlowski wrote:
-> On 08/05/2023 09:01, Jacky Huang wrote:
->>
->> On 2023/5/8 下午 02:31, Krzysztof Kozlowski wrote:
->>> On 08/05/2023 05:26, Rob Herring wrote:
->>>> On Mon, 08 May 2023 02:59:32 +0000, Jacky Huang wrote:
->>>>> From: Jacky Huang <ychuang3@nuvoton.com>
->>>>>
->>>>> Add documentation that describes the nuvoton ma35d1 UART driver bindings.
->>>>>
->>>>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
->>>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>> ---
->>>>>    .../serial/nuvoton,ma35d1-serial.yaml         | 48 +++++++++++++++++++
->>>>>    1 file changed, 48 insertions(+)
->>>>>    create mode 100644 Documentation/devicetree/bindings/serial/nuvoton,ma35d1-serial.yaml
->>>>>
->>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>>>
->>>> yamllint warnings/errors:
->>>>
->>>> dtschema/dtc warnings/errors:
->>>> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.example.dtb: camera-sensor@3c: port:endpoint:data-lanes: [[1]] is too short
->>>> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
->>>> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: port:endpoint:data-lanes: [[1]] is too short
->>>> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
->>>> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.example.dtb: pcie-ep@33800000: Unevaluated properties are not allowed ('assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' were unexpected)
->>>> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.yaml
->>>> Documentation/devicetree/bindings/serial/nuvoton,ma35d1-serial.example.dts:25:18: fatal error: dt-bindings/clock/nuvoton,ma35d1-clk.h: No such file or directory
->>>>      25 |         #include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
->>>>         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>> compilation terminated.
->>>> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/serial/nuvoton,ma35d1-serial.example.dtb] Error 1
->>> This however is related, although might be coming from earlier failure.
->>> I assume you run the check and you do not see any errors?
->>>
->>> Best regards,
->>> Krzysztof
->>>
->> Dear Krzysztof,
->>
->> Thank you for your review.
->>
->> Of course I have run the check.
->> I did not see any errors, because I have
->> "dt-bindings/clock/nuvoton,ma35d1-clk.h".
->> This patch 6/10 depends on path 3/10 which include
->> "dt-bindings/clock/nuvoton,ma35d1-clk.h".
->> Should I combine this patch 6/10 into patch 3/10?
-> No, it's fine. If you got the reviews and acks and no reports from
-> kernel test robot, you can go in few days with Arnd's request and send
-> everything to soc@.
->
-> Best regards,
-> Krzysztof
->
+[1] https://lore.kernel.org/r/20230105021952.3090070-1-guoren@kernel.org
 
-Dear Krzysztof,
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+---
+ kernel/locking/qspinlock.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-I got it. Thank you very much.
-
-
-Best Regards,
-Jacky Huang
-
+diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+index efebbf19f887..e7b990b28610 100644
+--- a/kernel/locking/qspinlock.c
++++ b/kernel/locking/qspinlock.c
+@@ -513,7 +513,20 @@ void __lockfunc queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+ 	if ((val = pv_wait_head_or_lock(lock, node)))
+ 		goto locked;
+ 
++#if _Q_PENDING_BITS == 8
++	/*
++	 * Spinning on the 2-byte locked_pending instead of the 4-byte qspinlock
++	 * variable can avoid the false dependency between the tail field and
++	 * the locked_pending field. This helps the h/w thread (the 1st spinner)
++	 * stay in a low power state and prevents it from being woken up by other
++	 * h/w threads in the same core when they perform xchg_tail() to update
++	 * the tail field only.
++	 */
++	smp_cond_load_acquire(&lock->locked_pending, !VAL);
++	val = atomic_read_acquire(&lock->val);
++#else
+ 	val = atomic_cond_read_acquire(&lock->val, !(VAL & _Q_LOCKED_PENDING_MASK));
++#endif
+ 
+ locked:
+ 	/*
+-- 
+2.17.1
 
