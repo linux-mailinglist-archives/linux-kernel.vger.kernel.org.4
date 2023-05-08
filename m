@@ -2,107 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C199A6FB1EA
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFCB6FB1D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234285AbjEHNo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
+        id S233551AbjEHNlN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 8 May 2023 09:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232748AbjEHNo4 (ORCPT
+        with ESMTP id S232161AbjEHNlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:44:56 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB95C25276;
-        Mon,  8 May 2023 06:44:54 -0700 (PDT)
-Received: from [IPV6:2001:250:4000:5122:23cb:1d84:8ee4:cdb3] ([172.16.0.254])
-        (user=dzm91@hust.edu.cn mech=PLAIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 348DheMI007261-348DheMJ007261
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Mon, 8 May 2023 21:43:40 +0800
-Message-ID: <b7154e2c-0438-87d1-9edc-7eb1aad40cd1@hust.edu.cn>
-Date:   Mon, 8 May 2023 21:40:41 +0800
+        Mon, 8 May 2023 09:41:11 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65FF2CD23;
+        Mon,  8 May 2023 06:41:10 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-55a6efe95c9so66296967b3.1;
+        Mon, 08 May 2023 06:41:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683553270; x=1686145270;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YHDxuNfTo4R9AHTimDxxB6DeeQKHVQC82igHr1lClPc=;
+        b=GWE6XrhWERdxGacrg1uG4Y/z4w9xfLsW8jdP3AOGpjWUhfk7rXHCfNZgB1WR7SIZFu
+         bNn5hzeMXV9K9soVkCZ2X+LIEjLKoKmlGZ4mgJiUr4m0IbcWx4fLczyq775lB72H7s54
+         fklvLEoUmoPQpFDJOM44uoioQLCIYtR6jdYNup4mGYTVIcI/oZay5vTGKRBhV0QE8jhD
+         W9zu+ItXgYgm/svCRY9dMojziEndsRwXJEVnz8eZALL7C+hMBc+t/eln8z/gt72YX96O
+         FkX3H/fRejtM7mDmaKUmxM2C8TDXxvN078a+mVid97sjrdeeUHKGnqgtYlmDF+Xq/v1P
+         rnVg==
+X-Gm-Message-State: AC+VfDw9i0htujxKNj+UN8S3gOauXW71P79esca+k8kAouo6S3hHdLxB
+        EKC2gZUd/K1M+zT+lGwXKgr9OLboIVw7Mw==
+X-Google-Smtp-Source: ACHHUZ7yd+AlhN83OylSLZrUuIScApde5FXnt4/h1SNGMKjAiG7es/KsaFWJX7HABjObw/5seLNLcQ==
+X-Received: by 2002:a0d:df94:0:b0:55a:5616:ba35 with SMTP id i142-20020a0ddf94000000b0055a5616ba35mr10025827ywe.37.1683553269813;
+        Mon, 08 May 2023 06:41:09 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id x186-20020a81a0c3000000b0054eff15530asm2509848ywg.90.2023.05.08.06.41.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 06:41:09 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-b99efd7c335so5989131276.0;
+        Mon, 08 May 2023 06:41:08 -0700 (PDT)
+X-Received: by 2002:a25:d141:0:b0:b9e:72b0:da22 with SMTP id
+ i62-20020a25d141000000b00b9e72b0da22mr9683626ybg.64.1683553268612; Mon, 08
+ May 2023 06:41:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drivers: mpt3sas: mpt3sas_debugfs: return value check of
- `mpt3sas_debugfs_root`
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Tomas Henzl <thenzl@redhat.com>
-Cc:     Jing Xu <U202112064@hust.edu.cn>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        hust-os-kernel-patches@googlegroups.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230423122535.31019-1-U202112064@hust.edu.cn>
- <6e69b57c-80ae-8b6e-cb5f-9e05da46ecd6@redhat.com>
- <1484408f-f68e-4354-ab59-56af9cd1ef14@kili.mountain>
-From:   Dongliang Mu <dzm91@hust.edu.cn>
-In-Reply-To: <1484408f-f68e-4354-ab59-56af9cd1ef14@kili.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-FEAS-AUTH-USER: dzm91@hust.edu.cn
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230508104557.47889-1-wsa+renesas@sang-engineering.com> <20230508104557.47889-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230508104557.47889-2-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 8 May 2023 15:40:57 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWGaDT_XGpeVm-915hbxa8-w5303QWg0a0iCjqk998unQ@mail.gmail.com>
+Message-ID: <CAMuHMdWGaDT_XGpeVm-915hbxa8-w5303QWg0a0iCjqk998unQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/3] dt-bindings: PCI: rcar-pci-host: add optional regulators
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Wolfram,
 
+On Mon, May 8, 2023 at 12:46 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> Support regulators found on the e.g. KingFisher board.
 
-On 5/3/23 01:06, Dan Carpenter wrote:
-> On Tue, May 02, 2023 at 05:53:10PM +0200, Tomas Henzl wrote:
->> On 4/23/23 14:25, Jing Xu wrote:
->>> Smatch complains that:
->>> mpt3sas_init_debugfs() warn: 'mpt3sas_debugfs_root' is an error
->>> pointer or valid
->>>
->>> There is no need to check the return value of the debugfs_create_dir()
->>> function, just delete the dead code.
->>>
->>> Fixes: 2b01b293f359 ("scsi: mpt3sas: Capture IOC data for debugging purposes")
->>> Signed-off-by: Jing Xu <U202112064@hust.edu.cn>
->>> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
->>> ---
->>>   drivers/scsi/mpt3sas/mpt3sas_debugfs.c | 2 --
->>>   1 file changed, 2 deletions(-)
->>>
->>> diff --git a/drivers/scsi/mpt3sas/mpt3sas_debugfs.c b/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
->>> index a6ab1db81167..c92e08c130b9 100644
->>> --- a/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
->>> +++ b/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
->>> @@ -99,8 +99,6 @@ static const struct file_operations mpt3sas_debugfs_iocdump_fops = {
->>>   void mpt3sas_init_debugfs(void)
->>>   {
->>>   	mpt3sas_debugfs_root = debugfs_create_dir("mpt3sas", NULL);
->>> -	if (!mpt3sas_debugfs_root)
->>> -		pr_info("mpt3sas: Cannot create debugfs root\n");
->> Hi Jing,
->> most drivers just ignore the return value but here the author wanted to
->> have the information logged.
->> Can you instead of removing the message modify the 'if' condition so it
->> suits the author's intention?
-> 
-> This code was always just wrong.
-> 
-> The history of this is slightly complicated and boring.  These days it's
-> harmless dead code so I guess it's less bad than before.
+... for the mini-PCIe slot.
 
-Hi Dan and Tomas,
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Any conclusion about this patch? The student Jing Xu is not sure about 
-how to revise this patch.
+Thanks for your patch!
 
-> 
-> 
-> regards,
-> dan carpenter
+> --- a/Documentation/devicetree/bindings/pci/rcar-pci-host.yaml
+> +++ b/Documentation/devicetree/bindings/pci/rcar-pci-host.yaml
+> @@ -68,6 +68,12 @@ properties:
+>    phy-names:
+>      const: pcie
+>
+> +  vpcie1v5-supply:
+> +    description: The 1.5v regulator to use for PCIe.
+
++1.5V is only present on mini-PCIe slots...
+
+> +
+> +  vpcie3v3-supply:
+> +    description: The 3.3v regulator to use for PCIe.
+
+... while +3.3V is present on PCIe, mini-PCIe, and M2 PCIe slots.
+
+In addition, normal PCIe slots also have +12V.
+So I think it would be prudent to add a vpcie12v0-supply property, too.
+
+W.r.t. to the actual naming, I don't know if there's already a (de facto)
+standard for that?
+
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -121,5 +127,7 @@ examples:
+>               clock-names = "pcie", "pcie_bus";
+>               power-domains = <&sysc R8A7791_PD_ALWAYS_ON>;
+>               resets = <&cpg 319>;
+> +             vpcie1v5-supply = <&pcie_1v5>;
+> +             vpcie3v3-supply = <&pcie_3v3>;
+>           };
+>      };
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
