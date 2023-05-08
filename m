@@ -2,124 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C926F9E35
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EB56F9E3F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232274AbjEHD0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 23:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
+        id S231791AbjEHD34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 23:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjEHD0d (ORCPT
+        with ESMTP id S229716AbjEHD3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 23:26:33 -0400
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D9CA5E9;
-        Sun,  7 May 2023 20:26:32 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-54cbb666aa5so2163309eaf.1;
-        Sun, 07 May 2023 20:26:32 -0700 (PDT)
+        Sun, 7 May 2023 23:29:53 -0400
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DB5A4
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 20:29:51 -0700 (PDT)
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-33539445684so35856285ab.1
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 20:29:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683516391; x=1686108391;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GUP740VSIFLDV8rZCQ5oBsU29cPyJ7u+vd58HVBat4Y=;
-        b=WNg9LdmW9hKC+3u6qdtyh03vW/t+SFJlh0j+umH8H3Avh7EUoTS/plV7eL2OM81sSc
-         0Uzp9qtkax88v1YerIAH69Zz0Ekdh09zY7/vr9P2/f70iWMX2+samMypIVGXmYI+eWSU
-         xe394LkK6rK5LqC2gUC6xx0036/1ru9TttzsGbcg7TSAhgS/WoUROAE4KoVvwbrGA2+9
-         QsoDyB8yBCQkeQcNj0B8oEDOHU4Htkw4N985DL55wOWDARWvX8m+AvW6033gz/1WCSt2
-         Tax5sg0HfW0rCsDxCCZRRzMmLBx+NCLAA63bAiVYALm6GnXAo9nT/8XNcJEcbojHZAGU
-         Tvrg==
-X-Gm-Message-State: AC+VfDyDp4JQqDDOvSoDHCQbb1Tfr+MKDDOJcH50KN1Vr1kRo8zMncjq
-        0p3WvaW9VVOplNVIFJvVdf9ZSsiUDnqB
-X-Google-Smtp-Source: ACHHUZ59A+v/ZumD/ssBM+TZ58XgiyDzEywM9UukDF60uWTxIK5s4tu0gz+Y+rdJF7rmlB0m0eKp1A==
-X-Received: by 2002:a05:6808:251:b0:38e:8e30:677d with SMTP id m17-20020a056808025100b0038e8e30677dmr4240684oie.3.1683516391495;
-        Sun, 07 May 2023 20:26:31 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id fe9-20020a0568082b0900b0038bb2f60064sm5199849oib.30.2023.05.07.20.26.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 20:26:30 -0700 (PDT)
-Received: (nullmailer pid 4154764 invoked by uid 1000);
-        Mon, 08 May 2023 03:26:27 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20221208; t=1683516590; x=1686108590;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EIIWjHjPkybLwfLbVgxz6cqw/F5xYKjkBJFflkScd1c=;
+        b=idbuItgPFrGxH7tVkAyeLrfvZygKASGXgCu6U9dp2OHzcFg6fHih7YzGvsYjeaMBc0
+         m3qJZjmnQmJV1Wm/U0OOF6GAcd0Sh1P1eMKBVsTR6616UfZWlwP0zBDjYg3Ky1xz1yw1
+         dKP3tlk+3zF8reyhb7qdah08IdqwoHLRlIZ8exbOYvOHiLynNZfc4ZByvgYsE1Dp2ytX
+         dNJM6QEXmuGLL6l8+7YpcXKa36sm2mZsjVn22FoDU09sV2sWAHTZjQUtT5pTVr1tlCP3
+         K7GjacHE2hn739d4Ksfi2SejEMGHe9NwdUZdCo4OkUKlI09L2SJiijMV2j0jBwUXXGtL
+         pGFA==
+X-Gm-Message-State: AC+VfDy+qoeNr1JTKcBsvkQsVNT0YhGl4H3BYKiFrCYcFWWZLlSXZbf2
+        eyfFDkWV8frpRSbPw4aF64Tvg3tgzEVP2BG4zRUEdUIzn1Qn
+X-Google-Smtp-Source: ACHHUZ7Yu0sBuUDWE49tOgau9MDVb48MDPdl2YmGtntp88/0G+TiQIYPT8kqHs31KF824EofJ0CE/bnTa323dnEAzU/N0gdwCeS3
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Jacky Huang <ychuang570808@gmail.com>
-Cc:     tmaimon77@gmail.com, mjchen@nuvoton.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        mturquette@baylibre.com, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de, krzysztof.kozlowski+dt@linaro.org,
-        sboyd@kernel.org, will@kernel.org, schung@nuvoton.com,
-        robh+dt@kernel.org, jirislaby@kernel.org, arnd@arndb.de,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Jacky Huang <ychuang3@nuvoton.com>, lee@kernel.org
-In-Reply-To: <20230508025936.36776-5-ychuang570808@gmail.com>
-References: <20230508025936.36776-1-ychuang570808@gmail.com>
- <20230508025936.36776-5-ychuang570808@gmail.com>
-Message-Id: <168351638608.4154679.2636482702680796849.robh@kernel.org>
-Subject: Re: [PATCH v10 04/10] dt-bindings: reset: nuvoton: Document ma35d1
- reset control
-Date:   Sun, 07 May 2023 22:26:27 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d5c8:0:b0:335:252b:4fc6 with SMTP id
+ d8-20020a92d5c8000000b00335252b4fc6mr2434904ilq.2.1683516590442; Sun, 07 May
+ 2023 20:29:50 -0700 (PDT)
+Date:   Sun, 07 May 2023 20:29:50 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000058d15f05fb264013@google.com>
+Subject: [syzbot] [usb?] memory leak in class_register
+From:   syzbot <syzbot+8d1206181166fb03c3d0@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rafael@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On Mon, 08 May 2023 02:59:30 +0000, Jacky Huang wrote:
-> From: Jacky Huang <ychuang3@nuvoton.com>
-> 
-> Add the dt-bindings header for Nuvoton ma35d1, that gets shared
-> between the reset controller and reset references in the dts.
-> Add documentation to describe nuvoton ma35d1 reset driver.
-> 
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/reset/nuvoton,ma35d1-reset.yaml  |  45 ++++++++
->  .../dt-bindings/reset/nuvoton,ma35d1-reset.h  | 108 ++++++++++++++++++
->  2 files changed, 153 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml
->  create mode 100644 include/dt-bindings/reset/nuvoton,ma35d1-reset.h
-> 
+syzbot found the following issue on:
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+HEAD commit:    89b7fd5d7f3c Merge tag 'pwm/for-6.4-rc1' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=174e9388280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2a36b20e363d588f
+dashboard link: https://syzkaller.appspot.com/bug?extid=8d1206181166fb03c3d0
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1343c5c4280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13e7e5d2280000
 
-yamllint warnings/errors:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/85195bfc3f96/disk-89b7fd5d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d2f70e851a75/vmlinux-89b7fd5d.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ab7d608fd71a/bzImage-89b7fd5d.xz
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.example.dtb: camera-sensor@3c: port:endpoint:data-lanes: [[1]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: port:endpoint:data-lanes: [[1]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.example.dtb: pcie-ep@33800000: Unevaluated properties are not allowed ('assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.yaml
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8d1206181166fb03c3d0@syzkaller.appspotmail.com
 
-doc reference errors (make refcheckdocs):
-Documentation/usb/gadget_uvc.rst: Documentation/userspace-api/media/v4l/pixfmt-packed.yuv.rst
-MAINTAINERS: Documentation/devicetree/bindings/pwm/pwm-apple.yaml
+BUG: memory leak
+unreferenced object 0xffff888101354400 (size 512):
+  comm "kworker/0:1", pid 8, jiffies 4294953824 (age 15.230s)
+  hex dump (first 32 bytes):
+    00 44 35 01 81 88 ff ff 00 44 35 01 81 88 ff ff  .D5......D5.....
+    00 00 00 00 00 00 00 00 9d 2d 9b 85 ff ff ff ff  .........-......
+  backtrace:
+    [<ffffffff81545854>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
+    [<ffffffff82b673e8>] kmalloc include/linux/slab.h:559 [inline]
+    [<ffffffff82b673e8>] kzalloc include/linux/slab.h:680 [inline]
+    [<ffffffff82b673e8>] class_register+0x28/0x140 drivers/base/class.c:186
+    [<ffffffff82b67547>] class_create+0x47/0x90 drivers/base/class.c:270
+    [<ffffffff831f9ad0>] init_usb_class drivers/usb/core/file.c:91 [inline]
+    [<ffffffff831f9ad0>] usb_register_dev+0x290/0x3d0 drivers/usb/core/file.c:179
+    [<ffffffff832d2014>] usblp_probe+0x4e4/0x750 drivers/usb/class/usblp.c:1208
+    [<ffffffff831f59f9>] usb_probe_interface+0x179/0x3c0 drivers/usb/core/driver.c:396
+    [<ffffffff82b64e5d>] call_driver_probe drivers/base/dd.c:579 [inline]
+    [<ffffffff82b64e5d>] really_probe+0x12d/0x430 drivers/base/dd.c:658
+    [<ffffffff82b65221>] __driver_probe_device+0xc1/0x1a0 drivers/base/dd.c:800
+    [<ffffffff82b6532a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
+    [<ffffffff82b6551b>] __device_attach_driver+0xfb/0x150 drivers/base/dd.c:958
+    [<ffffffff82b62271>] bus_for_each_drv+0xc1/0x110 drivers/base/bus.c:457
+    [<ffffffff82b65a42>] __device_attach+0x102/0x2a0 drivers/base/dd.c:1030
+    [<ffffffff82b639da>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
+    [<ffffffff82b5ffd3>] device_add+0x993/0xc60 drivers/base/core.c:3625
+    [<ffffffff831f2ad9>] usb_set_configuration+0x9a9/0xc90 drivers/usb/core/message.c:2211
+    [<ffffffff832053f1>] usb_generic_driver_probe+0xa1/0x100 drivers/usb/core/generic.c:238
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230508025936.36776-5-ychuang570808@gmail.com
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-pip3 install dtschema --upgrade
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
