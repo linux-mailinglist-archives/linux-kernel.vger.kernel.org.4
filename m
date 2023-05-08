@@ -2,98 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6273B6FA276
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A9F6FA274
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbjEHIkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 04:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
+        id S233163AbjEHIji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 04:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbjEHIjr (ORCPT
+        with ESMTP id S232080AbjEHIjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 04:39:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1048D17DCD;
-        Mon,  8 May 2023 01:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/1KExNcE7Wnmx5lqqgWUNAAEwP1cS0k9vm/3gTrShQ0=; b=Q4ZmT6o6NHSlxm0gZzh+8pWZHf
-        XjqBOWiFbblldzvHxMqy+uMFFyZ9eFGNqmZf33DxNkXS/dmKoJT0uol/cwGjS0ovSl2EURaWhGPK5
-        zjl7tJkq3kKQzqH9VFm6KgiB32YZzF677qGlN5DWUxkiyjFNzyE/cncLccmAvNfld3XBNfloI7kCz
-        oOwdeVJh4lilAFkvCPrVsd3kPJUcjTYbqtxar0DIZ5grC+YrDc/eSjUftjzCFpmbtZoFLdVR51e44
-        a4jLow2n9izMWpDoAbz/lJYYYAqvdfOvida4xDqteQnBs8QbReH5C/NwqFK/fzbNCn/B5f8yrz+m+
-        HGw3XR1A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pvwP4-00Dyv8-P6; Mon, 08 May 2023 08:39:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7DE49300786;
-        Mon,  8 May 2023 10:39:29 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 382EE263B7D50; Mon,  8 May 2023 10:39:29 +0200 (CEST)
-Date:   Mon, 8 May 2023 10:39:29 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [GIT PULL] pipe: nonblocking rw for io_uring
-Message-ID: <20230508083929.GT83892@hirez.programming.kicks-ass.net>
-References: <6882b74e-874a-c116-62ac-564104c5ad34@kernel.dk>
- <CAHk-=wiQ8g+B0bCPJ9fxZ+Oa0LPAUAyryw9i+-fBUe72LoA+QQ@mail.gmail.com>
- <CAHk-=wgGzwaz2yGO9_PFv4O1ke_uHg25Ab0UndK+G9vJ9V4=hw@mail.gmail.com>
- <2e7d4f63-7ddd-e4a6-e7eb-fd2a305d442e@kernel.dk>
- <69ec222c-1b75-cdc1-ac1b-0e9e504db6cb@kernel.dk>
- <CAHk-=wiaFUoHpztu6Zf_4pyzH-gzeJhdCU0MYNw9LzVg1-kx8g@mail.gmail.com>
- <CAHk-=wjSuGTLrmygUSNh==u81iWUtVzJ5GNSz0A-jbr4WGoZyw@mail.gmail.com>
- <20230425194910.GA1350354@hirez.programming.kicks-ass.net>
- <CAHk-=wjNfkT1oVLGbe2=Vymp66Ht=tk+YKa9gUL4T=_hA_JLjg@mail.gmail.com>
- <978690c4-1d25-46e8-3375-45940ec1ea51@huaweicloud.com>
+        Mon, 8 May 2023 04:39:35 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDE518DC8;
+        Mon,  8 May 2023 01:39:34 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pvwP6-0007CA-K0; Mon, 08 May 2023 10:39:32 +0200
+Message-ID: <9d1022a5-847b-13f0-84d3-5b7d81355d59@leemhuis.info>
+Date:   Mon, 8 May 2023 10:39:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <978690c4-1d25-46e8-3375-45940ec1ea51@huaweicloud.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: PROBLEM: ThinkPad T430 (BCM20702) Can't Detect Bluetooth Devices
+ Starting from Kernel v6.1.0 Until Now v6.3.1
+Content-Language: en-US, de-DE
+To:     Moh Oktavi Aziz Nugraha <moktavizzen@gmail.com>,
+        marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        avisaziz123@gmail.com
+Cc:     linux-bluetooth@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <CAHCNbp3ztCcp31JdVYuxy+s1qXaa+Zy74eGJmfPmyrx_6Wjhhw@mail.gmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <CAHCNbp3ztCcp31JdVYuxy+s1qXaa+Zy74eGJmfPmyrx_6Wjhhw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1683535174;acdecd99;
+X-HE-SMSGID: 1pvwP6-0007CA-K0
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 07, 2023 at 04:04:23PM +0200, Jonas Oberhauser wrote:
+[CCing the regression list, as it should be in the loop for regressions:
+https://docs.kernel.org/admin-guide/reporting-regressions.html]
+
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
+
+On 06.05.23 13:33, Moh Oktavi Aziz Nugraha wrote:
+> [1.] One line summary of the problem:
+> ThinkPad T430 (BCM20702) Can't Detect Bluetooth Devices Starting from
+> Kernel v6.1.0 Until Now v6.3.1
 > 
-> Am 4/25/2023 um 9:58 PM schrieb Linus Torvalds:
-> > Yes, I think Mark is right. It's not that 'old' might be wrong - that
-> > doesn't matter because cmpxchg will work it out - it's just that 'new'
-> > might not be consistent with the old value we then use.
+> [2.] Full description of the problem/report:
+> Last week I installed Ubuntu, but my bluetooth can't detect devices
+> when I use kernel 6.1 and above. My bluetooth was fine when I used
+> kernel 6.0 and before. I'm filing this bug on the kernel because when
+> I tested this bug on Fedora and Ubuntu, the same problem appeared when
+> I used kernel version 6.1 and above.
+> The workaround for version 6.1 and above is to run "hcitool scan" on
+> the terminal if I want to detect bluetooth devices.
+> There are similar problem in earlier kernel version, but it was fixed
+> according to this post https://askubuntu.com/a/1169415
+> Here is the video i made to reproduce the issue https://youtu.be/pHjOIAk90Zc
+> Here is the information about my Bluetooth card:
+> Bus 001 Device 007: ID 0a5c:21e6 Broadcom Corp. BCM20702 Bluetooth 4.0
+> [ThinkPad]
+> What I have tried:
+> - Installed Fedora 38 and then Install bluetooth firmware
+> https://github.com/winterheart/broadcom-bt-firmware, and then
+> downgrade bluez (bluetooth cant detect devices)
+> - Installed Fedora 37 (no problem, because the default kernel is 6.0)
+> - installed Ubuntu 23.04 and then  install bluetooth firmware
+> https://github.com/winterheart/broadcom-bt-firmware (bluetooth cant
+> detect devices)
+> - Installed Ubuntu 22.10 (no problem, because the default kernel is 5.19)
+> - Installed Ubuntu 22.04 (no problem, because the default kernel is 5.19)
+> - Go back to Ubuntu 23.04 and then try these kernel:
+> v5.15.110 (good)
+> v5.19.17 (good)
+> v6.0.12 (good)
+> v6.0.19 (good)
+> v6.1.27 (bad)
+> v6.2.14 (bad)
+> v6.3.1 (bad)
+> After trying all of that I came to conclusion that this bug is caused
+> by the kernel.
+> I want to try git bisect to find the commit that caused the regression
+> between kernel versions 6.0 and 6.1, but it might take me a while
+> since it’s my first time using it. Plus, I’ve got a bunch of college
+> assignments to finish up this week, so I’m a bit strapped for time.
+
+FWIW, the following guide recently added might help you (a similar
+document to also cover bisection is planned, but I haven't started on it
+yet...):
+https://docs.kernel.org/admin-guide/quickly-build-trimmed-linux.html
+
+> [3.] Keywords (i.e., modules, networking, kernel):
+> bluetooth, networking, broadcom, bcm20702, thinkpad, t430
+>
+> [4.] Kernel information
+> [4.1.] Kernel version (from /proc/version):
+> Linux version 6.3.1-060301-generic (kernel@kathleen)
+>
+> (x86_64-linux-gnu-gcc-12 (Ubuntu 12.2.0-17ubuntu1) 12.2.0, GNU ld (GNU
+> Binutils for Ubuntu) 2.40) #202304302031 SMP PREEMPT_DYNAMIC Mon May
+> 1 00:41:22 UTC 2023
+> [4.2.] Kernel .config file:
+> <attachment1-KernelConfig.txt>
 > 
-> In the general pattern, besides the potential issue raised by Mark, tearing
-> may also be an issue (longer example inspired by a case we met at the end of
-> the mail) where 'old' being wrong matters.
+> [5.] Most recent kernel version which did not have the bug:
+> 6.0.19
+> 
+> [6.] Output of Oops.. message (if applicable) with symbolic
+> information resolved (see Documentation/admin-guide/bug-hunting.rst)
+> I can't find the Oops message when i use "journalctl | grep Oops"
+> 
+> [7.] A small shell script or example program which triggers the
+> problem (if possible)
+> I cant write a shell script yet, but i have made a video to show the
+> trigger and how to reproduce the issue https://youtu.be/pHjOIAk90Zc
+> 
+> [8.] Environment
+> [8.1.] Software (add the output of the ver_linux script here)
+> <attachment2-Software.txt>
+> [8.2.] Processor information (from /proc/cpuinfo):
+> <attachment3-Processor.txt>
+> [8.3.] Module information (from /proc/modules):
+> <attachment4-Module.txt>
+> [8.4.] Loaded driver and hardware information (/proc/ioports, /proc/iomem)
+> <attachment5-DriverHW.txt>
+> [8.5.] PCI information ('lspci -vvv' as root)
+> <attachment6-PCI.txt>
+> [8.6.] SCSI information (from /proc/scsi/scsi)
+> <attachment7-SCSI.txt>
+> [8.7.] Other information that might be relevant to the problem (please
+> look in /proc and include all information that you think to be
+> relevant):
+> <attachment9-lsusb.txt>
+> 
+> [X.] Other notes, patches, fixes, workarounds:
+> The workaround for version 6.1 and above is to run "hcitool scan" on
+> the terminal if I want to detect bluetooth devices.
 
-There is yet another pattern where it actually matters:
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
 
-	old = READ_ONCE(*ptr);
-	do {
-		if (cond(old))
-			return false;
+#regzbot ^introduced v6.0..v6.1
+#regzbot title bluetooth: ThinkPad T430 (BCM20702) does not  Detect
+Bluetooth Devices anymore
+#regzbot ignore-activity
 
-		new = func(old);
-	} while (!try_cmpxchg(ptr, &old, new));
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
 
-	return true;
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
 
-In this case we rely on old being 'coherent'. The more obvious case is
-where it returns old (also not uncommon), but even if it just checks a
-(multi-bit) condition on old you don't want tearing.
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
