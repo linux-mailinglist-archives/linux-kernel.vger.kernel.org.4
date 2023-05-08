@@ -2,130 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87E06FB332
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D6A6FB338
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234044AbjEHOpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 10:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
+        id S233973AbjEHOsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 10:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233714AbjEHOpt (ORCPT
+        with ESMTP id S229764AbjEHOsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 10:45:49 -0400
-Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021024.outbound.protection.outlook.com [52.101.57.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F8FC2;
-        Mon,  8 May 2023 07:45:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ij6qiwk9HXw/YngIR5QFd7nDBdixqiJmZskDNCcSHvSvDQryIix9ayPEDXAi8E9BgGb/7R6rFaIu1ltwgt0pLPa62Bzs3ZAPbpg+e7EpwaIa3ysl/0YIiY3WsxmfmFmbrp/J47VkbceDfzMnk84/P28hSveh/o+x5gGDivwH2VSEK0c3Zt2Oni3TJCQVufr+fClG1Vx3nokdUCj9sCnILEktezbZZBfNdtl4I8P9fElSivuUPJTnbTKFrtGJd/L8kwXdVdkUi/pTjFODJJ8MNV8b3XT8y0TLcsy0UsZTrbWo8ZHG/gx3WwMT1flHDxjbmh0hV7LSocLbyoShGr9bqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Tkh8n4op8lLZCPvzvWnDHXLvmgLoi5A/daRfvXarQuA=;
- b=jwG4rUPFhFWIgMDYAwHTCmhjXvGddFqgmvdEuUMwmBs0/I34phV+GQtVFU8KxX2XYRDvwmjObMoSx/NuO19VpqjUwbLm8MbTmEFo/BL6VU5MZ1SYdGu7vAMt2UJEjb5e89zqLboX35Bwf+YArIXJ/6e+3MuetTSbIkzC4StWoXeDXVAXX02B732UrU4aH8QbULneefJa0PvfN4Tl2ZKhZRV0fwbiyZaDj4tGQGH5twaZBDAMJrwbROpGC3RpTleHtWgHmTk+dAv94Xzll6XRWdZjbSauGuBwYSqir6ebw/YampZKEFPUFsfTl5VRg+7Kd/Qyxq+NsiFwOhJqKAvzBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Tkh8n4op8lLZCPvzvWnDHXLvmgLoi5A/daRfvXarQuA=;
- b=bywMlXMjl9v12T+MvkhtQVAL9VepzhY99t40DgmEnt5A0STiNiXbX7xQajVuLUtmqTdWU/EbVkJlRBjowh5yoj21AmiTsL+GvjFCH0AqfbfalTa6KEYdDesouuRMVI+JNT69aP4OdFEZ8ZjYx4O9HDXEdqiVNEqfS2qoPR529b8=
-Received: from PH7PR21MB3116.namprd21.prod.outlook.com (2603:10b6:510:1d0::10)
- by PH7PR21MB3848.namprd21.prod.outlook.com (2603:10b6:510:245::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.8; Mon, 8 May
- 2023 14:45:44 +0000
-Received: from PH7PR21MB3116.namprd21.prod.outlook.com
- ([fe80::7745:82a2:4a33:65c5]) by PH7PR21MB3116.namprd21.prod.outlook.com
- ([fe80::7745:82a2:4a33:65c5%6]) with mapi id 15.20.6411.004; Mon, 8 May 2023
- 14:45:44 +0000
-From:   Haiyang Zhang <haiyangz@microsoft.com>
-To:     Leon Romanovsky <leon@kernel.org>
-CC:     Long Li <longli@microsoft.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] RDMA/mana_ib: Use v2 version of cfg_rx_steer_req to
- enable RX coalescing
-Thread-Topic: [PATCH] RDMA/mana_ib: Use v2 version of cfg_rx_steer_req to
- enable RX coalescing
-Thread-Index: AQHZf4Kxjex9WkNlekCvwwavSM4vhq9Od9yAgADgy0CAAI+qAIAAjikg
-Date:   Mon, 8 May 2023 14:45:44 +0000
-Message-ID: <PH7PR21MB3116031E5E1B5B9B97AE71BCCA719@PH7PR21MB3116.namprd21.prod.outlook.com>
-References: <1683312708-24872-1-git-send-email-longli@linuxonhyperv.com>
- <20230507081053.GD525452@unreal>
- <PH7PR21MB31168035C903BD666253BF70CA709@PH7PR21MB3116.namprd21.prod.outlook.com>
- <20230508060938.GA6195@unreal>
-In-Reply-To: <20230508060938.GA6195@unreal>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=78a9b04a-730b-4f26-be14-e54bb584600d;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-08T14:38:26Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR21MB3116:EE_|PH7PR21MB3848:EE_
-x-ms-office365-filtering-correlation-id: e35a99fb-7dbe-4970-d577-08db4fd2e728
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lP9te/PYR1Mi+dbbGhPzz3IeR4puxoL71KKZNEt0YBy5hXP/SVPmwFtRm6ES3UqRlCmFB/iDuxvUI1uGPH0M8i96aTwCKZLJ7h/iba3Jm5mEpzZEngx5mj4vBhFKnrSsCubNTiKAbbBN23Snlir7KKA0rF2yX1Wu9ReQjE8u414N29PGrOAMHKN0avE12Gk9k7itH7ub2OXSFul1OcdIO2iD4mSnvBeCGMXNYE2brdjL+hI+EUwJJhXofGo2SXaWVJzyzAJrNkM4eBR6Cz4fwYjiWpkXyodY8ja7K9xBQ5ghG76Mzx7Eu73muhU036MZgPmvQA/z6AXauikn/cWp9sssTd9WU0qu/VhGatvNzpV4og9mvoHUZFViR479GLFxbfzAfrU68FGu3CPMpRBHrM/JjpdwiwDq6yXRl9ZymKGy6bNTtIQTJFXVP2AeaR1vs65UIo5UUIN1ycxQ8fwELk4uaODDnGExuQhoh/yQuppM1k1gSONadWwueLYp5GeGXF987XfUUbJWDs/fMkfdEPgaeVkYKWJxNHddxRtYCrFXhEpN/6PZ0qUuVUM8COo2gs3XLhdUxDxCHKaBRi/uxK36gIgnpigfkO6curAC/IV9l615s6FSup073Yby6JWoUX3lqre3eml/nj6MqGx2AHwv1QVJwpe2WbxwEyUkid0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3116.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(366004)(396003)(376002)(451199021)(52536014)(8990500004)(2906002)(5660300002)(64756008)(10290500003)(66476007)(316002)(7416002)(33656002)(66556008)(41300700001)(478600001)(66446008)(76116006)(6916009)(7696005)(86362001)(4326008)(8936002)(54906003)(66946007)(71200400001)(55016003)(786003)(8676002)(38100700002)(83380400001)(26005)(122000001)(82950400001)(82960400001)(38070700005)(53546011)(9686003)(186003)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7mWH/kbbHEZzjZyDTGkIzpUQuUwa5wXuKLSPjYvwvxZcxl1eluj3ldXTgW89?=
- =?us-ascii?Q?kIQptUf9GLBjCywVBASVPPEx5FGVrmU/R3sfzIY9Eo6r3+jeiDMqIi98dT1K?=
- =?us-ascii?Q?uAKveMhBRLvEUNr16Uu4SMbvhHbqrk6SPCkHDo87Vq/untk5Yc+g1LUcEtX9?=
- =?us-ascii?Q?rz068C13YamkyIY6GEgHbDR1nKS7vK6nnDDJMN6mF7X5zs1Q7/WsVWVkjdlp?=
- =?us-ascii?Q?hvbF2CPQlY4/OtXNYcZYlvxPYp8B0zFuYW16QsxpUJDTDldKq1LM7rp4yDLe?=
- =?us-ascii?Q?RNl6MS0jhiO5rsheZLScM/66LXUwp+FkjIx5FpQY6vjnVfdi3jUEciEpErnX?=
- =?us-ascii?Q?9krI0NTyMzv0Iun6EveXXDneV66WAUR4a7KzLm5pP6ItPeLJ5UKPXxLmOJ1e?=
- =?us-ascii?Q?2oGEIi/qVpL2J+7eLKo/NLcvVTFnONs4laczEiFJWUwrU0XzkhyIdLmTF+Er?=
- =?us-ascii?Q?J9xJYsScstHYCxS7QDKZz09XdjKfrUMiIInAN337wBeOrjb5eqjLXn1zh1jA?=
- =?us-ascii?Q?z8Nj/vKPS2V66C+/+5/HeTM2x1E2/6lt1dYUu1qCf9R//pJIDDaG1UY6ErN6?=
- =?us-ascii?Q?nuxWFMBA2tEQJ+PjxpzXcy05UJQdZ7iI1QuhaAMibsuoXOJhWfAou7dxQ4vn?=
- =?us-ascii?Q?kVBfiqLd7ayeRnOB8PHYo8nAG0ib8QUQV9dPzmkc3TysXSFgt8MBLWJ39xdh?=
- =?us-ascii?Q?8Ijwk/ttgFgAuGSXkvwuZaHwQOZi9T3XSa3aDDvzg9ieDm3Gh8hpmQl0k69j?=
- =?us-ascii?Q?+YyMFBOL0s1RLM+aPcj7Ijpvl7McA9aWR4HU4AzB6rdmqlHTJsfp3t2gfXyH?=
- =?us-ascii?Q?KKgGP1Wf5eLTSk8FCZZnEjrCRSF6ZCCluS5KzwMKUg6rB7iWBgZgA+7e26iE?=
- =?us-ascii?Q?gllm1xwU0ryLqe7WEWXQu/E0pS15XjOIZGjBhO37IEJACy6DlzcpvFeYIPqd?=
- =?us-ascii?Q?78/Okgz4CTmNeFe6YtHW6KJ40fDgipHjIP0xzqDk8DM64qh32JjB0F6hHfGS?=
- =?us-ascii?Q?dr/6g2PI0r7qHuv0oHjxk5UzVp+f9O8+1qlS4m1r6k0pN+VgSLYvLRxokuiV?=
- =?us-ascii?Q?9gLuT+CXotB+znQFPJkghj7pzvtOECKE5UT0ZsM3dctzveNXBDbOrUU/cZfv?=
- =?us-ascii?Q?qGbdpgcoOKDd5ACObm+PXCrpk1qPkhY2Skt1/7FRFsjGteApzGoHPG4CuKxx?=
- =?us-ascii?Q?22gdhoI5mNevQSz1XHCmYrtO1io2cKMFam1lElgoMNb65TD/Z69IW3t/zjHT?=
- =?us-ascii?Q?GcJwuxH2HoWKehHPJT40WFHijIjxHvKk4ufaYiuTtNMMrVzXR4Y+Ni24JIvj?=
- =?us-ascii?Q?Qk+qckXyhqxvPYTYNAnb9IlpNcPwQmPGTFA4TBCV0TZtrvJVTs8rbNT+uL1h?=
- =?us-ascii?Q?gNkN0g2i+sEN1HnWoVyFdcQ+2HJklj8R+Q0UQy9E8cUwHROfC7SWhwip0p0K?=
- =?us-ascii?Q?Am0p3gvwpFcXKWsiX4mYV5ssLDs2Qf3kS3aHcGBO4sj3BpIgHPTEzUdxl71U?=
- =?us-ascii?Q?cX+Neg3EK3If30sGBnSNFnwYe7J9+832FDCfuwHmrRMwGwHVeea1I965rExC?=
- =?us-ascii?Q?ZMG8rDfhaU+p4+7eyThywB+hh0bPWSZBDES6QohG?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 8 May 2023 10:48:30 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91165A7
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 07:48:29 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-559e2051d05so66233297b3.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 07:48:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683557309; x=1686149309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dBRDdEMkcJinIhxYo+B9YRkKgZD79DRuOOXoD9mvqrA=;
+        b=iD0hSzpClyLDSlsnaJ2NGcfs5E32cBiwzYfcZo6LCcWAHRSKDUETJfz3+7n45JTCwt
+         douc/nbRktVg+S9fgzdZd9ScZKiQ+MLW3/muv3NLSJFv+HVZ1RbAevD7TlvCK57ZbvsL
+         WbMNsnumNBYCgNcGj9soUX8blE5RPgua8v/9CbQ9T+ZTUmF4CWk5O7uuwGp0/o9HtmFA
+         qyXKiledds2jlCCRcHNZCkTa7gVrJPZ0JjWU86yuchOPpVmmabEi+k8tUyz46CCBxqZu
+         lkwDO47kj1R1h518ubnwuTvtPDxjClD3JFwmyETVbTvSrq7BD1t2WPJWAC3zXBCHpNJT
+         kT/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683557309; x=1686149309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dBRDdEMkcJinIhxYo+B9YRkKgZD79DRuOOXoD9mvqrA=;
+        b=D9wY+gC5hadS1xL0XoNVWCIt0+cx7g18L700/MIoz/jpPVsBh7N6WhfQEa5UoXyqdw
+         DPm80bwr4nqvJaxltTwFPtbTqmGuvswj6jnOAzB1NcXaYwbkyUplYgUsL1Ql+21Vs0i1
+         wsETeSP+n8oulmldKtNZS+hAKMHgFzu7Mmgci0GXpQhhpDBQVsSHtnaQh6yLLFLTDPVB
+         b635qTpf4TZi+FIgUY4SD4I7kKg9wW6U6iTQERfWxFJB6J/REa/DU77/1sM9laEI4CNs
+         1gbYNlcekPS48+gS8BoDIHwwRqrghhzz/rOgtXVfSJBTUHywlqPSgL2rHAOWeotmC7st
+         2wcQ==
+X-Gm-Message-State: AC+VfDy0hLnBBShxs0W4CU+g+YCzPM49YoJr+N6tHJKbCp5fCewzDeqU
+        MB87lXC95yNghLHENWfR0rFgIIf7HQsDAcw0ZHPcWg==
+X-Google-Smtp-Source: ACHHUZ5YUrkJZ/Z2beY5zA4zYoasGmvc6Wh2Js2To2GzZo6nfjG/1CfaA4enPcYkeZdCT/H+sD/SeZS62t99vhljdDw=
+X-Received: by 2002:a05:6902:18c6:b0:b99:5707:4e6f with SMTP id
+ ck6-20020a05690218c600b00b9957074e6fmr15005818ybb.32.1683557308817; Mon, 08
+ May 2023 07:48:28 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3116.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e35a99fb-7dbe-4970-d577-08db4fd2e728
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2023 14:45:44.2492
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: X7mAiHpPSUKxsDZMIp6bYN5+NrxETEHwsRD4runandtJguRuW6cQX3JKpmxsnHyjUPrF/7traYfxcpRWWwpRrg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR21MB3848
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org> <20230504-arm-dts-mv-v1-2-2c8e51a2b6c4@kernel.org>
+In-Reply-To: <20230504-arm-dts-mv-v1-2-2c8e51a2b6c4@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 8 May 2023 16:48:17 +0200
+Message-ID: <CACRpkdbfKdR=ru8dCJL0Tincu2-Smsi56vt=C7OW3K9JuQ=47Q@mail.gmail.com>
+Subject: Re: [PATCH 2/4] ARM: dts: Add .dts files missing from the build
+To:     Rob Herring <robh@kernel.org>
+Cc:     soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Lars Persson <lars.persson@axis.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Daniel Palmer <daniel@thingy.jp>,
+        Romain Perier <romain.perier@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Barker <paul.barker@sancloud.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@axis.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,84 +127,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 5, 2023 at 5:29=E2=80=AFAM Rob Herring <robh@kernel.org> wrote:
 
+> Comparing .dts files to built .dtb files yielded a few .dts files which
+> are never built. Add them to the build.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-> -----Original Message-----
-> From: Leon Romanovsky <leon@kernel.org>
-> Sent: Monday, May 8, 2023 2:10 AM
-> To: Haiyang Zhang <haiyangz@microsoft.com>
-> Cc: Long Li <longli@microsoft.com>; Jason Gunthorpe <jgg@ziepe.ca>; Ajay
-> Sharma <sharmaajay@microsoft.com>; Dexuan Cui <decui@microsoft.com>;
-> KY Srinivasan <kys@microsoft.com>; Wei Liu <wei.liu@kernel.org>; David S.
-> Miller <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>;
-> Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; linux-
-> rdma@vger.kernel.org; linux-hyperv@vger.kernel.org;
-> netdev@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH] RDMA/mana_ib: Use v2 version of cfg_rx_steer_req to
-> enable RX coalescing
->=20
-> On Sun, May 07, 2023 at 09:39:27PM +0000, Haiyang Zhang wrote:
-> >
-> >
-> > > -----Original Message-----
-> > > From: Leon Romanovsky <leon@kernel.org>
-> > > Sent: Sunday, May 7, 2023 4:11 AM
-> > > To: Long Li <longli@microsoft.com>
-> > > Cc: Jason Gunthorpe <jgg@ziepe.ca>; Ajay Sharma
-> > > <sharmaajay@microsoft.com>; Dexuan Cui <decui@microsoft.com>; KY
-> > > Srinivasan <kys@microsoft.com>; Haiyang Zhang
-> <haiyangz@microsoft.com>;
-> > > Wei Liu <wei.liu@kernel.org>; David S. Miller <davem@davemloft.net>; =
-Eric
-> > > Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>;
-> Paolo
-> > > Abeni <pabeni@redhat.com>; linux-rdma@vger.kernel.org; linux-
-> > > hyperv@vger.kernel.org; netdev@vger.kernel.org; linux-
-> > > kernel@vger.kernel.org
-> > > Subject: Re: [PATCH] RDMA/mana_ib: Use v2 version of cfg_rx_steer_req
-> to
-> > > enable RX coalescing
-> > >
-> > > On Fri, May 05, 2023 at 11:51:48AM -0700, longli@linuxonhyperv.com
-> > > wrote:
-> > > > From: Long Li <longli@microsoft.com>
-> > > >
-> > > > With RX coalescing, one CQE entry can be used to indicate multiple
-> packets
-> > > > on the receive queue. This saves processing time and PCI bandwidth =
-over
-> > > > the CQ.
-> > > >
-> > > > Signed-off-by: Long Li <longli@microsoft.com>
-> > > > ---
-> > > >  drivers/infiniband/hw/mana/qp.c |  5 ++++-
-> > > >  include/net/mana/mana.h         | 17 +++++++++++++++++
-> > > >  2 files changed, 21 insertions(+), 1 deletion(-)
-> > >
-> > > Why didn't you change mana_cfg_vport_steering() too?
-> >
-> > The mana_cfg_vport_steering() is for mana_en (Enthernet) driver, not th=
-e
-> > mana_ib driver.
-> >
-> > The changes for mana_en will be done in a separate patch together with
-> > changes for mana_en RX code patch to support multiple packets / CQE.
->=20
-> I'm aware of the difference between mana_en and mana_ib.
->=20
-> The change you proposed doesn't depend on "support multiple packets /
-> CQE."
-> and works perfectly with one packet/CQE also, does it?
+Wow weird.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-No.
-If we add the following setting to the mana_en / mana_cfg_vport_steering(),
-the NIC may put multiple packets in one CQE, so we need to have the changes
-for mana_en RX code path to support multiple packets / CQE.
-+	req->cqe_coalescing_enable =3D true;
-
-So we plan to set this cqe_coalescing_enable, and the changes for mana_en=20
-RX code path to support multiple packets / CQE in another patch.
-
-Thanks,
-- Haiyang
-
+Yours,
+Linus Walleij
