@@ -2,119 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E1E6F9E9F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 06:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0806A6F9EAA
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 06:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbjEHENs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 00:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
+        id S232273AbjEHE0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 00:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjEHENp (ORCPT
+        with ESMTP id S229852AbjEHE0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 00:13:45 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E3C4488;
-        Sun,  7 May 2023 21:13:43 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bc1612940so7743794a12.2;
-        Sun, 07 May 2023 21:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683519222; x=1686111222;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kC/utfZ9fQhbpGbbmjC75yjL4GQLhxn8VaJ5T9oPJN4=;
-        b=X+bSHPjbHLPk1qA8Aao6jbLomI98279x8hPmZFq7jfOjREhlmBwkiJKeb9HJyPtNu7
-         TM50+f5UDWF51BRscQpo4jfNa4S1BYW1SgiBW99OfJzS8y8HkqMlYXe3ppAoNW5BAGoA
-         PtUezP9Knqz8sTlJ+W0+6fS3FQtlVeae+EpUD69go9KI3hP/RwS/3uUS47pa3l4we2RQ
-         Fwa1Leg7yjpj+CjFaKttckbxSC0uoAMBwam48T4Ww6E5PQY4YDeQicJLc5RSMsto3xnh
-         qE0aeD38QIbmAjbpA7MuRa/USVfklyGyp/ldYhXT+4coW9ifggLtLHj74qId7Uiyf4t5
-         Y4sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683519222; x=1686111222;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kC/utfZ9fQhbpGbbmjC75yjL4GQLhxn8VaJ5T9oPJN4=;
-        b=aeK9YeUaz2B9aR/RBKSmiZ+MmkI/Wa/G9/IIWy/sEIIeEx1RNFD8bLsAf1XKCzbE5r
-         osNmo0PHFKIHZ63XelehF/kA4OlBeMsdU4UjLrVemZTT8W8o+sz+KebnNrHnCxxMKCeU
-         9lXcxAXmbYIdZxdwKABYEjZhDv4PXhQyBJwPl+V75/xJY9tPlFJaHhwbcOTzRAB9XJtJ
-         pa02PS7WSK9vrNSV2nxGeLfrtMcbMu9d/WZ9aTMi+Gx5gbPTxoHGY1cEwiXqfPwikZ8v
-         vcoMZGNOOj2/qcbjb9Hy2KRgNQC27kQPGF2j4+u9fkpDY6D7iX+1aqzw8tBbQk8hxEbQ
-         yl7A==
-X-Gm-Message-State: AC+VfDzkdQ9BTONkk1ZuhqOLUMtDfYHY8obwwbgJbj6gqhF5tfzoNyPZ
-        2dSKMG54ak0R3YiSHbsiyJo=
-X-Google-Smtp-Source: ACHHUZ5B2XVJMuK0mzQwjZNfFsjp4f/1CnkLkrvqQbu+FtRNNBkxDLHdC0EWGLGqzdgE1wB69nQatQ==
-X-Received: by 2002:a17:907:2d0b:b0:94a:6953:602d with SMTP id gs11-20020a1709072d0b00b0094a6953602dmr9559962ejc.37.1683519222168;
-        Sun, 07 May 2023 21:13:42 -0700 (PDT)
-Received: from felia.fritz.box ([2a02:810d:7e40:14b0:8906:f99a:ce33:2033])
-        by smtp.gmail.com with ESMTPSA id w20-20020a170907271400b00965b0eb7b0csm4392834ejk.103.2023.05.07.21.13.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 21:13:41 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marcel Hasler <mahasler@gmail.com>, linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] media: stk1160: Simplify the build config definition
-Date:   Mon,  8 May 2023 06:13:39 +0200
-Message-Id: <20230508041339.19571-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 8 May 2023 00:26:04 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765BE72BE;
+        Sun,  7 May 2023 21:26:01 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3483tkhV010768;
+        Mon, 8 May 2023 04:25:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=xM9aJ3QMYI2jjSHFnPeXdxLTxmpqEH4m6OdKBd6a4jw=;
+ b=Z53fIorsfOd/a5CfYh4YR40eH4/zl/8i43oFqmhz8TA3IcgjNqTxlyPwN1b5u+B5d9S/
+ H2A1S+pHvVQqUXYCjqdXk+rMYusZyT+/zuUacZsIN5O9fdpT04NIOz67D9kQ4ep34/VS
+ y/CogXYhe2KP+RAEMnePBTVYfHKUdJYnSKAxRbXOiNSb5TkVQCwmRFKWZJsnn83X/aFP
+ EbJ7/0kBfPQQtvq19l4tRdMSB2DGpVgBOBJSC1Ju67Zc0/r4kgnmnn4H2fwtFzgJ7tJQ
+ xvRjAUIoNDmX4ClfZUXDfK5uNHRmjWmArfiOMf9parl4SM0xMl1OvbvMuRgTMhq+biRd zw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qddv0as7t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 04:25:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3484PLaF024967
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 8 May 2023 04:25:21 GMT
+Received: from [10.110.53.190] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 7 May 2023
+ 21:25:20 -0700
+Message-ID: <b0cc40d5-6de1-91cc-e2cd-f47cc53551e4@quicinc.com>
+Date:   Sun, 7 May 2023 21:25:19 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] Revert "drm/msm/dp: Remove INIT_SETUP delay"
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Leonard Lausen <leonard@lausen.nl>
+CC:     <regressions@lists.linux.dev>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Nikita Travkin <nikita@trvn.ru>
+References: <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
+ <20230508021536.txtamifw2vkfncnx@ripper>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20230508021536.txtamifw2vkfncnx@ripper>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: CPo0I43eNuQT6fj1KBtBGXpp7wBGxqkl
+X-Proofpoint-ORIG-GUID: CPo0I43eNuQT6fj1KBtBGXpp7wBGxqkl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-08_02,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ suspectscore=0 clxscore=1011 spamscore=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305080029
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit dfb9f94e8e5e ("[media] stk1160: Build as a module if SND is m and
-audio support is selected") had to introduce some complex config dependency
-handling to compile for all combinations of configs VIDEO_STK1160 and
-VIDEO_STK1160_AC97.
 
-Later, commit e36e6b5f26c1 ("[media] stk1160: Remove stk1160-mixer and
-setup internal AC97 codec automatically") removes the config
-VIDEO_STK1160_AC97, which renders the previous dependency handling
-unnecessary. The commit already simplified the dependency of the remaining
-config VIDEO_STK1160, but it misses the opportunity to merge VIDEO_STK1160
-and VIDEO_STK1160_COMMON.
 
-So, do that now and simplify the build config definition of the STK1160 USB
-video capture support.
+On 5/7/2023 7:15 PM, Bjorn Andersson wrote:
+> On Mon, May 08, 2023 at 01:06:13AM +0000, Leonard Lausen wrote:
+>> This reverts commit e17af1c9d861dc177e5b56009bd4f71ace688d97.
+>>
+>> Removing the delay of 100 units broke hot plug detection for USB-C displays on
+>> qcom sc7180 lazor devices. Lazor uses mdss for hot plug detection and declares
+>> dp_hot_plug_det in the dts. Other sc7180 based devices like aspire1 were not
+>> affected by the regression, as they do not rely on mdss and dp_hot_plug_det for
+>> hot plug detection.
+>>
+>> Signed-off-by: Leonard Lausen <leonard@lausen.nl>
+>> Tested-by: Leonard Lausen <leonard@lausen.nl> # Trogdor (sc7180)
+>> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>
+>> ---
+>>   drivers/gpu/drm/msm/dp/dp_display.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+>> index bde1a7ce442f..db9783ffd5cf 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>> @@ -1506,7 +1506,7 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+>>          dp = container_of(dp_display, struct dp_display_private, dp_display);
+>>   
+>>          if (!dp_display->is_edp)
+>> -               dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 0);
+>> +               dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
+> 
+> When booting with the cable connected on my X13s, 100 is long enough for
+> my display to time out and require me to disconnect and reconnect the
+> cable again.
+> 
+> Do we have any idea of why the reduction to 0 is causing an issue when
+> using the internal HPD?
+> 
+> Regards,
+> Bjorn
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- drivers/media/usb/stk1160/Kconfig | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+Yes, we do know why this is causing an issue. The cleaner patch for this 
+will be posted this week.
 
-diff --git a/drivers/media/usb/stk1160/Kconfig b/drivers/media/usb/stk1160/Kconfig
-index 4f50fb7db7b9..bf7c16baa9f8 100644
---- a/drivers/media/usb/stk1160/Kconfig
-+++ b/drivers/media/usb/stk1160/Kconfig
-@@ -1,8 +1,9 @@
- # SPDX-License-Identifier: GPL-2.0-only
--config VIDEO_STK1160_COMMON
-+config VIDEO_STK1160
- 	tristate "STK1160 USB video capture support"
- 	depends on VIDEO_DEV && I2C
--
-+	select VIDEOBUF2_VMALLOC
-+	select VIDEO_SAA711X
- 	help
- 	  This is a video4linux driver for STK1160 based video capture devices.
- 
-@@ -12,10 +13,3 @@ config VIDEO_STK1160_COMMON
- 	  This driver only provides support for video capture. For audio
- 	  capture, you need to select the snd-usb-audio driver (i.e.
- 	  CONFIG_SND_USB_AUDIO).
--
--config VIDEO_STK1160
--	tristate
--	depends on VIDEO_STK1160_COMMON
--	default y
--	select VIDEOBUF2_VMALLOC
--	select VIDEO_SAA711X
--- 
-2.17.1
+There is no need to add the 100ms delay back yet.
 
+thanks for posting this but NAK on this patch till we post the fix this 
+week.
+
+Appreciate a bit of patience till then.
+
+> 
+>>   }
+>>   
+>>   bool msm_dp_wide_bus_available(const struct msm_dp *dp_display)
+>> -- 
+>> 2.30.2
