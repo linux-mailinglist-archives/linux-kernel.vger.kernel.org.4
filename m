@@ -2,207 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A3C6FB2F0
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE9D6FB2F7
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235044AbjEHOay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 10:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
+        id S235191AbjEHObQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 10:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234942AbjEHOaO (ORCPT
+        with ESMTP id S235218AbjEHOa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 10:30:14 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2052.outbound.protection.outlook.com [40.107.7.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BB2A244;
-        Mon,  8 May 2023 07:29:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j3QrkHXjSQSQYTPDfYdpfGAOkKLGLCGCMpEP0icgZjUeC2MYwHU+AVKQcnnFAdRFe4zh6ePbDdaNE3c+G8Rj2JPOYGTYPlhBUXxqma23LV8GdeY8AAufk1zbTUIEUK4V9v2rbqVk5VtOq+Wc/4oNGh3FbU7n9KjG+ejzggs2ok3RLM0pBc+hAR9eFnzuJmdUCIPNbsgDZzBfrs5HUtf4YlqGXeKvzB0C0FYQ6zxoo9tzxo+pEZqGKueQxvnEK764uOKDwFKTE/KuDiK5OSdxf6fYh6mTQUvHjiphSjmvA5aw00DYHCDcgII/jxeI6puZDNSzmMnFHobrX4nC6Umotg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2Ak51wo9QF9+45g3AyhvJ96xnL8AaJnlRO0P2rBaUoA=;
- b=XP5bXeRKP4Gli1d6pjXAgiwB5vadGkzk1PD1mqcU5yCWj+KrA3tIYGSFu9xANov/nESoddg9RxrEG/2CXa8oChcfmzzcydJz8Zh/E98YZA+6PUdb6TRz3tGULcpMU/big1/8GO/Oluya7/xjX7x26S7QUeLlhz6Kc9CW53FqDkPDk4AkJPWUr/WgQiW19hIq+sZCJ9CD5PLQIrOGKvXtQD40k962zSFBU9xlHC/X4LQckipzs+TkEhnrHY4UMEp/wC2a3ioQIAKUzWUJ+d/wluVT6P4CEweBomu24Fjr3q1cEOGK0GU7iF6s20bp7Qr29VnTcEP+Qb6iEIAAlOoteA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2Ak51wo9QF9+45g3AyhvJ96xnL8AaJnlRO0P2rBaUoA=;
- b=COH2butADl5C5zn7a6YeBff2mu8y3cuyvgi5aKTgk88M8TiiwdhSEnt3UpjVRtw9NdM0PzBuHPPjq6IbBpYD7wH6R2/fcDBLRpUW7ZWdfEg94Si+1XBcbcJ3aBCIPi/3Fu7Lh8/haeNfG/tsAkQ2eaxZ9k7Jb7ye2cAoMd/Zigw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
- by VE1PR04MB7325.eurprd04.prod.outlook.com (2603:10a6:800:1af::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
- 2023 14:29:43 +0000
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::28fb:82ec:7a6:62f3]) by PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::28fb:82ec:7a6:62f3%5]) with mapi id 15.20.6363.032; Mon, 8 May 2023
- 14:29:43 +0000
-From:   Shenwei Wang <shenwei.wang@nxp.com>
-To:     Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev, Gagandeep Singh <g.singh@nxp.com>
-Subject: [PATCH v4 1/1] net: fec: correct the counting of XDP sent frames
-Date:   Mon,  8 May 2023 09:29:31 -0500
-Message-Id: <20230508142931.980196-1-shenwei.wang@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BY5PR17CA0066.namprd17.prod.outlook.com
- (2603:10b6:a03:167::43) To PAXPR04MB9185.eurprd04.prod.outlook.com
- (2603:10a6:102:231::11)
+        Mon, 8 May 2023 10:30:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFFF9010;
+        Mon,  8 May 2023 07:29:57 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 348ETpNA015244;
+        Mon, 8 May 2023 14:29:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=5OtZQNzTavdtMmiQ3BQTEPQPhnMBmFVHCrTtzHQe0Aw=;
+ b=W/3rtYJh7L7iF3oFVojlRC1xzGSh4RwWlEI+dV9Y3G8fqsasyTNggb5+x2TDfK9XfObS
+ Ka5ZEzKeLq2QYAN7G/asVvP6eFxlOv0dubZ0iArzc9NAHNqlQkCW4Ef91f7+O2UyTah7
+ Dn7D2dTFMrngwHGvLo0oYV8IzD3SUGgn7zMr6pgN6OdYCi0E5CIByGgQVIwaXR1sbJMJ
+ 69std41K2GlRGw+wAotOpAooJazvbnnbKt+gqwMya5Pz+SXeurxBfsV769KUj3+A43op
+ rnNBUYQhfI9NFHcasakcg4b6E1N0WwDNYBEAOslPzg0e0FiLknnGeTgUP3o9KS2fazUy jA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf0vk09g6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 14:29:51 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 348EToXa017015
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 8 May 2023 14:29:50 GMT
+Received: from [10.242.242.190] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 8 May 2023
+ 07:29:42 -0700
+Message-ID: <3d876a44-0145-09b8-0722-80f57d6c96ac@quicinc.com>
+Date:   Mon, 8 May 2023 19:59:39 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9185:EE_|VE1PR04MB7325:EE_
-X-MS-Office365-Filtering-Correlation-Id: f57a1871-9ab9-4695-ff6e-08db4fd0aa2e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: l9HMX+LpEafX+XysenJ5XaEPjRZMDpWMXzrhIjuOmMlmKKHx9yhj28Nx2C5AQgSfM7/qYKvLe7Zlgr1RGWSt9lYUXwozRdVd063E8JJP0KkuQFpsBUxZhmm1lnQdZYzoKnJAhHFeuCFZjPTQB9J/Va5GJvaby2lvomJI9EWvpvi9W9tY6hYCSVV9eIDSTSZoTUJNLQHNzIoUpOhfWRpIcfxk73HJRVz4EPBDE4PouOnFo6NGoAX/6gzuVN8GnKu5uq8ENCKrMKB5NW5GVuzCxmA0gbJmPsp5FDZ0LbCFW/HV1QkgTjODa0IW+3LFv5jZ5ROIpSk24FDTBpqH1TSLnW5x1AEhwYiIMg75w3xfywVtnobsjBDHSH6yvaabU/U+x69/eNhhCzWbXDVV9GAhzBCvxuoPIWMS2wyOEfTlHV4ZWA/oTA6Nof6rKtKQVCgiFNHN6B0QdTpCf2SwIWsfw25u0yEGxuc5H/B3iZeNafB/tB273OxXoME5xFmQND48DWJOVpAVonVtPrIh6VyXGoico+sFUdeWwCzz5Ie9Loj8+EEHD032APB7g64M4K/iQvGsVNRslI+YUiWuJUUt95m2ltYTh/7hm8Q2A3j+2xVv11YzBdXCfBrvF8UB5wXi
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(39860400002)(136003)(376002)(396003)(451199021)(52116002)(6486002)(6506007)(6512007)(26005)(55236004)(1076003)(83380400001)(36756003)(2616005)(38100700002)(38350700002)(86362001)(186003)(110136005)(44832011)(2906002)(7416002)(54906003)(316002)(8936002)(8676002)(41300700001)(4326008)(5660300002)(66946007)(66476007)(66556008)(478600001)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hgnbxc8IgYLEsvjYhscFU+VAKlNQk02+Nj0bV7zwomzMN48tj22xQxxCEANr?=
- =?us-ascii?Q?Vl09S1iV2CTZhxw7T44JIm2UZWL+17J0nYNUhOR1BdpB5XGM7UaXQXWfnkPX?=
- =?us-ascii?Q?MshKnqnHfflCRUKESGg+rlXzZJOr/FtTHNB+Xqxn488YH81eG7ZYGITZQHuX?=
- =?us-ascii?Q?0uM8qLWtIZHd0LLxY2wOuJWccQiIMatdQTJ915qGBAC4WzZcux6ylQ68tptd?=
- =?us-ascii?Q?UBGbQ9XPfO3AVbIQq8TLX0OLHtX7gYaRbEvT3wA7b3M7EvHiMYAHsocyqYSS?=
- =?us-ascii?Q?JG4PYLRcOsCi9OClsMlPTnpB67Dc24UzArMOJosNRdIgA7yxv949hnNWQojo?=
- =?us-ascii?Q?3n63KR5nUUKoNCTlTuyRCuOcEbVeTtzqzAzhXuTmMVQ5MNh6h3Yw5VsDhaLj?=
- =?us-ascii?Q?9QM5QGz9JHtsf69l9j3H+xNzzSWglO+UzYgxptTC/LSTB0HXzpMDi4BM2riW?=
- =?us-ascii?Q?zqAEiNFVdpx8x9v3FrvjqQBdhebRcWYkN56zE9Ht+kr26PmoFoEysBHQPrUb?=
- =?us-ascii?Q?sevoromuZno1bmG2X6xDry+tdUh09fxvef3uxM8OLsAQKAssHUaa8WcOBd7S?=
- =?us-ascii?Q?Jows1cRyiktrcfmvWLz07pNeWyne7aL1w9P9gTLLFS7YRxwo4j7WcKcIGN+A?=
- =?us-ascii?Q?EgYVkG0zauciChxT4fV6QmwPBwEaFY7NmHdyB/K/zx9+jY4WoEcqOpyhTD57?=
- =?us-ascii?Q?QrBdj/gb6QIdWxlzzL/XiNyb8QWHYsb7JhXv1OaLOEUaCdipmouyUMZjU3Vw?=
- =?us-ascii?Q?e5gOJliVbbUl2bVipTfUGJmInNTvoZYg+8dbjjYXTjiRMhbGNFGDuz5M9Kyg?=
- =?us-ascii?Q?zwizcyQac3qzb33oLEC3TiwzNdgMwPQSd0lC1TSUCbTnGBPFMNnDJsGIBo17?=
- =?us-ascii?Q?v+pplU3VOs1S9ItAxar/bGuIBZJ5tWWljcoh16GxUFAEY2fCnieoq8EhqqOA?=
- =?us-ascii?Q?s9Xj4u89F8Tq0eytAob8rYKMzC04rYUJSagWP+rRIb+ZgB0Cfkj5x6BEVTmo?=
- =?us-ascii?Q?vZnvlUJxVoKU232mEuaJw0xGE5CWBY3BUy25ZHnOWweI75c0E0efrU5K26sq?=
- =?us-ascii?Q?eemK810OM1X6AcB/Zqou5La1V6mF6hozbudAuZm9w7z02ZQf74gbsfR5rDQ0?=
- =?us-ascii?Q?MvxaV6l6rwQ1EE5PypMKPjpugaLLn1z5UbnUKUisPW2ctnrt665/K/SCVnyf?=
- =?us-ascii?Q?iwoyb6T/qWFN/H9oNlr8BSNakjOC7cf8robobeCWCVvAM3bQ2LV1RsPeAwk7?=
- =?us-ascii?Q?IzEwv/RjRolyKZvk4YYyxiMcrQdxDD0N7PtnTRKOrcbS9gP9g+visQgRg7DG?=
- =?us-ascii?Q?kT677w79Oset846vxSoajAsHkhDDUU5g9eYs177X8J1JpnP8UmpTvlWfNDVn?=
- =?us-ascii?Q?pnDKmaIyMT6lH/hQX4/kbkHnuJzuzeF5sY4FbiknVkiLv7tul9S0rf7Lv5aw?=
- =?us-ascii?Q?YlESeGEsLhWFTrzAc9lkCYWmIBVoVZQSuHQg7chYJ9ekKVieX6BJm6x6cXpr?=
- =?us-ascii?Q?uqdIue86Qkzq4WRiqYkCfIHvsFrPsgCDfmFHSn+SZhYhteman6QpuxxBF7Gr?=
- =?us-ascii?Q?fPnwUtQ/D8KwScda5IwL08lzkqzQIc+GpRqaUvjB?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f57a1871-9ab9-4695-ff6e-08db4fd0aa2e
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 14:29:43.2891
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W43ZUhLDCXKQcMPJZsUGVi6GWidWLj0Ofb4gi6atbVD6CP02Z4rj2qKOQKXUUCYR+KUqmF5IE2tQX0XcjqsmcA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7325
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 05/11] dt-bindings: clock: qcom: gcc-ipq9574: Add Q6 gcc
+ clock control
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
+        <mathieu.poirier@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <quic_gurus@quicinc.com>,
+        <loic.poulain@linaro.org>, <quic_eberman@quicinc.com>,
+        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-clk@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
+ <1678164097-13247-6-git-send-email-quic_mmanikan@quicinc.com>
+ <95c57098-aa37-a203-2ed3-f36449abefea@linaro.org>
+From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+In-Reply-To: <95c57098-aa37-a203-2ed3-f36449abefea@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KqQ7f46CIgekKZiO7U2LP9DA5aiSHFvY
+X-Proofpoint-ORIG-GUID: KqQ7f46CIgekKZiO7U2LP9DA5aiSHFvY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-08_10,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=990 bulkscore=0
+ malwarescore=0 adultscore=0 spamscore=0 mlxscore=0 clxscore=1015
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2305080097
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the current xdp_xmit implementation, if any single frame fails to
-transmit due to insufficient buffer descriptors, the function nevertheless
-reports success in sending all frames. This results in erroneously
-indicating that frames were transmitted when in fact they were dropped.
 
-This patch fixes the issue by ensureing the return value properly
-indicates the actual number of frames successfully transmitted, rather than
-potentially reporting success for all frames when some could not transmit.
 
-Fixes: 6d6b39f180b8 ("net: fec: add initial XDP support")
-Signed-off-by: Gagandeep Singh <g.singh@nxp.com>
-Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
----
- v4:
-  - the tx frame shouldn't be returned when error occurs.
-  - changed the function return values by using the standard errno.
+On 3/7/2023 8:49 PM, Krzysztof Kozlowski wrote:
+> On 07/03/2023 05:41, Manikanta Mylavarapu wrote:
+>> Add support for the QDSP6 gcc clock control used on IPQ9574
+>> based devices. This would allow mpd remoteproc driver to control
+>> the required gcc clocks to bring the subsystem out of reset.
+>>
+>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+>> ---
+>>   include/dt-bindings/clock/qcom,ipq9574-gcc.h | 159 ++++++++++---------
+>>   1 file changed, 83 insertions(+), 76 deletions(-)
+>>
+>> diff --git a/include/dt-bindings/clock/qcom,ipq9574-gcc.h b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
+>> index c89e96d568c6..8bd6350ecd56 100644
+>> --- a/include/dt-bindings/clock/qcom,ipq9574-gcc.h
+>> +++ b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
+>> @@ -138,80 +138,87 @@
+>>   #define WCSS_AHB_CLK_SRC				129
+>>   #define GCC_Q6_AHB_CLK					130
+>>   #define GCC_Q6_AHB_S_CLK				131
+>> -#define GCC_WCSS_ECAHB_CLK				132
+>> -#define GCC_WCSS_ACMT_CLK				133
+> 
+> That's an ABI break, if file was accepted. Or a very weird change
+> anyway, if it wasn't (why adding entry and immediately changing it?).
+> 
+> Best regards,
+> Krzysztof
+> 
 
- v3:
-  - resend the v2 fix for "net" as the standalone patch.
+I will add new macros at the end instead in middle.
 
- v2:
-  - only keep the bug fix part of codes according to Horatiu's comments.
-  - restructure the functions to avoid the forward declaration.
-
- drivers/net/ethernet/freescale/fec_main.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 160c1b3525f5..36a3ee304482 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -3798,7 +3798,7 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
- 	entries_free = fec_enet_get_free_txdesc_num(txq);
- 	if (entries_free < MAX_SKB_FRAGS + 1) {
- 		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
--		return NETDEV_TX_OK;
-+		return -EBUSY;
- 	}
-
- 	/* Fill in a Tx ring entry */
-@@ -3812,7 +3812,7 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
- 	dma_addr = dma_map_single(&fep->pdev->dev, frame->data,
- 				  frame->len, DMA_TO_DEVICE);
- 	if (dma_mapping_error(&fep->pdev->dev, dma_addr))
--		return FEC_ENET_XDP_CONSUMED;
-+		return -ENOMEM;
-
- 	status |= (BD_ENET_TX_INTR | BD_ENET_TX_LAST);
- 	if (fep->bufdesc_ex)
-@@ -3856,6 +3856,7 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
- 	struct fec_enet_private *fep = netdev_priv(dev);
- 	struct fec_enet_priv_tx_q *txq;
- 	int cpu = smp_processor_id();
-+	unsigned int sent_frames = 0;
- 	struct netdev_queue *nq;
- 	unsigned int queue;
- 	int i;
-@@ -3866,8 +3867,11 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
-
- 	__netif_tx_lock(nq, cpu);
-
--	for (i = 0; i < num_frames; i++)
--		fec_enet_txq_xmit_frame(fep, txq, frames[i]);
-+	for (i = 0; i < num_frames; i++) {
-+		if (fec_enet_txq_xmit_frame(fep, txq, frames[i]) != 0)
-+			break;
-+		sent_frames++;
-+	}
-
- 	/* Make sure the update to bdp and tx_skbuff are performed. */
- 	wmb();
-@@ -3877,7 +3881,7 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
-
- 	__netif_tx_unlock(nq);
-
--	return num_frames;
-+	return sent_frames;
- }
-
- static const struct net_device_ops fec_netdev_ops = {
---
-2.34.1
-
+Thanks & Regards,
+Manikanta.
