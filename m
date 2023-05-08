@@ -2,72 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767E06FB472
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FDEE6FB479
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234707AbjEHPxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 11:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
+        id S234435AbjEHP4Q convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 8 May 2023 11:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234439AbjEHPxe (ORCPT
+        with ESMTP id S229523AbjEHP4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 11:53:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6610F97;
-        Mon,  8 May 2023 08:53:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 02C4F21DB3;
-        Mon,  8 May 2023 15:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683561209; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=enCmPKVL/QYyWJsvjc1siLNro32aXyEZpjP4ToWLEys=;
-        b=ithED1KI1jXI4dpx1wT8kE5Q567qTNV290ZWYDHVsYekplRXDrxtJQ+EvU5F7c90fBjv19
-        TB5/cxMwkMWg5B9aAl5f6H/hSokrfNUEno+6Xt156PNgM0Dk2JrTcpTPyZexNh7ip4e8ou
-        tWXTL7Rb7w06LMHD/hNPWswPX0spdsY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 809EE1346B;
-        Mon,  8 May 2023 15:53:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id y8mUHfgaWWQfOQAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 08 May 2023 15:53:28 +0000
-Message-ID: <3ce78def-659c-a3c2-3633-26e5b0a212b1@suse.com>
-Date:   Mon, 8 May 2023 17:53:28 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] x86/pci/xen: populate MSI sysfs entries
-Content-Language: en-US
-To:     Maximilian Heyne <mheyne@amazon.de>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mon, 8 May 2023 11:56:14 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D2C90;
+        Mon,  8 May 2023 08:56:11 -0700 (PDT)
+Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pw3DW-00063i-N6; Mon, 08 May 2023 17:56:02 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Icenowy Zheng <uwu@icenowy.me>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Ashok Raj <ashok.raj@intel.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        xen-devel@lists.xenproject.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230503131656.15928-1-mheyne@amazon.de>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20230503131656.15928-1-mheyne@amazon.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------qUSNF0DqSSSO09uggR0ul3al"
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>
+Subject: Re: [PATCH 3/5] riscv: dts: add initial T-HEAD light SoC device tree
+Date:   Mon, 08 May 2023 17:56:01 +0200
+Message-ID: <3554468.R56niFO833@diego>
+In-Reply-To: <20230508-refute-reliable-f50dafa6afbd@wendy>
+References: <20230507182304.2934-1-jszhang@kernel.org> <7518428.EvYhyI6sBW@diego>
+ <20230508-refute-reliable-f50dafa6afbd@wendy>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,129 +53,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------qUSNF0DqSSSO09uggR0ul3al
-Content-Type: multipart/mixed; boundary="------------2VgdL2ARHnFdKP06t0hm3NRa";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Maximilian Heyne <mheyne@amazon.de>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Marc Zyngier <maz@kernel.org>, Kevin Tian <kevin.tian@intel.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Ashok Raj <ashok.raj@intel.com>,
- "Ahmed S. Darwish" <darwi@linutronix.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- xen-devel@lists.xenproject.org, linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-ID: <3ce78def-659c-a3c2-3633-26e5b0a212b1@suse.com>
-Subject: Re: [PATCH] x86/pci/xen: populate MSI sysfs entries
-References: <20230503131656.15928-1-mheyne@amazon.de>
-In-Reply-To: <20230503131656.15928-1-mheyne@amazon.de>
+Am Montag, 8. Mai 2023, 10:35:38 CEST schrieb Conor Dooley:
+> On Mon, May 08, 2023 at 10:23:02AM +0200, Heiko Stübner wrote:
+> > Am Montag, 8. Mai 2023, 05:32:17 CEST schrieb Icenowy Zheng:
+> > > 在 2023-05-07星期日的 22:35 +0100，Conor Dooley写道：
+> > > > Hey Jisheng,
+> > > > 
+> > > > On Mon, May 08, 2023 at 02:23:02AM +0800, Jisheng Zhang wrote:
+> > > > 
+> > > > > +               c910_0: cpu@0 {
+> > > > > +                       compatible = "thead,c910", "riscv";
+> > > > > +                       device_type = "cpu";
+> > > > > +                       riscv,isa = "rv64imafdc";
+> > > > 
+> > > > Does this support more than "rv64imafdc"?
+> > > > I assume there's some _xtheadfoo extensions that it does support,
+> > > > although I am not sure how we are proceeding with those - Heiko might
+> > > > have a more nuanced take.
+> > 
+> > I guess the interesting question still is, are these part of the isa
+> > string or more of an errata?
+> 
+> Yeah, I dunno. That's possible a policy decision more than anything
+> else. I don't remember if it was one of your patchsets or elsewhere, but
+> I do recall a split between xtheadba etc and vector, where xtheadba was
+> defined as a vendor extension, whereas vector is not. Their extension
+> spec repo <https://github.com/T-head-Semi/thead-extension-spec> appears
+> to be aligned with that view, apart from the CMOs that we have already
+> called an erratum.
 
---------------2VgdL2ARHnFdKP06t0hm3NRa
-Content-Type: multipart/mixed; boundary="------------5l1refLpYoFuAkuHwmsfSyyJ"
+I think the CMO stuff came a bit before that repo actually existed ;-) .
 
---------------5l1refLpYoFuAkuHwmsfSyyJ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I guess another argument for riscv,isa would be that we don't have to
+trust MVENDORID, and especially values in MARCHID and MIMPID.
 
-T24gMDMuMDUuMjMgMTU6MTYsIE1heGltaWxpYW4gSGV5bmUgd3JvdGU6DQo+IENvbW1pdCBi
-ZjVlNzU4ZjAyZmMgKCJnZW5pcnEvbXNpOiBTaW1wbGlmeSBzeXNmcyBoYW5kbGluZyIpIHJl
-d29ya2VkIHRoZQ0KPiBjcmVhdGlvbiBvZiBzeXNmcyBlbnRyaWVzIGZvciBNU0kgSVJRcy4g
-VGhlIGNyZWF0aW9uIHVzZWQgdG8gYmUgaW4NCj4gbXNpX2RvbWFpbl9hbGxvY19pcnFzX2Rl
-c2NzX2xvY2tlZCBhZnRlciBjYWxsaW5nIG9wcy0+ZG9tYWluX2FsbG9jX2lycXMuDQo+IFRo
-ZW4gaXQgbW92ZWQgaW50byBfX21zaV9kb21haW5fYWxsb2NfaXJxcyB3aGljaCBpcyBhbiBp
-bXBsZW1lbnRhdGlvbiBvZg0KPiBkb21haW5fYWxsb2NfaXJxcy4gSG93ZXZlciwgWGVuIGNv
-bWVzIHdpdGggdGhlIG9ubHkgb3RoZXIgaW1wbGVtZW50YXRpb24NCj4gb2YgZG9tYWluX2Fs
-bG9jX2lycXMgYW5kIGhlbmNlIGRvZXNuJ3QgcnVuIHRoZSBzeXNmcyBwb3B1bGF0aW9uIGNv
-ZGUNCj4gYW55bW9yZS4NCj4gDQo+IENvbW1pdCA2Yzc5Njk5NmVlNzAgKCJ4ODYvcGNpL3hl
-bjogRml4dXAgZmFsbG91dCBmcm9tIHRoZSBQQ0kvTVNJDQo+IG92ZXJoYXVsIikgc2V0IHRo
-ZSBmbGFnIE1TSV9GTEFHX0RFVl9TWVNGUyBmb3IgdGhlIHhlbiBtc2lfZG9tYWluX2luZm8N
-Cj4gYnV0IHRoYXQgZG9lc24ndCBhY3R1YWxseSBoYXZlIGFuIGVmZmVjdCBiZWNhdXNlIFhl
-biB1c2VzIGl0J3Mgb3duDQo+IGRvbWFpbl9hbGxvY19pcnFzIGltcGxlbWVudGF0aW9uLg0K
-PiANCj4gRml4IHRoaXMgYnkgbWFraW5nIHVzZSBvZiB0aGUgZmFsbGJhY2sgZnVuY3Rpb25z
-IGZvciBzeXNmcyBwb3B1bGF0aW9uLg0KPiANCj4gRml4ZXM6IGJmNWU3NThmMDJmYyAoImdl
-bmlycS9tc2k6IFNpbXBsaWZ5IHN5c2ZzIGhhbmRsaW5nIikNCj4gU2lnbmVkLW9mZi1ieTog
-TWF4aW1pbGlhbiBIZXluZSA8bWhleW5lQGFtYXpvbi5kZT4NCg0KUmV2aWV3ZWQtYnk6IEp1
-ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCg0KDQpKdWVyZ2VuDQoNCg==
---------------5l1refLpYoFuAkuHwmsfSyyJ
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Somehow part of me doesn't have enough trust that these values will
+always be suitably different when they are baked into the hardware ;-) .
 
------BEGIN PGP PUBLIC KEY BLOCK-----
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+I guess vector is somewhat special, with it implementing version 0.7.1
+it's not a t-head invention but also not the real RISCV "v" .
 
---------------5l1refLpYoFuAkuHwmsfSyyJ--
+So I _guess_ the jury might still be out on how to handle that everywhere.
 
---------------2VgdL2ARHnFdKP06t0hm3NRa--
 
---------------qUSNF0DqSSSO09uggR0ul3al
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> > The binding currently says
+> >       Identifies the specific RISC-V instruction set architecture
+> >       supported by the hart.  These are documented in the RISC-V
+> >       User-Level ISA document, available from
+> >       https://riscv.org/specifications/
+> > 
+> > 
+> > I guess if we decide to make them part of the isa-string the binding
+> > then should get a paragraph mention _xfoo vendor-extensions too.
+> 
+> I have an idea in the works that may allow dealing with this kind of
+> thing, but it's a bit of a departure from the existing binding.
+> I will hopefully post an early RFC of it later today.
+> That said, the binding does currently allow you to put in _xfoo vendor
+> extensions as-is.
+> 
+> > Personally, making these part of the ISA string definitly sounds like
+> > the best solution though :-) .
+> 
+> You would say that wouldn't you! In general, I'd rather we filled in as
+> much information as possible here, even if it is not currently in use,
+> to avoid having to retrofit as support becomes available.
 
------BEGIN PGP SIGNATURE-----
+yep definitively.
+Especially as switching to expecting _xfoo later on then causes of course
+compatiblity issues. The fun part will be though to get vendors,
+toolchains and friends to agree on the naming.
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmRZGvgFAwAAAAAACgkQsN6d1ii/Ey93
-MQf/cxKVXhKe0gAEAMln7DmZGr6S7zdybp9iDiXoHMLt9maAVZlKd7AoiwoDqsSRJCkaxoZWtPfC
-1ShfFUXQrH3X+RXM0xoOZbwErxXDCnT06ZAtV4muq8RUWfw6wTppfnvd0t0WxuYhEtvdbU40zH0u
-+K26n/zsBHSUygZ6kpnHLvMAI/BarkuOamBar8fkKQ3SxhKdOtpNWSn7UgmyvO0tDyepG3GciLy6
-cMrI5ibjjWIOeOJD93KNpihT0QlSlVVfQ2MYr58QUyTmi4VLtIJ2LPI/H6whMc1d399u16pzjpfJ
-gIE01xfP/1/0PoBJhnL3Y+9LNzY1ZGzF/iKfnTxP7Q==
-=cQFh
------END PGP SIGNATURE-----
 
---------------qUSNF0DqSSSO09uggR0ul3al--
+Heiko
+ 
+
+
+
