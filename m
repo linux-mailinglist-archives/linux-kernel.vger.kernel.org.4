@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BBF6FB31A
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D576FB327
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234169AbjEHOlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 10:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
+        id S234504AbjEHOmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 10:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233648AbjEHOlu (ORCPT
+        with ESMTP id S234407AbjEHOmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 10:41:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F56E10C0
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 07:41:48 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pw23Y-00032R-I7; Mon, 08 May 2023 16:41:40 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pw23X-0021LS-0d; Mon, 08 May 2023 16:41:39 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pw23W-002SpR-AW; Mon, 08 May 2023 16:41:38 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Joe Perches <joe@perches.com>
-Cc:     Liviu Dudau <liviu.dudau@arm.com>,
-        "james qian wang (Arm Technology China)" <james.qian.wang@arm.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexandru Vasile <acvasile96@gmail.com>,
-        Brian Starkey <brian.starkey@arm.com>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] MAINTAINERS: Drop realname for L: entries
-Date:   Mon,  8 May 2023 16:41:35 +0200
-Message-Id: <20230508144135.1450524-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        Mon, 8 May 2023 10:42:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6707DAF;
+        Mon,  8 May 2023 07:41:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D185640A6;
+        Mon,  8 May 2023 14:41:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8673BC43321;
+        Mon,  8 May 2023 14:41:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683556916;
+        bh=MQ5DoJA1f5DU0Jx7eqFBYGiVwF/uh9yVBMTNrxYMYIE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=tZJut4FMcHrALPqDh2zYAwVmSSL7WEktSeQju/lInVcIKyJV3YQxdELZDXzE/4FcV
+         a+xdEVih12ZS09iwE4Cm7uDi5XAkYq2iaNyHIVbmZXEboLjmZ8cfdXhzq7+UaIdf8A
+         DNjVewcBH3R4CnX5tKmHoahlkyC4jKqL9T2bRbUtUwHvowwtM2nCZTnTdPw9k/8O4i
+         ENIVVieYaTy45YyTku7vFGBJ2EDIStmGZRYki8YIU44aoVgcZQ1VuyQ15DT0HCDLzZ
+         QNXcq/0bYs0XsBzoDkPjcOkopq37LnQAwMfOEBznR8/TLD3KGAT0LxllTbmXO2tSbm
+         Hvrxnly9AVAaQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6A92FE4F0A1;
+        Mon,  8 May 2023 14:41:56 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2111; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=5MAYXKXrDK0JRRNZ5gPCoA2bv4PjsOKRsLUgPH2+tQI=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkWQoeQjqySYiomkaNxW/xuyfC4KJtzhUhJHjvg 2Vu3ts/wLCJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFkKHgAKCRCPgPtYfRL+ TpXlB/4ga8V6C9N3XRZh8O5u7MTydfre0g8IguqoUna1fTrjeXdVW+OCCH7vF04X847UhhqimHk 8cISO9MpYfBLy7q950WGUhDClIrvKmL3JC5e7IEQHgd7u4X49oqngFcyNWF2kMxQ/Y3ycNcd1KB hEDzYCeQDFTdlHHhiQxy3Yf51b0nTHT1+HFIm7vgrSZucvz+2nVdJgxoKbwaWSIUoonivVHr3NA 1UXAl4YTzvzZ1RF2N8LJZl9uggQ4JZXwa0jrVg/VrhJQVCvka4Mu39e8s1xDWRLqnIFFcF8IOKS H5Vj7NKHLY4MQw115F1B2gGsrjVjKKo9edWf9MmtVRji4bYX
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Subject: Re: [PATCH] cpuidle: Use of_property_present() for testing DT property
+ presence
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <168355691642.25692.10503148227988680423.git-patchwork-notify@kernel.org>
+Date:   Mon, 08 May 2023 14:41:56 +0000
+References: <20230310144703.1541888-1-robh@kernel.org>
+In-Reply-To: <20230310144703.1541888-1-robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, ulf.hansson@linaro.org,
+        rafael@kernel.org, daniel.lezcano@linaro.org, anup@brainfault.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,65 +62,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The format of L: entries in the MAINTAINERS file are expected to just
-contain the list's email address. get_maintainers doesn't cope well, if
-a realname is specified:
+Hello:
 
-	$ scripts/get_maintainer.pl -f Documentation/devicetree/bindings/display/arm,komeda.yaml
-	...
-	 (open list:ARM KOMEDA DRM-KMS DRIVER)
-	...
+This patch was applied to riscv/linux.git (fixes)
+by Rafael J. Wysocki <rafael.j.wysocki@intel.com>:
 
-So drop the realname (and the < >).
+On Fri, 10 Mar 2023 08:47:03 -0600 you wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
+> 
+> [...]
 
-Fixes: ab6911b73493 ("MAINTAINERS: Add maintainer for Arm komeda driver")
-Fixes: 6865788f5ad9 ("MAINTAINERS: Update entries from the Nitro Enclaves section")
-Fixes: 3affaa5a7ca3 ("drm/afbc: Add AFBC modifier usage documentation")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
-Hello,
+Here is the summary with links:
+  - cpuidle: Use of_property_present() for testing DT property presence
+    https://git.kernel.org/riscv/c/f914bfdd7f84
 
-who will apply this patch? Joe?
-
-Best regards
-Uwe
-
- MAINTAINERS | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7e0b87d5aa2e..ae1d8e140a67 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1669,7 +1669,7 @@ ARM KOMEDA DRM-KMS DRIVER
- M:	James (Qian) Wang <james.qian.wang@arm.com>
- M:	Liviu Dudau <liviu.dudau@arm.com>
- M:	Mihail Atanassov <mihail.atanassov@arm.com>
--L:	Mali DP Maintainers <malidp@foss.arm.com>
-+L:	malidp@foss.arm.com
- S:	Supported
- T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	Documentation/devicetree/bindings/display/arm,komeda.yaml
-@@ -1691,7 +1691,7 @@ F:	include/uapi/drm/panfrost_drm.h
- ARM MALI-DP DRM DRIVER
- M:	Liviu Dudau <liviu.dudau@arm.com>
- M:	Brian Starkey <brian.starkey@arm.com>
--L:	Mali DP Maintainers <malidp@foss.arm.com>
-+L:	malidp@foss.arm.com
- S:	Supported
- T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	Documentation/devicetree/bindings/display/arm,malidp.yaml
-@@ -14825,7 +14825,7 @@ F:	arch/nios2/
- NITRO ENCLAVES (NE)
- M:	Alexandru Ciobotaru <alcioa@amazon.com>
- L:	linux-kernel@vger.kernel.org
--L:	The AWS Nitro Enclaves Team <aws-nitro-enclaves-devel@amazon.com>
-+L:	aws-nitro-enclaves-devel@amazon.com
- S:	Supported
- W:	https://aws.amazon.com/ec2/nitro/nitro-enclaves/
- F:	Documentation/virt/ne_overview.rst
-
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
+You are awesome, thank you!
 -- 
-2.39.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
