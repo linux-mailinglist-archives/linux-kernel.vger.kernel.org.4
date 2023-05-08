@@ -2,118 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0247B6FB0AD
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7716FB165
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbjEHM5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 08:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
+        id S233491AbjEHNXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbjEHM5g (ORCPT
+        with ESMTP id S229479AbjEHNXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 08:57:36 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB6335577
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 05:57:35 -0700 (PDT)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 3628421BF;
-        Mon,  8 May 2023 12:52:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1683550367;
-        bh=HHZWgsJXNB3VUOHK0ASN7bDv1iCE+fapn/CG3Czr8FY=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Ln8Lw87Wu+H25bPgi6/TAjlCnEvEUBwtojZya3bMwCKeWy5lWTOzBd5CfgTcR3HuF
-         HiUYoeWReU01GycLoVDB+DTMlyC615fOSvFv7fc716FihfJkDIvm588j6ui4ZsO4y8
-         0KzDnh2cASqF3u/U4Q9vpQ2tPbjdWpVV9utpqagA=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id DB03E2D0;
-        Mon,  8 May 2023 12:57:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1683550653;
-        bh=HHZWgsJXNB3VUOHK0ASN7bDv1iCE+fapn/CG3Czr8FY=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=XxG3I3Tmhd+iDwWbqhLDhg1YOB+p8qrMDH2YKWi06NfdOTiuwIXwwgmuDwqvL/Tx+
-         BUlL4iiDQWAAfXXIPgKAJyU+Fib6OBeX3qWAfwty5Q5AzX8u+1Pj1f9eg8y0IJJ3li
-         ghQZAwcsbU/H2ogDqScEAeXIWVRZfcEanmIF80KE=
-Received: from [192.168.211.146] (192.168.211.146) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 8 May 2023 15:57:33 +0300
-Message-ID: <16b5bd2f-8098-0447-d3c9-0e764cf78d01@paragon-software.com>
-Date:   Mon, 8 May 2023 16:57:32 +0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] fs: ntfs3: Fix possible null-pointer dereferences in
- mi_read()
-Content-Language: en-US
-To:     Jia-Ju Bai <baijiaju@buaa.edu.cn>
-CC:     <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-References: <20230321132211.3103922-1-baijiaju@buaa.edu.cn>
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-In-Reply-To: <20230321132211.3103922-1-baijiaju@buaa.edu.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.211.146]
-X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 8 May 2023 09:23:50 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642E383;
+        Mon,  8 May 2023 06:23:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683552229; x=1715088229;
+  h=from:to:cc:subject:date:message-id;
+  bh=8SCm4wFEaCHIjaaMs+tOcclnzwJ0N0aJVRlTnjeWArY=;
+  b=NxiT+kvP3EHjRZBkF5hpSVX3nOEH2ECltC9x5L/ltmwX9zMnx3uEXJsE
+   cXp9fJvTCLCPm0QSJlcj1VkAyCv6iM4jV6cwmcWDB8120J/uC1Im+E73q
+   hoWwtzAaw+PQxIi7b/es5uG6mOVLh7w1TPe8PPyM3m9lG9agMxa4giuny
+   Y8JIz3unikABksYQ80hBiDwC/gC+wPh7K/WWpXaQFe1H/J/QIzW/ac+jq
+   MpAqKvOAKzzq+XiKN8tMSoiFBqMbO3b6sBUGRsgMrI3XDhlqJ207M3dDf
+   8FZpn+bWwnMbH956OOTctospTcuCmtkKGp7skcsYXWXXRksChEUxDPipf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="349674058"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="349674058"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 06:23:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="648873705"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="648873705"
+Received: from yzhao56-desk.sh.intel.com ([10.239.159.62])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 06:23:46 -0700
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     alex.williamson@redhat.com, kevin.tian@intel.com, jgg@nvidia.com,
+        yishaih@nvidia.com, shameerali.kolothum.thodi@huawei.com,
+        Yan Zhao <yan.y.zhao@intel.com>
+Subject: [PATCH] vfio/pci: take mmap write lock for io_remap_pfn_range
+Date:   Mon,  8 May 2023 20:58:42 +0800
+Message-Id: <20230508125842.28193-1-yan.y.zhao@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.03.2023 17:22, Jia-Ju Bai wrote:
-> In a previous commit 2681631c2973 ("fs/ntfs3: Add null pointer check to
-> attr_load_runs_vcn"), ni can be NULL in attr_load_runs_vcn(), and thus it
-> should be checked before being used.
->
-> However, in the call stack of this commit, mft_ni in mi_read() is
-> aliased with ni in attr_load_runs_vcn(), and it is also used in
-> mi_read() at two places:
->
-> mi_read()
->    rw_lock = &mft_ni->file.run_lock -> No check
->    attr_load_runs_vcn(mft_ni, ...)
->      ni (namely mft_ni) is checked in the previous commit
->    attr_load_runs_vcn(..., &mft_ni->file.run) -> No check
->
-> Thus, to avoid possible null-pointer dereferences, the related checks
-> should be added.
->
-> These bugs are reported by a static analysis tool implemented by myself,
-> and they are found by extending a known bug fixed in the previous commit.
-> Thus, they could be theoretical bugs.
->
-> Signed-off-by: Jia-Ju Bai <baijiaju@buaa.edu.cn>
-> ---
->   fs/ntfs3/record.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/ntfs3/record.c b/fs/ntfs3/record.c
-> index defce6a5c8e1..dfa1fed9c0d9 100644
-> --- a/fs/ntfs3/record.c
-> +++ b/fs/ntfs3/record.c
-> @@ -124,7 +124,7 @@ int mi_read(struct mft_inode *mi, bool is_mft)
->   	struct rw_semaphore *rw_lock = NULL;
->   
->   	if (is_mounted(sbi)) {
-> -		if (!is_mft) {
-> +		if (!is_mft && mft_ni) {
->   			rw_lock = &mft_ni->file.run_lock;
->   			down_read(rw_lock);
->   		}
-> @@ -148,7 +148,7 @@ int mi_read(struct mft_inode *mi, bool is_mft)
->   		ni_lock(mft_ni);
->   		down_write(rw_lock);
->   	}
-> -	err = attr_load_runs_vcn(mft_ni, ATTR_DATA, NULL, 0, &mft_ni->file.run,
-> +	err = attr_load_runs_vcn(mft_ni, ATTR_DATA, NULL, 0, run,
->   				 vbo >> sbi->cluster_bits);
->   	if (rw_lock) {
->   		up_write(rw_lock);
-Thanks, your patch has been applied.
+In VFIO type1, vaddr_get_pfns() will try fault in MMIO PFNs after
+pin_user_pages_remote() returns -EFAULT.
+
+follow_fault_pfn
+ fixup_user_fault
+  handle_mm_fault
+   handle_mm_fault
+    do_fault
+     do_shared_fault
+      do_fault
+       __do_fault
+        vfio_pci_mmap_fault
+         io_remap_pfn_range
+          remap_pfn_range
+           track_pfn_remap
+            vm_flags_set         ==> mmap_assert_write_locked(vma->vm_mm)
+           remap_pfn_range_notrack
+            vm_flags_set         ==> mmap_assert_write_locked(vma->vm_mm)
+
+As io_remap_pfn_range() will call vm_flags_set() to update vm_flags [1],
+holding of mmap write lock is required.
+So, update vfio_pci_mmap_fault() to drop mmap read lock and take mmap
+write lock.
+
+[1] https://lkml.kernel.org/r/20230126193752.297968-3-surenb@google.com
+commit bc292ab00f6c ("mm: introduce vma->vm_flags wrapper functions")
+commit 1c71222e5f23
+("mm: replace vma->vm_flags direct modifications with modifier calls")
+
+Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
+---
+ drivers/vfio/pci/vfio_pci_core.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+index a5ab416cf476..5082f89152b3 100644
+--- a/drivers/vfio/pci/vfio_pci_core.c
++++ b/drivers/vfio/pci/vfio_pci_core.c
+@@ -1687,6 +1687,12 @@ static vm_fault_t vfio_pci_mmap_fault(struct vm_fault *vmf)
+ 	struct vfio_pci_mmap_vma *mmap_vma;
+ 	vm_fault_t ret = VM_FAULT_NOPAGE;
+ 
++	mmap_assert_locked(vma->vm_mm);
++	mmap_read_unlock(vma->vm_mm);
++
++	if (mmap_write_lock_killable(vma->vm_mm))
++		return VM_FAULT_RETRY;
++
+ 	mutex_lock(&vdev->vma_lock);
+ 	down_read(&vdev->memory_lock);
+ 
+@@ -1726,6 +1732,17 @@ static vm_fault_t vfio_pci_mmap_fault(struct vm_fault *vmf)
+ up_out:
+ 	up_read(&vdev->memory_lock);
+ 	mutex_unlock(&vdev->vma_lock);
++	mmap_write_unlock(vma->vm_mm);
++
++	/* If PTE is installed successfully, add the completed flag to
++	 * indicate mmap lock is released,
++	 * otherwise retake the read lock
++	 */
++	if (ret == VM_FAULT_NOPAGE)
++		ret |= VM_FAULT_COMPLETED;
++	else
++		mmap_read_lock(vma->vm_mm);
++
+ 	return ret;
+ }
+ 
+
+base-commit: 705b004ee377b789e39ae237519bab714297ac83
+-- 
+2.17.1
+
