@@ -2,117 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 865EA6F9D8C
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 03:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABA06F9D8E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 03:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbjEHByM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 21:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
+        id S232203AbjEHBza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 21:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjEHByK (ORCPT
+        with ESMTP id S229960AbjEHBz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 21:54:10 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59952A257;
-        Sun,  7 May 2023 18:54:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683510851; x=1715046851;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=NlwA/JGEa3cJXZJD2KYsrvTLSGrKWeh48+hlqUZVXFk=;
-  b=VEgWZLslP4rpLTqs5YLRun2C5BY/D7kGCHGx39r0IFHa2UJPQRHpVlfx
-   G2c2m82NNtP3wMWZODyIYG9oFJOkD/H5o3aLxQ9cpsIzUR1BQEb1djAft
-   CpL4rNMMqoN8sdbLFXDqs1lJNW1CD+vF4Fp62kYzZ/JHTWtpuQVfZgPjR
-   ny7rbTlXMDzsolPdcWqQWf6ZQQxkZp2Zx0xs4EztUwutZ4v7bnNl+evpv
-   74OufD/0HSP+4aL8ddAc1w8HhEtAZuMA5xZtJNb/lIUB1avwQtS1ct8d4
-   uDxa4LZYYMvp9Vstjv2L+1msizU1IIP0Q2jwqpC/kDDYv/chXmAI1J9qu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="351696401"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="351696401"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2023 18:54:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="872609592"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="872609592"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.254.208.84]) ([10.254.208.84])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2023 18:54:06 -0700
-Message-ID: <c9090d80-46da-ed88-bad9-5a2e6d33d77b@intel.com>
-Date:   Mon, 8 May 2023 09:54:04 +0800
+        Sun, 7 May 2023 21:55:27 -0400
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E9AA24B;
+        Sun,  7 May 2023 18:55:26 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0Vhyn0p8_1683510918;
+Received: from 30.240.112.215(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vhyn0p8_1683510918)
+          by smtp.aliyun-inc.com;
+          Mon, 08 May 2023 09:55:21 +0800
+Message-ID: <1694e1b3-c4ad-abfe-bf3a-e3210473b3b5@linux.alibaba.com>
+Date:   Mon, 8 May 2023 09:55:17 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.1
-Subject: Re: [PATCH v2] KVM: VMX: add MSR_IA32_TSX_CTRL into msrs_to_save
-To:     Mingwei Zhang <mizhang@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>
-References: <20230504181827.130532-1-mizhang@google.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH v7 0/2] ACPI: APEI: handle synchronous exceptions with
+ proper si_code
 Content-Language: en-US
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20230504181827.130532-1-mizhang@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+To:     rafael@kernel.org, wangkefeng.wang@huawei.com,
+        tanxiaofei@huawei.com, mawupeng1@huawei.com, tony.luck@intel.com,
+        naoya.horiguchi@nec.com
+Cc:     linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, justin.he@arm.com,
+        akpm@linux-foundation.org, ardb@kernel.org, ashish.kalra@amd.com,
+        baolin.wang@linux.alibaba.com, bp@alien8.de,
+        cuibixuan@linux.alibaba.com, dave.hansen@linux.intel.com,
+        james.morse@arm.com, jarkko@kernel.org, lenb@kernel.org,
+        linmiaohe@huawei.com, lvying6@huawei.com, xiexiuqi@huawei.com,
+        zhuo.song@linux.alibaba.com
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+ <20230417011407.58319-1-xueshuai@linux.alibaba.com>
+ <92f2642e-ab44-913f-24fa-3313acd905f8@linux.alibaba.com>
+In-Reply-To: <92f2642e-ab44-913f-24fa-3313acd905f8@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-12.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/2023 2:18 AM, Mingwei Zhang wrote:
-> Add MSR_IA32_TSX_CTRL into msrs_to_save[] to explicitly tell userspace to
-> save/restore the register value during migration. Missing this may cause
-> userspace that relies on KVM ioctl(KVM_GET_MSR_INDEX_LIST) fail to port the
-> value to the target VM.
+
+
+On 2023/4/24 14:24, Shuai Xue wrote:
 > 
-> In addition, there is no need to add MSR_IA32_TSX_CTRL when
-> ARCH_CAP_TSX_CTRL_MSR is not supported in guest. So add the checking in
-> kvm_probe_msr_to_save().
 > 
-> Fixes: b07a5c53d42a ("KVM: vmx: use MSR_IA32_TSX_CTRL to hard-disable TSX on guest that lack it")
-
-I wonder it's the fix for this commit.
-
-Apart from this,
-
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
-
-> Reported-by: Jim Mattson <jmattson@google.com>
-> Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> ---
->   arch/x86/kvm/x86.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
+> On 2023/4/17 AM9:14, Shuai Xue wrote:
+>> changes since v6:
+>> - add more explicty error message suggested by Xiaofei
+>> - pick up reviewed-by tag from Xiaofei
+>> - pick up internal reviewed-by tag from Baolin
+>>
+>> changes since v5 by addressing comments from Kefeng:
+>> - document return value of memory_failure()
+>> - drop redundant comments in call site of memory_failure() 
+>> - make ghes_do_proc void and handle abnormal case within it
+>> - pick up reviewed-by tag from Kefeng Wang 
+>>
+>> changes since v4 by addressing comments from Xiaofei:
+>> - do a force kill only for abnormal sync errors
+>>
+>> changes since v3 by addressing comments from Xiaofei:
+>> - do a force kill for abnormal memory failure error such as invalid PA,
+>> unexpected severity, OOM, etc
+>> - pcik up tested-by tag from Ma Wupeng
+>>
+>> changes since v2 by addressing comments from Naoya:
+>> - rename mce_task_work to sync_task_work
+>> - drop ACPI_HEST_NOTIFY_MCE case in is_hest_sync_notify()
+>> - add steps to reproduce this problem in cover letter
+>>
+>> changes since v1:
+>> - synchronous events by notify type
+>> - Link: https://lore.kernel.org/lkml/20221206153354.92394-3-xueshuai@linux.alibaba.com/
+>>
+>> Shuai Xue (2):
+>>   ACPI: APEI: set memory failure flags as MF_ACTION_REQUIRED on
+>>     synchronous events
+>>   ACPI: APEI: handle synchronous exceptions in task work
+>>
+>>  arch/x86/kernel/cpu/mce/core.c |   9 +--
+>>  drivers/acpi/apei/ghes.c       | 113 ++++++++++++++++++++++-----------
+>>  include/acpi/ghes.h            |   3 -
+>>  mm/memory-failure.c            |  17 +----
+>>  4 files changed, 79 insertions(+), 63 deletions(-)
+>>
 > 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 237c483b1230..c8accbd6c861 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -1431,7 +1431,7 @@ static const u32 msrs_to_save_base[] = {
->   #endif
->   	MSR_IA32_TSC, MSR_IA32_CR_PAT, MSR_VM_HSAVE_PA,
->   	MSR_IA32_FEAT_CTL, MSR_IA32_BNDCFGS, MSR_TSC_AUX,
-> -	MSR_IA32_SPEC_CTRL,
-> +	MSR_IA32_SPEC_CTRL, MSR_IA32_TSX_CTRL,
->   	MSR_IA32_RTIT_CTL, MSR_IA32_RTIT_STATUS, MSR_IA32_RTIT_CR3_MATCH,
->   	MSR_IA32_RTIT_OUTPUT_BASE, MSR_IA32_RTIT_OUTPUT_MASK,
->   	MSR_IA32_RTIT_ADDR0_A, MSR_IA32_RTIT_ADDR0_B,
-> @@ -7077,6 +7077,10 @@ static void kvm_probe_msr_to_save(u32 msr_index)
->   		if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
->   			return;
->   		break;
-> +	case MSR_IA32_TSX_CTRL:
-> +		if (!(kvm_get_arch_capabilities() & ARCH_CAP_TSX_CTRL_MSR))
-> +			return;
-> +		break;
->   	default:
->   		break;
->   	}
+> Hi, Rafael,
+> 
+> Gentle ping. Are you happy to queue this patch set into your next tree, so that we can merge
+> that in next merge window.
+> 
+> Thank you.
+> 
+
+Gentle ping :)
+
+Thanks.
+
+> Best Regards,
+> Shuai
+
 
