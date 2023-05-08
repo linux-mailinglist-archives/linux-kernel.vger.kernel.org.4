@@ -2,152 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9219A6F9F69
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D7C6F9F6C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbjEHGIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 02:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
+        id S232779AbjEHGIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 02:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbjEHGIn (ORCPT
+        with ESMTP id S232748AbjEHGIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 02:08:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E6513875
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 23:08:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683526084;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=496riEt70CLjVEPXxKBFIzM6DccwKHKgAN0XgS7K+xk=;
-        b=WU3MR5nPwyORCS4PDfIDUkkSu3M9zLSEngYD76mv+AO7vSBezbqusIT1qIq9bMi+o9Kni5
-        eJ3KJa3nYJ5lajV9cBqiMcdG3l1G1jJ1ruJgT8Z+O5JdUVuqBJwkdEMM3rLmJSk4goWcHm
-        Es7bUys3H2Xczgetv6iWj1C9fC2+xAs=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-326-bzsvHkrjNFa2-JndIPgE7g-1; Mon, 08 May 2023 02:08:03 -0400
-X-MC-Unique: bzsvHkrjNFa2-JndIPgE7g-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30641258c9eso1359709f8f.2
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 23:08:02 -0700 (PDT)
+        Mon, 8 May 2023 02:08:46 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E1613875
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 23:08:44 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f41dceb9d4so15569285e9.1
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 23:08:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683526123; x=1686118123;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=b5W8da6wt3rFKDNRM++Yd7sVb4bFvYT4nuWMH2oQ4co=;
+        b=jBR6qF+paUoajq7jJeR+ZgCasEddONzc0BUWQpueMWVKytDeu4W5EWSEdaQRz2wSOY
+         P6VY9FsJrnCJKnonL7jC0+LHuGSg9tVdOSDbDcdWA1eTRlA8XzcYE+FTF/G+EWcbIOH4
+         BND2bs51cgrvXQ3j3e4mvz/hHO3OJcpUQVURBC66enwKb51RCS9MlIrYQHe8O4wz02P8
+         QN4T7B+MaYiubNr/2a991meohXKTqL/mc42L6RzkotLolNWL4J78wMOHjFhFg17S3X+Z
+         06YJWdTl2AFz6fVs7lRMrLddSQ2Lu6zv5/MgSS+0JhCD+6xKl2nvMRWRAWhwRu0vB1r0
+         E5Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683526082; x=1686118082;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=496riEt70CLjVEPXxKBFIzM6DccwKHKgAN0XgS7K+xk=;
-        b=SkgpRetj6l/hsB9vOOf6gWmK0UeXmxxSBGEd7jjxXlOqORLzaRSt9U70wtpg/s/hP0
-         6hgyyb6HXNVmnClkiGLHb8vNrmpCAWXrLomwhQwqXFCLX77gF/TOdPgBJVZKSX5lJW7h
-         7S7h5xc+mVWzVkSpon/0A2+QULXaHQ2QPulGYfMz1PO1cOJyhC7ifIb/pF4TsorzYenD
-         w5OyRsAsmP9GwtNzlpe2mBvLc34KUbvSsZElMHhPyVpCmNx1orrM75s5U4AuYup4Lp5L
-         emdfCXPpQbz6ozzLcwtSvWDro1Yk+gaSRflgl05wZ6GcLR0bZecjUcZ7hDITB26QnNLo
-         mq6A==
-X-Gm-Message-State: AC+VfDw/4N0CDrF6U+MxjkD1Fubtsotz8wEvPE+WGXkAfF0lgKkA3ZFO
-        p63NfVxXI5a5KicMwSgeiWWnl+TI8y5dEkETlPOo2WvLjskz3uD57Ghe599xqZULz6NbU601G/j
-        biM3E/YXgCSstOf2cBGrajBnH
-X-Received: by 2002:a5d:6801:0:b0:306:2b64:fd1b with SMTP id w1-20020a5d6801000000b003062b64fd1bmr6387823wru.52.1683526082131;
-        Sun, 07 May 2023 23:08:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7f8poeeWKuFbkFRFraXJPQPQU8mq+PdFxmJfqKohdU/FLK+Ng7mCXc+1OoWwdFP0rxufKFDA==
-X-Received: by 2002:a5d:6801:0:b0:306:2b64:fd1b with SMTP id w1-20020a5d6801000000b003062b64fd1bmr6387812wru.52.1683526081830;
-        Sun, 07 May 2023 23:08:01 -0700 (PDT)
-Received: from redhat.com ([2.52.158.28])
-        by smtp.gmail.com with ESMTPSA id k15-20020a5d428f000000b003062d815fa6sm10182362wrq.85.2023.05.07.23.07.59
+        d=1e100.net; s=20221208; t=1683526123; x=1686118123;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b5W8da6wt3rFKDNRM++Yd7sVb4bFvYT4nuWMH2oQ4co=;
+        b=QKnMqC6FsfZZAoqlndx8gbMmPn9IVbRCWGEutfUnb8JdXxptkmvQ3kiqN4Y31aMYze
+         Zl+wXI5sKGfB/bKuH8Q8ccRkvLQbagGcqFCDlcEqv1STBKLagdDpvmJwYxtlStDsomFY
+         ZmYvw3fzGS4Uxv6HpT8MCM2Jdj6+d6FlJkHtosq5MYvFnodv3crBp60mAquXE2DR6f2B
+         joI71netmoNPSfg4hisxqW6WDvSHqlVgGQg8L9HW0Y/hYOB+f4lIMy2tl4F9XDcmV1hl
+         AmU6wAEFKSyLJWqtHm3N/XcjopCX910kxfdyQTU4+XTds7c9w+eTXvevlYY43JHZ7Z49
+         UKfQ==
+X-Gm-Message-State: AC+VfDwNDJWLREyG5SwlmN0YVTIIyiJz2q7dCk0Nk+8ZKfItA8gRlLls
+        XOY4yOpP4Rv8yXnhXvcKtHaxs5q4dDlQ3yrVAe8=
+X-Google-Smtp-Source: ACHHUZ7d4WSJg4vnVxhZk2Io2D+8Dv28X7WCTzCh8fFCvIe8DWFu20gWxeWwa+nR6a3Hwtx4diqXfA==
+X-Received: by 2002:a7b:c4c3:0:b0:3f1:9526:22d4 with SMTP id g3-20020a7bc4c3000000b003f1952622d4mr6219983wmk.21.1683526122746;
+        Sun, 07 May 2023 23:08:42 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id m16-20020a7bca50000000b003f1957ace1fsm15610474wml.13.2023.05.07.23.08.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 23:08:01 -0700 (PDT)
-Date:   Mon, 8 May 2023 02:07:57 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Wenliang Wang <wangwenliang.1995@bytedance.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, zhengqi.arch@bytedance.com,
-        willemdebruijn.kernel@gmail.com,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuanzhuo@linux.alibaba.com
-Subject: Re: [PATCH v4] virtio_net: suppress cpu stall when free_unused_bufs
-Message-ID: <20230508020717-mutt-send-email-mst@kernel.org>
-References: <1683167226-7012-1-git-send-email-wangwenliang.1995@bytedance.com>
- <CACGkMEs_4kUzc6iSBWvhZA1+U70Pp0o+WhE0aQnC-5pECW7QXA@mail.gmail.com>
- <20230507093328-mutt-send-email-mst@kernel.org>
- <2b5cf90a-efa8-52a7-9277-77722622c128@redhat.com>
+        Sun, 07 May 2023 23:08:40 -0700 (PDT)
+Date:   Mon, 8 May 2023 09:08:37 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, dmaengine@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: mcf-edma: Use struct_size()
+Message-ID: <9063649a-23a4-4c33-bdc4-f6f82fdef1e3@kili.mountain>
+References: <97c2bb1c9b69d0739da3762a7752ae6582c4ad02.1683390112.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2b5cf90a-efa8-52a7-9277-77722622c128@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <97c2bb1c9b69d0739da3762a7752ae6582c4ad02.1683390112.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 11:12:03AM +0800, Jason Wang wrote:
+On Sat, May 06, 2023 at 06:22:06PM +0200, Christophe JAILLET wrote:
+> Use struct_size() instead of hand writing it.
+> This is less verbose and more informative.
 > 
-> 在 2023/5/7 21:34, Michael S. Tsirkin 写道:
-> > On Fri, May 05, 2023 at 11:28:25AM +0800, Jason Wang wrote:
-> > > On Thu, May 4, 2023 at 10:27 AM Wenliang Wang
-> > > <wangwenliang.1995@bytedance.com> wrote:
-> > > > For multi-queue and large ring-size use case, the following error
-> > > > occurred when free_unused_bufs:
-> > > > rcu: INFO: rcu_sched self-detected stall on CPU.
-> > > > 
-> > > > Fixes: 986a4f4d452d ("virtio_net: multiqueue support")
-> > > > Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
-> > > > ---
-> > > > v2:
-> > > > -add need_resched check.
-> > > > -apply same logic to sq.
-> > > > v3:
-> > > > -use cond_resched instead.
-> > > > v4:
-> > > > -add fixes tag
-> > > > ---
-> > > >   drivers/net/virtio_net.c | 2 ++
-> > > >   1 file changed, 2 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > index 8d8038538fc4..a12ae26db0e2 100644
-> > > > --- a/drivers/net/virtio_net.c
-> > > > +++ b/drivers/net/virtio_net.c
-> > > > @@ -3560,12 +3560,14 @@ static void free_unused_bufs(struct virtnet_info *vi)
-> > > >                  struct virtqueue *vq = vi->sq[i].vq;
-> > > >                  while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
-> > > >                          virtnet_sq_free_unused_buf(vq, buf);
-> > > > +               cond_resched();
-> > > Does this really address the case when the virtqueue is very large?
-> > > 
-> > > Thanks
-> > 
-> > it does in that a very large queue is still just 64k in size.
-> > we might however have 64k of these queues.
+> 'mcf_chan' is now unused and can be removed. In fact, it is shadowed by
+> another variable in the 'for' loop below. Keep this one.
 > 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> It will also help scripts when __counted_by macro will be added.
+> See [1].
 > 
-> Ok, but we have other similar loops especially the refill, I think we may
-> need cond_resched() there as well.
-> 
-> Thanks
-> 
+> [1]: https://lore.kernel.org/all/6453f739.170a0220.62695.7785@mx.google.com/
 
-Refill is already per vq isn't it?
+Of course, the main selling point of struct_size() for me is that it
+protects you against integer overflows.  Open coding the math might end
+up giving you a size which is smaller than expected but struct_size()
+will give you ULONG_MAX in that same situation.  The allocation will
+fail as expected.  #Safe.
 
+Even when the open coded math is safe, this is easier to audit in an
+automated way.
 
-> > 
-> > > >          }
-> > > > 
-> > > >          for (i = 0; i < vi->max_queue_pairs; i++) {
-> > > >                  struct virtqueue *vq = vi->rq[i].vq;
-> > > >                  while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
-> > > >                          virtnet_rq_free_unused_buf(vq, buf);
-> > > > +               cond_resched();
-> > > >          }
-> > > >   }
-> > > > 
-> > > > --
-> > > > 2.20.1
-> > > > 
+regards,
+dan carpenter
 
