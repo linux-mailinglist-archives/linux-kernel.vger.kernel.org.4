@@ -2,154 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECB06FA429
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC806FA4A3
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbjEHJz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 05:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
+        id S233927AbjEHKBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 06:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjEHJzt (ORCPT
+        with ESMTP id S233917AbjEHKB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 05:55:49 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3BB2ABE4;
-        Mon,  8 May 2023 02:55:46 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pvxaq-0006bV-6U; Mon, 08 May 2023 11:55:44 +0200
-Message-ID: <9b987585-0834-bb8c-3414-283c29f3f2ab@leemhuis.info>
-Date:   Mon, 8 May 2023 11:55:43 +0200
+        Mon, 8 May 2023 06:01:28 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65FD2E062;
+        Mon,  8 May 2023 03:01:26 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-6439f186366so2134071b3a.2;
+        Mon, 08 May 2023 03:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683540086; x=1686132086;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rJvJGURrh5Y6Ahv+dvSHYL3+bNVZ9g/h4mq9+B66qRI=;
+        b=IPShIZ0hYGoGQZ+QpgYEoS7sXMWJihKWBFY8s06PyRBEPpO8fiac9zfXtKK+oC+7ks
+         +5JM8r+DcylJmbKZJjo1jkOrh4NpjgM1KMT/6PXtTdt7P16Q1bVpoOQMJu/xd6ZuQJf6
+         g0wxdJshfIpodgZPz8OSPuNG8QEfupLy5h2HhTz9rjIDjUPXK1rVQ7aazGvB5W8WfNld
+         JhRCRS6vM7Dl2sn+luKAPSacYOwUCV6Uu/hstIDQaxTcuZKxGKGwqUbCRdEAR5dMajWV
+         PZF1Vy+nsY72Pl4fdXRbabdzVh6jYSVvgiKnDr3yLcl7t0C5+d/Vc6M+qwI1gNWSsMZR
+         CAAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683540086; x=1686132086;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rJvJGURrh5Y6Ahv+dvSHYL3+bNVZ9g/h4mq9+B66qRI=;
+        b=FekkjWtelKJd+P4Mb9vrpEIxVnk2esoGx4LDivqTRewf1hOFKzkFKeGmrndua9se27
+         aC7+PAfVsjgIxqUrbro5F55kMgCieEtkAjOoED7gzPCMFV+UVawB4wJMaO1ZuavCW/Gk
+         UgGQlXuQ3gtdcOxnRZ/SzB07nlsskCJXlg77TC28U+oHIVzk5n1inCiCMjFdUNogqc7j
+         7ZTmcgqgJ9HDAN9qokuI/O5PgYBX6agI4CKZX3Osicx22lAkqOb/kq5gYlySqkZzMRh1
+         oVBTBFrY4T5dId0tiSJN6zgYh/7Wc7Pz0i56/LVZFOxQTG6wb+hzGiTJmCNEOZ/BJ9Ps
+         s1Lw==
+X-Gm-Message-State: AC+VfDzasEe6x5Gz24fMbjKYHa6wHogSVsCL+46dlYwyTwIpHmpb9Y7t
+        ZX8a+7Bj+NjlLikJYPreKHk=
+X-Google-Smtp-Source: ACHHUZ432kkuqfkRj7AzZft5/WbhfjXcUv0u9eGieSBZ3qtznBd/fiH77+wHRKFcmjTGSgYOzAr1dw==
+X-Received: by 2002:a05:6a00:1694:b0:63b:57cb:145f with SMTP id k20-20020a056a00169400b0063b57cb145fmr13083641pfc.20.1683540085842;
+        Mon, 08 May 2023 03:01:25 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-55.three.co.id. [116.206.28.55])
+        by smtp.gmail.com with ESMTPSA id i23-20020aa787d7000000b0062d90f36d16sm2667483pfo.88.2023.05.08.03.01.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 03:01:25 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 0C36010687E; Mon,  8 May 2023 17:01:21 +0700 (WIB)
+Date:   Mon, 8 May 2023 17:01:21 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, corbet@lwn.net,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        srinivas.kandagatla@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 03/18] docs: qcom: Add qualcomm minidump guide
+Message-ID: <ZFjIcSRSitmOvmZw@debian.me>
+References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
+ <1683133352-10046-4-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     =?UTF-8?Q?Filipe_La=c3=adns?= <lains@riseup.net>,
-        Bastien Nocera <hadess@hadess.net>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        guy.b@bluewin.ch
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Since kernel 6.3.1 logitech unify receiver not working
- properly
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1683539747;28b8ae58;
-X-HE-SMSGID: 1pvxaq-0006bV-6U
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y9mITgkKFRXba6ks"
+Content-Disposition: inline
+In-Reply-To: <1683133352-10046-4-git-send-email-quic_mojha@quicinc.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
 
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developers don't keep an eye on it, I decided to forward it by mail.
+--y9mITgkKFRXba6ks
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217412 :
+On Wed, May 03, 2023 at 10:32:17PM +0530, Mukesh Ojha wrote:
+>  Documentation/admin-guide/qcom_minidump.rst | 246 ++++++++++++++++++++++=
+++++++
+>  1 file changed, 246 insertions(+)
 
->  guy.b 2023-05-07 07:37:34 UTC
-> 
-> Hello,
-> 
-> Since kernel 6.3.1 the boot process hangs (~ 5 seconds) by uevent triggering with the following errors :
-> 
-> logitech-hidpp-device 0003:046D:405E.0004: hidpp_devicenametype_get_count: received protocol error 0x07
-> 
-> 
-> The logs about logitech input:
-> 
-> usb 1-8: new full-speed USB device number 2 using xhci_hcd
-> mai 06 11:54:24 Cockpit kernel: usb 1-8: New USB device found, idVendor=046d, idProduct=c52b, bcdDevice=24.10
-> mai 06 11:54:24 Cockpit kernel: usb 1-8: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> mai 06 11:54:24 Cockpit kernel: usb 1-8: Product: USB Receiver
-> mai 06 11:54:24 Cockpit kernel: usb 1-8: Manufacturer: Logitech
-> mai 06 11:54:24 Cockpit kernel: input: Logitech USB Receiver as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.0/0003:046D:C52B.0001/input/input4
-> mai 06 11:54:24 Cockpit kernel: hid-generic 0003:046D:C52B.0001: input,hidraw0: USB HID v1.11 Keyboard [Logitech USB Receiver] on usb-0000:00:14.0-8/input0
-> mai 06 11:54:24 Cockpit kernel: input: Logitech USB Receiver Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.1/0003:046D:C52B.0002/input/input5
-> mai 06 11:54:24 Cockpit kernel: input: Logitech USB Receiver Consumer Control as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.1/0003:046D:C52B.0002/input/input6
-> mai 06 11:54:24 Cockpit kernel: input: Logitech USB Receiver System Control as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.1/0003:046D:C52B.0002/input/input7
-> mai 06 11:54:24 Cockpit kernel: hid-generic 0003:046D:C52B.0002: input,hiddev96,hidraw1: USB HID v1.11 Mouse [Logitech USB Receiver] on usb-0000:00:14.0-8/input1
-> mai 06 11:54:24 Cockpit kernel: hid-generic 0003:046D:C52B.0003: hiddev97,hidraw2: USB HID v1.11 Device [Logitech USB Receiver] on usb-0000:00:14.0-8/input2
-> mai 06 11:54:24 Cockpit kernel: usbcore: registered new interface driver usbhid
-> mai 06 11:54:24 Cockpit kernel: usbhid: USB HID core driver
-> mai 06 11:54:24 Cockpit kernel: logitech-djreceiver 0003:046D:C52B.0003: hiddev96,hidraw0: USB HID v1.11 Device [Logitech USB Receiver] on usb-0000:00:14.0-8/input2
-> mai 06 11:54:24 Cockpit kernel: input: Logitech Wireless Device PID:405e Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.2/0003:046D:C52B.0003/0003:046D:405E.0004/input/input9
-> mai 06 11:54:24 Cockpit kernel: input: Logitech Wireless Device PID:405e Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.2/0003:046D:C52B.0003/0003:046D:405E.0004/input/input10
-> mai 06 11:54:24 Cockpit kernel: hid-generic 0003:046D:405E.0004: input,hidraw1: USB HID v1.11 Keyboard [Logitech Wireless Device PID:405e] on usb-0000:00:14.0-8/input2:1
-> mai 06 11:54:24 Cockpit kernel: input: Logitech Wireless Device PID:2010 Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.2/0003:046D:C52B.0003/0003:046D:2010.0005/input/input14
-> mai 06 11:54:24 Cockpit kernel: hid-generic 0003:046D:2010.0005: input,hidraw2: USB HID v1.11 Keyboard [Logitech Wireless Device PID:2010] on usb-0000:00:14.0-8/input2:2
-> mai 06 11:54:24 Cockpit kernel: logitech-hidpp-device 0003:046D:405E.0004: HID++ 4.5 device connected.
-> mai 06 11:54:24 Cockpit kernel: logitech-hidpp-device 0003:046D:405E.0004: hidpp_devicenametype_get_count: received protocol error 0x07
-> mai 06 11:54:24 Cockpit kernel: input: Logitech Wireless Device PID:405e as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.2/0003:046D:C52B.0003/0003:046D:405E.0004/input/input18
-> mai 06 11:54:24 Cockpit kernel: logitech-hidpp-device 0003:046D:405E.0004: input,hidraw1: USB HID v1.11 Keyboard [Logitech Wireless Device PID:405e] on usb-0000:00:14.0-8/input2:1
-> mai 06 11:54:24 Cockpit kernel: input: Logitech Wireless Device PID:2010 as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.2/0003:046D:C52B.0003/0003:046D:2010.0005/input/input19
-> mai 06 11:54:24 Cockpit kernel: logitech-hidpp-device 0003:046D:2010.0005: input,hidraw2: USB HID v1.11 Keyboard [Logitech Wireless Device PID:2010] on usb-0000:00:14.0-8/input2:2
-> 
-> Next, once booted and remove the unify receiver and plug it again there is a massive lag (~ 15 seconds) before that the receiver get ready for the mouse and keyboard to be functional with following errors :
-> 
-> kernel: logitech-hidpp-device 0003:046D:405E.0022: hidpp_devicenametype_get_count: received protocol error 0x07
-> kernel: logitech-hidpp-device 0003:046D:405E.0023: Couldn't get wheel multiplier (error -110)
-> 
-> Unify receiver with K800 keyboard and M720 Triathlon mouse paired.
-> 
-> This happens on my desktop computer but not on my laptop with a unify receiver and a marathon M705 mouse.
-> 
-> Both computer are on Archlinux and up to date.
-> 
-> On the desktop the boot is fine without the unify receiver.
-> 
-> Let me know if you need more info.
-> 
-> Thank you.
+You forget to add toctree entry:
 
+---- >8 ----
+diff --git a/Documentation/admin-guide/index.rst b/Documentation/admin-guid=
+e/index.rst
+index 43ea35613dfcd4..251d070486c2ab 100644
+--- a/Documentation/admin-guide/index.rst
++++ b/Documentation/admin-guide/index.rst
+@@ -120,6 +120,7 @@ configure specific aspects of kernel behavior to your l=
+iking.
+    perf-security
+    pm/index
+    pnp
++   qcom_minidump
+    rapidio
+    ras
+    rtc
 
-See the ticket for more details.
+> +Writing to sysfs node can also be used to set the mode to minidump.
+> +
+> +::
+> +	echo "mini" > /sys/module/qcom_scm/parameter/download_mode
 
-Note, there are two users affected by this (see Comment 5 for the
-second), but you have to use bugzilla to reach the second reporter, as I
-sadly[1] can not simply CCed them in mails like this (the initial
-reporter gave permission).
+The snippet above isn't rendered to code block, so I have to fix it up:
 
+---- >8 ----
+diff --git a/Documentation/admin-guide/qcom_minidump.rst b/Documentation/ad=
+min-guide/qcom_minidump.rst
+index 062c797e90d9cf..408fe1beed1b78 100644
+--- a/Documentation/admin-guide/qcom_minidump.rst
++++ b/Documentation/admin-guide/qcom_minidump.rst
+@@ -208,9 +208,8 @@ Similarly, "full" is passed to set the download mode to=
+ full dump
+ where entire ddr dump will be collected while setting it "full,mini"
+ will collect minidump along with fulldump.
+=20
+-Writing to sysfs node can also be used to set the mode to minidump.
++Writing to sysfs node can also be used to set the mode to minidump::
+=20
+-::
+ 	echo "mini" > /sys/module/qcom_scm/parameter/download_mode
+=20
+ Once the download mode is set, any kind of crash will make the device coll=
+ect
 
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
+> +By default, dumps are downloaded via USB to the attached x86_64 machine
+> +running PCAT (Qualcomm tool) software. Upon download, we will see
+> +a set of binary blobs starts with name md_* in PCAT configured directory
+> +in x86_64 machine, so for above example from the client it will be
+> +md_REGION_A.BIN. This binary blob depends on region content to determine
+> +whether it needs external parser support to get the content of the regio=
+n,
+> +so for simple plain ASCII text we don't need any parsing and the content
+> +can be seen just opening the binary file.
+> +
+> <snipped> ...
+> +One need to read the entire rawdump partition and pull out content to
+> +save it onto the attached x86_64 machine over USB. Later, this rawdump
+> +can be pass it to another tool dexter.exe(Qualcomm tool) which converts
+> +this into the similar binary blobs which we have got it when download ty=
+pe
+> +was set to USB i.e a set of registered region as blobs and their name
+> +starts with md_*.
+> +
+> +Replacing the dexter.exe with some open source tool can be added as futu=
+re
+> +scope of this document.
 
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
+There is inconsistency on inlining code keywords, so I have to inline
+the rest:
 
-#regzbot introduced: v6.2..v6.3
-https://bugzilla.kernel.org/show_bug.cgi?id=217412
-#regzbot title: input: hid: logitech unify receiver not working properly
-#regzbot ignore-activity
+---- >8 ----
+diff --git a/Documentation/admin-guide/qcom_minidump.rst b/Documentation/ad=
+min-guide/qcom_minidump.rst
+index 408fe1beed1b78..117e61ef9fde67 100644
+--- a/Documentation/admin-guide/qcom_minidump.rst
++++ b/Documentation/admin-guide/qcom_minidump.rst
+@@ -118,7 +118,7 @@ Client driver can use ``qcom_apss_minidump_region_regis=
+ter`` API's to
+ register and ``qcom_apss_minidump_region_unregister`` to unregister
+ their region from minidump driver.
+=20
+-Client need to fill their region by filling qcom_apss_minidump_region
++Client need to fill their region by filling ``qcom_apss_minidump_region``
+ structure object which consist of the region name, region's
+ virtual and physical address and its size.
+=20
+@@ -166,7 +166,7 @@ Test
+=20
+ Existing Qualcomm devices already supports entire ddr dump (also called
+ full dump) by writing appropriate value to Qualcomm's top control and
+-status register(tcsr) in driver/firmware/qcom_scm.c .
++status register(tcsr) in ``driver/firmware/qcom_scm.c``.
+=20
+ SCM device Tree bindings required to support download mode
+ For example (sm8450) ::
+@@ -202,10 +202,10 @@ For example (sm8450) ::
+=20
+ 	};
+=20
+-User of minidump can pass qcom_scm.download_mode=3D"mini" to kernel
++User of minidump can pass ``qcom_scm.download_mode=3D"mini"`` to kernel
+ commandline to set the current download mode to minidump.
+-Similarly, "full" is passed to set the download mode to full dump
+-where entire ddr dump will be collected while setting it "full,mini"
++Similarly, ``"full"`` is passed to set the download mode to full dump
++where entire ddr dump will be collected while setting it ``"full,mini"``
+ will collect minidump along with fulldump.
+=20
+ Writing to sysfs node can also be used to set the mode to minidump::
+@@ -223,9 +223,9 @@ stored to an attached storage device.
+=20
+ By default, dumps are downloaded via USB to the attached x86_64 machine
+ running PCAT (Qualcomm tool) software. Upon download, we will see
+-a set of binary blobs starts with name md_* in PCAT configured directory
++a set of binary blobs starts with name ``md_*`` in PCAT configured directo=
+ry
+ in x86_64 machine, so for above example from the client it will be
+-md_REGION_A.BIN. This binary blob depends on region content to determine
++``md_REGION_A.BIN``. This binary blob depends on region content to determi=
+ne
+ whether it needs external parser support to get the content of the region,
+ so for simple plain ASCII text we don't need any parsing and the content
+ can be seen just opening the binary file.
+@@ -236,10 +236,10 @@ partition on the target device itself.
+=20
+ One need to read the entire rawdump partition and pull out content to
+ save it onto the attached x86_64 machine over USB. Later, this rawdump
+-can be pass it to another tool dexter.exe(Qualcomm tool) which converts
++can be pass it to another tool (``dexter.exe`` [Qualcomm tool]) which conv=
+erts
+ this into the similar binary blobs which we have got it when download type
+ was set to USB i.e a set of registered region as blobs and their name
+-starts with md_*.
++starts with ``md_*``.
+=20
+-Replacing the dexter.exe with some open source tool can be added as future
++Replacing the ``dexter.exe`` with some open source tool can be added as fu=
+ture
+ scope of this document.
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
+Thanks.
 
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
+--=20
+An old man doll... just what I always wanted! - Clara
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+--y9mITgkKFRXba6ks
+Content-Type: application/pgp-signature; name="signature.asc"
 
-[1] because bugzilla.kernel.org tells users upon registration their
-"email address will never be displayed to logged out users"
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFjIbAAKCRD2uYlJVVFO
+oyXUAP9Jdvp3ekfNs/R/xT6oObGE6Yey/Lz3Tnr82n5uZ2grhgD+Jc+IKZQhm8/Q
+linikE60BwEYt7d/w1AiQuaOIvuahgk=
+=PaTP
+-----END PGP SIGNATURE-----
+
+--y9mITgkKFRXba6ks--
