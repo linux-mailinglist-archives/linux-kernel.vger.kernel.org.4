@@ -2,97 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E85C6FB521
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A6A6FB525
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233886AbjEHQbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
+        id S234061AbjEHQcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbjEHQbA (ORCPT
+        with ESMTP id S232527AbjEHQcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 12:31:00 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0A24C0C
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:30:59 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50b383222f7so7224226a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 09:30:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683563458; x=1686155458;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7XZ+bhPlwzWhayELXrhbCbnvtPJ+kW/neWtCZuaOEDA=;
-        b=sQYiigymkSQGz1c3Eblx6BYBSksmvaD89TyiGKSydp4AZ89HLnlctiQ/Az6+OrnZZ1
-         S1C2uEXRfm0qNIRH65+jq4V4I0lH7esWxFQ/3IHdgJVo1JToy9uk0dCyvu9f9B9WU4k7
-         VrOuGknyH5fRMEfjUO0paWezryAEXfCe3jaFLojkQlSKfrfWEJ8MoxP7lp34pDDCgYe7
-         UsRYkYnOZh4MSz5eliAum7uVdjkIS8PHIaKyfenSDJrSRYnzEEErwZOYbFHLWicu/KLm
-         ZHI6umaEo7w7ghlMJH/yU6aiPspf1xFy6sRfN2waQ5giHo3ivhve63oT/LhYDBBPleAq
-         HXUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683563458; x=1686155458;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7XZ+bhPlwzWhayELXrhbCbnvtPJ+kW/neWtCZuaOEDA=;
-        b=VfV6C2mzj7hU2gs/ASB8tBsvVsJWeWwdhV7STYvUHjXRjVkfVb1rhktxDK4BjBmVO2
-         DK43T3A5jaIngt8Ae8cuaZDu+ikkAQJwLV9ZliQSqaVIdxyCruKFNg5LCvdNpcJJibKQ
-         jOGgAmAOPQlrOJ2pt1y7MmNbA/CA193goOat4TwH/xVGGe+FZgm6YmxSG5vB50P0eB5u
-         7gcY3RNZpl6UPsxOtKdN9JD1ZOHZLj3JjanY6WL0acu9eS9zPaoFbSyLgeEY2OG3Y9S7
-         XCO6bO6MNqLIl+ZGj8zNjjD/1cKXsIEaKPgkDG4ORQ84Qvy0ldVFSre17G1GqSLoykGC
-         JV/g==
-X-Gm-Message-State: AC+VfDw/A80fN48s5Oa9lXHWhgwF2Dzz1TN6inRoIjst5ImwHvj5ov84
-        IEtZ4M0Szf6FLUej57wfA2Z0QA==
-X-Google-Smtp-Source: ACHHUZ4W/+DD5ldtST9n+L3tb19fltiQjnjSwXcsWaHXldW/GVwZIlA/d220E2oOodwNbaN9vsHROA==
-X-Received: by 2002:a17:907:16a3:b0:967:92c6:1ec1 with SMTP id hc35-20020a17090716a300b0096792c61ec1mr2573213ejc.55.1683563457748;
-        Mon, 08 May 2023 09:30:57 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
-        by smtp.gmail.com with ESMTPSA id j24-20020a170906105800b0096650474479sm153939ejj.165.2023.05.08.09.30.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 09:30:57 -0700 (PDT)
-Message-ID: <7b5b2b87-3ac7-4a58-8ebc-e6e59096caf2@linaro.org>
-Date:   Mon, 8 May 2023 18:30:56 +0200
+        Mon, 8 May 2023 12:32:08 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13315BA9;
+        Mon,  8 May 2023 09:32:06 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 348ECe3k008653;
+        Mon, 8 May 2023 16:32:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
+ : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=LAgWuXSnoqsb8NEK+hX9dVQNQ6gPI+qclJRmYcmoTYI=;
+ b=nSJLpkZueqz4P4bL2vmNI8gNLuZJdFU2wXHCYdhKDUtJpsMoiU+ffWDoD6pZj7V0haeo
+ 6FSClnZ1xVh89FCuFuH42LIVCvcHhAM2n00jfsl4hpVCa5z6ohk7KREVRilq+1XGmWeW
+ w3sAYK0QFHMQ9bNc7klSKudQOr9koi+yUJ9LkEni5AGdPedui2U2f75suLteOWIXIgJZ
+ P8Bqko+6AJjrt9ioNrh49Q7Vh1bmGa5l4g4K8Xb6mDxpL0rQMGRKhbh9Opeuap5chpbA
+ g5JeUK4zwKZQYkOExeeQUTP1Tep4sX13609RyFKrkbH8O2IkbJXdBR/GPBieGjTvWMtB Lg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf0vk0kv8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 16:32:03 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 348GW2it026029
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 8 May 2023 16:32:02 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 8 May 2023 09:31:59 -0700
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     <andersson@kernel.org>, <agross@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <quic_kathirav@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] clk: qcom: gcc: ipq5332: Use floor ops for SDCC clocks
+Date:   Mon, 8 May 2023 22:01:45 +0530
+Message-ID: <20230508163145.9678-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] dt-bindings: soc: bcm: add missing dt-binding document
- for bcm23550-cdc
-Content-Language: en-US
-To:     Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230508135930.GA27583@standask-GA-A55M-S2HP>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230508135930.GA27583@standask-GA-A55M-S2HP>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: fc6JHhFx_gllWJ6QzCCcxD2QxDQP3xYU
+X-Proofpoint-ORIG-GUID: fc6JHhFx_gllWJ6QzCCcxD2QxDQP3xYU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-08_12,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=628 bulkscore=0
+ malwarescore=0 adultscore=0 spamscore=0 mlxscore=0 clxscore=1015
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2305080110
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/05/2023 15:59, Stanislav Jakubek wrote:
-> Broadcom BCM23550 has a Cluster Dormant Control block that keeps the CPU
-> in idle state. A command needs to be sent to this block to bring the CPU
-> into running state.
-> 
-> This has been in use in mainline Linux since ~2016, but was never
-> documented. Add a dt-binding document for it.
-> 
-> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+SDCC clocks must be rounded down to avoid overclocking the controller.
 
+Fixes: 3d89d52970fd ("clk: qcom: add Global Clock controller (GCC) driver for IPQ5332 SoC")
+Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+---
+ drivers/clk/qcom/gcc-ipq5332.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+diff --git a/drivers/clk/qcom/gcc-ipq5332.c b/drivers/clk/qcom/gcc-ipq5332.c
+index bdb4a0a11d07..1ad23aa8aa5a 100644
+--- a/drivers/clk/qcom/gcc-ipq5332.c
++++ b/drivers/clk/qcom/gcc-ipq5332.c
+@@ -963,7 +963,7 @@ static struct clk_rcg2 gcc_sdcc1_apps_clk_src = {
+ 		.name = "gcc_sdcc1_apps_clk_src",
+ 		.parent_data = gcc_parent_data_9,
+ 		.num_parents = ARRAY_SIZE(gcc_parent_data_9),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_floor_ops,
+ 	},
+ };
+ 
+-- 
+2.17.1
 
