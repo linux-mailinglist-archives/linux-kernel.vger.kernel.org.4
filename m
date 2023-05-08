@@ -2,84 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 426806F9F55
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 710D36F9F58
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbjEHF66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 01:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
+        id S232649AbjEHF7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 01:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbjEHF6y (ORCPT
+        with ESMTP id S232618AbjEHF7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 01:58:54 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43F15249
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 22:58:52 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f19b9d5358so40703975e9.1
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 22:58:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683525531; x=1686117531;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bvA3BbB5eTzMJDO0Xj1V5sRcebpMMil+vQRxCJL4nIs=;
-        b=xDIAoKjRxh1WHbxAA6RvXEZMnI/KSmHcXZZ1nhICt2VnmLT9Z1lohGdva6AeZL9Jyv
-         VtC5FjqRCv7Jtb07ptQuFpcaSbwfE0laWcsWVZta6VXzPqVY7Nr3bFUPG1OOrD1MJ69a
-         bpgd5TBHyxCZorJ+pxZx2y9vKrby0XSxsqJHVEvsEQUYHZQlJ9Q+1lDQVmT+KuJ91W/G
-         oKJIR/siGj8Taxk7G1hat4OGmlA9TC1W1QVztRyhjbAfhNufvOMlbTMw6khW+ky6co9+
-         sD3x90jLKPKlSoeqSOkLjDNy2ZBYoic92fxQDMcojDnkf5t2HLpTtsBtbL/MpFp8c//L
-         b1HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683525531; x=1686117531;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bvA3BbB5eTzMJDO0Xj1V5sRcebpMMil+vQRxCJL4nIs=;
-        b=ebpHe7N58nol2BKpzkyZDii71zzBhiOD5Ofc9LFCIm9+AH9U0e2ueBIaoFvV2PVLnw
-         4QD35XGtsyEl8FwfrlP5Mx2MnQZuFReQrO/M7/t3R7xXRARyQuLIk+0uiW47ss7SI47T
-         AGu+I5oUcJ3oIXFdhld/24JS92xedbOq8p2+awkJ6qdfnh0uBYLWp8RteMiW79+G7PqK
-         +PjE6jBaH3KliFUGKJIrX/zhNLkGpbd1Hn4uOAUyqD4sr2EteBLfI7ok0/VXcEnhbe4X
-         BG5z5w4u9Shq9SwdAr70NigBe4tJaEGYllBT3mnkLYlCdi3qi7jN88ZWTFp3KSagIAFz
-         LSvw==
-X-Gm-Message-State: AC+VfDxdSaEBtMJvTHWz9f3iitz1wEPWH60HbDKtIFmnt1nIRNTtHKgH
-        X4742VcnxG+vo7BSNQz9v5zDYw==
-X-Google-Smtp-Source: ACHHUZ7kDPVe7FvT1eLdhpgOyd9pM4EuemhqOQKpxgQxIAchh3l9w3IogVUbfMCPsTWEXXHshOsPEA==
-X-Received: by 2002:a7b:c455:0:b0:3f1:79ad:f3a8 with SMTP id l21-20020a7bc455000000b003f179adf3a8mr6075223wmi.16.1683525531435;
-        Sun, 07 May 2023 22:58:51 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id u24-20020a7bc058000000b003f173987ec2sm15629013wmc.22.2023.05.07.22.58.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 22:58:49 -0700 (PDT)
-Date:   Mon, 8 May 2023 08:58:46 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Brandon Pollack <brpol@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, masahiroy@kernel.org,
-        ojeda@kernel.org, alex.gaynor@gmail.com, keescook@chromium.org,
-        nathan@kernel.org
-Subject: Re: [PATCH v2] .gitignore: ignore smatch generated files
-Message-ID: <d7e5e4ea-c931-4eee-9a49-3cf167c9ab8e@kili.mountain>
-References: <20230508055226.3183447-1-brpol@chromium.org>
+        Mon, 8 May 2023 01:59:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B263213854;
+        Sun,  7 May 2023 22:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=1dCjcKAEnQ411omHCOVFyvsOwdZaZO9UpsrQTgMf9e0=; b=eydKThLigQoQiMyZT/8tq81SNv
+        nIGZonbM26SPCm8H2q/RTyXQlQa48evbD1At0CF6B5ErjHJTrUeOLHTYnszQwQw4Swz7sL2hBtlbu
+        wUibt1d0iVdlWNFSJu0FJP9Z2xsvBTDcukFZqIKkXfyMQtiimEPdtDkIknaAOcLj0N4Ee2UdrMBAC
+        M0wGVGrfUyzWFlc/5viiI+Oi3B//dNCoVQvSPzByjAHmwe7mnwG72iK4rdGzF1Tqb+7c8nOOo/2XU
+        EA5MD9SN8gNTMbMUUhUiy4t6IIMiKH18MMZ5cxrUcwwlfpV+wJFymqJRgv+mTU8vXHOL0PGp1tygE
+        P6gUT57Q==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pvtuC-00HLfV-2y;
+        Mon, 08 May 2023 05:59:29 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, Rob Landley <rob@landley.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH] Documentation/filesystems: ramfs-rootfs-initramfs: use :Author:
+Date:   Sun,  7 May 2023 22:59:28 -0700
+Message-Id: <20230508055928.3548-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508055226.3183447-1-brpol@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 05:52:28AM +0000, Brandon Pollack wrote:
-> ignore smatch generated files.
-> 
-> Change-Id: I8ca4002128e53024ea8a3daef908ec5e49cec65c
-> Signed-off-by: Brandon Pollack <brpol@chromium.org>
+Use the :Author: markup instead of making it a chapter heading.
+This cleans up the table of contents for this file.
 
-Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
+Fixes: 7f46a240b0a1 ("[PATCH] ramfs, rootfs, and initramfs docs")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: Rob Landley <rob@landley.net>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+---
+ Documentation/filesystems/ramfs-rootfs-initramfs.rst |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-regards,
-dan carpenter
-
+diff -- a/Documentation/filesystems/ramfs-rootfs-initramfs.rst b/Documentation/filesystems/ramfs-rootfs-initramfs.rst
+--- a/Documentation/filesystems/ramfs-rootfs-initramfs.rst
++++ b/Documentation/filesystems/ramfs-rootfs-initramfs.rst
+@@ -6,8 +6,7 @@ Ramfs, rootfs and initramfs
+ 
+ October 17, 2005
+ 
+-Rob Landley <rob@landley.net>
+-=============================
++:Author: Rob Landley <rob@landley.net>
+ 
+ What is ramfs?
+ --------------
