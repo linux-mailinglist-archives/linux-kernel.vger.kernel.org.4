@@ -2,111 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56B86FB1DB
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3886FB1DE
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233875AbjEHNmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
+        id S233746AbjEHNnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234200AbjEHNl5 (ORCPT
+        with ESMTP id S232748AbjEHNnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:41:57 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94D719917;
-        Mon,  8 May 2023 06:41:52 -0700 (PDT)
-Date:   Mon, 08 May 2023 13:41:50 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683553310;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZJZo66bmNey3lT9jFnB9bUIzDEHCyi70FsJKZ/DnTpA=;
-        b=wn8f6IfTaN1+x8oBnYVZP3TBh2OWfttD89smYptRexO0AncSv/VyMEDflQpxmj9P36qc0L
-        kCpTI19vMEzK50QkfHvm5+dlbm8Gnc1bL/ZaHD6gGvyGSp1GONFoxDqEF5u0XqA6+oOL4G
-        PDJRwbXOzebmIHjnm8p1yRmp9u3iCjlHbTOtOQQcw2Jjvl8foy0i+D9Qm5UWLbI4W/3R9u
-        Rx1ENacm8qfviqvXo/nECUkyADnsknlOaOjPB1crAUTcmAskton6ndGgRckfxNBw7sqnRa
-        1Nu3qSl9y4VAffQAmHOmtUMaFQKcAjI4OFqTfPniioJkRy/4BD59N94ifO7UEA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683553310;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZJZo66bmNey3lT9jFnB9bUIzDEHCyi70FsJKZ/DnTpA=;
-        b=ftuWG76R8UhgbnE/Us7FgvMELMoTWNfVaUcjHLC4Tj9xh31xnUUOtciM2E8RiLlMaRqJu+
-        euOtYLLwOCmZToDw==
-From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Fix __swp_entry_to_pte() for Xen PV guests
-Cc:     Juergen Gross <jgross@suse.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230306123259.12461-1-jgross@suse.com>
-References: <20230306123259.12461-1-jgross@suse.com>
+        Mon, 8 May 2023 09:43:08 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1298EE5F;
+        Mon,  8 May 2023 06:43:07 -0700 (PDT)
+Received: from kwepemi500026.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QFMrT3sfHzsRGW;
+        Mon,  8 May 2023 21:41:13 +0800 (CST)
+Received: from localhost.localdomain (10.175.104.82) by
+ kwepemi500026.china.huawei.com (7.221.188.247) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 8 May 2023 21:43:03 +0800
+From:   Dong Chenchen <dongchenchen2@huawei.com>
+To:     <edumazet@google.com>, <kuba@kernel.org>, <davem@davemloft.net>,
+        <pabeni@redhat.com>
+CC:     <jbenc@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yuehaibing@huawei.com>,
+        <weiyongjun1@huawei.com>, Dong Chenchen <dongchenchen2@huawei.com>
+Subject: [PATCH -next] net: nsh: Use correct mac_offset to unwind gso skb in nsh_gso_segment()
+Date:   Mon, 8 May 2023 21:42:58 +0800
+Message-ID: <20230508134258.496465-1-dongchenchen2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Message-ID: <168355331020.404.17123011230047801582.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500026.china.huawei.com (7.221.188.247)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/mm branch of tip:
+As the call trace shows, skb_panic was caused by wrong skb->mac_header
+in nsh_gso_segment():
 
-Commit-ID:     0f88130e8a6fd185b0aeb5d8e286083735f2585a
-Gitweb:        https://git.kernel.org/tip/0f88130e8a6fd185b0aeb5d8e286083735f2585a
-Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Mon, 06 Mar 2023 13:32:59 +01:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 08 May 2023 15:25:24 +02:00
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+CPU: 3 PID: 2737 Comm: syz Not tainted 6.3.0-next-20230505 #1
+RIP: 0010:skb_panic+0xda/0xe0
+call Trace:
+ skb_push+0x91/0xa0
+ nsh_gso_segment+0x4f3/0x570
+ skb_mac_gso_segment+0x19e/0x270
+ __skb_gso_segment+0x1e8/0x3c0
+ validate_xmit_skb+0x452/0x890
+ validate_xmit_skb_list+0x99/0xd0
+ sch_direct_xmit+0x294/0x7c0
+ __dev_queue_xmit+0x16f0/0x1d70
+ packet_xmit+0x185/0x210
+ packet_snd+0xc15/0x1170
+ packet_sendmsg+0x7b/0xa0
+ sock_sendmsg+0x14f/0x160
 
-x86/mm: Fix __swp_entry_to_pte() for Xen PV guests
+The root cause is:
+nsh_gso_segment() use skb->network_header - nhoff to reset mac_header
+in skb_gso_error_unwind() if inner-layer protocol gso fails.
+However, skb->network_header may be reset by inner-layer protocol
+gso function e.g. mpls_gso_segment. skb->mac_header reset by the
+inaccurate network_header will be larger than skb headroom.
 
-Normally __swp_entry_to_pte() is never called with a value translating
-to a valid PTE. The only known exception is pte_swap_tests(), resulting
-in a WARN splat in Xen PV guests, as __pte_to_swp_entry() did
-translate the PFN of the valid PTE to a guest local PFN, while
-__swp_entry_to_pte() doesn't do the opposite translation.
+nsh_gso_segment
+    nhoff = skb->network_header - skb->mac_header;
+    __skb_pull(skb,nsh_len)
+    skb_mac_gso_segment
+        mpls_gso_segment
+            skb_reset_network_header(skb);//skb->network_header+=nsh_len
+            return -EINVAL;
+    skb_gso_error_unwind
+        skb_push(skb, nsh_len);
+        skb->mac_header = skb->network_header - nhoff;
+        // skb->mac_header > skb->headroom, cause skb_push panic
 
-Fix that by using __pte() in __swp_entry_to_pte() instead of open
-coding the native variant of it.
+Use correct mac_offset to restore mac_header to fix it.
 
-For correctness do the similar conversion for __swp_entry_to_pmd().
-
-Fixes: 05289402d717 ("mm/debug_vm_pgtable: add tests validating arch helpers for core MM features")
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230306123259.12461-1-jgross@suse.com
+Fixes: c411ed854584 ("nsh: add GSO support")
+Signed-off-by: Dong Chenchen <dongchenchen2@huawei.com>
 ---
- arch/x86/include/asm/pgtable_64.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/nsh/nsh.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/pgtable_64.h b/arch/x86/include/asm/pgtable_64.h
-index 7929327..a629b1b 100644
---- a/arch/x86/include/asm/pgtable_64.h
-+++ b/arch/x86/include/asm/pgtable_64.h
-@@ -237,8 +237,8 @@ static inline void native_pgd_clear(pgd_t *pgd)
+diff --git a/net/nsh/nsh.c b/net/nsh/nsh.c
+index e9ca007718b7..17433b115058 100644
+--- a/net/nsh/nsh.c
++++ b/net/nsh/nsh.c
+@@ -78,6 +78,7 @@ static struct sk_buff *nsh_gso_segment(struct sk_buff *skb,
+ {
+ 	struct sk_buff *segs = ERR_PTR(-EINVAL);
+ 	unsigned int nsh_len, mac_len;
++	u16 mac_offset;
+ 	__be16 proto;
+ 	int nhoff;
  
- #define __pte_to_swp_entry(pte)		((swp_entry_t) { pte_val((pte)) })
- #define __pmd_to_swp_entry(pmd)		((swp_entry_t) { pmd_val((pmd)) })
--#define __swp_entry_to_pte(x)		((pte_t) { .pte = (x).val })
--#define __swp_entry_to_pmd(x)		((pmd_t) { .pmd = (x).val })
-+#define __swp_entry_to_pte(x)		(__pte((x).val))
-+#define __swp_entry_to_pmd(x)		(__pmd((x).val))
+@@ -103,13 +104,13 @@ static struct sk_buff *nsh_gso_segment(struct sk_buff *skb,
+ 	skb_reset_mac_header(skb);
+ 	skb->mac_len = proto == htons(ETH_P_TEB) ? ETH_HLEN : 0;
+ 	skb->protocol = proto;
++	mac_offset = skb->network_header - nhoff;
  
- extern void cleanup_highmap(void);
+ 	features &= NETIF_F_SG;
+ 	segs = skb_mac_gso_segment(skb, features);
+ 	if (IS_ERR_OR_NULL(segs)) {
+ 		skb_gso_error_unwind(skb, htons(ETH_P_NSH), nsh_len,
+-				     skb->network_header - nhoff,
+-				     mac_len);
++				     mac_offset, mac_len);
+ 		goto out;
+ 	}
  
+-- 
+2.25.1
+
