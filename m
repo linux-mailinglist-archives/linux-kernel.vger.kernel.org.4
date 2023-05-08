@@ -2,153 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985956FA02B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2048C6FA05C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232954AbjEHGws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 02:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
+        id S229852AbjEHG60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 02:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjEHGwq (ORCPT
+        with ESMTP id S232580AbjEHG6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 02:52:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572DD11628;
-        Sun,  7 May 2023 23:52:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 8 May 2023 02:58:18 -0400
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B25AA27E
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 23:58:00 -0700 (PDT)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9EEB61F3A;
-        Mon,  8 May 2023 06:52:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50B12C433A1;
-        Mon,  8 May 2023 06:52:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683528763;
-        bh=ZE6Vr9Yajp3snKfRb/T4DJi7T/W3uvjeYiZ1cxbbIQ8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Hs/uQexpO/8RkhQ8GVASe16K5oogngtqWb4hWHGsYN+phIhOYKsxuEyHuOVWH8dqq
-         s/ycLF9sGenZ526Kv7dFj2xUkEvU1/sAoaThocwUfx64gipZijsklWVrgLo72kfKBQ
-         h5V551044EuiZ2nA1xveZU1dtjwIBRiseKdLIOdeY04gb1ZkMcflkaTqCfU75TIQh6
-         jD3DqwZv4Zgg/tZssm8y7r8QYvu6pDhZEmy8lGmDpaSwZrN3X7/1DipxA004TyGs2C
-         VpH4n3+VYflmI7qStjblaHRawAOhN+lZ4EtvO14IDz7r+O5seIIGF3Bea1ze+HmySL
-         HfszT9KBNABBA==
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-965ac4dd11bso833864566b.2;
-        Sun, 07 May 2023 23:52:43 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwqaXAaU9vghMopTBYMdIpQMQhNSqmH89QoyRyD/G+5q//kgcrO
-        HuILqeExyYl/7KfZdMsADcaRT/i9fiTb+61KQTU=
-X-Google-Smtp-Source: ACHHUZ6Y6grqgRLTUhlimPBKynh9DnHZoR/6MpPmj9ylOios2EVUGTDYz+S0kva/uFN5mGCt7yUrdJztk28ZabD8yiM=
-X-Received: by 2002:a17:907:5c6:b0:94e:e293:cf34 with SMTP id
- wg6-20020a17090705c600b0094ee293cf34mr8100801ejb.6.1683528761470; Sun, 07 May
- 2023 23:52:41 -0700 (PDT)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4QFBtZ5Z9sz9sbv;
+        Mon,  8 May 2023 08:57:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1683529046;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XtmaYEfhkK+ur5naimltvQ4iqVq57t4hjPHSqtkEcow=;
+        b=xB9Jx8VLgZAlpCoPZLpqC5O2aKUuP18Lhn2kgotfbfZnKanZ9WMuGV4domG/79dUM5gaEF
+        ikjBALJB2mlbwY8zHBfMcmtT8gYV6RU+99i9Uqnemngy9soX343R7ds5yPK4WQtF5SMFJP
+        KwQGvebLAfy/kB59YW4bJJfUjvNxusGBImCuxBiTwoL1EW+PPg+bDCztc7JgCkJg2di+Oh
+        KulvYJpfVXPd++bihCV135c8C6W4kGleJ1gzIMoEaMnKobETJzUqZ3ravBF9uUvhLALMpM
+        gXgnQcsf9wKDLmoUf76aDuSqCO4876JtycNJcUlVBM/kj9K0nbvxBNoWCLi2tA==
+References: <20230418074008.69752-1-me@crly.cz>
+ <87cz3uzpx1.fsf@oltmanns.dev> <87mt2o9njh.fsf@oltmanns.dev>
+ <CSCPKPC8OB80.1TTBCM3YDVJQ5@void.crly.cz>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Roman Beranek <me@crly.cz>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Samuel Holland <samuel@sholland.org>,
+        Ondrej Jirman <megi@xff.cz>, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] drm: sun4i: set proper TCON0 DCLK rate in DSI mode
+Date:   Mon, 08 May 2023 08:54:28 +0200
+In-reply-to: <CSCPKPC8OB80.1TTBCM3YDVJQ5@void.crly.cz>
+Message-ID: <87o7mvpayj.fsf@oltmanns.dev>
 MIME-Version: 1.0
-References: <20230507182304.2934-1-jszhang@kernel.org> <20230507182304.2934-2-jszhang@kernel.org>
-In-Reply-To: <20230507182304.2934-2-jszhang@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 8 May 2023 14:52:29 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTni=G5FP80rSArErXGWQatR1P8rCy9nNOggeA4vtXftQ@mail.gmail.com>
-Message-ID: <CAJF2gTTni=G5FP80rSArErXGWQatR1P8rCy9nNOggeA4vtXftQ@mail.gmail.com>
-Subject: Re: [PATCH 1/5] irqchip/sifive-plic: Support T-HEAD's C910 PLIC
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023 at 2:34=E2=80=AFAM Jisheng Zhang <jszhang@kernel.org> w=
-rote:
->
-> The T-HEAD's C910 PLIC still needs the delegation bit settingto allow
-> access from S-mode, but it doesn't need the edge quirk.
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml      | 4 ++++
->  drivers/irqchip/irq-sifive-plic.c                             | 1 +
->  2 files changed, 5 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifiv=
-e,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/=
-sifive,plic-1.0.0.yaml
-> index f75736a061af..64b43a3c3748 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-=
-1.0.0.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-=
-1.0.0.yaml
-> @@ -62,6 +62,10 @@ properties:
->                - starfive,jh7110-plic
->                - canaan,k210-plic
->            - const: sifive,plic-1.0.0
-> +      - items:
-> +          - enum:
-> +              - thead,light-plic
-> +          - const: thead,c910-plic
->        - items:
->            - enum:
->                - allwinner,sun20i-d1-plic
-> diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifi=
-ve-plic.c
-> index e1484905b7bd..71afa2a584d9 100644
-> --- a/drivers/irqchip/irq-sifive-plic.c
-> +++ b/drivers/irqchip/irq-sifive-plic.c
-> @@ -569,6 +569,7 @@ static int __init plic_init(struct device_node *node,
->  }
->
->  IRQCHIP_DECLARE(sifive_plic, "sifive,plic-1.0.0", plic_init);
-> +IRQCHIP_DECLARE(thead_c910_plic, "thead,c910-plic", plic_init);
->  IRQCHIP_DECLARE(riscv_plic0, "riscv,plic0", plic_init); /* for legacy sy=
-stems */
->
->  static int __init plic_edge_init(struct device_node *node,
-> --
-> 2.40.0
->
-opensbi needs thead,c900-plic, and we could put multi compatible name
-in the dts. So, it's no need here.
+Hello Roman,
 
-Another question, Could we change the name of Sifive to RISC-V when
-"cat /proc/interrupts" ?
+On 2023-05-03 at 16:22:32 +0200, "Roman Beranek" <me@crly.cz> wrote:
+> Hello everyone,
+>
+> I apologize for my absence from the discussion during past week, I got
+> hit with tonsillitis.
 
-diff --git a/drivers/irqchip/irq-sifive-plic.c
-b/drivers/irqchip/irq-sifive-plic.c
-index ff47bd0dec45..b5844d784bfa 100644
---- a/drivers/irqchip/irq-sifive-plic.c
-+++ b/drivers/irqchip/irq-sifive-plic.c
-@@ -177,7 +177,7 @@ static int plic_set_affinity(struct irq_data *d,
- #endif
+I hope you feel better!
 
- static struct irq_chip plic_edge_chip =3D {
--       .name           =3D "SiFive PLIC",
-+       .name           =3D "RISC-V PLIC",
-        .irq_enable     =3D plic_irq_enable,
-        .irq_disable    =3D plic_irq_disable,
-        .irq_ack        =3D plic_irq_eoi,
-@@ -192,7 +192,7 @@ static struct irq_chip plic_edge_chip =3D {
- };
+> On Mon May 1, 2023 at 3:40 PM CEST, Frank Oltmanns wrote:
+>> Looking at ccu_nkm_determine_rate(), we've found our culprit because it
+>> does not try parent clock rates other than the current one. The same
+>> applies to all other ccu_nkm_* functions.
+>
+> Yes, that's why I dropped CLK_SET_RATE_PARENT from pll-mipi in v3.
+>
+>>  b. Add functionality to ccu_nkm_* to also update the parent clock rate.
+>>
+>> I'm actually interested in tackling b, but I can't make any promises as
+>> to if and when I'll be able to solve it. I'm not certain about any side
+>> effects this might have.
+>
+> It sounds like an interesting exercise. But what if HDMI is then added
+> to the mix?
 
- static struct irq_chip plic_chip =3D {
--       .name           =3D "SiFive PLIC",
-+       .name           =3D "RISC-V PLIC",
-        .irq_enable     =3D plic_irq_enable,
-        .irq_disable    =3D plic_irq_disable,
-        .irq_mask       =3D plic_irq_mask,
+Thanks for interest in this discussion! I really appreciate it!
 
---=20
-Best Regards
- Guo Ren
+First of all, let me admit that I'm no expert on this. But nobody else
+has replied so far, and I want to keep this conversation going, so let
+me share my view.
+
+My understanding is that pll-mipi being able to set pll-video0's rate
+should not have an impact on HDMI, neither positive nor negative. If I'm
+not mistaken those two things are orthogonal.
+
+The relevant part of the clk_summary with your v4 [1] patch on top of
+drm-next looks like this:
+
+                                 enable  protect              hardware
+   clock                          count    count        rate    enable
+----------------------------------------------------------------------
+    pll-video0                        1        1   294000000         Y
+       hdmi                           0        0   294000000         N
+       tcon1                          0        0   294000000         N
+       pll-mipi                       1        1   431200000         Y
+          tcon0                       2        1   431200000         Y
+             tcon-data-clock          1        1   107800000         Y
+       pll-video0-2x                  0        0   588000000         Y
+
+Note, that pll-video0 is protected.
+
+I don't own any boards that support HDMI in mainline. For the pinephone
+this support is added e.g. in megi's kernel, where connecting an HDMI
+output results in pll-video0's rate being set to 297MHz, even though it
+is 294MHz after boot.
+
+So, for reference, this is the same part of the clk_summary with megi's
+6.3.0 kernel, USB-C dock unplugged:
+
+                                 enable  protect              hardware
+   clock                          count    count        rate    enable
+----------------------------------------------------------------------
+    pll-video0                        3        0   294000000         Y
+       hdmi-phy-clk                   1        0    73500000         Y
+       hdmi                           1        0   294000000         Y
+       tcon1                          0        0   294000000         N
+       pll-mipi                       1        0   431200000         Y
+          tcon0                       2        0   431200000         Y
+             tcon-pixel-clock         1        0   107800000         Y
+       pll-video0-2x                  0        0   588000000         Y
+
+pll-video0 is not protected. When plugging in the USB-C dock with an HDMI
+monitor connected, the situation looks like this:
+
+                                 enable  protect              hardware
+   clock                          count    count        rate    enable
+----------------------------------------------------------------------
+    pll-video0                        4        1   297000000         Y
+       hdmi-phy-clk                   1        0   148500000         Y
+       hdmi                           1        0   148500000         Y
+       tcon1                          1        1   148500000         Y
+       pll-mipi                       1        0   424285714         Y
+          tcon0                       2        0   424285714         Y
+             tcon-pixel-clock         1        0   106071428         Y
+       pll-video0-2x                  0        0   594000000         Y
+
+As you can see, pll-video0 is updated to 297 MHz. My understanding is
+(again: not an expert here) this is only possible due to the missing
+protection.
+
+What I'm trying to say is that I don't see a connection between HDMI and
+having the functionality in ccu_nkm_* to update the parent clock rate.
+
+But I do think it would be preferable to have pll-video0 at 297 MHz
+after boot on the pinephone. We could achieve this with my two previous
+proposals:
+
+ a) Set pll-video0 to 297 MHz on boot
+ b) Add functionality to ccu_nkm_* to also update the parent clock rate.
+
+If solution b is viable, the goal for the pinephone (and any other
+boards supporting HDMI) would then be to select a pixel-data-clock so
+that the rate for pll-video0 is set to 297 MHz (by selecting an
+appropriate clock speed for the internal panel).
+
+Maybe I'm misunderstanding something. If so, I'd appreciate any
+corrections.
+
+Thanks,
+  Frank
+
+[1]: https://lore.kernel.org/all/20230505052110.67514-1-me@crly.cz/
+
+>
+> Best regards
+> Roman
