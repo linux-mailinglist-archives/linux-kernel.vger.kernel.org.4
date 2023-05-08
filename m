@@ -2,126 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679C76FB146
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B526FB153
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234176AbjEHNSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
+        id S234052AbjEHNUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbjEHNS1 (ORCPT
+        with ESMTP id S233727AbjEHNUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:18:27 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E9239BB1;
-        Mon,  8 May 2023 06:18:01 -0700 (PDT)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EB4B1E0002;
-        Mon,  8 May 2023 13:17:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1683551879;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=enm7EUfHqK7UBTbWSYhTmWN9a9/L22u9i8BI5feMG94=;
-        b=Of7X0Z3DotjRgU4wcDZNoyGeTSdaFfmz+q/cvFxbAAXxtf6DzzzAOmH0SFmG8LHGNjMaIl
-        upaEzzwS6gVAklDTj1GYc4RJiz0U3F4hY97GITjAN/q53Q2lSyHvKaa1ofI/YFlgYBhQUX
-        i+mkNoPIpqnc0SICMCAMvpUAoaGv0j16qAEVDcpZM8qVIfv71xDUJUcywS4jD9matvduva
-        d3M95MQ5DIggZAl85FcI+TZyJ4VzAu6ZG096iZpRbIiq+7Ns3DlfNckwocWVca3VOUk9h7
-        5KfOHrT4vhdkxfxV288snNHVv6pRSgAqgXjXMQ0r51GcEE/mG10QRMT/1KX7vQ==
-Date:   Mon, 8 May 2023 15:17:56 +0200
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Jun Li <jun.li@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Xu Yang <xu.yang_2@nxp.com>
-Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
-Message-ID: <20230508151756.785ec07e@booty>
-In-Reply-To: <ZFjaNzY32x8o2XG7@francesco-nb.int.toradex.com>
-References: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
-        <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
-        <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
-        <PA4PR04MB96403377F5E37C12AD8C25B389729@PA4PR04MB9640.eurprd04.prod.outlook.com>
-        <20230505120618.2f4cf22c@booty>
-        <ZFThyn/D/dDK9nk3@francesco-nb.int.toradex.com>
-        <PA4PR04MB96405EE2468555EA900B340189739@PA4PR04MB9640.eurprd04.prod.outlook.com>
-        <ZFjaNzY32x8o2XG7@francesco-nb.int.toradex.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 8 May 2023 09:20:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753E633853;
+        Mon,  8 May 2023 06:20:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 844DC617FB;
+        Mon,  8 May 2023 13:20:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86072C433EF;
+        Mon,  8 May 2023 13:20:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683552007;
+        bh=qxFXyXiRdVLI2aihpdzgvoA6SSxPIdCsgLDWxMdXX5o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SDESLVfEzhSqWVZXhUfs6uC5deUwcGU3S2WRTAYeCbTYSo11M9ke2xWtgxCkxK/jH
+         zseYJ5kcIgk01/TUw0HouGhrGsR2ro7tLcbpIWXiku1Ftpy5MkGLNkUVysAAJfTl3M
+         CU3Mj5AlTpTjCGuKpcl9EZuV+7HMlFQCqGedxrGWko3yG1uii8CUJJGBxupTa7/Fgo
+         ZGzU6I4xF9fGk1yMeyOPDhzGhrvJUQ2OyuIfsutzEqsvBLTCw2JJJ1ta8e8/JBjT8c
+         I7tBoJOxRHAM0Ui58UKO8Tu7WfOAp4nogSRpFaoSASmVZzzrhMndR8/yhjsExAP5i7
+         Qfwxuzf4IuCnw==
+Date:   Mon, 8 May 2023 22:20:04 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+Message-ID: <ZFj3BEHCDc/XLBZB@finisterre.sirena.org.uk>
+References: <20230426071045.20753-1-zhuyinbo@loongson.cn>
+ <20230426071045.20753-3-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="XLm4P5IUAz3phiU9"
+Content-Disposition: inline
+In-Reply-To: <20230426071045.20753-3-zhuyinbo@loongson.cn>
+X-Cookie: New customers only.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jun, Francesco,
 
-On Mon, 8 May 2023 13:17:11 +0200
-Francesco Dolcini <francesco@dolcini.it> wrote:
+--XLm4P5IUAz3phiU9
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On Sat, May 06, 2023 at 09:02:39AM +0000, Jun Li wrote:
-> > > -----Original Message-----
-> > > From: Francesco Dolcini <francesco@dolcini.it>
-> > > Sent: Friday, May 5, 2023 7:00 PM
-> > > To: Luca Ceresoli <luca.ceresoli@bootlin.com>; Jun Li <jun.li@nxp.com>
-> > > Cc: Francesco Dolcini <francesco@dolcini.it>; devicetree@vger.kernel.org;
-> > > festevam@gmail.com; gregkh@linuxfoundation.org; kernel@pengutronix.de;
-> > > linux-arm-kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>;
-> > > linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
-> > > peter.chen@nxp.com; robh+dt@kernel.org; s.hauer@pengutronix.de;
-> > > shawnguo@kernel.org; Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>;
-> > > Francesco Dolcini <francesco.dolcini@toradex.com>
-> > > Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
-> > > 
-> > > On Fri, May 05, 2023 at 12:06:18PM +0200, Luca Ceresoli wrote:  
-> > > > On Fri, 5 May 2023 09:49:16 +0000
-> > > > Jun Li <jun.li@nxp.com> wrote:  
-> > > > > Is your board design similar like Francesco's as below?  
-> > > >
-> > > > Possibly, but I'm afraid I can't say: I am using the Toradex Colibri
-> > > > i.MX6ULL SoM, whose schematics are not public.  
-> > > 
-> > > I can confirm that it's the same.  
-> > 
-> > Thanks Francesco for the confirmation, had a check with design team,
-> > there is no status bit which can be used to judge the VDD_USB_CAP is
-> > powered or not, so we have to add a board level dts property to tell
-> > this usb phy driver to bypass MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS.
-> > 
-> > Before send a formal patch, I want to confirm this should work for your
-> > HW design, like below simple hack:  
-> 
-> Thanks Li Jun, I tested it with v6.3.1 kernel and it's all good.
-> I would be happy to test the patch as soon as you send it.
+On Wed, Apr 26, 2023 at 03:10:45PM +0800, Yinbo Zhu wrote:
+> This bus driver supports the Loongson spi hardware controller in the
+> Loongson platforms and supports to use DTS and PCI framework to
+> register spi device resources.
 
-Thanks Jun, it works here as well, on 6.1.27!
+This breaks an x86 allmodconfig build:
 
-Best regards,
-Luca
+/build/stage/linux/drivers/spi/spi-loongson-core.c: In function =E2=80=98lo=
+ongson_spi_init_master=E2=80=99:
+/build/stage/linux/drivers/spi/spi-loongson-core.c:222:31: error: implicit =
+declaration of function =E2=80=98of_node_get=E2=80=99 [-Werror=3Dimplicit-f=
+unction-declaration]
+  222 |         master->dev.of_node =3D of_node_get(dev->of_node);
+      |                               ^~~~~~~~~~~
+/build/stage/linux/drivers/spi/spi-loongson-core.c:222:29: error: assignmen=
+t to =E2=80=98struct device_node *=E2=80=99 from =E2=80=98int=E2=80=99 make=
+s pointer from integer without a cast [-Werror=3Dint-conversion]
+  222 |         master->dev.of_node =3D of_node_get(dev->of_node);
+      |                             ^
+/build/stage/linux/drivers/spi/spi-loongson-core.c:242:13: error: implicit =
+declaration of function =E2=80=98of_get_property=E2=80=99 [-Werror=3Dimplic=
+it-function-declaration]
+  242 |         if (of_get_property(dev->of_node, "spi-nocs", NULL))
+      |             ^~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--XLm4P5IUAz3phiU9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRY9wMACgkQJNaLcl1U
+h9DhnAf/Rhh0Q9tyOwxp7DdPW2Ys4Rcuq4CES/hgxOKXyxUqTn1HsF0H9VL2/P1w
+KqLKoqzD1+Y24twdKcTh100SonViZqf6xMJSAB0U+RfyLcErUwafjmckjQe0pmEH
+Yigc7BExtn4GY7hK+IeSE3XbUX17Tk6WLcn0t7khwOcpo2KfaeCrea/ZJtlMt1eR
+/PAv/6QL64kBj6j23F/EtzvCTx9yXGPi3oa1sh9D/c/EkkwQhbdDJv1zMW6pRN9T
+A6nyb+wUq+vwN03XnyqWu8cjHd6Y9ExhDjnELm9jbxXr5kARlfK/8rihNL+PDjzT
+xuTS6cmhMfWsXisDtixgKfRf4UBFeQ==
+=z8qJ
+-----END PGP SIGNATURE-----
+
+--XLm4P5IUAz3phiU9--
