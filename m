@@ -2,170 +2,501 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0096FB6BA
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987E86FB6BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232921AbjEHTZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 15:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
+        id S233355AbjEHTal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 15:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjEHTZC (ORCPT
+        with ESMTP id S229577AbjEHTaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 15:25:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A8CE7;
-        Mon,  8 May 2023 12:25:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AAFB62A69;
-        Mon,  8 May 2023 19:25:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FE64C433EF;
-        Mon,  8 May 2023 19:24:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683573899;
-        bh=d25zkj4QIGqo1q9tRg60u0/yBs9nIpXewK+TJMWlDW4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KLRAJbBdRK515SCcYa1oYJQKak5uw89c+v1lYRyQNEYe9Rku839yD9vkdD2MALzRx
-         2hHmvo3ulnCy9ifr4zGje4M0roh1X+ugpS2Wew0Mk21s/j3Q7PLDgZRSMwqeNTHowm
-         ZXAp5vS02JoKUM3VnHz7HpWTKXZGUv5x+lAJfDay8i2OVmHFCg2+JuqI1++489ye4S
-         b3aR3TcYLOoFpnL92z2zBV0jM/wgZxqhpGFdJsc/mjZLwVFQdB36t2AcFS9KkID6b2
-         FmlnqXnINf0TSEuhagyPh0OX78cdwy95tMDESZOiCGcLN2pXQIvFXUy+K5NjiAcW1a
-         /VAo+mf6lNt/A==
-Date:   Mon, 8 May 2023 20:24:53 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        William Qiu <william.qiu@starfivetech.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v3 5/7] dt-bindings: soc: starfive: Add StarFive syscon
- module
-Message-ID: <20230508-margarita-fondling-c9b970ad73a9@spud>
-References: <20230414024157.53203-1-xingyu.wu@starfivetech.com>
- <20230414024157.53203-6-xingyu.wu@starfivetech.com>
- <20230424-footsie-compost-d6624c8ef4e8@spud>
+        Mon, 8 May 2023 15:30:39 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B0359C1;
+        Mon,  8 May 2023 12:30:37 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2ac733b813fso54427661fa.1;
+        Mon, 08 May 2023 12:30:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683574236; x=1686166236;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RpFHmWTSO87snqsRDFQuOr7PS8NeITU+H8E5Qf2YRbk=;
+        b=cgbFpOKrBrd11Zhos3+dwntw02ytm8nVOxOtp7uTUYjNx4Xo/v1oCkyhm6+ZH7WZsv
+         QexMgoCxRQzU9IAva7BevB2aTXWFfdwJiJ2WpXlaYGGwm/o2TnGVJ9Nx3p9LgU21MhQS
+         L8T6LhIuHSiuheq6RSLsl5h4Q0RILfpuN73uqqAwZZOjFOoRlZVXftLMbyizqRi4Tcat
+         BVNu029oKHcOZHjCRwoALv5bsy7Zi8OcdgnydSsi9PuVS872zrIZkX/HLFwMD370+6jB
+         1bbIv7PeuDfwqVGOL0bZ7slX9lEatiITtWowphuQ99oUzeDmLY41RJMosrH+Ksh3qKVD
+         xUWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683574236; x=1686166236;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RpFHmWTSO87snqsRDFQuOr7PS8NeITU+H8E5Qf2YRbk=;
+        b=JIAMn1WqHbQUiKDi8YbT7IDncNgtu0RXIBUuqoYfHThsJV2vC4LYb3G1VOcLp+VFgL
+         NjKLJDP8WbRqC60NJWBl5ZPHT0fKMqXAvU9C44Y3MINAaAVSK9BUyTDYgK90ME9iTB03
+         GfAxUVZJT8kOpbGBTAxo+zMVGc+baio8hADDqOzsW5ep679TaoOZv2rTDB50/+WCnJEo
+         bE9B6QM2r+e42kSPScmd8zJ0uSl3mMzvobz5J9Puw9BlkrLIGr7MG8mCMzW2JlDcKV0P
+         mF23mXftwbyN2C1EGum00Y3C5m7BLQuwRHc+4zwtn67byZ9/rMdyZeqfbeHOpJkrVYi8
+         RfgQ==
+X-Gm-Message-State: AC+VfDxv7RrjruGW6qcD9MTLyhKYJg5EtQdPKKxedF1K7KQcHDNnb3in
+        aWE2MU/LYNVykvMLAAuNb8bbT33h90iojCfXzGvoy1dz
+X-Google-Smtp-Source: ACHHUZ6w+XyOOEFGVf3IYSwWT5GrQg+yjLSZEGJIkk/BVXQnHiqrtCi5Y12Sqn/WmjtzbcofbQ7Ez+81k53R/fcRBr0=
+X-Received: by 2002:a2e:a16f:0:b0:2a8:ea22:28ab with SMTP id
+ u15-20020a2ea16f000000b002a8ea2228abmr57794ljl.25.1683574235396; Mon, 08 May
+ 2023 12:30:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mn9OXjbT0/L5FxUF"
-Content-Disposition: inline
-In-Reply-To: <20230424-footsie-compost-d6624c8ef4e8@spud>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1683001400-29905-1-git-send-email-quic_saluvala@quicinc.com>
+In-Reply-To: <1683001400-29905-1-git-send-email-quic_saluvala@quicinc.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Mon, 8 May 2023 12:30:23 -0700
+Message-ID: <CABBYNZ+QLkWhiWfZt0tb50zagsKA8VjtNZ7jefd8iOeMyfCRBA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] Bluetooth: hci_qca: Add qcomm devcoredump support
+To:     Sai Teja Aluvala <quic_saluvala@quicinc.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        quic_hemantg@quicinc.com, quic_bgodavar@quicinc.com,
+        jiangzp@google.com, mmandlik@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Sai,
 
---mn9OXjbT0/L5FxUF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, May 1, 2023 at 9:23=E2=80=AFPM Sai Teja Aluvala
+<quic_saluvala@quicinc.com> wrote:
+>
+> Intercept debug exception events from QCA controller and put them into
+> a devcoredump using hci devcoredump APIs of hci_core
+>
+> Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
+> Reviewed-by: Manish Mandlik <mmandlik@google.com>
+>
+> V2:
+> --
+> Updated to work with the updated HCI devcoredump API.
+>
+> V1:
+> --
+> Initial Patch
+> ---
+>  drivers/bluetooth/hci_qca.c | 190 ++++++++++++++++++++++++++++++++------=
+------
+>  1 file changed, 138 insertions(+), 52 deletions(-)
+>
+> diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+> index ca98f6d..c94a414 100644
+> --- a/drivers/bluetooth/hci_qca.c
+> +++ b/drivers/bluetooth/hci_qca.c
+> @@ -77,6 +77,7 @@ enum qca_flags {
+>         QCA_MEMDUMP_COLLECTION,
+>         QCA_HW_ERROR_EVENT,
+>         QCA_SSR_TRIGGERED,
+> +       QCA_COREDUMP_TRIGGERED,
+>         QCA_BT_OFF,
+>         QCA_ROM_FW
+>  };
+> @@ -116,9 +117,7 @@ enum qca_memdump_states {
+>         QCA_MEMDUMP_TIMEOUT,
+>  };
+>
+> -struct qca_memdump_data {
+> -       char *memdump_buf_head;
+> -       char *memdump_buf_tail;
+> +struct qca_memdump_info {
+>         u32 current_seq_no;
+>         u32 received_dump;
+>         u32 ram_dump_size;
+> @@ -159,13 +158,15 @@ struct qca_data {
+>         struct work_struct ws_tx_vote_off;
+>         struct work_struct ctrl_memdump_evt;
+>         struct delayed_work ctrl_memdump_timeout;
+> -       struct qca_memdump_data *qca_memdump;
+> +       struct qca_memdump_info *qca_memdump;
+>         unsigned long flags;
+>         struct completion drop_ev_comp;
+>         wait_queue_head_t suspend_wait_q;
+>         enum qca_memdump_states memdump_state;
+>         struct mutex hci_memdump_lock;
+>
+> +       u16 fw_version;
+> +       u16 controller_id;
+>         /* For debugging purpose */
+>         u64 ibs_sent_wacks;
+>         u64 ibs_sent_slps;
+> @@ -232,6 +233,7 @@ static void qca_regulator_disable(struct qca_serdev *=
+qcadev);
+>  static void qca_power_shutdown(struct hci_uart *hu);
+>  static int qca_power_off(struct hci_dev *hdev);
+>  static void qca_controller_memdump(struct work_struct *work);
+> +static void qca_dmp_hdr(struct hci_dev *hdev, struct sk_buff *skb);
+>
+>  static enum qca_btsoc_type qca_soc_type(struct hci_uart *hu)
+>  {
+> @@ -543,7 +545,8 @@ static void qca_controller_memdump_timeout(struct wor=
+k_struct *work)
+>         mutex_lock(&qca->hci_memdump_lock);
+>         if (test_bit(QCA_MEMDUMP_COLLECTION, &qca->flags)) {
+>                 qca->memdump_state =3D QCA_MEMDUMP_TIMEOUT;
+> -               if (!test_bit(QCA_HW_ERROR_EVENT, &qca->flags)) {
+> +               if ((!test_bit(QCA_HW_ERROR_EVENT, &qca->flags)) ||
+> +                       (!test_bit(QCA_COREDUMP_TRIGGERED, &qca->flags)))=
+ {
+>                         /* Inject hw error event to reset the device
+>                          * and driver.
+>                          */
+> @@ -976,6 +979,28 @@ static int qca_recv_acl_data(struct hci_dev *hdev, s=
+truct sk_buff *skb)
+>         return hci_recv_frame(hdev, skb);
+>  }
+>
+> +static void qca_dmp_hdr(struct hci_dev *hdev, struct sk_buff *skb)
+> +{
+> +       struct hci_uart *hu =3D hci_get_drvdata(hdev);
+> +       struct qca_data *qca =3D hu->priv;
+> +       char buf[80];
+> +
+> +       snprintf(buf, sizeof(buf), "Controller Name: 0x%x\n",
+> +               qca->controller_id);
+> +       skb_put_data(skb, buf, strlen(buf));
+> +
+> +       snprintf(buf, sizeof(buf), "Firmware Version: 0x%x\n",
+> +               qca->fw_version);
+> +       skb_put_data(skb, buf, strlen(buf));
+> +
+> +       snprintf(buf, sizeof(buf), "Vendor:Qualcomm\n");
+> +       skb_put_data(skb, buf, strlen(buf));
+> +
+> +       snprintf(buf, sizeof(buf), "Driver: %s\n",
+> +               hu->serdev->dev.driver->name);
+> +       skb_put_data(skb, buf, strlen(buf));
+> +}
+> +
+>  static void qca_controller_memdump(struct work_struct *work)
+>  {
+>         struct qca_data *qca =3D container_of(work, struct qca_data,
+> @@ -983,13 +1008,11 @@ static void qca_controller_memdump(struct work_str=
+uct *work)
+>         struct hci_uart *hu =3D qca->hu;
+>         struct sk_buff *skb;
+>         struct qca_memdump_event_hdr *cmd_hdr;
+> -       struct qca_memdump_data *qca_memdump =3D qca->qca_memdump;
+> +       struct qca_memdump_info *qca_memdump =3D qca->qca_memdump;
+>         struct qca_dump_size *dump;
+> -       char *memdump_buf;
+> -       char nullBuff[QCA_DUMP_PACKET_SIZE] =3D { 0 };
+>         u16 seq_no;
+> -       u32 dump_size;
+>         u32 rx_size;
+> +       int ret =3D 0;
+>         enum qca_btsoc_type soc_type =3D qca_soc_type(hu);
+>
+>         while ((skb =3D skb_dequeue(&qca->rx_memdump_q))) {
+> @@ -1005,7 +1028,7 @@ static void qca_controller_memdump(struct work_stru=
+ct *work)
+>                 }
+>
+>                 if (!qca_memdump) {
+> -                       qca_memdump =3D kzalloc(sizeof(struct qca_memdump=
+_data),
+> +                       qca_memdump =3D kzalloc(sizeof(struct qca_memdump=
+_info),
+>                                               GFP_ATOMIC);
+>                         if (!qca_memdump) {
+>                                 mutex_unlock(&qca->hci_memdump_lock);
+> @@ -1031,44 +1054,49 @@ static void qca_controller_memdump(struct work_st=
+ruct *work)
+>                         set_bit(QCA_IBS_DISABLED, &qca->flags);
+>                         set_bit(QCA_MEMDUMP_COLLECTION, &qca->flags);
+>                         dump =3D (void *) skb->data;
+> -                       dump_size =3D __le32_to_cpu(dump->dump_size);
+> -                       if (!(dump_size)) {
+> +                       qca_memdump->ram_dump_size =3D __le32_to_cpu(dump=
+->dump_size);
+> +                       if (!(qca_memdump->ram_dump_size)) {
+>                                 bt_dev_err(hu->hdev, "Rx invalid memdump =
+size");
+>                                 kfree(qca_memdump);
+>                                 kfree_skb(skb);
+> -                               qca->qca_memdump =3D NULL;
+>                                 mutex_unlock(&qca->hci_memdump_lock);
+>                                 return;
+>                         }
+>
+> -                       bt_dev_info(hu->hdev, "QCA collecting dump of siz=
+e:%u",
+> -                                   dump_size);
+>                         queue_delayed_work(qca->workqueue,
+>                                            &qca->ctrl_memdump_timeout,
+> -                                          msecs_to_jiffies(MEMDUMP_TIMEO=
+UT_MS)
+> -                                         );
+> -
+> -                       skb_pull(skb, sizeof(dump_size));
+> -                       memdump_buf =3D vmalloc(dump_size);
+> -                       qca_memdump->ram_dump_size =3D dump_size;
+> -                       qca_memdump->memdump_buf_head =3D memdump_buf;
+> -                       qca_memdump->memdump_buf_tail =3D memdump_buf;
+> -               }
+> +                                          msecs_to_jiffies(MEMDUMP_TIMEO=
+UT_MS));
+> +                       skb_pull(skb, sizeof(qca_memdump->ram_dump_size))=
+;
+> +                       qca_memdump->current_seq_no =3D 0;
+> +                       qca_memdump->received_dump =3D 0;
+> +                       ret =3D hci_devcd_init(hu->hdev, qca_memdump->ram=
+_dump_size);
+> +                       bt_dev_info(hu->hdev, "hci_devcd_init Return:%d",
+> +                                   ret);
+> +                       if (ret < 0) {
+> +                               kfree(qca->qca_memdump);
+> +                               qca->qca_memdump =3D NULL;
+> +                               qca->memdump_state =3D QCA_MEMDUMP_COLLEC=
+TED;
+> +                               cancel_delayed_work(&qca->ctrl_memdump_ti=
+meout);
+> +                               clear_bit(QCA_MEMDUMP_COLLECTION, &qca->f=
+lags);
+> +                               mutex_unlock(&qca->hci_memdump_lock);
+> +                               return;
+> +                       }
+>
+> -               memdump_buf =3D qca_memdump->memdump_buf_tail;
+> +                       bt_dev_info(hu->hdev, "QCA collecting dump of siz=
+e:%u",
+> +                                   qca_memdump->ram_dump_size);
+> +
+> +               }
+>
+>                 /* If sequence no 0 is missed then there is no point in
+>                  * accepting the other sequences.
+>                  */
+> -               if (!memdump_buf) {
+> +               if (!test_bit(QCA_MEMDUMP_COLLECTION, &qca->flags)) {
+>                         bt_dev_err(hu->hdev, "QCA: Discarding other packe=
+ts");
+>                         kfree(qca_memdump);
+>                         kfree_skb(skb);
+> -                       qca->qca_memdump =3D NULL;
+>                         mutex_unlock(&qca->hci_memdump_lock);
+>                         return;
+>                 }
+> -
+>                 /* There could be chance of missing some packets from
+>                  * the controller. In such cases let us store the dummy
+>                  * packets in the buffer.
+> @@ -1078,8 +1106,8 @@ static void qca_controller_memdump(struct work_stru=
+ct *work)
+>                  * bits, so skip this checking for missing packet.
+>                  */
+>                 while ((seq_no > qca_memdump->current_seq_no + 1) &&
+> -                      (soc_type !=3D QCA_QCA6390) &&
+> -                      seq_no !=3D QCA_LAST_SEQUENCE_NUM) {
+> +                       (soc_type !=3D QCA_QCA6390) &&
+> +                       seq_no !=3D QCA_LAST_SEQUENCE_NUM) {
+>                         bt_dev_err(hu->hdev, "QCA controller missed packe=
+t:%d",
+>                                    qca_memdump->current_seq_no);
+>                         rx_size =3D qca_memdump->received_dump;
+> @@ -1090,43 +1118,38 @@ static void qca_controller_memdump(struct work_st=
+ruct *work)
+>                                            qca_memdump->received_dump);
+>                                 break;
+>                         }
+> -                       memcpy(memdump_buf, nullBuff, QCA_DUMP_PACKET_SIZ=
+E);
+> -                       memdump_buf =3D memdump_buf + QCA_DUMP_PACKET_SIZ=
+E;
+> +                       hci_devcd_append_pattern(hu->hdev, 0x00,
+> +                               QCA_DUMP_PACKET_SIZE);
+>                         qca_memdump->received_dump +=3D QCA_DUMP_PACKET_S=
+IZE;
+>                         qca_memdump->current_seq_no++;
+>                 }
+>
+> -               rx_size =3D qca_memdump->received_dump + skb->len;
+> +               rx_size =3D qca_memdump->received_dump  + skb->len;
+>                 if (rx_size <=3D qca_memdump->ram_dump_size) {
+>                         if ((seq_no !=3D QCA_LAST_SEQUENCE_NUM) &&
+> -                           (seq_no !=3D qca_memdump->current_seq_no))
+> +                           (seq_no !=3D qca_memdump->current_seq_no)) {
+>                                 bt_dev_err(hu->hdev,
+>                                            "QCA memdump unexpected packet=
+ %d",
+>                                            seq_no);
+> +                       }
+>                         bt_dev_dbg(hu->hdev,
+>                                    "QCA memdump packet %d with length %d"=
+,
+>                                    seq_no, skb->len);
+> -                       memcpy(memdump_buf, (unsigned char *)skb->data,
+> -                              skb->len);
+> -                       memdump_buf =3D memdump_buf + skb->len;
+> -                       qca_memdump->memdump_buf_tail =3D memdump_buf;
+> -                       qca_memdump->current_seq_no =3D seq_no + 1;
+> -                       qca_memdump->received_dump +=3D skb->len;
+> +                       hci_devcd_append(hu->hdev, skb);
+> +                       qca_memdump->current_seq_no +=3D 1;
+> +                       qca_memdump->received_dump =3D rx_size;
+>                 } else {
+>                         bt_dev_err(hu->hdev,
+> -                                  "QCA memdump received %d, no space for=
+ packet %d",
+> -                                  qca_memdump->received_dump, seq_no);
+> +                                  "QCA memdump received no space for pac=
+ket %d",
+> +                                   qca_memdump->current_seq_no);
+>                 }
+> -               qca->qca_memdump =3D qca_memdump;
+> -               kfree_skb(skb);
+> +
+>                 if (seq_no =3D=3D QCA_LAST_SEQUENCE_NUM) {
+>                         bt_dev_info(hu->hdev,
+> -                                   "QCA memdump Done, received %d, total=
+ %d",
+> -                                   qca_memdump->received_dump,
+> -                                   qca_memdump->ram_dump_size);
+> -                       memdump_buf =3D qca_memdump->memdump_buf_head;
+> -                       dev_coredumpv(&hu->serdev->dev, memdump_buf,
+> -                                     qca_memdump->received_dump, GFP_KER=
+NEL);
+> +                               "QCA memdump Done, received %d, total %d"=
+,
+> +                               qca_memdump->received_dump,
+> +                               qca_memdump->ram_dump_size);
+> +                       hci_devcd_complete(hu->hdev);
+>                         cancel_delayed_work(&qca->ctrl_memdump_timeout);
+>                         kfree(qca->qca_memdump);
+>                         qca->qca_memdump =3D NULL;
+> @@ -1537,8 +1560,8 @@ static void qca_hw_error(struct hci_dev *hdev, u8 c=
+ode)
+>         mutex_lock(&qca->hci_memdump_lock);
+>         if (qca->memdump_state !=3D QCA_MEMDUMP_COLLECTED) {
+>                 bt_dev_err(hu->hdev, "clearing allocated memory due to me=
+mdump timeout");
+> +               hci_devcd_abort(hu->hdev);
+>                 if (qca->qca_memdump) {
+> -                       vfree(qca->qca_memdump->memdump_buf_head);
+>                         kfree(qca->qca_memdump);
+>                         qca->qca_memdump =3D NULL;
+>                 }
+> @@ -1577,7 +1600,8 @@ static void qca_cmd_timeout(struct hci_dev *hdev)
+>         mutex_lock(&qca->hci_memdump_lock);
+>         if (qca->memdump_state !=3D QCA_MEMDUMP_COLLECTED) {
+>                 qca->memdump_state =3D QCA_MEMDUMP_TIMEOUT;
+> -               if (!test_bit(QCA_HW_ERROR_EVENT, &qca->flags)) {
+> +               if ((!test_bit(QCA_HW_ERROR_EVENT, &qca->flags)) ||
+> +                       (!test_bit(QCA_COREDUMP_TRIGGERED, &qca->flags)))=
+ {
+>                         /* Inject hw error event to reset the device
+>                          * and driver.
+>                          */
+> @@ -1702,6 +1726,65 @@ static int qca_power_on(struct hci_dev *hdev)
+>         return ret;
+>  }
+>
+> +static void hci_coredump_qca(struct hci_dev *hdev)
+> +{
+> +       struct hci_uart *hu =3D hci_get_drvdata(hdev);
+> +       struct qca_data *qca =3D hu->priv;
+> +       struct sk_buff *skb;
+> +
+> +
+> +       set_bit(QCA_COREDUMP_TRIGGERED, &qca->flags);
+> +       bt_dev_info(hdev, "Enter mem_dump_status: %d", qca->memdump_state=
+);
+> +
+> +       if (qca->memdump_state =3D=3D QCA_MEMDUMP_IDLE) {
+> +               /* we need to crash the SOC
+> +                * and wait here for 8 seconds to get the dump packets.
+> +                * This will block main thread to be on hold until we
+> +                * collect dump.
+> +                */
+> +               set_bit(QCA_SSR_TRIGGERED, &qca->flags);
+> +               set_bit(QCA_MEMDUMP_COLLECTION, &qca->flags);
+> +
+> +               skb =3D bt_skb_alloc(QCA_CRASHBYTE_PACKET_LEN, GFP_KERNEL=
+);
+> +               if (!skb) {
+> +                       bt_dev_err(hu->hdev, "Failed to allocate memory f=
+or skb packet");
+> +                       return;
+> +               }
+> +
+> +               /* We forcefully crash the controller, by sending 0xfb by=
+te for
+> +                * 1024 times. We also might have chance of losing data, =
+To be
+> +                * on safer side we send 1096 bytes to the SoC.
+> +                */
+> +               memset(skb_put(skb, QCA_CRASHBYTE_PACKET_LEN), QCA_MEMDUM=
+P_BYTE,
+> +                       QCA_CRASHBYTE_PACKET_LEN);
+> +               hci_skb_pkt_type(skb) =3D HCI_COMMAND_PKT;
+> +               bt_dev_info(hu->hdev, "crash the soc to collect controlle=
+r dump");
 
-On Mon, Apr 24, 2023 at 06:15:47PM +0100, Conor Dooley wrote:
-> On Fri, Apr 14, 2023 at 10:41:55AM +0800, Xingyu Wu wrote:
-> > From: William Qiu <william.qiu@starfivetech.com>
-> >=20
-> > Add documentation to describe StarFive System Controller Registers.
-> >=20
-> > Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> > ---
-> >  .../soc/starfive/starfive,jh7110-syscon.yaml  | 58 +++++++++++++++++++
-> >  MAINTAINERS                                   |  6 ++
-> >  2 files changed, 64 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/soc/starfive/star=
-five,jh7110-syscon.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh=
-7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,=
-jh7110-syscon.yaml
-> > new file mode 100644
-> > index 000000000000..de086e74a229
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-sy=
-scon.yaml
-> > @@ -0,0 +1,58 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/soc/starfive/starfive,jh7110-syscon=
-=2Eyaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: StarFive JH7110 SoC system controller
-> > +
-> > +maintainers:
-> > +  - William Qiu <william.qiu@starfivetech.com>
-> > +
-> > +description: |
-> > +  The StarFive JH7110 SoC system controller provides register informat=
-ion such
-> > +  as offset, mask and shift to configure related modules such as MMC a=
-nd PCIe.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +          - enum:
-> > +              - starfive,jh7110-aon-syscon
-> > +              - starfive,jh7110-sys-syscon
-> > +          - const: syscon
-> > +          - const: simple-mfd
-> > +      - items:
-> > +          - const: starfive,jh7110-stg-syscon
-> > +          - const: syscon
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clock-controller:
-> > +    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
-> > +    type: object
-> > +
-> > +  power-controller:
-> > +    $ref: /schemas/power/starfive,jh7110-pmu.yaml#
-> > +    type: object
->=20
-> My plan was to grab this patch after the merge window, but there's been
-> some back and forth [1] about what exactly should be a power-controller
-> here. Given the merge window is open & I know Emil wants to look at the
-> various clock bits for the JH7110, I don't think there's a pressing need
-> for you to do anything here, but figured I'd at least mention how things
-> are going on this thread too.
+This seem awkward, the purpose of devcd is to collect coredumps not to
+force the controller to crash to then collect it, so if the controller
+hasn't crashed it shall not call into devcd, if you doing this as part
+of handling a hardware error Id recommend doing it as part of hw_error
+callback, that said be aware that you are probably exposing a
+vulnerability to your firmware with the code above.
 
-To follow up on this, it transpired in that thread that this node, not a
-child node, should be the power controller.
+> +
+> +               switch (qca->tx_ibs_state) {
+> +               case HCI_IBS_TX_WAKING:
+> +                       /* Transient state; just keep packet for later */
+> +                       skb_queue_tail(&qca->tx_wait_q, skb);
+> +                       break;
+> +               case HCI_IBS_TX_AWAKE:
+> +                       skb_queue_tail(&qca->txq, skb);
+> +                       hci_uart_tx_wakeup(hu);
+> +                       break;
+> +               case HCI_IBS_TX_ASLEEP:
+> +                       skb_queue_tail(&qca->tx_wait_q, skb);
+> +                       qca->tx_ibs_state =3D HCI_IBS_TX_WAKING;
+> +                       /* Schedule a work queue to wake up device */
+> +                       queue_work(qca->workqueue, &qca->ws_awake_device)=
+;
+> +                       break;
+> +               }
+> +       } else if (qca->memdump_state =3D=3D QCA_MEMDUMP_COLLECTING) {
+> +               /* Let us wait here until memory dump collected or
+> +                * memory dump timer expired.
+> +                */
+> +               bt_dev_info(hdev, "waiting for dump to complete");
+> +       }
+> +       clear_bit(QCA_COREDUMP_TRIGGERED, &qca->flags);
+> +}
+> +
+>  static int qca_setup(struct hci_uart *hu)
+>  {
+>         struct hci_dev *hdev =3D hu->hdev;
+> @@ -1816,6 +1899,9 @@ static int qca_setup(struct hci_uart *hu)
+>                 hu->hdev->set_bdaddr =3D qca_set_bdaddr_rome;
+>         else
+>                 hu->hdev->set_bdaddr =3D qca_set_bdaddr;
+> +       qca->fw_version =3D le16_to_cpu(ver.patch_ver);
+> +       qca->controller_id =3D le16_to_cpu(ver.rom_ver);
+> +       hci_devcd_register(hdev, hci_coredump_qca, qca_dmp_hdr, NULL);
+>
+>         return ret;
+>  }
+> --
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
+>
 
-Up to you StarFive folk how you wish to resend, but I am fine with it
-being in this series, I shall just not pick up the soc driver patches
-until the resent binding is applied by Stephen.
 
-Thanks,
-Conor.
-
---mn9OXjbT0/L5FxUF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFlMhQAKCRB4tDGHoIJi
-0qDRAQC/Oe6fBxsiKfuTm43qtFROX9XPTmdIibQnwwOi+PzIEQD8DfYgZYAzC53a
-PgLCy7zOEWGuwYyL6gtESmlBXNsYlQY=
-=Nsa4
------END PGP SIGNATURE-----
-
---mn9OXjbT0/L5FxUF--
+--=20
+Luiz Augusto von Dentz
