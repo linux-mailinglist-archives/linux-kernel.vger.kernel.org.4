@@ -2,345 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7EA6FB169
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 916EE6FB16A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233002AbjEHN07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
+        id S233524AbjEHN1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEHN06 (ORCPT
+        with ESMTP id S229457AbjEHN1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:26:58 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F70A26EB1
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 06:26:57 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64115eef620so34393932b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 06:26:57 -0700 (PDT)
+        Mon, 8 May 2023 09:27:01 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77268E70A
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 06:27:00 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-7577ef2fa31so280824885a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 06:27:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683552416; x=1686144416;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fQCOJg3W+uzuBK1RqiTQ11fYeTUuvn8Ma1oUc2qRxTs=;
-        b=KlZIFceKK/yUt1yZ2w8IWHrzddZd+q+0DLvinVyhw10Yvr8b7ShPD9U6KEoq2V08tJ
-         sPUraAFwu4rVe1UwQ5Gi1dDzz6Gu4u0lyW3yhoeDm5oef5WNSzB8oPaRqiDAoITsQsP/
-         C+fXcpwGtzl55NZ1QFpnviufpFnguPyo/eMm41aVCaWOhGivGXrv7unxCZjTxV3YKVDx
-         7+ZUqtxEuOZAq51FH55m1OIA66WyVoj5pSuoeiQfVg2MLtpLCaMHx9zxN1q9Bu6r3Oo2
-         aFpWcncg95OfCZ/wdF59c1giSsDwfsNaoOEqgGK+GstMDgV3sEuTwGuI/4lHih/mu4lo
-         +6kw==
+        d=gmail.com; s=20221208; t=1683552419; x=1686144419;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=21T2ruoV7Hb2byNjXRrKdStLSJ9N1tOpZrLYkVqWI4g=;
+        b=aX8dhtJ3Of8LskEHMPZUnsrWqNtDscG4RcldfbwS8Rk5MGGHAzAWoCfvckzi1JJ+p8
+         +ENMwfFP8Mal3HHrXZ7Z/6gBObNQUrKv1rdsj9FOS+EAcwpULt2H0y8diJ+n1GIQpaFI
+         HU239dtelTmUXRsfSKW/WiyCooiUhkILOrXlkkiWj0qBert5tmcfpxmfjihLtHkZO1/l
+         L8OILMLdLyLPiFxlunazgq/L4r37cg7aLsiY5g55vyC6/h7Mqyvp0BdGuNF06hp2CsYN
+         ocY8UPYc7V8MNKGHru4M6/OFpx7vUIIcDsfrWwmHLJiGVhCQ7z3cNRj5pIUU+pywNwgv
+         RtiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683552416; x=1686144416;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fQCOJg3W+uzuBK1RqiTQ11fYeTUuvn8Ma1oUc2qRxTs=;
-        b=JaQaZglc3YmI8zfzy2Qs51HXqho6zRgvmOsZjDJzIolmkFidQ4B9R5EAYjuRZ97Juc
-         Rgkd2Nc0+afRAY/8Yeqxzm+dWJKxqNwr7luzukV1+DG5OwSVN0Z3bJyBNLVmDveHDcMp
-         sNnxbyIXsslMu3tQuw0POZtUuKWgXcSIaHBsxKXZJMYIlrgwS8LauWBnr9A9aWYT/9+9
-         Lo48Z+P7qk3siRC8uBFCbpOsHCKZSwJfMOANGL5PqSaemiGlhm54TmUpLNl0Ln21ZDyO
-         +Y7E5jo6h4H+QwDKts5swzpe+W7Zb88JSTY4EXwQukwJqGTAl5PZL4Ar6ZkVKHShDd1Y
-         N80g==
-X-Gm-Message-State: AC+VfDw5s254HhFNeYW9Y0D4FjmakII74wyj/yLZVp+pNbRiO5nXer0z
-        1oVhjnMrsV34LEH7NuH8BoIpfTOzuIVJxQ==
-X-Google-Smtp-Source: ACHHUZ5HnOLRskG7NnYBLe2nfjDvZBhtYYyvcvVtwlX0yOcrRs3/2qwK+Rp5IYRwTRqFZxOInp5+Ng==
-X-Received: by 2002:a17:902:c409:b0:1a9:778b:c1a8 with SMTP id k9-20020a170902c40900b001a9778bc1a8mr22710917plk.12.1683552416296;
-        Mon, 08 May 2023 06:26:56 -0700 (PDT)
-Received: from vernon-pc ([49.67.182.217])
-        by smtp.gmail.com with ESMTPSA id o9-20020a170902d4c900b001a98f844e60sm3209582plg.263.2023.05.08.06.26.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 06:26:55 -0700 (PDT)
-Date:   Mon, 8 May 2023 21:26:44 +0800
-From:   Vernon Yang <vernon2gm@gmail.com>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 31/36] maple_tree: Add mas_prev_range() and
- mas_find_range_rev interface
-Message-ID: <ZFj4dNW953l/qCb4@vernon-pc>
-References: <20230505174204.2665599-1-Liam.Howlett@oracle.com>
- <20230505174204.2665599-32-Liam.Howlett@oracle.com>
+        d=1e100.net; s=20221208; t=1683552419; x=1686144419;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=21T2ruoV7Hb2byNjXRrKdStLSJ9N1tOpZrLYkVqWI4g=;
+        b=IsSizfO0ZCTQ3nmRBlbKZtjAX7WXnJuAqOLBjUnQMS6ojPbfN5FsKyqimvdq6Eh9cE
+         3/FX7Nh+kj7COyLeZSWvtgIqFpi9jXb1vDfezS8X/eCTkJRciyRi4Nx9CMViGbG0RcbG
+         2uu40QF6GM+yAxSeG0hWpZsxTO1Y5bFjVh+BdhB+EbIQnDmR6TGBjUGuSXuu095uRPpx
+         O2n4hkLsDBxFZh7bW5Nx0my3h3vaLlldA0tPkmXWmJ0Gy2Ab85afN+SZKEeNL9FVLhmZ
+         uGHGBF6DSW+QxOYiMIIDKJAy+98CrgrsvW+/cRCUGUyrlEHvrwdUYN/TMP7GXWoh/DXA
+         daLQ==
+X-Gm-Message-State: AC+VfDw6lHwZCumrsGyah/TjhUs3Fwnd0E/RES1qjBXNS568YzvKb2YF
+        PljVQCgCt3VuzG1FnEwFOiyyDErFvQx7bsjv8F8=
+X-Google-Smtp-Source: ACHHUZ7T9W7EIITLa1TsAqjEQmo5ihJZHu0wAuDPkjDo3XKSP+xKv20ecO/5TD7HvM0TSL+kCd2tYQLT02mbRMBJxDw=
+X-Received: by 2002:ad4:5ecf:0:b0:619:90cd:4a99 with SMTP id
+ jm15-20020ad45ecf000000b0061990cd4a99mr16664111qvb.3.1683552419471; Mon, 08
+ May 2023 06:26:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230505174204.2665599-32-Liam.Howlett@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: mr.adnaali.muhamad01@gmail.com
+Received: by 2002:a05:6214:2f8c:b0:61a:cb7d:5031 with HTTP; Mon, 8 May 2023
+ 06:26:59 -0700 (PDT)
+From:   Mrs Suzara Maling Wan <mrssuzaramailingwan12@gmail.com>
+Date:   Mon, 8 May 2023 14:26:59 +0100
+X-Google-Sender-Auth: dh7Oql1BfHNkGjmevQYWnOTmn50
+Message-ID: <CAMhMFrGk35rbE9sfO-L5LQ5ZvG8D9av59d8_rK71xdRmKJW_WA@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 01:41:59PM -0400, Liam R. Howlett wrote:
-> Some users of the maple tree may want to move to the previous range
-> regardless of the value stored there.  Add this interface as well as the
-> 'find' variant to support walking to the first value, then iterating
-> over the previous ranges.
->
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> ---
->  include/linux/maple_tree.h |   1 +
->  lib/maple_tree.c           | 160 +++++++++++++++++++++++++++----------
->  2 files changed, 121 insertions(+), 40 deletions(-)
->
-> diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
-> index a4cd8f891a090..542b09118a09f 100644
-> --- a/include/linux/maple_tree.h
-> +++ b/include/linux/maple_tree.h
-> @@ -467,6 +467,7 @@ void mas_destroy(struct ma_state *mas);
->  int mas_expected_entries(struct ma_state *mas, unsigned long nr_entries);
->
->  void *mas_prev(struct ma_state *mas, unsigned long min);
-> +void *mas_prev_range(struct ma_state *mas, unsigned long max);
->  void *mas_next(struct ma_state *mas, unsigned long max);
->  void *mas_next_range(struct ma_state *mas, unsigned long max);
->
-> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> index e050fd1f7cce8..f060c71965c0d 100644
-> --- a/lib/maple_tree.c
-> +++ b/lib/maple_tree.c
-> @@ -5924,18 +5924,8 @@ void *mt_next(struct maple_tree *mt, unsigned long index, unsigned long max)
->  }
->  EXPORT_SYMBOL_GPL(mt_next);
->
-> -/**
-> - * mas_prev() - Get the previous entry
-> - * @mas: The maple state
-> - * @min: The minimum value to check.
-> - *
-> - * Must hold rcu_read_lock or the write lock.
-> - * Will reset mas to MAS_START if the node is MAS_NONE.  Will stop on not
-> - * searchable nodes.
-> - *
-> - * Return: the previous value or %NULL.
-> - */
-> -void *mas_prev(struct ma_state *mas, unsigned long min)
-> +static inline bool mas_prev_setup(struct ma_state *mas, unsigned long min,
-> +		void **entry)
->  {
->  	if (mas->index <= min)
->  		goto none;
-> @@ -5953,7 +5943,8 @@ void *mas_prev(struct ma_state *mas, unsigned long min)
->  		if (!mas->index)
->  			goto none;
->  		mas->index = mas->last = 0;
-> -		return mas_root(mas);
-> +		*entry = mas_root(mas);
-> +		return true;
->  	}
->
->  	if (mas_is_none(mas)) {
-> @@ -5961,18 +5952,64 @@ void *mas_prev(struct ma_state *mas, unsigned long min)
->  			/* Walked to out-of-range pointer? */
->  			mas->index = mas->last = 0;
->  			mas->node = MAS_ROOT;
-> -			return mas_root(mas);
-> +			*entry = mas_root(mas);
-> +			return true;
->  		}
-> -		return NULL;
-> +		return true;
->  	}
-> -	return mas_prev_slot(mas, min, false);
-> +
-> +	return false;
->
->  none:
->  	mas->node = MAS_NONE;
-> -	return NULL;
-> +	return true;
-> +}
-> +
-> +/**
-> + * mas_prev() - Get the previous entry
-> + * @mas: The maple state
-> + * @min: The minimum value to check.
-> + *
-> + * Must hold rcu_read_lock or the write lock.
-> + * Will reset mas to MAS_START if the node is MAS_NONE.  Will stop on not
-> + * searchable nodes.
-> + *
-> + * Return: the previous value or %NULL.
-> + */
-> +void *mas_prev(struct ma_state *mas, unsigned long min)
-> +{
-> +	void *entry = NULL;
-> +
-> +	if (mas_prev_setup(mas, min, &entry))
-> +		return entry;
-> +
-> +	return mas_prev_slot(mas, min, false);
->  }
->  EXPORT_SYMBOL_GPL(mas_prev);
->
-> +/**
-> + * mas_prev_range() - Advance to the previous range
-> + * @mas: The maple state
-> + * @min: The minimum value to check.
-> + *
-> + * Sets @mas->index and @mas->last to the range.
-> + * Must hold rcu_read_lock or the write lock.
-> + * Will reset mas to MAS_START if the node is MAS_NONE.  Will stop on not
-> + * searchable nodes.
-> + *
-> + * Return: the previous value or %NULL.
-> + */
-> +void *mas_prev_range(struct ma_state *mas, unsigned long min)
-> +{
-> +	void *entry = NULL;
-> +
-> +	if (mas_prev_setup(mas, min, &entry))
-> +		return entry;
-> +
-> +	return mas_prev_slot(mas, min, true);
-> +}
-> +EXPORT_SYMBOL_GPL(mas_prev_slot);
+I am Mrs Suzara Maling Wan, I have a desire to build an orphanage home
+in your country and also support the poor and less privilege in your
+society, I want you to handle this project on my behalf, I have $4.5
+Million Dollars with Ecobank to execute this project .
 
-Hi Liam,
+If you are in a good position to handle this project, reply for
+further details of the project
 
-I guess you want to export mas_prev_range symbol instead of mas_prev_slot.
-
-> +
->  /**
->   * mt_prev() - get the previous value in the maple tree
->   * @mt: The maple tree
-> @@ -6116,20 +6153,15 @@ void *mas_find_range(struct ma_state *mas, unsigned long max)
->  EXPORT_SYMBOL_GPL(mas_find_range);
->
->  /**
-> - * mas_find_rev: On the first call, find the first non-null entry at or below
-> - * mas->index down to %min.  Otherwise find the first non-null entry below
-> - * mas->index down to %min.
-> - * @mas: The maple state
-> - * @min: The minimum value to check.
-> + * mas_find_rev_setup() - Internal function to set up mas_find_*_rev()
->   *
-> - * Must hold rcu_read_lock or the write lock.
-> - * If an entry exists, last and index are updated accordingly.
-> - * May set @mas->node to MAS_NONE.
-> - *
-> - * Return: The entry or %NULL.
-> + * Returns: True if entry is the answer, false otherwise.
->   */
-> -void *mas_find_rev(struct ma_state *mas, unsigned long min)
-> +static inline bool mas_find_rev_setup(struct ma_state *mas, unsigned long min,
-> +		void **entry)
->  {
-> +	*entry = NULL;
-> +
->  	if (unlikely(mas_is_none(mas))) {
->  		if (mas->index <= min)
->  			goto none;
-> @@ -6141,7 +6173,7 @@ void *mas_find_rev(struct ma_state *mas, unsigned long min)
->  	if (unlikely(mas_is_paused(mas))) {
->  		if (unlikely(mas->index <= min)) {
->  			mas->node = MAS_NONE;
-> -			return NULL;
-> +			return true;
->  		}
->  		mas->node = MAS_START;
->  		mas->last = --mas->index;
-> @@ -6149,14 +6181,12 @@ void *mas_find_rev(struct ma_state *mas, unsigned long min)
->
->  	if (unlikely(mas_is_start(mas))) {
->  		/* First run or continue */
-> -		void *entry;
-> -
->  		if (mas->index < min)
-> -			return NULL;
-> +			return true;
->
-> -		entry = mas_walk(mas);
-> -		if (entry)
-> -			return entry;
-> +		*entry = mas_walk(mas);
-> +		if (*entry)
-> +			return true;
->  	}
->
->  	if (unlikely(!mas_searchable(mas))) {
-> @@ -6170,22 +6200,72 @@ void *mas_find_rev(struct ma_state *mas, unsigned long min)
->  			 */
->  			mas->last = mas->index = 0;
->  			mas->node = MAS_ROOT;
-> -			return mas_root(mas);
-> +			*entry = mas_root(mas);
-> +			return true;
->  		}
->  	}
->
->  	if (mas->index < min)
-> -		return NULL;
-> +		return true;
->
-> -	/* Retries on dead nodes handled by mas_prev_slot */
-> -	return mas_prev_slot(mas, min, false);
-> +	return false;
->
->  none:
->  	mas->node = MAS_NONE;
-> -	return NULL;
-> +	return true;
-> +}
-> +
-> +/**
-> + * mas_find_rev: On the first call, find the first non-null entry at or below
-> + * mas->index down to %min.  Otherwise find the first non-null entry below
-> + * mas->index down to %min.
-> + * @mas: The maple state
-> + * @min: The minimum value to check.
-> + *
-> + * Must hold rcu_read_lock or the write lock.
-> + * If an entry exists, last and index are updated accordingly.
-> + * May set @mas->node to MAS_NONE.
-> + *
-> + * Return: The entry or %NULL.
-> + */
-> +void *mas_find_rev(struct ma_state *mas, unsigned long min)
-> +{
-> +	void *entry;
-> +
-> +	if (mas_find_rev_setup(mas, min, &entry))
-> +		return entry;
-> +
-> +	/* Retries on dead nodes handled by mas_prev_slot */
-> +	return mas_prev_slot(mas, min, false);
-> +
->  }
->  EXPORT_SYMBOL_GPL(mas_find_rev);
->
-> +/**
-> + * mas_find_range_rev: On the first call, find the first non-null entry at or
-> + * below mas->index down to %min.  Otherwise advance to the previous slot after
-> + * mas->index down to %min.
-> + * @mas: The maple state
-> + * @min: The minimum value to check.
-> + *
-> + * Must hold rcu_read_lock or the write lock.
-> + * If an entry exists, last and index are updated accordingly.
-> + * May set @mas->node to MAS_NONE.
-> + *
-> + * Return: The entry or %NULL.
-> + */
-> +void *mas_find_range_rev(struct ma_state *mas, unsigned long min)
-> +{
-> +	void *entry;
-> +
-> +	if (mas_find_rev_setup(mas, min, &entry))
-> +		return entry;
-> +
-> +	/* Retries on dead nodes handled by mas_prev_slot */
-> +	return mas_prev_slot(mas, min, true);
-> +}
-> +EXPORT_SYMBOL_GPL(mas_find_range_rev);
-> +
->  /**
->   * mas_erase() - Find the range in which index resides and erase the entire
->   * range.
->
-> --
-> 2.39.2
->
+Regards
+Mrs Suzara Maling Wan
