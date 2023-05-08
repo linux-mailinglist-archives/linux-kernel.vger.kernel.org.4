@@ -2,147 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3E36FB214
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FEC6FB21A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234324AbjEHN7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
+        id S234359AbjEHN7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233752AbjEHN7O (ORCPT
+        with ESMTP id S233752AbjEHN7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:59:14 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306FD33D7C
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 06:59:13 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-18f4a6d2822so31526713fac.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 06:59:13 -0700 (PDT)
+        Mon, 8 May 2023 09:59:33 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BEA35DA9
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 06:59:30 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9619095f479so723360966b.1
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 06:59:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683554352; x=1686146352;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HKI5hargzKBJ4u7aTkJl99CJ0qfSrzAu9HhTH/5DBYA=;
-        b=BQfgfPoucSO9c0iYSjaKh5WEjsLp6hSV70hZxGF9TjAkJY+7/p6Nl+vDhsx9L1ZWWf
-         nXRiiqmxG1ptJIeP60CAb/vG1tzQp3aaKCqoA5quhRNYwDaLA+taA/HrpcFDaebaYYLK
-         TFx4iwsiU7MqaR2VgjhUizBLHi10ICQLi9yGOUikTGCFsBk4YIAS/VtILBrEUno6W6OU
-         +3/p7jTt0njRB6rhvXCRxTKjQ32yVxonaeG+p6HHcRP7Wy4JhWynRY2lwI48IXn2DWxe
-         9dvbCYsVbQB5v0B6igzIKSHgzqADtdDCm8FdUfFYlgPVSXwo9b73EID5SU1986f1yMD5
-         xjRg==
+        d=linaro.org; s=google; t=1683554369; x=1686146369;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jq3J7+1ys1dSse2zrXI8w6B2jfTU5HybCEFcTuGrfvI=;
+        b=rKSKiXLEkv3IwzslJAuu/S/mOwWyIwnHPlOVC/5jrFB25bK5suewvDEPWm/4X1yWfD
+         3krqGBLkiLuRjhxCrE3VANXOtU+RYfj1VitH5kSX9CjrQ4GdK4t/Ky3ieRb+zlSEzuVZ
+         CHAJp4LbYmZCQAgcsV1FSmIXCVm0orEthoumSY7MuoY8aS3U8Wi0kXI5ucZC+QEfWLkI
+         6x+5dioufh7biFRQDPp5s0wuoMODHZjk4k0QhgzEa3f8uzCbzJl5hBs4P6HTruJvKu4N
+         xNlxWWdl2aHa0RgJ45zS8I8+HnyTssKq0FrXj2s4WisiGdNw1qwl/SH7Yu9yR937UBg+
+         wdQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683554352; x=1686146352;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HKI5hargzKBJ4u7aTkJl99CJ0qfSrzAu9HhTH/5DBYA=;
-        b=fmEiU+kpQOkSeB/kKyyS7afC6eXi5K1N00LqDoL2kuuJAznq/mB9iSXW1igo4T23HU
-         SFResSyjln7LQH++TkhOQm/qPoy81DmJPpE1SsXOvaik6w85+PYTqrXQLncC1+dtCQuj
-         or350ncP5Ln8Jy+0mf1FWA0T8SRVuvQWjkdQ21A0kF7isLUPL7lv/y0+CFAMzcQwOrFw
-         RQcLY8IjQ8vwgnnd5JM59+RfWZSXImh9aM2KND2GOcB0sgJlnc3yFDqSePxmnNOe5wNu
-         6Ktbb/kscrxushFBZ4HcfJCtuKdef77YgH51xLnjOpo76Hg0FSDjiY/oGLaFg9IwB1bL
-         U5Eg==
-X-Gm-Message-State: AC+VfDzPkYYp2OkeB5IpyLz/ODlSI34mD3/dg7EFAFNwTe6g01UTa8+7
-        p2dg+u2RMKqrsKnfSTBW8Iico+Sh1PCPMhOveRM=
-X-Google-Smtp-Source: ACHHUZ50LkNfTNRkSeGJJPoa/BAX/xul353Ik0wlxeRY6hIxnEX5WoLqEnM6SGjMhC3zTb7ICsPNNWeUaMeA3jfGlNY=
-X-Received: by 2002:aca:c0c1:0:b0:387:31fd:1782 with SMTP id
- q184-20020acac0c1000000b0038731fd1782mr6592750oif.28.1683554352400; Mon, 08
- May 2023 06:59:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683554369; x=1686146369;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jq3J7+1ys1dSse2zrXI8w6B2jfTU5HybCEFcTuGrfvI=;
+        b=BNDNca0DC38/L2XeKqNp5E9rUwRWVp0SWMebQEKcw5K6MQgBj31SVHcZkonEcXrbYx
+         YCRGOr9aC9jFO9EZ1/IEmXEYIbNsa5f7TbAcEbwR8/sSryQDbrgBzYRMAd8/TkFpgRgf
+         6op/nOVvx9qrnPGWyApaiwWBgL87a/JkgOF/7KKyeXT+OpCYJITJFbjp6malAtfHor45
+         i1Hgl/lMyRQfnVfP7ndq9+dKoCVTnJ/XZyFrNRtBo1fkOLBGkqtHqs/pR+kTaAynm2xA
+         z/d+Vl2BeSP2iJ1YdfStaAVRqU+EngCvfo1EwORTsFBcZ0CkVENorVpx8iBvqpCJXbpu
+         11Tg==
+X-Gm-Message-State: AC+VfDzpq8zJhmhWOTf1SyfvSG1yS0jVZ7jkPNoaeD6ewnjGt2FuXfjD
+        HjpXGGqZdqNvSMFZSynkIbuMZg==
+X-Google-Smtp-Source: ACHHUZ5LrhWFh5iQx3Nf7XyU8hCLZYUOSPRPDjrUAIH3uVROjaWLxfJvQ/amtmLnKfk6c78Ux2MYHQ==
+X-Received: by 2002:a17:907:8a01:b0:967:21:589d with SMTP id sc1-20020a1709078a0100b009670021589dmr2449230ejc.2.1683554369113;
+        Mon, 08 May 2023 06:59:29 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
+        by smtp.gmail.com with ESMTPSA id t9-20020a170906608900b0096557203071sm4991017ejj.217.2023.05.08.06.59.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 06:59:28 -0700 (PDT)
+Message-ID: <698a836c-42a4-02eb-ba58-908db8abdd47@linaro.org>
+Date:   Mon, 8 May 2023 15:59:27 +0200
 MIME-Version: 1.0
-References: <20230416115237.798604-1-dmitry.osipenko@collabora.com>
- <141b928d-6165-f282-b8e6-f140cb09333d@collabora.com> <CAAfnVBnrUotph4TYJVu9Bohqv3m80t90V34TNhh-Tspxwsj-ZQ@mail.gmail.com>
-In-Reply-To: <CAAfnVBnrUotph4TYJVu9Bohqv3m80t90V34TNhh-Tspxwsj-ZQ@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 8 May 2023 06:59:02 -0700
-Message-ID: <CAF6AEGs4fuq4i8UJdO5hvgHTNhzFMKGZ87+w1oyvL0LAqWio6A@mail.gmail.com>
-Subject: Re: [PATCH v6 0/3] Add sync object UAPI support to VirtIO-GPU driver
-To:     Gurchetan Singh <gurchetansingh@chromium.org>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        David Airlie <airlied@redhat.com>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
-        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-        Emil Velikov <emil.velikov@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/5] dt-bindings: mailbox: tegra: Document Tegra264 HSP
+Content-Language: en-US
+To:     Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20230508122048.99953-1-pdeschrijver@nvidia.com>
+ <20230508122048.99953-2-pdeschrijver@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230508122048.99953-2-pdeschrijver@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 10:07=E2=80=AFAM Gurchetan Singh
-<gurchetansingh@chromium.org> wrote:
->
->
->
-> On Mon, May 1, 2023 at 8:38=E2=80=AFAM Dmitry Osipenko <dmitry.osipenko@c=
-ollabora.com> wrote:
->>
->> On 4/16/23 14:52, Dmitry Osipenko wrote:
->> > We have multiple Vulkan context types that are awaiting for the additi=
-on
->> > of the sync object DRM UAPI support to the VirtIO-GPU kernel driver:
->> >
->> >  1. Venus context
->> >  2. Native contexts (virtio-freedreno, virtio-intel, virtio-amdgpu)
->> >
->> > Mesa core supports DRM sync object UAPI, providing Vulkan drivers with=
- a
->> > generic fencing implementation that we want to utilize.
->> >
->> > This patch adds initial sync objects support. It creates fundament for=
- a
->> > further fencing improvements. Later on we will want to extend the Virt=
-IO-GPU
->> > fencing API with passing fence IDs to host for waiting, it will be a n=
-ew
->> > additional VirtIO-GPU IOCTL and more. Today we have several VirtIO-GPU=
- context
->> > drivers in works that require VirtIO-GPU to support sync objects UAPI.
->> >
->> > The patch is heavily inspired by the sync object UAPI implementation o=
-f the
->> > MSM driver.
->>
->> Gerd, do you have any objections to merging this series?
->>
->> We have AMDGPU [1] and Intel [2] native context WIP drivers depending on
->> the sync object support. It is the only part missing from kernel today
->> that is wanted by the native context drivers. Otherwise, there are few
->> other things in Qemu and virglrenderer left to sort out.
->>
->> [1] https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/21658
->> [2] https://gitlab.freedesktop.org/digetx/mesa/-/commits/native-context-=
-iris
->
->
-> I'm not saying this change isn't good, just it's probably possible to imp=
-lement the native contexts (even up to even VK1.2) without it.  But this pa=
-tch series may be the most ergonomic way to do it, given how Mesa is design=
-ed.  But you probably want one of Mesa MRs reviewed first before merging (I=
- added a comment on the amdgpu change) and that is a requirement [a].
->
-> [a] "The userspace side must be fully reviewed and tested to the standard=
-s of that user space project. For e.g. mesa this means piglit testcases and=
- review on the mailing list. This is again to ensure that the new interface=
- actually gets the job done." -- from the requirements
->
+On 08/05/2023 14:20, Peter De Schrijver wrote:
+> Add the compatible string for the HSP block found on the Tegra264 SoC.
+> 
+> Signed-off-by: Peter De Schrijver <pdeschrijver@nvidia.com>
+> ---
+>  .../devicetree/bindings/mailbox/nvidia,tegra186-hsp.yaml         | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mailbox/nvidia,tegra186-hsp.yaml b/Documentation/devicetree/bindings/mailbox/nvidia,tegra186-hsp.yaml
+> index a3e87516d637..2d14fc948999 100644
+> --- a/Documentation/devicetree/bindings/mailbox/nvidia,tegra186-hsp.yaml
+> +++ b/Documentation/devicetree/bindings/mailbox/nvidia,tegra186-hsp.yaml
+> @@ -66,6 +66,7 @@ properties:
+>      oneOf:
+>        - const: nvidia,tegra186-hsp
+>        - const: nvidia,tegra194-hsp
+> +      - const: nvidia,tegra264-hsp
 
-tbh, the syncobj support is all drm core, the only driver specifics is
-the ioctl parsing.  IMHO existing tests and the two existing consumers
-are sufficient.  (Also, considering that additional non-drm
-dependencies involved.)
+I didn't get other patches, so I assume you know what you are doing and
+the device is not compatible with others (see entire context of that diff).
 
-If this was for the core drm syncobj implementation, and not just
-driver ioctl parsing and wiring up the core helpers, I would agree
-with you.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-BR,
--R
+Best regards,
+Krzysztof
+
