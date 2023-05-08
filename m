@@ -2,392 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EE36FB7CE
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256C86FB7CC
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233958AbjEHTzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 15:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233761AbjEHTzM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232241AbjEHTzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 8 May 2023 15:55:12 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FA165BF;
-        Mon,  8 May 2023 12:54:40 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2ac7c59665bso57381261fa.3;
-        Mon, 08 May 2023 12:54:40 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234371AbjEHTzK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 8 May 2023 15:55:10 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6297DC
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 12:54:38 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-965f7bdab6bso688206266b.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 12:54:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683575668; x=1686167668;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aond+PBh56G+BZA3H7+tIB9ZL9ml8G3VONmOz3SWSsI=;
-        b=CF9eCwKhsjEdE6QtfUE1lz3kJpia2NFTqxrJB8eyf6nE0slKUMDW+LB4S7hZf4Zefs
-         FDrDSu12mRBTQorkOV1EbSPA86H3zsoW5zxwB1kRysL08aNQCrandfvgSPVMbeSjZGyE
-         EDBCeyUjk5UkYIQrCY9re9OIRmf/77snJEb1LlUD0vrComgtgIHmrIHcBGjUMdRjjs4T
-         4MDXrpOCRXNKUab9lF3D/pbRGIcca8wNZlxEAQlGyMaMkiU53OUpRaHRh9sTqiQPgrO7
-         OSAvM4lY0Gq0NSYrfb8upL4g3P8oifqbui8Eph8tBnjMkrtP84EhGfajyxBmTCFjgQ4L
-         dVJw==
+        d=linaro.org; s=google; t=1683575662; x=1686167662;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UkLqC0bGaOlVWnnBet4QRsS/pSWQwc9qaoFivs6O6Ms=;
+        b=bGNr52Jcjr+zJbu0ApsHdwEfzDNOmdLjNBT2JEHjrehpcLwJJSlYyptOuDkdtvv80G
+         6AkvKsFBgd4u5EG+bS4O/7a/TL75Q0bsPu1d5rc/E+gssy84f0RhRYEdvECHsVeJwJfy
+         mr6qhVpCy5FiYeVs6pLl6OaN25u9+Ao8i3r9gBPot6DS67KJFYhJllACr0kXigHlbNhn
+         AniITUi2mDmR9yzDM2z/T0GeW7RBG/w8Xpe71WFUH1Nfe4l3wE10EBQLf1TwL8nOFWxk
+         cgJNuQBAnAiSP9stYotBLmXbDCdyI/kVLcp+7miEjbC8SJeDyiwnBfreVzky0T54LZX7
+         xncg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683575668; x=1686167668;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aond+PBh56G+BZA3H7+tIB9ZL9ml8G3VONmOz3SWSsI=;
-        b=WPfZHehEQely7buGa+p+XHKLjxrX7w2uOwlIVj5n/G+EawBTe9MpDT2elaW4MsZvlv
-         SJFBALOgwz3wJH67cN+auG2hhiAkLtMlT5C+C6341LSed17MZuoRfjb5kGe6qz3NBEqG
-         yFhGRBBprMP9vRkJWLOzobC/EMepq6Jz2PkYK6tEM3C+pEdTN4qYFK8hWPgwyq4WDq3O
-         x8gnBYNWDoiIhXNLidqN+8F1B1ISATldZBlwx0mAWu1uPeDsaQs7EpRDjBjFMJxKwjnJ
-         VGJo3Iy6m6h0zCYuRj4IAy/mHzPsiI/8oopxIBmTinWGcz6e5vVFNNSYTA5TZYl6e6Uv
-         1ZnQ==
-X-Gm-Message-State: AC+VfDz0VHwC5df4Mx1GumFV6/1sojL+LM4Y360b32UxXi+FS5QDalDC
-        vLxKO1QK6BdNZKgwiTO8wE8JJrqz6ycwMLUQWrU=
-X-Google-Smtp-Source: ACHHUZ7H4PDX2u0w6WQ6LT5sjOWRLUvhtxu9dXeWV5/9JodHVsFloTya/PWTJ71zN3zfU48x6Cmb/Z/kMU+s/bETORE=
-X-Received: by 2002:a2e:7004:0:b0:2ac:8e5a:1054 with SMTP id
- l4-20020a2e7004000000b002ac8e5a1054mr96891ljc.0.1683575667931; Mon, 08 May
- 2023 12:54:27 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683575662; x=1686167662;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UkLqC0bGaOlVWnnBet4QRsS/pSWQwc9qaoFivs6O6Ms=;
+        b=j+6CAyzIiWVw2y6W9pbQ7ECuo7jHTlP2JcGf5BvbSxUWEG6lKEPPQ3Lwo0jLunlEI0
+         hgj1Bai2ppX0wwpQEvaAinO/tQMfYFEQSXCnowT+Z5l0VESavl7jYObOrKRA57HgLLb1
+         HzjTlWd2b0gYUSPKMO3eLyfNfY93rIb90WDHXbEnmXibu5vpIZ0KjanAbTQY//ftkvGR
+         3LtzKB6XQl8+Iv3cSfe45xcQfEcNBG/cYOcHLez9FV6tKUetVPq7P9KJnntNsPE+//8L
+         cM9+2YU2/VXpVX+RUDWY9qr0ycdR98aG/zIIGkbeCcja+rK9los+HVHGrzGBJVmvXjL1
+         PhVw==
+X-Gm-Message-State: AC+VfDzNVQkjASNVz3XmrfMusVQDRiqj5TWH47i5mmTWAgviN55Z4tJq
+        4dpFkRiBmPWxsw+EOAitKpTKDw==
+X-Google-Smtp-Source: ACHHUZ5M1ZAUXpF/qt6oeM0HV6JJuGDgWeKPoQQW/4gtdMcTUFm5ocYnqXBweR27SWq2FPIlTBQY4Q==
+X-Received: by 2002:a17:907:72d6:b0:960:f1a6:6a12 with SMTP id du22-20020a17090772d600b00960f1a66a12mr10729673ejc.55.1683575662625;
+        Mon, 08 May 2023 12:54:22 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac? ([2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac])
+        by smtp.gmail.com with ESMTPSA id k14-20020a170906128e00b009660df2e6c6sm353843ejb.168.2023.05.08.12.54.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 12:54:21 -0700 (PDT)
+Message-ID: <9c916321-a2c6-6665-bfea-b1778ea4f983@linaro.org>
+Date:   Mon, 8 May 2023 21:54:20 +0200
 MIME-Version: 1.0
-References: <c90f4606c85f5862e2e3e1dc330af4ac95f2bc9f.1683065391.git.objelf@gmail.com>
- <ddcbc509b5024882583d5c143ec5f4520bef860a.1683065391.git.objelf@gmail.com>
-In-Reply-To: <ddcbc509b5024882583d5c143ec5f4520bef860a.1683065391.git.objelf@gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 8 May 2023 12:54:15 -0700
-Message-ID: <CABBYNZJQjoTzqmivUbLnDnn826pStW+kTuicYN1qVuHDoQjfmw@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] Bluetooth: btusb: mediatek: add MediaTek
- devcoredump support
-To:     sean.wang@mediatek.com, Manish Mandlik <mmandlik@google.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
-        chris.lu@mediatek.com, Soul.Huang@mediatek.com,
-        Leon.Yen@mediatek.com, Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, jenhao.yang@mediatek.com,
-        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
-        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
-        abhishekpandit@google.com, michaelfsun@google.com,
-        abhishekpandit@chromium.org, mcchou@chromium.org,
-        shawnku@google.com, linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jing Cai <jing.cai@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 4/7] dt-bindings: power: supply: max77658: Add ADI
+ MAX77658 Battery
+Content-Language: en-US
+To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
+        lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org,
+        lgirdwood@gmail.com, broonie@kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Nurettin Bolucu <Nurettin.Bolucu@analog.com>
+References: <20230508131045.9399-1-Zeynep.Arslanbenzer@analog.com>
+ <20230508131045.9399-5-Zeynep.Arslanbenzer@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230508131045.9399-5-Zeynep.Arslanbenzer@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
-
-On Tue, May 2, 2023 at 4:02=E2=80=AFPM <sean.wang@mediatek.com> wrote:
->
-> From: Jing Cai <jing.cai@mediatek.com>
->
-> This patch implement function .coredump() and dmp_hdr() in btusb
-> driver for MediaTek controller.  FW core dump was triggered by FW
-> specific event to show something unexpected happened in the controller.
->
-> The driver would be responsible for collecting and uploading the device
-> core dump pieces in hci driver using core dump API. Once we finished
-> the whole process, the driver would reset the controller to recover the
-> kind of fatal error.
->
-> Co-developed-by: Chris Lu <chris.lu@mediatek.com>
-> Signed-off-by: Chris Lu <chris.lu@mediatek.com>
-> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Jing Cai <jing.cai@mediatek.com>
+On 08/05/2023 15:10, Zeynep Arslanbenzer wrote:
+> Add ADI MAX77658 power supply devicetree document.
+> 
+> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
 > ---
-> v2, v3: rebase onto the latest codebase
-> v4: update the newest API usage for the coredump which was already
->     into the upstream
-> v5: support devcoredump on hdev basis
-> ---
->  drivers/bluetooth/btmtk.c | 117 ++++++++++++++++++++++++++++++++++++++
->  drivers/bluetooth/btmtk.h |  28 +++++++++
->  drivers/bluetooth/btusb.c |  14 +++++
->  3 files changed, 159 insertions(+)
->
-> diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
-> index ac2fac7e3c5f..657792f9dcab 100644
-> --- a/drivers/bluetooth/btmtk.c
-> +++ b/drivers/bluetooth/btmtk.c
-> @@ -19,6 +19,12 @@
->  #define MTK_SEC_MAP_COMMON_SIZE        12
->  #define MTK_SEC_MAP_NEED_SEND_SIZE     52
->
-> +enum {
-> +       BTMTK_COREDUMP_INIT,
-> +       BTMTK_COREDUMP_DISABLED,
-> +       BTMTK_COREDUMP_ACTIVE,
-> +};
+>  .../power/supply/adi,max77658-battery.yaml    | 47 +++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/adi,max77658-battery.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/adi,max77658-battery.yaml b/Documentation/devicetree/bindings/power/supply/adi,max77658-battery.yaml
+> new file mode 100644
+> index 000000000000..112296d2b1f4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/adi,max77658-battery.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/adi,max77658-battery.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  struct btmtk_patch_header {
->         u8 datetime[16];
->         u8 platform[4];
-> @@ -53,6 +59,56 @@ struct btmtk_section_map {
->         };
->  } __packed;
->
-> +static void btmtk_coredump(struct hci_dev *hdev)
-> +{
-> +       int err;
+> +title: Battery for MAX77658 PMICs family from ADI
 > +
-> +       err =3D __hci_cmd_send(hdev, 0xfd5b, 0, NULL);
-> +       if (err < 0)
-> +               bt_dev_err(hdev, "Coredump failed (%d)", err);
-> +}
+> +maintainers:
+> +  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>
+> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
 > +
-> +static void btmtk_coredump_hdr(struct hci_dev *hdev, struct sk_buff *skb=
-)
-> +{
-> +       struct btmtk_data *data =3D hci_get_priv(hdev);
-> +       char buf[80];
+> +description: |
+> +  This module is part of the MAX77658 MFD device. For more details
+> +  see Documentation/devicetree/bindings/mfd/adi,max77658.yaml.
 > +
-> +       snprintf(buf, sizeof(buf), "Controller Name: 0x%X\n",
-> +                data->cd_info.dev_id);
-> +       skb_put_data(skb, buf, strlen(buf));
+> +  The fuel gauge is represented as a sub-node of the PMIC node on the device tree.
 > +
-> +       snprintf(buf, sizeof(buf), "Firmware Version: 0x%X\n",
-> +                data->cd_info.fw_version);
-> +       skb_put_data(skb, buf, strlen(buf));
+> +properties:
+> +  compatible:
+> +    const: adi,max77658-battery
 > +
-> +       snprintf(buf, sizeof(buf), "Driver: %s\n",
-> +                data->cd_info.driver_name);
-> +       skb_put_data(skb, buf, strlen(buf));
+> +  adi,valrt-min-microvolt:
+> +    description: alert when battery voltage is lower than this value
 > +
-> +       snprintf(buf, sizeof(buf), "Vendor: MediaTek\n");
-> +       skb_put_data(skb, buf, strlen(buf));
-> +}
-> +
-> +static void btmtk_coredump_notify(struct hci_dev *hdev, int state)
-> +{
-> +       struct btmtk_data *data =3D hci_get_priv(hdev);
-> +
-> +       switch (state) {
-> +       case HCI_DEVCOREDUMP_IDLE:
-> +               data->cd_info.state =3D BTMTK_COREDUMP_INIT;
-> +               break;
-> +       case HCI_DEVCOREDUMP_ACTIVE:
-> +               data->cd_info.state =3D BTMTK_COREDUMP_ACTIVE;
-> +               break;
-> +       case HCI_DEVCOREDUMP_TIMEOUT:
-> +       case HCI_DEVCOREDUMP_ABORT:
-> +       case HCI_DEVCOREDUMP_DONE:
-> +               data->cd_info.state =3D BTMTK_COREDUMP_INIT;
-> +               btmtk_reset_sync(hdev);
-> +               break;
-> +       }
-> +}
+> +  adi,valrt-max-microvolt:
+> +    description: alert when battery voltage is higher than this value
 
-Don't really like where this is going, why can't you just use the
-state from devcd?
+Use the same approach/solution as battery.yaml.
 
 > +
->  int btmtk_setup_firmware_79xx(struct hci_dev *hdev, const char *fwname,
->                               wmt_cmd_sync_func_t wmt_cmd_sync)
->  {
-> @@ -295,6 +351,67 @@ void btmtk_reset_sync(struct hci_dev *hdev)
->  }
->  EXPORT_SYMBOL_GPL(btmtk_reset_sync);
->
-> +int btmtk_register_coredump(struct hci_dev *hdev, u32 dev_id,
-> +                            const char *name, u32 fw_version)
-> +{
-> +       struct btmtk_data *data =3D hci_get_priv(hdev);
+> +  adi,ialrt-min-microamp:
+> +    description: alert when battery current is lower than this value
 > +
-> +       if (!IS_ENABLED(CONFIG_DEV_COREDUMP))
-> +               return -EOPNOTSUPP;
-> +
-> +       data->cd_info.dev_id =3D dev_id;
-> +       data->cd_info.fw_version =3D fw_version;
-> +       data->cd_info.state =3D BTMTK_COREDUMP_INIT;
-> +       strncpy(data->cd_info.driver_name, name, MTK_DRIVER_NAME_LEN - 1)=
-;
+> +  adi,ialrt-max-microamp:
+> +    description: alert when battery current is higher than this value
 
-Im not really sure why every devcd is having to store the driver name
-as a copy, the driver name is already accessible via
-hdev->dev->driver->name.
-
-@Manish Mandlik we might want to fix any code that still is doing
-copies of driver name like above.
+Also here.
 
 > +
-> +       return hci_devcd_register(hdev, btmtk_coredump, btmtk_coredump_hd=
-r,
-> +                                 btmtk_coredump_notify);
-> +}
-> +EXPORT_SYMBOL_GPL(btmtk_register_coredump);
+> +  monitored-battery:
+> +    description: >
+> +      This property must be a phandle to a node using the format described
+> +      in battery.yaml, with the following properties being required:
+> +      - alert-celsius
 > +
-> +int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *skb)
-> +{
-> +       struct btmtk_data *data =3D hci_get_priv(hdev);
-> +       int err;
+> +required:
+> +  - compatible
+> +  - monitored-battery
 > +
-> +       if (!IS_ENABLED(CONFIG_DEV_COREDUMP))
-> +               return 0;
+> +additionalProperties: false
 > +
-> +       switch (data->cd_info.state) {
-> +       case BTMTK_COREDUMP_DISABLED:
-> +               err =3D -EINVAL;
-> +               break;
-> +       case BTMTK_COREDUMP_INIT:
-> +               err =3D hci_devcd_init(hdev, MTK_COREDUMP_SIZE);
-> +               if (err < 0)
-> +                       break;
-> +               /* It is supposed coredump can be done within 5 seconds *=
-/
-> +               schedule_delayed_work(&hdev->dump.dump_timeout,
-> +                                     msecs_to_jiffies(5000));
-> +               fallthrough;
-> +       case BTMTK_COREDUMP_ACTIVE:
-> +       default:
-> +               err =3D hci_devcd_append(hdev, skb);
-> +               if (err < 0)
-> +                       break;
-> +
-> +               if (skb->len > 12 &&
-> +                   !strncmp((char *)&skb->data[skb->len - 13],
-> +                            MTK_COREDUMP_END, 12))
-> +                       hci_devcd_complete(hdev);
-> +
-> +               break;
-> +       }
-> +
-> +       if (err < 0) {
-> +               data->cd_info.state =3D BTMTK_COREDUMP_DISABLED;
-> +               kfree_skb(skb);
-> +       }
-> +
-> +       return err;
-> +}
-> +EXPORT_SYMBOL_GPL(btmtk_process_coredump);
-> +
->  MODULE_AUTHOR("Sean Wang <sean.wang@mediatek.com>");
->  MODULE_AUTHOR("Mark Chen <mark-yw.chen@mediatek.com>");
->  MODULE_DESCRIPTION("Bluetooth support for MediaTek devices ver " VERSION=
-);
-> diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
-> index 6245662f6ccb..7eb162f0e7aa 100644
-> --- a/drivers/bluetooth/btmtk.h
-> +++ b/drivers/bluetooth/btmtk.h
-> @@ -21,6 +21,10 @@
->  #define MT7921_DLSTATUS 0x7c053c10
->  #define BT_DL_STATE BIT(1)
->
-> +#define MTK_DRIVER_NAME_LEN            16
-> +#define MTK_COREDUMP_SIZE              (1024 * 1000)
-> +#define MTK_COREDUMP_END               "coredump end"
-> +
->  enum {
->         BTMTK_WMT_PATCH_DWNLD =3D 0x1,
->         BTMTK_WMT_TEST =3D 0x2,
-> @@ -119,12 +123,20 @@ struct btmtk_hci_wmt_params {
->         u32 *status;
->  };
->
-> +struct btmtk_coredump_info {
-> +       char driver_name[MTK_DRIVER_NAME_LEN];
-> +       u32 dev_id;
-> +       u32 fw_version;
-> +       int state;
-> +};
-> +
->  typedef int (*wmt_cmd_sync_func_t)(struct hci_dev *,
->                                    struct btmtk_hci_wmt_params *);
->
->  typedef int (*btmtk_reset_sync_func_t)(struct hci_dev *, void *);
->
->  struct btmtk_data {
-> +       struct btmtk_coredump_info cd_info;
->         btmtk_reset_sync_func_t reset_sync;
->  };
->
-> @@ -139,6 +151,11 @@ int btmtk_setup_firmware(struct hci_dev *hdev, const=
- char *fwname,
->                          wmt_cmd_sync_func_t wmt_cmd_sync);
->
->  void btmtk_reset_sync(struct hci_dev *hdev);
-> +
-> +int btmtk_register_coredump(struct hci_dev *hdev, u32 dev_id, const char=
- *name,
-> +                            u32 fw_version);
-> +
-> +int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *skb);
->  #else
->
->  static inline int btmtk_set_bdaddr(struct hci_dev *hdev,
-> @@ -162,4 +179,15 @@ static int btmtk_setup_firmware(struct hci_dev *hdev=
-, const char *fwname,
->  static void btmtk_reset_sync(struct hci_dev *hdev)
->  {
->  }
-> +
-> +static int btmtk_register_coredump(struct hci_dev *hdev, u32 dev_id, con=
-st char *name,
-> +                            u32 fw_version)
-> +{
-> +       return -EOPNOTSUPP;
-> +}
-> +
-> +static int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *=
-skb)
-> +{
-> +       return -EOPNOTSUPP;
-> +}
->  #endif
-> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> index 034edd8ad777..1c2a0cbcf62e 100644
-> --- a/drivers/bluetooth/btusb.c
-> +++ b/drivers/bluetooth/btusb.c
-> @@ -3035,6 +3035,10 @@ static int btusb_mtk_setup(struct hci_dev *hdev)
->         }
->
->         btmtk_data->reset_sync =3D btusb_mtk_reset_work;
-> +       err =3D btmtk_register_coredump(hdev, dev_id, btusb_driver.name,
-> +                               fw_version);
-> +       if (err < 0)
-> +               bt_dev_err(hdev, "Failed to register coredump (%d)", err)=
-;
->
->         switch (dev_id) {
->         case 0x7663:
-> @@ -3189,6 +3193,7 @@ static int btusb_recv_acl_mtk(struct hci_dev *hdev,=
- struct sk_buff *skb)
->  {
->         struct btusb_data *data =3D hci_get_drvdata(hdev);
->         u16 handle =3D le16_to_cpu(hci_acl_hdr(skb)->handle);
-> +       struct sk_buff *skb_cd;
->
->         switch (handle) {
->         case 0xfc6f:            /* Firmware dump from device */
-> @@ -3196,6 +3201,15 @@ static int btusb_recv_acl_mtk(struct hci_dev *hdev=
-, struct sk_buff *skb)
->                  * suspend and thus disable auto-suspend.
->                  */
->                 usb_disable_autosuspend(data->udev);
-> +
-> +               /* We need to forward the diagnostic packet to userspace =
-daemon
-> +                * for backward compatibility, so we have to clone the pa=
-cket
-> +                * extraly for the in-kernel coredump support.
-> +                */
-> +               skb_cd =3D skb_clone(skb, GFP_ATOMIC);
-> +               if (skb_cd)
-> +                       btmtk_process_coredump(hdev, skb_cd);
-> +
->                 fallthrough;
->         case 0x05ff:            /* Firmware debug logging 1 */
->         case 0x05fe:            /* Firmware debug logging 2 */
-> --
-> 2.25.1
->
+> +...
 
+Best regards,
+Krzysztof
 
---=20
-Luiz Augusto von Dentz
