@@ -2,90 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC146FB59A
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 19:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699C56FB59F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 19:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233767AbjEHRBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 13:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
+        id S233079AbjEHRDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 13:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbjEHRBN (ORCPT
+        with ESMTP id S232876AbjEHRDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 13:01:13 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABDB55BB
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 10:01:11 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-757743fd60bso83332085a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 10:01:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1683565270; x=1686157270;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pG46GvARjz+oazbsADG8J8cWnfJfmTt3sQRcfy1HKus=;
-        b=ATdol1HmSHQUazAN5bA6BnwEwp9y0FBHM9J14a0hj4vzEDKl6CixxjJfghNwHuYIN4
-         0pPfE3ZsdA7ITznvX1+Yd5GbSFoQHkQxR+x4muhWqfvVxGNdtz3tVAdPp49sJOsbQkcK
-         1sBrKGWqYzFR5r51mvpWkutvlR534wQVq/XR4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683565270; x=1686157270;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pG46GvARjz+oazbsADG8J8cWnfJfmTt3sQRcfy1HKus=;
-        b=IfGQ6dCbLespbJsVSBLn7y9+78xLs6EiE1Rlm1JVPnT1jpeI7fiNhAkziUB9k0oLaO
-         673/NIKapWwpnnRk0G3zaDFaGJ6OtlZLa+tBed4eilWkRgqk2I7poX/9ljVgJ877QokB
-         Ajye34jXn48UjE8IDGT17pllsRwQdUesRgx32gQ6R8mSCrYRcsKuRx5Hd6g/VW0Yt7x0
-         SGR2+o/6+Ojr0JtQDCSjzqL9C4l1B3tJ+QhDXpJpO7BMZT1PI5+pJgkOe0MRh9e4Jqb2
-         3qaYoKLnM3FRg9yWuUzA3m065gupZTk6MQc8roQydLS8qxXkqYiQNG+9vVdeXa7D5+tB
-         OkFg==
-X-Gm-Message-State: AC+VfDzqJ6iB+LmGymD/VDrQ6YA/nXKqf+9Obo48PcE7PsKY8G1bewI1
-        SXjGfHWvej2r+OMS5+eE6oFwTA==
-X-Google-Smtp-Source: ACHHUZ6EviS0DiWUQqkPgKZaZTcNKQ6DELL/M2y3GvjJG/dI7iFQoV90KXUcrfI/Pe3f5cykAulygg==
-X-Received: by 2002:a05:6214:407:b0:5f1:5f73:aed8 with SMTP id z7-20020a056214040700b005f15f73aed8mr17720169qvx.20.1683565269653;
-        Mon, 08 May 2023 10:01:09 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-30-209-226-106-132.dsl.bell.ca. [209.226.106.132])
-        by smtp.gmail.com with ESMTPSA id ph14-20020a0562144a4e00b0061b5b8dbbbbsm115082qvb.57.2023.05.08.10.01.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 10:01:09 -0700 (PDT)
-Date:   Mon, 8 May 2023 13:01:07 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Ronald Warsow <rwarsow@gmx.de>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: no sha256sum for 6.3.1 (was Re: Linux 6.3.1)
-Message-ID: <20230508-length-distress-784870@meerkat>
-References: <f0497747-2318-7355-6ea6-ff01f9eb97ef@gmx.de>
- <2023050617-stardom-granola-32e3@gregkh>
+        Mon, 8 May 2023 13:03:18 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E85E659E;
+        Mon,  8 May 2023 10:03:17 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4QFS684TNWz9xFPm;
+        Tue,  9 May 2023 00:53:20 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwCHMzo5K1lkVOGLAg--.32526S2;
+        Mon, 08 May 2023 18:02:57 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     casey@schaufler-ca.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
+        yoonjaeh@amazon.com, kamatam@amazon.com, mengcc@amazon.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RFC][PATCH 1/2] smack: Retrieve transmuting information in smack_inode_getsecurity()
+Date:   Mon,  8 May 2023 19:02:33 +0200
+Message-Id: <20230508170234.3595105-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2023050617-stardom-granola-32e3@gregkh>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwCHMzo5K1lkVOGLAg--.32526S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJryfGFWrKry5XF13JFyfXrb_yoW8Ar1fpF
+        sxK3Wakr10qF9xXFZ3Gr12gFWSkFZ3KrWUXwsrW343ZFnIg340ga95tr17uF1rXrWxuFnY
+        kay2qrn8u3WqkrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+        w2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+        uYvjxU4NB_UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgALBF1jj4j+TAABsH
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 06, 2023 at 09:38:35AM +0900, Greg KH wrote:
-> > fetching new kernels via script:
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/mricon/korg-helpers.git/tree/get-verified-tarball
-> > 
-> > it seems
-> > https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-> > 
-> > doesn't contain a hash for 6.3.1
-> 
-> Yeah, that does look odd.
-> 
-> Konstantin, I think you said you updated some things on the servers
-> right after I did the 6.3.1 release, would this have caused the
-> signature to not be recorded in this file?
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Sorry, this got fixed last week. I forgot to mount the key storage after the
-final reboot. It should be all good now.
+Enhance smack_inode_getsecurity() to retrieve the value for
+SMACK64TRANSMUTE from the inode security blob, similarly to SMACK64.
 
--K
+This helps to display accurate values in the situation where the security
+labels come from mount options and not from xattrs.
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/smack/smack_lsm.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index 7a3e9ab137d..c7e37ed2799 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -1463,10 +1463,19 @@ static int smack_inode_getsecurity(struct mnt_idmap *idmap,
+ 	struct super_block *sbp;
+ 	struct inode *ip = inode;
+ 	struct smack_known *isp;
++	struct inode_smack *ispp;
++	size_t label_len;
++	char *label = NULL;
+ 
+-	if (strcmp(name, XATTR_SMACK_SUFFIX) == 0)
++	if (strcmp(name, XATTR_SMACK_SUFFIX) == 0) {
+ 		isp = smk_of_inode(inode);
+-	else {
++	} else if (strcmp(name, XATTR_SMACK_TRANSMUTE) == 0) {
++		ispp = smack_inode(inode);
++		if (ispp->smk_flags & SMK_INODE_TRANSMUTE)
++			label = TRANS_TRUE;
++		else
++			label = "";
++	} else {
+ 		/*
+ 		 * The rest of the Smack xattrs are only on sockets.
+ 		 */
+@@ -1488,13 +1497,18 @@ static int smack_inode_getsecurity(struct mnt_idmap *idmap,
+ 			return -EOPNOTSUPP;
+ 	}
+ 
++	if (!label)
++		label = isp->smk_known;
++
++	label_len = strlen(label);
++
+ 	if (alloc) {
+-		*buffer = kstrdup(isp->smk_known, GFP_KERNEL);
++		*buffer = kstrdup(label, GFP_KERNEL);
+ 		if (*buffer == NULL)
+ 			return -ENOMEM;
+ 	}
+ 
+-	return strlen(isp->smk_known);
++	return label_len;
+ }
+ 
+ 
+-- 
+2.25.1
+
