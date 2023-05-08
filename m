@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982236FB1B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2808B6FB1AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234302AbjEHNhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S234237AbjEHNhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234317AbjEHNhZ (ORCPT
+        with ESMTP id S233170AbjEHNhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:37:25 -0400
+        Mon, 8 May 2023 09:37:17 -0400
+X-Greylist: delayed 1353 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 08 May 2023 06:37:12 PDT
 Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41EC33D5E;
-        Mon,  8 May 2023 06:37:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBC233169;
+        Mon,  8 May 2023 06:37:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=kernkonzept.com; s=mx1; h=Cc:To:In-Reply-To:References:Message-Id:
         Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
         Reply-To:Content-ID:Content-Description;
-        bh=srA3euTk/5sjMRb84lbIHFc1mB5nmRpPgU1BRVL2uW0=; b=d1IKuU0QJzbptvYQyztNEI2xdM
-        MUVyODdv4KijIhe8/YR5rNEfC5EJC6OCUJdlaeyW3y9uHJJrfGD98hiMiH3SBQcxGA0aDgsaMU9qf
-        Ez6ZFbO2ciqdP34Mb5h6NNA5ktsd1RgZPCLuSdrwo+vlxqTfBxNaI4QqWsUOwUvMM7Pt6JlmGg1gO
-        QhJGDewUZH92JQ2ZS2eQwnBt2IrzXjDcet83ixhaSjQrwR59In1af62q0Tr70A/of8StuBqdUI3s+
-        icCevsYci8PfynSmAYOuNVJ8R35C8hddLQ2Dw8Lp0NogPt+9r/pYxdjYVylJC/EM6T4G+Dwrize2u
-        L+ylw68A==;
+        bh=mOseTxwGsFqvCCOX46fJqAaMaCn90Qk+xtOVYSA8awE=; b=Dk032G458xZecq5cd3P+eY/iVo
+        qXHdks3fPPt/PslF/Qvqsmi4Jeywm7kDHGumpRItgfXF22yIjJAVXHB7+bp2NGa1AsDvpbrypbNlj
+        x8o2hRsmX0DMSto1AObec6EsFMyiPFOeQACKB256dckq8IRmXbwMlr8XZTeWbQ58jCfLFUGBRx3J5
+        l037XXKq7XLiOWu8AqGlnyAjLaEklpYTwmOWYE3KTnfTLyAL86R//EL1n3beCStZUBHoxfDNMvG25
+        eZQxtZtU+q0piduR4Pgcp6sKETOme+3wwUS3qfKExHyyzOkdcZ4IC5yykAxZ8kb5G6zHpHfy3Pm/v
+        F5UjxM+w==;
 Received: from [10.22.3.24] (helo=serv1.dd1.int.kernkonzept.com)
         by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
-        id 1pw0hK-009LZn-Lp; Mon, 08 May 2023 15:14:38 +0200
+        id 1pw0hN-009LZn-Db; Mon, 08 May 2023 15:14:41 +0200
 From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Date:   Mon, 08 May 2023 15:13:39 +0200
-Subject: [PATCH v4 2/6] thermal: qcom: tsens-v0_1: Fix mdm9607 slope values
+Date:   Mon, 08 May 2023 15:13:40 +0200
+Subject: [PATCH v4 3/6] thermal: qcom: tsens-v0_1: Add mdm9607 correction
+ offsets
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230508-msm8909-tsens-v4-2-d9119622cb19@kernkonzept.com>
+Message-Id: <20230508-msm8909-tsens-v4-3-d9119622cb19@kernkonzept.com>
 References: <20230508-msm8909-tsens-v4-0-d9119622cb19@kernkonzept.com>
 In-Reply-To: <20230508-msm8909-tsens-v4-0-d9119622cb19@kernkonzept.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
@@ -62,70 +64,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the msm-3.18 vendor kernel from Qualcomm [1], mdm9607 uses
-a non-standard slope value of 3000 (instead of 3200) for all sensors.
-Fill it properly similar to the 8939 code added recently.
+According to the msm-3.18 vendor kernel from Qualcomm, mdm9607 needs
+"correction factors" to adjust for additional offsets observed after the
+factory calibration values in the fuses [1, 2].
 
-[1]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LE.UM.4.3.2.r1-04200-9x07/arch/arm/boot/dts/qcom/mdm9607.dtsi#L875
+The fixed offsets should be applied unless there is a special
+calibration mode value that indicates that no offsets are needed [3].
+
+Note that the new calibration mode values are called differently in this
+patch compared to the vendor kernel:
+  - TSENS_TWO_POINT_CALIB_N_WA        -> ONE_PT_CALIB2_NO_OFFSET
+  - TSENS_TWO_POINT_CALIB_N_OFFSET_WA -> TWO_PT_CALIB_NO_OFFSET
+This is because close inspection of the calibration function [3] reveals
+that TSENS_TWO_POINT_CALIB_N_WA is actually a "one point" calibration
+because the if statements skip all "point2" related code for it.
+
+[1]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/commit/d9d2db1b82bf3f72f5de0803d55e6849eb5b671e
+[2]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/commit/d75aef53a760e8ff7bac54049d00c8b2ee1b193e
+[3]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LE.UM.4.3.2.r1-04200-9x07/drivers/thermal/msm-tsens.c#L2987-3136
 
 Fixes: a2149ab815fc ("thermal/drivers/qcom/tsens-v0_1: Add support for MDM9607")
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 ---
- drivers/thermal/qcom/tsens-v0_1.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
+ drivers/thermal/qcom/tsens-v0_1.c | 11 +++++++++++
+ drivers/thermal/qcom/tsens.c      | 16 +++++++++++++++-
+ drivers/thermal/qcom/tsens.h      |  4 ++++
+ 3 files changed, 30 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
-index 106d26076e3f..1b454de3928d 100644
+index 1b454de3928d..e69889dd524a 100644
 --- a/drivers/thermal/qcom/tsens-v0_1.c
 +++ b/drivers/thermal/qcom/tsens-v0_1.c
-@@ -222,6 +222,16 @@ static int __init init_8939(struct tsens_priv *priv) {
+@@ -229,6 +229,17 @@ static int __init init_9607(struct tsens_priv *priv)
+ 	for (i = 0; i < priv->num_sensors; ++i)
+ 		priv->sensor[i].slope = 3000;
+ 
++	priv->sensor[0].p1_calib_offset = 1;
++	priv->sensor[0].p2_calib_offset = 1;
++	priv->sensor[1].p1_calib_offset = -4;
++	priv->sensor[1].p2_calib_offset = -2;
++	priv->sensor[2].p1_calib_offset = 4;
++	priv->sensor[2].p2_calib_offset = 8;
++	priv->sensor[3].p1_calib_offset = -3;
++	priv->sensor[3].p2_calib_offset = -5;
++	priv->sensor[4].p1_calib_offset = -4;
++	priv->sensor[4].p2_calib_offset = -4;
++
  	return init_common(priv);
  }
  
-+static int __init init_9607(struct tsens_priv *priv)
-+{
-+	int i;
-+
-+	for (i = 0; i < priv->num_sensors; ++i)
-+		priv->sensor[i].slope = 3000;
-+
-+	return init_common(priv);
-+}
-+
- /* v0.1: 8916, 8939, 8974, 9607 */
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index d3218127e617..065d0f9728a5 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -134,10 +134,12 @@ int tsens_read_calibration(struct tsens_priv *priv, int shift, u32 *p1, u32 *p2,
+ 			p1[i] = p1[i] + (base1 << shift);
+ 		break;
+ 	case TWO_PT_CALIB:
++	case TWO_PT_CALIB_NO_OFFSET:
+ 		for (i = 0; i < priv->num_sensors; i++)
+ 			p2[i] = (p2[i] + base2) << shift;
+ 		fallthrough;
+ 	case ONE_PT_CALIB2:
++	case ONE_PT_CALIB2_NO_OFFSET:
+ 		for (i = 0; i < priv->num_sensors; i++)
+ 			p1[i] = (p1[i] + base1) << shift;
+ 		break;
+@@ -149,6 +151,18 @@ int tsens_read_calibration(struct tsens_priv *priv, int shift, u32 *p1, u32 *p2,
+ 		}
+ 	}
  
- static struct tsens_features tsens_v0_1_feat = {
-@@ -271,12 +281,6 @@ static const struct reg_field tsens_v0_1_regfields[MAX_REGFIELDS] = {
- 	[TRDY] = REG_FIELD(TM_TRDY_OFF, 0, 0),
++	/* Apply calibration offset workaround except for _NO_OFFSET modes */
++	switch (mode) {
++	case TWO_PT_CALIB:
++		for (i = 0; i < priv->num_sensors; i++)
++			p2[i] += priv->sensor[i].p2_calib_offset;
++		fallthrough;
++	case ONE_PT_CALIB2:
++		for (i = 0; i < priv->num_sensors; i++)
++			p1[i] += priv->sensor[i].p1_calib_offset;
++		break;
++	}
++
+ 	return mode;
+ }
+ 
+@@ -254,7 +268,7 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
+ 
+ 		if (!priv->sensor[i].slope)
+ 			priv->sensor[i].slope = SLOPE_DEFAULT;
+-		if (mode == TWO_PT_CALIB) {
++		if (mode == TWO_PT_CALIB || mode == TWO_PT_CALIB_NO_OFFSET) {
+ 			/*
+ 			 * slope (m) = adc_code2 - adc_code1 (y2 - y1)/
+ 			 *	temp_120_degc - temp_30_degc (x2 - x1)
+diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+index dba9cd38f637..880be6be5c3f 100644
+--- a/drivers/thermal/qcom/tsens.h
++++ b/drivers/thermal/qcom/tsens.h
+@@ -10,6 +10,8 @@
+ #define ONE_PT_CALIB		0x1
+ #define ONE_PT_CALIB2		0x2
+ #define TWO_PT_CALIB		0x3
++#define ONE_PT_CALIB2_NO_OFFSET	0x6
++#define TWO_PT_CALIB_NO_OFFSET	0x7
+ #define CAL_DEGC_PT1		30
+ #define CAL_DEGC_PT2		120
+ #define SLOPE_FACTOR		1000
+@@ -57,6 +59,8 @@ struct tsens_sensor {
+ 	unsigned int			hw_id;
+ 	int				slope;
+ 	u32				status;
++	int				p1_calib_offset;
++	int				p2_calib_offset;
  };
  
--static const struct tsens_ops ops_v0_1 = {
--	.init		= init_common,
--	.calibrate	= tsens_calibrate_common,
--	.get_temp	= get_temp_common,
--};
--
- static const struct tsens_ops ops_8916 = {
- 	.init		= init_common,
- 	.calibrate	= calibrate_8916,
-@@ -320,9 +324,15 @@ struct tsens_plat_data data_8974 = {
- 	.fields	= tsens_v0_1_regfields,
- };
- 
-+static const struct tsens_ops ops_9607 = {
-+	.init		= init_9607,
-+	.calibrate	= tsens_calibrate_common,
-+	.get_temp	= get_temp_common,
-+};
-+
- struct tsens_plat_data data_9607 = {
- 	.num_sensors	= 5,
--	.ops		= &ops_v0_1,
-+	.ops		= &ops_9607,
- 	.feat		= &tsens_v0_1_feat,
- 	.fields	= tsens_v0_1_regfields,
- };
+ /**
 
 -- 
 2.30.2
