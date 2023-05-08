@@ -2,430 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA086FBA17
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BBB6FB9B4
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234062AbjEHVlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 17:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
+        id S233818AbjEHV31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 17:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234369AbjEHVkn (ORCPT
+        with ESMTP id S233401AbjEHV3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 17:40:43 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000EE93CB;
-        Mon,  8 May 2023 14:40:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683582021; x=1715118021;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hKHsoNGSMMtx6Q9tcu30hatw3LMK0bAjnC3I6pBAw90=;
-  b=kh1TJajYrqqOrsY/bqIBp3yTXEf0fsUSIt2lfh+DsIX5x3IUurUCE0kp
-   OAVgiq7YbAG0+CnNHLSoZSFgswLBlFEdFiEZ+A3Zcqx8VD9FAKDxUgdaY
-   TI6ijfhDu9f/Gnaatzhl/IWfZW2nPYJP/tcJlY8ujAtXvj5FyHGjCHS2Y
-   +jPZAHaOcNKLlrZax/3Cydrrdjse21jhT7Ey8w4QLKsoXLwD+IgmW9js5
-   i3Sg68mkvlKhY3Zxg9s+aBwN9lpMxXGatVP7O0/qy4b93uq2vrq/cMcgZ
-   GSL8indkKrfNy8Eo6nzTl49r6dj2EzjuPkqTOQJ7/xvaAjnKk0ztxtDmW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="349796708"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="349796708"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 14:39:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="945018727"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="945018727"
-Received: from linux-builds1.an.intel.com ([10.122.105.32])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 14:39:00 -0700
-From:   dinh.nguyen@linux.intel.com
-To:     linux-hwmon@vger.kernel.org
-Cc:     dinguyen@kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, jdelvare@suse.com,
-        linux@roeck-us.net, Dinh Nguyen <dinh.nguyen@linux.intel.com>
-Subject: [PATCHv2 6/6] arm64: dts: socfpga: add hwmon properties
-Date:   Mon,  8 May 2023 16:28:52 -0500
-Message-Id: <20230508212852.8413-6-dinh.nguyen@linux.intel.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230508212852.8413-1-dinh.nguyen@linux.intel.com>
-References: <20230508212852.8413-1-dinh.nguyen@linux.intel.com>
+        Mon, 8 May 2023 17:29:24 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA90173A
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 14:29:17 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-76c56d0e265so1527739f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 14:29:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1683581356; x=1686173356;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H7j3j99LnhayE2tjFufPEFdNc8DYyO9ySk1bd20eGs4=;
+        b=EcmO0t+AT4stpwhfKSGaH5aY1gmlk67L/84AUvUBymhE3/i1mqew+1VU3PhmUHEdOl
+         P66vitqhRWIbVQl9Mn6FLhaJAQ/oK5rO+AbM0LExBdAtQeOvX1oNEre1YMa1Zai4Fvrc
+         aJpqHV4yF7LphbeEyra52n0ugfrEoqukkSljE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683581356; x=1686173356;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H7j3j99LnhayE2tjFufPEFdNc8DYyO9ySk1bd20eGs4=;
+        b=f2LTk7je6setDpfYxpQGm3eWTTLFbybRUgdf6yHAYGk+qcJZTc4/nYPUpetCsmGVst
+         0qjUcC1rUwNKV6tM/K7lvRAjPp7LD3L+rpQyyYq/TJGGyHcXewg/PA6RAHiboruihg1L
+         5q8DGaTGTNcDKEdABagzEeDfmpmWMieINTKGh088a0GH4AXiBU2kIvSfddq8W0Ztqoo8
+         tCQSUnpJwmUkYKNyVytr2eF/8u0IXbtyHBOeMemJLhWjet2wpVGa+W32i290OVGZHVxc
+         FuhZ/ZyGCXqe24/PsBa5ps6Fb1PYDV9/0rkb+cVhpkRjSHYzuX7xcS8/kLN1B3+u2FBh
+         79Ww==
+X-Gm-Message-State: AC+VfDydfhLrdPsNm1xxO5t5fVKe1imw1Yp/H3tcO5JlSQGZSfcLYuO4
+        d0jvlGn6h0GcnX9JK7ajtTFhig==
+X-Google-Smtp-Source: ACHHUZ5pnEXjGo7+oJPYrQgNCtPh8fY5eYaY6ozuV9aPsNmizygrFjxKt7uk9B/IaoWJOOQxIg3+lA==
+X-Received: by 2002:a05:6e02:cc4:b0:32f:1232:f5d5 with SMTP id c4-20020a056e020cc400b0032f1232f5d5mr4885399ilj.2.1683581356456;
+        Mon, 08 May 2023 14:29:16 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id 18-20020a92c652000000b00335717785ecsm393780ill.63.2023.05.08.14.29.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 14:29:16 -0700 (PDT)
+Message-ID: <bb06bab8-d906-108c-c829-cec82bd5d35c@linuxfoundation.org>
+Date:   Mon, 8 May 2023 15:29:15 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 6.1 000/611] 6.1.28-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230508094421.513073170@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230508094421.513073170@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dinh Nguyen <dinh.nguyen@linux.intel.com>
+On 5/8/23 03:37, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.28 release.
+> There are 611 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 10 May 2023 09:42:40 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.28-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Add the hardware monitoring properties for Stratix10 and Agilex.
+Compiled and booted on my test system. No dmesg regressions.
 
-Signed-off-by: Dinh Nguyen <dinh.nguyen@linux.intel.com>
----
-v2: add platform specific platforms to DTS files
----
- .../boot/dts/altera/socfpga_stratix10.dtsi    |  4 ++
- .../dts/altera/socfpga_stratix10_socdk.dts    | 31 +++++++++
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi |  4 ++
- .../boot/dts/intel/socfpga_agilex_n6000.dts   | 66 +++++++++++++++++++
- .../boot/dts/intel/socfpga_agilex_socdk.dts   | 66 +++++++++++++++++++
- .../dts/intel/socfpga_agilex_socdk_nand.dts   | 66 +++++++++++++++++++
- .../boot/dts/intel/socfpga_n5x_socdk.dts      | 47 +++++++++++++
- 7 files changed, 284 insertions(+)
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-index 41c9eb51d0ee..2526afa687d6 100644
---- a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-+++ b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-@@ -633,6 +633,10 @@ svc {
- 				fpga_mgr: fpga-mgr {
- 					compatible = "intel,stratix10-soc-fpga-mgr";
- 				};
-+
-+				hwmon: temp-volt {
-+					compatible = "intel,socfpga-stratix10-hwmon", "intel,socfpga-hwmon";
-+				};
- 			};
- 		};
- 	};
-diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
-index 38ae674f2f02..d506dcf8dc7c 100644
---- a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
-+++ b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
-@@ -212,3 +212,34 @@ qspi_rootfs: partition@3FE0000 {
- 		};
- 	};
- };
-+
-+&hwmon {
-+	voltage {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		input@2 {
-+			label = "0.8V VCC";
-+			reg = <2>;
-+		};
-+
-+		input@3 {
-+			label = "1.0V VCCIO";
-+			reg = <3>;
-+		};
-+
-+		input@6 {
-+			label = "0.9V VCCERAM";
-+			reg = <6>;
-+		};
-+	};
-+
-+	temperature {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		input@0 {
-+			label = "Main Die SDM";
-+			reg = <0x0>;
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-index f9674cc46764..552f9a05d039 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-@@ -666,6 +666,10 @@ svc {
- 				fpga_mgr: fpga-mgr {
- 					compatible = "intel,agilex-soc-fpga-mgr";
- 				};
-+
-+				hwmon: temp-volt {
-+					compatible = "intel,socfpga-agilex-hwmon", "intel,socfpga-hwmon";
-+				};
- 			};
- 		};
- 	};
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
-index 6231a69204b1..c0642353b506 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
-@@ -64,3 +64,69 @@ &watchdog0 {
- &fpga_mgr {
- 	status = "disabled";
- };
-+
-+&hwmon {
-+	voltage {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		input@2 {
-+			label = "0.8V VCC";
-+			reg = <2>;
-+		};
-+
-+		input@3 {
-+			label = "1.8V VCCIO_SDM";
-+			reg = <3>;
-+		};
-+
-+		input@4 {
-+			label = "1.8V VCCPT";
-+			reg = <4>;
-+		};
-+
-+		input@5 {
-+			label = "1.2V VCCCRCORE";
-+			reg = <5>;
-+		};
-+
-+		input@6 {
-+			label = "0.9V VCCH";
-+			reg = <6>;
-+		};
-+
-+		input@7 {
-+			label = "0.8V VCCL";
-+			reg = <7>;
-+		};
-+	};
-+
-+	temperature {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		input@0 {
-+			label = "Main Die SDM";
-+			reg = <0x0>;
-+		};
-+
-+		input@10000 {
-+			label = "Main Die corner bottom left max";
-+			reg = <0x10000>;
-+		};
-+
-+		input@20000 {
-+			label = "Main Die corner top left max";
-+			reg = <0x20000>;
-+		};
-+
-+		input@30000 {
-+			label = "Main Die corner bottom right max";
-+			reg = <0x30000>;
-+		};
-+
-+		input@40000 {
-+			label = "Main Die corner top right max";
-+			reg = <0x40000>;
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-index 07c3f8876613..4bd8cdd8a7ca 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-@@ -138,3 +138,69 @@ qspi_rootfs: partition@3FE0000 {
- 		};
- 	};
- };
-+
-+&hwmon {
-+	voltage {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		input@2 {
-+			label = "0.8V VCC";
-+			reg = <2>;
-+		};
-+
-+		input@3 {
-+			label = "1.8V VCCIO_SDM";
-+			reg = <3>;
-+		};
-+
-+		input@4 {
-+			label = "1.8V VCCPT";
-+			reg = <4>;
-+		};
-+
-+		input@5 {
-+			label = "1.2V VCCCRCORE";
-+			reg = <5>;
-+		};
-+
-+		input@6 {
-+			label = "0.9V VCCH";
-+			reg = <6>;
-+		};
-+
-+		input@7 {
-+			label = "0.8V VCCL";
-+			reg = <7>;
-+		};
-+	};
-+
-+	temperature {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		input@0 {
-+			label = "Main Die SDM";
-+			reg = <0x0>;
-+		};
-+
-+		input@10000 {
-+			label = "Main Die corner bottom left max";
-+			reg = <0x10000>;
-+		};
-+
-+		input@20000 {
-+			label = "Main Die corner top left max";
-+			reg = <0x20000>;
-+		};
-+
-+		input@30000 {
-+			label = "Main Die corner bottom right max";
-+			reg = <0x30000>;
-+		};
-+
-+		input@40000 {
-+			label = "Main Die corner top right max";
-+			reg = <0x40000>;
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
-index 51f83f96ec65..bfee1ca0bd6e 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_nand.dts
-@@ -114,3 +114,69 @@ &usb0 {
- &watchdog0 {
- 	status = "okay";
- };
-+
-+&hwmon {
-+	voltage {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		input@2 {
-+			label = "0.8V VCC";
-+			reg = <2>;
-+		};
-+
-+		input@3 {
-+			label = "1.8V VCCIO_SDM";
-+			reg = <3>;
-+		};
-+
-+		input@4 {
-+			label = "1.8V VCCPT";
-+			reg = <4>;
-+		};
-+
-+		input@5 {
-+			label = "1.2V VCCCRCORE";
-+			reg = <5>;
-+		};
-+
-+		input@6 {
-+			label = "0.9V VCCH";
-+			reg = <6>;
-+		};
-+
-+		input@7 {
-+			label = "0.8V VCCL";
-+			reg = <7>;
-+		};
-+	};
-+
-+	temperature {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		input@0 {
-+			label = "Main Die SDM";
-+			reg = <0x0>;
-+		};
-+
-+		input@10000 {
-+			label = "Main Die corner bottom left max";
-+			reg = <0x10000>;
-+		};
-+
-+		input@20000 {
-+			label = "Main Die corner top left max";
-+			reg = <0x20000>;
-+		};
-+
-+		input@30000 {
-+			label = "Main Die corner bottom right max";
-+			reg = <0x30000>;
-+		};
-+
-+		input@40000 {
-+			label = "Main Die corner top right max";
-+			reg = <0x40000>;
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
-index 08c088571270..090b0382db98 100644
---- a/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
-+++ b/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
-@@ -129,3 +129,50 @@ &usb0 {
- &watchdog0 {
- 	status = "okay";
- };
-+
-+&hwmon {
-+	compatible = "intel,socfpga-n5x-hwmon", "intel,socfpga-hwmon";
-+	voltage {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		input@2 {
-+			label = "0.8V VDD";
-+			reg = <2>;
-+		};
-+
-+		input@3 {
-+			label = "0.8V VDD_SDM";
-+			reg = <3>;
-+		};
-+
-+		input@4 {
-+			label = "1.8V VCCADC";
-+			reg = <4>;
-+		};
-+
-+		input@5 {
-+			label = "1.8V VCCPD";
-+			reg = <5>;
-+		};
-+
-+		input@6 {
-+			label = "1.8V VCCIO_SDM";
-+			reg = <6>;
-+		};
-+
-+		input@7 {
-+			label = "0.8V VDD_HPS";
-+			reg = <7>;
-+		};
-+	};
-+
-+	temperature {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		input@0 {
-+			label = "Main Die SDM";
-+			reg = <0x0>;
-+		};
-+	};
-+};
--- 
-2.40.0
-
+thanks,
+-- Shuah
