@@ -2,149 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E1A6FB589
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94DE6FB58E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233298AbjEHQv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
+        id S234080AbjEHQwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbjEHQv4 (ORCPT
+        with ESMTP id S233974AbjEHQwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 12:51:56 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E1149DD
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:51:55 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-331139b46cfso31792175ab.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 09:51:55 -0700 (PDT)
+        Mon, 8 May 2023 12:52:20 -0400
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412064C03;
+        Mon,  8 May 2023 09:52:15 -0700 (PDT)
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-24e4e23f378so3369841a91.3;
+        Mon, 08 May 2023 09:52:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683564714; x=1686156714;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vKAJIhZErfGgup3nkmbHVmmde/aJfUx7FrW75v72/Oo=;
-        b=XMNScPZzrkW/PkJzpvHGNuIqhd1tvKowEHYpFlWfmaU3cArUbqHBLrNCPq51C6yOHH
-         IxhtYEP1BqTgk/hc0huP/dn43mF5tSroICBcylCIWvLZgS9OIhwBqrpT+wHz4WGmL/3z
-         D69m7xQbR2PBq1hTXaAOdcWJIVpE6Dm8vCQ+Ov7BK0BJvAh6U2OSCQdnz+q5x1shRJs4
-         DbyRL+uFHgC50agIYU7AFZUKbF/QXbRXIVxW5jDsSfrBgpAafZd62tHmZKYa9kS991uq
-         /7zzmgRAfOKeE4LJv5c5FCQ45kHnk59K1/Alwcx3Wg/SXs95oBjOWYCxnQUj2uxzAXFU
-         ty3w==
-X-Gm-Message-State: AC+VfDx4fT6mepKDJMtIujv2Y6b/4j2L6aVKowiS9gjAeTlBGkSEiKNx
-        HJWbWBCIMMMg80VSyyoyn+lYFjjLmglky3dCcAJmb/mAPnA5
-X-Google-Smtp-Source: ACHHUZ5JJOubbmBPxJ5XWWGE2MpiMMVz5hn+mm+ERj/WNuPOsCoXJb04UrJqpPDqksAfiumYkuEN1C1KdqsHp6WWDEdPaEZw2B8r
+        d=1e100.net; s=20221208; t=1683564734; x=1686156734;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lKlpAB8AKIxo4dSlH4+cwNzwviO7i4BXcMDofbP4/Y4=;
+        b=VNYUsDpNxh8iUcl/Z+qy3L6GTWsvnbQrE8TZOflMUCT7Krg4Hp3tqfye6eVYkRjbI7
+         hRMowKsZ9FYtne5q5YwNUJTA11384VA7QtmKmata04a/st3S98DlCcQzyAdEf5fSYg98
+         fI/M6FAS+Vb3KIl51a/JILvEgnuWrMpoR2Rgg6IrnG0aZ36ORJ/pyngDT5WONDw9iHic
+         POCFWZiYdj7tJykZnguy4WpylegsVVgpAYgrR/nriNv88gFblHt3hpfHwRq6ginubBQp
+         ACXglcQfbUSoalNLyZpLcRmjXCiBDXcncXx8izrs1rPvX9b3qKEV9d0hK8SHrXycyAuK
+         NqFQ==
+X-Gm-Message-State: AC+VfDwG2UgEj44L6o6rnlaPflJ5gk6xAjEaQ9cRsLlg7zGOEpiBLlWJ
+        tXx/427sSakEaNX743ap0Tw=
+X-Google-Smtp-Source: ACHHUZ5YAZBJRuwObeE+RUnkQ/prDCWbYAQOh6GSzcmna/vKchpEna9OA/ygjsSnyZEa3ijepdKOrw==
+X-Received: by 2002:a17:90a:880b:b0:250:484e:355f with SMTP id s11-20020a17090a880b00b00250484e355fmr8509250pjn.49.1683564734648;
+        Mon, 08 May 2023 09:52:14 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
+        by smtp.gmail.com with ESMTPSA id f5-20020a170902ce8500b001ab016e7916sm7536143plg.234.2023.05.08.09.52.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 09:52:14 -0700 (PDT)
+Date:   Mon, 8 May 2023 16:52:12 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     "'bhelgaas@google.com'" <bhelgaas@google.com>,
+        "'davem@davemloft.net'" <davem@davemloft.net>,
+        "'edumazet@google.com'" <edumazet@google.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Jake Oshins <jakeo@microsoft.com>,
+        "'kuba@kernel.org'" <kuba@kernel.org>,
+        "'kw@linux.com'" <kw@linux.com>, KY Srinivasan <kys@microsoft.com>,
+        "'leon@kernel.org'" <leon@kernel.org>,
+        "'linux-pci@vger.kernel.org'" <linux-pci@vger.kernel.org>,
+        "'lpieralisi@kernel.org'" <lpieralisi@kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "'pabeni@redhat.com'" <pabeni@redhat.com>,
+        "'robh@kernel.org'" <robh@kernel.org>,
+        "'saeedm@nvidia.com'" <saeedm@nvidia.com>,
+        "'wei.liu@kernel.org'" <wei.liu@kernel.org>,
+        Long Li <longli@microsoft.com>,
+        "'boqun.feng@gmail.com'" <boqun.feng@gmail.com>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        "'helgaas@kernel.org'" <helgaas@kernel.org>,
+        "'linux-hyperv@vger.kernel.org'" <linux-hyperv@vger.kernel.org>,
+        "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
+        "'linux-rdma@vger.kernel.org'" <linux-rdma@vger.kernel.org>,
+        "'netdev@vger.kernel.org'" <netdev@vger.kernel.org>,
+        Jose Teuttli Carranco <josete@microsoft.com>
+Subject: Re: [PATCH v3 0/6] pci-hyper: Fix race condition bugs for fast
+ device hotplug
+Message-ID: <ZFkovIxZudoLISBv@liuwe-devbox-debian-v2>
+References: <20230420024037.5921-1-decui@microsoft.com>
+ <SA1PR21MB1335B7E8FFBE1C03E9B0FDE2BF609@SA1PR21MB1335.namprd21.prod.outlook.com>
+ <SA1PR21MB13353B83E4DE3E6EEB62483ABF609@SA1PR21MB1335.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d4ce:0:b0:32a:9e86:242f with SMTP id
- o14-20020a92d4ce000000b0032a9e86242fmr5968170ilm.6.1683564714802; Mon, 08 May
- 2023 09:51:54 -0700 (PDT)
-Date:   Mon, 08 May 2023 09:51:54 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c84b4705fb31741e@google.com>
-Subject: [syzbot] [bpf?] [net?] WARNING: zero-size vmalloc in print_tainted
-From:   syzbot <syzbot+fae676d3cf469331fc89@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bjorn@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        edumazet@google.com, hawk@kernel.org, john.fastabend@gmail.com,
-        jonathan.lemon@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, maciej.fijalkowski@intel.com,
-        magnus.karlsson@intel.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SA1PR21MB13353B83E4DE3E6EEB62483ABF609@SA1PR21MB1335.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Apr 21, 2023 at 10:23:03PM +0000, Dexuan Cui wrote:
+> > From: Dexuan Cui
+> > Sent: Thursday, April 20, 2023 7:04 PM
+> > > ...
+> > >
+> > > Dexuan Cui (6):
+> > >   PCI: hv: Fix a race condition bug in hv_pci_query_relations()
+> > >   PCI: hv: Fix a race condition in hv_irq_unmask() that can cause panic
+> > >   PCI: hv: Remove the useless hv_pcichild_state from struct hv_pci_dev
+> > >   Revert "PCI: hv: Fix a timing issue which causes kdump to fail
+> > >     occasionally"
+> > >   PCI: hv: Add a per-bus mutex state_lock
+> > >   PCI: hv: Use async probing to reduce boot time
+> > >
+> > >  drivers/pci/controller/pci-hyperv.c | 145 +++++++++++++++++-----------
+> > >  1 file changed, 86 insertions(+), 59 deletions(-)
+> > 
+> > Hi Bjorn, Lorenzo, since basically this patchset is Hyper-V stuff, I would
+> > like it to go through the hyper-v tree if you have no objection.
+> > 
+> > The hyper-v tree already has one big PCI patch from Michael:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git/commit/?h=
+> > hyperv-next&id=2c6ba4216844ca7918289b49ed5f3f7138ee2402
+> > 
+> > Thanks,
+> > Dexuan
+> 
+> Hi Lorenzo, thanks for Ack'ing the patch:
+>   Re: [PATCH v2] PCI: hv: Replace retarget_msi_interrupt_params with hyperv_pcpu_input_arg
+> 
+> It would be great if you and/or Bjorn can Ack this patchset as well :-)
+> 
 
-syzbot found the following issue on:
+Lorenzo and Bjorn, are you happy with these patches? I can collect them
+via the hyperv-fixes tree.
 
-HEAD commit:    457391b03803 Linux 6.3
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1697e9d4280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=385e197a58ca4afe
-dashboard link: https://syzkaller.appspot.com/bug?extid=fae676d3cf469331fc89
-compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15916904280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10910f18280000
+Thanks,
+Wei.
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/c35b5b2731d2/non_bootable_disk-457391b0.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2a1bf3bafeb6/vmlinux-457391b0.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/21f1e3b4a5a9/zImage-457391b0.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fae676d3cf469331fc89@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 2949 at mm/vmalloc.c:3132 __vmalloc_node_range+0x44c/0x584 mm/vmalloc.c:3132
-Modules linked in:
-Kernel panic - not syncing: kernel: panic_on_warn set ...
-CPU: 1 PID: 2949 Comm: syz-executor398 Not tainted 6.3.0-syzkaller #0
-Hardware name: ARM-Versatile Express
-Backtrace: 
-[<817b2528>] (dump_backtrace) from [<817b261c>] (show_stack+0x18/0x1c arch/arm/kernel/traps.c:256)
- r7:81d81ac0 r6:82422c04 r5:60000093 r4:81d901cc
-[<817b2604>] (show_stack) from [<817cec84>] (__dump_stack lib/dump_stack.c:88 [inline])
-[<817b2604>] (show_stack) from [<817cec84>] (dump_stack_lvl+0x48/0x54 lib/dump_stack.c:106)
-[<817cec3c>] (dump_stack_lvl) from [<817ceca8>] (dump_stack+0x18/0x1c lib/dump_stack.c:113)
- r5:00000000 r4:8264dd14
-[<817cec90>] (dump_stack) from [<817b3110>] (panic+0x11c/0x36c kernel/panic.c:340)
-[<817b2ff4>] (panic) from [<802422ec>] (print_tainted+0x0/0xa0 kernel/panic.c:236)
- r3:8240c488 r2:00000001 r1:81d79fcc r0:81d81ac0
- r7:80469ba0
-[<80242268>] (check_panic_on_warn) from [<802424e0>] (__warn+0x7c/0x180 kernel/panic.c:673)
-[<80242464>] (__warn) from [<802426bc>] (warn_slowpath_fmt+0xd8/0x1d8 kernel/panic.c:697)
- r8:00000009 r7:00000c3c r6:81da5110 r5:8240c954 r4:822ab6bc
-[<802425e8>] (warn_slowpath_fmt) from [<80469ba0>] (__vmalloc_node_range+0x44c/0x584 mm/vmalloc.c:3132)
- r10:00000dc0 r9:8410d080 r8:83d04e80 r7:df800000 r6:00004000 r5:00000000
- r4:00000000
-[<80469754>] (__vmalloc_node_range) from [<80469db0>] (vmalloc_user+0x6c/0x74 mm/vmalloc.c:3359)
- r10:00000126 r9:8410d080 r8:83d04e80 r7:00000000 r6:00000000 r5:842aa940
- r4:00000000
-[<80469d44>] (vmalloc_user) from [<81767778>] (xskq_create+0x74/0xc4 net/xdp/xsk_queue.c:39)
-[<81767704>] (xskq_create) from [<81766c64>] (xsk_init_queue net/xdp/xsk.c:756 [inline])
-[<81767704>] (xskq_create) from [<81766c64>] (xsk_setsockopt+0x1c0/0x2bc net/xdp/xsk.c:1080)
- r7:83d04eac r6:83d04c00 r5:00000000 r4:00000003
-[<81766aa8>] (xsk_setsockopt) from [<812f6720>] (__sys_setsockopt+0xd4/0x1c8 net/socket.c:2271)
- r8:80200288 r7:00000126 r6:000118b0 r5:81766aa4 r4:844eb900
-[<812f664c>] (__sys_setsockopt) from [<812f6830>] (__do_sys_setsockopt net/socket.c:2282 [inline])
-[<812f664c>] (__sys_setsockopt) from [<812f6830>] (sys_setsockopt+0x1c/0x24 net/socket.c:2279)
- r5:00000000 r4:00000020
-[<812f6814>] (sys_setsockopt) from [<80200060>] (ret_fast_syscall+0x0/0x1c arch/arm/mm/proc-v7.S:66)
-Exception stack(0xdf981fa8 to 0xdf981ff0)
-1fa0:                   00000020 00000000 00000003 0000011b 00000003 20000040
-1fc0: 00000020 00000000 000118b0 00000126 000f4240 00000000 00000000 00003a97
-1fe0: 7e9b4c90 7e9b4c80 00010624 0002a900
-Rebooting in 86400 seconds..
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+> v1 of this patchset was posted on 3/28:
+> https://lwn.net/ml/linux-kernel/20230328045122.25850-1-decui%40microsoft.com/
+> and v3 got Michael Kelley's and Long Li's Reviewed-by.
+> 
+> I have done a long-haul testing against the patchset and it worked
+> reliably without causing any issue: without the patchset, usually the VM
+> can crash within 1~2 days; with the patchset, the VM is still running fine 
+> after 2 weeks.
+> 
+> Thanks,
+> Dexuan
