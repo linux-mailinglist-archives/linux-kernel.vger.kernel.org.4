@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7256FAD2E
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405C06FAD33
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235977AbjEHLcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 07:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
+        id S235720AbjEHLcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 07:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235925AbjEHLbo (ORCPT
+        with ESMTP id S235929AbjEHLbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 07:31:44 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4F73EDB6
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 04:31:00 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f14468ef54so5014554e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 04:31:00 -0700 (PDT)
+        Mon, 8 May 2023 07:31:46 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB984BBFE
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 04:31:01 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2ac8cc8829fso32055791fa.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 04:31:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google; t=1683545458; x=1686137458;
+        d=semihalf.com; s=google; t=1683545459; x=1686137459;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=shiQSDHxh2e+KlYJCYWsmpEL6ugBkLgWKoLDXET6U5s=;
-        b=n8CNxVHOk+38/s0589knvXD81SPym5aqdK0A73K52Br0MOHeFOM9Gr1OdsbbgzcbgP
-         CdI1J7TsZjoVcLmoHVrfwtp7KnxCGHSnxbAH9Nin+SFoCizJewq0XFhB4glBWCgP5flD
-         Uq6+pxH1hJy/WdI3ksWcwMGf3Zndb1eNYiO5mXQtTGQe/C+VNe30Jje6G9Q5hVsZQLme
-         19iNgCeO8LSwrAwfo+zp9FoXx1WRS1e+ZE+2Ls+m9HrnCGJ4XU+Urxkfo4qCBBJAGGfg
-         n0QW1h1NoKyf+nGMljdfdfHOhgohcigAgK40Zhwpg5+iNmWFgPoQoMdhpUGVu3xm3cg1
-         bDLg==
+        bh=ago5W1TH3NtYlqnoMKL2QoZcqhImH0EhtanUKlx90+o=;
+        b=ubqJyPUXHkbI4WVG4p1/PBG73AtSJIpqB/ICYxMLF8yrq2pTPj0EmaTlq3zuCful4n
+         MFM9xrXSTPVnn4YflEdt3wvK4GTbpC3Xj2EeRLfcCKfyEtX4jXTwKMWNG/dQOLRvLFfp
+         xy7ky6fMUjmLdBl5TBiz+RqdJWePrLWSaJln1Hxes8TL6RxSTRfDpG1IDXsXe432PRZV
+         Wr1rxHAZ66XoVTFDYbgrOFkA+ohh52HMjDI8drQu8SZw4zGiKMZ0f41TAj4KT17K9ogG
+         HZ2jU4GPk/oRejiYUuBS9z13dOZXLx0o1MRT2uR8V+LhKeCy2kWDGNja1DvLGZJT0W7Q
+         E6FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683545458; x=1686137458;
+        d=1e100.net; s=20221208; t=1683545459; x=1686137459;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=shiQSDHxh2e+KlYJCYWsmpEL6ugBkLgWKoLDXET6U5s=;
-        b=lYeKTI7yIztwvC4pB+fhKZqoUGGkvi8+G5/q+avFbZMZ4AmI7Qs/rbQxa6z43GHruq
-         OQ6bv7xhlCcuzeu2t0a1WXkxPBGkV+5WFdys1Ad3MUxy46tAvZf/OtVTMUx19vDDBzN4
-         74CZyKfs6Y2CNnN5/6S8H86VXhKdkJHJKft1q+u0TxHV8An0uQHSjmVXM42+IumXdX+w
-         QNWOsruAiL9mW5nVp3aknFjLb/XAnGdU/y9gccu4Xu9KQeRyYimnO+NnWaDkJ3iUhy/X
-         4loD2aQx3/XQmSURojxyy+Cj60kCh0FRXiLi1ZeTMr8zMBdhXzCI4HploBuUJXcsLqQn
-         mjSw==
-X-Gm-Message-State: AC+VfDzn0qSdzhx3FCDZ9LQiQd/5bTX0PDWzXUCuZIjm3wLaMdGLyfmW
-        FM/uY5Gluu9GWiLilBaRRRIprA==
-X-Google-Smtp-Source: ACHHUZ50+PimcUDxTXMGgv4EmguGyZF2tQHBDg+ZcDZGs3SUV4qB2dxtuCHtl09GTLefG4MJiuTaHw==
-X-Received: by 2002:ac2:4461:0:b0:4ee:e0c7:434d with SMTP id y1-20020ac24461000000b004eee0c7434dmr2134076lfl.51.1683545458729;
-        Mon, 08 May 2023 04:30:58 -0700 (PDT)
+        bh=ago5W1TH3NtYlqnoMKL2QoZcqhImH0EhtanUKlx90+o=;
+        b=TXTOa4iG4oztnOnh3s6yzD2u2gyW02STmyVH+lCpNFrxwQrpgNcmueHOfWJJC/ak7B
+         i/kpHzPbUQphBRyaV2TyyNZHurKE15YNcEOcxGujWlCnfwDEYERdIFVMVv74IPxHLjFe
+         NocfLQDKpur/CZGszeZwOcuV6QwqJA6Mtg0W5esrwPeYYgUdz2tAL15QR9ri3+U7Tt00
+         dT0hCes7gGrMY6pxVB5muiTqRyUB/2d3b+Q56C83lmy39hBTyEy1T29rc0RhsVZf63LY
+         8uV6H0CDXGkYhHZ0MywjqH0mAAz8qlUsCmyS24LsCjSjcI5zxF4D1pblZEzW5zqSzoBb
+         q33g==
+X-Gm-Message-State: AC+VfDyvYT79N5AQuRdweLEVAkqlWC7jAkSQ66Tj2g3MQzSnU1ah9JAZ
+        QhGY4rYBQtWXD41yP2txUfYarg==
+X-Google-Smtp-Source: ACHHUZ6dznyxLhJT/VBoJN3aVEWWHkYoCuIWMKXSx1E6hT10TgdkNvC/r4/EbQWmrtsm3zZdT804Jw==
+X-Received: by 2002:a2e:9b08:0:b0:2a8:e480:a3c8 with SMTP id u8-20020a2e9b08000000b002a8e480a3c8mr2548687lji.44.1683545459588;
+        Mon, 08 May 2023 04:30:59 -0700 (PDT)
 Received: from panikiel.office.semihalf.net ([83.142.187.84])
-        by smtp.gmail.com with ESMTPSA id k8-20020a2e2408000000b002a8b9353338sm1144406ljk.117.2023.05.08.04.30.57
+        by smtp.gmail.com with ESMTPSA id k8-20020a2e2408000000b002a8b9353338sm1144406ljk.117.2023.05.08.04.30.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 04:30:58 -0700 (PDT)
+        Mon, 08 May 2023 04:30:59 -0700 (PDT)
 From:   =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
 To:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
@@ -59,9 +59,9 @@ Cc:     perex@perex.cz, tiwai@suse.com, robh+dt@kernel.org,
         lars@metafoo.de, nuno.sa@analog.com, upstream@semihalf.com,
         amstan@chromium.org,
         =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
-Subject: [PATCH v2 4/7] ASoC: dt-bindings: Add Google Chameleon v3 audio codec
-Date:   Mon,  8 May 2023 13:30:34 +0200
-Message-ID: <20230508113037.137627-5-pan@semihalf.com>
+Subject: [PATCH v2 5/7] ARM: dts: chameleonv3: Add mute gpio hog
+Date:   Mon,  8 May 2023 13:30:35 +0200
+Message-ID: <20230508113037.137627-6-pan@semihalf.com>
 X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
 In-Reply-To: <20230508113037.137627-1-pan@semihalf.com>
 References: <20230508113037.137627-1-pan@semihalf.com>
@@ -78,51 +78,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding for google,chv3-codec device.
+Add an output-high gpio hog for the mute pin.
 
 Signed-off-by: Paweł Anikiel <pan@semihalf.com>
 ---
- .../bindings/sound/google,chv3-codec.yaml     | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/google,chv3-codec.yaml
+ arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/google,chv3-codec.yaml b/Documentation/devicetree/bindings/sound/google,chv3-codec.yaml
-new file mode 100644
-index 000000000000..5329dc140b1c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/google,chv3-codec.yaml
-@@ -0,0 +1,31 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/google,chv3-codec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts b/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
+index 422d00cd4c74..f0483ef46a36 100644
+--- a/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
++++ b/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
+@@ -69,6 +69,12 @@ u80: gpio@21 {
+ 			"TP122",
+ 			"TP123",
+ 			"TP124";
 +
-+title: Google Chameleon v3 audio codec
-+
-+maintainers:
-+  - Paweł Anikiel <pan@semihalf.com>
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: google,chv3-codec
-+
-+  "#sound-dai-cells":
-+    const: 0
-+
-+required:
-+  - compatible
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    audio-codec {
-+        compatible = "google,chv3-codec";
-+    };
++		mute {
++			gpio-hog;
++			gpios = <0 0>;
++			output-high;
++		};
+ 	};
+ };
+ 
 -- 
 2.40.1.521.gf1e218fcd8-goog
 
