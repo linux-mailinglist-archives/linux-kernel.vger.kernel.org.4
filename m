@@ -2,93 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D726FA0A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59AAE6FA0A8
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjEHHJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
+        id S233313AbjEHHKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233050AbjEHHJ3 (ORCPT
+        with ESMTP id S233428AbjEHHJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:09:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304DA1A492;
-        Mon,  8 May 2023 00:09:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B75561E9A;
-        Mon,  8 May 2023 07:08:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E5E0C433EF;
-        Mon,  8 May 2023 07:08:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683529710;
-        bh=+3W5Mv5xX/kx/ta/ix62WAEEVv/SvGa7b/nAH0LLghM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HBc8kLKoeZxm0sVitUx8Nt7ML5tEi2FZvBm7xEMaj0xk0+QmkvGjrd4yXORCvwi2m
-         eG/ds4BvGYXhaYxMiJYjeVtUr8ppfkiKnWSGu3rQqp1UfGdNVq+qoYBcTrhn5ZBaeU
-         zeSVzpJSHsbpMSroGk+tKjsX1LhBNFy0YLZG+bomQ71KIeYD1rgLiFsyO46+Ki2sWk
-         6aAwdN1LPHKfISUM9YQi538NVnSFcu1GbSMd/aNSj4R3sY0/tdkWomoG6y9lamgPEi
-         dJeWB3TNzVCUYLdccHbtoUJKFDsBCi7e5rr5rkogOKq7KQsiQu88txeojb/KTRWvwm
-         YxsTUAO4eH+vg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
-        Breno Leitao <leitao@debian.org>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Kanchan Joshi <joshi.k@samsung.com>,
-        Anuj Gupta <anuj20.g@samsung.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] io_uring: add dummy io_uring_sqe_cmd() helper
-Date:   Mon,  8 May 2023 09:08:18 +0200
-Message-Id: <20230508070825.3659621-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Mon, 8 May 2023 03:09:57 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262601AEF4;
+        Mon,  8 May 2023 00:09:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1683529781;
+  x=1715065781;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=2V+NUhnYRzHcs/qPV372ooVdqlg/MRqyc6ldidCg9bY=;
+  b=DIZct6ncsTbjR4096+pVaYccmSB9epzRem86o3mB2lJTEHhNWiK4dJQL
+   r42DLb/tRgRntj/24e/cR8/gP95JuKyzZWW4Y0HmiriAwkjX27iX+IFvd
+   WnLe9nCeGrWLuhZbJFN2whTcj3yIDDdK5jQbH7X9cdMIWZcIgG3rpw+aJ
+   eyNa2HH00SN9yQ73z6bbnWwRHiy7Ei5asQcpMX1753qbkvbCAaVDKh/JJ
+   jU0XV54SdkVo4hH5BfN2bpZYIcXPb/vfIoCeyt/ONx5uETqZSmCcUAEpy
+   +FeVA8OUSavXWtz22oEChsrns8yFFNShsGk0sTmcVi9SC4FQg9yAvZsqb
+   g==;
+From:   Astrid Rost <astrid.rost@axis.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+CC:     <kernel@axis.com>, Astrid Rost <astridr@axis.com>,
+        Astrid Rost <astrid.rost@axis.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 1/7] iio: light: vcnl4000: Add proximity irq for vcnl4200
+Date:   Mon, 8 May 2023 09:09:19 +0200
+Message-ID: <20230508070925.2123265-2-astrid.rost@axis.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230508070925.2123265-1-astrid.rost@axis.com>
+References: <20230508070925.2123265-1-astrid.rost@axis.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Add proximity interrupt support for vcnl4200 (similar to vcnl4040).
+Add support to configure proximity sensor interrupts and threshold
+limits. If an interrupt is detected an event will be pushed to the
+event interface.
 
-When CONFIG_IO_URING is disabled, the NVMe host support fails to build:
-
-drivers/nvme/host/ioctl.c: In function 'nvme_uring_cmd_io':
-drivers/nvme/host/ioctl.c:555:44: error: implicit declaration of function 'io_uring_sqe_cmd'; did you mean 'io_uring_free'? [-Werror=implicit-function-declaration]
-  555 |         const struct nvme_uring_cmd *cmd = io_uring_sqe_cmd(ioucmd->sqe);
-      |                                            ^~~~~~~~~~~~~~~~
-      |                                            io_uring_free
-
-Add a dummy function like the other interfaces for this configuration.
-
-Fixes: fd9b8547bc5c ("io_uring: Pass whole sqe to commands")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Astrid Rost <astrid.rost@axis.com>
 ---
- include/linux/io_uring.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/iio/light/vcnl4000.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
-index 3399d979ee1c..ec1dbd9e2599 100644
---- a/include/linux/io_uring.h
-+++ b/include/linux/io_uring.h
-@@ -102,6 +102,10 @@ static inline const char *io_uring_get_opcode(u8 opcode)
- {
- 	return "";
- }
-+static inline const void *io_uring_sqe_cmd(const struct io_uring_sqe *sqe)
-+{
-+	return NULL;
-+}
- #endif
+diff --git a/drivers/iio/light/vcnl4000.c b/drivers/iio/light/vcnl4000.c
+index 56d3963d3d66..13568454baff 100644
+--- a/drivers/iio/light/vcnl4000.c
++++ b/drivers/iio/light/vcnl4000.c
+@@ -65,6 +65,7 @@
+ #define VCNL4200_PS_DATA	0x08 /* Proximity data */
+ #define VCNL4200_AL_DATA	0x09 /* Ambient light data */
+ #define VCNL4040_INT_FLAGS	0x0b /* Interrupt register */
++#define VCNL4200_INT_FLAGS	0x0d /* Interrupt register */
+ #define VCNL4200_DEV_ID		0x0e /* Device ID, slave address and version */
  
- #endif
+ #define VCNL4040_DEV_ID		0x0c /* Device ID and version */
+@@ -1004,8 +1005,14 @@ static irqreturn_t vcnl4040_irq_thread(int irq, void *p)
+ 	struct iio_dev *indio_dev = p;
+ 	struct vcnl4000_data *data = iio_priv(indio_dev);
+ 	int ret;
++	int reg;
+ 
+-	ret = i2c_smbus_read_word_data(data->client, VCNL4040_INT_FLAGS);
++	if (data->id == VCNL4200)
++		reg = VCNL4200_INT_FLAGS;
++	else
++		reg = VCNL4040_INT_FLAGS;
++
++	ret = i2c_smbus_read_word_data(data->client, reg);
+ 	if (ret < 0)
+ 		return IRQ_HANDLED;
+ 
+@@ -1321,9 +1328,10 @@ static const struct vcnl4000_chip_spec vcnl4000_chip_spec_cfg[] = {
+ 		.measure_light = vcnl4200_measure_light,
+ 		.measure_proximity = vcnl4200_measure_proximity,
+ 		.set_power_state = vcnl4200_set_power_state,
+-		.channels = vcnl4000_channels,
++		.channels = vcnl4040_channels,
+ 		.num_channels = ARRAY_SIZE(vcnl4000_channels),
+-		.info = &vcnl4000_info,
++		.info = &vcnl4040_info,
++		.irq_thread = vcnl4040_irq_thread,
+ 	},
+ };
+ 
 -- 
-2.39.2
+2.30.2
 
