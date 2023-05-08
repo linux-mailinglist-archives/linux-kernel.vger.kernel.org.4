@@ -2,60 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523286F9D79
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 03:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87D8A6F9D7D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 03:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbjEHBl4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 7 May 2023 21:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S232528AbjEHBot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 21:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjEHBly (ORCPT
+        with ESMTP id S229662AbjEHBoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 21:41:54 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5217DBB;
-        Sun,  7 May 2023 18:41:49 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 3505F24E03C;
-        Mon,  8 May 2023 09:41:33 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 8 May
- 2023 09:41:33 +0800
-Received: from [192.168.125.124] (183.27.98.219) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 8 May
- 2023 09:41:32 +0800
-Message-ID: <622746ca-8d29-72cf-cc8f-cfe7bc5aea58@starfivetech.com>
-Date:   Mon, 8 May 2023 09:41:31 +0800
+        Sun, 7 May 2023 21:44:46 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289F083FD
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 18:44:43 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230508014440epoutp04fe4f3541d0e6cf1c08980ad5cb536a59~dB64yJhzm2141421414epoutp04G
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 01:44:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230508014440epoutp04fe4f3541d0e6cf1c08980ad5cb536a59~dB64yJhzm2141421414epoutp04G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683510280;
+        bh=VMbyO2NgYAIXy4+h0cOhx721nE7JCLzEfchB8xU0VBA=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=S3q0MRCGPw0uvTNuMnZuNAad1OmuViamgJ4xVvc+B3LMlSFuThJW8yap/HuwHrVyF
+         VStajfSouguXdH6bYVRZEvsIHn20vhASM/fx/vPjMQ6JTNJybHwtG+C9H5FTUFIY+l
+         biOFnx5Jt6AaaypqujJVlNTGjYlRjbk/eB5IEDZw=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20230508014438epcas2p4eaa0543e12020fd896df98d23c2a1ca2~dB63Po95_0862908629epcas2p4w;
+        Mon,  8 May 2023 01:44:38 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.97]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4QF3xf06zsz4x9Q1; Mon,  8 May
+        2023 01:44:38 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        17.E7.08199.50458546; Mon,  8 May 2023 10:44:37 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20230508014437epcas2p3078ac91705aba3019cbad406a5bf2cef~dB62HLt271205912059epcas2p3Q;
+        Mon,  8 May 2023 01:44:37 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230508014437epsmtrp29d7fb3656d9cc1a00cb5dd7c6687301e~dB62Gjph40870408704epsmtrp2X;
+        Mon,  8 May 2023 01:44:37 +0000 (GMT)
+X-AuditID: b6c32a47-e99fd70000002007-d0-64585405a293
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        5A.CA.28392.50458546; Mon,  8 May 2023 10:44:37 +0900 (KST)
+Received: from [10.229.8.168] (unknown [10.229.8.168]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230508014437epsmtip2abb7d743f3c27bccb759e4d1aba4a164~dB613xSPa0503305033epsmtip2v;
+        Mon,  8 May 2023 01:44:37 +0000 (GMT)
+Message-ID: <b93d7b1f-c0b1-7704-2beb-c574f87a06e8@samsung.com>
+Date:   Mon, 8 May 2023 10:42:12 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 2/3] ASoC: starfive: Add JH7110 TDM driver
-To:     Shengyu Qu <wiagn233@outlook.com>, Mark Brown <broonie@kernel.org>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        "Takashi Iwai" <tiwai@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20230506090116.9206-1-walker.chen@starfivetech.com>
- <20230506090116.9206-3-walker.chen@starfivetech.com>
- <TY3P286MB26118DAB0E0E2BF32C91B19F98739@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Thunderbird/102.10.0
+Subject: Re: [PATCH v3 3/3] spi: s3c64xx: support interrupt based pio mode
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
 Content-Language: en-US
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <TY3P286MB26118DAB0E0E2BF32C91B19F98739@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [183.27.98.219]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Jaewon Kim <jaewon02.kim@samsung.com>
+In-Reply-To: <53b60eca-e8ab-3ff3-61a4-019ccac6cd65@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEJsWRmVeSWpSXmKPExsWy7bCmhS5rSESKwd2TFhYP5m1js1j84zmT
+        xdSHT9gsLu/Xttj7eiu7xabH11gtLu+aw2Yx4/w+JovGjzfZHTg9ri/5xOyxaVUnm8eda3vY
+        PDYvqffo27KK0ePzJrkAtqhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE
+        3FRbJRefAF23zBygm5QUyhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BeYFesWJucWl
+        eel6eaklVoYGBkamQIUJ2Rlvm/6yFOxUrtg4YTVLA2OzdBcjJ4eEgIlEf8NU5i5GLg4hgR2M
+        Evu6J7GCJIQEPjFK7FgVAJH4zChx9/UeNpiOY482M0EU7WKUmL9EAqLoNaPEjGePmEESvAJ2
+        EguPtLOD2CwCKhIv3n9lhIgLSpyc+YQFxBYViJZYvG8KmC0s4CXxZ3cTE8ggEYHFjBILru5k
+        B3GYBTYySmxumgo2iVlAXOLWk/lgq9kEtCW+r18MdCsHByfQtgsXJSBK5CW2v50D9o+EwFwO
+        ifYPk9ghznaR6F/7AcoWlnh1fAuULSXx+d1eqNeyJdqn/2GFsCskLm6YDRU3lpj1rJ0RZBez
+        gKbE+l36IKaEgLLEkVssEGv5JDoO/2WHCPNKdLQJQTSqSdyfeg5qiIzEpCMrmSBKPCSm7Cud
+        wKg4CylQZiF5cRaSX2YhrF3AyLKKUSy1oDg3PbXYqMAYHtXJ+bmbGMGJVct9B+OMtx/0DjEy
+        cTAeYpTgYFYS4V2VEJYixJuSWFmVWpQfX1Sak1p8iNEUGDUTmaVEk/OBqT2vJN7QxNLAxMzM
+        0NzI1MBcSZxX2vZkspBAemJJanZqakFqEUwfEwenVAOTVMyXZi+Wq/+zdqz6sfxn83m/M2tK
+        ZNk6V91efZJdUGPpp83TKiTOn9QW3249S2S+iMSPqL/n2BsW5G9SlrOvuSMvser+BWO1f1N/
+        nv59R2fVPY6LFxfcX67YLqZu3V86y2u9Zq360Xtp1qG9hoZ9V7/y2+5xfytmHH3zsseh2T41
+        x737+7/Unv6rZdGxXNDEmGH9rq8ffvumenSEmqz5Ymc65UjLS9eYT++eF1U6rr9f+ebe/9yF
+        X5ljeEu4J62+7fWo+/yZ36sdlod7yX83qF8XayX9znSz1WsJUdHk05EVu0Kn7Y7f9Mrl4dFN
+        X78Gn3jM4+wToun5w+ekU8jG5c3Ju/8vSLP/8/mEjcJUPiWW4oxEQy3mouJEABtd3J41BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphkeLIzCtJLcpLzFFi42LZdlhJXpc1JCLF4PgmGYsH87axWSz+8ZzJ
+        YurDJ2wWl/drW+x9vZXdYtPja6wWl3fNYbOYcX4fk0Xjx5vsDpwe15d8YvbYtKqTzePOtT1s
+        HpuX1Hv0bVnF6PF5k1wAWxSXTUpqTmZZapG+XQJXxtumvywFO5UrNk5YzdLA2CzdxcjJISFg
+        InHs0WYmEFtIYAejxKb3lhBxGYnlz/rYIGxhifstR1ghal4ySsyaFg9i8wrYSSw80s4OYrMI
+        qEi8eP+VESIuKHFy5hMWEFtUIFrixvJvYPOFBbwk/uxuArK5OEQEFjNKTGzcBuYwC2xklFh5
+        fT0ziCMk8JtR4vetx2CjmAXEJW49mQ/WziagLfF9/WKgMzg4OIFWX7goAVFiJtG1tQuqXF5i
+        +9s5zBMYhWYhOWQWkkmzkLTMQtKygJFlFaNkakFxbnpusWGBUV5quV5xYm5xaV66XnJ+7iZG
+        cERpae1g3LPqg94hRiYOxkOMEhzMSiK8qxLCUoR4UxIrq1KL8uOLSnNSiw8xSnOwKInzXug6
+        GS8kkJ5YkpqdmlqQWgSTZeLglGpgWljBdktOOpWnOSvD47OZY2p70+nsjpSw9p23+hRWrIq/
+        kmHeG2rLZPPscfcf0+l7VfdKi+S0zghNnl9r86rV3sXy3kL9X1enhW2dNKM7t1uC/+ebu/0f
+        LxSnH/rzen72MrkFu3x1FtlJ6v1e8/XffLvjua5/64QswnWOH35h86pkmkBuk/aNiz6LjvRW
+        tbyN1a5wWbF5ruC8U5aKPH9rz66rcX6hLOb4ckr1jw6+Z4dPTuSJPSQh2Mvwa2mNW0/Y3t/b
+        T8uuZ1pR6Mm7gT3rd0hS7yGdFxlCJ9f1t7Hf49l37yjHVBehl0bTG9sSo8o3rJEQuhdpnfb5
+        4oeWKQ8NN6w8w75lj3iiQLVVCr+dEktxRqKhFnNRcSIATjDzQRcDAAA=
+X-CMS-MailID: 20230508014437epcas2p3078ac91705aba3019cbad406a5bf2cef
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230502065025epcas2p34507ffad60b32e091ff0efeced9bc12f
+References: <20230502062813.112434-1-jaewon02.kim@samsung.com>
+        <CGME20230502065025epcas2p34507ffad60b32e091ff0efeced9bc12f@epcas2p3.samsung.com>
+        <20230502062813.112434-4-jaewon02.kim@samsung.com>
+        <53b60eca-e8ab-3ff3-61a4-019ccac6cd65@linaro.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,308 +124,149 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 2023/5/6 21:47, Shengyu Qu wrote:
-> Hi,
-> 
->> Add tdm driver support for the StarFive JH7110 SoC.
+On 23. 5. 5. 18:47, Krzysztof Kozlowski wrote:
+> On 02/05/2023 08:28, Jaewon Kim wrote:
+>> Support interrupt based pio mode to optimize cpu usage.
+>> When transmitting data size is larget than 32 bytes, operates with
+>> interrupt based pio mode.
 >>
->> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+>> By using the FIFORDY INT, an interrupt can be triggered when
+>> the desired size of data has been received. Using this, we can support
+>> interrupt based pio mode.
+>>
+>> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
 >> ---
->>   MAINTAINERS                     |   6 +
->>   sound/soc/Kconfig               |   1 +
->>   sound/soc/Makefile              |   1 +
->>   sound/soc/starfive/Kconfig      |  15 +
->>   sound/soc/starfive/Makefile     |   2 +
->>   sound/soc/starfive/jh7110_tdm.c | 573 ++++++++++++++++++++++++++++++++
->>   sound/soc/starfive/jh7110_tdm.h | 147 ++++++++
->>   7 files changed, 745 insertions(+)
->>   create mode 100644 sound/soc/starfive/Kconfig
->>   create mode 100644 sound/soc/starfive/Makefile
->>   create mode 100644 sound/soc/starfive/jh7110_tdm.c
->>   create mode 100644 sound/soc/starfive/jh7110_tdm.h
+>>   drivers/spi/spi-s3c64xx.c | 66 ++++++++++++++++++++++++++++++++++-----
+>>   1 file changed, 58 insertions(+), 8 deletions(-)
 >>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 5f9c544bc189..add89615d327 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19945,6 +19945,12 @@ F:    Documentation/devicetree/bindings/power/starfive*
->>   F:    drivers/soc/starfive/jh71xx_pmu.c
->>   F:    include/dt-bindings/power/starfive,jh7110-pmu.h
->>   +STARFIVE JH7110 TDM DRIVERS
->> +M:    Walker Chen <walker.chen@starfivetech.com>
->> +S:    Maintained
->> +F:    Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml
->> +F:    sound/soc/starfive/jh7110-tdm.*
+>> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+>> index 2a8304678df9..323c6da9730b 100644
+>> --- a/drivers/spi/spi-s3c64xx.c
+>> +++ b/drivers/spi/spi-s3c64xx.c
+>> @@ -58,6 +58,8 @@
+>>   #define S3C64XX_SPI_MODE_BUS_TSZ_HALFWORD	(1<<17)
+>>   #define S3C64XX_SPI_MODE_BUS_TSZ_WORD		(2<<17)
+>>   #define S3C64XX_SPI_MODE_BUS_TSZ_MASK		(3<<17)
+>> +#define S3C64XX_SPI_MODE_RX_RDY_LVL		GENMASK(16, 11)
+>> +#define S3C64XX_SPI_MODE_RX_RDY_LVL_SHIFT	11
+>>   #define S3C64XX_SPI_MODE_SELF_LOOPBACK		(1<<3)
+>>   #define S3C64XX_SPI_MODE_RXDMA_ON		(1<<2)
+>>   #define S3C64XX_SPI_MODE_TXDMA_ON		(1<<1)
+>> @@ -114,6 +116,8 @@
+>>   
+>>   #define S3C64XX_SPI_TRAILCNT		S3C64XX_SPI_MAX_TRAILCNT
+>>   
+>> +#define S3C64XX_SPI_POLLING_SIZE	32
 >> +
->>   STARFIVE SOC DRIVERS
->>   M:    Conor Dooley <conor@kernel.org>
->>   S:    Maintained
->> diff --git a/sound/soc/Kconfig b/sound/soc/Kconfig
->> index 848fbae26c3b..8d1d9401ecf2 100644
->> --- a/sound/soc/Kconfig
->> +++ b/sound/soc/Kconfig
->> @@ -91,6 +91,7 @@ source "sound/soc/sh/Kconfig"
->>   source "sound/soc/sof/Kconfig"
->>   source "sound/soc/spear/Kconfig"
->>   source "sound/soc/sprd/Kconfig"
->> +source "sound/soc/starfive/Kconfig"
->>   source "sound/soc/sti/Kconfig"
->>   source "sound/soc/stm/Kconfig"
->>   source "sound/soc/sunxi/Kconfig"
->> diff --git a/sound/soc/Makefile b/sound/soc/Makefile
->> index 507eaed1d6a1..65aeb4ef4068 100644
->> --- a/sound/soc/Makefile
->> +++ b/sound/soc/Makefile
->> @@ -59,6 +59,7 @@ obj-$(CONFIG_SND_SOC)    += sh/
->>   obj-$(CONFIG_SND_SOC)    += sof/
->>   obj-$(CONFIG_SND_SOC)    += spear/
->>   obj-$(CONFIG_SND_SOC)    += sprd/
->> +obj-$(CONFIG_SND_SOC)    += starfive/
->>   obj-$(CONFIG_SND_SOC)    += sti/
->>   obj-$(CONFIG_SND_SOC)    += stm/
->>   obj-$(CONFIG_SND_SOC)    += sunxi/
->> diff --git a/sound/soc/starfive/Kconfig b/sound/soc/starfive/Kconfig
->> new file mode 100644
->> index 000000000000..737c956f7b93
->> --- /dev/null
->> +++ b/sound/soc/starfive/Kconfig
->> @@ -0,0 +1,15 @@
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +config SND_SOC_STARFIVE
->> +    tristate "Audio support for StarFive SoC"
->> +    depends on COMPILE_TEST || SOC_STARFIVE
->> +    help
->> +      Say Y or M if you want to add support for codecs attached to
->> +      the Starfive SoCs' Audio interfaces. You will also need to
->> +      select the audio interfaces to support below.
+>>   #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
+>>   #define is_polling(x)	(x->cntrlr_info->polling)
+>>   
+>> @@ -552,7 +556,7 @@ static int s3c64xx_wait_for_dma(struct s3c64xx_spi_driver_data *sdd,
+>>   }
+>>   
+>>   static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
+>> -				struct spi_transfer *xfer)
+>> +				struct spi_transfer *xfer, bool use_irq)
+>>   {
+>>   	void __iomem *regs = sdd->regs;
+>>   	unsigned long val;
+>> @@ -573,6 +577,12 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
+>>   	if (RX_FIFO_LVL(status, sdd) < xfer->len)
+>>   		usleep_range(time_us / 2, time_us);
+>>   
+>> +	if (use_irq) {
+>> +		val = msecs_to_jiffies(ms);
+>> +		if (!wait_for_completion_timeout(&sdd->xfer_completion, val))
+>> +			return -EIO;
+>> +	}
 >> +
->> +config SND_SOC_JH7110_TDM
->> +    tristate "JH7110 TDM device driver"
->> +    depends on HAVE_CLK && SND_SOC_STARFIVE
->> +    select SND_SOC_GENERIC_DMAENGINE_PCM
->> +    help
->> +      Say Y or M if you want to add support for StarFive TDM driver.
->> diff --git a/sound/soc/starfive/Makefile b/sound/soc/starfive/Makefile
->> new file mode 100644
->> index 000000000000..f7d960211d72
->> --- /dev/null
->> +++ b/sound/soc/starfive/Makefile
->> @@ -0,0 +1,2 @@
->> +# StarFive Platform Support
->> +obj-$(CONFIG_SND_SOC_JH7110_TDM) += jh7110_tdm.o
->> diff --git a/sound/soc/starfive/jh7110_tdm.c b/sound/soc/starfive/jh7110_tdm.c
->> new file mode 100644
->> index 000000000000..33f7cf43e4bd
->> --- /dev/null
->> +++ b/sound/soc/starfive/jh7110_tdm.c
->> @@ -0,0 +1,573 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * jh7110_tdm.c -- StarFive JH7110 TDM driver
->> + *
->> + * Copyright (C) 2022-2023 StarFive Technology Co., Ltd.
->> + *
->> + * Author: Walker Chen <walker.chen@starfivetech.com>
->> + */
->> +
->> +#include <linux/clk.h>
->> +#include <linux/device.h>
->> +#include <linux/module.h>
->> +#include <linux/of_irq.h>
->> +#include <linux/of_platform.h>
->> +#include <linux/pm_runtime.h>
->> +#include <linux/regmap.h>
->> +#include <linux/reset.h>
->> +#include <sound/initval.h>
->> +#include <sound/pcm_params.h>
->> +#include <sound/soc.h>
->> +#include <sound/soc-dai.h>
->> +#include "jh7110_tdm.h"
->> +
->> +static inline u32 jh7110_tdm_readl(struct jh7110_tdm_dev *tdm, u16 reg)
->> +{
->> +    return readl_relaxed(tdm->tdm_base + reg);
->> +}
->> +
->> +static inline void jh7110_tdm_writel(struct jh7110_tdm_dev *tdm, u16 reg, u32 val)
->> +{
->> +    writel_relaxed(val, tdm->tdm_base + reg);
->> +}
->> +
->> +static void jh7110_tdm_save_context(struct jh7110_tdm_dev *tdm,
->> +                    struct snd_pcm_substream *substream)
->> +{
->> +    if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
->> +        tdm->saved_pcmtxcr = jh7110_tdm_readl(tdm, TDM_PCMTXCR);
->> +    else
->> +        tdm->saved_pcmrxcr = jh7110_tdm_readl(tdm, TDM_PCMRXCR);
->> +}
->> +
->> +static void jh7110_tdm_start(struct jh7110_tdm_dev *tdm,
->> +                 struct snd_pcm_substream *substream)
->> +{
->> +    u32 data;
->> +
->> +    data = jh7110_tdm_readl(tdm, TDM_PCMGBCR);
->> +    jh7110_tdm_writel(tdm, TDM_PCMGBCR, data | PCMGBCR_ENABLE);
->> +
->> +    /* restore context */
->> +    if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
->> +        jh7110_tdm_writel(tdm, TDM_PCMTXCR, tdm->saved_pcmtxcr | PCMTXCR_TXEN);
->> +    else
->> +        jh7110_tdm_writel(tdm, TDM_PCMRXCR, tdm->saved_pcmrxcr | PCMRXCR_RXEN);
->> +}
->> +
->> +static void jh7110_tdm_stop(struct jh7110_tdm_dev *tdm,
->> +                struct snd_pcm_substream *substream)
->> +{
->> +    unsigned int val;
->> +
->> +    if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
->> +        val = jh7110_tdm_readl(tdm, TDM_PCMTXCR);
->> +        val &= ~PCMTXCR_TXEN;
->> +        jh7110_tdm_writel(tdm, TDM_PCMTXCR, val);
->> +    } else {
->> +        val = jh7110_tdm_readl(tdm, TDM_PCMRXCR);
->> +        val &= ~PCMRXCR_RXEN;
->> +        jh7110_tdm_writel(tdm, TDM_PCMRXCR, val);
->> +    }
->> +}
->> +
->> +static int jh7110_tdm_syncdiv(struct jh7110_tdm_dev *tdm)
->> +{
->> +    u32 sl, sscale, syncdiv;
->> +
->> +    if (tdm->rx.sl >= tdm->tx.sl)
->> +        sl = tdm->rx.sl;
->> +    else
->> +        sl = tdm->tx.sl;
->> +
->> +    if (tdm->rx.sscale >= tdm->tx.sscale)
->> +        sscale = tdm->rx.sscale;
->> +    else
->> +        sscale = tdm->tx.sscale;
->> +
->> +    syncdiv = tdm->pcmclk / tdm->samplerate - 1;
->> +
->> +    if ((syncdiv + 1) < (sl * sscale)) {
->> +        dev_err(tdm->dev, "Failed to set syncdiv!\n");
->> +        return -EINVAL;
->> +    }
->> +
->> +    if (tdm->syncm == TDM_SYNCM_LONG &&
->> +        (tdm->rx.sscale <= 1 || tdm->tx.sscale <= 1)) {
->> +        if ((syncdiv + 1) <= sl) {
->> +            dev_err(tdm->dev, "Wrong syncdiv! It must be (syncdiv+1) > max[tx.sl, rx.sl]\n");
->> +            return -EINVAL;
->> +        }
->> +    }
->> +
->> +    jh7110_tdm_writel(tdm, TDM_PCMDIV, syncdiv);
->> +    return 0;
->> +}
->> +
->> +static int jh7110_tdm_config(struct jh7110_tdm_dev *tdm,
->> +                 struct snd_pcm_substream *substream)
->> +{
->> +    u32 datarx, datatx;
->> +    int ret;
->> +
->> +    ret = jh7110_tdm_syncdiv(tdm);
->> +    if (ret)
->> +        return ret;
->> +
->> +    datarx = (tdm->rx.ifl << IFL_BIT) |
->> +          (tdm->rx.wl << WL_BIT) |
->> +          (tdm->rx.sscale << SSCALE_BIT) |
->> +          (tdm->rx.sl << SL_BIT) |
->> +          (tdm->rx.lrj << LRJ_BIT);
->> +
->> +    datatx = (tdm->tx.ifl << IFL_BIT) |
->> +          (tdm->tx.wl << WL_BIT) |
->> +          (tdm->tx.sscale << SSCALE_BIT) |
->> +          (tdm->tx.sl << SL_BIT) |
->> +          (tdm->tx.lrj << LRJ_BIT);
->> +
->> +    if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
->> +        jh7110_tdm_writel(tdm, TDM_PCMTXCR, datatx);
->> +    else
->> +        jh7110_tdm_writel(tdm, TDM_PCMRXCR, datarx);
->> +
->> +    return 0;
->> +}
->> +
->> +static void jh7110_tdm_clk_disable(struct jh7110_tdm_dev *tdm)
->> +{
->> +    int i;
->> +
->> +    for (i = tdm->num_clks - 1; i >= 0; i--)
->> +        clk_disable_unprepare(tdm->clks[i]);
->> +}
->> +
->> +static int jh7110_tdm_clk_enable(struct jh7110_tdm_dev *tdm)
->> +{
->> +    int i, ret;
->> +
->> +    for (i = 0; i < tdm->num_clks; i++) {
->> +        ret = clk_prepare_enable(tdm->clks[i]);
->> +        if (ret) {
->> +            while (i-- > 0)
->> +                clk_disable_unprepare(tdm->clks[i]);
->> +            return ret;
->> +        }
->> +    }
->> +
->> +    ret = reset_control_deassert(tdm->resets);
->> +    if (ret) {
->> +        dev_err(tdm->dev, "Failed to deassert tdm resets\n");
->> +        goto dis_tdm_clk;
->> +    }
->> +
->> +    /* select tdm_ext clock as the clock source for tdm */
->> +    ret = clk_set_parent(tdm->clks[5], tdm->clks[4]);
->> +    if (ret) {
->> +        dev_err(tdm->dev, "Can't set clock source for clk_tdm: %d\n", ret);
->> +        goto dis_tdm_clk;
->> +    }
->> +    return 0;
->> +
->> +dis_tdm_clk:
->> +    for (i = tdm->num_clks - 1; i >= 0; i--)
->> +        clk_disable_unprepare(tdm->clks[i]);
->> +
->> +    return ret;
->> +}
->> +
->> +#ifdef CONFIG_PM
->> +static int jh7110_tdm_runtime_suspend(struct device *dev)
->> +{
->> +    struct jh7110_tdm_dev *tdm = dev_get_drvdata(dev);
->> +
->> +    jh7110_tdm_clk_disable(tdm);
->> +    return 0;
->> +}
->> +
->> +static int jh7110_tdm_runtime_resume(struct device *dev)
->> +{
->> +    struct jh7110_tdm_dev *tdm = dev_get_drvdata(dev);
->> +
->> +    return jh7110_tdm_clk_enable(tdm);
->> +}
->> +#endif
->> +
->> +#ifdef CONFIG_PM_SLEEP
->> +static int jh7110_tdm_suspend(struct snd_soc_component *component)
->> +{
->> +    /* save context */
->> +    tdm->saved_pcmgbcr = jh7110_tdm_readl(tdm, TDM_PCMGBCR);
->> +    tdm->saved_pcmdiv = jh7110_tdm_readl(tdm, TDM_PCMDIV);
-> 
-> tdm isn't declared here. Is that same with resume function?
+>>   	val = msecs_to_loops(ms);
+>>   	do {
+>>   		status = readl(regs + S3C64XX_SPI_STATUS);
+>> @@ -735,10 +745,13 @@ static int s3c64xx_spi_transfer_one(struct spi_master *master,
+>>   	void *rx_buf = NULL;
+>>   	int target_len = 0, origin_len = 0;
+>>   	int use_dma = 0;
+>> +	bool use_irq = false;
+>>   	int status;
+>>   	u32 speed;
+>>   	u8 bpw;
+>>   	unsigned long flags;
+>> +	u32 rdy_lv;
+>> +	u32 val;
+>>   
+>>   	reinit_completion(&sdd->xfer_completion);
+>>   
+>> @@ -759,17 +772,46 @@ static int s3c64xx_spi_transfer_one(struct spi_master *master,
+>>   	    sdd->rx_dma.ch && sdd->tx_dma.ch) {
+>>   		use_dma = 1;
+>>   
+>> -	} else if (xfer->len > fifo_len) {
+>> +	} else if (xfer->len >= fifo_len) {
+> I don't fully understand this. If len equals to fifo_len, everything
+> would fit into FIFO so no need for all this?
 
-OMG! Maybe I accidentally deleted the declaration of tdm while deleting some debugging statement.
-Yes, it is same with resume function.
+If the FIFO is filled with data, TX Overrun & RX Underrun interrupts 
+will occur.
 
-Best regards,
-Walker
+In CPU polling, there is no such issue because data is read before an 
+interrupt occurs.
+
+And, RDY_LVL has only 6 bits.(max. 63). we cannot set trigger level on 
+the FIFO max size.
+
+
+>>   		tx_buf = xfer->tx_buf;
+>>   		rx_buf = xfer->rx_buf;
+>>   		origin_len = xfer->len;
+>> -
+>>   		target_len = xfer->len;
+>> -		if (xfer->len > fifo_len)
+>> -			xfer->len = fifo_len;
+>> +		xfer->len = fifo_len - 1;
+>>   	}
+>>   
+>>   	do {
+>> +		/* transfer size is greater than 32, change to IRQ mode */
+>> +		if (xfer->len > S3C64XX_SPI_POLLING_SIZE)
+>> +			use_irq = true;
+>> +
+>> +		if (use_irq) {
+>> +			reinit_completion(&sdd->xfer_completion);
+>> +
+>> +			rdy_lv = xfer->len;
+> Style is:
+>
+> /*
+>   *
+>
+>> +			/* Setup RDY_FIFO trigger Level
+>> +			 * RDY_LVL =
+>> +			 * fifo_lvl up to 64 byte -> N bytes
+>> +			 *               128 byte -> RDY_LVL * 2 bytes
+>> +			 *               256 byte -> RDY_LVL * 4 bytes
+> I don't understand it. Based on this equation for 256 bytes,
+> RDY_LVL = RDY_LVL * 4?
+> Didn't you mean xfer->len?
+
+In v4, I will change it to the following
+
+/*
+  * Trigger Level =
+  * (N = value of RDY_LVL field)
+  * fifo_lvl up to 64 byte -> N bytes
+  *               128 byte -> N * 2 bytes
+  *               256 byte -> N * 4 bytes
+  */
+
+>
+>
+> Best regards,
+> Krzysztof
+>
+>
+
+Thanks
+
+Jaewon Kim
+
