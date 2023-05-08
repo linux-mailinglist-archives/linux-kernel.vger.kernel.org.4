@@ -2,292 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0946FB48F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDBC6FB2AD
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbjEHQCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
+        id S234060AbjEHOZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 10:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233108AbjEHQCH (ORCPT
+        with ESMTP id S232938AbjEHOZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 12:02:07 -0400
-Received: from alln-iport-3.cisco.com (alln-iport-3.cisco.com [173.37.142.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9BD526F
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:02:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=8626; q=dns/txt; s=iport;
-  t=1683561724; x=1684771324;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iJ7pjBaNjs4nBD8BQAS6E6wbv4xaISl93uvUv2wL+mU=;
-  b=TzUkBfYp/ekWFt2FFhSXVsAGB8AQizGiXODQ6+gcCl6wbfb7DnzpH84X
-   lwAA8MbTp/s8/+NeoIu37o/IRlGBJ94awB8IeaJDZEDo3TZWZsAw/Z6Uk
-   P14QlALtSckhIEWNNZp5ENBjIwyrmAGR2tHWqvO9zzSxnzpVnmkGFd2qV
-   Q=;
-X-CSE-ConnectionGUID: UNsUyunNSXGIzwu/FdLTww==
-X-CSE-MsgGUID: aWtlM5KBQUWKjpQqOWhJ+A==
-X-IronPort-AV: E=Sophos;i="5.99,259,1677542400"; 
-   d="scan'208";a="84758450"
-Received: from alln-core-10.cisco.com ([173.36.13.132])
-  by alln-iport-3.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 16:02:04 +0000
-Received: from sjc-ads-7449.cisco.com (sjc-ads-7449.cisco.com [10.30.220.234])
-        by alln-core-10.cisco.com (8.15.2/8.15.2) with ESMTPS id 348G1wdS002688
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 8 May 2023 16:02:02 GMT
-Received: by sjc-ads-7449.cisco.com (Postfix, from userid 1777032)
-        id 7B01BCCD0B1; Mon,  8 May 2023 09:01:57 -0700 (PDT)
-From:   Marcin Wierzbicki <mawierzb@cisco.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Marcin Wierzbicki <mawierzb@cisco.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Roger Quadros <rogerq@kernel.org>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     xe-linux-external@cisco.com, danielwa@cisco.com, olicht@cisco.com,
-        Bartosz Wawrzyniak <bwawrzyn@cisco.com>
-Subject: [PATCH v2] phy: cadence: Sierra: Add single link SGMII register configuration
-Date:   Mon,  8 May 2023 16:01:40 +0000
-Message-Id: <20230508160142.2489365-1-mawierzb@cisco.com>
-X-Mailer: git-send-email 2.28.0
+        Mon, 8 May 2023 10:25:10 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C9410E3;
+        Mon,  8 May 2023 07:25:09 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 348Dolvh003028;
+        Mon, 8 May 2023 10:24:51 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3qdkt9bht0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 10:24:51 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 348EOo1a028223
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 8 May 2023 10:24:50 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 8 May 2023 10:24:49 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 8 May 2023 10:24:49 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 8 May 2023 10:24:49 -0400
+Received: from daniel-Precision-5530.ad.analog.com ([10.48.65.214])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 348EOYCr012218;
+        Mon, 8 May 2023 10:24:36 -0400
+From:   Daniel Matyas <daniel.matyas@analog.com>
+CC:     Daniel Matyas <daniel.matyas@analog.com>,
+        Rob Herring <robh@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: [PATCH v7 1/2] dt-bindings: hwmon: add MAX31827
+Date:   Mon, 8 May 2023 20:24:23 +0300
+Message-ID: <20230508172427.23915-1-daniel.matyas@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-Outbound-SMTP-Client: 10.30.220.234, sjc-ads-7449.cisco.com
-X-Outbound-Node: alln-core-10.cisco.com
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: oEn_-A5gyVPzPW1BJiaKP73j5Q41kqr_
+X-Proofpoint-ORIG-GUID: oEn_-A5gyVPzPW1BJiaKP73j5Q41kqr_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-08_10,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ adultscore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 clxscore=1015
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2305080097
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add single link SGMII register configuration for no SSC for
-cdns,sierra-phy-t0 compatibility string.
-The configuration is based on Sierra Programmer's Guide and
-validated in Cisco CrayAR SoC.
+MAX31827 is a low-power temperature switch with I2C interface.
 
-Co-developed-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
-Signed-off-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
-Signed-off-by: Marcin Wierzbicki <mawierzb@cisco.com>
-Change-Id: Id4c093a1bbf409f3176736b5326854a1396391c1
+The device is a ±1°C accuracy from -40°C to +125°C
+(12 bits) local temperature switch and sensor with I2C/SM-
+Bus interface. The combination of small 6-bump wafer-lev-
+el package (WLP) and high accuracy makes this temper-
+ature sensor/switch ideal for a wide range of applications.
+
+Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- drivers/phy/cadence/phy-cadence-sierra.c | 103 +++++++++++++++++++++++
- 1 file changed, 103 insertions(+)
+ .../bindings/hwmon/adi,max31827.yaml          | 54 +++++++++++++++++++
+ MAINTAINERS                                   |  7 +++
+ 2 files changed, 61 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
 
-diff --git a/drivers/phy/cadence/phy-cadence-sierra.c b/drivers/phy/cadence/phy-cadence-sierra.c
-index 13fcd3a65fe9..6c3870a6b236 100644
---- a/drivers/phy/cadence/phy-cadence-sierra.c
-+++ b/drivers/phy/cadence/phy-cadence-sierra.c
-@@ -30,28 +30,40 @@
- #define SIERRA_COMMON_CDB_OFFSET			0x0
- #define SIERRA_MACRO_ID_REG				0x0
- #define SIERRA_CMN_PLLLC_GEN_PREG			0x42
-+#define SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG		0x43
-+#define SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG		0x45
-+#define SIERRA_CMN_PLLLC_INIT_PREG			0x46
-+#define SIERRA_CMN_PLLLC_ITERTMR_PREG			0x47
- #define SIERRA_CMN_PLLLC_MODE_PREG			0x48
- #define SIERRA_CMN_PLLLC_LF_COEFF_MODE1_PREG		0x49
- #define SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG		0x4A
- #define SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG		0x4B
-+#define SIERRA_CMN_PLLLC_LOCKSEARCH_PREG		0x4C
- #define SIERRA_CMN_PLLLC_CLK1_PREG			0x4D
-+#define SIERRA_CMN_PLLLC_CLK0_PREG			0x4E
- #define SIERRA_CMN_PLLLC_BWCAL_MODE1_PREG		0x4F
- #define SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG		0x50
- #define SIERRA_CMN_PLLLC_DSMCORR_PREG			0x51
- #define SIERRA_CMN_PLLLC_SS_PREG			0x52
- #define SIERRA_CMN_PLLLC_SS_AMP_STEP_SIZE_PREG		0x53
- #define SIERRA_CMN_PLLLC_SSTWOPT_PREG			0x54
-+#define SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG		0x5D
-+#define SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG		0x5E
- #define SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG	0x62
- #define SIERRA_CMN_PLLLC_LOCK_DELAY_CTRL_PREG		0x63
-+#define SIERRA_SDOSCCAL_CLK_CNT_PREG			0x6E
- #define SIERRA_CMN_REFRCV_PREG				0x98
-+#define SIERRA_CMN_RESCAL_CTRLA_PREG			0xA0
- #define SIERRA_CMN_REFRCV1_PREG				0xB8
- #define SIERRA_CMN_PLLLC1_GEN_PREG			0xC2
- #define SIERRA_CMN_PLLLC1_FBDIV_INT_PREG		0xC3
-+#define SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG		0xC5
- #define SIERRA_CMN_PLLLC1_LF_COEFF_MODE0_PREG		0xCA
- #define SIERRA_CMN_PLLLC1_CLK0_PREG			0xCE
- #define SIERRA_CMN_PLLLC1_BWCAL_MODE0_PREG		0xD0
- #define SIERRA_CMN_PLLLC1_SS_TIME_STEPSIZE_MODE_PREG	0xE2
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+new file mode 100644
+index 000000000000..2dc8b07b4d3b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/adi,max31827.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch
++
++maintainers:
++  - Daniel Matyas <daniel.matyas@analog.com>
++
++description: |
++  Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch with
++  I2C Interface
++  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31827-MAX31829.pdf
++
++properties:
++  compatible:
++    oneOf:
++      - const: adi,max31827
++      - items:
++          - enum:
++              - adi,max31828
++              - adi,max31829
++          - const: adi,max31827
++
++  reg:
++    maxItems: 1
++
++  vref-supply:
++    description:
++      Must have values in the interval (1.6V; 3.6V) in order for the device to
++      function correctly.
++
++required:
++  - compatible
++  - reg
++  - vref-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        temperature-sensor@42 {
++            compatible = "adi,max31827";
++            reg = <0x42>;
++            vref-supply = <&reg_vdd>;
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c0cde28c62c6..91de1e95f11d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12618,6 +12618,13 @@ F:	Documentation/userspace-api/media/drivers/max2175.rst
+ F:	drivers/media/i2c/max2175*
+ F:	include/uapi/linux/max2175.h
  
++MAX31827 TEMPERATURE SWITCH DRIVER
++M:	Daniel Matyas <daniel.matyas@analog.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Supported
++W:	http://ez.analog.com/community/linux-device-drivers
++F:	Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
 +
- #define SIERRA_LANE_CDB_OFFSET(ln, block_offset, reg_offset)	\
- 				((0x4000 << (block_offset)) + \
- 				 (((ln) << 9) << (reg_offset)))
-@@ -86,6 +98,7 @@
- #define SIERRA_DFE_BIASTRIM_PREG			0x04C
- #define SIERRA_DRVCTRL_ATTEN_PREG			0x06A
- #define SIERRA_DRVCTRL_BOOST_PREG			0x06F
-+#define SIERRA_LANE_TX_RECEIVER_DETECT_PREG		0x071
- #define SIERRA_TX_RCVDET_OVRD_PREG			0x072
- #define SIERRA_CLKPATHCTRL_TMR_PREG			0x081
- #define SIERRA_RX_CREQ_FLTR_A_MODE3_PREG		0x085
-@@ -101,6 +114,8 @@
- #define SIERRA_CREQ_SPARE_PREG				0x096
- #define SIERRA_CREQ_EQ_OPEN_EYE_THRESH_PREG		0x097
- #define SIERRA_CTLELUT_CTRL_PREG			0x098
-+#define SIERRA_DEQ_BLK_TAU_CTRL1_PREG			0x0AC
-+#define SIERRA_DEQ_BLK_TAU_CTRL4_PREG			0x0AF
- #define SIERRA_DFE_ECMP_RATESEL_PREG			0x0C0
- #define SIERRA_DFE_SMP_RATESEL_PREG			0x0C1
- #define SIERRA_DEQ_PHALIGN_CTRL				0x0C4
-@@ -129,6 +144,9 @@
- #define SIERRA_DEQ_GLUT14				0x0F6
- #define SIERRA_DEQ_GLUT15				0x0F7
- #define SIERRA_DEQ_GLUT16				0x0F8
-+#define SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG		0x0F9
-+#define SIERRA_TAU_EN_CEPH2TO0_PREG			0x0FB
-+#define SIERRA_TAU_EN_CEPH5TO3_PREG			0x0FC
- #define SIERRA_DEQ_ALUT0				0x108
- #define SIERRA_DEQ_ALUT1				0x109
- #define SIERRA_DEQ_ALUT2				0x10A
-@@ -143,6 +161,7 @@
- #define SIERRA_DEQ_ALUT11				0x113
- #define SIERRA_DEQ_ALUT12				0x114
- #define SIERRA_DEQ_ALUT13				0x115
-+#define SIERRA_OEPH_EN_CTRL_PREG			0x124
- #define SIERRA_DEQ_DFETAP_CTRL_PREG			0x128
- #define SIERRA_DEQ_DFETAP0				0x129
- #define SIERRA_DEQ_DFETAP1				0x12B
-@@ -157,6 +176,7 @@
- #define SIERRA_DEQ_TAU_CTRL2_PREG			0x151
- #define SIERRA_DEQ_TAU_CTRL3_PREG			0x152
- #define SIERRA_DEQ_OPENEYE_CTRL_PREG			0x158
-+#define SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG		0x159
- #define SIERRA_DEQ_PICTRL_PREG				0x161
- #define SIERRA_CPICAL_TMRVAL_MODE1_PREG			0x170
- #define SIERRA_CPICAL_TMRVAL_MODE0_PREG			0x171
-@@ -165,6 +185,7 @@
- #define SIERRA_CPI_RESBIAS_BIN_PREG			0x17E
- #define SIERRA_CPI_TRIM_PREG				0x17F
- #define SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG		0x183
-+#define SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG		0x184
- #define SIERRA_EPI_CTRL_PREG				0x187
- #define SIERRA_LFPSDET_SUPPORT_PREG			0x188
- #define SIERRA_LFPSFILT_NS_PREG				0x18A
-@@ -176,6 +197,7 @@
- #define SIERRA_RXBUFFER_CTLECTRL_PREG			0x19E
- #define SIERRA_RXBUFFER_RCDFECTRL_PREG			0x19F
- #define SIERRA_RXBUFFER_DFECTRL_PREG			0x1A0
-+#define SIERRA_LN_SPARE_REG_PREG			0x1B0
- #define SIERRA_DEQ_TAU_CTRL1_FAST_MAINT_PREG		0x14F
- #define SIERRA_DEQ_TAU_CTRL1_SLOW_MAINT_PREG		0x150
- 
-@@ -2401,6 +2423,77 @@ static struct cdns_sierra_vals usb_100_ext_ssc_ln_vals = {
- 	.num_regs = ARRAY_SIZE(cdns_usb_ln_regs_ext_ssc),
- };
- 
-+/* SGMII PHY common configuration */
-+static const struct cdns_reg_pairs sgmii_cmn_regs[] = {
-+	{0x0180, SIERRA_SDOSCCAL_CLK_CNT_PREG},
-+	{0x6000, SIERRA_CMN_REFRCV_PREG},
-+	{0x0031, SIERRA_CMN_RESCAL_CTRLA_PREG},
-+	{0x001C, SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG},
-+	{0x2106, SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG},
-+	{0x0000, SIERRA_CMN_PLLLC_LOCKSEARCH_PREG},
-+	{0x8103, SIERRA_CMN_PLLLC_CLK0_PREG},
-+	{0x0000, SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG},
-+	{0x0027, SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG},
-+	{0x0062, SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG},
-+	{0x0800, SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG},
-+	{0x0000, SIERRA_CMN_PLLLC_INIT_PREG},
-+	{0x0000, SIERRA_CMN_PLLLC_ITERTMR_PREG},
-+	{0x0020, SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG},
-+	{0x0013, SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG},
-+	{0x0013, SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG},
-+};
-+
-+static struct cdns_sierra_vals sgmii_cmn_vals = {
-+	.reg_pairs = sgmii_cmn_regs,
-+	.num_regs = ARRAY_SIZE(sgmii_cmn_regs),
-+};
-+
-+/* SGMII PHY lane configuration */
-+static const struct cdns_reg_pairs sgmii_ln_regs[] = {
-+	{0x691E, SIERRA_DET_STANDEC_D_PREG},
-+	{0x0FFE, SIERRA_PSC_RX_A0_PREG},
-+	{0x0104, SIERRA_PLLCTRL_FBDIV_MODE01_PREG},
-+	{0x0013, SIERRA_PLLCTRL_SUBRATE_PREG},
-+	{0x0106, SIERRA_PLLCTRL_GEN_D_PREG},
-+	{0x5234, SIERRA_PLLCTRL_CPGAIN_MODE_PREG},
-+	{0x0000, SIERRA_DRVCTRL_ATTEN_PREG},
-+	{0x00AB, SIERRA_RX_CREQ_FLTR_A_MODE0_PREG},
-+	{0x3C0E, SIERRA_CREQ_CCLKDET_MODE01_PREG},
-+	{0x3220, SIERRA_CREQ_FSMCLK_SEL_PREG},
-+	{0x0000, SIERRA_CREQ_EQ_CTRL_PREG},
-+	{0x6320, SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG},
-+	{0x0000, SIERRA_CPI_OUTBUF_RATESEL_PREG},
-+	{0x15A2, SIERRA_LN_SPARE_REG_PREG},
-+	{0x7900, SIERRA_DEQ_BLK_TAU_CTRL1_PREG},
-+	{0x2202, SIERRA_DEQ_BLK_TAU_CTRL4_PREG},
-+	{0x2206, SIERRA_DEQ_TAU_CTRL2_PREG},
-+	{0x0005, SIERRA_LANE_TX_RECEIVER_DETECT_PREG},
-+	{0x8001, SIERRA_CREQ_SPARE_PREG},
-+	{0x0000, SIERRA_DEQ_CONCUR_CTRL1_PREG},
-+	{0xD004, SIERRA_DEQ_CONCUR_CTRL2_PREG},
-+	{0x0101, SIERRA_DEQ_GLUT9},
-+	{0x0101, SIERRA_DEQ_GLUT10},
-+	{0x0101, SIERRA_DEQ_GLUT11},
-+	{0x0101, SIERRA_DEQ_GLUT12},
-+	{0x0000, SIERRA_DEQ_GLUT13},
-+	{0x0000, SIERRA_DEQ_GLUT16},
-+	{0x0000, SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG},
-+	{0x0000, SIERRA_TAU_EN_CEPH2TO0_PREG},
-+	{0x0003, SIERRA_TAU_EN_CEPH5TO3_PREG},
-+	{0x0101, SIERRA_DEQ_ALUT8},
-+	{0x0101, SIERRA_DEQ_ALUT9},
-+	{0x0100, SIERRA_DEQ_ALUT10},
-+	{0x0000, SIERRA_OEPH_EN_CTRL_PREG},
-+	{0x5425, SIERRA_DEQ_OPENEYE_CTRL_PREG},
-+	{0x7458, SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG},
-+	{0x321F, SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG},
-+};
-+
-+static struct cdns_sierra_vals sgmii_ln_vals = {
-+	.reg_pairs = sgmii_ln_regs,
-+	.num_regs = ARRAY_SIZE(sgmii_ln_regs),
-+};
-+
- static const struct cdns_sierra_data cdns_map_sierra = {
- 	.id_value = SIERRA_MACRO_ID,
- 	.block_offset_shift = 0x2,
-@@ -2461,6 +2554,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
- 				[INTERNAL_SSC] = &qsgmii_100_no_ssc_plllc1_cmn_vals,
- 			},
- 		},
-+		[TYPE_SGMII] = {
-+			[TYPE_NONE] = {
-+				[NO_SSC] = &sgmii_cmn_vals,
-+			},
-+		},
- 	},
- 	.pma_ln_vals = {
- 		[TYPE_PCIE] = {
-@@ -2499,6 +2597,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
- 				[INTERNAL_SSC] = &qsgmii_100_no_ssc_plllc1_ln_vals,
- 			},
- 		},
-+		[TYPE_SGMII] = {
-+			[TYPE_NONE] = {
-+				[NO_SSC] = &sgmii_ln_vals,
-+			},
-+		},
- 	},
- };
- 
+ MAX6650 HARDWARE MONITOR AND FAN CONTROLLER DRIVER
+ L:	linux-hwmon@vger.kernel.org
+ S:	Orphan
 -- 
-2.28.0
+2.34.1
 
