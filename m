@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C286F9F24
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA466F9F27
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 07:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbjEHFij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 01:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S232340AbjEHFjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 01:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjEHFih (ORCPT
+        with ESMTP id S229757AbjEHFjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 01:38:37 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AD7A245
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 22:38:36 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f13dafd5dcso4476485e87.3
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 22:38:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683524314; x=1686116314;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=Q0yXVNqgTQGYZezA+7iYk6YNmq/xakaKCPu0doEqgAJg1mlwnSDYf+H5SeQ/Mm0hwo
-         jN5a+b/svbZHOCheMkhCw/c+D+UYEMobPai8PUaPSvf93n4nD/u45gZvSeZfyjBMIIr8
-         rz26He5YGEFDzqzcyvinKRSM73Vdjh/Ry2hdVLlJJu+I/LFvWJ9H0zvpyTX+Dw6CpGYx
-         PScTbfOW4QLG5Vin8+DJxPfIJYPjmfmH8bkQaJ9tVGP3VNQK+2hjBbWVvLo0cqM1OIWy
-         SqvZSG8T1vf8HRcJxt//LE1j00721mh8Dc6T501KvQX3BH7vKjkynfBIQO2wXVOZem45
-         MTwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683524314; x=1686116314;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=P6xyBPAlgFFS+Cj+YncTWNy7vn2hw7Sh2jVFU/sCmgvl+ZrXshwu8ubKVCG45mndcF
-         RiWubkc5rM6UvrO+SSCeRTa+JHQ7OVQm3qRXtSz7njvmG8rMYdGpE9GSsuQrlhPMEH/W
-         02WRR6BN4kPVDBUDs20+z8Bg0O9banYx5OCRbpUbtNfeVhSTOPYQPeZkRZPL0O8yTigf
-         lIKDSm2dV0OKmX37a807eUr0hHh2SVc7ClLTNLol2P3yE/qLHP20OdkVFwOR4Vf/eMs8
-         Xl4/Ht5NdrbKZ8zyjarntr5TNOuYzlBkyFetGeS8qYrgvkvKgMVy1t/Dl6sCuzwNCij/
-         Q/1A==
-X-Gm-Message-State: AC+VfDzOgUuG7EDHXOaCyRyEXAkhFlNzrRBbQggDlAR5EcEf4x9WQxlJ
-        o8a9VsiDtpzdcUQDidyi9NHaqy9/BIp9jfuQsdc=
-X-Google-Smtp-Source: ACHHUZ6gxEclbczMhJzlgM8Hj+UZFzQvbH4iplxC4k0eKDzDJ+7qkQCnKmSfLdvNIELvoTAWbgyObtz+jNNMUXJ6NTg=
-X-Received: by 2002:ac2:4c30:0:b0:4f1:3e97:4486 with SMTP id
- u16-20020ac24c30000000b004f13e974486mr2133175lfq.57.1683524314234; Sun, 07
- May 2023 22:38:34 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ab3:680f:0:b0:22b:110b:5d3c with HTTP; Sun, 7 May 2023
- 22:38:33 -0700 (PDT)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <teewe45@gmail.com>
-Date:   Sun, 7 May 2023 22:38:33 -0700
-Message-ID: <CAEPmxYfcB1LciLhSYFW37Ux_kkK_TxGEYV2wiuAaMr8TOjCSZw@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        Mon, 8 May 2023 01:39:02 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635BFA245;
+        Sun,  7 May 2023 22:39:00 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 8FDDD3200916;
+        Mon,  8 May 2023 01:38:56 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 08 May 2023 01:38:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1683524336; x=1683610736; bh=IG
+        uhB1AfYiLDeTeaCQ/lxK2IkfOy97OVYEZQfyjOyE8=; b=HJd/3ixkuBsg4xH/jW
+        HALc0Cwu+ulF/i847SnxtIL6wpmn+wKSZzdrX8COeeTh2pJUr7mjgfjAV/yBogVI
+        4H+MkQOCtwBkyOE4wsMxGuf23aS4vq/pDPReE7t/ANoKccMY50tE4JOJTjL2TJcC
+        Nv+9xteKpPhn2Hyycya5TYfQ5p6WtWS1xUwn3RkX1PmX1otQ2+3ipgKvz+sIAhfE
+        nvqUhveiwgO8JhCS+6vuvF07nuv17pBGeTZrDItsC2kDz8gbFHIUJ6/HmleSh07C
+        bLV9GVBQ2lIHunynM9vT5DBXCS9o0V9OXafyBGeOsU3H5P6UeYJVCVADTUir/WTz
+        5cdA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1683524336; x=1683610736; bh=IGuhB1AfYiLDe
+        TeaCQ/lxK2IkfOy97OVYEZQfyjOyE8=; b=NhLJsAvdYck62CQOjCB7hCftKFF3D
+        d27LqxB91+09qM+pOG4hu4dl7Nirzj0DiNmonJncuYTR5p0jEPrP6thcbFY7P+m0
+        rle4a4b7EePpHkIhn1YOSChhwcBYX4hCZbf9PR7z6lZQXlpZy0VF7q36V8Up9Gsp
+        GJsChYslLGTNuygxZPMK2R8Lp6eoyixShZP2O0iuAqIVmD8vAoBFrZ8G5EBr+iGQ
+        SxzWEWTsltXMJvHZKgNEEtVzXFBtNoM32lRvH+XY03YsUy5nPQ9WPdyaWGhAttyg
+        Fpv+//Ds8/ITZ0baNIskmRQyX6xlgbaO/bQPXh/603v7NZAY/GmlkiVog==
+X-ME-Sender: <xms:74pYZHTiZBhpNP0D8IKwpg3P1zqobXUMkDV9QgKqZqn6OtKiG_gvsg>
+    <xme:74pYZIy_TqlfS6KOkc-7hbVLGu7G3eLU-NfORB8Ni7IgAVCfKysdSGJDuI-aCHeSW
+    3OIGGfp0JHWMznmxKk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeefjedguddttdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:74pYZM2uD8uY6FiKh_pinA8SCEg8kyrFeqmU4plDxicr9nnZzWON7g>
+    <xmx:74pYZHAHmbzNTBKdTFgwAsFyyIz8ufJbYPOuw-n6Gl3HJI0jg5lMlg>
+    <xmx:74pYZAiPWgFd1ktDCeQo_0-DNnzh_H-BUIQc1glhyj3FrWviveLQFQ>
+    <xmx:8IpYZLXMX8Pm0PmIE822VPYkH0-qXK_6C84T2hl0zffVLS9EkwGcIw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7E219B60086; Mon,  8 May 2023 01:38:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-386-g2404815117-fm-20230425.001-g24048151
+Mime-Version: 1.0
+Message-Id: <730b1560-cf57-482a-966b-93b4c51568b2@app.fastmail.com>
+In-Reply-To: <20230508040433.13648-1-lukas.bulwahn@gmail.com>
+References: <20230508040433.13648-1-lukas.bulwahn@gmail.com>
+Date:   Mon, 08 May 2023 07:38:35 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Lukas Bulwahn" <lukas.bulwahn@gmail.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, soc@kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: s3c: remove obsolete config S3C64XX_SETUP_IDE
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:12c listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4857]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [teewe45[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [teewe45[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+On Mon, May 8, 2023, at 06:04, Lukas Bulwahn wrote:
+> Commit 0d297df03890 ("ARM: s3c: simplify platform code") removes the line
+> in Makefile.s3c64xx to configure the inclusion of setup-ide-s3c64xx.c,
+> with CONFIG_S3C64XX_SETUP_IDE. So, since then, config S3C64XX_SETUP_IDE has
+> no effect and any further purpose.
+>
+> Remove the obsolete config S3C64XX_SETUP_IDE.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+
+Indeed, this was only used on the smdk64xx board file,
+so the file was removed along with the deletion of the board,
+but I forgot to remove the Kconfig option.
+
+Acked-by: Arnd Bergmann <arnd@arndb.de>
