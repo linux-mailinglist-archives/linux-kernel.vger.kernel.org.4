@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0206F9E8D
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 06:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8056F9E92
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 06:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbjEHEFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 00:05:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
+        id S232052AbjEHEIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 00:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231654AbjEHEEr (ORCPT
+        with ESMTP id S229540AbjEHEIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 00:04:47 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823605FDA;
-        Sun,  7 May 2023 21:04:42 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bc4ba28cbso7443273a12.0;
-        Sun, 07 May 2023 21:04:42 -0700 (PDT)
+        Mon, 8 May 2023 00:08:44 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E501F6EB5;
+        Sun,  7 May 2023 21:08:42 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50be0d835aaso7406430a12.3;
+        Sun, 07 May 2023 21:08:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683518681; x=1686110681;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1683518921; x=1686110921;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7EHAT0FpwV3AmMbV3FwWi0IRotmMH++8ZC/lSzkodBA=;
-        b=geMSnh2vDesRtQzP5cZ6uRXFnNtww8hlBA5Kugl8KRxENtX4dpqiYLyiabSZXjdEy/
-         ePuWKENTV+KkKm2iRoxfYfUSxoIxVmjrH8Gm5BDDonPp3mWBCOmMS9AJF1zpecHhqSCD
-         oXg5GMaEtLifWEbN8Mg9SzthetubwvBBOkLF8nM8Zb4xgqu5gTGFDJjTkxveeXbUWN35
-         elKFwv2kbqzDLfAjr4fBBUD+3coxi1uQlmriHN5eC7ntDZAw6u2CzCgZsAhp3RgX9vA6
-         fnpJTaHPV4VaK9RTG/TPmjAhZi9fJX+zfjhTMc2soBA7TMzM9b5QyRPYami7MCmuG1Ij
-         6CDQ==
+        bh=418lmDvsSwaR5hPOcnBAQZAbghEwqMzFRELtnuxfpVc=;
+        b=WM48MUrgQ8nDrO/xcJbziZYeEJIYKJ+lsqBG5g5X/M3QfyNsy8Zp0JnPxtCfngt9o4
+         mUXFB3keoT+bry4xcLN3YHZFV1qbfuK7R1SvymDYF6QNCR+ojbXKkQ1jq08YPmVpOkk9
+         7Nx5DtP3rWm1T0hpcw/e6M2A3squvqmwdDE51oDaXeXJWSZJCEMoFNIKU8Fkhw7uIUBk
+         3a+2cnpSTeuTw7HNLm3OEoYauDKYWea3CxCQecN9No7QPJgUnT51B2yO0RunQEAfnKlx
+         PDMAhI1h1pBIUYRStRuC99P7bfCzoeCspk6mZ0UZXl2/XPWadRpEThfj6GQs/83QMpIa
+         F4Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683518681; x=1686110681;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683518921; x=1686110921;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7EHAT0FpwV3AmMbV3FwWi0IRotmMH++8ZC/lSzkodBA=;
-        b=OrHWHsmvjTMett/EZreNU6ibWeSG2mgM3JGpAPbCiQFYwkL9y0TPb3hXLNl2yA5NsA
-         nfMuj8nwRtFK8MWMhz6FzbG6XpjTvZpDFM7VpGzaQE1A3yqtKLYSoW9xijTy5ROBV5Zo
-         +m33Je7L2iUKqc3g+wy3APrsC79yhlhqEOI/Zncn6GliGsDI1jNmAWYGCymVfVqBJKGC
-         I/Ull9STCckSYa1v9hFxFn2p6HHaj34DC7WFlThM4DYpU1+Cl2V9WaJrmPFW3WYe9Sen
-         HTZR+8NlFC8MDz/BWiM/QngoU3WskK6QsKt6h9/QvZdoJ7KAvygqxXKCptoMlmBCuHmP
-         zN2g==
-X-Gm-Message-State: AC+VfDz5hy468p1KFhYf7cPxyST7j2Wi7uqJ3KgL61kXeGHWFW5tYHI0
-        4SFo9U8Eh3Wdz1sFm7bKeZ8=
-X-Google-Smtp-Source: ACHHUZ7S7/kq9jz38RlRxFDhe5+6ko5+I6KvU/mC4gq9bmtvxlog+Hpmw1DjqBpVwlOOqJKu63i2Kw==
-X-Received: by 2002:aa7:d5d5:0:b0:508:4f66:e70d with SMTP id d21-20020aa7d5d5000000b005084f66e70dmr6512173eds.36.1683518680757;
-        Sun, 07 May 2023 21:04:40 -0700 (PDT)
-Received: from felia.fritz.box ([2a02:810d:7e40:14b0:8906:f99a:ce33:2033])
-        by smtp.gmail.com with ESMTPSA id f12-20020a05640214cc00b005068fe6f3d8sm5645242edx.87.2023.05.07.21.04.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 21:04:40 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        soc@kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] ARM: s3c: remove obsolete config S3C64XX_SETUP_IDE
-Date:   Mon,  8 May 2023 06:04:33 +0200
-Message-Id: <20230508040433.13648-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        bh=418lmDvsSwaR5hPOcnBAQZAbghEwqMzFRELtnuxfpVc=;
+        b=Svw9l9fN9G25HkTmy70H45i5COdSuMG/pUTPfIUlUWE+zlxqKoJ/H20R33PvFCr2Ue
+         oQnfRKGrvQYJK8KnSzgJkkg9rJpBu7ueqYJi01ZvX8SulT2kDKVeYwQy1vOobYR0PajN
+         +XbILV4CbGCEnJkOhzHBRuMbUgOGNXkyVtM6MNXQ8aeQ0aebU1FF2af74ex+I8cNPp4x
+         dC2a0XkgvRvu5e1OZl0LEHVLpRXCUHAR4CYBiQUvuBIv7ZDZxdWQoY8Q7SoGqrBLBuHD
+         RYXtDGcKfZDqJfogUe15PfkAlxr3lEf1XVTA6BzRylkJ2axJ5UAUvMHGNbdc8yYqcF7P
+         1ivQ==
+X-Gm-Message-State: AC+VfDwKRTPtkCIAYGJ2eVoCku3YSrYSNJg9qHyXmPIv6+HUvNoe8qT8
+        MUrWVMCkt71CdhTkck4NQhv6tICaRSfKM7AblAE=
+X-Google-Smtp-Source: ACHHUZ4IPERXtNJef1vvKhMOH/D3B+M3LH79PgUudG1dBoi9d1doeo709yH83md5swCmQ/LygaVdGk3TZgPTcg9HZhk=
+X-Received: by 2002:aa7:ca57:0:b0:50c:1e2:4a42 with SMTP id
+ j23-20020aa7ca57000000b0050c01e24a42mr7368607edt.15.1683518921019; Sun, 07
+ May 2023 21:08:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230505113315.3307723-1-liujian56@huawei.com> <20230505113315.3307723-3-liujian56@huawei.com>
+In-Reply-To: <20230505113315.3307723-3-liujian56@huawei.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Mon, 8 May 2023 12:08:04 +0800
+Message-ID: <CAL+tcoDY11sSO8_h1DKCWgAXOjQwM1JR5cx7cpmotWVj28m_fg@mail.gmail.com>
+Subject: Re: [PATCH 2/9] softirq: Use sched_clock() based timeout
+To:     Liu Jian <liujian56@huawei.com>
+Cc:     corbet@lwn.net, paulmck@kernel.org, frederic@kernel.org,
+        quic_neeraju@quicinc.com, joel@joelfernandes.org,
+        josh@joshtriplett.org, boqun.feng@gmail.com, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        qiang1.zhang@intel.com, jstultz@google.com, tglx@linutronix.de,
+        sboyd@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, peterz@infradead.org,
+        frankwoo@google.com, Rhinewuwu@google.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rcu@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,42 +77,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 0d297df03890 ("ARM: s3c: simplify platform code") removes the line
-in Makefile.s3c64xx to configure the inclusion of setup-ide-s3c64xx.c,
-with CONFIG_S3C64XX_SETUP_IDE. So, since then, config S3C64XX_SETUP_IDE has
-no effect and any further purpose.
+On Fri, May 5, 2023 at 7:25=E2=80=AFPM Liu Jian <liujian56@huawei.com> wrot=
+e:
+>
+> From: Peter Zijlstra <peterz@infradead.org>
+>
+> Replace the jiffies based timeout with a sched_clock() based one.
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Liu Jian <liujian56@huawei.com>
+> ---
+>  kernel/softirq.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/softirq.c b/kernel/softirq.c
+> index bff5debf6ce6..59f16a9af5d1 100644
+> --- a/kernel/softirq.c
+> +++ b/kernel/softirq.c
+> @@ -27,6 +27,7 @@
+>  #include <linux/tick.h>
+>  #include <linux/irq.h>
+>  #include <linux/wait_bit.h>
+> +#include <linux/sched/clock.h>
+>
+>  #include <asm/softirq_stack.h>
+>
+> @@ -489,7 +490,7 @@ asmlinkage __visible void do_softirq(void)
+>   * we want to handle softirqs as soon as possible, but they
+>   * should not be able to lock up the box.
+>   */
+> -#define MAX_SOFTIRQ_TIME  msecs_to_jiffies(2)
+> +#define MAX_SOFTIRQ_TIME       (2 * NSEC_PER_MSEC)
 
-Remove the obsolete config S3C64XX_SETUP_IDE.
+I wonder if it affects those servers that set HZ to some different
+values rather than 1000 as default.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- arch/arm/mach-s3c/Kconfig.s3c64xx | 6 ------
- 1 file changed, 6 deletions(-)
+Thanks,
+Jason
 
-diff --git a/arch/arm/mach-s3c/Kconfig.s3c64xx b/arch/arm/mach-s3c/Kconfig.s3c64xx
-index 01a7a8eec6e8..8f40af063ad6 100644
---- a/arch/arm/mach-s3c/Kconfig.s3c64xx
-+++ b/arch/arm/mach-s3c/Kconfig.s3c64xx
-@@ -69,11 +69,6 @@ config S3C64XX_SETUP_I2C1
- 	help
- 	  Common setup code for i2c bus 1.
- 
--config S3C64XX_SETUP_IDE
--	bool
--	help
--	  Common setup code for S3C64XX IDE.
--
- config S3C64XX_SETUP_FB_24BPP
- 	bool
- 	help
-@@ -110,7 +105,6 @@ config MACH_WLF_CRAGG_6410
- 	select S3C64XX_DEV_SPI0
- 	select S3C64XX_SETUP_FB_24BPP
- 	select S3C64XX_SETUP_I2C1
--	select S3C64XX_SETUP_IDE
- 	select S3C64XX_SETUP_KEYPAD
- 	select S3C64XX_SETUP_SDHCI
- 	select S3C64XX_SETUP_SPI
--- 
-2.17.1
-
+>  #define MAX_SOFTIRQ_RESTART 10
+>
+>  #ifdef CONFIG_TRACE_IRQFLAGS
+> @@ -527,9 +528,9 @@ static inline void lockdep_softirq_end(bool in_hardir=
+q) { }
+>
+>  asmlinkage __visible void __softirq_entry __do_softirq(void)
+>  {
+> -       unsigned long end =3D jiffies + MAX_SOFTIRQ_TIME;
+>         unsigned long old_flags =3D current->flags;
+>         int max_restart =3D MAX_SOFTIRQ_RESTART;
+> +       u64 start =3D sched_clock();
+>         struct softirq_action *h;
+>         unsigned long pending;
+>         unsigned int vec_nr;
+> @@ -584,7 +585,7 @@ asmlinkage __visible void __softirq_entry __do_softir=
+q(void)
+>
+>         pending =3D local_softirq_pending();
+>         if (pending) {
+> -               if (time_before(jiffies, end) && !need_resched() &&
+> +               if (sched_clock() - start < MAX_SOFTIRQ_TIME && !need_res=
+ched() &&
+>                     --max_restart)
+>                         goto restart;
+>
+> --
+> 2.34.1
+>
+>
