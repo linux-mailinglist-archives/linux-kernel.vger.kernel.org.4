@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 856146FB5D4
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 19:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A66076FB5D5
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 19:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjEHRTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 13:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
+        id S233293AbjEHRTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 13:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbjEHRS7 (ORCPT
+        with ESMTP id S233409AbjEHRTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 13:18:59 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B485B1BE9
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 10:18:36 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id ca18e2360f4ac-760dff4b701so29762239f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 10:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1683566316; x=1686158316;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FPp2h4EDEYJ2YkjNK6Cz8A2OUZJ0t46AiKfKnDtxUn8=;
-        b=MVqaHBGWzrfD00BXHCzkU7L4rPa8Z4ZtNfxO+vupCgS5WRXclzYBRUU/918dVqHyL/
-         LMhWXLaI5V9OVsio8TIK6chz1W4i1uQv2AFJeFOQnQNvp2zAKc8g7e6qd/HDMhbZzZO7
-         75vVkJfoR3aJO0XaNjwz01VK8Wh1t8VVzFX4M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683566316; x=1686158316;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FPp2h4EDEYJ2YkjNK6Cz8A2OUZJ0t46AiKfKnDtxUn8=;
-        b=Wm9mELxBpiX0A8AQ83G3xHKsDxT/3ft/eC7kCp1id6GQnFOwBkQqjau3pDbKYMsEPT
-         3yhziBNfamYvwcUPelIU7bNRIBu4MeUg3jgyyQWh4r2RwLxWzo3wsAB0VavGtriMPDxi
-         6VYBqCvltoI3N3OKoYL35tVPiN4tkDNW4oEBxrOSOnsUNhp/k88DAEXNZXBUNAiVc1wb
-         8k52HVJookjkzWroQp4RNx0rIJUDetnEG4+4bI45hv77kJSlk2B3H2gyvgRjjnPiN0z7
-         KRf/vQ7BngBuWO3Ik3PKP7P0K++zBog+i0AqMOiSQLH6wW5rQQqnfzxwJYBtaQoNHjtb
-         ApeA==
-X-Gm-Message-State: AC+VfDxSTRazw15zq6eL3+xnu+1i4nm6bSuIV+xxOTx4QgKuFujoR2vP
-        OPUgDFMgwBTAvalBVIW/HuRcr5a5VlJxj453Wns=
-X-Google-Smtp-Source: ACHHUZ4meZeYyiPjUYlS9Zz76Hx/oG9htRP5jlKCsxRVY5RgaJ+4a0Rw/zsqyBGS+z7rLws6KtyR9g==
-X-Received: by 2002:a05:6e02:582:b0:332:fcce:c26d with SMTP id c2-20020a056e02058200b00332fccec26dmr4949876ils.0.1683566316035;
-        Mon, 08 May 2023 10:18:36 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id q1-20020a920501000000b0033181097e9esm2474757ile.51.2023.05.08.10.18.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 10:18:35 -0700 (PDT)
-Message-ID: <31510739-c069-56fc-a1d2-43a0c86aeb2c@linuxfoundation.org>
-Date:   Mon, 8 May 2023 11:18:35 -0600
+        Mon, 8 May 2023 13:19:00 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD1659C6;
+        Mon,  8 May 2023 10:18:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1683566322; i=rwarsow@gmx.de;
+        bh=3GwddkUaT4egiNG9XI3JLy/NEDDtzwWlfimW2nnXp4Q=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=DFX3eJ1rpUiWgu2TrazWs/88qv9qRVy3dyScvUxdlzSQ87L4y+VSH4ClKHnqir09R
+         rZ3Gf6q/LHyC6Y4ZhbdosLl059WXb5/O30JUGkDvm439UVUGja8ouz0VHz8lA2fJnJ
+         iM7ZAcDFJwlkvjMfz4LrUYSQ1cbZeYlEOUTX10efDKX3ytUfWVylcz+8/R0LnuZfzz
+         n+sGOVP/ymfF36li90agtkRrwbojhHUSs+6yyheYZCN6ztbQvRWsneLGC9qDWXZ1ut
+         t4LpSx5PgH5qIdXSxf2hrSBUlac0mePtC1JM6/z4UsyempZaUAHXpWsUE986s6V+NC
+         VLRLflPYtLgZw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([46.142.34.11]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MEm27-1pyWGw3hqF-00GFL3; Mon, 08
+ May 2023 19:18:41 +0200
+Message-ID: <62ab5732-4748-d326-231f-a5c86c4e5352@gmx.de>
+Date:   Mon, 8 May 2023 19:18:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2] tools/nolibc: Fix build of stdio.h due to header
- ordering
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Willy Tarreau <w@1wt.eu>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230413-nolibc-stdio-fix-v2-1-6b6bbb045a80@kernel.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230413-nolibc-stdio-fix-v2-1-6b6bbb045a80@kernel.org>
+Subject: Re: no sha256sum for 6.3.1 (was Re: Linux 6.3.1)
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <f0497747-2318-7355-6ea6-ff01f9eb97ef@gmx.de>
+ <2023050617-stardom-granola-32e3@gregkh>
+ <20230508-length-distress-784870@meerkat>
+Content-Language: de-DE, en-US
+From:   Ronald Warsow <rwarsow@gmx.de>
+In-Reply-To: <20230508-length-distress-784870@meerkat>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:C7qJcLe54/x1Blu/2f8fgnKaeeKVS8I0PYDo5ryKRsja4RS92dv
+ /Mnu2wIJALRUhKfSjBVlE/x8wVnNhsGlDRhAW801wPoDzV8AfEJ3MMcgXyGAfkDsnS9t0A2
+ QO/2buSefD9kFOM6zWedk3FIPiAxc7pHiS4L6m3c0+gOwn9Ja5SEoQ8zhT6w0jw7pNBFBe8
+ q84SzVIY4n3lgNhRC5jbg==
+UI-OutboundReport: notjunk:1;M01:P0:OG/KU/ozn4k=;h1ibpqppYdmMEqO+MCWJ2m5YMei
+ 8hwDWBLriz+7QGPlnRRzLNHRR/NJxuPLjAr2saNiPOBNvdFJt9OEAx3F2qBK3p0+PRDqQiOnv
+ NtkX+1+Sb9JEulEwuwgT6BiDZhjDbFfKnr4zzGlZVgJl7f/KhQqz8/meBuzLUZhZcLN13HHBJ
+ XBFVQ5OEQCZO6BXadGsMUOHmTY2ZOcqScPIpiyNVSRMAWj9bXlhNUK4u2seQx+WxQD9HJKsM9
+ 3RrRq7pbsPC1tS56aGBxNaFK/AHrJ2LH6NsDMW9KRXpGuodR/++Q7l4AWITZvBRQaROmeGuhN
+ ZQ2CLMBIBA0NVmjsvL6O3vNQOYGDDxFtPLD5KX3yX2s2IZgHS2515Jz6XnMtzYVal0xA7UoMK
+ 20MaW/3TiSjM48Gbp17uHm0auBF163cZzOHQqWOV3Q5GeHrpGtKvvtVyg5D0FEaWrvPAytBeX
+ hVRtmhPjk2Myb6yLOXnXGVvrmhZQe/eul4DAAQ3L4tVDLvANGNB/0stXuHNP+hDAwDr8eTHlz
+ 7D0uMXVZbq6dxpWlQEsFZmEm+F+K0YJTQoReZqVai8LQBUP+/S45i2ffPXIpCx1+0CTf5M9SO
+ UFagCBS7/vW6CZpw5psrt+R/Y/AXe6whUXVAuNARBOiunoQUWFKZPtAnUziaLgoyFCkU0Cit3
+ DonrNWGIZb8Brz0mx1C7jx43uxqDrHuxs9YE3/1AHAmuqnhi26pWuuonwXLOSU1bUR1ehdTaL
+ ErWX5Qs6X+XSzNHzJhhzmk4b6/nB5kuKYGQ2lFeqzbLvdM82k2dt1NBjGA8WHhssfupP115Qx
+ n2E+8mfnlzjSKVBrT2jL0yqq4tKU+TWDyRAp/v+MGulDXneq8h9p8RX9BX8HSqi5P5LnnwAud
+ ddyR6kaPFEwe0ChBS5qwvESeGZPAfvQ5A1eb5c9gZNlEHz3gzuTtKjAkdFNP+8rIHAjdz8Bc0
+ aukLqowqohcnwebS6EQzAnGQhcc=
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/8/23 07:30, Mark Brown wrote:
-> When we added fd based file streams we created references to STx_FILENO in
-> stdio.h but these constants are declared in unistd.h which is the last file
-> included by the top level nolibc.h meaning those constants are not defined
-> when we try to build stdio.h. This causes programs using nolibc.h to fail
-> to build.
-> 
-> Reorder the headers to avoid this issue.
-> 
-> Fixes: d449546c957f ("tools/nolibc: implement fd-based FILE streams")
-> Acked-by: Willy Tarreau <w@1wt.eu>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
+On 08.05.23 19:01, Konstantin Ryabitsev wrote:
+> On Sat, May 06, 2023 at 09:38:35AM +0900, Greg KH wrote:
+>>> fetching new kernels via script:
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/mricon/korg-helpers.gi=
+t/tree/get-verified-tarball
+>>>
+>>> it seems
+>>> https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+>>>
+>>> doesn't contain a hash for 6.3.1
+>>
+>> Yeah, that does look odd.
+>>
+>> Konstantin, I think you said you updated some things on the servers
+>> right after I did the 6.3.1 release, would this have caused the
+>> signature to not be recorded in this file?
+>
+> Sorry, this got fixed last week. I forgot to mount the key storage after=
+ the
+> final reboot. It should be all good now.
+>
+> -K
 
-Applied now to linux-kselftest fixes for 6.4-rc2
-
-thanks,
--- Shuah
+Thanks
+=2D-
+Ronald
 
