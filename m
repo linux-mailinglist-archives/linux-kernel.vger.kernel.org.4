@@ -2,60 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFAD6FB511
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C886FB4F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234113AbjEHQ3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        id S234049AbjEHQVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbjEHQ3B (ORCPT
+        with ESMTP id S233725AbjEHQVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 12:29:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87B340D9;
-        Mon,  8 May 2023 09:29:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4989761D5B;
-        Mon,  8 May 2023 16:29:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C252DC433EF;
-        Mon,  8 May 2023 16:28:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683563339;
-        bh=feGALERuqLirZfIT3bBs/N6JFRyyWW2IgyCwmw6yorY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BYUk/Uc61HOkwT+RYeVVFRAzRzRgQy3R7D5RHJqObbFl2ZIU6xFemM2PeE3j3hT0+
-         ARTGdJzCWUrm47hH77jsKLB4ZLJOTTKUbVZ3yUEL294sKN3SMuiN3mG4RCh2aRQObR
-         dstunq5YVv7JssAX4likGVe1MTZOrxyvgEFmxIOyhnJ3/3fCcuhnPEoSS5+Qr/66OF
-         uKjBAKO899/pkBjqN0NZ08pK615SbHrhFLXlrCaYyfOBaRsj3EEcnEy9Fv3k69R/Is
-         mtuslIJgDaFO8hYyQh9yzrrNbQPtRCz4oIbdLULvkcjidBKvWt1kZlLwLPUwR5awtp
-         KMtmTjGgbjGOw==
-Date:   Tue, 9 May 2023 00:17:52 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
+        Mon, 8 May 2023 12:21:49 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF93172D
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:21:47 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bceaf07b8so9013630a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 09:21:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683562906; x=1686154906;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bByvY91yjFmYYAl8+yO8RJrqMmwasrfCvUEiLf04BkQ=;
+        b=fXdGCvyEm5gGOcm5T0zdCgu+KEU2/V73fZwDRWjgWaeeDPOJKy6xwGSkhuuZRByuLX
+         aHN8KfSxHfaDNskhkR2iBv7PupeO6v7wc78aSA2WhDP0nhLMUKdMsjt8IlUr/HSDMw+/
+         Rmxg9UUmsgcMuR73WMC2f+HSb6YzS54U7oBTRXu/y7Ih7LbYpjAXfvSMtgd1IehY3laa
+         3bfEuSGB3joyCEooKnCKRtM9CLmmGjZMxt1zKobiq91NArPc+jE9mMtt5CkorB98ZJpe
+         yijqg/IJRw/11iBhrSKi36mGi3zCjOAYjnnNfal3Vb08PnThf84pV5C//+54rjqhmtec
+         uBcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683562906; x=1686154906;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bByvY91yjFmYYAl8+yO8RJrqMmwasrfCvUEiLf04BkQ=;
+        b=kRdsorZjoMBKS8kPnqIwTw6RUINg4pWQbbLbIWkC9NdxkBcnByw79Pk1vHBhwFZfO0
+         W/dTgDqTp73jyHtpTRJ5dfALtm5HvZPqgmS3WrHOEe9IKd+rRwSE/PqjfpzA5puEplzw
+         xKHSG4//MZPLs2EBlXmwRsW9bTRvSFVIxEJ0XeFCJs8PtlLnCZ/XPjP7CKw8gZeXsJYn
+         sT/dHeTDF6wICgseWAWoKTAZK0jQZkT+xzKOIxiWSh2ygML89FF8XiTk51bl+zml6iQD
+         mr9ApPBtL5yV/ZRDxef5EFqJkQdzYjNEmOqJtHcMA2Cm+84f9RAqyhJELGWbCD+zfJvt
+         /blg==
+X-Gm-Message-State: AC+VfDx9/qZuvAhTKyeTcS/gVVWOBd6tL/sldT2bH1p1AjYMrzZMvrtK
+        eqyQsDGL0AuujBo2Q47hCcLAfOrEpa+59d5IKnk=
+X-Google-Smtp-Source: ACHHUZ5VmJPrF0oBBAqUa/85bhiSJ/EF8tbDtYjza9FoecRfsEbm98dbBiVNnhevft1FVqPOSmZ+Sw==
+X-Received: by 2002:a05:6402:1390:b0:502:9a5b:206e with SMTP id b16-20020a056402139000b005029a5b206emr7732377edv.9.1683562906034;
+        Mon, 08 May 2023 09:21:46 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
+        by smtp.gmail.com with ESMTPSA id j2-20020aa7c402000000b00501c96564b5sm6233636edq.93.2023.05.08.09.21.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 09:21:45 -0700 (PDT)
+Message-ID: <003b0a75-75d4-cca0-556f-bc78f90e6964@linaro.org>
+Date:   Mon, 8 May 2023 18:21:44 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3] dt-bindings: firmware: brcm,kona-smc: convert to YAML
+To:     Stanislav Jakubek <stano.jakubek@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>
-Subject: Re: [PATCH 5/5] MAINTAINERS: add entry for T-HEAD RISC-V SoC
-Message-ID: <ZFkgsHGvEIxGDxXv@xhacker>
-References: <20230507182304.2934-1-jszhang@kernel.org>
- <20230507182304.2934-6-jszhang@kernel.org>
- <20230507-woof-eldercare-f1323b10bde6@spud>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230507-woof-eldercare-f1323b10bde6@spud>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230508103255.GA18424@standask-GA-A55M-S2HP>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230508103255.GA18424@standask-GA-A55M-S2HP>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,19 +80,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 07, 2023 at 10:21:26PM +0100, Conor Dooley wrote:
-> Hey Jisheng,
-
-Hi Conor,
-
+On 08/05/2023 12:32, Stanislav Jakubek wrote:
+> Convert Broadcom Kona family Secure Monitor bounce buffer bindings
+> to DT schema.
 > 
-> On Mon, May 08, 2023 at 02:23:04AM +0800, Jisheng Zhang wrote:
-> > I would like to temporarily maintain the T-HEAD RISC-V SoC support.
+> Changes during conversion:
+>   - move from misc to firmware subdirectory
+>   - add used, but previously undocumented SoC-specific compatibles
+>   - drop deprecated compatibles (they've been deprecated for ~10 years)
 > 
-> What does "temporarily" mean?
+> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> ---
+> Changes in V3:
+>   - remove unnecessary oneOf (Krzysztof)
+> 
 
-I got a Lichee Pi 4A board, and want to mainline its support. Sending
-the new dts patches needs to touch MAINTAINERS entry, so I added it.
-But I expected an experienced people from T-HEAD, with many
-kernel contribuitions in the past, will take the maintainership
-finally, for example, Ren Guo. He knew this SoC better than me.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
