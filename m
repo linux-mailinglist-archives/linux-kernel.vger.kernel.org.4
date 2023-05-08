@@ -2,93 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CE86FA1D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA8A6FA1D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233695AbjEHIB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 04:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S233742AbjEHICc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 04:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233692AbjEHIA3 (ORCPT
+        with ESMTP id S233662AbjEHICK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 04:00:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE47226A1
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:59:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683532760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dfPukP/Du1LGfYJq+OltwvS6nBsX94mIek7bBbVyGoI=;
-        b=CJPkLOuu5A2RQ66TRWkMRRPqyaHUHbeEkvk0n6mFp1P9CazB7wETAeIDEkeKsp4IEJ+333
-        8I7lit298CuNbdMcgX7BzIulU8cOp5tVbpZddio4j7qT6ndE6vMO6SqFRpQAW1tnstmT1V
-        xuRprbZTyFziSyfBrh9krKjhQFWHLwc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-445-oqeNx8RjMdq8GL5ECM-wsw-1; Mon, 08 May 2023 03:59:19 -0400
-X-MC-Unique: oqeNx8RjMdq8GL5ECM-wsw-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f426d4944fso1706725e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 00:59:19 -0700 (PDT)
+        Mon, 8 May 2023 04:02:10 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690CF23486
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 01:00:59 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50bc3a2d333so6421848a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 01:00:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683532855; x=1686124855;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H79Zgrm4wbuSOOrJMryaltEQAo3fM+yI7ifmyX2Kujw=;
+        b=rcpf8AJ4UNXprSsaIGtdQQKlApX92vPblCB/QvczxGY+vlEj0TrXd7USNO/C05jUYn
+         puJVIE9IIdYzGAldLs/6K7A0D6/7DfRA1Kw/NKj5D2AHJR5nYy9rOh5NpuheSgM4/KwS
+         g4EowCVCzCUhk/aUbLr9jCDxcK84hlDToICYFMxgFex99fSH69ae/QcN7bdp21VgPej9
+         eCJ3tqMOZI1fyRAseqy4XTMwj8BzhcRxw6sYprEd0Cxm6dIXHBDYZT7YF1gOQ6Ky79KN
+         Tq+2LHeDCjkgQusAR7TQrKkxZ/VKWVKiOhmDjDnkfWuf22gDJbzT3O3rDnMrb1S/kRdE
+         gPVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683532758; x=1686124758;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dfPukP/Du1LGfYJq+OltwvS6nBsX94mIek7bBbVyGoI=;
-        b=aPbGTthI6kytKNYVLmIq9WKF0Jx+Agaayde/ReSfynQpSwf4HSEtBVvsUNxIc/4B4I
-         VMZYj8EVCTDiKNGzpZF2ZQ+c+Rd71uja5uIk4SHqegsZDEsnY3L+sfOD5Pl7vaZjdTwN
-         znzQBfmSX9Bl/n2RCR1RXvQcbSWv+w9sh7Y/kOTPB420rWpMsOmWJUaoLVI1EOb7xRXR
-         naFvesVj/alia/woBPd2/ApERA9q9dZPisFFYzVpDl8mNJ//xIeAmMbtY6PBoPbHJZkO
-         7WIxU8jnd+EBXYXYcNKOLA/oF3g9sdzXvtFFVWFCsfbW2G2S739eq3eLzPx3B8clYuns
-         z49A==
-X-Gm-Message-State: AC+VfDwevn0hfFuzFvb+sfsehQBwlLRAmNS3BLlnIomNiv51k+pwBUD3
-        dAnCZKnhNmAguOF3/Te0K7B2U3fhag8yVvWESBBuFurMtDKTlGM5p0+rUPRSNY00/G6P+ina3OJ
-        H/pXcaWvm1eCtbzUNqbTt8s6v
-X-Received: by 2002:a7b:c314:0:b0:3ef:6b97:f0c3 with SMTP id k20-20020a7bc314000000b003ef6b97f0c3mr6383503wmj.15.1683532758546;
-        Mon, 08 May 2023 00:59:18 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5QMc6nmMYpZnn81W6ZDf8+8596wsBwbRO3giK5xp1GXbx6tSIlERS1jK411lcpHz4EQI2Ccg==
-X-Received: by 2002:a7b:c314:0:b0:3ef:6b97:f0c3 with SMTP id k20-20020a7bc314000000b003ef6b97f0c3mr6383474wmj.15.1683532758258;
-        Mon, 08 May 2023 00:59:18 -0700 (PDT)
-Received: from localhost.localdomain.com ([176.206.13.250])
-        by smtp.gmail.com with ESMTPSA id f8-20020a7bcd08000000b003f42894ebe2sm250423wmj.23.2023.05.08.00.59.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 00:59:17 -0700 (PDT)
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>,
-        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>
-Subject: [PATCH v3 6/6] cgroup/cpuset: Free DL BW in case can_attach() fails
-Date:   Mon,  8 May 2023 09:58:54 +0200
-Message-Id: <20230508075854.17215-7-juri.lelli@redhat.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230508075854.17215-1-juri.lelli@redhat.com>
-References: <20230508075854.17215-1-juri.lelli@redhat.com>
+        d=1e100.net; s=20221208; t=1683532855; x=1686124855;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H79Zgrm4wbuSOOrJMryaltEQAo3fM+yI7ifmyX2Kujw=;
+        b=kLnVKFCqCtRwamjfwdnC2crGBdwC/QrQHETd19xN3moOofEjWLd8HX2A6X0HQOWPVL
+         3KoMCIa11GxMWEmMW6nxyORgIWUplhfjLONYpB1Id/iIH8aYyhgAaOWzYiVIvyaCxqzj
+         cKw6YdsWxVs5b1h85SmNppwdovRCDHnJH3itpT2MvyhFjJvBG5hSS/sCVBsb2xsK7kpZ
+         C+xoBOrIUyvRQlQCbcyXMGD9qOsA3s++JQtzQQxCgF6Y3qnydiGygfl5L6F7/K+nJXjQ
+         GKDLIjqPL1YGvJdFT+XcGM7xsLovIc2GC7fuMroffMS0vM/eU+eDZ4GUjXP1KeFNeq2k
+         5llw==
+X-Gm-Message-State: AC+VfDxX3RQZybd8AbZnD7/FYxlMBDx/1w31zpu8H2+mhrBEo+9ppvYh
+        8NWrDnOYSvwQFVRK8zRQL87pNw==
+X-Google-Smtp-Source: ACHHUZ57I31OJMvWDGmpRxPGO4eTDHZQ2yjiOy105SO676F7ZJgK1ga8xgvFa7bVs9qUXmjrjZR0Rw==
+X-Received: by 2002:a05:6402:1806:b0:50d:8979:5722 with SMTP id g6-20020a056402180600b0050d89795722mr5939669edy.39.1683532854806;
+        Mon, 08 May 2023 01:00:54 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
+        by smtp.gmail.com with ESMTPSA id i15-20020a50fc0f000000b0050bd19ec39bsm5812756edr.83.2023.05.08.01.00.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 01:00:54 -0700 (PDT)
+Message-ID: <dda6eef1-ecce-a98e-605f-b9640827c6fd@linaro.org>
+Date:   Mon, 8 May 2023 10:00:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v4 1/2] gnss: ubx: customize serial device open to set
+ U-Blox Zed-F9P baud
+Content-Language: en-US
+To:     alison@she-devel.com, johan@kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, achaiken@aurora.tech
+References: <20230508011159.263322-1-alison@she-devel.com>
+ <20230508011159.263322-2-alison@she-devel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230508011159.263322-2-alison@she-devel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,197 +78,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+On 08/05/2023 03:11, alison@she-devel.com wrote:
+> From: Alison Chaiken <achaiken@aurora.tech>
+> 
+> Add support for setting the baud rate of U-Blox Zed-F9P GNSS devices.
+> Provide functions that support writing of arbitrary configuration
+> messages to the device plus one that specifically configures the baud
+> rate.  Override the default gnss_serial_open() with a new method that
+> writes the configuration message to the GNSS if the devicetree declares
+> it to be a Zed F9P and requests a non-default baud.  Add a boolean flag
+> to the ubx_data private data of the GNSS driver in order to track
+> whether the configuration message has already been written.  Set the Zed
+> F9P to its default port speed if the devicetree does not specify a
+> value.
+> 
+> Signed-off-by: Alison Chaiken <achaiken@aurora.tech>
+> ---
+> 
+> V5 -> V4 Compile out the changes if CONFIG_OF is not set.
 
-cpuset_can_attach() can fail. Postpone DL BW allocation until all tasks
-have been checked. DL BW is not allocated per-task but as a sum over
-all DL tasks migrating.
+Judging by the number of kernel test robot failures, I am not sure if
+you tested the patch.
 
-If multiple controllers are attached to the cgroup next to the cpuset
-controller a non-cpuset can_attach() can fail. In this case free DL BW
-in cpuset_cancel_attach().
+Anyway, don't add more #ifdefs, that's not a correct approach. Depending
+on the case, you either remove if entirely or add __maybe_unused. Why
+did you need to add the #ifdefs?
 
-Finally, update cpuset DL task count (nr_deadline_tasks) only in
-cpuset_attach().
 
-Suggested-by: Waiman Long <longman@redhat.com>
-Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
-Reviewed-by: Waiman Long <longman@redhat.com>
----
- include/linux/sched.h  |  2 +-
- kernel/cgroup/cpuset.c | 53 ++++++++++++++++++++++++++++++++++++++----
- kernel/sched/core.c    | 17 ++------------
- 3 files changed, 51 insertions(+), 21 deletions(-)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 0bee06542450..2553918f0b61 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1852,7 +1852,7 @@ current_restore_flags(unsigned long orig_flags, unsigned long flags)
- }
- 
- extern int cpuset_cpumask_can_shrink(const struct cpumask *cur, const struct cpumask *trial);
--extern int task_can_attach(struct task_struct *p, const struct cpumask *cs_effective_cpus);
-+extern int task_can_attach(struct task_struct *p);
- extern int dl_bw_alloc(int cpu, u64 dl_bw);
- extern void dl_bw_free(int cpu, u64 dl_bw);
- #ifdef CONFIG_SMP
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index c7a346cfdd8d..c994d39cb0b2 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -198,6 +198,8 @@ struct cpuset {
- 	 * know when to rebuild associated root domain bandwidth information.
- 	 */
- 	int nr_deadline_tasks;
-+	int nr_migrate_dl_tasks;
-+	u64 sum_migrate_dl_bw;
- 
- 	/* Invalid partition error code, not lock protected */
- 	enum prs_errcode prs_err;
-@@ -2496,16 +2498,23 @@ static int cpuset_can_attach_check(struct cpuset *cs)
- 	return 0;
- }
- 
-+static void reset_migrate_dl_data(struct cpuset *cs)
-+{
-+	cs->nr_migrate_dl_tasks = 0;
-+	cs->sum_migrate_dl_bw = 0;
-+}
-+
- /* Called by cgroups to determine if a cpuset is usable; cpuset_mutex held */
- static int cpuset_can_attach(struct cgroup_taskset *tset)
- {
- 	struct cgroup_subsys_state *css;
--	struct cpuset *cs;
-+	struct cpuset *cs, *oldcs;
- 	struct task_struct *task;
- 	int ret;
- 
- 	/* used later by cpuset_attach() */
- 	cpuset_attach_old_cs = task_cs(cgroup_taskset_first(tset, &css));
-+	oldcs = cpuset_attach_old_cs;
- 	cs = css_cs(css);
- 
- 	mutex_lock(&cpuset_mutex);
-@@ -2516,7 +2525,7 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
- 		goto out_unlock;
- 
- 	cgroup_taskset_for_each(task, css, tset) {
--		ret = task_can_attach(task, cs->effective_cpus);
-+		ret = task_can_attach(task);
- 		if (ret)
- 			goto out_unlock;
- 		ret = security_task_setscheduler(task);
-@@ -2524,11 +2533,31 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
- 			goto out_unlock;
- 
- 		if (dl_task(task)) {
--			cs->nr_deadline_tasks++;
--			cpuset_attach_old_cs->nr_deadline_tasks--;
-+			cs->nr_migrate_dl_tasks++;
-+			cs->sum_migrate_dl_bw += task->dl.dl_bw;
- 		}
- 	}
- 
-+	if (!cs->nr_migrate_dl_tasks)
-+		goto out_success;
-+
-+	if (!cpumask_intersects(oldcs->effective_cpus, cs->effective_cpus)) {
-+		int cpu = cpumask_any_and(cpu_active_mask, cs->effective_cpus);
-+
-+		if (unlikely(cpu >= nr_cpu_ids)) {
-+			reset_migrate_dl_data(cs);
-+			ret = -EINVAL;
-+			goto out_unlock;
-+		}
-+
-+		ret = dl_bw_alloc(cpu, cs->sum_migrate_dl_bw);
-+		if (ret) {
-+			reset_migrate_dl_data(cs);
-+			goto out_unlock;
-+		}
-+	}
-+
-+out_success:
- 	/*
- 	 * Mark attach is in progress.  This makes validate_change() fail
- 	 * changes which zero cpus/mems_allowed.
-@@ -2551,6 +2580,14 @@ static void cpuset_cancel_attach(struct cgroup_taskset *tset)
- 	cs->attach_in_progress--;
- 	if (!cs->attach_in_progress)
- 		wake_up(&cpuset_attach_wq);
-+
-+	if (cs->nr_migrate_dl_tasks) {
-+		int cpu = cpumask_any(cs->effective_cpus);
-+
-+		dl_bw_free(cpu, cs->sum_migrate_dl_bw);
-+		reset_migrate_dl_data(cs);
-+	}
-+
- 	mutex_unlock(&cpuset_mutex);
- }
- 
-@@ -2651,6 +2688,12 @@ static void cpuset_attach(struct cgroup_taskset *tset)
- out:
- 	cs->old_mems_allowed = cpuset_attach_nodemask_to;
- 
-+	if (cs->nr_migrate_dl_tasks) {
-+		cs->nr_deadline_tasks += cs->nr_migrate_dl_tasks;
-+		oldcs->nr_deadline_tasks -= cs->nr_migrate_dl_tasks;
-+		reset_migrate_dl_data(cs);
-+	}
-+
- 	cs->attach_in_progress--;
- 	if (!cs->attach_in_progress)
- 		wake_up(&cpuset_attach_wq);
-@@ -3330,7 +3373,7 @@ static int cpuset_can_fork(struct task_struct *task, struct css_set *cset)
- 	if (ret)
- 		goto out_unlock;
- 
--	ret = task_can_attach(task, cs->effective_cpus);
-+	ret = task_can_attach(task);
- 	if (ret)
- 		goto out_unlock;
- 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index df659892d7d5..ed0d7381b2ec 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9294,8 +9294,7 @@ int cpuset_cpumask_can_shrink(const struct cpumask *cur,
- 	return ret;
- }
- 
--int task_can_attach(struct task_struct *p,
--		    const struct cpumask *cs_effective_cpus)
-+int task_can_attach(struct task_struct *p)
- {
- 	int ret = 0;
- 
-@@ -9308,21 +9307,9 @@ int task_can_attach(struct task_struct *p,
- 	 * success of set_cpus_allowed_ptr() on all attached tasks
- 	 * before cpus_mask may be changed.
- 	 */
--	if (p->flags & PF_NO_SETAFFINITY) {
-+	if (p->flags & PF_NO_SETAFFINITY)
- 		ret = -EINVAL;
--		goto out;
--	}
--
--	if (dl_task(p) && !cpumask_intersects(task_rq(p)->rd->span,
--					      cs_effective_cpus)) {
--		int cpu = cpumask_any_and(cpu_active_mask, cs_effective_cpus);
- 
--		if (unlikely(cpu >= nr_cpu_ids))
--			return -EINVAL;
--		ret = dl_bw_alloc(cpu, p->dl.dl_bw);
--	}
--
--out:
- 	return ret;
- }
- 
--- 
-2.40.1
+Best regards,
+Krzysztof
 
