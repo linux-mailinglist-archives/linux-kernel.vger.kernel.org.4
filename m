@@ -2,174 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9346FB5C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 19:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE356FB5CA
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 19:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjEHRNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 13:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S229764AbjEHRQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 13:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjEHRNh (ORCPT
+        with ESMTP id S232230AbjEHRQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 13:13:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61C446AB
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 10:13:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38AD86427B
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 17:13:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE42C433EF;
-        Mon,  8 May 2023 17:13:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683566014;
-        bh=uNXUcIsvzCLohQIAh6OYzUn/+a+z0kaZVaP/zTa0rws=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R+hjgu9bN/HGrz7aHLXPf7HKC2H89xznOH4CP8ZS/GGxIhG23ocm+/TCNzTCOs8fe
-         l84y/FHcy/qQD2xAngaVFyjtz5P4QG3ChMMTEJ347Wo59AvcHFjuEtyhLTUwlIzNSO
-         ikSSI2tvbYKay/8vf92nPmj6xsXx4WAdnz0bsHQY5iU2l6IDFYqVhafnNBDU0mViKN
-         TJXzvMK7OmDuJEKh2mCLuPJP3+qITPeBEKuzo3NeHqm/N19Z0hSRezmIZA12u/55g0
-         lwegtrI3uiW+VixuIGpcE+g38xNE4HmEyWDE4QimRJ4UToZqyuXWvGlH5YwkCPITEg
-         x9R06QNW/7HLQ==
-Date:   Mon, 8 May 2023 19:13:33 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        nicolas.dichtel@6wind.com, hch@infradead.org, stefanha@redhat.com,
-        jasowang@redhat.com, mst@redhat.com, sgarzare@redhat.com,
-        virtualization@lists.linux-foundation.org, ebiederm@xmission.com,
-        konrad.wilk@oracle.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 8/8] vhost: use vhost_tasks for worker threads
-Message-ID: <20230508-ebenfalls-unangebracht-1ef3cf2e35de@brauner>
-References: <20230202232517.8695-1-michael.christie@oracle.com>
- <20230202232517.8695-9-michael.christie@oracle.com>
- <aba6cca4-e66c-768f-375c-b38c8ba5e8a8@6wind.com>
- <CAHk-=wgadfsCnKHLON7op=Qs5t3w3PVz5ZDbvbKsfb=yBg=yjQ@mail.gmail.com>
- <78c5e150-26cf-7724-74ee-4a0b16b944b1@oracle.com>
+        Mon, 8 May 2023 13:16:14 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3529B4ED6;
+        Mon,  8 May 2023 10:16:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683566173; x=1715102173;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=I5UZMcyj02FL6cYHxfdgEYHGfkFiYXZYS6u755QZG64=;
+  b=XSVndJYn6TrxF3y/ZyWS4oMRITbVDRwe1RRFP8GXPNZaIzazdvA+yX4l
+   SfnYTKh7UmKsB7zfnKSYplyrvWEBiKgVRHV3tbOUueDncXFME4cBTqyB3
+   wzE85tcajvef5IiBKqUuWjw8EKVbZ/axJ9e4VAartwOAh4jVFnuRVYFx2
+   HW/Vvd8lzVzb0db6WbHHUvhOVtax5jLBS16HmIxkmrDaiUtbztGBZfMfs
+   VmXb2qtNycjrqhFdS2saLwcyomMsU46MHu2B4+D6Xwltho2ofmK68lDkZ
+   2MwXU8Z+/B2yK9UljgIwXDBkUpOZ3OhoGkpu8U1HXonq6SclYSsxYXBT+
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="412965487"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="412965487"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 10:16:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="676126150"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="676126150"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.12.75]) ([10.213.12.75])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 10:16:09 -0700
+Message-ID: <bb49bbd6-1ff2-8dba-11d1-6b6ab2ccd986@intel.com>
+Date:   Mon, 8 May 2023 19:16:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <78c5e150-26cf-7724-74ee-4a0b16b944b1@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [Intel-gfx] [PATCH v8 0/7] drm/i915: use ref_tracker library for
+ tracking wakerefs
+Content-Language: en-US
+To:     Rodrigo Vivi <rodrigo.vivi@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     netdev@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+References: <20230224-track_gt-v8-0-4b6517e61be6@intel.com>
+ <55aa19b3-58d4-02ae-efd1-c3f3d0f21ce6@intel.com>
+ <ZFVhx2PBdcwpNNl0@rdvivi-mobl4>
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <ZFVhx2PBdcwpNNl0@rdvivi-mobl4>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 05:37:40PM -0500, Mike Christie wrote:
-> On 5/5/23 1:22 PM, Linus Torvalds wrote:
-> > On Fri, May 5, 2023 at 6:40 AM Nicolas Dichtel
-> > <nicolas.dichtel@6wind.com> wrote:
-> >>
-> >> Is this an intended behavior?
-> >> This breaks some of our scripts.
-> > 
-> > It doesn't just break your scripts (which counts as a regression), I
-> > think it's really wrong.
-> > 
-> > The worker threads should show up as threads of the thing that started
-> > them, not as processes.
-> > 
-> > So they should show up in 'ps' only when one of the "show threads" flag is set.
-> > 
-> > But I suspect the fix is trivial:  the virtio code should likely use
-> > CLONE_THREAD for the copy_process() it does.
-> > 
-> > It should look more like "create_io_thread()" than "copy_process()", I think.
-> > 
-> > For example, do virtio worker threads really want their own signals
-> > and files? That sounds wrong. create_io_thread() uses all of
-> > 
-> >  CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_IO
-> > 
-> > to share much more of the context with the process it is actually run within.
-> > 
+On 05.05.2023 22:06, Rodrigo Vivi wrote:
+> On Thu, May 04, 2023 at 06:27:53PM +0200, Andrzej Hajda wrote:
+>> Hi maintainers of net and i915,
+>>
+>> On 25.04.2023 00:05, Andrzej Hajda wrote:
+>>> This is revived patchset improving ref_tracker library and converting
+>>> i915 internal tracker to ref_tracker.
+>>> The old thread ended without consensus about small kernel allocations,
+>>> which are performed under spinlock.
+>>> I have tried to solve the problem by splitting the calls, but it results
+>>> in complicated API, so I went back to original solution.
+>>> If there are better solutions I am glad to discuss them.
+>>> Meanwhile I send original patchset with addressed remaining comments.
+>>>
+>>> To: Jani Nikula <jani.nikula@linux.intel.com>
+>>> To: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+>>> To: Rodrigo Vivi <rodrigo.vivi@intel.com>
+>>> To: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+>>> To: David Airlie <airlied@gmail.com>
+>>> To: Daniel Vetter <daniel@ffwll.ch>
+>>> To: Eric Dumazet <edumazet@google.com>
+>>> Cc: linux-kernel@vger.kernel.org
+>>> Cc: intel-gfx@lists.freedesktop.org
+>>> Cc: dri-devel@lists.freedesktop.org
+>>> Cc: Chris Wilson <chris@chris-wilson.co.uk>
+>>> Cc: netdev@vger.kernel.org
+>>> Cc: Jakub Kicinski <kuba@kernel.org>
+>>> Cc: Dmitry Vyukov <dvyukov@google.com>
+>>> Cc: "David S. Miller" <davem@davemloft.net>
+>>> Cc: Andi Shyti <andi.shyti@linux.intel.com>
+>>> Cc: Das, Nirmoy <nirmoy.das@linux.intel.com>
+>>> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+>>>
+>>> ---
+>>> Changes in v8:
+>>> - addressed comments from Eric, Zhou and CI, thanks,
+>>> - added ref_tracker_dir_init name argument to all callers in one patch
+>>> - moved intel_wakeref_tracker_show to *.c
+>>> - s/intel_wakeref_tracker_show/intel_ref_tracker_show/
+>>> - removed 'default n' from Kconfig
+>>> - changed strlcpy to strscpy,
+>>> - removed assignement from if condition,
+>>> - removed long lines from patch description
+>>> - added tags
+>>> - Link to v7: https://lore.kernel.org/r/20230224-track_gt-v7-0-11f08358c1ec@intel.com
+>>>
+>>> Changes in v7:
+>>> - removed 8th patch (hold wakeref), as it was already merged
+>>> - added tags (thx Andi)
+>>> - Link to v6: https://lore.kernel.org/r/20230224-track_gt-v6-0-0dc8601fd02f@intel.com
+>>>
+>>> Changes in v6:
+>>> - rebased to solve minor conflict and allow CI testing
+>>> - Link to v5: https://lore.kernel.org/r/20230224-track_gt-v5-0-77be86f2c872@intel.com
+>>>
+>>> Changes in v5 (thx Andi for review):
+>>> - use *_locked convention instead of __*,
+>>> - improved commit messages,
+>>> - re-worked i915 patches, squashed separation and conversion patches,
+>>> - added tags,
+>>> - Link to v4: https://lore.kernel.org/r/20230224-track_gt-v4-0-464e8ab4c9ab@intel.com
+>>>
+>>> Changes in v4:
+>>> - split "Separate wakeref tracking" to smaller parts
+>>> - fixed typos,
+>>> - Link to v1-v3: https://patchwork.freedesktop.org/series/100327/
+>>>
+>>> ---
+>>> Andrzej Hajda (7):
+>>>         lib/ref_tracker: add unlocked leak print helper
+>>>         lib/ref_tracker: improve printing stats
+>>>         lib/ref_tracker: add printing to memory buffer
+>>>         lib/ref_tracker: remove warnings in case of allocation failure
+>>>         drm/i915: Correct type of wakeref variable
+>>>         drm/i915: Replace custom intel runtime_pm tracker with ref_tracker library
+>>>         drm/i915: Track gt pm wakerefs
+>>
+>> Finally all patches are reviewed.
+>> Question to network and i915 maintainers, how to merge this patchset:
+>> 1. Patches 1-4 belongs rather to network domain (especially patch 2).
+>> 2. Patches 5-7 are for i915.
 > 
-> For the vhost tasks and the CLONE flags:
+> Well, probably the easiest way to avoid conflicts would be to send
+> this right now through the net repo.
 > 
-> 1. I didn't use CLONE_FILES in the vhost task patches because you are right
-> and we didn't need our own. We needed it to work like kthreads where there
-> are no files, so I set the kernel_clone_args.no_files bit to have copy_files
-> not do a dup or clone (task->files is NULL).
+> And hold patches 5-7 after drm-intel-next can backmerge them.
 > 
-> 2. vhost tasks didn't use CLONE_SIGHAND, because userspace apps like qemu use
-> signals for management operations. But, the vhost thread's worker functions
-> assume signals are ignored like they were with kthreads. So if they were doing
-> IO and got a signal like a SIGHUP they might return early and fail from whatever
-> network/block function they were calling. And currently the parent like qemu
-> handles something like a SIGSTOP by shutting everything down by calling into
-> the vhost interface to remove the device.
+> At this point I believe we would be looking at 6.5-rc2
+> backmerge to drm-intel-next in likely 11 weeks from now.
 > 
-> So similar to files I used the kernel_clone_args.ignore_signals bit so
-> copy_process has the vhost thread have it's own signal handle that just ignores
-> signals.
-> 
-> 3. I didn't use CLONE_THREAD because before my patches you could do
-> "ps -u root" and see all the vhost threads. If we use CLONE_THREAD, then we
-> can only see it when we do something like "ps -T -p $parent" like you mentioned
-> above. I guess I messed up and did the reverse and thought it would be a
-> regression if "ps -u root" no longer showed the vhost threads.
-> 
-> If it's ok to change the behavior of "ps -u root", then we can do this patch:
-> (Nicolas, I confirmed it fixes the 'ps a' case, but couldn't replicate the 'ps'
-> case. If you could test the ps only case or give me info on what /usr/bin/example
-> was doing I can replicate and test here):
-> 
-> 
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index ed4e01daccaa..eb9ffc58e211 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -2269,8 +2269,14 @@ __latent_entropy struct task_struct *copy_process(
->  	/*
->  	 * Thread groups must share signals as well, and detached threads
->  	 * can only be started up within the thread group.
-> +	 *
-> +	 * A userworker's parent thread will normally have a signal handler
-> +	 * that performs management operations, but the worker will not
-> +	 * because the parent will handle the signal then user a worker
-> +	 * specific interface to manage the thread and related resources.
->  	 */
-> -	if ((clone_flags & CLONE_THREAD) && !(clone_flags & CLONE_SIGHAND))
-> +	if ((clone_flags & CLONE_THREAD) && !(clone_flags & CLONE_SIGHAND) &&
-> +	    !args->user_worker && !args->ignore_signals)
->  		return ERR_PTR(-EINVAL);
+> Do we have any urgency on them? Looking to all the changes in
+> i915 I believe we will get many conflicts if we let all these
+> i915 patches go through net tree as well.
 
-I'm currently traveling due to LSFMM so that's why my responses will be
-delayed this week. I'm not yet clear if CLONE_THREAD without
-CLONE_SIGHAND is safe. If there's code that assumes that
-$task_in_threadgroup->sighand->siglock always covers all threads in the
-threadgroup then this change would break this assumption?
 
->  
->  	/*
-> diff --git a/kernel/vhost_task.c b/kernel/vhost_task.c
-> index b7cbd66f889e..3700c21ea39d 100644
-> --- a/kernel/vhost_task.c
-> +++ b/kernel/vhost_task.c
-> @@ -75,7 +78,8 @@ struct vhost_task *vhost_task_create(int (*fn)(void *), void *arg,
->  				     const char *name)
->  {
->  	struct kernel_clone_args args = {
-> -		.flags		= CLONE_FS | CLONE_UNTRACED | CLONE_VM,
-> +		.flags		= CLONE_FS | CLONE_THREAD | CLONE_VM |
-> +				  CLONE_UNTRACED,
->  		.exit_signal	= 0,
->  		.fn		= vhost_task_fn,
->  		.name		= name,
+Eric, Dave, Jakub, could you take patches 1-4?
+
+Regards
+Andrzej
+
+
 > 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
+>>
+>> What would be the best way to do it?
+>>
+>> Regards
+>> Andrzej
+>>
+>>
+>>
+>>>
+>>>    drivers/gpu/drm/i915/Kconfig.debug                 |  18 ++
+>>>    drivers/gpu/drm/i915/display/intel_display_power.c |   2 +-
+>>>    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c     |   7 +-
+>>>    .../drm/i915/gem/selftests/i915_gem_coherency.c    |  10 +-
+>>>    drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c |  14 +-
+>>>    drivers/gpu/drm/i915/gt/intel_breadcrumbs.c        |  13 +-
+>>>    drivers/gpu/drm/i915/gt/intel_breadcrumbs_types.h  |   3 +-
+>>>    drivers/gpu/drm/i915/gt/intel_context.h            |   4 +-
+>>>    drivers/gpu/drm/i915/gt/intel_context_types.h      |   2 +
+>>>    drivers/gpu/drm/i915/gt/intel_engine_pm.c          |   7 +-
+>>>    drivers/gpu/drm/i915/gt/intel_engine_types.h       |   2 +
+>>>    .../gpu/drm/i915/gt/intel_execlists_submission.c   |   2 +-
+>>>    drivers/gpu/drm/i915/gt/intel_gt_pm.c              |  12 +-
+>>>    drivers/gpu/drm/i915/gt/intel_gt_pm.h              |  38 +++-
+>>>    drivers/gpu/drm/i915/gt/intel_gt_pm_debugfs.c      |   4 +-
+>>>    drivers/gpu/drm/i915/gt/selftest_engine_cs.c       |  20 +-
+>>>    drivers/gpu/drm/i915/gt/selftest_gt_pm.c           |   5 +-
+>>>    drivers/gpu/drm/i915/gt/selftest_reset.c           |  10 +-
+>>>    drivers/gpu/drm/i915/gt/selftest_rps.c             |  17 +-
+>>>    drivers/gpu/drm/i915/gt/selftest_slpc.c            |   5 +-
+>>>    drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c  |  12 +-
+>>>    drivers/gpu/drm/i915/i915_driver.c                 |   2 +-
+>>>    drivers/gpu/drm/i915/i915_pmu.c                    |  16 +-
+>>>    drivers/gpu/drm/i915/intel_runtime_pm.c            | 221 ++-------------------
+>>>    drivers/gpu/drm/i915/intel_runtime_pm.h            |  11 +-
+>>>    drivers/gpu/drm/i915/intel_wakeref.c               |  35 +++-
+>>>    drivers/gpu/drm/i915/intel_wakeref.h               |  73 ++++++-
+>>>    include/linux/ref_tracker.h                        |  25 ++-
+>>>    lib/ref_tracker.c                                  | 179 ++++++++++++++---
+>>>    lib/test_ref_tracker.c                             |   2 +-
+>>>    net/core/dev.c                                     |   2 +-
+>>>    net/core/net_namespace.c                           |   4 +-
+>>>    32 files changed, 445 insertions(+), 332 deletions(-)
+>>> ---
+>>> base-commit: 4d0066a1c0763d50b6fb017e27d12b081ce21b57
+>>> change-id: 20230224-track_gt-1b3da8bdacd7
+>>>
+>>> Best regards,
+>>
+
