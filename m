@@ -2,209 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C266FA139
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 497846FA14F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233321AbjEHHmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
+        id S233542AbjEHHpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbjEHHmA (ORCPT
+        with ESMTP id S232779AbjEHHpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:42:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED9A40D1
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:41:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1541B6201E
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 07:41:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB2CC433EF;
-        Mon,  8 May 2023 07:41:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683531718;
-        bh=yNTGKvnvEJLVtEyVTqWeDENaezR1MgGHS3g9B/4BDWU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F3loFkYDYcjTv69jeH0SfBGgatd4d0Uo1oq9tbaCm8wUO/Dbha5dCWXW8U/lykg+z
-         i8iD4eV8sVHXD9lwkcFopZ18gbOawcg+NoybYJY9UDpRAXGP6BTMDNtn9GKhi99cJz
-         4aMwS6DYHDYDxMtNNl7Wd8JzAzKMxdk79LuNCIrtaFEKY0rTyqCT4mFsQFQre2QxYe
-         IUDi74XXSv3W+Hw0/ipaaGHT6VWWpu/0eZNMwlx1CxCcRFLmrtAUcELCNsC2PMlRsB
-         QLDZ0zmQw6IZj8z1IDc5oOiZ5J22s4qptOcwdvxHERfGILH0bVIzyLzH0pRAoeUWa6
-         9Fpg+y7KvRo9w==
-Date:   Mon, 8 May 2023 13:11:54 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     David Yang <mmyangfl@gmail.com>
-Cc:     linux-phy@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] phy: hisilicon: Adopt phy-hisi-inno-usb2 to Hi3798MV100
-Message-ID: <ZFinwhFphe71VeLk@matsya>
-References: <20230507154615.793942-1-mmyangfl@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230507154615.793942-1-mmyangfl@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 8 May 2023 03:45:12 -0400
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9E81A1DC;
+        Mon,  8 May 2023 00:45:10 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vi0xjwt_1683531906;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vi0xjwt_1683531906)
+          by smtp.aliyun-inc.com;
+          Mon, 08 May 2023 15:45:07 +0800
+Message-ID: <1683531716.238961-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH] virtio_net: set default mtu to 1500 when 'Device maximum MTU' bigger than 1500
+Date:   Mon, 8 May 2023 15:41:56 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     huangml@yusur.tech, zy@yusur.tech,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:VIRTIO CORE AND NET DRIVERS" 
+        <virtualization@lists.linux-foundation.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Hao Chen <chenh@yusur.tech>, hengqi@linux.alibaba.com
+References: <20230506021529.396812-1-chenh@yusur.tech>
+ <1683341417.0965195-4-xuanzhuo@linux.alibaba.com>
+ <07b6b325-9a15-222f-e618-d149b57cbac2@yusur.tech>
+ <20230507045627-mutt-send-email-mst@kernel.org>
+ <1683511319.099806-2-xuanzhuo@linux.alibaba.com>
+ <20230508020953-mutt-send-email-mst@kernel.org>
+ <1683526688.7492425-1-xuanzhuo@linux.alibaba.com>
+ <20230508024147-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230508024147-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07-05-23, 23:46, David Yang wrote:
-> Hisilicon also uses phy-hisi-inno-usb2 on Hi3798MV100, with a slightly
-> different register convention.
+On Mon, 8 May 2023 02:43:24 -0400, "Michael S. Tsirkin" <mst@redhat.com> wr=
+ote:
+> On Mon, May 08, 2023 at 02:18:08PM +0800, Xuan Zhuo wrote:
+> > On Mon, 8 May 2023 02:15:46 -0400, "Michael S. Tsirkin" <mst@redhat.com=
+> wrote:
+> > > On Mon, May 08, 2023 at 10:01:59AM +0800, Xuan Zhuo wrote:
+> > > > On Sun, 7 May 2023 04:58:58 -0400, "Michael S. Tsirkin" <mst@redhat=
+.com> wrote:
+> > > > > On Sat, May 06, 2023 at 04:56:35PM +0800, Hao Chen wrote:
+> > > > > >
+> > > > > >
+> > > > > > =E5=9C=A8 2023/5/6 10:50, Xuan Zhuo =E5=86=99=E9=81=93:
+> > > > > > > On Sat,  6 May 2023 10:15:29 +0800, Hao Chen <chenh@yusur.tec=
+h> wrote:
+> > > > > > > > When VIRTIO_NET_F_MTU(3) Device maximum MTU reporting is su=
+pported.
+> > > > > > > > If offered by the device, device advises driver about the v=
+alue of its
+> > > > > > > > maximum MTU. If negotiated, the driver uses mtu as the maxi=
+mum
+> > > > > > > > MTU value. But there the driver also uses it as default mtu,
+> > > > > > > > some devices may have a maximum MTU greater than 1500, this=
+ may
+> > > > > > > > cause some large packages to be discarded,
+> > > > > > >
+> > > > > > > You mean tx packet?
+> > > > > > Yes.
+> > > > > > >
+> > > > > > > If yes, I do not think this is the problem of driver.
+> > > > > > >
+> > > > > > > Maybe you should give more details about the discard.
+> > > > > > >
+> > > > > > In the current code, if the maximum MTU supported by the virtio=
+ net hardware
+> > > > > > is 9000, the default MTU of the virtio net driver will also be =
+set to 9000.
+> > > > > > When sending packets through "ping -s 5000", if the peer router=
+ does not
+> > > > > > support negotiating a path MTU through ICMP packets, the packet=
+s will be
+> > > > > > discarded. If the peer router supports negotiating path mtu thr=
+ough ICMP
+> > > > > > packets, the host side will perform packet sharding processing =
+based on the
+> > > > > > negotiated path mtu, which is generally within 1500.
+> > > > > > This is not a bugfix patch, I think setting the default mtu to =
+within 1500
+> > > > > > would be more suitable here.Thanks.
+> > > > >
+> > > > > I don't think VIRTIO_NET_F_MTU is appropriate for support for jum=
+bo packets.
+> > > > > The spec says:
+> > > > > 	The device MUST forward transmitted packets of up to mtu (plus l=
+ow level ethernet header length) size with
+> > > > > 	gso_type NONE or ECN, and do so without fragmentation, after VIR=
+TIO_NET_F_MTU has been success-
+> > > > > 	fully negotiated.
+> > > > > VIRTIO_NET_F_MTU has been designed for all kind of tunneling devi=
+ces,
+> > > > > and this is why we set mtu to max by default.
+> > > > >
+> > > > > For things like jumbo frames where MTU might or might not be avai=
+lable,
+> > > > > a new feature would be more appropriate.
+> > > >
+> > > >
+> > > > So for jumbo frame, what is the problem?
+> > > >
+> > > > We are trying to do this. @Heng
+> > > >
+> > > > Thanks.
+> > >
+> > > It is not a problem as such. But VIRTIO_NET_F_MTU will set the
+> > > default MTU not just the maximum one, because spec seems to
+> > > say it can.
+> >
+> > I see.
+> >
+> > In the case of Jumbo Frame, we also hope that the driver will set the d=
+efault
+> > directly to the max mtu. Just like what you said "Bigger packets =3D be=
+tter
+> > performance."
+> >
+> > I don't know, in any scenario, when the hardware supports a large mtu, =
+but we do
+> > not want the user to use it by default.
+>
+> When other devices on the same LAN have mtu set to 1500 and
+> won't accept bigger packets.
 
-OK, so what should I expect from this patch, pls document that here...
+So, that depends on pmtu/tcp-probe-mtu.
 
-> 
-> Signed-off-by: David Yang <mmyangfl@gmail.com>
-> ---
->  drivers/phy/hisilicon/Kconfig              |  2 +-
->  drivers/phy/hisilicon/phy-hisi-inno-usb2.c | 67 ++++++++++++++++------
->  2 files changed, 51 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/phy/hisilicon/Kconfig b/drivers/phy/hisilicon/Kconfig
-> index d3b92c288554..6c89136fc8c2 100644
-> --- a/drivers/phy/hisilicon/Kconfig
-> +++ b/drivers/phy/hisilicon/Kconfig
-> @@ -54,7 +54,7 @@ config PHY_HISTB_COMBPHY
->  
->  config PHY_HISI_INNO_USB2
->  	tristate "HiSilicon INNO USB2 PHY support"
-> -	depends on (ARCH_HISI && ARM64) || COMPILE_TEST
-> +	depends on ARCH_HISI || COMPILE_TEST
+If the os without pmtu/tcp-probe-mtu has a bigger mtu, then it's big packet
+will lost.
 
-why this change?
+Thanks.
 
->  	select GENERIC_PHY
->  	select MFD_SYSCON
->  	help
-> diff --git a/drivers/phy/hisilicon/phy-hisi-inno-usb2.c b/drivers/phy/hisilicon/phy-hisi-inno-usb2.c
-> index b133ae06757a..b5d006f38934 100644
-> --- a/drivers/phy/hisilicon/phy-hisi-inno-usb2.c
-> +++ b/drivers/phy/hisilicon/phy-hisi-inno-usb2.c
-> @@ -9,7 +9,7 @@
->  #include <linux/delay.h>
->  #include <linux/io.h>
->  #include <linux/module.h>
-> -#include <linux/platform_device.h>
-> +#include <linux/of_device.h>
->  #include <linux/phy/phy.h>
->  #include <linux/reset.h>
->  
-> @@ -20,12 +20,28 @@
->  #define PHY_CLK_STABLE_TIME	2	/* unit:ms */
->  #define UTMI_RST_COMPLETE_TIME	2	/* unit:ms */
->  #define POR_RST_COMPLETE_TIME	300	/* unit:us */
-> -#define PHY_TEST_DATA		GENMASK(7, 0)
-> -#define PHY_TEST_ADDR		GENMASK(15, 8)
-> -#define PHY_TEST_PORT		GENMASK(18, 16)
-> -#define PHY_TEST_WREN		BIT(21)
-> -#define PHY_TEST_CLK		BIT(22)	/* rising edge active */
-> -#define PHY_TEST_RST		BIT(23)	/* low active */
-> +
-> +#define PHY_TYPE_0	0
-> +#define PHY_TYPE_1	1
-> +
-> +#define PHY0_TEST_DATA		GENMASK(7, 0)
 
-same as previous what changed??
-
-> +#define PHY0_TEST_ADDR_OFFSET	8
-> +#define PHY0_TEST_ADDR		GENMASK(15, 8)
-> +#define PHY0_TEST_PORT_OFFSET	16
-> +#define PHY0_TEST_PORT		GENMASK(18, 16)
-> +#define PHY0_TEST_WREN		BIT(21)
-> +#define PHY0_TEST_CLK		BIT(22)	/* rising edge active */
-> +#define PHY0_TEST_RST		BIT(23)	/* low active */
-> +
-> +#define PHY1_TEST_DATA		GENMASK(7, 0)
-> +#define PHY1_TEST_ADDR_OFFSET	8
-> +#define PHY1_TEST_ADDR		GENMASK(11, 8)
-> +#define PHY1_TEST_PORT_OFFSET	12
-> +#define PHY1_TEST_PORT		BIT(12)
-> +#define PHY1_TEST_WREN		BIT(13)
-> +#define PHY1_TEST_CLK		BIT(14)	/* rising edge active */
-> +#define PHY1_TEST_RST		BIT(15)	/* low active */
-> +
->  #define PHY_CLK_ENABLE		BIT(2)
->  
->  struct hisi_inno_phy_port {
-> @@ -37,6 +53,7 @@ struct hisi_inno_phy_priv {
->  	void __iomem *mmio;
->  	struct clk *ref_clk;
->  	struct reset_control *por_rst;
-> +	unsigned int type;
->  	struct hisi_inno_phy_port ports[INNO_PHY_PORT_NUM];
->  };
->  
-> @@ -45,17 +62,27 @@ static void hisi_inno_phy_write_reg(struct hisi_inno_phy_priv *priv,
->  {
->  	void __iomem *reg = priv->mmio;
->  	u32 val;
-> -
-> -	val = (data & PHY_TEST_DATA) |
-> -	      ((addr << 8) & PHY_TEST_ADDR) |
-> -	      ((port << 16) & PHY_TEST_PORT) |
-> -	      PHY_TEST_WREN | PHY_TEST_RST;
-> +	u32 value;
-> +
-> +	if (priv->type == PHY_TYPE_0)
-> +		val = (data & PHY0_TEST_DATA) |
-> +		      ((addr << PHY0_TEST_ADDR_OFFSET) & PHY0_TEST_ADDR) |
-> +		      ((port << PHY0_TEST_PORT_OFFSET) & PHY0_TEST_PORT) |
-> +		      PHY0_TEST_WREN | PHY0_TEST_RST;
-> +	else
-> +		val = (data & PHY1_TEST_DATA) |
-> +		      ((addr << PHY1_TEST_ADDR_OFFSET) & PHY1_TEST_ADDR) |
-> +		      ((port << PHY1_TEST_PORT_OFFSET) & PHY1_TEST_PORT) |
-> +		      PHY1_TEST_WREN | PHY1_TEST_RST;
->  	writel(val, reg);
->  
-> -	val |= PHY_TEST_CLK;
-> -	writel(val, reg);
-> +	value = val;
-> +	if (priv->type == PHY_TYPE_0)
-> +		value |= PHY0_TEST_CLK;
-> +	else
-> +		value |= PHY1_TEST_CLK;
-> +	writel(value, reg);
->  
-> -	val &= ~PHY_TEST_CLK;
->  	writel(val, reg);
->  }
->  
-> @@ -135,6 +162,8 @@ static int hisi_inno_phy_probe(struct platform_device *pdev)
->  	if (IS_ERR(priv->por_rst))
->  		return PTR_ERR(priv->por_rst);
->  
-> +	priv->type = (unsigned int) of_device_get_match_data(dev);
-> +
->  	for_each_child_of_node(np, child) {
->  		struct reset_control *rst;
->  		struct phy *phy;
-> @@ -170,8 +199,12 @@ static int hisi_inno_phy_probe(struct platform_device *pdev)
->  }
->  
->  static const struct of_device_id hisi_inno_phy_of_match[] = {
-> -	{ .compatible = "hisilicon,inno-usb2-phy", },
-> -	{ .compatible = "hisilicon,hi3798cv200-usb2-phy", },
-> +	{ .compatible = "hisilicon,inno-usb2-phy",
-> +	  .data = (void *) PHY_TYPE_0 },
-> +	{ .compatible = "hisilicon,hi3798cv200-usb2-phy",
-> +	  .data = (void *) PHY_TYPE_0 },
-> +	{ .compatible = "hisilicon,hi3798mv100-usb2-phy",
-> +	  .data = (void *) PHY_TYPE_1 },
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(of, hisi_inno_phy_of_match);
-> -- 
-> 2.39.2
-
--- 
-~Vinod
+>
+> > Of course, the scene that this patch
+> > wants to handle does exist, but I have never thought that this is a pro=
+blem at
+> > the driver level.
+> >
+> > Thanks.
+> >
+> >
+> > >
+> > >
+> > > >
+> > > > >
+> > > > > > > > so I changed the MTU to a more
+> > > > > > > > general 1500 when 'Device maximum MTU' bigger than 1500.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Hao Chen <chenh@yusur.tech>
+> > > > > > > > ---
+> > > > > > > >   drivers/net/virtio_net.c | 5 ++++-
+> > > > > > > >   1 file changed, 4 insertions(+), 1 deletion(-)
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_=
+net.c
+> > > > > > > > index 8d8038538fc4..e71c7d1b5f29 100644
+> > > > > > > > --- a/drivers/net/virtio_net.c
+> > > > > > > > +++ b/drivers/net/virtio_net.c
+> > > > > > > > @@ -4040,7 +4040,10 @@ static int virtnet_probe(struct virt=
+io_device *vdev)
+> > > > > > > >   			goto free;
+> > > > > > > >   		}
+> > > > > > > >
+> > > > > > > > -		dev->mtu =3D mtu;
+> > > > > > > > +		if (mtu > 1500)
+> > > > > > >
+> > > > > > > s/1500/ETH_DATA_LEN/
+> > > > > > >
+> > > > > > > Thanks.
+> > > > > > >
+> > > > > > > > +			dev->mtu =3D 1500;
+> > > > > > > > +		else
+> > > > > > > > +			dev->mtu =3D mtu;
+> > > > > > > >   		dev->max_mtu =3D mtu;
+> > > > > > > >   	}
+> > > > > > > >
+> > > > > > > > --
+> > > > > > > > 2.27.0
+> > > > > > > >
+> > > > >
+> > >
+>
