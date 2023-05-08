@@ -2,70 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC476FA137
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C266FA139
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233405AbjEHHlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
+        id S233321AbjEHHmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233288AbjEHHk7 (ORCPT
+        with ESMTP id S230187AbjEHHmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:40:59 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5C361B0;
-        Mon,  8 May 2023 00:40:57 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 5A8D360161;
-        Mon,  8 May 2023 09:40:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1683531653; bh=LcsRoVzy2DsfLxqYmDIf21xsrKudxm9I91adDGLAktY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kpkbbbhysbx7FV4r4GiMggC8S1aYH1cojJpKgwLbFwSBOmBYMLxTqAm2BHKhcVAah
-         o0vFAPc1vSafkN2TZC3csVTiF6i+YLCeBZZ4pZ4+pRuFsPN3/2HOy7svI5r04iuXdk
-         Rcl+InBsuzzR8f9hUfv69sh9c0VHYwRuWMM5JcQT28aBflvW2HwpWDuNhybCunMLHK
-         7kBgAa9YVYw1ATlRuUeFlXuYDHfOmr/4GMpudA7lpexe4wFTeqnlgQ55llNPE07Wq8
-         YCGoSCVH2MJQXqOZUG2LFAXysoOGKmzhAhIdojMAWGPiGzVLAvYS0YnNZGXZnHlsHA
-         QahDqaKbVfLgA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FxHpJaKemVL8; Mon,  8 May 2023 09:40:50 +0200 (CEST)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id 7AF3360173;
-        Mon,  8 May 2023 09:40:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1683531648; bh=LcsRoVzy2DsfLxqYmDIf21xsrKudxm9I91adDGLAktY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kllWp5gmJ4eJtIj26EGwrYCvMrhQkydfHbZwwwqsM/HcXj54ba7RaDjLu3naLfdxq
-         60FZijE5iX7CrqK0S8/Vv7c7XUvyb+UqgdY96jOBrpEvf3yizyVQK7N8WIlStbyC7j
-         pjEVVT5LnQUhzhmj4FV0cIVh53w8rDp0umNu0hbQ0usYZJp7PvTBON/Pe9gyLvstdk
-         EdMtnIUXWcZiINrIF2WtcUbf/cXC/iZv5G/UgnyN+CGfqh3yz1DdGaoy/bFitVJRKx
-         a6aHqhvGaxvFb+Ee7F88phLr9BQ8xxnSLtu2HoO2Ls+EGVPkEmz2l7Z75znhBOe+x6
-         wXguearYfSlDA==
-Message-ID: <30daba6b-e264-5141-221f-5daed103b4ce@alu.unizg.hr>
-Date:   Mon, 8 May 2023 09:40:33 +0200
+        Mon, 8 May 2023 03:42:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED9A40D1
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:41:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1541B6201E
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 07:41:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB2CC433EF;
+        Mon,  8 May 2023 07:41:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683531718;
+        bh=yNTGKvnvEJLVtEyVTqWeDENaezR1MgGHS3g9B/4BDWU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F3loFkYDYcjTv69jeH0SfBGgatd4d0Uo1oq9tbaCm8wUO/Dbha5dCWXW8U/lykg+z
+         i8iD4eV8sVHXD9lwkcFopZ18gbOawcg+NoybYJY9UDpRAXGP6BTMDNtn9GKhi99cJz
+         4aMwS6DYHDYDxMtNNl7Wd8JzAzKMxdk79LuNCIrtaFEKY0rTyqCT4mFsQFQre2QxYe
+         IUDi74XXSv3W+Hw0/ipaaGHT6VWWpu/0eZNMwlx1CxCcRFLmrtAUcELCNsC2PMlRsB
+         QLDZ0zmQw6IZj8z1IDc5oOiZ5J22s4qptOcwdvxHERfGILH0bVIzyLzH0pRAoeUWa6
+         9Fpg+y7KvRo9w==
+Date:   Mon, 8 May 2023 13:11:54 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     David Yang <mmyangfl@gmail.com>
+Cc:     linux-phy@lists.infradead.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] phy: hisilicon: Adopt phy-hisi-inno-usb2 to Hi3798MV100
+Message-ID: <ZFinwhFphe71VeLk@matsya>
+References: <20230507154615.793942-1-mmyangfl@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [BUG] Kmemleak, possibly hiddev_connect(), in 6.3.0+ torvalds
- tree commit gfc4354c6e5c2
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>
-References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
- <2023050824-juiciness-catching-9290@gregkh>
-Content-Language: en-US, hr
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <2023050824-juiciness-catching-9290@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230507154615.793942-1-mmyangfl@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,91 +55,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/8/23 08:51, Greg Kroah-Hartman wrote:
-> On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
->> Hi,
->>
->> There seems to be a kernel memory leak in the USB keyboard driver.
->>
->> The leaked memory allocs are 96 and 512 bytes.
->>
->> The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
->> Lightning mobo,
->> and Genius SlimStar i220 GK-080012 keyboard.
->>
->> (Logitech M100 HID mouse is not affected by the bug.)
->>
->> BIOS is:
->>
->>       *-firmware
->>            description: BIOS
->>            vendor: American Megatrends International, LLC.
->>            physical id: 0
->>            version: 1.21
->>            date: 04/26/2023
->>            size: 64KiB
->>
->> The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
->>
->> The keyboard is recognised as Chicony:
->>
->>                   *-usb
->>                        description: Keyboard
->>                        product: CHICONY USB Keyboard
->>                        vendor: CHICONY
->>                        physical id: 2
->>                        bus info: usb@5:2
->>                        logical name: input35
->>                        logical name: /dev/input/event4
->>                        logical name: input35::capslock
->>                        logical name: input35::numlock
->>                        logical name: input35::scrolllock
->>                        logical name: input36
->>                        logical name: /dev/input/event5
->>                        logical name: input37
->>                        logical name: /dev/input/event6
->>                        logical name: input38
->>                        logical name: /dev/input/event8
->>                        version: 2.30
->>                        capabilities: usb-2.00 usb
->>                        configuration: driver=usbhid maxpower=100mA
->> speed=1Mbit/s
->>
->> The bug is easily reproduced by unplugging the USB keyboard, waiting about a
->> couple of seconds,
->> and then reconnect and scan for memory leaks twice.
->>
->> The kmemleak log is as follows [edited privacy info]:
->>
->> root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
->> unreferenced object 0xffff8dd020037c00 (size 96):
->>    comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
->>    hex dump (first 32 bytes):
->>      5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
->>      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
->>    backtrace:
->>      [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
->>      [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
->>      [<ffffffffb87543d9>] class_create+0x29/0x80
->>      [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
+On 07-05-23, 23:46, David Yang wrote:
+> Hisilicon also uses phy-hisi-inno-usb2 on Hi3798MV100, with a slightly
+> different register convention.
+
+OK, so what should I expect from this patch, pls document that here...
+
 > 
-> As the call to class_create() in this path is now gone in 6.4-rc1, can
-> you retry that release to see if this is still there or not?
+> Signed-off-by: David Yang <mmyangfl@gmail.com>
+> ---
+>  drivers/phy/hisilicon/Kconfig              |  2 +-
+>  drivers/phy/hisilicon/phy-hisi-inno-usb2.c | 67 ++++++++++++++++------
+>  2 files changed, 51 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/phy/hisilicon/Kconfig b/drivers/phy/hisilicon/Kconfig
+> index d3b92c288554..6c89136fc8c2 100644
+> --- a/drivers/phy/hisilicon/Kconfig
+> +++ b/drivers/phy/hisilicon/Kconfig
+> @@ -54,7 +54,7 @@ config PHY_HISTB_COMBPHY
+>  
+>  config PHY_HISI_INNO_USB2
+>  	tristate "HiSilicon INNO USB2 PHY support"
+> -	depends on (ARCH_HISI && ARM64) || COMPILE_TEST
+> +	depends on ARCH_HISI || COMPILE_TEST
 
-Certainly, but probably not before 6 PM UTC+02.
+why this change?
 
-Best regards,
-Mirsad
+>  	select GENERIC_PHY
+>  	select MFD_SYSCON
+>  	help
+> diff --git a/drivers/phy/hisilicon/phy-hisi-inno-usb2.c b/drivers/phy/hisilicon/phy-hisi-inno-usb2.c
+> index b133ae06757a..b5d006f38934 100644
+> --- a/drivers/phy/hisilicon/phy-hisi-inno-usb2.c
+> +++ b/drivers/phy/hisilicon/phy-hisi-inno-usb2.c
+> @@ -9,7 +9,7 @@
+>  #include <linux/delay.h>
+>  #include <linux/io.h>
+>  #include <linux/module.h>
+> -#include <linux/platform_device.h>
+> +#include <linux/of_device.h>
+>  #include <linux/phy/phy.h>
+>  #include <linux/reset.h>
+>  
+> @@ -20,12 +20,28 @@
+>  #define PHY_CLK_STABLE_TIME	2	/* unit:ms */
+>  #define UTMI_RST_COMPLETE_TIME	2	/* unit:ms */
+>  #define POR_RST_COMPLETE_TIME	300	/* unit:us */
+> -#define PHY_TEST_DATA		GENMASK(7, 0)
+> -#define PHY_TEST_ADDR		GENMASK(15, 8)
+> -#define PHY_TEST_PORT		GENMASK(18, 16)
+> -#define PHY_TEST_WREN		BIT(21)
+> -#define PHY_TEST_CLK		BIT(22)	/* rising edge active */
+> -#define PHY_TEST_RST		BIT(23)	/* low active */
+> +
+> +#define PHY_TYPE_0	0
+> +#define PHY_TYPE_1	1
+> +
+> +#define PHY0_TEST_DATA		GENMASK(7, 0)
+
+same as previous what changed??
+
+> +#define PHY0_TEST_ADDR_OFFSET	8
+> +#define PHY0_TEST_ADDR		GENMASK(15, 8)
+> +#define PHY0_TEST_PORT_OFFSET	16
+> +#define PHY0_TEST_PORT		GENMASK(18, 16)
+> +#define PHY0_TEST_WREN		BIT(21)
+> +#define PHY0_TEST_CLK		BIT(22)	/* rising edge active */
+> +#define PHY0_TEST_RST		BIT(23)	/* low active */
+> +
+> +#define PHY1_TEST_DATA		GENMASK(7, 0)
+> +#define PHY1_TEST_ADDR_OFFSET	8
+> +#define PHY1_TEST_ADDR		GENMASK(11, 8)
+> +#define PHY1_TEST_PORT_OFFSET	12
+> +#define PHY1_TEST_PORT		BIT(12)
+> +#define PHY1_TEST_WREN		BIT(13)
+> +#define PHY1_TEST_CLK		BIT(14)	/* rising edge active */
+> +#define PHY1_TEST_RST		BIT(15)	/* low active */
+> +
+>  #define PHY_CLK_ENABLE		BIT(2)
+>  
+>  struct hisi_inno_phy_port {
+> @@ -37,6 +53,7 @@ struct hisi_inno_phy_priv {
+>  	void __iomem *mmio;
+>  	struct clk *ref_clk;
+>  	struct reset_control *por_rst;
+> +	unsigned int type;
+>  	struct hisi_inno_phy_port ports[INNO_PHY_PORT_NUM];
+>  };
+>  
+> @@ -45,17 +62,27 @@ static void hisi_inno_phy_write_reg(struct hisi_inno_phy_priv *priv,
+>  {
+>  	void __iomem *reg = priv->mmio;
+>  	u32 val;
+> -
+> -	val = (data & PHY_TEST_DATA) |
+> -	      ((addr << 8) & PHY_TEST_ADDR) |
+> -	      ((port << 16) & PHY_TEST_PORT) |
+> -	      PHY_TEST_WREN | PHY_TEST_RST;
+> +	u32 value;
+> +
+> +	if (priv->type == PHY_TYPE_0)
+> +		val = (data & PHY0_TEST_DATA) |
+> +		      ((addr << PHY0_TEST_ADDR_OFFSET) & PHY0_TEST_ADDR) |
+> +		      ((port << PHY0_TEST_PORT_OFFSET) & PHY0_TEST_PORT) |
+> +		      PHY0_TEST_WREN | PHY0_TEST_RST;
+> +	else
+> +		val = (data & PHY1_TEST_DATA) |
+> +		      ((addr << PHY1_TEST_ADDR_OFFSET) & PHY1_TEST_ADDR) |
+> +		      ((port << PHY1_TEST_PORT_OFFSET) & PHY1_TEST_PORT) |
+> +		      PHY1_TEST_WREN | PHY1_TEST_RST;
+>  	writel(val, reg);
+>  
+> -	val |= PHY_TEST_CLK;
+> -	writel(val, reg);
+> +	value = val;
+> +	if (priv->type == PHY_TYPE_0)
+> +		value |= PHY0_TEST_CLK;
+> +	else
+> +		value |= PHY1_TEST_CLK;
+> +	writel(value, reg);
+>  
+> -	val &= ~PHY_TEST_CLK;
+>  	writel(val, reg);
+>  }
+>  
+> @@ -135,6 +162,8 @@ static int hisi_inno_phy_probe(struct platform_device *pdev)
+>  	if (IS_ERR(priv->por_rst))
+>  		return PTR_ERR(priv->por_rst);
+>  
+> +	priv->type = (unsigned int) of_device_get_match_data(dev);
+> +
+>  	for_each_child_of_node(np, child) {
+>  		struct reset_control *rst;
+>  		struct phy *phy;
+> @@ -170,8 +199,12 @@ static int hisi_inno_phy_probe(struct platform_device *pdev)
+>  }
+>  
+>  static const struct of_device_id hisi_inno_phy_of_match[] = {
+> -	{ .compatible = "hisilicon,inno-usb2-phy", },
+> -	{ .compatible = "hisilicon,hi3798cv200-usb2-phy", },
+> +	{ .compatible = "hisilicon,inno-usb2-phy",
+> +	  .data = (void *) PHY_TYPE_0 },
+> +	{ .compatible = "hisilicon,hi3798cv200-usb2-phy",
+> +	  .data = (void *) PHY_TYPE_0 },
+> +	{ .compatible = "hisilicon,hi3798mv100-usb2-phy",
+> +	  .data = (void *) PHY_TYPE_1 },
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(of, hisi_inno_phy_of_match);
+> -- 
+> 2.39.2
 
 -- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-
-"What’s this thing suddenly coming towards me very fast? Very very fast.
-... I wonder if it will be friends with me?"
+~Vinod
