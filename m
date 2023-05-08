@@ -2,176 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767736FB082
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF946FB08D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbjEHMqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 08:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
+        id S233722AbjEHMrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 08:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbjEHMqI (ORCPT
+        with ESMTP id S234237AbjEHMrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 08:46:08 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB4C18C;
-        Mon,  8 May 2023 05:46:06 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f41dceb9d1so19586985e9.1;
-        Mon, 08 May 2023 05:46:06 -0700 (PDT)
+        Mon, 8 May 2023 08:47:08 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA18733863
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 05:47:05 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-b9d8b2e1576so6022665276.2
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 05:47:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683549965; x=1686141965;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=asbulxWBBUUI7EhpI6L3ou9HymcJhGeGWLD2VK7v0Wk=;
-        b=TIzCwj/pI/o0/YWw8CTrR3fZHS2yw48fL9IAOdDFNArHQUatheY+o7DJ2aCyUvy23N
-         j+9Q7cGYTUhJeUQKhvdga0DWYOtSwdcZK6woZAa2jGJ8o2RuOwPKrh2oetm18m31uWHs
-         OXtZmd0tVqYb15iqkpfB85kiUVTa469JT9RgQZOK7gHPMpIwGNSAT2tgbL/HvoQc7GaM
-         V0VHMt1zd9J/5hzWfPi5Ubw2VkIAxWeTS4xL0yEtfD/cDVCWaicb4nfKzijY4ojLx5j9
-         3OSuitk4sLousbcMjEQn+lthDgyN7QiauUJm8pICKubK6yaupSV63ppnPesac4mFbZ+7
-         +KKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683549965; x=1686141965;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1683550025; x=1686142025;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=asbulxWBBUUI7EhpI6L3ou9HymcJhGeGWLD2VK7v0Wk=;
-        b=HDnOIWObXfG+havnbnX8zqzoN1UPpuqyl91wWLZqnK5HI+eXLTzTeAjMn/j1K3wgBb
-         MhhxfewTMJK6XqnGemOPRCuEU9wWD3ArIQ9JKOZylkflN8IiFk9DhOL7Pxh5AXFAhTF5
-         DFsw1AcfxyMcZzlreRy0Z7Z2QGfnuD2ASZqgdskRNjXXJ3ZMCE0swMreozEqgdk2Gosu
-         kr9Gl/NbE4r57UMMGvhR/bFp2Jz+b0hvsYmWyKAGZs6CJDUa2lN193sz9FSNhAeD4MiN
-         jO4wdfyqWTyEeDFD/h0wDpWGFU98qDyQ+S59IWqPv1iKsI5jcSpg1i8BIroKnN+hXYP3
-         /ttQ==
-X-Gm-Message-State: AC+VfDwIhaQepP6XxiYpUv3eVQmWVX7yKdMp1o4VwtJLKwOg3Yo3MT2W
-        PGrI4X+Qau8dBOvhYXo/3+jEzX9jX2nQHg==
-X-Google-Smtp-Source: ACHHUZ4Caw1eB1LyVaPjHrWuOkjvhK/LDxL+ZU7Tdq6wIDisHDEgaQ1pyNkzVDQ0KBXmSLZ1QgxqHQ==
-X-Received: by 2002:a7b:cb46:0:b0:3f1:82a1:122 with SMTP id v6-20020a7bcb46000000b003f182a10122mr7240608wmj.21.1683549965505;
-        Mon, 08 May 2023 05:46:05 -0700 (PDT)
-Received: from standask-GA-A55M-S2HP ([188.123.113.247])
-        by smtp.gmail.com with ESMTPSA id l11-20020a7bc34b000000b003f195d2f1a9sm16696200wmj.15.2023.05.08.05.46.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 05:46:05 -0700 (PDT)
-Date:   Mon, 8 May 2023 14:46:03 +0200
-From:   Stanislav Jakubek <stano.jakubek@gmail.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: mmc: brcm,kona-sdhci: convert to YAML
-Message-ID: <a1fd4092b8a31c2ee58a3cd4cca062db13197b45.1683548624.git.stano.jakubek@gmail.com>
-References: <88c64da50a1af868d8b14054c440e5ff96a63399.1683548624.git.stano.jakubek@gmail.com>
+        bh=zasgJqK4/xXN93z/6quZqlnv3qeuCfz7ocg5qzyPXEg=;
+        b=RajjGp62Dz8ojYRdb7Qa+Wgfqgh0PaYifZWF3TTdykBqxGdZt1EVUNJgaYudAdgH0B
+         Xg3JTqbjfMPvBykB3B6dUqxM06VYHhnFiNb3XE/XcC5Ztyh78OLAKhrw8PJejX4YFTTI
+         T+vB1pGR+mi+xkQCqUtCMQ3MiOTb3EVdwWrk+TUiA6ZINQyKLNhD43v6BQQrRv7+JRMi
+         cvCUkWJxZLkwp7i2rmC3lnRSgHo1Rn4cL6SmvIWuptJmL7XUBS9mqJyvHLzQR09YswpU
+         2D5jSNDym1P0IVrN+9et2PxQcAuUbnvM+P999GHkyxqaoLLaOQRZYvQq/YGWMa62+THX
+         hmFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683550025; x=1686142025;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zasgJqK4/xXN93z/6quZqlnv3qeuCfz7ocg5qzyPXEg=;
+        b=cv5kMyM02H9zhF0I+PDP4IkZwVLd4YzlOC2CN73LA2jOVodOW7DswwAXdJFpYBj5z7
+         6R5qcFNjLsjB2VWX/N/iUf62+fYdVokbwOHPkQtDO7Q+l+Q9SajaoJLt1pCS53bKUTdQ
+         ibppLDTn1vIluaKtMbSQrIw7o+Dh/6TWF5BFAgvdsFePZeZBXQ3axnIKat/hb/b30Lg2
+         YPSQdPzTztVuJRt6iG6KnPQ5zTM0IlocZdKZxFr73oYVv380hmO+AwlRx43ErL5bNZgu
+         F+FLGLi+xbfTdJAo3xOuyG1mVTcsCdCDs2ELwI9m7Ax8soQTDUowFNHHDY1oY6LgvzEi
+         03+A==
+X-Gm-Message-State: AC+VfDxbu06uVEvjEz7PTai0anIbOXbh5NX5PwUt/mZvn7HO5+LAaDfK
+        vbaDjqPj8AoEdzRQmXaey0HIW67yZ6KfpeUpbU93FQ==
+X-Google-Smtp-Source: ACHHUZ53AC1hM60sp7/VCP+nhBtzioSIHDIvS/pGi97VmrDQO+/wKeMaoVDcdKw+DXIsXe0NDeF2BZWop2xGNZr78VA=
+X-Received: by 2002:a25:fc0a:0:b0:b9e:8f7b:5c36 with SMTP id
+ v10-20020a25fc0a000000b00b9e8f7b5c36mr10696865ybd.17.1683550024778; Mon, 08
+ May 2023 05:47:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <88c64da50a1af868d8b14054c440e5ff96a63399.1683548624.git.stano.jakubek@gmail.com>
+References: <20230421124938.21974-1-quic_devipriy@quicinc.com>
+ <20230421124938.21974-7-quic_devipriy@quicinc.com> <20230508122109.GC4190@thinkpad>
+In-Reply-To: <20230508122109.GC4190@thinkpad>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 8 May 2023 15:46:53 +0300
+Message-ID: <CAA8EJppKUwfatdNoQPD4QbEPXyv1cEz3cDLfND+70Veq5Bcf8Q@mail.gmail.com>
+Subject: Re: [PATCH V3 6/6] PCI: qcom: Add support for IPQ9574
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_ipkumar@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Broadcom Kona family SDHCI controller bindings to DT schema.
+On Mon, 8 May 2023 at 15:21, Manivannan Sadhasivam <mani@kernel.org> wrote:
+>
+> On Fri, Apr 21, 2023 at 06:19:38PM +0530, Devi Priya wrote:
+> > The IPQ9574 platform has 4 Gen3 PCIe controllers: two single-lane
+> > and two dual-lane based on SNPS core 5.70a
+> > The Qcom IP rev is 1.27.0 and Synopsys IP rev is 5.80a
+> > Added a new compatible 'qcom,pcie-ipq9574' and 'ops_1_27_0'
+> > which reuses all the members of 'ops_2_9_0' except for the post_init
+> > as the SLV_ADDR_SPACE_SIZE configuration differs between 2_9_0
+> > and 1_27_0.
+> > Also, modified get_resources of 'ops 2_9_0' to get the clocks
+> > from the device tree and modelled the post init sequence as
+> > a common function to avoid code redundancy.
+> >
+> > Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> > Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> > Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>
+> One comment below. With that fixed,
+>
+> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+>
+> - Mani
+>
+> > ---
+> >  Changes in V3:
+> >       - Rebased on top of linux-next/master
+> >
+> >  drivers/pci/controller/dwc/pcie-qcom.c | 61 ++++++++++++++++++--------
+> >  1 file changed, 43 insertions(+), 18 deletions(-)
+> >
+> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/contr=
+oller/dwc/pcie-qcom.c
+> > index 4ab30892f6ef..3682ecdead1f 100644
+> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > @@ -107,6 +107,7 @@
+> >
+> >  /* PARF_SLV_ADDR_SPACE_SIZE register value */
+> >  #define SLV_ADDR_SPACE_SZ                    0x10000000
+> > +#define SLV_ADDR_SPACE_SZ_1_27_0             0x08000000
+> >
+> >  /* PARF_MHI_CLOCK_RESET_CTRL register fields */
+> >  #define AHB_CLK_EN                           BIT(0)
+> > @@ -202,10 +203,10 @@ struct qcom_pcie_resources_2_7_0 {
+> >       struct reset_control *rst;
+> >  };
+> >
+> > -#define QCOM_PCIE_2_9_0_MAX_CLOCKS           5
+> >  struct qcom_pcie_resources_2_9_0 {
+> > -     struct clk_bulk_data clks[QCOM_PCIE_2_9_0_MAX_CLOCKS];
+> > +     struct clk_bulk_data *clks;
+> >       struct reset_control *rst;
+> > +     int num_clks;
+> >  };
+> >
+> >  union qcom_pcie_resources {
+> > @@ -1050,17 +1051,10 @@ static int qcom_pcie_get_resources_2_9_0(struct=
+ qcom_pcie *pcie)
+> >       struct qcom_pcie_resources_2_9_0 *res =3D &pcie->res.v2_9_0;
+> >       struct dw_pcie *pci =3D pcie->pci;
+> >       struct device *dev =3D pci->dev;
+> > -     int ret;
+> >
+> > -     res->clks[0].id =3D "iface";
+> > -     res->clks[1].id =3D "axi_m";
+> > -     res->clks[2].id =3D "axi_s";
+> > -     res->clks[3].id =3D "axi_bridge";
+> > -     res->clks[4].id =3D "rchng";
+> > -
+> > -     ret =3D devm_clk_bulk_get(dev, ARRAY_SIZE(res->clks), res->clks);
+> > -     if (ret < 0)
+> > -             return ret;
+> > +     res->num_clks =3D devm_clk_bulk_get_all(dev, &res->clks);
+> > +     if (res->clks < 0)
+> > +             return res->num_clks;
+>
+> Why not return proper error no?
 
-Changes during conversion:
-  - also mark reg and interrupts as required
-  - drop deprecated compatible (it's been deprecated for ~10 years)
+Instead the question should be, why not the proper condition: it tells
+`if (res->clks < 0)', while it should be `if (res->num_clks < 0)'.
 
-Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
----
- .../bindings/mmc/brcm,kona-sdhci.txt          | 21 --------
- .../bindings/mmc/brcm,kona-sdhci.yaml         | 48 +++++++++++++++++++
- 2 files changed, 48 insertions(+), 21 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.txt
- create mode 100644 Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.yaml
+>
+> >
+> >       res->rst =3D devm_reset_control_array_get_exclusive(dev);
+> >       if (IS_ERR(res->rst))
+> > @@ -1073,7 +1067,7 @@ static void qcom_pcie_deinit_2_9_0(struct qcom_pc=
+ie *pcie)
+> >  {
+> >       struct qcom_pcie_resources_2_9_0 *res =3D &pcie->res.v2_9_0;
+> >
+> > -     clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
+> > +     clk_bulk_disable_unprepare(res->num_clks, res->clks);
+> >  }
+> >
+> >  static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
+> > @@ -1102,19 +1096,16 @@ static int qcom_pcie_init_2_9_0(struct qcom_pci=
+e *pcie)
+> >
+> >       usleep_range(2000, 2500);
+> >
+> > -     return clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
+> > +     return clk_bulk_prepare_enable(res->num_clks, res->clks);
+> >  }
+> >
+> > -static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+> > +static int qcom_pcie_post_init(struct qcom_pcie *pcie)
+> >  {
+> >       struct dw_pcie *pci =3D pcie->pci;
+> >       u16 offset =3D dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> >       u32 val;
+> >       int i;
+> >
+> > -     writel(SLV_ADDR_SPACE_SZ,
+> > -             pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
+> > -
+> >       val =3D readl(pcie->parf + PARF_PHY_CTRL);
+> >       val &=3D ~PHY_TEST_PWR_DOWN;
+> >       writel(val, pcie->parf + PARF_PHY_CTRL);
+> > @@ -1151,6 +1142,26 @@ static int qcom_pcie_post_init_2_9_0(struct qcom=
+_pcie *pcie)
+> >       return 0;
+> >  }
+> >
+> > +static int qcom_pcie_post_init_1_27_0(struct qcom_pcie *pcie)
+> > +{
+> > +     writel(SLV_ADDR_SPACE_SZ_1_27_0,
+> > +            pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
+> > +
+> > +     qcom_pcie_post_init(pcie);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+> > +{
+> > +     writel(SLV_ADDR_SPACE_SZ,
+> > +            pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
+> > +
+> > +     qcom_pcie_post_init(pcie);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static int qcom_pcie_link_up(struct dw_pcie *pci)
+> >  {
+> >       u16 offset =3D dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> > @@ -1291,6 +1302,15 @@ static const struct qcom_pcie_ops ops_2_9_0 =3D =
+{
+> >       .ltssm_enable =3D qcom_pcie_2_3_2_ltssm_enable,
+> >  };
+> >
+> > +/* Qcom IP rev.: 1.27.0  Synopsys IP rev.: 5.80a */
+> > +static const struct qcom_pcie_ops ops_1_27_0 =3D {
+> > +     .get_resources =3D qcom_pcie_get_resources_2_9_0,
+> > +     .init =3D qcom_pcie_init_2_9_0,
+> > +     .post_init =3D qcom_pcie_post_init_1_27_0,
+> > +     .deinit =3D qcom_pcie_deinit_2_9_0,
+> > +     .ltssm_enable =3D qcom_pcie_2_3_2_ltssm_enable,
+> > +};
+> > +
+> >  static const struct qcom_pcie_cfg cfg_1_0_0 =3D {
+> >       .ops =3D &ops_1_0_0,
+> >  };
+> > @@ -1323,6 +1343,10 @@ static const struct qcom_pcie_cfg cfg_2_9_0 =3D =
+{
+> >       .ops =3D &ops_2_9_0,
+> >  };
+> >
+> > +static const struct qcom_pcie_cfg cfg_1_27_0 =3D {
+> > +     .ops =3D &ops_1_27_0,
+> > +};
+> > +
+> >  static const struct dw_pcie_ops dw_pcie_ops =3D {
+> >       .link_up =3D qcom_pcie_link_up,
+> >       .start_link =3D qcom_pcie_start_link,
+> > @@ -1607,6 +1631,7 @@ static const struct of_device_id qcom_pcie_match[=
+] =3D {
+> >       { .compatible =3D "qcom,pcie-ipq8064-v2", .data =3D &cfg_2_1_0 },
+> >       { .compatible =3D "qcom,pcie-ipq8074", .data =3D &cfg_2_3_3 },
+> >       { .compatible =3D "qcom,pcie-ipq8074-gen3", .data =3D &cfg_2_9_0 =
+},
+> > +     { .compatible =3D "qcom,pcie-ipq9574", .data =3D &cfg_1_27_0 },
+> >       { .compatible =3D "qcom,pcie-msm8996", .data =3D &cfg_2_3_2 },
+> >       { .compatible =3D "qcom,pcie-qcs404", .data =3D &cfg_2_4_0 },
+> >       { .compatible =3D "qcom,pcie-sa8540p", .data =3D &cfg_1_9_0 },
+> > --
+> > 2.17.1
+> >
+>
+> --
+> =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=A9=
+=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=AE=
+=E0=AF=8D
 
-diff --git a/Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.txt b/Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.txt
-deleted file mode 100644
-index 7f5dd83f5bd9..000000000000
---- a/Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.txt
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Broadcom BCM281xx SDHCI
--
--This file documents differences between the core properties in mmc.txt
--and the properties present in the bcm281xx SDHCI
--
--Required properties:
--- compatible : Should be "brcm,kona-sdhci"
--- DEPRECATED: compatible : Should be "bcm,kona-sdhci"
--- clocks: phandle + clock specifier pair of the external clock
--
--Refer to clocks/clock-bindings.txt for generic clock consumer properties.
--
--Example:
--
--sdio2: sdio@3f1a0000 {
--	compatible = "brcm,kona-sdhci";
--	reg = <0x3f1a0000 0x10000>;
--	clocks = <&sdio3_clk>;
--	interrupts = <0x0 74 0x4>;
--};
--
-diff --git a/Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.yaml b/Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.yaml
-new file mode 100644
-index 000000000000..87711edf9b39
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mmc/brcm,kona-sdhci.yaml
-@@ -0,0 +1,48 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mmc/brcm,kona-sdhci.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Broadcom Kona family SDHCI controller
-+
-+maintainers:
-+  - Florian Fainelli <f.fainelli@gmail.com>
-+
-+allOf:
-+  - $ref: sdhci-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: brcm,kona-sdhci
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include "dt-bindings/clock/bcm281xx.h"
-+
-+    mmc@3f1a0000 {
-+        compatible = "brcm,kona-sdhci";
-+        reg = <0x3f1a0000 0x10000>;
-+        clocks = <&master_ccu BCM281XX_MASTER_CCU_SDIO3>;
-+        interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
-+    };
-+...
--- 
-2.25.1
 
+
+--=20
+With best wishes
+Dmitry
