@@ -2,81 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF616FA0FA
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3931E6FA0FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbjEHH1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39590 "EHLO
+        id S233309AbjEHH1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233230AbjEHH0x (ORCPT
+        with ESMTP id S232941AbjEHH1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:26:53 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9363A40FE
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:26:51 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f2510b2b98so489431e87.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 00:26:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683530810; x=1686122810;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JFLTzjYHc2Wy3NEyiiA6VvE9neb0Ehp30pb4IjLGMHs=;
-        b=wruiOd/65aWLE5iIGAms0g5iLixlraLq+GDsKNGd/sNtiPR/9MfqubZCdb0cnWj04T
-         5uJT+W99aiG5/RBhlM7UNmSzl3els2hmcIwb7ft08OUd1CT/TjfADuk4fFUkHvLT50VS
-         7oGbWswa/I9w9zqjAQz4QfSniKkFWOc56G+9yWysaa1qo+Te59iwxN6Nrp6MQhSGyMZq
-         8apBHG7gPFCyzpQREeKPI4G0IxBHnjB/wd6MCOcv9o90QueSz2he4JprJBt2lQO4cq87
-         9t9eyrnxiacFpy6vfJy/hBC0cL2Ia8F+SMVG5yoqgHWOTgQfXWziLzKum+np4WXXDzR+
-         oTtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683530810; x=1686122810;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JFLTzjYHc2Wy3NEyiiA6VvE9neb0Ehp30pb4IjLGMHs=;
-        b=jx8QCWF0h26IprQlvS1+A4+Wr3J/UaZF7bh/J+d4bP17Ws2OiEku4YsBP95OE03PY3
-         R9nz+ZVP2FeHqPAHTtQn4Hx7FxSPmkCTPUbsMapQcvwcHnjS8AgAjdOk6ItQwbv5iCuv
-         eJSXM97oWdOVJzdZs4xqjUFlNh/CjuZXX/xUAf8JaC0K0BQu5WepNBg2jnivW2YC3I0K
-         Bc4F89jGgzhpSuxS9ImMkUzNvHrYbiOdx6VI7VCQTYmQdbivXHcSs/lnp994t3vnPssi
-         2H0c6hAplfQPC9VM7bdUPenCTwoqbW36VqIJpN69q0nJ0+GQIzM8TUNjkr/hFoN7aAuZ
-         3Gqw==
-X-Gm-Message-State: AC+VfDx0u3Ni86P1z7U80CNh3nLCgXOpVHWgQ7OJRiJUxjN09nep3SNr
-        VfJcB5Y+hpiN8YJUqMxGzRfhQw==
-X-Google-Smtp-Source: ACHHUZ5owctDJw6gtd5X+hv8xl+nhtwxwTQ1jcUgyseC+4hSXZ4GviWouC12390R6JPONcfOrZLh2g==
-X-Received: by 2002:a19:ae0d:0:b0:4f1:2236:6d2a with SMTP id f13-20020a19ae0d000000b004f122366d2amr2413021lfc.53.1683530809851;
-        Mon, 08 May 2023 00:26:49 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id c11-20020ac2414b000000b004f12f5d866fsm1208560lfi.10.2023.05.08.00.26.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 00:26:49 -0700 (PDT)
-Message-ID: <8f3db51e-30a0-8550-3775-c49c6c25cac4@linaro.org>
-Date:   Mon, 8 May 2023 09:26:47 +0200
+        Mon, 8 May 2023 03:27:46 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0CA1FCA;
+        Mon,  8 May 2023 00:27:45 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QFCSl1kRQz18LGH;
+        Mon,  8 May 2023 15:23:35 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 8 May 2023 15:27:42 +0800
+Message-ID: <2ab0ddbb-f9a4-8963-b066-d9a93b5f01b3@huawei.com>
+Date:   Mon, 8 May 2023 15:27:42 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH 1/6] soc: qcom: ocmem: Fix NUM_PORTS & NUM_MACROS macros
+Subject: Re: [PATCH 03/12] mm: page_alloc: move set_zone_contiguous() into
+ mm_init.c
 Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Brian Masney <masneyb@onstation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
- <20230506-msm8226-ocmem-v1-1-3e24e2724f01@z3ntu.xyz>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230506-msm8226-ocmem-v1-1-3e24e2724f01@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
+To:     "Huang, Ying" <ying.huang@intel.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>, <linux-mm@kvack.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+References: <20230508071200.123962-1-wangkefeng.wang@huawei.com>
+ <20230508071200.123962-4-wangkefeng.wang@huawei.com>
+ <87jzxj9u0n.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <87jzxj9u0n.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,41 +64,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 7.05.2023 11:12, Luca Weiss wrote:
-> Since we're using these two macros to read a value from a register, we
-> need to use the FIELD_GET instead of the FIELD_PREP macro, otherwise
-> we're getting wrong values.
+On 2023/5/8 15:12, Huang, Ying wrote:
+> Kefeng Wang <wangkefeng.wang@huawei.com> writes:
 > 
-> So instead of:
+>> set_zone_contiguous() is only used in mm init/hotplug, and
+>> clear_zone_contiguous() only used in hotplug, move them from
+>> page_alloc.c to the more appropriate file.
+>>
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>> ---
+>>   include/linux/memory_hotplug.h |  3 --
+>>   mm/internal.h                  |  7 +++
+>>   mm/mm_init.c                   | 74 +++++++++++++++++++++++++++++++
+>>   mm/page_alloc.c                | 79 ----------------------------------
+>>   4 files changed, 81 insertions(+), 82 deletions(-)
+>>
+...
+>>   
+>> +/*
+>> + * Check that the whole (or subset of) a pageblock given by the interval of
+>> + * [start_pfn, end_pfn) is valid and within the same zone, before scanning it
+>> + * with the migration of free compaction scanner.
+>> + *
+>> + * Return struct page pointer of start_pfn, or NULL if checks were not passed.
+>> + *
+>> + * It's possible on some configurations to have a setup like node0 node1 node0
+>> + * i.e. it's possible that all pages within a zones range of pages do not
+>> + * belong to a single zone. We assume that a border between node0 and node1
+>> + * can occur within a single pageblock, but not a node0 node1 node0
+>> + * interleaving within a single pageblock. It is therefore sufficient to check
+>> + * the first and last page of a pageblock and avoid checking each individual
+>> + * page in a pageblock.
+>> + *
+>> + * Note: the function may return non-NULL struct page even for a page block
+>> + * which contains a memory hole (i.e. there is no physical memory for a subset
+>> + * of the pfn range). For example, if the pageblock order is MAX_ORDER, which
+>> + * will fall into 2 sub-sections, and the end pfn of the pageblock may be hole
+>> + * even though the start pfn is online and valid. This should be safe most of
+>> + * the time because struct pages are still initialized via init_unavailable_range()
+>> + * and pfn walkers shouldn't touch any physical memory range for which they do
+>> + * not recognize any specific metadata in struct pages.
+>> + */
+>> +struct page *__pageblock_pfn_to_page(unsigned long start_pfn,
+>> +				     unsigned long end_pfn, struct zone *zone)
 > 
->   [    3.111779] ocmem fdd00000.sram: 2 ports, 1 regions, 512 macros, not interleaved
+> __pageblock_pfn_to_page() is also called by compaction code too (e.g.,
+> isolate_freepages_range() -> pageblock_pfn_to_page() ->
+> __pageblock_pfn_to_page()).
 > 
-> we now get the correct value of:
+> So, it is used not only by initialization and hotplug?
 > 
->   [    3.129672] ocmem fdd00000.sram: 2 ports, 1 regions, 2 macros, not interleaved
-> 
-> Fixes: 88c1e9404f1d ("soc: qcom: add OCMEM driver")
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Konrad
->  drivers/soc/qcom/ocmem.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
-> index 199fe9872035..c3e78411c637 100644
-> --- a/drivers/soc/qcom/ocmem.c
-> +++ b/drivers/soc/qcom/ocmem.c
-> @@ -76,8 +76,8 @@ struct ocmem {
->  #define OCMEM_REG_GFX_MPU_START			0x00001004
->  #define OCMEM_REG_GFX_MPU_END			0x00001008
->  
-> -#define OCMEM_HW_PROFILE_NUM_PORTS(val)		FIELD_PREP(0x0000000f, (val))
-> -#define OCMEM_HW_PROFILE_NUM_MACROS(val)	FIELD_PREP(0x00003f00, (val))
-> +#define OCMEM_HW_PROFILE_NUM_PORTS(val)		FIELD_GET(0x0000000f, (val))
-> +#define OCMEM_HW_PROFILE_NUM_MACROS(val)	FIELD_GET(0x00003f00, (val))
->  
->  #define OCMEM_HW_PROFILE_LAST_REGN_HALFSIZE	0x00010000
->  #define OCMEM_HW_PROFILE_INTERLEAVING		0x00020000
-> 
+I should drop the move of this function, thanks for your reminder.
+
+> Best Regards,
+> Huang, Ying
