@@ -2,66 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374BB6F9E85
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 06:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D486F9E9B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 06:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbjEHECS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 00:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
+        id S232491AbjEHEMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 00:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbjEHECP (ORCPT
+        with ESMTP id S232217AbjEHEMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 00:02:15 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FF54224;
-        Sun,  7 May 2023 21:02:14 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-965a68abfd4so761799466b.2;
-        Sun, 07 May 2023 21:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683518533; x=1686110533;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gRDFA2Oq3a7TFMTFPjEDpCf3c96bA2T/fIIJ3Z+9UNA=;
-        b=Kl05KRFvCTs1ljKqfwvJrspDTYYwuJGHUrj/k2AEMXP5zWezRj2mMKeoDLxEbbYhj/
-         BXla76hGiGt9Lpa5vpm7n8JT19kABnpbgZjyrvBFTG0IIWdLcZEVdy7vkwj/QuC/MCtf
-         vKmHEjjOWbtRW14l3jLavWEddU0f8j+sxo4Ph0wppOvlu4oq6jxi36VmcN2nJnJ0/czc
-         9mJ8TTqJkQdQjbcwqWhnlFXtnQVjdMAd2cBmADh/nKHoYD4I1SAU3EUN3aduq32oiOp0
-         +f8iOWov9rEqda5MA3dAZrE5AQ/LWoQHWGN3sGC78pTo78XHPXAC3s+HqGChNKt9Nyf7
-         LO7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683518533; x=1686110533;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gRDFA2Oq3a7TFMTFPjEDpCf3c96bA2T/fIIJ3Z+9UNA=;
-        b=bqQlqWPcES9e1N/ydjGZz7+CWw39qAqrSWI7K6WM/aOA9TMfLGkbiJqMLOsRV1u76J
-         reWTlGEytuW0UUUIvi89ptdwfr316qhAZ1SZ8J/4ZmFKRAswIt6b22JBRIk7jUk5d+Yx
-         1rJIfNNi1c2wD4ekfPHsHqO/N4U+4Eh/zEI7Tb6fy+l9rOkwqwhK4428qnpx6t8OYueo
-         TBp8Cwpm6S9PMygBsKJOxJ5CKog5yvuPXQ537EkCUbTjGDT3IJVH9KtH54voRAHL2EW2
-         rjzGM6prGvgYLNSAxIV12cK3HVVQuEU89lv9S9aZsO+hnD7xHkCFd8+Vum2Mss/ZxJyw
-         +hQg==
-X-Gm-Message-State: AC+VfDxXHTwWK8G9fZbpIrAM3To/J5n+xUv+J0h8tqMIAR12BmOYb3SL
-        vNPhGeGxbS09TVq5A6EkoWs=
-X-Google-Smtp-Source: ACHHUZ5Vm0lEgqoo2PiIBq8J3bwbjgKEAhZ5fqiRC1wZTDsdtsIHBU1VlBQFNoJtAsw9IkhspAYJEQ==
-X-Received: by 2002:a17:906:9b8a:b0:961:272d:bdbe with SMTP id dd10-20020a1709069b8a00b00961272dbdbemr8053329ejc.35.1683518532543;
-        Sun, 07 May 2023 21:02:12 -0700 (PDT)
-Received: from felia.fritz.box ([2a02:810d:7e40:14b0:8906:f99a:ce33:2033])
-        by smtp.gmail.com with ESMTPSA id ka7-20020a170907990700b00947ed087a2csm4391606ejc.154.2023.05.07.21.02.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 21:02:11 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Stefan Popa <stefan.popa@analog.com>, linux-iio@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] iio: dac: build ad5758 driver when AD5758 is selected
-Date:   Mon,  8 May 2023 06:02:08 +0200
-Message-Id: <20230508040208.12033-1-lukas.bulwahn@gmail.com>
+        Mon, 8 May 2023 00:12:10 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFB94227;
+        Sun,  7 May 2023 21:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683519129; x=1715055129;
+  h=from:to:cc:subject:date:message-id;
+  bh=zT05ulhlCsDMX6ubQhxzo5A+qEruyiIbSgQaS9PNcCc=;
+  b=ClcI07Tej/VhD/Cjcn6HM1aBxmRSnkj1+r4NrEzPf8XKel5yoRTEQ3W9
+   T/NiGUuZL4i5QDAt7O80rfoVSX+zJv0Txa3fYPz60XayIfUoN8sLgZ/hw
+   ukW/mFvU4tqKcOsXUNCvuAbaN1waS4jGvqPNsO7uKX4+eGZup8xGF4s3O
+   UdEbM35Ugu7Y2VJocSsxWdOCLJLbluElXk3mkwnc4zvInGIRst4XYCaz+
+   WvtwC/dz3ppfSHjUNWplXHuBvvLAH2nvlEq63vDB2dpaFmSHud07z8tHC
+   7lKboIzkZrmxVGSEPTdKVBtQtMIsXjfZU4CfzZ40A8UP8RQ22+tLWCI7V
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="415110258"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="415110258"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2023 21:12:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="731146970"
+X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
+   d="scan'208";a="731146970"
+Received: from yzhao56-desk.sh.intel.com ([10.239.159.62])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2023 21:12:04 -0700
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com,
+        Yan Zhao <yan.y.zhao@intel.com>
+Subject: [PATCH] KVM: x86: Zap all TDP leaf entries according noncoherent DMA count
+Date:   Mon,  8 May 2023 11:47:00 +0800
+Message-Id: <20230508034700.7686-1-yan.y.zhao@intel.com>
 X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,34 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 28d1a7ac2a0d ("iio: dac: Add AD5758 support") adds the config AD5758
-and the corresponding driver ad5758.c. In the Makefile, the ad5758 driver
-is however included when AD5755 is selected, not when AD5758 is selected.
+Zap all TDP leaf entries when noncoherent DMA count goes from 0 to !0, or
+from !0 to 0.
 
-Probably, this was simply a mistake that happened by copy-and-paste and
-forgetting to adjust the actual line. Surprisingly, no one has ever noticed
-that this driver is actually only included when AD5755 is selected and that
-the config AD5758 has actually no effect on the build.
+When there's no noncoherent DMA device, EPT memory type is
+((MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT) | VMX_EPT_IPAT_BIT)
 
-Fixes: 28d1a7ac2a0d ("iio: dac: Add AD5758 support")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+When there're noncoherent DMA devices, EPT memory type needs to honor
+guest CR0_CD and MTRR settings.
+
+So, if noncoherent DMA count changes between 0 and !0, EPT leaf entries
+need to be zapped to clear stale memory type.
+
+This issue might be hidden when VFIO adding/removing MMIO regions of the
+noncoherent DMA devices on device attaching/de-attaching because
+usually the MMIO regions will be disabled/enabled for several times during
+guest PCI probing. And in KVM, TDP entries are all zapped on memslot
+removal.
+
+However, this issue may appear when kvm_mmu_zap_all_fast() is not called
+before KVM slot removal, e.g. as for TDX, only leaf entries for the
+memslot to be removed is zapped.
+
+static void kvm_mmu_invalidate_zap_pages_in_memslot(struct kvm *kvm,
+                        struct kvm_memory_slot *slot,
+                        struct kvm_page_track_notifier_node *node)
+{
+        if (kvm_gfn_shared_mask(kvm))
+                /*
+                 * Secure-EPT requires to release PTs from the leaf.  The
+                 * optimization to zap root PT first with child PT doesn't
+                 * work.
+                 */
+                kvm_mmu_zap_memslot(kvm, slot);
+        else
+                kvm_mmu_zap_all_fast(kvm);
+}
+
+And even without TDX's case, in some extreme conditions if MMIO regions
+are not disabled during device attaching, e.g. if guest does not cause
+the MMIO region disabling in QEMU.
+Then TDP zap will not be called and wrong EPT memory type might be
+retained.
+
+So, do the TDP zapping of all leaf entries when present/non-present state
+of noncoherent DMA devices changes to ensure stale entries cleaned away.
+And as this is not a frequent operation, the extra zap should be fine.
+
+Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
 ---
- drivers/iio/dac/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kvm/x86.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iio/dac/Makefile b/drivers/iio/dac/Makefile
-index 6c74fea21736..addd97a78838 100644
---- a/drivers/iio/dac/Makefile
-+++ b/drivers/iio/dac/Makefile
-@@ -17,7 +17,7 @@ obj-$(CONFIG_AD5592R_BASE) += ad5592r-base.o
- obj-$(CONFIG_AD5592R) += ad5592r.o
- obj-$(CONFIG_AD5593R) += ad5593r.o
- obj-$(CONFIG_AD5755) += ad5755.o
--obj-$(CONFIG_AD5755) += ad5758.o
-+obj-$(CONFIG_AD5758) += ad5758.o
- obj-$(CONFIG_AD5761) += ad5761.o
- obj-$(CONFIG_AD5764) += ad5764.o
- obj-$(CONFIG_AD5766) += ad5766.o
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index e7f78fe79b32..99a825722d95 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -13145,13 +13145,15 @@ EXPORT_SYMBOL_GPL(kvm_arch_has_assigned_device);
+ 
+ void kvm_arch_register_noncoherent_dma(struct kvm *kvm)
+ {
+-	atomic_inc(&kvm->arch.noncoherent_dma_count);
++	if (atomic_inc_return(&kvm->arch.noncoherent_dma_count) == 1)
++		kvm_zap_gfn_range(kvm, gpa_to_gfn(0), gpa_to_gfn(~0ULL));
+ }
+ EXPORT_SYMBOL_GPL(kvm_arch_register_noncoherent_dma);
+ 
+ void kvm_arch_unregister_noncoherent_dma(struct kvm *kvm)
+ {
+-	atomic_dec(&kvm->arch.noncoherent_dma_count);
++	if (!atomic_dec_return(&kvm->arch.noncoherent_dma_count))
++		kvm_zap_gfn_range(kvm, gpa_to_gfn(0), gpa_to_gfn(~0ULL));
+ }
+ EXPORT_SYMBOL_GPL(kvm_arch_unregister_noncoherent_dma);
+ 
 -- 
 2.17.1
 
