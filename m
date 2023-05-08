@@ -2,81 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C887A6FA008
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A446FA00A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232562AbjEHGjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 02:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
+        id S232836AbjEHGm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 02:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbjEHGja (ORCPT
+        with ESMTP id S231791AbjEHGmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 02:39:30 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEC1469D;
-        Sun,  7 May 2023 23:39:28 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 8 May 2023 02:42:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88476EB9;
+        Sun,  7 May 2023 23:42:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 3EDA112EC;
-        Mon,  8 May 2023 08:39:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1683527966;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/6M1Ih63w56e4EHUEuM6ZDRiovFqST9QgQFM0cgHYD4=;
-        b=KmpVUxJXUkzB1QEi9Svp88PLsI4/Akj9QAn7dtiJsUXETU6UnFaiq6uX/BzVLZskBaTJsa
-        4EqGjyFNekFEGiLVWzL8vRstkFCTh3e2ixO8qkoZofzLEwrqXPWJH6kQ7zSf78/m3BsICU
-        Z9uDbt65auf7giMYCEeOMwaOdVnuLdkGDkdqfvJuGCkS9vQJ4H2Wtn79Q2eLei525ZEXn2
-        +WaYhHMCyWeI07CV+t6CKgHb0i0TWan0t4axh0yl5rGBTQPjOBe3I60k4b7aHQYnWZy42p
-        vB2+OHnyM1R6pe/jZW9tHZU7CBsGMEYjDjUawuqj7yli9xA2Q3Qy5/1V6Zu95g==
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58D8D61F1D;
+        Mon,  8 May 2023 06:42:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE278C433D2;
+        Mon,  8 May 2023 06:42:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683528143;
+        bh=r4iJVdq+kSsrznQO5iASjJKSVcwHIpX8k/weFqPL9PI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Q7kcmg1iT3UqoMWAplBRwyuluRJxI8j7Y+GLwaHViQ7KuLs7RGOUVeVyY7gwJyOyB
+         KG94ukA6ksrI4RkIM9j0YBB9EajPNCkD/mNhkfsuMonQFvf1XYcfXdK1VWoU+HjMSd
+         SheLyaDBcWQ5Ks8REeDwSqHWzBLYkuKcFnNoiCd/wqWN1O/fArsOYIzDBvVXYANcz3
+         EdCHu8W+TwziYxkltnqmQ3lGDMFvH9xbjK5MmUgGptXTEAjzPWjxniclbc5Bq1/Di/
+         0tMPHMPhP0XYEnjSWjpEpqOeJgFg//ImzuwDJS5L7QobAv5AzPaPYKJBUkorYBF02r
+         7CFgBQ9gQR7Vg==
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-965e4be7541so568268666b.1;
+        Sun, 07 May 2023 23:42:23 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzqgsudndp3sXQzYdJOHubSc6omZScJBcFn8o3TqHvGTonqTqsm
+        Qg9pwZhJb7LvQXiAED3vqvmWVpx+Mvmfnb37Ew0=
+X-Google-Smtp-Source: ACHHUZ4mwkcqjrAbBZUuOGbMCbkwPBgYeaGSSqohUR7fCRsoF+JinJDShKS4My6aDu+hZJHKsZERSxfc7mVo1Rq0h1Q=
+X-Received: by 2002:a17:907:7f87:b0:965:d7c7:24d4 with SMTP id
+ qk7-20020a1709077f8700b00965d7c724d4mr10802839ejc.77.1683528141910; Sun, 07
+ May 2023 23:42:21 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Mon, 08 May 2023 08:39:25 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     "Vaibhaav Ram T.L" <vaibhaavram.tl@microchip.com>
-Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
-        kumaravel.thiagarajan@microchip.com,
-        tharunkumar.pasumarthi@microchip.com, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH v11 char-misc-next 1/2] misc: microchip: pci1xxxx: Add
- support to read and write into PCI1XXXX OTP via NVMEM sysfs
-In-Reply-To: <20230429120209.2232-2-vaibhaavram.tl@microchip.com>
-References: <20230429120209.2232-1-vaibhaavram.tl@microchip.com>
- <20230429120209.2232-2-vaibhaavram.tl@microchip.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <5445b9ad526aa1f4beaa47a3b0e7d83f@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230507182304.2934-1-jszhang@kernel.org> <20230507182304.2934-3-jszhang@kernel.org>
+ <20230507-sleeve-tacky-21e817e31fb2@spud>
+In-Reply-To: <20230507-sleeve-tacky-21e817e31fb2@spud>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 8 May 2023 14:42:10 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTSRQUX8C3C-tgq4o5iGJqKTja7-1Dv8epG_qZizUvSow@mail.gmail.com>
+Message-ID: <CAJF2gTTSRQUX8C3C-tgq4o5iGJqKTja7-1Dv8epG_qZizUvSow@mail.gmail.com>
+Subject: Re: [PATCH 2/5] riscv: Add the T-HEAD SoC family Kconfig option
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-04-29 14:02, schrieb Vaibhaav Ram T.L:
-> From: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-> 
-> Microchip's pci1xxxx is an unmanaged PCIe3.1a switch for consumer,
-> industrial, and automotive applications. This switch integrates OTP
-> and EEPROM to enable customization of the part in the field. This
-> patch adds support to read and write into PCI1XXXX OTP via NVMEM sysfs.
-> 
-> Signed-off-by: Kumaravel Thiagarajan 
-> <kumaravel.thiagarajan@microchip.com>
-> Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-> Co-developed-by: Vaibhaav Ram T.L <vaibhaavram.tl@microchip.com>
-> Signed-off-by: Vaibhaav Ram T.L <vaibhaavram.tl@microchip.com>
+On Mon, May 8, 2023 at 5:22=E2=80=AFAM Conor Dooley <conor@kernel.org> wrot=
+e:
+>
+> On Mon, May 08, 2023 at 02:23:01AM +0800, Jisheng Zhang wrote:
+> > The first SoC in the T-HEAD series is light(a.k.a th1520), containing
+> > quad T-HEAD C910 cores.
+> >
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> >  arch/riscv/Kconfig.socs | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+> > index 1cf69f958f10..ce10a38dff37 100644
+> > --- a/arch/riscv/Kconfig.socs
+> > +++ b/arch/riscv/Kconfig.socs
+> > @@ -41,6 +41,12 @@ config ARCH_SUNXI
+> >         This enables support for Allwinner sun20i platform hardware,
+> >         including boards based on the D1 and D1s SoCs.
+> >
+> > +config ARCH_THEAD
+>
+> Could you please add a defconfig patch, adding this option, so that we
+> build support for this platform by default?
+Yes, but it's another patch, see: 'commit eb20e7cb91ba ("riscv:
+defconfig: Enable the Allwinner D1 platform and drivers")'
 
-I just had a quick look for obvious errors, couldn't spot any. It's
-not a extensive review, though.
 
--michael
+>
+> Thanks,
+> Conor.
+>
+> > +     bool "T-HEAD RISC-V SoCs"
+> > +     select ERRATA_THEAD
+> > +     help
+> > +       This enables support for the RISC-V based T-HEAD SoCs.
+> > +
+> >  config ARCH_VIRT
+> >       def_bool SOC_VIRT
+> >
+> > --
+> > 2.40.0
+> >
+
+
+
+--=20
+Best Regards
+ Guo Ren
