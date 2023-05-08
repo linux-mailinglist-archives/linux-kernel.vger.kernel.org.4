@@ -2,135 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8256FB371
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFA86FB376
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234404AbjEHPIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 11:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
+        id S234441AbjEHPJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 11:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234351AbjEHPIP (ORCPT
+        with ESMTP id S232161AbjEHPJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 11:08:15 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2436D2108;
-        Mon,  8 May 2023 08:08:14 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 78FD55C01AB;
-        Mon,  8 May 2023 11:08:11 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 08 May 2023 11:08:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1683558491; x=1683644891; bh=cv
-        5LmLlxQ/Ec9lm2EbwBEEFSvNmUdeMiEO/+fdGXWi0=; b=O70J1buFqq/BiyYgEW
-        s3WDJZDi3oSrXKUICGjd5baF4B6pzIRbobtossDCS7gT6FyOuC8gYYwmd8axFbwr
-        d8FGarsoCpn3aMcJummqZ4dh7cAB+JpDKJt17tWI3nqke1NMD0dt4enbI6f9Iohg
-        r+1dV++2mJG7gi5wElrqFy9bha4Tdv8SudM9ItpWwj0U6pvIhD1V3c04emguRpuo
-        wTmBoRRDdRK5MWlodgkaQVHGBPJZe/3zdRbzrYQdw6AQinB7NLFi0f6YTXqevzav
-        gLyszKz4KG5ouSA1vSJ+PssKDJu+ogEt+6KWyI17xtiXhgprRfaYgR0k4sF8WP1Z
-        gl9w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683558491; x=1683644891; bh=cv5LmLlxQ/Ec9
-        lm2EbwBEEFSvNmUdeMiEO/+fdGXWi0=; b=OTA3dzqwjslM1twh3wp61IGFSN501
-        RZWskN/43ZMoUxvDsmtah4qXOXCreYUMcELkpBhh8SMnoC6HmmCS2rkGl87Om2b7
-        rr2yBiqkmQjkISjHkKCbQ6uJG/c1xkLvGDGnx3ky2Wr+bI8jOPAnuZD8jx6+rlRw
-        Pt6NayVuTRI57Qr2fvaubIwThSwfA75vkSaCXjKONcORwo9Lz3DXtDE3SDrwWE45
-        pyP2rxDavdeXz4LgptBvyZ28edPdcfFpKGM7lTV1T0lE9a5314HP6n8WHTh6J70I
-        Q1ZnhDZ3SQM6t9XtmM9k792ORl6dz6vqt9Ly0+sJU4oZCxabYQSX+nsLQ==
-X-ME-Sender: <xms:WxBZZPZlN4zZs5JCh5pT9xpe-e_dUVPVSFsnjFluy1hgPznhq_S0lA>
-    <xme:WxBZZOaJ7xPQnsWrrqi5WV6w9WompWfV44J2g0uDcUTxPcfWTsrDH4V7cWUgmZ9pn
-    bskSQTSgHka0yAbhAo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeefkedgkeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:WxBZZB-zSj4h2nGUXv2oSuaEg47f21Uf0nma-6IxB-8Nek89jZJ7zw>
-    <xmx:WxBZZFqKM-ouFdSGBprbH3Q3u7XoWffpc7WyU3fWNsAafuQpAym98A>
-    <xmx:WxBZZKqIetlfT9w-Sv13XdGnCV_S-AlsKmkwvm8xqzfaIzZxNPJo4g>
-    <xmx:WxBZZPDG6zMd8hXIw8fi-_16F0c6_eD24tKyJsZaZBPn3f7Cx1Nwhg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2181EB60086; Mon,  8 May 2023 11:08:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-415-gf2b17fe6c3-fm-20230503.001-gf2b17fe6
-Mime-Version: 1.0
-Message-Id: <c7f88295-2e22-4100-b9c8-feb380b64359@app.fastmail.com>
-In-Reply-To: <87mt2eoopo.fsf@kernel.org>
-References: <20230417205447.1800912-1-arnd@kernel.org>
- <87ttwnnrer.fsf@kernel.org>
- <504c5a7d-0bfd-4b1e-a7f0-65d072657e0a@app.fastmail.com>
- <87mt2eoopo.fsf@kernel.org>
-Date:   Mon, 08 May 2023 17:07:49 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Kalle Valo" <kvalo@kernel.org>
-Cc:     "Arnd Bergmann" <arnd@kernel.org>, Netdev <netdev@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] wireless: ath: work around false-positive stringop-overread
- warning
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 8 May 2023 11:09:43 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2D1C0;
+        Mon,  8 May 2023 08:09:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683558582; x=1715094582;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Zs8Q8b77iyeTiU+NAG9KTWimf6AuNOLbyShHnGVJxFc=;
+  b=YaG+TZG25CbO+we4TmkmV42Qhc3/EAz1uCQABGUB53VlTUrZylN23rYE
+   bess5iqEl9vkuwxdAM5FhYnO4dtdhHrc+kMgDZf9LHpU+L0VD3WaF2nCD
+   0wbzppdNJY7kwWkst4jDh3zLoK0BKozLWjp55qwJ//NHc0FIOKA2aZzpv
+   bumbotBrRlQuOlzSb0SzA4SdDrwns1rxW8DeXrDyDZ7wIBat14UIV1Y0u
+   BLffBefDOhxNg5a2mg3BgsQRdO9NzV5P6UN/sTGT9IvEFsylLEO3A5/Xr
+   kCU0gKvMiZcmKk2jbJK8BJ5za3YTaO5IDpjAru3/F7uWDwbofgYxkla+P
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="349706268"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="349706268"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 08:09:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="648917803"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="648917803"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 08 May 2023 08:09:35 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pw2UY-0001HF-1F;
+        Mon, 08 May 2023 15:09:34 +0000
+Date:   Mon, 8 May 2023 23:08:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Astrid Rost <astrid.rost@axis.com>,
+        Jonathan Cameron <jic23@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, kernel@axis.com,
+        Astrid Rost <astridr@axis.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/7] iio: light: vcnl4000: Add als_it for vcnl4040/4200
+Message-ID: <202305082245.Fy28zlcu-lkp@intel.com>
+References: <20230508070925.2123265-4-astrid.rost@axis.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508070925.2123265-4-astrid.rost@axis.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023, at 16:57, Kalle Valo wrote:
-> "Arnd Bergmann" <arnd@arndb.de> writes:
->>
->> I uploaded gcc-13.1.0 binaries last week, but still need to
->> update the html page, so it's not yet linked. You can navigate
->> the directories from the gcc-12 builds.
->
-> Thanks! I was able to find the build[1] but having an issue:
->
-> $ ./x86_64-linux-gcc -v
-> ./x86_64-linux-gcc: /lib/x86_64-linux-gnu/libc.so.6: version 
-> `GLIBC_2.35' not found (required by ./x86_64-linux-gcc)
-> ./x86_64-linux-gcc: /lib/x86_64-linux-gnu/libc.so.6: version 
-> `GLIBC_2.32' not found (required by ./x86_64-linux-gcc)
-> ./x86_64-linux-gcc: /lib/x86_64-linux-gnu/libc.so.6: version 
-> `GLIBC_2.33' not found (required by ./x86_64-linux-gcc)
-> ./x86_64-linux-gcc: /lib/x86_64-linux-gnu/libc.so.6: version 
-> `GLIBC_2.36' not found (required by ./x86_64-linux-gcc)
-> ./x86_64-linux-gcc: /lib/x86_64-linux-gnu/libc.so.6: version 
-> `GLIBC_2.34' not found (required by ./x86_64-linux-gcc)
->
-> With older GCC versions from your page I don't have this problem. I'm
-> using Debian 10 still so so is my libc too old?
+Hi Astrid,
 
-(dropping most Cc)
+kernel test robot noticed the following build errors:
 
-Indeed, thanks for the report, I forgot about that issue. I used
-to build the cross toolchains in an old Ubuntu 16.04 chroot to avoid
-that issue, and I linked all other dependencies statically.
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on linus/master v6.4-rc1 next-20230508]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The gcc-13.1.0 builds are the first ones I did on an arm64 machine,
-so I had to create a new build environment and started out with
-just my normal Debian testing rootfs, which caused me enough issues
-to figure out first.
+url:    https://github.com/intel-lab-lkp/linux/commits/Astrid-Rost/iio-light-vcnl4000-Add-proximity-ps_it-for-vcnl4200/20230508-161005
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20230508070925.2123265-4-astrid.rost%40axis.com
+patch subject: [PATCH v1 3/7] iio: light: vcnl4000: Add als_it for vcnl4040/4200
+config: i386-randconfig-a016-20230508 (https://download.01.org/0day-ci/archive/20230508/202305082245.Fy28zlcu-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/6ff2e1cf084f5b3038f2d72110fb01f2a8353a34
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Astrid-Rost/iio-light-vcnl4000-Add-proximity-ps_it-for-vcnl4200/20230508-161005
+        git checkout 6ff2e1cf084f5b3038f2d72110fb01f2a8353a34
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-I had previously experimented with linking statically against
-musl to avoid all other dependencies, but that ended up with
-slower binaries because the default memory allocator in musl
-doesn't work that well for gcc, and I never quite figured out
-how to pick a different memory allocator, or which one to use.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305082245.Fy28zlcu-lkp@intel.com/
 
-I should probably just pick an older Debian release that is new
-enough to contain cross compilers for arm64 and x86 and then
-set up the same kind of chroot I had in before.
+All errors (new ones prefixed by >>):
 
-      Arnd
+   ld: drivers/iio/light/vcnl4000.o: in function `vcnl4040_write_als_it':
+>> drivers/iio/light/vcnl4000.c:580: undefined reference to `__divdi3'
+
+
+vim +580 drivers/iio/light/vcnl4000.c
+
+   552	
+   553	static ssize_t vcnl4040_write_als_it(struct vcnl4000_data *data, int val)
+   554	{
+   555		unsigned int i;
+   556		int ret, index = -1;
+   557		u16 regval;
+   558		const int(*als_it_times)[][2];
+   559		int size;
+   560	
+   561		if (data->id == VCNL4200) {
+   562			als_it_times = &vcnl4200_als_it_times;
+   563			size = ARRAY_SIZE(vcnl4200_als_it_times);
+   564		} else {
+   565			als_it_times = &vcnl4040_als_it_times;
+   566			size = ARRAY_SIZE(vcnl4040_als_it_times);
+   567		}
+   568	
+   569		for (i = 0; i < size; i++) {
+   570			if (val == (*als_it_times)[i][1]) {
+   571				index = i;
+   572				break;
+   573			}
+   574		}
+   575	
+   576		if (index < 0)
+   577			return -EINVAL;
+   578	
+   579		data->vcnl4200_al.sampling_rate = ktime_set(0, val * 1200000);
+ > 580		data->al_scale = 12000000000 / val;
+   581	
+   582		mutex_lock(&data->vcnl4000_lock);
+   583	
+   584		ret = i2c_smbus_read_word_data(data->client, VCNL4200_AL_CONF);
+   585		if (ret < 0)
+   586			goto out;
+   587	
+   588		regval = (ret & ~VCNL4040_ALS_CONF_IT) |
+   589		    FIELD_PREP(VCNL4040_ALS_CONF_IT, index);
+   590		ret = i2c_smbus_write_word_data(data->client, VCNL4200_AL_CONF,
+   591						regval);
+   592	
+   593	out:
+   594		mutex_unlock(&data->vcnl4000_lock);
+   595		return ret;
+   596	}
+   597	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
