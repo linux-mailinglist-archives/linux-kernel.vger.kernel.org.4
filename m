@@ -2,157 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFA86FB376
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F116FB379
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234441AbjEHPJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 11:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
+        id S234444AbjEHPKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 11:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbjEHPJn (ORCPT
+        with ESMTP id S234199AbjEHPKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 11:09:43 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2D1C0;
-        Mon,  8 May 2023 08:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683558582; x=1715094582;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zs8Q8b77iyeTiU+NAG9KTWimf6AuNOLbyShHnGVJxFc=;
-  b=YaG+TZG25CbO+we4TmkmV42Qhc3/EAz1uCQABGUB53VlTUrZylN23rYE
-   bess5iqEl9vkuwxdAM5FhYnO4dtdhHrc+kMgDZf9LHpU+L0VD3WaF2nCD
-   0wbzppdNJY7kwWkst4jDh3zLoK0BKozLWjp55qwJ//NHc0FIOKA2aZzpv
-   bumbotBrRlQuOlzSb0SzA4SdDrwns1rxW8DeXrDyDZ7wIBat14UIV1Y0u
-   BLffBefDOhxNg5a2mg3BgsQRdO9NzV5P6UN/sTGT9IvEFsylLEO3A5/Xr
-   kCU0gKvMiZcmKk2jbJK8BJ5za3YTaO5IDpjAru3/F7uWDwbofgYxkla+P
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="349706268"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="349706268"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 08:09:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="648917803"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="648917803"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 08 May 2023 08:09:35 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pw2UY-0001HF-1F;
-        Mon, 08 May 2023 15:09:34 +0000
-Date:   Mon, 8 May 2023 23:08:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Astrid Rost <astrid.rost@axis.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, kernel@axis.com,
-        Astrid Rost <astridr@axis.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/7] iio: light: vcnl4000: Add als_it for vcnl4040/4200
-Message-ID: <202305082245.Fy28zlcu-lkp@intel.com>
-References: <20230508070925.2123265-4-astrid.rost@axis.com>
+        Mon, 8 May 2023 11:10:08 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6584210;
+        Mon,  8 May 2023 08:10:02 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6439df6c268so2477730b3a.0;
+        Mon, 08 May 2023 08:10:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683558601; x=1686150601;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OSylYoD+qttl7xRZ7brp3i6yMB7BIlgJJas/6/1hMcM=;
+        b=IDcUd0djX0LZEYsra3ZmzvjJ6cDAOIE5/KMToPd1I5LlwCstPUXxYLO8aP+iVwqPck
+         9+eQbKApBEiZXze/DzsbWH2dNu7itDNS/dXR7lAcjKND/2xsKFE0V6KnCPayR5OzVXUm
+         kH9fXKr0lawHwM/rkfsAQfTI5s85AyI6bPfs0T3mT7xCzYqpmStE88QfWvbgeB3FLS/9
+         bNusDWvsj9uA85TuTao+yNH9Th19Wu5ZWd31YmaJbwh9IRx/uoIjP38/ceIUeTwHw8ur
+         wL90W+RYFqDZFuXQlJLpkrupEfbwc2Yue4+s7PA1a08OLHQQjowVNLl4nvk4TrV7tcIJ
+         TSGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683558601; x=1686150601;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OSylYoD+qttl7xRZ7brp3i6yMB7BIlgJJas/6/1hMcM=;
+        b=lEMVh1KhFmIwzTKf3jwFR0vdg+eYfJhpTl2V1ftcmg8CtMObaeDRVley/0OOAfIboA
+         MM1UaH3mMPjl/6JC8LSe8pE5zStu9cZFnHOHE5+Kj36kf2JcN/csZqDu9XKCRfkIO4in
+         qjwmgLs4gm7/QkRRybECcgAIDQHCHNFrL3WtAWEDys60dWB8XYY+AAZXDEvdaiIDXqZZ
+         KkCxLD16zl/CQyDylrTye3VZPlwtzl/DBgKXvVNA1hMjGY5WXWAQ1uPYw7Inz8hTEYSV
+         evx3UOtXz+yFMz520d9SVsbRp0rqRjXN6nq85tvndKDY9swXdoUW+Hwn4/JfvNYhdSAy
+         E//g==
+X-Gm-Message-State: AC+VfDwG4qqk/ekMf6nZDVyeulzcmAnHyP5qPoYM2H9m6SB9OCO92WlO
+        zwFyiTypSqBlURfFADE8Hrg=
+X-Google-Smtp-Source: ACHHUZ7SpQbNuEhuLR29p18l5dgrcV1c7qAmZjCT0hJ487WYIGDBGJagKSFZXDr1YME3Jj0Twrbm5A==
+X-Received: by 2002:a05:6a00:2e98:b0:63d:2382:4948 with SMTP id fd24-20020a056a002e9800b0063d23824948mr12487711pfb.25.1683558601268;
+        Mon, 08 May 2023 08:10:01 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id n14-20020a62e50e000000b0064399be15f0sm48621pff.183.2023.05.08.08.09.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 08:10:00 -0700 (PDT)
+Message-ID: <ff9ee361-cb1e-26c3-c14d-f4bc1c1a9059@gmail.com>
+Date:   Tue, 9 May 2023 00:09:57 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508070925.2123265-4-astrid.rost@axis.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+To:     bagasdotme@gmail.com, rdunlap@infradead.org
+Cc:     devicetree@vger.kernel.org, grant.likely@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, Akira Yokosawa <akiyks@gmail.com>
+References: <ZFkDce5ISNEu6nsp@debian.me>
+Subject: Re: [PATCH v2] docs: dt: Make references and mention kernel
+ abstractions
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <ZFkDce5ISNEu6nsp@debian.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Astrid,
+Hi,
 
-kernel test robot noticed the following build errors:
+On Date: Mon, 8 May 2023 21:13:05 +0700, Bagas Sanjaya wrote:
+> On Sat, May 06, 2023 at 03:09:11PM -0700, Randy Dunlap wrote:
+>> For @linux-doc: Is there something in ReST that does auto section numbering
+>> so that this renumbering does not have to be repeated in the future?
+>> 
+> 
+> There is sectnum:: directive which does the job. In the kernel docs,
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on linus/master v6.4-rc1 next-20230508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Just for you info:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Astrid-Rost/iio-light-vcnl4000-Add-proximity-ps_it-for-vcnl4200/20230508-161005
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20230508070925.2123265-4-astrid.rost%40axis.com
-patch subject: [PATCH v1 3/7] iio: light: vcnl4000: Add als_it for vcnl4040/4200
-config: i386-randconfig-a016-20230508 (https://download.01.org/0day-ci/archive/20230508/202305082245.Fy28zlcu-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/6ff2e1cf084f5b3038f2d72110fb01f2a8353a34
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Astrid-Rost/iio-light-vcnl4000-Add-proximity-ps_it-for-vcnl4200/20230508-161005
-        git checkout 6ff2e1cf084f5b3038f2d72110fb01f2a8353a34
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+In Sphinx documentation at:
+    https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#directives
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305082245.Fy28zlcu-lkp@intel.com/
+has a warning which reads:
 
-All errors (new ones prefixed by >>):
+    Warning
+    Do not use the directives sectnum, header and footer. 
 
-   ld: drivers/iio/light/vcnl4000.o: in function `vcnl4040_write_als_it':
->> drivers/iio/light/vcnl4000.c:580: undefined reference to `__divdi3'
+Sphinx prefers the the :numbered: option of the toctree:: directive.
+See https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-toctree
 
+This directive applies to the documentation as a whole, not to each .rst
+file.
 
-vim +580 drivers/iio/light/vcnl4000.c
+An example is at:
+    https://www.kernel.org/doc/html/latest/process/development-process.html
 
-   552	
-   553	static ssize_t vcnl4040_write_als_it(struct vcnl4000_data *data, int val)
-   554	{
-   555		unsigned int i;
-   556		int ret, index = -1;
-   557		u16 regval;
-   558		const int(*als_it_times)[][2];
-   559		int size;
-   560	
-   561		if (data->id == VCNL4200) {
-   562			als_it_times = &vcnl4200_als_it_times;
-   563			size = ARRAY_SIZE(vcnl4200_als_it_times);
-   564		} else {
-   565			als_it_times = &vcnl4040_als_it_times;
-   566			size = ARRAY_SIZE(vcnl4040_als_it_times);
-   567		}
-   568	
-   569		for (i = 0; i < size; i++) {
-   570			if (val == (*als_it_times)[i][1]) {
-   571				index = i;
-   572				break;
-   573			}
-   574		}
-   575	
-   576		if (index < 0)
-   577			return -EINVAL;
-   578	
-   579		data->vcnl4200_al.sampling_rate = ktime_set(0, val * 1200000);
- > 580		data->al_scale = 12000000000 / val;
-   581	
-   582		mutex_lock(&data->vcnl4000_lock);
-   583	
-   584		ret = i2c_smbus_read_word_data(data->client, VCNL4200_AL_CONF);
-   585		if (ret < 0)
-   586			goto out;
-   587	
-   588		regval = (ret & ~VCNL4040_ALS_CONF_IT) |
-   589		    FIELD_PREP(VCNL4040_ALS_CONF_IT, index);
-   590		ret = i2c_smbus_write_word_data(data->client, VCNL4200_AL_CONF,
-   591						regval);
-   592	
-   593	out:
-   594		mutex_unlock(&data->vcnl4000_lock);
-   595		return ret;
-   596	}
-   597	
+Just my two cents.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+        Thanks, Akira
+
+> however, it is customarily used together with contents:: directive to
+> generate toctree for current doc. In order for this to work as expected,
+> you need also to rearrange section heading levels, like:
+> 
+> ---- >8 ----
+> diff --git a/Documentation/devicetree/usage-model.rst b/Documentation/devicetree/usage-model.rst
+> index 87f522d5feba81..890dde293540f9 100644
+> --- a/Documentation/devicetree/usage-model.rst
+> +++ b/Documentation/devicetree/usage-model.rst
+> @@ -1,5 +1,8 @@
+>  .. SPDX-License-Identifier: GPL-2.0
+>  
+> +.. contents::
+> +.. sectnum::
+> +
+>  ========================
+>  Linux and the Devicetree
+>  ========================
+
