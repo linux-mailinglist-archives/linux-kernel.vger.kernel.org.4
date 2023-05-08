@@ -2,135 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273E56FBA5D
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEA66FBA5E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 23:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbjEHV5W convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 8 May 2023 17:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
+        id S234383AbjEHV5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 17:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233835AbjEHV5T (ORCPT
+        with ESMTP id S234345AbjEHV52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 17:57:19 -0400
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455271721;
-        Mon,  8 May 2023 14:57:15 -0700 (PDT)
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6439df6c268so2811722b3a.0;
-        Mon, 08 May 2023 14:57:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683583035; x=1686175035;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nr1Zb6Ozywk7OVF4mmQ0nbkLri6483J5psmZMkp9VDE=;
-        b=TMFDRIjkvtXVCXBuaJUOULkN+1LUbCEudijsoxnX7vthCc3Jx1/n06KLm+uLJkv1A9
-         jLGGJl3mefeMvoXEUWjWGEZsxe7rpUIoRjoRu0jk+txTEgO1eno5SCFTw1fXfJI2eaDB
-         jzv3FTZ9PSVa56rokIwjUu33duzXs/Am8o5vuxBGySo97d5QQhTlDRsKaa0aO6Ma5hvH
-         IyENyy6Q1FL4sERJEIZRm1CSXaJxN3W5tl3Hm6k7dkWqHmrh3GzK3eNhBpmttbW8Fi6j
-         1vVnBSHDEtFf+hFQJxXTJfCVruNYuy23Nie6nPPRGrIgambnZ8gJStl6s7n16gqx8TYZ
-         lsoA==
-X-Gm-Message-State: AC+VfDzPGxwnsKhcHkc9EK/U5nHJWzosK84wu37VL3wmXA6O4gfoQ+SI
-        vYy85ecDZ1D/r3Sq91aPjAkxpx9D+3rUSw==
-X-Google-Smtp-Source: ACHHUZ4tmxB4rSam8sD0aXWYGzOrZuBXAB3fu1o2Ht0Y3lvfZX53viwZJ/q4lq99vIdeBO0T4uDjxA==
-X-Received: by 2002:a05:6a21:7898:b0:101:167d:8472 with SMTP id bf24-20020a056a21789800b00101167d8472mr1720812pzc.26.1683583035227;
-        Mon, 08 May 2023 14:57:15 -0700 (PDT)
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com. [209.85.214.179])
-        by smtp.gmail.com with ESMTPSA id i6-20020a17090aa90600b0024e262feac1sm10223415pjq.23.2023.05.08.14.57.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 14:57:15 -0700 (PDT)
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1aaea43def7so34646075ad.2;
-        Mon, 08 May 2023 14:57:13 -0700 (PDT)
-X-Received: by 2002:a17:903:1247:b0:1ac:3605:97ec with SMTP id
- u7-20020a170903124700b001ac360597ecmr15056103plh.62.1683583033433; Mon, 08
- May 2023 14:57:13 -0700 (PDT)
+        Mon, 8 May 2023 17:57:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06735241
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 14:57:23 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683583041;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5tGCUv5bkdbUJ3J4cUImIxGyAzEBlNK1aC1+DBJOGpk=;
+        b=AdrsldnCxqzeqH+B1kpoG4Q8NWv+NjNDjFVWiE2dJNLV6TBjQIgnaNTm06zKNX7mVPEcQ9
+        Z7kgJen826Q4YbreKZXoSjed+ycAonCtgAWgkI8wORB0pPmMbK3DTYuROJlYY5QAv0+5HJ
+        TCPsWaWrySkxfibkefO1RBucF5TKShUqAPKGsrTleOPBlfAim2PFaTYM8LRAFR42oXprp5
+        TQBhG2VMYtJEcppA/67OTgwXPhkV4kEUfx3dnvXUs90LwU+rwQ2Qv1wvu1t3g8YtHhGnp2
+        V/M8ECuzvV33+JzfvKGegaBnW48PDctsytyPio1oBYy/q41pUs4+xFHWetSRuw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683583041;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5tGCUv5bkdbUJ3J4cUImIxGyAzEBlNK1aC1+DBJOGpk=;
+        b=vRMf/rVcLAnYNPEHlQ0kOdmSalLwu7Ufk9ky/SoC32YwQUgXVEcUmJ4pvLyNGhPIEBUvNA
+        5reKUSRrXYCsJFAA==
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Subject: Re: [patch 02/20] posix-timers: Ensure timer ID search-loop limit
+ is valid
+In-Reply-To: <87v8h62vwp.ffs@tglx>
+References: <20230425181827.219128101@linutronix.de>
+ <20230425183312.932345089@linutronix.de> <ZFUXrCZtWyNG3Esi@lothringen>
+ <87zg6i2xn3.ffs@tglx> <87v8h62vwp.ffs@tglx>
+Date:   Mon, 08 May 2023 23:57:21 +0200
+Message-ID: <878rdy32ri.ffs@tglx>
 MIME-Version: 1.0
-References: <20230310224128.2638078-1-u.kleine-koenig@pengutronix.de>
- <20230412171056.xcluewbuyytm77yp@pengutronix.de> <AM0PR04MB6289BB9BA4BC0B398F2989108F9B9@AM0PR04MB6289.eurprd04.prod.outlook.com>
- <20230413060004.t55sqmfxqtnejvkc@pengutronix.de> <20230508134300.s36d6k4e25f6ubg4@pengutronix.de>
-In-Reply-To: <20230508134300.s36d6k4e25f6ubg4@pengutronix.de>
-From:   Li Yang <leoyang.li@nxp.com>
-Date:   Mon, 8 May 2023 16:57:00 -0500
-X-Gmail-Original-Message-ID: <CADRPPNQ0QiLzzKhHon62haPJCanDoN=B4QsWCxunJTc4wXwMaA@mail.gmail.com>
-Message-ID: <CADRPPNQ0QiLzzKhHon62haPJCanDoN=B4QsWCxunJTc4wXwMaA@mail.gmail.com>
-Subject: Re: [PATCH 0/6] bus: fsl-mc: Make remove function return void
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Gaurav Jain <gaurav.jain@nxp.com>,
-        Roy Pledge <roy.pledge@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "Diana Madalina Craciun (OSS)" <diana.craciun@oss.nxp.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "Y.B. Lu" <yangbo.lu@nxp.com>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023 at 8:44 AM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
+On Sat, May 06 2023 at 01:36, Thomas Gleixner wrote:
+> On Sat, May 06 2023 at 00:58, Thomas Gleixner wrote:
+>> On Fri, May 05 2023 at 16:50, Frederic Weisbecker wrote:
+>> As the initial lockless readout is guaranteed to be in the positive
+>> space, how is that supposed to be looping forever?
 >
-> Hello Leo,
->
-> On Thu, Apr 13, 2023 at 08:00:04AM +0200, Uwe Kleine-König wrote:
-> > On Wed, Apr 12, 2023 at 09:30:05PM +0000, Leo Li wrote:
-> > > > On Fri, Mar 10, 2023 at 11:41:22PM +0100, Uwe Kleine-König wrote:
-> > > > > Hello,
-> > > > >
-> > > > > many bus remove functions return an integer which is a historic
-> > > > > misdesign that makes driver authors assume that there is some kind of
-> > > > > error handling in the upper layers. This is wrong however and
-> > > > > returning and error code only yields an error message.
-> > > > >
-> > > > > This series improves the fsl-mc bus by changing the remove callback to
-> > > > > return no value instead. As a preparation all drivers are changed to
-> > > > > return zero before so that they don't trigger the error message.
-> > > >
-> > > > Who is supposed to pick up this patch series (or point out a good reason for
-> > > > not taking it)?
-> > >
-> > > Previously Greg KH picked up MC bus patches.
-> > >
-> > > If no one is picking up them this time, I probably can take it through
-> > > the fsl soc tree.
-> >
-> > I guess Greg won't pick up this series as he didn't get a copy of it :-)
-> >
-> > Browsing through the history of drivers/bus/fsl-mc there is no
-> > consistent maintainer to see. So if you can take it, that's very
-> > appreciated.
->
-> My mail was meant encouraging, maybe it was too subtile? I'll try again:
->
-> Yes, please apply, that would be wonderful!
+> Unless you think about the theoretical case of an unlimited number of
+> threads sharing the signal_struct which all concurrently try to allocate
+> a timer id and then releasing it immediately again (to avoid resource
+> limit exhaustion). Theoretically possible, but is this a real concern
+> with a timer ID space of 2G?
 
-Sorry for missing your previous email.  I will do that.  Thanks.
+It only hurts the process which does this and does not inflict any
+latencies by holding hash_lock over the full search for a free spot.
 
-Regards,
-Leo
+> The only alternative solution I could come up with is a paritioned
+> xarray where the index space would be segmented for each TGID, i.e.
+>
+>        segment.start = TGID * MAX_TIMERS_PER_PROCESS
+>        segment.end    = segment.start + MAX_TIMERS_PER_PROCESS - 1
+>
+> where MAX_TIMERS_PER_PROCESS could be a copius 2^16 which would work for
+> both 32bit and 64bit TID limits.
+>
+> That would avoid the hash table lookups and the related issues, but OTH
+> it would require to allocate one extra page per TGID if the application
+> uses a single posix timer.
+>
+> Not sure whether that's worth it though.
+
+More thoughts on this. If we go there and accept the extra page of
+memory then we can just go all the way and make the xarray per process,
+actually per signal.
+
+That would also require another change, namely making the preallocated
+sigqueue part of struct k_itimer, which in turn would not be the worst
+of all ideas as it gets rid of the lookup in posixtimer_rearm() and
+would also allow for some clever handling of the nasty SIG_IGN issues.
+
+Though that's separate from the problem at hand.
+
+Thanks,
+
+        tglx
