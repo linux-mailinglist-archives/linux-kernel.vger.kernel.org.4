@@ -2,113 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638AD6FA427
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECB06FA429
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232921AbjEHJzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 05:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
+        id S233757AbjEHJz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 05:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232753AbjEHJzr (ORCPT
+        with ESMTP id S229577AbjEHJzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 05:55:47 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E382ABE2;
-        Mon,  8 May 2023 02:55:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683539746; x=1715075746;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=WTX1dz7lHf4L+q8fzbM1rRR3mOShmgZOjskHSySl7QI=;
-  b=QME4RNf0BNSE6SzV8Xf3CyGjrDUt3YxJllz6VJurxALe1JrkBX1qvbGj
-   BRxIrD6NZ9FU71ThbaCUEMOj+jOmfcQF4c/bjwI8Z47VMka5eY3/0vAY5
-   7B+FSoItRVvSYzkIdUl3BMemMFb4ZGz4bdBxXFEWjaVbpz8AiMWhnGm+k
-   sAQL1wNMVXJ1iHD95Yd9Ded1dNnPqhspESqJbyXlM5G4eCAG2rcFBiE5D
-   /xV2sHW6Gc0LsW7sCIzIwoQh4Fejt3GJfobF7yrF88SFV5qn3M8JPyeIN
-   rykvu1CVRF9E3w2JZ6vaf0fype3HNUgvwDbOGyAUu+YHWPZ+g+5RH8zni
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="338826299"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="338826299"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 02:55:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="842634466"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="842634466"
-Received: from cciobanu-mobl1.ger.corp.intel.com ([10.249.37.159])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 02:55:41 -0700
-Date:   Mon, 8 May 2023 12:55:38 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Tony Lindgren <tony@atomide.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Peter Hurley <peter@hurleysoftware.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>, Johan Hovold <johan@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/4] serial: 8250: omap: Fix freeing of resources on
- failed register
-In-Reply-To: <20230508082014.23083-2-tony@atomide.com>
-Message-ID: <9ea78388-86f-736b-e46-b3bc6223ddbe@linux.intel.com>
-References: <20230508082014.23083-1-tony@atomide.com> <20230508082014.23083-2-tony@atomide.com>
+        Mon, 8 May 2023 05:55:49 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3BB2ABE4;
+        Mon,  8 May 2023 02:55:46 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pvxaq-0006bV-6U; Mon, 08 May 2023 11:55:44 +0200
+Message-ID: <9b987585-0834-bb8c-3414-283c29f3f2ab@leemhuis.info>
+Date:   Mon, 8 May 2023 11:55:43 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-543991086-1683538786=:1790"
-Content-ID: <16ee339f-7443-12e0-5159-93dbbb6ea79@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     =?UTF-8?Q?Filipe_La=c3=adns?= <lains@riseup.net>,
+        Bastien Nocera <hadess@hadess.net>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        guy.b@bluewin.ch
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: [regression] Since kernel 6.3.1 logitech unify receiver not working
+ properly
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1683539747;28b8ae58;
+X-HE-SMSGID: 1pvxaq-0006bV-6U
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi, Thorsten here, the Linux kernel's regression tracker.
 
---8323329-543991086-1683538786=:1790
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <e92d2f17-9e4c-c55c-9e41-e213b929c4d0@linux.intel.com>
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developers don't keep an eye on it, I decided to forward it by mail.
 
-On Mon, 8 May 2023, Tony Lindgren wrote:
+Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217412 :
 
-> If serial8250_register_8250_port() fails, the SoC can hang as the
-> deferred PMQoS work will still run as is not flushed and removed.
+>  guy.b 2023-05-07 07:37:34 UTC
 > 
-> Fixes: 61929cf0169d ("tty: serial: Add 8250-core based omap driver")
-> Signed-off-by: Tony Lindgren <tony@atomide.com>
-> ---
->  drivers/tty/serial/8250/8250_omap.c | 2 ++
->  1 file changed, 2 insertions(+)
+> Hello,
 > 
-> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-> --- a/drivers/tty/serial/8250/8250_omap.c
-> +++ b/drivers/tty/serial/8250/8250_omap.c
-> @@ -1532,7 +1532,9 @@ static int omap8250_probe(struct platform_device *pdev)
->  err:
->  	pm_runtime_dont_use_autosuspend(&pdev->dev);
->  	pm_runtime_put_sync(&pdev->dev);
-> +	flush_work(&priv->qos_work);
->  	pm_runtime_disable(&pdev->dev);
-> +	cpu_latency_qos_remove_request(&priv->pm_qos_request);
->  	return ret;
+> Since kernel 6.3.1 the boot process hangs (~ 5 seconds) by uevent triggering with the following errors :
+> 
+> logitech-hidpp-device 0003:046D:405E.0004: hidpp_devicenametype_get_count: received protocol error 0x07
+> 
+> 
+> The logs about logitech input:
+> 
+> usb 1-8: new full-speed USB device number 2 using xhci_hcd
+> mai 06 11:54:24 Cockpit kernel: usb 1-8: New USB device found, idVendor=046d, idProduct=c52b, bcdDevice=24.10
+> mai 06 11:54:24 Cockpit kernel: usb 1-8: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> mai 06 11:54:24 Cockpit kernel: usb 1-8: Product: USB Receiver
+> mai 06 11:54:24 Cockpit kernel: usb 1-8: Manufacturer: Logitech
+> mai 06 11:54:24 Cockpit kernel: input: Logitech USB Receiver as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.0/0003:046D:C52B.0001/input/input4
+> mai 06 11:54:24 Cockpit kernel: hid-generic 0003:046D:C52B.0001: input,hidraw0: USB HID v1.11 Keyboard [Logitech USB Receiver] on usb-0000:00:14.0-8/input0
+> mai 06 11:54:24 Cockpit kernel: input: Logitech USB Receiver Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.1/0003:046D:C52B.0002/input/input5
+> mai 06 11:54:24 Cockpit kernel: input: Logitech USB Receiver Consumer Control as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.1/0003:046D:C52B.0002/input/input6
+> mai 06 11:54:24 Cockpit kernel: input: Logitech USB Receiver System Control as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.1/0003:046D:C52B.0002/input/input7
+> mai 06 11:54:24 Cockpit kernel: hid-generic 0003:046D:C52B.0002: input,hiddev96,hidraw1: USB HID v1.11 Mouse [Logitech USB Receiver] on usb-0000:00:14.0-8/input1
+> mai 06 11:54:24 Cockpit kernel: hid-generic 0003:046D:C52B.0003: hiddev97,hidraw2: USB HID v1.11 Device [Logitech USB Receiver] on usb-0000:00:14.0-8/input2
+> mai 06 11:54:24 Cockpit kernel: usbcore: registered new interface driver usbhid
+> mai 06 11:54:24 Cockpit kernel: usbhid: USB HID core driver
+> mai 06 11:54:24 Cockpit kernel: logitech-djreceiver 0003:046D:C52B.0003: hiddev96,hidraw0: USB HID v1.11 Device [Logitech USB Receiver] on usb-0000:00:14.0-8/input2
+> mai 06 11:54:24 Cockpit kernel: input: Logitech Wireless Device PID:405e Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.2/0003:046D:C52B.0003/0003:046D:405E.0004/input/input9
+> mai 06 11:54:24 Cockpit kernel: input: Logitech Wireless Device PID:405e Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.2/0003:046D:C52B.0003/0003:046D:405E.0004/input/input10
+> mai 06 11:54:24 Cockpit kernel: hid-generic 0003:046D:405E.0004: input,hidraw1: USB HID v1.11 Keyboard [Logitech Wireless Device PID:405e] on usb-0000:00:14.0-8/input2:1
+> mai 06 11:54:24 Cockpit kernel: input: Logitech Wireless Device PID:2010 Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.2/0003:046D:C52B.0003/0003:046D:2010.0005/input/input14
+> mai 06 11:54:24 Cockpit kernel: hid-generic 0003:046D:2010.0005: input,hidraw2: USB HID v1.11 Keyboard [Logitech Wireless Device PID:2010] on usb-0000:00:14.0-8/input2:2
+> mai 06 11:54:24 Cockpit kernel: logitech-hidpp-device 0003:046D:405E.0004: HID++ 4.5 device connected.
+> mai 06 11:54:24 Cockpit kernel: logitech-hidpp-device 0003:046D:405E.0004: hidpp_devicenametype_get_count: received protocol error 0x07
+> mai 06 11:54:24 Cockpit kernel: input: Logitech Wireless Device PID:405e as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.2/0003:046D:C52B.0003/0003:046D:405E.0004/input/input18
+> mai 06 11:54:24 Cockpit kernel: logitech-hidpp-device 0003:046D:405E.0004: input,hidraw1: USB HID v1.11 Keyboard [Logitech Wireless Device PID:405e] on usb-0000:00:14.0-8/input2:1
+> mai 06 11:54:24 Cockpit kernel: input: Logitech Wireless Device PID:2010 as /devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.2/0003:046D:C52B.0003/0003:046D:2010.0005/input/input19
+> mai 06 11:54:24 Cockpit kernel: logitech-hidpp-device 0003:046D:2010.0005: input,hidraw2: USB HID v1.11 Keyboard [Logitech Wireless Device PID:2010] on usb-0000:00:14.0-8/input2:2
+> 
+> Next, once booted and remove the unify receiver and plug it again there is a massive lag (~ 15 seconds) before that the receiver get ready for the mouse and keyboard to be functional with following errors :
+> 
+> kernel: logitech-hidpp-device 0003:046D:405E.0022: hidpp_devicenametype_get_count: received protocol error 0x07
+> kernel: logitech-hidpp-device 0003:046D:405E.0023: Couldn't get wheel multiplier (error -110)
+> 
+> Unify receiver with K800 keyboard and M720 Triathlon mouse paired.
+> 
+> This happens on my desktop computer but not on my laptop with a unify receiver and a marathon M705 mouse.
+> 
+> Both computer are on Archlinux and up to date.
+> 
+> On the desktop the boot is fine without the unify receiver.
+> 
+> Let me know if you need more info.
+> 
+> Thank you.
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-An unrelated comment to the patch itself, there seems to be somewhat 
-handwavy and possibly wrong calculation for the pm qos latency. First of 
-all, I think it would want something based on port->frame_time, and I'm 
-far from convinced that 64 is right as it matches FIFO size which doesn't 
-feel correct for a wakeup related time.
+See the ticket for more details.
 
--- 
- i.
---8323329-543991086-1683538786=:1790--
+Note, there are two users affected by this (see Comment 5 for the
+second), but you have to use bugzilla to reach the second reporter, as I
+sadly[1] can not simply CCed them in mails like this (the initial
+reporter gave permission).
+
+
+[TLDR for the rest of this mail: I'm adding this report to the list of
+tracked Linux kernel regressions; the text you find below is based on a
+few templates paragraphs you might have encountered already in similar
+form.]
+
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
+
+#regzbot introduced: v6.2..v6.3
+https://bugzilla.kernel.org/show_bug.cgi?id=217412
+#regzbot title: input: hid: logitech unify receiver not working properly
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+this thread sees some discussion). See page linked in footer for details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+[1] because bugzilla.kernel.org tells users upon registration their
+"email address will never be displayed to logged out users"
