@@ -2,283 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0D36FB7E4
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE4A6FB7F4
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbjEHUCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 16:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
+        id S233120AbjEHUHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 16:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjEHUCV (ORCPT
+        with ESMTP id S229452AbjEHUHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 16:02:21 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD6D1996
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 13:02:14 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-965fc25f009so606636966b.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 13:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683576133; x=1686168133;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lAtYseLpXxuBkVxFlbQ8laerKtW1IS2FwFjnYIf67Ew=;
-        b=HrbuCNqRpGjYUk98SN1qVGL7DcEPo8uLKF7tJOUQYAXRJIlclZT2/8zUA81YeCGZGa
-         5lxcnMX6CYataSzjiwHpRvFjYHExxSYyn/lREd4L26wJxN4Qo9a8XWbASAIVakgCtGzf
-         ZAaEdfLnknO5gnH4p2gbmxstXjJI5+IlpUYmivhhvawZsVBXCks8ZU4PgnDkmwpc7JeT
-         Ih/bSh/PsDGTzH0dW9w71qKAzE1YiBzgMXFHPrlF9DFhmb31mqmz1D06HVPk17l28KwP
-         I4r+iF6OPnnXSGIOTEMUsRZAS2At06NP8qQGH95CzT6WprAGbzNHotDv4RB7cjimEdV9
-         3fiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683576133; x=1686168133;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lAtYseLpXxuBkVxFlbQ8laerKtW1IS2FwFjnYIf67Ew=;
-        b=k5GYG8Ahv2vcTIVyGkeJIEhs6YEC52mahuzL7yvHrg3OECHcYtyJiw+fXh77dQFqpV
-         LunGM5ffv5qGuhoLqCInux8omm1JdAyA8z23tQT4ZE3G0sQgLctCR5lB9sJ6iBiDkOHW
-         IaB8DLT70Qpqnhq1VBZ62cGPWnW7jt40EfJG3ho3nAwHjCY3eR6Xi4YCvI1OMSZUTjf/
-         F4i+QzvYgyXc5dLtJ4mdBKwE3TcZUGcRyScAPrA6lx04tuirnPf1zXmSXP0pt6XEd+0F
-         vLZXZ6smySsU00dM89yaB3PEEvdZhaUzEQP1sQD8+HzL91WVgJc8IyEPVPIsTdmL2FAZ
-         IHQw==
-X-Gm-Message-State: AC+VfDxu45+01t2Sy1h38NlEb/iKGTb6AQ9T+GgTQ/t181e+J7lo7uS0
-        DibBSG9g2Sj5HwZtSHvtsyF47w==
-X-Google-Smtp-Source: ACHHUZ6VNPRKEgr7OuCdHtimURoftvfdyzlJfcJSBfAQGPgaV7H8oz4a1Kp6taoPOYmL7Bq/1nOfiQ==
-X-Received: by 2002:a17:907:97ce:b0:94e:4523:b0d8 with SMTP id js14-20020a17090797ce00b0094e4523b0d8mr9960088ejc.73.1683576132774;
-        Mon, 08 May 2023 13:02:12 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac? ([2a02:810d:15c0:828:d19b:4e0f:cfe4:a1ac])
-        by smtp.gmail.com with ESMTPSA id ca21-20020a170906a3d500b00965a52d2bf6sm373253ejb.88.2023.05.08.13.02.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 13:02:12 -0700 (PDT)
-Message-ID: <9b629b5e-9d49-98a0-abca-75e68abf425b@linaro.org>
-Date:   Mon, 8 May 2023 22:02:11 +0200
+        Mon, 8 May 2023 16:07:44 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C18B5597;
+        Mon,  8 May 2023 13:07:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683576462; x=1715112462;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=o/eQse6ouvtKZjFsqfY9xN0R3dia8cqqzM6/UZnHyu8=;
+  b=GUxLEmCitnLLAHu/MEuOuzf4ADPPNQLoyQ9zvuAy61UcczvRoGmGROIr
+   KaTwssEKBMCR/NY6PfCm1yxvPi6EEMJTtseCxebrVXFE2UBD7O+P3iM8C
+   uwEKwO6xsWFU3sxjeRxFG/bU0rK9PTHJ24jtC7KZqtx96Y7+wOsN9bANR
+   /We9okIqCQMfvKVroJtfxnbhpQiUUsC6cseUSKjN0CwtlK7K3lCrCB3kr
+   njJBbeCUcOM42JPeTeV5TMJL8AdJm6IATW4qJXLWo8cUxwOlijRYJLobg
+   Fm3WT+sfKerzIEifceAHWvCNs7buAYRU+k2B5yc2RSsOMulv6U9H25//L
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="348573598"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="348573598"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 13:07:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="788241609"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="788241609"
+Received: from sajmal-mobl1.amr.corp.intel.com (HELO tzanussi-mobl1.intel.com) ([10.212.74.4])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 13:07:39 -0700
+From:   Tom Zanussi <tom.zanussi@linux.intel.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        fenghua.yu@intel.com, vkoul@kernel.org
+Cc:     dave.jiang@intel.com, tony.luck@intel.com,
+        wajdi.k.feghali@intel.com, james.guilford@intel.com,
+        kanchana.p.sridhar@intel.com, giovanni.cabiddu@intel.com,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Subject: [PATCH v4 00/15] crypto: Add Intel Analytics Accelerator (IAA) crypto compression driver
+Date:   Mon,  8 May 2023 15:07:22 -0500
+Message-Id: <cover.1683573703.git.zanussi@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 6/7] dt-bindings: mfd: max77658: Add ADI MAX77658
-Content-Language: en-US
-To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org,
-        lgirdwood@gmail.com, broonie@kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-References: <20230508131045.9399-1-Zeynep.Arslanbenzer@analog.com>
- <20230508131045.9399-7-Zeynep.Arslanbenzer@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230508131045.9399-7-Zeynep.Arslanbenzer@analog.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/05/2023 15:10, Zeynep Arslanbenzer wrote:
-> Add ADI MAX77658 devicetree document.
-> 
-> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> ---
->  .../devicetree/bindings/mfd/adi,max77658.yaml | 160 ++++++++++++++++++
->  1 file changed, 160 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77658.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/adi,max77658.yaml b/Documentation/devicetree/bindings/mfd/adi,max77658.yaml
-> new file mode 100644
-> index 000000000000..4d6d87cd4b52
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/adi,max77658.yaml
-> @@ -0,0 +1,160 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/adi,max77658.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MAX77643/54/58/59 PMIC from ADI
-> +
-> +maintainers:
-> +  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> +
-> +description: |
-> +  MAX77643, MAX77654, MAX77658 and MAX77659 devices are a family of ADI PMICs
-> +  providing battery charging and power supply solutions for
-> +  low-power applications.
-> +
-> +  MAX77643 is a Power Management IC with 1 LDO regulator.
-> +
-> +  MAX77654 is a Power Management IC with 2 LDO regulators and 1 charger.
-> +
-> +  MAX77658 is a Power Management IC with 2 LDO regulators, 1 charger
-> +  and 1 fuel gauge.
-> +
-> +  MAX77659 is a Power Management IC with 1 LDO regulator and 1 charger.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,max77643
-> +      - adi,max77654
-> +      - adi,max77658
-> +      - adi,max77659
-> +
-> +  reg:
-> +    items:
-> +      - enum: [0x40, 0x48]
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  charger:
-> +    $ref: /schemas/power/supply/adi,max77658-charger.yaml
-> +
-> +  fuel-gauge:
-> +    $ref: /schemas/power/supply/adi,max77658-battery.yaml
-> +
-> +  regulators:
-> +    type: object
-> +
-> +    description:
-> +      The regulators is represented as a sub-node of the PMIC node on the device tree.
-> +
-> +    patternProperties:
-> +      "^LDO[01]$":
+From: Tom Zanussi <zanussi@kernel.org>
 
-lowercase
+Hi, this is v4 of the IAA crypto driver, incorporating feedback from
+v3.
 
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml
-> +        additionalProperties: false
-> +        description:
-> +          LDO regulator
-> +
-> +        properties:
-> +          regulator-always-on: true
-> +          regulator-boot-on: true
+v4 changes:
 
-Why nothing else is allowed? You have different voltages, so how can you
-configure their constraints if you do not allow them to be configured?
-Drop all properties and use unevaluatedProperties..
+  - Added and used DRIVER_NAME_SIZE for wq driver_name.
 
-> +
-> +    additionalProperties: false
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - adi,max77643
-> +              - adi,max77654
-> +              - adi,max77658
-> +
-> +    then:
-> +      properties:
-> +        reg:
-> +          items:
-> +            - const: 0x48
-> +
-> +    else:
-> +      properties:
-> +        reg:
-> +          items:
-> +            - const: 0x40
+  - Changed all spaces to tabs in CRYPTO_DEV_IAA_CRYPTO_STATS config
+    menu.
 
- - if:
-    ...
+  - Removed the private_data void * from wq and replaced with
+    wq_confdev() instead, as suggested by Dave Jiang.
 
-    then:
-      properties:
-        regulators:
-          properties:
-            LDO1: false
+  - Added  more Reviewed-by tags.
+
+v3 changes:
+
+  - Reworked the code to only allow the registered crypto alg to be
+    unregistered by removing the module.  Also added an iaa_wq_get()
+    and iaa_wq_put() to take/give up a reference to the work queue
+    while there are compresses/decompresses in flight.  This is
+    synchronized with the wq remove function, so that the
+    iaa_wq/iaa_devices can't go away beneath active operations.  This
+    was tested by removing/disabling the iaa wqs/devices while
+    operations were in flight.
+
+  - Simplified the rebalance code and removed cpu_to_iaa() function
+    since it was overly complicated and wasn't actually working as
+    advertised.
+
+  - As a result of reworking the above code, fixed several bugs such
+    as possibly unregistering an unregistered crypto alg, a memory
+    leak where iaa_wqs weren't being freed, and making sure the
+    compression schemes were registered before registering the driver.
+
+  - Added set_/idxd_wq_private() accessors for wq private data.
+
+  - Added missing XPORT_SYMBOL_NS_GPL() to [PATCH 04/15] dmaengine:
+    idxd: Export descriptor management functions
+
+  - Added Dave's Reviewed-by: tags from v2.
+
+  - Updated Documentation and commit messages to reflect the changes
+    above.
+  
+  - Rebased to to cryptodev tree, since that has the earlier changes
+    that moved the intel drivers to crypto/intel.
+
+v2 changes:
+
+  - Removed legacy interface and all related code; merged async
+    interface into main deflate patch.
+
+  - Added support for the null destination case.  Thanks to Giovanni
+    Cabiddu for making me aware of this as well as the selftests for
+    it.
+
+  - Had to do some rearrangement of the code in order to pass all the
+    selftests.  Also added a testcase for 'canned'.
+
+  - Moved the iaa crypto driver to drivers/crypto/intel, and moved all
+    the other intel drivers there as well (which will be posted as a
+    separate series immediately following this one).
+
+  - Added an iaa crypto section to MAINTAINERS.
+
+  - Updated the documenation and commit messages to reflect the removal
+    of the legacy interface.
+
+  - Changed kernel version from 6.3.0 to 6.4.0 in patch 01/15 (wq
+    driver name support)
+
+v1:
+
+This series adds Linux crypto algorithm support for Intel® In-memory
+Analytics Accelerator (Intel IAA) [1] hardware compression and
+decompression, which is available on Sapphire Rapids systems.
+
+The IAA crypto support is implemented as an IDXD sub-driver.  The IDXD
+driver already present in the kernel provides discovery and management
+of the IAA devices on a system, as well as all the functionality
+needed to manage, submit, and wait for completion of work executed on
+them.  The first 7 patches (patches starting with dmaengine:) add
+small bits of underlying IDXD plumbing needed to allow external
+sub-drivers to take advantage of this support and claim ownership of
+specific IAA devices and workqueues.
+
+The remaining patches add the main support for this feature via the
+crypto API, making it transparently accessible to kernel features that
+can make use of it such as zswap and zram (patches starting with
+crypto – iaa:).
+
+These include both sync/async support for the deflate algorithm
+implemented by the IAA hardware, as well as an additional option for
+driver statistics and Documentation.
+
+Patch 8 ('[PATCH 08/15] crypto: iaa - Add IAA Compression Accelerator
+Documentation') describes the IAA crypto driver in detail; the
+following is just a high-level synopsis meant to aid the following
+discussion.
+
+The IAA hardware is fairly complex and generally requires a
+knowledgeable administrator with sufficiently detailed understanding
+of the hardware to set it up before it can be used.  As mentioned in
+the Documentation, this typically requires using a special tool called
+accel-config to enumerate and configure IAA workqueues, engines, etc,
+although this can also be done using only sysfs files.
+
+The operation of the driver mirrors this requirement and only allows
+the hardware to be accessed via the crypto layer once the hardware has
+been configured and bound to the the IAA crypto driver.  As an IDXD
+sub-driver, the IAA crypto driver essentially takes ownership of the
+hardware until it is given up explicitly by the administrator.  This
+occurs automatically when the administrator enables the first IAA
+workqueue or disables the last one; the iaa_crypto (sync and async)
+algorithms are registered when the first workqueue is enabled, and
+deregistered when the last one is disabled.
+
+The normal sequence of operations would normally be: 
+
+  < configure the hardware using accel-config or sysfs > 
+
+  < configure the iaa crypto driver (see below) > 
+
+  < configure the subsystem e.g. zswap/zram to use the iaa_crypto algo >  
+
+  < run the workload > 
+
+There are a small number of iaa_crypto driver attributes that the
+administrator can configure, and which also need to be configured
+before the algorithm is enabled:
+
+compression_mode: 
+
+  The IAA crypto driver supports an extensible interface supporting
+  any number of different compression modes that can be tailored to
+  specific types of workloads.  These are implemented as tables and
+  given arbitrary names describing their intent.
+
+  There are currently only 2 compression modes, “canned” and “fixed”.
+  In order to set a compression mode, echo the mode’s name to the
+  compression_mode driver attribute:
+ 
+    echo "canned" > /sys/bus/dsa/drivers/crypto/compression_mode
+
+There are a few other available iaa_crypto driver attributes (see
+Documentation for details) but the main one we want to consider in
+detail for now is the ‘sync_mode’ attribute.
+
+The ‘sync_mode’ attribute has 3 possible settings: ‘sync’, ‘async’,
+and ‘async_irq’.
+
+The context for these different modes is that although the iaa_crypto
+driver implements the asynchronous crypto interface, the async
+interface is currently only used in a synchronous way by facilities
+like zswap that make use of it.
+
+This is fine for software compress/decompress algorithms, since
+there’s no real benefit in being able to use a truly asynchronous
+interface with them.  This isn’t the case, though, for hardware
+compress/decompress engines such as IAA, where truly asynchronous
+behavior is beneficial if not completely necessary to make optimal use
+of the hardware.
+
+The IAA crypto driver ‘sync_mode’ support should allow facilities such
+as zswap to ‘support async (de)compression in some way [2]’ once
+they are modified to actually make use of it.
+
+When the ‘async_irq’ sync_mode is specified, the driver sets the bits
+in the IAA work descriptor to generate an irq when the work completes.
+So for every compression or decompression, the IAA acomp_alg
+implementations called by crypto_acomp_compress/decompress() simply
+set up the descriptor, turn on the 'request irq' bit and return
+immediately with -EINPROGRESS.  When the work completes, the irq fires
+and the IDXD driver’s irq thread for that irq invokes the callback the
+iaa_crypto module registered with IDXD.  When the irq thread gets
+scheduled, it wakes up the caller, which could be for instance zswap,
+waiting synchronously via crypto_wait_req().
+
+Using the simple madvise test program in '[PATCH 08/15] crypto: iaa -
+Add IAA Compression Accelerator Documentation' along with a set of
+pages from the spec17 benchmark and tracepoint instrumentation
+measuring the time taken between the start and end of each compress
+and decompress, this case, async_irq, takes on average 6,847 ns for
+compression and 5,840 ns for decompression. (See Table 1 below for a
+summary of all the tests.)
+
+When sync_mode is set to ‘sync’, the interrupt bit is not set and the
+work descriptor is submitted in the same way it was for the previous
+case.  In this case the call doesn’t return but rather loops around
+waiting in the iaa_crypto driver’s check_completion() function which
+continually checks the descriptor’s completion bit until it finds it
+set to ‘completed’.  It then returns to the caller, again for example
+zswap waiting in crypto_wait_req().  From the standpoint of zswap,
+this case is exactly the same as the previous case, the difference
+seen only in the crypto layer and the iaa_crypto driver internally;
+from its standpoint they’re both synchronous calls.  There is however
+a large performance difference: an average of 3,177 ns for compress
+and 2,235 ns for decompress.
+
+The final sync_mode is ‘async’.  In this case also the interrupt bit
+is not set and the work descriptor is submitted, returning immediately
+to the caller with -EINPROGRESS.  Because there’s no interrupt set to
+notify anyone when the work completes, the caller needs to somehow
+check for work completion.  Because core code like zswap can’t do this
+directly by for example calling iaa_crypto’s check_completion(), there
+would need to be some changes made to code like zswap and the crypto
+layer in order to take advantage of this mode.  As such, there are no
+numbers to share for this mode.
+
+Finally, just a quick discussion of the remaining numbers in Table 1,
+those comparing the iaa_crypto sync and async irq cases to software
+deflate.  Software deflate took average of 108,978 ns for compress and
+14,485 ns for decompress.
+
+As can be seen from Table 1, the numbers using the iaa_crypto driver
+for deflate as compared to software are so much better that merging it
+would seem to make sense on its own merits.  The 'async' sync_mode
+described above, however, offers the possibility of even greater gains
+to be had against higher-performing algorithms such as lzo, via
+parallelization, once the calling facilities are modified to take
+advantage of it.  Follow-up patchsets to this one will demonstrate
+concretely how that might be accomplished.
+
+Thanks, 
+
+Tom  
 
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
+  Table 1. Zswap latency and compression numbers (in ns): 
 
-Put required before allOf.
+  Algorithm                    compress      decompress
+  ----------------------------------------------------------
+  iaa sync			3,177		2,235
+  iaa async irq   		6,847		5,840
+  software deflate	      108,978	       14,485
 
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    battery: battery-cell {
-> +      compatible = "simple-battery";
-> +      alert-celsius = <0 100>;
-> +      constant-charge-current-max-microamp = <15000>;
-> +    };
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      pmic@48 {
-> +        compatible = "adi,max77658";
-> +        reg = <0x48>;
-> +        interrupt-parent = <&gpio>;
-> +        interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
-> +        charger {
-> +          compatible = "adi,max77658-charger";
-> +          monitored-battery = <&battery>;
-> +          adi,input-current-limit-microamp = <475000>;
-> +        };
-> +        regulators {
-> +          LDO0 {
-> +            regulator-boot-on;
-> +            regulator-always-on;
-> +          };
-> +          LDO1 {
-> +            regulator-boot-on;
-> +            regulator-always-on;
-> +          };
-> +        };
-> +        fuel-gauge {
-> +          compatible = "adi,max77658-battery";
-> +          monitored-battery = <&battery>;
-> +          adi,valrt-min-microvolt = <0>;
-> +          adi,valrt-max-microvolt = <5100000>;
-> +          adi,ialrt-min-microamp = <(-5000)>;
-> +          adi,ialrt-max-microamp = <5000>;
-> +        };
-> +      };
-> +    };
-> +
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      pmic@40 {
-> +        compatible = "adi,max77659";
-> +        reg = <0x40>;
-> +        interrupt-parent = <&gpio>;
-> +        interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
-> +        charger {
-> +          compatible = "adi,max77659-charger";
-> +          monitored-battery = <&battery>;
-> +        };
-> +        regulators {
-> +          LDO0 {
-> +            regulator-boot-on;
-> +            regulator-always-on;
-> +          };
-> +        };
-> +      };
-> +    };
+[1] https://cdrdv2.intel.com/v1/dl/getContent/721858
 
-Best regards,
-Krzysztof
+[2] https://lore.kernel.org/lkml/20201107065332.26992-1-song.bao.hua@hisilicon.com/
+
+
+Dave Jiang (2):
+  dmaengine: idxd: add wq driver name support for accel-config user tool
+  dmaengine: idxd: add external module driver support for dsa_bus_type
+
+Tom Zanussi (13):
+  dmaengine: idxd: Export drv_enable/disable and related functions
+  dmaengine: idxd: Export descriptor management functions
+  dmaengine: idxd: Export wq resource management functions
+  dmaengine: idxd: Add wq private data accessors
+  dmaengine: idxd: add callback support for iaa crypto
+  crypto: iaa - Add IAA Compression Accelerator Documentation
+  crypto: iaa - Add Intel IAA Compression Accelerator crypto driver core
+  crypto: iaa - Add per-cpu workqueue table with rebalancing
+  crypto: iaa - Add compression mode management along with fixed mode
+  crypto: iaa - Add support for iaa_crypto deflate compression algorithm
+  crypto: iaa - Add support for default IAA 'canned' compression mode
+  crypto: iaa - Add irq support for the crypto async interface
+  crypto: iaa - Add IAA Compression Accelerator stats
+
+ .../ABI/stable/sysfs-driver-dma-idxd          |    6 +
+ .../driver-api/crypto/iaa/iaa-crypto.rst      |  640 +++++
+ Documentation/driver-api/crypto/iaa/index.rst |   20 +
+ Documentation/driver-api/crypto/index.rst     |   20 +
+ Documentation/driver-api/index.rst            |    1 +
+ MAINTAINERS                                   |    7 +
+ crypto/testmgr.c                              |   10 +
+ crypto/testmgr.h                              |   72 +
+ drivers/crypto/intel/Kconfig                  |    1 +
+ drivers/crypto/intel/Makefile                 |    1 +
+ drivers/crypto/intel/iaa/Kconfig              |   19 +
+ drivers/crypto/intel/iaa/Makefile             |   12 +
+ drivers/crypto/intel/iaa/iaa_crypto.h         |  175 ++
+ .../crypto/intel/iaa/iaa_crypto_comp_canned.c |  110 +
+ .../crypto/intel/iaa/iaa_crypto_comp_fixed.c  |   92 +
+ drivers/crypto/intel/iaa/iaa_crypto_main.c    | 2151 +++++++++++++++++
+ drivers/crypto/intel/iaa/iaa_crypto_stats.c   |  271 +++
+ drivers/crypto/intel/iaa/iaa_crypto_stats.h   |   58 +
+ drivers/dma/idxd/bus.c                        |    6 +
+ drivers/dma/idxd/cdev.c                       |    8 +
+ drivers/dma/idxd/device.c                     |    9 +-
+ drivers/dma/idxd/dma.c                        |    9 +-
+ drivers/dma/idxd/idxd.h                       |   84 +-
+ drivers/dma/idxd/irq.c                        |   12 +-
+ drivers/dma/idxd/submit.c                     |    9 +-
+ drivers/dma/idxd/sysfs.c                      |   28 +
+ include/uapi/linux/idxd.h                     |    1 +
+ 27 files changed, 3812 insertions(+), 20 deletions(-)
+ create mode 100644 Documentation/driver-api/crypto/iaa/iaa-crypto.rst
+ create mode 100644 Documentation/driver-api/crypto/iaa/index.rst
+ create mode 100644 Documentation/driver-api/crypto/index.rst
+ create mode 100644 drivers/crypto/intel/iaa/Kconfig
+ create mode 100644 drivers/crypto/intel/iaa/Makefile
+ create mode 100644 drivers/crypto/intel/iaa/iaa_crypto.h
+ create mode 100644 drivers/crypto/intel/iaa/iaa_crypto_comp_canned.c
+ create mode 100644 drivers/crypto/intel/iaa/iaa_crypto_comp_fixed.c
+ create mode 100644 drivers/crypto/intel/iaa/iaa_crypto_main.c
+ create mode 100644 drivers/crypto/intel/iaa/iaa_crypto_stats.c
+ create mode 100644 drivers/crypto/intel/iaa/iaa_crypto_stats.h
+
+-- 
+2.34.1
 
