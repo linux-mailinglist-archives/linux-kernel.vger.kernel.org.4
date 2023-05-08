@@ -2,320 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B8D6FB047
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5EE6FB04B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234647AbjEHMj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 08:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S234779AbjEHMjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 08:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234274AbjEHMjW (ORCPT
+        with ESMTP id S234426AbjEHMjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 08:39:22 -0400
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AD539488
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 05:39:15 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:6a18:41e7:fcfe:24c0])
-        by andre.telenet-ops.be with bizsmtp
-        id uCfC2900W2WBekD01CfCj9; Mon, 08 May 2023 14:39:13 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pw08v-001VqE-Us;
-        Mon, 08 May 2023 14:39:12 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pw092-00Avgn-LR;
-        Mon, 08 May 2023 14:39:12 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-m68k@lists.linux-m68k.org
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] m68k: defconfig: Update defconfigs for v6.4-rc1
-Date:   Mon,  8 May 2023 14:39:09 +0200
-Message-Id: <5a9bc6058c4fab4b57ba45d778956df8ce7e8688.1683548863.git.geert@linux-m68k.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 8 May 2023 08:39:36 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D647DC41;
+        Mon,  8 May 2023 05:39:20 -0700 (PDT)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 51A9A21C3;
+        Mon,  8 May 2023 12:34:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1683549272;
+        bh=RZn6MEBLEPB8PODbTWpyKrutKazvJ93u3sSJUo2QDe0=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=J8R8cYIvFDJzrpNRE3G922qcYFnnI/bBOt8ad0u0N5q6Er9X6MnYLf7IE68IgRSGr
+         Cq0289oRYMayQVh4ydPTBa2Qt13pQMsi88iGtZZzOCwK2xRbpSrg8q3xKdZZdanJ5+
+         bxFPnNDaGTF7QL2IBC2zfx2Q/H/bNWwDos1xmuuY=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 017652191;
+        Mon,  8 May 2023 12:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1683549559;
+        bh=RZn6MEBLEPB8PODbTWpyKrutKazvJ93u3sSJUo2QDe0=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=LrMJkh4GqzhuNnEemwuNCNXOfSOiHzgcWJI5IDQnK+hU1RVOjLaFxFSFe/rwqSK1e
+         GEMmkGr8V+GZb5edstNj+eeqb45lPijVKaqK/s2sWD+E0MOOXZtLB4hnD3upKqzdR8
+         mKk7xAzkrW1WThUpFmZrffB4C/F6/rsqJGr/42/w=
+Received: from [192.168.211.146] (192.168.211.146) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 8 May 2023 15:39:17 +0300
+Message-ID: <39d06f0d-f30d-c7c7-39e6-e4a566e6d5f4@paragon-software.com>
+Date:   Mon, 8 May 2023 16:39:17 +0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: [PATCH 08/10] fs/ntfs3: Add ability to format new mft records with
+ bigger/smaller header
+Content-Language: en-US
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+To:     <ntfs3@lists.linux.dev>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+References: <b21a4bc9-166d-2631-d73b-cb4e802ff69e@paragon-software.com>
+In-Reply-To: <b21a4bc9-166d-2631-d73b-cb4e802ff69e@paragon-software.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [192.168.211.146]
+X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  - Enable modular build of the new DMA pool test,
-  - Drop CONFIG_PRINT_QUOTA_WARNING=n (auto-disabled since commit
-    36d532d713db5797 ("quota: mark PRINT_QUOTA_WARNING as BROKEN")),
-  - Drop CONFIG_UNIX=y and CONFIG_INET=y (implied by 9P_FS since commit
-    d7385ba137711ea7 ("9p: Remove INET dependency")).
+Just define in ntfs.h
+     #define MFTRECORD_FIXUP_OFFSET  MFTRECORD_FIXUP_OFFSET_1
+or
+     #define MFTRECORD_FIXUP_OFFSET  MFTRECORD_FIXUP_OFFSET_3
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
-To be queued in the m68k for-v6.5 branch.
+  fs/ntfs3/ntfs.h   | 9 +++++++++
+  fs/ntfs3/record.c | 2 ++
+  fs/ntfs3/super.c  | 6 +++---
+  3 files changed, 14 insertions(+), 3 deletions(-)
 
- arch/m68k/configs/amiga_defconfig    | 2 +-
- arch/m68k/configs/apollo_defconfig   | 2 +-
- arch/m68k/configs/atari_defconfig    | 2 +-
- arch/m68k/configs/bvme6000_defconfig | 2 +-
- arch/m68k/configs/hp300_defconfig    | 2 +-
- arch/m68k/configs/mac_defconfig      | 2 +-
- arch/m68k/configs/multi_defconfig    | 2 +-
- arch/m68k/configs/mvme147_defconfig  | 2 +-
- arch/m68k/configs/mvme16x_defconfig  | 2 +-
- arch/m68k/configs/q40_defconfig      | 2 +-
- arch/m68k/configs/sun3_defconfig     | 1 -
- arch/m68k/configs/sun3x_defconfig    | 2 +-
- arch/m68k/configs/virt_defconfig     | 2 --
- 13 files changed, 11 insertions(+), 14 deletions(-)
+diff --git a/fs/ntfs3/ntfs.h b/fs/ntfs3/ntfs.h
+index 3ec2eaf31996..98b76d1b09e7 100644
+--- a/fs/ntfs3/ntfs.h
++++ b/fs/ntfs3/ntfs.h
+@@ -288,6 +288,15 @@ struct MFT_REC {
 
-diff --git a/arch/m68k/configs/amiga_defconfig b/arch/m68k/configs/amiga_defconfig
-index b26469a65bc11ed4..62fdca7efce4dc96 100644
---- a/arch/m68k/configs/amiga_defconfig
-+++ b/arch/m68k/configs/amiga_defconfig
-@@ -43,6 +43,7 @@ CONFIG_IOSCHED_BFQ=m
- CONFIG_BINFMT_MISC=m
- CONFIG_SLAB=y
- # CONFIG_COMPACTION is not set
-+CONFIG_DMAPOOL_TEST=m
- CONFIG_USERFAULTFD=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -454,7 +455,6 @@ CONFIG_OCFS2_FS=m
- # CONFIG_OCFS2_DEBUG_MASKLOG is not set
- CONFIG_FANOTIFY=y
- CONFIG_QUOTA_NETLINK_INTERFACE=y
--# CONFIG_PRINT_QUOTA_WARNING is not set
- CONFIG_AUTOFS_FS=m
- CONFIG_FUSE_FS=m
- CONFIG_CUSE=m
-diff --git a/arch/m68k/configs/apollo_defconfig b/arch/m68k/configs/apollo_defconfig
-index 944a49a129bedab0..5bfbd0444bb51f70 100644
---- a/arch/m68k/configs/apollo_defconfig
-+++ b/arch/m68k/configs/apollo_defconfig
-@@ -39,6 +39,7 @@ CONFIG_IOSCHED_BFQ=m
- CONFIG_BINFMT_MISC=m
- CONFIG_SLAB=y
- # CONFIG_COMPACTION is not set
-+CONFIG_DMAPOOL_TEST=m
- CONFIG_USERFAULTFD=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -411,7 +412,6 @@ CONFIG_OCFS2_FS=m
- # CONFIG_OCFS2_DEBUG_MASKLOG is not set
- CONFIG_FANOTIFY=y
- CONFIG_QUOTA_NETLINK_INTERFACE=y
--# CONFIG_PRINT_QUOTA_WARNING is not set
- CONFIG_AUTOFS_FS=m
- CONFIG_FUSE_FS=m
- CONFIG_CUSE=m
-diff --git a/arch/m68k/configs/atari_defconfig b/arch/m68k/configs/atari_defconfig
-index f3790c45cac722af..8e52bc4a48f1f04f 100644
---- a/arch/m68k/configs/atari_defconfig
-+++ b/arch/m68k/configs/atari_defconfig
-@@ -46,6 +46,7 @@ CONFIG_IOSCHED_BFQ=m
- CONFIG_BINFMT_MISC=m
- CONFIG_SLAB=y
- # CONFIG_COMPACTION is not set
-+CONFIG_DMAPOOL_TEST=m
- CONFIG_USERFAULTFD=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -442,7 +443,6 @@ CONFIG_OCFS2_FS=m
- # CONFIG_OCFS2_DEBUG_MASKLOG is not set
- CONFIG_FANOTIFY=y
- CONFIG_QUOTA_NETLINK_INTERFACE=y
--# CONFIG_PRINT_QUOTA_WARNING is not set
- CONFIG_AUTOFS_FS=m
- CONFIG_FUSE_FS=m
- CONFIG_CUSE=m
-diff --git a/arch/m68k/configs/bvme6000_defconfig b/arch/m68k/configs/bvme6000_defconfig
-index 23b7805309bd4407..f3336f1774ec48b4 100644
---- a/arch/m68k/configs/bvme6000_defconfig
-+++ b/arch/m68k/configs/bvme6000_defconfig
-@@ -36,6 +36,7 @@ CONFIG_IOSCHED_BFQ=m
- CONFIG_BINFMT_MISC=m
- CONFIG_SLAB=y
- # CONFIG_COMPACTION is not set
-+CONFIG_DMAPOOL_TEST=m
- CONFIG_USERFAULTFD=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -403,7 +404,6 @@ CONFIG_OCFS2_FS=m
- # CONFIG_OCFS2_DEBUG_MASKLOG is not set
- CONFIG_FANOTIFY=y
- CONFIG_QUOTA_NETLINK_INTERFACE=y
--# CONFIG_PRINT_QUOTA_WARNING is not set
- CONFIG_AUTOFS_FS=m
- CONFIG_FUSE_FS=m
- CONFIG_CUSE=m
-diff --git a/arch/m68k/configs/hp300_defconfig b/arch/m68k/configs/hp300_defconfig
-index 5605ab5c3dcfc25f..2d1bbac680662884 100644
---- a/arch/m68k/configs/hp300_defconfig
-+++ b/arch/m68k/configs/hp300_defconfig
-@@ -38,6 +38,7 @@ CONFIG_IOSCHED_BFQ=m
- CONFIG_BINFMT_MISC=m
- CONFIG_SLAB=y
- # CONFIG_COMPACTION is not set
-+CONFIG_DMAPOOL_TEST=m
- CONFIG_USERFAULTFD=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -413,7 +414,6 @@ CONFIG_OCFS2_FS=m
- # CONFIG_OCFS2_DEBUG_MASKLOG is not set
- CONFIG_FANOTIFY=y
- CONFIG_QUOTA_NETLINK_INTERFACE=y
--# CONFIG_PRINT_QUOTA_WARNING is not set
- CONFIG_AUTOFS_FS=m
- CONFIG_FUSE_FS=m
- CONFIG_CUSE=m
-diff --git a/arch/m68k/configs/mac_defconfig b/arch/m68k/configs/mac_defconfig
-index d0d1f9c33756d795..b4428dc361027632 100644
---- a/arch/m68k/configs/mac_defconfig
-+++ b/arch/m68k/configs/mac_defconfig
-@@ -37,6 +37,7 @@ CONFIG_IOSCHED_BFQ=m
- CONFIG_BINFMT_MISC=m
- CONFIG_SLAB=y
- # CONFIG_COMPACTION is not set
-+CONFIG_DMAPOOL_TEST=m
- CONFIG_USERFAULTFD=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -433,7 +434,6 @@ CONFIG_OCFS2_FS=m
- # CONFIG_OCFS2_DEBUG_MASKLOG is not set
- CONFIG_FANOTIFY=y
- CONFIG_QUOTA_NETLINK_INTERFACE=y
--# CONFIG_PRINT_QUOTA_WARNING is not set
- CONFIG_AUTOFS_FS=m
- CONFIG_FUSE_FS=m
- CONFIG_CUSE=m
-diff --git a/arch/m68k/configs/multi_defconfig b/arch/m68k/configs/multi_defconfig
-index 6d04314ce7eafb39..4cd9fa4cb10c8893 100644
---- a/arch/m68k/configs/multi_defconfig
-+++ b/arch/m68k/configs/multi_defconfig
-@@ -57,6 +57,7 @@ CONFIG_IOSCHED_BFQ=m
- CONFIG_BINFMT_MISC=m
- CONFIG_SLAB=y
- # CONFIG_COMPACTION is not set
-+CONFIG_DMAPOOL_TEST=m
- CONFIG_USERFAULTFD=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -519,7 +520,6 @@ CONFIG_OCFS2_FS=m
- # CONFIG_OCFS2_DEBUG_MASKLOG is not set
- CONFIG_FANOTIFY=y
- CONFIG_QUOTA_NETLINK_INTERFACE=y
--# CONFIG_PRINT_QUOTA_WARNING is not set
- CONFIG_AUTOFS_FS=m
- CONFIG_FUSE_FS=m
- CONFIG_CUSE=m
-diff --git a/arch/m68k/configs/mvme147_defconfig b/arch/m68k/configs/mvme147_defconfig
-index e6f5ae526d089339..7ee9ad50f0ad9d5e 100644
---- a/arch/m68k/configs/mvme147_defconfig
-+++ b/arch/m68k/configs/mvme147_defconfig
-@@ -35,6 +35,7 @@ CONFIG_IOSCHED_BFQ=m
- CONFIG_BINFMT_MISC=m
- CONFIG_SLAB=y
- # CONFIG_COMPACTION is not set
-+CONFIG_DMAPOOL_TEST=m
- CONFIG_USERFAULTFD=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -402,7 +403,6 @@ CONFIG_OCFS2_FS=m
- # CONFIG_OCFS2_DEBUG_MASKLOG is not set
- CONFIG_FANOTIFY=y
- CONFIG_QUOTA_NETLINK_INTERFACE=y
--# CONFIG_PRINT_QUOTA_WARNING is not set
- CONFIG_AUTOFS_FS=m
- CONFIG_FUSE_FS=m
- CONFIG_CUSE=m
-diff --git a/arch/m68k/configs/mvme16x_defconfig b/arch/m68k/configs/mvme16x_defconfig
-index f2d4dff4787aade7..2488893616dc237f 100644
---- a/arch/m68k/configs/mvme16x_defconfig
-+++ b/arch/m68k/configs/mvme16x_defconfig
-@@ -36,6 +36,7 @@ CONFIG_IOSCHED_BFQ=m
- CONFIG_BINFMT_MISC=m
- CONFIG_SLAB=y
- # CONFIG_COMPACTION is not set
-+CONFIG_DMAPOOL_TEST=m
- CONFIG_USERFAULTFD=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -403,7 +404,6 @@ CONFIG_OCFS2_FS=m
- # CONFIG_OCFS2_DEBUG_MASKLOG is not set
- CONFIG_FANOTIFY=y
- CONFIG_QUOTA_NETLINK_INTERFACE=y
--# CONFIG_PRINT_QUOTA_WARNING is not set
- CONFIG_AUTOFS_FS=m
- CONFIG_FUSE_FS=m
- CONFIG_CUSE=m
-diff --git a/arch/m68k/configs/q40_defconfig b/arch/m68k/configs/q40_defconfig
-index 907eedecd040262c..ffc676289f878012 100644
---- a/arch/m68k/configs/q40_defconfig
-+++ b/arch/m68k/configs/q40_defconfig
-@@ -37,6 +37,7 @@ CONFIG_IOSCHED_BFQ=m
- CONFIG_BINFMT_MISC=m
- CONFIG_SLAB=y
- # CONFIG_COMPACTION is not set
-+CONFIG_DMAPOOL_TEST=m
- CONFIG_USERFAULTFD=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -420,7 +421,6 @@ CONFIG_OCFS2_FS=m
- # CONFIG_OCFS2_DEBUG_MASKLOG is not set
- CONFIG_FANOTIFY=y
- CONFIG_QUOTA_NETLINK_INTERFACE=y
--# CONFIG_PRINT_QUOTA_WARNING is not set
- CONFIG_AUTOFS_FS=m
- CONFIG_FUSE_FS=m
- CONFIG_CUSE=m
-diff --git a/arch/m68k/configs/sun3_defconfig b/arch/m68k/configs/sun3_defconfig
-index 9e3d47008f218675..198179657ce09afc 100644
---- a/arch/m68k/configs/sun3_defconfig
-+++ b/arch/m68k/configs/sun3_defconfig
-@@ -402,7 +402,6 @@ CONFIG_OCFS2_FS=m
- # CONFIG_OCFS2_DEBUG_MASKLOG is not set
- CONFIG_FANOTIFY=y
- CONFIG_QUOTA_NETLINK_INTERFACE=y
--# CONFIG_PRINT_QUOTA_WARNING is not set
- CONFIG_AUTOFS_FS=m
- CONFIG_FUSE_FS=m
- CONFIG_CUSE=m
-diff --git a/arch/m68k/configs/sun3x_defconfig b/arch/m68k/configs/sun3x_defconfig
-index f6540078cb4beb48..85364f6178d440d8 100644
---- a/arch/m68k/configs/sun3x_defconfig
-+++ b/arch/m68k/configs/sun3x_defconfig
-@@ -33,6 +33,7 @@ CONFIG_IOSCHED_BFQ=m
- CONFIG_BINFMT_MISC=m
- CONFIG_SLAB=y
- # CONFIG_COMPACTION is not set
-+CONFIG_DMAPOOL_TEST=m
- CONFIG_USERFAULTFD=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -401,7 +402,6 @@ CONFIG_OCFS2_FS=m
- # CONFIG_OCFS2_DEBUG_MASKLOG is not set
- CONFIG_FANOTIFY=y
- CONFIG_QUOTA_NETLINK_INTERFACE=y
--# CONFIG_PRINT_QUOTA_WARNING is not set
- CONFIG_AUTOFS_FS=m
- CONFIG_FUSE_FS=m
- CONFIG_CUSE=m
-diff --git a/arch/m68k/configs/virt_defconfig b/arch/m68k/configs/virt_defconfig
-index 0b5a9f1cb7e8c5d8..49e649cc29f7b1e8 100644
---- a/arch/m68k/configs/virt_defconfig
-+++ b/arch/m68k/configs/virt_defconfig
-@@ -26,8 +26,6 @@ CONFIG_SUN_PARTITION=y
- CONFIG_SYSV68_PARTITION=y
- CONFIG_NET=y
- CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
- CONFIG_IP_PNP=y
- CONFIG_IP_PNP_DHCP=y
- CONFIG_IP_PNP_BOOTP=y
+  #define MFTRECORD_FIXUP_OFFSET_1 offsetof(struct MFT_REC, res)
+  #define MFTRECORD_FIXUP_OFFSET_3 offsetof(struct MFT_REC, fixups)
++/*
++ * define MFTRECORD_FIXUP_OFFSET as MFTRECORD_FIXUP_OFFSET_3 (0x30)
++ * to format new mft records with bigger header (as current ntfs.sys does)
++ *
++ * define MFTRECORD_FIXUP_OFFSET as MFTRECORD_FIXUP_OFFSET_1 (0x2A)
++ * to format new mft records with smaller header (as old ntfs.sys did)
++ * Both variants are valid.
++ */
++#define MFTRECORD_FIXUP_OFFSET  MFTRECORD_FIXUP_OFFSET_1
+
+  static_assert(MFTRECORD_FIXUP_OFFSET_1 == 0x2A);
+  static_assert(MFTRECORD_FIXUP_OFFSET_3 == 0x30);
+diff --git a/fs/ntfs3/record.c b/fs/ntfs3/record.c
+index e73ca2df42eb..c12ebffc94da 100644
+--- a/fs/ntfs3/record.c
++++ b/fs/ntfs3/record.c
+@@ -388,6 +388,8 @@ int mi_format_new(struct mft_inode *mi, struct 
+ntfs_sb_info *sbi, CLST rno,
+
+      rec->seq = cpu_to_le16(seq);
+      rec->flags = RECORD_FLAG_IN_USE | flags;
++    if (MFTRECORD_FIXUP_OFFSET == MFTRECORD_FIXUP_OFFSET_3)
++        rec->mft_record = cpu_to_le32(rno);
+
+      mi->dirty = true;
+
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index 12019bfe1325..7ab0a79c7d84 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -867,7 +867,7 @@ static int ntfs_init_from_boot(struct super_block 
+*sb, u32 sector_size,
+      }
+
+      sbi->max_bytes_per_attr =
+-        record_size - ALIGN(MFTRECORD_FIXUP_OFFSET_1, 8) -
++        record_size - ALIGN(MFTRECORD_FIXUP_OFFSET, 8) -
+          ALIGN(((record_size >> SECTOR_SHIFT) * sizeof(short)), 8) -
+          ALIGN(sizeof(enum ATTR_TYPE), 8);
+
+@@ -909,10 +909,10 @@ static int ntfs_init_from_boot(struct super_block 
+*sb, u32 sector_size,
+
+      sbi->new_rec = rec;
+      rec->rhdr.sign = NTFS_FILE_SIGNATURE;
+-    rec->rhdr.fix_off = cpu_to_le16(MFTRECORD_FIXUP_OFFSET_1);
++    rec->rhdr.fix_off = cpu_to_le16(MFTRECORD_FIXUP_OFFSET);
+      fn = (sbi->record_size >> SECTOR_SHIFT) + 1;
+      rec->rhdr.fix_num = cpu_to_le16(fn);
+-    ao = ALIGN(MFTRECORD_FIXUP_OFFSET_1 + sizeof(short) * fn, 8);
++    ao = ALIGN(MFTRECORD_FIXUP_OFFSET + sizeof(short) * fn, 8);
+      rec->attr_off = cpu_to_le16(ao);
+      rec->used = cpu_to_le32(ao + ALIGN(sizeof(enum ATTR_TYPE), 8));
+      rec->total = cpu_to_le32(sbi->record_size);
 -- 
 2.34.1
 
