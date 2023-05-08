@@ -2,65 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F65E6FA2C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B6B6FA2E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbjEHI7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 04:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
+        id S233677AbjEHJCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 05:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbjEHI7e (ORCPT
+        with ESMTP id S233620AbjEHJCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 04:59:34 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7831115695;
-        Mon,  8 May 2023 01:59:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683536372; x=1715072372;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vF8rQRTcg0Qb6PSV+SSaexqlbUZnUeRKMH3XSNDXkBE=;
-  b=LkOquEuAGBRiw/ZtvkAA73XWrhbFV2dXG7XGIOApY5iUBELOtIvNXnzo
-   uuPrukYSZvExa1chGl0Kbw8AF75LYUQmSShk0wE7jdWxACbB2qBJYD47a
-   TQ1C4nkXpYODryitZjLjMuKBDmnLvTsbYNuuU9BWTljN3fwOm42Ycuf8N
-   ++W34DIQB/t0SR9BTp6S4pkpP/5x1rVbRW2XVAIWggbW+7gMpuG8QLFel
-   ppdXQ5jg8qbgu2zxl3+s2JwV/AqL7+VymLID/HGYByOBPKp3Elm/yRcMG
-   cfaqB9RdWcl7BRw8CUSXPa+NKkmrV+YVBX+GZsRcpKoBno0LzvOBFdHv6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="412854457"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="412854457"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 01:59:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="701343490"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="701343490"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga007.fm.intel.com with ESMTP; 08 May 2023 01:59:29 -0700
-Message-ID: <71834813-4f59-a453-5d17-1a44010047ad@linux.intel.com>
-Date:   Mon, 8 May 2023 12:01:02 +0300
+        Mon, 8 May 2023 05:02:10 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1707823A15
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 02:01:10 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bc25f0c7dso8107918a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 02:01:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683536466; x=1686128466;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mdjVB1LcK65MjUQ5lAoWWtjhBM+KfEqN5gXnbsQlIK0=;
+        b=t40AGY5/zL0/XXc7pQ4Npisl0XqlgKQc9BM/f43pHyOgmLT7RrDqoFoJaUTQjSel5S
+         C0hfCvVd2YeezCX1ZvEN4S8f+dCNm5R0iCkNKEVLWdx8Kj39qwAww0eq7SztqAeoKWW5
+         GNipyl/sTouqc+HG67BH0X5Xl61zdJnpc6kwIIYWg2zSJKppGoghENY4OPp31mxr23Tz
+         Ug+u3P37klL3iESNEiUTRQRcRZqTFA4IPjV3KWkMoE0N/5vQOBwneqBDF1YytNJHFk7P
+         HwF3YwPS2hc8WhTkpkuUEgKXk+igPwAGHa7roc6GAuDn3tfjp4+k0Tkp32ehLyCNzFL4
+         6PsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683536466; x=1686128466;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mdjVB1LcK65MjUQ5lAoWWtjhBM+KfEqN5gXnbsQlIK0=;
+        b=hXmFbSDDShUbERUEIYg0e/xNfN8LQqfHlyG7+bm9geodC1x+UW9yMOaABjB+wrBwDs
+         ZYILRNNaQyqWtJSRrqgvW/Xk6syxfUmOyVNhyR+jVGAte+nZ2GMKZXQ7x+75j4hsdvw9
+         HfetcQjHih6wVIiUQEakmIYdIQPtqheSWeUygSM8zJCv1DZgMZ93xwSt22fg5e7Vy8HY
+         axpKA++j6P/K0qTAniD1HQvw2jBC/O3N7dOBwkwnJvR5DJHxESDBBBFG6XmaFyEey4Mh
+         4xIq9hvNvWF4Dty1QzeXjfJT3boxNZP5v4K+BCIy5gMz8IWvYW3AaVWx6g/lJsXAnKIO
+         fyOg==
+X-Gm-Message-State: AC+VfDy3+9lizxlYD9+2WuSGpI5jr+eGCc3Pp28G3GW9ya7tk0QoqsgS
+        LEKUBxvZg75hH9mTANJdL35FmQ==
+X-Google-Smtp-Source: ACHHUZ4HpKWDjurqiqoLaDtN/lfcKNWSX5+AEn0mGRBLeJKV/5W39K4QrEkUfS5UpnPMpO6vpYpdLA==
+X-Received: by 2002:a17:907:5c5:b0:965:9edf:f0d0 with SMTP id wg5-20020a17090705c500b009659edff0d0mr7601374ejb.13.1683536466403;
+        Mon, 08 May 2023 02:01:06 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
+        by smtp.gmail.com with ESMTPSA id z10-20020a1709063a0a00b0094b5ce9d43dsm4685758eje.85.2023.05.08.02.01.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 02:01:05 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Russell King <linux@armlinux.org.uk>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        soc@kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: s3c: remove obsolete config S3C64XX_SETUP_IDE
+Date:   Mon,  8 May 2023 11:01:02 +0200
+Message-Id: <168353645813.78617.10247256011505870361.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230508040433.13648-1-lukas.bulwahn@gmail.com>
+References: <20230508040433.13648-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH v3 1/4] xhci: Add some quirks for zhaoxin xhci to fix
- issues
-Content-Language: en-US
-To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
-        gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     tonywwang@zhaoxin.com, weitaowang@zhaoxin.com,
-        stable@vger.kernel.org
-References: <20230506201536.7362-1-WeitaoWang-oc@zhaoxin.com>
- <20230506201536.7362-2-WeitaoWang-oc@zhaoxin.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20230506201536.7362-2-WeitaoWang-oc@zhaoxin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,44 +77,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6.5.2023 23.15, Weitao Wang wrote:
-> Add a quirk XHCI_ZHAOXIN_HOST for zhaoxin xhci to fix issues,
-> there are two cases will be used.
-> - add u1/u2 support.
-> - fix xHCI root hub speed show issue in zhaoxin platform.
+
+On Mon, 08 May 2023 06:04:33 +0200, Lukas Bulwahn wrote:
+> Commit 0d297df03890 ("ARM: s3c: simplify platform code") removes the line
+> in Makefile.s3c64xx to configure the inclusion of setup-ide-s3c64xx.c,
+> with CONFIG_S3C64XX_SETUP_IDE. So, since then, config S3C64XX_SETUP_IDE has
+> no effect and any further purpose.
 > 
-> Add a quirk XHCI_ZHAOXIN_TRB_FETCH to fix TRB prefetch issue.
+> Remove the obsolete config S3C64XX_SETUP_IDE.
 > 
-> On Zhaoxin ZX-100 project, xHCI can't work normally after resume
-> from system Sx state. To fix this issue, when resume from system
-> Sx state, reinitialize xHCI instead of restore.
-> So, Add XHCI_RESET_ON_RESUME quirk for ZX-100 to fix issue of
-> resuming from system Sx state.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+> [...]
 
+Applied, thanks!
 
-I'd split this series into different logical parts:
+[1/1] ARM: s3c: remove obsolete config S3C64XX_SETUP_IDE
+      https://git.kernel.org/krzk/linux/c/9d2edccb154bd98baf7f1e21d23f799e4f5e8359
 
-patch 1/4
-   Set XHCI_RESET_ON_RESUME quirk to ZHAOXIN host to fix resume issue.
-   cc: stable
-
-patch 2/4
-   Add XHCI_ZHAOXIN_TRB_FETCH quirk flag together with code that allocates double pages
-   cc: stable
-
-patch 3/4
-   Add XHCI_ZHAOXIN_HOST quirk flag together with code that corrects USB3 roothub minor version
-   cc: stable
-
-patch 4/4
-   Set XHCI_LPM_SUPPORT quirk together with code that sets tier policy and u1/u2 timeouts,
-   Don't add stable as this is about adding feature support.
-
-(Accidentally replied to older v2 series with the above comments)
-
-Thanks
--Mathias
-
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
