@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7276F6FAFEF
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9E06FAFFE
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233986AbjEHM1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 08:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S234193AbjEHM3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 08:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjEHM1j (ORCPT
+        with ESMTP id S234149AbjEHM3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 08:27:39 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2071.outbound.protection.outlook.com [40.107.93.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DD2348A4;
-        Mon,  8 May 2023 05:27:37 -0700 (PDT)
+        Mon, 8 May 2023 08:29:11 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on20605.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8d::605])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DCE37601;
+        Mon,  8 May 2023 05:28:50 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CNX0gGuzBWuPlAEowkRKR4jiwB7U765KqsZIiumE8YGWuN2QrfkMZ5qXfYarguvM16XOULyCXu8rNfGMfMDny+YbNKyWemOtPVEkLCcL9Atr+WwF4l3d5vaIHnLI+EiQUSWWPuCQwXEj3vUyzzSYZPXgTgr49p4A9Q8422kVEz8+BDIhn9WjX1s9e1RkxceWF7X1SFZch1pvcN7XxqqglXdBJqKTycVp3BBACoJML5DrC8g6x2CixPXfRTggS/xyfVLg8vVIFcWS7OriCeiHqhB7Eh0dBXdG5IqLcsv2lwpt1RMa2kZ78UDArI7I4zd0qXNc39N/cdYq9BD6yCxwug==
+ b=iTIIGI5eh4+njvwMlPBBH7c+RtG6jlPEV2QkJQC9g7zQRK82dH6OJVmKVOWVx1uwZ6Fcu3hjD2/EIwywEBKkIIcrcX/hN3cwE/4NrhuEQjN2e9nmcb6a1WiOxlSXTv40CI1GxC+CXUYNohGSqnfjHuf8yRalg1U14Cc+xeZ33Q3EM50jnJylbZN6zyeLuEutHLQVKumZxcrY+0QDFmjYj8aFRGl9Ve90ETwcfnkJhqxMIawvYhbXJTo0okIpwc9jvx2MJrx8sYHGh+nduzlAGCG5pSba+UIHIa2Y5B1xV/5LJscWW/jux1nwN0E7syXRw6mWgWQFEV3p8oXDAIMUAw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ggPzDBoMg+NSkCkSTSGEpJElqU9s0QggF8m3H/JWI40=;
- b=Ugtw8Mdq5lJyjybhsVxtFpLIVI7Bt6t5qfdb7dgveRFTXc4fZxtCqocA0aHssKirfGBgHInusEYb+AbpQLR7FmeVUQ7T2sCaHsqZsJEr4GQmCmYvEDPlATXt+fJJjyTseFEacwwurCRw7jDkOhyjX7+TRebQ2NhjZVNidrBS7PRTPwB6OdnvAUknKG6xzIL4ZUUYoer6ZwoOTmo/nmhXFYqHj4H0Lw/xm3suBTMCImJNavrSVXrZ3pTegoAaycZH/w8yox3TI8aWFCZHJzsih9uts/6T/8vch15lT60zWtPDYRs0ZGyZHtJhKW0duBqZf4AGFDUu35paniKQqDt9Aw==
+ bh=4WP0nIrW0puSZZb0FzvEsxvFWz7wvg3IdKUl5/vBVps=;
+ b=bQq2SOh9nB/V77Gah9ocdV9r5LfpPEa1ZpAGYhD/hgOZUpWrGF30uT8rWnpTTmlkhygNCYAuEyUaupXz8MVSWwgT3SRC8JE0KtK4hjEF3yWglwhRyeybyuSZHppKlDOhB5ZAMW2csoreg1KIfo7d50iNCP4G7sCjOa8YD1Vdw8CI7BvCAOVLXk2+PUy3wEt1puTWLW5tEvPoJt/t/aWebNccMmw3DVXN1DlbPCGwHuxlzqeqvMZjoToJGTe8XlH+hokxeEK+YkXS0i/GUmVit3eCqG+4JLEa7CBte85DoRrWWUY11lE5XTq24gdEIPFxgBxnweayfLsdtAn2WEbKYw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -29,18 +29,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ggPzDBoMg+NSkCkSTSGEpJElqU9s0QggF8m3H/JWI40=;
- b=B7cDtL/Z6R4keGK5Q7yfDlpeKjOFS/D3BG5n72h9cpBghajFCkCSecake3Em7FtXJ4xXdv7Jj4ZPeyW3qVzCUi7GZxiSjk24TpIcKmz7mIHJH6vU93TqKlTExKra33mnHCC121LiujQPOXN/V9LC2ANSFlQehG3xk4OOFSPSNLLy8Cuc1iqikvRnTx6YiuBS08lh38aaAUQsH/quSjNSgHEp6XJgePvydf+cjiV9oCd7iHBlSzwDrky3fDF1a43qk8dvsaeIvW1a4j+PmJ34hpH1FLZEv3M2QBdWEZSQezzoRp0WOUd6CFVKLTzrHdzTcbBLXDgf/ebLmmDfJEOTMg==
-Received: from MW4PR03CA0124.namprd03.prod.outlook.com (2603:10b6:303:8c::9)
- by BN9PR12MB5033.namprd12.prod.outlook.com (2603:10b6:408:132::14) with
+ bh=4WP0nIrW0puSZZb0FzvEsxvFWz7wvg3IdKUl5/vBVps=;
+ b=tAiPMG1igM6oIm0AbLWeYogJ40NtqXU1buWGuxn7HsKJcqn1ujrNqyjDYbVfzztn7uCiyVXJ9ICg64UqCwlWfSQK5ENKSM+cX5nsrhZxT9tm5FM6aN7JfLPOsvPtSDM8ybClchqYJj8j3S/4W+wUztf2PY+LNFzdOZBOQccrcRvP93XwyCMrhSgproZUky8ISIuM0pZaCR3ckpWzsCQISTSo0YwjVl7CIUm7ptzVfF6/pcOGGb5/t2w7+qwMnxNJyXWM3AgZjrU5jSyJ3w6QzN0A1TtMAl2upoFNoNcNSEonDcH6ZBabdz/7dAZblMNGafi+8r1ADyhUYqpcFsAZJw==
+Received: from MW4PR04CA0319.namprd04.prod.outlook.com (2603:10b6:303:82::24)
+ by BY5PR12MB4180.namprd12.prod.outlook.com (2603:10b6:a03:213::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
- 2023 12:27:35 +0000
-Received: from CO1NAM11FT060.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8c:cafe::31) by MW4PR03CA0124.outlook.office365.com
- (2603:10b6:303:8c::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32 via Frontend
- Transport; Mon, 8 May 2023 12:27:34 +0000
+ 2023 12:28:46 +0000
+Received: from CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:82:cafe::33) by MW4PR04CA0319.outlook.office365.com
+ (2603:10b6:303:82::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33 via Frontend
+ Transport; Mon, 8 May 2023 12:28:46 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -48,30 +48,30 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.160 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT060.mail.protection.outlook.com (10.13.175.132) with Microsoft SMTP
+ CO1NAM11FT063.mail.protection.outlook.com (10.13.175.37) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6363.32 via Frontend Transport; Mon, 8 May 2023 12:27:33 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ 15.20.6363.32 via Frontend Transport; Mon, 8 May 2023 12:28:46 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
  (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 8 May 2023
- 05:27:27 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ 05:28:35 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 8 May 2023
- 05:27:27 -0700
+ 05:28:35 -0700
 Received: from mallet.nvidia.com (10.127.8.10) by mail.nvidia.com
  (10.129.68.6) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Mon, 8 May 2023 05:27:25 -0700
+ Transport; Mon, 8 May 2023 05:28:33 -0700
 From:   Peter De Schrijver <pdeschrijver@nvidia.com>
 To:     Peter De Schrijver <pdeschrijver@nvidia.com>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>
-CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <mperttunen@nvidia.com>
+CC:     <sudeep.holla@arm.com>, <talho@nvidia.com>, <robh@kernel.org>,
         <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <stefank@nvidia.com>
-Subject: [PATCH 4/5] dt-bindings: Add bindings to support DRAM MRQ GSCs
-Date:   Mon, 8 May 2023 15:20:52 +0300
-Message-ID: <20230508122048.99953-5-pdeschrijver@nvidia.com>
+Subject: [PATCH 5/5] firmware: tegra: bpmp: Add support for DRAM MRQ GSCs
+Date:   Mon, 8 May 2023 15:20:54 +0300
+Message-ID: <20230508122048.99953-6-pdeschrijver@nvidia.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230508122048.99953-1-pdeschrijver@nvidia.com>
 References: <20230508122048.99953-1-pdeschrijver@nvidia.com>
@@ -81,191 +81,360 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT060:EE_|BN9PR12MB5033:EE_
-X-MS-Office365-Filtering-Correlation-Id: cb95df79-fc18-4420-36f1-08db4fbf99d1
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT063:EE_|BY5PR12MB4180:EE_
+X-MS-Office365-Filtering-Correlation-Id: afd4eac4-0093-4879-ebf7-08db4fbfc4c5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: p3/hyzTck2ueF/hTMacXUVfjIUuZWgoi3XV1ZLJ2JDkujds0ARQyPXlGMLl4w9FVh1iMxVkYhHsSb88Y8o7rNUM7VQEYGH4GyC7qc2SvmTcbq7eB7Vg7L1084Vc9CYeeAAG8Kk6WmNSbedVWZR1JaDwtnMsS1FZC0sYJaJuMF4f3eliG8fn/iVR2eCPdy3Q4J5e914E+uP602Yi6ZBWGZDvwnjIdzoaqwNB1/jqHpV84WarUdWeZIzSEv2kBIv3J8iGX1lCqS5Vm4r34S0tOO5nKrij7e2ZWctRKu86wxvSURnbUr/Rb5pC8X35hVRw99B/QaEqhXMWwSvEWZnazQ/Av8D0A06mGDGsR+dbNZhuOy8OQyZ5z4bXdCCqgKHVXDK+2S/3A94tVgf/P/kVjJsbnNBqEvWLFtCLrtyDJ0Z1KPrv76KOmG6icl8zKdw4vcYQMJHj5x4Ins4FcYR/JvLnNODCKstui0Z4+qapnhbA6qJ5PeNo3ES1Xg1EUf9Bvu6U4ny902hQEPSlHQTASCSWD/U3oy/jf2vzuJExjh3xNaAXqKUqczGj8sUnetp8GxNIFwNErAKGEbAfsnDcJPR9TupFccbk6X+amgPZlznrqVdBpC/ZM+ePYB9UYryJgYmBhfyPYf8/7QOO3B+rE6/uje+ox1uuchj3A35+Eacw34m9c4vwX9W21KbnU4Mr7E8wryEGIofpd31BBX9ZechUbFL+lE4Z6kzdBWOQL7LLJd8ke6c457nNrgb/9ZGSm
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(396003)(376002)(451199021)(46966006)(36840700001)(40470700004)(40460700003)(2906002)(36860700001)(426003)(5660300002)(47076005)(356005)(7636003)(82740400003)(82310400005)(36756003)(86362001)(40480700001)(54906003)(110136005)(478600001)(186003)(26005)(966005)(7696005)(6666004)(1076003)(107886003)(316002)(2616005)(8936002)(336012)(8676002)(41300700001)(70586007)(6636002)(4326008)(83380400001)(70206006);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ifgF48vNxunyLoiMb8HVwo8Q57bMkA/CUrk5Y5HtU7DGqwiKWez6kJSElbOvG1exzEL0qOIlbf03c+34nUVSialEmNpNJ544XElYq7e7Jr5T8dTGXJtMMzdGYedI2P2N/jo0FLobeH56ye7WFSiroLNv2ak1NoG4p/ZGB60F95w8dq7hj/j+dc9DwYyOK4rbrYDnDwtyk18KRPNZNjey+F/Pj/E75TzFTQv/VK/t26wQNWE/eIKQEg+RrU54pARTuAV+0Koyu6gcVYp5zfQWTwjX4lbvk44jiHBGteniITCNb1L8n5cQKMa0Y18zkwKiR7a8UfLAHZ+I+K03zMSQkgWu/K6cCfxLAkp5Ge9uXZu8DPtb/Oz4l/nLS/SpIajRBclwPUbf4N7HsOLOK8A1H6VST7FCnmrGlPtpv8+Jtf8K7poY5TBIy12PpEcIfNfm9vBrn2muMBDyW9Qw2olU4KsH38fImejaTcT2mkAdFr51ECu4TaK4YdqLpO5o3ZmP5hnzDY4bJ8ip14/xRMRHueJTc3Z2YLGIhJAHTilirGqtWR+QiDeePXRU3srqYvIOC8cjF3UjGwps8bGWwQWI0MUpJBQYAnVhXga4HRsALNcLo6e5MHc+8w+c+gflyZt3m3fSBThW1ujnziXoBBVevH87+ePwGjheylQLHCotEX0=
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(136003)(396003)(346002)(451199021)(46966006)(36840700001)(86362001)(36756003)(6666004)(316002)(110136005)(54906003)(6636002)(4326008)(70586007)(7696005)(70206006)(478600001)(82310400005)(40480700001)(5660300002)(8676002)(2906002)(8936002)(356005)(41300700001)(7636003)(82740400003)(186003)(107886003)(36860700001)(26005)(1076003)(47076005)(336012)(83380400001)(426003)(2616005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 12:27:33.9936
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 12:28:46.0772
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb95df79-fc18-4420-36f1-08db4fbf99d1
+X-MS-Exchange-CrossTenant-Network-Message-Id: afd4eac4-0093-4879-ebf7-08db4fbfc4c5
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT060.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5033
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4180
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for DRAM MRQ GSC support.
+Implement support for DRAM MRQ GSCs.
 
-Co-developed-by: Stefan Kristiansson <stefank@nvidia.com>
-Signed-off-by: Stefan Kristiansson <stefank@nvidia.com>
 Signed-off-by: Peter De Schrijver <pdeschrijver@nvidia.com>
 ---
- .../firmware/nvidia,tegra186-bpmp.yaml        | 69 ++++++++++++++++++-
- .../nvidia,tegra264-bpmp-shmem.yaml           | 40 +++++++++++
- 2 files changed, 106 insertions(+), 3 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/reserved-memory/nvidia,tegra264-bpmp-shmem.yaml
+ drivers/firmware/tegra/bpmp-tegra186.c | 208 ++++++++++++++++++-------
+ drivers/firmware/tegra/bpmp.c          |   4 +-
+ 2 files changed, 150 insertions(+), 62 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/firmware/nvidia,tegra186-bpmp.yaml b/Documentation/devicetree/bindings/firmware/nvidia,tegra186-bpmp.yaml
-index 833c07f1685c..d818cfe1d783 100644
---- a/Documentation/devicetree/bindings/firmware/nvidia,tegra186-bpmp.yaml
-+++ b/Documentation/devicetree/bindings/firmware/nvidia,tegra186-bpmp.yaml
-@@ -57,8 +57,11 @@ description: |
-   "#address-cells" or "#size-cells" property.
+diff --git a/drivers/firmware/tegra/bpmp-tegra186.c b/drivers/firmware/tegra/bpmp-tegra186.c
+index 2e26199041cd..000acf0fe183 100644
+--- a/drivers/firmware/tegra/bpmp-tegra186.c
++++ b/drivers/firmware/tegra/bpmp-tegra186.c
+@@ -4,8 +4,11 @@
+  */
  
-   The shared memory area for the IPC TX and RX between CPU and BPMP are
--  predefined and work on top of sysram, which is an SRAM inside the
--  chip. See ".../sram/sram.yaml" for the bindings.
-+  predefined and work on top of either sysram, which is an SRAM inside the
-+  chip, or in normal SDRAM.
-+  See ".../sram/sram.yaml" for the bindings for the SRAM case.
-+  See "../reserved-memory/nvidia,tegra264-bpmp-shmem.yaml" for bindings for
-+  the SDRAM case.
+ #include <linux/genalloc.h>
++#include <linux/io.h>
+ #include <linux/mailbox_client.h>
++#include <linux/of_address.h>
+ #include <linux/platform_device.h>
++#include <linux/range.h>
  
- properties:
-   compatible:
-@@ -81,6 +84,11 @@ properties:
-     minItems: 2
-     maxItems: 2
+ #include <soc/tegra/bpmp.h>
+ #include <soc/tegra/bpmp-abi.h>
+@@ -13,11 +16,12 @@
  
-+  memory-region:
-+    description: phandle to reserved memory region used for IPC between
-+      CPU-NS and BPMP.
-+    maxItems: 1
-+
-   "#clock-cells":
-     const: 1
+ #include "bpmp-private.h"
  
-@@ -115,10 +123,16 @@ properties:
++enum tegra_bpmp_mem_type { TEGRA_INVALID, TEGRA_SRAM, TEGRA_RMEM };
++
+ struct tegra186_bpmp {
+ 	struct tegra_bpmp *parent;
  
- additionalProperties: false
+ 	struct {
+-		struct gen_pool *pool;
+ 		void __iomem *virt;
+ 		dma_addr_t phys;
+ 	} tx, rx;
+@@ -26,6 +30,12 @@ struct tegra186_bpmp {
+ 		struct mbox_client client;
+ 		struct mbox_chan *channel;
+ 	} mbox;
++
++	struct {
++		struct gen_pool *tx, *rx;
++	} sram;
++
++	enum tegra_bpmp_mem_type type;
+ };
  
-+allOf:
-+  - oneOf:
-+      - required:
-+          - memory-region
-+      - required:
-+          - shmem
+ static inline struct tegra_bpmp *
+@@ -158,64 +168,171 @@ static void mbox_handle_rx(struct mbox_client *client, void *data)
+ 	tegra_bpmp_handle_rx(bpmp);
+ }
+ 
+-static int tegra186_bpmp_init(struct tegra_bpmp *bpmp)
++static void tegra186_bpmp_channel_deinit(struct tegra_bpmp *bpmp)
++{
++	int i;
++	struct tegra186_bpmp *priv = bpmp->priv;
 +
- required:
-   - compatible
-   - mboxes
--  - shmem
-   - "#clock-cells"
-   - "#power-domain-cells"
-   - "#reset-cells"
-@@ -184,3 +198,52 @@ examples:
-             #thermal-sensor-cells = <1>;
-         };
-     };
++	for (i = 0; i < bpmp->threaded.count; i++) {
++		if (!bpmp->threaded_channels[i].bpmp)
++			continue;
 +
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/mailbox/tegra186-hsp.h>
-+    #include <dt-bindings/memory/tegra186-mc.h>
++		tegra186_bpmp_channel_cleanup(&bpmp->threaded_channels[i]);
++	}
 +
-+    hsp_top0: hsp@3c00000 {
-+        compatible = "nvidia,tegra186-hsp";
-+        reg = <0x03c00000 0xa0000>;
-+        interrupts = <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-names = "doorbell";
-+        #mbox-cells = <2>;
-+    };
++	tegra186_bpmp_channel_cleanup(bpmp->rx_channel);
++	tegra186_bpmp_channel_cleanup(bpmp->tx_channel);
 +
-+    reserved-memory {
-+        dram_cpu_bpmp_mail: shmem@f1be0000  {
-+            compatible = "nvidia,tegra264-bpmp-shmem";
-+            reg = <0x0 0xf1be0000 0x0 0x2000>;
-+            no-map;
-+        };
-+    };
++	if (priv->type == TEGRA_SRAM) {
++		gen_pool_free(priv->sram.tx, (unsigned long)priv->tx.virt, 4096);
++		gen_pool_free(priv->sram.rx, (unsigned long)priv->rx.virt, 4096);
++	} else if (priv->type == TEGRA_RMEM) {
++		memunmap(priv->tx.virt);
++	}
++}
 +
-+    bpmp {
-+        compatible = "nvidia,tegra186-bpmp";
-+        interconnects = <&mc TEGRA186_MEMORY_CLIENT_BPMPR &emc>,
-+                        <&mc TEGRA186_MEMORY_CLIENT_BPMPW &emc>,
-+                        <&mc TEGRA186_MEMORY_CLIENT_BPMPDMAR &emc>,
-+                        <&mc TEGRA186_MEMORY_CLIENT_BPMPDMAW &emc>;
-+        interconnect-names = "read", "write", "dma-mem", "dma-write";
-+        iommus = <&smmu TEGRA186_SID_BPMP>;
-+        mboxes = <&hsp_top0 TEGRA_HSP_MBOX_TYPE_DB
-+                            TEGRA_HSP_DB_MASTER_BPMP>;
-+        memory-region = <&dram_cpu_bpmp_mail>;
-+        #clock-cells = <1>;
-+        #power-domain-cells = <1>;
-+        #reset-cells = <1>;
++static int tegra186_bpmp_channel_setup(struct tegra_bpmp *bpmp)
+ {
+-	struct tegra186_bpmp *priv;
+ 	unsigned int i;
+ 	int err;
+ 
+-	priv = devm_kzalloc(bpmp->dev, sizeof(*priv), GFP_KERNEL);
+-	if (!priv)
+-		return -ENOMEM;
++	err = tegra186_bpmp_channel_init(bpmp->tx_channel, bpmp,
++					 bpmp->soc->channels.cpu_tx.offset);
++	if (err < 0)
++		return err;
+ 
+-	bpmp->priv = priv;
+-	priv->parent = bpmp;
++	err = tegra186_bpmp_channel_init(bpmp->rx_channel, bpmp,
++					 bpmp->soc->channels.cpu_rx.offset);
++	if (err < 0) {
++		tegra186_bpmp_channel_cleanup(bpmp->tx_channel);
++		return err;
++	}
 +
-+        i2c {
-+            compatible = "nvidia,tegra186-bpmp-i2c";
-+            nvidia,bpmp-bus-id = <5>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+        };
++	for (i = 0; i < bpmp->threaded.count; i++) {
++		unsigned int index = bpmp->soc->channels.thread.offset + i;
+ 
+-	priv->tx.pool = of_gen_pool_get(bpmp->dev->of_node, "shmem", 0);
+-	if (!priv->tx.pool) {
++		err = tegra186_bpmp_channel_init(&bpmp->threaded_channels[i],
++						 bpmp, index);
++		if (err < 0)
++			break;
++	}
 +
-+        thermal {
-+            compatible = "nvidia,tegra186-bpmp-thermal";
-+            #thermal-sensor-cells = <1>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/reserved-memory/nvidia,tegra264-bpmp-shmem.yaml b/Documentation/devicetree/bindings/reserved-memory/nvidia,tegra264-bpmp-shmem.yaml
-new file mode 100644
-index 000000000000..6cd9a61cd31f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/reserved-memory/nvidia,tegra264-bpmp-shmem.yaml
-@@ -0,0 +1,40 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/reserved-memory/nvidia,tegra264-bpmp-shmem.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++	if (err < 0)
++		tegra186_bpmp_channel_deinit(bpmp);
 +
-+title: Tegra CPU-NS - BPMP IPC reserved memory binding
++	return err;
++}
 +
-+maintainers:
-+ - Peter De Schrijver <pdeschrijver@nvidia.com>
++static void tegra186_bpmp_reset_channels(struct tegra_bpmp *bpmp)
++{
++	unsigned int i;
 +
-+description: |
-+  Define a memory region used for communication between CPU-NS and BPMP.
-+  Typically this node is created by the bootloader as the physical address
-+  has to be known to both CPU-NS and BPMP for correct IPC operation.
-+  The memory region is defined using a child node under /reserved-memory.
-+  The sub-node is named shmem@<address>.
++	tegra186_bpmp_channel_reset(bpmp->tx_channel);
++	tegra186_bpmp_channel_reset(bpmp->rx_channel);
 +
-+properties:
-+  compatible:
-+    const: nvidia,tegra264-bpmp-shmem
++	for (i = 0; i < bpmp->threaded.count; i++)
++		tegra186_bpmp_channel_reset(&bpmp->threaded_channels[i]);
++}
 +
-+  reg:
-+    description: The physical address and size of the shared SDRAM region
++static int tegra186_bpmp_sram_init(struct tegra_bpmp *bpmp)
++{
++	int err;
++	struct tegra186_bpmp *priv = bpmp->priv;
 +
-+required:
-+  - compatible
-+  - reg
-+  - no-map
++	priv->sram.tx = of_gen_pool_get(bpmp->dev->of_node, "shmem", 0);
++	if (!priv->sram.tx) {
+ 		dev_err(bpmp->dev, "TX shmem pool not found\n");
+ 		return -EPROBE_DEFER;
+ 	}
+ 
+-	priv->tx.virt = (void __iomem *)gen_pool_dma_alloc(priv->tx.pool, 4096, &priv->tx.phys);
++	priv->tx.virt = gen_pool_dma_alloc(priv->sram.tx, 4096, &priv->tx.phys);
+ 	if (!priv->tx.virt) {
+ 		dev_err(bpmp->dev, "failed to allocate from TX pool\n");
+ 		return -ENOMEM;
+ 	}
+ 
+-	priv->rx.pool = of_gen_pool_get(bpmp->dev->of_node, "shmem", 1);
+-	if (!priv->rx.pool) {
++	priv->sram.rx = of_gen_pool_get(bpmp->dev->of_node, "shmem", 1);
++	if (!priv->sram.rx) {
+ 		dev_err(bpmp->dev, "RX shmem pool not found\n");
+ 		err = -EPROBE_DEFER;
+ 		goto free_tx;
+ 	}
+ 
+-	priv->rx.virt = (void __iomem *)gen_pool_dma_alloc(priv->rx.pool, 4096, &priv->rx.phys);
++	priv->rx.virt = gen_pool_dma_alloc(priv->sram.rx, 4096, &priv->rx.phys);
+ 	if (!priv->rx.virt) {
+ 		dev_err(bpmp->dev, "failed to allocate from RX pool\n");
+ 		err = -ENOMEM;
+ 		goto free_tx;
+ 	}
+ 
+-	err = tegra186_bpmp_channel_init(bpmp->tx_channel, bpmp,
+-					 bpmp->soc->channels.cpu_tx.offset);
+-	if (err < 0)
+-		goto free_rx;
++	priv->type = TEGRA_SRAM;
+ 
+-	err = tegra186_bpmp_channel_init(bpmp->rx_channel, bpmp,
+-					 bpmp->soc->channels.cpu_rx.offset);
+-	if (err < 0)
+-		goto cleanup_tx_channel;
++	return 0;
+ 
+-	for (i = 0; i < bpmp->threaded.count; i++) {
+-		unsigned int index = bpmp->soc->channels.thread.offset + i;
++free_tx:
++	gen_pool_free(priv->sram.tx, (unsigned long)priv->tx.virt, 4096);
+ 
+-		err = tegra186_bpmp_channel_init(&bpmp->threaded_channels[i],
+-						 bpmp, index);
++	return err;
++}
 +
-+examples:
-+  - |
-+    reserved-memory {
-+       dram_cpu_bpmp_mail: shmem@f1be0000  {
-+           compatible = "nvidia,tegra264-bpmp-shmem";
-+           reg = <0x0 0xf1be0000 0x0 0x2000>;
-+           no-map;
-+       };
-+    };
-+...
++static enum tegra_bpmp_mem_type tegra186_bpmp_dram_init(struct tegra_bpmp *bpmp)
++{
++	int err;
++	struct resource res;
++	struct device_node *np;
++	struct tegra186_bpmp *priv = bpmp->priv;
++
++	np = of_parse_phandle(bpmp->dev->of_node, "memory-region", 0);
++	if (!np)
++		return TEGRA_INVALID;
++
++	err = of_address_to_resource(np, 0, &res);
++	if (err) {
++		dev_warn(bpmp->dev,  "Parsing memory region returned: %d\n", err);
++		return TEGRA_INVALID;
++	}
++
++	if ((res.end - res.start + 1) < 0x2000) {
++		dev_warn(bpmp->dev,  "DRAM region less than 0x2000 bytes\n");
++		return TEGRA_INVALID;
++	}
++
++	priv->tx.phys = res.start;
++	priv->rx.phys = res.start + 0x1000;
++
++	priv->tx.virt = memremap(priv->tx.phys, res.end - res.start + 1, MEMREMAP_WC);
++	if (priv->tx.virt == NULL) {
++		dev_warn(bpmp->dev,  "DRAM region mapping failed\n");
++		return TEGRA_INVALID;
++	}
++	priv->rx.virt = priv->tx.virt + 0x1000;
++
++	return TEGRA_RMEM;
++}
++
++static int tegra186_bpmp_init(struct tegra_bpmp *bpmp)
++{
++	struct tegra186_bpmp *priv;
++	int err;
++
++	priv = devm_kzalloc(bpmp->dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	bpmp->priv = priv;
++	priv->parent = bpmp;
++
++	priv->type = tegra186_bpmp_dram_init(bpmp);
++	if (priv->type == TEGRA_INVALID) {
++		err = tegra186_bpmp_sram_init(bpmp);
+ 		if (err < 0)
+-			goto cleanup_channels;
++			return err;
+ 	}
+ 
++	err = tegra186_bpmp_channel_setup(bpmp);
++	if (err < 0)
++		return err;
++
+ 	/* mbox registration */
+ 	priv->mbox.client.dev = bpmp->dev;
+ 	priv->mbox.client.rx_callback = mbox_handle_rx;
+@@ -226,51 +343,22 @@ static int tegra186_bpmp_init(struct tegra_bpmp *bpmp)
+ 	if (IS_ERR(priv->mbox.channel)) {
+ 		err = PTR_ERR(priv->mbox.channel);
+ 		dev_err(bpmp->dev, "failed to get HSP mailbox: %d\n", err);
+-		goto cleanup_channels;
++		tegra186_bpmp_channel_deinit(bpmp);
++		return err;
+ 	}
+ 
+-	tegra186_bpmp_channel_reset(bpmp->tx_channel);
+-	tegra186_bpmp_channel_reset(bpmp->rx_channel);
+-
+-	for (i = 0; i < bpmp->threaded.count; i++)
+-		tegra186_bpmp_channel_reset(&bpmp->threaded_channels[i]);
++	tegra186_bpmp_reset_channels(bpmp);
+ 
+ 	return 0;
+-
+-cleanup_channels:
+-	for (i = 0; i < bpmp->threaded.count; i++) {
+-		if (!bpmp->threaded_channels[i].bpmp)
+-			continue;
+-
+-		tegra186_bpmp_channel_cleanup(&bpmp->threaded_channels[i]);
+-	}
+-
+-	tegra186_bpmp_channel_cleanup(bpmp->rx_channel);
+-cleanup_tx_channel:
+-	tegra186_bpmp_channel_cleanup(bpmp->tx_channel);
+-free_rx:
+-	gen_pool_free(priv->rx.pool, (unsigned long)priv->rx.virt, 4096);
+-free_tx:
+-	gen_pool_free(priv->tx.pool, (unsigned long)priv->tx.virt, 4096);
+-
+-	return err;
+ }
+ 
+ static void tegra186_bpmp_deinit(struct tegra_bpmp *bpmp)
+ {
+ 	struct tegra186_bpmp *priv = bpmp->priv;
+-	unsigned int i;
+ 
+ 	mbox_free_channel(priv->mbox.channel);
+ 
+-	for (i = 0; i < bpmp->threaded.count; i++)
+-		tegra186_bpmp_channel_cleanup(&bpmp->threaded_channels[i]);
+-
+-	tegra186_bpmp_channel_cleanup(bpmp->rx_channel);
+-	tegra186_bpmp_channel_cleanup(bpmp->tx_channel);
+-
+-	gen_pool_free(priv->rx.pool, (unsigned long)priv->rx.virt, 4096);
+-	gen_pool_free(priv->tx.pool, (unsigned long)priv->tx.virt, 4096);
++	tegra186_bpmp_channel_deinit(bpmp);
+ }
+ 
+ static int tegra186_bpmp_resume(struct tegra_bpmp *bpmp)
+diff --git a/drivers/firmware/tegra/bpmp.c b/drivers/firmware/tegra/bpmp.c
+index 8b5e5daa9fae..17bd3590aaa2 100644
+--- a/drivers/firmware/tegra/bpmp.c
++++ b/drivers/firmware/tegra/bpmp.c
+@@ -735,6 +735,8 @@ static int tegra_bpmp_probe(struct platform_device *pdev)
+ 	if (!bpmp->threaded_channels)
+ 		return -ENOMEM;
+ 
++	platform_set_drvdata(pdev, bpmp);
++
+ 	err = bpmp->soc->ops->init(bpmp);
+ 	if (err < 0)
+ 		return err;
+@@ -758,8 +760,6 @@ static int tegra_bpmp_probe(struct platform_device *pdev)
+ 
+ 	dev_info(&pdev->dev, "firmware: %.*s\n", (int)sizeof(tag), tag);
+ 
+-	platform_set_drvdata(pdev, bpmp);
+-
+ 	err = of_platform_default_populate(pdev->dev.of_node, NULL, &pdev->dev);
+ 	if (err < 0)
+ 		goto free_mrq;
 -- 
 2.40.0
 
