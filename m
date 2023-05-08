@@ -2,226 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9336FA785
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777626FA77C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234724AbjEHKbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 06:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60064 "EHLO
+        id S234615AbjEHKat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 06:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234649AbjEHKbH (ORCPT
+        with ESMTP id S234647AbjEHKap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 06:31:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E140E4C07
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 03:30:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683541816;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xPsu5YVFrEenCLv+iZuaZj4Zmadv4HGEz/gE1xJGp6I=;
-        b=drUTJiB1n3DLo5YemSOacZmi7dmMWEFhRFEpjOdQpjCrYNxPfjsjImqFlnuHBt6nxZAauP
-        QdpE6PtLYlDDoX4Oqz1Df7aPTtUCYmwg4Aw/OdE/h5tIUHkfsszHCaOAfwjFrl1M+q7gKE
-        ef6l0JX7REoyuopX8Ao803fco2P/ym0=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-655-d4ujyNy9PgmuuRGlGQe7WA-1; Mon, 08 May 2023 06:30:14 -0400
-X-MC-Unique: d4ujyNy9PgmuuRGlGQe7WA-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-306286b3573so2681688f8f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 03:30:14 -0700 (PDT)
+        Mon, 8 May 2023 06:30:45 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62C924A8D;
+        Mon,  8 May 2023 03:30:43 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2ac831bb762so41740931fa.3;
+        Mon, 08 May 2023 03:30:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683541842; x=1686133842;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u4n+sPW796mS9dhJ6fHd9qvr1mW3PkrYQCtXjQ0ZTZo=;
+        b=QJ2rbssUzSgbKCZkXM9w7Jy0q9Ix8lJSjNabHHhe83scfou2njTVA3OeVd6BRwpSAS
+         Y2kXOkoQHhszriKKexHeyuv5TkLFALBm0HfQ8P8OcZZDMbXMKdBDppYtwoAh1uv+jt9c
+         S1fIL9/nb7bkjAY4tGXwjoRoolDp+C6Oum9P5o1ksQqlrYU8YSrY1Lm6BIbElpSNWhmR
+         CiTm/JmGS5ZaLUBN6uVGcpo3AdXaDcSzVzPmCytsq14l3uPhMCdWWN0UxSKLFmvfYIHW
+         K4YYUiGoWmu7o3Uklb0nH1xljrlZKEWBLdJnaMrmuzL12a5oh5J6YSuup+RrDFVGgrfP
+         nZvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683541813; x=1686133813;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1683541842; x=1686133842;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xPsu5YVFrEenCLv+iZuaZj4Zmadv4HGEz/gE1xJGp6I=;
-        b=KypY3kKrQvB4oVXqFpZ0TJ3uOnToWwZK1YhZmFe7S2s+8yeqFKItd6B67iRhTkiF1s
-         3FKLUfLsJ8RBebS7gKiepdy4wuvoyppeuoJ0dr9VouFKFDEbTCQBB6KTgGep5Bs7E64W
-         DvzXl9lpd5TGNQAJmQ2l8y6bGxm3Za5nKBJrxquS7XxdN6/bkZQjJSi50p7x6Cf7y6W8
-         A8kBEoCbyQAonPYc9f8CpV1exhKp98KyH9KTcZfq+D2VJUHPdPC4fX0qwT+8xrLpLUfn
-         PYNFniQwnkyv4I5zUbMoK+A+CF7ax1HZRj6G58ALQdrvZ5UxekzpURyvel62kImybV/C
-         ke0Q==
-X-Gm-Message-State: AC+VfDxHkRl1lX8y2ZtOZdi53jiadR6HTyGmkmkrOMH6kxuzacNdi2L9
-        iqKqZeQ03CThIAsJ2y8a7eN7Ltp2O1smGtl286FTPEPOQeCd40T+Hb4fej6aZDrpA/RwhjvIjM0
-        4utCC3n+owg1ZLujJ5qkEOpKs
-X-Received: by 2002:adf:e943:0:b0:306:2cf5:79dc with SMTP id m3-20020adfe943000000b003062cf579dcmr7718610wrn.35.1683541813557;
-        Mon, 08 May 2023 03:30:13 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7ykEugQ/sjlWtVtf+RWhyd+Wdn5biO6WeKJ/H0kdlQUIkECfX6aLaJNv/UFBtqbWwQjfrirw==
-X-Received: by 2002:adf:e943:0:b0:306:2cf5:79dc with SMTP id m3-20020adfe943000000b003062cf579dcmr7718591wrn.35.1683541813164;
-        Mon, 08 May 2023 03:30:13 -0700 (PDT)
-Received: from redhat.com ([31.187.78.15])
-        by smtp.gmail.com with ESMTPSA id h14-20020a5d6e0e000000b0030631dcbea6sm10959097wrz.77.2023.05.08.03.30.09
+        bh=u4n+sPW796mS9dhJ6fHd9qvr1mW3PkrYQCtXjQ0ZTZo=;
+        b=idry36PbWBvxLmL6t2TRuwP2KC1Rxmfi3IAj2Mm4a2HoeGPXh7cEMxNH4M7LduKo/B
+         HZJfEjaAnQ322dW1v2I/wkfqFej0+N5Jc/VSQnHznVfTp8nM415GDlVbpZz2mBINlhMT
+         4c4xWNz+CUOG9O+/dfZm5FlooX0S1wRPyrOWLfAppDqpeFTQGe1eR9cVpCYuCipd1MZ9
+         WCQfLp1f/VvxvrRwRGu4jfJQx/+R50q3A2LpL5unxuAuQ2AUghONw9wcudDCuniI1gQX
+         82QKSfUTMVy3dZVfMLLTvwOVYyL8Bv3+jwhwnwLYZE1oTYdYmAtbmOoRcF6tLGB/lODH
+         ascg==
+X-Gm-Message-State: AC+VfDw+hybmBte7tWtAnHdQNtSXLtJj60lO+UR6+o+iEfEIaFb3h0Q3
+        9n3DJLi3lsu8wmMTj/gwMWA=
+X-Google-Smtp-Source: ACHHUZ4YOM1piwm7Fu+MPvieFGLO26hzkwFNae5/vCt1pwGMpJ94UX0EIzV3mxdVa3/6NfG6InqJEQ==
+X-Received: by 2002:a2e:9e45:0:b0:2ac:7764:aa4 with SMTP id g5-20020a2e9e45000000b002ac77640aa4mr2886398ljk.10.1683541841688;
+        Mon, 08 May 2023 03:30:41 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id w8-20020a2e9bc8000000b002a8b205bb50sm1104959ljj.61.2023.05.08.03.30.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 03:30:12 -0700 (PDT)
-Date:   Mon, 8 May 2023 06:30:07 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     huangml@yusur.tech, zy@yusur.tech,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Hao Chen <chenh@yusur.tech>, hengqi@linux.alibaba.com
-Subject: Re: [PATCH] virtio_net: set default mtu to 1500 when 'Device maximum
- MTU' bigger than 1500
-Message-ID: <20230508062928-mutt-send-email-mst@kernel.org>
-References: <20230506021529.396812-1-chenh@yusur.tech>
- <1683341417.0965195-4-xuanzhuo@linux.alibaba.com>
- <07b6b325-9a15-222f-e618-d149b57cbac2@yusur.tech>
- <20230507045627-mutt-send-email-mst@kernel.org>
- <1683511319.099806-2-xuanzhuo@linux.alibaba.com>
- <20230508020953-mutt-send-email-mst@kernel.org>
- <1683526688.7492425-1-xuanzhuo@linux.alibaba.com>
- <20230508024147-mutt-send-email-mst@kernel.org>
- <1683531716.238961-1-xuanzhuo@linux.alibaba.com>
+        Mon, 08 May 2023 03:30:40 -0700 (PDT)
+Date:   Mon, 8 May 2023 13:30:28 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/5] Support ROHM BU27008 RGB sensor
+Message-ID: <cover.1683541225.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="tywmqNVigfIf5Z/k"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1683531716.238961-1-xuanzhuo@linux.alibaba.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 03:41:56PM +0800, Xuan Zhuo wrote:
-> On Mon, 8 May 2023 02:43:24 -0400, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > On Mon, May 08, 2023 at 02:18:08PM +0800, Xuan Zhuo wrote:
-> > > On Mon, 8 May 2023 02:15:46 -0400, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > > On Mon, May 08, 2023 at 10:01:59AM +0800, Xuan Zhuo wrote:
-> > > > > On Sun, 7 May 2023 04:58:58 -0400, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > > > > On Sat, May 06, 2023 at 04:56:35PM +0800, Hao Chen wrote:
-> > > > > > >
-> > > > > > >
-> > > > > > > 在 2023/5/6 10:50, Xuan Zhuo 写道:
-> > > > > > > > On Sat,  6 May 2023 10:15:29 +0800, Hao Chen <chenh@yusur.tech> wrote:
-> > > > > > > > > When VIRTIO_NET_F_MTU(3) Device maximum MTU reporting is supported.
-> > > > > > > > > If offered by the device, device advises driver about the value of its
-> > > > > > > > > maximum MTU. If negotiated, the driver uses mtu as the maximum
-> > > > > > > > > MTU value. But there the driver also uses it as default mtu,
-> > > > > > > > > some devices may have a maximum MTU greater than 1500, this may
-> > > > > > > > > cause some large packages to be discarded,
-> > > > > > > >
-> > > > > > > > You mean tx packet?
-> > > > > > > Yes.
-> > > > > > > >
-> > > > > > > > If yes, I do not think this is the problem of driver.
-> > > > > > > >
-> > > > > > > > Maybe you should give more details about the discard.
-> > > > > > > >
-> > > > > > > In the current code, if the maximum MTU supported by the virtio net hardware
-> > > > > > > is 9000, the default MTU of the virtio net driver will also be set to 9000.
-> > > > > > > When sending packets through "ping -s 5000", if the peer router does not
-> > > > > > > support negotiating a path MTU through ICMP packets, the packets will be
-> > > > > > > discarded. If the peer router supports negotiating path mtu through ICMP
-> > > > > > > packets, the host side will perform packet sharding processing based on the
-> > > > > > > negotiated path mtu, which is generally within 1500.
-> > > > > > > This is not a bugfix patch, I think setting the default mtu to within 1500
-> > > > > > > would be more suitable here.Thanks.
-> > > > > >
-> > > > > > I don't think VIRTIO_NET_F_MTU is appropriate for support for jumbo packets.
-> > > > > > The spec says:
-> > > > > > 	The device MUST forward transmitted packets of up to mtu (plus low level ethernet header length) size with
-> > > > > > 	gso_type NONE or ECN, and do so without fragmentation, after VIRTIO_NET_F_MTU has been success-
-> > > > > > 	fully negotiated.
-> > > > > > VIRTIO_NET_F_MTU has been designed for all kind of tunneling devices,
-> > > > > > and this is why we set mtu to max by default.
-> > > > > >
-> > > > > > For things like jumbo frames where MTU might or might not be available,
-> > > > > > a new feature would be more appropriate.
-> > > > >
-> > > > >
-> > > > > So for jumbo frame, what is the problem?
-> > > > >
-> > > > > We are trying to do this. @Heng
-> > > > >
-> > > > > Thanks.
-> > > >
-> > > > It is not a problem as such. But VIRTIO_NET_F_MTU will set the
-> > > > default MTU not just the maximum one, because spec seems to
-> > > > say it can.
-> > >
-> > > I see.
-> > >
-> > > In the case of Jumbo Frame, we also hope that the driver will set the default
-> > > directly to the max mtu. Just like what you said "Bigger packets = better
-> > > performance."
-> > >
-> > > I don't know, in any scenario, when the hardware supports a large mtu, but we do
-> > > not want the user to use it by default.
-> >
-> > When other devices on the same LAN have mtu set to 1500 and
-> > won't accept bigger packets.
-> 
-> So, that depends on pmtu/tcp-probe-mtu.
-> 
-> If the os without pmtu/tcp-probe-mtu has a bigger mtu, then it's big packet
-> will lost.
-> 
-> Thanks.
-> 
 
-pmtu is designed for routing. LAN is supposed to be configured with
-a consistent MTU.
+--tywmqNVigfIf5Z/k
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> >
-> > > Of course, the scene that this patch
-> > > wants to handle does exist, but I have never thought that this is a problem at
-> > > the driver level.
-> > >
-> > > Thanks.
-> > >
-> > >
-> > > >
-> > > >
-> > > > >
-> > > > > >
-> > > > > > > > > so I changed the MTU to a more
-> > > > > > > > > general 1500 when 'Device maximum MTU' bigger than 1500.
-> > > > > > > > >
-> > > > > > > > > Signed-off-by: Hao Chen <chenh@yusur.tech>
-> > > > > > > > > ---
-> > > > > > > > >   drivers/net/virtio_net.c | 5 ++++-
-> > > > > > > > >   1 file changed, 4 insertions(+), 1 deletion(-)
-> > > > > > > > >
-> > > > > > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > > > > > > index 8d8038538fc4..e71c7d1b5f29 100644
-> > > > > > > > > --- a/drivers/net/virtio_net.c
-> > > > > > > > > +++ b/drivers/net/virtio_net.c
-> > > > > > > > > @@ -4040,7 +4040,10 @@ static int virtnet_probe(struct virtio_device *vdev)
-> > > > > > > > >   			goto free;
-> > > > > > > > >   		}
-> > > > > > > > >
-> > > > > > > > > -		dev->mtu = mtu;
-> > > > > > > > > +		if (mtu > 1500)
-> > > > > > > >
-> > > > > > > > s/1500/ETH_DATA_LEN/
-> > > > > > > >
-> > > > > > > > Thanks.
-> > > > > > > >
-> > > > > > > > > +			dev->mtu = 1500;
-> > > > > > > > > +		else
-> > > > > > > > > +			dev->mtu = mtu;
-> > > > > > > > >   		dev->max_mtu = mtu;
-> > > > > > > > >   	}
-> > > > > > > > >
-> > > > > > > > > --
-> > > > > > > > > 2.27.0
-> > > > > > > > >
-> > > > > >
-> > > >
-> >
+Add support for ROHM BU27008 RGB sensor.
 
+The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
+and IR) with four configurable channels. Red and green being always
+available and two out of the rest three (blue, clear, IR) can be
+selected to be simultaneously measured. Typical application is adjusting
+LCD backlight of TVs, mobile phones and tablet PCs.
+
+This series supports reading the RGBC and IR channels using IIO
+framework. However, only two of the BC+IR can be enabled at the same
+time. Series adds also support for scale and integration time
+configuration, where scale consists of impact of both the integration
+time and hardware gain. The gain and time support is backed by the newly
+introduced IIO GTS helper. This series depends on GTS helper patches
+added in BU27034 support series which is already merged in iio/togreg
+which this series is based on.
+
+The hardware allows configuring gain setting by writing a 5-bit gain
+selector value to a register. Part of the gain setting is common for all
+channels (RGBC + IR) but part of the selector value can be set
+separately for RGBC and IR:
+
+MODE_CONTROL2 REG:
+bit 7	    6	    5	    4	    3	    2	    1	    0
+-----------------------------------------------------------------
+|	RGB	selector		|
++---------------------------------------+
+-----------------------------------------------------------------
+| high bits IR	|			| low bits IR selector	|
++---------------+			+-----------------------+
+
+In theory it would be possible to set certain separate gain values for
+RGBC and IR channels, but this gets pretty confusing because there are a
+few 'unsupported' selector values. If only RGBC or IR was set, some
+extra handling should be done to prevent the other channel from getting
+unsupported value due to change in high-bits. Furthermore, allowing the
+channels to be set different gain values (in some cases when gains are
+such the HW supports it) would make the cases where also integration
+time is changed to achieve correct scale ... interesting. It might also
+be confusing for user to try predicting when setting different scales
+succeeds and when it does not. Furthermore, if for example the scale
+setting for RGBC caused IR selector to be invalid - it could also cause
+the IR scale to "jump" very far from previous value.
+
+To make the code simpler and more predictable for users, the current
+logic is as follows:
+
+1. Prevent setting IR scale. (My assumption is IR is less used than
+RGBC)
+2. When RGBC scale is set, set also the IR-selector to the same value.
+This prevents unsupported selector values and makes the IR scale changes
+predictable.
+
+The 2) could mean we effectively have the same scale for all channels.
+Unfortunately, the HW design is slightly peculiar and selector 0 means
+gain 1X on RGBC but gain 2X on IR. Rest of the selectors equal same gain
+values on RGBC and IR. The result is that while changin selector from 0
+=3D> 1 causes RGBC gain to go from 1X =3D> 4X, it causes IR gain to go from
+2X =3D> 4X.
+
+So, the driver provides separate scale entries for all channels (also
+RGB and C will have separate gain entries because these channels are of
+same type as IR channel). This makes it possible for user applications
+to go read the scales for all channels after setting scale for one (in
+order to detect the IR scale difference).
+
+Having the separate IR scale entry which applications can read to detect
+"arbitrary scale changes" makes it possible for applications to be
+written so they can cope if we need to implement the 'allow setting some
+different gains for IR and RGBC' - later.
+
+Finally, the scales_available is also provided for all other channels
+except the IR channel, which does not allow the scale to be changed.
+
+The sensor provides a data-ready IRQ and the driver implements a
+triggered buffer mode using this IRQ as a trigger.
+
+Finally, the series introduces generic iio_validate_own_trigger() helper
+which can be used as a validate_trigger callback for drivers which
+require the trigger and iio-device to be parented by same device. The
+KX022A driver is converted to use this new callback instead of rolling
+it's own function. The new helper and KX022A can be merged in as
+independent changes if need be.
+
+
+Revision history
+v3 =3D> v4:
+  iio_validate_own_trigger:
+    - kernel-doc fix
+  bu27008 driver fixes:
+    - re-enable IRQ in trigger renable-callback
+    - do trigger setup on own function
+    - drop regmap lock
+    - configure channels in appropriate callback
+v3 =3D> v4:
+  bu27008 driver fixes:
+    - Drop thread from device IRQ handler
+    - Styling and some minor improvements
+    - Use kernel-doc for enums
+    - Correctly order entries in Makefile
+v2 =3D> v3:
+  dt-bindings:
+    - No changes
+  iio_validate_own_trigger:
+    - subject fix
+  bu27008:
+    - Mostly styling based on comments from Andy and Andi
+
+  More accurate changelog in individual patches
+
+v1 =3D> v2:
+  dt-bindings:
+    - Fix issues pointed by Krzysztof.
+  bu27008 driver:
+    - Fix issues pointed by Jonathan
+  Add new helper for validating own trigger
+
+  More accurate changelog in individual patches
+
+---
+
+Matti Vaittinen (5):
+  dt-bindings: iio: light: ROHM BU27008
+  iio: trigger: Add simple trigger_validation helper
+  iio: kx022a: Use new iio_validate_own_trigger()
+  iio: light: ROHM BU27008 color sensor
+  MAINTAINERS: Add ROHM BU27008
+
+ .../bindings/iio/light/rohm,bu27008.yaml      |   49 +
+ MAINTAINERS                                   |    3 +-
+ drivers/iio/accel/kionix-kx022a.c             |   13 +-
+ drivers/iio/industrialio-trigger.c            |   22 +-
+ drivers/iio/light/Kconfig                     |   14 +
+ drivers/iio/light/Makefile                    |    1 +
+ drivers/iio/light/rohm-bu27008.c              | 1026 +++++++++++++++++
+ include/linux/iio/trigger.h                   |    1 +
+ 8 files changed, 1115 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/iio/light/rohm,bu2700=
+8.yaml
+ create mode 100644 drivers/iio/light/rohm-bu27008.c
+
+--=20
+2.40.1
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--tywmqNVigfIf5Z/k
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRYzzcACgkQeFA3/03a
+ocVJyAf/VKRrGdriwVFe902yrspxGTs9cHVLsvCSBdREg2ByVVDXwdczq8M7UJy0
+/VWxHBR66SGXskuovDp2pnBh/8JJHU9p4UmnnGfdTndOCL14y+gFp5BElKyb8u0o
+p3/tuz2kwAILqpSfcJpSQp7az5Qeu6Hzl6Fo8fyLQThsDZgAgHEKZKFGrZrk+V7O
+FnCXpSg6CL648VB70oZNSXbBF+MeGe6REzvImxFztCC2pLkCqviQ+eBcwD+NPzVx
+zAdKsOwBfz1UXOHO95pHjzD1qZhQAm6JVAJvV49aJZTohhnN4ffZzN5yx1rVkjtc
+t8+VdFiwVE/Hr4K6w2fge/sefB0drw==
+=GBvF
+-----END PGP SIGNATURE-----
+
+--tywmqNVigfIf5Z/k--
