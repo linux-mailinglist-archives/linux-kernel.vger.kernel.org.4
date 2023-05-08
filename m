@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A4F6FB102
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A6E6FB107
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233896AbjEHNOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        id S234059AbjEHNOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbjEHNO2 (ORCPT
+        with ESMTP id S233557AbjEHNO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:14:28 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37E346A4;
+        Mon, 8 May 2023 09:14:29 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB89C86A2;
         Mon,  8 May 2023 06:14:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1683551667;
-  x=1715087667;
-  h=from:subject:date:message-id:mime-version:
-   content-transfer-encoding:to:cc;
-  bh=mwiNk8d92A4aFHHJWlAJe/9rlrNM++TYqFzol8J4zms=;
-  b=iJOlRUutk0HL+rFE2nJ+5XEsl5SloLsfKXbEaMYzYfwMNZW9rVf8MGLv
-   VF73LAMGxQBI6fsbPc2uZME8+gbzhLZp2Nsm4XumkeQO9bDDDQNNjIDge
-   HzJk4LZcLhF5fA0HkPOxg3vwUYajcXzHLZZRNn8V79rYeE8dz2XFQeMM4
-   +1h8pH7GLbhDd94t7aT2I6+ZDdg+JsQzaVul5xYWBmZRTcwfdk8n0f/2s
-   T1a1HdlodrF6xV2xI1LcUIue2QPhZc78Na7ZCnXX+YvZcAUq/Idm3V7m2
-   ZvW4rq2PIkt56ke3MlqL+YyD8Z4lizsd5tk3ch9sLUv0lC13ZelfWGWYL
+  d=axis.com; q=dns/txt; s=axis-central1; t=1683551668;
+  x=1715087668;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=TtHpwat9GIEkB+1blW10QNVbCuv3L2YzA9AyRKP7Tts=;
+  b=hYvACVQw1Ff2L+FCnhACMQ6eC3lf1rXy8ZqkrVeOXHDVOhZf7Q+PLwyD
+   DQXbPRePuTsIZElypBJ9rQuLobWWAyfOl88+lw5Ijju0Xhu5T2f7JZo6c
+   Rt4dYU9+pXFyQGkXE36vMK2Z8Z+p70lL2D5KlJSA5eEOrtNjN6H9yUhiw
+   mvEnAo/K4lZ8wlLczpieRiSEqo2MH0Ck6UIU7NBvy/GDu7oMbHFTCDecS
+   vdTSefXzvIZxiHz/auDqO1Ngoxybbh/3Y+w/cJoourzaUOWP5IAMFKzJp
+   CLJ52EIIBYTAB/VAiDmusVa03BIeBOhMMuYSf0wvmQy/p6VGPifGxnapy
    w==;
 From:   =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
-Subject: [PATCH v3 0/2] regulator: Add support for TPS6287x
-Date:   Mon, 8 May 2023 15:14:06 +0200
-Message-ID: <20230502-tps6287x-driver-v3-0-e25140a023f5@axis.com>
+Date:   Mon, 8 May 2023 15:14:07 +0200
+Subject: [PATCH v3 1/2] regulator: dt-bindings: Add bindings for TPS6287x
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAJ71WGQC/4WNOQ6DMBBFr4Jcx5E3MKTKPaIUXoYwBYtsZBEh7
- h6bKk2U8s3o/beTCAEhklu1kwAJI85TBnmpiBvM9AKKPjMRTEhWM0HXJTai1Rv1ARMEanqutLK
- Scw4kW9ZEoDaYyQ3FG01cIZTHEqDH7Uw9npkHjOsc3mc58XL9HUmcMqp91wjFpLa+vZsN49XNI
- ylTSfzRRdZ7WyveedU41X3px3F8AOF/XFsFAQAA
+Message-ID: <20230502-tps6287x-driver-v3-1-e25140a023f5@axis.com>
+References: <20230502-tps6287x-driver-v3-0-e25140a023f5@axis.com>
+In-Reply-To: <20230502-tps6287x-driver-v3-0-e25140a023f5@axis.com>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         "Rob Herring" <robh+dt@kernel.org>,
@@ -47,11 +45,11 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <kernel@axis.com>,
         =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1683551664; l=1870;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1683551664; l=1676;
  i=marten.lindahl@axis.com; s=20230329; h=from:subject:message-id;
- bh=TMBdzmNmERfop/Y8HvPBMUIEhv3U3++6HDUci+m58DQ=;
- b=w5j3WGDholXRzzQqc2f2/fOAp+l0p5V3D9Zz1UYmJvV97u8QveL10uQArU7cVrPs1QnZfnSGs
- IIZC7hDIhHOAR/8qG3JfCUWU51dWFr5y6TnOkxv1F6Zq5gU+Z10TPbZ
+ bh=KARdrRBkfobsUPZuEvNegZELY7vBi0k9NmejXd4gaFw=;
+ b=nyLrWgIMZg9mzlaoZyM0bh+lRW/6/OZxjEGHU1urwrHpvGEMIVsSJbSlT+POd41G1AbONnto2
+ x3LDXeAXzndDGZzgkCnMOojZ0z8hwCykgBw6InCf1JV3R3EJlAwaQ7s
 X-Developer-Key: i=marten.lindahl@axis.com; a=ed25519;
  pk=JfbjqFPJnIDIQOkJBeatC8+S3Ax3N0RIdmN+fL3wXgw=
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -64,48 +62,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds basic support for TI's TPS62870/TPS62871/TPS62872/
-TPS62873 high-frequency single-channel step-down converters with an
-I2C interface.
-
-The devices can operate in power save mode for maximum efficiency, or
-forced-PWM mode for best transient performance and lowest output
-voltage ripple. All chip variants have four output voltage ranges and
-the driver changes active range depending on the requested voltage
-setting.
-
-There are differences in the electrical characteristics and packaging
-between the variants, but the register interfaces are identical.
+Add bindings for the TPS62870/TPS62871/TPS62872/TPS62873 voltage
+regulators.
 
 Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
 ---
-Changes in v3:
-- dt-bindings: Changed subject prefix "regulator:" => "regulator: dt-bindings:".
-- dt-bindings: Dropped 'regulators' and 'vout' nodes.
-- dt-bindings: Added description for regulator-initial-mode.
-- Call of_get_regulator_init_data to read the regulation constraints from driver probe.
-- Drop local get/set voltage functions and use helper functions get/set/list_pickable_regmap
-  with linear_ranges/linear_range_selectors mappings instead.
-- Link to v2: https://lore.kernel.org/r/20230502-tps6287x-driver-v2-0-fb5419d46c49@axis.com
+ .../devicetree/bindings/regulator/ti,tps62870.yaml | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-Changes in v2:
-- No changes. v2 was v1
+diff --git a/Documentation/devicetree/bindings/regulator/ti,tps62870.yaml b/Documentation/devicetree/bindings/regulator/ti,tps62870.yaml
+new file mode 100644
+index 000000000000..386989544dac
+--- /dev/null
++++ b/Documentation/devicetree/bindings/regulator/ti,tps62870.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/regulator/ti,tps62870.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TI TPS62870/TPS62871/TPS62872/TPS62873 voltage regulator
++
++maintainers:
++  - Mårten Lindahl <marten.lindahl@axis.com>
++
++allOf:
++  - $ref: regulator.yaml#
++
++properties:
++  compatible:
++    enum:
++      - ti,tps62870
++      - ti,tps62871
++      - ti,tps62872
++      - ti,tps62873
++
++  reg:
++    maxItems: 1
++
++  regulator-initial-mode:
++    enum: [ 1, 2 ]
++    description: 1 - Forced PWM mode, 2 - Low power mode
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      regulator@41 {
++        compatible = "ti,tps62873";
++        reg = <0x41>;
++        regulator-name = "+0.75V";
++        regulator-min-microvolt = <400000>;
++        regulator-max-microvolt = <1675000>;
++        regulator-initial-mode = <1>;
++      };
++    };
++
++...
 
----
-Mårten Lindahl (2):
-      regulator: dt-bindings: Add bindings for TPS6287x
-      regulator: Add support for TI TPS6287x regulators
-
- .../devicetree/bindings/regulator/ti,tps62870.yaml |  52 ++++++
- drivers/regulator/Kconfig                          |  11 ++
- drivers/regulator/Makefile                         |   1 +
- drivers/regulator/tps6287x-regulator.c             | 188 +++++++++++++++++++++
- 4 files changed, 252 insertions(+)
----
-base-commit: 457391b0380335d5e9a5babdec90ac53928b23b4
-change-id: 20230502-tps6287x-driver-af1474b3111e
-
-Best regards,
 -- 
-Mårten Lindahl <marten.lindahl@axis.com>
+2.30.2
 
