@@ -2,321 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC716FA120
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61B46FA123
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233248AbjEHHeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
+        id S233293AbjEHHeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjEHHeB (ORCPT
+        with ESMTP id S233381AbjEHHeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:34:01 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68B0C272A;
-        Mon,  8 May 2023 00:33:58 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:48392.2047955144
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id BA7B910023D;
-        Mon,  8 May 2023 15:33:53 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-85667d6c59-6qwzn with ESMTP id 0bbb1b79ff9a4e41bf60092d3c6a1e39 for maarten.lankhorst@linux.intel.com;
-        Mon, 08 May 2023 15:33:57 CST
-X-Transaction-ID: 0bbb1b79ff9a4e41bf60092d3c6a1e39
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <c704eaae-e0b6-262c-4a2b-80e80062532b@189.cn>
-Date:   Mon, 8 May 2023 15:33:52 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v12 0/2] drm: add kms driver for loongson display
- controller
+        Mon, 8 May 2023 03:34:15 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2071.outbound.protection.outlook.com [40.107.15.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436DE6A6A;
+        Mon,  8 May 2023 00:34:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j+G3cASJ7fxQE7UFpVcIp4emdD8JaSxsquGaDNTjIfrgcclOouZdHS+X1iMY53ZWuVYoGu6Sbl1BCxhktb8yHeUQGzP7D/QlOnaUskbfeltrwEORwjX2Pq7tEYiRlinSEcsnJzGwh4HG5xAdbSIxi/PCTDRzLpQ9VDA3lpevh+D/UPqwpxSStfro3dIs9azJKVaU0eCKRQkPFHVKlCYE8F9SD1abgW9UhdMEZzW170Zv+FeX4J+KU53Ye9F1MJs/UKVgjUmYpbFnlrx4cz02xAN56HqR+o8fLLyZERG/kbz4SfdLualg+Lon1p507sfjmmp9lbkOcsIQrzfZTUr17g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zN4MyXu6dw+dul9SpwWTj6yrk8rf/CzxLLL1DIPh9C0=;
+ b=fpZXLosqgZ6F6QaYfkalFnc4yE8/F9EJzDz9TI6psd4cjfZ++ajhJPASi09+fprG9eqk79sWSvZdbltahojDtbXJh2TcY6LbjtQ84J3ihaxTGMQLuZ/NVTLa8gHhC6m7fsT5E9FV0ThbhoVhEXH0ZCLM3tMcorimByF1EVxX3H36aqG01ymulkpSEoEWfBvbcKbnLNr4DN95FBBgPsUoyRFGViXZjdF+rDkMWCSbd1RlsT8FXXY+Ie9vzTpNf3WMudTctthT0tuQD5ViJtl5ZTYzLWtY37iKzq9qrOTQuLDUCVSTcB7K/GB9x/gUaBxWlMEkjGDaDkqRq75+7WoKQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zN4MyXu6dw+dul9SpwWTj6yrk8rf/CzxLLL1DIPh9C0=;
+ b=XTHn5SByyPUlYECPu0hClkZ64TzAXcr3ScyP4rKqrMUCVGdb5Dxm5NsOK3xOnNksd/adwENC2bLvcxZ0RQH62w4iPixpTWrYM7yDyWf5ySkJY9ovNiZ2/DnsbDOppMI26N7+OY/JYJyoHGVGyh1mFtAYmA9g3rLGXZVSat33PME=
+Received: from AS8PR04MB8676.eurprd04.prod.outlook.com (2603:10a6:20b:42b::10)
+ by PAXPR04MB9304.eurprd04.prod.outlook.com (2603:10a6:102:2b6::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
+ 2023 07:34:10 +0000
+Received: from AS8PR04MB8676.eurprd04.prod.outlook.com
+ ([fe80::242b:ff61:ac0e:bb05]) by AS8PR04MB8676.eurprd04.prod.outlook.com
+ ([fe80::242b:ff61:ac0e:bb05%5]) with mapi id 15.20.6363.032; Mon, 8 May 2023
+ 07:34:09 +0000
+From:   Hongxing Zhu <hongxing.zhu@nxp.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?gb2312?B?S3J6eXN6dG9mIFdpbGN6eai9c2tp?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH fixes] dt-bindings: PCI: fsl,imx6q: fix assigned-clocks
+ warning
+Thread-Topic: [PATCH fixes] dt-bindings: PCI: fsl,imx6q: fix assigned-clocks
+ warning
+Thread-Index: AQHZgX1YDmBqT4/xDkCPySgWK6doEa9P+zUA
+Date:   Mon, 8 May 2023 07:34:09 +0000
+Message-ID: <AS8PR04MB86769BEEFF7283D65F92DBA98C719@AS8PR04MB8676.eurprd04.prod.outlook.com>
+References: <20230508071837.68552-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230508071837.68552-1-krzysztof.kozlowski@linaro.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-media@vger.kernel.org
-References: <20230504080406.1213623-1-suijingfeng@loongson.cn>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <20230504080406.1213623-1-suijingfeng@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS8PR04MB8676:EE_|PAXPR04MB9304:EE_
+x-ms-office365-filtering-correlation-id: eb2deaca-5981-4f20-ac3f-08db4f969ca4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VUtc+7FJA00QVDxrY6YT0ff7UiJqxW7pmWR53BjStlRI6Cbl74UBXYV2pDXCM1bJkOAbq4roLzj4L8fZjGQqFLllrrnAh7N/GtdzLo7AEopJM+jnWgK1IgPu3DH6C81tGKZwtyNMESfVJWlA3hvh49vsi2kQhQSXD77a/s9DyBfa4dEElIgjIZ2jgjYPrb6RKBWfXYt0uKhX+8ULSMMUvzG6NI/oL9fmFHNFM9R1ztFX1jvhOF5qTKJX4RQXFX/K17hxjETp8uZjcSXpTtFY/xKzVNnty8wrQPBDc6Y8mWRwOcsMBOiEPoF4b2paVFVpNQxRFcySmcKcfRpmaWB338+3gn85bG3qIJ4Rh2ggkiQ2nNfortDW0Niar+OfWkFBjsMdLWn/jucw0IuUkYAIkYqL/Vhn3mQFfRlc1cV96M306+RaY4yzsbdkCcTWf+Nbh9wBSGYvWxIgai6HwAw021ZNJLkvQVIljCq0smXTG+0L2l6rdjl0mMYKsT6bW8D6ieAXtWOnuCBzJWyt1w9JUHL+CXB5K/C0AyU2rEc3eDsjn9l0c83JhZ4SYpthVff+d7hPWhmWKF5MiQgn/TDJdsK8os+X8MrQWJShPa0CHTiAZpO18AM5p+HXrVfQxu4lImKUosteLQi9m4ci6BTh4Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8676.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(366004)(136003)(396003)(376002)(451199021)(86362001)(33656002)(110136005)(316002)(76116006)(66946007)(66556008)(66476007)(66446008)(64756008)(7696005)(478600001)(55016003)(8676002)(8936002)(5660300002)(52536014)(71200400001)(44832011)(2906002)(41300700001)(7416002)(38070700005)(921005)(38100700002)(122000001)(186003)(6506007)(9686003)(53546011)(66574015)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?elR4SnJMNkZBbmQ1NzR5OWtZRy9Rd21jQzlFdVdOakFJTlNQUjk3SDZpck1a?=
+ =?gb2312?B?YStGRjlGOXhVcHBrS0VkRjJKSFlodVJNMWIrRGorN29FTE5LajdOTGxJaUE4?=
+ =?gb2312?B?NGdKZjNXVmdGQy9OTGhOL3BvOVMxV2RsME0rdDBqLzdWQVhYUzFZOTBPdjJn?=
+ =?gb2312?B?cm5Ud0d5RzRVbVovZ2o1NlY0Z0tpYmVVNjdTaHg3SW4yZFpKN3N0ZkZMZVdD?=
+ =?gb2312?B?QXNML1BVM1gyeHdmR0VZVG1ySFdQNzJ6QVN0cnVRTURUWjBiajFmNWRhMW44?=
+ =?gb2312?B?SjdRSVZaZkN4RUtVdk9CYUNtcjZRUS9VQWdxWldxR0lPQmJoZURZVlprQ2dJ?=
+ =?gb2312?B?NlJESm51eVBNSVVJQVh5K0J0RW5oMVNxbmhCdEJsMFRwUUsyaGUxNzRQb2Ro?=
+ =?gb2312?B?WUZaNzViejExWmIvTjhRMFhyclI4ZjFubmxGdzNOS1dhS0VHNldITk1JSkpW?=
+ =?gb2312?B?M3VOcVcxQjVhVjNvZWxKYXJNbmh4TXRXUEZ6M0NTaUI3QVhYdmlVUytGUUho?=
+ =?gb2312?B?Y1VvSFM1cUFUTnVSa1lFNW9QWmVRVjdGMEJUQUdTQmF6N0gvUHRrSFI3Y1JX?=
+ =?gb2312?B?Mm5TTS90elc3Ulh2NStWZGpyWjExdFRqUXNJUHZLcTNoMENIQUd6UVZLNGVC?=
+ =?gb2312?B?clJOQWZ1emxaK3VDdjhFNVdlQTBHbkY2cXdBSmUzUFpTaytxankweStuTTFl?=
+ =?gb2312?B?SjJULzhFa2NyQllxc3RXNnF1dGJIWGVtaEFFK1YzM3N2bE04ODk0SEM3dWV4?=
+ =?gb2312?B?NzllMlRod252R29GandqUDdTZTRLS0NCLzhXdytCWldROXVjR21QWnI2dCt6?=
+ =?gb2312?B?Q0tncnJiMG1GbEQ1U0U0azlKellFSkRLTE9Yd2hsRFJYUHFiYVVvaDBNcEFx?=
+ =?gb2312?B?UG9QVTh0M2lMY0N5QmF5MEdBa1B2TGZNYm5MeU1UY2R2d0NxUnV5N2NCZm82?=
+ =?gb2312?B?TkpMS0luNTJtQkhtWldUbExXejkwUER6Z1dCZVFZcGRQZjZVWXI5N084TTJ6?=
+ =?gb2312?B?VCtIc1RpbzF4cGI0cVc0anJPUzVUd3o5SGpqZ2RiSG5HTUJPSS93VUtxOFVn?=
+ =?gb2312?B?VUV5azJCUTRwNFRCYkRqSy8xcHFaSm15TjArdG1zRTk4bjM2SHE0OXZYRUp2?=
+ =?gb2312?B?UDZTZktVZEI3d0JMU1hPQ1FCZlF6RmZJOHFmdlhVN095bTdzWDcvc05PWVpS?=
+ =?gb2312?B?cjRBZjM4a3FHZlkvRys4aWNNS2RwTDRSYmlmcFdkMmtKamFJb3BzQ2tWSlhE?=
+ =?gb2312?B?THEwNnBXY2tVdUhhai9tTlc3T2FtaW5XQW9qN3lUazNlaDg5MWFqRzNVK1cx?=
+ =?gb2312?B?KzNoeE1UUmFmbXg5SithcmtPWjVLNVJMZHY1dFpVY0tyWlJSSHZzcTVtSjF3?=
+ =?gb2312?B?NER1S3kwOWlZNFZHdFdzUEplTjlVOFJwVDk1NkkrMDA3aEFNSTdDRXQ5ODd6?=
+ =?gb2312?B?VDNLNitKQUdNaTJWV3JuSmZKdUFQcG9PS0xaRGViaUhTQ0FtM3F3RTAvZStw?=
+ =?gb2312?B?NlNCR2czNTVOSytwUTZuMWZHUE9raWhFbEs4anlNK2ZMRVg1NkxaNWRVbnhY?=
+ =?gb2312?B?MkZMSllLR1piZzBJb1BpeGxld3BENXgyNmRmVHV6ZFU5azNxWmx0Nitxdlcw?=
+ =?gb2312?B?MGFZUTFRWXFZRDBiVjFHMThxZUsya2s2K1RFSHI3QjVxamd1ajJ2U0RuTGJV?=
+ =?gb2312?B?SDZGOXgwc3F3OGtoOVlTMjErZ25GNzdPaW85MUZGTzN5QlltTVFNK0t2ZjRW?=
+ =?gb2312?B?MkxCSTgxUk1IWmdObERMK1l3NUtrRG5qK2xoT3VKNlBOVURhMlFYTWRDNnBJ?=
+ =?gb2312?B?VXMydCsvSXlpSlUrclQxazVxUE04WitrVWVaalR6UTdpclZPcmJmNnVsQklQ?=
+ =?gb2312?B?ZzBGZ0tRUXdWMkVlcnFWZmU1YnJobjJpYWc4WWJsSkx1ZzVZSGhJWVhoZ2k0?=
+ =?gb2312?B?SEttbWJjenBJNFNYeWRpZFN1TlE2QytGUlBRV2Q5cks0WmFuTkFQWjhBQytK?=
+ =?gb2312?B?T3ZVaVN2ZW1ITG4ycVBLKzhPaFRXZjhXM29jVG44aFpSWFhzTCtmbFZLb25N?=
+ =?gb2312?B?VU02RjMxTmE0OUFEVlh1bkJGSjdFMS9IYS9tdz09?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8676.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb2deaca-5981-4f20-ac3f-08db4f969ca4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2023 07:34:09.4519
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LEOOXRMMuoeItGCHD6YLUnEMRGV0nX2iPD76yaun05B4NsyALVKl+Yrd0XWkOoXyu/MiQ4+Zx4eGN1TY3wbh0g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9304
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch is tested against IGT,
-
-
-1) fbdev test passed
-
-
-IGT-Version: 1.27.1-gce91d123 (loongarch64) (Linux: 6.3.0+ loongarch64)
-Starting subtest: info
-Subtest info: SUCCESS (0.000s)
-Starting subtest: pan
-Subtest pan: SUCCESS (0.042s)
-Starting subtest: read
-Subtest read: SUCCESS (0.012s)
-Starting subtest: unaligned-read
-Subtest unaligned-read: SUCCESS (0.003s)
-Starting subtest: write
-Subtest write: SUCCESS (0.024s)
-Starting subtest: unaligned-write
-Subtest unaligned-write: SUCCESS (0.003s)
-Starting subtest: eof
-Subtest eof: SUCCESS (0.000s)
-Starting subtest: nullptr
-Subtest nullptr: SUCCESS (0.000s)
-
-
-2) fbtest from geert also show good results:
-
-
-Using drawops cfb32 (32 bpp packed pixels)
-Available visuals:
-   Monochrome
-   Grayscale 256
-   Truecolor 8:8:8:0
-Using visops truecolor
-Running all tests
-test001: PASSED
-test002: PASSED
-test003: PASSED
-test004: PASSED
-test005: PASSED
-test006: PASSED
-test008: PASSED
-test009: PASSED
-test010: PASSED
-Benchmarking... 10x10 squares: 461.49 Mpixels/s
-Benchmarking... 20x20 squares: 984.74 Mpixels/s
-Benchmarking... 50x50 squares: 2253.04 Mpixels/s
-Benchmarking... 100x100 squares: 2218.78 Mpixels/s
-Benchmarking... 200x200 squares: 2880.41 Mpixels/s
-Benchmarking... 500x500 squares: 3642.36 Mpixels/s
-Benchmarking... 1000x1000 squares: 3931.25 Mpixels/s
-test012: PASSED
-Benchmarking... R5 circles: 258.73 Mpixels/s
-Benchmarking... R10 circles: 605.78 Mpixels/s
-Benchmarking... R25 circles: 1513.02 Mpixels/s
-Benchmarking... R50 circles: 1970.00 Mpixels/s
-Benchmarking... R100 circles: 2481.70 Mpixels/s
-Benchmarking... R250 circles: 3274.97 Mpixels/s
-Benchmarking... R500 circles: 3722.24 Mpixels/s
-test013: PASSED
-
-
-On 2023/5/4 16:04, Sui Jingfeng wrote:
-> Loongson display controller IP has been integrated in both Loongson north
-> bridge chipset(ls7a1000/ls7a2000) and Loongson SoCs(ls2k1000/ls2k2000), it
-> has been even included in Loongson self-made BMC products.
->
-> This display controller is a PCI device. It has two display pipes and each
-> display pipe support a primary plane and a cursor plane. For the DC in the
-> ls7a1000 and ls2k1000, each display pipe has a DVO output interface which
-> provide RGB888 signals, vertical & horizontal synchronisations and pixel
-> clock. Each CRTC is able to support 1920x1080@60Hz, the maximum resolution
-> of each display pipe is 2048x2048 according to the hardware spec.
->
-> For the DC in LS7A2000, each display pipe is equipped with a built-in HDMI
-> encoder which is compliant with the HDMI 1.4 specification, thus it support
-> 3840x2160@30Hz. The first display pipe is also equipped with a transparent
-> vga encoder which is parallel with the HDMI encoder. The DC in LS7A2000 is
-> more complete compare with the one in old chips, besides above feature, it
-> has two hardware cursors, two hardware vblank counter and two scanout
-> position recorders unit. It also support tiled framebuffer format which
-> can be scanout the tiled framebuffer rendered by the LoongGPU directly.
->
-> v1 -> v2:
->   1) Use hpd status reg when polling for ls7a2000
->   2) Fix all warnings emerged when compile with W=1
->
-> v2 -> v3:
->   1) Add COMPILE_TEST in Kconfig and make the driver off by default
->   2) Alphabetical sorting headers (Thomas)
->   3) Untangle register access functions as much as possible (Thomas)
->   4) Switch to TTM based memory manager and prefer cached mapping
->      for Loongson SoC (Thomas)
->   5) Add chip id detection method, now all models are distinguishable.
->   6) Revise builtin HDMI phy driver, nearly all main stream mode
->      below 4K@30Hz is tested, this driver supported these mode very
->      well including clone display mode and extend display mode.
->
-> v3 -> v4:
->   1) Quickly fix a small mistake.
->
-> v4 -> v5:
->   1) Drop potential support for Loongson 2K series SoC temporary,
->      this part should be resend with the DT binding patch in the future.
->   2) Add per display pipe debugfs support to the builtin HDMI encoder.
->   3) Rewrite atomic_update() for hardware cursors plane(Thomas)
->   4) Rewrite encoder and connector initialization part, untangle it
->      according to the chip(Thomas).
->
-> v5 -> v6:
->   1) Remove stray code which didn't get used, say lsdc_of_get_reserved_ram
->   2) Fix all typos I could found, make sentences and code more readable
->   3) Untangle lsdc_hdmi*_connector_detect() function according to the pipe
->   4) After a serious consideration, we rename this driver as loongson.
->      Because we also have drivers toward the LoongGPU IP in LS7A2000 and
->      LS2K2000. Besides, there are also drivers about the external encoder,
->      HDMI audio driver and vbios support etc. This patch only provide DC
->      driver part, my teammate Li Yi believe that loongson will be more
->      suitable for loongson graphics than lsdc in the long run.
->
->      loongson.ko = LSDC + LoongGPU + encoders driver + vbios/DT ...
->
-> v6 -> v7:
->   1) Add prime support, self-sharing is works. sharing buffer with etnaviv
->      is also tested, and its works with limitation.
->   2) Implement buffer objects tracking with list_head.
->   3) S3(sleep to RAM) is tested on ls3a5000+ls7a2000 evb and it works.
->   4) Rewrite lsdc_bo_move, since ttm core stop allocating resources
->      during BO creation. Patch V1 ~ V6 of this series no longer works
->      on latest kernel. Thus, we send V7 to revival them.
->
-> v7 -> v8:
->   1) Zero a compile warnnings on 32-bit platform, compile with W=1
->   2) Revise lsdc_bo_gpu_offset() and minor cleanup
->   3) Pageflip tested on the virtual terminal with following commands
->
->      modetest -M loongson -s 32:1920x1080 -v
->      modetest -M loongson -s 34:1920x1080 -v -F tiles
->
->     It works like a charm, when running pageflip test with dual screnn
->     configuration, another two additional bo created by the modetest
->     emerged, VRAM usage up to 40+MB, well we have at least 64MB, still
->     enough.
->
->     # cat bos
->
->         bo[0000]: size:     8112kB VRAM
->         bo[0001]: size:       16kB VRAM
->         bo[0002]: size:       16kB VRAM
->         bo[0003]: size:    16208kB VRAM
->         bo[0004]: size:     8112kB VRAM
->         bo[0005]: size:     8112kB VRAM
->
-> v8 -> v9:
->   1) Select I2C and I2C_ALGOBIT in Kconfig and should depend on MMU.
->   2) Using pci_get_domain_bus_and_slot to get the GPU device.
->   3) Other minor improvements.
->
->   Those patches are tested on ls3a5000 + ls7a1000 CRB, ls3a5000 + ls7a2000
->   evb, and lemote a1901 board(ls3a4000 + ls7a1000). On loongson mips CPU,
->   the write combine support should be enabled, to get a decent performance
->   for writing framebuffer data to the VRAM.
->
-> v9 -> v10:
->   1) Revise lsdc_drm_freeze() to implement S3 completely and correctly.
->      I suddenly realized that pinned buffer can not move and VRAM lost
->      power when sleep to RAM. Thus, the data in the buffer who is pinned
->      in VRAM will get lost when resume. Yet it's not big problem because
->      we are software rendering solution which relay on the CPU update the
->      front framebuffer. We can see the garbage data when resume from S3,
->      but the screen will show correct image as I move the cursor. This is
->      due to the cpu repaint. v10 of this patch make S3 perfect by unpin
->      all of BOs in VRAM, evict them all to system RAM.
->
-> v10 -> v11:
->   1) On double screen case, the single giant framebuffer is referenced by
->      two GEM object, hence, it will be pinned by prepare_fb() at lease two
->      times. This cause its pin count > 1. V10 of this patch only unpin VRAM
->      BOs once when suspend, which is not correct on double screen case. V11
->      of this patch unpin BOs until its pin count reach to zero when suspend.
->      Then, we make the S3 support complete finally. With v11, I can't see
->      any garbage data after resume. Teste on both ls7a1000 and ls7a2000
->      platform, with single screen and double screen configuration tested.
->   2) Fix vblank wait timeout when disable CRTC.
->   3) Test against IGT, at least fbdev test and kms_flip test of it passed,
->      while most tests of it passed.
->   4) Rewrite pixel PLL update function, magic numbers eliminated (Emil)
->   5) Drop a few common hardware features description in lsdc_desc (Emil)
->   6) Drop lsdc_mode_config_mode_valid(), instead add restrictions in dumb
->      create function. (Emil)
->   7) Untangle the ls7a1000 case and ls7a2000 case completely (Thomas)
->
-> v11 -> v12:
->   none
->
-> Sui Jingfeng (2):
->    MAINTAINERS: add maintainers for DRM LOONGSON driver
->    drm: add kms driver for loongson display controller
->
->   MAINTAINERS                                 |    7 +
->   drivers/gpu/drm/Kconfig                     |    2 +
->   drivers/gpu/drm/Makefile                    |    1 +
->   drivers/gpu/drm/loongson/Kconfig            |   17 +
->   drivers/gpu/drm/loongson/Makefile           |   19 +
->   drivers/gpu/drm/loongson/ls7a1000_outputs.c |  160 +++
->   drivers/gpu/drm/loongson/ls7a2000_outputs.c |  534 ++++++++++
->   drivers/gpu/drm/loongson/lsdc_crtc.c        | 1064 +++++++++++++++++++
->   drivers/gpu/drm/loongson/lsdc_debugfs.c     |   78 ++
->   drivers/gpu/drm/loongson/lsdc_device.c      |  104 ++
->   drivers/gpu/drm/loongson/lsdc_drv.c         |  484 +++++++++
->   drivers/gpu/drm/loongson/lsdc_drv.h         |  485 +++++++++
->   drivers/gpu/drm/loongson/lsdc_gem.c         |  319 ++++++
->   drivers/gpu/drm/loongson/lsdc_gem.h         |   37 +
->   drivers/gpu/drm/loongson/lsdc_gfxpll.c      |  199 ++++
->   drivers/gpu/drm/loongson/lsdc_gfxpll.h      |   52 +
->   drivers/gpu/drm/loongson/lsdc_i2c.c         |  179 ++++
->   drivers/gpu/drm/loongson/lsdc_i2c.h         |   29 +
->   drivers/gpu/drm/loongson/lsdc_irq.c         |   81 ++
->   drivers/gpu/drm/loongson/lsdc_irq.h         |   16 +
->   drivers/gpu/drm/loongson/lsdc_output.h      |   21 +
->   drivers/gpu/drm/loongson/lsdc_pixpll.c      |  485 +++++++++
->   drivers/gpu/drm/loongson/lsdc_pixpll.h      |   86 ++
->   drivers/gpu/drm/loongson/lsdc_plane.c       |  639 +++++++++++
->   drivers/gpu/drm/loongson/lsdc_probe.c       |   56 +
->   drivers/gpu/drm/loongson/lsdc_probe.h       |   12 +
->   drivers/gpu/drm/loongson/lsdc_regs.h        |  400 +++++++
->   drivers/gpu/drm/loongson/lsdc_ttm.c         |  547 ++++++++++
->   drivers/gpu/drm/loongson/lsdc_ttm.h         |   88 ++
->   29 files changed, 6201 insertions(+)
->   create mode 100644 drivers/gpu/drm/loongson/Kconfig
->   create mode 100644 drivers/gpu/drm/loongson/Makefile
->   create mode 100644 drivers/gpu/drm/loongson/ls7a1000_outputs.c
->   create mode 100644 drivers/gpu/drm/loongson/ls7a2000_outputs.c
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_crtc.c
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_debugfs.c
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_device.c
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.c
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.h
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.c
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.h
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_gfxpll.c
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_gfxpll.h
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.c
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.h
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.c
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.h
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_output.h
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_pixpll.c
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_pixpll.h
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_plane.c
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.c
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.h
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_regs.h
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.c
->   create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.h
->
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBLcnp5c3p0b2YgS296bG93c2tp
+IDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+DQo+IFNlbnQ6IDIwMjPE6jXUwjjI1SAx
+NToxOQ0KPiBUbzogSG9uZ3hpbmcgWmh1IDxob25neGluZy56aHVAbnhwLmNvbT47IEx1Y2FzIFN0
+YWNoDQo+IDxsLnN0YWNoQHBlbmd1dHJvbml4LmRlPjsgQmpvcm4gSGVsZ2FhcyA8YmhlbGdhYXNA
+Z29vZ2xlLmNvbT47IExvcmVuem8NCj4gUGllcmFsaXNpIDxscGllcmFsaXNpQGtlcm5lbC5vcmc+
+OyBLcnp5c3p0b2YgV2lsY3p5qL1za2kgPGt3QGxpbnV4LmNvbT47IFJvYg0KPiBIZXJyaW5nIDxy
+b2JoQGtlcm5lbC5vcmc+OyBLcnp5c3p0b2YgS296bG93c2tpDQo+IDxrcnp5c3p0b2Yua296bG93
+c2tpK2R0QGxpbmFyby5vcmc+OyBDb25vciBEb29sZXkgPGNvbm9yK2R0QGtlcm5lbC5vcmc+Ow0K
+PiBTaGF3biBHdW8gPHNoYXduZ3VvQGtlcm5lbC5vcmc+OyBTYXNjaGEgSGF1ZXIgPHMuaGF1ZXJA
+cGVuZ3V0cm9uaXguZGU+Ow0KPiBQZW5ndXRyb25peCBLZXJuZWwgVGVhbSA8a2VybmVsQHBlbmd1
+dHJvbml4LmRlPjsgRmFiaW8gRXN0ZXZhbQ0KPiA8ZmVzdGV2YW1AZ21haWwuY29tPjsgZGwtbGlu
+dXgtaW14IDxsaW51eC1pbXhAbnhwLmNvbT47DQo+IGxpbnV4LXBjaUB2Z2VyLmtlcm5lbC5vcmc7
+IGxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsNCj4gZGV2aWNldHJlZUB2Z2Vy
+Lmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IEtyenlzenRv
+ZiBLb3psb3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4NCj4gU3ViamVjdDog
+W1BBVENIIGZpeGVzXSBkdC1iaW5kaW5nczogUENJOiBmc2wsaW14NnE6IGZpeCBhc3NpZ25lZC1j
+bG9ja3Mgd2FybmluZw0KPiANCj4gYXNzaWduZWQtY2xvY2tzIGFyZSBhIGRlcGVuZGVuY3kgb2Yg
+Y2xvY2tzLCBob3dldmVyIHRoZSBkdHNjaGVtYSBoYXMgbGltaXRhdGlvbg0KPiBhbmQgZXhwZWN0
+cyBjbG9ja3MgdG8gYmUgcHJlc2VudCBpbiB0aGUgYmluZGluZyB1c2luZyBhc3NpZ25lZC1jbG9j
+a3MsIG5vdCBpbiBvdGhlcg0KPiByZWZlcmVuY2VkIGJpbmRpbmdzLiAgVGhlIGNsb2NrcyB3ZXJl
+IGRlZmluZWQgaW4gY29tbW9uDQo+IGZzbCxpbXg2cS1wY2llLWNvbW1vbi55YW1sLCB3aGljaCBp
+cyByZWZlcmVuY2VkIGJ5IGZzbCxpbXg2cS1wY2llLWVwLnlhbWwuDQo+IFRoZSBmc2wsaW14NnEt
+cGNpZS1lcC55YW1sIHVzZWQgYXNzaWduZWQtY2xvY2tzIHRodXMgbGVhZGluZyB0byB3YXJuaW5n
+czoNCj4gDQo+ICAgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3BjaS9mc2wsaW14
+NnEtcGNpZS1lcC5leGFtcGxlLmR0YjoNCj4gcGNpZS1lcEAzMzgwMDAwMDoNCj4gICAgIFVuZXZh
+bHVhdGVkIHByb3BlcnRpZXMgYXJlIG5vdCBhbGxvd2VkICgnYXNzaWduZWQtY2xvY2stcGFyZW50
+cycsDQo+ICdhc3NpZ25lZC1jbG9jay1yYXRlcycsICdhc3NpZ25lZC1jbG9ja3MnIHdlcmUgdW5l
+eHBlY3RlZCkNCj4gICBGcm9tIHNjaGVtYTogRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
+bmdzL3BjaS9mc2wsaW14NnEtcGNpZS1lcC55YW1sDQo+IA0KPiBGaXggdGhpcyBieSBtb3Zpbmcg
+Y2xvY2tzIHRvIGVhY2ggc3BlY2lmaWMgc2NoZW1hIGZyb20gdGhlIGNvbW1vbiBvbmUgYW5kDQo+
+IG5hcnJvd2luZyB0aGVtIHRvIHN0cmljdGx5IG1hdGNoIHdoYXQgaXMgZXhwZWN0ZWQgZm9yIGdp
+dmVuIGRldmljZS4NCj4gDQo+IEZpeGVzOiBiMTBmODIzODBlZWIgKCJkdC1iaW5kaW5nczogaW14
+NnEtcGNpZTogUmVzdHJ1Y3QgaS5NWCBQQ0llIHNjaGVtYSIpDQo+IFNpZ25lZC1vZmYtYnk6IEty
+enlzenRvZiBLb3psb3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4NClJldmll
+d2VkLWJ5OiBSaWNoYXJkIFpodSA8aG9uZ3hpbmcuemh1QG54cC5jb20+DQoNCkJlc3QgUmVnYXJk
+cw0KUmljaGFyZCBaaHUNCj4gDQo+IC0tLQ0KPiANCj4gUGF0Y2ggZm9yIGN1cnJlbnQgY3ljbGUg
+KHY2LjQtcmMpLiAgIFBsZWFzZSB0YWtlIGRpcmVjdGx5IGFzIGZpeGVzIG9yDQo+IGxldCBtZSBr
+bm93LCBzbyBJIHdpbGwgc2VuZCBpdCB0byBMaW51cy4NCj4gLS0tDQo+ICAuLi4vYmluZGluZ3Mv
+cGNpL2ZzbCxpbXg2cS1wY2llLWNvbW1vbi55YW1sICAgfCAxMyArLS0tDQo+ICAuLi4vYmluZGlu
+Z3MvcGNpL2ZzbCxpbXg2cS1wY2llLWVwLnlhbWwgICAgICAgfCAzOCArKysrKysrKysNCj4gIC4u
+Li9iaW5kaW5ncy9wY2kvZnNsLGlteDZxLXBjaWUueWFtbCAgICAgICAgICB8IDc3ICsrKysrKysr
+KysrKysrKysrKysNCj4gIDMgZmlsZXMgY2hhbmdlZCwgMTE3IGluc2VydGlvbnMoKyksIDExIGRl
+bGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
+aW5kaW5ncy9wY2kvZnNsLGlteDZxLXBjaWUtY29tbW9uLnlhbWwNCj4gYi9Eb2N1bWVudGF0aW9u
+L2RldmljZXRyZWUvYmluZGluZ3MvcGNpL2ZzbCxpbXg2cS1wY2llLWNvbW1vbi55YW1sDQo+IGlu
+ZGV4IDliZmY4ZWNiNjUzYy4uZDkxYjYzOWFlN2FlIDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVudGF0
+aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcGNpL2ZzbCxpbXg2cS1wY2llLWNvbW1vbi55YW1sDQo+
+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9wY2kvZnNsLGlteDZxLXBj
+aWUtY29tbW9uLnlhbWwNCj4gQEAgLTE3LDIwICsxNywxMSBAQCBkZXNjcmlwdGlvbjoNCj4gIHBy
+b3BlcnRpZXM6DQo+ICAgIGNsb2NrczoNCj4gICAgICBtaW5JdGVtczogMw0KPiAtICAgIGl0ZW1z
+Og0KPiAtICAgICAgLSBkZXNjcmlwdGlvbjogUENJZSBicmlkZ2UgY2xvY2suDQo+IC0gICAgICAt
+IGRlc2NyaXB0aW9uOiBQQ0llIGJ1cyBjbG9jay4NCj4gLSAgICAgIC0gZGVzY3JpcHRpb246IFBD
+SWUgUEhZIGNsb2NrLg0KPiAtICAgICAgLSBkZXNjcmlwdGlvbjogQWRkaXRpb25hbCByZXF1aXJl
+ZCBjbG9jayBlbnRyeSBmb3IgaW14NnN4LXBjaWUsDQo+IC0gICAgICAgICAgIGlteDZzeC1wY2ll
+LWVwLCBpbXg4bXEtcGNpZSwgaW14OG1xLXBjaWUtZXAuDQo+ICsgICAgbWF4SXRlbXM6IDQNCj4g
+DQo+ICAgIGNsb2NrLW5hbWVzOg0KPiAgICAgIG1pbkl0ZW1zOiAzDQo+IC0gICAgaXRlbXM6DQo+
+IC0gICAgICAtIGNvbnN0OiBwY2llDQo+IC0gICAgICAtIGNvbnN0OiBwY2llX2J1cw0KPiAtICAg
+ICAgLSBlbnVtOiBbIHBjaWVfcGh5LCBwY2llX2F1eCBdDQo+IC0gICAgICAtIGVudW06IFsgcGNp
+ZV9pbmJvdW5kX2F4aSwgcGNpZV9hdXggXQ0KPiArICAgIG1heEl0ZW1zOiA0DQo+IA0KPiAgICBu
+dW0tbGFuZXM6DQo+ICAgICAgY29uc3Q6IDENCj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24v
+ZGV2aWNldHJlZS9iaW5kaW5ncy9wY2kvZnNsLGlteDZxLXBjaWUtZXAueWFtbA0KPiBiL0RvY3Vt
+ZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9wY2kvZnNsLGlteDZxLXBjaWUtZXAueWFtbA0K
+PiBpbmRleCBmNGEzMjhlYzFkYWEuLmVlMTU1ZWQ1ZjE4MSAxMDA2NDQNCj4gLS0tIGEvRG9jdW1l
+bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3BjaS9mc2wsaW14NnEtcGNpZS1lcC55YW1sDQo+
+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9wY2kvZnNsLGlteDZxLXBj
+aWUtZXAueWFtbA0KPiBAQCAtMzEsNiArMzEsMTkgQEAgcHJvcGVydGllczoNCj4gICAgICAgIC0g
+Y29uc3Q6IGRiaQ0KPiAgICAgICAgLSBjb25zdDogYWRkcl9zcGFjZQ0KPiANCj4gKyAgY2xvY2tz
+Og0KPiArICAgIG1pbkl0ZW1zOiAzDQo+ICsgICAgaXRlbXM6DQo+ICsgICAgICAtIGRlc2NyaXB0
+aW9uOiBQQ0llIGJyaWRnZSBjbG9jay4NCj4gKyAgICAgIC0gZGVzY3JpcHRpb246IFBDSWUgYnVz
+IGNsb2NrLg0KPiArICAgICAgLSBkZXNjcmlwdGlvbjogUENJZSBQSFkgY2xvY2suDQo+ICsgICAg
+ICAtIGRlc2NyaXB0aW9uOiBBZGRpdGlvbmFsIHJlcXVpcmVkIGNsb2NrIGVudHJ5IGZvciBpbXg2
+c3gtcGNpZSwNCj4gKyAgICAgICAgICAgaW14NnN4LXBjaWUtZXAsIGlteDhtcS1wY2llLCBpbXg4
+bXEtcGNpZS1lcC4NCj4gKw0KPiArICBjbG9jay1uYW1lczoNCj4gKyAgICBtaW5JdGVtczogMw0K
+PiArICAgIG1heEl0ZW1zOiA0DQo+ICsNCj4gICAgaW50ZXJydXB0czoNCj4gICAgICBpdGVtczoN
+Cj4gICAgICAgIC0gZGVzY3JpcHRpb246IGJ1aWx0aW4gZURNQSBpbnRlcnJ1cHRlci4NCj4gQEAg
+LTQ5LDYgKzYyLDMxIEBAIHJlcXVpcmVkOg0KPiAgYWxsT2Y6DQo+ICAgIC0gJHJlZjogL3NjaGVt
+YXMvcGNpL3NucHMsZHctcGNpZS1lcC55YW1sIw0KPiAgICAtICRyZWY6IC9zY2hlbWFzL3BjaS9m
+c2wsaW14NnEtcGNpZS1jb21tb24ueWFtbCMNCj4gKyAgLSBpZjoNCj4gKyAgICAgIHByb3BlcnRp
+ZXM6DQo+ICsgICAgICAgIGNvbXBhdGlibGU6DQo+ICsgICAgICAgICAgZW51bToNCj4gKyAgICAg
+ICAgICAgIC0gZnNsLGlteDhtcS1wY2llLWVwDQo+ICsgICAgdGhlbjoNCj4gKyAgICAgIHByb3Bl
+cnRpZXM6DQo+ICsgICAgICAgIGNsb2NrczoNCj4gKyAgICAgICAgICBtaW5JdGVtczogNA0KPiAr
+ICAgICAgICBjbG9jay1uYW1lczoNCj4gKyAgICAgICAgICBpdGVtczoNCj4gKyAgICAgICAgICAg
+IC0gY29uc3Q6IHBjaWUNCj4gKyAgICAgICAgICAgIC0gY29uc3Q6IHBjaWVfYnVzDQo+ICsgICAg
+ICAgICAgICAtIGNvbnN0OiBwY2llX3BoeQ0KPiArICAgICAgICAgICAgLSBjb25zdDogcGNpZV9h
+dXgNCj4gKyAgICBlbHNlOg0KPiArICAgICAgcHJvcGVydGllczoNCj4gKyAgICAgICAgY2xvY2tz
+Og0KPiArICAgICAgICAgIG1heEl0ZW1zOiAzDQo+ICsgICAgICAgIGNsb2NrLW5hbWVzOg0KPiAr
+ICAgICAgICAgIGl0ZW1zOg0KPiArICAgICAgICAgICAgLSBjb25zdDogcGNpZQ0KPiArICAgICAg
+ICAgICAgLSBjb25zdDogcGNpZV9idXMNCj4gKyAgICAgICAgICAgIC0gY29uc3Q6IHBjaWVfYXV4
+DQo+ICsNCj4gDQo+ICB1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZhbHNlDQo+IA0KPiBkaWZmIC0t
+Z2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3BjaS9mc2wsaW14NnEtcGNp
+ZS55YW1sDQo+IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3BjaS9mc2wsaW14
+NnEtcGNpZS55YW1sDQo+IGluZGV4IDI0NDM2NDE3NTRkMy4uODFiYmI4NzI4ZjBmIDEwMDY0NA0K
+PiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcGNpL2ZzbCxpbXg2cS1w
+Y2llLnlhbWwNCj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3BjaS9m
+c2wsaW14NnEtcGNpZS55YW1sDQo+IEBAIC00MCw2ICs0MCwxOSBAQCBwcm9wZXJ0aWVzOg0KPiAg
+ICAgICAgLSBjb25zdDogZGJpDQo+ICAgICAgICAtIGNvbnN0OiBjb25maWcNCj4gDQo+ICsgIGNs
+b2NrczoNCj4gKyAgICBtaW5JdGVtczogMw0KPiArICAgIGl0ZW1zOg0KPiArICAgICAgLSBkZXNj
+cmlwdGlvbjogUENJZSBicmlkZ2UgY2xvY2suDQo+ICsgICAgICAtIGRlc2NyaXB0aW9uOiBQQ0ll
+IGJ1cyBjbG9jay4NCj4gKyAgICAgIC0gZGVzY3JpcHRpb246IFBDSWUgUEhZIGNsb2NrLg0KPiAr
+ICAgICAgLSBkZXNjcmlwdGlvbjogQWRkaXRpb25hbCByZXF1aXJlZCBjbG9jayBlbnRyeSBmb3Ig
+aW14NnN4LXBjaWUsDQo+ICsgICAgICAgICAgIGlteDZzeC1wY2llLWVwLCBpbXg4bXEtcGNpZSwg
+aW14OG1xLXBjaWUtZXAuDQo+ICsNCj4gKyAgY2xvY2stbmFtZXM6DQo+ICsgICAgbWluSXRlbXM6
+IDMNCj4gKyAgICBtYXhJdGVtczogNA0KPiArDQo+ICAgIGludGVycnVwdHM6DQo+ICAgICAgaXRl
+bXM6DQo+ICAgICAgICAtIGRlc2NyaXB0aW9uOiBidWlsdGluIE1TSSBjb250cm9sbGVyLg0KPiBA
+QCAtNzcsNiArOTAsNzAgQEAgcmVxdWlyZWQ6DQo+ICBhbGxPZjoNCj4gICAgLSAkcmVmOiAvc2No
+ZW1hcy9wY2kvc25wcyxkdy1wY2llLnlhbWwjDQo+ICAgIC0gJHJlZjogL3NjaGVtYXMvcGNpL2Zz
+bCxpbXg2cS1wY2llLWNvbW1vbi55YW1sIw0KPiArICAtIGlmOg0KPiArICAgICAgcHJvcGVydGll
+czoNCj4gKyAgICAgICAgY29tcGF0aWJsZToNCj4gKyAgICAgICAgICBlbnVtOg0KPiArICAgICAg
+ICAgICAgLSBmc2wsaW14NnN4LXBjaWUNCj4gKyAgICB0aGVuOg0KPiArICAgICAgcHJvcGVydGll
+czoNCj4gKyAgICAgICAgY2xvY2tzOg0KPiArICAgICAgICAgIG1pbkl0ZW1zOiA0DQo+ICsgICAg
+ICAgIGNsb2NrLW5hbWVzOg0KPiArICAgICAgICAgIGl0ZW1zOg0KPiArICAgICAgICAgICAgLSBj
+b25zdDogcGNpZQ0KPiArICAgICAgICAgICAgLSBjb25zdDogcGNpZV9idXMNCj4gKyAgICAgICAg
+ICAgIC0gY29uc3Q6IHBjaWVfcGh5DQo+ICsgICAgICAgICAgICAtIGNvbnN0OiBwY2llX2luYm91
+bmRfYXhpDQo+ICsNCj4gKyAgLSBpZjoNCj4gKyAgICAgIHByb3BlcnRpZXM6DQo+ICsgICAgICAg
+IGNvbXBhdGlibGU6DQo+ICsgICAgICAgICAgZW51bToNCj4gKyAgICAgICAgICAgIC0gZnNsLGlt
+eDhtcS1wY2llDQo+ICsgICAgdGhlbjoNCj4gKyAgICAgIHByb3BlcnRpZXM6DQo+ICsgICAgICAg
+IGNsb2NrczoNCj4gKyAgICAgICAgICBtaW5JdGVtczogNA0KPiArICAgICAgICBjbG9jay1uYW1l
+czoNCj4gKyAgICAgICAgICBpdGVtczoNCj4gKyAgICAgICAgICAgIC0gY29uc3Q6IHBjaWUNCj4g
+KyAgICAgICAgICAgIC0gY29uc3Q6IHBjaWVfYnVzDQo+ICsgICAgICAgICAgICAtIGNvbnN0OiBw
+Y2llX3BoeQ0KPiArICAgICAgICAgICAgLSBjb25zdDogcGNpZV9hdXgNCj4gKw0KPiArICAtIGlm
+Og0KPiArICAgICAgcHJvcGVydGllczoNCj4gKyAgICAgICAgY29tcGF0aWJsZToNCj4gKyAgICAg
+ICAgICBlbnVtOg0KPiArICAgICAgICAgICAgLSBmc2wsaW14NnEtcGNpZQ0KPiArICAgICAgICAg
+ICAgLSBmc2wsaW14NnFwLXBjaWUNCj4gKyAgICAgICAgICAgIC0gZnNsLGlteDdkLXBjaWUNCj4g
+KyAgICB0aGVuOg0KPiArICAgICAgcHJvcGVydGllczoNCj4gKyAgICAgICAgY2xvY2tzOg0KPiAr
+ICAgICAgICAgIG1heEl0ZW1zOiAzDQo+ICsgICAgICAgIGNsb2NrLW5hbWVzOg0KPiArICAgICAg
+ICAgIGl0ZW1zOg0KPiArICAgICAgICAgICAgLSBjb25zdDogcGNpZQ0KPiArICAgICAgICAgICAg
+LSBjb25zdDogcGNpZV9idXMNCj4gKyAgICAgICAgICAgIC0gY29uc3Q6IHBjaWVfcGh5DQo+ICsN
+Cj4gKyAgLSBpZjoNCj4gKyAgICAgIHByb3BlcnRpZXM6DQo+ICsgICAgICAgIGNvbXBhdGlibGU6
+DQo+ICsgICAgICAgICAgZW51bToNCj4gKyAgICAgICAgICAgIC0gZnNsLGlteDhtbS1wY2llDQo+
+ICsgICAgICAgICAgICAtIGZzbCxpbXg4bXAtcGNpZQ0KPiArICAgIHRoZW46DQo+ICsgICAgICBw
+cm9wZXJ0aWVzOg0KPiArICAgICAgICBjbG9ja3M6DQo+ICsgICAgICAgICAgbWF4SXRlbXM6IDMN
+Cj4gKyAgICAgICAgY2xvY2stbmFtZXM6DQo+ICsgICAgICAgICAgaXRlbXM6DQo+ICsgICAgICAg
+ICAgICAtIGNvbnN0OiBwY2llDQo+ICsgICAgICAgICAgICAtIGNvbnN0OiBwY2llX2J1cw0KPiAr
+ICAgICAgICAgICAgLSBjb25zdDogcGNpZV9hdXgNCj4gDQo+ICB1bmV2YWx1YXRlZFByb3BlcnRp
+ZXM6IGZhbHNlDQo+IA0KPiAtLQ0KPiAyLjM0LjENCg0K
