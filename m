@@ -2,105 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9E06FAFFE
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E41C66FAFCF
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234193AbjEHM3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 08:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
+        id S234094AbjEHMV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 08:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234149AbjEHM3L (ORCPT
+        with ESMTP id S234076AbjEHMVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 08:29:11 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on20605.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8d::605])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DCE37601;
-        Mon,  8 May 2023 05:28:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iTIIGI5eh4+njvwMlPBBH7c+RtG6jlPEV2QkJQC9g7zQRK82dH6OJVmKVOWVx1uwZ6Fcu3hjD2/EIwywEBKkIIcrcX/hN3cwE/4NrhuEQjN2e9nmcb6a1WiOxlSXTv40CI1GxC+CXUYNohGSqnfjHuf8yRalg1U14Cc+xeZ33Q3EM50jnJylbZN6zyeLuEutHLQVKumZxcrY+0QDFmjYj8aFRGl9Ve90ETwcfnkJhqxMIawvYhbXJTo0okIpwc9jvx2MJrx8sYHGh+nduzlAGCG5pSba+UIHIa2Y5B1xV/5LJscWW/jux1nwN0E7syXRw6mWgWQFEV3p8oXDAIMUAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4WP0nIrW0puSZZb0FzvEsxvFWz7wvg3IdKUl5/vBVps=;
- b=bQq2SOh9nB/V77Gah9ocdV9r5LfpPEa1ZpAGYhD/hgOZUpWrGF30uT8rWnpTTmlkhygNCYAuEyUaupXz8MVSWwgT3SRC8JE0KtK4hjEF3yWglwhRyeybyuSZHppKlDOhB5ZAMW2csoreg1KIfo7d50iNCP4G7sCjOa8YD1Vdw8CI7BvCAOVLXk2+PUy3wEt1puTWLW5tEvPoJt/t/aWebNccMmw3DVXN1DlbPCGwHuxlzqeqvMZjoToJGTe8XlH+hokxeEK+YkXS0i/GUmVit3eCqG+4JLEa7CBte85DoRrWWUY11lE5XTq24gdEIPFxgBxnweayfLsdtAn2WEbKYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4WP0nIrW0puSZZb0FzvEsxvFWz7wvg3IdKUl5/vBVps=;
- b=tAiPMG1igM6oIm0AbLWeYogJ40NtqXU1buWGuxn7HsKJcqn1ujrNqyjDYbVfzztn7uCiyVXJ9ICg64UqCwlWfSQK5ENKSM+cX5nsrhZxT9tm5FM6aN7JfLPOsvPtSDM8ybClchqYJj8j3S/4W+wUztf2PY+LNFzdOZBOQccrcRvP93XwyCMrhSgproZUky8ISIuM0pZaCR3ckpWzsCQISTSo0YwjVl7CIUm7ptzVfF6/pcOGGb5/t2w7+qwMnxNJyXWM3AgZjrU5jSyJ3w6QzN0A1TtMAl2upoFNoNcNSEonDcH6ZBabdz/7dAZblMNGafi+8r1ADyhUYqpcFsAZJw==
-Received: from MW4PR04CA0319.namprd04.prod.outlook.com (2603:10b6:303:82::24)
- by BY5PR12MB4180.namprd12.prod.outlook.com (2603:10b6:a03:213::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
- 2023 12:28:46 +0000
-Received: from CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:82:cafe::33) by MW4PR04CA0319.outlook.office365.com
- (2603:10b6:303:82::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33 via Frontend
- Transport; Mon, 8 May 2023 12:28:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT063.mail.protection.outlook.com (10.13.175.37) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6363.32 via Frontend Transport; Mon, 8 May 2023 12:28:46 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 8 May 2023
- 05:28:35 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 8 May 2023
- 05:28:35 -0700
-Received: from mallet.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Mon, 8 May 2023 05:28:33 -0700
-From:   Peter De Schrijver <pdeschrijver@nvidia.com>
-To:     Peter De Schrijver <pdeschrijver@nvidia.com>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <mperttunen@nvidia.com>
-CC:     <sudeep.holla@arm.com>, <talho@nvidia.com>, <robh@kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stefank@nvidia.com>
-Subject: [PATCH 5/5] firmware: tegra: bpmp: Add support for DRAM MRQ GSCs
-Date:   Mon, 8 May 2023 15:20:54 +0300
-Message-ID: <20230508122048.99953-6-pdeschrijver@nvidia.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230508122048.99953-1-pdeschrijver@nvidia.com>
-References: <20230508122048.99953-1-pdeschrijver@nvidia.com>
+        Mon, 8 May 2023 08:21:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948D131565;
+        Mon,  8 May 2023 05:21:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 201D563BFA;
+        Mon,  8 May 2023 12:21:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55314C433D2;
+        Mon,  8 May 2023 12:21:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683548481;
+        bh=uq5dzUvZQoVw3C52vq/DdsRT8oi8aDqjHTKmyLpSfZo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r0SxYbcZN3jgbBBE4ta+Dzn8/3lyfGNX3BbuOqE8B84X1N1cIKwIzO4SYcQVgH9iH
+         MeLYFhhvGzQSFVyn/1hCKtRerG1EFDNPyCKzUcebDRXTMur1z8zpAnRJwl0lw8Mogq
+         sOC/3m5d9rmB3H2i+skm0YQ4clsnrWhOe552wdOL8Inj8vCFx/gEG6BEUgmZ2j5ZWd
+         XGu5dLYnJ6dLJFJJGn/MyHLMp1rP4A7stireL7O6syT+xGhcl7AfHaaG6P3osBPkxJ
+         V4BsPL7ppePFvF4cfTSD8UPiJXKmGbzY65wl/Kjr2m+jRw3p+7RxsUvyOAocS/MX3+
+         Dg5171/dpRdFw==
+Date:   Mon, 8 May 2023 17:51:09 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Devi Priya <quic_devipriy@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, mani@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_ipkumar@quicinc.com
+Subject: Re: [PATCH V3 6/6] PCI: qcom: Add support for IPQ9574
+Message-ID: <20230508122109.GC4190@thinkpad>
+References: <20230421124938.21974-1-quic_devipriy@quicinc.com>
+ <20230421124938.21974-7-quic_devipriy@quicinc.com>
 MIME-Version: 1.0
-X-NVConfidentiality: public
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT063:EE_|BY5PR12MB4180:EE_
-X-MS-Office365-Filtering-Correlation-Id: afd4eac4-0093-4879-ebf7-08db4fbfc4c5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ifgF48vNxunyLoiMb8HVwo8Q57bMkA/CUrk5Y5HtU7DGqwiKWez6kJSElbOvG1exzEL0qOIlbf03c+34nUVSialEmNpNJ544XElYq7e7Jr5T8dTGXJtMMzdGYedI2P2N/jo0FLobeH56ye7WFSiroLNv2ak1NoG4p/ZGB60F95w8dq7hj/j+dc9DwYyOK4rbrYDnDwtyk18KRPNZNjey+F/Pj/E75TzFTQv/VK/t26wQNWE/eIKQEg+RrU54pARTuAV+0Koyu6gcVYp5zfQWTwjX4lbvk44jiHBGteniITCNb1L8n5cQKMa0Y18zkwKiR7a8UfLAHZ+I+K03zMSQkgWu/K6cCfxLAkp5Ge9uXZu8DPtb/Oz4l/nLS/SpIajRBclwPUbf4N7HsOLOK8A1H6VST7FCnmrGlPtpv8+Jtf8K7poY5TBIy12PpEcIfNfm9vBrn2muMBDyW9Qw2olU4KsH38fImejaTcT2mkAdFr51ECu4TaK4YdqLpO5o3ZmP5hnzDY4bJ8ip14/xRMRHueJTc3Z2YLGIhJAHTilirGqtWR+QiDeePXRU3srqYvIOC8cjF3UjGwps8bGWwQWI0MUpJBQYAnVhXga4HRsALNcLo6e5MHc+8w+c+gflyZt3m3fSBThW1ujnziXoBBVevH87+ePwGjheylQLHCotEX0=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(136003)(396003)(346002)(451199021)(46966006)(36840700001)(86362001)(36756003)(6666004)(316002)(110136005)(54906003)(6636002)(4326008)(70586007)(7696005)(70206006)(478600001)(82310400005)(40480700001)(5660300002)(8676002)(2906002)(8936002)(356005)(41300700001)(7636003)(82740400003)(186003)(107886003)(36860700001)(26005)(1076003)(47076005)(336012)(83380400001)(426003)(2616005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 12:28:46.0772
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: afd4eac4-0093-4879-ebf7-08db4fbfc4c5
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4180
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20230421124938.21974-7-quic_devipriy@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,333 +64,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement support for DRAM MRQ GSCs.
+On Fri, Apr 21, 2023 at 06:19:38PM +0530, Devi Priya wrote:
+> The IPQ9574 platform has 4 Gen3 PCIe controllers: two single-lane
+> and two dual-lane based on SNPS core 5.70a
+> The Qcom IP rev is 1.27.0 and Synopsys IP rev is 5.80a
+> Added a new compatible 'qcom,pcie-ipq9574' and 'ops_1_27_0'
+> which reuses all the members of 'ops_2_9_0' except for the post_init
+> as the SLV_ADDR_SPACE_SIZE configuration differs between 2_9_0
+> and 1_27_0.
+> Also, modified get_resources of 'ops 2_9_0' to get the clocks
+> from the device tree and modelled the post init sequence as
+> a common function to avoid code redundancy.
+> 
+> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
 
-Signed-off-by: Peter De Schrijver <pdeschrijver@nvidia.com>
----
- drivers/firmware/tegra/bpmp-tegra186.c | 208 ++++++++++++++++++-------
- drivers/firmware/tegra/bpmp.c          |   4 +-
- 2 files changed, 150 insertions(+), 62 deletions(-)
+One comment below. With that fixed,
 
-diff --git a/drivers/firmware/tegra/bpmp-tegra186.c b/drivers/firmware/tegra/bpmp-tegra186.c
-index 2e26199041cd..000acf0fe183 100644
---- a/drivers/firmware/tegra/bpmp-tegra186.c
-+++ b/drivers/firmware/tegra/bpmp-tegra186.c
-@@ -4,8 +4,11 @@
-  */
- 
- #include <linux/genalloc.h>
-+#include <linux/io.h>
- #include <linux/mailbox_client.h>
-+#include <linux/of_address.h>
- #include <linux/platform_device.h>
-+#include <linux/range.h>
- 
- #include <soc/tegra/bpmp.h>
- #include <soc/tegra/bpmp-abi.h>
-@@ -13,11 +16,12 @@
- 
- #include "bpmp-private.h"
- 
-+enum tegra_bpmp_mem_type { TEGRA_INVALID, TEGRA_SRAM, TEGRA_RMEM };
-+
- struct tegra186_bpmp {
- 	struct tegra_bpmp *parent;
- 
- 	struct {
--		struct gen_pool *pool;
- 		void __iomem *virt;
- 		dma_addr_t phys;
- 	} tx, rx;
-@@ -26,6 +30,12 @@ struct tegra186_bpmp {
- 		struct mbox_client client;
- 		struct mbox_chan *channel;
- 	} mbox;
-+
-+	struct {
-+		struct gen_pool *tx, *rx;
-+	} sram;
-+
-+	enum tegra_bpmp_mem_type type;
- };
- 
- static inline struct tegra_bpmp *
-@@ -158,64 +168,171 @@ static void mbox_handle_rx(struct mbox_client *client, void *data)
- 	tegra_bpmp_handle_rx(bpmp);
- }
- 
--static int tegra186_bpmp_init(struct tegra_bpmp *bpmp)
-+static void tegra186_bpmp_channel_deinit(struct tegra_bpmp *bpmp)
-+{
-+	int i;
-+	struct tegra186_bpmp *priv = bpmp->priv;
-+
-+	for (i = 0; i < bpmp->threaded.count; i++) {
-+		if (!bpmp->threaded_channels[i].bpmp)
-+			continue;
-+
-+		tegra186_bpmp_channel_cleanup(&bpmp->threaded_channels[i]);
-+	}
-+
-+	tegra186_bpmp_channel_cleanup(bpmp->rx_channel);
-+	tegra186_bpmp_channel_cleanup(bpmp->tx_channel);
-+
-+	if (priv->type == TEGRA_SRAM) {
-+		gen_pool_free(priv->sram.tx, (unsigned long)priv->tx.virt, 4096);
-+		gen_pool_free(priv->sram.rx, (unsigned long)priv->rx.virt, 4096);
-+	} else if (priv->type == TEGRA_RMEM) {
-+		memunmap(priv->tx.virt);
-+	}
-+}
-+
-+static int tegra186_bpmp_channel_setup(struct tegra_bpmp *bpmp)
- {
--	struct tegra186_bpmp *priv;
- 	unsigned int i;
- 	int err;
- 
--	priv = devm_kzalloc(bpmp->dev, sizeof(*priv), GFP_KERNEL);
--	if (!priv)
--		return -ENOMEM;
-+	err = tegra186_bpmp_channel_init(bpmp->tx_channel, bpmp,
-+					 bpmp->soc->channels.cpu_tx.offset);
-+	if (err < 0)
-+		return err;
- 
--	bpmp->priv = priv;
--	priv->parent = bpmp;
-+	err = tegra186_bpmp_channel_init(bpmp->rx_channel, bpmp,
-+					 bpmp->soc->channels.cpu_rx.offset);
-+	if (err < 0) {
-+		tegra186_bpmp_channel_cleanup(bpmp->tx_channel);
-+		return err;
-+	}
-+
-+	for (i = 0; i < bpmp->threaded.count; i++) {
-+		unsigned int index = bpmp->soc->channels.thread.offset + i;
- 
--	priv->tx.pool = of_gen_pool_get(bpmp->dev->of_node, "shmem", 0);
--	if (!priv->tx.pool) {
-+		err = tegra186_bpmp_channel_init(&bpmp->threaded_channels[i],
-+						 bpmp, index);
-+		if (err < 0)
-+			break;
-+	}
-+
-+	if (err < 0)
-+		tegra186_bpmp_channel_deinit(bpmp);
-+
-+	return err;
-+}
-+
-+static void tegra186_bpmp_reset_channels(struct tegra_bpmp *bpmp)
-+{
-+	unsigned int i;
-+
-+	tegra186_bpmp_channel_reset(bpmp->tx_channel);
-+	tegra186_bpmp_channel_reset(bpmp->rx_channel);
-+
-+	for (i = 0; i < bpmp->threaded.count; i++)
-+		tegra186_bpmp_channel_reset(&bpmp->threaded_channels[i]);
-+}
-+
-+static int tegra186_bpmp_sram_init(struct tegra_bpmp *bpmp)
-+{
-+	int err;
-+	struct tegra186_bpmp *priv = bpmp->priv;
-+
-+	priv->sram.tx = of_gen_pool_get(bpmp->dev->of_node, "shmem", 0);
-+	if (!priv->sram.tx) {
- 		dev_err(bpmp->dev, "TX shmem pool not found\n");
- 		return -EPROBE_DEFER;
- 	}
- 
--	priv->tx.virt = (void __iomem *)gen_pool_dma_alloc(priv->tx.pool, 4096, &priv->tx.phys);
-+	priv->tx.virt = gen_pool_dma_alloc(priv->sram.tx, 4096, &priv->tx.phys);
- 	if (!priv->tx.virt) {
- 		dev_err(bpmp->dev, "failed to allocate from TX pool\n");
- 		return -ENOMEM;
- 	}
- 
--	priv->rx.pool = of_gen_pool_get(bpmp->dev->of_node, "shmem", 1);
--	if (!priv->rx.pool) {
-+	priv->sram.rx = of_gen_pool_get(bpmp->dev->of_node, "shmem", 1);
-+	if (!priv->sram.rx) {
- 		dev_err(bpmp->dev, "RX shmem pool not found\n");
- 		err = -EPROBE_DEFER;
- 		goto free_tx;
- 	}
- 
--	priv->rx.virt = (void __iomem *)gen_pool_dma_alloc(priv->rx.pool, 4096, &priv->rx.phys);
-+	priv->rx.virt = gen_pool_dma_alloc(priv->sram.rx, 4096, &priv->rx.phys);
- 	if (!priv->rx.virt) {
- 		dev_err(bpmp->dev, "failed to allocate from RX pool\n");
- 		err = -ENOMEM;
- 		goto free_tx;
- 	}
- 
--	err = tegra186_bpmp_channel_init(bpmp->tx_channel, bpmp,
--					 bpmp->soc->channels.cpu_tx.offset);
--	if (err < 0)
--		goto free_rx;
-+	priv->type = TEGRA_SRAM;
- 
--	err = tegra186_bpmp_channel_init(bpmp->rx_channel, bpmp,
--					 bpmp->soc->channels.cpu_rx.offset);
--	if (err < 0)
--		goto cleanup_tx_channel;
-+	return 0;
- 
--	for (i = 0; i < bpmp->threaded.count; i++) {
--		unsigned int index = bpmp->soc->channels.thread.offset + i;
-+free_tx:
-+	gen_pool_free(priv->sram.tx, (unsigned long)priv->tx.virt, 4096);
- 
--		err = tegra186_bpmp_channel_init(&bpmp->threaded_channels[i],
--						 bpmp, index);
-+	return err;
-+}
-+
-+static enum tegra_bpmp_mem_type tegra186_bpmp_dram_init(struct tegra_bpmp *bpmp)
-+{
-+	int err;
-+	struct resource res;
-+	struct device_node *np;
-+	struct tegra186_bpmp *priv = bpmp->priv;
-+
-+	np = of_parse_phandle(bpmp->dev->of_node, "memory-region", 0);
-+	if (!np)
-+		return TEGRA_INVALID;
-+
-+	err = of_address_to_resource(np, 0, &res);
-+	if (err) {
-+		dev_warn(bpmp->dev,  "Parsing memory region returned: %d\n", err);
-+		return TEGRA_INVALID;
-+	}
-+
-+	if ((res.end - res.start + 1) < 0x2000) {
-+		dev_warn(bpmp->dev,  "DRAM region less than 0x2000 bytes\n");
-+		return TEGRA_INVALID;
-+	}
-+
-+	priv->tx.phys = res.start;
-+	priv->rx.phys = res.start + 0x1000;
-+
-+	priv->tx.virt = memremap(priv->tx.phys, res.end - res.start + 1, MEMREMAP_WC);
-+	if (priv->tx.virt == NULL) {
-+		dev_warn(bpmp->dev,  "DRAM region mapping failed\n");
-+		return TEGRA_INVALID;
-+	}
-+	priv->rx.virt = priv->tx.virt + 0x1000;
-+
-+	return TEGRA_RMEM;
-+}
-+
-+static int tegra186_bpmp_init(struct tegra_bpmp *bpmp)
-+{
-+	struct tegra186_bpmp *priv;
-+	int err;
-+
-+	priv = devm_kzalloc(bpmp->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	bpmp->priv = priv;
-+	priv->parent = bpmp;
-+
-+	priv->type = tegra186_bpmp_dram_init(bpmp);
-+	if (priv->type == TEGRA_INVALID) {
-+		err = tegra186_bpmp_sram_init(bpmp);
- 		if (err < 0)
--			goto cleanup_channels;
-+			return err;
- 	}
- 
-+	err = tegra186_bpmp_channel_setup(bpmp);
-+	if (err < 0)
-+		return err;
-+
- 	/* mbox registration */
- 	priv->mbox.client.dev = bpmp->dev;
- 	priv->mbox.client.rx_callback = mbox_handle_rx;
-@@ -226,51 +343,22 @@ static int tegra186_bpmp_init(struct tegra_bpmp *bpmp)
- 	if (IS_ERR(priv->mbox.channel)) {
- 		err = PTR_ERR(priv->mbox.channel);
- 		dev_err(bpmp->dev, "failed to get HSP mailbox: %d\n", err);
--		goto cleanup_channels;
-+		tegra186_bpmp_channel_deinit(bpmp);
-+		return err;
- 	}
- 
--	tegra186_bpmp_channel_reset(bpmp->tx_channel);
--	tegra186_bpmp_channel_reset(bpmp->rx_channel);
--
--	for (i = 0; i < bpmp->threaded.count; i++)
--		tegra186_bpmp_channel_reset(&bpmp->threaded_channels[i]);
-+	tegra186_bpmp_reset_channels(bpmp);
- 
- 	return 0;
--
--cleanup_channels:
--	for (i = 0; i < bpmp->threaded.count; i++) {
--		if (!bpmp->threaded_channels[i].bpmp)
--			continue;
--
--		tegra186_bpmp_channel_cleanup(&bpmp->threaded_channels[i]);
--	}
--
--	tegra186_bpmp_channel_cleanup(bpmp->rx_channel);
--cleanup_tx_channel:
--	tegra186_bpmp_channel_cleanup(bpmp->tx_channel);
--free_rx:
--	gen_pool_free(priv->rx.pool, (unsigned long)priv->rx.virt, 4096);
--free_tx:
--	gen_pool_free(priv->tx.pool, (unsigned long)priv->tx.virt, 4096);
--
--	return err;
- }
- 
- static void tegra186_bpmp_deinit(struct tegra_bpmp *bpmp)
- {
- 	struct tegra186_bpmp *priv = bpmp->priv;
--	unsigned int i;
- 
- 	mbox_free_channel(priv->mbox.channel);
- 
--	for (i = 0; i < bpmp->threaded.count; i++)
--		tegra186_bpmp_channel_cleanup(&bpmp->threaded_channels[i]);
--
--	tegra186_bpmp_channel_cleanup(bpmp->rx_channel);
--	tegra186_bpmp_channel_cleanup(bpmp->tx_channel);
--
--	gen_pool_free(priv->rx.pool, (unsigned long)priv->rx.virt, 4096);
--	gen_pool_free(priv->tx.pool, (unsigned long)priv->tx.virt, 4096);
-+	tegra186_bpmp_channel_deinit(bpmp);
- }
- 
- static int tegra186_bpmp_resume(struct tegra_bpmp *bpmp)
-diff --git a/drivers/firmware/tegra/bpmp.c b/drivers/firmware/tegra/bpmp.c
-index 8b5e5daa9fae..17bd3590aaa2 100644
---- a/drivers/firmware/tegra/bpmp.c
-+++ b/drivers/firmware/tegra/bpmp.c
-@@ -735,6 +735,8 @@ static int tegra_bpmp_probe(struct platform_device *pdev)
- 	if (!bpmp->threaded_channels)
- 		return -ENOMEM;
- 
-+	platform_set_drvdata(pdev, bpmp);
-+
- 	err = bpmp->soc->ops->init(bpmp);
- 	if (err < 0)
- 		return err;
-@@ -758,8 +760,6 @@ static int tegra_bpmp_probe(struct platform_device *pdev)
- 
- 	dev_info(&pdev->dev, "firmware: %.*s\n", (int)sizeof(tag), tag);
- 
--	platform_set_drvdata(pdev, bpmp);
--
- 	err = of_platform_default_populate(pdev->dev.of_node, NULL, &pdev->dev);
- 	if (err < 0)
- 		goto free_mrq;
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+
+- Mani
+
+> ---
+>  Changes in V3:
+> 	- Rebased on top of linux-next/master
+> 
+>  drivers/pci/controller/dwc/pcie-qcom.c | 61 ++++++++++++++++++--------
+>  1 file changed, 43 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 4ab30892f6ef..3682ecdead1f 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -107,6 +107,7 @@
+>  
+>  /* PARF_SLV_ADDR_SPACE_SIZE register value */
+>  #define SLV_ADDR_SPACE_SZ			0x10000000
+> +#define SLV_ADDR_SPACE_SZ_1_27_0		0x08000000
+>  
+>  /* PARF_MHI_CLOCK_RESET_CTRL register fields */
+>  #define AHB_CLK_EN				BIT(0)
+> @@ -202,10 +203,10 @@ struct qcom_pcie_resources_2_7_0 {
+>  	struct reset_control *rst;
+>  };
+>  
+> -#define QCOM_PCIE_2_9_0_MAX_CLOCKS		5
+>  struct qcom_pcie_resources_2_9_0 {
+> -	struct clk_bulk_data clks[QCOM_PCIE_2_9_0_MAX_CLOCKS];
+> +	struct clk_bulk_data *clks;
+>  	struct reset_control *rst;
+> +	int num_clks;
+>  };
+>  
+>  union qcom_pcie_resources {
+> @@ -1050,17 +1051,10 @@ static int qcom_pcie_get_resources_2_9_0(struct qcom_pcie *pcie)
+>  	struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
+>  	struct dw_pcie *pci = pcie->pci;
+>  	struct device *dev = pci->dev;
+> -	int ret;
+>  
+> -	res->clks[0].id = "iface";
+> -	res->clks[1].id = "axi_m";
+> -	res->clks[2].id = "axi_s";
+> -	res->clks[3].id = "axi_bridge";
+> -	res->clks[4].id = "rchng";
+> -
+> -	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(res->clks), res->clks);
+> -	if (ret < 0)
+> -		return ret;
+> +	res->num_clks = devm_clk_bulk_get_all(dev, &res->clks);
+> +	if (res->clks < 0)
+> +		return res->num_clks;
+
+Why not return proper error no?
+
+>  
+>  	res->rst = devm_reset_control_array_get_exclusive(dev);
+>  	if (IS_ERR(res->rst))
+> @@ -1073,7 +1067,7 @@ static void qcom_pcie_deinit_2_9_0(struct qcom_pcie *pcie)
+>  {
+>  	struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
+>  
+> -	clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
+> +	clk_bulk_disable_unprepare(res->num_clks, res->clks);
+>  }
+>  
+>  static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
+> @@ -1102,19 +1096,16 @@ static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
+>  
+>  	usleep_range(2000, 2500);
+>  
+> -	return clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
+> +	return clk_bulk_prepare_enable(res->num_clks, res->clks);
+>  }
+>  
+> -static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+> +static int qcom_pcie_post_init(struct qcom_pcie *pcie)
+>  {
+>  	struct dw_pcie *pci = pcie->pci;
+>  	u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+>  	u32 val;
+>  	int i;
+>  
+> -	writel(SLV_ADDR_SPACE_SZ,
+> -		pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
+> -
+>  	val = readl(pcie->parf + PARF_PHY_CTRL);
+>  	val &= ~PHY_TEST_PWR_DOWN;
+>  	writel(val, pcie->parf + PARF_PHY_CTRL);
+> @@ -1151,6 +1142,26 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+>  	return 0;
+>  }
+>  
+> +static int qcom_pcie_post_init_1_27_0(struct qcom_pcie *pcie)
+> +{
+> +	writel(SLV_ADDR_SPACE_SZ_1_27_0,
+> +	       pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
+> +
+> +	qcom_pcie_post_init(pcie);
+> +
+> +	return 0;
+> +}
+> +
+> +static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+> +{
+> +	writel(SLV_ADDR_SPACE_SZ,
+> +	       pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
+> +
+> +	qcom_pcie_post_init(pcie);
+> +
+> +	return 0;
+> +}
+> +
+>  static int qcom_pcie_link_up(struct dw_pcie *pci)
+>  {
+>  	u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> @@ -1291,6 +1302,15 @@ static const struct qcom_pcie_ops ops_2_9_0 = {
+>  	.ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+>  };
+>  
+> +/* Qcom IP rev.: 1.27.0  Synopsys IP rev.: 5.80a */
+> +static const struct qcom_pcie_ops ops_1_27_0 = {
+> +	.get_resources = qcom_pcie_get_resources_2_9_0,
+> +	.init = qcom_pcie_init_2_9_0,
+> +	.post_init = qcom_pcie_post_init_1_27_0,
+> +	.deinit = qcom_pcie_deinit_2_9_0,
+> +	.ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+> +};
+> +
+>  static const struct qcom_pcie_cfg cfg_1_0_0 = {
+>  	.ops = &ops_1_0_0,
+>  };
+> @@ -1323,6 +1343,10 @@ static const struct qcom_pcie_cfg cfg_2_9_0 = {
+>  	.ops = &ops_2_9_0,
+>  };
+>  
+> +static const struct qcom_pcie_cfg cfg_1_27_0 = {
+> +	.ops = &ops_1_27_0,
+> +};
+> +
+>  static const struct dw_pcie_ops dw_pcie_ops = {
+>  	.link_up = qcom_pcie_link_up,
+>  	.start_link = qcom_pcie_start_link,
+> @@ -1607,6 +1631,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+>  	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &cfg_2_1_0 },
+>  	{ .compatible = "qcom,pcie-ipq8074", .data = &cfg_2_3_3 },
+>  	{ .compatible = "qcom,pcie-ipq8074-gen3", .data = &cfg_2_9_0 },
+> +	{ .compatible = "qcom,pcie-ipq9574", .data = &cfg_1_27_0 },
+>  	{ .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
+>  	{ .compatible = "qcom,pcie-qcs404", .data = &cfg_2_4_0 },
+>  	{ .compatible = "qcom,pcie-sa8540p", .data = &cfg_1_9_0 },
+> -- 
+> 2.17.1
+> 
+
 -- 
-2.40.0
-
+மணிவண்ணன் சதாசிவம்
