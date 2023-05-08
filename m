@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0094F6FA0CB
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE286FA0CD
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjEHHRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
+        id S233060AbjEHHRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbjEHHRG (ORCPT
+        with ESMTP id S232959AbjEHHR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:17:06 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9751FC0
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:16:50 -0700 (PDT)
+        Mon, 8 May 2023 03:17:26 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CC926BD
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:17:25 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B4FD11F891;
-        Mon,  8 May 2023 07:16:48 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 686EF21B66;
+        Mon,  8 May 2023 07:17:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683530208; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1683530244; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9bBpSGWZHCsPFu7eUnrD04RX7FHJebblDjv0SIWXe2k=;
-        b=WtU58xbvUbbveTlVsCCT3HQTI90wlBcabqEfpjKpXVxBPlrzCpFQj3Mv1hxzAu5NegNwYh
-        Pm2U0yHo4ubntpUv+gJfCiAoliOaJYwSljjzKAghsuGfsC2fCSEYbU+ehrl+Ed9u8AWqux
-        PLi5CS62rmfztYdRxkod5b8OPMZEKlo=
+        bh=lOBQCm8AMjRxtn7j8gmb1VRMaITJi8rIg/Mexro7TZE=;
+        b=HV8V4Vwx/sYcDJpYt8SDiklX74iohR5On2I6TGbK1WEYyhoDJ0SvpQ4wjPd+nK4ULFwEqF
+        9rd+2YLE/3BeuOnCjIUzV9dCISvOEwB6g7x3zwgBclnqaUaWY4SM6gAXWV4AqtOaDIRiU/
+        BAoJN3nGKv/T6lAqy4YILMKbK2RgdBI=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683530208;
+        s=susede2_ed25519; t=1683530244;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9bBpSGWZHCsPFu7eUnrD04RX7FHJebblDjv0SIWXe2k=;
-        b=NT6ajSJcohloz0NHfHCGKR916erLY4lXfHP+KsyN6w8piv71sORE7LF2TC0BtzrJdCZZ7r
-        d+TtCAzUAjzRZUAA==
+        bh=lOBQCm8AMjRxtn7j8gmb1VRMaITJi8rIg/Mexro7TZE=;
+        b=TdQ0BUqOmDyjNrZ1M5kavayLv5jDUE+bEqP7o6HuT5RXcAuCJekIwQM7oXagG1b4ZWAQ+D
+        UnjshFosdGPJX6CA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8D4B31346B;
-        Mon,  8 May 2023 07:16:48 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1DBF01346B;
+        Mon,  8 May 2023 07:17:24 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id DgKjIeChWGRZLwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Mon, 08 May 2023 07:16:48 +0000
-Date:   Mon, 08 May 2023 09:16:48 +0200
-Message-ID: <875y93fg2n.wl-tiwai@suse.de>
+        id UbtHBgSiWGSWLwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 08 May 2023 07:17:24 +0000
+Date:   Mon, 08 May 2023 09:17:23 +0200
+Message-ID: <874jonfg1o.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        perex@perex.cz, tiwai@suse.com
-Subject: Re: [PATCH v2 1/1] ALSA: hda/realtek: Add quirk for 2nd ASUS GU603
-In-Reply-To: <20230505235824.49607-2-luke@ljones.dev>
-References: <20230505235824.49607-1-luke@ljones.dev>
-        <20230505235824.49607-2-luke@ljones.dev>
+To:     Ai Chao <aichao@kylinos.cn>
+Cc:     perex@perex.cz, tiwai@suse.com, sbinding@opensource.cirrus.com,
+        tcrawford@system76.com, andy.chi@canonical.com,
+        tangmeng@uniontech.com, luke@ljones.dev, yangyuchi66@gmail.com,
+        p.jungkamp@gmx.net, kasper93@gmail.com, gabriele.mzt@gmail.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek: Add a quirk for HP EliteDesk 805
+In-Reply-To: <20230506022653.2074343-1-aichao@kylinos.cn>
+References: <20230506022653.2074343-1-aichao@kylinos.cn>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -70,12 +72,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 06 May 2023 01:58:24 +0200,
-Luke D. Jones wrote:
+On Sat, 06 May 2023 04:26:53 +0200,
+Ai Chao wrote:
 > 
-> Add quirk for GU603 with 0x1c62 variant of codec.
+> Add a quirk for HP EliteDesk 805 to fixup ALC3867 headset MIC no sound.
 > 
-> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+> Signed-off-by: Ai Chao <aichao@kylinos.cn>
 
 Thanks, applied now.
 
