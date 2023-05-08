@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37076FB4AE
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9914E6FB4AC
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbjEHQFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S233079AbjEHQFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbjEHQF3 (ORCPT
+        with ESMTP id S232429AbjEHQF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 8 May 2023 12:05:29 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5472B5596
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:05:27 -0700 (PDT)
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FB45588
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:05:28 -0700 (PDT)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:6a18:41e7:fcfe:24c0])
-        by albert.telenet-ops.be with bizsmtp
-        id uG5R290052WBekD06G5RXE; Mon, 08 May 2023 18:05:25 +0200
+        by michel.telenet-ops.be with bizsmtp
+        id uG5R290042WBekD06G5Rm6; Mon, 08 May 2023 18:05:25 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtp (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1pw3MU-001XSl-9n;
+        id 1pw3MU-001XSm-9q;
         Mon, 08 May 2023 18:05:25 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1pw3Mb-00BTFB-0a;
+        id 1pw3Mb-00BTFE-1L;
         Mon, 08 May 2023 18:05:25 +0200
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
 To:     Marc Zyngier <maz@kernel.org>,
@@ -34,12 +34,12 @@ To:     Marc Zyngier <maz@kernel.org>,
         Will Deacon <will@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 1/2] ARM: perf: Mark all accessor functions inline
-Date:   Mon,  8 May 2023 18:05:18 +0200
-Message-Id: <3a7d9bc7470aa2d85696ee9765c74f8c03fb5454.1683561482.git.geert+renesas@glider.be>
+Subject: [PATCH 2/2] arm64: perf: Mark all accessor functions inline
+Date:   Mon,  8 May 2023 18:05:19 +0200
+Message-Id: <d53a19043c0c3bd25f6c203e73a2fb08a9661824.1683561482.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1683561087.git.geert+renesas@glider.be>
-References: <cover.1683561087.git.geert+renesas@glider.be>
+In-Reply-To: <3a7d9bc7470aa2d85696ee9765c74f8c03fb5454.1683561482.git.geert+renesas@glider.be>
+References: <3a7d9bc7470aa2d85696ee9765c74f8c03fb5454.1683561482.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -54,42 +54,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 When just including <asm/arm_pmuv3.h>:
 
-    arch/arm/include/asm/arm_pmuv3.h:110:13: error: ‘write_pmevtypern’ defined but not used [-Werror=unused-function]
-      110 | static void write_pmevtypern(int n, unsigned long val)
+    arch/arm64/include/asm/arm_pmuv3.h:31:13: error: ‘write_pmevtypern’ defined but not used [-Werror=unused-function]
+       31 | static void write_pmevtypern(int n, unsigned long val)
 	  |             ^~~~~~~~~~~~~~~~
-    arch/arm/include/asm/arm_pmuv3.h:103:13: error: ‘write_pmevcntrn’ defined but not used [-Werror=unused-function]
-      103 | static void write_pmevcntrn(int n, unsigned long val)
+    arch/arm64/include/asm/arm_pmuv3.h:24:13: error: ‘write_pmevcntrn’ defined but not used [-Werror=unused-function]
+       24 | static void write_pmevcntrn(int n, unsigned long val)
 	  |             ^~~~~~~~~~~~~~~
-    arch/arm/include/asm/arm_pmuv3.h:95:22: error: ‘read_pmevcntrn’ defined but not used [-Werror=unused-function]
-       95 | static unsigned long read_pmevcntrn(int n)
+    arch/arm64/include/asm/arm_pmuv3.h:16:22: error: ‘read_pmevcntrn’ defined but not used [-Werror=unused-function]
+       16 | static unsigned long read_pmevcntrn(int n)
 	  |                      ^~~~~~~~~~~~~~
 
 Fix this by adding the missing "inline" keywords to the three accessor
 functions that lack them.
 
-Fixes: 009d6dc87a568db6 ("ARM: perf: Allow the use of the PMUv3 driver on 32bit ARM")
+Fixes: df29ddf4f04b00cf ("arm64: perf: Abstract system register accesses away")
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- arch/arm/include/asm/arm_pmuv3.h | 6 +++---
+ arch/arm64/include/asm/arm_pmuv3.h | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pmuv3.h
-index 78d3d4b82c6c2598..f4db3e75d75f024e 100644
---- a/arch/arm/include/asm/arm_pmuv3.h
-+++ b/arch/arm/include/asm/arm_pmuv3.h
-@@ -92,7 +92,7 @@
+diff --git a/arch/arm64/include/asm/arm_pmuv3.h b/arch/arm64/include/asm/arm_pmuv3.h
+index d6b51deb7bf0ff2f..18dc2fb3d7b7b2d0 100644
+--- a/arch/arm64/include/asm/arm_pmuv3.h
++++ b/arch/arm64/include/asm/arm_pmuv3.h
+@@ -13,7 +13,7 @@
  
  #define RETURN_READ_PMEVCNTRN(n) \
- 	return read_sysreg(PMEVCNTR##n)
+ 	return read_sysreg(pmevcntr##n##_el0)
 -static unsigned long read_pmevcntrn(int n)
 +static inline unsigned long read_pmevcntrn(int n)
  {
  	PMEVN_SWITCH(n, RETURN_READ_PMEVCNTRN);
  	return 0;
-@@ -100,14 +100,14 @@ static unsigned long read_pmevcntrn(int n)
+@@ -21,14 +21,14 @@ static unsigned long read_pmevcntrn(int n)
  
  #define WRITE_PMEVCNTRN(n) \
- 	write_sysreg(val, PMEVCNTR##n)
+ 	write_sysreg(val, pmevcntr##n##_el0)
 -static void write_pmevcntrn(int n, unsigned long val)
 +static inline void write_pmevcntrn(int n, unsigned long val)
  {
@@ -97,7 +97,7 @@ index 78d3d4b82c6c2598..f4db3e75d75f024e 100644
  }
  
  #define WRITE_PMEVTYPERN(n) \
- 	write_sysreg(val, PMEVTYPER##n)
+ 	write_sysreg(val, pmevtyper##n##_el0)
 -static void write_pmevtypern(int n, unsigned long val)
 +static inline void write_pmevtypern(int n, unsigned long val)
  {
