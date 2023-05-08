@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C51F6F9D3B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 03:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBFD6F9D3F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 03:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbjEHBMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 21:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35218 "EHLO
+        id S232241AbjEHBMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 21:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbjEHBMf (ORCPT
+        with ESMTP id S232166AbjEHBMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 21:12:35 -0400
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B56235BF;
-        Sun,  7 May 2023 18:12:32 -0700 (PDT)
+        Sun, 7 May 2023 21:12:40 -0400
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FAD30FF;
+        Sun,  7 May 2023 18:12:39 -0700 (PDT)
 Received: from localhost (unknown [127.0.0.1])
-        by mx.kolabnow.com (Postfix) with ESMTP id 73B5442455;
-        Mon,  8 May 2023 03:12:29 +0200 (CEST)
-Authentication-Results: ext-mx-out003.mykolab.com (amavisd-new);
+        by mx.kolabnow.com (Postfix) with ESMTP id D3FB714EC;
+        Mon,  8 May 2023 03:12:37 +0200 (CEST)
+Authentication-Results: ext-mx-out002.mykolab.com (amavisd-new);
         dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
         header.d=kolabnow.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
         content-transfer-encoding:organization:mime-version:references
         :in-reply-to:message-id:date:date:subject:subject:from:from
-        :received:received:received; s=dkim20160331; t=1683508346; x=
-        1685322747; bh=dAWdSV+j69LUq5M0TBNovpeTeZjb2Qg3Eg9SXH/d5Qo=; b=1
-        4BuWJK58FO3cRiQ4k9QMJJG+mYfj5UShD6WMrEInMQJFZHPmv6sT35GF1D8tQ/4L
-        aGUt3pilueUjZwp3VS++91QAFkT2ubtnkYiVikRZr0PLVjXv0qNF57WsUmsjNyoK
-        fiJVue0AFPPiPnYMhZEZg2hcqLcZLNtEbxI5GDwEPPcSV59md3J1UGZdpQt1i0/b
-        XqfCSA7wTg6jWj/heE8rMgZa0tgI/dwuX5+O3jCyddswDze7MJQ67Bu/K/He3xnk
-        aK3Lo+RKTNo/4SsWw++zY+zJeBb7faQ0pkTTPQ8devc0OtZo9bjGph4ZXQR6rbJp
-        2Ja/4SlDr6xebIDsKBMA7C/wD3hFKipxOiPTJ9DoWJ7ub+SoaJVvxp4T4TnqwKXf
-        pR9ftjaKla89GL73S3JslWtXzVesXxuyxb5j1vQpzrVFYlJ/z5+dR6LE1TbFr8hz
-        jmKz2fHxZxPSfYfMZOV705P36VfEPW6JOqJsmn6bGQCcXSfR14GmffXGNmQBEdVr
-        5BcH9kJCLGM0/EcbhISf69hqpNcmFbTOKjOmSD2OB8pLzLgCeDC49XnlrTF9UFmL
-        yJKOw+Kiu+W7VT1X/5JnJxuTCKfD7/FDoQL0cx+RlLUf1tYPJ2vkFDBmJKpERoLF
-        I2ylBBY60EVMlxCV6ne4x7J6WxX0EKAEh7b39iVBuU=
+        :received:received:received; s=dkim20160331; t=1683508357; x=
+        1685322758; bh=IeHcnYGT8x5oIMpt7vaj6WJo5TzDUMMrc5PAh+gHWeM=; b=g
+        7W463VF/adkDqa44QzzkcPInNaz36baWwB1FizUBPUXnJCs0846IrDj414oyUMG1
+        vm1MMBTcScaH0DWJtqKXQXHtvlNreuhdwmLUbMbcoiJjxr6q6VZDvL9t+FfK7aFd
+        4gzArBT/QaUnJsFwLRarUErQ9/hGiobcPG0SHYrRAYrCpffcSny+/gYgZ3Kl49BV
+        efgziOatftBsMLlhHGuqJ72kV0sshI65Lp+pLk2zRLlGnObxswRxkbnJakfJ20m9
+        64Fv64FKEV6k8NR0nrjZer8pO/xBw6cUY9cGDikQhwsXid1ompVtZu6oMBENS9hL
+        EpByPmG3nxb8FTyyrZik5cRCxJXDTsZbjD4KefkVVMlZm60bTl4ccTUKKG4zGpaB
+        4Df7u4oWGIhANv3Jet9eWsEJGVSt1nFmf1RBrOFE5ukXXIhdEwnbhIpla2YOv+6d
+        TR6MlQnoEk/v7VNIdj48asCk06N+p8MuaZ3H1VJE6VUbj4hXtWjC1DFcljCrZYcG
+        QVzfkf8/SwZqPMvSFo1iyGHc65G7CYEpPkAaVpphXUJxUOQrJRgYxQkRznfP8091
+        BOlJvKxmJaumzZnhoFMHQZklu8tV35oyquoMNlls75vFbETj5QA6rSRm9Z+yzKMK
+        FID/xhKKUsd5SOFnQP7wqdp8ojyX26X6rRDiQlBUDs=
 X-Virus-Scanned: amavisd-new at mykolab.com
 X-Spam-Score: -1.9
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 Received: from mx.kolabnow.com ([127.0.0.1])
-        by localhost (ext-mx-out003.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EF0251ETni0Z; Mon,  8 May 2023 03:12:26 +0200 (CEST)
+        by localhost (ext-mx-out002.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ejdT8ismRjGi; Mon,  8 May 2023 03:12:37 +0200 (CEST)
 Received: from int-mx002.mykolab.com (unknown [10.9.13.2])
-        by mx.kolabnow.com (Postfix) with ESMTPS id B0C634244F;
-        Mon,  8 May 2023 03:12:25 +0200 (CEST)
+        by mx.kolabnow.com (Postfix) with ESMTPS id 4834B14A3;
+        Mon,  8 May 2023 03:12:37 +0200 (CEST)
 Received: from ext-subm001.mykolab.com (unknown [10.9.6.1])
-        by int-mx002.mykolab.com (Postfix) with ESMTPS id 91553141FF;
-        Mon,  8 May 2023 03:12:23 +0200 (CEST)
+        by int-mx002.mykolab.com (Postfix) with ESMTPS id D274614280;
+        Mon,  8 May 2023 03:12:35 +0200 (CEST)
 From:   alison@she-devel.com
 To:     johan@kernel.org
 Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         conor+dt@kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, alison@she-devel.com,
         achaiken@aurora.tech
-Subject: [PATCH v4 1/2] gnss: ubx: customize serial device open to set U-Blox Zed-F9P baud
-Date:   Sun,  7 May 2023 18:11:58 -0700
-Message-Id: <20230508011159.263322-2-alison@she-devel.com>
+Subject: [PATCH 2/2] dt-bindings: gnss: Add U-Blox Zed-F9
+Date:   Sun,  7 May 2023 18:11:59 -0700
+Message-Id: <20230508011159.263322-3-alison@she-devel.com>
 In-Reply-To: <20230508011159.263322-1-alison@she-devel.com>
 References: <20230508011159.263322-1-alison@she-devel.com>
 MIME-Version: 1.0
@@ -74,323 +74,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alison Chaiken <achaiken@aurora.tech>
 
-Add support for setting the baud rate of U-Blox Zed-F9P GNSS devices.
-Provide functions that support writing of arbitrary configuration
-messages to the device plus one that specifically configures the baud
-rate.  Override the default gnss_serial_open() with a new method that
-writes the configuration message to the GNSS if the devicetree declares
-it to be a Zed F9P and requests a non-default baud.  Add a boolean flag
-to the ubx_data private data of the GNSS driver in order to track
-whether the configuration message has already been written.  Set the Zed
-F9P to its default port speed if the devicetree does not specify a
-value.
+Add support for the U-Blox Zed-F9P GNSS device.
 
 Signed-off-by: Alison Chaiken <achaiken@aurora.tech>
 ---
+ Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-V5 -> V4 Compile out the changes if CONFIG_OF is not set.
-V4 -> V3 Modified to lookup Zed-F9P-specific data via the device_id
-               rather than the compatible string.
-
- drivers/gnss/ubx.c | 242 ++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 231 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/gnss/ubx.c b/drivers/gnss/ubx.c
-index c951be202ca2..64fea07da87c 100644
---- a/drivers/gnss/ubx.c
-+++ b/drivers/gnss/ubx.c
-@@ -9,18 +9,214 @@
- #include <linux/gnss.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
-+#include <linux/kstrtox.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/pm.h>
-+#include <linux/pm_runtime.h>
- #include <linux/regulator/consumer.h>
- #include <linux/serdev.h>
+diff --git a/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml b/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
+index 4835a280b3bf..86b65d4d9266 100644
+--- a/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
++++ b/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
+@@ -21,6 +21,7 @@ properties:
+       - u-blox,neo-6m
+       - u-blox,neo-8
+       - u-blox,neo-m8
++      - u-blox,zed-f9p
  
- #include "serial.h"
- 
-+#ifdef CONFIG_OF
-+/* Total configuration message length = PREAMBLE_LEN + MESSAGE_CLASS_LEN +
-+ *   MESSAGE_LENGTH_LEN + payload length + CHECKSUM_LEN
-+ */
-+const int32_t PREAMBLE_LEN = 2;
-+const int32_t MESSAGE_CLASS_LEN = 2;
-+const int32_t MESSAGE_LENGTH_LEN = 2;
-+const int32_t CHECKSUM_LEN = 2;
-+const size_t FIRST_CONFIG_REGISTER_BYTE = 10U;
-+const size_t FIRST_VALUE_BYTE = 14U;
-+const size_t FIRST_CHECKSUM_BYTE = 18U;
-+const size_t CFG_MSG_TOTAL_LEN = 20U;
-+
-+uint8_t ZED_F9P_CFG_VALSET_MSG[] = {
-+	0xB5, 0x62, /* 0-1 preamble */
-+	0x06, 0x8A, /* 2-3 CFG_VALSET command */
-+	0x0C, 0x00, /* 4-5 payload length = 12 for one key-value pair */
-+	0x00, /* 6 U-Blox API version */
-+	0x01, /* 7 Write to RAM */
-+	0x00, 0x00, /* 8-9 Reserved */
-+	0x00, 0x00, 0x00, 0x00, /* 10-13 Placeholder for configuration register */
-+	0x00, 0x00, 0x00, 0x00, /* 14-17 Placeholder for baud value */
-+	0x00, 0x00 /* 18-19 Placeholder for checksum */
-+};
-+
-+struct ubx_features {
-+	u32 min_baud;
-+	u32 default_baud;
-+	u32 max_baud;
-+	size_t baud_config_reg;
-+	int (*open)(struct gnss_device *gdev);
-+};
-+
- struct ubx_data {
- 	struct regulator *v_bckp;
- 	struct regulator *vcc;
-+	const struct ubx_features *features;
-+	unsigned long is_configured;
-+};
-+
-+union message_length {
-+	uint16_t ml;
-+	uint8_t bytes[2];
- };
- 
-+union int_to_bytes {
-+	uint32_t int_val;
-+	uint8_t bytes[4];
-+};
-+
-+/* Payload  length is contained in bytes 0-2 after message class and ID.
-+ *  While the checksum includes the Message class and ID plus message length, the
-+ *  payload does not.
-+ */
-+static uint16_t get_payload_length(const uint8_t msg[])
-+{
-+	union message_length hs_msg_len;
-+
-+	hs_msg_len.bytes[0] = msg[PREAMBLE_LEN + MESSAGE_CLASS_LEN];
-+	hs_msg_len.bytes[1] = msg[PREAMBLE_LEN + MESSAGE_CLASS_LEN + 1U];
-+	return hs_msg_len.ml;
-+}
-+
-+static int32_t get_msg_total_len(const uint8_t msg[])
-+{
-+	const size_t payload_len = get_payload_length(msg);
-+
-+	return PREAMBLE_LEN + MESSAGE_CLASS_LEN + MESSAGE_LENGTH_LEN + payload_len
-+		+ CHECKSUM_LEN;
-+}
-+
-+/* The checksum is calculated on message class, message ID, message length and
-+ * payload.
-+ */
-+static void calc_ubx_checksum(const uint8_t msg[], uint8_t checksum[],
-+			   const uint16_t total_len)
-+{
-+	uint8_t CK_A = 0;
-+	uint8_t CK_B = 0;
-+	int i;
-+
-+	for (i = PREAMBLE_LEN; i < (total_len - CHECKSUM_LEN); i++) {
-+		CK_A += msg[i];
-+		CK_B += CK_A;
-+	}
-+	checksum[0] = CK_A;
-+	checksum[1] = CK_B;
-+}
-+
-+static uint32_t  check_baud(speed_t speed, const struct device *dev,
-+					const struct ubx_features *features)
-+{
-+	if ((speed < features->min_baud) || (speed > features->max_baud)) {
-+		dev_warn(dev, "Baud rate specification %d out of range\n", speed);
-+		speed = features->default_baud;
-+	}
-+	return speed;
-+}
-+
-+static int prepare_zedf9p_config_msg(const speed_t speed,
-+					const struct device *dev,
-+					    const struct ubx_features *features)
-+{
-+	union int_to_bytes cfg_val, cfg_register;
-+	int i = 0;
-+	uint8_t checksum[2];
-+	const size_t total_len = get_msg_total_len(ZED_F9P_CFG_VALSET_MSG);
-+
-+	if (total_len != CFG_MSG_TOTAL_LEN)
-+		goto bad_msg;
-+
-+	cfg_val.int_val = check_baud(speed, dev, features);
-+	cfg_register.int_val = features->baud_config_reg;
-+	for (i = 0; i < 4; i++) {
-+		ZED_F9P_CFG_VALSET_MSG[FIRST_VALUE_BYTE + i] = cfg_val.bytes[i];
-+		ZED_F9P_CFG_VALSET_MSG[FIRST_CONFIG_REGISTER_BYTE + i] = cfg_register.bytes[i];
-+	}
-+	calc_ubx_checksum(ZED_F9P_CFG_VALSET_MSG, checksum, total_len);
-+	ZED_F9P_CFG_VALSET_MSG[FIRST_CHECKSUM_BYTE] = checksum[0];
-+	ZED_F9P_CFG_VALSET_MSG[FIRST_CHECKSUM_BYTE + 1U] = checksum[1];
-+	return 0;
-+
-+ bad_msg:
-+	dev_err(dev, "Malformed UBX-CFG-VALSET message\n");
-+	return -EINVAL;
-+}
-+
-+/* Configure the Zed F9P baud rate via the UBX-CFG-VALSET message. */
-+static int set_zedf9p_baud(struct gnss_device *gdev,
-+					struct serdev_device *serdev, struct gnss_serial *gserial)
-+{
-+	const struct ubx_data *data = gnss_serial_get_drvdata(gserial);
-+	const struct ubx_features *features = data->features;
-+	size_t count = 0U;
-+	int ret;
-+
-+	if (!data->features)
-+		return -EINVAL;
-+	if (gserial->speed == features->default_baud)
-+		return 0;
-+
-+	ret = prepare_zedf9p_config_msg(gserial->speed, &gdev->dev, features);
-+	if (ret)
-+		return ret;
-+	/* Initially set the UART to the default speed to match the GNSS' power-on value. */
-+	serdev_device_set_baudrate(serdev, features->default_baud);
-+	/* Now set the new baud rate. */
-+	count = gdev->ops->write_raw(gdev, ZED_F9P_CFG_VALSET_MSG, CFG_MSG_TOTAL_LEN);
-+	if (count != CFG_MSG_TOTAL_LEN)
-+		return count;
-+
-+	return 0;
-+}
-+
-+static int zed_f9p_serial_open(struct gnss_device *gdev)
-+{
-+	struct gnss_serial *gserial = gnss_get_drvdata(gdev);
-+	struct serdev_device *serdev = gserial->serdev;
-+	struct ubx_data *data = gnss_serial_get_drvdata(gserial);
-+	int ret;
-+
-+	ret = serdev_device_open(serdev);
-+	if (ret)
-+		return ret;
-+	if (!data->features)
-+		return -EINVAL;
-+
-+	serdev_device_set_flow_control(serdev, false);
-+
-+	if (!data->is_configured) {
-+		/* 4800 is the default value set by gnss_serial_parse_dt() */
-+		if (gserial->speed == 4800) {
-+			/* Fall back instead to Zed F9P default */
-+			gserial->speed = data->features->default_baud;
-+		} else {
-+			ret = set_zedf9p_baud(gdev, serdev, gserial);
-+			if (ret)
-+				return ret;
-+		}
-+		data->is_configured = 1;
-+	}
-+	serdev_device_set_baudrate(serdev, gserial->speed);
-+
-+	ret = pm_runtime_get_sync(&serdev->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_noidle(&serdev->dev);
-+		goto err_close;
-+	}
-+	return 0;
-+
-+err_close:
-+	serdev_device_close(serdev);
-+
-+	return ret;
-+}
-+#endif  /* CONFIG_OF */
-+
- static int ubx_set_active(struct gnss_serial *gserial)
- {
- 	struct ubx_data *data = gnss_serial_get_drvdata(gserial);
-@@ -63,10 +259,30 @@ static const struct gnss_serial_ops ubx_gserial_ops = {
- 	.set_power = ubx_set_power,
- };
- 
-+#ifdef CONFIG_OF
-+static const struct ubx_features zedf9p_feats = {
-+	.min_baud		=	9600,
-+	.default_baud		=	38400,
-+	.max_baud		=	921600,
-+	.baud_config_reg	=	0x40520001,
-+	.open			=	zed_f9p_serial_open,
-+};
-+
-+static const struct of_device_id ubx_of_match[] = {
-+	{ .compatible = "u-blox,neo-6m" },
-+	{ .compatible = "u-blox,neo-8" },
-+	{ .compatible = "u-blox,neo-m8" },
-+	{ .compatible = "u-blox,zed-f9p", .data = &zedf9p_feats },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, ubx_of_match);
-+#endif
-+
- static int ubx_probe(struct serdev_device *serdev)
- {
- 	struct gnss_serial *gserial;
- 	struct ubx_data *data;
-+	struct gnss_operations *ubx_gnss_ops;
- 	int ret;
- 
- 	gserial = gnss_serial_allocate(serdev, sizeof(*data));
-@@ -74,13 +290,27 @@ static int ubx_probe(struct serdev_device *serdev)
- 		ret = PTR_ERR(gserial);
- 		return ret;
- 	}
-+	ubx_gnss_ops = kzalloc(sizeof(struct gnss_operations), GFP_KERNEL);
-+	if (IS_ERR(ubx_gnss_ops)) {
-+		ret = PTR_ERR(ubx_gnss_ops);
-+		return ret;
-+	}
- 
- 	gserial->ops = &ubx_gserial_ops;
- 
- 	gserial->gdev->type = GNSS_TYPE_UBX;
- 
- 	data = gnss_serial_get_drvdata(gserial);
--
-+	if (IS_ENABLED(CONFIG_OF)) {
-+		data->is_configured = 0;
-+		data->features = of_match_device(ubx_of_match, &serdev->dev)->data;
-+		if (data->features && data->features->open) {
-+			ubx_gnss_ops->open  = data->features->open;
-+			ubx_gnss_ops->close = gserial->gdev->ops->close;
-+			ubx_gnss_ops->write_raw = gserial->gdev->ops->write_raw;
-+			gserial->gdev->ops = ubx_gnss_ops;
-+		}
-+	}
- 	data->vcc = devm_regulator_get(&serdev->dev, "vcc");
- 	if (IS_ERR(data->vcc)) {
- 		ret = PTR_ERR(data->vcc);
-@@ -128,16 +358,6 @@ static void ubx_remove(struct serdev_device *serdev)
- 	gnss_serial_free(gserial);
- }
- 
--#ifdef CONFIG_OF
--static const struct of_device_id ubx_of_match[] = {
--	{ .compatible = "u-blox,neo-6m" },
--	{ .compatible = "u-blox,neo-8" },
--	{ .compatible = "u-blox,neo-m8" },
--	{},
--};
--MODULE_DEVICE_TABLE(of, ubx_of_match);
--#endif
--
- static struct serdev_device_driver ubx_driver = {
- 	.driver	= {
- 		.name		= "gnss-ubx",
+   reg:
+     description: >
 -- 
 2.39.2
 
