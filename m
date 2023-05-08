@@ -2,247 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044596FB57F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD42C6FB581
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234254AbjEHQsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
+        id S234304AbjEHQsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233569AbjEHQsD (ORCPT
+        with ESMTP id S232967AbjEHQsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 12:48:03 -0400
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B0259CF
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:48:01 -0700 (PDT)
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-331632be774so202892605ab.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 09:48:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683564480; x=1686156480;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a9GMJOjHlBih2iaTGUzZxRC5iM+ZwrV3nEjnpyC9JsE=;
-        b=S5jRL6JQ8fk3nJiAMh84pb2mtO1ONCw1Lpxr/moyBWI6fxKrRZjEDwN/T8iGugUM0L
-         Iu4TXD9xln133HzPWmWOHuLWvX6TuDYWSwKufBlf3DAEJJ2WAYPxe8wXD6JRPwolpslV
-         deMj70AnX61hclMi+XLh3HwP0Xe+lCru7Zq1xpZ8mtJ+Hhr6QJx8TMk1LvwuGLmfXs04
-         Yr3JsmUrZA7JHxYahoxo1HJgzMpkGxZGjJjQTGLUjU6iKZtlJywfYdOW7Xg4KkOi0PDA
-         nO3uLXwbvavfA/t2KzT9dxBOZsm3TihG/3qquec/dwQ4sj5asPR9xR1Tllm3FpO0+d+Q
-         EFUA==
-X-Gm-Message-State: AC+VfDwDWSPMQy16eHyMgNhJd1+MNCTZrg1z+HZxOBRMPwPoeo4EOmYe
-        VjzXg9u86jAn9GnH6CJYq2JcNlL037wa5RVDp5j5qL3icQ/B
-X-Google-Smtp-Source: ACHHUZ7P2wgx3G45cW8Esf7vOLmDlNqNzCljRWkyglxQU6h0HQYsPJ+1/vCHscn6hXGJAUaUFxC8sYNftlFa01WlZjCJMReM244U
+        Mon, 8 May 2023 12:48:36 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2044.outbound.protection.outlook.com [40.107.244.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50142468A;
+        Mon,  8 May 2023 09:48:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ix5G/2+G6KtRxfNzJ2ASEH8AhK6P/sdrzRCnyihm8+aE2b5nUtFbmLr0uqQzyN45+Es1vPaLZtHBF5Fmpq3/aISRcSprC2vIJH27ZjR5MMeU4PC2hfhbAGCu0Eu3XSg+tvrhE2Zd0d5DZv2qmnIS82JVip1imQYl9OsoTvSlqUWkX/S+UBkHRTnU1NWUhxGVaHaG7qH3XvhHSBeUHWAVv2ewflcVNCOGKdF8ps6B/EOliEfMYM9H5kIlgrJtrxpmm0dwmvpUiCj5VfIY9+oTu5n8YXArsDsQhg2IlMzsUghw3M/wDbjGuCPRpXiA5Gxti0rZ6ZEl1ZfSUCGDugLHhQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jr5dkqDor9+bfMYDG0D0544k6FAli10DORylr7SYxLc=;
+ b=dS6zizLmga4ha9GvHMLXVQT6IOFf47EpeqyBYyfEYHVLKNXz7GyGkJWY7qHGYYy6g/Zzp0DhuY0JLtI45Zr+vrRng2D0QfghT8NwvF7YDyWaz3O8bLKlNqbDQ9aZKtUaT7XbaVv2jw4Zsi9etdJKuMx8Z8Vg0ZdyE8Z3lMWeBAAtQlVqoEuqUszuellrs6eVEunp9z9Zr+sePHzWFs4CVwN9MQuZKboKok8zwI1/MGlgkwlFvU8SAbUXNYNhbTuXBTt5u8GQER+rrp1qmbO55OLp9rznYrI/LmtXV1i/roebq2jaTi0dnY0+euoX4lMmLwSe5d7wf9da9NyaGjJB3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Jr5dkqDor9+bfMYDG0D0544k6FAli10DORylr7SYxLc=;
+ b=uAsgVuYQhHO0Ivl8DVt14fMY3nWxGJjnHrngHKXQ9gqSQ0nGRfiMyozBRTDJGijUN3sfIK6FdLJ2ZvSumPiLsTLnFjB8s9x+UKIRlsePX98TsxDME+vqWzGXM/sU12whofUbKeX4cchk70jWdouJCtHVoVnk4o1sKoYx0IrHXhfbiyh3PMfnEEumB48MbICLeVWQAuztkMhBhoinOYqBLLET5AtpotX4tNr4jUJu8ugH38W4RPJTZw99sgv81rIcU52uXUhwT6MSFLb+adWh20EL3lrOMhq3BR5EWADSUtYygiEEuQmEGiDn2wNVCaHbMzBCAFonCPx25E50/sm3lw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by IA1PR12MB6163.namprd12.prod.outlook.com (2603:10b6:208:3e9::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
+ 2023 16:48:33 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6363.032; Mon, 8 May 2023
+ 16:48:33 +0000
+Date:   Mon, 8 May 2023 13:48:30 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alex.williamson@redhat.com, kevin.tian@intel.com,
+        yishaih@nvidia.com, shameerali.kolothum.thodi@huawei.com
+Subject: Re: [PATCH] vfio/pci: take mmap write lock for io_remap_pfn_range
+Message-ID: <ZFkn3q45RUJXMS+P@nvidia.com>
+References: <20230508125842.28193-1-yan.y.zhao@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508125842.28193-1-yan.y.zhao@intel.com>
+X-ClientProxiedBy: MW4PR03CA0310.namprd03.prod.outlook.com
+ (2603:10b6:303:dd::15) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-X-Received: by 2002:a92:d5c8:0:b0:335:252b:4fc6 with SMTP id
- d8-20020a92d5c8000000b00335252b4fc6mr3487775ilq.2.1683564480524; Mon, 08 May
- 2023 09:48:00 -0700 (PDT)
-Date:   Mon, 08 May 2023 09:48:00 -0700
-In-Reply-To: <000000000000964cb905f5e876ff@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d17bff05fb316670@google.com>
-Subject: Re: [syzbot] [reiserfs?] possible deadlock in delete_one_xattr (2)
-From:   syzbot <syzbot+7a278bf8bfa794494110@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB6163:EE_
+X-MS-Office365-Filtering-Correlation-Id: 89a6653f-5746-4842-f14d-08db4fe40f27
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jzqIjJ/j30YWW8YtGDoWGsOvVc+HRGUgTskUQyiPk7Rb1vYnFS8cfhjKe75dR5Vo18p+UzsBK5oWlF+zFK4k74+QB5cfwLGeNJO2RRMffdKZirMVjfhRzBcMWqUf+SzLEtAlb2QdHlr6xjyWhBlaaIkkDgz+UgHETaPhF+StIaSh36TDpyW9Mg8BCiP/2lRYphHixrJ7iSiWS2ooAG0nhEY3RWoNfT0DqbA4ru5frI6gJrZ43UKZwD/gJ6RgMCAAKxfJqjpj7U/ziEK8I78nVTew0Brvyy1tzHwrlEL/a6cP/y+RFOy3oj6IRqzhL5cBq/AIym0AW0OVdOzXLXEeiZBN6ACvTiZKutOZq8NzVZ8fq68Z2WkZswdkA5ur3oL0oCSBgStwBdVxrQjpoQC285u5hWhWb2AXaS8+S2w4/Z6bmEHOFRihTHPgtY0xzKWIEKEeV3pYiBhHj5b1C9SLwM2+sMC9/lhThYnda2772Ws7V0veWtunwH89LRFHtFQ/5NBCJW8c6/5/mBG61VqiKqmQfBL5hHInbuzKXnX/M1MJk32iwuvcoZXWGKGjVrTe/xhC7IWkZ7nEQAJZ0Yp+vWiGnsLBCYXqLQj5dxez0R+GBewdrjz7TrGEpaCBBGzZIrohGw4eTbybtDEiVC1GZA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(39860400002)(136003)(346002)(451199021)(966005)(66556008)(6916009)(4326008)(66946007)(316002)(478600001)(6486002)(86362001)(66476007)(36756003)(83380400001)(6512007)(2616005)(26005)(6506007)(5660300002)(8936002)(41300700001)(8676002)(2906002)(38100700002)(186003)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pdQ/h1l2CUn8tbI0zlrVSkJjDd831yl5xWHhgsCW1GkqXyuPdJb7qbA09V9f?=
+ =?us-ascii?Q?cewAitGtjiaUPndLnV4/oDig0EwfAos5gOKneS4cJz03KifynGyHFY0dsZ5v?=
+ =?us-ascii?Q?so3RASLRNhkeNBIYz3Epw96d6PDOk4f0WNfBFt48E4qrlduBIPBg66T/GOvh?=
+ =?us-ascii?Q?jyeALV5xMAg3hfxmgHrRZjld4tGEu2ZQTJ9evcZQzlwq/PZsRW+HmS0fYsz7?=
+ =?us-ascii?Q?jqcBQg1n6ricmfaM77RwDq2xfBDrXlm4F9M9QJ7WKVf4jgO8/JbDZEsxnJhb?=
+ =?us-ascii?Q?s49W3hDsws3/PJ457xZDBP59jfgxzL3iuCJkTH/bUpJefD/lFF5e/MaaIRVW?=
+ =?us-ascii?Q?xKw61sFuKc1LrByDOiVr2nXFhzOfSaak/YaVSpQfmkSFuvBJHku0VdmFxc3t?=
+ =?us-ascii?Q?M2HBeadjZQRgOS1ZTjTNxE/kjM2NpsMerdCDF+pnj/RmZaGI4oE6Q1nYByXs?=
+ =?us-ascii?Q?QOxfRYDeah+ljbtAUDiYyTkeFcTfQNEd/e9bZElMss/MopD6R7E/IRSut0C9?=
+ =?us-ascii?Q?uICDVXEaGV1h9zfIY9imdU0QlIinkskGXRTs6yDCxfPtk2da+kjmuAexn9xC?=
+ =?us-ascii?Q?Gx+zw86vtbfZFkWbpzoZbaDDFmaAupqt7/ibf/HxedT7CUrqn4+A3FJPRQ9q?=
+ =?us-ascii?Q?oddIZX0MI1SF1F9qqZeMAnWebGt6hS8xq4ADQoNUtRKy6amB8PFRqCKRpjnU?=
+ =?us-ascii?Q?9TJqJwJUf+l04safet0mYE/SjPvmksmXeOSdSoVE7kG3EZc3DFwrShcN9CEk?=
+ =?us-ascii?Q?BMz0/KBVL9PWScZoutotz+HtTHKibtcW7WTbU5Y9LNE1uQ+Q5Er2Md2+oFlV?=
+ =?us-ascii?Q?6ZydBy1eiAow7CLEBE8DOPBMhmvuGikFTKQ5dSw5++UD2aEqm5/1OY1hV7PF?=
+ =?us-ascii?Q?pDwpSkfWribg3WzT3RMf3wnoXJMNz6lsk8Sq0m/4C1/uLfftfmCYilICvUI/?=
+ =?us-ascii?Q?pMdnglTR/7yYpzwOmDJ4y5B2xXiBrIHeEfSt84tEK3qqCvdNND/ysiITSTj4?=
+ =?us-ascii?Q?wH5GcRG7C8w5iSDR7wX6/JgX6JHF4uj+AKhhJPP4uH3L0jAIG8g4l5sBpPWM?=
+ =?us-ascii?Q?k8MJdtmreUDm4R2rSHzCZdqkHntfG5AtV9Le3hdo96kvUS6oIKomNQXObmpd?=
+ =?us-ascii?Q?fotOiljpI9hAD2fwOfu08DEp+HSpCd1UNeRgDw/rMCgKAUBohi5fAChHGsZp?=
+ =?us-ascii?Q?gvvSv0lZGA8j3DPODK4U3ikScZ3azN7PitA/vJ+2e5e5BKqcUCXQx9lSMv0Y?=
+ =?us-ascii?Q?aec706p+WBG4Yb5tOerXiyhcciTWNOgk5cCX4RnucTAtRLhyAIxpTJ0HFTRQ?=
+ =?us-ascii?Q?rOEhvP8+x2qOHf5ZyYMJvQB2SmDxoME5Io9nqSQ+OLuuVKMO98q7q4CMUC/X?=
+ =?us-ascii?Q?YhIEV7NME0d/kce22iOxjtw78XFO2Rf6K1Hkh4JV50GWL+H07EBYhX7noukj?=
+ =?us-ascii?Q?3LnMv7Yhsemy2WKJNGLls87S6gO3CyCLzmHlQfAOGpthufFQVMMo5SbWE2D/?=
+ =?us-ascii?Q?ZpKw0NCRB5O0Puo34Kh8g5+JOgd83yhfqRZDupHpik1W/Pte15t5TIvqz1aL?=
+ =?us-ascii?Q?vOPibgSuEnof4bJx0HI=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89a6653f-5746-4842-f14d-08db4fe40f27
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 16:48:33.0246
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XTrjR0TKDL6iUNl0wly0O+xRZnywA+9c6Z9XMQbhBSFYFsDUdJY3n226rK5QlNTg
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6163
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Mon, May 08, 2023 at 08:58:42PM +0800, Yan Zhao wrote:
+> In VFIO type1, vaddr_get_pfns() will try fault in MMIO PFNs after
+> pin_user_pages_remote() returns -EFAULT.
+> 
+> follow_fault_pfn
+>  fixup_user_fault
+>   handle_mm_fault
+>    handle_mm_fault
+>     do_fault
+>      do_shared_fault
+>       do_fault
+>        __do_fault
+>         vfio_pci_mmap_fault
+>          io_remap_pfn_range
+>           remap_pfn_range
+>            track_pfn_remap
+>             vm_flags_set         ==> mmap_assert_write_locked(vma->vm_mm)
+>            remap_pfn_range_notrack
+>             vm_flags_set         ==> mmap_assert_write_locked(vma->vm_mm)
+> 
+> As io_remap_pfn_range() will call vm_flags_set() to update vm_flags [1],
+> holding of mmap write lock is required.
+> So, update vfio_pci_mmap_fault() to drop mmap read lock and take mmap
+> write lock.
+> 
+> [1] https://lkml.kernel.org/r/20230126193752.297968-3-surenb@google.com
+> commit bc292ab00f6c ("mm: introduce vma->vm_flags wrapper functions")
+> commit 1c71222e5f23
+> ("mm: replace vma->vm_flags direct modifications with modifier calls")
+> 
+> Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
+> ---
+>  drivers/vfio/pci/vfio_pci_core.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index a5ab416cf476..5082f89152b3 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -1687,6 +1687,12 @@ static vm_fault_t vfio_pci_mmap_fault(struct vm_fault *vmf)
+>  	struct vfio_pci_mmap_vma *mmap_vma;
+>  	vm_fault_t ret = VM_FAULT_NOPAGE;
+>  
+> +	mmap_assert_locked(vma->vm_mm);
+> +	mmap_read_unlock(vma->vm_mm);
+> +
+> +	if (mmap_write_lock_killable(vma->vm_mm))
+> +		return VM_FAULT_RETRY;
 
-HEAD commit:    ac9a78681b92 Linux 6.4-rc1
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=12d2a75a280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8bc832f563d8bf38
-dashboard link: https://syzkaller.appspot.com/bug?extid=7a278bf8bfa794494110
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1295e4b8280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=140af20a280000
+Certainly not..
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/09860189d36b/disk-ac9a7868.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3eb9c32c8830/vmlinux-ac9a7868.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/14b50dd219a1/bzImage-ac9a7868.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/10efaa5d185c/mount_0.gz
+I'm not sure how to resolve this properly, set the flags in advance?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7a278bf8bfa794494110@syzkaller.appspotmail.com
+The address space conversion?
 
-overlayfs: upper fs needs to support d_type.
-overlayfs: upper fs does not support tmpfile.
-overlayfs: upper fs does not support RENAME_WHITEOUT.
-======================================================
-WARNING: possible circular locking dependency detected
-6.4.0-rc1-syzkaller #0 Not tainted
-------------------------------------------------------
-syz-executor174/4998 is trying to acquire lock:
-ffff888073d4aaa0 (&type->i_mutex_dir_key#6/2){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
-ffff888073d4aaa0 (&type->i_mutex_dir_key#6/2){+.+.}-{3:3}, at: xattr_rmdir fs/reiserfs/xattr.c:107 [inline]
-ffff888073d4aaa0 (&type->i_mutex_dir_key#6/2){+.+.}-{3:3}, at: delete_one_xattr+0x141/0x2d0 fs/reiserfs/xattr.c:339
-
-but task is already holding lock:
-ffff888073d496c0 (&type->i_mutex_dir_key#6/3){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
-ffff888073d496c0 (&type->i_mutex_dir_key#6/3){+.+.}-{3:3}, at: reiserfs_for_each_xattr+0x6fd/0x9a0 fs/reiserfs/xattr.c:310
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (&type->i_mutex_dir_key#6/3){+.+.}-{3:3}:
-       down_write_nested+0x96/0x200 kernel/locking/rwsem.c:1689
-       inode_lock_nested include/linux/fs.h:810 [inline]
-       open_xa_root fs/reiserfs/xattr.c:128 [inline]
-       open_xa_dir+0x127/0x840 fs/reiserfs/xattr.c:153
-       xattr_lookup+0x21/0x3d0 fs/reiserfs/xattr.c:396
-       reiserfs_xattr_set_handle+0xfb/0xb00 fs/reiserfs/xattr.c:534
-       reiserfs_xattr_set+0x454/0x5b0 fs/reiserfs/xattr.c:634
-       trusted_set+0xa7/0xd0 fs/reiserfs/xattr_trusted.c:31
-       __vfs_setxattr+0x173/0x1e0 fs/xattr.c:201
-       __vfs_setxattr_noperm+0x129/0x5f0 fs/xattr.c:235
-       __vfs_setxattr_locked+0x1d3/0x260 fs/xattr.c:296
-       vfs_setxattr+0x143/0x340 fs/xattr.c:322
-       ovl_do_setxattr fs/overlayfs/overlayfs.h:255 [inline]
-       ovl_setxattr fs/overlayfs/overlayfs.h:267 [inline]
-       ovl_make_workdir fs/overlayfs/super.c:1332 [inline]
-       ovl_get_workdir fs/overlayfs/super.c:1436 [inline]
-       ovl_fill_super+0x2276/0x7270 fs/overlayfs/super.c:1992
-       mount_nodev+0x64/0x120 fs/super.c:1426
-       legacy_get_tree+0x109/0x220 fs/fs_context.c:610
-       vfs_get_tree+0x8d/0x350 fs/super.c:1510
-       do_new_mount fs/namespace.c:3039 [inline]
-       path_mount+0x134b/0x1e40 fs/namespace.c:3369
-       do_mount fs/namespace.c:3382 [inline]
-       __do_sys_mount fs/namespace.c:3591 [inline]
-       __se_sys_mount fs/namespace.c:3568 [inline]
-       __x64_sys_mount+0x283/0x300 fs/namespace.c:3568
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #1 (&type->i_mutex_dir_key#6){++++}-{3:3}:
-       down_write+0x92/0x200 kernel/locking/rwsem.c:1573
-       inode_lock include/linux/fs.h:775 [inline]
-       vfs_rename+0x4f9/0x17a0 fs/namei.c:4821
-       do_renameat2+0xc04/0xd40 fs/namei.c:5002
-       __do_sys_rename fs/namei.c:5048 [inline]
-       __se_sys_rename fs/namei.c:5046 [inline]
-       __x64_sys_rename+0x81/0xa0 fs/namei.c:5046
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&type->i_mutex_dir_key#6/2){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3108 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
-       validate_chain kernel/locking/lockdep.c:3842 [inline]
-       __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
-       lock_acquire kernel/locking/lockdep.c:5691 [inline]
-       lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5656
-       down_write_nested+0x96/0x200 kernel/locking/rwsem.c:1689
-       inode_lock_nested include/linux/fs.h:810 [inline]
-       xattr_rmdir fs/reiserfs/xattr.c:107 [inline]
-       delete_one_xattr+0x141/0x2d0 fs/reiserfs/xattr.c:339
-       reiserfs_for_each_xattr+0x70e/0x9a0 fs/reiserfs/xattr.c:312
-       reiserfs_delete_xattrs+0x20/0xa0 fs/reiserfs/xattr.c:365
-       reiserfs_evict_inode+0x2e7/0x540 fs/reiserfs/inode.c:53
-       evict+0x2ed/0x6b0 fs/inode.c:665
-       iput_final fs/inode.c:1747 [inline]
-       iput.part.0+0x50a/0x740 fs/inode.c:1773
-       iput+0x5c/0x80 fs/inode.c:1763
-       dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
-       __dentry_kill+0x3c0/0x640 fs/dcache.c:607
-       dentry_kill fs/dcache.c:745 [inline]
-       dput+0x6ac/0xe10 fs/dcache.c:913
-       cleanup_mnt+0x286/0x3d0 fs/namespace.c:1176
-       task_work_run+0x16f/0x270 kernel/task_work.c:179
-       exit_task_work include/linux/task_work.h:38 [inline]
-       do_exit+0xad3/0x2960 kernel/exit.c:871
-       do_group_exit+0xd4/0x2a0 kernel/exit.c:1021
-       __do_sys_exit_group kernel/exit.c:1032 [inline]
-       __se_sys_exit_group kernel/exit.c:1030 [inline]
-       __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1030
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
-Chain exists of:
-  &type->i_mutex_dir_key#6/2 --> &type->i_mutex_dir_key#6 --> &type->i_mutex_dir_key#6/3
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&type->i_mutex_dir_key#6/3);
-                               lock(&type->i_mutex_dir_key#6);
-                               lock(&type->i_mutex_dir_key#6/3);
-  lock(&type->i_mutex_dir_key#6/2);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor174/4998:
- #0: ffff888073d496c0 (&type->i_mutex_dir_key#6/3){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
- #0: ffff888073d496c0 (&type->i_mutex_dir_key#6/3){+.+.}-{3:3}, at: reiserfs_for_each_xattr+0x6fd/0x9a0 fs/reiserfs/xattr.c:310
-
-stack backtrace:
-CPU: 0 PID: 4998 Comm: syz-executor174 Not tainted 6.4.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2188
- check_prev_add kernel/locking/lockdep.c:3108 [inline]
- check_prevs_add kernel/locking/lockdep.c:3227 [inline]
- validate_chain kernel/locking/lockdep.c:3842 [inline]
- __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
- lock_acquire kernel/locking/lockdep.c:5691 [inline]
- lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5656
- down_write_nested+0x96/0x200 kernel/locking/rwsem.c:1689
- inode_lock_nested include/linux/fs.h:810 [inline]
- xattr_rmdir fs/reiserfs/xattr.c:107 [inline]
- delete_one_xattr+0x141/0x2d0 fs/reiserfs/xattr.c:339
- reiserfs_for_each_xattr+0x70e/0x9a0 fs/reiserfs/xattr.c:312
- reiserfs_delete_xattrs+0x20/0xa0 fs/reiserfs/xattr.c:365
- reiserfs_evict_inode+0x2e7/0x540 fs/reiserfs/inode.c:53
- evict+0x2ed/0x6b0 fs/inode.c:665
- iput_final fs/inode.c:1747 [inline]
- iput.part.0+0x50a/0x740 fs/inode.c:1773
- iput+0x5c/0x80 fs/inode.c:1763
- dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
- __dentry_kill+0x3c0/0x640 fs/dcache.c:607
- dentry_kill fs/dcache.c:745 [inline]
- dput+0x6ac/0xe10 fs/dcache.c:913
- cleanup_mnt+0x286/0x3d0 fs/namespace.c:1176
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xad3/0x2960 kernel/exit.c:871
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1021
- __do_sys_exit_group kernel/exit.c:1032 [inline]
- __se_sys_exit_group kernel/exit.c:1030 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1030
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f73aae31bb9
-Code: Unable to access opcode bytes at 0x7f73aae31b8f.
-RSP: 002b:00007fff0a6df368 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f73aaea8330 RCX: 00007f73aae31bb9
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
-RBP: 0000000000000001 R08: ffffffffffffffc0 R09: 00007f73aaea2e40
-R10: 00007f73aaea2
-
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+Jason
