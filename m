@@ -2,79 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916EE6FB16A
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12966FB16B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233524AbjEHN1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
+        id S233834AbjEHN1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEHN1B (ORCPT
+        with ESMTP id S233480AbjEHN1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:27:01 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77268E70A
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 06:27:00 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-7577ef2fa31so280824885a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 06:27:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683552419; x=1686144419;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=21T2ruoV7Hb2byNjXRrKdStLSJ9N1tOpZrLYkVqWI4g=;
-        b=aX8dhtJ3Of8LskEHMPZUnsrWqNtDscG4RcldfbwS8Rk5MGGHAzAWoCfvckzi1JJ+p8
-         +ENMwfFP8Mal3HHrXZ7Z/6gBObNQUrKv1rdsj9FOS+EAcwpULt2H0y8diJ+n1GIQpaFI
-         HU239dtelTmUXRsfSKW/WiyCooiUhkILOrXlkkiWj0qBert5tmcfpxmfjihLtHkZO1/l
-         L8OILMLdLyLPiFxlunazgq/L4r37cg7aLsiY5g55vyC6/h7Mqyvp0BdGuNF06hp2CsYN
-         ocY8UPYc7V8MNKGHru4M6/OFpx7vUIIcDsfrWwmHLJiGVhCQ7z3cNRj5pIUU+pywNwgv
-         RtiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683552419; x=1686144419;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=21T2ruoV7Hb2byNjXRrKdStLSJ9N1tOpZrLYkVqWI4g=;
-        b=IsSizfO0ZCTQ3nmRBlbKZtjAX7WXnJuAqOLBjUnQMS6ojPbfN5FsKyqimvdq6Eh9cE
-         3/FX7Nh+kj7COyLeZSWvtgIqFpi9jXb1vDfezS8X/eCTkJRciyRi4Nx9CMViGbG0RcbG
-         2uu40QF6GM+yAxSeG0hWpZsxTO1Y5bFjVh+BdhB+EbIQnDmR6TGBjUGuSXuu095uRPpx
-         O2n4hkLsDBxFZh7bW5Nx0my3h3vaLlldA0tPkmXWmJ0Gy2Ab85afN+SZKEeNL9FVLhmZ
-         uGHGBF6DSW+QxOYiMIIDKJAy+98CrgrsvW+/cRCUGUyrlEHvrwdUYN/TMP7GXWoh/DXA
-         daLQ==
-X-Gm-Message-State: AC+VfDw6lHwZCumrsGyah/TjhUs3Fwnd0E/RES1qjBXNS568YzvKb2YF
-        PljVQCgCt3VuzG1FnEwFOiyyDErFvQx7bsjv8F8=
-X-Google-Smtp-Source: ACHHUZ7T9W7EIITLa1TsAqjEQmo5ihJZHu0wAuDPkjDo3XKSP+xKv20ecO/5TD7HvM0TSL+kCd2tYQLT02mbRMBJxDw=
-X-Received: by 2002:ad4:5ecf:0:b0:619:90cd:4a99 with SMTP id
- jm15-20020ad45ecf000000b0061990cd4a99mr16664111qvb.3.1683552419471; Mon, 08
- May 2023 06:26:59 -0700 (PDT)
+        Mon, 8 May 2023 09:27:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536A82BCF0
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 06:27:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9DC263D26
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 13:27:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 683A1C433D2;
+        Mon,  8 May 2023 13:27:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683552426;
+        bh=9Preocx0f7YMHLQdzCuT7Uy7mFgFqA+N2t0VXY0AnFA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=WXQIr4EHHDhWlYyU3qOW4iHcVNPYB+ORmYD2XALeKRA2RdEZTw1Yhs/zymsRZWBS5
+         U5LVfdnvAKCRPSOFMS2gCThGeg/P/bLn+w7g0dQkHwogX+3yqyvIJ6LCg6ygS0dAuK
+         rAoGUv15qv8fQxg4AtbA2lK6PH9x4S7RJYSVHbdiwmHgO3JRI/MgfeaQlMBQG4AXu6
+         rEwGJ/oLwWPTKQsA2QtcpxMl2uPRuozcaBHROnXL01igBjs8SQueWmTo1rmV4xgpLJ
+         YadzvRIgp37ZHR00gfBR0Cm4XS7p1DF029I2ibQ88JqBNo5S7HHMR9kjJo4Z0ZmNb4
+         UE399dHni8uTg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
+In-Reply-To: <20230505220218.1239542-1-u.kleine-koenig@pengutronix.de>
+References: <20230505220218.1239542-1-u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH] regulator: Switch i2c drivers back to use .probe()
+Message-Id: <168355242473.260126.9342449014522306239.b4-ty@kernel.org>
+Date:   Mon, 08 May 2023 22:27:04 +0900
 MIME-Version: 1.0
-Sender: mr.adnaali.muhamad01@gmail.com
-Received: by 2002:a05:6214:2f8c:b0:61a:cb7d:5031 with HTTP; Mon, 8 May 2023
- 06:26:59 -0700 (PDT)
-From:   Mrs Suzara Maling Wan <mrssuzaramailingwan12@gmail.com>
-Date:   Mon, 8 May 2023 14:26:59 +0100
-X-Google-Sender-Auth: dh7Oql1BfHNkGjmevQYWnOTmn50
-Message-ID: <CAMhMFrGk35rbE9sfO-L5LQ5ZvG8D9av59d8_rK71xdRmKJW_WA@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am Mrs Suzara Maling Wan, I have a desire to build an orphanage home
-in your country and also support the poor and less privilege in your
-society, I want you to handle this project on my behalf, I have $4.5
-Million Dollars with Ecobank to execute this project .
+On Sat, 06 May 2023 00:02:18 +0200, Uwe Kleine-König wrote:
+> After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> call-back type"), all drivers being converted to .probe_new() and then
+> 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter") convert
+> back to (the new) .probe() to be able to eventually drop .probe_new() from
+> struct i2c_driver.
+> 
+> 
+> [...]
 
-If you are in a good position to handle this project, reply for
-further details of the project
+Applied to
 
-Regards
-Mrs Suzara Maling Wan
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+
+Thanks!
+
+[1/1] regulator: Switch i2c drivers back to use .probe()
+      commit: 964e186547b22b9c3b23fee49eb993391aa73ea8
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
