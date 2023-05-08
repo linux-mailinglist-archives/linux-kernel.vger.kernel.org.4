@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB946FB161
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A50876FB163
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233947AbjEHNVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
+        id S234273AbjEHNVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234256AbjEHNVc (ORCPT
+        with ESMTP id S234261AbjEHNVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:21:32 -0400
+        Mon, 8 May 2023 09:21:33 -0400
 Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C371F3047B
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 06:21:16 -0700 (PDT)
-X-ASG-Debug-ID: 1683552059-086e237e536e4c0003-xx1T2L
-Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx1.zhaoxin.com with ESMTP id eIEAquarjLSwerll (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 08 May 2023 21:21:00 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6200737025
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 06:21:17 -0700 (PDT)
+X-ASG-Debug-ID: 1683552059-086e237e536e4c0004-xx1T2L
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx1.zhaoxin.com with ESMTP id EFJRcdrH2v7v4A03 (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 08 May 2023 21:21:01 +0800 (CST)
 X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
 X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
 Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
@@ -32,11 +32,13 @@ From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
 X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
 To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
         <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <WeitaoWang@zhaoxin.com>, <stable@vger.kernel.org>
-Subject: [PATCH v4 2/4] xhci: Fix TRB prefetch issue of ZHAOXIN hosts
-Date:   Tue, 9 May 2023 05:20:56 +0800
-X-ASG-Orig-Subj: [PATCH v4 2/4] xhci: Fix TRB prefetch issue of ZHAOXIN hosts
-Message-ID: <20230508212058.6307-3-WeitaoWang-oc@zhaoxin.com>
+CC:     <WeitaoWang@zhaoxin.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v4 3/4] xhci: Show ZHAOXIN xHCI root hub speed correctly
+Date:   Tue, 9 May 2023 05:20:57 +0800
+X-ASG-Orig-Subj: [PATCH v4 3/4] xhci: Show ZHAOXIN xHCI root hub speed correctly
+Message-ID: <20230508212058.6307-4-WeitaoWang-oc@zhaoxin.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20230508212058.6307-1-WeitaoWang-oc@zhaoxin.com>
 References: <20230508212058.6307-1-WeitaoWang-oc@zhaoxin.com>
@@ -47,13 +49,13 @@ X-Originating-IP: [10.29.8.21]
 X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
  zxbjmbx1.zhaoxin.com (10.29.252.163)
 X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
-X-Barracuda-Start-Time: 1683552059
+X-Barracuda-Start-Time: 1683552060
 X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
 X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
 X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 2762
+X-Barracuda-Scan-Msg-Size: 4438
 X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0008 1.0000 -2.0160
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
 X-Barracuda-Spam-Score: 1.09
 X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
 X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.108487
@@ -71,67 +73,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some ZHAOXIN hosts, xHCI will prefetch TRB for performance
-improvement. However this TRB prefetch mechanism may cross page boundary,
-which may access memory not allocated by xHCI driver. In order to fix
-this issue, two pages was allocated for a segment and only the first
-page will be used. And add a quirk XHCI_ZHAOXIN_TRB_FETCH for this issue.
+Some ZHAOXIN xHCI controllers follow usb3.1 spec,
+but only support gen1 speed 5Gbps. While in Linux kernel,
+if xHCI suspport usb3.1, root hub speed will show on 10Gbps.
+To fix this issue of ZHAOXIN xHCI platforms, read usb speed ID
+supported by xHCI to determine root hub speed. And add a quirk
+XHCI_ZHAOXIN_HOST for this issue.
 
+Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 Cc: stable@vger.kernel.org
 Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
 ---
- drivers/usb/host/xhci-mem.c | 8 ++++++--
- drivers/usb/host/xhci-pci.c | 7 ++++++-
- drivers/usb/host/xhci.h     | 1 +
- 3 files changed, 13 insertions(+), 3 deletions(-)
+ drivers/usb/host/xhci-mem.c | 30 +++++++++++++++++++++++-------
+ drivers/usb/host/xhci-pci.c |  2 ++
+ drivers/usb/host/xhci.h     |  1 +
+ 3 files changed, 26 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 7e106bd804ca..1532414c8c40 100644
+index 1532414c8c40..0634fba01ac8 100644
 --- a/drivers/usb/host/xhci-mem.c
 +++ b/drivers/usb/host/xhci-mem.c
-@@ -2352,8 +2352,12 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 	 * and our use of dma addresses in the trb_address_map radix tree needs
- 	 * TRB_SEGMENT_SIZE alignment, so we pick the greater alignment need.
- 	 */
--	xhci->segment_pool = dma_pool_create("xHCI ring segments", dev,
--			TRB_SEGMENT_SIZE, TRB_SEGMENT_SIZE, xhci->page_size);
-+	if (xhci->quirks & XHCI_ZHAOXIN_TRB_FETCH)
-+		xhci->segment_pool = dma_pool_create("xHCI ring segments", dev,
-+				TRB_SEGMENT_SIZE * 2, TRB_SEGMENT_SIZE * 2, xhci->page_size * 2);
-+	else
-+		xhci->segment_pool = dma_pool_create("xHCI ring segments", dev,
-+				TRB_SEGMENT_SIZE, TRB_SEGMENT_SIZE, xhci->page_size);
+@@ -1968,7 +1968,7 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+ {
+ 	u32 temp, port_offset, port_count;
+ 	int i;
+-	u8 major_revision, minor_revision;
++	u8 major_revision, minor_revision, tmp_minor_revision;
+ 	struct xhci_hub *rhub;
+ 	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+ 	struct xhci_port_cap *port_cap;
+@@ -1988,6 +1988,15 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+ 		 */
+ 		if (minor_revision > 0x00 && minor_revision < 0x10)
+ 			minor_revision <<= 4;
++		/*
++		 * Some zhaoxin's xHCI controller that follow usb3.1 spec
++		 * but only support Gen1.
++		 */
++		if (xhci->quirks & XHCI_ZHAOXIN_HOST) {
++			tmp_minor_revision = minor_revision;
++			minor_revision = 0;
++		}
++
+ 	} else if (major_revision <= 0x02) {
+ 		rhub = &xhci->usb2_rhub;
+ 	} else {
+@@ -1996,10 +2005,6 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+ 		/* Ignoring port protocol we can't understand. FIXME */
+ 		return;
+ 	}
+-	rhub->maj_rev = XHCI_EXT_PORT_MAJOR(temp);
+-
+-	if (rhub->min_rev < minor_revision)
+-		rhub->min_rev = minor_revision;
  
- 	/* See Table 46 and Note on Figure 55 */
- 	xhci->device_pool = dma_pool_create("xHCI input/output contexts", dev,
+ 	/* Port offset and count in the third dword, see section 7.2 */
+ 	temp = readl(addr + 2);
+@@ -2017,8 +2022,6 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+ 	if (xhci->num_port_caps > max_caps)
+ 		return;
+ 
+-	port_cap->maj_rev = major_revision;
+-	port_cap->min_rev = minor_revision;
+ 	port_cap->psi_count = XHCI_EXT_PORT_PSIC(temp);
+ 
+ 	if (port_cap->psi_count) {
+@@ -2039,6 +2042,10 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+ 				  XHCI_EXT_PORT_PSIV(port_cap->psi[i - 1])))
+ 				port_cap->psi_uid_count++;
+ 
++			if (xhci->quirks & XHCI_ZHAOXIN_HOST &&
++					XHCI_EXT_PORT_PSIV(port_cap->psi[i]) >= 5)
++				minor_revision = tmp_minor_revision;
++
+ 			xhci_dbg(xhci, "PSIV:%d PSIE:%d PLT:%d PFD:%d LP:%d PSIM:%d\n",
+ 				  XHCI_EXT_PORT_PSIV(port_cap->psi[i]),
+ 				  XHCI_EXT_PORT_PSIE(port_cap->psi[i]),
+@@ -2048,6 +2055,15 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+ 				  XHCI_EXT_PORT_PSIM(port_cap->psi[i]));
+ 		}
+ 	}
++
++	rhub->maj_rev = major_revision;
++
++	if (rhub->min_rev < minor_revision)
++		rhub->min_rev = minor_revision;
++
++	port_cap->maj_rev = major_revision;
++	port_cap->min_rev = minor_revision;
++
+ 	/* cache usb2 port capabilities */
+ 	if (major_revision < 0x03 && xhci->num_ext_caps < max_caps)
+ 		xhci->ext_caps[xhci->num_ext_caps++] = temp;
 diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 46d4d642c9bd..3dfb3e0c910b 100644
+index 3dfb3e0c910b..4a025ed50686 100644
 --- a/drivers/usb/host/xhci-pci.c
 +++ b/drivers/usb/host/xhci-pci.c
-@@ -528,8 +528,13 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+@@ -528,6 +528,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
  		xhci->quirks |= XHCI_NO_SOFT_RETRY;
  
  	if (pdev->vendor == PCI_VENDOR_ID_ZHAOXIN) {
--		if (pdev->device == 0x9202)
-+		if (pdev->device == 0x9202) {
- 			xhci->quirks |= XHCI_RESET_ON_RESUME;
-+			xhci->quirks |= XHCI_ZHAOXIN_TRB_FETCH;
-+		}
++		xhci->quirks |= XHCI_ZHAOXIN_HOST;
 +
-+		if (pdev->device == 0x9203)
-+			xhci->quirks |= XHCI_ZHAOXIN_TRB_FETCH;
- 	}
- 
- 	/* xHC spec requires PCI devices to support D3hot and D3cold */
+ 		if (pdev->device == 0x9202) {
+ 			xhci->quirks |= XHCI_RESET_ON_RESUME;
+ 			xhci->quirks |= XHCI_ZHAOXIN_TRB_FETCH;
 diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 08d721921b7b..41c38bfd7348 100644
+index 41c38bfd7348..3737510b5981 100644
 --- a/drivers/usb/host/xhci.h
 +++ b/drivers/usb/host/xhci.h
-@@ -1905,6 +1905,7 @@ struct xhci_hcd {
- #define XHCI_EP_CTX_BROKEN_DCS	BIT_ULL(42)
+@@ -1906,6 +1906,7 @@ struct xhci_hcd {
  #define XHCI_SUSPEND_RESUME_CLKS	BIT_ULL(43)
  #define XHCI_RESET_TO_DEFAULT	BIT_ULL(44)
-+#define XHCI_ZHAOXIN_TRB_FETCH	BIT_ULL(45)
+ #define XHCI_ZHAOXIN_TRB_FETCH	BIT_ULL(45)
++#define XHCI_ZHAOXIN_HOST	BIT_ULL(46)
  
  	unsigned int		num_active_eps;
  	unsigned int		limit_active_eps;
