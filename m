@@ -2,76 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706F66FA168
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B636FA16D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233483AbjEHHsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S232870AbjEHHsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232521AbjEHHsX (ORCPT
+        with ESMTP id S233558AbjEHHsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:48:23 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38C41BCB
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:48:21 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4eff50911bfso4594817e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 00:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683532100; x=1686124100;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Kre6qWKGNcjeM+iThCvTDJwFCUHgVmlK0SAmHcQy0AE=;
-        b=hOzGiR18dYlNKOaD0IWoyHPQVtb5yxUQLPG/xCrxGx/JvtgvNH4mIy3oJIncWALBTv
-         N/eFB5Yh79rgBINFL7807kaoQBJhP4axsXBO7H1fv3SOloLDsRL2GfsnwVoS2PRSBLyr
-         kyuRF9n2nbAZixqZa6j6gITS/FMQ0sDaCjxNHcgtmSxTy6+c7p66y9arFJgnIWhXHuIh
-         88G029UcMnh/N0XPxS/mAiaXL0mfNdb9O/Z45OMKalCR1R2NmlkujSv8/EqwqE42S7ZP
-         SMtlVtJRlXcDd1gH7VfntypcVpkyqP5dxrJnjWZgqVCEBd9a6Dl8iwmjJYVeQxQ69mUf
-         4VYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683532100; x=1686124100;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kre6qWKGNcjeM+iThCvTDJwFCUHgVmlK0SAmHcQy0AE=;
-        b=LT5maYPdnwdTylPWdQEKr4hmh/Qg7znyEuwYGRSfrCHwXysdWV6rTVUhQE/rPaR8IX
-         3gOzIaf1Ol5pSOhIcV6UXYjlwmo1e/Q43sjkKSylSPn0ZJby//pIfhlUW9vVtDIvLRVW
-         ZPaKW143ltANAmdo7pGOWFfGZp+5c6Nzoqw1YHYWjBJBKY4wR1ZHPrq4xieuRwDzWPo8
-         2GNK6E9rwxNN/7Cb+BKzxfjYt3n3fceVEU7CTT0tHeeuF+CsLKPgqIy9eK510YwDZczD
-         +E+2cjQSkbu3dosByLNJ2UpMTq6h83K7opFt8PEKruJZgyDuqumatqCiN1FcuJCznUwq
-         fHFA==
-X-Gm-Message-State: AC+VfDzBLBPDzL5bjUrjCnkvfuX82vhFWPGmd75w5dFQrYWUfXf/rMtX
-        tUgWiLA5scN/2IsdUTAPBh4g4A==
-X-Google-Smtp-Source: ACHHUZ4Sy9seY2TUtAfRj+f9YmJ3Jrb1VAY5uFb/4F86HCNYKlD3iDZgKj6hxFBEbyvFrfeXuzCE5w==
-X-Received: by 2002:ac2:54a3:0:b0:4e8:5e39:6238 with SMTP id w3-20020ac254a3000000b004e85e396238mr1990707lfk.42.1683532100166;
-        Mon, 08 May 2023 00:48:20 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id h14-20020ac25d6e000000b004d8546456c6sm1199876lft.195.2023.05.08.00.48.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 00:48:19 -0700 (PDT)
-Message-ID: <7bf5a2c1-ae97-ae8c-5621-25e06d186a65@linaro.org>
-Date:   Mon, 8 May 2023 09:48:18 +0200
+        Mon, 8 May 2023 03:48:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A646A5FDA
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 00:48:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E86662040
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 07:48:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9BBEC433D2;
+        Mon,  8 May 2023 07:48:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683532121;
+        bh=G9HdM1QJziMzpOUvCuJGpW3lxswdvThqfd4Irkdvc78=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SFLrL35w0Msv/Ut1ZxVUaSrWlMrdhAImX35jJa+vNdjFsaccU4K/Tmt46yGGcK/ab
+         ShGUwgzPb0DXnrbmb7y+amP1uv5G7AULBvvpwkxkCI8F/TrVO4X4k20OUy7LQhW354
+         VQpewPMkAJfEPC2bALgNFB95LK7BWdgiYlJlZMw70TcptzYNU6cjXZ08Hv2+wil21O
+         sidC919sGP4/xfCnp+E8wq+yejJrbmLzoCSv8Fv6Ym+qsqV0c+COSzCe4/6DDVgAN6
+         SxgSWWuqvXXfvXnWitxgoPYDeztdtBvZsyFeoeZX5IbsFy458+BM+3hXZi1UEKlP5S
+         A2B38BMSM4HgQ==
+Date:   Mon, 8 May 2023 13:18:37 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Tom Rix <trix@redhat.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, chunfeng.yun@mediatek.com,
+        kishon@kernel.org, angelogioacchino.delregno@collabora.com,
+        nathan@kernel.org, ndesaulniers@google.com, granquet@baylibre.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] phy: mediatek: fix returning garbage
+Message-ID: <ZFipVfhLVyye/eud@matsya>
+References: <20230414122253.3171524-1-trix@redhat.com>
+ <ZFTMPWp8LhwA9uHz@matsya>
+ <db9c3190-28d8-199f-f4f0-a12524d0451e@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 2/3] arm64: dts: qcom: msm8996: correct MMCC clocks order
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230507174516.264936-1-krzysztof.kozlowski@linaro.org>
- <20230507174516.264936-2-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230507174516.264936-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <db9c3190-28d8-199f-f4f0-a12524d0451e@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,43 +63,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7.05.2023 19:45, Krzysztof Kozlowski wrote:
-> Re-order the clocks for MMCC clock controller node to match the bindings (Linux
-> driver takes by name):
+On 05-05-23, 17:37, Matthias Brugger wrote:
 > 
->   msm8996-mtp.dtb: clock-controller@8c0000: clock-names:1: 'gpll0' was expected
->   msm8996-mtp.dtb: clock-controller@8c0000: clock-names:2: 'gcc_mmss_noc_cfg_ahb_clk' was expected
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> On 05/05/2023 11:28, Vinod Koul wrote:
+> > On 14-04-23, 08:22, Tom Rix wrote:
+> > > clang reports
+> > > drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable
+> > >    'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+> > >          if (ret)
+> > >              ^~~
+> > > ret should have been set by the preceding call to mtk_hdmi_pll_set_hw.
+> > 
+> > I have applied "phy: mediatek: hdmi: mt8195: fix uninitialized variable
+> > usage in pll_calc"
+> 
+> Thanks Vinod, that was on my list for today as well. I was a bit puzzled
+> because you took the patch that added it, but I wasn't sure if you would
+> take the fix. How do you want to handle things like this in the future?
 
-Konrad
->  arch/arm64/boot/dts/qcom/msm8996.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> index fe9e1cb12a73..718007cfb10e 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> @@ -939,16 +939,16 @@ mmcc: clock-controller@8c0000 {
->  			#power-domain-cells = <1>;
->  			reg = <0x008c0000 0x40000>;
->  			clocks = <&xo_board>,
-> -				 <&gcc GCC_MMSS_NOC_CFG_AHB_CLK>,
->  				 <&gcc GPLL0>,
-> +				 <&gcc GCC_MMSS_NOC_CFG_AHB_CLK>,
->  				 <&dsi0_phy 1>,
->  				 <&dsi0_phy 0>,
->  				 <&dsi1_phy 1>,
->  				 <&dsi1_phy 0>,
->  				 <&hdmi_phy>;
->  			clock-names = "xo",
-> -				      "gcc_mmss_noc_cfg_ahb_clk",
->  				      "gpll0",
-> +				      "gcc_mmss_noc_cfg_ahb_clk",
->  				      "dsi0pll",
->  				      "dsi0pllbyte",
->  				      "dsi1pll",
+Fixes should be sent as Fixes patch
+
+-- 
+~Vinod
