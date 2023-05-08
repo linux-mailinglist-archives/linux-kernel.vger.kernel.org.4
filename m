@@ -2,143 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230186FB43F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FA06FB465
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234653AbjEHPr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 11:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
+        id S234674AbjEHPwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 11:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234436AbjEHPrv (ORCPT
+        with ESMTP id S234439AbjEHPwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 11:47:51 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0801EA266;
-        Mon,  8 May 2023 08:47:43 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 348Fl3jg054523;
-        Mon, 8 May 2023 10:47:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683560823;
-        bh=ThTMpPXBEPh4HdHzswHAKDf5fokfeMb5MpOdHcvdqgE=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=cAwMBQtt+9p61ybgcF82DbpMQgD20dsGzxfdQiMdlKtBtnVK2UXR045dEAVRh0lw2
-         sTOwAqMYxGlLQJ385l3l0Bl8nRyL358LToNs2y2d5uPVKZa1Lk3e+hQ4572pQfyh7L
-         0GnxlXQCzr1YRXEg2m0XQFvatQYp7I0Uu4DaPNUU=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 348Fl3t3121784
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 8 May 2023 10:47:03 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 8
- May 2023 10:47:03 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 8 May 2023 10:47:03 -0500
-Received: from [10.250.149.252] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 348FkvEU003096;
-        Mon, 8 May 2023 10:46:58 -0500
-Message-ID: <a80f540a-492a-0585-9ed1-de3397535e07@ti.com>
-Date:   Mon, 8 May 2023 21:16:56 +0530
+        Mon, 8 May 2023 11:52:15 -0400
+Received: from m228-4.mailgun.net (m228-4.mailgun.net [159.135.228.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E20940F3
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 08:51:56 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
+ s=mx; t=1683561115; x=1683568315; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Subject: Cc: To: To: From: From: Sender: Sender;
+ bh=EzeSormUv/APmLb2gfl1VbYW9Wt3gs9mSg+do/Wyebs=;
+ b=NxGhuOwKwmiDDbzGzgURfB7IquxuMSyKwN+aPmFNK3G5KdgMqisgz2oFd0rTDcH+W06oTfh2wmkLopgti68iotob6Z7cSSF2A4Z9k/jrJkddt8lUwkHF2ej5E1NJKI8EOg0MtBDUHDcwHblF19fyluxFS4HERhobtTN1W/XFjBsKv2u04rX+Cgong471v3OaE+lxoEaI9FHlsi0mLSbR7WjxuRiZLzJsl1NRiMEAhZl6DP0aHgZ783tIWjrCUoebYHzRMzk78C9gyB+01XjvjUHzutWM9TilGXZbza4r4eN4+X4o3EsMEJU8YE5g7W0XLRw6lCq/NuNUr5sgVZQpug==
+X-Mailgun-Sending-Ip: 159.135.228.4
+X-Mailgun-Sid: WyI4ZWI3MiIsImxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmciLCI5M2Q1YWIiXQ==
+Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 90bddcf34616 with SMTP id
+ 64591a9b97a5b02842b7cd3e (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 08 May 2023 15:51:55 GMT
+Sender: james@equiv.tech
+From:   James Seo <james@equiv.tech>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     James Seo <james@equiv.tech>, linux-kernel@vger.kernel.org
+Subject: [PATCH] driver core: device.h: add some missing kerneldocs
+Date:   Mon,  8 May 2023 08:48:50 -0700
+Message-Id: <20230508154849.1946589-1-james@equiv.tech>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Build regressions/improvements in v6.4-rc1
-Content-Language: en-US
-To:     Pratyush Yadav <pratyush@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        <linux-um@lists.infradead.org>, <linux-media@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <linux-xfs@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <sparclinux@vger.kernel.org>
-References: <CAHk-=wiUxm-NZ1si8dXWVTTJ9n3c+1SRTC0V+Lk7hOE4bDVwJQ@mail.gmail.com>
- <20230508115727.2597864-1-geert@linux-m68k.org>
- <749c2fc2-93dc-585-3826-dea581602d6e@linux-m68k.org>
- <mafs035466ebk.fsf@amazon.de>
-From:   "Raghavendra, Vignesh" <vigneshr@ti.com>
-In-Reply-To: <mafs035466ebk.fsf@amazon.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+struct device_attribute, struct dev_ext_attribute, dev_name(), and the
+DEVICE_ATTR() macros lack kerneldocs, preventing them from appearing in
+the driver core documentation and from being cross-referenced elsewhere.
 
+Add the missing kerneldocs (except for DEVICE_ATTR_IGNORE_LOCKDEP(),
+which is only meaningful on debug builds with CONFIG_DEBUG_LOCK_ALLOC
+not #defined, and is aliased to DEVICE_ATTR() otherwise).
 
-On 5/8/2023 8:49 PM, Pratyush Yadav wrote:
-> On Mon, May 08 2023, Geert Uytterhoeven wrote:
-> 
->> On Mon, 8 May 2023, Geert Uytterhoeven wrote:
->>> Below is the list of build error/warning regressions/improvements in
->>> v6.4-rc1[1] compared to v6.3[2].
->>>
->>> Summarized:
->>>  - build errors: +9/-16
->>>  - build warnings: +1/-1439
->>>
->>> Happy fixing! ;-)
->>>
->>> Thanks to the linux-next team for providing the build service.
->>>
->>> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/ac9a78681b921877518763ba0e89202254349d1b/ (all 152 configs)
->>> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/457391b0380335d5e9a5babdec90ac53928b23b4/ (all 152 configs)
->>>
->>>
-> [...]
->>
->>>  + /kisskb/src/drivers/mtd/spi-nor/spansion.c: error: 'op' is used uninitialized [-Werror=uninitialized]:  => 495:27, 364:27
-> 
-> Hmm, I don't get why we get this warning. Line 495 is in
-> s25fs256t_post_bfpt_fixup(). It declares 'op' and then it does
-> 
->     op = (struct spi_mem_op)
->         CYPRESS_NOR_RD_ANY_REG_OP(nor->params->addr_mode_nbytes,
->                       SPINOR_REG_CYPRESS_ARCFN, 1,
->                       nor->bouncebuf);
->     ret = spi_nor_read_any_reg(nor, &op, nor->reg_proto);
-> 
+Signed-off-by: James Seo <james@equiv.tech>
+---
+ include/linux/device.h | 111 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 110 insertions(+), 1 deletion(-)
 
-Not all the fields of struct get initialized if you assign later on in
-the function vs at the time of declaration... For example cmd.dtr isn't
-explicitly set to any value here and may have garbage?
-> 
-> which initializes 'op' before using it. Same with line 364 which is in
-> the function cypress_nor_set_addr_mode_nbytes().
-> 
-> Even the compiler warnings [0] don't seem to make much sense to me:
-> 
->     /kisskb/src/drivers/mtd/spi-nor/spansion.c: In function 's25fs256t_post_bfpt_fixup':
->     /kisskb/src/drivers/mtd/spi-nor/spansion.c:495:27: error: 'op' is used uninitialized [-Werror=uninitialized]
->     495 |         struct spi_mem_op op;
->         |                           ^~
->     /kisskb/src/drivers/mtd/spi-nor/spansion.c:495:27: note: 'op' declared here
->     495 |         struct spi_mem_op op;
->         |                           ^~
-> 
-> [0] http://kisskb.ellerman.id.au/kisskb/buildresult/14922057/
-> 
->>
->> um-x86_64-gcc12/um-allyesconfig
->>
-> [...]
-> 
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 472dd24d4823..4e59eda12c88 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -96,7 +96,12 @@ struct device_type {
+ 	const struct dev_pm_ops *pm;
+ };
+ 
+-/* interface for exporting device attributes */
++/**
++ * struct device_attribute - Interface for exporting device attributes.
++ * @attr: sysfs attribute definition.
++ * @show: Show handler.
++ * @store: Store handler.
++ */
+ struct device_attribute {
+ 	struct attribute	attr;
+ 	ssize_t (*show)(struct device *dev, struct device_attribute *attr,
+@@ -105,6 +110,11 @@ struct device_attribute {
+ 			 const char *buf, size_t count);
+ };
+ 
++/**
++ * struct dev_ext_attribute - Exported device attribute with extra context.
++ * @attr: Exported device attribute.
++ * @var: Pointer to context.
++ */
+ struct dev_ext_attribute {
+ 	struct device_attribute attr;
+ 	void *var;
+@@ -123,30 +133,124 @@ ssize_t device_show_bool(struct device *dev, struct device_attribute *attr,
+ ssize_t device_store_bool(struct device *dev, struct device_attribute *attr,
+ 			 const char *buf, size_t count);
+ 
++/**
++ * DEVICE_ATTR - Define a device attribute.
++ * @_name: Attribute name.
++ * @_mode: File mode.
++ * @_show: Show handler. Optional, but mandatory if attribute is readable.
++ * @_store: Store handler. Optional, but mandatory if attribute is writable.
++ *
++ * Convenience macro for defining a struct device_attribute.
++ *
++ * For example, ``DEVICE_ATTR(foo, 0644, foo_show, foo_store);`` expands to:
++ *
++ * .. code-block:: c
++ *
++ *	struct device_attribute dev_attr_foo = {
++ *		.attr	= { .name = "foo", .mode = 0644 },
++ *		.show	= foo_show,
++ *		.store	= foo_store,
++ *	};
++ */
+ #define DEVICE_ATTR(_name, _mode, _show, _store) \
+ 	struct device_attribute dev_attr_##_name = __ATTR(_name, _mode, _show, _store)
++
++/**
++ * DEVICE_ATTR_PREALLOC - Define a preallocated device attribute.
++ * @_name: Attribute name.
++ * @_mode: File mode.
++ * @_show: Show handler. Optional, but mandatory if attribute is readable.
++ * @_store: Store handler. Optional, but mandatory if attribute is writable.
++ *
++ * Like DEVICE_ATTR(), but ``SYSFS_PREALLOC`` is set on @_mode.
++ */
+ #define DEVICE_ATTR_PREALLOC(_name, _mode, _show, _store) \
+ 	struct device_attribute dev_attr_##_name = \
+ 		__ATTR_PREALLOC(_name, _mode, _show, _store)
++
++/**
++ * DEVICE_ATTR_RW - Define a read-write device attribute.
++ * @_name: Attribute name.
++ *
++ * Like DEVICE_ATTR(), but @_mode is 0644, @_show is <_name>_show,
++ * and @_store is <_name>_store.
++ */
+ #define DEVICE_ATTR_RW(_name) \
+ 	struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
++
++/**
++ * DEVICE_ATTR_ADMIN_RW - Define an admin-only read-write device attribute.
++ * @_name: Attribute name.
++ *
++ * Like DEVICE_ATTR_RW(), but @_mode is 0600.
++ */
+ #define DEVICE_ATTR_ADMIN_RW(_name) \
+ 	struct device_attribute dev_attr_##_name = __ATTR_RW_MODE(_name, 0600)
++
++/**
++ * DEVICE_ATTR_RO - Define a readable device attribute.
++ * @_name: Attribute name.
++ *
++ * Like DEVICE_ATTR(), but @_mode is 0444 and @_show is <_name>_show.
++ */
+ #define DEVICE_ATTR_RO(_name) \
+ 	struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
++
++/**
++ * DEVICE_ATTR_ADMIN_RO - Define an admin-only readable device attribute.
++ * @_name: Attribute name.
++ *
++ * Like DEVICE_ATTR_RO(), but @_mode is 0400.
++ */
+ #define DEVICE_ATTR_ADMIN_RO(_name) \
+ 	struct device_attribute dev_attr_##_name = __ATTR_RO_MODE(_name, 0400)
++
++/**
++ * DEVICE_ATTR_WO - Define an admin-only writable device attribute.
++ * @_name: Attribute name.
++ *
++ * Like DEVICE_ATTR(), but @_mode is 0200 and @_store is <_name>_store.
++ */
+ #define DEVICE_ATTR_WO(_name) \
+ 	struct device_attribute dev_attr_##_name = __ATTR_WO(_name)
++
++/**
++ * DEVICE_ULONG_ATTR - Define a device attribute backed by an unsigned long.
++ * @_name: Attribute name.
++ * @_mode: File mode.
++ * @_var: Identifier of unsigned long.
++ *
++ * Like DEVICE_ATTR(), but @_show and @_store are automatically provided
++ * such that reads and writes to the attribute from userspace affect @_var.
++ */
+ #define DEVICE_ULONG_ATTR(_name, _mode, _var) \
+ 	struct dev_ext_attribute dev_attr_##_name = \
+ 		{ __ATTR(_name, _mode, device_show_ulong, device_store_ulong), &(_var) }
++
++/**
++ * DEVICE_INT_ATTR - Define a device attribute backed by an int.
++ * @_name: Attribute name.
++ * @_mode: File mode.
++ * @_var: Identifier of int.
++ *
++ * Like DEVICE_ULONG_ATTR(), but @_var is an int.
++ */
+ #define DEVICE_INT_ATTR(_name, _mode, _var) \
+ 	struct dev_ext_attribute dev_attr_##_name = \
+ 		{ __ATTR(_name, _mode, device_show_int, device_store_int), &(_var) }
++
++/**
++ * DEVICE_BOOL_ATTR - Define a device attribute backed by a bool.
++ * @_name: Attribute name.
++ * @_mode: File mode.
++ * @_var: Identifier of bool.
++ *
++ * Like DEVICE_ULONG_ATTR(), but @_var is a bool.
++ */
+ #define DEVICE_BOOL_ATTR(_name, _mode, _var) \
+ 	struct dev_ext_attribute dev_attr_##_name = \
+ 		{ __ATTR(_name, _mode, device_show_bool, device_store_bool), &(_var) }
++
+ #define DEVICE_ATTR_IGNORE_LOCKDEP(_name, _mode, _show, _store) \
+ 	struct device_attribute dev_attr_##_name =		\
+ 		__ATTR_IGNORE_LOCKDEP(_name, _mode, _show, _store)
+@@ -700,6 +804,11 @@ static inline bool device_iommu_mapped(struct device *dev)
+ /* Get the wakeup routines, which depend on struct device */
+ #include <linux/pm_wakeup.h>
+ 
++/**
++ * dev_name - Return a device's name.
++ * @dev: Device with name to get.
++ * Return: The kobject name of the device, or its initial name if unavailable.
++ */
+ static inline const char *dev_name(const struct device *dev)
+ {
+ 	/* Use the init name until the kobject becomes available */
+-- 
+2.34.1
+
