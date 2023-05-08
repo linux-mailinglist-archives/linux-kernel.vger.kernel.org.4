@@ -2,143 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8BC6FAED5
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C276FAF04
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236293AbjEHLsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 07:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
+        id S236424AbjEHLsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 07:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236360AbjEHLsJ (ORCPT
+        with ESMTP id S234059AbjEHLso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 07:48:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F052436A6
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 04:47:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 8 May 2023 07:48:44 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2029843BB5;
+        Mon,  8 May 2023 04:48:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C790B63A52
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 11:47:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A040BC433EF;
-        Mon,  8 May 2023 11:47:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683546475;
-        bh=QpWbsF81AEIhM6M2asCt/LL6A53rK0qfm2ZYOa/uUzs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s9FXdpCCuYT+NuTeW9TK8giBrQdhU3Z6Rzed/hvA/BQQoHibU9BgST9V53uVqQ7OI
-         MNx9aiLNaSHBXJLHAe7RGFc2ELr374UhKNjmBBLaZGv/vfqER4UFIP9hI9bbvcfvw0
-         A+4FBa5xboDbTf2XKpv0k2IoElPvCAEk76z8g7Vh+weKHAKDRaZleJ3dvKKz/pTo0d
-         Hq9coh75EvzLYWE5BeWk+eDtR2FLcg2rq/hRf2B7DB6h7XwcIMTl9q9P9htH23S4pP
-         2xvShGpLFwtRq8eJEFqQ13/LXVQ3cs48IowulWcZYQh8TJvJxqvJCbwFguhkAQAkYb
-         yMRkA1lTdxnpw==
-Date:   Mon, 8 May 2023 17:17:50 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Yangfl <mmyangfl@gmail.com>
-Cc:     linux-phy@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] phy: hisilicon: Adopt phy-hisi-inno-usb2 to Hi3798MV100
-Message-ID: <ZFjhZt6/K5wNJOrW@matsya>
-References: <20230507154615.793942-1-mmyangfl@gmail.com>
- <ZFinwhFphe71VeLk@matsya>
- <CAAXyoMN2CvVkL+=wT=Q4zJZJa-qUiyiVS4SZquVQ1LUfDmoM5Q@mail.gmail.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EB97C21D1E;
+        Mon,  8 May 2023 11:48:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683546511; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=9Sebc4x1LtKsCXOKUFkPrRuThN42LEoCL9B7L3OU8Kc=;
+        b=iq8iKwt6Ve77LLPIfH0nlw1Lw3NCgGCEf77dia+bCG7rwiu8ivTHobHUsQrHNkgAB07b3J
+        UFHQ0HM0eoTujpICjcoHcZVkpDnfDEXP5h4uTvIyc288DUNI7YFU8tau8LLYnoabaED30i
+        8DLC9MXQKzQPx8rDMNkVHrgQO2HcZ18=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683546511;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=9Sebc4x1LtKsCXOKUFkPrRuThN42LEoCL9B7L3OU8Kc=;
+        b=6ioBTZWbuMAZgGUHWtl0jsPX1qOMJtBJsYg0JblVAjrrxM7pNYcYez/6zX0ce0wgibhl4W
+        /te6CT8S5sKG4wDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 874881346B;
+        Mon,  8 May 2023 11:48:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id klD5H4/hWGQvNwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 08 May 2023 11:48:31 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
+        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, davem@davemloft.net,
+        James.Bottomley@HansenPartnership.com, arnd@arndb.de,
+        sam@ravnborg.org, suijingfeng@loongson.cn
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v5 0/6] fbdev: Move framebuffer I/O helpers to <asm/fb.h>
+Date:   Mon,  8 May 2023 13:48:24 +0200
+Message-Id: <20230508114830.28182-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAXyoMN2CvVkL+=wT=Q4zJZJa-qUiyiVS4SZquVQ1LUfDmoM5Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08-05-23, 19:39, Yangfl wrote:
-> Vinod Koul <vkoul@kernel.org> 于2023年5月8日周一 15:41写道：
-> >
-> > On 07-05-23, 23:46, David Yang wrote:
-> > > Hisilicon also uses phy-hisi-inno-usb2 on Hi3798MV100, with a slightly
-> > > different register convention.
-> >
-> > OK, so what should I expect from this patch, pls document that here...
-> 
-> Hi3798MV100 usb2 phy. Which kind of document should I put here?
+Fbdev provides helpers for framebuffer I/O, such as fb_readl(),
+fb_writel() or fb_memcpy_to_fb(). The implementation of each helper
+depends on the architecture, but they are all equivalent to regular
+I/O functions of similar names. So use regular functions instead and
+move all helpers into <asm-generic/fb.h>
 
-Pls add the details on what is being changed in this patch. this is the
-place where patch description is provided, what are all the things that
-are getting changed
+The first patch a simple whitespace cleanup.
 
-> 
-> >
-> > >
-> > > Signed-off-by: David Yang <mmyangfl@gmail.com>
-> > > ---
-> > >  drivers/phy/hisilicon/Kconfig              |  2 +-
-> > >  drivers/phy/hisilicon/phy-hisi-inno-usb2.c | 67 ++++++++++++++++------
-> > >  2 files changed, 51 insertions(+), 18 deletions(-)
-> > >
-> > > diff --git a/drivers/phy/hisilicon/Kconfig b/drivers/phy/hisilicon/Kconfig
-> > > index d3b92c288554..6c89136fc8c2 100644
-> > > --- a/drivers/phy/hisilicon/Kconfig
-> > > +++ b/drivers/phy/hisilicon/Kconfig
-> > > @@ -54,7 +54,7 @@ config PHY_HISTB_COMBPHY
-> > >
-> > >  config PHY_HISI_INNO_USB2
-> > >       tristate "HiSilicon INNO USB2 PHY support"
-> > > -     depends on (ARCH_HISI && ARM64) || COMPILE_TEST
-> > > +     depends on ARCH_HISI || COMPILE_TEST
-> >
-> > why this change?
-> 
-> Hi3798MV100 is a A9 ARM32 only soc.
+Until now, <linux/fb.h> contained an include of <asm/io.h>. As this
+will go away, patches 2 to 4 prepare include statements in the various
+drivers. Source files that use regular I/O helpers, such as readl(),
+now include <linux/io.h>. Source files that use framebuffer I/O
+helpers, such as fb_readl(), now include <linux/fb.h>.
 
-OK pls document that, also suspect that might a separate patch..?
+Patch 5 replaces the architecture-based if-else branching in 
+<linux/fb.h> by helpers in <asm-generic/fb.h>. All helpers use Linux'
+existing I/O functions.
 
-> 
-> >
-> > >       select GENERIC_PHY
-> > >       select MFD_SYSCON
-> > >       help
-> > > diff --git a/drivers/phy/hisilicon/phy-hisi-inno-usb2.c b/drivers/phy/hisilicon/phy-hisi-inno-usb2.c
-> > > index b133ae06757a..b5d006f38934 100644
-> > > --- a/drivers/phy/hisilicon/phy-hisi-inno-usb2.c
-> > > +++ b/drivers/phy/hisilicon/phy-hisi-inno-usb2.c
-> > > @@ -9,7 +9,7 @@
-> > >  #include <linux/delay.h>
-> > >  #include <linux/io.h>
-> > >  #include <linux/module.h>
-> > > -#include <linux/platform_device.h>
-> > > +#include <linux/of_device.h>
-> > >  #include <linux/phy/phy.h>
-> > >  #include <linux/reset.h>
-> > >
-> > > @@ -20,12 +20,28 @@
-> > >  #define PHY_CLK_STABLE_TIME  2       /* unit:ms */
-> > >  #define UTMI_RST_COMPLETE_TIME       2       /* unit:ms */
-> > >  #define POR_RST_COMPLETE_TIME        300     /* unit:us */
-> > > -#define PHY_TEST_DATA                GENMASK(7, 0)
-> > > -#define PHY_TEST_ADDR                GENMASK(15, 8)
-> > > -#define PHY_TEST_PORT                GENMASK(18, 16)
-> > > -#define PHY_TEST_WREN                BIT(21)
-> > > -#define PHY_TEST_CLK         BIT(22) /* rising edge active */
-> > > -#define PHY_TEST_RST         BIT(23) /* low active */
-> > > +
-> > > +#define PHY_TYPE_0   0
-> > > +#define PHY_TYPE_1   1
-> > > +
-> > > +#define PHY0_TEST_DATA               GENMASK(7, 0)
-> >
-> > same as previous what changed??
-> 
-> Register convention for PHY1 below, as mentioned in commit message.
+Patch 6 harmonizes naming among fbdev and existing I/O functions.
 
-It is _exactly_ same as previous, so pls dont introduce unnecessary
-changes..
+The patchset has been built for a variety of platforms, such as x86-64,
+arm, aarch64, ppc64, parisc, m64k, mips and sparc.
+
+v5:
+	* fix build on s390
+v4:
+	* keep fb_mem*() as-is on ia64, loongarch, sparc64 (Arnd)
+	* don't include <asm/fb.h> (Sam)
+v3:
+	* add the new helpers in <asm-generic/fb.h>
+	* support reordering and native byte order (Geert, Arnd)
+v2:
+	* use Linux I/O helpers (Sam, Arnd)
+
+Thomas Zimmermann (6):
+  fbdev/matrox: Remove trailing whitespaces
+  ipu-v3: Include <linux/io.h>
+  fbdev: Include <linux/io.h> in various drivers
+  fbdev: Include <linux/fb.h> instead of <asm/fb.h>
+  fbdev: Move framebuffer I/O helpers into <asm/fb.h>
+  fbdev: Rename fb_mem*() helpers
+
+ arch/ia64/include/asm/fb.h                  |  20 ++++
+ arch/loongarch/include/asm/fb.h             |  21 ++++
+ arch/parisc/video/fbdev.c                   |   3 +-
+ arch/sparc/include/asm/fb.h                 |  20 ++++
+ arch/sparc/video/fbdev.c                    |   1 -
+ arch/x86/video/fbdev.c                      |   2 -
+ drivers/gpu/ipu-v3/ipu-prv.h                |   1 +
+ drivers/staging/sm750fb/sm750.c             |   2 +-
+ drivers/video/fbdev/arcfb.c                 |   1 +
+ drivers/video/fbdev/aty/atyfb.h             |   2 +
+ drivers/video/fbdev/aty/mach64_cursor.c     |   2 +-
+ drivers/video/fbdev/chipsfb.c               |   2 +-
+ drivers/video/fbdev/core/fbcon.c            |   1 -
+ drivers/video/fbdev/core/fbmem.c            |   6 +-
+ drivers/video/fbdev/kyro/fbdev.c            |   2 +-
+ drivers/video/fbdev/matrox/matroxfb_accel.c |   6 +-
+ drivers/video/fbdev/matrox/matroxfb_base.h  |   4 +-
+ drivers/video/fbdev/pvr2fb.c                |   2 +-
+ drivers/video/fbdev/sstfb.c                 |   2 +-
+ drivers/video/fbdev/stifb.c                 |   4 +-
+ drivers/video/fbdev/tdfxfb.c                |   2 +-
+ drivers/video/fbdev/wmt_ge_rops.c           |   2 +
+ include/asm-generic/fb.h                    | 102 ++++++++++++++++++++
+ include/linux/fb.h                          |  55 +----------
+ 24 files changed, 188 insertions(+), 77 deletions(-)
 
 -- 
-~Vinod
+2.40.1
+
