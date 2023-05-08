@@ -2,111 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D8C6FA879
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BFA6FA899
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235008AbjEHKlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 06:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
+        id S234964AbjEHKnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 06:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234934AbjEHKkp (ORCPT
+        with ESMTP id S234957AbjEHKm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 06:40:45 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605AE2A85E
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 03:40:20 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-5e7534b6736so7180526d6.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 03:40:20 -0700 (PDT)
+        Mon, 8 May 2023 06:42:28 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6B626EAD
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 03:41:36 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1aad5245632so30503705ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 03:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683542419; x=1686134419;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tOLarLbPEw2BzQnlH1NcQezuXJK2sUMhOzGscxqhSmI=;
-        b=szGEV5YbuseSTT2QhxnkprtYX6zVniR4AZX710LSV2FNdm2UEe1dsq9MJMXE67D25P
-         VDItCbJ2B1EtrmvWegZIJ7dKGwCYVFsO74nwYdsAn43Pd7pyj2Egeyu54mHT1w4PF1Tu
-         CnLg1TkOZiy/Fkdiy4izaXMTb/EzTOuGba/2TTCSnbGVJBdvcxBrilwMN3sZcMsUIO+k
-         Wm7AkufaY45+fCrZJsJ2dzYxWGsi81HOa1IJGn5zI7b3pZjxExtz+1GeXlxhX9YcM/u+
-         UUtYfRp+rJJQ94IDiTem5ZXUBXkpZc3kUU2+QIJSN1vXo0ccDGKSMvcvZnI+v7vWhVV5
-         7Olg==
+        d=linaro.org; s=google; t=1683542492; x=1686134492;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=LeRt9uIBhRc0IzYM4Je8YJbs6yEHyFSlqTzPoluTbQk=;
+        b=zAllV7isaF8QsMiAdjnG+3bMSkb94Omp7PXqGc3tTrBnlYeAJ7TdRXD5DnSYDUYs96
+         JSMIgLpqwdk8E8/sCvTsB7hq+AsYLpo7UlwH6TvKT58geYGh7r2D6RRyAF0vZTt4Rqm7
+         SyojFnkQynQ4GmxY7VNbUaO/t7xFbHCWzxZifCi18ORHHoQF4vPmjbshVRjJIz91eEaK
+         saqK2xFq8q8PrVNxULsBGmqcUg9hT95l6lGoy2Fa1fm9e727VKU7/mOTjTnP3VzmCql+
+         cUkXwvkCShAnnGmiDkpu0YMYNMZiGoPZUAOVf0HIkqjTBVFB0gnu1QpJfr1nP33JDFAs
+         GYew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683542419; x=1686134419;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tOLarLbPEw2BzQnlH1NcQezuXJK2sUMhOzGscxqhSmI=;
-        b=PwnNy5A9ImtSX9YyXXPVCsLb3NnpZxVuQ4PSelpmk79OOZnLbQaHveFeWEsER5hJYi
-         zFzWEISwCB/DO2VkCqGfJp5lpYkg4FFzWIuTZZe0yqFgj7EKpTm/UeFFdZtvUDG9bNJm
-         2wwghL4UdYgDm0RNXrS3YDHcIXny/rG+9+fnBre7kDNizeY5KE8ftwDVOCBUEyTI7GOf
-         m3Wl4zmBBmKKKvMgJrRXD3f73EqGJQhjKmSomkiN5K7FjQk9gmEp5ytmg9TzlvOwdjnS
-         RdM0V1PpV4nqadyAmnUeYg0wHdQvvF0xXadHlGxuNWP6p9ItqnJM0N9lHP6XuAwL5/Dp
-         yrDA==
-X-Gm-Message-State: AC+VfDxp2CcgJj4nnPgEVgYzrxlbzGD2zF+0sYG3+Sbu9KiTQ9HjCZ+S
-        uWzbtn23Ox5HRp1Tr0XqlCNES7bFrPiTrwSmu+LNClcL3OWRoBlWxKc=
-X-Google-Smtp-Source: ACHHUZ5iItQygWtfgG27YbkNns42GQ2GwBwYRcbTfphBkNC5JHBOvYHayfIU5uZmZdKKjmsB6uKI5PvuZadFGQsXIRY=
-X-Received: by 2002:ad4:5ecf:0:b0:616:73d9:b9d8 with SMTP id
- jm15-20020ad45ecf000000b0061673d9b9d8mr12826533qvb.3.1683542419276; Mon, 08
- May 2023 03:40:19 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683542492; x=1686134492;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LeRt9uIBhRc0IzYM4Je8YJbs6yEHyFSlqTzPoluTbQk=;
+        b=dKTZyGM0muE0rk1kIoU34HilRefWlNY18RzFfafeypBGKR7oOzwO2muZkXVLyzH1IE
+         uiE9dZOLNE4K3HMpejYF8u6yxwsLVJjzl1nGCmwVfrjVgYzOVPb99/uXqFN05di5rjB0
+         R6Kgoz+ddtQp2UJ/AKANdfcZpV0caOpKKoA8eWvkEGguyqaG7+R9Uh4uoJKn2Q2soxHU
+         DCSb95NBWSYvKPvNltupjzxigC5/cgNnTS+VdBpRucNFRIeElo3r6GEXSTWJR2ZJ6w8n
+         G2skhbqRmGmt8ns0AWGsswin48+8oVd+fzTJqc7qrke6cidHEz8A8YBQX5otmKF6ogkT
+         wlSg==
+X-Gm-Message-State: AC+VfDy6+VcQBtmFE5n1yvpvdRKH/fHzXbMTBirFCluAp1V/fOjx3orL
+        Yr4bIaMHSimiDnQ9DfSqMusp
+X-Google-Smtp-Source: ACHHUZ77wjgYAVc0g6+G0s0folTgzK1xWweysONOrE9DaFKntjxyue1aOAMnKmsnmhZ8kntbX9AkRQ==
+X-Received: by 2002:a17:902:e80c:b0:1ab:1dff:9540 with SMTP id u12-20020a170902e80c00b001ab1dff9540mr12713851plg.14.1683542492544;
+        Mon, 08 May 2023 03:41:32 -0700 (PDT)
+Received: from thinkpad ([59.92.97.45])
+        by smtp.gmail.com with ESMTPSA id m1-20020a170902768100b001aaf2e7b06csm6863394pll.132.2023.05.08.03.41.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 03:41:32 -0700 (PDT)
+Date:   Mon, 8 May 2023 16:11:27 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
+        robh@kernel.org, andersson@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        steev@kali.org, quic_srichara@quicinc.com
+Subject: Re: [PATCH 5/8] PCI: qcom: Do not advertise hotplug capability for
+ IP v2.3.2
+Message-ID: <20230508104127.GB4190@thinkpad>
+References: <20230506073139.8789-1-manivannan.sadhasivam@linaro.org>
+ <20230506073139.8789-6-manivannan.sadhasivam@linaro.org>
+ <bc3ce44f-745a-bbad-32ac-67f8baa49483@linaro.org>
+ <0e5f9f6b-eb67-38f8-2719-06aa8fe296bd@linaro.org>
 MIME-Version: 1.0
-References: <CABXGCsPiR4Lwd0NTecp8GMN9YVLU4OXTiHm-z7Gsa_4-LEm1ZQ@mail.gmail.com>
-In-Reply-To: <CABXGCsPiR4Lwd0NTecp8GMN9YVLU4OXTiHm-z7Gsa_4-LEm1ZQ@mail.gmail.com>
-From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date:   Mon, 8 May 2023 15:40:08 +0500
-Message-ID: <CABXGCsOWCp=KYFFvWA6ExUotUJe=YViZEsomqkCJb7dwNUFAwg@mail.gmail.com>
-Subject: Re: KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
- - RIP: 0010:amdgpu_bo_get_memory+0x80/0x360 [amdgpu]
-To:     "Olsak, Marek" <Marek.Olsak@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <Christian.Koenig@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0e5f9f6b-eb67-38f8-2719-06aa8fe296bd@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 6:44=E2=80=AFPM Mikhail Gavrilov
-<mikhail.v.gavrilov@gmail.com> wrote:
-> I need to say that it may not be easy to reproduce this bug.
-> For helping reproduce:
-> 1. I looped script above:
-> $ for i in {1..99999}; do sudo curl -s
-> https://raw.githubusercontent.com/fatso83/dotfiles/master/utils/scripts/i=
-notify-consumers
-> | bash; done
-> 2. Launched google chrome with 26 opened windows
-> 3. And played in the game Division 2.
-> A little time and luck and I get the desired backtrace again and again.
->
-> I am ready to answer any question and open for testing any patches.
-> Thanks.
+On Sat, May 06, 2023 at 04:01:43PM +0200, Konrad Dybcio wrote:
+> 
+> 
+> On 6.05.2023 14:04, Dmitry Baryshkov wrote:
+> > On 06/05/2023 10:31, Manivannan Sadhasivam wrote:
+> >> SoCs making use of Qcom PCIe controller IP v2.3.2 do not support hotplug
+> >> functionality. But the hotplug capability bit is set by default in the
+> >> hardware. This causes the kernel PCI core to register hotplug service for
+> >> the controller and send hotplug commands to it. But those commands will
+> >> timeout generating messages as below during boot and suspend/resume.
+> >>
+> >> [    5.782159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
+> >> [    5.810161] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2048 msec ago)
+> >> [    7.838162] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2020 msec ago)
+> >> [    7.870159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2052 msec ago)
+> >>
+> >> This not only spams the console output but also induces a delay of a
+> >> couple of seconds. To fix this issue, let's clear the HPC bit in
+> >> PCI_EXP_SLTCAP register as a part of the post init sequence to not
+> >> advertise the hotplug capability for the controller.
+> >>
+> >> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> >> ---
+> >>   drivers/pci/controller/dwc/pcie-qcom.c | 10 ++++++++++
+> >>   1 file changed, 10 insertions(+)
+> >>
+> >> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> >> index 3d5b3ce9e2da..33353be396ec 100644
+> >> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> >> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> >> @@ -579,6 +579,8 @@ static int qcom_pcie_init_2_3_2(struct qcom_pcie *pcie)
+> >>     static int qcom_pcie_post_init_2_3_2(struct qcom_pcie *pcie)
+> >>   {
+> >> +    struct dw_pcie *pci = pcie->pci;
+> >> +    u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> >>       u32 val;
+> >>         /* enable PCIe clocks and resets */
+> >> @@ -602,6 +604,14 @@ static int qcom_pcie_post_init_2_3_2(struct qcom_pcie *pcie)
+> >>       val |= EN;
+> >>       writel(val, pcie->parf + PARF_AXI_MSTR_WR_ADDR_HALT_V2);
+> >>   +    dw_pcie_dbi_ro_wr_en(pci);
+> >> +
+> >> +    val = readl(pci->dbi_base + offset + PCI_EXP_SLTCAP);
+> >> +    val &= ~PCI_EXP_SLTCAP_HPC;
+> >> +    writel(val, pci->dbi_base + offset + PCI_EXP_SLTCAP);
+> >> +
+> >> +    dw_pcie_dbi_ro_wr_dis(pci);
+> >> +
+> > 
+> > Seeing this code again and again makes me wonder if we should have a separate function for this.
+> Moreover, is there no generic rmw type function for readl+writel?
+> 
 
-No one can reproduce this?
-I prepared a video instruction which can helps:
-https://youtu.be/0ipQnMpZG1Y
+No rmw as of now. But it could be added to reduce boilerplate code. But it
+should be part of separate cleanup series though.
 
-1. Run script which would calculate watchers:
-$ for i in {1..99999}; do sudo curl -s
-https://raw.githubusercontent.com/fatso83/dotfiles/master/utils/scripts/ino=
-tify-consumers
-| bash; done
+- Mani
 
-2. Run the game "Devision 2"
+> Konrad
+> > 
 
-3. Run 20 windows of Google Chrome with such script
-$ for i in {1..20}; do google-chrome-unstable
---profile-directory=3D"Test-2" --new-window --start-maximized
-"youtube.com" &; done
-
-I hope after it you see the desired backtrace.
-
---=20
-Best Regards,
-Mike Gavrilov.
+-- 
+மணிவண்ணன் சதாசிவம்
