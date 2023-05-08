@@ -2,589 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F956F9CE3
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 01:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F6F6F9CEA
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 02:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbjEGXr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 19:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
+        id S231706AbjEHAJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 20:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbjEGXqz (ORCPT
+        with ESMTP id S229960AbjEHAJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 19:46:55 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D784CCA;
-        Sun,  7 May 2023 16:46:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683503207; x=1715039207;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aZopMiOqySx7JndnTrSUPweowgUAMNn3NhckmECikp4=;
-  b=eZRwUJPYk+1Km1lSN6haNvsxiGDGu0ZZglcrJvXLB22n7HnHWM13ErZd
-   dWFC34iTSWCXL1BEFmuuZgFdHIu7hzVYocwrWZipqOkAUuNDA1bv4qrVi
-   6HYmMw+k+jIqg2X4hh9Nks7qpaPG2g8JiAuz3lfonRwKu4Kgfu7jS7a8v
-   Fd/CPrmANtBj5CxwrtNUGzHYz7wzsd3nM81Zp8SVkPwB5GFHeuVYPy0ip
-   iBn8E6TbvH2D544x46v28ZVKkdllYvEBgjrGuBXuFKzRUbOzm3qUzUUIF
-   fjG7hQCTPvFF8TMjzT4ymEjTBlxVO9tUQJTlTVSdLnQG4PKcNFJubRh50
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="349550325"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="349550325"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2023 16:46:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="701222816"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="701222816"
-Received: from dancaspi-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.61.73])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2023 16:46:33 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 833ED10D48E; Mon,  8 May 2023 02:46:20 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv10 11/11] x86/tdx: Add unaccepted memory support
-Date:   Mon,  8 May 2023 02:46:18 +0300
-Message-Id: <20230507234618.18067-12-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20230507234618.18067-1-kirill.shutemov@linux.intel.com>
-References: <20230507234618.18067-1-kirill.shutemov@linux.intel.com>
+        Sun, 7 May 2023 20:09:24 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652486A56
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 17:09:23 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-24e2b2a27ebso3732488a91.3
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 17:09:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683504563; x=1686096563;
+        h=content-disposition:mime-version:subject:to:date:from:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h7g8Xlgvko0+iMQ3bWpyLb30HaolKZPLVEsVOIfgeRQ=;
+        b=kokcZ59vCwy7TBU565FUIYz499meBcO2w/NuTo5ZzhoESU5eMI5T3nDT7AI50TreIw
+         eMrPBzXPu0RVuw7e4xNGfZiijESCNgZn6icf++VOIIUQ3k2WFQScIMyGPrJ9x3a/xt5U
+         i6K0MUR81wUkGuFRjzhPhq0QqFXaaNb2gWidYS8KfCDp9kPDKDMNyr3nq8zcKE7F40tf
+         QAQRrUFTbd/yW12VLALxyNgHoz5fTANAQ3lSGRyx37WJV/JAaPXnNtXH/RoU/Ib7jIyL
+         BwiB4JOYT8Y29SG/i3H4JG00d3BKYREzfZyNc8lean3svYPxR8nWBipVXTXszrdeCvjf
+         K8lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683504563; x=1686096563;
+        h=content-disposition:mime-version:subject:to:date:from:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h7g8Xlgvko0+iMQ3bWpyLb30HaolKZPLVEsVOIfgeRQ=;
+        b=LzroHTcOz8V+hkZxLakuoW1gcZ32FXqSaUm7suW6rnVSPG+Zi80XkXaieGC/8YyYBX
+         O+dG2aOoeIXOf9e23CsJlRZCAUPTOXOoFBz8u7w53XN1phFKVVQUlTS4RZdZqLjE9WWg
+         HgC6NH1Bkvo3n1K76nUftyh5DqJgD30vQbctrXD5mu7QxWP80AR4yPWZoyWg7OXh9y23
+         YaaTPngBRCSMQuH9cf2ABYglWY75jAwx3/iArFDXuHAP6+fFb7/XV182+AlYZooSVrIj
+         +KbT/Acy2+e5uHtEW1pK8xdT+4FQ9aKamQXL/XZ+TdOGF8abyOKu4A83B4UBruf5Yq3o
+         vipw==
+X-Gm-Message-State: AC+VfDziR4aWM5LX3W/VtAVfPTaGnuksn5M/FIjKYUVHoWbItegH4v3Y
+        JKDFkAYc3E6i6ttawPPzYeQ=
+X-Google-Smtp-Source: ACHHUZ4dyHjvWnYvH4eG8Ywx4yDKmoglkqdID4t9Fpxz8r4RCtCm6eIC4SjcZB+wz0MhTMTAZmnQqg==
+X-Received: by 2002:a17:90a:3841:b0:24e:14a4:9b93 with SMTP id l1-20020a17090a384100b0024e14a49b93mr8994180pjf.43.1683504562529;
+        Sun, 07 May 2023 17:09:22 -0700 (PDT)
+Received: from sie-luc. ([124.89.8.225])
+        by smtp.gmail.com with ESMTPSA id bs2-20020a632802000000b0051b5d0fe708sm5071243pgb.43.2023.05.07.17.09.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 May 2023 17:09:22 -0700 (PDT)
+Message-ID: <64583db2.630a0220.eb75d.8f51@mx.google.com>
+X-Google-Original-Message-ID: <20230508000916.GA11328@sie-luc.>
+From:   Luc Ma <onion0709@gmail.com>
+X-Google-Original-From: Luc Ma <luc@sietium.com>
+Date:   Mon, 8 May 2023 08:09:16 +0800
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 RESEND] drm/vram-helper: fix function names in vram helper
+ doc
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hookup TDX-specific code to accept memory.
+From: Luc Ma <luc@sietium.com>
 
-Accepting the memory is the same process as converting memory from
-shared to private: kernel notifies VMM with MAP_GPA hypercall and then
-accept pages with ACCEPT_PAGE module call.
+Refer to drmm_vram_helper_init() instead of the non-existent
+drmm_vram_helper_alloc_mm().
 
-The implementation in core kernel uses tdx_enc_status_changed(). It
-already used for converting memory to shared and back for I/O
-transactions.
-
-Boot stub provides own implementation of tdx_accept_memory(). It is
-similar in structure to tdx_enc_status_changed(), but only cares about
-converting memory to private.
-
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Fixes: a5f23a72355d ("drm/vram-helper: Managed vram helpers")
+Signed-off-by: Luc Ma <luc@sietium.com>
 ---
- arch/x86/Kconfig                      |  2 +
- arch/x86/boot/compressed/Makefile     |  2 +-
- arch/x86/boot/compressed/error.c      | 19 ++++++
- arch/x86/boot/compressed/error.h      |  1 +
- arch/x86/boot/compressed/mem.c        | 33 +++++++++-
- arch/x86/boot/compressed/tdx-shared.c |  2 +
- arch/x86/boot/compressed/tdx.c        | 39 +++++++++++
- arch/x86/coco/tdx/Makefile            |  2 +-
- arch/x86/coco/tdx/tdx-shared.c        | 95 +++++++++++++++++++++++++++
- arch/x86/coco/tdx/tdx.c               | 86 +-----------------------
- arch/x86/include/asm/shared/tdx.h     |  2 +
- arch/x86/include/asm/tdx.h            |  2 +
- arch/x86/mm/unaccepted_memory.c       |  9 ++-
- 13 files changed, 206 insertions(+), 88 deletions(-)
- create mode 100644 arch/x86/boot/compressed/tdx-shared.c
- create mode 100644 arch/x86/coco/tdx/tdx-shared.c
+ drivers/gpu/drm/drm_gem_vram_helper.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 53bab123a8ee..5c72067c06d4 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -884,9 +884,11 @@ config INTEL_TDX_GUEST
- 	bool "Intel TDX (Trust Domain Extensions) - Guest Support"
- 	depends on X86_64 && CPU_SUP_INTEL
- 	depends on X86_X2APIC
-+	depends on EFI_STUB
- 	select ARCH_HAS_CC_PLATFORM
- 	select X86_MEM_ENCRYPT
- 	select X86_MCE
-+	select UNACCEPTED_MEMORY
- 	help
- 	  Support running as a guest under Intel TDX.  Without this support,
- 	  the guest kernel can not boot or run under TDX.
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 74f7adee46ad..71d9f71c13eb 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -106,7 +106,7 @@ ifdef CONFIG_X86_64
- endif
- 
- vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
--vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdcall.o
-+vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdx-shared.o $(obj)/tdcall.o
- vmlinux-objs-$(CONFIG_UNACCEPTED_MEMORY) += $(obj)/bitmap.o $(obj)/find.o $(obj)/mem.o
- 
- vmlinux-objs-$(CONFIG_EFI) += $(obj)/efi.o
-diff --git a/arch/x86/boot/compressed/error.c b/arch/x86/boot/compressed/error.c
-index c881878e56d3..5313c5cb2b80 100644
---- a/arch/x86/boot/compressed/error.c
-+++ b/arch/x86/boot/compressed/error.c
-@@ -22,3 +22,22 @@ void error(char *m)
- 	while (1)
- 		asm("hlt");
- }
-+
-+/* EFI libstub  provides vsnprintf() */
-+#ifdef CONFIG_EFI_STUB
-+void panic(const char *fmt, ...)
-+{
-+	static char buf[1024];
-+	va_list args;
-+	int len;
-+
-+	va_start(args, fmt);
-+	len = vsnprintf(buf, sizeof(buf), fmt, args);
-+	va_end(args);
-+
-+	if (len && buf[len - 1] == '\n')
-+		buf[len - 1] = '\0';
-+
-+	error(buf);
-+}
-+#endif
-diff --git a/arch/x86/boot/compressed/error.h b/arch/x86/boot/compressed/error.h
-index 1de5821184f1..86fe33b93715 100644
---- a/arch/x86/boot/compressed/error.h
-+++ b/arch/x86/boot/compressed/error.h
-@@ -6,5 +6,6 @@
- 
- void warn(char *m);
- void error(char *m) __noreturn;
-+void panic(const char *fmt, ...) __noreturn __cold;
- 
- #endif /* BOOT_COMPRESSED_ERROR_H */
-diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
-index de858a5180b6..e6b92e822ddd 100644
---- a/arch/x86/boot/compressed/mem.c
-+++ b/arch/x86/boot/compressed/mem.c
-@@ -5,6 +5,8 @@
- #include "error.h"
- #include "find.h"
- #include "math.h"
-+#include "tdx.h"
-+#include <asm/shared/tdx.h>
- 
- #define PMD_SHIFT	21
- #define PMD_SIZE	(_AC(1, UL) << PMD_SHIFT)
-@@ -12,10 +14,39 @@
- 
- extern struct boot_params *boot_params;
- 
-+/*
-+ * accept_memory() and process_unaccepted_memory() called from EFI stub which
-+ * runs before decompresser and its early_tdx_detect().
-+ *
-+ * Enumerate TDX directly from the early users.
-+ */
-+static bool early_is_tdx_guest(void)
-+{
-+	static bool once;
-+	static bool is_tdx;
-+
-+	if (!IS_ENABLED(CONFIG_INTEL_TDX_GUEST))
-+		return false;
-+
-+	if (!once) {
-+		u32 eax, sig[3];
-+
-+		cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax,
-+			    &sig[0], &sig[2],  &sig[1]);
-+		is_tdx = !memcmp(TDX_IDENT, sig, sizeof(sig));
-+		once = true;
-+	}
-+
-+	return is_tdx;
-+}
-+
- static inline void __accept_memory(phys_addr_t start, phys_addr_t end)
- {
- 	/* Platform-specific memory-acceptance call goes here */
--	error("Cannot accept memory");
-+	if (early_is_tdx_guest())
-+		tdx_accept_memory(start, end);
-+	else
-+		error("Cannot accept memory: unknown platform\n");
- }
- 
- /*
-diff --git a/arch/x86/boot/compressed/tdx-shared.c b/arch/x86/boot/compressed/tdx-shared.c
-new file mode 100644
-index 000000000000..5ac43762fe13
---- /dev/null
-+++ b/arch/x86/boot/compressed/tdx-shared.c
-@@ -0,0 +1,2 @@
-+#include "error.h"
-+#include "../../coco/tdx/tdx-shared.c"
-diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
-index 2d81d3cc72a1..5cc4053f9df5 100644
---- a/arch/x86/boot/compressed/tdx.c
-+++ b/arch/x86/boot/compressed/tdx.c
-@@ -3,12 +3,17 @@
- #include "../cpuflags.h"
- #include "../string.h"
- #include "../io.h"
-+#include "align.h"
- #include "error.h"
-+#include "pgtable_types.h"
- 
- #include <vdso/limits.h>
- #include <uapi/asm/vmx.h>
- 
- #include <asm/shared/tdx.h>
-+#include <asm/page_types.h>
-+
-+static u64 cc_mask;
- 
- /* Called from __tdx_hypercall() for unrecoverable failure */
- void __tdx_hypercall_failed(void)
-@@ -16,6 +21,38 @@ void __tdx_hypercall_failed(void)
- 	error("TDVMCALL failed. TDX module bug?");
- }
- 
-+static u64 get_cc_mask(void)
-+{
-+	struct tdx_module_output out;
-+	unsigned int gpa_width;
-+
-+	/*
-+	 * TDINFO TDX module call is used to get the TD execution environment
-+	 * information like GPA width, number of available vcpus, debug mode
-+	 * information, etc. More details about the ABI can be found in TDX
-+	 * Guest-Host-Communication Interface (GHCI), section 2.4.2 TDCALL
-+	 * [TDG.VP.INFO].
-+	 *
-+	 * The GPA width that comes out of this call is critical. TDX guests
-+	 * can not meaningfully run without it.
-+	 */
-+	if (__tdx_module_call(TDX_GET_INFO, 0, 0, 0, 0, &out))
-+		error("TDCALL GET_INFO failed (Buggy TDX module!)\n");
-+
-+	gpa_width = out.rcx & GENMASK(5, 0);
-+
-+	/*
-+	 * The highest bit of a guest physical address is the "sharing" bit.
-+	 * Set it for shared pages and clear it for private pages.
-+	 */
-+	return BIT_ULL(gpa_width - 1);
-+}
-+
-+u64 cc_mkdec(u64 val)
-+{
-+	return val & ~cc_mask;
-+}
-+
- static inline unsigned int tdx_io_in(int size, u16 port)
- {
- 	struct tdx_hypercall_args args = {
-@@ -70,6 +107,8 @@ void early_tdx_detect(void)
- 	if (memcmp(TDX_IDENT, sig, sizeof(sig)))
- 		return;
- 
-+	cc_mask = get_cc_mask();
-+
- 	/* Use hypercalls instead of I/O instructions */
- 	pio_ops.f_inb  = tdx_inb;
- 	pio_ops.f_outb = tdx_outb;
-diff --git a/arch/x86/coco/tdx/Makefile b/arch/x86/coco/tdx/Makefile
-index 46c55998557d..2c7dcbf1458b 100644
---- a/arch/x86/coco/tdx/Makefile
-+++ b/arch/x86/coco/tdx/Makefile
-@@ -1,3 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--obj-y += tdx.o tdcall.o
-+obj-y += tdx.o tdx-shared.o tdcall.o
-diff --git a/arch/x86/coco/tdx/tdx-shared.c b/arch/x86/coco/tdx/tdx-shared.c
-new file mode 100644
-index 000000000000..ee74f7bbe806
---- /dev/null
-+++ b/arch/x86/coco/tdx/tdx-shared.c
-@@ -0,0 +1,95 @@
-+#include <asm/tdx.h>
-+#include <asm/pgtable.h>
-+
-+static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
-+				    enum pg_level pg_level)
-+{
-+	unsigned long accept_size = page_level_size(pg_level);
-+	u64 tdcall_rcx;
-+	u8 page_size;
-+
-+	if (!IS_ALIGNED(start, accept_size))
-+		return 0;
-+
-+	if (len < accept_size)
-+		return 0;
-+
-+	/*
-+	 * Pass the page physical address to the TDX module to accept the
-+	 * pending, private page.
-+	 *
-+	 * Bits 2:0 of RCX encode page size: 0 - 4K, 1 - 2M, 2 - 1G.
-+	 */
-+	switch (pg_level) {
-+	case PG_LEVEL_4K:
-+		page_size = 0;
-+		break;
-+	case PG_LEVEL_2M:
-+		page_size = 1;
-+		break;
-+	case PG_LEVEL_1G:
-+		page_size = 2;
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	tdcall_rcx = start | page_size;
-+	if (__tdx_module_call(TDX_ACCEPT_PAGE, tdcall_rcx, 0, 0, 0, NULL))
-+		return 0;
-+
-+	return accept_size;
-+}
-+
-+bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end, bool enc)
-+{
-+	if (!enc) {
-+		/* Set the shared (decrypted) bits: */
-+		start |= cc_mkdec(0);
-+		end   |= cc_mkdec(0);
-+	}
-+
-+	/*
-+	 * Notify the VMM about page mapping conversion. More info about ABI
-+	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
-+	 * section "TDG.VP.VMCALL<MapGPA>"
-+	 */
-+	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
-+		return false;
-+
-+	/* private->shared conversion  requires only MapGPA call */
-+	if (!enc)
-+		return true;
-+
-+	/*
-+	 * For shared->private conversion, accept the page using
-+	 * TDX_ACCEPT_PAGE TDX module call.
-+	 */
-+	while (start < end) {
-+		unsigned long len = end - start;
-+		unsigned long accept_size;
-+
-+		/*
-+		 * Try larger accepts first. It gives chance to VMM to keep
-+		 * 1G/2M Secure EPT entries where possible and speeds up
-+		 * process by cutting number of hypercalls (if successful).
-+		 */
-+
-+		accept_size = try_accept_one(start, len, PG_LEVEL_1G);
-+		if (!accept_size)
-+			accept_size = try_accept_one(start, len, PG_LEVEL_2M);
-+		if (!accept_size)
-+			accept_size = try_accept_one(start, len, PG_LEVEL_4K);
-+		if (!accept_size)
-+			return false;
-+		start += accept_size;
-+	}
-+
-+	return true;
-+}
-+
-+void tdx_accept_memory(phys_addr_t start, phys_addr_t end)
-+{
-+	if (!tdx_enc_status_changed_phys(start, end, true))
-+		panic("Accepting memory failed: %#llx-%#llx\n",  start, end);
-+}
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 0d5fe6e24e45..32501277ef84 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -713,46 +713,6 @@ static bool tdx_cache_flush_required(void)
- 	return true;
- }
- 
--static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
--				    enum pg_level pg_level)
--{
--	unsigned long accept_size = page_level_size(pg_level);
--	u64 tdcall_rcx;
--	u8 page_size;
--
--	if (!IS_ALIGNED(start, accept_size))
--		return 0;
--
--	if (len < accept_size)
--		return 0;
--
--	/*
--	 * Pass the page physical address to the TDX module to accept the
--	 * pending, private page.
--	 *
--	 * Bits 2:0 of RCX encode page size: 0 - 4K, 1 - 2M, 2 - 1G.
--	 */
--	switch (pg_level) {
--	case PG_LEVEL_4K:
--		page_size = 0;
--		break;
--	case PG_LEVEL_2M:
--		page_size = 1;
--		break;
--	case PG_LEVEL_1G:
--		page_size = 2;
--		break;
--	default:
--		return 0;
--	}
--
--	tdcall_rcx = start | page_size;
--	if (__tdx_module_call(TDX_ACCEPT_PAGE, tdcall_rcx, 0, 0, 0, NULL))
--		return 0;
--
--	return accept_size;
--}
--
- /*
-  * Inform the VMM of the guest's intent for this physical page: shared with
-  * the VMM or private to the guest.  The VMM is expected to change its mapping
-@@ -761,51 +721,9 @@ static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
- static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
- {
- 	phys_addr_t start = __pa(vaddr);
--	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
-+	phys_addr_t end = __pa(vaddr + numpages * PAGE_SIZE);
- 
--	if (!enc) {
--		/* Set the shared (decrypted) bits: */
--		start |= cc_mkdec(0);
--		end   |= cc_mkdec(0);
--	}
--
--	/*
--	 * Notify the VMM about page mapping conversion. More info about ABI
--	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
--	 * section "TDG.VP.VMCALL<MapGPA>"
--	 */
--	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
--		return false;
--
--	/* private->shared conversion  requires only MapGPA call */
--	if (!enc)
--		return true;
--
--	/*
--	 * For shared->private conversion, accept the page using
--	 * TDX_ACCEPT_PAGE TDX module call.
--	 */
--	while (start < end) {
--		unsigned long len = end - start;
--		unsigned long accept_size;
--
--		/*
--		 * Try larger accepts first. It gives chance to VMM to keep
--		 * 1G/2M Secure EPT entries where possible and speeds up
--		 * process by cutting number of hypercalls (if successful).
--		 */
--
--		accept_size = try_accept_one(start, len, PG_LEVEL_1G);
--		if (!accept_size)
--			accept_size = try_accept_one(start, len, PG_LEVEL_2M);
--		if (!accept_size)
--			accept_size = try_accept_one(start, len, PG_LEVEL_4K);
--		if (!accept_size)
--			return false;
--		start += accept_size;
--	}
--
--	return true;
-+	return tdx_enc_status_changed_phys(start, end, enc);
- }
- 
- void __init tdx_early_init(void)
-diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-index 1ff0ee822961..95fbe7376694 100644
---- a/arch/x86/include/asm/shared/tdx.h
-+++ b/arch/x86/include/asm/shared/tdx.h
-@@ -91,5 +91,7 @@ struct tdx_module_output {
- u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
- 		      struct tdx_module_output *out);
- 
-+void tdx_accept_memory(phys_addr_t start, phys_addr_t end);
-+
- #endif /* !__ASSEMBLY__ */
- #endif /* _ASM_X86_SHARED_TDX_H */
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 234197ec17e4..3a7340ad9a4b 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -50,6 +50,8 @@ bool tdx_early_handle_ve(struct pt_regs *regs);
- 
- int tdx_mcall_get_report0(u8 *reportdata, u8 *tdreport);
- 
-+bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end, bool enc);
-+
- #else
- 
- static inline void tdx_early_init(void) { };
-diff --git a/arch/x86/mm/unaccepted_memory.c b/arch/x86/mm/unaccepted_memory.c
-index 2f38059e5b08..f61174d4c3cb 100644
---- a/arch/x86/mm/unaccepted_memory.c
-+++ b/arch/x86/mm/unaccepted_memory.c
-@@ -6,6 +6,7 @@
- 
- #include <asm/io.h>
- #include <asm/setup.h>
-+#include <asm/shared/tdx.h>
- #include <asm/unaccepted_memory.h>
- 
- /* Protects unaccepted memory bitmap */
-@@ -55,7 +56,13 @@ void accept_memory(phys_addr_t start, phys_addr_t end)
- 		unsigned long len = range_end - range_start;
- 
- 		/* Platform-specific memory-acceptance call goes here */
--		panic("Cannot accept memory: unknown platform\n");
-+		if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
-+			tdx_accept_memory(range_start * PMD_SIZE,
-+					  range_end * PMD_SIZE);
-+		} else {
-+			panic("Cannot accept memory: unknown platform\n");
-+		}
-+
- 		bitmap_clear(bitmap, range_start, len);
- 	}
- 	spin_unlock_irqrestore(&unaccepted_memory_lock, flags);
+diff --git a/drivers/gpu/drm/drm_gem_vram_helper.c b/drivers/gpu/drm/drm_gem_vram_helper.c
+index d40b3edb52d0..f1539d4448c6 100644
+--- a/drivers/gpu/drm/drm_gem_vram_helper.c
++++ b/drivers/gpu/drm/drm_gem_vram_helper.c
+@@ -45,7 +45,7 @@ static const struct drm_gem_object_funcs drm_gem_vram_object_funcs;
+  * the frame's scanout buffer or the cursor image. If there's no more space
+  * left in VRAM, inactive GEM objects can be moved to system memory.
+  *
+- * To initialize the VRAM helper library call drmm_vram_helper_alloc_mm().
++ * To initialize the VRAM helper library call drmm_vram_helper_init().
+  * The function allocates and initializes an instance of &struct drm_vram_mm
+  * in &struct drm_device.vram_mm . Use &DRM_GEM_VRAM_DRIVER to initialize
+  * &struct drm_driver and  &DRM_VRAM_MM_FILE_OPERATIONS to initialize
+@@ -73,7 +73,7 @@ static const struct drm_gem_object_funcs drm_gem_vram_object_funcs;
+  *		// setup device, vram base and size
+  *		// ...
+  *
+- *		ret = drmm_vram_helper_alloc_mm(dev, vram_base, vram_size);
++ *		ret = drmm_vram_helper_init(dev, vram_base, vram_size);
+  *		if (ret)
+  *			return ret;
+  *		return 0;
+@@ -86,7 +86,7 @@ static const struct drm_gem_object_funcs drm_gem_vram_object_funcs;
+  * to userspace.
+  *
+  * You don't have to clean up the instance of VRAM MM.
+- * drmm_vram_helper_alloc_mm() is a managed interface that installs a
++ * drmm_vram_helper_init() is a managed interface that installs a
+  * clean-up handler to run during the DRM device's release.
+  *
+  * For drawing or scanout operations, rsp. buffer objects have to be pinned
 -- 
-2.39.3
+2.25.1
 
