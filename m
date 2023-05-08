@@ -2,488 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8A46FA197
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6556FA1B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 09:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbjEHHxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 03:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
+        id S233637AbjEHH66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 03:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbjEHHxE (ORCPT
+        with ESMTP id S232784AbjEHH6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 03:53:04 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3922C1BC7;
-        Mon,  8 May 2023 00:53:02 -0700 (PDT)
-Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QFD1t5KvFzpT0j;
-        Mon,  8 May 2023 15:48:50 +0800 (CST)
-Received: from huawei.com (10.67.174.33) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 8 May
- 2023 15:52:59 +0800
-From:   "GONG, Ruiqi" <gongruiqi1@huawei.com>
-To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>
-CC:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        <kasan-dev@googlegroups.com>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>
-Subject: [PATCH RFC v2] Randomized slab caches for kmalloc()
-Date:   Mon, 8 May 2023 15:55:07 +0800
-Message-ID: <20230508075507.1720950-1-gongruiqi1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 8 May 2023 03:58:53 -0400
+Received: from mx0b-002c1b01.pphosted.com (mx0b-002c1b01.pphosted.com [148.163.155.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0AD7A8A;
+        Mon,  8 May 2023 00:58:52 -0700 (PDT)
+Received: from pps.filterd (m0127844.ppops.net [127.0.0.1])
+        by mx0b-002c1b01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3487QqkG011998;
+        Mon, 8 May 2023 00:58:49 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=proofpoint20171006;
+ bh=wybb7csgti6PZ/4OnQUT5BT/u0GFyNhURtuC+iUr2y0=;
+ b=V1UXALHrBWysMaaA7HWwgRUsMkFDZRXLbS8W9wF17cbehHOSmquL7nCVdF87SV4xla6S
+ uxbyEqgfFdpMXqjISJz04/8C5P5tcZe12TdRXEf/FH1WIPuE9OEtex0R8/9ETrkGR77g
+ 2ZDe+P1mWjFxjaoUKhVmLL7lTnicNfjH0qQXoUlewiKFFnrHKyshfu6nNx1Ghw9s/Q3O
+ yrXTbVEKg3Sur8hjIsshuoThJgftnR9C46Z8Dhs+uZKhW8RK1stMPYj6535fOFYI8Aee
+ b5mw/uf19ewOgeGW5L23V9+P0Z+zT2n1MWdHqt/SuRaRSdMGE4He59Jz0PN5YW4dtBdI uw== 
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2177.outbound.protection.outlook.com [104.47.57.177])
+        by mx0b-002c1b01.pphosted.com (PPS) with ESMTPS id 3qdpe43n4a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 00:58:48 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KAVSPgqCMwI4loBAdVDGHwirfZqT3YmqH6/EfXi8mlp3uGVgFWyOCpvEp2ekkDrYQTBfYAXoX58JxxCTqoHJQPyMy4Qqx2oRbOiVIOJwwjZ8Qzouve5r5AH8ETGnVVibJTXr+MbT8nYn0kBQY9DRh6+Yyc/d0WSsczoXjWj9yHL2ARziV6YYB7GZ2pg8bl87xIWDDZOj7yV5CFiYfeRyNgbOvywMVIC2xLmq8t5rsEEzGXX6EXGKgQV85FW07yRmU7ZU7mRWWZmcd5xwHCwj17uSR1TMPLjPg7udjGbpT5qGg9CV1xUSQN6dKYckpoA2B1rH2MhSwNTwYw/li2fPIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wybb7csgti6PZ/4OnQUT5BT/u0GFyNhURtuC+iUr2y0=;
+ b=dCyo93jtD3Ebl9jiTB2UkBqUvHwFW8DzemBmhIHMEfSqrMB+MXveG7C9K3T+YsToUJBLybLZsxw+EtzyFGL/5aQKNJ98EOF6k2EOEnycvPqN9wmRYjrXSznv5mGkQN7zBkVGSNXMW4R3hwMYJjE3W48mNJlw9JvYMqQon0KsjOPev0rvIPN53zFlaWrtVJzFrlGO/znab2NkTPNG3UQKRAz7QZ9qdclGjpKe6+R1y3gcd18qaIhmMlAMXfTpmkrIunOY3TrDahL1QHN/QO1Wuq3w6qknA3WRZ0/g8qhdKBkqWVvyrnIKDZWSUOd6ha/0a5sk9F3HJtfZU/k6Zh1Shg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
+ dkim=pass header.d=nutanix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wybb7csgti6PZ/4OnQUT5BT/u0GFyNhURtuC+iUr2y0=;
+ b=guzRNr5sWwDJMdSKtF+/HgxHZpQExDQca2Qa+vf7bpkN2ZoyepajWRrDyH7diDpktF1W2Y+BiRArwz7uSMXGhKsVZpMxRKaXxKpNj6WTHiBJp6zdFxxAg9tWFnNzzsTNxKhDMgwngLFWQA/p+OE1M1unviccc6bdMeJ+rPVTpFoudNqzmp2dX8eEedfJWbr+0gqh9ROdY/O0n54egbl8VLXQHCjNNGpX1lFyz+UmcdgRbrW3crdRytpIGKKBvXV82l3sUizx9nmFaYo7cRXFRE070+xI9yywwacxN5KfHkMQGK/qpkPAW34aTqCr6YHzG0EFuGSg7sek0FcouBI8ow==
+Received: from CH0PR02MB8041.namprd02.prod.outlook.com (2603:10b6:610:106::10)
+ by SN4PR0201MB8821.namprd02.prod.outlook.com (2603:10b6:806:201::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
+ 2023 07:58:46 +0000
+Received: from CH0PR02MB8041.namprd02.prod.outlook.com
+ ([fe80::e48:dd5d:b7e4:4d54]) by CH0PR02MB8041.namprd02.prod.outlook.com
+ ([fe80::e48:dd5d:b7e4:4d54%2]) with mapi id 15.20.6363.032; Mon, 8 May 2023
+ 07:58:45 +0000
+From:   Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+To:     paul@paul-moore.com, eparis@redhat.com,
+        linux-kernel@vger.kernel.org, audit@vger.kernel.org
+Cc:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+Subject: [PATCH 0/4] audit: refactor and fix for potential deadlock
+Date:   Mon,  8 May 2023 07:58:08 +0000
+Message-Id: <20230508075812.76077-1-eiichi.tsukata@nutanix.com>
+X-Mailer: git-send-email 2.27.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR08CA0070.namprd08.prod.outlook.com
+ (2603:10b6:a03:117::47) To CH0PR02MB8041.namprd02.prod.outlook.com
+ (2603:10b6:610:106::10)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.33]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH0PR02MB8041:EE_|SN4PR0201MB8821:EE_
+X-MS-Office365-Filtering-Correlation-Id: 024ba718-b69d-47ca-dc25-08db4f9a0c82
+x-proofpoint-crosstenant: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Y41dyCGpEstoj9HnrQYIR7gIl3/VjUXv7LXMd7bGU1KuPuNxIL2e9JZUPS9WiMLmWLPi6Uzb1cTV1AlGyFJ7b5DlKM4JNn69ygQqCovWOCS4sMRO2FW+ZXfNU7BrtYjUmgb3+c7F2CEo8Amegr8yKf+JCSL4lYCgud+ZNBRtZbeZcdbAQ/SahOhSVJu4pbLDI3kiyw7Iqcr5glSO96LbrZRLDeDfFO1rafdb2BDoF5OV0GSZXlhzQdfMeHgMdakfOkVEXuR5yg7zASNoHzyy6A3O+HnIW/572IeSRfB50AC4qzV49Xbf01Qdav6xksgsa/jk2tvxQtdlpRje0ZqMdFKNiuGgZzRBpYs+W97VYVU7v3pICuFLpY/Lu/+tackXrkRbxsR50fHoENhlKMKYg1KzKtNH9/TY5SjtkBKJ7lhrTHaq4yf6idceNiAkzL9W+kkRdEUjvF3XbtczaK5WFG/8gdixQtOCrgaycx3B+XrqbI9ke+PE3rjmhzKiINkLbozLoX8ny0LZg/1tZhfS1EId8z2W2jDulADw7+81FC8H+uRtXm6TA67BBVQDMuJp/N8pcROX1FX+RRpBXhoCtfvIgoj9F//7hOaioE4PyfwSSHfX3U7amlA2rggQjBsg
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR02MB8041.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(39860400002)(346002)(136003)(376002)(451199021)(52116002)(66946007)(66476007)(4326008)(478600001)(316002)(6486002)(86362001)(36756003)(66556008)(83380400001)(107886003)(2616005)(6512007)(6506007)(1076003)(26005)(6666004)(8676002)(8936002)(5660300002)(44832011)(41300700001)(2906002)(38350700002)(38100700002)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?arfCXgpUeTR5rYEWBliOsrsKKs8EMBejCMVDk42awIDt/s4T3SE7mNdSkOEJ?=
+ =?us-ascii?Q?2F2ufvQLJfo4gb25CExz0og3nH9ySyV317sf4MSdL79nGUMmMzNGr1yyhf2d?=
+ =?us-ascii?Q?DNOsfCutcg1i9/tdaAa3KU2pYnm8r/nb5n3i9sps+z5MLzX2tt3ZhMMYHjc1?=
+ =?us-ascii?Q?gKN46Q7WmHHQv2wLg04uXjGeNdXjNm5gxwUqhnkxaFwcdXQQnvBKOTTdWjot?=
+ =?us-ascii?Q?gvbhKPTelQ3asKEQaks/zy38gTIH6HPIESFioyIZ0/QyOCGG19vFfzxu26cO?=
+ =?us-ascii?Q?NKe0JiXAuywd5r1KNqDF2DgXClDAv0INZs0ehRKXuCV7sksH3c0/6wYtaL6n?=
+ =?us-ascii?Q?2nSnxXZUYffh8f1bI85s/36l3eOlgElSBDsKibKd30nmyB/3mmfucWkx0D5g?=
+ =?us-ascii?Q?sIBExxb8qa4bw0hCSzws1Vq6IDapSBgCaVXE2akszTq8vZ0ULoYuDzRHsDEx?=
+ =?us-ascii?Q?CyUySUwjWCqBKWO5WLV61bCumx2KOTpKyKMKXjEFs07NnoOtzZKKhILqODZs?=
+ =?us-ascii?Q?T0uIknvz+qoInjOk75jcCCRH9nXqIkh/0pxFaqt157hS0D0CxaPAyzc54cC1?=
+ =?us-ascii?Q?syF5BkJqmcX4rZlU9PMtRw1dGoSP0XS9PRr5ucsaDbDmdmaMP+eYKGK88FUg?=
+ =?us-ascii?Q?OGoWyc3rQVpXDj7droglWx3h8qgp5zBbUSLFrqQ+v+Talug8jm/cLuasrwFX?=
+ =?us-ascii?Q?pNIu1tcHvlwpTckIoCXMwLG9FuiyL3DcAFJc+8NQXQetawaVfPqMQneOiJon?=
+ =?us-ascii?Q?xeKn0LQe1I9ZgKYZQbhNPqK6/fMp1GhDIcXWKtByE0sNboqmu1Rc8wKsde1q?=
+ =?us-ascii?Q?TFCS6c3wh/suUrKtTSglmhhON2kg+Gwu87eRjW/cyjZGLt0ED1ezb2/BoCok?=
+ =?us-ascii?Q?SKO4ebTF03fQ0StS0ZoQK+Ol5kJvOR9oOJWj/6AlxD0eFR4GyqsDBqGKAsK1?=
+ =?us-ascii?Q?qYOEqmcCaWX8itDNBvclMoosQAvm1nNrLKQu3YSVZOeLboCSW81kgIJZ37pS?=
+ =?us-ascii?Q?9TumPOP0lkL8ZawbviWAfEeAylBqjZ3ZNglWKowsVWI3JDX7z+uti31XFxvp?=
+ =?us-ascii?Q?S7AxsrpBG0mj3VM/UctpN/PXXzVSG78tvOQH8PCHYh6GVTTWS+rcfiPGo+Ef?=
+ =?us-ascii?Q?3i31/nrC1TwvQaUAhqk0a1dtOLhVIq1/PUTMQJIZVR242bLTi1bPe93Ll9rE?=
+ =?us-ascii?Q?42eam75NH2aio9rRC2QDcxBYb8cdBZ0JsS9vGb5chcBN0QfLeOX0CZQ46jyn?=
+ =?us-ascii?Q?SgunHgK9OnfwMkW5Spnqh81GGiY8hQqCVPxIsG2HrugwH+k0tMf9anNyAqof?=
+ =?us-ascii?Q?TpCybIM31CwZmot4ullWiHyYizXHTwqsPAloTzAzzrIKn29w9HjdZC+QfIv/?=
+ =?us-ascii?Q?uIGgiqmMfnIeaNGxLSRG3siC/gme65/ikYU7o+aoaPCcb9qNBtOi4PJuOz+M?=
+ =?us-ascii?Q?MRZdNG41ngb/a2YBdBTJ8ofch5f2UlAgSfwd2VzrM/2WGd72aqjsTCkCzKoW?=
+ =?us-ascii?Q?vxdEgC2TFYyPhSDp8WkItrGE93cHB0hw1R3jPozjBs2HFTI7q36DtHHyasek?=
+ =?us-ascii?Q?zlQ6tgRsIZmlyY9iUkWBakmrq4Dhe0Uo1sKSOIBx7nlHSrnCOOT3bpa5o4SL?=
+ =?us-ascii?Q?tw=3D=3D?=
+X-OriginatorOrg: nutanix.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 024ba718-b69d-47ca-dc25-08db4f9a0c82
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR02MB8041.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 07:58:45.8769
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: g2UKVcoNT9D+eXIG6I8Sy/vEnrBROyg/0GK+djT2nEZNmCFl+h9QAh17UoyY1Fc3qQYIqmwlJktCGYWPbO+Pm2zy76JawNFYeS3o6qDPD6Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0201MB8821
+X-Proofpoint-GUID: o9KngwlqifAhUNGrQviQ-ATo-O8S3D8m
+X-Proofpoint-ORIG-GUID: o9KngwlqifAhUNGrQviQ-ATo-O8S3D8m
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-08_05,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When exploiting memory vulnerabilities, "heap spraying" is a common
-technique targeting those related to dynamic memory allocation (i.e. the
-"heap"), and it plays an important role in a successful exploitation.
-Basically, it is to overwrite the memory area of vulnerable object by
-triggering allocation in other subsystems or modules and therefore
-getting a reference to the targeted memory location. It's usable on
-various types of vulnerablity including use after free (UAF), heap out-
-of-bound write and etc.
+Commit 7ffb8e317bae ("audit: we don't need to
+__set_current_state(TASK_RUNNING)") accidentally moved queue full check
+before add_wait_queue_exclusive() which introduced the following race:
 
-There are (at least) two reasons why the heap can be sprayed: 1) generic
-slab caches are shared among different subsystems and modules, and
-2) dedicated slab caches could be merged with the generic ones.
-Currently these two factors cannot be prevented at a low cost: the first
-one is a widely used memory allocation mechanism, and shutting down slab
-merging completely via `slub_nomerge` would be overkill.
+    CPU1                           CPU2
+  ========                       ========
+  (in audit_log_start())         (in kauditd_thread())
 
-To efficiently prevent heap spraying, we propose the following approach:
-to create multiple copies of generic slab caches that will never be
-merged, and random one of them will be used at allocation. The random
-selection is based on the address of code that calls `kmalloc()`, which
-means it is static at runtime (rather than dynamically determined at
-each time of allocation, which could be bypassed by repeatedly spraying
-in brute force). In this way, the vulnerable object and memory allocated
-in other subsystems and modules will (most probably) be on different
-slab caches, which prevents the object from being sprayed.
+  queue is full
+                                 wake_up(&audit_backlog_wait)
+                                 wait_event_freezable()
+  add_wait_queue_exclusive()
+  ...
+  schedule_timeout()
 
-The overhead of performance has been tested on a 40-core x86 server by
-comparing the results of `perf bench all` between the kernels with and
-without this patch based on the latest linux-next kernel, which shows
-minor difference. A subset of benchmarks are listed below:
+Once this happens, both audit_log_start() and kauditd_thread() can cause
+deadlock for up to backlog_wait_time waiting for each other. To prevent
+the race, this patch adds queue full check after
+prepare_to_wait_exclusive().
 
-			control		experiment (avg of 3 samples)
-sched/messaging (sec)	0.019		0.019
-sched/pipe (sec)	5.253		5.340
-syscall/basic (sec)	0.741		0.742
-mem/memcpy (GB/sec)	15.258789	14.860495
-mem/memset (GB/sec)	48.828125	50.431069
+This patchset consists of the following parts:
 
-The overhead of memory usage was measured by executing `free` after boot
-on a QEMU VM with 1GB total memory, and as expected, it's positively
-correlated with # of cache copies:
+Patch 1-3: Refactorings and a small fix preferable for deadlock fix
+Patch 4: Actual deadlock fix
 
-		control		4 copies	8 copies	16 copies
-total		969.8M		968.2M		968.2M		968.2M
-used		20.0M		21.9M		24.1M		26.7M
-free		936.9M		933.6M		931.4M		928.6M
-available	932.2M		928.8M		926.6M		923.9M
+Eiichi Tsukata (4):
+  audit: refactor queue full checks
+  audit: account backlog waiting time in audit_receive()
+  audit: convert DECLARE_WAITQUEUE to DEFINE_WAIT
+  audit: check if queue is full after prepare_to_wait_exclusive()
 
-Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
----
+ kernel/audit.c | 71 ++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 43 insertions(+), 28 deletions(-)
 
-v2:
-  - Use hash_64() and a per-boot random seed to select kmalloc() caches.
-  - Change acceptable # of caches from [4,16] to {2,4,8,16}, which is
-more compatible with hashing.
-  - Supplement results of performance and memory overhead tests.
-
- include/linux/percpu.h  | 12 ++++++---
- include/linux/slab.h    | 25 +++++++++++++++---
- mm/Kconfig              | 49 ++++++++++++++++++++++++++++++++++++
- mm/kfence/kfence_test.c |  4 +--
- mm/slab.c               |  2 +-
- mm/slab.h               |  3 ++-
- mm/slab_common.c        | 56 +++++++++++++++++++++++++++++++++++++----
- 7 files changed, 135 insertions(+), 16 deletions(-)
-
-diff --git a/include/linux/percpu.h b/include/linux/percpu.h
-index 1338ea2aa720..6cee6425951f 100644
---- a/include/linux/percpu.h
-+++ b/include/linux/percpu.h
-@@ -34,6 +34,12 @@
- #define PCPU_BITMAP_BLOCK_BITS		(PCPU_BITMAP_BLOCK_SIZE >>	\
- 					 PCPU_MIN_ALLOC_SHIFT)
- 
-+#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-+#define PERCPU_DYNAMIC_SIZE_SHIFT      13
-+#else
-+#define PERCPU_DYNAMIC_SIZE_SHIFT      10
-+#endif
-+
- /*
-  * Percpu allocator can serve percpu allocations before slab is
-  * initialized which allows slab to depend on the percpu allocator.
-@@ -41,7 +47,7 @@
-  * for this.  Keep PERCPU_DYNAMIC_RESERVE equal to or larger than
-  * PERCPU_DYNAMIC_EARLY_SIZE.
-  */
--#define PERCPU_DYNAMIC_EARLY_SIZE	(20 << 10)
-+#define PERCPU_DYNAMIC_EARLY_SIZE	(20 << PERCPU_DYNAMIC_SIZE_SHIFT)
- 
- /*
-  * PERCPU_DYNAMIC_RESERVE indicates the amount of free area to piggy
-@@ -55,9 +61,9 @@
-  * intelligent way to determine this would be nice.
-  */
- #if BITS_PER_LONG > 32
--#define PERCPU_DYNAMIC_RESERVE		(28 << 10)
-+#define PERCPU_DYNAMIC_RESERVE		(28 << PERCPU_DYNAMIC_SIZE_SHIFT)
- #else
--#define PERCPU_DYNAMIC_RESERVE		(20 << 10)
-+#define PERCPU_DYNAMIC_RESERVE		(20 << PERCPU_DYNAMIC_SIZE_SHIFT)
- #endif
- 
- extern void *pcpu_base_addr;
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 6b3e155b70bf..939c41c20600 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -18,6 +18,9 @@
- #include <linux/workqueue.h>
- #include <linux/percpu-refcount.h>
- 
-+#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-+#include <linux/hash.h>
-+#endif
- 
- /*
-  * Flags to pass to kmem_cache_create().
-@@ -106,6 +109,12 @@
- /* Avoid kmemleak tracing */
- #define SLAB_NOLEAKTRACE	((slab_flags_t __force)0x00800000U)
- 
-+#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-+# define SLAB_RANDOMSLAB	((slab_flags_t __force)0x01000000U)
-+#else
-+# define SLAB_RANDOMSLAB	0
-+#endif
-+
- /* Fault injection mark */
- #ifdef CONFIG_FAILSLAB
- # define SLAB_FAILSLAB		((slab_flags_t __force)0x02000000U)
-@@ -331,7 +340,9 @@ static inline unsigned int arch_slab_minalign(void)
-  * kmem caches can have both accounted and unaccounted objects.
-  */
- enum kmalloc_cache_type {
--	KMALLOC_NORMAL = 0,
-+	KMALLOC_RANDOM_START = 0,
-+	KMALLOC_RANDOM_END = KMALLOC_RANDOM_START + CONFIG_RANDOM_KMALLOC_CACHES_NR - 1,
-+	KMALLOC_NORMAL = KMALLOC_RANDOM_END,
- #ifndef CONFIG_ZONE_DMA
- 	KMALLOC_DMA = KMALLOC_NORMAL,
- #endif
-@@ -363,14 +374,20 @@ kmalloc_caches[NR_KMALLOC_TYPES][KMALLOC_SHIFT_HIGH + 1];
- 	(IS_ENABLED(CONFIG_ZONE_DMA)   ? __GFP_DMA : 0) |	\
- 	(IS_ENABLED(CONFIG_MEMCG_KMEM) ? __GFP_ACCOUNT : 0))
- 
--static __always_inline enum kmalloc_cache_type kmalloc_type(gfp_t flags)
-+extern unsigned long random_kmalloc_seed;
-+
-+static __always_inline enum kmalloc_cache_type kmalloc_type(gfp_t flags, unsigned long caller)
- {
- 	/*
- 	 * The most common case is KMALLOC_NORMAL, so test for it
- 	 * with a single branch for all the relevant flags.
- 	 */
- 	if (likely((flags & KMALLOC_NOT_NORMAL_BITS) == 0))
-+#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-+		return KMALLOC_RANDOM_START + hash_64(caller ^ random_kmalloc_seed, CONFIG_RANDOM_KMALLOC_CACHES_BITS);
-+#else
- 		return KMALLOC_NORMAL;
-+#endif
- 
- 	/*
- 	 * At least one of the flags has to be set. Their priorities in
-@@ -557,7 +574,7 @@ static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
- 
- 		index = kmalloc_index(size);
- 		return kmalloc_trace(
--				kmalloc_caches[kmalloc_type(flags)][index],
-+				kmalloc_caches[kmalloc_type(flags, _RET_IP_)][index],
- 				flags, size);
- 	}
- 	return __kmalloc(size, flags);
-@@ -573,7 +590,7 @@ static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t fla
- 
- 		index = kmalloc_index(size);
- 		return kmalloc_node_trace(
--				kmalloc_caches[kmalloc_type(flags)][index],
-+				kmalloc_caches[kmalloc_type(flags, _RET_IP_)][index],
- 				flags, node, size);
- 	}
- 	return __kmalloc_node(size, flags, node);
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 7672a22647b4..e868da87d9cd 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -311,6 +311,55 @@ config SLUB_CPU_PARTIAL
- 	  which requires the taking of locks that may cause latency spikes.
- 	  Typically one would choose no for a realtime system.
- 
-+config RANDOM_KMALLOC_CACHES
-+	default n
-+	depends on SLUB
-+	bool "Random slab caches for normal kmalloc"
-+	help
-+	  A hardening feature that creates multiple copies of slab caches for
-+	  normal kmalloc allocation and makes kmalloc randomly pick one based
-+	  on code address, which makes the attackers unable to spray vulnerable
-+	  memory objects on the heap for exploiting memory vulnerabilities.
-+
-+choice
-+	prompt "Number of random slab caches copies"
-+	depends on RANDOM_KMALLOC_CACHES
-+	default RANDOM_KMALLOC_CACHES_16
-+	help
-+	  The number of copies of random slab caches. Bigger value makes the
-+	  potentially vulnerable memory object less likely to collide with
-+	  objects allocated from other subsystems or modules.
-+
-+config RANDOM_KMALLOC_CACHES_2
-+	bool "2"
-+
-+config RANDOM_KMALLOC_CACHES_4
-+	bool "4"
-+
-+config RANDOM_KMALLOC_CACHES_8
-+	bool "8"
-+
-+config RANDOM_KMALLOC_CACHES_16
-+	bool "16"
-+
-+endchoice
-+
-+config RANDOM_KMALLOC_CACHES_BITS
-+	int
-+	default 0 if !RANDOM_KMALLOC_CACHES
-+	default 1 if RANDOM_KMALLOC_CACHES_2
-+	default 2 if RANDOM_KMALLOC_CACHES_4
-+	default 3 if RANDOM_KMALLOC_CACHES_8
-+	default 4 if RANDOM_KMALLOC_CACHES_16
-+
-+config RANDOM_KMALLOC_CACHES_NR
-+	int
-+	default 1 if !RANDOM_KMALLOC_CACHES
-+	default 2 if RANDOM_KMALLOC_CACHES_2
-+	default 4 if RANDOM_KMALLOC_CACHES_4
-+	default 8 if RANDOM_KMALLOC_CACHES_8
-+	default 16 if RANDOM_KMALLOC_CACHES_16
-+
- endmenu # SLAB allocator options
- 
- config SHUFFLE_PAGE_ALLOCATOR
-diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
-index 6aee19a79236..8a95ef649d5e 100644
---- a/mm/kfence/kfence_test.c
-+++ b/mm/kfence/kfence_test.c
-@@ -213,7 +213,7 @@ static void test_cache_destroy(void)
- 
- static inline size_t kmalloc_cache_alignment(size_t size)
- {
--	return kmalloc_caches[kmalloc_type(GFP_KERNEL)][__kmalloc_index(size, false)]->align;
-+	return kmalloc_caches[kmalloc_type(GFP_KERNEL, _RET_IP_)][__kmalloc_index(size, false)]->align;
- }
- 
- /* Must always inline to match stack trace against caller. */
-@@ -284,7 +284,7 @@ static void *test_alloc(struct kunit *test, size_t size, gfp_t gfp, enum allocat
- 		if (is_kfence_address(alloc)) {
- 			struct slab *slab = virt_to_slab(alloc);
- 			struct kmem_cache *s = test_cache ?:
--					kmalloc_caches[kmalloc_type(GFP_KERNEL)][__kmalloc_index(size, false)];
-+					kmalloc_caches[kmalloc_type(GFP_KERNEL, _RET_IP_)][__kmalloc_index(size, false)];
- 
- 			/*
- 			 * Verify that various helpers return the right values
-diff --git a/mm/slab.c b/mm/slab.c
-index bb57f7fdbae1..82e2a8d4cd9d 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -1674,7 +1674,7 @@ static size_t calculate_slab_order(struct kmem_cache *cachep,
- 			if (freelist_size > KMALLOC_MAX_CACHE_SIZE) {
- 				freelist_cache_size = PAGE_SIZE << get_order(freelist_size);
- 			} else {
--				freelist_cache = kmalloc_slab(freelist_size, 0u);
-+				freelist_cache = kmalloc_slab(freelist_size, 0u, _RET_IP_);
- 				if (!freelist_cache)
- 					continue;
- 				freelist_cache_size = freelist_cache->size;
-diff --git a/mm/slab.h b/mm/slab.h
-index f01ac256a8f5..1e484af71c52 100644
---- a/mm/slab.h
-+++ b/mm/slab.h
-@@ -243,7 +243,7 @@ void setup_kmalloc_cache_index_table(void);
- void create_kmalloc_caches(slab_flags_t);
- 
- /* Find the kmalloc slab corresponding for a certain size */
--struct kmem_cache *kmalloc_slab(size_t, gfp_t);
-+struct kmem_cache *kmalloc_slab(size_t, gfp_t, unsigned long);
- 
- void *__kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags,
- 			      int node, size_t orig_size,
-@@ -319,6 +319,7 @@ static inline bool is_kmalloc_cache(struct kmem_cache *s)
- 			      SLAB_TEMPORARY | \
- 			      SLAB_ACCOUNT | \
- 			      SLAB_KMALLOC | \
-+			      SLAB_RANDOMSLAB | \
- 			      SLAB_NO_USER_FLAGS)
- 
- bool __kmem_cache_empty(struct kmem_cache *);
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 607249785c07..70899b20a9a7 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -47,6 +47,7 @@ static DECLARE_WORK(slab_caches_to_rcu_destroy_work,
-  */
- #define SLAB_NEVER_MERGE (SLAB_RED_ZONE | SLAB_POISON | SLAB_STORE_USER | \
- 		SLAB_TRACE | SLAB_TYPESAFE_BY_RCU | SLAB_NOLEAKTRACE | \
-+		SLAB_RANDOMSLAB | \
- 		SLAB_FAILSLAB | kasan_never_merge())
- 
- #define SLAB_MERGE_SAME (SLAB_RECLAIM_ACCOUNT | SLAB_CACHE_DMA | \
-@@ -679,6 +680,11 @@ kmalloc_caches[NR_KMALLOC_TYPES][KMALLOC_SHIFT_HIGH + 1] __ro_after_init =
- { /* initialization for https://bugs.llvm.org/show_bug.cgi?id=42570 */ };
- EXPORT_SYMBOL(kmalloc_caches);
- 
-+#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-+unsigned long random_kmalloc_seed __ro_after_init;
-+EXPORT_SYMBOL(random_kmalloc_seed);
-+#endif
-+
- /*
-  * Conversion table for small slabs sizes / 8 to the index in the
-  * kmalloc array. This is necessary for slabs < 192 since we have non power
-@@ -721,7 +727,7 @@ static inline unsigned int size_index_elem(unsigned int bytes)
-  * Find the kmem_cache structure that serves a given size of
-  * allocation
-  */
--struct kmem_cache *kmalloc_slab(size_t size, gfp_t flags)
-+struct kmem_cache *kmalloc_slab(size_t size, gfp_t flags, unsigned long caller)
- {
- 	unsigned int index;
- 
-@@ -736,7 +742,7 @@ struct kmem_cache *kmalloc_slab(size_t size, gfp_t flags)
- 		index = fls(size - 1);
- 	}
- 
--	return kmalloc_caches[kmalloc_type(flags)][index];
-+	return kmalloc_caches[kmalloc_type(flags, caller)][index];
- }
- 
- size_t kmalloc_size_roundup(size_t size)
-@@ -754,7 +760,7 @@ size_t kmalloc_size_roundup(size_t size)
- 		return PAGE_SIZE << get_order(size);
- 
- 	/* The flags don't matter since size_index is common to all. */
--	c = kmalloc_slab(size, GFP_KERNEL);
-+	c = kmalloc_slab(size, GFP_KERNEL, _RET_IP_);
- 	return c ? c->object_size : 0;
- }
- EXPORT_SYMBOL(kmalloc_size_roundup);
-@@ -777,12 +783,44 @@ EXPORT_SYMBOL(kmalloc_size_roundup);
- #define KMALLOC_RCL_NAME(sz)
- #endif
- 
-+#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-+#define __KMALLOC_RANDOM_CONCAT(a, b, c) a ## b ## c
-+#define KMALLOC_RANDOM_NAME(N, sz) __KMALLOC_RANDOM_CONCAT(KMALLOC_RANDOM_, N, _NAME)(sz)
-+#if CONFIG_RANDOM_KMALLOC_CACHES_BITS >= 1
-+#define KMALLOC_RANDOM_1_NAME(sz)                             .name[KMALLOC_RANDOM_START +  0] = "kmalloc-random-01-" #sz,
-+#define KMALLOC_RANDOM_2_NAME(sz)  KMALLOC_RANDOM_1_NAME(sz)  .name[KMALLOC_RANDOM_START +  1] = "kmalloc-random-02-" #sz,
-+#endif
-+#if CONFIG_RANDOM_KMALLOC_CACHES_BITS >= 2
-+#define KMALLOC_RANDOM_3_NAME(sz)  KMALLOC_RANDOM_2_NAME(sz)  .name[KMALLOC_RANDOM_START +  2] = "kmalloc-random-03-" #sz,
-+#define KMALLOC_RANDOM_4_NAME(sz)  KMALLOC_RANDOM_3_NAME(sz)  .name[KMALLOC_RANDOM_START +  3] = "kmalloc-random-04-" #sz,
-+#endif
-+#if CONFIG_RANDOM_KMALLOC_CACHES_BITS >= 3
-+#define KMALLOC_RANDOM_5_NAME(sz)  KMALLOC_RANDOM_4_NAME(sz)  .name[KMALLOC_RANDOM_START +  4] = "kmalloc-random-05-" #sz,
-+#define KMALLOC_RANDOM_6_NAME(sz)  KMALLOC_RANDOM_5_NAME(sz)  .name[KMALLOC_RANDOM_START +  5] = "kmalloc-random-06-" #sz,
-+#define KMALLOC_RANDOM_7_NAME(sz)  KMALLOC_RANDOM_6_NAME(sz)  .name[KMALLOC_RANDOM_START +  6] = "kmalloc-random-07-" #sz,
-+#define KMALLOC_RANDOM_8_NAME(sz)  KMALLOC_RANDOM_7_NAME(sz)  .name[KMALLOC_RANDOM_START +  7] = "kmalloc-random-08-" #sz,
-+#endif
-+#if CONFIG_RANDOM_KMALLOC_CACHES_BITS >= 4
-+#define KMALLOC_RANDOM_9_NAME(sz)  KMALLOC_RANDOM_8_NAME(sz)  .name[KMALLOC_RANDOM_START +  8] = "kmalloc-random-09-" #sz,
-+#define KMALLOC_RANDOM_10_NAME(sz) KMALLOC_RANDOM_9_NAME(sz)  .name[KMALLOC_RANDOM_START +  9] = "kmalloc-random-10-" #sz,
-+#define KMALLOC_RANDOM_11_NAME(sz) KMALLOC_RANDOM_10_NAME(sz) .name[KMALLOC_RANDOM_START + 10] = "kmalloc-random-11-" #sz,
-+#define KMALLOC_RANDOM_12_NAME(sz) KMALLOC_RANDOM_11_NAME(sz) .name[KMALLOC_RANDOM_START + 11] = "kmalloc-random-12-" #sz,
-+#define KMALLOC_RANDOM_13_NAME(sz) KMALLOC_RANDOM_12_NAME(sz) .name[KMALLOC_RANDOM_START + 12] = "kmalloc-random-13-" #sz,
-+#define KMALLOC_RANDOM_14_NAME(sz) KMALLOC_RANDOM_13_NAME(sz) .name[KMALLOC_RANDOM_START + 13] = "kmalloc-random-14-" #sz,
-+#define KMALLOC_RANDOM_15_NAME(sz) KMALLOC_RANDOM_14_NAME(sz) .name[KMALLOC_RANDOM_START + 14] = "kmalloc-random-15-" #sz,
-+#define KMALLOC_RANDOM_16_NAME(sz) KMALLOC_RANDOM_15_NAME(sz) .name[KMALLOC_RANDOM_START + 15] = "kmalloc-random-16-" #sz,
-+#endif
-+#else // CONFIG_RANDOM_KMALLOC_CACHES
-+#define KMALLOC_RANDOM_NAME(N, sz)
-+#endif
-+
- #define INIT_KMALLOC_INFO(__size, __short_size)			\
- {								\
- 	.name[KMALLOC_NORMAL]  = "kmalloc-" #__short_size,	\
- 	KMALLOC_RCL_NAME(__short_size)				\
- 	KMALLOC_CGROUP_NAME(__short_size)			\
- 	KMALLOC_DMA_NAME(__short_size)				\
-+	KMALLOC_RANDOM_NAME(CONFIG_RANDOM_KMALLOC_CACHES_NR, __short_size)	\
- 	.size = __size,						\
- }
- 
-@@ -878,6 +916,11 @@ new_kmalloc_cache(int idx, enum kmalloc_cache_type type, slab_flags_t flags)
- 		flags |= SLAB_CACHE_DMA;
- 	}
- 
-+#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-+	if (type >= KMALLOC_RANDOM_START && type <= KMALLOC_RANDOM_END)
-+		flags |= SLAB_RANDOMSLAB;
-+#endif
-+
- 	kmalloc_caches[type][idx] = create_kmalloc_cache(
- 					kmalloc_info[idx].name[type],
- 					kmalloc_info[idx].size, flags, 0,
-@@ -904,7 +947,7 @@ void __init create_kmalloc_caches(slab_flags_t flags)
- 	/*
- 	 * Including KMALLOC_CGROUP if CONFIG_MEMCG_KMEM defined
- 	 */
--	for (type = KMALLOC_NORMAL; type < NR_KMALLOC_TYPES; type++) {
-+	for (type = KMALLOC_RANDOM_START; type < NR_KMALLOC_TYPES; type++) {
- 		for (i = KMALLOC_SHIFT_LOW; i <= KMALLOC_SHIFT_HIGH; i++) {
- 			if (!kmalloc_caches[type][i])
- 				new_kmalloc_cache(i, type, flags);
-@@ -922,6 +965,9 @@ void __init create_kmalloc_caches(slab_flags_t flags)
- 				new_kmalloc_cache(2, type, flags);
- 		}
- 	}
-+#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-+	random_kmalloc_seed = get_random_u64();
-+#endif
- 
- 	/* Kmalloc array is now usable */
- 	slab_state = UP;
-@@ -957,7 +1003,7 @@ void *__do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller
- 		return ret;
- 	}
- 
--	s = kmalloc_slab(size, flags);
-+	s = kmalloc_slab(size, flags, caller);
- 
- 	if (unlikely(ZERO_OR_NULL_PTR(s)))
- 		return s;
 -- 
-2.25.1
+2.40.0
 
