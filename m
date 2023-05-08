@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4026F9D81
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 03:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 011966F9D82
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 03:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbjEHBpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 21:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
+        id S232702AbjEHBpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 21:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232580AbjEHBpG (ORCPT
+        with ESMTP id S232596AbjEHBpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 21:45:06 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C016911D89
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 18:44:59 -0700 (PDT)
-Received: from kwepemm600017.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QF3sF2GZSzpTRk;
-        Mon,  8 May 2023 09:40:49 +0800 (CST)
+        Sun, 7 May 2023 21:45:10 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464171437F
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 18:45:01 -0700 (PDT)
+Received: from kwepemm600017.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QF3tp09PtzLnwc;
+        Mon,  8 May 2023 09:42:09 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.125) by
  kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 8 May 2023 09:44:56 +0800
+ 15.1.2507.23; Mon, 8 May 2023 09:44:57 +0800
 From:   Tong Tiangen <tongtiangen@huawei.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -40,9 +40,9 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         Guohanjun <guohanjun@huawei.com>,
         Xie XiuQi <xiexiuqi@huawei.com>,
         Tong Tiangen <tongtiangen@huawei.com>
-Subject: [PATCH -next v9 3/5] arm64: add uaccess to machine check safe
-Date:   Mon, 8 May 2023 09:44:34 +0800
-Message-ID: <20230508014436.198717-4-tongtiangen@huawei.com>
+Subject: [PATCH -next v9 4/5] mm/hwpoison: return -EFAULT when copy fail in copy_mc_[user]_highpage()
+Date:   Mon, 8 May 2023 09:44:35 +0800
+Message-ID: <20230508014436.198717-5-tongtiangen@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230508014436.198717-1-tongtiangen@huawei.com>
 References: <20230508014436.198717-1-tongtiangen@huawei.com>
@@ -62,34 +62,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If user process access memory fails due to hardware memory error, only the
-relevant processes are affected, so it is more reasonable to kill the user
-process and isolate the corrupt page than to panic the kernel.
+If hardware errors are encountered during page copying, returning the bytes
+not copied is not meaningful, and the caller cannot do any processing on
+the remaining data. Returning -EFAULT is more reasonable, which represents
+a hardware error encountered during the copying.
 
 Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
 ---
- arch/arm64/mm/extable.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ include/linux/highmem.h | 8 ++++----
+ mm/khugepaged.c         | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
-index 478e639f8680..28ec35e3d210 100644
---- a/arch/arm64/mm/extable.c
-+++ b/arch/arm64/mm/extable.c
-@@ -85,10 +85,10 @@ bool fixup_exception_mc(struct pt_regs *regs)
- 	if (!ex)
- 		return false;
+diff --git a/include/linux/highmem.h b/include/linux/highmem.h
+index 4de1dbcd3ef6..c29f51ea8517 100644
+--- a/include/linux/highmem.h
++++ b/include/linux/highmem.h
+@@ -335,8 +335,8 @@ static inline void copy_highpage(struct page *to, struct page *from)
+ /*
+  * If architecture supports machine check exception handling, define the
+  * #MC versions of copy_user_highpage and copy_highpage. They copy a memory
+- * page with #MC in source page (@from) handled, and return the number
+- * of bytes not copied if there was a #MC, otherwise 0 for success.
++ * page with #MC in source page (@from) handled, and return -EFAULT if there
++ * was a #MC, otherwise 0 for success.
+  */
+ static inline int copy_mc_user_highpage(struct page *to, struct page *from,
+ 					unsigned long vaddr, struct vm_area_struct *vma)
+@@ -352,7 +352,7 @@ static inline int copy_mc_user_highpage(struct page *to, struct page *from,
+ 	kunmap_local(vto);
+ 	kunmap_local(vfrom);
  
--	/*
--	 * This is not complete, More Machine check safe extable type can
--	 * be processed here.
--	 */
-+	switch (ex->type) {
-+	case EX_TYPE_UACCESS_ERR_ZERO:
-+		return ex_handler_uaccess_err_zero(ex, regs);
-+	}
- 
- 	return false;
+-	return ret;
++	return ret ? -EFAULT : 0;
  }
+ 
+ static inline int copy_mc_highpage(struct page *to, struct page *from)
+@@ -368,7 +368,7 @@ static inline int copy_mc_highpage(struct page *to, struct page *from)
+ 	kunmap_local(vto);
+ 	kunmap_local(vfrom);
+ 
+-	return ret;
++	return ret ? -EFAULT : 0;
+ }
+ #else
+ static inline int copy_mc_user_highpage(struct page *to, struct page *from,
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 6b9d39d65b73..ef8b70377292 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -805,7 +805,7 @@ static int __collapse_huge_page_copy(pte_t *pte,
+ 			continue;
+ 		}
+ 		src_page = pte_page(pteval);
+-		if (copy_mc_user_highpage(page, src_page, _address, vma) > 0) {
++		if (copy_mc_user_highpage(page, src_page, _address, vma)) {
+ 			result = SCAN_COPY_MC;
+ 			break;
+ 		}
+@@ -2140,7 +2140,7 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 			clear_highpage(hpage + (index % HPAGE_PMD_NR));
+ 			index++;
+ 		}
+-		if (copy_mc_highpage(hpage + (page->index % HPAGE_PMD_NR), page) > 0) {
++		if (copy_mc_highpage(hpage + (page->index % HPAGE_PMD_NR), page)) {
+ 			result = SCAN_COPY_MC;
+ 			goto rollback;
+ 		}
 -- 
 2.25.1
 
