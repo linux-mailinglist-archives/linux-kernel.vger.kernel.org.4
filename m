@@ -2,90 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6886FAF91
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE766FAF95
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232894AbjEHMBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 08:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S232967AbjEHMCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 08:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236392AbjEHMBN (ORCPT
+        with ESMTP id S234101AbjEHMB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 08:01:13 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A38046427
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 04:58:44 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-3318961b385so44399445ab.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 04:58:44 -0700 (PDT)
+        Mon, 8 May 2023 08:01:26 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B382D4754D
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 04:59:07 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-55b7630a736so66035017b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 04:59:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683547122; x=1686139122;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SjqeUWDoSs0kIbCfr3nS8TzW819KiR3PYMo9rpWCO4k=;
-        b=SD+Vigicn2RLbrrfV7Tjx5fsKjbUQHUjWZPs447MmcnKiMh0oL6aB0oNkJy11SLLJD
-         obK7578mAGFH80fZ9wqHqptAiD/+h0Lg99Guza7Tmlxn/SJUr4OaBhVQCVDxqUhr9ZDv
-         AW/pMNLpPjZVm/lX8LHbN3PCuAK9C5wLD7jykhmupBZ/jbJ9JxaV+5GJt/bxBKC95ZoD
-         iy8JO9PVNolF8gKNOmKCxYPqNKlvh+EhGnhzMO5PFMvJkh6xiTz4H3RziEe/4aMvQOwW
-         nLY//Mlvrs4xlBtwGXiP1rYTqzuV0S+Kk8RLnp2ww86ex8Ob54q8NexMWkQxo4f4nbpN
-         snGQ==
+        d=google.com; s=20221208; t=1683547143; x=1686139143;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QIowkfIi/w2/lZ9wY1KVia8iKFoETo3oMoKgAYwhoeg=;
+        b=CUXUoK5y3HKeeFBmYl0RX9X0y83y8VWqHwJiui8cI4DkfLD1RiJUf/RSH2G80oDA28
+         /1foKFJRT2NsXFxLDP0E63bplVXdaFRFYas+EABmp3j9ck3kuP8NsKeaCY6USAeu57G5
+         dQqStiBALTt5xf+aiA/UxCCkSxntt+2yJoyq4CtS/p0AHMbK5pANnniFF3vYIj0hz5B9
+         Aya9gvzS6N9ooDUX+hfozUwDxoOKaL7qHu3GxCChRyDSvazQENY0VgvZ9kP0Dh050Ljz
+         CdTu8KB4gpmMw7DuVtRr4XEPyyTwRR5Ck05T3qSP5O3q/MbTrmzP64bF4OAhZJRMHKM8
+         RnCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683547122; x=1686139122;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SjqeUWDoSs0kIbCfr3nS8TzW819KiR3PYMo9rpWCO4k=;
-        b=cOXiuy0SXhCds4fxZGG/O1D2gejVMQG1/MDbGBJtxzqt4aSyM7iYHCxlJ5qCB4IRK9
-         ZN9NH98Q5KJOlBSFA1GzTaQb2OmtgoQTRK3WJl0XMWBnnV7Uds6Z7p+yvvSrov81tLBC
-         Z6xzGq9FVrivIGt7KLdmtr9nJU+IHBXkwg5yK1fAlNgyk0OI0uHy8qNBlgsM/N6DPr29
-         K968CckSk4c1SrZbSCcvevO/gHtrElJSWhe0suyyWcNvGPPPD20+Mfo1/qWMsam7lBDT
-         eX57MN7/0rENhm5x3U+HO++YjOFBY0fOthaLEdolGp5tHsgfigSCfsllKeUq/58RMmdw
-         hhFQ==
-X-Gm-Message-State: AC+VfDxDbI8oeyfWwWBKhdW7//lgOijLFCfPhRM9+3rxUFmi2Ln8CzHs
-        ouZkUd0z/MpHSRcHUg9gPb7sTCPVuxuSzTw/d4c=
-X-Google-Smtp-Source: ACHHUZ5bJyQFIgmGSzuK5pDcoIx0c1u/Uljz5CA9D+QBSuZFri0KXXph9zl7/ztmKGxlmJEmz7YIIRyPUQgAT79E9HQ=
-X-Received: by 2002:a92:cc05:0:b0:32f:752d:4a4e with SMTP id
- s5-20020a92cc05000000b0032f752d4a4emr6489135ilp.1.1683547122213; Mon, 08 May
- 2023 04:58:42 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683547143; x=1686139143;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QIowkfIi/w2/lZ9wY1KVia8iKFoETo3oMoKgAYwhoeg=;
+        b=DDMOAtI/++JuAa+L9mjXVlc6YXY2EsGQqh+xexElZBVyFLbrnGXYvp8xqXKpyc834Y
+         npGEG903tk/v1SMRItWrBzf7WlD3FmK8mR9sqAjF8ljn0WsXhPGQ4dqru9RQrE0C6Ech
+         F8c2sFMPe/5no0e67jUsw9InHJD5l7asUf0Edr30Dvo5aqtoD7QIIHVUEPwdzsG+Hxv5
+         TEPgNPmxHKoqJLoAk5BhcWqn0dHIU87EpJQ8/AJPfPChQxzceYA0Djk3oE6HorCGaos1
+         OP++36+GaFO8B0jKOi0fuioaAE4xNRqF2ifDO29QVdFY2MgkAOPo5Yhl92YZEtX0gzl3
+         yHEg==
+X-Gm-Message-State: AC+VfDy53lzat3avlJpljTlLyNO1vn44Edbj473E1At3Tml7Uw8DeqNa
+        szT5UHJvjNHye8iK7K5KSHVE3vcO8OGZHB7rRRFubA==
+X-Google-Smtp-Source: ACHHUZ6HUZVug7ZDRRKUd20kN2DYD1F/ilVsXiwLgoLzYKoGNVYq9ZU6JXNMvLJltqVpFR6OojeV1Uz99EAQLmyEqUY=
+X-Received: by 2002:a81:a1c9:0:b0:559:f85e:44e8 with SMTP id
+ y192-20020a81a1c9000000b00559f85e44e8mr11335498ywg.29.1683547143242; Mon, 08
+ May 2023 04:59:03 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a92:d4c9:0:b0:32a:daf1:c0ab with HTTP; Mon, 8 May 2023
- 04:58:41 -0700 (PDT)
-Reply-To: georgebrown0004@gmail.com
-From:   george brown <joeakaba00@gmail.com>
-Date:   Mon, 8 May 2023 13:58:41 +0200
-Message-ID: <CAEoXQLwmtmDJVb4FUtP80JtDdHHMYx3b=EBvzC_9z5QCwi2BGw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20230504145737.286444-1-joychakr@google.com> <20230504145737.286444-8-joychakr@google.com>
+ <78616bc1-8d9e-4a1c-70d6-ad62c2cfa8a8@linaro.org> <CAOSNQF15UN2Rckes55UHxbUvN1PJcbj9aWirVGSLDOs5Y5EPnQ@mail.gmail.com>
+ <3d9d545d-a620-85f6-b7bd-d57a8729f818@linaro.org>
+In-Reply-To: <3d9d545d-a620-85f6-b7bd-d57a8729f818@linaro.org>
+From:   Joy Chakraborty <joychakr@google.com>
+Date:   Mon, 8 May 2023 17:28:50 +0530
+Message-ID: <CAOSNQF0jJLc78_1aGYY3=csJc7WqqvydwxmQ22rvXpLruQ-XRg@mail.gmail.com>
+Subject: Re: [PATCH 7/7] dt-bindings: dmaengine: pl330: Add new quirks
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, manugautam@google.com,
+        danielmentz@google.com, sjadavani@google.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Buna ziua
+On Fri, May 5, 2023 at 5:53=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 05/05/2023 11:44, Joy Chakraborty wrote:
+> > On Thu, May 4, 2023 at 8:38=E2=80=AFPM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 04/05/2023 16:57, Joy Chakraborty wrote:
+> >>> Add 2 new quirks added to the driver "arm,pl330-optimize-dev2mem-axsi=
+ze"
+> >>> and "arm,pl330-periph-single-dregs"
+> >>
+> >> This we can see from the diff. You need to answer why?
+> >>
+> >
+> > Sure will change it to:
+> > "
+> > Addition of following quirks :
+> > - "arm,pl330-periph-use-diff-axsize"
+> >    AxSize of transactions to peripherals are limited by the peripheral
+> > address width which inturn limits the AxSize used for transactions
+> > towards memory.
+> >    This quirk will make transactions to memory use the maximum
+> > possible bus width(AxSize), store data in MFIFO and use narrow
+> > multi-beat transactions to move data to peripherals.
+> >    This only applies to transfers between memory and peripherals where
+> > bus widths available are different for memory and the peripheral.
+> > - "arm,pl330-periph-complete-with-singles" :
+> >    When transfer sizes are not a multiple of a block of burst
+> > transfers (AxLen * AxSize configured at the peripheral), certain
+> > peripherals might choose not to set the burst request at the
+> > peripheral request interface of the DMA.
+> >    This quirk moves the remaining bytes to the peripheral using single
+> > transactions.
+> > "
+>
+> This does not answer why. You just copied again the patch contents.
+>
+Hi Krzysztof,
+Both the changes could be useful for SOC's which have PL330 integrated
+with a peripheral but I am not sure if all SOC's need/want this change
+hence wanted to keep it as a DT knob to avoid any regressions.
+But like you say it might not be the right thing to do.
 
-Numele meu este George Brown. Sunt avocat de profesie. vreau sa va ofer
-rudele apropiate clientului meu. Ve=C8=9Bi mo=C8=99teni suma de (8,5 milioa=
-ne USD)
-dolari pe care clientul meu i-a l=C4=83sat =C3=AEn banc=C4=83 =C3=AEnainte =
-de moartea lui.
+> >
+> >>>
+> >>> Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> >>> ---
+> >>>  Documentation/devicetree/bindings/dma/arm,pl330.yaml | 8 ++++++++
+> >>>  1 file changed, 8 insertions(+)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/dma/arm,pl330.yaml b/D=
+ocumentation/devicetree/bindings/dma/arm,pl330.yaml
+> >>> index 4a3dd6f5309b..0499a7fba88d 100644
+> >>> --- a/Documentation/devicetree/bindings/dma/arm,pl330.yaml
+> >>> +++ b/Documentation/devicetree/bindings/dma/arm,pl330.yaml
+> >>> @@ -53,6 +53,14 @@ properties:
+> >>>      type: boolean
+> >>>      description: quirk for performing burst transfer only
+> >>>
+> >>> +  arm,pl330-optimize-dev2mem-axsize:
+> >>> +    type: boolean
+> >>> +    description: quirk for optimizing AxSize used between dev<->mem
+> >>
+> >> This tells me nothing... Neither what it is about nor why this is
+> >> property of a board or PL330 hardware implementation. Please describe
+> >> hardware, not drivers.
+> >>
+> >
+> > Will change the name to "arm,pl330-periph-use-diff-axsize" and add desc=
+ription:
+> > "
+> > Quirk to use different AxSize for bursts while accessing source and
+> > destination when moving data between memory and peripheral.
+> > Maximum possible bus width is used as AxSize for transactions towards
+> > memory and transactions towards peripherals use AxSize as per
+> > peripheral address width.
+> > "
+>
+> Still no answer. Why this is property of a board or PL330 hardware
+> implementation?
+> I also asked to describe hardware but I still see "quirk to ...". We use
+> "quirk" as concept in Linux driver. Describe the hardware, not Linux driv=
+er.
+>
 
-Clientul meu este un cet=C4=83=C8=9Bean al =C8=9B=C4=83rii tale care a muri=
-t =C3=AEntr-un
-accident de ma=C8=99in=C4=83 =C3=AEmpreun=C4=83 cu so=C8=9Bia sa
-si singurul fiu. Voi avea dreptul cu 50% din fondul total, =C3=AEn timp ce
-50% va avea
-fie pentru tine.
-V=C4=83 rug=C4=83m s=C4=83 contacta=C8=9Bi e-mailul meu privat aici pentru =
-mai multe
-detalii: georgebrown0004@gmail.com
+This comes to use when the bus width requirement between peripheral
+and memory is different, but buswidth is something we read from HW
+registers so this can be enabled by default.
 
-Multe mul=C8=9Bumiri in avans,
-Domnule George Brown,
+>
+> >
+> >>> +
+> >>> +  arm,pl330-periph-single-dregs:
+> >>> +    type: boolean
+> >>> +    description: quirk for using dma-singles for peripherals in _dre=
+gs()
+> >>
+> >> Same concerns.
+> >>
+
+An example of such a case is given in the ARM TRM for PL330, so maybe
+we can have this by default as well.
+Link : https://developer.arm.com/documentation/ddi0424/d/functional-overvie=
+w/peripheral-request-interface/dmac-length-management#:~:text=3DDMAC%20leng=
+th%20management-,Example%202.3,-shows%20a%20DMAC
+
+> >
+> > Will change the name to  "arm,pl330-periph-complete-with-singles" and
+> > add description:
+> > "
+> > Quirk to use dma singles n times instead of an n beat burst to
+> > complete a transfer when the transfer size is not a multiple of the
+>
+> No, how you wrote it sounds like driver. Don't add driver quirks to DT.
+>
+> Best regards,
+> Krzysztof
+>
+
+Hi Vinod Kaul,
+
+Do you think it is feasible to enable these changes by default instead
+of a DT property ?
+
+Thanks
+Joy
