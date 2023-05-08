@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6D76FABB1
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5CE6FABCB
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235328AbjEHLQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 07:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S235438AbjEHLR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 07:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235144AbjEHLQP (ORCPT
+        with ESMTP id S233955AbjEHLRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 07:16:15 -0400
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813C937019;
-        Mon,  8 May 2023 04:16:13 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0Vi4Yqgi_1683544567;
-Received: from 30.221.149.87(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0Vi4Yqgi_1683544567)
-          by smtp.aliyun-inc.com;
-          Mon, 08 May 2023 19:16:09 +0800
-Message-ID: <68bfb845-5b65-73a6-aa37-6262604d5171@linux.alibaba.com>
-Date:   Mon, 8 May 2023 19:16:04 +0800
+        Mon, 8 May 2023 07:17:25 -0400
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D72D32356;
+        Mon,  8 May 2023 04:17:21 -0700 (PDT)
+Received: from francesco-nb.int.toradex.com (31-10-206-125.static.upc.ch [31.10.206.125])
+        by mail11.truemail.it (Postfix) with ESMTPA id 4C53F202F9;
+        Mon,  8 May 2023 13:17:18 +0200 (CEST)
+Date:   Mon, 8 May 2023 13:17:11 +0200
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Jun Li <jun.li@nxp.com>
+Cc:     Francesco Dolcini <francesco@dolcini.it>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Xu Yang <xu.yang_2@nxp.com>
+Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+Message-ID: <ZFjaNzY32x8o2XG7@francesco-nb.int.toradex.com>
+References: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
+ <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
+ <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
+ <PA4PR04MB96403377F5E37C12AD8C25B389729@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <20230505120618.2f4cf22c@booty>
+ <ZFThyn/D/dDK9nk3@francesco-nb.int.toradex.com>
+ <PA4PR04MB96405EE2468555EA900B340189739@PA4PR04MB9640.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/5] perf vendor events: Add JSON metrics for CMN-700
-To:     John Garry <john.g.garry@oracle.com>
-Cc:     James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>,
-        Ian Rogers <irogers@google.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Will Deacon <will@kernel.org>
-References: <1682329456-19418-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1682329456-19418-3-git-send-email-renyu.zj@linux.alibaba.com>
- <75c36607-9cdd-42fe-b3f3-bb049b3eb223@oracle.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <75c36607-9cdd-42fe-b3f3-bb049b3eb223@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PA4PR04MB96405EE2468555EA900B340189739@PA4PR04MB9640.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,119 +60,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/5/1 下午8:27, John Garry 写道:
-> On 24/04/2023 10:44, Jing Zhang wrote:
->> Add JSON metrics for CMN-700. Currently just add part of CMN-700 PMU
->> metrics which are general and compatible for any SoC.
->>
->> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
->> ---
->>   .../arch/arm64/arm/cmn700/sys/metrics.json         | 74 ++++++++++++++++++++++
->>   tools/perf/pmu-events/jevents.py                   |  1 +
->>   2 files changed, 75 insertions(+)
->>   create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cmn700/sys/metrics.json
->>
->> diff --git a/tools/perf/pmu-events/arch/arm64/arm/cmn700/sys/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/cmn700/sys/metrics.json
->> new file mode 100644
->> index 0000000..1577d86
->> --- /dev/null
->> +++ b/tools/perf/pmu-events/arch/arm64/arm/cmn700/sys/metrics.json
+On Sat, May 06, 2023 at 09:02:39AM +0000, Jun Li wrote:
+> > -----Original Message-----
+> > From: Francesco Dolcini <francesco@dolcini.it>
+> > Sent: Friday, May 5, 2023 7:00 PM
+> > To: Luca Ceresoli <luca.ceresoli@bootlin.com>; Jun Li <jun.li@nxp.com>
+> > Cc: Francesco Dolcini <francesco@dolcini.it>; devicetree@vger.kernel.org;
+> > festevam@gmail.com; gregkh@linuxfoundation.org; kernel@pengutronix.de;
+> > linux-arm-kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>;
+> > linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
+> > peter.chen@nxp.com; robh+dt@kernel.org; s.hauer@pengutronix.de;
+> > shawnguo@kernel.org; Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>;
+> > Francesco Dolcini <francesco.dolcini@toradex.com>
+> > Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+> > 
+> > On Fri, May 05, 2023 at 12:06:18PM +0200, Luca Ceresoli wrote:
+> > > On Fri, 5 May 2023 09:49:16 +0000
+> > > Jun Li <jun.li@nxp.com> wrote:
+> > > > Is your board design similar like Francesco's as below?
+> > >
+> > > Possibly, but I'm afraid I can't say: I am using the Toradex Colibri
+> > > i.MX6ULL SoM, whose schematics are not public.
+> > 
+> > I can confirm that it's the same.
 > 
-> I suppose putting these here is ok. Are all these events a must for a CMN-700 implementation? Is there potential for impdef event in some implementations?
+> Thanks Francesco for the confirmation, had a check with design team,
+> there is no status bit which can be used to judge the VDD_USB_CAP is
+> powered or not, so we have to add a board level dts property to tell
+> this usb phy driver to bypass MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS.
 > 
+> Before send a formal patch, I want to confirm this should work for your
+> HW design, like below simple hack:
 
-Yes, according it's driver code, all these events are a must for a CMN-700 implementation even in different revision. But if the revision is added
-as an identifier, then these metrics need to be defined for each revision. This doesn't seem lean enough. So I also need to consider how to
-match the common metrics of multiple rivisions. Could you provide some suggestions?
+Thanks Li Jun, I tested it with v6.3.1 kernel and it's all good.
+I would be happy to test the patch as soon as you send it.
 
-> Previously we considered ARM PMCG events would be put in a per-SoC sys folder only (and not in perf/pmu-events/arch/arm64/arm)
-> 
->> @@ -0,0 +1,74 @@
->> +[
->> +    {
->> +        "MetricName": "slc_miss_rate",
->> +        "BriefDescription": "The system level cache miss rate include.",
->> +        "MetricGroup": "cmn700",
->> +        "MetricExpr": "hnf_cache_miss / hnf_slc_sf_cache_access",
->> +        "ScaleUnit": "100%",
->> +        "Unit": "arm_cmn",
->> +        "Compat": "cmn700"
->> +    },
->> +    {
->> +        "MetricName": "hnf_message_retry_rate",
->> +        "BriefDescription": "HN-F message retry rate indicates whether a lack of credits is causing the bottlenecks.",
->> +        "MetricGroup": "cmn700",
->> +        "MetricExpr": "hnf_pocq_retry / hnf_pocq_reqs_recvd",
->> +        "ScaleUnit": "100%",
->> +        "Unit": "arm_cmn",
->> +        "Compat": "cmn700"
->> +    },
->> +    {
->> +        "MetricName": "sf_hit_rate",
->> +        "BriefDescription": "Snoop filter hit rate can be used to measure the Snoop Filter efficiency.",
->> +        "MetricGroup": "cmn700",
->> +        "MetricExpr": "hnf_sf_hit / hnf_slc_sf_cache_access",
->> +        "ScaleUnit": "100%",
->> +        "Unit": "arm_cmn",
->> +        "Compat": "cmn700"
->> +    },
->> +    {
->> +        "MetricName": "mc_message_retry_rate",
->> +        "BriefDescription": "The memory controller request retries rate indicates whether the memory controller is the bottleneck.",
->> +        "MetricGroup": "cmn700",
->> +        "MetricExpr": "hnf_mc_retries / hnf_mc_reqs",
->> +        "ScaleUnit": "100%",
->> +        "Unit": "arm_cmn",
->> +        "Compat": "cmn700"
->> +    },
->> +    {
->> +        "MetricName": "rni_actual_read_bandwidth.all",
->> +        "BriefDescription": "This event measure the actual bandwidth(MB/sec) that RN-I bridge sends to the interconnect.",
->> +        "MetricGroup": "cmn700",
->> +        "MetricExpr": "rnid_rxdat_flits * 32 / 1e6 / duration_time",
->> +        "ScaleUnit": "1MB/s",
->> +        "Unit": "arm_cmn",
->> +        "Compat": "cmn700"
->> +    },
->> +    {
->> +        "MetricName": "rni_actual_write_bandwidth.all",
->> +        "BriefDescription": "This event measures the actual write bandwidth(MB/sec) at RN-I bridges.",
->> +        "MetricGroup": "cmn700",
->> +        "MetricExpr": "rnid_txdat_flits * 32 / 1e6 / duration_time",
->> +        "ScaleUnit": "1MB/s",
->> +        "Unit": "arm_cmn",
->> +        "Compat": "cmn700"
->> +    },
->> +    {
->> +        "MetricName": "rni_retry_rate",
->> +        "BriefDescription": "RN-I bridge retry rate indicates whether the memory controller is the bottleneck.",
->> +        "MetricGroup": "cmn700",
->> +        "MetricExpr": "rnid_txreq_flits_retried / rnid_txreq_flits_total",
->> +        "ScaleUnit": "100%",
->> +        "Unit": "arm_cmn",
->> +        "Compat": "cmn700"
->> +    },
->> +    {
->> +        "MetricName": "sbsx_actual_write_bandwidth.all",
->> +        "BriefDescription": "sbsx actual write bandwidth(MB/sec).",
->> +        "MetricGroup": "cmn700",
->> +        "MetricExpr": "sbsx_txdat_flitv * 32 / 1e6 / duration_time",
->> +        "ScaleUnit": "1MB/s",
->> +        "Unit": "arm_cmn",
->> +        "Compat": "cmn700"
->> +    }
->> +]
->> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
->> index 2bcd07c..7cff2c6 100755
->> --- a/tools/perf/pmu-events/jevents.py
->> +++ b/tools/perf/pmu-events/jevents.py
->> @@ -256,6 +256,7 @@ class JsonEvent:
->>             'DFPMC': 'amd_df',
->>             'cpu_core': 'cpu_core',
->>             'cpu_atom': 'cpu_atom',
->> +          'arm_cmn': 'arm_cmn',
->>         }
->>         return table[unit] if unit in table else f'uncore_{unit.lower()}'
->>   
+
+With that said I had another issue that I assume is unrelated.
+In addition to the USB Host port, we have an additional OTG one. This
+interface has the same circuit WRT to the VBUS, however in this case
+it's possible to read the VBUS using extcon, e.g. a standard GPIO input.
+
+With that setup, while doing a role switch, I had a couple of time this
+error:
+
+[  187.310421] ci_hdrc ci_hdrc.0: USB bus 2 deregistered
+[  192.351452] ci_hdrc ci_hdrc.0: timeout waiting for 00000800 in OTGSC
+
+that was recovered only doing an additional transition.
+
+More complete logs here:
+
+[  184.997619] usb 2-1: USB disconnect, device number 9
+[  185.019620] ci_hdrc ci_hdrc.0: remove, state 1
+[  185.024271] usb usb2: USB disconnect, device number 1
+[  185.334975] ci_hdrc ci_hdrc.0: USB bus 2 deregistered
+[  185.353857] ci_hdrc ci_hdrc.0: EHCI Host Controller
+[  185.389670] ci_hdrc ci_hdrc.0: new USB bus registered, assigned bus number 2
+[  185.470170] ci_hdrc ci_hdrc.0: USB 2.0 started, EHCI 1.00
+[  185.476097] usb usb2: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.01
+[  185.484527] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[  185.491811] usb usb2: Product: EHCI Host Controller
+[  185.496704] usb usb2: Manufacturer: Linux 6.1.22-6.2.0+git.3b29299e5f60 ehci_hcd
+[  185.504148] usb usb2: SerialNumber: ci_hdrc.0
+[  185.531121] hub 2-0:1.0: USB hub found
+[  185.542636] hub 2-0:1.0: 1 port detected
+[  185.556586] mxs_phy 20c9000.usbphy: vbus is not valid
+[  187.271684] ci_hdrc ci_hdrc.0: remove, state 4
+[  187.276281] usb usb2: USB disconnect, device number 1
+[  187.310421] ci_hdrc ci_hdrc.0: USB bus 2 deregistered
+[  192.351452] ci_hdrc ci_hdrc.0: timeout waiting for 00000800 in OTGSC
+
+
+> diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
+> index e1a2b2ea098b..ec5ee790455e 100644
+> --- a/drivers/usb/phy/phy-mxs-usb.c
+> +++ b/drivers/usb/phy/phy-mxs-usb.c
+> @@ -178,7 +178,6 @@ static const struct mxs_phy_data imx6sx_phy_data = {
+>  };
+>  
+>  static const struct mxs_phy_data imx6ul_phy_data = {
+> -       .flags = MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS,
+>  };
+>  
+>  static const struct mxs_phy_data imx7ulp_phy_data = {
+
+Francesco
+
