@@ -2,61 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F516F9DA8
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 04:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844946F9DA3
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 04:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbjEHCL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 22:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
+        id S232364AbjEHCJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 22:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjEHCL6 (ORCPT
+        with ESMTP id S231738AbjEHCJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 22:11:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3441982;
-        Sun,  7 May 2023 19:11:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B96861DF5;
-        Mon,  8 May 2023 02:11:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F4EEC433EF;
-        Mon,  8 May 2023 02:11:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683511915;
-        bh=W+BDWcTwbvNWQBCgt9uZZKh6zOCIi71k2crWd1L3W+k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SwpOfcoQzugMTe6nrRk10AeVJ9UQT/ItdgdISy7DTqoikrRz7Vrv19tbRp/olkgV8
-         UBkjm8j7t9GSZPAgHoCls3WCNgnbSQXRf3ZhOdMELvr3rXsYAfpcEYG5Br5ho9atNt
-         Z55/nHxH0BlmftEffctJVa/X4ADi1yAzrawwLAglJRzFJ1EUHjOYOlcV4FxZiBgXjU
-         0q3LdRMHxvI7Yt17Ip2XdG0QclnuZjPEgGo93iPi4NuG6a3nBDbIl/QjhmTvpSv4fa
-         RbizSWsueFK5ilHy2NvIztJrlGKzTk0eSEzrxhiJOKmAOBO7LUTWPxCnr8zjyMscRS
-         2i8vHZAd7BNVw==
-Date:   Sun, 7 May 2023 19:15:36 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Leonard Lausen <leonard@lausen.nl>
-Cc:     regressions@lists.linux.dev,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>
-Subject: Re: [PATCH] Revert "drm/msm/dp: Remove INIT_SETUP delay"
-Message-ID: <20230508021536.txtamifw2vkfncnx@ripper>
-References: <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
+        Sun, 7 May 2023 22:09:27 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84318124BE;
+        Sun,  7 May 2023 19:09:25 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QF4Qy28c7zLntj;
+        Mon,  8 May 2023 10:06:34 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 8 May 2023 10:09:22 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <jane.chu@oracle.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH] x86/mce: set MCE_IN_KERNEL_COPYIN for all MC-Safe Copy
+Date:   Mon, 8 May 2023 10:22:33 +0800
+Message-ID: <20230508022233.13890-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,46 +52,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 01:06:13AM +0000, Leonard Lausen wrote:
-> This reverts commit e17af1c9d861dc177e5b56009bd4f71ace688d97.
-> 
-> Removing the delay of 100 units broke hot plug detection for USB-C displays on
-> qcom sc7180 lazor devices. Lazor uses mdss for hot plug detection and declares
-> dp_hot_plug_det in the dts. Other sc7180 based devices like aspire1 were not
-> affected by the regression, as they do not rely on mdss and dp_hot_plug_det for
-> hot plug detection.
-> 
-> Signed-off-by: Leonard Lausen <leonard@lausen.nl>
-> Tested-by: Leonard Lausen <leonard@lausen.nl> # Trogdor (sc7180)
-> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> 
-> ---
->  drivers/gpu/drm/msm/dp/dp_display.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index bde1a7ce442f..db9783ffd5cf 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -1506,7 +1506,7 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
->         dp = container_of(dp_display, struct dp_display_private, dp_display);
->  
->         if (!dp_display->is_edp)
-> -               dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 0);
-> +               dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
+Both EX_TYPE_FAULT_MCE_SAFE and EX_TYPE_DEFAULT_MCE_SAFE exception
+fixup types are used to identify fixups which allow in kernel #MC
+recovery, that is the Machine Check Safe Copy.
 
-When booting with the cable connected on my X13s, 100 is long enough for
-my display to time out and require me to disconnect and reconnect the
-cable again.
+For now, the MCE_IN_KERNEL_COPYIN flag is only set for EX_TYPE_COPY
+and EX_TYPE_UACCESS when copy from user, and corrupted page is
+isolated in this case, for MC-safe copy, memory_failure() is not
+always called, some places, like __wp_page_copy_user, copy_subpage,
+copy_user_gigantic_page and ksm_might_need_to_copy manually call
+memory_failure_queue() to cope with such unhandled error pages,
+recently coredump hwposion recovery support[1] is asked to do the
+same thing, and there are some other already existed MC-safe copy
+scenarios, eg, nvdimm, dm-writecache, dax, which has similar issue.
 
-Do we have any idea of why the reduction to 0 is causing an issue when
-using the internal HPD?
+The best way to fix them is set MCE_IN_KERNEL_COPYIN to MCE_SAFE
+exception, then kill_me_never() will be queued to call memory_failure()
+in do_machine_check() to isolate corrupted page, which avoid calling
+memory_failure_queue() after every MC-safe copy return.
 
-Regards,
-Bjorn
+[1] https://lkml.kernel.org/r/20230417045323.11054-1-wangkefeng.wang@huawei.com
 
->  }
->  
->  bool msm_dp_wide_bus_available(const struct msm_dp *dp_display)
-> -- 
-> 2.30.2
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ arch/x86/kernel/cpu/mce/severity.c |  3 +--
+ mm/ksm.c                           |  1 -
+ mm/memory.c                        | 12 +++---------
+ 3 files changed, 4 insertions(+), 12 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
+index c4477162c07d..63e94484c5d6 100644
+--- a/arch/x86/kernel/cpu/mce/severity.c
++++ b/arch/x86/kernel/cpu/mce/severity.c
+@@ -293,12 +293,11 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
+ 	case EX_TYPE_COPY:
+ 		if (!copy_user)
+ 			return IN_KERNEL;
+-		m->kflags |= MCE_IN_KERNEL_COPYIN;
+ 		fallthrough;
+ 
+ 	case EX_TYPE_FAULT_MCE_SAFE:
+ 	case EX_TYPE_DEFAULT_MCE_SAFE:
+-		m->kflags |= MCE_IN_KERNEL_RECOV;
++		m->kflags |= MCE_IN_KERNEL_RECOV | MCE_IN_KERNEL_COPYIN;
+ 		return IN_KERNEL_RECOV;
+ 
+ 	default:
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 0156bded3a66..7abdf4892387 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -2794,7 +2794,6 @@ struct page *ksm_might_need_to_copy(struct page *page,
+ 	if (new_page) {
+ 		if (copy_mc_user_highpage(new_page, page, address, vma)) {
+ 			put_page(new_page);
+-			memory_failure_queue(page_to_pfn(page), 0);
+ 			return ERR_PTR(-EHWPOISON);
+ 		}
+ 		SetPageDirty(new_page);
+diff --git a/mm/memory.c b/mm/memory.c
+index 5e2c6b1fc00e..c0f586257017 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -2814,10 +2814,8 @@ static inline int __wp_page_copy_user(struct page *dst, struct page *src,
+ 	unsigned long addr = vmf->address;
+ 
+ 	if (likely(src)) {
+-		if (copy_mc_user_highpage(dst, src, addr, vma)) {
+-			memory_failure_queue(page_to_pfn(src), 0);
++		if (copy_mc_user_highpage(dst, src, addr, vma))
+ 			return -EHWPOISON;
+-		}
+ 		return 0;
+ 	}
+ 
+@@ -5852,10 +5850,8 @@ static int copy_user_gigantic_page(struct folio *dst, struct folio *src,
+ 
+ 		cond_resched();
+ 		if (copy_mc_user_highpage(dst_page, src_page,
+-					  addr + i*PAGE_SIZE, vma)) {
+-			memory_failure_queue(page_to_pfn(src_page), 0);
++					  addr + i*PAGE_SIZE, vma))
+ 			return -EHWPOISON;
+-		}
+ 	}
+ 	return 0;
+ }
+@@ -5871,10 +5867,8 @@ static int copy_subpage(unsigned long addr, int idx, void *arg)
+ 	struct copy_subpage_arg *copy_arg = arg;
+ 
+ 	if (copy_mc_user_highpage(copy_arg->dst + idx, copy_arg->src + idx,
+-				  addr, copy_arg->vma)) {
+-		memory_failure_queue(page_to_pfn(copy_arg->src + idx), 0);
++				  addr, copy_arg->vma))
+ 		return -EHWPOISON;
+-	}
+ 	return 0;
+ }
+ 
+-- 
+2.35.3
+
