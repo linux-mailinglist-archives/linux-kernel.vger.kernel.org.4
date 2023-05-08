@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4366FB794
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32B46FB756
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234284AbjEHTr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 15:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
+        id S233884AbjEHTpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 15:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233923AbjEHTqq (ORCPT
+        with ESMTP id S233882AbjEHTov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 15:46:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29367A9D;
-        Mon,  8 May 2023 12:45:05 -0700 (PDT)
-Message-ID: <20230508185218.749244209@linutronix.de>
+        Mon, 8 May 2023 15:44:51 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932087AB2;
+        Mon,  8 May 2023 12:44:17 -0700 (PDT)
+Message-ID: <20230508185218.802324532@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683575051;
+        s=2020; t=1683575052;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=4bj8ZvYTo7h4ovclEum+b6WsfhLEcO8uNjPMgn9Q5x4=;
-        b=luptazBGQl/6gwCsUF/buYWxkBAEoJNYHx7Kxq0OeppfP1uF6F7NgOCw3LqRVTaT31I9h4
-        D5XOFiRqBn9YmzEHb1c8fA6wh7ZzDtnqoGVuN2a4blplprkdtDd8R1N5BUJ7dY//ynam4z
-        9nOeEaXVbMYGsvANvqaAzHwNiaL+IZrNUZNLb8PdkXNIsgQJ3JnLHxTcMWQHPktfZ7p1+I
-        valh5s3/2GsrRw0m8GhQn7EqA30eWJMKuxbBma4fWLJDjf3ostL0yMHCO5slcxoZThfFtJ
-        ateRKwD80dVM75IN8sPMyv58NxXIKSeUEGcWX63SCtgZbvKN9Mfqco6vLkvfkg==
+         references:references; bh=HVjUF1EbgoHvP2JET34IHqSOI4Hcbuoi5HyMhczyA/0=;
+        b=f87S8Ive1ie4K+DuiLg7usxJY5CRCksJCqSgCkxD5uZH7y4x+OJFuZWNm0Taip1XPPiDD6
+        MNH0b+hp2o5RbiOVox1gno/kYayr67OXDsY3LQy/XL1EajtZ65KomNmMKrjSPGzPHIQ6mt
+        Bc0Q0qOP9/5ItgD7CpD7wNvTDGfz7YuG1nQmd5y2Lv904N1i53sg9+MQ+HioP83fuoz27l
+        K0h3votn/bkWzE6uLiONR6KdsjL/p4GqVASZ+gwe2bmO48I4HcfU9n8eyvXRqDwkYb7s44
+        Njvuj3M2dK+aBiLKQsshzndlNWX014TMRWinVJi/9FwvNn2qCERvNBTYOkZNDg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683575051;
+        s=2020e; t=1683575052;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=4bj8ZvYTo7h4ovclEum+b6WsfhLEcO8uNjPMgn9Q5x4=;
-        b=Irrw/2b9WZnFSWO4H5T5IOf9dImpiZr2fFBeiX3HwHII5+jw+y4xy+lPuveYMabu3EDI57
-        iXBQKFEgrrdQwlAQ==
+         references:references; bh=HVjUF1EbgoHvP2JET34IHqSOI4Hcbuoi5HyMhczyA/0=;
+        b=0jP1z8zyc9UIx2xHWlL0pghnJTSR5ytXBwb/OqMmY//ybrAvid6zf5b8IChN8VPr3CVlpG
+        1ard2l2bnsfXlBBQ==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
@@ -66,12 +66,13 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         linux-riscv@lists.infradead.org,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: [patch v3 27/36] cpu/hotplug: Remove unused state functions
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        David Woodhouse <dwmw@amazon.co.uk>
+Subject: [patch v3 28/36] cpu/hotplug: Reset task stack state in _cpu_up()
 References: <20230508181633.089804905@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Mon,  8 May 2023 21:44:10 +0200 (CEST)
+Date:   Mon,  8 May 2023 21:44:12 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -82,111 +83,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-All users converted to the hotplug core mechanism.
+Commit dce1ca0525bf ("sched/scs: Reset task stack state in bringup_cpu()")
+ensured that the shadow call stack and KASAN poisoning were removed from
+a CPU's stack each time that CPU is brought up, not just once.
 
+This is not incorrect. However, with parallel bringup the idle thread setup
+will happen at a different step. As a consequence the cleanup in
+bringup_cpu() would be too late.
+
+Move the SCS/KASAN cleanup to the generic _cpu_up() function instead,
+which already ensures that the new CPU's stack is available, purely to
+allow for early failure. This occurs when the CPU to be brought up is
+in the CPUHP_OFFLINE state, which should correctly do the cleanup any
+time the CPU has been taken down to the point where such is needed.
+
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Mark Rutland <mark.rutland@arm.com>
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
 
 
 ---
- include/linux/cpu.h |    2 -
- kernel/smpboot.c    |   75 ----------------------------------------------------
- 2 files changed, 77 deletions(-)
+ kernel/cpu.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 ---
 
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -193,8 +193,6 @@ static inline void play_idle(unsigned lo
- }
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -771,12 +771,6 @@ static int bringup_cpu(unsigned int cpu)
+ 		return -EAGAIN;
  
- #ifdef CONFIG_HOTPLUG_CPU
--bool cpu_wait_death(unsigned int cpu, int seconds);
--bool cpu_report_death(void);
- void cpuhp_report_idle_dead(void);
- #else
- static inline void cpuhp_report_idle_dead(void) { }
---- a/kernel/smpboot.c
-+++ b/kernel/smpboot.c
-@@ -325,78 +325,3 @@ void smpboot_unregister_percpu_thread(st
- 	cpus_read_unlock();
- }
- EXPORT_SYMBOL_GPL(smpboot_unregister_percpu_thread);
+ 	/*
+-	 * Reset stale stack state from the last time this CPU was online.
+-	 */
+-	scs_task_reset(idle);
+-	kasan_unpoison_task_stack(idle);
 -
--#ifndef CONFIG_HOTPLUG_CORE_SYNC
--static DEFINE_PER_CPU(atomic_t, cpu_hotplug_state) = ATOMIC_INIT(CPU_POST_DEAD);
--
--#ifdef CONFIG_HOTPLUG_CPU
--/*
-- * Wait for the specified CPU to exit the idle loop and die.
-- */
--bool cpu_wait_death(unsigned int cpu, int seconds)
--{
--	int jf_left = seconds * HZ;
--	int oldstate;
--	bool ret = true;
--	int sleep_jf = 1;
--
--	might_sleep();
--
--	/* The outgoing CPU will normally get done quite quickly. */
--	if (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) == CPU_DEAD)
--		goto update_state_early;
--	udelay(5);
--
--	/* But if the outgoing CPU dawdles, wait increasingly long times. */
--	while (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) != CPU_DEAD) {
--		schedule_timeout_uninterruptible(sleep_jf);
--		jf_left -= sleep_jf;
--		if (jf_left <= 0)
--			break;
--		sleep_jf = DIV_ROUND_UP(sleep_jf * 11, 10);
--	}
--update_state_early:
--	oldstate = atomic_read(&per_cpu(cpu_hotplug_state, cpu));
--update_state:
--	if (oldstate == CPU_DEAD) {
--		/* Outgoing CPU died normally, update state. */
--		smp_mb(); /* atomic_read() before update. */
--		atomic_set(&per_cpu(cpu_hotplug_state, cpu), CPU_POST_DEAD);
--	} else {
--		/* Outgoing CPU still hasn't died, set state accordingly. */
--		if (!atomic_try_cmpxchg(&per_cpu(cpu_hotplug_state, cpu),
--					&oldstate, CPU_BROKEN))
--			goto update_state;
--		ret = false;
--	}
--	return ret;
--}
--
--/*
-- * Called by the outgoing CPU to report its successful death.  Return
-- * false if this report follows the surviving CPU's timing out.
-- *
-- * A separate "CPU_DEAD_FROZEN" is used when the surviving CPU
-- * timed out.  This approach allows architectures to omit calls to
-- * cpu_check_up_prepare() and cpu_set_state_online() without defeating
-- * the next cpu_wait_death()'s polling loop.
-- */
--bool cpu_report_death(void)
--{
--	int oldstate;
--	int newstate;
--	int cpu = smp_processor_id();
--
--	oldstate = atomic_read(&per_cpu(cpu_hotplug_state, cpu));
--	do {
--		if (oldstate != CPU_BROKEN)
--			newstate = CPU_DEAD;
--		else
--			newstate = CPU_DEAD_FROZEN;
--	} while (!atomic_try_cmpxchg(&per_cpu(cpu_hotplug_state, cpu),
--				     &oldstate, newstate));
--	return newstate == CPU_DEAD;
--}
--
--#endif /* #ifdef CONFIG_HOTPLUG_CPU */
--#endif /* !CONFIG_HOTPLUG_CORE_SYNC */
+-	/*
+ 	 * Some architectures have to walk the irq descriptors to
+ 	 * setup the vector space for the cpu which comes online.
+ 	 * Prevent irq alloc/free across the bringup.
+@@ -1583,6 +1577,12 @@ static int _cpu_up(unsigned int cpu, int
+ 			ret = PTR_ERR(idle);
+ 			goto out;
+ 		}
++
++		/*
++		 * Reset stale stack state from the last time this CPU was online.
++		 */
++		scs_task_reset(idle);
++		kasan_unpoison_task_stack(idle);
+ 	}
+ 
+ 	cpuhp_tasks_frozen = tasks_frozen;
 
 
