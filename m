@@ -2,165 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEEC6FA211
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB5E6FA213
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbjEHIWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 04:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
+        id S233052AbjEHIXR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 8 May 2023 04:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233831AbjEHIVg (ORCPT
+        with ESMTP id S232699AbjEHIXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 04:21:36 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC291FAA0;
-        Mon,  8 May 2023 01:21:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683534075; x=1715070075;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=u8U6CpU+Uixx4b0Yc9a9cuI2RB9dOyCILQo/ufHu6C8=;
-  b=Opj9L37u6PB8pm2Um1CR7FqbitSVXooCBj421PHAEtLVyRz8Y99wPde3
-   lw50uw/oainX1ey1er+lTRMRlidAC5j8NJL2WNlAH1MjEtlIYx08Fq3dk
-   mhcWkdLTvNLM58qG+/P/IxeV0ateYlyn8YA0R7cNXJ2Q6IimVuzQ99qaj
-   SXMMYq5UlI564do58o3wi7LZa/ujOSz4j1Szth5bQ9mLkhSZtpw/oGdqg
-   2svmvpJ5l5UXpb4UO9d7fzJ7ZRwQzbbLBHnmZXqbC83/NiCZCOKesRpe5
-   dFRIMpoWFFqBnZjt80pcOkSov1GeyLaqVid+6TZf1tUE3woXi2mSWTVl7
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="348416217"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="348416217"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 01:21:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10703"; a="944762598"
-X-IronPort-AV: E=Sophos;i="5.99,258,1677571200"; 
-   d="scan'208";a="944762598"
-Received: from cciobanu-mobl1.ger.corp.intel.com ([10.249.37.159])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 01:21:12 -0700
-Date:   Mon, 8 May 2023 11:21:10 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Luke Jones <luke@ljones.dev>
-cc:     platform-driver-x86@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        acpi4asus-user@lists.sourceforge.net, hdegoede@redhat.com,
-        corentin.chary@gmail.com, markgross@kernel.org, jdelvare@suse.com,
-        linux@roeck-us.net
-Subject: Re: [PATCH v2 1/1] platform/x86: asus-wmi: add support for ASUS
- screenpad
-In-Reply-To: <TWL7UR.KE812U8BYMG8@ljones.dev>
-Message-ID: <39570a-d3a-13b9-f2d-e75b3d60c6c4@linux.intel.com>
-References: <20230505043013.2622603-1-luke@ljones.dev> <20230505043013.2622603-2-luke@ljones.dev> <9f77e8fd-38fe-818f-2fee-ca3bf4243576@linux.intel.com> <TWL7UR.KE812U8BYMG8@ljones.dev>
+        Mon, 8 May 2023 04:23:14 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AAE1A10A;
+        Mon,  8 May 2023 01:23:10 -0700 (PDT)
+Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pvw99-0003K2-5u; Mon, 08 May 2023 10:23:03 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Conor Dooley <conor@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Icenowy Zheng <uwu@icenowy.me>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>
+Subject: Re: [PATCH 3/5] riscv: dts: add initial T-HEAD light SoC device tree
+Date:   Mon, 08 May 2023 10:23:02 +0200
+Message-ID: <7518428.EvYhyI6sBW@diego>
+In-Reply-To: <394696a52bf1d767044e3f990cebfbaf69dabe70.camel@icenowy.me>
+References: <20230507182304.2934-1-jszhang@kernel.org>
+ <20230507-calamari-gentleman-bbe62af06f92@spud>
+ <394696a52bf1d767044e3f990cebfbaf69dabe70.camel@icenowy.me>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-487321179-1683533721=:1790"
-Content-ID: <5dca5e23-df7d-2774-ed31-47f8441772@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-487321179-1683533721=:1790
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <e862af48-2873-40a0-439c-ebca6f841dcc@linux.intel.com>
-
-On Sat, 6 May 2023, Luke Jones wrote:
-> On Fri, May 5 2023 at 16:08:16 +0300, Ilpo J�rvinen
-> <ilpo.jarvinen@linux.intel.com> wrote:
-> > On Fri, 5 May 2023, Luke D. Jones wrote:
+Am Montag, 8. Mai 2023, 05:32:17 CEST schrieb Icenowy Zheng:
+> 在 2023-05-07星期日的 22:35 +0100，Conor Dooley写道：
+> > Hey Jisheng,
 > > 
-> > >  Add support for the WMI methods used to turn off and adjust the
-> > >  brightness of the secondary "screenpad" device found on some high-end
-> > >  ASUS laptops like the GX650P series and others.
-> > > 
-> > >  These methods are utilised in a new backlight device named:
-> > >  - asus_screenpad
-> > > 
-> > >  Signed-off-by: Luke D. Jones <luke@ljones.dev>
-> > >  ---
-
-> > >  @@ -3208,6 +3209,129 @@ static int is_display_toggle(int code)
-> > >   	return 0;
-> > >   }
-> > > 
-> > >  +/* Screenpad backlight */
-> > >  +
-> > >  +static int read_screenpad_backlight_power(struct asus_wmi *asus)
-> > >  +{
-> > >  +	int ret = asus_wmi_get_devstate_simple(asus,
-> > > ASUS_WMI_DEVID_SCREENPAD_POWER);
+> > On Mon, May 08, 2023 at 02:23:02AM +0800, Jisheng Zhang wrote:
 > > 
-> > Please move this to own line because now you have the extra newline
-> > in between the call and error handling.
+> > > +               c910_0: cpu@0 {
+> > > +                       compatible = "thead,c910", "riscv";
+> > > +                       device_type = "cpu";
+> > > +                       riscv,isa = "rv64imafdc";
+> > 
+> > Does this support more than "rv64imafdc"?
+> > I assume there's some _xtheadfoo extensions that it does support,
+> > although I am not sure how we are proceeding with those - Heiko might
+> > have a more nuanced take.
+
+I guess the interesting question still is, are these part of the isa
+string or more of an errata?
+
+The binding currently says
+      Identifies the specific RISC-V instruction set architecture
+      supported by the hart.  These are documented in the RISC-V
+      User-Level ISA document, available from
+      https://riscv.org/specifications/
+
+
+I guess if we decide to make them part of the isa-string the binding
+then should get a paragraph mention _xfoo vendor-extensions too.
+
+Personally, making these part of the ISA string definitly sounds like
+the best solution though :-) .
+
+
+> > > +               reset: reset-sample {
+> > > +                       compatible = "thead,reset-sample";
+> > 
+> > What is a "reset-sample"?
+> > 
+> > > +                       entry-reg = <0xff 0xff019050>;
+> > > +                       entry-cnt = <4>;
+> > > +                       control-reg = <0xff 0xff015004>;
+> > > +                       control-val = <0x1c>;
+> > > +                       csr-copy = <0x7f3 0x7c0 0x7c1 0x7c2 0x7c3
+> > > 0x7c5 0x7cc>;
+> > > +               };
+> > > +
+> > > +               plic: interrupt-controller@ffd8000000 {
+> > > +                       compatible = "thead,c910-plic";
+> > > +                       reg = <0xff 0xd8000000 0x0 0x01000000>;
+> > > +                       interrupts-extended = <&cpu0_intc 11>,
+> > > <&cpu0_intc 9>,
+> > > +                                             <&cpu1_intc 11>,
+> > > <&cpu1_intc 9>,
+> > > +                                             <&cpu2_intc 11>,
+> > > <&cpu2_intc 9>,
+> > > +                                             <&cpu3_intc 11>,
+> > > <&cpu3_intc 9>;
+> > > +                       interrupt-controller;
+> > > +                       #interrupt-cells = <1>;
+> > > +                       riscv,ndev = <240>;
+> > > +               };
+> > > +
+> > > +               clint: timer@ffdc000000 {
+> > > +                       compatible = "thead,c900-clint";
+> > 
+> > "c900"? That a typo or intentional. Hard to tell since this
+> > compatible
+> > is undocumented ;)
 > 
-> I don't understand what you mean sorry. Remove the new line or:
-> int ret;
-> ret = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_SCREENPAD_POWER);
-
-Don't do:
-
-int func()
-{
-	int ret = func();
-
-	if (ret < 0)
-		return ret;
-	...
-}
-
-But do:
-
-int func()
-{
-	int ret;
-
-	ret = func();
-	if (ret < 0)
-		return ret;
-	...
-}
-
-This keeps the error handling next to the actual call following the usual 
-error handling pattern (natural logic grouping). The added clarity is well 
-worth the one extra line required.
-
-> > >  +static int update_screenpad_bl_status(struct backlight_device *bd)
-> > >  +{
-> > >  +	struct asus_wmi *asus = bl_get_data(bd);
-> > >  +	int power, err = 0;
-> > >  +	u32 ctrl_param;
-> > >  +
-> > >  +	power = read_screenpad_backlight_power(asus);
-> > >  +	if (power == -ENODEV)
-> > >  +		return err;
-> > 
-> > Just return 0. Or is there perhaps something wrong/missing here?
+> Intentional, for supporting both C906 and C910.
 > 
-> I thought the correct thing was to return any possible error state (here,
-> anything less than 0 would be an error, right?)
+> However, as we discussed in some binding patches, there should be a DT
+> binding string per chip.
+> 
+> So here should be "thead,light-clint", "thead,c900-clint".
+> 
+> (Or use th1520, the marketing name, instead of light, the codename)
 
-I think this was covered already but here what I meant, use either:
-	return 0;
-because err is always 0 at that point, or:
-	return power;
-Depending on which is correct, I wasn't sure because you had this after 
-it:
+I'm definitly confused now :-)
 
-> > >  +	else if (power < 0)
-> > >  +		return power;
+c900 as well as something like c9xx should not be part of dt-bindings.
+Binding-names should always denote _actual_ component names.
 
-...So I thought you might really intentionally wanted to return 0 there.
+So you can do
+	"thead,c906-clint"
+and for example
+	"thead,c910-clint", "thead,c906-clint"
+
+to describe that the clint in the c910 is compatible with the one in c906
 
 
--- 
- i.
---8323329-487321179-1683533721=:1790--
+I don't think there should be a "thead,light-clint" ... the clint is part
+of the cpu core itself so the soc itself shouldn't introduce any changes?
+
+
+Heiko
+
+
