@@ -2,315 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CCF6FB254
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174896FB257
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234471AbjEHOMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 10:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
+        id S234480AbjEHOM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 10:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbjEHOMd (ORCPT
+        with ESMTP id S233971AbjEHOM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 10:12:33 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532FB26E82
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 07:12:31 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-541b5cfa9d8so2417871eaf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 07:12:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1683555150; x=1686147150;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BBOQSpkdgEYQoD0cZBQYsHQxADMQ0Ee2J69WM/3BE8A=;
-        b=MUtcbcUw5esCCgp4x+vUb/UV0ODUgw50C0iNwE6UAv0KhGAYBUH8FPNM5fmHHbTqpJ
-         tzopdR07m03eoV6eRAG+15P+FSn198UeuQaWhRN1g/y4CcB8p4hQ8Wcq0aT6QHUuV35k
-         EGP3reVXErzf4h0BIRvqZ3C0ajV/1CoLs6p6BqEXGT5zf9hKKjzIXfn5YMwMOA4Uqxyl
-         nqis8oopjaGFxxK72o3DAJwz1J8VUOAVjFtmHxBwmzVEXAzX3+JlCbb5G/087ukOaej3
-         E0pYUC3cV1vG9IidyR+OUOpJ54OERTb/yOHJa9Wmju7ptPvWCXmIPL0LqA1+/suA3QaX
-         LdZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683555150; x=1686147150;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BBOQSpkdgEYQoD0cZBQYsHQxADMQ0Ee2J69WM/3BE8A=;
-        b=GtPIA5hiiUrRTyYmIeoD67RZ5urqdvkLmp85yo9xshJ3sL1SLE0Bbu/UR9N0COLbdE
-         MEHqQBQuztWsR417T9N9uGudK7fntsmBkS7MZDCDtP93dew9/mYCrb3cOWcn5sdWLdTz
-         XgdXqBnwI64w9RT30i+E9E4n1FOgDZR9lyDd4ilWrCcoOknItYQ3wuoR/9swJ2hwANwP
-         LGykvv9g4T6+XBTRANAW2Ji2yclPqWynTUglVKi+OX+hfRkyhlaeOerSi+m8kgOwHfRe
-         FbQLATf/Gu2ueFr66emA6/nBZazywLWgDgIkrWudyyoNMRDgUmVjEPdLWcLsQfmcXieG
-         iP1Q==
-X-Gm-Message-State: AC+VfDxKOa7s0ZhoK9c6qGWcaJPqlUj9WGkB6DJixN6reHUD9ecPN2Ek
-        ZJ96iDoVa1ScxiqUwQckp10JTQ==
-X-Google-Smtp-Source: ACHHUZ452vNcTu3t4t5ExsibTngkr7q0+nbdS5zZNNLu8gFvM+W4aH0XDZFmvmdh2M6DzEk2QRibyw==
-X-Received: by 2002:a54:481a:0:b0:384:374c:43c7 with SMTP id j26-20020a54481a000000b00384374c43c7mr4285626oij.25.1683555150609;
-        Mon, 08 May 2023 07:12:30 -0700 (PDT)
-Received: from ?IPV6:2804:14d:5c5e:44fb:d672:f891:23e9:e156? ([2804:14d:5c5e:44fb:d672:f891:23e9:e156])
-        by smtp.gmail.com with ESMTPSA id bh11-20020a056808180b00b0038934c5b400sm20671oib.25.2023.05.08.07.12.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 07:12:30 -0700 (PDT)
-Message-ID: <2cef1199-98ae-32c1-0e5f-06c69a0eb843@mojatatu.com>
-Date:   Mon, 8 May 2023 11:12:24 -0300
+        Mon, 8 May 2023 10:12:56 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2055.outbound.protection.outlook.com [40.107.94.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC86658B;
+        Mon,  8 May 2023 07:12:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Pn/JTuC2GOqLsWiVD/K9xvHvSGo5G1yZqU5EimUBfoql4IlmGCbiI2RDxswQktA5G8ppipbdJfgQl0/DdmXUWlQBaULsdVmUDCbgEwvZNXahAAbm1mwOYUpvYhaLCPU1eFRkjYSZUM1IbBSz4O/2NolB8GBRC+z1VyIUBRif0UbejMwvzfO9bBRBxZAQEXjAoVeVroUIAtWDOxrwugn8rQmaomyOqFCkGAqQQsnaFa7iV4lhMxe6kDQWwRG2UIksGNjMjMqy4bPi37axwCX4JgW6jojRGe0hnAM9Dj1l/6ymiWcGzMCFCw/58KkJPPvoRk/BMOSA4bZ73abnQHl24w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yvdVcix3EKZL02iyqz8QSv4I/kKlndFiHlbx7gI1fdo=;
+ b=VyGQSjP/xxUq1WhgehLI7rZyxKbtEHKI4mK7giJdiu02wH8JYNUrTv1qhjnt5svTzwQBMssB26XyzOioKN6wISuoze7GfmjPhqGGsgINl96x4hWNE9M/7cyy+I2CdHkiUiPxsk0vkEwlBvGtAik6DazVKiuZQ29Q0Tsgx4ZfE6NvSTFDN3UNgCRzW7lL2M4INdv5Qh++Sx37YSr2PQaWIX1FeL+SiRftjV9vJK1PWsf+nWVVtiNPAJ1xpvcU2mah4tR5LaJWF0hqnphKqIbXnxztvpz14gO4BxJfznqDVdvnjAWTV6YKTR8nYydvy1aSublalHo0E1xjbfl0oA8WJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yvdVcix3EKZL02iyqz8QSv4I/kKlndFiHlbx7gI1fdo=;
+ b=MhMx1VyfwzgJbjFCRnCdflEda8UtIwJb0LK5kmXp5xFN4h/sfmzP05j3jMf+l9Otow9plhxVRtaOeuISot2S/WlHk5pjofPBP+eUqkMevBMRxFsvMrCWjoe/yfKH5gWKzneih/vP62sYeRqN7uZeX9BqLM2asB5t8MsPzoMoDRe/aGluXy1C2yOsuqZfB8vfQMUhQ03bJwSjT0D2Og6WAZr3myeZiB0lg+IhSDZ4lNQ45q4TULJQ5hPFm+eyg1LrsGt9OpVqATnOZu88lYWVxljkEliNp3kVHYoOV3JD6Z5pZKHKRb5WlwHYsackCHKTsNS8QNDEsUJI0zRzB8TDaw==
+Received: from MW3PR12MB4346.namprd12.prod.outlook.com (2603:10b6:303:58::20)
+ by MW6PR12MB8868.namprd12.prod.outlook.com (2603:10b6:303:242::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Mon, 8 May
+ 2023 14:12:49 +0000
+Received: from MW3PR12MB4346.namprd12.prod.outlook.com
+ ([fe80::42f0:9bed:2b:32e8]) by MW3PR12MB4346.namprd12.prod.outlook.com
+ ([fe80::42f0:9bed:2b:32e8%4]) with mapi id 15.20.6363.032; Mon, 8 May 2023
+ 14:12:49 +0000
+From:   Peter De Schrijver <pdeschrijver@nvidia.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Stefan Kristiansson <stefank@nvidia.com>
+Subject: Re: [PATCH 4/5] dt-bindings: Add bindings to support DRAM MRQ GSCs
+Thread-Topic: [PATCH 4/5] dt-bindings: Add bindings to support DRAM MRQ GSCs
+Thread-Index: AQHZgah4ktUTN2aU+EKhTdV7EHkSYK9QaM8AgAAAstQ=
+Date:   Mon, 8 May 2023 14:12:49 +0000
+Message-ID: <MW3PR12MB4346ED32BBE6EAA7CB8C91A8B1719@MW3PR12MB4346.namprd12.prod.outlook.com>
+References: <20230508122048.99953-1-pdeschrijver@nvidia.com>
+ <20230508122048.99953-5-pdeschrijver@nvidia.com>
+ <43945fad-f57b-cfd9-78bd-9ec9e6628382@linaro.org>
+In-Reply-To: <43945fad-f57b-cfd9-78bd-9ec9e6628382@linaro.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW3PR12MB4346:EE_|MW6PR12MB8868:EE_
+x-ms-office365-filtering-correlation-id: 7e471ca5-a949-4494-59d1-08db4fce4e38
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: J7F1TtdRFvw8aeK4r5v3b46Thlu0hmPf77hAzVG/aj4dskta9Dm7CCV5RE7U5pAbj3G8XDq/eHsNOPM/Kah1eeP4i9n50ohZhBMfiQV1RftYhAIebRMCGJ04pIq8J1NPNWLxVpQITSGeEhSfV51ussQLY2wjeD6UfziWS71r0f0LTIeZu7eWMBFiWPJdbcSIHMgFkw5VIYmTImcu4pX99+x1hEaWXOx1Os1wNYjnge9jf7uB1UQbLqoupI6raq/vgPWZK0SNqJZxwtSW3FlbZCOD6LEUDvUiQpTh0LC7VMQ6tq1fokI70o45aJKarBoVmn6ccfRt7VDyTte2DDd1gi+LX0HiNmKAZy+riW1T8MaOpRU6vUAc3A7SkWa1trcqqyIEvKD3oo5cDG4thYQI5WhXJEeTzeu5s3H1iuASml+oTr60jPPDdkoJ8Iag6liazxuqCBLG7hWWgJVI1Csfmgq5TtN8ig5zqGxVKRUr6un/TD1ditfBkReOm5ewbSe8Q6H/UyZ7AyhRJpck3iXYoM9Pp+7WiwSN7+dKc2akvHzFBXpFJ0ektlBSm9z/tLniENB1bX6JidcADj5kan66uYmPWWTQdySy9Wp30itlqo3p/UptfMib7dJFLEZEGxv6XutOZlwUmKAd4gkUjrO3XC3aiRl2Iz52S4MXGdOwIuDW6idU6N38zvWkowwesdYi
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4346.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(396003)(346002)(376002)(136003)(451199021)(53546011)(9686003)(26005)(6506007)(107886003)(7696005)(966005)(83380400001)(55016003)(38100700002)(33656002)(122000001)(86362001)(38070700005)(186003)(110136005)(41300700001)(2906002)(54906003)(5660300002)(6636002)(4326008)(64756008)(66476007)(66446008)(66556008)(316002)(8936002)(8676002)(478600001)(91956017)(52536014)(76116006)(66946007)(71200400001)(586874003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?i5zMRey/er4A8z/+WrNWxxIPSOi+r0KNoH4igOJLRN3xNPRa/RKyAIyr2F?=
+ =?iso-8859-1?Q?/Sl0SWWFtnBUntWO7Ehd/lhgKYXqg8lQ3mnXlxDyCR2A8s95nkUuOit93T?=
+ =?iso-8859-1?Q?UnqsrpbZCYAvOLGhMbcO7MiZGepv4h65kOFoGUIYm5VcJXMxW4y5cvYJzN?=
+ =?iso-8859-1?Q?S3s4JwY1SRX6GU9vz0qoP8YosIf862DNdTZ8SUGbpM634zvd3MDDio33pl?=
+ =?iso-8859-1?Q?Pm2nizjMMH4iYKEP2mGWEtCGvUoeo657A2VYUq0lnpUSkbMN92f4ciO7Bs?=
+ =?iso-8859-1?Q?0bSE6gqm4z3RYAtj5xY31y5yLsUYjSzqRX74MVWrLTDRSovRbGmzbJY5+8?=
+ =?iso-8859-1?Q?uJ7eCCtMnDqJYDrM3aWPZbUeEoirDQBgkS/DJkCQdDpc1v4wMbcqPI+WqB?=
+ =?iso-8859-1?Q?rq/C0dum1e5KaEAiWROhl9szKTIYiK8kF+Q+nOGkePn+MQGY0/s38PSWf6?=
+ =?iso-8859-1?Q?WNDltQhXrRjCnYcCCGz+SyTxoHKPAuWeCk7xmuvkqoniBHsqMGt0F3Vfwb?=
+ =?iso-8859-1?Q?+8PnJ1sUZsHQA8d5Wl5JmwlzPQb117Ijv0Dedrlc8INO3ZAisuO61RLBDZ?=
+ =?iso-8859-1?Q?emOklrL8e0Zp5KtqQ3TJiYhizuk0mUv2R3cvNy0srQeCWfyn697Vc3b//U?=
+ =?iso-8859-1?Q?FxGF5R3O4Y4P8Mfv02z5WlnYf65WLovT0SSObn19ROJ8eUsTXk2mjxnyVM?=
+ =?iso-8859-1?Q?iRSfi881XD69+dSQ5W+XfLQ+T6fhD6JaewEuvsil1A63CfAXVXa5rIyAK6?=
+ =?iso-8859-1?Q?kFf5DrWpyaJ6qqzAbMO34cIH3ROhrUcOHzRNT7n3mMV61iT/VH03G3GPBI?=
+ =?iso-8859-1?Q?GJdUtIKFlB9NKBKU+LYtTdP8UTpA7vgVK25gkBj37xHItpHOakWILCHZ03?=
+ =?iso-8859-1?Q?gbY81MI2jZWFpsdEkAzQESRqzNSGRWoXXTlwu014irS1KesIQW6Yvm0HiV?=
+ =?iso-8859-1?Q?lw0w7tlGttsd3s9Sg8FlQrXuXa9Y3yjTMLC50S09W5hzoTnjHVL3U0+CdZ?=
+ =?iso-8859-1?Q?luNnel+XBO+FgByQo6M7ACnlQy/V8I+z+/VB1hARlfcBbVoaAut8UxBsc7?=
+ =?iso-8859-1?Q?iG6r2Z940o2xk0/gmAAuRJ95Nmu//TGWH04+e4peddqg42wEg68zz1MEjl?=
+ =?iso-8859-1?Q?dFU4hQD/j8KzebyLnFM4FE2OL8TzCq/m/sqxLD/p+0dDC/8w235tZQz+j2?=
+ =?iso-8859-1?Q?qUhdIpm/QeIWWb8Sooije+kEAVvqqgamFg7OSzir9zrbIpEoyHFX6bNkVq?=
+ =?iso-8859-1?Q?rGa8uP3otdTpmB2pjobZzGHnDgevuARHQbxbWE0+MwOBV12xtWl3o/8jln?=
+ =?iso-8859-1?Q?DwsdP6EbmSOtBBnFKHlUFffrvcYDCgt7ZxRkGg8dGPp0VMiM496eASyW+/?=
+ =?iso-8859-1?Q?YTdgDHGeqtvMzgSUJMONr5MF/plAiR6X39n565vceFd91a6GDE1lNYiBcR?=
+ =?iso-8859-1?Q?eWYATJLWSWAt8toBFpJ04gVeRyOsTURp7igWOqbudpQsX88CgZP06anWvW?=
+ =?iso-8859-1?Q?IbK7/idYGfS0en+H92fTqhO3YlKbtPYa9qOflqRhg+qSxW6wLP9sxuajDx?=
+ =?iso-8859-1?Q?LLPdtZdtk5o5Q8cIkCkRuoY6k+RNfsQK1lIdevKHYIPkpaVju+1bPnY8kw?=
+ =?iso-8859-1?Q?Iir8akgfWuUpv6yAakjCZaemI4eSQdXF22?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH net 6/6] net/sched: qdisc_destroy() old ingress and clsact
- Qdiscs before grafting
-Content-Language: en-US
-To:     Peilin Ye <yepeilin.cs@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.r.fastabend@intel.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
-References: <cover.1683326865.git.peilin.ye@bytedance.com>
- <e6c4681dd9205d702ae2e6124e20c6210520e76e.1683326865.git.peilin.ye@bytedance.com>
-From:   Pedro Tammela <pctammela@mojatatu.com>
-In-Reply-To: <e6c4681dd9205d702ae2e6124e20c6210520e76e.1683326865.git.peilin.ye@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4346.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e471ca5-a949-4494-59d1-08db4fce4e38
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2023 14:12:49.7188
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qcAhe8gKshjSJ3AvSIFllP/LGMRVoFfn5wKjZkhaYSyrM7VLrIamVwddPZIGpm24IvTweZuZniwpW9BXY5dpqw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8868
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2023 21:16, Peilin Ye wrote:
-> mini_Qdisc_pair::p_miniq is a double pointer to mini_Qdisc, initialized in
-> ingress_init() to point to net_device::miniq_ingress.  ingress Qdiscs
-> access this per-net_device pointer in mini_qdisc_pair_swap().  Similar for
-> clsact Qdiscs and miniq_egress.
-> 
-> Unfortunately, after introducing RTNL-lockless RTM_{NEW,DEL,GET}TFILTER
-> requests, when e.g. replacing ingress (clsact) Qdiscs, the old Qdisc could
-> access the same miniq_{in,e}gress pointer(s) concurrently with the new
-> Qdisc, causing race conditions [1] including a use-after-free in
-> mini_qdisc_pair_swap() reported by syzbot:
-> 
->   BUG: KASAN: slab-use-after-free in mini_qdisc_pair_swap+0x1c2/0x1f0 net/sched/sch_generic.c:1573
->   Write of size 8 at addr ffff888045b31308 by task syz-executor690/14901
-> ...
->   Call Trace:
->    <TASK>
->    __dump_stack lib/dump_stack.c:88 [inline]
->    dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
->    print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:319
->    print_report mm/kasan/report.c:430 [inline]
->    kasan_report+0x11c/0x130 mm/kasan/report.c:536
->    mini_qdisc_pair_swap+0x1c2/0x1f0 net/sched/sch_generic.c:1573
->    tcf_chain_head_change_item net/sched/cls_api.c:495 [inline]
->    tcf_chain0_head_change.isra.0+0xb9/0x120 net/sched/cls_api.c:509
->    tcf_chain_tp_insert net/sched/cls_api.c:1826 [inline]
->    tcf_chain_tp_insert_unique net/sched/cls_api.c:1875 [inline]
->    tc_new_tfilter+0x1de6/0x2290 net/sched/cls_api.c:2266
-> ...
-> 
-> The new (ingress or clsact) Qdisc should only call mini_qdisc_pair_swap()
-> after the old Qdisc's last call (in {ingress,clsact}_destroy()) has
-> finished.
-> 
-> To achieve this, in qdisc_graft(), return -EBUSY if the old (ingress or
-> clsact) Qdisc has ongoing RTNL-lockless filter requests, and call
-> qdisc_destroy() for "old" before grafting "new".
-> 
-> Introduce qdisc_refcount_dec_if_one() as the counterpart of
-> qdisc_refcount_inc_nz() used for RTNL-lockless filter requests.  Introduce
-> a non-static version of qdisc_destroy() that does a TCQ_F_BUILTIN check,
-> just like qdisc_put() etc.
-> 
-> [1] To illustrate, the syzkaller reproducer adds ingress Qdiscs under
-> TC_H_ROOT (no longer possible after patch "net/sched: sch_ingress: Only
-> create under TC_H_INGRESS") on eth0 that has 8 transmission queues:
-> 
->    Thread 1 creates ingress Qdisc A (containing mini Qdisc a1 and a2), then
->    adds a flower filter X to A.
-> 
->    Thread 2 creates another ingress Qdisc B (containing mini Qdisc b1 and
->    b2) to replace A, then adds a flower filter Y to B.
-> 
->   Thread 1               A's refcnt   Thread 2
->    RTM_NEWQDISC (A, RTNL-locked)
->     qdisc_create(A)               1
->     qdisc_graft(A)                9
-> 
->    RTM_NEWTFILTER (X, RTNL-lockless)
->     __tcf_qdisc_find(A)          10
->     tcf_chain0_head_change(A)
->     mini_qdisc_pair_swap(A) (1st)
->              |
->              |                         RTM_NEWQDISC (B, RTNL-locked)
->             RCU                   2     qdisc_graft(B)
->              |                    1     notify_and_destroy(A)
->              |
->     tcf_block_release(A)          0    RTM_NEWTFILTER (Y, RTNL-lockless)
->     qdisc_destroy(A)                    tcf_chain0_head_change(B)
->     tcf_chain0_head_change_cb_del(A)    mini_qdisc_pair_swap(B) (2nd)
->     mini_qdisc_pair_swap(A) (3rd)                |
->             ...                                 ...
-> 
-> Here, B calls mini_qdisc_pair_swap(), pointing eth0->miniq_ingress to its
-> mini Qdisc, b1.  Then, A calls mini_qdisc_pair_swap() again during
-> ingress_destroy(), setting eth0->miniq_ingress to NULL, so ingress packets
-> on eth0 will not find filter Y in sch_handle_ingress().
-> 
-> This is just one of the possible consequences of concurrently accessing
-> net_device::miniq_{in,e}gress pointers.  The point is clear, however:
-> B's first call to mini_qdisc_pair_swap() should take place after A's
-> last call, in qdisc_destroy().
-> 
-> Fixes: 7a096d579e8e ("net: sched: ingress: set 'unlocked' flag for Qdisc ops")
-> Fixes: 87f373921c4e ("net: sched: ingress: set 'unlocked' flag for clsact Qdisc ops")
-> Reported-by: syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com
-> Link: https://lore.kernel.org/netdev/0000000000006cf87705f79acf1a@google.com
-> Cc: Hillf Danton <hdanton@sina.com>
-> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-
-Thanks for chasing this!
-
-Tested-by: Pedro Tammela <pctammela@mojatatu.com>
-
-> ---
->   include/net/sch_generic.h |  8 ++++++++
->   net/sched/sch_api.c       | 26 +++++++++++++++++++++-----
->   net/sched/sch_generic.c   | 14 +++++++++++---
->   3 files changed, 40 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-> index fab5ba3e61b7..3e9cc43cbc90 100644
-> --- a/include/net/sch_generic.h
-> +++ b/include/net/sch_generic.h
-> @@ -137,6 +137,13 @@ static inline void qdisc_refcount_inc(struct Qdisc *qdisc)
->   	refcount_inc(&qdisc->refcnt);
->   }
->   
-> +static inline bool qdisc_refcount_dec_if_one(struct Qdisc *qdisc)
-> +{
-> +	if (qdisc->flags & TCQ_F_BUILTIN)
-> +		return true;
-> +	return refcount_dec_if_one(&qdisc->refcnt);
-> +}
-> +
->   /* Intended to be used by unlocked users, when concurrent qdisc release is
->    * possible.
->    */
-> @@ -652,6 +659,7 @@ void dev_deactivate_many(struct list_head *head);
->   struct Qdisc *dev_graft_qdisc(struct netdev_queue *dev_queue,
->   			      struct Qdisc *qdisc);
->   void qdisc_reset(struct Qdisc *qdisc);
-> +void qdisc_destroy(struct Qdisc *qdisc);
->   void qdisc_put(struct Qdisc *qdisc);
->   void qdisc_put_unlocked(struct Qdisc *qdisc);
->   void qdisc_tree_reduce_backlog(struct Qdisc *qdisc, int n, int len);
-> diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
-> index f72a581666a2..a2d07bc8ded6 100644
-> --- a/net/sched/sch_api.c
-> +++ b/net/sched/sch_api.c
-> @@ -1080,10 +1080,20 @@ static int qdisc_graft(struct net_device *dev, struct Qdisc *parent,
->   		if ((q && q->flags & TCQ_F_INGRESS) ||
->   		    (new && new->flags & TCQ_F_INGRESS)) {
->   			ingress = 1;
-> -			if (!dev_ingress_queue(dev)) {
-> +			dev_queue = dev_ingress_queue(dev);
-> +			if (!dev_queue) {
->   				NL_SET_ERR_MSG(extack, "Device does not have an ingress queue");
->   				return -ENOENT;
->   			}
-> +
-> +			/* This is the counterpart of that qdisc_refcount_inc_nz() call in
-> +			 * __tcf_qdisc_find() for RTNL-lockless filter requests.
-> +			 */
-> +			if (!qdisc_refcount_dec_if_one(dev_queue->qdisc_sleeping)) {
-> +				NL_SET_ERR_MSG(extack,
-> +					       "Current ingress or clsact Qdisc has ongoing filter request(s)");
-> +				return -EBUSY;
-> +			}
->   		}
->   
->   		if (dev->flags & IFF_UP)
-> @@ -1104,8 +1114,16 @@ static int qdisc_graft(struct net_device *dev, struct Qdisc *parent,
->   				qdisc_put(old);
->   			}
->   		} else {
-> -			dev_queue = dev_ingress_queue(dev);
-> -			old = dev_graft_qdisc(dev_queue, new);
-> +			old = dev_graft_qdisc(dev_queue, NULL);
-> +
-> +			/* {ingress,clsact}_destroy() "old" before grafting "new" to avoid
-> +			 * unprotected concurrent accesses to net_device::miniq_{in,e}gress
-> +			 * pointer(s) in mini_qdisc_pair_swap().
-> +			 */
-> +			qdisc_notify(net, skb, n, classid, old, new, extack);
-> +			qdisc_destroy(old);
-> +
-> +			dev_graft_qdisc(dev_queue, new);
->   		}
->   
->   skip:
-> @@ -1119,8 +1137,6 @@ static int qdisc_graft(struct net_device *dev, struct Qdisc *parent,
->   
->   			if (new && new->ops->attach)
->   				new->ops->attach(new);
-> -		} else {
-> -			notify_and_destroy(net, skb, n, classid, old, new, extack);
->   		}
->   
->   		if (dev->flags & IFF_UP)
-> diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-> index 37e41f972f69..e14ed47f961c 100644
-> --- a/net/sched/sch_generic.c
-> +++ b/net/sched/sch_generic.c
-> @@ -1046,7 +1046,7 @@ static void qdisc_free_cb(struct rcu_head *head)
->   	qdisc_free(q);
->   }
->   
-> -static void qdisc_destroy(struct Qdisc *qdisc)
-> +static void __qdisc_destroy(struct Qdisc *qdisc)
->   {
->   	const struct Qdisc_ops  *ops = qdisc->ops;
->   
-> @@ -1070,6 +1070,14 @@ static void qdisc_destroy(struct Qdisc *qdisc)
->   	call_rcu(&qdisc->rcu, qdisc_free_cb);
->   }
->   
-> +void qdisc_destroy(struct Qdisc *qdisc)
-> +{
-> +	if (qdisc->flags & TCQ_F_BUILTIN)
-> +		return;
-> +
-> +	__qdisc_destroy(qdisc);
-> +}
-> +
->   void qdisc_put(struct Qdisc *qdisc)
->   {
->   	if (!qdisc)
-> @@ -1079,7 +1087,7 @@ void qdisc_put(struct Qdisc *qdisc)
->   	    !refcount_dec_and_test(&qdisc->refcnt))
->   		return;
->   
-> -	qdisc_destroy(qdisc);
-> +	__qdisc_destroy(qdisc);
->   }
->   EXPORT_SYMBOL(qdisc_put);
->   
-> @@ -1094,7 +1102,7 @@ void qdisc_put_unlocked(struct Qdisc *qdisc)
->   	    !refcount_dec_and_rtnl_lock(&qdisc->refcnt))
->   		return;
->   
-> -	qdisc_destroy(qdisc);
-> +	__qdisc_destroy(qdisc);
->   	rtnl_unlock();
->   }
->   EXPORT_SYMBOL(qdisc_put_unlocked);
-
+=0A=
+=0A=
+________________________________________=0A=
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>=0A=
+Sent: 08 May 2023 17:04=0A=
+To: Peter De Schrijver; thierry.reding@gmail.com; Jonathan Hunter=0A=
+Cc: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; conor+dt@kernel.=
+org; devicetree@vger.kernel.org; linux-tegra@vger.kernel.org; linux-kernel@=
+vger.kernel.org; Stefan Kristiansson=0A=
+Subject: Re: [PATCH 4/5] dt-bindings: Add bindings to support DRAM MRQ GSCs=
+=0A=
+=0A=
+On 08/05/2023 14:20, Peter De Schrijver wrote:=0A=
+> Add bindings for DRAM MRQ GSC support.=0A=
+>=0A=
+> Co-developed-by: Stefan Kristiansson <stefank@nvidia.com>=0A=
+> Signed-off-by: Stefan Kristiansson <stefank@nvidia.com>=0A=
+> Signed-off-by: Peter De Schrijver <pdeschrijver@nvidia.com>=0A=
+> ---=0A=
+>  .../firmware/nvidia,tegra186-bpmp.yaml        | 69 ++++++++++++++++++-=
+=0A=
+>  .../nvidia,tegra264-bpmp-shmem.yaml           | 40 +++++++++++=0A=
+=0A=
+> Why touching two files?=0A=
+=0A=
+Because both are needed to support having MRQ GSCs in DRAM.=0A=
+=0A=
+>  2 files changed, 106 insertions(+), 3 deletions(-)=0A=
+>  create mode 100644 Documentation/devicetree/bindings/reserved-memory/nvi=
+dia,tegra264-bpmp-shmem.yaml=0A=
+>=0A=
+> diff --git a/Documentation/devicetree/bindings/firmware/nvidia,tegra186-b=
+pmp.yaml b/Documentation/devicetree/bindings/firmware/nvidia,tegra186-bpmp.=
+yaml=0A=
+> index 833c07f1685c..d818cfe1d783 100644=0A=
+> --- a/Documentation/devicetree/bindings/firmware/nvidia,tegra186-bpmp.yam=
+l=0A=
+> +++ b/Documentation/devicetree/bindings/firmware/nvidia,tegra186-bpmp.yam=
+l=0A=
+> @@ -57,8 +57,11 @@ description: |=0A=
+>    "#address-cells" or "#size-cells" property.=0A=
+>=0A=
+>    The shared memory area for the IPC TX and RX between CPU and BPMP are=
+=0A=
+> -  predefined and work on top of sysram, which is an SRAM inside the=0A=
+> -  chip. See ".../sram/sram.yaml" for the bindings.=0A=
+> +  predefined and work on top of either sysram, which is an SRAM inside t=
+he=0A=
+> +  chip, or in normal SDRAM.=0A=
+> +  See ".../sram/sram.yaml" for the bindings for the SRAM case.=0A=
+> +  See "../reserved-memory/nvidia,tegra264-bpmp-shmem.yaml" for bindings =
+for=0A=
+> +  the SDRAM case.=0A=
+>=0A=
+>  properties:=0A=
+>    compatible:=0A=
+> @@ -81,6 +84,11 @@ properties:=0A=
+>      minItems: 2=0A=
+>      maxItems: 2=0A=
+>=0A=
+> +  memory-region:=0A=
+> +    description: phandle to reserved memory region used for IPC between=
+=0A=
+> +      CPU-NS and BPMP.=0A=
+> +    maxItems: 1=0A=
+> +=0A=
+>    "#clock-cells":=0A=
+>      const: 1=0A=
+>=0A=
+> @@ -115,10 +123,16 @@ properties:=0A=
+>=0A=
+>  additionalProperties: false=0A=
+>=0A=
+> +allOf:=0A=
+> +  - oneOf:=0A=
+=0A=
+Keep just oneOf and drop allOf.=0A=
+=0A=
+> +      - required:=0A=
+> +          - memory-region=0A=
+> +      - required:=0A=
+> +          - shmem=0A=
+> +=0A=
+>  required:=0A=
+>    - compatible=0A=
+>    - mboxes=0A=
+> -  - shmem=0A=
+>    - "#clock-cells"=0A=
+>    - "#power-domain-cells"=0A=
+>    - "#reset-cells"=0A=
+> @@ -184,3 +198,52 @@ examples:=0A=
+>              #thermal-sensor-cells =3D <1>;=0A=
+>          };=0A=
+>      };=0A=
+> +=0A=
+> +  - |=0A=
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>=0A=
+> +    #include <dt-bindings/mailbox/tegra186-hsp.h>=0A=
+> +    #include <dt-bindings/memory/tegra186-mc.h>=0A=
+> +=0A=
+> +    hsp_top0: hsp@3c00000 {=0A=
+> +        compatible =3D "nvidia,tegra186-hsp";=0A=
+> +        reg =3D <0x03c00000 0xa0000>;=0A=
+> +        interrupts =3D <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>;=0A=
+> +        interrupt-names =3D "doorbell";=0A=
+> +        #mbox-cells =3D <2>;=0A=
+=0A=
+> Why HSP example is here?=0A=
+=0A=
+Because it's referred to further down the example.=0A=
+=0A=
+> +    };=0A=
+> +=0A=
+> +    reserved-memory {=0A=
+> +        dram_cpu_bpmp_mail: shmem@f1be0000  {=0A=
+> +            compatible =3D "nvidia,tegra264-bpmp-shmem";=0A=
+> +            reg =3D <0x0 0xf1be0000 0x0 0x2000>;=0A=
+> +            no-map;=0A=
+> +        };=0A=
+> +    };=0A=
+=0A=
+Drop, fairly obvious and should be in that binding, not here.=0A=
+=0A=
+> +=0A=
+> +    bpmp {=0A=
+> +        compatible =3D "nvidia,tegra186-bpmp";=0A=
+> +        interconnects =3D <&mc TEGRA186_MEMORY_CLIENT_BPMPR &emc>,=0A=
+> +                        <&mc TEGRA186_MEMORY_CLIENT_BPMPW &emc>,=0A=
+> +                        <&mc TEGRA186_MEMORY_CLIENT_BPMPDMAR &emc>,=0A=
+> +                        <&mc TEGRA186_MEMORY_CLIENT_BPMPDMAW &emc>;=0A=
+> +        interconnect-names =3D "read", "write", "dma-mem", "dma-write";=
+=0A=
+> +        iommus =3D <&smmu TEGRA186_SID_BPMP>;=0A=
+> +        mboxes =3D <&hsp_top0 TEGRA_HSP_MBOX_TYPE_DB=0A=
+=0A=
+^^^ refers to hsp_top0.=0A=
+=0A=
+> +                            TEGRA_HSP_DB_MASTER_BPMP>;=0A=
+> +        memory-region =3D <&dram_cpu_bpmp_mail>;=0A=
+> +        #clock-cells =3D <1>;=0A=
+> +        #power-domain-cells =3D <1>;=0A=
+> +        #reset-cells =3D <1>;=0A=
+> +=0A=
+> +        i2c {=0A=
+> +            compatible =3D "nvidia,tegra186-bpmp-i2c";=0A=
+> +            nvidia,bpmp-bus-id =3D <5>;=0A=
+> +            #address-cells =3D <1>;=0A=
+> +            #size-cells =3D <0>;=0A=
+> +        };=0A=
+> +=0A=
+> +        thermal {=0A=
+> +            compatible =3D "nvidia,tegra186-bpmp-thermal";=0A=
+> +            #thermal-sensor-cells =3D <1>;=0A=
+> +        };=0A=
+> +    };=0A=
+> diff --git a/Documentation/devicetree/bindings/reserved-memory/nvidia,teg=
+ra264-bpmp-shmem.yaml b/Documentation/devicetree/bindings/reserved-memory/n=
+vidia,tegra264-bpmp-shmem.yaml=0A=
+> new file mode 100644=0A=
+> index 000000000000..6cd9a61cd31f=0A=
+> --- /dev/null=0A=
+> +++ b/Documentation/devicetree/bindings/reserved-memory/nvidia,tegra264-b=
+pmp-shmem.yaml=0A=
+> @@ -0,0 +1,40 @@=0A=
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)=0A=
+> +%YAML 1.2=0A=
+> +---=0A=
+> +$id: http://devicetree.org/schemas/reserved-memory/nvidia,tegra264-bpmp-=
+shmem.yaml#=0A=
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#=0A=
+> +=0A=
+> +title: Tegra CPU-NS - BPMP IPC reserved memory binding=0A=
+=0A=
+Drop "binding"=0A=
+=0A=
+> +=0A=
+> +maintainers:=0A=
+> + - Peter De Schrijver <pdeschrijver@nvidia.com>=0A=
+> +=0A=
+> +description: |=0A=
+> +  Define a memory region used for communication between CPU-NS and BPMP.=
+=0A=
+> +  Typically this node is created by the bootloader as the physical addre=
+ss=0A=
+> +  has to be known to both CPU-NS and BPMP for correct IPC operation.=0A=
+> +  The memory region is defined using a child node under /reserved-memory=
+.=0A=
+> +  The sub-node is named shmem@<address>.=0A=
+> +=0A=
+=0A=
+> Open other files there and implement it similar way. I really wonder why=
+=0A=
+> this should be done differently than for example other nvidia stuff -=0A=
+> without reserved-memory schema?=0A=
+=0A=
+Because up to now, the GSC was kept in sysram which is considered to be a d=
+evice by the kernel. Now part of the DRAM will be reserved for this, so the=
+ kernel needs to know about it.=0A=
+=0A=
+> +properties:=0A=
+> +  compatible:=0A=
+> +    const: nvidia,tegra264-bpmp-shmem=0A=
+> +=0A=
+> +  reg:=0A=
+> +    description: The physical address and size of the shared SDRAM regio=
+n=0A=
+> +=0A=
+> +required:=0A=
+> +  - compatible=0A=
+> +  - reg=0A=
+> +  - no-map=0A=
+> +=0A=
+=0A=
+Does not look like you tested the bindings. Please run `make=0A=
+dt_binding_check` (see=0A=
+Documentation/devicetree/bindings/writing-schema.rst for instructions).=0A=
+=0A=
+> +examples:=0A=
+> +  - |=0A=
+> +    reserved-memory {=0A=
+> +       dram_cpu_bpmp_mail: shmem@f1be0000  {=0A=
+> +           compatible =3D "nvidia,tegra264-bpmp-shmem";=0A=
+> +           reg =3D <0x0 0xf1be0000 0x0 0x2000>;=0A=
+> +           no-map;=0A=
+> +       };=0A=
+> +    };=0A=
+> +...=0A=
+=0A=
+Best regards,=0A=
+Krzysztof=0A=
+=0A=
