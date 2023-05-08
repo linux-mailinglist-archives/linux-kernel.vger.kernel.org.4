@@ -2,93 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EC26F9E17
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97306F9E1C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbjEHDJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 23:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
+        id S232026AbjEHDND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 23:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjEHDJO (ORCPT
+        with ESMTP id S230076AbjEHDNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 23:09:14 -0400
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270157ED0
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 20:09:11 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Vhz46DB_1683515348;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vhz46DB_1683515348)
-          by smtp.aliyun-inc.com;
-          Mon, 08 May 2023 11:09:08 +0800
-Message-ID: <1683515269.507076-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH V2] tools/virtio: fix build break for aarch64
-Date:   Mon, 8 May 2023 11:07:49 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
-        Peng Fan <peng.fan@nxp.com>, mst@redhat.com,
-        jasowang@redhat.com, mie@igel.co.jp,
-        virtualization@lists.linux-foundation.org
-References: <20230323040024.3809108-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20230323040024.3809108-1-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 7 May 2023 23:13:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9897EDC
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 20:12:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683515533;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9nyAgUbuTjzD6fHJpqxIZiFQeyCjpbJk624bFTFNpfo=;
+        b=dqAL4kMtn1iPVye9ftLbseCCSTCjkzdJSEHmWjTl6S72iWjsgp3N2vv26LhkwWXAXioEUH
+        X3C+siAfl1JAm+J/w9JsmL1jK4uveIo2/adgi4TCAwvzim522IUnzI/CAgheEgGZ+t+WZ/
+        Us0YeHduY8an97DUjCrI7KEkmp8BqkY=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-266-iMBp1UA4MUG3xziycPYeuA-1; Sun, 07 May 2023 23:12:12 -0400
+X-MC-Unique: iMBp1UA4MUG3xziycPYeuA-1
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-1ac6193a1e3so7979895ad.0
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 20:12:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683515531; x=1686107531;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9nyAgUbuTjzD6fHJpqxIZiFQeyCjpbJk624bFTFNpfo=;
+        b=biM5lZu5xj1yBjLrqa3wZMxt5f1DRtnHZh+qRoQSbtxdZeM8cSLRXf/rk40RzY/eBu
+         A9TgWT6Fpxiv+ebo9RSXMHxRfcLfX5c4dqnrHQCB4d1gMNrlLVWN6MZa+IgmOlMXo14j
+         XF0YUfleiv1fHHXHoh6BMnRfkOGz/p5gi3WNXkd/Suv+Mfp5iBNhcMTGQ0vzPEhbK8cT
+         A0OBcClTm8+7ezhPjDRdMndwS9ZR4p9vtJHJ7r+ky//VY7q4i07P4xnQw+8lpblhkk47
+         JrvG3sYqRlqAmehwMDQOxNdHEv7DN2nePi4Yk9gw1JlChoplGZsfDlF0WNr9esssmAtC
+         DE1w==
+X-Gm-Message-State: AC+VfDzJ9p87fqjyROHMkQ5nP2Xab4hJDEIxdU7NJbhb3Cf2oZBcFpTr
+        4wZVIThaq19PRhRDwj/71bGShQzO1jeoPfR48xD+of78za+cB9hNlv7HZkDqiVH0JqUW9eyufJ9
+        nTTlMACGo9GPlTWAOE6vZelqW
+X-Received: by 2002:a17:902:a516:b0:1ab:1355:1a45 with SMTP id s22-20020a170902a51600b001ab13551a45mr8724900plq.30.1683515530940;
+        Sun, 07 May 2023 20:12:10 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4Dsr/5I/1xDjPCTgBELpkfYOze5JmdS9lW2LqmCICvddW3VQUgjgtMk5CSsiE4sTTKAkq0Yg==
+X-Received: by 2002:a17:902:a516:b0:1ab:1355:1a45 with SMTP id s22-20020a170902a51600b001ab13551a45mr8724890plq.30.1683515530640;
+        Sun, 07 May 2023 20:12:10 -0700 (PDT)
+Received: from [10.72.12.58] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id o4-20020a170902d4c400b00199193e5ea1sm5857923plg.61.2023.05.07.20.12.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 May 2023 20:12:10 -0700 (PDT)
+Message-ID: <2b5cf90a-efa8-52a7-9277-77722622c128@redhat.com>
+Date:   Mon, 8 May 2023 11:12:03 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH v4] virtio_net: suppress cpu stall when free_unused_bufs
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Wenliang Wang <wangwenliang.1995@bytedance.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, zhengqi.arch@bytedance.com,
+        willemdebruijn.kernel@gmail.com,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuanzhuo@linux.alibaba.com
+References: <1683167226-7012-1-git-send-email-wangwenliang.1995@bytedance.com>
+ <CACGkMEs_4kUzc6iSBWvhZA1+U70Pp0o+WhE0aQnC-5pECW7QXA@mail.gmail.com>
+ <20230507093328-mutt-send-email-mst@kernel.org>
+Content-Language: en-US
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20230507093328-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Mar 2023 12:00:24 +0800, "Peng Fan (OSS)" <peng.fan@oss.nxp.com> wrote:
-> From: Peng Fan <peng.fan@nxp.com>
->
-> "-mfunction-return=thunk -mindirect-branch-register" are only valid
-> for x86. So introduce compiler operation check to avoid such issues
->
-> Fixes: 0d0ed4006127 ("tools/virtio: enable to build with retpoline")
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->
-> V2:
->  Use /dev/null as output dest
->  Move call cc-option to the original CFLAGS
->
->  tools/virtio/Makefile | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/virtio/Makefile b/tools/virtio/Makefile
-> index 7b7139d97d74..d128925980e0 100644
-> --- a/tools/virtio/Makefile
-> +++ b/tools/virtio/Makefile
-> @@ -4,7 +4,18 @@ test: virtio_test vringh_test
->  virtio_test: virtio_ring.o virtio_test.o
->  vringh_test: vringh_test.o vringh.o virtio_ring.o
->
-> -CFLAGS += -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h -mfunction-return=thunk -fcf-protection=none -mindirect-branch-register
-> +try-run = $(shell set -e;		\
-> +	if ($(1)) >/dev/null 2>&1;	\
-> +	then echo "$(2)";		\
-> +	else echo "$(3)";		\
-> +	fi)
-> +
-> +__cc-option = $(call try-run,\
-> +	$(1) -Werror $(2) -c -x c /dev/null -o /dev/null,$(2),)
-> +cc-option = $(call __cc-option, $(CC),$(1))
 
-Can we sqush these to one function?
-
-> +
-> +CFLAGS += -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h $(call cc-option,-mfunction-return=thunk) $(call cc-option,-fcf-protection=none) $(call cc-option,-mindirect-branch-register)
-
-nit: this line is too long. Can we split it?
-
-Thanks.
-
-> +
->  CFLAGS += -pthread
->  LDFLAGS += -pthread
->  vpath %.c ../../drivers/virtio ../../drivers/vhost
-> --
-> 2.37.1
+在 2023/5/7 21:34, Michael S. Tsirkin 写道:
+> On Fri, May 05, 2023 at 11:28:25AM +0800, Jason Wang wrote:
+>> On Thu, May 4, 2023 at 10:27 AM Wenliang Wang
+>> <wangwenliang.1995@bytedance.com> wrote:
+>>> For multi-queue and large ring-size use case, the following error
+>>> occurred when free_unused_bufs:
+>>> rcu: INFO: rcu_sched self-detected stall on CPU.
+>>>
+>>> Fixes: 986a4f4d452d ("virtio_net: multiqueue support")
+>>> Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
+>>> ---
+>>> v2:
+>>> -add need_resched check.
+>>> -apply same logic to sq.
+>>> v3:
+>>> -use cond_resched instead.
+>>> v4:
+>>> -add fixes tag
+>>> ---
+>>>   drivers/net/virtio_net.c | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+>>> index 8d8038538fc4..a12ae26db0e2 100644
+>>> --- a/drivers/net/virtio_net.c
+>>> +++ b/drivers/net/virtio_net.c
+>>> @@ -3560,12 +3560,14 @@ static void free_unused_bufs(struct virtnet_info *vi)
+>>>                  struct virtqueue *vq = vi->sq[i].vq;
+>>>                  while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
+>>>                          virtnet_sq_free_unused_buf(vq, buf);
+>>> +               cond_resched();
+>> Does this really address the case when the virtqueue is very large?
+>>
+>> Thanks
 >
+> it does in that a very large queue is still just 64k in size.
+> we might however have 64k of these queues.
+
+
+Ok, but we have other similar loops especially the refill, I think we 
+may need cond_resched() there as well.
+
+Thanks
+
+
+>
+>>>          }
+>>>
+>>>          for (i = 0; i < vi->max_queue_pairs; i++) {
+>>>                  struct virtqueue *vq = vi->rq[i].vq;
+>>>                  while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
+>>>                          virtnet_rq_free_unused_buf(vq, buf);
+>>> +               cond_resched();
+>>>          }
+>>>   }
+>>>
+>>> --
+>>> 2.20.1
+>>>
+
