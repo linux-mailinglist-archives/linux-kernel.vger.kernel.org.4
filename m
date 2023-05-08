@@ -2,108 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1A26FA235
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4163E6FA238
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 10:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233289AbjEHI0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 04:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
+        id S233146AbjEHI10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 04:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233321AbjEHI0C (ORCPT
+        with ESMTP id S232700AbjEHI1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 04:26:02 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337481A12C;
-        Mon,  8 May 2023 01:26:00 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1aaf21bb427so29649455ad.1;
-        Mon, 08 May 2023 01:26:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683534359; x=1686126359;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TtLgsCbQA18vCCbTX233GJS8Y1W6cCFoICqxu5DDlZ0=;
-        b=hhPPUp4ugNyRQ4Hgv6YmYt0UkPsbXat2Wp/4UfMwgu05qY7ISuZ+3ajXIoojG8oZzU
-         V6v3GdFDWcmpl/08fKuYjJfSy8cI4GeVXAHXoQVMTuOl9ncXrGof5DgTGzmvz3TaHFGm
-         VCX0rDr9VAT0DL+JyWUyr9E8cvKes1+JkwnInaqRu68I7Z65nmZU4AJk1cULibB9Zyul
-         //GNzCMuiw+l7W6zC/PiOVf4ni0/JrT/O4kYdzglSE6XSkbQKgJrREHBDBMlCAILKg4L
-         QQnRI5Y1LkhQJGultdccn74LsXgGoJ9C/N0PZlCJjlvz4kDq7VSncnmUiHQAyQZdEtN+
-         ITTg==
+        Mon, 8 May 2023 04:27:23 -0400
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530341A125;
+        Mon,  8 May 2023 01:27:07 -0700 (PDT)
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-5475e0147c9so1143360eaf.1;
+        Mon, 08 May 2023 01:27:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683534359; x=1686126359;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TtLgsCbQA18vCCbTX233GJS8Y1W6cCFoICqxu5DDlZ0=;
-        b=GNFaWNfHatmIlMNtkBnvELWyQ0S/z8oWX5GWwwd9+XA9t8I6PQn3dzu7UE+vFXbM2h
-         /1tm8HcaqZSan/TfmfqVUP9XU0UCfzD/ssVqO81q7BUi8Lu9A8sHhnZH2BY/lsbjlAh4
-         1cdsvz0L3CbuhEKBAnzXw4HfI8ceEdZtZ4qN6qAOVFWfO8zWlcpdq0vVlKZ2ww+zh1/1
-         8Ep3bQYJs8FB9zneM+HGj+z5TK/gl6C4a+TkO6HSuTfhTb5uUeHL9vsyI+rR2i8tIoLp
-         VUuU2BYp8axjPg8U0l3Y5LObQ7D4zWK1ig/pPLZ9+8XHw6Dx2zGAXjNrPIC2AMCga7qt
-         9L6w==
-X-Gm-Message-State: AC+VfDygZ3+9i2k/eI55g06fHOluIRY67LIBGJuRVYaQLm+5Yk1Xcorq
-        PMyAjAzE5idPkaS6XiQ/H7XfwjI/4BI=
-X-Google-Smtp-Source: ACHHUZ5+jlpMmX7LKvwkl9yszBMjKgJFmGkEJ5GaZWvYWHhDssp8dKf32SSYOv1NXFIdZDjSh/x0fA==
-X-Received: by 2002:a17:902:f68c:b0:1ac:8148:8c50 with SMTP id l12-20020a170902f68c00b001ac81488c50mr1928154plg.28.1683534359287;
-        Mon, 08 May 2023 01:25:59 -0700 (PDT)
-Received: from cxl-test.. ([103.181.222.211])
-        by smtp.gmail.com with ESMTPSA id x6-20020a170902ea8600b0019c13d032d8sm6497933plb.253.2023.05.08.01.25.56
+        d=1e100.net; s=20221208; t=1683534426; x=1686126426;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WHUlZpeMyjqd2JYUgY2eHNWG1bqzG/LjLu6e2GSUtNk=;
+        b=OlC8rCuChWAeg/QY8MZOKhpKQH9b4JPgs98Xml7j2rxY/qmUkQcyZhiOZwu1XbBWNL
+         a2wcbpbpRqL1/1/6j4kxKSits12dkeXk+vh6XywP1lOPVbcuxVkV6LCYYhab3089IPqt
+         aHT9GIaBgTm6fEWx8Q3gsvJQpFbuI3AL/o/05rlvlOAeWJWA7fQDqy1AYnuV0AXI90dR
+         FdSo7fODhmb+X9n3tmQw1eQCytz8Ftm5qep6j4iia56LLQvH2E4RMl/tEMW9tF/6Brjd
+         M1cKHwxFN+68fFT+1fR1th87wMbyWyCnv6LbNZWvWWLt8qzoUfJuuQNSQo9INHWS5Cmd
+         CdOA==
+X-Gm-Message-State: AC+VfDwB3VM9Fl+POANiGOLg4MOpu/dY2xpVSgXkPY3B+gED1fjVLyUv
+        N90y5GVECMDSbN02nhC1YQ==
+X-Google-Smtp-Source: ACHHUZ64TdmlneC7I2hyuGS9hkgReKtzuOarI8Il6BCrERKnGSiV8pCbE8zCqMVSck1GuBov3oW27w==
+X-Received: by 2002:a4a:9c4e:0:b0:541:f9a3:3455 with SMTP id c14-20020a4a9c4e000000b00541f9a33455mr3750503ook.4.1683534426014;
+        Mon, 08 May 2023 01:27:06 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v26-20020a4ae6da000000b0054c84710025sm3821446oot.8.2023.05.08.01.27.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 01:25:58 -0700 (PDT)
-From:   Raghu Halharvi <raghuhack78@gmail.com>
-To:     linux-cxl@vger.kernel.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        raghuhack78@gmail.com, ira.weiny@intel.com, bwidawsk@kernel.org,
-        dan.j.williams@intel.com, vishal.l.verma@intel.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] cxl/region: Remove else after return statement
-Date:   Mon,  8 May 2023 08:25:31 +0000
-Message-Id: <20230508082531.136281-3-raghuhack78@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230508082531.136281-1-raghuhack78@gmail.com>
-References: <20230508082531.136281-1-raghuhack78@gmail.com>
-MIME-Version: 1.0
+        Mon, 08 May 2023 01:27:05 -0700 (PDT)
+Received: (nullmailer pid 462508 invoked by uid 1000);
+        Mon, 08 May 2023 08:27:04 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lucas Stach <l.stach@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Richard Zhu <hongxing.zhu@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-pci@vger.kernel.org
+In-Reply-To: <20230508071837.68552-1-krzysztof.kozlowski@linaro.org>
+References: <20230508071837.68552-1-krzysztof.kozlowski@linaro.org>
+Message-Id: <168353442421.462471.2290093137731039069.robh@kernel.org>
+Subject: Re: [PATCH fixes] dt-bindings: PCI: fsl,imx6q: fix assigned-clocks
+ warning
+Date:   Mon, 08 May 2023 03:27:04 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Issue found with checkpatch
 
-The else section here is redundant after return statement, removing it.
-Sanity and correctness is not affected due to this fix.
+On Mon, 08 May 2023 09:18:37 +0200, Krzysztof Kozlowski wrote:
+> assigned-clocks are a dependency of clocks, however the dtschema has
+> limitation and expects clocks to be present in the binding using
+> assigned-clocks, not in other referenced bindings.  The clocks were
+> defined in common fsl,imx6q-pcie-common.yaml, which is referenced by fsl,imx6q-pcie-ep.yaml.  The fsl,imx6q-pcie-ep.yaml used assigned-clocks thus leading to warnings:
+> 
+>   Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.example.dtb: pcie-ep@33800000:
+>     Unevaluated properties are not allowed ('assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' were unexpected)
+>   From schema: Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.yaml
+> 
+> Fix this by moving clocks to each specific schema from the common one
+> and narrowing them to strictly match what is expected for given device.
+> 
+> Fixes: b10f82380eeb ("dt-bindings: imx6q-pcie: Restruct i.MX PCIe schema")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Patch for current cycle (v6.4-rc).   Please take directly as fixes or
+> let me know, so I will send it to Linus.
+> ---
+>  .../bindings/pci/fsl,imx6q-pcie-common.yaml   | 13 +---
+>  .../bindings/pci/fsl,imx6q-pcie-ep.yaml       | 38 +++++++++
+>  .../bindings/pci/fsl,imx6q-pcie.yaml          | 77 +++++++++++++++++++
+>  3 files changed, 117 insertions(+), 11 deletions(-)
+> 
 
-Signed-off-by: Raghu Halharvi <raghuhack78@gmail.com>
----
- drivers/cxl/core/region.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-index f29028148806..a46d6ad9ef0a 100644
---- a/drivers/cxl/core/region.c
-+++ b/drivers/cxl/core/region.c
-@@ -2666,11 +2666,11 @@ static int cxl_region_invalidate_memregion(struct cxl_region *cxlr)
- 				"Bypassing cpu_cache_invalidate_memregion() for testing!\n");
- 			clear_bit(CXL_REGION_F_INCOHERENT, &cxlr->flags);
- 			return 0;
--		} else {
--			dev_err(&cxlr->dev,
--				"Failed to synchronize CPU cache state\n");
--			return -ENXIO;
- 		}
-+
-+		dev_err(&cxlr->dev,
-+			"Failed to synchronize CPU cache state\n");
-+		return -ENXIO;
- 	}
- 
- 	cpu_cache_invalidate_memregion(IORES_DESC_CXL);
--- 
-2.39.2
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.example.dtb: camera-sensor@3c: port:endpoint:data-lanes: [[1]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: port:endpoint:data-lanes: [[1]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+
+doc reference errors (make refcheckdocs):
+Documentation/usb/gadget_uvc.rst: Documentation/userspace-api/media/v4l/pixfmt-packed.yuv.rst
+MAINTAINERS: Documentation/devicetree/bindings/pwm/pwm-apple.yaml
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230508071837.68552-1-krzysztof.kozlowski@linaro.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
