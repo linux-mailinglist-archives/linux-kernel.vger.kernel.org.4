@@ -2,77 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADC76FA86F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D8C6FA879
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 12:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234991AbjEHKk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 06:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
+        id S235008AbjEHKlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 06:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234982AbjEHKj6 (ORCPT
+        with ESMTP id S234934AbjEHKkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 06:39:58 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327AA26EA2;
-        Mon,  8 May 2023 03:39:56 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4efe8b3f3f7so4950103e87.2;
-        Mon, 08 May 2023 03:39:56 -0700 (PDT)
+        Mon, 8 May 2023 06:40:45 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605AE2A85E
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 03:40:20 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-5e7534b6736so7180526d6.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 03:40:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683542394; x=1686134394;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ITL2Opz6E6A0DibX5pblUWA3qdWmUenAiQmhMjtE1P4=;
-        b=D2iTdIJd2dvnUS6tDeRqImvxB44uq0GmGQnUQtbyB1LW3cehqdUB/G9MoHVq9MExy6
-         9K8O58aPqmPw+ExIzsYLUKWD4laN2pfelvbn1ViF4FWdL7Z69LOwjGoRGZdWz6ZR3Ljj
-         WKzTgbfb4Y+RdHKUDs2+qPYyuqL12qpouIAvsOY7/1JpIfwCYwrU+aZ5cCgBSRFxShjP
-         BeaAzt6cQkvQJSxViYtla0fUmohznEkGlYLLMupQ393dfbPHbX3c3kc5Q9xsbYJpNRY2
-         AvSKlwwZAw6NlkeLCQXtu2WxyqJHRv7LdsNyoyS/Kqb3398jgpWix02+MqiWCJ0sOgpS
-         lIMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683542394; x=1686134394;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1683542419; x=1686134419;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ITL2Opz6E6A0DibX5pblUWA3qdWmUenAiQmhMjtE1P4=;
-        b=MWbqM5b8/fXIgKG3urDkZEX8NOgBOhinkwJ0mcVoWfj19JvV6b3/BcAEOtSz0Gehcg
-         oTBJdLetV6F8jFFhqAZ6q9teNeNl8w2CXxiitHhjjnB5E4q2La/6Px67RNYFLk0GmPsG
-         jK/7mbNxFopjqmRvlu7LUJqCJaSJjdnOpPZGbhBwUPeNzsfkpvu1JCYlYHHLTV3sgFgG
-         rtusYGpTUrCR1g0IFMbHMczC09jYP/EmBUVj92fMkuuRf3OHhUjdCxuVoGgRRvn9jCeM
-         vUo3hOrlLhEM+x61xl+F8/14SCfvBE+1TJqtwEgczHAyYWxc8x1x1B9pDUFUC/0QdefZ
-         Jcmg==
-X-Gm-Message-State: AC+VfDyCWRfryubGjImlEbJ4xEpeHulGmekNuv4ZplX/x6pN84e60GQ+
-        PgB3ccaE8191y3XDiOrwJeoKtZCS2/w=
-X-Google-Smtp-Source: ACHHUZ6CAahghdWRq/LOQPLWN9BZzrw8fWcZ7mq+GVYfzMWgLTwJH+D4zwxnzFC2x7JZD+Tp4shnFA==
-X-Received: by 2002:ac2:5447:0:b0:4eb:341c:ecc5 with SMTP id d7-20020ac25447000000b004eb341cecc5mr2290694lfn.12.1683542394364;
-        Mon, 08 May 2023 03:39:54 -0700 (PDT)
-Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id p22-20020ac246d6000000b004eedb66983csm1245391lfo.273.2023.05.08.03.39.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 03:39:53 -0700 (PDT)
-Date:   Mon, 8 May 2023 13:39:49 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 5/5] MAINTAINERS: Add ROHM BU27008
-Message-ID: <31e25a41135ab0a86645b5078af797802b32f9c7.1683541225.git.mazziesaccount@gmail.com>
-References: <cover.1683541225.git.mazziesaccount@gmail.com>
+        bh=tOLarLbPEw2BzQnlH1NcQezuXJK2sUMhOzGscxqhSmI=;
+        b=szGEV5YbuseSTT2QhxnkprtYX6zVniR4AZX710LSV2FNdm2UEe1dsq9MJMXE67D25P
+         VDItCbJ2B1EtrmvWegZIJ7dKGwCYVFsO74nwYdsAn43Pd7pyj2Egeyu54mHT1w4PF1Tu
+         CnLg1TkOZiy/Fkdiy4izaXMTb/EzTOuGba/2TTCSnbGVJBdvcxBrilwMN3sZcMsUIO+k
+         Wm7AkufaY45+fCrZJsJ2dzYxWGsi81HOa1IJGn5zI7b3pZjxExtz+1GeXlxhX9YcM/u+
+         UUtYfRp+rJJQ94IDiTem5ZXUBXkpZc3kUU2+QIJSN1vXo0ccDGKSMvcvZnI+v7vWhVV5
+         7Olg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683542419; x=1686134419;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tOLarLbPEw2BzQnlH1NcQezuXJK2sUMhOzGscxqhSmI=;
+        b=PwnNy5A9ImtSX9YyXXPVCsLb3NnpZxVuQ4PSelpmk79OOZnLbQaHveFeWEsER5hJYi
+         zFzWEISwCB/DO2VkCqGfJp5lpYkg4FFzWIuTZZe0yqFgj7EKpTm/UeFFdZtvUDG9bNJm
+         2wwghL4UdYgDm0RNXrS3YDHcIXny/rG+9+fnBre7kDNizeY5KE8ftwDVOCBUEyTI7GOf
+         m3Wl4zmBBmKKKvMgJrRXD3f73EqGJQhjKmSomkiN5K7FjQk9gmEp5ytmg9TzlvOwdjnS
+         RdM0V1PpV4nqadyAmnUeYg0wHdQvvF0xXadHlGxuNWP6p9ItqnJM0N9lHP6XuAwL5/Dp
+         yrDA==
+X-Gm-Message-State: AC+VfDxp2CcgJj4nnPgEVgYzrxlbzGD2zF+0sYG3+Sbu9KiTQ9HjCZ+S
+        uWzbtn23Ox5HRp1Tr0XqlCNES7bFrPiTrwSmu+LNClcL3OWRoBlWxKc=
+X-Google-Smtp-Source: ACHHUZ5iItQygWtfgG27YbkNns42GQ2GwBwYRcbTfphBkNC5JHBOvYHayfIU5uZmZdKKjmsB6uKI5PvuZadFGQsXIRY=
+X-Received: by 2002:ad4:5ecf:0:b0:616:73d9:b9d8 with SMTP id
+ jm15-20020ad45ecf000000b0061673d9b9d8mr12826533qvb.3.1683542419276; Mon, 08
+ May 2023 03:40:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="8UjCQYjFpjbeJzQ5"
-Content-Disposition: inline
-In-Reply-To: <cover.1683541225.git.mazziesaccount@gmail.com>
+References: <CABXGCsPiR4Lwd0NTecp8GMN9YVLU4OXTiHm-z7Gsa_4-LEm1ZQ@mail.gmail.com>
+In-Reply-To: <CABXGCsPiR4Lwd0NTecp8GMN9YVLU4OXTiHm-z7Gsa_4-LEm1ZQ@mail.gmail.com>
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Mon, 8 May 2023 15:40:08 +0500
+Message-ID: <CABXGCsOWCp=KYFFvWA6ExUotUJe=YViZEsomqkCJb7dwNUFAwg@mail.gmail.com>
+Subject: Re: KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
+ - RIP: 0010:amdgpu_bo_get_memory+0x80/0x360 [amdgpu]
+To:     "Olsak, Marek" <Marek.Olsak@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <Christian.Koenig@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -83,69 +72,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 5, 2023 at 6:44=E2=80=AFPM Mikhail Gavrilov
+<mikhail.v.gavrilov@gmail.com> wrote:
+> I need to say that it may not be easy to reproduce this bug.
+> For helping reproduce:
+> 1. I looped script above:
+> $ for i in {1..99999}; do sudo curl -s
+> https://raw.githubusercontent.com/fatso83/dotfiles/master/utils/scripts/i=
+notify-consumers
+> | bash; done
+> 2. Launched google chrome with 26 opened windows
+> 3. And played in the game Division 2.
+> A little time and luck and I get the desired backtrace again and again.
+>
+> I am ready to answer any question and open for testing any patches.
+> Thanks.
 
---8UjCQYjFpjbeJzQ5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No one can reproduce this?
+I prepared a video instruction which can helps:
+https://youtu.be/0ipQnMpZG1Y
 
-Add myself as a maintainer for ROHM BU27008 color sensor driver.
+1. Run script which would calculate watchers:
+$ for i in {1..99999}; do sudo curl -s
+https://raw.githubusercontent.com/fatso83/dotfiles/master/utils/scripts/ino=
+tify-consumers
+| bash; done
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+2. Run the game "Devision 2"
 
----
-Revision history:
-No changes since v1
----
- MAINTAINERS | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+3. Run 20 windows of Google Chrome with such script
+$ for i in {1..20}; do google-chrome-unstable
+--profile-directory=3D"Test-2" --new-window --start-maximized
+"youtube.com" &; done
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 32772c383ab7..c02e3d2ec348 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18198,10 +18198,11 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/iio/light/bh1750.yaml
- F:	drivers/iio/light/bh1750.c
-=20
--ROHM BU27034 AMBIENT LIGHT SENSOR DRIVER
-+ROHM BU270xx LIGHT SENSOR DRIVERs
- M:	Matti Vaittinen <mazziesaccount@gmail.com>
- L:	linux-iio@vger.kernel.org
- S:	Supported
-+F:	drivers/iio/light/rohm-bu27008.c
- F:	drivers/iio/light/rohm-bu27034.c
-=20
- ROHM MULTIFUNCTION BD9571MWV-M PMIC DEVICE DRIVERS
---=20
-2.40.1
-
+I hope after it you see the desired backtrace.
 
 --=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---8UjCQYjFpjbeJzQ5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRY0XUACgkQeFA3/03a
-ocVlYwgAoVdhy5/9TOCo6CvTPfep1lA6mtTvoCgdVJyKKzMS6cd/TI2p/VuHdyMU
-ct3VYsERP0hvg9pkd8d1npeiDyhJ3mtCPbmnEj71eamudj/Enzo/oq5MePuCngcX
-xM8uJopazW7trk/7WTA+HOzV2vVGqq9Lm2+m34GnNcxGxuu0FMa7F9LBD1P5ffr7
-Z3IdVB4JBaSN375XTwAyVAbFMPvdtbhnD4IZrsRbZmxOZD5LZ3cxQ44WR/IVAnXS
-S6T9U3YLGc/YiroNUinmTR6unIeFTc9Gpb6P1D45a24QoYyw4UyItsvBRnjO8m0j
-J7E1swPBOHdkQ1VRsr3QSwn3ukpLmQ==
-=qIiF
------END PGP SIGNATURE-----
-
---8UjCQYjFpjbeJzQ5--
+Best Regards,
+Mike Gavrilov.
