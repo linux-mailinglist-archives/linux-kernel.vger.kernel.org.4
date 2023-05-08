@@ -2,96 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE2F6FBAC0
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 00:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 230C26FBB2B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 00:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234529AbjEHWCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 18:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S233835AbjEHWvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 18:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234490AbjEHWBs (ORCPT
+        with ESMTP id S229621AbjEHWvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 18:01:48 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F93F1BCE;
-        Mon,  8 May 2023 15:01:47 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6a5f765d595so3335035a34.0;
-        Mon, 08 May 2023 15:01:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683583307; x=1686175307;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dss+wCN5CLASAMMxLWP2S+XJ2l+zFkt1Pl/DL2YpH2Q=;
-        b=YVtY6ML8v/alSFXTnKPXgfjkjky1M0tJWUuoG5oBsWCe7MU9C0hOnVB4+VAggoc1XS
-         l6dcjMkabiOaoFRPkdFqcTAnh2hAaIy4lT3G6+yURyVuHdluufjI9mnOGskXPKjyeIiC
-         LUoFtNJYV69fkVPqSPM3ifKrzVOLzcU0/gNO/13nTudPW10jgLVdp8ogrHDAsD52OFRD
-         0h4mBa9SQqNnsO6uRyCeDUfNnCHUWIV+g9dTG4hZNTV+tijICNpdowMVcJuHj0Ypocs8
-         w0eU1M22DSAfUe2FJr7F0MDJQw43tt/cnT2hDC01jkeSdyBse7I0IfsXOvDQT5yO+LiV
-         HGAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683583307; x=1686175307;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dss+wCN5CLASAMMxLWP2S+XJ2l+zFkt1Pl/DL2YpH2Q=;
-        b=NibsEKbmTCjHvy0o9wUnM1Ec4QdS/A15mNKRnpYJgkIV57CxciO0O+7Xutj9GHQfOZ
-         OKL3HleCfGxqEmgagKAYQ3m1p+NTpl0j/ZJLN5vqEtC5gmLGt4AgAzjQ0uDivh1dkIsi
-         UPjLNoVaVPKDrHnn7GBRM194vMKfh70cj2PltvNka5M5rz0pKiL4llvTUhQLhFF6PnR/
-         csEfFHEPnOUgZlbtrUH+gv05Vix2HqEK8XuPOwdu4FaCUt2cyFSyf1aq+SyueNZfWsr4
-         o6Nd21AttN7tlntXj6tY69r+GSzwCRcmnphNaDYatIS8F6KGlSQaRWPDh9l/ksBcUjrc
-         bXHQ==
-X-Gm-Message-State: AC+VfDz8PhuexPhxjWUISNqWeE275y95kIeefTJ0LyrGaLkXrloJCFxT
-        PUaoFkp7KYi9quIHB57nyg==
-X-Google-Smtp-Source: ACHHUZ5RplRkTAVpl/PBZcQr0LaBoOeAs3QovtnYSaMM1eXj5XJzITEC8wnovgoyogFAe5Ct6uK0Rw==
-X-Received: by 2002:a9d:6b17:0:b0:6a3:4e22:2bd with SMTP id g23-20020a9d6b17000000b006a34e2202bdmr358386otp.5.1683583306768;
-        Mon, 08 May 2023 15:01:46 -0700 (PDT)
-Received: from C02FL77VMD6R ([208.184.112.130])
-        by smtp.gmail.com with ESMTPSA id e18-20020a9d5612000000b006a1287ccce6sm4557825oti.31.2023.05.08.15.01.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 15:01:46 -0700 (PDT)
-Date:   Mon, 8 May 2023 15:01:43 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Pedro Tammela <pctammela@mojatatu.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH net 6/6] net/sched: qdisc_destroy() old ingress and
- clsact Qdiscs before grafting
-Message-ID: <ZFlxRyy2nXXxEI7a@C02FL77VMD6R>
-References: <cover.1683326865.git.peilin.ye@bytedance.com>
- <e6c4681dd9205d702ae2e6124e20c6210520e76e.1683326865.git.peilin.ye@bytedance.com>
- <2cef1199-98ae-32c1-0e5f-06c69a0eb843@mojatatu.com>
+        Mon, 8 May 2023 18:51:19 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183467ED7;
+        Mon,  8 May 2023 15:51:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QFc314YVTz4x44;
+        Tue,  9 May 2023 08:51:09 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1683586270;
+        bh=GoA8n/e4DUi0nPKQIp2gJNGRtdRebfHKoah7CCT7Oi4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=R0Xkl56J4pzjofMhQ1+s40533GhS0yqoY38r+u0jYN/ZWeYI6oFnjkxB9m3bvoha3
+         ZV30mQOS+CvQQlijIgdeVor3uIQDsT2QHKY8T7Wdj7ZxUnq0BrtIlzQGA0Pd/NO5vP
+         zecf/+9BVqli9Yp0vSRu5wQcPs82/apuzO+cFpfEUOY4CgJWo5jGSyOjB42ujTqKxD
+         e+L3eJ0TQeEhBtfWOlKCTNduASRf81Q9c9e2UYyJiEQ4dpmry0YX8MAivrr0sAq5T1
+         mTcIjLviJh1KQJRhZbwJaN5oNBVJJJSygeYgFZyJacnvhDlKvho7tKTbTk562fVzwY
+         /xisWppSWLaCA==
+Date:   Tue, 9 May 2023 06:33:25 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the v4l-dvb-fixes tree
+Message-ID: <20230509063325.0e746f55@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2cef1199-98ae-32c1-0e5f-06c69a0eb843@mojatatu.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Yr7RK1g3BR35S8ylzrQrpyO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 11:12:24AM -0300, Pedro Tammela wrote:
-> Thanks for chasing this!
-> 
-> Tested-by: Pedro Tammela <pctammela@mojatatu.com>
+--Sig_/Yr7RK1g3BR35S8ylzrQrpyO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for testing, Pedro!
+Hi all,
 
-Thanks,
-Peilin Ye
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
+  4ab0bfe3badf ("media: nxp: imx8-isi: fix buiding on 32-bit")
+
+This is commit
+
+  ba0ad6ed89fd ("media: nxp: imx8-isi: fix buiding on 32-bit")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Yr7RK1g3BR35S8ylzrQrpyO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRZXJYACgkQAVBC80lX
+0GybTwf9H+hAcp2mlPu8GQSd/d4yUExGA948SudeQ8IGeWyqw3kwZFmCscxxgFvB
+NZkxGKGn7BxSRMSCYxELNbktrsv1OO9Fpla3GxqCUUM2CcxiCZ5bIP1XQ9fMRGWo
+duV9phKYuhZU23Vz+pa9aSFH0xgWdMFqnysuJhjKeDcqtp1uMV+kRm/KT+ksA6Zz
+2OAL7yiq9tT/IVCbPf6B1bJF0an4w373idTZyNbRoR6g3Hy9NMH1sWGmgpZe2q3q
+gDaVhGypr9YKzXEtNeb1YgUQbNZ5FRrht4GTdhGBgP9mebCkxCevSAQ89kytNsTi
+u7nwgMkLne7WyAfxHibcb/gHqIJ3Iw==
+=qtK+
+-----END PGP SIGNATURE-----
+
+--Sig_/Yr7RK1g3BR35S8ylzrQrpyO--
