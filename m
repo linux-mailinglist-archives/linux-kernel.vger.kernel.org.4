@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DB36FB1D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C56B86FB1DB
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233758AbjEHNlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
+        id S233875AbjEHNmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233626AbjEHNl3 (ORCPT
+        with ESMTP id S234200AbjEHNl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:41:29 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C4033868;
-        Mon,  8 May 2023 06:41:27 -0700 (PDT)
-Date:   Mon, 08 May 2023 13:41:24 -0000
+        Mon, 8 May 2023 09:41:57 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94D719917;
+        Mon,  8 May 2023 06:41:52 -0700 (PDT)
+Date:   Mon, 08 May 2023 13:41:50 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683553285;
+        s=2020; t=1683553310;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pDr6XCBRHrruP48zMzJ+ChN55e2Rx1d0obpc04QaIyE=;
-        b=a/z2MhD6/20guLOItc9zWq/9V+uh3rijXAU44laa7YhHvf0NpXkHAKYTrXBxUAcXa/Bsuc
-        HbjkdOT10g27W1T46Tml1duXy1nE3u2piZsRlp4j/mF/VuompWEGteciXR6A86PTHU0P7B
-        FgpZvbGmDzflZbg9LM28HhXrud5UY8F34YKTqKdqUc2PTWSskWnCSrT47jvSxtRM1EiJ1B
-        MhufgB7mO+dwW35KZlMHdvddyW+hhbryNO0MHWfP0YzVIgAv3Rct6Kap8WmdOQdJy5SyIp
-        pzmmYtntr8K0I2+8c/+8jZrIqIheAnH91QDxMfZIvB/AtMdc+xYBPNuUAIMkNg==
+        bh=ZJZo66bmNey3lT9jFnB9bUIzDEHCyi70FsJKZ/DnTpA=;
+        b=wn8f6IfTaN1+x8oBnYVZP3TBh2OWfttD89smYptRexO0AncSv/VyMEDflQpxmj9P36qc0L
+        kCpTI19vMEzK50QkfHvm5+dlbm8Gnc1bL/ZaHD6gGvyGSp1GONFoxDqEF5u0XqA6+oOL4G
+        PDJRwbXOzebmIHjnm8p1yRmp9u3iCjlHbTOtOQQcw2Jjvl8foy0i+D9Qm5UWLbI4W/3R9u
+        Rx1ENacm8qfviqvXo/nECUkyADnsknlOaOjPB1crAUTcmAskton6ndGgRckfxNBw7sqnRa
+        1Nu3qSl9y4VAffQAmHOmtUMaFQKcAjI4OFqTfPniioJkRy/4BD59N94ifO7UEA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683553285;
+        s=2020e; t=1683553310;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pDr6XCBRHrruP48zMzJ+ChN55e2Rx1d0obpc04QaIyE=;
-        b=oGHzz82k0PTGMH5jUggZKElYl5fsmDwVN2Zhd70IqQLXRZrapgYFcvzO+O2MOVAY7KuS0L
-        HGmovjQI2g7SL7AQ==
-From:   "tip-bot2 for Christian Kujau" <tip-bot2@linutronix.de>
+        bh=ZJZo66bmNey3lT9jFnB9bUIzDEHCyi70FsJKZ/DnTpA=;
+        b=ftuWG76R8UhgbnE/Us7FgvMELMoTWNfVaUcjHLC4Tj9xh31xnUUOtciM2E8RiLlMaRqJu+
+        euOtYLLwOCmZToDw==
+From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] Documentation/process: Explain when tip branches
- get merged into mainline
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Christian Kujau <lists@nerdbynature.de>, x86@kernel.org,
+Subject: [tip: x86/mm] x86/mm: Fix __swp_entry_to_pte() for Xen PV guests
+Cc:     Juergen Gross <jgross@suse.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <8a1fd8b7-9fe3-b2b5-406e-fa6f5e03e7c0@nerdbynature.de>
-References: <8a1fd8b7-9fe3-b2b5-406e-fa6f5e03e7c0@nerdbynature.de>
+In-Reply-To: <20230306123259.12461-1-jgross@suse.com>
+References: <20230306123259.12461-1-jgross@suse.com>
 MIME-Version: 1.0
-Message-ID: <168355328495.404.278386404769420617.tip-bot2@tip-bot2>
+Message-ID: <168355331020.404.17123011230047801582.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,38 +65,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
+The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     cb5d28c01b2d56700e1656cd6c3742b40e840bf9
-Gitweb:        https://git.kernel.org/tip/cb5d28c01b2d56700e1656cd6c3742b40e840bf9
-Author:        Christian Kujau <lists@nerdbynature.de>
-AuthorDate:    Sat, 18 Feb 2023 22:29:44 +01:00
+Commit-ID:     0f88130e8a6fd185b0aeb5d8e286083735f2585a
+Gitweb:        https://git.kernel.org/tip/0f88130e8a6fd185b0aeb5d8e286083735f2585a
+Author:        Juergen Gross <jgross@suse.com>
+AuthorDate:    Mon, 06 Mar 2023 13:32:59 +01:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 08 May 2023 15:35:00 +02:00
+CommitterDate: Mon, 08 May 2023 15:25:24 +02:00
 
-Documentation/process: Explain when tip branches get merged into mainline
+x86/mm: Fix __swp_entry_to_pte() for Xen PV guests
 
-Explain when tip branches get merged into mainline.
+Normally __swp_entry_to_pte() is never called with a value translating
+to a valid PTE. The only known exception is pte_swap_tests(), resulting
+in a WARN splat in Xen PV guests, as __pte_to_swp_entry() did
+translate the PFN of the valid PTE to a guest local PFN, while
+__swp_entry_to_pte() doesn't do the opposite translation.
 
-Suggested-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Christian Kujau <lists@nerdbynature.de>
+Fix that by using __pte() in __swp_entry_to_pte() instead of open
+coding the native variant of it.
+
+For correctness do the similar conversion for __swp_entry_to_pmd().
+
+Fixes: 05289402d717 ("mm/debug_vm_pgtable: add tests validating arch helpers for core MM features")
+Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/8a1fd8b7-9fe3-b2b5-406e-fa6f5e03e7c0@nerdbynature.de
+Link: https://lore.kernel.org/r/20230306123259.12461-1-jgross@suse.com
 ---
- Documentation/process/maintainer-tip.rst | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/x86/include/asm/pgtable_64.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/process/maintainer-tip.rst b/Documentation/process/maintainer-tip.rst
-index 178c95f..93d8a79 100644
---- a/Documentation/process/maintainer-tip.rst
-+++ b/Documentation/process/maintainer-tip.rst
-@@ -421,6 +421,9 @@ allowing themselves a breath. Please respect that.
- The release candidate -rc1 is the starting point for new patches to be
- applied which are targeted for the next merge window.
+diff --git a/arch/x86/include/asm/pgtable_64.h b/arch/x86/include/asm/pgtable_64.h
+index 7929327..a629b1b 100644
+--- a/arch/x86/include/asm/pgtable_64.h
++++ b/arch/x86/include/asm/pgtable_64.h
+@@ -237,8 +237,8 @@ static inline void native_pgd_clear(pgd_t *pgd)
  
-+So called _urgent_ branches will be merged into mainline during the
-+stabilization phase of each release.
-+
+ #define __pte_to_swp_entry(pte)		((swp_entry_t) { pte_val((pte)) })
+ #define __pmd_to_swp_entry(pmd)		((swp_entry_t) { pmd_val((pmd)) })
+-#define __swp_entry_to_pte(x)		((pte_t) { .pte = (x).val })
+-#define __swp_entry_to_pmd(x)		((pmd_t) { .pmd = (x).val })
++#define __swp_entry_to_pte(x)		(__pte((x).val))
++#define __swp_entry_to_pmd(x)		(__pmd((x).val))
  
- Git
- ^^^
+ extern void cleanup_highmap(void);
+ 
