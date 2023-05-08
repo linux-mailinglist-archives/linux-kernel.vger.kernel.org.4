@@ -2,937 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C516F9E15
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A13B46F9E10
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbjEHDCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 23:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
+        id S232456AbjEHDBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 23:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232520AbjEHDAu (ORCPT
+        with ESMTP id S231836AbjEHDAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 23:00:50 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EBA1891A;
-        Sun,  7 May 2023 20:00:21 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6434e65d808so4294390b3a.3;
-        Sun, 07 May 2023 20:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683514819; x=1686106819;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sAkqwKrHnwoUmvd6HkFbw848v2jZBMyZClvdFO+62NE=;
-        b=i18XOkIRgeUh9tBT2JHQEIqEpdyfGyYokcb1N38Yv1Y1OOfCTM1VRfceL1HNdWlkVd
-         OhqVUDiinuzr/Hss7jWki1+hvIh63aD6P2/m4J6fWv+/aCx0HJMsQOLkRye8An0bHhev
-         qiKGk4KkTFs20rs3aWsLKrQi8QHFxhomNvIAaAd6m7SM3oG7dli5PAgMVmPf4oEIyOr0
-         Nig+zypCRa4p9CbyPaXXwIQSnvisoQ4Rw/myvazD1sxqcc1YczBUhbGjS4gFa3xbrUPy
-         qdXxFj6H/UAXrQpRcbMC2NwHbwjqY9fEqpTYN+p93eLHs2HMY/uzDf2iUJVUr8zjsrm0
-         BaHQ==
+        Sun, 7 May 2023 23:00:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0457EE4
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 19:59:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683514793;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hf0y8biX1fmWFzJdwC/6/gmCOXFL3ymrq+8iff3P/gA=;
+        b=FXueB92N4oF11Y1CYCefgt5ZW3WAp/ONdN5y7pYZqFWQjXskGVkOlZIINOZKzO4Icd8ffB
+        6urzkFyImcQNWshLPLN9cVv/24XfD2OlhWXYnsRUEDEWLpPGF23yaj3IpHaiB1qDIw/oD/
+        +jx0rLqTrJvaoEVZkoQKcXHOdI23EOg=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-461-0oyq4yv8MVqacQzqYNBB-Q-1; Sun, 07 May 2023 22:59:51 -0400
+X-MC-Unique: 0oyq4yv8MVqacQzqYNBB-Q-1
+Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2ad93fa7132so2258571fa.0
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 19:59:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683514819; x=1686106819;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sAkqwKrHnwoUmvd6HkFbw848v2jZBMyZClvdFO+62NE=;
-        b=BRirrws6plea3+P2ct8SltEs2D4F3RYgsUgIq75cO826LpNudTFkzdpE0I667LwonN
-         zo3GAaa7eV4h/rcJ3aADM0o39JqZPzltuyFMNHerO3uwow0+Ml0mz4sa9az1p24Vbdvp
-         Lx1LU2U23Zc+grddKrHpdTENLtOAxXxAVNpGKspTE2ySY2nOZ1ApU5B+aXinffWodnOQ
-         MO2yRO9H7Pj/Ic1Q4nxe5Ej2Y3j9s33gyPPuD/Hl/7PilDsbqFiBjv2qqBFt5b2VkC9d
-         dB1awv77++YEwup6BQ3+EmyAXKiRkItxGQRw41DA17ApIKgfycsyGqhXrdioSJVf0/HX
-         t2wg==
-X-Gm-Message-State: AC+VfDynhSbKo7hoKzzuEwXUenAABWXsOf7f0tI9fuuzjn0z0Ta4fkWP
-        Z4F58BsIxdhRW5cIS7Su3qU=
-X-Google-Smtp-Source: ACHHUZ5CWBaSrfl8DxTqT9+g8BlfRQ2IbF+HQ7shYb6jQssdufUMOPfME5PvdYtPYD9ekoZtyAj9Xg==
-X-Received: by 2002:a05:6a00:a21:b0:62a:d752:acc5 with SMTP id p33-20020a056a000a2100b0062ad752acc5mr11878762pfh.32.1683514818775;
-        Sun, 07 May 2023 20:00:18 -0700 (PDT)
-Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id y3-20020aa78543000000b0064559b58eb8sm1525422pfn.154.2023.05.07.20.00.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 May 2023 20:00:18 -0700 (PDT)
-From:   Jacky Huang <ychuang570808@gmail.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, tmaimon77@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
-        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH v10 10/10] tty: serial: Add Nuvoton ma35d1 serial driver support
-Date:   Mon,  8 May 2023 02:59:36 +0000
-Message-Id: <20230508025936.36776-11-ychuang570808@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230508025936.36776-1-ychuang570808@gmail.com>
-References: <20230508025936.36776-1-ychuang570808@gmail.com>
+        d=1e100.net; s=20221208; t=1683514790; x=1686106790;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hf0y8biX1fmWFzJdwC/6/gmCOXFL3ymrq+8iff3P/gA=;
+        b=c+D4ouzT+Z7Cpvf3azilrQMEXxuz+Mg6pVSBVzA4Kv8VXSwVp9H9qDhlbxgkG7naqe
+         /F9LKzbDYsttmbD18YhAKh4ggO4iiXS+ytEUzZB/zFlrFJVVLClqOC51dOZ8ZND6fOga
+         cZ5qaAr4iqqBrOabD6HP0fysmlGpnEDwWkWs5toqMuwkCXsig5vueckwKh0Lnajchj4q
+         QuPrWGV15DQh9eftvBbUMrGKf0S4Mno3zWFCHGDfbH0K5tOy14eJ0w6z1D3JHVp3Yvy1
+         qh5hd3FAsv+cC5eTP9eRWkeWYReV7Fk33Brkf+wZ6dSMcFWs2rhRDsP+7NLZL+JYV0o+
+         mtzA==
+X-Gm-Message-State: AC+VfDyLg5mXTrsiriDKl20si3gghn1ALttyNd0EzwbszCZosJjJW082
+        wMDfFoC8V/2sB70R+1nKgssq+uVro18O8TKFBGxmyUHHiFuXSB1vPXf9fajHdR9f2OBhNhROTpT
+        AH7XOp2LcQq4btePG7C6JYWQ=
+X-Received: by 2002:ac2:548f:0:b0:4ea:fabb:4db1 with SMTP id t15-20020ac2548f000000b004eafabb4db1mr2061462lfk.1.1683514790281;
+        Sun, 07 May 2023 19:59:50 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5JxCpWUmBpdpbkhI6qHC3tfE841A1miI1aAw8ej/Hti23WwvWnwBjH/zfGx5yEpi+SOjHlcg==
+X-Received: by 2002:ac2:548f:0:b0:4ea:fabb:4db1 with SMTP id t15-20020ac2548f000000b004eafabb4db1mr2061455lfk.1.1683514789992;
+        Sun, 07 May 2023 19:59:49 -0700 (PDT)
+Received: from [192.168.1.121] (85-23-48-202.bb.dnainternet.fi. [85.23.48.202])
+        by smtp.gmail.com with ESMTPSA id t21-20020ac24c15000000b004cc8196a308sm1136305lfq.98.2023.05.07.19.59.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 May 2023 19:59:49 -0700 (PDT)
+Message-ID: <f93c14f6-024d-4abc-7598-fa82cc3ea1a5@redhat.com>
+Date:   Mon, 8 May 2023 05:59:46 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] mm/migrate_device: Try to handle swapcache pages.
+Content-Language: en-US
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        apopple@nvidia.com, jhubbard@nvidia.com, rcampbell@nvidia.com
+References: <20230507061726.13422-1-mpenttil@redhat.com>
+ <87wn1ja793.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   =?UTF-8?Q?Mika_Penttil=c3=a4?= <mpenttil@redhat.com>
+In-Reply-To: <87wn1ja793.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jacky Huang <ychuang3@nuvoton.com>
+H,
 
-This adds UART and console driver for Nuvoton ma35d1 Soc.
-It supports full-duplex communication, FIFO control, and
-hardware flow control.
 
-Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
----
- drivers/tty/serial/Kconfig         |  18 +
- drivers/tty/serial/Makefile        |   1 +
- drivers/tty/serial/ma35d1_serial.c | 796 +++++++++++++++++++++++++++++
- 3 files changed, 815 insertions(+)
- create mode 100644 drivers/tty/serial/ma35d1_serial.c
+On 8.5.2023 5.26, Huang, Ying wrote:
+> mpenttil@redhat.com writes:
+> 
+>> From: Mika Penttilä <mpenttil@redhat.com>
+>>
+>> Migrating file pages and swapcache pages into device memory is not supported.
+>> The decision is done based on page_mapping(). For now, swapcache pages are not migrated.
+>>
+>> Things can however be improved, for swapcache pages. Try to get rid of the swap cache,
+>> and if successful, go ahead as with other anonymous pages.
+>>
+>> As a detail, do not mess with shmem pages, as they handle swap internally.
+>>
+>> Cc: Alistair Popple <apopple@nvidia.com>
+>> Cc: John Hubbard <jhubbard@nvidia.com>
+>> Cc: Ralph Campbell <rcampbell@nvidia.com>
+>> Signed-off-by: Mika Penttilä <mpenttil@redhat.com>
+>> ---
+>>   mm/migrate_device.c | 12 ++++++++++--
+>>   1 file changed, 10 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
+>> index d30c9de60b0d..e8169c58c341 100644
+>> --- a/mm/migrate_device.c
+>> +++ b/mm/migrate_device.c
+>> @@ -12,6 +12,7 @@
+>>   #include <linux/mmu_notifier.h>
+>>   #include <linux/oom.h>
+>>   #include <linux/pagewalk.h>
+>> +#include <linux/shmem_fs.h>
+>>   #include <linux/rmap.h>
+>>   #include <linux/swapops.h>
+>>   #include <asm/tlbflush.h>
+>> @@ -750,10 +751,17 @@ static void __migrate_device_pages(unsigned long *src_pfns,
+>>   			/*
+>>   			 * For now only support anonymous memory migrating to
+>>   			 * device private or coherent memory.
+>> +			 *
+>> +			 * Try to get rid of swap cache if possible.
+>> +			 * Leave shmem pages alone, they handle swap internally
+>> +			 *
+>>   			 */
+>>   			if (mapping) {
+>> -				src_pfns[i] &= ~MIGRATE_PFN_MIGRATE;
+>> -				continue;
+>> +				if (shmem_mapping(mapping) ||
+>> +				    !folio_free_swap(page_folio(page))) {
+> 
+> Should we filter out file pages firstly?
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 398e5aac2e77..85ac6fc1ff1d 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -1555,6 +1555,24 @@ config SERIAL_SUNPLUS_CONSOLE
- 	  you can alter that using a kernel command line option such as
- 	  "console=ttySUPx".
- 
-+config SERIAL_NUVOTON_MA35D1
-+	tristate "Nuvoton MA35D1 family UART support"
-+	depends on ARCH_MA35 || COMPILE_TEST
-+	select SERIAL_CORE
-+	help
-+	  This driver supports Nuvoton MA35D1 family UART ports. If you would
-+	  like to use them, you must answer Y or M to this option. Note that
-+	  for use as console, it must be included in kernel and not as a
-+	  module
-+
-+config SERIAL_NUVOTON_MA35D1_CONSOLE
-+	bool "Console on a Nuvotn MA35D1 family UART port"
-+	depends on SERIAL_NUVOTON_MA35D1=y
-+	select SERIAL_CORE_CONSOLE
-+	help
-+	  Select this options if you'd like to use the UART port0 of the
-+	  Nuvoton MA35D1 family as a console.
-+
- endmenu
- 
- config SERIAL_MCTRL_GPIO
-diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
-index cd9afd9e3018..0e823851c42c 100644
---- a/drivers/tty/serial/Makefile
-+++ b/drivers/tty/serial/Makefile
-@@ -93,3 +93,4 @@ obj-$(CONFIG_SERIAL_MCTRL_GPIO)	+= serial_mctrl_gpio.o
- 
- obj-$(CONFIG_SERIAL_KGDB_NMI) += kgdb_nmi.o
- obj-$(CONFIG_KGDB_SERIAL_CONSOLE) += kgdboc.o
-+obj-$(CONFIG_SERIAL_NUVOTON_MA35D1) += ma35d1_serial.o
-diff --git a/drivers/tty/serial/ma35d1_serial.c b/drivers/tty/serial/ma35d1_serial.c
-new file mode 100644
-index 000000000000..4eca34ba01c9
---- /dev/null
-+++ b/drivers/tty/serial/ma35d1_serial.c
-@@ -0,0 +1,796 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ *  MA35D1 serial driver
-+ *  Copyright (C) 2023 Nuvoton Technology Corp.
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/serial_core.h>
-+#include <linux/slab.h>
-+#include <linux/tty_flip.h>
-+
-+#define UART_NR			17
-+
-+#define UART_REG_RBR		0x00
-+#define UART_REG_THR		0x00
-+#define UART_REG_IER		0x04
-+#define UART_REG_FCR		0x08
-+#define UART_REG_LCR		0x0C
-+#define UART_REG_MCR		0x10
-+#define UART_REG_MSR		0x14
-+#define UART_REG_FSR		0x18
-+#define UART_REG_ISR		0x1C
-+#define UART_REG_TOR		0x20
-+#define UART_REG_BAUD		0x24
-+#define UART_REG_ALTCTL		0x2C
-+#define UART_FUN_SEL		0x30
-+#define UART_REG_WKCTL		0x40
-+#define UART_REG_WKSTS		0x44
-+
-+/* UART_REG_IER - Interrupt Enable Register */
-+#define IER_RDA_IEN		BIT(0)  /* RBR Available Interrupt Enable */
-+#define IER_THRE_IEN		BIT(1)  /* THR Empty Interrupt Enable */
-+#define IER_RLS_IEN		BIT(2)  /* RX Line Status Interrupt Enable */
-+#define IER_RTO_IEN		BIT(4)  /* RX Time-out Interrupt Enable */
-+#define IER_BUFERR_IEN		BIT(5)  /* Buffer Error Interrupt Enable */
-+#define IER_TIME_OUT_EN		BIT(11) /* RX Buffer Time-out Counter Enable */
-+#define IER_AUTO_RTS		BIT(12) /* nRTS Auto-flow Control Enable */
-+#define IER_AUTO_CTS		BIT(13) /* nCTS Auto-flow Control Enable */
-+
-+/* UART_REG_FCR - FIFO Control Register */
-+#define FCR_RFR			BIT(1)  /* RX Field Software Reset */
-+#define FCR_TFR			BIT(2)  /* TX Field Software Reset */
-+#define FCR_RFITL_MASK		GENMASK(7, 4) /* RX FIFO Interrupt Trigger Level */
-+#define FCR_RFITL_1BYTE		FIELD_PREP(FCR_RFITL_MASK, 0)
-+#define FCR_RFITL_4BYTES	FIELD_PREP(FCR_RFITL_MASK, 1)
-+#define FCR_RFITL_8BYTES	FIELD_PREP(FCR_RFITL_MASK, 2)
-+#define FCR_RFITL_14BYTES	FIELD_PREP(FCR_RFITL_MASK, 3)
-+#define FCR_RFITL_30BYTES	FIELD_PREP(FCR_RFITL_MASK, 4)
-+#define FCR_RTSTRGLV_MASK	GENMASK(19, 16) /* nRTS Trigger Level */
-+#define FCR_RTSTRGLV_1BYTE	FIELD_PREP(FCR_RTSTRGLV_MASK, 0)
-+#define FCR_RTSTRGLV_4BYTES	FIELD_PREP(FCR_RTSTRGLV_MASK, 1)
-+#define FCR_RTSTRGLV_8BYTES	FIELD_PREP(FCR_RTSTRGLV_MASK, 2)
-+#define FCR_RTSTRGLV_14BYTES	FIELD_PREP(FCR_RTSTRGLV_MASK, 3)
-+#define FCR_RTSTRGLVL_30BYTES	FIELD_PREP(FCR_RTSTRGLV_MASK, 4)
-+
-+/* UART_REG_LCR - Line Control Register */
-+#define	LCR_NSB			BIT(2) /* Number of “STOP Bit” */
-+#define LCR_PBE			BIT(3) /* Parity Bit Enable */
-+#define LCR_EPE			BIT(4) /* Even Parity Enable */
-+#define LCR_SPE			BIT(5) /* Stick Parity Enable */
-+#define LCR_BREAK		BIT(6) /* Break Control */
-+#define LCR_WLS_MASK		GENMASK(1, 0) /* Word Length Selection */
-+#define LCR_WLS_5BITS		FIELD_PREP(LCR_WLS_MASK, 0)
-+#define LCR_WLS_6BITS		FIELD_PREP(LCR_WLS_MASK, 1)
-+#define LCR_WLS_7BITS		FIELD_PREP(LCR_WLS_MASK, 2)
-+#define LCR_WLS_8BITS		FIELD_PREP(LCR_WLS_MASK, 3)
-+
-+/* UART_REG_MCR - Modem Control Register */
-+#define MCR_RTS_CTRL		BIT(1)  /* nRTS Signal Control */
-+#define MCR_RTSACTLV		BIT(9)  /* nRTS Pin Active Level */
-+#define MCR_RTSSTS		BIT(13) /* nRTS Pin Status (Read Only) */
-+
-+/* UART_REG_MSR - Modem Status Register */
-+#define MSR_CTSDETF		BIT(0)  /* Detect nCTS State Change Flag */
-+#define MSR_CTSSTS		BIT(4)  /* nCTS Pin Status (Read Only) */
-+#define MSR_CTSACTLV		BIT(8)  /* nCTS Pin Active Level */
-+
-+/* UART_REG_FSR - FIFO Status Register */
-+#define FSR_RX_OVER_IF		BIT(0)  /* RX Overflow Error Interrupt Flag */
-+#define FSR_PEF			BIT(4)  /* Parity Error Flag*/
-+#define FSR_FEF			BIT(5)  /* Framing Error Flag */
-+#define FSR_BIF			BIT(6)  /* Break Interrupt Flag */
-+#define FSR_RX_EMPTY		BIT(14) /* Receiver FIFO Empty (Read Only) */
-+#define FSR_RX_FULL		BIT(15) /* Receiver FIFO Full (Read Only) */
-+#define FSR_TX_EMPTY		BIT(22) /* Transmitter FIFO Empty (Read Only) */
-+#define FSR_TX_FULL		BIT(23) /* Transmitter FIFO Full (Read Only) */
-+#define FSR_TX_OVER_IF		BIT(24) /* TX Overflow Error Interrupt Flag */
-+#define FSR_TE_FLAG		BIT(28) /* Transmitter Empty Flag (Read Only) */
-+#define FSR_RXPTR_MSK		GENMASK(13, 8) /* TX FIFO Pointer mask */
-+#define FSR_TXPTR_MSK		GENMASK(21, 16) /* RX FIFO Pointer mask */
-+
-+/* UART_REG_ISR - Interrupt Status Register */
-+#define ISR_RDA_IF		BIT(0) /* RBR Available Interrupt Flag */
-+#define ISR_THRE_IF		BIT(1) /* THR Empty Interrupt Flag */
-+#define ISR_RLSIF		BIT(2) /* Receive Line Interrupt Flag */
-+#define ISR_MODEMIF		BIT(3) /* MODEM Interrupt Flag */
-+#define ISR_RXTO_IF		BIT(4) /* RX Time-out Interrupt Flag */
-+#define ISR_BUFEIF		BIT(5) /* Buffer Error Interrupt Flag */
-+#define UART_ISR_WK_IF		BIT(6) /* UART Wake-up Interrupt Flag */
-+#define UART_ISR_RDAINT		BIT(8) /* RBR Available Interrupt Indicator */
-+#define ISR_THRE_INT		BIT(9) /* THR Empty Interrupt Indicator */
-+#define ISR_ALL			0xFFFFFFFF
-+
-+/* UART_REG_BAUD - Baud Rate Divider Register */
-+#define	BAUD_MODE_MASK		GENMASK(29, 28)
-+#define BAUD_MODE0		FIELD_PREP(BAUD_MODE_MASK, 0)
-+#define BAUD_MODE1		FIELD_PREP(BAUD_MODE_MASK, 2)
-+#define BAUD_MODE2		FIELD_PREP(BAUD_MODE_MASK, 3)
-+
-+/* UART_REG_ALTCTL - Alternate Control/Status Register */
-+#define ALTCTL_RS485AUD		BIT(10) /* RS-485 Auto Direction Function */
-+
-+/* UART_FUN_SEL - Function Select Register */
-+#define FUN_SEL_MASK		GENMASK(2, 0)
-+#define FUN_SEL_UART		FIELD_PREP(FUN_SEL_MASK, 0)
-+#define FUN_SEL_RS485		FIELD_PREP(FUN_SEL_MASK, 3)
-+
-+/* UART FIFO depth */
-+#define UART_FIFO_DEPTH		32
-+/* UART console clock */
-+#define UART_CONSOLE_CLK	24000000
-+/* UART register ioremap size */
-+#define UART_REG_SIZE		0x100
-+/* Rx Timeout */
-+#define UART_RX_TOUT		0x40
-+
-+#define UART_ISR_IF_CHECK (ISR_RDA_IF | ISR_RXTO_IF | ISR_THRE_INT | ISR_BUFEIF)
-+
-+#define LOOP_TIMEOUT		1000
-+
-+static struct uart_driver ma35d1serial_reg;
-+
-+struct uart_ma35d1_port {
-+	struct uart_port port;
-+	struct clk *clk;
-+	u16 capabilities; /* port capabilities */
-+	u8 ier;
-+	u8 lcr;
-+	u8 mcr;
-+	u32 baud_rate;
-+	u32 console_baud_rate;
-+	u32 console_line;
-+	u32 console_int;
-+};
-+
-+static struct uart_ma35d1_port ma35d1serial_ports[UART_NR];
-+
-+static struct uart_ma35d1_port *to_ma35d1_uart_port(struct uart_port *uart)
-+{
-+	return container_of(uart, struct uart_ma35d1_port, port);
-+}
-+
-+static u32 serial_in(struct uart_ma35d1_port *p, u32 offset)
-+{
-+	return readl_relaxed(p->port.membase + offset);
-+}
-+
-+static void serial_out(struct uart_ma35d1_port *p, u32 offset, u32 value)
-+{
-+	writel_relaxed(value, p->port.membase + offset);
-+}
-+
-+static void __stop_tx(struct uart_ma35d1_port *p)
-+{
-+	u32 ier;
-+
-+	ier = serial_in(p, UART_REG_IER);
-+	if (ier & IER_THRE_IEN)
-+		serial_out(p, UART_REG_IER, ier & ~IER_THRE_IEN);
-+}
-+
-+static void ma35d1serial_stop_tx(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	__stop_tx(up);
-+}
-+
-+static void transmit_chars(struct uart_ma35d1_port *up)
-+{
-+	u32 count;
-+	u8 ch;
-+
-+	if (uart_tx_stopped(&up->port)) {
-+		ma35d1serial_stop_tx(&up->port);
-+		return;
-+	}
-+	count = UART_FIFO_DEPTH - FIELD_GET(FSR_TXPTR_MSK, serial_in(up, UART_REG_FSR));
-+	uart_port_tx_limited(&up->port, ch, count,
-+			     !(serial_in(up, UART_REG_FSR) & FSR_TX_FULL),
-+			     serial_out(up, UART_REG_THR, ch),
-+			     ({}));
-+}
-+
-+static void ma35d1serial_start_tx(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	u32 ier;
-+
-+	ier = serial_in(up, UART_REG_IER);
-+	serial_out(up, UART_REG_IER, ier & ~IER_THRE_IEN);
-+	transmit_chars(up);
-+	serial_out(up, UART_REG_IER, ier | IER_THRE_IEN);
-+}
-+
-+static void ma35d1serial_stop_rx(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	serial_out(up, UART_REG_IER, serial_in(up, UART_REG_IER) & ~IER_RDA_IEN);
-+}
-+
-+static void receive_chars(struct uart_ma35d1_port *up)
-+{
-+	u8 ch, flag;
-+	u32 fsr;
-+	int max_count = 256;
-+
-+	fsr = serial_in(up, UART_REG_FSR);
-+	do {
-+		flag = TTY_NORMAL;
-+		up->port.icount.rx++;
-+
-+		if (unlikely(fsr & (FSR_BIF | FSR_FEF | FSR_PEF | FSR_RX_OVER_IF))) {
-+			if (fsr & FSR_BIF) {
-+				up->port.icount.brk++;
-+				if (uart_handle_break(&up->port))
-+					continue;
-+			}
-+			if (fsr & FSR_FEF)
-+				up->port.icount.frame++;
-+			if (fsr & FSR_PEF)
-+				up->port.icount.parity++;
-+			if (fsr & FSR_RX_OVER_IF)
-+				up->port.icount.overrun++;
-+
-+			serial_out(up, UART_REG_FSR, fsr &
-+				   (FSR_BIF | FSR_FEF | FSR_PEF | FSR_RX_OVER_IF));
-+
-+			if (fsr & FSR_BIF)
-+				flag = TTY_BREAK;
-+			else if (fsr & FSR_PEF)
-+				flag = TTY_PARITY;
-+			else if (fsr & FSR_FEF)
-+				flag = TTY_FRAME;
-+		}
-+
-+		ch = serial_in(up, UART_REG_RBR);
-+		if (uart_handle_sysrq_char(&up->port, ch))
-+			continue;
-+
-+		spin_lock(&up->port.lock);
-+		uart_insert_char(&up->port, fsr, FSR_RX_OVER_IF, ch, flag);
-+		spin_unlock(&up->port.lock);
-+
-+		fsr = serial_in(up, UART_REG_FSR);
-+	} while (!(fsr & FSR_RX_EMPTY) && (max_count-- > 0));
-+
-+	spin_lock(&up->port.lock);
-+	tty_flip_buffer_push(&up->port.state->port);
-+	spin_unlock(&up->port.lock);
-+}
-+
-+static irqreturn_t ma35d1serial_interrupt(int irq, void *dev_id)
-+{
-+	struct uart_port *port = dev_id;
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	u32 isr, fsr;
-+
-+	isr = serial_in(up, UART_REG_ISR);
-+	fsr = serial_in(up, UART_REG_FSR);
-+
-+	if (!(isr & UART_ISR_IF_CHECK))
-+		return IRQ_NONE;
-+
-+	if (isr & (ISR_RDA_IF | ISR_RXTO_IF))
-+		receive_chars(up);
-+	if (isr & ISR_THRE_INT)
-+		transmit_chars(up);
-+	if (fsr & FSR_TX_OVER_IF)
-+		serial_out(up, UART_REG_FSR, FSR_TX_OVER_IF);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static u32 ma35d1serial_tx_empty(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	u32 fsr;
-+
-+	fsr = serial_in(up, UART_REG_FSR);
-+	return (fsr & (FSR_TE_FLAG | FSR_TX_EMPTY)) ==
-+		(FSR_TE_FLAG | FSR_TX_EMPTY) ? TIOCSER_TEMT : 0;
-+}
-+
-+static u32 ma35d1serial_get_mctrl(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	u32 status;
-+	u32 ret = 0;
-+
-+	status = serial_in(up, UART_REG_MSR);
-+	if (!(status & MSR_CTSSTS))
-+		ret |= TIOCM_CTS;
-+	return ret;
-+}
-+
-+static void ma35d1serial_set_mctrl(struct uart_port *port, u32 mctrl)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	u32 mcr = 0;
-+	u32 ier = 0;
-+
-+	if (mctrl & TIOCM_RTS) {
-+		mcr = serial_in(up, UART_REG_MCR);
-+		mcr |= MCR_RTSACTLV;
-+		mcr &= ~MCR_RTS_CTRL;
-+	}
-+	if (up->mcr & UART_MCR_AFE) {
-+		mcr = serial_in(up, UART_REG_MCR);
-+		mcr |= MCR_RTSACTLV;
-+		mcr &= ~MCR_RTS_CTRL;
-+
-+		serial_out(up, UART_REG_IER,
-+			   (serial_in(up, UART_REG_IER) | IER_AUTO_RTS | IER_AUTO_CTS));
-+
-+		up->port.flags |= UPF_HARD_FLOW;
-+	} else {
-+		ier = serial_in(up, UART_REG_IER);
-+		ier &= ~(IER_AUTO_RTS | IER_AUTO_CTS);
-+		serial_out(up, UART_REG_IER, ier);
-+
-+		up->port.flags &= ~UPF_HARD_FLOW;
-+	}
-+	serial_out(up, UART_REG_MSR, (serial_in(up, UART_REG_MSR) | MSR_CTSACTLV));
-+	serial_out(up, UART_REG_MCR, mcr);
-+}
-+
-+static void ma35d1serial_break_ctl(struct uart_port *port, int break_state)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	unsigned long flags;
-+	u32 lcr;
-+
-+	spin_lock_irqsave(&up->port.lock, flags);
-+	lcr = serial_in(up, UART_REG_LCR);
-+	if (break_state != 0)
-+		lcr |= LCR_BREAK;
-+	else
-+		lcr &= ~LCR_BREAK;
-+	serial_out(up, UART_REG_LCR, lcr);
-+	spin_unlock_irqrestore(&up->port.lock, flags);
-+}
-+
-+static int ma35d1serial_startup(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	int retval;
-+
-+	/* Reset FIFO */
-+	serial_out(up, UART_REG_FCR, FCR_TFR | FCR_RFR);
-+
-+	/* Clear pending interrupts */
-+	serial_out(up, UART_REG_ISR, ISR_ALL);
-+
-+	retval = request_irq(port->irq, ma35d1serial_interrupt, 0,
-+			     dev_name(port->dev), port);
-+	if (retval) {
-+		dev_err(up->port.dev, "request irq failed.\n");
-+		return retval;
-+	}
-+
-+	serial_out(up, UART_REG_FCR, serial_in(up, UART_REG_FCR) |
-+		   FCR_RFITL_4BYTES | FCR_RTSTRGLV_8BYTES);
-+	serial_out(up, UART_REG_LCR, LCR_WLS_8BITS);
-+	serial_out(up, UART_REG_TOR, UART_RX_TOUT);
-+	serial_out(up, UART_REG_IER, IER_RTO_IEN | IER_RDA_IEN |
-+		   IER_TIME_OUT_EN | IER_BUFERR_IEN);
-+	return 0;
-+}
-+
-+static void ma35d1serial_shutdown(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	serial_out(up, UART_REG_IER, 0);
-+	free_irq(port->irq, port);
-+}
-+
-+static u32 ma35d1serial_get_divisor(struct uart_port *port, u32 baud)
-+{
-+	return (port->uartclk / baud) - 2;
-+}
-+
-+static void ma35d1serial_set_termios(struct uart_port *port,
-+				     struct ktermios *termios,
-+				     const struct ktermios *old)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	u32 lcr = 0;
-+	unsigned long flags;
-+	u32 baud, quot;
-+
-+	lcr = UART_LCR_WLEN(tty_get_char_size(termios->c_cflag));
-+
-+	if (termios->c_cflag & CSTOPB)
-+		lcr |= LCR_NSB;
-+	if (termios->c_cflag & PARENB)
-+		lcr |= LCR_PBE;
-+	if (!(termios->c_cflag & PARODD))
-+		lcr |= LCR_EPE;
-+	if (termios->c_cflag & CMSPAR)
-+		lcr |= LCR_SPE;
-+
-+	baud = uart_get_baud_rate(port, termios, old, port->uartclk / 0xffff,
-+				  port->uartclk / 11);
-+
-+	quot = ma35d1serial_get_divisor(port, baud);
-+
-+	/*
-+	 * Ok, we're now changing the port state.  Do it with
-+	 * interrupts disabled.
-+	 */
-+	spin_lock_irqsave(&up->port.lock, flags);
-+
-+	up->port.read_status_mask = FSR_RX_OVER_IF;
-+	if (termios->c_iflag & INPCK)
-+		up->port.read_status_mask |= FSR_FEF | FSR_PEF;
-+	if (termios->c_iflag & (BRKINT | PARMRK))
-+		up->port.read_status_mask |= FSR_BIF;
-+
-+	/* Characteres to ignore */
-+	up->port.ignore_status_mask = 0;
-+	if (termios->c_iflag & IGNPAR)
-+		up->port.ignore_status_mask |= FSR_FEF | FSR_PEF;
-+	if (termios->c_iflag & IGNBRK) {
-+		up->port.ignore_status_mask |= FSR_BIF;
-+		/*
-+		 * If we're ignoring parity and break indicators,
-+		 * ignore overruns too (for real raw support).
-+		 */
-+		if (termios->c_iflag & IGNPAR)
-+			up->port.ignore_status_mask |= FSR_RX_OVER_IF;
-+	}
-+	if (termios->c_cflag & CRTSCTS)
-+		up->mcr |= UART_MCR_AFE;
-+	else
-+		up->mcr &= ~UART_MCR_AFE;
-+
-+	uart_update_timeout(port, termios->c_cflag, baud);
-+	ma35d1serial_set_mctrl(&up->port, up->port.mctrl);
-+	serial_out(up, UART_REG_BAUD, quot | BAUD_MODE2);
-+	serial_out(up, UART_REG_LCR, lcr);
-+	spin_unlock_irqrestore(&up->port.lock, flags);
-+}
-+
-+static const char *ma35d1serial_type(struct uart_port *port)
-+{
-+	return "ma35d1-uart";
-+}
-+
-+static void ma35d1serial_config_port(struct uart_port *port, int flags)
-+{
-+	/*
-+	 * Driver core for serial ports forces a non-zero value for port type.
-+	 * Write an arbitrary value here to accommodate the serial core driver,
-+	 * as ID part of UAPI is redundant.
-+	 */
-+	port->type = 1;
-+}
-+
-+static int ma35d1serial_verify_port(struct uart_port *port,
-+				struct serial_struct *ser)
-+{
-+	if (port->type != PORT_UNKNOWN && ser->type != 1)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static const struct uart_ops ma35d1serial_ops = {
-+	.tx_empty     = ma35d1serial_tx_empty,
-+	.set_mctrl    = ma35d1serial_set_mctrl,
-+	.get_mctrl    = ma35d1serial_get_mctrl,
-+	.stop_tx      = ma35d1serial_stop_tx,
-+	.start_tx     = ma35d1serial_start_tx,
-+	.stop_rx      = ma35d1serial_stop_rx,
-+	.break_ctl    = ma35d1serial_break_ctl,
-+	.startup      = ma35d1serial_startup,
-+	.shutdown     = ma35d1serial_shutdown,
-+	.set_termios  = ma35d1serial_set_termios,
-+	.type         = ma35d1serial_type,
-+	.config_port  = ma35d1serial_config_port,
-+	.verify_port  = ma35d1serial_verify_port,
-+};
-+
-+static const struct of_device_id ma35d1_serial_of_match[] = {
-+	{ .compatible = "nuvoton,ma35d1-uart" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, ma35d1_serial_of_match);
-+
-+#ifdef CONFIG_SERIAL_NUVOTON_MA35D1_CONSOLE
-+
-+static struct device_node *ma35d1serial_uart_nodes[UART_NR];
-+
-+static void wait_for_xmitr(struct uart_ma35d1_port *up)
-+{
-+	unsigned int tmout;
-+
-+	/* Wait up to 10ms for the character(s) to be sent. */
-+	tmout = 10000;
-+	while (--tmout) {
-+		if (serial_in(up, UART_REG_FSR) & FSR_TX_EMPTY)
-+			break;
-+		udelay(1);
-+	}
-+}
-+
-+static void ma35d1serial_console_putchar(struct uart_port *port, unsigned char ch)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	wait_for_xmitr(up);
-+	serial_out(up, UART_REG_THR, ch);
-+}
-+
-+/*
-+ *  Print a string to the serial port trying not to disturb
-+ *  any possible real use of the port...
-+ *
-+ *  The console_lock must be held when we get here.
-+ */
-+static void ma35d1serial_console_write(struct console *co,
-+				       const char *s, u32 count)
-+{
-+	struct uart_ma35d1_port *up = &ma35d1serial_ports[co->index];
-+	unsigned long flags;
-+	u32 ier;
-+
-+	spin_lock_irqsave(&up->port.lock, flags);
-+
-+	/*
-+	 *  First save the IER then disable the interrupts
-+	 */
-+	ier = serial_in(up, UART_REG_IER);
-+	serial_out(up, UART_REG_IER, 0);
-+
-+	uart_console_write(&up->port, s, count, ma35d1serial_console_putchar);
-+
-+	wait_for_xmitr(up);
-+	serial_out(up, UART_REG_IER, ier);
-+
-+	spin_unlock_irqrestore(&up->port.lock, flags);
-+}
-+
-+static int __init ma35d1serial_console_setup(struct console *co,
-+					     char *options)
-+{
-+	struct device_node *np = ma35d1serial_uart_nodes[co->index];
-+	struct uart_ma35d1_port *p = &ma35d1serial_ports[co->index];
-+	u32 val32[4];
-+	struct uart_port *port;
-+	int baud = 115200;
-+	int bits = 8;
-+	int parity = 'n';
-+	int flow = 'n';
-+
-+	/*
-+	 * Check whether an invalid uart number has been specified, and
-+	 * if so, search for the first available port that does have
-+	 * console support.
-+	 */
-+	if ((co->index < 0) || (co->index >= UART_NR)) {
-+		pr_debug("Console Port%x out of range\n", co->index);
-+		return -EINVAL;
-+	}
-+
-+	if (of_property_read_u32_array(np, "reg", val32, 4) != 0)
-+		return -EINVAL;
-+	p->port.iobase = val32[1];
-+	p->port.membase = ioremap(p->port.iobase, UART_REG_SIZE);
-+	p->port.ops = &ma35d1serial_ops;
-+	p->port.line = 0;
-+	p->port.uartclk = UART_CONSOLE_CLK;
-+
-+	port = &ma35d1serial_ports[co->index].port;
-+
-+	if (options)
-+		uart_parse_options(options, &baud, &parity, &bits, &flow);
-+
-+	return uart_set_options(port, co, baud, parity, bits, flow);
-+}
-+
-+static struct console ma35d1serial_console = {
-+	.name    = "ttyS",
-+	.write   = ma35d1serial_console_write,
-+	.device  = uart_console_device,
-+	.setup   = ma35d1serial_console_setup,
-+	.flags   = CON_PRINTBUFFER | CON_ENABLED,
-+	.index   = -1,
-+	.data    = &ma35d1serial_reg,
-+};
-+
-+static void ma35d1serial_console_init_port(void)
-+{
-+	u32 i = 0;
-+	struct device_node *np;
-+
-+	for_each_matching_node(np, ma35d1_serial_of_match) {
-+		if (ma35d1serial_uart_nodes[i] == NULL) {
-+			of_node_get(np);
-+			ma35d1serial_uart_nodes[i] = np;
-+			i++;
-+			if (i == UART_NR)
-+				break;
-+		}
-+	}
-+}
-+
-+static int __init ma35d1serial_console_init(void)
-+{
-+	ma35d1serial_console_init_port();
-+	register_console(&ma35d1serial_console);
-+	return 0;
-+}
-+console_initcall(ma35d1serial_console_init);
-+
-+#define MA35D1SERIAL_CONSOLE    (&ma35d1serial_console)
-+#else
-+#define MA35D1SERIAL_CONSOLE    NULL
-+#endif
-+
-+static struct uart_driver ma35d1serial_reg = {
-+	.owner        = THIS_MODULE,
-+	.driver_name  = "serial",
-+	.dev_name     = "ttyS",
-+	.major        = TTY_MAJOR,
-+	.minor        = 64,
-+	.cons         = MA35D1SERIAL_CONSOLE,
-+	.nr           = UART_NR,
-+};
-+
-+/*
-+ * Register a set of serial devices attached to a platform device.
-+ * The list is terminated with a zero flags entry, which means we expect
-+ * all entries to have at least UPF_BOOT_AUTOCONF set.
-+ */
-+static int ma35d1serial_probe(struct platform_device *pdev)
-+{
-+	struct resource *res_mem;
-+	struct uart_ma35d1_port *up;
-+	int ret = 0;
-+
-+	if (pdev->dev.of_node) {
-+		ret = of_alias_get_id(pdev->dev.of_node, "serial");
-+		if (ret < 0) {
-+			dev_err(&pdev->dev, "failed to get alias/pdev id, errno %d\n", ret);
-+			return ret;
-+		}
-+	}
-+	up = &ma35d1serial_ports[ret];
-+	up->port.line = ret;
-+	res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res_mem)
-+		return -ENODEV;
-+
-+	up->port.iobase = res_mem->start;
-+	up->port.membase = ioremap(up->port.iobase, UART_REG_SIZE);
-+	up->port.ops = &ma35d1serial_ops;
-+
-+	spin_lock_init(&up->port.lock);
-+
-+	up->clk = of_clk_get(pdev->dev.of_node, 0);
-+	if (IS_ERR(up->clk)) {
-+		ret = PTR_ERR(up->clk);
-+		dev_err(&pdev->dev, "failed to get core clk: %d\n", ret);
-+		goto err_iounmap;
-+	}
-+
-+	ret = clk_prepare_enable(up->clk);
-+	if (ret)
-+		goto err_iounmap;
-+
-+	if (up->port.line != 0)
-+		up->port.uartclk = clk_get_rate(up->clk);
-+
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		goto err_clk_disable;
-+
-+	up->port.irq = ret;
-+	up->port.dev = &pdev->dev;
-+	up->port.flags = UPF_BOOT_AUTOCONF;
-+
-+	platform_set_drvdata(pdev, up);
-+
-+	ret = uart_add_one_port(&ma35d1serial_reg, &up->port);
-+	if (ret < 0)
-+		goto err_free_irq;
-+
-+	return 0;
-+
-+err_free_irq:
-+	free_irq(up->port.irq, &up->port);
-+
-+err_clk_disable:
-+	clk_disable_unprepare(up->clk);
-+
-+err_iounmap:
-+	iounmap(up->port.membase);
-+	return ret;
-+}
-+
-+/*
-+ * Remove serial ports registered against a platform device.
-+ */
-+static int ma35d1serial_remove(struct platform_device *dev)
-+{
-+	struct uart_port *port = platform_get_drvdata(dev);
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	uart_remove_one_port(&ma35d1serial_reg, port);
-+	clk_disable_unprepare(up->clk);
-+	return 0;
-+}
-+
-+static int ma35d1serial_suspend(struct platform_device *dev, pm_message_t state)
-+{
-+	struct uart_port *port = platform_get_drvdata(dev);
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	uart_suspend_port(&ma35d1serial_reg, &up->port);
-+	if (up->port.line == 0) {
-+		up->console_baud_rate = serial_in(up, UART_REG_BAUD);
-+		up->console_line = serial_in(up, UART_REG_LCR);
-+		up->console_int = serial_in(up, UART_REG_IER);
-+	}
-+	return 0;
-+}
-+
-+static int ma35d1serial_resume(struct platform_device *dev)
-+{
-+	struct uart_port *port = platform_get_drvdata(dev);
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	if (up->port.line == 0) {
-+		serial_out(up, UART_REG_BAUD, up->console_baud_rate);
-+		serial_out(up, UART_REG_LCR, up->console_line);
-+		serial_out(up, UART_REG_IER, up->console_int);
-+	}
-+	uart_resume_port(&ma35d1serial_reg, &up->port);
-+	return 0;
-+}
-+
-+static struct platform_driver ma35d1serial_driver = {
-+	.probe      = ma35d1serial_probe,
-+	.remove     = ma35d1serial_remove,
-+	.suspend    = ma35d1serial_suspend,
-+	.resume     = ma35d1serial_resume,
-+	.driver     = {
-+		.name   = "ma35d1-uart",
-+		.owner  = THIS_MODULE,
-+		.of_match_table = of_match_ptr(ma35d1_serial_of_match),
-+	},
-+};
-+
-+static int __init ma35d1serial_init(void)
-+{
-+	int ret;
-+
-+	ret = uart_register_driver(&ma35d1serial_reg);
-+	if (ret)
-+		return ret;
-+	ret = platform_driver_register(&ma35d1serial_driver);
-+	if (ret)
-+		uart_unregister_driver(&ma35d1serial_reg);
-+	return ret;
-+}
-+
-+static void __exit ma35d1serial_exit(void)
-+{
-+	platform_driver_unregister(&ma35d1serial_driver);
-+	uart_unregister_driver(&ma35d1serial_reg);
-+}
-+
-+module_init(ma35d1serial_init);
-+module_exit(ma35d1serial_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("MA35D1 serial driver");
-+
--- 
-2.34.1
+folio_free_swap() checks first and returns false if not swapcache page 
+(ie including normal file pages) so think that is enough, but maybe for 
+clarity and not depending on it, could be good explicitly check for 
+swapcache before calling folio_free_swap().
+
+> 
+>> +					src_pfns[i] &= ~MIGRATE_PFN_MIGRATE;
+>> +					continue;
+>> +				}
+>>   			}
+>>   		} else if (is_zone_device_page(newpage)) {
+>>   			/*
+> 
+> Best Regards,
+> Huang, Ying
+> 
+
+Thanks,
+Mika
 
