@@ -2,173 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9976FB582
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E1A6FB589
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbjEHQuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
+        id S233298AbjEHQv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232967AbjEHQuM (ORCPT
+        with ESMTP id S232292AbjEHQv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 12:50:12 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA2740D0
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:50:10 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4efe8991b8aso5517442e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 09:50:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1683564609; x=1686156609;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tcrvD/HGfP0sQ8rn7rEA3w+8hNghq9eS4p2dVN+XRPw=;
-        b=YOe7TLYwTq2FS+pgqtD6IU9zBah2N7CgzKD2s77+3g0flsJL5ZT26ZJDFP1VHBRTe4
-         2IO8Ftmnh1CMF0cxapLxrjnmlFauKy8nE4BxvJGryBUlE39XnO915uS7n+XtzU6YuHZH
-         flN05rExGkzzgrVw964Il3tUAsR9bOBc9C56OSxbKNlXIRyHJ45RyQ7oiZ7qDnKhk9+Z
-         xr7UsTGKzw29fbQyJJTSybV9tLNGnyWkYTjOld/lmRZeCbFY3efN1VrMD8ZfQ/tRT8a4
-         XyYtd05TmYT2MhEzor+UGPYjaigZ8vYNEcCt+d/hx75xkDaJUb/kWgzjkLcp4YQcipXw
-         VWMw==
+        Mon, 8 May 2023 12:51:56 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E1149DD
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 09:51:55 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-331139b46cfso31792175ab.1
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 09:51:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683564609; x=1686156609;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tcrvD/HGfP0sQ8rn7rEA3w+8hNghq9eS4p2dVN+XRPw=;
-        b=Z7vWrycV+sbu7nYTQzAtX+aP+dXFgFBaOZboNDYze95aAQTWGRA6Wc4erBJiGECmZH
-         RsCrnFgzU9A5Ap4aHnDHmGTcikvE+M0SW1dWtwnNnb306uHAxgfjpSJ+dTs6VMEdk0W0
-         1jG9USUS3SWrT+BD6IPN8yk+J3nXtTdZ/FcVJhHGHI77MmZc/T5VOjXtnK3CegEk/X+e
-         hlqj8LYfBNGScjGLIaiHw4VRIIWKb1CDyfocvcrdeqNg5QS3AojpW+3h6gClnS8BGsbu
-         yw35n+3pVZYC5Exi1LZrzEIAFcCxxgX/eCRQsXz/ZFu1GC4M5DZxDAvOKl0gwO4abc+x
-         EBHg==
-X-Gm-Message-State: AC+VfDzzpMQte5KJZzOCJ97WOmEel3mkNx2raSfoBBcuOpdX6bbrEqBS
-        NQgvi6UhYmtNIBlO8Yntvt9V+DI4Z3RyPTBPS7uFZQ==
-X-Google-Smtp-Source: ACHHUZ4+gjA9MQpcwzYPPM5k47cAY6H6hQhv8AiOghh9B/HC+0qEmiIPg0YCZV1xuf2Ou2iOsJjKnEGGtcVPWiJTNEw=
-X-Received: by 2002:a19:f709:0:b0:4ef:9633:f119 with SMTP id
- z9-20020a19f709000000b004ef9633f119mr2918416lfe.26.1683564608901; Mon, 08 May
- 2023 09:50:08 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683564714; x=1686156714;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vKAJIhZErfGgup3nkmbHVmmde/aJfUx7FrW75v72/Oo=;
+        b=XMNScPZzrkW/PkJzpvHGNuIqhd1tvKowEHYpFlWfmaU3cArUbqHBLrNCPq51C6yOHH
+         IxhtYEP1BqTgk/hc0huP/dn43mF5tSroICBcylCIWvLZgS9OIhwBqrpT+wHz4WGmL/3z
+         D69m7xQbR2PBq1hTXaAOdcWJIVpE6Dm8vCQ+Ov7BK0BJvAh6U2OSCQdnz+q5x1shRJs4
+         DbyRL+uFHgC50agIYU7AFZUKbF/QXbRXIVxW5jDsSfrBgpAafZd62tHmZKYa9kS991uq
+         /7zzmgRAfOKeE4LJv5c5FCQ45kHnk59K1/Alwcx3Wg/SXs95oBjOWYCxnQUj2uxzAXFU
+         ty3w==
+X-Gm-Message-State: AC+VfDx4fT6mepKDJMtIujv2Y6b/4j2L6aVKowiS9gjAeTlBGkSEiKNx
+        HJWbWBCIMMMg80VSyyoyn+lYFjjLmglky3dCcAJmb/mAPnA5
+X-Google-Smtp-Source: ACHHUZ5JJOubbmBPxJ5XWWGE2MpiMMVz5hn+mm+ERj/WNuPOsCoXJb04UrJqpPDqksAfiumYkuEN1C1KdqsHp6WWDEdPaEZw2B8r
 MIME-Version: 1.0
-References: <mhng-4b9e3d86-2f0b-47da-8a5d-bd383a0171d6@palmer-ri-x1c9> <4830085.8hb0ThOEGa@diego>
-In-Reply-To: <4830085.8hb0ThOEGa@diego>
-From:   Evan Green <evan@rivosinc.com>
-Date:   Mon, 8 May 2023 09:49:32 -0700
-Message-ID: <CALs-HsveK-uUuSAOkUUPuUYK6_ChG95_YWtdwYvGsTfKYSWUpg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Expose the isa-string via the AT_BASE_PLATFORM aux vector
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     philipp.tomsich@vrull.eu, Palmer Dabbelt <palmer@dabbelt.com>,
-        bjorn@kernel.org, jrtc27@jrtc27.com,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        kito.cheng@sifive.com, Conor Dooley <conor.dooley@microchip.com>,
-        matthias.bgg@gmail.com, heinrich.schuchardt@canonical.com,
-        greentime.hu@sifive.com, nick.knight@sifive.com,
-        christoph.muellner@vrull.eu,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+X-Received: by 2002:a92:d4ce:0:b0:32a:9e86:242f with SMTP id
+ o14-20020a92d4ce000000b0032a9e86242fmr5968170ilm.6.1683564714802; Mon, 08 May
+ 2023 09:51:54 -0700 (PDT)
+Date:   Mon, 08 May 2023 09:51:54 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c84b4705fb31741e@google.com>
+Subject: [syzbot] [bpf?] [net?] WARNING: zero-size vmalloc in print_tainted
+From:   syzbot <syzbot+fae676d3cf469331fc89@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bjorn@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        edumazet@google.com, hawk@kernel.org, john.fastabend@gmail.com,
+        jonathan.lemon@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, maciej.fijalkowski@intel.com,
+        magnus.karlsson@intel.com, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 3:31=E2=80=AFAM Heiko St=C3=BCbner <heiko@sntech.de>=
- wrote:
->
-> Hi,
->
-> Am Dienstag, 2. Mai 2023, 19:15:29 CEST schrieb Palmer Dabbelt:
-> > On Tue, 02 May 2023 02:13:10 PDT (-0700), philipp.tomsich@vrull.eu wrot=
-e:
-> > > On Tue, 2 May 2023 at 09:58, Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>=
- wrote:
-> > >>
-> > >> Philipp Tomsich <philipp.tomsich@vrull.eu> writes:
-> > >>
-> > >> > It is a pity that the current interface was designed without invol=
-ving
-> > >> > RVI (and that I had to ask my team to put together a patch set for
-> > >> > further discussion, given that none of the other major vendors in =
-RVI
-> > >> > stepped forward).  I guarantee that plenty of reviewers would have
-> > >> > highlighted that a central registry (even if it is just a kernel
-> > >> > header) should be avoided.
-> > >>
-> > >> Are you claiming that the hwprobe work was not done in the open, but
-> > >> secretly merged? That is not only incorrect, but rude to upstream RI=
-SC-V
-> > >> Linux developers. I suggest you review how you interact with upstrea=
-m
-> > >> kernel work.
-> > >
-> > > Please don't put words into my mouth...
-> > >
-> > > I was merely pointing out that there was no engagement by the RVI
-> > > member companies (in regard to this mechanism) within RVI, which woul=
-d
-> > > have prevented Jessica's issue.
-> > > This would have also helped to address the concerns on vendor-defined
-> > > extensions.
-> > >
-> > > Also who do you refer to when you say "how _you_ interact"?  If it is
-> > > RVI that you refer to: it doesn't interact with upstream work
-> > > directly, as it doesn't own any engineering resources.
-> > > RVI provides a forum for member companies to come to an
-> > > understanding/design and then have the member companies perform the
-> > > work and take it upstream.
-> >
-> > I'm not even sure what you're looking for here: if RVI doesn't want to
-> > work upstream, then complaining that RVI isn't part of upstream
-> > discussions is pretty pointless.
-> >
-> > >> Why didn't RVI get involved in the review of the series? The expecta=
-tion
-> > >> cannot be that all open source projects go to RVI, but rather the ot=
-her
-> > >> way around.
-> > >
-> > > That is exactly the point I was making and which you seem to miss: RV=
-I
-> > > does not own any engineering resources and depends solely on its
-> > > member companies to project into open source projects.
-> > >
-> > >> Take a look at commit ea3de9ce8aa2 ("RISC-V: Add a syscall for HW
-> > >> probing"). Your team was very much involved in the review.
-> > >
-> > > I am aware, as I had reviewed and commented on these are well.
-> > > And my only request (was and) is that we need to figure out a way to
-> > > efficiently deal with vendor-defined extensions.
-> >
-> > Maybe you should go talk to you team, then?  Handling vendor extensions
-> > via hwprobe has been discussed, sounds like you're confused again.
->
-> I too have this vague memory of us talking about vendor extensions,
-> but my memory is really bad for stuff like this, so I spent the morning
-> combing through all the hwprobe iterations looking for it, but so far
-> have only found
->
-> https://lore.kernel.org/lkml/CALs-HstoeoTWjTEZrLWouCgwq0t3tDB6uL=3DtB68RJ=
-Ds1ub4Frw@mail.gmail.com/
->
-> I'm most likely just blind, but does someone have another pointer?
+Hello,
 
-Hello! That's probably the only pointer.
+syzbot found the following issue on:
 
-Couldn't handling vendor extensions within the hwprobe framework be as
-straightforward as explicitly carving out a region for them? Say
-0x8000000000000000+ belongs to the vendor? The layout of keys within
-the vendor hwprobe region then depends on the value in mvendorid (and
-if the vendor so chooses, archid and impid as well). Then vendors can
-expose keys to their hearts (avoiding the dumb pun there) content.
+HEAD commit:    457391b03803 Linux 6.3
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1697e9d4280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=385e197a58ca4afe
+dashboard link: https://syzkaller.appspot.com/bug?extid=fae676d3cf469331fc89
+compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15916904280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10910f18280000
 
-We can probably skip caching the vendor keys in the vDSO for now. If
-it really needs to be done we can add it later.
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/c35b5b2731d2/non_bootable_disk-457391b0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/2a1bf3bafeb6/vmlinux-457391b0.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/21f1e3b4a5a9/zImage-457391b0.xz
 
-This would enforce that there's only one "vendor" at a time for a
-given hart, but I think that's reasonable. Let me know what you think.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fae676d3cf469331fc89@syzkaller.appspotmail.com
 
--Evan
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 2949 at mm/vmalloc.c:3132 __vmalloc_node_range+0x44c/0x584 mm/vmalloc.c:3132
+Modules linked in:
+Kernel panic - not syncing: kernel: panic_on_warn set ...
+CPU: 1 PID: 2949 Comm: syz-executor398 Not tainted 6.3.0-syzkaller #0
+Hardware name: ARM-Versatile Express
+Backtrace: 
+[<817b2528>] (dump_backtrace) from [<817b261c>] (show_stack+0x18/0x1c arch/arm/kernel/traps.c:256)
+ r7:81d81ac0 r6:82422c04 r5:60000093 r4:81d901cc
+[<817b2604>] (show_stack) from [<817cec84>] (__dump_stack lib/dump_stack.c:88 [inline])
+[<817b2604>] (show_stack) from [<817cec84>] (dump_stack_lvl+0x48/0x54 lib/dump_stack.c:106)
+[<817cec3c>] (dump_stack_lvl) from [<817ceca8>] (dump_stack+0x18/0x1c lib/dump_stack.c:113)
+ r5:00000000 r4:8264dd14
+[<817cec90>] (dump_stack) from [<817b3110>] (panic+0x11c/0x36c kernel/panic.c:340)
+[<817b2ff4>] (panic) from [<802422ec>] (print_tainted+0x0/0xa0 kernel/panic.c:236)
+ r3:8240c488 r2:00000001 r1:81d79fcc r0:81d81ac0
+ r7:80469ba0
+[<80242268>] (check_panic_on_warn) from [<802424e0>] (__warn+0x7c/0x180 kernel/panic.c:673)
+[<80242464>] (__warn) from [<802426bc>] (warn_slowpath_fmt+0xd8/0x1d8 kernel/panic.c:697)
+ r8:00000009 r7:00000c3c r6:81da5110 r5:8240c954 r4:822ab6bc
+[<802425e8>] (warn_slowpath_fmt) from [<80469ba0>] (__vmalloc_node_range+0x44c/0x584 mm/vmalloc.c:3132)
+ r10:00000dc0 r9:8410d080 r8:83d04e80 r7:df800000 r6:00004000 r5:00000000
+ r4:00000000
+[<80469754>] (__vmalloc_node_range) from [<80469db0>] (vmalloc_user+0x6c/0x74 mm/vmalloc.c:3359)
+ r10:00000126 r9:8410d080 r8:83d04e80 r7:00000000 r6:00000000 r5:842aa940
+ r4:00000000
+[<80469d44>] (vmalloc_user) from [<81767778>] (xskq_create+0x74/0xc4 net/xdp/xsk_queue.c:39)
+[<81767704>] (xskq_create) from [<81766c64>] (xsk_init_queue net/xdp/xsk.c:756 [inline])
+[<81767704>] (xskq_create) from [<81766c64>] (xsk_setsockopt+0x1c0/0x2bc net/xdp/xsk.c:1080)
+ r7:83d04eac r6:83d04c00 r5:00000000 r4:00000003
+[<81766aa8>] (xsk_setsockopt) from [<812f6720>] (__sys_setsockopt+0xd4/0x1c8 net/socket.c:2271)
+ r8:80200288 r7:00000126 r6:000118b0 r5:81766aa4 r4:844eb900
+[<812f664c>] (__sys_setsockopt) from [<812f6830>] (__do_sys_setsockopt net/socket.c:2282 [inline])
+[<812f664c>] (__sys_setsockopt) from [<812f6830>] (sys_setsockopt+0x1c/0x24 net/socket.c:2279)
+ r5:00000000 r4:00000020
+[<812f6814>] (sys_setsockopt) from [<80200060>] (ret_fast_syscall+0x0/0x1c arch/arm/mm/proc-v7.S:66)
+Exception stack(0xdf981fa8 to 0xdf981ff0)
+1fa0:                   00000020 00000000 00000003 0000011b 00000003 20000040
+1fc0: 00000020 00000000 000118b0 00000126 000f4240 00000000 00000000 00003a97
+1fe0: 7e9b4c90 7e9b4c80 00010624 0002a900
+Rebooting in 86400 seconds..
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
