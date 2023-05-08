@@ -2,133 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E516FA338
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7A06FA341
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 11:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233608AbjEHJ0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 05:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
+        id S233691AbjEHJ1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 05:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233367AbjEHJ0k (ORCPT
+        with ESMTP id S233642AbjEHJ1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 05:26:40 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C83191C2
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 02:26:38 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bc0117683so7850472a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 02:26:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683537997; x=1686129997;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MiCCw6JVpqLvBjxuPw1yzCHzKR/sVakiwZutl82ltXI=;
-        b=m9j3yNB/3j3E/6fpurCNLFASZERGHi46OQt8kzyW9FNlCQ1FNT2GhqeqzkgnwNp0bv
-         lw1gBq9VdCQKkLzQRSqETJxJLMMy3swM+q/f3uF3Nkx3x+Tn1s1YcvrCigyW/Iz/9pVu
-         HiOfeFM3VG36hNPUEcLEmYl7mVxJP0FxMaFs7Np7IfVzK47SgiuD3/PVGPXd2L/JBAOo
-         8jNVmbkaQ8f6+qPEnzjIEkWBfmFUKSarsZjwAzQ22pZDHAkP/h9tjrVOH05Sgpy9a01J
-         prvhC+u28HxUK8MtETLvXyKbbbH5St35kNER3QA3rrVDEkVm+KqT9x3uWKvN4AtkmnLM
-         ht6g==
+        Mon, 8 May 2023 05:27:20 -0400
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F160D59FB;
+        Mon,  8 May 2023 02:27:18 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6aaffc866c4so324654a34.2;
+        Mon, 08 May 2023 02:27:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683537997; x=1686129997;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MiCCw6JVpqLvBjxuPw1yzCHzKR/sVakiwZutl82ltXI=;
-        b=V5LfTuehVAYXH4HgICGqo5pmbGR7t8VJ47sK2M9NuZX9AEFDQ+QVJt7BQSpIlqNgLD
-         UmEwCxVo0WliOdEuKRKTSVHctcjF41OLeEY80SjzrgNvzw78vCv7Z+9QLBCenzm43bCO
-         t92BjuIzr1mEY7bn6WdmuUsVJ3+lWIYrKupipByAN6baZbLPX2bgi0KF8WWObOcUDfAG
-         p0Vc3Hunkm3v7w9WeF08ieYOaYfWJ6EraxXAwYApuEQzIgzkWWN/XV/txgi9YG4q4D1M
-         6tEtQHPZdpR/Agy9UMjqw8svTcXxcq285oaw1DlMdAxPQCo6HWBLVLatNjIlAapK3Ea0
-         mLtw==
-X-Gm-Message-State: AC+VfDzM5JEOMbuRMVPj3ZAZuP46andvs2ki6wQ0K42K+Eha01VnbEKL
-        jSIaKn9h3VIXP6JRW4uTpBYh3g==
-X-Google-Smtp-Source: ACHHUZ4oSPt/qB3Tyl8i9/yHcjt2sV4nl/PsiHtr0b18C6HMzsQHpCse2qMCin1fQ33JLgiu0JjN+g==
-X-Received: by 2002:a05:6402:28d:b0:506:fcd5:6159 with SMTP id l13-20020a056402028d00b00506fcd56159mr7754402edv.21.1683537997025;
-        Mon, 08 May 2023 02:26:37 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
-        by smtp.gmail.com with ESMTPSA id f18-20020a056402151200b0050daa883545sm578585edw.64.2023.05.08.02.26.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 02:26:36 -0700 (PDT)
-Message-ID: <1da9fbcb-07c7-5bf8-4461-dc6578101f84@linaro.org>
-Date:   Mon, 8 May 2023 11:26:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: gpio: Add STMPE YAML DT schema
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-gpio@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Stefan Agner <stefan@agner.ch>, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Lee Jones <lee@kernel.org>
-References: <20230426-stmpe-dt-bindings-v3-0-eac1d736e488@linaro.org>
- <20230426-stmpe-dt-bindings-v3-1-eac1d736e488@linaro.org>
- <168349835606.3623231.4270033272905089508.robh@kernel.org>
- <CACRpkdZsC6s3MjX5Mkr5u763CYSAotJKcK5wZMwCQxgEzvw+vQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CACRpkdZsC6s3MjX5Mkr5u763CYSAotJKcK5wZMwCQxgEzvw+vQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        d=1e100.net; s=20221208; t=1683538038; x=1686130038;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DguH7yd98IO9no2ougJQcRCCw8JxeycA5jMXenEALPQ=;
+        b=cMAX1HkLFqT3tMBaTB6+aDEc5c2kPAugnE4YPP/JAJRq2yhPIOkovQymh4lqDrksZ0
+         4IQzTii0Wr6etbxQQS0K2KW9dPAYtgmLZf9BEO7YjJ5wDqtrzWAYrVPsXLMfUcQUp1Rn
+         0ji32M9Sv9r9pv5RmLpGgIc2l8LUFS0kGnX4GLSFQpIyNLgDiJpD59MJ3FEM92fE79Wh
+         Tnul+qkoYyAg6JHLX6Ezy3D8TwaQyAd3gQ+ZMqVnUDC9sEoK23GpkC/30V9vcLouiL7p
+         naazbrrpv6FUtGOuJgJ2sZ9W3oD8kqsZdlAaVPNe6rxc2k1wjUmGsaIOyw7Ymbp5iq0W
+         pbog==
+X-Gm-Message-State: AC+VfDxGDEwazJc/mH40B/KBW3rNSNXnQ9NJTCBD3up03FQJZoYxDX7J
+        1xwEzCT1+XQFsYxbDg763FZo9IpZYubp
+X-Google-Smtp-Source: ACHHUZ4aCjwS3clxMxZaGq8mqr3vyeaqLy0a5Z1wm8QlVNY4m6uxyOmhNS1CHyug8eYUUbVMjFrUlg==
+X-Received: by 2002:a9d:6443:0:b0:6a1:1bd4:d8c8 with SMTP id m3-20020a9d6443000000b006a11bd4d8c8mr4421158otl.26.1683538038151;
+        Mon, 08 May 2023 02:27:18 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c5-20020a9d6845000000b006aaf62e838dsm1798202oto.53.2023.05.08.02.27.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 02:27:17 -0700 (PDT)
+Received: (nullmailer pid 575486 invoked by uid 1000);
+        Mon, 08 May 2023 09:27:12 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     thierry.reding@gmail.com, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
+        neil.armstrong@linaro.org, robh+dt@kernel.org, conor+dt@kernel.org,
+        daniel@ffwll.ch, sam@ravnborg.org, devicetree@vger.kernel.org,
+        airlied@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-imx@nxp.com
+In-Reply-To: <20230508083826.1016206-2-victor.liu@nxp.com>
+References: <20230508083826.1016206-1-victor.liu@nxp.com>
+ <20230508083826.1016206-2-victor.liu@nxp.com>
+Message-Id: <168353803230.575435.10408042054525345719.robh@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: display: simple: Add BOE
+ EV121WXM-N10-1850 panel
+Date:   Mon, 08 May 2023 04:27:12 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/05/2023 08:30, Linus Walleij wrote:
-> On Mon, May 8, 2023 at 12:26 AM Rob Herring <robh@kernel.org> wrote:
->> On Sun, 07 May 2023 23:19:19 +0200, Linus Walleij wrote:
+
+On Mon, 08 May 2023 16:38:25 +0800, Liu Ying wrote:
+> Add BOE EV121WXM-N10-1850 12.1" WXGA (1280x800) TFT LCD panel
+> compatible string.  The panel has a LVDS display interface.
 > 
->>> This adds a schema for the STMPE GPIO that while it is used a
->>> lot in the kernel tree is anyway missing its bindings.
->>>
->>> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
->>> ---
->>> ChangeLog v2->v3:
->>> - Use a compact hog node schema backed by the standard hog
->>>   schema.
->>> ChangeLog v1->v2:
->>> - New patch split off from the MFD patch.
->>> ---
->>>  .../devicetree/bindings/gpio/st,stmpe-gpio.yaml    | 51 ++++++++++++++++++++++
->>>  1 file changed, 51 insertions(+)
->>>
->>
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>
->> yamllint warnings/errors:
->>
->> dtschema/dtc warnings/errors:
->> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.example.dtb: camera-sensor@3c: port:endpoint:data-lanes: [[1]] is too short
->>         From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
->> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: port:endpoint:data-lanes: [[1]] is too short
->>         From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
->> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.example.dtb: pcie-ep@33800000: Unevaluated properties are not allowed ('assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' were unexpected)
->>         From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.yaml
+> The panel's product specification can be found at:
+> http://www.onetech.com.tw/files/EV121WXM-N10-1850ProductSpecification_20180801.pdf
 > 
-> Looks like these are not mine...
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> ---
+> v1->v2:
+> * Add Krzysztof's A-b tag.
+> 
+>  .../devicetree/bindings/display/panel/panel-simple.yaml         | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-Yep, these are coming from other issues, now happening in Linus' master.
-I fixed the PCI and I will send it together with the fix for media to Linus.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
+yamllint warnings/errors:
 
-Best regards,
-Krzysztof
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.example.dtb: pcie-ep@33800000: Unevaluated properties are not allowed ('assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' were unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: port:endpoint:data-lanes: [[1]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.example.dtb: camera-sensor@3c: port:endpoint:data-lanes: [[1]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+
+doc reference errors (make refcheckdocs):
+Documentation/usb/gadget_uvc.rst: Documentation/userspace-api/media/v4l/pixfmt-packed.yuv.rst
+MAINTAINERS: Documentation/devicetree/bindings/pwm/pwm-apple.yaml
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230508083826.1016206-2-victor.liu@nxp.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
