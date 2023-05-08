@@ -2,136 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8C76FBB65
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489376FBB69
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbjEHXYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 19:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
+        id S233120AbjEHX1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 19:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjEHXYU (ORCPT
+        with ESMTP id S229491AbjEHX1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 19:24:20 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7B44C0F;
-        Mon,  8 May 2023 16:24:19 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1ab13da70a3so50719635ad.1;
-        Mon, 08 May 2023 16:24:19 -0700 (PDT)
+        Mon, 8 May 2023 19:27:21 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6289293CD
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 16:27:20 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2ac87e7806aso44304301fa.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 16:27:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683588259; x=1686180259;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xWUewLtyjjleyCE27N0mgy++XbZ3xZJBSp9FQArDlQU=;
-        b=cMgyvKzfMRZ5F6dobb+hxpXJmFiFNPdymS/AneW1qDN9sWCmT/PL8mluUI+VSw0I7L
-         yLOTKnHDqulRpFgPTlbgJ068wRQv3ph93VqvAylgj0TBV9hjoWcIyVwstwcQo6JoKuBf
-         GfmMQ9iDoviqnYAGxX0P1lj/KwdXQcJk+6KOxAIbdfgXgu9sNn0HBGqbnRIvJ30Wm0fG
-         gDB/Txt23JlWHtP7he4FGgXwIz+m1WwbgFCcKj6sXoBdsA9RU8kz5nsushGnw8lEzrBQ
-         JDOGRmm5Sj7o913tB4WBuCs3EcWn7K50tzAM96peisZmCKkOYcTUdyN0crppKzcxCPco
-         89bA==
+        d=linaro.org; s=google; t=1683588438; x=1686180438;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a6Rt7YiQAZlCnHEpzBmgJ4SMOzivrPiJcKF14bVvwBc=;
+        b=YBOCnu8VfDSyp3Adz3AUWEr/nwKCediKzOd9kJ0zdZ0tnra0ubkMZU+X5J0ItN/gY4
+         vq952Rowh5oKvoRtvcGzVRwDjssEtDV9b3nWUY59FIVrtvRi+fvlbENYgqHoRzFddxGp
+         /4MoHCALIOJV3w7ZKGgCI/63MniAI0WUA85OUF8y8ix42O6g/BunJBjTiI/iYzkNuuoL
+         gEUupmWmqlpFCK+DODGCARU+nQuBh9vhRbtCiXz10MufMZ4DpnO2LpPUnUsPoTEotRbD
+         /h1CcOrcD/oYdUQ8ulal63W2Oi0zmQEjkKTb/WDaDhZn+0xmWTvRozpHuFZyQ5SK3eyH
+         iSbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683588259; x=1686180259;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xWUewLtyjjleyCE27N0mgy++XbZ3xZJBSp9FQArDlQU=;
-        b=Ypf0qFB/mmaBOeSBGzNjh+MyoXDnLKWFMSbCqTnOMAsC/vS2o9cVzLm5gEipvoawHm
-         gpwYfDbumGuR2jfDz5gBoVtpn563vnUbGU/UhFylBn4wr+4ZHxOqKZH2mYdIpgz2/0XA
-         wSRVIuCyVSq8OPPEyWGYsJT46xL+lL4bnn5kIpB5FsQhqrCHbOzGfZRLQ3apZRuFKspw
-         SzoRoemxkCUjVUlL/cn3c6P/tRBkrZyII/a+j7cyYaN2831E69gRMZrwbi3yEqDXQ+GH
-         mZgAUzpvD6K+glFkdwQfgdVBOhBAbyvuR5nBLro7ebdTg1ayy0/3LP805X2Ex7OlzmSF
-         TLRA==
-X-Gm-Message-State: AC+VfDzslq4mEHimEgzUFVsG3VWK5pywXB2HcIsIcIchG03irSydyHBg
-        6zcmqv7hzkZxYkJ0dF/An/NJF2TYuyI=
-X-Google-Smtp-Source: ACHHUZ7Ywzg5sOXXcxQByghXAZO4WL2DDYhOxV9eqxNVmgAEUcQow7sUQy+/dUNbzjCenv4IHOqiPg==
-X-Received: by 2002:a17:902:ec83:b0:1ac:4d01:dff8 with SMTP id x3-20020a170902ec8300b001ac4d01dff8mr14216942plg.45.1683588258763;
-        Mon, 08 May 2023 16:24:18 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id s13-20020a170902988d00b001aaff9be643sm32647plp.89.2023.05.08.16.24.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 16:24:18 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 8 May 2023 13:24:16 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Juri Lelli <juri.lelli@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>,
-        Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v3 0/6] sched/deadline: cpuset: Rework DEADLINE bandwidth
- restoration
-Message-ID: <ZFmEoBoX15FIpyW1@slm.duckdns.org>
-References: <20230508075854.17215-1-juri.lelli@redhat.com>
+        d=1e100.net; s=20221208; t=1683588438; x=1686180438;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a6Rt7YiQAZlCnHEpzBmgJ4SMOzivrPiJcKF14bVvwBc=;
+        b=JZId+FTUHkFSG9FXt+Flaw63AXimc2o8TiQRMDROspsrh7kwvdpjlFNTxBfb1hZn6o
+         fgaBtG28oJouWI8dJgEcRtmKu+O++f86d0R91YvBJQG7LfhikyaJdYGG6zhWKi872RtU
+         ay0ABithjvfsJExrpFMkzLBz5eGOaFdErp0cGXz6JHNzut04pqOe9NRpQ4Z1t/boTuYg
+         xcicPLbeoltQEnQVTfkvgENuaCl8QgCcVqjTnQO524pXgByPvVrYlgE9qEabIq+FWrE0
+         E+dLr0TtY/izS0xejVUH6I5ZnKc5G0ZIQHYZDSnUALDj4QZkT4F2vbcKo69kK5DeNYSk
+         VgvQ==
+X-Gm-Message-State: AC+VfDxfQDQTxcIxD4tlsvTpnF0lB27VghvfVC4lJz1QX3t45PA1VRFN
+        HI7FJg33v8yig3xXImzFqoHkYw==
+X-Google-Smtp-Source: ACHHUZ5Bvvam4bUJ8MKi747WCRxlnyuUFM84qlBLhz6yqhAjz3rge5MoCzrhn9yKp6Pwag/AeM0IBg==
+X-Received: by 2002:a2e:9355:0:b0:2a7:6e37:ee68 with SMTP id m21-20020a2e9355000000b002a76e37ee68mr196002ljh.12.1683588438391;
+        Mon, 08 May 2023 16:27:18 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id z4-20020a2e7e04000000b002a8e758f669sm1322546ljc.27.2023.05.08.16.27.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 16:27:17 -0700 (PDT)
+Message-ID: <4cf2e9ab-7e08-fb26-d924-8ea8141d9f58@linaro.org>
+Date:   Tue, 9 May 2023 02:27:17 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508075854.17215-1-juri.lelli@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/4] drm/msm/dsi: Fix compressed word count calculation
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
+ <20230405-add-dsc-support-v1-2-6bc6f03ae735@quicinc.com>
+ <a60a9f37-bb43-6e2b-2535-995e9fae250a@linaro.org>
+ <32d473a6-f7a5-9aa6-85cf-0f77f1c071ce@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <32d473a6-f7a5-9aa6-85cf-0f77f1c071ce@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 09:58:48AM +0200, Juri Lelli wrote:
-> Qais reported [1] that iterating over all tasks when rebuilding root
-> domains for finding out which ones are DEADLINE and need their bandwidth
-> correctly restored on such root domains can be a costly operation (10+
-> ms delays on suspend-resume). He proposed we skip rebuilding root
-> domains for certain operations, but that approach seemed arch specific
-> and possibly prone to errors, as paths that ultimately trigger a rebuild
-> might be quite convoluted (thanks Qais for spending time on this!).
+On 08/05/2023 23:09, Abhinav Kumar wrote:
 > 
-> This is v3 of an alternative approach (v2 at [4]) to fix the problem.
 > 
->  01/06 - Rename functions deadline with DEADLINE accounting (cleanup
->          suggested by Qais) - no functional change
->  02/06 - Bring back cpuset_mutex (so that we have write access to cpusets
->          from scheduler operations - and we also fix some problems
->          associated to percpu_cpuset_rwsem)
->  03/06 - Keep track of the number of DEADLINE tasks belonging to each cpuset
->  04/06 - Use this information to only perform the costly iteration if
->          DEADLINE tasks are actually present in the cpuset for which a
->          corresponding root domain is being rebuilt
->  05/06 - Create DL BW alloc, free & check overflow interface for bulk
->          bandwidth allocation/removal - no functional change 
->  06/06 - Fix bandwidth allocation handling for cgroup operation
->          involving multiple tasks
+> On 5/3/2023 1:26 AM, Dmitry Baryshkov wrote:
+>> On 03/05/2023 04:19, Jessica Zhang wrote:
+>>> Currently, word count is calculated using slice_count. This is incorrect
+>>> as downstream uses slice per packet, which is different from
+>>> slice_count.
+>>>
+>>> Slice count represents the number of soft slices per interface, and its
+>>> value will not always match that of slice per packet. For example, it is
+>>> possible to have cases where there are multiple soft slices per 
+>>> interface
+>>> but the panel specifies only one slice per packet.
+>>>
+>>> Thus, use the default value of one slice per packet and remove 
+>>> slice_count
+>>> from the word count calculation.
+>>>
+>>> Fixes: bc6b6ff8135c ("drm/msm/dsi: Use DSC slice(s) packet size to 
+>>> compute word count")
+>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>>> ---
+>>>   drivers/gpu/drm/msm/dsi/dsi_host.c | 9 ++++++++-
+>>>   1 file changed, 8 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c 
+>>> b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>>> index 35c69dbe5f6f..b0d448ffb078 100644
+>>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+>>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>>> @@ -996,7 +996,14 @@ static void dsi_timing_setup(struct msm_dsi_host 
+>>> *msm_host, bool is_bonded_dsi)
+>>>           if (!msm_host->dsc)
+>>>               wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
+>>>           else
+>>> -            wc = msm_host->dsc->slice_chunk_size * 
+>>> msm_host->dsc->slice_count + 1;
+>>> +            /*
+>>> +             * When DSC is enabled, WC = slice_chunk_size * 
+>>> slice_per_packet + 1.
+>>> +             * Currently, the driver only supports default value of 
+>>> slice_per_packet = 1
+>>> +             *
+>>> +             * TODO: Expand drm_panel struct to hold 
+>>> slice_per_packet info
+>>> +             *       and adjust DSC math to account for 
+>>> slice_per_packet.
+>>
+>> slice_per_packet is not a part of the standard DSC, so I'm not sure 
+>> how that can be implemented. And definitely we should not care about 
+>> the drm_panel here. It should be either a part of drm_dsc_config, or 
+>> mipi_dsi_device.
+>>
 > 
-> With respect to the v2 posting [4]
+> This is not correct.
 > 
->  1 - rebase on top of Linus' tree as of today (ac9a78681b92)
->  2 - add the 'why' to 5/6 changelog - Peter
->  3 - explicitly say that we need to keep cpuset_mutex a mutex for PI on
->      2/6 - Peter
-> 
-> This set is also available from
-> 
-> https://github.com/jlelli/linux.git deadline/rework-cpusets
+> It is part of the DSI standard (not DSC standard). Please refer to 
+> Figure 40 "One Line Containing One Packet with Data from One or More 
+> Compressed Slices" and Figure 41 "One Line Containing More than One 
+> Compressed Pixel Stream Packet".
 
-Applied to cgroup/for-6.5.
+I have reviewed section 8.8.24 and Annex D of the DSI standard.
 
-Thanks.
+It is not clear to me, if we can get away with always using 
+slice_per_packet = 1. What is the DSI sink's difference between Fig. 
+40.(b) and Fig 41?
+
+Are there are known panels that require slice_per_packet != 1? If so, we 
+will have to implement support for such configurations.
+
+> This has details about this. So I still stand by my point that this 
+> should be in the drm_panel.
+
+Note, the driver doesn't use drm_panel directly. So slices_per_packet 
+should go to mipi_dsi_device instead (which in turn can be filled from 
+e.g. drm_panel or from any other source).
+
+> 
+>>> +             */
+>>> +            wc = msm_host->dsc->slice_chunk_size + 1;
+>>>           dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
+>>>               DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
+>>>
+>>
 
 -- 
-tejun
+With best wishes
+Dmitry
+
