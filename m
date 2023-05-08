@@ -2,115 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CFE6FB05D
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2F56FB04D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235008AbjEHMls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 08:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
+        id S233896AbjEHMkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 08:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234206AbjEHMlY (ORCPT
+        with ESMTP id S233727AbjEHMkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 08:41:24 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18E039494;
-        Mon,  8 May 2023 05:41:07 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QFLTg4rC7zpWDH;
-        Mon,  8 May 2023 20:39:51 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+        Mon, 8 May 2023 08:40:08 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E023DC88;
+        Mon,  8 May 2023 05:39:45 -0700 (PDT)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 4C39321C3;
+        Mon,  8 May 2023 12:34:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1683549297;
+        bh=6s1aiYUMi1N3V7VNMRBYWUxpu3ZEhCtn4SbHn7Qf7Fg=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=aVk0mrX9MQkqEi99MHlO7uLlgKuUQcXvpr0EXyBauUXaj35rdaVC/KvhvRNxNOBS1
+         VH0UBergSpSBdZBRl9a1KG61Qyf1wBmdNmNiiVIMBxW7z0CObhot03hGsQ1CsLxZRJ
+         KaWr3N8j91EGcmFDIXvI26wQpNQ5EgtTwhIdwwYE=
+Received: from [192.168.211.146] (192.168.211.146) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 8 May 2023 20:41:03 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <netdev@vger.kernel.org>
-CC:     <linux-rdma@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <xen-devel@lists.xenproject.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <edumazet@google.com>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <alexanderduyck@fb.com>, <jbrouer@redhat.com>,
-        <ilias.apalodimas@linaro.org>
-Subject: [PATCH RFC 2/2] net: remove __skb_frag_set_page()
-Date:   Mon, 8 May 2023 20:39:22 +0800
-Message-ID: <20230508123922.39284-3-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20230508123922.39284-1-linyunsheng@huawei.com>
-References: <20230508123922.39284-1-linyunsheng@huawei.com>
+ 15.1.2375.7; Mon, 8 May 2023 15:39:43 +0300
+Message-ID: <5915fbe7-5448-6093-4318-a37987953c7a@paragon-software.com>
+Date:   Mon, 8 May 2023 16:39:42 +0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: [PATCH 09/10] fs/ntfs3: Fix endian problem
+Content-Language: en-US
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+To:     <ntfs3@lists.linux.dev>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+References: <b21a4bc9-166d-2631-d73b-cb4e802ff69e@paragon-software.com>
+In-Reply-To: <b21a4bc9-166d-2631-d73b-cb4e802ff69e@paragon-software.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.211.146]
+X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The remaining users calling __skb_frag_set_page() with
-page being NULL seems to doing defensive programming, as
-shinfo->nr_frags is already decremented, so remove them.
-
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
- drivers/net/ethernet/broadcom/bnx2.c      |  1 -
- drivers/net/ethernet/broadcom/bnxt/bnxt.c |  1 -
- include/linux/skbuff.h                    | 12 ------------
- 3 files changed, 14 deletions(-)
+  fs/ntfs3/frecord.c | 11 +++++------
+  fs/ntfs3/ntfs_fs.h |  2 +-
+  2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnx2.c b/drivers/net/ethernet/broadcom/bnx2.c
-index 466e1d62bcf6..0d917a9699c5 100644
---- a/drivers/net/ethernet/broadcom/bnx2.c
-+++ b/drivers/net/ethernet/broadcom/bnx2.c
-@@ -2955,7 +2955,6 @@ bnx2_reuse_rx_skb_pages(struct bnx2 *bp, struct bnx2_rx_ring_info *rxr,
- 		shinfo = skb_shinfo(skb);
- 		shinfo->nr_frags--;
- 		page = skb_frag_page(&shinfo->frags[shinfo->nr_frags]);
--		__skb_frag_set_page(&shinfo->frags[shinfo->nr_frags], NULL);
- 
- 		cons_rx_pg->page = page;
- 		dev_kfree_skb(skb);
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index efaff5018af8..f3f08660ec30 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -1105,7 +1105,6 @@ static u32 __bnxt_rx_agg_pages(struct bnxt *bp,
- 			unsigned int nr_frags;
- 
- 			nr_frags = --shinfo->nr_frags;
--			__skb_frag_set_page(&shinfo->frags[nr_frags], NULL);
- 			cons_rx_buf->page = page;
- 
- 			/* Update prod since possibly some pages have been
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 0d1027ea81e0..a3c448757b4e 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -3491,18 +3491,6 @@ static inline void skb_frag_page_copy(skb_frag_t *fragto,
- 	fragto->bv_page = fragfrom->bv_page;
- }
- 
--/**
-- * __skb_frag_set_page - sets the page contained in a paged fragment
-- * @frag: the paged fragment
-- * @page: the page to set
-- *
-- * Sets the fragment @frag to contain @page.
-- */
--static inline void __skb_frag_set_page(skb_frag_t *frag, struct page *page)
--{
--	frag->bv_page = page;
--}
+diff --git a/fs/ntfs3/frecord.c b/fs/ntfs3/frecord.c
+index be59bd399fd1..16bd9faa2d28 100644
+--- a/fs/ntfs3/frecord.c
++++ b/fs/ntfs3/frecord.c
+@@ -236,6 +236,7 @@ struct ATTRIB *ni_find_attr(struct ntfs_inode *ni, 
+struct ATTRIB *attr,
+      return attr;
+
+  out:
++    ntfs_inode_err(&ni->vfs_inode, "failed to parse mft record");
+      ntfs_set_state(ni->mi.sbi, NTFS_DIRTY_ERROR);
+      return NULL;
+  }
+@@ -1643,14 +1644,13 @@ int ni_delete_all(struct ntfs_inode *ni)
+   * Return: File name attribute by its value.
+   */
+  struct ATTR_FILE_NAME *ni_fname_name(struct ntfs_inode *ni,
+-                     const struct cpu_str *uni,
++                     const struct le_str *uni,
+                       const struct MFT_REF *home_dir,
+                       struct mft_inode **mi,
+                       struct ATTR_LIST_ENTRY **le)
+  {
+      struct ATTRIB *attr = NULL;
+      struct ATTR_FILE_NAME *fname;
+-    struct le_str *fns;
+
+      if (le)
+          *le = NULL;
+@@ -1674,10 +1674,9 @@ struct ATTR_FILE_NAME *ni_fname_name(struct 
+ntfs_inode *ni,
+      if (uni->len != fname->name_len)
+          goto next;
+
+-    fns = (struct le_str *)&fname->name_len;
+-    if (ntfs_cmp_names_cpu(uni, fns, NULL, false))
++    if (ntfs_cmp_names(uni->name, uni->len, fname->name, uni->len, NULL,
++               false))
+          goto next;
 -
- bool skb_page_frag_refill(unsigned int sz, struct page_frag *pfrag, gfp_t prio);
- 
- /**
+      return fname;
+  }
+
+@@ -2915,7 +2914,7 @@ int ni_remove_name(struct ntfs_inode *dir_ni, 
+struct ntfs_inode *ni,
+      /* Find name in record. */
+      mi_get_ref(&dir_ni->mi, &de_name->home);
+
+-    fname = ni_fname_name(ni, (struct cpu_str *)&de_name->name_len,
++    fname = ni_fname_name(ni, (struct le_str *)&de_name->name_len,
+                    &de_name->home, &mi, &le);
+      if (!fname)
+          return -ENOENT;
+diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
+index 98b61e4b3215..00fa782fcada 100644
+--- a/fs/ntfs3/ntfs_fs.h
++++ b/fs/ntfs3/ntfs_fs.h
+@@ -543,7 +543,7 @@ void ni_remove_attr_le(struct ntfs_inode *ni, struct 
+ATTRIB *attr,
+                 struct mft_inode *mi, struct ATTR_LIST_ENTRY *le);
+  int ni_delete_all(struct ntfs_inode *ni);
+  struct ATTR_FILE_NAME *ni_fname_name(struct ntfs_inode *ni,
+-                     const struct cpu_str *uni,
++                     const struct le_str *uni,
+                       const struct MFT_REF *home,
+                       struct mft_inode **mi,
+                       struct ATTR_LIST_ENTRY **entry);
 -- 
-2.33.0
+2.34.1
 
