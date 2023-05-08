@@ -2,123 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B952C6FB1F2
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7596FB1F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234357AbjEHNpm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 8 May 2023 09:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S234358AbjEHNpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234338AbjEHNpi (ORCPT
+        with ESMTP id S234314AbjEHNpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:45:38 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB39348B9;
-        Mon,  8 May 2023 06:45:34 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-55a6efe95c9so66378117b3.1;
-        Mon, 08 May 2023 06:45:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683553533; x=1686145533;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P/+FqXMV4ArCmDq7qgtI4IzpiR25k00ePFNuL3jyw0o=;
-        b=QWtmwA20Am7zvIGRO/JfsueTYEN4Sli9cBNjtPMv9gzbEIcf/vBR6iDJdnDwsNynUx
-         6WgcRkI7ZDVztWUUVdtJtxR1cRZ2F/Rhcl+iddQ65YHZPldxdwNf4rQBQ4ltLgfEH4+R
-         /iMe/c/Hxa3+91u1+4CPIVIvjYgDiQEcJuO2yQU+JQczcIp/uTzkFgh5wdUlwLkd1dy6
-         c2A6P6xfawMeAlmscl4BnsboL+q1EcuLxaX7zz8RkOVCml/QAYqzvI/rj9DByB3m01Uv
-         Atl+DvL4JPKcQkQYQino1Mddx6tFDjfQ97LV1+xQ9y9yRo+iHAxNS9Oi3pwSINqBH9W0
-         msXQ==
-X-Gm-Message-State: AC+VfDxdkq9rZJW+njyMa/4LcAYac/fObTqE0ykUi5chW/2No7E5kcZB
-        5JksUlUGWVMvC4Ge7xP4iOqna0vSAaOUwQ==
-X-Google-Smtp-Source: ACHHUZ4jo1o50IJ8sNJ3FRW+umPGnI4yPX9qE8clMvMkRHHBVLC71T1ZUXb5L9j25JEVR7WaRNTI2w==
-X-Received: by 2002:a81:75c6:0:b0:55a:7c68:c0f7 with SMTP id q189-20020a8175c6000000b0055a7c68c0f7mr11143007ywc.7.1683553533343;
-        Mon, 08 May 2023 06:45:33 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id y205-20020a0dd6d6000000b0055a6f26fbbasm2545359ywd.38.2023.05.08.06.45.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 06:45:32 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-559e317eef1so66609437b3.0;
-        Mon, 08 May 2023 06:45:32 -0700 (PDT)
-X-Received: by 2002:a25:d616:0:b0:b9e:6537:4f3f with SMTP id
- n22-20020a25d616000000b00b9e65374f3fmr10430975ybg.61.1683553531815; Mon, 08
- May 2023 06:45:31 -0700 (PDT)
+        Mon, 8 May 2023 09:45:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0503335B0B
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 06:45:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38A3B62481
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 13:45:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5928C433EF;
+        Mon,  8 May 2023 13:45:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683553537;
+        bh=Qu9Rl94bP0g+nhL6tXXSt0OxbS7NzYjh13hkmP95BH8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AQBCyttRFuLCiwy/rIAkzhHqSCqIsv/5tdR8PgqEDLUffIbFMAafyCFsfAAJwW4wI
+         0j6ABrQKivthcpQQqN9YA52XZZp0lGZJe8xp7wf1otHPkpqj0XYFa2eLO3LrDAMPxc
+         644fbgz6xoNmi9geJROfFORL9+v7Y8wlqN81E/Ovp/ud3z4D20xWv55XHJfDzpQSxT
+         /PA7ImPXgtyueHtO8IqFumjXrwzNLKtJ6gD6xqqlIg9igrsRVcnKS2jkhCFWxTyRn6
+         u5iHdu2h43+GCkkdhA3frL73Xzq3w7mtuPSPgEVkTSo4s0BxxepDfycyv6ohuTF4lX
+         vRkxiqD7rmLTg==
+Date:   Mon, 8 May 2023 15:45:33 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Md Danish Anwar <a0501179@ti.com>
+Cc:     Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] soc: ti: pruss: Avoid cast to incompatible function type
+Message-ID: <ZFj8/TW1bMuqY1WP@kernel.org>
+References: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
+ <f6c92e55-93f5-e5c6-e5ca-4c24fd59f245@ti.com>
 MIME-Version: 1.0
-References: <20230508104557.47889-1-wsa+renesas@sang-engineering.com> <20230508104557.47889-3-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20230508104557.47889-3-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 8 May 2023 15:45:20 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUZUTJmrE==zf2OxaBdQGa-zS2VC7hTtcE9aD+MD7JYDQ@mail.gmail.com>
-Message-ID: <CAMuHMdUZUTJmrE==zf2OxaBdQGa-zS2VC7hTtcE9aD+MD7JYDQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/3] PCI: rcar-host: add support for optional regulators
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f6c92e55-93f5-e5c6-e5ca-4c24fd59f245@ti.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+On Thu, Apr 20, 2023 at 11:19:59AM +0530, Md Danish Anwar wrote:
+> On 18/04/23 17:11, Simon Horman wrote:
 
-On Mon, May 8, 2023 at 12:47 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> The KingFisher board has regulators. They just need to be en-/disabled,
-> so we can leave the handling to devm.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+...
 
-Thanks for your patch!
+> > Rather than casting clk_unregister_mux to an incompatible function
+> > type provide a trivial wrapper with the correct signature for the
+> > use-case.
+> > 
+> > Reported by clang-16 with W=1:
+> > 
+> >  drivers/soc/ti/pruss.c:158:38: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+> >          ret = devm_add_action_or_reset(dev, (void(*)(void *))clk_unregister_mux,
+> > 
+> > No functional change intended.
+> > Compile tested only.
+> > 
+> > Signed-off-by: Simon Horman <horms@kernel.org>
+> 
+> Reviewed-by: MD Danish Anwar <danishanwar@ti.com>
 
-> --- a/drivers/pci/controller/pcie-rcar-host.c
-> +++ b/drivers/pci/controller/pcie-rcar-host.c
+Hi,
 
-> @@ -992,6 +993,14 @@ static int rcar_pcie_probe(struct platform_device *pdev)
->         pcie->dev = dev;
->         platform_set_drvdata(pdev, host);
->
-> +       err = devm_regulator_get_enable_optional(dev, "vpcie3v3");
-> +       if (err < 0 && err != -ENODEV)
-> +               dev_err_probe(dev, err, "error enabling 3.3V regulator");
-> +
-> +       err = devm_regulator_get_enable_optional(dev, "vpcie1v5");
-> +       if (err < 0 && err != -ENODEV)
-> +               dev_err_probe(dev, err, "error enabling 1.5V regulator");
-
-As per my comment on patch 1/3, I think you want to grab
-"vpcie12v0-supply", too.
-And perhaps factor out the voltage as a parameter in the error message,
-to increase string sharing?
-
-I don't know if PCIe specifies some ordering w.r.t. power supply
-enablement.
-
-> +
->         pm_runtime_enable(pcie->dev);
->         err = pm_runtime_get_sync(pcie->dev);
->         if (err < 0) {
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+I'm wondering what the path of this patch to Linus's tree might be.
+Perhaps naively, I expected it to show up in v6.4-rc1.
