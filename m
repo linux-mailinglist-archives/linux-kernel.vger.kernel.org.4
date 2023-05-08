@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB9C6FAFB1
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F13286FAFB2
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233783AbjEHMMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 08:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
+        id S233830AbjEHMMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 08:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233527AbjEHMM1 (ORCPT
+        with ESMTP id S233771AbjEHMMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 08:12:27 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649443847E
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 05:12:26 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-6438d95f447so2960188b3a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 05:12:26 -0700 (PDT)
+        Mon, 8 May 2023 08:12:38 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33176394AB
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 05:12:33 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-517c01edaaaso2820496a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 05:12:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683547946; x=1686139946;
+        d=chromium.org; s=google; t=1683547952; x=1686139952;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YomQZvLv9U8LydRAVDM7uH3rsydf2VckIT0qLaKYgH4=;
-        b=Py7muHYwG6zPRaX+oumvWzOw51CdAo3uRtkps3zvOagnhnvPdHNPQ4hj4BETg3uIY3
-         bw1MOFvCMil2kTbJk29QVjD7BiIg/oMwHlbe5nLO92s/vk7WffTRgxwSGi6ZHaur+mRH
-         yO/zQLQLt26bqzF891XuY4xqbC5aM5Nv0Uw04=
+        bh=qhm2iuMs798BH3BBr1kXDWeqcKP/EaEB0LeOD1fdOvc=;
+        b=amudl00aclp5eVgRfCiZdj8vsvdACj4/gj3CnKBYa29Pwuw+SXLwygXXgEgfdw4zMT
+         DV0TW4D72p5zOdy0qrYqGlVpE4TfyPtp+eVj7/tmqWlbTV9cW0QB7NA1cfVz62mcDp9q
+         RtjgMDkkYyNlF+7SHfPysmV81QqaFcwieNj0Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683547946; x=1686139946;
+        d=1e100.net; s=20221208; t=1683547952; x=1686139952;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YomQZvLv9U8LydRAVDM7uH3rsydf2VckIT0qLaKYgH4=;
-        b=gh/0BXRmnVji2wLzGwc0s0g/i+KnvHy4K9SeIAV0lb4gHIdmCu13DRgVm5BxkG2j3S
-         8LbutUGpbDKMv9Y3lq9oK1U9pkk4GXYGYVv2WxpAO1JGAl118HbYR6tdM8SJbH8K7tt7
-         VKChw+h53RoRGB6lBXuwuNvqebwL3HSWbGaVskKnHE1YVnP2PL8oqvMqnVkNpKocIvUZ
-         dBQtfgo3qHfnzMF4Oldb2wvEUbEnj98dLlbvgHwBV5hkedKQBVmECzQdnW7XoXSeQxuW
-         cIWEAjLsBPY/44hAWeXeIT8TOFyEsJXJlq088bulNqJGCMlXv1QxYEQ4jq6jORnUoT3H
-         rVJg==
-X-Gm-Message-State: AC+VfDwqmQmfRiu+QgMh4Unm0a7xVFf5BXL/YfidcumC+Xcet6+pViFf
-        eQFsDWSidY3VvjM4BGBNStV1WTcijm32icgOlwNrZw==
-X-Google-Smtp-Source: ACHHUZ7VFRVjNcNqpJzwYp7zp0ZTeknZGMvtFs1Y57kRo83uZmvZygCrpjIHaDKG8rxlno+Rrsl3kSNWXGC1Gi9q+F4=
-X-Received: by 2002:a05:6a20:3ca9:b0:100:1044:9ce2 with SMTP id
- b41-20020a056a203ca900b0010010449ce2mr6052128pzj.56.1683547945910; Mon, 08
- May 2023 05:12:25 -0700 (PDT)
+        bh=qhm2iuMs798BH3BBr1kXDWeqcKP/EaEB0LeOD1fdOvc=;
+        b=QklqH+WZOaEaKp8laUHfA83oEcoLxYTMHZnAgoizz1YFUigholZaweTBC4r+QMDyn5
+         iRUwxEL7BCP4r4T1Po0do8n5cwipMgUUJkhD6Rjt0UcGvgPC1AyL6Hv7oFw9uc5v1Jrd
+         fqXsKaFkYGTTiKzo23wR7ZVQ1Bj/DrIi+6Nqy/L4zD0iz33b0SmC5TDlJXwe4P5g0+GD
+         dHtmGdsmSreTcdqQmXsKgLStiKP2a0hK6WXhR3crobJurrtZZ4BpfLe42PijI5F6tX9g
+         Ok4Z8ASCCdk42JBgJ8UcWaDLbG3vvKP2yoqTk7pD/a/SeO9hEKF4Eo6eA53MUuunV4II
+         v6uQ==
+X-Gm-Message-State: AC+VfDwevmME3nqvhKPj/4Jzky0t3dUFKJM2P7UU3GnYMDNvZJwHwUmX
+        pUfxwIe5uRCuCGVHiFLDl7dGBZmlsMoHB1pE5emaSQ==
+X-Google-Smtp-Source: ACHHUZ6sn/H7nwrvtvCQBr4N81UPVX2I/AOYS5pTvgCjVgFzFXf6yiHJvrICK6ftzlpNBCP8c4YsesJplr4re7S9KZ4=
+X-Received: by 2002:a05:6a20:6a15:b0:fa:3347:6e1 with SMTP id
+ p21-20020a056a206a1500b000fa334706e1mr13169747pzk.51.1683547952595; Mon, 08
+ May 2023 05:12:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230504170942.822147-1-revest@chromium.org> <20230504170942.822147-5-revest@chromium.org>
- <66900d0ad42797a55259061f757beece@ispras.ru> <CABRcYmKXrPE0oP9R=qsn=mL3Nwm_mVqT-r-TvOvowTdiuYU--A@mail.gmail.com>
- <3a38319a3b241e578729ffa5484ad24b@ispras.ru>
-In-Reply-To: <3a38319a3b241e578729ffa5484ad24b@ispras.ru>
+References: <20230504170942.822147-1-revest@chromium.org> <ZFQQSKijXQHWlYaI@x1n>
+ <CABRcYmJFcUs=3QYXz8iq7qvu2orJ4HL-cHdBKg9o7=Ma=nfPLw@mail.gmail.com> <ZFhQcwDBFWcRCC4N@x1n>
+In-Reply-To: <ZFhQcwDBFWcRCC4N@x1n>
 From:   Florent Revest <revest@chromium.org>
-Date:   Mon, 8 May 2023 14:12:14 +0200
-Message-ID: <CABRcYm+SUV9HThByGcTfS8K+f5KRxgD1SWnc5iqWTqgipsCP0g@mail.gmail.com>
-Subject: Re: [PATCH 4/4] kselftest: vm: Add tests for no-inherit memory-deny-write-execute
-To:     Alexey Izbyshev <izbyshev@ispras.ru>
+Date:   Mon, 8 May 2023 14:12:21 +0200
+Message-ID: <CABRcYm+RquNGYUyfCEmLrcaoMSKagzwXgto-24ZCaLAdFUKUjg@mail.gmail.com>
+Subject: Re: [PATCH 0/4] MDWE without inheritance
+To:     Peter Xu <peterx@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         akpm@linux-foundation.org, catalin.marinas@arm.com,
         anshuman.khandual@arm.com, joey.gouly@arm.com, mhocko@suse.com,
-        keescook@chromium.org, david@redhat.com, peterx@redhat.com,
-        nd@arm.com, broonie@kernel.org, szabolcs.nagy@arm.com
+        keescook@chromium.org, david@redhat.com, izbyshev@ispras.ru,
+        nd@arm.com, broonie@kernel.org, szabolcs.nagy@arm.com,
+        toiwoton@gmail.com, lennart@poettering.net
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -71,73 +71,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 11:26=E2=80=AFPM Alexey Izbyshev <izbyshev@ispras.ru=
-> wrote:
+On Mon, May 8, 2023 at 3:29=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
 >
-> On 2023-05-05 19:42, Florent Revest wrote:
-> > On Thu, May 4, 2023 at 10:30=E2=80=AFPM Alexey Izbyshev <izbyshev@ispra=
-s.ru>
-> > wrote:
-> >>
-> >> On 2023-05-04 20:09, Florent Revest wrote:
-> >> > Add some tests to cover the new PR_MDWE_NO_INHERIT flag of the
-> >> > PR_SET_MDWE prctl.
-> >> >
-> >> > Signed-off-by: Florent Revest <revest@chromium.org>
-> >> > ---
-> >> >  tools/testing/selftests/mm/mdwe_test.c | 95 +++++++++++++++++++++++=
-+--
-> >> >  1 file changed, 89 insertions(+), 6 deletions(-)
-> >> >
-> >> > diff --git a/tools/testing/selftests/mm/mdwe_test.c
-> >> > b/tools/testing/selftests/mm/mdwe_test.c
-> >> > index 91aa9c3099e7..9f08ed1b99ae 100644
-> >> > --- a/tools/testing/selftests/mm/mdwe_test.c
-> >> > +++ b/tools/testing/selftests/mm/mdwe_test.c
-> >> > @@ -22,6 +22,8 @@
-> >> >
-> >> >  TEST(prctl_flags)
-> >> >  {
-> >> > +     EXPECT_LT(prctl(PR_SET_MDWE, PR_MDWE_NO_INHERIT, 0L, 0L, 7L), =
-0);
-> >> > +
-> >>
-> >> PR_MDWE_NO_INHERIT is defined to an int constant, so passing it to
-> >> prctl() without a cast to long or similar may produce wrong code on
-> >> 64-bit targets (ABIs typically don't require the compiler to clear the
-> >> upper 32 bits of a 64-bit register when passing a 32-bit argument, so
-> >> va_arg(arg, unsigned long) in prctl() implementation might get junk).
+> On Fri, May 05, 2023 at 06:42:08PM +0200, Florent Revest wrote:
+> > On Thu, May 4, 2023 at 10:06=E2=80=AFPM Peter Xu <peterx@redhat.com> wr=
+ote:
+> > >
+> > > On Thu, May 04, 2023 at 07:09:38PM +0200, Florent Revest wrote:
+> > > > Joey recently introduced a Memory-Deny-Write-Executable (MDWE) prct=
+l which tags
+> > > > current with a flag that prevents pages that were previously not ex=
+ecutable from
+> > > > becoming executable.
+> > > > This tag always gets inherited by children tasks. (it's in MMF_INIT=
+_MASK)
+> > > >
+> > > > At Google, we've been using a somewhat similar downstream patch for=
+ a few years
+> > > > now. To make the adoption of this feature easier, we've had it supp=
+ort a mode in
+> > > > which the W^X flag does not propagate to children. For example, thi=
+s is handy if
+> > > > a C process which wants W^X protection suspects it could start chil=
+dren
+> > > > processes that would use a JIT.
+> > > >
+> > > > I'd like to align our features with the upstream prctl. This series=
+ proposes a
+> > > > new NO_INHERIT flag to the MDWE prctl to make this kind of adoption=
+ easier. It
+> > > > sets a different flag in current that is not in MMF_INIT_MASK and w=
+hich does not
+> > > > propagate.
+> > >
+> > > I don't think I have enough context, so sorry if I'm going to ask a n=
+aive
+> > > question..
 > >
-> > Ah, good catch Alexey! :)
+> > Not at all! :) You're absolutely right, it's important to address these=
+ points.
 > >
-> >> Arguably, defining PR_MDWE_* to plain int constants is a bug, or at
-> >> least a footgun for users of uapi headers.
+> > > I can understand how current MDWE helps on not allowing any modifi-ab=
+le
+> > > content from becoming executable.  How could NO_INHERIT help if it wo=
+n't
+> > > inherit and not in MMF_INIT_MASK?
 > >
-> > As part of the next version of this series, I'm happy to:
-> > 1- change the existing PR_MDWE_REFUSE_EXEC_GAIN to 1UL
-> > 2- introduce PR_MDWE_NO_INHERIT as 2UL
+> > The way I see it, enabling MDWE is just a small step towards hardening
+> > a binary anyway. It can possibly make exploitation a bit harder in the
+> > case where the attacker has _just_: a write primitive they can use to
+> > write a shellcode somewhere and a primitive to make that page
+> > executable later. It's a fairly narrow protection already and I think
+> > it only really helps as part of a broader "defense in depth" strategy.
 > >
-> Yes, I think it's the right thing to do. I suggest to spell them as (1UL
-> << 0), etc. for consistency with all other unsigned long flags in the
-> header.
-
-Ah yeah, absolutely! Good tip too, thank you :)
-
-> > But I'm surprised that most of the macros in
-> > include/uapi/linux/prctl.h are the same sort of footguns already ?
-> > Hasn't it been an issue for other prctls yet ?
+> > > IIUC it means the restriction will only apply to the current process.=
+  Then
+> > > I assume the process can escape from this rule simply by a fork().  I=
+f so,
+> > > what's the point to protect at all?
+> >
+> > If we assume enough control from the attacker, then MDWE is already
+> > useless since it can be bypassed by writing to a file and then
+> > mmapping that file with PROT_EXEC. I think that's a good example of
+> > how "perfect can be the enemy of good" in security hardening. MDWE
+> > isn't a silver-bullet but it's a cheap trick and it makes a small dent
+> > in reducing the attack surface so it seems worth having anyway ?
+> >
+> > But indeed, to address your question, if you choose to use this
+> > NO_INHERIT flag: you're no longer protected if the attacker can fork()
+> > as part of their exploitation. I think it's been a useful trade-off
+> > for our internal users since, on the other hand, it also makes
+> > adoption a lot easier: our C++ services developers can trivially opt
+> > into a potpourri of hardening features without having to think too
+> > much about how they work under-the-hood. The default behavior has been
+> > to use a NO_INHERIT strategy so users don't get bad surprises the day
+> > when they try to spawn a JITted subcommand. In the meantime, their C++
+> > service still gets a little bit of extra protection.
+> >
+> > > And, what's the difference of this comparing to disabling MDWE after =
+being
+> > > enabled (which seems to be forbidden for now, but it seems fork() can=
+ play
+> > > a similar role of disabling it)?
+> >
+> > That would be functionally somewhat similar, yes. I think it mostly
+> > comes down to ease of adoption. I imagine that users who would opt
+> > into NO_INHERIT are those who are interested in MDWE for the binary
+> > they are writing but aren't 100% confident in what subprocesses they
+> > will run and so they don't have to think about disabling it after
+> > every fork.
 >
-> Yes, they are. I'm not aware of a public discussion of this specific
-> issue, but note that at least for some prctl() options the kernel
-> doesn't care about upper bits because arguments are truncated before
-> doing anything else with them (e.g. for PR_SCHED_CORE raw prctl()
+> Okay, that makes sense to me.  Thanks.
+>
+> Since the original MDWE was for systemd, I'm wondering what will happen i=
+f
+> some program like what you said is invoked by systemd and with MDWE enabl=
+ed
+> already.
 
-That makes sense
+Good question
 
-> arguments are implicitly converted to what sched_core_share_pid()
-> expects). Also, actually getting junk in the upper bits might not always
-> be easy (e.g. on x86-64 all or almost all instructions with r32
-> destination operand clear the upper bits). Unfortunately, I don't have a
-> better answer than this.
+> Currently in your patch IIUC MDWE_NO_INHERIT will fail directly on MDWE
+> enabled process,
 
-Okay, I was just curious, that's good to know
+Yes, I tried to stay close to the spirit of the existing logic (which
+doesn't allow any sort of privilege gains) but this is not
+particularly a requirement on our side so I'm quite flexible here.
+Maybe Joey has an input here ?
+
+> but then it makes me think whether it makes more sense to
+> allow converting MDWE->MDWE_NO_INHERIT in this case.  It seems to provide=
+ a
+> most broad coverage on system daemons using MDWE starting from systemd
+> initial process, meanwhile allows specific daemons to fork into anything
+> like a JIT process so it can make itself NO_INHERIT.  Attackers won't
+> leverage this because MDWE_NO_INHERIT also means MDWE enabled.
+
+I should have cc-ed systemd folks who could have opinions on this. I
+will for v2.
+
++ cc Topi & Lennart
