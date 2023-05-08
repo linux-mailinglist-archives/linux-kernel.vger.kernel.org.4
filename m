@@ -2,151 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B0B6FB87E
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F366FB881
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 22:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233354AbjEHUsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 16:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
+        id S233600AbjEHUtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 16:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232991AbjEHUsp (ORCPT
+        with ESMTP id S233613AbjEHUtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 16:48:45 -0400
-Received: from out-38.mta1.migadu.com (out-38.mta1.migadu.com [IPv6:2001:41d0:203:375::26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B075BAA;
-        Mon,  8 May 2023 13:48:42 -0700 (PDT)
-Date:   Mon, 8 May 2023 16:48:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683578919;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T9yUrg/v5raybQi2xKwTXiJDyugUh7KFNSbnsbVf1ko=;
-        b=JlOqRkPdzk5AJhxPMwu8AlexUvrKA9kXRniMs6KXFAxkkCykU6KjHBDIF+g4xO4yC/3Xao
-        +RuScEMByhVbOYP7Nl+Ojs+6ZTV4KDzSfRqi3slN82Zdtt1OUgviKekasieY9DgexpymM2
-        tFWfTgTgTslrvfQsG/FcZTuRpfPmr6I=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFlgG02A87qPNIn1@moria.home.lan>
-References: <20230501165450.15352-1-surenb@google.com>
- <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
- <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com>
- <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
- <ZFfd99w9vFTftB8D@moria.home.lan>
- <20230508175206.7dc3f87c@meshulam.tesarici.cz>
- <ZFkb1p80vq19rieI@moria.home.lan>
- <20230508180913.6a018b21@meshulam.tesarici.cz>
- <ZFkjRBCExpXfI+O5@moria.home.lan>
- <20230508205939.0b5b485c@meshulam.tesarici.cz>
+        Mon, 8 May 2023 16:49:07 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A0E5FE6;
+        Mon,  8 May 2023 13:49:04 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2ac7ac8a4ffso55551021fa.0;
+        Mon, 08 May 2023 13:49:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683578943; x=1686170943;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YsKXl8LzqTVbbQol4cbpGlujpNWzeMbCqY5cgUyI8o8=;
+        b=Ije9mb/D6+VFB6nkY/YkPSvWvq2MVTKKKzZ6ZpTjhk8NNtE2kioOKPpzWQPzsNAdJ3
+         ANQ/r2sdxojQdNcHSz2+ClDeRX0YiITqoIu6vjfSjNgUffpVVo175+9/GguP1Uyg8lfP
+         k1AZcMIQu6R45hrsqrgG6TsdPgElXKTUqlk532VfcnfykF34S7zpExWOHg0innT2WoeU
+         pkb2egbFOgJ46sqpf9SakORgXEcUkNwFRY8ePe8AiLzzX3ZDlK38z9iPtb3cCBK2MYex
+         wkhYPMHIPosH+IdI4vMWKevDuUIVhGuzZ3FODEN3cvGPENfry2lP16di/5XZM2OZ2zpU
+         QEKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683578943; x=1686170943;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YsKXl8LzqTVbbQol4cbpGlujpNWzeMbCqY5cgUyI8o8=;
+        b=b3PeMog/Lf/oDYFc9CdffcBcxIrfTn5pYFdVG8oZWqCs6LpYFdyi3DZDZQETrAE6Mu
+         UJi9rvrCkD2JH7oZVXVRfpW9zeT9kOiGRlzmksTuIsFLi53b81gjJOVNUY5CVbfY2CIo
+         mGpemL0tfHzpBEN8FxunosGIXGx7RXBKI0HyUZ3uJoR0i5nJq0cGkgGlm5farNBskgI0
+         FKLgbyKOaDeT2opRSXpA56mXIQghXge7jdHqNU5H8tY1d4udbq7rSwEJBcS3Oid3iRnO
+         Zbihrx+vFV7xw8AUwHZvU4RuP2TP1xFU2lE4MKMeC3aAzgMiZnyMifneTtCdr+8e5/Cz
+         KPug==
+X-Gm-Message-State: AC+VfDxIwIFOzB4Xv3SHO/+57Tk+qeggUEH2eTw9FOMDa8fNamWWCu9o
+        FsiSo3Aj5Md/4uvntrhc8Nmo9C9UZe838xZYspA=
+X-Google-Smtp-Source: ACHHUZ5qJVuJyvvfoypuM8hd7wNxfOnwHkc6MesNLWpXjXMvG0HDihbm47/mxm+yZITjeZc+iRNO9Itav3oEYHN4V2I=
+X-Received: by 2002:a2e:81ce:0:b0:2ac:829f:487e with SMTP id
+ s14-20020a2e81ce000000b002ac829f487emr116011ljg.21.1683578942992; Mon, 08 May
+ 2023 13:49:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230508205939.0b5b485c@meshulam.tesarici.cz>
-X-Migadu-Flow: FLOW_OUT
+References: <20230505220043.39036-1-jorge.lopez2@hp.com> <b87d1a4c-9624-4df8-98ba-f2560b7df18b@t-8ch.de>
+ <CAOOmCE_DMb6ejprALCfmWa0eA3WQquFnS+Z3D0TjsqqPiytbQw@mail.gmail.com> <a1f87dd8-6547-4d6d-9fc8-d7986d9e2c93@t-8ch.de>
+In-Reply-To: <a1f87dd8-6547-4d6d-9fc8-d7986d9e2c93@t-8ch.de>
+From:   Jorge Lopez <jorgealtxwork@gmail.com>
+Date:   Mon, 8 May 2023 15:48:34 -0500
+Message-ID: <CAOOmCE8fg1=A0KU6jWsbj0H-xxOkN4XFtqJJH6eOOZz5_oBotQ@mail.gmail.com>
+Subject: Re: [PATCH v12 00/13] HP BIOSCFG driver
+To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 08:59:39PM +0200, Petr Tesařík wrote:
-> On Mon, 8 May 2023 12:28:52 -0400
-> Kent Overstreet <kent.overstreet@linux.dev> wrote:
-> 
-> > On Mon, May 08, 2023 at 06:09:13PM +0200, Petr Tesařík wrote:
-> > > Sure, although AFAIK the index does not cover all possible config
-> > > options (so non-x86 arch code is often forgotten). However, that's the
-> > > less important part.
-> > > 
-> > > What do you do if you need to hook something that does conflict with an
-> > > existing identifier?  
-> > 
-> > As already happens in this patchset, rename the other identifier.
-> > 
-> > But this is C, we avoid these kinds of conflicts already because the
-> > language has no namespacing
-> 
-> This statement is not accurate, but I agree there's not much. Refer to
-> section 6.2.3 of ISO/IEC9899:2018 (Name spaces of identifiers).
-> 
-> More importantly, macros also interfere with identifier scoping, e.g.
-> you cannot even have a local variable with the same name as a macro.
-> That's why I dislike macros so much.
+On Mon, May 8, 2023 at 3:42=E2=80=AFPM Thomas Wei=C3=9Fschuh <thomas@t-8ch.=
+de> wrote:
+>
+> On 2023-05-08 09:05:22-0500, Jorge Lopez wrote:
+> > On Sat, May 6, 2023 at 1:57=E2=80=AFAM Thomas Wei=C3=9Fschuh <thomas@t-=
+8ch.de> wrote:
+> > >
+> > > On 2023-05-05 17:00:30-0500, Jorge Lopez wrote:
+> > > <snip>
+> > >
+> > > > Jorge Lopez (13):
+> > > >   HP BIOSCFG driver - Documentation
+> > > >   HP BIOSCFG driver  - biosattr-interface
+> > > >   HP BIOSCFG driver  - bioscfg
+> > > >   HP BIOSCFG driver  - int-attributes
+> > > >   HP BIOSCFG driver  - ordered-attributes
+> > > >   HP BIOSCFG driver  - passwdobj-attributes
+> > > >   HP BIOSCFG driver  - string-attributes
+> > > >   HP BIOSCFG driver  - bioscfg-h
+> > > >   HP BIOSCFG driver  - enum-attributes
+> > > >   HP BIOSCFG driver  - spmobj-attributes
+> > > >   HP BIOSCFG driver  - surestart-attributes
+> > > >   HP BIOSCFG driver  - Makefile
+> > > >   HP BIOSCFG driver  - MAINTAINERS
+> > >
+> > > These could be reordered a bit to be easier to read.
+> > >
+> > > * Documentation
+> > > * bioscfg-h
+> > > * bioscfg
+> > > * biosattr-interface
+> > > * *-attributes
+> > > * Makefile
+> > > * MAINTAINERS
+> > >
+> >
+> > the order is determined when a particular commit took place and as
+> > reported by git.
+> > I will reorder the list in the cover-letter in future submissions.
+>
+> The commits should be ordered in a way that make the most sense.
+> This should indeed match the order of commits/patches, you could reorder
+> the commits to match the proposed order.
+>
 
-Shadowing a global identifier like that would at best be considered poor
-style, so I don't see this as a major downside.
+Thank you.  Will do.
 
-> But since there's no clear policy regarding macros in the kernel, I'm
-> merely showing a downside; it's perfectly fine to write kernel code
-> like this as long as the maintainers agree that the limitation is
-> acceptable and outweighed by the benefits.
-
-Macros do have lots of tricky downsides, but in general we're not shy
-about using them for things that can't be done otherwise; see
-wait_event(), all of tracing...
-
-I think we could in general do a job of making the macros _themselves_
-more managable, when writing things that need to be macros I'll often
-have just the wrapper as a macro and write the bulk as inline functions.
-See the generic radix tree code for example.
-
-Reflection is a major use case for macros, and the underlying mechanism
-here - code tagging - is something worth talking about more, since it's
-codifying something that's been done ad-hoc in the kernel for a long
-time and something we hope to refactor other existing code to use,
-including tracing - I've got a patch already written to convert the
-dynamic debug code to code tagging; it's a nice -200 loc cleanup.
-
-Regarding the alloc_hooks() macro itself specifically, I've got more
-plans for it. I have another patch series after this one that implements
-code tagging based fault injection, which is _far_ more ergonomic to use
-than our existing fault injection capabilities (and this matters! Fault
-injection is a really important tool for getting good test coverage, but
-tools that are a pain in the ass to use don't get used) - and with the
-alloc_hooks() macro already in place, we'll be able to turn _every
-individual memory allocation callsite_ into a distinct, individually
-selectable fault injection point - which is something our existing fault
-injection framework attempts at but doesn't really manage.
-
-If we can get this in, it'll make it really easy to write unit tests
-that iterate over every memory allocation site in a given module,
-individually telling them to fail, run a workload until they hit, and
-verify that the code path being tested was executed. It'll nicely
-complement the fuzz testing capabilities that we've been working on,
-particularly in filesystem land.
+> > > Also currently the subject spacing is currently inconsistent.
+> > > Something like "hp-bioscfg: foo" would be more in line with the rest =
+of
+> > > the kernel.
+> > >
+> >
+> > Noted.  I will update the subject spacing as indicated.   "hp-bioscfg: =
+foo"
+> >
+> > > >
+> > > >  .../testing/sysfs-class-firmware-attributes   | 117 ++-
+> > > >  MAINTAINERS                                   |   6 +
+> > > >  drivers/platform/x86/hp/Kconfig               |  16 +
+> > > >  drivers/platform/x86/hp/Makefile              |   1 +
+> > > >  drivers/platform/x86/hp/hp-bioscfg/Makefile   |  12 +
+> > > >  .../x86/hp/hp-bioscfg/biosattr-interface.c    | 319 ++++++
+> > > >  drivers/platform/x86/hp/hp-bioscfg/bioscfg.c  | 982 ++++++++++++++=
+++++
+> > > >  drivers/platform/x86/hp/hp-bioscfg/bioscfg.h  | 523 ++++++++++
+> > > >  .../x86/hp/hp-bioscfg/enum-attributes.c       | 482 +++++++++
+> > > >  .../x86/hp/hp-bioscfg/int-attributes.c        | 448 ++++++++
+> > > >  .../x86/hp/hp-bioscfg/ordered-attributes.c    | 443 ++++++++
+> > > >  .../x86/hp/hp-bioscfg/passwdobj-attributes.c  | 584 +++++++++++
+> > > >  .../x86/hp/hp-bioscfg/spmobj-attributes.c     | 381 +++++++
+> > > >  .../x86/hp/hp-bioscfg/string-attributes.c     | 415 ++++++++
+> > > >  .../x86/hp/hp-bioscfg/surestart-attributes.c  | 133 +++
+> > > >  15 files changed, 4860 insertions(+), 2 deletions(-)
+> > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/Makefile
+> > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/biosattr-int=
+erface.c
+> > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/bioscfg.c
+> > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/bioscfg.h
+> > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/enum-attribu=
+tes.c
+> > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/int-attribut=
+es.c
+> > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/ordered-attr=
+ibutes.c
+> > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/passwdobj-at=
+tributes.c
+> > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/spmobj-attri=
+butes.c
+> > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/string-attri=
+butes.c
+> > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/surestart-at=
+tributes.c
+> > > >
+> > > > --
+> > > > 2.34.1
+> > > >
