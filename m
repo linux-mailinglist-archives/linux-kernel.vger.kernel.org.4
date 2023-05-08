@@ -2,181 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C2F6F9FDB
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74DF6F9FBC
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 08:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232804AbjEHG2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 02:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
+        id S232779AbjEHGVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 02:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232185AbjEHG2Q (ORCPT
+        with ESMTP id S232649AbjEHGVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 02:28:16 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D7330E8;
-        Sun,  7 May 2023 23:28:13 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vi.ayqL_1683527290;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vi.ayqL_1683527290)
-          by smtp.aliyun-inc.com;
-          Mon, 08 May 2023 14:28:11 +0800
-Message-ID: <1683526688.7492425-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH] virtio_net: set default mtu to 1500 when 'Device maximum MTU' bigger than 1500
-Date:   Mon, 8 May 2023 14:18:08 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     huangml@yusur.tech, zy@yusur.tech,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Hao Chen <chenh@yusur.tech>, hengqi@linux.alibaba.com
-References: <20230506021529.396812-1-chenh@yusur.tech>
- <1683341417.0965195-4-xuanzhuo@linux.alibaba.com>
- <07b6b325-9a15-222f-e618-d149b57cbac2@yusur.tech>
- <20230507045627-mutt-send-email-mst@kernel.org>
- <1683511319.099806-2-xuanzhuo@linux.alibaba.com>
- <20230508020953-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230508020953-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 8 May 2023 02:21:09 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2601D5599
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 23:21:03 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50b37f3e664so7506081a12.1
+        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 23:21:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683526861; x=1686118861;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=a0zCtbvyuCZv5ZDHktClt14M1N3Yn1Kq3aOXWGII3Xk=;
+        b=obRN4lQ7yHzsItWJG4sNNHmfey7iO95l0VBtNkqyNMnl86G7pjomhab75YLbaKbRKD
+         d7J1yxq+fKLj4/sPDMuDIXjxAo+SUv5eDxcWFbjTkhF4YWwuvaabWmEy4FhxjwvGo5Wa
+         kIsTsi5TImn74gKb5GZs00vVaOQFMt7OBK3FnzxmzS6qRN/koqzTeZ6wtAyJs8u+qhVb
+         XMuUo7E/lgFVbOdcPWdUUXwiF3kHyGJ147q+SuJyTul+JVYJ6NxNu0xQPEEJBoc4jRdH
+         qQr9j3XOsFF8lSiK+LDLQfUSWjNDTbsSlk6mZv+slmqmJmSh+gIR82sZNW2/xsjw6VCj
+         yvjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683526861; x=1686118861;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a0zCtbvyuCZv5ZDHktClt14M1N3Yn1Kq3aOXWGII3Xk=;
+        b=YJRQ8gwfhaoXlIijHcZAExDuBAxvnDHraJ6NSkWOQ4fO46/Rp2cHFA5/R/saM4Yc6G
+         TqqCwrWl6PcEepPCLkX8of4wDDTpA+MmgN6ra0lNNUXCzd7/r895QJeOJrf2BAL60Cjr
+         sVfPy4w19YFCVLPHBVEQCjIxjFXUeShmMJqRE7P8ujRVgzNEPusgkOGLBfQ+RKAhpSOI
+         nvjhMaIzNnnXzM769aHQEdUupQ/OwWt6qtnbkbWIcwgBeQAcnbTRTGxJV1EvB+uSX00I
+         1C3hrYShw9TRNiMDFY6TCrEBxQhifRLOs6RpPPhgUUUHWKiDGZuZQ7E0mD+3JMCMj4RQ
+         +M1Q==
+X-Gm-Message-State: AC+VfDzOa7/CwwaepSChCaBG1oEViutYDTd1TVXidx7s6pi2eFVVAYS+
+        COQNIUBiCUyxQdi+/0lToiXm9Q==
+X-Google-Smtp-Source: ACHHUZ7imTk2GtOBXkQpqz9YJxyQfy/GWd7QwSAHeIMqTup1BE9EF/jBA4+9QziBnqdNtVPsmJ/Q3w==
+X-Received: by 2002:a17:906:58c5:b0:966:58ad:d934 with SMTP id e5-20020a17090658c500b0096658add934mr2980785ejs.0.1683526861596;
+        Sun, 07 May 2023 23:21:01 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:50e0:ebdf:b755:b300? ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
+        by smtp.gmail.com with ESMTPSA id kg20-20020a17090776f400b0094f3e169ca5sm4511506ejc.158.2023.05.07.23.20.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 May 2023 23:21:00 -0700 (PDT)
+Message-ID: <df471efa-9ec5-f323-3892-2505ba782512@linaro.org>
+Date:   Mon, 8 May 2023 08:20:59 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v7 1/3] dt-bindings: ufs: qcom: Add ICE phandle
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+References: <20230408214041.533749-1-abel.vesa@linaro.org>
+ <20230408214041.533749-2-abel.vesa@linaro.org>
+ <316e9ee5-fccc-e199-f727-7b8187e965ff@linaro.org>
+Content-Language: en-US
+In-Reply-To: <316e9ee5-fccc-e199-f727-7b8187e965ff@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 8 May 2023 02:15:46 -0400, "Michael S. Tsirkin" <mst@redhat.com> wr=
-ote:
-> On Mon, May 08, 2023 at 10:01:59AM +0800, Xuan Zhuo wrote:
-> > On Sun, 7 May 2023 04:58:58 -0400, "Michael S. Tsirkin" <mst@redhat.com=
-> wrote:
-> > > On Sat, May 06, 2023 at 04:56:35PM +0800, Hao Chen wrote:
-> > > >
-> > > >
-> > > > =E5=9C=A8 2023/5/6 10:50, Xuan Zhuo =E5=86=99=E9=81=93:
-> > > > > On Sat,  6 May 2023 10:15:29 +0800, Hao Chen <chenh@yusur.tech> w=
-rote:
-> > > > > > When VIRTIO_NET_F_MTU(3) Device maximum MTU reporting is suppor=
-ted.
-> > > > > > If offered by the device, device advises driver about the value=
- of its
-> > > > > > maximum MTU. If negotiated, the driver uses mtu as the maximum
-> > > > > > MTU value. But there the driver also uses it as default mtu,
-> > > > > > some devices may have a maximum MTU greater than 1500, this may
-> > > > > > cause some large packages to be discarded,
-> > > > >
-> > > > > You mean tx packet?
-> > > > Yes.
-> > > > >
-> > > > > If yes, I do not think this is the problem of driver.
-> > > > >
-> > > > > Maybe you should give more details about the discard.
-> > > > >
-> > > > In the current code, if the maximum MTU supported by the virtio net=
- hardware
-> > > > is 9000, the default MTU of the virtio net driver will also be set =
-to 9000.
-> > > > When sending packets through "ping -s 5000", if the peer router doe=
-s not
-> > > > support negotiating a path MTU through ICMP packets, the packets wi=
-ll be
-> > > > discarded. If the peer router supports negotiating path mtu through=
- ICMP
-> > > > packets, the host side will perform packet sharding processing base=
-d on the
-> > > > negotiated path mtu, which is generally within 1500.
-> > > > This is not a bugfix patch, I think setting the default mtu to with=
-in 1500
-> > > > would be more suitable here.Thanks.
-> > >
-> > > I don't think VIRTIO_NET_F_MTU is appropriate for support for jumbo p=
-ackets.
-> > > The spec says:
-> > > 	The device MUST forward transmitted packets of up to mtu (plus low l=
-evel ethernet header length) size with
-> > > 	gso_type NONE or ECN, and do so without fragmentation, after VIRTIO_=
-NET_F_MTU has been success-
-> > > 	fully negotiated.
-> > > VIRTIO_NET_F_MTU has been designed for all kind of tunneling devices,
-> > > and this is why we set mtu to max by default.
-> > >
-> > > For things like jumbo frames where MTU might or might not be availabl=
-e,
-> > > a new feature would be more appropriate.
-> >
-> >
-> > So for jumbo frame, what is the problem?
-> >
-> > We are trying to do this. @Heng
-> >
-> > Thanks.
->
-> It is not a problem as such. But VIRTIO_NET_F_MTU will set the
-> default MTU not just the maximum one, because spec seems to
-> say it can.
+On 05/05/2023 20:47, Krzysztof Kozlowski wrote:
+> On 08/04/2023 23:40, Abel Vesa wrote:
+>> Starting with SM8550, the ICE will have its own devicetree node
+>> so add the qcom,ice property to reference it.
+>>
+>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>> ---
+>>
+>> The v6 is here:
+>> https://lore.kernel.org/all/20230407105029.2274111-3-abel.vesa@linaro.org/
+>>
+>> Changes since v6:
+>>  * Dropped the minItems for both the qcom,ice and the reg in the
+>>    qcom,ice compatile subschema, like Krzysztof suggested
+>>
+>> Changes since v5:
+>>  * dropped the sm8550 specific subschema and replaced it with one that
+>>    mutually excludes the qcom,ice vs both the ICE specific reg range
+>>    and the ICE clock
+>>
+>> Changes since v4:
+>>  * Added check for sm8550 compatible w.r.t. qcom,ice in order to enforce
+>>    it while making sure none of the other platforms are allowed to use it
+>>
+>> Changes since v3:
+>>  * dropped the "and drop core clock" part from subject line
+>>
+>> Changes since v2:
+>>  * dropped all changes except the qcom,ice property
+>>
+>>
+>>  .../devicetree/bindings/ufs/qcom,ufs.yaml     | 24 +++++++++++++++++++
+>>  1 file changed, 24 insertions(+)
+>>
+> 
+> I see dt_binding_check errors after applying this patch. Are you sure
+> this was tested?
 
-I see.
+False alarm, it was other patch in my tree.
 
-In the case of Jumbo Frame, we also hope that the driver will set the defau=
-lt
-directly to the max mtu. Just like what you said "Bigger packets =3D better
-performance."
+This one is good.
 
-I don't know, in any scenario, when the hardware supports a large mtu, but =
-we do
-not want the user to use it by default. Of course, the scene that this patch
-wants to handle does exist, but I have never thought that this is a problem=
- at
-the driver level.
+Best regards,
+Krzysztof
 
-Thanks.
-
-
->
->
-> >
-> > >
-> > > > > > so I changed the MTU to a more
-> > > > > > general 1500 when 'Device maximum MTU' bigger than 1500.
-> > > > > >
-> > > > > > Signed-off-by: Hao Chen <chenh@yusur.tech>
-> > > > > > ---
-> > > > > >   drivers/net/virtio_net.c | 5 ++++-
-> > > > > >   1 file changed, 4 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > > > index 8d8038538fc4..e71c7d1b5f29 100644
-> > > > > > --- a/drivers/net/virtio_net.c
-> > > > > > +++ b/drivers/net/virtio_net.c
-> > > > > > @@ -4040,7 +4040,10 @@ static int virtnet_probe(struct virtio_d=
-evice *vdev)
-> > > > > >   			goto free;
-> > > > > >   		}
-> > > > > >
-> > > > > > -		dev->mtu =3D mtu;
-> > > > > > +		if (mtu > 1500)
-> > > > >
-> > > > > s/1500/ETH_DATA_LEN/
-> > > > >
-> > > > > Thanks.
-> > > > >
-> > > > > > +			dev->mtu =3D 1500;
-> > > > > > +		else
-> > > > > > +			dev->mtu =3D mtu;
-> > > > > >   		dev->max_mtu =3D mtu;
-> > > > > >   	}
-> > > > > >
-> > > > > > --
-> > > > > > 2.27.0
-> > > > > >
-> > >
->
