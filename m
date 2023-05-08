@@ -2,149 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97306F9E1C
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE176F9E20
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 05:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbjEHDND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 23:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S232201AbjEHDPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 23:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbjEHDNB (ORCPT
+        with ESMTP id S232152AbjEHDPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 23:13:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9897EDC
-        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 20:12:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683515533;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9nyAgUbuTjzD6fHJpqxIZiFQeyCjpbJk624bFTFNpfo=;
-        b=dqAL4kMtn1iPVye9ftLbseCCSTCjkzdJSEHmWjTl6S72iWjsgp3N2vv26LhkwWXAXioEUH
-        X3C+siAfl1JAm+J/w9JsmL1jK4uveIo2/adgi4TCAwvzim522IUnzI/CAgheEgGZ+t+WZ/
-        Us0YeHduY8an97DUjCrI7KEkmp8BqkY=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-266-iMBp1UA4MUG3xziycPYeuA-1; Sun, 07 May 2023 23:12:12 -0400
-X-MC-Unique: iMBp1UA4MUG3xziycPYeuA-1
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-1ac6193a1e3so7979895ad.0
-        for <linux-kernel@vger.kernel.org>; Sun, 07 May 2023 20:12:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683515531; x=1686107531;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9nyAgUbuTjzD6fHJpqxIZiFQeyCjpbJk624bFTFNpfo=;
-        b=biM5lZu5xj1yBjLrqa3wZMxt5f1DRtnHZh+qRoQSbtxdZeM8cSLRXf/rk40RzY/eBu
-         A9TgWT6Fpxiv+ebo9RSXMHxRfcLfX5c4dqnrHQCB4d1gMNrlLVWN6MZa+IgmOlMXo14j
-         XF0YUfleiv1fHHXHoh6BMnRfkOGz/p5gi3WNXkd/Suv+Mfp5iBNhcMTGQ0vzPEhbK8cT
-         A0OBcClTm8+7ezhPjDRdMndwS9ZR4p9vtJHJ7r+ky//VY7q4i07P4xnQw+8lpblhkk47
-         JrvG3sYqRlqAmehwMDQOxNdHEv7DN2nePi4Yk9gw1JlChoplGZsfDlF0WNr9esssmAtC
-         DE1w==
-X-Gm-Message-State: AC+VfDzJ9p87fqjyROHMkQ5nP2Xab4hJDEIxdU7NJbhb3Cf2oZBcFpTr
-        4wZVIThaq19PRhRDwj/71bGShQzO1jeoPfR48xD+of78za+cB9hNlv7HZkDqiVH0JqUW9eyufJ9
-        nTTlMACGo9GPlTWAOE6vZelqW
-X-Received: by 2002:a17:902:a516:b0:1ab:1355:1a45 with SMTP id s22-20020a170902a51600b001ab13551a45mr8724900plq.30.1683515530940;
-        Sun, 07 May 2023 20:12:10 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4Dsr/5I/1xDjPCTgBELpkfYOze5JmdS9lW2LqmCICvddW3VQUgjgtMk5CSsiE4sTTKAkq0Yg==
-X-Received: by 2002:a17:902:a516:b0:1ab:1355:1a45 with SMTP id s22-20020a170902a51600b001ab13551a45mr8724890plq.30.1683515530640;
-        Sun, 07 May 2023 20:12:10 -0700 (PDT)
-Received: from [10.72.12.58] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id o4-20020a170902d4c400b00199193e5ea1sm5857923plg.61.2023.05.07.20.12.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 May 2023 20:12:10 -0700 (PDT)
-Message-ID: <2b5cf90a-efa8-52a7-9277-77722622c128@redhat.com>
-Date:   Mon, 8 May 2023 11:12:03 +0800
+        Sun, 7 May 2023 23:15:09 -0400
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B652083DE
+        for <linux-kernel@vger.kernel.org>; Sun,  7 May 2023 20:15:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1683515679; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=l9Yk2ZpIGQ75skWpiIgtduLusGE0oPB3mXGTsifKZOd4htya3Lqri6vqKzS+RAv0h8tGa6qEoIzSUPoHrga+izsHhKMJAhvntlkmkHzigs8jpJwMJ8NioaVFqypgoLjUA6GSxNGvaR6aa7OE90VOs0bfyVuOYACp6DntwGfvxsw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1683515679; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=qnDzkRSag6SxflxnrB+gJTuVsWsOkNdIPE1k2QWE8XE=; 
+        b=RUnwG9k5DIpDNtpbg3Bo0K5nvSIveaan3d38/FCtTLP4mdnPLHeUOrJ7MLyOAiPSgdnJKxKfQkiHuadbVtXbg059Vy2H5ImNegQZwQkMxUx8QJCmuu1rKZFBgJzS5SkWqDAZ6md27ajQirnwbmN66nnfamsAcsLCj4yYoCCWliU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1683515679;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=qnDzkRSag6SxflxnrB+gJTuVsWsOkNdIPE1k2QWE8XE=;
+        b=TzPxT1lMzDl+M0OheL8u2UY+r17jtv5k9D2Ui8pLXoO6w0j+soRqNs2YdOAYiXsE
+        6qCNPWUjcfS/lE7tROLVaGJYcWNlWKc6yn5m5128QFJatuU/Ei+0jx7MDktcY8Rd9Ld
+        lQTTX2V3CI6y7FFBdMs7qDn9qLnUQgOTXw/hzWuk=
+Received: from edelgard.fodlan.icenowy.me (120.85.98.36 [120.85.98.36]) by mx.zohomail.com
+        with SMTPS id 1683515678721325.31977442907953; Sun, 7 May 2023 20:14:38 -0700 (PDT)
+Message-ID: <56489d3f1b23a90baf3ef024da09b4c8c02a2204.camel@icenowy.me>
+Subject: Re: [PATCH 1/5] irqchip/sifive-plic: Support T-HEAD's C910 PLIC
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Jisheng Zhang <jszhang@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>
+Date:   Mon, 08 May 2023 11:14:32 +0800
+In-Reply-To: <20230507182304.2934-2-jszhang@kernel.org>
+References: <20230507182304.2934-1-jszhang@kernel.org>
+         <20230507182304.2934-2-jszhang@kernel.org>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v4] virtio_net: suppress cpu stall when free_unused_bufs
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Wenliang Wang <wangwenliang.1995@bytedance.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, zhengqi.arch@bytedance.com,
-        willemdebruijn.kernel@gmail.com,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuanzhuo@linux.alibaba.com
-References: <1683167226-7012-1-git-send-email-wangwenliang.1995@bytedance.com>
- <CACGkMEs_4kUzc6iSBWvhZA1+U70Pp0o+WhE0aQnC-5pECW7QXA@mail.gmail.com>
- <20230507093328-mutt-send-email-mst@kernel.org>
-Content-Language: en-US
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20230507093328-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+=E5=9C=A8 2023-05-08=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 02:23 +0800=EF=BC=
+=8CJisheng Zhang=E5=86=99=E9=81=93=EF=BC=9A
+> The T-HEAD's C910 PLIC still needs the delegation bit settingto allow
+> access from S-mode, but it doesn't need the edge quirk.
 
-在 2023/5/7 21:34, Michael S. Tsirkin 写道:
-> On Fri, May 05, 2023 at 11:28:25AM +0800, Jason Wang wrote:
->> On Thu, May 4, 2023 at 10:27 AM Wenliang Wang
->> <wangwenliang.1995@bytedance.com> wrote:
->>> For multi-queue and large ring-size use case, the following error
->>> occurred when free_unused_bufs:
->>> rcu: INFO: rcu_sched self-detected stall on CPU.
->>>
->>> Fixes: 986a4f4d452d ("virtio_net: multiqueue support")
->>> Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
->>> ---
->>> v2:
->>> -add need_resched check.
->>> -apply same logic to sq.
->>> v3:
->>> -use cond_resched instead.
->>> v4:
->>> -add fixes tag
->>> ---
->>>   drivers/net/virtio_net.c | 2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
->>> index 8d8038538fc4..a12ae26db0e2 100644
->>> --- a/drivers/net/virtio_net.c
->>> +++ b/drivers/net/virtio_net.c
->>> @@ -3560,12 +3560,14 @@ static void free_unused_bufs(struct virtnet_info *vi)
->>>                  struct virtqueue *vq = vi->sq[i].vq;
->>>                  while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
->>>                          virtnet_sq_free_unused_buf(vq, buf);
->>> +               cond_resched();
->> Does this really address the case when the virtqueue is very large?
->>
->> Thanks
->
-> it does in that a very large queue is still just 64k in size.
-> we might however have 64k of these queues.
+No, the PLIC controller seems to be the same between C906 and C910,
+which has level/edge selectable via external signal.
 
+See openc906 and openc910 repositories, especially the documents with
+it: =E7=8E=84=E9=93=81C9{06,10}=E9=9B=86=E6=88=90=E6=89=8B=E5=86=8C.pdf .
 
-Ok, but we have other similar loops especially the refill, I think we 
-may need cond_resched() there as well.
+In addition, such problem won't arise when the system uses only level-
+triggered interrupts.
 
-Thanks
-
-
->
->>>          }
->>>
->>>          for (i = 0; i < vi->max_queue_pairs; i++) {
->>>                  struct virtqueue *vq = vi->rq[i].vq;
->>>                  while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
->>>                          virtnet_rq_free_unused_buf(vq, buf);
->>> +               cond_resched();
->>>          }
->>>   }
->>>
->>> --
->>> 2.20.1
->>>
+>=20
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+> =C2=A0.../bindings/interrupt-controller/sifive,plic-1.0.0.yaml=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 | 4
+> ++++
+> =C2=A0drivers/irqchip/irq-sifive-plic.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 1 +
+> =C2=A02 files changed, 5 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/interrupt-
+> controller/sifive,plic-1.0.0.yaml
+> b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-
+> 1.0.0.yaml
+> index f75736a061af..64b43a3c3748 100644
+> --- a/Documentation/devicetree/bindings/interrupt-
+> controller/sifive,plic-1.0.0.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-
+> controller/sifive,plic-1.0.0.yaml
+> @@ -62,6 +62,10 @@ properties:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 - starfive,jh7110-plic
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 - canaan,k210-plic
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: sif=
+ive,plic-1.0.0
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - enum:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 - thead,light-plic
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: thead,c9=
+10-plic
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - enum:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 - allwinner,sun20i-d1-plic
+> diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-
+> sifive-plic.c
+> index e1484905b7bd..71afa2a584d9 100644
+> --- a/drivers/irqchip/irq-sifive-plic.c
+> +++ b/drivers/irqchip/irq-sifive-plic.c
+> @@ -569,6 +569,7 @@ static int __init plic_init(struct device_node
+> *node,
+> =C2=A0}
+> =C2=A0
+> =C2=A0IRQCHIP_DECLARE(sifive_plic, "sifive,plic-1.0.0", plic_init);
+> +IRQCHIP_DECLARE(thead_c910_plic, "thead,c910-plic", plic_init);
+> =C2=A0IRQCHIP_DECLARE(riscv_plic0, "riscv,plic0", plic_init); /* for
+> legacy systems */
+> =C2=A0
+> =C2=A0static int __init plic_edge_init(struct device_node *node,
 
