@@ -2,158 +2,377 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 670FC6FAE0B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C25C6FAE14
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 13:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236210AbjEHLkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 07:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
+        id S236161AbjEHLkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 07:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236274AbjEHLkE (ORCPT
+        with ESMTP id S236147AbjEHLkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 07:40:04 -0400
-Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2095.outbound.protection.outlook.com [40.107.11.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D87C3F2D2;
-        Mon,  8 May 2023 04:40:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d5+zVUrtmD+O9xvZh40zu87sIjByrclyovhustiSi7NV6GLQJPquMMisnovmZ0GqPQBeJXm1TAqVrkVEhaOl/DRizXyCCXQZ/nSqlSwzGEa+c4QaUDQOuqyi3vkSsEGsUeFU0456zcZJWXPnFwohFmSA9/Uv9TRUopsF4fjnQILgT+f0Gj5Rky9LvLx1M0CbR4l/PylfpNVN9gOhppQ26amGxSIz0cUUt1cRm6a6hWBcUSyWIKDEJXcUchDn2JJtu/YGOus+jpQuEZEDQ9m/M9cypjjPZXyZg23G8agEGLADIR5rq2s5PR1bJJJrY1vdl9A1W2P+evSbcuEl0+UMpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A0Vcc4x2w1XrcYRwslQCX1jrck2o36AlbrzUrJMTWs0=;
- b=Cdd5MKPVj1hKjCf14b1YrTDPbEoZjtfSfX1cz5KO/y5m6KobL01PdwvNSr8guSDmd80vdKG0rYNWI8B6lDe5/PA375boR4OMIgQIr6icHffakL2vul5eMz+xpQmOjM96AWhtozDPTA999/BUQX2w/FznXpRkdO9Sg3jUfLR9gvgzE2oewTQUrxznvt5k+e0QmOZUipqwWyHn3pN8u7OqXLCVp1iklJ/NHMJpoZUC0QyICTN2a7IM0KPMuHI/Liypno99BM5JRFUPwE9WS/PhArraRyKwuB1A53EbCHdAdI6gvfi2IDqndgPNQRJiOW805hwtjC8fUZR/92W8NxdP3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A0Vcc4x2w1XrcYRwslQCX1jrck2o36AlbrzUrJMTWs0=;
- b=omQgtNKcTomBWWV/y3xDhBW9WBZFy9qrwCkXDKoC5k+c+LGWiCGDWNzHKFVTe3AewfVXpqfqXp3F+vK5wQlfqnSLXoVxdhDnyk26igXTvOt59ykpLPo0hY6PXwwOjCKowhICaHct8OKgAmMH2D+p74UjLBPtTYnIZxVkoGy8Uxs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO3P265MB1946.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:10b::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.17; Mon, 8 May
- 2023 11:39:58 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1d51:d482:270c:7daf]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1d51:d482:270c:7daf%4]) with mapi id 15.20.6387.017; Mon, 8 May 2023
- 11:39:58 +0000
-Date:   Mon, 8 May 2023 12:39:53 +0100
-From:   Gary Guo <gary@garyguo.net>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "=?UTF-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH] rust: error: allow specifying error type on `Result`
-Message-ID: <20230508123953.4ccb85e6.gary@garyguo.net>
-In-Reply-To: <20230502124015.356001-1-aliceryhl@google.com>
-References: <20230502124015.356001-1-aliceryhl@google.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0407.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:f::35) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+        Mon, 8 May 2023 07:40:23 -0400
+Received: from out0-205.mail.aliyun.com (out0-205.mail.aliyun.com [140.205.0.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D06144510
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 04:40:18 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047201;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---.Sba47YZ_1683546010;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.Sba47YZ_1683546010)
+          by smtp.aliyun-inc.com;
+          Mon, 08 May 2023 19:40:11 +0800
+Date:   Mon, 08 May 2023 19:40:10 +0800
+From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Petr Mladek" <pmladek@suse.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "Song Liu" <song@kernel.org>,
+        "Julian Pidancet" <julian.pidancet@oracle.com>
+Subject: Re: [PATCH RFC 31/43] x86/modules: Adapt module loading for PIE
+ support
+Message-ID: <20230508114010.GA62035@k08j02272.eu95sqa>
+References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
+ <c79285bfa4450fd5ad160ddd4919ac9ad826de04.1682673543.git.houwenlong.hwl@antgroup.com>
+ <CAMj1kXH8E7AgvmJ-Spa+EwHSz7kcqd+AMGvtxRUo3jFD3PAWsQ@mail.gmail.com>
+ <20230508083223.GA116442@k08j02272.eu95sqa>
+ <CAMj1kXH1P4owoSV9OmRwEZyKritBFmCpQaa68EMrTHi0LvUrFg@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO3P265MB1946:EE_
-X-MS-Office365-Filtering-Correlation-Id: f9293be1-030e-4f61-e071-08db4fb8f389
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UYvMpNBOzH8yNcSSeHB7VQx1DJoYRVg8Q8SFYOLKnZaLofUPUI/53KnDPFBP2enupoHGzZZnz7eoCYzSiOyfOvH+JlczHqbvx93h+jH6O61o0njUXmCKNZIMUfj8YQ0+3VNFKmmqaSTCJeSndfgO2rPkkAEhMo3ITB9L9Ha/MTIS8UI0SqunaFOQcbGtKqaD1SE1J1x4fyvUn4EfjDUo2Uaqjedn3/dzkWZOEz/zFuntTVejnzxOJa45Fod1iu2W9nfBOMw5TwCX5cNl+wXRGE9jl/qEiXJMhmJMMr8O9sVbLjlPy6NpB1muq7FZW2aVMoS+eNqW1p7B5KDV7je0tJxmknLdgvxTQMm6OOQAiUkV5shxGWS8MpDDqOyFc8PaXk/v6z+IrpNAfIxD/eFadCHLILdlM1UnEj+1DnCNeS7LrbPruMHs+pcV4U/Waa6bQQaowT3cBdzZ4QybophAACN6v42GO1s1C+G5oHE8zlJdv4UsleiTZAxatRJJsaLJTV+mgaasGkd+6caZaKjTJ9xwbxltl3zjKbZfdMtvDbp/eoaj/r9NE1EvpIeQILrRrMZfP7QRgFEgyVjtwU2sIw61pEiaDEmMzXqFUAbYqA4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(39830400003)(396003)(346002)(136003)(451199021)(26005)(6506007)(1076003)(6512007)(6486002)(83380400001)(36756003)(2616005)(38100700002)(86362001)(186003)(54906003)(2906002)(8936002)(8676002)(316002)(41300700001)(478600001)(7416002)(6916009)(4326008)(66476007)(66946007)(5660300002)(66556008)(6666004)(81973001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eKGCCnqIAI3+h1DPo+PlppJu0CVILdFr7HMHMDFISMSf8aYTu3AW9OQtvgjI?=
- =?us-ascii?Q?to4Q96Pd+C+5OZkPbe0IeTo1zlOEFO+h9CmAFVo3rn1LPYyxt7VfXb8ji2fn?=
- =?us-ascii?Q?hW9/OGPnYr8ahSVAbnlZ482OGFM0JQ5DoA/81H4LUt9PKMMJjNnIXlRXfq0/?=
- =?us-ascii?Q?z0kaPui65z+qCKpZB3lpHslQuQWprcxLA1LH2yfG/sruwoHjISLAnXMn5L/t?=
- =?us-ascii?Q?QOe0vYG+JhkMJNwH0jHKg9elp7EOC10rMttqJ2z8uChdiJ0znr4Ibd3OkHzs?=
- =?us-ascii?Q?saWi+sH/OyjyDGHakXlOYKG71TDWPZnTSwcKXYURYev30bJTPSIWbT7I/GD8?=
- =?us-ascii?Q?NA5oKHVweBc8gew08St+0KcXpfvME44cA8H+3yiGV+xTzi1UqfD2e9s5h6by?=
- =?us-ascii?Q?3s2rk6YL8LV2hIiqAbfAs+b/4LS4Ob9TUcWgRfXqIxUXr9Qv2rlg+56VL6SF?=
- =?us-ascii?Q?zsVZsSr+FR0dAL8ny1VkUJ6P6H5RjCEs2FpV99OyhuEu8/83A4gcAkt0W/jG?=
- =?us-ascii?Q?aQBo1ifxr/2gHB2505oh7ofzRPvSIarNJNXNsfErpwjPlO39m97ZJj78M1AP?=
- =?us-ascii?Q?bcPZla02fNkXw8CasWbcpTJWHArC9cS6x6V4ySrlVYvPW01+ofG2gyDka2Qd?=
- =?us-ascii?Q?djGwquQwRgf05wDpMhT52l95A9cY5GjBTFM1vbwPr4L2mBdjoIBWvhBHn2F2?=
- =?us-ascii?Q?RY1RhMoE4XZfEKik+mYr87qnoBa3ZSH5j+JntMhTEWGG3heSVARxCdtQE2Jt?=
- =?us-ascii?Q?7Jc909JqyeBaODUJd5S6n0IDACuzPDBkOFgCAoQudqngrlLC01pedC6CNo84?=
- =?us-ascii?Q?avTw/kSMc31zp8kqFHRzdUbtTCfbPYnUJ/FTcKoLp3LHt5KHKZAEHoqp8ce8?=
- =?us-ascii?Q?ZIZYHZVFR9vweSAAikgj/dN0TCZMYqQuW1bsuYkv66qSUKcMNo9voB/vZACl?=
- =?us-ascii?Q?NPS4PWseNAdezcS71pc+sswt5VvTjGifKsoTYFtDRCAgWN4wAMOuU1iP0V3G?=
- =?us-ascii?Q?zpJwtRzeWsc318xC0FXEkBCqtigZ8QIHtQxnVOQHtVlJZKFqOwtYI7IO/fcj?=
- =?us-ascii?Q?bsO91Xi6slehuUIhMkDtOKn9pGPvL+6oWpFhiYOBuHRiAl0TSxN1fk3iamrI?=
- =?us-ascii?Q?vdCENX908548NJGIfBWvtiIDlWpZgDTQ6Uyfrqn1/ywZwK3LmrxSGbUtFLn4?=
- =?us-ascii?Q?AGBk+s9/np9eeIjrgFOskEmZyqtERll/d/dCaB20AI1kU6JpJw2B7G3SQqPB?=
- =?us-ascii?Q?HqO+uydCGsanr0Bdq/mhGXUNygEqAi7+14meY6tjKw+u7ppYugJrXUdoHy91?=
- =?us-ascii?Q?vLMg05Dkz5s+Ij28XuxA4+OgtB4fDP5pBszhQJxt45Lkw2Ad4ZjVi+xD+3rP?=
- =?us-ascii?Q?H3XOi0BBFyVTS9gRiyrej4b6vEjYlluOX9QLD3ZNEM2HsQOosYDjnHF4PXQZ?=
- =?us-ascii?Q?I7y0F2V3xGIIo/eILeZdET6J/cyyOS6swyJi63jvbetaPKc9B8KEOMD3TVv/?=
- =?us-ascii?Q?l9fj1UY7gJ/IIHXwLdw8Y1IBMN2R+6Ti45ilc2ZXH/Zh48ZE1TqSSifwO1Tb?=
- =?us-ascii?Q?tKlbVfdqR1THwMF557M=3D?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9293be1-030e-4f61-e071-08db4fb8f389
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 11:39:58.2987
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wWJXt1Gbzh84zWMTfGP37uwZcyn1TmMvG7OBdcjd3qhslOnLqeCB2Q5ST5XeyA37v4rv4sPn5D0oAJv6ZJ6fsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO3P265MB1946
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXH1P4owoSV9OmRwEZyKritBFmCpQaa68EMrTHi0LvUrFg@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLACK
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  2 May 2023 12:40:15 +0000
-Alice Ryhl <aliceryhl@google.com> wrote:
-
-> Currently, if the `kernel::error::Result` type is in scope (which is
-> often is, since it's in the kernel's prelude), you cannot write
-> `Result<T, SomeOtherErrorType>` when you want to use a different error
-> type than `kernel::error::Error`.
+On Mon, May 08, 2023 at 05:16:34PM +0800, Ard Biesheuvel wrote:
+> On Mon, 8 May 2023 at 10:38, Hou Wenlong <houwenlong.hwl@antgroup.com> wrote:
+> >
+> > On Sat, Apr 29, 2023 at 03:29:32AM +0800, Ard Biesheuvel wrote:
+> > > On Fri, 28 Apr 2023 at 10:53, Hou Wenlong <houwenlong.hwl@antgroup.com> wrote:
+> > > >
+> > > > Adapt module loading to support PIE relocations. No GOT is generared for
+> > > > module, all the GOT entry of got references in module should exist in
+> > > > kernel GOT.  Currently, there is only one usable got reference for
+> > > > __fentry__().
+> > > >
+> > >
+> > > I don't think this is the right approach. We should permit GOTPCREL
+> > > relocations properly, which means making them point to a location in
+> > > memory that carries the absolute address of the symbol. There are
+> > > several ways to go about that, but perhaps the simplest way is to make
+> > > the symbol address in ksymtab a 64-bit absolute value (but retain the
+> > > PC32 references for the symbol name and the symbol namespace name).
+> > > That way, you can always resolve such GOTPCREL relocations by pointing
+> > > it to the ksymtab entry. Another option would be to take inspiration
+> > > from the PLT code we have on ARM and arm64 (and other architectures,
+> > > surely) and to count the GOT based relocations, allocate some extra
+> > > r/o module space for each, and allocate slots and populate them with
+> > > the right value as you fix up the relocations.
+> > >
+> > > Then, many such relocations can be relaxed at module load time if the
+> > > symbol is in range. IIUC, the module and kernel will still be inside
+> > > the same 2G window even after widening the KASLR range to 512G, so
+> > > most GOT loads can be converted into RIP relative LEA instructions.
+> > >
+> > > Note that this will also permit you to do things like
+> > >
+> > > #define PV_VCPU_PREEMPTED_ASM \
+> > >  "leaq __per_cpu_offset(%rip), %rax \n\t" \
+> > >  "movq (%rax,%rdi,8), %rax \n\t" \
+> > >  "addq steal_time@GOTPCREL(%rip), %rax \n\t" \
+> > >  "cmpb $0, " __stringify(KVM_STEAL_TIME_preempted) "(%rax) \n\t" \
+> > >  "setne %al\n\t"
+> > >
+> > > or
+> > >
+> > > +#ifdef CONFIG_X86_PIE
+> > > + " pushq arch_rethook_trampoline@GOTPCREL(%rip)\n"
+> > > +#else
+> > > " pushq $arch_rethook_trampoline\n"
+> > > +#endif
+> > >
+> > > instead of having these kludgy push/pop sequences to free up temp registers.
+> > >
+> > > (FYI I have looked into this PIE linking just a few weeks ago [0] so
+> > > this is all rather fresh in my memory)
+> > >
+> > >
+> > >
+> > >
+> > > [0] https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=x86-pie
+> > >
+> > >
+> > Hi Ard,
+> > Thanks for providing the link, it has been very helpful for me as I am
+> > new to the topic of compilers.
 > 
-> To solve this we change the error type from being hard-coded to just
-> being a default generic parameter. This still lets you write `Result<T>`
-> when you just want to use the `Error` error type, but also lets you
-> write `Result<T, SomeOtherErrorType>` when necessary.
-> 
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> Happy to hear that.
+>
+ 
+Thanks for your prompt reply.
 
-Reviewed-by: Gary Guo <gary@garyguo.net>
-
-> ---
->  rust/kernel/error.rs | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> > One key difference I noticed is that you
+> > linked the kernel with "-pie" instead of "--emit-reloc". I also noticed
+> > that Thomas' initial patchset[0] used "-pie", but in RFC v3 [1], it
+> > switched to "--emit-reloc" in order to reduce dynamic relocation space
+> > on mapped memory.
+> >
 > 
-> diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
-> index 5f4114b30b94..01dd4d2f63d2 100644
-> --- a/rust/kernel/error.rs
-> +++ b/rust/kernel/error.rs
-> @@ -177,7 +177,7 @@ impl From<core::convert::Infallible> for Error {
->  /// Note that even if a function does not return anything when it succeeds,
->  /// it should still be modeled as returning a `Result` rather than
->  /// just an [`Error`].
-> -pub type Result<T = ()> = core::result::Result<T, Error>;
-> +pub type Result<T = (), E = Error> = core::result::Result<T, E>;
->  
->  /// Converts an integer as returned by a C kernel function to an error if it's negative, and
->  /// `Ok(())` otherwise.
+> The problem with --emit-relocs is that the relocations emitted into
+> the binary may get out of sync with the actual code after the linker
+> has applied relocations.
 > 
-> base-commit: ea76e08f4d901a450619831a255e9e0a4c0ed162
+> $ cat /tmp/a.s
+> foo:movq foo@GOTPCREL(%rip), %rax
+> 
+> $ x86_64-linux-gnu-gcc -c -o /tmp/a.o /tmp/a.s
+> ard@gambale:~/linux$ x86_64-linux-gnu-objdump -dr /tmp/a.o
+> 
+> /tmp/a.o:     file format elf64-x86-64
+> 
+> 
+> Disassembly of section .text:
+> 
+> 0000000000000000 <foo>:
+>    0: 48 8b 05 00 00 00 00 mov    0x0(%rip),%rax        # 7 <foo+0x7>
+> 3: R_X86_64_REX_GOTPCRELX foo-0x4
+> 
+> $ x86_64-linux-gnu-gcc -c -o /tmp/a.o /tmp/a.s
+> $ x86_64-linux-gnu-objdump -dr /tmp/a.o
+> 0000000000000000 <foo>:
+>    0: 48 8b 05 00 00 00 00 mov    0x0(%rip),%rax        # 7 <foo+0x7>
+> 3: R_X86_64_REX_GOTPCRELX foo-0x4
+> 
+> $ x86_64-linux-gnu-gcc -o /tmp/a.elf -nostartfiles
+> -Wl,-no-pie,-q,--defsym,_start=0x0 /tmp/a.s
+> $ x86_64-linux-gnu-objdump -dr /tmp/a.elf
+> 0000000000401000 <foo>:
+>   401000: 48 c7 c0 00 10 40 00 mov    $0x401000,%rax
+> 401003: R_X86_64_32S foo
+> 
+> $ x86_64-linux-gnu-gcc -o /tmp/a.elf -nostartfiles
+> -Wl,-q,--defsym,_start=0x0 /tmp/a.s
+> $ x86_64-linux-gnu-objdump -dr /tmp/a.elf
+> 0000000000001000 <foo>:
+>     1000: 48 8d 05 f9 ff ff ff lea    -0x7(%rip),%rax        # 1000 <foo>
+> 1003: R_X86_64_PC32 foo-0x4
+> 
+> This all looks as expected. However, when using Clang, we end up with
+> 
+> $ clang -target x86_64-linux-gnu -o /tmp/a.elf -nostartfiles
+> -fuse-ld=lld -Wl,--relax,-q,--defsym,_start=0x0 /tmp/a.s
+> $ x86_64-linux-gnu-objdump -dr /tmp/a.elf
+> 00000000000012c0 <foo>:
+>     12c0: 48 8d 05 f9 ff ff ff lea    -0x7(%rip),%rax        # 12c0 <foo>
+> 12c3: R_X86_64_REX_GOTPCRELX foo-0x4
+> 
+> So in this case, what --emit-relocs gives us is not what is actually
+> in the binary. We cannot just ignore these either, given that they are
+> treated differently depending on whether the symbol is a per-CPU
+> symbol or not - in the former case, we need to perform a fixup if the
+> relaxed reference is RIP relative, and in the latter case, if the
+> relaxed reference is absolute.
+>
+With symbols hidden and the compile-time address of the kernel image
+kept in the top 2G, is it possible for the relaxed reference to be
+absolute, even if I keep the percpu section zero-mapping for SMP?  I
+didn't see absoulte relaxed reference after dropping
+"-mrelax-relocations=no" option.
 
+> On top of that, --emit-relocs does not cover the GOT, so we'd still
+> need to process that from the code explicitly.
+>
+Yes, so the relocs tool would process GOT, and generate
+R_X86_64_GLOB_DAT relocation for GOT entries in patch 27:
+https://lore.kernel.org/lkml/d25c7644249355785365914398bdba1ed2c52468.1682673543.git.houwenlong.hwl@antgroup.com
+
+> In general, relying on --emit-relocs is kind of dodgy, and I think
+> combining PIE linking with --emit-relocs is a bad idea.
+> 
+> > The another issue is that it requires the addition of the
+> > "-mrelax-relocations=no" option to support older compilers and linkers.
+> 
+> Why? The decompressor is now linked in PIE mode so we should be able
+> to drop that. Or do you need to add is somewhere else?
+>
+I tried to use binutils 2.25 (mini version), it couldn't recognize
+R_X86_64_GOTPCRELX and R_X86_64_REX_GOTPCRELX.
+
+> > R_X86_64_GOTPCRELX and R_X86_64_REX_GOTPCRELX relocations are supported
+> > in binutils 2.26 and later, but the mini version required for the kernel
+> > is 2.25. This option disables relocation relaxation, which makes GOT not
+> > empty. I also noticed this option in arch/x86/boot/compressed/Makefile
+> > with the reason given in [2]. Without relocation relaxation, GOT
+> > references would increase the size of GOT. Therefore, I do not want to
+> > use GOT reference in assembly directly.  However, I realized that the
+> > compiler could still generate GOT references in some cases such as
+> > "fentry" calls and stack canary references.
+> >
+> 
+> The stack canary references are under discussion here [3]. I have also
+> sent a patch for kallsyms symbol references [4]. Beyond that, there
+> should be very few cases where GOT entries are emitted, so I don't
+> think this is fundamentally a problem.
+> 
+> I haven't run into the __fentry__ issue myself: do you think we should
+> fix this in the compiler?
+>
+The issue about __fentry__ is that the compiler would generate 6-bytes
+indirect call through GOT with "-fPIE" option. However, the original
+ftrace nop patching assumes it is a 5-bytes direct call. And
+"-mnop-mcount" option is not compatiable with "-fPIE" option, so the
+complier woudn't patch it as nop.
+
+So we should patch it with one 5-bytes nop followed by one 1-byte nop,
+This way, ftrace can handle the previous 5-bytes as before. Also I have
+built PIE kernel with relocation relaxation on GCC, and the linker would
+relax it as following:
+ffffffff810018f0 <do_one_initcall>:
+ffffffff810018f0:       f3 0f 1e fa             endbr64
+ffffffff810018f4:       67 e8 a6 d6 05 00       addr32 call ffffffff8105efa0 <__fentry__>
+			ffffffff810018f6: R_X86_64_PC32 __fentry__-0x4
+
+It still requires a different nop patching for ftrace. I notice
+"Optimize GOTPCRELX Relocations" chapter in x86-64 psABI, which suggests
+that the GOT indirect call can be relaxed as "call fentry nop" or "nop
+call fentry", it appears that the latter is chosen. If the linker could
+generate the former, then no fixup would be necessary for ftrace with
+PIE.
+
+> > Regarding module loading, I agree that we should support GOT reference
+> > for the module itself. I will refactor it according to your suggestion.
+> >
+> 
+> Excellent, good luck with that.
+> 
+> However, you will still need to make a convincing case for why this is
+> all worth the trouble. Especially given that you disable the depth
+> tracking code, which I don't think should be mutually exclusive.
+>
+Actually, I could do relocation for it when apply patching for the
+depth tracking code. I'm not sure such case is common or not.
+
+> I am aware that this a rather tricky, and involves rewriting
+> RIP-relative per-CPU variable accesses, but it would be good to get a
+> discussion started on that topic, and figure out whether there is a
+> way forward there. Ignoring it is not going to help.
+> 
+>
+I see that your PIE linking chose to put the per-cpu section in high
+kernel image address, I still keep it as zero-mapping. However, both are
+in the RIP-relative addressing range.
+
+> >
+> > [0] https://yhbt.net/lore/all/20170718223333.110371-20-thgarnie@google.com
+> > [1] https://yhbt.net/lore/all/20171004212003.28296-1-thgarnie@google.com
+> > [2] https://lore.kernel.org/all/20200903203053.3411268-2-samitolvanen@google.com/
+> >
+> 
+> [3] https://github.com/llvm/llvm-project/issues/60116
+> [4] 20230504174320.3930345-1-ardb@kernel.org
+> 
+> > > > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> > > > Cc: Thomas Garnier <thgarnie@chromium.org>
+> > > > Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> > > > Cc: Kees Cook <keescook@chromium.org>
+> > > > ---
+> > > >  arch/x86/include/asm/sections.h |  5 +++++
+> > > >  arch/x86/kernel/module.c        | 27 +++++++++++++++++++++++++++
+> > > >  2 files changed, 32 insertions(+)
+> > > >
+> > > > diff --git a/arch/x86/include/asm/sections.h b/arch/x86/include/asm/sections.h
+> > > > index a6e8373a5170..dc1c2b08ec48 100644
+> > > > --- a/arch/x86/include/asm/sections.h
+> > > > +++ b/arch/x86/include/asm/sections.h
+> > > > @@ -12,6 +12,11 @@ extern char __end_rodata_aligned[];
+> > > >
+> > > >  #if defined(CONFIG_X86_64)
+> > > >  extern char __end_rodata_hpage_align[];
+> > > > +
+> > > > +#ifdef CONFIG_X86_PIE
+> > > > +extern char __start_got[], __end_got[];
+> > > > +#endif
+> > > > +
+> > > >  #endif
+> > > >
+> > > >  extern char __end_of_kernel_reserve[];
+> > > > diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+> > > > index 84ad0e61ba6e..051f88e6884e 100644
+> > > > --- a/arch/x86/kernel/module.c
+> > > > +++ b/arch/x86/kernel/module.c
+> > > > @@ -129,6 +129,18 @@ int apply_relocate(Elf32_Shdr *sechdrs,
+> > > >         return 0;
+> > > >  }
+> > > >  #else /*X86_64*/
+> > > > +#ifdef CONFIG_X86_PIE
+> > > > +static u64 find_got_kernel_entry(Elf64_Sym *sym, const Elf64_Rela *rela)
+> > > > +{
+> > > > +       u64 *pos;
+> > > > +
+> > > > +       for (pos = (u64 *)__start_got; pos < (u64 *)__end_got; pos++)
+> > > > +               if (*pos == sym->st_value)
+> > > > +                       return (u64)pos + rela->r_addend;
+> > > > +       return 0;
+> > > > +}
+> > > > +#endif
+> > > > +
+> > > >  static int __write_relocate_add(Elf64_Shdr *sechdrs,
+> > > >                    const char *strtab,
+> > > >                    unsigned int symindex,
+> > > > @@ -171,6 +183,7 @@ static int __write_relocate_add(Elf64_Shdr *sechdrs,
+> > > >                 case R_X86_64_64:
+> > > >                         size = 8;
+> > > >                         break;
+> > > > +#ifndef CONFIG_X86_PIE
+> > > >                 case R_X86_64_32:
+> > > >                         if (val != *(u32 *)&val)
+> > > >                                 goto overflow;
+> > > > @@ -181,6 +194,13 @@ static int __write_relocate_add(Elf64_Shdr *sechdrs,
+> > > >                                 goto overflow;
+> > > >                         size = 4;
+> > > >                         break;
+> > > > +#else
+> > > > +               case R_X86_64_GOTPCREL:
+> > > > +                       val = find_got_kernel_entry(sym, rel);
+> > > > +                       if (!val)
+> > > > +                               goto unexpected_got_reference;
+> > > > +                       fallthrough;
+> > > > +#endif
+> > > >                 case R_X86_64_PC32:
+> > > >                 case R_X86_64_PLT32:
+> > > >                         val -= (u64)loc;
+> > > > @@ -214,11 +234,18 @@ static int __write_relocate_add(Elf64_Shdr *sechdrs,
+> > > >         }
+> > > >         return 0;
+> > > >
+> > > > +#ifdef CONFIG_X86_PIE
+> > > > +unexpected_got_reference:
+> > > > +       pr_err("Target got entry doesn't exist in kernel got, loc %p\n", loc);
+> > > > +       return -ENOEXEC;
+> > > > +#else
+> > > >  overflow:
+> > > >         pr_err("overflow in relocation type %d val %Lx\n",
+> > > >                (int)ELF64_R_TYPE(rel[i].r_info), val);
+> > > >         pr_err("`%s' likely not compiled with -mcmodel=kernel\n",
+> > > >                me->name);
+> > > > +#endif
+> > > > +
+> > > >         return -ENOEXEC;
+> > > >  }
+> > > >
+> > > > --
+> > > > 2.31.1
+> > > >
