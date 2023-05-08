@@ -2,167 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB576FBB4D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 459F96FBB50
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234098AbjEHXLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 19:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S234016AbjEHXNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 19:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234016AbjEHXLJ (ORCPT
+        with ESMTP id S230022AbjEHXNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 19:11:09 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2056C46AC
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 16:11:08 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b9a6eeea78cso37489827276.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 16:11:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683587467; x=1686179467;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+KHbWW8aLhrRbwJSnBa+NaTRCZqDMugAVxqQ48a5vrA=;
-        b=CkjnqpvoEfZTwHBSM/0dyupsDIBPF7IPLz0ISI7PYOrxbb5YGCHqcS8N0v1ZYLos5s
-         ZtWoMSyGyNck58xxb4MlM7D9oeMpY0FMBEc1BB4KSMsLYewZ4bdbEkD4livoTWc5PyMn
-         O6B6HPkIRROawPcob38VSK47JQ4hFYCRXn3/HKfzTm2sErrjX47RdPpxKRFPiEamuWVj
-         dY0PNzDtDuNp4y+ZdO9x1a1jm8PI7Jl4Z50tbqGybTBauo0Ds/fKCExzX4fsh1G9Ky3M
-         zud9d1MI+NzDEjmYLQsAx7fV9bJWoybJ0h2w+RKsLj2WC3dKJRNmET+kWSdQCNy3pj45
-         NCwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683587467; x=1686179467;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+KHbWW8aLhrRbwJSnBa+NaTRCZqDMugAVxqQ48a5vrA=;
-        b=GWegMLi5ZrrndnbSWHahaB+9Th3Ju0coVXgM7BmXAS0Ok8CTg3sF2mWxixNUj5XSSw
-         TRXCjhiFPYU5gtg/o63+LTX59+d2e160WXgrHkVkw89ym7FJFYODsRFv9PYJQExloW+y
-         hd9goy5WgcCPc81dgSC/LwjPiOKjnv6CzGDrpOk4g+y8/jc7eK3+efs/vMByWbm9nzmP
-         H96V0qxmraWuPVsKeHFnPuS8+xvRqNlFGgAJlkAJ+yMD9rVqihIhx7ZMzN80lOtOpciF
-         Vr6Zhvk/46na4obiZGd2Re1K/HGyvmBDdZ5Jq2yTW2x6W0UGrY0SXZDYD/EGE6lj0cId
-         yGJQ==
-X-Gm-Message-State: AC+VfDxbRp0F/egqTGkzcY1AELfOfCNILEORYO2901jMH0f1jQ8Ymntn
-        lfoH61cZstn2A1IeoSdFdm33tJF1+1Py
-X-Google-Smtp-Source: ACHHUZ4B/vPacOTqfRbMpnEhblMLe1lmO3gLnmtHCUmQOhnTl/8VZr5qPYV7FXFR46siNgB15sSf8X+ChjYg
-X-Received: from hi-h2o-specialist.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cef])
- (user=arakesh job=sendgmr) by 2002:a25:1283:0:b0:b9a:672d:23c9 with SMTP id
- 125-20020a251283000000b00b9a672d23c9mr7400472ybs.0.1683587467239; Mon, 08 May
- 2023 16:11:07 -0700 (PDT)
-Date:   Mon,  8 May 2023 16:11:03 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
-Message-ID: <20230508231103.1621375-1-arakesh@google.com>
-Subject: [PATCH] usb: gadget: uvc: queue empty isoc requests if no video
- buffer is available
-From:   Avichal Rakesh <arakesh@google.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
-        Jayant Chowdhary <jchowdhary@google.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Avichal Rakesh <arakesh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 8 May 2023 19:13:52 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8406249FE;
+        Mon,  8 May 2023 16:13:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683587630; x=1715123630;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UpsSTff8/0ZXEy+QYlfFYcdPyMTh1FDGgu5tOGHwm04=;
+  b=KvguI4bktPpyYQuKGuMO3HJJQ4z5GOEy6n5udFyl6S8YCz//4YKnqrdX
+   kThhm+btaG1KFbw9PjukUzBf4RCEEfCzoIVt6T8fAKPDaaHxfzkQV3iKY
+   tdpNj1sl9/viNGZsP9AE+HrRvBcEY4YsInuV0VE4Zi01EH+K7lcwi5pOI
+   KS4R68Uf3bNsFJ/sYYCyzf7HM+eNouswoRAGlcNwVZYNkrXFycdw4a+3T
+   evk2kWHkci2Hh4185evYnDACEH+ohKD0YABHNcO0VelsN1VaP07mshsKH
+   8Mh6LsKJkEhmzoTnSDa9RugSDsmHDTUlIRbdkWma3umzJtBdFeZ9Nj/Yh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="351937836"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="351937836"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 16:13:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="788295124"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="788295124"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 May 2023 16:13:46 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwA37-0001SX-09;
+        Mon, 08 May 2023 23:13:45 +0000
+Date:   Tue, 9 May 2023 07:13:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tony Lindgren <tony@atomide.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v10 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <202305090752.w4XZxmsN-lkp@intel.com>
+References: <20230508110339.38699-1-tony@atomide.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508110339.38699-1-tony@atomide.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ISOC transfers expect a certain cadence of requests being queued. Not
-keeping up with the expected rate of requests results in missed ISOC
-transfers (EXDEV). The application layer may or may not produce video
-frames to match this expectation, so uvc gadget driver must handle cases
-where the application is not queuing up buffers fast enough to fulfill
-ISOC requirements.
+Hi Tony,
 
-Currently, uvc gadget driver waits for new video buffer to become available
-before queuing up usb requests. With this patch the gadget driver queues up
-0 length usb requests whenever there are no video buffers available. The
-USB controller's complete callback is used as the limiter for how quickly
-the 0 length packets will be queued. Video buffers are still queued as
-soon as they become available.
+kernel test robot noticed the following build warnings:
 
-Link: https://lore.kernel.org/CAMHf4WKbi6KBPQztj9FA4kPvESc1fVKrC8G73-cs6tTeQby9=w@mail.gmail.com/
-Signed-off-by: Avichal Rakesh <arakesh@google.com>
----
- drivers/usb/gadget/function/uvc_video.c | 32 ++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 8 deletions(-)
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on tty/tty-next tty/tty-linus usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.4-rc1 next-20230508]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index dd1c6b2ca7c6..e81865978299 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -386,6 +386,9 @@ static void uvcg_video_pump(struct work_struct *work)
- 	struct uvc_buffer *buf;
- 	unsigned long flags;
- 	int ret;
-+	bool buf_int;
-+	/* video->max_payload_size is only set when using bulk transfer */
-+	bool is_bulk = video->max_payload_size;
- 
- 	while (video->ep->enabled) {
- 		/*
-@@ -408,20 +411,35 @@ static void uvcg_video_pump(struct work_struct *work)
- 		 */
- 		spin_lock_irqsave(&queue->irqlock, flags);
- 		buf = uvcg_queue_head(queue);
--		if (buf == NULL) {
-+
-+		if (buf != NULL) {
-+			video->encode(req, video, buf);
-+			/* Always interrupt for the last request of a video buffer */
-+			buf_int = buf->state == UVC_BUF_STATE_DONE;
-+		} else if (!(queue->flags & UVC_QUEUE_DISCONNECTED) && !is_bulk) {
-+			/*
-+			 * No video buffer available; the queue is still connected and
-+			 * we're traferring over ISOC. Queue a 0 length request to
-+			 * prevent missed ISOC transfers.
-+			 */
-+			req->length = 0;
-+			buf_int = false;
-+		} else {
-+			/*
-+			 * Either queue has been disconnected or no video buffer
-+			 * available to bulk transfer. Either way, stop processing
-+			 * further.
-+			 */
- 			spin_unlock_irqrestore(&queue->irqlock, flags);
- 			break;
- 		}
- 
--		video->encode(req, video, buf);
--
- 		/*
- 		 * With usb3 we have more requests. This will decrease the
- 		 * interrupt load to a quarter but also catches the corner
- 		 * cases, which needs to be handled.
- 		 */
--		if (list_empty(&video->req_free) ||
--		    buf->state == UVC_BUF_STATE_DONE ||
-+		if (list_empty(&video->req_free) || buf_int ||
- 		    !(video->req_int_count %
- 		       DIV_ROUND_UP(video->uvc_num_requests, 4))) {
- 			video->req_int_count = 0;
-@@ -441,8 +459,7 @@ static void uvcg_video_pump(struct work_struct *work)
- 
- 		/* Endpoint now owns the request */
- 		req = NULL;
--		if (buf->state != UVC_BUF_STATE_DONE)
--			video->req_int_count++;
-+		video->req_int_count++;
- 	}
- 
- 	if (!req)
-@@ -527,4 +544,3 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
- 			V4L2_BUF_TYPE_VIDEO_OUTPUT, &video->mutex);
- 	return 0;
- }
--
+url:    https://github.com/intel-lab-lkp/linux/commits/Tony-Lindgren/serial-core-Start-managing-serial-controllers-to-enable-runtime-PM/20230508-190805
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+patch link:    https://lore.kernel.org/r/20230508110339.38699-1-tony%40atomide.com
+patch subject: [PATCH v10 1/1] serial: core: Start managing serial controllers to enable runtime PM
+config: x86_64-randconfig-a001-20230508 (https://download.01.org/0day-ci/archive/20230509/202305090752.w4XZxmsN-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2f298f9dbe3a1d9550e1f15bb1415aeaf9ce4311
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tony-Lindgren/serial-core-Start-managing-serial-controllers-to-enable-runtime-PM/20230508-190805
+        git checkout 2f298f9dbe3a1d9550e1f15bb1415aeaf9ce4311
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/tty/serial/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305090752.w4XZxmsN-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/tty/serial/serial_base_bus.c:97:13: warning: variable 'id' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           } else if (type == &serial_port_type) {
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/tty/serial/serial_base_bus.c:102:77: note: uninitialized use occurs here
+           err = dev_set_name(&sbd->dev, "%s.%s.%d", type->name, dev_name(port->dev), id);
+                                                                                      ^~
+   drivers/tty/serial/serial_base_bus.c:97:9: note: remove the 'if' if its condition is always true
+           } else if (type == &serial_port_type) {
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/tty/serial/serial_base_bus.c:83:13: note: initialize the variable 'id' to silence this warning
+           int err, id;
+                      ^
+                       = 0
+   1 warning generated.
+
+
+vim +97 drivers/tty/serial/serial_base_bus.c
+
+    77	
+    78	static struct device *serial_base_device_add(struct uart_port *port,
+    79						     struct device *parent_dev,
+    80						     const struct device_type *type)
+    81	{
+    82		struct serial_base_device *sbd;
+    83		int err, id;
+    84	
+    85		sbd = kzalloc(sizeof(*sbd), GFP_KERNEL);
+    86		if (!sbd)
+    87			return NULL;
+    88	
+    89		device_initialize(&sbd->dev);
+    90		sbd->dev.type = type;
+    91		sbd->dev.parent = parent_dev;
+    92		sbd->dev.bus = &serial_base_bus_type;
+    93		sbd->dev.release = &serial_base_release;
+    94	
+    95		if (type == &serial_ctrl_type) {
+    96			id = port->ctrl_id;
+  > 97		} else if (type == &serial_port_type) {
+    98			id = port->line;
+    99			sbd->port = port;
+   100		}
+   101	
+   102		err = dev_set_name(&sbd->dev, "%s.%s.%d", type->name, dev_name(port->dev), id);
+   103		if (err)
+   104			goto err_free_dev;
+   105	
+   106		err = device_add(&sbd->dev);
+   107		if (err)
+   108			goto err_put_device;
+   109	
+   110		return &sbd->dev;
+   111	
+   112	err_put_device:
+   113		put_device(&sbd->dev);
+   114	
+   115	err_free_dev:
+   116		kfree(sbd);
+   117	
+   118		return NULL;
+   119	}
+   120	
+
 -- 
-2.40.1.521.gf1e218fcd8-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
