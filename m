@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB816FB54E
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7776D6FB549
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbjEHQiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        id S234431AbjEHQhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjEHQhk (ORCPT
+        with ESMTP id S234319AbjEHQhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 12:37:40 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28A36A71;
+        Mon, 8 May 2023 12:37:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494E36E8F;
         Mon,  8 May 2023 09:37:35 -0700 (PDT)
 Received: from mercury (195-23-45-170.net.novis.pt [195.23.45.170])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7FD3E66056CE;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 68ECB66034CF;
         Mon,  8 May 2023 17:37:32 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1683563852;
-        bh=fO5izScTRyVHPTwMk7OYZEtF1VDwquhA8HkOV2kHXhc=;
+        bh=uZCfI6nSerksNmlPugy693GyFz8gqLCBRGAQ3defUSo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ftpf01dKkf7sbhbMyc2k9a9Mt2fNy1kkx9WJil8XtjzEuP4lHtiQk2a8VKW0DtZZb
-         tcFIqaB5xLmyvY8uSFfoTiKfPsJ0spZ7g6LmDMltzX+yvkpf0zTyVj36xkrnv0MLFy
-         YrsNRhVmTYgcxsZvCLbZLU4KMfNuMrMwTeYV+r9OzhB/78itYSZz5UEC6G5RJUizt9
-         AShnXFEfrXcKR4wrRaa6FrsCW860lfVKYgmWKqXE7FwBb+K4rntFX9Ga+pm0E4ID9W
-         kXENeoe6A6GKengjGktbwjqORKGsyLTVmAo2kAMqlABHIGEqnCc0NquhW+oGkA+2a3
-         PKHpmMjn55ihg==
+        b=WPuBeeslpqeyX/tYiivm5tjgQrfSuZl+GX5bEtLYBGwLFC0lCi8Z6P3MTH564TMb3
+         2q1N6gWhV1FS1xBH+pWruRt2R+zz9oQjNJGc2TyUqiJR4s1SDNVxmnZqrEi52RGlgt
+         RIjCRZBxJaXY01kvORkC6czbvyNE9fNYOI39gPq6NIAiE42Z38oHpVE0BDGnb9H4PT
+         VVqVgsk/eTK3dQCsXNhBVaMkCVvi4N6ueG2R/cHaYpWJ5kOgCG7nhb4f1+U7GzA9nO
+         crONdNx+dWudnZlqMaavNEQrcspKTdFeqZTW8shmB36/giDwhpKdzBih+IFhsYX9+e
+         SXIpkEtkKP3jw==
 Received: by mercury (Postfix, from userid 1000)
-        id BF2471066FA0; Mon,  8 May 2023 13:35:18 +0200 (CEST)
-Date:   Mon, 8 May 2023 13:35:18 +0200
+        id F26281066FA2; Mon,  8 May 2023 13:43:23 +0200 (CEST)
+Date:   Mon, 8 May 2023 13:43:23 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Jakob Hauser <jahau@rocketmail.com>
 Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
@@ -51,16 +51,16 @@ Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
         Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v4 7/8] power: supply: rt5033_battery: Adopt status
- property from charger
-Message-ID: <20230508113518.nfwchl5wusmnkjp6@mercury.elektranox.org>
+Subject: Re: [PATCH v4 6/8] power: supply: rt5033_charger: Add cable
+ detection and USB OTG supply
+Message-ID: <20230508114323.rzqbp2isvczzg3wx@mercury.elektranox.org>
 References: <20230506155435.3005-1-jahau@rocketmail.com>
- <20230506155435.3005-8-jahau@rocketmail.com>
+ <20230506155435.3005-7-jahau@rocketmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="62exsovixfg2cfix"
+        protocol="application/pgp-signature"; boundary="is77izww4ugbdpkq"
 Content-Disposition: inline
-In-Reply-To: <20230506155435.3005-8-jahau@rocketmail.com>
+In-Reply-To: <20230506155435.3005-7-jahau@rocketmail.com>
 X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
@@ -72,110 +72,96 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---62exsovixfg2cfix
+--is77izww4ugbdpkq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sat, May 06, 2023 at 05:54:34PM +0200, Jakob Hauser wrote:
-> The rt5033-battery fuelgauge can't get a status by itself. The rt5033-cha=
-rger
-> can, let's get this value.
+On Sat, May 06, 2023 at 05:54:33PM +0200, Jakob Hauser wrote:
+> Implement cable detection by extcon and handle the driver according to the
+> connector type.
+>=20
+> There are basically three types of action: "set_charging", "set_otg" and
+> "set_disconnect".
+>=20
+> A forth helper function to "unset_otg" was added because this is used in =
+both
+> "set_charging" and "set_disconnect". In the first case it covers the rath=
+er
+> rare event that someone changes from OTG to charging without disconnect. =
+In
+> the second case, when disconnecting, the values are set back to the ones =
+=66rom
+> initialization to return into a defined state.
+>=20
+> Additionally, there is "set_mivr". When connecting to e.g. a laptop/PC, t=
+he
+> minimum input voltage regulation (MIVR) shall prevent a voltage drop if t=
+he
+> cable or the supply is weak. The MIVR value is set to 4600MV, same as in =
+the
+> Android driver [1]. When disconnecting, MIVR is set back to DISABLED.
+>=20
+> In the function rt5033_get_charger_state(): When in OTG mode, the chip
+> reports status "charging". Change this to "discharging" because there is
+> no charging going on in OTG mode [2].
+>=20
+> [1] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/d=
+rivers/battery/rt5033_charger.c#L499
+> [2] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/d=
+rivers/battery/rt5033_charger.c#L686-L687
 >=20
 > Tested-by: Raymond Hackley <raymondhackley@protonmail.com>
 > Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
 > ---
->  drivers/power/supply/rt5033_battery.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
->=20
-> diff --git a/drivers/power/supply/rt5033_battery.c b/drivers/power/supply=
-/rt5033_battery.c
-> index 5c04cf305219..a6520716d813 100644
-> --- a/drivers/power/supply/rt5033_battery.c
-> +++ b/drivers/power/supply/rt5033_battery.c
-> @@ -12,6 +12,26 @@
->  #include <linux/mfd/rt5033-private.h>
->  #include <linux/mfd/rt5033.h>
-> =20
-> +static int rt5033_battery_get_status(struct i2c_client *client)
-> +{
-> +	struct power_supply *charger;
-> +	union power_supply_propval val;
-> +	int ret;
-> +
-> +	charger =3D power_supply_get_by_name("rt5033-charger");
-> +	if (!charger)
-> +		return POWER_SUPPLY_STATUS_UNKNOWN;
-> +
-> +	ret =3D power_supply_get_property(charger, POWER_SUPPLY_PROP_STATUS, &v=
-al);
-> +	if (ret) {
-> +		power_supply_put(charger);
-> +		return POWER_SUPPLY_STATUS_UNKNOWN;
-> +	}
-
-struct rt5033_battery *battery =3D i2c_get_clientdata(client);
-ret =3D power_supply_get_property_from_supplier(battery->psy, POWER_SUPPLY_=
-PROP_STATUS, &val);
-if (ret)
-    val.intval =3D POWER_SUPPLY_STATUS_UNKNOWN;
-
-> +
-> +	power_supply_put(charger);
-> +	return val.intval;
-> +}
-> +
->  static int rt5033_battery_get_capacity(struct i2c_client *client)
->  {
->  	struct rt5033_battery *battery =3D i2c_get_clientdata(client);
-> @@ -84,6 +104,9 @@ static int rt5033_battery_get_property(struct power_su=
-pply *psy,
->  	case POWER_SUPPLY_PROP_CAPACITY:
->  		val->intval =3D rt5033_battery_get_capacity(battery->client);
->  		break;
-> +	case POWER_SUPPLY_PROP_STATUS:
-> +		val->intval =3D rt5033_battery_get_status(battery->client);
-> +		break;
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -96,6 +119,7 @@ static enum power_supply_property rt5033_battery_props=
-[] =3D {
->  	POWER_SUPPLY_PROP_VOLTAGE_OCV,
->  	POWER_SUPPLY_PROP_PRESENT,
->  	POWER_SUPPLY_PROP_CAPACITY,
-> +	POWER_SUPPLY_PROP_STATUS,
+> [...]
+> diff --git a/include/linux/mfd/rt5033.h b/include/linux/mfd/rt5033.h
+> index e99e2ab0c1c1..d2c613764756 100644
+> --- a/include/linux/mfd/rt5033.h
+> +++ b/include/linux/mfd/rt5033.h
+> @@ -53,6 +53,14 @@ struct rt5033_charger {
+>  	struct rt5033_dev		*rt5033;
+>  	struct power_supply		*psy;
+>  	struct rt5033_charger_data	*chg;
+> +	struct extcon_dev		*edev;
+> +	struct notifier_block		extcon_nb;
+> +	struct work_struct		extcon_work;
+> +	struct mutex			lock;
+> +	bool online;
+> +	bool otg;
+> +	bool mivr_enabled;
+> +	u8 cv_regval;
 >  };
-> =20
->  static const struct regmap_config rt5033_battery_regmap_config =3D {
-> --=20
-> 2.39.2
->=20
+
+Please move 'struct rt5033_charger' and 'struct rt5033_charger_data'
+to drivers/power/supply/rt5033_charger.c; they are not supposed to
+be used directly by others. Making it private helps to avoid
+cross-subsystem series for future maintanence patches.
 
 Otherwise LGTM.
 
 -- Sebastian
 
---62exsovixfg2cfix
+--is77izww4ugbdpkq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRY3nMACgkQ2O7X88g7
-+ppbow/+Jb4FCPWzC6F8Q70mCz+KMOZJtpuJD1RsXNBzsnYaI5lcQjbBZJZbSbi2
-ojoT8X2yOaqtpMejD9eAqjWO6xXUDge161AojcuiBo7c5Fs7v5WMU/+QrhWn3moG
-kSAGxS2FI+0YhduSXNqm++MuTVTmYvNVkLRcX2lDGtSOEbx8Wb9kYiKsqDFCf3Af
-JsorEUTCqB6HCPip3I3YfgOcYRps/DFKgcggeZIXNiNwYEpza+vcE5oHXLXzzk+R
-HBQcvg9HPC1iCbFYIb79wgtOzKd3t9qrVJDL579zy8620cfDytm/soIZcFBqQEZV
-GM8MtyL8VvMQk7qujXY7V9PDoFTNWhY5fAX41hJkw6LCvPIfgzSEMWSSlZgdR4bc
-m8yctkujP4rvSe1dsaZzwI+d4+Yer1e4ECYG6p8jOalkMzwjTZNUVmNdTUH+i4oO
-dfmi2uxIvdW3xl5Uhd4/Mnobzi+z8WEGkfkRhrOd4UKmyUFP3s6hZ0lIniZMiqnF
-iF5AlorDb3ExNVOH3hWNGUyKlmPr/JKCh0vgRinQ47IDFxyynMtOPU9NHwKarF9J
-uQGvwQaPnpyRwXw9fqWLyW42NjKtKdIn9H8A1aQqLq3LlYPGWOes38kgqW1+coaV
-WIB2J/rhlHiT8hHTbQ8tI0vDpryg8Q1RvTrF8LITUXGgEU+7tcA=
-=OyXU
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRY4FsACgkQ2O7X88g7
++ppgzhAAiuyrMlrlL+A6FWUNH5NALnLtlzgNOlXErWC5EzseHFk7cDfSIgzoM+eR
+Fu6YN08pmniDN2okXmr4L+JRyu/8ALmtrgZRYG9t2juQwLyoyjGj+ZEOMtb1UQPz
+Lz9tuAEsCRKv2mwBKl5P3wNewgKS/aqe0xrndg+86Qesb3bLyO5pPhG2UesBU3yv
+DE/NdbG5+0aXGrEYnpN58XT4S+ZK717sfFlLTBePHUnA1ANpRXrdgPrv3p4xvp1/
+X7EA1FQ4jnZL7AlhGCartvygqrPUpUF0387jPervjYeAbs7emA+Y3ZOYQvyhTCez
+fXnLi9ETD9Dhd6/XMmd0Vp3p5aR4EyojAXkIP5kS1iOHni6R9aUuFQi7Kobfy2na
+zLKsfKIOpVOlYADWRWB4oEMPAVmdZLZUeMHY1Tl3abJuvwK/yhGDIbPspk/t1UKS
+sz41mNz9y16MVPPNEsxRrO/D3G3e2IhNrfuGxRZ0YmzLlRFsULNvSKKhTP2FZ6vT
+2z8+hiukyH45uf758funq9mvm2Y0/DPkMLtyEUfnWJk3EJWTRmCUJvGoGMG+wjH9
+ChYUNYz2jbKgSXUZkPfxnoxDACUlF2L+YkEdxbtgRKxERqxVQoH6KfcHb46ZbtD6
+EggsiR0izVGdq1TE5hIRU/9OhLxb9z4QpeZZ51T+3I4VHYQM6bQ=
+=NU/1
 -----END PGP SIGNATURE-----
 
---62exsovixfg2cfix--
+--is77izww4ugbdpkq--
