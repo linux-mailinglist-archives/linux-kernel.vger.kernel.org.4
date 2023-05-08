@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7CA6FB22A
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7FC6FB229
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234377AbjEHOEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 10:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
+        id S234378AbjEHOEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 10:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234139AbjEHOEi (ORCPT
+        with ESMTP id S233920AbjEHOEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 8 May 2023 10:04:38 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9823657F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1C836562;
         Mon,  8 May 2023 07:04:37 -0700 (PDT)
 Date:   Mon, 08 May 2023 14:04:35 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w+UvbKlCDotLpiK1Wavm759o5WLup9mjATyq9kKNMQQ=;
-        b=L8Xv2qRcTdMfhHFXXXuBgnzs4cf7YSi+1Joc90GkXgrAXjtlZcOlH96rEXrD4MIMmNQZSY
-        lqusLeaU2TgPqrvsu+f/TQjdFuY06kKeNYf9PUfn21zJvpI3/WtqwVCCrVXz47FKoqoVR+
-        n11VMD7fmhRHwgvatP9P0g7hRdFznY3kXhqN+JallWQmLr1T8Yu3t6dMfhn7agbRG4cij2
-        BpR1MreGzeDVd1vIIAvntHss8ZFa7HzSEQY1Na7qVBmaruK5G7iDtPeZhBe7jj5H2hrcyT
-        jqG979F12Aq/46GIjDq5Aw5feJppt9A4yfc0I5hOMgnXq5n9CJcV5acyvQzELQ==
+        bh=31tKUF0XOqo9VkRjDJPUdomXdb9oKFooHh4XcuaTp98=;
+        b=gYmjyMigisB6tExIqYnIkmqzmnR9xy23FHymUGUXsWegGW0I0ci94YBMFL4BwE56ZFex88
+        NSJ7NBeXvEbZFVtc0wTM8zeqLNWDibu/TSNyvTKPPMCKy+RV+jodBecKaLOLtUa39tMuDD
+        1A4U2i9Sky0IZ0Le964CrhqVoH4dSjjCRYaqr22NU8obOy6L869mCfWjBX5eqs4suCh2jH
+        wA/gw44Z8rDE5i1b9Izb70FTSMt02A7/vJONj0372KxJrxAh86/W3pmv8ZgZL0284OQUsZ
+        r6mCZMrLLSUlxJd+4tymRPJ92Ct+ItvKoNPaO8kVprglA98ZO06uEqCKqor9BQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1683554675;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,20 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w+UvbKlCDotLpiK1Wavm759o5WLup9mjATyq9kKNMQQ=;
-        b=UzIPPPQPooKMBeXWgaliVnwOtUcHL5fKIseGqEf68wGkcPh4z6F5yePPLkYzvaSyTPdKMY
-        h6SXAsD0Asm+9/Ag==
-From:   "tip-bot2 for Rong Tao" <tip-bot2@linutronix.de>
+        bh=31tKUF0XOqo9VkRjDJPUdomXdb9oKFooHh4XcuaTp98=;
+        b=W/CfOTMjvtQHE6JeSd3BBpvPynHLBAMrJk3mTDtP/Hx0foC62dehi3xBUE83w3ElYZHz3e
+        W6MOHwiE68AEfJAg==
+From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/misc] tools/x86/kcpuid: Add .gitignore
-Cc:     Rong Tao <rtoax@foxmail.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+Subject: [tip: x86/misc] tools/x86/kcpuid: Dump the correct CPUID function in error
+Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <tencent_F0318BF0724705EC156C341E11DE4040E805@qq.com>
-References: <tencent_F0318BF0724705EC156C341E11DE4040E805@qq.com>
+In-Reply-To: <20230426094107.27348-1-bp@alien8.de>
+References: <20230426094107.27348-1-bp@alien8.de>
 MIME-Version: 1.0
-Message-ID: <168355467503.404.9147950102200023529.tip-bot2@tip-bot2>
+Message-ID: <168355467536.404.8937977023899677332.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,31 +66,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/misc branch of tip:
 
-Commit-ID:     b2ad431f6469b58914ee7254302c6dc97f688e54
-Gitweb:        https://git.kernel.org/tip/b2ad431f6469b58914ee7254302c6dc97f688e54
-Author:        Rong Tao <rtoax@foxmail.com>
-AuthorDate:    Fri, 28 Apr 2023 15:55:49 +08:00
+Commit-ID:     0150d1bfbedf29d7473ae458815781488f62d11d
+Gitweb:        https://git.kernel.org/tip/0150d1bfbedf29d7473ae458815781488f62d11d
+Author:        Borislav Petkov (AMD) <bp@alien8.de>
+AuthorDate:    Wed, 26 Apr 2023 11:41:07 +02:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 08 May 2023 15:53:50 +02:00
+CommitterDate: Mon, 08 May 2023 15:50:27 +02:00
 
-tools/x86/kcpuid: Add .gitignore
+tools/x86/kcpuid: Dump the correct CPUID function in error
 
-Ignore kcpuid ELF file.
+The tool uses the 16 least significant bits of the CPUID leaf as an
+index into its array of CPUID function field descriptions.
 
-  [ bp: Drop the '/' before the name. ]
+However, when that index is non-existent, it uses the same, truncated
+index to report it, which is wrong:
 
-Signed-off-by: Rong Tao <rtoax@foxmail.com>
+$ kcpuid -l 0x80000034
+  ERR: invalid input index (0x34)
+
+Use the original index number in the error message.
+
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/tencent_F0318BF0724705EC156C341E11DE4040E805@qq.com
+Link: https://lore.kernel.org/r/20230426094107.27348-1-bp@alien8.de
 ---
- tools/arch/x86/kcpuid/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
- create mode 100644 tools/arch/x86/kcpuid/.gitignore
+ tools/arch/x86/kcpuid/kcpuid.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/tools/arch/x86/kcpuid/.gitignore b/tools/arch/x86/kcpuid/.gitignore
-new file mode 100644
-index 0000000..1b8541b
---- /dev/null
-+++ b/tools/arch/x86/kcpuid/.gitignore
-@@ -0,0 +1 @@
-+kcpuid
+diff --git a/tools/arch/x86/kcpuid/kcpuid.c b/tools/arch/x86/kcpuid/kcpuid.c
+index 416f5b3..24b7d01 100644
+--- a/tools/arch/x86/kcpuid/kcpuid.c
++++ b/tools/arch/x86/kcpuid/kcpuid.c
+@@ -517,15 +517,16 @@ static void show_range(struct cpuid_range *range)
+ static inline struct cpuid_func *index_to_func(u32 index)
+ {
+ 	struct cpuid_range *range;
++	u32 func_idx;
+ 
+ 	range = (index & 0x80000000) ? leafs_ext : leafs_basic;
+-	index &= 0x7FFFFFFF;
++	func_idx = index & 0xffff;
+ 
+-	if (((index & 0xFFFF) + 1) > (u32)range->nr) {
++	if ((func_idx + 1) > (u32)range->nr) {
+ 		printf("ERR: invalid input index (0x%x)\n", index);
+ 		return NULL;
+ 	}
+-	return &range->funcs[index];
++	return &range->funcs[func_idx];
+ }
+ 
+ static void show_info(void)
