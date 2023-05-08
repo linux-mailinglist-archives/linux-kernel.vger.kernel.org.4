@@ -2,174 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B326F9D90
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 03:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF2D6F9D95
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 04:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbjEHB7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 May 2023 21:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
+        id S232339AbjEHCD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 May 2023 22:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbjEHB7N (ORCPT
+        with ESMTP id S231956AbjEHCD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 May 2023 21:59:13 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097AEA5DF;
-        Sun,  7 May 2023 18:59:11 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QF49c1kzszpStJ;
-        Mon,  8 May 2023 09:55:00 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 8 May 2023 09:59:08 +0800
-Subject: Re: [PATCH v3] perf/core: Fix perf_sample_data not properly
- initialized for different swevents in perf_tp_event()
-To:     <peterz@infradead.org>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230425103217.130600-1-yangjihong1@huawei.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-CC:     <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>
-Message-ID: <9ae47526-8d40-dcd7-4fef-199b8605bfe9@huawei.com>
-Date:   Mon, 8 May 2023 09:59:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-MIME-Version: 1.0
-In-Reply-To: <20230425103217.130600-1-yangjihong1@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 7 May 2023 22:03:58 -0400
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F2F14926;
+        Sun,  7 May 2023 19:03:55 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R491e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vhyt-XW_1683511431;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vhyt-XW_1683511431)
+          by smtp.aliyun-inc.com;
+          Mon, 08 May 2023 10:03:52 +0800
+Message-ID: <1683511319.099806-2-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH] virtio_net: set default mtu to 1500 when 'Device maximum MTU' bigger than 1500
+Date:   Mon, 8 May 2023 10:01:59 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     huangml@yusur.tech, zy@yusur.tech,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:VIRTIO CORE AND NET DRIVERS" 
+        <virtualization@lists.linux-foundation.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Hao Chen <chenh@yusur.tech>, <hengqi@linux.alibaba.com>
+References: <20230506021529.396812-1-chenh@yusur.tech>
+ <1683341417.0965195-4-xuanzhuo@linux.alibaba.com>
+ <07b6b325-9a15-222f-e618-d149b57cbac2@yusur.tech>
+ <20230507045627-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230507045627-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Peter
+On Sun, 7 May 2023 04:58:58 -0400, "Michael S. Tsirkin" <mst@redhat.com> wr=
+ote:
+> On Sat, May 06, 2023 at 04:56:35PM +0800, Hao Chen wrote:
+> >
+> >
+> > =E5=9C=A8 2023/5/6 10:50, Xuan Zhuo =E5=86=99=E9=81=93:
+> > > On Sat,  6 May 2023 10:15:29 +0800, Hao Chen <chenh@yusur.tech> wrote:
+> > > > When VIRTIO_NET_F_MTU(3) Device maximum MTU reporting is supported.
+> > > > If offered by the device, device advises driver about the value of =
+its
+> > > > maximum MTU. If negotiated, the driver uses mtu as the maximum
+> > > > MTU value. But there the driver also uses it as default mtu,
+> > > > some devices may have a maximum MTU greater than 1500, this may
+> > > > cause some large packages to be discarded,
+> > >
+> > > You mean tx packet?
+> > Yes.
+> > >
+> > > If yes, I do not think this is the problem of driver.
+> > >
+> > > Maybe you should give more details about the discard.
+> > >
+> > In the current code, if the maximum MTU supported by the virtio net har=
+dware
+> > is 9000, the default MTU of the virtio net driver will also be set to 9=
+000.
+> > When sending packets through "ping -s 5000", if the peer router does not
+> > support negotiating a path MTU through ICMP packets, the packets will be
+> > discarded. If the peer router supports negotiating path mtu through ICMP
+> > packets, the host side will perform packet sharding processing based on=
+ the
+> > negotiated path mtu, which is generally within 1500.
+> > This is not a bugfix patch, I think setting the default mtu to within 1=
+500
+> > would be more suitable here.Thanks.
+>
+> I don't think VIRTIO_NET_F_MTU is appropriate for support for jumbo packe=
+ts.
+> The spec says:
+> 	The device MUST forward transmitted packets of up to mtu (plus low level=
+ ethernet header length) size with
+> 	gso_type NONE or ECN, and do so without fragmentation, after VIRTIO_NET_=
+F_MTU has been success-
+> 	fully negotiated.
+> VIRTIO_NET_F_MTU has been designed for all kind of tunneling devices,
+> and this is why we set mtu to max by default.
+>
+> For things like jumbo frames where MTU might or might not be available,
+> a new feature would be more appropriate.
 
-PING.
 
-As shown in Link [1] report, data->raw->frag.data may be accessed in 
-perf_tp_event_match().
-we may need to init sample_data and then go through swevent hlist to 
-prevent reference of NULL pointer.
+So for jumbo frame, what is the problem?
 
-Please check whether the solution is OK.
+We are trying to do this. @Heng
 
-[1] Link: 
-https://lore.kernel.org/oe-lkp/202304250929.efef2caa-yujie.liu@intel.com
+Thanks.
 
-Thanks,
-Yang
 
-On 2023/4/25 18:32, Yang Jihong wrote:
-> data->sample_flags may be modified in perf_prepare_sample(),
-> in perf_tp_event(), different swevents use the same on-stack
-> perf_sample_data, the previous swevent may change sample_flags in
-> perf_prepare_sample(), as a result, some members of perf_sample_data are
-> not correctly initialized when next swevent_event preparing sample
-> (for example data->id, the value varies according to swevent).
-> 
-> A simple scenario triggers this problem is as follows:
-> 
->    # perf record -e sched:sched_switch --switch-output-event sched:sched_switch -a sleep 1
->    [ perf record: dump data: Woken up 0 times ]
->    [ perf record: Dump perf.data.2023041209014396 ]
->    [ perf record: dump data: Woken up 0 times ]
->    [ perf record: Dump perf.data.2023041209014662 ]
->    [ perf record: dump data: Woken up 0 times ]
->    [ perf record: Dump perf.data.2023041209014910 ]
->    [ perf record: Woken up 0 times to write data ]
->    [ perf record: Dump perf.data.2023041209015164 ]
->    [ perf record: Captured and wrote 0.069 MB perf.data.<timestamp> ]
->    # ls -l
->    total 860
->    -rw------- 1 root root  95694 Apr 12 09:01 perf.data.2023041209014396
->    -rw------- 1 root root 606430 Apr 12 09:01 perf.data.2023041209014662
->    -rw------- 1 root root  82246 Apr 12 09:01 perf.data.2023041209014910
->    -rw------- 1 root root  82342 Apr 12 09:01 perf.data.2023041209015164
->    # perf script -i perf.data.2023041209014396
->    0x11d58 [0x80]: failed to process type: 9 [Bad address]
-> 
-> Solution: Re-initialize perf_sample_data after each event is processed.
-> Note that data->raw->frag.data may be accessed in perf_tp_event_match().
-> Therefore, need to init sample_data and then go through swevent hlist to prevent
-> reference of NULL pointer, reported by [1].
-> 
-> After fix:
-> 
->    # perf record -e sched:sched_switch --switch-output-event sched:sched_switch -a sleep 1
->    [ perf record: dump data: Woken up 0 times ]
->    [ perf record: Dump perf.data.2023041209442259 ]
->    [ perf record: dump data: Woken up 0 times ]
->    [ perf record: Dump perf.data.2023041209442514 ]
->    [ perf record: dump data: Woken up 0 times ]
->    [ perf record: Dump perf.data.2023041209442760 ]
->    [ perf record: Woken up 0 times to write data ]
->    [ perf record: Dump perf.data.2023041209443003 ]
->    [ perf record: Captured and wrote 0.069 MB perf.data.<timestamp> ]
->    # ls -l
->    total 864
->    -rw------- 1 root root 100166 Apr 12 09:44 perf.data.2023041209442259
->    -rw------- 1 root root 606438 Apr 12 09:44 perf.data.2023041209442514
->    -rw------- 1 root root  82246 Apr 12 09:44 perf.data.2023041209442760
->    -rw------- 1 root root  82342 Apr 12 09:44 perf.data.2023041209443003
->    # perf script -i perf.data.2023041209442259 | head -n 5
->                perf   232 [000]    66.846217: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=D ==> next_comm=perf next_pid=234 next_prio=120
->                perf   234 [000]    66.846449: sched:sched_switch: prev_comm=perf prev_pid=234 prev_prio=120 prev_state=S ==> next_comm=perf next_pid=232 next_prio=120
->                perf   232 [000]    66.846546: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=R ==> next_comm=perf next_pid=234 next_prio=120
->                perf   234 [000]    66.846606: sched:sched_switch: prev_comm=perf prev_pid=234 prev_prio=120 prev_state=S ==> next_comm=perf next_pid=232 next_prio=120
->                perf   232 [000]    66.846646: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=R ==> next_comm=perf next_pid=234 next_prio=120
-> 
-> [1] Link: https://lore.kernel.org/oe-lkp/202304250929.efef2caa-yujie.liu@intel.com
-> 
-> Fixes: bb447c27a467 ("perf/core: Set data->sample_flags in perf_prepare_sample()")
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> ---
-> 
-> Changes since v2:
->   - Initialize perf_sample_data before go through the swevent hlist.
->   - Re-initialize perf_sample_data after each swevent is processed.
-> 
-> Changes since v1:
->   - Re-initialize the entire perf_sample_data before processing each swevent.
-> 
->   kernel/events/core.c | 14 +++++++++++++-
->   1 file changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 435815d3be3f..753d4e9665b6 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -10150,8 +10150,20 @@ void perf_tp_event(u16 event_type, u64 count, void *record, int entry_size,
->   	perf_trace_buf_update(record, event_type);
->   
->   	hlist_for_each_entry_rcu(event, head, hlist_entry) {
-> -		if (perf_tp_event_match(event, &data, regs))
-> +		if (perf_tp_event_match(event, &data, regs)) {
->   			perf_swevent_event(event, count, &data, regs);
-> +
-> +			/*
-> +			 * Here use the same on-stack perf_sample_data,
-> +			 * some members in data are event-specific and
-> +			 * need to be re-computed for different sweveents.
-> +			 * Re-initialize data->sample_flags safely to avoid
-> +			 * the problem that next event skips preparing data
-> +			 * because data->sample_flags is set.
-> +			 */
-> +			perf_sample_data_init(&data, 0, 0);
-> +			perf_sample_save_raw_data(&data, &raw);
-> +		}
->   	}
->   
->   	/*
-> 
+>
+> > > > so I changed the MTU to a more
+> > > > general 1500 when 'Device maximum MTU' bigger than 1500.
+> > > >
+> > > > Signed-off-by: Hao Chen <chenh@yusur.tech>
+> > > > ---
+> > > >   drivers/net/virtio_net.c | 5 ++++-
+> > > >   1 file changed, 4 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > > > index 8d8038538fc4..e71c7d1b5f29 100644
+> > > > --- a/drivers/net/virtio_net.c
+> > > > +++ b/drivers/net/virtio_net.c
+> > > > @@ -4040,7 +4040,10 @@ static int virtnet_probe(struct virtio_devic=
+e *vdev)
+> > > >   			goto free;
+> > > >   		}
+> > > >
+> > > > -		dev->mtu =3D mtu;
+> > > > +		if (mtu > 1500)
+> > >
+> > > s/1500/ETH_DATA_LEN/
+> > >
+> > > Thanks.
+> > >
+> > > > +			dev->mtu =3D 1500;
+> > > > +		else
+> > > > +			dev->mtu =3D mtu;
+> > > >   		dev->max_mtu =3D mtu;
+> > > >   	}
+> > > >
+> > > > --
+> > > > 2.27.0
+> > > >
+>
