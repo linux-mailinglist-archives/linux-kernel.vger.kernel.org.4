@@ -2,56 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49A16FB0F1
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334CF6FB1BE
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 15:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233259AbjEHNLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 09:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
+        id S234349AbjEHNhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 09:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbjEHNLc (ORCPT
+        with ESMTP id S234304AbjEHNhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 09:11:32 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CFA2FA34;
-        Mon,  8 May 2023 06:11:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=c4ZTi/fdPvEGyjWULqRCx9hYDcJ4HpkQpuJc9kjoNqA=; b=KaEvqxZnRUuaaSPLPtkGRw2LCe
-        Q314eTim86fE4mSgl0M0yrjA3SkuPEtgnk0UEoM7/+yAKZYXUVSO9KCWyESH2FAQlQ3lqU+ytJxuX
-        0RKPB5CLBdGzLWSYGa5NhcPcjqb+1ldqjWWQ0kHtXy98C9UWcGEZyDPeVAcKe5aKDPHo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pw0dv-00CCOL-MU; Mon, 08 May 2023 15:11:07 +0200
-Date:   Mon, 8 May 2023 15:11:07 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 00/11] leds: introduce new LED hw control APIs
-Message-ID: <e206d683-6a89-4168-b8ed-ac5b1c76f94c@lunn.ch>
-References: <20230427001541.18704-1-ansuelsmth@gmail.com>
- <ZFjqKoZtgOAWrkP+@pengutronix.de>
- <6458ec16.050a0220.21ddf.3955@mx.google.com>
- <20230508125253.GW29365@pengutronix.de>
+        Mon, 8 May 2023 09:37:37 -0400
+Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127703488B;
+        Mon,  8 May 2023 06:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kernkonzept.com; s=mx1; h=Cc:To:Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-Id:Date:Subject:From:References:In-Reply-To:Sender:
+        Reply-To:Content-ID:Content-Description;
+        bh=ZiYNyYZW2PX1GsawJ1pBHCOLh0RTEIYbhy7d/KLFVEs=; b=XS1W6sPzQaVo5Lfz5EtL1xaUX2
+        tZ7EapKk+HCmadsMPS0I8CsdL/oFQjRa44ngulQvMOdTa94/73FemElK/o7MyrFYdiSPThIl/Nruf
+        n7onJn8/cJXeu5QM9HzsexpMBGTylIx4QgeB8/dyVgLRb+kTUsnd5zAuGTiVUd17ulQoLU+clQGHo
+        8YF9XK7gj8gj5W9wRAwWz3shTijUQCNwaKXvW2Z3c5RaW20hAvXinPE++TW0t/c+FuvCIzxukL+3m
+        AoDqQRWS2HvfmkRsw1PiJ5goj/MI9GxYDiczdNBnvdhWghYMRlG9OYnNvY9qXcvC2BDR7A1vE0a71
+        oHRjbwCQ==;
+Received: from [10.22.3.24] (helo=serv1.dd1.int.kernkonzept.com)
+        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
+        id 1pw0hF-009LZn-85; Mon, 08 May 2023 15:14:33 +0200
+From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Subject: [PATCH v4 0/6] thermal: qcom: tsens: Fix MDM9607, add MSM8909
+Date:   Mon, 08 May 2023 15:13:37 +0200
+Message-Id: <20230508-msm8909-tsens-v4-0-d9119622cb19@kernkonzept.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508125253.GW29365@pengutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIL1WGQC/52Oyw6CMBREf8V0bUlLeYgr/8OwKHClDdCSeytRC
+ f9uYePe5Zlk5szKCNACsetpZQiLJetdhOx8Yq3Rrgduu8gsFakSubjwiaZLJSoeCBzxolRKF10
+ m8wZY7DSagDeoXWtiyz3HMYYzwsO+Dsm9jvxAP/FgEPRvWslcClXlIkmLslKy5JJTgDl+SHpA4
+ 8fuNgC6wbsPzCFp/bT7jKXg8X3cX7Jd8P9cvW3bF1438jcQAQAA
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,21 +65,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I'll wait for v2 then. My ultimate goal is to implement LED trigger support
-> for the DP83867 phy. It would be great if you could Cc me on v2 so I get
-> a trigger once it's out.
+Make the MDM9607 thermal sensor support consistent with Qualcomm's
+vendor kernel (msm-3.18) by applying the correct default slope values
+and adding "correction factors" to the factory calibration values in the
+fuses. Use the same functionality to add the very similar MSM8909 SoC to
+the tsens driver.
 
-Hi Sascha
+---
+Changes in v4:
+- Mostly just resend, explicitly initialize zero values for
+  the MSM8909 p1/p2_calib_offset for better clarity (Konrad)
+- Link to v3: https://lore.kernel.org/r/20230315103950.2679317-1-stephan.gerhold@kernkonzept.com
+Changes in v3:
+- Drop now unused definition reported by kernel test robot
+Changes in v2:
+- Rewrite on top of per-sensor nvmem cell changes that landed in 6.3
+- Add patches to fix existing support for MDM9607
 
-Full hardware offload is going to take a few patch sets. The v2 to be
-posted soon gives basic support. It is will be missing linking the PHY
-LED to the netdev. We have patches for that. And then there is a DT
-binding, which again we have patches for. It could also be my Marvell
-PHY patches are a separate series. You might want those to get an
-example for your DP83867 work.
+---
+Stephan Gerhold (6):
+      thermal: qcom: tsens: Drop unused legacy structs
+      thermal: qcom: tsens-v0_1: Fix mdm9607 slope values
+      thermal: qcom: tsens-v0_1: Add mdm9607 correction offsets
+      dt-bindings: thermal: qcom-tsens: Drop redundant compatibles
+      dt-bindings: thermal: qcom-tsens: Add MSM8909 compatible
+      thermal: qcom: tsens-v0_1: Add MSM8909 data
 
-I'm hoping we can move faster than last cycles, there is less LED and
-more networking, so we might be closer to 3 day review cycles than 2
-weeks.
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    | 23 +----
+ drivers/thermal/qcom/tsens-v0_1.c                  | 99 +++++++++++++---------
+ drivers/thermal/qcom/tsens-v1.c                    | 22 -----
+ drivers/thermal/qcom/tsens.c                       | 19 ++++-
+ drivers/thermal/qcom/tsens.h                       |  6 +-
+ 5 files changed, 84 insertions(+), 85 deletions(-)
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+change-id: 20230508-msm8909-tsens-6733a6d415be
 
-	Andrew
+Best regards,
+-- 
+Stephan Gerhold
+Kernkonzept GmbH at Dresden, Germany, HRB 31129, CEO Dr.-Ing. Michael Hohmuth
+
