@@ -2,175 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489376FBB69
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DA96FBB70
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 01:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233120AbjEHX1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 19:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
+        id S233849AbjEHXaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 19:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjEHX1V (ORCPT
+        with ESMTP id S229491AbjEHXax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 19:27:21 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6289293CD
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 16:27:20 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2ac87e7806aso44304301fa.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 16:27:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683588438; x=1686180438;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a6Rt7YiQAZlCnHEpzBmgJ4SMOzivrPiJcKF14bVvwBc=;
-        b=YBOCnu8VfDSyp3Adz3AUWEr/nwKCediKzOd9kJ0zdZ0tnra0ubkMZU+X5J0ItN/gY4
-         vq952Rowh5oKvoRtvcGzVRwDjssEtDV9b3nWUY59FIVrtvRi+fvlbENYgqHoRzFddxGp
-         /4MoHCALIOJV3w7ZKGgCI/63MniAI0WUA85OUF8y8ix42O6g/BunJBjTiI/iYzkNuuoL
-         gEUupmWmqlpFCK+DODGCARU+nQuBh9vhRbtCiXz10MufMZ4DpnO2LpPUnUsPoTEotRbD
-         /h1CcOrcD/oYdUQ8ulal63W2Oi0zmQEjkKTb/WDaDhZn+0xmWTvRozpHuFZyQ5SK3eyH
-         iSbQ==
+        Mon, 8 May 2023 19:30:53 -0400
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899964C1F;
+        Mon,  8 May 2023 16:30:51 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1aafa03f541so50866335ad.0;
+        Mon, 08 May 2023 16:30:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683588438; x=1686180438;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a6Rt7YiQAZlCnHEpzBmgJ4SMOzivrPiJcKF14bVvwBc=;
-        b=JZId+FTUHkFSG9FXt+Flaw63AXimc2o8TiQRMDROspsrh7kwvdpjlFNTxBfb1hZn6o
-         fgaBtG28oJouWI8dJgEcRtmKu+O++f86d0R91YvBJQG7LfhikyaJdYGG6zhWKi872RtU
-         ay0ABithjvfsJExrpFMkzLBz5eGOaFdErp0cGXz6JHNzut04pqOe9NRpQ4Z1t/boTuYg
-         xcicPLbeoltQEnQVTfkvgENuaCl8QgCcVqjTnQO524pXgByPvVrYlgE9qEabIq+FWrE0
-         E+dLr0TtY/izS0xejVUH6I5ZnKc5G0ZIQHYZDSnUALDj4QZkT4F2vbcKo69kK5DeNYSk
-         VgvQ==
-X-Gm-Message-State: AC+VfDxfQDQTxcIxD4tlsvTpnF0lB27VghvfVC4lJz1QX3t45PA1VRFN
-        HI7FJg33v8yig3xXImzFqoHkYw==
-X-Google-Smtp-Source: ACHHUZ5Bvvam4bUJ8MKi747WCRxlnyuUFM84qlBLhz6yqhAjz3rge5MoCzrhn9yKp6Pwag/AeM0IBg==
-X-Received: by 2002:a2e:9355:0:b0:2a7:6e37:ee68 with SMTP id m21-20020a2e9355000000b002a76e37ee68mr196002ljh.12.1683588438391;
-        Mon, 08 May 2023 16:27:18 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id z4-20020a2e7e04000000b002a8e758f669sm1322546ljc.27.2023.05.08.16.27.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 16:27:17 -0700 (PDT)
-Message-ID: <4cf2e9ab-7e08-fb26-d924-8ea8141d9f58@linaro.org>
-Date:   Tue, 9 May 2023 02:27:17 +0300
+        d=1e100.net; s=20221208; t=1683588646; x=1686180646;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NWxWshApja0U0iHBNlsacIgsAdM0MyD6OFNDBR0TtQw=;
+        b=IzLBkalk10UYJRHbcvJG4FDrPexD91OQn3RH12DbW9q+8Pwfa+GgVwBtjGHUORnPbn
+         RohXlJHd63t1c54UlWzN/JozEybtgV9vUE9OPXF7SMpAhP42DqYsvI1gh887hNU8xwEc
+         0MD9S6HswMr7DZfEj7RQTo4iFpa8orlzLcAboUThFoPOnmfCayn+7+91QABLIe2OaKYN
+         YPvuI3QPL28A2HHSV9Gj2vL7ofXNRsiE257rcw+ede932eqP7RHlRnSX2og5Igw/0vbw
+         rMXijtJWsSWQwvkYwHJxq53BfdcZ4OVoeiYRvR3jbPE7hvW4PIaSVA2TSDGs0KoksUF2
+         Y2qQ==
+X-Gm-Message-State: AC+VfDzJGojeTxY9NvpnCzvPqUo9vDJsRhzXHbgQ63Q6PQi4DhLJVVX2
+        zEZc6kS5SrhwcVdgJpU2clg=
+X-Google-Smtp-Source: ACHHUZ5KJ4FNkdOABPorvJcHaGbZpI6LNA96wccpsa7XLg8qzH5+GC1t9zf3JxwP2V/DQj2I5E7UKA==
+X-Received: by 2002:a17:902:ec88:b0:1aa:fbaa:ee09 with SMTP id x8-20020a170902ec8800b001aafbaaee09mr16421433plg.49.1683588646241;
+        Mon, 08 May 2023 16:30:46 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
+        by smtp.gmail.com with ESMTPSA id x1-20020a170902820100b0019e60c645b1sm6760pln.305.2023.05.08.16.30.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 16:30:45 -0700 (PDT)
+Date:   Mon, 8 May 2023 23:30:43 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Michael Kelley <mikelley@microsoft.com>, ltykernel@gmail.com
+Cc:     bigeasy@linutronix.de, mark.rutland@arm.com, maz@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, pbonzini@redhat.com, wanpengli@tencent.com,
+        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, jgross@suse.com, boris.ostrovsky@oracle.com,
+        daniel.lezcano@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        rafael@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        pmladek@suse.com, senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, jstultz@google.com, sboyd@kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [RFC][PATCH 7/9] x86/tsc: Provide sched_clock_noinstr()
+Message-ID: <ZFmGI1EN24xroPHa@liuwe-devbox-debian-v2>
+References: <20230508211951.901961964@infradead.org>
+ <20230508213147.853677542@infradead.org>
+ <20230508214419.GA2053935@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/4] drm/msm/dsi: Fix compressed word count calculation
-Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
- <20230405-add-dsc-support-v1-2-6bc6f03ae735@quicinc.com>
- <a60a9f37-bb43-6e2b-2535-995e9fae250a@linaro.org>
- <32d473a6-f7a5-9aa6-85cf-0f77f1c071ce@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <32d473a6-f7a5-9aa6-85cf-0f77f1c071ce@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508214419.GA2053935@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/05/2023 23:09, Abhinav Kumar wrote:
+On Mon, May 08, 2023 at 11:44:19PM +0200, Peter Zijlstra wrote:
+> On Mon, May 08, 2023 at 11:19:58PM +0200, Peter Zijlstra wrote:
+> 
+> > --- a/drivers/clocksource/hyperv_timer.c
+> > +++ b/drivers/clocksource/hyperv_timer.c
+> > @@ -408,9 +408,9 @@ static u64 notrace read_hv_clock_tsc_cs(
+> >  	return read_hv_clock_tsc();
+> >  }
+> >  
+> > -static u64 notrace read_hv_sched_clock_tsc(void)
+> > +static u64 noinstr read_hv_sched_clock_tsc(void)
+> >  {
+> > -	return (read_hv_clock_tsc() - hv_sched_clock_offset) *
+> > +	return (hv_read_tsc_page(hv_get_tsc_page()) - hv_sched_clock_offset) *
+> >  		(NSEC_PER_SEC / HV_CLOCK_HZ);
+> >  }
+> >  
+> > --- a/include/clocksource/hyperv_timer.h
+> > +++ b/include/clocksource/hyperv_timer.h
+> > @@ -38,7 +38,7 @@ extern void hv_remap_tsc_clocksource(voi
+> >  extern unsigned long hv_get_tsc_pfn(void);
+> >  extern struct ms_hyperv_tsc_page *hv_get_tsc_page(void);
+> >  
+> > -static inline notrace u64
+> > +static __always_inline notrace u64
+> >  hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg, u64 *cur_tsc)
+> >  {
+> >  	u64 scale, offset;
+> > @@ -85,7 +85,7 @@ hv_read_tsc_page_tsc(const struct ms_hyp
+> >  	return mul_u64_u64_shr(*cur_tsc, scale, 64) + offset;
+> >  }
+> >  
+> > -static inline notrace u64
+> > +static __always_inline notrace u64
+> >  hv_read_tsc_page(const struct ms_hyperv_tsc_page *tsc_pg)
+> >  {
+> >  	u64 cur_tsc;
+> 
+> Hyper-V folks!
+> 
+> While reviewing all this I found the following 'gem':
+> 
+> hv_init_clocksource()
+>   hv_setup_sched_clock()
+>     paravirt_set_sched_clock(read_hv_sched_clock_msr)
+> 
+> read_hv_sched_clock_msr() [notrace]
+>   read_hv_clock_msr()     [notrace]
+>     hv_get_register()      *traced*
+>       hv_get_non_nested_register() ...
+>         hv_ghcb_msr_read()
+> 	  WARN_ON(in_nmi())
+> 	  ...
+> 	  local_irq_save()
 > 
 > 
-> On 5/3/2023 1:26 AM, Dmitry Baryshkov wrote:
->> On 03/05/2023 04:19, Jessica Zhang wrote:
->>> Currently, word count is calculated using slice_count. This is incorrect
->>> as downstream uses slice per packet, which is different from
->>> slice_count.
->>>
->>> Slice count represents the number of soft slices per interface, and its
->>> value will not always match that of slice per packet. For example, it is
->>> possible to have cases where there are multiple soft slices per 
->>> interface
->>> but the panel specifies only one slice per packet.
->>>
->>> Thus, use the default value of one slice per packet and remove 
->>> slice_count
->>> from the word count calculation.
->>>
->>> Fixes: bc6b6ff8135c ("drm/msm/dsi: Use DSC slice(s) packet size to 
->>> compute word count")
->>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>> ---
->>>   drivers/gpu/drm/msm/dsi/dsi_host.c | 9 ++++++++-
->>>   1 file changed, 8 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c 
->>> b/drivers/gpu/drm/msm/dsi/dsi_host.c
->>> index 35c69dbe5f6f..b0d448ffb078 100644
->>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->>> @@ -996,7 +996,14 @@ static void dsi_timing_setup(struct msm_dsi_host 
->>> *msm_host, bool is_bonded_dsi)
->>>           if (!msm_host->dsc)
->>>               wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
->>>           else
->>> -            wc = msm_host->dsc->slice_chunk_size * 
->>> msm_host->dsc->slice_count + 1;
->>> +            /*
->>> +             * When DSC is enabled, WC = slice_chunk_size * 
->>> slice_per_packet + 1.
->>> +             * Currently, the driver only supports default value of 
->>> slice_per_packet = 1
->>> +             *
->>> +             * TODO: Expand drm_panel struct to hold 
->>> slice_per_packet info
->>> +             *       and adjust DSC math to account for 
->>> slice_per_packet.
->>
->> slice_per_packet is not a part of the standard DSC, so I'm not sure 
->> how that can be implemented. And definitely we should not care about 
->> the drm_panel here. It should be either a part of drm_dsc_config, or 
->> mipi_dsi_device.
->>
+> Note that:
 > 
-> This is not correct.
+>  a) sched_clock() is used in NMI context a *LOT*
+>  b) sched_clock() is notrace (or even noinstr with these patches)
+>     and local_irq_save() implies tracing
 > 
-> It is part of the DSI standard (not DSC standard). Please refer to 
-> Figure 40 "One Line Containing One Packet with Data from One or More 
-> Compressed Slices" and Figure 41 "One Line Containing More than One 
-> Compressed Pixel Stream Packet".
 
-I have reviewed section 8.8.24 and Annex D of the DSI standard.
+Tianyu and Michael, what's your thought on this?
 
-It is not clear to me, if we can get away with always using 
-slice_per_packet = 1. What is the DSI sink's difference between Fig. 
-40.(b) and Fig 41?
+Is the MSR-based GHCB usable at this point?
 
-Are there are known panels that require slice_per_packet != 1? If so, we 
-will have to implement support for such configurations.
+What other clock source can be used?
 
-> This has details about this. So I still stand by my point that this 
-> should be in the drm_panel.
-
-Note, the driver doesn't use drm_panel directly. So slices_per_packet 
-should go to mipi_dsi_device instead (which in turn can be filled from 
-e.g. drm_panel or from any other source).
+Thanks,
+Wei.
 
 > 
->>> +             */
->>> +            wc = msm_host->dsc->slice_chunk_size + 1;
->>>           dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
->>>               DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
->>>
->>
-
--- 
-With best wishes
-Dmitry
-
+> Can you pretty please:
+> 
+>  1) delete all this; or,
+>  2) fix it in a hurry?
+> 
+> Thanks!
