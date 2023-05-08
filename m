@@ -2,997 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2016FB000
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F9A6FB00B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 14:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbjEHM3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 08:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
+        id S233223AbjEHMbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 08:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234159AbjEHM33 (ORCPT
+        with ESMTP id S234037AbjEHMax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 08:29:29 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1273847A;
-        Mon,  8 May 2023 05:29:19 -0700 (PDT)
-Date:   Mon, 08 May 2023 12:29:08 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1683548955; x=1683808155;
-        bh=2o+QhLEI39Ivg9mw6YMEs+As5D9Y3PgvTGz97q5/fpQ=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=lMIPvhJJVjkedVkpCbyoZ6ZrjxSIqOnubXVOnj1uRUkn8s9+d2UhZBgAJqxs5Wvmm
-         HZKPFjxHu87wcifX82m5MLRRnf0mOeEuba9GqzkVhM/19DaeJpKt9wC/Ot08OZhpoZ
-         j0QWE2IbsaE+BO/R5TZE0mH4SBAmT3C+SiD5aaYlrmyPTAI09PH72OMa737jCS6tU+
-         b41dXFpnwWf74ksfPEQ2OjklTfI/X1/cQx9bb/zHnLgl2Ls0pD+p6cysEW3b5xb7vG
-         NKfbB1envtkZuZNq/LzcCHpzmJzgLNlwt5efpkzc4tGO51lI5mgPFg7x1gJqo4Fw+g
-         Sq7Y0wQ0/gS9g==
-To:     Andreas Hindborg <nmi@metaspace.dk>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Hannes Reinecke <hare@suse.de>,
-        lsf-pc@lists.linux-foundation.org, rust-for-linux@vger.kernel.org,
-        linux-block@vger.kernel.org,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org, gost.dev@samsung.com
-Subject: Re: [RFC PATCH 03/11] rust: block: introduce `kernel::block::mq` module
-Message-ID: <iL2M45BoRlK6yS9y8uo0A5yUXcZWMkdk3vtH3LRFSWXfvPVagVZ-0YC7taIKOBFUcjJYA_2xNNFPoC4WL-_ulCHOLkbqvsZlIshE_LEeYtU=@proton.me>
-In-Reply-To: <20230503090708.2524310-4-nmi@metaspace.dk>
-References: <20230503090708.2524310-1-nmi@metaspace.dk> <20230503090708.2524310-4-nmi@metaspace.dk>
-Feedback-ID: 71780778:user:proton
+        Mon, 8 May 2023 08:30:53 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCAD3A5CC;
+        Mon,  8 May 2023 05:30:33 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4QFL2875l9z9v7Z5;
+        Mon,  8 May 2023 20:19:28 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBXKWA661hkBwGLAg--.32489S2;
+        Mon, 08 May 2023 13:30:00 +0100 (CET)
+Message-ID: <2d0abd075d6c67e72e3fb88a4c163fb0dd28f72e.camel@huaweicloud.com>
+Subject: Re: [PATCH] Smack modifications for: security: Allow all LSMs to
+ provide xattrs for inode_init_security hook
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mengchi Cheng <mengcc@amazon.com>
+Cc:     bpf@vger.kernel.org, casey@schaufler-ca.com,
+        dmitry.kasatkin@gmail.com, eparis@parisplace.org,
+        jmorris@namei.org, kamatam@amazon.com, keescook@chromium.org,
+        kpsingh@kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
+        nicolas.bouchinet@clip-os.org, paul@paul-moore.com,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        selinux@vger.kernel.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, yoonjaeh@amazon.com,
+        zohar@linux.ibm.com
+Date:   Mon, 08 May 2023 14:29:42 +0200
+In-Reply-To: <2f90828cc8e9e1ab369790a3da687790c4348b0f.camel@huaweicloud.com>
+References: <0fccab67e496f10f4ee7bf2220e70a655013935f.camel@huaweicloud.com>
+         <20230419192516.757220-1-mengcc@amazon.com>
+         <2f90828cc8e9e1ab369790a3da687790c4348b0f.camel@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwBXKWA661hkBwGLAg--.32489S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Gw18Wr1kuFyfZF18Xw1xGrg_yoWfWw13pF
+        Z5Ga43Krs5Jw17CayvqF43Za1F9FZ7Ga15XFnxKry7AF1DKr1IgryYqr1jkF1xtrsY93Wq
+        qF4jvry3Zr1Du3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj4z38QAAs1
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have left some comments below. Some of them are not really
-suggestions, but rather I would like to know the rationale of the
-design, as I am not familiar at all with the C side and have mostly
-no idea what the called functions do.
+On Thu, 2023-04-20 at 10:48 +0200, Roberto Sassu wrote:
+> On Wed, 2023-04-19 at 12:25 -0700, Mengchi Cheng wrote:
+> > > I got some errors during xattr removal, so not sure if my patch was
+> > > working properly or not (it happened also without it, didn't
+> > > investigate more).
+> > > 
+> > > However, I saw another discussion related to transmute:
+> > > 
+> > > https://lore.kernel.org/linux-security-module/20230419002338.566487-1-mengcc@amazon.com/
+> > > 
+> > > I add the people in CC.
+> > > 
+> > > The steps described were so easy to understand and executed, I tried
+> > > without and with overlayfs.
+> > > 
+> > > Without:
+> > > 
+> > > # echo "_ system rwxatl" > /sys/fs/smackfs/load2
+> > > # mkdir /data
+> > > # chsmack -a "system" /data
+> > > # chsmack -t /data
+> > > # mkdir -p /data/dir1/dir2
+> > > # chsmack /data/dir1
+> > > /data/dir1 access="system" transmute="TRUE"
+> > > # chsmack /data/dir1/dir2
+> > > /data/dir1/dir2 access="system" transmute="TRUE"
+> > > 
+> > > It seems to work, right?
+> > > 
+> > > With overlay fs it didn't work, same result as the one Mengchi
+> > > reported. Since Mengchi's solution was to set SMK_INODE_CHANGED, and I
+> > > want to get rid of it, I thought to investigate more.
+> > > 
+> > > Looking at smack_dentry_create_files_as(), I see that the label of the
+> > > process is overwritten with the label of the transmuting directory.
+> > > 
+> > > That causes smack_inode_init_security() to lookup the transmuting rule
+> > > on the overridden credential, and not on the original one.
+> > > 
+> > > In the example above, it means that, when overlayfs is creating the new
+> > > inode, the label of the process is system, not _. So no transmute
+> > > permission, and also the xattr will not be added, as observed by
+> > > Mengchi.
+> > > 
+> > > Hopefully I undertood the code, so in this particular case we would not
+> > > need to override the label of the process in smack_dentry_create_files_
+> > > as().
+> > > 
+> > > If you see smack_inode_init_security():
+> > > 
+> > > 	struct smack_known *skp = smk_of_current();
+> > > 	struct smack_known *isp = smk_of_inode(inode);
+> > > 	struct smack_known *dsp = smk_of_inode(dir);
+> > > 
+> > > [...]
+> > > 
+> > > 		if (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
+> > > 		    smk_inode_transmutable(dir)) {
+> > > 			isp = dsp;
+> > > [...]
+> > > 
+> > > 		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
+> > > 
+> > > This code is telling, if there is a transmute rule, and the directory
+> > > is transmuting, set the label of the new inode to the label of the
+> > > directory. That should be already the result that we wanted to obtain.
+> > > 
+> > > The current code should have been doing it by overriding the label of
+> > > the process in smack_dentry_create_files_as() with the label of the
+> > > parent directory, and letting the inode being created with the
+> > > overridden label of the process. The transmute xattr is not set due to
+> > > the problem described above.
+> > > 
+> > > So, as a quick test, I kept this patch with the change to xattr2->name, 
+> > > and skipped the label override in smack_dentry_create_files_as(). It
+> > > worked, I get the same result as without overlayfs. Wondering if the
+> > > process label override is necessary in other cases.
+> > 
+> > If I understand correctly, removing the if block below is what you suggested.
+> 
+> Yes, more or less is what I did.
+> 
+> > diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> > index cfcbb748da25..a867288e9de9 100644
+> > --- a/security/smack/smack_lsm.c
+> > +++ b/security/smack/smack_lsm.c
+> > @@ -4769,8 +4769,8 @@ static int smack_dentry_create_files_as(struct dentry *dentry, int mode,
+> >                  * providing access is transmuting use the containing
+> >                  * directory label instead of the process label.
+> >                  */
+> > -               if (may > 0 && (may & MAY_TRANSMUTE))
+> > -                       ntsp->smk_task = isp->smk_inode;
+> > +//             if (may > 0 && (may & MAY_TRANSMUTE))
+> > +//                     ntsp->smk_task = isp->smk_inode;
+> >         }
+> >         return 0;
+> >  }
+> > 
+> > This way will have issue in the following situation on the vanila kernel.
+> > data in the lowerdir has "_" label before overlay and dir1 is already
+> > created in the lowerdir.
+> > # chsmack /data
+> > /data access="_"
+> > # chsmack /data/dir1
+> > /data/dir1 access="system" transmute="TRUE"
+> > Apply overlay on data directory and set the smack rule in the same way.
+> > data has the same smack label.
+> > # chsmack /data
+> > /data access="system" transmute="TRUE"
+> 
+> I'm using an older kernel, but I get _ instead of system.
+> 
+> > After that, remove dir1 and mkdir dir1 again. dir1 did not get the correct
+> > label.
+> > # rm -r /data/dir1
+> > # mkdir -p /data/dir1
+> > # chsmack /data/dir1
+> > /data/dir1 access="_"
+> 
+> Unfortunately, it cannot work:
+> 
+> Thread 3 hit Breakpoint 1, smack_inode_init_security (...) at security/smack/smack_lsm.c:959
+> 959	{
+> (gdb) p dir->i_ino
+> $12 = 9169116
+> (gdb) p dsp
+> $13 = (struct smack_known *) 0xffffffff831fc0a0 <smack_known_floor>
+> 
+> 
+> ls -i /home/root/data_work/
+> 9169116 work
+> 
+> So, transmuting is decided on the working directory.
 
-On Wednesday, May 3rd, 2023 at 11:07, Andreas Hindborg <nmi@metaspace.dk> w=
-rote:
-> From: Andreas Hindborg <a.hindborg@samsung.com>
->=20
-> Add initial abstractions for working with blk-mq.
->=20
-> This patch is a maintained, refactored subset of code originally publishe=
-d by
-> Wedson Almeida Filho <wedsonaf@gmail.com> [1].
->=20
-> [1] https://github.com/wedsonaf/linux/tree/f2cfd2fe0e2ca4e90994f96afe268b=
-bd4382a891/rust/kernel/blk/mq.rs
->=20
-> Cc: Wedson Almeida Filho <wedsonaf@gmail.com>
-> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
-> ---
->  rust/bindings/bindings_helper.h    |   2 +
->  rust/helpers.c                     |  22 +++
->  rust/kernel/block.rs               |   5 +
->  rust/kernel/block/mq.rs            |  15 ++
->  rust/kernel/block/mq/gen_disk.rs   | 133 +++++++++++++++
->  rust/kernel/block/mq/operations.rs | 260 +++++++++++++++++++++++++++++
->  rust/kernel/block/mq/raw_writer.rs |  30 ++++
->  rust/kernel/block/mq/request.rs    |  71 ++++++++
->  rust/kernel/block/mq/tag_set.rs    |  92 ++++++++++
->  rust/kernel/error.rs               |   4 +
->  rust/kernel/lib.rs                 |   1 +
->  11 files changed, 635 insertions(+)
->  create mode 100644 rust/kernel/block.rs
->  create mode 100644 rust/kernel/block/mq.rs
->  create mode 100644 rust/kernel/block/mq/gen_disk.rs
->  create mode 100644 rust/kernel/block/mq/operations.rs
->  create mode 100644 rust/kernel/block/mq/raw_writer.rs
->  create mode 100644 rust/kernel/block/mq/request.rs
->  create mode 100644 rust/kernel/block/mq/tag_set.rs
->=20
-> diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_hel=
-per.h
-> index 52834962b94d..86c07eeb1ba1 100644
-> --- a/rust/bindings/bindings_helper.h
-> +++ b/rust/bindings/bindings_helper.h
-> @@ -11,6 +11,8 @@
->  #include <linux/wait.h>
->  #include <linux/sched.h>
->  #include <linux/radix-tree.h>
-> +#include <linux/blk_types.h>
-> +#include <linux/blk-mq.h>
->=20
->  /* `bindgen` gets confused at certain things. */
->  const gfp_t BINDINGS_GFP_KERNEL =3D GFP_KERNEL;
-> diff --git a/rust/helpers.c b/rust/helpers.c
-> index 9bd9d95da951..a59341084774 100644
-> --- a/rust/helpers.c
-> +++ b/rust/helpers.c
-> @@ -18,6 +18,7 @@
->   * accidentally exposed.
->   */
->=20
-> +#include <linux/bio.h>
->  #include <linux/bug.h>
->  #include <linux/build_bug.h>
->  #include <linux/err.h>
-> @@ -28,6 +29,8 @@
->  #include <linux/wait.h>
->  #include <linux/radix-tree.h>
->  #include <linux/highmem.h>
-> +#include <linux/blk-mq.h>
-> +#include <linux/blkdev.h>
->=20
->  __noreturn void rust_helper_BUG(void)
->  {
-> @@ -130,6 +133,25 @@ void rust_helper_put_task_struct(struct task_struct =
-*t)
->  }
->  EXPORT_SYMBOL_GPL(rust_helper_put_task_struct);
->=20
-> +struct bio_vec rust_helper_req_bvec(struct request *rq)
-> +{
-> +=09return req_bvec(rq);
-> +}
-> +EXPORT_SYMBOL_GPL(rust_helper_req_bvec);
-> +
-> +void *rust_helper_blk_mq_rq_to_pdu(struct request *rq)
-> +{
-> +=09return blk_mq_rq_to_pdu(rq);
-> +}
-> +EXPORT_SYMBOL_GPL(rust_helper_blk_mq_rq_to_pdu);
-> +
-> +void rust_helper_bio_advance_iter_single(const struct bio *bio,
-> +                                         struct bvec_iter *iter,
-> +                                         unsigned int bytes) {
-> +  bio_advance_iter_single(bio, iter, bytes);
-> +}
-> +EXPORT_SYMBOL_GPL(rust_helper_bio_advance_iter_single);
-> +
->  void rust_helper_init_radix_tree(struct xarray *tree, gfp_t gfp_mask)
->  {
->  =09INIT_RADIX_TREE(tree, gfp_mask);
-> diff --git a/rust/kernel/block.rs b/rust/kernel/block.rs
-> new file mode 100644
-> index 000000000000..4c93317a568a
-> --- /dev/null
-> +++ b/rust/kernel/block.rs
-> @@ -0,0 +1,5 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! Types for working with the block layer
-> +
-> +pub mod mq;
-> diff --git a/rust/kernel/block/mq.rs b/rust/kernel/block/mq.rs
-> new file mode 100644
-> index 000000000000..5b40f6a73c0f
-> --- /dev/null
-> +++ b/rust/kernel/block/mq.rs
-> @@ -0,0 +1,15 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! This module provides types for implementing drivers that interface t=
-he
-> +//! blk-mq subsystem
-> +
-> +mod gen_disk;
-> +mod operations;
-> +mod raw_writer;
-> +mod request;
-> +mod tag_set;
-> +
-> +pub use gen_disk::GenDisk;
-> +pub use operations::Operations;
-> +pub use request::Request;
-> +pub use tag_set::TagSet;
-> diff --git a/rust/kernel/block/mq/gen_disk.rs b/rust/kernel/block/mq/gen_=
-disk.rs
-> new file mode 100644
-> index 000000000000..50496af15bbf
-> --- /dev/null
-> +++ b/rust/kernel/block/mq/gen_disk.rs
-> @@ -0,0 +1,133 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! GenDisk abstraction
-> +//!
-> +//! C header: [`include/linux/blkdev.h`](../../include/linux/blkdev.h)
-> +//! C header: [`include/linux/blk_mq.h`](../../include/linux/blk_mq.h)
-> +
-> +use crate::block::mq::{raw_writer::RawWriter, Operations, TagSet};
-> +use crate::{
-> +    bindings, error::from_err_ptr, error::Result, sync::Arc, types::Fore=
-ignOwnable,
-> +    types::ScopeGuard,
-> +};
-> +use core::fmt::{self, Write};
-> +
-> +/// A generic block device
-> +///
-> +/// # Invariants
-> +///
-> +///  - `gendisk` must always point to an initialized and valid `struct g=
-endisk`.
-> +pub struct GenDisk<T: Operations> {
-> +    _tagset: Arc<TagSet<T>>,
-> +    gendisk: *mut bindings::gendisk,
+Actually, after studying the code better, this is
+what security_dentry_create_files_as() is useful for.
 
-Why are these two fields not embedded? Shouldn't the user decide where
-to allocate?
+ * Compute a context for a dentry as the inode is not yet available and set
+ * that context in passed in creds so that new files are created using that
+ * context. Context is calculated using the passed in creds and not the creds
+ * of the caller.
 
-> +}
-> +
-> +// SAFETY: `GenDisk` is an owned pointer to a `struct gendisk` and an `A=
-rc` to a
-> +// `TagSet` It is safe to send this to other threads as long as T is Sen=
-d.
-> +unsafe impl<T: Operations + Send> Send for GenDisk<T> {}
-> +
-> +impl<T: Operations> GenDisk<T> {
-> +    /// Try to create a new `GenDisk`
-> +    pub fn try_new(tagset: Arc<TagSet<T>>, queue_data: T::QueueData) -> =
-Result<Self> {
-> +        let data =3D queue_data.into_foreign();
-> +        let recover_data =3D ScopeGuard::new(|| {
-> +            // SAFETY: T::QueueData was created by the call to `into_for=
-eign()` above
-> +            unsafe { T::QueueData::from_foreign(data) };
-> +        });
-> +
-> +        let lock_class_key =3D crate::sync::LockClassKey::new();
-> +
-> +        // SAFETY: `tagset.raw_tag_set()` points to a valid and initiali=
-zed tag set
-> +        let gendisk =3D from_err_ptr(unsafe {
-> +            bindings::__blk_mq_alloc_disk(tagset.raw_tag_set(), data as =
-_, lock_class_key.as_ptr())
+And Smack is doing:
 
-Avoid `as _` casts.
+		if (may > 0 && (may & MAY_TRANSMUTE)) {
+			ntsp->smk_task = isp->smk_inode;
 
-> +        })?;
-> +
-> +        const TABLE: bindings::block_device_operations =3D bindings::blo=
-ck_device_operations {
-> +            submit_bio: None,
-> +            open: None,
-> +            release: None,
-> +            ioctl: None,
-> +            compat_ioctl: None,
-> +            check_events: None,
-> +            unlock_native_capacity: None,
-> +            getgeo: None,
-> +            set_read_only: None,
-> +            swap_slot_free_notify: None,
-> +            report_zones: None,
-> +            devnode: None,
-> +            alternative_gpt_sector: None,
-> +            get_unique_id: None,
-> +            owner: core::ptr::null_mut(),
-> +            pr_ops: core::ptr::null_mut(),
-> +            free_disk: None,
-> +            poll_bio: None,
-> +        };
-> +
-> +        // SAFETY: gendisk is a valid pointer as we initialized it above
-> +        unsafe { (*gendisk).fops =3D &TABLE };
-> +
-> +        recover_data.dismiss();
-> +        Ok(Self {
-> +            _tagset: tagset,
-> +            gendisk,
-> +        })
-> +    }
-> +
-> +    /// Set the name of the device
-> +    pub fn set_name(&self, args: fmt::Arguments<'_>) -> Result {
-> +        let mut raw_writer =3D RawWriter::from_array(unsafe { &mut (*sel=
-f.gendisk).disk_name });
+The new inode will be created with the label of the current task, that
+was replaced with the label of the parent directory (see above) in smac
+k_dentry_create_files_as().
 
-Missing `SAFETY` also see below.
+I think the reason why Mengchi was not obtaining the desired label when
+replacing /data/dir1 was because /data is incorrectly labeled.
 
-> +        raw_writer.write_fmt(args)?;
-> +        raw_writer.write_char('\0')?;
-> +        Ok(())
-> +    }
-> +
-> +    /// Register the device with the kernel. When this function return, =
-the
-> +    /// device is accessible from VFS. The kernel may issue reads to the=
- device
-> +    /// during registration to discover partition infomation.
-> +    pub fn add(&self) -> Result {
-> +        crate::error::to_result(unsafe {
-> +            bindings::device_add_disk(core::ptr::null_mut(), self.gendis=
-k, core::ptr::null_mut())
-> +        })
-> +    }
-> +
-> +    /// Call to tell the block layer the capcacity of the device
-> +    pub fn set_capacity(&self, sectors: u64) {
-> +        unsafe { bindings::set_capacity(self.gendisk, sectors) };
-> +    }
-> +
-> +    /// Set the logical block size of the device
-> +    pub fn set_queue_logical_block_size(&self, size: u32) {
-> +        unsafe { bindings::blk_queue_logical_block_size((*self.gendisk).=
-queue, size) };
-> +    }
-> +
-> +    /// Set the physical block size of the device
+To ensure that /data has label 'system' and transmute is true, I added
+smackfstransmute=system to the mount options.
 
-What does this *do*? I do not think the doc string gives any meaningful
-information not present in the function name (this might just be,
-because I have no idea of what this is and anyone with just a little
-more knowledge would know, but I still wanted to mention it).
+However, at the beginning, it seemed that it didn't work:
 
-> +    pub fn set_queue_physical_block_size(&self, size: u32) {
-> +        unsafe { bindings::blk_queue_physical_block_size((*self.gendisk)=
-.queue, size) };
-> +    }
-> +
-> +    /// Set the rotational media attribute for the device
-> +    pub fn set_rotational(&self, rotational: bool) {
-> +        if !rotational {
-> +            unsafe {
-> +                bindings::blk_queue_flag_set(bindings::QUEUE_FLAG_NONROT=
-, (*self.gendisk).queue)
-> +            };
-> +        } else {
-> +            unsafe {
-> +                bindings::blk_queue_flag_clear(bindings::QUEUE_FLAG_NONR=
-OT, (*self.gendisk).queue)
-> +            };
-> +        }
-> +    }
-> +}
-> +
-> +impl<T: Operations> Drop for GenDisk<T> {
-> +    fn drop(&mut self) {
-> +        let queue_data =3D unsafe { (*(*self.gendisk).queue).queuedata }=
-;
-> +
-> +        unsafe { bindings::del_gendisk(self.gendisk) };
-> +
-> +        // SAFETY: `queue.queuedata` was created by `GenDisk::try_new()`=
- with a
-> +        // call to `ForeignOwnable::into_pointer()` to create `queuedata=
-`.
-> +        // `ForeignOwnable::from_foreign()` is only called here.
-> +        let _queue_data =3D unsafe { T::QueueData::from_foreign(queue_da=
-ta) };
-> +    }
-> +}
-> diff --git a/rust/kernel/block/mq/operations.rs b/rust/kernel/block/mq/op=
-erations.rs
-> new file mode 100644
-> index 000000000000..fb1ab707d1f0
-> --- /dev/null
-> +++ b/rust/kernel/block/mq/operations.rs
-> @@ -0,0 +1,260 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! This module provides an interface for blk-mq drivers to implement.
-> +//!
-> +//! C header: [`include/linux/blk-mq.h`](../../include/linux/blk-mq.h)
-> +
-> +use crate::{
-> +    bindings,
-> +    block::mq::{tag_set::TagSetRef, Request},
-> +    error::{from_result, Result},
-> +    types::ForeignOwnable,
-> +};
-> +use core::{marker::PhantomData, pin::Pin};
-> +
-> +/// Implement this trait to interface blk-mq as block devices
-> +#[macros::vtable]
-> +pub trait Operations: Sized {
+# mount -t overlay overlay -o lowerdir=/data,upperdir=/home/root/data,workdir=/home/root/data_work,smackfstransmute=system /data
+# chsmack /data
+/data access="system"
 
-Is this trait really safe? Are there **no** requirements for e.g.
-`QueueData`? So could I use `Box<()>`?
+I found that the reason for this is that smack_inode_getsecurity()
+retrieves metadata from the inode only for SMACK64, and the rest from
+xattrs (which would not work for mount options). I just made a patch to
+handle SMACK64TRANSMUTE too.
 
-> +    /// Data associated with a request. This data is located next to the=
- request
-> +    /// structure.
-> +    type RequestData;
-> +
-> +    /// Data associated with the `struct request_queue` that is allocate=
-d for
-> +    /// the `GenDisk` associated with this `Operations` implementation.
-> +    type QueueData: ForeignOwnable;
-> +
-> +    /// Data associated with a dispatch queue. This is stored as a point=
-er in
-> +    /// `struct blk_mq_hw_ctx`.
-> +    type HwData: ForeignOwnable;
-> +
-> +    /// Data associated with a tag set. This is stored as a pointer in `=
-struct
-> +    /// blk_mq_tag_set`.
-> +    type TagSetData: ForeignOwnable;
-> +
-> +    /// Called by the kernel to allocate a new `RequestData`. The struct=
-ure will
-> +    /// eventually be pinned, so defer initialization to `init_request_d=
-ata()`
-> +    fn new_request_data(
-> +        _tagset_data: <Self::TagSetData as ForeignOwnable>::Borrowed<'_>=
-,
-> +    ) -> Result<Self::RequestData>;
-> +
-> +    /// Called by the kernel to initialize a previously allocated `Reque=
-stData`
-> +    fn init_request_data(
-> +        _tagset_data: <Self::TagSetData as ForeignOwnable>::Borrowed<'_>=
-,
-> +        _data: Pin<&mut Self::RequestData>,
-> +    ) -> Result {
-> +        Ok(())
-> +    }
-> +
-> +    /// Called by the kernel to queue a request with the driver. If `is_=
-last` is
-> +    /// `false`, the driver is allowed to defer commiting the request.
-> +    fn queue_rq(
-> +        hw_data: <Self::HwData as ForeignOwnable>::Borrowed<'_>,
-> +        queue_data: <Self::QueueData as ForeignOwnable>::Borrowed<'_>,
-> +        rq: &Request<Self>,
-> +        is_last: bool,
-> +    ) -> Result;
-> +
-> +    /// Called by the kernel to indicate that queued requests should be =
-submitted
-> +    fn commit_rqs(
-> +        hw_data: <Self::HwData as ForeignOwnable>::Borrowed<'_>,
-> +        queue_data: <Self::QueueData as ForeignOwnable>::Borrowed<'_>,
-> +    );
-> +
-> +    /// Called by the kernel when the request is completed
-> +    fn complete(_rq: &Request<Self>);
-> +
-> +    /// Called by the kernel to allocate and initialize a driver specifi=
-c hardware context data
-> +    fn init_hctx(
-> +        tagset_data: <Self::TagSetData as ForeignOwnable>::Borrowed<'_>,
-> +        hctx_idx: u32,
-> +    ) -> Result<Self::HwData>;
-> +
-> +    /// Called by the kernel to poll the device for completed requests. =
-Only used for poll queues.
-> +    fn poll(_hw_data: <Self::HwData as ForeignOwnable>::Borrowed<'_>) ->=
- i32 {
-> +        unreachable!()
+With the patch applied, I correctly get:
 
-Why are these implemented this way? Should this really panic? Maybe
-return an error? Why `i32` as the return type? If it can error it should
-be `Result<u32>`.
+# mount -t overlay overlay -o lowerdir=/data,upperdir=/home/root/data,workdir=/home/root/data_work,smackfstransmute=system /data
+# chsmack /data
+/data access="system" transmute="TRUE"
 
-> +    }
-> +
-> +    /// Called by the kernel to map submission queues to CPU cores.
-> +    fn map_queues(_tag_set: &TagSetRef) {
-> +        unreachable!()
-> +    }
-> +
-> +    // There is no need for exit_request() because `drop` will be called=
-.
-> +}
-> +
-> +pub(crate) struct OperationsVtable<T: Operations>(PhantomData<T>);
-> +
-> +impl<T: Operations> OperationsVtable<T> {
-> +    // # Safety
-> +    //
-> +    // The caller of this function must ensure that `hctx` and `bd` are =
-valid
-> +    // and initialized. The pointees must outlive this function. Further
-> +    // `hctx->driver_data` must be a pointer created by a call to
-> +    // `Self::init_hctx_callback()` and the pointee must outlive this fu=
-nction.
-> +    // This function must not be called with a `hctx` for which
-> +    // `Self::exit_hctx_callback()` has been called.
-> +    unsafe extern "C" fn queue_rq_callback(
-> +        hctx: *mut bindings::blk_mq_hw_ctx,
-> +        bd: *const bindings::blk_mq_queue_data,
-> +    ) -> bindings::blk_status_t {
-> +        // SAFETY: `bd` is valid as required by the safety requirement f=
-or this function.
-> +        let rq =3D unsafe { (*bd).rq };
-> +
-> +        // SAFETY: The safety requirement for this function ensure that
-> +        // `(*hctx).driver_data` was returned by a call to
-> +        // `Self::init_hctx_callback()`. That function uses
-> +        // `PointerWrapper::into_pointer()` to create `driver_data`. Fur=
-ther,
-> +        // the returned value does not outlive this function and
-> +        // `from_foreign()` is not called until `Self::exit_hctx_callbac=
-k()` is
-> +        // called. By the safety requirement of this function and contra=
-ct with
-> +        // the `blk-mq` API, `queue_rq_callback()` will not be called af=
-ter that
-> +        // point.
+With the root inode correctly labeled, I get:
 
-This safety section and the others here are rather long and mostly
-repeat themselves. Is it possible to put this in its own module and
-explain the safety invariants in that module and then in these safety
-sections just refer to some labels from that section?
+# mount -t overlay overlay -o lowerdir=/data,upperdir=/home/root/data,workdir=/home/root/data_work,smackfstransmute=system /data
+# rm -Rf /data/dir1
+# mkdir /data/dir1
+# chsmack /data/dir1
+/data/dir1 access="system"
 
-I think we should discuss this in our next meeting.
+This is partially correct, transmute="TRUE" is missing.
 
-> +        let hw_data =3D unsafe { T::HwData::borrow((*hctx).driver_data) =
-};
-> +
-> +        // SAFETY: `hctx` is valid as required by this function.
-> +        let queue_data =3D unsafe { (*(*hctx).queue).queuedata };
-> +
-> +        // SAFETY: `queue.queuedata` was created by `GenDisk::try_new()`=
- with a
-> +        // call to `ForeignOwnable::into_pointer()` to create `queuedata=
-`.
-> +        // `ForeignOwnable::from_foreign()` is only called when the tags=
-et is
-> +        // dropped, which happens after we are dropped.
-> +        let queue_data =3D unsafe { T::QueueData::borrow(queue_data) };
-> +
-> +        // SAFETY: `bd` is valid as required by the safety requirement f=
-or this function.
-> +        let ret =3D T::queue_rq(
-> +            hw_data,
-> +            queue_data,
-> +            &unsafe { Request::from_ptr(rq) },
-> +            unsafe { (*bd).last },
-> +        );
-> +        if let Err(e) =3D ret {
-> +            e.to_blk_status()
-> +        } else {
-> +            bindings::BLK_STS_OK as _
-> +        }
-> +    }
-> +
-> +    unsafe extern "C" fn commit_rqs_callback(hctx: *mut bindings::blk_mq=
-_hw_ctx) {
-> +        let hw_data =3D unsafe { T::HwData::borrow((*hctx).driver_data) =
-};
-> +
-> +        // SAFETY: `hctx` is valid as required by this function.
-> +        let queue_data =3D unsafe { (*(*hctx).queue).queuedata };
-> +
-> +        // SAFETY: `queue.queuedata` was created by `GenDisk::try_new()`=
- with a
-> +        // call to `ForeignOwnable::into_pointer()` to create `queuedata=
-`.
-> +        // `ForeignOwnable::from_foreign()` is only called when the tags=
-et is
-> +        // dropped, which happens after we are dropped.
-> +        let queue_data =3D unsafe { T::QueueData::borrow(queue_data) };
-> +        T::commit_rqs(hw_data, queue_data)
-> +    }
-> +
-> +    unsafe extern "C" fn complete_callback(rq: *mut bindings::request) {
-> +        T::complete(&unsafe { Request::from_ptr(rq) });
-> +    }
-> +
-> +    unsafe extern "C" fn poll_callback(
-> +        hctx: *mut bindings::blk_mq_hw_ctx,
-> +        _iob: *mut bindings::io_comp_batch,
-> +    ) -> core::ffi::c_int {
-> +        let hw_data =3D unsafe { T::HwData::borrow((*hctx).driver_data) =
-};
-> +        T::poll(hw_data)
-> +    }
-> +
-> +    unsafe extern "C" fn init_hctx_callback(
-> +        hctx: *mut bindings::blk_mq_hw_ctx,
-> +        tagset_data: *mut core::ffi::c_void,
-> +        hctx_idx: core::ffi::c_uint,
-> +    ) -> core::ffi::c_int {
-> +        from_result(|| {
-> +            let tagset_data =3D unsafe { T::TagSetData::borrow(tagset_da=
-ta) };
-> +            let data =3D T::init_hctx(tagset_data, hctx_idx)?;
-> +            unsafe { (*hctx).driver_data =3D data.into_foreign() as _ };
-> +            Ok(0)
-> +        })
-> +    }
-> +
-> +    unsafe extern "C" fn exit_hctx_callback(
-> +        hctx: *mut bindings::blk_mq_hw_ctx,
-> +        _hctx_idx: core::ffi::c_uint,
-> +    ) {
-> +        let ptr =3D unsafe { (*hctx).driver_data };
-> +        unsafe { T::HwData::from_foreign(ptr) };
-> +    }
-> +
-> +    unsafe extern "C" fn init_request_callback(
-> +        set: *mut bindings::blk_mq_tag_set,
-> +        rq: *mut bindings::request,
-> +        _hctx_idx: core::ffi::c_uint,
-> +        _numa_node: core::ffi::c_uint,
-> +    ) -> core::ffi::c_int {
-> +        from_result(|| {
-> +            // SAFETY: The tagset invariants guarantee that all requests=
- are allocated with extra memory
-> +            // for the request data.
-> +            let pdu =3D unsafe { bindings::blk_mq_rq_to_pdu(rq) } as *mu=
-t T::RequestData;
-> +            let tagset_data =3D unsafe { T::TagSetData::borrow((*set).dr=
-iver_data) };
-> +
-> +            let v =3D T::new_request_data(tagset_data)?;
-> +
-> +            // SAFETY: `pdu` memory is valid, as it was allocated by the=
- caller.
-> +            unsafe { pdu.write(v) };
-> +
-> +            let tagset_data =3D unsafe { T::TagSetData::borrow((*set).dr=
-iver_data) };
-> +            // SAFETY: `pdu` memory is valid and properly initialised.
-> +            T::init_request_data(tagset_data, unsafe { Pin::new_unchecke=
-d(&mut *pdu) })?;
-> +
-> +            Ok(0)
-> +        })
-> +    }
-> +
-> +    unsafe extern "C" fn exit_request_callback(
-> +        _set: *mut bindings::blk_mq_tag_set,
-> +        rq: *mut bindings::request,
-> +        _hctx_idx: core::ffi::c_uint,
-> +    ) {
-> +        // SAFETY: The tagset invariants guarantee that all requests are=
- allocated with extra memory
-> +        // for the request data.
-> +        let pdu =3D unsafe { bindings::blk_mq_rq_to_pdu(rq) } as *mut T:=
-:RequestData;
-> +
-> +        // SAFETY: `pdu` is valid for read and write and is properly ini=
-tialised.
-> +        unsafe { core::ptr::drop_in_place(pdu) };
-> +    }
-> +
-> +    unsafe extern "C" fn map_queues_callback(tag_set_ptr: *mut bindings:=
-:blk_mq_tag_set) {
-> +        let tag_set =3D unsafe { TagSetRef::from_ptr(tag_set_ptr) };
-> +        T::map_queues(&tag_set);
-> +    }
-> +
-> +    const VTABLE: bindings::blk_mq_ops =3D bindings::blk_mq_ops {
-> +        queue_rq: Some(Self::queue_rq_callback),
-> +        queue_rqs: None,
-> +        commit_rqs: Some(Self::commit_rqs_callback),
-> +        get_budget: None,
-> +        put_budget: None,
-> +        set_rq_budget_token: None,
-> +        get_rq_budget_token: None,
-> +        timeout: None,
-> +        poll: if T::HAS_POLL {
-> +            Some(Self::poll_callback)
-> +        } else {
-> +            None
-> +        },
-> +        complete: Some(Self::complete_callback),
-> +        init_hctx: Some(Self::init_hctx_callback),
-> +        exit_hctx: Some(Self::exit_hctx_callback),
-> +        init_request: Some(Self::init_request_callback),
-> +        exit_request: Some(Self::exit_request_callback),
-> +        cleanup_rq: None,
-> +        busy: None,
-> +        map_queues: if T::HAS_MAP_QUEUES {
-> +            Some(Self::map_queues_callback)
-> +        } else {
-> +            None
-> +        },
-> +        #[cfg(CONFIG_BLK_DEBUG_FS)]
-> +        show_rq: None,
-> +    };
-> +
-> +    pub(crate) const unsafe fn build() -> &'static bindings::blk_mq_ops =
-{
-> +        &Self::VTABLE
-> +    }
+Judging from smk_task, we cannot determine in smack_inode_init_security
+() if transmuting was successful in smack_dentry_create_files_as(). We
+need an extra information.
 
-Why is this function `unsafe`?
+Mengchi's solution was to add the new inode as parameter
+to security_dentry_create_files_as(), so that SMK_INODE_CHANGED can be
+set in smk_flags, and SMACK64TRANSMUTE is set in smack_d_instantiate().
 
-> +}
+One concern could be that preallocating the inode maybe is overlayfs-
+specific? A comment also says that we might not use that one:
 
-Some `# Safety` and `SAFETY` missing in this hunk.
+	err = ovl_create_or_link(dentry, inode, &attr, false);
+	/* Did we end up using the preallocated inode? */
+	if (inode != d_inode(dentry))
 
-> diff --git a/rust/kernel/block/mq/raw_writer.rs b/rust/kernel/block/mq/ra=
-w_writer.rs
-> new file mode 100644
-> index 000000000000..25c16ee0b1f7
-> --- /dev/null
-> +++ b/rust/kernel/block/mq/raw_writer.rs
-> @@ -0,0 +1,30 @@
-> +use core::fmt::{self, Write};
-> +
-> +pub(crate) struct RawWriter {
-> +    ptr: *mut u8,
-> +    len: usize,
-> +}
-> +
-> +impl RawWriter {
-> +    unsafe fn new(ptr: *mut u8, len: usize) -> Self {
-> +        Self { ptr, len }
-> +    }
-> +
-> +    pub(crate) fn from_array<const N: usize>(a: &mut [core::ffi::c_char;=
- N]) -> Self {
-> +        unsafe { Self::new(&mut a[0] as *mut _ as _, N) }
-> +    }
+We could achieve the same goal without adding a new parameter to security_dentry_create_files_as() and, instead, by adding a new field
+in the task_smack structure, smk_transmuted, that is set to smk_task
+when transmuting is successful.
 
-This function needs to be `unsafe`, because it never captures the
-lifetime of `a`. I can write:
-    let mut a =3D Box::new([0; 10]);
-    let mut writer =3D RawWriter::from_array(&mut *a);
-    drop(a);
-    writer.write_str("Abc"); // UAF
-Alternatively add a lifetime to `RawWriter`.
+Then, if smk_task == smk_transmuted, smack_inode_init_security() would
+set SMK_INODE_CHANGED. On top of that, I would instead just provide the
+second xattr SMACK64TRANSMUTE, in addition to SMACK64.
 
-> +}
-> +
-> +impl Write for RawWriter {
-> +    fn write_str(&mut self, s: &str) -> fmt::Result {
-> +        let bytes =3D s.as_bytes();
-> +        let len =3D bytes.len();
-> +        if len > self.len {
-> +            return Err(fmt::Error);
-> +        }
-> +        unsafe { core::ptr::copy_nonoverlapping(&bytes[0], self.ptr, len=
-) };
-> +        self.ptr =3D unsafe { self.ptr.add(len) };
-> +        self.len -=3D len;
-> +        Ok(())
-> +    }
-> +}
-> diff --git a/rust/kernel/block/mq/request.rs b/rust/kernel/block/mq/reque=
-st.rs
-> new file mode 100644
-> index 000000000000..e95ae3fd71ad
-> --- /dev/null
-> +++ b/rust/kernel/block/mq/request.rs
-> @@ -0,0 +1,71 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! This module provides a wrapper for the C `struct request` type.
-> +//!
-> +//! C header: [`include/linux/blk-mq.h`](../../include/linux/blk-mq.h)
-> +
-> +use crate::{
-> +    bindings,
-> +    block::mq::Operations,
-> +    error::{Error, Result},
-> +};
-> +use core::marker::PhantomData;
-> +
-> +/// A wrapper around a blk-mq `struct request`. This represents an IO re=
-quest.
-> +pub struct Request<T: Operations> {
-> +    ptr: *mut bindings::request,
+Will send the patches for upstream first, and then switch to providing 
+SMACK64TRANSMUTE in smack_inode_init_security(), in a new version of
+the EVM patch set.
 
-Why is this not embedded?
+Thanks
 
-> +    _p: PhantomData<T>,
-> +}
-> +
-> +impl<T: Operations> Request<T> {
-> +    pub(crate) unsafe fn from_ptr(ptr: *mut bindings::request) -> Self {
-> +        Self {
-> +            ptr,
-> +            _p: PhantomData,
-> +        }
-> +    }
-> +
-> +    /// Get the command identifier for the request
-> +    pub fn command(&self) -> u32 {
-> +        unsafe { (*self.ptr).cmd_flags & ((1 << bindings::REQ_OP_BITS) -=
- 1) }
-> +    }
-> +
-> +    /// Call this to indicate to the kernel that the request has been is=
-sued by the driver
-> +    pub fn start(&self) {
-> +        unsafe { bindings::blk_mq_start_request(self.ptr) };
-> +    }
-> +
-> +    /// Call this to indicate to the kernel that the request has been co=
-mpleted without errors
-> +    // TODO: Consume rq so that we can't use it after ending it?
-> +    pub fn end_ok(&self) {
-> +        unsafe { bindings::blk_mq_end_request(self.ptr, bindings::BLK_ST=
-S_OK as _) };
-> +    }
-> +
-> +    /// Call this to indicate to the kernel that the request completed w=
-ith an error
-> +    pub fn end_err(&self, err: Error) {
-> +        unsafe { bindings::blk_mq_end_request(self.ptr, err.to_blk_statu=
-s()) };
-> +    }
-> +
-> +    /// Call this to indicate that the request completed with the status=
- indicated by `status`
-> +    pub fn end(&self, status: Result) {
-> +        if let Err(e) =3D status {
-> +            self.end_err(e);
-> +        } else {
-> +            self.end_ok();
-> +        }
-> +    }
-> +
-> +    /// Call this to schedule defered completion of the request
-> +    // TODO: Consume rq so that we can't use it after completing it?
-> +    pub fn complete(&self) {
-> +        if !unsafe { bindings::blk_mq_complete_request_remote(self.ptr) =
-} {
-> +            T::complete(&unsafe { Self::from_ptr(self.ptr) });
-> +        }
-> +    }
-> +
-> +    /// Get the target sector for the request
-> +    #[inline(always)]
+Roberto
 
-Why is this `inline(always)`?
+> If I do:
+> 
+> # chsmack -a system -t /home/root/data_work/work/
+> # mkdir /data/dir1
+> # chsmack /data/dir1
+> /data/dir1 access="system" transmute="TRUE"
+> 
+> I obtain the expected result. However, this problem is due to how overlayfs works:
+> 
+> static int ovl_create_over_whiteout(struct dentry *dentry, struct inode *inode,
+> 				    struct ovl_cattr *cattr)
+> {
+> 
+> [...]
+> 
+> 	newdentry = ovl_create_temp(ofs, workdir, cattr);
+> 	err = PTR_ERR(newdentry);
+> 	if (IS_ERR(newdentry))
+> 		goto out_dput;
+> 
+> 
+> The good news seems to be that, once you set the label to the correct
+> directory, transmuting works with the changes I proposed.
+> 
+> Roberto
+> 
+> > Since I am not very familiar your change. Could you help check with your
+> > patch will this issue also happen? 
+> > 
+> > 
+> > Best,
+> > Mengchi
+> > 
+> > >  
+> > > Roberto
 
-> +    pub fn sector(&self) -> usize {
-> +        unsafe { (*self.ptr).__sector as usize }
-> +    }
-> +}
-> diff --git a/rust/kernel/block/mq/tag_set.rs b/rust/kernel/block/mq/tag_s=
-et.rs
-> new file mode 100644
-> index 000000000000..d122db7f6d0e
-> --- /dev/null
-> +++ b/rust/kernel/block/mq/tag_set.rs
-> @@ -0,0 +1,92 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! This module provides the `TagSet` struct to wrap the C `struct blk_m=
-q_tag_set`.
-> +//!
-> +//! C header: [`include/linux/blk-mq.h`](../../include/linux/blk-mq.h)
-> +
-> +use crate::{
-> +    bindings,
-> +    block::mq::{operations::OperationsVtable, Operations},
-> +    error::{Error, Result},
-> +    sync::Arc,
-> +    types::ForeignOwnable,
-> +};
-> +use core::{cell::UnsafeCell, convert::TryInto, marker::PhantomData};
-> +
-> +/// A wrapper for the C `struct blk_mq_tag_set`
-> +pub struct TagSet<T: Operations> {
-> +    inner: UnsafeCell<bindings::blk_mq_tag_set>,
-> +    _p: PhantomData<T>,
-> +}
-> +
-> +impl<T: Operations> TagSet<T> {
-> +    /// Try to create a new tag set
-> +    pub fn try_new(
-> +        nr_hw_queues: u32,
-> +        tagset_data: T::TagSetData,
-> +        num_tags: u32,
-> +        num_maps: u32,
-> +    ) -> Result<Arc<Self>> {
-
-Why force the users to use `Arc`?
-
-> +        let tagset =3D Arc::try_new(Self {
-> +            inner: UnsafeCell::new(bindings::blk_mq_tag_set::default()),
-> +            _p: PhantomData,
-> +        })?;
-> +
-> +        // SAFETY: We just allocated `tagset`, we know this is the only =
-reference to it.
-> +        let inner =3D unsafe { &mut *tagset.inner.get() };
-> +
-> +        inner.ops =3D unsafe { OperationsVtable::<T>::build() };
-> +        inner.nr_hw_queues =3D nr_hw_queues;
-> +        inner.timeout =3D 0; // 0 means default which is 30 * HZ in C
-> +        inner.numa_node =3D bindings::NUMA_NO_NODE;
-> +        inner.queue_depth =3D num_tags;
-> +        inner.cmd_size =3D core::mem::size_of::<T::RequestData>().try_in=
-to()?;
-> +        inner.flags =3D bindings::BLK_MQ_F_SHOULD_MERGE;
-> +        inner.driver_data =3D tagset_data.into_foreign() as _;
-> +        inner.nr_maps =3D num_maps;
-> +
-> +        // SAFETY: `inner` points to valid and initialised memory.
-> +        let ret =3D unsafe { bindings::blk_mq_alloc_tag_set(inner) };
-> +        if ret < 0 {
-> +            // SAFETY: We created `driver_data` above with `into_foreign=
-`
-> +            unsafe { T::TagSetData::from_foreign(inner.driver_data) };
-> +            return Err(Error::from_errno(ret));
-> +        }
-> +
-> +        Ok(tagset)
-> +    }
-> +
-> +    /// Return the pointer to the wrapped `struct blk_mq_tag_set`
-> +    pub(crate) fn raw_tag_set(&self) -> *mut bindings::blk_mq_tag_set {
-> +        self.inner.get()
-> +    }
-> +}
-> +
-> +impl<T: Operations> Drop for TagSet<T> {
-> +    fn drop(&mut self) {
-> +        let tagset_data =3D unsafe { (*self.inner.get()).driver_data };
-> +
-> +        // SAFETY: `inner` is valid and has been properly initialised du=
-ring construction.
-> +        unsafe { bindings::blk_mq_free_tag_set(self.inner.get()) };
-> +
-> +        // SAFETY: `tagset_data` was created by a call to
-> +        // `ForeignOwnable::into_foreign` in `TagSet::try_new()`
-> +        unsafe { T::TagSetData::from_foreign(tagset_data) };
-> +    }
-> +}
-> +
-> +/// A tag set reference. Used to control lifetime and prevent drop of Ta=
-gSet references passed to
-> +/// `Operations::map_queues()`
-> +pub struct TagSetRef {
-> +    ptr: *mut bindings::blk_mq_tag_set,
-> +}
-> +
-> +impl TagSetRef {
-> +    pub(crate) unsafe fn from_ptr(tagset: *mut bindings::blk_mq_tag_set)=
- -> Self {
-> +        Self { ptr: tagset }
-> +    }
-> +
-> +    pub fn ptr(&self) -> *mut bindings::blk_mq_tag_set {
-> +        self.ptr
-> +    }
-> +}
-
-This is a **very** thin abstraction, why is it needed?
-
-> diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
-> index 5f4114b30b94..421fef677321 100644
-> --- a/rust/kernel/error.rs
-> +++ b/rust/kernel/error.rs
-> @@ -107,6 +107,10 @@ impl Error {
->          self.0
->      }
->=20
-> +    pub(crate) fn to_blk_status(self) -> bindings::blk_status_t {
-> +        unsafe { bindings::errno_to_blk_status(self.0) }
-> +    }
-> +
->      /// Returns the error encoded as a pointer.
->      #[allow(dead_code)]
->      pub(crate) fn to_ptr<T>(self) -> *mut T {
-> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> index 8bef6686504b..cd798d12d97c 100644
-> --- a/rust/kernel/lib.rs
-> +++ b/rust/kernel/lib.rs
-> @@ -34,6 +34,7 @@ extern crate self as kernel;
->  #[cfg(not(test))]
->  #[cfg(not(testlib))]
->  mod allocator;
-> +pub mod block;
->  mod build_assert;
->  pub mod error;
->  pub mod init;
-> --
-> 2.40.0
->=20
-
---
-Cheers,
-Benno
