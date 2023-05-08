@@ -2,57 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59FA6FB548
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8D46FB495
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 18:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234061AbjEHQhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 12:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
+        id S232292AbjEHQEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 12:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234256AbjEHQhh (ORCPT
+        with ESMTP id S234057AbjEHQCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 12:37:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42E56E8E;
-        Mon,  8 May 2023 09:37:34 -0700 (PDT)
-Received: from mercury (195-23-45-170.net.novis.pt [195.23.45.170])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 539FA66032C9;
-        Mon,  8 May 2023 17:37:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1683563852;
-        bh=udDMBajQiOPVdGZyg8mQ3I6M6Uy1zjD8NZ9JgkagEVA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LpI11uVtHUtq6e129Ry21XqOUdkwH+VfEBkkO1IDaIjlDshx2iaaRPrS0AsYReOrx
-         DztirCNlLJa6b0Fo2rVH+70sNgYXyjWpqR/CDS6lM4Qfz9/pJud+hX7RgYD7JPpyLs
-         vC3RUHa2O7WOtqzdZv2xqn/javd160IiA4pTW589wPSAIba3APsiSflEcou1QUOMck
-         4hZ3KD3QN9WbKAuqppz8xWfzs16W1ZCFGaNqK1vCwKbJJUswK46A4/5lCKabE0gbYo
-         qNel3EsRIH6nek2mKOu7Tt8jTKMu/4CAhwVySWpoTak9cuBjtkL//ir5BRaV5xNCLO
-         QFS9qgy7PQbXA==
-Received: by mercury (Postfix, from userid 1000)
-        id 3827E1067084; Mon,  8 May 2023 15:34:13 +0200 (CEST)
-Date:   Mon, 8 May 2023 15:34:13 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] power: supply: hwmon: constify pointers to
- hwmon_channel_info
-Message-ID: <20230508133413.ojt4hjxbxofixxh7@mercury.elektranox.org>
-References: <20230407150326.80183-1-krzysztof.kozlowski@linaro.org>
+        Mon, 8 May 2023 12:02:54 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67155588;
+        Mon,  8 May 2023 09:02:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683561773; x=1715097773;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FJSlVdhkFps4m9yW9DtGq15XX4xhvkxEhOkkJuq8yPo=;
+  b=WX/O/03qmAkYvTQT/gZnVB+Il1Q8Z2CuqiprTc0ddIianv+dAJ7aY1OL
+   g/Cln1/z/M/VqSdZWxh2vMZrGtPdEiGQZgtjNTIEMU/lx1dy95CKUaiIk
+   cz57Db8H4OSHNguR4vOB4sFWVNB1i1RbwB2LGFwEpIekUo36hNfSb1cgT
+   5dWL2XGX+QbP7XxplSjpS/XCzCqLvdrFdhtOruy+3HMuvkwNVZ/Koiamf
+   I6VWa7NOAL47WntgCcg5kZidAHNaOMUtNUXOplUh06am0WA+vIzTifcJ7
+   QnPu9nMvuo/xGEuknI8VXdtGzjEDTZq1do2OmPOdIAONxIQsOH/TsFg0d
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="334127066"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="334127066"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 09:01:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="822729832"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="822729832"
+Received: from pscharto-mobl2.amr.corp.intel.com (HELO [10.212.92.102]) ([10.212.92.102])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 09:01:55 -0700
+Message-ID: <fa975430-1ca1-fc89-dfa3-f28b2228b6a2@intel.com>
+Date:   Mon, 8 May 2023 09:01:54 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dguijg5cxkkxb3fj"
-Content-Disposition: inline
-In-Reply-To: <20230407150326.80183-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v3 0/2] Fixing check patch styling issues
+Content-Language: en-US
+To:     Raghu Halharvi <raghuhack78@gmail.com>, linux-cxl@vger.kernel.org,
+        Alison Schofield <alison.schofield@intel.com>,
+        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
+        vishal.l.verma@intel.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20230508082531.136281-1-raghuhack78@gmail.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20230508082531.136281-1-raghuhack78@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,76 +67,46 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---dguijg5cxkkxb3fj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On 5/8/23 1:25 AM, Raghu Halharvi wrote:
+> v3 changes:
+> - Update the cover letter and commit message with full author
+>    name(Fabio/Alison)
+> - Correct the "typo error" in commit message(Fabio)
 
-On Fri, Apr 07, 2023 at 05:03:26PM +0200, Krzysztof Kozlowski wrote:
-> Statically allocated array of pointed to hwmon_channel_info can be made
-> const for safety.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->=20
-> ---
-> This depends on hwmon core patch:
-> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@=
-linaro.org/
->=20
-> Therefore I propose this should also go via hwmon tree.
->=20
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> ---
+Hi Raghu,
+Please make sure you pick up all the review tags given by reviewers in 
+the previous round and also add them to the respective patches.
 
-Thanks, queued (to my for-next branch).
+Using the b4 tool can do that for you.
+https://people.kernel.org/monsieuricon/introducing-b4-and-patch-attestation
 
--- Sebastian
 
->  drivers/power/supply/power_supply_hwmon.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/su=
-pply/power_supply_hwmon.c
-> index a48aa4afb828..c97893d4c25e 100644
-> --- a/drivers/power/supply/power_supply_hwmon.c
-> +++ b/drivers/power/supply/power_supply_hwmon.c
-> @@ -293,7 +293,7 @@ static const struct hwmon_ops power_supply_hwmon_ops =
-=3D {
->  	.read_string	=3D power_supply_hwmon_read_string,
->  };
-> =20
-> -static const struct hwmon_channel_info *power_supply_hwmon_info[] =3D {
-> +static const struct hwmon_channel_info * const power_supply_hwmon_info[]=
- =3D {
->  	HWMON_CHANNEL_INFO(temp,
->  			   HWMON_T_LABEL     |
->  			   HWMON_T_INPUT     |
-> --=20
-> 2.34.1
->=20
-
---dguijg5cxkkxb3fj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRY+lQACgkQ2O7X88g7
-+prO+Q//QSMdR1Hjn+1cUVSJn9lLDExWtvOYSWrSiECUCpLfCIZCr+QeClYYUYcN
-xLtZc9441/a54EYbGt6EjkJh+WqZbmnl5SI8PUUfIb465oLCqwAh3ZkreSzIhWjs
-H6C6HLKKCI+kWTL1zAQC6RENWAU8X0nZrFaZT/yuGexfOyHBtakTk/Ki1lkANP90
-8/jPrSPtvhwS53VzAiVloRLX/GsJsaIc8pywv6UUygJDcOR7Xy+U4AXp4Y0ZLgqg
-ITTYFpi+qbG1fxdOJ2HSHx0ozEa1kERCz7diAJOixlpzGkxq0qg+Kf1StpqFcKvQ
-qwNUkGuheCMw+/ehTM+wIZXy2wGRuQzqZ8asuu8UwHGlFOWo+lCxvBWyTNAOSnQy
-nJVXs3DWyTp+rVqk5rSQ7s0D7Urnca1RcbVtE8yfkr9OT+HuHeqcrIwygeVsigbD
-iBDKd98yVfEs9k/DvJHVdmiowJVJPJ//vVEOkTMR528UBDWJxIA9YOIVoWtb/M38
-LeGFOptAH6hDKHSezFz4HfKEE+KoZ/nnitIbYTND97OZU1Kf+AuFp8j1PErW1AkX
-sf1XvYAdUJ91DicxsVuNdIuGcd6SRQPxzm/tmS5Z12IT3icfX2cGBuWUjYW+yyJP
-ng/tRI1EJEWMjDuFFL3LYLwZS505c05Lwv66CDRRS0cJhPFP4GY=
-=fKk0
------END PGP SIGNATURE-----
-
---dguijg5cxkkxb3fj--
+> 
+> v2 changes:
+> Thanks Alison, Ira for your comments, modified the v1 patches as
+> suggested.
+> Dropped the patch containing tab changes in port.c
+> 
+> v1 cover letter:
+> The following patches are cleanup or fixing the styling issues found
+> using checkpatch
+> 
+> In cxl/core/mbox.c, in case of null check failure, returning errno or
+> -ENOMEM in this case is good enough, removing the redundant dev_err
+> message.
+> 
+> In cxl/core/region.c, the else is not required after the return
+> statement, cleaned it up.
+> 
+> Verified the build and sanity by booting the guest VM using the freshly
+> built components.
+> 
+> Raghu Halharvi (2):
+>    cxl/mbox: Remove redundant dev_err() after failed mem alloc
+>    cxl/region: Remove else after return statement
+> 
+>   drivers/cxl/core/mbox.c   | 4 +---
+>   drivers/cxl/core/region.c | 8 ++++----
+>   2 files changed, 5 insertions(+), 7 deletions(-)
+> 
