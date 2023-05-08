@@ -2,208 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880946FB313
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1D86FB315
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 16:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234034AbjEHOi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 10:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
+        id S234347AbjEHOjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 10:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233259AbjEHOiy (ORCPT
+        with ESMTP id S233259AbjEHOjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 10:38:54 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2074.outbound.protection.outlook.com [40.107.8.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7F0E4C;
-        Mon,  8 May 2023 07:38:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mp3IvDfhNaR6Kh5B5bG88dYXwzbqB9BtF3GjQy1RKze/7mAMUJ1xk0qyVxiMUfAixZBclbQLZXGgRHmzSzPCvf8211Yj0ahfzbaqfARDc0ORIKkBaJru3egsI69sbNysJVxXGqazkG3lPOC+DPgs5dC++IA57uS840xT2WxZqJRqJIS5ITcY94WFBzMI7trLeeX9RpbOcbgw1cLsbW+OYHgcO9ggK8KlSzJuDhpZFhrnsMWS0AKWYV2V155dRGwbU9YECKISwS/ZQlRNTdqR3ZdPykN0lh8sVOD0KHTAUxtRu+64mKv1MqvFGvYsHNHURrtA4+kwYCxozIoC78n3QA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LUjOTXCujI1Ixal2+7VYOS4B39m/XSniOvDRXHTOZOQ=;
- b=bGEsVHhdLHhliiPuEMWiJ/nL08q5g2zcM0WQJ47zI731pFf/jKWpmF+/HlxrnnQl4/pTFptUUht8/3T5W+p4tyKOtropZOWNIEahYlJ7XwaKbR7vDfEteCj/vHwKe7zbbTlkPObDGLrOu1FhroxfB8+x8cHmNgmYTSZew3IttVxF4mhKyhRfaIHotnNBCbC8SXs5J0cEUfjQd08gbMOz6jxI++JkmMl824Qodz61nDeo2Dl39iBslWDZeHZxwey5tc/ovnTtjFMLVtJzQQ9LIkFmor4yoPdWFtUY3eAh2Be3DTZbpJicv5gzvOG6kYaPRjk7YARguR3AyJruiHG1Cg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LUjOTXCujI1Ixal2+7VYOS4B39m/XSniOvDRXHTOZOQ=;
- b=LDfn/BA887c4cvR/QytrHRsF3e8UjbJk3WfjA8/HCm2bXcnRcEqjUtXdwB03NnQmGDHzFwJUYWOVHPYNR9OD9lEOWZPJEmElhDWxqWUA2dO53gIgNeP6Hyal8UIpe7gdFJnbn3YLVMr8OshdlFhgJMixa1Tqx7PgsrtyU9XNaos=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
- by AM8PR04MB7361.eurprd04.prod.outlook.com (2603:10a6:20b:1d2::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.29; Mon, 8 May
- 2023 14:38:49 +0000
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::28fb:82ec:7a6:62f3]) by PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::28fb:82ec:7a6:62f3%5]) with mapi id 15.20.6363.032; Mon, 8 May 2023
- 14:38:49 +0000
-From:   Shenwei Wang <shenwei.wang@nxp.com>
-To:     Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev, Gagandeep Singh <g.singh@nxp.com>
-Subject: [RESEND PATCH v4 net 1/1] net: fec: correct the counting of XDP sent frames
-Date:   Mon,  8 May 2023 09:38:31 -0500
-Message-Id: <20230508143831.980668-1-shenwei.wang@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0074.namprd03.prod.outlook.com
- (2603:10b6:a03:331::19) To PAXPR04MB9185.eurprd04.prod.outlook.com
- (2603:10a6:102:231::11)
+        Mon, 8 May 2023 10:39:17 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAF74C08
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 07:39:11 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f42769a0c1so7307675e9.2
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 07:39:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683556750; x=1686148750;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XKa3M9jBMdQPBsXGj4GG7TDDf9/LBhAgzA2/jVjGDng=;
+        b=UC6m4w4u7QpQUbESbXOteX0ljEB1v/64kDiKb/nTQIcuqxofVL7yw65jwvdLAVpB1j
+         jisG0AH6+vlgwVWsly70tcniAFKF6MPPk7RUfaQ92k+2/KdDh/+ozsZT/HTtALlh3tGx
+         beKipMR0g4gFfPEX4czqEBi7ZAGtMtVKHXtkUS3IQE+3+H4WaiK911e2kmjFeUobD159
+         HU5rnIriqxHlm7KCRmm1/7fnByfGOMDqldG/X1TZmu8KCfEeU4edPqZDAmaiEdmOfGW5
+         NecwP2G0Rcp7ixH6hGbgg6rAIbki/l3vbf/2hJCs0kTo1qmsUxkiditxV3+aVYj19pZq
+         7TtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683556750; x=1686148750;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XKa3M9jBMdQPBsXGj4GG7TDDf9/LBhAgzA2/jVjGDng=;
+        b=YSF5JrKoyQCm4oTvXQe0JP2Z+qIUxpv0OptiOx9rxThXs4iX5nBxz5s6BRItSbOxm0
+         SaDQo/MuK4FWwuGefuZTaERJgrapQByEsVGkETIFtgF6VlWPAk8qe4oTReMU6/1NJ2Ql
+         JOWp46DJJITj2dO72wP77jO+9OPq+fG0546Ci7E8/o9Xie57d9N18/fNf6mcBNZDrrLH
+         MEoHLxgAPhdvjzQaD0dlfLOh6zDjVHf5dk47VTr74zD2oVuE30r2prauuIggMjrx5FVB
+         K35ivMg0VmUuLJfjnGZVs5EhN6CJOxq57wqeCGb+faX+Ux4XdX9qUCvR8XNDXmKxaQQL
+         0MaQ==
+X-Gm-Message-State: AC+VfDxKDWrOBf0MTWjBrhaTJd9v4nsxHfUNM6Uf4gaSz/g//XaRrfcF
+        SaP4YIf5Lw7Ek6eqXaDaK1vAug==
+X-Google-Smtp-Source: ACHHUZ7e1NO1n+801sRZRPy5/spMBxkJtnkeTCGiE4m4ao4b80MPhoPOpj4jejdZ9SjI8LBNXBsG0Q==
+X-Received: by 2002:a1c:cc14:0:b0:3f4:20bd:ba46 with SMTP id h20-20020a1ccc14000000b003f420bdba46mr4579620wmb.5.1683556749876;
+        Mon, 08 May 2023 07:39:09 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id n9-20020a05600c294900b003f423508c6bsm4886169wmd.44.2023.05.08.07.39.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 07:39:07 -0700 (PDT)
+Date:   Mon, 8 May 2023 17:38:55 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Tomas Henzl <thenzl@redhat.com>, Jing Xu <U202112064@hust.edu.cn>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        hust-os-kernel-patches@googlegroups.com,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: mpt3sas: mpt3sas_debugfs: return value check of
+ `mpt3sas_debugfs_root`
+Message-ID: <81d236bb-3913-4eef-bf71-6d17535d6d79@kili.mountain>
+References: <20230423122535.31019-1-U202112064@hust.edu.cn>
+ <6e69b57c-80ae-8b6e-cb5f-9e05da46ecd6@redhat.com>
+ <1484408f-f68e-4354-ab59-56af9cd1ef14@kili.mountain>
+ <b7154e2c-0438-87d1-9edc-7eb1aad40cd1@hust.edu.cn>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9185:EE_|AM8PR04MB7361:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0212e884-27ed-4076-a098-08db4fd1efce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /xP3XL7VT9IZYQOf1n2ogTAWq8DpcPcWJqR6R6Mmc17OA6gjg6UMJZj9o4GoxEDgF8W8tvqtRP/sxf5GlnU84GyWwX+vgeMWRYnzD1aX1NQ4YWqJonqQ0wmXSQL829EL+BTKTIAgJXrRsNYY5duF/pMUVRBw2sMFwmkNWDkw6BW8xSWtW46BAFDcJCYm/DwkW/YYzufcnYTUU6dysrFQ9QmYvVZzIBdPEao9QJ7mIvjkpSFGHsTbI1pN5OUOAHYxtoKp69cZTOPhT/I5kq60KXiFjqU+74Zz8TtFeIwBTkSQrChhmQgbA31jXZLJuPirXD7MyVzwz8wr3THA4JYWRcJY2YYEvOJdIhXpHzOUUTvBQ3L0ap4M/SNRjjNTcsBKl3vsbD9merN7qsxQcrc4y/Qd4IHhGkrvjltYfDRLu8HWpG6G1mJfFp3Qo999Kr6sNfHfdmGO5AS+3FUV3sv1e79KgnZ7Dja6pnMGOxkXkpWzuA5W68xTptVjFPZqwKTqi+e+nZe3UwQk7gdkRSaMQ4Vk309rbFSQYV2Xip6Oy3Gf+032Mzxa228CwA07UYu+6Ohhl2J7rxrlAwNhGuRssF43rP2r40lpHMf6whyMSN6VjemMbQAWBISHZT+hd1Ra
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(136003)(376002)(366004)(451199021)(38100700002)(38350700002)(52116002)(54906003)(110136005)(6486002)(6666004)(316002)(36756003)(478600001)(41300700001)(86362001)(66556008)(66946007)(4326008)(66476007)(55236004)(83380400001)(186003)(8936002)(2616005)(26005)(6506007)(6512007)(5660300002)(8676002)(44832011)(7416002)(2906002)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3DUcvYUliLujvAwxjcn+DaNcUVT+4lBGqtOGJQXuZZkxvqTJXxrXdeoOvVNg?=
- =?us-ascii?Q?+2wVzIcHCGwzXHVywLMStXBntyAuDBgsLnBj2jCSTi/N49Rk/MtcF/heQAEl?=
- =?us-ascii?Q?ZyJmW/n6jbWIZItwVtv8tOh/Hj6VroOVHGZIGFZ1vg5LQ7iuFCu4jn9+aw52?=
- =?us-ascii?Q?kpLDIDuoz3i3VcOvzOyDQaXlYLmbxA7mjNNnDFtvMaivKdet00AFj8yxEC2E?=
- =?us-ascii?Q?QaQz2xWEL6vVm9ygUIfVoZn1AIEKDXHced6bMyaDKL5zPfL+ocFWOEvuAZd2?=
- =?us-ascii?Q?WGQ7GxsrWZx6vP18FQpoWR31Fi5IKTyNDuBo5YJfmY5GYRUFiLNwrKLM/hA1?=
- =?us-ascii?Q?UaN9bRy3Gr25a9l5i7n22XcHuddFxv34e5ff1JAWLCaElunRcU3SdM0c6h5h?=
- =?us-ascii?Q?7F6JURXRPgJxlsyLPr5NkqRXLF+DxbJnaLCpTGfHmd0HRKwiMWMJxANiBSTj?=
- =?us-ascii?Q?srniHVpqe0uhs734pOjONBJEwGBY5YJSxqTmjxr1WeJfewlyfgm6Tjf75JmK?=
- =?us-ascii?Q?VmeN3RZbI9dj1/qHb8xcX5JHXQI88MG4Ha2OgDJBmAwaj4/Dlue5Gvyt7C2i?=
- =?us-ascii?Q?gBkBCIPLW/LDjQHoHG9AASEUyRe0V904zcHM+EL4kCYEBN2mSBY/4NL98VcM?=
- =?us-ascii?Q?5V2ikdo4uqYn7JkcgzSutt0z1QyLXyUgmJrqSKaj4N3klYQazVo8Vo4cuMh7?=
- =?us-ascii?Q?Ffxmx9V1XNncGqSBp0GT22lITPxRjb3rPzpS0i0DwhVUSxYbdlZWBRw5H5AT?=
- =?us-ascii?Q?0NNHqr3lN1YiWkHqIExsY+wArkMH4Gn9pZFM6eRsrMcB5qc7f2RcZdrGf3uf?=
- =?us-ascii?Q?TCxnYVFx+3xXLQ13wGjtPss+xE1WmwiTLzhDVqqrcTFRukLjgqp7mrJRBbIT?=
- =?us-ascii?Q?ud1JRM7qTgYvqMEcLvqqDQg6jTe+15SoRAb7zqrcwgVLMjxF/s5BCKrCDfyJ?=
- =?us-ascii?Q?edc3l0DSYf98SGoSuy8EO9s+Of52uLYCErL9ODAH1SqitxRlDjsK9vKynQrM?=
- =?us-ascii?Q?dEa+jfRyb2nMD929zt09wDt1hddTVwrOXL4GoecICtNbN9zsX11G1iDlYGEs?=
- =?us-ascii?Q?rdI66uA6XZMIearSmVjS+dQC3EdVzFgecO41cdQX/4yoni3jWoQ9L1msc3fW?=
- =?us-ascii?Q?h0E7onyb0gXv5970ILUmXKy90dfecUrz+24JWduWH5BVfIoToDEo189EDTzJ?=
- =?us-ascii?Q?vG2lCSMnLaOCCi3SMMcrRvhpcCjEmVZsc7EyyZHwL+6xSwMooohUGHM8xXbb?=
- =?us-ascii?Q?99uBk3nDPYKyUEdnZTT/deSXfdXFp2cnL8yBGIBWRaNTa8ghGRgXiBg/jZE1?=
- =?us-ascii?Q?i1fqDE7vXuoEvb6NH40etej86ydU5JeTcuQ6SiXjbHkhXJBXXNtPLoIVg1JE?=
- =?us-ascii?Q?zZ6pdJvhT2HE2hyvi5Ktb5QuenzXkbvkh+b9hOFuuZdcm6+oEi0CRnVk68Cp?=
- =?us-ascii?Q?UI1E78z7kJNuNkYCiiT5G+F4HYCX8IbDT/INvo52HgGj3ChVO8fNRpGbtUrg?=
- =?us-ascii?Q?g9nYEOZ7zaV0H1GxmkKTfaAapfCCNc5vyepRI32uCEi9pF0GvkmzyPcE5Ufm?=
- =?us-ascii?Q?Vs4o5/fyqjiU/2lMv4AmLzlrY/uT3eyusyvLExQ4?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0212e884-27ed-4076-a098-08db4fd1efce
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2023 14:38:49.6219
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EqHPxCk8nMy5t4eP3VJABmSNTj8V+0yhdZIa1ehRNRrEb6zoywgu/+ZSAqpHhJlRqGRNOiQskPhS83bZWwlddg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7361
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b7154e2c-0438-87d1-9edc-7eb1aad40cd1@hust.edu.cn>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the current xdp_xmit implementation, if any single frame fails to
-transmit due to insufficient buffer descriptors, the function nevertheless
-reports success in sending all frames. This results in erroneously
-indicating that frames were transmitted when in fact they were dropped.
+On Mon, May 08, 2023 at 09:40:41PM +0800, Dongliang Mu wrote:
+> > > > diff --git a/drivers/scsi/mpt3sas/mpt3sas_debugfs.c b/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
+> > > > index a6ab1db81167..c92e08c130b9 100644
+> > > > --- a/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
+> > > > +++ b/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
+> > > > @@ -99,8 +99,6 @@ static const struct file_operations mpt3sas_debugfs_iocdump_fops = {
+> > > >   void mpt3sas_init_debugfs(void)
+> > > >   {
+> > > >   	mpt3sas_debugfs_root = debugfs_create_dir("mpt3sas", NULL);
+> > > > -	if (!mpt3sas_debugfs_root)
+> > > > -		pr_info("mpt3sas: Cannot create debugfs root\n");
+> > > Hi Jing,
+> > > most drivers just ignore the return value but here the author wanted to
+> > > have the information logged.
+> > > Can you instead of removing the message modify the 'if' condition so it
+> > > suits the author's intention?
+> > 
+> > This code was always just wrong.
+> > 
+> > The history of this is slightly complicated and boring.  These days it's
+> > harmless dead code so I guess it's less bad than before.
+> 
+> Hi Dan and Tomas,
+> 
+> Any conclusion about this patch? The student Jing Xu is not sure about how
+> to revise this patch.
 
-This patch fixes the issue by ensureing the return value properly
-indicates the actual number of frames successfully transmitted, rather than
-potentially reporting success for all frames when some could not transmit.
+The correct fix is to delete the code.
 
-Fixes: 6d6b39f180b8 ("net: fec: add initial XDP support")
-Signed-off-by: Gagandeep Singh <g.singh@nxp.com>
-Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
----
- v4:
-  - resend for net
-  - the tx frame shouldn't be returned when error occurs.
-  - changed the function return values by using the standard errno.
+Debugfs code has error checking built in and was never supposed to be
+checked for errors in normal driver code.
 
- v3:
-  - resend the v2 fix for "net" as the standalone patch.
+Originally, debugfs returned a mix of error pointers and NULL.  In the
+kernel, when you have a mix of error pointers and NULL, then the NULL
+means that the feature has been disabled deliberately.  It's not an
+error, we should not print a message.
 
- v2:
-  - only keep the bug fix part of codes according to Horatiu's comments.
-  - restructure the functions to avoid the forward declaration.
+So a different, correct-ish way to write write debugfs error handling
+was to say:
 
- drivers/net/ethernet/freescale/fec_main.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+	mpt3sas_debugfs_root = debugfs_create_dir("mpt3sas", NULL);
+	if (IS_ERR(mpt3sas_debugfs_root))
+		return PTR_ERR(mpt3sas_debugfs_root);
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 160c1b3525f5..36a3ee304482 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -3798,7 +3798,7 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
- 	entries_free = fec_enet_get_free_txdesc_num(txq);
- 	if (entries_free < MAX_SKB_FRAGS + 1) {
- 		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
--		return NETDEV_TX_OK;
-+		return -EBUSY;
- 	}
+However, in those days, a lot of people didn't understand error pointers
+and thought that "if (IS_ERR_OR_NULL(mpt3sas_debugfs_root)) {" was a
+super secure way to check for errors.  Or they just got it wrong and
+checked for NULL instead of error pointers.  Any of the checks are
+wrong, but if (IS_ERR()) check was at least correct-ish.
 
- 	/* Fill in a Tx ring entry */
-@@ -3812,7 +3812,7 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
- 	dma_addr = dma_map_single(&fep->pdev->dev, frame->data,
- 				  frame->len, DMA_TO_DEVICE);
- 	if (dma_mapping_error(&fep->pdev->dev, dma_addr))
--		return FEC_ENET_XDP_CONSUMED;
-+		return -ENOMEM;
+I dealt with this a lot because of my work with Smatch.  I used to be
+happy if I could persuade someone to write at least correct-ish code,
+but it was pretty painful to try explain this over and over and very few
+people deleted the checks.
 
- 	status |= (BD_ENET_TX_INTR | BD_ENET_TX_LAST);
- 	if (fep->bufdesc_ex)
-@@ -3856,6 +3856,7 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
- 	struct fec_enet_private *fep = netdev_priv(dev);
- 	struct fec_enet_priv_tx_q *txq;
- 	int cpu = smp_processor_id();
-+	unsigned int sent_frames = 0;
- 	struct netdev_queue *nq;
- 	unsigned int queue;
- 	int i;
-@@ -3866,8 +3867,11 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
+Eventually Greg changed the code to never return NULL and mass deleted
+the IS_ERR() checks.  Not returning NULL makes it simpler to understand.
+And it makes it impossible to check in the correct-ish way so it kind of
+forces people to just delete the error handling.
 
- 	__netif_tx_lock(nq, cpu);
-
--	for (i = 0; i < num_frames; i++)
--		fec_enet_txq_xmit_frame(fep, txq, frames[i]);
-+	for (i = 0; i < num_frames; i++) {
-+		if (fec_enet_txq_xmit_frame(fep, txq, frames[i]) != 0)
-+			break;
-+		sent_frames++;
-+	}
-
- 	/* Make sure the update to bdp and tx_skbuff are performed. */
- 	wmb();
-@@ -3877,7 +3881,7 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
-
- 	__netif_tx_unlock(nq);
-
--	return num_frames;
-+	return sent_frames;
- }
-
- static const struct net_device_ops fec_netdev_ops = {
---
-2.34.1
-
+regards,
+dan carpenter
