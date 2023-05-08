@@ -2,93 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFC46FB35E
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3046FB363
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 17:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234307AbjEHPBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 11:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
+        id S234326AbjEHPE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 11:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbjEHPBS (ORCPT
+        with ESMTP id S233864AbjEHPE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 11:01:18 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71918107;
-        Mon,  8 May 2023 08:01:17 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-24ded4b33d7so3174593a91.3;
-        Mon, 08 May 2023 08:01:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683558077; x=1686150077;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BwuEFswjwM39alefSERoo8uDLiBlpgOGT7lCw+29x0M=;
-        b=j3fCI18IFdDkCfixXqPyFMHXC11/ozVPiBVQ+btIvST69Q+FkYsDG2p47TdtUnMmeG
-         xKsaO08e+ltVDvrSRYpPfcrC+8FBG5wMvxpPVNC9PTvJkVQcwbz8cOOtn6l5R4iMqMTd
-         OAZlFN1FhJtYvrzEgg5gXq1hv6oFdZZjzBRqDtjeh6CgZRLH5KFHpQKxrNtftkQpaGXd
-         /VihLM9z0KczXtgyMf25185dswV7PEx85kYC/EHiLsUKn6dp2fPUU7I1IhJznCtnIqN4
-         vQuCwpnnArDsZ5J8Vjn14YMsaIu1k5BtN0AhN8CYPsmX75+j7Y+oNZxK2AkAO3pGVvP6
-         HE6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683558077; x=1686150077;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BwuEFswjwM39alefSERoo8uDLiBlpgOGT7lCw+29x0M=;
-        b=fIJbmwwp7tXyUQJjULKBTwnxIv/BlXzv/p+wPaFZ98H84y7VJOCwyFIYNlGHkOVkgO
-         kAVqxNNvXp0k+0lsZdvPZEcSx9tCIh09stf67l/Z/sIGWqGAeffr5bYm93XG8j3lTsWJ
-         ZvP9iso7xSiuUXdYkeP1ozjBiK8isxbFAQfM1r7lsTXluXH0JQqaAqT2pte+cXWQD1c6
-         9HKHU93R6kEW8V554aH2Iz2GaUqVs9plxoymV6KQMLYgUGw2DXDeqgTSuanjWhXi6nw8
-         z6fMGdALsxOqRJ21KHtam+2sWlJwYMb5NCe6M1d5KqFDlGcf8MXFkziBtr4s04roSLq6
-         CpsA==
-X-Gm-Message-State: AC+VfDzRR4khOhVwiPWPFKXXahOsPsBx6n58jBw2yaPz55C3rzExcgaY
-        FWnwY1YO6inRea7i321rIt8=
-X-Google-Smtp-Source: ACHHUZ7X8/aecoEG354Z34PKQq/LvS3YTbQK2ojSvJMkJzjIifNYcQ5CdvSsG+MI6RNaGU9GZXwVlQ==
-X-Received: by 2002:a17:90a:a798:b0:24e:3c23:9650 with SMTP id f24-20020a17090aa79800b0024e3c239650mr10308663pjq.44.1683558076595;
-        Mon, 08 May 2023 08:01:16 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:4d1:db5a:dbba:cd34])
-        by smtp.gmail.com with ESMTPSA id x15-20020a17090a46cf00b0025069c8a151sm3078260pjg.53.2023.05.08.08.01.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 08:01:15 -0700 (PDT)
-Date:   Mon, 8 May 2023 08:01:12 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Teng Qi <starmiku1207184332@gmail.com>
-Cc:     rydberg@bitmath.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: input: input: Fix possible sleep-in-atomic bug
- in input_alloc_absinfo()
-Message-ID: <ZFkOuOmkIiYuQBpz@google.com>
-References: <20230425074951.1042694-1-starmiku1207184332@gmail.com>
- <ZFBheCRW5fbzVK1V@google.com>
- <CALyQVay-_StW8ZghzF0DUp75UFZvssh-RcPC-DvHPgFLt0np=w@mail.gmail.com>
+        Mon, 8 May 2023 11:04:27 -0400
+Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F129311A
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 08:04:24 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
+        id 93d5ad66-edb1-11ed-a9de-005056bdf889;
+        Mon, 08 May 2023 18:04:10 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Mon, 8 May 2023 18:04:06 +0300
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+Message-ID: <ZFkPZhF8QqScXAmH@surfacebook>
+References: <20230426071045.20753-1-zhuyinbo@loongson.cn>
+ <20230426071045.20753-3-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALyQVay-_StW8ZghzF0DUp75UFZvssh-RcPC-DvHPgFLt0np=w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230426071045.20753-3-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 03:13:19PM +0800, Teng Qi wrote:
-> Thank you for an alternative solution. I will take a closer look at the
-> patch
-> you CCed me on.
-> However, I am still confused about why this cannot happen in practice.
-> Could you provide more information?
+Wed, Apr 26, 2023 at 03:10:45PM +0800, Yinbo Zhu kirjoitti:
+> This bus driver supports the Loongson spi hardware controller in the
+> Loongson platforms and supports to use DTS and PCI framework to
+> register spi device resources.
 
-The only call to input_abs_set_val() in the event processing code that
-is running in an atomic context (under spinlock) is done for
-ABS_MT_SLOT, and the call is protected by checks ensuring that
-multitouch was set up properly for the device. This includes allocating
-absinfo. Therefore while the code may trip up static analyzers the
-problem will not happen in practice with the current code.
+SPI
 
-Thanks.
+...
+
+> +config SPI_LOONGSON_CORE
+> +	tristate "Loongson SPI Controller Core Driver Support"
+
+Does it need to be visible to the user?
+
+> +	depends on LOONGARCH || COMPILE_TEST
+> +	help
+> +	  This core driver supports the Loongson spi hardware controller in
+> +	  the Loongson platforms.
+> +	  Say Y or M here if you want to use the SPI controller on
+> +	  Loongson platform.
+
+...
+
+> +config SPI_LOONGSON_PLATFORM
+> +	tristate "Loongson SPI Controller Platform Driver Support"
+> +	select SPI_LOONGSON_CORE
+> +	depends on OF && (LOONGARCH || COMPILE_TEST)
+
+Is it really dependent to OF? Why?
+
+> +	help
+> +	  This bus driver supports the Loongson spi hardware controller in
+> +	  the Loongson platforms and supports to use DTS framework to
+> +	  register spi device resources.
+> +	  Say Y or M here if you want to use the SPI controller on
+> +	  Loongson platform.
+
+...
+
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/kernel.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/delay.h>
+> +#include <linux/err.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/clk.h>
+> +#include <linux/io.h>
+
+Ordered?
+
+...
+
+> +	if (loongson_spi->mode & SPI_NO_CS)
+> +		loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SFCS_REG, 0);
+
+Missing {}
+
+> +	else {
+> +		cs = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SFCS_REG)
+> +					   & ~(0x11 << spi->chip_select);
+> +		loongson_spi_write_reg(loongson_spi,
+> +				       LOONGSON_SPI_SFCS_REG,
+> +				       (val ? (0x11 << spi->chip_select) :
+> +				       (0x1 << spi->chip_select)) | cs);
+
+Too many parentheses.
+
+> +	}
+
+...
+
+> +	const char rdiv[12] = {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
+
+Oh, why?!
+
+...
+
+> +	if ((hz && loongson_spi->hz != hz) ||
+> +	    ((spi->mode ^ loongson_spi->mode) & (SPI_CPOL | SPI_CPHA))) {
+> +		div = DIV_ROUND_UP_ULL(loongson_spi->clk_rate, hz);
+
+> +		if (div < 2)
+> +			div = 2;
+> +		if (div > 4096)
+> +			div = 4096;
+
+NIH clamp_val()
+
+> +		bit = fls(div) - 1;
+> +		if ((1<<bit) == div)
+> +			bit--;
+> +		div_tmp = rdiv[bit];
+
+I believe this can be optimized.
+
+> +		dev_dbg(&spi->dev, "clk_rate = %llu hz = %d div_tmp = %d bit = %d\n",
+> +			loongson_spi->clk_rate, hz, div_tmp, bit);
+> +
+> +		loongson_spi->hz = hz;
+> +		loongson_spi->spcr = div_tmp & 3;
+> +		loongson_spi->sper = (div_tmp >> 2) & 3;
+> +		val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
+> +		val &= ~0xc;
+
+GENMASK()
+
+> +		if (spi->mode & SPI_CPOL)
+> +			val |= 8;
+
+BIT()
+
+> +		if (spi->mode & SPI_CPHA)
+> +			val |= 4;
+
+> +		loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPCR_REG, (val & ~3) |
+> +				       loongson_spi->spcr);
+> +		val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPER_REG);
+> +		loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPER_REG, (val & ~3) |
+> +				       loongson_spi->sper);
+> +		loongson_spi->mode &= SPI_NO_CS;
+> +		loongson_spi->mode |= spi->mode;
+> +	}
+
+...
+
+> +		while ((loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPSR_REG) & 0x1) == 1 &&
+> +			time_after(timeout, jiffies))
+> +			cpu_relax();
+
+iopoll.h has a suitable macro for this.
+
+...
+
+> +		while ((loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPSR_REG) & 0x1) == 1 &&
+> +			time_after(timeout, jiffies))
+> +			cpu_relax();
+
+Ditto.
+
+...
+
+> +	master = devm_spi_alloc_master(dev, sizeof(struct loongson_spi));
+> +	if (master == NULL) {
+
+> +		dev_info(dev, "master allocation failed\n");
+
+We do not issue a message for ENOMEM
+
+> +		return -ENOMEM;
+> +	}
+
+...
+
+> +	master->dev.of_node = of_node_get(dev->of_node);
+
+device_set_node()
+
+...
+
+> +	spi->base = devm_ioremap(dev, res->start, resource_size(res));
+
+Why not devm_ioremap_resource()?
+
+
+> +	if (spi->base == NULL) {
+> +		dev_err(dev, "cannot map io\n");
+> +		return -ENXIO;
+
+	return dev_err_probe();
+
+> +	}
+
+...
+
+> +	clk = devm_clk_get(dev, NULL);
+
+Can we hav
+
+> +	if (!IS_ERR(clk))
+
+Use _optional variant above instead of this.
+Do not forget about deferred probe.
+
+> +		spi->clk_rate = clk_get_rate(clk);
+
+...
+
+> +	if (of_get_property(dev->of_node, "spi-nocs", NULL))
+> +		spi->mode |= SPI_NO_CS;
+
+Don't we have something in the SPI core to handle this in a generic way?
+
+...
+
+
+> +EXPORT_SYMBOL_GPL(loongson_spi_init_master);
+
+Please, use _NS variant.
+
+...
+
+> +MODULE_DESCRIPTION("Loongson spi core driver");
+
+SPI
+
+...
+
+> +	struct resource res[2];
+> +	struct device *dev = &pdev->dev;
+> +
+> +	ret = pci_enable_device(pdev);
+
+pcim_enable_device()
+
+> +	if (ret < 0) {
+> +		dev_err(dev, "cannot enable pci device\n");
+> +		goto err_out;
+
+	return dev_err_probe();
+
+> +	}
+> +
+> +	ret = pci_request_region(pdev, 0, "loongson-spi io");
+> +	if (ret < 0) {
+> +		dev_err(dev, "cannot request region 0.\n");
+> +		goto err_out;
+> +	}
+> +
+> +	res[0].start = pci_resource_start(pdev, 0);
+> +	res[0].end = pci_resource_end(pdev, 0);
+
+What's wrong with pcim_iomap_regions()?
+
+...
+
+> +	ret = pci_read_config_byte(pdev, PCI_INTERRUPT_LINE, &v8);
+
+What?!
+
+What's wrong with pci_alloc_irq_vectors()?
+
+> +
+> +	if (ret == PCIBIOS_SUCCESSFUL) {
+> +		res[1].start = v8;
+> +		res[1].end = v8;
+> +	}
+> +
+> +	ret = loongson_spi_init_master(dev, res);
+
+Why not passing the remapped address and IRQ number instead?
+
+> +	if (ret)
+> +		dev_err(dev, "failed to initialize master\n");
+
+	return dev_err_probe();
+
+> +
+> +err_out:
+
+Completely useless. Return in-line.
+
+> +	return ret;
+> +}
+
+...
+
+> +static struct pci_device_id loongson_spi_devices[] = {
+> +	{PCI_DEVICE(0x14, 0x7a0b)},
+> +	{PCI_DEVICE(0x14, 0x7a1b)},
+
+Can you define vendor ID in pci_ids.h?
+
+
+> +	{0, 0, 0, 0, 0, 0, 0}
+
+What is this? Why {} is not working for you?
+
+> +};
+
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (res == NULL) {
+
+Why not using devm_platform_ioremap_resource()?
+
+> +		dev_err(dev, "cannot get io resource memory\n");
+> +		return -ENOENT;
+
+	return dev_err_probe();
+
+> +	}
+> +
+> +	ret = loongson_spi_init_master(dev, res);
+> +	if (ret)
+> +		dev_err(dev, "failed to initialize master\n");
+
+Ditto.
+
+...
+
+> +static const struct of_device_id loongson_spi_id_table[] = {
+> +	{ .compatible = "loongson,ls2k-spi", },
+
+Inned comma is redundant.
+
+> +	{ }
+> +};
+
+...
+
+> +#ifndef __LINUX_SPI_LOONGSON_H
+> +#define __LINUX_SPI_LOONGSON_H
+
+Missing bits.h
+Missing types.h
+Missing declaration for msecs_to_jiffies()
+Missing forward declarations for struct spi_master and struct device.
+MIssing declaration for dev_pm_ops.
+
+
+> +#define	LOONGSON_SPI_SPCR_REG	0x00
+> +#define	LOONGSON_SPI_SPSR_REG	0x01
+> +#define	LOONGSON_SPI_FIFO_REG	0x02
+> +#define	LOONGSON_SPI_SPER_REG	0x03
+> +#define	LOONGSON_SPI_PARA_REG	0x04
+> +#define	LOONGSON_SPI_SFCS_REG	0x05
+> +#define	LOONGSON_SPI_TIMI_REG	0x06
+> +
+> +/* Bits definition for Loongson SPI register */
+> +#define	LOONGSON_SPI_PARA_MEM_EN	BIT(0)
+> +#define	LOONGSON_SPI_SPSR_SPIF	BIT(7)
+> +#define	LOONGSON_SPI_SPSR_WCOL	BIT(6)
+> +#define	LOONGSON_SPI_SPCR_SPE	BIT(6)
+> +
+> +#define SPI_COMPLETION_TIMEOUT	msecs_to_jiffies(2000)
+> +
+> +struct loongson_spi {
+> +	struct	spi_master	*master;
+> +	void __iomem		*base;
+> +	int			cs_active;
+> +	unsigned int		hz;
+> +	unsigned char		spcr;
+> +	unsigned char		sper;
+> +	unsigned char		spsr;
+> +	unsigned char		para;
+> +	unsigned char		sfcs;
+> +	unsigned char		timi;
+> +	unsigned int		mode;
+> +	u64			clk_rate;
+> +};
+> +
+> +extern int loongson_spi_init_master(struct device *dev, struct resource *res);
+
+No extern for the function declarations.
+
+> +extern const struct dev_pm_ops loongson_spi_dev_pm_ops;
+
+> +#endif /* __LINUX_SPI_LOONGSON_H */
 
 -- 
-Dmitry
+With Best Regards,
+Andy Shevchenko
+
+
