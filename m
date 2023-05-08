@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40356FB734
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC346FB73B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 May 2023 21:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233678AbjEHToy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 15:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
+        id S233894AbjEHTpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 15:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233810AbjEHToT (ORCPT
+        with ESMTP id S232779AbjEHTo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 15:44:19 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6627AA2;
-        Mon,  8 May 2023 12:43:51 -0700 (PDT)
-Message-ID: <20230508185218.013044883@linutronix.de>
+        Mon, 8 May 2023 15:44:27 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEE361BD;
+        Mon,  8 May 2023 12:43:56 -0700 (PDT)
+Message-ID: <20230508185218.070008578@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683575029;
+        s=2020; t=1683575031;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=BOT3gWwQF7O/1lZ9KsTIy5NWCf87k83rCpCfGL29bzE=;
-        b=Vtkw853T/g2LgebBW2u5NvRyk/o8vkE9DVNbCjOgfsv8NQAdQ+PiRmVE3YRjVR9zyaPDpW
-        A0CpqtisqwiF90SMSTT3dgMD9wfCYwYlyM9zgdWNPZBK6ove/DWKBEfTIBavRYG3mLpwGW
-        gj5/U4hTXI1gfU5gMpT9O+3nSrnlgwHXON5jO7YTMsIZWUpGn1lUA7aXp/3y1CXCUYBa6o
-        4saDTE36mpdN94ZK/rdI32a5+qd4XpBBQ9/jSvxCD81AEctXSXlca21oVxip2aNe/i6362
-        k8ifgTHs2omVUbliI/3cpRSjuph/X6qOreGlkue5SVagGH6iBXC3i5IxD3kMEg==
+         references:references; bh=DpwezFnftgf/NwnjaJYg18wbFoZRAK6UuAmlsWmBJR4=;
+        b=i1TFZjgCtddkAakfxkISXw55XmrEJvUVPuQTFOFgS+oTTKVcNGhuqDExhfxWr3kSGXHZ9h
+        Q+ujpZNUZEK3gioXPoyRZ+NzfuV4aL+sQupa7bIw509g00exAtAYyYGseE5+d40Ye/9iSn
+        kyYz5rdl/ounEY4O9wO7ubw04Cyxxy6DTnoJB2oO2RietlbB/OitKYLkOQ8iHZAyHbfy1W
+        bv+Q2OEIWcacTVCd+tTm0xqwTwSoZ8e7RLxQJArbSe8S99eF/7jfVItjSmrC275mG9pAip
+        lscg+orwTig3a1iTNLS2jmVzL558VHIKrCz5q1WCRCIfLCf1r3Xa3vOeSE+ulQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683575029;
+        s=2020e; t=1683575031;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=BOT3gWwQF7O/1lZ9KsTIy5NWCf87k83rCpCfGL29bzE=;
-        b=z0rzXlV5+Y57E7wE/hgSxsOIOaBBLImivYo4M54wyRCUx4IHVjFSQS7chfIs3CglORkucG
-        Op/Ji4IG3mTcrvAw==
+         references:references; bh=DpwezFnftgf/NwnjaJYg18wbFoZRAK6UuAmlsWmBJR4=;
+        b=p4MipbJWjxb6AbwUz07UF9If0ACyXBwES1Mx0lUk9qi+e9Q63raPnhjjqmne+YvfK1SUP6
+        eRiNkcZ4g3zeVxBg==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
@@ -67,12 +67,11 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: [patch v3 14/36] [patch V2 14/38] cpu/hotplug: Rework sparse_irq
- locking in bringup_cpu()
+Subject: [patch v3 15/36] x86/smpboot: Remove wait for cpu_online()
 References: <20230508181633.089804905@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Mon,  8 May 2023 21:43:49 +0200 (CEST)
+Date:   Mon,  8 May 2023 21:43:51 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -85,74 +84,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-There is no harm to hold sparse_irq lock until the upcoming CPU completes
-in cpuhp_online_idle(). This allows to remove cpu_online() synchronization
-from architecture code.
+Now that the core code drops sparse_irq_lock after the idle thread
+synchronized, it's pointless to wait for the AP to mark itself online.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
 
 
 ---
- kernel/cpu.c |   28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ arch/x86/kernel/smpboot.c |   26 ++------------------------
+ 1 file changed, 2 insertions(+), 24 deletions(-)
 ---
 
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -558,7 +558,7 @@ static int cpuhp_kick_ap(int cpu, struct
- 	return ret;
- }
- 
--static int bringup_wait_for_ap(unsigned int cpu)
-+static int bringup_wait_for_ap_online(unsigned int cpu)
- {
- 	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
- 
-@@ -579,15 +579,12 @@ static int bringup_wait_for_ap(unsigned
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -281,7 +281,6 @@ static void notrace start_secondary(void
+ 	 * half valid vector space.
  	 */
- 	if (!cpu_smt_allowed(cpu))
- 		return -ECANCELED;
--
--	if (st->target <= CPUHP_AP_ONLINE_IDLE)
--		return 0;
--
--	return cpuhp_kick_ap(cpu, st, st->target);
-+	return 0;
+ 	lock_vector_lock();
+-	/* Sync point with do_wait_cpu_online() */
+ 	set_cpu_online(smp_processor_id(), true);
+ 	lapic_online();
+ 	unlock_vector_lock();
+@@ -1110,20 +1109,6 @@ static int wait_cpu_initialized(unsigned
+ 	return 0;
  }
  
- static int bringup_cpu(unsigned int cpu)
+-/*
+- * Bringup step three: Wait for the target AP to reach set_cpu_online() in
+- * start_secondary().
+- */
+-static void wait_cpu_online(unsigned int cpu)
+-{
+-	/*
+-	 * Wait for the AP to mark itself online, so the core caller
+-	 * can drop sparse_irq_lock.
+-	 */
+-	while (!cpu_online(cpu))
+-		schedule();
+-}
+-
+ static int native_kick_ap(unsigned int cpu, struct task_struct *tidle)
  {
-+	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
- 	struct task_struct *idle = idle_thread_get(cpu);
+ 	int apicid = apic->cpu_present_to_apicid(cpu);
+@@ -1170,16 +1155,9 @@ int native_cpu_up(unsigned int cpu, stru
  	int ret;
  
-@@ -606,10 +603,23 @@ static int bringup_cpu(unsigned int cpu)
+ 	ret = native_kick_ap(cpu, tidle);
+-	if (ret)
+-		goto out;
+-
+-	ret = wait_cpu_initialized(cpu);
+-	if (ret)
+-		goto out;
+-
+-	wait_cpu_online(cpu);
++	if (!ret)
++		ret = wait_cpu_initialized(cpu);
  
- 	/* Arch-specific enabling code. */
- 	ret = __cpu_up(cpu, idle);
--	irq_unlock_sparse();
- 	if (ret)
--		return ret;
--	return bringup_wait_for_ap(cpu);
-+		goto out_unlock;
-+
-+	ret = bringup_wait_for_ap_online(cpu);
-+	if (ret)
-+		goto out_unlock;
-+
-+	irq_unlock_sparse();
-+
-+	if (st->target <= CPUHP_AP_ONLINE_IDLE)
-+		return 0;
-+
-+	return cpuhp_kick_ap(cpu, st, st->target);
-+
-+out_unlock:
-+	irq_unlock_sparse();
-+	return ret;
- }
- 
- static int finish_cpu(unsigned int cpu)
+-out:
+ 	/* Cleanup possible dangling ends... */
+ 	if (x86_platform.legacy.warm_reset)
+ 		smpboot_restore_warm_reset_vector();
 
 
