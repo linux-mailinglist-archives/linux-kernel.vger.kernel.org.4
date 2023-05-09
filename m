@@ -2,59 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B76C6FCD8C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F27016FCD92
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjEISQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 14:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
+        id S233992AbjEISRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 14:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjEISQk (ORCPT
+        with ESMTP id S230078AbjEISRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 14:16:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79252120;
-        Tue,  9 May 2023 11:16:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1066263638;
-        Tue,  9 May 2023 18:16:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04921C433EF;
-        Tue,  9 May 2023 18:16:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683656198;
-        bh=jfcOfENDXVo1zvtGdJGG+4yuDzgrOfrlQMEP4qdEXh4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fhs00o+RG1r5a6r5BnnkBobooevjXBIMZW+Eh7OIzQboi9Q+PqpKnAM9vDmfKFFqc
-         m3I1neHHeUuaDYjuyrQ8dgpg1qUKxTBNF27KArWKIZZLsJActk0us99JLQUhHk3KHi
-         BPVyvzK7ZR2IRjCjSnrqy6P/442ZQzqswtCHb1ADc9ZCrgtyfyKlePGP55Tne14dQu
-         jZ2bbDeiLkKTiBa/45R8T9RiHcruXU30cKEIwBIQ3QDpQcnpvQXZ2SKNFVe6CX2mLC
-         z+briRaH/kFMsX4rfYMsfolu1zXtv34ge94D0WBfDIL65R1Z8pP/I/QuJ5cqNA/3d7
-         IzZh5/jCqShWg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 9E46F403B5; Tue,  9 May 2023 15:16:35 -0300 (-03)
-Date:   Tue, 9 May 2023 15:16:35 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Thomas Richter <tmricht@linux.ibm.com>, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        leo.yan@linaro.org, svens@linux.ibm.com, gor@linux.ibm.com,
-        sumanthk@linux.ibm.com, hca@linux.ibm.com
-Subject: Re: [PATCH] perf/test: reduce run time of perf test Test java symbol
-Message-ID: <ZFqOAwM2mgvnExnC@kernel.org>
-References: <20230509131847.835974-1-tmricht@linux.ibm.com>
- <CAP-5=fVC1bAMk5gOGSXi0sHdetdLHGT2tqW43dxTTyJ3jRz8QA@mail.gmail.com>
- <ZFqMsjJg00zmQyJG@kernel.org>
+        Tue, 9 May 2023 14:17:34 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F1BE56;
+        Tue,  9 May 2023 11:17:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683656254; x=1715192254;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=+zof/M4BrnkXcaqZnvlv0ayjo/OkY4a8oPbzI+2bvgw=;
+  b=UDTMJIWGf1W1UyvCQljrRYawh5S2hiaz+TBGHbi66PHzYnEANYs2hH6F
+   6xaEiQTkOndGuWl66DXX2hAdb5lyHl2J6gI9Xvvf5yfZUAObH6TtPGOW0
+   3d7dPXWPzeL7idk3oI0vxxxNOP9ES01Lj9EHPmifFBdIy8Qz4mNhkKz5P
+   r3hH05KSFvC50tO4F7jW0a57icCOtae+lM/Pmd5VnNGua7QEbTuCV882F
+   0voERed0oS3stzmnrCQExRIi/oi5hdb1xX6TTpgt1sGc0J3uS5nuASgWl
+   s605rWXhK1dm3OiUOzZr2+QBKo0mZGAT3HhnYNCHe5PHYzcPBw0WU128z
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="348848993"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="348848993"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 11:17:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="763958071"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="763958071"
+Received: from acyuen-mobl4.amr.corp.intel.com ([10.212.1.251])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 11:17:30 -0700
+Message-ID: <16d1abf15c99929c794f32d750b358d1c0981c18.camel@linux.intel.com>
+Subject: Re: [PATCH v4 01/15] dmaengine: idxd: add wq driver name support
+ for accel-config user tool
+From:   Tom Zanussi <tom.zanussi@linux.intel.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>, herbert@gondor.apana.org.au,
+        davem@davemloft.net, vkoul@kernel.org
+Cc:     dave.jiang@intel.com, tony.luck@intel.com,
+        wajdi.k.feghali@intel.com, james.guilford@intel.com,
+        kanchana.p.sridhar@intel.com, giovanni.cabiddu@intel.com,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Date:   Tue, 09 May 2023 13:17:29 -0500
+In-Reply-To: <d9bad7c2-14d7-7f06-da50-81069853babd@intel.com>
+References: <cover.1683573703.git.zanussi@kernel.org>
+         <a874741f266f57502d671843b9d4a9b563c372e3.1683573703.git.zanussi@kernel.org>
+         <d9bad7c2-14d7-7f06-da50-81069853babd@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZFqMsjJg00zmQyJG@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,22 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, May 09, 2023 at 03:10:58PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > On Tue, May 9, 2023 at 6:19 AM Thomas Richter <tmricht@linux.ibm.com> wrote:
-> > > -if ! perf inject -i $PERF_DATA -o $PERF_INJ_DATA -j; then
-> > > +if ! DEBUGINFOD_URLS='' perf inject -i $PERF_DATA -o $PERF_INJ_DATA -j; then
- 
-> I noticed this delay, It is good that someone worked on rootcausing this
-> excessive delay, thanks Thomas.
-> 
-> I'll test it now.
+T24gVHVlLCAyMDIzLTA1LTA5IGF0IDEwOjQ4IC0wNzAwLCBGZW5naHVhIFl1IHdyb3RlOgo+IEhp
+LCBUb20sCj4gCj4gT24gNS84LzIzIDEzOjA3LCBUb20gWmFudXNzaSB3cm90ZToKPiA+IEZyb206
+IERhdmUgSmlhbmcgPGRhdmUuamlhbmdAaW50ZWwuY29tPgo+ID4gCj4gPiBXaXRoIHRoZSBwb3Nz
+aWJpbGl0eSBvZiBtdWx0aXBsZSB3cSBkcml2ZXJzIHRoYXQgY2FuIGJlIGJvdW5kIHRvCj4gPiB0
+aGUgd3EsCj4gPiB0aGUgdXNlciBjb25maWcgdG9vbCBhY2NlbC1jb25maWcgbmVlZHMgYSB3YXkg
+dG8ga25vdyB3aGljaCB3cQo+ID4gZHJpdmVyIHRvCj4gPiBiaW5kIHRvIHRoZSB3cS4gSW50cm9k
+dWNlIHBlciB3cSBkcml2ZXJfbmFtZSBzeXNmcyBhdHRyaWJ1dGUgd2hlcmUKPiA+IHRoZSB1c2Vy
+Cj4gPiBjYW4gaW5kaWNhdGUgdGhlIGRyaXZlciB0byBiZSBib3VuZCB0byB0aGUgd3EuIFRoaXMg
+YWxsb3dzIGFjY2VsLQo+ID4gY29uZmlnIHRvCj4gPiBqdXN0IGJpbmQgdG8gdGhlIGRyaXZlciB1
+c2luZyB3cS0+ZHJpdmVyX25hbWUuCj4gPiAKPiA+IFNpZ25lZC1vZmYtYnk6IERhdmUgSmlhbmcg
+PGRhdmUuamlhbmdAaW50ZWwuY29tPgo+ID4gU2lnbmVkLW9mZi1ieTogVG9tIFphbnVzc2kgPHRv
+bS56YW51c3NpQGxpbnV4LmludGVsLmNvbT4KPiA+IC0tLQo+ID4gwqAgLi4uL0FCSS9zdGFibGUv
+c3lzZnMtZHJpdmVyLWRtYS1pZHhkwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCA2ICsrKysKPiA+IMKg
+IGRyaXZlcnMvZG1hL2lkeGQvY2Rldi5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgfMKgIDggKysrKysrCj4gPiDCoCBkcml2ZXJzL2RtYS9pZHhkL2RtYS5jwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgNiArKysrCj4g
+PiDCoCBkcml2ZXJzL2RtYS9pZHhkL2lkeGQuaMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIHzCoCA5ICsrKysrKwo+ID4gwqAgZHJpdmVycy9kbWEvaWR4ZC9zeXNm
+cy5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMjgKPiA+ICsr
+KysrKysrKysrKysrKysrKysKPiA+IMKgIGluY2x1ZGUvdWFwaS9saW51eC9pZHhkLmjCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCAxICsKPiA+IMKgIDYgZmlsZXMg
+Y2hhbmdlZCwgNTggaW5zZXJ0aW9ucygrKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRh
+dGlvbi9BQkkvc3RhYmxlL3N5c2ZzLWRyaXZlci1kbWEtaWR4ZAo+ID4gYi9Eb2N1bWVudGF0aW9u
+L0FCSS9zdGFibGUvc3lzZnMtZHJpdmVyLWRtYS1pZHhkCj4gPiBpbmRleCAzYmVjYzlhODJiZGYu
+LmQ1ZGFhZTQ0MmZlNyAxMDA2NDQKPiA+IC0tLSBhL0RvY3VtZW50YXRpb24vQUJJL3N0YWJsZS9z
+eXNmcy1kcml2ZXItZG1hLWlkeGQKPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vQUJJL3N0YWJsZS9z
+eXNmcy1kcml2ZXItZG1hLWlkeGQKPiA+IEBAIC0yNDQsNiArMjQ0LDEyIEBAIERlc2NyaXB0aW9u
+OsKgwqDCoMKgwqDCoMKgU2hvd3MgdGhlIG9wZXJhdGlvbgo+ID4gY2FwYWJpbGl0eSBiaXRzIGRp
+c3BsYXllZCBpbiBiaXRtYXAgZm9ybWF0Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGNvcnJlbGF0ZXMgdG8gdGhlIG9wZXJhdGlvbnMgYWxsb3dlZC4gSXQncyB2aXNpYmxlCj4g
+PiBvbmx5Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG9uIHBsYXRmb3JtcyB0
+aGF0IHN1cHBvcnQgdGhlIGNhcGFiaWxpdHkuCj4gPiDCoCAKPiA+ICtXaGF0OsKgwqDCoMKgwqDC
+oMKgwqDCoMKgL3N5cy9idXMvZHNhL2RldmljZXMvd3E8bT4uPG4+L2RyaXZlcl9uYW1lCj4gPiAr
+RGF0ZTrCoMKgwqDCoMKgwqDCoMKgwqDCoE1hciAyNywgMjAyMyA+ICtLZXJuZWxWZXJzaW9uOsKg
+wqA2LjQuMAo+IAo+IE5lZWQgdG8gYmUgY2hhbmdlZCB0byA2LjUuMCBub3c6KQoKWWVzLCB3aWxs
+IGNoYW5nZS4KCj4gCj4gQWZ0ZXIgZml4aW5nIHRoZSBLZXJuZWxWZXJzaW9uLAo+IAo+IFJldmll
+d2VkLWJ5OiBGZW5naHVhIFl1IDxmZW5naHVhLnl1QGludGVsLmNvbT4KPiAKClRoYW5rcyBmb3Ig
+eW91ciByZXZpZXcocykuCgpUb20KCj4gVGhhbmtzLgo+IAo+IC1GZW5naHVhCgo=
 
-gdb asks the user if debuginfod should be used, perf is doing this if
-the system is configured for debuginfod queries via a systemwide config,
-what is best? Unsure, but since the test passes, i.e. the expected
-symbols are found in the 'perf report' output, avoiding debuginfod
-queries seems to fit the bill,
-
-Applied,
-
-- Arnaldo
