@@ -2,104 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F466FD18B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB11E6FD18F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235241AbjEIVi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 17:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
+        id S235916AbjEIVlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 17:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235006AbjEIVix (ORCPT
+        with ESMTP id S235626AbjEIVlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 17:38:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81421BCC
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 14:37:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683668278;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AS+fKVGuPLb0PNBw40EVQclmhLUg9m8EqlylUBoJ6/4=;
-        b=i6OJWNtSV7dUOHbCWwCaLo0EIKZGy1faXPIFTvdfYPxNNVm2hOdSkDq+qQhp5DP86LkMsx
-        WhgMxOFb8h8MuKScG1F0Wyi4PjZiPKOZFLftLV6GYolLcrKetqo2dEAt18yMpe9KxqGWVH
-        Vqy93JlZr1TzgM3jv7LdbsNwLHG8a0A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-540-lCcqVZ60OkWva9VAe79vjw-1; Tue, 09 May 2023 17:37:56 -0400
-X-MC-Unique: lCcqVZ60OkWva9VAe79vjw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8CCF10115E0;
-        Tue,  9 May 2023 21:37:55 +0000 (UTC)
-Received: from [10.22.16.30] (unknown [10.22.16.30])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 97775C15BA0;
-        Tue,  9 May 2023 21:37:55 +0000 (UTC)
-Message-ID: <a7fcd53a-7680-49c5-dd93-489d75126c8d@redhat.com>
-Date:   Tue, 9 May 2023 17:37:55 -0400
+        Tue, 9 May 2023 17:41:06 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EFF83;
+        Tue,  9 May 2023 14:41:05 -0700 (PDT)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 833BDCECA8;
+        Tue,  9 May 2023 21:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1683668463; bh=gsYPDBwIud9iyVw2mn3lgwZmX4+b0Pkui6afxVuIAkE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=wfTf1Hp/uDeEtmiNGTNwffR8LgKAqpcApdi6SjbAHH2NDKLXRT0tGDxiP4d0WMAVw
+         au9Euc+w41Hruk65kpbH8X5hCOL3pGvG6a9C5Yr1d1cMXq8zweit/eTksj2D32VpGx
+         npqoMnPD2Ra3Y+PBz/p9p2C6cL4lGMzj6cbn0Wcg=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Brian Masney <masneyb@onstation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 3/6] soc: qcom: ocmem: make iface clock optional
+Date:   Tue, 09 May 2023 23:41:02 +0200
+Message-ID: <4094905.iIbC2pHGDl@z3ntu.xyz>
+In-Reply-To: <CAA8EJpo_x=q8yBSUV=owYvQqD30YQbhU51iKHUjr-_doLk6HPw@mail.gmail.com>
+References: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
+ <3479852.e9J7NaK4W3@z3ntu.xyz>
+ <CAA8EJpo_x=q8yBSUV=owYvQqD30YQbhU51iKHUjr-_doLk6HPw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 03/32] locking/lockdep: lockdep_set_no_check_recursion()
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-4-kent.overstreet@linux.dev>
- <20230509193147.GC2148518@hirez.programming.kicks-ass.net>
- <ZFqqsyDpatgb77Vh@moria.home.lan>
- <d5b65b01-62a9-e483-dea8-5e2bb65be278@redhat.com>
- <ZFquoxJn1RzWhRiI@moria.home.lan>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <ZFquoxJn1RzWhRiI@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/23 16:35, Kent Overstreet wrote:
-> On Tue, May 09, 2023 at 04:27:46PM -0400, Waiman Long wrote:
->> On 5/9/23 16:18, Kent Overstreet wrote:
->>> On Tue, May 09, 2023 at 09:31:47PM +0200, Peter Zijlstra wrote:
->>>> On Tue, May 09, 2023 at 12:56:28PM -0400, Kent Overstreet wrote:
->>>>> This adds a method to tell lockdep not to check lock ordering within a
->>>>> lock class - but to still check lock ordering w.r.t. other lock types.
->>>>>
->>>>> This is for bcachefs, where for btree node locks we have our own
->>>>> deadlock avoidance strategy w.r.t. other btree node locks (cycle
->>>>> detection), but we still want lockdep to check lock ordering w.r.t.
->>>>> other lock types.
->>>>>
->>>> ISTR you had a much nicer version of this where you gave a custom order
->>>> function -- what happend to that?
->>> Actually, I spoke too soon; this patch and the other series with the
->>> comparison function solve different problems.
->>>
->>> For bcachefs btree node locks, we don't have a defined lock ordering at
->>> all - we do full runtime cycle detection, so we don't want lockdep
->>> checking for self deadlock because we're handling that but we _do_ want
->>> lockdep checking lock ordering of btree node locks w.r.t. other locks in
->>> the system.
->> Maybe you can use lock_set_novalidate_class() instead.
-> No, we want that to go away, this is the replacement.
+On Dienstag, 9. Mai 2023 19:08:50 CEST Dmitry Baryshkov wrote:
+> On Tue, 9 May 2023 at 19:47, Luca Weiss <luca@z3ntu.xyz> wrote:
+> > On Montag, 8. Mai 2023 13:34:23 CEST Dmitry Baryshkov wrote:
+> > > On 07/05/2023 12:12, Luca Weiss wrote:
+> > > > Some platforms such as msm8226 do not have an iface clk. Since
+> > > > clk_bulk
+> > > > APIs don't offer to a way to treat some clocks as optional simply add
+> > > > core_clk and iface_clk members to our drvdata.
+> > > 
+> > > What about using devm_clk_bulk_get_optional()? I think it would be
+> > > simpler this way.
+> > 
+> > Using that function both clocks would be optional which may or may not be
+> > a
+> > bad idea. Not sure how much binding yaml and/or driver should try and
+> > catch
+> > bad usages of the driver.
+> 
+> The generic rule is that we should not validate the DT unless required
+> (e.g. because of the possibility of legacy DT which used other
+> bindings or contained less information).
 
-OK, you can mention that in the commit log then.
+Got it.
 
-Cheers,
-Longman
+But since in this driver we use one of the clocks for setting clock rate I'd
+keep using the two separate struct clk as I've done in this patch if you don't
+mind too much.
+
+Regards
+Luca
+
+> 
+> > But honestly the current usage of the bulk API seems a bit clunky, we have
+> > a static array of clocks that we use (not in struct ocmem for some
+> > reason) and then we refer to the core clock by index? Feels better to
+> > just have the two clock references in the device struct and then we're
+> > good.
+> > 
+> > Let me know.
+> > 
+> > Regards
+> > Luca
+> > 
+> > > > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> > > > ---
+> > > > 
+> > > >   drivers/soc/qcom/ocmem.c | 42
+> > > >   ++++++++++++++++++++++++------------------
+> > > >   1 file changed, 24 insertions(+), 18 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
+> > > > index a11a955a1327..6235065d3bc9 100644
+> > > > --- a/drivers/soc/qcom/ocmem.c
+> > > > +++ b/drivers/soc/qcom/ocmem.c
+> > > > @@ -54,6 +54,8 @@ struct ocmem {
+> > > > 
+> > > >     const struct ocmem_config *config;
+> > > >     struct resource *memory;
+> > > >     void __iomem *mmio;
+> > > > 
+> > > > +   struct clk *core_clk;
+> > > > +   struct clk *iface_clk;
+> > > > 
+> > > >     unsigned int num_ports;
+> > > >     unsigned int num_macros;
+> > > >     bool interleaved;
+> > > > 
+> > > > @@ -91,16 +93,6 @@ struct ocmem {
+> > > > 
+> > > >   #define OCMEM_PSGSC_CTL_MACRO2_MODE(val)  FIELD_PREP(0x00000700,
+> > 
+> > (val))
+> > 
+> > > >   #define OCMEM_PSGSC_CTL_MACRO3_MODE(val)  FIELD_PREP(0x00007000,
+> > 
+> > (val))
+> > 
+> > > > -#define OCMEM_CLK_CORE_IDX                 0
+> > > > -static struct clk_bulk_data ocmem_clks[] = {
+> > > > -   {
+> > > > -           .id = "core",
+> > > > -   },
+> > > > -   {
+> > > > -           .id = "iface",
+> > > > -   },
+> > > > -};
+> > > > -
+> > > > 
+> > > >   static inline void ocmem_write(struct ocmem *ocmem, u32 reg, u32
+> > > >   data)
+> > > >   {
+> > > >   
+> > > >     writel(data, ocmem->mmio + reg);
+> > > > 
+> > > > @@ -316,9 +308,15 @@ static int ocmem_dev_probe(struct platform_device
+> > > > *pdev)>
+> > > > 
+> > > >     ocmem->dev = dev;
+> > > >     ocmem->config = device_get_match_data(dev);
+> > > > 
+> > > > -   ret = devm_clk_bulk_get(dev, ARRAY_SIZE(ocmem_clks), ocmem_clks);
+> > > > -   if (ret)
+> > > > -           return dev_err_probe(dev, ret, "Unable to get clocks\n");
+> > > > +   ocmem->core_clk = devm_clk_get(dev, "core");
+> > > > +   if (IS_ERR(ocmem->core_clk))
+> > > > +           return dev_err_probe(dev, PTR_ERR(ocmem->core_clk),
+> > > > +                                "Unable to get core clock\n");
+> > > > +
+> > > > +   ocmem->iface_clk = devm_clk_get_optional(dev, "iface");
+> > > > +   if (IS_ERR(ocmem->iface_clk))
+> > > > +           return dev_err_probe(dev, PTR_ERR(ocmem->iface_clk),
+> > > > +                                "Unable to get iface clock\n");
+> > > > 
+> > > >     ocmem->mmio = devm_platform_ioremap_resource_byname(pdev, "ctrl");
+> > > >     if (IS_ERR(ocmem->mmio))
+> > > > 
+> > > > @@ -333,11 +331,15 @@ static int ocmem_dev_probe(struct
+> > > > platform_device
+> > > > *pdev)>
+> > > > 
+> > > >     }
+> > > >     
+> > > >     /* The core clock is synchronous with graphics */
+> > > > 
+> > > > -   WARN_ON(clk_set_rate(ocmem_clks[OCMEM_CLK_CORE_IDX].clk, 1000) <
+> > > > 0);
+> > > > +   WARN_ON(clk_set_rate(ocmem->core_clk, 1000) < 0);
+> > > > +
+> > > > +   ret = clk_prepare_enable(ocmem->core_clk);
+> > > > +   if (ret)
+> > > > +           return dev_err_probe(ocmem->dev, ret, "Failed to enable
+> > 
+> > core clock\n");
+> > 
+> > > > -   ret = clk_bulk_prepare_enable(ARRAY_SIZE(ocmem_clks), ocmem_clks);
+> > > > +   ret = clk_prepare_enable(ocmem->iface_clk);
+> > > > 
+> > > >     if (ret)
+> > > > 
+> > > > -           return dev_err_probe(ocmem->dev, ret, "Failed to enable
+> > 
+> > clocks\n");
+> > 
+> > > > +           return dev_err_probe(ocmem->dev, ret, "Failed to enable
+> > 
+> > iface
+> > 
+> > > > clock\n");
+> > > > 
+> > > >     if (qcom_scm_restore_sec_cfg_available()) {
+> > > >     
+> > > >             dev_dbg(dev, "configuring scm\n");
+> > > > 
+> > > > @@ -396,13 +398,17 @@ static int ocmem_dev_probe(struct
+> > > > platform_device
+> > > > *pdev)>
+> > > > 
+> > > >     return 0;
+> > > >   
+> > > >   err_clk_disable:
+> > > > -   clk_bulk_disable_unprepare(ARRAY_SIZE(ocmem_clks), ocmem_clks);
+> > > > +   clk_disable_unprepare(ocmem->core_clk);
+> > > > +   clk_disable_unprepare(ocmem->iface_clk);
+> > > > 
+> > > >     return ret;
+> > > >   
+> > > >   }
+> > > >   
+> > > >   static int ocmem_dev_remove(struct platform_device *pdev)
+> > > >   {
+> > > > 
+> > > > -   clk_bulk_disable_unprepare(ARRAY_SIZE(ocmem_clks), ocmem_clks);
+> > > > +   struct ocmem *ocmem = platform_get_drvdata(pdev);
+> > > > +
+> > > > +   clk_disable_unprepare(ocmem->core_clk);
+> > > > +   clk_disable_unprepare(ocmem->iface_clk);
+> > > > 
+> > > >     return 0;
+> > > >   
+> > > >   }
+
+
+
 
