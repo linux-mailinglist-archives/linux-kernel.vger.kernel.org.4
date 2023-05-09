@@ -2,54 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2326E6FC2B6
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9406FC2B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbjEIJZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 05:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
+        id S233625AbjEIJ0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 05:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjEIJZC (ORCPT
+        with ESMTP id S233586AbjEIJZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 05:25:02 -0400
+        Tue, 9 May 2023 05:25:57 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BC097
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:25:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCC7199F;
+        Tue,  9 May 2023 02:25:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683624300; x=1715160300;
-  h=date:from:to:cc:subject:message-id;
-  bh=3o9mhW9pYQGr/a20Uumtltq/A9LwloIb6TbgYcmcoeo=;
-  b=QhmQr4XBsiuIkRgDSpr3Gxrtd1Laz2oBM/rKc5lGbEiqWsg+iXLlu9FP
-   sQfZFx0nBoHWwGp4vb/QlLBy8D5XVwqxHKWZ6N2btB5IAv46+3iryBeqi
-   c2+11C5BQkiFBe9+nObU7GL5a2NGbUnrmfgr+dnr6O/SA0lZN2PeO++1y
-   +VHaDcOlNsJJArADFo0p+zB/5Ol5jQ7oo7wr9JCzrKkt57fslwUpLd5sI
-   3S3w5xRp5wOUFETUj8zDz9l/eiKY962mHC7bXnGXgTcxJl1uGgYQKh2W7
-   1Hsh4H2t6hekurztaNNOZPQkZp4QFz2A/iGihwRJ7XezUtXF04J07eHy8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="352034909"
+  t=1683624355; x=1715160355;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZUjtGLtCp5bmDtgxpBnRsLLbwrRUEv9l+1hvqKxDfhM=;
+  b=jiakkmrm8p3f5JO/BwMlC+DbsugIGTigoTy9/J5COLQ4bUBVWwxGATxq
+   3jmvWItY249Dcw7AMSemyKKZ7OqI3z2XfntwOOpWHK+7Pr6T2vINVERF3
+   TtTg4dATHIJ/q7UiFlefehblLjDw1gVBTu/FQdsiGt6pKXbiYyqWikkBc
+   ffBBh9THl68oKEXbw6oZpb7d4OOoj7zRb1ZB+wIJH9Y85eSQcGvtXQtV4
+   ioBJHcWjNqWTnFHdteje1wt325sWFekQjtwAStyDslj5cp5lyoG1LG5J8
+   NnJNqdr1C18Gq+xCeltSk6dRyKJOote1g4cydeAH9nw4U5X13Yq4Sfiyt
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="352035491"
 X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="352034909"
+   d="scan'208";a="352035491"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 02:24:52 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 02:25:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="729425630"
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="729425778"
 X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="729425630"
+   d="scan'208";a="729425778"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 09 May 2023 02:24:50 -0700
+  by orsmga008.jf.intel.com with ESMTP; 09 May 2023 02:25:51 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pwJaU-00020a-0w;
-        Tue, 09 May 2023 09:24:50 +0000
-Date:   Tue, 09 May 2023 17:24:34 +0800
+        id 1pwJbS-00020s-1V;
+        Tue, 09 May 2023 09:25:50 +0000
+Date:   Tue, 9 May 2023 17:25:21 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:timers/urgent] BUILD SUCCESS
- f9d36cf445ffff0b913ba187a3eff78028f9b1fb
-Message-ID: <20230509092434.Y625V%lkp@intel.com>
-User-Agent: s-nail v14.9.24
+To:     Florian Fainelli <f.fainelli@gmail.com>, netdev@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Frank <Frank.Sae@motor-comm.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 2/3] net: phy: broadcom: Add support for
+ Wake-on-LAN
+Message-ID: <202305091725.uiFVrVZR-lkp@intel.com>
+References: <20230508184309.1628108-3-f.fainelli@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508184309.1628108-3-f.fainelli@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -61,135 +78,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/urgent
-branch HEAD: f9d36cf445ffff0b913ba187a3eff78028f9b1fb  tick/broadcast: Make broadcast device replacement work correctly
+Hi Florian,
 
-elapsed time: 720m
+kernel test robot noticed the following build warnings:
 
-configs tested: 117
-configs skipped: 7
+[auto build test WARNING on net-next/main]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Fainelli/net-phy-Let-drivers-check-Wake-on-LAN-status/20230509-024405
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230508184309.1628108-3-f.fainelli%40gmail.com
+patch subject: [PATCH net-next 2/3] net: phy: broadcom: Add support for Wake-on-LAN
+config: s390-randconfig-r036-20230508 (https://download.01.org/0day-ci/archive/20230509/202305091725.uiFVrVZR-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/9bc5e73961748471e3dae79cb94f329382a6d490
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Florian-Fainelli/net-phy-Let-drivers-check-Wake-on-LAN-status/20230509-024405
+        git checkout 9bc5e73961748471e3dae79cb94f329382a6d490
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/phy/ kernel/
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230507   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r004-20230508   gcc  
-arm                  randconfig-r023-20230508   clang
-arm                  randconfig-r046-20230507   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r005-20230508   clang
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-hexagon              randconfig-r005-20230508   clang
-hexagon              randconfig-r031-20230507   clang
-hexagon              randconfig-r036-20230508   clang
-hexagon              randconfig-r041-20230507   clang
-hexagon              randconfig-r045-20230507   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r002-20230508   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                 randconfig-a011-20230508   gcc  
-i386                 randconfig-a012-20230508   gcc  
-i386                 randconfig-a013-20230508   gcc  
-i386                 randconfig-a014-20230508   gcc  
-i386                 randconfig-a015-20230508   gcc  
-i386                 randconfig-a016-20230508   gcc  
-i386                 randconfig-r035-20230508   clang
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r003-20230508   gcc  
-ia64         buildonly-randconfig-r004-20230508   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r002-20230507   gcc  
-ia64                 randconfig-r024-20230508   gcc  
-ia64                 randconfig-r026-20230507   gcc  
-ia64                 randconfig-r026-20230508   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r003-20230507   gcc  
-loongarch            randconfig-r022-20230508   gcc  
-loongarch            randconfig-r034-20230508   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r024-20230507   gcc  
-microblaze           randconfig-r001-20230507   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r034-20230507   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r022-20230507   gcc  
-nios2                randconfig-r025-20230508   gcc  
-nios2                randconfig-r031-20230508   gcc  
-openrisc             randconfig-r015-20230507   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r011-20230507   gcc  
-parisc               randconfig-r014-20230507   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r002-20230508   clang
-powerpc              randconfig-r016-20230507   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r021-20230507   clang
-riscv                randconfig-r021-20230508   gcc  
-riscv                randconfig-r035-20230507   gcc  
-riscv                randconfig-r042-20230507   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r001-20230508   clang
-s390                 randconfig-r006-20230508   clang
-s390                 randconfig-r032-20230507   gcc  
-s390                 randconfig-r044-20230507   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r004-20230507   gcc  
-sh                   randconfig-r013-20230507   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r032-20230508   gcc  
-sparc                randconfig-r033-20230507   gcc  
-sparc64              randconfig-r012-20230507   gcc  
-sparc64              randconfig-r036-20230507   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230508   clang
-x86_64               randconfig-a002-20230508   clang
-x86_64               randconfig-a003-20230508   clang
-x86_64               randconfig-a004-20230508   clang
-x86_64               randconfig-a005-20230508   clang
-x86_64               randconfig-a006-20230508   clang
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64               randconfig-r033-20230508   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r005-20230507   gcc  
-xtensa               randconfig-r006-20230507   gcc  
-xtensa               randconfig-r023-20230507   gcc  
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305091725.uiFVrVZR-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/phy/broadcom.c:13:
+   In file included from drivers/net/phy/bcm-phy-lib.h:9:
+   In file included from include/linux/brcmphy.h:5:
+   In file included from include/linux/phy.h:16:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/net/phy/broadcom.c:13:
+   In file included from drivers/net/phy/bcm-phy-lib.h:9:
+   In file included from include/linux/brcmphy.h:5:
+   In file included from include/linux/phy.h:16:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/net/phy/broadcom.c:13:
+   In file included from drivers/net/phy/bcm-phy-lib.h:9:
+   In file included from include/linux/brcmphy.h:5:
+   In file included from include/linux/phy.h:16:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/net/phy/broadcom.c:471:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (priv->wake_irq_enabled != state) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/phy/broadcom.c:479:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/net/phy/broadcom.c:471:2: note: remove the 'if' if its condition is always true
+           if (priv->wake_irq_enabled != state) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/phy/broadcom.c:466:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   13 warnings generated.
+
+
+vim +471 drivers/net/phy/broadcom.c
+
+   462	
+   463	static int bcm54xx_set_wakeup_irq(struct phy_device *phydev, bool state)
+   464	{
+   465		struct bcm54xx_phy_priv *priv = phydev->priv;
+   466		int ret;
+   467	
+   468		if (!bcm54xx_phy_can_wakeup(phydev))
+   469			return 0;
+   470	
+ > 471		if (priv->wake_irq_enabled != state) {
+   472			if (state)
+   473				ret = enable_irq_wake(priv->wake_irq);
+   474			else
+   475				ret = disable_irq_wake(priv->wake_irq);
+   476			priv->wake_irq_enabled = state;
+   477		}
+   478	
+   479		return ret;
+   480	}
+   481	
 
 -- 
 0-DAY CI Kernel Test Service
