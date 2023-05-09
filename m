@@ -2,167 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653B76FC3DA
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECB66FC3DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233784AbjEIK2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 06:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
+        id S234971AbjEIK2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 06:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234194AbjEIK2A (ORCPT
+        with ESMTP id S234503AbjEIK21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 06:28:00 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CCADC6C;
-        Tue,  9 May 2023 03:27:58 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 349ARboc043784;
-        Tue, 9 May 2023 05:27:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683628057;
-        bh=J+aJ87Wk8u/OIKkswXL4WuenR3rbc+J67mfSul8Awmk=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=ZkOdIr8VF757n5ofAIAtwfjjQuhyjRTFoziyg0Cgi3S/51UjDjcIIjwMum6MrigPo
-         b8RA534KHtulontOcyv1rh6964O8ZojM+CgglEkzzqcXv+WQXHKALYUqDt032WVfdu
-         SpT/sULc9vgb9kX8+gkTwFq4K17oIyCDJNFT9eSY=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 349ARbOj008095
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 9 May 2023 05:27:37 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
- May 2023 05:27:37 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 9 May 2023 05:27:36 -0500
-Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 349ARXah015938;
-        Tue, 9 May 2023 05:27:34 -0500
-Message-ID: <bb7d6644-38b9-c807-6ef2-45a9d5acefe9@ti.com>
-Date:   Tue, 9 May 2023 15:57:33 +0530
+        Tue, 9 May 2023 06:28:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C269BDC62
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 03:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683628058;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uwJ3DY9RdcSd+YOIHggeltEqU051lT22jrjPoxOONus=;
+        b=S19gNRw6CeB9mvSl7AlV7Y8uhMOpnC8rCnQYSUld7s4aJc0YS8Ktjt4NCxlpZfYeTwa+bl
+        DVuESs49q/iDaQyVwwK2qEy62k/1a5snpQHdF4fSkaRv5cVkJQnGqaJdaI3CY9xZ+/m18+
+        qsQSycUfFhljjYQZd7Z/LzLFuI4dxu0=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-423-iJ6atyQoPymTy9NsVZBi2Q-1; Tue, 09 May 2023 06:27:37 -0400
+X-MC-Unique: iJ6atyQoPymTy9NsVZBi2Q-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-969c36898d4so101548666b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 03:27:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683628056; x=1686220056;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uwJ3DY9RdcSd+YOIHggeltEqU051lT22jrjPoxOONus=;
+        b=DjAmIFTsXZt6ffb1y3S10sKrQTE3d1kBYzmZ6VkBsB9ma9yd06CYV+0hvFD5Qz2s9W
+         oec6i0G2V8Yit0xEgCw9bjYX82Uz7htb5dTbrVVICXLRF3HgsGNqFFSsVsVSaKvCBngA
+         91B9aGtDKiKk9d5qgmJK8JhGFxzT4HR2DO1HY74XRnoZ8C/6zR78zy0FjPRjGlx5+MXt
+         ylvps//2f2V+dpYo9LWcbw+D0P2dwt/eMxFhFFTGV763MlrOvCNMOjLk5/J81BhtEqkS
+         GQOLDSFwIPX1v7rIZkf2EwUejWor90Q7/EbL0HvlBrQOe+zQPbYOmU3HmOJ9O60GlURS
+         /fzA==
+X-Gm-Message-State: AC+VfDwqIX/ofI8bMo3zPGeua+iSzYw64xzG6HZ5o8YRO+rdXKgKu1Bs
+        Lac4ymkFvhzZFk+brhGrEh643md84moxfF/t0mTXEVnImhpuxpgKr8y2lxrADDugIvh76k5/TQ7
+        nzf1d4Gz6RXE+z+8qHOfQ6SRV
+X-Received: by 2002:a17:907:7d9e:b0:969:f54c:dee2 with SMTP id oz30-20020a1709077d9e00b00969f54cdee2mr1339918ejc.26.1683628055926;
+        Tue, 09 May 2023 03:27:35 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7dBcF0PeeSSPZxUvJ2br+FqbE5k+D1T5jX/3UjFICYV5HGVZEnqvbF6oMuzkxkJk9L157EPQ==
+X-Received: by 2002:a17:907:7d9e:b0:969:f54c:dee2 with SMTP id oz30-20020a1709077d9e00b00969f54cdee2mr1339892ejc.26.1683628055613;
+        Tue, 09 May 2023 03:27:35 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id mc27-20020a170906eb5b00b00966330021e9sm1146359ejb.47.2023.05.09.03.27.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 03:27:35 -0700 (PDT)
+Message-ID: <3e87dd49-b2c0-c6a9-5385-c075e5264de1@redhat.com>
+Date:   Tue, 9 May 2023 12:27:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-CC:     <andrew@lunn.ch>, <linux@armlinux.org.uk>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH net v2] net: phy: dp83867: add w/a for packet errors seen
- with short cables
-Content-Language: en-US
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-References: <20230509052124.611875-1-s-vadapalli@ti.com>
- <7a53f0d3-3e9a-4024-6b19-72ad9c19ab97@gmail.com>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <7a53f0d3-3e9a-4024-6b19-72ad9c19ab97@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] wifi: brcmfmac: wcc: Add debug messages
+Content-Language: en-US, nl
+To:     matthias.bgg@kernel.org, Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc:     brcm80211-dev-list.pdl@broadcom.com, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        SHA-cyfmac-dev-list@infineon.com,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Matthias Brugger <mbrugger@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <20230509100420.26094-1-matthias.bgg@kernel.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230509100420.26094-1-matthias.bgg@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 09/05/23 14:29, Heiner Kallweit wrote:
-> On 09.05.2023 07:21, Siddharth Vadapalli wrote:
->> From: Grygorii Strashko <grygorii.strashko@ti.com>
->>
->> Introduce the W/A for packet errors seen with short cables (<1m) between
->> two DP83867 PHYs.
->>
->> The W/A recommended by DM requires FFE Equalizer Configuration tuning by
->> writing value 0x0E81 to DSP_FFE_CFG register (0x012C), surrounded by hard
->> and soft resets as follows:
->>
->> write_reg(0x001F, 0x8000); //hard reset
->> write_reg(DSP_FFE_CFG, 0x0E81);
->> write_reg(0x001F, 0x4000); //soft reset
->>
->> Since  DP83867 PHY DM says "Changing this register to 0x0E81, will not
->> affect Long Cable performance.", enable the W/A by default.
->>
->> Fixes: 2a10154abcb7 ("net: phy: dp83867: Add TI dp83867 phy")
->> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
->> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->> ---
->>
->> V1 patch at:
->> https://lore.kernel.org/r/20230508070019.356548-1-s-vadapalli@ti.com
->>
->> Changes since v1 patch:
->> - Wrap the line invoking phy_write_mmd(), limiting it to 80 characters.
->> - Replace 0X0E81 with 0x0e81 in the call to phy_write_mmd().
->> - Replace 0X012C with 0x012c in the new define for DP83867_DSP_FFE_CFG.
->>
->> RFC patch at:
->> https://lore.kernel.org/r/20230425054429.3956535-2-s-vadapalli@ti.com/
->>
->> Changes since RFC patch:
->> - Change patch subject to PATCH net.
->> - Add Fixes tag.
->> - Check return value of phy_write_mmd().
->>
->>  drivers/net/phy/dp83867.c | 18 +++++++++++++++++-
->>  1 file changed, 17 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/phy/dp83867.c b/drivers/net/phy/dp83867.c
->> index d75f526a20a4..bbdcc595715d 100644
->> --- a/drivers/net/phy/dp83867.c
->> +++ b/drivers/net/phy/dp83867.c
->> @@ -44,6 +44,7 @@
->>  #define DP83867_STRAP_STS1	0x006E
->>  #define DP83867_STRAP_STS2	0x006f
->>  #define DP83867_RGMIIDCTL	0x0086
->> +#define DP83867_DSP_FFE_CFG	0x012c
->>  #define DP83867_RXFCFG		0x0134
->>  #define DP83867_RXFPMD1	0x0136
->>  #define DP83867_RXFPMD2	0x0137
->> @@ -941,8 +942,23 @@ static int dp83867_phy_reset(struct phy_device *phydev)
->>  
->>  	usleep_range(10, 20);
->>  
->> -	return phy_modify(phydev, MII_DP83867_PHYCTRL,
->> +	err = phy_modify(phydev, MII_DP83867_PHYCTRL,
->>  			 DP83867_PHYCR_FORCE_LINK_GOOD, 0);
->> +	if (err < 0)
->> +		return err;
->> +
+On 5/9/23 12:04, matthias.bgg@kernel.org wrote:
+> From: Matthias Brugger <mbrugger@suse.com>
 > 
-> Would be good to add a comment here explaining what this magic write does.
-
-Sure. Is the following comment acceptable?
-
-"Configure the DSP Feedforward Equalizer Configuration register to improve short
-cable (< 1 meter) performance. This will not affect long cable performance."
-
+> The message is attach and detach function are merly for debugging,
+> change them from pr_err to pr_debug.
 > 
->> +	err = phy_write_mmd(phydev, DP83867_DEVADDR, DP83867_DSP_FFE_CFG,
->> +			    0x0e81);
->> +	if (err < 0)
->> +		return err;
->> +
->> +	err = phy_write(phydev, DP83867_CTRL, DP83867_SW_RESTART);
->> +	if (err < 0)
->> +		return err;
->> +
->> +	usleep_range(10, 20);
->> +
->> +	return 0;
->>  }
->>  
->>  static void dp83867_link_change_notify(struct phy_device *phydev)
-> 
+> Signed-off-by: Matthias Brugger <mbrugger@suse.com>
 
--- 
+Thank you, I had writing this same patch on my own TODO list :)
+
+Patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
 Regards,
-Siddharth.
+
+Hans
+
+
+
+
+
+
+> ---
+> 
+>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/wcc/core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/wcc/core.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/wcc/core.c
+> index 02de99818efa..5573a47766ad 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/wcc/core.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/wcc/core.c
+> @@ -12,13 +12,13 @@
+>  
+>  static int brcmf_wcc_attach(struct brcmf_pub *drvr)
+>  {
+> -	pr_err("%s: executing\n", __func__);
+> +	pr_debug("%s: executing\n", __func__);
+>  	return 0;
+>  }
+>  
+>  static void brcmf_wcc_detach(struct brcmf_pub *drvr)
+>  {
+> -	pr_err("%s: executing\n", __func__);
+> +	pr_debug("%s: executing\n", __func__);
+>  }
+>  
+>  const struct brcmf_fwvid_ops brcmf_wcc_ops = {
+
