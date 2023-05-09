@@ -2,216 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1695B6FC826
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5038A6FC7CB
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235590AbjEINmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 09:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
+        id S234764AbjEINXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 09:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbjEINmH (ORCPT
+        with ESMTP id S229477AbjEINXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 09:42:07 -0400
-X-Greylist: delayed 1147 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 09 May 2023 06:42:05 PDT
-Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32345E6B;
-        Tue,  9 May 2023 06:42:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
-        s=default2211; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
-        Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References;
-        bh=Mc9JORN232SL1HsWqoXgmrDyPRbH9NMhJpNdhG1Rw7Q=; b=A3YWMGFqkSxkz1bI1aoQOIU0SV
-        aUV0ZZWQEEFNEEE7GExtydHFyrODmAMFsIz2/cLYUM5m4Xy2nSxQvfPNNH78qNcKJp/IkKwlc5elk
-        7KhccITNWDA9h01I78wlQFxWACe+OTPhn/8Id812NDmhhTFl6gbaUthuT2mqbUYu2fTaQz8/4hOUe
-        uz4z6gIm5E+fT63WmCHI+oIU4ZMqdTBecaruo/Pyn5s4kfUMkDo1tWAl1Fol1c4mevGSGPKkI/2l/
-        XhHs9ZWzTm8sDXkIp6XCZ6tiC3TjpFPlV3bkmGe3+5OC+61UPCUYYhvab97SJS7TudVUzzCoX+Zpc
-        W/z/QqLw==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <sean@geanix.com>)
-        id 1pwNIs-000HBc-Uw; Tue, 09 May 2023 15:22:54 +0200
-Received: from [185.17.218.86] (helo=zen..)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sean@geanix.com>)
-        id 1pwNIs-000RSx-IN; Tue, 09 May 2023 15:22:54 +0200
-From:   Sean Nyekjaer <sean@geanix.com>
-To:     Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     Sean Nyekjaer <sean@geanix.com>, linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: stm32f7: Add atomic_xfer method to driver
-Date:   Tue,  9 May 2023 15:21:59 +0200
-Message-Id: <20230509132159.4160984-1-sean@geanix.com>
-X-Mailer: git-send-email 2.40.0
+        Tue, 9 May 2023 09:23:45 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF373C01;
+        Tue,  9 May 2023 06:23:43 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349Cc06g023990;
+        Tue, 9 May 2023 13:23:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Ztn5cr2+ZzyLZNYlN4HERQHsgAwqhpff8Mu0TMY37L8=;
+ b=F7yVdNngGGU/CXbalbwgLhlQEwRt+TdhgqARpq9VknRt30uts4zD3QXJgBI56wFXaGxa
+ ygIVkYCstrCZFffzpSG3INe6+/LtMyaFQ1YgwFK/pihRBuQPKxDJ+JqtQQ2VQVjqWml5
+ 7jJQStJeXSKnSMpd/deWhjhSEETLpLFU2z9ivmAgo+T7By0innnKhh67rF09Pj+MJWbx
+ fWmFz/Zbuxlg3T7YX+fx7crZgn92A8h9F7EHsTvyrQkGad/xZsu/0sd4TfIwy98rttXL
+ hpcBqAQ3F1CdurL8KkNp2BwyEHyd0ba5XXSOq07Y41G60v0dJDsRFvlJSct1IdDCRRfz xQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf77kstph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 May 2023 13:23:39 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 349DNcNc025061
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 9 May 2023 13:23:38 GMT
+Received: from [10.242.242.190] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
+ 06:23:29 -0700
+Message-ID: <1aa64a2f-fa57-2f06-b993-2e158512361c@quicinc.com>
+Date:   Tue, 9 May 2023 18:53:26 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: sean@geanix.com
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26901/Tue May  9 09:24:37 2023)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 01/11] dt-bindings: remoteproc: qcom: Add support for
+ multipd model
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
+        <mathieu.poirier@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <quic_gurus@quicinc.com>,
+        <loic.poulain@linaro.org>, <quic_eberman@quicinc.com>,
+        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-clk@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
+ <1678164097-13247-2-git-send-email-quic_mmanikan@quicinc.com>
+ <38a5a268-7d8a-6e61-4272-8e9155df0034@linaro.org>
+ <790496d7-98dc-c92e-dedc-1c89395a1ad8@quicinc.com>
+ <e63a3e34-1f73-3661-8655-e34e1e955804@linaro.org>
+ <b8b30b77-31df-15c3-3914-1198f90299e6@quicinc.com>
+ <c1833e5b-9397-8a87-07c5-1b8bd84bd457@linaro.org>
+From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+In-Reply-To: <c1833e5b-9397-8a87-07c5-1b8bd84bd457@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: zpdH6aWB3suKursu49WPMBHucX_FhXI9
+X-Proofpoint-ORIG-GUID: zpdH6aWB3suKursu49WPMBHucX_FhXI9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-09_08,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 clxscore=1015 phishscore=0
+ spamscore=0 malwarescore=0 mlxlogscore=598 impostorscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305090109
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an atomic_xfer method to the driver so that it behaves correctly
-when controlling a PMIC that is responsible for device shutdown.
 
-The atomic_xfer method added is similar to the one from the i2c-mv64xxx
-driver. When running an atomic_xfer a bool flag in the driver data is
-set, the interrupt is not unmasked on transfer start, and the IRQ
-handler is manually invoked while waiting for pending transfers to
-complete.
 
-Signed-off-by: Sean Nyekjaer <sean@geanix.com>
----
-Tested on a STM32MP1 with:
-https://lore.kernel.org/all/20230428112847.2146348-2-sean@geanix.com/
+On 5/9/2023 6:31 PM, Krzysztof Kozlowski wrote:
+> On 09/05/2023 12:34, Manikanta Mylavarapu wrote:
+>>>> Sure, will add.
+>>>>>> +    description:
+>>>>>> +      Qualcomm G-Link subnode which represents communication edge, channels
+>>>>>> +      and devices related to the Modem.
+>>>>>> +
+>>>>>> +patternProperties:
+>>>>>> +  "^remoteproc_pd1|remoteproc_pd2|remoteproc_pd3":
+>>>>>
+>>>>> No, underscores are not allowed. Also, what is pd?
+>>>>>
+>>>> Sure, will remove underscores.
+>>>
+>>> Shouldn't this be just pd-1?
+>>>
+>>>
+>> I think 'pd-1' not enough. Because child's i.e userpd's also considered
+>> as remote processor's, so name should be like "remoteproc-pd1".
+> 
+> "pd-1" is not enough for what? Why the node name has to be more specific?
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
-Is it okay to keep the DMA transfer in atomic?
+Sure. "pd-1" also seems fine. I will change child node name to "pd-1".
 
-I'm annoyed by the return 1 in stm32f7_i2c_wait_polling() is there any
-good idea to fix that?
-
- drivers/i2c/busses/i2c-stm32f7.c | 73 ++++++++++++++++++++++++++------
- 1 file changed, 60 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index d1c59d83a65b..b63e8a7eb1aa 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -357,6 +357,7 @@ struct stm32f7_i2c_dev {
- 	u32 dnf_dt;
- 	u32 dnf;
- 	struct stm32f7_i2c_alert *alert;
-+	bool atomic;
- };
- 
- /*
-@@ -905,13 +906,18 @@ static void stm32f7_i2c_xfer_msg(struct stm32f7_i2c_dev *i2c_dev,
- 		cr2 |= STM32F7_I2C_CR2_NBYTES(f7_msg->count);
- 	}
- 
--	/* Enable NACK, STOP, error and transfer complete interrupts */
--	cr1 |= STM32F7_I2C_CR1_ERRIE | STM32F7_I2C_CR1_TCIE |
--		STM32F7_I2C_CR1_STOPIE | STM32F7_I2C_CR1_NACKIE;
-+	if (!i2c_dev->atomic) {
-+		/* Enable NACK, STOP, error and transfer complete interrupts */
-+		cr1 |= STM32F7_I2C_CR1_ERRIE | STM32F7_I2C_CR1_TCIE |
-+			STM32F7_I2C_CR1_STOPIE | STM32F7_I2C_CR1_NACKIE;
- 
--	/* Clear DMA req and TX/RX interrupt */
--	cr1 &= ~(STM32F7_I2C_CR1_RXIE | STM32F7_I2C_CR1_TXIE |
--			STM32F7_I2C_CR1_RXDMAEN | STM32F7_I2C_CR1_TXDMAEN);
-+		/* Clear DMA req and TX/RX interrupt */
-+		cr1 &= ~(STM32F7_I2C_CR1_RXIE | STM32F7_I2C_CR1_TXIE |
-+				STM32F7_I2C_CR1_RXDMAEN | STM32F7_I2C_CR1_TXDMAEN);
-+	} else {
-+		/* Disable interrupts */
-+		cr1 &= ~STM32F7_I2C_ALL_IRQ_MASK;
-+	}
- 
- 	/* Configure DMA or enable RX/TX interrupt */
- 	i2c_dev->use_dma = false;
-@@ -928,10 +934,12 @@ static void stm32f7_i2c_xfer_msg(struct stm32f7_i2c_dev *i2c_dev,
- 	}
- 
- 	if (!i2c_dev->use_dma) {
--		if (msg->flags & I2C_M_RD)
--			cr1 |= STM32F7_I2C_CR1_RXIE;
--		else
--			cr1 |= STM32F7_I2C_CR1_TXIE;
-+		if (!i2c_dev->atomic) {
-+			if (msg->flags & I2C_M_RD)
-+				cr1 |= STM32F7_I2C_CR1_RXIE;
-+			else
-+				cr1 |= STM32F7_I2C_CR1_TXIE;
-+		}
- 	} else {
- 		if (msg->flags & I2C_M_RD)
- 			cr1 |= STM32F7_I2C_CR1_RXDMAEN;
-@@ -1670,7 +1678,22 @@ static irqreturn_t stm32f7_i2c_isr_error(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
--static int stm32f7_i2c_xfer(struct i2c_adapter *i2c_adap,
-+static int stm32f7_i2c_wait_polling(struct stm32f7_i2c_dev *i2c_dev)
-+{
-+	ktime_t timeout = ktime_add_ms(ktime_get(), i2c_dev->adap.timeout);
-+
-+	while (ktime_compare(ktime_get(), timeout) < 0) {
-+		udelay(5);
-+		stm32f7_i2c_isr_event(0, i2c_dev);
-+
-+		if (try_wait_for_completion(&i2c_dev->complete))
-+			return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int stm32f7_i2c_xfer_core(struct i2c_adapter *i2c_adap,
- 			    struct i2c_msg msgs[], int num)
- {
- 	struct stm32f7_i2c_dev *i2c_dev = i2c_get_adapdata(i2c_adap);
-@@ -1694,8 +1717,13 @@ static int stm32f7_i2c_xfer(struct i2c_adapter *i2c_adap,
- 
- 	stm32f7_i2c_xfer_msg(i2c_dev, msgs);
- 
--	time_left = wait_for_completion_timeout(&i2c_dev->complete,
--						i2c_dev->adap.timeout);
-+	if (!i2c_dev->atomic) {
-+		time_left = wait_for_completion_timeout(&i2c_dev->complete,
-+							i2c_dev->adap.timeout);
-+	} else {
-+		time_left = stm32f7_i2c_wait_polling(i2c_dev);
-+	}
-+
- 	ret = f7_msg->result;
- 	if (ret) {
- 		if (i2c_dev->use_dma)
-@@ -1727,6 +1755,24 @@ static int stm32f7_i2c_xfer(struct i2c_adapter *i2c_adap,
- 	return (ret < 0) ? ret : num;
- }
- 
-+static int stm32f7_i2c_xfer(struct i2c_adapter *i2c_adap,
-+			    struct i2c_msg msgs[], int num)
-+{
-+	struct stm32f7_i2c_dev *i2c_dev = i2c_get_adapdata(i2c_adap);
-+
-+	i2c_dev->atomic = 0;
-+	return stm32f7_i2c_xfer_core(i2c_adap, msgs, num);
-+}
-+
-+static int stm32f7_i2c_xfer_atomic(struct i2c_adapter *i2c_adap,
-+			    struct i2c_msg msgs[], int num)
-+{
-+	struct stm32f7_i2c_dev *i2c_dev = i2c_get_adapdata(i2c_adap);
-+
-+	i2c_dev->atomic = 1;
-+	return stm32f7_i2c_xfer_core(i2c_adap, msgs, num);
-+}
-+
- static int stm32f7_i2c_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
- 				  unsigned short flags, char read_write,
- 				  u8 command, int size,
-@@ -2095,6 +2141,7 @@ static u32 stm32f7_i2c_func(struct i2c_adapter *adap)
- 
- static const struct i2c_algorithm stm32f7_i2c_algo = {
- 	.master_xfer = stm32f7_i2c_xfer,
-+	.master_xfer_atomic = stm32f7_i2c_xfer_atomic,
- 	.smbus_xfer = stm32f7_i2c_smbus_xfer,
- 	.functionality = stm32f7_i2c_func,
- 	.reg_slave = stm32f7_i2c_reg_slave,
--- 
-2.40.0
-
+Thanks & Regards,
+Manikanta.
