@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEA76FBDCE
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 05:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0258C6FBDD3
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 05:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234539AbjEIDzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 23:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S234486AbjEIDzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 23:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233270AbjEIDzD (ORCPT
+        with ESMTP id S234410AbjEIDzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 23:55:03 -0400
+        Mon, 8 May 2023 23:55:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65E44C3D;
-        Mon,  8 May 2023 20:55:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD788A48;
+        Mon,  8 May 2023 20:55:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40E3262425;
-        Tue,  9 May 2023 03:55:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89686C4339B;
-        Tue,  9 May 2023 03:55:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91CAF61011;
+        Tue,  9 May 2023 03:55:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4AA3C433AE;
+        Tue,  9 May 2023 03:55:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683604501;
-        bh=tU2A4wj5lvfjaL193dHua5J4mUq9RDcdrukuxdAY/Zk=;
+        s=k20201202; t=1683604505;
+        bh=FeEPuL62SD/ceTdy1AZqZeZrGvNE+W6iSSHqrcpuhdM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xk15pnZUEaVRIpSe484Hb6KRvXX3F/qOjEVzlqreCx9cvP6/vGWBMo1outp67KjnA
-         G2fLL7YSt6hfLObxY5az4VpXDZikZPlvs2kTtaw7TVDMzRc4xYj1/Tp+jmRdrZmHW2
-         SHn4ldHKpUPkjLeikJLAPqZODJHWcN5oH+KpKN2ehyjs7aGCdUEPZ2/Bk5iwoJaMJ8
-         PutTNehmhUWsRinwlipY4qRQTsb7bF5g6+jLSKJfKGAle6LSKESCmrDeFoa048mYTR
-         MBgYa9FXnHtN0sW1sw0BBhEauH/QFt1U0v4LYEul5P5EtWCVTDmIv8O4m7zwxe7z80
-         EJQxROQKJ2wTg==
+        b=GQXhuxX40OjGGl1paD/X/fdnwF9K7z/DBK9UKpH7kwctsb++xAOnVd8Vrlo+/lTHU
+         yC7UFxLTQ/wQ5dQ4yIv2ocW5hSi0UsDrcFQcQ/T1CI092s3g+uuZbMJndTkhl/n4l3
+         gTTAm4c9zAuklrHU+soqL7v3xXxrXR2S8IT1RACELJGwF2HhxnSFVGLFf36eVe3FLM
+         O9m4QRQSefHBk6PpO+vupZQ8liC70N0769oqFKFg1sv3oFuAH6xLqI0jrN/EYdwdrl
+         tAVL3u+YZC6IloyF+RRfY+RLbbk+NEoqpg7PHsEDobSGysTcX37hzGVGv9DzFT8jZq
+         L21/v6pEfIM5Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sasha Levin <sashal@kernel.org>, keescook@chromium.org,
-        gregkh@linuxfoundation.org
-Subject: [PATCH AUTOSEL 6.3 3/7] lkdtm/stackleak: Fix noinstr violation
-Date:   Mon,  8 May 2023 23:54:26 -0400
-Message-Id: <20230509035455.59524-3-sashal@kernel.org>
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Sasha Levin <sashal@kernel.org>, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.3 4/7] riscv: Fix EFI stub usage of KASAN instrumented strcmp function
+Date:   Mon,  8 May 2023 23:54:27 -0400
+Message-Id: <20230509035455.59524-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230509035455.59524-1-sashal@kernel.org>
 References: <20230509035455.59524-1-sashal@kernel.org>
@@ -58,64 +61,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
 
-[ Upstream commit f571da059f86fd9d432aea32c9c7e5aaa53245d8 ]
+[ Upstream commit 617955ca6e275c4dd0dcf5316fca7fc04a8f2fe6 ]
 
-Fixes the following warning:
+The EFI stub must not use any KASAN instrumented code as the kernel
+proper did not initialize the thread pointer and the mapping for the
+KASAN shadow region.
 
-  vmlinux.o: warning: objtool: check_stackleak_irqoff+0x2b6: call to _printk() leaves .noinstr.text section
+Avoid using the generic strcmp function, instead use the one in
+drivers/firmware/efi/libstub/string.c.
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/ee5209f53aa0a62aea58be18f2b78b17606779a6.1681320026.git.jpoimboe@kernel.org
+Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
+Link: https://lore.kernel.org/r/20230203075232.274282-5-alexghiti@rivosinc.com
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/lkdtm/stackleak.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/riscv/kernel/image-vars.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/misc/lkdtm/stackleak.c b/drivers/misc/lkdtm/stackleak.c
-index 025b133297a6b..f1d0221609138 100644
---- a/drivers/misc/lkdtm/stackleak.c
-+++ b/drivers/misc/lkdtm/stackleak.c
-@@ -43,12 +43,14 @@ static void noinstr check_stackleak_irqoff(void)
- 	 * STACK_END_MAGIC, and in either casee something is seriously wrong.
- 	 */
- 	if (current_sp < task_stack_low || current_sp >= task_stack_high) {
-+		instrumentation_begin();
- 		pr_err("FAIL: current_stack_pointer (0x%lx) outside of task stack bounds [0x%lx..0x%lx]\n",
- 		       current_sp, task_stack_low, task_stack_high - 1);
- 		test_failed = true;
- 		goto out;
- 	}
- 	if (lowest_sp < task_stack_low || lowest_sp >= task_stack_high) {
-+		instrumentation_begin();
- 		pr_err("FAIL: current->lowest_stack (0x%lx) outside of task stack bounds [0x%lx..0x%lx]\n",
- 		       lowest_sp, task_stack_low, task_stack_high - 1);
- 		test_failed = true;
-@@ -86,11 +88,14 @@ static void noinstr check_stackleak_irqoff(void)
- 		if (*(unsigned long *)poison_low == STACKLEAK_POISON)
- 			continue;
- 
-+		instrumentation_begin();
- 		pr_err("FAIL: non-poison value %lu bytes below poison boundary: 0x%lx\n",
- 		       poison_high - poison_low, *(unsigned long *)poison_low);
- 		test_failed = true;
-+		goto out;
- 	}
- 
-+	instrumentation_begin();
- 	pr_info("stackleak stack usage:\n"
- 		"  high offset: %lu bytes\n"
- 		"  current:     %lu bytes\n"
-@@ -113,6 +118,7 @@ static void noinstr check_stackleak_irqoff(void)
- 	} else {
- 		pr_info("OK: the rest of the thread stack is properly erased\n");
- 	}
-+	instrumentation_end();
- }
- 
- static void lkdtm_STACKLEAK_ERASING(void)
+diff --git a/arch/riscv/kernel/image-vars.h b/arch/riscv/kernel/image-vars.h
+index 7e2962ef73f92..15616155008cc 100644
+--- a/arch/riscv/kernel/image-vars.h
++++ b/arch/riscv/kernel/image-vars.h
+@@ -23,8 +23,6 @@
+  * linked at. The routines below are all implemented in assembler in a
+  * position independent manner
+  */
+-__efistub_strcmp		= strcmp;
+-
+ __efistub__start		= _start;
+ __efistub__start_kernel		= _start_kernel;
+ __efistub__end			= _end;
 -- 
 2.39.2
 
