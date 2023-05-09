@@ -2,166 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38036FC30D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06316FC30F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjEIJsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 05:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
+        id S234635AbjEIJtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 05:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233712AbjEIJr5 (ORCPT
+        with ESMTP id S234775AbjEIJsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 05:47:57 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7675E7;
-        Tue,  9 May 2023 02:47:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683625675; x=1715161675;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qHyAThXYmVHluBPVN2uS0ad8NkGdnwbxCZvndMHC6J4=;
-  b=HUV+LuzEzmVoMPdcYBcS2+W9Z4XD1iwhLPVnf6S1Ugpn+GMhevY0uavP
-   XDV6o+TBRy9WBnO538zMVAyN703NnSCKKuLeNh8F6VW59E/D55SMhOyGL
-   x1GhJcVcAoaFKkNdtTy46o5PPdzyBKCwp7H9jUV/Rre1YPsqjZQ1/fOdb
-   /hItIa8txHmgBXBE6JXi3qXezqKAg51+nGueKqckULShibc1kotnfluSj
-   KDy20LFcENQrwq7+MRiHzkfx1yjgaExLeeKTHYUwf31SXMgGV3lIQjDr9
-   cCoLsWji2wlCgGEaXro3xNQZPUBcEn6p1XehO8YacGG/OY6xcgzRzUfVr
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="415445309"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="415445309"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 02:47:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="698835080"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="698835080"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 May 2023 02:47:52 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pwJwl-00021Y-0t;
-        Tue, 09 May 2023 09:47:51 +0000
-Date:   Tue, 9 May 2023 17:46:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Oleksii_Moisieiev@epam.com, linus.walleij@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, michal.simek@amd.com,
-        peng.fan@oss.nxp.com, sudeep.holla@arm.com
-Subject: Re: [PATCH] [REVIEW][PINCTRL]: Misc Fixes and refactor
-Message-ID: <202305091719.8LNihq5L-lkp@intel.com>
-References: <20230505201012.3171817-1-cristian.marussi@arm.com>
+        Tue, 9 May 2023 05:48:37 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C2DD9
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:48:35 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-94f4b911570so869421966b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 02:48:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1683625714; x=1686217714;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ssFb5TKrUxDuSwzgf3mFueyqkmtk+lVo5a7Efc/W2I=;
+        b=ZN2Nc4KwU1Bj5BSAFhnaSB7vzpHs1RhygZN+XFGK6hQBeLnMiYwvwPAXnsYMiqJHcm
+         p5Avtf3vt8Y4M1ljhuJY4Ln3gMYVG7jsegJ0RHNvxURf0hlpLwZueGcJGInAG8o/DEpx
+         it6a0EUAy5fX5DjfyZ+qlO6ITrPw0whW+MWWfRWmNA+Rdx0XgpCVPzNndlG2EnyxycPT
+         n/qx5p3EDi+udnGMqVQxfwTqIeuqo9wtrHkaGhTl36t8RDumMIFpAccz+H4xw3J0Xa4f
+         tR5hRvEoLeSQd7RlB2rJF6Pz4xRdXkzxi/FXfrC0VcYNWsG1552WhKHK1SU8vXmFz6Vz
+         VZbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683625714; x=1686217714;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+ssFb5TKrUxDuSwzgf3mFueyqkmtk+lVo5a7Efc/W2I=;
+        b=R9TBCwp4sB8wDLBGFOIyei3v5BqAW82SPxUbHBInCyX/pNY6/krKcMBToDvXJ8EUpf
+         j3UdzxGGwmFedfnHMG+lKQNz9S59etH41GDmxKAUdMiFKZ5Oa757GGkApqe9DQAYhaEW
+         Gvy8mx9TR4x4/Jfw7PlMTJKz8ZJ1QMJb1CZDpzR4eJkOu0AEB5S1KudnpkfPCxX0ZHON
+         mr8cwt8/O+ON52yCVwCNI3OosYhuSzD5GAvoiAVqp5CzA4myHoLmY/zLmh6ez0J2tSR4
+         VEx8X+oyHQGV72DRKhKVU/aMGCQ3v6VxWnTr67DPniUZAzcd2OwiwPit9hQgFu8xdrao
+         dIKw==
+X-Gm-Message-State: AC+VfDwl3HnNfwGVhckqAB74pDmWfN2KRS/M31OO1O8TDFIG1WWhG1Qt
+        Gse3Np72BB4dLMuHCnrU30rr3Q==
+X-Google-Smtp-Source: ACHHUZ4csAwN4H1Mldb1yqeubVyBLjLh5qJMfW88DpJJEltr6uvpRCkmVOXq0ie/fCZXpf1YLvGLNg==
+X-Received: by 2002:a17:907:a01:b0:94a:5d5c:fe6f with SMTP id bb1-20020a1709070a0100b0094a5d5cfe6fmr10679597ejc.47.1683625714394;
+        Tue, 09 May 2023 02:48:34 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id jx6-20020a170907760600b00958434d4ecesm1143737ejc.13.2023.05.09.02.48.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 02:48:34 -0700 (PDT)
+Date:   Tue, 9 May 2023 11:48:33 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     zhangfei <zhang_fei_0403@163.com>
+Cc:     aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, zhangfei@nj.iscas.ac.cn,
+        conor.dooley@microchip.com
+Subject: Re: [PATCH 1/2] RISC-V: lib: Improve memset assembler formatting
+Message-ID: <20230509-b76dc35d2a84d96806496c8e@orel>
+References: <20230505-9ec599a36801972451e8b17f@orel>
+ <20230509022207.3700-1-zhang_fei_0403@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230505201012.3171817-1-cristian.marussi@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230509022207.3700-1-zhang_fei_0403@163.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cristian,
+On Tue, May 09, 2023 at 10:22:05AM +0800, zhangfei wrote:
+> From: Andrew Jones <ajones@ventanamicro.com>
+> 
+> Aligning the first operand of each instructions with a tab is a
+> typical style which improves readability. Apply it to memset.S.
+> While there, we also make a small grammar change to a comment.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
 
-kernel test robot noticed the following build errors:
+Please pick up Conor's r-b on this reposting.
 
+Thanks,
+drew
 
-
-url:    https://github.com/intel-lab-lkp/linux/commits/UPDATE-20230506-041158/Oleksii-Moisieiev/pinctrl-Implementation-of-the-generic-scmi-pinctrl-driver/20230426-222739
-base:   the 1th patch of https://lore.kernel.org/r/b4d60f3408f8fe839933fa3938ecdc9bfceb75d7.1682513390.git.oleksii_moisieiev%40epam.com
-patch link:    https://lore.kernel.org/r/20230505201012.3171817-1-cristian.marussi%40arm.com
-patch subject: [PATCH] [REVIEW][PINCTRL]: Misc Fixes and refactor
-config: arm-randconfig-r011-20230508 (https://download.01.org/0day-ci/archive/20230509/202305091719.8LNihq5L-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/c3e47504d3b8eac203b4ae3fc56c3791790dd88b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20230506-041158/Oleksii-Moisieiev/pinctrl-Implementation-of-the-generic-scmi-pinctrl-driver/20230426-222739
-        git checkout c3e47504d3b8eac203b4ae3fc56c3791790dd88b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/firmware/arm_scmi/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305091719.8LNihq5L-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/firmware/arm_scmi/pinctrl.c:228:10: error: too many arguments to function call, expected 5, have 6
-                                               SCMI_MAX_STR_SIZE);
-                                               ^~~~~~~~~~~~~~~~~
-   include/linux/scmi_protocol.h:16:28: note: expanded from macro 'SCMI_MAX_STR_SIZE'
-   #define SCMI_MAX_STR_SIZE               64
-                                           ^~
-   1 error generated.
-
-
-vim +228 drivers/firmware/arm_scmi/pinctrl.c
-
-   182	
-   183	static int scmi_pinctrl_attributes(const struct scmi_protocol_handle *ph,
-   184					   enum scmi_pinctrl_selector_type type,
-   185					   u32 selector, char *name,
-   186					   unsigned int *n_elems)
-   187	{
-   188		int ret;
-   189		u32 attrs;
-   190		struct scmi_xfer *t;
-   191		struct scmi_msg_pinctrl_attributes *tx;
-   192		struct scmi_resp_pinctrl_attributes *rx;
-   193	
-   194		if (!name)
-   195			return -EINVAL;
-   196	
-   197		ret = scmi_pinctrl_validate_id(ph, selector, type);
-   198		if (ret)
-   199			return ret;
-   200	
-   201		ret = ph->xops->xfer_get_init(ph, PINCTRL_ATTRIBUTES, sizeof(*tx),
-   202					      sizeof(*rx), &t);
-   203		if (ret)
-   204			return ret;
-   205	
-   206		tx = t->tx.buf;
-   207		rx = t->rx.buf;
-   208		tx->identifier = cpu_to_le32(selector);
-   209		tx->flags = cpu_to_le32(type);
-   210	
-   211		ret = ph->xops->do_xfer(ph, t);
-   212		if (!ret) {
-   213			attrs = le32_to_cpu(rx->attributes);
-   214			if (n_elems)
-   215				*n_elems = NUM_ELEMS(attrs);
-   216			strscpy(name, rx->name, SCMI_SHORT_NAME_MAX_SIZE);
-   217		}
-   218	
-   219		ph->xops->xfer_put(ph, t);
-   220	
-   221		/*
-   222		 * If supported overwrite short name with the extended one;
-   223		 * on error just carry on and use already provided short name.
-   224		 */
-   225		if (!ret && EXT_NAME_FLAG(attrs))
-   226			ph->hops->extended_name_get(ph, PINCTRL_NAME_GET, selector,
-   227						    (u32 *)&type, name,
- > 228						    SCMI_MAX_STR_SIZE);
-   229		return ret;
-   230	}
-   231	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>  arch/riscv/lib/memset.S | 143 ++++++++++++++++++++--------------------
+>  1 file changed, 72 insertions(+), 71 deletions(-)
+> 
+> diff --git a/arch/riscv/lib/memset.S b/arch/riscv/lib/memset.S
+> index 34c5360c6705..e613c5c27998 100644
+> --- a/arch/riscv/lib/memset.S
+> +++ b/arch/riscv/lib/memset.S
+> @@ -3,111 +3,112 @@
+>   * Copyright (C) 2013 Regents of the University of California
+>   */
+>  
+> -
+>  #include <linux/linkage.h>
+>  #include <asm/asm.h>
+>  
+>  /* void *memset(void *, int, size_t) */
+>  ENTRY(__memset)
+>  WEAK(memset)
+> -	move t0, a0  /* Preserve return value */
+> +	move	t0, a0			/* Preserve return value */
+>  
+>  	/* Defer to byte-oriented fill for small sizes */
+> -	sltiu a3, a2, 16
+> -	bnez a3, 4f
+> +	sltiu	a3, a2, 16
+> +	bnez	a3, 4f
+>  
+>  	/*
+>  	 * Round to nearest XLEN-aligned address
+> -	 * greater than or equal to start address
+> +	 * greater than or equal to the start address.
+>  	 */
+> -	addi a3, t0, SZREG-1
+> -	andi a3, a3, ~(SZREG-1)
+> -	beq a3, t0, 2f  /* Skip if already aligned */
+> +	addi	a3, t0, SZREG-1
+> +	andi	a3, a3, ~(SZREG-1)
+> +	beq	a3, t0, 2f		/* Skip if already aligned */
+> +
+>  	/* Handle initial misalignment */
+> -	sub a4, a3, t0
+> +	sub	a4, a3, t0
+>  1:
+> -	sb a1, 0(t0)
+> -	addi t0, t0, 1
+> -	bltu t0, a3, 1b
+> -	sub a2, a2, a4  /* Update count */
+> +	sb	a1, 0(t0)
+> +	addi	t0, t0, 1
+> +	bltu	t0, a3, 1b
+> +	sub	a2, a2, a4		/* Update count */
+>  
+>  2: /* Duff's device with 32 XLEN stores per iteration */
+>  	/* Broadcast value into all bytes */
+> -	andi a1, a1, 0xff
+> -	slli a3, a1, 8
+> -	or a1, a3, a1
+> -	slli a3, a1, 16
+> -	or a1, a3, a1
+> +	andi	a1, a1, 0xff
+> +	slli	a3, a1, 8
+> +	or	a1, a3, a1
+> +	slli	a3, a1, 16
+> +	or	a1, a3, a1
+>  #ifdef CONFIG_64BIT
+> -	slli a3, a1, 32
+> -	or a1, a3, a1
+> +	slli	a3, a1, 32
+> +	or	a1, a3, a1
+>  #endif
+>  
+>  	/* Calculate end address */
+> -	andi a4, a2, ~(SZREG-1)
+> -	add a3, t0, a4
+> +	andi	a4, a2, ~(SZREG-1)
+> +	add	a3, t0, a4
+>  
+> -	andi a4, a4, 31*SZREG  /* Calculate remainder */
+> -	beqz a4, 3f            /* Shortcut if no remainder */
+> -	neg a4, a4
+> -	addi a4, a4, 32*SZREG  /* Calculate initial offset */
+> +	andi	a4, a4, 31*SZREG	/* Calculate remainder */
+> +	beqz	a4, 3f			/* Shortcut if no remainder */
+> +	neg	a4, a4
+> +	addi	a4, a4, 32*SZREG	/* Calculate initial offset */
+>  
+>  	/* Adjust start address with offset */
+> -	sub t0, t0, a4
+> +	sub	t0, t0, a4
+>  
+>  	/* Jump into loop body */
+>  	/* Assumes 32-bit instruction lengths */
+> -	la a5, 3f
+> +	la	a5, 3f
+>  #ifdef CONFIG_64BIT
+> -	srli a4, a4, 1
+> +	srli	a4, a4, 1
+>  #endif
+> -	add a5, a5, a4
+> -	jr a5
+> +	add	a5, a5, a4
+> +	jr	a5
+>  3:
+> -	REG_S a1,        0(t0)
+> -	REG_S a1,    SZREG(t0)
+> -	REG_S a1,  2*SZREG(t0)
+> -	REG_S a1,  3*SZREG(t0)
+> -	REG_S a1,  4*SZREG(t0)
+> -	REG_S a1,  5*SZREG(t0)
+> -	REG_S a1,  6*SZREG(t0)
+> -	REG_S a1,  7*SZREG(t0)
+> -	REG_S a1,  8*SZREG(t0)
+> -	REG_S a1,  9*SZREG(t0)
+> -	REG_S a1, 10*SZREG(t0)
+> -	REG_S a1, 11*SZREG(t0)
+> -	REG_S a1, 12*SZREG(t0)
+> -	REG_S a1, 13*SZREG(t0)
+> -	REG_S a1, 14*SZREG(t0)
+> -	REG_S a1, 15*SZREG(t0)
+> -	REG_S a1, 16*SZREG(t0)
+> -	REG_S a1, 17*SZREG(t0)
+> -	REG_S a1, 18*SZREG(t0)
+> -	REG_S a1, 19*SZREG(t0)
+> -	REG_S a1, 20*SZREG(t0)
+> -	REG_S a1, 21*SZREG(t0)
+> -	REG_S a1, 22*SZREG(t0)
+> -	REG_S a1, 23*SZREG(t0)
+> -	REG_S a1, 24*SZREG(t0)
+> -	REG_S a1, 25*SZREG(t0)
+> -	REG_S a1, 26*SZREG(t0)
+> -	REG_S a1, 27*SZREG(t0)
+> -	REG_S a1, 28*SZREG(t0)
+> -	REG_S a1, 29*SZREG(t0)
+> -	REG_S a1, 30*SZREG(t0)
+> -	REG_S a1, 31*SZREG(t0)
+> -	addi t0, t0, 32*SZREG
+> -	bltu t0, a3, 3b
+> -	andi a2, a2, SZREG-1  /* Update count */
+> +	REG_S	a1,        0(t0)
+> +	REG_S	a1,    SZREG(t0)
+> +	REG_S	a1,  2*SZREG(t0)
+> +	REG_S	a1,  3*SZREG(t0)
+> +	REG_S	a1,  4*SZREG(t0)
+> +	REG_S	a1,  5*SZREG(t0)
+> +	REG_S	a1,  6*SZREG(t0)
+> +	REG_S	a1,  7*SZREG(t0)
+> +	REG_S	a1,  8*SZREG(t0)
+> +	REG_S	a1,  9*SZREG(t0)
+> +	REG_S	a1, 10*SZREG(t0)
+> +	REG_S	a1, 11*SZREG(t0)
+> +	REG_S	a1, 12*SZREG(t0)
+> +	REG_S	a1, 13*SZREG(t0)
+> +	REG_S	a1, 14*SZREG(t0)
+> +	REG_S	a1, 15*SZREG(t0)
+> +	REG_S	a1, 16*SZREG(t0)
+> +	REG_S	a1, 17*SZREG(t0)
+> +	REG_S	a1, 18*SZREG(t0)
+> +	REG_S	a1, 19*SZREG(t0)
+> +	REG_S	a1, 20*SZREG(t0)
+> +	REG_S	a1, 21*SZREG(t0)
+> +	REG_S	a1, 22*SZREG(t0)
+> +	REG_S	a1, 23*SZREG(t0)
+> +	REG_S	a1, 24*SZREG(t0)
+> +	REG_S	a1, 25*SZREG(t0)
+> +	REG_S	a1, 26*SZREG(t0)
+> +	REG_S	a1, 27*SZREG(t0)
+> +	REG_S	a1, 28*SZREG(t0)
+> +	REG_S	a1, 29*SZREG(t0)
+> +	REG_S	a1, 30*SZREG(t0)
+> +	REG_S	a1, 31*SZREG(t0)
+> +
+> +	addi	t0, t0, 32*SZREG
+> +	bltu	t0, a3, 3b
+> +	andi	a2, a2, SZREG-1		/* Update count */
+>  
+>  4:
+>  	/* Handle trailing misalignment */
+> -	beqz a2, 6f
+> -	add a3, t0, a2
+> +	beqz	a2, 6f
+> +	add	a3, t0, a2
+>  5:
+> -	sb a1, 0(t0)
+> -	addi t0, t0, 1
+> -	bltu t0, a3, 5b
+> +	sb	a1, 0(t0)
+> +	addi	t0, t0, 1
+> +	bltu	t0, a3, 5b
+>  6:
+>  	ret
+>  END(__memset)
+> -- 
+> 2.33.0
+> 
