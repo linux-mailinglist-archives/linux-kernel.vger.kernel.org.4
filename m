@@ -2,74 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6106FCA52
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F0A6FCA5B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235663AbjEIPfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 11:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
+        id S235814AbjEIPiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 11:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235541AbjEIPfD (ORCPT
+        with ESMTP id S234828AbjEIPiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 11:35:03 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42FEE3
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 08:35:02 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id 5614622812f47-38e0a37594eso95236b6e.0
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 08:35:02 -0700 (PDT)
+        Tue, 9 May 2023 11:38:01 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272B646B2
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 08:37:59 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1aad5245571so41549125ad.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 08:37:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683646502; x=1686238502;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JEkw1KmmzfmMdZjy2G/k2kJ9Rp06l3CUoffIihDDUro=;
-        b=SasqTVINoWJK7v9izvGdhA8dWFzxZnhGBHSGUrg+kjTd/DycxQ5HCo3QPXX0aEUelD
-         VTGFAMgZJXYxTs4slgWnvHIWuClnsEu4uZ8GtYdek1lshTcBpy0RXD1GJUHNPtUvkJPU
-         OkB5bzs2ylH/l8JOxC0QFyJGYG0sc5y94Ppe99eOXR9OjVt45w4Zd9+FJ4MLlF1OK2lH
-         7T2TOt4q0RTxvD5chASSrImNVZtEmD5WeQLjSZMsCmpiwbt+oeniSBvmqWOcauigMqSp
-         LF3m/MvoW1TYb1pXfvxwVnoR2JYju2e3+d3pS8sAUmsi15aEsixxZG6MUPBkcwc3EBJ2
-         O/fg==
+        d=gmail.com; s=20221208; t=1683646678; x=1686238678;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=znDwmoweGIbazinqZk+RMiWAEky714GctekUC5TPRSI=;
+        b=KKOZZnf9GqB+bW2sq2bGj2OI4Eksv6MexBLK85NQVZrQbRXviqwAWY5u3yzTIeTtW6
+         YtVYXZiCtfv1Ymn8pVeuL9rZZYJFYH8ay+4vC1dPp7IJNo5eWO31dxpkxT62JzvWBgMh
+         I/T+6AmVV4FoUE04NVug7mYJmZb0vUH6TciApC35IgdiGsCSqrRkYP1PnQTutASx/0NG
+         lsOq3BnDP6SBV4BZ19RYWCVYPNaCAW6+PtB7nTeU6nCcfx7rCmbomBZkuhhLLBkpSmP3
+         uTBJufpBY0KQijq+q5j3XyfvziuhLI2WRViYJwl0lP1FecYYL3b8Hw7PkofkfkjYcpZf
+         JDqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683646502; x=1686238502;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JEkw1KmmzfmMdZjy2G/k2kJ9Rp06l3CUoffIihDDUro=;
-        b=KTVwkGH7svAmATRJw7Um7Opw8uYsPjZXVb0Pez47Vc8YetuzyrIj4kpynZO9cU+5Ye
-         DY1urbzOkC3Wlq7OJWTRfEN1f3m2ZwWtSSDG5rcbDioYvzA5xEso1EdJkF4s/NTZ+c8s
-         jDyteLk1K1BicE35HvzhyrFMeDnOdSM2J9fygqZbgC0ipjmOJM5PV52qs9wU6LOizRX5
-         4dL1TOi2T3bzkl1LQjHCxYk+n5AwXpNFHb8eOWV10HvtDNTqXIJgvCeVZFjP0TKpozlC
-         iW4HP9BVXMF1PkFEf8WaeXZc3JLc2hG+nUmZVEYV63makZhdaeV1tGnYKlXs4jDb+EWP
-         6LPA==
-X-Gm-Message-State: AC+VfDyHtPT4GG6ps27zSUBcOsTIU1NzUuzWrLVdeXlNT+7Jqv/pkaxy
-        uQdLj7DvyebZNynEoDxlwAGTpXDKbJKKUvgrawo=
-X-Google-Smtp-Source: ACHHUZ7+6RH6YL7GsnNT3KgiEL8VbSOmQ8KhUHXrPHbMyAroXTNL5G9c50M9GXhw2S7HLUVmRICrkA3Ukme5M4hMxkw=
-X-Received: by 2002:aca:df07:0:b0:385:d91:ee30 with SMTP id
- w7-20020acadf07000000b003850d91ee30mr5688123oig.3.1683646501744; Tue, 09 May
- 2023 08:35:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683646678; x=1686238678;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=znDwmoweGIbazinqZk+RMiWAEky714GctekUC5TPRSI=;
+        b=aqLvEVN5Qlbma03dJ1qx+kmHDzK6EXC8bJjEjDXCZhQI+MOh/ILTpegFgxdoHm8mHs
+         FnxZ5LEPBce2NxZeo6mifmgX2xESmY+pPVGWm7o/XBnSYEcWc8/S6WoxFU/XhYB4tbu4
+         OLqn2a671INAgtpFqULkQVahKLju3heXtbH/cNO6p2Hn5ywGwbbnW20ACEte6CsSFey9
+         egiPeSwFaVt1QBo2sVCq/0T7Op8EHIZncQglOZmalcMxqRE1F2J3paKQIkf0n2sert+9
+         3Mc05GRUKQAZSnAkKrFa6OQXCse4sjbDP+p5VjNbAhGaCHIea/gZEsTlIOEBklAqBUjf
+         ShHg==
+X-Gm-Message-State: AC+VfDzKsv3JxO0K2xkxTBALq6ymLQQO8aikIdfg39Rk39ldZye0rnKi
+        wWhGs66Vc5P5PgZQvle8jH8exskN8NM=
+X-Google-Smtp-Source: ACHHUZ5V3bE4bDm1bOJVAoybprrK78mLfVXMFJins9Cj4n2R6LdEU6vQr+B5gQDJsvJaxb54BBdLOQ==
+X-Received: by 2002:a17:902:d2cb:b0:1ac:7ea7:6ccd with SMTP id n11-20020a170902d2cb00b001ac7ea76ccdmr8190149plc.34.1683646678123;
+        Tue, 09 May 2023 08:37:58 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id i1-20020a1709026ac100b001a64011899asm1753977plt.25.2023.05.09.08.37.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 08:37:57 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 9 May 2023 05:37:56 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH workqueues] Further upgrade queue_work_on() comment
+Message-ID: <ZFpo1OA7hnRaVrgx@slm.duckdns.org>
+References: <ae548f82-fd4e-490e-889a-3307b9a2c531@paulmck-laptop>
 MIME-Version: 1.0
-Sender: mrsnicolemarois10@gmail.com
-Received: by 2002:a05:6358:882:b0:123:83c:c3e3 with HTTP; Tue, 9 May 2023
- 08:35:00 -0700 (PDT)
-From:   AVA SMITH <avasmith1181@gmail.com>
-Date:   Tue, 9 May 2023 15:35:00 +0000
-X-Google-Sender-Auth: 11ygK3VKJW3yMjVqTfXKSPHUlyg
-Message-ID: <CAPsswJL4RMokdjupVYGvaYJZ_vaYx0eZFWxoJFSj-TSW+NpMSg@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae548f82-fd4e-490e-889a-3307b9a2c531@paulmck-laptop>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-My name is Dr Ava Smith,a medical doctor from United States.I have
-Dual citizenship which is English and French.I will share more details
-about me as soon as i get a response from you.
+On Fri, Apr 28, 2023 at 04:47:07PM -0700, Paul E. McKenney wrote:
+> The current queue_work_on() docbook comment says that the caller must
+> ensure that the specified CPU can't go away, and further says that the
+> penalty for failing to nail down the specified CPU is that the workqueue
+> handler might find itself executing on some other CPU.  This is true
+> as far as it goes, but fails to note what happens if the specified CPU
+> never was online.  Therefore, further expand this comment to say that
+> specifying a CPU that was never online will result in a splat.
+> 
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+> Cc: Tejun Heo <tj@kernel.org>
 
-Thanks
-Ava
+Applied to wq/for-6.5.
+
+Thanks.
+
+-- 
+tejun
