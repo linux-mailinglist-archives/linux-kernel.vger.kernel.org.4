@@ -2,99 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BCC6FC63A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAEFB6FC640
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbjEIMZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 08:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
+        id S234398AbjEIM0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 08:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235053AbjEIMZ2 (ORCPT
+        with ESMTP id S234811AbjEIM0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 08:25:28 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7126C44AF;
-        Tue,  9 May 2023 05:25:27 -0700 (PDT)
+        Tue, 9 May 2023 08:26:06 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3654201;
+        Tue,  9 May 2023 05:25:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1683635127; x=1715171127;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ijkGrW+2rpFL4Y0gLu0veMBivtrLnsxJY0JGpTtZ9Bk=;
-  b=VzdDXSnu7ppy6LMg/3wIq90VQzfw8zFHkoJqkgbVQoiYwpBAtTgb8YSX
-   OTJtXp09ZkLv3oKvN6WWDUZuYp1mA7n3CBOf7bRIj0NQ9xXbx5Q1NHJ8e
-   icncKEGmkYEq9pB5a87VhLcVLriOVPnJa0QZwTzMLk0MIOhtOEr+QQc5M
-   jnCvhBpPtdQBoQzDR0uZnvj1sA4l1eN7cDRNcJBYgUG8GZNT+MZnW+Rj1
-   rlGViWXWkWHq4f5AJweDA/DbfpGM1XdknAsWzruRS4/vVwzL/7iNviFsb
-   VIE7lhIC3Q3TWE8J8oGk1CnF8FD+D4GM96unL2zFuKbR66Z2Ih6amC6ha
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683635150; x=1715171150;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=upRdd3SMsO3dE9kZLhoq1cDgJaHqitqd/ygcALdoe24=;
+  b=hDWpXuFP3GIewLqwVmTr4CzVkohhHbGsObijiW9N3+3kU4s2MRJbqN4E
+   WRvpcv8Y/BXxXZemD2Ni7dS7YcODRf1D7XK9+/I+o+3ym8GVZ3j6dvHbF
+   L5qJteul69CzNeonPZjYj+nivq1J5lIo1BM+m0R23B/O+2uwhe4hXxsE4
+   BCBcEm1vaN1BBDM6uPSt/fYCbyCrZKyB2yQayuphDDq7tD2V616mP3aLE
+   N5UJlWamnxa/KWJjyreP+57Waba2TgBXgA9ZNtaGVxejyRCT5lX+vzY2M
+   vULgKFmNWhQUVxuBjOG7kTMQS/wDB6RAmbh4KNM3fThXInbx1K5t20YnQ
    Q==;
-X-IronPort-AV: E=Sophos;i="5.99,262,1677567600"; 
-   d="asc'?scan'208";a="210342933"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 May 2023 05:25:26 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 9 May 2023 05:25:25 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 9 May 2023 05:25:22 -0700
-Date:   Tue, 9 May 2023 13:25:03 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>
-Subject: Re: [PATCH 6.3 000/694] 6.3.2-rc2 review
-Message-ID: <20230509-reheat-enclosure-c0f8fcf7f157@wendy>
-References: <20230509030705.399628514@linuxfoundation.org>
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="352973445"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="352973445"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 05:25:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="788505129"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="788505129"
+Received: from mbrdon-mobl.ger.corp.intel.com ([10.251.219.121])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 05:25:44 -0700
+Date:   Tue, 9 May 2023 15:25:41 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+cc:     Jacky Huang <ychuang570808@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, Lee Jones <lee@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-serial <linux-serial@vger.kernel.org>, schung@nuvoton.com,
+        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v10 10/10] tty: serial: Add Nuvoton ma35d1 serial driver
+ support
+In-Reply-To: <eeeaf258-8f2b-436a-aba0-b32dc90b359f@app.fastmail.com>
+Message-ID: <b9573562-d4d7-3535-fb4d-f2bc694f2a4@linux.intel.com>
+References: <20230508025936.36776-1-ychuang570808@gmail.com> <20230508025936.36776-11-ychuang570808@gmail.com> <2ba483e9-267f-2159-1ea8-75a2618fcdf9@linux.intel.com> <eeeaf258-8f2b-436a-aba0-b32dc90b359f@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9nh3UvsGBTT76EVo"
-Content-Disposition: inline
-In-Reply-To: <20230509030705.399628514@linuxfoundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-1414178471-1683634754=:2036"
+Content-ID: <9bb37169-6cc8-9ecf-9c75-4d17151c32d@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---9nh3UvsGBTT76EVo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On Tue, May 09, 2023 at 05:26:44AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.2 release.
-> There are 694 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+--8323329-1414178471-1683634754=:2036
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <ba1258be-c4c9-856b-c814-9cd42d1740c8@linux.intel.com>
 
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
+On Tue, 9 May 2023, Arnd Bergmann wrote:
 
-Thanks,
-Conor.
+> On Tue, May 9, 2023, at 12:17, Ilpo Järvinen wrote:
+> > On Mon, 8 May 2023, Jacky Huang wrote:
+> >> +
+> >> +#define UART_NR			17
+> >> +
+> >> +#define UART_REG_RBR		0x00
+> >> +#define UART_REG_THR		0x00
+> >> +#define UART_REG_IER		0x04
+> >> +#define UART_REG_FCR		0x08
+> >> +#define UART_REG_LCR		0x0C
+> >> +#define UART_REG_MCR		0x10
+> >
+> > These duplicate include/uapi/linux/serial_reg.h ones, use the std ones 
+> > directly.
+> >
+> > Setup regshift too and use it in serial_in.
+> 
+> I think this came up in previous reviews, but it turned out that
+> only the first six registers are compatible, while the later
+> ones are all different, and it's not 8250 compatible.
 
---9nh3UvsGBTT76EVo
-Content-Type: application/pgp-signature; name="signature.asc"
+So use the normal name for compatible ones and HW specific names for the 
+others?
 
------BEGIN PGP SIGNATURE-----
+It might not be compatible in everything but surely 8250 influence is 
+visible here and there.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFo7nwAKCRB4tDGHoIJi
-0rXdAQCStlcR0Mkfx/k9Pb/1gFsKOiO1GZCFh66yXngIdynN/QEAyex3G0ZVNS/F
-qe2nUILynK5mjBX5La5rIPAZCi7NAQw=
-=MJU6
------END PGP SIGNATURE-----
+> It might be helpful to rename the registers to something
+> with a prefix other than UART_REG_*, to avoid the confusion
+> and possible namespace clash.
 
---9nh3UvsGBTT76EVo--
+That is what I also suggested for the rest of the registers.
+
+-- 
+ i.
+
+> >> +/* UART_REG_IER - Interrupt Enable Register */
+> >> +#define IER_RDA_IEN		BIT(0)  /* RBR Available Interrupt Enable */
+> >> +#define IER_THRE_IEN		BIT(1)  /* THR Empty Interrupt Enable */
+> >> +#define IER_RLS_IEN		BIT(2)  /* RX Line Status Interrupt Enable */
+> >
+> > These look same as UART_IER bits, use the std ones.
+> ...
+> > Are these same as UART_FCR_CLEAR_* functionality wise? If they're use std 
+> > ones.
+> 
+> Again, I'd think we're better off having a distinct naming for
+> them than trying to share the definitions with 8250.
+> 
+> >> +static struct uart_driver ma35d1serial_reg = {
+> >> +	.owner        = THIS_MODULE,
+> >> +	.driver_name  = "serial",
+> >> +	.dev_name     = "ttyS",
+> >> +	.major        = TTY_MAJOR,
+> >> +	.minor        = 64,
+> >> +	.cons         = MA35D1SERIAL_CONSOLE,
+> >> +	.nr           = UART_NR,
+> >> +};
+> >
+> > This doesn't seem necessary, 8250 core will have the uart_driver for you
+> > and most of the console stuff too. You just need to setup a few things 
+> > correctly (see the setup functions in 8250_early for ideas/examples).
+> >...
+> >> +
+> >> +	ret = uart_add_one_port(&ma35d1serial_reg, &up->port);
+> >
+> > For 8250, you should be using serial8250_register_8250_port(). See the 
+> > other drivers how to setup the console functions.
+> 
+> Consequently, this should also be kept separate from the serial8250
+> driver, I don't see a way to fit the nuvoton code into the existing
+> driver without making the resulting driver worse for everyone.
+> 
+> There is one thing that absolutely needs to be changed though:
+> the driver_name/dev_name/major/minor fields all clash with the
+> 8250 driver, so you cannot have a kernel that has both drivers
+> built-in. All of these should change to get out of the way of the
+> existing drivers.
+> 
+>         Arnd
+> 
+--8323329-1414178471-1683634754=:2036--
