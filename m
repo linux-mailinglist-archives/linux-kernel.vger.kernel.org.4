@@ -2,161 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A076FC192
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0EBF6FC194
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234507AbjEIIVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 04:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
+        id S234702AbjEIIWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjEIIVm (ORCPT
+        with ESMTP id S234267AbjEIIWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 04:21:42 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6301FC9;
-        Tue,  9 May 2023 01:21:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683620498; x=1715156498;
-  h=message-id:subject:from:to:cc:date:mime-version:
-   content-transfer-encoding;
-  bh=iL32OTVxfsKf0MiPlMkD5VCv+3BZXtsc3yvc0K3cIjA=;
-  b=aKCU8lp1lRWDS2Dv2E6nRvDZ5vp/qWpqDkU2vxwmzcDJW0bdLom9QlLf
-   ZORv7rdPiVv5+Lc5v7LDzrK/8FgdoyFEE/sZmIDpAxo9JIKHZdgdLxs+L
-   KpuaLf0d68TnzeiRg/K1MSnLwvfncg38Fy3dlUS7aj+74/m2qwMJT4Cfy
-   Ot96Ojpd7LT6guVy4jksV+XtNyBMEQ927DesfGgMIJ3Bfm0cQhxbOLGj6
-   WUrUzRLvYdjVFIWhrTNymq+jBpygztsPNRSUajmMKVyIxY3DKu8oAbAph
-   1Pm9VdNgMpwI6Yt2Xq1ZjRgprmFYDNyj6vGxoznIDTJljzEfGyXFXYLqz
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="349871441"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208,223";a="349871441"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 01:21:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="873081495"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208,223";a="873081495"
-Received: from dperchan-mobl1.ger.corp.intel.com (HELO terminus) ([143.185.115.141])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 01:21:31 -0700
-Message-ID: <86fe33984f12ff5eec5c0418e927ab93d0b71759.camel@intel.com>
-Subject: [PATCH] media: uapi: v4l: Intel metadata format update
-From:   Dmitry Perchanov <dmitry.perchanov@intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     mchehab@kernel.org, linux-kernel@vger.kernel.org,
-        sakari.ailus@iki.fi, laurent.pinchart@ideasonboard.com,
-        evgeni.raikhel@intel.com, demisrael@gmail.com,
-        Sakari Ailus <sakari.ailus@intel.com>
-Date:   Tue, 09 May 2023 11:21:20 +0300
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 9 May 2023 04:22:00 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2129.outbound.protection.outlook.com [40.107.244.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC352E40;
+        Tue,  9 May 2023 01:21:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a8ZSpvxAYuzH/hF/667uCdcVAyq5ljgMUiRT8WfbFEi9wxANLJqk/+kKyNnH1AnFWu1faq2hi3Q98pOSe10YprPMAHaST2nXfPBKUO8hcb/Hm0p8NGW4SH+lJpZYNA40e11JjiKHWYCcRS7si69JyVUTGAsv29ZYPwHx9vJGX0umcGYXeuWuJ24KxWwBZR8RCxPmvfMSNMX8SJJ4pMc4QZ9Qa3e9+ucEcBE9SwGMFJRCvS/bXav6z/F5bwiS+M03EyA7EFaEzCO7zRks4puooTxZiO0pNCbpszdf5O7Z9YokErK6prKxYAfF4OD7IhrnxKdBwcoh8BSDlME9hq3mhg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/cC+gyrpLd7nYJ7x0ybYahKmrjO1lOvIqIUs3grtMsg=;
+ b=dOOnWVMHaPuStUgyNODweYoBIdCtlnP5hw+BsmcOSU8YA/9ls/BnCVfwN3Hw75dfpuKhmFYVUB881l5B0voUT9Wm6yWnUu5uxUHWT/IgruzYMj6aYSUA+bkdI9ihy20ZOWfOySQqUBVlTaRuNihtlfDaXbsD0Gis11gPQaMzl24Z4bLcciCGARCcQH57tNJS8XcAYQdkNxY+JjTibhkUgTFwRP7bZy84kLdR1hoJy2dpAjpSMrySA2qwldA1dW1BWXAkRrwo7/CX2yV/Rhd9l56DHLgmCjt/LONbYvUq2N8Li43mit3dZffv8h1FvWXrfl7lTbMGbtp05selSVDgGA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/cC+gyrpLd7nYJ7x0ybYahKmrjO1lOvIqIUs3grtMsg=;
+ b=rLLudrUobXUaeKGE6qOaEumUMannM+sQYwP0mArTfPXf7B1CflXhxodvz0GG4z25r+TsVkN8pYixnssh5tHyrFFXbhQnw8ow1YdrJtTYC8KbrVQImNn3hzqeJxJQYGmmAy8CUrWm/fgbDeOZmhc/A5DV8yoIov7CnOmKNfW0J84=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by MW5PR13MB5945.namprd13.prod.outlook.com (2603:10b6:303:1aa::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Tue, 9 May
+ 2023 08:21:56 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6363.032; Tue, 9 May 2023
+ 08:21:56 +0000
+Date:   Tue, 9 May 2023 10:21:48 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Dong Chenchen <dongchenchen2@huawei.com>
+Cc:     edumazet@google.com, kuba@kernel.org, davem@davemloft.net,
+        pabeni@redhat.com, jbenc@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yuehaibing@huawei.com,
+        weiyongjun1@huawei.com
+Subject: Re: [PATCH next, v2] net: nsh: Use correct mac_offset to unwind gso
+ skb in nsh_gso_segment()
+Message-ID: <ZFoCnIIZdrdoht6T@corigine.com>
+References: <20230509021924.554576-1-dongchenchen2@huawei.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509021924.554576-1-dongchenchen2@huawei.com>
+X-ClientProxiedBy: AM0PR10CA0060.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:150::40) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW5PR13MB5945:EE_
+X-MS-Office365-Filtering-Correlation-Id: f83f1c04-a9fa-4bc5-43e1-08db506673d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Cih3rktRXEON/8tfos/IklqCbChtXIk62MJ4QJ4bdKxc7RhJ4J+6AA4BH7UXZWzmlxVXwjEpqtyJogb7a7s1THpFhapasY1q3Q3xLOqB5kaIyvNPYJ+IqVj8zRFl+/8Xv75f+W40JOohty5Ou8me4nnEdi9umzuDFqtJUEsQY2NsNRqP2ixE419ti88lq1sqex7M9stG+ic8BBpc0hzittezzSq+MpWUsRsiEnN0hN/wmiIWbAstuSuntxN+hXb4CRwtm3BZZlETzVZLr2jZgg9ne7kTtJTM//K0PWnceF/UhMOXHgs2/9FoxW7E6edQ6poZ+64lHNfRU6v+WmL4fSKv6pUzm0a9L4eufE4n2XvRFu4/CJbnOv8BFibie8XtcFfQFw7nTkwb/NIYBxRsdWT3gHUFbszB6y6ll8C5UmUCZBkpR7a5pm0YrJXpZBvk1Ja5Mp45KsOTlgSGLgqzj+i5djhRgMoxxeKAQt12ejxlYss3Bjc4mTQiVTrV+j0TuDL6Fp0+AufLehlP+/49PJYoHiwJ+Oz2e+QCwc1jxEQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(136003)(376002)(39840400004)(346002)(451199021)(966005)(66476007)(6916009)(478600001)(316002)(4326008)(6486002)(66946007)(66556008)(86362001)(36756003)(83380400001)(6506007)(2616005)(6512007)(6666004)(44832011)(5660300002)(2906002)(7416002)(41300700001)(8676002)(8936002)(38100700002)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?q32vWeYJgeARxVZrE25433ccC0ozYDm+ea+gXsH3c/iTjQarofqUWp12MThW?=
+ =?us-ascii?Q?2c2mj/Jisr/R+I7OQ5ljgqzh5eIhnBrubXr2mXUNVsWOhjAghEt+4dU0bBMr?=
+ =?us-ascii?Q?d3xbrSThbEEZdHQtO9tJMHIiXAeT3cykJbjR61e3T+ry+VU1Id62fCfUeyWL?=
+ =?us-ascii?Q?co4OzoPeVpIxlbCah8ddm8ZVonMrz0vBtbzaw25/LwhvaRNa0o+D3rwBGHQo?=
+ =?us-ascii?Q?CfkKpdE5q2YKlv/yt+2yE8WFrK66lvnL4Ypp+j2ECu8GyoHmFuLkFxDDglXD?=
+ =?us-ascii?Q?x2XVLyiom3RFXgdQzkOwaQ/8HP8qWGGIZ+FA+0nw5XGpzfp8pSPUENaXIh6P?=
+ =?us-ascii?Q?goXgTG59bBoCTbQDBVzJ/Q+I4QQ5R6L3reqY4oAkVJXivVKrMAffPC1WFf9/?=
+ =?us-ascii?Q?8hOplSTiv6giKdKHdk8CEdpbITuyEy1ZI8tCHSmqhuAc0fxRyOp5eyNOOCfF?=
+ =?us-ascii?Q?pzkv4vzn1dUtUnxNNYMRBHHQYAylrlYAsl2LJDZC0aqc1Wp2TfOOvRqUcknb?=
+ =?us-ascii?Q?gwpS8jPv6sdTEjw1dArhMyJceBiawcRZaNiMyQoXB+ADJYXp3etxsCok3V95?=
+ =?us-ascii?Q?JsZGjwfAdyliogM22YSmjUxCogNFRi7Pj7KjqDdZ8v/H1zbTgILSiy9ZyymO?=
+ =?us-ascii?Q?v3w7gl+QuXh7xADJF8yS10BVwXSKE61PuYfPN/rP75wDkcDEDOMQemojMOvB?=
+ =?us-ascii?Q?XQ4vMsJ0tvvv6HjyLEh6eWuT0v2BXWCLKfPIts2huoCvws5xUw0DXeVg18YI?=
+ =?us-ascii?Q?BfMGfN9WGq9Ew2A+hktbTMq1wT07qIQFgz+GTwSajMdJL0GCOlwyjPxqJwyT?=
+ =?us-ascii?Q?I4dHWafa4zNB32AoK0NxIWupNr0EN62VMGQApDjNCpIs6msPlOeV2ztSMCP2?=
+ =?us-ascii?Q?O0rgqn8ovXQaJgk4MwMG58xLEaaUV9UYp/BCZ56dYOrimEEniqsqgKIFVpFR?=
+ =?us-ascii?Q?YbzUw+QeuY2Q4Zr0HzvorkeTAqnlCCjsklSvIUz28k7WLkKqkmEfqJMdkOzK?=
+ =?us-ascii?Q?86R14ZWg+pxTDcM2PBwJOrHgnY6kcwVVah8MFEtzyNLS+s8cHvhlyw3LzoYf?=
+ =?us-ascii?Q?pOD6dzfcvgXTgOs3NsI9vl9oBMdgwyz2G/J0TDR5S+K5quHB/tIHLFh5qdQG?=
+ =?us-ascii?Q?ODeHLRNEGoheHggBUk9ouCjhywGrJoJ5P7WDYtQvGAcdtaPgRmB0lxegHrvI?=
+ =?us-ascii?Q?HzyymFZiKpY+HL869BS9bLZKsEBbte4Zj+rf0x4uTsN4+U3DlM4JhS4FR/xt?=
+ =?us-ascii?Q?L5zUlTM8VOZQEwXBIMJb8gb3WTku5lDnqFRxXhecLMXil9Bh31+jk4Afw3cw?=
+ =?us-ascii?Q?39B8Z62aXRuGN9zVhWwd7gjvoIFGlXbLQ033YxV8EujYHArtSjWKxflJFlJW?=
+ =?us-ascii?Q?xfEMsqnvsAR3AySyNQ9Qo0WElZ2ip7vLAgceD4XLiOmFEsjaXwJha7+OTFt7?=
+ =?us-ascii?Q?6VSO5W+045n6bOsvKs6Yi4LcFGyQ7ETNzRbIhw/nSDaPKX2ZzTWi8fYj8qMa?=
+ =?us-ascii?Q?TwW62OU/mNgUPG+xYA8MpFSN2FcJJ+BGyz9YonkF/QIRgmJoQ1RDtcHOZWmA?=
+ =?us-ascii?Q?D4Cp4y1UWEQYWcxUh6yF8LrYPog5h7hL11bjrb/ams9nABIPyBWcn9GrCz5l?=
+ =?us-ascii?Q?7KpdmKMy136CuwcPKtCY4TUo7c1OjLnPaZ/s+foc9Xv+lfxwHDFoAUchNgkE?=
+ =?us-ascii?Q?iW9cxQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f83f1c04-a9fa-4bc5-43e1-08db506673d5
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 08:21:56.6051
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aaCnKzTeJgnYDKx7iGa5EE0grT7mu1RCisjNabIHyg1kgya90A1eUGdfSB9Yx5pO7aOuZtc8GaGnio9xdt5rE2THRnReg22R4FAtrzJa6qA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR13MB5945
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From be3b4d3505530496a5079c88e3c76da3a688ee8a Mon Sep 17 00:00:00 2001
-From: Dmitry Perchanov <dmitry.perchanov@intel.com>
-Date: Tue, 9 May 2023 11:09:11 +0300
-Subject: [PATCH] media: uapi: v4l: Intel metadata format update
+On Tue, May 09, 2023 at 10:19:24AM +0800, Dong Chenchen wrote:
+> As the call trace shows, skb_panic was caused by wrong skb->mac_header
+> in nsh_gso_segment():
+> 
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+> CPU: 3 PID: 2737 Comm: syz Not tainted 6.3.0-next-20230505 #1
+> RIP: 0010:skb_panic+0xda/0xe0
+> call Trace:
+>  skb_push+0x91/0xa0
+>  nsh_gso_segment+0x4f3/0x570
+>  skb_mac_gso_segment+0x19e/0x270
+>  __skb_gso_segment+0x1e8/0x3c0
+>  validate_xmit_skb+0x452/0x890
+>  validate_xmit_skb_list+0x99/0xd0
+>  sch_direct_xmit+0x294/0x7c0
+>  __dev_queue_xmit+0x16f0/0x1d70
+>  packet_xmit+0x185/0x210
+>  packet_snd+0xc15/0x1170
+>  packet_sendmsg+0x7b/0xa0
+>  sock_sendmsg+0x14f/0x160
+> 
+> The root cause is:
+> nsh_gso_segment() use skb->network_header - nhoff to reset mac_header
+> in skb_gso_error_unwind() if inner-layer protocol gso fails.
+> However, skb->network_header may be reset by inner-layer protocol
+> gso function e.g. mpls_gso_segment. skb->mac_header reset by the
+> inaccurate network_header will be larger than skb headroom.
+> 
+> nsh_gso_segment
+>     nhoff = skb->network_header - skb->mac_header;
+>     __skb_pull(skb,nsh_len)
+>     skb_mac_gso_segment
+>         mpls_gso_segment
+>             skb_reset_network_header(skb);//skb->network_header+=nsh_len
+>             return -EINVAL;
+>     skb_gso_error_unwind
+>         skb_push(skb, nsh_len);
+>         skb->mac_header = skb->network_header - nhoff;
+>         // skb->mac_header > skb->headroom, cause skb_push panic
+> 
+> Use correct mac_offset to restore mac_header to fix it.
+> 
+> Fixes: c411ed854584 ("nsh: add GSO support")
+> Signed-off-by: Dong Chenchen <dongchenchen2@huawei.com>
 
-Update metadata structure for Intel RealSense UVC/MIPI cameras.
-Compliant to Intel Configuration version 3.
+nit: As this is a fix it should probably be targeted at 'net'
+     (as opposed to 'net-next'). This should be noted in the subject.
 
-Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
----
- .../media/v4l/pixfmt-meta-d4xx.rst            | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+     Subject: [PATCH net v2]...
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst b/D=
-ocumentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-index 4e437ba97a0e..b5decde640c1 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-@@ -12,7 +12,7 @@ Intel D4xx UVC Cameras Metadata
- Description
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
- =
+> ---
+> v2:
+>   - Use skb->mac_header not skb->network_header-nhoff for mac_offset.
+> ---
+>  net/nsh/nsh.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/nsh/nsh.c b/net/nsh/nsh.c
+> index e9ca007718b7..7eb536a9677f 100644
+> --- a/net/nsh/nsh.c
+> +++ b/net/nsh/nsh.c
+> @@ -78,6 +78,7 @@ static struct sk_buff *nsh_gso_segment(struct sk_buff *skb,
+>  {
+>  	struct sk_buff *segs = ERR_PTR(-EINVAL);
+>  	unsigned int nsh_len, mac_len;
+> +	u16 mac_offset = skb->mac_header;
 
--Intel D4xx (D435 and other) cameras include per-frame metadata in their UVC
-+Intel D4xx (D435, D455 and others) cameras include per-frame metadata in t=
-heir UVC
- payload headers, following the Microsoft(R) UVC extension proposal [1_]. T=
-hat
- means, that the private D4XX metadata, following the standard UVC header, =
-is
- organised in blocks. D4XX cameras implement several standard block types,
-@@ -26,6 +26,8 @@ V4L2_META_FMT_UVC with the only difference, that it also =
-includes proprietary
- payload header data. D4xx cameras use bulk transfers and only send one pay=
-load
- per frame, therefore their headers cannot be larger than 255 bytes.
- =
+nit: It is generally preferred to arrange local variable in networking code
+     from shortest line to longest - reverse xmas tree order.
 
-+This document implements Intel Configuration version 3.
-+
- Below are proprietary Microsoft style metadata types, used by D4xx cameras,
- where all fields are in little endian order:
- =
+     This can be verified using.
+     https://github.com/ecree-solarflare/xmastree/blob/master/README
 
-@@ -43,7 +45,7 @@ where all fields are in little endian order:
-     * - __u32 ID
-       - 0x80000000
-     * - __u32 Size
--      - Size in bytes (currently 56)
-+      - Size in bytes (currently 60)
-     * - __u32 Version
-       - Version of this structure. The documentation herein corresponds to
-         version xxx. The version number will be incremented when new field=
-s are
-@@ -72,8 +74,11 @@ where all fields are in little endian order:
-       - Bottom border of the AE Region of Interest
-     * - __u32 Preset
-       - Preset selector value, default: 0, unless changed by the user
--    * - __u32 Laser mode
-+    * - __u8 Emitter mode
-       - 0: off, 1: on
-+    * - __u8 RFU byte
-+    * - __u16 LED Power
-+      - Led power value 0-360 (F416 SKU)
-     * - :cspan:`1` *Capture Timing*
-     * - __u32 ID
-       - 0x80000001
-@@ -124,6 +129,14 @@ where all fields are in little endian order:
-       - Requested frame rate per second
-     * - __u16 Trigger
-       - Byte 0: bit 0: depth and RGB are synchronised, bit 1: external tri=
-gger
-+    * - __u16 Calibration count
-+    * - __u8 GPIO input data
-+      - GPIO readout
-+      - Supported from FW 5.12.7.0
-+    * - __u32 Sub-preset info
-+      - Sub-preset choice information
-+    * - __u8 reserved
-+      - RFU byte.
- =
-
- .. _1:
- =
-
--- =
-
-2.25.1
-
-
----------------------------------------------------------------------
-Intel Israel (74) Limited
-
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
-
+>  	__be16 proto;
+>  	int nhoff;
+>  
+> @@ -108,8 +109,7 @@ static struct sk_buff *nsh_gso_segment(struct sk_buff *skb,
+>  	segs = skb_mac_gso_segment(skb, features);
+>  	if (IS_ERR_OR_NULL(segs)) {
+>  		skb_gso_error_unwind(skb, htons(ETH_P_NSH), nsh_len,
+> -				     skb->network_header - nhoff,
+> -				     mac_len);
+> +				     mac_offset, mac_len);
+>  		goto out;
+>  	}
+>  
+> -- 
+> 2.25.1
+> 
+> 
