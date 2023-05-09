@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 375C86FBF9C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57A46FBFA5
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235061AbjEIGxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 02:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
+        id S235074AbjEIGxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 02:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235068AbjEIGws (ORCPT
+        with ESMTP id S235099AbjEIGxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 02:52:48 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A78E49F5;
-        Mon,  8 May 2023 23:52:46 -0700 (PDT)
-X-UUID: 16d91f6eee3611edb20a276fd37b9834-20230509
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=TmJURkv7pbAHTEbnTOyNE3fGHfegLQvP/MIIY3flVJM=;
-        b=kUS6TaLzLYv8M+UHcTz5DkzpA2ogXcOS5em6uYemIl2r5zYuklhlER6kZVUFt7AlmZGTjbRqwGx6rSVisFrlf1TA9aQySl1Q8BaZ/P316E0Iex0eiz+QzyrKL5jessvm7IhjJ3eW6NOCgKRSWZnEfna3noySCWuULBsbVppTxr8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.23,REQID:623d23ad-f6ee-4b62-8f02-966255298c67,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:697ab71,CLOUDID:5a153dc0-e32c-4c97-918d-fbb3fc224d4e,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: 16d91f6eee3611edb20a276fd37b9834-20230509
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
-        (envelope-from <ed.tsai@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 213924394; Tue, 09 May 2023 14:52:39 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 9 May 2023 14:52:39 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 9 May 2023 14:52:39 +0800
-From:   Ed Tsai <ed.tsai@mediatek.com>
-To:     <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <bvanassche@acm.org>, <stanley.chu@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
-        <naomi.chu@mediatek.com>, <wsd_upstream@mediatek.com>,
-        Ed Tsai <ed.tsai@mediatek.com>
-Subject: [PATCH 2/2] ufs: don't use the fair tag sharings
-Date:   Tue, 9 May 2023 14:52:30 +0800
-Message-ID: <20230509065230.32552-3-ed.tsai@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230509065230.32552-1-ed.tsai@mediatek.com>
-References: <20230509065230.32552-1-ed.tsai@mediatek.com>
+        Tue, 9 May 2023 02:53:13 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6502BAD28
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 23:53:11 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bc070c557so10637861a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 23:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683615190; x=1686207190;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0gVYUKUESgFg4JXOzPAjSxRkiRFFRfIKte714mnZ86g=;
+        b=c6t/rIcOSaiWGIGAtBLzqVuVk9Tev5gB7eF4xFTFUhOi0kSla9f4WBJwTRzrLOciJD
+         500GH/iS3kNjYz706tol8X20Y24nEbupifwz3mAUfPV41FtfXb4E3M45vsohor9cgGjE
+         KXdYuDF/t5oNhWc/aB8QM7Pb5Bf43mNsFLOOTfqw43mu/L/PiuVl2YSHSut9WEf1Upy2
+         zuEnCTC0Ac514nEsQyhcC4Lfzz5kHyInlYyxy5Wg+X2AOKWKwdSoP5EUhaeQ/vna+nR9
+         YUJ5fVqSoTGM2jHMOQi++2a8WPWZjLP24XfmWAFP6gucd7fFvhNsxcIeFlzUUJsP/SP0
+         dd4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683615190; x=1686207190;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0gVYUKUESgFg4JXOzPAjSxRkiRFFRfIKte714mnZ86g=;
+        b=Fz+pZWApsrZghoQpbBup9qr27uD7fpXujsJefbSUXwDk4UAljkIZdWJzSYRJ5+Z669
+         EFHxPjPlmVVGlXexgGMMssNoh2VjmSEqpqTzJE1F7U8LJ1GXM/qjvpiZqftqv/Cl8t9S
+         eJPfmDXkpyTfryN0+Kk0Ax8pMNxCby+PQcI0FinmzegdmssvKWWXYeUBc4QJHfiq2OCu
+         uysSTKEOyWMFu7LVFgpAQbLr5/sFkhK+cJH0qjsfgep4r2fQQlIpNdxjTx0J4PdWfVGK
+         eKbYCaweZ66Ozz+Jo3ExpH9T+01VYXA2yprZNoeGGxN98N46upIFPabX4hdvJFXdJIt3
+         lY1A==
+X-Gm-Message-State: AC+VfDx3ywsa0UQElVrkZFRVZ/0Di0c/DeEH6lWGYRA8BYReh0Dyv5ad
+        i2DW5JLXrh3jM6pzoUbl9fRHIQ==
+X-Google-Smtp-Source: ACHHUZ65+L9lC22HwIp27k17nrs3SAtXzR1jYOlboAXf/p55Rd9BcjSN9Y21U+KDgvJ5kmk0VHWD6g==
+X-Received: by 2002:a17:907:1b29:b0:94f:2d5f:6949 with SMTP id mp41-20020a1709071b2900b0094f2d5f6949mr12526827ejc.42.1683615189883;
+        Mon, 08 May 2023 23:53:09 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
+        by smtp.gmail.com with ESMTPSA id hz17-20020a1709072cf100b009664e25c425sm933807ejc.95.2023.05.08.23.53.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 23:53:09 -0700 (PDT)
+Message-ID: <ea9ae4c9-2808-bf22-70a3-bb7e7b1168d0@linaro.org>
+Date:   Tue, 9 May 2023 08:53:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI system watchdog
+ driver
+Content-Language: en-US
+To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com
+References: <20230508131515.19403-1-bbhushan2@marvell.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230508131515.19403-1-bbhushan2@marvell.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,29 +78,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tags allocation is limited by the fair sharing algorithm. It hurts
-the performance for UFS devices, because the queue depth of general I/O
-is reduced by half once the UFS send a control command.
+On 08/05/2023 15:15, Bharat Bhushan wrote:
+> Add binding documentation for the Marvell GTI system
+> watchdog driver.
+> 
+> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+> ---
+> v7:
+>  - Corrected compatible to have soc name
+>  - Converted marvell,wdt-timer-index to optional
+> 
+>  .../watchdog/marvell,octeontx2-wdt.yaml       | 80 +++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+> new file mode 100644
+> index 000000000000..72951b10f1f3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+> @@ -0,0 +1,80 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/marvell,octeontx2-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell Global Timer (GTI) system watchdog
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
 
-Signed-off-by: Ed Tsai <ed.tsai@mediatek.com>
----
- drivers/ufs/core/ufshcd.c | 3 +++
- 1 file changed, 3 insertions(+)
+Put allOf after maintainers:.
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 17d7bb875fee..e96a50265285 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -5149,6 +5149,9 @@ static int ufshcd_slave_configure(struct scsi_device *sdev)
- 	blk_queue_update_dma_pad(q, PRDT_DATA_BYTE_COUNT_PAD - 1);
- 	if (hba->quirks & UFSHCD_QUIRK_4KB_DMA_ALIGNMENT)
- 		blk_queue_update_dma_alignment(q, 4096 - 1);
-+
-+	blk_queue_flag_clear(QUEUE_FLAG_FAIR_TAG_SHARING, q);
-+
- 	/*
- 	 * Block runtime-pm until all consumers are added.
- 	 * Refer ufshcd_setup_links().
--- 
-2.18.0
+> +
+> +maintainers:
+> +  - Bharat Bhushan <bbhushan2@marvell.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: marvell,octeontx2-wdt
+
+Why is this alone? Judging by the enum below, octeontx2 is not specific.
+
+> +      - items:
+> +          - enum:
+> +              - marvell,octeontx2-95xx-wdt
+> +              - marvell,octeontx2-96xx-wdt
+> +              - marvell,octeontx2-98xx-wdt
+
+We don't allow wildcards in general
+
+> +          - const: marvell,octeontx2-wdt
+> +      - const: marvell,cn10k-wdt
+
+Same question - why is this alone?
+
+Second question - it should be rather part of enum with the first one if
+accepted.
+
+> +      - items:
+> +          - enum:
+> +              - marvell,cn10kx-wdt
+> +              - marvell,cnf10kx-wdt
+> +          - const: marvell,cn10k-wdt
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+
+maxItems instead. You see it is different than above properties?
+
+> +
+> +  clock-names:
+> +    minItems: 1
+
+Need to define names.
+
+Best regards,
+Krzysztof
 
