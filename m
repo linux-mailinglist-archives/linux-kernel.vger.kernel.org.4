@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AFA6FBCC0
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 03:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015A96FBCC3
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 03:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234319AbjEIBvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 21:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
+        id S234169AbjEIBwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 21:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234169AbjEIBvb (ORCPT
+        with ESMTP id S233895AbjEIBvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 21:51:31 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BD9D07E;
-        Mon,  8 May 2023 18:51:01 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64115e652eeso39074740b3a.0;
-        Mon, 08 May 2023 18:51:01 -0700 (PDT)
+        Mon, 8 May 2023 21:51:32 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF53D04B
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 18:51:02 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-53033a0b473so770188a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 18:51:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683597059; x=1686189059;
+        d=gmail.com; s=20221208; t=1683597061; x=1686189061;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6dC7RqULScM3cUuSiw/pxvquCOcwrRPE1SiWm7WCEb0=;
-        b=HXZsHlbIhzqti5tgJYiPvXUl+AJNb4YJD4WPyehn7JumU60rY1LJ19vOZkS4pTR4SH
-         uvPKNk2AWKs4sMWXJSu4YHq2V9fL93fJOqYK4AM2vL2/0T2a0p0gKZvwHXwwinBnTGyv
-         xm1MMLptr/rfEVaC1aP7K2emb+bC2ZTUkMgStaekVIeNPN2lsAgv87HG8vPxFtW6WomP
-         y9+8YGpZ+c6cN2/hklGRg49a20646oWxbJZdKscD6gX81fndKjQ4GE1nuG6fXr+a+uoh
-         z7UcCDvFyHbd9N/7u/MGcE3yXRzfOALk5il1nxfU4SKdmMTDwIjlPXv78NXQRhips99r
-         4QBA==
+        bh=RA5k4x2cPapdL0imOMtMHgP2RzOlYcEcybwZg8p7ykM=;
+        b=CzFT7Rvlg6QqOuYMkwmERLb6+Tuxhm+WYECV7SkXw2YgLIv1aZ147r2g0hsCbWCBDm
+         64SiF3BFojY7zp4iE7hNIkj+CkF9AEjhUqkmqysA95EEwsYiPaYyqIMg2mvHPvm4BixO
+         JxzGYwoZ8pNyKYJEZeq5SvjNqpVc+aPtkkA19xg27iEdXNjwbX0/1avdixuYMo0cenap
+         InZ5gRGdfEolzfgBp8BJhFQXyVke8aDgGp0xioRwXPPQYz7veMGBuRz1mf3Y+/MKODro
+         N6xh0urWC6ajZfI+O3BiWV/nwl7xhrKzZ/ZD/8WODKUpFYcisgssVMBXY1A0woVgtw1o
+         OAuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683597059; x=1686189059;
+        d=1e100.net; s=20221208; t=1683597061; x=1686189061;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=6dC7RqULScM3cUuSiw/pxvquCOcwrRPE1SiWm7WCEb0=;
-        b=DdvOwwGIOsB/X9P93PiCqeV2VcmjPEzJ3vBLY0lL0H7ht9OV0YZCxIEM4z5D8CA2n2
-         7LUZmct8iXiXOKqE+5np0RVoK238opzUslu6LKCMj+ZqIKevSxgECjUpVZeoX0Qy4abG
-         KsRgocOiXc9A4UeNC0jVvHnlWsj2Xu00jSGu+NWya7+90FN06aIsLkDT0evk86raWuA0
-         83Msl5v8qTlOr1897i3SYfKovLZfxFARPtrKKCCIe3rY4OPJGsL8+nars5l2A5H0vNzi
-         YCCjLzS3cQRRa2CPC5Vgdp2CyJDdxDYlydMpl4BPUKZ67yrIYF6rXNeaGzbqVSoXP9tB
-         OVjg==
-X-Gm-Message-State: AC+VfDxI8CO6q6g/COzXdlfmGFwQDe9oWLSOMYHoOjaKzQXUeEk0aqOr
-        NgD1uIe+tpFxo03S7hQ8CRDXE0MLPgA=
-X-Google-Smtp-Source: ACHHUZ4O20Bayud9t8g10s/GUlyir7MjD8/LL/ukziPWc7W0njWQGjmCOGPwCusOrDQ+OK8FsxPTFA==
-X-Received: by 2002:a05:6a20:5495:b0:100:6a95:c288 with SMTP id i21-20020a056a20549500b001006a95c288mr6154056pzk.7.1683597058725;
-        Mon, 08 May 2023 18:50:58 -0700 (PDT)
+        bh=RA5k4x2cPapdL0imOMtMHgP2RzOlYcEcybwZg8p7ykM=;
+        b=TNY14WQjzSrDPHyN/wAFKhOnaAc/Ww80apzG4AEBFwZn4H7vlOqQuvR3RpFW7QOY2F
+         /RQW5zzP1rp7EHRYfrgKdINVYevw6r7d3MFZjhreQQqArMU2pfaZq2qisUgHLTXhlzlN
+         2XPV4I+G+Zs/HWHHGgEoh+kCe7MLa8r+wup6Bty0bjg9kdTYr6CWcRUEJ7pMaPK+wMUt
+         PM3OTXLEVNba1WLu6W4GbukrSMN4z7wUcmusOP/EedL0hBo38ro6i/32DQbCRbQudfVs
+         yV8gf+v9CFpoiDnF+waSGQb+Suya/DkZY/hErckEi/BAeRpMnG5LSelOSJRVszQ4HGw6
+         NEnQ==
+X-Gm-Message-State: AC+VfDxDddKAbw7L4WXBGyKivyASIUbNeSuhzNgre8q2VJhnT3bhmQwL
+        6pl9atTb9lO9TzVwH9+BVwI=
+X-Google-Smtp-Source: ACHHUZ7SrBvdBfdBoe8l5fj6veGeS6NBNCyqUqaJI24TRN/OvmGqiWKn5xw8fc6JTkXAAj8lU3DEtg==
+X-Received: by 2002:a17:90b:4ac8:b0:24e:507:7408 with SMTP id mh8-20020a17090b4ac800b0024e05077408mr12500681pjb.37.1683597060543;
+        Mon, 08 May 2023 18:51:00 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id p5-20020aa78605000000b006438898ce82sm589449pfn.140.2023.05.08.18.50.58
+        by smtp.gmail.com with ESMTPSA id b19-20020a17090a8c9300b002509d988eaasm1370207pjo.52.2023.05.08.18.50.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 18:50:58 -0700 (PDT)
+        Mon, 08 May 2023 18:51:00 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     jiangshanlai@gmail.com
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         Tejun Heo <tj@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: [PATCH 12/13] media: coda: Use alloc_ordered_workqueue() to create ordered workqueues
-Date:   Mon,  8 May 2023 15:50:31 -1000
-Message-Id: <20230509015032.3768622-13-tj@kernel.org>
+        kernel test robot <oliver.sang@intel.com>
+Subject: [PATCH 13/13] workqueue: Don't implicitly make UNBOUND workqueues w/ @max_active==1 ordered
+Date:   Mon,  8 May 2023 15:50:32 -1000
+Message-Id: <20230509015032.3768622-14-tj@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230509015032.3768622-1-tj@kernel.org>
 References: <20230509015032.3768622-1-tj@kernel.org>
@@ -77,79 +75,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BACKGROUND
-==========
-
-When multiple work items are queued to a workqueue, their execution order
-doesn't match the queueing order. They may get executed in any order and
-simultaneously. When fully serialized execution - one by one in the queueing
-order - is needed, an ordered workqueue should be used which can be created
-with alloc_ordered_workqueue().
-
-However, alloc_ordered_workqueue() was a later addition. Before it, an
-ordered workqueue could be obtained by creating an UNBOUND workqueue with
-@max_active==1. This originally was an implementation side-effect which was
-broken by 4c16bd327c74 ("workqueue: restore WQ_UNBOUND/max_active==1 to be
-ordered"). Because there were users that depended on the ordered execution,
 5c0338c68706 ("workqueue: restore WQ_UNBOUND/max_active==1 to be ordered")
-made workqueue allocation path to implicitly promote UNBOUND workqueues w/
-@max_active==1 to ordered workqueues.
+automoatically promoted UNBOUND workqueues w/ @max_active==1 to ordered
+workqueues because UNBOUND workqueues w/ @max_active==1 used to be the way
+to create ordered workqueues and the new NUMA support broke it. These
+problems can be subtle and the fact that they can only trigger on NUMA
+machines made them even more difficult to debug.
 
-While this has worked okay, overloading the UNBOUND allocation interface
-this way creates other issues. It's difficult to tell whether a given
-workqueue actually needs to be ordered and users that legitimately want a
-min concurrency level wq unexpectedly gets an ordered one instead. With
-planned UNBOUND workqueue updates to improve execution locality and more
-prevalence of chiplet designs which can benefit from such improvements, this
-isn't a state we wanna be in forever.
+However, overloading the UNBOUND allocation interface this way creates other
+issues. It's difficult to tell whether a given workqueue actually needs to
+be ordered and users that legitimately want a min concurrency level wq
+unexpectedly gets an ordered one instead. With planned UNBOUND workqueue
+udpates to improve execution locality and more prevalence of chiplet designs
+which can benefit from such improvements, this isn't a state we wanna be in
+forever.
 
-This patch series audits all callsites that create an UNBOUND workqueue w/
-@max_active==1 and converts them to alloc_ordered_workqueue() as necessary.
+There aren't that many UNBOUND w/ @max_active==1 users in the tree and the
+preceding patches audited all and converted them to
+alloc_ordered_workqueue() as appropriate. This patch removes the implicit
+promotion of UNBOUND w/ @max_active==1 workqueues to ordered ones.
 
-WHAT TO LOOK FOR
-================
+Workqueue will also add a debug option to make all unordered UNBOUND
+workqueues to use per-cpu pool_workqueues so that these problems can be
+surfaced easier on most machines.
 
-The conversions are from
-
-  alloc_workqueue(WQ_UNBOUND | flags, 1, args..)
-
-to
-
-  alloc_ordered_workqueue(flags, args...)
-
-which don't cause any functional changes. If you know that fully ordered
-execution is not ncessary, please let me know. I'll drop the conversion and
-instead add a comment noting the fact to reduce confusion while conversion
-is in progress.
-
-If you aren't fully sure, it's completely fine to let the conversion
-through. The behavior will stay exactly the same and we can always
-reconsider later.
-
-As there are follow-up workqueue core changes, I'd really appreciate if the
-patch can be routed through the workqueue tree w/ your acks. Thanks.
+v2: v1 patch incorrectly dropped !list_empty(&wq->pwqs) condition in
+    apply_workqueue_attrs_locked() which spuriously triggers WARNING and
+    fails workqueue creation. Fix it.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Link: https://lore.kernel.org/oe-lkp/202304251050.45a5df1f-oliver.sang@intel.com
 ---
- drivers/media/platform/chips-media/coda-common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/workqueue.h |  4 +---
+ kernel/workqueue.c        | 23 ++++-------------------
+ 2 files changed, 5 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
-index d013ea5d9d3d..ac9a642ae76f 100644
---- a/drivers/media/platform/chips-media/coda-common.c
-+++ b/drivers/media/platform/chips-media/coda-common.c
-@@ -3268,7 +3268,7 @@ static int coda_probe(struct platform_device *pdev)
- 						       &dev->iram.blob);
- 	}
+diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
+index 3992c994787f..79901dea932e 100644
+--- a/include/linux/workqueue.h
++++ b/include/linux/workqueue.h
+@@ -339,7 +339,6 @@ enum {
+ 	__WQ_DRAINING		= 1 << 16, /* internal: workqueue is draining */
+ 	__WQ_ORDERED		= 1 << 17, /* internal: workqueue is ordered */
+ 	__WQ_LEGACY		= 1 << 18, /* internal: create*_workqueue() */
+-	__WQ_ORDERED_EXPLICIT	= 1 << 19, /* internal: alloc_ordered_workqueue() */
  
--	dev->workqueue = alloc_workqueue("coda", WQ_UNBOUND | WQ_MEM_RECLAIM, 1);
-+	dev->workqueue = alloc_ordered_workqueue("coda", WQ_MEM_RECLAIM);
- 	if (!dev->workqueue) {
- 		dev_err(&pdev->dev, "unable to alloc workqueue\n");
- 		ret = -ENOMEM;
+ 	WQ_MAX_ACTIVE		= 512,	  /* I like 512, better ideas? */
+ 	WQ_MAX_UNBOUND_PER_CPU	= 4,	  /* 4 * #cpus for unbound wq */
+@@ -417,8 +416,7 @@ alloc_workqueue(const char *fmt, unsigned int flags, int max_active, ...);
+  * Pointer to the allocated workqueue on success, %NULL on failure.
+  */
+ #define alloc_ordered_workqueue(fmt, flags, args...)			\
+-	alloc_workqueue(fmt, WQ_UNBOUND | __WQ_ORDERED |		\
+-			__WQ_ORDERED_EXPLICIT | (flags), 1, ##args)
++	alloc_workqueue(fmt, WQ_UNBOUND | __WQ_ORDERED | (flags), 1, ##args)
+ 
+ #define create_workqueue(name)						\
+ 	alloc_workqueue("%s", __WQ_LEGACY | WQ_MEM_RECLAIM, 1, (name))
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 4666a1a92a31..34a91eee7332 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -4195,12 +4195,8 @@ static int apply_workqueue_attrs_locked(struct workqueue_struct *wq,
+ 		return -EINVAL;
+ 
+ 	/* creating multiple pwqs breaks ordering guarantee */
+-	if (!list_empty(&wq->pwqs)) {
+-		if (WARN_ON(wq->flags & __WQ_ORDERED_EXPLICIT))
+-			return -EINVAL;
+-
+-		wq->flags &= ~__WQ_ORDERED;
+-	}
++	if (!list_empty(&wq->pwqs) && WARN_ON(wq->flags & __WQ_ORDERED))
++		return -EINVAL;
+ 
+ 	ctx = apply_wqattrs_prepare(wq, attrs, wq_unbound_cpumask);
+ 	if (!ctx)
+@@ -4428,16 +4424,6 @@ struct workqueue_struct *alloc_workqueue(const char *fmt,
+ 	struct workqueue_struct *wq;
+ 	struct pool_workqueue *pwq;
+ 
+-	/*
+-	 * Unbound && max_active == 1 used to imply ordered, which is no
+-	 * longer the case on NUMA machines due to per-node pools.  While
+-	 * alloc_ordered_workqueue() is the right way to create an ordered
+-	 * workqueue, keep the previous behavior to avoid subtle breakages
+-	 * on NUMA.
+-	 */
+-	if ((flags & WQ_UNBOUND) && max_active == 1)
+-		flags |= __WQ_ORDERED;
+-
+ 	/* see the comment above the definition of WQ_POWER_EFFICIENT */
+ 	if ((flags & WQ_POWER_EFFICIENT) && wq_power_efficient)
+ 		flags |= WQ_UNBOUND;
+@@ -4645,14 +4631,13 @@ void workqueue_set_max_active(struct workqueue_struct *wq, int max_active)
+ 	struct pool_workqueue *pwq;
+ 
+ 	/* disallow meddling with max_active for ordered workqueues */
+-	if (WARN_ON(wq->flags & __WQ_ORDERED_EXPLICIT))
++	if (WARN_ON(wq->flags & __WQ_ORDERED))
+ 		return;
+ 
+ 	max_active = wq_clamp_max_active(max_active, wq->flags, wq->name);
+ 
+ 	mutex_lock(&wq->mutex);
+ 
+-	wq->flags &= ~__WQ_ORDERED;
+ 	wq->saved_max_active = max_active;
+ 
+ 	for_each_pwq(pwq, wq)
+@@ -5920,7 +5905,7 @@ int workqueue_sysfs_register(struct workqueue_struct *wq)
+ 	 * attributes breaks ordering guarantee.  Disallow exposing ordered
+ 	 * workqueues.
+ 	 */
+-	if (WARN_ON(wq->flags & __WQ_ORDERED_EXPLICIT))
++	if (WARN_ON(wq->flags & __WQ_ORDERED))
+ 		return -EINVAL;
+ 
+ 	wq->wq_dev = wq_dev = kzalloc(sizeof(*wq_dev), GFP_KERNEL);
 -- 
 2.40.1
 
