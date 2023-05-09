@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0EB86FD0AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA426FD09F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235587AbjEIVRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 17:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
+        id S235509AbjEIVQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 17:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235574AbjEIVRe (ORCPT
+        with ESMTP id S229498AbjEIVQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 17:17:34 -0400
+        Tue, 9 May 2023 17:16:51 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E0655A2;
-        Tue,  9 May 2023 14:17:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA08E198A;
+        Tue,  9 May 2023 14:16:50 -0700 (PDT)
 Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 6C415CED2A;
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id BCC68CED2C;
         Tue,  9 May 2023 21:16:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1683667008; bh=Dd2WH20nE9Cn1fgXE2cnZpLj6u3pya7fQbeUQoj+SfI=;
-        h=From:Subject:Date:To:Cc;
-        b=lOpNq6XYafpR/MdOnyEJb70lm7LnbUPGaI/PiAOiVwrkHkIlpIuZjIW+OPRj9LYRQ
-         KJDe+Q6r2hZ6mqiBiC67YK40hAbcrBw6PNkKudgmagKo1UhpMKiwZV19oZLfMBmoch
-         mAkCRfaBOKqI8fbKKimROdZGUSibRdBaIqJgietQ=
+        t=1683667009; bh=lG1YLFdMOPVJ2F7GFyS2fMzqWjY+cPFGdTsfQNs2tc8=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc;
+        b=it1Zm6hgLJcnZN4/m2xwv5+5LuUrmBj1TuNeEsaKO8pbOrQExtgsSgyUEOT3aHrkY
+         puf1GVAFBVKnEMsEEP/E/WZ9wNmVtcaVGzK6qi884gdEo0LVRdqYBIamt2FCjML8PH
+         WGurMij36F/XTNDpGqpCwwcvHrScvkc/dFAZ5H/o=
 From:   Luca Weiss <luca@z3ntu.xyz>
-Subject: [PATCH 0/3] Provide parent clocks to msm8226 mmcc
-Date:   Tue, 09 May 2023 23:16:34 +0200
-Message-Id: <20230509-msm8226-mmcc-parents-v1-0-83a2dfc986ab@z3ntu.xyz>
+Date:   Tue, 09 May 2023 23:16:35 +0200
+Subject: [PATCH 1/3] ARM: dts: qcom: msm8226: Use XO from rpmcc where
+ possible
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIADK4WmQC/z3Oyw6CMBCF4Vchs3ZIrYUUX4W4KGWEWbTUjtcQ3
- t3iwuWfnC85KwhlJoFztUKmJwsvscTxUIGfXZwIeSwNWumTalSHQYLVusUQvMfkMsW7oDbGdqa
- z1IwOCh2cEA7ZRT/v+OaX8IdtbeoPvjjhlB77OGW68vv3ob9s2xdJa9wokwAAAA==
+Message-Id: <20230509-msm8226-mmcc-parents-v1-1-83a2dfc986ab@z3ntu.xyz>
+References: <20230509-msm8226-mmcc-parents-v1-0-83a2dfc986ab@z3ntu.xyz>
+In-Reply-To: <20230509-msm8226-mmcc-parents-v1-0-83a2dfc986ab@z3ntu.xyz>
 To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -49,20 +49,20 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         Luca Weiss <luca@z3ntu.xyz>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=772; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=Dd2WH20nE9Cn1fgXE2cnZpLj6u3pya7fQbeUQoj+SfI=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkWrg6XuAMsP/aBDMGI64O47DqT3NboGZkfPi9r
- oQoEIZeBPKJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZFq4OgAKCRBy2EO4nU3X
- Vnm5D/0RqlJmfmZNPpXLXRauQUuEJHxSu3Kg6Uxc3AGbIdHG39ZhBLEWqO90wHdmDRNKDso29Xh
- rA3PaDwg3H8siDm1VZmm8jnJQkaxSGtqCHpQ30HcOpFE4fJfv6nxPO/kZSh1sZNOTue8AxqW2NR
- xDkKIbGbs6PjQH47GJYSH+b8h4x3NnsG1OOoICKSEVHRxSbbmAYjj5shtjlhZZ801p17b8f40+e
- iQjTQkSDYBNJrbXzJBjw9XyroZkxpehx5b6qoSVewzwiF5aHq+KeRfX8Gb0YN9Hz5JdU8xNljcN
- DKsTom5o9gxTq0POG30rmuk2928zJ5EfPA8wI3CESEAE9Y4BYfEbubvKG6NfYAl9vzXJpN5xNQU
- 9zSFJrI2fugkC2/ExpVJ5PtGf4UXQtiYTYTjipjzX+cmA3tIsDs9OLECw5sdrbW4yPcV2r15oFt
- Jlxffq+oxZ+dp8Nkqj+Fkxm2UF3dgIV+taO2f29Tpn4VLitEsnQrd500zqEo/Om2S+BcOHdg9zk
- RcpB/+NBmQI9aSZLyTRbFyCkr3CP6w0G38IjOIkk5lN130tTxpsXehwH2q6eev9dOuu/wOzDkcn
- uWt0LDNYO3R+GCvmtGUWJi+T4stncCTRPjhQn9/RtqnNMUnhZnG0DqEOrb+J9xBcJR+9wc/QiEA
- jP936NZoYc/dU4w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2209; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=lG1YLFdMOPVJ2F7GFyS2fMzqWjY+cPFGdTsfQNs2tc8=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkWrg970Ak6m7eyWn4rwysuprLFQDhVlQ6GbF7t
+ aGrzHOKU8GJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZFq4PQAKCRBy2EO4nU3X
+ VneHEACvGxKaU63dFjSuFQxhvuadm71Bi4y1YvCaMBB8d3N9rQIpNVdWOhIfqg22fYAUVFJ3JUO
+ PS8KziLR9LH/z/aD8LanXYxqPoP//Px/Z9KsOs2e8jqyF/CuOoMSpLet/zgE0UI46SCPmkQEaUS
+ 9s4QNzgj3QrxWwfC3kf0lOMizAJxO92DfSmZ7FLQFeklRUuIanmDIWwR+da9D9zRXD2Y6XR4jrU
+ iDGfSm/cYcvcwo99jO2Q0pDNtVnjtK0YxBvY7QocPfwoVu8qt/gWooWQbls+oej7xRvnwx8WsIF
+ Tm+fkm2SMLgIrKH+54c4R+opzcdmrhOvJ4y9aL/msFrguryvSE2bYJ1HetOgtq3MHedRPoy9e6J
+ CtMnoEpvG1FB+pm3f3oPR5H2rB1RyDfgDVGdBNSbchFKh3Yovcy1edqDX/45EVKNPEqiZjKU/ip
+ ITWEkarNCLN53XtZ6LghMJxprD02ukGNbhXMHP6qA+Hd5eudmmyN20aPER2mm6ZHW8U0Iors1xS
+ CnXZGq0dPGTehQP23+bPRtzrHe5BbXIytrZW3exzNrJUtA/odZAa69m+rXyWbfc4DLdT4hyxjd0
+ hbvzd4McraKMC2JNijevWuo7hEjKYjFfNd+jNFMHEVOZIjvBPJ3HKmDeAHrT7nT4YvnVHCVerwR
+ S/TuExYQZWUDe/A==
 X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
  fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,24 +75,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace most usages of &xo_board with the &rpmcc variant, and also
-provide the necessary parent clocks to the mmcc driver.
+The xo clock being used everywhere actually goes via the RPM. Since the
+rpmcc driver recently got support for this clock we can use this now.
 
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
-Luca Weiss (3):
-      ARM: dts: qcom: msm8226: Use XO from rpmcc where possible
-      dt-bindings: clock: qcom,mmcc: define clocks/clock-names for MSM8226
-      ARM: dts: qcom: msm8226: Provide clocks to mmcc node
+ arch/arm/boot/dts/qcom-msm8226.dtsi | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
- .../devicetree/bindings/clock/qcom,mmcc.yaml       | 32 ++++++++++++++++++++--
- arch/arm/boot/dts/qcom-msm8226.dtsi                | 26 ++++++++++++++----
- 2 files changed, 51 insertions(+), 7 deletions(-)
----
-base-commit: f46950f720460ef8b8c5ca68e14a529dd1705832
-change-id: 20230509-msm8226-mmcc-parents-24489498e5da
+diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
+index 42acb9ddb8cc..4dd4e26c73a2 100644
+--- a/arch/arm/boot/dts/qcom-msm8226.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
+@@ -176,7 +176,7 @@ sdhc_1: mmc@f9824900 {
+ 			interrupt-names = "hc_irq", "pwr_irq";
+ 			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
+ 				 <&gcc GCC_SDCC1_APPS_CLK>,
+-				 <&xo_board>;
++				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+ 			clock-names = "iface", "core", "xo";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&sdhc1_default_state>;
+@@ -192,7 +192,7 @@ sdhc_2: mmc@f98a4900 {
+ 			interrupt-names = "hc_irq", "pwr_irq";
+ 			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
+ 				 <&gcc GCC_SDCC2_APPS_CLK>,
+-				 <&xo_board>;
++				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+ 			clock-names = "iface", "core", "xo";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&sdhc2_default_state>;
+@@ -208,7 +208,7 @@ sdhc_3: mmc@f9864900 {
+ 			interrupt-names = "hc_irq", "pwr_irq";
+ 			clocks = <&gcc GCC_SDCC3_AHB_CLK>,
+ 				 <&gcc GCC_SDCC3_APPS_CLK>,
+-				 <&xo_board>;
++				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+ 			clock-names = "iface", "core", "xo";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&sdhc3_default_state>;
+@@ -362,7 +362,8 @@ usb_hs_phy: phy {
+ 					compatible = "qcom,usb-hs-phy-msm8226",
+ 						     "qcom,usb-hs-phy";
+ 					#phy-cells = <0>;
+-					clocks = <&xo_board>, <&gcc GCC_USB2A_PHY_SLEEP_CLK>;
++					clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
++						 <&gcc GCC_USB2A_PHY_SLEEP_CLK>;
+ 					clock-names = "ref", "sleep";
+ 					resets = <&gcc GCC_USB2A_PHY_BCR>, <&usb 0>;
+ 					reset-names = "phy", "por";
+@@ -617,7 +618,7 @@ adsp: remoteproc@fe200000 {
+ 			power-domains = <&rpmpd MSM8226_VDDCX>;
+ 			power-domain-names = "cx";
+ 
+-			clocks = <&xo_board>;
++			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>;
+ 			clock-names = "xo";
+ 
+ 			memory-region = <&adsp_region>;
 
-Best regards,
 -- 
-Luca Weiss <luca@z3ntu.xyz>
+2.40.1
 
