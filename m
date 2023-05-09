@@ -2,188 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101FE6FC02A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1AB6FC02C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235226AbjEIHIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 03:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
+        id S233912AbjEIHJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 03:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235112AbjEIHIV (ORCPT
+        with ESMTP id S234729AbjEIHJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 03:08:21 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FC240F7
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 00:08:18 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bc070c557so10662973a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 00:08:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683616097; x=1686208097;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ijqKQLeIRjvBb3i4iB7l0bYhwmssEZf0GIGJ6UemaFA=;
-        b=NAPiPEacVNMeV/8T7Qyn/B67Q3fDRfn+csLq9mfxJU+3v/exzCRl2ZV0FUDgEArjvC
-         P9hFE8Vp+LTTGw6f/wwv/GeeHYvqO4GzBD4l2W07YBZ9PmzFyBwyXHzhSD3GUrKXFfO2
-         zGwxQHwOgvcB6uBMR2jKiDMPRSDpmm3AK5f8CflcVFNQc8XeCXcT7yLb9/ulSg1+OdMo
-         B/DxccJiNrvy6rq7XvZu20gyrwmxFQ3vIXxSxMHVZ079ahKrB5D1+i0N+txwzNKVLyGH
-         KUjwLbdCfRILMBV0duoIQ0MV+FBjvMpG1XVa2MZu7hfsw6rvPFHyfkzCbrQ1UWDm2ugV
-         xanw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683616097; x=1686208097;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ijqKQLeIRjvBb3i4iB7l0bYhwmssEZf0GIGJ6UemaFA=;
-        b=jHd9GkNtVswpa60YCwyXd9DYua0emZVa4cUi1EGLuVtqa8xPWN7TibKWjcyhGLM0Ni
-         IKH2y7mGCaN83Gb1YxnsjYe/o+q052uP4asZi5HhpsMtZPtNtWfNQ7RfBa1Wh7FgmwiL
-         wCiVY054/wd34KbDKmoot5hSebSILHekQkzo+XCkHyIwifbbplQRtudTXDM5YJK0d4Fm
-         ETR0hdeLRLrjFE6bfFnqT0+CHPHKiC7v/XlrP78tIaIRtnIC4m4p670WpdfG4h9mjMPt
-         9t9Tem1h6Nc/VCEx3yFoTHVhigiuhFwWHQuGNHqhmz1DNtogxv+KfISJxOcfBhwRT9v1
-         xldQ==
-X-Gm-Message-State: AC+VfDzPRzIGOF63omSXKL3cl6ao+tBBOzR056Hx55cqQFTX88rJR/2X
-        IpC+Htnq1aHytd8uEVzX6OnDzA==
-X-Google-Smtp-Source: ACHHUZ6oKQbYJQadciEcI19zNNY1h9h3yTo1GwrdDAWBngJN5RZQsYi/bp6k+xH6GRfHLRlP5gCkCA==
-X-Received: by 2002:aa7:d382:0:b0:50b:c3b1:9790 with SMTP id x2-20020aa7d382000000b0050bc3b19790mr10628592edq.16.1683616097109;
-        Tue, 09 May 2023 00:08:17 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
-        by smtp.gmail.com with ESMTPSA id z24-20020aa7d418000000b0050bfa1905f6sm424071edq.30.2023.05.09.00.08.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 00:08:16 -0700 (PDT)
-Message-ID: <e63a3e34-1f73-3661-8655-e34e1e955804@linaro.org>
-Date:   Tue, 9 May 2023 09:08:15 +0200
+        Tue, 9 May 2023 03:09:53 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9086BBB;
+        Tue,  9 May 2023 00:09:50 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QFq6N3JvFz4x3d;
+        Tue,  9 May 2023 17:09:47 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1683616189;
+        bh=c8H4G/Dv234HYjr+KJ10w7TX5wPsTcnHJLfz2R+M/U4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=IybDFoZYRCA04a+HfRdbR5lqAQfh2/gLTIZuGwqb1gG1NN/C/GU+vQq7V0pdxysgy
+         85ewwIr+8dZ4wfuYcfyzEH2jKNqTOir08D6PlYg3NfZ+ptA1Ti+vz01L3uA0ioOMOv
+         4ve7RrFfqbB2GvW+JqZoZa4N4VA+wvwErCbVuNQ1vvH+V7/Xy7gmuRx4q37j2KcmWM
+         pLAKpjbChoEiG1Hpaon4ZKRKna8gEtV5q0JeW50u8XhmlwDnw+/VlXLggCS/aExLYW
+         N9+b4UcGRm0HePsomadDMDMmvO58JMK7toMhdJ7+XFbh6fbSoSPU+HM9uUmvJSXAW9
+         1o9F5FIQ7miWQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Tejun Heo <tj@kernel.org>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: boot warning
+In-Reply-To: <20230509122440.418068cb@canb.auug.org.au>
+References: <20230509122440.418068cb@canb.auug.org.au>
+Date:   Tue, 09 May 2023 17:09:43 +1000
+Message-ID: <87mt2ex9oo.fsf@mail.lhotse>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 01/11] dt-bindings: remoteproc: qcom: Add support for
- multipd model
-Content-Language: en-US
-To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, mathieu.poirier@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_gurus@quicinc.com,
-        loic.poulain@linaro.org, quic_eberman@quicinc.com,
-        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-clk@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-2-git-send-email-quic_mmanikan@quicinc.com>
- <38a5a268-7d8a-6e61-4272-8e9155df0034@linaro.org>
- <790496d7-98dc-c92e-dedc-1c89395a1ad8@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <790496d7-98dc-c92e-dedc-1c89395a1ad8@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/05/2023 15:45, Manikanta Mylavarapu wrote:
-> 
-> 
-> On 3/7/2023 8:47 PM, Krzysztof Kozlowski wrote:
->> On 07/03/2023 05:41, Manikanta Mylavarapu wrote:
->>> Add new binding document for multipd model remoteproc.
->>> IPQ5018, IPQ9574 follows multipd model.
->>>
->>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
->>> ---
->>>   .../bindings/remoteproc/qcom,multipd-pil.yaml | 282 ++++++++++++++++++
->>>   1 file changed, 282 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
->>> new file mode 100644
->>> index 000000000000..b788607f5abd
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
->>> @@ -0,0 +1,282 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/remoteproc/qcom,multipd-pil.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Qualcomm Multipd Secure Peripheral Image Loader
->>> +
->>> +maintainers:
->>> +  - Bjorn Andersson <andersson@kernel.org>
->>> +  - Mathieu Poirier <mathieu.poirier@linaro.org>
->>> +
->>> +description:
->>> +  Multipd Peripheral Image Loader loads firmware and boots Q6 pd, WCSS pd
->>> +  remoteproc's on the Qualcomm IPQ5018, IPQ9574 SoC.
->>
->> What is a "pd"?
->>
-> Pd means protection domain.
-> It's similar to process in Linux. Here QDSP6 processor runs each wifi 
-> radio functionality on a separate process. One process can't access 
-> other process resources, so this is termed as PD i.e protection domain.
-> Here we have two pd's called root and user pd. We can correlate Root pd
-> as root and user pd as user in linux. Root pd has more privileges than
-> user pd.
->  From remoteproc driver perspective, root pd corresponds to QDSP6 
-> processor bring up and user pd corresponds to Wifi radio (WCSS) bring up.
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> Hi all,
+>
+> Today's qemu test boot (powerpc pseries_le_defconfig) produced this
+> warning:
+>
+> [    2.048588][    T1] ipr: IBM Power RAID SCSI Device Driver version: 2.6.4 (March 14, 2017)
+> [    2.051560][    T1] ------------[ cut here ]------------
+> [    2.052297][    T1] WARNING: CPU: 0 PID: 1 at kernel/workqueue.c:5925 workqueue_sysfs_register+0x20/0x1f0
 
-Parts of it should be in description. And definitely "pd" should be
-explained.
+Caused by 59709bb84c22 scsi: Use alloc_ordered_workqueue() to create ordered workqueues.
 
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - qcom,ipq5018-q6-mpd
->>> +      - qcom,ipq9574-q6-mpd
->>> +
->>> +  '#address-cells': true
->>> +
->>> +  '#size-cells': true
+cheers
 
-...
-
->>
-> Sure, will add.
->>> +    description:
->>> +      Qualcomm G-Link subnode which represents communication edge, channels
->>> +      and devices related to the Modem.
->>> +
->>> +patternProperties:
->>> +  "^remoteproc_pd1|remoteproc_pd2|remoteproc_pd3":
->>
->> No, underscores are not allowed. Also, what is pd?
->>
-> Sure, will remove underscores.
-
-Shouldn't this be just pd-1?
-
-
->>> +    type: object
->>> +    description:
->>> +      In Multipd model, WCSS pd depends on Q6 pd i.e Q6 pd should be up before
->>> +      WCSS. It can be achieved by keeping wcss pd node as subnode of Q6
->>> +      device node.
->>> +
->>> +    properties:
->>> +      compatible:
->>> +        enum:
->>> +          - "qcom,ipq5018-wcss-ahb-mpd"
->>> +          - "qcom,ipq9574-wcss-ahb-mpd"
->>> +          - "qcom,ipq5018-wcss-pcie-mpd"
-
-
-
-Best regards,
-Krzysztof
-
+> [    2.053294][    T1] Modules linked in:
+> [    2.053678][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.4.0-rc1-01511-g91b79de175e1 #1
+> [    2.053899][    T1] Hardware name: IBM pSeries (emulated by qemu) POWER8 (raw) 0x4d0200 0xf000004 of:SLOF,HEAD pSeries
+> [    2.054099][    T1] NIP:  c000000000181d40 LR: c000000000182164 CTR: c0000000001b71e0
+> [    2.054171][    T1] REGS: c0000000047632c0 TRAP: 0700   Not tainted  (6.4.0-rc1-01511-g91b79de175e1)
+> [    2.054279][    T1] MSR:  8000000002029033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 48000284  XER: 00000000
+> [    2.054608][    T1] CFAR: c000000000182160 IRQMASK: 0 
+> [    2.054608][    T1] GPR00: c000000000182164 c000000004763560 c000000001558c00 c000000004d18600 
+> [    2.054608][    T1] GPR04: 0000000000000000 0000000000000000 c0000000028eccd8 0000000000000000 
+> [    2.054608][    T1] GPR08: 0000000000000000 0000000000080000 0000000000000000 0000000048000288 
+> [    2.054608][    T1] GPR12: 0000000000000000 c000000002ad0000 c000000000013788 0000000000000000 
+> [    2.054608][    T1] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [    2.054608][    T1] GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [    2.054608][    T1] GPR24: 0000000000000000 c000000004d186b8 c000000004d18610 c000000004d18620 
+> [    2.054608][    T1] GPR28: 0000000000000000 c00000000299b310 0000000000000000 c000000004d18600 
+> [    2.055488][    T1] NIP [c000000000181d40] workqueue_sysfs_register+0x20/0x1f0
+> [    2.055564][    T1] LR [c000000000182164] alloc_workqueue+0x254/0x584
+> [    2.055858][    T1] Call Trace:
+> [    2.055989][    T1] [c000000004763560] [c0000000047635f0] 0xc0000000047635f0 (unreliable)
+> [    2.056509][    T1] [c0000000047635f0] [c0000000001823a8] alloc_workqueue+0x498/0x584
+> [    2.056605][    T1] [c0000000047636a0] [c000000000ba016c] scsi_host_alloc+0x2fc/0x500
+> [    2.056678][    T1] [c000000004763730] [c000000000bdf7ec] ibmvscsi_probe+0x6c/0xaf8
+> [    2.056746][    T1] [c000000004763820] [c000000000105d4c] vio_bus_probe+0x9c/0x4a0
+> [    2.056816][    T1] [c0000000047638e0] [c000000000b1c274] really_probe+0x104/0x410
+> [    2.056885][    T1] [c000000004763970] [c000000000b1c630] __driver_probe_device+0xb0/0x1e0
+> [    2.056956][    T1] [c0000000047639f0] [c000000000b1c7b4] driver_probe_device+0x54/0x130
+> [    2.057025][    T1] [c000000004763a30] [c000000000b1cac8] __driver_attach+0xd8/0x200
+> [    2.057092][    T1] [c000000004763a70] [c000000000b18cd4] bus_for_each_dev+0xb4/0x140
+> [    2.057158][    T1] [c000000004763ad0] [c000000000b1b824] driver_attach+0x34/0x50
+> [    2.057226][    T1] [c000000004763af0] [c000000000b1ac1c] bus_add_driver+0x13c/0x2d0
+> [    2.057292][    T1] [c000000004763b80] [c000000000b1e3c4] driver_register+0xa4/0x1b0
+> [    2.057360][    T1] [c000000004763bf0] [c000000000108054] __vio_register_driver+0x74/0x9c
+> [    2.057428][    T1] [c000000004763c10] [c000000002063690] ibmvscsi_module_init+0x98/0xd4
+> [    2.057500][    T1] [c000000004763c40] [c0000000000131a0] do_one_initcall+0x80/0x320
+> [    2.057583][    T1] [c000000004763d20] [c0000000020049b4] kernel_init_freeable+0x304/0x3ac
+> [    2.057657][    T1] [c000000004763df0] [c0000000000137b0] kernel_init+0x30/0x1a0
+> [    2.057723][    T1] [c000000004763e50] [c00000000000debc] ret_from_kernel_user_thread+0x14/0x1c
+> [    2.057807][    T1] --- interrupt: 0 at 0x0
+> [    2.057858][    T1] NIP:  0000000000000000 LR: 0000000000000000 CTR: 0000000000000000
+> [    2.057909][    T1] REGS: c000000004763e80 TRAP: 0000   Not tainted  (6.4.0-rc1-01511-g91b79de175e1)
+> [    2.057964][    T1] MSR:  0000000000000000 <>  CR: 00000000  XER: 00000000
+> [    2.058031][    T1] CFAR: 0000000000000000 IRQMASK: 0 
+> [    2.058031][    T1] GPR00: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [    2.058031][    T1] GPR04: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [    2.058031][    T1] GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [    2.058031][    T1] GPR12: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [    2.058031][    T1] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [    2.058031][    T1] GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [    2.058031][    T1] GPR24: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [    2.058031][    T1] GPR28: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [    2.058682][    T1] NIP [0000000000000000] 0x0
+> [    2.058728][    T1] LR [0000000000000000] 0x0
+> [    2.058782][    T1] --- interrupt: 0
+> [    2.058965][    T1] Code: 60000000 60000000 60000000 60420000 3c4c013d 38426ee0 7c0802a6 60000000 fb61ffd8 f821ff71 81230100 55290318 <0b090000> 3d22fff0 7c0802a6 fb810070 
+> [    2.059420][    T1] ---[ end trace 0000000000000000 ]---
+> [    2.065968][   T46] scsi_tmf_0 (46) used greatest stack depth: 15200 bytes left
+> [    2.067252][    T1] scsi host0: failed to create tmf workq
+> [    2.092458][   T45] scsi_eh_0 (45) used greatest stack depth: 14240 bytes left
+> [    2.092852][    T1] ibmvscsi 71000003: couldn't allocate host data
+> [    2.093005][    T1] ibmvscsi: probe of 71000003 failed with error -1
+>
+>
+> I have no idea what has caused this.
+>
+> -- 
+> Cheers,
+> Stephen Rothwell
