@@ -2,138 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1DF6FBF73
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619176FBF75
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234976AbjEIGnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 02:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
+        id S234994AbjEIGna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 02:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234948AbjEIGnT (ORCPT
+        with ESMTP id S234987AbjEIGn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 02:43:19 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C54144BC;
-        Mon,  8 May 2023 23:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Wv7LrPlxWTrZ14rkME2VRRQZSVOQ7wE/+VS+80j6MWc=; b=XcKBtk/zB7EKluL3QCHMkIHg1L
-        FRyFBoIxzUPSmPGR49L0FShoMMEuUXInLYKLMDtkZe020PTEIsJ+xmhApEuZrrROlqBqx1+T/6VTL
-        eSH5dMiMSPBMO+6IX2KK4ybVnENgJi2emZ7dTiW5ir2Pk+1MKekBFJ0cmhipyVLRJrxhUMQzd64yd
-        RyGljbAyDofd+E8+SJkFDGv2QFdrmZYKgTbjis4G+rNumyanlw88RqgCXZg5OwYjSpRzpleiAIMvd
-        t0P7f/h/yj/cCbEXd7s7HSKwUrEYeL25K0kjvErZ4E8pM3vLhLoU0SlnmtH83/1Ztjba9/ohE/7yw
-        p/5KCCGQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pwH3L-00EybA-HS; Tue, 09 May 2023 06:42:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Tue, 9 May 2023 02:43:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726759EE2
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 23:43:27 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pwH4E-0007pE-7b; Tue, 09 May 2023 08:43:22 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 54E3630026A;
-        Tue,  9 May 2023 08:42:22 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 313FC2B0DE80D; Tue,  9 May 2023 08:42:22 +0200 (CEST)
-Date:   Tue, 9 May 2023 08:42:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     bigeasy@linutronix.de, mark.rutland@arm.com, maz@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        pbonzini@redhat.com, wanpengli@tencent.com, vkuznets@redhat.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        jgross@suse.com, boris.ostrovsky@oracle.com,
-        daniel.lezcano@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        rafael@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        pmladek@suse.com, senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, jstultz@google.com, sboyd@kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [RFC][PATCH 6/9] s390/time: Provide sched_clock_noinstr()
-Message-ID: <20230509064222.GA2065796@hirez.programming.kicks-ass.net>
-References: <20230508211951.901961964@infradead.org>
- <20230508213147.786238095@infradead.org>
- <ZFnkp6dlOuJqm2II@osiris>
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4EC461C09B2;
+        Tue,  9 May 2023 06:43:21 +0000 (UTC)
+Date:   Tue, 9 May 2023 08:43:20 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Thomas.Kopp@microchip.com, linux-can@vger.kernel.org,
+        marex@denx.de, linux-kernel@vger.kernel.org
+Subject: Re: RE: [PATCH] can: length: add definitions for frame lengths in
+ bits
+Message-ID: <20230509-helmet-oozy-c1136e384d2e-mkl@pengutronix.de>
+References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
+ <BL3PR11MB64842FA5ECB64DD2C6C9FA76FB719@BL3PR11MB6484.namprd11.prod.outlook.com>
+ <20230508-paralysis-disarm-fecee3f8a625-mkl@pengutronix.de>
+ <CAMZ6RqL42d04S-pKuMEEMwd0ZoKhrHc2EDci8fv0SoSJVTf3Hg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dgog4qyg36hwczr7"
 Content-Disposition: inline
-In-Reply-To: <ZFnkp6dlOuJqm2II@osiris>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMZ6RqL42d04S-pKuMEEMwd0ZoKhrHc2EDci8fv0SoSJVTf3Hg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 08:13:59AM +0200, Heiko Carstens wrote:
-> 
-> 1;115;0cOn Mon, May 08, 2023 at 11:19:57PM +0200, Peter Zijlstra wrote:
-> > With the intent to provide local_clock_noinstr(), a variant of
-> > local_clock() that's safe to be called from noinstr code (with the
-> > assumption that any such code will already be non-preemptible),
-> > prepare for things by providing a noinstr sched_clock_noinstr()
-> > function.
-> > 
-> > Specifically, preempt_enable_*() calls out to schedule(), which upsets
-> > noinstr validation efforts.
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  arch/s390/include/asm/timex.h |   13 +++++++++----
-> >  arch/s390/kernel/time.c       |   11 ++++++++++-
-> >  2 files changed, 19 insertions(+), 5 deletions(-)
-> ...
-> > +static __always_inline unsigned long __get_tod_clock_monotonic(void)
-> > +{
-> > +	return get_tod_clock() - tod_clock_base.tod;
-> > +}
-> > +
-> >  /**
-> >   * get_clock_monotonic - returns current time in clock rate units
-> >   *
-> > @@ -216,7 +221,7 @@ static inline unsigned long get_tod_cloc
-> >  	unsigned long tod;
-> >  
-> >  	preempt_disable_notrace();
-> > -	tod = get_tod_clock() - tod_clock_base.tod;
-> > +	tod = __get_tod_clock_monotonic();
-> >  	preempt_enable_notrace();
-> >  	return tod;
-> >  }
-> ...
-> > +unsigned long long noinstr sched_clock_noinstr(void)
-> > +{
-> > +	return tod_to_ns(__get_tod_clock_monotonic());
-> > +}
-> > +
-> >  /*
-> >   * Scheduler clock - returns current time in nanosec units.
-> >   */
-> >  unsigned long long notrace sched_clock(void)
-> >  {
-> > -	return tod_to_ns(get_tod_clock_monotonic());
-> > +	unsigned long long ns;
-> > +	preempt_disable_notrace();
-> > +	ns = tod_to_ns(get_tod_clock_monotonic());
-> > +	preempt_enable_notrace();
-> > +	return ns;
-> >  }
-> >  NOKPROBE_SYMBOL(sched_clock);
-> 
-> This disables preemption twice within sched_clock(). So this should either
-> call __get_tod_clock_monotonic() instead, or the function could stay as it
-> is, which I would prefer.
 
-Duh. Will fix.
+--dgog4qyg36hwczr7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 09.05.2023 13:16:08, Vincent MAILHOL wrote:
+> > The diagram in https://www.can-cia.org/can-knowledge/can/can-fd/
+> > suggests that IMF is part of the frame.
+>=20
+> ISO 11898-1:2015 section 10.4.6 "Specification of inter-frame space"
+> makes it clear that the intermission is not part of the frame but part
+> of the "Inter-frame space".
+
+For this reason, it is good to have open standards...oh wait!
+
+> To close the discussion, I would finally argue that the intermission
+> occurs after the EOF bit. Something after an "End of Frame" is not
+> part of the frame, right?
+>=20
+> I agree with and will follow Thomas's suggestion.
+
+[...]
+
+> > > /*
+> > >   * Size of a CAN-FD Standard Frame
+> > > @@ -69,17 +87,17 @@
+> > >   * Error Status Indicator (ESI)                1
+> > >   * Data length code (DLC)              4
+> > >   * Data field                          0...512
+> > > - * Stuff Bit Count (SBC)               0...16: 4 20...64:5
+> > > + * Stuff Bit Count (SBC)               4
+> >
+> > ACK
+> >
+> > >   * CRC                                 0...16: 17 20...64:21
+> > >   * CRC delimiter (CD)                  1
+> > > + * Fixed Stuff bits (FSB)              0...16: 6 20...64:7
+> >
+> > As far as I understand
+> > https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=3D&arnumber=3D8338047 th=
+e FSB
+> > is 5 or 6.
+>=20
+> Reading the ISO, the fixed bit stuff applies to the CRC field (which,
+> in the standard nomenclature, includes both the stuff count and the
+> CRC sequence).
+> The CRC field starts with a fixed stuff bit and then has another fixed
+> stuff bit after each fourth bit.
+>=20
+> So the formula would be:
+>=20
+>   FSB count =3D 1 + round_down(len(CRC field)/4)
+>             =3D 1 + round_down((len(stuff count) + len(CRC sequence))/4)
+>=20
+> In case of CRC_17:
+>=20
+>   FSB count =3D 1 + round_down((4 + 17)/4)
+>             =3D 6
+>=20
+> This is coherent with the last figure of
+> https://www.can-cia.org/can-knowledge/can/can-fd/ which shows 6 FSB
+> for CRC_17.
+>=20
+> In case of CRC_21:
+>=20
+>   FSB count =3D 1 + round_down((4 + 21)/4)
+>             =3D 7
+>=20
+> So, ACK for Thomas, NACK for Marc (sorry :))
+
+It seems that the reviewers of this paper missed some parts :)
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--dgog4qyg36hwczr7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRZ64YACgkQvlAcSiqK
+BOhHbwf/df+jU/oRZa2E3NJ52jz5NKl2IE+9XNL6HChPAKqUvUbw0aCTN+K6RFI1
+KLkr3fxAQibonrenRGJkzzokeYTcwz0yAWWIUtsV6mhNX1s9V8PWAFTam7LjNvQD
+XoBBWrj+cAOE+WK7bEyqBZAjO/YYjybHL5UMwz+pZ3AlgoMcQ0xNeoPXk0wtIyfG
+rzugwTbCbJdV2BMzneOhBQReQrQihJ5x8ZXuxtgle/wqKgCcaWn9m4/BogAatqti
+V/Or8+H2pNJGWu/evSsHFyG3RdRGzd0VOGzA1hwOAFf2wYNz9KOsremyzb74teJx
+kEfJcshcov1cVgqgLi2q4tj0rBWHCQ==
+=Zldt
+-----END PGP SIGNATURE-----
+
+--dgog4qyg36hwczr7--
