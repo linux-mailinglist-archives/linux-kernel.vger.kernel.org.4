@@ -2,149 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC6A6FC5BB
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A99F46FC5BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbjEIMBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 08:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
+        id S235320AbjEIMBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 08:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233995AbjEIMBk (ORCPT
+        with ESMTP id S235225AbjEIMBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 08:01:40 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDBB1713;
-        Tue,  9 May 2023 05:01:38 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349ASFxM018918;
-        Tue, 9 May 2023 12:01:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=rFWxx/yqlbgsjzLBRvryLMRgg6Bs28xakqZEhpRdvDk=;
- b=itoPX8Zik6FYry9BLDl31+MD2lHs5A+aI8LKqULHiXbdA+9l9X1i8xEI3Nx3aOD6M0YI
- sF25OVkf6TNnh6BHN24JWt7K9RvcFzGXuCtdBnvKXXqwC2PwzBdkxfqjl56f9zTKJ/Ha
- Ry+el3VLK0f6UEfyiw01Ju5WzhrdfbOcppOtwkItBwy1A7inAggEFxDX8IvCcGrEkWhr
- OpxYyibFe/Wjoi2Nv7SZ8pxLQ7IH3XQr+9iTvhIHL6fAab7b9nNp2XRplHUwuVZxn5VR
- VTFmMpm1i7PvGEQ1/yEdDUcn62YaybR92oifcxRJUloFXvd3j7o0062tTJZ3900l5Ps1 ag== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf77g1pbm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 12:01:03 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 349C12xF029893
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 9 May 2023 12:01:02 GMT
-Received: from [10.216.61.171] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
- 05:00:57 -0700
-Message-ID: <df8d6f3b-28f5-551f-b585-db237eb93545@quicinc.com>
-Date:   Tue, 9 May 2023 17:30:54 +0530
+        Tue, 9 May 2023 08:01:50 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FFA170B;
+        Tue,  9 May 2023 05:01:47 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (softbank126090219015.bbtec.net [126.90.219.15])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7B5DA8D;
+        Tue,  9 May 2023 14:01:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1683633698;
+        bh=rYlJf263/PtNuCOBr5voLeTxg4q5CGxv8QuS63srN0g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SyNOejiTVudg54qRLJPHp6a/NFNPIyMCnFxoV4zo+GyjpmAtGPaPSKtZ6cs65Gh+4
+         ERhHHiDS/+Cd/HGb1OkncX7iIFZZK4dPqHiW7TCKan1kRBeHRQPs2399HwI68U2HgD
+         X1dVDxs3bFpv8VTStj2OPULT6Jp7mOeaCbyA3TK8=
+Date:   Tue, 9 May 2023 15:01:56 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] drm: rcar-du: remove R-Car H3 ES1.* workarounds
+Message-ID: <20230509120156.GB10510@pendragon.ideasonboard.com>
+References: <20230509074818.4399-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 06/18] media: venus: firmware: Leave a clue for
- homegrown porters
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Marijn Suijten" <marijn.suijten@somainline.org>
-References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
- <20230228-topic-venus-v2-6-d95d14949c79@linaro.org>
- <ef50ac6c-a635-7f83-c484-a4f91b5e5d12@quicinc.com>
- <579f3480-1cbc-5688-7226-986205b5825e@quicinc.com>
- <9acc7001-2b3a-f635-9814-95850a71f142@linaro.org>
-From:   Vikash Garodia <quic_vgarodia@quicinc.com>
-In-Reply-To: <9acc7001-2b3a-f635-9814-95850a71f142@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ccT-cbVLcZ4lCLkVG6q3EMx18l-HkrZs
-X-Proofpoint-ORIG-GUID: ccT-cbVLcZ4lCLkVG6q3EMx18l-HkrZs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_08,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- mlxlogscore=999 malwarescore=0 clxscore=1015 mlxscore=0 suspectscore=0
- priorityscore=1501 bulkscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305090096
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230509074818.4399-1-wsa+renesas@sang-engineering.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Wolfram,
 
+Thank you for the patch.
 
-On 5/6/2023 12:54 AM, Konrad Dybcio wrote:
+On Tue, May 09, 2023 at 09:48:17AM +0200, Wolfram Sang wrote:
+> R-Car H3 ES1.* was only available to an internal development group and
+> needed a lot of quirks and workarounds. These become a maintenance
+> burden now, so our development group decided to remove upstream support
+> for this SoC and prevent booting it. Public users only have ES2 onwards.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+
+> ---
+> 
+> This is the last ES1 bit remaining, would be awesome if it could go
+> soon.
+> 
+> Changes since v1:
+> * rebased to 6.4-rc1 (no code updates needed)
+> * added Kieran's tag (thanks!)
+> * mention in commit message that ES1 doesn't even boot anymore
 > 
 > 
-> On 5.05.2023 15:00, Vikash Garodia wrote:
->>
->> On 5/5/2023 6:27 PM, Vikash Garodia wrote:
->>>
->>> On 5/4/2023 1:31 PM, Konrad Dybcio wrote:
->>>> Leave a clue about where the seemingly magic values come from, as it
->>>> is not obvious and requires some digging downstream..
->> Rephrase the commit text.
-> Please be more specific, do you want me to use the
-> explanations you gave in the previous reply?
+>  drivers/gpu/drm/rcar-du/rcar_du_crtc.c | 37 ++------------------
+>  drivers/gpu/drm/rcar-du/rcar_du_drv.c  | 48 --------------------------
+>  drivers/gpu/drm/rcar-du/rcar_du_drv.h  |  2 --
+>  drivers/gpu/drm/rcar-du/rcar_du_regs.h |  3 +-
+>  4 files changed, 4 insertions(+), 86 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+> index d6d29be6b4f4..7e175dbfd892 100644
+> --- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+> +++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+> @@ -223,20 +223,6 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
+>  		 * DU channels that have a display PLL can't use the internal
+>  		 * system clock, and have no internal clock divider.
+>  		 */
+> -
+> -		/*
+> -		 * The H3 ES1.x exhibits dot clock duty cycle stability issues.
+> -		 * We can work around them by configuring the DPLL to twice the
+> -		 * desired frequency, coupled with a /2 post-divider. Restrict
+> -		 * the workaround to H3 ES1.x as ES2.0 and all other SoCs have
+> -		 * no post-divider when a display PLL is present (as shown by
+> -		 * the workaround breaking HDMI output on M3-W during testing).
+> -		 */
+> -		if (rcdu->info->quirks & RCAR_DU_QUIRK_H3_ES1_PCLK_STABILITY) {
+> -			target *= 2;
+> -			div = 1;
+> -		}
+> -
+>  		extclk = clk_get_rate(rcrtc->extclock);
+>  		rcar_du_dpll_divider(rcrtc, &dpll, extclk, target);
+>  
+> @@ -245,30 +231,13 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
+>  		       | DPLLCR_N(dpll.n) | DPLLCR_M(dpll.m)
+>  		       | DPLLCR_STBY;
+>  
+> -		if (rcrtc->index == 1) {
+> +		if (rcrtc->index == 1)
+>  			dpllcr |= DPLLCR_PLCS1
+>  			       |  DPLLCR_INCS_DOTCLKIN1;
+> -		} else {
+> -			dpllcr |= DPLLCR_PLCS0_PLL
+> +		else
+> +			dpllcr |= DPLLCR_PLCS0
+>  			       |  DPLLCR_INCS_DOTCLKIN0;
+>  
+> -			/*
+> -			 * On ES2.x we have a single mux controlled via bit 21,
+> -			 * which selects between DCLKIN source (bit 21 = 0) and
+> -			 * a PLL source (bit 21 = 1), where the PLL is always
+> -			 * PLL1.
+> -			 *
+> -			 * On ES1.x we have an additional mux, controlled
+> -			 * via bit 20, for choosing between PLL0 (bit 20 = 0)
+> -			 * and PLL1 (bit 20 = 1). We always want to use PLL1,
+> -			 * so on ES1.x, in addition to setting bit 21, we need
+> -			 * to set the bit 20.
+> -			 */
+> -
+> -			if (rcdu->info->quirks & RCAR_DU_QUIRK_H3_ES1_PLL)
+> -				dpllcr |= DPLLCR_PLCS0_H3ES1X_PLL1;
+> -		}
+> -
+>  		rcar_du_group_write(rcrtc->group, DPLLCR, dpllcr);
+>  
+>  		escr = ESCR_DCLKSEL_DCLKIN | div;
+> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> index b9a94c5260e9..1ffde19cb87f 100644
+> --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> @@ -16,7 +16,6 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/pm.h>
+>  #include <linux/slab.h>
+> -#include <linux/sys_soc.h>
+>  #include <linux/wait.h>
+>  
+>  #include <drm/drm_atomic_helper.h>
+> @@ -387,43 +386,6 @@ static const struct rcar_du_device_info rcar_du_r8a7795_info = {
+>  	.dpll_mask =  BIT(2) | BIT(1),
+>  };
+>  
+> -static const struct rcar_du_device_info rcar_du_r8a7795_es1_info = {
+> -	.gen = 3,
+> -	.features = RCAR_DU_FEATURE_CRTC_IRQ
+> -		  | RCAR_DU_FEATURE_CRTC_CLOCK
+> -		  | RCAR_DU_FEATURE_VSP1_SOURCE
+> -		  | RCAR_DU_FEATURE_INTERLACED
+> -		  | RCAR_DU_FEATURE_TVM_SYNC,
+> -	.quirks = RCAR_DU_QUIRK_H3_ES1_PCLK_STABILITY
+> -		| RCAR_DU_QUIRK_H3_ES1_PLL,
+> -	.channels_mask = BIT(3) | BIT(2) | BIT(1) | BIT(0),
+> -	.routes = {
+> -		/*
+> -		 * R8A7795 has one RGB output, two HDMI outputs and one
+> -		 * LVDS output.
+> -		 */
+> -		[RCAR_DU_OUTPUT_DPAD0] = {
+> -			.possible_crtcs = BIT(3),
+> -			.port = 0,
+> -		},
+> -		[RCAR_DU_OUTPUT_HDMI0] = {
+> -			.possible_crtcs = BIT(1),
+> -			.port = 1,
+> -		},
+> -		[RCAR_DU_OUTPUT_HDMI1] = {
+> -			.possible_crtcs = BIT(2),
+> -			.port = 2,
+> -		},
+> -		[RCAR_DU_OUTPUT_LVDS0] = {
+> -			.possible_crtcs = BIT(0),
+> -			.port = 3,
+> -		},
+> -	},
+> -	.num_lvds = 1,
+> -	.num_rpf = 5,
+> -	.dpll_mask =  BIT(2) | BIT(1),
+> -};
+> -
+>  static const struct rcar_du_device_info rcar_du_r8a7796_info = {
+>  	.gen = 3,
+>  	.features = RCAR_DU_FEATURE_CRTC_IRQ
+> @@ -614,11 +576,6 @@ static const struct of_device_id rcar_du_of_table[] = {
+>  
+>  MODULE_DEVICE_TABLE(of, rcar_du_of_table);
+>  
+> -static const struct soc_device_attribute rcar_du_soc_table[] = {
+> -	{ .soc_id = "r8a7795", .revision = "ES1.*", .data = &rcar_du_r8a7795_es1_info },
+> -	{ /* sentinel */ }
+> -};
+> -
+>  const char *rcar_du_output_name(enum rcar_du_output output)
+>  {
+>  	static const char * const names[] = {
+> @@ -707,7 +664,6 @@ static void rcar_du_shutdown(struct platform_device *pdev)
+>  
+>  static int rcar_du_probe(struct platform_device *pdev)
+>  {
+> -	const struct soc_device_attribute *soc_attr;
+>  	struct rcar_du_device *rcdu;
+>  	unsigned int mask;
+>  	int ret;
+> @@ -725,10 +681,6 @@ static int rcar_du_probe(struct platform_device *pdev)
+>  
+>  	rcdu->info = of_device_get_match_data(rcdu->dev);
+>  
+> -	soc_attr = soc_device_match(rcar_du_soc_table);
+> -	if (soc_attr)
+> -		rcdu->info = soc_attr->data;
+> -
+>  	platform_set_drvdata(pdev, rcdu);
+>  
+>  	/* I/O resources */
+> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.h b/drivers/gpu/drm/rcar-du/rcar_du_drv.h
+> index acc3673fefe1..5cfa2bb7ad93 100644
+> --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.h
+> +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.h
+> @@ -34,8 +34,6 @@ struct rcar_du_device;
+>  #define RCAR_DU_FEATURE_NO_BLENDING	BIT(5)	/* PnMR.SPIM does not have ALP nor EOR bits */
+>  
+>  #define RCAR_DU_QUIRK_ALIGN_128B	BIT(0)	/* Align pitches to 128 bytes */
+> -#define RCAR_DU_QUIRK_H3_ES1_PCLK_STABILITY BIT(1)	/* H3 ES1 has pclk stability issue */
+> -#define RCAR_DU_QUIRK_H3_ES1_PLL	BIT(2)	/* H3 ES1 PLL setup differs from non-ES1 */
+>  
+>  enum rcar_du_output {
+>  	RCAR_DU_OUTPUT_DPAD0,
+> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_regs.h b/drivers/gpu/drm/rcar-du/rcar_du_regs.h
+> index 6c750fab6ebb..391de6661d8b 100644
+> --- a/drivers/gpu/drm/rcar-du/rcar_du_regs.h
+> +++ b/drivers/gpu/drm/rcar-du/rcar_du_regs.h
+> @@ -283,8 +283,7 @@
+>  #define DPLLCR			0x20044
+>  #define DPLLCR_CODE		(0x95 << 24)
+>  #define DPLLCR_PLCS1		(1 << 23)
+> -#define DPLLCR_PLCS0_PLL	(1 << 21)
+> -#define DPLLCR_PLCS0_H3ES1X_PLL1	(1 << 20)
+> +#define DPLLCR_PLCS0		(1 << 21)
+>  #define DPLLCR_CLKE		(1 << 18)
+>  #define DPLLCR_FDPLL(n)		((n) << 12)
+>  #define DPLLCR_N(n)		((n) << 5)
 
-Something which describes the patch like - Add comments to describe the
-arguments of the qcom_scm_mem_protect_video_var TZ call. The TZ call programs
-the video hardware with CP and non-CP VARs, and the comments describes these VARs.
+-- 
+Regards,
 
-> Konrad
->>>> Reviewed-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
->>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> Reviewed-by: Vikash Garodia <quic_vgarodia@quicinc.com>
->>>> ---
->>>>   drivers/media/platform/qcom/venus/firmware.c | 7 +++++++
->>>>   1 file changed, 7 insertions(+)
->>>>
->>>> diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
->>>> index cfb11c551167..a4cd919e1dbe 100644
->>>> --- a/drivers/media/platform/qcom/venus/firmware.c
->>>> +++ b/drivers/media/platform/qcom/venus/firmware.c
->>>> @@ -241,6 +241,13 @@ int venus_boot(struct venus_core *core)
->>>>           return ret;
->>>>         if (core->use_tz && res->cp_size) {
->>>> +        /*
->>>> +         * Clues for porting using downstream data:
->>>> +         * cp_start = 0
->>>> +         * cp_size = venus_ns/virtual-addr-pool[0] (yes, addr not size)
->>>
->>> The field is the start address of ns context bank. Since the cp_start is 0, the start address for (next) non-secure context bank
->>>
->>> is interpreted as size of the (previous) content protection region.
->>>
->>>> +         * cp_nonpixel_start = venus_sec_non_pixel/virtual-addr-pool[0]
->>>> +         * cp_nonpixel_size = venus_sec_non_pixel/virtual-addr-pool[1]
->>>> +         */
->>>>           ret = qcom_scm_mem_protect_video_var(res->cp_start,
->>>>                                res->cp_size,
->>>>                                res->cp_nonpixel_start,
->>>>
+Laurent Pinchart
