@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A141C6FCBA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49DAE6FCBA8
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234427AbjEIQs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 12:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
+        id S234438AbjEIQtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 12:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233293AbjEIQsz (ORCPT
+        with ESMTP id S229491AbjEIQtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 12:48:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31A419B3;
-        Tue,  9 May 2023 09:48:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 679926314A;
-        Tue,  9 May 2023 16:48:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ADCFC433EF;
-        Tue,  9 May 2023 16:48:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683650933;
-        bh=/5mgumQsRWcCzDVcW6dKY3+mva/nAJpSN1nWmyf57wg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EkyD9qXGv6gqLuWoxG7a4O/2aL77tF6C4CjEFN5pbY1qgoYmUgdl6YB0ErIZrSbwx
-         6l5qij0vpzrKEr0RUgkZgW96SXq5sSiLT7kS1XTwbHyyvAN2nAkOqRQkVA0y4UFbHM
-         JFn4bQsYzFSx2fskfwymVNAvXzfy07AsWs3oCQl/bjFs7tZQ0cou2/DHgmN6yArTne
-         SdquKQ8yztySUb72ETE7u+Fn/2PVbTHPUKdyY394XjU2uJA4yxP5Z5KM/bl8C0GS+y
-         gPIRZcDY9QGNqM/jAAeCJ2E8vAMz9FsIHgEQDZWglWacFL4jIjCx7IYjHOBIqfLuZw
-         jAx3PvLiwTjQQ==
-Date:   Tue, 9 May 2023 09:48:51 -0700
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 06/12] mm: page_alloc: remove alloc_contig_dump_pages()
- stub
-Message-ID: <20230509164851.GD4135@kernel.org>
-References: <20230508071200.123962-1-wangkefeng.wang@huawei.com>
- <20230508071200.123962-7-wangkefeng.wang@huawei.com>
+        Tue, 9 May 2023 12:49:40 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAA61725;
+        Tue,  9 May 2023 09:49:39 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75773a7bd66so308362085a.1;
+        Tue, 09 May 2023 09:49:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683650978; x=1686242978;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+v/X+OxvTsGwJMDiA5a3JO4hrqmYlFbvSipw3tCkW7k=;
+        b=mi18ne7/zmw24M0PE5a/jix7FCxVRAPj2OWezMOLK435O6KTl91ufM7ecY/3An5FlG
+         3eDIxoiYdu6nOfrJG1xvexSDGBBA8iftptyC0At0dA4g4TSRiM+tkA3sJL8/LCj+5u2H
+         Bvl8EJoSWHQqjhd+Qtaly9hiW0mzpXzSC+Ff/OGOg6C6OOPVed4LlRAo/4/qB/c9FXM3
+         qAAJNsx/YYbRNnn7PHjDliADKFOFEmo3AV9DioKrvGDQHhEqFe3NYV0/YaryXGzVXliQ
+         7RKZFyJhAY3QPNhuyesiQtVX9bbyj1FqAqLttQffgFNCN5QhF4Ip9Qbx0BWt/7pTO0US
+         besA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683650978; x=1686242978;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+v/X+OxvTsGwJMDiA5a3JO4hrqmYlFbvSipw3tCkW7k=;
+        b=DraFSfJAYldTwMvMM8xq0QNwz2oBAKqXGg4DNDS3VRzD8A2q4X9XlmXibFSYXO2GnW
+         YVn7vnmj36oSeThnBVpaFGkpb/SZGKdY2V6GxbabhrKPbplD9s6KlIK4yehZfYoJHsfP
+         9GOor5Ol1WwFKnPURMTzSESOAMWxven20+7u5jCaOFLbJtT1TXOo10l0nfIXtO3di7c7
+         JH9XtAC+kJaDiqhc3X9wYLJKZpwVOmhwJsKAPdMgE5kyBI3yIwwnSFyvFIHUAPthhlv3
+         QflFPQiIth5M4htQE+t8IF7kvatqGlpwwZWyXX2pOEmbdV+cY8BTfWJxhwoOhgsbR5EJ
+         zq+A==
+X-Gm-Message-State: AC+VfDx3SWShDz91uhp68LF2g7jkJRjeplCzqGsTVavRymu/FncyKaVR
+        ioL0qVeR9pruf/QQ9VxixNo=
+X-Google-Smtp-Source: ACHHUZ4KMC8JbEB3svxiOe6ARE2a/tn5H49VSw4ZqmLxsz8hib28t5obbwshSIBb3QlXSqLgXxD0Vg==
+X-Received: by 2002:a05:6214:1243:b0:5c5:1a25:edf0 with SMTP id r3-20020a056214124300b005c51a25edf0mr21819667qvv.26.1683650978520;
+        Tue, 09 May 2023 09:49:38 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id u2-20020a0cdd02000000b005ef6128255bsm875900qvk.92.2023.05.09.09.49.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 09:49:37 -0700 (PDT)
+Message-ID: <1f7ec6f8-dc61-9ea0-a7c6-1a51d69d0610@gmail.com>
+Date:   Tue, 9 May 2023 09:49:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508071200.123962-7-wangkefeng.wang@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 5.15 000/370] 5.15.111-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230509030611.521807993@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230509030611.521807993@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 03:11:54PM +0800, Kefeng Wang wrote:
-> DEFINE_DYNAMIC_DEBUG_METADATA and DYNAMIC_DEBUG_BRANCH already has
-> stub definitions without dynamic debug feature, remove unnecessary
-> alloc_contig_dump_pages() stub.
+On 5/8/23 20:26, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.111 release.
+> There are 370 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Responses should be made by Thu, 11 May 2023 03:05:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.111-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-> ---
->  mm/page_alloc.c | 7 -------
->  1 file changed, 7 deletions(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 348dcbaca757..bc453edbad21 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -6161,8 +6161,6 @@ int percpu_pagelist_high_fraction_sysctl_handler(struct ctl_table *table,
->  }
->  
->  #ifdef CONFIG_CONTIG_ALLOC
-> -#if defined(CONFIG_DYNAMIC_DEBUG) || \
-> -	(defined(CONFIG_DYNAMIC_DEBUG_CORE) && defined(DYNAMIC_DEBUG_MODULE))
->  /* Usage: See admin-guide/dynamic-debug-howto.rst */
->  static void alloc_contig_dump_pages(struct list_head *page_list)
->  {
-> @@ -6176,11 +6174,6 @@ static void alloc_contig_dump_pages(struct list_head *page_list)
->  			dump_page(page, "migration failure");
->  	}
->  }
-> -#else
-> -static inline void alloc_contig_dump_pages(struct list_head *page_list)
-> -{
-> -}
-> -#endif
->  
->  /* [start, end) must belong to a single zone. */
->  int __alloc_contig_migrate_range(struct compact_control *cc,
-> -- 
-> 2.35.3
-> 
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
+
