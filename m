@@ -2,460 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3139A6FCB9A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B624D6FCB95
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbjEIQq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 12:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S233996AbjEIQqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 12:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbjEIQq5 (ORCPT
+        with ESMTP id S229489AbjEIQqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 12:46:57 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A891725;
-        Tue,  9 May 2023 09:46:54 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349Gg8j3003653;
-        Tue, 9 May 2023 16:46:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=PmUvMkpmxb5wKT0GLDxWM+Pmnk5F3eR61Wx8LVrALXU=;
- b=gMo0L7RvUq1+/EdzbrW5kobBaFL5OSGf3OIc1tTu/NiJLlFdDCOGOqv3A19DonL1YW+3
- zlNxdpv5PiuqH5zFTYWRj6CTaaXYAk201OyidPlri4HxHuYnQtT3Otl98gX1Ig/3hUBI
- u/IJriXqmzFCTHfQqfLIUnqDIuRCT/A7KoP8BmRCcUF4ls7ItGKl5u/MDWRQmOlgZP0n
- xti5YYDj+0TlnDtm9GryyaBvVhAbs9dD91KOlIF3V5Yjtplrwq7R/GyQ8+1BKFTn4gEP
- ZFRqOO6dvu3vo0ZkIeFwzIHu/fyzHeI5l3Xqa+9U/4Ovk4fz0JxUmX5ha5wskpyXab7+ wg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf77ktcna-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 16:46:49 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 349GkmMu018137
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 9 May 2023 16:46:48 GMT
-Received: from [10.216.5.187] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
- 09:46:39 -0700
-Message-ID: <26c8bbe3-18e4-92f9-f559-340331c08562@quicinc.com>
-Date:   Tue, 9 May 2023 22:16:36 +0530
+        Tue, 9 May 2023 12:46:46 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7831740C2;
+        Tue,  9 May 2023 09:46:44 -0700 (PDT)
+Date:   Tue, 9 May 2023 18:46:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683650802;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=uCUU9WZugBN0LhAAPvuAiN6MFGxW7tHeTT1UiMBLeLQ=;
+        b=Reo3qeBmcL0vgGN6yrGxKzPfQKIucLXsCLQXtoX1KlICDQEl784kC3DXGDknjOYTxoaPEE
+        HtYjno/IK3rkihgAHDsYTlNbFuAfh81SMrsMgXeiiY3cP5zpIIS8vqhmcSPBbYnevCsinO
+        Wri9VbF/+8xgAQwVH6CC3JRdYSpDK8Znl69f37kFHlr8Dyh21WjypdU47naE15BOUH977F
+        NFZ6CehLXWVoSuPUcynVRTg85oNJbSZn+YlbYSJ1M1RcdR88O84bkWhsblH6GiJTBIIQIm
+        5QnsDivJDTNNtYm7aB5YIl1uvPh4Km1cB3RGyL1pPtwX7czlPDl0ZH00NLygrA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683650802;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=uCUU9WZugBN0LhAAPvuAiN6MFGxW7tHeTT1UiMBLeLQ=;
+        b=OPpP2wo/RsKE+/4VO9b2dql3jdt59hzYD3IHqHLVtxVNUxMOM/FUSXEq7RPEK9NXFbW74r
+        7aKMopW5lhMUp5AQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [ANNOUNCE] v6.3.1-rt13
+Message-ID: <20230509164640.-aaZNrjH@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 01/11] dt-bindings: remoteproc: qcom: Add support for
- multipd model
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
-        <mathieu.poirier@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <quic_gurus@quicinc.com>,
-        <loic.poulain@linaro.org>, <quic_eberman@quicinc.com>,
-        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-2-git-send-email-quic_mmanikan@quicinc.com>
- <38a5a268-7d8a-6e61-4272-8e9155df0034@linaro.org>
-From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-In-Reply-To: <38a5a268-7d8a-6e61-4272-8e9155df0034@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: DhUQcEPQ3EjIlYA8VFPlzZKhWLQ9RM7Q
-X-Proofpoint-ORIG-GUID: DhUQcEPQ3EjIlYA8VFPlzZKhWLQ9RM7Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_10,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- suspectscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
- phishscore=0 impostorscore=0 spamscore=0 clxscore=1015 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305090139
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear RT folks!
 
+I'm pleased to announce the v6.3.1-rt13 patch set. 
 
-On 3/7/2023 8:47 PM, Krzysztof Kozlowski wrote:
-> On 07/03/2023 05:41, Manikanta Mylavarapu wrote:
->> Add new binding document for multipd model remoteproc.
->> IPQ5018, IPQ9574 follows multipd model.
->>
->> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
->> ---
->>   .../bindings/remoteproc/qcom,multipd-pil.yaml | 282 ++++++++++++++++++
->>   1 file changed, 282 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
->> new file mode 100644
->> index 000000000000..b788607f5abd
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
->> @@ -0,0 +1,282 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/remoteproc/qcom,multipd-pil.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm Multipd Secure Peripheral Image Loader
->> +
->> +maintainers:
->> +  - Bjorn Andersson <andersson@kernel.org>
->> +  - Mathieu Poirier <mathieu.poirier@linaro.org>
->> +
->> +description:
->> +  Multipd Peripheral Image Loader loads firmware and boots Q6 pd, WCSS pd
->> +  remoteproc's on the Qualcomm IPQ5018, IPQ9574 SoC.
-> 
-> What is a "pd"?
-> 
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - qcom,ipq5018-q6-mpd
->> +      - qcom,ipq9574-q6-mpd
->> +
->> +  '#address-cells': true
->> +
->> +  '#size-cells': true
-> 
-> Why do you need both?
-> 
-> If really needed, these should be const.
-> 
->> +
->> +  'ranges': true
->> +
-> 
-> Same question - why do you need it?
-> 
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts-extended:
-> 
-> Instead interrupts
-> 
->> +    items:
->> +      - description: Watchdog interrupt
->> +      - description: Fatal interrupt
->> +      - description: Ready interrupt
->> +      - description: Handover interrupt
->> +      - description: Stop acknowledge interrupt
->> +
->> +  interrupt-names:
->> +    items:
->> +      - const: wdog
->> +      - const: fatal
->> +      - const: ready
->> +      - const: handover
->> +      - const: stop-ack
->> +
->> +  clocks:
->> +    minItems: 25
->> +    maxItems: 25
-> 
-> Drop both and instead describe the items. Anyway minItems are not needed
-> here.
-> 
->> +
->> +  clock-names:
->> +    minItems: 25
->> +    maxItems: 25
-> 
-> Drop both and instead list the names.
-> 
->> +
->> +  assigned-clocks:
->> +    minItems: 13
->> +    maxItems: 13
-> 
-> Drop, they do not have to be mentioned in the binding. If you think they
-> need to, then why?
->  >> +
->> +  assigned-clock-rates:
->> +    minItems: 13
->> +    maxItems: 13
-> 
-> Ditto
-> 
-Clocks in multipd architecture will be handled by QDSP6 firmware.
-So i am going to remove clock handling.
->> +
->> +  qcom,smem-states:
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->> +    description: States used by the AP to signal the remoteprocessor
->> +    items:
->> +      - description: Shutdown Q6
->> +      - description: Stop Q6
->> +
->> +  qcom,smem-state-names:
->> +    description:
->> +      Names of the states used by the AP to signal the remoteprocessor
->> +    items:
->> +      - const: shutdown
->> +      - const: stop
->> +
->> +  memory-region:
->> +    items:
->> +      - description: Q6 pd reserved region
->> +
->> +  glink-edge:
->> +    $ref: /schemas/remoteproc/qcom,glink-edge.yaml#
-> 
-> unevaluatedProperties: false
-> 
->> +    description:
->> +      Qualcomm G-Link subnode which represents communication edge, channels
->> +      and devices related to the Modem.
->> +
->> +patternProperties:
->> +  "^remoteproc_pd1|remoteproc_pd2|remoteproc_pd3":
-> 
-> No, underscores are not allowed. Also, what is pd?
-> 
->> +    type: object
->> +    description:
->> +      In Multipd model, WCSS pd depends on Q6 pd i.e Q6 pd should be up before
->> +      WCSS. It can be achieved by keeping wcss pd node as subnode of Q6
->> +      device node.
->> +
->> +    properties:
->> +      compatible:
->> +        enum:
->> +          - "qcom,ipq5018-wcss-ahb-mpd"
->> +          - "qcom,ipq9574-wcss-ahb-mpd"
->> +          - "qcom,ipq5018-wcss-pcie-mpd"
-> 
-> Drop quotes
-> 
->> +
->> +      interrupts-extended:
-> 
-> Same as before
-> 
->> +        items:
->> +          - description: Fatal interrupt
->> +          - description: Ready interrupt
->> +          - description: Spawn acknowledge interrupt
->> +          - description: Stop acknowledge interrupt
->> +
->> +      interrupt-names:
->> +        items:
->> +          - const: fatal
->> +          - const: ready
->> +          - const: spawn-ack
->> +          - const: stop-ack
->> +
->> +      qcom,smem-states:
->> +        $ref: /schemas/types.yaml#/definitions/phandle-array
->> +        description: States used by the AP to signal the remoteprocessor
->> +        items:
->> +          - description: Shutdown WCSS pd
->> +          - description: Stop WCSS pd
->> +          - description: Spawn WCSS pd
->> +
->> +      qcom,smem-state-names:
->> +        description:
->> +          Names of the states used by the AP to signal the remoteprocessor
-> 
-> remote processor
-> 
->> +        items:
->> +          - const: shutdown
->> +          - const: stop
->> +          - const: spawn
-> 
-> This is confusing. Why your children have the same properties as parent?
-> 
->> +
->> +    required:
->> +      - compatible
->> +
->> +    additionalProperties: false
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts-extended
-> 
-> interrupts
-> 
->> +  - interrupt-names
->> +  - qcom,smem-states
->> +  - qcom,smem-state-names
->> +  - memory-region
->> +
->> +additionalProperties: false
->> +
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - qcom,ipq9574-q6-mpd
->> +    then:
->> +      properties:
->> +        assigned-clocks:
->> +          items:
->> +            - description: Phandle, clock specifier of GCC_ANOC_WCSS_AXI_M_CLK
->> +            - description: Phandle, clock specifier of GCC_WCSS_AHB_S_CLK
->> +            - description: Phandle, clock specifier of GCC_WCSS_ECAHB_CLK
->> +            - description: Phandle, clock specifier of GCC_WCSS_ACMT_CLK
->> +            - description: Phandle, clock specifier of GCC_WCSS_AXI_M_CLK
->> +            - description: Phandle, clock specifier of GCC_Q6_AXIM_CLK
->> +            - description: Phandle, clock specifier of GCC_Q6_AXIM2_CLK
->> +            - description: Phandle, clock specifier of GCC_Q6_AHB_CLK
->> +            - description: Phandle, clock specifier of GCC_Q6_AHB_S_CLK
->> +            - description: Phandle, clock specifier of GCC_Q6SS_BOOT_CLK
->> +            - description: Phandle, clock specifier of GCC_MEM_NOC_Q6_AXI_CLK
->> +            - description: Phandle, clock specifier of GCC_WCSS_Q6_TBU_CLK
->> +            - description: Phandle, clock specifier of GCC_SYS_NOC_WCSS_AHB_CLK
-> 
-> Eh, so here they are. But Why? Do you expect different clocks for
-> others? If so, where are they?
-> 
-> Anyway, drop useless "Phandle, clock specifier of". Clocks cannot be
-> anything else than phandle and a clock specifier. Instead of using some
-> cryptic ACRONYM_OR_SOME_CLK, describe them. Just like we do for other
-> bindings. You have plenty of good examples, so please start from them.
-> 
-> 
-Clocks in multipd architecture will be handled by QDSP6 firmware.
-So i am going to remove clock handling.
->> +        assigned-clock-rates:
->> +          items:
->> +            - description: Must be 266666667 HZ
->> +            - description: Must be 133333333 HZ
->> +            - description: Must be 133333333 HZ
->> +            - description: Must be 133333333 HZ
->> +            - description: Must be 266666667 HZ
->> +            - description: Must be 533000000 HZ
->> +            - description: Must be 342857143 HZ
->> +            - description: Must be 133333333 HZ
->> +            - description: Must be 133333333 HZ
->> +            - description: Must be 342857143 HZ
->> +            - description: Must be 533000000 HZ
->> +            - description: Must be 533000000 HZ
->> +            - description: Must be 133333333 HZ
-> 
-> ???
-> 
-> If these are fixed, why this is in DT? DT is for variable and
-> non-discoverable pieces and you do not have here anything variable, but
-> fixed.
-> 
-Clocks in multipd architecture will be handled by QDSP6 firmware.
-So i am going to remove clock handling.
+Changes since v6.3.1-rt12:
 
-Thanks & Regards,
-Manikanta.
->> +
->> +examples:
->> +  - |
->> +        #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +        #include <dt-bindings/clock/qcom,gcc-ipq5018.h>
->> +        #include <dt-bindings/reset/qcom,gcc-ipq5018.h>
-> 
-> Use 4 spaces for example indentation.
-> 
->> +
->> +        q6v5_wcss: remoteproc@cd00000 {
->> +                compatible = "qcom,ipq5018-q6-mpd";
->> +                #address-cells = <1>;
->> +                #size-cells = <1>;
->> +                ranges;
->> +                reg = <0x0cd00000 0x4040>;
->> +                interrupts-extended = <&intc GIC_SPI 291 IRQ_TYPE_EDGE_RISING>,
->> +                                <&wcss_smp2p_in 0 0>,
-> 
-> Wrong alignment of indentation
-> 
->> +                                <&wcss_smp2p_in 1 0>,
->> +                                <&wcss_smp2p_in 2 0>,
->> +                                <&wcss_smp2p_in 3 0>;
->> +                interrupt-names = "wdog",
->> +                                  "fatal",
->> +                                  "ready",
->> +                                  "handover",
->> +                                  "stop-ack";
->> +
->> +                qcom,smem-states = <&wcss_smp2p_out 0>,
->> +                                   <&wcss_smp2p_out 1>;
->> +                qcom,smem-state-names = "shutdown",
->> +                                        "stop";
->> +
->> +                memory-region = <&q6_region>;
->> +
->> +                glink-edge {
->> +                        interrupts = <GIC_SPI 179 IRQ_TYPE_EDGE_RISING>;
->> +                        label = "rtr";
->> +                        qcom,remote-pid = <1>;
->> +                        mboxes = <&apcs_glb 8>;
->> +                };
->> +
->> +                q6_wcss_pd1: remoteproc_pd1 {
->> +                        compatible = "qcom,ipq5018-wcss-ahb-mpd";
->> +                        interrupts-extended = <&wcss_smp2p_in 8 0>,
->> +                                        <&wcss_smp2p_in 9 0>,
->> +                                        <&wcss_smp2p_in 12 0>,
->> +                                        <&wcss_smp2p_in 11 0>;
->> +                        interrupt-names = "fatal",
->> +                                          "ready",
->> +                                          "spawn-ack",
->> +                                          "stop-ack";
->> +                        qcom,smem-states = <&wcss_smp2p_out 8>,
->> +                                           <&wcss_smp2p_out 9>,
->> +                                           <&wcss_smp2p_out 10>;
->> +                        qcom,smem-state-names = "shutdown",
->> +                                                "stop",
->> +                                                "spawn";
->> +                };
->> +
->> +                q6_wcss_pd2: remoteproc_pd2 {
->> +                        compatible = "qcom,ipq5018-wcss-pcie-mpd";
->> +                        interrupts-extended = <&wcss_smp2p_in 16 0>,
->> +                                        <&wcss_smp2p_in 17 0>,
->> +                                        <&wcss_smp2p_in 20 0>,
->> +                                        <&wcss_smp2p_in 19 0>;
->> +                        interrupt-names = "fatal",
->> +                                          "ready",
->> +                                          "spawn-ack",
->> +                                          "stop-ack";
->> +
->> +                        qcom,smem-states = <&wcss_smp2p_out 16>,
->> +                                           <&wcss_smp2p_out 17>,
->> +                                           <&wcss_smp2p_out 18>;
->> +                        qcom,smem-state-names = "shutdown",
->> +                                                "stop",
->> +                                                "spawn";
->> +                        status = "okay";
-> 
-> Drop statuses from the example.
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+  - Two posix-timers picked-up from the list. They are scheduled for
+    upstream inclusion. One of prevents a livelock on PREEMPT_RT in
+    itimer_delete(). Patches by Thomas Gleixner.
+
+  - A softirq handling patch from the list 'revert: "softirq: Let
+    ksoftirqd do its job' from Paolo Abeni. This revert should reduce a
+    lot of trouble which start once ksoftirqd is woken up.
+    The 6.1-RT series has the ktimersd thread which mitigates some of
+    the pain. This patch should render the patch obsolete.
+    Should everything work out as expected I intend to backport this
+    patch the earlier RT series and revert the ktimersd patch in the
+    v6.1 series.
+
+Known issues
+     None
+
+The delta patch against v6.3.1-rt12 is appended below and can be found here:
+ 
+     https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/incr/patch-6.3.1-rt12-rt13.patch.xz
+
+You can get this release via the git tree at:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v6.3.1-rt13
+
+The RT patch against v6.3.1 can be found here:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patch-6.3.1-rt13.patch.xz
+
+The split quilt queue is available at:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patches-6.3.1-rt13.tar.xz
+
+Sebastian
+
+diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+index a39be9f9ba966..b38ce53576000 100644
+--- a/include/linux/sched/signal.h
++++ b/include/linux/sched/signal.h
+@@ -136,7 +136,7 @@ struct signal_struct {
+ #ifdef CONFIG_POSIX_TIMERS
+ 
+ 	/* POSIX.1b Interval Timers */
+-	int			posix_timer_id;
++	unsigned int		next_posix_timer_id;
+ 	struct list_head	posix_timers;
+ 
+ 	/* ITIMER_REAL timer for the process */
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index 82f3e68fbe220..af9e879bbbf75 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -80,21 +80,6 @@ static void wakeup_softirqd(void)
+ 		wake_up_process(tsk);
+ }
+ 
+-/*
+- * If ksoftirqd is scheduled, we do not want to process pending softirqs
+- * right now. Let ksoftirqd handle this at its own rate, to get fairness,
+- * unless we're doing some of the synchronous softirqs.
+- */
+-#define SOFTIRQ_NOW_MASK ((1 << HI_SOFTIRQ) | (1 << TASKLET_SOFTIRQ))
+-static bool ksoftirqd_running(unsigned long pending)
+-{
+-	struct task_struct *tsk = __this_cpu_read(ksoftirqd);
+-
+-	if (pending & SOFTIRQ_NOW_MASK)
+-		return false;
+-	return tsk && task_is_running(tsk) && !__kthread_should_park(tsk);
+-}
+-
+ #ifdef CONFIG_TRACE_IRQFLAGS
+ DEFINE_PER_CPU(int, hardirqs_enabled);
+ DEFINE_PER_CPU(int, hardirq_context);
+@@ -236,7 +221,7 @@ void __local_bh_enable_ip(unsigned long ip, unsigned int cnt)
+ 		goto out;
+ 
+ 	pending = local_softirq_pending();
+-	if (!pending || ksoftirqd_running(pending))
++	if (!pending)
+ 		goto out;
+ 
+ 	/*
+@@ -432,9 +417,6 @@ static inline bool should_wake_ksoftirqd(void)
+ 
+ static inline void invoke_softirq(void)
+ {
+-	if (ksoftirqd_running(local_softirq_pending()))
+-		return;
+-
+ 	if (!force_irqthreads() || !__this_cpu_read(ksoftirqd)) {
+ #ifdef CONFIG_HAVE_IRQ_EXIT_ON_IRQ_STACK
+ 		/*
+@@ -468,7 +450,7 @@ asmlinkage __visible void do_softirq(void)
+ 
+ 	pending = local_softirq_pending();
+ 
+-	if (pending && !ksoftirqd_running(pending))
++	if (pending)
+ 		do_softirq_own_stack();
+ 
+ 	local_irq_restore(flags);
+diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+index 0c8a87a11b39d..863b8ac073c30 100644
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -140,25 +140,29 @@ static struct k_itimer *posix_timer_by_id(timer_t id)
+ static int posix_timer_add(struct k_itimer *timer)
+ {
+ 	struct signal_struct *sig = current->signal;
+-	int first_free_id = sig->posix_timer_id;
+ 	struct hlist_head *head;
+-	int ret = -ENOENT;
++	unsigned int start, id;
+ 
+-	do {
++	/* Can be written by a different task concurrently in the loop below */
++	start = READ_ONCE(sig->next_posix_timer_id);
++
++	for (id = ~start; start != id; id++) {
+ 		spin_lock(&hash_lock);
+-		head = &posix_timers_hashtable[hash(sig, sig->posix_timer_id)];
+-		if (!__posix_timers_find(head, sig, sig->posix_timer_id)) {
++		id = sig->next_posix_timer_id;
++
++		/* Write the next ID back. Clamp it to the positive space */
++		WRITE_ONCE(sig->next_posix_timer_id, (id + 1) & INT_MAX);
++
++		head = &posix_timers_hashtable[hash(sig, id)];
++		if (!__posix_timers_find(head, sig, id)) {
+ 			hlist_add_head_rcu(&timer->t_hash, head);
+-			ret = sig->posix_timer_id;
++			spin_unlock(&hash_lock);
++			return id;
+ 		}
+-		if (++sig->posix_timer_id < 0)
+-			sig->posix_timer_id = 0;
+-		if ((sig->posix_timer_id == first_free_id) && (ret == -ENOENT))
+-			/* Loop over all possible ids completed */
+-			ret = -EAGAIN;
+ 		spin_unlock(&hash_lock);
+-	} while (ret == -ENOENT);
+-	return ret;
++	}
++	/* POSIX return code when no timer ID could be allocated */
++	return -EAGAIN;
+ }
+ 
+ static inline void unlock_timer(struct k_itimer *timr, unsigned long flags)
+@@ -1033,27 +1037,59 @@ SYSCALL_DEFINE1(timer_delete, timer_t, timer_id)
+ }
+ 
+ /*
+- * return timer owned by the process, used by exit_itimers
++ * Delete a timer if it is armed, remove it from the hash and schedule it
++ * for RCU freeing.
+  */
+ static void itimer_delete(struct k_itimer *timer)
+ {
+-retry_delete:
+-	spin_lock_irq(&timer->it_lock);
++	unsigned long flags;
+ 
++retry_delete:
++	/*
++	 * irqsave is required to make timer_wait_running() work.
++	 */
++	spin_lock_irqsave(&timer->it_lock, flags);
++
++	/*
++	 * Even if the timer is not longer accessible from other tasks
++	 * it still might be armed and queued in the underlying timer
++	 * mechanism. Worse, that timer mechanism might run the expiry
++	 * function concurrently.
++	 */
+ 	if (timer_delete_hook(timer) == TIMER_RETRY) {
+-		spin_unlock_irq(&timer->it_lock);
++		/*
++		 * Timer is expired concurrently, prevent livelocks
++		 * and pointless spinning on RT.
++		 *
++		 * The CONFIG_POSIX_CPU_TIMERS_TASK_WORK=y case is
++		 * irrelevant here because obviously the exiting task
++		 * cannot be expiring timer in task work concurrently.
++		 * Ditto for CONFIG_POSIX_CPU_TIMERS_TASK_WORK=n as the
++		 * tick interrupt cannot run on this CPU because the above
++		 * spin_lock disabled interrupts.
++		 *
++		 * timer_wait_running() drops timer::it_lock, which opens
++		 * the possibility for another task to delete the timer.
++		 *
++		 * That's not possible here because this is invoked from
++		 * do_exit() only for the last thread of the thread group.
++		 * So no other task can access that timer.
++		 */
++		if (WARN_ON_ONCE(timer_wait_running(timer, &flags) != timer))
++			return;
++
+ 		goto retry_delete;
+ 	}
+ 	list_del(&timer->list);
+ 
+-	spin_unlock_irq(&timer->it_lock);
++	spin_unlock_irqrestore(&timer->it_lock, flags);
+ 	release_posix_timer(timer, IT_ID_SET);
+ }
+ 
+ /*
+- * This is called by do_exit or de_thread, only when nobody else can
+- * modify the signal->posix_timers list. Yet we need sighand->siglock
+- * to prevent the race with /proc/pid/timers.
++ * Invoked from do_exit() when the last thread of a thread group exits.
++ * At that point no other task can access the timers of the dying
++ * task anymore.
+  */
+ void exit_itimers(struct task_struct *tsk)
+ {
+@@ -1063,10 +1099,12 @@ void exit_itimers(struct task_struct *tsk)
+ 	if (list_empty(&tsk->signal->posix_timers))
+ 		return;
+ 
++	/* Protect against concurrent read via /proc/$PID/timers */
+ 	spin_lock_irq(&tsk->sighand->siglock);
+ 	list_replace_init(&tsk->signal->posix_timers, &timers);
+ 	spin_unlock_irq(&tsk->sighand->siglock);
+ 
++	/* The timers are not longer accessible via tsk::signal */
+ 	while (!list_empty(&timers)) {
+ 		tmr = list_first_entry(&timers, struct k_itimer, list);
+ 		itimer_delete(tmr);
+diff --git a/localversion-rt b/localversion-rt
+index 6e44e540b927b..9f7d0bdbffb18 100644
+--- a/localversion-rt
++++ b/localversion-rt
+@@ -1 +1 @@
+--rt12
++-rt13
