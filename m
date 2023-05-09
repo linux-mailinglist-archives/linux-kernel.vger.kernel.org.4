@@ -2,138 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2097E6FBC31
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 02:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED466FBC34
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 02:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbjEIAz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 20:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49214 "EHLO
+        id S232520AbjEIA4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 20:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232784AbjEIAzw (ORCPT
+        with ESMTP id S229539AbjEIA4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 20:55:52 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCBD93C5
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 17:55:50 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7606e3c6c8aso350684639f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 17:55:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683593750; x=1686185750;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+LadK4ztz7DMxRtO6OmvxwUFVGeyvRciIiCq7RQ694Q=;
-        b=gTujTPcJf6jWEnSy4wDIShGbmJlDwpxmsI7v34qZvig+AfzXruqJz4dL2vX1cx2MCT
-         IReL+VSAQ4QU4Hlj+TlDTdsi3TrBVILwofXZpoRonOFpWFYYaCz+NC3HYZLiKz7YQNNv
-         JLs6kyxdM6Wtfk/KjiMjjqsUl3JsBsaRpH4fqysPvihlylNTOqZRDJXJQXvRM4a/KF+P
-         LxTYdLso6fQyS7eSjAEZ/b5y6ol99BEHykj2gjgMMMOrDTux83diAqMMvIlR7Trwne5R
-         NPdiNHjyRe/BPhtWFLNsncSiI9olGsCd+DVqwMTIfLsxQqHqVbH1t+LhBa54D0Bt9Cq9
-         ybMA==
-X-Gm-Message-State: AC+VfDzar0HVBhayXefoXNq2gek86CtE3q7Xft62Ho4o2WTW7YOHWzMi
-        YaVbwCtygf6r3oaF63ZoX8ZfpTXkpWUgLYeoNSD/Loh20AsG
-X-Google-Smtp-Source: ACHHUZ4RS4qgUNxbc6bSatT4oCmoxvP5DvIb1R8vnlXKvZn876jkbj6tEooeFjSiO1SK+tI7+mVt14YQP+lojgwpFg901A8YdXc/
+        Mon, 8 May 2023 20:56:44 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032673A84;
+        Mon,  8 May 2023 17:56:42 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id B99285C01AA;
+        Mon,  8 May 2023 20:56:39 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 08 May 2023 20:56:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1683593799; x=
+        1683680199; bh=R0MvdCJrAGQ3Lx601BQioOuJmlf2hwwfSdhcLcNWO5Q=; b=s
+        EeEvU6yL9KcddveYTaG4jW49jAptZTFLlcgGM7rB5S79PZlLO/WT5o7kriEpPZzd
+        jNxN9wQGt4jmdJV68b/Q05Oo2SOo3FR7UPK1aDOvrKntXqbxZK0lDqMESF3/usWx
+        jOUFx5Po71d1NncnScZ4Ej9IICFrbIHIS1kDZfGs3NfC+fBLjFMr7MTyZJfaUzUg
+        rnoA0HdA4znpZ+OCutRFCblzmWw+mMAWUe48qpFsypD4RpJiMUork6hZCnipfdiY
+        3Ekv9ZBusPtuovilI2BjnmY/Baer0aA815jHxR6WMaKoK/dYNOmUk1L0phbivXQF
+        rxxhh+qu3aEvvQrEPRt2w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1683593799; x=1683680199; bh=R0MvdCJrAGQ3L
+        x601BQioOuJmlf2hwwfSdhcLcNWO5Q=; b=g/w0UhmNd2dweHlXYwAIHgEQlefGr
+        Cxa7kh+pkPfbpoHlavNypmWkCIYcGm84Zvr97hAOp/QvhNf4TS1h9I20ljSYthI2
+        9kzfxxrukjzZ3KbI31uDt4vsKyx7mI54LJP8ckq8DdyMNOMWMU56J11oBW4pjngs
+        jgMvtWW1XVu4UE3u0WjzcLV/28ZVopNibtVTcJLzHdrCw3EZ1A0eczDyuKK9ooAK
+        AJ1WxInDWqZKq0fV9vjzdmUWsRGoQK9L2wtTjxzDxJT+stcLSGx//Vj+r86znjZW
+        hox7ObZSqiMDnSoiRD2//yLDTKf9gDvbRS0+WasRF/ol3RbI6vPaSpn/A==
+X-ME-Sender: <xms:RppZZLIZvHZLxfeASGA3I9g966R4yZqV3JWcmJZQ88RWwM0r5gDx-w>
+    <xme:RppZZPL4OuE677_Tk6XD-IVdtLMdQtYfr5dMPcR9UI1q8MTGTa3XdOuE4Tk6daRRZ
+    sXIleKZrRy4UgG6hyg>
+X-ME-Received: <xmr:RppZZDvDPTSVzc86XrescHVIxi9Ji0lQGQnN3fLtt86DQZJvgTX4IsS8yapsX_gw593hJQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeefledgfeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeeulefgteeukeeihfffveeukefhudehvdegvdeh
+    lefhvdduffegheegffeifeelveenucffohhmrghinhepthhhihhnghhsrdhhmhenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhes
+    shhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:RppZZEaO-iTHcU7AIuouj19ki9bDuGEgpnHP5Dme13T8UKFv6mu64g>
+    <xmx:RppZZCY8TfNS_5ME1lpq92RblPOT7IhR4uNfy9KA1e9e0k9M3M02Bw>
+    <xmx:RppZZIBc2-NXle5d_v3l__XehFTzyuLP-9wZssKk-8vv4hm0IAZ7YQ>
+    <xmx:R5pZZFnc9reDSxZgxioSzcXFjrY-QLvPVEPHVmegnMKplIGQegloEg>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 8 May 2023 20:56:37 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 5E0AE10C40B; Tue,  9 May 2023 03:56:34 +0300 (+03)
+Date:   Tue, 9 May 2023 03:56:34 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv10 04/11] efi/x86: Implement support for unaccepted memory
+Message-ID: <20230509005634.qtuiodpirexbxu2k@box.shutemov.name>
+References: <20230507234618.18067-1-kirill.shutemov@linux.intel.com>
+ <20230507234618.18067-5-kirill.shutemov@linux.intel.com>
+ <CAMj1kXE26G=HgqBHoJOWF+FyXs7Ryj7VFFY9A+xG7HmUXnb5bg@mail.gmail.com>
+ <20230508190043.ouauzbghn27khdy4@box.shutemov.name>
+ <CAMj1kXFxw4+opJuq=g2unocitRyKYz_hfrZb-grsZtPwBOyKgw@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:84a8:0:b0:416:6d60:e462 with SMTP id
- f37-20020a0284a8000000b004166d60e462mr501621jai.2.1683593749853; Mon, 08 May
- 2023 17:55:49 -0700 (PDT)
-Date:   Mon, 08 May 2023 17:55:49 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000067fdc105fb3837b8@google.com>
-Subject: [syzbot] [udf?] WARNING in udf_unlink
-From:   syzbot <syzbot+0b7eed2aab568dec42b8@syzkaller.appspotmail.com>
-To:     jack@suse.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXFxw4+opJuq=g2unocitRyKYz_hfrZb-grsZtPwBOyKgw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, May 09, 2023 at 12:11:41AM +0200, Ard Biesheuvel wrote:
+> > @@ -1324,13 +1325,15 @@ void __init e820__memblock_setup(void)
+> >          * e820_table is not finalized and e820__end_of_ram_pfn() cannot be
+> >          * used to get correct RAM size.
+> >          */
+> > -       if (boot_params.unaccepted_memory) {
+> > +       if (efi.unaccepted != EFI_INVALID_TABLE_ADDR) {
+> > +               struct efi_unaccepted_memory *unaccepted;
+> >                 unsigned long size;
+> >
+> > -               /* One bit per 2MB */
+> > -               size = DIV_ROUND_UP(e820__end_of_ram_pfn() * PAGE_SIZE,
+> > -                                   PMD_SIZE * BITS_PER_BYTE);
+> > -               memblock_reserve(boot_params.unaccepted_memory, size);
+> > +               unaccepted = __va(efi.unaccepted);
+> > +
+> > +               size = sizeof(struct efi_unaccepted_memory);
+> > +               size += unaccepted->size;
+> > +               memblock_reserve(efi.unaccepted, size);
+> >         }
+> >
+> 
+> This could be moved to generic code (but we'll need to use early_memremap())
 
-syzbot found the following issue on:
+I don't understand why early_memremap() is needed. EFI_LOADER_DATA already
+mapped into direct mapping. We only need to reserve the memory so it
+could not be reallocated for other things. Hm?
 
-HEAD commit:    1a5304fecee5 Merge tag 'parisc-for-6.4-1' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1159c15a280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
-dashboard link: https://syzkaller.appspot.com/bug?extid=0b7eed2aab568dec42b8
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/dd767dde3306/disk-1a5304fe.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/21e0fbeccd39/vmlinux-1a5304fe.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/dada79d4407c/bzImage-1a5304fe.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0b7eed2aab568dec42b8@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 8987 at fs/udf/udfdecl.h:123 udf_add_fid_counter fs/udf/namei.c:350 [inline]
-WARNING: CPU: 0 PID: 8987 at fs/udf/udfdecl.h:123 udf_unlink+0x5ab/0x740 fs/udf/namei.c:565
-Modules linked in:
-CPU: 0 PID: 8987 Comm: syz-executor.0 Not tainted 6.3.0-syzkaller-13027-g1a5304fecee5 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:udf_updated_lvid fs/udf/udfdecl.h:121 [inline]
-RIP: 0010:udf_add_fid_counter fs/udf/namei.c:350 [inline]
-RIP: 0010:udf_unlink+0x5ab/0x740 fs/udf/namei.c:565
-Code: 04 25 28 00 00 00 48 3b 84 24 40 01 00 00 0f 85 06 01 00 00 89 d8 48 8d 65 d8 5b 41 5c 41 5d 41 5e 41 5f 5d c3 e8 e5 c0 8b fe <0f> 0b e9 1f ff ff ff 89 f9 80 e1 07 38 c1 0f 8c 47 fb ff ff be 06
-RSP: 0018:ffffc9000709fba0 EFLAGS: 00010283
-RAX: ffffffff82ffcf3b RBX: 000000003fd1f4fc RCX: 0000000000040000
-RDX: ffffc90004091000 RSI: 00000000000020ee RDI: 00000000000020ef
-RBP: ffffc9000709fd30 R08: ffffffff82ffce54 R09: fffffbfff1cab866
-R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
-R13: 1ffff92000e13f7c R14: ffff8880754c2678 R15: ffff88804e5b201c
-FS:  00007f52a20dd700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000a43 CR3: 000000007d2e7000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- vfs_unlink+0x35d/0x5f0 fs/namei.c:4327
- do_unlinkat+0x4a7/0x950 fs/namei.c:4393
- __do_sys_unlink fs/namei.c:4441 [inline]
- __se_sys_unlink fs/namei.c:4439 [inline]
- __x64_sys_unlink+0x49/0x50 fs/namei.c:4439
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f52ab88c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f52a20dd168 EFLAGS: 00000246 ORIG_RAX: 0000000000000057
-RAX: ffffffffffffffda RBX: 00007f52ab9ac050 RCX: 00007f52ab88c169
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000300
-RBP: 00007f52ab8e7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc735e15ef R14: 00007f52a20dd300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
