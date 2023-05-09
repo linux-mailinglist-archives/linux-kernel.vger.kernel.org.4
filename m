@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F60B6FCC59
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 19:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61136FCC60
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 19:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234952AbjEIRHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 13:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S235492AbjEIRIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 13:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234911AbjEIRHb (ORCPT
+        with ESMTP id S234729AbjEIRIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 13:07:31 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F252983C5;
-        Tue,  9 May 2023 10:05:05 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b9a7e639656so9296013276.0;
-        Tue, 09 May 2023 10:05:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683651894; x=1686243894;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=owOMixsqPNTyMBJNKUX/FgFLQqeBQlm+1l2rTnwK/fs=;
-        b=JOX0hNsoJ+nxU9HMHvvY9dGTFLfJLh7mmQS+GkpFIK4WwUd39rCAACztJrQ0Lo5Y6/
-         DLAb3z5i6KRx9o2dVXq6X33tjCkcBj1JbVQoYT5+iLz2CPUkSsOSX55MMRZymFDcN220
-         hMqnW1LxW5XKGdygadMgT+2xCLuAdatcQCbKyilp8lenEYfuWsSUSR293yncexEbj6ji
-         LAaV5mhLpwljgj9SKdaWFNLRHFP/5Q85uEVaBHre+UnpFc+0UDA4kvyu6EsJvBDZ5/r4
-         /UEYyBW9zrvTxUi9TX1dMElAgEw/YJ7+x2x+sgJokDV2nU+Ltm86CtwgLbWnDglmtS0n
-         5JlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683651894; x=1686243894;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=owOMixsqPNTyMBJNKUX/FgFLQqeBQlm+1l2rTnwK/fs=;
-        b=Z5B970k/68FHZqAks962MF5NxkjrA2hsnC7vXoex2YSHfyFvNDEwKyn2k2jRpV4XDW
-         Xrh/ufBlvorQKWkge10pclpbPgahQmYlhr9QUHyCNTQ+LE74EvHvRHhdfV3RvvQTCwd2
-         xPS4J4KD2KCGXU0JAsPWrAg/61Yf9vQjHTg8aq8aZqNC7O2Ag7Ta4D2SYGn5IrQH1EZH
-         j5wlI4gmMhXJ0kzRoEfZ3oXQzIy24phwPevDNdG9QHsK/P5N2LvC5vrWwMqbdiqVFU/X
-         kSjZN9vQxMegrcoL1KaF/OkDZvfZiAG18rW33k2/+Sx6BKqNJfjmLNexLOhDppEaDYxW
-         L2fw==
-X-Gm-Message-State: AC+VfDzuYc9T95t1dyEYzGFICuFgSNN7R1kbFnCJnrCKZAQghMGYr1jX
-        zZ8mOrPm+yz2kvwR3n8MXCgcP/2fd1dh4/goag4=
-X-Google-Smtp-Source: ACHHUZ4Ap8lrkdUmK6J87mlrt06sBuonBxyNhWV6PrQXF5/y8Czghn3iJSEmbpcJ2d/Ohw8GgN9pM4qcPala3tWkprA=
-X-Received: by 2002:a05:6902:1508:b0:b9e:45e1:3ff with SMTP id
- q8-20020a056902150800b00b9e45e103ffmr17231824ybu.42.1683651894352; Tue, 09
- May 2023 10:04:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev> <20230509165657.1735798-2-kent.overstreet@linux.dev>
-In-Reply-To: <20230509165657.1735798-2-kent.overstreet@linux.dev>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 9 May 2023 19:04:43 +0200
-Message-ID: <CANiq72mLmAG1Vus5-r4ynQciyypZbO8ueva2jbiEvaOAQTTzdQ@mail.gmail.com>
-Subject: Re: [PATCH 01/32] Compiler Attributes: add __flatten
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 9 May 2023 13:08:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C617959E7;
+        Tue,  9 May 2023 10:05:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB54B64768;
+        Tue,  9 May 2023 17:04:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1DE7FC4339E;
+        Tue,  9 May 2023 17:04:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683651885;
+        bh=E3+K58qU414bRsnbd15n0OCOfU/IdaXFKVzoQ8rHz/Y=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ConwubS8n7VUfAZhpEsWdYrv5FZNtjEcpCnRI2dMUQQzIf7mfF2C3J5QMeHzxR29u
+         vj4pxvVI5Xd825toniHrINiAR5dVnaDfIJnVsiRcKmxT6hoB8s0iED/OIrsNukMjaA
+         LTKi7/8kxcv1IIPtw3n4iAYNjCoVQz3zXr1ELnv4imAmIux7ji1GMGSZ1GG9HIVQmS
+         +l3Qnj6JCj4aDOXJe9MMs6nVTjJQOeYdREa4hiJCdM8jkh2lL8wNZ/W5eaHFG6hiDS
+         /s7gn2pfDAWol3qeCu6wBsyEDHXhLEgUtov84yccOqNjSyinFmtvZ6+9/cZq1gAQDk
+         147rhltIFz3Iw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 08636E26D23;
+        Tue,  9 May 2023 17:04:45 +0000 (UTC)
+Subject: Re: [GIT PULL] Btrfs fixes for 6.4-rc2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <cover.1683645063.git.dsterba@suse.com>
+References: <cover.1683645063.git.dsterba@suse.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <cover.1683645063.git.dsterba@suse.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.4-rc1-tag
+X-PR-Tracked-Commit-Id: d246331b78cbef86237f9c22389205bc9b4e1cc1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1dc3731daf1f350cfd631b5559aac865ab2fbb4c
+Message-Id: <168365188502.31493.12802949372404519924.pr-tracker-bot@kernel.org>
+Date:   Tue, 09 May 2023 17:04:45 +0000
+To:     David Sterba <dsterba@suse.com>
+Cc:     torvalds@linux-foundation.org, David Sterba <dsterba@suse.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 9, 2023 at 6:57=E2=80=AFPM Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
->
-> This makes __attribute__((flatten)) available, which is used by
-> bcachefs.
+The pull request you sent on Tue,  9 May 2023 18:02:32 +0200:
 
-We already have it in mainline, so I think it is one less patch you
-need to care about! :)
+> git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.4-rc1-tag
 
-Cheers,
-Miguel
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1dc3731daf1f350cfd631b5559aac865ab2fbb4c
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
