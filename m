@@ -2,146 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F384E6FBEA0
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 07:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445FB6FBEA6
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 07:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233813AbjEIFWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 01:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
+        id S229899AbjEIF2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 01:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEIFWD (ORCPT
+        with ESMTP id S229484AbjEIF2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 01:22:03 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF6D6187;
-        Mon,  8 May 2023 22:22:01 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3495LTLp011976;
-        Tue, 9 May 2023 00:21:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683609689;
-        bh=FaHeUjnucih418Ur8PV/2ZSUSUsKfveQTe6yIr3uQrc=;
-        h=From:To:CC:Subject:Date;
-        b=vMGtVkAdDAeqsfumXOCtzPOOiCwbqf5cFMoGSdA+q12MuL5PdBDZRQpGu0JyJuoBI
-         l10TDG5GdmOF5qg8SjwpaddiZJj7PuvZl5plwyOVYa+jy9yz7q64NuIXxe/zFbAMfM
-         2htIn8oWgf5hntRvk59YlHJOCx2NHiyJD+3ifYSw=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3495LTUi009596
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 9 May 2023 00:21:29 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
- May 2023 00:21:28 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 9 May 2023 00:21:28 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3495LOd3024283;
-        Tue, 9 May 2023 00:21:25 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH net v2] net: phy: dp83867: add w/a for packet errors seen with short cables
-Date:   Tue, 9 May 2023 10:51:24 +0530
-Message-ID: <20230509052124.611875-1-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 9 May 2023 01:28:17 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4EF9025;
+        Mon,  8 May 2023 22:28:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1683610096; x=1715146096;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YOW7Hn4s9yWFPggxPjKYjh0bJ/JrU0+7299boe9n1YE=;
+  b=IbnRFnELMDqmFer9uxXCrXz1XiyvoT+gRxRS1r3W49ttUiu1KghYhG+A
+   N/6zDQWxdH+jKDw5uWQo7yne+wo5IyHQohrweU2eFmb0BBmhtnmxgxFMw
+   +MDS/FEBDNHPXYKEUEZXVw8YJdarLiTuSNFeJmVek+Y90Afidp6NMg19H
+   fiQ7Zj/F4/zSEWxs6vowX2AQiLg8w+I8fwoKojK7xP3le1Ex1wecA6J+l
+   Pim47rrZ+pAyZ41qM1CT2tkzz1++J5vfFvRqE3krcdGKir3sODDbPpaxA
+   BpGw3IHycLSASxYldX1sojq7SIi/VWIRo1p6zzPYVJC3kkHJB0olzy73r
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,261,1677567600"; 
+   d="scan'208";a="210291694"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 May 2023 22:28:14 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 8 May 2023 22:28:14 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Mon, 8 May 2023 22:28:10 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH v3 0/5] dt-bindings: clocks: at91: convert to yaml
+Date:   Tue, 9 May 2023 08:27:52 +0300
+Message-ID: <20230509052757.539274-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Grygorii Strashko <grygorii.strashko@ti.com>
+Hi,
 
-Introduce the W/A for packet errors seen with short cables (<1m) between
-two DP83867 PHYs.
+This series converts atmel clocks bindings (PMC and slow clock
+controller) to YAML. Along with it updated device trees to cope
+with the dt-binding requirements.
 
-The W/A recommended by DM requires FFE Equalizer Configuration tuning by
-writing value 0x0E81 to DSP_FFE_CFG register (0x012C), surrounded by hard
-and soft resets as follows:
+Thank you,
+Claudiu Beznea
 
-write_reg(0x001F, 0x8000); //hard reset
-write_reg(DSP_FFE_CFG, 0x0E81);
-write_reg(0x001F, 0x4000); //soft reset
+Changes in v3:
+- in patch 2/5:
+	- get rid of 1st "items" section and embedd it in the last compatible
+	  enum
+	- sort alphanumerically the compatibles in allOf
+- collected tags
 
-Since  DP83867 PHY DM says "Changing this register to 0x0E81, will not
-affect Long Cable performance.", enable the W/A by default.
+Changes in v2:
+- in patch 2/5:
+	- dropped quotes from $id and $schema
+	- get rid of 1st "items" sections corresponding to "atmel,at91sam9260-pmc",
+	  "syscon" compatible and move it to the proper enum
+	- ordered compatibles by name
+	- add description for #clock-cells
+	- remove blank lines
+	- keep order in required (same order that the properties were
+	  defined)
+	- dropped required from allOf
 
-Fixes: 2a10154abcb7 ("net: phy: dp83867: Add TI dp83867 phy")
-Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
+- in patch 5/5:
+	- dropped quotes from $id and $schema
+	- drop first "items:" in compatible:oneOf section
+	- ordered compatibles by name
+	- moved additionalProperties after allOf
+	- dropped microchip,sama7g5-sckc from first allOf:if section
+	- moved "required" section from allOf to global "required" section
+	- dropped if:then from the last if:then:else in allOf
 
-V1 patch at:
-https://lore.kernel.org/r/20230508070019.356548-1-s-vadapalli@ti.com
+Claudiu Beznea (5):
+  ARM: dts: at91: use clock-controller name for PMC nodes
+  dt-bindings: clocks: atmel,at91rm9200-pmc: convert to yaml
+  ARM: dts: at91: at91sam9n12: witch sckc to new clock bindings
+  ARM: dts: at91: use clock-controller name for sckc nodes
+  dt-bindings: clocks: at91sam9x5-sckc: convert to yaml
 
-Changes since v1 patch:
-- Wrap the line invoking phy_write_mmd(), limiting it to 80 characters.
-- Replace 0X0E81 with 0x0e81 in the call to phy_write_mmd().
-- Replace 0X012C with 0x012c in the new define for DP83867_DSP_FFE_CFG.
+ .../devicetree/bindings/clock/at91-clock.txt  |  58 -------
+ .../bindings/clock/atmel,at91rm9200-pmc.yaml  | 152 ++++++++++++++++++
+ .../bindings/clock/atmel,at91sam9x5-sckc.yaml |  70 ++++++++
+ arch/arm/boot/dts/at91rm9200.dtsi             |   2 +-
+ arch/arm/boot/dts/at91sam9260.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9261.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9263.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9g20.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9g25.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9g35.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9g45.dtsi            |   4 +-
+ arch/arm/boot/dts/at91sam9n12.dtsi            |  25 +--
+ arch/arm/boot/dts/at91sam9rl.dtsi             |   4 +-
+ arch/arm/boot/dts/at91sam9x25.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9x35.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9x5.dtsi             |   4 +-
+ arch/arm/boot/dts/sam9x60.dtsi                |   4 +-
+ arch/arm/boot/dts/sama5d2.dtsi                |   4 +-
+ arch/arm/boot/dts/sama5d3.dtsi                |   4 +-
+ arch/arm/boot/dts/sama5d3_emac.dtsi           |   2 +-
+ arch/arm/boot/dts/sama5d4.dtsi                |   4 +-
+ arch/arm/boot/dts/sama7g5.dtsi                |   2 +-
+ 22 files changed, 251 insertions(+), 104 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/at91-clock.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml
 
-RFC patch at:
-https://lore.kernel.org/r/20230425054429.3956535-2-s-vadapalli@ti.com/
-
-Changes since RFC patch:
-- Change patch subject to PATCH net.
-- Add Fixes tag.
-- Check return value of phy_write_mmd().
-
- drivers/net/phy/dp83867.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/phy/dp83867.c b/drivers/net/phy/dp83867.c
-index d75f526a20a4..bbdcc595715d 100644
---- a/drivers/net/phy/dp83867.c
-+++ b/drivers/net/phy/dp83867.c
-@@ -44,6 +44,7 @@
- #define DP83867_STRAP_STS1	0x006E
- #define DP83867_STRAP_STS2	0x006f
- #define DP83867_RGMIIDCTL	0x0086
-+#define DP83867_DSP_FFE_CFG	0x012c
- #define DP83867_RXFCFG		0x0134
- #define DP83867_RXFPMD1	0x0136
- #define DP83867_RXFPMD2	0x0137
-@@ -941,8 +942,23 @@ static int dp83867_phy_reset(struct phy_device *phydev)
- 
- 	usleep_range(10, 20);
- 
--	return phy_modify(phydev, MII_DP83867_PHYCTRL,
-+	err = phy_modify(phydev, MII_DP83867_PHYCTRL,
- 			 DP83867_PHYCR_FORCE_LINK_GOOD, 0);
-+	if (err < 0)
-+		return err;
-+
-+	err = phy_write_mmd(phydev, DP83867_DEVADDR, DP83867_DSP_FFE_CFG,
-+			    0x0e81);
-+	if (err < 0)
-+		return err;
-+
-+	err = phy_write(phydev, DP83867_CTRL, DP83867_SW_RESTART);
-+	if (err < 0)
-+		return err;
-+
-+	usleep_range(10, 20);
-+
-+	return 0;
- }
- 
- static void dp83867_link_change_notify(struct phy_device *phydev)
 -- 
-2.25.1
+2.34.1
 
