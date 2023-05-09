@@ -2,258 +2,681 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159BA6FC81C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433236FC821
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235560AbjEINkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 09:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
+        id S235598AbjEINkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 09:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235550AbjEINkJ (ORCPT
+        with ESMTP id S235552AbjEINkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 09:40:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7153596;
-        Tue,  9 May 2023 06:40:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61CDD62F33;
-        Tue,  9 May 2023 13:40:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD540C433EF;
-        Tue,  9 May 2023 13:40:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683639602;
-        bh=331uf8VgM+EnxY1VTF6u21mARaxabgfX60a6qxEft7k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UnBHzn7USKmpexemqJkXyZr+6LpfL0ePMJCVpgwUHlXTIRGSWtJciUFtDn05sIq48
-         NY5BPGKH4DV7bAXPMGEsoYvUv8Sz+vpRPII+lZKVkX48MJPM+dGWRc1ecgf52/5ykX
-         WIfFbLSF1uN7A1jNVHRR1kLu+TrmJUTSc17tfZUqSYz9J76Q6K1LkBeEvmXD0ksxW6
-         trwqfl9gRgRMJre1sSLxWQAbe0OSzcJwWgZDeodvwyQC4QnRqkC68UlgfyobQ9gzNe
-         YMVeOYeTqqzR5vO4Jt/1/DLr1dizw8YQ25nETsfyDRzioxmz0AFhOXIBlzfTephf6C
-         CB5HsZ3JeZPxQ==
-Date:   Tue, 9 May 2023 16:39:58 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Ding Hui <dinghui@sangfor.com.cn>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        keescook@chromium.org, grzegorzx.szczurek@intel.com,
-        mateusz.palczewski@intel.com, mitch.a.williams@intel.com,
-        gregory.v.rose@intel.com, jeffrey.t.kirsher@intel.com,
-        michal.kubiak@intel.com, simon.horman@corigine.com,
-        madhu.chittim@intel.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn
-Subject: Re: [PATCH net v5 1/2] iavf: Fix use-after-free in free_netdev
-Message-ID: <20230509133958.GL38143@unreal>
-References: <20230509111148.4608-1-dinghui@sangfor.com.cn>
- <20230509111148.4608-2-dinghui@sangfor.com.cn>
+        Tue, 9 May 2023 09:40:36 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9CC10FB;
+        Tue,  9 May 2023 06:40:30 -0700 (PDT)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id 46164E001E;
+        Tue,  9 May 2023 13:40:19 +0000 (UTC)
+Message-ID: <a20e07cd-e7c3-991d-a1f7-2423bf8f5464@ghiti.fr>
+Date:   Tue, 9 May 2023 15:40:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509111148.4608-2-dinghui@sangfor.com.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 4/4] riscv: Enable perf counters user access only through
+ perf
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Andrew Jones <ajones@ventanamicro.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230413161725.195417-1-alexghiti@rivosinc.com>
+ <20230413161725.195417-5-alexghiti@rivosinc.com>
+ <kwvrls2m6swp443brn27jwcsdhovtc4kxrkqustxpqgf7zqltw@xlhsrndkf4om>
+ <CAHVXubh_y9Uw2xsgsQrVZEcb9bCLBLUCo74GOm-czsSawHxk4g@mail.gmail.com>
+ <CAJM55Z_-wmN89PAgV3W9-9j7Chi84WdPW_wjUrppU75_-ZFsnA@mail.gmail.com>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <CAJM55Z_-wmN89PAgV3W9-9j7Chi84WdPW_wjUrppU75_-ZFsnA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 07:11:47PM +0800, Ding Hui wrote:
-> We do netif_napi_add() for all allocated q_vectors[], but potentially
-> do netif_napi_del() for part of them, then kfree q_vectors and leave
-> invalid pointers at dev->napi_list.
-> 
-> Reproducer:
-> 
->   [root@host ~]# cat repro.sh
->   #!/bin/bash
-> 
->   pf_dbsf="0000:41:00.0"
->   vf0_dbsf="0000:41:02.0"
->   g_pids=()
-> 
->   function do_set_numvf()
->   {
->       echo 2 >/sys/bus/pci/devices/${pf_dbsf}/sriov_numvfs
->       sleep $((RANDOM%3+1))
->       echo 0 >/sys/bus/pci/devices/${pf_dbsf}/sriov_numvfs
->       sleep $((RANDOM%3+1))
->   }
-> 
->   function do_set_channel()
->   {
->       local nic=$(ls -1 --indicator-style=none /sys/bus/pci/devices/${vf0_dbsf}/net/)
->       [ -z "$nic" ] && { sleep $((RANDOM%3)) ; return 1; }
->       ifconfig $nic 192.168.18.5 netmask 255.255.255.0
->       ifconfig $nic up
->       ethtool -L $nic combined 1
->       ethtool -L $nic combined 4
->       sleep $((RANDOM%3))
->   }
-> 
->   function on_exit()
->   {
->       local pid
->       for pid in "${g_pids[@]}"; do
->           kill -0 "$pid" &>/dev/null && kill "$pid" &>/dev/null
->       done
->       g_pids=()
->   }
-> 
->   trap "on_exit; exit" EXIT
-> 
->   while :; do do_set_numvf ; done &
->   g_pids+=($!)
->   while :; do do_set_channel ; done &
->   g_pids+=($!)
-> 
->   wait
-> 
-> Result:
-> 
-> [ 4093.900222] ==================================================================
-> [ 4093.900230] BUG: KASAN: use-after-free in free_netdev+0x308/0x390
-> [ 4093.900232] Read of size 8 at addr ffff88b4dc145640 by task repro.sh/6699
-> [ 4093.900233]
-> [ 4093.900236] CPU: 10 PID: 6699 Comm: repro.sh Kdump: loaded Tainted: G           O     --------- -t - 4.18.0 #1
-> [ 4093.900238] Hardware name: Powerleader PR2008AL/H12DSi-N6, BIOS 2.0 04/09/2021
-> [ 4093.900239] Call Trace:
-> [ 4093.900244]  dump_stack+0x71/0xab
-> [ 4093.900249]  print_address_description+0x6b/0x290
-> [ 4093.900251]  ? free_netdev+0x308/0x390
-> [ 4093.900252]  kasan_report+0x14a/0x2b0
-> [ 4093.900254]  free_netdev+0x308/0x390
-> [ 4093.900261]  iavf_remove+0x825/0xd20 [iavf]
-> [ 4093.900265]  pci_device_remove+0xa8/0x1f0
-> [ 4093.900268]  device_release_driver_internal+0x1c6/0x460
-> [ 4093.900271]  pci_stop_bus_device+0x101/0x150
-> [ 4093.900273]  pci_stop_and_remove_bus_device+0xe/0x20
-> [ 4093.900275]  pci_iov_remove_virtfn+0x187/0x420
-> [ 4093.900277]  ? pci_iov_add_virtfn+0xe10/0xe10
-> [ 4093.900278]  ? pci_get_subsys+0x90/0x90
-> [ 4093.900280]  sriov_disable+0xed/0x3e0
-> [ 4093.900282]  ? bus_find_device+0x12d/0x1a0
-> [ 4093.900290]  i40e_free_vfs+0x754/0x1210 [i40e]
-> [ 4093.900298]  ? i40e_reset_all_vfs+0x880/0x880 [i40e]
-> [ 4093.900299]  ? pci_get_device+0x7c/0x90
-> [ 4093.900300]  ? pci_get_subsys+0x90/0x90
-> [ 4093.900306]  ? pci_vfs_assigned.part.7+0x144/0x210
-> [ 4093.900309]  ? __mutex_lock_slowpath+0x10/0x10
-> [ 4093.900315]  i40e_pci_sriov_configure+0x1fa/0x2e0 [i40e]
-> [ 4093.900318]  sriov_numvfs_store+0x214/0x290
-> [ 4093.900320]  ? sriov_totalvfs_show+0x30/0x30
-> [ 4093.900321]  ? __mutex_lock_slowpath+0x10/0x10
-> [ 4093.900323]  ? __check_object_size+0x15a/0x350
-> [ 4093.900326]  kernfs_fop_write+0x280/0x3f0
-> [ 4093.900329]  vfs_write+0x145/0x440
-> [ 4093.900330]  ksys_write+0xab/0x160
-> [ 4093.900332]  ? __ia32_sys_read+0xb0/0xb0
-> [ 4093.900334]  ? fput_many+0x1a/0x120
-> [ 4093.900335]  ? filp_close+0xf0/0x130
-> [ 4093.900338]  do_syscall_64+0xa0/0x370
-> [ 4093.900339]  ? page_fault+0x8/0x30
-> [ 4093.900341]  entry_SYSCALL_64_after_hwframe+0x65/0xca
-> [ 4093.900357] RIP: 0033:0x7f16ad4d22c0
-> [ 4093.900359] Code: 73 01 c3 48 8b 0d d8 cb 2c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 89 24 2d 00 00 75 10 b8 01 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 fe dd 01 00 48 89 04 24
-> [ 4093.900360] RSP: 002b:00007ffd6491b7f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-> [ 4093.900362] RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f16ad4d22c0
-> [ 4093.900363] RDX: 0000000000000002 RSI: 0000000001a41408 RDI: 0000000000000001
-> [ 4093.900364] RBP: 0000000001a41408 R08: 00007f16ad7a1780 R09: 00007f16ae1f2700
-> [ 4093.900364] R10: 0000000000000001 R11: 0000000000000246 R12: 0000000000000002
-> [ 4093.900365] R13: 0000000000000001 R14: 00007f16ad7a0620 R15: 0000000000000001
-> [ 4093.900367]
-> [ 4093.900368] Allocated by task 820:
-> [ 4093.900371]  kasan_kmalloc+0xa6/0xd0
-> [ 4093.900373]  __kmalloc+0xfb/0x200
-> [ 4093.900376]  iavf_init_interrupt_scheme+0x63b/0x1320 [iavf]
-> [ 4093.900380]  iavf_watchdog_task+0x3d51/0x52c0 [iavf]
-> [ 4093.900382]  process_one_work+0x56a/0x11f0
-> [ 4093.900383]  worker_thread+0x8f/0xf40
-> [ 4093.900384]  kthread+0x2a0/0x390
-> [ 4093.900385]  ret_from_fork+0x1f/0x40
-> [ 4093.900387]  0xffffffffffffffff
-> [ 4093.900387]
-> [ 4093.900388] Freed by task 6699:
-> [ 4093.900390]  __kasan_slab_free+0x137/0x190
-> [ 4093.900391]  kfree+0x8b/0x1b0
-> [ 4093.900394]  iavf_free_q_vectors+0x11d/0x1a0 [iavf]
-> [ 4093.900397]  iavf_remove+0x35a/0xd20 [iavf]
-> [ 4093.900399]  pci_device_remove+0xa8/0x1f0
-> [ 4093.900400]  device_release_driver_internal+0x1c6/0x460
-> [ 4093.900401]  pci_stop_bus_device+0x101/0x150
-> [ 4093.900402]  pci_stop_and_remove_bus_device+0xe/0x20
-> [ 4093.900403]  pci_iov_remove_virtfn+0x187/0x420
-> [ 4093.900404]  sriov_disable+0xed/0x3e0
-> [ 4093.900409]  i40e_free_vfs+0x754/0x1210 [i40e]
-> [ 4093.900415]  i40e_pci_sriov_configure+0x1fa/0x2e0 [i40e]
-> [ 4093.900416]  sriov_numvfs_store+0x214/0x290
-> [ 4093.900417]  kernfs_fop_write+0x280/0x3f0
-> [ 4093.900418]  vfs_write+0x145/0x440
-> [ 4093.900419]  ksys_write+0xab/0x160
-> [ 4093.900420]  do_syscall_64+0xa0/0x370
-> [ 4093.900421]  entry_SYSCALL_64_after_hwframe+0x65/0xca
-> [ 4093.900422]  0xffffffffffffffff
-> [ 4093.900422]
-> [ 4093.900424] The buggy address belongs to the object at ffff88b4dc144200
->                 which belongs to the cache kmalloc-8k of size 8192
-> [ 4093.900425] The buggy address is located 5184 bytes inside of
->                 8192-byte region [ffff88b4dc144200, ffff88b4dc146200)
-> [ 4093.900425] The buggy address belongs to the page:
-> [ 4093.900427] page:ffffea00d3705000 refcount:1 mapcount:0 mapping:ffff88bf04415c80 index:0x0 compound_mapcount: 0
-> [ 4093.900430] flags: 0x10000000008100(slab|head)
-> [ 4093.900433] raw: 0010000000008100 dead000000000100 dead000000000200 ffff88bf04415c80
-> [ 4093.900434] raw: 0000000000000000 0000000000030003 00000001ffffffff 0000000000000000
-> [ 4093.900434] page dumped because: kasan: bad access detected
-> [ 4093.900435]
-> [ 4093.900435] Memory state around the buggy address:
-> [ 4093.900436]  ffff88b4dc145500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> [ 4093.900437]  ffff88b4dc145580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> [ 4093.900438] >ffff88b4dc145600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> [ 4093.900438]                                            ^
-> [ 4093.900439]  ffff88b4dc145680: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> [ 4093.900440]  ffff88b4dc145700: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> [ 4093.900440] ==================================================================
-> 
-> Although the patch #2 (of 2) can avoid the issuse triggered by this
-> repro.sh, there still are other potential risks that if num_active_queues
-> is changed to less than allocated q_vectors[] by unexpected, the
-> mismatched netif_napi_add/del() can also cause UAF.
-> 
-> Since we actually call netif_napi_add() for all allocated q_vectors
-> unconditionally in iavf_alloc_q_vectors(), so we should fix it by
-> letting netif_napi_del() match to netif_napi_add().
-> 
-> Fixes: 5eae00c57f5e ("i40evf: main driver core")
-> Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
-> Cc: Donglin Peng <pengdonglin@sangfor.com.cn>
-> Cc: Huang Cun <huangcun@sangfor.com.cn>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> Reviewed-by: Michal Kubiak <michal.kubiak@intel.com>
-> Reviewed-by: Madhu Chittim <madhu.chittim@intel.com>
-> ---
-> v4 to v5:
->   - no changes
-> 
-> v3 to v4:
->   - fix typo in commit message
-> 
-> v2 to v3:
->   - fix review tag
-> 
-> v1 to v2:
->   - add Fixes: tag
->   - add reproduction script
->   - update commit message
-> 
-> ---
->  drivers/net/ethernet/intel/iavf/iavf_main.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
 
-Thanks,
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+On 5/9/23 14:24, Emil Renner Berthing wrote:
+> On Wed, 26 Apr 2023 at 15:19, Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
+>> On Wed, Apr 26, 2023 at 2:57 PM Andrew Jones <ajones@ventanamicro.com> wrote:
+>>> On Thu, Apr 13, 2023 at 06:17:25PM +0200, Alexandre Ghiti wrote:
+>>>> We used to unconditionnally expose the cycle and instret csrs to
+>>>> userspace, which gives rise to security concerns.
+>>>>
+>>>> So only allow access to hw counters from userspace through the perf
+>>>> framework which will handle context switchs, per-task events...etc. But
+>>>> as we cannot break userspace, we give the user the choice to go back to
+>>>> the previous behaviour by setting the sysctl perf_user_access.
+>>>>
+>>>> We also introduce a means to directly map the hardware counters to
+>>>> userspace, thus avoiding the need for syscalls whenever an application
+>>>> wants to access counters values.
+>>>>
+>>>> Note that arch_perf_update_userpage is a copy of arm64 code.
+>>>>
+>>>> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+>>>> ---
+>>>>   Documentation/admin-guide/sysctl/kernel.rst |  23 +++-
+>>>>   arch/riscv/include/asm/perf_event.h         |   3 +
+>>>>   arch/riscv/kernel/Makefile                  |   2 +-
+>>>>   arch/riscv/kernel/perf_event.c              |  65 +++++++++++
+>>>>   drivers/perf/riscv_pmu.c                    |  42 ++++++++
+>>>>   drivers/perf/riscv_pmu_legacy.c             |  17 +++
+>>>>   drivers/perf/riscv_pmu_sbi.c                | 113 ++++++++++++++++++--
+>>>>   include/linux/perf/riscv_pmu.h              |   3 +
+>>>>   tools/lib/perf/mmap.c                       |  65 +++++++++++
+>>>>   9 files changed, 322 insertions(+), 11 deletions(-)
+>>>>   create mode 100644 arch/riscv/kernel/perf_event.c
+>>>>
+>>>> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+>>>> index 4b7bfea28cd7..02b2a40a3647 100644
+>>>> --- a/Documentation/admin-guide/sysctl/kernel.rst
+>>>> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+>>>> @@ -941,16 +941,31 @@ enabled, otherwise writing to this file will return ``-EBUSY``.
+>>>>   The default value is 8.
+>>>>
+>>>>
+>>>> -perf_user_access (arm64 only)
+>>>> -=================================
+>>>> +perf_user_access (arm64 and riscv only)
+>>>> +=======================================
+>>>> +
+>>>> +Controls user space access for reading perf event counters.
+>>>>
+>>>> -Controls user space access for reading perf event counters. When set to 1,
+>>>> -user space can read performance monitor counter registers directly.
+>>>> +arm64
+>>>> +=====
+>>>>
+>>>>   The default value is 0 (access disabled).
+>>>> +When set to 1, user space can read performance monitor counter registers
+>>>> +directly.
+>>>>
+>>>>   See Documentation/arm64/perf.rst for more information.
+>>>>
+>>>> +riscv
+>>>> +=====
+>>>> +
+>>>> +When set to 0, user access is disabled.
+>>>> +
+>>>> +When set to 1, user space can read performance monitor counter registers
+>>>> +directly only through perf, any direct access without perf intervention will
+>>>> +trigger an illegal instruction.
+>>>> +
+>>>> +The default value is 2, it enables the legacy mode, that is user space has
+>>>> +direct access to cycle, time and insret CSRs only.
+>>> I think this default value should be a Kconfig symbol, allowing kernels to
+>>> be built with a secure default.
+>> Actually I was more in favor of having the default to 1 (ie the secure
+>> option) and let the distros deal with the legacy mode (via a sysctl
+>> parameter on the command line) as long as user-space has not been
+>> fixed: does that make sense?
+> With the Linux policy of not breaking userspace I wouldn't think
+> having anything but 2 as the default is ok. Is there a reason we can't
+> have a mode that allows both the legacy and perf interface?
+
+
+No, perf will enable/disable counters at context switch so the legacy 
+applications that expect the CSRs to be accessible will fail and the 
+goal of using perf is to avoid leaking application details.
+
+
+>
+>>>>   pid_max
+>>>>   =======
+>>>> diff --git a/arch/riscv/include/asm/perf_event.h b/arch/riscv/include/asm/perf_event.h
+>>>> index d42c901f9a97..9fdfdd9dc92d 100644
+>>>> --- a/arch/riscv/include/asm/perf_event.h
+>>>> +++ b/arch/riscv/include/asm/perf_event.h
+>>>> @@ -9,5 +9,8 @@
+>>>>   #define _ASM_RISCV_PERF_EVENT_H
+>>>>
+>>>>   #include <linux/perf_event.h>
+>>>> +
+>>>> +#define PERF_EVENT_FLAG_LEGACY       1
+>>>> +
+>>>>   #define perf_arch_bpf_user_pt_regs(regs) (struct user_regs_struct *)regs
+>>>>   #endif /* _ASM_RISCV_PERF_EVENT_H */
+>>>> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+>>>> index aa22f87faeae..9ae951b07847 100644
+>>>> --- a/arch/riscv/kernel/Makefile
+>>>> +++ b/arch/riscv/kernel/Makefile
+>>>> @@ -70,7 +70,7 @@ obj-$(CONFIG_DYNAMIC_FTRACE)        += mcount-dyn.o
+>>>>
+>>>>   obj-$(CONFIG_TRACE_IRQFLAGS) += trace_irq.o
+>>>>
+>>>> -obj-$(CONFIG_PERF_EVENTS)    += perf_callchain.o
+>>>> +obj-$(CONFIG_PERF_EVENTS)    += perf_callchain.o perf_event.o
+>>>>   obj-$(CONFIG_HAVE_PERF_REGS) += perf_regs.o
+>>>>   obj-$(CONFIG_RISCV_SBI)              += sbi.o
+>>>>   ifeq ($(CONFIG_RISCV_SBI), y)
+>>>> diff --git a/arch/riscv/kernel/perf_event.c b/arch/riscv/kernel/perf_event.c
+>>>> new file mode 100644
+>>>> index 000000000000..4a75ab628bfb
+>>>> --- /dev/null
+>>>> +++ b/arch/riscv/kernel/perf_event.c
+>>>> @@ -0,0 +1,65 @@
+>>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>>> +#include <linux/perf/riscv_pmu.h>
+>>>> +#include <linux/sched_clock.h>
+>>>> +
+>>>> +void arch_perf_update_userpage(struct perf_event *event,
+>>>> +                            struct perf_event_mmap_page *userpg, u64 now)
+>>>> +{
+>>>> +     struct riscv_pmu *rvpmu = to_riscv_pmu(event->pmu);
+>>>> +     struct clock_read_data *rd;
+>>>> +     unsigned int seq;
+>>>> +     u64 ns;
+>>>> +
+>>>> +     userpg->cap_user_time = 0;
+>>>> +     userpg->cap_user_time_zero = 0;
+>>>> +     userpg->cap_user_time_short = 0;
+>>>> +     userpg->cap_user_rdpmc =
+>>>> +             !!(event->hw.flags & PERF_EVENT_FLAG_USER_READ_CNT);
+>>>> +
+>>>> +     /*
+>>>> +      * The counters are 64-bit but the priv spec doesn't mandate all the
+>>>> +      * bits to be implemented: that's why, counter width can vary based on
+>>>> +      * the cpu vendor.
+>>>> +      */
+>>>> +     userpg->pmc_width = rvpmu->ctr_get_width(event->hw.idx) + 1;
+>>>> +
+>>>> +     do {
+>>>> +             rd = sched_clock_read_begin(&seq);
+>>>> +
+>>>> +             userpg->time_mult = rd->mult;
+>>>> +             userpg->time_shift = rd->shift;
+>>>> +             userpg->time_zero = rd->epoch_ns;
+>>>> +             userpg->time_cycles = rd->epoch_cyc;
+>>>> +             userpg->time_mask = rd->sched_clock_mask;
+>>>> +
+>>>> +             /*
+>>>> +              * Subtract the cycle base, such that software that
+>>>> +              * doesn't know about cap_user_time_short still 'works'
+>>>> +              * assuming no wraps.
+>>>> +              */
+>>>> +             ns = mul_u64_u32_shr(rd->epoch_cyc, rd->mult, rd->shift);
+>>>> +             userpg->time_zero -= ns;
+>>>> +
+>>>> +     } while (sched_clock_read_retry(seq));
+>>>> +
+>>>> +     userpg->time_offset = userpg->time_zero - now;
+>>>> +
+>>>> +     /*
+>>>> +      * time_shift is not expected to be greater than 31 due to
+>>>> +      * the original published conversion algorithm shifting a
+>>>> +      * 32-bit value (now specifies a 64-bit value) - refer
+>>>> +      * perf_event_mmap_page documentation in perf_event.h.
+>>>> +      */
+>>>> +     if (userpg->time_shift == 32) {
+>>>> +             userpg->time_shift = 31;
+>>>> +             userpg->time_mult >>= 1;
+>>>> +     }
+>>>> +
+>>>> +     /*
+>>>> +      * Internal timekeeping for enabled/running/stopped times
+>>>> +      * is always computed with the sched_clock.
+>>>> +      */
+>>>> +     userpg->cap_user_time = 1;
+>>>> +     userpg->cap_user_time_zero = 1;
+>>>> +     userpg->cap_user_time_short = 1;
+>>>> +}
+>>>> diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
+>>>> index ebca5eab9c9b..12675ee1123c 100644
+>>>> --- a/drivers/perf/riscv_pmu.c
+>>>> +++ b/drivers/perf/riscv_pmu.c
+>>>> @@ -171,6 +171,8 @@ int riscv_pmu_event_set_period(struct perf_event *event)
+>>>>
+>>>>        local64_set(&hwc->prev_count, (u64)-left);
+>>>>
+>>>> +     perf_event_update_userpage(event);
+>>>> +
+>>>>        return overflow;
+>>>>   }
+>>>>
+>>>> @@ -283,6 +285,43 @@ static int riscv_pmu_event_init(struct perf_event *event)
+>>>>        return 0;
+>>>>   }
+>>>>
+>>>> +static int riscv_pmu_event_idx(struct perf_event *event)
+>>>> +{
+>>>> +     struct riscv_pmu *rvpmu = to_riscv_pmu(event->pmu);
+>>>> +
+>>>> +     if (!(event->hw.flags & PERF_EVENT_FLAG_USER_READ_CNT))
+>>>> +             return 0;
+>>>> +
+>>>> +     /*
+>>>> +      * cycle and instret can either be retrieved from their fixed counters
+>>>> +      * or from programmable counters, the latter being the preferred way
+>>>> +      * since cycle and instret counters do not support sampling.
+>>>> +      */
+>>>> +
+>>>> +     return rvpmu->csr_index(event) + 1;
+>>>> +}
+>>>> +
+>>>> +static void riscv_pmu_event_mapped(struct perf_event *event, struct mm_struct *mm)
+>>>> +{
+>>>> +     /*
+>>>> +      * The user mmapped the event to directly access it: this is where
+>>>> +      * we determine based on sysctl_perf_user_access if we grant userspace
+>>>> +      * the direct access to this event. That means that within the same
+>>>> +      * task, some events may be directly accessible and some other may not,
+>>>> +      * if the user changes the value of sysctl_perf_user_accesss in the
+>>>> +      * meantime.
+>>>> +      */
+>>>> +     struct riscv_pmu *rvpmu = to_riscv_pmu(event->pmu);
+>>>> +
+>>>> +     event->hw.flags |= rvpmu->event_flags(event);
+>>>> +     perf_event_update_userpage(event);
+>>>> +}
+>>>> +
+>>>> +static void riscv_pmu_event_unmapped(struct perf_event *event, struct mm_struct *mm)
+>>>> +{
+>>>> +     event->hw.flags &= ~PERF_EVENT_FLAG_USER_READ_CNT;
+>>>> +}
+>>>> +
+>>>>   struct riscv_pmu *riscv_pmu_alloc(void)
+>>>>   {
+>>>>        struct riscv_pmu *pmu;
+>>>> @@ -307,6 +346,9 @@ struct riscv_pmu *riscv_pmu_alloc(void)
+>>>>        }
+>>>>        pmu->pmu = (struct pmu) {
+>>>>                .event_init     = riscv_pmu_event_init,
+>>>> +             .event_mapped   = riscv_pmu_event_mapped,
+>>>> +             .event_unmapped = riscv_pmu_event_unmapped,
+>>>> +             .event_idx      = riscv_pmu_event_idx,
+>>>>                .add            = riscv_pmu_add,
+>>>>                .del            = riscv_pmu_del,
+>>>>                .start          = riscv_pmu_start,
+>>>> diff --git a/drivers/perf/riscv_pmu_legacy.c b/drivers/perf/riscv_pmu_legacy.c
+>>>> index 0d8c9d8849ee..35c4c9097a0f 100644
+>>>> --- a/drivers/perf/riscv_pmu_legacy.c
+>>>> +++ b/drivers/perf/riscv_pmu_legacy.c
+>>>> @@ -74,6 +74,21 @@ static void pmu_legacy_ctr_start(struct perf_event *event, u64 ival)
+>>>>        local64_set(&hwc->prev_count, initial_val);
+>>>>   }
+>>>>
+>>>> +static uint8_t pmu_legacy_csr_index(struct perf_event *event)
+>>>> +{
+>>>> +     return event->hw.idx;
+>>>> +}
+>>>> +
+>>>> +static int pmu_legacy_event_flags(struct perf_event *event)
+>>>> +{
+>>>> +     /* In legacy mode, the first 3 CSRs are available. */
+>>>> +     if (event->attr.config != PERF_COUNT_HW_CPU_CYCLES &&
+>>>> +         event->attr.config != PERF_COUNT_HW_INSTRUCTIONS)
+>>>> +             return 0;
+>>>> +
+>>>> +     return PERF_EVENT_FLAG_USER_READ_CNT;
+>>>> +}
+>>>> +
+>>>>   /*
+>>>>    * This is just a simple implementation to allow legacy implementations
+>>>>    * compatible with new RISC-V PMU driver framework.
+>>>> @@ -94,6 +109,8 @@ static void pmu_legacy_init(struct riscv_pmu *pmu)
+>>>>        pmu->ctr_get_width = NULL;
+>>>>        pmu->ctr_clear_idx = NULL;
+>>>>        pmu->ctr_read = pmu_legacy_read_ctr;
+>>>> +     pmu->event_flags = pmu_legacy_event_flags;
+>>>> +     pmu->csr_index = pmu_legacy_csr_index;
+>>>>
+>>>>        perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
+>>>>   }
+>>>> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+>>>> index 70cb50fd41c2..af7f3128b6b8 100644
+>>>> --- a/drivers/perf/riscv_pmu_sbi.c
+>>>> +++ b/drivers/perf/riscv_pmu_sbi.c
+>>>> @@ -24,6 +24,10 @@
+>>>>   #include <asm/sbi.h>
+>>>>   #include <asm/hwcap.h>
+>>>>
+>>>> +#define SYSCTL_NO_USER_ACCESS        0
+>>>> +#define SYSCTL_USER_ACCESS   1
+>>>> +#define SYSCTL_LEGACY                2
+>>>> +
+>>>>   PMU_FORMAT_ATTR(event, "config:0-47");
+>>>>   PMU_FORMAT_ATTR(firmware, "config:63");
+>>>>
+>>>> @@ -43,6 +47,9 @@ static const struct attribute_group *riscv_pmu_attr_groups[] = {
+>>>>        NULL,
+>>>>   };
+>>>>
+>>>> +/* Allow legacy access by default */
+>>>> +static int sysctl_perf_user_access __read_mostly = SYSCTL_LEGACY;
+>>>> +
+>>>>   /*
+>>>>    * RISC-V doesn't have heterogeneous harts yet. This need to be part of
+>>>>    * per_cpu in case of harts with different pmu counters
+>>>> @@ -301,6 +308,11 @@ int riscv_pmu_get_hpm_info(u32 *hw_ctr_width, u32 *num_hw_ctr)
+>>>>   }
+>>>>   EXPORT_SYMBOL_GPL(riscv_pmu_get_hpm_info);
+>>>>
+>>>> +static uint8_t pmu_sbi_csr_index(struct perf_event *event)
+>>>> +{
+>>>> +     return pmu_ctr_list[event->hw.idx].csr - CSR_CYCLE;
+>>>> +}
+>>>> +
+>>>>   static unsigned long pmu_sbi_get_filter_flags(struct perf_event *event)
+>>>>   {
+>>>>        unsigned long cflags = 0;
+>>>> @@ -329,18 +341,30 @@ static int pmu_sbi_ctr_get_idx(struct perf_event *event)
+>>>>        struct cpu_hw_events *cpuc = this_cpu_ptr(rvpmu->hw_events);
+>>>>        struct sbiret ret;
+>>>>        int idx;
+>>>> -     uint64_t cbase = 0;
+>>>> +     uint64_t cbase = 0, cmask = rvpmu->cmask;
+>>>>        unsigned long cflags = 0;
+>>>>
+>>>>        cflags = pmu_sbi_get_filter_flags(event);
+>>>> +
+>>>> +     /* In legacy mode, we have to force the fixed counters for those events */
+>>>> +     if (hwc->flags & PERF_EVENT_FLAG_LEGACY) {
+>>>> +             if (event->attr.config == PERF_COUNT_HW_CPU_CYCLES) {
+>>>> +                     cflags |= SBI_PMU_CFG_FLAG_SKIP_MATCH;
+>>>> +                     cmask = 1;
+>>>> +             } else if (event->attr.config == PERF_COUNT_HW_INSTRUCTIONS) {
+>>>> +                     cflags |= SBI_PMU_CFG_FLAG_SKIP_MATCH;
+>>>> +                     cmask = 1UL << (CSR_INSTRET - CSR_CYCLE);
+>>>> +             }
+>>>> +     }
+>>>> +
+>>>>        /* retrieve the available counter index */
+>>>>   #if defined(CONFIG_32BIT)
+>>>>        ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_CFG_MATCH, cbase,
+>>>> -                     rvpmu->cmask, cflags, hwc->event_base, hwc->config,
+>>>> +                     cmask, cflags, hwc->event_base, hwc->config,
+>>>>                        hwc->config >> 32);
+>>>>   #else
+>>>>        ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_CFG_MATCH, cbase,
+>>>> -                     rvpmu->cmask, cflags, hwc->event_base, hwc->config, 0);
+>>>> +                     cmask, cflags, hwc->event_base, hwc->config, 0);
+>>>>   #endif
+>>>>        if (ret.error) {
+>>>>                pr_debug("Not able to find a counter for event %lx config %llx\n",
+>>>> @@ -490,6 +514,11 @@ static void pmu_sbi_ctr_start(struct perf_event *event, u64 ival)
+>>>>        if (ret.error && (ret.error != SBI_ERR_ALREADY_STARTED))
+>>>>                pr_err("Starting counter idx %d failed with error %d\n",
+>>>>                        hwc->idx, sbi_err_map_linux_errno(ret.error));
+>>>> +
+>>>> +     if (!(event->hw.flags & PERF_EVENT_FLAG_LEGACY) &&
+>>>> +         event->hw.flags & PERF_EVENT_FLAG_USER_READ_CNT)
+>>>> +             csr_write(CSR_SCOUNTEREN,
+>>>> +                       csr_read(CSR_SCOUNTEREN) | (1 << pmu_sbi_csr_index(event)));
+>>>>   }
+>>>>
+>>>>   static void pmu_sbi_ctr_stop(struct perf_event *event, unsigned long flag)
+>>>> @@ -497,6 +526,11 @@ static void pmu_sbi_ctr_stop(struct perf_event *event, unsigned long flag)
+>>>>        struct sbiret ret;
+>>>>        struct hw_perf_event *hwc = &event->hw;
+>>>>
+>>>> +     if (!(event->hw.flags & PERF_EVENT_FLAG_LEGACY) &&
+>>>> +         event->hw.flags & PERF_EVENT_FLAG_USER_READ_CNT)
+>>>> +             csr_write(CSR_SCOUNTEREN,
+>>>> +                       csr_read(CSR_SCOUNTEREN) & ~(1 << pmu_sbi_csr_index(event)));
+>>>> +
+>>>>        ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_STOP, hwc->idx, 1, flag, 0, 0, 0);
+>>>>        if (ret.error && (ret.error != SBI_ERR_ALREADY_STOPPED) &&
+>>>>                flag != SBI_PMU_STOP_FLAG_RESET)
+>>>> @@ -704,10 +738,13 @@ static int pmu_sbi_starting_cpu(unsigned int cpu, struct hlist_node *node)
+>>>>        struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
+>>>>
+>>>>        /*
+>>>> -      * Enable the access for CYCLE, TIME, and INSTRET CSRs from userspace,
+>>>> -      * as is necessary to maintain uABI compatibility.
+>>>> +      * We keep enabling userspace access to CYCLE, TIME and INSRET via the
+>>>> +      * legacy option but that will be removed in the future.
+>>> Will it? The documentation hunk didn't mention that value 2 was depreciated.
+>> You're right, I'll add that to the documentation too, thanks.
+>>
+>>>>         */
+>>>> -     csr_write(CSR_SCOUNTEREN, 0x7);
+>>>> +     if (sysctl_perf_user_access == SYSCTL_LEGACY)
+>>>> +             csr_write(CSR_SCOUNTEREN, 0x7);
+>>>> +     else
+>>>> +             csr_write(CSR_SCOUNTEREN, 0x2);
+>>>>
+>>>>        /* Stop all the counters so that they can be enabled from perf */
+>>>>        pmu_sbi_stop_all(pmu);
+>>>> @@ -851,6 +888,66 @@ static void riscv_pmu_destroy(struct riscv_pmu *pmu)
+>>>>        cpuhp_state_remove_instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
+>>>>   }
+>>>>
+>>>> +static int pmu_sbi_event_flags(struct perf_event *event)
+>>>> +{
+>>>> +     if (sysctl_perf_user_access == SYSCTL_NO_USER_ACCESS)
+>>>> +             return 0;
+>>>> +
+>>>> +     /* In legacy mode, the first 3 CSRs are available. */
+>>>> +     if (sysctl_perf_user_access == SYSCTL_LEGACY) {
+>>>> +             int flags = PERF_EVENT_FLAG_LEGACY;
+>>>> +
+>>>> +             if (event->attr.config == PERF_COUNT_HW_CPU_CYCLES ||
+>>>> +                 event->attr.config == PERF_COUNT_HW_INSTRUCTIONS)
+>>>> +                     flags |= PERF_EVENT_FLAG_USER_READ_CNT;
+>>>> +
+>>>> +             return flags;
+>>>> +     }
+>>>> +
+>>>> +     return PERF_EVENT_FLAG_USER_READ_CNT;
+>>>> +}
+>>>> +
+>>>> +static void riscv_pmu_update_counter_access(void *info)
+>>>> +{
+>>>> +     if (sysctl_perf_user_access == SYSCTL_LEGACY)
+>>>> +             csr_write(CSR_SCOUNTEREN, 0x7);
+>>>> +     else
+>>>> +             csr_write(CSR_SCOUNTEREN, 0x2);
+>>>> +}
+>>>> +
+>>>> +static int riscv_pmu_proc_user_access_handler(struct ctl_table *table,
+>>>> +                                           int write, void *buffer,
+>>>> +                                           size_t *lenp, loff_t *ppos)
+>>>> +{
+>>>> +     int prev = sysctl_perf_user_access;
+>>>> +     int ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+>>>> +
+>>>> +     /*
+>>>> +      * Test against the previous value since we clear SCOUNTEREN when
+>>>> +      * sysctl_perf_user_access is set to SYSCTL_USER_ACCESS, but we should
+>>>> +      * not do that if that was already the case.
+>>>> +      */
+>>>> +     if (ret || !write || prev == sysctl_perf_user_access)
+>>>> +             return ret;
+>>>> +
+>>>> +     on_each_cpu(riscv_pmu_update_counter_access, (void *)&prev, 1);
+>>>> +
+>>>> +     return 0;
+>>>> +}
+>>>> +
+>>>> +static struct ctl_table sbi_pmu_sysctl_table[] = {
+>>>> +     {
+>>>> +             .procname       = "perf_user_access",
+>>>> +             .data           = &sysctl_perf_user_access,
+>>>> +             .maxlen         = sizeof(unsigned int),
+>>>> +             .mode           = 0644,
+>>>> +             .proc_handler   = riscv_pmu_proc_user_access_handler,
+>>>> +             .extra1         = SYSCTL_ZERO,
+>>>> +             .extra2         = SYSCTL_TWO,
+>>>> +     },
+>>>> +     { }
+>>>> +};
+>>>> +
+>>>>   static int pmu_sbi_device_probe(struct platform_device *pdev)
+>>>>   {
+>>>>        struct riscv_pmu *pmu = NULL;
+>>>> @@ -888,6 +985,8 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
+>>>>        pmu->ctr_get_width = pmu_sbi_ctr_get_width;
+>>>>        pmu->ctr_clear_idx = pmu_sbi_ctr_clear_idx;
+>>>>        pmu->ctr_read = pmu_sbi_ctr_read;
+>>>> +     pmu->event_flags = pmu_sbi_event_flags;
+>>>> +     pmu->csr_index = pmu_sbi_csr_index;
+>>>>
+>>>>        ret = cpuhp_state_add_instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
+>>>>        if (ret)
+>>>> @@ -901,6 +1000,8 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
+>>>>        if (ret)
+>>>>                goto out_unregister;
+>>>>
+>>>> +     register_sysctl("kernel", sbi_pmu_sysctl_table);
+>>>> +
+>>>>        return 0;
+>>>>
+>>>>   out_unregister:
+>>>> diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pmu.h
+>>>> index 9f70d94942e0..ba19634d815c 100644
+>>>> --- a/include/linux/perf/riscv_pmu.h
+>>>> +++ b/include/linux/perf/riscv_pmu.h
+>>>> @@ -12,6 +12,7 @@
+>>>>   #include <linux/perf_event.h>
+>>>>   #include <linux/ptrace.h>
+>>>>   #include <linux/interrupt.h>
+>>>> +#include <asm/perf_event.h>
+>>>>
+>>>>   #ifdef CONFIG_RISCV_PMU
+>>>>
+>>>> @@ -55,6 +56,8 @@ struct riscv_pmu {
+>>>>        void            (*ctr_start)(struct perf_event *event, u64 init_val);
+>>>>        void            (*ctr_stop)(struct perf_event *event, unsigned long flag);
+>>>>        int             (*event_map)(struct perf_event *event, u64 *config);
+>>>> +     int             (*event_flags)(struct perf_event *event);
+>>>> +     uint8_t         (*csr_index)(struct perf_event *event);
+>>>>
+>>>>        struct cpu_hw_events    __percpu *hw_events;
+>>>>        struct hlist_node       node;
+>>>> diff --git a/tools/lib/perf/mmap.c b/tools/lib/perf/mmap.c
+>>>> index 0d1634cedf44..18f2abb1584a 100644
+>>>> --- a/tools/lib/perf/mmap.c
+>>>> +++ b/tools/lib/perf/mmap.c
+>>>> @@ -392,6 +392,71 @@ static u64 read_perf_counter(unsigned int counter)
+>>>>
+>>>>   static u64 read_timestamp(void) { return read_sysreg(cntvct_el0); }
+>>>>
+>>>> +#elif defined(__riscv) && __riscv_xlen == 64
+>>> It's enough to just check __riscv_xlen.
+>> Right, thanks
+>>
+>>>> +
+>>>> +#define CSR_CYCLE    0xc00
+>>>> +#define CSR_TIME     0xc01
+>>>> +#define CSR_CYCLEH   0xc80
+>>>> +
+>>>> +#define csr_read(csr)                                                \
+>>>> +({                                                           \
+>>>> +     register unsigned long __v;                             \
+>>>> +             __asm__ __volatile__ ("csrr %0, " #csr          \
+>>>> +              : "=r" (__v) :                                 \
+>>>> +              : "memory");                                   \
+>>>> +              __v;                                           \
+>>>> +})
+>>>> +
+>>>> +static unsigned long csr_read_num(int csr_num)
+>>>> +{
+>>>> +#define switchcase_csr_read(__csr_num, __val)           {\
+>>>> +     case __csr_num:                                 \
+>>>> +             __val = csr_read(__csr_num);            \
+>>>> +             break; }
+>>>> +#define switchcase_csr_read_2(__csr_num, __val)         {\
+>>>> +     switchcase_csr_read(__csr_num + 0, __val)        \
+>>>> +     switchcase_csr_read(__csr_num + 1, __val)}
+>>>> +#define switchcase_csr_read_4(__csr_num, __val)         {\
+>>>> +     switchcase_csr_read_2(__csr_num + 0, __val)      \
+>>>> +     switchcase_csr_read_2(__csr_num + 2, __val)}
+>>>> +#define switchcase_csr_read_8(__csr_num, __val)         {\
+>>>> +     switchcase_csr_read_4(__csr_num + 0, __val)      \
+>>>> +     switchcase_csr_read_4(__csr_num + 4, __val)}
+>>>> +#define switchcase_csr_read_16(__csr_num, __val)        {\
+>>>> +     switchcase_csr_read_8(__csr_num + 0, __val)      \
+>>>> +     switchcase_csr_read_8(__csr_num + 8, __val)}
+>>>> +#define switchcase_csr_read_32(__csr_num, __val)        {\
+>>>> +     switchcase_csr_read_16(__csr_num + 0, __val)     \
+>>>> +     switchcase_csr_read_16(__csr_num + 16, __val)}
+>>>> +
+>>>> +     unsigned long ret = 0;
+>>>> +
+>>>> +     switch (csr_num) {
+>>>> +     switchcase_csr_read_32(CSR_CYCLE, ret)
+>>>> +     switchcase_csr_read_32(CSR_CYCLEH, ret)
+>>>> +     default :
+>>>                 ^ extra space
+>>>
+>> Thanks
+>>
+>>>> +             break;
+>>>> +     }
+>>>> +
+>>>> +     return ret;
+>>>> +#undef switchcase_csr_read_32
+>>>> +#undef switchcase_csr_read_16
+>>>> +#undef switchcase_csr_read_8
+>>>> +#undef switchcase_csr_read_4
+>>>> +#undef switchcase_csr_read_2
+>>>> +#undef switchcase_csr_read
+>>>> +}
+>>>> +
+>>>> +static u64 read_perf_counter(unsigned int counter)
+>>>> +{
+>>>> +     return csr_read_num(CSR_CYCLE + counter);
+>>>> +}
+>>>> +
+>>>> +static u64 read_timestamp(void)
+>>>> +{
+>>>> +     return csr_read_num(CSR_TIME);
+>>>> +}
+>>>> +
+>>>>   #else
+>>>>   static u64 read_perf_counter(unsigned int counter __maybe_unused) { return 0; }
+>>>>   static u64 read_timestamp(void) { return 0; }
+>>>> --
+>>>> 2.37.2
+>>>>
+>>> A lot going on this patch. It'd be easier to review if it was broken up a
+>>> bit. E.g. import of arm code, the tools/lib/perf/mmap.c hunk, and whatever
+>>> else makes sense.
+>> Ok, will do that in v2!
+>>
+>>> Thanks,
+>>> drew
+>> Thanks,
+>>
+>> Alex
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
