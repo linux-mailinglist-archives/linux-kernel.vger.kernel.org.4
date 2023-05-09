@@ -2,138 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B786FC199
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E4D6FC19D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234834AbjEIIWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 04:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        id S234655AbjEIIWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234721AbjEIIWP (ORCPT
+        with ESMTP id S234341AbjEIIWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 04:22:15 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29563B4
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:22:12 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pwIbe-0005j4-4k; Tue, 09 May 2023 10:21:58 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pwIba-002BuQ-Oe; Tue, 09 May 2023 10:21:54 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pwIba-002iPP-3L; Tue, 09 May 2023 10:21:54 +0200
-Date:   Tue, 9 May 2023 10:21:53 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Anatolij Gustschin <agust@denx.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powerpc: Drop MPC5200 LocalPlus bus FIFO driver
-Message-ID: <20230509082153.jcy2qpvyd44bjaee@pengutronix.de>
-References: <20221228145129.31700-1-u.kleine-koenig@pengutronix.de>
- <20230412150524.ojsvukh47hing6db@pengutronix.de>
- <87zg7cabf6.fsf@mpe.ellerman.id.au>
- <20230413061642.kqkor4wkt7lp2mhp@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jz6b5qpi3ldmi55y"
-Content-Disposition: inline
-In-Reply-To: <20230413061642.kqkor4wkt7lp2mhp@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 9 May 2023 04:22:53 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99556E72
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:22:51 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a6eeea78cso1277107276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 01:22:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683620571; x=1686212571;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EYZzu5uKAv2K3CUFKdV+PnrKtAXzT9zaDvfq92PiXpQ=;
+        b=6VaIk8BU1+iBlJ+77HD/FYD7NedD7l/shwrtU1U5jS0VwZtEU7QE4T7XXUhZI17OZ8
+         U9JSKU+iOohlvTCS1rn5lBDusZWAPfZkhuoM0UjliXqV/4rqDDaP0aaIMAuf9HDYrwjk
+         iB+oxn+z0CTNn27ICs/OOF5Dy5jX+UFGdzSSPMXhlhD5MMBvgPj3uJW/9BeAgOM3mpvK
+         HMSxpMuZr0s8KnPlBMQh/eRFhbl0WJweyW3Cb20JKkjSf21qlLA1fxe68Gh5tROIvZod
+         HB6Amj6ZBwvjC0m9pe7kU4aIzOibxxk1R6wnnKfdf2+l6N1KYXPGRthT1w9IvEjtj9V8
+         f4qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683620571; x=1686212571;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EYZzu5uKAv2K3CUFKdV+PnrKtAXzT9zaDvfq92PiXpQ=;
+        b=LSUZCYLfFPI1l8rlY6LY9K31TTcumgXe9dm7j4HJi5AQUyeywQBWUgB7rpapqkwxsV
+         S5Rq/YoKyrzdEUorxcgve76QCLaRQtcyYIhYBDKTpyXMpgCnUzFX1F8l/r5xziDdPyTj
+         Ug/UwgVAWWtCuFNoD8EgMjDYKxxZ/TPFsROmOraSZgbZYL8Nx1ea0DTKKQG42IEwmXyb
+         ORYncYPg6QkPbDxtI/9pGuGDKcEJo51rfAzRjKgbNmKn5lzNHnnsxkd9kuv3lfyyYcAg
+         Ds3WZZ4YFg0ctQHQl3oNLI3SfNR5RbP6UicC/3B0ZrjyJJvy77GF0FIHmOhT0FuWYMe3
+         mfEw==
+X-Gm-Message-State: AC+VfDwtd1VPzXvcThuMbNJm14oQPB1KW46xORbkQTOZrrWfod0nG1sk
+        bnZ1oj27ZkGvqEYWPfLlD58aliwMzfqY7A==
+X-Google-Smtp-Source: ACHHUZ7ePLuqu3tSKvz5oaQ3PDOHFNO4qCTQswBuuJslNkpOXenDmWSbdTpJWIfI7Qau9StIT4VQYh3yTh0l1g==
+X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
+ (user=joychakr job=sendgmr) by 2002:a25:c016:0:b0:ba1:ac14:7e1d with SMTP id
+ c22-20020a25c016000000b00ba1ac147e1dmr8789084ybf.3.1683620570885; Tue, 09 May
+ 2023 01:22:50 -0700 (PDT)
+Date:   Tue,  9 May 2023 08:22:39 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
+Message-ID: <20230509082244.1069623-1-joychakr@google.com>
+Subject: [PATCH v10 0/5] spi: dw: DW SPI DMA Driver updates
+From:   Joy Chakraborty <joychakr@google.com>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, rohitner@google.com,
+        Joy Chakraborty <joychakr@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This Patch series adds support for 32 bits per word trasfers using DMA
+and some defensive checks around dma controller capabilities.
+---
+V1 Changes : Add support for AxSize=3D4 bytes to support 32bits/word.
+---
+V1->V2 Changes : Add dma capability check to make sure address widths
+are supported.
+---
+V2->V3 Changes : Split changes , add DMA direction check and other
+cosmetic chnages.
+---
+V3->V4 Changes : Fix Sparce Warning
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@int=
+el.com/
+---
+V4->V5 Changes : Preserve reverse xmas Tree order, move direction
+check before initalisation of further capabilities, remove zero
+initialisations, remove error OR'ing.
+---
+V5->V6 Changes :
+	-Remove case of n_bytes=3D3 using 4_bytes buswidth
+	-Avoid forward decaration
+	-Break capability check patch into 2
+	-round n_bytes to power of 2 ( Bug Fix)
+	-Add more explanation in commit text.
+---
+V6->V7 Changes : Remove extra spaces, refer to functions in commit as
+func()
+---
+V7->V8 Changes : Minor commment updates in patch 4/5
+---
+V8->V9 Changes : Minor formatting changes in patch 5/5
+---
+V9->V10 Changes : Moving "return 0" at the end of dw_spi_dma_caps_init() fr=
+om patch
+[4/5] to patch [3/5] to solve :
+spi-dw-dma.c: In function =E2=80=98dw_spi_dma_caps_init=E2=80=99:
+spi-dw-dma.c:100:1: control reaches end of non-void function [-Werror=3Dret=
+urn-type]
+---
 
---jz6b5qpi3ldmi55y
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Joy Chakraborty (5):
+  spi: dw: Add 32 bpw support to SPI DW DMA driver
+  spi: dw: Move dw_spi_can_dma()
+  spi: dw: Add DMA directional capability check
+  spi: dw: Add DMA address widths capability check
+  spi: dw: Round of n_bytes to power of 2
 
-Hello,
-
-On Thu, Apr 13, 2023 at 08:16:42AM +0200, Uwe Kleine-K=F6nig wrote:
-> While mpc5200b.dtsi contains a device that this driver can bind to, the
-> only purpose of a bound device is to be used by the four exported functio=
-ns
-> mpc52xx_lpbfifo_submit(), mpc52xx_lpbfifo_abort(), mpc52xx_lpbfifo_poll()
-> and mpc52xx_lpbfifo_start_xfer(). However there are no callers to this
-> function and so the driver is effectively superfluous and can be deleted.
-> Also drop some defines and a struct from <asm/mpc52xx.h> that are unused
-> now together with the declarations of the four mentioned functions.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> ---
-> Hello Michael,
->=20
-> On Thu, Apr 13, 2023 at 10:11:25AM +1000, Michael Ellerman wrote:
-> > Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de> writes:
-> > > On Wed, Dec 28, 2022 at 03:51:29PM +0100, Uwe Kleine-K=F6nig wrote:
-> > >> The four exported functions mpc52xx_lpbfifo_submit(),
-> > >> mpc52xx_lpbfifo_abort(), mpc52xx_lpbfifo_poll(), and
-> > >> mpc52xx_lpbfifo_start_xfer() are not used. So they can be dropped an=
-d the
-> > >> definitions needed to call them can be moved into the driver file.
-> > >>=20
-> > >> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > >
-> > > I never got feedback about this driver and it has not appeared in next
-> > > up to now. Did it fell through the cracks?
-> >=20
-> > Yeah. I was hoping someone would explain what's going on with the
-> > driver.
-> >=20
-> > Presumably there are some out-of-tree drivers that use the routines
-> > provided by this driver?
->=20
-> I googled for the function names but the only related hits were
-> references to this thread :-)
->=20
-> > I think rather than merging this patch, which keeps the code but makes
-> > it completely useless, do you mind sending a patch to remove the whole
-> > driver? Maybe that will get someone's attention.
->=20
-> fair enough, here it is.
-
-What is your thought about this patch? If you (also) think getting it
-into next soon after a merge window closed, around now would be a good
-opportunity to do so ..
-
-Best regards
-Uwe
+ drivers/spi/spi-dw-core.c |  5 ++-
+ drivers/spi/spi-dw-dma.c  | 76 +++++++++++++++++++++++++++++----------
+ drivers/spi/spi-dw.h      |  1 +
+ 3 files changed, 63 insertions(+), 19 deletions(-)
 
 --=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+2.40.1.521.gf1e218fcd8-goog
 
---jz6b5qpi3ldmi55y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRaAqEACgkQj4D7WH0S
-/k785Qf/ZliZLWmy9GKR+VccrZYE0nfkRJGLWHhQZhFn0In1A9R+uO+Gszh5rRZX
-mH8vWixRKyYIW694+5Bcyg7SjXZzxDZQZzkDLi213lKZ60sbrxLKIgdhfjthEUoP
-mKk4/I4WTPXn2RKcNGLHS828fi2cSk32bU9+WTQtWO4uKJxrv6ctW9pCWwHXQ/mj
-8cGalx5YDNy38mSCtJ9se5pKES4NOSYcvPdD/xLIju5ZKyz4HIC5FZiNyNPDzh+f
-F6U6VaSAME8hznCuZAEva2zZMdcEyc1WGGG38JmSKbXRFv+DiKrglvqcryzW4RsK
-kRaqpzZJxx7GccK2FIsvaEJhi7SHXg==
-=mgE1
------END PGP SIGNATURE-----
-
---jz6b5qpi3ldmi55y--
