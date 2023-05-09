@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445FB6FBEA6
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 07:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BABF6FBEA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 07:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjEIF2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 01:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
+        id S233911AbjEIF2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 01:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjEIF2R (ORCPT
+        with ESMTP id S231468AbjEIF2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 01:28:17 -0400
+        Tue, 9 May 2023 01:28:21 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4EF9025;
-        Mon,  8 May 2023 22:28:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465899039;
+        Mon,  8 May 2023 22:28:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1683610096; x=1715146096;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YOW7Hn4s9yWFPggxPjKYjh0bJ/JrU0+7299boe9n1YE=;
-  b=IbnRFnELMDqmFer9uxXCrXz1XiyvoT+gRxRS1r3W49ttUiu1KghYhG+A
-   N/6zDQWxdH+jKDw5uWQo7yne+wo5IyHQohrweU2eFmb0BBmhtnmxgxFMw
-   +MDS/FEBDNHPXYKEUEZXVw8YJdarLiTuSNFeJmVek+Y90Afidp6NMg19H
-   fiQ7Zj/F4/zSEWxs6vowX2AQiLg8w+I8fwoKojK7xP3le1Ex1wecA6J+l
-   Pim47rrZ+pAyZ41qM1CT2tkzz1++J5vfFvRqE3krcdGKir3sODDbPpaxA
-   BpGw3IHycLSASxYldX1sojq7SIi/VWIRo1p6zzPYVJC3kkHJB0olzy73r
+  t=1683610099; x=1715146099;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Fulgl6C4mZyo6UchjyoA3AVcKlBuE17Iss40HcwQstc=;
+  b=ToSYXDApeBQGIPWud3pw//8swBWzRfxa2Eoe+u4HspC5zPVAMrw8E/NK
+   4G5Zps0pkvicC6LGmfyBldJLopsEDrUcse4CZeiqa5Vxb/+7YrJrzpT5w
+   ySUpiXJGhd13FwSZbxvnzKc5oUKcX7J9KjzbjOzqjVPcz16QRlnFEDyXC
+   1hJwHsdWAIqDGukQN3fuK5KufKO+RpchoEs3c3348DYmknhEXdCp87oMp
+   5EdeILXu2DhQvfFmtN6vyETO/ct5cXPZyJb+on50jYoOIjW9HfhhquEuZ
+   f4Ncz9NYF9ohXr5sP2/2mvb5XInIQLvFBkohwe4/YprHpLM326oDnFHqf
    g==;
 X-IronPort-AV: E=Sophos;i="5.99,261,1677567600"; 
-   d="scan'208";a="210291694"
+   d="scan'208";a="210291718"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 May 2023 22:28:14 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 May 2023 22:28:19 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 8 May 2023 22:28:14 -0700
+ 15.1.2507.21; Mon, 8 May 2023 22:28:18 -0700
 Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Mon, 8 May 2023 22:28:10 -0700
+ 15.1.2507.21 via Frontend Transport; Mon, 8 May 2023 22:28:14 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
         <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
@@ -48,10 +48,12 @@ CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v3 0/5] dt-bindings: clocks: at91: convert to yaml
-Date:   Tue, 9 May 2023 08:27:52 +0300
-Message-ID: <20230509052757.539274-1-claudiu.beznea@microchip.com>
+Subject: [PATCH v3 1/5] ARM: dts: at91: use clock-controller name for PMC nodes
+Date:   Tue, 9 May 2023 08:27:53 +0300
+Message-ID: <20230509052757.539274-2-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230509052757.539274-1-claudiu.beznea@microchip.com>
+References: <20230509052757.539274-1-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -65,77 +67,278 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Use clock-controller generic name for PMC nodes.
 
-This series converts atmel clocks bindings (PMC and slow clock
-controller) to YAML. Along with it updated device trees to cope
-with the dt-binding requirements.
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
+ arch/arm/boot/dts/at91rm9200.dtsi   | 2 +-
+ arch/arm/boot/dts/at91sam9260.dtsi  | 2 +-
+ arch/arm/boot/dts/at91sam9261.dtsi  | 2 +-
+ arch/arm/boot/dts/at91sam9263.dtsi  | 2 +-
+ arch/arm/boot/dts/at91sam9g20.dtsi  | 2 +-
+ arch/arm/boot/dts/at91sam9g25.dtsi  | 2 +-
+ arch/arm/boot/dts/at91sam9g35.dtsi  | 2 +-
+ arch/arm/boot/dts/at91sam9g45.dtsi  | 2 +-
+ arch/arm/boot/dts/at91sam9n12.dtsi  | 2 +-
+ arch/arm/boot/dts/at91sam9rl.dtsi   | 2 +-
+ arch/arm/boot/dts/at91sam9x25.dtsi  | 2 +-
+ arch/arm/boot/dts/at91sam9x35.dtsi  | 2 +-
+ arch/arm/boot/dts/at91sam9x5.dtsi   | 2 +-
+ arch/arm/boot/dts/sam9x60.dtsi      | 2 +-
+ arch/arm/boot/dts/sama5d2.dtsi      | 2 +-
+ arch/arm/boot/dts/sama5d3.dtsi      | 2 +-
+ arch/arm/boot/dts/sama5d3_emac.dtsi | 2 +-
+ arch/arm/boot/dts/sama5d4.dtsi      | 2 +-
+ arch/arm/boot/dts/sama7g5.dtsi      | 2 +-
+ 19 files changed, 19 insertions(+), 19 deletions(-)
 
-Thank you,
-Claudiu Beznea
-
-Changes in v3:
-- in patch 2/5:
-	- get rid of 1st "items" section and embedd it in the last compatible
-	  enum
-	- sort alphanumerically the compatibles in allOf
-- collected tags
-
-Changes in v2:
-- in patch 2/5:
-	- dropped quotes from $id and $schema
-	- get rid of 1st "items" sections corresponding to "atmel,at91sam9260-pmc",
-	  "syscon" compatible and move it to the proper enum
-	- ordered compatibles by name
-	- add description for #clock-cells
-	- remove blank lines
-	- keep order in required (same order that the properties were
-	  defined)
-	- dropped required from allOf
-
-- in patch 5/5:
-	- dropped quotes from $id and $schema
-	- drop first "items:" in compatible:oneOf section
-	- ordered compatibles by name
-	- moved additionalProperties after allOf
-	- dropped microchip,sama7g5-sckc from first allOf:if section
-	- moved "required" section from allOf to global "required" section
-	- dropped if:then from the last if:then:else in allOf
-
-Claudiu Beznea (5):
-  ARM: dts: at91: use clock-controller name for PMC nodes
-  dt-bindings: clocks: atmel,at91rm9200-pmc: convert to yaml
-  ARM: dts: at91: at91sam9n12: witch sckc to new clock bindings
-  ARM: dts: at91: use clock-controller name for sckc nodes
-  dt-bindings: clocks: at91sam9x5-sckc: convert to yaml
-
- .../devicetree/bindings/clock/at91-clock.txt  |  58 -------
- .../bindings/clock/atmel,at91rm9200-pmc.yaml  | 152 ++++++++++++++++++
- .../bindings/clock/atmel,at91sam9x5-sckc.yaml |  70 ++++++++
- arch/arm/boot/dts/at91rm9200.dtsi             |   2 +-
- arch/arm/boot/dts/at91sam9260.dtsi            |   2 +-
- arch/arm/boot/dts/at91sam9261.dtsi            |   2 +-
- arch/arm/boot/dts/at91sam9263.dtsi            |   2 +-
- arch/arm/boot/dts/at91sam9g20.dtsi            |   2 +-
- arch/arm/boot/dts/at91sam9g25.dtsi            |   2 +-
- arch/arm/boot/dts/at91sam9g35.dtsi            |   2 +-
- arch/arm/boot/dts/at91sam9g45.dtsi            |   4 +-
- arch/arm/boot/dts/at91sam9n12.dtsi            |  25 +--
- arch/arm/boot/dts/at91sam9rl.dtsi             |   4 +-
- arch/arm/boot/dts/at91sam9x25.dtsi            |   2 +-
- arch/arm/boot/dts/at91sam9x35.dtsi            |   2 +-
- arch/arm/boot/dts/at91sam9x5.dtsi             |   4 +-
- arch/arm/boot/dts/sam9x60.dtsi                |   4 +-
- arch/arm/boot/dts/sama5d2.dtsi                |   4 +-
- arch/arm/boot/dts/sama5d3.dtsi                |   4 +-
- arch/arm/boot/dts/sama5d3_emac.dtsi           |   2 +-
- arch/arm/boot/dts/sama5d4.dtsi                |   4 +-
- arch/arm/boot/dts/sama7g5.dtsi                |   2 +-
- 22 files changed, 251 insertions(+), 104 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/at91-clock.txt
- create mode 100644 Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml
- create mode 100644 Documentation/devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml
-
+diff --git a/arch/arm/boot/dts/at91rm9200.dtsi b/arch/arm/boot/dts/at91rm9200.dtsi
+index 6f9004ebf424..37b500f6f395 100644
+--- a/arch/arm/boot/dts/at91rm9200.dtsi
++++ b/arch/arm/boot/dts/at91rm9200.dtsi
+@@ -102,7 +102,7 @@ ramc0: ramc@ffffff00 {
+ 				reg = <0xffffff00 0x100>;
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,at91rm9200-pmc", "syscon";
+ 				reg = <0xfffffc00 0x100>;
+ 				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
+diff --git a/arch/arm/boot/dts/at91sam9260.dtsi b/arch/arm/boot/dts/at91sam9260.dtsi
+index 789fe356dbf6..16e3b24b4ddd 100644
+--- a/arch/arm/boot/dts/at91sam9260.dtsi
++++ b/arch/arm/boot/dts/at91sam9260.dtsi
+@@ -115,7 +115,7 @@ matrix: matrix@ffffee00 {
+ 				reg = <0xffffee00 0x200>;
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,at91sam9260-pmc", "syscon";
+ 				reg = <0xfffffc00 0x100>;
+ 				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
+diff --git a/arch/arm/boot/dts/at91sam9261.dtsi b/arch/arm/boot/dts/at91sam9261.dtsi
+index ee0bd1aceb3f..fe9ead867e2a 100644
+--- a/arch/arm/boot/dts/at91sam9261.dtsi
++++ b/arch/arm/boot/dts/at91sam9261.dtsi
+@@ -599,7 +599,7 @@ pioC: gpio@fffff800 {
+ 				};
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,at91sam9261-pmc", "syscon";
+ 				reg = <0xfffffc00 0x100>;
+ 				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
+diff --git a/arch/arm/boot/dts/at91sam9263.dtsi b/arch/arm/boot/dts/at91sam9263.dtsi
+index 3ce9ea987312..ee5e6ed44dd4 100644
+--- a/arch/arm/boot/dts/at91sam9263.dtsi
++++ b/arch/arm/boot/dts/at91sam9263.dtsi
+@@ -101,7 +101,7 @@ aic: interrupt-controller@fffff000 {
+ 				atmel,external-irqs = <30 31>;
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,at91sam9263-pmc", "syscon";
+ 				reg = <0xfffffc00 0x100>;
+ 				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
+diff --git a/arch/arm/boot/dts/at91sam9g20.dtsi b/arch/arm/boot/dts/at91sam9g20.dtsi
+index 708e1646b7f4..738a43ffd228 100644
+--- a/arch/arm/boot/dts/at91sam9g20.dtsi
++++ b/arch/arm/boot/dts/at91sam9g20.dtsi
+@@ -41,7 +41,7 @@ adc0: adc@fffe0000 {
+ 				atmel,adc-startup-time = <40>;
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,at91sam9g20-pmc", "atmel,at91sam9260-pmc", "syscon";
+ 			};
+ 		};
+diff --git a/arch/arm/boot/dts/at91sam9g25.dtsi b/arch/arm/boot/dts/at91sam9g25.dtsi
+index d2f13afb35ea..ec3c77221881 100644
+--- a/arch/arm/boot/dts/at91sam9g25.dtsi
++++ b/arch/arm/boot/dts/at91sam9g25.dtsi
+@@ -26,7 +26,7 @@ pinctrl@fffff400 {
+ 				      >;
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,at91sam9g25-pmc", "atmel,at91sam9x5-pmc", "syscon";
+ 			};
+ 		};
+diff --git a/arch/arm/boot/dts/at91sam9g35.dtsi b/arch/arm/boot/dts/at91sam9g35.dtsi
+index 48c2bc4a7753..c9cfb93092ee 100644
+--- a/arch/arm/boot/dts/at91sam9g35.dtsi
++++ b/arch/arm/boot/dts/at91sam9g35.dtsi
+@@ -25,7 +25,7 @@ pinctrl@fffff400 {
+ 				      >;
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,at91sam9g35-pmc", "atmel,at91sam9x5-pmc", "syscon";
+ 			};
+ 		};
+diff --git a/arch/arm/boot/dts/at91sam9g45.dtsi b/arch/arm/boot/dts/at91sam9g45.dtsi
+index 95f5d76234db..76afeb31b7f5 100644
+--- a/arch/arm/boot/dts/at91sam9g45.dtsi
++++ b/arch/arm/boot/dts/at91sam9g45.dtsi
+@@ -129,7 +129,7 @@ matrix: matrix@ffffea00 {
+ 				reg = <0xffffea00 0x200>;
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,at91sam9g45-pmc", "syscon";
+ 				reg = <0xfffffc00 0x100>;
+ 				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
+diff --git a/arch/arm/boot/dts/at91sam9n12.dtsi b/arch/arm/boot/dts/at91sam9n12.dtsi
+index 83114d26f10d..c2e7460fb7ff 100644
+--- a/arch/arm/boot/dts/at91sam9n12.dtsi
++++ b/arch/arm/boot/dts/at91sam9n12.dtsi
+@@ -118,7 +118,7 @@ smc: smc@ffffea00 {
+ 				reg = <0xffffea00 0x200>;
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,at91sam9n12-pmc", "syscon";
+ 				reg = <0xfffffc00 0x200>;
+ 				#clock-cells = <2>;
+diff --git a/arch/arm/boot/dts/at91sam9rl.dtsi b/arch/arm/boot/dts/at91sam9rl.dtsi
+index 364a2ff0a763..a12e6c419fe3 100644
+--- a/arch/arm/boot/dts/at91sam9rl.dtsi
++++ b/arch/arm/boot/dts/at91sam9rl.dtsi
+@@ -763,7 +763,7 @@ pioD: gpio@fffffa00 {
+ 				};
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,at91sam9rl-pmc", "syscon";
+ 				reg = <0xfffffc00 0x100>;
+ 				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
+diff --git a/arch/arm/boot/dts/at91sam9x25.dtsi b/arch/arm/boot/dts/at91sam9x25.dtsi
+index 0fe8802e1242..7036f5f04571 100644
+--- a/arch/arm/boot/dts/at91sam9x25.dtsi
++++ b/arch/arm/boot/dts/at91sam9x25.dtsi
+@@ -27,7 +27,7 @@ pinctrl@fffff400 {
+ 				      >;
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,at91sam9x25-pmc", "atmel,at91sam9x5-pmc", "syscon";
+ 			};
+ 		};
+diff --git a/arch/arm/boot/dts/at91sam9x35.dtsi b/arch/arm/boot/dts/at91sam9x35.dtsi
+index 0bfa21f18f87..eb03b0497e37 100644
+--- a/arch/arm/boot/dts/at91sam9x35.dtsi
++++ b/arch/arm/boot/dts/at91sam9x35.dtsi
+@@ -26,7 +26,7 @@ pinctrl@fffff400 {
+ 				      >;
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,at91sam9x35-pmc", "atmel,at91sam9x5-pmc", "syscon";
+ 			};
+ 		};
+diff --git a/arch/arm/boot/dts/at91sam9x5.dtsi b/arch/arm/boot/dts/at91sam9x5.dtsi
+index 0c26c925761b..af19ef2a875c 100644
+--- a/arch/arm/boot/dts/at91sam9x5.dtsi
++++ b/arch/arm/boot/dts/at91sam9x5.dtsi
+@@ -126,7 +126,7 @@ smc: smc@ffffea00 {
+ 				reg = <0xffffea00 0x200>;
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,at91sam9x5-pmc", "syscon";
+ 				reg = <0xfffffc00 0x200>;
+ 				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
+diff --git a/arch/arm/boot/dts/sam9x60.dtsi b/arch/arm/boot/dts/sam9x60.dtsi
+index 8f5477e307dd..6f5177df01bc 100644
+--- a/arch/arm/boot/dts/sam9x60.dtsi
++++ b/arch/arm/boot/dts/sam9x60.dtsi
+@@ -660,7 +660,7 @@ pioD: gpio@fffffa00 {
+ 				};
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "microchip,sam9x60-pmc", "syscon";
+ 				reg = <0xfffffc00 0x200>;
+ 				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
+diff --git a/arch/arm/boot/dts/sama5d2.dtsi b/arch/arm/boot/dts/sama5d2.dtsi
+index 14c35c12a115..86009dd28e62 100644
+--- a/arch/arm/boot/dts/sama5d2.dtsi
++++ b/arch/arm/boot/dts/sama5d2.dtsi
+@@ -284,7 +284,7 @@ dma1: dma-controller@f0004000 {
+ 				clock-names = "dma_clk";
+ 			};
+ 
+-			pmc: pmc@f0014000 {
++			pmc: clock-controller@f0014000 {
+ 				compatible = "atmel,sama5d2-pmc", "syscon";
+ 				reg = <0xf0014000 0x160>;
+ 				interrupts = <74 IRQ_TYPE_LEVEL_HIGH 7>;
+diff --git a/arch/arm/boot/dts/sama5d3.dtsi b/arch/arm/boot/dts/sama5d3.dtsi
+index bde8e92d60bb..4524a16322d1 100644
+--- a/arch/arm/boot/dts/sama5d3.dtsi
++++ b/arch/arm/boot/dts/sama5d3.dtsi
+@@ -1001,7 +1001,7 @@ pioE: gpio@fffffa00 {
+ 				};
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 				compatible = "atmel,sama5d3-pmc", "syscon";
+ 				reg = <0xfffffc00 0x120>;
+ 				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
+diff --git a/arch/arm/boot/dts/sama5d3_emac.dtsi b/arch/arm/boot/dts/sama5d3_emac.dtsi
+index 45226108850d..5d7ce13de8cc 100644
+--- a/arch/arm/boot/dts/sama5d3_emac.dtsi
++++ b/arch/arm/boot/dts/sama5d3_emac.dtsi
+@@ -30,7 +30,7 @@ AT91_PIOC 8 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PC8 periph A EMDC, conflicts with
+ 				};
+ 			};
+ 
+-			pmc: pmc@fffffc00 {
++			pmc: clock-controller@fffffc00 {
+ 			};
+ 
+ 			macb1: ethernet@f802c000 {
+diff --git a/arch/arm/boot/dts/sama5d4.dtsi b/arch/arm/boot/dts/sama5d4.dtsi
+index af62157ae214..e94f3a661f4b 100644
+--- a/arch/arm/boot/dts/sama5d4.dtsi
++++ b/arch/arm/boot/dts/sama5d4.dtsi
+@@ -250,7 +250,7 @@ dma0: dma-controller@f0014000 {
+ 				clock-names = "dma_clk";
+ 			};
+ 
+-			pmc: pmc@f0018000 {
++			pmc: clock-controller@f0018000 {
+ 				compatible = "atmel,sama5d4-pmc", "syscon";
+ 				reg = <0xf0018000 0x120>;
+ 				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
+diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
+index ab131762ecb5..f0478a43edc2 100644
+--- a/arch/arm/boot/dts/sama7g5.dtsi
++++ b/arch/arm/boot/dts/sama7g5.dtsi
+@@ -241,7 +241,7 @@ pioA: pinctrl@e0014000 {
+ 			clocks = <&pmc PMC_TYPE_PERIPHERAL 11>;
+ 		};
+ 
+-		pmc: pmc@e0018000 {
++		pmc: clock-controller@e0018000 {
+ 			compatible = "microchip,sama7g5-pmc", "syscon";
+ 			reg = <0xe0018000 0x200>;
+ 			interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 2.34.1
 
