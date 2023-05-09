@@ -2,97 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C356FBE01
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 05:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D5E6FBE0A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 05:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234704AbjEID6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 23:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+        id S234615AbjEID7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 23:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234615AbjEID5V (ORCPT
+        with ESMTP id S234700AbjEID6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 23:57:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173CADC64;
-        Mon,  8 May 2023 20:56:09 -0700 (PDT)
+        Mon, 8 May 2023 23:58:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DE3DDA0;
+        Mon,  8 May 2023 20:56:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20435643FA;
-        Tue,  9 May 2023 03:56:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AC25C433D2;
-        Tue,  9 May 2023 03:56:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABCE3643F9;
+        Tue,  9 May 2023 03:56:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2E03C433D2;
+        Tue,  9 May 2023 03:56:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683604567;
-        bh=3awfLUxgFh+sXJD7N4I6ldRMx6yhH/b34e6kdYaeaZ0=;
+        s=k20201202; t=1683604571;
+        bh=V+SRqTeOIQkCJr1YG3oqjich7N1hefNlgQc35gKG3p0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T98HpLJldDKAc2k7qnkJpCsfPw7I99V2b8S6RLRsqKKBncWoXikL1UY2u8de5Y750
-         oXLgahRCG74EoNNE+fZyRV7a0yLxvtiJ9kKrwy1yZ9mNXMBx3wykgm1WKEJ/xLmaKw
-         45kgpx2T1yv8j34KQQJR4FVzKgGt7dWugJzJlAc5x0GiHpT3IhrgO93Lmm5S+EEUi0
-         AFvK/SGFPb+h4kztOWhdbc2Wc8/GLa6YsQxT0Q+d/YMKycMCjKznqZPV9yRrr8JXrA
-         SCXPn3VBgHM+em4Ziw3fM+VTZgjpiGdKCT4G6z+Dvz9rT3v+BVe3WRpW4w/0TW7VbX
-         MGqYfGT8Cz36Q==
+        b=qzNhRAhIVuVwTXkaUBOSBl4Gcww732+ZSN3xnVFGfzIcD6GzrAlaxAHFC4r4GuZXy
+         tAoN0LYmDpSus+aqG3PRw6mnNEBjGY0dNsP9sJzqG+smxsc5Pw+C1FOnaBicYcQAv4
+         CvkTBloYzZL3RzLjIfivADpywfj319py9nylaQtDU/nN9JpqpA6a6rzrsjQrM/mf3R
+         hQLuZe9Ejejsr9zEpkS215xDA2tYWvR60XvIIe5RH2UBM+9VWhcUUB9tk+dVAxd71D
+         MusoFydmpnpumKOK6P93HTwZHX3F0tJuyTZMniqhTvJjxh7Ukwiv0hrVWn+rfeknJ6
+         iyzBTOTYwDQ3w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>,
-        andriy.shevchenko@linux.intel.com, linus.walleij@linaro.org,
-        arnd@arndb.de, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH AUTOSEL 5.10 2/3] powerpc/fsl_uli1575: Allow to disable FSL_ULI1575 support
-Date:   Mon,  8 May 2023 23:55:57 -0400
-Message-Id: <20230509035602.60613-2-sashal@kernel.org>
+Cc:     Hao Zeng <zenghao@kylinos.cn>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sasha Levin <sashal@kernel.org>, zhangqing@loongson.cn,
+        chenhuacai@kernel.org
+Subject: [PATCH AUTOSEL 5.10 3/3] recordmcount: Fix memory leaks in the uwrite function
+Date:   Mon,  8 May 2023 23:55:58 -0400
+Message-Id: <20230509035602.60613-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230509035602.60613-1-sashal@kernel.org>
 References: <20230509035602.60613-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Hao Zeng <zenghao@kylinos.cn>
 
-[ Upstream commit 22fdf79171e8509db54599fd2c05ef0022ee83f5 ]
+[ Upstream commit fa359d068574d29e7d2f0fdd0ebe4c6a12b5cfb9 ]
 
-ULI1575 PCIe south bridge exists only on some Freescale boards. Allow to
-disable CONFIG_FSL_ULI1575 symbol when it is not explicitly selected and
-only implied. This is achieved by marking symbol as visible by providing
-short description. Also adds dependency for this symbol to prevent enabling
-it on platforms on which driver does not compile.
+Common realloc mistake: 'file_append' nulled but not freed upon failure
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://msgid.link/20230409000812.18904-7-pali@kernel.org
+Link: https://lkml.kernel.org/r/20230426010527.703093-1-zenghao@kylinos.cn
+
+Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/Kconfig | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ scripts/recordmcount.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/platforms/Kconfig b/arch/powerpc/platforms/Kconfig
-index 7a5e8f4541e3f..6fb71f00a3ea3 100644
---- a/arch/powerpc/platforms/Kconfig
-+++ b/arch/powerpc/platforms/Kconfig
-@@ -258,7 +258,9 @@ config CPM2
- 	  on it (826x, 827x, 8560).
+diff --git a/scripts/recordmcount.c b/scripts/recordmcount.c
+index cce12e1971d85..ec692af8ce9eb 100644
+--- a/scripts/recordmcount.c
++++ b/scripts/recordmcount.c
+@@ -102,6 +102,7 @@ static ssize_t uwrite(void const *const buf, size_t const count)
+ {
+ 	size_t cnt = count;
+ 	off_t idx = 0;
++	void *p = NULL;
  
- config FSL_ULI1575
--	bool
-+	bool "ULI1575 PCIe south bridge support"
-+	depends on FSL_SOC_BOOKE || PPC_86xx
-+	select FSL_PCI
- 	select GENERIC_ISA_DMA
- 	help
- 	  Supports for the ULI1575 PCIe south bridge that exists on some
+ 	file_updated = 1;
+ 
+@@ -109,7 +110,10 @@ static ssize_t uwrite(void const *const buf, size_t const count)
+ 		off_t aoffset = (file_ptr + count) - file_end;
+ 
+ 		if (aoffset > file_append_size) {
+-			file_append = realloc(file_append, aoffset);
++			p = realloc(file_append, aoffset);
++			if (!p)
++				free(file_append);
++			file_append = p;
+ 			file_append_size = aoffset;
+ 		}
+ 		if (!file_append) {
 -- 
 2.39.2
 
