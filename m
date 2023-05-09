@@ -2,78 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978B26FC2D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6590E6FC2D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235226AbjEIJcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 05:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
+        id S234967AbjEIJcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 05:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235116AbjEIJcL (ORCPT
+        with ESMTP id S235072AbjEIJcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 05:32:11 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E02B10E4D
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:31:43 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3499UnYr071952;
-        Tue, 9 May 2023 04:30:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683624649;
-        bh=8taID+G2ciET/Nm9QcwqHumVXPYzXyNQltrMDx3JFjM=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=OF/vjnq7ceWTczsxkvLENm3rXiH5BJxSdC0KWZ5i5QhOseUq4rpI+Cq/4+Z8VEQc+
-         RZq0JyGp0Z5DMJxuVtlAzTQxInh2wvQtovKT5n6hnvad3Lld5Yc51kCRTFIi7/DaLP
-         rrmaSZ24MNc1UL6CE07VaVAQxIo6faqCub5ZTGzQ=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3499UnAU022512
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 9 May 2023 04:30:49 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
- May 2023 04:30:48 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 9 May 2023 04:30:48 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3499UmeV020547;
-        Tue, 9 May 2023 04:30:48 -0500
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-To:     Tomi Valkeinen <tomba@kernel.org>, Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Francesco Dolcini <francesco@dolcini.it>
-CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        Aradhya Bhatia <a-bhatia1@ti.com>
-Subject: [PATCH v6 8/8] drm/bridge: cdns-mhdp8546: Fix the interrupt enable/disable
-Date:   Tue, 9 May 2023 15:00:36 +0530
-Message-ID: <20230509093036.3303-9-a-bhatia1@ti.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230509093036.3303-1-a-bhatia1@ti.com>
-References: <20230509093036.3303-1-a-bhatia1@ti.com>
+        Tue, 9 May 2023 05:32:17 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9CF3ABA
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:31:52 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bcae898b2so10220036a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 02:31:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683624710; x=1686216710;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vpyp88z1I8Iz4ssWAYip/S0rI/Ti+jaoje7zei8uE0k=;
+        b=w2MZ5vCArdyktuy2hjMHXft05Usx1sHDcYiI1RsW7Wz897G24kUaMx9PinBx6jt7ed
+         ZQFoosOVY9dbjgfW1IczKthuPsry4YxdL3ZQj/6pY4k4ivQzFnHYnHtav9YmonLIbHDB
+         +EikZ6wi21w/i2kpCCkdCBq71YYB9NEjgJf5+QLdmKHdXCDOFjRv/VwildiLkzOXEsa2
+         1bdwn1+RkQM20+Zj9eh+tk1AtMKiyXmklD0MNDodXPMNSDBUv59b0ESDk7dOkyBwWt0K
+         Kgz1z9exFiyjJdyocwKvVzWUSXGMyaHB8dVNBXX5IVDw3rKsxJ1udWSHmR0Lwy6nlaGy
+         Wu9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683624710; x=1686216710;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vpyp88z1I8Iz4ssWAYip/S0rI/Ti+jaoje7zei8uE0k=;
+        b=bl+ici8bpERi33excqmoIzCG2Me/yzF5rURwJJJdL1+/p5W8ovfFEzeOlRdoJL9UlK
+         7TmOFkeYwreDEXVJL4FuTQJsSJPGaCupcIXUXNyMt0XIgQyUVQa3B1hw3lu9oX8s0g1G
+         bjRlXSjmgti0hQPNfxZ4Udmp/Z694Za+I7eiEtQ3I48/dqve6VIHVqtxz/7jTgBTPVrX
+         2xVUJ9nS90o2aqvlYbDb/WKx4J2OGRWeo8mvqNJGVmLI0NvO6fGJFzcXniaJn10NYFn3
+         LmQ0WGk4icKy0jeoBgQBPGLsnPZP2ttcfUtfzIkV4oAdRpW1j6xK714qiwSa/D0AeeWi
+         AVEQ==
+X-Gm-Message-State: AC+VfDxpVAH7B25aaZ3l04Ja67FIeD6zrFBM8lS4caVhjuCfI7guzTkh
+        O5eNgoclEIBgZsjhl8Khxaakeg==
+X-Google-Smtp-Source: ACHHUZ6mCIa39pUXuz8D/0qQR2zNJvZGwC/puYhg9AlXx1N2/XCQevUQkURPunSUG89h+u9MUt6UZg==
+X-Received: by 2002:a17:907:789:b0:965:fd71:f1d6 with SMTP id xd9-20020a170907078900b00965fd71f1d6mr9735379ejb.16.1683624710550;
+        Tue, 09 May 2023 02:31:50 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
+        by smtp.gmail.com with ESMTPSA id ci18-20020a170907267200b00959c6cb82basm1081708ejc.105.2023.05.09.02.31.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 02:31:49 -0700 (PDT)
+Message-ID: <2880d5bb-61ce-a4d7-f870-b5549a5d88f2@linaro.org>
+Date:   Tue, 9 May 2023 11:31:48 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [EXTERNAL] Re: [PATCH] arm64: defconfig: enable PCIe controller
+ on TI platforms
+Content-Language: en-US
+To:     "Verma, Achal" <a-verma1@ti.com>, Arnd Bergmann <arnd@arndb.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Nishanth Menon <nm@ti.com>, Milind Parab <mparab@cadence.com>,
+        Swapnil Kashinath Jakhade <sjakhade@cadence.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230509063431.1203367-1-a-verma1@ti.com>
+ <46b0dbd4-5695-1a2d-8d06-0a60a7c3a151@linaro.org>
+ <de6432db-0da0-b535-1f44-04541116be8b@ti.com>
+ <63dc3d1b-ba17-48ee-a02e-83b2903e360a@app.fastmail.com>
+ <b48613f5-9442-5a41-34fb-760d9edf3682@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b48613f5-9442-5a41-34fb-760d9edf3682@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,118 +90,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikhil Devshatwar <nikhil.nd@ti.com>
+On 09/05/2023 11:19, Verma, Achal wrote:
+> 
+> Hello,
+> On 5/9/2023 1:58 PM, Arnd Bergmann wrote:
+>> On Tue, May 9, 2023, at 10:08, Vignesh Raghavendra wrote:
+>>
+>>> Also, see [0] for history. We really want these to be
+>>> modules unless its necessary for bootup.
+>>>
+>>> You may want to revive [1] and get it to mainline
+>>>
+>>> [0]
+>>> https://lore.kernel.org/linux-arm-kernel/CAK8P3a2VSBvOn1o+q1PYZaQ6LS9U4cz+DZGuDbisHkwNs2dAAw@mail.gmail.com/
+>>> [1]
+>>> https://lore.kernel.org/linux-arm-kernel/20230110153805.GA1505901@bhelgaas/
+>>
+>> Agreed, that seems simple enough. Ideally these should even
+>> be removable modules, not just single-load but unremovable.
+>>
+>> Doing that may require changes to the cadence PCIe host
+>> code if that does not support unloading yet (I have not
+>> checked), but should not require any changes to the core
+>> PCIe host code that supports loadable/removable modules.
+>>
+>>       Arnd
+> So, my understanding is that following change is expected
+> +CONFIG_PCIE_CADENCE=m
+> +CONFIG_PCIE_CADENCE_HOST=m
+> +CONFIG_PCIE_CADENCE_EP=m
+> +CONFIG_PCI_J721E=m
+> +CONFIG_PCI_J721E_HOST=m
+> +CONFIG_PCI_J721E_EP=m
+> +CONFIG_PCI_EPF_NTB=m
+> 
+> I also want to inform that pci_j721e.c is a single file with both host 
+> and EP functionality, last attempt to build it as modules depending on 
+> host or EP selected failed because of symbols dependency.
+> Refactoring of pci_j721e.c into common, host and EP specific files could 
+> work similar to the Cadence driver, So I will follow this way and push 
+> the changes.
+> 
+> Please let me know if there are concerns.
 
-When removing the tidss driver, there is a warning reported by
-kernel about an unhandled interrupt for mhdp driver.
+Aren't HOST and EP just customizing main module?
 
-[   43.238895] irq 31: nobody cared (try booting with the "irqpoll" option)
-... [snipped backtrace]
-[   43.330735] handlers:
-[   43.333020] [<000000005367c4f9>] irq_default_primary_handler threaded [<000000007e02b601>]
-cdns_mhdp_irq_handler [cdns_mhdp8546]
-[   43.344607] Disabling IRQ #31
-
-This happens because as part of cdns_mhdp_bridge_hpd_disable, driver tries
-to disable the interrupts. While disabling the SW_EVENT interrupts,
-it accidentally enables the MBOX interrupts, which are not handled by
-the driver.
-
-Fix this with a read-modify-write to update only required bits.
-Use the enable / disable function as required in other places.
-
-Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
-Reviewed-by: Swapnil Jakhade <sjakhade@cadence.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
----
-
-Notes:
-    changes from v2:
-    * Fix the interrupt enable logic at other places in code
-    * Reorder functions so that they can be used earlier in the program
-
-    changes from v5:
-    * Manual rebase to linux-next.
-
- .../drm/bridge/cadence/cdns-mhdp8546-core.c   | 44 +++++++++----------
- 1 file changed, 22 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
-index a677b1267525..66a771b140bc 100644
---- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
-@@ -54,6 +54,26 @@
- #include "cdns-mhdp8546-hdcp.h"
- #include "cdns-mhdp8546-j721e.h"
- 
-+static void cdns_mhdp_bridge_hpd_enable(struct drm_bridge *bridge)
-+{
-+	struct cdns_mhdp_device *mhdp = bridge_to_mhdp(bridge);
-+
-+	/* Enable SW event interrupts */
-+	if (mhdp->bridge_attached)
-+		writel(readl(mhdp->regs + CDNS_APB_INT_MASK) &
-+		       ~CDNS_APB_INT_MASK_SW_EVENT_INT,
-+		       mhdp->regs + CDNS_APB_INT_MASK);
-+}
-+
-+static void cdns_mhdp_bridge_hpd_disable(struct drm_bridge *bridge)
-+{
-+	struct cdns_mhdp_device *mhdp = bridge_to_mhdp(bridge);
-+
-+	writel(readl(mhdp->regs + CDNS_APB_INT_MASK) |
-+	       CDNS_APB_INT_MASK_SW_EVENT_INT,
-+	       mhdp->regs + CDNS_APB_INT_MASK);
-+}
-+
- static int cdns_mhdp_mailbox_read(struct cdns_mhdp_device *mhdp)
- {
- 	int ret, empty;
-@@ -749,9 +769,7 @@ static int cdns_mhdp_fw_activate(const struct firmware *fw,
- 	 * MHDP_HW_STOPPED happens only due to driver removal when
- 	 * bridge should already be detached.
- 	 */
--	if (mhdp->bridge_attached)
--		writel(~(u32)CDNS_APB_INT_MASK_SW_EVENT_INT,
--		       mhdp->regs + CDNS_APB_INT_MASK);
-+	cdns_mhdp_bridge_hpd_enable(&mhdp->bridge);
- 
- 	spin_unlock(&mhdp->start_lock);
- 
-@@ -1740,8 +1758,7 @@ static int cdns_mhdp_attach(struct drm_bridge *bridge,
- 
- 	/* Enable SW event interrupts */
- 	if (hw_ready)
--		writel(~(u32)CDNS_APB_INT_MASK_SW_EVENT_INT,
--		       mhdp->regs + CDNS_APB_INT_MASK);
-+		cdns_mhdp_bridge_hpd_enable(bridge);
- 
- 	return 0;
- aux_unregister:
-@@ -2215,23 +2232,6 @@ static struct edid *cdns_mhdp_bridge_get_edid(struct drm_bridge *bridge,
- 	return cdns_mhdp_get_edid(mhdp, connector);
- }
- 
--static void cdns_mhdp_bridge_hpd_enable(struct drm_bridge *bridge)
--{
--	struct cdns_mhdp_device *mhdp = bridge_to_mhdp(bridge);
--
--	/* Enable SW event interrupts */
--	if (mhdp->bridge_attached)
--		writel(~(u32)CDNS_APB_INT_MASK_SW_EVENT_INT,
--		       mhdp->regs + CDNS_APB_INT_MASK);
--}
--
--static void cdns_mhdp_bridge_hpd_disable(struct drm_bridge *bridge)
--{
--	struct cdns_mhdp_device *mhdp = bridge_to_mhdp(bridge);
--
--	writel(CDNS_APB_INT_MASK_SW_EVENT_INT, mhdp->regs + CDNS_APB_INT_MASK);
--}
--
- static const struct drm_bridge_funcs cdns_mhdp_bridge_funcs = {
- 	.atomic_enable = cdns_mhdp_atomic_enable,
- 	.atomic_disable = cdns_mhdp_atomic_disable,
--- 
-2.40.1
+Best regards,
+Krzysztof
 
