@@ -2,107 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889CE6FC9FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358E66FCA08
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236065AbjEIPNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 11:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
+        id S235651AbjEIPRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 11:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235664AbjEIPNr (ORCPT
+        with ESMTP id S235086AbjEIPRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 11:13:47 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FED44AC;
-        Tue,  9 May 2023 08:13:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683645224; x=1715181224;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=sDIaRhN9LwUxhy8X7r7FslkiOl4KGP7DqZP3VkptV7U=;
-  b=D17WbPDl5viGwTJ0ndZm1m8n/00/GDY/YOaf9cP0tHtlDqiDT8tOIUvN
-   QnCmvn4cnh7n6uSlNV0hM+9/n5Df8DOBewYMBwykoC0KtWb9xplLVbi13
-   s9N3dMp3mTDFvMKnajyOZYQ0j7kCYvOTj5xWqtf5uxCJGGCgxC0mbuoeQ
-   vJ/3Dl8LSTxtpskHlPzVgElXYpdPCszrcvT49E/gQt0k7tDMaU4sZVX5Q
-   22zwuo7WEYOPOIT31llPlde9g4lV7ypwpiG9pz4wqG4/llXlu9+hlYHWx
-   gVMESM1AdHb+Ct7ADkHfL2lwYl0QYAX9vOHGHCmdl4jdZh23/zNNrLgz/
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="329580623"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="329580623"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 08:13:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="873220589"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="873220589"
-Received: from dcovax-mobl.amr.corp.intel.com (HELO [10.212.97.226]) ([10.212.97.226])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 08:13:43 -0700
-Message-ID: <a33ff0bb-28c8-0bdf-4367-8354a9e1af9d@intel.com>
-Date:   Tue, 9 May 2023 08:13:42 -0700
+        Tue, 9 May 2023 11:17:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F6244B8
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 08:16:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683645388;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MDzfBWP3pjVUkb9AGu0G6Wtedp0sdaxtshvvGxbi+yI=;
+        b=d4+Wvw7gobaYLaEUe2M5ESAgrHIMegal3MPanZ5AqyxYnte/BB/8RlThjNujAqN6ryRnCt
+        5woskZBR0C/nlfik5nQzdwODIXPiFKi6pvTBWT2kt/4IEuRJjVd/M8zZrO/VSdIhSOu3c8
+        ReTb+gUnCkXwYhJAhfXr/+BWvrSScgA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-260-r1aQFDHuN0SFkV1Y2ICV-Q-1; Tue, 09 May 2023 11:16:26 -0400
+X-MC-Unique: r1aQFDHuN0SFkV1Y2ICV-Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80FD1895689;
+        Tue,  9 May 2023 15:16:25 +0000 (UTC)
+Received: from [192.168.37.1] (unknown [10.22.50.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9F243C15BA0;
+        Tue,  9 May 2023 15:16:24 +0000 (UTC)
+From:   Benjamin Coddington <bcodding@redhat.com>
+To:     Chengen Du <chengen.du@canonical.com>
+Cc:     trond.myklebust@hammerspace.com, anna@kernel.org,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] NFS: Add mount option 'nofasc'
+Date:   Tue, 09 May 2023 11:16:23 -0400
+Message-ID: <B9E03B97-F67C-48FC-B5EE-5B02E288C227@redhat.com>
+In-Reply-To: <CAPza5qee7vHKwjwhS27xB8xXTgAFHEmv7eiFk6zGTUUc4s8=TQ@mail.gmail.com>
+References: <20230411030248.53356-1-chengen.du@canonical.com>
+ <CAPt2mGNqqDeRMeCSVh6oX_=nS0UcGCfhBfVcuaVG9HpdwVSzVg@mail.gmail.com>
+ <CAPza5qee7vHKwjwhS27xB8xXTgAFHEmv7eiFk6zGTUUc4s8=TQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH] dmaengine: idxd: Fix passing freed memory in
- idxd_cdev_open()
-Content-Language: en-US
-To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     error27@gmail.com, kernel-janitors@vger.kernel.org,
-        dan.carpenter@linaro.org, Fenghua Yu <fenghua.yu@intel.com>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230509060716.2830630-1-harshit.m.mogalapalli@oracle.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230509060716.2830630-1-harshit.m.mogalapalli@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 24 Apr 2023, at 21:41, Chengen Du wrote:
 
+> Hi,
+>
+> May I ask if there are any concerns or opinions regarding the
+> introduction of the new mount option?
+> If there is a more suitable solution, we can discuss it, and I can
+> work on implementing it.
 
-On 5/8/23 11:07 PM, Harshit Mogalapalli wrote:
-> Smatch warns:
-> 	drivers/dma/idxd/cdev.c:327:
-> 		idxd_cdev_open() warn: 'sva' was already freed.
-> 
-> When idxd_wq_set_pasid() fails, the current code unbinds sva and then
-> goes to 'failed_set_pasid' where iommu_sva_unbind_device is called
-> again causing the above warning.
-> [ device_user_pasid_enabled(idxd) is still true when calling
-> failed_set_pasid ]
-> 
-> Fix this by removing additional unbind when idxd_wq_set_pasid() fails
-> 
-> Fixes: b022f59725f0 ("dmaengine: idxd: add idxd_copy_cr() to copy user completion record during page fault handling")
-> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+I suspect there's some weariness of mount options, we have a lot of them and
+they are not easily removed once implemented.  Additionally, requests to add
+them usually can show the appropriate changes to the nfs-utils mount.nfs and
+man pages required.  Incompleteness here may be the reason you're not
+hearing back from a maintainer.
 
-Acked-by: Dave Jiang <dave.jiang@intel.com>
+However, without guidance from a maintainer, you might end up doing extra
+work trying to meet unclear standards.
 
-Thank you!
-> ---
-> This is purely based on static analysis. Only compile tested.
-> ---
->   drivers/dma/idxd/cdev.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/dma/idxd/cdev.c b/drivers/dma/idxd/cdev.c
-> index ecbf67c2ad2b..d32deb9b4e3d 100644
-> --- a/drivers/dma/idxd/cdev.c
-> +++ b/drivers/dma/idxd/cdev.c
-> @@ -277,7 +277,6 @@ static int idxd_cdev_open(struct inode *inode, struct file *filp)
->   		if (wq_dedicated(wq)) {
->   			rc = idxd_wq_set_pasid(wq, pasid);
->   			if (rc < 0) {
-> -				iommu_sva_unbind_device(sva);
->   				dev_err(dev, "wq set pasid failed: %d\n", rc);
->   				goto failed_set_pasid;
->   			}
+There's a couple of other ways to address the access cache performance
+"degradation" that was introduced by the changes that other folks
+desperately needed for correctness.
+
+We can change nfs_access_login_time to have a module parameter modifying
+the behavior.  The downside is this would affect every mount.
+
+We can grow a sysfs knob to change the behavior.  Downside is we only have
+very preliminary sysfs scaffolding as of yet.
+
+However, if you want to keep pushing for the mount option, I'd suggest doing
+a v2 with the userspace patches, and if that gets ignored then do a "PATCH
+RESEND" on that a month or so before each mainline merge window.
+
+I've found that bump-replying to old patches isn't as effective at getting
+work merged here.  I believe the maintainers want to see that you're
+rebasing as mainline progresses, and you have active ownership over the work
+to fix bugs that may follow or address other fallout from the community.
+
+Ben
+
