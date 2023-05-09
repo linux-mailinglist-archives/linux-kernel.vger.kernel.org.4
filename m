@@ -2,103 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050BC6FD152
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDC66FD15A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236316AbjEIVY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 17:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
+        id S236238AbjEIVZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 17:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236218AbjEIVY3 (ORCPT
+        with ESMTP id S236111AbjEIVYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 17:24:29 -0400
+        Tue, 9 May 2023 17:24:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6797DB3;
-        Tue,  9 May 2023 14:21:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59705A248;
+        Tue,  9 May 2023 14:22:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E08E763724;
-        Tue,  9 May 2023 21:20:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC24DC433EF;
-        Tue,  9 May 2023 21:20:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37DA363725;
+        Tue,  9 May 2023 21:21:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20298C4339C;
+        Tue,  9 May 2023 21:21:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683667255;
-        bh=4knAG3RUm6soJKDwALrqcaCFg+q9W4kn1/iRmmyAGQ0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Baq3phak4Vn55erawpMcn2EnMot/Dn7mBRK7/oAi1hqbluXJyqFSmuABNOwuxBJrX
-         DoY9FVwwssi7jNfSr8mDnewcujRWwHCACKHtqEGKryOd3hS4ceK+hYTj0dmWHi0aeo
-         vG8hHY91GaXX97gSwR/muGriTzMtPvItLiRooA/1M8DwD/lO0degtA3FtrDi2mzKF2
-         62h94YklSmccY6GpHOkMlHFwa2QSapiHg0KL1Fyyh9eeH8RBlDVDl1ImMZhY+jpJY9
-         RjMEm7PyySSATEy31HCl2LKVWiVcIkXeL/rkwyqFcFFX49vUH8bmVRdSr+Gadwg7gb
-         BDMCOLQaQeMgA==
+        s=k20201202; t=1683667261;
+        bh=w3idX9v5XOeQ50vgBlbR+ZAhP3EpnQKSofC3XOe3QHE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RQfqdy2+9YZ0o0vWKlvNh73jeAtOb5K4Aj2g7ThXJ2nOQLcbqIQdRPkq5RBup/LVZ
+         WkCNnuc2UuAqhlBRnfHLwJAzAqQ16n3opXZvOTrG9dLzsr1qfhuPX7mBuRtVrOUM+Q
+         JYJBwSGOn725j+NMCTCVLPua8z9HScmlF/9RkmGgQNeZ8XEoKRgJwsNLxLQIuUvK3t
+         tToDim3xnLrLDF+TBQIfb6E5hZQruaY4lyW7MAa/h7VlAKP89EUwxnXJQrv4BtZ9ew
+         2oPm9W9kMkNt3unKgNb7BBj7aQShUjTScMeEwCbBGcbTp5i8YKxm37X33OskZteD+w
+         csDcd6nFjoL/A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vicki Pfau <vi@endrift.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, rojtberg@gmail.com,
-        nate@yocom.org, mkorpershoek@baylibre.com,
-        pgriffais@valvesoftware.com, chaorace@gmail.com,
-        s.demassari@gmail.com, linux-input@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 5/5] Input: xpad - add constants for GIP interface numbers
-Date:   Tue,  9 May 2023 17:20:41 -0400
-Message-Id: <20230509212044.22294-5-sashal@kernel.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, nathan@kernel.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        mcgrof@kernel.org, linux-rdma@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.4 1/4] RDMA/core: Fix multiple -Warray-bounds warnings
+Date:   Tue,  9 May 2023 17:20:53 -0400
+Message-Id: <20230509212058.22651-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230509212044.22294-1-sashal@kernel.org>
-References: <20230509212044.22294-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vicki Pfau <vi@endrift.com>
+From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 
-[ Upstream commit f9b2e603c6216824e34dc9a67205d98ccc9a41ca ]
+[ Upstream commit aa4d540b4150052ae3b36d286b9c833a961ce291 ]
 
-Wired GIP devices present multiple interfaces with the same USB identification
-other than the interface number. This adds constants for differentiating two of
-them and uses them where appropriate
+GCC-13 (and Clang)[1] does not like to access a partially allocated
+object, since it cannot reason about it for bounds checking.
 
-Signed-off-by: Vicki Pfau <vi@endrift.com>
-Link: https://lore.kernel.org/r/20230411031650.960322-2-vi@endrift.com
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+In this case 140 bytes are allocated for an object of type struct
+ib_umad_packet:
+
+        packet = kzalloc(sizeof(*packet) + IB_MGMT_RMPP_HDR, GFP_KERNEL);
+
+However, notice that sizeof(*packet) is only 104 bytes:
+
+struct ib_umad_packet {
+        struct ib_mad_send_buf *   msg;                  /*     0     8 */
+        struct ib_mad_recv_wc *    recv_wc;              /*     8     8 */
+        struct list_head           list;                 /*    16    16 */
+        int                        length;               /*    32     4 */
+
+        /* XXX 4 bytes hole, try to pack */
+
+        struct ib_user_mad         mad __attribute__((__aligned__(8))); /*    40    64 */
+
+        /* size: 104, cachelines: 2, members: 5 */
+        /* sum members: 100, holes: 1, sum holes: 4 */
+        /* forced alignments: 1, forced holes: 1, sum forced holes: 4 */
+        /* last cacheline: 40 bytes */
+} __attribute__((__aligned__(8)));
+
+and 36 bytes extra bytes are allocated for a flexible-array member in
+struct ib_user_mad:
+
+include/rdma/ib_mad.h:
+120 enum {
+...
+123         IB_MGMT_RMPP_HDR = 36,
+... }
+
+struct ib_user_mad {
+        struct ib_user_mad_hdr     hdr;                  /*     0    64 */
+        /* --- cacheline 1 boundary (64 bytes) --- */
+        __u64                      data[] __attribute__((__aligned__(8))); /*    64     0 */
+
+        /* size: 64, cachelines: 1, members: 2 */
+        /* forced alignments: 1 */
+} __attribute__((__aligned__(8)));
+
+So we have sizeof(*packet) + IB_MGMT_RMPP_HDR == 140 bytes
+
+Then the address of the flex-array member (for which only 36 bytes were
+allocated) is casted and copied into a pointer to struct ib_rmpp_mad,
+which, in turn, is of size 256 bytes:
+
+        rmpp_mad = (struct ib_rmpp_mad *) packet->mad.data;
+
+struct ib_rmpp_mad {
+        struct ib_mad_hdr          mad_hdr;              /*     0    24 */
+        struct ib_rmpp_hdr         rmpp_hdr;             /*    24    12 */
+        u8                         data[220];            /*    36   220 */
+
+        /* size: 256, cachelines: 4, members: 3 */
+};
+
+The thing is that those 36 bytes allocated for flex-array member data
+in struct ib_user_mad onlly account for the size of both struct ib_mad_hdr
+and struct ib_rmpp_hdr, but nothing is left for array u8 data[220].
+So, the compiler is legitimately complaining about accessing an object
+for which not enough memory was allocated.
+
+Apparently, the only members of struct ib_rmpp_mad that are relevant
+(that are actually being used) in function ib_umad_write() are mad_hdr
+and rmpp_hdr. So, instead of casting packet->mad.data to
+(struct ib_rmpp_mad *) create a new structure
+
+struct ib_rmpp_mad_hdr {
+        struct ib_mad_hdr       mad_hdr;
+        struct ib_rmpp_hdr      rmpp_hdr;
+} __packed;
+
+and cast packet->mad.data to (struct ib_rmpp_mad_hdr *).
+
+Notice that
+
+        IB_MGMT_RMPP_HDR == sizeof(struct ib_rmpp_mad_hdr) == 36 bytes
+
+Refactor the rest of the code, accordingly.
+
+Fix the following warnings seen under GCC-13 and -Warray-bounds:
+drivers/infiniband/core/user_mad.c:564:50: warning: array subscript ‘struct ib_rmpp_mad[0]’ is partly outside array bounds of ‘unsigned char[140]’ [-Warray-bounds=]
+drivers/infiniband/core/user_mad.c:566:42: warning: array subscript ‘struct ib_rmpp_mad[0]’ is partly outside array bounds of ‘unsigned char[140]’ [-Warray-bounds=]
+drivers/infiniband/core/user_mad.c:618:25: warning: array subscript ‘struct ib_rmpp_mad[0]’ is partly outside array bounds of ‘unsigned char[140]’ [-Warray-bounds=]
+drivers/infiniband/core/user_mad.c:622:44: warning: array subscript ‘struct ib_rmpp_mad[0]’ is partly outside array bounds of ‘unsigned char[140]’ [-Warray-bounds=]
+
+Link: https://github.com/KSPP/linux/issues/273
+Link: https://godbolt.org/z/oYWaGM4Yb [1]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Link: https://lore.kernel.org/r/ZBpB91qQcB10m3Fw@work
+Signed-off-by: Leon Romanovsky <leon@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/input/joystick/xpad.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/infiniband/core/user_mad.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/input/joystick/xpad.c b/drivers/input/joystick/xpad.c
-index 70dedc0f7827c..0bd55e1fca372 100644
---- a/drivers/input/joystick/xpad.c
-+++ b/drivers/input/joystick/xpad.c
-@@ -489,6 +489,9 @@ struct xboxone_init_packet {
- 	}
+diff --git a/drivers/infiniband/core/user_mad.c b/drivers/infiniband/core/user_mad.c
+index ad3a092b8b5c3..390123f87658b 100644
+--- a/drivers/infiniband/core/user_mad.c
++++ b/drivers/infiniband/core/user_mad.c
+@@ -131,6 +131,11 @@ struct ib_umad_packet {
+ 	struct ib_user_mad mad;
+ };
  
- 
-+#define GIP_WIRED_INTF_DATA 0
-+#define GIP_WIRED_INTF_AUDIO 1
++struct ib_rmpp_mad_hdr {
++	struct ib_mad_hdr	mad_hdr;
++	struct ib_rmpp_hdr      rmpp_hdr;
++} __packed;
 +
- /*
-  * This packet is required for all Xbox One pads with 2015
-  * or later firmware installed (or present from the factory).
-@@ -1813,7 +1816,7 @@ static int xpad_probe(struct usb_interface *intf, const struct usb_device_id *id
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/ib_umad.h>
+ 
+@@ -494,11 +499,11 @@ static ssize_t ib_umad_write(struct file *filp, const char __user *buf,
+ 			     size_t count, loff_t *pos)
+ {
+ 	struct ib_umad_file *file = filp->private_data;
++	struct ib_rmpp_mad_hdr *rmpp_mad_hdr;
+ 	struct ib_umad_packet *packet;
+ 	struct ib_mad_agent *agent;
+ 	struct rdma_ah_attr ah_attr;
+ 	struct ib_ah *ah;
+-	struct ib_rmpp_mad *rmpp_mad;
+ 	__be64 *tid;
+ 	int ret, data_len, hdr_len, copy_offset, rmpp_active;
+ 	u8 base_version;
+@@ -506,7 +511,7 @@ static ssize_t ib_umad_write(struct file *filp, const char __user *buf,
+ 	if (count < hdr_size(file) + IB_MGMT_RMPP_HDR)
+ 		return -EINVAL;
+ 
+-	packet = kzalloc(sizeof *packet + IB_MGMT_RMPP_HDR, GFP_KERNEL);
++	packet = kzalloc(sizeof(*packet) + IB_MGMT_RMPP_HDR, GFP_KERNEL);
+ 	if (!packet)
+ 		return -ENOMEM;
+ 
+@@ -560,13 +565,13 @@ static ssize_t ib_umad_write(struct file *filp, const char __user *buf,
+ 		goto err_up;
  	}
  
- 	if (xpad->xtype == XTYPE_XBOXONE &&
--	    intf->cur_altsetting->desc.bInterfaceNumber != 0) {
-+	    intf->cur_altsetting->desc.bInterfaceNumber != GIP_WIRED_INTF_DATA) {
- 		/*
- 		 * The Xbox One controller lists three interfaces all with the
- 		 * same interface class, subclass and protocol. Differentiate by
+-	rmpp_mad = (struct ib_rmpp_mad *) packet->mad.data;
+-	hdr_len = ib_get_mad_data_offset(rmpp_mad->mad_hdr.mgmt_class);
++	rmpp_mad_hdr = (struct ib_rmpp_mad_hdr *)packet->mad.data;
++	hdr_len = ib_get_mad_data_offset(rmpp_mad_hdr->mad_hdr.mgmt_class);
+ 
+-	if (ib_is_mad_class_rmpp(rmpp_mad->mad_hdr.mgmt_class)
++	if (ib_is_mad_class_rmpp(rmpp_mad_hdr->mad_hdr.mgmt_class)
+ 	    && ib_mad_kernel_rmpp_agent(agent)) {
+ 		copy_offset = IB_MGMT_RMPP_HDR;
+-		rmpp_active = ib_get_rmpp_flags(&rmpp_mad->rmpp_hdr) &
++		rmpp_active = ib_get_rmpp_flags(&rmpp_mad_hdr->rmpp_hdr) &
+ 						IB_MGMT_RMPP_FLAG_ACTIVE;
+ 	} else {
+ 		copy_offset = IB_MGMT_MAD_HDR;
+@@ -615,12 +620,12 @@ static ssize_t ib_umad_write(struct file *filp, const char __user *buf,
+ 		tid = &((struct ib_mad_hdr *) packet->msg->mad)->tid;
+ 		*tid = cpu_to_be64(((u64) agent->hi_tid) << 32 |
+ 				   (be64_to_cpup(tid) & 0xffffffff));
+-		rmpp_mad->mad_hdr.tid = *tid;
++		rmpp_mad_hdr->mad_hdr.tid = *tid;
+ 	}
+ 
+ 	if (!ib_mad_kernel_rmpp_agent(agent)
+-	   && ib_is_mad_class_rmpp(rmpp_mad->mad_hdr.mgmt_class)
+-	   && (ib_get_rmpp_flags(&rmpp_mad->rmpp_hdr) & IB_MGMT_RMPP_FLAG_ACTIVE)) {
++	    && ib_is_mad_class_rmpp(rmpp_mad_hdr->mad_hdr.mgmt_class)
++	    && (ib_get_rmpp_flags(&rmpp_mad_hdr->rmpp_hdr) & IB_MGMT_RMPP_FLAG_ACTIVE)) {
+ 		spin_lock_irq(&file->send_lock);
+ 		list_add_tail(&packet->list, &file->send_list);
+ 		spin_unlock_irq(&file->send_lock);
 -- 
 2.39.2
 
