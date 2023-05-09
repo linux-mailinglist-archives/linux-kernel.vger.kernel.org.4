@@ -2,77 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5179F6FBC47
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 03:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B176FBC5F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 03:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjEIBEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 21:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
+        id S233450AbjEIBJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 21:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjEIBEp (ORCPT
+        with ESMTP id S233293AbjEIBJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 21:04:45 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9862700;
-        Mon,  8 May 2023 18:04:44 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64115eef620so38718198b3a.1;
-        Mon, 08 May 2023 18:04:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683594283; x=1686186283;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A/eeFC8dcbPa4pCqEyWdKkytQsMGVfBsdFuIBBNLaI4=;
-        b=Ids9hQYw3LSbClm+e+oSHj6XMgYdg3GeiZBlLd3gXX19ywvH/YEjxhUdCxqL1YPiAO
-         2IX/0dwlyBdgXYszLhCqAmGWLrN8jcGN6nTDofvtQAJH2Cc5tIjyh73HvWXn03HiRCao
-         RwZ4zsHPesKy+iRmvf4Kzi9YF3AjV+ikv9XKu/pv4FNe67oX8P8xLEpKqTdCW3dyDyyl
-         l7BeNYemar6Gk+jUn85bqSP+TB8J+lw6Az8jdw6bh3FPYrIlUqtSo0G8kRkts6uLXHfX
-         3RIJacgl0ptAJV5o41KdK2TyfudwjCzFQh34MUqizKcz5+SD3goaGp0Rwat6zNC2I/c9
-         B2FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683594283; x=1686186283;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A/eeFC8dcbPa4pCqEyWdKkytQsMGVfBsdFuIBBNLaI4=;
-        b=aK0XoaZMbHjOvODfG/4nUjghWu+yM0aNOzv8MpBn7p+H7FAQkIKgi8JXj5YJ6IDDf+
-         7MzbjmdiGIqYsBw/IzjwA3ybnbav1Zlpd01atNJBgdbnaPMcH28ny+YKPAZC0hoFcCsk
-         6v8tgihVghb72oNSn55nrRquSmqarvd7nQtttDjUQ3okSCf4e6+k+yarpCQ+oKo+pqLh
-         308wP/9MHUIiX+4LGalw8x1pyBILX6FDKtwFz+DKA29yeEfZqbLXEH05T+E/oEape54u
-         PV/Twf9suQwvYPamW/ecYOkpARkgi+Kl+ddrsA2q/ry+hcXFl+7ixH+kvz+RuiSH0fqJ
-         zT5A==
-X-Gm-Message-State: AC+VfDySNRlncdWuQYYC41SdTstTIVlvhavzXioL/xs+wm1rlab7dl63
-        HP84SeC9QWPjNl46JohRmKgFzvLLPnE=
-X-Google-Smtp-Source: ACHHUZ5sKdGmB7fo/A8VsSBn039olyGcgtYBkwC7l/jWfQClFlGNymESgeJ88HgoFLm9fFTNMzM7Ng==
-X-Received: by 2002:a17:902:e5c6:b0:1a5:27d2:b6de with SMTP id u6-20020a170902e5c600b001a527d2b6demr21951662plf.3.1683594283413;
-        Mon, 08 May 2023 18:04:43 -0700 (PDT)
-Received: from [172.27.232.45] (ec2-16-163-40-128.ap-east-1.compute.amazonaws.com. [16.163.40.128])
-        by smtp.gmail.com with ESMTPSA id l5-20020a17090270c500b001a641ea111fsm109074plt.112.2023.05.08.18.04.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 18:04:43 -0700 (PDT)
-Message-ID: <5aec4689-fe63-abff-94d4-8e42cf5bba66@gmail.com>
-Date:   Tue, 9 May 2023 09:04:38 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 2/6] KVM: x86: Do not unload MMU roots when only
- toggling CR0.WP with TDP enabled
-To:     Mathias Krause <minipli@grsecurity.net>, kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20230322013731.102955-1-minipli@grsecurity.net>
- <20230322013731.102955-3-minipli@grsecurity.net>
- <e70af22a-f09f-aadb-8353-35b29d2def61@gmail.com>
- <b0d4b430-afd2-979c-e7d2-b53e131412ad@grsecurity.net>
-Content-Language: en-US
-From:   Robert Hoo <robert.hoo.linux@gmail.com>
-In-Reply-To: <b0d4b430-afd2-979c-e7d2-b53e131412ad@grsecurity.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 8 May 2023 21:09:50 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3965E184
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 18:09:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683594589; x=1715130589;
+  h=date:from:to:cc:subject:message-id;
+  bh=JvSMDSd/nF/FVy/Y/PUK9PkEOfv9SxzKNZpGXBRtjWk=;
+  b=FW+sOm5mTggfMdbL+cIPPUuwk4F/xPkZtj0kylw7uR7YBWGT/F9/4Jtm
+   3dLVhQv66z+NOWlaucn3r6CIIJc4xiO57FxpXatuL/qhcpLO3v4Zj04NL
+   pobpLfdC0WdSn3qEk8Lzi8TZJ28MKOEwuJUSBL9uIq4+Sdvfb5mrdyD2m
+   eD4I9QOysHg6kSpvm02VfRg+R+mbVx9cl/g68gmLpy3vn6oUojJe9gf1s
+   7JYVAvgNYx8YRSvGQIb25C4GI5mSmikNsqb9bSfpUNfPRrWiJohev797z
+   vCviEqX/y61bNUoHrsDbMCCKPlQCvSV0TKQnQ9nyaJpahhMnaTYTdAOsP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="329406938"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="329406938"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 18:09:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="763618872"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="763618872"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 08 May 2023 18:09:48 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwBrP-0001Xh-22;
+        Tue, 09 May 2023 01:09:47 +0000
+Date:   Tue, 09 May 2023 09:09:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/microcode] BUILD SUCCESS
+ e281d5cad1f3924edf1042441b98c25204ae0def
+Message-ID: <20230509010924.FYjyz%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,46 +60,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/8/2023 5:30 PM, Mathias Krause wrote:
->>>    void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0,
->>> unsigned long cr0)
->>>    {
->>> +    /*
->>> +     * CR0.WP is incorporated into the MMU role, but only for
->>> non-nested,
->>> +     * indirect shadow MMUs.  If TDP is enabled, the MMU's metadata
->>> needs
->>> +     * to be updated, e.g. so that emulating guest translations does the
->>> +     * right thing, but there's no need to unload the root as CR0.WP
->>> +     * doesn't affect SPTEs.
->>> +     */
->>> +    if (tdp_enabled && (cr0 ^ old_cr0) == X86_CR0_WP) {
->>
->> Curiously, this patch only affects tdp_enabled, why does legacy MMU also
->> see comparable performance gains?
-> 
-> Because 'tdp_enabled' just implies EPT / NPT and only 'tdp_mmu_enabled'
-> decides which MMU mode to use -- either legacy or TDP MMU (see
-> kvm_configure_mmu() and now gets invoked from vmx.c / svm.c).
-> 
-Ah, get it, thanks. The name indeed confuses me (and perhaps others).
-After dig into,
-1. kvm modules has a param "tdp_mmu_enabled", (in the first place) 
-indicates KVM level's willingness on enable two dimensional paging. 
-However, it in the end depends on ept/npt enabled or not on vendor layer.
-So, uses a "tdp_mmu_allowed" to intermediately record this willness in kvm 
-module init phase.
-	/*
-	 * Snapshot userspace's desire to enable the TDP MMU. Whether or not the
-	 * TDP MMU is actually enabled is determined in kvm_configure_mmu()
-	 * when the vendor module is loaded.
-	 */
-	tdp_mmu_allowed = tdp_mmu_enabled;
-2. When vendor module init --> kvm_configure_mmu()
-	tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled;
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
+branch HEAD: e281d5cad1f3924edf1042441b98c25204ae0def  x86/microcode/amd: Remove unneeded pointer arithmetic
 
-    tdp_mmu_enabled's semantics becomes, as its name indicates, the 
-eventual tdp mmu enablement status.
+elapsed time: 722m
 
-    And, tdp_enabled, is the general (ept_enabled | npt_enabled).
+configs tested: 32
+configs skipped: 126
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230508   clang
+i386                 randconfig-a002-20230508   clang
+i386                 randconfig-a003-20230508   clang
+i386                 randconfig-a004-20230508   clang
+i386                 randconfig-a005-20230508   clang
+i386                 randconfig-a006-20230508   clang
+i386                 randconfig-a011-20230508   gcc  
+i386                 randconfig-a012-20230508   gcc  
+i386                 randconfig-a013-20230508   gcc  
+i386                 randconfig-a014-20230508   gcc  
+i386                 randconfig-a015-20230508   gcc  
+i386                 randconfig-a016-20230508   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230508   clang
+x86_64               randconfig-a002-20230508   clang
+x86_64               randconfig-a003-20230508   clang
+x86_64               randconfig-a004-20230508   clang
+x86_64               randconfig-a005-20230508   clang
+x86_64               randconfig-a006-20230508   clang
+x86_64               randconfig-a011-20230508   gcc  
+x86_64               randconfig-a012-20230508   gcc  
+x86_64               randconfig-a013-20230508   gcc  
+x86_64               randconfig-a014-20230508   gcc  
+x86_64               randconfig-a015-20230508   gcc  
+x86_64               randconfig-a016-20230508   gcc  
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
