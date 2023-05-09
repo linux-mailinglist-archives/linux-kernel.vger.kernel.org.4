@@ -2,161 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 709F16FCDCE
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1436FCDD4
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjEIS3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 14:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
+        id S233624AbjEISau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 14:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjEIS3j (ORCPT
+        with ESMTP id S229923AbjEISaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 14:29:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DCDB4
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 11:29:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80B4A63638
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 18:29:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28902C433D2;
-        Tue,  9 May 2023 18:29:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683656976;
-        bh=/dkH0X9QFvdWzyFSW87BMSJow12Yf5GCpIFiBdDHDpU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VZZzIsmsQtHwsHlw/HAnmw/XQIzODFlap9ibuHqQ7d+4MyNzAgXSa4IhFmuv9WTan
-         kLODFH2dHAYpeVZGqePoQH80qhgv2tSj5jU4oXXUwtyZRNKi+07c6Ndj1M/+BgEQY1
-         BHbdnmDbJZSMjbPezMB/Fr69QlsRexHcUfu3s41BFHwM2TPIYsxRWWic1zmI6S0I6a
-         xgHw7G4QLxsnGNiq2qC/4jbMR/4SEINam4e6G9OtZ+oOozm9lQxpkOI356BEhYng2M
-         oncHyeecju7244lihby6HIRKlVZnviZ10+bD8P1jkLZvcvjJwje/WpotJ8AWmFT7qF
-         ngQ/6IO3mCE9w==
-Date:   Tue, 9 May 2023 19:29:31 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Evan Green <evan@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 1/3] RISC-V: Add Zba, Zbs extension probing
-Message-ID: <20230509-exclusion-crested-67dad91b7055@spud>
-References: <20230509182504.2997252-1-evan@rivosinc.com>
- <20230509182504.2997252-2-evan@rivosinc.com>
+        Tue, 9 May 2023 14:30:46 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5BD136
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 11:30:45 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-55c939fb24dso57758407b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 11:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683657045; x=1686249045;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cQ5hIfVGYt176X0mmh5Nxb3U1ww7Q7ORWMM97Hft4mM=;
+        b=VjqJEnqzTkEZ4iHn5ydijXymdY8/PV8bwyjXe+lzA3PjZfKpJ8NjCIR2auQ/yWySh6
+         ez1BUZukd6Xe9G6E6C2E+046wP2yVXKEmbXOaXCbEzKQITPhFpeGTZ3fkHkwTzKR6MYN
+         DUSVuUlscFmiptusPeEEDTQfX6ggVPePqlPcm9wLs2h423+rsZRL7r+POmNERu+u0op2
+         1bOwKAxlp4EP8SWOHg64z/c8oIY0BACcnNcfgoqlEvteOObaTHDywjJV1VnipYuZeYkY
+         1xyJU0CXqrOJDLvONs7qFLrjVA2J0DyTrcKNe6TaIsg/RBT6o3qSpKnKaXW3XWcYAM9S
+         qGMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683657045; x=1686249045;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cQ5hIfVGYt176X0mmh5Nxb3U1ww7Q7ORWMM97Hft4mM=;
+        b=J0Xh7gpPPuXEpV9pTr7XMYm1YbBH6kcnyt3IFqwfQTSpseiv1KTf3iYHEeHdNRISdu
+         SkTBr0PVFqF4xwqzuDtxtaKJ9BvnacMooE7L6fQOwuwql8/+UqWnRCibGPpD9nvDbUHE
+         1EXxQnNO/jOxSIOhheWy98gifV3qPW00mfnkoB3hDkJI/v2HHwofEgjvq39VZtEKxR6C
+         CyeIhe18gEiJXXpJdjnF4TToubAn+FRa+5PGAxcLwn+CYQZh8d4vZB6X4ytGbZmZuk1a
+         oCcK/J4g8P4BZ7I53/TDTp96wKGbkl2QqDgQdGH4zdibGqEA+cK2kwy/ubA7Rag2ay1/
+         WuxA==
+X-Gm-Message-State: AC+VfDyBybyVLF7DSCrjpuJn6NNZdr1yM+Q1/+RozE4t0EXyHBkeGDZN
+        R40zDLziTvihyWyeslF50ImfNAJhXHb4C1ZJnHR27A==
+X-Google-Smtp-Source: ACHHUZ64WObK4alO23JU4r2bWXEcbsP3Y6beKyvnef7Og3R6aLy+mmjR1HujeuofX7PzFky5/HHtl4QtPES8PUPQ3To=
+X-Received: by 2002:a25:c549:0:b0:b97:4b7b:945c with SMTP id
+ v70-20020a25c549000000b00b974b7b945cmr17021207ybe.57.1683657044881; Tue, 09
+ May 2023 11:30:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="B6X/AADM6tnISOtQ"
-Content-Disposition: inline
-In-Reply-To: <20230509182504.2997252-2-evan@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230506-seama-partitions-v1-0-5806af1e4ac7@linaro.org> <20230509093129.40b30c7a@xps-13>
+In-Reply-To: <20230509093129.40b30c7a@xps-13>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 9 May 2023 20:30:33 +0200
+Message-ID: <CACRpkdYLZ36Ad5y7qLUTFix6yx=jBQ=ZvxaB9U-fhqQ_fvvXCQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Add SEAMA partition types
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 9, 2023 at 9:31=E2=80=AFAM Miquel Raynal <miquel.raynal@bootlin=
+.com> wrote:
+> linus.walleij@linaro.org wrote on Sat, 06 May 2023 17:29:43 +0200:
+>
+> > This type of firmware partition appear in some devices in
+> > NAND flash, so we need to be able to tag the partitions
+> > with the appropriate type.
+> >
+> > The origin of the "SEAttle iMAge" is unknown.
+>
+> I don't see any kernel changes, why do we need an additional binding?
 
---B6X/AADM6tnISOtQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The bindings are not strictly bound to Linux, it's more like all OS:es
+uses the Linux DT binding repo because it is the biggest project.
+Also we actually merge a bunch of bindings just to describe hardware
+(or things like partitions), in the hope of making use of them in the
+long run.
 
-On Tue, May 09, 2023 at 11:25:01AM -0700, Evan Green wrote:
-> Add the Zba address bit manipulation extension and Zbs single bit
-> instructions extension into those the kernel is aware of and maintains
-> in its riscv_isa bitmap.
->=20
-> Signed-off-by: Evan Green <evan@rivosinc.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+Anyways, for the record, the full story:
 
-Given you added the lads, rather than ignoring them due to the Zbs
-change, I think you forgot my R-b from v1?
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Currently this binding is used in out-of-tree OpenWrt code, where it
+is used as magic for splitting partitions with mtdsplit.
 
-Cheers,
-Conor.
+I guess you might be familiar with mtdsplit. It is a software partition
+splitter that makes it possible to split a big partition into smaller
+partitions dynamically, using magic block identifiers.
 
->=20
-> ---
->=20
-> Changes in v2:
->  - Add Zbs as well
->=20
->  arch/riscv/include/asm/hwcap.h | 2 ++
->  arch/riscv/kernel/cpu.c        | 2 ++
->  arch/riscv/kernel/cpufeature.c | 2 ++
->  3 files changed, 6 insertions(+)
->=20
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwca=
-p.h
-> index e0c40a4c63d5..6b2e8ff4638c 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -46,6 +46,8 @@
->  #define RISCV_ISA_EXT_ZICBOZ		34
->  #define RISCV_ISA_EXT_SMAIA		35
->  #define RISCV_ISA_EXT_SSAIA		36
-> +#define RISCV_ISA_EXT_ZBA		37
-> +#define RISCV_ISA_EXT_ZBS		38
-> =20
->  #define RISCV_ISA_EXT_MAX		64
+The typical usecase is to put the kernel in the first flash blocks,
+then pad up to the nearest even erase block, and then add a
+JFFS2 or UBI filesystem immediately there.
 
-Heh, gonna start getting tight on bits here soonish :)
+This way it avoids using static partitioning, the tools rebuilding the
+firmware can dynamically split off more flash as the kernel image
+grows.
 
->  #define RISCV_ISA_EXT_NAME_LEN_MAX	32
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index c96aa56cf1c7..bd294364390d 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -184,7 +184,9 @@ static struct riscv_isa_ext_data isa_ext_arr[] =3D {
->  	__RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
->  	__RISCV_ISA_EXT_DATA(zicboz, RISCV_ISA_EXT_ZICBOZ),
->  	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
-> +	__RISCV_ISA_EXT_DATA(zba, RISCV_ISA_EXT_ZBA),
->  	__RISCV_ISA_EXT_DATA(zbb, RISCV_ISA_EXT_ZBB),
-> +	__RISCV_ISA_EXT_DATA(zbs, RISCV_ISA_EXT_ZBS),
->  	__RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
->  	__RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
->  	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
-e.c
-> index b1d6b7e4b829..a1954c83638f 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -236,7 +236,9 @@ void __init riscv_fill_hwcap(void)
->  				SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
->  				SET_ISA_EXT_MAP("svnapot", RISCV_ISA_EXT_SVNAPOT);
->  				SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
-> +				SET_ISA_EXT_MAP("zba", RISCV_ISA_EXT_ZBA);
->  				SET_ISA_EXT_MAP("zbb", RISCV_ISA_EXT_ZBB);
-> +				SET_ISA_EXT_MAP("zbs", RISCV_ISA_EXT_ZBS);
->  				SET_ISA_EXT_MAP("zicbom", RISCV_ISA_EXT_ZICBOM);
->  				SET_ISA_EXT_MAP("zicboz", RISCV_ISA_EXT_ZICBOZ);
->  				SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
-> --=20
-> 2.25.1
->=20
+The mtdsplit code uses different magic numbers to identify where
+the different partitions start.
 
---B6X/AADM6tnISOtQ
-Content-Type: application/pgp-signature; name="signature.asc"
+One such type of partition is seama, so the code needs to know
+that it should look for seama magic to determine the size and
+split this partition in a kernel and rootfs part. This is the code:
+https://git.openwrt.org/?p=3Dopenwrt/openwrt.git;a=3Dtree;f=3Dtarget/linux/=
+generic/files/drivers/mtd/mtdsplit;h=3D3e0df856713a84b1decf17190f171cb10ce7=
+a757;hb=3DHEAD
 
------BEGIN PGP SIGNATURE-----
+It is a bit sad that no-one has the energy to propose mtdsplit
+upstream, I think it is quite generic and generally useful. I started
+to make an upstream patch but got exhausted with the task.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFqRCwAKCRB4tDGHoIJi
-0nC4AQDHsQlCVjBd4jkD1jLd+iPE4qxOG+r9snQk1olq+ZEgKgEA3KF1DHY+2APQ
-FwjrrVJr0kk42/XLN6nO4bjwDcd4uQk=
-=MHIQ
------END PGP SIGNATURE-----
-
---B6X/AADM6tnISOtQ--
+Yours,
+Linus Walleij
