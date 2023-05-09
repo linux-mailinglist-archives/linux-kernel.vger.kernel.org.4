@@ -2,172 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BC26FC3B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 452546FC3B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234887AbjEIKSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 06:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
+        id S234821AbjEIKUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 06:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234553AbjEIKSG (ORCPT
+        with ESMTP id S229519AbjEIKUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 06:18:06 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB3A30FA;
-        Tue,  9 May 2023 03:18:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683627479; x=1715163479;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lFaYZaHglXHehMJ3FYW16hTblnm28QwUMGPBW9xCS3A=;
-  b=bLCgozb+3t+8MBp6RzVVCqWQ65ebWQp8fPdqdolMY2zDRgR5atvy7WYw
-   6Mqca8ahdsuxypLr90rhAutLF2fLw82emLOmjwb2JoMBbHvv/dTN5b4jo
-   n86FeJd8CKcDzI2cMNvKHGpIL12E08xOpfMJVRDYqnUjdvOAVIY/CC0X1
-   HnT61LRin0RgdaSDmED3hFpHjKOgXhQCvTOfll2FNjX1gQyIC1CTIFg8f
-   TJzl5aM97ie1EpOfqpTfK3fats/8/s/1QCKNLS+fFcPm57Fm+gVC/OCpJ
-   JsaavMDjV8m2j1YO3T9LZn8FA10lMDGe72FMhIqttBH93IYFHMQvxmW9s
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="413158406"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="413158406"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 03:17:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="873156762"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="873156762"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 May 2023 03:17:55 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pwKPq-000244-37;
-        Tue, 09 May 2023 10:17:54 +0000
-Date:   Tue, 9 May 2023 18:17:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>,
-        wg@grandegger.com, mkl@pengutronix.de,
-        michal.swiatkowski@linux.intel.com, Steen.Hegelund@microchip.com,
-        mailhol.vincent@wanadoo.fr
-Cc:     oe-kbuild-all@lists.linux.dev, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        frank.jungclaus@esd.eu, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        hpeter+linux_kernel@gmail.com,
-        "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>
-Subject: Re: [PATCH V7] can: usb: f81604: add Fintek F81604 support
-Message-ID: <202305091802.pRFS6n2j-lkp@intel.com>
-References: <20230509073821.25289-1-peter_hong@fintek.com.tw>
+        Tue, 9 May 2023 06:20:04 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE5230FA;
+        Tue,  9 May 2023 03:20:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PKLh6UaLISIjcUauhr3iF6UlbMhF5g8Vn0HXFbC39j0=; b=K8SrgFC3k1Pze4pOS36EiCmG5X
+        E4mGhrJh8Tp4MMzIggJmmXSFDZoSRoQqK8ZUoW5YCSL9s//gW2n7gBpJeQTN7vOfD2LUm3mpTdcjL
+        DTdVl75NGlZb4DOM8Wve9/AenoFUKmgzoAxcsYqONDoeb7PPUXjOxPipqJ24L4IRLmGatnmIZpg2K
+        HOlNGraQ3bkXrLYD9MfaMGh6bgWxWd7JPQwv1bSEkvzLwsfu5SOyXdDbvpO1kezDEFG52JV23LZ25
+        KZPTC+yVvXc+uJTxC9FqAeTMucXuRrB9TjfoerWv5xB7Ih77dPE2yMPM9BF4mN/7ksbc1OfszoqR+
+        0x9nU15w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pwKQx-00F95R-HR; Tue, 09 May 2023 10:19:03 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4B1FF300451;
+        Tue,  9 May 2023 12:19:02 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 29A6F20B21BBE; Tue,  9 May 2023 12:19:02 +0200 (CEST)
+Date:   Tue, 9 May 2023 12:19:02 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        David Woodhouse <dwmw@amazon.co.uk>
+Subject: Re: [patch v3 08/36] x86/smpboot: Split up native_cpu_up() into
+ separate phases and document them
+Message-ID: <20230509101902.GV83892@hirez.programming.kicks-ass.net>
+References: <20230508181633.089804905@linutronix.de>
+ <20230508185217.671595388@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230509073821.25289-1-peter_hong@fintek.com.tw>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230508185217.671595388@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ji-Ze,
 
-kernel test robot noticed the following build warnings:
+Again, not really this patch, but since I had to look at this code ....
 
-[auto build test WARNING on mkl-can-next/testing]
-[also build test WARNING on linus/master v6.4-rc1 next-20230509]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Mon, May 08, 2023 at 09:43:39PM +0200, Thomas Gleixner wrote:
+> @@ -1048,60 +1066,89 @@ static int do_boot_cpu(int apicid, int c
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ji-Ze-Hong-Peter-Hong/can-usb-f81604-add-Fintek-F81604-support/20230509-154045
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
-patch link:    https://lore.kernel.org/r/20230509073821.25289-1-peter_hong%40fintek.com.tw
-patch subject: [PATCH V7] can: usb: f81604: add Fintek F81604 support
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230509/202305091802.pRFS6n2j-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9549380f8d5eea359f8c83f48e10a0becfd13541
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ji-Ze-Hong-Peter-Hong/can-usb-f81604-add-Fintek-F81604-support/20230509-154045
-        git checkout 9549380f8d5eea359f8c83f48e10a0becfd13541
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/net/
+	/*
+	 * AP might wait on cpu_callout_mask in cpu_init() with
+	 * cpu_initialized_mask set if previous attempt to online
+	 * it timed-out. Clear cpu_initialized_mask so that after
+	 * INIT/SIPI it could start with a clean state.
+	 */
+	cpumask_clear_cpu(cpu, cpu_initialized_mask);
+	smp_mb();
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305091802.pRFS6n2j-lkp@intel.com/
+^^^ that barrier is weird too, cpumask_clear_cpu() is an atomic op and
+implies much the same (this is x86 after all). If you want to be super
+explicit about it write:
 
-All warnings (new ones prefixed by >>):
+	smp_mb__after_atomic();
 
-   drivers/net/can/usb/f81604.c: In function 'f81604_read_bulk_callback':
->> drivers/net/can/usb/f81604.c:440:67: warning: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Wformat=]
-     440 |                 netdev_warn(netdev, "URB length %u not equal to %lu\n",
-         |                                                                 ~~^
-         |                                                                   |
-         |                                                                   long unsigned int
-         |                                                                 %u
-     441 |                             urb->actual_length, sizeof(*frame));
-         |                                                 ~~~~~~~~~~~~~~     
-         |                                                 |
-         |                                                 unsigned int
+(which is a no-op) but then it still very much requires a comment as to
+what exactly it orders against what.
 
 
-vim +440 drivers/net/can/usb/f81604.c
-
-   411	
-   412	static void f81604_read_bulk_callback(struct urb *urb)
-   413	{
-   414		struct f81604_can_frame *frame = urb->transfer_buffer;
-   415		struct net_device *netdev = urb->context;
-   416		int ret;
-   417	
-   418		if (!netif_device_present(netdev))
-   419			return;
-   420	
-   421		if (urb->status)
-   422			netdev_info(netdev, "%s: URB aborted %pe\n", __func__,
-   423				    ERR_PTR(urb->status));
-   424	
-   425		switch (urb->status) {
-   426		case 0: /* success */
-   427			break;
-   428	
-   429		case -ENOENT:
-   430		case -EPIPE:
-   431		case -EPROTO:
-   432		case -ESHUTDOWN:
-   433			return;
-   434	
-   435		default:
-   436			goto resubmit_urb;
-   437		}
-   438	
-   439		if (urb->actual_length != sizeof(*frame)) {
- > 440			netdev_warn(netdev, "URB length %u not equal to %lu\n",
-   441				    urb->actual_length, sizeof(*frame));
-   442			goto resubmit_urb;
-   443		}
-   444	
-   445		f81604_process_rx_packet(netdev, frame);
-   446	
-   447	resubmit_urb:
-   448		ret = usb_submit_urb(urb, GFP_ATOMIC);
-   449		if (ret == -ENODEV)
-   450			netif_device_detach(netdev);
-   451		else if (ret)
-   452			netdev_err(netdev,
-   453				   "%s: failed to resubmit read bulk urb: %pe\n",
-   454				   __func__, ERR_PTR(ret));
-   455	}
-   456	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+	/*
+	 * Wake up a CPU in difference cases:
+	 * - Use a method from the APIC driver if one defined, with wakeup
+	 *   straight to 64-bit mode preferred over wakeup to RM.
+	 * Otherwise,
+>  	 * - Use an INIT boot APIC message
+>  	 */
+>  	if (apic->wakeup_secondary_cpu_64)
+> +		return apic->wakeup_secondary_cpu_64(apicid, start_ip);
+>  	else if (apic->wakeup_secondary_cpu)
+> +		return apic->wakeup_secondary_cpu(apicid, start_ip);
+>  
+> +	return wakeup_secondary_cpu_via_init(apicid, start_ip);
+> +}
