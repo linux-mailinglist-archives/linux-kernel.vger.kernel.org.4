@@ -2,115 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A4A6FC973
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 310A76FC933
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbjEIOtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 10:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
+        id S235388AbjEIOir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 10:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjEIOtG (ORCPT
+        with ESMTP id S233120AbjEIOip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 10:49:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55661E6A
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 07:49:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E90F2633C4
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 14:49:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63CCBC433EF;
-        Tue,  9 May 2023 14:49:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683643744;
-        bh=NBvpZ3SVsEm0RYtMI4MVcyA/5Q5NxM5iMqiiZpuJwog=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cYRH/oxwAZvnUeZPPirZXT7XWphCD4RiogIVrgR0hmbqX2nXQTT24uAmjwk6gbMu7
-         rdbt7GsjiN/gVpBu9EodkLSk95qo4OzGy32rNn3B4iw3FCYWCG0cOVLC01M/oGpRYK
-         h9suRxfgbB9B1abUln2d3A17GNmKVeEHCCZ+IHbWPiBcrhffOL/OJMB+LVCA208+V0
-         yNAvnS4TXlvuq/yvOBgxbISxBplraaUTtpPg+cWZUxxCQipC3p++WVhI4ySs4trCW9
-         YTooyDIqUO4mfR0WhY/yTmgzDQ/hM9yJGIQOnt+qbPHUGgJJKCI0SQZbVzrVmiPhDm
-         JKBXF3mse5wUQ==
-Date:   Tue, 9 May 2023 22:37:56 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: enable BUILDTIME_TABLE_SORT for !MMU
-Message-ID: <ZFpaxItE8TUTXktH@xhacker>
-References: <20230409164306.3801-1-jszhang@kernel.org>
- <20230411-flier-establish-d3ffd434be28@wendy>
+        Tue, 9 May 2023 10:38:45 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D22E50
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 07:38:43 -0700 (PDT)
+X-UUID: 2da4128aee7711edb20a276fd37b9834-20230509
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=FfEZUsBd8PhHOwH7wVI5boERlBIs90PqKjWeSm8Pz2k=;
+        b=jHEAG042TGb6SK0aWH+6lzrmhTu5U9jibxchgxileAzfXFT5pyW/GfobyfGBlmMcbpQbYoHv45sHJH3VH646JnY/nx21NqVBJi+Lk/2cT1to0H1jNhPMSJDLglG3n25KNVnlw+SWYJuIniZJwRZIrSJ0y2rera5bKhtJeSgKfd8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.24,REQID:a2a4c2ce-a6c9-424d-a773-b789fe863a63,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:178d4d4,CLOUDID:49cd416b-2f20-4998-991c-3b78627e4938,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 2da4128aee7711edb20a276fd37b9834-20230509
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1939939483; Tue, 09 May 2023 22:38:35 +0800
+Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 9 May 2023 22:38:34 +0800
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.237)
+ by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 9 May 2023 22:38:33 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L6wZBEYr3Ymm1bG5py2qqv6PYpbz3MnGOQMz5f0SmO+heg2AvEREn+42yIz7Zh1P43xOtlI95sjyG9c0M4k4tkL/ok22kjm0IgWWUa8+3/PfdcbO8qPuVSJJwiFIYP0spLVlQFqJcibewWVp6xpP9TK+LJBmHMFIVFmIf6WpHGybgvj8sOMRrkmXE3qjg2GwY61/isqQA9i+Py/ezuiFD5nMMJb77X04ZWvctgt4QZjLyXQ+yg5xcqWdSDxw+PBOyVnXeZXQB/vRIkyHTM9dnjWtU92pZQLd7Yt8orUqllxG8yg4O68lIHhpLoHH3b/OiKNQ01YDcCnke7+KSQ+cRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FfEZUsBd8PhHOwH7wVI5boERlBIs90PqKjWeSm8Pz2k=;
+ b=LrPiVc+Evi3CjL6QkOKfPUyOALB2UDrFpP3popyLISFLaidHul2BKwuYZxizRDHl9k6H6wfc4zWDzpwkgTzl/qFDF5Rot2fyauixCmjIrz5Vw1DZcT43Q2JowzvZYoC/Ab9jTZpbLrlZnP5KnxYxeBsNSrsJUqxS8pvStOi6PagRvNnJ3RFfgWRigIpK80/UrYikdrr14mKpWb51adBSpJKJUg1e4rlXZKl1oAAcjbfXsb9r2kSEGTqvh7Y8vepL2C/z5B1MaZga2VN2MjEliCoTIwyp9vqxu9uurcjGD5jB9duGF5RwRyHLozaDyvc4mqBZIkHAWTCr2fzJK9sB5Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FfEZUsBd8PhHOwH7wVI5boERlBIs90PqKjWeSm8Pz2k=;
+ b=JsHn90HtjanjXcn+Mkv3VUrJl0sDzKuZH+LWHc2+xZVfVVsMxvpCRwM6Q/Hyr/ZKM65bkOKwYnRbgKSfFDd/KV4WMYlsvxIq7GMAtz9gamk8FzTaega86UF5OGkYCDj4Y9InO/vkeCQ7D9ZI4IrYuyWgqSwTqskDzt4LY7/NhMg=
+Received: from PU1PR03MB3062.apcprd03.prod.outlook.com (2603:1096:803:3b::21)
+ by TYZPR03MB5995.apcprd03.prod.outlook.com (2603:1096:400:12a::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Tue, 9 May
+ 2023 14:38:32 +0000
+Received: from PU1PR03MB3062.apcprd03.prod.outlook.com
+ ([fe80::66d9:2bd0:26ba:d9bb]) by PU1PR03MB3062.apcprd03.prod.outlook.com
+ ([fe80::66d9:2bd0:26ba:d9bb%7]) with mapi id 15.20.6363.033; Tue, 9 May 2023
+ 14:38:32 +0000
+From:   =?utf-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
+        <Jason-JH.Lin@mediatek.com>
+To:     "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
+Subject: Re: [PATCH v3 02/11] drm/mediatek: gamma: Reduce indentation in
+ mtk_gamma_set_common()
+Thread-Topic: [PATCH v3 02/11] drm/mediatek: gamma: Reduce indentation in
+ mtk_gamma_set_common()
+Thread-Index: AQHZgBdtFS8SkzXmdkuSXvCpFnLrMa9SB6qA
+Date:   Tue, 9 May 2023 14:38:32 +0000
+Message-ID: <a6ef1a063de33e337003abc4738820cfe53cb0dd.camel@mediatek.com>
+References: <20230506123549.101727-1-angelogioacchino.delregno@collabora.com>
+         <20230506123549.101727-3-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230506123549.101727-3-angelogioacchino.delregno@collabora.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PU1PR03MB3062:EE_|TYZPR03MB5995:EE_
+x-ms-office365-filtering-correlation-id: 2a4b9bae-6a12-4711-b9f4-08db509b101c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0RTVH9uaY6nVd6IeaMIENOlDRQuRF81bLqUcgZbL1NR5lC8s2wQlSL3JwqZiFjlboo+tP4+p6xNva2h7Dim3r1T77K+Q83rFV6dtlEt+tigC/gzwMSf8k4/Z6lHUrZ04TdD7r5nEIfFIu6IDEivG9J2ifSXlD1RqA2lsUEqKjJcilmMHW3TzqiQ98iCJpCgw+6NiZvoza/dBN7Y6yu3fvBdCTm1EwLECn4jETp3yuXUM1Eva4E1PUvDrQgxRPXS+JGGBUD8FmC3RPly6ZF1dB2yotBKw6F+MAJnswNAdV1n73PQbUmkujhieFZNUrEEbejkLIpLQmao3ir4tl4Jg9ShMrvg+KluBVO/xoZzOkgNzrJSvlXyDaxKTGeW7ieEwTYh48PJA7nVSkg5pDpR1KxleOi4U9TAwJAzU78bIq3UCeXfv2UJA1c+LbGUF+3zAZ0fhcCeU1tK2knXsuy2yW+yHS2qx2uwtR7iteWJXmf+KCIE3i+pGag2wE71uXFg8qEtzJYhfjOIGNAfcidzPZCRbrQnongr7DyB29LVHZlJfOoD3EZ+8PsBNx6aAf8+TaCcBnOx+bmPLAOImVBT+jNI4R0I/dyTkWCY152pT8sYdSj6/AUcYLZDwG1owE2T1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PU1PR03MB3062.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(39860400002)(366004)(346002)(451199021)(66476007)(4744005)(7416002)(8676002)(8936002)(5660300002)(41300700001)(4326008)(316002)(64756008)(76116006)(91956017)(66556008)(66946007)(83380400001)(85182001)(71200400001)(26005)(186003)(6506007)(6512007)(478600001)(6486002)(2906002)(66446008)(38070700005)(86362001)(38100700002)(36756003)(2616005)(54906003)(110136005)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Uk04L1R1TjRYNVp4ZnpRNzE3L05HcmlVRjNzRW1wSGwrZFJpcmhBa29WdFRm?=
+ =?utf-8?B?WEdFSEhIYy9PV2ZJOWdRRjF6R29wVXFqTVg0TFhmL293a2tPbVVaeHpqdVlq?=
+ =?utf-8?B?a0FmR2lnUGViRW5abFV0aFpVditkSHk4YlV6WEdBdElwM2txc0hPN21tSiti?=
+ =?utf-8?B?ejd6VUVUemdBTmkzMTRNdWRGeHBHeHpxT2Z3REhhVXBXcGErYllwU2g1Uzcv?=
+ =?utf-8?B?RDRUdE5oZXlqak4vRkZMbk1vSnFYeUpGcjhjYUc3SGdwNU9jSjR1WDZXUDBS?=
+ =?utf-8?B?MStqSGhVdXlaQWdLQmlESjNQbDZjUjNVUW05dHBRKzA4Y1FSWXZvNzV2WmRa?=
+ =?utf-8?B?eWp2QkVoSnVIMHFsNzgzajVGRlVYNGsydkU2bGEzV0xSVy9GUkFjRHl3cHlx?=
+ =?utf-8?B?dHZMQzlrK3k2VGN5WXlXY09iL1pOZEYrYUplMlpRazlHeVkyTzNDYnI2ZFNv?=
+ =?utf-8?B?eHBmVy9jTWU0M29OcGlSVzRYeG9MLzVOTUtHZ1ViZzJ6RkJXZU80bUdYSW9W?=
+ =?utf-8?B?MDRjQW9Bdys4NGtXSXY0ajA1cGZ3NnFTeFhIcTRubzAvVDQrY042VnluRExx?=
+ =?utf-8?B?aE5XYlh6TmJsVFdHK0JzbUxzTjJPMThzS2Q4OUNmR1hZa3h1N0o3LytRNlk3?=
+ =?utf-8?B?U1BDK21YTU5jdS9NLy9HSjZ6N2habi9zdTY5bHB6SFozMjF0V1hrWWFRaGFx?=
+ =?utf-8?B?REQvdU8yUXdZUFJ3RkdTMUQ0WW11UGRqQVlFMkdsSlYzM2haMzJEcnJNWElJ?=
+ =?utf-8?B?aGZZeGxLdTM1SjkvTTdQY3Zjdkc3Y2V0OEhobU5RR24wZXQ3NzM0K2JvMHRt?=
+ =?utf-8?B?SjFHcThMc1BVVWo4TlhEQnd3bWk2LzliSCtTaUJzYVpRL2REN0lvcVMxRWs3?=
+ =?utf-8?B?UllHZFk5VFJ0N1hDNGE2TEsrR1FKdnlDNzh0SkRRdTZHYVhKZzJ5bElzWjVu?=
+ =?utf-8?B?UU5GTWI5TW80cm5aOWQ0MThvdy9Cd0xINWJVMkNEUng0dVJ6OTZJRy8wc1Nt?=
+ =?utf-8?B?Q0tOT0NRUm1QSVVoUm9EMlc0N1VsSit5RlNFS1Y0WUhzZDhUSFVaTzlzZGxh?=
+ =?utf-8?B?aGxFVDB2RmVaS0gvQ2F0SnZUbEwzRCt0bHJqOTRYTGwrWk9JWXlOa25paVFq?=
+ =?utf-8?B?WlBQUEZvRHRWRFlSZjVGOEFWWEMrbUdCMjRsUk0vTVQwdjQ0OGdoZUF4V053?=
+ =?utf-8?B?aWFiYWhVaC96bDhieDlhVHZjc0lQWlhyM3pOYkp5eE0vaER3Y1V5TmRIVUp3?=
+ =?utf-8?B?RHhFcHc5c2RQa1RKTVl5dHlPdkNFc2ViVEk3QmFnUTZ3eDVsRUh3YkY1bG9M?=
+ =?utf-8?B?K3VzWW9HalRzSHBjYVN5MmZXcmkvUVRMVEVMOW43MVFXamJGYWI1LzEvdEdt?=
+ =?utf-8?B?OW5ZRm9iTDdCMnUxVXJZQXBQd3FNTnFXMmhoRGJyWTlkQlBzT1ZWM0UvQWNi?=
+ =?utf-8?B?YVVrYk1uYkNFempKd2lScHF0ck1HNS8xNXpuYWgrMUhuU3VsUUlvbUJVcVk2?=
+ =?utf-8?B?eE1qSEtEVWVIRzBVLzhrVWpqcGNyM2xJUnA5all2TE1ReFFWY1U0SjZxbk5Q?=
+ =?utf-8?B?VVpSbTd3b1FzVWJEWmk0QWl5SnlsSm44VXBLUCs5a09FUUZmSFdJYnRwT2J5?=
+ =?utf-8?B?NUQ4OEVLYXd6d3I0cVVtWWpTUCsxWUM4K01hSjVCbnpsWURUL3BIdnlwdmhI?=
+ =?utf-8?B?MzVCWmZNQW5VODgzRmY2cERBQ1h3b0ZqWU5ZZEJNbHV6U3hvQVNnNmFjcDI5?=
+ =?utf-8?B?SkNBRkFxNHRwT2dYaWNsL1NuZHdVK0Jqd2FKTXM3cExGQlEwUFJxK2dySjk2?=
+ =?utf-8?B?S3F1K2orbEhZcjN4bWJmVjFYaXhaaTZXa1J4cWt2Q0k4Ly9heVZlclk0YTRU?=
+ =?utf-8?B?K3RNOUhFaTFzME9VRnJZRjhUY2EyTXo0ZVR6WTRkK2hLY3RpanN3bFZnTDgy?=
+ =?utf-8?B?My9oQ1BTNnlTMjFiaGJjOGVSd0hCNU1TN0kvMGZUYmN0YjRmT0ZKMXBwVjVy?=
+ =?utf-8?B?ZUpyTTFiOVV0SHdMa3R4MjNtZ3lIZ1V3L2JwR0dFeDFnZDdQSng5NzJoRTJX?=
+ =?utf-8?B?T3Q5WlZtSnBxTUZBYWdXSzlWUzZUYWF0N1A1b01QdjVEendqbk5VWEVET1A0?=
+ =?utf-8?B?L1ZTTkZVTzRYZ08rcklnRzFPRGxaTHkzLy90bUhvcVVSNHN3UkhVWi9PM0hN?=
+ =?utf-8?B?c1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <586FA48E54D72843A93442FBEEB101FC@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230411-flier-establish-d3ffd434be28@wendy>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PU1PR03MB3062.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a4b9bae-6a12-4711-b9f4-08db509b101c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2023 14:38:32.3108
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cF+GxZ8BGozIv0P+VtoTdjKzXqT+xL/5VGU3AXpgpK1rjkrY5OB4sSnI1r4aCYf2uY1rTN+ML5KwMXmJUnkn8vtejZKSa8m3DvYuPQtnZpk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB5995
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 10:37:36AM +0100, Conor Dooley wrote:
-> Hey Jisheng,
-> 
-> On Mon, Apr 10, 2023 at 12:43:06AM +0800, Jisheng Zhang wrote:
-> > BUILDTIME_TABLE_SORT works for !MMU as well, so enable it.
-> > 
-> > Tested on QEMU and FPGA.
-> > 
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> 
-> Fails to build for nommu_k210_defconfig:
-> 
-> make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu- O=build -sk -j30
-> no __ex_table in file: vmlinux
-
-This failure log makes me carefully go through the ex_table mechanism
-again. Now I knew where's the failure from and what should be done:
-Because FUTEX is disabled in nommu_k210_defconfig. However, there's a
-deeply hidden issue here: there should be no __ex_table section usage
-at all in NOMMU case, becaue __ex_table usage relies on MMU to do the
-*fixup*, so I need to patch the risc extable part instead.
-
-Thanks
-
-> Failed to sort kernel tables
-> make[2]: *** [../scripts/Makefile.vmlinux:35: vmlinux] Error 1
-> make[2]: *** Deleting file 'vmlinux'
-> make[2]: Target '__default' not remade because of errors.
-> make[1]: *** [/home/conor/stuff/linux/Makefile:1250: vmlinux] Error 2
-> make[1]: Target '__all' not remade because of errors.
-> make: *** [Makefile:226: __sub-make] Error 2
-> make: Target '__all' not remade because of errors.
-> 
-> :(
-> 
-> > ---
-> >  arch/riscv/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index c5e42cc37604..212ea28e346b 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -50,7 +50,7 @@ config RISCV
-> >  	select ARCH_WANT_LD_ORPHAN_WARN if !XIP_KERNEL
-> >  	select ARCH_WANTS_THP_SWAP if HAVE_ARCH_TRANSPARENT_HUGEPAGE
-> >  	select BINFMT_FLAT_NO_DATA_START_OFFSET if !MMU
-> > -	select BUILDTIME_TABLE_SORT if MMU
-> > +	select BUILDTIME_TABLE_SORT
-> >  	select CLINT_TIMER if !MMU
-> >  	select CLONE_BACKWARDS
-> >  	select COMMON_CLK
-> > -- 
-> > 2.40.0
-> > 
-
-
+SGkgQW5nZWxvLA0KDQpPbiBTYXQsIDIwMjMtMDUtMDYgYXQgMTQ6MzUgKzAyMDAsIEFuZ2Vsb0dp
+b2FjY2hpbm8gRGVsIFJlZ25vIHdyb3RlOg0KPiBFeHRlcm5hbCBlbWFpbCA6IFBsZWFzZSBkbyBu
+b3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bnRpbA0KPiB5b3UgaGF2ZSB2ZXJp
+ZmllZCB0aGUgc2VuZGVyIG9yIHRoZSBjb250ZW50Lg0KPiANCj4gDQo+IEludmVydCB0aGUgY2hl
+Y2sgZm9yIHN0YXRlLT5nYW1tYV9sdXQgYW5kIG1vdmUgaXQgYXQgdGhlIGJlZ2lubmluZw0KPiBv
+ZiB0aGUgZnVuY3Rpb24gdG8gcmVkdWNlIGluZGVudGF0aW9uOiB0aGlzIHByZXBhcmVzIHRoZSBj
+b2RlIGZvcg0KPiBrZWVwaW5nIHJlYWRhYmlsaXR5IG9uIGxhdGVyIGFkZGl0aW9ucy4NCj4gDQo+
+IFRoaXMgY29tbWl0IGJyaW5ncyBubyBmdW5jdGlvbmFsIGNoYW5nZXMuDQo+IA0KPiBTaWduZWQt
+b2ZmLWJ5OiBBbmdlbG9HaW9hY2NoaW5vIERlbCBSZWdubyA8DQo+IGFuZ2Vsb2dpb2FjY2hpbm8u
+ZGVscmVnbm9AY29sbGFib3JhLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IEphc29uLUpILkxpbiA8amFz
+b24tamgubGluQG1lZGlhdGVrLmNvbT4NCg0KUmVnYXJkcywNCkphc29uLUpILkxpbg0K
