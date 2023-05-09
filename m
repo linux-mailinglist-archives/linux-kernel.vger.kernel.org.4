@@ -2,94 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF276FC070
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA376FC071
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233238AbjEIH3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 03:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
+        id S233354AbjEIH3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 03:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbjEIH3A (ORCPT
+        with ESMTP id S232223AbjEIH3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 03:29:00 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC40210D;
-        Tue,  9 May 2023 00:28:58 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-306281edf15so5095545f8f.1;
-        Tue, 09 May 2023 00:28:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683617337; x=1686209337;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TZ9NuQkeXU4fNX7iBYzOS07LZkDDq4TEk1a9dRD5OwI=;
-        b=WuM5pudY0UqsP46LjTI8WpnLOV8nN2P+Qon8Lyta6Mr/3rEJHnoJBlFaw2vhAL48mC
-         voOwJ6181tWnwuyAgPn+V0EcNkd3MlB10CzlY4+tNaxMA9CPFqMnw6SMNvINi0kNQv6y
-         6W8X3pRPQIVvakeu2uLtI2s6BU3HO8DiJPiAEop463HKeqCyvLcZJN62f/WaVaygXth7
-         1cjk4MGdIUaI//1oY/VbQJOZt9xCOrmv9d4SKI+3TNdbVhxp/ggghajkFa6JQ7tSoFAr
-         9XYYZD6x8VaM8aDOAe8spO1er3riawEbhfroBAABSo2eeG1gyholwPqAXNv+aRJk3AGD
-         BUyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683617337; x=1686209337;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TZ9NuQkeXU4fNX7iBYzOS07LZkDDq4TEk1a9dRD5OwI=;
-        b=WKpNW4hrCKWBPG5NEC4httV1kC588Yc3P1YClQqjsAS4I8p4G2L4ZutaQ44H4vJkac
-         dDFXUlSJYE2sRXelGzYP0QhSdsSU0RGgeDaNZdXMM0i52ar2c8tdxnw9ipy8/9PJygAq
-         MK3vzhbo8d2IJvws37AOos4Pv8Di1174tPnSE4XfmzyP7jaqVGhP3I0kAUJq53/RHfoO
-         HilJAa4KYaoUmz1fEXhJodu8VKNLV/DScEZjXfSMuRt0/I0ARMYURm2zXLDs1cJkHVNt
-         XZZCp8Us6/HjdvO81rMluFQ9h2qWtoQRvtmkJaFe0GvxKHW6AaAvyDMkLIr7nUF9fBZ5
-         jMUw==
-X-Gm-Message-State: AC+VfDzGwibD5L7NBjvZGErus+EN/qMwBtlqB9ccCibWHOn42uv6LwvQ
-        CB8DaB/+C6GpLmn0t7hxEfQgFFfPmHI=
-X-Google-Smtp-Source: ACHHUZ4aprA8jaV+02OALul3CdrPdHuejsbTRnfgW+TaIxH+q45taetODg6awx4MtB1jJAj852Yabg==
-X-Received: by 2002:a05:6000:c1:b0:307:9473:fe26 with SMTP id q1-20020a05600000c100b003079473fe26mr4379251wrx.26.1683617337199;
-        Tue, 09 May 2023 00:28:57 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id t9-20020a7bc3c9000000b003f1958eeadcsm784243wmj.17.2023.05.09.00.28.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 00:28:56 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        ntfs3@lists.linux.dev
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] fs/ntfs3: Fix spelling mistake "recommened" -> "recommended"
-Date:   Tue,  9 May 2023 08:28:55 +0100
-Message-Id: <20230509072855.2908731-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 9 May 2023 03:29:36 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889B1210D
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 00:29:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683617375; x=1715153375;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=n3xp3Oxep/6XUd0YYFwl+lzYWyDoeEYTha+L0N5Dz7U=;
+  b=RDIv5oe9Eg3/QICIbXiZY5ruLcbJTgvPv8KocUecJBOa4FtwFrPQm1cs
+   RnwHEm6iDQosrJn45Z5+3z3v6Pg0umcF0bHPHMi4NkoAIwgsvemnCyFi7
+   VLNH0q60EyDxQ4XlKrTyfFvl1g10K/UCcG2kjvEgGEtTw1nl+nttWQqd0
+   3noLbymqgSBTDT7P480hy9+ruRG/e90Q7jh1eCcY8nF+Sdzmw32J65fKm
+   iglEcKReEl3o5nQcovcj2YEi/i5Wy/HkcHMa6lgaPdG+15Fmt8GLQHFmu
+   +DRtQDsE4TvIIrL94UqFyRA+9hyRyybef7DCqwiHlC5jJ5SJKh7Jyb5XC
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="377926191"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="377926191"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 00:29:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="822963526"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="822963526"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 00:29:31 -0700
+From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
+Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/1] locking/qspinlock: Fix state-transition changes in comments
+Date:   Tue,  9 May 2023 15:29:02 +0800
+Message-Id: <20230509072902.66284-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <IA1PR11MB6171282A1E2CF22740398F8989769@IA1PR11MB6171.namprd11.prod.outlook.com>
+References: <IA1PR11MB6171282A1E2CF22740398F8989769@IA1PR11MB6171.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a ntfs_info message. Fix it.
+1. set_locked() only sets the locked field to 1 and doesn't touch
+   the pending field. So the correct lock state transition is:
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+         *,*,0 -> *,*,1
+
+2. The initial lock state when calling clear_pending_set_locked() is
+   the state just after waiting for the locker goes away. So the
+   state transition for clear_pending_set_locked() is:
+
+         *,1,0 -> *,0,1
+
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 ---
- fs/ntfs3/super.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ v1->v2:
+ - Drop the state transition comments fixes (viewed from the current lock word value).
+ - Update the commit message accordingly.
 
-diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-index e36769eac7de..8323911fe274 100644
---- a/fs/ntfs3/super.c
-+++ b/fs/ntfs3/super.c
-@@ -1191,7 +1191,7 @@ static int ntfs_fill_super(struct super_block *sb, struct fs_context *fc)
- 	sbi->volume.ni = ni;
- 	if (info->flags & VOLUME_FLAG_DIRTY) {
- 		sbi->volume.real_dirty = true;
--		ntfs_info(sb, "It is recommened to use chkdsk.");
-+		ntfs_info(sb, "It is recommended to use chkdsk.");
- 	}
- 
- 	/* Load $MFTMirr to estimate recs_mirr. */
+ kernel/locking/qspinlock.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+index ebe6b8ec7cb3..256021c87ac1 100644
+--- a/kernel/locking/qspinlock.c
++++ b/kernel/locking/qspinlock.c
+@@ -257,7 +257,7 @@ static __always_inline u32 queued_fetch_set_pending_acquire(struct qspinlock *lo
+  * set_locked - Set the lock bit and own the lock
+  * @lock: Pointer to queued spinlock structure
+  *
+- * *,*,0 -> *,0,1
++ * *,*,0 -> *,*,1
+  */
+ static __always_inline void set_locked(struct qspinlock *lock)
+ {
+@@ -385,7 +385,7 @@ void __lockfunc queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+ 	/*
+ 	 * take ownership and clear the pending bit.
+ 	 *
+-	 * 0,1,0 -> 0,0,1
++	 * *,1,0 -> *,0,1
+ 	 */
+ 	clear_pending_set_locked(lock);
+ 	lockevent_inc(lock_pending);
 -- 
-2.30.2
+2.17.1
 
