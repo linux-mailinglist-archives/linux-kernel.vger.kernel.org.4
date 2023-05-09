@@ -2,52 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240CF6FCBE4
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3C36FCC5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 19:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233996AbjEIQ5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 12:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
+        id S235490AbjEIRHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 13:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjEIQ5G (ORCPT
+        with ESMTP id S235333AbjEIRHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 12:57:06 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95E6FA;
-        Tue,  9 May 2023 09:57:04 -0700 (PDT)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 1DD7ECCC1C;
-        Tue,  9 May 2023 16:57:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1683651423; bh=I3ePwvXSmImEkgis0VV8gRsOntE/VNU7m0pNxel7O0I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ALcJ4cP1cMEftnsVntVXVnAUdYytrvCGqYCs0vH7q0MhfZ3NBiu4QWf/LdODYGPAt
-         Z399Lz/f4WKenkoiKEklLujt2pH9gyodZtMYwFtt5abqGtj9xq42kCzw1aQR0b4Dzh
-         TAk8WFKWdqx3OoxXhBs28N2m/ilerd2lZEo0ZTJw=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bartosz Dudziak <bartosz.dudziak@snejp.pl>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: qcom: mmcc-msm8974: Add OXILICX_GDSC for msm8226
-Date:   Tue, 09 May 2023 18:57:02 +0200
-Message-ID: <2528191.PYKUYFuaPT@z3ntu.xyz>
-In-Reply-To: <69ec1926-760e-c957-82b5-0c3f48f65dcf@linaro.org>
-References: <20230506-msm8226-oxilicx-v1-1-52e34b94ff22@z3ntu.xyz>
- <fdb76743-de20-91c5-2edc-19dd5ead33e3@linaro.org>
- <69ec1926-760e-c957-82b5-0c3f48f65dcf@linaro.org>
+        Tue, 9 May 2023 13:07:31 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E80D2FF
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 10:04:22 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-61b5de68cd5so28579946d6.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 10:04:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683651532; x=1686243532;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZNfiDYylpHckBsTJBtckQjf+FcPfo0wjhkF9b1/i4T8=;
+        b=A3BRXGjY/Wyft9HnzuCRd3VSxwLw71GdpvA0dr4ZYdLo2tGMp0vWreaLQGRrQXfL6A
+         VXnVDCh4fnySinKQ8fYSfBZvSUXul9+42hAGYzO53m/74o7/z6tRO38Z3zaIMAGivm+W
+         DhajN+5qCG1mZqM26l32mgMZzrGktbGP5tT3ERVQwfeJOeDpysfhwrqHGDGWJgVn8cnB
+         D6JI3OWYxcoptP2BmIfyyHWCp7K+vG/Guzx9fl3xGvlBWHuznrjHfqwcAXmA62xi9fzm
+         QiVFVNKUj73q58U3XEEqC3PYUSPinSewaiLyYeOOjeqcn/m/DvIokdQ7j+8c+h8X9VvY
+         1Efg==
+X-Gm-Message-State: AC+VfDyaCeHBmHH8Jh935SjE5kF5C7FveVzmrHYTig+gMwRMn+OwJXiv
+        kp0qJYEZIViUQwdJ/6alZsJF
+X-Google-Smtp-Source: ACHHUZ6uxzUunep6oGxrhGEI8fJWpdH9biEaIAPK8tnW9no4oBDOuhDxrDrorqXw1bgEv5VB07afuQ==
+X-Received: by 2002:a05:6214:528b:b0:621:44ee:7065 with SMTP id kj11-20020a056214528b00b0062144ee7065mr1016696qvb.9.1683651532284;
+        Tue, 09 May 2023 09:58:52 -0700 (PDT)
+Received: from localhost ([217.138.208.150])
+        by smtp.gmail.com with ESMTPSA id pp16-20020a056214139000b006168277998csm896786qvb.58.2023.05.09.09.58.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 09:58:51 -0700 (PDT)
+Date:   Tue, 9 May 2023 12:58:50 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v6 4/5] dm-thin: Add REQ_OP_PROVISION support
+Message-ID: <ZFp7ykxGFUbPG1ON@redhat.com>
+References: <20230420004850.297045-1-sarthakkukreti@chromium.org>
+ <20230506062909.74601-1-sarthakkukreti@chromium.org>
+ <20230506062909.74601-5-sarthakkukreti@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230506062909.74601-5-sarthakkukreti@chromium.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,105 +73,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Montag, 8. Mai 2023 13:35:07 CEST Konrad Dybcio wrote:
-> On 8.05.2023 13:32, Dmitry Baryshkov wrote:
-> > On 08/05/2023 10:23, Konrad Dybcio wrote:
-> >> On 6.05.2023 23:20, Luca Weiss wrote:
-> >>> On msm8226 we also have OXILICX_GDSC but we need a slighly different
-> >>> config, with a .cxcs defined for clock but with no parent.
-> >> 
-> >> Hm, on newer (a5xx+) GPUs, CX needs to be turned on first and
-> >> to achieve that, we sometimes define it to be the GX's (also
-> >> implicitly known as "oxili-non-CX" in before-a6xx-times) parent..
-> >> 
-> >> Roughly speaking CX powers the "GPU hardware owned by the broader
-> >> SoC that may not need the GPU core clock to be up" and GX powers
-> >> the "GPU hardware owned strictly by the GPU that needs at least some
-> >> GPU clocks to be enabled"
-> >> 
-> >> Maybe 8974 simply has a bug in the driver that would do the reverse?
-> >> Could you (and perhaps Dmitry on his shiny new 13yo board) test that
-> >> theory, preferably on both SoCs?
-> >> 
-> >> --- a/drivers/clk/qcom/mmcc-msm8974.c
-> >> +++ b/drivers/clk/qcom/mmcc-msm8974.c
-> >> @@ -2431,6 +2431,7 @@ static struct gdsc oxili_gdsc = {
-> >>          .pd = {
-> >>                  .name = "oxili",
-> >>          },
-> >> +       .parent = &oxili_gdsc.pd,
-> >>          .pwrsts = PWRSTS_OFF_ON,
-> >>   };
-> > 
-> > Are you declaring oxili_gdsc to be a parent of itself?
+On Sat, May 06 2023 at  2:29P -0400,
+Sarthak Kukreti <sarthakkukreti@chromium.org> wrote:
+
+> dm-thinpool uses the provision request to provision
+> blocks for a dm-thin device. dm-thinpool currently does not
+> pass through REQ_OP_PROVISION to underlying devices.
 > 
-> lol.. nice catch of course this line should have been
+> For shared blocks, provision requests will break sharing and copy the
+> contents of the entire block. Additionally, if 'skip_block_zeroing'
+> is not set, dm-thin will opt to zero out the entire range as a part
+> of provisioning.
 > 
-> +       .parent = &oxilicx_gdsc.pd,
+> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> ---
+>  drivers/md/dm-thin.c | 70 +++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 66 insertions(+), 4 deletions(-)
 > 
-> and the definitions would need to be swapped
+> diff --git a/drivers/md/dm-thin.c b/drivers/md/dm-thin.c
+> index 2b13c949bd72..3f94f53ac956 100644
+> --- a/drivers/md/dm-thin.c
+> +++ b/drivers/md/dm-thin.c
+> @@ -274,6 +274,7 @@ struct pool {
+>  
+>  	process_bio_fn process_bio;
+>  	process_bio_fn process_discard;
+> +	process_bio_fn process_provision;
+>  
+>  	process_cell_fn process_cell;
+>  	process_cell_fn process_discard_cell;
+> @@ -913,7 +914,8 @@ static void __inc_remap_and_issue_cell(void *context,
+>  	struct bio *bio;
+>  
+>  	while ((bio = bio_list_pop(&cell->bios))) {
+> -		if (op_is_flush(bio->bi_opf) || bio_op(bio) == REQ_OP_DISCARD)
+> +		if (op_is_flush(bio->bi_opf) || bio_op(bio) == REQ_OP_DISCARD ||
+> +		    bio_op(bio) == REQ_OP_PROVISION)
+>  			bio_list_add(&info->defer_bios, bio);
+>  		else {
+>  			inc_all_io_entry(info->tc->pool, bio);
+> @@ -1245,8 +1247,8 @@ static int io_overlaps_block(struct pool *pool, struct bio *bio)
+>  
+>  static int io_overwrites_block(struct pool *pool, struct bio *bio)
+>  {
+> -	return (bio_data_dir(bio) == WRITE) &&
+> -		io_overlaps_block(pool, bio);
+> +	return (bio_data_dir(bio) == WRITE) && io_overlaps_block(pool, bio) &&
+> +	       bio_op(bio) != REQ_OP_PROVISION;
+>  }
+>  
+>  static void save_and_set_endio(struct bio *bio, bio_end_io_t **save,
+> @@ -1953,6 +1955,51 @@ static void provision_block(struct thin_c *tc, struct bio *bio, dm_block_t block
+>  	}
+>  }
+>  
+> +static void process_provision_bio(struct thin_c *tc, struct bio *bio)
+> +{
+> +	int r;
+> +	struct pool *pool = tc->pool;
+> +	dm_block_t block = get_bio_block(tc, bio);
+> +	struct dm_bio_prison_cell *cell;
+> +	struct dm_cell_key key;
+> +	struct dm_thin_lookup_result lookup_result;
+> +
+> +	/*
+> +	 * If cell is already occupied, then the block is already
+> +	 * being provisioned so we have nothing further to do here.
+> +	 */
+> +	build_virtual_key(tc->td, block, &key);
+> +	if (bio_detain(pool, &key, bio, &cell))
+> +		return;
+> +
+> +	if (tc->requeue_mode) {
+> +		cell_requeue(pool, cell);
+> +		return;
+> +	}
+> +
+> +	r = dm_thin_find_block(tc->td, block, 1, &lookup_result);
+> +	switch (r) {
+> +	case 0:
+> +		if (lookup_result.shared) {
+> +			process_shared_bio(tc, bio, block, &lookup_result, cell);
+> +		} else {
+> +			bio_endio(bio);
+> +			cell_defer_no_holder(tc, cell);
+> +		}
+> +		break;
+> +	case -ENODATA:
+> +		provision_block(tc, bio, block, cell);
+> +		break;
+> +
+> +	default:
+> +		DMERR_LIMIT("%s: dm_thin_find_block() failed: error = %d",
+> +			    __func__, r);
+> +		cell_defer_no_holder(tc, cell);
+> +		bio_io_error(bio);
+> +		break;
+> +	}
+> +}
+> +
+>  static void process_cell(struct thin_c *tc, struct dm_bio_prison_cell *cell)
+>  {
+>  	int r;
+> @@ -2228,6 +2275,8 @@ static void process_thin_deferred_bios(struct thin_c *tc)
+>  
+>  		if (bio_op(bio) == REQ_OP_DISCARD)
+>  			pool->process_discard(tc, bio);
+> +		else if (bio_op(bio) == REQ_OP_PROVISION)
+> +			pool->process_provision(tc, bio);
+>  		else
+>  			pool->process_bio(tc, bio);
+>  
+> @@ -2579,6 +2628,7 @@ static void set_pool_mode(struct pool *pool, enum pool_mode new_mode)
+>  		dm_pool_metadata_read_only(pool->pmd);
+>  		pool->process_bio = process_bio_fail;
+>  		pool->process_discard = process_bio_fail;
+> +		pool->process_provision = process_bio_fail;
+>  		pool->process_cell = process_cell_fail;
+>  		pool->process_discard_cell = process_cell_fail;
+>  		pool->process_prepared_mapping = process_prepared_mapping_fail;
+> @@ -2592,6 +2642,7 @@ static void set_pool_mode(struct pool *pool, enum pool_mode new_mode)
+>  		dm_pool_metadata_read_only(pool->pmd);
+>  		pool->process_bio = process_bio_read_only;
+>  		pool->process_discard = process_bio_success;
+> +		pool->process_provision = process_bio_fail;
+>  		pool->process_cell = process_cell_read_only;
+>  		pool->process_discard_cell = process_cell_success;
+>  		pool->process_prepared_mapping = process_prepared_mapping_fail;
+> @@ -2612,6 +2663,7 @@ static void set_pool_mode(struct pool *pool, enum pool_mode new_mode)
+>  		pool->out_of_data_space = true;
+>  		pool->process_bio = process_bio_read_only;
+>  		pool->process_discard = process_discard_bio;
+> +		pool->process_provision = process_bio_fail;
+>  		pool->process_cell = process_cell_read_only;
+>  		pool->process_prepared_mapping = process_prepared_mapping;
+>  		set_discard_callbacks(pool);
+> @@ -2628,6 +2680,7 @@ static void set_pool_mode(struct pool *pool, enum pool_mode new_mode)
+>  		dm_pool_metadata_read_write(pool->pmd);
+>  		pool->process_bio = process_bio;
+>  		pool->process_discard = process_discard_bio;
+> +		pool->process_provision = process_provision_bio;
+>  		pool->process_cell = process_cell;
+>  		pool->process_prepared_mapping = process_prepared_mapping;
+>  		set_discard_callbacks(pool);
+> @@ -2749,7 +2802,8 @@ static int thin_bio_map(struct dm_target *ti, struct bio *bio)
+>  		return DM_MAPIO_SUBMITTED;
+>  	}
+>  
+> -	if (op_is_flush(bio->bi_opf) || bio_op(bio) == REQ_OP_DISCARD) {
+> +	if (op_is_flush(bio->bi_opf) || bio_op(bio) == REQ_OP_DISCARD ||
+> +	    bio_op(bio) == REQ_OP_PROVISION) {
+>  		thin_defer_bio_with_throttle(tc, bio);
+>  		return DM_MAPIO_SUBMITTED;
+>  	}
+> @@ -3396,6 +3450,9 @@ static int pool_ctr(struct dm_target *ti, unsigned int argc, char **argv)
+>  	pt->adjusted_pf = pt->requested_pf = pf;
+>  	ti->num_flush_bios = 1;
+>  	ti->limit_swap_bios = true;
+> +	ti->num_provision_bios = 1;
+> +	ti->provision_supported = true;
+> +	ti->max_provision_granularity = true;
+>  
+>  	/*
+>  	 * Only need to enable discards if the pool should pass
+> @@ -4114,6 +4171,8 @@ static void pool_io_hints(struct dm_target *ti, struct queue_limits *limits)
+>  	 * The pool uses the same discard limits as the underlying data
+>  	 * device.  DM core has already set this up.
+>  	 */
+> +
+> +	limits->max_provision_sectors = pool->sectors_per_block;
+>  }
+>  
+>  static struct target_type pool_target = {
+> @@ -4288,6 +4347,9 @@ static int thin_ctr(struct dm_target *ti, unsigned int argc, char **argv)
+>  		ti->max_discard_granularity = true;
+>  	}
+>  
+> +	ti->num_provision_bios = 1;
+> +	ti->provision_supported = true;
+> +
 
-The 0x4024 oxili_gdsc (downstream name gdsc_oxili_gx) is disabled in 8226 dts.
+We need this in thin_ctr: ti->max_provision_granularity = true;
 
-Only in downstream msm8974.dtsi this gdsc gets "parent-supply = 
-<&pm8841_s4_corner>;", on 8226 there's no parent-supply. And the gdsc parent 
-doesn't even seem to be described there.
+More needed in the thin target than thin-pool; otherwise provision bio
+issued to thin devices won't be split appropriately.  But I do think
+its fine to set in both thin_ctr and pool_ctr.
 
-Should I still try?
+Otherwise, looks good.
 
-> 
-> Konrad
-> 
-> >>   @@ -2439,7 +2440,6 @@ static struct gdsc oxilicx_gdsc = {
-> >>          .pd = {
-> >>                  .name = "oxilicx",
-> >>          },
-> >> -       .parent = &oxili_gdsc.pd,
-> >>          .pwrsts = PWRSTS_OFF_ON,
-> >>   };
-> >> 
-> >> Konrad
-> >> 
-> >>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> >>> ---
-> >>>   drivers/clk/qcom/mmcc-msm8974.c | 11 +++++++++++
-> >>>   1 file changed, 11 insertions(+)
-> >>> 
-> >>> diff --git a/drivers/clk/qcom/mmcc-msm8974.c
-> >>> b/drivers/clk/qcom/mmcc-msm8974.c index 4273fce9a4a4..39ee3953567c
-> >>> 100644
-> >>> --- a/drivers/clk/qcom/mmcc-msm8974.c
-> >>> +++ b/drivers/clk/qcom/mmcc-msm8974.c
-> >>> @@ -2443,6 +2443,16 @@ static struct gdsc oxilicx_gdsc = {
-> >>>       .pwrsts = PWRSTS_OFF_ON,
-> >>>   };
-> >>>   +static struct gdsc oxilicx_gdsc_msm8226 = {
-> >>> +    .gdscr = 0x4034,
-> >>> +    .cxcs = (unsigned int []){ 0x4028 },
-> >>> +    .cxc_count = 1,
-> >>> +    .pd = {
-> >>> +        .name = "oxilicx",
-> >>> +    },
-> >>> +    .pwrsts = PWRSTS_OFF_ON,
-> >>> +};
-> >>> +
-> >>>   static struct clk_regmap *mmcc_msm8226_clocks[] = {
-> >>>       [MMSS_AHB_CLK_SRC] = &mmss_ahb_clk_src.clkr,
-> >>>       [MMSS_AXI_CLK_SRC] = &mmss_axi_clk_src.clkr,
-> >>> @@ -2533,6 +2543,7 @@ static struct gdsc *mmcc_msm8226_gdscs[] = {
-> >>>       [MDSS_GDSC] = &mdss_gdsc,
-> >>>       [CAMSS_JPEG_GDSC] = &camss_jpeg_gdsc,
-> >>>       [CAMSS_VFE_GDSC] = &camss_vfe_gdsc,
-> >>> +    [OXILICX_GDSC] = &oxilicx_gdsc_msm8226,
-> >>>   };
-> >>>     static const struct regmap_config mmcc_msm8226_regmap_config = {
-> >>> 
-> >>> ---
-> >>> base-commit: dd9e11d6477a52ede9ebe575c83285e79e823889
-> >>> change-id: 20230506-msm8226-oxilicx-7f3f0f8e491d
-> >>> 
-> >>> Best regards,
-
-
-
-
+Thanks,
+Mike
