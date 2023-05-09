@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433096FD308
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 01:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF546FD307
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 01:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234887AbjEIX3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 19:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
+        id S234931AbjEIX3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 19:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjEIX26 (ORCPT
+        with ESMTP id S229498AbjEIX26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 9 May 2023 19:28:58 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B04B4239
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351C04237
         for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 16:28:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1683674937; x=1715210937;
   h=date:from:to:cc:subject:message-id;
-  bh=9HdVZyYUoZ3CwJD6rQPjc4LnKSSplS4iPSW+zDwh2gI=;
-  b=XK/LUjPR8lfsKixNAXODxghlFiNO36B+oqdke4sAmlBqdNLiBxagPw43
-   tK3nd/hYLp+hiNSVXzr3WNaubIsvvWGJvoy4rmhlLL78RQ1cuP5YQBZ4G
-   SvJt1Nh1uguelvCvmkgt7GtHhZPZ5aI2CYVPuyAu1GttYjXxTNexMEGnC
-   40CoA5PuNXQJ2tN1UMNauZ55P0N1hlh2uyY5ObDyEJFXU0ycCZWs/h3kQ
-   921EfvxCNbSUx5cGTKhhvitOoB2nO7s/BezJm2i/7gyM8J5xabMEqV7sz
-   SA2jNgvu+x4Spj0CSMENgNKbN11fWi0r74iF5VKBTVMoRQYBr65YZWbUK
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="436404519"
+  bh=hVzjAtKqYofWT2SwhNtWyKLIoPvoaXdk7WD7HlJCNpk=;
+  b=aGyb4XEO2mFriEJInDIn8XctSwAoX3kgTZ2KWEk3KujAgoGqeQHCLVpV
+   D/oaFCTKjCvSacgZnybkdf7dK95RD9Mvo+fG6fNCK2+2To2xlQupLsHbU
+   TflmWFohQNa/jG8R7vE9EgPezCqn2YT3Ye3Y+ahvsuD3ePbY0HlMaSK1K
+   k8hjPubzkhZHwf7ismixIJ9VvoVKeHVCId8fmMq5PZBxVm2yh5qxj4X4k
+   CDGCNYGhSKyN3EBq9UEecLfRdoWHGysyF4DmXIm7I+UGHyx89t5vk9RUl
+   PHh5T+5MJiH392N5s3mjWZYZ7oyXDc4yF19PKAWXpRHP6NmCfbW5liHtE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="348916075"
 X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
-   d="scan'208";a="436404519"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 16:28:57 -0700
+   d="scan'208";a="348916075"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 16:28:56 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="873371390"
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="843297770"
 X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
-   d="scan'208";a="873371390"
+   d="scan'208";a="843297770"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 May 2023 16:28:55 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 09 May 2023 16:28:55 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pwWlL-0002ci-0T;
+        id 1pwWlL-0002cn-0b;
         Tue, 09 May 2023 23:28:55 +0000
-Date:   Wed, 10 May 2023 07:27:56 +0800
+Date:   Wed, 10 May 2023 07:28:07 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/sev] BUILD SUCCESS
- da86eb9611840772a459693832e54c63cbcc040a
-Message-ID: <20230509232756.sAnKm%lkp@intel.com>
+Subject: [tip:master] BUILD SUCCESS
+ d40dcfe0eed0cd08748af969af8b71e517fd569a
+Message-ID: <20230509232807.HnJPQ%lkp@intel.com>
 User-Agent: s-nail v14.9.24
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -60,12 +60,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sev
-branch HEAD: da86eb9611840772a459693832e54c63cbcc040a  x86/coco: Get rid of accessor functions
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: d40dcfe0eed0cd08748af969af8b71e517fd569a  Merge x86/sev into tip/master
 
-elapsed time: 729m
+elapsed time: 730m
 
-configs tested: 116
+configs tested: 117
 configs skipped: 115
 
 The following configs have been built successfully.
@@ -84,8 +84,6 @@ arm                              allyesconfig   gcc
 arm                                 defconfig   gcc  
 arm                          gemini_defconfig   gcc  
 arm                          moxart_defconfig   clang
-arm                        neponset_defconfig   clang
-arm                          sp7021_defconfig   clang
 arm64                            allyesconfig   gcc  
 arm64                               defconfig   gcc  
 arm64                randconfig-r003-20230509   gcc  
@@ -102,12 +100,15 @@ i386                                defconfig   gcc
 i386                          randconfig-a001   gcc  
 i386                          randconfig-a002   clang
 i386                          randconfig-a003   gcc  
-i386                 randconfig-a004-20230508   clang
 i386                          randconfig-a004   clang
 i386                          randconfig-a005   gcc  
 i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                 randconfig-a012-20230508   gcc  
 i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
 i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
 i386                          randconfig-a016   gcc  
 ia64                             allmodconfig   gcc  
 ia64                                defconfig   gcc  
