@@ -2,279 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B866FD2B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 027776FD2BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235277AbjEIWc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 18:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        id S234772AbjEIWex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 18:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbjEIWc4 (ORCPT
+        with ESMTP id S233120AbjEIWek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 18:32:56 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D81119AC
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 15:32:54 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f25d79f6bfso1155192e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 15:32:54 -0700 (PDT)
+        Tue, 9 May 2023 18:34:40 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F9B49CD;
+        Tue,  9 May 2023 15:34:33 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64388cf3263so4642426b3a.3;
+        Tue, 09 May 2023 15:34:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683671572; x=1686263572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cFW1OU15IbqXpYsuUkMH+3bP+c5PgEdgY9o9m73RVKE=;
-        b=u95LiecvKtnHneogqmaoEKvmLRYm/ZKTtCQyxlXlKpbePXWSU9ea+0ME4Ob79D6xsa
-         wutNTYraqc42tw46oad0QOE1ZuQswJHSdNc26KVCja8AVCk7CMQwvlxKvgp1NP9YPpDI
-         3e4pd1wQ6YhlTUgb2WtFHREXS4hPqLKPENkPF3dS09cFzJgs/+rrdv3MXUS8IARt/Yka
-         sr7rgrXNCvt0Migjqex2P85Fn7caFpTf/O1S7JfGQCIg1zmGU2nfUdk4fjn2lWIgruuA
-         6grSd2wtPLf0m7jMjy0+mZksklHWNE7QrUA2038PqBWjieJrV8MH55sthFedG2621uAd
-         uAEw==
+        d=gmail.com; s=20221208; t=1683671672; x=1686263672;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nm/iB1zX0wTmh39nnUNXbCnFgHABdZ3zLA40vJ95ofk=;
+        b=hyYJdXFW4QC3b9HxVlK89KHgNVcYjlbqzLZtwZpwWs2ktV0Rk9oq7wGAwBxCEMbnHz
+         TPqEG6gc7hzUF59xTJo6X6yVHaPWM0y1BIvUOKGqd1RBwlMSBz+KZew0pAodu0D1myfg
+         HiAS3ERNZtfgnKDrmATnVnYgVihDlIgkSzcNxw4EJf+mSPAU/ekbaGY+ZwzGGD0VsBuz
+         b8uiVL3I16RC3A0409Sb19B6RDXZ0zEX3/91wnrbINgtkE+oCqcyKelnaLfXe3XrnqZr
+         x5Asf9j2VKtHNawj5SnCfoMe3AklD7kHfaiS4pgEjG6i0lhp6TpUFVFYkqUqC5/e0LuG
+         f3bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683671572; x=1686263572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cFW1OU15IbqXpYsuUkMH+3bP+c5PgEdgY9o9m73RVKE=;
-        b=XASjxOYIyOzpYIGMVYgLJllWeBVEO+oPPaRnExJ+rDWi5IeNeUpD0tk2sAifuv6ZZW
-         hiUsMWkMB6LHeCKBAdNQzhjLzItVYGQlVCZbpK6EXlv/TEfLsoA2ku7+9ZH4IePvI6eb
-         2xmdcFaDby/8q2W+/ugqrgJS5MinB8TfQtUdkeq974N8ufHk+R5Lfpwk+IM+NqCe9g73
-         ne156rhVKqiOiMegSpeMCm0SwhlN7P/e12Y4YQos4+MyaoBgrMEq44i6wOr8knrokyqb
-         wbeBvLy0mb0/oY2I8YTHDrFubazTj08dZAoTfFiChRfLpp2FAIb1bbX3LPwNO/LLFg3W
-         rbvw==
-X-Gm-Message-State: AC+VfDy7YEJmxqt5YQhyN8cCBC3N4F4hMwIhQKwNmrGwYLxYZa2VRJoV
-        mVsXASc8NzvdEg6Z7iLXjP0F4xngN6xP+7xfT0o=
-X-Google-Smtp-Source: ACHHUZ54rAhXTNw+ZVnp/3LnUbR9U4Or594W+T53dvrDD5klHLA2NotZcFcbFSCllPcc3x/s49Au0A==
-X-Received: by 2002:ac2:4e4e:0:b0:4f2:5393:b7c with SMTP id f14-20020ac24e4e000000b004f253930b7cmr924673lfr.67.1683671572630;
-        Tue, 09 May 2023 15:32:52 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id b29-20020ac25e9d000000b004edce1d338csm483754lfq.89.2023.05.09.15.32.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 15:32:52 -0700 (PDT)
-Message-ID: <f9cfa346-42f8-8061-3517-947440c6f860@linaro.org>
-Date:   Wed, 10 May 2023 00:32:50 +0200
+        d=1e100.net; s=20221208; t=1683671672; x=1686263672;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nm/iB1zX0wTmh39nnUNXbCnFgHABdZ3zLA40vJ95ofk=;
+        b=bnTlYebS+uMFBXC7g0+NL2yMgEp9EH4PQ0+UD7ItPxyiY41u6Je3HjpSH+ctNVb7oG
+         RWIfXH7LP/hHlNC5VEK3RgT3QSicwa0ZZoKif05EtwMw/NXF74IVC802HG/Vcj7FPaOk
+         oYO0ZO4BCrzMNg/9x3+bmpomkA20BWNig6M779v753sVAbs6BpTGGqZIh7nxLd5+WhML
+         wULpfWJ50niVgsUWKsqzLDDzfX6LLByUMsLSX7o0HtAGZLkWOIcHCFAk5z7EzPe2K4vu
+         b6OYuo906qqhPtziD9/MsCCfnT7ijGeKkDPr+JGyrl8rUJRzBd9U10D0tRjdNkoIMavD
+         eorg==
+X-Gm-Message-State: AC+VfDxd202MbLCWF71c+5MJkMy+q3HJsG9zim6u9R2K+4eZO4DIeG2s
+        0XIxqN587B/fa3wpiehXUkr7NEJROIU=
+X-Google-Smtp-Source: ACHHUZ5M0q2kgcwCyV5g0FRAI+Wsgqo+WR18DX2sQYSBuRUV3LPYZBi9zDZQmmfBps5eZbiN8c2MYw==
+X-Received: by 2002:a05:6a00:2da8:b0:647:776c:d19c with SMTP id fb40-20020a056a002da800b00647776cd19cmr3112845pfb.13.1683671671813;
+        Tue, 09 May 2023 15:34:31 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id p5-20020aa78605000000b006438898ce82sm2317274pfn.140.2023.05.09.15.34.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 15:34:31 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Frank <Frank.Sae@motor-comm.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net-next v2 0/3] Support for Wake-on-LAN for Broadcom
+Date:   Tue,  9 May 2023 15:34:00 -0700
+Message-Id: <20230509223403.1852603-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 3/6] soc: qcom: ocmem: make iface clock optional
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Brian Masney <masneyb@onstation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
- <3479852.e9J7NaK4W3@z3ntu.xyz>
- <CAA8EJpo_x=q8yBSUV=owYvQqD30YQbhU51iKHUjr-_doLk6HPw@mail.gmail.com>
- <4094905.iIbC2pHGDl@z3ntu.xyz>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <4094905.iIbC2pHGDl@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series adds support for Wake-on-LAN to the Broadcom PHY
+driver. Specifically the BCM54210E/B50212E are capable of supporting
+Wake-on-LAN using an external pin typically wired up to a system's GPIO.
 
+These PHY operate a programmable Ethernet MAC destination address
+comparator which will fire up an interrupt whenever a match is received.
+Because of that, it was necessary to introduce patch #1 which allows the
+PHY driver's ->suspend() routine to be called unconditionally. This is
+necessary in our case because we need a hook point into the device
+suspend/resume flow to enable the wake-up interrupt as late as possible.
 
-On 9.05.2023 23:41, Luca Weiss wrote:
-> On Dienstag, 9. Mai 2023 19:08:50 CEST Dmitry Baryshkov wrote:
->> On Tue, 9 May 2023 at 19:47, Luca Weiss <luca@z3ntu.xyz> wrote:
->>> On Montag, 8. Mai 2023 13:34:23 CEST Dmitry Baryshkov wrote:
->>>> On 07/05/2023 12:12, Luca Weiss wrote:
->>>>> Some platforms such as msm8226 do not have an iface clk. Since
->>>>> clk_bulk
->>>>> APIs don't offer to a way to treat some clocks as optional simply add
->>>>> core_clk and iface_clk members to our drvdata.
->>>>
->>>> What about using devm_clk_bulk_get_optional()? I think it would be
->>>> simpler this way.
->>>
->>> Using that function both clocks would be optional which may or may not be
->>> a
->>> bad idea. Not sure how much binding yaml and/or driver should try and
->>> catch
->>> bad usages of the driver.
->>
->> The generic rule is that we should not validate the DT unless required
->> (e.g. because of the possibility of legacy DT which used other
->> bindings or contained less information).
-> 
-> Got it.
-> 
-> But since in this driver we use one of the clocks for setting clock rate I'd
-> keep using the two separate struct clk as I've done in this patch if you don't
-> mind too much.
-I'd also advocate for 2x struct clk, using bulk here is like trying to
-spread butter with a fork, it works, but has holes..
+Patch #2 adds support for the Broadcom PHY library and driver for
+Wake-on-LAN proper with the WAKE_UCAST, WAKE_MCAST, WAKE_BCAST,
+WAKE_MAGIC and WAKE_MAGICSECURE. Note that WAKE_FILTER is supportable,
+however this will require further discussions and be submitted as a RFC
+series later on.
 
-Konrad
-> 
-> Regards
-> Luca
-> 
->>
->>> But honestly the current usage of the bulk API seems a bit clunky, we have
->>> a static array of clocks that we use (not in struct ocmem for some
->>> reason) and then we refer to the core clock by index? Feels better to
->>> just have the two clock references in the device struct and then we're
->>> good.
->>>
->>> Let me know.
->>>
->>> Regards
->>> Luca
->>>
->>>>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
->>>>> ---
->>>>>
->>>>>   drivers/soc/qcom/ocmem.c | 42
->>>>>   ++++++++++++++++++++++++------------------
->>>>>   1 file changed, 24 insertions(+), 18 deletions(-)
->>>>>
->>>>> diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
->>>>> index a11a955a1327..6235065d3bc9 100644
->>>>> --- a/drivers/soc/qcom/ocmem.c
->>>>> +++ b/drivers/soc/qcom/ocmem.c
->>>>> @@ -54,6 +54,8 @@ struct ocmem {
->>>>>
->>>>>     const struct ocmem_config *config;
->>>>>     struct resource *memory;
->>>>>     void __iomem *mmio;
->>>>>
->>>>> +   struct clk *core_clk;
->>>>> +   struct clk *iface_clk;
->>>>>
->>>>>     unsigned int num_ports;
->>>>>     unsigned int num_macros;
->>>>>     bool interleaved;
->>>>>
->>>>> @@ -91,16 +93,6 @@ struct ocmem {
->>>>>
->>>>>   #define OCMEM_PSGSC_CTL_MACRO2_MODE(val)  FIELD_PREP(0x00000700,
->>>
->>> (val))
->>>
->>>>>   #define OCMEM_PSGSC_CTL_MACRO3_MODE(val)  FIELD_PREP(0x00007000,
->>>
->>> (val))
->>>
->>>>> -#define OCMEM_CLK_CORE_IDX                 0
->>>>> -static struct clk_bulk_data ocmem_clks[] = {
->>>>> -   {
->>>>> -           .id = "core",
->>>>> -   },
->>>>> -   {
->>>>> -           .id = "iface",
->>>>> -   },
->>>>> -};
->>>>> -
->>>>>
->>>>>   static inline void ocmem_write(struct ocmem *ocmem, u32 reg, u32
->>>>>   data)
->>>>>   {
->>>>>   
->>>>>     writel(data, ocmem->mmio + reg);
->>>>>
->>>>> @@ -316,9 +308,15 @@ static int ocmem_dev_probe(struct platform_device
->>>>> *pdev)>
->>>>>
->>>>>     ocmem->dev = dev;
->>>>>     ocmem->config = device_get_match_data(dev);
->>>>>
->>>>> -   ret = devm_clk_bulk_get(dev, ARRAY_SIZE(ocmem_clks), ocmem_clks);
->>>>> -   if (ret)
->>>>> -           return dev_err_probe(dev, ret, "Unable to get clocks\n");
->>>>> +   ocmem->core_clk = devm_clk_get(dev, "core");
->>>>> +   if (IS_ERR(ocmem->core_clk))
->>>>> +           return dev_err_probe(dev, PTR_ERR(ocmem->core_clk),
->>>>> +                                "Unable to get core clock\n");
->>>>> +
->>>>> +   ocmem->iface_clk = devm_clk_get_optional(dev, "iface");
->>>>> +   if (IS_ERR(ocmem->iface_clk))
->>>>> +           return dev_err_probe(dev, PTR_ERR(ocmem->iface_clk),
->>>>> +                                "Unable to get iface clock\n");
->>>>>
->>>>>     ocmem->mmio = devm_platform_ioremap_resource_byname(pdev, "ctrl");
->>>>>     if (IS_ERR(ocmem->mmio))
->>>>>
->>>>> @@ -333,11 +331,15 @@ static int ocmem_dev_probe(struct
->>>>> platform_device
->>>>> *pdev)>
->>>>>
->>>>>     }
->>>>>     
->>>>>     /* The core clock is synchronous with graphics */
->>>>>
->>>>> -   WARN_ON(clk_set_rate(ocmem_clks[OCMEM_CLK_CORE_IDX].clk, 1000) <
->>>>> 0);
->>>>> +   WARN_ON(clk_set_rate(ocmem->core_clk, 1000) < 0);
->>>>> +
->>>>> +   ret = clk_prepare_enable(ocmem->core_clk);
->>>>> +   if (ret)
->>>>> +           return dev_err_probe(ocmem->dev, ret, "Failed to enable
->>>
->>> core clock\n");
->>>
->>>>> -   ret = clk_bulk_prepare_enable(ARRAY_SIZE(ocmem_clks), ocmem_clks);
->>>>> +   ret = clk_prepare_enable(ocmem->iface_clk);
->>>>>
->>>>>     if (ret)
->>>>>
->>>>> -           return dev_err_probe(ocmem->dev, ret, "Failed to enable
->>>
->>> clocks\n");
->>>
->>>>> +           return dev_err_probe(ocmem->dev, ret, "Failed to enable
->>>
->>> iface
->>>
->>>>> clock\n");
->>>>>
->>>>>     if (qcom_scm_restore_sec_cfg_available()) {
->>>>>     
->>>>>             dev_dbg(dev, "configuring scm\n");
->>>>>
->>>>> @@ -396,13 +398,17 @@ static int ocmem_dev_probe(struct
->>>>> platform_device
->>>>> *pdev)>
->>>>>
->>>>>     return 0;
->>>>>   
->>>>>   err_clk_disable:
->>>>> -   clk_bulk_disable_unprepare(ARRAY_SIZE(ocmem_clks), ocmem_clks);
->>>>> +   clk_disable_unprepare(ocmem->core_clk);
->>>>> +   clk_disable_unprepare(ocmem->iface_clk);
->>>>>
->>>>>     return ret;
->>>>>   
->>>>>   }
->>>>>   
->>>>>   static int ocmem_dev_remove(struct platform_device *pdev)
->>>>>   {
->>>>>
->>>>> -   clk_bulk_disable_unprepare(ARRAY_SIZE(ocmem_clks), ocmem_clks);
->>>>> +   struct ocmem *ocmem = platform_get_drvdata(pdev);
->>>>> +
->>>>> +   clk_disable_unprepare(ocmem->core_clk);
->>>>> +   clk_disable_unprepare(ocmem->iface_clk);
->>>>>
->>>>>     return 0;
->>>>>   
->>>>>   }
-> 
-> 
-> 
-> 
+Patch #3 updates the GENET driver to defer to the PHY for Wake-on-LAN if
+the PHY supports it, thus allowing the MAC to be powered down to
+conserve power.
+
+Changes in v2:
+
+- introduce PHY_ALWAYS_CALL_SUSPEND and only have the Broadcom PHY
+  driver set this flag to minimize changes to the suspend flow to only
+  drivers that need it
+
+- corrected possibly uninitialized variable in bcm54xx_set_wakeup_irq
+  (Simon)
+
+Florian Fainelli (3):
+  net: phy: Allow drivers to always call into ->suspend()
+  net: phy: broadcom: Add support for Wake-on-LAN
+  net: bcmgenet: Add support for PHY-based Wake-on-LAN
+
+ .../ethernet/broadcom/genet/bcmgenet_wol.c    |  14 ++
+ drivers/net/phy/bcm-phy-lib.c                 | 212 ++++++++++++++++++
+ drivers/net/phy/bcm-phy-lib.h                 |   5 +
+ drivers/net/phy/broadcom.c                    | 126 ++++++++++-
+ drivers/net/phy/phy_device.c                  |   5 +-
+ include/linux/brcmphy.h                       |  55 +++++
+ include/linux/phy.h                           |   4 +
+ 7 files changed, 416 insertions(+), 5 deletions(-)
+
+-- 
+2.34.1
+
