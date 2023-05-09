@@ -2,188 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F55C6FBE6B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 06:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 886266FBE6D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 06:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjEIEsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 00:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S233108AbjEIEwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 00:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234490AbjEIEra (ORCPT
+        with ESMTP id S229460AbjEIEwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 00:47:30 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFEE1B1
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 21:46:46 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-76c365e0114so388721339f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 21:46:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683607546; x=1686199546;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Nka0UQDLy3l68Pe1UcuY6PZ6w5ZWCFXNDKJyD70sHRs=;
-        b=eSYr0nwGVIl4PYAQPy9F4Ff/3iqKfNwhZN3xKPewUaxGhPbc927t3RPbCa3I7puoG2
-         gK3IQC9TPlqTy6yLInVkVb3ybIJy9JWoTra7Xd7dc0ms0rOKgaVuetrD6fI+4shwMajh
-         jUtMSpowU/ZIX2pc/iYMXEZjKIiRHbPavnCS9wuTGHyXWyBvBwslnTLHc3Ml3IO1mgx3
-         zN8k2BosMbzqBTdQf6jzbVDRngFiEWv7qmcJKbmnvbamXcoIKeD0BHD6ase2y9+JLt+C
-         haEg/XmNvHXImfG4KID7jdAkgciwHfbWKtQnselRjyW3ZWCsNZIj/107YEDe6mjwz5rX
-         AE+g==
-X-Gm-Message-State: AC+VfDwP7gfI3zKWl1a9l72FsUhwLMkrP9yAV9/iolFDZ+17CFWlqP2U
-        ro3rHjtE+QN4Cnd0RijtzAHxaQeD6L7SNvkOiZGlLplLLtcr
-X-Google-Smtp-Source: ACHHUZ7shSVpmodaX6RVegmcGe8XgRULmYBQuRb4Ww0tg08/7hT9bHiWeooxxQw/sSYOAUzb1CjNsQHniV3I6Pe4OGQWrOzcRmlr
+        Tue, 9 May 2023 00:52:12 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2060.outbound.protection.outlook.com [40.107.244.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0FB30E3
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 21:52:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VstwDOMQW8bS0Oghkj0o3NHUQRh+2odL4DxB3U91YYtVRwB/nXNI+J3SNCEFDBcgJdUJAAUJlFk3N36E7fLDpOqYmjlBDsq+HeCoyPbRKvthuSslo31Ntjt7gZXz37rK1i2nC5kDLEVY4lvHOkUrGR+u91Y9nAHg2CCNRLbAucHvejw8YVPriDzNQ3eNnHkbLkV2yd7lipcp6MXWZEdp6rA+S/DaKwTuapCESG19ihL7b2ReTDVE3tDH4bRgF4yTHpjfetUO024bVkbY1qaaTSXagvhBmRS2VVewEq676VrY9dNC6Av9WQzT7WcUA+vQG3JYoirG/HsjvwHHFsF+5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9ef5NRH8tC9RA5J8xFZhniNG9977Rwv/V6yHHHmCvhg=;
+ b=bbOlShlghMQ7bLlAZrwlTwqqCK/FsfAUsWBJiGAXa58c+0MvUtm9SLw2pcazERGFuQmT/pwsSV7GRKYRNvLTzWv3R6Bjp3pJnksxWkzxloV9Mdqq9QCWoohCu8FKN/E9T+W9zZr5nwiFTcwmyGVZDeU0HutsN4bGKPSvAIfyRHMaDcPMitU+m/tylx7xuX7+56c/RO8VdqopaVAEeK9k3rSwUEOsUlAqAKyOEYVY89psLVXjc0d6IirfGfYAJcFhdh2NmcUaqL/0AVPGumTDNMYcHFpU7bmvoVYhsSvy8MEYFe28x9i/FF+f5VC4ux7OfzHUAtskdMdhvvtzTXBE7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9ef5NRH8tC9RA5J8xFZhniNG9977Rwv/V6yHHHmCvhg=;
+ b=DOg95UXBYD/A7+GqUKy3f7mZqtOPNYWWjsS7cnmklnAXs3upQm2ByG/ykptpcI+8nLxrI/hnbJHk1Ide0Ue4jiCNH/dc6VPtRepgrc96+vlT2EW+jLYgeKDOj9u6/ZlXFrmDFOgjAyaBXckV7WVqJ5WGcflY+M/4ooYJlAfoA+hXrOP/ODylfqtUm7bmkNSuDcaP9nrXngoL24TRbCqN+6+hK7+9MPfQsm8/b/YXMbtuvGKjVtZAd+7C6XNUjtgFxQ4MybEVHt8dxMOCB5fqjOXDZK4Gclnr4HwMAxGO/VSn84Ot9sxPHRv0v6bVvaYa3lIyAL97ePcLT410aDj6dw==
+Received: from BN0PR03CA0040.namprd03.prod.outlook.com (2603:10b6:408:e7::15)
+ by SA0PR12MB4592.namprd12.prod.outlook.com (2603:10b6:806:9b::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Tue, 9 May
+ 2023 04:52:07 +0000
+Received: from BN8NAM11FT078.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e7:cafe::7d) by BN0PR03CA0040.outlook.office365.com
+ (2603:10b6:408:e7::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33 via Frontend
+ Transport; Tue, 9 May 2023 04:52:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT078.mail.protection.outlook.com (10.13.176.251) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6363.33 via Frontend Transport; Tue, 9 May 2023 04:52:07 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 8 May 2023
+ 21:51:55 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 8 May 2023
+ 21:51:55 -0700
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Mon, 8 May 2023 21:51:54 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     <jgg@nvidia.com>, <kevin.tian@intel.com>
+CC:     <robin.murphy@arm.com>, <eric.auger@redhat.com>,
+        <yi.l.liu@intel.com>, <baolu.lu@linux.intel.com>,
+        <will@kernel.org>, <joro@8bytes.org>,
+        <shameerali.kolothum.thodi@huawei.com>, <jean-philippe@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH RFC v4 0/4] Add set_dev_data and unset_dev_data support
+Date:   Mon, 8 May 2023 21:51:46 -0700
+Message-ID: <cover.1683593949.git.nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:b11e:0:b0:3a7:e46e:ab64 with SMTP id
- r30-20020a02b11e000000b003a7e46eab64mr752942jah.1.1683607546669; Mon, 08 May
- 2023 21:45:46 -0700 (PDT)
-Date:   Mon, 08 May 2023 21:45:46 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c2b03c05fb3b6db0@google.com>
-Subject: [syzbot] linux-next boot error: WARNING in workqueue_sysfs_register
-From:   syzbot <syzbot+5b06ded6a65536fa99c2@syzkaller.appspotmail.com>
-To:     jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-scsi@vger.kernel.org,
-        martin.petersen@oracle.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT078:EE_|SA0PR12MB4592:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2439d380-f712-43a2-8f47-08db5049243d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MjtdlsGYFXV4oHeWuPup0czmUAiADfrc77Gg0oB0qpIKnVngORlWbh54Ttth8Q4ijd4MbrDTKbeAJ4tl17Cn1cllDckrq28ZTnF/fMFFsScZxtmU4WlJESKyKfPpqG8druAp2JXB1W5ta7I4PXUqHYp4jBy83cUJCHEVtQZa+4P73eD5FYIPU2e9DNLgdeF0K/j/b4uAAJIuHcS7ppsDSy8d10WHjJOPR6+H6y8qeHINwJ9/8mwe57G1JE9ZBYKsX4Mr4v+dKnSxlZKRXKHPXd9zcNL0IIOzyQzWAx/Wtxu1CgEmbesH1DPsaOqGm5idEUYw1CDyDLht06Hdz2uS+hecTSVfv54/Zq92Zm5d1m0LUXHyOvTSAPtsWXVSAsEVradgg1cOub6/AWPanidlzb/NNYk1xMSs7AhFLMErLbTEDtg1guddL7roH9FSJAhKgQLevKuCQbg8R+WNYCFbKa2UisBUnrbhkjElX41V3LYsIPOh4ybtWLop549kqRvm53smBW43TqQF3TqDI2yaS3McXiWIfv7GUuK8wtqo0b47e2V6B21gWFwA4QmHkA8EdO1AFT09RGNa3rhlZwOEErWvc+VURsJZC/TRC/7LWJiehCUUFcwSxta626bTTYo7av5jTvHOzsJEVnj4bV54wzuM/rHEsBzce0vvTPtAUmJ1n5gAVJxiUOlsGmFaixvwqmvq+yfn1cVyCOC3lrztPC/W2oz50zbYCriE6v9fpemVxS/YG9I4e5T9Lb6grA0oLQq+hePRJHTet0HrxKfhV6+TLFceoDt5rEcU7JoLEMI=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(376002)(136003)(451199021)(46966006)(36840700001)(40470700004)(70206006)(70586007)(83380400001)(40460700003)(36860700001)(2616005)(336012)(426003)(40480700001)(86362001)(54906003)(356005)(7636003)(82740400003)(110136005)(26005)(7696005)(6666004)(966005)(186003)(36756003)(478600001)(47076005)(2906002)(8676002)(8936002)(7416002)(82310400005)(316002)(4326008)(41300700001)(5660300002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 04:52:07.2031
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2439d380-f712-43a2-8f47-08db5049243d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT078.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4592
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Changelog
+v4:
+ * Rebased on top of v6.4-rc1, and iommufd_nesting-v2 (candidate)
+ * Dropped WARN_ON in the destroy()
+v3:
+ https://lore.kernel.org/all/cover.1682234302.git.nicolinc@nvidia.com/
+ * Reverted the data in VFIO BIND ioctl to a set of new iommufd ioctls
+ * Replaced the iommu_device_data_size array with a dev_user_data_len
+   variable in the iommu_ops structure.
+ * Added has_dev_data check and locking protection
+ * Added selftest coverage
+v2:
+ https://lore.kernel.org/all/cover.1681976394.git.nicolinc@nvidia.com/
+ * Integrated the uAPI into VFIO_DEVICE_BIND_IOMMUFD call
+ * Renamed the previous set_rid_user to set_dev_data, to decouple from
+   the PCI regime.
+v1:
+ https://lore.kernel.org/all/cover.1680762112.git.nicolinc@nvidia.com/
 
-syzbot found the following issue on:
+This is a pair of new uAPI/ops for user space to set an iommu specific
+device data for a passthrough device. This is primarily used by SMMUv3
+driver for now, to link the vSID and the pSID of a device that's behind
+the SMMU. The link (lookup table) will be used to verify any ATC_INV
+command from the user space for that device, and then replace the SID
+field (virtual SID) with the corresponding physical SID.
 
-HEAD commit:    47cba14ce6fc Add linux-next specific files for 20230509
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17e063a8280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d1f55a88ec660cdb
-dashboard link: https://syzkaller.appspot.com/bug?extid=5b06ded6a65536fa99c2
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+This series is available on Github:
+https://github.com/nicolinc/iommufd/commits/set_dev_data-rfc-v4
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0dff7f749545/disk-47cba14c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/238b578b8345/vmlinux-47cba14c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/2909e3e79ac1/bzImage-47cba14c.xz
+Thanks!
+Nicolin
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5b06ded6a65536fa99c2@syzkaller.appspotmail.com
+Nicolin Chen (4):
+  iommu: Add set/unset_dev_user_data ops
+  iommufd: Add IOMMUFD_CMD_DEVICE_SET_DATA and
+    IOMMUFD_CMD_DEVICE_UNSET_DATA
+  iommufd/selftest: Add IOMMU_TEST_OP_DEV_CHECK_DATA
+  iommufd/selftests: Add coverage for IOMMU_DEVICE_SET/UNSET_DATA
 
-Asymmetric key parser 'x509' registered
-Asymmetric key parser 'pkcs8' registered
-Key type pkcs7_test registered
-Block layer SCSI generic (bsg) driver version 0.4 loaded (major 240)
-io scheduler mq-deadline registered
-io scheduler kyber registered
-io scheduler bfq registered
-input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
-ACPI: button: Power Button [PWRF]
-input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
-ACPI: button: Sleep Button [SLPF]
-ioatdma: Intel(R) QuickData Technology Driver 5.00
-ACPI: \_SB_.LNKC: Enabled at IRQ 11
-virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKD: Enabled at IRQ 10
-virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKB: Enabled at IRQ 10
-virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
-virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
-N_HDLC line discipline registered with maxframe=4096
-Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-Non-volatile memory driver v1.3
-Linux agpgart interface v0.103
-ACPI: bus type drm_connector registered
-[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
-[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
-Console: switching to colour frame buffer device 128x48
-platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
-usbcore: registered new interface driver udl
-brd: module loaded
-loop: module loaded
-zram: Added device: zram0
-null_blk: disk nullb0 created
-null_blk: module loaded
-Guest personality initialized and is inactive
-VMCI host device registered (name=vmci, major=10, minor=118)
-Initialized host personality
-usbcore: registered new interface driver rtsx_usb
-usbcore: registered new interface driver viperboard
-usbcore: registered new interface driver dln2
-usbcore: registered new interface driver pn533_usb
-nfcsim 0.2 initialized
-usbcore: registered new interface driver port100
-usbcore: registered new interface driver nfcmrvl
-Loading iSCSI transport class v2.0-870.
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1 at kernel/workqueue.c:5925 workqueue_sysfs_register+0x32c/0x3f0 kernel/workqueue.c:5925
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.4.0-rc1-next-20230509-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:workqueue_sysfs_register+0x32c/0x3f0 kernel/workqueue.c:5925
-Code: b8 00 00 00 00 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 ac 00 00 00 49 c7 84 24 18 01 00 00 00 00 00 00 eb b1 e8 a4 d4 2f 00 <0f> 0b 41 be ea ff ff ff eb a2 4c 89 ff e8 a2 d3 82 00 e9 9b fe ff
-RSP: 0000:ffffc90000067910 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000080000 RCX: 0000000000000000
-RDX: ffff888140660000 RSI: ffffffff81546bac RDI: 0000000000000005
-RBP: ffffc90000067a80 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000080000 R11: 0000000000000000 R12: ffff88801f7ed800
-R13: 0000000000000008 R14: ffff88801f7ed960 R15: ffff88801f7ed9c0
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000c571000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- alloc_workqueue+0x637/0x1110 kernel/workqueue.c:4485
- scsi_host_alloc+0xd1f/0x11a0 drivers/scsi/hosts.c:513
- virtscsi_probe+0x206/0xc80 drivers/scsi/virtio_scsi.c:872
- virtio_dev_probe+0x57b/0x870 drivers/virtio/virtio.c:305
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x240/0xca0 drivers/base/dd.c:658
- __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
- __driver_attach+0x271/0x570 drivers/base/dd.c:1216
- bus_for_each_dev+0x12a/0x1c0 drivers/base/bus.c:368
- bus_add_driver+0x2e9/0x640 drivers/base/bus.c:673
- driver_register+0x162/0x4a0 drivers/base/driver.c:246
- virtio_scsi_init+0x76/0x110 drivers/scsi/virtio_scsi.c:1019
- do_one_initcall+0x102/0x540 init/main.c:1246
- do_initcall_level init/main.c:1319 [inline]
- do_initcalls init/main.c:1335 [inline]
- do_basic_setup init/main.c:1354 [inline]
- kernel_init_freeable+0x5a4/0x890 init/main.c:1571
- kernel_init+0x1e/0x2c0 init/main.c:1462
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+ drivers/iommu/iommufd/device.c                | 81 +++++++++++++++++++
+ drivers/iommu/iommufd/iommufd_private.h       |  3 +
+ drivers/iommu/iommufd/iommufd_test.h          | 15 ++++
+ drivers/iommu/iommufd/main.c                  |  4 +
+ drivers/iommu/iommufd/selftest.c              | 42 ++++++++++
+ include/linux/iommu.h                         | 13 +++
+ include/uapi/linux/iommufd.h                  | 32 ++++++++
+ tools/testing/selftests/iommu/iommufd.c       | 20 +++++
+ tools/testing/selftests/iommu/iommufd_utils.h | 59 ++++++++++++++
+ 9 files changed, 269 insertions(+)
 
+-- 
+2.40.1
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
