@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFC96FBCB3
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 03:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFA26FBCB4
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 03:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233875AbjEIBvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 21:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S233943AbjEIBvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 21:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233842AbjEIBuy (ORCPT
+        with ESMTP id S233895AbjEIBvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 21:50:54 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB43AD0E;
-        Mon,  8 May 2023 18:50:44 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1aafa03f541so51937305ad.0;
-        Mon, 08 May 2023 18:50:44 -0700 (PDT)
+        Mon, 8 May 2023 21:51:03 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37473AD23;
+        Mon,  8 May 2023 18:50:46 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1aaebed5bd6so37148685ad.1;
+        Mon, 08 May 2023 18:50:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683597043; x=1686189043;
+        d=gmail.com; s=20221208; t=1683597045; x=1686189045;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NrqNc+2n+X33D/fyVH+5OCxvofzF9jLKnUEj7w+cHec=;
-        b=qTyTEfIWrUl9clnLrbs+ALzV4ZhzxV2eoI+Kuj2xBGhIyJVv0N3NVspv9peRBOHID1
-         sPkT+dUsRKrBL8q+TKygynxiD3IlS0YGAOBz9jbme2oVJmrHo2yX8wKEVovFxi2mbUs1
-         W1f3bGszis45Hl34x16mfSstXnM+F5hYajB0Es9XjcBl7GezD8hH6OtU8lXC7ZfsV7YA
-         2mFqfp3eQXVWdIGW049QdLTN4oSAzkXW/VD1LLM3R9+jfT+9kWH800fo7mv0VFmRDCA3
-         UuThLAjMEfwOxJjQol6FL2YKoUUsoTWU3mcZmhsGwqo1zqvatM1efVr/wx419Z5hOMom
-         bT1g==
+        bh=QMTTy8Xq3DQysjr0Apwc28XqtPWPIN/Qk2iVDooviS4=;
+        b=DcJ7t//ro7U/ttHMBFC9attG41EeH8VZtSXuwOroBYbJWhoKZNI4AV1KG5CeHOcRmO
+         ECsAMMzBkOBp29bRrORU2z666uQHw0dYQm+6fgQkpamYB4oKMGKokl0W8OZrujBS6ltA
+         oJkH2HEjJ/yL50TyNebQGtX6iXTrrOCoja74sdoYXYeZ36wllotLKdhFh6JwLGfRZJvZ
+         XXy8Sfcu2kvmbNC4oHLLSbLaM40HpkKcN8u4d+BFupNEL5GNVORMOj1sRkjxxbEovwk8
+         ySdD1vMNYGpJZXuXyMdszB62AKUBeDypRwSg7TaF1EN00A3P4fDhAvnQrY8Rhzixh4Cu
+         sONQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683597043; x=1686189043;
+        d=1e100.net; s=20221208; t=1683597045; x=1686189045;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=NrqNc+2n+X33D/fyVH+5OCxvofzF9jLKnUEj7w+cHec=;
-        b=XFC+oOKBrNS7AMwdBrqepBVUoyRcjgD5dEFuv+Qdz4trGSBPWpgi8mTingmoGuMjKf
-         6UGtUt/1qcd/fNXWMOJs8kZgkA5rf+4a/IP9vBRSDokeifaPvYLJVdydR3/MVLNKACmW
-         cCcMukwPDK3+cT8Ug4jiMteP1mL6yU1qtmVFj6e+6h12KrV9JeWD7U8cjxe5GufrZpQ4
-         EydtDy7VfXG/IbZMC3feh9RMEoPlLw1onXsqmi2CGulBWl+vKzTI3ICZpsZA2tYN0KZ3
-         k7rG021yqDYyCmf++8jlgfExjCfxSDeLajZ+uBx+qNXm/7k9atxYa6hYCM/FSPF0Tn8q
-         OqFg==
-X-Gm-Message-State: AC+VfDz3cratzc3W5h0IyT3QVMXskbb6MsiPFwkABjxEASEsGX7TypJP
-        LCfgD1j1JhiCAh5QhEKOrv4=
-X-Google-Smtp-Source: ACHHUZ42FE//i0L4Sin9FHyiLrlzv+HHMIgvNF2bWG8qG5oOI+1HoQR2s8x4fTKQKdTgTqSRlejXAQ==
-X-Received: by 2002:a17:903:2289:b0:1a6:84be:a08f with SMTP id b9-20020a170903228900b001a684bea08fmr14901133plh.64.1683597043293;
-        Mon, 08 May 2023 18:50:43 -0700 (PDT)
+        bh=QMTTy8Xq3DQysjr0Apwc28XqtPWPIN/Qk2iVDooviS4=;
+        b=LaUZsJrc4COiF5Ik6UCdJxCoWH9zTIxpGsFFxLX2L0CUa+YmbF8q0h21j2cdmSq1OM
+         w0yrgcuTJ4S1joDnKAgiQlE6pgljP11IAVWtMzAKi6BK3nacigyNh3KwMjflQHG7vfIs
+         mDa64VRw8eax3LXJ30ZM14WHQ5EsIQbr1ZkBjcGVGip6fa9Rdv63MT0NHGynV4NzHibA
+         AMbdAggVLKRtoTbT016EeX4Cdo+hs2XhdjlVuXhXvWAGtNYnzFmq04OYywGLSz77qqO2
+         NHZ1CDWqOkFyG3l+8gbb1hyJag0lJKQzmDXGjzuEHvvzUx7AyMtYNa9vLWF3tQ9yWCgP
+         1tbw==
+X-Gm-Message-State: AC+VfDwma+Hk9fYb5w4pEsQYz+/ZoXPTUPBG2FEhYIWvsAeuCoOjOLyS
+        srRtQZC7Ny7EDuyqWiVNHO4=
+X-Google-Smtp-Source: ACHHUZ4bv7//zjoXAVozZ9A4o/qCIb2Vg+jgfHItIU4zO6YD64j7Wt4dENV1GblH0pUluA5l6Rlrhw==
+X-Received: by 2002:a17:902:ef96:b0:1aa:ce4d:c77d with SMTP id iz22-20020a170902ef9600b001aace4dc77dmr11830781plb.24.1683597045176;
+        Mon, 08 May 2023 18:50:45 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id b4-20020a170902d50400b001a9af8ddb64sm123818plg.298.2023.05.08.18.50.42
+        by smtp.gmail.com with ESMTPSA id i12-20020a17090332cc00b001ac5896e96esm139330plr.207.2023.05.08.18.50.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 18:50:42 -0700 (PDT)
+        Mon, 08 May 2023 18:50:44 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     jiangshanlai@gmail.com
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Tejun Heo <tj@kernel.org>, Ming Qian <ming.qian@nxp.com>,
-        Shijie Qin <shijie.qin@nxp.com>,
-        Zhou Peng <eagle.zhou@nxp.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: [PATCH 04/13] media: amphion: Use alloc_ordered_workqueue() to create ordered workqueues
-Date:   Mon,  8 May 2023 15:50:23 -1000
-Message-Id: <20230509015032.3768622-5-tj@kernel.org>
+        Tejun Heo <tj@kernel.org>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH 05/13] wifi: ath10/11/12k: Use alloc_ordered_workqueue() to create ordered workqueues
+Date:   Mon,  8 May 2023 15:50:24 -1000
+Message-Id: <20230509015032.3768622-6-tj@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230509015032.3768622-1-tj@kernel.org>
 References: <20230509015032.3768622-1-tj@kernel.org>
@@ -131,42 +132,61 @@ As there are follow-up workqueue core changes, I'd really appreciate if the
 patch can be routed through the workqueue tree w/ your acks. Thanks.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Ming Qian <ming.qian@nxp.com>
-Cc: Shijie Qin <shijie.qin@nxp.com>
-Cc: Zhou Peng <eagle.zhou@nxp.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
 ---
- drivers/media/platform/amphion/vpu_core.c | 2 +-
- drivers/media/platform/amphion/vpu_v4l2.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/wireless/ath/ath10k/qmi.c | 3 +--
+ drivers/net/wireless/ath/ath11k/qmi.c | 3 +--
+ drivers/net/wireless/ath/ath12k/qmi.c | 3 +--
+ 3 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/amphion/vpu_core.c b/drivers/media/platform/amphion/vpu_core.c
-index de23627a119a..43d85a54268b 100644
---- a/drivers/media/platform/amphion/vpu_core.c
-+++ b/drivers/media/platform/amphion/vpu_core.c
-@@ -254,7 +254,7 @@ static int vpu_core_register(struct device *dev, struct vpu_core *core)
- 	if (vpu_core_is_exist(vpu, core))
- 		return 0;
+diff --git a/drivers/net/wireless/ath/ath10k/qmi.c b/drivers/net/wireless/ath/ath10k/qmi.c
+index 038c5903c0dc..52c1a3de8da6 100644
+--- a/drivers/net/wireless/ath/ath10k/qmi.c
++++ b/drivers/net/wireless/ath/ath10k/qmi.c
+@@ -1082,8 +1082,7 @@ int ath10k_qmi_init(struct ath10k *ar, u32 msa_size)
+ 	if (ret)
+ 		goto err;
  
--	core->workqueue = alloc_workqueue("vpu", WQ_UNBOUND | WQ_MEM_RECLAIM, 1);
-+	core->workqueue = alloc_ordered_workqueue("vpu", WQ_MEM_RECLAIM);
- 	if (!core->workqueue) {
- 		dev_err(core->dev, "fail to alloc workqueue\n");
- 		return -ENOMEM;
-diff --git a/drivers/media/platform/amphion/vpu_v4l2.c b/drivers/media/platform/amphion/vpu_v4l2.c
-index 6773b885597c..a48edb445eea 100644
---- a/drivers/media/platform/amphion/vpu_v4l2.c
-+++ b/drivers/media/platform/amphion/vpu_v4l2.c
-@@ -740,7 +740,7 @@ int vpu_v4l2_open(struct file *file, struct vpu_inst *inst)
- 	inst->fh.ctrl_handler = &inst->ctrl_handler;
- 	file->private_data = &inst->fh;
- 	inst->state = VPU_CODEC_STATE_DEINIT;
--	inst->workqueue = alloc_workqueue("vpu_inst", WQ_UNBOUND | WQ_MEM_RECLAIM, 1);
-+	inst->workqueue = alloc_ordered_workqueue("vpu_inst", WQ_MEM_RECLAIM);
- 	if (inst->workqueue) {
- 		INIT_WORK(&inst->msg_work, vpu_inst_run_work);
- 		ret = kfifo_init(&inst->msg_fifo,
+-	qmi->event_wq = alloc_workqueue("ath10k_qmi_driver_event",
+-					WQ_UNBOUND, 1);
++	qmi->event_wq = alloc_ordered_workqueue("ath10k_qmi_driver_event", 0);
+ 	if (!qmi->event_wq) {
+ 		ath10k_err(ar, "failed to allocate workqueue\n");
+ 		ret = -EFAULT;
+diff --git a/drivers/net/wireless/ath/ath11k/qmi.c b/drivers/net/wireless/ath/ath11k/qmi.c
+index ab923e24b0a9..26b252e62909 100644
+--- a/drivers/net/wireless/ath/ath11k/qmi.c
++++ b/drivers/net/wireless/ath/ath11k/qmi.c
+@@ -3256,8 +3256,7 @@ int ath11k_qmi_init_service(struct ath11k_base *ab)
+ 		return ret;
+ 	}
+ 
+-	ab->qmi.event_wq = alloc_workqueue("ath11k_qmi_driver_event",
+-					   WQ_UNBOUND, 1);
++	ab->qmi.event_wq = alloc_ordered_workqueue("ath11k_qmi_driver_event", 0);
+ 	if (!ab->qmi.event_wq) {
+ 		ath11k_err(ab, "failed to allocate workqueue\n");
+ 		return -EFAULT;
+diff --git a/drivers/net/wireless/ath/ath12k/qmi.c b/drivers/net/wireless/ath/ath12k/qmi.c
+index 03ba245fbee9..0a7892b1a8f8 100644
+--- a/drivers/net/wireless/ath/ath12k/qmi.c
++++ b/drivers/net/wireless/ath/ath12k/qmi.c
+@@ -3056,8 +3056,7 @@ int ath12k_qmi_init_service(struct ath12k_base *ab)
+ 		return ret;
+ 	}
+ 
+-	ab->qmi.event_wq = alloc_workqueue("ath12k_qmi_driver_event",
+-					   WQ_UNBOUND, 1);
++	ab->qmi.event_wq = alloc_ordered_workqueue("ath12k_qmi_driver_event", 0);
+ 	if (!ab->qmi.event_wq) {
+ 		ath12k_err(ab, "failed to allocate workqueue\n");
+ 		return -EFAULT;
 -- 
 2.40.1
 
