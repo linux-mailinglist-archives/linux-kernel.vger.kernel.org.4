@@ -2,92 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 294D56FD2F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 01:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB256FD2F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 01:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234738AbjEIXIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 19:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48908 "EHLO
+        id S234738AbjEIXNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 19:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjEIXIf (ORCPT
+        with ESMTP id S229555AbjEIXNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 19:08:35 -0400
-Received: from sonic314-20.consmr.mail.ir2.yahoo.com (sonic314-20.consmr.mail.ir2.yahoo.com [77.238.177.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58DC3AA5
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 16:08:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1683673712; bh=zp2c2cd4lwZqhHjdjVdFDoJiq8XP9spy5T+/kzV/2H8=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=YRKXllKXPkJjYzNv9qUn3bC9XiUM23lukQasnHqq2W1UqGsSKqPdxt3V2MnGpmFkQn5zCMYikVz0UGL2SfftP+icM6rtlWT2DLV15u3J/BMv5AW52SGSWmI75e9O7wvdZyQZkDK7QAgrRD/n1A3wrNUPZKYvjzGH236s3NC2S8Uv6xpM/xxmyE0o1yurPIPJhn2Up0a4Y2lviXPa/DDVZZkg17VMxtcE2g4h+TH0fRvD8ChugXD2PAR5ldWCFQ93FBWSBLFYezbtSgn00O7o08IWVmD6fftYErUmupms+baHoPhTTg3fd/wy55YroBPGzJSuiBosPOP1Ew5g2M8WeQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1683673712; bh=3bt0fE80k7Rxcpi/4RtFXVoaDMa2eRmUO6BCOqhmq0y=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=nrTo17tYlokj40BgbBijWTlsKKhPeajoeEOjjuEv/3S5IvB/xFzOcKaf7MwNb7hpXqTR2Z1zzvnCRVojZcgpsmN1nOUc7v4gXYsU95vJmV9ZeQLJ+COCzo7H0JDeESFKqvJF3Wpp74cLiA3u9OMQ3dUjEoV8f/TMBW1dloRPRBsGxwnX6YnIWvQ2xBk5GI05FthgKOSaWJjKpj+Y5oEp/i82NTh5WzmB6gttbI6sQMKdQUMb3J1dTkGOHLB0q1Jy0jzxRgNl/76ITfO2TyYWj6Mrpwr2mewnmiGoJ2iiyHIt4TXkgSeBzXwv7u95Y7VFXJEnVCexo+irQFzKdmih5A==
-X-YMail-OSG: dNLcEmYVM1mtV84oVum2i3KZLiY3yU5rrycjCHcF4QT5y8aEcJO1WCu.JAhZAJk
- 40_kCiH9IfTaVjYm0NqQjCcA2qpfNUqXzNWyIyOFsTmSZLvjJwsohVYDTF6vNpTq29o7.sdEu7AB
- 53O4ylzhAbqqpf0L6eswdgvdYHIJ3Hk1r58D4YysDeHRsSN5R2MVhpkqq0DOqHyMjCG.EcrzVov.
- W4.s8kHfFK.nHoa22P4hIz3euAf1Ltpr_BaTG7of6sbMVULOe39l3kQYa7i377._HKFJ.zglwi6U
- OX_fAvFFE7_nJ4sTOorDiAaiM0cSNfhQ4u5WzGpZW3dTqGM3FXHB3CAtrRJkntKvpYy.KI6xEbLT
- JMfo93q9bjfTOjwcVbDuwUeTJPlegnRQ_nbG6Nuvz9fe0s8j5XtLP5DGdtjP20RsP2IptNIxqzUg
- vW8RsF7WxaMCAtPGAkvVUO2ELosASXZOiRmlBdZ.5E5xlGu.sTcqeQwnDOd5VpmxaHM7ls6P8MHW
- UTUKYQdG3xulyFF.x21Z51r8SQ_uk1kgGsWGYzEPHA0WQTeGGadL04gA7zVMjoxU0EzA2sz8IZkD
- DxgWpPXfjXN1fe.wfogCSuPZTrmSVZMjBJ58OMsr2RMmLo0UTmEBKlozjrCyycL_79U7F2IBzVsV
- VI9UMKfIp4oEn.jXqqGxC.T0URthaOeFxXzA5wTe9j4SDgTklBxHWgyMWTfusWW5S2GQCRiIB9BJ
- 9PKk.jOa3bdDtPayGqtbpBp29BckvK0lAuJwc7kKOTulEk4X8QzLDFZH92hNwFhIXjUJwDHpp3Ij
- y15e_oSLqYos6k7ZoBva8KJ7pFGTHrnI4J.ySZsKC.S8y0.9uUC1o7PIAT6UhfpmK3w9QebxUuJC
- iD0nI5bu_fzbS78EcLAYs3.tejdw_R2.ENcO44_af2Dkx2lCAHfWmsURPMy3TdRIFK9wQcXUYux0
- fpM5rEW45S_0taEVQtMPe2giwv.7Y8w.4VHbhYJewXk45ak2O_H8SqJDutZA3NH0jwWuFgnKxAaD
- _1QP8xz65CB2UtKE09WnaLEdMMmxqsMB.DLLHFGXW7vN9STqAVb9cK_vyhtJGyvwDb1QjLA2VTiV
- g02cOsRJMyd0sBFitUkPDIC784qSzdsHODqMj6b3lL7duQLUi_K_LLRhEhNT.O2tSAxOUAgzrJCj
- sjMStT65WIhxYH2XrE1PxD5GjZMhobxnxCLgW8QlUs0.4l1qEcnElGpBT31shBxTNVBletNosGEK
- 7Okt_r.EGK8bNejBShVxsEat_mK58JENr4T6s4MyMPInC1wpoTJ3CqYxHEuRSq_aJR7V8KUHhV5x
- J2IO56F_hRfhbEqvR_rLdVwvRjoXlwdvvA0DrjHTP4eNOvpasxbi_Ta7Mc80FHksioQ60C6PWQig
- QUYR0MCZiEDSJFDlghIPcXVcJihxW27r5V7UAgxpGReJt42m0CQaTUGFFnBtiLRNh6zFBz4Z7DCK
- RPIHTqmeIBJfLgg.8RC18tgEF.PdFRTX9erZ6pYCX2gZn0asuLQzjwkX0XCfa.ULNOl9v9iyRtxK
- ww77YRxvdTl3Z3h1BnzQCIPBEfKOmuD5bZdaDCwK6lMoPvmPlUGOjaKarla7JBgsdJe00g6UtFj3
- QORtP5uUg1O7wGwLgBY0KnzwHqM61zp01xzL3yb9PmCtDhW6zn03SPifG5fSoeYw.PnP7FxZPah8
- CRbvJwymUF2zicLbKhCrDLh1jOHRnEVhMM7Vm3K2qbUIzVZ1_PWghw3mxy6hgaK4nkYWqHflv2Qs
- Nu50Sz1vCAzKh4f0QXDVnJL0Ystr6xsNBzSPV6eGMQsiF0Nou1ASRE5ITbuHRr5vAkIj3VhKdzv2
- GwtMu8dsYltGMhnutjY5YUXeDOazFHbqIgX7mX463.bAXeiyluNUTzphyQfyA19zMuw6X382rNnZ
- dBrDaSv4B_A_f9ypv4_4l.xftl5VBFxUCehWMjymvKirANPwxnwdCSGtLYBctkCt7yOKHxJR3_Ur
- 9qt77GMm7pnuh7csqxXH5C9RuqtWdOeZzRHhJY31PG9bWCaYmI5ZnIweM7U9n0_plz80g1KnT2PJ
- EfBpADrqwPFEoEyZmF0AYFBMvBigM6Hockr58zh.BDyanyUpbgaYNFZ10dvQSftoXv.sCKy1C0Z0
- oA0BssVDZp9x8thtnfLpeXtnlFRuCZet6ailZxPTir0eaDzqgGNin1aRHCiTOa5aVvMyHK8xyG4s
- 4ytzISpX9PsUN1f2E2H0UEivKDl9zL5OsPzPEUcpu6K06Pytv5pFMztSwFSapbDQAHcjDTLqI69a
- gJKLgLQ--
-X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: 1c7df8da-ea60-4aad-8ef7-a78a43a32e11
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ir2.yahoo.com with HTTP; Tue, 9 May 2023 23:08:32 +0000
-Received: by hermes--production-ir2-74cd8fc864-db5p9 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 837ff3d45b33d672f05185fc55fb6f66;
-          Tue, 09 May 2023 23:08:31 +0000 (UTC)
-Message-ID: <74ab2851-1ca4-dec1-850a-1811e5a7e22f@rocketmail.com>
-Date:   Wed, 10 May 2023 01:08:30 +0200
+        Tue, 9 May 2023 19:13:14 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2057.outbound.protection.outlook.com [40.107.95.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667F830C2;
+        Tue,  9 May 2023 16:13:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FtxTyzWDINPFhXQACXnjLdnkLVMzpS4ow4A4nG10Wo6G0rVPAjI61IMGG66MJmNh7ETP+WnbUKHuzCPAUlPnwTQjmePNBX7jAMDNBMpNwIGgZiwhmFzTJyBrpRrCyutP6JcrboLrqegpC05FvN3m+BUVOhNezFg5nOtPU1ZeXfMqWsRdeKTlBHYcT6ayZAAhlw8kKzj39OSn8J8urZWiItddqMOIQikQKR0YVx0gidLeRabFJ1mE3XJ+5N4VPLSTc+Qp68ag8GS1dN7UB8tuciF2hLOW6NtCGQzsdUHtREqbnJOSEvP8vJLFFo5SWuM2SnB/h4kIWcgtB39TjK1Lew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AfiPrTjXNzB6bqmMDmF74e8FnV62pFvDXBJZQkUQe+A=;
+ b=ZMa6/zrpys7qqIO0Te1AqRmiv6W6N6fv8LAFCnXC/rMQDQDhLrVid1NIwZcs3yqnCX5ksMPlv7R3FNOW4JQyiNsavOdjq7JzUEYcGDVuyObvg8McgMdZwjeMQuNfyKcpFK1029DFxnnQuW1fmrNGlmOxLby+80MBYeWrIo2nLS+7LWiVwx0oPQ03SCmckprneL9S0LQ0tWciegRo4Nk1EaeyvUxbYJuoi56PWs+j5iqoD7EgE4967naMtruH6WO+El0JAiZaOfW3Jl+Z7d/Vs62iXJ6ZgJSvHqogyRSeJK6E0ke2TrgsK2e5uSAWjZ4K7gR84ISIpTyxQQOlbDC1SA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AfiPrTjXNzB6bqmMDmF74e8FnV62pFvDXBJZQkUQe+A=;
+ b=On1QQNwR+LwAs1K7fhF9UCxUUSQaPoawPw77RiasntnqYZCUZJIL6XTR14UAomdwoHguI1yIV7h0Lx+LcE2hNQ4ay5UYcR4ngPBpCsJOuOY4NTjyLrYFkys8NA3BtT4fTpYH3MoQF8l/HHAhOClVjHp7TumDPDHPDz2LYJoumpBWre3jb4NRb7aNYplDOuSjLVvhrSabBECHY2tqNv2okPLaKPPax4UQeSSCL4HIPcruLtBrofMPEQ7TI/yExfRIv/bBvNfqwDQTJoThaB2BbYJqNY83yqmkcMKWdmt2S0pNIHeDHz1lKGvSpuIPkP+9Z2QBQOi6qns8sYjEmWr9aQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM4PR12MB6111.namprd12.prod.outlook.com (2603:10b6:8:ac::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Tue, 9 May
+ 2023 23:13:11 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6363.032; Tue, 9 May 2023
+ 23:13:11 +0000
+Date:   Tue, 9 May 2023 20:13:08 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        "Lu, Baolu" <baolu.lu@intel.com>
+Subject: Re: vPASID capability for VF
+Message-ID: <ZFrThMhUnsYOE3WP@nvidia.com>
+References: <BN9PR11MB52764BE569672A02FE2A8CCA8C769@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZFrMneCMKuCtu7JF@nvidia.com>
+ <BN9PR11MB527627F407BB2942ADFF800E8C769@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB527627F407BB2942ADFF800E8C769@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: MW4P221CA0007.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:303:8b::12) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 8/8] dt-bindings: Add rt5033 mfd, regulator and charger
-Content-Language: de-DE
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230506155435.3005-1-jahau@rocketmail.com>
- <20230506155435.3005-9-jahau@rocketmail.com>
- <fbfd02d5-183a-118c-5743-dee6c9367bf6@linaro.org>
-From:   Jakob Hauser <jahau@rocketmail.com>
-In-Reply-To: <fbfd02d5-183a-118c-5743-dee6c9367bf6@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21471 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM4PR12MB6111:EE_
+X-MS-Office365-Filtering-Correlation-Id: 726237ef-2787-4078-6e4d-08db50e2f55f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: S0d/M1g2dqc9PrIs4l/fJjURgkMdPN7p+H3d26gp5Z4A0t8gJvHMRu/IYK8Oqeq7ugK/ArFAut9gkXtHFBiegY3Up/E73DJxRLRA4fl4apflPGB19hw807O8yts9kyEwHbOLApBlvQOgBdiIX+XKbaUO5yOGltHLrquxYCK1GKttDqC762zp4Zg1q4tPmbI7wW061dmmnNA+xilSSonL1+joNVcItKsmjmZKTvdevD7Uh2GReOoiOx0nF2KpFWWcTZ0mtkN/gGKfZ8npy8Oxav6bFarKGAp2ONtJ4ZYYnaBl6tuVuifgUUEfjNKbxgM+rCpA1zUd8OqTSCR9VwjZQL5229BEEXOy2YLETPa25MLvink7R701fAR2ABY4rUzUcwxmQ9aj7ZbE4VfxE9UQNyc4wEQRfw5ZwbLOehFJW9OSOyhMwuDGIxviXykW6X/GpqjALDC9aLpCJIX50seqcZI3iS401jj0gpiyvqQcWnEobWqKyUAI3TGi/JDcYKXhw48G7jlrQ3FYl2YJujotv3zlqJV0CmZiFJLlMmbW04XBCHyZWzfWZ0PUWto3QP+q
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(136003)(346002)(366004)(451199021)(86362001)(6486002)(36756003)(6666004)(316002)(54906003)(4326008)(66946007)(66476007)(6916009)(478600001)(66556008)(5660300002)(8676002)(186003)(8936002)(41300700001)(2906002)(3480700007)(38100700002)(26005)(2616005)(6506007)(83380400001)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aWy6ZMwEDhdwQvTfWgyVEbvNBMdLJA/CzCPRovIQN4ueDl3LFxgkLrwqewRZ?=
+ =?us-ascii?Q?NC0TrIDQfwX94ZiGhTvm5l763SLf/TqpJByY09JubciL+BFvpK/bwVhPDlfk?=
+ =?us-ascii?Q?YlzgHg4KJ5bUwNKx/Q0k55Rln/hTutQtgIGsCPOzSKihb8eizLyehZRVl/n1?=
+ =?us-ascii?Q?j6LZqg8ND4Ca7MZUSutQXzl0FcWkVVM+rjBNz0R4T20zheQ5qUxhUOTrz/8X?=
+ =?us-ascii?Q?va3eSc3z215SSDVRQWS9nf6WJbD1AiRSxiEVFny35rVd7iQTCKNu+xb2ls/2?=
+ =?us-ascii?Q?yOPN5WKggUGyk7KMHWbvdY6I7l+R8S/gNV0r/qrTet29VbxI7zCImKAhu42l?=
+ =?us-ascii?Q?67c6fzgXsPDqxELdkWJKPZbQqTL79KZfsEjVhR1gfAdGo3lnfhnSy6wUJVJA?=
+ =?us-ascii?Q?cNVzyMOy3oTyDKyqg+JwFev2hdpAV0lk0W4K4sraXktdFlQDlnZrl4pW/wBY?=
+ =?us-ascii?Q?AW13r5LQ5NhtacdFAgRLGo+kNdKt1oMRyqFNusF6WQrVCKM6WujngF5nA5P6?=
+ =?us-ascii?Q?jkJl+0a49n4an78jV4cq+OrHevl+Zcl+jzSl4uIC+WoJ7uIZXuDBU7en46ak?=
+ =?us-ascii?Q?vkmAtJJHmWpz4uRefBasUhlqzBmyx4htMUwhUyVHmlh2hy0jTCbsh5UsUiPo?=
+ =?us-ascii?Q?bZRT5vdeLycYoYvkWQktqg7PA5jDPdkvUH2TDSb6brZYZ7iTUIz2LUZS0NP0?=
+ =?us-ascii?Q?So4fU+Kr9aYlWrbO2RAGpOfRyc5rWaP80S3l2oXJW+H0Myd8UprXavtLA5Uj?=
+ =?us-ascii?Q?pCYlOv18wrNIza+hda2IrfmMh3JHhD3duHRMDTvj7li/6uAjze+vdbsKGhml?=
+ =?us-ascii?Q?CyFO5J8O2vHllwMXRtemQ3YRAlCWbXCxyBZPYCzU2ZuIbXuk8rvLHCh/CO+A?=
+ =?us-ascii?Q?2f68Ts9vpaU7ptYQghZeKuIJkElKVpZEmxoewVBUFC0Cs/lObPltP9D8gqW+?=
+ =?us-ascii?Q?PKuPBgKkTTdrV1ExcMWGg3lnI+zr9nH9fNt4y/QNPeVWTu1z3JzlB0vyupJN?=
+ =?us-ascii?Q?/oETUwMYCaxnyd+UJPeTrRMB3OeAR5OGVTI7gRVbhl9nC4uxFZgBfArdHV24?=
+ =?us-ascii?Q?xIIQk0IG08NMXNmlhsJXSApZn/fmI+ZFaBYZMaUGnIjaAIfEfNq8EINwlRgs?=
+ =?us-ascii?Q?DqpMTHmc5FtLWGm3x6aLr9cKgng05OjggnMAY1XY0FWFO3bFhjr4yR/9khCd?=
+ =?us-ascii?Q?H31+0BdkZlm3nkjLhwFfHSCU3JEXfSS66F3gch5aNk5hYHFAMT/Gh0IeVgt5?=
+ =?us-ascii?Q?ZMhA32h/TN9pKwrGeyDb5Ujr3k3xe1884Bhz3zh4ZPpW59YPoMdmccnaeti3?=
+ =?us-ascii?Q?PuhdMyAC8EEg5NswtM6gqmUsBWVBSwBs3n1kJaQaSBDxpFk/87wGYow+Rppx?=
+ =?us-ascii?Q?WPndir2RQ8TUpn6QugZfUqhiQ3e+Vp8keNdBTE07fhIxSv7u3DBxXWZmnxHc?=
+ =?us-ascii?Q?+Xsk1hZC9LuJbu+jTR9e18CIuzAR7Ab6pDIjUqvokznsMEru+aevtHM5yG2j?=
+ =?us-ascii?Q?Li+sqENK5U+qRg8jDf53O2/JTGr7q+wcONWR4C6XTm+uKq7SFKIq0ttXMKTv?=
+ =?us-ascii?Q?r63n+rsv6Hok/tA0Cd0=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 726237ef-2787-4078-6e4d-08db50e2f55f
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 23:13:11.3892
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: t3nOXBH4xjOg8BW+U/XHTLXJgRsBleS+fRN+OE2M4S1pJGs9KwcGCYB1PNheZ7ao
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6111
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,94 +120,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On 09.05.23 11:18, Krzysztof Kozlowski wrote:
-> On 06/05/2023 17:54, Jakob Hauser wrote:
-
-...
-
->> diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
->> new file mode 100644
->> index 000000000000..b8607cc6ec63
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
->> @@ -0,0 +1,64 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/power/supply/richtek,rt5033-charger.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Richtek RT5033 PIMC Battery Charger
+On Tue, May 09, 2023 at 10:57:04PM +0000, Tian, Kevin wrote:
+> > From: Jason Gunthorpe <jgg@nvidia.com>
+> > Sent: Wednesday, May 10, 2023 6:44 AM
+> > 
+> > On Tue, May 09, 2023 at 08:34:53AM +0000, Tian, Kevin wrote:
+> > > According to PCIe spec (7.8.9 PASID Extended Capability Structure):
+> > >
+> > >   The PASID configuration of the single non-VF Function representing
+> > >   the device is also used by all VFs in the device. A PF is permitted
+> > >   to implement the PASID capability, but VFs must not implement it.
+> > >
+> > > To enable PASID on VF then one open is where to locate the PASID
+> > > capability in VF's vconfig space. vfio-pci doesn't know which offset
+> > > may contain VF specific config registers. Finding such offset must
+> > > come from a device specific knowledge.
+> > 
+> > Why? Can't vfio probe the cap tree and just find a gap to insert a new
+> > cap? We already mangle the cap list, I'm not sure I see what
+> > the problem is?
+> > 
 > 
-> PMIC
+> PCI config space includes not only caps, but also device specific
+> defined fields. e.g. Intel IGD defines offset 0xfc as a pointer to
+> OpRegion. I'm sure Alex can give many other examples.
 
-Good catch.
+Do we even expose those over VIFO? I thought in general we blocked of
+various parts of the config space. I keep seeing patches to unblock
+parts of config space?
 
->> +
->> +maintainers:
->> +  - Jakob Hauser <jahau@rocketmail.com>
->> +
->> +description:
->> +  The battery charger of the multifunction device RT5033 has to be instantiated
->> +  under sub-node named "charger" using the following format.
->> +
->> +properties:
->> +  compatible:
->> +    const: richtek,rt5033-charger
->> +
->> +  monitored-battery:
->> +    description: |
->> +      Phandle to the monitored battery according to battery.yaml. The battery
->> +      node needs to contain five parameters.
->> +
->> +      precharge-current-microamp:
->> +      Current of pre-charge mode. The pre-charge current levels are 350 mA
->> +      to 650 mA programmed by I2C per 100 mA.
->> +
->> +      constant-charge-current-max-microamp:
->> +      Current of fast-charge mode. The fast-charge current levels are 700 mA
->> +      to 2000 mA programmed by I2C per 100 mA.
->> +
->> +      charge-term-current-microamp:
->> +      This property is end of charge current. Its level ranges from 150 mA
->> +      to 600 mA. Between 150 mA and 300 mA in 50 mA steps, between 300 mA and
->> +      600 mA in 100 mA steps.
->> +
->> +      precharge-upper-limit-microvolt:
->> +      Voltage of pre-charge mode. If the battery voltage is below the pre-charge
->> +      threshold voltage, the charger is in pre-charge mode with pre-charge
->> +      current. Its levels are 2.3 V to 3.8 V programmed by I2C per 0.1 V.
->> +
->> +      constant-charge-voltage-max-microvolt:
->> +      Battery regulation voltage of constant voltage mode. This voltage levels
->> +      from 3.65 V to 4.4 V by I2C per 0.025 V.
->> +
->> +  connector:
->> +    description:
->> +      Phandle to a USB connector according to usb-connector.yaml. The connector
->> +      should be a child of the extcon device.
->> +    maxItems: 1
-> 
-> Missing type/ref... but then you will notice you have conflicting ref
-> with existing connector. connector is usb-connector.yaml, not phandle. I
-> am not sure if we need generic property, so let's go with device
-> specific - richtek,usb-connector
+I'd do the reverse and say devices that want to pass parts of their
+config space should have a special hook to do it and otherwise we
+should sanitize and block?
 
-Actually, as we already switched to the connector thing, I would have 
-liked to do it properly, if at all. Again looking for examples how it 
-should be done, the usb-connector.yaml schema gets mostly used in the 
-USB and PHY domain. Those examples don't fit the specific case well. I 
-didn't find examples in the power supply domain.
+eg we already have a hook to pass the opregion
 
-Therefore, giving in, I'll chage it to richtek,usb-connector.
+> So it's easy to find the gap between caps, but not easy to know
+> whether that gap is actually free to use.
 
-It's still hard for me to understand why phandle excton shouldn't fit 
-the specific simple case. Now we have neither a proper "connector" thing 
-nor a simple extcon phandle.
+Because, let's face it, this is a horrible thing to do, and the
+opregion stuff is just ugly as s sin.
 
-...
-
-Kind regards,
-Jakob
+Jason
