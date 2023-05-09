@@ -2,113 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9036FD268
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71986FD272
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234795AbjEIWO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 18:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
+        id S235087AbjEIWQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 18:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbjEIWO4 (ORCPT
+        with ESMTP id S229741AbjEIWQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 18:14:56 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD723A88
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 15:14:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683670495; x=1715206495;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dANONa1DPO/BbwE8Bny4oBm6ve4Cbsy61v0wAbQU4Og=;
-  b=nBp8af6t+ql0eA04Ch5s/bbJP4QGVUDYRLR9tgvwVK86JMDmhLRh/XGL
-   fOuWkURlbheeDpqS7LAfGtE2/AF87WSJPWJvwnKPLJ3deCfGnHKV9Fuw8
-   ev5JMu3B6isL0kiZVlr95/kH3x0n4s5p6u9NZM8Ird6hsj3OlUHzSOgWO
-   XbLxFEOvrFg2FjyLktXgub242SJGTjiF5W5w2pvtKF/27xMSdCONZZFmg
-   0aIYBRpu/NeSp6tmjyWm8Jl3RAW9RSnSRXOnszgjgczdy3p4/mUQzjmM6
-   gD3RvHnnLTGA4FSLPZ76k6aHT/wuZvSWpQo2EkJIC/JAVnXdDAMoVe54z
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="334523734"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="334523734"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 15:14:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="649513029"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="649513029"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 09 May 2023 15:14:53 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pwVbg-0002Yr-2O;
-        Tue, 09 May 2023 22:14:52 +0000
-Date:   Wed, 10 May 2023 06:14:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Johannes Berg <johannes.berg@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Richard Weinberger <richard@nod.at>
-Subject: arch/um/drivers/harddog_user.c:6:10: fatal error: stdio.h: No such
- file or directory
-Message-ID: <202305100640.HGwVAUIt-lkp@intel.com>
+        Tue, 9 May 2023 18:16:18 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4013A88
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 15:16:17 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-30789a4c537so2548806f8f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 15:16:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google; t=1683670575; x=1686262575;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hu65y9LQ0JYUL/b/I+3CE2Q5EL9XofrXHd9owDz27hI=;
+        b=hBZrbLhMlpy/7oSVs0lTprrVy94U7upvFqODG929/y5dhCt9nV1hGalb0dMN0Bw0ER
+         5DNOkwvSwT/9VKbM3+BNzR/TQk0etBwApXWwMlfJQB2sTqYOvpUFz9QSmWOgUudK9pvQ
+         iEeIg4PuDTD83+ivdSQdwUf70PgfCfdoaFvcIcuEmyymE7/0yFkC8z3DT+/NWKxI0FU3
+         x71z6oOvpTQQCc67HK51hOoKfaAjUcQDv9UXIbZ2QxmUmMjW54OydoPA2Koacp6atRiD
+         B/avJ/CyKq22ldsN/3ZjA1hTQ+NkZYbXZSQttzNV6zHKe6pWl+YJ+cr9xwLEdACkltMN
+         MOug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683670575; x=1686262575;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hu65y9LQ0JYUL/b/I+3CE2Q5EL9XofrXHd9owDz27hI=;
+        b=edMF0St/ABdX1K1z1BguBpK0fLZ8NqMmSoxzW9TKOKnwGcR9zdLI8Td6+wDYLkGhUu
+         hhfrACjoe7MSgVZ0XJt/hOBlDKMsozhrwq2dF+LU5GaNJSmoGGxTC1PP2YPJMu3FwdXX
+         bF60EBcc5zaJtliPW1T3EykiVlvOEyF7pQyuG2a+qQSrmXUzaXC/T4GufYeC6IaYQRBs
+         PJYNHFvhddrGagIwPtm8bfhFD5w4lfCkxndM2wanwkX/SRatt/8D//0eNo6D6RdBZ0MG
+         n12Dm0gOXE0EMOCIBObqDOXKkxXQyA+Eeg9uPofhHagcYSo8sxROGBk63JZOQtIGIP3o
+         VzRA==
+X-Gm-Message-State: AC+VfDwMBZRILGFDm7kM2ECt+WhbCOwEKtHxJ/FKOULl2dFAbRNmRUVZ
+        Dr22eLfY/NHN06TF1nAqCdPMIgKfilrsLYmoUgk=
+X-Google-Smtp-Source: ACHHUZ79BTqG7tWfhK7o9CNI8lUq9aMIXawO83vQQ1z7O/72MkWFXZxOplN99ejMbyp9axkegONteQ==
+X-Received: by 2002:adf:f54c:0:b0:307:a24f:c15e with SMTP id j12-20020adff54c000000b00307a24fc15emr3059912wrp.39.1683670575497;
+        Tue, 09 May 2023 15:16:15 -0700 (PDT)
+Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id t25-20020a7bc3d9000000b003f42d3111b8sm2052888wmj.30.2023.05.09.15.16.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 15:16:14 -0700 (PDT)
+From:   Dmitry Safonov <dima@arista.com>
+To:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Dmitry Safonov <dima@arista.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org
+Subject: [PATCH 0/5] net/tcp-md5: Verify segments on TIME_WAIT sockets
+Date:   Tue,  9 May 2023 23:16:03 +0100
+Message-Id: <20230509221608.2569333-1-dima@arista.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johannes,
+Hi,
 
-FYI, the error/warning still remains.
+Started as a refactoring of tcp_v{4,6}_send_reset(), in order to prepare
+it for TCP-AO signing for RST segments. As you can see the previous
+TCP-AO-v5 [1] version of those functions, they get too big and nasty.
+Patches 1 and 2 seem more-or-less straight-forward to me.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   16a8829130ca22666ac6236178a6233208d425c3
-commit: fc54a4f15988e228cf88f888483e985c5f35031e um: prevent user code in modules
-date:   3 weeks ago
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20230510/202305100640.HGwVAUIt-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fc54a4f15988e228cf88f888483e985c5f35031e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout fc54a4f15988e228cf88f888483e985c5f35031e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um olddefconfig
-        make W=1 O=build_dir ARCH=um SHELL=/bin/bash
+But then another thing that I wanted to fix for TCP-AO-version6 was
+accepting of unsigned or incorrectly signed segments on twsk, which is
+against RFC5925 (7.2) that requires checking the signature. So, I decided
+to give it a shot and fix twsk for TCP-MD5 as well.
+That seems more questionable, that's why I'm sending patch 3 as RFC.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305100640.HGwVAUIt-lkp@intel.com/
+And the last part, patches 4 and 5 are paranoid checks made to minimize
+cases when inbound segment's signature and RST/ACK reply aren't consistent.
+This is direct result of RFC2385 that lacks key rotation mechanism.
+Probably, patches 4 and 5 are a bit too much, sending them for review
+anyway in case such paranoia makes sense.
 
-All errors (new ones prefixed by >>):
+Thanks,
+          Dmitry
 
->> arch/um/drivers/harddog_user.c:6:10: fatal error: stdio.h: No such file or directory
-       6 | #include <stdio.h>
-         |          ^~~~~~~~~
-   compilation terminated.
+Cc: David Ahern <dsahern@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Leonard Crestez <cdleonard@gmail.com>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Salam Noureddine <noureddine@arista.com>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+[1]: https://lore.kernel.org/all/20230403213420.1576559-9-dima@arista.com/T/#u
+
+Dmitry Safonov (5):
+  net/tcp: Separate TCP-MD5 signing from tcp_v{4,6}_send_reset()
+  net/tcp: Use tcp_v6_md5_hash_skb() instead of .calc_md5_hash()
+  [RFC] net/tcp-md5: Verify inbound segments on twsk
+  [RFC] net/tcp-md5: Don't send RST if key (dis)appeared
+  [RFC] net/tcp-md5: Don't send ACK if key (dis)appears
+
+ include/net/tcp.h   |  18 +++-
+ net/ipv4/tcp.c      |   9 +-
+ net/ipv4/tcp_ipv4.c | 196 +++++++++++++++++++++++++-------------------
+ net/ipv6/tcp_ipv6.c | 130 +++++++++++++++++------------
+ 4 files changed, 207 insertions(+), 146 deletions(-)
 
 
-vim +6 arch/um/drivers/harddog_user.c
-
-^1da177e4c3f41 Linus Torvalds 2005-04-16  @6  #include <stdio.h>
-^1da177e4c3f41 Linus Torvalds 2005-04-16   7  #include <unistd.h>
-^1da177e4c3f41 Linus Torvalds 2005-04-16   8  #include <errno.h>
-37185b33240870 Al Viro        2012-10-08   9  #include <os.h>
-^1da177e4c3f41 Linus Torvalds 2005-04-16  10  
-
-:::::: The code at line 6 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
+base-commit: ba0ad6ed89fd5dada3b7b65ef2b08e95d449d4ab
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.40.0
+
