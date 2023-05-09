@@ -2,71 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C31A56FD2AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB096FD2B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235762AbjEIWbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 18:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S235778AbjEIWcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 18:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbjEIWbv (ORCPT
+        with ESMTP id S231467AbjEIWcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 18:31:51 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639BE10F7;
-        Tue,  9 May 2023 15:31:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683671507; x=1715207507;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1R2Gg6wlaBtXe+4zx8PrBpi9i8hSxKDH4nvvTPsLK2E=;
-  b=RFurPuMGXS6KGqG2LxYWQzmrO4vLHIPV7BLP9GZ8HodizhjSwVXCtPob
-   YjbkyAdsEtczC9JWeB+A5NNnN0ReIVM5chBaFa9CM0zpwv7gg98SGP1px
-   HJo1x50zNlVpeFDEySw/UadnTztIJ9lwcBl25alyIiD957s3EuyhEL6Mh
-   ltY2eVlOp+YU8y7frSWq0j8qRUvHK/H4Rqk7lEdOQZPQhAmNNV4U6qa7w
-   i1Wzn37T4HUHVrquzV8ZJu6VxNyuRFFjKUedi72N4ntH1AMYMV/uE66b/
-   F4JG3OMmw0U2WoRyEMGsSknG4vVGgNPEoDs4hBP4QVBBidC2PKtlelR/u
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="330430580"
-X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
-   d="scan'208";a="330430580"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 15:31:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="649520053"
-X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
-   d="scan'208";a="649520053"
-Received: from dcovax-mobl.amr.corp.intel.com (HELO [10.212.97.226]) ([10.212.97.226])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 15:31:43 -0700
-Message-ID: <7d35c9f2-9070-32d0-2ddc-ff6b0a8b5c26@intel.com>
-Date:   Tue, 9 May 2023 15:31:43 -0700
+        Tue, 9 May 2023 18:32:21 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363D5FC
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 15:32:13 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f41d087b24so26764955e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 15:32:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683671531; x=1686263531;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vf2w+03BSCOP6r1cRizX6iGMWy1Ixd9xnBiskm0VO5I=;
+        b=BaEiCloTlLMgeA+infWj+9LILWoW7KxzKnuCegCmLWsAKExFZaDE/XVQiD2Xtj/eh4
+         xpGEMVIp26w/ldkzeeiRchy2jCLeEqjW0Yj+TYgzA9p8KWAHj0eZrhNmXHRf1hv2+7i0
+         gz3Go+8ewST7Q1qvOu8SZCLk4MIGluqe4BfmeSDEMxJ8MrCVXEqMQjUhUYaQfdYz+jXX
+         eRUgVPfBzw4kbe4YBiFw/ociSz0jthUvzQL8SdwmCRJZQANz9lgX2d6AePHEwS+AaxSe
+         jo+d75WlpfM7M8iz8zU2U9LlmRBsyoaN5qpT5hUFomJqIP1H+40BCatVaz1ll9J6OpqK
+         royg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683671531; x=1686263531;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vf2w+03BSCOP6r1cRizX6iGMWy1Ixd9xnBiskm0VO5I=;
+        b=XiBWqbQOcMUI4Ft5noFtArZ9jYox0KnBLVB2k7KLr2NezeY8mcqoG5WmjQ/R5Pk+Bj
+         ojRsxX8MzA19FYMkDhnOZwjew5Js2hlGGMT6DlD4jMdVIKOCjRdkAlhFbeHEwE0/QUHp
+         sffjPVk304CukQdxUsAKqenye889cwqGAf+qKYWgvInIw9ZpIT1E91LZeiZt3GAWONxK
+         1Jhx1WnqfdpJGehJUVAt3B1rkWMUteGObwTlIDNJnYSn9LluY/MylqrWg1Fw4YxFSg9s
+         LpX9xg4NH81JJffzeDXqLNX8Np/VampzEJGgLf4mMcjxVaALGPMMKGbrArxTbZPpckMh
+         yfKA==
+X-Gm-Message-State: AC+VfDxanN00VD4B+RkXUvSzXm6sZyWAbXtLcBRIbyIcRtmqNy0X+jSr
+        4VaXpjTYyQXkfmkZbQVRlWFHuA==
+X-Google-Smtp-Source: ACHHUZ7YnTCKxhlxi6auAU1rer1yNJnPEtCNoPrm8phQHi1jU6zcsj2xBl8SoQRjqCEi5DI1dXU8CA==
+X-Received: by 2002:a7b:cd08:0:b0:3f4:27ff:7d48 with SMTP id f8-20020a7bcd08000000b003f427ff7d48mr4235219wmj.19.1683671531733;
+        Tue, 09 May 2023 15:32:11 -0700 (PDT)
+Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
+        by smtp.gmail.com with ESMTPSA id m21-20020a7bca55000000b003f4285629casm5490392wml.42.2023.05.09.15.32.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 15:32:11 -0700 (PDT)
+Message-ID: <aab042f3-46e3-cf44-fead-6d1afd432558@linaro.org>
+Date:   Tue, 9 May 2023 23:32:10 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v7 8/8] cxl/test: Simulate event log overflow
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 2/6] soc: qcom: ocmem: Use dev_err_probe where appropriate
 Content-Language: en-US
-To:     Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org
-References: <20221216-cxl-ev-log-v7-0-2316a5c8f7d8@intel.com>
- <20221216-cxl-ev-log-v7-8-2316a5c8f7d8@intel.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20221216-cxl-ev-log-v7-8-2316a5c8f7d8@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Brian Masney <masneyb@onstation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
+ <20230506-msm8226-ocmem-v1-2-3e24e2724f01@z3ntu.xyz>
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <20230506-msm8226-ocmem-v1-2-3e24e2724f01@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,128 +86,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/17/23 10:53 PM, Ira Weiny wrote:
-> Log overflow is marked by a separate trace message.
+On 07/05/2023 10:12, Luca Weiss wrote:
+> Use dev_err_probe in the driver probe function where useful, to simplify
+> getting PTR_ERR and to ensure the underlying errors are included in the
+> error message.
 > 
-> Simulate a log with lots of messages and flag overflow until space is
-> cleared.
-> 
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
+> ---
+>  drivers/soc/qcom/ocmem.c | 23 ++++++++---------------
+>  1 file changed, 8 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
+> index c3e78411c637..a11a955a1327 100644
+> --- a/drivers/soc/qcom/ocmem.c
+> +++ b/drivers/soc/qcom/ocmem.c
+> @@ -317,18 +317,13 @@ static int ocmem_dev_probe(struct platform_device *pdev)
+>  	ocmem->config = device_get_match_data(dev);
+>  
+>  	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(ocmem_clks), ocmem_clks);
+> -	if (ret) {
+> -		if (ret != -EPROBE_DEFER)
+> -			dev_err(dev, "Unable to get clocks\n");
+> -
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Unable to get clocks\n");
+>  
+>  	ocmem->mmio = devm_platform_ioremap_resource_byname(pdev, "ctrl");
+> -	if (IS_ERR(ocmem->mmio)) {
+> -		dev_err(&pdev->dev, "Failed to ioremap ocmem_ctrl resource\n");
+> -		return PTR_ERR(ocmem->mmio);
+> -	}
+> +	if (IS_ERR(ocmem->mmio))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(ocmem->mmio),
+> +				     "Failed to ioremap ocmem_ctrl resource\n");
+>  
+>  	ocmem->memory = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+>  						     "mem");
+> @@ -341,16 +336,14 @@ static int ocmem_dev_probe(struct platform_device *pdev)
+>  	WARN_ON(clk_set_rate(ocmem_clks[OCMEM_CLK_CORE_IDX].clk, 1000) < 0);
+>  
+>  	ret = clk_bulk_prepare_enable(ARRAY_SIZE(ocmem_clks), ocmem_clks);
+> -	if (ret) {
+> -		dev_info(ocmem->dev, "Failed to enable clocks\n");
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(ocmem->dev, ret, "Failed to enable clocks\n");
+>  
+>  	if (qcom_scm_restore_sec_cfg_available()) {
+>  		dev_dbg(dev, "configuring scm\n");
+>  		ret = qcom_scm_restore_sec_cfg(QCOM_SCM_OCMEM_DEV_ID, 0);
+>  		if (ret) {
+> -			dev_err(dev, "Could not enable secure configuration\n");
+> +			dev_err_probe(dev, ret, "Could not enable secure configuration\n");
+>  			goto err_clk_disable;
+>  		}
+>  	}
+> 
 
-> 
-> ---
-> Changes in v7:
->          <no change>
-> ---
->   tools/testing/cxl/test/mem.c | 50 +++++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 49 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
-> index 00bf19a68604..9263b04d35f7 100644
-> --- a/tools/testing/cxl/test/mem.c
-> +++ b/tools/testing/cxl/test/mem.c
-> @@ -78,6 +78,8 @@ struct mock_event_log {
->   	u16 clear_idx;
->   	u16 cur_idx;
->   	u16 nr_events;
-> +	u16 nr_overflow;
-> +	u16 overflow_reset;
->   	struct cxl_event_record_raw *events[CXL_TEST_EVENT_CNT_MAX];
->   };
->   
-> @@ -116,6 +118,7 @@ static void event_reset_log(struct mock_event_log *log)
->   {
->   	log->cur_idx = 0;
->   	log->clear_idx = 0;
-> +	log->nr_overflow = log->overflow_reset;
->   }
->   
->   /* Handle can never be 0 use 1 based indexing for handle */
-> @@ -147,8 +150,12 @@ static void mes_add_event(struct mock_event_store *mes,
->   		return;
->   
->   	log = &mes->mock_logs[log_type];
-> -	if (WARN_ON(log->nr_events >= CXL_TEST_EVENT_CNT_MAX))
-> +
-> +	if ((log->nr_events + 1) > CXL_TEST_EVENT_CNT_MAX) {
-> +		log->nr_overflow++;
-> +		log->overflow_reset = log->nr_overflow;
->   		return;
-> +	}
->   
->   	log->events[log->nr_events] = event;
->   	log->nr_events++;
-> @@ -159,6 +166,7 @@ static int mock_get_event(struct cxl_dev_state *cxlds,
->   {
->   	struct cxl_get_event_payload *pl;
->   	struct mock_event_log *log;
-> +	u16 nr_overflow;
->   	u8 log_type;
->   	int i;
->   
-> @@ -191,6 +199,19 @@ static int mock_get_event(struct cxl_dev_state *cxlds,
->   	if (!event_log_empty(log))
->   		pl->flags |= CXL_GET_EVENT_FLAG_MORE_RECORDS;
->   
-> +	if (log->nr_overflow) {
-> +		u64 ns;
-> +
-> +		pl->flags |= CXL_GET_EVENT_FLAG_OVERFLOW;
-> +		pl->overflow_err_count = cpu_to_le16(nr_overflow);
-> +		ns = ktime_get_real_ns();
-> +		ns -= 5000000000; /* 5s ago */
-> +		pl->first_overflow_timestamp = cpu_to_le64(ns);
-> +		ns = ktime_get_real_ns();
-> +		ns -= 1000000000; /* 1s ago */
-> +		pl->last_overflow_timestamp = cpu_to_le64(ns);
-> +	}
-> +
->   	return 0;
->   }
->   
-> @@ -231,6 +252,9 @@ static int mock_clear_event(struct cxl_dev_state *cxlds,
->   		}
->   	}
->   
-> +	if (log->nr_overflow)
-> +		log->nr_overflow = 0;
-> +
->   	/* Clear events */
->   	log->clear_idx += pl->nr_recs;
->   	return 0;
-> @@ -353,6 +377,30 @@ static void cxl_mock_add_event_logs(struct mock_event_store *mes)
->   		      (struct cxl_event_record_raw *)&mem_module);
->   	mes->ev_status |= CXLDEV_EVENT_STATUS_INFO;
->   
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &maint_needed);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
-> +		      (struct cxl_event_record_raw *)&dram);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
-> +		      (struct cxl_event_record_raw *)&gen_media);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
-> +		      (struct cxl_event_record_raw *)&mem_module);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
-> +		      (struct cxl_event_record_raw *)&dram);
-> +	/* Overflow this log */
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-> +	mes->ev_status |= CXLDEV_EVENT_STATUS_FAIL;
-> +
->   	mes_add_event(mes, CXL_EVENT_TYPE_FATAL, &hardware_replace);
->   	mes_add_event(mes, CXL_EVENT_TYPE_FATAL,
->   		      (struct cxl_event_record_raw *)&dram);
-> 
+-- 
+Kind Regards,
+Caleb (they/them)
