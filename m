@@ -2,68 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CBB6FC91C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDE26FC916
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235757AbjEIOfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 10:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S235770AbjEIOen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 10:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235495AbjEIOfH (ORCPT
+        with ESMTP id S235495AbjEIOel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 10:35:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A91C3
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 07:34:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683642861;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G2ai7ns1LZjyFqipe9+OXAgC6WA3MwOpCGdkhaCR2Rk=;
-        b=XSyQvuIWik6bGrwWqIGVxo9F+GOlr0rTxpnIcTvACiYBOj6Z+Bm8oKfme57SwAgibKlq5n
-        vePmsfuqi+M6pordXP/gPdMc/0j1tC4QdR4iNOzH7Ilymm9orZqqPiN3sFMbKHlTmR6EiO
-        kq0qISOJTovYa2FisFPHSC/fuEQeCGY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-230-NuXfkqBpMK-CjvPMx480rw-1; Tue, 09 May 2023 10:34:19 -0400
-X-MC-Unique: NuXfkqBpMK-CjvPMx480rw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 98BD18FC083;
-        Tue,  9 May 2023 14:33:31 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A8A4492C3F;
-        Tue,  9 May 2023 14:33:31 +0000 (UTC)
-Message-ID: <a98a5982-1a13-4e79-868e-0c21c04f61a1@redhat.com>
-Date:   Tue, 9 May 2023 10:33:31 -0400
+        Tue, 9 May 2023 10:34:41 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2109.outbound.protection.outlook.com [40.107.92.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C68FA;
+        Tue,  9 May 2023 07:34:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nx20YU5ue0TAbIhFbPL9jNrvKb9CtfnO60j/0FKO39ln4u/tk7pCLqekFwsCPeioRpQor39oLwEXDbggcl3e+34RnMcjTYf7vaREmJ2JSvMXEZX0SavbueH1FmUtIuTHUqjrUFIzZvlQSvBKl/UUEn4t+8HingnayzfgbNgxjgqF/ud9v8TBxZzXetEpOgk6p08ZPH2opP753DIzq9ULz2CLEx0uhC5XGQfsHM1VadbNZJSvagyc/PaFiXsnzkgPcSpv1zYIJPTcVQx0CVp6/NH9HhntEjF4eCEmbnu9c+LR4k+TnimFasgV/tbcZoMhtaWjbaczV4MWHWDzKMm6VQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/vzxucU/wG/FdEeuelKgL/dz/0tFB0CkygPQ0Hx81AQ=;
+ b=gCX0XqD+9y4WkwX1gMg0uclR3fxQCIa7X8FwaRmaYcuD/rPMgfrpf5Yld9jacbqACoxBie3RfHsNAjdkm0llqbwAsSTWiMqg08BVg2yJ8iGuPzd+gp7ClNBB6MDh6s5093sBZdHvpPCIzEthhvWRzd/3RVvjdtfb4Nl3oqUViAbf4CY3MCaLLMxqWr+YlEkJME6hekQWXASNwKqpdyQ257DLfKImdd8y95J3rfwNhx0oahx37DlWtZH1tRlNNo0VHTs0ERwcx+5rynzFzf3VtQN2pHmIGSkwYHhQ+RW8Fmr4LcGC+PCdEQN4OSYYSjf/+Z3zGf/NLfeAIINAnrDFww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/vzxucU/wG/FdEeuelKgL/dz/0tFB0CkygPQ0Hx81AQ=;
+ b=L5aUm6jcuPaouRSU6Ag9p1OGD9Qmr8+TN94js/Ufa/x1Gu101tOjZGfUxWuJPf8SNN6JEkhgmmdpxMfb4MERRQU43xu4iYioSxp4Id88PQmgA2a0NV/pOU3UYUWUgAuW+1oU7V04oNmF0pzbWsriANJHjmFJQTQBhgtgLNH736M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH0PR13MB4844.namprd13.prod.outlook.com (2603:10b6:510:76::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Tue, 9 May
+ 2023 14:34:35 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6363.032; Tue, 9 May 2023
+ 14:34:35 +0000
+Date:   Tue, 9 May 2023 16:34:28 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Ivan Mikhaylov <fr0st61te@gmail.com>
+Cc:     Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: Re: [PATCH v2 4/5] net/ncsi: add shift MAC address property
+Message-ID: <ZFpZ9Ko5DHWiBXDu@corigine.com>
+References: <20230509143504.30382-1-fr0st61te@gmail.com>
+ <20230509143504.30382-5-fr0st61te@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509143504.30382-5-fr0st61te@gmail.com>
+X-ClientProxiedBy: AS4P251CA0023.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d3::20) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/1] locking/qspinlock: Make the 1st spinner only spin on
- locked_pending bits
-Content-Language: en-US
-To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230508081532.36379-1-qiuxu.zhuo@intel.com>
- <29297e16-2c79-8367-cd6c-efedd0a8d9ed@redhat.com>
- <IA1PR11MB617102EB293516D2DC81F28089769@IA1PR11MB6171.namprd11.prod.outlook.com>
- <3432de9e-6642-10c0-31e5-ac0ce65bea23@redhat.com>
- <IA1PR11MB6171DBBD1F386020667324DD89769@IA1PR11MB6171.namprd11.prod.outlook.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <IA1PR11MB6171DBBD1F386020667324DD89769@IA1PR11MB6171.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB4844:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7e049c3b-ee53-464e-1473-08db509a82a5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GJhV6HeVjjhvSz9qUMZ2TjVOqStwzODx8Bg3TK28C1z/eNDO+QX8xT3wYtbLD1115Jd1jL0sI0ashGbP+yAue0wwKN07JsCmu7x/aDYfru98xgFhkIrela4hW98DaEotWeIXrb/s5nFFgVDy2OlXohrXwASph3czRy+LKUpmDrAYC0KrLx80UwPFnhz6YsaCuYR7P8irgCCeiHIohyzUTwX71etBPl8BkAg/BMlnDrgizIB14+zY/IsWSAqE/nrDvsCQZ6oVBPeUI/B9aAtT+sEl57GW050Hdyv+DtlwmgI60PuSE3tQ1oGSTr2X4wYH6TzwWVlyNfNqfoM2KXt5+fvwHk8hDVO6A7WPqlHL/ivVFK5A5NuHfFvxSPJ2W00AOXtxxU3jI1mSnM43A9y+6WqZusxbpfGgUVo4oC5HshF17R+QL7v9mPEe8477e+oubs/ouHbQpdZIPCqR5XFUWWhntMGNOJAplTws8rT3fTonznCQzHpmuN0dQekOrHA+ahw3u5dQY4HXWpSw3pyGtlfpek+mYCVfe/tu0c+7mIgLNCN2O1PxRWTO7m1MTrHWycWrwMNMmaLHSltpT1JQQ2afgRL7pmQOV+XbJdQp9Oo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39830400003)(346002)(376002)(366004)(136003)(451199021)(2616005)(8936002)(8676002)(38100700002)(186003)(6486002)(6666004)(6506007)(6512007)(36756003)(2906002)(5660300002)(44832011)(478600001)(7416002)(316002)(66946007)(83380400001)(6916009)(66556008)(66476007)(4326008)(54906003)(86362001)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?A+aEm8o1+aWPmRk4TqmmScC3t5L+OSGHq8xcVdH/m4qGCj7USCnsEjfQSbyO?=
+ =?us-ascii?Q?7TZMrwfbNrOHo9dIK4qtGlx6wdN+/U4icJku22to/HnPXVe3PDbDI5xGjWnV?=
+ =?us-ascii?Q?pOTgjxkEhkMK0LIVnn6misFR42vdAULUgQiSxlDfpqZUp0eEhU2kl4E6dAm1?=
+ =?us-ascii?Q?hkl0T+m0wbJvJeDHzyNXInNl2xOCBY67o7phEI+U0f0+E3U/nhAVpVbniTmH?=
+ =?us-ascii?Q?8kkZ7a855OUV3kqmoS1Y2nkV8cnS+UXxMB1EiErCHdX6SR3I6YJT3P31dRUL?=
+ =?us-ascii?Q?yWKfSOUpKiUcLQ3a48iqf3HfHBu1EsQD5uWzXlOFDmmbW0lzQkISBE4FLegn?=
+ =?us-ascii?Q?GcKQI8X6QPmaFXYBC6zcfe9Q9U3Ly/xUhhLFbau7vp5RTCFUXd5j+XDze0e9?=
+ =?us-ascii?Q?JaE8eK/NwqqLOiJV0leCcaziwCxxKwUHrLOtob6uqEl8bNDpT6DPZQjAFLcZ?=
+ =?us-ascii?Q?beFWfA0I8cGlf+v0x3Hp1UDbtY5LerpckP6Z7pBiE7W38LEgcDdqHoVihOn0?=
+ =?us-ascii?Q?/028ey0MWQQfkWoooljcS60+aeAX1Hihc7A/2+nYONRcjNWvWyu/1WAagSku?=
+ =?us-ascii?Q?jd8tleKrw4ghuxvXlqOEMmamYE+Z3wLKd5qIQc7uPTuxult+1cUO2MfQidU0?=
+ =?us-ascii?Q?Ostyyyjw7Kj4mldOZW7/hjNsHH35QCPtiDYGVaxZhkzoI+JyuDokjhr5qg5S?=
+ =?us-ascii?Q?REL1pXe21tzITVNEnCi9Opsqb+2Eq1uhLfrzhbvlN7Uxa6hrWeQZL8jojJvK?=
+ =?us-ascii?Q?63Gh+svEUIo59z3+B7ajmpxkTs+hNbEUFc/I6i8WPGF4lt5jWktNX2ng298+?=
+ =?us-ascii?Q?FU1m0QdVO9O6INI4aSMHCh3RjnD3OO0Hj+/q/dN2Ml7OWdDzhOOxCYgsfaFJ?=
+ =?us-ascii?Q?vOXxQ/q+0AlENzMawes0c6LQipB13I19MM5BqzgWvOGT8LEKm3PQnqDauc8v?=
+ =?us-ascii?Q?NGdnB33IOYBcYW6R18rF2qb87Eoe1O5vbKsAEiPzT8C3ZMiD65c1MViMIWnN?=
+ =?us-ascii?Q?bYKLMUnXAFSV13WiNyjZEA0tvW0qTAuL62ptoSp9gzYdZZTobVeiWky+FVwl?=
+ =?us-ascii?Q?+fgvFsINAVaWLs/ORTHv2Ooi7PpDP2f7Wd32Bne2WFSQ49tL3tQQsPtvftOs?=
+ =?us-ascii?Q?bTSgu9Zmz1sM1gMhudK9yJ8LBI8HsXvWhFGzuagAuSvJ2HJcI6FMdC0i4/kf?=
+ =?us-ascii?Q?D3yDD3AJEP+ARPlt7eV2JqFYiXdP/PAeHCMa1f+XCJFz6QJ/haBE8fFG8xLM?=
+ =?us-ascii?Q?sBRfFgMiEX1c4CEbtrDRYXBXW+XrcqK5VgXD9Jtq6fXEgwfUAWbCUHN256Bt?=
+ =?us-ascii?Q?m28w7J/kDMWgdlq0fMbEaRt0I9Slhy/WT26v/DDh7xjkthse3JRwsCB3QguG?=
+ =?us-ascii?Q?1j376gfJDrU7BkMY5m/w4u1JmxY6T4rFFy8QR4DWMg4+vxtv0pszms2PCuJa?=
+ =?us-ascii?Q?AIzmi/+ffNufXMCxg6nIO6qkSPDndxCEoVaIBthuj+ny+4CK2aEy1riFjg0l?=
+ =?us-ascii?Q?LMsQfzL8O1JVfmnYoIyeot0s/KWcmGCVZIk31MlJvCFim4ywiVLyFmOINJw5?=
+ =?us-ascii?Q?evk9H1Wn+/MjTfZWQy3v5XPBw/+3ZnwCgznMRxir1RSE8RoN1JDENFAWPZV7?=
+ =?us-ascii?Q?6jgHsoRkiB8Ir6yAc8+rsGT4m/v9A8dey60FKAt+iaV4SUJXrgtABLBrqDeM?=
+ =?us-ascii?Q?olptjQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e049c3b-ee53-464e-1473-08db509a82a5
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 14:34:35.2045
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Zfx61nPNNTddJwWPtQJ95so4rHf4kYT8OVB6DUrzo0x6iDTucjzSMvTimSShKQbX7uKbaiwNZ7GkU+vs83KcWQhS0PF97CnO5vUTap6QlkM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB4844
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,131 +122,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/8/23 23:30, Zhuo, Qiuxu wrote:
->> From: Waiman Long <longman@redhat.com>
->> Sent: Tuesday, May 9, 2023 10:58 AM
->> To: Zhuo, Qiuxu <qiuxu.zhuo@intel.com>; Peter Zijlstra
->> <peterz@infradead.org>; Ingo Molnar <mingo@redhat.com>; Will Deacon
->> <will@kernel.org>
->> Cc: Boqun Feng <boqun.feng@gmail.com>; linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH 1/1] locking/qspinlock: Make the 1st spinner only spin on
->> locked_pending bits
->>
->>
->> On 5/8/23 22:45, Zhuo, Qiuxu wrote:
->>> Hi Waiman,
->>>
->>> Thanks for your review of this patch.
->>> Please see the comments below.
->>>
->>>> From: Waiman Long <longman@redhat.com>
->>>> Sent: Monday, May 8, 2023 11:31 PM
->>>> To: Zhuo, Qiuxu <qiuxu.zhuo@intel.com>; Peter Zijlstra
->>>> <peterz@infradead.org>; Ingo Molnar <mingo@redhat.com>; Will Deacon
->>>> <will@kernel.org>
->>>> Cc: Boqun Feng <boqun.feng@gmail.com>; linux-kernel@vger.kernel.org
->>>> Subject: Re: [PATCH 1/1] locking/qspinlock: Make the 1st spinner only
->>>> spin on locked_pending bits
->>>>
->>>>
->>>> On 5/8/23 04:15, Qiuxu Zhuo wrote:
->>>>> The 1st spinner (header of the MCS queue) spins on the whole
->>>>> qspinlock variable to check whether the lock is released. For a
->>>>> contended qspinlock, this spinning is a hotspot as each CPU queued
->>>>> in the MCS queue performs the spinning when it becomes the 1st
->>>>> spinner (header of
->>>> the MCS queue).
->>>>> The granularity among SMT h/w threads in the same core could be
->> "byte"
->>>>> which the Load-Store Unit (LSU) inside the core handles. Making the
->>>>> 1st spinner only spin on locked_pending bits (not the whole
->>>>> qspinlock) can avoid the false dependency between the tail field and
->>>>> the locked_pending field. So this micro-optimization helps the h/w
->>>>> thread (the 1st spinner) stay in a low power state and prevents it
->>>>> from being woken up by other h/w threads in the same core when they
->>>>> perform
->>>>> xchg_tail() to update the tail field. Please see a similar
->>>>> discussion in the link
->>>> [1].
->>>>> [1]
->>>>> https://lore.kernel.org/r/20230105021952.3090070-1-
->> guoren@kernel.org
->>>>> Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
->>>>> ---
->>>>>     kernel/locking/qspinlock.c | 13 +++++++++++++
->>>>>     1 file changed, 13 insertions(+)
->>>>>
->>>>> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
->>>>> index efebbf19f887..e7b990b28610 100644
->>>>> --- a/kernel/locking/qspinlock.c
->>>>> +++ b/kernel/locking/qspinlock.c
->>>>> @@ -513,7 +513,20 @@ void __lockfunc
->>>> queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
->>>>>     	if ((val = pv_wait_head_or_lock(lock, node)))
->>>>>     		goto locked;
->>>>>
->>>>> +#if _Q_PENDING_BITS == 8
->>>>> +	/*
->>>>> +	 * Spinning on the 2-byte locked_pending instead of the 4-byte
->>>> qspinlock
->>>>> +	 * variable can avoid the false dependency between the tail field and
->>>>> +	 * the locked_pending field. This helps the h/w thread (the 1st
->>>> spinner)
->>>>> +	 * stay in a low power state and prevents it from being woken up
->>>>> +by
->>>> other
->>>>> +	 * h/w threads in the same core when they perform xchg_tail() to
->>>> update
->>>>> +	 * the tail field only.
->>>>> +	 */
->>>>> +	smp_cond_load_acquire(&lock->locked_pending, !VAL);
->>>>> +	val = atomic_read_acquire(&lock->val); #else
->>>>>     	val = atomic_cond_read_acquire(&lock->val, !(VAL &
->>>>> _Q_LOCKED_PENDING_MASK));
->>>>> +#endif
->>>>>
->>>>>     locked:
->>>>>     	/*
->>>> What hardware can benefit from this change? Do you have any micro-
->>>> benchmark that can show the performance benefit?
->>> i)  I don't have the hardware to measure the data.
->>>       But I run a benchmark [1] for the contended spinlock on an Intel
->> Sapphire Rapids
->>>       server (192 h/w threads, 2sockets) that showed that the 1st spinner
->> spinning was
->>>       a hotspot (contributed ~55% cache bouncing traffic measured by the
->> perf C2C.
->>>        I don't analyze the cache bouncing here, but just say the spinning is a
->> hotspot).
->> I believe the amount of cacheline bouncing will be the same whether you
->> read 32 or 16 bits from the lock word. At least this is my understanding of the
->> x86 arch. Please correct me if my assumption is incorrect.
-> You're right.
-> The amount of cache line bouncing was nearly the same either spinning 32 or 16 bits
-> (according to my measured perf C2C data on an x86 server).
->   
->>> ii) The similar micro-optimization discussion [2] (looked like it was accepted
->> by you 😉) that
->>>       avoiding the false dependency (between the tail field and the
->> locked_pending field)
->>>       should help some arches (e.g., some ARM64???) the h/w thread
->> (spinner) stay in a
->>>       low-power state without the disruption by its sibling h/w threads in the
->> same core.
->>
->> That is true. However, this patch causes one more read from the lock
->> cacheline which isn't necessary for arches that won't benefit from it.
->> So I am less incline to accept it unless there is evidence of the
->> benefit it can bring.
-> This patch removes a bitwise AND operation on the VAL value.
-> Does it compensate for the one more read from the cache line?
+On Tue, May 09, 2023 at 02:35:03PM +0000, Ivan Mikhaylov wrote:
+> Add the shift MAC address property for GMA command which provides which
+> shift should be used but keep old one values for backward compatability.
 
-Register to register operation in the case of bitwise AND doesn't cost 
-much, it is the potential reading from a hot cacheline that cause most 
-of the delay. Besides there is also an additional acquire barrier. 
-Again, if there is no concrete proof of a benefit, there is no point to 
-make the code more complicated.
+nit: s/compatability/compatibility/
 
-Cheers,
-Longman
+> 
+> Signed-off-by: Ivan Mikhaylov <fr0st61te@gmail.com>
+> ---
+>  net/ncsi/ncsi-rsp.c | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/ncsi/ncsi-rsp.c b/net/ncsi/ncsi-rsp.c
+> index 069c2659074b..1f108db34d85 100644
+> --- a/net/ncsi/ncsi-rsp.c
+> +++ b/net/ncsi/ncsi-rsp.c
+> @@ -9,6 +9,8 @@
+>  #include <linux/netdevice.h>
+>  #include <linux/etherdevice.h>
+>  #include <linux/skbuff.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/of.h>
+>  
+>  #include <net/ncsi.h>
+>  #include <net/net_namespace.h>
+> @@ -616,9 +618,12 @@ static int ncsi_rsp_handler_oem_gma(struct ncsi_request *nr, int mfr_id)
+>  {
+>  	struct ncsi_dev_priv *ndp = nr->ndp;
+>  	struct net_device *ndev = ndp->ndev.dev;
+> +	struct platform_device *pdev;
+>  	struct ncsi_rsp_oem_pkt *rsp;
+>  	struct sockaddr saddr;
+>  	u32 mac_addr_off = 0;
+> +	s32 shift_mac_addr = 0;
+> +	u64 mac_addr;
+>  	int ret = 0;
 
+nit: please preserve reverse xmas tree - longest line to shortest - order
+     for local variables in networking code. Or in this case,
+     move towards rather than away from that pattern.
+
+>  	/* Get the response header */
+> @@ -635,7 +640,17 @@ static int ncsi_rsp_handler_oem_gma(struct ncsi_request *nr, int mfr_id)
+>  
+>  	memcpy(saddr.sa_data, &rsp->data[mac_addr_off], ETH_ALEN);
+>  	if (mfr_id == NCSI_OEM_MFR_BCM_ID || mfr_id == NCSI_OEM_MFR_INTEL_ID)
+> -		eth_addr_inc((u8 *)saddr.sa_data);
+> +		shift_mac_addr = 1;
+> +
+> +	pdev = to_platform_device(ndev->dev.parent);
+> +	if (pdev)
+> +		of_property_read_s32(pdev->dev.of_node,
+> +				     "mac-address-increment", &shift_mac_addr);
+> +
+> +	/* Increase mac address by shift value for BMC's address */
+> +	mac_addr = ether_addr_to_u64((u8 *)saddr.sa_data);
+> +	mac_addr += shift_mac_addr;
+> +	u64_to_ether_addr(mac_addr, (u8 *)saddr.sa_data);
+>  	if (!is_valid_ether_addr((const u8 *)saddr.sa_data))
+>  		return -ENXIO;
+>  
+> -- 
+> 2.40.1
+> 
+> 
