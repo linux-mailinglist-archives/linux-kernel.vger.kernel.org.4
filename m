@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C87D6FC34C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9D16FC352
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234528AbjEIJ5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 05:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
+        id S234640AbjEIJ5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 05:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233625AbjEIJ5Y (ORCPT
+        with ESMTP id S233789AbjEIJ50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 05:57:24 -0400
+        Tue, 9 May 2023 05:57:26 -0400
 Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2137.outbound.protection.outlook.com [40.107.215.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4231146BD
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:57:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A4A4C16
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:57:24 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Sq+qFWuNWEQBQvFy3CcUgfbVuQSIv4jJzW2f576cy3D9N/+TkW4h/q8MP8GkbdYgPjfVZdoT4B45r32Otf3os57b5kRHML0/isyoPhN9KnmjcmQWmbBzR3bnPqnN3xjKbV2a3aVvPCOESh6FZg50i9FErkuTlAvLJckU+QZUjF23vmZrcSDJMOiTx/CN1/kvOI07reWvVnmCHVbfLhtBRQ2fKrRvXv5X7B9Y5iGpUdaOIEJ/QFOflBcUqKLel3sL+OloafVX+of+d18rMinC4x1jjRRkNEb8g0fzzXHQn3bso50CggdHWNKPdJ1MGrqyuH0GP3n/9FpHWVBbKVAdcA==
+ b=ID9mqbrjWdGhvYaHk9rcAxiM5TP5aKs8rHXyvCYIw/ofNdJ/OtFYpFW2WOwaQUscwRsPtIsVr8EGoc6KmpoHq7e8vAxJsQgyOxiDUruDd3MBjmR6zytoB8adWr1J6Mp1CI0p4+c9Ges+oANbgoyNL+Nl3KArsBVXaBV9LQP4kJFOg2y3gvXYfAvqvbEcYtUrNYTOPq8yyvoCDHKVmbrAtxEal8ZBn7c9q+VtIgJPaBp9hCy3fr2DnPjSvm3hcez3Ozwb+gP4JVZ978SH98VGdLzp8W8pS9kOybI4JjHB872wEI+a2sfZL0LjwOU9v+coER6DhwTmIo8BH6BS07SPpg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ciyak4ApemOiGcAYqhdzZj7ZzKBroG9JAocEbmxXWn0=;
- b=I5TsMZdjLymrHjM9RFJ0RddAcFE0LFHJFrmsFWWS1wOgav6gSf32wu3+Porpro+w+qCWH+13csGxTL4SukXYB82Q9N0lgTLGItUvT+CvxdcU9MwG9kL5+lMnzT03/rX5qs9sbwZ6nj0DzEcwW8rYJ32ZaCfH7iIV4GThHPZHD9hEwd10wY4A6Jwz/3EjwGMBsXDt12H64bIWfLgriHpK7/5+vCJWF/K5uzv3GWgKKHvTbCP1Pk2kUKjbKOBKpUYkCCF0tXA6uDGzO92v/SogAhvWOm6Thdhn14gbrQQJwKLbpfvhYp697bs4xbAecr7oXdH/Wv6MnNR1i8nBAH8xAQ==
+ bh=6luf1sDdpq7vm+r+VRwsJaFqPhL7j1YIsUOYdY43Kko=;
+ b=ZJdJo6ZOVE0Nw5icSlifCXkl7iEF7m5BzeRK3i5Ve2HVXWMVtiu8S7uGoxSpO9yBSpYo+6PcZt1KfEOEYl6YdKwYMs4JLmVS5JJen4SaXssmBbiizhYD5yPRR7dVtKgvCUwXakEZ9chu4PK/2PJIJ7Pmhu4Hfp9rjq7+1Gov28J7kPP2XMGf37q1XR4pk2Yjf6e24JHpdENWR2L1hexZlZ2czm1JU8jUtvwLHmYiiFX13YY1WcEIY47E+6c/8ALcPRugLKOiIxezPCt9mhjk2v6ja1Te6z3tGgo4Hzgn7vMvEwQHRc1Ri3Qw/jAuZXQCE1XCJJfUJ38aSWGYgH6TPw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ciyak4ApemOiGcAYqhdzZj7ZzKBroG9JAocEbmxXWn0=;
- b=LhboLZJiiKE654Cqllo5dHACjMqaEhtmZz4sDgGquc4hkPrxJv4Xf/rkTC37izovVAxYMeoJ3mGUydoaGIKP9w6MNEINS50NOyGFaXhjo4GTwGBPgsy8+K2qtUtYo0oXcxLQ0Zn7ltXSfhwAgetO9NcBB+htdeQmvFQdGiPhG1GGWBHJQGRV2IpjU6QZdYWdC9tI1M8W1l2W79r5NwfiOMKKZvWNUaO7CcNRI0X0rCjP6Zyk0Ju7y2D+N5cjeWu9L341ytw0sh/Fzz5ACIsbjuNZeRN3c1YG0xFXyI/x+PTh5UQ/JCB5sC4f70dfn5HInPDlFunYYGw018S6F6/WsA==
+ bh=6luf1sDdpq7vm+r+VRwsJaFqPhL7j1YIsUOYdY43Kko=;
+ b=dzvELX6wEDZKlg4rpMjLsJStToyfe+Cp7KAFnzyNm8oRsIHWGfMKXfvAWnOFJAJVOQhVYrQlk9tVDRGfykwK3hvqqIDEi4FmDoDtF2ssMq3Ur0DX0z5Q7DSWU1oT+dv2zQjkPasJyKEHXu+67ZEqGcwaABMNCN3kogpbnfouVCHhqpV88TfoLgcB0tAZXvo/9elrMolC6DzgNi/1J3rLtIRhS/F2UfbZSYztZdXu3lkotdHzyNj/JXRgxsOEX8gm+sMuG5WmAFDx0hw1Rkh0mtJAqv5guzw87++T4JGHd6B/Xf3d7INrQsXYgQCP3U6e1q7oZ80muVfZSIjDG0oN8g==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
  by SEYPR06MB6130.apcprd06.prod.outlook.com (2603:1096:101:db::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Tue, 9 May
- 2023 09:57:18 +0000
+ 2023 09:57:20 +0000
 Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
  ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
  ([fe80::76d6:4828:7e80:2965%3]) with mapi id 15.20.6363.033; Tue, 9 May 2023
- 09:57:18 +0000
+ 09:57:20 +0000
 From:   Yangtao Li <frank.li@vivo.com>
 To:     jaegeuk@kernel.org, chao@kernel.org
 Cc:     linux-f2fs-devel@lists.sourceforge.net,
         linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH 1/4] f2fs: convert to use sbi directly
-Date:   Tue,  9 May 2023 17:57:03 +0800
-Message-Id: <20230509095706.17844-1-frank.li@vivo.com>
+Subject: [PATCH 2/4] f2fs: move the conditional statement to hold the inode lock in f2fs_ioc_decompress_file() and f2fs_ioc_compress_file()
+Date:   Tue,  9 May 2023 17:57:04 +0800
+Message-Id: <20230509095706.17844-2-frank.li@vivo.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230509095706.17844-1-frank.li@vivo.com>
+References: <20230509095706.17844-1-frank.li@vivo.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SI2PR04CA0017.apcprd04.prod.outlook.com
@@ -56,50 +58,50 @@ X-ClientProxiedBy: SI2PR04CA0017.apcprd04.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEYPR06MB6130:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1487afe6-a0c3-49d3-3b56-08db5073c5fd
+X-MS-Office365-Filtering-Correlation-Id: 97c37b63-ab5f-4a0d-c806-08db5073c781
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1yZAKTXTaPLt9jt5/Rjgay0t4Exuvr7XR+YWbZ+LKHt/2JXL5TJBLOByru+QamP/5YRR1YFxpRr4dqcD3rZ1Nim+vJ2mcVHSDZj87WfAg1IMEHEVTMViccfCCJEdyXtPURfkStVjV/8nE7LdGYTxbn5FMTCDQhNi42ZRZLPGEl5RSxJUh22J6zXGWdGfzbaAOu9akqgrwApuw2Fb7NLtyqBRJVH+ogSXFClICxFbgcuW4sa8/j06txZZ53SgfDpVCapIAIZaAkzmry25ZWIW65foYW1+csR4AWR8FbvAw7QvfLs14jwYn5yq5x0OmrH+87sZv9d1LPkzArf0gHrNJbPgeZLaer5bpDBIe7tvIX5nDICX28g490AK2qzHdpQxPPcnoiQKe2DfHr+eg0d494NTPJVa8I3vjFlZLZLEifrq6JslvPOru4o/Ta0Qe9cbbtTYg82Gsst+LerZX4XltIXaGU5ugeSr36fTOFTAwfAfwtMg8xf35FDDbRT4QtEP7BoCZ53zhAm7+fbE/ur0GXjPGt+aBZ2yFRSYWYnlO07Ode/NPCqnYV1RuAlO6kEaZzt8HjCkotq/P84NNWmv2YMRGjDitijnExzrwEZqU/A=
+X-Microsoft-Antispam-Message-Info: 6l99tE5w3DDX9R3o0uriggDGr7khTXWrjryU48YwNGEi6pHmk6MjLns+A0K57Q7aWLjV1FBN91ESJgxPwGUOyzAi5itCf4SF4U+bXgcjAK5VETxMCtw+8eFs8LTHz4VSvQlxLBfqfsafr55VI+k+2PurARZe7h66LWfqqphWuAu7IXNKksWAjNhR86xwygB4cs01PIeoKc2zdLjVi6K4iRKjT93O+exsddiPwKVqxrGm9IhSq9XQcTdA7zmxmUSuASYHdb0WyQ0rsuNtu+tyvZRAYU8Ry0wYqhtMHpZnFovUQ6fPdpK9nh1hywyUhQ5thcO1trBeu3xt6CKLwqjfmZK/AqYic4OszEmmpueCEF7hDIUMDU1tDB2kOMok5u+IviXR7XpZfwrDJiC7QB5VBnddBKOTeOveLdB0SpI5lpTJ4aTeyTHADvdpp8sMo1VK3jrz/Q2aAx5Z4rMCbkQWSJB0pjsamuENRN4ES25Wbnfk1SP1FHYswc9iHQOouok0vPjLQ3pZZhHaMdQWbmkQACd4qOTMMDONr2FiIN/1T9F495F9SBpjHnbcWmxRuOA4mujDlNmwahV4ZwoNF4iJBY34IGOI8mgXRZ6QJxm+n6OYSB2wfACq9CoYwXMVLWJD
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(39860400002)(136003)(376002)(366004)(451199021)(6486002)(83380400001)(316002)(66946007)(66476007)(66556008)(4326008)(478600001)(6666004)(52116002)(2616005)(6506007)(6512007)(1076003)(26005)(107886003)(186003)(2906002)(86362001)(36756003)(41300700001)(5660300002)(8676002)(8936002)(38100700002)(38350700002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KG251XEDqWAwpwIrilUHKd36dPcuFVswOyVSAsLbMHHePsUzqYJlcUgPg5XL?=
- =?us-ascii?Q?Wv00JQlq3xZ24gH9DR1f1yOiZr+s2LMxuDz4HlYZvDapaYtp9FMVJ8/VB3/P?=
- =?us-ascii?Q?r7z5PA7z6h2tyaEXWTdQSwSKLHaBmFifqlHKbxXPGSce7Jw17w+ggNq6CKJq?=
- =?us-ascii?Q?JA/du/2G4uvJPPTx5GQ0eFeVOoXBXMb3RlKlFBYbYekAm9gN9ID7hBHM4+FX?=
- =?us-ascii?Q?lFwQ4wpQlBO+dAKkql+/72CiALHEuYR6DqGRI1jm9MqeR0IA4q4DBIUFNFXB?=
- =?us-ascii?Q?YtEolFHgOXWkKqfGF6cbuDZFFN0jSXBB8WWhoCNgoX6MYpLpv9sTe+9FFT6m?=
- =?us-ascii?Q?+cRhhT40JmqiclVRuxrzXYHM/u62g8wwo97oURUgRKzEcuEPRTph3R99IbIe?=
- =?us-ascii?Q?x4SofTx3LQ781VTchHqZyTZ3OMHtOClHumBJP7+oxA/YX82RIl6/94P3lnR8?=
- =?us-ascii?Q?eS7Z+kXIme78nycVhgP2pUOJthU7VLqCRf8ocHVSYoqsu3Rk3Mg2G4GEgfts?=
- =?us-ascii?Q?MuG27EBhhB9+k3ggMrnjaB5MrWgRTxrY6udJroMVnyuUVfare6y2xeFxqJYO?=
- =?us-ascii?Q?jvVhdrgLfAfDP7Oh7dCDsRZY4jYTSOPxaguePZys5BdR2FJFDR6LJ9tZ3Ew5?=
- =?us-ascii?Q?kuosKpZMcXxUXL177VxtMhRja/rN2PIvRI3KSZGWkPxrIEha/ai8nDfw2dyR?=
- =?us-ascii?Q?ZnPsQm5n7AfpforV5OYy1tVU0JNVwWsdJJx2sslUQbopHUDPadid+sOeAWHY?=
- =?us-ascii?Q?0on5dO21kqXhLmwX28ayPSv31SddDciSdxFIvuq496qc/pX2z4NAWUoH2VrW?=
- =?us-ascii?Q?qiQesZegFSICiDJ9dLbPbxSynsH4Z1c7ZtiS9TRIq1IQKRkx+J/bENV/x7se?=
- =?us-ascii?Q?BKMgDjD40eweas8LH7j0gqYksns795byeutwT9OIlg2mBtbGPyXvn0ovtXu/?=
- =?us-ascii?Q?9JuBpPvl3omQ87Bx4g/aVHw6Kqne8bZ3IvngeLGzpakSOtqCu+4/DU9dw9k6?=
- =?us-ascii?Q?WAr5psOvaa+FpVAnX/9YJyoPpG2qEiSoc5F14Uy9om2p/kYBzM+4cNBC/EaS?=
- =?us-ascii?Q?23YkUd1mx70jStb1OkAGZKgz42JL0RczFXHtEQDdVUvqbmP2y8RE7bDw9sqq?=
- =?us-ascii?Q?IK5nPQV0fvi9oitDshxa9ioFmHTMW1hypOyt+j1EYxBqTR2L8rV5OekRSSNE?=
- =?us-ascii?Q?QPQ3cSyf+S38j5V/bSVGlwpWsMYHLkpj7wikGfLUVOwJsYOK7e+/yxKlez1C?=
- =?us-ascii?Q?nBGVqNWOe4Zn6hLLPczpBRKNRgnayNhEQvOfIMISED7zxZseNIfcDOpFoBjE?=
- =?us-ascii?Q?W/riK1DM4d70PnLhINi6qw1rzFqYPuXntuYi+2NMO6YNCu1pU+gAHruCIdxZ?=
- =?us-ascii?Q?m55n/W9Vdd69abn7SEQj0vfo4Bkcq6lqxpCaF41MGwtcRjGKejhWtRTgr5Tg?=
- =?us-ascii?Q?Is/Nc2/Fr6wydF92np3OsaQhYK7/dEhojsMJiI+OZ6YNCUu4SyfsGde0BC/R?=
- =?us-ascii?Q?GI56DZtEkksiQX+g7fShYbzIGnKEQlqV21M8V6FRjTH1Z3yWUjQARWc+xC/Q?=
- =?us-ascii?Q?TU/iKyZ6JspmigygrswDQ590Tw9WtQa6Cph6vqMk?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?n/15Gt9E5lmgjRW/p1l5QBAqVrRUMZBfY7E2Elo1lNkO0xYCqb+Ov6SAwRpe?=
+ =?us-ascii?Q?U0a4VHcF80f9AiCBbN88HWHDat0f8h7DKsU7OobRnfbzSgN/QsJTxJzsvXpG?=
+ =?us-ascii?Q?UOgZK0M8bSbM7xPk1c2UeNlIgwhYzIizIywjdJ9mzugLiLIPV5P6LFDj4OSk?=
+ =?us-ascii?Q?WSROOw+O/FXq+TuOt48EuSIBnvCPZ2iaejXJK9uMl8E5jsRg4+t7UdKol0+7?=
+ =?us-ascii?Q?hN2+yP7IfGuUIIdMuPbOswUr6q+oWo1N3LccF8trKZHNHyLSom2dKl5rIXaW?=
+ =?us-ascii?Q?ZYnVYCUk4wJB0/nhgL9H1b5SOWr8XIxYdKGrbdS6VdihX/PCGrPzXq/yMh6y?=
+ =?us-ascii?Q?YuJJs99F6XZBnXZmj8Z9pNS2OVjaG92HCvVYgvCiPBRVQ5fpTNrYZ1pdYAEF?=
+ =?us-ascii?Q?DmgEb7P6FbLP2NkOK0s0aI6pK/QV2+L33RuRep7HaR+UNUBnHkEFYMrfGosv?=
+ =?us-ascii?Q?PbN/pB7DwLEnH2TdzfH4SwzE/gM/QHjZljFdHBMZMIfWYBwr+B+27OlNEqk4?=
+ =?us-ascii?Q?hzBEYLT7L9/GR4qAp7671wAEDTaxvWf07G8Lfn9cl5RJn8EcFB1wm8wxtdym?=
+ =?us-ascii?Q?fHKrtuf1ryw/GHUIHNe2yoxs6zuKW4GF3NmShFaN7G0uN8nOadFFx6Sten5s?=
+ =?us-ascii?Q?D9pBIaDaBjQ8hMhXfNBnofs/dbl/fLAEGlfkmQ4i3Zx0ewjXCwQDid5Xjbco?=
+ =?us-ascii?Q?K+RhD/LHSRqJqCFuyr0x0Gqwwso6AnEff3c91fWkaXYjftwOCaLLG/y2DGkb?=
+ =?us-ascii?Q?Tl/D/tCMji3VIy/lLeMfBsOo8LEv67+9zGDM4hli+tK5Egsgvfx3xdDzDb3H?=
+ =?us-ascii?Q?o9sxttSjsl2sLLjKCxbBHdA1/fwVSrUBaMeT4TKNEw9sgirnzEgWGwbkCa1k?=
+ =?us-ascii?Q?C3APZ4SQCfRGGF2bGZA8ooTFzm0doHgoHCBk3H2n0j/1TzifUanvGdbyqgxl?=
+ =?us-ascii?Q?e4tTMWMibBij3a52XoPcVIxCobNeky/IL+DgOHNqvAxk3BTuvmf4JrvowXrv?=
+ =?us-ascii?Q?JYJ2ZVkA+6TwoygKJ473UstzipEmlKDWB9w1UJLRA/JfFHtnl5eDLD5Wgtue?=
+ =?us-ascii?Q?6oeLikcsHXR99B15Qn7rmItqYxYof327ygauI/WIkXoWswyvDHcUFDx5a9YT?=
+ =?us-ascii?Q?nrNC5y6lO8wU9fQP9lg27Nvt341fvOHNMLVqsxh1buWDbAKTXofEsb0aD6Ma?=
+ =?us-ascii?Q?iWwVKyXGJYU8sQ2upH5gXBCcxagnMnvRlVAGCNOVVqwddmrwa9LHUUqAhoyc?=
+ =?us-ascii?Q?lFrSbocb7jLUYbk+RMHTDDFr/XSpRbCZ5AbPH3G7RvpgK5EeGPnujzYqDZd5?=
+ =?us-ascii?Q?+MkZSIFoswCTrJ5N5egAqesMxhZ4VkyfR/X4Hn4EqrJPPZFbM1eQfpzkf12O?=
+ =?us-ascii?Q?W+CvrHlRVT+SLBhgUKM4IphXb/0RG/9Fo8UWdnOYlH6wQ5LwzbjpsYgegbqA?=
+ =?us-ascii?Q?UYt6uK2oj15mQLfXNbD5W+YXuzFTfIhUTCV+MpcdiiC6BK3AxHrn+W6oxDB+?=
+ =?us-ascii?Q?nUTbtikYhesP3EXFxM7hHizH60FS+2gKic9gsnDFA0spUU5WxvaeAYR911yY?=
+ =?us-ascii?Q?vh9g0Ct7Ohosz34xr4hHAvr622DVYLJKbjS7d4kc?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1487afe6-a0c3-49d3-3b56-08db5073c5fd
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97c37b63-ab5f-4a0d-c806-08db5073c781
 X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 09:57:18.1483
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 09:57:20.3153
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0rjJCbHO8V6pibiP8z4k7qbBgLWCO4H7/nYJOdP4yVxNTfkVbocYHICghTMdtTPoxABohW1NfDhKG4V/tYelCg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: OuQiTvc/rfSNjWP4ofBTNSMcOsguGSk4W0+8GL2gzPs81gHEieU3+1gu5h+sGpeqGqjEhaHO0pRauaekR5ThwQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6130
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -111,71 +113,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-F2FS_I_SB(inode) is redundant.
+For judging the inode flag state, the inode lock must be held.
 
+Fixes: 5fdb322ff2c2 ("f2fs: add F2FS_IOC_DECOMPRESS_FILE and F2FS_IOC_COMPRESS_FILE")
 Signed-off-by: Yangtao Li <frank.li@vivo.com>
 ---
- fs/f2fs/file.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ fs/f2fs/file.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
 diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 0dbbcb406d3f..6f8936ec689c 100644
+index 6f8936ec689c..a6180d4d94cb 100644
 --- a/fs/f2fs/file.c
 +++ b/fs/f2fs/file.c
-@@ -3466,7 +3466,7 @@ static int f2fs_release_compress_blocks(struct file *filp, unsigned long arg)
- 	int ret;
- 	int writecount;
+@@ -4043,14 +4043,16 @@ static int f2fs_ioc_decompress_file(struct file *filp)
+ 	if (!(filp->f_mode & FMODE_WRITE))
+ 		return -EBADF;
  
--	if (!f2fs_sb_has_compression(F2FS_I_SB(inode)))
-+	if (!f2fs_sb_has_compression(sbi))
- 		return -EOPNOTSUPP;
+-	if (!f2fs_compressed_file(inode))
+-		return -EINVAL;
+-
+ 	f2fs_balance_fs(sbi, true);
  
- 	if (!f2fs_compressed_file(inode))
-@@ -3479,7 +3479,7 @@ static int f2fs_release_compress_blocks(struct file *filp, unsigned long arg)
- 	if (ret)
- 		return ret;
- 
--	f2fs_balance_fs(F2FS_I_SB(inode), true);
-+	f2fs_balance_fs(sbi, true);
- 
+ 	file_start_write(filp);
  	inode_lock(inode);
  
-@@ -3636,7 +3636,7 @@ static int f2fs_reserve_compress_blocks(struct file *filp, unsigned long arg)
- 	unsigned int reserved_blocks = 0;
- 	int ret;
- 
--	if (!f2fs_sb_has_compression(F2FS_I_SB(inode)))
-+	if (!f2fs_sb_has_compression(sbi))
- 		return -EOPNOTSUPP;
- 
- 	if (!f2fs_compressed_file(inode))
-@@ -3652,7 +3652,7 @@ static int f2fs_reserve_compress_blocks(struct file *filp, unsigned long arg)
- 	if (atomic_read(&F2FS_I(inode)->i_compr_blocks))
++	if (!f2fs_compressed_file(inode)) {
++		ret = -EINVAL;
++		goto out;
++	}
++
+ 	if (!f2fs_is_compress_backend_ready(inode)) {
+ 		ret = -EOPNOTSUPP;
  		goto out;
+@@ -4118,14 +4120,16 @@ static int f2fs_ioc_compress_file(struct file *filp)
+ 	if (!(filp->f_mode & FMODE_WRITE))
+ 		return -EBADF;
  
--	f2fs_balance_fs(F2FS_I_SB(inode), true);
-+	f2fs_balance_fs(sbi, true);
- 
- 	inode_lock(inode);
- 
-@@ -4046,7 +4046,7 @@ static int f2fs_ioc_decompress_file(struct file *filp)
- 	if (!f2fs_compressed_file(inode))
- 		return -EINVAL;
- 
--	f2fs_balance_fs(F2FS_I_SB(inode), true);
-+	f2fs_balance_fs(sbi, true);
+-	if (!f2fs_compressed_file(inode))
+-		return -EINVAL;
+-
+ 	f2fs_balance_fs(sbi, true);
  
  	file_start_write(filp);
  	inode_lock(inode);
-@@ -4121,7 +4121,7 @@ static int f2fs_ioc_compress_file(struct file *filp)
- 	if (!f2fs_compressed_file(inode))
- 		return -EINVAL;
  
--	f2fs_balance_fs(F2FS_I_SB(inode), true);
-+	f2fs_balance_fs(sbi, true);
- 
- 	file_start_write(filp);
- 	inode_lock(inode);
++	if (!f2fs_compressed_file(inode)) {
++		ret = -EINVAL;
++		goto out;
++	}
++
+ 	if (!f2fs_is_compress_backend_ready(inode)) {
+ 		ret = -EOPNOTSUPP;
+ 		goto out;
 -- 
 2.39.0
 
