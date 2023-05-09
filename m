@@ -2,89 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E1F6FCBC8
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CDB6FCBC0
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234621AbjEIQxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 12:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
+        id S234652AbjEIQwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 12:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234552AbjEIQxE (ORCPT
+        with ESMTP id S234559AbjEIQwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 12:53:04 -0400
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E2230E9
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 09:52:18 -0700 (PDT)
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-75773252cbfso305122685a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 09:52:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683651137; x=1686243137;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Tue, 9 May 2023 12:52:34 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76721BD3;
+        Tue,  9 May 2023 09:52:33 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-24df4ecdb87so4257366a91.0;
+        Tue, 09 May 2023 09:52:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683651153; x=1686243153;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9NlCnOkM/MgxA+OhUODaj0DcPdY66ABvKJcAkS48+rQ=;
-        b=SxfjV9qhIqe4F/RWFKxy1ppkQyzhxyntwpYFvYr+ohODGJ+VuD9HPIy3heTtxskNto
-         hH6RVoz8zd3kWHjHsXlVB5rAsZGC2lwSiggUyt+H2pKNTML/F7Yf9OcP4gweM07JsmeY
-         /xO0qyB9N/UrMfupB9cUSqNKGXkRwwKpRCKd32WucwGdQkmG1eih6wS8w+Cgqh92dk8O
-         GvPp7u4qjriv8edzXbhA3tabkue44F0gIysING5UzYKliM5/mARI1H1TFkwstrdF4h5O
-         +glvWstpmItW3MCvkogr3wFFEdZSq3HU3eMJRBPb6YDDAaS3BTNTw3OGikWapdYJg5os
-         hPsA==
-X-Gm-Message-State: AC+VfDwDVdvtinkhg2kbDASzwgNLemiGfu9TxWNan3zd5pAW/esvLB+3
-        WT+H1yYMGR/1aVrj5M6uffFd
-X-Google-Smtp-Source: ACHHUZ6sqdNZ2jTWBpQoQUne2HxU2x6SkHvDsQePL/EB6aWKWGfiLRP7QOvsu0TXIL8IYmrE41X/oQ==
-X-Received: by 2002:ad4:5ba2:0:b0:61b:6872:1459 with SMTP id 2-20020ad45ba2000000b0061b68721459mr18704881qvq.49.1683651137572;
-        Tue, 09 May 2023 09:52:17 -0700 (PDT)
-Received: from localhost ([217.138.208.150])
-        by smtp.gmail.com with ESMTPSA id ew8-20020a05622a514800b003e635f80e72sm633574qtb.48.2023.05.09.09.52.16
+        bh=CrzAg4b1IL2WebYrz9jjSo4DKTQ6JUzCbfd1CBaJHyY=;
+        b=EBtnPLaE9IhJzG6EU9DHfnUGk950MAheAVNyDRdH92n+XxoAXpfbDHIkIPRRLF/Wv6
+         pXuZn+VO9YDQs9fttlQU1VsMywC4P4pTQePt+QmyM1k8uYqOianw94J3gFb/K9NbNOsf
+         dx1SpIboVTxK89m5yhMRA6Nq9c2RAaT1hebFI1NQClKcKI1zXkpU2MuWFJ/L4Br38tdd
+         S8LbqxMHrUMEZH0zjSumPkJ/MZVTCuEkFy3a6+faAvu90wsb4vkhAZBE2zEQOHcttTrN
+         TIrTZkvToWUC1b2wq09rWMzzZnQ1PKnSgmT5j8VDXzTdIjy1DRoqBoADSzdRInwQysv5
+         TYig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683651153; x=1686243153;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CrzAg4b1IL2WebYrz9jjSo4DKTQ6JUzCbfd1CBaJHyY=;
+        b=d4KAyTHPPaQUuLBxd0nVsMbQkSr9j/iNblq1aiAbTH2+ztfg8G/gH5JAIS6JBJwcby
+         CyXVrmp0e+tGc7XFelP3W30LIgVrQ9oTfVTU5R1dE1Iejiz+/uAgxgddYPLh/4lpEPF6
+         1o14DSXNcHkj3aiKTN5/UUDrA51It+eJA6c494xN5pGYA4mdV28bOP/Kgh0cCRN2aX1I
+         VqFG2kQwjVpmr+jFyuauRW10q1wtB62vQBILw0f6527uPoM/IDoPHYk2eGs9biBJ5uKg
+         3ZC81IYPjRuQVCmDk2hBwKt3gvN4hq8yPGgeMVSDN+czWFNO0kqFIaSqi7dk92Dk+xzz
+         5lPQ==
+X-Gm-Message-State: AC+VfDwLOf8lyZKju9wtSxanTEelXCeMtanIUuHWLRmoWD1qy01n1aJT
+        B7gG8Psox98vZSg7HSGUO3ac/33isT4=
+X-Google-Smtp-Source: ACHHUZ7DXpQbxKcrVivCCV+L9RdZZPI6fMa5rxR7MnawmK2vcr0LkFSSp0RPC+CfG5RTxjj/ujpa9A==
+X-Received: by 2002:a17:90b:19d4:b0:24e:46f8:492a with SMTP id nm20-20020a17090b19d400b0024e46f8492amr14099171pjb.46.1683651152985;
+        Tue, 09 May 2023 09:52:32 -0700 (PDT)
+Received: from cxl-test.. ([103.181.222.211])
+        by smtp.gmail.com with ESMTPSA id lw6-20020a17090b180600b002505f8b9c53sm5503986pjb.38.2023.05.09.09.52.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 09:52:17 -0700 (PDT)
-Date:   Tue, 9 May 2023 12:52:16 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [PATCH v6 2/5] block: Introduce provisioning primitives
-Message-ID: <ZFp6QDkSm296+Qm6@redhat.com>
-References: <20230420004850.297045-1-sarthakkukreti@chromium.org>
- <20230506062909.74601-1-sarthakkukreti@chromium.org>
- <20230506062909.74601-3-sarthakkukreti@chromium.org>
+        Tue, 09 May 2023 09:52:32 -0700 (PDT)
+From:   Raghu Halharvi <raghuhack78@gmail.com>
+To:     linux-cxl@vger.kernel.org,
+        Alison Schofield <alison.schofield@intel.com>,
+        raghuhack78@gmail.com, ira.weiny@intel.com, bwidawsk@kernel.org,
+        dan.j.williams@intel.com, vishal.l.verma@intel.com
+Cc:     linux-kernel@vger.kernel.org, Dave Jiang <dave.jiang@intel.com>
+Subject: [PATCH v5 1/2] cxl/mbox: Remove redundant dev_err() after failed mem alloc
+Date:   Tue,  9 May 2023 16:52:16 +0000
+Message-Id: <20230509165218.139568-2-raghuhack78@gmail.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230509165218.139568-1-raghuhack78@gmail.com>
+References: <20230509165218.139568-1-raghuhack78@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230506062909.74601-3-sarthakkukreti@chromium.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 06 2023 at  2:29P -0400,
-Sarthak Kukreti <sarthakkukreti@chromium.org> wrote:
+Issue found with checkpatch
 
-> Introduce block request REQ_OP_PROVISION. The intent of this request
-> is to request underlying storage to preallocate disk space for the given
-> block range. Block devices that support this capability will export
-> a provision limit within their request queues.
-> 
-> This patch also adds the capability to call fallocate() in mode 0
-> on block devices, which will send REQ_OP_PROVISION to the block
-> device for the specified range,
-> 
-> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+A return of errno should be good enough if the memory allocation fails,
+the error message here is redundant as per the coding style, removing it.
 
-Reviewed-by: Mike Snitzer <snitzer@kernel.org>
+Reviewed-by: Vishal Verma <vishal.l.verma@intel.com>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Signed-off-by: Raghu Halharvi <raghuhack78@gmail.com>
+---
+ drivers/cxl/core/mbox.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+index f2addb457172..11ea145b4b1f 100644
+--- a/drivers/cxl/core/mbox.c
++++ b/drivers/cxl/core/mbox.c
+@@ -1112,10 +1112,8 @@ struct cxl_dev_state *cxl_dev_state_create(struct device *dev)
+ 	struct cxl_dev_state *cxlds;
+ 
+ 	cxlds = devm_kzalloc(dev, sizeof(*cxlds), GFP_KERNEL);
+-	if (!cxlds) {
+-		dev_err(dev, "No memory available\n");
++	if (!cxlds)
+ 		return ERR_PTR(-ENOMEM);
+-	}
+ 
+ 	mutex_init(&cxlds->mbox_mutex);
+ 	mutex_init(&cxlds->event.log_lock);
+-- 
+2.39.2
+
