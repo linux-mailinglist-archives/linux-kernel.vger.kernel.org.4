@@ -2,165 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57A46FBFA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5F36FBFAD
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235074AbjEIGxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 02:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
+        id S235118AbjEIGzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 02:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235099AbjEIGxN (ORCPT
+        with ESMTP id S235175AbjEIGy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 02:53:13 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6502BAD28
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 23:53:11 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bc070c557so10637861a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 23:53:11 -0700 (PDT)
+        Tue, 9 May 2023 02:54:59 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0ECAD2E
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 23:54:37 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1aaf70676b6so38411065ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 23:54:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683615190; x=1686207190;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0gVYUKUESgFg4JXOzPAjSxRkiRFFRfIKte714mnZ86g=;
-        b=c6t/rIcOSaiWGIGAtBLzqVuVk9Tev5gB7eF4xFTFUhOi0kSla9f4WBJwTRzrLOciJD
-         500GH/iS3kNjYz706tol8X20Y24nEbupifwz3mAUfPV41FtfXb4E3M45vsohor9cgGjE
-         KXdYuDF/t5oNhWc/aB8QM7Pb5Bf43mNsFLOOTfqw43mu/L/PiuVl2YSHSut9WEf1Upy2
-         zuEnCTC0Ac514nEsQyhcC4Lfzz5kHyInlYyxy5Wg+X2AOKWKwdSoP5EUhaeQ/vna+nR9
-         YUJ5fVqSoTGM2jHMOQi++2a8WPWZjLP24XfmWAFP6gucd7fFvhNsxcIeFlzUUJsP/SP0
-         dd4g==
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683615277; x=1686207277;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8f7AFFRkXXKxkzsTH7JfwHgWYybfOeRANzMf6aB4GvY=;
+        b=oS/3s1VQfCdROM7w06UUy1feQDAkekR15S+W+Lck1hb5ImBoiw9PTJrGHvLGdhTWxX
+         YIO5QVFOI+XUkjxUqxVV3Jqo2HpFqpr0K5ZFfmXsTsaGMWK05+dMdJyyfOOjAoqu9k0M
+         GO33YahzUNlU+1+5U7niPyeqwzkzx/fVZs7IEsHtO22XI+sIS4ZGG2JF9rogkh2/8Q64
+         pJ2AA1fb4Lyq/cQl6LGsYw5vjhO7zc7/9CxueqbTm5gm8Zrb451c4H1g7aVDJKy5LfpF
+         yP8zbgyeQlqJ/c47Q/1Woo4pxbo+jHEAqO2sNJGFYpVV8etIY3Of/UPdn8K3elJmevyL
+         ZXVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683615190; x=1686207190;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0gVYUKUESgFg4JXOzPAjSxRkiRFFRfIKte714mnZ86g=;
-        b=Fz+pZWApsrZghoQpbBup9qr27uD7fpXujsJefbSUXwDk4UAljkIZdWJzSYRJ5+Z669
-         EFHxPjPlmVVGlXexgGMMssNoh2VjmSEqpqTzJE1F7U8LJ1GXM/qjvpiZqftqv/Cl8t9S
-         eJPfmDXkpyTfryN0+Kk0Ax8pMNxCby+PQcI0FinmzegdmssvKWWXYeUBc4QJHfiq2OCu
-         uysSTKEOyWMFu7LVFgpAQbLr5/sFkhK+cJH0qjsfgep4r2fQQlIpNdxjTx0J4PdWfVGK
-         eKbYCaweZ66Ozz+Jo3ExpH9T+01VYXA2yprZNoeGGxN98N46upIFPabX4hdvJFXdJIt3
-         lY1A==
-X-Gm-Message-State: AC+VfDx3ywsa0UQElVrkZFRVZ/0Di0c/DeEH6lWGYRA8BYReh0Dyv5ad
-        i2DW5JLXrh3jM6pzoUbl9fRHIQ==
-X-Google-Smtp-Source: ACHHUZ65+L9lC22HwIp27k17nrs3SAtXzR1jYOlboAXf/p55Rd9BcjSN9Y21U+KDgvJ5kmk0VHWD6g==
-X-Received: by 2002:a17:907:1b29:b0:94f:2d5f:6949 with SMTP id mp41-20020a1709071b2900b0094f2d5f6949mr12526827ejc.42.1683615189883;
-        Mon, 08 May 2023 23:53:09 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
-        by smtp.gmail.com with ESMTPSA id hz17-20020a1709072cf100b009664e25c425sm933807ejc.95.2023.05.08.23.53.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 May 2023 23:53:09 -0700 (PDT)
-Message-ID: <ea9ae4c9-2808-bf22-70a3-bb7e7b1168d0@linaro.org>
-Date:   Tue, 9 May 2023 08:53:08 +0200
+        d=1e100.net; s=20221208; t=1683615277; x=1686207277;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8f7AFFRkXXKxkzsTH7JfwHgWYybfOeRANzMf6aB4GvY=;
+        b=SWFIYpz61wrjRzRJimf6jH+UwBTmTrp/noaatoZRmEKRdXmPgQOIVdovZyAnTHMK8W
+         jPPTalCx/73TUR7A450I5han8ZO/ZIuEWQc5k6xhHx5IQzipIEOw0ZmCo7O2JEF5WTQD
+         ayL6A2Gw7JKr+Xkrrr2u2B7Ru5Oj1nrtrH90llNuxvR2eKEqT/Ku6YFUYWyHw/uALzhL
+         4SN7neKMUBx/+KfmSFdJcnD74rzcbPWlACj9X1MD/X2VOpYQ1HlxpFF65d9zVTScNr2W
+         PHGKTN12sMOGWn9VaGs+o9clYml6tsmHITcUaEBfpWJzOQcQhTesAmfLWVY3Xlgttit6
+         uZZA==
+X-Gm-Message-State: AC+VfDwHji8y8/z3uRpEMeVL182Nnf2gApAiaJ96mRn16yLavgbJuaHp
+        eaMiZkfH1e/5RySnI1PLSQ9coA==
+X-Google-Smtp-Source: ACHHUZ7LdOHTKLDLgTu5Mf4elrCAwM8dbTu05hZuRJn2cRPKqYLnO0y9skDG4YG19caNlHilV8oKBA==
+X-Received: by 2002:a17:902:eb46:b0:1a6:5487:3f97 with SMTP id i6-20020a170902eb4600b001a654873f97mr12176228pli.64.1683615277073;
+        Mon, 08 May 2023 23:54:37 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
+        by smtp.gmail.com with ESMTPSA id g7-20020a170902868700b001aad4be4503sm719394plo.2.2023.05.08.23.54.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 23:54:36 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pwHF3-00D7ut-QH; Tue, 09 May 2023 16:54:33 +1000
+Date:   Tue, 9 May 2023 16:54:33 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     Dave Chinner <dchinner@redhat.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, linux-kernel@vger.kernel.org,
+        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
+        ying.huang@intel.com, feng.tang@intel.com, fengwei.yin@intel.com
+Subject: Re: [linus:master] [xfs]  2edf06a50f:  fsmark.files_per_sec -5.7%
+ regression
+Message-ID: <20230509065433.GT3223426@dread.disaster.area>
+References: <202305090905.aff4e0e6-oliver.sang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI system watchdog
- driver
-Content-Language: en-US
-To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sgoutham@marvell.com
-References: <20230508131515.19403-1-bbhushan2@marvell.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230508131515.19403-1-bbhushan2@marvell.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202305090905.aff4e0e6-oliver.sang@intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/05/2023 15:15, Bharat Bhushan wrote:
-> Add binding documentation for the Marvell GTI system
-> watchdog driver.
+On Tue, May 09, 2023 at 10:13:19AM +0800, kernel test robot wrote:
 > 
-> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
-> ---
-> v7:
->  - Corrected compatible to have soc name
->  - Converted marvell,wdt-timer-index to optional
 > 
->  .../watchdog/marvell,octeontx2-wdt.yaml       | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+> Hello,
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
-> new file mode 100644
-> index 000000000000..72951b10f1f3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/marvell,octeontx2-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Marvell Global Timer (GTI) system watchdog
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
+> kernel test robot noticed a -5.7% regression of fsmark.files_per_sec on:
+> 
+> 
+> commit: 2edf06a50f5bbe664283f3c55c480fc013221d70 ("xfs: factor xfs_alloc_vextent_this_ag() for  _iterate_ags()")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
 
-Put allOf after maintainers:.
+This is just a refactoring patch and doesn't change any logic.
+Hence I'm sceptical that it actually resulted in a performance
+regression. Indeed, the profile indicates a significant change of
+behaviour in the allocator and I can't see how the commit above
+would cause anything like that.
 
-> +
-> +maintainers:
-> +  - Bharat Bhushan <bbhushan2@marvell.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: marvell,octeontx2-wdt
+Was this a result of a bisect? If so, what were the original kernel
+versions where the regression was detected?
 
-Why is this alone? Judging by the enum below, octeontx2 is not specific.
+Cheers,
 
-> +      - items:
-> +          - enum:
-> +              - marvell,octeontx2-95xx-wdt
-> +              - marvell,octeontx2-96xx-wdt
-> +              - marvell,octeontx2-98xx-wdt
+Dave.
 
-We don't allow wildcards in general
-
-> +          - const: marvell,octeontx2-wdt
-> +      - const: marvell,cn10k-wdt
-
-Same question - why is this alone?
-
-Second question - it should be rather part of enum with the first one if
-accepted.
-
-> +      - items:
-> +          - enum:
-> +              - marvell,cn10kx-wdt
-> +              - marvell,cnf10kx-wdt
-> +          - const: marvell,cn10k-wdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-
-maxItems instead. You see it is different than above properties?
-
-> +
-> +  clock-names:
-> +    minItems: 1
-
-Need to define names.
-
-Best regards,
-Krzysztof
-
+-- 
+Dave Chinner
+david@fromorbit.com
