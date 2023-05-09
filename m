@@ -2,208 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0EBF6FC194
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B786FC199
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234702AbjEIIWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 04:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
+        id S234834AbjEIIWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234267AbjEIIWA (ORCPT
+        with ESMTP id S234721AbjEIIWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 04:22:00 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2129.outbound.protection.outlook.com [40.107.244.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC352E40;
-        Tue,  9 May 2023 01:21:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a8ZSpvxAYuzH/hF/667uCdcVAyq5ljgMUiRT8WfbFEi9wxANLJqk/+kKyNnH1AnFWu1faq2hi3Q98pOSe10YprPMAHaST2nXfPBKUO8hcb/Hm0p8NGW4SH+lJpZYNA40e11JjiKHWYCcRS7si69JyVUTGAsv29ZYPwHx9vJGX0umcGYXeuWuJ24KxWwBZR8RCxPmvfMSNMX8SJJ4pMc4QZ9Qa3e9+ucEcBE9SwGMFJRCvS/bXav6z/F5bwiS+M03EyA7EFaEzCO7zRks4puooTxZiO0pNCbpszdf5O7Z9YokErK6prKxYAfF4OD7IhrnxKdBwcoh8BSDlME9hq3mhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/cC+gyrpLd7nYJ7x0ybYahKmrjO1lOvIqIUs3grtMsg=;
- b=dOOnWVMHaPuStUgyNODweYoBIdCtlnP5hw+BsmcOSU8YA/9ls/BnCVfwN3Hw75dfpuKhmFYVUB881l5B0voUT9Wm6yWnUu5uxUHWT/IgruzYMj6aYSUA+bkdI9ihy20ZOWfOySQqUBVlTaRuNihtlfDaXbsD0Gis11gPQaMzl24Z4bLcciCGARCcQH57tNJS8XcAYQdkNxY+JjTibhkUgTFwRP7bZy84kLdR1hoJy2dpAjpSMrySA2qwldA1dW1BWXAkRrwo7/CX2yV/Rhd9l56DHLgmCjt/LONbYvUq2N8Li43mit3dZffv8h1FvWXrfl7lTbMGbtp05selSVDgGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/cC+gyrpLd7nYJ7x0ybYahKmrjO1lOvIqIUs3grtMsg=;
- b=rLLudrUobXUaeKGE6qOaEumUMannM+sQYwP0mArTfPXf7B1CflXhxodvz0GG4z25r+TsVkN8pYixnssh5tHyrFFXbhQnw8ow1YdrJtTYC8KbrVQImNn3hzqeJxJQYGmmAy8CUrWm/fgbDeOZmhc/A5DV8yoIov7CnOmKNfW0J84=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by MW5PR13MB5945.namprd13.prod.outlook.com (2603:10b6:303:1aa::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Tue, 9 May
- 2023 08:21:56 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6363.032; Tue, 9 May 2023
- 08:21:56 +0000
-Date:   Tue, 9 May 2023 10:21:48 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Dong Chenchen <dongchenchen2@huawei.com>
-Cc:     edumazet@google.com, kuba@kernel.org, davem@davemloft.net,
-        pabeni@redhat.com, jbenc@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yuehaibing@huawei.com,
-        weiyongjun1@huawei.com
-Subject: Re: [PATCH next, v2] net: nsh: Use correct mac_offset to unwind gso
- skb in nsh_gso_segment()
-Message-ID: <ZFoCnIIZdrdoht6T@corigine.com>
-References: <20230509021924.554576-1-dongchenchen2@huawei.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509021924.554576-1-dongchenchen2@huawei.com>
-X-ClientProxiedBy: AM0PR10CA0060.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:150::40) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Tue, 9 May 2023 04:22:15 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29563B4
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:22:12 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pwIbe-0005j4-4k; Tue, 09 May 2023 10:21:58 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pwIba-002BuQ-Oe; Tue, 09 May 2023 10:21:54 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pwIba-002iPP-3L; Tue, 09 May 2023 10:21:54 +0200
+Date:   Tue, 9 May 2023 10:21:53 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Anatolij Gustschin <agust@denx.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc: Drop MPC5200 LocalPlus bus FIFO driver
+Message-ID: <20230509082153.jcy2qpvyd44bjaee@pengutronix.de>
+References: <20221228145129.31700-1-u.kleine-koenig@pengutronix.de>
+ <20230412150524.ojsvukh47hing6db@pengutronix.de>
+ <87zg7cabf6.fsf@mpe.ellerman.id.au>
+ <20230413061642.kqkor4wkt7lp2mhp@pengutronix.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW5PR13MB5945:EE_
-X-MS-Office365-Filtering-Correlation-Id: f83f1c04-a9fa-4bc5-43e1-08db506673d5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Cih3rktRXEON/8tfos/IklqCbChtXIk62MJ4QJ4bdKxc7RhJ4J+6AA4BH7UXZWzmlxVXwjEpqtyJogb7a7s1THpFhapasY1q3Q3xLOqB5kaIyvNPYJ+IqVj8zRFl+/8Xv75f+W40JOohty5Ou8me4nnEdi9umzuDFqtJUEsQY2NsNRqP2ixE419ti88lq1sqex7M9stG+ic8BBpc0hzittezzSq+MpWUsRsiEnN0hN/wmiIWbAstuSuntxN+hXb4CRwtm3BZZlETzVZLr2jZgg9ne7kTtJTM//K0PWnceF/UhMOXHgs2/9FoxW7E6edQ6poZ+64lHNfRU6v+WmL4fSKv6pUzm0a9L4eufE4n2XvRFu4/CJbnOv8BFibie8XtcFfQFw7nTkwb/NIYBxRsdWT3gHUFbszB6y6ll8C5UmUCZBkpR7a5pm0YrJXpZBvk1Ja5Mp45KsOTlgSGLgqzj+i5djhRgMoxxeKAQt12ejxlYss3Bjc4mTQiVTrV+j0TuDL6Fp0+AufLehlP+/49PJYoHiwJ+Oz2e+QCwc1jxEQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(136003)(376002)(39840400004)(346002)(451199021)(966005)(66476007)(6916009)(478600001)(316002)(4326008)(6486002)(66946007)(66556008)(86362001)(36756003)(83380400001)(6506007)(2616005)(6512007)(6666004)(44832011)(5660300002)(2906002)(7416002)(41300700001)(8676002)(8936002)(38100700002)(186003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?q32vWeYJgeARxVZrE25433ccC0ozYDm+ea+gXsH3c/iTjQarofqUWp12MThW?=
- =?us-ascii?Q?2c2mj/Jisr/R+I7OQ5ljgqzh5eIhnBrubXr2mXUNVsWOhjAghEt+4dU0bBMr?=
- =?us-ascii?Q?d3xbrSThbEEZdHQtO9tJMHIiXAeT3cykJbjR61e3T+ry+VU1Id62fCfUeyWL?=
- =?us-ascii?Q?co4OzoPeVpIxlbCah8ddm8ZVonMrz0vBtbzaw25/LwhvaRNa0o+D3rwBGHQo?=
- =?us-ascii?Q?CfkKpdE5q2YKlv/yt+2yE8WFrK66lvnL4Ypp+j2ECu8GyoHmFuLkFxDDglXD?=
- =?us-ascii?Q?x2XVLyiom3RFXgdQzkOwaQ/8HP8qWGGIZ+FA+0nw5XGpzfp8pSPUENaXIh6P?=
- =?us-ascii?Q?goXgTG59bBoCTbQDBVzJ/Q+I4QQ5R6L3reqY4oAkVJXivVKrMAffPC1WFf9/?=
- =?us-ascii?Q?8hOplSTiv6giKdKHdk8CEdpbITuyEy1ZI8tCHSmqhuAc0fxRyOp5eyNOOCfF?=
- =?us-ascii?Q?pzkv4vzn1dUtUnxNNYMRBHHQYAylrlYAsl2LJDZC0aqc1Wp2TfOOvRqUcknb?=
- =?us-ascii?Q?gwpS8jPv6sdTEjw1dArhMyJceBiawcRZaNiMyQoXB+ADJYXp3etxsCok3V95?=
- =?us-ascii?Q?JsZGjwfAdyliogM22YSmjUxCogNFRi7Pj7KjqDdZ8v/H1zbTgILSiy9ZyymO?=
- =?us-ascii?Q?v3w7gl+QuXh7xADJF8yS10BVwXSKE61PuYfPN/rP75wDkcDEDOMQemojMOvB?=
- =?us-ascii?Q?XQ4vMsJ0tvvv6HjyLEh6eWuT0v2BXWCLKfPIts2huoCvws5xUw0DXeVg18YI?=
- =?us-ascii?Q?BfMGfN9WGq9Ew2A+hktbTMq1wT07qIQFgz+GTwSajMdJL0GCOlwyjPxqJwyT?=
- =?us-ascii?Q?I4dHWafa4zNB32AoK0NxIWupNr0EN62VMGQApDjNCpIs6msPlOeV2ztSMCP2?=
- =?us-ascii?Q?O0rgqn8ovXQaJgk4MwMG58xLEaaUV9UYp/BCZ56dYOrimEEniqsqgKIFVpFR?=
- =?us-ascii?Q?YbzUw+QeuY2Q4Zr0HzvorkeTAqnlCCjsklSvIUz28k7WLkKqkmEfqJMdkOzK?=
- =?us-ascii?Q?86R14ZWg+pxTDcM2PBwJOrHgnY6kcwVVah8MFEtzyNLS+s8cHvhlyw3LzoYf?=
- =?us-ascii?Q?pOD6dzfcvgXTgOs3NsI9vl9oBMdgwyz2G/J0TDR5S+K5quHB/tIHLFh5qdQG?=
- =?us-ascii?Q?ODeHLRNEGoheHggBUk9ouCjhywGrJoJ5P7WDYtQvGAcdtaPgRmB0lxegHrvI?=
- =?us-ascii?Q?HzyymFZiKpY+HL869BS9bLZKsEBbte4Zj+rf0x4uTsN4+U3DlM4JhS4FR/xt?=
- =?us-ascii?Q?L5zUlTM8VOZQEwXBIMJb8gb3WTku5lDnqFRxXhecLMXil9Bh31+jk4Afw3cw?=
- =?us-ascii?Q?39B8Z62aXRuGN9zVhWwd7gjvoIFGlXbLQ033YxV8EujYHArtSjWKxflJFlJW?=
- =?us-ascii?Q?xfEMsqnvsAR3AySyNQ9Qo0WElZ2ip7vLAgceD4XLiOmFEsjaXwJha7+OTFt7?=
- =?us-ascii?Q?6VSO5W+045n6bOsvKs6Yi4LcFGyQ7ETNzRbIhw/nSDaPKX2ZzTWi8fYj8qMa?=
- =?us-ascii?Q?TwW62OU/mNgUPG+xYA8MpFSN2FcJJ+BGyz9YonkF/QIRgmJoQ1RDtcHOZWmA?=
- =?us-ascii?Q?D4Cp4y1UWEQYWcxUh6yF8LrYPog5h7hL11bjrb/ams9nABIPyBWcn9GrCz5l?=
- =?us-ascii?Q?7KpdmKMy136CuwcPKtCY4TUo7c1OjLnPaZ/s+foc9Xv+lfxwHDFoAUchNgkE?=
- =?us-ascii?Q?iW9cxQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f83f1c04-a9fa-4bc5-43e1-08db506673d5
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 08:21:56.6051
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aaCnKzTeJgnYDKx7iGa5EE0grT7mu1RCisjNabIHyg1kgya90A1eUGdfSB9Yx5pO7aOuZtc8GaGnio9xdt5rE2THRnReg22R4FAtrzJa6qA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR13MB5945
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jz6b5qpi3ldmi55y"
+Content-Disposition: inline
+In-Reply-To: <20230413061642.kqkor4wkt7lp2mhp@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 10:19:24AM +0800, Dong Chenchen wrote:
-> As the call trace shows, skb_panic was caused by wrong skb->mac_header
-> in nsh_gso_segment():
-> 
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-> CPU: 3 PID: 2737 Comm: syz Not tainted 6.3.0-next-20230505 #1
-> RIP: 0010:skb_panic+0xda/0xe0
-> call Trace:
->  skb_push+0x91/0xa0
->  nsh_gso_segment+0x4f3/0x570
->  skb_mac_gso_segment+0x19e/0x270
->  __skb_gso_segment+0x1e8/0x3c0
->  validate_xmit_skb+0x452/0x890
->  validate_xmit_skb_list+0x99/0xd0
->  sch_direct_xmit+0x294/0x7c0
->  __dev_queue_xmit+0x16f0/0x1d70
->  packet_xmit+0x185/0x210
->  packet_snd+0xc15/0x1170
->  packet_sendmsg+0x7b/0xa0
->  sock_sendmsg+0x14f/0x160
-> 
-> The root cause is:
-> nsh_gso_segment() use skb->network_header - nhoff to reset mac_header
-> in skb_gso_error_unwind() if inner-layer protocol gso fails.
-> However, skb->network_header may be reset by inner-layer protocol
-> gso function e.g. mpls_gso_segment. skb->mac_header reset by the
-> inaccurate network_header will be larger than skb headroom.
-> 
-> nsh_gso_segment
->     nhoff = skb->network_header - skb->mac_header;
->     __skb_pull(skb,nsh_len)
->     skb_mac_gso_segment
->         mpls_gso_segment
->             skb_reset_network_header(skb);//skb->network_header+=nsh_len
->             return -EINVAL;
->     skb_gso_error_unwind
->         skb_push(skb, nsh_len);
->         skb->mac_header = skb->network_header - nhoff;
->         // skb->mac_header > skb->headroom, cause skb_push panic
-> 
-> Use correct mac_offset to restore mac_header to fix it.
-> 
-> Fixes: c411ed854584 ("nsh: add GSO support")
-> Signed-off-by: Dong Chenchen <dongchenchen2@huawei.com>
 
-nit: As this is a fix it should probably be targeted at 'net'
-     (as opposed to 'net-next'). This should be noted in the subject.
+--jz6b5qpi3ldmi55y
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-     Subject: [PATCH net v2]...
+Hello,
 
+On Thu, Apr 13, 2023 at 08:16:42AM +0200, Uwe Kleine-K=F6nig wrote:
+> While mpc5200b.dtsi contains a device that this driver can bind to, the
+> only purpose of a bound device is to be used by the four exported functio=
+ns
+> mpc52xx_lpbfifo_submit(), mpc52xx_lpbfifo_abort(), mpc52xx_lpbfifo_poll()
+> and mpc52xx_lpbfifo_start_xfer(). However there are no callers to this
+> function and so the driver is effectively superfluous and can be deleted.
+> Also drop some defines and a struct from <asm/mpc52xx.h> that are unused
+> now together with the declarations of the four mentioned functions.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 > ---
-> v2:
->   - Use skb->mac_header not skb->network_header-nhoff for mac_offset.
-> ---
->  net/nsh/nsh.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/nsh/nsh.c b/net/nsh/nsh.c
-> index e9ca007718b7..7eb536a9677f 100644
-> --- a/net/nsh/nsh.c
-> +++ b/net/nsh/nsh.c
-> @@ -78,6 +78,7 @@ static struct sk_buff *nsh_gso_segment(struct sk_buff *skb,
->  {
->  	struct sk_buff *segs = ERR_PTR(-EINVAL);
->  	unsigned int nsh_len, mac_len;
-> +	u16 mac_offset = skb->mac_header;
+> Hello Michael,
+>=20
+> On Thu, Apr 13, 2023 at 10:11:25AM +1000, Michael Ellerman wrote:
+> > Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de> writes:
+> > > On Wed, Dec 28, 2022 at 03:51:29PM +0100, Uwe Kleine-K=F6nig wrote:
+> > >> The four exported functions mpc52xx_lpbfifo_submit(),
+> > >> mpc52xx_lpbfifo_abort(), mpc52xx_lpbfifo_poll(), and
+> > >> mpc52xx_lpbfifo_start_xfer() are not used. So they can be dropped an=
+d the
+> > >> definitions needed to call them can be moved into the driver file.
+> > >>=20
+> > >> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > >
+> > > I never got feedback about this driver and it has not appeared in next
+> > > up to now. Did it fell through the cracks?
+> >=20
+> > Yeah. I was hoping someone would explain what's going on with the
+> > driver.
+> >=20
+> > Presumably there are some out-of-tree drivers that use the routines
+> > provided by this driver?
+>=20
+> I googled for the function names but the only related hits were
+> references to this thread :-)
+>=20
+> > I think rather than merging this patch, which keeps the code but makes
+> > it completely useless, do you mind sending a patch to remove the whole
+> > driver? Maybe that will get someone's attention.
+>=20
+> fair enough, here it is.
 
-nit: It is generally preferred to arrange local variable in networking code
-     from shortest line to longest - reverse xmas tree order.
+What is your thought about this patch? If you (also) think getting it
+into next soon after a merge window closed, around now would be a good
+opportunity to do so ..
 
-     This can be verified using.
-     https://github.com/ecree-solarflare/xmastree/blob/master/README
+Best regards
+Uwe
 
->  	__be16 proto;
->  	int nhoff;
->  
-> @@ -108,8 +109,7 @@ static struct sk_buff *nsh_gso_segment(struct sk_buff *skb,
->  	segs = skb_mac_gso_segment(skb, features);
->  	if (IS_ERR_OR_NULL(segs)) {
->  		skb_gso_error_unwind(skb, htons(ETH_P_NSH), nsh_len,
-> -				     skb->network_header - nhoff,
-> -				     mac_len);
-> +				     mac_offset, mac_len);
->  		goto out;
->  	}
->  
-> -- 
-> 2.25.1
-> 
-> 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--jz6b5qpi3ldmi55y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRaAqEACgkQj4D7WH0S
+/k785Qf/ZliZLWmy9GKR+VccrZYE0nfkRJGLWHhQZhFn0In1A9R+uO+Gszh5rRZX
+mH8vWixRKyYIW694+5Bcyg7SjXZzxDZQZzkDLi213lKZ60sbrxLKIgdhfjthEUoP
+mKk4/I4WTPXn2RKcNGLHS828fi2cSk32bU9+WTQtWO4uKJxrv6ctW9pCWwHXQ/mj
+8cGalx5YDNy38mSCtJ9se5pKES4NOSYcvPdD/xLIju5ZKyz4HIC5FZiNyNPDzh+f
+F6U6VaSAME8hznCuZAEva2zZMdcEyc1WGGG38JmSKbXRFv+DiKrglvqcryzW4RsK
+kRaqpzZJxx7GccK2FIsvaEJhi7SHXg==
+=mgE1
+-----END PGP SIGNATURE-----
+
+--jz6b5qpi3ldmi55y--
