@@ -2,456 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9EDB6FD284
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861F66FD28C
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235374AbjEIWSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 18:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
+        id S235447AbjEIWTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 18:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234952AbjEIWSA (ORCPT
+        with ESMTP id S235609AbjEIWTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 18:18:00 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE30418C;
-        Tue,  9 May 2023 15:17:47 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2acb6571922so45817791fa.0;
-        Tue, 09 May 2023 15:17:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683670666; x=1686262666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GMS8lMJkJ44K6UlNQcnjtAD8uJyW4lXgjqtSqJt2gok=;
-        b=AW25tEATVzucEyfVL0cnUTxf6ByHRou4R2mNP2u2DKdxCqHGdFJnCxoXrEvDFmCmBI
-         V4DgNyt/xDYnCzvmJI2eJA5gNSSv4xp0YRIIj0sqLwi61DtLFpJUoxcmFloyyuYjelzx
-         tpZBSAHU0LRvr4TOcldKL6U0Nho3coi9U/CQFyqN5oERNDVmiP+trKCZe+JlTcp2CEIn
-         wswUdnJrA/SRhoVINU1qPuQ/eJzGrDDjXGhVyc9qMGQSaK2TJYm4ASneqvtFOlZqmAb2
-         W7SdnvF6PxtTTuy88r23vxQ5bJ1MOz9LKFenshQwAG47ogFyRf5dIUGsXcSuhUyXWZFu
-         Rm1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683670666; x=1686262666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GMS8lMJkJ44K6UlNQcnjtAD8uJyW4lXgjqtSqJt2gok=;
-        b=jjOGT4QvVzfxju3ct8yiCkuuH4o7MfsJedJd8/e8pTwtHIZfQ/ZujPHgogl9/dOB4e
-         xsUoYKO6sq1jULA+x2HBr4V0vHqH/WlkWniWMhoyoM6Zc3cIr4yK4gTMgswuO8ufMKFh
-         OnBFckleDKEvvFHjm5A0mUHFL34FTM3itilk+W62NV7oL0EhuOlHY7S9UdcbmXPeF2xF
-         TuR1Kk62KQJS73RVWO7kkQ47IBukSp+aXX1Pc/ShX5RAh33ldS2RvCkHZeI6Oa2/v55i
-         1K2AwtrhvRyODhXTtm4sNaB6aO4zIuMhAtw+hW4oU1rUX4fej8SE2rvbj2NMtJgHZWX/
-         FbHQ==
-X-Gm-Message-State: AC+VfDzZLW30GQtCN+E0StkG8hTqT1OfH8vTNETvJvP7DiOUqlbpwsDy
-        f0VshE7x245R28nn5YVErBJkHNF/cD7Y+mHhm5FlGcis
-X-Google-Smtp-Source: ACHHUZ6sJpe0CCUPtiZAuSLzaPYVrAsdvKZcKPlVZqhPJkb93X/JtHY1CuhuvasogquXkw1lPpq+VsOVx0kcgRgJm14=
-X-Received: by 2002:a2e:8297:0:b0:2a7:79e6:1630 with SMTP id
- y23-20020a2e8297000000b002a779e61630mr1192262ljg.25.1683670665498; Tue, 09
- May 2023 15:17:45 -0700 (PDT)
+        Tue, 9 May 2023 18:19:00 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FE5173B;
+        Tue,  9 May 2023 15:18:41 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 349MI650127975;
+        Tue, 9 May 2023 17:18:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683670686;
+        bh=VPo0BABSLp/yxbXX4gZZ7G7cTOoL07it58TctQ+j5ik=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=FGFqDMbHMXIrXIfgOe9p+FKAufbeVHkv6noeC/6wdAOteglVO+Y047zkLUvgqSNKm
+         d32djcWLDbZpnBTwGiSxye3N74r35VrpPZX009V9Jw2fO9L5WsRWjur2d/e1boIE78
+         fs11K2clqx9U+Xg9f7re/YsX3IvUS7EsFQV6KYjM=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 349MI6FS087928
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 9 May 2023 17:18:06 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
+ May 2023 17:18:06 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 9 May 2023 17:18:06 -0500
+Received: from [128.247.81.95] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 349MI6D8046289;
+        Tue, 9 May 2023 17:18:06 -0500
+Message-ID: <84e5b09e-f8b9-15ae-4871-e5e4c4f4a470@ti.com>
+Date:   Tue, 9 May 2023 17:18:06 -0500
 MIME-Version: 1.0
-References: <20230505220043.39036-1-jorge.lopez2@hp.com> <20230505220043.39036-6-jorge.lopez2@hp.com>
- <41331cf6-cd60-43e1-b53a-8f74a46a8d28@t-8ch.de>
-In-Reply-To: <41331cf6-cd60-43e1-b53a-8f74a46a8d28@t-8ch.de>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Tue, 9 May 2023 17:17:16 -0500
-Message-ID: <CAOOmCE-760F=zc0EipQqD57EyusUtvLQ4KAYsn6r-TCXpKTL_g@mail.gmail.com>
-Subject: Re: [PATCH v12 05/13] HP BIOSCFG driver - ordered-attributes
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 2/4] can: m_can: Add hrtimer to generate software
+ interrupt
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Simon Horman <simon.horman@corigine.com>
+References: <20230501224624.13866-1-jm@ti.com>
+ <20230501224624.13866-3-jm@ti.com>
+ <20230502-twiddling-threaten-d032287d4630-mkl@pengutronix.de>
+Content-Language: en-US
+From:   Judith Mendez <jm@ti.com>
+In-Reply-To: <20230502-twiddling-threaten-d032287d4630-mkl@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023 at 4:35=E2=80=AFPM Thomas Wei=C3=9Fschuh <thomas@t-8ch.=
-de> wrote:
->
-> On 2023-05-05 17:00:35-0500, Jorge Lopez wrote:
->
-> <snip>
->
-> > ---
-> > Based on the latest platform-drivers-x86.git/for-next
-> > ---
-> >  .../x86/hp/hp-bioscfg/ordered-attributes.c    | 443 ++++++++++++++++++
-> >  1 file changed, 443 insertions(+)
-> >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/ordered-attribut=
-es.c
->
-> Should be named order-list-attributes.
->
-> >
-> > diff --git a/drivers/platform/x86/hp/hp-bioscfg/ordered-attributes.c b/=
-drivers/platform/x86/hp/hp-bioscfg/ordered-attributes.c
-> > new file mode 100644
-> > index 000000000000..1d06fbefceca
-> > --- /dev/null
-> > +++ b/drivers/platform/x86/hp/hp-bioscfg/ordered-attributes.c
-> > @@ -0,0 +1,443 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Functions corresponding to ordered list type attributes under
-> > + * BIOS ORDERED LIST GUID for use with hp-bioscfg driver.
-> > + *
-> > + *  Copyright (c) 2022 HP Development Company, L.P.
-> > + */
-> > +
-> > +#include "bioscfg.h"
-> > +
-> > +GET_INSTANCE_ID(ordered_list);
-> > +
-> > +static ssize_t current_value_show(struct kobject *kobj, struct kobj_at=
-tribute *attr, char *buf)
-> > +{
-> > +     int instance_id =3D get_ordered_list_instance_id(kobj);
-> > +
-> > +     if (instance_id < 0)
-> > +             return -EIO;
-> > +
-> > +     return sysfs_emit(buf, "%s\n",
-> > +                      bioscfg_drv.ordered_list_data[instance_id].curre=
-nt_value);
-> > +}
-> > +
-> > +/**
-> > + * validate_ordered_list_input() -
-> > + * Validate input of current_value against possible values
-> > + *
-> > + * @instance_id: The instance on which input is validated
-> > + * @buf: Input value
-> > + */
-> > +static int validate_ordered_list_input(int instance_id, const char *bu=
-f)
-> > +{
-> > +     struct ordered_list_data *ordered_list_data =3D &bioscfg_drv.orde=
-red_list_data[instance_id];
-> > +
-> > +     if (ordered_list_data->common.requires_physical_presence)
-> > +             set_reboot_and_signal_event();
->
-> I think the block above can actually be pulled up into
-> ATTRIBUTE_PROPERTY_STORE() and removed from all the attributes.
->
-Done!
+Hello Marc,
 
+On 5/2/23 01:37, Marc Kleine-Budde wrote:
+> On 01.05.2023 17:46:22, Judith Mendez wrote:
+>> Add an hrtimer to MCAN class device. Each MCAN will have its own
+>> hrtimer instantiated if there is no hardware interrupt found and
+>> poll-interval property is defined in device tree M_CAN node.
+>>
+>> The hrtimer will generate a software interrupt every 1 ms. In
+>> hrtimer callback, we check if there is a transaction pending by
+>> reading a register, then process by calling the isr if there is.
+>>
+>> Signed-off-by: Judith Mendez <jm@ti.com>
+> 
+> I think this patch is as good as it gets, given the HW and SW
+> limitations of the coprocessor.
+> 
+> Some minor nitpicks inline. No need to resend from my point of view,
+> I'll fixup while applying the patch.
+> 
+> Marc
+> 
+>> ---
+>> Changelog:
+>> v1:
+>>  1. Sort list of includes
+>>  2. Create a define for HR_TIMER_POLL_INTERVAL
+>>  3. Fix indentations and style issues/warnings
+>>  4. Change polling variable to type bool
+>>  5. Change platform_get_irq to optional so not to print error msg
+>>  6. Move error check for addr directly after assignment
+>>  7. Print appropriate error msg with dev_err_probe insead of dev_dbg
+>>
+>> v2:
+>>  1. Add poll-interval to MCAN class device to check if poll-interval propery is
+>>     present in MCAN node, this enables timer polling method
+>>  2. Add 'polling' flag to MCAN class device to check if a device is using timer
+>>     polling method
+>>  3. Check if both timer polling and hardware interrupt are enabled for a MCAN
+>>     device, default to hardware interrupt mode if both are enabled
+>>  4. Change ms_to_ktime() to ns_to_ktime()
+>>  5. Remove newlines, tabs, and restructure if/else section
+>>  
+>>  drivers/net/can/m_can/m_can.c          | 29 +++++++++++++++++++++--
+>>  drivers/net/can/m_can/m_can.h          |  4 ++++
+>>  drivers/net/can/m_can/m_can_platform.c | 32 +++++++++++++++++++++++---
+>>  3 files changed, 60 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+>> index a5003435802b..e1ac0c1d85a3 100644
+>> --- a/drivers/net/can/m_can/m_can.c
+>> +++ b/drivers/net/can/m_can/m_can.c
+>> @@ -11,6 +11,7 @@
+>>  #include <linux/bitfield.h>
+>>  #include <linux/can/dev.h>
+>>  #include <linux/ethtool.h>
+>> +#include <linux/hrtimer.h>
+>>  #include <linux/interrupt.h>
+>>  #include <linux/io.h>
+>>  #include <linux/iopoll.h>
+>> @@ -308,6 +309,9 @@ enum m_can_reg {
+>>  #define TX_EVENT_MM_MASK	GENMASK(31, 24)
+>>  #define TX_EVENT_TXTS_MASK	GENMASK(15, 0)
+>>  
+>> +/* Hrtimer polling interval */
+>> +#define HRTIMER_POLL_INTERVAL		1
+>> +
+>>  /* The ID and DLC registers are adjacent in M_CAN FIFO memory,
+>>   * and we can save a (potentially slow) bus round trip by combining
+>>   * reads and writes to them.
+>> @@ -1587,6 +1591,11 @@ static int m_can_close(struct net_device *dev)
+>>  	if (!cdev->is_peripheral)
+>>  		napi_disable(&cdev->napi);
+>>  
+>> +	if (cdev->polling) {
+>> +		dev_dbg(cdev->dev, "Disabling the hrtimer\n");
+>> +		hrtimer_cancel(&cdev->hrtimer);
+>> +	}
+>> +
+>>  	m_can_stop(dev);
+>>  	m_can_clk_stop(cdev);
+>>  	free_irq(dev->irq, dev);
+>> @@ -1793,6 +1802,18 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
+>>  	return NETDEV_TX_OK;
+>>  }
+>>  
+>> +static enum hrtimer_restart hrtimer_callback(struct hrtimer *timer)
+>> +{
+>> +	struct m_can_classdev *cdev = container_of(timer, struct
+>> +						   m_can_classdev, hrtimer);
+>> +
+>> +	m_can_isr(0, cdev->net);
+>> +
+>> +	hrtimer_forward_now(timer, ms_to_ktime(HRTIMER_POLL_INTERVAL));
+>> +
+>> +	return HRTIMER_RESTART;
+>> +}
+>> +
+>>  static int m_can_open(struct net_device *dev)
+>>  {
+>>  	struct m_can_classdev *cdev = netdev_priv(dev);
+>> @@ -1827,13 +1848,17 @@ static int m_can_open(struct net_device *dev)
+>>  		}
+>>  
+>>  		INIT_WORK(&cdev->tx_work, m_can_tx_work_queue);
+>> -
+> 
+> unrelated change
+> 
+>>  		err = request_threaded_irq(dev->irq, NULL, m_can_isr,
+>>  					   IRQF_ONESHOT,
+>>  					   dev->name, dev);
+>> -	} else {
+>> +	} else if (!cdev->polling) {
+>>  		err = request_irq(dev->irq, m_can_isr, IRQF_SHARED, dev->name,
+>>  				  dev);
+>> +	} else {
+>> +		dev_dbg(cdev->dev, "Start hrtimer\n");
+>> +		cdev->hrtimer.function = &hrtimer_callback;
+>> +		hrtimer_start(&cdev->hrtimer, ms_to_ktime(HRTIMER_POLL_INTERVAL),
+>> +			      HRTIMER_MODE_REL_PINNED);
+>>  	}
+>>  
+>>  	if (err < 0) {
+>> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+>> index a839dc71dc9b..e9db5cce4e68 100644
+>> --- a/drivers/net/can/m_can/m_can.h
+>> +++ b/drivers/net/can/m_can/m_can.h
+>> @@ -15,6 +15,7 @@
+>>  #include <linux/device.h>
+>>  #include <linux/dma-mapping.h>
+>>  #include <linux/freezer.h>
+>> +#include <linux/hrtimer.h>
+>>  #include <linux/interrupt.h>
+>>  #include <linux/io.h>
+>>  #include <linux/iopoll.h>
+>> @@ -93,6 +94,9 @@ struct m_can_classdev {
+>>  	int is_peripheral;
+>>  
+>>  	struct mram_cfg mcfg[MRAM_CFG_NUM];
+>> +
+>> +	struct hrtimer hrtimer;
+>> +	bool polling;
+>>  };
+>>  
+>>  struct m_can_classdev *m_can_class_allocate_dev(struct device *dev, int sizeof_priv);
+>> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
+>> index 9c1dcf838006..0fcb436298f8 100644
+>> --- a/drivers/net/can/m_can/m_can_platform.c
+>> +++ b/drivers/net/can/m_can/m_can_platform.c
+>> @@ -5,6 +5,7 @@
+>>  //
+>>  // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.com/
+>>  
+>> +#include <linux/hrtimer.h>
+>>  #include <linux/phy/phy.h>
+>>  #include <linux/platform_device.h>
+>>  
+>> @@ -96,12 +97,37 @@ static int m_can_plat_probe(struct platform_device *pdev)
+>>  		goto probe_fail;
+>>  
+>>  	addr = devm_platform_ioremap_resource_byname(pdev, "m_can");
+>> -	irq = platform_get_irq_byname(pdev, "int0");
+>> -	if (IS_ERR(addr) || irq < 0) {
+>> -		ret = -EINVAL;
+>> +	if (IS_ERR(addr)) {
+>> +		ret = PTR_ERR(addr);
+>>  		goto probe_fail;
+>>  	}
+>>  
+>> +	irq = platform_get_irq_byname_optional(pdev, "int0");
+>> +	if (irq == -EPROBE_DEFER) {
+>> +		ret = -EPROBE_DEFER;
+>> +		goto probe_fail;
+>> +	}
+>> +
+>> +	if (device_property_present(mcan_class->dev, "poll-interval"))
+>> +		mcan_class->polling = 1;
+> 
+> true
+> 
+>> +
+>> +	if (!mcan_class->polling && irq < 0) {
+>> +		ret = -ENXIO;
+>> +		dev_err_probe(mcan_class->dev, ret, "IRQ int0 not found and polling not activated\n");
+>> +		goto probe_fail;
+>> +	}
+>> +
+>> +	if (mcan_class->polling) {
+>> +		if (irq > 0) {
+>> +			mcan_class->polling = 0;
+> 
+> false
+> 
+>> +			dev_dbg(mcan_class->dev, "Polling enabled and hardware IRQ found, use hardware IRQ\n");
+> 
+> "...using hardware IRQ"
+> 
+> Use dev_info(), as there is something not 100% correct with the DT.
 
+Is it dev_info or dev_dbg? I used to have dev_info since it was nice to see when polling was
+enabled. Also, I had seen this print and the next as informative prints, hence the dev_info().
+However, I was told in this review process to change to dev_dbg. Which is correct?
 
-> > +
-> > +     return 0;
-> > +}
-> > +
-<snip>
+>> +		} else {
+>> +			dev_dbg(mcan_class->dev, "Polling enabled, initialize hrtimer");
+>> +			hrtimer_init(&mcan_class->hrtimer, CLOCK_MONOTONIC,
+>> +				     HRTIMER_MODE_REL_PINNED);
+>> +		}
+>> +	}
+>> +
+>>  	/* message ram could be shared */
+>>  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "message_ram");
+>>  	if (!res) {
+>> -- 
+>> 2.17.1
+>>
+>>
+> 
 
-> > +static struct attribute *ordered_list_attrs[] =3D {
-> > +     &ordered_list_display_langcode.attr,
-> > +     &ordered_list_display_name.attr,
-> > +     &ordered_list_current_val.attr,
-> > +     &ordered_list_elements_val.attr,
-> > +     &ordered_list_type.attr,
-> > +     NULL,
->
-> No comma.
-
-Done!
->
-> > +};
-> > +
-> > +static const struct attribute_group ordered_list_attr_group =3D {
-> > +     .attrs =3D ordered_list_attrs,
-> > +};
-> > +
-> > +int alloc_ordered_list_data(void)
-> > +{
-> > +     bioscfg_drv.ordered_list_instances_count =3D
-> > +             get_instance_count(HP_WMI_BIOS_ORDERED_LIST_GUID);
-> > +     bioscfg_drv.ordered_list_data =3D kcalloc(bioscfg_drv.ordered_lis=
-t_instances_count,
-> > +                                             sizeof(struct ordered_lis=
-t_data), GFP_KERNEL);
-> > +     if (!bioscfg_drv.ordered_list_data) {
-> > +             bioscfg_drv.ordered_list_instances_count =3D 0;
-> > +             return -ENOMEM;
-> > +     }
-> > +     return 0;
-> > +}
-> > +
-> > +/**
-> > + * populate_ordered_list_package_data() -
-> > + * Populate all properties of an instance under ordered_list attribute
-> > + *
-> > + * @order_obj: ACPI object with ordered_list data
-> > + * @instance_id: The instance to enumerate
-> > + * @attr_name_kobj: The parent kernel object
-> > + */
-> > +int populate_ordered_list_package_data(union acpi_object *order_obj, i=
-nt instance_id,
-> > +                                    struct kobject *attr_name_kobj)
-> > +{
-> > +     struct ordered_list_data *ordered_list_data =3D &bioscfg_drv.orde=
-red_list_data[instance_id];
-> > +
-> > +     ordered_list_data->attr_name_kobj =3D attr_name_kobj;
-> > +
-> > +     populate_ordered_list_elements_from_package(order_obj,
-> > +                                                 order_obj->package.co=
-unt,
-> > +                                                 instance_id);
-> > +     update_attribute_permissions(ordered_list_data->common.is_readonl=
-y,
-> > +                                  &ordered_list_current_val);
-> > +     friendly_user_name_update(ordered_list_data->common.path,
-> > +                               attr_name_kobj->name,
-> > +                               ordered_list_data->common.display_name,
-> > +                               sizeof(ordered_list_data->common.displa=
-y_name));
-> > +     return sysfs_create_group(attr_name_kobj, &ordered_list_attr_grou=
-p);
-> > +}
-> > +
-> > +/* Expected Values types associated with each element */
-> > +static const acpi_object_type expected_order_types[] =3D {
-> > +     [NAME]  =3D ACPI_TYPE_STRING,
-> > +     [VALUE] =3D ACPI_TYPE_STRING,
-> > +     [PATH] =3D ACPI_TYPE_STRING,
-> > +     [IS_READONLY] =3D ACPI_TYPE_INTEGER,
-> > +     [DISPLAY_IN_UI] =3D ACPI_TYPE_INTEGER,
-> > +     [REQUIRES_PHYSICAL_PRESENCE] =3D ACPI_TYPE_INTEGER,
-> > +     [SEQUENCE] =3D ACPI_TYPE_INTEGER,
-> > +     [PREREQUISITES_SIZE] =3D ACPI_TYPE_INTEGER,
-> > +     [PREREQUISITES] =3D ACPI_TYPE_STRING,
-> > +     [SECURITY_LEVEL] =3D ACPI_TYPE_INTEGER,
-> > +     [ORD_LIST_SIZE] =3D ACPI_TYPE_INTEGER,
-> > +     [ORD_LIST_ELEMENTS] =3D ACPI_TYPE_STRING,
-> > +};
-> > +
-> > +int populate_ordered_list_elements_from_package(union acpi_object *ord=
-er_obj,
-> > +                                             int order_obj_count,
-> > +                                             int instance_id)
->
-> Can be static. Same for the other attributes.
-
-Done!
->
-> > +{
-
-<snip>
-> > +                     for (elem =3D 1; elem < MAX_ELEMENTS_SIZE && part=
-; elem++) {
-> > +                             strscpy(ordered_list_data->elements[elem]=
-,
-> > +                                     part,
-> > +                                     sizeof(ordered_list_data->element=
-s[elem]));
-> > +                             part =3D strsep(&part_tmp, ",");
-> > +                     }
-> > +
-> > +                     kfree(tmpstr);
->
-> This will be freed below anyways.
->
-> > +                     break;
-> > +             default:
-> > +                     pr_warn("Invalid element: %d found in Ordered_Lis=
-t attribute or data may be malformed\n", elem);
-> > +                     break;
-> > +             }
-> > +             kfree(tmpstr);
-> > +             kfree(str_value);
-> > +     }
-> > +
-> > +exit_list_package:
->
-> No need for function name in jump label.
-
-Done!
->
-> > +     kfree(tmpstr);
-> > +     kfree(str_value);
-> > +     return 0;
-> > +}
-> > +
-> > +/**
-> > + * populate_ordered_list_buffer_data() - Populate all properties of an
-> > + * instance under ordered list attribute
-> > + *
-> > + * @buffer_ptr: Buffer pointer
-> > + * @buffer_size: Buffer size
-> > + * @instance_id: The instance to enumerate
-> > + * @attr_name_kobj: The parent kernel object
-> > + */
-> > +int populate_ordered_list_buffer_data(u8 *buffer_ptr, u32 *buffer_size=
-, int instance_id,
-> > +                                   struct kobject *attr_name_kobj)
-> > +{
-> > +     struct ordered_list_data *ordered_list_data =3D &bioscfg_drv.orde=
-red_list_data[instance_id];
-> > +
-> > +     ordered_list_data->attr_name_kobj =3D attr_name_kobj;
-> > +
-> > +     /* Populate ordered list elements */
-> > +     populate_ordered_list_elements_from_buffer(buffer_ptr, buffer_siz=
-e,
-> > +                                                instance_id);
-> > +     update_attribute_permissions(ordered_list_data->common.is_readonl=
-y,
-> > +                                  &ordered_list_current_val);
-> > +     friendly_user_name_update(ordered_list_data->common.path,
-> > +                               attr_name_kobj->name,
-> > +                               ordered_list_data->common.display_name,
-> > +                               sizeof(ordered_list_data->common.displa=
-y_name));
-> > +
-> > +     return sysfs_create_group(attr_name_kobj, &ordered_list_attr_grou=
-p);
-> > +}
-> > +
-> > +int populate_ordered_list_elements_from_buffer(u8 *buffer_ptr, u32 *bu=
-ffer_size,
-> > +                                            int instance_id)
->
-> Can be static. Same for the other attributes.
-
-Done!
->
-> > +{
-> > +     int reqs;
-> > +     int values;
-> > +     struct ordered_list_data *ordered_list_data =3D &bioscfg_drv.orde=
-red_list_data[instance_id];
-> > +
-> > +     strscpy(ordered_list_data->common.display_name_language_code,
-> > +             LANG_CODE_STR,
-> > +             sizeof(ordered_list_data->common.display_name_language_co=
-de));
-> > +
-> > +     // VALUE:
-> > +     get_string_from_buffer(&buffer_ptr, buffer_size, ordered_list_dat=
-a->current_value,
-> > +                            sizeof(ordered_list_data->current_value));
-> > +
-> > +     // PATH:
-> > +     get_string_from_buffer(&buffer_ptr, buffer_size, ordered_list_dat=
-a->common.path,
-> > +                            sizeof(ordered_list_data->common.path));
-> > +
-> > +     // IS_READONLY:
-> > +     get_integer_from_buffer(&buffer_ptr, buffer_size,
-> > +                             &ordered_list_data->common.is_readonly);
-> > +
-> > +     //DISPLAY_IN_UI:
-> > +     get_integer_from_buffer(&buffer_ptr, buffer_size,
-> > +                             &ordered_list_data->common.display_in_ui)=
-;
-> > +
-> > +     // REQUIRES_PHYSICAL_PRESENCE:
-> > +     get_integer_from_buffer(&buffer_ptr, buffer_size,
-> > +                             &ordered_list_data->common.requires_physi=
-cal_presence);
-> > +
-> > +     // SEQUENCE:
-> > +     get_integer_from_buffer(&buffer_ptr, buffer_size,
-> > +                             &ordered_list_data->common.sequence);
-> > +
-> > +     // PREREQUISITES_SIZE:
-> > +     get_integer_from_buffer(&buffer_ptr, buffer_size,
-> > +                             &ordered_list_data->common.prerequisites_=
-size);
-> > +
-> > +     if (ordered_list_data->common.prerequisites_size > MAX_PREREQUISI=
-TES_SIZE) {
-> > +             /* Report a message and limit prerequisite size to maximu=
-m value */
-> > +             pr_warn("String Prerequisites size value exceeded the max=
-imum number of elements supported or data may be malformed\n");
-> > +             ordered_list_data->common.prerequisites_size =3D MAX_PRER=
-EQUISITES_SIZE;
-> > +     }
-> > +
-> > +     // PREREQUISITES:
-> > +     for (reqs =3D 0;
-> > +          reqs < ordered_list_data->common.prerequisites_size && reqs =
-< MAX_PREREQUISITES_SIZE;
-> > +          reqs++)
-> > +             get_string_from_buffer(&buffer_ptr, buffer_size,
-> > +                                    ordered_list_data->common.prerequi=
-sites[reqs],
-> > +                                    sizeof(ordered_list_data->common.p=
-rerequisites[reqs]));
-> > +
-> > +     // SECURITY_LEVEL:
-> > +     get_integer_from_buffer(&buffer_ptr, buffer_size,
-> > +                             &ordered_list_data->common.security_level=
-);
-> > +
-> > +     // ORD_LIST_SIZE:
-> > +     get_integer_from_buffer(&buffer_ptr, buffer_size,
-> > +                             &ordered_list_data->elements_size);
-> > +
-> > +     if (ordered_list_data->elements_size > MAX_ELEMENTS_SIZE) {
-> > +             /* Report a message and limit elements size to maximum va=
-lue */
-> > +             pr_warn("Ordered List size value exceeded the maximum num=
-ber of elements supported or data may be malformed\n");
-> > +             ordered_list_data->elements_size =3D MAX_ELEMENTS_SIZE;
-> > +     }
-> > +
-> > +     // ORD_LIST_ELEMENTS:
-> > +     for (values =3D 0; values < ordered_list_data->elements_size && v=
-alues < MAX_ELEMENTS_SIZE;
->
-> values < min(ordered_list_data->elements_size, MAX_ELEMENTS_SIZE)
->
-> Also elements_size can actually never be > MAX_ELEMENTS_SIZE here.
-> Same for PREREQUISITES.
-> But as discussed before this limiting to a max amount of elements is
-> invalid, as following data will be misinterpreted.
->
-
-Done!
-
-> > +          values++)
-> > +             get_string_from_buffer(&buffer_ptr, buffer_size,
-> > +                                    ordered_list_data->elements[values=
-],
-> > +                                    sizeof(ordered_list_data->elements=
-[values]));
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +/**
-> > + * exit_ordered_list_attributes() - Clear all attribute data
-> > + *
-> > + * Clears all data allocated for this group of attributes
-> > + */
-> > +void exit_ordered_list_attributes(void)
-> > +{
-> > +     int instance_id;
-> > +
-> > +     for (instance_id =3D 0; instance_id < bioscfg_drv.ordered_list_in=
-stances_count;
-> > +          instance_id++) {
-> > +             struct kobject *attr_name_kobj =3D
-> > +                     bioscfg_drv.ordered_list_data[instance_id].attr_n=
-ame_kobj;
-> > +
-> > +             if (attr_name_kobj)
-> > +                     sysfs_remove_group(attr_name_kobj,
-> > +                                        &ordered_list_attr_group);
-> > +     }
-> > +     bioscfg_drv.ordered_list_instances_count =3D 0;
-> > +
-> > +     kfree(bioscfg_drv.ordered_list_data);
-> > +     bioscfg_drv.ordered_list_data =3D NULL;
-> > +}
-> > --
-> > 2.34.1
-> >
+regards,
+Judith
