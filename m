@@ -2,93 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F686FC369
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A9A6FC36B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235108AbjEIKEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 06:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
+        id S234494AbjEIKE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 06:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234848AbjEIKE1 (ORCPT
+        with ESMTP id S235164AbjEIKEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 06:04:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D94246BD
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 03:04:25 -0700 (PDT)
+        Tue, 9 May 2023 06:04:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEAFDD8E;
+        Tue,  9 May 2023 03:04:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED14E62296
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 10:04:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82BDFC433D2;
-        Tue,  9 May 2023 10:04:21 +0000 (UTC)
-Date:   Tue, 9 May 2023 11:04:18 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Topi Miettinen <toiwoton@gmail.com>
-Cc:     Florent Revest <revest@chromium.org>, Peter Xu <peterx@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        joey.gouly@arm.com, mhocko@suse.com, keescook@chromium.org,
-        david@redhat.com, izbyshev@ispras.ru, nd@arm.com,
-        broonie@kernel.org, szabolcs.nagy@arm.com, lennart@poettering.net
-Subject: Re: [PATCH 0/4] MDWE without inheritance
-Message-ID: <ZFoaorv+aJDRdyqf@arm.com>
-References: <20230504170942.822147-1-revest@chromium.org>
- <ZFQQSKijXQHWlYaI@x1n>
- <CABRcYmJFcUs=3QYXz8iq7qvu2orJ4HL-cHdBKg9o7=Ma=nfPLw@mail.gmail.com>
- <ZFhQcwDBFWcRCC4N@x1n>
- <CABRcYm+RquNGYUyfCEmLrcaoMSKagzwXgto-24ZCaLAdFUKUjg@mail.gmail.com>
- <ZFkCugTkQmZh3sJo@arm.com>
- <ccc1a37b-f0f4-82da-22e8-d7b2a88afb0c@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32BEA62808;
+        Tue,  9 May 2023 10:04:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 102B2C433D2;
+        Tue,  9 May 2023 10:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683626670;
+        bh=478tQNtd0bYwq0TBSEOC3ofnei1ThTQcsDZ0NkuIvwQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZcRsqRbmqX45semrAv+8Zi+zdyK/evTHP7peNB9Msqpi75O/PUuhuzK66l7RO8yKI
+         HBrF0jkIbrr+GwU+KV/YBHRI5dT1qVnu5Vx0LW4I/tzqr19X6tUqT4c7t/1JuHnXAe
+         yKd3iEs0M3UeI8RTdEJFf1es8wGwGYjC6SrfHv2DfyuipqiX/mcRfV3o1TDC61g8/H
+         frMRq/t+wLhoaA0fGERSRkOteC7OhaGdMiZ/kvYGr5k0P5EGoXgAnyElXkPMhS//Go
+         K8KCN+WoyDxnbrNTItKp/ytL9HFdeZs+Hzmxb+T8R2TRNL30pSocfZGQklZ8BfOGTu
+         fKpzzZvvvy3Ug==
+From:   matthias.bgg@kernel.org
+To:     Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc:     brcm80211-dev-list.pdl@broadcom.com, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        SHA-cyfmac-dev-list@infineon.com,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Matthias Brugger <mbrugger@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH] wifi: brcmfmac: wcc: Add debug messages
+Date:   Tue,  9 May 2023 12:04:20 +0200
+Message-Id: <20230509100420.26094-1-matthias.bgg@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ccc1a37b-f0f4-82da-22e8-d7b2a88afb0c@gmail.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 08:21:16PM +0300, Topi Miettinen wrote:
-> On 8.5.2023 17.10, Catalin Marinas wrote:
-> > I think we should keep the original behaviour of systemd here, otherwise
-> > they won't transition to the new interface and keep using the SECCOMP
-> > BPF approach (which, in addition, prevents glibc from setting PROT_BTI
-> > on an already executable mapping).
-> 
-> Systemd has transitioned to prctl(PR_SET_MDWE) method since release of v253,
-> so the original behaviour definitely should be kept.
+From: Matthias Brugger <mbrugger@suse.com>
 
-That's great. So yes, no ABI changes allowed anymore.
+The message is attach and detach function are merly for debugging,
+change them from pr_err to pr_debug.
 
-> > x86 has protection keys and arm64 will soon have permission overlays
-> > that allow user-space to toggle between RX and RW (Joey is looking at
-> > the arm64 support). I'm not sure how we'll end up implemented this on
-> > arm64 (and haven't looked at x86) but I have a suspicion MDWE will get
-> > in the way as the base page table permission will probably need
-> > PROT_WRITE|PROT_EXEC.
-> 
-> Wouldn't those features defeat any gains from MDWE? The features probably
-> should be forbidden with MemoryDenyWriteExecute=yes.
+Signed-off-by: Matthias Brugger <mbrugger@suse.com>
 
-The permission overlays (controlled by the user) can only further
-restrict the mmap() permissions. So MDWE would still work as expected.
-If one wants to toggle between RW and RX with overlays, the overall
-mmap() needs to be RWX and it won't work if MDWE=yes. No need to
-explicitly disable the overlays feature.
+---
 
-On arm64 at least, with the introduction of permission overlays we also
-have the notion of "Read, Execute if not Write". This permission
-automatically disables Exec if the mapping becomes writable (overlays
-can disable writable, allowing exec). We could have a new MDWE policy
-which allows this, though I'm not that keen on using it in Linux since
-background permission changes done by the kernel can lead to an
-unexpected executable permission (e.g. marking a page read-only for
-clean/dirty tracking or in preparation for CoW after fork()).
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/wcc/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/wcc/core.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/wcc/core.c
+index 02de99818efa..5573a47766ad 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/wcc/core.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/wcc/core.c
+@@ -12,13 +12,13 @@
+ 
+ static int brcmf_wcc_attach(struct brcmf_pub *drvr)
+ {
+-	pr_err("%s: executing\n", __func__);
++	pr_debug("%s: executing\n", __func__);
+ 	return 0;
+ }
+ 
+ static void brcmf_wcc_detach(struct brcmf_pub *drvr)
+ {
+-	pr_err("%s: executing\n", __func__);
++	pr_debug("%s: executing\n", __func__);
+ }
+ 
+ const struct brcmf_fwvid_ops brcmf_wcc_ops = {
 -- 
-Catalin
+2.40.1
+
