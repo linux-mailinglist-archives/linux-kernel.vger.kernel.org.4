@@ -2,112 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31706FC6EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6EC6FC715
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235455AbjEIMnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 08:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
+        id S234645AbjEIMwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 08:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235269AbjEIMnM (ORCPT
+        with ESMTP id S234981AbjEIMwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 08:43:12 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F5549DE;
-        Tue,  9 May 2023 05:42:53 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f420618d5bso20314845e9.1;
-        Tue, 09 May 2023 05:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683636165; x=1686228165;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZplJga8URR6w22NuOXzuaUfxRbCk+zusrF2eonp43Ic=;
-        b=M8kM4F50Y4QTpse4LTLaTC1p2lmcHK/sWrXz58Uxbdofq75cCK6nNc6tPZC5QyUyuq
-         itS6L8KsQbXQLFbX6rssoOqIJTKrxa+d5P4RUpP1y7jwIU+ae5TyoANwDKjMR2GfM1uz
-         DQEmnv60HVaZyyHeULYvT/yZqvXaV8N3/nRaVtvvnuFsm9gMqt9M5UsjptXzOcC8aLJe
-         5VFkMJrUx1QzSQO1wBTorV4wBjQH/lJxtQ4HN9zf52oYG5ZFLVHp5maEVBBKuWh0G5fa
-         M7/eIHccCIzaMzXED2bvBJYGn00JlpH1Y9bpXKsjk/1lmnhZGyl2HTv6acFjYShVQZWV
-         5U7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683636165; x=1686228165;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZplJga8URR6w22NuOXzuaUfxRbCk+zusrF2eonp43Ic=;
-        b=COYYWgEmlkHQZt2PqiCMO0QI3mzddFccjEwsm+88tl3UxeGcYmaYoLfNGZnl3MjCT6
-         MxbP/M8pFLgn2YvQ+ytRZv+N6HIDOcADkdVUFxkupVUe9ocSUiaTfkV7lsYGb0ylV9dp
-         B2M7Kuuaswu0XHkkvf7jaRbHV5NiQFxgL/LQTgxgZCTJpRAxrWalKr5r4z4Ve9dJ++WA
-         bvEwuhv7MzrVGF1MS3TPah7C+Iwgz2sATt/0v6tgm80nhFCLy5x8LhK4oAVysp83mTVd
-         wN9CKhzDP81PGEI6uMDRSJWDNGNR8sv1CUmpQcM1idaqXhKjcArR6slw/uCDuIok64Xm
-         ZERA==
-X-Gm-Message-State: AC+VfDy6pkaVSeZDYVUrUzLCE14Yxyh0qbhwozStnz29qSAPLOwvvekB
-        Cek1vn49MRJLoat0KFj0Szs=
-X-Google-Smtp-Source: ACHHUZ5JuGl0TT7zoc5WZviOsoU/R1kF0RdwnsYbTD5iMTaRYgFq5PeC4oHx05osceUHEJ0tdlmpXw==
-X-Received: by 2002:a05:600c:22d9:b0:3f0:9a90:a5e7 with SMTP id 25-20020a05600c22d900b003f09a90a5e7mr8961042wmg.28.1683636165108;
-        Tue, 09 May 2023 05:42:45 -0700 (PDT)
-Received: from localhost ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id f1-20020a1cc901000000b003f25b40fc24sm19933419wmb.6.2023.05.09.05.42.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 05:42:44 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        tsbogend@alpha.franken.de, paul@crapouillou.net
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH v1 3/3] mips: dts: ingenic: x1000: Add AIC device tree node
-Date:   Tue,  9 May 2023 13:42:38 +0100
-Message-Id: <20230509124238.195191-3-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20230509124238.195191-1-aidanmacdonald.0x0@gmail.com>
-References: <20230509124238.195191-1-aidanmacdonald.0x0@gmail.com>
+        Tue, 9 May 2023 08:52:03 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727AA2694;
+        Tue,  9 May 2023 05:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683636720; x=1715172720;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=rrSQ/FJcEqHkrsjB0HKViGMNUOtQomkux4NFU2fyLL0=;
+  b=UQd+EizIVOZpQSRFB1ChVWrnDtLeMUmqaZsyXRzu8n5A1wMND7BGtcr9
+   dCosj+p3HS3vxF1yS36bX+LDLCuYk4zjgBxN0lxh3oa9Yz2BLekLZKel4
+   IBWohBrUsz+CyPxguby8SUTReCXjmV+Fgy6kdULuhJK4BMETaU5r8qM5z
+   i7bAsRZ5/yBn/Ja+W4oit51fwHr711jbWjpwi8NvWUmZd5/HEsRyqSfuS
+   gzR+v6b9syaG7Omf4Rz8aGo4tfuXNsYpOhPkUuw/S0ylczJakaSs2eiyv
+   aMIqJxYQ6geE3dLEX1wgv8es5nqVUMqncM7cDKorYBapaNEv9NIFNfccp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="347373707"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="347373707"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 05:52:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="768484681"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="768484681"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
+  by fmsmga004.fm.intel.com with ESMTP; 09 May 2023 05:51:54 -0700
+Date:   Tue, 9 May 2023 20:44:28 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>, david@redhat.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, jmattson@google.com,
+        joro@8bytes.org, mail@maciej.szmigiero.name, vbabka@suse.cz,
+        vannapurve@google.com, yu.c.zhang@linux.intel.com,
+        kirill.shutemov@linux.intel.com, dhildenb@redhat.com,
+        qperret@google.com, tabba@google.com, michael.roth@amd.com,
+        wei.w.wang@intel.com, rppt@kernel.org, liam.merwick@oracle.com,
+        isaku.yamahata@gmail.com, jarkko@kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hughd@google.com, brauner@kernel.org
+Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
+ KVM: mm: fd-based approach for supporting KVM)
+Message-ID: <20230509124428.GA217130@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <ZEM5Zq8oo+xnApW9@google.com>
+ <diqz8re2ftzb.fsf@ackerleytng-ctop.c.googlers.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=gb2312
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <diqz8re2ftzb.fsf@ackerleytng-ctop.c.googlers.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a node for the on-board I2S audio controller.
+On Fri, May 05, 2023 at 07:39:36PM +0000, Ackerley Tng wrote:
+> 
+> Hi Sean,
+> 
+> Thanks for implementing this POC!
+> 
+> I¡¯ve started porting the selftests (both Chao¡¯s and those I added [1]).
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
- arch/mips/boot/dts/ingenic/x1000.dtsi | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Hi Sean/Ackerley,
 
-diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
-index 42e69664efd9..cc264cfff826 100644
---- a/arch/mips/boot/dts/ingenic/x1000.dtsi
-+++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-@@ -417,4 +417,22 @@ otg: usb@13500000 {
- 
- 		status = "disabled";
- 	};
-+
-+	aic: audio-controller@10020000 {
-+		compatible = "ingenic,x1000-i2s";
-+		reg = <0x10020000 0x38>;
-+
-+		#sound-dai-cells = <0>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <1>;
-+
-+		clocks = <&cgu X1000_CLK_AIC>,
-+			 <&cgu X1000_CLK_I2S>;
-+		clock-names = "aic", "i2s";
-+
-+		dmas = <&pdma X1000_DMA_I2S0_RX 0xffffffff>,
-+			   <&pdma X1000_DMA_I2S0_TX 0xffffffff>;
-+		dma-names = "rx", "tx";
-+	};
- };
--- 
-2.39.2
+Thanks for doing that. Overall making gmem a KVM ioctl() looks good to
+me and it should also play nice with Intel TDX. Besides what Ackerley
+mentioned below, I think we haven't discussed device assignment, which
+will be supported in not too long distance. Current VFIO_IOMMU_MAP_DMA
+consumes virtual address so that needs to be fixed for fd-based memory
+anyway, and the fix looks not related to whether this being a syscall()
+or a KVM ioctl(). There will be some initialization sequence dependency,
+e.g. if gmem is finally a VM-scope ioctl() then we need VM created first
+before can we map fd-based memory in VFIO, but that sounds not an issue
+at all.
 
+I also see Vlastimil/David expressed their preference on ioctl. So maybe
+we can move forward on your current PoC. Do you already have a plan to
+post a formal version?
+
+Chao
+
+> 
+> guest mem seems to cover the use cases that have been discussed and
+> proposed so far, but I still need to figure out how gmem can work with
+> 
+> + hugetlbfs
+> + specification of/storing memory policy (for NUMA node bindings)
+> + memory accounting - we may need to account for memory used separately,
+>   so that guest mem shows up separately on /proc/meminfo and similar
+>   places.
+> 
+> One issue I¡¯ve found so far is that the pointer to kvm (gmem->kvm) is
+> not cleaned up, and hence it is possible to crash the host kernel in the
+> following way
+> 
+> 1. Create a KVM VM
+> 2. Create a guest mem fd on that VM
+> 3. Create a memslot with the guest mem fd (hence binding the fd to the
+>    VM)
+> 4. Close/destroy the KVM VM
+> 5. Call fallocate(PUNCH_HOLE) on the guest mem fd, which uses gmem->kvm
+>    when it tries to do invalidation.
+> 
+> I then tried to clean up the gmem->kvm pointer during unbinding when the
+> KVM VM is destroyed.
+> 
+> That works, but then I realized there¡¯s a simpler way to use the pointer
+> after freeing:
+> 
+> 1. Create a KVM VM
+> 2. Create a guest mem fd on that VM
+> 3. Close/destroy the KVM VM
+> 4. Call fallocate(PUNCH_HOLE) on the guest mem fd, which uses gmem->kvm
+>    when it tries to do invalidation.
+> 
+> Perhaps binding should mean setting the gmem->kvm pointer in addition to
+> gmem->bindings. This makes binding and unbinding symmetric and avoids
+> the use-after-frees described above.
+> 
+> This also means that creating a guest mem fd is no longer dependent on
+> the VM. Perhaps we can make creating a gmem fd a system ioctl (like
+> KVM_GET_API_VERSION and KVM_CREATE_VM) instead of a vm ioctl?
+> 
+> [1]
+> https://lore.kernel.org/all/cover.1678926164.git.ackerleytng@google.com/T/
+> 
+> Ackerley
