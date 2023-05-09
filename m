@@ -2,231 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9406FC2B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB576FC2BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233625AbjEIJ0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 05:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
+        id S234641AbjEIJ0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 05:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233586AbjEIJZ5 (ORCPT
+        with ESMTP id S234496AbjEIJ03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 05:25:57 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCC7199F;
-        Tue,  9 May 2023 02:25:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683624355; x=1715160355;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZUjtGLtCp5bmDtgxpBnRsLLbwrRUEv9l+1hvqKxDfhM=;
-  b=jiakkmrm8p3f5JO/BwMlC+DbsugIGTigoTy9/J5COLQ4bUBVWwxGATxq
-   3jmvWItY249Dcw7AMSemyKKZ7OqI3z2XfntwOOpWHK+7Pr6T2vINVERF3
-   TtTg4dATHIJ/q7UiFlefehblLjDw1gVBTu/FQdsiGt6pKXbiYyqWikkBc
-   ffBBh9THl68oKEXbw6oZpb7d4OOoj7zRb1ZB+wIJH9Y85eSQcGvtXQtV4
-   ioBJHcWjNqWTnFHdteje1wt325sWFekQjtwAStyDslj5cp5lyoG1LG5J8
-   NnJNqdr1C18Gq+xCeltSk6dRyKJOote1g4cydeAH9nw4U5X13Yq4Sfiyt
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="352035491"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="352035491"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 02:25:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="729425778"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="729425778"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 09 May 2023 02:25:51 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pwJbS-00020s-1V;
-        Tue, 09 May 2023 09:25:50 +0000
-Date:   Tue, 9 May 2023 17:25:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>, netdev@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Frank <Frank.Sae@motor-comm.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/3] net: phy: broadcom: Add support for
- Wake-on-LAN
-Message-ID: <202305091725.uiFVrVZR-lkp@intel.com>
-References: <20230508184309.1628108-3-f.fainelli@gmail.com>
+        Tue, 9 May 2023 05:26:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF77E49
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:25:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683624338;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eGDlZetmlCOLO0fUqhWWdR3cbHCPh418SeujG8QKx34=;
+        b=RnwQioB+xFJd5kU2fwYnKCQn7c6/CW4T+DQUAkRi9wfvzJ52rivPgsT8oee2V9WmWmU/7v
+        66BBw71an2eDIUJSMGNe+24yweF4FMXizU/USOBzOR50gRfrQDn8OAfRnW3lX8gg5tGoQ2
+        PzOOgRUQvM8DHJFqgww5K5p3V7Nk2Hc=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-322-Ezvx3laoP2i1ffv3oLZpWg-1; Tue, 09 May 2023 05:25:37 -0400
+X-MC-Unique: Ezvx3laoP2i1ffv3oLZpWg-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94a356c74e0so537637466b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 02:25:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683624336; x=1686216336;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eGDlZetmlCOLO0fUqhWWdR3cbHCPh418SeujG8QKx34=;
+        b=NuJp1jmggeBpBtkfhGjWtJ/PL2VQWgv7OMzm/zImN/VCsY/h6+WRaAT4Uxck3Po3/4
+         eTrfHOE3nlcytzTusp34G3oeUoW68iGGBJe473Zo76IfT9qrOtQ6xgzrdZWHLbrs2PM/
+         TDgYLAlvWp8OQ2yQ+VpVjmjNM1mA9p3F0yZWUQb0RbMv3vJBe3mpa2si1eb2Qar3A8ji
+         yavIU0gyCo3BR2OUZWO+hxb6XvfCQAMJGHmeeiQ9byDKyEKiIgPPUeV+HKc6Rzyt/+rr
+         u7s7Amj9w3GbT/066609bufLsSxPkSZqtlMgVe1RS3zU820XxHQqZFta3JBGNIw9p0bb
+         C//Q==
+X-Gm-Message-State: AC+VfDy2pKkkyPdB1d0mfP1xbTKKnyNJXoBAiTrbSOSptHT8TaUeCgxw
+        zWKV+UBK/GkmVLpTmelR4n8At29/GzRxkLwGJkBStbLURPGpQekHcPTmCdRYNwfMU8JQMPbAq3q
+        Qsl2DVbaD9igLfh6L9u9EEEkd
+X-Received: by 2002:a17:907:3203:b0:94a:8f3a:1a77 with SMTP id xg3-20020a170907320300b0094a8f3a1a77mr11316331ejb.8.1683624335962;
+        Tue, 09 May 2023 02:25:35 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5L2cJvxvF3rn+zunfCjbSxurCfWaR08aJvGuB510l7OsCPVOgewV+EY3vby9MN8ZVsRC04OQ==
+X-Received: by 2002:a17:907:3203:b0:94a:8f3a:1a77 with SMTP id xg3-20020a170907320300b0094a8f3a1a77mr11316318ejb.8.1683624335648;
+        Tue, 09 May 2023 02:25:35 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id ml17-20020a170906cc1100b009661484e84esm1077409ejb.191.2023.05.09.02.25.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 02:25:34 -0700 (PDT)
+Message-ID: <b212b426-7339-1ffd-6a59-a1dd7cc3ad72@redhat.com>
+Date:   Tue, 9 May 2023 11:25:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508184309.1628108-3-f.fainelli@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 1/2] platform/x86: hp-wmi: Add HP WMI camera switch
+Content-Language: en-US, nl
+To:     Jonathan Singer <jes965@nyu.edu>,
+        Mario Limonciello <Mario.Limonciello@amd.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     Jorge Lopez <jorge.lopez2@hp.com>,
+        Rishit Bansal <rishitbansal0@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <20230426184852.2100-1-jes965@nyu.edu>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230426184852.2100-1-jes965@nyu.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
+Hi,
 
-kernel test robot noticed the following build warnings:
+On 4/26/23 20:48, Jonathan Singer wrote:
+> Previously, when the camera toggle switch was hit, the hp-wmi driver
+> would report an invalid event code. By adding a case for that in the
+> event handling switch statement we can eliminate that error code and
+> enable a framework for potential further kernel handling of that key.
+> This change was tested on my HP Envy x360 15-ey0023dx laptop, but it
+> would likely work for any HP laptop with a camera toggle button. Now
+> we emit an SW_CAMERA_LENS_COVER event, on a device that gets created
+> on the first such event so as to not report incorrectly the state of
+> the camera shutter before we can know its state.
+> 
+> Signed-off-by: Jonathan Singer <jes965@nyu.edu>
 
-[auto build test WARNING on net-next/main]
+Thank you for your patch-series, I've applied the series to my
+review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Fainelli/net-phy-Let-drivers-check-Wake-on-LAN-status/20230509-024405
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230508184309.1628108-3-f.fainelli%40gmail.com
-patch subject: [PATCH net-next 2/3] net: phy: broadcom: Add support for Wake-on-LAN
-config: s390-randconfig-r036-20230508 (https://download.01.org/0day-ci/archive/20230509/202305091725.uiFVrVZR-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/9bc5e73961748471e3dae79cb94f329382a6d490
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Florian-Fainelli/net-phy-Let-drivers-check-Wake-on-LAN-status/20230509-024405
-        git checkout 9bc5e73961748471e3dae79cb94f329382a6d490
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/phy/ kernel/
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305091725.uiFVrVZR-lkp@intel.com/
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
 
-All warnings (new ones prefixed by >>):
+Regards,
 
-   In file included from drivers/net/phy/broadcom.c:13:
-   In file included from drivers/net/phy/bcm-phy-lib.h:9:
-   In file included from include/linux/brcmphy.h:5:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/phy/broadcom.c:13:
-   In file included from drivers/net/phy/bcm-phy-lib.h:9:
-   In file included from include/linux/brcmphy.h:5:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/phy/broadcom.c:13:
-   In file included from drivers/net/phy/bcm-phy-lib.h:9:
-   In file included from include/linux/brcmphy.h:5:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/phy/broadcom.c:471:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (priv->wake_irq_enabled != state) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/phy/broadcom.c:479:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/net/phy/broadcom.c:471:2: note: remove the 'if' if its condition is always true
-           if (priv->wake_irq_enabled != state) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/phy/broadcom.c:466:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   13 warnings generated.
+Hans
 
 
-vim +471 drivers/net/phy/broadcom.c
 
-   462	
-   463	static int bcm54xx_set_wakeup_irq(struct phy_device *phydev, bool state)
-   464	{
-   465		struct bcm54xx_phy_priv *priv = phydev->priv;
-   466		int ret;
-   467	
-   468		if (!bcm54xx_phy_can_wakeup(phydev))
-   469			return 0;
-   470	
- > 471		if (priv->wake_irq_enabled != state) {
-   472			if (state)
-   473				ret = enable_irq_wake(priv->wake_irq);
-   474			else
-   475				ret = disable_irq_wake(priv->wake_irq);
-   476			priv->wake_irq_enabled = state;
-   477		}
-   478	
-   479		return ret;
-   480	}
-   481	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+> V2 changes: Added SW_CAMERA_LENS_COVER switch event
+> V3 changes: removed input dev sync, changed pr_info to pr_err/pr_warn
+> 
+>  drivers/platform/x86/hp/hp-wmi.c | 46 ++++++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
+> index 873f59c3e280..18d40270aa0d 100644
+> --- a/drivers/platform/x86/hp/hp-wmi.c
+> +++ b/drivers/platform/x86/hp/hp-wmi.c
+> @@ -90,6 +90,7 @@ enum hp_wmi_event_ids {
+>  	HPWMI_PEAKSHIFT_PERIOD		= 0x0F,
+>  	HPWMI_BATTERY_CHARGE_PERIOD	= 0x10,
+>  	HPWMI_SANITIZATION_MODE		= 0x17,
+> +	HPWMI_CAMERA_TOGGLE		= 0x1A,
+>  	HPWMI_OMEN_KEY			= 0x1D,
+>  	HPWMI_SMART_EXPERIENCE_APP	= 0x21,
+>  };
+> @@ -228,6 +229,7 @@ static const struct key_entry hp_wmi_keymap[] = {
+>  };
+>  
+>  static struct input_dev *hp_wmi_input_dev;
+> +static struct input_dev *camera_shutter_input_dev;
+>  static struct platform_device *hp_wmi_platform_dev;
+>  static struct platform_profile_handler platform_profile_handler;
+>  static bool platform_profile_support;
+> @@ -739,6 +741,33 @@ static ssize_t postcode_store(struct device *dev, struct device_attribute *attr,
+>  	return count;
+>  }
+>  
+> +static int camera_shutter_input_setup(void)
+> +{
+> +	int err;
+> +
+> +	camera_shutter_input_dev = input_allocate_device();
+> +	if (!camera_shutter_input_dev)
+> +		return -ENOMEM;
+> +
+> +	camera_shutter_input_dev->name = "HP WMI camera shutter";
+> +	camera_shutter_input_dev->phys = "wmi/input1";
+> +	camera_shutter_input_dev->id.bustype = BUS_HOST;
+> +
+> +	__set_bit(EV_SW, camera_shutter_input_dev->evbit);
+> +	__set_bit(SW_CAMERA_LENS_COVER, camera_shutter_input_dev->swbit);
+> +
+> +	err = input_register_device(camera_shutter_input_dev);
+> +	if (err)
+> +		goto err_free_dev;
+> +
+> +	return 0;
+> +
+> + err_free_dev:
+> +	input_free_device(camera_shutter_input_dev);
+> +	camera_shutter_input_dev = NULL;
+> +	return err;
+> +}
+> +
+>  static DEVICE_ATTR_RO(display);
+>  static DEVICE_ATTR_RO(hddtemp);
+>  static DEVICE_ATTR_RW(als);
+> @@ -866,6 +895,20 @@ static void hp_wmi_notify(u32 value, void *context)
+>  		break;
+>  	case HPWMI_SANITIZATION_MODE:
+>  		break;
+> +	case HPWMI_CAMERA_TOGGLE:
+> +		if (!camera_shutter_input_dev)
+> +			if (camera_shutter_input_setup()) {
+> +				pr_err("Failed to setup camera shutter input device\n");
+> +				break;
+> +			}
+> +		if (event_data == 0xff)
+> +			input_report_switch(camera_shutter_input_dev, SW_CAMERA_LENS_COVER, 1);
+> +		else if (event_data == 0xfe)
+> +			input_report_switch(camera_shutter_input_dev, SW_CAMERA_LENS_COVER, 0);
+> +		else
+> +			pr_warn("Unknown camera shutter state - 0x%x\n", event_data);
+> +		input_sync(camera_shutter_input_dev);
+> +		break;
+>  	case HPWMI_SMART_EXPERIENCE_APP:
+>  		break;
+>  	default:
+> @@ -1564,6 +1607,9 @@ static void __exit hp_wmi_exit(void)
+>  	if (wmi_has_guid(HPWMI_EVENT_GUID))
+>  		hp_wmi_input_destroy();
+>  
+> +	if (camera_shutter_input_dev)
+> +		input_unregister_device(camera_shutter_input_dev);
+> +
+>  	if (hp_wmi_platform_dev) {
+>  		platform_device_unregister(hp_wmi_platform_dev);
+>  		platform_driver_unregister(&hp_wmi_driver);
+
