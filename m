@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E4A6FCA24
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D08DF6FCA2F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235631AbjEIPYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 11:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
+        id S235856AbjEIPZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 11:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjEIPYo (ORCPT
+        with ESMTP id S235392AbjEIPZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 11:24:44 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CA01729;
-        Tue,  9 May 2023 08:24:43 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f1fe1208a4so3885793e87.2;
-        Tue, 09 May 2023 08:24:42 -0700 (PDT)
+        Tue, 9 May 2023 11:25:29 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6252D63;
+        Tue,  9 May 2023 08:25:28 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1a50cb65c92so42648995ad.0;
+        Tue, 09 May 2023 08:25:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683645881; x=1686237881;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ko7fzt9nOGMj8UcJACPmdJ37rpoFvFpIcWe4r0HuiUA=;
-        b=sTgTHurDmGKxDtOnlVSkAhLPkTW1zo3AeBefovmRj/j61oY+wmDqzx3EK5fembdMXn
-         fedDkv/XL9zQOZbz0OHhjmU20y29cAXQIa6oMDih0EfFzRSXYvz865vlB9yQZnuGMpwz
-         LWNw1WVOO0NQUj8BY+F7Y3O1Vbpi2uUUzdxHpW49kEfdn9CJCXKaFhXIePtAwKTJFF9m
-         SDAitzKH+ViHP0jcp1ZhIx4jQb2dtuRt9ccYJ2Bxd59GEZZIXoEEVZsKafK/Ot2DueJm
-         aXGzw760HZrwAvbkLUCndnGUaD/XNpvmUj6OUnmjhIlJXH/Dk8+DA39gy1Ng2lxZNG9D
-         dp/w==
+        d=gmail.com; s=20221208; t=1683645928; x=1686237928;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BapK3YZat2JrgkQ27y5fKqAf0JI1AsmzEqrfbJH0CP0=;
+        b=T0Xc7i+iruIpfW3f/ePg4G2BwS871YDGZQJvpnfUOmKjgT+0ikyl3Bw2+nSNVJ2Al5
+         21Nl8FIfQby1t6KuZ7IDXQObd6EzuQvSQXnrXoDSU59rOP1kToq0UMFsR5tsmNLN/ice
+         YmZS6g/xra07johxCZ1D6N2gfmvQZ57sxGqBWkuY5xKd+esdzYT3reTAnP6Vt22lBC9i
+         pqlG6d/f9EaL+6lQJ16Cwtv2M6RkOE2nPpLysjjqW/UvtN3+gand0PWgYKvwYyYUOriF
+         z4/GidS0HxRi6M9piZWTW7VNTYV/ghTNvmXbRpCQUkUyklCTR1X9cetM4Gyf3/K0wCVb
+         +y8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683645881; x=1686237881;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683645928; x=1686237928;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ko7fzt9nOGMj8UcJACPmdJ37rpoFvFpIcWe4r0HuiUA=;
-        b=SP3PLfEn3MIlrPReK5GM5luhl0roitz3p/wxHSLCtX7eH2NFR4E6TP4SqOeFsV5Qvx
-         t/1Fy7gvF5rX9T8C8oqvX2CgFtENTiwoGFlIA1UUx5PCQeRajW2kcpaSnaEcjK3kPkS8
-         BlOq/dZL/EQ4MOJLVS17dEtt/DRDXRf0alCqidm6Cz0cERDu7IvgxLj2IRjc2DZjk/19
-         6kRixxxt006sVz8Z+rHr7LP5PJe4AqdQw52hLoWV3LYIhYUqA+867xM6U+Lj1L0Kw13K
-         J9BLyRpgTuLzQcZO4eXJb3C7gGqyYP+7KlaLYoRsFBnJ6n9VWAKeR60QUxCQmJnRIWrc
-         79RQ==
-X-Gm-Message-State: AC+VfDx6kWOjqP2zHh6VFxqipiTq+7OuJn1B0UFqTOA0IYZwhIcms6aI
-        n3JMTW9OSDK47brV4VYYJdBfNDlY9HIZyeKrwpAC9sBHSbY=
-X-Google-Smtp-Source: ACHHUZ4SjZ4qo86WxxKUIJ/Bu0/inKxyyPbh66X5cGqOTGy6JV7MupaZQuR+oDw6wgU+MgNXDKdthrDInbs0bXQYFmg=
-X-Received: by 2002:a2e:3012:0:b0:2a7:a719:5943 with SMTP id
- w18-20020a2e3012000000b002a7a7195943mr885570ljw.40.1683645880861; Tue, 09 May
- 2023 08:24:40 -0700 (PDT)
+        bh=BapK3YZat2JrgkQ27y5fKqAf0JI1AsmzEqrfbJH0CP0=;
+        b=lKY9oXXpDQwSuBUD65hy5bQo2fRlJiPXbTjmraoLb0ez5VFGAZsYgN900ih8uJg46R
+         7aqDHqqpvukzaghE7NwQf0QH8P8d3T/7fRBAkVbNr9ag8L4SlXqfkdPqOJf4vXnEwJ8Y
+         3hPty5gTZPQN/VnZP0ZkTjzqgKufXhtcRaDfpgUPI/J7c2Ge7Xr20rdWlgqRL7tCjYEi
+         XTk0UDKRPLXu2hAFu2agqzIMVBGq5iar/bwjYNiI0NFWY4cmeNHFpqJazbqTnmQN91K4
+         lIFO1uKGA1racLUXh8ZfzDzuF7OKsQj/HkL8edRivYZq93XXP9fJZl2o2tvld3g2HgeY
+         I/YA==
+X-Gm-Message-State: AC+VfDy9pcm8NoE+MKzzOejBLXK+qm2ujPyuoa3ztVNgWzbp/YMOPg/A
+        c32VZqvkhUyqniJRwUh09as=
+X-Google-Smtp-Source: ACHHUZ6yYycY4c2Qj/Cp1fVn1nBKhwmXWZN8uaMWGSzOfPsErIKzM9qhtuUgkwdpZ59idvuUIspnRA==
+X-Received: by 2002:a17:903:32c2:b0:1aa:e938:3ddf with SMTP id i2-20020a17090332c200b001aae9383ddfmr17893612plr.7.1683645927612;
+        Tue, 09 May 2023 08:25:27 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id b13-20020a170902b60d00b001aafdf8063dsm1722771pls.157.2023.05.09.08.25.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 08:25:27 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 9 May 2023 05:25:25 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     jiangshanlai@gmail.com
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Avraham Stern <avraham.stern@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mordechay Goodstein <mordechay.goodstein@intel.com>,
+        "Haim, Dreyfuss" <haim.dreyfuss@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 09/22] wifi: iwlwifi: Use alloc_ordered_workqueue() to
+ create ordered workqueues
+Message-ID: <ZFpl5UFRXVdEyJcQ@slm.duckdns.org>
+References: <20230421025046.4008499-1-tj@kernel.org>
+ <20230421025046.4008499-10-tj@kernel.org>
+ <ZFmM3taSTiq7Mv4L@slm.duckdns.org>
 MIME-Version: 1.0
-References: <20230508163751.841-1-beaub@linux.microsoft.com>
-In-Reply-To: <20230508163751.841-1-beaub@linux.microsoft.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 9 May 2023 08:24:29 -0700
-Message-ID: <CAADnVQLYL-ZaP_2vViaktw0G4UKkmpOK2q4ZXBa+f=M7cC25Rg@mail.gmail.com>
-Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFmM3taSTiq7Mv4L@slm.duckdns.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023 at 9:38=E2=80=AFAM Beau Belgrave <beaub@linux.microsoft=
-.com> wrote:
->
-> Programs that utilize user_events today only get the event payloads via
-> perf or ftrace when writing event data. When BPF programs are attached
-> to tracepoints created by user_events the BPF programs do not get run
-> even though the attach succeeds. This causes confusion by the users of
-> the programs, as they expect the data to be available via BPF programs
-> they write. We have several projects that have hit this and requested
-> BPF program support when publishing data via user_events from their
-> user processes in production.
->
-> Swap out perf_trace_buf_submit() for perf_trace_run_bpf_submit() to
-> ensure BPF programs that are attached are run in addition to writing to
-> perf or ftrace buffers. This requires no changes to the BPF infrastructur=
-e
-> and only utilizes the GPL exported function that modules and other
-> components may use for the same purpose. This keeps user_events consisten=
-t
-> with how other kernel, modules, and probes expose tracepoint data to allo=
-w
-> attachment of a BPF program.
+On Mon, May 08, 2023 at 01:59:26PM -1000, Tejun Heo wrote:
+> Applied to wq/for-6.5-cleanup-ordered.
 
-Sorry, I have to keep my Nack here.
+This notification is on the wrong patch. The updated one w/ 0 @max_active
+was applied.
 
-I see no practical use case for bpf progs to be connected to user events.
+Thanks.
 
-There must be a different way to solve your user needs
-and this is not bpf.
+-- 
+tejun
