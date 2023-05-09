@@ -2,59 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5F36FC9E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64F16FC9F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236034AbjEIPI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 11:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
+        id S236056AbjEIPKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 11:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235628AbjEIPIr (ORCPT
+        with ESMTP id S236049AbjEIPKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 11:08:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B27C3C3B;
-        Tue,  9 May 2023 08:08:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 9 May 2023 11:10:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53773C3B
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 08:10:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683645003;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aBON9BagCS1dEKC7O+dSyOIycB+7hV0ncW4/EcaZsns=;
+        b=d8lM4A7csg/AvB4VLR0YJvGmJjtFCLUQdPiGi4llOpaF/jOkI9diHseRSlVWpNOryXJnIj
+        45HZD3GRQfJwzQFM+BmK9VNmEfriceifA17wrFA1eL/D4XfoyXQ2vja0TP3UBtMxEdnSwV
+        jWyMmeGxEL7drt+hw+Ms3LXt4q3TT2E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-647-ejCbP0-zOMWg-l7vwXJYLA-1; Tue, 09 May 2023 11:09:59 -0400
+X-MC-Unique: ejCbP0-zOMWg-l7vwXJYLA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECB4862EDE;
-        Tue,  9 May 2023 15:08:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89D5CC433EF;
-        Tue,  9 May 2023 15:08:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683644925;
-        bh=T9KFHDYYM0c4PV+Z2aMfqPPqiVr9JLfTv51Lf3v+Y+A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Y7VYuOnopAMNMopzSNbyQ23zxRhoZfdzcY2y1gPfUrJMrSqTqoriOSp9Rk9QCN19F
-         Y2OiTAJ6yQhlh0NKMkfkXemcCUDUyvsWn2nxEZg+Xnzyi6vnIWj6wVw2/iWr3kQpL0
-         mxXm9M8tEbU60b+1hOsi7OMUYj5mXugExEobKwLSa9ONokuVEzpssSBg1mLNHgVHZG
-         YsDc0iTdaaIiyJmgGlynW/xJ+UDvRvm9S62H4fcwyq7Y/LIB72xtOTT83J5Olz7PdY
-         G2sqEanDENqvaz8Gm7TgEfIQVPXtnJlZ0rZPmBwUXJoyDpe5tx/lTHv19YDKZSXyXj
-         RISXiJcS3v80A==
-Date:   Wed, 10 May 2023 00:08:39 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: Re: [PATCH v9.1 02/11] tracing/probes: Add fprobe events for
- tracing function entry and exit.
-Message-Id: <20230510000839.0d223bfd5ba9e556f302596d@kernel.org>
-In-Reply-To: <20230505121212.7569c9b9@gandalf.local.home>
-References: <168299383880.3242086.7182498102007986127.stgit@mhiramat.roam.corp.google.com>
-        <168299385687.3242086.18384268741128867952.stgit@mhiramat.roam.corp.google.com>
-        <20230505121212.7569c9b9@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 03E2A280253D;
+        Tue,  9 May 2023 15:09:58 +0000 (UTC)
+Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B76912166B2F;
+        Tue,  9 May 2023 15:09:57 +0000 (UTC)
+Message-ID: <1428e38f-6dee-a162-b2e0-03604d73f889@redhat.com>
+Date:   Tue, 9 May 2023 11:09:57 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/1] locking/qspinlock: Fix state-transition changes in
+ comments
+Content-Language: en-US
+To:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
+References: <IA1PR11MB6171282A1E2CF22740398F8989769@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <20230509072902.66284-1-qiuxu.zhuo@intel.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230509072902.66284-1-qiuxu.zhuo@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,279 +67,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 5 May 2023 12:12:12 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On 5/9/23 03:29, Qiuxu Zhuo wrote:
+> 1. set_locked() only sets the locked field to 1 and doesn't touch
+>     the pending field. So the correct lock state transition is:
+>
+>           *,*,0 -> *,*,1
+>
+> 2. The initial lock state when calling clear_pending_set_locked() is
+>     the state just after waiting for the locker goes away. So the
+>     state transition for clear_pending_set_locked() is:
+>
+>           *,1,0 -> *,0,1
+>
+> Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+> ---
+>   v1->v2:
+>   - Drop the state transition comments fixes (viewed from the current lock word value).
+>   - Update the commit message accordingly.
+>
+>   kernel/locking/qspinlock.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+> index ebe6b8ec7cb3..256021c87ac1 100644
+> --- a/kernel/locking/qspinlock.c
+> +++ b/kernel/locking/qspinlock.c
+> @@ -257,7 +257,7 @@ static __always_inline u32 queued_fetch_set_pending_acquire(struct qspinlock *lo
+>    * set_locked - Set the lock bit and own the lock
+>    * @lock: Pointer to queued spinlock structure
+>    *
+> - * *,*,0 -> *,0,1
+> + * *,*,0 -> *,*,1
+>    */
+>   static __always_inline void set_locked(struct qspinlock *lock)
+>   {
+> @@ -385,7 +385,7 @@ void __lockfunc queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+>   	/*
+>   	 * take ownership and clear the pending bit.
+>   	 *
+> -	 * 0,1,0 -> 0,0,1
+> +	 * *,1,0 -> *,0,1
+>   	 */
+>   	clear_pending_set_locked(lock);
+>   	lockevent_inc(lock_pending);
+Acked-by: Waiman Long <longman@redhat.com>
 
-> On Tue,  2 May 2023 11:17:36 +0900
-> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-> 
-> > diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
-> > new file mode 100644
-> > index 000000000000..0049d9ef2402
-> > --- /dev/null
-> > +++ b/kernel/trace/trace_fprobe.c
-> > @@ -0,0 +1,1053 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Fprobe-based tracing events
-> > + * Copyright (C) 2022 Google LLC.
-> > + */
-> > +#define pr_fmt(fmt)	"trace_fprobe: " fmt
-> > +
-> > +#include <linux/fprobe.h>
-> > +#include <linux/module.h>
-> > +#include <linux/rculist.h>
-> > +#include <linux/security.h>
-> > +#include <linux/uaccess.h>
-> > +
-> > +#include "trace_dynevent.h"
-> > +#include "trace_probe.h"
-> > +#include "trace_probe_kernel.h"
-> > +#include "trace_probe_tmpl.h"
-> > +
-> > +#define FPROBE_EVENT_SYSTEM "fprobes"
-> > +#define RETHOOK_MAXACTIVE_MAX 4096
-> > +
-> > +static int trace_fprobe_create(const char *raw_command);
-> > +static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev);
-> > +static int trace_fprobe_release(struct dyn_event *ev);
-> > +static bool trace_fprobe_is_busy(struct dyn_event *ev);
-> > +static bool trace_fprobe_match(const char *system, const char *event,
-> > +			int argc, const char **argv, struct dyn_event *ev);
-> > +
-> > +static struct dyn_event_operations trace_fprobe_ops = {
-> > +	.create = trace_fprobe_create,
-> > +	.show = trace_fprobe_show,
-> > +	.is_busy = trace_fprobe_is_busy,
-> > +	.free = trace_fprobe_release,
-> > +	.match = trace_fprobe_match,
-> > +};
-> > +
-> > +/*
-> > + * Fprobe event core functions
-> > + */
-> > +struct trace_fprobe {
-> > +	struct dyn_event	devent;
-> > +	struct fprobe		fp;
-> > +	const char		*symbol;
-> > +	struct trace_probe	tp;
-> > +};
-> > +
-> > +static bool is_trace_fprobe(struct dyn_event *ev)
-> > +{
-> > +	return ev->ops == &trace_fprobe_ops;
-> > +}
-> > +
-> > +static struct trace_fprobe *to_trace_fprobe(struct dyn_event *ev)
-> > +{
-> > +	return container_of(ev, struct trace_fprobe, devent);
-> > +}
-> > +
-> > +/**
-> > + * for_each_trace_fprobe - iterate over the trace_fprobe list
-> > + * @pos:	the struct trace_fprobe * for each entry
-> > + * @dpos:	the struct dyn_event * to use as a loop cursor
-> > + */
-> > +#define for_each_trace_fprobe(pos, dpos)	\
-> > +	for_each_dyn_event(dpos)		\
-> > +		if (is_trace_fprobe(dpos) && (pos = to_trace_fprobe(dpos)))
-> > +
-> > +static bool trace_fprobe_is_return(struct trace_fprobe *tf)
-> > +{
-> > +	return tf->fp.exit_handler != NULL;
-> > +}
-> > +
-> > +static const char *trace_fprobe_symbol(struct trace_fprobe *tf)
-> > +{
-> > +	return tf->symbol ? tf->symbol : "unknown";
-> > +}
-> > +
-> > +static bool trace_fprobe_is_busy(struct dyn_event *ev)
-> > +{
-> > +	struct trace_fprobe *tf = to_trace_fprobe(ev);
-> > +
-> > +	return trace_probe_is_enabled(&tf->tp);
-> > +}
-> > +
-> > +static bool trace_fprobe_match_command_head(struct trace_fprobe *tf,
-> > +					    int argc, const char **argv)
-> > +{
-> > +	char buf[MAX_ARGSTR_LEN + 1];
-> > +
-> > +	if (!argc)
-> > +		return true;
-> > +
-> > +	snprintf(buf, sizeof(buf), "%s", trace_fprobe_symbol(tf));
-> > +	if (strcmp(buf, argv[0]))
-> > +		return false;
-> > +	argc--; argv++;
-> > +
-> > +	return trace_probe_match_command_args(&tf->tp, argc, argv);
-> > +}
-> > +
-> > +static bool trace_fprobe_match(const char *system, const char *event,
-> > +			int argc, const char **argv, struct dyn_event *ev)
-> > +{
-> > +	struct trace_fprobe *tf = to_trace_fprobe(ev);
-> > +
-> > +	return (event[0] == '\0' ||
-> > +		strcmp(trace_probe_name(&tf->tp), event) == 0) &&
-> > +	    (!system || strcmp(trace_probe_group_name(&tf->tp), system) == 0) &&
-> > +	    trace_fprobe_match_command_head(tf, argc, argv);
-> 
-> The above is really hard to read, and Linus hates these kinds of
-> statements. Please break it up (the compiler should do the right thing).
-> 
-> Reversing the tests to return false:
-> 
-> 	if (event[0] != '\0' &&
-> 	    strcmp(trace_probe_name(&tf->tp), event) != 0))
-> 		return false;
-> 
-> 	if (system && strcmp(trace_probe_group_name(&tf->tp), system) != 0))
-> 		return false;
-> 
-> 	return trace_fprobe_match_command_head(tf, argc, argv);
-> 
-
-OK, I'll clean it up.
-
-> 
-> > +}
-> > +
-> > +static bool trace_fprobe_is_registered(struct trace_fprobe *tf)
-> > +{
-> > +	return fprobe_is_registered(&tf->fp);
-> > +}
-> > +
-> > +/* Note that we don't verify it, since the code does not come from user space */
-> 
-> Verify what?
-> 
-> Hmm, I see this is a copy of the comment from both trace_kprobe.c and
-> trace_uprobe.c. I think this requires a bit more explanation (and also in
-> those locations as well).
-
-Yeah, sorry about this comment. I meant that this fetch process (will run
-on probe handlers) did not verify the fetch_insn code because it should be
-generated by parser.
-
-/*
- * Note that we don't verify the fetch_insn code, since it does not come
- * from user space.
- */
-
-> 
-> > +static int
-> > +process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
-> > +		   void *base)
-> > +{
-> > +	struct pt_regs *regs = rec;
-> > +	unsigned long val;
-> > +
-> > +retry:
-> > +	/* 1st stage: get value from context */
-> > +	switch (code->op) {
-> > +	case FETCH_OP_REG:
-> > +		val = regs_get_register(regs, code->param);
-> > +		break;
-> > +	case FETCH_OP_STACK:
-> > +		val = regs_get_kernel_stack_nth(regs, code->param);
-> > +		break;
-> > +	case FETCH_OP_STACKP:
-> > +		val = kernel_stack_pointer(regs);
-> > +		break;
-> > +	case FETCH_OP_RETVAL:
-> > +		val = regs_return_value(regs);
-> > +		break;
-> 
-> 
-> > +	case FETCH_OP_IMM:
-> > +		val = code->immediate;
-> > +		break;
-> > +	case FETCH_OP_COMM:
-> > +		val = (unsigned long)current->comm;
-> > +		break;
-> > +	case FETCH_OP_DATA:
-> > +		val = (unsigned long)code->data;
-> > +		break;
-> 
-> These are new and not part of trace_kprobe.c. Should we have a version that
-> the two could share?
-
-Oh, I remember that I missed one series which did that.
-
-https://lore.kernel.org/lkml/20230103223202.7963bfb62b4ae5827e51ee30@kernel.org/T/
-
-Let's pick it.
-
-> 
-> Probably a helper function that can be called by these two.
-> 
-> > +#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
-> > +	case FETCH_OP_ARG:
-> > +		val = regs_get_kernel_argument(regs, code->param);
-> > +		break;
-> > +#endif
-> > +	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
-> > +		code++;
-> > +		goto retry;
-> > +	default:
-> > +		return -EILSEQ;
-> > +	}
-> > +	code++;
-> > +
-> > +	return process_fetch_insn_bottom(code, val, dest, base);
-> > +}
-> > +NOKPROBE_SYMBOL(process_fetch_insn)
-> > +
-> > +/* function entry handler */
-> > +static nokprobe_inline void
-> > +__fentry_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> > +		    struct pt_regs *regs,
-> > +		    struct trace_event_file *trace_file)
-> > +{
-> > +	struct fentry_trace_entry_head *entry;
-> > +	struct trace_event_call *call = trace_probe_event_call(&tf->tp);
-> > +	struct trace_event_buffer fbuffer;
-> > +	int dsize;
-> > +
-> > +	WARN_ON(call != trace_file->event_call);
-> 
->  WARN_ON_ONCE()?
-> 
-> And if you are doing the check, perhaps even:
-> 
-> 	if (WARN_ON_ONCE(call != trace_file->event_call))
-> 		return;
-
-OK.
-
-Thank you!
-
-> 
-> -- Steve
-> 
-> > +
-> > +	if (trace_trigger_soft_disabled(trace_file))
-> > +		return;
-> > +
-> > +	dsize = __get_data_size(&tf->tp, regs);
-> > +
-> > +	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
-> > +					   sizeof(*entry) + tf->tp.size + dsize);
-> > +	if (!entry)
-> > +		return;
-> > +
-> > +	fbuffer.regs = regs;
-> > +	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
-> > +	entry->ip = entry_ip;
-> > +	store_trace_args(&entry[1], &tf->tp, regs, sizeof(*entry), dsize);
-> > +
-> > +	trace_event_buffer_commit(&fbuffer);
-> > +}
-> > +
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
