@@ -2,193 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8AB6FCCA6
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 19:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE19C6FCCA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 19:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbjEIRXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 13:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S234934AbjEIRYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 13:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEIRXV (ORCPT
+        with ESMTP id S234919AbjEIRYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 13:23:21 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010424EC5;
-        Tue,  9 May 2023 10:22:57 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6439b410679so3867917b3a.0;
-        Tue, 09 May 2023 10:22:57 -0700 (PDT)
+        Tue, 9 May 2023 13:24:40 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8240930F3
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 10:24:35 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4eff50911bfso6813148e87.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 10:24:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683652977; x=1686244977;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=h8H4gLY9QD6JR3rBgoCS4vvXjxVaagMATkBih9kNdRg=;
-        b=EMBC+q+FGd7Q3uU5/5oV3B6UZEISuagmTJ9Cx076RXqV8Ik2Zb9HknVj5oCHgmH3Ug
-         RFVHxwYh58xvNHtou7+BfSvFF5zxGKfwDARu9iF/4Cd5yr2prKfvY9M0/QdmyCqtYotM
-         3+6sXXNvM90RXZ+b2227fnKcHESoJ6NGaKMkEPROokGe8Gx3YIrBCsKUWgBAptXVqE9G
-         fC6DUtFjBKNBe7Y1UhZj1+NrmwGoSE0D25r0zsLKAzktvG/P3xNq9gPJiiaQYP/cNKgK
-         sv+wVvIzvrBU/0O1jFgrffWR38BDiAR+J1MTKRd5QtP73pVqtfJNT8L+Z42izNjuwM0y
-         rpdQ==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1683653074; x=1686245074;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KijSDDtr4Rt22dcRS8vqEW+f0ADU373p/rgXdIi8mN8=;
+        b=oANRBLfG4slWbvN06gbXaSs+bG+dC/JrCD+T1ZYmrYEIhCJVH5eZTxcfi+4v70joJ3
+         vs99RlmBGYV2tSB5czl04bPsJAjNlHR65WlIApWKY7sp07ad1j91IA4yifWUj7li17Ev
+         PChbV3tuKGhx0SWW+MeZZ/mk7eMfHezw/1KOrElcG4af7QSLhmwA24imVYfu+G9jJz3g
+         9KAEkW8eYZ8FIj5X9mDZu9d9WR7TjccylasEID9YFz9eMY95Y+zCmYk3l+Eey4EETvi4
+         EBTRwCklUE//bSYIlqtbcuk6aMX5j8x35v6INdvfEElNRNYVP3ZU1PTNqNcVvfXQMMGz
+         matA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683652977; x=1686244977;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h8H4gLY9QD6JR3rBgoCS4vvXjxVaagMATkBih9kNdRg=;
-        b=TDCUFbpCW1QN87GPX8dTRRUeHn/oVzc1WVXXXhBQ2efgirhwXGnUH8FE1VZtDa9Xq+
-         CbywlCIGHq4OW0e9M/SulUDJn2Ru9f4QM3PXF0bAnHiR6S8AkPbrRoYJMh+rW+dVmGSY
-         eSZvu/bB99IlbrmRYc2csGzLq74EKfwp1a5+Y0gpgWbNWR/cB5+zGBZfDAEh6T8U5+TG
-         bXx3vIrraRhPPtMfceAcm2Wwd7n7j1Sg3I8oskTCUXByv2UR6G+LPUeVDKgJm+a1XdUm
-         GNQbGMYufziZ0s2Psd1Wbjy+vKWjC4hJBM54uyE82XHkk6i3nN6r9bjh4uL/YIFJzsQW
-         b4yA==
-X-Gm-Message-State: AC+VfDySgEyrFMgSz+f9GnTs0KSdvrUWY3ZNllYPscEL5TgWH09bwANV
-        6gjwFCKmcY9XKxX2sAYh72I=
-X-Google-Smtp-Source: ACHHUZ7n2ye/CuTjs4se99yvH8Xq0S3axmyWPzeGYkUleujVONQhA3IefUZmticF0BdwwXUn6OV+xw==
-X-Received: by 2002:a05:6a21:920d:b0:eb:69b3:116c with SMTP id tl13-20020a056a21920d00b000eb69b3116cmr17192888pzb.52.1683652977404;
-        Tue, 09 May 2023 10:22:57 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id e5-20020aa78c45000000b00639fc7124c2sm2072001pfd.148.2023.05.09.10.22.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 10:22:57 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>, pinkperfect2021@gmail.com,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3] drm/msm: Fix submit error-path leaks
-Date:   Tue,  9 May 2023 10:22:53 -0700
-Message-Id: <20230509172253.383964-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        d=1e100.net; s=20221208; t=1683653074; x=1686245074;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KijSDDtr4Rt22dcRS8vqEW+f0ADU373p/rgXdIi8mN8=;
+        b=YhVHs8rjbCeKC/wJaGdL5MHUQPdhjcvjqxaAepwIBobxO9VTTt9QSv+d2qMruvq91G
+         Llq6QqjF5c9DsRLqpm/1fH6lxwM/WdmS/wWMXuJgzHoPn1nNywHbrJIwuSLhd1zD9O3q
+         UDrKl+9CrwQ3WaE5dP7Qu/Ht9NxcYyf9vUky1CZuAtY/sAcS6qZWveAu5l0yvhqPgILw
+         y7PrFFGD8W94lf6Raz0twArVqVDEk/3/uAlcTw9pNHxp7vxJ7G60mq2fNxI709J6nXO1
+         ELFNJ1I5u985ZyVF8JuhJs4dxuoIzZIhancGGL4FzM0tYOnPEbEN6IUFtIBMWga7Kp9p
+         QzdA==
+X-Gm-Message-State: AC+VfDw4T5i/GoAtqJ3Dp22EknQVLJrXgGMdeNBX59B02S6S60OtQbrV
+        Lk4OLUvZj3/0bdMgfyO1H5/pw5wxpfpjE8D4+PCl/ce5HKt6Y4by
+X-Google-Smtp-Source: ACHHUZ5goDi9spAV+VnvFQcUsJdDpeKQoLmuh1K1IhnRnNXbQC8fPc2AxH/LXD+LwOZZUrtwuooBVHIk73NWlIZeypQ=
+X-Received: by 2002:ac2:5293:0:b0:4eb:42b7:8c18 with SMTP id
+ q19-20020ac25293000000b004eb42b78c18mr1021784lfm.53.1683653073672; Tue, 09
+ May 2023 10:24:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <mhng-4b9e3d86-2f0b-47da-8a5d-bd383a0171d6@palmer-ri-x1c9>
+ <4830085.8hb0ThOEGa@diego> <CALs-HsveK-uUuSAOkUUPuUYK6_ChG95_YWtdwYvGsTfKYSWUpg@mail.gmail.com>
+ <CAAeLtUDgWwT0wxhFANagBX4ExA_HkyqM-ZdPn==+_atGV3vTww@mail.gmail.com>
+In-Reply-To: <CAAeLtUDgWwT0wxhFANagBX4ExA_HkyqM-ZdPn==+_atGV3vTww@mail.gmail.com>
+From:   Evan Green <evan@rivosinc.com>
+Date:   Tue, 9 May 2023 10:23:57 -0700
+Message-ID: <CALs-HsvvUsqW6zib2oqfnJ-ddND6dK3ow_O5LG46Rc61iGVMmA@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Expose the isa-string via the AT_BASE_PLATFORM aux vector
+To:     Philipp Tomsich <philipp.tomsich@vrull.eu>
+Cc:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>, bjorn@kernel.org,
+        jrtc27@jrtc27.com, linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        kito.cheng@sifive.com, Conor Dooley <conor.dooley@microchip.com>,
+        matthias.bgg@gmail.com, heinrich.schuchardt@canonical.com,
+        greentime.hu@sifive.com, nick.knight@sifive.com,
+        christoph.muellner@vrull.eu,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Mon, May 8, 2023 at 10:33=E2=80=AFAM Philipp Tomsich
+<philipp.tomsich@vrull.eu> wrote:
+>
+> Evan,
+>
+> On Mon, 8 May 2023 at 18:50, Evan Green <evan@rivosinc.com> wrote:
+>>
+>> On Wed, May 3, 2023 at 3:31=E2=80=AFAM Heiko St=C3=BCbner <heiko@sntech.=
+de> wrote:
+>> >
+>> > Hi,
+>> >
+>> > Am Dienstag, 2. Mai 2023, 19:15:29 CEST schrieb Palmer Dabbelt:
+>> > > On Tue, 02 May 2023 02:13:10 PDT (-0700), philipp.tomsich@vrull.eu w=
+rote:
+>> > > > On Tue, 2 May 2023 at 09:58, Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.o=
+rg> wrote:
+>> > > >>
+>> > > >> Philipp Tomsich <philipp.tomsich@vrull.eu> writes:
+>> > > >>
+>> > > >> > It is a pity that the current interface was designed without in=
+volving
+>> > > >> > RVI (and that I had to ask my team to put together a patch set =
+for
+>> > > >> > further discussion, given that none of the other major vendors =
+in RVI
+>> > > >> > stepped forward).  I guarantee that plenty of reviewers would h=
+ave
+>> > > >> > highlighted that a central registry (even if it is just a kerne=
+l
+>> > > >> > header) should be avoided.
+>> > > >>
+>> > > >> Are you claiming that the hwprobe work was not done in the open, =
+but
+>> > > >> secretly merged? That is not only incorrect, but rude to upstream=
+ RISC-V
+>> > > >> Linux developers. I suggest you review how you interact with upst=
+ream
+>> > > >> kernel work.
+>> > > >
+>> > > > Please don't put words into my mouth...
+>> > > >
+>> > > > I was merely pointing out that there was no engagement by the RVI
+>> > > > member companies (in regard to this mechanism) within RVI, which w=
+ould
+>> > > > have prevented Jessica's issue.
+>> > > > This would have also helped to address the concerns on vendor-defi=
+ned
+>> > > > extensions.
+>> > > >
+>> > > > Also who do you refer to when you say "how _you_ interact"?  If it=
+ is
+>> > > > RVI that you refer to: it doesn't interact with upstream work
+>> > > > directly, as it doesn't own any engineering resources.
+>> > > > RVI provides a forum for member companies to come to an
+>> > > > understanding/design and then have the member companies perform th=
+e
+>> > > > work and take it upstream.
+>> > >
+>> > > I'm not even sure what you're looking for here: if RVI doesn't want =
+to
+>> > > work upstream, then complaining that RVI isn't part of upstream
+>> > > discussions is pretty pointless.
+>> > >
+>> > > >> Why didn't RVI get involved in the review of the series? The expe=
+ctation
+>> > > >> cannot be that all open source projects go to RVI, but rather the=
+ other
+>> > > >> way around.
+>> > > >
+>> > > > That is exactly the point I was making and which you seem to miss:=
+ RVI
+>> > > > does not own any engineering resources and depends solely on its
+>> > > > member companies to project into open source projects.
+>> > > >
+>> > > >> Take a look at commit ea3de9ce8aa2 ("RISC-V: Add a syscall for HW
+>> > > >> probing"). Your team was very much involved in the review.
+>> > > >
+>> > > > I am aware, as I had reviewed and commented on these are well.
+>> > > > And my only request (was and) is that we need to figure out a way =
+to
+>> > > > efficiently deal with vendor-defined extensions.
+>> > >
+>> > > Maybe you should go talk to you team, then?  Handling vendor extensi=
+ons
+>> > > via hwprobe has been discussed, sounds like you're confused again.
+>> >
+>> > I too have this vague memory of us talking about vendor extensions,
+>> > but my memory is really bad for stuff like this, so I spent the mornin=
+g
+>> > combing through all the hwprobe iterations looking for it, but so far
+>> > have only found
+>> >
+>> > https://lore.kernel.org/lkml/CALs-HstoeoTWjTEZrLWouCgwq0t3tDB6uL=3DtB6=
+8RJDs1ub4Frw@mail.gmail.com/
+>> >
+>> > I'm most likely just blind, but does someone have another pointer?
+>>
+>> Hello! That's probably the only pointer.
+>
+>
+> Thanks for following up, as we were debating internally if and what discu=
+ssions we had missed.
+>
+>>
+>> Couldn't handling vendor extensions within the hwprobe framework be as
+>> straightforward as explicitly carving out a region for them? Say
+>> 0x8000000000000000+ belongs to the vendor? The layout of keys within
+>> the vendor hwprobe region then depends on the value in mvendorid (and
+>> if the vendor so chooses, archid and impid as well). Then vendors can
+>> expose keys to their hearts (avoiding the dumb pun there) content.
+>>
+>> We can probably skip caching the vendor keys in the vDSO for now. If
+>> it really needs to be done we can add it later.
+>>
+>> This would enforce that there's only one "vendor" at a time for a
+>> given hart, but I think that's reasonable. Let me know what you think.
+>
+>
+> We generally try to treat vendor-extensions as "vendor-defined" and not "=
+vendor-specific".  In other words, an implementor would be free to implemen=
+t XVentanaCondOp and XTHeadVDot.  While we could simply alias things into t=
+he implementor's "vendor"-space, I see some benefits to having a unique id =
+for every vendor-defined property=E2=80=A6
+>
+> Could we use ( 0x8000000000000000 | vendor-id << VENDOR_SHIFT | key-in-ve=
+ndor-space )?
+> If so, do we have vendor-ids allocated today that we could use for this p=
+urpose?
 
-For errors after msm_submitqueue_get(), we need to drop the submitqueue
-reference.  Additionally after get_unused_fd() we need to drop the fd.
-The ordering for dropping the queue lock and put_unused_fd() is not
-important, so just move this all into out_post_unlock.
+I can sort of see why you'd make that choice architecturally, and the
+translation of that idea to this implementation is reasonable. But I
+think there are too many dragons there for not enough benefit. Some
+thoughts below:
 
-v2: Only drop queue ref if submit doesn't take it
-v3: Fix unitialized submit ref in error path
+ * I'm a little skeptical of the idea that vendors will actually
+implement each other's extensions. Have there been a lot of instances
+of this so far we can point to? However, even if they did, I think the
+chances that they'll do it identically, such that software can simply
+look at the feature bit without also considering the vendor, are
+virtually nil. So doing all of these acrobatics to allow usermode to
+query a single bit are pointless if the implementations come out
+different (or even might come out different) and a (correctly)
+defensive usermode filters it by mvendorid anyway.
 
-Reported-by: pinkperfect2021@gmail.com
-Fixes: f0de40a131d9 drm/msm: ("Reorder lock vs submit alloc")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/msm_gem_submit.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
+ * Outside of parsing the ISA string, there's no sane implementation
+for a vendor to populate/probe their vendor-specific feature set on
+another vendor's hardware. So all the implementations are going to
+start with if (mvendorid !=3D mine) return -1, which again makes
+exposing all vendors keys on all chips a bit silly.
 
-diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
-index 6c6aefaa72be..c994d4a13580 100644
---- a/drivers/gpu/drm/msm/msm_gem_submit.c
-+++ b/drivers/gpu/drm/msm/msm_gem_submit.c
-@@ -720,21 +720,21 @@ static void msm_process_post_deps(struct msm_submit_post_dep *post_deps,
- 		}
- 	}
- }
- 
- int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 		struct drm_file *file)
- {
- 	struct msm_drm_private *priv = dev->dev_private;
- 	struct drm_msm_gem_submit *args = data;
- 	struct msm_file_private *ctx = file->driver_priv;
--	struct msm_gem_submit *submit;
-+	struct msm_gem_submit *submit = NULL;
- 	struct msm_gpu *gpu = priv->gpu;
- 	struct msm_gpu_submitqueue *queue;
- 	struct msm_ringbuffer *ring;
- 	struct msm_submit_post_dep *post_deps = NULL;
- 	struct drm_syncobj **syncobjs_to_reset = NULL;
- 	int out_fence_fd = -1;
- 	bool has_ww_ticket = false;
- 	unsigned i;
- 	int ret;
- 
-@@ -767,27 +767,29 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 	queue = msm_submitqueue_get(ctx, args->queueid);
- 	if (!queue)
- 		return -ENOENT;
- 
- 	ring = gpu->rb[queue->ring_nr];
- 
- 	if (args->flags & MSM_SUBMIT_FENCE_FD_OUT) {
- 		out_fence_fd = get_unused_fd_flags(O_CLOEXEC);
- 		if (out_fence_fd < 0) {
- 			ret = out_fence_fd;
--			return ret;
-+			goto out_post_unlock;
- 		}
- 	}
- 
- 	submit = submit_create(dev, gpu, queue, args->nr_bos, args->nr_cmds);
--	if (IS_ERR(submit))
--		return PTR_ERR(submit);
-+	if (IS_ERR(submit)) {
-+		ret = PTR_ERR(submit);
-+		goto out_post_unlock;
-+	}
- 
- 	trace_msm_gpu_submit(pid_nr(submit->pid), ring->id, submit->ident,
- 		args->nr_bos, args->nr_cmds);
- 
- 	ret = mutex_lock_interruptible(&queue->lock);
- 	if (ret)
- 		goto out_post_unlock;
- 
- 	if (args->flags & MSM_SUBMIT_SUDO)
- 		submit->in_rb = true;
-@@ -962,25 +964,33 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 	msm_reset_syncobjs(syncobjs_to_reset, args->nr_in_syncobjs);
- 	msm_process_post_deps(post_deps, args->nr_out_syncobjs,
- 	                      submit->user_fence);
- 
- 
- out:
- 	submit_cleanup(submit, !!ret);
- 	if (has_ww_ticket)
- 		ww_acquire_fini(&submit->ticket);
- out_unlock:
--	if (ret && (out_fence_fd >= 0))
--		put_unused_fd(out_fence_fd);
- 	mutex_unlock(&queue->lock);
- out_post_unlock:
--	msm_gem_submit_put(submit);
-+	if (ret && (out_fence_fd >= 0))
-+		put_unused_fd(out_fence_fd);
-+	if (submit) {
-+		msm_gem_submit_put(submit);
-+	} else {
-+		/*
-+		 * If the submit hasn't yet taken ownership of the queue
-+		 * then we need to drop the reference ourself:
-+		 */
-+		msm_submitqueue_put(queue);
-+	}
- 	if (!IS_ERR_OR_NULL(post_deps)) {
- 		for (i = 0; i < args->nr_out_syncobjs; ++i) {
- 			kfree(post_deps[i].chain);
- 			drm_syncobj_put(post_deps[i].syncobj);
- 		}
- 		kfree(post_deps);
- 	}
- 
- 	if (!IS_ERR_OR_NULL(syncobjs_to_reset)) {
- 		for (i = 0; i < args->nr_in_syncobjs; ++i) {
--- 
-2.40.1
+ * If we did have that rare vendor extension that the vendors all
+loved and implemented perfectly faithfully, it would be easy enough to
+lower it into the general hwprobe keyspace. I think this will be rare
+enough that we won't be tripping over our own merge conflicts.
 
+ * As others have documented, there are real downsides to slicing up
+the keyspace this finely: we'd be imposing lower ceilings on the
+number of vendors and the number of keys per vendor, and we now have
+to become the arbiter of a vendor ID to enum mapping. And since this
+is ABI, once that keyspace is allocated to some vendor, it's gone
+forever.
+
+One thing we could do if we're really concerned we're making the wrong
+choice is to make a smaller slice for the (single) vendor space, like
+size 0x1000000. Giving away smaller keyspace acreage now for vendor
+extensions gives us the flexibility to either expand it later if it's
+working-but-too-small (since everything up there is currently
+reserved), or abandon that chunk of keys and do the other thing with
+the remaining reserved area.
+
+-Evan
+
+>
+> Thanks,
+> Philipp.
+>
+>>
+>>
+>> -Evan
