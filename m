@@ -2,102 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED946FBD4B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 04:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AC46FBD55
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 04:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbjEICct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 22:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
+        id S233530AbjEICfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 22:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbjEICcq (ORCPT
+        with ESMTP id S231863AbjEICfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 22:32:46 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B1F10CF
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 19:32:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=YNI/F7qyrCLspgi+tP41OwTJ6KrpGQKLIcl5Qot8Wck=; b=kzTcjm5Vrf0x9vkMuJZ+8Ex8Uz
-        SyVNyRD2pyGfET+Ko5vi28OkVY2+X4TjCoV4eDEFPaVMP/OT31Nhy92iumqjmI+UGoiPw/35A3yYb
-        voLqFJujXkp0OT+ZvpZjIP+Nu45ntbN8uyKowE/2z4j6E6kOSvbtZBk1uHYLb6pYw5EsOv+ElsklM
-        6ACUdDnEtyqA0BEVIlWNSxYDKpnN1rHbvDhcoQQSi8N4sLIFpkIR2sgCxWAKkwnY/JWvQJqyPeI+9
-        YXUkZ+fHMTJbWNW/EL5+EKe3zNQ8QIjwrRxgyki96y1gEuhEDNVozrJKcq6Ar0M9Hn+jiOw7QMX6n
-        gUtafUBQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pwD9Y-0027kk-2S;
-        Tue, 09 May 2023 02:32:36 +0000
-Message-ID: <628d3801-0a9e-c25b-c509-6db98a8afc14@infradead.org>
-Date:   Mon, 8 May 2023 19:32:34 -0700
+        Mon, 8 May 2023 22:35:14 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56FDE69
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 19:35:12 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-77d5083569fso1640652241.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 19:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683599712; x=1686191712;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yritB4z6Kqy8r2lo349eyuC/ueDu/IfImR1iz6M8Adk=;
+        b=Za9xxhlzJALA12W2xTNNfS4Ws39Ff0F9agUXnb9JqmK21argGiU7ikCEmspRw6uCMk
+         G3WnuKbcXJ7bFZQhwA4XO/xzU5NaARhaioTva2PrYd9qurMKJTNq67MHmpphBo8MUBK/
+         LPrp9SUp5c0svKgp0GpsyBba/ARFEZkjRsjX4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683599712; x=1686191712;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yritB4z6Kqy8r2lo349eyuC/ueDu/IfImR1iz6M8Adk=;
+        b=kWBBZjvKQTE4u2G0hJ9au+X6inmkvGjNLCI11VdlahNpnDaMis+Dq7ozsOMDz8UEWG
+         2l3DUQGopztS/JOz7fOLj8NwIJsKzGhqxuvVJujPFtZSjOthTwL8oOjsx8T8kmJZTn4u
+         jLiuWJtmCKSPWo1sK2BPVWrsyqgxTgySS9lOegteMbSQv3eu16rfYDwnAgOwt8STTdqY
+         imHTtQdFh0lCyHumzXDcmc9dSZZI2y7A8YmpuEzWQOEUGbQMXkfSmKdMwmTCsrWCMMVb
+         ZeypeZ1xC66Y+UrghkUib6BrpF+YGm/vH0FW2HY1gxfUf+5lpjBgy3VHqA6W1ajuyNxr
+         A06g==
+X-Gm-Message-State: AC+VfDzGeZ9mQumFQwDQdSsSXBkSZ2/BqJnmwYHE3CZ1wW3BzqbpgATW
+        CYi/ywgMt68dj3/7tiLX8HuCts/nX7l51TtFXR1FQtZg4nW1sREI
+X-Google-Smtp-Source: ACHHUZ43QicLmkfhH+oYvAXYrxdNOv42T+rZkBbCVZnxjLF94cGhsyXNXvAbH/yolD5ycizlZzmGm5mX2sje4ri8X/Y=
+X-Received: by 2002:a67:ce13:0:b0:42c:7df3:ca0a with SMTP id
+ s19-20020a67ce13000000b0042c7df3ca0amr4149891vsl.17.1683599711858; Mon, 08
+ May 2023 19:35:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH V2] locking: Fix a typo of comment
-Content-Language: en-US
-To:     Wang Honghui <honghui.wang@ucas.com.cn>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-References: <BE152DE8EF273104+ZFmu4JjPKLhla6Y9@TP-P15V>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <BE152DE8EF273104+ZFmu4JjPKLhla6Y9@TP-P15V>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <9b2e791d-aeba-a2c7-1877-797ff5c680a3@kernel.dk>
+ <20230508031852.GA4029098@google.com> <fb84f054-517c-77d4-eb11-d3df61f53701@kernel.dk>
+In-Reply-To: <fb84f054-517c-77d4-eb11-d3df61f53701@kernel.dk>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 9 May 2023 10:35:00 +0800
+Message-ID: <CAGXv+5GpeJ8hWt2Sc6L+4GB-ghA4vESobEaFGpo1_ZyPhOvW0g@mail.gmail.com>
+Subject: Re: [GIT PULL] Final io_uring updates for 6.4-rc1
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        io-uring <io-uring@vger.kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 9, 2023 at 2:42=E2=80=AFAM Jens Axboe <axboe@kernel.dk> wrote:
+>
+> On 5/7/23 9:18?PM, Chen-Yu Tsai wrote:
+> > Hi,
+> >
+> > On Sun, May 07, 2023 at 06:00:48AM -0600, Jens Axboe wrote:
+> >> Hi Linus,
+> >>
+> >> Nothing major in here, just two different parts:
+> >>
+> >> - Small series from Breno that enables passing the full SQE down
+> >>   for ->uring_cmd(). This is a prerequisite for enabling full network
+> >>   socket operations. Queued up a bit late because of some stylistic
+> >>   concerns that got resolved, would be nice to have this in 6.4-rc1
+> >>   so the dependent work will be easier to handle for 6.5.
+> >>
+> >> - Fix for the huge page coalescing, which was a regression introduced
+> >>   in the 6.3 kernel release (Tobias).
+> >>
+> >> Note that this will throw a merge conflict in the ublk_drv code, due
+> >> to this branch still being based off the original for-6.4/io_uring
+> >> branch. Resolution is pretty straight forward, I'm including it below
+> >> for reference.
+> >>
+> >> Please pull!
+> >>
+> >>
+> >> The following changes since commit 3c85cc43c8e7855d202da184baf00c7b8ee=
+acf71:
+> >>
+> >>   Revert "io_uring/rsrc: disallow multi-source reg buffers" (2023-04-2=
+0 06:51:48 -0600)
+> >>
+> >> are available in the Git repository at:
+> >>
+> >>   git://git.kernel.dk/linux.git tags/for-6.4/io_uring-2023-05-07
+> >>
+> >> for you to fetch changes up to d2b7fa6174bc4260e496cbf84375c7363691464=
+1:
+> >>
+> >>   io_uring: Remove unnecessary BUILD_BUG_ON (2023-05-04 08:19:05 -0600=
+)
+> >>
+> >> ----------------------------------------------------------------
+> >> for-6.4/io_uring-2023-05-07
+> >>
+> >> ----------------------------------------------------------------
+> >> Breno Leitao (3):
+> >>       io_uring: Create a helper to return the SQE size
+> >>       io_uring: Pass whole sqe to commands
+> >
+> > This commit causes broken builds when IO_URING=3Dn and NVME_CORE=3Dy, a=
+s
+> > io_uring_sqe_cmd(), called in drivers/nvme/host/ioctl.c, ends up being
+> > undefined. This was also reported [1] by 0-day bot on your branch
+> > yesterday, but it's worse now that Linus merged the pull request.
+> >
+> > Not sure what the better fix would be. Move io_uring_sqe_cmd() outside
+> > of the "#if defined(CONFIG_IO_URING)" block?
+>
+> Queued up a patch for this:
+>
+> https://git.kernel.dk/cgit/linux/commit/?h=3Dio_uring-6.4&id=3D5d371b2f2b=
+0d1a047582563ee36af8ffb5022847
 
+Thanks! Looks like the Reported-by line for the test bot is missing a right
+angle bracket?
 
-On 5/8/23 19:24, Wang Honghui wrote:
-> 
-> As title
-> 
-> Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
-> ---
->  kernel/locking/mutex.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-> index d973fe6041bf..fe7335fb63d4 100644
-> --- a/kernel/locking/mutex.c
-> +++ b/kernel/locking/mutex.c
-> @@ -362,7 +362,7 @@ bool mutex_spin_on_owner(struct mutex *lock, struct task_struct *owner,
->  		 * checking lock->owner still matches owner. And we already
->  		 * disabled preemption which is equal to the RCU read-side
->  		 * crital section in optimistic spinning code. Thus the
+Also, consider it
 
-		   critical
-
-> -		 * task_strcut structure won't go away during the spinning
-> +		 * task_struct structure won't go away during the spinning
->  		 * period
-
-		   period.
-
->  		 */
->  		barrier();
-> @@ -401,7 +401,7 @@ static inline int mutex_can_spin_on_owner(struct mutex *lock)
->  
->  	/*
->  	 * We already disabled preemption which is equal to the RCU read-side
-> -	 * crital section in optimistic spinning code. Thus the task_strcut
-> +	 * crital section in optimistic spinning code. Thus the task_struct
-
-	   critical
-
->  	 * structure won't go away during the spinning period.
->  	 */
->  	owner = __mutex_owner(lock);
-
--- 
-~Randy
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
