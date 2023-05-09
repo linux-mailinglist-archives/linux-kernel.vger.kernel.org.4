@@ -2,289 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0116FCDEC
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7BEB6FCDEF
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234534AbjEISjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 14:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
+        id S234814AbjEISjp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 9 May 2023 14:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjEISjM (ORCPT
+        with ESMTP id S229656AbjEISjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 14:39:12 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10B4359A;
-        Tue,  9 May 2023 11:39:09 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2ac8c0fbb16so54334241fa.2;
-        Tue, 09 May 2023 11:39:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683657548; x=1686249548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ulRyBkl/qWX93LIo8890ueLJxZUL9lpsbdMrYwZnp+E=;
-        b=Y2Net+zfTYVFtcUke75d91W3T6xLOdpuaAUaQZ67WAKWegHkiNPr9uZhkc3xuHlz/t
-         i3BK4+9rdhtSRyZaFUaX+NUIKSO9NMvBlApiNsQKwMHokwWU+VP7nWDr03rIC8N+EpE3
-         k/k1ult1IJ9MXFHBeLjdgUHq5Tu9N3xDU7PEEDRw7bNIH0uaOqZgbHZxZ/g0j59z9H9l
-         NdjQXfY4CVxPtaZEIxDNVmEQdMZYofQr9/X5Z+4Rk/FBN2TpYqdFgKTyZEFiH68rNP+Z
-         NqiwRnW0x5FPTsSbt3VX5kEmkqAtkkrfVva2bnB28vttbucuM2F8TQEEDcmeArC6bd1Q
-         u3zA==
+        Tue, 9 May 2023 14:39:43 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B13359D;
+        Tue,  9 May 2023 11:39:35 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-965aa9d1d19so173776366b.0;
+        Tue, 09 May 2023 11:39:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683657548; x=1686249548;
+        d=1e100.net; s=20221208; t=1683657574; x=1686249574;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ulRyBkl/qWX93LIo8890ueLJxZUL9lpsbdMrYwZnp+E=;
-        b=eKvQh7hXNDUZQapkP3Zp2bKe5P6gPIFbJt6LHliAaH6jpL3f2tHpv5tIIeILxjmdc+
-         wPMDpaXE6kMgqRyKkk6y2UQy4KMFt0CtIawAKEVcM0PNr5hZulKypyfhd34E3JRf+phd
-         FyRTg8QSIkis1w5+7oM/khalYYRxsYgAD1gzXUXWBat7ObsopcfcolwA57pNEcpmCBm+
-         706un4EdW2guiW7gcuDA9oO+GWG+jhNVyjwPw0ICTAH/lDeedH3Nkugd0yhKP7uOqB2I
-         2tRN1NKpM4gUShB7JDCHt32CyGpU1c+wmyzUwB+7eHH9M6qlTrQCfiPVQBv2qIdun1Ds
-         kkQA==
-X-Gm-Message-State: AC+VfDy/2oM24KN6i8YB/EVXt2nFzBQVdQ2h2VBnJbZa3Szocu7bWDtF
-        QgfVJQVZQMEY7b4zuEmIJNFzyES2gEGD9T+PMFlKZv+A
-X-Google-Smtp-Source: ACHHUZ6I0studWcnY/YTrwtK00kVrbv1Ofs3UKW8CmkSjfdlE0KLWKS/22wGEfQ9WGsYIHAiPLym7deL+EA25G/uukQ=
-X-Received: by 2002:a2e:a1c7:0:b0:2a8:c520:da1d with SMTP id
- c7-20020a2ea1c7000000b002a8c520da1dmr999128ljm.29.1683657547542; Tue, 09 May
- 2023 11:39:07 -0700 (PDT)
+        bh=Fk4TDLP8eBXdwBhXU6v4XzEa25SJ2T9VAd0f2AbruVE=;
+        b=HsKXg5j7xn2DroMQ8N8hGVgmdHNK6LCiW+giePIR740uT85/nWHknVePCX6fv7bBfA
+         EcOIRehJ+k2ipfZkexvMttUrWkrFwZK5DdnJ6npb+d963lH1vaxYED2+csO28NDE4krz
+         A1zEZeSOo68v+eFd0LaTt+EukaHM2ZyplbmrLqtJjGVthl2Zh8ZbrDXubBHBdTjyEDLq
+         hA3ugGvkzqqshvFDWUGYvwCMQVIIklwmLWAPsNfXOO652vOburzb/YAyqIO5gtNJUIZM
+         XKW3bab0561RYrKjfaLQ7ppNEKzIL+9h7OgPiD5IY1xSgNSdhlneJhofvW7SjHQeeIyf
+         NhxA==
+X-Gm-Message-State: AC+VfDzCXG/OAxciPSb1hXhgC6FB3wAh7b/MYMpDf1+nsWGZ5r2giT9B
+        uGlyWwdn8mrsAyl/0Hes0Au9CXMsp3BPxwpJUFw=
+X-Google-Smtp-Source: ACHHUZ5rax/xmMWs1z6JW/r//VY062uNlBtZrozPqNrkG3nHAgRy7pyaM4+uN/I9amqmlS4J3r9q8KvkMvqihsieEgs=
+X-Received: by 2002:a17:906:518a:b0:959:37cc:190e with SMTP id
+ y10-20020a170906518a00b0095937cc190emr11911985ejk.3.1683657573653; Tue, 09
+ May 2023 11:39:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230420165454.9517-1-jorge.lopez2@hp.com> <20230420165454.9517-6-jorge.lopez2@hp.com>
- <24fb56f9-49c6-432d-8c2f-17df7f7e37b2@t-8ch.de> <CAOOmCE-HR205R2vjyZedDocZLwvMdk7B1w7w9HgdXaypTrBK+A@mail.gmail.com>
- <34539db1-98a4-4696-934b-af04d74720cc@t-8ch.de> <CAOOmCE_9fmLKgum9hYxPpa_BrX0FyFFz_dRUX8sNm9T2EUABMg@mail.gmail.com>
- <daf6a6e0-69cd-48a6-b61b-c893324323ff@t-8ch.de> <CAOOmCE-FNUUh+tZLPdJW+y5m0JKufWXiJ8M-7WFEiveNi4rRAg@mail.gmail.com>
- <5662fa47-1156-459b-af86-31351d69cc3f@t-8ch.de>
-In-Reply-To: <5662fa47-1156-459b-af86-31351d69cc3f@t-8ch.de>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Tue, 9 May 2023 13:38:38 -0500
-Message-ID: <CAOOmCE_ZDCLEcFmtiS+VvCqas9331Q5v-1YyELrGaON1V8KaGA@mail.gmail.com>
-Subject: Re: [PATCH v11 05/14] HP BIOSCFG driver - ordered-attributes
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230509180503.739208-1-wyes.karny@amd.com> <20230509180503.739208-2-wyes.karny@amd.com>
+ <CAJZ5v0hN7AxkSf7=8-xP1Pb_7bA2Ba6nGUiK45q01uo_MFa1qQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hN7AxkSf7=8-xP1Pb_7bA2Ba6nGUiK45q01uo_MFa1qQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 9 May 2023 20:39:22 +0200
+Message-ID: <CAJZ5v0gb9TpH1qCqhqAb28c7uRRk8=iufTkzc5aCpC=OJm8QaQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] cpufreq/schedutil: Remove fast_switch_possible
+ flag if driver doesn't set fast_switch
+To:     Wyes Karny <wyes.karny@amd.com>
+Cc:     ray.huang@amd.com, rafael@kernel.org, viresh.kumar@linaro.org,
+        srinivas.pandruvada@linux.intel.com, lenb@kernel.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        joel@joelfernandes.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023 at 3:50=E2=80=AFPM Thomas Wei=C3=9Fschuh <thomas@t-8ch.=
-de> wrote:
+On Tue, May 9, 2023 at 8:18 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> On 2023-05-08 08:56:55-0500, Jorge Lopez wrote:
-> > On Sat, May 6, 2023 at 12:51=E2=80=AFAM Thomas Wei=C3=9Fschuh <thomas@t=
--8ch.de> wrote:
-> > >
-> > > On 2023-05-05 16:57:59-0500, Jorge Lopez wrote:
-> > > > On Fri, May 5, 2023 at 4:11=E2=80=AFPM Thomas Wei=C3=9Fschuh <thoma=
-s@t-8ch.de> wrote:
-> > > > >
-> > > > > On 2023-05-05 11:09:55-0500, Jorge Lopez wrote:
-> > > > > > On Sun, Apr 23, 2023 at 1:55=E2=80=AFAM <thomas@t-8ch.de> wrote=
-:
-> > > > > > >
-> > > > > > > On 2023-04-20 11:54:45-0500, Jorge Lopez wrote:
-> > > > > > > >  .../x86/hp/hp-bioscfg/ordered-attributes.c    | 563 ++++++=
-++++++++++++
-> > > > > > > >  1 file changed, 563 insertions(+)
-> > > > > > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/orde=
-red-attributes.c
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/platform/x86/hp/hp-bioscfg/ordered-att=
-ributes.c b/drivers/platform/x86/hp/hp-bioscfg/ordered-attributes.c
-> > > > > > > > new file mode 100644
-> > > > > > > > index 000000000000..5e5d540f728d
-> > > > > > > > --- /dev/null
+> On Tue, May 9, 2023 at 8:06 PM Wyes Karny <wyes.karny@amd.com> wrote:
 > >
-> > <snip>
-> >
-> > > > > > > > +     elem_found =3D 0;
-> > > > > > > > +     while (elem_found < bioscfg_drv.ordered_list_data[ins=
-tance_id].elements_size) {
-> > > > > > > > +
-> > > > > > > > +             value =3D strsep(&new_values, ",");
-> > > > > > >
-> > > > > > > The docs say the separator is semicolon.
-> > > > > >
-> > > > > > BIOS reports the current value using ',' as separator instead o=
-f ";".
-> > > > > >
-> > > > > > ./hp-bioscfg/attributes/UEFI Boot Order/current_value
-> > > > > > HDD:M.2:3,HDD:USB:1(Disabled),HDD:M.2:4,HDD:M.2:1,HDD:M.2:2,NET=
-WORK
-> > > > > > IPV4:EMBEDDED:1,NETWORK IPV6:EMBEDDED:1,NETWORK
-> > > > > > IPV4:EXPANSION:1,NETWORK IPV6:EXPANSION:1
-> > > > > >
-> > > > > > To avoid having to convert from "," to ";" and vice versa, I wi=
-ll
-> > > > > > update the documentation to reflect the use of  "'," commas as =
-the
-> > > > > > separator
-> > > > >
-> > > > > The enum data format uses ";". Therefore it makes sense to also s=
-tick to
-> > > > > ";".
-> > > > > The implementation detail of the BIOS using ',' should not matter=
- to
-> > > > > users.
-> > > >
-> > > > The use of ',' does matter because BIOS expects the updated string =
-to
-> > > > use commas as separators
-> > > > current_value is reported by BIOS using commas.  Any changes to the
-> > > > order of items in that string needs to use commas.
-> > > >
-> > > > The difference with enum is the fact the user needs to  enter only =
-one
-> > > > value out of those possible values available and no separators are
-> > > > needed.
-> > > > For ordered attributes...
-> > > >
-> > > > when the current value  is "foo,bar,baz".   the user provides a str=
-ing
-> > > > which items are ordered differently.  i.e. "baz,bar,foo"
-> > > > if the new string is using semicolon instead of comma for the
-> > > > separator, BIOS will reject the data.
-> > >
-> > > Of course the BIOS expects the format with comma.
-> > >
-> > > But the users of this API should not have to care about implementatio=
-n
-> > > details like that.
-> > > They want a consistent API. As the ordered-list type is fairly genera=
-l
-> > > it may be promoted to be a general attribute type later.
-> > >
-> > > If this happens the API can't be changed as that would break users of
-> > > hp-bioscfg. So either there would be two APIs for the ordered-list, o=
-ne
-> > > for hp-bioscfg and one for all other drivers, or different attribute
-> > > types would use different kinds of separators.
-> > >
-> > > Was there an issue with the previous replacement logic?
-> >
-> > No issue. I was anticipating a potential problem/confusion and created
-> > a solution.  Customers will start using this driver when it becomes
-> > part of the upstream code.
-> > Users primarily will use Powershell scripts to interact with the
-> > driver.  The use of powershell will require the user to have the
-> > knowledge and convert ';' semicolon to ',' commas prior to submitting
-> > the request to the driver.  AFIK, the boot order is one of those
-> > attributes that is not configured often by the user.  Just my opinion.
->
-> If this conversion is done by the driver why would the users have to
-> care?
->
-> > >
-> > > The whole point of device drivers is to translate general kernel APIs
-> > > into whatever a specific device needs, switching around ',' and ';'
-> > > seems not so bad.
-> >
-> > So, are you saying, it is ok for the driver to convert  ';' semicolon
-> > to ',' commas prior to submitting a request  to change any attribute
-> > of type 'ordered-list' or when reading current value ?
-> > If that is correct, then we can change the documentation back to use
-> > ';' semicolons.
-> > Please confirm.
->
-> A device drivers task it to translate from the domain of the kernel and
-> its unified APIs to whatever a specific device needs.
->
-> If we agree that it is more consistent to use semicolons for class
-> firmware-attribute APIs then the driver would make sure that userspace
-> always sees semicolons while the ACPI calls always use commas.
->
-> This means translating semicolon->comma when writing to and
-> comma->semicolon when reading from ACPI.
-> Userspace should not be exposed to the implementation details but just
-> the consistent and documented kernel API.
+> > The set value of `fast_switch_enabled` indicates that fast_switch
+> > callback is set.
 
-Added conversion routine (replace commas to semicolon and vice versa).
-Documentation was updated to reflect that semicolons are used to
-separate values.
-Userspace is not expose to the implementation details but just the
-consistent and documented API
+BTW, this is not true.  The ACPI cpufreq driver has fast_switch, but
+it doesn't always use it.
 
->
-> > > > > > > > +             if (value !=3D NULL) {
-> > > > > > > > +                     if (!*value)
-> > > > > > > > +                             continue;
-> > > > > > > > +                     elem_found++;
-> > > > > > > > +             }
-> > > > > > > > +
-> > > > > > > > +             found =3D 0;
-> > > > > > > > +             for (elem =3D 0; elem < bioscfg_drv.ordered_l=
-ist_data[instance_id].elements_size; elem++) {
-> > > > > > > > +                     if (!strcasecmp(bioscfg_drv.ordered_l=
-ist_data[instance_id].elements[elem], value)) {
-> > > > > > >
-> > > > > > > It's surprising that this is case-insensitive.
-> > > > > >
-> > > > > > As validated in earlier reviews,  BIOS rejects strings that do =
-not
-> > > > > > match the internal values.
-> > > > > >
-> >
-> > <snip>
-> >
-> > > > > > > > +
-> > > > > > > > +     strscpy(bioscfg_drv.ordered_list_data[instance_id].co=
-mmon.display_name_language_code,
-> > > > > > > > +             LANG_CODE_STR,
-> > > > > > > > +             sizeof(bioscfg_drv.ordered_list_data[instance=
-_id].common.display_name_language_code));
-> > > > > > >
-> > > > > > > This seems to be the same for every type. Can it not be moved=
- into
-> > > > > > > common code?
-> > > > > >
-> > > > > > Each instance requires to report 'display_name_language_code' h=
-ence it
-> > > > > > cannot be moved to a common code.
-> > > > >
-> > > > > Can it every be different from LANG_CODE_STR?
-> > > >
-> > > > Yes.   The string currently is LANG_CODE_STR (en_US.UTF-8)  but it
-> > > > will change as the BIOS provides additional translations at a later
-> > > > time.
-> > > > This is a future enhancement for the driver.
-> > >
-> > > Is this planned for the near future?
-> > > And/Or already implemented in the BIOS?
-> > >
-> > > If there are no concrete plans to implement this soon, in my opinion,
-> > > it would be better to only introduce this code when it does something
-> > > useful.
-> >
-> > There are no concrete plans yet for the driver.  BIOS provides
-> > translations for strings (F10) UI but the attributes are reported in
-> > English regardless of the language configured.
-> > firmware-attributes requires 'display_name_language_code' to be
-> > reported.  At this time, the driver can provide a common helper to
-> > assign the LANG_CODE_STR to the corresponding attribute.
->
-> Yes please.
->
-> Create an attribute in bioscfg.c that can be used in all the other
-> attribute_groups.
+> >  For some drivers such as amd_pstate and intel_pstate,
+> > the adjust_perf callback is used but it still sets
+> > `fast_switch_possible` flag. This is because this flag also decides
+> > whether schedutil governor selects adjust_perf function for frequency
+> > update. This condition in the schedutil governor forces the scaling
+> > driver to set the `fast_switch_possible` flag.
 
-Done!
+Yes, it does, but setting this flag is not sufficient.
+
+> > Remove `fast_switch_enabled` check when schedutil decides to select
+> > adjust_perf function for frequency update. Thus removing this drivers
+> > are now free to remove `fast_switch_possible` flag if they don't use
+> > fast_switch callback.
+> >
+> > This issue becomes apparent when aperf/mperf overflow occurs.  When this
+> > happens, kernel disables frequency invariance calculation which causes
+> > schedutil to fallback to sugov_update_single_freq which currently relies
+> > on the fast_switch callback.
+> >
+> > Normal flow:
+> >   sugov_update_single_perf
+> >     cpufreq_driver_adjust_perf
+> >       cpufreq_driver->adjust_perf
+> >
+> > Error case flow:
+> >   sugov_update_single_perf
+> >     sugov_update_single_freq  <-- This is chosen because the freq invariant is disabled due to aperf/mperf overflow
+> >       cpufreq_driver_fast_switch
+> >          cpufreq_driver->fast_switch <-- Here NULL pointer dereference is happening, because fast_switch is not set
 >
-> > > > > If not instead of having one kobj_attribute diplay_langcode for e=
-ach
-> > > > > string/enum/integer/etc you could have one kobj_attribute defined=
- in
-> > > > > bioscfg.c and then added to each string_attrs, enum_attrs...
-> > > > >
-> > > > > The _show() callback for this attribute would just return the con=
-stant
-> > > > > string.
-> > > > >
-> > > > > This removes the need for many attribute definition, members in t=
-he data
-> > > > > struct, initialization of these member...
+> So you need to set fast_switch.
+>
+> Please read the comment in sugov_update_single_perf().  It explains
+> why adjust_perf is not used when scale invariance is not enabled: the
+> mapping between the performance levels and frequency are not generally
+> defined in that case and it is up to the driver to figure out what
+> perf level to use to get the given frequency.  And this is exactly why
+> fast_switch is not optional: because scale invariance may be disabled.
+>
+> Please feel free to update the documentation to clarify this, but the
+> way to fix the issue is to implement fast_switch in the driver.
+>
+> > Fixes: a61dec744745 ("cpufreq: schedutil: Avoid missing updates for one-CPU policies")
+> > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> >
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Cc: stable@vger.kernel.org
+> > ---
+> >  drivers/cpufreq/amd-pstate.c     | 10 +++++++---
+> >  drivers/cpufreq/cpufreq.c        | 20 +++++++++++++++++++-
+> >  drivers/cpufreq/intel_pstate.c   |  3 +--
+> >  include/linux/cpufreq.h          |  1 +
+> >  kernel/sched/cpufreq_schedutil.c |  2 +-
+> >  5 files changed, 29 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> > index 5a3d4aa0f45a..007bfe724a6a 100644
+> > --- a/drivers/cpufreq/amd-pstate.c
+> > +++ b/drivers/cpufreq/amd-pstate.c
+> > @@ -671,8 +671,14 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+> >         /* It will be updated by governor */
+> >         policy->cur = policy->cpuinfo.min_freq;
+> >
+> > +       /**
+> > +        * For shared memory system frequency update takes time that's why
+> > +        * do this in deferred kthread context.
+> > +        */
+> >         if (boot_cpu_has(X86_FEATURE_CPPC))
+> > -               policy->fast_switch_possible = true;
+> > +               current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
+> > +       else
+> > +               current_pstate_driver->adjust_perf = NULL;
+> >
+> >         ret = freq_qos_add_request(&policy->constraints, &cpudata->req[0],
+> >                                    FREQ_QOS_MIN, policy->cpuinfo.min_freq);
+> > @@ -697,8 +703,6 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+> >         policy->driver_data = cpudata;
+> >
+> >         amd_pstate_boost_init(cpudata);
+> > -       if (!current_pstate_driver->adjust_perf)
+> > -               current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
+> >
+> >         return 0;
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 6b52ebe5a890..366747012104 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -501,6 +501,13 @@ void cpufreq_enable_fast_switch(struct cpufreq_policy *policy)
+> >         if (!policy->fast_switch_possible)
+> >                 return;
+> >
+> > +       /**
+> > +        * It's not expected driver's fast_switch callback is not set
+> > +        * even fast_switch_possible is true.
+> > +        */
+> > +       if (WARN_ON(!cpufreq_driver_has_fast_switch()))
+> > +               return;
+> > +
+> >         mutex_lock(&cpufreq_fast_switch_lock);
+> >         if (cpufreq_fast_switch_count >= 0) {
+> >                 cpufreq_fast_switch_count++;
+> > @@ -2143,6 +2150,17 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+> >  }
+> >  EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
+> >
+> > +/**
+> > + * cpufreq_driver_has_fast_switch - Check "fast switch" callback.
+> > + *
+> > + * Return 'true' if the ->fast_switch callback is present for the
+> > + * current driver or 'false' otherwise.
+> > + */
+> > +bool cpufreq_driver_has_fast_switch(void)
+> > +{
+> > +       return !!cpufreq_driver->fast_switch;
+> > +}
+> > +
+> >  /**
+> >   * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
+> >   * @cpu: Target CPU.
+> > @@ -2157,7 +2175,7 @@ EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
+> >   * and it is expected to select a suitable performance level equal to or above
+> >   * @min_perf and preferably equal to or below @target_perf.
+> >   *
+> > - * This function must not be called if policy->fast_switch_enabled is unset.
+> > + * By default this function takes the fast frequency update path.
+> >   *
+> >   * Governors calling this function must guarantee that it will never be invoked
+> >   * twice in parallel for the same CPU and that it will never be called in
+> > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> > index 2548ec92faa2..007893514c87 100644
+> > --- a/drivers/cpufreq/intel_pstate.c
+> > +++ b/drivers/cpufreq/intel_pstate.c
+> > @@ -2698,8 +2698,6 @@ static int __intel_pstate_cpu_init(struct cpufreq_policy *policy)
+> >
+> >         intel_pstate_init_acpi_perf_limits(policy);
+> >
+> > -       policy->fast_switch_possible = true;
+> > -
+> >         return 0;
+> >  }
+> >
+> > @@ -2955,6 +2953,7 @@ static int intel_cpufreq_cpu_init(struct cpufreq_policy *policy)
+> >         if (ret)
+> >                 return ret;
+> >
+> > +       policy->fast_switch_possible = true;
+
+I'm not sure what this is about.  Is it a cleanup of intel_pstate?
+
+> >         policy->cpuinfo.transition_latency = INTEL_CPUFREQ_TRANSITION_LATENCY;
+> >         /* This reflects the intel_pstate_get_cpu_pstates() setting. */
+> >         policy->cur = policy->cpuinfo.min_freq;
+> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> > index 26e2eb399484..7a32cfca26c9 100644
+> > --- a/include/linux/cpufreq.h
+> > +++ b/include/linux/cpufreq.h
+> > @@ -604,6 +604,7 @@ struct cpufreq_governor {
+> >  /* Pass a target to the cpufreq driver */
+> >  unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+> >                                         unsigned int target_freq);
+> > +bool cpufreq_driver_has_fast_switch(void);
+> >  void cpufreq_driver_adjust_perf(unsigned int cpu,
+> >                                 unsigned long min_perf,
+> >                                 unsigned long target_perf,
+> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > index e3211455b203..f993ecf731a9 100644
+> > --- a/kernel/sched/cpufreq_schedutil.c
+> > +++ b/kernel/sched/cpufreq_schedutil.c
+> > @@ -776,7 +776,7 @@ static int sugov_start(struct cpufreq_policy *policy)
+> >
+> >         if (policy_is_shared(policy))
+> >                 uu = sugov_update_shared;
+> > -       else if (policy->fast_switch_enabled && cpufreq_driver_has_adjust_perf())
+> > +       else if (cpufreq_driver_has_adjust_perf())
+> >                 uu = sugov_update_single_perf;
+> >         else
+> >                 uu = sugov_update_single_freq;
+> > --
