@@ -2,214 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA5D6FCF8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A2D66FCF92
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbjEIUdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 16:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
+        id S234609AbjEIUe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 16:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjEIUdm (ORCPT
+        with ESMTP id S229543AbjEIUey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 16:33:42 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2832940E0
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 13:33:40 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-55a2cb9788dso93858267b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 13:33:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683664419; x=1686256419;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KP7rmZOvJCmCpfoX+ax0Qp6p7fblxM/RetTiw2ZGEU0=;
-        b=zhDJ8rgk00ZwGuAI3zgrRweoHBmO5cUTD9RRmc5hk+BThEdXbM8yUsUw75Qbr6YQ5T
-         aZiGsapTpjFDhckEGQB/gUB1c7Uc9pzdThgULUKowYzcvvSY5fdUOngR8OGtOUpoeJuq
-         pji77qHC/lWdgdiL3gykZtbP3iL+ZPqvcPLoLPxVwMxGxQneSJLdOMIEeiti9TVZi9JI
-         42wZpWXfXWiCOmJCBO+AH0dIKIQkp10n+M0UUSOEgnq4R+JtwvPVHi1vy+X1/oMX1Qsg
-         pot3LPTWZNONTqkfeD+HUzrYc5cpWJmvsV5qjNtqrOgj06DcGCugfBv+tDAe5OHC5JkU
-         GYiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683664419; x=1686256419;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KP7rmZOvJCmCpfoX+ax0Qp6p7fblxM/RetTiw2ZGEU0=;
-        b=MvdsGZO2f0+XABPFdKMDzmd/N2GTKmcONi83VZ20Bt31P8B03UVv3SJyCsV24ni3pf
-         8RBADhJrf62Z5YueOSZqVZAFppr6bNQXi4xTtJqvrX/f2O2Ze97sozSkNr/Dm96HstW1
-         R7Tz00iQxFlcGI5gOfibZ9knLHsvaTvql4REwxdoTWzBxPR8C8W7mEb8vY5tm4RL9efU
-         lNCHzpG6YFJW/6MWHkrpZzHjdkc1Ht+Onrj7ZN90qdH5zt9TO96/wLqdn4i7vfz2xHXQ
-         xtet7qyHDOfgdC1eseCJq0GAC/VIETsGq2oBP+Ve6B82K6UEZlXeUSiEF/B5++YhJ9OW
-         DyKQ==
-X-Gm-Message-State: AC+VfDzuIPEVeE+3/nTSgpJtshSabFX0BI1FjGoL5/J2yNy4vzxVt4ar
-        3Tr4Q0hEVeKYVmH2Q3z8CJs+OCummcchUtVVzT+WOg==
-X-Google-Smtp-Source: ACHHUZ4neReDgJmqJHC1dgqR5Bnztdbv3WI1a7UYpjdRfBZKXYGprf/4rCj4iie42pvz4dlWsX9YhEYXq7AGH3LbMFM=
-X-Received: by 2002:a25:6943:0:b0:b9d:853e:5cef with SMTP id
- e64-20020a256943000000b00b9d853e5cefmr19297675ybc.37.1683664419340; Tue, 09
- May 2023 13:33:39 -0700 (PDT)
+        Tue, 9 May 2023 16:34:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1239E10FE;
+        Tue,  9 May 2023 13:34:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5E63D1F749;
+        Tue,  9 May 2023 20:34:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683664491; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K3D8zA2tmAmIa323+7ZF/XLPZJO7JogZ7ToR1HtZFDM=;
+        b=0I8DhwtC7cuSTVHblvvoG/OReiK2L4AFZRelRMvJ2uoQMIB6Y6qLnvBiA1jityK88b9W7/
+        h7xhozNFf4FOIfajQRz+QVXKWApqTdPwVPfg9A/5nxCu3yZuT9rU6qWMwOu7Tfz/qn+T56
+        4dC1H/0CFpmohCdjxv2KWKGuzuB2eZk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683664491;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K3D8zA2tmAmIa323+7ZF/XLPZJO7JogZ7ToR1HtZFDM=;
+        b=xmiFJQDxWV48mWyA1idnEfNYHFeEYTbFAwbSkQBSpdzajM01VvE6m4M5IVdWqdg3Ovmy/0
+        5vbHjx/sDNnVmlBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D55E5139B3;
+        Tue,  9 May 2023 20:34:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Ai+bJmquWmQjRgAAMHmgww
+        (envelope-from <mpdesouza@suse.com>); Tue, 09 May 2023 20:34:50 +0000
+Date:   Tue, 9 May 2023 17:34:48 -0300
+From:   Marcos Paulo de Souza <mpdesouza@suse.de>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Nicolai Stange <nstange@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>,
+        Lukas Hruska <lhruska@suse.cz>
+Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
+Message-ID: <coxl6y2ivnp6tqxclpm54m4fpbf3ansil3abftbj4nv76vuheq@sxvagra4almd>
+References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
+ <20230314202356.kal22jracaw5442y@daedalus>
+ <ZBTNvEPrCcRj3F1C@redhat.com>
+ <20230317232010.7uq6tt4ty35eo5hm@treble>
+ <873556ag24.fsf@suse.de>
+ <e41b041a-6a9e-210a-bf09-14db2b637e79@redhat.com>
 MIME-Version: 1.0
-References: <20230509172148.7627-1-quic_tdas@quicinc.com> <20230509172148.7627-3-quic_tdas@quicinc.com>
-In-Reply-To: <20230509172148.7627-3-quic_tdas@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 9 May 2023 23:33:28 +0300
-Message-ID: <CAA8EJprHgOaiH2CFKmz_E+NvJpA+DRNE-r1wQXbSfYi+5qoBmA@mail.gmail.com>
-Subject: Re: [PATCH V4 2/3] clk: qcom: videocc-sm8450: Add video clock
- controller driver for SM8450
-To:     Taniya Das <quic_tdas@quicinc.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_skakitap@quicinc.com, quic_jkona@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e41b041a-6a9e-210a-bf09-14db2b637e79@redhat.com>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 May 2023 at 20:22, Taniya Das <quic_tdas@quicinc.com> wrote:
->
-> Add support for the video clock controller driver for peripheral clock
-> clients to be able to request for video cc clocks.
->
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> ---
-> Changes since V3:
->  - Use lower case hex.
->  - Check the return value here and bail out early on failure in probe.
->
-> Changes since V2:
->  - Update the header file name to match the latest upstream header
->    files.
->
-> Changes since V1:
->  - Use DT indices instead of fw_name.
->  - Replace pm_runtime_enable with devm_pm_runtime_enable.
->  - Change license to GPL from GPL V2.
->
->  drivers/clk/qcom/Kconfig          |   9 +
->  drivers/clk/qcom/Makefile         |   1 +
->  drivers/clk/qcom/videocc-sm8450.c | 461 ++++++++++++++++++++++++++++++
->  3 files changed, 471 insertions(+)
->  create mode 100644 drivers/clk/qcom/videocc-sm8450.c
+On Wed, May 03, 2023 at 03:54:47PM -0400, Joe Lawrence wrote:
+> On 4/11/23 06:06, Nicolai Stange wrote:
+> > Josh Poimboeuf <jpoimboe@kernel.org> writes:
+> > 
+> >> On Fri, Mar 17, 2023 at 04:29:48PM -0400, Joe Lawrence wrote:
+> >>> Have you tried retrofitting klp-convert into any real-world livepatch?
+> >>> I'm curious as to your observations on the overall experience, or
+> >>> thoughts on the sympos annotation style noted above.
+> >>
+> >> On a related note, the patch creation process (of which klp-convert
+> >> would be part of) needs to be documented.
+> >>
+> >> If I remember correctly, the proper safe usage of klp-convert requires a
+> >> kernel built with -flive-patching, plus some scripting and/or manual
+> >> processes.
+> > 
+> > Not always, I think: -flive-patching or IPA optimizations in general
+> > aren't a concern in the context of data symbols. From a quick glance, it
+> > seems like the selftests introduced as part of this patchset are
+> > all restricted to this usecase.
+> > 
+> 
+> IIRC there is nothing currently stopping klp-convert from converting
+> function symbol relocations.  That may be dangerous when taking
+> optimizations like sibling functions (and their sharing of stack) into
+> consideration.  This is about the point I stopped to turn and see what
+> the real use cases may be.
+> 
+> >> If nobody knows how to safely use it then there wouldn't be much value
+> >> in merging it.
+> > 
+> > I tend to agree, but would put it a bit differently: the current
+> > implementation of klp-convert features quite some convenience logic,
+> > which, until the question of a documented livepatch preparation process
+> > has been settled, is not known yet to ever be of any use.
+> > 
+> 
+> Good observation and perhaps something that Marcos could elaborate on
+> (pros and cons of klp-convert in his experiments).
+> 
 
-[skipped]
+In my tests, I took the exact code generated by klp-ccp, and adapted it to not
+rely on kallsyms anymore, removing the symbol lookups. For data symbols, I
+changed it to be a extern variable instead of a pointer to it. For the function
+symbols, also removed the pointer lookup, and left only the function prototype,
+and it worked as expected.
 
-
-> +static const struct qcom_reset_map video_cc_sm8450_resets[] = {
-> +       [CVP_VIDEO_CC_INTERFACE_BCR] = { 0x80e0 },
-> +       [CVP_VIDEO_CC_MVS0_BCR] = { 0x8098 },
-> +       [CVP_VIDEO_CC_MVS0C_BCR] = { 0x8048 },
-> +       [CVP_VIDEO_CC_MVS1_BCR] = { 0x80bc },
-> +       [CVP_VIDEO_CC_MVS1C_BCR] = { 0x8070 },
-
-Can we have a common VIDEO_CC prefix here please?
-
-> +       [VIDEO_CC_MVS0C_CLK_ARES] = { 0x8064, 2 },
-> +       [VIDEO_CC_MVS1C_CLK_ARES] = { 0x808c, 2 },
-> +};
-> +
-> +static const struct regmap_config video_cc_sm8450_regmap_config = {
-> +       .reg_bits = 32,
-> +       .reg_stride = 4,
-> +       .val_bits = 32,
-> +       .max_register = 0x9f4c,
-> +       .fast_io = true,
-> +};
-> +
-> +static struct qcom_cc_desc video_cc_sm8450_desc = {
-> +       .config = &video_cc_sm8450_regmap_config,
-> +       .clks = video_cc_sm8450_clocks,
-> +       .num_clks = ARRAY_SIZE(video_cc_sm8450_clocks),
-> +       .resets = video_cc_sm8450_resets,
-> +       .num_resets = ARRAY_SIZE(video_cc_sm8450_resets),
-> +       .gdscs = video_cc_sm8450_gdscs,
-> +       .num_gdscs = ARRAY_SIZE(video_cc_sm8450_gdscs),
-> +};
-> +
-> +static const struct of_device_id video_cc_sm8450_match_table[] = {
-> +       { .compatible = "qcom,sm8450-videocc" },
-> +       { }
-> +};
-> +MODULE_DEVICE_TABLE(of, video_cc_sm8450_match_table);
-> +
-> +static int video_cc_sm8450_probe(struct platform_device *pdev)
-> +{
-> +       struct regmap *regmap;
-> +       int ret;
-> +
-> +       ret = devm_pm_runtime_enable(&pdev->dev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = pm_runtime_resume_and_get(&pdev->dev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       regmap = qcom_cc_map(pdev, &video_cc_sm8450_desc);
-> +       if (IS_ERR(regmap)) {
-> +               pm_runtime_put(&pdev->dev);
-> +               return PTR_ERR(regmap);
-> +       }
-> +
-> +       clk_lucid_evo_pll_configure(&video_cc_pll0, regmap, &video_cc_pll0_config);
-> +       clk_lucid_evo_pll_configure(&video_cc_pll1, regmap, &video_cc_pll1_config);
-> +
-> +       /*
-> +        * Keep clocks always enabled:
-> +        *      video_cc_ahb_clk
-> +        *      video_cc_sleep_clk
-> +        *      video_cc_xo_clk
-> +        */
-> +       regmap_update_bits(regmap, 0x80e4, BIT(0), BIT(0));
-> +       regmap_update_bits(regmap, 0x8130, BIT(0), BIT(0));
-> +       regmap_update_bits(regmap, 0x8114, BIT(0), BIT(0));
-> +
-> +       ret = qcom_cc_really_probe(pdev, &video_cc_sm8450_desc, regmap);
-> +
-> +       pm_runtime_put(&pdev->dev);
-> +
-> +       return ret;
-> +}
-> +
-> +static struct platform_driver video_cc_sm8450_driver = {
-> +       .probe = video_cc_sm8450_probe,
-> +       .driver = {
-> +               .name = "video_cc-sm8450",
-> +               .of_match_table = video_cc_sm8450_match_table,
-> +       },
-> +};
-> +
-> +static int __init video_cc_sm8450_init(void)
-> +{
-> +       return platform_driver_register(&video_cc_sm8450_driver);
-> +}
-> +subsys_initcall(video_cc_sm8450_init);
-> +
-> +static void __exit video_cc_sm8450_exit(void)
-> +{
-> +       platform_driver_unregister(&video_cc_sm8450_driver);
-> +}
-> +module_exit(video_cc_sm8450_exit);
-
-module_platform_driver() ?
-
-> +
-> +MODULE_DESCRIPTION("QTI VIDEO_CC SM8450 Driver");
-> +MODULE_LICENSE("GPL");
-> --
-> 2.17.1
->
-
-
--- 
-With best wishes
-Dmitry
+I was quite surprised that it worked quite well. But I agree with
+Nicolai that the tool itself could be shrunk into a smaller version. In our
+usage, klp-ccp knows all unexported functions and to which modules they belong,
+as it's currently used for the symbol lookup. I believe that kpatch-build also
+has similar information so all the symbols.klp and other Kbuild machinery could be
+avoided, making the tool responsible to only generate the klp relocations based
+on the undefined symbols, just as proposed by Nicolai.
