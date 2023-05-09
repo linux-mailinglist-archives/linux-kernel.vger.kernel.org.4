@@ -2,99 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE936FCF78
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8646FCF80
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjEIU2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 16:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
+        id S229704AbjEIUas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 16:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjEIU2j (ORCPT
+        with ESMTP id S229533AbjEIUaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 16:28:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EA940EB
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 13:27:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683664074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lxZpyzEfcn2FNFCbnX4Bm747Ok1kXJdow2Un/gyXnX8=;
-        b=SjcNr59m37DGUExOoAsui4+nxp2rjMPneojtG283QC5vFlVmbbcywKzdKC9/J5GG6vA+77
-        YvykUe10Q4axFKWh5RFrY+27Tm6N0kCcgtVADt0Hkwtw6Z/xmOWqPaFWu6kITHAKDXnInp
-        X09BapHXaqeVuAw8F5LvN3O8wJGa/wg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-xbO7DSw7MRmHYo0FHuzFMw-1; Tue, 09 May 2023 16:27:47 -0400
-X-MC-Unique: xbO7DSw7MRmHYo0FHuzFMw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1691E185A79C;
-        Tue,  9 May 2023 20:27:47 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D51B92026D16;
-        Tue,  9 May 2023 20:27:46 +0000 (UTC)
-Message-ID: <d5b65b01-62a9-e483-dea8-5e2bb65be278@redhat.com>
-Date:   Tue, 9 May 2023 16:27:46 -0400
+        Tue, 9 May 2023 16:30:46 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3BF40F6;
+        Tue,  9 May 2023 13:30:45 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-517bdd9957dso4293919a12.1;
+        Tue, 09 May 2023 13:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683664245; x=1686256245;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q12a5WAfbjE9tI2h9PcKYehgmQ2VIuui/JVi4STZnFM=;
+        b=TiyGvRVlKc2lRSa5ZO/dIelreRCeOR7friP4DKkQISR6S3JHHW9R233VhYOQ7PyyYx
+         rhKy7PGBmN1k9FQXVgvp8ZVUmNXWdVHYKafzSnlPVWhly6lFuonItSi+x2evVxnmbBUE
+         pp9dcAxcsc60Drkxcb7ud/HrucKighPBo+pWUi00mWF/ots3r8HMwUVpz/0zzuZTOE85
+         TJw3z6eGGJDGqjVjbZqLtVrHHB/amzBAxsWeStDq1brOFl5wU5/f/P0Y8SrLutQulFQX
+         MpEODxRlrF0805XGiF0On7JOOki6lFWMgmE9KvaSSnlUdMr1tFKNTQLUSStH6bIf1+ak
+         svog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683664245; x=1686256245;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q12a5WAfbjE9tI2h9PcKYehgmQ2VIuui/JVi4STZnFM=;
+        b=WubSgSAEtkmDYJho08ksZe37Ek53NyUf+VZcNVCFEAq3lMSkwGCcX3Os4TjBDNzGIs
+         Jjkg3rqby3DsYXgx0UitwCLyCJgtC7WLz8kLKQZQc8CX2hrw3j28JHiHQ+IK/Eenwxrf
+         QmittjcWCktW6hnfI/jD3n3xjavvgB6qcgTjZdamGrvBMItnSYgUNU5LKSPGaDYZpyhF
+         Dwb+fX5V29XDdo59FQDLpc1qzfdND7AGW6k+y9mjpwwrdXCzRP20A6svCopKoVI2/Omg
+         sx58ZFE0kuPDY+Tsa50HNb5pfwTV9iY/jTTXEvAKTExaJYsGRW4sx3asz3kYRiMaFTmu
+         JiVA==
+X-Gm-Message-State: AC+VfDw7hoq2195Z+laq41z7wRbBvny0y3h0TVWrnCEr+Eyw7zP0+5pG
+        6n8vJ5Vwh0UsS9iblu2ndKRXobUAuqc=
+X-Google-Smtp-Source: ACHHUZ77EKns869ZjZdNydQB7QDHos3f3dAgAlTjEC1RUVhm1f8GZ1v+WcQUl6K/L6lHLkzHUFA3hg==
+X-Received: by 2002:a17:902:d2c6:b0:1ab:16e0:ef49 with SMTP id n6-20020a170902d2c600b001ab16e0ef49mr18761259plc.24.1683664244752;
+        Tue, 09 May 2023 13:30:44 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902684c00b001ac69bdc9d1sm2051939pln.156.2023.05.09.13.30.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 13:30:44 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>, pinkperfect2021@gmail.com,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v4] drm/msm: Fix submit error-path leaks
+Date:   Tue,  9 May 2023 13:30:41 -0700
+Message-Id: <20230509203041.440619-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 03/32] locking/lockdep: lockdep_set_no_check_recursion()
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-4-kent.overstreet@linux.dev>
- <20230509193147.GC2148518@hirez.programming.kicks-ass.net>
- <ZFqqsyDpatgb77Vh@moria.home.lan>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <ZFqqsyDpatgb77Vh@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rob Clark <robdclark@chromium.org>
 
-On 5/9/23 16:18, Kent Overstreet wrote:
-> On Tue, May 09, 2023 at 09:31:47PM +0200, Peter Zijlstra wrote:
->> On Tue, May 09, 2023 at 12:56:28PM -0400, Kent Overstreet wrote:
->>> This adds a method to tell lockdep not to check lock ordering within a
->>> lock class - but to still check lock ordering w.r.t. other lock types.
->>>
->>> This is for bcachefs, where for btree node locks we have our own
->>> deadlock avoidance strategy w.r.t. other btree node locks (cycle
->>> detection), but we still want lockdep to check lock ordering w.r.t.
->>> other lock types.
->>>
->> ISTR you had a much nicer version of this where you gave a custom order
->> function -- what happend to that?
-> Actually, I spoke too soon; this patch and the other series with the
-> comparison function solve different problems.
->
-> For bcachefs btree node locks, we don't have a defined lock ordering at
-> all - we do full runtime cycle detection, so we don't want lockdep
-> checking for self deadlock because we're handling that but we _do_ want
-> lockdep checking lock ordering of btree node locks w.r.t. other locks in
-> the system.
+For errors after msm_submitqueue_get(), we need to drop the submitqueue
+reference.  Additionally after get_unused_fd() we need to drop the fd.
+The ordering for dropping the queue lock and put_unused_fd() is not
+important, so just move this all into out_post_unlock.
 
-Maybe you can use lock_set_novalidate_class() instead.
+v2: Only drop queue ref if submit doesn't take it
+v3: Fix unitialized submit ref in error path
+v4: IS_ERR_OR_NULL()
 
-Cheers,
-Longman
+Reported-by: pinkperfect2021@gmail.com
+Fixes: f0de40a131d9 drm/msm: ("Reorder lock vs submit alloc")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/msm_gem_submit.c | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
+index 6c6aefaa72be..8a3c9246ebf7 100644
+--- a/drivers/gpu/drm/msm/msm_gem_submit.c
++++ b/drivers/gpu/drm/msm/msm_gem_submit.c
+@@ -720,21 +720,21 @@ static void msm_process_post_deps(struct msm_submit_post_dep *post_deps,
+ 		}
+ 	}
+ }
+ 
+ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
+ 		struct drm_file *file)
+ {
+ 	struct msm_drm_private *priv = dev->dev_private;
+ 	struct drm_msm_gem_submit *args = data;
+ 	struct msm_file_private *ctx = file->driver_priv;
+-	struct msm_gem_submit *submit;
++	struct msm_gem_submit *submit = NULL;
+ 	struct msm_gpu *gpu = priv->gpu;
+ 	struct msm_gpu_submitqueue *queue;
+ 	struct msm_ringbuffer *ring;
+ 	struct msm_submit_post_dep *post_deps = NULL;
+ 	struct drm_syncobj **syncobjs_to_reset = NULL;
+ 	int out_fence_fd = -1;
+ 	bool has_ww_ticket = false;
+ 	unsigned i;
+ 	int ret;
+ 
+@@ -767,27 +767,29 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
+ 	queue = msm_submitqueue_get(ctx, args->queueid);
+ 	if (!queue)
+ 		return -ENOENT;
+ 
+ 	ring = gpu->rb[queue->ring_nr];
+ 
+ 	if (args->flags & MSM_SUBMIT_FENCE_FD_OUT) {
+ 		out_fence_fd = get_unused_fd_flags(O_CLOEXEC);
+ 		if (out_fence_fd < 0) {
+ 			ret = out_fence_fd;
+-			return ret;
++			goto out_post_unlock;
+ 		}
+ 	}
+ 
+ 	submit = submit_create(dev, gpu, queue, args->nr_bos, args->nr_cmds);
+-	if (IS_ERR(submit))
+-		return PTR_ERR(submit);
++	if (IS_ERR(submit)) {
++		ret = PTR_ERR(submit);
++		goto out_post_unlock;
++	}
+ 
+ 	trace_msm_gpu_submit(pid_nr(submit->pid), ring->id, submit->ident,
+ 		args->nr_bos, args->nr_cmds);
+ 
+ 	ret = mutex_lock_interruptible(&queue->lock);
+ 	if (ret)
+ 		goto out_post_unlock;
+ 
+ 	if (args->flags & MSM_SUBMIT_SUDO)
+ 		submit->in_rb = true;
+@@ -962,25 +964,34 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
+ 	msm_reset_syncobjs(syncobjs_to_reset, args->nr_in_syncobjs);
+ 	msm_process_post_deps(post_deps, args->nr_out_syncobjs,
+ 	                      submit->user_fence);
+ 
+ 
+ out:
+ 	submit_cleanup(submit, !!ret);
+ 	if (has_ww_ticket)
+ 		ww_acquire_fini(&submit->ticket);
+ out_unlock:
+-	if (ret && (out_fence_fd >= 0))
+-		put_unused_fd(out_fence_fd);
+ 	mutex_unlock(&queue->lock);
+ out_post_unlock:
+-	msm_gem_submit_put(submit);
++	if (ret && (out_fence_fd >= 0))
++		put_unused_fd(out_fence_fd);
++
++	if (!IS_ERR_OR_NULL(submit)) {
++		msm_gem_submit_put(submit);
++	} else {
++		/*
++		 * If the submit hasn't yet taken ownership of the queue
++		 * then we need to drop the reference ourself:
++		 */
++		msm_submitqueue_put(queue);
++	}
+ 	if (!IS_ERR_OR_NULL(post_deps)) {
+ 		for (i = 0; i < args->nr_out_syncobjs; ++i) {
+ 			kfree(post_deps[i].chain);
+ 			drm_syncobj_put(post_deps[i].syncobj);
+ 		}
+ 		kfree(post_deps);
+ 	}
+ 
+ 	if (!IS_ERR_OR_NULL(syncobjs_to_reset)) {
+ 		for (i = 0; i < args->nr_in_syncobjs; ++i) {
+-- 
+2.40.1
 
