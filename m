@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1BA6FC62F
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D946FC632
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235118AbjEIMW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 08:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
+        id S235723AbjEIMXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 08:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234246AbjEIMW4 (ORCPT
+        with ESMTP id S234246AbjEIMW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 08:22:56 -0400
+        Tue, 9 May 2023 08:22:59 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8B1F40DB;
-        Tue,  9 May 2023 05:22:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA97019A9;
+        Tue,  9 May 2023 05:22:58 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D9919FEC;
-        Tue,  9 May 2023 05:23:39 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F28A21063;
+        Tue,  9 May 2023 05:23:42 -0700 (PDT)
 Received: from e123648.arm.com (unknown [10.57.22.29])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 948BE3F67D;
-        Tue,  9 May 2023 05:22:52 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B1D593F67D;
+        Tue,  9 May 2023 05:22:55 -0700 (PDT)
 From:   Lukasz Luba <lukasz.luba@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
 Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mingo@redhat.com,
@@ -29,10 +29,12 @@ Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mingo@redhat.com,
         bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
         vschneid@redhat.com, delyank@fb.com, lukasz.luba@arm.com,
         qyousef@google.com, qyousef@layalina.io
-Subject: [PATCH v2 0/3] Add basic tracing for uclamp and schedutil
-Date:   Tue,  9 May 2023 13:22:43 +0100
-Message-Id: <20230509122246.1702397-1-lukasz.luba@arm.com>
+Subject: [PATCH v2 1/3] sched/tp: Add new tracepoint to track uclamp set from user-space
+Date:   Tue,  9 May 2023 13:22:44 +0100
+Message-Id: <20230509122246.1702397-2-lukasz.luba@arm.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230509122246.1702397-1-lukasz.luba@arm.com>
+References: <20230509122246.1702397-1-lukasz.luba@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -44,47 +46,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+The user-space can set uclamp value for a given task. It impacts task
+placement decisions made by the scheduler. This is very useful information
+and helps to understand the system behavior or track improvements in
+middleware and applications which start using uclamp mechanisms and report
+better performance in tests.
 
-The task scheduler feature: Uclamp, begins to take off. To better understand
-the dynamics in the task scheduler and CPU frequency requests we need some
-better tracing.
-In schedutil (cpufreq governor) we allow to enter the scheduler
-and make the frequency change. Although, there is some limit in regards to how
-often this can happen. That min period is provided by the cpufreq driver.
-Thus, some of the cpufreq requests might be filter out and the frequency won't
-be changed (hopefuly will be set a bit later). We would like to know about
-those situations, especially in context of the user-space hints made via
-Uclamp for particular tasks.
-This patch set aims to add base for our toolkits and post-processing trace
-analyzes.
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+---
+ include/trace/events/sched.h | 4 ++++
+ kernel/sched/core.c          | 5 +++++
+ 2 files changed, 9 insertions(+)
 
-Changelog:
-v2:
-- solved the issue from CI build warning, dropped schedutil.h and re-used
-  the sched.h which is available in build_utility.c where cpufreq_schedutil.c
-  is included
-- added tag for the last patch 3/3 for the CI robot helping hend 
-- re-based on top of v6.4-rc1
-v1:
-- implementation can be found here [1]
-
-
-Regards,
-Lukasz Luba
-
-[1] https://lore.kernel.org/lkml/20230322151843.14390-1-lukasz.luba@arm.com/
-
-Lukasz Luba (3):
-  sched/tp: Add new tracepoint to track uclamp set from user-space
-  cpufreq: schedutil: Refactor sugov_update_shared() internals
-  schedutil: trace: Add tracing to capture filter out requests
-
- include/trace/events/sched.h     |  8 ++++++++
- kernel/sched/core.c              |  5 +++++
- kernel/sched/cpufreq_schedutil.c | 28 ++++++++++++++++++----------
- 3 files changed, 31 insertions(+), 10 deletions(-)
-
+diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
+index fbb99a61f714..dbfb30809f15 100644
+--- a/include/trace/events/sched.h
++++ b/include/trace/events/sched.h
+@@ -735,6 +735,10 @@ DECLARE_TRACE(sched_update_nr_running_tp,
+ 	TP_PROTO(struct rq *rq, int change),
+ 	TP_ARGS(rq, change));
+ 
++DECLARE_TRACE(uclamp_update_tsk_tp,
++	TP_PROTO(struct task_struct *tsk, int uclamp_id,  unsigned int value),
++	TP_ARGS(tsk, uclamp_id, value));
++
+ #endif /* _TRACE_SCHED_H */
+ 
+ /* This part must be outside protection */
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 944c3ae39861..7b9b800ebb6c 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -114,6 +114,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(sched_overutilized_tp);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_cfs_tp);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_se_tp);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(sched_update_nr_running_tp);
++EXPORT_TRACEPOINT_SYMBOL_GPL(uclamp_update_tsk_tp);
+ 
+ DEFINE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
+ 
+@@ -1956,12 +1957,16 @@ static void __setscheduler_uclamp(struct task_struct *p,
+ 	    attr->sched_util_min != -1) {
+ 		uclamp_se_set(&p->uclamp_req[UCLAMP_MIN],
+ 			      attr->sched_util_min, true);
++		trace_uclamp_update_tsk_tp(p, UCLAMP_MIN,
++					   attr->sched_util_min);
+ 	}
+ 
+ 	if (attr->sched_flags & SCHED_FLAG_UTIL_CLAMP_MAX &&
+ 	    attr->sched_util_max != -1) {
+ 		uclamp_se_set(&p->uclamp_req[UCLAMP_MAX],
+ 			      attr->sched_util_max, true);
++		trace_uclamp_update_tsk_tp(p, UCLAMP_MAX,
++					   attr->sched_util_max);
+ 	}
+ }
+ 
 -- 
 2.25.1
 
