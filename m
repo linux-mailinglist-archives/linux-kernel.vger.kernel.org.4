@@ -2,160 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F226FC84F
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 285016FC85B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235651AbjEIN6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 09:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
+        id S235657AbjEIN7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 09:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234641AbjEIN6N (ORCPT
+        with ESMTP id S235231AbjEIN7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 09:58:13 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811642D78
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 06:58:12 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f396606ab0so188701cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 06:58:12 -0700 (PDT)
+        Tue, 9 May 2023 09:59:53 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F013A3A9A
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 06:59:50 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-334d0f0d537so1152185ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 06:59:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683640691; x=1686232691;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DSqntl2LwDgOi2CCdpxO/7xZ2YXwZ5Dx9RPSAsCTISo=;
-        b=vKPIcx6ZkKkiLbCYPEDzkTCNBTwfk6x2XuEnmTTUegweL6A4DJ5ktTO3tspG7YUMtq
-         3QNebSFIb3FUJvdcoIadOz9cCBEXRfwE4qmDt3OTY2dtMWGApM/33X0Av+edIQ4IN6IP
-         3SSseJi+xy+iOWj5nCb4D9NHkQlOUl+UHCSE6d3xpjcz4qVesRUryIGULaLV9XhRUUG6
-         Ja2Vft65Q5MDynFkf/0gx2GRYMFvX3hGKHCpW38aZpVNIjmuYtn0h3WrEHlaUGW9zLP3
-         ipfSX0rMKT7oGMWEVWzBjDRb5G8ETKrDWUVQx9yRRghTmHl9JpgQ3sFpn8Cs0FGd3EWb
-         jzoA==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1683640790; x=1686232790;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hd6ZB9aSf979ARr3TqFE0nWEfQzugKRcLTSaL7ZQ8us=;
+        b=4+PqTxPO/yz7EkghXMUvCXZqut880jtX1fj+yTavRDIDlW6VCKy0JigNU5r11IUHF/
+         I4/ImtFwGv4FBzUzDBzXOIOi/CgoRb3rp0U3sJTLgG7HJeHROJUBCrMp0rTnCWoMQ+jL
+         0Fxls9FNabL7++hSX6jtSDFq+pav6pYPtgOZsn2jJuKqZWNkwM+06Y4jnq4H1DlkhICM
+         qzFKRn4y8EMHsqfThybD3WggyuAbi1nLyG7Z8LBJFz8ZaIoJ6iKEamCLfI84/sgVrmqR
+         OMiLDpRV2IJHEh1BvPVtn6VOSv7bauJMaB4T8t7KbAhcxndrggGzFpvdlTHEwoABcZRc
+         hB+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683640691; x=1686232691;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DSqntl2LwDgOi2CCdpxO/7xZ2YXwZ5Dx9RPSAsCTISo=;
-        b=YgYLO4kX3LJYVR5W/oOkhuvKY0zaX7Mk5oLz3tdn0EUF6x+2teboE5K/VnfBpJp2lz
-         LyFdllRdsFjsOS2FEkWvqLZCsoRdcJRb0m961a/p7XJ4H022SR+z1xUbmqfS7MB5wscR
-         GBVCEU+tiYhhqyApQqZ3w5qsBoSQ4D0lLaoV6H1PsN3kC0GJzHAVr13NBG/zHOabyl5g
-         vh9D1aEP8TGXDB9VXwIhDp8X2PWn0OYvQ2Rah1YkWklHf0EptK7/61ODTpojxMiaRSfe
-         UJbMm9Reo6ysEnw4CadQafFstXl9rGxsnKtAeGbwehNXdMg4W7sYwXdym3if1ZUwEtQF
-         d56A==
-X-Gm-Message-State: AC+VfDwmR3/1XlDsVKts/f2opsqakhRJJAr82QDFjoez9DVo9qkDb4oD
-        CUK0YVJfaWFLz0tloB4gNofRRahX15dJOptuOSe/+FskZNY4qyHWlGk=
-X-Google-Smtp-Source: ACHHUZ5abdauklrITK6bwGvP8T+6hrrpobSuHK87seRgis2rZzB2m1SpfEUSSNSfkBh1ZdhPohQ5FZcMV0OLEYUmwHA=
-X-Received: by 2002:a05:622a:178e:b0:3ef:2f55:2204 with SMTP id
- s14-20020a05622a178e00b003ef2f552204mr452047qtk.6.1683640691222; Tue, 09 May
- 2023 06:58:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683640790; x=1686232790;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hd6ZB9aSf979ARr3TqFE0nWEfQzugKRcLTSaL7ZQ8us=;
+        b=cVRkvTXjNb0ym960AM9YJJcf/tTVW1Jz93uV6wjVIxoYniVdRxXJVPhHev30n+jQbD
+         Hk2F9RmWsGD6ZN9OkOcdirQhnU4RerznuwLa0bLqT0d9xmVTHSh6Ucakv8EEH7hbAX14
+         1UNM6CN3SQcyWuO0C3sy04NP7GVzwfvnUrv/KYoG3WuqAC2HK+wzvBdnxuHTajmzcZbX
+         4WoY7nfGWPSXhNxvacMYNQDUYj12zu1bFVQ/P+ccdsTRYlqu6fdBqToaAa7MkV6uN+0b
+         5OZfC63o0r7BwKO4YFnhJKkios+Wh5NSct29zm4twiaOBitLWhG7q1CQ/wrPrCkWqOue
+         KahA==
+X-Gm-Message-State: AC+VfDwtIufGdioYPVCO9QUOuKS21Zno7pAjzWBNY/zLx814prZvqtF9
+        R6jtbG4tzyxRuDVBq93PshFOMos3NMJvW3d6GW4=
+X-Google-Smtp-Source: ACHHUZ7Y5mQy1Q7Ux5Hq4kEgKF/SGR+TgYQuhDIIaVeLtYJy/BQ7njzk9FzPnC/yJOGbvvQX7FJe3Q==
+X-Received: by 2002:a05:6e02:4a9:b0:32a:8792:7248 with SMTP id e9-20020a056e0204a900b0032a87927248mr6440953ils.2.1683640790150;
+        Tue, 09 May 2023 06:59:50 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id b24-20020a05663801b800b00411b6a4ab7esm2752304jaq.93.2023.05.09.06.59.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 06:59:49 -0700 (PDT)
+Message-ID: <6d6a494b-3c1a-2bf6-79e3-0ccc81166a67@kernel.dk>
+Date:   Tue, 9 May 2023 07:59:48 -0600
 MIME-Version: 1.0
-References: <20230509135546.580158-1-dongchenchen2@huawei.com>
-In-Reply-To: <20230509135546.580158-1-dongchenchen2@huawei.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 9 May 2023 15:57:58 +0200
-Message-ID: <CANn89iLq7Mh6p=F=ygGa0=J=R6gDq4HDFYnLatdhgM_FEveFnQ@mail.gmail.com>
-Subject: Re: [PATCH net, v3] net: nsh: Use correct mac_offset to unwind gso
- skb in nsh_gso_segment()
-To:     Dong Chenchen <dongchenchen2@huawei.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
-        simon.horman@corigine.com, jbenc@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yuehaibing@huawei.com, weiyongjun1@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [GIT PULL] Final io_uring updates for 6.4-rc1
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        io-uring <io-uring@vger.kernel.org>, linux-kernel@vger.kernel.org
+References: <9b2e791d-aeba-a2c7-1877-797ff5c680a3@kernel.dk>
+ <20230508031852.GA4029098@google.com>
+ <fb84f054-517c-77d4-eb11-d3df61f53701@kernel.dk>
+ <CAGXv+5GpeJ8hWt2Sc6L+4GB-ghA4vESobEaFGpo1_ZyPhOvW0g@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAGXv+5GpeJ8hWt2Sc6L+4GB-ghA4vESobEaFGpo1_ZyPhOvW0g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 9, 2023 at 3:55=E2=80=AFPM Dong Chenchen <dongchenchen2@huawei.=
-com> wrote:
->
-> As the call trace shows, skb_panic was caused by wrong skb->mac_header
-> in nsh_gso_segment():
->
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-> CPU: 3 PID: 2737 Comm: syz Not tainted 6.3.0-next-20230505 #1
-> RIP: 0010:skb_panic+0xda/0xe0
-> call Trace:
->  skb_push+0x91/0xa0
->  nsh_gso_segment+0x4f3/0x570
->  skb_mac_gso_segment+0x19e/0x270
->  __skb_gso_segment+0x1e8/0x3c0
->  validate_xmit_skb+0x452/0x890
->  validate_xmit_skb_list+0x99/0xd0
->  sch_direct_xmit+0x294/0x7c0
->  __dev_queue_xmit+0x16f0/0x1d70
->  packet_xmit+0x185/0x210
->  packet_snd+0xc15/0x1170
->  packet_sendmsg+0x7b/0xa0
->  sock_sendmsg+0x14f/0x160
->
-> The root cause is:
-> nsh_gso_segment() use skb->network_header - nhoff to reset mac_header
-> in skb_gso_error_unwind() if inner-layer protocol gso fails.
-> However, skb->network_header may be reset by inner-layer protocol
-> gso function e.g. mpls_gso_segment. skb->mac_header reset by the
-> inaccurate network_header will be larger than skb headroom.
->
-> nsh_gso_segment
->     nhoff =3D skb->network_header - skb->mac_header;
->     __skb_pull(skb,nsh_len)
->     skb_mac_gso_segment
->         mpls_gso_segment
->             skb_reset_network_header(skb);//skb->network_header+=3Dnsh_le=
-n
->             return -EINVAL;
->     skb_gso_error_unwind
->         skb_push(skb, nsh_len);
->         skb->mac_header =3D skb->network_header - nhoff;
->         // skb->mac_header > skb->headroom, cause skb_push panic
->
-> Use correct mac_offset to restore mac_header to fix it.
->
-> Fixes: c411ed854584 ("nsh: add GSO support")
-> Signed-off-by: Dong Chenchen <dongchenchen2@huawei.com>
->
-> ---
-> v2:
->   - Use skb->mac_header not skb->network_header-nhoff for mac_offset.
->
-> v3:
->   - 'net' is noted in the subject.
->   - arrange local variable following reverse xmas tree order
-> ---
->  net/nsh/nsh.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/net/nsh/nsh.c b/net/nsh/nsh.c
-> index e9ca007718b7..793e0bd94558 100644
-> --- a/net/nsh/nsh.c
-> +++ b/net/nsh/nsh.c
-> @@ -77,6 +77,7 @@ static struct sk_buff *nsh_gso_segment(struct sk_buff *=
-skb,
->                                        netdev_features_t features)
->  {
->         struct sk_buff *segs =3D ERR_PTR(-EINVAL);
-> +       u16 mac_offset =3D skb->mac_header;
->         unsigned int nsh_len, mac_len;
->         __be16 proto;
->         int nhoff;
-> @@ -108,8 +109,7 @@ static struct sk_buff *nsh_gso_segment(struct sk_buff=
- *skb,
->         segs =3D skb_mac_gso_segment(skb, features);
->         if (IS_ERR_OR_NULL(segs)) {
->                 skb_gso_error_unwind(skb, htons(ETH_P_NSH), nsh_len,
-> -                                    skb->network_header - nhoff,
-> -                                    mac_len);
-> +                                    mac_offset, mac_len);
->                 goto out;
->         }
->
-> --
-> 2.25.1
->
+On 5/8/23 8:35?PM, Chen-Yu Tsai wrote:
+> On Tue, May 9, 2023 at 2:42?AM Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> On 5/7/23 9:18?PM, Chen-Yu Tsai wrote:
+>>> Hi,
+>>>
+>>> On Sun, May 07, 2023 at 06:00:48AM -0600, Jens Axboe wrote:
+>>>> Hi Linus,
+>>>>
+>>>> Nothing major in here, just two different parts:
+>>>>
+>>>> - Small series from Breno that enables passing the full SQE down
+>>>>   for ->uring_cmd(). This is a prerequisite for enabling full network
+>>>>   socket operations. Queued up a bit late because of some stylistic
+>>>>   concerns that got resolved, would be nice to have this in 6.4-rc1
+>>>>   so the dependent work will be easier to handle for 6.5.
+>>>>
+>>>> - Fix for the huge page coalescing, which was a regression introduced
+>>>>   in the 6.3 kernel release (Tobias).
+>>>>
+>>>> Note that this will throw a merge conflict in the ublk_drv code, due
+>>>> to this branch still being based off the original for-6.4/io_uring
+>>>> branch. Resolution is pretty straight forward, I'm including it below
+>>>> for reference.
+>>>>
+>>>> Please pull!
+>>>>
+>>>>
+>>>> The following changes since commit 3c85cc43c8e7855d202da184baf00c7b8eeacf71:
+>>>>
+>>>>   Revert "io_uring/rsrc: disallow multi-source reg buffers" (2023-04-20 06:51:48 -0600)
+>>>>
+>>>> are available in the Git repository at:
+>>>>
+>>>>   git://git.kernel.dk/linux.git tags/for-6.4/io_uring-2023-05-07
+>>>>
+>>>> for you to fetch changes up to d2b7fa6174bc4260e496cbf84375c73636914641:
+>>>>
+>>>>   io_uring: Remove unnecessary BUILD_BUG_ON (2023-05-04 08:19:05 -0600)
+>>>>
+>>>> ----------------------------------------------------------------
+>>>> for-6.4/io_uring-2023-05-07
+>>>>
+>>>> ----------------------------------------------------------------
+>>>> Breno Leitao (3):
+>>>>       io_uring: Create a helper to return the SQE size
+>>>>       io_uring: Pass whole sqe to commands
+>>>
+>>> This commit causes broken builds when IO_URING=n and NVME_CORE=y, as
+>>> io_uring_sqe_cmd(), called in drivers/nvme/host/ioctl.c, ends up being
+>>> undefined. This was also reported [1] by 0-day bot on your branch
+>>> yesterday, but it's worse now that Linus merged the pull request.
+>>>
+>>> Not sure what the better fix would be. Move io_uring_sqe_cmd() outside
+>>> of the "#if defined(CONFIG_IO_URING)" block?
+>>
+>> Queued up a patch for this:
+>>
+>> https://git.kernel.dk/cgit/linux/commit/?h=io_uring-6.4&id=5d371b2f2b0d1a047582563ee36af8ffb5022847
+> 
+> Thanks! Looks like the Reported-by line for the test bot is missing a right
+> angle bracket?
+> 
+> Also, consider it
+> 
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+
+Oops yes, thanks for noticing. I'll correct that and add your tested-by.
+
+-- 
+Jens Axboe
+
