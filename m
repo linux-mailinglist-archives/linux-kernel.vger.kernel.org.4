@@ -2,202 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F326FC579
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ECF86FC5B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235652AbjEILzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 07:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
+        id S235069AbjEIMAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 08:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235609AbjEILyn (ORCPT
+        with ESMTP id S229520AbjEIMA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 07:54:43 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BDC421D;
-        Tue,  9 May 2023 04:54:40 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3062db220a3so3709421f8f.0;
-        Tue, 09 May 2023 04:54:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683633279; x=1686225279;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tolBytGtS8Xn8iqANX94YDwAEigexY0tGBNVZtJhEmU=;
-        b=D6TvQygrPJNzSbMNHt4fPWFwo/YKMyUETTgiVamzBUKtWWKADyyauhyudd3KgaG6Wy
-         iZ+nvp3l0YOQ2TZKMzVB3UPT4j1JLTeQa7/VNhfYQYDP4I0ZKZFmdgfhNe+vRCrg/5ao
-         yv64sC8Cr54gQ0i783euGwBVeO+zPdAg4flsJwDByFISeQP+KqS1/CYySsjjP3Oejfgb
-         zh6RtIeg5738bgB8y7hoYAMd3nzqV2E4sY/SAdR5H9rKruIXLjcSx8/rYhR5019vOU7A
-         yjSBZhlfsUDFIsn6snjXLJJPsxGKmqdaarDD+vML/Mp2RO5sgFJghcdoHV3TxLgeA0ra
-         /HJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683633279; x=1686225279;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tolBytGtS8Xn8iqANX94YDwAEigexY0tGBNVZtJhEmU=;
-        b=W8g8WggNjz/O9hTOLGDIGjjQCRE7L7ZXliUFze+6YJpXd6wdgQq16QbfTf08NoqjqO
-         L4sYwVFLnmUpxpr0qaXuSbAU0s9KVwR+YUMH5X58/r8KrThvf/izeaPtP3VwZYlKoHZX
-         y32fzVzB70G3e4VOKVTnz7vbEGhIzpo0hBPlQIO3TEQBIcLPGrClKlSuELNUirS30HJf
-         Kb85GZs383hMwDyfutCbVrRLdOwHnyo2Km0NVXjq3R/uIvMrJTjw9JW30uCf5FKXrkOh
-         ihYVabCCfok7rc3DLzTjJxgaCCqkJnJx85FxJ7HlfIEFRd7uGWIHxyfUufQ0UICuGLF8
-         1Cng==
-X-Gm-Message-State: AC+VfDwGpjaph1gDAoajQmBpcUiswNmeYx9ToSNynEkmm0610frNs8Tl
-        4B2rsm2QaVT8A+jAACbTqkpYU9q/9Pk=
-X-Google-Smtp-Source: ACHHUZ7lUnR1lX2mgpHgMvrPLwQZiXCLPakDNhXkNVP+sknjVOjyDfgZTT0z9ZjxVHwGQvBtagcN7Q==
-X-Received: by 2002:a05:6000:10a:b0:2f9:482f:c13f with SMTP id o10-20020a056000010a00b002f9482fc13fmr8829581wrx.46.1683633279032;
-        Tue, 09 May 2023 04:54:39 -0700 (PDT)
-Received: from localhost ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id b15-20020a5d4b8f000000b003064600cff9sm14153895wrt.38.2023.05.09.04.54.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 04:54:38 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] scsi: ses: Avoid reporting errors for simple subenclosures
-Date:   Tue,  9 May 2023 12:54:24 +0100
-Message-Id: <20230509115424.3996664-1-aidanmacdonald.0x0@gmail.com>
+        Tue, 9 May 2023 08:00:28 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2094.outbound.protection.outlook.com [40.107.114.94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCDA113;
+        Tue,  9 May 2023 05:00:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BiWhfRTXWBj4TtbZetffsUXnwFXA4VQt6dDd69dB9THcF6VzN978Twkt6Dj/KCX8kqTqZBxprpJ7uVK4fNikNFG0Lft2CvJ3cJFSSJi7b0xtjojZhQ6GNpex+lqg4LppEqFgEYOHF9VUeG4EJY7SSVQuRRLLuSO2AB5jygdfb5KH5OH+yxCogjkQHVnHRTBq06sH9ZK7NHTjZSLufqJWPaGoWAQNGe0GuFDlImC42TAUAvpOC50+wHbJyiPNFJyPsWWgwsWeufaTG5ZY8ny9hba1YaepuyyQW8Adxa4HURIAhJOF7ORAJ/EKqTHdWsCBw7CbUaS6O36veCYKh2KERA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6jBxo9035tLzNnDAcGAZ21oL42TXIfMgY9ifLOBMryY=;
+ b=kG90ltzeNAoYEBvh87nKo5xJOk6V1sRqTcSnIQdUoTDsi0LkqZuu6I6wcMPhK3icEu57cMZ60nQN+fLI58arGgmhZxhYSI6vm7USG5NujASXFHUn9Lu38BMMvhWp4vva2lRn1Lbq9SzB4gmaWO0zGhJB2iv0T/TT28Lg7pojZa/jgXHG7ic0FcU7VRi5s52DFRpIL+qvhAyrxRXTyLvw8COAj/sMq9+UWBbEmdtSKWR7QIvlkX95VWVJVdUBxJJ0lvDYxI1pZfYX8ypWUbFIjWaTa9sU+c+UnIK2FkYQB8JZNJYXI+BHt2UU6ytZ/tIG+7mtrL+0DpFNz1aC6UCTPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6jBxo9035tLzNnDAcGAZ21oL42TXIfMgY9ifLOBMryY=;
+ b=kQ0oRl7LsXT7GDr2eGu5RgqBw5RZyFe0lu3wIQ2m+CJsNbzMGHR4ykNn7T4qs3DgRwd79ppcpX5S1e+hyh2NR6/LQIGXaFlGE+WRraehmig6YqqyGi3yOFdCZWjxt02OKtCLAieZUvmc2uCq45Aoy/TrH36gKWxp9kDfXsKPbnQ=
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
+ by TYCPR01MB11494.jpnprd01.prod.outlook.com (2603:1096:400:379::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Tue, 9 May
+ 2023 12:00:23 +0000
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::8c55:9dbb:2418:df89]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::8c55:9dbb:2418:df89%4]) with mapi id 15.20.6363.033; Tue, 9 May 2023
+ 12:00:23 +0000
+From:   Chris Paterson <Chris.Paterson2@renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "patches@kernelci.org" <patches@kernelci.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        "pavel@denx.de" <pavel@denx.de>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "srw@sladewatkins.net" <srw@sladewatkins.net>,
+        "rwarsow@gmx.de" <rwarsow@gmx.de>
+Subject: RE: [PATCH 5.15 000/370] 5.15.111-rc2 review
+Thread-Topic: [PATCH 5.15 000/370] 5.15.111-rc2 review
+Thread-Index: AQHZgiYPvpM3d3BQs02mBFpXSa358q9R09Ww
+Date:   Tue, 9 May 2023 12:00:23 +0000
+Message-ID: <TY2PR01MB378890A8BA8A7B0F26572969B7769@TY2PR01MB3788.jpnprd01.prod.outlook.com>
+References: <20230509030611.521807993@linuxfoundation.org>
+In-Reply-To: <20230509030611.521807993@linuxfoundation.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|TYCPR01MB11494:EE_
+x-ms-office365-filtering-correlation-id: 7fd1c395-eaeb-4915-d1d2-08db5084f877
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VR1FL0IyNKGxv1Vd0L136wmNnFf6oU2Lw2rlc8XwW9UEGtV+kZ54W3LgR75d8GUaGrKa5bxYiOPYNG94tHI0bAthPwgTPi24gxCAN4SDID42i7RNnUJSrl0R2q9l6UaLnem2+vvP5RtwHZQ9Kv6Djp6Dah6/e39yivPR1IgDxLMy6dcvPOzbGmYjsc+vGr/zul4MfPT5pPzpzuHfx6eFnKIM01LEn2bgdQa4rbfwfMLhE9aiuugBoo4yX83W5FlSn6Fiwpv4KhajBQ5MdXBZWFLhGvpC53+HjgAx55UTn+tOZhtDghjnpDT6DRG98xVXDCaXnKsuZmLvq+N3GkOY5bWoHyDQZh7iI6xkhFy+JYlkMlTxJNVkq+vhDCSnWZRfM4pBWs3deAKCfOan0ZaF2TnU3T0iVpDYPrccX4oA82RHz3RgM+NdLmJLknSRM8WlLxlFwHJjlclviNS1NpmT6I5mANVmEep5z+NqHeYN44ClCUb/RANQnIaDCSHV6p++QjlFBbPebfydkQpr14ViRyZPwidi8yEc2Dkve8Y6R9ZoHxHgoJMph0zyWwkYR/Jq3HIWorJcfxCpG7Z27dQIFd1IaMN+LmGxZU37toRilFZ+1WHLoweP5RGJK1hkpn/bBoZ8dWDWE056ma5lidbx+g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(376002)(366004)(39860400002)(451199021)(9686003)(186003)(2906002)(4744005)(6506007)(26005)(33656002)(38100700002)(55016003)(122000001)(316002)(38070700005)(71200400001)(41300700001)(4326008)(76116006)(66476007)(66946007)(64756008)(66556008)(7696005)(66446008)(966005)(86362001)(54906003)(110136005)(478600001)(7416002)(8676002)(5660300002)(8936002)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?MpLFWkLAzYGmK8iVhcouffXV1Rj7sj4Cl1OeikOWRIZ2KuLterlBMN47?=
+ =?Windows-1252?Q?JCPlnYKMA5CWK2bMq5wwY9UtE68vSrXCcI5vm1u9eWzQ6J79VMqkN4/m?=
+ =?Windows-1252?Q?ZmxFJ8NX2/Kcdq/bLPCfytYix7dq8zBLc+4tm/QxKEVpz7ORg2Ny6ieK?=
+ =?Windows-1252?Q?Y+AF88h7UGe4piXPLAMLzMBbf7Hbv7W86VcUb0FJudpP/dBXKgnYKVDA?=
+ =?Windows-1252?Q?gU2kHaAiNh1SnrptBBakQt1tOWy2mXglYf142mYYT17s3HJrHYO/V0NJ?=
+ =?Windows-1252?Q?6UCv8kjWt5qd9/2l/QlbYuH6PaLuwZ3/XdflZq1/+vFa//XIhUQvAdPZ?=
+ =?Windows-1252?Q?gUQx6UWNvBUnel53GeTMuUe7Ug5kKbO8wjeTkdMHZZOVmlp6+D4qZhOs?=
+ =?Windows-1252?Q?KbgXOqjfLdvF3mvHx8rEMs4Ua2E8hVh+w0OMG1yksAnGOP3pD0M89GeO?=
+ =?Windows-1252?Q?bx0aZ53p22OmbwHVB78ybZYB+zhJQn6QljO9HJnfKQlUyAQk72VTm5NQ?=
+ =?Windows-1252?Q?UYLi4tLhsLCRGFZ77yfVEVymh/xMi3NUTiikl0dHwj3rPi0vGQYxYiha?=
+ =?Windows-1252?Q?LB8CS4PBDg47j6G16kKSsjAyFixSk/Qd4EQSsh1mZCtFn6W6MMG5W3I/?=
+ =?Windows-1252?Q?+gBm7woi3Heqq8Y5KrfdrIA3KjlWGxjmr4DGPh8zaQCkeEGOqE6o1a4y?=
+ =?Windows-1252?Q?WonFOr9o+8+b7fLaH6xxmstbOZtUkMaNkn/Kmf/UkREP7qFM8EwuUZdy?=
+ =?Windows-1252?Q?ulasG5DKDJtqCn3Y0fWF6uCYh/8EV+7p+In2Edy0uhmO6a1PUTZmOaTy?=
+ =?Windows-1252?Q?XF934T4DdIzJEFy7igRtFs8Euj2IgkR/8K+Y6campIDxCFWphnSQH3mC?=
+ =?Windows-1252?Q?IzZjQILvN48AAJ+l1NLgjBr6ndOYUBAi6/Xc0L1sJUkFKJc/076cMM7F?=
+ =?Windows-1252?Q?IV1mWzrd+HYvR71s4e0TuYMFdnjTPCHXRPVygSCiieE1Kz7uKkoJbDVx?=
+ =?Windows-1252?Q?Dc3GOvnGZzyq/QzvnyQo+IPmpxRe2CHnKvQgH8eDenWNnys7A7cRrXaQ?=
+ =?Windows-1252?Q?w0b1YoqK5S+KM8VTEk+bfEFxmliRw4thTe1CiBba7wPVH25pMqA6FTiN?=
+ =?Windows-1252?Q?6suWew3l8YoTv5i9c5Ai1AEfKrQzdxABOi4WwqWLk9giGmsK/hfEv38t?=
+ =?Windows-1252?Q?PyfOe3Lnlf7djCWvwFA4uND439+qlskD7kCogEgstlnf1XxGv70Ij1At?=
+ =?Windows-1252?Q?dUzvAPLzXlZ5vY+tAtV/O7q+YDDRXwYcEgU+XfcpgIvdCdravIV3QNyG?=
+ =?Windows-1252?Q?v30FugYiLogew+1+TK7CRNKm2PWNf3a4467C5v//4O0g3hIKEqLcPqPY?=
+ =?Windows-1252?Q?BmLJEvX325tfz8B2epjeiXF+Dq9wp9BOX1JrbOn8j36kbtFvQjnJtr21?=
+ =?Windows-1252?Q?WVw2zt0Se2m3wrLxeGbfUxaMlO7obUFk4qdQq433VI36Zn9kOBfFvkdp?=
+ =?Windows-1252?Q?z+nd9uBU4uol7HSabSqLbokq4at4qodl/RwFi8ZJl2DI3r17uc+zmypT?=
+ =?Windows-1252?Q?fUKBbQeS2Amghyi4uYdWgYa+X6UFhiVsY4YPqYg50smpaljpeCLB9iMn?=
+ =?Windows-1252?Q?Uoq6kTykGaV2xf6I01yxRIAvNBhvzceoI03j9VXbgL2fNj9/uEkhrBIx?=
+ =?Windows-1252?Q?4lyJWophcihPd2nkPHxW+8MVfZ8U6hmgyKZ7vD/Sl5ntL4rwbugqqg?=
+ =?Windows-1252?Q?=3D=3D?=
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7fd1c395-eaeb-4915-d1d2-08db5084f877
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2023 12:00:23.7418
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: TR1KKjNM3PesrqJEwjy+xUcDZB81oejOihiQekulAxtU1mMRzwCt2bYeInF4AcIhZhXH4o+EgBaR9LKtaugySM7aGJ+QhhyvTEkWwLp018U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB11494
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the SES driver reports bogus errors when plugging
-in a drive that exposes only a single, simple subenclosure:
+Hello Greg,
 
-[  432.713731] scsi 3:0:0:0: Direct-Access     WD       Elements 2667    2007 PQ: 0 ANSI: 6
-[  432.714127] scsi 3:0:0:1: Enclosure         WD       SES Device       2007 PQ: 0 ANSI: 6
-...
-[  432.716508] scsi 3:0:0:1: Attached scsi generic sg2 type 13
-...
-[  439.897020] scsi 3:0:0:1: Wrong diagnostic page; asked for 1 got 8
-[  439.897023] scsi 3:0:0:1: Failed to get diagnostic page 0x1
-[  439.897025] scsi 3:0:0:1: Failed to bind enclosure -19
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: Tuesday, May 9, 2023 4:26 AM
+>=20
+> This is the start of the stable review cycle for the 5.15.111 release.
+> There are 370 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+> Responses should be made by Thu, 11 May 2023 03:05:05 +0000.
+> Anything received after that time might be too late.
 
-According to the SES specification, simple subenclosures always
-return diagnostic page 8 no matter what page was requested, so
-the device is permitted to page 8 here and nothing is wrong.
+CIP configurations built and booted with Linux 5.15.111-rc1 (89e0c91492bf):
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
+59734879
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
+ux-5.15.y
 
-To avoid polluting the kernel logs with bogus errors, the first
-diagnostic page read bypasses the usual page code check. If it
-returns page 8 the device is assumed to be a simple subenclosure
-and no enclosure device is created. Simple subenclosures only
-return a vendor specific status byte in page 8 and don't support
-any other pages, so they can't support the enclosure interface.
+Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
- drivers/scsi/ses.c | 53 +++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 45 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/scsi/ses.c b/drivers/scsi/ses.c
-index d7d0c35c58b8..3457d8bc1ddf 100644
---- a/drivers/scsi/ses.c
-+++ b/drivers/scsi/ses.c
-@@ -73,9 +73,12 @@ static void init_device_slot_control(unsigned char *dest_desc,
- 	dest_desc[3] &= 0x3c;
- }
- 
--
--static int ses_recv_diag(struct scsi_device *sdev, int page_code,
--			 void *buf, int bufflen)
-+/*
-+ * Raw RECEIVE_DIAGNOSTIC page command. Does not check the returned
-+ * page code, which may differ from the requested page code!
-+ */
-+static int __ses_recv_diag(struct scsi_device *sdev, int page_code,
-+			   void *buf, int bufflen)
- {
- 	int ret;
- 	unsigned char cmd[] = {
-@@ -86,7 +89,6 @@ static int ses_recv_diag(struct scsi_device *sdev, int page_code,
- 		bufflen & 0xff,
- 		0
- 	};
--	unsigned char recv_page_code;
- 	unsigned int retries = SES_RETRIES;
- 	struct scsi_sense_hdr sshdr;
- 	const struct scsi_exec_args exec_args = {
-@@ -100,6 +102,15 @@ static int ses_recv_diag(struct scsi_device *sdev, int page_code,
- 		 (sshdr.sense_key == NOT_READY ||
- 		  (sshdr.sense_key == UNIT_ATTENTION && sshdr.asc == 0x29)));
- 
-+	return ret;
-+}
-+
-+static int ses_recv_diag(struct scsi_device *sdev, int page_code,
-+			 void *buf, int bufflen)
-+{
-+	unsigned char recv_page_code;
-+	int ret = __ses_recv_diag(sdev, page_code, buf, bufflen);
-+
- 	if (unlikely(ret))
- 		return ret;
- 
-@@ -108,8 +119,11 @@ static int ses_recv_diag(struct scsi_device *sdev, int page_code,
- 	if (likely(recv_page_code == page_code))
- 		return ret;
- 
--	/* successful diagnostic but wrong page code.  This happens to some
--	 * USB devices, just print a message and pretend there was an error */
-+	/*
-+	 * Successful diagnostic but wrong page code. Shouldn't happen
-+	 * except for simple subenclosures, which should already have
-+	 * been detected by this point.
-+	 */
- 
- 	sdev_printk(KERN_ERR, sdev,
- 		    "Wrong diagnostic page; asked for %d got %u\n",
-@@ -695,11 +709,33 @@ static int ses_intf_add(struct device *cdev)
- 	if (!hdr_buf || !ses_dev)
- 		goto err_init_free;
- 
-+	/*
-+	 * Read without checking page code, getting a different page
-+	 * is not necessarily an error for devices with only a simple
-+	 * subenclosure (eg. some USB drives).
-+	 */
- 	page = 1;
--	result = ses_recv_diag(sdev, page, hdr_buf, INIT_ALLOC_SIZE);
-+	result = __ses_recv_diag(sdev, page, hdr_buf, INIT_ALLOC_SIZE);
- 	if (result)
- 		goto recv_failed;
- 
-+	/*
-+	 * A simple subenclosure only supports page 8 and will return
-+	 * it after any diagnostic page request. Simple subenclosures
-+	 * are not supported by this driver -- there is simply no data
-+	 * to report besides a vendor specific byte -- but they will
-+	 * not be treated as an error.
-+	 */
-+	if (hdr_buf[0] == 8) {
-+		err = 0;
-+		goto err_init_free;
-+	}
-+
-+	/*
-+	 * All diagnostic pages will include a length field so even
-+	 * if the page code is incorrect at this point, that'll get
-+	 * detected when re-reading the page.
-+	 */
- 	len = (hdr_buf[2] << 8) + hdr_buf[3] + 4;
- 	buf = kzalloc(len, GFP_KERNEL);
- 	if (!buf)
-@@ -817,7 +853,8 @@ static int ses_intf_add(struct device *cdev)
-  err_init_free:
- 	kfree(ses_dev);
- 	kfree(hdr_buf);
--	sdev_printk(KERN_ERR, sdev, "Failed to bind enclosure %d\n", err);
-+	if (err)
-+		sdev_printk(KERN_ERR, sdev, "Failed to bind enclosure %d\n", err);
- 	return err;
- }
- 
--- 
-2.39.2
-
+Kind regards, Chris
