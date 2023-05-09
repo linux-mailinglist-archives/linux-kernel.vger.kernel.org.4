@@ -2,97 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26F06FCBDE
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB246FCBE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjEIQ4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 12:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S234772AbjEIQ5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 12:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233996AbjEIQz5 (ORCPT
+        with ESMTP id S234621AbjEIQ5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 12:55:57 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78AA5597
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 09:55:37 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-334d0f0d537so1233245ab.0
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 09:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1683651336; x=1686243336;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M99v2oSk5Zw/R5pw6TMXoO8HTOcL3iX6x+QANsvXHn0=;
-        b=nw42TFhjvS20Sm1KQRHjcqztVks5L+rL5PfFA4DM+VLRlkicZy/SMjm/+P35agvpJ6
-         0fy9drliNrmfdxiK3ZETRU0VyppcgqItDAZnUWtT4ocuouF9HzIzERLOg1Rj4povaH5z
-         b4TeGFHBVg9+tpZO3wG5XzPLEQ2eHrzPXAkl3P8jszyq6OATNNUf5bzKfJUo+Z1ve6Mn
-         S6BqPUuM2UIKRW/Q2eUAboxUMrVObPGRAeOq7i6mzOODsH4CWgk7pWnvmNkzitcT6NAP
-         HEdu6jB8crZpEEfwWYe5ifjMoNGd2vb/nPO530kpFXkllsmRdRjgn/IIwwImULoBVo4y
-         gs4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683651336; x=1686243336;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M99v2oSk5Zw/R5pw6TMXoO8HTOcL3iX6x+QANsvXHn0=;
-        b=QPsdxwETvsAQ5gXDzSzkQpvQbRJnw7oiw3TJ1VudTzllXHi3AH7g0mkh3F8uQWkIpm
-         uQdHUJVDVxxnqmkajvZzpkBonSb40QPzcaImjbAWOBc1zju/uw57fN9+ZTpPdKmsxBXA
-         97hrjwYnHdQC68taqMMXJFr4IPy07eEA3LPr4DaT2BcdVwr/3z3o0ak+4H5xwiOIZO71
-         sk5+qpryWhd9OUn/aoFfsX5q5WqFtf2JZ4xfNeyAXfGd9lqwH1C+bZvPEYbKehzf8UFX
-         TOsds8E70uy1SkNIXUA/A+yttNjW35m3A9QRiUTDuwFxYFtxJRIZ8WnhDRherIGM7/r5
-         cvBg==
-X-Gm-Message-State: AC+VfDyFcpNBvSGjhD5UE+wdZpqXfB7lO0QkBCurupO8/UsQNA/WBkpN
-        xyFl0BxsPVlCme6n5XOnITiZYw==
-X-Google-Smtp-Source: ACHHUZ45ERK48eSf4fRmxV6a4A56X4dx/bmDEP2oJ4KQZazCYhPAVEsq1amsvvs3C6mbOkKpuT8JLw==
-X-Received: by 2002:a05:6e02:1d05:b0:331:1129:b8a9 with SMTP id i5-20020a056e021d0500b003311129b8a9mr7806137ila.1.1683651336617;
-        Tue, 09 May 2023 09:55:36 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id y19-20020a056638229300b004166c24e30dsm2148946jas.32.2023.05.09.09.55.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 09:55:35 -0700 (PDT)
-Message-ID: <f3c4fce2-657c-2743-6d05-9af29b35fcbe@kernel.dk>
-Date:   Tue, 9 May 2023 10:55:34 -0600
+        Tue, 9 May 2023 12:57:14 -0400
+Received: from out-41.mta1.migadu.com (out-41.mta1.migadu.com [IPv6:2001:41d0:203:375::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAB146A2
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 09:57:10 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683651428;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bDdRmpQUHxUwEp25w0/2seMdc64/j9Z/b3eHGlchF3o=;
+        b=TaJMh+ibDwZ76+zvUT6ManuBOa+4NfdawA4yfp4IwNuyxCJPeSx6kSLuIiLFU/AYzVahz9
+        rf/FyP1YvsTQKuFFE19raB/1s/qyS2VrGGpC3H/gPky9ZkmWIlYgcxT9D00qxDwC7GRg6u
+        6VvAb9zEEyDkJvg4QVh3+P/EcPdALq8=
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-mm@kvack.org,
+        linux-bcachefs@vger.kernel.org
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        boqun.feng@gmail.com, brauner@kernel.org, hch@infradead.org,
+        colyli@suse.de, djwong@kernel.org, mingo@redhat.com, jack@suse.cz,
+        axboe@kernel.dk, willy@infradead.org, ojeda@kernel.org,
+        ming.lei@redhat.com, ndesaulniers@google.com, peterz@infradead.org,
+        phillip@squashfs.org.uk, urezki@gmail.com, longman@redhat.com,
+        will@kernel.org
+Subject: [PATCH 00/32] bcachefs - a new COW filesystem
+Date:   Tue,  9 May 2023 12:56:25 -0400
+Message-Id: <20230509165657.1735798-1-kent.overstreet@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [GIT PULL] Final io_uring updates for 6.4-rc1
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        io-uring <io-uring@vger.kernel.org>, linux-kernel@vger.kernel.org
-References: <9b2e791d-aeba-a2c7-1877-797ff5c680a3@kernel.dk>
- <20230508031852.GA4029098@google.com>
- <fb84f054-517c-77d4-eb11-d3df61f53701@kernel.dk>
- <CAGXv+5GpeJ8hWt2Sc6L+4GB-ghA4vESobEaFGpo1_ZyPhOvW0g@mail.gmail.com>
- <6d6a494b-3c1a-2bf6-79e3-0ccc81166a67@kernel.dk>
- <CAHk-=wjspoBCSrwL2s=qof3GFnZ4BmMzFbCcEx3VpVP81zXwrg@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHk-=wjspoBCSrwL2s=qof3GFnZ4BmMzFbCcEx3VpVP81zXwrg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/23 10:52?AM, Linus Torvalds wrote:
-> On Tue, May 9, 2023 at 6:59?AM Jens Axboe <axboe@kernel.dk> wrote:
->>
->> Oops yes, thanks for noticing. I'll correct that and add your tested-by.
-> 
-> .. this build problem isn't caught by Guenter's build testing, but can
-> we please make sure that it's fixed in my tree by -rc2?
-> 
-> It would be lovely to have a release that doesn't end up having silly
-> build problems pending for too long. Even if they might be unusual
-> configs.
+I'm submitting the bcachefs filesystem for review and inclusion.
 
-It's in my tree, it'll go your way before -rc2 for sure.
+Included in this patch series are all the non fs/bcachefs/ patches. The
+entire tree, based on v6.3, may be found at:
+
+  http://evilpiepirate.org/git/bcachefs.git bcachefs-for-upstream
+
+----------------------------------------------------------------
+
+bcachefs overview, status:
+
+Features:
+ - too many to list
+
+Known bugs:
+ - too many to list
+
+Status:
+ - Snapshots have been declared stable; one serious bug report
+   outstanding to look into, most users report it working well.
+
+   These are RW btrfs-style snapshots, but with far better scalability
+   and no scalability issues with sparse snapshots due to key level
+   versioning.
+
+ - Erasure coding is getting really close; hope to have it ready for
+   users to beat on it by this summer. This is a novel RAID/erasure
+   coding design with no write hole, and no fragmentation of writes
+   (e.g. RAIDZ).
+
+ - Tons of scalabality work finished over the past year, users are
+   running it on 100 TB filesystems without complaint, waiting for first
+   1 PB user; next thing to address re: scalability is fsck/recovery
+   memory usage.
+
+ - Test infrastructure! Major project milestone, check out our test
+   dashboard at
+     https://evilpiepirate.org/~testdashboard/ci?branch=bcachefs
+
+Other project notes:
+
+irc::/irc.oftc.net/bcache is where most activity happens; I'm always
+there, and most code review happens there - I find the conversational
+format more productive.
+
+------------------------------------------------
+
+patches in this series:
+
+Christopher James Halse Rogers (1):
+  stacktrace: Export stack_trace_save_tsk
+
+Daniel Hill (1):
+  lib: add mean and variance module.
+
+Dave Chinner (3):
+  vfs: factor out inode hash head calculation
+  hlist-bl: add hlist_bl_fake()
+  vfs: inode cache conversion to hash-bl
+
+Kent Overstreet (27):
+  Compiler Attributes: add __flatten
+  locking/lockdep: lock_class_is_held()
+  locking/lockdep: lockdep_set_no_check_recursion()
+  locking: SIX locks (shared/intent/exclusive)
+  MAINTAINERS: Add entry for six locks
+  sched: Add task_struct->faults_disabled_mapping
+  mm: Bring back vmalloc_exec
+  fs: factor out d_mark_tmpfile()
+  block: Add some exports for bcachefs
+  block: Allow bio_iov_iter_get_pages() with bio->bi_bdev unset
+  block: Bring back zero_fill_bio_iter
+  block: Rework bio_for_each_segment_all()
+  block: Rework bio_for_each_folio_all()
+  block: Don't block on s_umount from __invalidate_super()
+  bcache: move closures to lib/
+  MAINTAINERS: Add entry for closures
+  closures: closure_wait_event()
+  closures: closure_nr_remaining()
+  closures: Add a missing include
+  iov_iter: copy_folio_from_iter_atomic()
+  MAINTAINERS: Add entry for generic-radix-tree
+  lib/generic-radix-tree.c: Don't overflow in peek()
+  lib/generic-radix-tree.c: Add a missing include
+  lib/generic-radix-tree.c: Add peek_prev()
+  lib/string_helpers: string_get_size() now returns characters wrote
+  lib: Export errname
+  MAINTAINERS: Add entry for bcachefs
+
+ MAINTAINERS                                   |  39 +
+ block/bdev.c                                  |   2 +-
+ block/bio.c                                   |  57 +-
+ block/blk-core.c                              |   1 +
+ block/blk-map.c                               |  38 +-
+ block/blk.h                                   |   1 -
+ block/bounce.c                                |  12 +-
+ drivers/md/bcache/Kconfig                     |  10 +-
+ drivers/md/bcache/Makefile                    |   4 +-
+ drivers/md/bcache/bcache.h                    |   2 +-
+ drivers/md/bcache/btree.c                     |   8 +-
+ drivers/md/bcache/super.c                     |   1 -
+ drivers/md/bcache/util.h                      |   3 +-
+ drivers/md/dm-crypt.c                         |  10 +-
+ drivers/md/raid1.c                            |   4 +-
+ fs/btrfs/disk-io.c                            |   4 +-
+ fs/btrfs/extent_io.c                          |  50 +-
+ fs/btrfs/raid56.c                             |  14 +-
+ fs/crypto/bio.c                               |   9 +-
+ fs/dcache.c                                   |  12 +-
+ fs/erofs/zdata.c                              |   4 +-
+ fs/ext4/page-io.c                             |   8 +-
+ fs/ext4/readpage.c                            |   4 +-
+ fs/f2fs/data.c                                |  20 +-
+ fs/gfs2/lops.c                                |  10 +-
+ fs/gfs2/meta_io.c                             |   8 +-
+ fs/inode.c                                    | 218 +++--
+ fs/iomap/buffered-io.c                        |  14 +-
+ fs/mpage.c                                    |   4 +-
+ fs/squashfs/block.c                           |  48 +-
+ fs/squashfs/lz4_wrapper.c                     |  17 +-
+ fs/squashfs/lzo_wrapper.c                     |  17 +-
+ fs/squashfs/xz_wrapper.c                      |  19 +-
+ fs/squashfs/zlib_wrapper.c                    |  18 +-
+ fs/squashfs/zstd_wrapper.c                    |  19 +-
+ fs/super.c                                    |  40 +-
+ fs/verity/verify.c                            |   9 +-
+ include/linux/bio.h                           | 132 +--
+ include/linux/blkdev.h                        |   1 +
+ include/linux/bvec.h                          |  70 +-
+ .../md/bcache => include/linux}/closure.h     |  46 +-
+ include/linux/compiler_attributes.h           |   5 +
+ include/linux/dcache.h                        |   1 +
+ include/linux/fs.h                            |  10 +-
+ include/linux/generic-radix-tree.h            |  68 +-
+ include/linux/list_bl.h                       |  22 +
+ include/linux/lockdep.h                       |  10 +
+ include/linux/lockdep_types.h                 |   2 +-
+ include/linux/mean_and_variance.h             | 219 +++++
+ include/linux/sched.h                         |   1 +
+ include/linux/six.h                           | 210 +++++
+ include/linux/string_helpers.h                |   4 +-
+ include/linux/uio.h                           |   2 +
+ include/linux/vmalloc.h                       |   1 +
+ init/init_task.c                              |   1 +
+ kernel/Kconfig.locks                          |   3 +
+ kernel/locking/Makefile                       |   1 +
+ kernel/locking/lockdep.c                      |  46 ++
+ kernel/locking/six.c                          | 779 ++++++++++++++++++
+ kernel/module/main.c                          |   4 +-
+ kernel/stacktrace.c                           |   2 +
+ lib/Kconfig                                   |   3 +
+ lib/Kconfig.debug                             |  18 +
+ lib/Makefile                                  |   2 +
+ {drivers/md/bcache => lib}/closure.c          |  36 +-
+ lib/errname.c                                 |   1 +
+ lib/generic-radix-tree.c                      |  76 +-
+ lib/iov_iter.c                                |  53 +-
+ lib/math/Kconfig                              |   3 +
+ lib/math/Makefile                             |   2 +
+ lib/math/mean_and_variance.c                  | 136 +++
+ lib/math/mean_and_variance_test.c             | 155 ++++
+ lib/string_helpers.c                          |   8 +-
+ mm/nommu.c                                    |  18 +
+ mm/vmalloc.c                                  |  21 +
+ 75 files changed, 2485 insertions(+), 445 deletions(-)
+ rename {drivers/md/bcache => include/linux}/closure.h (93%)
+ create mode 100644 include/linux/mean_and_variance.h
+ create mode 100644 include/linux/six.h
+ create mode 100644 kernel/locking/six.c
+ rename {drivers/md/bcache => lib}/closure.c (88%)
+ create mode 100644 lib/math/mean_and_variance.c
+ create mode 100644 lib/math/mean_and_variance_test.c
 
 -- 
-Jens Axboe
+2.40.1
 
