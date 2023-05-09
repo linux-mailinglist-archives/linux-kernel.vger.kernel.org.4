@@ -2,90 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFF16FC880
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BBEB6FC884
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235699AbjEIOEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 10:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49590 "EHLO
+        id S235694AbjEIOHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 10:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233731AbjEIOEc (ORCPT
+        with ESMTP id S233731AbjEIOHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 10:04:32 -0400
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9035D4EE4;
-        Tue,  9 May 2023 07:04:17 -0700 (PDT)
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6439d505274so3311094b3a.0;
-        Tue, 09 May 2023 07:04:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683641047; x=1686233047;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9iYEfFTtNREDQTvxRbwhudL5byolCTLR+oROEUU0XWk=;
-        b=cXaFOb3TYm5YAVgKvsnr+fUF4OGMyXeTAB54Q6bGl/cDQHuldc8pgDLD5HROtP1/1T
-         LEG0iT1eOCymhxVDu+868sJeLalHO5o0v0KS6ROjhOtBL/iaDlo+V5Rdovvsf4oKqJkG
-         bScaGifYEM+1JuGB2IFe4AAFrWWm0WvjV7xIZdTbFVy1WOihBauaxNhLppjipfjQ2Sc5
-         anvlw1jI3zSNGHwuO1P2/J/1qvrBaTkGulZWnTBU3ttms9LjvE2nY2Ldu5BXr4aAupY0
-         zZLlBqbU9sgqPFNf0TSDUMQiveGVJ9tQIwDwNzoPWu45JSrg9x0bTjS8QG6LvhVnlMl4
-         DRjw==
-X-Gm-Message-State: AC+VfDzJT2kpZ10Fqd4ReBCshqxheXefKT1gZV52twwNcR5OWWXR8s/3
-        EyJ3lDmxjrdPeR+s+B8BXXw=
-X-Google-Smtp-Source: ACHHUZ7bmLHWSD/owi64qe/gcPVVP1QwblzeAhOQrZYE11UgsG7VHYh36OLy+DLbg3Mw0K08Knb3Iw==
-X-Received: by 2002:a05:6a20:244a:b0:100:5222:7c0d with SMTP id t10-20020a056a20244a00b0010052227c0dmr10023694pzc.52.1683641047080;
-        Tue, 09 May 2023 07:04:07 -0700 (PDT)
-Received: from [172.20.11.151] ([173.214.130.133])
-        by smtp.gmail.com with ESMTPSA id f23-20020aa782d7000000b0063d63d48215sm1842392pfn.3.2023.05.09.07.04.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 07:04:06 -0700 (PDT)
-Message-ID: <dcfae203-005f-928b-37d6-7ee5bb4e2971@acm.org>
-Date:   Tue, 9 May 2023 07:04:06 -0700
+        Tue, 9 May 2023 10:07:15 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719372D5E;
+        Tue,  9 May 2023 07:07:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683641234; x=1715177234;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FRtig0kLjAATP66RGEd0cQ+yL/wUNEXNEjDY53Sgycc=;
+  b=Zm7MnOvxpC+v+XizhojkVhRHGJxTx9UMb0kEWBzhjQCph4asYOhTGQhl
+   ZfVdlf1yPGe2xoJdmD1TVsh4r94+zHraJfADG/iEfWAHphoyGCbpSYp5J
+   v2Tuxd2BxqpwGZUnYsfo0AMUzTOmT6S6W5ykYtZFVNVI5u23Igeg/YFTh
+   aKX/GsvPYybrtbDcG0aE+Dk4+5PRh9xtCbuaurndOHvfGzRK5XeMcZbXz
+   CgYyvcliMXA35iROep4L/5l6eqyCFodh/Q+wHszZPNqywJHdpP/LXwcLE
+   cJFyym9LkqnF0ETYMTEXe8jivJgKmOrb0aKzPDAH2C2mhmFZztGtz+HPS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="347397530"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="347397530"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 07:06:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="649343928"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="649343928"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 09 May 2023 07:06:49 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwNzM-0002C1-1N;
+        Tue, 09 May 2023 14:06:48 +0000
+Date:   Tue, 9 May 2023 22:06:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: Re: [PATCH V6 2/3] soc: qcom: boot_stat: Add Driver Support for Boot
+ Stats
+Message-ID: <202305092107.0Wy1eeCn-lkp@intel.com>
+References: <35863b47c04c2edd7ae49c57d23682aba6111d4f.1683628357.git.quic_schowdhu@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 2/2] ufs: don't use the fair tag sharings
-Content-Language: en-US
-To:     Avri Altman <Avri.Altman@wdc.com>, Ed Tsai <ed.tsai@mediatek.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>
-Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
-        "alice.chao@mediatek.com" <alice.chao@mediatek.com>,
-        "powen.kao@mediatek.com" <powen.kao@mediatek.com>,
-        "naomi.chu@mediatek.com" <naomi.chu@mediatek.com>,
-        "wsd_upstream@mediatek.com" <wsd_upstream@mediatek.com>
-References: <20230509065230.32552-1-ed.tsai@mediatek.com>
- <20230509065230.32552-3-ed.tsai@mediatek.com>
- <DM6PR04MB6575753742F933DE192E7325FC769@DM6PR04MB6575.namprd04.prod.outlook.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <DM6PR04MB6575753742F933DE192E7325FC769@DM6PR04MB6575.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <35863b47c04c2edd7ae49c57d23682aba6111d4f.1683628357.git.quic_schowdhu@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/23 01:03, Avri Altman wrote:
-> However, I think the decision of that should be of the platform owner,
-> And not in the core driver.
+Hi Souradeep,
 
-Hi Avri,
+kernel test robot noticed the following build warnings:
 
-I don't see any use case in which performance of a UFS device would be improved
-by leaving QUEUE_FLAG_FAIR_TAG_SHARING enabled. Are you perhaps aware of such a
-use case?
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on krzk-dt/for-next linus/master v6.4-rc1 next-20230509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
+url:    https://github.com/intel-lab-lkp/linux/commits/Souradeep-Chowdhury/dt-bindings-sram-qcom-imem-Add-Boot-Stat-region-within-IMEM/20230509-185332
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/35863b47c04c2edd7ae49c57d23682aba6111d4f.1683628357.git.quic_schowdhu%40quicinc.com
+patch subject: [PATCH V6 2/3] soc: qcom: boot_stat: Add Driver Support for Boot Stats
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230509/202305092107.0Wy1eeCn-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7883e99da179c8b49f6834b84a91259b03679e56
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Souradeep-Chowdhury/dt-bindings-sram-qcom-imem-Add-Boot-Stat-region-within-IMEM/20230509-185332
+        git checkout 7883e99da179c8b49f6834b84a91259b03679e56
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/soc/qcom/
 
-Bart.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305092107.0Wy1eeCn-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/soc/qcom/boot_stats.c:76:6: warning: no previous prototype for 'boot_stats_remove' [-Wmissing-prototypes]
+      76 | void boot_stats_remove(struct platform_device *pdev)
+         |      ^~~~~~~~~~~~~~~~~
+
+
+vim +/boot_stats_remove +76 drivers/soc/qcom/boot_stats.c
+
+    75	
+  > 76	void boot_stats_remove(struct platform_device *pdev)
+    77	{
+    78		struct bs_data *drvdata = platform_get_drvdata(pdev);
+    79	
+    80		debugfs_remove_recursive(drvdata->dbg_dir);
+    81	}
+    82	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
