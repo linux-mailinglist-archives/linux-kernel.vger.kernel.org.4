@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D5E6FBE0A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 05:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C63066FBE03
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 05:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbjEID7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 23:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S234783AbjEID6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 23:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234700AbjEID6P (ORCPT
+        with ESMTP id S234723AbjEID5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 23:58:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DE3DDA0;
-        Mon,  8 May 2023 20:56:29 -0700 (PDT)
+        Mon, 8 May 2023 23:57:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EA0D04A;
+        Mon,  8 May 2023 20:56:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABCE3643F9;
-        Tue,  9 May 2023 03:56:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2E03C433D2;
-        Tue,  9 May 2023 03:56:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD23262401;
+        Tue,  9 May 2023 03:56:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3973EC433EF;
+        Tue,  9 May 2023 03:56:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683604571;
-        bh=V+SRqTeOIQkCJr1YG3oqjich7N1hefNlgQc35gKG3p0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qzNhRAhIVuVwTXkaUBOSBl4Gcww732+ZSN3xnVFGfzIcD6GzrAlaxAHFC4r4GuZXy
-         tAoN0LYmDpSus+aqG3PRw6mnNEBjGY0dNsP9sJzqG+smxsc5Pw+C1FOnaBicYcQAv4
-         CvkTBloYzZL3RzLjIfivADpywfj319py9nylaQtDU/nN9JpqpA6a6rzrsjQrM/mf3R
-         hQLuZe9Ejejsr9zEpkS215xDA2tYWvR60XvIIe5RH2UBM+9VWhcUUB9tk+dVAxd71D
-         MusoFydmpnpumKOK6P93HTwZHX3F0tJuyTZMniqhTvJjxh7Ukwiv0hrVWn+rfeknJ6
-         iyzBTOTYwDQ3w==
+        s=k20201202; t=1683604578;
+        bh=toR2bLyq3hM+oXjKQG0SLyCCD/d68pj9onuC5lV3trw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=axAVK+2UNntyb0T3vl8aGeNtR1I/2IU3zopOwTCVWhZhX3ue3XqTA7P8uspB5MsPY
+         5qJaVSJDfQelMl2Ag6kihhQXv/OjU47BPo4ziMg3A/jZNzH4GHxW2m2gVvcKBlUsAS
+         rxJydDEMDHWIZJ3h29HaqT0n1LJ1L/FVXeC/oXnqlEjs1KddHSZ6HqN9WOhJdO5SNq
+         XDq1Axt3ulOmz8f38kFm0+2F+xrk9UYoTsMgwLqGvgZLPFQqXZJF9xC6oxplTm68oo
+         jGNPvCcGyef3cUUzKgkatosC6lDjUZYQ6t+HrZC1mdOWH04rkNxjZ9Tt18/Sl1PbaN
+         08ML+m4XM2/Cw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hao Zeng <zenghao@kylinos.cn>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>, zhangqing@loongson.cn,
-        chenhuacai@kernel.org
-Subject: [PATCH AUTOSEL 5.10 3/3] recordmcount: Fix memory leaks in the uwrite function
-Date:   Mon,  8 May 2023 23:55:58 -0400
-Message-Id: <20230509035602.60613-3-sashal@kernel.org>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 1/3] sched: Fix KCSAN noinstr violation
+Date:   Mon,  8 May 2023 23:56:09 -0400
+Message-Id: <20230509035616.60683-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230509035602.60613-1-sashal@kernel.org>
-References: <20230509035602.60613-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,46 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Zeng <zenghao@kylinos.cn>
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-[ Upstream commit fa359d068574d29e7d2f0fdd0ebe4c6a12b5cfb9 ]
+[ Upstream commit e0b081d17a9f4e5c0cbb0e5fbeb1abe3de0f7e4e ]
 
-Common realloc mistake: 'file_append' nulled but not freed upon failure
+With KCSAN enabled, end_of_stack() can get out-of-lined.  Force it
+inline.
 
-Link: https://lkml.kernel.org/r/20230426010527.703093-1-zenghao@kylinos.cn
+Fixes the following warnings:
 
-Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+  vmlinux.o: warning: objtool: check_stackleak_irqoff+0x2b: call to end_of_stack() leaves .noinstr.text section
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/r/cc1b4d73d3a428a00d206242a68fdf99a934ca7b.1681320026.git.jpoimboe@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/recordmcount.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ include/linux/sched/task_stack.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/scripts/recordmcount.c b/scripts/recordmcount.c
-index cce12e1971d85..ec692af8ce9eb 100644
---- a/scripts/recordmcount.c
-+++ b/scripts/recordmcount.c
-@@ -102,6 +102,7 @@ static ssize_t uwrite(void const *const buf, size_t const count)
+diff --git a/include/linux/sched/task_stack.h b/include/linux/sched/task_stack.h
+index 1009b6b5ce403..879a5c8f930b6 100644
+--- a/include/linux/sched/task_stack.h
++++ b/include/linux/sched/task_stack.h
+@@ -23,7 +23,7 @@ static __always_inline void *task_stack_page(const struct task_struct *task)
+ 
+ #define setup_thread_stack(new,old)	do { } while(0)
+ 
+-static inline unsigned long *end_of_stack(const struct task_struct *task)
++static __always_inline unsigned long *end_of_stack(const struct task_struct *task)
  {
- 	size_t cnt = count;
- 	off_t idx = 0;
-+	void *p = NULL;
- 
- 	file_updated = 1;
- 
-@@ -109,7 +110,10 @@ static ssize_t uwrite(void const *const buf, size_t const count)
- 		off_t aoffset = (file_ptr + count) - file_end;
- 
- 		if (aoffset > file_append_size) {
--			file_append = realloc(file_append, aoffset);
-+			p = realloc(file_append, aoffset);
-+			if (!p)
-+				free(file_append);
-+			file_append = p;
- 			file_append_size = aoffset;
- 		}
- 		if (!file_append) {
+ #ifdef CONFIG_STACK_GROWSUP
+ 	return (unsigned long *)((unsigned long)task->stack + THREAD_SIZE) - 1;
 -- 
 2.39.2
 
