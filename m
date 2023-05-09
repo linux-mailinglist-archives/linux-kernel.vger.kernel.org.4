@@ -2,61 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99BD6FBE4C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 06:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4316FBE4E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 06:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233908AbjEIEj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 00:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
+        id S234580AbjEIEms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 00:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232643AbjEIEjS (ORCPT
+        with ESMTP id S234435AbjEIEmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 00:39:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE767688;
-        Mon,  8 May 2023 21:39:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98A5C62DFB;
-        Tue,  9 May 2023 04:39:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ADADC433EF;
-        Tue,  9 May 2023 04:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683607157;
-        bh=XhiuFaCJ6NwdwKam/Cyef7P/+G3d7UCQ6LK4Q3XNOfo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aCT8dSEOvZ+0E+qJsK2en3YBzm3oFErN2H4XkAsssS2KA/dEuyyVbCI100mdvBrC6
-         3irKQRyTq7FY2WNCB3nwhPWsrQ2fXIn9NKCBFAe3OCAPan1uPqrELyzOQB9I7HPLQF
-         ME1CSxMkV6GZ2mdGMpvCKSlWEf7LC3bjHwENE0Ee8zyCv2oDUvWrrBSIQ58xrHu8fa
-         rGTOrXf6VfP147tIvFo2KVSdz4c3spSfK3szkPmnll4noubg6EbMnqpSmzU2bK1U89
-         DYtq0y6HRrQ5giFj3XDkkXJIIa6DM1IBKyjX86l1TO78I0kiS3lAeVm0g6IeA2J/Dh
-         OU7vETfYR7Svw==
-Date:   Tue, 9 May 2023 13:39:02 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     andy.shevchenko@gmail.com
-Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-Message-ID: <ZFnOZptCM7JDFTQz@finisterre.sirena.org.uk>
-References: <20230426071045.20753-1-zhuyinbo@loongson.cn>
- <20230426071045.20753-3-zhuyinbo@loongson.cn>
- <ZFkPZhF8QqScXAmH@surfacebook>
+        Tue, 9 May 2023 00:42:45 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3527F558D;
+        Mon,  8 May 2023 21:42:43 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3494gL1a003157;
+        Mon, 8 May 2023 23:42:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683607341;
+        bh=YfCKA31Ps0JPQEAdzY7jNg99L/MnSENSiIkKGZQoxH4=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=ai0Lbc0FvlrraMrpmyWsQcMn5JBtqQNtqobJdrfFiNUaG7IeKj11aytepSqsp8IoZ
+         22SXJKUZbWKJX8LOsEdBqBwqX5Z7oBVdX7xJLenIXAb86/edtBE48J4SB/HNQ+DgvC
+         CSbKsloPCdLKcnoXFvGW9h9Hhwm7c+kyfm1Tur3U=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3494gLQ2057151
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 8 May 2023 23:42:21 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 8
+ May 2023 23:42:21 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 8 May 2023 23:42:20 -0500
+Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3494gHfH097353;
+        Mon, 8 May 2023 23:42:17 -0500
+Message-ID: <007ca679-2ba7-635f-942f-deee52e70117@ti.com>
+Date:   Tue, 9 May 2023 10:12:16 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PvPFwm68AkT2apH1"
-Content-Disposition: inline
-In-Reply-To: <ZFkPZhF8QqScXAmH@surfacebook>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net] net: phy: dp83867: add w/a for packet errors seen
+ with short cables
+To:     Jakub Kicinski <kuba@kernel.org>
+References: <20230508070019.356548-1-s-vadapalli@ti.com>
+ <20230508190035.24b5710e@kernel.org>
+Content-Language: en-US
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20230508190035.24b5710e@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,56 +72,21 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---PvPFwm68AkT2apH1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Mon, May 08, 2023 at 06:04:06PM +0300, andy.shevchenko@gmail.com wrote:
-> Wed, Apr 26, 2023 at 03:10:45PM +0800, Yinbo Zhu kirjoitti:
+On 09/05/23 07:30, Jakub Kicinski wrote:
+> Thanks for the patch! Some nit picks below..
+> 
+> On Mon, 8 May 2023 12:30:19 +0530 Siddharth Vadapalli wrote:
+>> +	err = phy_write_mmd(phydev, DP83867_DEVADDR, DP83867_DSP_FFE_CFG, 0X0E81);
+> 
+> Pleas wrap this line at 80 characters, there's no reason for it 
+> to be this long.
+> 
+> And 0x prefix should not be in upper case, here and in the new define
+> you're adding.
 
-> > +		loongson_spi_write_reg(loongson_spi,
-> > +				       LOONGSON_SPI_SFCS_REG,
-> > +				       (val ? (0x11 << spi->chip_select) :
-> > +				       (0x1 << spi->chip_select)) | cs);
+Thank you for pointing out the issues. I will fix them and post the v2 patch.
 
-> Too many parentheses.
-
-The code is absolutely fine, there is nothing wrong with adding explicit
-parentheses even where not strictly needed if it helps to make things
-clear (which is obviously always a problem wiht ternery operator use).
-
-Please, stop this sort of nitpicking.  It is at times actively unhelpful.
-
-> > +		bit = fls(div) - 1;
-> > +		if ((1<<bit) == div)
-> > +			bit--;
-> > +		div_tmp = rdiv[bit];
-
-> I believe this can be optimized.
-
-This isn't constructive feedback, if there is a concrete optimisation
-you want to suggest please just suggest it.
-
-> > +EXPORT_SYMBOL_GPL(loongson_spi_init_master);
-
-> Please, use _NS variant.
-
-It really does not matter, the chances of any collisions is pretty much
-zero.
-
---PvPFwm68AkT2apH1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRZzmEACgkQJNaLcl1U
-h9AJXwf/bcA5vAd/CeUpexx9xVC7N3Q3Um30fxyeECrqf+W5wNVVem1NNz0HDn+n
-vPaQ/8HhN/Gdu+A6tLZ1pzepHE1+E+E5kcMgYJHNNY7EPFs49BXvHSqN7IyCxOCm
-sUegi8DfHJMK00T1w5AnRK/mY0TeKwBz0kHP8R1qTCtjZVn6rqAgrSLQoQ8t9RGF
-Znln4s59Bwt2AdavPgQ3503/vwMkMIZQGW9FPoaf2KWD17MNAUVUkH9eD81b0WIF
-6Uibp0Mk898jyQDW4UwqyfM66xdb9k17aRFeFzbRJfWL0jeXHdbUWJsMwrOB5QJ6
-jeGknTmherSiz61uL4rkk7VW1Ia2Kw==
-=s4B1
------END PGP SIGNATURE-----
-
---PvPFwm68AkT2apH1--
+-- 
+Regards,
+Siddharth.
