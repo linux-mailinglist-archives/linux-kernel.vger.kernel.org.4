@@ -2,86 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF69A6FC150
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C446FC161
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235046AbjEIIJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 04:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
+        id S234924AbjEIIKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234912AbjEIIIs (ORCPT
+        with ESMTP id S235163AbjEIIJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 04:08:48 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4ED6A59;
-        Tue,  9 May 2023 01:08:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683619687; x=1715155687;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CsBQVDzs+AyhViIYfvFI7BjnqmBy7jowKSpDt9yNVOM=;
-  b=XOEVcmiWEHbkfhPTN4msxsgwJItL2C9B+T/xKlszgwswY5A8l6ALvM+R
-   FPHBYHnaUpaiNAsauWOJMY7f2NWSaFcN3B9LhLLPRfVSoF4C7igbEvszg
-   7MraUzyp+O5B2uwSVUbkVrLt+80COhglPhd1oS8jl0ccG/K6G5+plGUO6
-   3zxFrIkr80/kbmIHVhqQUZBO0NXw9y9k3gXr2VKTzs0Gw2NAn7yjcmp3b
-   Wi1heGGjUFHrYWUQBdt9UNLTvO8bwfjRFJWRwMJVEu3RLyLzR7/JOJSRv
-   3XYrmKH4O0sEAz5t4kpwkka/i8LQXBlIeWHUea2WACMvc1WpF6CGE6KKJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="415400202"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="415400202"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 01:06:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="1028722785"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="1028722785"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga005.fm.intel.com with ESMTP; 09 May 2023 01:06:26 -0700
-Message-ID: <d59ce91a-1992-6cae-1a6a-ada922594cda@intel.com>
-Date:   Tue, 9 May 2023 11:08:00 +0300
+        Tue, 9 May 2023 04:09:53 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A7CDDB4
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:09:17 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34988gkg002590;
+        Tue, 9 May 2023 03:08:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683619722;
+        bh=ppgfFY3YEbYf7+4gGVzaZtFcc1sTh3HZqZhDb/IzUek=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=pUynhI7F5QXvUfpels7iVVuwCydttOO8oA6+gQaC1g3Wc/AlhmsJywaxVj4lAG+oU
+         IAVWQCMCV9zwho7C7Xc7NWabAxUWm3rJjqDJSOkjCPSyPqp+BYbRfpmrHyv466RS0w
+         OWz7JSyX5kvTJYJSz9rS/6fm126edQPFLEDkQGHE=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34988giB106201
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 9 May 2023 03:08:42 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
+ May 2023 03:08:42 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 9 May 2023 03:08:42 -0500
+Received: from [172.24.145.182] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34988bP8010303;
+        Tue, 9 May 2023 03:08:38 -0500
+Message-ID: <de6432db-0da0-b535-1f44-04541116be8b@ti.com>
+Date:   Tue, 9 May 2023 13:38:36 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH v4 0/4] Fix some issues for ZHAOXIN xHCI host
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] arm64: defconfig: enable PCIe controller on TI platforms
 Content-Language: en-US
-To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     WeitaoWang@zhaoxin.com
-References: <20230508212058.6307-1-WeitaoWang-oc@zhaoxin.com>
-From:   Mathias Nyman <mathias.nyman@intel.com>
-In-Reply-To: <20230508212058.6307-1-WeitaoWang-oc@zhaoxin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Achal Verma <a-verma1@ti.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "N_colas F . R . A . Prado" <nfraprado@collabora.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rafa_ Mi_ecki <rafal@milecki.pl>, Nishanth Menon <nm@ti.com>,
+        Milind Parab <mparab@cadence.com>,
+        Swapnil Kashinath Jakhade <sjakhade@cadence.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230509063431.1203367-1-a-verma1@ti.com>
+ <46b0dbd4-5695-1a2d-8d06-0a60a7c3a151@linaro.org>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <46b0dbd4-5695-1a2d-8d06-0a60a7c3a151@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9.5.2023 0.20, Weitao Wang wrote:
-> Fix some issues for ZHAOXIN xHCI host.
-> 
-> Weitao Wang (4):
->    xhci: Fix resume issue of some ZHAOXIN hosts
->    xhci: Fix TRB prefetch issue of ZHAOXIN hosts
->    xhci: Show ZHAOXIN xHCI root hub speed correctly
->    xhci: Add ZHAOXIN xHCI host U1/U2 feature support
-> 
->   drivers/usb/host/xhci-mem.c | 38 ++++++++++++++++++++++++--------
->   drivers/usb/host/xhci-pci.c | 13 +++++++++++
->   drivers/usb/host/xhci.c     | 43 ++++++++++++++++---------------------
->   drivers/usb/host/xhci.h     |  2 ++
->   4 files changed, 62 insertions(+), 34 deletions(-)
-> 
+Hi Achal,
 
-Thanks, added to queue
+On 09/05/23 12:09, Krzysztof Kozlowski wrote:
+> On 09/05/2023 08:34, Achal Verma wrote:
+>> Enable PCIe controller and serdes drivers to enable PCIe functionality.
+>> * Enable Cadence serdes phy and wrapper driver.
+>> * Enable Cadence PCIe controller driver.
+> 
+> Why? IOW, which boards needs it?
+>>
+>> Signed-off-by: Achal Verma <a-verma1@ti.com>
+>> ---
+>>  arch/arm64/configs/defconfig | 15 +++++++++++----
+>>  1 file changed, 11 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+>> index a24609e14d50..ff187dd585c2 100644
+>> --- a/arch/arm64/configs/defconfig
+>> +++ b/arch/arm64/configs/defconfig
+>> @@ -230,9 +230,16 @@ CONFIG_PCIE_HISI_STB=y
+>>  CONFIG_PCIE_TEGRA194_HOST=m
+>>  CONFIG_PCIE_VISCONTI_HOST=y
+>>  CONFIG_PCIE_LAYERSCAPE_GEN4=y
+>> +CONFIG_PCIE_CADENCE=y
+> 
+> =m
+> 
+>> +CONFIG_PCIE_CADENCE_HOST=y
+>> +CONFIG_PCIE_CADENCE_EP=y
+>> +CONFIG_PCI_J721E=y
+> 
+> =m
 
--Mathias
+Also, see [0] for history. We really want these to be 
+modules unless its necessary for bootup.
+
+You may want to revive [1] and get it to mainline
+
+[0] https://lore.kernel.org/linux-arm-kernel/CAK8P3a2VSBvOn1o+q1PYZaQ6LS9U4cz+DZGuDbisHkwNs2dAAw@mail.gmail.com/
+[1] https://lore.kernel.org/linux-arm-kernel/20230110153805.GA1505901@bhelgaas/
+
+
+[...]
+
+-- 
+Regards
+Vignesh
