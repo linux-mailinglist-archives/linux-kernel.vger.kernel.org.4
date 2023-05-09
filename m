@@ -2,72 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE246FC237
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A91A6FC1F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234873AbjEIJAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 05:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S234699AbjEIItw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235024AbjEIJAE (ORCPT
+        with ESMTP id S234599AbjEIIts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 05:00:04 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B625D2E1;
-        Tue,  9 May 2023 02:00:00 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 993A96018D;
-        Tue,  9 May 2023 10:59:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1683622799; bh=DplkcwFmSKllgiewQPCLoUNazOClR1ZbTBiZSdEqy0U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g4k0Y+ghcd9fdouRDxY5N9375kz/FzLyirTE2BUXmi7ygiJYZXnOWDFF4FUWYDdHG
-         hyS/1i9Ftz4A+6Skrpl7/3UAPkkfPERoXbP9CCxp72G++cwqOE4tQPO7rUDum5Prvn
-         gToDz/F32tahvoiHfp7+PLRlVeqzGj27AtLimwecq5zSerfnIsExrLq5T0tHUu2lov
-         r1gQFCQONJ8reQE+29sgYaxmFR+wIin4YFufZDk+77UVKgOYmgDxjlS0sa+TfXA5L3
-         Ee2Cj9B8J6m6whIrlccrwXt9wAV/l5EMZYAcuLh17sZUx9r2ajZxkY0mJJ1V8ABAvE
-         NhOwoLcxFRyPQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id RPEpUU_TnZgB; Tue,  9 May 2023 10:59:56 +0200 (CEST)
-Received: by domac.alu.hr (Postfix, from userid 1014)
-        id 20E576018F; Tue,  9 May 2023 10:59:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1683622796; bh=DplkcwFmSKllgiewQPCLoUNazOClR1ZbTBiZSdEqy0U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qwDS5EN/EnZWo6Y2BW2kpN1wTaseiMrvP9XRaLF0bnJ1YGWkwwL8lfjtmgHnQLzaA
-         WbSdPxV5wSMDqcptSKUeGUsA55p/wq6/tw9AqgDRMOHMTO07tOqlF4gXvLOEiQYdWP
-         d8HHK/DgZSyfrlh1YE8zX3IkJP+DirDWKduiWgVvzVa+SRGQMy8enLODZIkcdeXStm
-         TZQEjlZeL5EEDQEZqQAS834+k6k1n7UcHh/0lLi2TKSVsaOt9a8+oseLhcpa9wPLn/
-         If0L6EVZhMylMSxJkNjmH5R0NhgWFORdB9/mmVk0oZfZu9y5ct+36Ba//LuhaUDW/1
-         T3Utw5Y5Lnfvg==
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <error27@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: [RESEND PATCH v5 3/3] test_firmware: fix the memory leak of the allocated firmware buffer
-Date:   Tue,  9 May 2023 10:47:49 +0200
-Message-Id: <20230509084746.48259-3-mirsad.todorovac@alu.unizg.hr>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230509084746.48259-1-mirsad.todorovac@alu.unizg.hr>
-References: <20230509084746.48259-1-mirsad.todorovac@alu.unizg.hr>
+        Tue, 9 May 2023 04:49:48 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F542D79;
+        Tue,  9 May 2023 01:49:46 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3497nu4O029362;
+        Tue, 9 May 2023 08:49:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=QCZXwawIslsED4/bUEvhU6+xKaK/cv0flb+GAJbEkU8=;
+ b=LAF521o/QZT3S3Z7C6LNyJP/VvkhHyXTJ7L6GEcvNqYMNDCruzYjA5YLR7KJ1REhaFwT
+ K+loZ+pxUuHil5B97mfB36GdCBzRMA+RliKFjvh0GIKSj1tXM753GHJ16AqnWDxgpBt4
+ xUQsb6yuRUuG0JtYId76SRaRosCkxKt0TTUy9yWorBGEKxMBXjWsnl0CVYTfvh+pr+f7
+ XqGUZMpeQ59X+xZAz69pgYr5VJ6yjlVKEvztokGWyscx/mcIz5qNYji4BaVQs54Qof1k
+ PuuwDaMaIXXy0wHE4mAQwHeACC0iBgNduEJ2V1H04JRVU6CytxSGkahUCQTXu2N+xW8r mw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf78517vc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 May 2023 08:49:39 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3498nYVX006825
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 9 May 2023 08:49:34 GMT
+Received: from [10.242.243.41] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
+ 01:49:27 -0700
+Message-ID: <db9af421-ca06-9eea-bac8-e014e86f3d46@quicinc.com>
+Date:   Tue, 9 May 2023 14:19:19 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V3 6/6] PCI: qcom: Add support for IPQ9574
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
+        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
+        <quic_anusha@quicinc.com>, <quic_ipkumar@quicinc.com>
+References: <20230421124938.21974-1-quic_devipriy@quicinc.com>
+ <20230421124938.21974-7-quic_devipriy@quicinc.com>
+ <20230508122109.GC4190@thinkpad>
+ <CAA8EJppKUwfatdNoQPD4QbEPXyv1cEz3cDLfND+70Veq5Bcf8Q@mail.gmail.com>
+ <20230508153706.GA14969@thinkpad>
+Content-Language: en-US
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <20230508153706.GA14969@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: tudU81w-H5_j0Ro2mqG6Vni8wPy1erip
+X-Proofpoint-GUID: tudU81w-H5_j0Ro2mqG6Vni8wPy1erip
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-09_05,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ bulkscore=0 mlxlogscore=999 impostorscore=0 spamscore=0 mlxscore=0
+ priorityscore=1501 adultscore=0 malwarescore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305090067
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,177 +92,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following kernel memory leak was noticed after running
-tools/testing/selftests/firmware/fw_run_tests.sh:
 
-[root@pc-mtodorov firmware]# cat /sys/kernel/debug/kmemleak
-.
-.
-.
-unreferenced object 0xffff955389bc3400 (size 1024):
-  comm "test_firmware-0", pid 5451, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff9553c334b400 (size 1024):
-  comm "test_firmware-1", pid 5452, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff9553c334f000 (size 1024):
-  comm "test_firmware-2", pid 5453, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff9553c3348400 (size 1024):
-  comm "test_firmware-3", pid 5454, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-[root@pc-mtodorov firmware]#
 
-Note that the size 1024 corresponds to the size of the test firmware
-buffer. The actual number of the buffers leaked is around 70-110,
-depending on the test run.
+On 5/8/2023 9:07 PM, Manivannan Sadhasivam wrote:
+> On Mon, May 08, 2023 at 03:46:53PM +0300, Dmitry Baryshkov wrote:
+>> On Mon, 8 May 2023 at 15:21, Manivannan Sadhasivam <mani@kernel.org> wrote:
+>>>
+>>> On Fri, Apr 21, 2023 at 06:19:38PM +0530, Devi Priya wrote:
+>>>> The IPQ9574 platform has 4 Gen3 PCIe controllers: two single-lane
+>>>> and two dual-lane based on SNPS core 5.70a
+>>>> The Qcom IP rev is 1.27.0 and Synopsys IP rev is 5.80a
+>>>> Added a new compatible 'qcom,pcie-ipq9574' and 'ops_1_27_0'
+>>>> which reuses all the members of 'ops_2_9_0' except for the post_init
+>>>> as the SLV_ADDR_SPACE_SIZE configuration differs between 2_9_0
+>>>> and 1_27_0.
+>>>> Also, modified get_resources of 'ops 2_9_0' to get the clocks
+>>>> from the device tree and modelled the post init sequence as
+>>>> a common function to avoid code redundancy.
+>>>>
+>>>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>>>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>>>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>>>
+>>> One comment below. With that fixed,
+>>>
+>>> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+>>>
+>>> - Mani
+>>>
+>>>> ---
+>>>>   Changes in V3:
+>>>>        - Rebased on top of linux-next/master
+>>>>
+>>>>   drivers/pci/controller/dwc/pcie-qcom.c | 61 ++++++++++++++++++--------
+>>>>   1 file changed, 43 insertions(+), 18 deletions(-)
+>>>>
+>>>> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+>>>> index 4ab30892f6ef..3682ecdead1f 100644
+>>>> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+>>>> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+>>>> @@ -107,6 +107,7 @@
+>>>>
+>>>>   /* PARF_SLV_ADDR_SPACE_SIZE register value */
+>>>>   #define SLV_ADDR_SPACE_SZ                    0x10000000
+>>>> +#define SLV_ADDR_SPACE_SZ_1_27_0             0x08000000
+>>>>
+>>>>   /* PARF_MHI_CLOCK_RESET_CTRL register fields */
+>>>>   #define AHB_CLK_EN                           BIT(0)
+>>>> @@ -202,10 +203,10 @@ struct qcom_pcie_resources_2_7_0 {
+>>>>        struct reset_control *rst;
+>>>>   };
+>>>>
+>>>> -#define QCOM_PCIE_2_9_0_MAX_CLOCKS           5
+>>>>   struct qcom_pcie_resources_2_9_0 {
+>>>> -     struct clk_bulk_data clks[QCOM_PCIE_2_9_0_MAX_CLOCKS];
+>>>> +     struct clk_bulk_data *clks;
+>>>>        struct reset_control *rst;
+>>>> +     int num_clks;
+>>>>   };
+>>>>
+>>>>   union qcom_pcie_resources {
+>>>> @@ -1050,17 +1051,10 @@ static int qcom_pcie_get_resources_2_9_0(struct qcom_pcie *pcie)
+>>>>        struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
+>>>>        struct dw_pcie *pci = pcie->pci;
+>>>>        struct device *dev = pci->dev;
+>>>> -     int ret;
+>>>>
+>>>> -     res->clks[0].id = "iface";
+>>>> -     res->clks[1].id = "axi_m";
+>>>> -     res->clks[2].id = "axi_s";
+>>>> -     res->clks[3].id = "axi_bridge";
+>>>> -     res->clks[4].id = "rchng";
+>>>> -
+>>>> -     ret = devm_clk_bulk_get(dev, ARRAY_SIZE(res->clks), res->clks);
+>>>> -     if (ret < 0)
+>>>> -             return ret;
+>>>> +     res->num_clks = devm_clk_bulk_get_all(dev, &res->clks);
+>>>> +     if (res->clks < 0)
+>>>> +             return res->num_clks;
+>>>
+>>> Why not return proper error no?
+>>
+>> Instead the question should be, why not the proper condition: it tells
+>> `if (res->clks < 0)', while it should be `if (res->num_clks < 0)'.
+>>
+> 
+> Heh. I completely overlooked that part. Yes, the if condition itself should be
+> fixed.
+> 
+> - Mani
 
-The cause of the leak is the following:
+Sure, will fix it up!
 
-request_partial_firmware_into_buf() and request_firmware_into_buf()
-provided firmware buffer isn't released on release_firmware(), we
-have allocated it and we are responsible for deallocating it manually.
-This is introduced in a number of context where previously only
-release_firmware() was called, which was insufficient.
-
-Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Fixes: 7feebfa487b92 ("test_firmware: add support for request_firmware_into_buf")
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Dan Carpenter <error27@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.de>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Russ Weight <russell.h.weight@intel.com>
-Cc: Tianfei zhang <tianfei.zhang@intel.com>
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Zhengchao Shao <shaozhengchao@huawei.com>
-Cc: Colin Ian King <colin.i.king@gmail.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Scott Branden <sbranden@broadcom.com>
-Cc: Luis R. Rodriguez <mcgrof@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: stable@vger.kernel.org # v5.4
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
----
- lib/test_firmware.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
-
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 91b232ed3161..1d7d480b8eeb 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -45,6 +45,7 @@ struct test_batched_req {
- 	bool sent;
- 	const struct firmware *fw;
- 	const char *name;
-+	const char *fw_buf;
- 	struct completion completion;
- 	struct task_struct *task;
- 	struct device *dev;
-@@ -175,8 +176,14 @@ static void __test_release_all_firmware(void)
- 
- 	for (i = 0; i < test_fw_config->num_requests; i++) {
- 		req = &test_fw_config->reqs[i];
--		if (req->fw)
-+		if (req->fw) {
-+			if (req->fw_buf) {
-+				kfree_const(req->fw_buf);
-+				req->fw_buf = NULL;
-+			}
- 			release_firmware(req->fw);
-+			req->fw = NULL;
-+		}
- 	}
- 
- 	vfree(test_fw_config->reqs);
-@@ -670,6 +677,8 @@ static ssize_t trigger_request_store(struct device *dev,
- 
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	test_firmware = NULL;
- 	rc = request_firmware(&test_firmware, name, dev);
- 	if (rc) {
-@@ -770,6 +779,8 @@ static ssize_t trigger_async_request_store(struct device *dev,
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
- 	test_firmware = NULL;
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	rc = request_firmware_nowait(THIS_MODULE, 1, name, dev, GFP_KERNEL,
- 				     NULL, trigger_async_request_cb);
- 	if (rc) {
-@@ -812,6 +823,8 @@ static ssize_t trigger_custom_fallback_store(struct device *dev,
- 
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	test_firmware = NULL;
- 	rc = request_firmware_nowait(THIS_MODULE, FW_ACTION_NOUEVENT, name,
- 				     dev, GFP_KERNEL, NULL,
-@@ -874,6 +887,8 @@ static int test_fw_run_batch_request(void *data)
- 						 test_fw_config->buf_size);
- 		if (!req->fw)
- 			kfree(test_buf);
-+		else
-+			req->fw_buf = test_buf;
- 	} else {
- 		req->rc = test_fw_config->req_firmware(&req->fw,
- 						       req->name,
-@@ -934,6 +949,7 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
- 		req->fw = NULL;
- 		req->idx = i;
- 		req->name = test_fw_config->name;
-+		req->fw_buf = NULL;
- 		req->dev = dev;
- 		init_completion(&req->completion);
- 		req->task = kthread_run(test_fw_run_batch_request, req,
-@@ -1038,6 +1054,7 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
- 	for (i = 0; i < test_fw_config->num_requests; i++) {
- 		req = &test_fw_config->reqs[i];
- 		req->name = test_fw_config->name;
-+		req->fw_buf = NULL;
- 		req->fw = NULL;
- 		req->idx = i;
- 		init_completion(&req->completion);
--- 
-2.30.2
-
+Regards,
+Devi Priya
+> 
+>>>
+>>>>
+>>>>        res->rst = devm_reset_control_array_get_exclusive(dev);
+>>>>        if (IS_ERR(res->rst))
+>>>> @@ -1073,7 +1067,7 @@ static void qcom_pcie_deinit_2_9_0(struct qcom_pcie *pcie)
+>>>>   {
+>>>>        struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
+>>>>
+>>>> -     clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
+>>>> +     clk_bulk_disable_unprepare(res->num_clks, res->clks);
+>>>>   }
+>>>>
+>>>>   static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
+>>>> @@ -1102,19 +1096,16 @@ static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
+>>>>
+>>>>        usleep_range(2000, 2500);
+>>>>
+>>>> -     return clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
+>>>> +     return clk_bulk_prepare_enable(res->num_clks, res->clks);
+>>>>   }
+>>>>
+>>>> -static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+>>>> +static int qcom_pcie_post_init(struct qcom_pcie *pcie)
+>>>>   {
+>>>>        struct dw_pcie *pci = pcie->pci;
+>>>>        u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+>>>>        u32 val;
+>>>>        int i;
+>>>>
+>>>> -     writel(SLV_ADDR_SPACE_SZ,
+>>>> -             pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
+>>>> -
+>>>>        val = readl(pcie->parf + PARF_PHY_CTRL);
+>>>>        val &= ~PHY_TEST_PWR_DOWN;
+>>>>        writel(val, pcie->parf + PARF_PHY_CTRL);
+>>>> @@ -1151,6 +1142,26 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+>>>>        return 0;
+>>>>   }
+>>>>
+>>>> +static int qcom_pcie_post_init_1_27_0(struct qcom_pcie *pcie)
+>>>> +{
+>>>> +     writel(SLV_ADDR_SPACE_SZ_1_27_0,
+>>>> +            pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
+>>>> +
+>>>> +     qcom_pcie_post_init(pcie);
+>>>> +
+>>>> +     return 0;
+>>>> +}
+>>>> +
+>>>> +static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+>>>> +{
+>>>> +     writel(SLV_ADDR_SPACE_SZ,
+>>>> +            pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
+>>>> +
+>>>> +     qcom_pcie_post_init(pcie);
+>>>> +
+>>>> +     return 0;
+>>>> +}
+>>>> +
+>>>>   static int qcom_pcie_link_up(struct dw_pcie *pci)
+>>>>   {
+>>>>        u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+>>>> @@ -1291,6 +1302,15 @@ static const struct qcom_pcie_ops ops_2_9_0 = {
+>>>>        .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+>>>>   };
+>>>>
+>>>> +/* Qcom IP rev.: 1.27.0  Synopsys IP rev.: 5.80a */
+>>>> +static const struct qcom_pcie_ops ops_1_27_0 = {
+>>>> +     .get_resources = qcom_pcie_get_resources_2_9_0,
+>>>> +     .init = qcom_pcie_init_2_9_0,
+>>>> +     .post_init = qcom_pcie_post_init_1_27_0,
+>>>> +     .deinit = qcom_pcie_deinit_2_9_0,
+>>>> +     .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+>>>> +};
+>>>> +
+>>>>   static const struct qcom_pcie_cfg cfg_1_0_0 = {
+>>>>        .ops = &ops_1_0_0,
+>>>>   };
+>>>> @@ -1323,6 +1343,10 @@ static const struct qcom_pcie_cfg cfg_2_9_0 = {
+>>>>        .ops = &ops_2_9_0,
+>>>>   };
+>>>>
+>>>> +static const struct qcom_pcie_cfg cfg_1_27_0 = {
+>>>> +     .ops = &ops_1_27_0,
+>>>> +};
+>>>> +
+>>>>   static const struct dw_pcie_ops dw_pcie_ops = {
+>>>>        .link_up = qcom_pcie_link_up,
+>>>>        .start_link = qcom_pcie_start_link,
+>>>> @@ -1607,6 +1631,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+>>>>        { .compatible = "qcom,pcie-ipq8064-v2", .data = &cfg_2_1_0 },
+>>>>        { .compatible = "qcom,pcie-ipq8074", .data = &cfg_2_3_3 },
+>>>>        { .compatible = "qcom,pcie-ipq8074-gen3", .data = &cfg_2_9_0 },
+>>>> +     { .compatible = "qcom,pcie-ipq9574", .data = &cfg_1_27_0 },
+>>>>        { .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
+>>>>        { .compatible = "qcom,pcie-qcs404", .data = &cfg_2_4_0 },
+>>>>        { .compatible = "qcom,pcie-sa8540p", .data = &cfg_1_9_0 },
+>>>> --
+>>>> 2.17.1
+>>>>
+>>>
+>>> --
+>>> மணிவண்ணன் சதாசிவம்
+>>
+>>
+>>
+>> -- 
+>> With best wishes
+>> Dmitry
+> 
