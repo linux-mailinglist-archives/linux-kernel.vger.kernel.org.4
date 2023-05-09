@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C64886FCE82
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 21:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8750A6FCE89
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 21:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234247AbjEITZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 15:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
+        id S234751AbjEIT3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 15:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234772AbjEITZR (ORCPT
+        with ESMTP id S229695AbjEIT3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 15:25:17 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1DD268D
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 12:25:14 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2ac81d2bfbcso67882401fa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 12:25:14 -0700 (PDT)
+        Tue, 9 May 2023 15:29:34 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F054486
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 12:29:32 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id 46e09a7af769-6a5f7341850so4284480a34.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 12:29:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683660313; x=1686252313;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=bitbyteword.org; s=google; t=1683660572; x=1686252572;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Z8mwiEqJrqUKLjr+CTYZwgPnU7EpYWeys0Xhrb5/CYI=;
-        b=NrSG6Zy5wwtEkL+Y3N0rFVqtodQL4ZNgPGFOhh/K0SWS41MfCfdDNJf5pk+BS1eAtC
-         E3xuWLmd/6IZCQoaC8S140aUPtr3I8JtjOHi59AZ3sDRdFNZBmauG+jAbCB95tiAEFCm
-         a3ZmYyUCbW9USPPgji0Ru+nJQNndC7qRMKGjK//AZ3dbNgH9uCIDJHDvs9QLlq9WREMI
-         MWLJ2opAMKkQeVfB2QaJ7ZJkVkEAzWhWHRfXFqCSvSVUoOZs6w3lXYoInOtXym1IKJKy
-         CUXfuFmKLFmeaSfOFGO+s4MglzDkREEkac6ypBBq4OkxLEQ1HMmFmre0Um/T0Pg+i1Yu
-         TA3A==
+        bh=nshW081Je0Ct1TPDyiEBPFzb8ygIPnS0SW9brrMdekw=;
+        b=SYVk9dCiNpWbU5xm3mawedT7+nrWY0hZ4g0Ajqlhu0IY4UOUL8Wv1LFavtxCvkIEY5
+         txdWCaBrKHVEdH9jH28dSxzADU7fefFg9W9XSS+zOn/nkOrjKViMhl4Bu46HY4CboTBa
+         346FkasT5QERCvME/+vBrUBwYjNAAp4hkM51HLT7fL3mqrJBKuJMKaH8PnaJKuE+/Ik/
+         daYZcNcetgbJ2wxVH3QwkE37Q3YI/9S0ns5/6JY6owwi1umOm8UvsVPapCqeXm9l4p4o
+         cu9zdbs75tO6oIcnC9XOT0pnYDT7eAmEHXvUvDSuSJZzliuXXJX/y8QF5mOtPuHMpWp3
+         xbIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683660313; x=1686252313;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683660572; x=1686252572;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Z8mwiEqJrqUKLjr+CTYZwgPnU7EpYWeys0Xhrb5/CYI=;
-        b=J6fW3UB4M2ehJqs3GU/TYGVQC6NxL0nnUvXg8AzBWroYMRe/lCizVvGG5VjoMiyu+z
-         FixIzOdJ7WzTtCIOYphkOTagvItQvNczAJIn8cZLvKMVPLWmIr0GMiXgtFtMrFXc4aSy
-         881RNzafgNiZJFTyMoLG+W3iAL+aDCiOkOxGHX0rxm13WavHVGyP81RxbnXZOufrUK5x
-         91dXs12M/MqaaaWisbMf2NVQGjDiqHKxXSlUVvqjaGj+pxqjPbNY7iTW658/e1lsppqw
-         9nrrEemIV6T6TNWwkf9uFI1u7/eVStqEXnj2sKtfK+E5yJOc5rKb9kjYKjf86OME2q5J
-         lxTQ==
-X-Gm-Message-State: AC+VfDy2drFbyK4W4uNAp1BNRr/lfER/PRDmkSTLVwjVdbkL1dy4jAgz
-        Fz02zWdfzBf+gafmIRIjvdhuxw==
-X-Google-Smtp-Source: ACHHUZ6zZgyh0wuaR1VlvC1ggGYZmX+KkqMgwByqSu+OQdCtGDpZb9QCFralrQ03BSjXYkOlcUaVag==
-X-Received: by 2002:a2e:8190:0:b0:2ad:8ca0:dbeb with SMTP id e16-20020a2e8190000000b002ad8ca0dbebmr1116636ljg.18.1683660312756;
-        Tue, 09 May 2023 12:25:12 -0700 (PDT)
-Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
-        by smtp.gmail.com with ESMTPSA id 19-20020a05651c009300b002a6007383a0sm1681131ljq.135.2023.05.09.12.25.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 12:25:12 -0700 (PDT)
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-To:     miquel.raynal@bootlin.com
-Cc:     pratyush@kernel.org, michael@walle.cc, richard@nod.at,
-        vigneshr@ti.com, Takahiro.Kuwano@infineon.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        geert@linux-m68k.org, Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH 2/2] mtd: spi-nor: spansion: make sure local struct does not contain garbage
-Date:   Tue,  9 May 2023 19:25:06 +0000
-Message-ID: <20230509192506.947094-2-tudor.ambarus@linaro.org>
-X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
-In-Reply-To: <20230509192506.947094-1-tudor.ambarus@linaro.org>
-References: <749c2fc2-93dc-585-3826-dea581602d6e@linux-m68k.org>
- <20230509192506.947094-1-tudor.ambarus@linaro.org>
+        bh=nshW081Je0Ct1TPDyiEBPFzb8ygIPnS0SW9brrMdekw=;
+        b=Wpu37TN7vz8SDTDH3/OuuDXg0gYL+OlW/InDFIpAQbtR+Q0TGZu7eBtZJ4csQ8AiA3
+         vlwpDPBgsGrsg/oIZ+w/SAZRf4zLPE4LiFw8D0R/ZPwVOOLjqsjR/nCP6vCno200o3Ym
+         CAOW/UdLnRtIAk3j1kKS5G+aedmZ+SBI5DC3b3fg/tFsT/0F8fP3nkQijYXtMacSSy6E
+         Q/vHULulLUBo+68qCej2MHEQfTBJqsKuXgPUK3R6WBm8woOQvzVfmVhiGzukg/804Ax3
+         4t5cvX0vZcrUXT8ymZ7u2VUCSmHlokFGe0dMoJ6/qKkXb5/3UpjWnjRoHhxAQXCehiTB
+         yQLQ==
+X-Gm-Message-State: AC+VfDxr5EZS/XwXhjJPnoo9BPEXJwtOL3OWXw3T4iApRLICk58ciyVi
+        a1kIMloNqDF0GWUbT7O5CyzRuBpMIj78h7cwPAkEcg==
+X-Google-Smtp-Source: ACHHUZ4ttVO3Kjk4VenwZACti+SYmo33rOMANrlfvXvsQMH2mfyKDcS+h8h/fB6FhOlKkjQGCrfo/62tBByoJMT8n+E=
+X-Received: by 2002:a05:6870:93d3:b0:183:fc80:7354 with SMTP id
+ c19-20020a05687093d300b00183fc807354mr5723936oal.21.1683660572023; Tue, 09
+ May 2023 12:29:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230508160829.2756405-1-vineeth@bitbyteword.org> <20230509132534.09098acc@luca64>
+In-Reply-To: <20230509132534.09098acc@luca64>
+From:   Vineeth Remanan Pillai <vineeth@bitbyteword.org>
+Date:   Tue, 9 May 2023 15:29:21 -0400
+Message-ID: <CAO7JXPhrqKWfsp860rRmEenxARi8U2gNMGsOn4m+aKporWwBcg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] sched/deadline: accurate reclaim bandwidth for GRUB
+To:     luca abeni <luca.abeni@santannapisa.it>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -75,46 +79,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following error was seen with um-x86_64-gcc12/um-allyesconfig:
-+ /kisskb/src/drivers/mtd/spi-nor/spansion.c: error: 'op' is used uninitialized [-Werror=uninitialized]:  => 495:27, 364:27
+Hi Luka,
 
-Set the spi_mem_op fields at the time of declaration so that all
-uninitialized members be initialized to default value.
+Thanks for reviewing the changes.
 
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Fixes: 6afcc84080c41 ("mtd: spi-nor: spansion: Add support for Infineon S25FS256T")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
- drivers/mtd/spi-nor/spansion.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+On Tue, May 9, 2023 at 7:25=E2=80=AFAM luca abeni <luca.abeni@santannapisa.=
+it> wrote:
+>
+> Hi,
+>
+> if I understand well, your patch addresses 2 separate issues:
+> 1) The current reclaiming code uses an approximation to avoid using
+>    div64_u64(), which might introduce too much overhead (at least, as
+>    far as I remember :). Your patch changes it to use the exact,
+>    non-approximated, equation
+> 2) Currently, the reclaimable CPU time is divided as if all the
+>    SCHED_DEADLINE tasks (and not only the SCHED_FLAG_RECLAIM tasks)
+>    could use it; your patch changes the code to distribute the
+>    reclaimable CPU time only to tasks having the SCHED_FLAG_RECLAIM
+>    flag set
+>
+> Is this understanding correct?
+Yes, the above two details are correct. In addition to that, I think
+the existing equation had a small bug:
+GRUB paper says, running time is depreciated as
+   "dq =3D -U dt" where U is running_bw.
+This is assuming that the whole cpu bandwidth could be reclaimed. But
+in our case, we cap at Umax. So the equation should be
+   "dq =3D -(U/Umax) dt"
 
-diff --git a/drivers/mtd/spi-nor/spansion.c b/drivers/mtd/spi-nor/spansion.c
-index d44ffaac1dba..257d05ed4146 100644
---- a/drivers/mtd/spi-nor/spansion.c
-+++ b/drivers/mtd/spi-nor/spansion.c
-@@ -492,7 +492,10 @@ s25fs256t_post_bfpt_fixup(struct spi_nor *nor,
- 			  const struct sfdp_parameter_header *bfpt_header,
- 			  const struct sfdp_bfpt *bfpt)
- {
--	struct spi_mem_op op;
-+	struct spi_mem_op op =
-+		CYPRESS_NOR_RD_ANY_REG_OP(nor->params->addr_mode_nbytes,
-+					  SPINOR_REG_CYPRESS_ARCFN, 1,
-+					  nor->bouncebuf);
- 	int ret;
- 
- 	ret = cypress_nor_set_addr_mode_nbytes(nor);
-@@ -500,10 +503,6 @@ s25fs256t_post_bfpt_fixup(struct spi_nor *nor,
- 		return ret;
- 
- 	/* Read Architecture Configuration Register (ARCFN) */
--	op = (struct spi_mem_op)
--		CYPRESS_NOR_RD_ANY_REG_OP(nor->params->addr_mode_nbytes,
--					  SPINOR_REG_CYPRESS_ARCFN, 1,
--					  nor->bouncebuf);
- 	ret = spi_nor_read_any_reg(nor, &op, nor->reg_proto);
- 	if (ret)
- 		return ret;
--- 
-2.40.1.521.gf1e218fcd8-goog
+And then we have an upper limit of (1 - Uextra - Uinact). I feel we
+should be taking the minimum of these values to make sure that we
+don't cross the upper bound. I think the equation should be:
+   "dq =3D -min{U/Umax, (1 - Uextra - Uinact)} dt"
 
+But the current implementation is
+   "dq =3D -max{u/Umax, (1 - Uextra - Uinact)} dt"
+   Where u =3D dl_se->dl_bw.
+
+After fixing the above equation, reclaim logic works well but when only
+SCHED_FLAG_RECLAIM tasks are running. When we have a mix of both
+normal deadline and SCHED_FLAG_RECLAIM, it breaks the reclaim logic.
+As you pointed out, the second part of the fix is for that.
+
+> If using div64_u64() does not introduce too much overhead, then I agree
+> with the first change.
+In my testing, I did not see a change in the performance of the
+grub_reclaim function. Both old and new implementations take 10 to
+20 nanoseconds on average. But my observation might not be accurate.
+
+With this change, it is difficult to avoid division as the denominator
+is a variable and we would not be able to pre-calculate an inverse. We
+could probably calculate inverse during {__add/__sub}_running_bw so as
+to reduce the frequency of div64_u64. I shall try this for v2.
+
+> The second change also looks good to me.
+>
+> I have no comments on the code, but there is one thing in the comments
+> that looks misleading to me (or I am misunderstanding the code or the
+> comments):
+>
+
+> > + * We can calculate Umax_reclaim as:
+> > + *   Umax_reclaim:   this_bw + Uinact + Ureclaim
+>
+> I think this looks like a typo (summing this_bw to Uinact
+> looks wrong). Should "this_bw" be Uextra?
+>
+Thanks a lot for pointing it out. Yes you are right, I messed up in the
+comments. It should be Uextra and I shall fix it in v2.
+
+> > + *   dq =3D -(Ureclaim / Umax_reclaim) * dt
+> > + *      =3D -(Ureclaim / (Ureclaim + Uextra + Uinact)) * dt
+>
+> I think this should be the correct equation. BTW, since you are summing
+> Uextra and Uinact, mabe you could just use "Umax - running_bw"?
+>
+Makes sense, it will avoid an extra variable Uinact. I shall modify this
+in v2.
+
+Thanks,
+Vineeth
