@@ -2,83 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896166FCFB9
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5DB6FCFCC
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbjEIUmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 16:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37414 "EHLO
+        id S235148AbjEIUqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 16:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234791AbjEIUmt (ORCPT
+        with ESMTP id S229534AbjEIUqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 16:42:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4422D1BDB;
-        Tue,  9 May 2023 13:42:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CDC10618EB;
-        Tue,  9 May 2023 20:42:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F6DC433EF;
-        Tue,  9 May 2023 20:42:46 +0000 (UTC)
-Date:   Tue, 9 May 2023 16:42:44 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Beau Belgrave <beaub@linux.microsoft.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        David Vernet <void@manifault.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
-Message-ID: <20230509164244.3163e421@rorschach.local.home>
-In-Reply-To: <20230509163050.127d5123@rorschach.local.home>
-References: <20230508163751.841-1-beaub@linux.microsoft.com>
-        <CAADnVQLYL-ZaP_2vViaktw0G4UKkmpOK2q4ZXBa+f=M7cC25Rg@mail.gmail.com>
-        <20230509130111.62d587f1@rorschach.local.home>
-        <20230509163050.127d5123@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 9 May 2023 16:46:12 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813AF2110;
+        Tue,  9 May 2023 13:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kCdk2cX8L2MN43rb5MxNNov65UyV2OH8ru0XyISmXUI=; b=K7upsmYH2eNpceBwZDvkKsjAT+
+        4vmnhZzUe6LJmKL5J95AraOcNy1gmtWq41lmziOVtI7zdlMRTcGcudRW+OikG6taddJ1oNrcCkZpf
+        wIFvqKLs7A8HUbxqxo2Yjhi7LQ0urLBbkeq19KXloG+ON+kDXtBmyXpDRSg+VF/N+UfR1Z3bzQeVZ
+        aofTqZ1uEH/bXHbmaScnXZ2SEsg9jhlj5xpJd2rAnmyU3Wo/tc1hjCNwT919l8VVInPw4qW8uczvd
+        vGu2zKtUDzXa/1WG3N1dNzkflPSN7NggpLf9nJ+XJYMyMQTxajkMhr9TibN6mtP3p0hzjuEu2Zqr2
+        i2ykeQvg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pwUDp-004Div-0e;
+        Tue, 09 May 2023 20:46:09 +0000
+Date:   Tue, 9 May 2023 13:46:09 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Message-ID: <ZFqxEWqD19eHe353@infradead.org>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509165657.1735798-8-kent.overstreet@linux.dev>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 May 2023 16:30:50 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> >From the user space side, which does:  
+On Tue, May 09, 2023 at 12:56:32PM -0400, Kent Overstreet wrote:
+> From: Kent Overstreet <kent.overstreet@gmail.com>
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/samples/user_events/example.c#n60
-> 
-> 	/* Check if anyone is listening */
-> 	if (enabled) {
+> This is needed for bcachefs, which dynamically generates per-btree node
+> unpack functions.
 
-Hmm, looking at this deeper, we should update it to prevent the
-compiler from optimizing it, and keeping "enabled" in a register. Which
-would not work. Should probably add:
-
-	if (*(const volatile int *)&enabled) {
-
--- Steve
-
-
-> 		/* Yep, trace out our data */
-> 		writev(data_fd, (const struct iovec *)io, 2);
-> 
-> 		/* Increase the count */
-> 		count++;
-> 
-> 		printf("Something was attached, wrote data\n");
-> 	}
-
+No, we will never add back a way for random code allocating executable
+memory in kernel space.
