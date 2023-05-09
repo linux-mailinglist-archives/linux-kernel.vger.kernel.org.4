@@ -2,298 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A91A6FC1F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7470B6FC1F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234699AbjEIItw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 04:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        id S234584AbjEIIth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234599AbjEIIts (ORCPT
+        with ESMTP id S229484AbjEIItf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 04:49:48 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F542D79;
-        Tue,  9 May 2023 01:49:46 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3497nu4O029362;
-        Tue, 9 May 2023 08:49:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=QCZXwawIslsED4/bUEvhU6+xKaK/cv0flb+GAJbEkU8=;
- b=LAF521o/QZT3S3Z7C6LNyJP/VvkhHyXTJ7L6GEcvNqYMNDCruzYjA5YLR7KJ1REhaFwT
- K+loZ+pxUuHil5B97mfB36GdCBzRMA+RliKFjvh0GIKSj1tXM753GHJ16AqnWDxgpBt4
- xUQsb6yuRUuG0JtYId76SRaRosCkxKt0TTUy9yWorBGEKxMBXjWsnl0CVYTfvh+pr+f7
- XqGUZMpeQ59X+xZAz69pgYr5VJ6yjlVKEvztokGWyscx/mcIz5qNYji4BaVQs54Qof1k
- PuuwDaMaIXXy0wHE4mAQwHeACC0iBgNduEJ2V1H04JRVU6CytxSGkahUCQTXu2N+xW8r mw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf78517vc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 08:49:39 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3498nYVX006825
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 9 May 2023 08:49:34 GMT
-Received: from [10.242.243.41] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
- 01:49:27 -0700
-Message-ID: <db9af421-ca06-9eea-bac8-e014e86f3d46@quicinc.com>
-Date:   Tue, 9 May 2023 14:19:19 +0530
+        Tue, 9 May 2023 04:49:35 -0400
+Received: from out-35.mta0.migadu.com (out-35.mta0.migadu.com [91.218.175.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC7610D4
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:49:33 -0700 (PDT)
+Message-ID: <ae0a6842-6445-3c0b-f7bc-737227897697@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683622171;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y2YEfLTZ+2kTzwk8gTK4luSx3j7sfqMv1rQowFERaEE=;
+        b=OUrOHUcc9ndBY1igjL544+Vqnyiuj5FmdoZggfWppDKXt5E+qsBfShmo6gAEv5i/BbB4dD
+        //w1iLCa1QTG2LYoNStpSRlpkvyBY6WSW99DF39RFcKItw2SRqfHAHfoZtTkk+i55zSy8L
+        sFgYGscbsf0qlA9o7OXMF1Kr4hehNCA=
+Date:   Tue, 9 May 2023 16:49:23 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V3 6/6] PCI: qcom: Add support for IPQ9574
-To:     Manivannan Sadhasivam <mani@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
-        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_ipkumar@quicinc.com>
-References: <20230421124938.21974-1-quic_devipriy@quicinc.com>
- <20230421124938.21974-7-quic_devipriy@quicinc.com>
- <20230508122109.GC4190@thinkpad>
- <CAA8EJppKUwfatdNoQPD4QbEPXyv1cEz3cDLfND+70Veq5Bcf8Q@mail.gmail.com>
- <20230508153706.GA14969@thinkpad>
-Content-Language: en-US
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <20230508153706.GA14969@thinkpad>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Subject: Re: [PATCH 1/1] kernel/fork: Fix the error "raw_local_irq_restore()
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Zhu Yanjun <yanjun.zhu@linux.dev>
+To:     "leon@kernel.org" <leon@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        RDMA mailing list <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        akpm@linux-foundation.org
+References: <a694638f-9fb4-88b2-cbba-bb5de2aadc3e@linux.dev>
+ <3064a4ac-4008-1f48-99ba-80524c8d3a79@linux.dev>
+In-Reply-To: <3064a4ac-4008-1f48-99ba-80524c8d3a79@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: tudU81w-H5_j0Ro2mqG6Vni8wPy1erip
-X-Proofpoint-GUID: tudU81w-H5_j0Ro2mqG6Vni8wPy1erip
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_05,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- bulkscore=0 mlxlogscore=999 impostorscore=0 spamscore=0 mlxscore=0
- priorityscore=1501 adultscore=0 malwarescore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305090067
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There is something wrong with this commit. Please ignore it.
 
+Zhu Yanjun
 
-On 5/8/2023 9:07 PM, Manivannan Sadhasivam wrote:
-> On Mon, May 08, 2023 at 03:46:53PM +0300, Dmitry Baryshkov wrote:
->> On Mon, 8 May 2023 at 15:21, Manivannan Sadhasivam <mani@kernel.org> wrote:
->>>
->>> On Fri, Apr 21, 2023 at 06:19:38PM +0530, Devi Priya wrote:
->>>> The IPQ9574 platform has 4 Gen3 PCIe controllers: two single-lane
->>>> and two dual-lane based on SNPS core 5.70a
->>>> The Qcom IP rev is 1.27.0 and Synopsys IP rev is 5.80a
->>>> Added a new compatible 'qcom,pcie-ipq9574' and 'ops_1_27_0'
->>>> which reuses all the members of 'ops_2_9_0' except for the post_init
->>>> as the SLV_ADDR_SPACE_SIZE configuration differs between 2_9_0
->>>> and 1_27_0.
->>>> Also, modified get_resources of 'ops 2_9_0' to get the clocks
->>>> from the device tree and modelled the post init sequence as
->>>> a common function to avoid code redundancy.
->>>>
->>>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
->>>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
->>>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->>>
->>> One comment below. With that fixed,
->>>
->>> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
->>>
->>> - Mani
->>>
->>>> ---
->>>>   Changes in V3:
->>>>        - Rebased on top of linux-next/master
->>>>
->>>>   drivers/pci/controller/dwc/pcie-qcom.c | 61 ++++++++++++++++++--------
->>>>   1 file changed, 43 insertions(+), 18 deletions(-)
->>>>
->>>> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
->>>> index 4ab30892f6ef..3682ecdead1f 100644
->>>> --- a/drivers/pci/controller/dwc/pcie-qcom.c
->>>> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
->>>> @@ -107,6 +107,7 @@
->>>>
->>>>   /* PARF_SLV_ADDR_SPACE_SIZE register value */
->>>>   #define SLV_ADDR_SPACE_SZ                    0x10000000
->>>> +#define SLV_ADDR_SPACE_SZ_1_27_0             0x08000000
->>>>
->>>>   /* PARF_MHI_CLOCK_RESET_CTRL register fields */
->>>>   #define AHB_CLK_EN                           BIT(0)
->>>> @@ -202,10 +203,10 @@ struct qcom_pcie_resources_2_7_0 {
->>>>        struct reset_control *rst;
->>>>   };
->>>>
->>>> -#define QCOM_PCIE_2_9_0_MAX_CLOCKS           5
->>>>   struct qcom_pcie_resources_2_9_0 {
->>>> -     struct clk_bulk_data clks[QCOM_PCIE_2_9_0_MAX_CLOCKS];
->>>> +     struct clk_bulk_data *clks;
->>>>        struct reset_control *rst;
->>>> +     int num_clks;
->>>>   };
->>>>
->>>>   union qcom_pcie_resources {
->>>> @@ -1050,17 +1051,10 @@ static int qcom_pcie_get_resources_2_9_0(struct qcom_pcie *pcie)
->>>>        struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
->>>>        struct dw_pcie *pci = pcie->pci;
->>>>        struct device *dev = pci->dev;
->>>> -     int ret;
->>>>
->>>> -     res->clks[0].id = "iface";
->>>> -     res->clks[1].id = "axi_m";
->>>> -     res->clks[2].id = "axi_s";
->>>> -     res->clks[3].id = "axi_bridge";
->>>> -     res->clks[4].id = "rchng";
->>>> -
->>>> -     ret = devm_clk_bulk_get(dev, ARRAY_SIZE(res->clks), res->clks);
->>>> -     if (ret < 0)
->>>> -             return ret;
->>>> +     res->num_clks = devm_clk_bulk_get_all(dev, &res->clks);
->>>> +     if (res->clks < 0)
->>>> +             return res->num_clks;
->>>
->>> Why not return proper error no?
->>
->> Instead the question should be, why not the proper condition: it tells
->> `if (res->clks < 0)', while it should be `if (res->num_clks < 0)'.
->>
+在 2023/5/8 16:57, Zhu Yanjun 写道:
+> The following can fix this problem. Not sure if this will introduce any 
+> risks.
 > 
-> Heh. I completely overlooked that part. Yes, the if condition itself should be
-> fixed.
+> Subject: [PATCH 1/1] kernel/fork: Fix the error "raw_local_irq_restore()
+>   called with IRQs enabled"
 > 
-> - Mani
-
-Sure, will fix it up!
-
-Regards,
-Devi Priya
+> The call trace are as below.
+> "
+> [ 6020.092175] Call Trace:
+> [ 6020.092178]  <TASK>
+> [ 6020.092181]  _raw_spin_unlock_irqrestore+0x67/0x70
+> [ 6020.092190]  ib_send_mad+0x3fa/0x7d0 [ib_core]
+> [ 6020.092299]  ? __pfx_ib_send_mad+0x10/0x10 [ib_core]
+> [ 6020.092429]  ib_post_send_mad+0x338/0x4c0 [ib_core]
+> [ 6020.092519]  ib_send_cm_rep+0x4b0/0x790 [ib_cm]
+> [ 6020.092553]  rdma_accept+0x432/0x550 [rdma_cm]
+> [ 6020.092585]  ? __pfx_rdma_accept+0x10/0x10 [rdma_cm]
+> [ 6020.092613]  ? do_raw_spin_unlock+0x97/0x130
+> [ 6020.092623]  ? preempt_count_sub+0x14/0xc0
+> [ 6020.092632]  ? _raw_spin_unlock+0x29/0x50
+> [ 6020.092637]  ? ucma_get_ctx+0xab/0x180 [rdma_ucm]
+> [ 6020.092650]  ? check_stack_object+0x22/0x70
+> [ 6020.092659]  ucma_accept+0x1e7/0x2e0 [rdma_ucm]
+> [ 6020.092671]  ? __pfx_ucma_accept+0x10/0x10 [rdma_ucm]
+> [ 6020.092683]  ? 
+> __pfx_ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0x10/0x10 [ib_uverbs]
+> [ 6020.092720]  ? _find_next_bit+0x37/0xc0
+> [ 6020.092741]  ucma_write+0x139/0x1f0 [rdma_ucm]
+> [ 6020.092752]  ? __pfx_ucma_write+0x10/0x10 [rdma_ucm]
+> [ 6020.092764]  ? security_file_permission+0x4b/0x2b0
+> [ 6020.092774]  vfs_write+0x161/0x740
+> [ 6020.092781]  ? ib_uverbs_ioctl+0x17f/0x210 [ib_uverbs]
+> [ 6020.092815]  ? __pfx_vfs_write+0x10/0x10
+> [ 6020.092822]  ? __fget_files+0x158/0x230
+> [ 6020.092831]  ? __fget_light+0xe2/0x100
+> [ 6020.092838]  ksys_write+0x13f/0x160
+> [ 6020.092843]  ? __pfx_ksys_write+0x10/0x10
+> [ 6020.092847]  ? ktime_get_coarse_real_ts64+0x107/0x120
+> [ 6020.092854]  ? ktime_get_coarse_real_ts64+0xaf/0x120
+> [ 6020.092863]  do_syscall_64+0x37/0x90
+> [ 6020.092870]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> [ 6020.092877] RIP: 0033:0x7f2151e11847
+> [ 6020.092882] Code: c3 66 90 41 54 49 89 d4 55 48 89 f5 53 89 fb 48 83 
+> ec 10 e8 1b fd ff ff 4c 89 e2 48 89 ee 89 df 41 89 c0 b8 01 00 00 00 0f 
+> 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 48 89 44 24 08 e8 54 fd ff ff 48
+> [ 6020.092886] RSP: 002b:00007ffc2439a0f0 EFLAGS: 00000293 ORIG_RAX: 
+> 0000000000000001
+> [ 6020.092892] RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 
+> 00007f2151e11847
+> [ 6020.092896] RDX: 0000000000000130 RSI: 00007ffc2439a120 RDI: 
+> 0000000000000003
+> [ 6020.092899] RBP: 00007ffc2439a120 R08: 0000000000000000 R09: 
+> 0000000000000000
+> [ 6020.092902] R10: 00000000ffffffff R11: 0000000000000293 R12: 
+> 0000000000000130
+> [ 6020.092905] R13: 0000000000000011 R14: 0000000000000000 R15: 
+> 000055c0ea6ffa18
+> [ 6020.092914]  </TASK>
+> [ 6020.092917] irq event stamp: 0
+> [ 6020.092919] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+> [ 6020.092923] hardirqs last disabled at (0): [<ffffffffad94dae6>] 
+> copy_process+0x13e6/0x3720
+> [ 6020.092931] softirqs last  enabled at (0): [<ffffffffad94dae6>] 
+> copy_process+0x13e6/0x3720
+> [ 6020.092936] softirqs last disabled at (0): [<0000000000000000>] 0x0
+> [ 6020.092939] ---[ end trace 0000000000000000 ]---
 > 
->>>
->>>>
->>>>        res->rst = devm_reset_control_array_get_exclusive(dev);
->>>>        if (IS_ERR(res->rst))
->>>> @@ -1073,7 +1067,7 @@ static void qcom_pcie_deinit_2_9_0(struct qcom_pcie *pcie)
->>>>   {
->>>>        struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
->>>>
->>>> -     clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
->>>> +     clk_bulk_disable_unprepare(res->num_clks, res->clks);
->>>>   }
->>>>
->>>>   static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
->>>> @@ -1102,19 +1096,16 @@ static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
->>>>
->>>>        usleep_range(2000, 2500);
->>>>
->>>> -     return clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
->>>> +     return clk_bulk_prepare_enable(res->num_clks, res->clks);
->>>>   }
->>>>
->>>> -static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
->>>> +static int qcom_pcie_post_init(struct qcom_pcie *pcie)
->>>>   {
->>>>        struct dw_pcie *pci = pcie->pci;
->>>>        u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
->>>>        u32 val;
->>>>        int i;
->>>>
->>>> -     writel(SLV_ADDR_SPACE_SZ,
->>>> -             pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
->>>> -
->>>>        val = readl(pcie->parf + PARF_PHY_CTRL);
->>>>        val &= ~PHY_TEST_PWR_DOWN;
->>>>        writel(val, pcie->parf + PARF_PHY_CTRL);
->>>> @@ -1151,6 +1142,26 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
->>>>        return 0;
->>>>   }
->>>>
->>>> +static int qcom_pcie_post_init_1_27_0(struct qcom_pcie *pcie)
->>>> +{
->>>> +     writel(SLV_ADDR_SPACE_SZ_1_27_0,
->>>> +            pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
->>>> +
->>>> +     qcom_pcie_post_init(pcie);
->>>> +
->>>> +     return 0;
->>>> +}
->>>> +
->>>> +static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
->>>> +{
->>>> +     writel(SLV_ADDR_SPACE_SZ,
->>>> +            pcie->parf + PARF_SLV_ADDR_SPACE_SIZE);
->>>> +
->>>> +     qcom_pcie_post_init(pcie);
->>>> +
->>>> +     return 0;
->>>> +}
->>>> +
->>>>   static int qcom_pcie_link_up(struct dw_pcie *pci)
->>>>   {
->>>>        u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
->>>> @@ -1291,6 +1302,15 @@ static const struct qcom_pcie_ops ops_2_9_0 = {
->>>>        .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
->>>>   };
->>>>
->>>> +/* Qcom IP rev.: 1.27.0  Synopsys IP rev.: 5.80a */
->>>> +static const struct qcom_pcie_ops ops_1_27_0 = {
->>>> +     .get_resources = qcom_pcie_get_resources_2_9_0,
->>>> +     .init = qcom_pcie_init_2_9_0,
->>>> +     .post_init = qcom_pcie_post_init_1_27_0,
->>>> +     .deinit = qcom_pcie_deinit_2_9_0,
->>>> +     .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
->>>> +};
->>>> +
->>>>   static const struct qcom_pcie_cfg cfg_1_0_0 = {
->>>>        .ops = &ops_1_0_0,
->>>>   };
->>>> @@ -1323,6 +1343,10 @@ static const struct qcom_pcie_cfg cfg_2_9_0 = {
->>>>        .ops = &ops_2_9_0,
->>>>   };
->>>>
->>>> +static const struct qcom_pcie_cfg cfg_1_27_0 = {
->>>> +     .ops = &ops_1_27_0,
->>>> +};
->>>> +
->>>>   static const struct dw_pcie_ops dw_pcie_ops = {
->>>>        .link_up = qcom_pcie_link_up,
->>>>        .start_link = qcom_pcie_start_link,
->>>> @@ -1607,6 +1631,7 @@ static const struct of_device_id qcom_pcie_match[] = {
->>>>        { .compatible = "qcom,pcie-ipq8064-v2", .data = &cfg_2_1_0 },
->>>>        { .compatible = "qcom,pcie-ipq8074", .data = &cfg_2_3_3 },
->>>>        { .compatible = "qcom,pcie-ipq8074-gen3", .data = &cfg_2_9_0 },
->>>> +     { .compatible = "qcom,pcie-ipq9574", .data = &cfg_1_27_0 },
->>>>        { .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
->>>>        { .compatible = "qcom,pcie-qcs404", .data = &cfg_2_4_0 },
->>>>        { .compatible = "qcom,pcie-sa8540p", .data = &cfg_1_9_0 },
->>>> --
->>>> 2.17.1
->>>>
->>>
->>> --
->>> மணிவண்ணன் சதாசிவம்
->>
->>
->>
->> -- 
->> With best wishes
->> Dmitry
+> "
 > 
+> Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
+> ---
+>   kernel/fork.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index ed4e01daccaa..802e11e55494 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -2250,6 +2250,7 @@ __latent_entropy struct task_struct *copy_process(
+>                                          struct kernel_clone_args *args)
+>   {
+>          int pidfd = -1, retval;
+> +       unsigned long flags;
+>          struct task_struct *p;
+>          struct multiprocess_signals delayed;
+>          struct file *pidfile = NULL;
+> @@ -2320,11 +2321,11 @@ __latent_entropy struct task_struct *copy_process(
+>          sigemptyset(&delayed.signal);
+>          INIT_HLIST_NODE(&delayed.node);
+> 
+> -       spin_lock_irq(&current->sighand->siglock);
+> +       spin_lock_irqsave(&current->sighand->siglock, flags);
+>          if (!(clone_flags & CLONE_THREAD))
+>                  hlist_add_head(&delayed.node, 
+> &current->signal->multiprocess);
+>          recalc_sigpending();
+> -       spin_unlock_irq(&current->sighand->siglock);
+> +       spin_unlock_irqrestore(&current->sighand->siglock, flags);
+>          retval = -ERESTARTNOINTR;
+>          if (task_sigpending(current))
+>                  goto fork_out;
+> -- 
+> 2.27.0
+> 
+> 
+> 在 2023/5/8 16:53, Zhu Yanjun 写道:
+>> Hi, all
+>>
+>> I confronted the following problem. The call traces are as below.
+>>
+>> kernel/fork.c:
+>>
+>> "
+>>
+>> 2323 spin_lock_irq(&current->sighand->siglock); <---disable
+>> 2324         if (!(clone_flags & CLONE_THREAD))
+>> 2325                 hlist_add_head(&delayed.node, 
+>> &current->signal->multiprocess);
+>> 2326         recalc_sigpending();
+>> 2327 spin_unlock_irq(&current->sighand->siglock); <--enable
+>> "
+>>
+>> conflicts with the following
+>>
+>> "
+>>
+>> 1031         spin_lock_irqsave(&qp_info->send_queue.lock, flags); 
+>> <---save
+>> 1032         if (qp_info->send_queue.count < 
+>> qp_info->send_queue.max_active) {
+>> 1033                 trace_ib_mad_ib_send_mad(mad_send_wr, qp_info);
+>> 1034                 ret = ib_post_send(mad_agent->qp, 
+>> &mad_send_wr->send_wr.wr,
+>> 1035                                    NULL);
+>> 1036                 list = &qp_info->send_queue.list;
+>> 1037         } else {
+>> 1038                 ret = 0;
+>> 1039                 list = &qp_info->overflow_list;
+>> 1040         }
+>> 1041
+>> 1042         if (!ret) {
+>> 1043                 qp_info->send_queue.count++;
+>> 1044 list_add_tail(&mad_send_wr->mad_list.list, list);
+>> 1045         }
+>> 1046 spin_unlock_irqrestore(&qp_info->send_queue.lock, flags); <--restore
+>>
+>> "
+>>
+>> If we change spin_lock_irq/spin_unlock_irq to 
+>> spin_lock_irqsave/spin_unlock_irqrestore, it seems that this problem 
+>> is resolved.
+>>
+>> But not sure if other problems are introduced.
+>>
+>> [ 6020.091840] ------------[ cut here ]------------
+>> [ 6020.091846] raw_local_irq_restore() called with IRQs enabled
+>> [ 6020.091857] WARNING: CPU: 82 PID: 10603 at 
+>> kernel/locking/irqflag-debug.c:10 warn_bogus_irq_restore+0x21/0x30
+>> [ 6020.091872] Modules linked in: rdma_rxe ip6_udp_tunnel udp_tunnel 
+>> xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT nf_reject_ipv4 
+>> nft_compat nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 
+>> nf_defrag_ipv4 nf_tables nfnetlink tun bridge stp llc vfat fat ext4 
+>> mbcache jbd2 rpcrdma sunrpc intel_rapl_msr intel_rapl_common rdma_ucm 
+>> i10nm_edac ib_srpt nfit ib_isert libnvdimm iscsi_target_mod 
+>> target_core_mod x86_pkg_temp_thermal ib_iser intel_powerclamp libiscsi 
+>> coretemp scsi_transport_iscsi ib_umad rdma_cm ib_ipoib iw_cm kvm_intel 
+>> ib_cm ipmi_ssif kvm mlx5_ib i40e irqbypass crct10dif_pclmul 
+>> crc32_pclmul ghash_clmulni_intel ib_uverbs sha512_ssse3 iTCO_wdt rapl 
+>> iTCO_vendor_support mei_me intel_cstate ib_core joydev acpi_ipmi 
+>> intel_uncore mei ipmi_si pcspkr i2c_i801 dax_hmem isst_if_mmio 
+>> isst_if_mbox_pci wmi_bmof isst_if_common intel_pch_thermal i2c_smbus 
+>> ipmi_devintf ipmi_msghandler acpi_power_meter ip_tables xfs libcrc32c 
+>> sd_mod t10_pi crc64_rocksoft crc64 sg mgag200 mlx5_core drm_kms_helper 
+>> syscopyarea mlxfw sysfillrect
+>> [ 6020.092063]  sysimgblt tls i2c_algo_bit ahci drm_shmem_helper 
+>> libahci ice pci_hyperv_intf crc32c_intel drm psample megaraid_sas 
+>> libata tg3 wmi dm_mirror dm_region_hash dm_log dm_mod fuse [last 
+>> unloaded: irdma]
+>> [ 6020.092108] CPU: 82 PID: 10603 Comm: rping Kdump: loaded Tainted: G 
+>> S  B              6.4.0-rc1+ #30
+>> [ 6020.092115] Hardware name: Dell Inc. PowerEdge R750/06V45N, BIOS 
+>> 1.2.4 05/28/2021
+>> [ 6020.092119] RIP: 0010:warn_bogus_irq_restore+0x21/0x30
+>> [ 6020.092126] Code: 90 90 90 90 90 90 90 90 90 80 3d 35 50 79 01 00 
+>> 74 05 c3 cc cc cc cc 48 c7 c7 a0 d7 e9 ae c6 05 20 50 79 01 01 e8 1f 
+>> 15 da fe <0f> 0b c3 cc cc cc cc cc cc cc cc cc cc cc cc 90 90 90 90 90 
+>> 90 90
+>> [ 6020.092131] RSP: 0018:ff11000180e477e8 EFLAGS: 00010286
+>> [ 6020.092137] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 
+>> 0000000000000000
+>> [ 6020.092141] RDX: 0000000000000004 RSI: dffffc0000000000 RDI: 
+>> ffffffffb27b31c0
+>> [ 6020.092144] RBP: ff110001175d69e8 R08: ffe21c02006d7f6a R09: 
+>> ffe21c02006d7f6a
+>> [ 6020.092148] R10: ff110010036bfb4b R11: ffe21c02006d7f69 R12: 
+>> ff110001175d6a28
+>> [ 6020.092152] R13: ff110001175d6a30 R14: ff110001175d69e8 R15: 
+>> 0000000000000000
+>> [ 6020.092155] FS:  00007f215281c740(0000) GS:ff11001003680000(0000) 
+>> knlGS:0000000000000000
+>> [ 6020.092160] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> [ 6020.092163] CR2: 00007f2147fffda0 CR3: 00000001a1b2c005 CR4: 
+>> 0000000000771ee0
+>> [ 6020.092167] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
+>> 0000000000000000
+>> [ 6020.092170] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 
+>> 0000000000000400
+>> [ 6020.092173] PKRU: 55555554
+>> [ 6020.092175] Call Trace:
+>> [ 6020.092178]  <TASK>
+>> [ 6020.092181]  _raw_spin_unlock_irqrestore+0x67/0x70
+>> [ 6020.092190]  ib_send_mad+0x3fa/0x7d0 [ib_core]
+>> [ 6020.092299]  ? __pfx_ib_send_mad+0x10/0x10 [ib_core]
+>> [ 6020.092429]  ib_post_send_mad+0x338/0x4c0 [ib_core]
+>> [ 6020.092519]  ib_send_cm_rep+0x4b0/0x790 [ib_cm]
+>> [ 6020.092553]  rdma_accept+0x432/0x550 [rdma_cm]
+>> [ 6020.092585]  ? __pfx_rdma_accept+0x10/0x10 [rdma_cm]
+>> [ 6020.092613]  ? do_raw_spin_unlock+0x97/0x130
+>> [ 6020.092623]  ? preempt_count_sub+0x14/0xc0
+>> [ 6020.092632]  ? _raw_spin_unlock+0x29/0x50
+>> [ 6020.092637]  ? ucma_get_ctx+0xab/0x180 [rdma_ucm]
+>> [ 6020.092650]  ? check_stack_object+0x22/0x70
+>> [ 6020.092659]  ucma_accept+0x1e7/0x2e0 [rdma_ucm]
+>> [ 6020.092671]  ? __pfx_ucma_accept+0x10/0x10 [rdma_ucm]
+>> [ 6020.092683]  ? 
+>> __pfx_ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0x10/0x10 [ib_uverbs]
+>> [ 6020.092720]  ? _find_next_bit+0x37/0xc0
+>> [ 6020.092741]  ucma_write+0x139/0x1f0 [rdma_ucm]
+>> [ 6020.092752]  ? __pfx_ucma_write+0x10/0x10 [rdma_ucm]
+>> [ 6020.092764]  ? security_file_permission+0x4b/0x2b0
+>> [ 6020.092774]  vfs_write+0x161/0x740
+>> [ 6020.092781]  ? ib_uverbs_ioctl+0x17f/0x210 [ib_uverbs]
+>> [ 6020.092815]  ? __pfx_vfs_write+0x10/0x10
+>> [ 6020.092822]  ? __fget_files+0x158/0x230
+>> [ 6020.092831]  ? __fget_light+0xe2/0x100
+>> [ 6020.092838]  ksys_write+0x13f/0x160
+>> [ 6020.092843]  ? __pfx_ksys_write+0x10/0x10
+>> [ 6020.092847]  ? ktime_get_coarse_real_ts64+0x107/0x120
+>> [ 6020.092854]  ? ktime_get_coarse_real_ts64+0xaf/0x120
+>> [ 6020.092863]  do_syscall_64+0x37/0x90
+>> [ 6020.092870]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>> [ 6020.092877] RIP: 0033:0x7f2151e11847
+>> [ 6020.092882] Code: c3 66 90 41 54 49 89 d4 55 48 89 f5 53 89 fb 48 
+>> 83 ec 10 e8 1b fd ff ff 4c 89 e2 48 89 ee 89 df 41 89 c0 b8 01 00 00 
+>> 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 48 89 44 24 08 e8 54 fd ff 
+>> ff 48
+>> [ 6020.092886] RSP: 002b:00007ffc2439a0f0 EFLAGS: 00000293 ORIG_RAX: 
+>> 0000000000000001
+>> [ 6020.092892] RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 
+>> 00007f2151e11847
+>> [ 6020.092896] RDX: 0000000000000130 RSI: 00007ffc2439a120 RDI: 
+>> 0000000000000003
+>> [ 6020.092899] RBP: 00007ffc2439a120 R08: 0000000000000000 R09: 
+>> 0000000000000000
+>> [ 6020.092902] R10: 00000000ffffffff R11: 0000000000000293 R12: 
+>> 0000000000000130
+>> [ 6020.092905] R13: 0000000000000011 R14: 0000000000000000 R15: 
+>> 000055c0ea6ffa18
+>> [ 6020.092914]  </TASK>
+>> [ 6020.092917] irq event stamp: 0
+>> [ 6020.092919] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+>> [ 6020.092923] hardirqs last disabled at (0): [<ffffffffad94dae6>] 
+>> copy_process+0x13e6/0x3720
+>> [ 6020.092931] softirqs last  enabled at (0): [<ffffffffad94dae6>] 
+>> copy_process+0x13e6/0x3720
+>> [ 6020.092936] softirqs last disabled at (0): [<0000000000000000>] 0x0
+>> [ 6020.092939] ---[ end trace 0000000000000000 ]---
+>>
+>> Zhu Yanjun
+>>
