@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5836FD118
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67FC6FD13B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235918AbjEIVXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 17:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38356 "EHLO
+        id S235855AbjEIVYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 17:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236003AbjEIVVy (ORCPT
+        with ESMTP id S236098AbjEIVXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 17:21:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEB586B1;
-        Tue,  9 May 2023 14:20:43 -0700 (PDT)
+        Tue, 9 May 2023 17:23:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741496A6E;
+        Tue,  9 May 2023 14:21:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB2AD63779;
-        Tue,  9 May 2023 21:20:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60657C4339B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E80DE63746;
+        Tue,  9 May 2023 21:20:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0017EC433AA;
         Tue,  9 May 2023 21:20:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683667234;
-        bh=fvggIfwE4DYJULyIHUQCishCUS8+oRGIdCElfL9i1Oc=;
+        s=k20201202; t=1683667235;
+        bh=FPZW9RYcum9eLwAVB5+4M2/FwCzOdmOvrgItKVfLNws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i9M+hF6SnnHha9BxsH+EM0BAogBu0jmQogOAnZJQcwqHsa1opOyGvOljYCqGjKyC7
-         hO4R5hKl3N65Q0uM83Iu+2GAi9yWzNEZlVa6rVukD2Qb+IiDz1mu/EU9RZkXB17vuB
-         MfDhuXDNinCGrTduNdmuz6+EQR8AXPH8Cyg80qYmiOIci1KCKKgTZFV/CeRLRX2rd2
-         YPe/Lt1kcUlrRc3WwP39A/Y663y7lHBDVndrQ/YVI5ZcCwse7IgWjRfKmmc6X1pa19
-         aogEPNGQklSi7M8y8choUyCE4HEiLelmx4tb5emFJG/bFbOtFBmE3Na0GLZGKrB5ii
-         pnBwtRdQIGCqA==
+        b=igQDxp7TCbmKvP4vGl1ezeziWiYY8Fkzt8gCzvOfXVaM6sqVygSlUUxUBqodFnM7S
+         oi5AKj7NNtV6m88xMgIHMa3Jufl/Oi2lWQJYq1RtfdksRaD6O5gWhjXNUknpzYotu9
+         eaEJuWTejAHUIjGIuzIdV/ggPXuQfNwoW7Lq5FORZpThT1lxFGFSnO/oB8DXbbg+vl
+         J/TFaHgVaGDlJrbWxaBiMrvMv6JSpgNj/3XPAy53nZnMa9gVjNMEn6FEIW1fKQXJMJ
+         Y38+uLX52DIbvdN580QEpoLZdLo6Eb9HvLdnu47QKeKivPhg0BLzkps1ytL61Y+Kon
+         zhm+zsMS5NA4Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jia-Ju Bai <baijiaju1990@gmail.com>,
-        TOTE Robot <oslab@tsinghua.edu.cn>,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        Sasha Levin <sashal@kernel.org>, ntfs3@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 08/13] fs/ntfs3: Fix a possible null-pointer dereference in ni_clear()
-Date:   Tue,  9 May 2023 17:20:16 -0400
-Message-Id: <20230509212023.22105-8-sashal@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, pdeschrijver@nvidia.com,
+        pgaikwad@nvidia.com, mturquette@baylibre.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 09/13] clk: tegra20: fix gcc-7 constant overflow warning
+Date:   Tue,  9 May 2023 17:20:17 -0400
+Message-Id: <20230509212023.22105-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230509212023.22105-1-sashal@kernel.org>
 References: <20230509212023.22105-1-sashal@kernel.org>
@@ -48,8 +49,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,47 +59,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit ec275bf9693d19cc0fdce8436f4c425ced86f6e7 ]
+[ Upstream commit b4a2adbf3586efa12fe78b9dec047423e01f3010 ]
 
-In a previous commit c1006bd13146, ni->mi.mrec in ni_write_inode()
-could be NULL, and thus a NULL check is added for this variable.
+Older gcc versions get confused by comparing a u32 value to a negative
+constant in a switch()/case block:
 
-However, in the same call stack, ni->mi.mrec can be also dereferenced
-in ni_clear():
+drivers/clk/tegra/clk-tegra20.c: In function 'tegra20_clk_measure_input_freq':
+drivers/clk/tegra/clk-tegra20.c:581:2: error: case label does not reduce to an integer constant
+  case OSC_CTRL_OSC_FREQ_12MHZ:
+  ^~~~
+drivers/clk/tegra/clk-tegra20.c:593:2: error: case label does not reduce to an integer constant
+  case OSC_CTRL_OSC_FREQ_26MHZ:
 
-ntfs_evict_inode(inode)
-  ni_write_inode(inode, ...)
-    ni = ntfs_i(inode);
-    is_rec_inuse(ni->mi.mrec) -> Add a NULL check by previous commit
-  ni_clear(ntfs_i(inode))
-    is_rec_inuse(ni->mi.mrec) -> No check
+Make the constants unsigned instead.
 
-Thus, a possible null-pointer dereference may exist in ni_clear().
-To fix it, a NULL check is added in this function.
-
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/r/20230227085914.2560984-1-arnd@kernel.org
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ntfs3/frecord.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/tegra/clk-tegra20.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/fs/ntfs3/frecord.c b/fs/ntfs3/frecord.c
-index 95556515ded3d..d24e12d348d49 100644
---- a/fs/ntfs3/frecord.c
-+++ b/fs/ntfs3/frecord.c
-@@ -101,7 +101,7 @@ void ni_clear(struct ntfs_inode *ni)
- {
- 	struct rb_node *node;
+diff --git a/drivers/clk/tegra/clk-tegra20.c b/drivers/clk/tegra/clk-tegra20.c
+index d246a39a6b4f0..cc57ababc882d 100644
+--- a/drivers/clk/tegra/clk-tegra20.c
++++ b/drivers/clk/tegra/clk-tegra20.c
+@@ -18,24 +18,24 @@
+ #define MISC_CLK_ENB 0x48
  
--	if (!ni->vfs_inode.i_nlink && is_rec_inuse(ni->mi.mrec))
-+	if (!ni->vfs_inode.i_nlink && ni->mi.mrec && is_rec_inuse(ni->mi.mrec))
- 		ni_delete_all(ni);
+ #define OSC_CTRL 0x50
+-#define OSC_CTRL_OSC_FREQ_MASK (3<<30)
+-#define OSC_CTRL_OSC_FREQ_13MHZ (0<<30)
+-#define OSC_CTRL_OSC_FREQ_19_2MHZ (1<<30)
+-#define OSC_CTRL_OSC_FREQ_12MHZ (2<<30)
+-#define OSC_CTRL_OSC_FREQ_26MHZ (3<<30)
+-#define OSC_CTRL_MASK (0x3f2 | OSC_CTRL_OSC_FREQ_MASK)
+-
+-#define OSC_CTRL_PLL_REF_DIV_MASK (3<<28)
+-#define OSC_CTRL_PLL_REF_DIV_1		(0<<28)
+-#define OSC_CTRL_PLL_REF_DIV_2		(1<<28)
+-#define OSC_CTRL_PLL_REF_DIV_4		(2<<28)
++#define OSC_CTRL_OSC_FREQ_MASK (3u<<30)
++#define OSC_CTRL_OSC_FREQ_13MHZ (0u<<30)
++#define OSC_CTRL_OSC_FREQ_19_2MHZ (1u<<30)
++#define OSC_CTRL_OSC_FREQ_12MHZ (2u<<30)
++#define OSC_CTRL_OSC_FREQ_26MHZ (3u<<30)
++#define OSC_CTRL_MASK (0x3f2u | OSC_CTRL_OSC_FREQ_MASK)
++
++#define OSC_CTRL_PLL_REF_DIV_MASK	(3u<<28)
++#define OSC_CTRL_PLL_REF_DIV_1		(0u<<28)
++#define OSC_CTRL_PLL_REF_DIV_2		(1u<<28)
++#define OSC_CTRL_PLL_REF_DIV_4		(2u<<28)
  
- 	al_destroy(ni);
+ #define OSC_FREQ_DET 0x58
+-#define OSC_FREQ_DET_TRIG (1<<31)
++#define OSC_FREQ_DET_TRIG (1u<<31)
+ 
+ #define OSC_FREQ_DET_STATUS 0x5c
+-#define OSC_FREQ_DET_BUSY (1<<31)
+-#define OSC_FREQ_DET_CNT_MASK 0xFFFF
++#define OSC_FREQ_DET_BUSYu (1<<31)
++#define OSC_FREQ_DET_CNT_MASK 0xFFFFu
+ 
+ #define TEGRA20_CLK_PERIPH_BANKS	3
+ 
 -- 
 2.39.2
 
