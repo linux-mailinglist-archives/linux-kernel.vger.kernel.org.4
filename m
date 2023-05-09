@@ -2,205 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064DB6FCDC6
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D996FCDC3
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234899AbjEISZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 14:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
+        id S234771AbjEISZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 14:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234911AbjEISZY (ORCPT
+        with ESMTP id S234772AbjEISZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 14:25:24 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99320E4E
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 11:25:22 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-643a1fed360so3361916b3a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 11:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1683656722; x=1686248722;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=26y59v9qUKc2CpO6S7UVQsEMURpLsKbwKkIt33el4rQ=;
-        b=DLepPrV+ewXWR/9YrNdLZsky9GdViwY78UMcLP8j0su7F5/fgByJg64fORBjd2IOJn
-         baXSJfWCoS84zI5g4AKPEviwFoxWDo28hKgTsxXDlKqNt2cvtpiDtxqGDT24IyaWTlzD
-         FnfD51zlWKvj5VLu8Rc/FFtHOH3uNeC62mi/YWw3Rjn9Oot+ZYAqX88ZxMsWK8z8yyiR
-         LibeL7cF4bShgGhQs7y6ZW2yiO46kN7/2rQEUNM77IdNMWcUshAIbv93HuNR+cQr6YxQ
-         1za0EaBwOeLdGnDvu/tvHk5EDsUQ2yXfuUPderpKOYp9leoKqfAN+i/sDjr5C8H7Upon
-         EuOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683656722; x=1686248722;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=26y59v9qUKc2CpO6S7UVQsEMURpLsKbwKkIt33el4rQ=;
-        b=CSmPFmg8Po3Pkjjy2oOP8gm//cuphq7HPpxouVxIDB/uOdB9AtXHAXwTY+ltbl5J/r
-         0lUWRKZTVaJIDjZ4Q5tZCeJTLrrpssae5aVzRQVGRZrJaRyP8zPcEraQ4N2l5EgofuIw
-         1Mtdioy+jT0vCnlCTmdkCFPUvZTJxRhieMWitpn1wlf3f6p0pQ9YnIY0nzY4NGBwrqFD
-         eQZ+bSeQaidrasELsEsD3FcFx5RMmRDByX7rCzZob8w77MfYqMtmx5JyZDTjgW+sQiUH
-         jyqPylfApI3qtSezL69MvTwouHyr64INCdE4mnuBPzF9wA4vyp4Mz1LwRpvL9ZFl3Bf5
-         VhwQ==
-X-Gm-Message-State: AC+VfDyX3J24HpybUiDCqRycEjY2/qJEHrZU59GQ5PpvWJYhvKGnCRlt
-        k3SHsiuFmeVo7LP+OL4lzcBTkQ==
-X-Google-Smtp-Source: ACHHUZ4Rc0x+ekHb+pf/Jq9jIVtRwLVZ76o+axXE34SjBCZ7M6BlLSO316QuMtQlI9a78xap+duh0w==
-X-Received: by 2002:a05:6a00:2401:b0:63d:3339:e967 with SMTP id z1-20020a056a00240100b0063d3339e967mr18559445pfh.19.1683656722049;
-        Tue, 09 May 2023 11:25:22 -0700 (PDT)
-Received: from evan.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id q12-20020a63cc4c000000b0051eff0a70d7sm1633559pgi.94.2023.05.09.11.25.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 11:25:21 -0700 (PDT)
-From:   Evan Green <evan@rivosinc.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Evan Green <evan@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v2 3/3] RISC-V: hwprobe: Expose Zba, Zbb, and Zbs
-Date:   Tue,  9 May 2023 11:25:03 -0700
-Message-Id: <20230509182504.2997252-4-evan@rivosinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230509182504.2997252-1-evan@rivosinc.com>
-References: <20230509182504.2997252-1-evan@rivosinc.com>
+        Tue, 9 May 2023 14:25:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FF255B9;
+        Tue,  9 May 2023 11:25:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0A8663085;
+        Tue,  9 May 2023 18:25:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CDF4C433D2;
+        Tue,  9 May 2023 18:25:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683656717;
+        bh=0P/k6mebKZTKYnXCl/aQwO2Tc3wNx/KJH2Q7j52kkjA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SFaU8+6jHTK+YTVoiam0qnoU0UqChEOTWM6zhet5hN42+pyCNQXmBwHxBAVW/oVsx
+         mVkgpqL//w9LIIOsQmE9+r5V+BRGPGeqFq3tzi0BC634vU3hFiYF+U+Uui7kTZbkDx
+         SKOsv9HIvDBtvjF+CG31kXP5I0V1RnWWPvYV1cUR+adIu8dfZPt/pA/yCmd+xL0uXj
+         mkH3n/nPdchaFgEYGDy2mPYeKQKJRnqDrbxhTxpjYi2JMbf65gk6HeX3sB9qi2Egla
+         rm38Q8srjrejq/MPnD+J1ksGovBPH8o+8P+SHY4ZaTiFS11v3+ykqp73Uh71I2gwpA
+         0LdA7mBfcnh4g==
+Date:   Tue, 9 May 2023 19:25:12 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        asahi@lists.linux.dev, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] ASoC: dt-bindings: Add adi,ssm3515 amp schema
+Message-ID: <20230509-marxism-plug-759c99ac601c@spud>
+References: <20230509163828.86003-1-povik+lin@cutebit.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="tXg5GVPl27ExK2ga"
+Content-Disposition: inline
+In-Reply-To: <20230509163828.86003-1-povik+lin@cutebit.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add two new bits to the IMA_EXT_0 key for ZBA, ZBB, and ZBS extensions.
-These are accurately reported per CPU.
 
-Signed-off-by: Evan Green <evan@rivosinc.com>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+--tXg5GVPl27ExK2ga
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
----
+Hey Martin,
 
-Changes in v2:
- - Fixed typo s/supporte/supported/ (Conor)
- - Fixed copypasta s/IMA_ZBB/EXT_ZBB/ (Conor)
- - Added Zbs
+On Tue, May 09, 2023 at 06:38:27PM +0200, Martin Povi=C5=A1er wrote:
+> Add a DT schema for the SSM3515 amp by Analog Devices. It's a simple
+> mono amplifier with digital input.
+>=20
+> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
+> ---
+>  .../bindings/sound/adi,ssm3515.yaml           | 66 +++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/adi,ssm3515.y=
+aml
+>=20
+> diff --git a/Documentation/devicetree/bindings/sound/adi,ssm3515.yaml b/D=
+ocumentation/devicetree/bindings/sound/adi,ssm3515.yaml
+> new file mode 100644
+> index 000000000000..19b7185ae8e2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/adi,ssm3515.yaml
+> @@ -0,0 +1,66 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2019-20 Texas Instruments Incorporated
 
- Documentation/riscv/hwprobe.rst       | 10 ++++++
- arch/riscv/include/uapi/asm/hwprobe.h |  3 ++
- arch/riscv/kernel/sys_riscv.c         | 48 +++++++++++++++++++++++----
- 3 files changed, 54 insertions(+), 7 deletions(-)
+Copyright here looks a little odd, copy & paste from the TI bindings you
+send patches for earlier, or intended?
 
-diff --git a/Documentation/riscv/hwprobe.rst b/Documentation/riscv/hwprobe.rst
-index 9f0dd62dcb5d..fb25670ef0e5 100644
---- a/Documentation/riscv/hwprobe.rst
-+++ b/Documentation/riscv/hwprobe.rst
-@@ -64,6 +64,16 @@ The following keys are defined:
-   * :c:macro:`RISCV_HWPROBE_IMA_C`: The C extension is supported, as defined
-     by version 2.2 of the RISC-V ISA manual.
- 
-+  * :c:macro:`RISCV_HWPROBE_EXT_ZBA`: The Zba address generation extension is
-+       supported, as defined in version 1.0 of the Bit-Manipulation ISA
-+       extensions.
-+
-+  * :c:macro:`RISCV_HWPROBE_EXT_ZBB`: The Zbb extension is supported, as defined
-+       in version 1.0 of the Bit-Manipulation ISA extensions.
-+
-+  * :c:macro:`RISCV_HWPROBE_EXT_ZBS`: The Zbs extension is supported, as defined
-+       in version 1.0 of the Bit-Manipulation ISA extensions.
-+
- * :c:macro:`RISCV_HWPROBE_KEY_CPUPERF_0`: A bitmask that contains performance
-   information about the selected set of processors.
- 
-diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
-index 8d745a4ad8a2..853f8f6d9a42 100644
---- a/arch/riscv/include/uapi/asm/hwprobe.h
-+++ b/arch/riscv/include/uapi/asm/hwprobe.h
-@@ -25,6 +25,9 @@ struct riscv_hwprobe {
- #define RISCV_HWPROBE_KEY_IMA_EXT_0	4
- #define		RISCV_HWPROBE_IMA_FD		(1 << 0)
- #define		RISCV_HWPROBE_IMA_C		(1 << 1)
-+#define		RISCV_HWPROBE_EXT_ZBA		(1 << 2)
-+#define		RISCV_HWPROBE_EXT_ZBB		(1 << 3)
-+#define		RISCV_HWPROBE_EXT_ZBS		(1 << 4)
- #define RISCV_HWPROBE_KEY_CPUPERF_0	5
- #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
- #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
-diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-index 5db29683ebee..fe655db19ab4 100644
---- a/arch/riscv/kernel/sys_riscv.c
-+++ b/arch/riscv/kernel/sys_riscv.c
-@@ -121,6 +121,46 @@ static void hwprobe_arch_id(struct riscv_hwprobe *pair,
- 	pair->value = id;
- }
- 
-+static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
-+			     const struct cpumask *cpus)
-+{
-+	int cpu;
-+	u64 missing = 0;
-+
-+	pair->value = 0;
-+	if (has_fpu())
-+		pair->value |= RISCV_HWPROBE_IMA_FD;
-+
-+	if (riscv_isa_extension_available(NULL, c))
-+		pair->value |= RISCV_HWPROBE_IMA_C;
-+
-+	/*
-+	 * Loop through and record extensions that 1) anyone has, and 2) anyone
-+	 * doesn't have.
-+	 */
-+	for_each_cpu(cpu, cpus) {
-+		struct riscv_isainfo *isainfo = &hart_isa[cpu];
-+
-+		if (riscv_isa_extension_available(isainfo->isa, ZBA))
-+			pair->value |= RISCV_HWPROBE_EXT_ZBA;
-+		else
-+			missing |= RISCV_HWPROBE_EXT_ZBA;
-+
-+		if (riscv_isa_extension_available(isainfo->isa, ZBB))
-+			pair->value |= RISCV_HWPROBE_EXT_ZBB;
-+		else
-+			missing |= RISCV_HWPROBE_EXT_ZBB;
-+
-+		if (riscv_isa_extension_available(isainfo->isa, ZBS))
-+			pair->value |= RISCV_HWPROBE_EXT_ZBS;
-+		else
-+			missing |= RISCV_HWPROBE_EXT_ZBS;
-+	}
-+
-+	/* Now turn off reporting features if any CPU is missing it. */
-+	pair->value &= ~missing;
-+}
-+
- static u64 hwprobe_misaligned(const struct cpumask *cpus)
- {
- 	int cpu;
-@@ -164,13 +204,7 @@ static void hwprobe_one_pair(struct riscv_hwprobe *pair,
- 		break;
- 
- 	case RISCV_HWPROBE_KEY_IMA_EXT_0:
--		pair->value = 0;
--		if (has_fpu())
--			pair->value |= RISCV_HWPROBE_IMA_FD;
--
--		if (riscv_isa_extension_available(NULL, c))
--			pair->value |= RISCV_HWPROBE_IMA_C;
--
-+		hwprobe_isa_ext0(pair, cpus);
- 		break;
- 
- 	case RISCV_HWPROBE_KEY_CPUPERF_0:
--- 
-2.25.1
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/sound/adi,ssm3515.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 
+Drop the quotes on these please.
+
+> +
+> +title: Analog Devices SSM3515 Audio Amplifier
+> +
+> +maintainers:
+> +  - Martin Povi=C5=A1er <povik+lin@cutebit.org>
+> +
+> +description: |
+> +  SSM3515 is a mono Class-D audio amplifier with digital input.
+> +
+> +  https://www.analog.com/media/en/technical-documentation/data-sheets/SS=
+M3515.pdf
+> +
+> +allOf:
+> +  - $ref: dai-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,ssm3515
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  adi,ana-gain:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1, 2, 3]
+> +    description: |
+> +      The value to be set in the ANA_GAIN register field on the codec. T=
+his determines
+> +      the full voltage span of the codec's analog output.
+> +
+> +      To quote the datasheet on the available options:
+> +
+> +        00: 8.4 V Full-Scale Gain Mapping
+> +        01: 12.6 V Full-Scale Gain Mapping
+> +        10: 14 V Full-Scale Gain Mapping
+> +        11: 15 V Full-Scale Gain Mapping
+
+Putting register values into the DT does not seem correct, although
+I know nothing about sound and will have to defer to Krzysztof & Co. on
+that front.
+
+Cheers,
+Conor.
+
+> +
+> +  '#sound-dai-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - adi,ana-gain
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +
+> +      codec@14 {
+> +        compatible =3D "adi,ssm3515";
+> +        reg =3D <0x14>;
+> +        #sound-dai-cells =3D <0>;
+> +        adi,ana-gain =3D <0>;
+> +        sound-name-prefix =3D "Left Tweeter";
+> +      };
+> +    };
+> --=20
+> 2.38.3
+>=20
+
+--tXg5GVPl27ExK2ga
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFqQBwAKCRB4tDGHoIJi
+0pp5AQCfS8Mv3YefCZm1yQhkJ7tPH2BC/U/0KKONa1u5T0DbyQD+MTbNkTLycV/c
+kTuzd+ntH5LiR3vjV1rILXA9XLIoEA4=
+=ycLO
+-----END PGP SIGNATURE-----
+
+--tXg5GVPl27ExK2ga--
