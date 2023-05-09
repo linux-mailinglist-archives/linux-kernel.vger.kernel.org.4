@@ -2,201 +2,402 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D526FC4C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3476FC4CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235310AbjEILR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 07:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
+        id S235028AbjEILTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 07:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234927AbjEILRl (ORCPT
+        with ESMTP id S234848AbjEILTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 07:17:41 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2082.outbound.protection.outlook.com [40.107.95.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E599F55B8
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 04:17:39 -0700 (PDT)
+        Tue, 9 May 2023 07:19:04 -0400
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01on2067.outbound.protection.outlook.com [40.107.239.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6D3100D9;
+        Tue,  9 May 2023 04:18:27 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bMbX5fDwZJPVfJ6BQ0ju4rTSYjS/UcnyVqF0Q8LZTu5ruCDUDsc1oEnAW6IphvNFIC3va/a2tvkuzIwK4qf7r2RH6p3dyfnkK1BmAwr3i753atGKdEtOfx5vg9MJdR11R7MwAqA4waJqMlx7YQ9bcuZvZUqE6sXeXynIxyGhWelo8X4ukgmhfrbAWceNXgwMAzEBTeTy+gJLgqzMwU2eLsBk8UQKYL9ySGBY6MXc4vxg0iB1/PT/zG+Kzsd7j0vHrWYDt4pthP6DyuZiGDMl/ybyTC4mLL8CdpjXDk300Lh2XE5lqmKelMsxN+XwifC5EqbEZLU1HYDLyTTOeMZmNw==
+ b=WewyAW00uQqP2MR33LT/7+n8FobjsCVax3o18EJpc74cMgrD2KYsXukbktBSi7a5JBZJmeScenbdlMFScdNhXemxUI0KwEItWO0yZPkmdCOJ7qB43UrzE2IWCOprGjDGAh65H5kzGsh2bDtSnxqGnd9MM1XpMXcWY54hxeSUC7JgE9Jgq0wB0CwkL5KVh1NEQaccXKjeoE5txxYQ6oi/KgOdw7RA5CyHOoQW9u7l1WkuU2xJfkS60gd4PwYJNpE2a16PvjXaufHu2Sm5Jfy419nPaTQfk9Y/7Yae0HYzO8bT05gjN2yg5bzFuxzU+P3CrWvAegH/5qHXuggQq3CTkg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y3tsa/MDtLn/bv/bcyLy1vi8+ZAH59E3e5Tn3pns+sY=;
- b=COzaFFyamAUvi9qUBcjJafTB5DoZFOmUTrfWwawyiRPxYHC/cWwyrsgiejWEJvP5i9vUmk1WY0Y8SuhhmkATDfMzn9OqbssEFMEekmbU4p0YUHRkJSkjN7/jVWryEQaMdAWz9GzkrlDPJlV9ELrzZV16o6yUpxomr5tagoJfobAFw+A/CF+dQprPvraIMqGtTfHsVtrhIioGhr77PfmCFwdsLmoUfqpgyRB4L0ykdBeniQG4km0HefUeR91dYJqEVX9UR/I5l45a3anZTi42eUI7r31nJfGXIfsRUJ5DRwWVslTME/zPnccnva97dLflHZ84CuTukAq8ThS53xtvwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y3tsa/MDtLn/bv/bcyLy1vi8+ZAH59E3e5Tn3pns+sY=;
- b=E62CUgPk6MkMXEsYgnXiEtygP+vDL/9kZmOShB1t5hoDOuXbXcyHJPSqIQUUAMk21IZB/lsyxIWC2PPUMbuxsqsbZgSUAAntT8KHbL3E800AlX5m/q9/unH5I2hqy1MiVrRG8n68UGsEqqttNE85d1rdlLcE1s0Ije7vr0yscnk=
-Received: from BN8PR04CA0057.namprd04.prod.outlook.com (2603:10b6:408:d4::31)
- by PH0PR12MB5500.namprd12.prod.outlook.com (2603:10b6:510:ef::8) with
+ bh=dgG7I5PIro1vk5XWdLiTm6QnITYG7k8g9idsolGWkPU=;
+ b=eBOUOufjCx+imJoEkJc+/yQxHby/o4MYl7cymuSAsjtisr9iWVwZVWBxE4aQrbH6O8j3+lZ3VmHqif68zGsUmRRbgpQM4RjTakEJoY9L9JTdgX5n/8nrNLuvktcNzMMm+9VYfpnJvPsQaG3vaKKVpVwbUEte/is3tDqrG2EKH/Bdbm6mU0wHzl50zw5ZIZZ+m8wRMchs3yIg2qFZcCqMOQjOCB21rdU63MDtSG2HVd0vHSWT9WmbQZH36yIIdoCc6X+ST/yo4BUAdN6wXLpz9cHhVozOHs8MwAgt+Tv2PWmXjAdj6YKM2O+xgUTyuGHvD76jU2hmvpY7Pe4QeO9+ZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
+ header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siliconsignals.io;
+Received: from BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b01:b::15)
+ by MA0PR01MB9627.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:c0::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Tue, 9 May
- 2023 11:17:37 +0000
-Received: from BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:d4:cafe::15) by BN8PR04CA0057.outlook.office365.com
- (2603:10b6:408:d4::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33 via Frontend
- Transport; Tue, 9 May 2023 11:17:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT035.mail.protection.outlook.com (10.13.177.116) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6387.18 via Frontend Transport; Tue, 9 May 2023 11:17:37 +0000
-Received: from titanite-d432host.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 9 May 2023 06:17:35 -0500
-From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <iommu@lists.linux-foundation.org>
-CC:     <joro@8bytes.org>, <joao.m.martins@oracle.com>,
-        <alejandro.j.jimenez@oracle.com>, <boris.ostrovsky@oracle.com>,
-        <jon.grimm@amd.com>, <santosh.shukla@amd.com>,
-        <vasant.hegde@amd.com>, <kishon.vijayabraham@amd.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Subject: [PATCH 5/5] iommu/amd: Improving Interrupt Remapping Table Invalidation
-Date:   Tue, 9 May 2023 07:16:46 -0400
-Message-ID: <20230509111646.369661-6-suravee.suthikulpanit@amd.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230509111646.369661-1-suravee.suthikulpanit@amd.com>
-References: <20230509111646.369661-1-suravee.suthikulpanit@amd.com>
+ 2023 11:18:13 +0000
+Received: from BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::a54e:e611:b89d:7470]) by BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::a54e:e611:b89d:7470%3]) with mapi id 15.20.6363.033; Tue, 9 May 2023
+ 11:18:13 +0000
+From:   Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+To:     krzysztof.kozlowski@linaro.org
+Cc:     himanshu.bhavani@siliconsignals.io,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: Add device tree for the Emtop SOM IMX8MM
+Date:   Tue,  9 May 2023 16:47:52 +0530
+Message-Id: <20230509111754.3301369-1-himanshu.bhavani@siliconsignals.io>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: PN2PR01CA0210.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:e9::19) To BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b01:b::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT035:EE_|PH0PR12MB5500:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9b9ca461-cf51-4a79-dfa3-08db507efed0
+X-MS-TrafficTypeDiagnostic: BM1PR01MB4899:EE_|MA0PR01MB9627:EE_
+X-MS-Office365-Filtering-Correlation-Id: 23aaec90-6f80-41aa-7ecd-08db507f13f5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pHkWL54c0k56bIDJx7CH6YuVyTGVSD8oAlR+9/pwr7nBfKCo81lN9Sil0AmfbQGOnaFS+QtIfQT3wGCGZtBwO915d0us1fl60df+ZCnEXO2z+f5DWTHGgBpFxOBFy/REHhfUgQv+vp5sodSlglRkFdWY/DuND5yKCf4ZKZNPNdFpAD2s1ZttMRuvyQ9PfrcskqC+I53Sux99O/4TPPRZEoL9ihEj29P/YOcggljS41sirXlLkJhZjQfkF3ZZr2LnjTl69lxm7J/rjT9rCxwTsMk+r8N39YnOsNYlkQSU+rOFziD6uNwMylaz9zEMDQ4HakppZc668hlNvhaxAPcAMNpVrwQ5yUeQDNDo0WtH5/gxm1Vm18/QjI9TLVnpuJk32jbPbG3ly5CFT1UOny7RvMvFR4yvzWV9jQTueIIGHd8dGD5YRYnSU1L4iFMDy3PD4b0RUheAyFLcgiOLmluFNiIRAiNw/yilyeAJeqV2yEaiaVbaU3Zm39qQSK7ynJTTo7UDI2KkoZqezy6YTS8+gAvxhbJ64gwHh5NByKjgQEqACSXW/PnSfr3ngcL0tHiRSJLVZZwcTcOPOns8LMGhRUEYloXOL+OjH5qYOnBSsmig9gXUC/SiY+ejEf8260RnAgZO2bLgie3DIAs7zZsOAmVemadcft+HIFL5EWEYb6xQzTdVXUde7rduBijvY2ezlsWTZTw3ihHPp4hNpgC61nIAODS50+M9ZI3VOdK7HIs=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(396003)(39860400002)(451199021)(40470700004)(36840700001)(46966006)(2616005)(2906002)(40460700003)(186003)(36756003)(16526019)(478600001)(44832011)(6666004)(7696005)(40480700001)(110136005)(316002)(356005)(4326008)(70206006)(82740400003)(70586007)(1076003)(83380400001)(81166007)(26005)(41300700001)(36860700001)(86362001)(5660300002)(8676002)(336012)(426003)(82310400005)(8936002)(47076005)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 11:17:37.3791
+X-Microsoft-Antispam-Message-Info: sF9WzIcwHQwoqqfobhx7oBhzfr6YZi/oqqVoXMmlvC/UhzFMo8fIZPwr1AGh+P01r2uoBl1FcVx98M2HutYZ9cnjDd56OgdwcEMFauCw/8oR6uWdHGT1DnIoLjVKvutaulEZTa/YQwskze0gP+CTw80HLU+WLsn6uJyJjgiS79L+pZghMP+OWaOpxSk7BH4Wja49D6vJxUAMba8D1DYfFOD1I0HkBbT1rElQs1GDhOVuLPS+1fEkhqd9DMmdkEPbI3aqi6nNjElrNTR6gikuYdtM2mNkmi308Q1PT03bWJ0qP3CuEBZ1iafz0NOtr9nO2eIn5nBPtOVjV1ixvZloEIWzP2SbsBE9UTQZ8Qs2GUU+iaLzY4b0DNovGS6ySttFeDjoKm2DuYwTEUovXR7U2wagmUtWtKOI8DlgvML1NQXBukIqAo3P4l65Nph5A4gbs6I1TIMiw+IihhjAqdWG134CEJD35kAjX8VfQdU7qfNfZTc5k7pB00mIdRJpT51B68ss75H8FZNvAch2fa8CMjzue8ROdTVXjAVVN0TuIlzgTQhijzarbgWXjaB1PVGQVSNYL1b//87A70wvhFOpY3EvoXpSuSMEaflPlCFNr1b1Z+QUyZWpn1DRum7gB16TkVSGjRFdnk+oe82D/TH3Xw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(396003)(136003)(39830400003)(376002)(451199021)(186003)(38350700002)(2906002)(6512007)(26005)(1076003)(6506007)(36756003)(38100700002)(83380400001)(2616005)(316002)(6666004)(6916009)(66556008)(66946007)(41300700001)(6486002)(66476007)(4326008)(52116002)(54906003)(86362001)(478600001)(7416002)(8676002)(44832011)(5660300002)(8936002)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hPMVegNIW6OJG0+Gs591zBXPAr+EXVWbPIh2jmkUbLtq+SMoLoWzFHauYE1S?=
+ =?us-ascii?Q?Fa0IzD/q932U6OiTJldHPm43gwyKQIvQ9CZw7a4kw0h3BN5SPX8XeUKFcE2s?=
+ =?us-ascii?Q?BByFx4LqiuMgyDGRFNc0Y31hocDX5P10cvTLChp0DJM9Oge9zUQLVewdtPWE?=
+ =?us-ascii?Q?aV9qK1Z3asn/tCbE8spPA9IqZ1X6HBkk/enirqkOdHDswtKk7YB85djUVA/t?=
+ =?us-ascii?Q?MvO/UBGbJEA4S01p1VzWv32zwNAH8y18aFNPgboFHJvq2ZlccvAurYe8JpVC?=
+ =?us-ascii?Q?ww49WyDjzg3UXtMDo9Qh+6qP2fdmZ7gK4S6TXQX6Uj0Esg1DsDrh0f/fwB4a?=
+ =?us-ascii?Q?lJramx90B4QDgW7N4a+5NswMaTGsVkvXm3bk0DH/g/xl+zgaVvAYprUKqPDR?=
+ =?us-ascii?Q?m4XXqjtRv0pH2MCDTPMgU+x8aOBKHHYDWrWGOfHlgcDpwXAGwbp8uyXnd1HJ?=
+ =?us-ascii?Q?OXcy6LlfVcLz4tHZ/zLjZNUObU4aqy+7DAkeC9YSgYPdcLFZNvo9ArGvfyh8?=
+ =?us-ascii?Q?h9Urk1r6aPUWFmtTXVboTQT8ng7t05+w5rZIexw/KWhH63N5HQQ19dhIxM0r?=
+ =?us-ascii?Q?qqBnEHbXod9NBWAMZn9ij05N9yvkMc6OT3oACtwPESr8QY8o4LSmBklolcp/?=
+ =?us-ascii?Q?/ZOyBoyDEhe2vKWYGuoq/XC624Ao+0THt2mQitLSte45XpUDEKvnOO6hExKe?=
+ =?us-ascii?Q?7grHSElMO6atT49uVzsCotYmCRgYeleQ/9Cr+nWoge21QQustb7qK7+arIvh?=
+ =?us-ascii?Q?NBagKc4yDBM4qZmu+Y9m6G3XogiBX3309ZQQqbGRXXgKY9QDBOmgIbxhTrfW?=
+ =?us-ascii?Q?Q+PzdundUBNG/qeMxXm0946ESri7rpwew9rw9dvha5xXdcgjbJQIjULLisst?=
+ =?us-ascii?Q?R8tpgzvM16GkVFP36vjCFsKOO1TfArny3ewIFagZuRtj0SFCeMo1COZsbsMK?=
+ =?us-ascii?Q?zR/1Li0Vj1d0Fwj5KGpGCXPTmXtMsd0p98ojV1mQtEIFVp0rZOlSgPt38noM?=
+ =?us-ascii?Q?mCdH/r+4G/uujBcRbUtNk1I7Huwd7KlRkvL64pKfqtIMlV0eNQR9oigJDT7H?=
+ =?us-ascii?Q?uUs04TGQY1YrjrSw/vOV91HNW+NpYFPG9SrCiWYED1p6gkYXgX75iRAZ3sVt?=
+ =?us-ascii?Q?ySgOdOlvrOIq7jxw8CRuxHFdHCcmW8OuKLR6VeX7E4FkXjPmsTUFpDhcqvos?=
+ =?us-ascii?Q?5jRLI8qvz52nmCFtNRN+59OcmhGv53AuSofbL/lgoSTJlJjLeLDPm8ZhbfIQ?=
+ =?us-ascii?Q?t+snj00gmFTqrpR1ysIQx/ST0I/EnTFCWarAWK9MyLBYGJVY1Wpc3NfFYVSv?=
+ =?us-ascii?Q?9Q+lNSQrFn1DDHO1r8HcgWnFzSqK4+C5qVeJC6xqflcpD4OrUXsPvWMGH6jJ?=
+ =?us-ascii?Q?vZdsRj3+nou4Dgixv15vYk6qvqzzhaReZAqg1Dsbw5Ke2GkSDhQIthK6A+8D?=
+ =?us-ascii?Q?gzUz6f7b0Iz1FZz4JYYi8Pcm7uiczPbFeTttAXbdXooKbTS5FTII2Zfb/9Gu?=
+ =?us-ascii?Q?AxW7Q2fELev/OJlPRXugVptOHJyiWDsEuGaqWl9jVnD5hUbQeKXdFRmffuoP?=
+ =?us-ascii?Q?nlEPKCsKmwGiBlJPr5wVxBMfxX8DppUotlxb2FUcnClo9CB4W/OSAbe58nh2?=
+ =?us-ascii?Q?bqZruwUpB14RSwzq4ivpagU=3D?=
+X-OriginatorOrg: siliconsignals.io
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23aaec90-6f80-41aa-7ecd-08db507f13f5
+X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 11:18:13.0883
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b9ca461-cf51-4a79-dfa3-08db507efed0
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ggNKC21hS0bRmp/Of4JTHUJUeYuE07y+JZwTA+BmZRsppJrRoh3HkKnIWcNpRBsOQAvX6CR8t/OY1JAOM6atvrenvU6CNZWId9h8FD1pLMA5C/xlK8L8nrFocDDggtSF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0PR01MB9627
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Invalidating Interrupt Remapping Table (IRT) requires, the AMD IOMMU driver
-to issue INVALIDATE_INTERRUPT_TABLE and COMPLETION_WAIT commands.
-Currently, the driver issues the two commands separately, which requires
-calling raw_spin_lock_irqsave() twice. In addition, the COMPLETION_WAIT
-could potentially be interleaved with other commands causing delay of
-the COMPLETION_WAIT command.
+Add a device tree file describing the Emtop SOM IMX8MM
 
-Therefore, combine issuing of the two commands in one spin-lock, and
-changing struct amd_iommu.cmd_sem_val to use atomic64 to minimize
-locking.
+Signed-off-by: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
 
-Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
----
- drivers/iommu/amd/amd_iommu_types.h |  2 +-
- drivers/iommu/amd/init.c            |  2 +-
- drivers/iommu/amd/iommu.c           | 27 ++++++++++++++++++++++-----
- 3 files changed, 24 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/iommu/amd/amd_iommu_types.h b/drivers/iommu/amd/amd_iommu_types.h
-index 486a052e37ca..2fa65da2a9a5 100644
---- a/drivers/iommu/amd/amd_iommu_types.h
-+++ b/drivers/iommu/amd/amd_iommu_types.h
-@@ -744,7 +744,7 @@ struct amd_iommu {
- 
- 	u32 flags;
- 	volatile u64 *cmd_sem;
--	u64 cmd_sem_val;
-+	atomic64_t cmd_sem_val;
- 
- #ifdef CONFIG_AMD_IOMMU_DEBUGFS
- 	/* DebugFS Info */
-diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-index 01d131e75de4..798cfc01b715 100644
---- a/drivers/iommu/amd/init.c
-+++ b/drivers/iommu/amd/init.c
-@@ -1747,7 +1747,7 @@ static int __init init_iommu_one(struct amd_iommu *iommu, struct ivhd_header *h,
- 	iommu->pci_seg = pci_seg;
- 
- 	raw_spin_lock_init(&iommu->lock);
--	iommu->cmd_sem_val = 0;
-+	atomic64_set(&iommu->cmd_sem_val, 0);
- 
- 	/* Add IOMMU to internal data structures */
- 	list_add_tail(&iommu->list, &amd_iommu_list);
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index 51c2b018433d..57ae4a8072d3 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -1182,11 +1182,11 @@ static int iommu_completion_wait(struct amd_iommu *iommu)
- 	if (!iommu->need_sync)
- 		return 0;
- 
--	raw_spin_lock_irqsave(&iommu->lock, flags);
--
--	data = ++iommu->cmd_sem_val;
-+	data = atomic64_add_return(1, &iommu->cmd_sem_val);
- 	build_completion_wait(&cmd, iommu, data);
- 
-+	raw_spin_lock_irqsave(&iommu->lock, flags);
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 198fff3731ae..36590515fbc1 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -54,6 +54,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-beacon-kit.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-data-modul-edm-sbc.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-ddr4-evk.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-emcon-avari.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mm-emtop.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-ctouch2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-edimm2.2.dtb
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts b/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
+new file mode 100644
+index 000000000000..461e1ef5dcb4
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
+@@ -0,0 +1,261 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 Emtop
++ */
 +
- 	ret = __iommu_queue_command_sync(iommu, &cmd, false);
- 	if (ret)
- 		goto out_unlock;
-@@ -1284,11 +1284,28 @@ static void amd_iommu_flush_irt_all(struct amd_iommu *iommu)
- 
- static void iommu_flush_irt_and_complete(struct amd_iommu *iommu, u16 devid)
- {
-+	int ret;
-+	u64 data;
-+	unsigned long flags;
-+	struct iommu_cmd cmd, cmd2;
++/dts-v1/;
 +
- 	if (iommu->irtcachedis_enabled)
- 		return;
- 
--	iommu_flush_irt(iommu, devid);
--	iommu_completion_wait(iommu);
-+	build_inv_irt(&cmd, devid);
-+	data = atomic64_add_return(1, &iommu->cmd_sem_val);
-+	build_completion_wait(&cmd2, iommu, data);
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
++#include <dt-bindings/usb/pd.h>
 +
-+	raw_spin_lock_irqsave(&iommu->lock, flags);
-+	ret = __iommu_queue_command_sync(iommu, &cmd, true);
-+	if (ret)
-+		goto out;
-+	ret = __iommu_queue_command_sync(iommu, &cmd2, false);
-+	if (ret)
-+		goto out;
-+	wait_on_sem(iommu, data);
-+out:
-+	raw_spin_unlock_irqrestore(&iommu->lock, flags);
- }
- 
- void iommu_flush_all_caches(struct amd_iommu *iommu)
++#include "imx8mm.dtsi"
++
++/ {
++	model = "Emtop SOM i.MX8MM";
++	compatible = "emtop,imx8mm-emtop", "fsl,imx8mm";
++
++	chosen {
++		stdout-path = &uart2;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio_led>;
++
++		led-0 {
++			function = LED_FUNCTION_POWER;
++			gpios = <&gpio3 16 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "heartbeat";
++		};
++	};
++};
++
++&A53_0 {
++	cpu-supply = <&buck2>;
++};
++
++&A53_1 {
++	cpu-supply = <&buck2>;
++};
++
++&A53_2 {
++	cpu-supply = <&buck2>;
++};
++
++&A53_3 {
++	cpu-supply = <&buck2>;
++};
++
++&uart2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart2>;
++	status = "okay";
++};
++
++&usdhc3 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
++	pinctrl-0 = <&pinctrl_usdhc3>;
++	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
++	bus-width = <8>;
++	non-removable;
++	status = "okay";
++};
++
++&wdog1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wdog>;
++	fsl,ext-reset-output;
++	status = "okay";
++};
++
++&i2c1 {
++	clock-frequency = <400000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c1>;
++	status = "okay";
++
++	pmic@25 {
++		compatible = "nxp,pca9450c";
++		reg = <0x25>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pmic>;
++		interrupt-parent = <&gpio1>;
++		interrupts = <3 IRQ_TYPE_EDGE_RISING>;
++
++		regulators {
++			buck1: BUCK1 {
++				regulator-name = "BUCK1";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <1000000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <3125>;
++			};
++
++			buck2: BUCK2 {
++				regulator-name = "BUCK2";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <900000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <3125>;
++			};
++
++			buck3: BUCK3 {
++				regulator-name = "BUCK3";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <1000000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			buck4: BUCK4 {
++				regulator-name = "BUCK4";
++				regulator-min-microvolt = <3000000>;
++				regulator-max-microvolt = <3600000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			buck5: BUCK5 {
++				regulator-name = "BUCK5";
++				regulator-min-microvolt = <1650000>;
++				regulator-max-microvolt = <1950000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			buck6: BUCK6 {
++				regulator-name = "BUCK6";
++				regulator-min-microvolt = <1100000>;
++				regulator-max-microvolt = <1200000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo1: LDO1 {
++				regulator-name = "LDO1";
++				regulator-min-microvolt = <1650000>;
++				regulator-max-microvolt = <1950000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo2: LDO2 {
++				regulator-name = "LDO2";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <945000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo3: LDO3 {
++				regulator-name = "LDO3";
++				regulator-min-microvolt = <1710000>;
++				regulator-max-microvolt = <1890000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo4: LDO4 {
++				regulator-name = "LDO4";
++				regulator-min-microvolt = <810000>;
++				regulator-max-microvolt = <945000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo5: LDO5 {
++				regulator-name = "LDO5";
++				regulator-min-microvolt = <1650000>;
++				regulator-max-microvolt = <3600000>;
++			};
++		};
++	};
++};
++
++&iomuxc {
++	pinctrl_gpio_led: gpioledgrp {
++		fsl,pins = <
++			MX8MM_IOMUXC_NAND_READY_B_GPIO3_IO16			0x19
++			MX8MM_IOMUXC_SAI3_RXC_GPIO4_IO29			0x19
++		>;
++	};
++
++	pinctrl_i2c1: i2c1grp {
++		fsl,pins = <
++			MX8MM_IOMUXC_I2C1_SCL_I2C1_SCL				0x400001c3
++			MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA				0x400001c3
++		>;
++	};
++
++	pinctrl_pmic: pmicirq {
++		fsl,pins = <
++			MX8MM_IOMUXC_GPIO1_IO03_GPIO1_IO3			0x41
++		>;
++	};
++
++	pinctrl_uart2: uart2grp {
++		fsl,pins = <
++			MX8MM_IOMUXC_UART2_RXD_UART2_DCE_RX			0x140
++			MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX			0x140
++		>;
++	};
++
++	pinctrl_usdhc3: usdhc3grp {
++		fsl,pins = <
++			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x190
++			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d0
++			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d0
++			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d0
++			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d0
++			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d0
++			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d0
++			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d0
++			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d0
++			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d0
++			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x190
++		>;
++	};
++
++	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
++		fsl,pins = <
++			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x194
++			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d4
++			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d4
++			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d4
++			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d4
++			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d4
++			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d4
++			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d4
++			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d4
++			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d4
++			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x194
++		>;
++	};
++
++	pinctrl_usdhc3_200mhz: usdhc3-200mhzgrp {
++		fsl,pins = <
++			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x196
++			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d6
++			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d6
++			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d6
++			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d6
++			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d6
++			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d6
++			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d6
++			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d6
++			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d6
++			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x196
++		>;
++	};
++
++	pinctrl_wdog: wdoggrp {
++		fsl,pins = <
++			MX8MM_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B			0xc6
++		>;
++	};
++};
 -- 
-2.31.1
+2.25.1
 
