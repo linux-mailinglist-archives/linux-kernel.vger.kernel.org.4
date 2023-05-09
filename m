@@ -2,75 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5156FCEDA
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 21:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FAC6FCEDD
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 21:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233293AbjEIT4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 15:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
+        id S234246AbjEIT4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 15:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjEITz7 (ORCPT
+        with ESMTP id S229826AbjEIT4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 15:55:59 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE9F3AA4
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 12:55:58 -0700 (PDT)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id 70DFB60005;
-        Tue,  9 May 2023 19:55:53 +0000 (UTC)
-Message-ID: <4adb27d2-325d-3ce0-23b1-ec69a973b4bf@ghiti.fr>
-Date:   Tue, 9 May 2023 21:55:53 +0200
+        Tue, 9 May 2023 15:56:20 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282E43C0C;
+        Tue,  9 May 2023 12:56:19 -0700 (PDT)
+Date:   Tue, 09 May 2023 19:56:16 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683662177;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i/vEnI/WFdPHZGqXC/3G2/DQm+2OzEhIX3KzqGEKGV0=;
+        b=WWeCfinM04pROlGUdsFazYzPo/sHmWF1rxTCgVX0XqZBRZKudUJeWlUvdD2l4I+sGpoEiO
+        Xfu/U31CiC/2oI+o4ewfoLNO9UbhWURr82RMzVzyf0/xOvdk6c1XE14S0Ea92QD60Jap6f
+        f14SGK/zw8KQ9A8IZF49QhIxMgRJ52mjJ7ZVsQrGSwmP2vhODHPyTe9N4UUGi8ik2CKrQ4
+        Fr9X6lIBug1URhSCG8YQ1SN8dL1ySTICcuJQQfzmvp4ZGIiiiU5+9OvlYMwxJieUzxWAt8
+        qbiRSFc41hu7z6D6XuGG9DAD5lf1KDTtiZC1OhpZzVrhdsNKBbFBrCAGc8CyCg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683662177;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i/vEnI/WFdPHZGqXC/3G2/DQm+2OzEhIX3KzqGEKGV0=;
+        b=jkNrt+obk5uJZpjgeqWqBfdwhbBGIEuDQRMWAK0+7IOWxkrQSxWaupXqOkUlxULv+fhH/C
+        TBkW2+utiV1lUWDg==
+From:   "tip-bot2 for Paolo Abeni" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/core] Revert "softirq: Let ksoftirqd do its job"
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Xing <kerneljasonxing@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, netdev@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: <305d7742212cbe98621b16be782b0562f1012cb6.camel@redhat.com>
+References: <305d7742212cbe98621b16be782b0562f1012cb6.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v8 1/3] riscv: Introduce CONFIG_RELOCATABLE
-Content-Language: en-US
-To:     Andreas Schwab <schwab@linux-m68k.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20230215143626.453491-1-alexghiti@rivosinc.com>
- <20230215143626.453491-2-alexghiti@rivosinc.com> <87wn1h5nne.fsf@igel.home>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <87wn1h5nne.fsf@igel.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <168366217649.404.15332707412932478981.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/23 21:07, Andreas Schwab wrote:
-> That does not work with UEFI booting:
->
-> Loading Linux 6.4.0-rc1-1.g668187d-default ...
-> Loading initial ramdisk ...
-> Unhandled exception: Instruction access fault
-> EPC: ffffffff80016d56 RA: 000000008020334e TVAL: 0000007f80016d56
-> EPC: ffffffff002d1d56 RA: 00000000004be34e reloc adjusted
-> Unhandled exception: Load access fault
-> EPC: 00000000fff462d4 RA: 00000000fff462d0 TVAL: ffffffff80016d56
-> EPC: 00000000802012d4 RA: 00000000802012d0 reloc adjusted
->
-> Code: c825 8e0d 05b3 40b4 d0ef 0636 7493 ffe4 (d783 0004)
-> UEFI image [0x00000000fe65e000:0x00000000fe6e3fff] '/efi\boot\bootriscv64.efi'
-> UEFI image [0x00000000daa82000:0x00000000dcc2afff]
->
+The following commit has been merged into the irq/core branch of tip:
 
-I need more details please, as I have a UEFI bootflow and it works great 
-(KASLR is based on a relocatable kernel and works fine in UEFI too).
+Commit-ID:     d15121be7485655129101f3960ae6add40204463
+Gitweb:        https://git.kernel.org/tip/d15121be7485655129101f3960ae6add40204463
+Author:        Paolo Abeni <pabeni@redhat.com>
+AuthorDate:    Mon, 08 May 2023 08:17:44 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Tue, 09 May 2023 21:50:27 +02:00
 
-Thanks,
+Revert "softirq: Let ksoftirqd do its job"
 
-Alex
+This reverts the following commits:
 
+  4cd13c21b207 ("softirq: Let ksoftirqd do its job")
+  3c53776e29f8 ("Mark HI and TASKLET softirq synchronous")
+  1342d8080f61 ("softirq: Don't skip softirq execution when softirq thread is parking")
+
+in a single change to avoid known bad intermediate states introduced by a
+patch series reverting them individually.
+
+Due to the mentioned commit, when the ksoftirqd threads take charge of
+softirq processing, the system can experience high latencies.
+
+In the past a few workarounds have been implemented for specific
+side-effects of the initial ksoftirqd enforcement commit:
+
+commit 1ff688209e2e ("watchdog: core: make sure the watchdog_worker is not deferred")
+commit 8d5755b3f77b ("watchdog: softdog: fire watchdog even if softirqs do not get to run")
+commit 217f69743681 ("net: busy-poll: allow preemption in sk_busy_loop()")
+commit 3c53776e29f8 ("Mark HI and TASKLET softirq synchronous")
+
+But the latency problem still exists in real-life workloads, see the link
+below.
+
+The reverted commit intended to solve a live-lock scenario that can now be
+addressed with the NAPI threaded mode, introduced with commit 29863d41bb6e
+("net: implement threaded-able napi poll loop support"), which is nowadays
+in a pretty stable status.
+
+While a complete solution to put softirq processing under nice resource
+control would be preferable, that has proven to be a very hard task. In
+the short term, remove the main pain point, and also simplify a bit the
+current softirq implementation.
+
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Jason Xing <kerneljasonxing@gmail.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: netdev@vger.kernel.org
+Link: https://lore.kernel.org/netdev/305d7742212cbe98621b16be782b0562f1012cb6.camel@redhat.com
+Link: https://lore.kernel.org/r/57e66b364f1b6f09c9bc0316742c3b14f4ce83bd.1683526542.git.pabeni@redhat.com
+---
+ kernel/softirq.c | 22 ++--------------------
+ 1 file changed, 2 insertions(+), 20 deletions(-)
+
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index 1b72551..807b34c 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -80,21 +80,6 @@ static void wakeup_softirqd(void)
+ 		wake_up_process(tsk);
+ }
+ 
+-/*
+- * If ksoftirqd is scheduled, we do not want to process pending softirqs
+- * right now. Let ksoftirqd handle this at its own rate, to get fairness,
+- * unless we're doing some of the synchronous softirqs.
+- */
+-#define SOFTIRQ_NOW_MASK ((1 << HI_SOFTIRQ) | (1 << TASKLET_SOFTIRQ))
+-static bool ksoftirqd_running(unsigned long pending)
+-{
+-	struct task_struct *tsk = __this_cpu_read(ksoftirqd);
+-
+-	if (pending & SOFTIRQ_NOW_MASK)
+-		return false;
+-	return tsk && task_is_running(tsk) && !__kthread_should_park(tsk);
+-}
+-
+ #ifdef CONFIG_TRACE_IRQFLAGS
+ DEFINE_PER_CPU(int, hardirqs_enabled);
+ DEFINE_PER_CPU(int, hardirq_context);
+@@ -236,7 +221,7 @@ void __local_bh_enable_ip(unsigned long ip, unsigned int cnt)
+ 		goto out;
+ 
+ 	pending = local_softirq_pending();
+-	if (!pending || ksoftirqd_running(pending))
++	if (!pending)
+ 		goto out;
+ 
+ 	/*
+@@ -432,9 +417,6 @@ static inline bool should_wake_ksoftirqd(void)
+ 
+ static inline void invoke_softirq(void)
+ {
+-	if (ksoftirqd_running(local_softirq_pending()))
+-		return;
+-
+ 	if (!force_irqthreads() || !__this_cpu_read(ksoftirqd)) {
+ #ifdef CONFIG_HAVE_IRQ_EXIT_ON_IRQ_STACK
+ 		/*
+@@ -468,7 +450,7 @@ asmlinkage __visible void do_softirq(void)
+ 
+ 	pending = local_softirq_pending();
+ 
+-	if (pending && !ksoftirqd_running(pending))
++	if (pending)
+ 		do_softirq_own_stack();
+ 
+ 	local_irq_restore(flags);
