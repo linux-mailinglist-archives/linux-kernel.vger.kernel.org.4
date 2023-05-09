@@ -2,70 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050636FC7CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16366FC7DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235328AbjEINZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 09:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
+        id S234828AbjEIN1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 09:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjEINZv (ORCPT
+        with ESMTP id S229477AbjEIN1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 09:25:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B4C2D73;
-        Tue,  9 May 2023 06:25:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=KkqdRlUqTfle/lYv4ZxNsnZATjCjThA8plTsZKPzERM=; b=FBbYsSJDiapHHKmOXLJjPcHlfA
-        2b7UFlLrJM2/KG1rwYBEUmutob3kdAzgoMniGXUUy1YL64qvbxmGBESnIi6KWBlf2AarPUfZJbMXe
-        RHh/+6ovolYDesxApYaOOV69N4ZFqBugnidcCDrLCUp4zraIg/KphUf/AGLkmvco8LE0baHsiiIH5
-        YCWKT7p4+J2kU+UA3Fe8u2WdLmCf2WdpkAzvBZrC0Iavymmc2vFlwT0aPizuD015Wxh06Yp8Gt485
-        v1SifxO1pisxS8h2ksTNDhhQ4kt5S3ELar5M+ZwlwMPwExrn/2TwGxgF3I+IrQt1a+2O0zf6Lf7FH
-        QXMfVEXg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pwNLa-003Ota-1B;
-        Tue, 09 May 2023 13:25:42 +0000
-Date:   Tue, 9 May 2023 06:25:42 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Ruihan Li <lrh2000@pku.edu.cn>
-Cc:     syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, pasha.tatashin@soleen.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: usbdev_mmap causes type confusion in page_table_check
-Message-ID: <ZFpJ1rs+XinCYfPs@infradead.org>
-References: <000000000000258e5e05fae79fc1@google.com>
- <20230507135844.1231056-1-lrh2000@pku.edu.cn>
+        Tue, 9 May 2023 09:27:42 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD7A30CB
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 06:27:39 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3063b5f32aaso3794393f8f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 06:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683638858; x=1686230858;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YuQ2FBeCRoqgngylaRdOh7aqiqlvdZtnW5rbAbkcgXI=;
+        b=AH1IzWoKD1GbxcF9ng7uQsTL872w02GkxK1Q77af/6B74iG8+N4tcxgxkyb7OF7cca
+         Un3CHwFvJCOe9jANPaUvgVp3z6qPeSkMv78Q31nEc+DzNcFSqduVfxqpERiiTgbIxEiL
+         uYMUNm2pcXy7AVAl7+aOS38etpxSM74rgG1X9Vn2TIAwXNuN0nU4CXYcCbL+WmYruQEi
+         apXr7BQg6zkxzn3spKQUkefPlrDVExBq5LPRdpsYJdRwqgi+PMhrS6V0tRCETTl07OO5
+         LrlqLsPxnoVZa2FKaXipGlrepsiGlXi0YGBODqPF6rQGfvwQW0ALnAAUm7XW8EftFs0Y
+         qQhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683638858; x=1686230858;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YuQ2FBeCRoqgngylaRdOh7aqiqlvdZtnW5rbAbkcgXI=;
+        b=Kl5L9eEju5D03i648e+Esg6XRLwPrfr+7YDGWgqELHgpAwvB2utpXfjtV2V6sc681n
+         axEQIM1VN3qDEh2Jh9Yd92y24/ixEAKzSEiGqlcty7SWFJ7DbQVzSqP1Q+MmGyNRzXgR
+         6JEY/rYVklEcJPqSJ68lgqjn6SOVZYBMi0uwIwuxcBApvZMyel10WsizBAxhIr8zVmTt
+         vwprbULzAwlM8H63EnjHxEJ8qhwy97M3P+YKyJesPADxYvnOdysei9IIsM9QGNJWJqjN
+         ZRq7PkYbu8uy0qQJq6T1t24qViqdgh/9IuU1nXmayHHZWjDq00XQfekyW7Y0s2xuLU59
+         OwsA==
+X-Gm-Message-State: AC+VfDwXcWre48fdFHOjBkNqkDkbJYWdJGdxrhCm9ce8I89UfaUPU8Zi
+        r5mtLn+fKQ6vezBdaYa4G2OdIQ==
+X-Google-Smtp-Source: ACHHUZ60LQ2w7jDdb1KfIt1LYeUDMCEJrCrpzMKg5XLc7SVJ/RpGIRMx0wqXtIAXfShUhg+fn2JRHA==
+X-Received: by 2002:adf:f491:0:b0:306:31b7:abe4 with SMTP id l17-20020adff491000000b0030631b7abe4mr11390420wro.14.1683638857874;
+        Tue, 09 May 2023 06:27:37 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id d6-20020a056000114600b00306344eaebfsm14415375wrx.28.2023.05.09.06.27.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 06:27:37 -0700 (PDT)
+Date:   Tue, 9 May 2023 14:27:35 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Maximilian Weigand <mweigand2017@gmail.com>
+Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        Maximilian Weigand <mweigand@mweigand.net>
+Subject: Re: [PATCH v1] backlight: lm3630a: turn off both led strings when
+ display is blank
+Message-ID: <20230509132735.GA31274@aspen.lan>
+References: <20230505185752.969476-1-mweigand2017@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230507135844.1231056-1-lrh2000@pku.edu.cn>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230505185752.969476-1-mweigand2017@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 07, 2023 at 09:58:44PM +0800, Ruihan Li wrote:
-> static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
-> {
-> 	// ...
-> 	mem = usb_alloc_coherent(ps->dev, size, GFP_USER | __GFP_NOWARN,
-> 			&dma_handle);
-> 	// ...
-> 	if (hcd->localmem_pool || !hcd_uses_dma(hcd)) {
-> 		if (remap_pfn_range(vma, vma->vm_start,
-> 				    virt_to_phys(usbm->mem) >> PAGE_SHIFT,
+On Fri, May 05, 2023 at 08:57:52PM +0200, Maximilian Weigand wrote:
+> From: Maximilian Weigand <mweigand@mweigand.net>
+>
+> Use display_is_blank() to determine if the led strings should be turned
 
-usb_alloc_coherent and up in the DMA coherent allocator (usually
-anyway), and you absolutely must never do a virt_to_phys or virt_to_page
-on that return value.  This code is a buggy as f**k.
+Shouldn't this be backlight_is_blank()?
+
+
+> off in the update_status() functions of both strings.
+
+Once the description is fixed this is:
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+
+
+Daniel.
