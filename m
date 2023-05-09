@@ -2,168 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D046FC0C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9257D6FC0BF
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234567AbjEIHvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 03:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
+        id S229966AbjEIHvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 03:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbjEIHvh (ORCPT
+        with ESMTP id S229533AbjEIHvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 03:51:37 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C4B1996;
-        Tue,  9 May 2023 00:51:35 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3495TFNC024353;
-        Tue, 9 May 2023 09:51:17 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=HSjGzSb2hrLFHJbVYyqixvIDOfFTHiXk6Q3D36GRzIY=;
- b=qM6uSwdL3FrsE8Z7kSEAE+7+sad/dubq4nPeQF7e59H/Hy/FWpQzW/Id4cwphx+RRrjK
- 5b9YE2iYXhTufk0ke/z5naUiyLAqclNau9Vcudq8omIdNb6ajFpAFRTy6qF17h+1HfEx
- Ecptew+skegGexESE0MHVuANZExJR19bnKKvhLKQl9qHKlZ8FQSyO2P8IsqIO4HHi+89
- ZrOZpzR32+IRYZy+z9AwFixuiZhYHoD7/KcOmpNHq2/DXPy1RXBsz4VKfIvsXLR/FBqn
- 0bF5g+waTjhKG7EoaAaudOrnrw03AF1GFhUDwFbDDFmUZcoM3AUjrKxp3ocViU+tOX/D PA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qf787b0gq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 09:51:17 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DC337100034;
-        Tue,  9 May 2023 09:51:15 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CA1B42132CE;
-        Tue,  9 May 2023 09:51:15 +0200 (CEST)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 9 May
- 2023 09:51:13 +0200
-Message-ID: <58c64bfa-f5d7-1d7f-4198-895319a65246@foss.st.com>
+        Tue, 9 May 2023 03:51:19 -0400
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859C310A;
+        Tue,  9 May 2023 00:51:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SHJ8rFSlgUKip49JflDFe5hQHWXdms45Qv37jV17d5w=; b=LYJOKkK6psZo49sTPJGzmdoj7k
+        5VuwqsJLQyo80OVasAwU0HX77BHFvCBgRQg5VlaGeG16uQMkJH0sxUjnpGndUa2NrUlpcdu0MmGwR
+        8a+2hCdugNMm4+7LbgABnPvnClCTEKabCqh1vrFC1m8haVpwaG0MlVkA0Wd58mpmgPiff/Z9jFOXJ
+        zh0tV+dMSY4R/lh2aW87IqCycGgmqCSD/1RxryqqtT5I2emqQ0XBWL6YF84Od8oVwNmWDuXGaV5zc
+        dKB7cM5T4euJqhlvTn3FEks/0vaE2zsaLlSv/Vpuii9iCSvEZr646+3rEhiPez4ppW3wlE0T/WUBu
+        /xTybutQ==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <kibi@debian.org>)
+        id 1pwI7v-008YdF-Qy; Tue, 09 May 2023 07:51:16 +0000
 Date:   Tue, 9 May 2023 09:51:13 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, <soc@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Lars Persson <lars.persson@axis.com>,
-        Scott Branden <sbranden@broadcom.com>,
+From:   Cyril Brulebois <kibi@debian.org>
+To:     Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Paul Barker <paul.barker@sancloud.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Michal Simek <michal.simek@xilinx.com>
-CC:     <devicetree@vger.kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@axis.com>
-References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
- <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_04,2023-05-05_01,2023-02-09_01
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 4/5] PCI: brcmstb: Don't assume 2711 bootloader leaves
+ PERST# asserted
+Message-ID: <20230509075113.5cosbeaoykdoiefa@mraw.org>
+Organization: Debian
+References: <20230508220126.16241-1-jim2101024@gmail.com>
+ <20230508220126.16241-5-jim2101024@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="udbgdswpzmjgu2ia"
+Content-Disposition: inline
+In-Reply-To: <20230508220126.16241-5-jim2101024@gmail.com>
+X-Debian-User: kibi
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/23 05:29, Rob Herring wrote:
-> The arm dts directory has grown to 1553 boards which makes it a bit
-> unwieldy to maintain and use. Past attempts stalled out due to plans to
-> move .dts files out of the kernel tree. Doing that is no longer planned
-> (any time soon at least), so let's go ahead and group .dts files by
-> vendors. This move aligns arm with arm64 .dts file structure.
-> 
-> Doing this enables building subsets of dts files by vendor easily
-> without changing kernel configs:
-> 
-> make allyesconfig
-> make arch/arm/boot/dts/ti/
-> 
-> There's no change to dtbs_install as the flat structure is maintained on
-> install.
-> 
-> The naming of vendor directories is roughly in this order of preference:
-> - Matching original and current SoC vendor prefix/name (e.g. ti, qcom)
-> - Current vendor prefix/name if still actively sold (SoCs which have
->    been aquired) (e.g. nxp/imx)
-> - Existing platform name for older platforms not sold/maintained by any
->    company (e.g. gemini, nspire)
-> 
-> The whole move was scripted with the exception of MAINTAINERS.
-> 
-> Signed-off-by: Rob Herring<robh@kernel.org>
+
+--udbgdswpzmjgu2ia
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+Jim Quinlan <jim2101024@gmail.com> (2023-05-08):
+> The current PCIe driver assumes PERST# is asserted when probe() is invoke=
+d.
+> The reasons are as follows:
+>=20
+> (1) One Broadcom SOC (7278) causes a panic if the PERST# register is
+>     written during this time window.
+>=20
+> (2) If PERST# is deasserted at Linux probe() time, experience and QA
+>     suspend/resume tests have shown that some endpoint devices fail if the
+>     PERST# is pulsed (deasserted =3D> asserted =3D> deasserted) quickly i=
+n this
+>     fashion, even though the timing is in accordance with their datasheet=
+s.
+>=20
+> (3) Keeping things in reset tends to save power, if for some reason the
+>     PCIe driver is not yet present.
+>=20
+> Broadcom STB and CM SOCs bootloaders always have PERST# asserted at
+> probe().  This is not necessarily the case for the 2711/RPi bootloader,
+> so, for 2711/RPi SOCs, do what Raspian OS does and assert PERST#.
+>=20
+> [1] https://lore.kernel.org/linux-pci/20230411165919.23955-1-jim2101024@g=
+mail.com/T/#m39ebab8bc2827b2304aeeff470a6c6a58f46f987
+
+It would probably make sense to remove that [1] link entirely, to match
+the reference removal between v4 and v5.
 
 
-For ST part:
+Cheers,
+--=20
+Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
+D-I release manager -- Release team member -- Freelance Consultant
 
-Acked-by: Alexandre TORGUE <alexandre.torgue@st.com>
+--udbgdswpzmjgu2ia
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks
+-----BEGIN PGP SIGNATURE-----
 
-Alex
+iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmRZ+3EACgkQ/5FK8MKz
+VSDPThAAnjd8pxRB2dH/ulH/Kg5l7D03KJPKpRRNXw9EvnVD25SsERIcoGvzS6+E
+b6UhVz/DznrrMZIa3m4URUkYZjAKOs4epXEpIHMLY6hHtdlSq4fVNN4MGjVGF8Gv
+P4ZRrh8MgX8dbGsWpew146ftkUAlDxF2tJH+m5/URm6ME6equZYmyY/hcak2GE7X
+i74oEb8UkC3QfTXKL4APwfSirU8XoyjTjdmfkB8PENVMfh61Z0SM4x+f9vSVYEwX
+AqkCHruEO4IfmP7A1d1vsjP0dGdYDojknZnNBBeBGfUGisFMN0QFqBoUfcXOJuuF
+b6UjJT2RNgFyVmqRKvP4nVEFpIj23eah/2uBDfgLbS/6dqbwKTuxgZonHkASJkLK
+gh67DnvMOht93JV0hT43XObjm6v+2yh4TXXNnVniywMhSGNEuJjrr4fYxS1Puq80
+DzoxRvgAfpe2xRUBom0/SxJGBJKOZFzZmSQh5B2yaeizei7p2mdaWXCfKEtMDbI1
+Z8K2rK5iXEidcDbu4Xw8znhWjg8/ukKH7dlAlkzYGY/aM8unpIEasHPJFos0oU1A
+JyRrDsmHgMfhU8VllwcaU7g/Nef4WcFAwoBxWBm1lWW7YlpP9k0emwcRtMYm9fZz
+Tbt/RWlpSLNku1m4GauKpOOS7cstZF5/727QA0ep4re31xQEdPI=
+=y2a+
+-----END PGP SIGNATURE-----
+
+--udbgdswpzmjgu2ia--
