@@ -2,107 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB97F6FC86A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 631376FC68A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235698AbjEIOCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 10:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
+        id S235550AbjEIMha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 08:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjEIOCJ (ORCPT
+        with ESMTP id S235155AbjEIMh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 10:02:09 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CDA30E8;
-        Tue,  9 May 2023 07:01:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1683640919;
-  x=1715176919;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2V+NUhnYRzHcs/qPV372ooVdqlg/MRqyc6ldidCg9bY=;
-  b=cnx4hZNk3RLw+BNyLhSOE8tqUSVh/j/WkCDZdqZjsxr3rmbCGd+cXg4W
-   iDvgZFZJX5K8bIAFniiwUX9Tf+bQhLpMgHVZxB+DAzCGi41tntoFgWtrc
-   KH23HCEF3pIJRNoEHNk7uTrwpCKxYuwx3zE0QfeL3yq5n9/VMp62nYL5q
-   hABKss+YF2eXu3NXfy4i37MlHx/NU7ul3j3ZNrM6K6H6FDZ7JxCoHBfvW
-   YzfUOT6R87I67L2glh5DWMh/hfYFuZUdbRU8qHUuIeXL97+hcYbMLq8xu
-   y0NJ7lUJytIi3Sx9l0vQrn+3VGuPz4CO91QqARa+4CT8w05PlHkEhVCef
-   Q==;
-From:   Astrid Rost <astrid.rost@axis.com>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-CC:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@axis.com>, Astrid Rost <astrid.rost@axis.com>
-Subject: [PATCH v2 1/7] iio: light: vcnl4000: Add proximity irq for vcnl4200
-Date:   Tue, 9 May 2023 16:01:47 +0200
-Message-ID: <20230509140153.3279288-2-astrid.rost@axis.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230509140153.3279288-1-astrid.rost@axis.com>
-References: <20230509140153.3279288-1-astrid.rost@axis.com>
+        Tue, 9 May 2023 08:37:28 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB6C468D;
+        Tue,  9 May 2023 05:37:26 -0700 (PDT)
+Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QFyLC64VpzsRFn;
+        Tue,  9 May 2023 20:35:31 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 9 May 2023 20:37:23 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>, <shuah@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <zhengyejian1@huawei.com>
+Subject: [PATCH] selftests/ftrace: Test toplevel-enable for instance
+Date:   Wed, 10 May 2023 04:36:59 +0800
+Message-ID: <20230509203659.1173917-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500012.china.huawei.com (7.185.36.15)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add proximity interrupt support for vcnl4200 (similar to vcnl4040).
-Add support to configure proximity sensor interrupts and threshold
-limits. If an interrupt is detected an event will be pushed to the
-event interface.
+'available_events' is actually not required by
+'test.d/event/toplevel-enable.tc' and its Existence has been tested in
+'test.d/00basic/basic4.tc'.
 
-Signed-off-by: Astrid Rost <astrid.rost@axis.com>
+So the require of 'available_events' can be dropped and then we can add
+'instance' flag to test 'test.d/event/toplevel-enable.tc' for instance.
+
+Test result show as below:
+ # ./ftracetest test.d/event/toplevel-enable.tc
+ === Ftrace unit tests ===
+ [1] event tracing - enable/disable with top level files [PASS]
+ [2] (instance)  event tracing - enable/disable with top level files [PASS]
+
+ # of passed:  2
+ # of failed:  0
+ # of unresolved:  0
+ # of untested:  0
+ # of unsupported:  0
+ # of xfailed:  0
+ # of undefined(test bug):  0
+
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
 ---
- drivers/iio/light/vcnl4000.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iio/light/vcnl4000.c b/drivers/iio/light/vcnl4000.c
-index 56d3963d3d66..13568454baff 100644
---- a/drivers/iio/light/vcnl4000.c
-+++ b/drivers/iio/light/vcnl4000.c
-@@ -65,6 +65,7 @@
- #define VCNL4200_PS_DATA	0x08 /* Proximity data */
- #define VCNL4200_AL_DATA	0x09 /* Ambient light data */
- #define VCNL4040_INT_FLAGS	0x0b /* Interrupt register */
-+#define VCNL4200_INT_FLAGS	0x0d /* Interrupt register */
- #define VCNL4200_DEV_ID		0x0e /* Device ID, slave address and version */
+diff --git a/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc b/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
+index 93c10ea42a68..8b8e1aea985b 100644
+--- a/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
++++ b/tools/testing/selftests/ftrace/test.d/event/toplevel-enable.tc
+@@ -1,7 +1,8 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ # description: event tracing - enable/disable with top level files
+-# requires: available_events set_event events/enable
++# requires: set_event events/enable
++# flags: instance
  
- #define VCNL4040_DEV_ID		0x0c /* Device ID and version */
-@@ -1004,8 +1005,14 @@ static irqreturn_t vcnl4040_irq_thread(int irq, void *p)
- 	struct iio_dev *indio_dev = p;
- 	struct vcnl4000_data *data = iio_priv(indio_dev);
- 	int ret;
-+	int reg;
- 
--	ret = i2c_smbus_read_word_data(data->client, VCNL4040_INT_FLAGS);
-+	if (data->id == VCNL4200)
-+		reg = VCNL4200_INT_FLAGS;
-+	else
-+		reg = VCNL4040_INT_FLAGS;
-+
-+	ret = i2c_smbus_read_word_data(data->client, reg);
- 	if (ret < 0)
- 		return IRQ_HANDLED;
- 
-@@ -1321,9 +1328,10 @@ static const struct vcnl4000_chip_spec vcnl4000_chip_spec_cfg[] = {
- 		.measure_light = vcnl4200_measure_light,
- 		.measure_proximity = vcnl4200_measure_proximity,
- 		.set_power_state = vcnl4200_set_power_state,
--		.channels = vcnl4000_channels,
-+		.channels = vcnl4040_channels,
- 		.num_channels = ARRAY_SIZE(vcnl4000_channels),
--		.info = &vcnl4000_info,
-+		.info = &vcnl4040_info,
-+		.irq_thread = vcnl4040_irq_thread,
- 	},
- };
- 
+ do_reset() {
+     echo > set_event
 -- 
-2.30.2
+2.25.1
 
