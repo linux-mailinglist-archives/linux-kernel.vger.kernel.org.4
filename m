@@ -2,151 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E38B6FC037
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5E46FC03B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235235AbjEIHLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 03:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
+        id S235244AbjEIHMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 03:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235230AbjEIHLj (ORCPT
+        with ESMTP id S235240AbjEIHMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 03:11:39 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4518B7AAE
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 00:11:36 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50bc570b4a3so10291567a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 00:11:36 -0700 (PDT)
+        Tue, 9 May 2023 03:12:15 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA6226B8;
+        Tue,  9 May 2023 00:12:13 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-965ac4dd11bso1086285766b.2;
+        Tue, 09 May 2023 00:12:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683616295; x=1686208295;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=APH4uf0HQ8cOpTtx4oEH1mlDXvsjwJke9jk7vwtuN80=;
-        b=e7j6qkllm/T/2M2c1EkqE/Qd/638PextIBR0EfhntkXwIPUhY6InG0cTEP19Pl6rJX
-         tzpjvB4ljG1Wpv06IP8v0iJEsTwM4pF4IdAbZvRdo2cjs5Wv4t8ffGIy4i89YSSwoyZY
-         QIWbShgowuM5OzwGJdJ1FxIYWJO8yENJsZnyGyyMcDCnf5X/AfB0a4iDpCyXAzK5kv83
-         YhQ2A8UNHBgzd9cPjbCi7+0ZFJkOowMKZg7uOa2zCrr9/kDcXodhAZYIk727px/1eZA4
-         D+/Wf5n6mnlx2gWnDoJQyYp8xv+TH0psqoE9I70jPYNednkYtru0ZwjFHM60MdO5DDQg
-         WJ8Q==
+        d=gmail.com; s=20221208; t=1683616332; x=1686208332;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e+aAIP8ajfLei8y315mzvfv242eDfozwQdKlXY70z4I=;
+        b=XDgkfCPWZ5DargSfyQlY3d6DnlIJgh/UruzjxNkJhDmTGgB77hY9SyEWDSodWX9W9U
+         NQaX3ksDR2muJpVt8fYGVrIs/BlzmP2yy9hRcJ4du4yawDE1rWV1t2qfUhrQU2TtipeL
+         aQGI7qXn/N4ckElhSwF/RKyx0rxSaTKbO3HW/AvRD1CIxfq/ANQL/KYXACifHN7pocOb
+         jq1cQaRu2LnKnEuZ2QQfLjo46od2p2+dcBRnsMqGUju1gIkRct1+O6IkEtoiPFBa1J1H
+         yzNvGfv5PUfAdwPSaUyw/t/+sS3ZMgi/LHEbqIa1IkOeVHhbYVjrhukAN+QNBBM2pnpf
+         tN7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683616295; x=1686208295;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=APH4uf0HQ8cOpTtx4oEH1mlDXvsjwJke9jk7vwtuN80=;
-        b=IsohLI+ImRTFgekyJFH3yVoKGpKIvVBRbOwjFEhN5K9YjKaRQZTFHfODr5i/QPnhF4
-         CthGcCMOsGzEZTW1ZwbPKXC1yymwSKhS9c4SsIAKuyRal0mfSX2Nh3+KspA8c/1neMht
-         2xlmYOMSC5vcQkcZBXnbQzQzAFhIbMqjHWLz9ZePvWqO8v9B/bzh8XiQka3g9f0DM5WZ
-         bmQ5VnIApykzinC4pQurtlVkJcifk0pU8czjuxWAD7YPgnkdmEuk+svaiYvIPp757NtY
-         81ZVtulCqEVnD50ctLB3rBbYqjVFdvdksLnU9PYE5sdZbRShFuxY6I5bGRqPKHMauStg
-         75qg==
-X-Gm-Message-State: AC+VfDzIXVVQmIEfjnYEtzqX7+1pJizS3UTsza3k2nWn0faWTaQsTBY9
-        rtmjT+Hn94AAZM7VLiBY5HmEdA==
-X-Google-Smtp-Source: ACHHUZ4NTgyfxBlvxeFNFcg9A0+pojhfwrdDKrGACJsSCpzT73/PLN82DOw9k/K7FMCu1mximsVIng==
-X-Received: by 2002:a05:6402:8c3:b0:506:7d3e:ade5 with SMTP id d3-20020a05640208c300b005067d3eade5mr9710332edz.33.1683616294764;
-        Tue, 09 May 2023 00:11:34 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
-        by smtp.gmail.com with ESMTPSA id n7-20020aa7d047000000b004fbdfbb5acesm415192edo.89.2023.05.09.00.11.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 00:11:34 -0700 (PDT)
-Message-ID: <7777c016-4875-a6c9-cd5e-78c2ac686448@linaro.org>
-Date:   Tue, 9 May 2023 09:11:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 04/18] soc: qcom: Add Qualcomm minidump kernel driver
-Content-Language: en-US
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, corbet@lwn.net,
-        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        srinivas.kandagatla@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
-References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
- <1683133352-10046-5-git-send-email-quic_mojha@quicinc.com>
- <c6f730b6-f702-91d4-4abd-71546e02f869@linaro.org>
- <23b493f4-1a01-8d03-fc12-d588b2c6fd74@quicinc.com>
- <575a422d-6224-06b7-628c-8487b47882e9@linaro.org>
- <500e5abc-fb71-8468-a6b0-3ced2676b57c@linaro.org>
- <e714566e-39b7-d46b-13bd-3c0e20e9f944@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e714566e-39b7-d46b-13bd-3c0e20e9f944@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683616332; x=1686208332;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e+aAIP8ajfLei8y315mzvfv242eDfozwQdKlXY70z4I=;
+        b=igJTTKZrSg8WSBU0+vZtN49M+aqoHp8AQ3y4GsozWcXzOxs16xtsAP1hNQe1mgHsx/
+         yolbdcd/Vnf4bS7wcZm+D153oGq0twKpnwOCXf1DfM5G+iN5XPIIfKTiqXC3LVxGj6+H
+         Bwx+cvDSN9Z4XYBmSI8ZtN+KLOyzVr/M1GXXhyk+VXolZ6sCjxmephNNDjwWHVh0sRmp
+         kZOdwFmnE+VVeLFnPN1oL452aGPpX9DFq+Tyz2jmubCMtNJQ/g18AKLYdf50S0DlLnmY
+         MAMemLOZU4bcMdS5sHZa1zyjEDFn7UyMINu9JwyKZKdKNQS5U5s7LcZ0zAMRs4SPSB66
+         I9jQ==
+X-Gm-Message-State: AC+VfDw8Sh+JW1b2isz4X4hZixgyryVppWt4a0cAEYx+1FPpKd0w04JO
+        b9mGqSD2J7Vb4zBLtOz/raY=
+X-Google-Smtp-Source: ACHHUZ7tVsDsrIvQZCyzO3IbZvqJmpg9O2zw45SMLd9uUvgRfE5Fsnwqe3oI+i0zBauKKHLajoLbiQ==
+X-Received: by 2002:a17:907:983:b0:94f:2c22:a7a2 with SMTP id bf3-20020a170907098300b0094f2c22a7a2mr10646421ejc.68.1683616331548;
+        Tue, 09 May 2023 00:12:11 -0700 (PDT)
+Received: from felia.fritz.box ([2a02:810d:7e40:14b0:b892:8631:69c7:ec2c])
+        by smtp.gmail.com with ESMTPSA id s3-20020a170906bc4300b0095fde299e83sm919706ejv.214.2023.05.09.00.12.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 00:12:11 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] net: skbuff: remove special handling for SLOB
+Date:   Tue,  9 May 2023 09:12:07 +0200
+Message-Id: <20230509071207.28942-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/05/2023 09:10, Mukesh Ojha wrote:
-> 
-> 
-> On 5/4/2023 10:04 PM, Krzysztof Kozlowski wrote:
->> On 04/05/2023 17:21, Krzysztof Kozlowski wrote:
->>>>>
->>>>>> +	ret = qcom_minidump_init_apss_subsystem(md);
->>>>>> +	if (ret) {
->>>>>> +		dev_err(&pdev->dev, "apss minidump initialization failed: %d\n", ret);
->>>>>> +		goto unlock;
->>>>>> +	}
->>>>>> +
->>>>>> +	__md = md;
->>>>>
->>>>> No. This is a platform device, so it can have multiple instances.
->>>>
->>>> It can have only one instance that is created from SMEM driver probe.
->>>
->>> Anyone can instantiate more of them.... how did you solve it?
->>
->> To clarify - sprinkling more of singletons makes everything tightly
->> coupled, difficult to debug and non-portable. You cannot have two
->> instances, you have to control concurrent initialization by yourself in
->> each of such singletons.
->>
->> I understand sometimes they are unavoidable, for example when this does
->> not map to hardware property. However here you have the parent - smem -
->> which can return you valid instance. Thus you avoid entire problem of
->> file-scope variables.
-> 
-> I get your point, why one's should avoid file scope variables.
-> 
-> 
-> This is infrastructure driver and will not have multiple instances and 
-> even if it happens could be avoided with with the help of global mutex 
-> and protect below function which i am already doing at the moment and 
+Commit c9929f0e344a ("mm/slob: remove CONFIG_SLOB") removes CONFIG_SLOB.
+Now, we can also remove special handling for socket buffers with the SLOB
+allocator. The code with HAVE_SKB_SMALL_HEAD_CACHE=1 is now the default
+behavior for all allocators.
 
-But we do not want global mutexes... so incorrect design is being
-improved by more incorrect design.
+Remove an unnecessary distinction between SLOB and SLAB/SLUB allocator
+after the SLOB allocator is gone.
 
-> fail the other probe if it is already initialized with proper logging..e.g
-> 
-> "already initialized..."
-> 
-> 
-> ret = qcom_minidump_init_apss_subsystem(md);
-> 
-> 
-> And this will be in-lined with
-> 
-> /* Pointer to the one and only smem handle */
-> static struct qcom_smem *__smem;
-> 
-> Let me know if you still disagree...and have some other way ?
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ net/core/skbuff.c | 17 -----------------
+ 1 file changed, 17 deletions(-)
 
-Why the parent - smem - cannot return every consumer the instance it
-has? There will be one smem having only one minidump, so all problems
-solved?
-
-Best regards,
-Krzysztof
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 515ec5cdc79c..01b48e68aca0 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -92,15 +92,7 @@ static struct kmem_cache *skbuff_fclone_cache __ro_after_init;
+ static struct kmem_cache *skbuff_ext_cache __ro_after_init;
+ #endif
+ 
+-/* skb_small_head_cache and related code is only supported
+- * for CONFIG_SLAB and CONFIG_SLUB.
+- * As soon as SLOB is removed from the kernel, we can clean up this.
+- */
+-#if !defined(CONFIG_SLOB)
+-# define HAVE_SKB_SMALL_HEAD_CACHE 1
+-#endif
+ 
+-#ifdef HAVE_SKB_SMALL_HEAD_CACHE
+ static struct kmem_cache *skb_small_head_cache __ro_after_init;
+ 
+ #define SKB_SMALL_HEAD_SIZE SKB_HEAD_ALIGN(MAX_TCP_HEADER)
+@@ -117,7 +109,6 @@ static struct kmem_cache *skb_small_head_cache __ro_after_init;
+ 
+ #define SKB_SMALL_HEAD_HEADROOM						\
+ 	SKB_WITH_OVERHEAD(SKB_SMALL_HEAD_CACHE_SIZE)
+-#endif /* HAVE_SKB_SMALL_HEAD_CACHE */
+ 
+ int sysctl_max_skb_frags __read_mostly = MAX_SKB_FRAGS;
+ EXPORT_SYMBOL(sysctl_max_skb_frags);
+@@ -562,7 +553,6 @@ static void *kmalloc_reserve(unsigned int *size, gfp_t flags, int node,
+ 	void *obj;
+ 
+ 	obj_size = SKB_HEAD_ALIGN(*size);
+-#ifdef HAVE_SKB_SMALL_HEAD_CACHE
+ 	if (obj_size <= SKB_SMALL_HEAD_CACHE_SIZE &&
+ 	    !(flags & KMALLOC_NOT_NORMAL_BITS)) {
+ 		obj = kmem_cache_alloc_node(skb_small_head_cache,
+@@ -576,7 +566,6 @@ static void *kmalloc_reserve(unsigned int *size, gfp_t flags, int node,
+ 		obj = kmem_cache_alloc_node(skb_small_head_cache, flags, node);
+ 		goto out;
+ 	}
+-#endif
+ 	*size = obj_size = kmalloc_size_roundup(obj_size);
+ 	/*
+ 	 * Try a regular allocation, when that fails and we're not entitled
+@@ -898,11 +887,9 @@ static bool skb_pp_recycle(struct sk_buff *skb, void *data, bool napi_safe)
+ 
+ static void skb_kfree_head(void *head, unsigned int end_offset)
+ {
+-#ifdef HAVE_SKB_SMALL_HEAD_CACHE
+ 	if (end_offset == SKB_SMALL_HEAD_HEADROOM)
+ 		kmem_cache_free(skb_small_head_cache, head);
+ 	else
+-#endif
+ 		kfree(head);
+ }
+ 
+@@ -2160,7 +2147,6 @@ int __skb_unclone_keeptruesize(struct sk_buff *skb, gfp_t pri)
+ 	if (likely(skb_end_offset(skb) == saved_end_offset))
+ 		return 0;
+ 
+-#ifdef HAVE_SKB_SMALL_HEAD_CACHE
+ 	/* We can not change skb->end if the original or new value
+ 	 * is SKB_SMALL_HEAD_HEADROOM, as it might break skb_kfree_head().
+ 	 */
+@@ -2174,7 +2160,6 @@ int __skb_unclone_keeptruesize(struct sk_buff *skb, gfp_t pri)
+ 		WARN_ON_ONCE(1);
+ 		return 0;
+ 	}
+-#endif
+ 
+ 	shinfo = skb_shinfo(skb);
+ 
+@@ -4768,7 +4753,6 @@ void __init skb_init(void)
+ 						0,
+ 						SLAB_HWCACHE_ALIGN|SLAB_PANIC,
+ 						NULL);
+-#ifdef HAVE_SKB_SMALL_HEAD_CACHE
+ 	/* usercopy should only access first SKB_SMALL_HEAD_HEADROOM bytes.
+ 	 * struct skb_shared_info is located at the end of skb->head,
+ 	 * and should not be copied to/from user.
+@@ -4780,7 +4764,6 @@ void __init skb_init(void)
+ 						0,
+ 						SKB_SMALL_HEAD_HEADROOM,
+ 						NULL);
+-#endif
+ 	skb_extensions_init();
+ }
+ 
+-- 
+2.17.1
 
