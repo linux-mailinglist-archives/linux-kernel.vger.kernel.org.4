@@ -2,82 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B25F6FD2AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31A56FD2AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235471AbjEIWbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 18:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
+        id S235762AbjEIWbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 18:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjEIWbU (ORCPT
+        with ESMTP id S231467AbjEIWbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 18:31:20 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C41F26A6
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 15:31:18 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f420618d5bso24929895e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 15:31:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683671476; x=1686263476;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H+e/daKX9drvWfcCFRUKynPMFbFB2xNv5pizYcQC/Ps=;
-        b=GFKH2bIxWke50r1pk7SF3vM1y+2UUkocKOj6AaVv+BIbIfPb50J4niBeH1qWBCHgYn
-         pMhPqIqQDEDD+sPbCSttytseujK0mOooNf2ruJHaG29ec55LjHb0G2J+HEq5FzmvvBp0
-         36d7RVt4jcPGXnfNoReBUhTuSBiVFtHWQ5yoGoRTRce32Mfu9+o1ydhhQHD8tlLMkmK3
-         4CO3f3u0TLd1Eke1T5U/18ADKLGOZowqrg8mCMirvnC+NslO3BpmNQVi7rNa4vAHzXJ2
-         0rrUakHbjlgSUan4I1Om8PTRhYDXNkfSDTSScef8xYGdK9XcxQrVhfmrxBdG9Js19fVk
-         Ozkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683671476; x=1686263476;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H+e/daKX9drvWfcCFRUKynPMFbFB2xNv5pizYcQC/Ps=;
-        b=MUPRhs5uV2xSnJwSQZ92+WrgxIAYwQgHZ5eeGTp1TkO2MOCke2MqPawlr15PpMghDj
-         X5bpHARM+08nosdyf1d3l+I5HDoqRyiEAQwPaB1gclT/gUfZIEeeVapvElyZOU2Ta4sy
-         8Jzek4qIoJXEl8zySAubjOPjxOs7ZOB6L8GGUqbEwoZ4iLYlr/knUC4wI7U5/pEN3g/X
-         ZlX3aUCto28AU+9wh7vFUbT+gHyrYmVm5w4/nYUbxPonk0XN/ViGJDYszZkcbPHGPtJo
-         wcxkvzunmpQbcDY7+AXv71nhkq9IApNSydsgOYvh3kUA524/d2/HJ77e93TseWXaQgIS
-         7MbQ==
-X-Gm-Message-State: AC+VfDzGodyazzKDyLsGz1bon7ryIJQ/dVAxpqef/4VnoK4YMcus/fYo
-        kLQ0RnYU7w56XVyfXMDLm0tE+g==
-X-Google-Smtp-Source: ACHHUZ6si+b8+Ej7zsK3mGDrXpwwIIjfiDltVqOh0t/imBMJJulNtoJoVip+zo8oVrlJXojtlzg4yg==
-X-Received: by 2002:a05:600c:29a:b0:3f4:2973:b8c8 with SMTP id 26-20020a05600c029a00b003f42973b8c8mr3730808wmk.26.1683671476656;
-        Tue, 09 May 2023 15:31:16 -0700 (PDT)
-Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
-        by smtp.gmail.com with ESMTPSA id z10-20020a05600c220a00b003f17122587bsm21203561wml.36.2023.05.09.15.31.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 15:31:16 -0700 (PDT)
-Message-ID: <53f6e9c7-26e2-94be-fa02-0c3cbb65372b@linaro.org>
-Date:   Tue, 9 May 2023 23:31:15 +0100
+        Tue, 9 May 2023 18:31:51 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639BE10F7;
+        Tue,  9 May 2023 15:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683671507; x=1715207507;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1R2Gg6wlaBtXe+4zx8PrBpi9i8hSxKDH4nvvTPsLK2E=;
+  b=RFurPuMGXS6KGqG2LxYWQzmrO4vLHIPV7BLP9GZ8HodizhjSwVXCtPob
+   YjbkyAdsEtczC9JWeB+A5NNnN0ReIVM5chBaFa9CM0zpwv7gg98SGP1px
+   HJo1x50zNlVpeFDEySw/UadnTztIJ9lwcBl25alyIiD957s3EuyhEL6Mh
+   ltY2eVlOp+YU8y7frSWq0j8qRUvHK/H4Rqk7lEdOQZPQhAmNNV4U6qa7w
+   i1Wzn37T4HUHVrquzV8ZJu6VxNyuRFFjKUedi72N4ntH1AMYMV/uE66b/
+   F4JG3OMmw0U2WoRyEMGsSknG4vVGgNPEoDs4hBP4QVBBidC2PKtlelR/u
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="330430580"
+X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
+   d="scan'208";a="330430580"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 15:31:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="649520053"
+X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
+   d="scan'208";a="649520053"
+Received: from dcovax-mobl.amr.corp.intel.com (HELO [10.212.97.226]) ([10.212.97.226])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 15:31:43 -0700
+Message-ID: <7d35c9f2-9070-32d0-2ddc-ff6b0a8b5c26@intel.com>
+Date:   Tue, 9 May 2023 15:31:43 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 1/6] soc: qcom: ocmem: Fix NUM_PORTS & NUM_MACROS macros
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v7 8/8] cxl/test: Simulate event log overflow
 Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Brian Masney <masneyb@onstation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
- <20230506-msm8226-ocmem-v1-1-3e24e2724f01@z3ntu.xyz>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <20230506-msm8226-ocmem-v1-1-3e24e2724f01@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org
+References: <20221216-cxl-ev-log-v7-0-2316a5c8f7d8@intel.com>
+ <20221216-cxl-ev-log-v7-8-2316a5c8f7d8@intel.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20221216-cxl-ev-log-v7-8-2316a5c8f7d8@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,44 +75,128 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 07/05/2023 10:12, Luca Weiss wrote:
-> Since we're using these two macros to read a value from a register, we
-> need to use the FIELD_GET instead of the FIELD_PREP macro, otherwise
-> we're getting wrong values.
+On 1/17/23 10:53 PM, Ira Weiny wrote:
+> Log overflow is marked by a separate trace message.
 > 
-> So instead of:
+> Simulate a log with lots of messages and flag overflow until space is
+> cleared.
 > 
->   [    3.111779] ocmem fdd00000.sram: 2 ports, 1 regions, 512 macros, not interleaved
-> 
-> we now get the correct value of:
-> 
->   [    3.129672] ocmem fdd00000.sram: 2 ports, 1 regions, 2 macros, not interleaved
-> 
-> Fixes: 88c1e9404f1d ("soc: qcom: add OCMEM driver")
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+
+> 
 > ---
->  drivers/soc/qcom/ocmem.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Changes in v7:
+>          <no change>
+> ---
+>   tools/testing/cxl/test/mem.c | 50 +++++++++++++++++++++++++++++++++++++++++++-
+>   1 file changed, 49 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
-> index 199fe9872035..c3e78411c637 100644
-> --- a/drivers/soc/qcom/ocmem.c
-> +++ b/drivers/soc/qcom/ocmem.c
-> @@ -76,8 +76,8 @@ struct ocmem {
->  #define OCMEM_REG_GFX_MPU_START			0x00001004
->  #define OCMEM_REG_GFX_MPU_END			0x00001008
->  
-> -#define OCMEM_HW_PROFILE_NUM_PORTS(val)		FIELD_PREP(0x0000000f, (val))
-> -#define OCMEM_HW_PROFILE_NUM_MACROS(val)	FIELD_PREP(0x00003f00, (val))
-> +#define OCMEM_HW_PROFILE_NUM_PORTS(val)		FIELD_GET(0x0000000f, (val))
-> +#define OCMEM_HW_PROFILE_NUM_MACROS(val)	FIELD_GET(0x00003f00, (val))
->  
->  #define OCMEM_HW_PROFILE_LAST_REGN_HALFSIZE	0x00010000
->  #define OCMEM_HW_PROFILE_INTERLEAVING		0x00020000
+> diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
+> index 00bf19a68604..9263b04d35f7 100644
+> --- a/tools/testing/cxl/test/mem.c
+> +++ b/tools/testing/cxl/test/mem.c
+> @@ -78,6 +78,8 @@ struct mock_event_log {
+>   	u16 clear_idx;
+>   	u16 cur_idx;
+>   	u16 nr_events;
+> +	u16 nr_overflow;
+> +	u16 overflow_reset;
+>   	struct cxl_event_record_raw *events[CXL_TEST_EVENT_CNT_MAX];
+>   };
+>   
+> @@ -116,6 +118,7 @@ static void event_reset_log(struct mock_event_log *log)
+>   {
+>   	log->cur_idx = 0;
+>   	log->clear_idx = 0;
+> +	log->nr_overflow = log->overflow_reset;
+>   }
+>   
+>   /* Handle can never be 0 use 1 based indexing for handle */
+> @@ -147,8 +150,12 @@ static void mes_add_event(struct mock_event_store *mes,
+>   		return;
+>   
+>   	log = &mes->mock_logs[log_type];
+> -	if (WARN_ON(log->nr_events >= CXL_TEST_EVENT_CNT_MAX))
+> +
+> +	if ((log->nr_events + 1) > CXL_TEST_EVENT_CNT_MAX) {
+> +		log->nr_overflow++;
+> +		log->overflow_reset = log->nr_overflow;
+>   		return;
+> +	}
+>   
+>   	log->events[log->nr_events] = event;
+>   	log->nr_events++;
+> @@ -159,6 +166,7 @@ static int mock_get_event(struct cxl_dev_state *cxlds,
+>   {
+>   	struct cxl_get_event_payload *pl;
+>   	struct mock_event_log *log;
+> +	u16 nr_overflow;
+>   	u8 log_type;
+>   	int i;
+>   
+> @@ -191,6 +199,19 @@ static int mock_get_event(struct cxl_dev_state *cxlds,
+>   	if (!event_log_empty(log))
+>   		pl->flags |= CXL_GET_EVENT_FLAG_MORE_RECORDS;
+>   
+> +	if (log->nr_overflow) {
+> +		u64 ns;
+> +
+> +		pl->flags |= CXL_GET_EVENT_FLAG_OVERFLOW;
+> +		pl->overflow_err_count = cpu_to_le16(nr_overflow);
+> +		ns = ktime_get_real_ns();
+> +		ns -= 5000000000; /* 5s ago */
+> +		pl->first_overflow_timestamp = cpu_to_le64(ns);
+> +		ns = ktime_get_real_ns();
+> +		ns -= 1000000000; /* 1s ago */
+> +		pl->last_overflow_timestamp = cpu_to_le64(ns);
+> +	}
+> +
+>   	return 0;
+>   }
+>   
+> @@ -231,6 +252,9 @@ static int mock_clear_event(struct cxl_dev_state *cxlds,
+>   		}
+>   	}
+>   
+> +	if (log->nr_overflow)
+> +		log->nr_overflow = 0;
+> +
+>   	/* Clear events */
+>   	log->clear_idx += pl->nr_recs;
+>   	return 0;
+> @@ -353,6 +377,30 @@ static void cxl_mock_add_event_logs(struct mock_event_store *mes)
+>   		      (struct cxl_event_record_raw *)&mem_module);
+>   	mes->ev_status |= CXLDEV_EVENT_STATUS_INFO;
+>   
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &maint_needed);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
+> +		      (struct cxl_event_record_raw *)&dram);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
+> +		      (struct cxl_event_record_raw *)&gen_media);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
+> +		      (struct cxl_event_record_raw *)&mem_module);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
+> +		      (struct cxl_event_record_raw *)&dram);
+> +	/* Overflow this log */
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	mes->ev_status |= CXLDEV_EVENT_STATUS_FAIL;
+> +
+>   	mes_add_event(mes, CXL_EVENT_TYPE_FATAL, &hardware_replace);
+>   	mes_add_event(mes, CXL_EVENT_TYPE_FATAL,
+>   		      (struct cxl_event_record_raw *)&dram);
 > 
-
--- 
-Kind Regards,
-Caleb (they/them)
