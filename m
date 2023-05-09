@@ -2,91 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDF26FCBCF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFB76FCBCC
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjEIQxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 12:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
+        id S234704AbjEIQxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 12:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234713AbjEIQxg (ORCPT
+        with ESMTP id S234770AbjEIQxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 12:53:36 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C7549D9
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 09:53:13 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9659f452148so1077544766b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 09:53:13 -0700 (PDT)
+        Tue, 9 May 2023 12:53:25 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BFC4C16
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 09:53:01 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-50bc25f0c7dso11443306a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 09:53:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1683651187; x=1686243187;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9W37NhXu6wJIBmLbeQ87YSwN8pbxoXa2SKsX9DQFeng=;
-        b=chpgdPd8dmW2Dvefw6SjayiN805bdKRypAVECSUlEcAO+4Lr/k0NSFPjrHZKhP1UjV
-         cEWGXpVIgsChcv/G901EaUmMnFoaQ2VLuSl7KXbQW5flgfOkhWrQsOeXCEBHRRN+cch8
-         6V0A3FZnwfa+pA8Zd4f0LqRfo5ZCtzchGl1mQ=
+        d=froggi.es; s=google; t=1683651179; x=1686243179;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kCSph6RPin0zDIowWuB4TbGOKDvCrFa8+qjOjCD0AQ4=;
+        b=bgLHKdztA0Ur7FCUZ9YOsYhFLxYrBT6I8hQLzWmJMKYsmvHSK7RAep9JO4Uec582rt
+         yfWJ7w3icpPTDLlo4Q/9I1/CL7cVlBb4ktsxhCECciEQUInOOOIeiNw+fkyZnouCrWAi
+         unFFng4n6RY8Wa0FN2Sad3kx9WRKldxQnsoCJfig+WC/33IXG3icw2OkYfJdaeZMNLdV
+         oN32xi4AOFUDqeMg62xOV9QI4yWBIBJZyF7pu55yx9vKqip5vE7/fcG+e+onBhONBZQ2
+         /CFFGRNkW/+V1KnK3U8ul5lJHZKIalTeiLjY+W+Bz0eUa932FgTLXNa6kfV94MkxNciq
+         4q3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683651187; x=1686243187;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9W37NhXu6wJIBmLbeQ87YSwN8pbxoXa2SKsX9DQFeng=;
-        b=NSNmWBRgGyE2Mf6vNupkiL5f+u6QAh3j3+Qiot6OuRNLpb7/SG9A+r1C13DanGIO93
-         FdXJ81qsfcN1iyeVp3IN0V8EtLfPReE5YYrgud/J3L9Xc4SMe0efMWWnRqOOXEiQ052n
-         gQNTizNc+CtHYwb3CSWuFXafiQYAvVHtS6B2nSUNAavwfhFwKpppIZsFxVlsukcZZrDl
-         fcAH0qvJJaB5qbgBCQs7Rzh1GX/z09WTqpdcOCAWt6YAGza8902DqxDzltTyhT6TBBwC
-         SdLdjtDaZDU978up0Y3UIHu3MZPSJlI3Db3Il2R/W7W2/HcbB/8LnErbjIt+vfsFV0i9
-         w26Q==
-X-Gm-Message-State: AC+VfDwUTO0oQEjp1vdQvH8ftpd2ZPgBXKGbJ4fgVrC6PQZ5RlsBwrT+
-        oHJtet0CrRqv19k5A4fAo198tUoJOF/9lvpwqLw32Q==
-X-Google-Smtp-Source: ACHHUZ71MCV5Poi2bJ9cgPIrH7t0+2IlS555ZFlq2jR8ypTYNUe3hDmaIPx9RUOTuUSgSgtC/nwm8A==
-X-Received: by 2002:a17:907:2d9f:b0:969:e55f:cca2 with SMTP id gt31-20020a1709072d9f00b00969e55fcca2mr3723120ejc.38.1683651187301;
-        Tue, 09 May 2023 09:53:07 -0700 (PDT)
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
-        by smtp.gmail.com with ESMTPSA id d21-20020a170906c21500b00965fdb90801sm1538774ejz.153.2023.05.09.09.53.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 09:53:06 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-959a3e2dd27so1076247066b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 09:53:06 -0700 (PDT)
-X-Received: by 2002:a17:907:1687:b0:94e:1764:b0b5 with SMTP id
- hc7-20020a170907168700b0094e1764b0b5mr15546777ejc.69.1683651185901; Tue, 09
- May 2023 09:53:05 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683651179; x=1686243179;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kCSph6RPin0zDIowWuB4TbGOKDvCrFa8+qjOjCD0AQ4=;
+        b=FEn1kEmYYycOyT452C+lMsVWjGWE0PltP/boP/Fd00Ee0bYX1Zigo9JOqaNYW9qNJM
+         oMGKUzZASsOsHtRXtPtYhqgiQ3LuWErNcpfIFGvKAH4ehbIp80wyVIPD/o4VH0mfou7i
+         dM+SZHHW3JOpR/dtU3QrqSBdZccqS4GMvmuQjSefMJKH7gVEloqkLc5zX0RG4hevqTar
+         mgiJuxT2ixRRb9uZjDQCnBI75+27DuLs5tHEj9CxJQYE+9EjU5D24xfQZAugcae4g+b+
+         DIKGROaccxfz+Y2cqjr8dvGN2VCvXBJRHKt+tgYV2lOC4dfFo0SYaWqyDlNVfJk/DRqJ
+         oxIw==
+X-Gm-Message-State: AC+VfDzYgyeVUok5M45PSBBdwD60NF+sa97Cif7I9IgSAsI2tSjGmLgn
+        3EPXhCdKTOgE6du4Rdge9SY5NCJb4dS4pcy5quyGMw==
+X-Google-Smtp-Source: ACHHUZ4YlFj73/y7wqqAibWxww81w4v76opgy9ewBq6NOW0La7GEnHmTx+ZD6gFf8zsVDFwmkiEY/478DC4l5ouHyS8=
+X-Received: by 2002:aa7:d50a:0:b0:50b:d4e8:317f with SMTP id
+ y10-20020aa7d50a000000b0050bd4e8317fmr12139312edq.13.1683651179673; Tue, 09
+ May 2023 09:52:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <9b2e791d-aeba-a2c7-1877-797ff5c680a3@kernel.dk>
- <20230508031852.GA4029098@google.com> <fb84f054-517c-77d4-eb11-d3df61f53701@kernel.dk>
- <CAGXv+5GpeJ8hWt2Sc6L+4GB-ghA4vESobEaFGpo1_ZyPhOvW0g@mail.gmail.com> <6d6a494b-3c1a-2bf6-79e3-0ccc81166a67@kernel.dk>
-In-Reply-To: <6d6a494b-3c1a-2bf6-79e3-0ccc81166a67@kernel.dk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 9 May 2023 09:52:48 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjspoBCSrwL2s=qof3GFnZ4BmMzFbCcEx3VpVP81zXwrg@mail.gmail.com>
-Message-ID: <CAHk-=wjspoBCSrwL2s=qof3GFnZ4BmMzFbCcEx3VpVP81zXwrg@mail.gmail.com>
-Subject: Re: [GIT PULL] Final io_uring updates for 6.4-rc1
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        io-uring <io-uring@vger.kernel.org>, linux-kernel@vger.kernel.org
+References: <20230423141051.702990-1-mwen@igalia.com> <20230423141051.702990-4-mwen@igalia.com>
+ <613b2431-7d05-fb44-25d7-dba59e5eca3c@amd.com> <20230509162353.7hak3fda43fim3ho@mail.igalia.com>
+In-Reply-To: <20230509162353.7hak3fda43fim3ho@mail.igalia.com>
+From:   Joshua Ashton <joshua@froggi.es>
+Date:   Tue, 9 May 2023 16:52:48 +0000
+Message-ID: <CAEZNXZARW1uxYz1G2gGt-U2VDCaXBZNNAK-UsXuMeHVufU5YLA@mail.gmail.com>
+Subject: Re: [RFC PATCH 03/40] drm/amd/display: introduce Steam Deck color
+ features to AMD display driver
+To:     Melissa Wen <mwen@igalia.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        amd-gfx@lists.freedesktop.org,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        sunpeng.li@amd.com, Alex Deucher <alexander.deucher@amd.com>,
+        dri-devel@lists.freedesktop.org, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        Sebastian Wick <sebastian.wick@redhat.com>,
+        Xaver Hugl <xaver.hugl@gmail.com>,
+        Shashank Sharma <Shashank.Sharma@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        sungjoon.kim@amd.com, Alex Hung <alex.hung@amd.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 9, 2023 at 6:59=E2=80=AFAM Jens Axboe <axboe@kernel.dk> wrote:
+I think the idea is that we wouldn't have a config option so it
+doesn't inherently become linux kernel uAPI?
+
+Then we can just build our SteamOS kernels with that definiton set.
+
+On Tue, 9 May 2023 at 16:26, Melissa Wen <mwen@igalia.com> wrote:
 >
-> Oops yes, thanks for noticing. I'll correct that and add your tested-by.
-
-.. this build problem isn't caught by Guenter's build testing, but can
-we please make sure that it's fixed in my tree by -rc2?
-
-It would be lovely to have a release that doesn't end up having silly
-build problems pending for too long. Even if they might be unusual
-configs.
-
-             Linus
+> On 05/08, Harry Wentland wrote:
+> > On 4/23/23 10:10, Melissa Wen wrote:
+> > > We are enabling a large set of color calibration features to enhance KMS
+> > > color mgmt but these properties are specific of AMD display HW, and
+> > > cannot be provided by other vendors. Therefore, set a config option to
+> > > enable AMD driver-private properties used on Steam Deck color mgmt
+> > > pipeline.
+> > >
+> > > Co-developed-by: Joshua Ashton <joshua@froggi.es>
+> > > Signed-off-by: Joshua Ashton <joshua@froggi.es>
+> > > Signed-off-by: Melissa Wen <mwen@igalia.com>
+> > > ---
+> > >  drivers/gpu/drm/amd/display/Kconfig | 6 ++++++
+> > >  1 file changed, 6 insertions(+)
+> > >
+> > > diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
+> > > index 06b438217c61..c45a8deb1098 100644
+> > > --- a/drivers/gpu/drm/amd/display/Kconfig
+> > > +++ b/drivers/gpu/drm/amd/display/Kconfig
+> > > @@ -53,5 +53,11 @@ config DRM_AMD_SECURE_DISPLAY
+> > >              of crc of specific region via debugfs.
+> > >              Cooperate with specific DMCU FW.
+> > >
+> > > +config STEAM_DECK
+> > > +   bool "Enable color calibration features for Steam Deck"
+> > > +   depends on DRM_AMD_DC
+> > > +   help
+> > > +     Choose this option if you want to use AMDGPU features for broader
+> > > +     color management support on Steam Deck.
+> > >
+> >
+> > If we can drop this (i.e. don't offer a CONFIG_ option to allow enablement of
+> > the uAPI, but build with -DCONFIG_STEAM_DECK) it would go a long way to keep
+> > us from requiring to support this forever.
+>
+> I see, I'll follow this path. Still on that, I've changed
+> CONFIG_STEAM_DECK (too generic) to CONFIG_DRM_AMD_COLOR_STEAMDECK.
+> Does it sound better?
+>
+> Thanks,
+>
+> Melissa
+>
+> >
+> > Harry
+> >
+> > >  endmenu
+> >
+> >
