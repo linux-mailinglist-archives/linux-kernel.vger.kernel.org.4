@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE416FBE8C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 07:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3ABD6FBE8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 07:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234562AbjEIFOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 01:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
+        id S234570AbjEIFO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 01:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjEIFOv (ORCPT
+        with ESMTP id S234528AbjEIFOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 01:14:51 -0400
+        Tue, 9 May 2023 01:14:52 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F179025
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 22:14:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586D99028
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 22:14:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683609290; x=1715145290;
+  t=1683609291; x=1715145291;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Ci3h/ZFdl5D0Hl7kzFcbanHfMsv6+NX1ka7tFtfJ1yc=;
-  b=XM+C5mHrL2DPvDQgjNznPzhQDBSw0B920c1CTHF3/FsyjEyf8BHdLANb
-   1VVasaZ/S0nI1nMziWulXjB0ioRmOQBpmrgHmXgVvXTG13RjeVGy7XAji
-   Xqkrj1gOqrpxz9RCQTTdHqrdvPZbzhNX0DnHHKiq/kKQB9kX6Eejs5OMu
-   K+6dFn6spZ69ztXXGuQHOUwBYUCWvlxN+kr5QX+fgToF6ZtUQqrgoKFIR
-   6XaENbIjQEymYGoAxrK7/m9cZ9+qJN5Tf0JLzxo9/CGmuclOD6FTV7qz1
-   d6jEzUmMfZeQAAUyb09Aw2yJFngvOqTmGhd/sBS2JQZHl8d88TIYpF53L
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="339037109"
+  bh=/zV+bBMFzqzEbY+zzFUi37/thW9CxZ9azFDevSUQdV0=;
+  b=EJ0ErFeEMyLQqq7fhYPEDJ3JavD+UZ6nsYN0jo+wFtG/8j9vC3B4qCKO
+   q5eDVBBu88+Jn7ei73QVeKL0UglOiHpHGEFoUa974ZbJS5fO/EdV9nAgW
+   280en2mHw28wbh+QE5u/23rPriVgzNbyd9UA8ZV1VUhBYJrFR+EG8FcMO
+   i6SdvdGPFADoE6YEQu9W2MvfPYPmmLjvuAKzdyOMfdCX+kqkFN0A2gz2h
+   mvVYNCDhydf6CT+21fdBcPsddhaSuDunot18XTHOH9eIQ7LFcZBO2R9WI
+   5Y5QHRshjhU9vmvjMEdYyyOveH+wMY6As8YuqyuB+bWkmPCnIJhMSkXlv
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="339037116"
 X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="339037109"
+   d="scan'208";a="339037116"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 22:14:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="873033253"
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="873033256"
 X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="873033253"
+   d="scan'208";a="873033256"
 Received: from lucas-s2600cw.jf.intel.com ([10.165.21.196])
   by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 22:14:45 -0700
 From:   Lucas De Marchi <lucas.demarchi@intel.com>
@@ -52,9 +52,9 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: [PATCH 2/3] linux/bits.h: Add fixed-width GENMASK and BIT macros
-Date:   Mon,  8 May 2023 22:14:02 -0700
-Message-Id: <20230509051403.2748545-3-lucas.demarchi@intel.com>
+Subject: [PATCH 3/3] drm/i915: Temporary conversion to new GENMASK/BIT macros
+Date:   Mon,  8 May 2023 22:14:03 -0700
+Message-Id: <20230509051403.2748545-4-lucas.demarchi@intel.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230509051403.2748545-1-lucas.demarchi@intel.com>
 References: <20230509051403.2748545-1-lucas.demarchi@intel.com>
@@ -71,108 +71,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add GENMASK_U32(), GENMASK_U16() and GENMASK_U8()  macros to create
-masks for fixed-width types and also the corresponding BIT_U32(),
-BIT_U16() and BIT_U8().
-
-All of those depend on a new "U" suffix added to the integer constant.
-Due to naming clashes it's better to call the macro U32. Since C doesn't
-have a proper suffix for short and char types, the U16 and U18 variants
-just use U32 with one additional check in the BIT_* macros to make
-sure the compiler gives an error when the those types overflow.
-The BIT_U16() and BIT_U8() need the help of GENMASK_INPUT_CHECK(),
-as otherwise they would allow an invalid bit to be passed. Hence
-implement them in include/linux/bits.h rather than together with
-the other BIT* variants.
-
-The following test file is is used to test this:
-
-	$ cat mask.c
-	#include <linux/types.h>
-	#include <linux/bits.h>
-
-	static const u32 a = GENMASK_U32(31, 0);
-	static const u16 b = GENMASK_U16(15, 0);
-	static const u8 c = GENMASK_U8(7, 0);
-	static const u32 x = BIT_U32(31);
-	static const u16 y = BIT_U16(15);
-	static const u8 z = BIT_U8(7);
-
-	#if FAIL
-	static const u32 a2 = GENMASK_U32(32, 0);
-	static const u16 b2 = GENMASK_U16(16, 0);
-	static const u8 c2 = GENMASK_U8(8, 0);
-	static const u32 x2 = BIT_U32(32);
-	static const u16 y2 = BIT_U16(16);
-	static const u8 z2 = BIT_U8(8);
-	#endif
+Convert the REG_* macros from i915_reg_defs.h to use the new macros
+defined in linux/bits.h. This is just to help on the implementation
+of the new macros and not intended to be applied.
 
 Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
 ---
- include/linux/bits.h       | 22 ++++++++++++++++++++++
- include/uapi/linux/const.h |  2 ++
- include/vdso/const.h       |  1 +
- 3 files changed, 25 insertions(+)
+ drivers/gpu/drm/i915/i915_reg_defs.h | 28 +++++-----------------------
+ 1 file changed, 5 insertions(+), 23 deletions(-)
 
-diff --git a/include/linux/bits.h b/include/linux/bits.h
-index 7c0cf5031abe..ff4786c99b8c 100644
---- a/include/linux/bits.h
-+++ b/include/linux/bits.h
-@@ -42,4 +42,26 @@
- #define GENMASK_ULL(h, l) \
- 	(GENMASK_INPUT_CHECK(h, l) + __GENMASK_ULL(h, l))
+diff --git a/drivers/gpu/drm/i915/i915_reg_defs.h b/drivers/gpu/drm/i915/i915_reg_defs.h
+index 622d603080f9..61fbb8d62b25 100644
+--- a/drivers/gpu/drm/i915/i915_reg_defs.h
++++ b/drivers/gpu/drm/i915/i915_reg_defs.h
+@@ -17,10 +17,7 @@
+  *
+  * @return: Value with bit @__n set.
+  */
+-#define REG_BIT(__n)							\
+-	((u32)(BIT(__n) +						\
+-	       BUILD_BUG_ON_ZERO(__is_constexpr(__n) &&		\
+-				 ((__n) < 0 || (__n) > 31))))
++#define REG_BIT(__n) BIT_U32(__n)
  
-+#define __GENMASK_U32(h, l) \
-+	(((~U32(0)) - (U32(1) << (l)) + 1) & \
-+	 (~U32(0) >> (32 - 1 - (h))))
-+#define GENMASK_U32(h, l) \
-+	(GENMASK_INPUT_CHECK(h, l) + __GENMASK_U32(h, l))
-+
-+#define __GENMASK_U16(h, l) \
-+	((U32(0xffff) - (U32(1) << (l)) + 1) & \
-+	 (U32(0xffff) >> (16 - 1 - (h))))
-+#define GENMASK_U16(h, l) \
-+	(GENMASK_INPUT_CHECK(h, l) + __GENMASK_U16(h, l))
-+
-+#define __GENMASK_U8(h, l) \
-+	(((U32(0xff)) - (U32(1) << (l)) + 1) & \
-+	 (U32(0xff) >> (8 - 1 - (h))))
-+#define GENMASK_U8(h, l) \
-+	(GENMASK_INPUT_CHECK(h, l) + __GENMASK_U8(h, l))
-+
-+#define BIT_U32(nr)	_BITU32(nr)
-+#define BIT_U16(nr)	(GENMASK_INPUT_CHECK(16 - 1, nr) + (U32(1) << (nr)))
-+#define BIT_U8(nr)	(GENMASK_INPUT_CHECK(32 - 1, nr) + (U32(1) << (nr)))
-+
- #endif	/* __LINUX_BITS_H */
-diff --git a/include/uapi/linux/const.h b/include/uapi/linux/const.h
-index a429381e7ca5..3a4e152520f4 100644
---- a/include/uapi/linux/const.h
-+++ b/include/uapi/linux/const.h
-@@ -22,9 +22,11 @@
- #define _AT(T,X)	((T)(X))
- #endif
+ /**
+  * REG_BIT8() - Prepare a u8 bit value
+@@ -30,10 +27,7 @@
+  *
+  * @return: Value with bit @__n set.
+  */
+-#define REG_BIT8(__n)                                                   \
+-	((u8)(BIT(__n) +                                                \
+-	       BUILD_BUG_ON_ZERO(__is_constexpr(__n) &&         \
+-				 ((__n) < 0 || (__n) > 7))))
++#define REG_BIT8(__n) BIT_U8(__n)
  
-+#define _U32(x)		(_AC(x, U))
- #define _UL(x)		(_AC(x, UL))
- #define _ULL(x)		(_AC(x, ULL))
+ /**
+  * REG_GENMASK() - Prepare a continuous u32 bitmask
+@@ -44,11 +38,7 @@
+  *
+  * @return: Continuous bitmask from @__high to @__low, inclusive.
+  */
+-#define REG_GENMASK(__high, __low)					\
+-	((u32)(GENMASK(__high, __low) +					\
+-	       BUILD_BUG_ON_ZERO(__is_constexpr(__high) &&	\
+-				 __is_constexpr(__low) &&		\
+-				 ((__low) < 0 || (__high) > 31 || (__low) > (__high)))))
++#define REG_GENMASK(__high, __low) GENMASK_U32(__high, __low)
  
-+#define _BITU32(x)	(_U32(1) << (x))
- #define _BITUL(x)	(_UL(1) << (x))
- #define _BITULL(x)	(_ULL(1) << (x))
+ /**
+  * REG_GENMASK64() - Prepare a continuous u64 bitmask
+@@ -59,11 +49,7 @@
+  *
+  * @return: Continuous bitmask from @__high to @__low, inclusive.
+  */
+-#define REG_GENMASK64(__high, __low)					\
+-	((u64)(GENMASK_ULL(__high, __low) +				\
+-	       BUILD_BUG_ON_ZERO(__is_constexpr(__high) &&		\
+-				 __is_constexpr(__low) &&		\
+-				 ((__low) < 0 || (__high) > 63 || (__low) > (__high)))))
++#define REG_GENMASK64(__high, __low) GENMASK_ULL(__high, __low)
  
-diff --git a/include/vdso/const.h b/include/vdso/const.h
-index 94b385ad438d..417384a9795b 100644
---- a/include/vdso/const.h
-+++ b/include/vdso/const.h
-@@ -4,6 +4,7 @@
+ /**
+  * REG_GENMASK8() - Prepare a continuous u8 bitmask
+@@ -74,11 +60,7 @@
+  *
+  * @return: Continuous bitmask from @__high to @__low, inclusive.
+  */
+-#define REG_GENMASK8(__high, __low)                                     \
+-	((u8)(GENMASK(__high, __low) +                                  \
+-	       BUILD_BUG_ON_ZERO(__is_constexpr(__high) &&      \
+-				 __is_constexpr(__low) &&               \
+-				 ((__low) < 0 || (__high) > 7 || (__low) > (__high)))))
++#define REG_GENMASK8(__high, __low) GENMASK_U8(__high, __low)
  
- #include <uapi/linux/const.h>
- 
-+#define U32(x)		(_U32(x))
- #define UL(x)		(_UL(x))
- #define ULL(x)		(_ULL(x))
- 
+ /*
+  * Local integer constant expression version of is_power_of_2().
 -- 
 2.40.1
 
