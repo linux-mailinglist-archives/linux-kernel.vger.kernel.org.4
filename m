@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFDAE6FCD81
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CFB6FCD83
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235312AbjEISKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 14:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
+        id S233678AbjEISMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 14:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234906AbjEISKW (ORCPT
+        with ESMTP id S235018AbjEISMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 14:10:22 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3764D5B8A
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 11:09:59 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-965ac4dd11bso1230451366b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 11:09:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683655798; x=1686247798;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NtIwXP7XX6CNvX90xvzkTb++FzwrEZ6PL4sjQf/MAoI=;
-        b=MjcfYztGjslc2Nn0eLKw9epXhQfiBsr7oQT1euGYEJff/qnIHXuBsaUcLkpeqUazO+
-         XFAyqJfdsa0kMtC50UBmyfLXsCxKCdaEVzrkWsMTPVHZzfhq/T9d+I8Dmk67bk3Wo2Kg
-         o3AatLjZNitUC7ZfvA+znLfiOhfPUSeONqoEtLD7ZI7bHb64P4Ypg1MXPiTOUwseqO3a
-         VoTioSogb+r1CzpKFx8eTeT8HPw8ws4tp9pscMgjIMLeVl/n02g4W0aphgoYjFXWUwtc
-         xTPUW/rnwGYJjRKf4GWNpLuXdn2l5VCiAxCRUV20kgZiN0ebEnxdB3DHUkrDqbtsQSP6
-         KmlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683655798; x=1686247798;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NtIwXP7XX6CNvX90xvzkTb++FzwrEZ6PL4sjQf/MAoI=;
-        b=Td2dekQheqxh7qD2t4Ip+tdtErMT5D/MuJreDQbTjsYL2DwHauLLiBkud+XCiXu+2I
-         4V3GDyyYI07uAv0u/UZ/jjXGR+xs8YKTBbquDJVIMZCcOxLz6IH+PNfX4cWvo+QcYgTr
-         V4X4uGm/5d09AoHZoA8Rx13P4vKw72F6XGF97dlnjlGg/4ilrzTc1LbDFOzyMwChIKRg
-         nVVIyTSMSDplxIlzKQ7nwrf4pF/sbXyo4vbDeaMdafiDxph0BPPhlueb4xnDRbR7bbqa
-         036ypzH2ie7F2PLzcCqc4H7Z1BTwJM1WiZ0bSb+lnnoITW+fC7VPTFMkKhUJ+XbtFTQp
-         Lhug==
-X-Gm-Message-State: AC+VfDzLRrrFvW4IGnqjiU2kMZ7TNMezW8+DHbUuQ26eB3jefmRvP6X+
-        XqN4QO46xWkmsF8rv1MP5PcBvA==
-X-Google-Smtp-Source: ACHHUZ6NF2Ql91suaaPN6PxHtMSdFZkdc+FSwOb64SB30td68JOV/MfNrqGsZjkOqMyccWiEb/SgHA==
-X-Received: by 2002:a17:907:3f87:b0:969:bae5:fa3c with SMTP id hr7-20020a1709073f8700b00969bae5fa3cmr4428101ejc.63.1683655798395;
-        Tue, 09 May 2023 11:09:58 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
-        by smtp.gmail.com with ESMTPSA id kx5-20020a170907774500b0096776c39540sm1615493ejc.31.2023.05.09.11.09.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 11:09:57 -0700 (PDT)
-Message-ID: <5fe4a4c2-e65e-0ac9-25e7-7554d48d81d5@linaro.org>
-Date:   Tue, 9 May 2023 20:09:56 +0200
+        Tue, 9 May 2023 14:12:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB0259E5;
+        Tue,  9 May 2023 11:11:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A73064745;
+        Tue,  9 May 2023 18:11:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A01AC433EF;
+        Tue,  9 May 2023 18:11:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683655861;
+        bh=QUIlMq5k9T6STtI5tHiTubb4VsiMOXpe8//RQa1AvRQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=urzxOlCi66xMt+lMN/e7USr+4divle1WP5LYITrSVp2AgrKm0u2iZ1nToYvioF/s5
+         17PmCicvqmJuQTxRJYDlHN0POF8/NvPjeA3yQd3NQnWJoSAL73ihbVtuMLhFOJ7bGy
+         3GLVjBPeVQzuoRqonpVyX2PyN7ddpKFeTyS143Lp2S42LsjhszWitgWsN6O7sBgJxy
+         pHFHOAZX7azVsFcIkSJphlCLFJ55e/vw9KrWQPh6BTq7krPeSMsIkpbD7jaB7ag87j
+         IvkvchkA4xokBzglT+bqMxkbz8/rxMwM9jLu73t2oLseKDdFwZAojDf0QYSqtCGHyg
+         DV8MAd5aAxzMQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B3E7F403B5; Tue,  9 May 2023 15:10:58 -0300 (-03)
+Date:   Tue, 9 May 2023 15:10:58 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Thomas Richter <tmricht@linux.ibm.com>, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        leo.yan@linaro.org, svens@linux.ibm.com, gor@linux.ibm.com,
+        sumanthk@linux.ibm.com, hca@linux.ibm.com
+Subject: Re: [PATCH] perf/test: reduce run time of perf test Test java symbol
+Message-ID: <ZFqMsjJg00zmQyJG@kernel.org>
+References: <20230509131847.835974-1-tmricht@linux.ibm.com>
+ <CAP-5=fVC1bAMk5gOGSXi0sHdetdLHGT2tqW43dxTTyJ3jRz8QA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 11/13] ARM: dts: exynos: Fix some typos in comments
-Content-Language: en-US
-To:     Artur Weber <aweber.kernel@gmail.com>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230501195525.6268-1-aweber.kernel@gmail.com>
- <20230501195525.6268-12-aweber.kernel@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230501195525.6268-12-aweber.kernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fVC1bAMk5gOGSXi0sHdetdLHGT2tqW43dxTTyJ3jRz8QA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/05/2023 21:55, Artur Weber wrote:
-> Change 'specfic' to 'specific', 'optiosn' to 'options' and remove
-> duplicated 'are listed' in DTSI heading comments.
+Em Tue, May 09, 2023 at 10:34:44AM -0700, Ian Rogers escreveu:
+> On Tue, May 9, 2023 at 6:19 AM Thomas Richter <tmricht@linux.ibm.com> wrote:
+> >
+> > Test case Test java symbol might run a long time. On Fedora 38 the
+> > run time is very, very long:
+> >
+> >  Output before:
+> >  # time ./perf test 108
+> >  108: Test java symbol                  : Ok
+> >  real   22m15.775s
+> >  user   3m42.584s
+> >  sys    4m30.685s
+> >  #
+> >
+> > The reason is a lookup for the server for debug symbols as shown in
+> >  # cat /etc/debuginfod/elfutils.urls
+> >  https://debuginfod.fedoraproject.org/
+> >  #
+> > This lookup is done for every symbol/sample, so about 3500 lookups
+> > will take place.
+> > To omit this lookup, which is not needed, unset environment variable
+> > DEBUGINFOD_URLS=''.
+> >
+> >  Output after:
+> >  # time ./perf test 108
+> >  108: Test java symbol                  : Ok
+> >
+> >  real   0m6.242s
+> >  user   0m4.982s
+> >  sys    0m3.243s
+> >  #
+> >
+> > Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+> > Cc: leo.yan@linaro.org
+> > Cc: irogers@google.com
+> > ---
+> >  tools/perf/tests/shell/test_java_symbol.sh | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/perf/tests/shell/test_java_symbol.sh b/tools/perf/tests/shell/test_java_symbol.sh
+> > index 90cea8811926..499539d1c479 100755
+> > --- a/tools/perf/tests/shell/test_java_symbol.sh
+> > +++ b/tools/perf/tests/shell/test_java_symbol.sh
+> > @@ -56,7 +56,7 @@ if [ $? -ne 0 ]; then
+> >         exit 1
+> >  fi
+> >
+> > -if ! perf inject -i $PERF_DATA -o $PERF_INJ_DATA -j; then
+> > +if ! DEBUGINFOD_URLS='' perf inject -i $PERF_DATA -o $PERF_INJ_DATA -j; then
 > 
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ---
+> Jiri, is this the best way to workaround a debuginfod slowness?
 
-This needs rebasing.
+I noticed this delay, It is good that someone worked on rootcausing this
+excessive delay, thanks Thomas.
 
-Best regards,
-Krzysztof
+I'll test it now.
 
+- Arnaldo
