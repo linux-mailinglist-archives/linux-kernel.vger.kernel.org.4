@@ -2,97 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFBD6FBBD7
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 02:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E92846FBBD9
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 02:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234005AbjEIAHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 20:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S234038AbjEIAII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 20:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjEIAH2 (ORCPT
+        with ESMTP id S234025AbjEIAIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 20:07:28 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE70B49D9
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 17:07:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683590847; x=1715126847;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AU0Xk5S1RJCxxN3bXhs+gF6gnmdjNOad1WJQrl0JRM4=;
-  b=BGXsJHvkKlPLhhBpoBQ5mfaRa6hXpGo3IcS5cfpe5HwCSkBDRQWCyono
-   Pa+atNmSn2+i91ovvDQXVk1WbnUTzUP69LGpALIP1WWGTIQPNfuuxtQjW
-   KuXJtNbPrS0b0hcC5cYWdHEpDmr9Bh+RYzKqv4DFY0x96G9V61TirDpYQ
-   L3fzJYNEtJYknZixIGLoxPeSk8TY5wfd0YK0tNr6KqmVXZOww+r4RINO/
-   FOB+e9Ay0D29/cDVAiYDoxnI/G0bzF5aXoncvtmjI3UJGfxafL6tXMlwW
-   UZ9Bamn5UUU08v/afxYP47FrVvshyVNPG5MVipAa4lbtsMnMmN2YX7a5J
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="436097881"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="436097881"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 17:07:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="763601856"
-X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
-   d="scan'208";a="763601856"
-Received: from ahdamali-mobl.amr.corp.intel.com (HELO [10.212.29.166]) ([10.212.29.166])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 17:07:27 -0700
-Message-ID: <27770379-5e65-d231-f7ee-dff3975eeeda@intel.com>
-Date:   Mon, 8 May 2023 17:07:26 -0700
+        Mon, 8 May 2023 20:08:04 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED52049DE
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 17:08:03 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3ef33f12995so28935241cf.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 17:08:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1683590883; x=1686182883;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kmbOgrH0rb5ijhbY2Wor2EVPZmT7RKPzPHW01oN7clM=;
+        b=oel6LShhm/iI4Dhey/P2K7T9x4C89z7w74vBuLx6LwncjE6lK1uEj8Ofp7ahI/wflO
+         W/rKYfZXgLLXIaXp8uNKfutQ2+UcEqWMGoetRxx2uexEZgHE3Cwy9wVRaBHrlq9ILcRJ
+         ZS77AQfGPL7erDtAPnV8y7mTbnNjbTgmqGTjIlLRgThpCo3Y46OnarNGKBwUx5/5QNqW
+         yu4bcqFX+pMIzb2klyqZ5YIJXEkW1Tu9dYix+tQzf+ATV7Gv+y8XsOK1zw0SwF1bZMMA
+         zzYpFoveqTlVX5vbqYnQl5UnRjTsjwXAoBKRi4d07/CJTZHqfafREiXVD3htxvCC6MYR
+         TF0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683590883; x=1686182883;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kmbOgrH0rb5ijhbY2Wor2EVPZmT7RKPzPHW01oN7clM=;
+        b=Hjwp3nNWLkj0zavjpEBdb4f///9N74lLISVMEO4Z+NGjGpaR6/usY5rev2vjfMpw7B
+         fd/meh0r8zQ78DlFWyZUBHP8USdgzo8HveD78hY2LtENFtB5ivlPDWgheuTZONkrEyKD
+         1HmUOOr7kNVj1PyCBd5H6uVpeuF+HKhRsRhHD/JwRRQuDEXzNTyhAQ39YAh21IF7nHSw
+         nAeZirStoiUHeaAJ8ZvSa28n0BWdgERHrDadg+fuHEAIaQoiPA0CtyZotSt0suzTpXlk
+         of2pdFnydkzbGGnc4jvwXG3nkpC9vL5DtXzZ46dMHFo378sf9axFTjQ/S4HrgNr9ubuv
+         xINQ==
+X-Gm-Message-State: AC+VfDyg5Grb5PXZUVG2+ys13DZqd5S62rCrWMGkLaTWigVcEVqyGqT5
+        MNKTHJqPlc3SK6/6PEVLrdaWwZcotcBHIjtNO/AgEQ==
+X-Google-Smtp-Source: ACHHUZ7V31jQo9MHkZ1H0Z5NarnpPjrrOBFHuW+TlbkAKUCWg2n3pFrZkPrCkNYVsNuGi2lUpCUhwgnz68eyQoyheHA=
+X-Received: by 2002:a05:622a:1c7:b0:3f3:82c2:cffe with SMTP id
+ t7-20020a05622a01c700b003f382c2cffemr13152140qtw.17.1683590883147; Mon, 08
+ May 2023 17:08:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [GIT PULL] x86/shstk for 6.4
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-References: <20230424212130.590684-1-dave.hansen@linux.intel.com>
- <CAHk-=whn3F1k263SZNUVQK195tcCMAo5E_WbmjUE0qFC5rWg=w@mail.gmail.com>
- <4433c3595db23f7c779b69b222958151b69ddd70.camel@intel.com>
- <148b3edb-b056-11a0-1684-6273a4a2d39a@intel.com>
- <CAHk-=wiuVXTfgapmjYQvrEDzn3naF2oYnHuky+feEJSj_G_yFQ@mail.gmail.com>
- <CAHk-=wiB0wy6oXOsPtYU4DSbqJAY8z5iNBKdjdOp2LP23khUoA@mail.gmail.com>
- <4171c4b0-e24b-a7e2-9928-030cc14f1d8d@intel.com>
- <CAHk-=wiVLvz3RdZiSjLNGKKgR3s-=2goRPnNWg6cbrcwMVvndQ@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CAHk-=wiVLvz3RdZiSjLNGKKgR3s-=2goRPnNWg6cbrcwMVvndQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000258e5e05fae79fc1@google.com> <20230507135844.1231056-1-lrh2000@pku.edu.cn>
+ <CA+CK2bBe2YKYM3rUTCnZ0RF=NFUR9VqO-QYn3ygPsFJWLY1MUA@mail.gmail.com>
+ <ZFlrbDft1QfMyIDc@casper.infradead.org> <CA+CK2bDVjovwB9v-Zv4Fn7EUfp5FV2XK36iJKYKY7pYNOFfOGA@mail.gmail.com>
+ <ZFlvJEfs1ufh1UUD@casper.infradead.org> <CA+CK2bDC-FVv1tZg9MDn-N735Ak3OAtdZPf+LEYM-JHsO90YcQ@mail.gmail.com>
+ <fa1dac7a-406e-30ea-6aba-ded2e0e871fa@redhat.com> <CA+CK2bAHbHHwLUoGJkz8n6mrM5dy7oMojeNksdVOMYn+qFYngA@mail.gmail.com>
+ <CA+CK2bD=bv1vPGZaNcxDy-uUFj2ZAKkdPmAtJaweXhgTe91oEw@mail.gmail.com> <366ab078-1101-421c-691d-34f5efe006b5@redhat.com>
+In-Reply-To: <366ab078-1101-421c-691d-34f5efe006b5@redhat.com>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Mon, 8 May 2023 17:07:26 -0700
+Message-ID: <CA+CK2bBwYGd2_CVQ4Nr87CGEjp7BqVbBeoP++yHB7Cr9_peBOQ@mail.gmail.com>
+Subject: Re: usbdev_mmap causes type confusion in page_table_check
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Ruihan Li <lrh2000@pku.edu.cn>,
+        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/8/23 16:31, Linus Torvalds wrote:
-> On Mon, May 8, 2023 at 3:57 PM Dave Hansen <dave.hansen@intel.com> wrote:
-...
->> This behavior is gone on shadow stack CPUs
-> 
-> Ok, so Intel has actually tightened up the rules on setting dirty, and
-> now guarantees that it will set dirty only if the pte is actually
-> writable?
+On Mon, May 8, 2023 at 4:37=E2=80=AFPM David Hildenbrand <david@redhat.com>=
+ wrote:
+>
+> On 09.05.23 01:21, Pasha Tatashin wrote:
+> >> For normal Kernel-MM operations, vm_normal_page() should be used to
+> >> get "struct page" based on vma+addr+pte combination, but
+> >> page_table_check does not use vma for its operation in order to
+> >> strengthen the verification of no invalid page sharing. But, even
+>
+> I'm not sure if that's the right approach for this case here, though.
+>
+> >> vm_normal_page() can cause access to the "struct page" for VM_PFNMAP
+> >> if pfn_valid(pfn) is true. So, vm_normal_page() can return a struct
+> >> page for a user mapped slab page.
+> >
+> > Only for !ARCH_HAS_PTE_SPECIAL case, otherwise NULL is returned.
+>
+> That would violate VM_PFNMAP semantics, though. I remember that there
+> was a trick to it.
+>
+> Assuming we map /dev/mem, what stops a page we mapped and determined to
+> be !anon to be freed and reused, such that we suddenly have an anon page
+> mappped?
+>
+> In that case, we really don't want to look at the "struct page" ever, no?
 
-Yep:
+Good point. page_table_check just does not work well /dev/mem. I am
+thinking of adding BUG_ON(PageSlab(page); and also "depends on
+!DEVMEM" for the PAGE_TABLE_CHECK config option.
 
-	Specifically, a processor that supports CET will never set the
-	dirty flag in a paging-structure entry in which the R/W flag is
-	clear.
-
-and this was _absolutely_ one of the things the hardware folks did for
-the benefit of software.
-
-As for the mm->users==1 optimization, seems like something sane to
-explore.  I can't think of any ways off the top of my head that it would
-break, but I'll go take a closer look.
+Pasha
