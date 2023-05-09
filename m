@@ -2,172 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9DA6FC2AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CC06FC288
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235170AbjEIJWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 05:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
+        id S234848AbjEIJSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 05:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235116AbjEIJVh (ORCPT
+        with ESMTP id S234728AbjEIJSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 05:21:37 -0400
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E9910A1F;
-        Tue,  9 May 2023 02:21:01 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4QFsn0680gz9v7Y4;
-        Tue,  9 May 2023 17:09:56 +0800 (CST)
-Received: from A2101119013HW2.china.huawei.com (unknown [10.81.212.219])
-        by APP2 (Coremail) with SMTP id GxC2BwDHdz7lD1pksN2OAg--.5S9;
-        Tue, 09 May 2023 10:20:22 +0100 (CET)
-From:   Petr Tesarik <petrtesarik@huaweicloud.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
-        linux-kernel@vger.kernel.org (open list),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-        iommu@lists.linux.dev (open list:DMA MAPPING HELPERS)
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>, petr@tesarici.cz
-Subject: [PATCH v2 RESEND 7/7] swiotlb: per-device flag if there are dynamically allocated buffers
-Date:   Tue,  9 May 2023 11:18:19 +0200
-Message-Id: <69f9e058bb1ad95905a62a4fc8461b064872af97.1683623618.git.petr.tesarik.ext@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1683623618.git.petr.tesarik.ext@huawei.com>
-References: <cover.1683623618.git.petr.tesarik.ext@huawei.com>
+        Tue, 9 May 2023 05:18:34 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F680D851
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:18:31 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bc394919cso8481400a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 02:18:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683623909; x=1686215909;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I7FYzpXB4JAY8REQ6N17vUTvC/w9zteq+juJjffaEPw=;
+        b=UUacsfduaEDjEk0zUYDO7xJxrrsNgrmVWgnHsIaXTBKhdhoRSBOS29z6L/WVyViKWg
+         eiO3U10ZPG9+TqsanbULhqMK6vWctoMsZipmmyPjNq4567fWWceEq1idjIQ1AnqqGdkJ
+         ctmHwgityKDDvjP6CrnN1kHU7GIELc+tykk0gQh17QoXeaSh0JMgVDPX2Sogi8RrS7yE
+         ogR9ctz+11I568K64CbVxvB+hBwSeoVr/+dgSU8zceo/Bd0jidxAaKbFwA76vhQLshby
+         DsZe9k1oUEGoWXyZ39gNpZfNVa1RCReUv6TYsRRIK9yY27+5uGfv5hgVJgtf+fv8NnF1
+         kGQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683623909; x=1686215909;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I7FYzpXB4JAY8REQ6N17vUTvC/w9zteq+juJjffaEPw=;
+        b=YN2YpPbHGWqxWF/HDqvz5u+rQ15+DplbOzDlnQuEhHhBUqrxX0V6o59e63EsHNB03E
+         mN4lG0iygAgduSU52uGJs0DfxkQq+7qfireaR5aHSNBaHe2onpKLkrtXLKI/1fVAkVNF
+         WsLZ3EIABgGXQ2VeOcF1pa735Mg3sFnK1NibDVVtTOR1fbJEongVrCdRYmLAayh/bJtO
+         A8WyndKRF8ZTEvWkVwqRhOu2+Owdv+UnW4qs3Q3If7F+rprRvVndA42W7bOJbwwzr74r
+         4d8cx/JCRIyYFfXXjFmXqPKJD39j1n56tK+5/dm0hhSNIWWzIGbbMNcSC5HcOFsinSIF
+         +LcQ==
+X-Gm-Message-State: AC+VfDwGUJ7FS7Uv1/EZukNHHuaJGf0nXC5fp+IGMkujysfXljt21rVx
+        eUere0Prq+6sFTRER4aPFLM89w==
+X-Google-Smtp-Source: ACHHUZ4EVVEITh4T8aJgcY8S930Dxi8YCadGVtavtGcs/hxxLvRYRvnzqhUfz+9hiFzzvr259Kr4Pw==
+X-Received: by 2002:a17:907:6d20:b0:969:e304:441d with SMTP id sa32-20020a1709076d2000b00969e304441dmr2095523ejc.4.1683623909486;
+        Tue, 09 May 2023 02:18:29 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170906220700b0096792b56c47sm1048546ejs.167.2023.05.09.02.18.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 02:18:28 -0700 (PDT)
+Message-ID: <fbfd02d5-183a-118c-5743-dee6c9367bf6@linaro.org>
+Date:   Tue, 9 May 2023 11:18:27 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwDHdz7lD1pksN2OAg--.5S9
-X-Coremail-Antispam: 1UD129KBjvJXoWxWr1UWr47Jw1kGryUAr4ktFb_yoW5uFW3pF
-        y8uF98KF4qqFWkA3sF9w17uF17uw4q93y3CrWFgr1Fkry5X345WF4kCry2y34rJr409F4x
-        XryjvrWrAF17Wr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPCb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0264
-        kExVAvwVAq07x20xyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2Iq
-        xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
-        WY6r4UJwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8I
-        cVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
-        Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI
-        43ZEXa7IU8gAw7UUUUU==
-X-CM-SenderInfo: hshw23xhvd2x3n6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 8/8] dt-bindings: Add rt5033 mfd, regulator and charger
+Content-Language: en-US
+To:     Jakob Hauser <jahau@rocketmail.com>,
+        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <20230506155435.3005-1-jahau@rocketmail.com>
+ <20230506155435.3005-9-jahau@rocketmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230506155435.3005-9-jahau@rocketmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Petr Tesarik <petr.tesarik.ext@huawei.com>
+On 06/05/2023 17:54, Jakob Hauser wrote:
+> Add device tree binding documentation for rt5033 multifunction device, voltage
+> regulator and battery charger.
+> 
+> Cc: Beomho Seo <beomho.seo@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> The patch is based on next-20230505.
+> 
+> The drivers for rt5033 (mfd) and rt5033-regulator are existing. Whereas the
+> the driver rt5033-charger is new in this patchset.
+> 
+>  .../bindings/mfd/richtek,rt5033.yaml          | 113 ++++++++++++++++++
+>  .../power/supply/richtek,rt5033-charger.yaml  |  64 ++++++++++
+>  2 files changed, 177 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml b/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
+> new file mode 100644
+> index 000000000000..0aa0a556b50f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
+> @@ -0,0 +1,113 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/richtek,rt5033.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Richtek RT5033 Power Management Integrated Circuit
+> +
+> +maintainers:
+> +  - Jakob Hauser <jahau@rocketmail.com>
+> +
+> +description:
+> +  RT5033 is a multifunction device which includes battery charger, fuel gauge,
+> +  flash LED current source, LDO and synchronous Buck converter for portable
+> +  applications. It is interfaced to host controller using I2C interface. The
+> +  battery fuel gauge uses a separate I2C bus.
+> +
+> +properties:
+> +  compatible:
+> +    const: richtek,rt5033
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  regulators:
+> +    description:
+> +      The regulators of RT5033 have to be instantiated under a sub-node named
+> +      "regulators". For SAFE_LDO voltage there is only one value of 4.9 V. LDO
+> +      voltage ranges from 1.2 V to 3.0 V in 0.1 V steps. BUCK voltage ranges
+> +      from 1.0 V to 3.0 V in 0.1 V steps.
+> +    type: object
+> +    patternProperties:
+> +      "^(SAFE_LDO|LDO|BUCK)$":
+> +        type: object
+> +        $ref: /schemas/regulator/regulator.yaml#
+> +        unevaluatedProperties: false
+> +    additionalProperties: false
+> +
+> +  charger:
+> +    type: object
+> +    $ref: /schemas/power/supply/richtek,rt5033-charger.yaml#
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    battery: battery {
+> +        compatible = "simple-battery";
+> +        precharge-current-microamp = <450000>;
+> +        constant-charge-current-max-microamp = <1000000>;
+> +        charge-term-current-microamp = <150000>;
+> +        precharge-upper-limit-microvolt = <3500000>;
+> +        constant-charge-voltage-max-microvolt = <4350000>;
+> +    };
+> +
+> +    extcon {
+> +        usb_con: connector {
+> +            compatible = "usb-b-connector";
+> +            label = "micro-USB";
+> +            type = "micro";
+> +        };
+> +    };
+> +
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        pmic@34 {
+> +            compatible = "richtek,rt5033";
+> +            reg = <0x34>;
+> +
+> +            interrupt-parent = <&msmgpio>;
+> +            interrupts = <62 IRQ_TYPE_EDGE_FALLING>;
+> +
+> +            pinctrl-names = "default";
+> +            pinctrl-0 = <&pmic_int_default>;
+> +
+> +            regulators {
+> +                safe_ldo_reg: SAFE_LDO {
+> +                    regulator-name = "SAFE_LDO";
+> +                    regulator-min-microvolt = <4900000>;
+> +                    regulator-max-microvolt = <4900000>;
+> +                    regulator-always-on;
+> +                };
+> +                ldo_reg: LDO {
+> +                    regulator-name = "LDO";
+> +                    regulator-min-microvolt = <2800000>;
+> +                    regulator-max-microvolt = <2800000>;
+> +                };
+> +                buck_reg: BUCK {
+> +                    regulator-name = "BUCK";
+> +                    regulator-min-microvolt = <1200000>;
+> +                    regulator-max-microvolt = <1200000>;
+> +                };
+> +            };
+> +
+> +            charger {
+> +                compatible = "richtek,rt5033-charger";
+> +                monitored-battery = <&battery>;
+> +                connector = <&usb_con>;
+> +            };
+> +        };
+> +    };
+> diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
+> new file mode 100644
+> index 000000000000..b8607cc6ec63
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/richtek,rt5033-charger.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Richtek RT5033 PIMC Battery Charger
 
-Do not walk the list of dynamically allocated bounce buffers if the
-list is empty. This avoids taking dma_io_tlb_dyn_lock for devices
-which do not use any dynamically allocated bounce buffers.
+PMIC
 
-When unmapping the last dynamically allocated bounce buffer, the
-flag is set to false as soon as possible to allow skipping the
-spinlock even before the list itself is updated.
+> +
+> +maintainers:
+> +  - Jakob Hauser <jahau@rocketmail.com>
+> +
+> +description:
+> +  The battery charger of the multifunction device RT5033 has to be instantiated
+> +  under sub-node named "charger" using the following format.
+> +
+> +properties:
+> +  compatible:
+> +    const: richtek,rt5033-charger
+> +
+> +  monitored-battery:
+> +    description: |
+> +      Phandle to the monitored battery according to battery.yaml. The battery
+> +      node needs to contain five parameters.
+> +
+> +      precharge-current-microamp:
+> +      Current of pre-charge mode. The pre-charge current levels are 350 mA
+> +      to 650 mA programmed by I2C per 100 mA.
+> +
+> +      constant-charge-current-max-microamp:
+> +      Current of fast-charge mode. The fast-charge current levels are 700 mA
+> +      to 2000 mA programmed by I2C per 100 mA.
+> +
+> +      charge-term-current-microamp:
+> +      This property is end of charge current. Its level ranges from 150 mA
+> +      to 600 mA. Between 150 mA and 300 mA in 50 mA steps, between 300 mA and
+> +      600 mA in 100 mA steps.
+> +
+> +      precharge-upper-limit-microvolt:
+> +      Voltage of pre-charge mode. If the battery voltage is below the pre-charge
+> +      threshold voltage, the charger is in pre-charge mode with pre-charge
+> +      current. Its levels are 2.3 V to 3.8 V programmed by I2C per 0.1 V.
+> +
+> +      constant-charge-voltage-max-microvolt:
+> +      Battery regulation voltage of constant voltage mode. This voltage levels
+> +      from 3.65 V to 4.4 V by I2C per 0.025 V.
+> +
+> +  connector:
+> +    description:
+> +      Phandle to a USB connector according to usb-connector.yaml. The connector
+> +      should be a child of the extcon device.
+> +    maxItems: 1
 
-Signed-off-by: Petr Tesarik <petr.tesarik.ext@huawei.com>
----
- include/linux/device.h  | 4 ++++
- include/linux/swiotlb.h | 6 +++++-
- kernel/dma/swiotlb.c    | 6 ++++++
- 3 files changed, 15 insertions(+), 1 deletion(-)
+Missing type/ref... but then you will notice you have conflicting ref
+with existing connector. connector is usb-connector.yaml, not phandle. I
+am not sure if we need generic property, so let's go with device
+specific - richtek,usb-connector
 
-diff --git a/include/linux/device.h b/include/linux/device.h
-index d1d2b8557b30..e340e0f06dce 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -516,6 +516,9 @@ struct device_physical_location {
-  * @dma_io_tlb_dyn_slots:
-  *		Dynamically allocated bounce buffers for this device.
-  *		Not for driver use.
-+ * @dma_io_tlb_have_dyn:
-+ *		Does this device have any dynamically allocated bounce
-+ *		buffers? Not for driver use.
-  * @archdata:	For arch-specific additions.
-  * @of_node:	Associated device tree node.
-  * @fwnode:	Associated device node supplied by platform firmware.
-@@ -623,6 +626,7 @@ struct device {
- 	struct io_tlb_mem *dma_io_tlb_mem;
- 	spinlock_t dma_io_tlb_dyn_lock;
- 	struct list_head dma_io_tlb_dyn_slots;
-+	bool dma_io_tlb_have_dyn;
- #endif
- 	/* arch specific additions */
- 	struct dev_archdata	archdata;
-diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
-index daa2064f2ede..8cbb0bebb0bc 100644
---- a/include/linux/swiotlb.h
-+++ b/include/linux/swiotlb.h
-@@ -152,7 +152,11 @@ static inline bool is_swiotlb_buffer(struct device *dev, phys_addr_t paddr)
- 
- 	return mem &&
- 		(is_swiotlb_fixed(mem, paddr) ||
--		 (mem->allow_dyn && is_swiotlb_dyn(dev, paddr)));
-+		 /* Pairs with smp_store_release() in swiotlb_dyn_map()
-+		  * and swiotlb_dyn_unmap().
-+		  */
-+		 (smp_load_acquire(&dev->dma_io_tlb_have_dyn) &&
-+		  is_swiotlb_dyn(dev, paddr)));
- }
- 
- static inline bool is_swiotlb_force_bounce(struct device *dev)
-diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-index 81eab1c72c50..e8be3ee50f18 100644
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -642,6 +642,9 @@ static phys_addr_t swiotlb_dyn_map(struct device *dev, phys_addr_t orig_addr,
- 
- 	spin_lock_irqsave(&dev->dma_io_tlb_dyn_lock, flags);
- 	list_add(&slot->node, &dev->dma_io_tlb_dyn_slots);
-+	if (!dev->dma_io_tlb_have_dyn)
-+		/* Pairs with smp_load_acquire() in is_swiotlb_buffer() */
-+		smp_store_release(&dev->dma_io_tlb_have_dyn, true);
- 	spin_unlock_irqrestore(&dev->dma_io_tlb_dyn_lock, flags);
- 
- 	return page_to_phys(slot->page);
-@@ -668,6 +671,9 @@ static void swiotlb_dyn_unmap(struct device *dev, phys_addr_t tlb_addr,
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&dev->dma_io_tlb_dyn_lock, flags);
-+	if (list_is_singular(&dev->dma_io_tlb_dyn_slots))
-+		/* Pairs with smp_load_acquire() in is_swiotlb_buffer() */
-+		smp_store_release(&dev->dma_io_tlb_have_dyn, false);
- 	slot = lookup_dyn_slot_locked(dev, tlb_addr);
- 	list_del(&slot->node);
- 	spin_unlock_irqrestore(&dev->dma_io_tlb_dyn_lock, flags);
--- 
-2.25.1
+
+> +
+> +required:
+> +  - monitored-battery
+Best regards,
+Krzysztof
 
