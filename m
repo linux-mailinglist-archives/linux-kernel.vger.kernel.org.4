@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7320F6FBF57
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CB66FBF5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234940AbjEIGjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 02:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
+        id S234930AbjEIGjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 02:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234909AbjEIGjD (ORCPT
+        with ESMTP id S234909AbjEIGjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 02:39:03 -0400
+        Tue, 9 May 2023 02:39:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D61AD33
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 23:38:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F2BAD28;
+        Mon,  8 May 2023 23:39:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB88462E95
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 06:38:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3B35C433EF;
-        Tue,  9 May 2023 06:38:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2168F62D2D;
+        Tue,  9 May 2023 06:39:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A212DC4339B;
+        Tue,  9 May 2023 06:38:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683614335;
-        bh=wNzKQRvFcfMVUIvv9+cNT/9rkrHms8a9kZvsENS9+os=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=OUl0rrj95UTRGzGCvWR57cGDl6SRnVxV7IYotdf1W75dAYG+/HRYqZ+6llpb43EuN
-         P1Xu2xV7SZidT66XI0KjGv4+JN3SLF4RxkDhF9lXIJ1y7P1XBCj+XVxi8fqdUoj9GO
-         JxBynGXAP3HqhP137wy0wE4OfHFTjAQ2IFxGPQZU4FL7LRjCSirJtbbEfIdnyJvdtt
-         wLLOBhhc/q8GNQUee6vh2l9dkBkumyr+cwWoF+t707RYcmZWoKEroOxHktSNJ5CMbJ
-         NK5oQHKqDVt3lGxlOI3Nk6wunbTRUnChQBdOjtDUO+oP/Ko505uNU1bnfPe6GPEi68
-         G0EQSLnXORCEg==
+        s=k20201202; t=1683614344;
+        bh=YgR5gthn/7Amv3cH003JLPMWgQs5SKsPVqLbkaAxcDo=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=Z9/UC3n6pY4XVT4CTaIkUIIzFuxrmzj/nq7QD3yO0hxehH7B+ErA0vZBrpOCZAo7v
+         ZhLROItSmj10A8edWjK6dgFKoeAtfChWz1q592KCGo+vSb79/66s/Gz0Q6NiIKEAhC
+         nmWaNeGgpJ7ZUGuB7KHrItGvfc+HVD8VlQ6LUpq8Fe1IbSvGMrG+sBfN5X4Qiy7ABc
+         HH4YSMrKqbFVf6rtZ6QlNsij7jeodbipG9ExULX/96jZXuuHxsNXpOWOUl8DPyv8IQ
+         jxtg7H5YI3b73J79QQ66PppAXXu3qB3Fhwmxya7wF7bGCaVfNwQJydA/5VU5CMitx6
+         ojubw7W1wwiAg==
 From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com, Yang Li <yang.lee@linux.alibaba.com>
-Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-In-Reply-To: <20230505004538.70270-1-yang.lee@linux.alibaba.com>
-References: <20230505004538.70270-1-yang.lee@linux.alibaba.com>
-Subject: Re: [PATCH -next] ASoC: codecs: wcd938x: Remove unneeded semicolon
-Message-Id: <168361433237.303059.8240679146907792775.b4-ty@kernel.org>
-Date:   Tue, 09 May 2023 15:38:52 +0900
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Cheng-Yi Chiang <cychiang@chromium.org>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230507174543.264987-1-krzysztof.kozlowski@linaro.org>
+References: <20230507174543.264987-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] ASoC: dt-bindings: google,sc7180-trogdor: allow up to
+ four codec DAIs
+Message-Id: <168361433934.303059.8293357053687076617.b4-ty@kernel.org>
+Date:   Tue, 09 May 2023 15:38:59 +0900
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -55,8 +60,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 05 May 2023 08:45:38 +0800, Yang Li wrote:
-> ./sound/soc/codecs/wcd938x-sdw.c:1274:2-3: Unneeded semicolon
+On Sun, 07 May 2023 19:45:43 +0200, Krzysztof Kozlowski wrote:
+> SC7180 Trogdor sound cards come with multiple audio amplifiers, so allow
+> up to four of them to fix dtbs_check warnings like:
+> 
+>   sc7180-trogdor-homestar-r3.dtb: sound: dai-link@1:codec:sound-dai: [[275], [276], [277], [278]] is too long
 > 
 > 
 
@@ -66,8 +74,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: codecs: wcd938x: Remove unneeded semicolon
-      commit: 101b23830d3c26e9549274d16e8d4542c8bce4af
+[1/1] ASoC: dt-bindings: google,sc7180-trogdor: allow up to four codec DAIs
+      commit: 853a954bf506c42c91b2d2b0d57be891a659ee5a
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
