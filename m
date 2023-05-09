@@ -2,217 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422BD6FC074
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECB96FC077
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233712AbjEIH36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 03:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
+        id S233784AbjEIHan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 03:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjEIH34 (ORCPT
+        with ESMTP id S233108AbjEIHal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 03:29:56 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A08A07D85;
-        Tue,  9 May 2023 00:29:53 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxFulw9llkmuAGAA--.11412S3;
-        Tue, 09 May 2023 15:29:52 +0800 (CST)
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxXrNv9llkAkRSAA--.16958S2;
-        Tue, 09 May 2023 15:29:51 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Zhangjin Wu <falcon@tinylab.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-Subject: [PATCH] LoongArch: Add jump-label implementation
-Date:   Tue,  9 May 2023 15:29:50 +0800
-Message-Id: <1683617390-18015-1-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8DxXrNv9llkAkRSAA--.16958S2
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxGF1rZw4rur15tw4rZF15XFb_yoW7Jryfpr
-        17Aws5GF4kGF1fJrZ8tryDur45JFs5Ga12gF13tFy8AF9rX34vvrn2kryDZFyDJ397GrWI
-        gF1ruFsIva1UJ3JanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
-        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
-        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4
-        kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I
-        6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
-        cSsGvfC2KfnxnUUI43ZEXa7IU8uc_3UUUUU==
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Tue, 9 May 2023 03:30:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A339A7A9D;
+        Tue,  9 May 2023 00:30:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39DE2643AB;
+        Tue,  9 May 2023 07:30:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB0DDC433D2;
+        Tue,  9 May 2023 07:30:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683617438;
+        bh=8muEFwwV/fMT6/BkEavYZNU3BkDJkYBlCsjz3eXYwpk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O0jAFc4AjkqBgTofQ2McerbR+WAzpALl8ybRyuubnlmPPpxizbGh1MIKqRmtNRqq7
+         9ceWpHWPT+BGtOfeP0uCDs/bJUzeLwoGZEC/rtta1Q/lRecyT9hyxOJOkVdd7vSKV/
+         qL7w/sZSD1pO2q951gMCjSfSK/mgNGW0t0CwgfU3ytKMJHdTDqGA2Tfav44OIzhI22
+         Nch1sC3hWOP7wnnmYcPo28MrMjgipYq5nyXocaHnzTWrHyuh5DmV9apWnPLxG2s38n
+         G/jftRhXkzunLll2ZowAs21Zd7ybw17SKst/TarQfbMnvBd3S0d+4GgiVo/6UbHl3d
+         EgfzlGd8XlbLA==
+Date:   Tue, 9 May 2023 10:30:34 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Haiyang Zhang <haiyangz@microsoft.com>
+Cc:     Long Li <longli@microsoft.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] RDMA/mana_ib: Use v2 version of cfg_rx_steer_req to
+ enable RX coalescing
+Message-ID: <20230509073034.GA38143@unreal>
+References: <1683312708-24872-1-git-send-email-longli@linuxonhyperv.com>
+ <20230507081053.GD525452@unreal>
+ <PH7PR21MB31168035C903BD666253BF70CA709@PH7PR21MB3116.namprd21.prod.outlook.com>
+ <20230508060938.GA6195@unreal>
+ <PH7PR21MB3116031E5E1B5B9B97AE71BCCA719@PH7PR21MB3116.namprd21.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH7PR21MB3116031E5E1B5B9B97AE71BCCA719@PH7PR21MB3116.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add jump-label implementation based on the ARM64 version.
+On Mon, May 08, 2023 at 02:45:44PM +0000, Haiyang Zhang wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Leon Romanovsky <leon@kernel.org>
+> > Sent: Monday, May 8, 2023 2:10 AM
+> > To: Haiyang Zhang <haiyangz@microsoft.com>
+> > Cc: Long Li <longli@microsoft.com>; Jason Gunthorpe <jgg@ziepe.ca>; Ajay
+> > Sharma <sharmaajay@microsoft.com>; Dexuan Cui <decui@microsoft.com>;
+> > KY Srinivasan <kys@microsoft.com>; Wei Liu <wei.liu@kernel.org>; David S.
+> > Miller <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>;
+> > Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; linux-
+> > rdma@vger.kernel.org; linux-hyperv@vger.kernel.org;
+> > netdev@vger.kernel.org; linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH] RDMA/mana_ib: Use v2 version of cfg_rx_steer_req to
+> > enable RX coalescing
+> > 
+> > On Sun, May 07, 2023 at 09:39:27PM +0000, Haiyang Zhang wrote:
+> > >
+> > >
+> > > > -----Original Message-----
+> > > > From: Leon Romanovsky <leon@kernel.org>
+> > > > Sent: Sunday, May 7, 2023 4:11 AM
+> > > > To: Long Li <longli@microsoft.com>
+> > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>; Ajay Sharma
+> > > > <sharmaajay@microsoft.com>; Dexuan Cui <decui@microsoft.com>; KY
+> > > > Srinivasan <kys@microsoft.com>; Haiyang Zhang
+> > <haiyangz@microsoft.com>;
+> > > > Wei Liu <wei.liu@kernel.org>; David S. Miller <davem@davemloft.net>; Eric
+> > > > Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>;
+> > Paolo
+> > > > Abeni <pabeni@redhat.com>; linux-rdma@vger.kernel.org; linux-
+> > > > hyperv@vger.kernel.org; netdev@vger.kernel.org; linux-
+> > > > kernel@vger.kernel.org
+> > > > Subject: Re: [PATCH] RDMA/mana_ib: Use v2 version of cfg_rx_steer_req
+> > to
+> > > > enable RX coalescing
+> > > >
+> > > > On Fri, May 05, 2023 at 11:51:48AM -0700, longli@linuxonhyperv.com
+> > > > wrote:
+> > > > > From: Long Li <longli@microsoft.com>
+> > > > >
+> > > > > With RX coalescing, one CQE entry can be used to indicate multiple
+> > packets
+> > > > > on the receive queue. This saves processing time and PCI bandwidth over
+> > > > > the CQ.
+> > > > >
+> > > > > Signed-off-by: Long Li <longli@microsoft.com>
+> > > > > ---
+> > > > >  drivers/infiniband/hw/mana/qp.c |  5 ++++-
+> > > > >  include/net/mana/mana.h         | 17 +++++++++++++++++
+> > > > >  2 files changed, 21 insertions(+), 1 deletion(-)
+> > > >
+> > > > Why didn't you change mana_cfg_vport_steering() too?
+> > >
+> > > The mana_cfg_vport_steering() is for mana_en (Enthernet) driver, not the
+> > > mana_ib driver.
+> > >
+> > > The changes for mana_en will be done in a separate patch together with
+> > > changes for mana_en RX code patch to support multiple packets / CQE.
+> > 
+> > I'm aware of the difference between mana_en and mana_ib.
+> > 
+> > The change you proposed doesn't depend on "support multiple packets /
+> > CQE."
+> > and works perfectly with one packet/CQE also, does it?
+> 
+> No.
+> If we add the following setting to the mana_en / mana_cfg_vport_steering(),
+> the NIC may put multiple packets in one CQE, so we need to have the changes
+> for mana_en RX code path to support multiple packets / CQE.
+> +	req->cqe_coalescing_enable = true;
 
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
----
- .../core/jump-labels/arch-support.txt         |  2 +-
- arch/loongarch/Kconfig                        |  2 +
- arch/loongarch/configs/loongson3_defconfig    |  1 +
- arch/loongarch/include/asm/jump_label.h       | 52 +++++++++++++++++++
- arch/loongarch/kernel/Makefile                |  2 +
- arch/loongarch/kernel/jump_label.c            | 23 ++++++++
- 6 files changed, 81 insertions(+), 1 deletion(-)
- create mode 100644 arch/loongarch/include/asm/jump_label.h
- create mode 100644 arch/loongarch/kernel/jump_label.c
+You can leave "cqe_coalescing_enable = false" for ETH and still reuse
+your new v2 struct.
 
-diff --git a/Documentation/features/core/jump-labels/arch-support.txt b/Documentation/features/core/jump-labels/arch-support.txt
-index 2328eada3a49..94d9dece580f 100644
---- a/Documentation/features/core/jump-labels/arch-support.txt
-+++ b/Documentation/features/core/jump-labels/arch-support.txt
-@@ -13,7 +13,7 @@
-     |        csky: |  ok  |
-     |     hexagon: | TODO |
-     |        ia64: | TODO |
--    |   loongarch: | TODO |
-+    |   loongarch: |  ok  |
-     |        m68k: | TODO |
-     |  microblaze: | TODO |
-     |        mips: |  ok  |
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index d38b066fc931..193a959a5611 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -83,6 +83,8 @@ config LOONGARCH
- 	select GPIOLIB
- 	select HAS_IOPORT
- 	select HAVE_ARCH_AUDITSYSCALL
-+	select HAVE_ARCH_JUMP_LABEL
-+	select HAVE_ARCH_JUMP_LABEL_RELATIVE
- 	select HAVE_ARCH_MMAP_RND_BITS if MMU
- 	select HAVE_ARCH_SECCOMP_FILTER
- 	select HAVE_ARCH_TRACEHOOK
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index 6cd26dd3c134..33a0f5f742f6 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -63,6 +63,7 @@ CONFIG_EFI_ZBOOT=y
- CONFIG_EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER=y
- CONFIG_EFI_CAPSULE_LOADER=m
- CONFIG_EFI_TEST=m
-+CONFIG_JUMP_LABEL=y
- CONFIG_MODULES=y
- CONFIG_MODULE_FORCE_LOAD=y
- CONFIG_MODULE_UNLOAD=y
-diff --git a/arch/loongarch/include/asm/jump_label.h b/arch/loongarch/include/asm/jump_label.h
-new file mode 100644
-index 000000000000..453a0cd3ddf0
---- /dev/null
-+++ b/arch/loongarch/include/asm/jump_label.h
-@@ -0,0 +1,52 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2023 Loongson Technology Corporation Limited
-+ *
-+ * Based on arch/arm64/include/asm/jump_label.h
-+ */
-+#ifndef __ASM_JUMP_LABEL_H
-+#define __ASM_JUMP_LABEL_H
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <linux/types.h>
-+#include <asm/inst.h>
-+
-+#define JUMP_LABEL_NOP_SIZE		LOONGARCH_INSN_SIZE
-+
-+static __always_inline bool arch_static_branch(struct static_key * const key,
-+					       const bool branch)
-+{
-+	asm_volatile_goto(
-+		"1:	nop					\n\t"
-+		 "	.pushsection	__jump_table, \"aw\"	\n\t"
-+		 "	.align		3			\n\t"
-+		 "	.long		1b - ., %l[l_yes] - .	\n\t"
-+		 "	.quad		%0 - .			\n\t"
-+		 "	.popsection				\n\t"
-+		 :  :  "i"(&((char *)key)[branch]) :  : l_yes);
-+
-+	return false;
-+l_yes:
-+	return true;
-+}
-+
-+static __always_inline bool arch_static_branch_jump(struct static_key * const key,
-+						    const bool branch)
-+{
-+	asm_volatile_goto(
-+		"1:	b		%l[l_yes]		\n\t"
-+		 "	.pushsection	__jump_table, \"aw\"	\n\t"
-+		 "	.align		3			\n\t"
-+		 "	.long		1b - ., %l[l_yes] - .	\n\t"
-+		 "	.quad		%0 - .			\n\t"
-+		 "	.popsection				\n\t"
-+		 :  :  "i"(&((char *)key)[branch]) :  : l_yes);
-+
-+	return false;
-+l_yes:
-+	return true;
-+}
-+
-+#endif  /* __ASSEMBLY__ */
-+#endif	/* __ASM_JUMP_LABEL_H */
-diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-index 9a72d91cd104..64ea76f60e2c 100644
---- a/arch/loongarch/kernel/Makefile
-+++ b/arch/loongarch/kernel/Makefile
-@@ -54,4 +54,6 @@ obj-$(CONFIG_HAVE_HW_BREAKPOINT)	+= hw_breakpoint.o
- 
- obj-$(CONFIG_KPROBES)		+= kprobes.o kprobes_trampoline.o
- 
-+obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
-+
- CPPFLAGS_vmlinux.lds		:= $(KBUILD_CFLAGS)
-diff --git a/arch/loongarch/kernel/jump_label.c b/arch/loongarch/kernel/jump_label.c
-new file mode 100644
-index 000000000000..c3ebaa4cf1e5
---- /dev/null
-+++ b/arch/loongarch/kernel/jump_label.c
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2023 Loongson Technology Corporation Limited
-+ *
-+ * Based on arch/arm64/include/asm/jump_label.h
-+ */
-+#include <linux/jump_label.h>
-+#include <linux/kernel.h>
-+#include <asm/inst.h>
-+
-+void arch_jump_label_transform(struct jump_entry *entry,
-+			       enum jump_label_type type)
-+{
-+	void *addr = (void *)jump_entry_code(entry);
-+	u32 insn;
-+
-+	if (type == JUMP_LABEL_JMP)
-+		insn = larch_insn_gen_b(jump_entry_code(entry), jump_entry_target(entry));
-+	else
-+		insn = larch_insn_gen_nop();
-+
-+	larch_insn_patch_text(addr, insn);
-+}
--- 
-2.37.1
+H> 
+> So we plan to set this cqe_coalescing_enable, and the changes for mana_en 
+> RX code path to support multiple packets / CQE in another patch.
 
+And how does it work with IB without changing anything except this
+proposed patch?
+
+Thanks
+
+> 
+> Thanks,
+> - Haiyang
+> 
