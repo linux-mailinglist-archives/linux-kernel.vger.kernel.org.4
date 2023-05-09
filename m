@@ -2,101 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358E66FCA08
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71EDF6FCA0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235651AbjEIPRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 11:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S236011AbjEIPRh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 9 May 2023 11:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235086AbjEIPRP (ORCPT
+        with ESMTP id S235869AbjEIPRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 11:17:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F6244B8
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 08:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683645388;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MDzfBWP3pjVUkb9AGu0G6Wtedp0sdaxtshvvGxbi+yI=;
-        b=d4+Wvw7gobaYLaEUe2M5ESAgrHIMegal3MPanZ5AqyxYnte/BB/8RlThjNujAqN6ryRnCt
-        5woskZBR0C/nlfik5nQzdwODIXPiFKi6pvTBWT2kt/4IEuRJjVd/M8zZrO/VSdIhSOu3c8
-        ReTb+gUnCkXwYhJAhfXr/+BWvrSScgA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-260-r1aQFDHuN0SFkV1Y2ICV-Q-1; Tue, 09 May 2023 11:16:26 -0400
-X-MC-Unique: r1aQFDHuN0SFkV1Y2ICV-Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80FD1895689;
-        Tue,  9 May 2023 15:16:25 +0000 (UTC)
-Received: from [192.168.37.1] (unknown [10.22.50.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9F243C15BA0;
-        Tue,  9 May 2023 15:16:24 +0000 (UTC)
-From:   Benjamin Coddington <bcodding@redhat.com>
-To:     Chengen Du <chengen.du@canonical.com>
-Cc:     trond.myklebust@hammerspace.com, anna@kernel.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] NFS: Add mount option 'nofasc'
-Date:   Tue, 09 May 2023 11:16:23 -0400
-Message-ID: <B9E03B97-F67C-48FC-B5EE-5B02E288C227@redhat.com>
-In-Reply-To: <CAPza5qee7vHKwjwhS27xB8xXTgAFHEmv7eiFk6zGTUUc4s8=TQ@mail.gmail.com>
-References: <20230411030248.53356-1-chengen.du@canonical.com>
- <CAPt2mGNqqDeRMeCSVh6oX_=nS0UcGCfhBfVcuaVG9HpdwVSzVg@mail.gmail.com>
- <CAPza5qee7vHKwjwhS27xB8xXTgAFHEmv7eiFk6zGTUUc4s8=TQ@mail.gmail.com>
+        Tue, 9 May 2023 11:17:34 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27414487;
+        Tue,  9 May 2023 08:17:32 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 80C8C24E083;
+        Tue,  9 May 2023 23:17:24 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 9 May
+ 2023 23:17:24 +0800
+Received: from localhost.localdomain (183.27.98.219) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 9 May
+ 2023 23:17:23 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 0/2] Add watchdog nodes in StarFive JH7100/JH7110 DTS
+Date:   Tue, 9 May 2023 23:17:21 +0800
+Message-ID: <20230509151723.84989-1-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [183.27.98.219]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24 Apr 2023, at 21:41, Chengen Du wrote:
+Hi, this patch serises add watchdog nodes in DTS for the StarFive JH7100
+and JH7110 SoCs. Patch 1 adds the node in JH7100 dts and Patch 2 adds it
+in JH7110 dts. This patch serises are based on Linux 6.4-rc1.
 
-> Hi,
->
-> May I ask if there are any concerns or opinions regarding the
-> introduction of the new mount option?
-> If there is a more suitable solution, we can discuss it, and I can
-> work on implementing it.
+Xingyu Wu (2):
+  riscv: dts: starfive: jh7100: Add watchdog node
+  riscv: dts: starfive: jh7110: Add watchdog node
 
-I suspect there's some weariness of mount options, we have a lot of them and
-they are not easily removed once implemented.  Additionally, requests to add
-them usually can show the appropriate changes to the nfs-utils mount.nfs and
-man pages required.  Incompleteness here may be the reason you're not
-hearing back from a maintainer.
+ arch/riscv/boot/dts/starfive/jh7100.dtsi | 10 ++++++++++
+ arch/riscv/boot/dts/starfive/jh7110.dtsi | 10 ++++++++++
+ 2 files changed, 20 insertions(+)
 
-However, without guidance from a maintainer, you might end up doing extra
-work trying to meet unclear standards.
-
-There's a couple of other ways to address the access cache performance
-"degradation" that was introduced by the changes that other folks
-desperately needed for correctness.
-
-We can change nfs_access_login_time to have a module parameter modifying
-the behavior.  The downside is this would affect every mount.
-
-We can grow a sysfs knob to change the behavior.  Downside is we only have
-very preliminary sysfs scaffolding as of yet.
-
-However, if you want to keep pushing for the mount option, I'd suggest doing
-a v2 with the userspace patches, and if that gets ignored then do a "PATCH
-RESEND" on that a month or so before each mainline merge window.
-
-I've found that bump-replying to old patches isn't as effective at getting
-work merged here.  I believe the maintainers want to see that you're
-rebasing as mainline progresses, and you have active ownership over the work
-to fix bugs that may follow or address other fallout from the community.
-
-Ben
+-- 
+2.25.1
 
