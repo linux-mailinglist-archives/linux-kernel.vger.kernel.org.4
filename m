@@ -2,166 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F876FD314
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 01:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C54B86FD30F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 01:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234931AbjEIXma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 19:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57638 "EHLO
+        id S230259AbjEIXgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 19:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjEIXm3 (ORCPT
+        with ESMTP id S229559AbjEIXgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 19:42:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF1449E6;
-        Tue,  9 May 2023 16:42:21 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 9 May 2023 19:36:48 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E4FF0;
+        Tue,  9 May 2023 16:36:47 -0700 (PDT)
+Received: from zn.tnic (p5de8e8ea.dip0.t-ipconnect.de [93.232.232.234])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id F1CAF21B53;
-        Tue,  9 May 2023 23:42:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1683675739;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UhXINiTaFgT7BrxS/vPCfG3eLNTGe/+tEY2XQOzoxgo=;
-        b=NC9DIW5rQM2KHTh4rY1hLxuY+uQHxljWdI7MhJSdGE3mcprR+/EqT8BNw3RVBTzXXzzuGC
-        qtsnDnkbrLRSEaWggUWefU5yIa3RazFH+dD6bMT1jrC7vHOt6mvuESCIZAyQT5rCsB5wRD
-        4KncxPqxgvTcy/6P93/FN8Km4ffI7ec=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1683675739;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UhXINiTaFgT7BrxS/vPCfG3eLNTGe/+tEY2XQOzoxgo=;
-        b=6SzslbxHTO7Qnu+dwbTVmj4GB+cbtSog5WjEmi/uHTwqG9etK77VNKyXt8CCxiUGrnlWU/
-        lBD/iC2o0gZtyQAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B23F7139B3;
-        Tue,  9 May 2023 23:42:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tcSjKlvaWmSGEAAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Tue, 09 May 2023 23:42:19 +0000
-Date:   Wed, 10 May 2023 01:36:20 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     David Sterba <dsterba@suse.cz>, jiangshanlai@gmail.com,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Wang Yugui <wangyugui@e16-tech.com>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH 08/13] btrfs: Use alloc_ordered_workqueue() to create
- ordered workqueues
-Message-ID: <20230509233620.GN32559@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20230509015032.3768622-1-tj@kernel.org>
- <20230509015032.3768622-9-tj@kernel.org>
- <20230509145332.GA32559@twin.jikos.cz>
- <ZFptXG44WVoWE0s4@slm.duckdns.org>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6BA1D1EC0338;
+        Wed, 10 May 2023 01:36:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1683675405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=5lxz18Yo5hMImpwUjevLsHYDBAq+H3HMlQ4JsgvZNfQ=;
+        b=ViBwKc/E9IwalgWRG3DAMDt1hENvVWCAvfGWo6kvQLcZaCN/W2U+PshsC+Sx7GbxRQ37Ra
+        jHwik+DHKo+xHqa20cn0nYZe9SzXWFt4Kl9kgOWriVsLyd3kk0m9fU0QJL5+ZgYsnH7c4M
+        Pq3h+M+VcNVK8HRaDnJtcn8Stpmew8s=
+Date:   Wed, 10 May 2023 01:36:41 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org,
+        mikelley@microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org, Jonathan Corbet <corbet@lwn.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v6 00/16] x86/mtrr: fix handling with PAT but without MTRR
+Message-ID: <20230509233641.GGZFrZCTDH7VwUMp5R@fat_crate.local>
+References: <20230502120931.20719-1-jgross@suse.com>
+ <20230509201437.GFZFqprc6otRejDPUt@fat_crate.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZFptXG44WVoWE0s4@slm.duckdns.org>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230509201437.GFZFqprc6otRejDPUt@fat_crate.local>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 05:57:16AM -1000, Tejun Heo wrote:
-> Hello, David.
+On Tue, May 09, 2023 at 10:14:37PM +0200, Borislav Petkov wrote:
+> On Tue, May 02, 2023 at 02:09:15PM +0200, Juergen Gross wrote:
+> > This series tries to fix the rather special case of PAT being available
+> > without having MTRRs (either due to CONFIG_MTRR being not set, or
+> > because the feature has been disabled e.g. by a hypervisor).
 > 
-> Thanks for taking a look.
-> 
-> On Tue, May 09, 2023 at 04:53:32PM +0200, David Sterba wrote:
-> > > diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
-> > > index 59ea049fe7ee..32d08aed88b6 100644
-> > > --- a/fs/btrfs/disk-io.c
-> > > +++ b/fs/btrfs/disk-io.c
-> > > @@ -2217,7 +2217,7 @@ static int btrfs_init_workqueues(struct btrfs_fs_info *fs_info)
-> > >  	fs_info->qgroup_rescan_workers =
-> > >  		btrfs_alloc_workqueue(fs_info, "qgroup-rescan", flags, 1, 0);
-> > >  	fs_info->discard_ctl.discard_workers =
-> > > -		alloc_workqueue("btrfs_discard", WQ_UNBOUND | WQ_FREEZABLE, 1);
-> > > +		alloc_ordered_workqueue("btrfs_discard", WQ_FREEZABLE);
-> > >  
-> > >  	if (!(fs_info->workers && fs_info->hipri_workers &&
-> > >  	      fs_info->delalloc_workers && fs_info->flush_workers &&
-> > 
-> > I think there are a few more conversions missing. There's a local flags
-> > variable in btrfs_init_workqueues
-> > 
-> > 2175 static int btrfs_init_workqueues(struct btrfs_fs_info *fs_info)
-> > 2176 {
-> > 2177         u32 max_active = fs_info->thread_pool_size;
-> > 2178         unsigned int flags = WQ_MEM_RECLAIM | WQ_FREEZABLE | WQ_UNBOUND;
-> > 
-> > And used like
-> > 
-> > 2194         fs_info->fixup_workers =
-> > 2195                 btrfs_alloc_workqueue(fs_info, "fixup", flags, 1, 0);
-> > 
-> > 2213         fs_info->qgroup_rescan_workers =
-> > 2214                 btrfs_alloc_workqueue(fs_info, "qgroup-rescan", flags, 1, 0);
-> 
-> Right you are.
-> 
-> > WQ_UNBOUND is not mentioned explicitliy like for the "btrfs_discard"
-> > workqueue.  Patch v2 did the switch in btrfs_alloc_workqueue according
-> > to the max_active/limit_active parameter but this would affect all
-> > queues and not all of them require to be ordered.
-> 
-> The thresh mechanism which auto adjusts max active means that the workqueues
-> allocated btrfs_alloc_workqueue() can't be ordered, right? When thresh is
-> smaller than DFT_THRESHOLD, the mechanism is disabled but that looks like an
-> optimization.
+> More weird stuff. With the series:
 
-Yeah I think so but I'm not entierly sure. The ordering for all queues
-that don't start with max_active > 1 should not be required, here the
-parallelization and out of order processing is expected and serialized
-or decided once the work is done.
+Yah, that was me.
 
-> > In btrfs_resize_thread_pool the workqueue_set_max_active is called
-> > directly or indirectly so this can set the max_active to a user-defined
-> > mount option. Could this be a problem or trigger a warning? This would
-> > lead to max_active==1 + WQ_UNBOUND.
-> 
-> That's not a problem. The only thing we need to make sure is that the
-> workqueues which actually *must* be ordered use alloc_ordered_workqueue() as
-> they won't be implicitly treated as ordered in the future.
-> 
-> * The current patch converts two - fs_info->discard_ctl.discard_workers and
->   scrub_workers when @is_dev_replace is set. Do they actually need to be
->   ordered?
-> 
-> * As you pointed out, fs_info->fixup_workers and
->   fs_info->qgroup_rescan_workers are also currently implicitly ordered. Do
->   they actually need to be ordered?
+That ->enabled thing is *two* bits. FFS.
 
-I think all of them somehow implictly depend on the ordering. The
-replace process sequentially goes over a block group and copies blocks.
+More staring at this tomorrow, on a clear head.
 
-The fixup process is quite obscure and we should preserve the semantics
-as much as possible. It has something to do with pages that get out of
-sync with extent state without btrfs knowing and that there are more such
-requests hapenning at the same time is low but once it happens it can
-lead to corruptions.
+diff --git a/arch/x86/include/uapi/asm/mtrr.h b/arch/x86/include/uapi/asm/mtrr.h
+index a28e6bbd8f21..f476a1355182 100644
+--- a/arch/x86/include/uapi/asm/mtrr.h
++++ b/arch/x86/include/uapi/asm/mtrr.h
+@@ -84,7 +84,7 @@ typedef __u8 mtrr_type;
+ struct mtrr_state_type {
+ 	struct mtrr_var_range var_ranges[MTRR_MAX_VAR_RANGES];
+ 	mtrr_type fixed_ranges[MTRR_NUM_FIXED_RANGES];
+-	bool enabled;
++	unsigned char enabled;
+ 	bool have_fixed;
+ 	mtrr_type def_type;
+ };
 
-Quota rescan is in its nature also a sequential process but I think it
-does not need to be ordered, it's started from higher level context like
-enabling quotas or rescan but there are also calls at remount time so
-this makes it less clear.
+-- 
+Regards/Gruss,
+    Boris.
 
-In summary, if the ordered queue could be used then I'd recommend to do
-it as the safe option.
+https://people.kernel.org/tglx/notes-about-netiquette
