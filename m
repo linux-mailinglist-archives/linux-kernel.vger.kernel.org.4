@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5016FBDD4
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 05:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0C66FBDD6
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 05:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232747AbjEIDzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 23:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
+        id S234587AbjEIDzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 23:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234433AbjEIDzH (ORCPT
+        with ESMTP id S234420AbjEIDzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 23:55:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCDC8A7B;
-        Mon,  8 May 2023 20:55:06 -0700 (PDT)
+        Mon, 8 May 2023 23:55:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD6F7A9F;
+        Mon,  8 May 2023 20:55:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2878161A69;
-        Tue,  9 May 2023 03:55:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6461DC433EF;
-        Tue,  9 May 2023 03:55:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F89361A69;
+        Tue,  9 May 2023 03:55:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3EE2C433D2;
+        Tue,  9 May 2023 03:55:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683604505;
-        bh=LwM8Wr44XK/BE4z7RcP3iHRyVzpPnh7ZfjNuk7u1V8M=;
+        s=k20201202; t=1683604508;
+        bh=BWaUpw5uHM6kKYPpC35BJ+4DJ7Geniu2LmeOM5AGg/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E5aG664fpzlweIZaYk7VXTybaH/4S76LmN5WssFNAt7rNwyCE4R77vBOg86/1wVik
-         jMmnk9F0BNycdwSBqdKHdZBnokQ5PTieRHJ7GgEZHM1pySo+juhXfDWLpFkcg7R0z2
-         r+I6m6Mo+xlmOy7EDBFW9XZYibLobTCxNNFioEuFRI0eWQq/gcer+RWML+9WFllPGo
-         NrxkPF9/M3hjpCtgkUXYAOXQIbBc1ehkVKZ7G8bHoZ4WY63AHQuG2YhgMoSkiSuoeV
-         32Lar06GaDgX8N0U4gKrHEvge+FfDysfVhxEoSD4YfmWQOmNV9teiIb1MagZXPtJRR
-         JA0yCQhFviJXg==
+        b=cq0xFJMSlMd7Rq4BzUQGrGfCTa2cG7aw7tBQl3XlWWCM7JTdZTLVte1uDAGA4IunP
+         +xikKd/9JYhzf/xpH/f0+zWzA50tKLFM3Vxl91Lx/UPr73XJgU+3a/2HhTGn+OjCm+
+         avOGYAs0yQU3A+197MRwaneWlcxWzqY6hZp5OBQFh1Q1VqmBygyZwFkyn4cNjy3d/T
+         GYqa97Nta/f5CxOe97VTlQH3PaXFRS8IOXbYGGIk0YXlh+QBw6plBRBxy4mnxN4k3x
+         1ZJsyl4x4g48dL7LxKq2z7gGR3+IzLyhsmaENAR9RYvgNFhskFstImKUOdWtb0jA5x
+         K3f7k5V99vC6Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Sasha Levin <sashal@kernel.org>, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.3 5/7] riscv: Unconditionnally select KASAN_VMALLOC if KASAN
-Date:   Mon,  8 May 2023 23:54:28 -0400
-Message-Id: <20230509035455.59524-5-sashal@kernel.org>
+Cc:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>,
+        andriy.shevchenko@linux.intel.com, linus.walleij@linaro.org,
+        arnd@arndb.de, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH AUTOSEL 6.3 6/7] powerpc/fsl_uli1575: Allow to disable FSL_ULI1575 support
+Date:   Mon,  8 May 2023 23:54:29 -0400
+Message-Id: <20230509035455.59524-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230509035455.59524-1-sashal@kernel.org>
 References: <20230509035455.59524-1-sashal@kernel.org>
@@ -51,44 +50,49 @@ Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandre Ghiti <alexghiti@rivosinc.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit 864046c512c2cd8418dc928b91981fb12a80396c ]
+[ Upstream commit 22fdf79171e8509db54599fd2c05ef0022ee83f5 ]
 
-If KASAN is enabled, VMAP_STACK depends on KASAN_VMALLOC so enable
-KASAN_VMALLOC with KASAN so that we can enable VMAP_STACK by default.
+ULI1575 PCIe south bridge exists only on some Freescale boards. Allow to
+disable CONFIG_FSL_ULI1575 symbol when it is not explicitly selected and
+only implied. This is achieved by marking symbol as visible by providing
+short description. Also adds dependency for this symbol to prevent enabling
+it on platforms on which driver does not compile.
 
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
-Link: https://lore.kernel.org/r/20230203075232.274282-7-alexghiti@rivosinc.com
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://msgid.link/20230409000812.18904-7-pali@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/powerpc/platforms/Kconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index eb7f29a412f87..d6aad84efb95e 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -118,6 +118,7 @@ config RISCV
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select IRQ_DOMAIN
- 	select IRQ_FORCED_THREADING
-+	select KASAN_VMALLOC if KASAN
- 	select MODULES_USE_ELF_RELA if MODULES
- 	select MODULE_SECTIONS if MODULES
- 	select OF
+diff --git a/arch/powerpc/platforms/Kconfig b/arch/powerpc/platforms/Kconfig
+index d41dad227de84..608ac0290e3aa 100644
+--- a/arch/powerpc/platforms/Kconfig
++++ b/arch/powerpc/platforms/Kconfig
+@@ -261,7 +261,9 @@ config CPM2
+ 	  on it (826x, 827x, 8560).
+ 
+ config FSL_ULI1575
+-	bool
++	bool "ULI1575 PCIe south bridge support"
++	depends on FSL_SOC_BOOKE || PPC_86xx
++	select FSL_PCI
+ 	select GENERIC_ISA_DMA
+ 	help
+ 	  Supports for the ULI1575 PCIe south bridge that exists on some
 -- 
 2.39.2
 
