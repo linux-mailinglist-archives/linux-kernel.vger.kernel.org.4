@@ -2,81 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C8F6FC3CB
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF526FC3CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235202AbjEIKX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 06:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
+        id S235220AbjEIKY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 06:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235231AbjEIKXt (ORCPT
+        with ESMTP id S235195AbjEIKYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 06:23:49 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4EAD864;
-        Tue,  9 May 2023 03:23:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1683627822; i=rwarsow@gmx.de;
-        bh=tbUnTBrhsp3v5Irmv6by48/eeQJh3MU77lTkBqaNiaY=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=NmEtyGzDJqL34QNybHgqRiQShlJQ+djAbeaL9ESu+x2sbkipNf1CbDITDth7blJhY
-         A4pP3E0xtmc0YMiJVJuIU6I6xAIiYg3mPqC+80ZI2JtUIaMa0BHApa0RGuO12TCtZO
-         L/5qb5lB95S31M53yZoEJisrlIVzjq5+IIwZm/UDVgj0NqcWCQk1WSDZKyRdk5ir83
-         sEzMVTGfWk7nA48q3WhtAWfw9F11ph70DngM158hsICubDSeH+/mh+29aziaFzmp51
-         K9gizAtY44xRn/Ub9LGtnCMkb8xfHuLsjAjmS4eR7ZyL4ri49MokEL+G9+D3o23aeO
-         xcy+9UgeMpxYA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([46.142.34.11]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M8QWA-1pruf80hQO-004Vjc; Tue, 09
- May 2023 12:23:42 +0200
-Message-ID: <8cbd0379-2059-7fb7-488f-5858d661a8bb@gmx.de>
-Date:   Tue, 9 May 2023 12:23:41 +0200
+        Tue, 9 May 2023 06:24:22 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFECD879;
+        Tue,  9 May 2023 03:24:19 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 349ANttG084602;
+        Tue, 9 May 2023 05:23:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683627835;
+        bh=unbZXmZdZ4FxgAl4cAtJiqnqRNuT+W4LkuEijgjP5+Y=;
+        h=From:To:CC:Subject:Date;
+        b=AScIXsLbiLSsZ3xHlnhcJ8uaj9RrnJsHUXde3lhBZ0QrFLOSqZIrtb6+5UnodyYrl
+         IFwKCAmPuVuT2KmorkVgahZmfyM7pzUHxLXnCkrJXI40dioAMp1jX+kD7aBIA9pw3S
+         Z77AewWICzFsE0EwM3qLqTPC8yP9yHvFufYO0tkM=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 349ANt6M021905
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 9 May 2023 05:23:55 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
+ May 2023 05:23:55 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 9 May 2023 05:23:55 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 349ANs3b061667;
+        Tue, 9 May 2023 05:23:55 -0500
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Will Deacon <will@kernel.org>
+CC:     Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Praneeth Bajjuri <praneeth@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>,
+        Aradhya Bhatia <a-bhatia1@ti.com>
+Subject: [PATCH v4 0/2] arm64: dts: ti: Enable OLDI display on AM654 EVM
+Date:   Tue, 9 May 2023 15:53:52 +0530
+Message-ID: <20230509102354.10116-1-a-bhatia1@ti.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE, en-US
-Subject: Re: [PATCH 6.3 000/694] 6.3.2-rc2 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:bV6Z2QHQnonO+lUDM2kVejnW0u3+D7gDbhbUeBJZBvEow0kE1Kf
- /A40Y9EYtkTxEpPWTBil5NxEJt86qxwHupz5ZAHYihpBqWX6hylCMWdqmvVCzELfVFNuBot
- eVEhQ4kuREoDWxj+sfZ85VdZG3wDmUkJcWVSFBmxs/rbEfWTkT10h2pwxXTIpgrTg0h/aov
- nmrwGrALRVp6hwoJzd2vQ==
-UI-OutboundReport: notjunk:1;M01:P0:Dbx+NSSREpI=;XUlZATIfDRphEhk01Tl8M/5xcnQ
- DXfSGXaUpeRbjQ3fcuPIzR0marAshoQqR07qVO/ZYIA3uMQ1aGoVW3XlIiL1l38I3dYbnRs1G
- PY/U800rLjzOZkUPw9NW2XpdmtaQDD47bAJpkBxT2x+ad4tlEKDLPrut9mtq0V+JRen5Ck/wC
- mrTkWNGrKDtOZN9W4b8ET/e/W4YnEntvLNSSLzUnBrfkG0Rucg5st1IecZa/sR/Cv10X/JZaF
- edSWJI77C7EwarepDCHdrVhl+niF6mfk3Djjc0xWpNYJpNPuwENhBC6I6ovXgsu5fzbjbkoUO
- KHqz1FDDKsS3hNQnUHcZdTW/MO2S+2pXjgDL96fJJK1HOvzA5LxotXs2/gwzvE4wxinWefkvU
- zh9CT1/sP6VNaz7o4DwMnXP6Xlhns48Bl8tjTAvSBUpZokO4xj3IzTngFwKftuFN65O5tTnyg
- 9QDvGHWJjnbtPucy9pfssp+jWdwDP0Bz+RtiVqeeSgu8Z1YsieVWZi/Tp7DuXHnQi0mpdW6I8
- u+pkvFwSecGpG/YUlzkKfinfAcxAZCuL9GB/pRBdSdxXuLX71SCRBbMLeQ/wMIL5NSeAy9cjC
- oPcKjXvXdNV4zS7dMvBQxkS1Ek+rwkbv1pVtxg8rRxZkIZvvt7KcX1xaNCVUrG3WGup2jNXO3
- XhlbcHH2vdUDCmNa789JN3CeAkU/8I4WXmdue5oMmqiHtMwYVguqNyd7ZaiUZRAq7z2fxYU9u
- 7dw403LA9p53+n5UYY6pjrgm/MYKM9PUnSFDRCwoloy4RzkRILZoTnYlihxi0o/51y8OX+OEs
- +FxbHxBJf2eFX3TNJKJhJtgatGrCFt4s48bjmNU+rTXUlxsMc3rE1skaXJfMYvFnhJTOlrCXu
- AbSvSeT01VYYGvvMPj9COaBdIDv5loljiTMt+Sw4poLb0+1eN1SdqbrT/XV76PQqp01rmnyF6
- ZV8HFBQmvBNFhIhIZ9xtThPIznQ=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FAKE_REPLY_A1,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+Hello,
 
-6.3.2-rc2
+This patch series adds support for the Rocktech RK101II01D-CT OLDI
+panel, on top of AM654 base-board EVM.
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 38)
+Moreover, it enables support for TI ECAP and TI EHRPWM drivers to
+provide SW control of backlight.
 
-Thanks
+While the AM654 GP EVM also consists of usb/pcie expansion board, I have
+only added support for base-board + OLDI panel as I do not have the
+required hardware.
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
+The first patch of this series, was picked up from TI's public tree[1]
+based on 5.10 LTS kernel.
+
+[1]:
+https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/tree/arch/arm64/boot/dts/ti/k3-am654-evm-oldi-lcd1evm.dts?h=ti-linux-5.10.y
+
+Change Log:
+V1 -> V2:
+  - Renamed the panel overlay file.
+  - Added am654-gp-evm build option in DT Makefile.
+  - Changes suggested by Tomi Valkeinen and Nishanth Menon.
+
+V2 -> V3:
+  - Added the product link in the overlay file.
+
+V3 -> V4:
+  - Added AM654 LCD EVM links for better information.
+
+V1: https://lore.kernel.org/linux-devicetree/20230425051235.15533-1-a-bhatia1@ti.com/
+V2: https://lore.kernel.org/linux-devicetree/20230426060612.19271-1-a-bhatia1@ti.com/
+V3:  i. https://lore.kernel.org/all/20230427132304.6857-1-a-bhatia1@ti.com/
+    ii. https://lore.kernel.org/all/20230427132436.7418-1-a-bhatia1@ti.com/
+
+Aradhya Bhatia (1):
+  arm64: defconfig: Enable PWM drivers for TI ECAP and EHRPWM
+
+Jyri Sarha (1):
+  arm64: dts: ti: am65x: Add Rocktech OLDI panel DT overlay
+
+ arch/arm64/boot/dts/ti/Makefile               |  2 +
+ ...am654-base-board-rocktech-rk101-panel.dtso | 71 +++++++++++++++++++
+ arch/arm64/configs/defconfig                  |  2 +
+ 3 files changed, 75 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am654-base-board-rocktech-rk101-panel.dtso
+
+-- 
+2.40.1
+
