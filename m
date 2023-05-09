@@ -2,85 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8474B6FCD42
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 880426FCD50
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234897AbjEISH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 14:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
+        id S234927AbjEISJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 14:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjEISHZ (ORCPT
+        with ESMTP id S229667AbjEISJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 14:07:25 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C560E10C2
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 11:07:23 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349GgReT028290;
-        Tue, 9 May 2023 18:07:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=mVQZRuD+3P2r942mwHwPs57XW9EIasfEdq69rorUZAk=;
- b=RJ+iP4UJSK48LBKOGpe5CN3lxw4UaVVYKM+iHG6HXagjn2pHdJhR20MxankyDXDI3SUq
- cn/JGKK+/8vcwkwih92Per7/+ijf3e1EbBQWa1GReSBOljTiWgCx8123ZKpRMDkDw3ZW
- xVjISRPFunfB3Jj1jg1eBi3MWd62qXFuoAkzFiwYg2vMjfff64PeI3gKaDwxmWy8ve93
- NklmtABcBDg1I0LH9PqezdIyYh0m6cbxcR7FMnFmlZWLd0BBTo1KA5k2dSOpZj7Vn9tp
- AvNfgd/tkc9S/cSoN8ZAmiSpiJ8BjAq6Ap6pqrsSmOaw/nXs2jvsnvWxz6dy/vcxzsDg HQ== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qfr508hbe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 18:07:01 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 349I70Ge016716
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 9 May 2023 18:07:00 GMT
-Received: from [10.216.0.143] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
- 11:06:57 -0700
-Message-ID: <94a81b02-e8e0-3b99-f63b-aef288790c82@quicinc.com>
-Date:   Tue, 9 May 2023 23:36:46 +0530
+        Tue, 9 May 2023 14:09:43 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873041706
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 11:09:41 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so61377698a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 11:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683655780; x=1686247780;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sOxLtKQQVjzWmW6oMf5arrESUTg7L76NrXcLY8eEWIY=;
+        b=h/Xalg+73qTYecR2RtFtm3tuJpHj9tjuvX9Eoeoi1yrKT6S/qlpEjSxNWyP0Bg5R+Z
+         c6n1s3h36fbep6yxERo9p8+xZFVL/VRQidHslyr48QNTYB02rQyr3p26ugouGKwsuUpN
+         6bSC69Rj3wmQlhIz0ngfGctDQI311hlnJfuss4MqYdPzdax+834fd1V6hf/ICPiZANyR
+         YQHv17bGlOgnT3jZVr3of2u0izPDQNgKNs87xG/PTlPxme0t/+1mWurd6oCVUWVSHorh
+         yVeNNHcnMpcRpv/dz6zty3KMklR/nYFb086yJuNo3GrrPqStPUJPA2qto7NJHw8y40LM
+         1yGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683655780; x=1686247780;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sOxLtKQQVjzWmW6oMf5arrESUTg7L76NrXcLY8eEWIY=;
+        b=Deh0InWJCRta5IofLT75ZRGXDnLgoocSVSIsvDagvMe9DcNJDF+sQ82JZKljEri2fi
+         fohFPHS+RoppCj4SNFoQIJwROglmd/xoadTHyt28l1srOozI4OTm1a6nCyCw9N8QSVtR
+         t9PZUMTsmluhZoSRLKqSi4WfOTpTdM2nVRIERlH/dfGATTeYE/W56eF/oMyjUXf5cwAg
+         1zSCqK0wVf+6LGuXVTCxHlZ1D+Pq937a25eJhFS9SAcfYd83tSdpaqTuQEuU9DAJ6/lR
+         S0OJaEHgINX1KqkodZnvgOMhkF17KP3Nr+pCz36okB78YWeq1VJLK7cKEbR+FMkzzXGZ
+         2oYQ==
+X-Gm-Message-State: AC+VfDzezpImB6tX2iSWbRB0iq5yjbQG9AoePZ8g66YLIPxYz5+Cs6qF
+        ErtKbBxe03PcBp1x5jbVIkDTqQ==
+X-Google-Smtp-Source: ACHHUZ7ZP9TpSCN16a7TGu8HBolTKycKVwrMz/AgCz5Pz6hGWhLH011gKjd/yBRjPNbci8b64gxLLA==
+X-Received: by 2002:a05:6402:34c9:b0:50b:c350:f9ca with SMTP id w9-20020a05640234c900b0050bc350f9camr14480931edc.10.1683655780065;
+        Tue, 09 May 2023 11:09:40 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
+        by smtp.gmail.com with ESMTPSA id dy28-20020a05640231fc00b0050d8b5757d1sm1015286edb.54.2023.05.09.11.09.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 11:09:39 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Artur Weber <aweber.kernel@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: (subset) [PATCH v3 01/13] dt-bindings: soc: samsung: add Exynos4212 PMU compatible
+Date:   Tue,  9 May 2023 20:09:28 +0200
+Message-Id: <168365575563.242810.473604395196843985.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230501195525.6268-2-aweber.kernel@gmail.com>
+References: <20230501195525.6268-1-aweber.kernel@gmail.com> <20230501195525.6268-2-aweber.kernel@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] ASoC:codecs: lpass: Fix for KASAN use_after_free out of
- bounds
-To:     Mark Brown <broonie@kernel.org>
-CC:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "moderated list:QCOM AUDIO (ASoC) DRIVERS" 
-        <alsa-devel@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230509103232.20953-1-quic_visr@quicinc.com>
- <ZFpaiBs19P2m2i/q@finisterre.sirena.org.uk>
-From:   VISHNUVARDHAN RAO RAVULAPATI <quic_visr@quicinc.com>
-In-Reply-To: <ZFpaiBs19P2m2i/q@finisterre.sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: MOzKdvGzFMlCiX5w2XRUJWaq9xZ80NnM
-X-Proofpoint-ORIG-GUID: MOzKdvGzFMlCiX5w2XRUJWaq9xZ80NnM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_11,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=440 bulkscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1015 impostorscore=0
- adultscore=0 phishscore=0 suspectscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305090150
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,17 +93,21 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 5/9/2023 8:06 PM, Mark Brown wrote:
-> On Tue, May 09, 2023 at 04:02:31PM +0530, Ravulapati Vishnu Vardhan Rao wrote:
->
->>   	val = ucontrol->value.enumerated.item[0];
->> +	if (val < 0 && val > 15)
->> +		return -EINVAL;
-> Srini is right that it'd be better to read the upper bound from the
-> control, that way it can't geto out of sync.
+On Mon, 01 May 2023 21:55:13 +0200, Artur Weber wrote:
+> Support for the Exynos4212 SoC was originally dropped as there were
+> no boards using it. We will be adding a device that uses it, so add
+> back the relevant compatible.
+> 
+> This reverts part of commit c40610198f35 ("soc: samsung: Remove
+> Exynos4212 related dead code").
+> 
+> [...]
 
-Will address and resend it..
+Applied, thanks!
 
-Thanks for review.
+[01/13] dt-bindings: soc: samsung: add Exynos4212 PMU compatible
+        https://git.kernel.org/krzk/linux/c/8a19d4a1508c62ff28ba427c3209cdb57379d325
 
-
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
