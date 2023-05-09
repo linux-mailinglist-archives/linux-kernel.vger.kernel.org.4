@@ -2,232 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C076FBBFC
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 02:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B206FBC02
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 02:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232792AbjEIA2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 20:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
+        id S233293AbjEIAau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 20:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjEIA2v (ORCPT
+        with ESMTP id S229479AbjEIAat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 20:28:51 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2AD4EEE;
-        Mon,  8 May 2023 17:28:49 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 348NswtK023495;
-        Tue, 9 May 2023 00:28:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=haDEAzScw5Q4ifeArnQZ0cit0TqKFjC9SaEKAqwZB8I=;
- b=aV67UFldXXJJicIj6NILY0Zz44URayedZO6XsfBtLtbnRnpKFjsVd67o37hHT75PgbSS
- bnhTRP7qvUOcMWhp3y9cuOQCdgNPvuOxYvlWjmCI3+doKPF0UVNqw3r/fCHYHs35VDjl
- mzk1qH43YQqsRWcYtGIZO7xSHjr6ttpR/j7XR6L+BBoOcaixMYT/YA83Efh/7zAezYSh
- aa2zbjQ9p3HhGxcDYtpIMwY6CntmghuDorLovBZOkGBnhk8vRKJmb5Ji/N0USL9N6+uS
- hPfFAW4z6lomW0s8jxp1DpV1XvcUYUuw7g4SHL2KvxEJs9Z3smAyZAxfZADnCOkimB6F 3Q== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf781gds0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 00:28:42 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3490SfCL011433
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 9 May 2023 00:28:41 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 8 May 2023
- 17:28:40 -0700
-Message-ID: <9aad0f0a-f168-5162-68a0-9e9cde21c1f6@quicinc.com>
-Date:   Mon, 8 May 2023 17:28:30 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 3/4] drm/msm/dpu: Add DPU_INTF_DATA_COMPRESS feature
- flag
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230405-add-dsc-support-v2-0-1072c70e9786@quicinc.com>
- <20230405-add-dsc-support-v2-3-1072c70e9786@quicinc.com>
- <i6i2xj2tuy5mcxsj674d77kfdb3ne6immkmrzw5f6u4bfx2sth@ef7fzrhdyypx>
- <1d7ccb5f-55c2-3b3a-df97-2c17beffabfc@quicinc.com>
- <0aa4130d-bb37-4743-10e5-fd518276f4a2@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <0aa4130d-bb37-4743-10e5-fd518276f4a2@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IY3IKbLjwgT9ZKefPMrIKlptq8-QtoDd
-X-Proofpoint-ORIG-GUID: IY3IKbLjwgT9ZKefPMrIKlptq8-QtoDd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-08_17,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- suspectscore=0 clxscore=1015 mlxlogscore=999 malwarescore=0 mlxscore=0
- impostorscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305090002
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 8 May 2023 20:30:49 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360464EEE
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 17:30:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683592248; x=1715128248;
+  h=date:from:to:cc:subject:message-id;
+  bh=3SCKbHTowXD3up7R2zIC50B7HTZaJZ0U0EvTcwVZdLU=;
+  b=Fpguy0Ipy1fSnkhWSiHFngBK+WGAsn62Y7/b5y0ivmlTxwIm/XVqA/x+
+   hpQ7dPA+c//EeNgs3fIGssqpXfVCDHVTCZUnvr4QAaQaOJd5Y9ptSYNpb
+   1o9novjB6wV+OduSWM0YuB5yGQ25oxNHaLgmL+PUndvJ/moKiAHgMyYY2
+   b8tuWm0e09Lm72Caf5TW0v3fL12kT77UqCUAbXoaEcP1iRAPwzuOpWQkR
+   jJgEI2OqWqFn+bSSd7mT66rpVdgsySE8llHUWnMv9tdvQ06YSYnsFZJgD
+   RPW5gx6HVqDUPDi5jHwQg31gZRmn+d2E1cOzNvHZYS4+718wRZcZ0Pb4H
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="339006102"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="339006102"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 17:30:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="788309871"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="788309871"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 May 2023 17:30:46 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwBFd-0001U1-2m;
+        Tue, 09 May 2023 00:30:45 +0000
+Date:   Tue, 09 May 2023 08:30:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 7d8accfaa0ab65e4282c8e58950f7d688342cd86
+Message-ID: <20230509003030.ZAB6L%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 7d8accfaa0ab65e4282c8e58950f7d688342cd86  hwmon: (k10temp) Add PCI ID for family 19, model 78h
 
+elapsed time: 733m
 
-On 5/8/2023 4:08 PM, Dmitry Baryshkov wrote:
-> On 09/05/2023 00:46, Jessica Zhang wrote:
->>
->>
->> On 5/7/2023 9:00 AM, Marijn Suijten wrote:
->>> On 2023-05-05 14:23:50, Jessica Zhang wrote:
->>>> Add DATA_COMPRESS feature flag to DPU INTF block.
->>>>
->>>> In DPU 7.x and later, DSC/DCE enablement registers have been moved from
->>>> PINGPONG to INTF.
->>>>
->>>> As core_rev (and related macros) was removed from the dpu_kms 
->>>> struct, the
->>>> most straightforward way to indicate the presence of this register 
->>>> would be
->>>> to have a feature flag.
->>>
->>> Irrelevant.  Even though core_rev was still in mainline until recently,
->>> we always hardcoded the features in the catalog and only used core_rev
->>> to select a dpu_mdss_cfg catalog entry.  There is no "if version >= X
->>> then enable feature Y" logic, this manually-enabled feature flag is the
->>> only, correct way to do it.
->>
->> Hi Marijn,
->>
->> Understood. FWIW, if we do find more register bit-level differences 
->> between HW versions in the future, it might make more sense to keep 
->> the HW catalog small and bring core_rev back, rather than keep adding 
->> these kinds of small differences to caps.
-> 
-> Let's see how it goes. Abhinav suggested that there might be feature 
-> differences inside the DPU generations (and even inside the single DPU 
-> major/minor combo). So I'm not sure what core_rev will bring us.
-> 
+configs tested: 137
+configs skipped: 5
 
-It allows us to have if MDSS_REV() checks which are convenient for some 
-calculations / bit programming which we dont want to expose in the 
-catalog as they cannot be classified as a hw cap as such or atleast we 
-dont want them to be classified as such.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> Let's land the platforms which are ready (or if there is anything close 
-> to be submitted). I'll post the next proposal for the catalog cleanups 
-> close to -rc4, when the dust settles then we can have one or two weaks 
-> for the discussion and polishing.
-> 
-> I'd like to consider:
-> - inlining foo_BLK macros, if that makes adding new features easier
-> - reformat of clk_ctrls
-> - maybe reintroduction of per-generation feature masks instead of 
-> keeping them named after the random SoC
-> - maybe a rework of mdss_irqs / INTFn_INTR. We already have this info in 
-> hw catalog.
-> 
-> Comments are appreciated.
-> 
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r002-20230507   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r016-20230507   gcc  
+alpha                randconfig-r016-20230508   gcc  
+alpha                randconfig-r034-20230507   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r031-20230507   gcc  
+arc                  randconfig-r032-20230507   gcc  
+arc                  randconfig-r033-20230507   gcc  
+arc                  randconfig-r043-20230507   gcc  
+arc                  randconfig-r043-20230508   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r004-20230508   gcc  
+arm                  randconfig-r032-20230508   gcc  
+arm                  randconfig-r046-20230507   gcc  
+arm                  randconfig-r046-20230508   clang
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r003-20230507   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r024-20230508   gcc  
+csky                 randconfig-r035-20230507   gcc  
+hexagon      buildonly-randconfig-r006-20230508   clang
+hexagon              randconfig-r005-20230508   clang
+hexagon              randconfig-r013-20230507   clang
+hexagon              randconfig-r015-20230508   clang
+hexagon              randconfig-r035-20230508   clang
+hexagon              randconfig-r036-20230508   clang
+hexagon              randconfig-r041-20230507   clang
+hexagon              randconfig-r041-20230508   clang
+hexagon              randconfig-r045-20230507   clang
+hexagon              randconfig-r045-20230508   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230508   clang
+i386                 randconfig-a002-20230508   clang
+i386                 randconfig-a003-20230508   clang
+i386                 randconfig-a004-20230508   clang
+i386                 randconfig-a005-20230508   clang
+i386                 randconfig-a006-20230508   clang
+i386                 randconfig-a011-20230508   gcc  
+i386                 randconfig-a012-20230508   gcc  
+i386                 randconfig-a013-20230508   gcc  
+i386                 randconfig-a014-20230508   gcc  
+i386                 randconfig-a015-20230508   gcc  
+i386                 randconfig-a016-20230508   gcc  
+i386                 randconfig-r011-20230508   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r005-20230508   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r002-20230507   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r003-20230507   gcc  
+loongarch            randconfig-r013-20230508   gcc  
+loongarch            randconfig-r014-20230508   gcc  
+loongarch            randconfig-r026-20230508   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r005-20230507   gcc  
+m68k                                defconfig   gcc  
+microblaze   buildonly-randconfig-r004-20230507   gcc  
+microblaze   buildonly-randconfig-r004-20230508   gcc  
+microblaze   buildonly-randconfig-r006-20230507   gcc  
+microblaze           randconfig-r001-20230507   gcc  
+microblaze           randconfig-r022-20230508   gcc  
+microblaze           randconfig-r034-20230508   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r011-20230507   gcc  
+nios2                randconfig-r012-20230507   gcc  
+nios2                randconfig-r022-20230507   gcc  
+nios2                randconfig-r025-20230507   gcc  
+openrisc             randconfig-r036-20230507   gcc  
+parisc       buildonly-randconfig-r001-20230507   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r033-20230508   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r002-20230508   clang
+powerpc              randconfig-r025-20230508   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r023-20230507   clang
+riscv                randconfig-r042-20230507   clang
+riscv                randconfig-r042-20230508   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390         buildonly-randconfig-r003-20230508   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230508   clang
+s390                 randconfig-r006-20230508   clang
+s390                 randconfig-r021-20230507   clang
+s390                 randconfig-r044-20230507   clang
+s390                 randconfig-r044-20230508   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r004-20230507   gcc  
+sh                   randconfig-r012-20230508   gcc  
+sh                   randconfig-r014-20230507   gcc  
+sh                   randconfig-r023-20230508   gcc  
+sparc        buildonly-randconfig-r002-20230508   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r015-20230507   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230508   clang
+x86_64               randconfig-a002-20230508   clang
+x86_64               randconfig-a003-20230508   clang
+x86_64               randconfig-a004-20230508   clang
+x86_64               randconfig-a005-20230508   clang
+x86_64               randconfig-a006-20230508   clang
+x86_64               randconfig-a011-20230508   gcc  
+x86_64               randconfig-a012-20230508   gcc  
+x86_64               randconfig-a013-20230508   gcc  
+x86_64               randconfig-a014-20230508   gcc  
+x86_64               randconfig-a015-20230508   gcc  
+x86_64               randconfig-a016-20230508   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r001-20230508   gcc  
+xtensa               randconfig-r005-20230507   gcc  
+xtensa               randconfig-r006-20230507   gcc  
+xtensa               randconfig-r021-20230508   gcc  
+xtensa               randconfig-r024-20230507   gcc  
+xtensa               randconfig-r026-20230507   gcc  
 
-I would say, lets wait for DSC to settle. Atleast the parts already on 
-the list. Continuous rebase of features already on the list is becoming 
-time consuming because of overlapping catalog reworks.
-
-> 
->>
->> Thanks,
->>
->> Jessica Zhang
->>
->>>
->>>> Changes in v2:
->>>> - Changed has_data_compress dpu_cap to a DATA_COMPRESS INTF feature 
->>>> flag
->>>>
->>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>>
->>> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
->>>
->>>> ---
->>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 2 +-
->>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
->>>>   2 files changed, 3 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>> index 7944481d0a33..c74051906d05 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>> @@ -104,7 +104,7 @@
->>>>   #define INTF_SC7180_MASK \
->>>>       (BIT(DPU_INTF_INPUT_CTRL) | BIT(DPU_INTF_TE) | 
->>>> BIT(DPU_INTF_STATUS_SUPPORTED))
->>>> -#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
->>>> +#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN) | 
->>>> BIT(DPU_INTF_DATA_COMPRESS)
->>>
->>> Konrad: Your SM6350/SM6375 series v3 [1] switched from INTF_SC7180_MASK
->>> to INTF_SC7280_MASK to enable HCTL on SM6375, but that will now
->>> erroneously also receive this feature flag and write the new
->>> DATA_COMPESS mask even if it's DPU 6.9 (< 7.x where it got added).
->>>
->>> [1]: 
->>> https://lore.kernel.org/linux-arm-msm/80b46fcb-d6d0-1998-c273-5401fa924c7d@linaro.org/T/#u 
->>>
->>>
->>> Depending on who lands first, this flag should be split.
->>>
->>> I still see value in inlining and removing these defines, though that
->>> brings a host of other complexity.
->>>
->>> - Marijn
->>>
->>>>   #define WB_SM8250_MASK (BIT(DPU_WB_LINE_MODE) | \
->>>>                BIT(DPU_WB_UBWC) | \
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h 
->>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>> index 4eda2cc847ef..01c65f940f2a 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>> @@ -185,6 +185,7 @@ enum {
->>>>    * @DPU_DATA_HCTL_EN                Allows data to be transferred 
->>>> at different rate
->>>>    *                                  than video timing
->>>>    * @DPU_INTF_STATUS_SUPPORTED       INTF block has INTF_STATUS 
->>>> register
->>>> + * @DPU_INTF_DATA_COMPRESS          INTF block has DATA_COMPRESS 
->>>> register
->>>>    * @DPU_INTF_MAX
->>>>    */
->>>>   enum {
->>>> @@ -192,6 +193,7 @@ enum {
->>>>       DPU_INTF_TE,
->>>>       DPU_DATA_HCTL_EN,
->>>>       DPU_INTF_STATUS_SUPPORTED,
->>>> +    DPU_INTF_DATA_COMPRESS,
->>>>       DPU_INTF_MAX
->>>>   };
->>>>
->>>> -- 
->>>> 2.40.1
->>>>
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
