@@ -2,151 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58A16FC69F
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655366FC6EC
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235610AbjEIMkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 08:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
+        id S234764AbjEIMnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 08:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235605AbjEIMju (ORCPT
+        with ESMTP id S234704AbjEIMnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 08:39:50 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABDF49D7
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 05:39:22 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a516fb6523so54665055ad.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 05:39:22 -0700 (PDT)
+        Tue, 9 May 2023 08:43:05 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E1E4C1A;
+        Tue,  9 May 2023 05:42:49 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3062db220a3so3753184f8f.0;
+        Tue, 09 May 2023 05:42:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1683635962; x=1686227962;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dSg39pJOZ91SeEigcRuN6jVIeNHw1ilok4weiuhyDQ4=;
-        b=HLCxQEs3+pODJpg0ga0dpy157prnJ6SfufjjhrAGeFxNZ2lQmMmJHf22cbESLnIxTe
-         VTD0mas+tFLOMshP8pygrGqkgm6XMwNpwbVICxepqmppdJGISDrm88qP3X1Co/RLI2D8
-         70tZ7PRVAhqYwK5EPRkUasxy2TdtMXQMszd0EPHydscoL2S+hQDjyL1/MYVxE4XOzgxy
-         BjflFVADvJ9Qdn9TH0hozxHZNynY9MlvJh/nzPGpD4nORG+bO922tbzPVkN/2eXBubMT
-         Sdny4NDVe/qRNdnm5l2EZ91vfzicxFQT41wrJOqiPRo9DWnErCK9Uclr4jAIMYhKVgc0
-         2PqA==
+        d=gmail.com; s=20221208; t=1683636163; x=1686228163;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ogUelxBN/iBvkYaR2z1a5yJ9iiiICSJTX6onuQ39wKc=;
+        b=bP7R25534DGHvBCha1PbVOLFyNyApN14uU0+rqLMNhnVLU10jdo0WpgiD4Fm5V0yAI
+         qB9qqNDTJNCGQpxxKLifFkvcNrAT6QpRIzcuFAQOHfNsG4T1LJkdu9BJqroSTIQuCnSH
+         hVmH8GmS4d3T4uHCkbAxE+GJfb+6wFmAyVPw8Qr8/MJJwoTr0DX3abclrKNkPLwDd3qq
+         QnkES30ONz6qzfN90XpFKCc6PfH1ofxZHL/Kfgi8YzSg/5h5z+MdHLX6fTrmTadngxAg
+         nsULLXonZPl8d+eq1IQ4r5tR/1ucDnjMokuQ606bWx9lLRVU7nOwih+KSmfHz8CWWfn8
+         2Ykw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683635962; x=1686227962;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=dSg39pJOZ91SeEigcRuN6jVIeNHw1ilok4weiuhyDQ4=;
-        b=PkBGfWVoFYejiqL04/YDTHUOkc2glA4bCG7KCt3PGwjcZL7jcM+68e5MscLh9JNPV/
-         S5FBUeAV6FLE53V3kCT2KYNhWLNcrjKQ6HjRGqTI+m0vs+xfsaGoqX2unaJ2YBk/uY5x
-         tPhdx6+M6hmelvD9vVn4jMEVVxP52jOvaWU9HztX4/yxwqrJYG0IO33mCeSz7R8vG2ZY
-         tMJOu8PP8vBW7lriOPO6R2L/mZdWSaQ6gRw/yLOc7+YYzOuyi+xTwm9dCIp0PJJlWCbj
-         xMJocsAi0PixV6FiwEHvW0aZPrwfLR7++W/qJV3bwoJNv97uK9K9JKbiuuQg8+zYQZD6
-         dj1Q==
-X-Gm-Message-State: AC+VfDzczKBj1Sb4QGi4h3uOvShW0C82U23AwV6TbknganReuoikxkMx
-        7gqlQZP8DN6VL3u5rwiayaKwnA==
-X-Google-Smtp-Source: ACHHUZ7PDkAiktdvBVywP+icr+5g3Sv2XARVqAaJlQ/pQP33I6gzKrGH9bpQoAULAbwFcpsYw6KmoA==
-X-Received: by 2002:a17:903:244c:b0:1ab:19ff:3a20 with SMTP id l12-20020a170903244c00b001ab19ff3a20mr16795752pls.54.1683635962003;
-        Tue, 09 May 2023 05:39:22 -0700 (PDT)
-Received: from [10.200.10.82] ([139.177.225.232])
-        by smtp.gmail.com with ESMTPSA id n6-20020a1709026a8600b001aad2910194sm1468042plk.14.2023.05.09.05.39.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 05:39:21 -0700 (PDT)
-Message-ID: <5ca5da7f-1b17-b22b-58c4-eae41443e334@bytedance.com>
-Date:   Tue, 9 May 2023 20:39:16 +0800
+        d=1e100.net; s=20221208; t=1683636163; x=1686228163;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ogUelxBN/iBvkYaR2z1a5yJ9iiiICSJTX6onuQ39wKc=;
+        b=IhkAgda/IgAVEFTtxKaJ7Z6LrvOQg85j5YFFXU+A+e4dgv4bjcJMlXn8vOiCSDOR8m
+         Ttrmy4lXS8rmzIx44wk4xmUis6tjNyznFha/QS6aXbQap4OtljatYHFs2HUQLfcwyVPb
+         oEKXLH98pYtt8vjuLhZ6x8ombL4uqWnFW6Id3xQ4cmSoGTk7z5TqjhpID1kB7Sio6QAe
+         PZa+pXf75mSLeaHMOuu+elZ76jPDAco1y9C6woaNYccrI2x2eSVDzyjZ7msCU+51LcHZ
+         X7XK5FcfLWt5qbYtTQ1t+moRgAAbc1ux3iOf5A057ibhRvEQghIzjyhL00I30RK5MNwH
+         5ykQ==
+X-Gm-Message-State: AC+VfDzV9AHiEwpazotJBtL/owgvtpbN/sESEuTkcBEa94MCTKfAVdrG
+        4nChmAW5loeJ+60dJDnZ6MI=
+X-Google-Smtp-Source: ACHHUZ4OvsksKT0JGRCaHiq1efo16lO58Z2ioXMGYLZCNfBtE3MpDpTy4POSymXX2RrynXBHt6s39g==
+X-Received: by 2002:a05:6000:1a48:b0:306:34e4:be40 with SMTP id t8-20020a0560001a4800b0030634e4be40mr8884827wry.33.1683636163178;
+        Tue, 09 May 2023 05:42:43 -0700 (PDT)
+Received: from localhost ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id i14-20020a5d558e000000b003079f2c2de7sm3058083wrv.112.2023.05.09.05.42.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 05:42:42 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        tsbogend@alpha.franken.de, paul@crapouillou.net
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH v1 1/3] ASoC: jz4740-i2s: Add support for X1000 SoC
+Date:   Tue,  9 May 2023 13:42:36 +0100
+Message-Id: <20230509124238.195191-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH v2 32/36] maple_tree: Clear up index and last setting in
- single entry tree
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230505174204.2665599-1-Liam.Howlett@oracle.com>
- <20230505174204.2665599-33-Liam.Howlett@oracle.com>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <20230505174204.2665599-33-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The X1000's AIC is similar to the AIC found on other Ingenic SoCs.
+It has symmetric playback/capture rates like the JZ4740, but more
+flexible clocking when outputting the system or bit clocks.
 
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+---
+ sound/soc/jz4740/jz4740-i2s.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-在 2023/5/6 01:42, Liam R. Howlett 写道:
-> When there is a single entry tree (range of 0-0 pointing to an entry),
-> then ensure the limit is either 0-0 or 1-oo, depending on where the user
-> walks.  Ensure the correct node setting as well; either MAS_ROOT or
-> MAS_NONE.
-> 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> ---
->   lib/maple_tree.c | 21 +++++++++++----------
->   1 file changed, 11 insertions(+), 10 deletions(-)
-> 
-> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> index f060c71965c0d..914399519cf54 100644
-> --- a/lib/maple_tree.c
-> +++ b/lib/maple_tree.c
-> @@ -5022,24 +5022,25 @@ void *mas_walk(struct ma_state *mas)
->   {
->   	void *entry;
->   
-> +	if (mas_is_none(mas) || mas_is_paused(mas))
-if (mas_is_none(mas) || mas_is_paused(mas) || mas_is_ptr(mas))
-> +		mas->node = MAS_START;
+diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s.c
+index 6d9cfe0a5041..7cb563bb8b09 100644
+--- a/sound/soc/jz4740/jz4740-i2s.c
++++ b/sound/soc/jz4740/jz4740-i2s.c
+@@ -329,6 +329,14 @@ static const struct i2s_soc_info jz4760_i2s_soc_info = {
+ 	.field_i2sdiv_playback	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+ };
+ 
++static const struct i2s_soc_info x1000_i2s_soc_info = {
++	.dai = &jz4740_i2s_dai,
++	.field_rx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
++	.field_tx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
++	.field_i2sdiv_capture	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 8),
++	.field_i2sdiv_playback	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 8),
++};
++
+ static struct snd_soc_dai_driver jz4770_i2s_dai = {
+ 	.probe = jz4740_i2s_dai_probe,
+ 	.playback = {
+@@ -440,6 +448,7 @@ static const struct of_device_id jz4740_of_matches[] = {
+ 	{ .compatible = "ingenic,jz4760-i2s", .data = &jz4760_i2s_soc_info },
+ 	{ .compatible = "ingenic,jz4770-i2s", .data = &jz4770_i2s_soc_info },
+ 	{ .compatible = "ingenic,jz4780-i2s", .data = &jz4780_i2s_soc_info },
++	{ .compatible = "ingenic,x1000-i2s", .data = &x1000_i2s_soc_info },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, jz4740_of_matches);
+-- 
+2.39.2
 
-Hi, Liam
-There is an issue that it cannot pass the user space test program
-with this patchset.
-I tested it based on 47cba14ce6fc4(linux-next/master).
-
-The reason is that mas_walk() does not handle the state that mas is
-root. The root cause is that mas_start() only handles the start state,
-and returns NULL for the root state. When encountering the root state,
-we can reset to start so that it is handled in mas_start().
-
-log:
-BUG at check_state_handling:3076 (1)
-maple_tree(0x55d6a9838ca0) flags 1, height 0 root 0x1234500
-0: 0x1234500
-Pass: 453406336 Run:453406337
-maple: ../../../lib/test_maple_tree.c:3076: check_state_handling: 
-Assertion `0' failed.
-Aborted (core dumped)
->   retry:
->   	entry = mas_state_walk(mas);
-> -	if (mas_is_start(mas))
-> +	if (mas_is_start(mas)) {
->   		goto retry;
-> -
-> -	if (mas_is_ptr(mas)) {
-> +	} else if (mas_is_none(mas)) {
-> +		mas->index = 0;
-> +		mas->last = ULONG_MAX;
-> +	} else if (mas_is_ptr(mas)) {
->   		if (!mas->index) {
->   			mas->last = 0;
-> -		} else {
-> -			mas->index = 1;
-> -			mas->last = ULONG_MAX;
-> +			return entry;
->   		}
-> -		return entry;
-> -	}
->   
-> -	if (mas_is_none(mas)) {
-> -		mas->index = 0;
-> +		mas->index = 1;
->   		mas->last = ULONG_MAX;
-> +		mas->node = MAS_NONE;
-> +		return NULL;
->   	}
->   
->   	return entry;
