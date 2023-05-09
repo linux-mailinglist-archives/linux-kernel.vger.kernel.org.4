@@ -2,105 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D7A6FC62C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1BA6FC62F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235598AbjEIMW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 08:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S235118AbjEIMW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 08:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235118AbjEIMW0 (ORCPT
+        with ESMTP id S234246AbjEIMW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 08:22:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C86D40C6
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 05:22:20 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pwMM2-0004Zj-En; Tue, 09 May 2023 14:22:06 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B3EC51C0DDB;
-        Tue,  9 May 2023 12:22:04 +0000 (UTC)
-Date:   Tue, 9 May 2023 14:22:04 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     dario.binacchi@amarulasolutions.com, wg@grandegger.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] can: bxcan: Remove unnecessary print function dev_err()
-Message-ID: <20230509-sensitive-upper-bd97c6e9abe1-mkl@pengutronix.de>
-References: <20230506080725.68401-1-jiapeng.chong@linux.alibaba.com>
+        Tue, 9 May 2023 08:22:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8B1F40DB;
+        Tue,  9 May 2023 05:22:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D9919FEC;
+        Tue,  9 May 2023 05:23:39 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.22.29])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 948BE3F67D;
+        Tue,  9 May 2023 05:22:52 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, delyank@fb.com, lukasz.luba@arm.com,
+        qyousef@google.com, qyousef@layalina.io
+Subject: [PATCH v2 0/3] Add basic tracing for uclamp and schedutil
+Date:   Tue,  9 May 2023 13:22:43 +0100
+Message-Id: <20230509122246.1702397-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uke4yzmz6wgdsbsm"
-Content-Disposition: inline
-In-Reply-To: <20230506080725.68401-1-jiapeng.chong@linux.alibaba.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all,
 
---uke4yzmz6wgdsbsm
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The task scheduler feature: Uclamp, begins to take off. To better understand
+the dynamics in the task scheduler and CPU frequency requests we need some
+better tracing.
+In schedutil (cpufreq governor) we allow to enter the scheduler
+and make the frequency change. Although, there is some limit in regards to how
+often this can happen. That min period is provided by the cpufreq driver.
+Thus, some of the cpufreq requests might be filter out and the frequency won't
+be changed (hopefuly will be set a bit later). We would like to know about
+those situations, especially in context of the user-space hints made via
+Uclamp for particular tasks.
+This patch set aims to add base for our toolkits and post-processing trace
+analyzes.
 
-On 06.05.2023 16:07:25, Jiapeng Chong wrote:
-> The print function dev_err() is redundant because
-> platform_get_irq_byname() already prints an error.
->=20
-> ./drivers/net/can/bxcan.c:970:2-9: line 970 is redundant because platform=
-_get_irq() already prints an error.
-> ./drivers/net/can/bxcan.c:964:2-9: line 964 is redundant because platform=
-_get_irq() already prints an error.
-> ./drivers/net/can/bxcan.c:958:2-9: line 958 is redundant because platform=
-_get_irq() already prints an error.
->=20
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D4878
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Changelog:
+v2:
+- solved the issue from CI build warning, dropped schedutil.h and re-used
+  the sched.h which is available in build_utility.c where cpufreq_schedutil.c
+  is included
+- added tag for the last patch 3/3 for the CI robot helping hend 
+- re-based on top of v6.4-rc1
+v1:
+- implementation can be found here [1]
 
-Applied to linux-can-next
 
-Thanks,
-Marc
+Regards,
+Lukasz Luba
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+[1] https://lore.kernel.org/lkml/20230322151843.14390-1-lukasz.luba@arm.com/
 
---uke4yzmz6wgdsbsm
-Content-Type: application/pgp-signature; name="signature.asc"
+Lukasz Luba (3):
+  sched/tp: Add new tracepoint to track uclamp set from user-space
+  cpufreq: schedutil: Refactor sugov_update_shared() internals
+  schedutil: trace: Add tracing to capture filter out requests
 
------BEGIN PGP SIGNATURE-----
+ include/trace/events/sched.h     |  8 ++++++++
+ kernel/sched/core.c              |  5 +++++
+ kernel/sched/cpufreq_schedutil.c | 28 ++++++++++++++++++----------
+ 3 files changed, 31 insertions(+), 10 deletions(-)
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRaOukACgkQvlAcSiqK
-BOgvnAgAtQPyQ1WfKt2BrYRfZ8kxWYSXEQ4y8VEhvujRjZUvbCLLaZPzAPVM5lBN
-gBdiEuwbid/nlRlB70y/ihG0m1LLnex9IRlgoaVid/QYocRLQ+u9x+tNHh5Q/igQ
-o2WPJTsiV5QNxsY3rVqSWUG9iB/JOhlA/DEa5fNBxrYrgXbsfRf6GczLtx85FEZG
-Ixp4onofSdOLZ9eKwDNXP5Kz92lm35XnEKtEpv0cTtG/q4kd170kxowDMhfu8cUU
-Omx1iZfQ9tO//jN+7D9/eOe5dkqYTm2OVYdY2zfhbeZ6bcbGaA5Q5x3N/sEqO2wy
-1jj1OrFrgRLt7Kl82CupH1/mHevfAw==
-=JG2b
------END PGP SIGNATURE-----
+-- 
+2.25.1
 
---uke4yzmz6wgdsbsm--
