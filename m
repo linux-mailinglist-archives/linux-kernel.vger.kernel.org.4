@@ -2,86 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814F16FC7C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1695B6FC826
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234094AbjEINTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 09:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
+        id S235590AbjEINmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 09:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235501AbjEINTH (ORCPT
+        with ESMTP id S229998AbjEINmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 09:19:07 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2D126AD;
-        Tue,  9 May 2023 06:19:05 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349DA36l005056;
-        Tue, 9 May 2023 13:19:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=XEH3nBB8VPNk1hip/0tDBrjO5m1Jjx8aKaWPX0Ovbh8=;
- b=ER7xAWBZ/7Kn05m08G9fSGnpxD4DblgA1NYY8ixs+5FC+ggbaOSVO2HMZL010yfIrGrt
- ocmxijt3P5dVvxzytWyeG/9mjuLD7mBRcflCyQgujCIObhrNlD6c3nvjut7Dg/M+tHXa
- VJyopy1TtDOdCj9rR5Qh0+G8kAFg1Dd1O+9exjtL38aaQ0n3fISiV87kV8y9lkVBtaHo
- LI9lCsdaqszwf7QdSFPKWXgctuD1xhYIMTG6Va46RIcDmzLTz5ShYKMEpAp4kIEfUKW2
- tK4FxnKrho+IPSYfR8oQplmX4Bdsqv1NPseDwpv+bx9rrnUfLGNMjUmJEfwPX5iF1Qsf Kg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qfpa61jgs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 13:18:59 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 349DAFak005772;
-        Tue, 9 May 2023 13:18:59 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qfpa61jfu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 13:18:59 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 348Na7nV030769;
-        Tue, 9 May 2023 13:18:57 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qf84e8f3y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 13:18:55 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 349DIprL54460772
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 9 May 2023 13:18:51 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BF1412007A;
-        Tue,  9 May 2023 13:18:51 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 91FBA20078;
-        Tue,  9 May 2023 13:18:51 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  9 May 2023 13:18:51 +0000 (GMT)
-From:   Thomas Richter <tmricht@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, leo.yan@linaro.org, irogers@google.com
-Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
-Subject: [PATCH] perf/test: reduce run time of perf test Test java symbol
-Date:   Tue,  9 May 2023 15:18:47 +0200
-Message-Id: <20230509131847.835974-1-tmricht@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: rjiuW1ce2WILyuQvif_rW9fhxCWyDR8j
-X-Proofpoint-ORIG-GUID: C-9LWF3gHB2CKGH-jQUSjVJZMutB5TSr
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 9 May 2023 09:42:07 -0400
+X-Greylist: delayed 1147 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 09 May 2023 06:42:05 PDT
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32345E6B;
+        Tue,  9 May 2023 06:42:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+        s=default2211; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References;
+        bh=Mc9JORN232SL1HsWqoXgmrDyPRbH9NMhJpNdhG1Rw7Q=; b=A3YWMGFqkSxkz1bI1aoQOIU0SV
+        aUV0ZZWQEEFNEEE7GExtydHFyrODmAMFsIz2/cLYUM5m4Xy2nSxQvfPNNH78qNcKJp/IkKwlc5elk
+        7KhccITNWDA9h01I78wlQFxWACe+OTPhn/8Id812NDmhhTFl6gbaUthuT2mqbUYu2fTaQz8/4hOUe
+        uz4z6gIm5E+fT63WmCHI+oIU4ZMqdTBecaruo/Pyn5s4kfUMkDo1tWAl1Fol1c4mevGSGPKkI/2l/
+        XhHs9ZWzTm8sDXkIp6XCZ6tiC3TjpFPlV3bkmGe3+5OC+61UPCUYYhvab97SJS7TudVUzzCoX+Zpc
+        W/z/QqLw==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <sean@geanix.com>)
+        id 1pwNIs-000HBc-Uw; Tue, 09 May 2023 15:22:54 +0200
+Received: from [185.17.218.86] (helo=zen..)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sean@geanix.com>)
+        id 1pwNIs-000RSx-IN; Tue, 09 May 2023 15:22:54 +0200
+From:   Sean Nyekjaer <sean@geanix.com>
+To:     Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     Sean Nyekjaer <sean@geanix.com>, linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: stm32f7: Add atomic_xfer method to driver
+Date:   Tue,  9 May 2023 15:21:59 +0200
+Message-Id: <20230509132159.4160984-1-sean@geanix.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_08,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- clxscore=1015 malwarescore=0 bulkscore=0 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 phishscore=0 mlxscore=0 impostorscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305090106
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: sean@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26901/Tue May  9 09:24:37 2023)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,55 +63,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test case Test java symbol might run a long time. On Fedora 38 the
-run time is very, very long:
+Add an atomic_xfer method to the driver so that it behaves correctly
+when controlling a PMIC that is responsible for device shutdown.
 
- Output before:
- # time ./perf test 108
- 108: Test java symbol                  : Ok
- real   22m15.775s
- user   3m42.584s
- sys    4m30.685s
- #
+The atomic_xfer method added is similar to the one from the i2c-mv64xxx
+driver. When running an atomic_xfer a bool flag in the driver data is
+set, the interrupt is not unmasked on transfer start, and the IRQ
+handler is manually invoked while waiting for pending transfers to
+complete.
 
-The reason is a lookup for the server for debug symbols as shown in
- # cat /etc/debuginfod/elfutils.urls
- https://debuginfod.fedoraproject.org/
- #
-This lookup is done for every symbol/sample, so about 3500 lookups
-will take place.
-To omit this lookup, which is not needed, unset environment variable
-DEBUGINFOD_URLS=''.
-
- Output after:
- # time ./perf test 108
- 108: Test java symbol                  : Ok
-
- real	0m6.242s
- user	0m4.982s
- sys	0m3.243s
- #
-
-Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-Cc: leo.yan@linaro.org
-Cc: irogers@google.com
+Signed-off-by: Sean Nyekjaer <sean@geanix.com>
 ---
- tools/perf/tests/shell/test_java_symbol.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Tested on a STM32MP1 with:
+https://lore.kernel.org/all/20230428112847.2146348-2-sean@geanix.com/
 
-diff --git a/tools/perf/tests/shell/test_java_symbol.sh b/tools/perf/tests/shell/test_java_symbol.sh
-index 90cea8811926..499539d1c479 100755
---- a/tools/perf/tests/shell/test_java_symbol.sh
-+++ b/tools/perf/tests/shell/test_java_symbol.sh
-@@ -56,7 +56,7 @@ if [ $? -ne 0 ]; then
- 	exit 1
- fi
+Is it okay to keep the DMA transfer in atomic?
+
+I'm annoyed by the return 1 in stm32f7_i2c_wait_polling() is there any
+good idea to fix that?
+
+ drivers/i2c/busses/i2c-stm32f7.c | 73 ++++++++++++++++++++++++++------
+ 1 file changed, 60 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+index d1c59d83a65b..b63e8a7eb1aa 100644
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -357,6 +357,7 @@ struct stm32f7_i2c_dev {
+ 	u32 dnf_dt;
+ 	u32 dnf;
+ 	struct stm32f7_i2c_alert *alert;
++	bool atomic;
+ };
  
--if ! perf inject -i $PERF_DATA -o $PERF_INJ_DATA -j; then
-+if ! DEBUGINFOD_URLS='' perf inject -i $PERF_DATA -o $PERF_INJ_DATA -j; then
- 	echo "Fail to inject samples"
- 	exit 1
- fi
+ /*
+@@ -905,13 +906,18 @@ static void stm32f7_i2c_xfer_msg(struct stm32f7_i2c_dev *i2c_dev,
+ 		cr2 |= STM32F7_I2C_CR2_NBYTES(f7_msg->count);
+ 	}
+ 
+-	/* Enable NACK, STOP, error and transfer complete interrupts */
+-	cr1 |= STM32F7_I2C_CR1_ERRIE | STM32F7_I2C_CR1_TCIE |
+-		STM32F7_I2C_CR1_STOPIE | STM32F7_I2C_CR1_NACKIE;
++	if (!i2c_dev->atomic) {
++		/* Enable NACK, STOP, error and transfer complete interrupts */
++		cr1 |= STM32F7_I2C_CR1_ERRIE | STM32F7_I2C_CR1_TCIE |
++			STM32F7_I2C_CR1_STOPIE | STM32F7_I2C_CR1_NACKIE;
+ 
+-	/* Clear DMA req and TX/RX interrupt */
+-	cr1 &= ~(STM32F7_I2C_CR1_RXIE | STM32F7_I2C_CR1_TXIE |
+-			STM32F7_I2C_CR1_RXDMAEN | STM32F7_I2C_CR1_TXDMAEN);
++		/* Clear DMA req and TX/RX interrupt */
++		cr1 &= ~(STM32F7_I2C_CR1_RXIE | STM32F7_I2C_CR1_TXIE |
++				STM32F7_I2C_CR1_RXDMAEN | STM32F7_I2C_CR1_TXDMAEN);
++	} else {
++		/* Disable interrupts */
++		cr1 &= ~STM32F7_I2C_ALL_IRQ_MASK;
++	}
+ 
+ 	/* Configure DMA or enable RX/TX interrupt */
+ 	i2c_dev->use_dma = false;
+@@ -928,10 +934,12 @@ static void stm32f7_i2c_xfer_msg(struct stm32f7_i2c_dev *i2c_dev,
+ 	}
+ 
+ 	if (!i2c_dev->use_dma) {
+-		if (msg->flags & I2C_M_RD)
+-			cr1 |= STM32F7_I2C_CR1_RXIE;
+-		else
+-			cr1 |= STM32F7_I2C_CR1_TXIE;
++		if (!i2c_dev->atomic) {
++			if (msg->flags & I2C_M_RD)
++				cr1 |= STM32F7_I2C_CR1_RXIE;
++			else
++				cr1 |= STM32F7_I2C_CR1_TXIE;
++		}
+ 	} else {
+ 		if (msg->flags & I2C_M_RD)
+ 			cr1 |= STM32F7_I2C_CR1_RXDMAEN;
+@@ -1670,7 +1678,22 @@ static irqreturn_t stm32f7_i2c_isr_error(int irq, void *data)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static int stm32f7_i2c_xfer(struct i2c_adapter *i2c_adap,
++static int stm32f7_i2c_wait_polling(struct stm32f7_i2c_dev *i2c_dev)
++{
++	ktime_t timeout = ktime_add_ms(ktime_get(), i2c_dev->adap.timeout);
++
++	while (ktime_compare(ktime_get(), timeout) < 0) {
++		udelay(5);
++		stm32f7_i2c_isr_event(0, i2c_dev);
++
++		if (try_wait_for_completion(&i2c_dev->complete))
++			return 1;
++	}
++
++	return 0;
++}
++
++static int stm32f7_i2c_xfer_core(struct i2c_adapter *i2c_adap,
+ 			    struct i2c_msg msgs[], int num)
+ {
+ 	struct stm32f7_i2c_dev *i2c_dev = i2c_get_adapdata(i2c_adap);
+@@ -1694,8 +1717,13 @@ static int stm32f7_i2c_xfer(struct i2c_adapter *i2c_adap,
+ 
+ 	stm32f7_i2c_xfer_msg(i2c_dev, msgs);
+ 
+-	time_left = wait_for_completion_timeout(&i2c_dev->complete,
+-						i2c_dev->adap.timeout);
++	if (!i2c_dev->atomic) {
++		time_left = wait_for_completion_timeout(&i2c_dev->complete,
++							i2c_dev->adap.timeout);
++	} else {
++		time_left = stm32f7_i2c_wait_polling(i2c_dev);
++	}
++
+ 	ret = f7_msg->result;
+ 	if (ret) {
+ 		if (i2c_dev->use_dma)
+@@ -1727,6 +1755,24 @@ static int stm32f7_i2c_xfer(struct i2c_adapter *i2c_adap,
+ 	return (ret < 0) ? ret : num;
+ }
+ 
++static int stm32f7_i2c_xfer(struct i2c_adapter *i2c_adap,
++			    struct i2c_msg msgs[], int num)
++{
++	struct stm32f7_i2c_dev *i2c_dev = i2c_get_adapdata(i2c_adap);
++
++	i2c_dev->atomic = 0;
++	return stm32f7_i2c_xfer_core(i2c_adap, msgs, num);
++}
++
++static int stm32f7_i2c_xfer_atomic(struct i2c_adapter *i2c_adap,
++			    struct i2c_msg msgs[], int num)
++{
++	struct stm32f7_i2c_dev *i2c_dev = i2c_get_adapdata(i2c_adap);
++
++	i2c_dev->atomic = 1;
++	return stm32f7_i2c_xfer_core(i2c_adap, msgs, num);
++}
++
+ static int stm32f7_i2c_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
+ 				  unsigned short flags, char read_write,
+ 				  u8 command, int size,
+@@ -2095,6 +2141,7 @@ static u32 stm32f7_i2c_func(struct i2c_adapter *adap)
+ 
+ static const struct i2c_algorithm stm32f7_i2c_algo = {
+ 	.master_xfer = stm32f7_i2c_xfer,
++	.master_xfer_atomic = stm32f7_i2c_xfer_atomic,
+ 	.smbus_xfer = stm32f7_i2c_smbus_xfer,
+ 	.functionality = stm32f7_i2c_func,
+ 	.reg_slave = stm32f7_i2c_reg_slave,
 -- 
 2.40.0
 
