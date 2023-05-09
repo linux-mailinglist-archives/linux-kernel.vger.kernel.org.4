@@ -2,396 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27FA6FC4F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0912E6FC4F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235516AbjEILZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 07:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
+        id S235342AbjEILZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 07:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234848AbjEILZE (ORCPT
+        with ESMTP id S234625AbjEILZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 07:25:04 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CFC49E6
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 04:25:01 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so29924204276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 04:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683631500; x=1686223500;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zDYwURL6aB5EYY0Cme2ttwuND/PMKWLi8Em3Bv+6xTA=;
-        b=R+/w/DCiQYMNVSHwP8o461Wr84ZWVO+hxSAQb3irmmqSahWvRocgABTOi+O/cdDhGX
-         pEPm1+c/LPdOxAGAiNcq5ke85kYwlYSNAIic8gGJAFkCyRlVSvm+VKOUUtjYTbAKSWVo
-         Uotbe7NXdcUnv/SLsFEUKPcXwhBCwUKu2x0i8/fg7fbbswe0S5ZpN4O2SJ4NPZiwTSUU
-         BUxD22T1Zy3eCOnRdXo/n4H81gWpjctD4zVz9DMBsLRRPOezoS3PtIC5T21h7SJAv5hI
-         mTJwALR0BkRiTQZXhwEmgsqkUebkM5zHHhTcyB2B8mi0enq8r5eOafjjjnacd41W0aWL
-         su7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683631500; x=1686223500;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zDYwURL6aB5EYY0Cme2ttwuND/PMKWLi8Em3Bv+6xTA=;
-        b=YWIDfnC5arCZwPLmTfxlVmCO6aUQhOUf+5lggzX3NzIaZAzxQugUNA+RZCDYQoU+0m
-         0w5M7s5c+TbhwWDjPUiVKhirTjZDShRIY0PyNO7XREhlISpme/n+iJ4VbSdWKBmAdNOH
-         NcC8IzEebt0DuguGGiciVE5RS6u7sJy3ekgWmrHuQvTYHpjD+QU+mW3f806l1FFAnVnR
-         2vNK0bx4/clJo6rjAh6W1lFb51YKogNs50Rz87Z2zWuUKBQW/QDlbLsj5dKQO2k/ufsS
-         Ez3nf0me3HUvchDYw0m3SwCnuh4Pcd7m6ifFPeODwOD3KGbXRgtm78rtaIbbWL6wL8Gg
-         9SPQ==
-X-Gm-Message-State: AC+VfDzgDL0MUL1aTpRBy32S7DHPvBElgg+tPx0sYFDhBY8K0yrJQQUW
-        WxoLn7kJ0iYICftnRseCn034K8/brXaYupDi9SBSmg==
-X-Google-Smtp-Source: ACHHUZ6xKbFhdzaGmoiDXeRtSJbtJJiXsPKcmktUy3Wxzk6Ifb3O+E7YLlxBL/iwLSCHIes7iX/slLRG29RsTZMq+JM=
-X-Received: by 2002:a0d:c604:0:b0:55a:3502:d2ca with SMTP id
- i4-20020a0dc604000000b0055a3502d2camr13380602ywd.13.1683631500305; Tue, 09
- May 2023 04:25:00 -0700 (PDT)
+        Tue, 9 May 2023 07:25:46 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2079.outbound.protection.outlook.com [40.107.8.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57A72127;
+        Tue,  9 May 2023 04:25:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BJZDzW6hyCjZrGmZomf9+afv7OaFa+owmbrkF24W/q5mdCiMX3IaIyiK4S+MkPs2yJypqXMH91GkhRdHU1KcYHZF2O/MWvv8bHzJehfGkH/rs7rBy09LFJZ/8F/cSyYN1yebbPcQyrB+29HXIx3ycUbNX0KQ/OTksewQ+ilXQuOZ986Cm2mG2BoWk2JVJxvsjnGtoZsNn7c4zIPPsea0Fl6V7mCAtlWhJhlqP0ZYIXoAhg8MCvnktZWqdPhosBn29Yu8N4y9KVjuKqQ9wJvTbysgYnBvP8WzLR/bCzIS+nuHCB3TTxB2sJFudweXMUCcijYZLJYIVcQawW1P+bM+DA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aYU1XfIOORhp/+gkx+/el46tU/e2lpK2rQDaHNFZVAo=;
+ b=ihCvDzkWeVjvY/o8Gpdj0Qyo7XyIFinDBcng2+gUXzrbt32yMI7c4mVOykxMctSjDJ126Rh2iHVKg4tQE9/+3Pv7EPHb6nFzIVwYu/xzEL27AcE/tTWKf13MonbIiagWvtAUjzrwnZ4oaqdEf4S5wg/U5HF06KERL//JAKIFUygQoakyofB9j1tt0vV5/YGucpfDqm1IuPyZq7HMsaBzyZZI4w8NZlCBnMXuk4CE20LReKcy4Xp0R/Puu9a4kI46CHRJNDYyAUt1cQUptlbpT1n8lGT+TSsAMIikPn6S7g+vKZ/TA46xDvjo9LmTq2BUakRtpVtymLX2sg8QqIBzXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=santannapisa.it; dmarc=pass action=none
+ header.from=santannapisa.it; dkim=pass header.d=santannapisa.it; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=santannapisa.it;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aYU1XfIOORhp/+gkx+/el46tU/e2lpK2rQDaHNFZVAo=;
+ b=mgaj+VsRifywXjPMq2AXAh9Wca/EPm0MsLUVuAnFWTILY6u7NoNuvb71uUQL3pMelyfAvmr9ZptzRqIEidW0abmEmwIXsQHsupdTpu2jrpZZIi+RkW0gKDezOjmFtn9kxyZcAGegqsuKJWMs3N0+dNsdOSYvFcwGZZ0ymRA6FeQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=santannapisa.it;
+Received: from VI1PR03MB2880.eurprd03.prod.outlook.com (2603:10a6:802:2d::21)
+ by PA4PR03MB6846.eurprd03.prod.outlook.com (2603:10a6:102:ea::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Tue, 9 May
+ 2023 11:25:38 +0000
+Received: from VI1PR03MB2880.eurprd03.prod.outlook.com
+ ([fe80::8cd9:c5f1:f698:5600]) by VI1PR03MB2880.eurprd03.prod.outlook.com
+ ([fe80::8cd9:c5f1:f698:5600%3]) with mapi id 15.20.6363.031; Tue, 9 May 2023
+ 11:25:37 +0000
+Date:   Tue, 9 May 2023 13:25:34 +0200
+From:   luca abeni <luca.abeni@santannapisa.it>
+To:     Vineeth Pillai <vineeth@bitbyteword.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH 1/2] sched/deadline: accurate reclaim bandwidth for GRUB
+Message-ID: <20230509132534.09098acc@luca64>
+In-Reply-To: <20230508160829.2756405-1-vineeth@bitbyteword.org>
+References: <20230508160829.2756405-1-vineeth@bitbyteword.org>
+Organization: Scuola Superiore S. Anna
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZR0P278CA0151.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:41::12) To VI1PR03MB2880.eurprd03.prod.outlook.com
+ (2603:10a6:802:2d::21)
 MIME-Version: 1.0
-References: <20230419133013.2563-1-quic_tdas@quicinc.com> <20230419133013.2563-5-quic_tdas@quicinc.com>
- <af5435c3-b3a4-af46-444e-023d6ee2304a@linaro.org> <f9a64c13-a8e4-c84d-cf6d-86f4ddf6d288@quicinc.com>
-In-Reply-To: <f9a64c13-a8e4-c84d-cf6d-86f4ddf6d288@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 9 May 2023 14:24:49 +0300
-Message-ID: <CAA8EJpriwM0Z=q+huhfkHdAG2tGAnVr_BUFkGjJnORia4PfBeg@mail.gmail.com>
-Subject: Re: [PATCH 4/4] clk: qcom: Add GCC driver support for SDX75
-To:     Taniya Das <quic_tdas@quicinc.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        quic_skakitap@quicinc.com, Imran Shaik <quic_imrashai@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_rohiagar@quicinc.com, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR03MB2880:EE_|PA4PR03MB6846:EE_
+X-MS-Office365-Filtering-Correlation-Id: 96fa3f61-42b3-45cd-812b-08db50801cee
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pbgnw72vQThGYQ3frs+sIktNwaNfze86EILqFy/mYytgABd1c/DfyBNN1ac2+CNPWtAtPF+MZd5b4GlaLwZ4EQsdqySUXr0tHOTpSQR/hDtkSFZfzrX9td7kwA2bb0nZyTX7QeEr+x9+vFpB0Y20f4k2fvxAcKWKSoa5v2rpUb8iAwfpfopgFHKnGFsq12F6zx5a/p1nYL1BDb/HmeKBHNQFIzH7uCYKJ/06l1M7IPnvlBK0PuZlSd2MOnOk+49BBRrCKFQ453ejarr86ovjpM3R7FUlpn0+F8R7mZXA0dUO7JibMsVu/VjIriUyY+zJKcNTiNNMdC1sP5HSJTjiBXZYTmN66noqSxRS7otDFkgLbxLpHs5/7yWJ7RrqhN1Sdo/ADPt2VF4Ek8ZQ+/7IC62Ew9D47m0lZohdZpQWcXgFHrFxa5150uesYs05T1WWNfDTpnvrExsMOxdUUIFF0Xfbb1DV/gQCo25W6D7oblWoicaj+1G5Lu+4o+3kjcclpKXGtYnaiedWNtT+bKkOvaHHo8J2UgqAuxFjYP6h/0HwADUnI76yGTXkJ0CJPqnj
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB2880.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(39850400004)(346002)(136003)(396003)(376002)(366004)(451199021)(36916002)(33716001)(54906003)(86362001)(786003)(316002)(6486002)(66476007)(66556008)(6666004)(41300700001)(66946007)(4326008)(6916009)(5660300002)(8936002)(8676002)(7416002)(478600001)(6512007)(9686003)(38100700002)(1076003)(6506007)(41320700001)(186003)(2906002)(26005)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Tfw1iJ43y++Nq4MLjwxkJyBYNmHT/imZhxBrTfN3S+xcdxFXcVdKqMWUXCdH?=
+ =?us-ascii?Q?kd0a1XpmYksDzAV0/2SYnlLPeHnLf+IdSWzce+a9cfgZQUdSuyp+nUMnDzP8?=
+ =?us-ascii?Q?GWwb9YZhmtMu3C45jr/bX2+Iod7djcBwfJZpKJ6ewjOaAhCJruQ0uB3h7bJh?=
+ =?us-ascii?Q?kwpcL32DUcv98/IL/YkPX9FX/gha9AETm4/ELnlC9U6VAaQ9arYH1S58Bdo6?=
+ =?us-ascii?Q?zuuqeQ8dDrMxQWYrDK5SwzT1VNoXVeD/tG6Xl4fjvPuOWP5PO+xYlRJh0RBB?=
+ =?us-ascii?Q?CJKH7032iZp9s49JyXmkYa39fQfjwl6dVsUNxLmcfIC1RcFuSh0tTSFnMpqT?=
+ =?us-ascii?Q?B1Ym2Pft0TXS5OfSvNjc+AppNODm1b6bHHVmXGM/b4LJDoQiZO6TSDYaRDJv?=
+ =?us-ascii?Q?6ZPIG6aAJccUR8il2FVGQm/iEvpati1tSjwRNWo8phjWtrzpnF6OQyOIf0K9?=
+ =?us-ascii?Q?lZqGeU3zG5t1vwA1PQWKzvtFLupu8YEPA9oQpFr0xn7E2AJhBKnoAu1oJIGF?=
+ =?us-ascii?Q?YR2K5k5PCcofFstQSL+eigdy7CN3m0/2pDHY9Nx9iXXBpmC8CYybyhTPeeH6?=
+ =?us-ascii?Q?ptrqEKVpFd43qITbeI2FPz68O3gdMUCP9kZpFWMr91gmH4YqahvuMVnj4ORq?=
+ =?us-ascii?Q?czv70cbOtdt/mefEweMoh+MKz5QsC5K0a4elXa4BYELODu2WpxBcXwO0qxQb?=
+ =?us-ascii?Q?pHZyN6cQNCSjdPleOP8dDGIFhx7tfgrVtcS5P+dB85JlOGNuMmJGFQLRKq6H?=
+ =?us-ascii?Q?wPYvX+TCq9DvbRoGNxiD2tU9HEwGsb1x9llyUFg+MfwRUfnUqBp+tKhSS00G?=
+ =?us-ascii?Q?ks2X5X6i9G+16fgn+UtmA7aLCVDIDNPgeXDlz2peJCTDWXJJb5aPCCAiBoCx?=
+ =?us-ascii?Q?/txk7GeuH15RWtgvMPnUi5vFTCoJLV0cr/+f5OXqwJUWqej91D82fjTZVzch?=
+ =?us-ascii?Q?WvN7DUUQjifwrfTrafIgOjMLsxOyDWP4zSi9m+inGsO8qHEisXLYT50iw2k9?=
+ =?us-ascii?Q?2R914AoQ0OrMNfeD705UCGnFifrvMrpNF5x0lXKNLRagAICTfw/72WWdOe7P?=
+ =?us-ascii?Q?EhRxeNvPwMfH8pWdTRVZ1sJNDadaipDoyqCfiMeoTZ9AVa26M9CkFIJIqowM?=
+ =?us-ascii?Q?4D1yE7HDrGtGzikKYRPQU7+FJPQhfI+8F4PVSGOrlD8dkNVxUccOhgGQUBD5?=
+ =?us-ascii?Q?9CFlzJ97b2HrzcIbqTcmiowZ1MNo9fWLrI2MX/sK3IUMZZSm9nQq897W2Eee?=
+ =?us-ascii?Q?NrZ2WqVMhRgPMo9phDQOPpQsAlonyf7jr9TsFndFi89Cg9TD8gIaOLkd/z5h?=
+ =?us-ascii?Q?QVFyjNFT6Y+k0NSf0pz8qnJpKK4xyHnHy1Vqv1Lx9Rby6Qg4MfnEOVblwN67?=
+ =?us-ascii?Q?2DVn6vXHqtp7RUywduidq/1pF6rrvLiORN/Trn/mlyFBT0yCW+NfkxN3ofCF?=
+ =?us-ascii?Q?QyTeOFzCWjDs7lXoWMMtNuByF1/Q2SBk3MOPlLE+Bzs40jAAeVEaPjQX/XpQ?=
+ =?us-ascii?Q?L3mayPcv38e+tIBhdxKmrOFYQ6SrQYykaY9upSPDCDvS5RZR4QueCt6dPN+1?=
+ =?us-ascii?Q?rTOp+ofe4WEizl8kXlg30fbQP/fBW6SYu/bZRpMp1C3xmfd72bAdpXI4XaNH?=
+ =?us-ascii?Q?+A=3D=3D?=
+X-OriginatorOrg: santannapisa.it
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96fa3f61-42b3-45cd-812b-08db50801cee
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB2880.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 11:25:37.6574
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d97360e3-138d-4b5f-956f-a646c364a01e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nzXms5mQVvzCVZahBEn7vwDcHxTMS8wJXU+wn0ddPcfIYX8HqNk44ZbsT4OxjxOGjEaNCfZ25v0UsTSydEtOMnLdrsNpvQ4dDhmLaKTvIC8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR03MB6846
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 May 2023 at 12:14, Taniya Das <quic_tdas@quicinc.com> wrote:
->
-> Thanks Dmitry for the review.
->
-> On 4/20/2023 3:40 PM, Dmitry Baryshkov wrote:
-> >> +static const struct clk_parent_data gcc_parent_data_5[] = {
-> >> +    { .fw_name = "emac0_sgmiiphy_rclk" },
-> >
-> > So, this looks like a mixture of fw_name and index clocks. Please
-> > migrate all of fw_names to the .index usage.
-> >
->
-> I will take care of it to move to index, but does it not bind us to use
-> the right index always from DT.
->
-> The current approach I was thinking to bind the XO clock to 0th index,
-> but we cannot gurantee these external clocks would be placed at the
-> right index.
+Hi,
 
-Please define all parent clocks as <0> inside the DT. This way you
-ensure ordering of the external clocks. Replace <0> with proper clock
-references as devices are added to DT.
+if I understand well, your patch addresses 2 separate issues:
+1) The current reclaiming code uses an approximation to avoid using
+   div64_u64(), which might introduce too much overhead (at least, as
+   far as I remember :). Your patch changes it to use the exact,
+   non-approximated, equation
+2) Currently, the reclaimable CPU time is divided as if all the
+   SCHED_DEADLINE tasks (and not only the SCHED_FLAG_RECLAIM tasks)
+   could use it; your patch changes the code to distribute the
+   reclaimable CPU time only to tasks having the SCHED_FLAG_RECLAIM
+   flag set
 
->
-> >> +    { .index = DT_BI_TCXO },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_6[] = {
-> >> +    { P_EMAC0_SGMIIPHY_TCLK, 0 },
-> >> +    { P_BI_TCXO, 2 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_6[] = {
-> >> +    { .fw_name = "emac0_sgmiiphy_tclk" },
-> >> +    { .index = DT_BI_TCXO },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_7[] = {
-> >> +    { P_EMAC0_SGMIIPHY_MAC_RCLK, 0 },
-> >> +    { P_BI_TCXO, 2 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_7[] = {
-> >> +    { .fw_name = "emac0_sgmiiphy_mac_rclk" },
-> >> +    { .index = DT_BI_TCXO },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_8[] = {
-> >> +    { P_EMAC0_SGMIIPHY_MAC_TCLK, 0 },
-> >> +    { P_BI_TCXO, 2 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_8[] = {
-> >> +    { .fw_name = "emac0_sgmiiphy_mac_tclk" },
-> >> +    { .index = DT_BI_TCXO },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_9[] = {
-> >> +    { P_EMAC1_SGMIIPHY_RCLK, 0 },
-> >> +    { P_BI_TCXO, 2 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_9[] = {
-> >> +    { .fw_name = "emac1_sgmiiphy_rclk" },
-> >> +    { .index = DT_BI_TCXO },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_10[] = {
-> >> +    { P_EMAC1_SGMIIPHY_TCLK, 0 },
-> >> +    { P_BI_TCXO, 2 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_10[] = {
-> >> +    { .fw_name = "emac1_sgmiiphy_tclk" },
-> >> +    { .index = DT_BI_TCXO },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_11[] = {
-> >> +    { P_EMAC1_SGMIIPHY_MAC_RCLK, 0 },
-> >> +    { P_BI_TCXO, 2 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_11[] = {
-> >> +    { .fw_name = "emac1_sgmiiphy_mac_rclk" },
-> >> +    { .index = DT_BI_TCXO },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_12[] = {
-> >> +    { P_EMAC1_SGMIIPHY_MAC_TCLK, 0 },
-> >> +    { P_BI_TCXO, 2 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_12[] = {
-> >> +    { .fw_name = "emac1_sgmiiphy_mac_tclk" },
-> >> +    { .index = DT_BI_TCXO },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_13[] = {
-> >> +    { P_PCIE_1_PIPE_CLK, 0 },
-> >> +    { P_BI_TCXO, 2 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_13[] = {
-> >> +    { .fw_name = "pcie_1_pipe_clk" },
-> >> +    { .index = DT_BI_TCXO },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_14[] = {
-> >> +    { P_PCIE_2_PIPE_CLK, 0 },
-> >> +    { P_BI_TCXO, 2 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_14[] = {
-> >> +    { .fw_name = "pcie_2_pipe_clk" },
-> >> +    { .index = DT_BI_TCXO },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_15[] = {
-> >> +    { P_PCIE20_PHY_AUX_CLK, 0 },
-> >> +    { P_BI_TCXO, 2 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_15[] = {
-> >> +    { .fw_name = "pcie20_phy_aux_clk" },
-> >> +    { .index = DT_BI_TCXO },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_16[] = {
-> >> +    { P_PCIE_PIPE_CLK, 0 },
-> >> +    { P_BI_TCXO, 2 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_16[] = {
-> >> +    { .fw_name = "pcie_pipe_clk" },
-> >> +    { .index = DT_BI_TCXO },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_17[] = {
-> >> +    { P_BI_TCXO, 0 },
-> >> +    { P_GPLL0_OUT_MAIN, 1 },
-> >> +    { P_GPLL6_OUT_MAIN, 2 },
-> >> +    { P_GPLL0_OUT_EVEN, 6 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_17[] = {
-> >> +    { .index = DT_BI_TCXO },
-> >> +    { .hw = &gpll0.clkr.hw },
-> >> +    { .hw = &gpll6.clkr.hw },
-> >> +    { .hw = &gpll0_out_even.clkr.hw },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_18[] = {
-> >> +    { P_BI_TCXO, 0 },
-> >> +    { P_GPLL0_OUT_MAIN, 1 },
-> >> +    { P_GPLL8_OUT_MAIN, 2 },
-> >> +    { P_GPLL0_OUT_EVEN, 6 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_18[] = {
-> >> +    { .index = DT_BI_TCXO },
-> >> +    { .hw = &gpll0.clkr.hw },
-> >> +    { .hw = &gpll8.clkr.hw },
-> >> +    { .hw = &gpll0_out_even.clkr.hw },
-> >> +};
-> >> +
-> >> +static const struct parent_map gcc_parent_map_19[] = {
-> >> +    { P_USB3_PHY_WRAPPER_GCC_USB30_PIPE_CLK, 0 },
-> >> +    { P_BI_TCXO, 2 },
-> >> +};
-> >> +
-> >> +static const struct clk_parent_data gcc_parent_data_19[] = {
-> >> +    { .fw_name = "usb3_phy_wrapper_gcc_usb30_pipe_clk" },
-> >> +    { .index = DT_BI_TCXO },
-> >> +};
-> >> +
-> >> +static struct clk_regmap_mux gcc_emac0_cc_sgmiiphy_rx_clk_src = {
-> >> +    .reg = 0x71060,
-> >> +    .shift = 0,
-> >> +    .width = 2,
-> >> +    .parent_map = gcc_parent_map_5,
-> >> +    .clkr = {
-> >> +        .hw.init = &(const struct clk_init_data) {
-> >> +            .name = "gcc_emac0_cc_sgmiiphy_rx_clk_src",
-> >> +            .parent_data = gcc_parent_data_5,
-> >> +            .num_parents = ARRAY_SIZE(gcc_parent_data_5),
-> >> +            .ops = &clk_regmap_mux_closest_ops,
-> >> +        },
-> >> +    },
-> >> +};
-> >> +
-> >> +static struct clk_regmap_mux gcc_emac0_cc_sgmiiphy_tx_clk_src = {
-> >> +    .reg = 0x71058,
-> >> +    .shift = 0,
-> >> +    .width = 2,
-> >> +    .parent_map = gcc_parent_map_6,
-> >> +    .clkr = {
-> >> +        .hw.init = &(const struct clk_init_data) {
-> >> +            .name = "gcc_emac0_cc_sgmiiphy_tx_clk_src",
-> >> +            .parent_data = gcc_parent_data_6,
-> >> +            .num_parents = ARRAY_SIZE(gcc_parent_data_6),
-> >> +            .ops = &clk_regmap_mux_closest_ops,
-> >> +        },
-> >> +    },
-> >> +};
-> >> +
-> >> +static struct clk_regmap_mux gcc_emac0_sgmiiphy_mac_rclk_src = {
-> >> +    .reg = 0x71098,
-> >> +    .shift = 0,
-> >> +    .width = 2,
-> >> +    .parent_map = gcc_parent_map_7,
-> >> +    .clkr = {
-> >> +        .hw.init = &(const struct clk_init_data) {
-> >> +            .name = "gcc_emac0_sgmiiphy_mac_rclk_src",
-> >> +            .parent_data = gcc_parent_data_7,
-> >> +            .num_parents = ARRAY_SIZE(gcc_parent_data_7),
-> >> +            .ops = &clk_regmap_mux_closest_ops,
-> >> +        },
-> >> +    },
-> >> +};
-> >> +
-> >> +static struct clk_regmap_mux gcc_emac0_sgmiiphy_mac_tclk_src = {
-> >> +    .reg = 0x71094,
-> >> +    .shift = 0,
-> >> +    .width = 2,
-> >> +    .parent_map = gcc_parent_map_8,
-> >> +    .clkr = {
-> >> +        .hw.init = &(const struct clk_init_data) {
-> >> +            .name = "gcc_emac0_sgmiiphy_mac_tclk_src",
-> >> +            .parent_data = gcc_parent_data_8,
-> >> +            .num_parents = ARRAY_SIZE(gcc_parent_data_8),
-> >> +            .ops = &clk_regmap_mux_closest_ops,
-> >> +        },
-> >> +    },
-> >> +};
-> >> +
-> >> +static struct clk_regmap_mux gcc_emac1_cc_sgmiiphy_rx_clk_src = {
-> >> +    .reg = 0x72060,
-> >> +    .shift = 0,
-> >> +    .width = 2,
-> >> +    .parent_map = gcc_parent_map_9,
-> >> +    .clkr = {
-> >> +        .hw.init = &(const struct clk_init_data) {
-> >> +            .name = "gcc_emac1_cc_sgmiiphy_rx_clk_src",
-> >> +            .parent_data = gcc_parent_data_9,
-> >> +            .num_parents = ARRAY_SIZE(gcc_parent_data_9),
-> >> +            .ops = &clk_regmap_mux_closest_ops,
-> >> +        },
-> >> +    },
-> >> +};
-> >> +
-> >> +static struct clk_regmap_mux gcc_emac1_cc_sgmiiphy_tx_clk_src = {
-> >> +    .reg = 0x72058,
-> >> +    .shift = 0,
-> >> +    .width = 2,
-> >> +    .parent_map = gcc_parent_map_10,
-> >> +    .clkr = {
-> >> +        .hw.init = &(const struct clk_init_data) {
-> >> +            .name = "gcc_emac1_cc_sgmiiphy_tx_clk_src",
-> >> +            .parent_data = gcc_parent_data_10,
-> >> +            .num_parents = ARRAY_SIZE(gcc_parent_data_10),
-> >> +            .ops = &clk_regmap_mux_closest_ops,
-> >> +        },
-> >> +    },
-> >> +};
-> >> +
-> >> +static struct clk_regmap_mux gcc_emac1_sgmiiphy_mac_rclk_src = {
-> >> +    .reg = 0x72098,
-> >> +    .shift = 0,
-> >> +    .width = 2,
-> >> +    .parent_map = gcc_parent_map_11,
-> >> +    .clkr = {
-> >> +        .hw.init = &(const struct clk_init_data) {
-> >> +            .name = "gcc_emac1_sgmiiphy_mac_rclk_src",
-> >> +            .parent_data = gcc_parent_data_11,
-> >> +            .num_parents = ARRAY_SIZE(gcc_parent_data_11),
-> >> +            .ops = &clk_regmap_mux_closest_ops,
-> >> +        },
-> >> +    },
-> >> +};
-> >> +
-> >> +static struct clk_regmap_mux gcc_emac1_sgmiiphy_mac_tclk_src = {
-> >> +    .reg = 0x72094,
-> >> +    .shift = 0,
-> >> +    .width = 2,
-> >> +    .parent_map = gcc_parent_map_12,
-> >> +    .clkr = {
-> >> +        .hw.init = &(const struct clk_init_data) {
-> >> +            .name = "gcc_emac1_sgmiiphy_mac_tclk_src",
-> >> +            .parent_data = gcc_parent_data_12,
-> >> +            .num_parents = ARRAY_SIZE(gcc_parent_data_12),
-> >> +            .ops = &clk_regmap_mux_closest_ops,
-> >> +        },
-> >> +    },
-> >> +};
-> >> +
-> >> +static struct clk_regmap_mux gcc_pcie_1_pipe_clk_src = {
-> >> +    .reg = 0x67084,
-> >> +    .shift = 0,
-> >> +    .width = 2,
-> >> +    .parent_map = gcc_parent_map_13,
-> >> +    .clkr = {
-> >> +        .hw.init = &(const struct clk_init_data) {
-> >> +            .name = "gcc_pcie_1_pipe_clk_src",
-> >> +            .parent_data = gcc_parent_data_13,
-> >> +            .num_parents = ARRAY_SIZE(gcc_parent_data_13),
-> >> +            .ops = &clk_regmap_mux_closest_ops,
-> >
-> > Are these clocks a clk_regmap_mux_closest_ops in reality
-> > clk_regmap_phy_mux_ops?
->
-> clk_regmap_phy_mux_ops cannot be used here, as multi parent mux requires
-> the .get_parent ops to be supported.
+Is this understanding correct?
+If using div64_u64() does not introduce too much overhead, then I agree
+with the first change.
+The second change also looks good to me.
 
-If we strike out the tcxo (= disable from regmap_phy_mux POV), there
-is only a single parent.
+I have no comments on the code, but there is one thing in the comments
+that looks misleading to me (or I am misunderstanding the code or the
+comments):
 
--- 
-With best wishes
-Dmitry
+On Mon,  8 May 2023 12:08:28 -0400
+Vineeth Pillai <vineeth@bitbyteword.org> wrote:
+[...]
+
+> + *	"dq = -(Ureclaim / Umax_reclaim) * dt"
+> + * Where
+> + *	Ureclaim:	Active Bandwidth of SCHED_FLAG_RECLAIM tasks for this rq.
+> + *	Umax_reclaim:	Maximum reclaimable bandwidth for this rq.
+> + *
+> + * We can calculate Umax_reclaim as:
+> + *	Umax_reclaim:	this_bw + Uinact + Ureclaim
+
+I think this looks like a typo (summing this_bw to Uinact
+looks wrong). Should "this_bw" be Uextra?
+
+> + * Where:
+> + *	this_bw:	Reserved bandwidth for this runqueue.
+> + *	Ureclaim:	Active Bandwidth of SCHED_FLAG_RECLAIM tasks for this rq.
+> + *	Uinact:		Inactive utilization (this_bw - running_bw)
+> + *	Uextra:		Extra bandwidth(Usually Umax - this_bw)
+> + *	Umax:		Max usable bandwidth. Currently
+> + *			= sched_rt_runtime_us / sched_rt_period_us
+> + *
+> + * We use the above formula to scale the runtime down
+> + *
+> + *	dq = -(Ureclaim / Umax_reclaim) * dt
+> + *	   = -(Ureclaim / (Ureclaim + Uextra + Uinact)) * dt
+
+I think this should be the correct equation. BTW, since you are summing
+Uextra and Uinact, mabe you could just use "Umax - running_bw"?
+
+
+
+			Luca
+
+>   */
+>  static u64 grub_reclaim(u64 delta, struct rq *rq, struct
+> sched_dl_entity *dl_se) {
+> +	u64 scaled_delta;
+>  	u64 u_inact = rq->dl.this_bw - rq->dl.running_bw; /* Utot -
+> Uact */
+> -	u64 u_act;
+> -	u64 u_act_min = (dl_se->dl_bw * rq->dl.bw_ratio) >>
+> RATIO_SHIFT;
+> +	u64 reclaimable_bw = rq->dl.extra_bw + u_inact;
+>  
+> -	/*
+> -	 * Instead of computing max{u * bw_ratio, (1 - u_inact -
+> u_extra)},
+> -	 * we compare u_inact + rq->dl.extra_bw with
+> -	 * 1 - (u * rq->dl.bw_ratio >> RATIO_SHIFT), because
+> -	 * u_inact + rq->dl.extra_bw can be larger than
+> -	 * 1 * (so, 1 - u_inact - rq->dl.extra_bw would be negative
+> -	 * leading to wrong results)
+> -	 */
+> -	if (u_inact + rq->dl.extra_bw > BW_UNIT - u_act_min)
+> -		u_act = u_act_min;
+> -	else
+> -		u_act = BW_UNIT - u_inact - rq->dl.extra_bw;
+> +	if (reclaimable_bw > rq->dl.max_bw)
+> +		reclaimable_bw = rq->dl.max_bw;
+>  
+> -	return (delta * u_act) >> BW_SHIFT;
+> +	scaled_delta = div64_u64(delta * rq->dl.reclaim_bw,
+> +			    (rq->dl.reclaim_bw + reclaimable_bw));
+> +	return scaled_delta;
+>  }
+>  
+>  /*
+> @@ -2783,12 +2797,9 @@ int sched_dl_global_validate(void)
+>  static void init_dl_rq_bw_ratio(struct dl_rq *dl_rq)
+>  {
+>  	if (global_rt_runtime() == RUNTIME_INF) {
+> -		dl_rq->bw_ratio = 1 << RATIO_SHIFT;
+> -		dl_rq->extra_bw = 1 << BW_SHIFT;
+> +		dl_rq->max_bw = dl_rq->extra_bw = 1 << BW_SHIFT;
+>  	} else {
+> -		dl_rq->bw_ratio = to_ratio(global_rt_runtime(),
+> -			  global_rt_period()) >> (BW_SHIFT -
+> RATIO_SHIFT);
+> -		dl_rq->extra_bw = to_ratio(global_rt_period(),
+> +		dl_rq->max_bw = dl_rq->extra_bw =
+> to_ratio(global_rt_period(), global_rt_runtime());
+>  	}
+>  }
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 3e8df6d31c1e..13d85af0f42b 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -257,6 +257,11 @@ static inline bool dl_entity_is_special(const
+> struct sched_dl_entity *dl_se) #endif
+>  }
+>  
+> +static inline bool dl_entity_is_reclaim(const struct sched_dl_entity
+> *dl_se) +{
+> +	return dl_se->flags & SCHED_FLAG_RECLAIM;
+> +}
+> +
+>  /*
+>   * Tells if entity @a should preempt entity @b.
+>   */
+> @@ -754,10 +759,20 @@ struct dl_rq {
+>  	u64			extra_bw;
+>  
+>  	/*
+> -	 * Inverse of the fraction of CPU utilization that can be
+> reclaimed
+> -	 * by the GRUB algorithm.
+> +	 * Maximum available bandwidth for this runqueue. This is
+> used to
+> +	 * calculate reclaimable bandwidth for SCHED_FLAG_RECLAIM
+> tasks.
+> +	 * By restricting maximum usable bandwidth, we aim to give
+> other
+> +	 * tasks on lower classes a chance to run, when competing
+> with
+> +	 * SCHED_FLAG_RECLAIM tasks.
+>  	 */
+> -	u64			bw_ratio;
+> +	u64			max_bw;
+> +
+> +	/*
+> +	 * Active bandwidth of SCHED_FLAG_RECLAIM tasks on this rq.
+> +	 * This will be a subset of running_bw.
+> +	 */
+> +	u64			reclaim_bw;
+> +
+>  };
+>  
+>  #ifdef CONFIG_FAIR_GROUP_SCHED
+
