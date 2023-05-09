@@ -2,84 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC386FC53A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BE86FC543
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234567AbjEILmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 07:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
+        id S235359AbjEILoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 07:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234704AbjEILmG (ORCPT
+        with ESMTP id S229937AbjEILoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 07:42:06 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D11A4209
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 04:42:04 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2ac785015d7so63810091fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 04:42:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683632523; x=1686224523;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9pl1V+sF83nw4jwYsmPa2jKKW5gdsa5ODMEKYo1fFAM=;
-        b=LQxNW0yHGaTmdH+eDy4hgR9cO7qNKTV4OXMOOT21I/r4dPd7cll2R5GHhECVI8Cnqv
-         Kep71GiRBdga58oD2UxP/oTQhmHWlqzemABoLdVysD4DHXSnkQukzmxGb6f3FSqJXfkB
-         rIeWeS6ogVfo168XH9A/q3ZE+DCBZmkNbQ++iKB05KwLVafAui8q0HYStT8G5ui3qMPf
-         08On4KNSKQVQOGz26EXQvhiaQlq2/HaNNa3YnDSngLOfeHioQyh00o/jW9ohVjosYlsQ
-         S0YoJCa7iizameoJR3FQtlUqPngVONeCxFjjEu2COFdE9rNuCEpoJyEBXXxu6dxmn1iY
-         9s5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683632523; x=1686224523;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9pl1V+sF83nw4jwYsmPa2jKKW5gdsa5ODMEKYo1fFAM=;
-        b=XxTxBPoGYsVMlcNjfnpVtUj1X30mEQHbfxratH4q530TOEEzAYXwkbwmtrbbvxCfsu
-         p1/d0MPbNO023K+GIKEXuXEqYdNekhSVnrjyIOPc+9ZMaoegNABa06L+n+HseP5wpwjb
-         +wwoML281DoafqTyT20s6uDTPa7907V72Hz5kSFsU/5e76tYBPwDNc2UmlVerTGqklX2
-         NE161OZqhIEgeFWsSTCIFg5lZsyvttF/hgURZ1TqnKiHoffqh2CJd1r02b+4XrlCQzJS
-         64h8Nd41gK34rtwpiQump5dbMRDnv/PE32kRjCNLIAD9EvLB9CNZejPl7UwbsUsGiT0+
-         iyLA==
-X-Gm-Message-State: AC+VfDx2WRiKILB7sA+5KU5ZXcJKUByDbZ7ZVXFWlzRsulPrkCKO5g5B
-        cbCjo4mFYvqyT8aEXmd2M6j2oQ==
-X-Google-Smtp-Source: ACHHUZ677yF0j6L9wDMCT+AqFIVJ8oMMpSOLMCU82Rxd1DFuJyXAtxGrYscgN90CzYZ8VSgI+lqctg==
-X-Received: by 2002:ac2:5fa6:0:b0:4f2:520e:f865 with SMTP id s6-20020ac25fa6000000b004f2520ef865mr637666lfe.16.1683632522700;
-        Tue, 09 May 2023 04:42:02 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id k2-20020ac24562000000b004eb0c51780bsm322168lfm.29.2023.05.09.04.42.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 04:42:02 -0700 (PDT)
-Message-ID: <5f069b2c-d1b1-e489-7494-67ef395437bc@linaro.org>
-Date:   Tue, 9 May 2023 14:42:01 +0300
+        Tue, 9 May 2023 07:44:18 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C361998;
+        Tue,  9 May 2023 04:44:17 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QFx9c6PCnzpWF3;
+        Tue,  9 May 2023 19:43:00 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 9 May 2023 19:44:13 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH net-next v1 0/2] introduce skb_frag_fill_page_desc()
+Date:   Tue, 9 May 2023 19:42:30 +0800
+Message-ID: <20230509114232.20986-1-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/4] drm/msm/dsi: Fix compressed word count calculation
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        neil.armstrong@linaro.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
- <20230405-add-dsc-support-v1-2-6bc6f03ae735@quicinc.com>
- <a60a9f37-bb43-6e2b-2535-995e9fae250a@linaro.org>
- <32d473a6-f7a5-9aa6-85cf-0f77f1c071ce@quicinc.com>
- <4cf2e9ab-7e08-fb26-d924-8ea8141d9f58@linaro.org>
- <44c47800-0913-b122-77ae-5ce0e5d4b443@linaro.org>
- <cd8cfbd5-1bde-08d8-dbb5-5489820d6a45@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <cd8cfbd5-1bde-08d8-dbb5-5489820d6a45@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,101 +45,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/05/2023 11:54, Konrad Dybcio wrote:
-> 
-> 
-> On 9.05.2023 10:23, Neil Armstrong wrote:
->> On 09/05/2023 01:27, Dmitry Baryshkov wrote:
->>> On 08/05/2023 23:09, Abhinav Kumar wrote:
->>>>
->>>>
->>>> On 5/3/2023 1:26 AM, Dmitry Baryshkov wrote:
->>>>> On 03/05/2023 04:19, Jessica Zhang wrote:
->>>>>> Currently, word count is calculated using slice_count. This is incorrect
->>>>>> as downstream uses slice per packet, which is different from
->>>>>> slice_count.
->>>>>>
->>>>>> Slice count represents the number of soft slices per interface, and its
->>>>>> value will not always match that of slice per packet. For example, it is
->>>>>> possible to have cases where there are multiple soft slices per interface
->>>>>> but the panel specifies only one slice per packet.
->>>>>>
->>>>>> Thus, use the default value of one slice per packet and remove slice_count
->>>>>> from the word count calculation.
->>>>>>
->>>>>> Fixes: bc6b6ff8135c ("drm/msm/dsi: Use DSC slice(s) packet size to compute word count")
->>>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>>>>> ---
->>>>>>    drivers/gpu/drm/msm/dsi/dsi_host.c | 9 ++++++++-
->>>>>>    1 file changed, 8 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
->>>>>> index 35c69dbe5f6f..b0d448ffb078 100644
->>>>>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->>>>>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->>>>>> @@ -996,7 +996,14 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->>>>>>            if (!msm_host->dsc)
->>>>>>                wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
->>>>>>            else
->>>>>> -            wc = msm_host->dsc->slice_chunk_size * msm_host->dsc->slice_count + 1;
->>>>>> +            /*
->>>>>> +             * When DSC is enabled, WC = slice_chunk_size * slice_per_packet + 1.
->>>>>> +             * Currently, the driver only supports default value of slice_per_packet = 1
->>>>>> +             *
->>>>>> +             * TODO: Expand drm_panel struct to hold slice_per_packet info
->>>>>> +             *       and adjust DSC math to account for slice_per_packet.
->>>>>
->>>>> slice_per_packet is not a part of the standard DSC, so I'm not sure how that can be implemented. And definitely we should not care about the drm_panel here. It should be either a part of drm_dsc_config, or mipi_dsi_device.
->>>>>
->>>>
->>>> This is not correct.
->>>>
->>>> It is part of the DSI standard (not DSC standard). Please refer to Figure 40 "One Line Containing One Packet with Data from One or More Compressed Slices" and Figure 41 "One Line Containing More than One Compressed Pixel Stream Packet".
->>>
->>> I have reviewed section 8.8.24 and Annex D of the DSI standard.
->>>
->>> It is not clear to me, if we can get away with always using slice_per_packet = 1. What is the DSI sink's difference between Fig. 40.(b) and Fig 41?
->>>
->>> Are there are known panels that require slice_per_packet != 1? If so, we will have to implement support for such configurations.
->>>
->>>> This has details about this. So I still stand by my point that this should be in the drm_panel.
->>>
->>> Note, the driver doesn't use drm_panel directly. So slices_per_packet should go to mipi_dsi_device instead (which in turn can be filled from e.g. drm_panel or from any other source).
->>
->> This is a big question, where should we set those parameters ?
->>
->> It's an even bigger questions for panels optionally supporting DSC in Video or Command mode (like the vtdr6130),
->> how to select DSC or not ? DT is not an option.
-> Compressed vs uncompressed modes, maybe? Would be nice to make this
-> togglable from userspace.. But then it may not scale for panels with e.g.
-> 10 resolutions, all cmd/vid/dsc/nodsc
+Most users use __skb_frag_set_page()/skb_frag_off_set()/
+skb_frag_size_set() to fill the page desc for a skb frag.
+It does not make much sense to calling __skb_frag_set_page()
+without calling skb_frag_off_set(), as the offset may depend
+on whether the page is head page or tail page, so add
+skb_frag_fill_page_desc() to fill the page desc for a skb
+frag.
 
-Currently the panel/panel-bridge make decision on command vs video mode. 
-We have no way to influence that decision. If you want to make that 
-negotiable, I'd start with adding 
-'cmd_supported/video_supported/dsc_supported' flags to struct 
-mipi_dsi_hosts.
+In the future, we can make sure the page in the frag is
+head page of compound page or a base page, if not, we
+may warn about that and convert the tail page to head
+page and update the offset accordingly, if we see a warning
+about that, we also fix the caller to fill the head page
+in the frag. when the fixing is done, we may remove the
+warning and converting.
 
-> 
-> 
-> Konrad
->>
->> Those should tied to a panel+controller tuple.
->>
->> Neil
->>
->>>
->>>>
->>>>>> +             */
->>>>>> +            wc = msm_host->dsc->slice_chunk_size + 1;
->>>>>>            dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
->>>>>>                DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
->>>>>>
->>>>>
->>>
->>
+In this way, we can remove the compound_head() or use
+page_ref_*() like the below case:
+https://elixir.bootlin.com/linux/latest/source/net/core/page_pool.c#L881
+https://elixir.bootlin.com/linux/latest/source/include/linux/skbuff.h#L3383
+
+It may also convert net stack to use the folio easier.
+
+RFC: remove a local variable as pointed out by Simon.
+
+Yunsheng Lin (2):
+  net: introduce and use skb_frag_fill_page_desc()
+  net: remove __skb_frag_set_page()
+
+ .../net/ethernet/aquantia/atlantic/aq_ring.c  |  6 +--
+ drivers/net/ethernet/broadcom/bnx2.c          |  1 -
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     | 10 ++---
+ drivers/net/ethernet/chelsio/cxgb3/sge.c      |  5 +--
+ drivers/net/ethernet/emulex/benet/be_main.c   | 32 ++++++++-------
+ drivers/net/ethernet/freescale/enetc/enetc.c  |  5 +--
+ .../net/ethernet/fungible/funeth/funeth_rx.c  |  5 +--
+ drivers/net/ethernet/marvell/mvneta.c         |  5 +--
+ .../net/ethernet/mellanox/mlx5/core/en_rx.c   |  4 +-
+ drivers/net/ethernet/sun/cassini.c            |  8 +---
+ drivers/net/virtio_net.c                      |  4 +-
+ drivers/net/vmxnet3/vmxnet3_drv.c             |  4 +-
+ drivers/net/xen-netback/netback.c             |  4 +-
+ include/linux/skbuff.h                        | 39 +++++--------------
+ net/bpf/test_run.c                            |  3 +-
+ net/core/gro.c                                |  4 +-
+ net/core/pktgen.c                             | 13 ++++---
+ net/core/skbuff.c                             |  7 ++--
+ net/tls/tls_device.c                          | 10 ++---
+ net/xfrm/xfrm_ipcomp.c                        |  5 +--
+ 20 files changed, 65 insertions(+), 109 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.33.0
 
