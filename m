@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E7A6FC06B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF276FC070
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbjEIH1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 03:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
+        id S233238AbjEIH3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 03:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbjEIH1F (ORCPT
+        with ESMTP id S232223AbjEIH3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 03:27:05 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A2E7AB8;
-        Tue,  9 May 2023 00:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1683617223; x=1715153223;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=s3bkE3YNau+vM3HCuNKp78J4YdtiK7cLZ0Se+tibbFY=;
-  b=AB++oQdXrz5omROLhwId8e2BxW8szT4xkDEy3YSiwWUFLYDoS1xfu8t5
-   tU17H9zw7YeiVFk0I3Ztn7QTAmhzHgO0rs6jqHTIfFfVe0zJdYGsTAoEw
-   NKn3tn4xPnl1Q0gPbnAcHsJszOjHPSK4S+65N8d2Ezf5GOS49aNV3rR4j
-   oOrb/UR5+CzWQBsH53+JLvhhC996rAu3QWTS1lMwAThhd1SUWLvCMBBP2
-   vxQlf6exWlXMFJmwmCMWk8PxO9ncHNzz1RUMN+HRJ+MNYu/vjAw29N7g2
-   SGkSJe+ulXmpcvrN6X7GxVw0C+/4uscOaf3aGZAYnaiaEjg8I0yDwJIZW
-   g==;
-X-IronPort-AV: E=Sophos;i="5.99,261,1677567600"; 
-   d="scan'208";a="210306086"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 May 2023 00:27:02 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 9 May 2023 00:27:01 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Tue, 9 May 2023 00:26:59 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <lars.povlsen@microchip.com>,
-        <Steen.Hegelund@microchip.com>, <daniel.machon@microchip.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next 3/3] net: lan966x: Add TC support for ES0 VCAP
-Date:   Tue, 9 May 2023 09:26:45 +0200
-Message-ID: <20230509072645.3245949-4-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20230509072645.3245949-1-horatiu.vultur@microchip.com>
-References: <20230509072645.3245949-1-horatiu.vultur@microchip.com>
+        Tue, 9 May 2023 03:29:00 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC40210D;
+        Tue,  9 May 2023 00:28:58 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-306281edf15so5095545f8f.1;
+        Tue, 09 May 2023 00:28:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683617337; x=1686209337;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TZ9NuQkeXU4fNX7iBYzOS07LZkDDq4TEk1a9dRD5OwI=;
+        b=WuM5pudY0UqsP46LjTI8WpnLOV8nN2P+Qon8Lyta6Mr/3rEJHnoJBlFaw2vhAL48mC
+         voOwJ6181tWnwuyAgPn+V0EcNkd3MlB10CzlY4+tNaxMA9CPFqMnw6SMNvINi0kNQv6y
+         6W8X3pRPQIVvakeu2uLtI2s6BU3HO8DiJPiAEop463HKeqCyvLcZJN62f/WaVaygXth7
+         1cjk4MGdIUaI//1oY/VbQJOZt9xCOrmv9d4SKI+3TNdbVhxp/ggghajkFa6JQ7tSoFAr
+         9XYYZD6x8VaM8aDOAe8spO1er3riawEbhfroBAABSo2eeG1gyholwPqAXNv+aRJk3AGD
+         BUyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683617337; x=1686209337;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TZ9NuQkeXU4fNX7iBYzOS07LZkDDq4TEk1a9dRD5OwI=;
+        b=WKpNW4hrCKWBPG5NEC4httV1kC588Yc3P1YClQqjsAS4I8p4G2L4ZutaQ44H4vJkac
+         dDFXUlSJYE2sRXelGzYP0QhSdsSU0RGgeDaNZdXMM0i52ar2c8tdxnw9ipy8/9PJygAq
+         MK3vzhbo8d2IJvws37AOos4Pv8Di1174tPnSE4XfmzyP7jaqVGhP3I0kAUJq53/RHfoO
+         HilJAa4KYaoUmz1fEXhJodu8VKNLV/DScEZjXfSMuRt0/I0ARMYURm2zXLDs1cJkHVNt
+         XZZCp8Us6/HjdvO81rMluFQ9h2qWtoQRvtmkJaFe0GvxKHW6AaAvyDMkLIr7nUF9fBZ5
+         jMUw==
+X-Gm-Message-State: AC+VfDzGwibD5L7NBjvZGErus+EN/qMwBtlqB9ccCibWHOn42uv6LwvQ
+        CB8DaB/+C6GpLmn0t7hxEfQgFFfPmHI=
+X-Google-Smtp-Source: ACHHUZ4aprA8jaV+02OALul3CdrPdHuejsbTRnfgW+TaIxH+q45taetODg6awx4MtB1jJAj852Yabg==
+X-Received: by 2002:a05:6000:c1:b0:307:9473:fe26 with SMTP id q1-20020a05600000c100b003079473fe26mr4379251wrx.26.1683617337199;
+        Tue, 09 May 2023 00:28:57 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id t9-20020a7bc3c9000000b003f1958eeadcsm784243wmj.17.2023.05.09.00.28.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 00:28:56 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        ntfs3@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] fs/ntfs3: Fix spelling mistake "recommened" -> "recommended"
+Date:   Tue,  9 May 2023 08:28:55 +0100
+Message-Id: <20230509072855.2908731-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,135 +70,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the TC command to use the lan966x ES0 VCAP. Currently support
-only one action which is vlan pop, other will be added later.
+There is a spelling mistake in a ntfs_info message. Fix it.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- .../microchip/lan966x/lan966x_tc_flower.c     | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
+ fs/ntfs3/super.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
-index 47b2f7579dd23..96b3def6c4741 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
-@@ -5,6 +5,8 @@
- #include "vcap_api_client.h"
- #include "vcap_tc.h"
- 
-+#define LAN966X_FORCE_UNTAGED	3
-+
- static bool lan966x_tc_is_known_etype(struct vcap_tc_flower_parse_usage *st,
- 				      u16 etype)
- {
-@@ -29,6 +31,8 @@ static bool lan966x_tc_is_known_etype(struct vcap_tc_flower_parse_usage *st,
- 			return true;
- 		}
- 		break;
-+	case VCAP_TYPE_ES0:
-+		return true;
- 	default:
- 		NL_SET_ERR_MSG_MOD(st->fco->common.extack,
- 				   "VCAP type not supported");
-@@ -318,6 +322,9 @@ static int lan966x_tc_set_actionset(struct vcap_admin *admin,
- 	case VCAP_TYPE_IS2:
- 		aset = VCAP_AFS_BASE_TYPE;
- 		break;
-+	case VCAP_TYPE_ES0:
-+		aset = VCAP_AFS_VID;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -353,6 +360,10 @@ static int lan966x_tc_add_rule_link_target(struct vcap_admin *admin,
- 		/* Add IS2 specific PAG key (for chaining rules from IS1) */
- 		return vcap_rule_add_key_u32(vrule, VCAP_KF_LOOKUP_PAG,
- 					     link_val, ~0);
-+	case VCAP_TYPE_ES0:
-+		/* Add ES0 specific ISDX key (for chaining rules from IS1) */
-+		return vcap_rule_add_key_u32(vrule, VCAP_KF_ISDX_CLS,
-+					     link_val, ~0);
- 	default:
- 		break;
- 	}
-@@ -389,6 +400,18 @@ static int lan966x_tc_add_rule_link(struct vcap_control *vctrl,
- 					       0xff);
- 		if (err)
- 			return err;
-+	} else if (admin->vtype == VCAP_TYPE_IS1 &&
-+		   to_admin->vtype == VCAP_TYPE_ES0) {
-+		/* This works for IS1->ES0 */
-+		err = vcap_rule_add_action_u32(vrule, VCAP_AF_ISDX_ADD_VAL,
-+					       diff);
-+		if (err)
-+			return err;
-+
-+		err = vcap_rule_add_action_bit(vrule, VCAP_AF_ISDX_REPLACE_ENA,
-+					       VCAP_BIT_1);
-+		if (err)
-+			return err;
- 	} else {
- 		NL_SET_ERR_MSG_MOD(f->common.extack,
- 				   "Unsupported chain destination");
-@@ -398,6 +421,23 @@ static int lan966x_tc_add_rule_link(struct vcap_control *vctrl,
- 	return err;
- }
- 
-+static int lan966x_tc_add_rule_counter(struct vcap_admin *admin,
-+				       struct vcap_rule *vrule)
-+{
-+	int err = 0;
-+
-+	switch (admin->vtype) {
-+	case VCAP_TYPE_ES0:
-+		err = vcap_rule_mod_action_u32(vrule, VCAP_AF_ESDX,
-+					       vrule->id);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return err;
-+}
-+
- static int lan966x_tc_flower_add(struct lan966x_port *port,
- 				 struct flow_cls_offload *f,
- 				 struct vcap_admin *admin,
-@@ -465,6 +505,21 @@ static int lan966x_tc_flower_add(struct lan966x_port *port,
- 			if (err)
- 				goto out;
- 
-+			break;
-+		case FLOW_ACTION_VLAN_POP:
-+			if (admin->vtype != VCAP_TYPE_ES0) {
-+				NL_SET_ERR_MSG_MOD(f->common.extack,
-+						   "Cannot use vlan pop on non es0");
-+				err = -EOPNOTSUPP;
-+				goto out;
-+			}
-+
-+			/* Force untag */
-+			err = vcap_rule_add_action_u32(vrule, VCAP_AF_PUSH_OUTER_TAG,
-+						       LAN966X_FORCE_UNTAGED);
-+			if (err)
-+				goto out;
-+
- 			break;
- 		default:
- 			NL_SET_ERR_MSG_MOD(f->common.extack,
-@@ -474,6 +529,12 @@ static int lan966x_tc_flower_add(struct lan966x_port *port,
- 		}
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index e36769eac7de..8323911fe274 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -1191,7 +1191,7 @@ static int ntfs_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	sbi->volume.ni = ni;
+ 	if (info->flags & VOLUME_FLAG_DIRTY) {
+ 		sbi->volume.real_dirty = true;
+-		ntfs_info(sb, "It is recommened to use chkdsk.");
++		ntfs_info(sb, "It is recommended to use chkdsk.");
  	}
  
-+	err = lan966x_tc_add_rule_counter(admin, vrule);
-+	if (err) {
-+		vcap_set_tc_exterr(f, vrule);
-+		goto out;
-+	}
-+
- 	err = vcap_val_rule(vrule, l3_proto);
- 	if (err) {
- 		vcap_set_tc_exterr(f, vrule);
+ 	/* Load $MFTMirr to estimate recs_mirr. */
 -- 
-2.38.0
+2.30.2
 
