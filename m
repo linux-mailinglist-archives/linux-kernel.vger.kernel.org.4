@@ -2,319 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102336FD181
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F466FD18B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235806AbjEIVf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 17:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
+        id S235241AbjEIVi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 17:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235913AbjEIVfv (ORCPT
+        with ESMTP id S235006AbjEIVix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 17:35:51 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6129D6EA0
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 14:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683668130; x=1715204130;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=0VhGDMX7szgI/jXvFlp7pUy7TnixG0/xz50rzEiEqHc=;
-  b=L41fpROWCeriSHJT5S4oX0mo5TNFw16MJtPku49tesFNCwembhhcPahY
-   yCxnlk14sXLrmjb1CI5+faaB/vTG8QCzd99hH05k5a4ZggcgDZn11y5ws
-   /Y3IeQZDAtZ6BJ/bXfwaNIVNEAplAwUyE8l36OvhLTM3vvr0PLkBQEUed
-   ewm7ujEvb9ub8f85R+vvVvjpdvtI0wf3W12zVh8zViDBqsOCHwOELHROx
-   OTmc7m5BUEJHcN9/TfeQdYT7JQWXbOaxhUmi+WvVN6WVOB5lEjksjiBlC
-   chU1h53KBKKnuINuus2aBYqqa89p5cdyL8mpPcC+aZ9RstjKbO+s5wKli
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="436380281"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="436380281"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 14:35:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="649498658"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="649498658"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga003.jf.intel.com with ESMTP; 09 May 2023 14:34:59 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 9 May 2023 14:34:59 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 9 May 2023 14:34:58 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 9 May 2023 14:34:58 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 9 May 2023 14:34:58 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZcS634zHVldLPSMYUnnJeC9i4BNG15aZ08dUQ+3jalOVDTQSIEqqrhuqMsSVQImw79WHIq59BkAP8hTAt6FAUuHayyejNTSBQhOeGkUDt0JzAj0njoFWrejrTvwAXYDJZxPLlcYRain13qP43DHpKkQYzCjMt5LoFV91ALUqf32SOowZsCQyAYLezMyk/C3ZPLu26sqlYSC8YqsWBKZSPBqsszj6nkQq50s3hSANKa6+ywSz9mwAMkIWvry5GR3Iq3rdIzHmFgxDgSMsnVosoZDiDA2RFaZhol4awxnCIgYFKZAD2wu8osY9KObGAH1Zd9hgbJIl8sdC4JqUDz5qmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BVjOLe3XhT/YgQrYKIpt6UL4D6gRJxws3vrUOriytB0=;
- b=fQQajFNo+DRHDeiyULivV4S7jkHjBWqpHV0wbm1CvXklAXp+7QAHbnExfhpernnjB/0JzB1JZQ1jrlPrQ3GNNJU0QSQ5ZCmCcWCCtUukxqHc+UmTN+os796cPvKOblyiJm1M0RA4E2g+e3h/zCFjERDGRYD70mlViZimbBVuELfOjppjNgVK3nwnWjzfAxs00Bg8ZWqI2dymE9AovIirS9koNZS2YqrcqO0P3vF6Lx5xjUIzAOJFp41nclx/i+Mc0VDcSIFx9yvbiYLwio833BadYyObeWXWsr+RKPIYMub69fhEWNuc6RR5SXq3zoCGblqRa2fE1nEfSoYCFC/YEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by DM6PR11MB4577.namprd11.prod.outlook.com (2603:10b6:5:2a1::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Tue, 9 May
- 2023 21:34:56 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::44e7:c479:62f4:3eb4]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::44e7:c479:62f4:3eb4%3]) with mapi id 15.20.6363.033; Tue, 9 May 2023
- 21:34:55 +0000
-Date:   Tue, 9 May 2023 14:34:51 -0700
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Gustavo Sousa <gustavo.sousa@intel.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>,
-        <intel-xe@lists.freedesktop.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        <linux-kernel@vger.kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Subject: Re: [Intel-xe] [PATCH 2/3] linux/bits.h: Add fixed-width GENMASK and
- BIT macros
-Message-ID: <iakuowef3ysobpcpa6f74kolw44zyjepb5byjxljp4mxuwunkn@rdegvnuzbnmi>
-X-Patchwork-Hint: comment
-References: <20230509051403.2748545-1-lucas.demarchi@intel.com>
- <20230509051403.2748545-3-lucas.demarchi@intel.com>
- <168364083689.27719.2337781022536351304@gjsousa-mobl2>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <168364083689.27719.2337781022536351304@gjsousa-mobl2>
-X-ClientProxiedBy: BY3PR05CA0018.namprd05.prod.outlook.com
- (2603:10b6:a03:254::23) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+        Tue, 9 May 2023 17:38:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81421BCC
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 14:37:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683668278;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AS+fKVGuPLb0PNBw40EVQclmhLUg9m8EqlylUBoJ6/4=;
+        b=i6OJWNtSV7dUOHbCWwCaLo0EIKZGy1faXPIFTvdfYPxNNVm2hOdSkDq+qQhp5DP86LkMsx
+        WhgMxOFb8h8MuKScG1F0Wyi4PjZiPKOZFLftLV6GYolLcrKetqo2dEAt18yMpe9KxqGWVH
+        Vqy93JlZr1TzgM3jv7LdbsNwLHG8a0A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-540-lCcqVZ60OkWva9VAe79vjw-1; Tue, 09 May 2023 17:37:56 -0400
+X-MC-Unique: lCcqVZ60OkWva9VAe79vjw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8CCF10115E0;
+        Tue,  9 May 2023 21:37:55 +0000 (UTC)
+Received: from [10.22.16.30] (unknown [10.22.16.30])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 97775C15BA0;
+        Tue,  9 May 2023 21:37:55 +0000 (UTC)
+Message-ID: <a7fcd53a-7680-49c5-dd93-489d75126c8d@redhat.com>
+Date:   Tue, 9 May 2023 17:37:55 -0400
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|DM6PR11MB4577:EE_
-X-MS-Office365-Filtering-Correlation-Id: 44dceb25-e1e5-46b8-d8a4-08db50d53ae2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z/Cj2wvh5Mk3Bo0YIGuaxHqAA8532LinbBIm/gNfalntw7K1A6IDVzp3MdwGBJIyhYlIXF8aruUB2KAmhlgZVKC3qd+bSAnCGGA0YqgAVBilSJn98YHZtQzf82bKU448sZdbpkioj+4lVd4XuiikFVpMioJ7F9FnI1dCSl97ftftUIcJEQzA9/luROwJeVcgcydKbR/9nM/pVzkE9tLFYGMgSqSgwR/5ynG1+V2ShCX0tiE20PZcSALeR7fhREai5GH7V7VSWZAg2WrHwldAuVw2UVQHhOo8jHEsraCDKA0EjDl5nVN7M5fYLZLDCk2cf8uQaEjN+vDkJ2xSjwPA0MNCyDfLWaOvcuxUgP/i97e2/A1LWnMKOLN33snepKsFLEHzpvWtjoAM6bGl89r3ek2BcJKrZjWnlFjTNpyKcyxUnAu/y4XSZo5q5xo51ucC4EGsdBB/dVEqR5PJUrNX7rM3E+R6jjm+SIfjICtgR8c1xSiiiiatCxoo3KIROZ4Yh9pCL3SL2DGZTNg5zfZzmEu+qDWJEr0C0l+IvP758BRNVdlX04vyHqDJFFbLusBIaiJiIvJMSOaHW/u8W1lnwYSAtFHfpvhQy6NWu1BnSd19i30vO/oY0oxVaScAapPR
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(376002)(39860400002)(136003)(346002)(396003)(451199021)(6512007)(6506007)(186003)(9686003)(2906002)(26005)(6666004)(6486002)(66946007)(86362001)(66556008)(82960400001)(4326008)(41300700001)(6636002)(316002)(66476007)(54906003)(478600001)(33716001)(7416002)(6862004)(8676002)(8936002)(5660300002)(38100700002)(27256005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iBtOR1IE3aHL/6t1J3IX65PhlLBR8j/FEdwvZDAxz4kOYJgNytdInKU4e6qW?=
- =?us-ascii?Q?ZLvpPC6TueITr32BJ9lcekVWcyHxGoxqtl7EFvzFH/zk+mSEqw6TxOCRMOPN?=
- =?us-ascii?Q?SBQ/Rs27ouuFDBBxQhy2kcg9yD+/yAHu3Evw5kKBWi3RmWMK/iuysN2zDA9m?=
- =?us-ascii?Q?zHrklPSVWsN8CV524C6+tlxgdfKktXk0hHpSYYYwXHJJT8wjdpLqrYI9JeoB?=
- =?us-ascii?Q?tt3vDtzfd2yxkUeA0W5VqiQB5AtRR5hjSC0Rw1UOdN1650WNzTGte8pQuNTa?=
- =?us-ascii?Q?QBl1stOY/WDAeDHj34gl3v83m6lU8T0/Ih3EgZbrPYUg2HcpQviDBhgMiHye?=
- =?us-ascii?Q?WHNI05Cl0I26E/vMfZRWTgJuLX5KygOfd2ILOc4o+X5vCG0KNv5AXNENy/lK?=
- =?us-ascii?Q?RSRxTHBYuGZo3uAorE3Ih+hCtH6ms/cLPaggtfUag74Bt/Li0VdfPyiB2BFF?=
- =?us-ascii?Q?P276jYlfZhITIDkGnmQeUQXSOQU7/OecEj2JwteADV1+0SYjc32chvzYFwGS?=
- =?us-ascii?Q?JPtMLRqPGZmGAjGRnVbwWh4JQ5fmqfOU1ZywsqeLGZLL2jybDD9ivW5ikLG/?=
- =?us-ascii?Q?IBZftMnRwfY0QAlcSBTV+uKXUq7DsopDT5qDigpMZe5LzeGQye/wslaL3WYm?=
- =?us-ascii?Q?uUp2ZFdU69BdyRH6SheM8IF4X8xdLlGUeELPBUYogs8THTrQlEyMECYEwb6S?=
- =?us-ascii?Q?7eZmur9fkPMEenDti/jpbfyfLmkVmd5rsBYoZZeUzgrIgrCHlS27S5b9lgxi?=
- =?us-ascii?Q?CiED3xVqwepbUN/Ug9CQ27+sA6P8+TBp4O5eLSn0PDFXGjTXsZMjsUOeZGu0?=
- =?us-ascii?Q?iP0z0lCNsipPRhVNkOrWOhfwK8nE6jJ0H+uOyvv91Ms2jWmIBIEp1u1cBMBV?=
- =?us-ascii?Q?M/yj5+4r/rRSC5Eab90gMCLeS2EF7H7CBTWIVrkbpSdnIUuzMo9USMzBe8HK?=
- =?us-ascii?Q?b9Y74UCcz+vTDkKtmi7B0peBpAqqetrtyC31JI8aLavY5QPGpcseE/j3hC2p?=
- =?us-ascii?Q?zLXlwpW+qpV9xzUQjnaxWlTxVd6OAXHxLxXfxAqkli1dkGDTNp7k2zyQyIPK?=
- =?us-ascii?Q?VI1B7WRDbU0ExICGRpj5nZMvpjUKC4729nVhWZCL2iS4kiOTb+QNkt0oj0my?=
- =?us-ascii?Q?2TWNIt6xVqAoDwNIUzZTch7z7J/PF4wxg8zmL1OXwnaz5klmaTTcHHzPsQ5O?=
- =?us-ascii?Q?1csVTLkuNBpV8T/8cVLXCtGhsNFfebl1pWN9AKHz38JAoM87NGKLPJ121l99?=
- =?us-ascii?Q?pSQor83dJj3Zm1PXVajGVxnN+UwcQh/tJCOfB8SMMOImWboC0AySWVM+HQ6a?=
- =?us-ascii?Q?QrAnJTzmIE4J0IuTA5mBi5p45at7PRZY6pAvKGZsNZpYX1DxLLcFYetYchPP?=
- =?us-ascii?Q?L8hK72tWjOqtJtmCkOlUILaWwuudemJXzw0Doakr/B/VNWX1f39Hlq+5CsJZ?=
- =?us-ascii?Q?COisX5XhBCfRZZE5BnaeX6luZD2tZWBwxtD1LpRBVClsS+St3kh7hAnssNku?=
- =?us-ascii?Q?N+X2jIKAOv14BQ1Pj2+toeQH7qHju629/biWXU1nho7U0g775APk99CGgBXv?=
- =?us-ascii?Q?w9RbHmzBWmVj3XMiOIOZ108LFUS5+jShvbylZ7sEHgjlO2rxXGTr7WurXylO?=
- =?us-ascii?Q?Vw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44dceb25-e1e5-46b8-d8a4-08db50d53ae2
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 21:34:55.1486
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FB4StLGrZxO9sKD97I1n1KWIIJ2vRsKG4s8naueaSanr7fhsOmS4Q8HFAB6MrWyE1BdNtKJuI23Si7UWkuo/bkGMQ3gqj/zzDDgM1OtYrHI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4577
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 03/32] locking/lockdep: lockdep_set_no_check_recursion()
+Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-4-kent.overstreet@linux.dev>
+ <20230509193147.GC2148518@hirez.programming.kicks-ass.net>
+ <ZFqqsyDpatgb77Vh@moria.home.lan>
+ <d5b65b01-62a9-e483-dea8-5e2bb65be278@redhat.com>
+ <ZFquoxJn1RzWhRiI@moria.home.lan>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <ZFquoxJn1RzWhRiI@moria.home.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 11:00:36AM -0300, Gustavo Sousa wrote:
->Quoting Lucas De Marchi (2023-05-09 02:14:02)
->>Add GENMASK_U32(), GENMASK_U16() and GENMASK_U8()  macros to create
->>masks for fixed-width types and also the corresponding BIT_U32(),
->>BIT_U16() and BIT_U8().
->>
->>All of those depend on a new "U" suffix added to the integer constant.
->>Due to naming clashes it's better to call the macro U32. Since C doesn't
->>have a proper suffix for short and char types, the U16 and U18 variants
->>just use U32 with one additional check in the BIT_* macros to make
->>sure the compiler gives an error when the those types overflow.
->>The BIT_U16() and BIT_U8() need the help of GENMASK_INPUT_CHECK(),
->>as otherwise they would allow an invalid bit to be passed. Hence
->>implement them in include/linux/bits.h rather than together with
->>the other BIT* variants.
->>
->>The following test file is is used to test this:
->>
->>        $ cat mask.c
->>        #include <linux/types.h>
->>        #include <linux/bits.h>
->>
->>        static const u32 a = GENMASK_U32(31, 0);
->>        static const u16 b = GENMASK_U16(15, 0);
->>        static const u8 c = GENMASK_U8(7, 0);
->>        static const u32 x = BIT_U32(31);
->>        static const u16 y = BIT_U16(15);
->>        static const u8 z = BIT_U8(7);
->>
->>        #if FAIL
->>        static const u32 a2 = GENMASK_U32(32, 0);
->>        static const u16 b2 = GENMASK_U16(16, 0);
->>        static const u8 c2 = GENMASK_U8(8, 0);
->>        static const u32 x2 = BIT_U32(32);
->>        static const u16 y2 = BIT_U16(16);
->>        static const u8 z2 = BIT_U8(8);
->>        #endif
->>
->>Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
->>---
->> include/linux/bits.h       | 22 ++++++++++++++++++++++
->> include/uapi/linux/const.h |  2 ++
->> include/vdso/const.h       |  1 +
->> 3 files changed, 25 insertions(+)
->>
->>diff --git a/include/linux/bits.h b/include/linux/bits.h
->>index 7c0cf5031abe..ff4786c99b8c 100644
->>--- a/include/linux/bits.h
->>+++ b/include/linux/bits.h
->>@@ -42,4 +42,26 @@
->> #define GENMASK_ULL(h, l) \
->>        (GENMASK_INPUT_CHECK(h, l) + __GENMASK_ULL(h, l))
->>
->>+#define __GENMASK_U32(h, l) \
->>+  (((~U32(0)) - (U32(1) << (l)) + 1) & \
->>+   (~U32(0) >> (32 - 1 - (h))))
->>+#define GENMASK_U32(h, l) \
->>+  (GENMASK_INPUT_CHECK(h, l) + __GENMASK_U32(h, l))
->>+
->>+#define __GENMASK_U16(h, l) \
->>+  ((U32(0xffff) - (U32(1) << (l)) + 1) & \
->>+   (U32(0xffff) >> (16 - 1 - (h))))
->>+#define GENMASK_U16(h, l) \
->>+  (GENMASK_INPUT_CHECK(h, l) + __GENMASK_U16(h, l))
->>+
->>+#define __GENMASK_U8(h, l) \
->>+  (((U32(0xff)) - (U32(1) << (l)) + 1) & \
->>+   (U32(0xff) >> (8 - 1 - (h))))
->>+#define GENMASK_U8(h, l) \
->>+  (GENMASK_INPUT_CHECK(h, l) + __GENMASK_U8(h, l))
->
->I wonder if we should use BIT_U* variants in the above to ensure the values are
->valid. If so, we get a nice boundary check and we also can use a single
->definition for the mask generation:
->
->  #define __GENMASK_U32(h, l) \
->          (((~U32(0)) - (U32(1) << (l)) + 1) & \
->           (~U32(0) >> (32 - 1 - (h))))
+On 5/9/23 16:35, Kent Overstreet wrote:
+> On Tue, May 09, 2023 at 04:27:46PM -0400, Waiman Long wrote:
+>> On 5/9/23 16:18, Kent Overstreet wrote:
+>>> On Tue, May 09, 2023 at 09:31:47PM +0200, Peter Zijlstra wrote:
+>>>> On Tue, May 09, 2023 at 12:56:28PM -0400, Kent Overstreet wrote:
+>>>>> This adds a method to tell lockdep not to check lock ordering within a
+>>>>> lock class - but to still check lock ordering w.r.t. other lock types.
+>>>>>
+>>>>> This is for bcachefs, where for btree node locks we have our own
+>>>>> deadlock avoidance strategy w.r.t. other btree node locks (cycle
+>>>>> detection), but we still want lockdep to check lock ordering w.r.t.
+>>>>> other lock types.
+>>>>>
+>>>> ISTR you had a much nicer version of this where you gave a custom order
+>>>> function -- what happend to that?
+>>> Actually, I spoke too soon; this patch and the other series with the
+>>> comparison function solve different problems.
+>>>
+>>> For bcachefs btree node locks, we don't have a defined lock ordering at
+>>> all - we do full runtime cycle detection, so we don't want lockdep
+>>> checking for self deadlock because we're handling that but we _do_ want
+>>> lockdep checking lock ordering of btree node locks w.r.t. other locks in
+>>> the system.
+>> Maybe you can use lock_set_novalidate_class() instead.
+> No, we want that to go away, this is the replacement.
 
-the boundary for h and l are already covered here because (32 - 1 - (h))
-would lead to a negative value if h >= 32. Similar reason for l
+OK, you can mention that in the commit log then.
 
-Doing ~U32(0) didn't work for me as it wouldn't catch the invalid values
-due to expanding to U32_MAX
+Cheers,
+Longman
 
-
->  #define GENMASK_U32(h, l) \
->          (GENMASK_INPUT_CHECK(h, l) + __GENMASK_U32(BIT_U32(h), BIT_U32(l)))
-
-							^^^^
-that doesn't really work as BIT_U32(h) would expand here,
-creating the equivalent of
-
-	~U32(0) >> (32 - 1 - (BIT_U32(h))),
-
-which is not what we want
-
->  #define GENMASK_U16(h, l) \
->          (GENMASK_INPUT_CHECK(h, l) + __GENMASK_U32(BIT_U16(h), BIT_U16(l)))
->  #define GENMASK_U8(h, l) \
->          (GENMASK_INPUT_CHECK(h, l) + __GENMASK_U32(BIT_U8(h), BIT_U8(l)))
->
->>+
->>+#define BIT_U32(nr)       _BITU32(nr)
->>+#define BIT_U16(nr)       (GENMASK_INPUT_CHECK(16 - 1, nr) + (U32(1) << (nr)))
->>+#define BIT_U8(nr)        (GENMASK_INPUT_CHECK(32 - 1, nr) + (U32(1) << (nr)))
->
->Shouldn't this be GENMASK_INPUT_CHECK(8 - 1, nr)?
-
-ugh, good catch. Thanks
-
-I will think if I can come up with something that reuses a single
-__GENMASK_U(). Meanwhile I improved my negative tests to cover more
-cases.
-
-Lucas De Marchi
-
-
-
->
->--
->Gustavo Sousa
->
->>+
->> #endif /* __LINUX_BITS_H */
->>diff --git a/include/uapi/linux/const.h b/include/uapi/linux/const.h
->>index a429381e7ca5..3a4e152520f4 100644
->>--- a/include/uapi/linux/const.h
->>+++ b/include/uapi/linux/const.h
->>@@ -22,9 +22,11 @@
->> #define _AT(T,X)       ((T)(X))
->> #endif
->>
->>+#define _U32(x)           (_AC(x, U))
->> #define _UL(x)         (_AC(x, UL))
->> #define _ULL(x)                (_AC(x, ULL))
->>
->>+#define _BITU32(x)        (_U32(1) << (x))
->> #define _BITUL(x)      (_UL(1) << (x))
->> #define _BITULL(x)     (_ULL(1) << (x))
->>
->>diff --git a/include/vdso/const.h b/include/vdso/const.h
->>index 94b385ad438d..417384a9795b 100644
->>--- a/include/vdso/const.h
->>+++ b/include/vdso/const.h
->>@@ -4,6 +4,7 @@
->>
->> #include <uapi/linux/const.h>
->>
->>+#define U32(x)            (_U32(x))
->> #define UL(x)          (_UL(x))
->> #define ULL(x)         (_ULL(x))
->>
->>--
->>2.40.1
->>
