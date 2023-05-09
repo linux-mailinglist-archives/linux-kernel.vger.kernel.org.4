@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417BE6FBF5D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752AB6FBF66
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235007AbjEIGjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 02:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
+        id S234986AbjEIGjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 02:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234963AbjEIGj0 (ORCPT
+        with ESMTP id S234771AbjEIGji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 02:39:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B0FD076;
-        Mon,  8 May 2023 23:39:09 -0700 (PDT)
+        Tue, 9 May 2023 02:39:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D275BDC53;
+        Mon,  8 May 2023 23:39:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2D1C6164F;
-        Tue,  9 May 2023 06:39:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B629C433EF;
-        Tue,  9 May 2023 06:39:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4640A61BB8;
+        Tue,  9 May 2023 06:39:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25D82C433EF;
+        Tue,  9 May 2023 06:39:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683614348;
-        bh=w22KuX01pMZbO/Eaa6JLtKePa21cyYmG8SwUr9hiNyw=;
+        s=k20201202; t=1683614356;
+        bh=INBPQ8y3g/7EUeHHHVr3w5P6C4GQfzSlBDZrauXOIOg=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=IlTXY2aCEu3Kl2vnXKCZZeoatsDFBy1icDMudOcR8MwKfg8GF4CyU+J0ULOaggod6
-         59qXgpp7PyhhHfp8MCeDCdflybDeEFgRSxfAADu1zRj82SmwmbUwi/xKLXGPhS5Ede
-         aubQxRLVVoym0NzqSpINOLJqvKsgFQsEh/LItG5orBwMH2IyyiG7K+oWGctHrOseRl
-         UD/i/G6Iqj3R4I7zRHKNHIM1I6s/YZnrnqht83bnf/CYkg/pqxf966b5wi6UuSdZ8X
-         A5mesHEWClaSKcI/2OSv4KsK1BHEN8w2xoitPSCpe3hJ0BX3lAzlcudu8gQ8mneJI9
-         gWVMjtPNm86Cw==
+        b=e9vK78zS97QkvcJoQT5DpVwfb7YnqqQRm6YUkseC8Wib9fzMIMVGsOoxurlNOSHWi
+         7HrvxlTZa0tYgRpJht19+lZ/zqn05VKWE5FI2eKDfXPcXdmehNy2nxuQFBUXmc+TYo
+         hYq7tDsniCGTNUhTV0CxpcEjXTU/f6DDOzp9vqmkYI1/yGOXm2HjZqrn+wK1WgTkTw
+         yuweZx0+iuga43ADxxqLs0cA1UPImcsF1yxRpCS9gv8NK1CW/kN+jRVX2xfuFRlFNR
+         BIV4qb4KRlX9wH1q2lglnrUZ4b/Hv9cCmCIKFgtX5RWs0f2RBJKh1cTTcN5PRWcoIq
+         AKP1g8QD6JXOA==
 From:   Mark Brown <broonie@kernel.org>
-To:     robh@kernel.org, Anup Sharma <anupnewsmail@gmail.com>
-Cc:     lgirdwood@gmail.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, KCHSU0@nuvoton.com,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <ZFYxWVdE9YkMKvXv@yoga>
-References: <ZFYxWVdE9YkMKvXv@yoga>
-Subject: Re: [PATCH v2] ASoC: dt-bindings: nau8540: Convert to dtschema
-Message-Id: <168361434507.303059.8363951498743127692.b4-ty@kernel.org>
-Date:   Tue, 09 May 2023 15:39:05 +0900
+To:     Tony Lindgren <tony@atomide.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jerome Neanne <jneanne@baylibre.com>,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     stable@vger.kernel.org, khilman@baylibre.com, msp@baylibre.com,
+        j-keerthy@ti.com
+In-Reply-To: <20230507144656.192800-1-krzysztof.kozlowski@linaro.org>
+References: <20230507144656.192800-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [RESEND PATCH] regulator: tps65219: Fix matching interrupts
+ for their regulators
+Message-Id: <168361435149.303261.3406346409850990450.b4-ty@kernel.org>
+Date:   Tue, 09 May 2023 15:39:11 +0900
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,25 +60,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 06 May 2023 16:22:09 +0530, Anup Sharma wrote:
-> Convert the NAU8540 audio CODEC bindings to DT schema
-> 
-> Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
-> 
-> Changes:
-> V1 -> V2: Adhere to the correct procedure by including the maintainer's name.
->           Drop Mark from maintainer.
+On Sun, 07 May 2023 16:46:56 +0200, Krzysztof Kozlowski wrote:
+> The driver's probe() first registers regulators in a loop and then in a
+> second loop passes them as irq data to the interrupt handlers.  However
+> the function to get the regulator for given name
+> tps65219_get_rdev_by_name() was a no-op due to argument passed by value,
+> not pointer, thus the second loop assigned always same value - from
+> previous loop.  The interrupts, when fired, where executed with wrong
+> data.  Compiler also noticed it:
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
 Thanks!
 
-[1/1] ASoC: dt-bindings: nau8540: Convert to dtschema
-      commit: 0f0d70c2881f8c28e6d449349e057963a742f842
+[1/1] regulator: tps65219: Fix matching interrupts for their regulators
+      commit: f050e56de80591fee55bedbdf5b6b998c740cd0c
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
