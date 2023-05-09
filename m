@@ -2,113 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138A36FBD7D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 05:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F1D6FBD81
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 05:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234418AbjEIDHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 23:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52336 "EHLO
+        id S234452AbjEIDKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 23:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234400AbjEIDHO (ORCPT
+        with ESMTP id S234435AbjEIDJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 23:07:14 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6431449FD;
-        Mon,  8 May 2023 20:07:12 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64115eef620so39260294b3a.1;
-        Mon, 08 May 2023 20:07:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683601631; x=1686193631;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JvMCL94HWXtWXaOhm3x+6fo3/iFeZR4RzaE9AL9QZjw=;
-        b=QFZQGPsD1BfzCUW4AbgKrpjQaC1YPI/GFHIglygbGb+FHpJBb0Eh/GVVKUO/a2CWdD
-         dbNu1Gp5lR1RbXj4O+0S5YSiuw6Nme7L7TdDIyX4Y4ZHKpzFdCsc25wF6GFqhtrRj/Oe
-         oezyVgkXk0+SI1JjLJ5Aj34qj+Pd2wpnZWvvxYoUgStjnfYcMY3L/4quZIIaahwe6qqq
-         rHNj5Q/pzVdemgsNR+E9wVWvGu4+l0/5oYNFwg3lzANTc1ogSx7EwCmdNnb+nZKzktTT
-         uk5ipLaU8rKplfgJddruHLO9wZCMn+Dk7SsrJ4JuNWLwM56jc2HKsDmmhGfZum5bKVlI
-         IKCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683601631; x=1686193631;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JvMCL94HWXtWXaOhm3x+6fo3/iFeZR4RzaE9AL9QZjw=;
-        b=gLnO03zhVKD07CzohrPwhtsy/zr1tnw3pHqyvJNBox1d9YlDIKQ6M2dW58CGu/Ryv/
-         JAFM/Za6frXB1ovsGNcOE4LlQcq/nHWlzm4sDcSyRc2aQ+KfLuz3tue4qHjm8EptCYFx
-         X0987rHN5pgL3EqNBrLdXaACORDv3O82lMzROLTprWSKaXIHLaawF+5PNfox/8ticzsn
-         6kZip+iiNZTld0PUYk/L4OKiNpliBoOfVniji983FPNKo9kAM39OFLYwxVtj8Wl12gPF
-         VcgoIzlxhXznVgJC9NNBp3c1BDTD4WULq0X/Qp27HGmFVisrvVff7Vh2C2S+LxX3RCUX
-         CzEg==
-X-Gm-Message-State: AC+VfDwN7NgM/EqwJHbyFbGC2i86ZVxOUVDBz7FNcPjJZQvfT7rtaWRD
-        NHpy6zgO4rs1c6+jeA5R6mM=
-X-Google-Smtp-Source: ACHHUZ4i72BhMuhdVOUaapXiiooE7xVTct+mEdco635HDQ9hdQZOQU2mEC7xd7qquoku8W3rcQlLEA==
-X-Received: by 2002:a05:6a20:4420:b0:fd:4273:f45b with SMTP id ce32-20020a056a20442000b000fd4273f45bmr15571802pzb.29.1683601631521;
-        Mon, 08 May 2023 20:07:11 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-91.three.co.id. [180.214.233.91])
-        by smtp.gmail.com with ESMTPSA id o33-20020a635a21000000b0052871962579sm208121pgb.63.2023.05.08.20.07.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 20:07:11 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 473CD1068A9; Tue,  9 May 2023 10:07:07 +0700 (WIB)
-Date:   Tue, 9 May 2023 10:07:06 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.3 000/694] 6.3.2-rc1 review
-Message-ID: <ZFm42pTaUG3eHAOc@debian.me>
-References: <20230508094432.603705160@linuxfoundation.org>
+        Mon, 8 May 2023 23:09:54 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B259749FD
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 20:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683601792; x=1715137792;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ApfAyEhUhHfjNFBHlVJnMnylpSR+C5SjLICGhV+eHbM=;
+  b=NPJ4SvzEodWMLln4lYoZvxUrp48YQWtyMCTaBzWYqnw4m2pNV8INBFpk
+   b7Q9aQtCtwzQcfAqtBj/SOBwi8QgpTgCdeKcMshHYgQzmsQHypWPYO6KE
+   fFEFJB2bGv8a0ZhyQDlxSZA1fqpgTLwmiIniNGyB8hz5kuUtSum0Tm4ma
+   fCMVbMY4bESdF5i4D4O62zDaSNRIQkpLWSRccLAdcxFknvyLq0Bjp2bCA
+   Divph1XEvJlDX86dVxjW/pV7i50/dFs4qzdMqaqbhwtYlg9DboYP3gkFc
+   ZGNkPAlVVfRSMt6ecpMIFdG47wMRgbGpHlictfDM10cPnwnONMt0u2Yur
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="334250140"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="334250140"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 20:09:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="842939432"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="842939432"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 08 May 2023 20:09:50 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwDjZ-0001cC-2h;
+        Tue, 09 May 2023 03:09:49 +0000
+Date:   Tue, 9 May 2023 11:09:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     liuwf <liuwf@mailbox.org>, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev
+Subject: Re: library: btree_blue - a simple btree with rapid linear traversal
+Message-ID: <202305091033.ffi2G2ZL-lkp@intel.com>
+References: <37586fd4e76b597aea4dad3f06bb7eb648425fa0.camel@mailbox.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="saZ15ehIGs6aFYK6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230508094432.603705160@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <37586fd4e76b597aea4dad3f06bb7eb648425fa0.camel@mailbox.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi liuwf,
 
---saZ15ehIGs6aFYK6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build errors:
 
-On Mon, May 08, 2023 at 11:37:15AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.2 release.
-> There are 694 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+[auto build test ERROR on fbe1871b562af6e9cffcf622247e821d1dd16c64]
 
-Successfully built bindeb-pkgs for my computer (Acer Aspire E15, Intel
-Core i3 Haswell) and booted. No noticeable regressions.
+url:    https://github.com/intel-lab-lkp/linux/commits/liuwf/library-btree_blue-a-simple-btree-with-rapid-linear-traversal/20230509-095127
+base:   fbe1871b562af6e9cffcf622247e821d1dd16c64
+patch link:    https://lore.kernel.org/r/37586fd4e76b597aea4dad3f06bb7eb648425fa0.camel%40mailbox.org
+patch subject: library: btree_blue - a simple btree with rapid linear traversal
+config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20230509/202305091033.ffi2G2ZL-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/fba954cf20fd4764f0e6090d1164251873b7569c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review liuwf/library-btree_blue-a-simple-btree-with-rapid-linear-traversal/20230509-095127
+        git checkout fba954cf20fd4764f0e6090d1164251873b7569c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305091033.ffi2G2ZL-lkp@intel.com/
 
---=20
-An old man doll... just what I always wanted! - Clara
+All errors (new ones prefixed by >>):
 
---saZ15ehIGs6aFYK6
-Content-Type: application/pgp-signature; name="signature.asc"
+   ld: lib/btree_blue_test.o: in function `btree_blue_test_init':
+>> btree_blue_test.c:(.text+0xb7): undefined reference to `btree_init'
+>> ld: btree_blue_test.c:(.text+0x133): undefined reference to `btree_geo64'
+>> ld: btree_blue_test.c:(.text+0x13d): undefined reference to `btree_insert'
+   ld: btree_blue_test.c:(.text+0x25b): undefined reference to `btree_geo64'
+>> ld: btree_blue_test.c:(.text+0x269): undefined reference to `btree_lookup'
+   ld: btree_blue_test.c:(.text+0x379): undefined reference to `btree_geo64'
+   ld: btree_blue_test.c:(.text+0x38f): undefined reference to `btree_insert'
+   ld: btree_blue_test.c:(.text+0x3aa): undefined reference to `btree_geo64'
+>> ld: btree_blue_test.c:(.text+0x3b8): undefined reference to `btree_remove'
+   ld: btree_blue_test.c:(.text+0x57f): undefined reference to `btree_geo64'
+>> ld: btree_blue_test.c:(.text+0x58d): undefined reference to `btree_last'
+   ld: btree_blue_test.c:(.text+0x5a4): undefined reference to `btree_geo64'
+>> ld: btree_blue_test.c:(.text+0x5ae): undefined reference to `btree_get_prev'
+   ld: btree_blue_test.c:(.text+0x5fb): undefined reference to `btree_geo64'
+   ld: btree_blue_test.c:(.text+0x609): undefined reference to `btree_last'
+   ld: btree_blue_test.c:(.text+0x62e): undefined reference to `btree_geo64'
+   ld: btree_blue_test.c:(.text+0x638): undefined reference to `btree_get_prev'
+   ld: btree_blue_test.c:(.text+0x6ef): undefined reference to `btree_geo64'
+   ld: btree_blue_test.c:(.text+0x6f9): undefined reference to `btree_remove'
+>> ld: btree_blue_test.c:(.text+0x7cd): undefined reference to `btree_destroy'
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFm41AAKCRD2uYlJVVFO
-o+x8AP90Lq+s2GGcwxyRb9hzvNGUrV705Jn0xjD9qaXeU2IVMwD9E1Pqy4nicVOA
-00HXXWTvsNZCb8fzdRpz1hpdICraDgY=
-=e4sA
------END PGP SIGNATURE-----
-
---saZ15ehIGs6aFYK6--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
