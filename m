@@ -2,250 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB9E6FD2CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F576FD2CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjEIWrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 18:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S230064AbjEIWuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 18:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjEIWrW (ORCPT
+        with ESMTP id S229461AbjEIWuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 18:47:22 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0817459DC
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 15:47:20 -0700 (PDT)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349KHk6l005704;
-        Tue, 9 May 2023 22:47:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=l/eIVwRYUGvw4wNtYxX2ekfjm2TLUWV/+B2JoByuuEo=;
- b=fpmPjRv5q2Eq3xB1UACfeT8YWTB2s6Km1dCGXtU3mT5khNfy80wDKp6z9CEwFcWcSbOD
- YNxu2LZXRYLLCQTLVZLHbqgZl/k0+fw417HO3Dtev3RTD1ze6oLyykHpA/7s9S26F7cx
- SXprULKn9dNJ1mIA+vOFdivPvudniH2/FyR4W8zdskY4CJwPWfYPK6VamVeSWZSpObmN
- BrDtYPNcCnr84Uae6nx/HChzJrS/OP/LTqZly8RmPEb82INOXoKln/cYA1KfYAOJXmDZ
- U4m1rJQYeIR2Xsdw7DxTv/a0SX2zEf1uqqhKk4lpfNYvu6E+tvtWRVpfoPoJcII1kF4I Jw== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qf77532vq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 09 May 2023 22:47:14 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 349ML6EG039339;
-        Tue, 9 May 2023 22:47:14 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qf77gmk4h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 09 May 2023 22:47:13 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UfEGnzC78LxOhquyCDbfXJ2kM6/SkEdlv1SAX2T9bS3e9EeivA6ByQ3xEm2gaILBulYTdpJKhTyDPYKWj61fcN1nHdTw4g1QxkWJYW8cLIGn8TSAl6AtlIho/Y1Bqx4uittBTmmnqbemU0PvFCyPbH/qpFqGEQBGdfkqT/8SLUa07HgD0jHlDlGxbAXDdNnhX6RPllT0ayQAJBFI8WgC3MjdBbEMfrgItS/+9WZ+uk2wEtZ6BDjvY2cFHuk2RuvwRwzSD0n2f4uESmtwaueebLMvmD9s2FEa9wMXlkKPaPT/nOVUAeuLKAHwtck8YaP+Zwfmqlwsh6vCpxiWy1hoSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l/eIVwRYUGvw4wNtYxX2ekfjm2TLUWV/+B2JoByuuEo=;
- b=MmvDjmm9iLU0HxxpHb1iBs+G4bWfGJgpP9JsjpFVJuum4oYcXjv4KBcR4lkX80ZVvK7rNyjynaPHjGhAcIodDCCSwlt9R8meZ4uUDuzB31CfsQbgm2hvjRa7mLXilErgnf0vkB48JNdzT2rcjYjzizicmKpuKakEi1VYpwl6yqAG9FZ3x4weYVWvS/y9wf9D5tngbPld7zSlRZlbs3H5aso7DL/b5L3vKLcmvGhRhIxrnivUkbE+XV9HsAZ95aJ0LM3AGsXCrtxHCTvoMvzimYVRpQ8Ql/sBmRB+cONCtXcT7v/fSvDca4g4m3X4VlqqeW6buQAycp63rgucJpImhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 9 May 2023 18:50:09 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADA259E7
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 15:50:08 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id a640c23a62f3a-96622bca286so764806366b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 15:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l/eIVwRYUGvw4wNtYxX2ekfjm2TLUWV/+B2JoByuuEo=;
- b=W8OLehXU/mQ3Z5oKWDWxxc9JOP7KWDIjEWMzJTsKN1NNQ+K5Doap9zczjydKI8veScRtnibMSKyr1vIUXJPObUB+4wPrNaEHVjWoXAbEl7ZVj8o33ui2/VAVwFf73q6HKUJBvblbVaYGT9rIn2Hd0x9trFZvBt/9Uk3uCJioo84=
-Received: from DS7PR10MB5280.namprd10.prod.outlook.com (2603:10b6:5:3a7::5) by
- DM6PR10MB4394.namprd10.prod.outlook.com (2603:10b6:5:221::21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6363.33; Tue, 9 May 2023 22:47:11 +0000
-Received: from DS7PR10MB5280.namprd10.prod.outlook.com
- ([fe80::f942:ba2a:1330:244b]) by DS7PR10MB5280.namprd10.prod.outlook.com
- ([fe80::f942:ba2a:1330:244b%3]) with mapi id 15.20.6363.033; Tue, 9 May 2023
- 22:47:11 +0000
-Message-ID: <2d0ab154-596e-437f-1575-3d25fe421b86@oracle.com>
-Date:   Tue, 9 May 2023 18:47:03 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 3/5] iommu/amd: Introduce Disable IRTE Caching Support
-Content-Language: en-US
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
-Cc:     joro@8bytes.org, joao.m.martins@oracle.com,
-        boris.ostrovsky@oracle.com, jon.grimm@amd.com,
-        santosh.shukla@amd.com, vasant.hegde@amd.com,
-        kishon.vijayabraham@amd.com
-References: <20230509111646.369661-1-suravee.suthikulpanit@amd.com>
- <20230509111646.369661-4-suravee.suthikulpanit@amd.com>
-From:   Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <20230509111646.369661-4-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0474.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1a8::11) To DS7PR10MB5280.namprd10.prod.outlook.com
- (2603:10b6:5:3a7::5)
+        d=gmail.com; s=20221208; t=1683672606; x=1686264606;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n+llcoQhZ1+xDIZc/YuxS/XX/JJ3BpLDZegnXpVRHmY=;
+        b=bbnO2dbi7/8IFVyjRd+mQhfos5G1eY2qrDnpbIY3s5BSj1apkc6GYFQ7uECOGGjraM
+         LeVOxg7YMUAsCMDHF2OI6W+JiDA1P1/5nh4Q0QGmK07KnFqNjG9HdzJygd8sEHdjqggZ
+         zj9C2FT9KAy9jtDITUfFu0Ij8n2Nvp2ruOYfOwMcyl0rHkEG1sb/OdXhoJ5PBNClaVMD
+         fDU38sRP0J7TcEcYnSfKG9ly+H8m2qy0KDmxCfKflzm67vFbcm99YJUrAHo5RtQj9HcB
+         w/gEMAqxq8kfj7B8b1KHBkz3q2ym7TDlj38kavsBe5f4ekYFvmcsjNjYWDl/Yx4FQBG/
+         lFOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683672606; x=1686264606;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n+llcoQhZ1+xDIZc/YuxS/XX/JJ3BpLDZegnXpVRHmY=;
+        b=XxXrtuCIXeoOy07pgCl2HfiLIT/bII2oeebhyWotFHMXgpXXwVZcMhA/X81rVXSTzA
+         n1wFVWBdFbyU2mXi/xs/ZR9GkPCO4dGGMMSfS7J6gHP3OFv/c8EbjtLj1E9Kz38LZN8g
+         XZcPYIzh1JUXyDMBBhZzBFaP6N787WecLuX8qvCWQpNJwbB7F2BxHUaSSQPCItMAxfok
+         hAkG4ZcXrcWxY2BHsg5lO1sxwGMQY0lLPgyxXyWaJa8CnuiUP2omOoT5mMI8yfi6wuEp
+         eU0NYgzth/jCNiIkxmKMrdDemK1iD4XKuLgn1fh+Pdsz+yPwqqs1hrW2Rs+icI+WZPEA
+         fISQ==
+X-Gm-Message-State: AC+VfDxXe+RWY6Xvv3jintFMz3IaU49lwuPazVy8P2OMTlk+lcQOKsxl
+        ixGGuEsXD3BXtb4EkrE5xJjts4A/OpTyig==
+X-Google-Smtp-Source: ACHHUZ6++mkktW+wEOxVivZcjikll8FysQj2zK6AIDtG3LeOSIHijfQn5iSe/WLb9rWHrwnWYYkRSQ==
+X-Received: by 2002:a17:907:5c5:b0:965:9edf:f0d0 with SMTP id wg5-20020a17090705c500b009659edff0d0mr12859533ejb.13.1683672606363;
+        Tue, 09 May 2023 15:50:06 -0700 (PDT)
+Received: from [127.0.1.1] (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id p24-20020a1709065dd800b0094e93ec20adsm1875316ejv.106.2023.05.09.15.50.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 15:50:05 -0700 (PDT)
+From:   Jakob Koschel <jkl820.git@gmail.com>
+Date:   Wed, 10 May 2023 00:49:53 +0200
+Subject: [PATCH v2] w1: Replace usage of found with dedicated list iterator
+ variable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR10MB5280:EE_|DM6PR10MB4394:EE_
-X-MS-Office365-Filtering-Correlation-Id: 587ab4b8-7737-4fff-c2a5-08db50df5379
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U8dOw170mrqYXiYBM7x1s7fnHKd/VOY89NeUZrzTvJsmqishBeT0MLALQybckPdUJFKalgC0Il/JSkL8M0Uq0f9pFdCPX+rrbRAM81/VAiJ1bPjnxgv0vbF2ih5XfJ/VstI2yFaV6pBmdkUPhvO1tcSjPtXdjj8KcPSz1sJW5GYkF1H0SO0cIQFUljwYQSLrLgwNMt4H/Rjf3v0AiyXopf7rN+1tRcp7qbKZTUMd704H+8PYehnR5KcNQ4k4TiVpxyRr3eC0uaEc5Ysv0o7UfOHmObTVtjYowRGs/6tBKF/plv713YGD9hOxMtY/EH6QwEZ+9gLqhDRB+facgK7X+gq6zHS16ybIVJ47HiZrHllG018GIxLI5YbhKYeuiJq2EuzQq1RvupphbMch5jYsTZK6jWWZhh0ki2Qs4WPdIYdpRDYgjYuhLdFcxP2b7R+Olz1oUhgEmpjBkrlHPIz5021Koi6X+fUt+MwUa+h7hOjMH8iWg4X88Md4FjiqjMiox2TotYGJP33Z6Dp/+pU24uAbHeEgeeBHlzUYOP5HQtoEJA3ywore5ILXKdQfQwadzEs1OoEjAoCEuB0BPrnw3EDzZmfoxfC+hNQinExvR3fWKGVuGZStNoJkFmU0smx+KkfaBz34Ux2WNqFHXQ2now==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5280.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(396003)(136003)(376002)(366004)(39860400002)(451199021)(478600001)(31696002)(31686004)(41300700001)(86362001)(66946007)(66476007)(66556008)(4326008)(316002)(8676002)(8936002)(6666004)(36916002)(83380400001)(6486002)(36756003)(5660300002)(38100700002)(26005)(53546011)(6512007)(2906002)(6506007)(186003)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Nmx3UnI1eisyTjlFY1locE4rTzhqTTkxdWxOT3FkeGs0VklOck95U0ErQ1Na?=
- =?utf-8?B?bVVmSnpMdXZ6WEpmYTFlQjRqK1Q4a1p2eVdyMTlmay9hVXVzM0U4aU80and0?=
- =?utf-8?B?VU13c0VPQXNOaE8wWnVqditaQ0tJSTdUUFFTNDRzSjQ0anByUmZGcTdTZ1N2?=
- =?utf-8?B?T28xQWNTa0hEdTltc05yZlBRY1N4WllzcVpCTCtQd21mdkRQdWswMkFHR3FI?=
- =?utf-8?B?VkZONkV3cmFsSlUwSklYS0FOTlpyVTJTM2xORjVjOG13dDIzMU00cDFHaXly?=
- =?utf-8?B?TDZ0QmcyVWxNRXhiNW5tM1Y4QnE2S3duQ3U4em1pNXBDMGdhc0p6L3BuNTI0?=
- =?utf-8?B?aURwRzMrd1hnazlTMDh5VmNZdXNBYkR5dEhyNkgraDdGQ0l0UXQ1L3lOYWFI?=
- =?utf-8?B?OUVPa2xycS90K1lweUlwVWx3K1Nnd3Z3WmNyenFoUlRWaFQydDBLY0Zpbm9x?=
- =?utf-8?B?YlVNdzNFTk1IdWpXMm9za3VJdzVWYzNJdTUvVzRXTHQ2TzhRbHc5M3ZHM1or?=
- =?utf-8?B?V0dEUXVaY3FNcmNpaUVNQWxuTzhKanpIWE16TWZZMDJBYVUyakl4a1VaU3Vi?=
- =?utf-8?B?UnZnMHNOaGx6S2xKdTN4WEswc2Q3OGFmKzRlMk01SjUyMUVIaEozVXdXTFor?=
- =?utf-8?B?QUp2WkI2d1I5ODVqY29RcEdFUEFMSzJhelBEOUlhaVI1VVNvQVQ2WGd4TXJq?=
- =?utf-8?B?U3pVODY4OUpENm9aMGRuVXBmSnA0MUJzTjkreWVWUWVYWWQ1cWRIM09tVnlo?=
- =?utf-8?B?SklpNndVTFFGbXVYeVd3eGZNaFJuSnhyMU05dnIzaTBnQ0E1YzlUKzltVVdv?=
- =?utf-8?B?ODhEcENHOE54Z0VKdmM0QnhXM2UxL3JYOGVNV3ZRZ2x6bitVdzNxbUxZcXMy?=
- =?utf-8?B?ZWljQmttL0h4M2V1bzJIWGZZOFY1dDRGVzVUdk4xTTczQ0tIUmNGSjhibTFU?=
- =?utf-8?B?MXFDZFJZUEVSbjRKWmxoakVXYWhBdGh5MjV5eTQwY015ZUJkYnVUQjIwSWtV?=
- =?utf-8?B?U2R2ZngxQ09TZ0pja2hEVmYxN3VCcVJhMVl3SXBBajJuWEQrdHlMamdmSGti?=
- =?utf-8?B?Q0lvcXYrdlB5VWVCM2JCVDJsYXdYdjZPdDNmTytXdlpienR6SU04T3dGQVBI?=
- =?utf-8?B?WWdvT1MvNnFtUFBzMjEvS3ByWTZ3SWNOVkFxNkVxMEt1ZGJQUGtXQXFpeFRE?=
- =?utf-8?B?QStxU24zR2hFN3FSODJEM1ZCRUVZQkk5a1kwSUUxbEVJYldSYUlsOHgvN08v?=
- =?utf-8?B?ejMxZG1SanEyZHNuZ1B0dXFYUHp1NVhUZEx3WGF2a2hoeXdvUGFaRjU3N29L?=
- =?utf-8?B?TjlhMVRCTmtiVUFPdHpjNGE5RDNIMTRMYmMrZkNYUjFxZk5VK1JGckp0U3M5?=
- =?utf-8?B?TTArUEhGMXUwbFpmenFRdExnbU8xU2VOZVc4RmxnSzVoRkhsTm1GenNxTk9w?=
- =?utf-8?B?cEVFK0I4WkVEeittQmhDdlU0TlhVdU5IRXl0RjdybGpHUG1lUmZVcXEvV0Zq?=
- =?utf-8?B?dklQYUttbjlLMnhkSlBjQ05wa2xlMlNyMHV5WVJRNFJEeHYvYnd6Z3FkRkkx?=
- =?utf-8?B?bUJqbmg1WE83T2pMZ3pEeXlxZ2d6TTNaZkxVK2tNaUNyczRuT2t3dnBwMzNt?=
- =?utf-8?B?aDArNGxLSlRJL1V2T3k0VmlYbG9kem1ML0UzZ3FWZDhNRzN3bURHYnVXRXpo?=
- =?utf-8?B?azJvYnNBU2RIVk1nZEZoczU0SG5GUnNDbnNKVS9ldGZZNW04TUhFZ0tEZURq?=
- =?utf-8?B?bkNBYnZjeGxXZmliejlRclR4K04vR2huOE15S1o0N1U3T0dwWUduWHFiRUtp?=
- =?utf-8?B?M1Q4cXp0MEZPNjB6S3czcHloTFE2TlNrWTlRZnFZdTRmUjR3ZUtOQWpObnR2?=
- =?utf-8?B?RFg1Y1hkdWdRSHdkZTFEQ1RuMExUYk5peW9yRlNDUEU3c1VqQWFNK3BpeURr?=
- =?utf-8?B?WGFLbWVJZzJULzd4VUdSTWtUOXNuZmhzNHM4VStkRTcrSFJFZlVZcmozZ0h0?=
- =?utf-8?B?ZHBydlRGY0NuK01pNFFoYi9ORDdYRGp2TEo5c1hnalpDRGRiZWN0K3VOY3ky?=
- =?utf-8?B?SUVuYW9GMGRHbHcwOXZDSmhMcXBEN3hKaElURGdyWUxudm8vR1d3RkhtZ2Z1?=
- =?utf-8?B?ZFpEUTE5MTFCRmFCV3hLeFRUUmtvbHRhNXVoRndQV2VwSkhuZXh2ZFFUNGpB?=
- =?utf-8?B?SEE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: dy1LQL+icHy4N70AXYppXAexEJI/+urR4UtRusw9so3mtVAHHOtjGTQ/4BNnVAVbcET7XKYr+9j52Yklw9hf+NJkN1g3dVphafL7im2sNoiLiQP6z4MJt2Vw1eNdD+nEIm/atI/E5T+vNeFbK+1bTINkG/FmDolpdjpi/y7M0tV5/b8bOBLx26d7VhfMELPN4P3CVPHX/gcFN18u+GiuiA4UY9RGFh+lRtBX9N9qnQCr/ukFHME+UpK8cpivx1WZvJbwVf8Yk4r+MzuOjmUQTHXCkNPWVp97UHRKihr/zcw28sr4gw3h77OX+/Vt5YZQKztGgJWpWyN3K5AK8CpgguAR99AJwVFr2C4+iVe/bsZXU0cM+5rpn3K/7Gt/d7nO9jvzPSP18Kk7HyixlWgOf30SbdOcqFvWkGVqg+HzGiNdxcHM8kC06lavlr2q9mFgVLYcMS+PeE0fuI/PdKF64bzszvHfQjAdcBj8jVVnUfZBX6o0R19EiWHJMO5A/nJVt8dCF3Ylc0nFEJ3Y2ghZAkwyRMvD2PkgUzGcSXIWqrwykrjR5A0YEHfnBCrtVV0R5GZAlz0rXL+HTnEvU7YwVYN+J/N0gj52a8W1eBkkVF+zz54jTszBO5C3iBypPKnF3YnsiDibO7QIyx14Yd6DdVKv7QjGEZyeMMWTXQ2vlup7l90Vttc3puv6yOf7A5uPu/muoghAAyLeSCYGa6mYQ8t89dVPHfKVeevLQ2UrqINsqkDM0pVQbp7mAt5QXSjhjDFpgfM/sNTbQl1Ng0sDxUdN/GgjzSJtQHkcssOZNZAhZD8UOQAPKoPk0H9yYjlmAuL1RSdcuqJ3AZaCdfmAksxulDahXynQfjw+gwsCmCNEPMiJW6NshhVTHJ9ZHD+Z
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 587ab4b8-7737-4fff-c2a5-08db50df5379
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5280.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 22:47:11.4502
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 55gGKV36cl5xpaaZRrKt/nUu1nBfKTo1VCsokPzVATDgxRX7JDfKtUlkDL9wFKIBQWUd8UrUHmw8wvNglt926PtKH1xoHMZ+YYgDeVxKl1w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4394
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_14,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
- adultscore=0 spamscore=0 mlxscore=0 phishscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305090185
-X-Proofpoint-GUID: Q5dE-tjADhR-S9K-T0mKQVofmCeyzxMZ
-X-Proofpoint-ORIG-GUID: Q5dE-tjADhR-S9K-T0mKQVofmCeyzxMZ
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230509-w1-replace-usage-of-found-with-tmp-list-iterator-variable-v2-1-259bf1ba44ed@gmail.com>
+X-B4-Tracking: v=1; b=H4sIABDOWmQC/x2OTQqDMBBGryJZdyA1WLBXKV1M4qQOaCIzUQvi3
+ Ru7fDy+n8MoCZOaZ3MYoY2Vc6rQ3hoTRkwfAh4qm9a2zna2h/0OQsuEgWBVrD5HiHlNA+xcRij
+ zAhNrAS4kWLLAhsLoJ4LQPVzvYrTO9ab2e1QCL5jCeC3MqDVyiUUo8vd/6vU+zx+gpqgrpAAAA
+ A==
+To:     Evgeniy Polyakov <zbr@ioremap.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Jakob Koschel <jkl820.git@gmail.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1683672605; l=2926;
+ i=jkl820.git@gmail.com; s=20230112; h=from:subject:message-id;
+ bh=ArsdWSzl//HHaek54+hIwOznbov1JSj2WiaKVNSOxSQ=;
+ b=JFegx2U1WFfpmiz6SsV55wQMbiLEfVPzJmvO3+PeLMBFBVCeGC2JymSZTHVQ2FjqemympYLAbsfE
+ cGOeTyPcA1GhoTyff/GtPQ2k1YovsW+jSgm6jfBMnMpTMeGxJTtl
+X-Developer-Key: i=jkl820.git@gmail.com; a=ed25519;
+ pk=rcRpP90oZXet9udPj+2yOibfz31aYv8tpf0+ZYOQhyA=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suravee,
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-A couple of additional comments below:
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate iterator variable instead of a
+found boolean [1].
 
-On 5/9/2023 7:16 AM, Suravee Suthikulpanit wrote:
-> An Interrupt Remapping Table (IRT) stores interrupt remapping configuration
-> for each device. In a normal operation, the AMD IOMMU caches the table
-> to optimize subsequent data accesses. This requires the IOMMU driver to
-> invalidate IRT whenever it updates the table. The invalidation process
-> includes issuing an INVALIDATE_INTERRUPT_TABLE command following by
-> a COMPLETION_WAIT command.
->
-> However, there are cases in which the IRT is updated at a high rate.
-> For example, for IOMMU AVIC, the IRTE[IsRun] bit is updated on every
-> vcpu scheduling (i.e. amd_iommu_update_ga()). On system with large
-> amount of vcpus and VFIO PCI pass-through devices, the invalidation
-> process could potentially become a performance bottleneck.
->
-> Introducing a new kernel boot option:
->
->      amd_iommu=irtcachedis
->
-> which disables IRTE caching by setting the IRTCachedis bit in each IOMMU
-> Control register, and bypass the IRT invalidation process.
->
-> Co-developed-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-> [Awaiting sign-off-by Alejandro]
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->   .../admin-guide/kernel-parameters.txt         |  1 +
->   drivers/iommu/amd/amd_iommu_types.h           |  4 +++
->   drivers/iommu/amd/init.c                      | 25 +++++++++++++++++++
->   3 files changed, 30 insertions(+)
-[snip]
-> diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-> index fd487c33b28a..01d131e75de4 100644
-> --- a/drivers/iommu/amd/init.c
-> +++ b/drivers/iommu/amd/init.c
-> @@ -160,6 +160,7 @@ static int amd_iommu_xt_mode = IRQ_REMAP_XAPIC_MODE;
->   static bool amd_iommu_detected;
->   static bool amd_iommu_disabled __initdata;
->   static bool amd_iommu_force_enable __initdata;
-> +static bool amd_iommu_irtcachedis __initdata;
-Lets drop the __initdata attribute above, since amd_iommu_irtcachedis is 
-used by early_enable_iommus(), which is in .text (causes modpost warning).
+This removes the need to use a found variable and simply checking if
+the variable was set, can determine if the break/goto was hit.
 
-[snip]
->   
-> +static void iommu_enable_irtcachedis(struct amd_iommu *iommu)
-> +{
-> +	u64 ctrl;
-> +
-> +	if (amd_iommu_irtcachedis) {
-> +		/*
-> +		 * Note:
-> +		 * The support for IRTCacheDis feature is dertermined by
-> +		 * checking if the bit is writable.
-> +		 */
-> +		iommu_feature_enable(iommu, CONTROL_IRTCACHEDIS);
-> +		ctrl = readq(iommu->mmio_base +  MMIO_CONTROL_OFFSET);
-> +		ctrl &= (1ULL << CONTROL_IRTCACHEDIS);
-> +		if (ctrl)
-> +			iommu->irtcachedis_enabled = true;
-> +		pr_info("iommu%d (%#06x) : IRT cache is %s\n",
-> +			iommu->index, iommu->devid,
-> +			iommu->irtcachedis_enabled ? "disabled" : "enabled");
-> +	}
-> +}
-> +
->   static void early_enable_iommu(struct amd_iommu *iommu)
->   {
->   	iommu_disable(iommu);
-> @@ -2710,6 +2732,7 @@ static void early_enable_iommu(struct amd_iommu *iommu)
->   	iommu_set_exclusion_range(iommu);
->   	iommu_enable_ga(iommu);
->   	iommu_enable_xt(iommu);
-> +	iommu_enable_irtcachedis(iommu);
->   	iommu_enable(iommu);
->   	iommu_flush_all_caches(iommu);
->   }
-I need to understand better the code flow around kdump, and it is not 
-clear from my reading of the spec that this is required, but shouldn't 
-iommu_enable_irtcachedis() also be called in the else{} block of 
-early_enable_iommus()?
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+---
+Changes in v2:
+  - fix checkpatch intentation issues
 
-Thank you,
-Alejandro
+Note: I've changed my email address to contributions to
+jkl820.git@gmail.com, I hope that's not an issue since the v1 was still
+on my old email.
+---
+ drivers/w1/w1.c | 32 +++++++++++++++-----------------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+index 9d199fed9628..c453160684e1 100644
+--- a/drivers/w1/w1.c
++++ b/drivers/w1/w1.c
+@@ -830,49 +830,47 @@ int w1_slave_detach(struct w1_slave *sl)
+ 
+ struct w1_master *w1_search_master_id(u32 id)
+ {
+-	struct w1_master *dev;
+-	int found = 0;
++	struct w1_master *dev = NULL, *iter;
+ 
+ 	mutex_lock(&w1_mlock);
+-	list_for_each_entry(dev, &w1_masters, w1_master_entry) {
+-		if (dev->id == id) {
+-			found = 1;
+-			atomic_inc(&dev->refcnt);
++	list_for_each_entry(iter, &w1_masters, w1_master_entry) {
++		if (iter->id == id) {
++			dev = iter;
++			atomic_inc(&iter->refcnt);
+ 			break;
+ 		}
+ 	}
+ 	mutex_unlock(&w1_mlock);
+ 
+-	return (found)?dev:NULL;
++	return dev;
+ }
+ 
+ struct w1_slave *w1_search_slave(struct w1_reg_num *id)
+ {
+ 	struct w1_master *dev;
+-	struct w1_slave *sl = NULL;
+-	int found = 0;
++	struct w1_slave *sl = NULL, *iter;
+ 
+ 	mutex_lock(&w1_mlock);
+ 	list_for_each_entry(dev, &w1_masters, w1_master_entry) {
+ 		mutex_lock(&dev->list_mutex);
+-		list_for_each_entry(sl, &dev->slist, w1_slave_entry) {
+-			if (sl->reg_num.family == id->family &&
+-					sl->reg_num.id == id->id &&
+-					sl->reg_num.crc == id->crc) {
+-				found = 1;
++		list_for_each_entry(iter, &dev->slist, w1_slave_entry) {
++			if (iter->reg_num.family == id->family &&
++					iter->reg_num.id == id->id &&
++					iter->reg_num.crc == id->crc) {
++				sl = iter;
+ 				atomic_inc(&dev->refcnt);
+-				atomic_inc(&sl->refcnt);
++				atomic_inc(&iter->refcnt);
+ 				break;
+ 			}
+ 		}
+ 		mutex_unlock(&dev->list_mutex);
+ 
+-		if (found)
++		if (sl)
+ 			break;
+ 	}
+ 	mutex_unlock(&w1_mlock);
+ 
+-	return (found)?sl:NULL;
++	return sl;
+ }
+ 
+ void w1_reconnect_slaves(struct w1_family *f, int attach)
+
+---
+base-commit: eeac8ede17557680855031c6f305ece2378af326
+change-id: 20230509-w1-replace-usage-of-found-with-tmp-list-iterator-variable-c56393ff0339
+
+Best regards,
+-- 
+Jakob Koschel <jkl820.git@gmail.com>
+
