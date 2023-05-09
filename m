@@ -2,69 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E8E6FC1C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 615B16FC120
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234367AbjEII1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 04:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43854 "EHLO
+        id S234039AbjEIIDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234304AbjEII1D (ORCPT
+        with ESMTP id S235041AbjEIIDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 04:27:03 -0400
-X-Greylist: delayed 1189 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 09 May 2023 01:27:03 PDT
-Received: from mail.rawlinsfis.com (mail.rawlinsfis.com [89.40.118.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178A749EF
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:27:03 -0700 (PDT)
-Received: by mail.rawlinsfis.com (Postfix, from userid 1001)
-        id 3BA8B8246E; Tue,  9 May 2023 08:51:20 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rawlinsfis.com;
-        s=mail; t=1683618684;
-        bh=lDo1OjfzzJ3sOfR9tSDg5RMmT4aDyBP45hIVJCLtIrE=;
-        h=Date:From:To:Subject:From;
-        b=WNFYaCMmCzzR2/awPXfJRdU9i8VLRU8xgy/qh5S0F5QBkI7m13r6nUTsS9esVVRqL
-         IvfxsLH1Yt4GSabky3bQZ1JlJlg33zFybN0FQW8Y0GDRSSS821jHpACb11IaWaoTip
-         PKj4tQe+KqvESozXf+cF4LmjR7rbM9/CBxR0N2nT3bIDHAzYNMoLP1t3aemlmZGG1+
-         m0PwTltL52n0aMqdto7/SyVANK1RViU5MLCbhTthqNW/VeAujhshVmne+oF297VxjB
-         DAHVe9HbWrqFzZmDRpsLMa2zs+Kow7nIpRHYdILQOJ1JQukJaHZtz/Y97OhSQRBIT1
-         m3PrOYQ1SCuVA==
-Received: by mail.rawlinsfis.com for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 07:51:09 GMT
-Message-ID: <20230509074500-0.1.3e.5px3.0.4bq9cx4npg@rawlinsfis.com>
-Date:   Tue,  9 May 2023 07:51:09 GMT
-From:   "Damian Hordych" <damian.hordych@rawlinsfis.com>
-To:     <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?Q?Pompy_ciep=C5=82a_-_nowe_warunki_?=
-X-Mailer: mail.rawlinsfis.com
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 9 May 2023 04:03:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18AC106DF
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:02:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9A9561825
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 07:56:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3465C433A7;
+        Tue,  9 May 2023 07:56:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683618961;
+        bh=mwtNdR8idA2DbPRgzw3PrtbTC2Z2A+y43aEyF1Zi2SY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=avh9vw/YFfASfIGXxo6N17tOFfJzRCwKHdeCY0M3a2aqc3bKMbaKsPGfDPvQgwtJa
+         4jl24qGir4wV6zxN44LbSyCThco5cu8gFpeCjgPIebKsvDyEQtpn85Lb2TGTjQTtvc
+         kBf/g6k43HcWP2/6M+U+JhbogWuJ4cSnSk2HGMYSNByyNFnuiNsaOOy+Quy7ZzKfSu
+         s5O2OhaXyPxSMe0xzhF4cK7zIskAycnmgqAo3gHL/qrUFYRU+ReEOXVNTIrgNJqBaC
+         HHr+XIZHaN9wewy0jq5mxmj2HMWZr7frsEThjia46Sn3hr0PLLSQt/UJ8/aqlEK0O1
+         XQt+UpjgeXuUw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pwICV-00Dp5r-LD;
+        Tue, 09 May 2023 08:55:59 +0100
+Date:   Tue, 09 May 2023 08:55:59 +0100
+Message-ID: <863546ndkg.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm64: perf: Mark all accessor functions inline
+In-Reply-To: <d53a19043c0c3bd25f6c203e73a2fb08a9661824.1683561482.git.geert+renesas@glider.be>
+References: <3a7d9bc7470aa2d85696ee9765c74f8c03fb5454.1683561482.git.geert+renesas@glider.be>
+        <d53a19043c0c3bd25f6c203e73a2fb08a9661824.1683561482.git.geert+renesas@glider.be>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: geert+renesas@glider.be, linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Mon, 08 May 2023 17:05:19 +0100,
+Geert Uytterhoeven <geert+renesas@glider.be> wrote:
+>=20
+> When just including <asm/arm_pmuv3.h>:
+>=20
+>     arch/arm64/include/asm/arm_pmuv3.h:31:13: error: =E2=80=98write_pmevt=
+ypern=E2=80=99 defined but not used [-Werror=3Dunused-function]
+>        31 | static void write_pmevtypern(int n, unsigned long val)
+> 	  |             ^~~~~~~~~~~~~~~~
+>     arch/arm64/include/asm/arm_pmuv3.h:24:13: error: =E2=80=98write_pmevc=
+ntrn=E2=80=99 defined but not used [-Werror=3Dunused-function]
+>        24 | static void write_pmevcntrn(int n, unsigned long val)
+> 	  |             ^~~~~~~~~~~~~~~
+>     arch/arm64/include/asm/arm_pmuv3.h:16:22: error: =E2=80=98read_pmevcn=
+trn=E2=80=99 defined but not used [-Werror=3Dunused-function]
+>        16 | static unsigned long read_pmevcntrn(int n)
+> 	  |                      ^~~~~~~~~~~~~~
+>=20
+> Fix this by adding the missing "inline" keywords to the three accessor
+> functions that lack them.
 
-w ramach nowej edycji programu Czyste Powietrze dla klient=C3=B3w indywid=
-ualnych mog=C4=85 otrzyma=C4=87 Pa=C5=84stwo do 135 tys. z=C5=82 wsparcia=
- na zakup pompy ciep=C5=82a.
+Looks reasonable to me. Each of these accessors is used exactly once
+in the PMUv3 driver, so the inlining doesn't result in extra bloat.
 
-Pr=C3=B3cz wy=C5=BCszego dofinansowania program zak=C5=82ada m.in. podwy=C5=
-=BCszenie prog=C3=B3w dochodowych oraz mo=C5=BCliwo=C5=9B=C4=87 z=C5=82o=C5=
-=BCenia kolejnego wniosku o dofinansowanie dla tych, kt=C3=B3rzy ju=C5=BC=
- wcze=C5=9Bniej skorzystali z Programu.
+Reviewed-by: Marc Zyngier <maz@kernel.org>
 
-Jako firma specjalizuj=C4=85ca si=C4=99 w dostawie, monta=C5=BCu i serwis=
-ie pomp ciep=C5=82a pomo=C5=BCemy Pa=C5=84stwu w uzyskaniu dofinansowania=
- wraz z kompleksow=C4=85 realizacj=C4=85 ca=C5=82ego projektu.
+	M.
 
-S=C4=85 Pa=C5=84stwo zainteresowani?
-
-Pozdrawiam
-Damian Hordych
+--=20
+Without deviation from the norm, progress is not possible.
