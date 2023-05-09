@@ -2,55 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A4C6FC522
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBF26FC525
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234850AbjEILjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 07:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
+        id S235398AbjEILjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 07:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjEILjf (ORCPT
+        with ESMTP id S235059AbjEILjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 07:39:35 -0400
+        Tue, 9 May 2023 07:39:40 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93225173C;
-        Tue,  9 May 2023 04:39:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33C84C3E;
+        Tue,  9 May 2023 04:39:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683632374; x=1715168374;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jlUp+w1eLo+0Ho6s3pyeHuASx0Ar1h308Xlzv9XQ2aA=;
-  b=IxmCl1BAIy1XLBfPruWyLxZ3UxUWdy8H2zStaL4ih3jW9XbanMTntYgp
-   kZqsTBnacn1hqL4qPrweKKLugAcvD0vXkPuqSKK55g5tfPcm7ZIOpDF2n
-   06WnIDqejuD2vhIK4PsSy3/nlMaa4RLhCN4MfScPo7Lxf3IuN6dLisJV0
-   uQMdGIrrtAP9tj3DpGJr3KjBJqt7KCYKYadWye60pWZpavEk2aHPmwyY7
-   jwNTXKwqkzKZTnKWgsD+Jt9FHKeyroTRkcC2er0wp1a1minirZAA+Wy87
-   b6LD2ZoHIL+Ao8GVKB3QdebMzwSFoEBRXaRPGvQNrYLPO57ixAlDbQmv+
+  t=1683632379; x=1715168379;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Q1Er4kkG8eGciYxqILmGRDghl79dke4ewOvyg1s/eaw=;
+  b=eT3xdnFP3+c0r1bkofEPw3AsCP/KuTvqqrYEgs1tT+ao2bWVCXPczYFY
+   xi9dIlK4NA92wuMK0nqRdJU1A1hQYxsi2AhFGFvsEo4wH4ib94O6T2yic
+   KnoY6b72GbyDiB4evOzdUjpFJYnLoOOxFW/Ucdc9yKSFQb5CSFVLG1PJP
+   X/WCgM43hUFiHLtg2+VidnfdMkKt3HYuTtmmi6zOep7GNY/ZENCAV1c5u
+   4ERh+aahhvlg+rTx+HW+AkkIab3GZGaSIeVOBB6PJtz99FbRbhdp0G+Y5
+   rg1B+gBBBB1F4nprk/EHn9j7a9aSax/Ncw4cH6S8/P/CDHWd0LJBHrunI
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="347362052"
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="347362060"
 X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="347362052"
+   d="scan'208";a="347362060"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 04:39:34 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 04:39:38 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="763805930"
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="763805934"
 X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="763805930"
+   d="scan'208";a="763805934"
 Received: from mbrdon-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.219.121])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 04:39:32 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 04:39:35 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v3 0/6] serial: Separate RT288x/Au1xxx code into own file
-Date:   Tue,  9 May 2023 14:39:18 +0300
-Message-Id: <20230509113924.19540-1-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v3 1/6] serial: 8250: Change dl_read/write to handle value as u32
+Date:   Tue,  9 May 2023 14:39:19 +0300
+Message-Id: <20230509113924.19540-2-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230509113924.19540-1-ilpo.jarvinen@linux.intel.com>
+References: <20230509113924.19540-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -64,48 +68,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A non-trivial amount of RT288x/Au1xxx code is encapsulated into
-ifdeffery in 8250_port / 8250_early and some if/switch UPIO_AU blocks.
-Create a separate file from them and do a few additional cleanups.
+Divisor latch read/write functions currently handle the value is int.
+As the value is related to HW context, u32 makes much more sense than a
+signed type.
 
-I kept the Kconfig entry as bool because the code has somewhat tricky
-dependency chain (mips arch code and 8250_of driver).
+While at it, name the parameters in the callback signature.
 
-v3:
-- Convert dl_read/write() to take u32 arg + name the args
-- Separatate the non-driver datastructure changes & document them better
-- Fix build when SERIAL_8250=m + SERIAL_8250_RT288X=y (+note reasoning
-  in the commit message for future reference)
-- Use u8 for arrays that no longer have < 0 values
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250.h          |  4 ++--
+ drivers/tty/serial/8250/8250_em.c       |  4 ++--
+ drivers/tty/serial/8250/8250_port.c     | 10 +++++-----
+ drivers/tty/serial/8250/8250_pxa.c      |  2 +-
+ drivers/tty/serial/8250/8250_uniphier.c |  4 ++--
+ include/linux/serial_8250.h             |  4 ++--
+ 6 files changed, 14 insertions(+), 14 deletions(-)
 
-v2:
-- Define register map array lengths explicitly to avoid creating
-  declaration trap.
-
-Ilpo Järvinen (6):
-  serial: 8250: Change dl_read/write to handle value as u32
-  serial: 8250: Document uart_8250_port's ->dl_read/write()
-  serial: 8250: Add dl_read/write, bugs and mapsize into plat_serial8250_port
-  serial: 8250: RT288x/Au1xxx code away from core
-  serial: 8250_rt288x: Name non-standard divisor latch reg
-  serial: 8250_rt288x: Remove unnecessary UART_REG_UNMAPPED
-
- arch/mips/alchemy/common/platform.c     |  10 +-
- drivers/tty/serial/8250/8250.h          |   4 +-
- drivers/tty/serial/8250/8250_core.c     |   4 +
- drivers/tty/serial/8250/8250_early.c    |  21 ----
- drivers/tty/serial/8250/8250_em.c       |   4 +-
- drivers/tty/serial/8250/8250_of.c       |   4 +-
- drivers/tty/serial/8250/8250_port.c     |  84 +--------------
- drivers/tty/serial/8250/8250_pxa.c      |   2 +-
- drivers/tty/serial/8250/8250_rt288x.c   | 136 ++++++++++++++++++++++++
- drivers/tty/serial/8250/8250_uniphier.c |   4 +-
- drivers/tty/serial/8250/Makefile        |   1 +
- drivers/tty/serial/Makefile             |   2 +-
- include/linux/serial_8250.h             |  42 +++++++-
- 13 files changed, 200 insertions(+), 118 deletions(-)
- create mode 100644 drivers/tty/serial/8250/8250_rt288x.c
-
+diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
+index 1e8fe44a7099..5418708f4631 100644
+--- a/drivers/tty/serial/8250/8250.h
++++ b/drivers/tty/serial/8250/8250.h
+@@ -167,12 +167,12 @@ static unsigned int __maybe_unused serial_icr_read(struct uart_8250_port *up,
+ 
+ void serial8250_clear_and_reinit_fifos(struct uart_8250_port *p);
+ 
+-static inline int serial_dl_read(struct uart_8250_port *up)
++static inline u32 serial_dl_read(struct uart_8250_port *up)
+ {
+ 	return up->dl_read(up);
+ }
+ 
+-static inline void serial_dl_write(struct uart_8250_port *up, int value)
++static inline void serial_dl_write(struct uart_8250_port *up, u32 value)
+ {
+ 	up->dl_write(up, value);
+ }
+diff --git a/drivers/tty/serial/8250/8250_em.c b/drivers/tty/serial/8250/8250_em.c
+index 25a9ecf26be6..ef5019e944ea 100644
+--- a/drivers/tty/serial/8250/8250_em.c
++++ b/drivers/tty/serial/8250/8250_em.c
+@@ -139,12 +139,12 @@ static void serial8250_em_serial_out(struct uart_port *p, int offset, int value)
+ 	}
+ }
+ 
+-static int serial8250_em_serial_dl_read(struct uart_8250_port *up)
++static u32 serial8250_em_serial_dl_read(struct uart_8250_port *up)
+ {
+ 	return serial_in(up, UART_DLL_EM) | serial_in(up, UART_DLM_EM) << 8;
+ }
+ 
+-static void serial8250_em_serial_dl_write(struct uart_8250_port *up, int value)
++static void serial8250_em_serial_dl_write(struct uart_8250_port *up, u32 value)
+ {
+ 	serial_out(up, UART_DLL_EM, value & 0xff);
+ 	serial_out(up, UART_DLM_EM, value >> 8 & 0xff);
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index fe8d79c4ae95..0622c11f0064 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -325,7 +325,7 @@ static const struct serial8250_config uart_config[] = {
+ };
+ 
+ /* Uart divisor latch read */
+-static int default_serial_dl_read(struct uart_8250_port *up)
++static u32 default_serial_dl_read(struct uart_8250_port *up)
+ {
+ 	/* Assign these in pieces to truncate any bits above 7.  */
+ 	unsigned char dll = serial_in(up, UART_DLL);
+@@ -335,7 +335,7 @@ static int default_serial_dl_read(struct uart_8250_port *up)
+ }
+ 
+ /* Uart divisor latch write */
+-static void default_serial_dl_write(struct uart_8250_port *up, int value)
++static void default_serial_dl_write(struct uart_8250_port *up, u32 value)
+ {
+ 	serial_out(up, UART_DLL, value & 0xff);
+ 	serial_out(up, UART_DLM, value >> 8 & 0xff);
+@@ -389,12 +389,12 @@ void au_serial_out(struct uart_port *p, int offset, int value)
+ }
+ 
+ /* Au1x00 haven't got a standard divisor latch */
+-static int au_serial_dl_read(struct uart_8250_port *up)
++static u32 au_serial_dl_read(struct uart_8250_port *up)
+ {
+ 	return __raw_readl(up->port.membase + 0x28);
+ }
+ 
+-static void au_serial_dl_write(struct uart_8250_port *up, int value)
++static void au_serial_dl_write(struct uart_8250_port *up, u32 value)
+ {
+ 	__raw_writel(value, up->port.membase + 0x28);
+ }
+@@ -847,7 +847,7 @@ static void disable_rsa(struct uart_8250_port *up)
+ static int size_fifo(struct uart_8250_port *up)
+ {
+ 	unsigned char old_fcr, old_mcr, old_lcr;
+-	unsigned short old_dl;
++	unsigned int old_dl;
+ 	int count;
+ 
+ 	old_lcr = serial_in(up, UART_LCR);
+diff --git a/drivers/tty/serial/8250/8250_pxa.c b/drivers/tty/serial/8250/8250_pxa.c
+index 795e55142d4c..28b341f602c6 100644
+--- a/drivers/tty/serial/8250/8250_pxa.c
++++ b/drivers/tty/serial/8250/8250_pxa.c
+@@ -60,7 +60,7 @@ static const struct of_device_id serial_pxa_dt_ids[] = {
+ MODULE_DEVICE_TABLE(of, serial_pxa_dt_ids);
+ 
+ /* Uart divisor latch write */
+-static void serial_pxa_dl_write(struct uart_8250_port *up, int value)
++static void serial_pxa_dl_write(struct uart_8250_port *up, u32 value)
+ {
+ 	unsigned int dll;
+ 
+diff --git a/drivers/tty/serial/8250/8250_uniphier.c b/drivers/tty/serial/8250/8250_uniphier.c
+index a2978abab0db..a405155264b1 100644
+--- a/drivers/tty/serial/8250/8250_uniphier.c
++++ b/drivers/tty/serial/8250/8250_uniphier.c
+@@ -145,12 +145,12 @@ static void uniphier_serial_out(struct uart_port *p, int offset, int value)
+  * The divisor latch register exists at different address.
+  * Override dl_read/write callbacks.
+  */
+-static int uniphier_serial_dl_read(struct uart_8250_port *up)
++static u32 uniphier_serial_dl_read(struct uart_8250_port *up)
+ {
+ 	return readl(up->port.membase + UNIPHIER_UART_DLR);
+ }
+ 
+-static void uniphier_serial_dl_write(struct uart_8250_port *up, int value)
++static void uniphier_serial_dl_write(struct uart_8250_port *up, u32 value)
+ {
+ 	writel(value, up->port.membase + UNIPHIER_UART_DLR);
+ }
+diff --git a/include/linux/serial_8250.h b/include/linux/serial_8250.h
+index 6f78f302d272..7b5d558e4e0c 100644
+--- a/include/linux/serial_8250.h
++++ b/include/linux/serial_8250.h
+@@ -129,8 +129,8 @@ struct uart_8250_port {
+ 	const struct uart_8250_ops *ops;
+ 
+ 	/* 8250 specific callbacks */
+-	int			(*dl_read)(struct uart_8250_port *);
+-	void			(*dl_write)(struct uart_8250_port *, int);
++	u32			(*dl_read)(struct uart_8250_port *up);
++	void			(*dl_write)(struct uart_8250_port *up, u32 value);
+ 
+ 	struct uart_8250_em485 *em485;
+ 	void			(*rs485_start_tx)(struct uart_8250_port *);
 -- 
 2.30.2
 
