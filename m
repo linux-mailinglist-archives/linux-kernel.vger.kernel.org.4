@@ -2,135 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53AAE6FC40D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6C16FC411
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235380AbjEIKgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 06:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
+        id S235409AbjEIKgQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 9 May 2023 06:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235318AbjEIKgB (ORCPT
+        with ESMTP id S235258AbjEIKgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 06:36:01 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6E010A27;
-        Tue,  9 May 2023 03:35:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2B0841F45A;
-        Tue,  9 May 2023 10:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683628495; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=z4MbD2ACh3hpHrhSw43Y87lfUQzej8A7wcLhxK8QwrA=;
-        b=LCF1CluIkegxLgjO5KHPunJbcrtz1mpYn4LktBxFrmsa1yUrhGvoB/SU6WhCId+SSKFl0I
-        Wj60Zs47HrzWF17T1B0WtMKCQ8EPgJ7D0WEPsx3xqk0x+d7b9hDcwBZvUHgpi9uautR5Oh
-        Fq1PClRqCUVlbLFwr21WOx0RIshBdbs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F021313581;
-        Tue,  9 May 2023 10:34:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id y2TkOc4hWmT1CgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 09 May 2023 10:34:54 +0000
-Date:   Tue, 9 May 2023 12:34:53 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Jiri Wiesner <jwiesner@suse.de>
-Subject: Re: [RFC PATCH 3/3] cgroup: Do not take css_set_lock in
- cgroup_show_path
-Message-ID: <6rjdfjltz5kkwzobpeefbqxzj4wbd4jzstdryb6rb67td3x45q@5ujarspzjk3x>
-References: <20230502133847.14570-1-mkoutny@suse.com>
- <20230502133847.14570-4-mkoutny@suse.com>
- <ZFUktg4Yxa30jRBX@slm.duckdns.org>
- <ta7bilcvc7lzt5tvs44y5wxqt6i3gdmvzwcr5h2vxhjhshmivk@3mecui76fxvy>
- <ZFVIJlAMyzTh3QTP@slm.duckdns.org>
+        Tue, 9 May 2023 06:36:02 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569D7106E5;
+        Tue,  9 May 2023 03:35:49 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-55a829411b5so51867797b3.1;
+        Tue, 09 May 2023 03:35:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683628539; x=1686220539;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=STRG9z0qGkjgtmp/Ps+FRw09qM+RNYz5SrXCeHI+JvM=;
+        b=LnHcvKDYr8O+nD84jiRRtE+nsuRO+Y79Pj9hGS952uKq/vzJW4s357JFbho8d/M5lO
+         76X51V1AJwLvAs4/huy8Pg5M8j4JixEE6urk8ikVMbcBXZThu8u9E4RZ8K4V9uQaIz0r
+         Mn3xM9XoCbYBnWVWaesGwNPbsCLqU/8se/KmcKnKYeai6Nw6tXRmGB0NTkOqQrIlxxW2
+         r+vUBxXNTT7Icz00gucwnSenXBhZ7dcIXC8EoFxlSBgheJ/46Dt0no5jQsoZXt4fQZAo
+         2uK6/syaXdXedAipo13eA3yFbN/bY5BQmZ4nuyCJO7ocqtrgYVyLaKAWl95TK+w6NR52
+         LFkg==
+X-Gm-Message-State: AC+VfDxMdiLc2KDXaNj8unEAVb36p7BNSWRlCBKQ1FC/WcsjFKQO9Ycc
+        mzMR/+MCiuYfS5uhBwYKENysHU3h+tqtCA==
+X-Google-Smtp-Source: ACHHUZ4pZlGzrTflynDcIgK6hxKFt8Aqe8g8SmveSIhcsigtQrFOUhoAlFdNVE8fnV+ai98Z70b3QQ==
+X-Received: by 2002:a81:4602:0:b0:55a:c42:406d with SMTP id t2-20020a814602000000b0055a0c42406dmr15061368ywa.3.1683628539086;
+        Tue, 09 May 2023 03:35:39 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id a145-20020a0dd897000000b0055a07c7be39sm3199458ywe.31.2023.05.09.03.35.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 03:35:38 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-b9e27684b53so4982207276.0;
+        Tue, 09 May 2023 03:35:38 -0700 (PDT)
+X-Received: by 2002:a25:258a:0:b0:b96:e7a6:dbe4 with SMTP id
+ l132-20020a25258a000000b00b96e7a6dbe4mr12470821ybl.21.1683628537827; Tue, 09
+ May 2023 03:35:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ulul6m7iwj5svxlz"
-Content-Disposition: inline
-In-Reply-To: <ZFVIJlAMyzTh3QTP@slm.duckdns.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230508104557.47889-1-wsa+renesas@sang-engineering.com>
+ <20230508104557.47889-2-wsa+renesas@sang-engineering.com> <CAMuHMdWGaDT_XGpeVm-915hbxa8-w5303QWg0a0iCjqk998unQ@mail.gmail.com>
+ <ZFlD7x99++k3yfE1@kunai>
+In-Reply-To: <ZFlD7x99++k3yfE1@kunai>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 9 May 2023 12:35:26 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUS56xQbOcRx7kVhL_irQQR2cnDr0Y6p6q8tCjZ2U_dwg@mail.gmail.com>
+Message-ID: <CAMuHMdUS56xQbOcRx7kVhL_irQQR2cnDr0Y6p6q8tCjZ2U_dwg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/3] dt-bindings: PCI: rcar-pci-host: add optional regulators
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Wolfram,
 
---ulul6m7iwj5svxlz
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, May 8, 2023 at 8:48 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> > > +  vpcie1v5-supply:
+> > > +    description: The 1.5v regulator to use for PCIe.
+> >
+> > +1.5V is only present on mini-PCIe slots...
+>
+> Since mini-PCIe is a subset of PCIe, I'd think we can leave the
+> description as-is.
 
-On Fri, May 05, 2023 at 08:17:10AM -1000, Tejun Heo <tj@kernel.org> wrote:
-> On Fri, May 05, 2023 at 07:32:40PM +0200, Michal Koutn=FD wrote:
-> > On Fri, May 05, 2023 at 05:45:58AM -1000, Tejun Heo <tj@kernel.org> wro=
-te:
-> > > > There are three relevant nodes for each cgroupfs entry:
-> > > >=20
-> > > >         R ... cgroup hierarchy root
-> > > >         M ... mount root
-> > > >         C ... reader's cgroup NS root
-> > > >=20
-> > > > mountinfo is supposed to show path from C to M.
-> > >=20
-> > > At least for cgroup2, the path from C to M isn't gonna change once NS=
- is
-> > > established, right?
-> >=20
-> > Right. Although, the argument about M (when C above M or when C and M in
-> > different subtrees) implicitly relies on the namespace_sem.
->=20
-> I don't follow. Can you please elaborate a bit more?
+Sure, the description is fine.
 
-I wanted to say that even with restriction to cgroup2, the css_set_lock
-removal would also rely on namespace_sem.
+> > > +
+> > > +  vpcie3v3-supply:
+> > > +    description: The 3.3v regulator to use for PCIe.
+> >
+> > ... while +3.3V is present on PCIe, mini-PCIe, and M2 PCIe slots.
+> >
+> > In addition, normal PCIe slots also have +12V.
+> > So I think it would be prudent to add a vpcie12v0-supply property, too.
+>
+> I agree. I can't test it but it is trivial enough to add 12v support as
+> well.
+>
+> > W.r.t. to the actual naming, I don't know if there's already a (de facto)
+> > standard for that?
+>
+> I couldn't find one and took what I think is the most used pattern. But
+> I wasn't entirely sure, this is why the series is still RFC.
 
-For a given mountinfo entry the path C--M won't change (no renames).
-The question is whether cgroup M will stay around (with the relaxed
-locking):
+Upon second thought, shouldn't these supplies be part of a PCIe
+connector subnode, as they are not properties of the PCIe host
+controller itself?
 
-  - C >=3D M (C is below M)=20
-    -> C (transitively) pins M
+Gr{oetje,eeting}s,
 
-  - C < M (C is above M) or C and M are in two disjoint subtrees (path
-    goes through a common ancestor)
-    -> M could be released without relation to C (even on cgroup2, with
-       the css_set_lock removed) but such a destructive operation on M
-       is excluded as long as namespace_sem is held during entry
-       rendering.
+                        Geert
 
-Does that clarify the trade-off of removing css_set_lock at this spot?
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Thanks,
-Michal
-
---ulul6m7iwj5svxlz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZFohyQAKCRAkDQmsBEOq
-uS+lAP0TvpVVVydhEBrTrZvKptICgVmSEmOvO3nyzJIgl+tsiQD/dQDf8sn52aYM
-5X1mlDRdvM/4tqdyHD5ZxRmF7hI+PAo=
-=d4Sg
------END PGP SIGNATURE-----
-
---ulul6m7iwj5svxlz--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
