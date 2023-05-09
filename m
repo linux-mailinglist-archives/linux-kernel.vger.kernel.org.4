@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6E46FC332
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 570766FC335
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235111AbjEIJut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 05:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
+        id S235140AbjEIJuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 05:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234825AbjEIJu0 (ORCPT
+        with ESMTP id S234838AbjEIJub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 05:50:26 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56190D9;
-        Tue,  9 May 2023 02:50:25 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64115eef620so41093170b3a.1;
-        Tue, 09 May 2023 02:50:25 -0700 (PDT)
+        Tue, 9 May 2023 05:50:31 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBB2D9;
+        Tue,  9 May 2023 02:50:30 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6436e004954so5828729b3a.0;
+        Tue, 09 May 2023 02:50:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683625824; x=1686217824;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cpHqB1C/P0ODmloRTkBUYjFxBRGC705v3QDRT3fRYTs=;
-        b=r1eHqu1dw4xbs3AkMn+R0MqCfekbvg+F8DEcfNQu6JG3ZmWQomABCEW9rciHTNxw5v
-         izFwnS8odfsvpQugRJnSD7xs0HRpBgZFJnWT76NU20L09VZpTDWXuMcOWKpLdxWb4+MS
-         42qeaI/7QedvphiZt1t8tXvpPolM9yoqrz1hl38vvbhTA1EeZgQIF3aXV4PV+LqxOQf1
-         9SZ2bdykKmPveMQ53eR2kjyWBOuFw5QRefYan0pwnJW8xqYCYIjAFe+MVptfMx7lUZc9
-         uqvyPlXnZyZm3OGl82mms6jo8xL+41ya7nO70GaXmA6GSkLyHkDt0lnJ1UwKDrI5mJCJ
-         /svA==
+        d=gmail.com; s=20221208; t=1683625830; x=1686217830;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CrzAg4b1IL2WebYrz9jjSo4DKTQ6JUzCbfd1CBaJHyY=;
+        b=p3VjtkCnEbcJZApi7MnwtJC+ENSPLKsnogxh1eE7XpNpL38JyHqEc3R0AJ1c5/Rpfk
+         J0s/v9ibfbZUjaiOy8mIqppXv54z+giTTe5aekZ2+B5vWrCMGGU/vKyKBP2sqZMUDBd2
+         iFwfp16swuPZuj6SF1keGvUaahk5XPsqqR/K1inJemmfKiG2AY5nkU7AS7v99/jbw7iU
+         bMIlHME7DJCpjnrq1lBtlR82sX9ApJ0uTD7TuFRept33Wl9qNvriJa6nepDtGfcJHUD/
+         1ar10D2JM6xSDh+m4sYjMjn5OokhWkwzC5RC0CK80fR9/qlWmhrrUKgnoYwQnSUg/4YZ
+         C8WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683625824; x=1686217824;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cpHqB1C/P0ODmloRTkBUYjFxBRGC705v3QDRT3fRYTs=;
-        b=ZSme2oIbNpBzXoX9J1l6q/ZN56pq6n0sHFr9x598LZysneT4RyuZts8XCEu5I1/EJN
-         05bYeIz3C76lR8K95I4kd04R/qxKLyqUCFX1jbqXa4vsJBrRFsA9DclGn9GFnJY+JajR
-         nEBeQ6iViosjP3fP+7PD1RFgaXfodv55oJJvGrSUW3azg630AjfOGghGr/+9SpQu7YT3
-         HkMWUNDWp0EDi/EOWBOpnJf/J/rhY+WogehUfr68NRYV6Kdv8mbLhFrPjO3IyhAQl0GH
-         Ee7yt21mo7+s+IVe6JLy7PTg3Fn4U29CNYJNFaLUHWhVZ7c+VC130wxmOPIzdHLUjoDc
-         gNYQ==
-X-Gm-Message-State: AC+VfDy2St259Rd/dpBWODz0mOeQR5C0FnUXWXG4qz1jO9nBq6mB//Lp
-        rkDUVqtE2XRMcDNONg9Z6lLUxDOl1AY=
-X-Google-Smtp-Source: ACHHUZ5oJndAhNNdvHlVegIPiOssD/deQWFoPGVaEvuWHtKfMyofHZOG5RbwoQU2lghlJvdlO6oyHQ==
-X-Received: by 2002:a05:6a20:3d91:b0:f2:e20a:c8f4 with SMTP id s17-20020a056a203d9100b000f2e20ac8f4mr14703954pzi.31.1683625824437;
-        Tue, 09 May 2023 02:50:24 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683625830; x=1686217830;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CrzAg4b1IL2WebYrz9jjSo4DKTQ6JUzCbfd1CBaJHyY=;
+        b=izL1PcZo97kNH2zjv9js8sLQGBA6dtB5mkz2wyYNSE1T++J8QW2JOKx3S176AqUOLp
+         4xOkkrnZk+5Vdkn5Yer9jNmhZHGynZ7tXauYVwHenpT0zjcoXJhn2hiM4rzBMNh9+Z3Z
+         717j5YO0rYGcg1PC0lH2KZ1f56tyxtg0mZZXmYgsOVZhaebMPPVKjLOUbUA06myNeQxb
+         JHMAMYcM5X0XOsa92hXGapL2d0FQT+w6+V2ZuDQQ07eDeJi5z14brdVR5bmuzTaLl3qp
+         h5LVqx+6BMTR0tDQl9+pe87DR9T7/u2GHJmpiWkcu2BMlIklnsZObDGQ4eAoVkntFSCj
+         H1/g==
+X-Gm-Message-State: AC+VfDy5H9QIyA8EYW8BQlhIRGs3jRcDOVM6F4D5mAsByms/CXRV1feB
+        7bSFR1APqUu4EvtGTLDSUhOQNO8JY1Q=
+X-Google-Smtp-Source: ACHHUZ7dizfbQsUR7EG0lvH5hXMlJLOJgMC3L/MMYSC+Iz+1q4hFUbkeECPt+ZmNs+WTjBUdu4sA3g==
+X-Received: by 2002:a05:6a00:1a06:b0:645:e008:d7ba with SMTP id g6-20020a056a001a0600b00645e008d7bamr8436941pfv.27.1683625830092;
+        Tue, 09 May 2023 02:50:30 -0700 (PDT)
 Received: from cxl-test.. ([103.181.222.211])
-        by smtp.gmail.com with ESMTPSA id j11-20020a62e90b000000b00571cdbd0771sm1361998pfh.102.2023.05.09.02.50.21
+        by smtp.gmail.com with ESMTPSA id j11-20020a62e90b000000b00571cdbd0771sm1361998pfh.102.2023.05.09.02.50.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 02:50:24 -0700 (PDT)
+        Tue, 09 May 2023 02:50:29 -0700 (PDT)
 From:   Raghu Halharvi <raghuhack78@gmail.com>
 To:     linux-cxl@vger.kernel.org,
         Alison Schofield <alison.schofield@intel.com>,
         raghuhack78@gmail.com, ira.weiny@intel.com, bwidawsk@kernel.org,
         dan.j.williams@intel.com, vishal.l.verma@intel.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/2] Fixing check patch styling issues
-Date:   Tue,  9 May 2023 09:50:14 +0000
-Message-Id: <20230509095016.138890-1-raghuhack78@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Dave Jiang <dave.jiang@intel.com>
+Subject: [PATCH v4 1/2] cxl/mbox: Remove redundant dev_err() after failed mem alloc
+Date:   Tue,  9 May 2023 09:50:15 +0000
+Message-Id: <20230509095016.138890-2-raghuhack78@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230509095016.138890-1-raghuhack78@gmail.com>
+References: <20230509095016.138890-1-raghuhack78@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,42 +74,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v4 changes:
-- Updated the respective patches with reviewers tags for respective
-  patches(Dave Jiang)
+Issue found with checkpatch
 
-v3 changes:
-- Update the cover letter and commit message with full author
-  name(Fabio/Alison)
-- Correct the "typo error" in commit message(Fabio)
+A return of errno should be good enough if the memory allocation fails,
+the error message here is redundant as per the coding style, removing it.
 
-v2 changes:
-Thanks Alison, Ira for your comments, modified the v1 patches as
-suggested.
-Dropped the patch containing tab changes in port.c
+Reviewed-by: Vishal Verma <vishal.l.verma@intel.com>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Signed-off-by: Raghu Halharvi <raghuhack78@gmail.com>
+---
+ drivers/cxl/core/mbox.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-v1 cover letter:
-The following patches are cleanup or fixing the styling issues found
-using checkpatch
-
-In cxl/core/mbox.c, in case of null check failure, returning errno or
--ENOMEM in this case is good enough, removing the redundant dev_err
-message.
-
-In cxl/core/region.c, the else is not required after the return
-statement, cleaned it up.
-
-Verified the build and sanity by booting the guest VM using the freshly
-built components.
-
-Raghu Halharvi (2):
-  cxl/mbox: Remove redundant dev_err() after failed mem alloc
-  cxl/region: Remove else after return statement
-
- drivers/cxl/core/mbox.c   | 4 +---
- drivers/cxl/core/region.c | 8 ++++----
- 2 files changed, 5 insertions(+), 7 deletions(-)
-
+diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+index f2addb457172..11ea145b4b1f 100644
+--- a/drivers/cxl/core/mbox.c
++++ b/drivers/cxl/core/mbox.c
+@@ -1112,10 +1112,8 @@ struct cxl_dev_state *cxl_dev_state_create(struct device *dev)
+ 	struct cxl_dev_state *cxlds;
+ 
+ 	cxlds = devm_kzalloc(dev, sizeof(*cxlds), GFP_KERNEL);
+-	if (!cxlds) {
+-		dev_err(dev, "No memory available\n");
++	if (!cxlds)
+ 		return ERR_PTR(-ENOMEM);
+-	}
+ 
+ 	mutex_init(&cxlds->mbox_mutex);
+ 	mutex_init(&cxlds->event.log_lock);
 -- 
 2.39.2
 
