@@ -2,106 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A9A6FCA3E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297DC6FCA43
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235804AbjEIPam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 11:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
+        id S235595AbjEIPbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 11:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjEIPak (ORCPT
+        with ESMTP id S229477AbjEIPbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 11:30:40 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F58468B;
-        Tue,  9 May 2023 08:30:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683646239; x=1715182239;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=R2xPIMfgvoJtrEPzrgFyA5tg4Dp7CA//fvaQ6VC7Wco=;
-  b=fvVADmAkk9mF6pINygI9e3bIKxtsftI7yyG23Xl+ypuSkuwNGFylP+m0
-   /XTM2Te/g9o531tAciZfi8EAYMuP+9D/92/FHmjQoUSFB+Z69BpTMp08l
-   5YtqV8rz+gskPkpXWm+dQTL7ZQRx8Pjl598k0iyg3SOYJlQLQwfxDSwB2
-   QEfF3mQaZ7toCmhDQ3CXlspc14exfEBPwMLdXsP3qBvBvTBvLJwUBfVpP
-   IiG7fhsJb8bR1qY0FGPg4SmYfhQj0qbIGqikWzm9+TX4igNoFLFpKWSCu
-   wVwVQuUP4X28s4b8/eaLnWeUQXtxlriRbNi7ztzoodig+Fl0Mgabt8GP7
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="378058129"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="378058129"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 08:30:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="1028849919"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="1028849919"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.97.226]) ([10.212.97.226])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 08:30:38 -0700
-Message-ID: <faad76bc-897b-c2ed-2a39-97a2710efe4b@intel.com>
-Date:   Tue, 9 May 2023 08:30:37 -0700
+        Tue, 9 May 2023 11:31:32 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B0644BB;
+        Tue,  9 May 2023 08:31:31 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6ab15dbef23so883588a34.3;
+        Tue, 09 May 2023 08:31:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683646291; x=1686238291;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YRq/aD3id00csyltRjTJ0ftOlEFFMSQYHa31MfuaUnM=;
+        b=sgRRFgb7KtKM8zt5Fb3JxnHYjqTMByaeZ/I3aaObqzABZN2saFUvg7jIbTB+CnV0Gp
+         PVC92+Wd3PJsKkghOrUB3KZ/UrAjwevOqXkuGXqD0AnVI+1wai1eaIL7s3ZU8tkK+zCq
+         Dtlr26Uyb5ch6ytcHzOvIjE3aZkD64b0dsaApgwNrpYok9+A7rAhV/yanySZN1Vkr81r
+         vOQMWdfWnxH27IWB22sr0NgK0MLghhNBA//0SHV+6GmNfA9kfJpPfRWaJF0V0CLFBJTd
+         5vrvBYvU3Ybyn3qQey2mO4mtrOrHcPO6H2d3lgzze8bJcTOtL5QmWaLlZyWiWZ9a4SP/
+         iBkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683646291; x=1686238291;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YRq/aD3id00csyltRjTJ0ftOlEFFMSQYHa31MfuaUnM=;
+        b=Dil/7+amy5j4M1LqfUCngMFiO1Zxuhh/Pv3CXy9SojHMkQfZ1zYw8dfu1f7m51UUoE
+         2NnodoVc0Wyjx+6J6vQZOC5sLlu9r02s71wrOrIbIUGs9JB2IUrkkr5YLRmxWixEezuf
+         /Q3RhmoM5KV0o8Tqf8EAcn8g8rHz53PBjBrBO68JFVZBuki6FN9psAZmkqeKgyNxSgjd
+         LL7rhafHtzUsW/vfZH/qpBxybu6kFcRWy02unucEi2WQ2YzP2xUd50DtCvVP0QbSq/mV
+         R8hZGHeeMalk7bPhRunuwdPAk7KFw+89xk+8n6pg9uDwDwXpxo0DICUG8YsDIjibIUNI
+         CA/Q==
+X-Gm-Message-State: AC+VfDx7Tyo3IV09eRAkuaxlSArkMWMDJLmh8cIEeLvPaMuweTnQH1MO
+        lZ0M7Y2b154n8KMmUCmMmFEb5ksRQp+AOYxyaRM=
+X-Google-Smtp-Source: ACHHUZ6JhLfo1J4qdGQamADfqvzqtpmuoC67PYVcnPOQ1MlOnqx2xDS8nZ5Pp1Gl/+rksyc+GLNFx4ITm3r/t77nX9c=
+X-Received: by 2002:a9d:6294:0:b0:6ab:1338:fed5 with SMTP id
+ x20-20020a9d6294000000b006ab1338fed5mr1612620otk.11.1683646290910; Tue, 09
+ May 2023 08:31:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v4 2/2] cxl/region: Remove else after return statement
-Content-Language: en-US
-To:     Raghu Halharvi <raghuhack78@gmail.com>, linux-cxl@vger.kernel.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20230509095016.138890-1-raghuhack78@gmail.com>
- <20230509095016.138890-3-raghuhack78@gmail.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230509095016.138890-3-raghuhack78@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230427055032.85015-2-rath@ibv-augsburg.de> <20230427183040.GA263395@bhelgaas>
+In-Reply-To: <20230427183040.GA263395@bhelgaas>
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+Date:   Tue, 9 May 2023 17:31:19 +0200
+Message-ID: <CAH9NwWeJMnBTTOk-PG_5U-t5aLFEAWC+or9-FJYKSGbbHoH_YA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: phy: cadence-torrent: Add latency properties
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Dominic Rath <rath@ibv-augsburg.de>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tjoseph@cadence.com,
+        bhelgaas@google.com, lpieralisi@kernel.org, nm@ti.com,
+        vigneshr@ti.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        bahle@ibv-augsburg.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Bjorn,
 
+>
+> On Thu, Apr 27, 2023 at 07:50:30AM +0200, Dominic Rath wrote:
+> > From: Alexander Bahle <bahle@ibv-augsburg.de>
+> >
+> > Add "tx-phy-latency-ps" and "rx-phy-latency-ps" DT bindings for
+> > setting the PCIe PHY latencies.
+> > The properties expect a list of uint32 PHY latencies in picoseconds for
+> > every supported speed starting at PCIe Gen1, e.g.:
+> >
+> >   tx-phy-latency-ps = <100000 200000>; /* Gen1: 100ns, Gen2: 200ns */
+> >   rx-phy-latency-ps = <150000 250000>; /* Gen1: 150ns, Gen2: 250ns */
+>
+> Are these things that could/should be described in a more generic
+> place?  They don't look necessarily Cadence-specific.
+>
 
-On 5/9/23 2:50 AM, Raghu Halharvi wrote:
-> Issue found with checkpatch
-> 
-> The else section here is redundant after return statement, removing it.
-> Sanity and correctness is not affected due to this fix.
-> 
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+As there is currently no generic binding, would you like to see a new
+yaml binding
+added (Documentation/devicetree/bindings/phy/phy.yaml) that contains just the
+two phy properties?
 
-Duplicate tags here. Just FYI. :)
-> Signed-off-by: Raghu Halharvi <raghuhack78@gmail.com>
-> ---
->   drivers/cxl/core/region.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-> index f29028148806..a46d6ad9ef0a 100644
-> --- a/drivers/cxl/core/region.c
-> +++ b/drivers/cxl/core/region.c
-> @@ -2666,11 +2666,11 @@ static int cxl_region_invalidate_memregion(struct cxl_region *cxlr)
->   				"Bypassing cpu_cache_invalidate_memregion() for testing!\n");
->   			clear_bit(CXL_REGION_F_INCOHERENT, &cxlr->flags);
->   			return 0;
-> -		} else {
-> -			dev_err(&cxlr->dev,
-> -				"Failed to synchronize CPU cache state\n");
-> -			return -ENXIO;
->   		}
-> +
-> +		dev_err(&cxlr->dev,
-> +			"Failed to synchronize CPU cache state\n");
-> +		return -ENXIO;
->   	}
->   
->   	cpu_cache_invalidate_memregion(IORES_DESC_CXL);
+-- 
+greets
+--
+Christian Gmeiner, MSc
+
+https://christian-gmeiner.info/privacypolicy
