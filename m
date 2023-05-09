@@ -2,130 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110306FC2FF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227756FC309
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234621AbjEIJme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 05:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57408 "EHLO
+        id S233534AbjEIJqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 05:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233625AbjEIJmc (ORCPT
+        with ESMTP id S233625AbjEIJql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 05:42:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4BE3ABB
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:42:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B17E62962
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 09:42:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37A89C433D2;
-        Tue,  9 May 2023 09:42:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683625350;
-        bh=04pCZDrxyu0T00XmwyXiFwQ5hWnBD+EL4Y1HHpJMI1U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vy61Puc9iZiJ/Kk9ZVbJ2bx5dkxA+K1djj2zilU0dH+yhnzXpeROAul+CIC/No+Ky
-         MzsOCXW/1lljCO6zGwPBKZLhx/q5k3YbyZ87lLOZ50LCWUqmbugDHCfxI+2xPRjvUi
-         JpDLsTpskhMTAK5V2rXA4+eEXxTY05jN+VEymXLYe7EZry4mOUYnD6npFjgzPNpgso
-         yI3diXYt75DX39f39euGJiMuHBJDgegGbyC/E33p6XUaUBgL9eowebJT0CwIpDNLCU
-         qGZD8NBA8NXsh2+Oqly+JIDOR3DKAN0Qs77STUCnr3/uOvauQKU3AxLJPK5P2CHDk1
-         h/zO0ptEvu4Aw==
-Date:   Tue, 9 May 2023 11:42:27 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: Re: [patch 02/20] posix-timers: Ensure timer ID search-loop limit is
- valid
-Message-ID: <ZFoVg9UmItpIaA69@lothringen>
-References: <20230425181827.219128101@linutronix.de>
- <20230425183312.932345089@linutronix.de>
- <ZFUXrCZtWyNG3Esi@lothringen>
- <87zg6i2xn3.ffs@tglx>
- <87v8h62vwp.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v8h62vwp.ffs@tglx>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 9 May 2023 05:46:41 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2FE171F;
+        Tue,  9 May 2023 02:46:40 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id E4128320093C;
+        Tue,  9 May 2023 05:46:38 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 09 May 2023 05:46:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1683625598; x=1683711998; bh=u9SCxQzR1XRkuaK/HGEsP2C84rfrSTM5IbR
+        tH9r44/0=; b=xsuYH3zyc+pyQRCICfLBLOEfXjd0W2cbd556J6ykaf1Lhn7og8o
+        HkCo9u+lUzW/HlTtp0TOFC2/5dhlwiT5BZTp3CAixxnAdSbG/oYnOVwMb9+GsOJY
+        cR2DWaSOspnaNmfkz2IAueXX+EG2RQmdph+jhOa5UYFGvDfJCZBIH+NsgftbjTEB
+        oy6he9tSfhL5QTVpznG6K/YUHUTQzQWNEYdEgtJhVCmES7yfPkYB0r2lEqRxnNIg
+        NCwRbdmLomfQM3ZrNAOS8cG60pSgnR/YJifjl5V/ZQDXGSZeYAqHAZHl2mRCK8ci
+        PGLkWpbEr6Db7QF7KqvJVB3vJDZ9b9QJzVg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1683625598; x=1683711998; bh=u9SCxQzR1XRkuaK/HGEsP2C84rfrSTM5IbR
+        tH9r44/0=; b=PDYTOJ2FeGFHDtds1EECengCf0mZbivbrCJcuIM7cuwh4uFv2bn
+        C6yFjmtjzZcvTrgwvqtOftXKTBo/KNrAnVFZO8fbJ/YwkOGH+zzsNLPKrW5VwjLw
+        0VJ60On9uPreuwZO5S3mDSECRMTkqVim9ZioscBfhDQHCQ3IlpzpIP1HgnugWymJ
+        iz4qXPFCa5oM6eqnmruN0QYlqF21ltcO8tav7hIWrI0Hn0W2rc3SgzB+PkxAULPU
+        QTeNnyGb0KSUL2+tD9uDaQHCKiM/4w8vODRRNMrZ89DgHyijCAENiBo9dnz1OKdq
+        huytW+qiET6PfShKNYA+HQvT8TLqBBrGNZw==
+X-ME-Sender: <xms:fRZaZF3sviVxEUTjAsp7jOIEuHgOE5L_SUAHRK7W6RJgSp9HPajSyQ>
+    <xme:fRZaZMFNWG5C_Ssc9kdo1O1mXRAMMMuCxxJjzZbUuek_NQ-zBzUiPmTfimAkzZLOF
+    ix1k0FUfto9GOxSvhc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeegtddgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:fRZaZF7ZwFT0eAW2DlF9XbAwfrQiKZ_qdrPGLG04wlbd0r7IpQm6EQ>
+    <xmx:fRZaZC1t8oQXBmIxq3m_b_3PNJj2IZZ9F8Oq04YBIkitGEHXO_f1KQ>
+    <xmx:fRZaZIGuDlHcAuT0F5kNcvqCGfsTBQ7eOy9qlIjO_83rpXPXOQ_kUg>
+    <xmx:fhZaZGVG-sKlc8heSc9s9z56UwKusDfj-AEn30QNvqOjEYXM7kMefQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7DE38B60086; Tue,  9 May 2023 05:46:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-415-gf2b17fe6c3-fm-20230503.001-gf2b17fe6
+Mime-Version: 1.0
+Message-Id: <e68c7dab-94a2-4b27-8c06-a788510c236b@app.fastmail.com>
+In-Reply-To: <CAMuHMdV-CY_foGPY5PZV=W92rnvSa0X3PTsUoBpzQ6vCNLSzEw@mail.gmail.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+ <20230314121216.413434-29-schnelle@linux.ibm.com>
+ <202303141252027ef5511a@mail.local>
+ <aa68b4afdca34bf3bfd2439b03e6f9bcfad94903.camel@linux.ibm.com>
+ <b7017996-b079-4534-a24a-080003772a66@app.fastmail.com>
+ <CAMuHMdXJ=hsB=A_umQnPMVSU+BGqeHt3O-2ygr3p_f7pHHvf=Q@mail.gmail.com>
+ <552c51fb-41b2-430b-b13c-0e578098dbf6@app.fastmail.com>
+ <CAMuHMdV-CY_foGPY5PZV=W92rnvSa0X3PTsUoBpzQ6vCNLSzEw@mail.gmail.com>
+Date:   Tue, 09 May 2023 11:46:16 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Geert Uytterhoeven" <geert@linux-m68k.org>
+Cc:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
+        linux-rtc@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Subject: Re: [PATCH v3 28/38] rtc: add HAS_IOPORT dependencies
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 06, 2023 at 01:36:22AM +0200, Thomas Gleixner wrote:
-> On Sat, May 06 2023 at 00:58, Thomas Gleixner wrote:
-> > On Fri, May 05 2023 at 16:50, Frederic Weisbecker wrote:
-> > So the whole thing works like this:
-> >
-> >    start = READ_LOCKLESS(sig->next_id);
-> >
-> >    // Enfore that id and start are different to not terminate right away
-> >    id = ~start;
-> >
-> > loop:
-> >    if (id == start)
-> >    	goto fail;
-> >    lock()
-> >         id = sig->next_id;                      <-- stable readout
-> >         sig->next_id = (id + 1) & INT_MAX;      <-- prevent going negative
-> >
-> >         if (unused_id(id)) {
-> >            add_timer_to_hash(timer, id);
-> >            unlock();
-> >            return id;
-> >         }
-> >    id++;
-> >    unlock();
-> >    goto loop;
-> >
-> > As the initial lockless readout is guaranteed to be in the positive
-> > space, how is that supposed to be looping forever?
-> 
-> Unless you think about the theoretical case of an unlimited number of
-> threads sharing the signal_struct which all concurrently try to allocate
-> a timer id and then releasing it immediately again (to avoid resource
-> limit exhaustion). Theoretically possible, but is this a real concern
-> with a timer ID space of 2G?
+On Tue, May 9, 2023, at 10:51, Geert Uytterhoeven wrote:
+> On Tue, May 9, 2023 at 10:23=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> =
+wrote:
+>> On Tue, May 9, 2023, at 08:38, Geert Uytterhoeven wrote:
+>> If you ever want to revisit this, I suspect the harder part here
+>> is to detach arch/m68k/ from the RTC_DRV_GENERIC code first, pushing
+>> the device registration into the individual machine specific time.c
+>> code. It's probably not even worth trying to share the rtc-cmos
+>> driver, but it might be useful to share the library code like
+>> RTC_DRV_ALPHA does.
+>
+> Arch/m68k is not that entangled with RTC_DRV_GENERIC, as amiga_defconf=
+ig
+> does not enable it, but enables CONFIG_RTC_DRV_MSM6242 and
+> CONFIG_RTC_DRV_RP5C01 instead.
 
-I didn't go that far actually, it was just me misunderstanding that loop and
-especially the (id =~start) part. Now I got it.
+Ah, I see now, I misremembered this part. The only bit that
+is shared on m68k is the mach_hwclk() function that is used
+for either read_persistent_clock64() or rtc_generic on platforms
+that have one. So any platform could indeed be converted from
+mach_hwclk() to a custom rtc driver without affecting the others.
 
-I guess the for statement can just be:
-
-for (; start != id; id++)
-
-> 
-> I'm sure that it's incredibly hard to exploit this, but what's really
-> bothering me is the hash table itself. The only reason why we have that
-> is CRIU.
-> 
-> The only alternative solution I could come up with is a paritioned
-> xarray where the index space would be segmented for each TGID, i.e.
-> 
->        segment.start = TGID * MAX_TIMERS_PER_PROCESS
->        segment.end    = segment.start + MAX_TIMERS_PER_PROCESS - 1
-> 
-> where MAX_TIMERS_PER_PROCESS could be a copius 2^16 which would work for
-> both 32bit and 64bit TID limits.
-> 
-> That would avoid the hash table lookups and the related issues, but OTH
-> it would require to allocate one extra page per TGID if the application
-> uses a single posix timer.
-> 
-> Not sure whether that's worth it though.
-
-Not sure either...
-
-Thanks.
+    Arnd
