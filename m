@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6F36FC1D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A66F76FC1DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234448AbjEIIkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 04:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
+        id S234246AbjEIIoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234520AbjEIIkP (ORCPT
+        with ESMTP id S229641AbjEIIox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 04:40:15 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59458A73;
-        Tue,  9 May 2023 01:40:11 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-965e93f915aso832178666b.2;
-        Tue, 09 May 2023 01:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683621610; x=1686213610;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vYoqIspga6VVNOgplfkhPgEKyUSoYEOyFaJeyHtCIVY=;
-        b=A77DX7ZtfU7QIwGEFQSjIJesTCiBnNHx8wrqCC+fw4j0m3ZZeWDLZRS/OH/HZo/OoO
-         ADIP+rovYCEJg4TLshImyx9xHZ6IYsVATXYdi4Wg9/EzlA8NETijV9V74XeSOPhPsqH7
-         Bx0TNnvkfxwseeotB2JFyRZMyZ9WcM6A9O7iNuxhwi7gdIHmNiGVr4MEUj4CbN/bUh8Q
-         dER1M2wjyiH7idl7dfPEC34GZgHgjHWMuvz3RHC3RIcsdnH76OZaz5IZwVeqhmmqQHcp
-         zz5XmWhw22HqTSFJJkq+1qef6eKStN+8+zPu59/yDOi2LXNs8AcJ913dCnny9EG6CS/Q
-         W39A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683621610; x=1686213610;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vYoqIspga6VVNOgplfkhPgEKyUSoYEOyFaJeyHtCIVY=;
-        b=jN7oO3AsZnRVDO0kT5wkVNoFUoP3U1si4c+T/ZBihVFklT3U6sWmkrVbe6TBt5ALDq
-         KprO515eLDmTvTruAuTtrU3u0fkZrKQd9DXgzN/oSZV+BhpB33O30blzs6Inmq0CVBuT
-         E90Bou7p2ccjb9EhvI9W9Ek7yiZ7WxkIS0Tr4o7Q7DnQjOlSs8SHlBu7PdGUREnxcyuc
-         ewCTD+DpUULOjX3D6wy61cG03wAXbQcK9Hu8nByHguYXqRtXBgLSgNAuXDC28qWNxR25
-         Q1tItQfi/L1c91O+GELSuH1LrOJClbVfkMe3gVFq65w+ONNr2IGrp87leOaAZc/c9fcb
-         h5ZQ==
-X-Gm-Message-State: AC+VfDzytQEgICdA4yGOTCemlJN6347rWvoxRI8J/iezm+4iAJJ0uZaD
-        2m4naSU3gTKZ034x4UoPqyQ=
-X-Google-Smtp-Source: ACHHUZ6hd93FZWtWtg4ZJBvGGApThiqmx/hX5hZ9HWlOvaz6jcwkWlqtSy2ZX+qPpm4TQEMtHJRM0w==
-X-Received: by 2002:a17:907:1c85:b0:94e:48ac:9a51 with SMTP id nb5-20020a1709071c8500b0094e48ac9a51mr12668621ejc.4.1683621609994;
-        Tue, 09 May 2023 01:40:09 -0700 (PDT)
-Received: from felia.fritz.box ([2a02:810d:7e40:14b0:b892:8631:69c7:ec2c])
-        by smtp.gmail.com with ESMTPSA id w15-20020a50fa8f000000b0050d89daaa70sm501447edr.2.2023.05.09.01.40.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 01:40:09 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] x86: make config X86_FEATURE_NAMES visible with EXPERT
-Date:   Tue,  9 May 2023 10:40:07 +0200
-Message-Id: <20230509084007.24373-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tue, 9 May 2023 04:44:53 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660CE83C5
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:44:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683621892; x=1715157892;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CxchOLSb2uQiQ0wq39RpL59EhQg6Bj3Eg9bjmW5VqwU=;
+  b=Rvb213U8HtHGTALiDDmivSPhCoFmkqmu/uFBJYe9iX3xG+JQcJ+irbq2
+   ESTCs0EO8Iwh5U/DZ5U98hE9CJNzxf7A+PTKyjHUJQzvgsAIxdk8xFrI1
+   rPJ4it6MPEW5ULUKqD+J2ct7uxcwWOKsQUDzAQlIz4164FStROLI/ifx5
+   jymqO1fzOzLYTJ+Yty7aKNIpTrPSye6sObluwlZDgWJ2y0cHDyfEJTB5W
+   tVZf8+eKuWohtq8ef05NqBm7HN2XmqK1NqAiQL+UPFsb3dTE8iPcvh5dI
+   obrfsSyIkTAbTaz1oMdX3uuj1FrpHhdyPpkW84GZinbQN5f5Q2U67iaqB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="436163461"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="436163461"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 01:44:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="763733944"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="763733944"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 09 May 2023 01:44:49 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwIxk-0001zE-2r;
+        Tue, 09 May 2023 08:44:48 +0000
+Date:   Tue, 9 May 2023 16:43:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
+Cc:     oe-kbuild-all@lists.linux.dev, quic_visr@quicinc.com,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:QCOM AUDIO (ASoC) DRIVERS" 
+        <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC:codecs: lpass: Fix for KASAN use_after_free out of
+ bounds
+Message-ID: <202305091655.6KwfcuWa-lkp@intel.com>
+References: <20230509061321.10218-1-quic_visr@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509061321.10218-1-quic_visr@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,85 +74,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6a108a14fa35 ("kconfig: rename CONFIG_EMBEDDED to CONFIG_EXPERT")
-introduces CONFIG_EXPERT to carry the previous intent of CONFIG_EMBEDDED
-and just gives that intent a much better name. That has been clearly a good
-and long overdue renaming, and it is clearly an improvement to the kernel
-build configuration that has shown to help managing the kernel build
-configuration in the last decade.
+Hi Ravulapati,
 
-However, rather than bravely and radically just deleting CONFIG_EMBEDDED,
-this commit gives CONFIG_EMBEDDED a new intended semantics, but keeps it
-open for future contributors to implement that intended semantics:
+kernel test robot noticed the following build warnings:
 
-    A new CONFIG_EMBEDDED option is added that automatically selects
-    CONFIG_EXPERT when enabled and can be used in the future to isolate
-    options that should only be considered for embedded systems (RISC
-    architectures, SLOB, etc).
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on linus/master v6.4-rc1 next-20230509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Since then, this CONFIG_EMBEDDED implicitly had two purposes:
+url:    https://github.com/intel-lab-lkp/linux/commits/Ravulapati-Vishnu-Vardhan-Rao/ASoC-codecs-lpass-Fix-for-KASAN-use_after_free-out-of-bounds/20230509-141447
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230509061321.10218-1-quic_visr%40quicinc.com
+patch subject: [PATCH] ASoC:codecs: lpass: Fix for KASAN use_after_free out of bounds
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20230509/202305091655.6KwfcuWa-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/83fb508f4eb95e9495f0e440b47226040e3b4efc
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ravulapati-Vishnu-Vardhan-Rao/ASoC-codecs-lpass-Fix-for-KASAN-use_after_free-out-of-bounds/20230509-141447
+        git checkout 83fb508f4eb95e9495f0e440b47226040e3b4efc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/
 
-  - It can make even more options visible beyond what CONFIG_EXPERT makes
-    visible. In other words, it may introduce another level of enabling the
-    visibility of configuration options: always visible, visible with
-    CONFIG_EXPERT and visible with CONFIG_EMBEDDED.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305091655.6KwfcuWa-lkp@intel.com/
 
-  - Set certain default values of some configurations differently,
-    following the assumption that configuring a kernel build for an
-    embedded system generally starts with a different set of default values
-    compared to kernel builds for all other kind of systems.
+All warnings (new ones prefixed by >>):
 
-Considering the first purpose, at the point in time where CONFIG_EMBEDDED
-was renamed to CONFIG_EXPERT, CONFIG_EXPERT already made 130 more options
-become visible throughout all different menus for the kernel configuration.
-Over the last decade, this has gradually increased, so that currently, with
-CONFIG_EXPERT, roughly 170 more options become visible throughout all
-different menus for the kernel configuration. In comparison, currently with
-CONFIG_EMBEDDED enabled, just seven more options are visible, one in x86,
-one in arm, and five for the ChipIdea Highspeed Dual Role Controller.
+   sound/soc/codecs/lpass-tx-macro.c: In function 'tx_macro_put_dec_enum':
+   sound/soc/codecs/lpass-tx-macro.c:801:57: warning: missing terminating " character
+     801 |                                 dev_err(component->dev, "dmic for clk sel is wrong,
+         |                                                         ^
+   sound/soc/codecs/lpass-tx-macro.c:802:79: warning: missing terminating " character
+     802 |                                         expected less than 4 but received %d\n", dmic);
+         |                                                                               ^
+   sound/soc/codecs/lpass-tx-macro.c:2199:23: error: unterminated argument list invoking macro "dev_err"
+    2199 | MODULE_LICENSE("GPL");
+         |                       ^
+   sound/soc/codecs/lpass-tx-macro.c:801:33: error: 'dev_err' undeclared (first use in this function); did you mean '_dev_err'?
+     801 |                                 dev_err(component->dev, "dmic for clk sel is wrong,
+         |                                 ^~~~~~~
+         |                                 _dev_err
+   sound/soc/codecs/lpass-tx-macro.c:801:33: note: each undeclared identifier is reported only once for each function it appears in
+   sound/soc/codecs/lpass-tx-macro.c:801:40: error: expected ';' at end of input
+     801 |                                 dev_err(component->dev, "dmic for clk sel is wrong,
+         |                                        ^
+         |                                        ;
+   ......
+   sound/soc/codecs/lpass-tx-macro.c:801:33: error: expected declaration or statement at end of input
+     801 |                                 dev_err(component->dev, "dmic for clk sel is wrong,
+         |                                 ^~~~~~~
+   sound/soc/codecs/lpass-tx-macro.c:801:33: error: expected declaration or statement at end of input
+   sound/soc/codecs/lpass-tx-macro.c:788:19: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
+     788 |                 } else if (val < 5) {
+         |                   ^~~~
+   sound/soc/codecs/lpass-tx-macro.c:788:19: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory
+   sound/soc/codecs/lpass-tx-macro.c:801:33: error: expected declaration or statement at end of input
+     801 |                                 dev_err(component->dev, "dmic for clk sel is wrong,
+         |                                 ^~~~~~~
+   sound/soc/codecs/lpass-tx-macro.c:801:33: error: expected declaration or statement at end of input
+   At top level:
+   sound/soc/codecs/lpass-tx-macro.c:737:12: warning: 'tx_macro_put_dec_enum' defined but not used [-Wunused-function]
+     737 | static int tx_macro_put_dec_enum(struct snd_kcontrol *kcontrol,
+         |            ^~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/lpass-tx-macro.c:717:12: warning: 'tx_macro_mclk_event' defined but not used [-Wunused-function]
+     717 | static int tx_macro_mclk_event(struct snd_soc_dapm_widget *w,
+         |            ^~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/lpass-tx-macro.c:699:13: warning: 'tx_macro_mute_update_callback' defined but not used [-Wunused-function]
+     699 | static void tx_macro_mute_update_callback(struct work_struct *work)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/lpass-tx-macro.c:655:13: warning: 'tx_macro_tx_hpf_corner_freq_callback' defined but not used [-Wunused-function]
+     655 | static void tx_macro_tx_hpf_corner_freq_callback(struct work_struct *work)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> sound/soc/codecs/lpass-tx-macro.c:587:35: warning: 'tx_regmap_config' defined but not used [-Wunused-const-variable=]
+     587 | static const struct regmap_config tx_regmap_config = {
+         |                                   ^~~~~~~~~~~~~~~~
+   In file included from include/sound/tlv.h:10,
+                    from sound/soc/codecs/lpass-tx-macro.c:13:
+>> sound/soc/codecs/lpass-tx-macro.c:281:35: warning: 'digital_gain' defined but not used [-Wunused-const-variable=]
+     281 | static const DECLARE_TLV_DB_SCALE(digital_gain, -8400, 100, -8400);
+         |                                   ^~~~~~~~~~~~
+   include/uapi/sound/tlv.h:53:22: note: in definition of macro 'SNDRV_CTL_TLVD_DECLARE_DB_SCALE'
+      53 |         unsigned int name[] = { \
+         |                      ^~~~
+   sound/soc/codecs/lpass-tx-macro.c:281:14: note: in expansion of macro 'DECLARE_TLV_DB_SCALE'
+     281 | static const DECLARE_TLV_DB_SCALE(digital_gain, -8400, 100, -8400);
+         |              ^~~~~~~~~~~~~~~~~~~~
 
-As the numbers suggest, these two levels of enabling the visibility of even
-more configuration options---beyond what CONFIG_EXPERT enables---never
-evolved to a good solution in the last decade. In other words, this
-additional level of visibility of configuration option with CONFIG_EMBEDDED
-compared to CONFIG_EXPERT has since its introduction never become really
-valuable. It requires quite some investigation to actually understand what
-is additionally visible and it does not differ significantly in complexity
-compared to just enabling CONFIG_EXPERT. This CONFIG_EMBEDDED---or any
-other config to show more detailed options beyond CONFIG_EXPERT---is
-unlikely to be valuable unless somebody puts significant effort in
-identifying how such visibility options can be properly split and creating
-clear criteria, when some config option is visible with CONFIG_EXPERT and
-when some config option is visible only with some further option enabled
-beyond CONFIG_EXPERT, such as CONFIG_EMBEDDED attempted to do. For now, it
-is much more reasonable to simply make those additional seven options that
-are visible with CONFIG_EMBEDDED visible with CONFIG_EXPERT, and then
-remove CONFIG_EMBEDDED. If anyone spends significant effort in structuring
-the visibility of config options, they may re-introduce suitable new
-config options simply as they see fit.
 
-Make the config X86_FEATURE_NAMES visible when CONFIG_EXPERT is enabled.
+vim +/tx_regmap_config +587 sound/soc/codecs/lpass-tx-macro.c
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/x86/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  586  
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11 @587  static const struct regmap_config tx_regmap_config = {
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  588  	.name = "tx_macro",
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  589  	.reg_bits = 16,
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  590  	.val_bits = 32,
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  591  	.reg_stride = 4,
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  592  	.cache_type = REGCACHE_FLAT,
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  593  	.max_register = TX_MAX_OFFSET,
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  594  	.reg_defaults = tx_defaults,
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  595  	.num_reg_defaults = ARRAY_SIZE(tx_defaults),
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  596  	.writeable_reg = tx_is_rw_register,
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  597  	.volatile_reg = tx_is_volatile_register,
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  598  	.readable_reg = tx_is_rw_register,
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  599  };
+c39667ddcfc516 Srinivas Kandagatla 2021-02-11  600  
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index ce460d6b4e25..595f6696281c 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -442,7 +442,7 @@ config SMP
- 	  If you don't know what to do here, say N.
- 
- config X86_FEATURE_NAMES
--	bool "Processor feature human-readable names" if EMBEDDED
-+	bool "Processor feature human-readable names" if EXPERT
- 	default y
- 	help
- 	  This option compiles in a table of x86 feature bits and corresponding
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
