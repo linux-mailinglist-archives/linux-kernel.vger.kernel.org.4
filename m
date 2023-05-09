@@ -2,160 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668936FC1C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F034E6FC1B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbjEIIdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 04:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
+        id S234721AbjEIIZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjEIIdT (ORCPT
+        with ESMTP id S229520AbjEIIZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 04:33:19 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E921E7
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:33:17 -0700 (PDT)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230509083314epoutp04378d927aafd76d4ea7c2657631c9d1ce~dbI5NxiT91867718677epoutp04F
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 08:33:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230509083314epoutp04378d927aafd76d4ea7c2657631c9d1ce~dbI5NxiT91867718677epoutp04F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683621194;
-        bh=uYJN7HQN0yUJfuNCPmL+Vq6L3jpPWUWnbtogStcJ3YA=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=VuXVwEAmDtpQfVVPSJGIcQSCEIYRs+OvlzwBGewOuBl7gYVs2f6mtlSLX1mUwvIr9
-         jiTxaXFH8+RXbB6RnqJAqJKQ0e9+Y+oWw8m850ZDgAtFSCX1DPSJjKgatDJj9j3hkw
-         5u4d7gX4xCI9Ar5BZb1RAtXH+1qugZddVFf5u7IQ=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20230509083313epcas2p23e863471d8683288ae83d7fdfaea4b32~dbI4wwKVl0643406434epcas2p28;
-        Tue,  9 May 2023 08:33:13 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.69]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4QFryc6t8Cz4x9Q0; Tue,  9 May
-        2023 08:33:12 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        CE.45.22936.8450A546; Tue,  9 May 2023 17:33:12 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230509083312epcas2p375f77d18a9026f7d263750baf9c9a5bb~dbI3kBlAR1519215192epcas2p3e;
-        Tue,  9 May 2023 08:33:12 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230509083312epsmtrp29bff0b16d99ef7128055f855d2e22645~dbI3jJ__82304923049epsmtrp2O;
-        Tue,  9 May 2023 08:33:12 +0000 (GMT)
-X-AuditID: b6c32a48-6d3fa70000005998-0c-645a0548c83f
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        33.34.28392.8450A546; Tue,  9 May 2023 17:33:12 +0900 (KST)
-Received: from ubuntu.dsn.sec.samsung.com (unknown [10.229.95.128]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230509083312epsmtip1c6ca7a82229cb5a2cf3310578f1c5d1b~dbI3WMgz90439304393epsmtip1Q;
-        Tue,  9 May 2023 08:33:12 +0000 (GMT)
-From:   Kiwoong Kim <kwmad.kim@samsung.com>
-To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
-        sh425.lee@samsung.com, kwangwon.min@samsung.com
-Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
-Subject: [RFC PATCH v1] ufs: poll HCS.UCRDY before issuing a UIC command
-Date:   Tue,  9 May 2023 17:24:34 +0900
-Message-Id: <1683620674-160173-1-git-send-email-kwmad.kim@samsung.com>
-X-Mailer: git-send-email 2.7.4
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrGKsWRmVeSWpSXmKPExsWy7bCmma4Ha1SKwdp+Y4uTT9awWTyYt43N
-        4uXPq2wWBx92slisXvyAxWLRjW1MFltv7GSxuLnlKIvF5V1z2Cy6r+9gs1h+/B+TRdfdG4wW
-        S/+9ZXHg9Vi85yWTx4RFBxg9vq/vYPP4+PQWi0ffllWMHp83yXm0H+hmCmCPyrbJSE1MSS1S
-        SM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMATpXSaEsMacUKBSQWFys
-        pG9nU5RfWpKqkJFfXGKrlFqQklNgXqBXnJhbXJqXrpeXWmJlaGBgZApUmJCdcfbtEcaCVdwV
-        i/4tZmtgXMXZxcjJISFgIrH16xfmLkYuDiGBHYwSk6/uh3I+MUp8vPmbFcL5zCixv3EyC0zL
-        pd59UIldjBLrpmxnBEkICfxglGhYbwpiswloSjy9OZUJpEhEYBWTxIeTd9hBEswC6hK7Jpxg
-        ArGFBTwk9qx4zgZiswioSkzd9JkVxOYVcJPY9+oTG8Q2OYmb5zrBbpIQeMsu0XL4MztEwkXi
-        8ZEfjBC2sMSr41ug4lISn9/tBWrmALKzJfYsFIMIV0gsnvYW6gNjiVnP2hlBSpiBDl2/Sx+i
-        WlniyC0WiCv5JDoO/2WHCPNKdLQJQTQqS/yaNBlqp6TEzJt3oHZ6SNz7cwQaCrESXTNOsE5g
-        lJ2FMH8BI+MqRrHUguLc9NRiowITeBwl5+duYgQnQC2PHYyz337QO8TIxMF4iFGCg1lJhHdV
-        QliKEG9KYmVValF+fFFpTmrxIUZTYGhNZJYSTc4HpuC8knhDE0sDEzMzQ3MjUwNzJXHejx3K
-        KUIC6YklqdmpqQWpRTB9TBycUg1MTes+Kgl2bTu/XZdhm1hVzIKlxjHRZd+tTtzY+9N/9+3v
-        ZsLBcXPvO7/6Kv7jcfvcu6/Frf/KKCt+feJ0/9NFCbuKlFimj12PX3yNKvlkmM1x/vSf6ZxT
-        dhiY7o+xWHWF/03xyayQBe/cy+0CctWtnYwb/NlXd/hPPR+evL6u81Z3fVv3hG0ufC8t5daK
-        dl56f3NdYc9vu9PJ2x02X8/2etp5WfL+4xkVewo570hfWvC/SejwJWPzNFO1VJtA59inrSVr
-        /Zhb7TQuyjtcssoK6FE5f1kwNTZcfPaTec8vNn6IKV017dE1i8mf7UUUCpN9mjcoTPnyUkUl
-        fpF5XadyTOk0pmOXD1vNPh7OZblaiaU4I9FQi7moOBEA3ctkNQkEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBLMWRmVeSWpSXmKPExsWy7bCSnK4Ha1SKwdtzAhYnn6xhs3gwbxub
-        xcufV9ksDj7sZLFYvfgBi8WiG9uYLLbe2MlicXPLURaLy7vmsFl0X9/BZrH8+D8mi667Nxgt
-        lv57y+LA67F4z0smjwmLDjB6fF/fwebx8ektFo++LasYPT5vkvNoP9DNFMAexWWTkpqTWZZa
-        pG+XwJVx9u0RxoJV3BWL/i1ma2BcxdnFyMkhIWAical3H2sXIxeHkMAORolfjSsYIRKSEid2
-        PoeyhSXutxyBKvrGKLFx0Vo2kASbgKbE05tTmUASIgI7mCSWPnzMApJgFlCX2DXhBBOILSzg
-        IbFnxXOwBhYBVYmpmz6zgti8Am4S+159YoPYICdx81wn8wRGngWMDKsYJVMLinPTc4sNC4zy
-        Usv1ihNzi0vz0vWS83M3MYIDU0trB+OeVR/0DjEycTAeYpTgYFYS4V2VEJYixJuSWFmVWpQf
-        X1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dUA5Mp27HOPa+e5QgGKxku2Jt3
-        OG1KyFUDSc0HHKpvkx802n2/83vVvZNibzbP8d3YYqUqe+/2w6Apm//tWcybUf+3eW2K9FeN
-        5S+3nT3oKXPIYtGrb7er/D0dtivPDxLaZBKQfWtPTurNjfnsjcUlH+8FT7mwPH9XS4rnoenr
-        vM/sLSl5fvHZme2s+XIrb8t+eXfhkYvudJOoiG/t5+ZtPfdEQU+FbULsz8/bSvpDJVlMZHlD
-        qrKOfJ7FMCO1sHbJEf6KL6xME9Ja3F9c/1snzHquvMjkusPqG+kFLIKxBe87d7p4LDc4xfGP
-        PUBCM/XnLCm7fJdpFttXueyW89/wb5dhxtVwm/DbLCudfiwN8lZVYinOSDTUYi4qTgQApLxp
-        z7sCAAA=
-X-CMS-MailID: 20230509083312epcas2p375f77d18a9026f7d263750baf9c9a5bb
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230509083312epcas2p375f77d18a9026f7d263750baf9c9a5bb
-References: <CGME20230509083312epcas2p375f77d18a9026f7d263750baf9c9a5bb@epcas2p3.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 9 May 2023 04:25:03 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A094CD87C;
+        Tue,  9 May 2023 01:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683620698; x=1715156698;
+  h=message-id:subject:from:to:cc:date:mime-version:
+   content-transfer-encoding;
+  bh=I6eWs+Z/cQ7dIAU3foLfsuSl4im8KJV9KCABsD9OpQQ=;
+  b=kwkE+CARt1v3T+fvTOzva53dCuJHQ2BBe59sz3CyIBKZG7upq3LI/t4b
+   mFdtsqwYCLInUd/w+IQLZp0BSKcjCS0w5WdjM/JZRvPvATUoSHK6pbMBr
+   mJ0AovI15O2UMRVt4ttCmdX6HLmP+9R240+cpenYb3UI64bVT2vfNLZZV
+   t7vTISu8lwMmherc2DZ+e4n6PDq6qBM2J/FYW95nNh8hERLKMjr5Vo5PF
+   zaayY7DSe25Htw+2ygS5rkrBag/Rq72VQxFuS5FAQGtEEaq0A6o4fOpQE
+   dcYz/xrmsptmw1bS4kyNIVLmKNy9vKaJwMlyHN8AK+4R8I7+a9I2dEO/s
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="334285812"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="334285812"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 01:24:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="873082191"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="873082191"
+Received: from dperchan-mobl1.ger.corp.intel.com (HELO terminus) ([143.185.115.141])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 01:24:55 -0700
+Message-ID: <e16ddf4fdb83f30899e575b218e524f6346a9f50.camel@intel.com>
+Subject: [PATCH v2] media: uapi: v4l: Intel metadata format update
+From:   Dmitry Perchanov <dmitry.perchanov@intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     mchehab@kernel.org, linux-kernel@vger.kernel.org,
+        sakari.ailus@iki.fi, laurent.pinchart@ideasonboard.com,
+        evgeni.raikhel@intel.com, demisrael@gmail.com,
+        sakari.ailus@intel.com
+Date:   Tue, 09 May 2023 11:24:53 +0300
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With auto hibern8 enabled, UIC could be working
-for a while to process a hibern8 operation and HCI
-reports UIC not ready for a short term through HCS.UCRDY.
-And UFS driver can't recognize the operation.
-UFSHCI spec specifies UCRDY like this:
-whether the host controller is ready to process UIC COMMAND
+Update metadata structure for Intel RealSense UVC/MIPI cameras.
+Compliant to Intel Configuration version 3.
 
-The 'ready' could be seen as many different meanings. If the meaning
-includes not processing any request from HCI, processing a hibern8
-operation can be 'not ready'. In this situation, the driver needs to
-wait until the operations is completed.
-
-Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
 ---
- drivers/ufs/core/ufshcd.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ .../media/v4l/pixfmt-meta-d4xx.rst            | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 96ce6af..fc79539 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -2368,7 +2368,18 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
-  */
- static inline bool ufshcd_ready_for_uic_cmd(struct ufs_hba *hba)
- {
--	return ufshcd_readl(hba, REG_CONTROLLER_STATUS) & UIC_COMMAND_READY;
-+	ktime_t timeout = ktime_add_ms(ktime_get(), UIC_CMD_TIMEOUT);
-+	u32 val = 0;
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst b/D=
+ocumentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
+index 4e437ba97a0e..b5decde640c1 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
+@@ -12,7 +12,7 @@ Intel D4xx UVC Cameras Metadata
+ Description
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ =
+
+-Intel D4xx (D435 and other) cameras include per-frame metadata in their UVC
++Intel D4xx (D435, D455 and others) cameras include per-frame metadata in t=
+heir UVC
+ payload headers, following the Microsoft(R) UVC extension proposal [1_]. T=
+hat
+ means, that the private D4XX metadata, following the standard UVC header, =
+is
+ organised in blocks. D4XX cameras implement several standard block types,
+@@ -26,6 +26,8 @@ V4L2_META_FMT_UVC with the only difference, that it also =
+includes proprietary
+ payload header data. D4xx cameras use bulk transfers and only send one pay=
+load
+ per frame, therefore their headers cannot be larger than 255 bytes.
+ =
+
++This document implements Intel Configuration version 3.
 +
-+	do {
-+		val = ufshcd_readl(hba, REG_CONTROLLER_STATUS) &
-+			UIC_COMMAND_READY;
-+		if (val)
-+			break;
-+		usleep_range(500, 1000);
-+	} while (ktime_before(ktime_get(), timeout));
-+
-+	return val ? true : false;
- }
- 
- /**
--- 
-2.7.4
+ Below are proprietary Microsoft style metadata types, used by D4xx cameras,
+ where all fields are in little endian order:
+ =
+
+@@ -43,7 +45,7 @@ where all fields are in little endian order:
+     * - __u32 ID
+       - 0x80000000
+     * - __u32 Size
+-      - Size in bytes (currently 56)
++      - Size in bytes (currently 60)
+     * - __u32 Version
+       - Version of this structure. The documentation herein corresponds to
+         version xxx. The version number will be incremented when new field=
+s are
+@@ -72,8 +74,11 @@ where all fields are in little endian order:
+       - Bottom border of the AE Region of Interest
+     * - __u32 Preset
+       - Preset selector value, default: 0, unless changed by the user
+-    * - __u32 Laser mode
++    * - __u8 Emitter mode
+       - 0: off, 1: on
++    * - __u8 RFU byte
++    * - __u16 LED Power
++      - Led power value 0-360 (F416 SKU)
+     * - :cspan:`1` *Capture Timing*
+     * - __u32 ID
+       - 0x80000001
+@@ -124,6 +129,14 @@ where all fields are in little endian order:
+       - Requested frame rate per second
+     * - __u16 Trigger
+       - Byte 0: bit 0: depth and RGB are synchronised, bit 1: external tri=
+gger
++    * - __u16 Calibration count
++    * - __u8 GPIO input data
++      - GPIO readout
++      - Supported from FW 5.12.7.0
++    * - __u32 Sub-preset info
++      - Sub-preset choice information
++    * - __u8 reserved
++      - RFU byte.
+ =
+
+ .. _1:
+ =
+
+-- =
+
+2.25.1
+
+
+---------------------------------------------------------------------
+Intel Israel (74) Limited
+
+This e-mail and any attachments may contain confidential material for
+the sole use of the intended recipient(s). Any review or distribution
+by others is strictly prohibited. If you are not the intended
+recipient, please contact the sender and delete all copies.
 
