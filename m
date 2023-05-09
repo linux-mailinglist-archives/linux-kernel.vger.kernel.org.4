@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE0F6FC4E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0BD6FC4E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235506AbjEILWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 07:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
+        id S235514AbjEILWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 07:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235523AbjEILWP (ORCPT
+        with ESMTP id S235529AbjEILWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 07:22:15 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C844EE0
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 04:22:10 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-306f2b42a86so3622870f8f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 04:22:10 -0700 (PDT)
+        Tue, 9 May 2023 07:22:17 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1083749FE
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 04:22:12 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f415a90215so37513065e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 04:22:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683631329; x=1686223329;
+        d=linaro.org; s=google; t=1683631330; x=1686223330;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bfCcSveqMLGp6QUetB3KVscfku26PhF2QBUjnUp0yPg=;
-        b=hf+jL8rKFKU/v9sPw7R1ubkn+2T4ZkSGkcWBbVdVE07z1Ve56+FJ3kVtfsRMcN6ypg
-         Xhny7KBwyBSPiiW0RcXqvma4g5OvYsZPpLB04M36yBRzFnPM3JVFzUZZx09gopbsxJRT
-         4GlLwiPrhNA746L4BgTnKRIpaGgo8Vv+q82XC2V42+e9swXlgSEz21dy3pvJ59LXcN+9
-         TfcJRpXd8n91X3Vv8yEoiXnYAZRV0H204DgSChKjT+4cWLs5lsHExmCqx1Ld0HybPgkp
-         /BPSjXcE2GGNWGXaRhwwH+31oplxz4pMIV9zwIZJfEqzzWoCLidjXxLoOjqQcUnmZCHE
-         4rOQ==
+        bh=AcBWMqISV9A++p9N6hrGlnxpBrh/70LXAdj4PNnNPmc=;
+        b=luRFiM+lwLaYpfKqQCsA8MqB1Xo7dII/IIjf7hfda8lgOOUgvIXxM33MgaNQ/w9hXp
+         jmfRRJ44qEo+8wuDrHHF3c3R5/H1Ki/0JuoT4qcuBOtGJNi6ckdtE85LonTGBHlN3g6L
+         H4ybapZugifO3/DicO3cPhAZau7qIpVu2WV2jCQ2D/Yel8rJCcd18o11y6zrJTk80N/9
+         hlrCrTBo6l6S7L6uTxcxm3L23hfYFBOtyKy/7FPkMfiXL+Do7vYrGyhrTo23DMzFG4aw
+         bH/z/vMhd/Fyd7xPioO6lAySztugfms415eQ3liDbhOrATrqUXpQriIfGQi2lm+XvlmG
+         V5MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683631329; x=1686223329;
+        d=1e100.net; s=20221208; t=1683631330; x=1686223330;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bfCcSveqMLGp6QUetB3KVscfku26PhF2QBUjnUp0yPg=;
-        b=bZ61X22EjcpKGfGuqjJXl7c3elnqKF1K5WTFm3Ce/FAOKhOH8SXPXKzswvpf9pTQ1H
-         bE6elAa6wm1pgEf99d1q1i/LM7A6d9fXfxxmrWJjmbiRtqVAfUYTHRLOF2aenR7wgbnh
-         yeVh+TOgB2oz7WJPV5z2bOfmQjI1CE4C2JRQ4dgplqxRkAf3ombdA2HZBG7otv8u3yKn
-         JeTxTKhZlcpoPFVbxP9BS2a3lR6qbnuukC97c5ZGWO6JWp+qJW7S1vJOzToQjP1ZwboD
-         FZU8yNPT5YOcAKGyZ10IWGwcK1avDB3z83Znm32vmvRZgenTNVJCoMhqcFUAb/6fjm1Z
-         CnDA==
-X-Gm-Message-State: AC+VfDz+RcmhcLKMYjZ/DZVSXx5VbVewXAvR98RT1cq5pvrmfTrkxZVb
-        MadZCRuOfHKVS0GTKAi96U9wbw==
-X-Google-Smtp-Source: ACHHUZ4NfB6pOeQ+HCgyqUG13YvNskOphBJkvvnDI9c2105UhklBZPaUEJCG+Wya5o9tKFl3aeNXYw==
-X-Received: by 2002:a5d:5746:0:b0:306:4239:4cd with SMTP id q6-20020a5d5746000000b00306423904cdmr9658659wrw.31.1683631329129;
-        Tue, 09 May 2023 04:22:09 -0700 (PDT)
+        bh=AcBWMqISV9A++p9N6hrGlnxpBrh/70LXAdj4PNnNPmc=;
+        b=EYYY2ZH5CL0jFFKcthpITT1f5UCBEwcJwFW6NIheDGGu0XpTSxFthip4oFQ11kyFCa
+         9FX5lanNJUNSc2rFzjNMQzAMBN+zMTy0fmKMiqrHIWmRKSTBav7cc31rLdlNMagp+B1V
+         bplKCdc9NkQ7HwPF5YaKyh/b5AdCS6ig3L906nQZIsxlc1QhKoegf3dakfOlR5tMlz41
+         heNkq8lQCnd82DTWW9HwE8xBsgUB+zZQi330VNKjK45Yy53OQU45gWosFWNgvsIdf0Ow
+         kCh0CWIx0M8m3ltUIPPxFYCgv8neX91UjLD9r/BSZua+GbfNZcdUngPogozHuj5ST/SN
+         IlMg==
+X-Gm-Message-State: AC+VfDzhnnppI4MomLvZ5EndFrdWg8kFahUOwWwNP3zWhy2ucuDleXV9
+        hJFcohoBGlY1ET6D4iEUXC6VEQ==
+X-Google-Smtp-Source: ACHHUZ5L3YbTRGyJAJmeYwfPqVXKmMnuTCBjfdZ9dKyfAaB7LLt09gFRzDI2AHX1NfxyYzVXledfEQ==
+X-Received: by 2002:a1c:cc11:0:b0:3f4:86:33b with SMTP id h17-20020a1ccc11000000b003f40086033bmr9020222wmb.26.1683631330578;
+        Tue, 09 May 2023 04:22:10 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id n2-20020a05600c294200b003f17eded97bsm19531072wmd.19.2023.05.09.04.22.08
+        by smtp.gmail.com with ESMTPSA id n2-20020a05600c294200b003f17eded97bsm19531072wmd.19.2023.05.09.04.22.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 04:22:08 -0700 (PDT)
+        Tue, 09 May 2023 04:22:09 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
@@ -57,9 +57,9 @@ Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
         linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
         alsa-devel@alsa-project.org,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 3/4] ASoC: qcom: q6dsp: add support to more display ports
-Date:   Tue,  9 May 2023 12:22:01 +0100
-Message-Id: <20230509112202.21471-4-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 4/4] ASoC: qcom: q6apm: add support to display ports in lpass dais
+Date:   Tue,  9 May 2023 12:22:02 +0100
+Message-Id: <20230509112202.21471-5-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20230509112202.21471-1-srinivas.kandagatla@linaro.org>
 References: <20230509112202.21471-1-srinivas.kandagatla@linaro.org>
@@ -75,104 +75,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Existing code base only supports one display port, this patch adds
-support upto 8 display ports. This support is required to allow platforms
-like X13s which have 3 display ports, and some of the Qualcomm SoCs
-there are upto 7 Display ports.
+This patch adds support to q6apm lpass display port dais. This support
+is required to get DP audio on x13s.
 
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- .../sound/qcom,q6dsp-lpass-ports.h            |  8 ++++
- sound/soc/qcom/qdsp6/q6dsp-lpass-ports.c      | 43 ++++++++++++-------
- 2 files changed, 35 insertions(+), 16 deletions(-)
+ sound/soc/qcom/qdsp6/q6apm-lpass-dais.c | 39 +++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h b/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
-index 9f7c5103bc82..39f203256c4f 100644
---- a/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
-+++ b/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
-@@ -131,6 +131,14 @@
- #define RX_CODEC_DMA_RX_7	126
- #define QUINARY_MI2S_RX		127
- #define QUINARY_MI2S_TX		128
-+#define DISPLAY_PORT_RX_0	DISPLAY_PORT_RX
-+#define DISPLAY_PORT_RX_1	129
-+#define DISPLAY_PORT_RX_2	130
-+#define DISPLAY_PORT_RX_3	131
-+#define DISPLAY_PORT_RX_4	132
-+#define DISPLAY_PORT_RX_5	133
-+#define DISPLAY_PORT_RX_6	134
-+#define DISPLAY_PORT_RX_7	135
+diff --git a/sound/soc/qcom/qdsp6/q6apm-lpass-dais.c b/sound/soc/qcom/qdsp6/q6apm-lpass-dais.c
+index 420e8aa11f42..7ad604b80e25 100644
+--- a/sound/soc/qcom/qdsp6/q6apm-lpass-dais.c
++++ b/sound/soc/qcom/qdsp6/q6apm-lpass-dais.c
+@@ -11,6 +11,7 @@
+ #include <sound/soc.h>
+ #include <sound/pcm_params.h>
+ #include "q6dsp-lpass-ports.h"
++#include "q6dsp-common.h"
+ #include "audioreach.h"
+ #include "q6apm.h"
  
- #define LPASS_CLK_ID_PRI_MI2S_IBIT	1
- #define LPASS_CLK_ID_PRI_MI2S_EBIT	2
-diff --git a/sound/soc/qcom/qdsp6/q6dsp-lpass-ports.c b/sound/soc/qcom/qdsp6/q6dsp-lpass-ports.c
-index f67c16fd90b9..ac937a6bf909 100644
---- a/sound/soc/qcom/qdsp6/q6dsp-lpass-ports.c
-+++ b/sound/soc/qcom/qdsp6/q6dsp-lpass-ports.c
-@@ -79,6 +79,22 @@
- 		.id = did,						\
- 	}
+@@ -91,6 +92,36 @@ static int q6dma_set_channel_map(struct snd_soc_dai *dai,
+ 	return 0;
+ }
  
-+#define Q6AFE_DP_RX_DAI(did) {						\
-+		.playback = {						\
-+			.stream_name = #did" Playback",			\
-+			.rates = SNDRV_PCM_RATE_48000 |			\
-+				SNDRV_PCM_RATE_96000 |			\
-+				SNDRV_PCM_RATE_192000,			\
-+			.formats = SNDRV_PCM_FMTBIT_S16_LE |		\
-+				   SNDRV_PCM_FMTBIT_S24_LE,		\
-+			.channels_min = 2,				\
-+			.channels_max = 8,				\
-+			.rate_min = 48000,				\
-+			.rate_max = 192000,				\
-+		},							\
-+		.name = #did,						\
-+		.id = did,						\
++static int q6hdmi_hw_params(struct snd_pcm_substream *substream,
++			    struct snd_pcm_hw_params *params, struct snd_soc_dai *dai)
++{
++	struct q6apm_lpass_dai_data *dai_data = dev_get_drvdata(dai->dev);
++	struct audioreach_module_config *cfg = &dai_data->module_config[dai->id];
++	int channels = params_channels(params);
++	int ret;
++
++	cfg->bit_width = params_width(params);
++	cfg->sample_rate = params_rate(params);
++	cfg->num_channels = channels;
++
++	switch (dai->id) {
++	case DISPLAY_PORT_RX_0:
++		cfg->dp_idx = 0;
++		break;
++	case DISPLAY_PORT_RX_1 ... DISPLAY_PORT_RX_7:
++		cfg->dp_idx = dai->id - DISPLAY_PORT_RX_1 + 1;
++		break;
 +	}
++
++	ret = q6dsp_get_channel_allocation(channels);
++	if (ret < 0)
++		return ret;
++
++	cfg->channel_allocation = ret;
++
++	return 0;
++}
++
+ static int q6dma_hw_params(struct snd_pcm_substream *substream,
+ 			   struct snd_pcm_hw_params *params, struct snd_soc_dai *dai)
+ {
+@@ -215,6 +246,13 @@ static const struct snd_soc_dai_ops q6i2s_ops = {
+ 	.shutdown	= q6apm_lpass_dai_shutdown,
+ 	.set_channel_map  = q6dma_set_channel_map,
+ 	.hw_params        = q6dma_hw_params,
++};
++
++static const struct snd_soc_dai_ops q6hdmi_ops = {
++	.prepare	= q6apm_lpass_dai_prepare,
++	.startup	= q6apm_lpass_dai_startup,
++	.shutdown	= q6apm_lpass_dai_shutdown,
++	.hw_params	= q6hdmi_hw_params,
+ 	.set_fmt	= q6i2s_set_fmt,
+ };
  
- static struct snd_soc_dai_driver q6dsp_audio_fe_dais[] = {
- 	{
-@@ -528,22 +544,14 @@ static struct snd_soc_dai_driver q6dsp_audio_fe_dais[] = {
- 	Q6AFE_TDM_CAP_DAI("Quinary", 5, QUINARY_TDM_TX_5),
- 	Q6AFE_TDM_CAP_DAI("Quinary", 6, QUINARY_TDM_TX_6),
- 	Q6AFE_TDM_CAP_DAI("Quinary", 7, QUINARY_TDM_TX_7),
--	{
--		.playback = {
--			.stream_name = "Display Port Playback",
--			.rates = SNDRV_PCM_RATE_48000 |
--				 SNDRV_PCM_RATE_96000 |
--				 SNDRV_PCM_RATE_192000,
--			.formats = SNDRV_PCM_FMTBIT_S16_LE |
--				   SNDRV_PCM_FMTBIT_S24_LE,
--			.channels_min = 2,
--			.channels_max = 8,
--			.rate_max =     192000,
--			.rate_min =	48000,
--		},
--		.id = DISPLAY_PORT_RX,
--		.name = "DISPLAY_PORT",
--	},
-+	Q6AFE_DP_RX_DAI(DISPLAY_PORT_RX_0),
-+	Q6AFE_DP_RX_DAI(DISPLAY_PORT_RX_1),
-+	Q6AFE_DP_RX_DAI(DISPLAY_PORT_RX_2),
-+	Q6AFE_DP_RX_DAI(DISPLAY_PORT_RX_3),
-+	Q6AFE_DP_RX_DAI(DISPLAY_PORT_RX_4),
-+	Q6AFE_DP_RX_DAI(DISPLAY_PORT_RX_5),
-+	Q6AFE_DP_RX_DAI(DISPLAY_PORT_RX_6),
-+	Q6AFE_DP_RX_DAI(DISPLAY_PORT_RX_7),
- 	Q6AFE_CDC_DMA_RX_DAI(WSA_CODEC_DMA_RX_0),
- 	Q6AFE_CDC_DMA_TX_DAI(WSA_CODEC_DMA_TX_0),
- 	Q6AFE_CDC_DMA_RX_DAI(WSA_CODEC_DMA_RX_1),
-@@ -603,6 +611,9 @@ struct snd_soc_dai_driver *q6dsp_audio_ports_set_config(struct device *dev,
- 		case DISPLAY_PORT_RX:
- 			q6dsp_audio_fe_dais[i].ops = cfg->q6hdmi_ops;
- 			break;
-+		case DISPLAY_PORT_RX_1 ... DISPLAY_PORT_RX_7:
-+			q6dsp_audio_fe_dais[i].ops = cfg->q6hdmi_ops;
-+			break;
- 		case SLIMBUS_0_RX ... SLIMBUS_6_TX:
- 			q6dsp_audio_fe_dais[i].ops = cfg->q6slim_ops;
- 			break;
+@@ -242,6 +280,7 @@ static int q6apm_lpass_dai_dev_probe(struct platform_device *pdev)
+ 	memset(&cfg, 0, sizeof(cfg));
+ 	cfg.q6i2s_ops = &q6i2s_ops;
+ 	cfg.q6dma_ops = &q6dma_ops;
++	cfg.q6hdmi_ops = &q6hdmi_ops;
+ 	dais = q6dsp_audio_ports_set_config(dev, &cfg, &num_dais);
+ 
+ 	return devm_snd_soc_register_component(dev, &q6apm_lpass_dai_component, dais, num_dais);
 -- 
 2.21.0
 
