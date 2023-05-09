@@ -2,185 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FAC6FCEDD
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 21:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFDA6FCEE1
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 21:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234246AbjEIT4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 15:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
+        id S229826AbjEIT5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 15:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjEIT4U (ORCPT
+        with ESMTP id S229555AbjEIT5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 15:56:20 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282E43C0C;
-        Tue,  9 May 2023 12:56:19 -0700 (PDT)
-Date:   Tue, 09 May 2023 19:56:16 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683662177;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 9 May 2023 15:57:21 -0400
+Received: from out-2.mta0.migadu.com (out-2.mta0.migadu.com [IPv6:2001:41d0:1004:224b::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179C13C0B
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 12:57:19 -0700 (PDT)
+Date:   Tue, 9 May 2023 15:57:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683662238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=i/vEnI/WFdPHZGqXC/3G2/DQm+2OzEhIX3KzqGEKGV0=;
-        b=WWeCfinM04pROlGUdsFazYzPo/sHmWF1rxTCgVX0XqZBRZKudUJeWlUvdD2l4I+sGpoEiO
-        Xfu/U31CiC/2oI+o4ewfoLNO9UbhWURr82RMzVzyf0/xOvdk6c1XE14S0Ea92QD60Jap6f
-        f14SGK/zw8KQ9A8IZF49QhIxMgRJ52mjJ7ZVsQrGSwmP2vhODHPyTe9N4UUGi8ik2CKrQ4
-        Fr9X6lIBug1URhSCG8YQ1SN8dL1ySTICcuJQQfzmvp4ZGIiiiU5+9OvlYMwxJieUzxWAt8
-        qbiRSFc41hu7z6D6XuGG9DAD5lf1KDTtiZC1OhpZzVrhdsNKBbFBrCAGc8CyCg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683662177;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i/vEnI/WFdPHZGqXC/3G2/DQm+2OzEhIX3KzqGEKGV0=;
-        b=jkNrt+obk5uJZpjgeqWqBfdwhbBGIEuDQRMWAK0+7IOWxkrQSxWaupXqOkUlxULv+fhH/C
-        TBkW2+utiV1lUWDg==
-From:   "tip-bot2 for Paolo Abeni" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] Revert "softirq: Let ksoftirqd do its job"
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Xing <kerneljasonxing@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, netdev@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <305d7742212cbe98621b16be782b0562f1012cb6.camel@redhat.com>
-References: <305d7742212cbe98621b16be782b0562f1012cb6.camel@redhat.com>
+        bh=vA3sbbV/QHVDEjFWeRW1Pm0ZfEpL5zDeaHwLB6+B5mM=;
+        b=LIjUnmNxS8zN+vYMhDT777VrmOACO6jwMvt5gO+8h44LS8gTFFx/ZseLESAkOf3iWbefUm
+        5h5F1IFqHB+hPJr/ZJwiTYG5znYVAvWkwxkodArfJldk7wj43vOFNhstko3JOQ0thONvyA
+        InTGcdRW5rNd1CoPZXKYU/LtJb9c/7w=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH 03/32] locking/lockdep: lockdep_set_no_check_recursion()
+Message-ID: <ZFqlmrL27is3AofY@moria.home.lan>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-4-kent.overstreet@linux.dev>
+ <20230509193147.GC2148518@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Message-ID: <168366217649.404.15332707412932478981.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509193147.GC2148518@hirez.programming.kicks-ass.net>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/core branch of tip:
+On Tue, May 09, 2023 at 09:31:47PM +0200, Peter Zijlstra wrote:
+> On Tue, May 09, 2023 at 12:56:28PM -0400, Kent Overstreet wrote:
+> > This adds a method to tell lockdep not to check lock ordering within a
+> > lock class - but to still check lock ordering w.r.t. other lock types.
+> > 
+> > This is for bcachefs, where for btree node locks we have our own
+> > deadlock avoidance strategy w.r.t. other btree node locks (cycle
+> > detection), but we still want lockdep to check lock ordering w.r.t.
+> > other lock types.
+> > 
+> 
+> ISTR you had a much nicer version of this where you gave a custom order
+> function -- what happend to that?
 
-Commit-ID:     d15121be7485655129101f3960ae6add40204463
-Gitweb:        https://git.kernel.org/tip/d15121be7485655129101f3960ae6add40204463
-Author:        Paolo Abeni <pabeni@redhat.com>
-AuthorDate:    Mon, 08 May 2023 08:17:44 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Tue, 09 May 2023 21:50:27 +02:00
-
-Revert "softirq: Let ksoftirqd do its job"
-
-This reverts the following commits:
-
-  4cd13c21b207 ("softirq: Let ksoftirqd do its job")
-  3c53776e29f8 ("Mark HI and TASKLET softirq synchronous")
-  1342d8080f61 ("softirq: Don't skip softirq execution when softirq thread is parking")
-
-in a single change to avoid known bad intermediate states introduced by a
-patch series reverting them individually.
-
-Due to the mentioned commit, when the ksoftirqd threads take charge of
-softirq processing, the system can experience high latencies.
-
-In the past a few workarounds have been implemented for specific
-side-effects of the initial ksoftirqd enforcement commit:
-
-commit 1ff688209e2e ("watchdog: core: make sure the watchdog_worker is not deferred")
-commit 8d5755b3f77b ("watchdog: softdog: fire watchdog even if softirqs do not get to run")
-commit 217f69743681 ("net: busy-poll: allow preemption in sk_busy_loop()")
-commit 3c53776e29f8 ("Mark HI and TASKLET softirq synchronous")
-
-But the latency problem still exists in real-life workloads, see the link
-below.
-
-The reverted commit intended to solve a live-lock scenario that can now be
-addressed with the NAPI threaded mode, introduced with commit 29863d41bb6e
-("net: implement threaded-able napi poll loop support"), which is nowadays
-in a pretty stable status.
-
-While a complete solution to put softirq processing under nice resource
-control would be preferable, that has proven to be a very hard task. In
-the short term, remove the main pain point, and also simplify a bit the
-current softirq implementation.
-
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Jason Xing <kerneljasonxing@gmail.com>
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: netdev@vger.kernel.org
-Link: https://lore.kernel.org/netdev/305d7742212cbe98621b16be782b0562f1012cb6.camel@redhat.com
-Link: https://lore.kernel.org/r/57e66b364f1b6f09c9bc0316742c3b14f4ce83bd.1683526542.git.pabeni@redhat.com
----
- kernel/softirq.c | 22 ++--------------------
- 1 file changed, 2 insertions(+), 20 deletions(-)
-
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index 1b72551..807b34c 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -80,21 +80,6 @@ static void wakeup_softirqd(void)
- 		wake_up_process(tsk);
- }
- 
--/*
-- * If ksoftirqd is scheduled, we do not want to process pending softirqs
-- * right now. Let ksoftirqd handle this at its own rate, to get fairness,
-- * unless we're doing some of the synchronous softirqs.
-- */
--#define SOFTIRQ_NOW_MASK ((1 << HI_SOFTIRQ) | (1 << TASKLET_SOFTIRQ))
--static bool ksoftirqd_running(unsigned long pending)
--{
--	struct task_struct *tsk = __this_cpu_read(ksoftirqd);
--
--	if (pending & SOFTIRQ_NOW_MASK)
--		return false;
--	return tsk && task_is_running(tsk) && !__kthread_should_park(tsk);
--}
--
- #ifdef CONFIG_TRACE_IRQFLAGS
- DEFINE_PER_CPU(int, hardirqs_enabled);
- DEFINE_PER_CPU(int, hardirq_context);
-@@ -236,7 +221,7 @@ void __local_bh_enable_ip(unsigned long ip, unsigned int cnt)
- 		goto out;
- 
- 	pending = local_softirq_pending();
--	if (!pending || ksoftirqd_running(pending))
-+	if (!pending)
- 		goto out;
- 
- 	/*
-@@ -432,9 +417,6 @@ static inline bool should_wake_ksoftirqd(void)
- 
- static inline void invoke_softirq(void)
- {
--	if (ksoftirqd_running(local_softirq_pending()))
--		return;
--
- 	if (!force_irqthreads() || !__this_cpu_read(ksoftirqd)) {
- #ifdef CONFIG_HAVE_IRQ_EXIT_ON_IRQ_STACK
- 		/*
-@@ -468,7 +450,7 @@ asmlinkage __visible void do_softirq(void)
- 
- 	pending = local_softirq_pending();
- 
--	if (pending && !ksoftirqd_running(pending))
-+	if (pending)
- 		do_softirq_own_stack();
- 
- 	local_irq_restore(flags);
+Probably in the other branch that I was meaning to re-mail you separately,
+clearly I hadn't pulled the latest versions back into here... expect
+that shortly :)
