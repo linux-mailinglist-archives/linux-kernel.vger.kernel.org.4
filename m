@@ -2,94 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D506FCFA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBFC6FCFA8
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234671AbjEIUhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 16:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
+        id S234872AbjEIUjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 16:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjEIUhf (ORCPT
+        with ESMTP id S229572AbjEIUjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 16:37:35 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490B1A0;
-        Tue,  9 May 2023 13:37:34 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f423521b10so22082495e9.0;
-        Tue, 09 May 2023 13:37:34 -0700 (PDT)
+        Tue, 9 May 2023 16:39:09 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC857A0;
+        Tue,  9 May 2023 13:39:06 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id ffacd0b85a97d-3062c1e7df8so4201966f8f.1;
+        Tue, 09 May 2023 13:39:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683664653; x=1686256653;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4Bswn/z08Bd4bd6J8MGGINAvE8t6sPW5eGxLX1r3urE=;
-        b=jDMOxRrjyGdBqOvvh4JjkZxcFwgQx3a1MkTCs051L8KFpewTjo59nOS43qQKGaikvd
-         1ekWusI/LwZKDRsiqdO8XzRwHdRF2kRdPwgBMJOFysGZNXhocFv3+mpazbt9NHuq2pno
-         qQRkGul4zLyzPqfcglpJmv7nDVqrZF9lMHwGPRv/e/MNddLe+4LNApkUuZ6b3qIKUAia
-         rIJ1BLIh6b6T78g9NAYbuy7l9VAE5v8Wrw0fEpOOjFoL/sgJIbt5uL+/3TdvAMVAFrVe
-         63bVp3OC1lHQbxjjZs+7MZOUZrYWO3euY0MdpPQfjr+FpOTIhyzSfhs1jRrsBVGwN8f8
-         LuUA==
+        d=gmail.com; s=20221208; t=1683664745; x=1686256745;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xzT2Qg7+gnTohAZR8U03MVTx3xSlsm1ApgjWGg/yeYo=;
+        b=qEHme8UZ/79GsnJuDa+hJvF24q+bvoWHIe4OGGF/RwMW9NPnWhSgdEkLCrisNYrwSK
+         l0uJTJinPPdpbhtmVhQjVmkw0PgCHRt9PN5HaJP3t2IAOAWBnXik99eannCuCrzVuROK
+         8Us4Uc06vcWW0A+COknpeEnuXt0+VB+wYNKKbiHYfh2aKDXuhf+2be7QJm4pdSSCBi/3
+         Wg1xP3tnF+tSHc4lrcgnjol8eIFkc5Q9Px/NCuyO3gwlsyLSL8E6LuDw4aQ4rG9nvF3I
+         zvLIQyTIFhjV1trdennbTuLHVnl4SnT7m1E3OCf1ZdgUNW95ivsJj59u4rM6hVcpVGS/
+         WyGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683664653; x=1686256653;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1683664745; x=1686256745;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Bswn/z08Bd4bd6J8MGGINAvE8t6sPW5eGxLX1r3urE=;
-        b=d9M0hI5lbcZPmgCmSI6XvCra6exApbUgd6dQ1d3rTVW9SWRS+5xW0myQxSEkWL97Yt
-         FDLI6K2yPfJeyoMg+L2hS1kLdLPrdgUqnGzABhTBs0zinkjE/TKfssMpXjB6ORp3Skqz
-         RiKOrg9LXwR4COPX9F3a6vqaurVd5uttX1eyZAOAvfyZUUt5pPIZNplGwqWG322O+kYs
-         +8l6IYfSLrkd4AcI0w0tuLZaCzWnNHoPqVYYH8/Zbns601EohuOFssq8PQSXlWs13PoB
-         ZLSnKmHyTC4ZW8UWqeXLR1D8jkclV+1TfGUM7J8Lw1gPCw/xVro3ThYfRkAhG0iI5Jqh
-         qjUw==
-X-Gm-Message-State: AC+VfDxpeymfWOjx3hcTm9XmDwCrxh+lphJ547J6rWSA7zXS3RJ22bbm
-        f4dcreQMRZ9VITtzFs+qYy8=
-X-Google-Smtp-Source: ACHHUZ4SVx6IA/oOEjsyRZjD2IHm1XLo6B8QZ2l1mFlQjkPC9UGcMcXbhsXq9ywzoIFBwHGsIIJsEw==
-X-Received: by 2002:a1c:f402:0:b0:3f3:3a81:32b with SMTP id z2-20020a1cf402000000b003f33a81032bmr10439045wma.15.1683664652628;
-        Tue, 09 May 2023 13:37:32 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:4a02:2aff:fe07:1efc])
-        by smtp.googlemail.com with ESMTPSA id w12-20020a05600c474c00b003f07ef4e3e0sm4498071wmo.0.2023.05.09.13.37.31
+        bh=xzT2Qg7+gnTohAZR8U03MVTx3xSlsm1ApgjWGg/yeYo=;
+        b=jDGcDmSy6w5Jf7uH9mapaX95M4ixKxl1bH9TZkkHX39lsNip963WPXEZAXSC7SK/Mg
+         2/tiAiUggjEP6CXNp171qV3pKVKBpGzil5/rH/GzzvStPZK2DyBajC4SBTeDxgf27+hA
+         AOfHjQkJ0QmEF78fTjwJ8cd6XSKKdFmXD89XR2QAB7tA2fZnkfLE99Z631z9trh61kj8
+         aeyibMfoE+4msQyrFDXc+354KalOo7lIr/WTsur3Ik7ilEsO9tU5f5YlEtGwvwNQaM7X
+         aYiCyvS5W6zz1C/OL1NB4+WmObsuS8BawdzOAuH4Jzvi0x4X1Y890XjjW3/s4uVPwfwL
+         o1zQ==
+X-Gm-Message-State: AC+VfDyv0wY5oGFunjCSNHyPoqESfFJW98+isbrKx7weJkUaARcK1JbK
+        8iMnoelXGajWpdCs1gDKh062h0cEB/hsWnOP
+X-Google-Smtp-Source: ACHHUZ4f1RVMO5EGx6nj8UpK4sD07mMfYHSd70dWGenO9CfbdCN4EaaokO8sbgvaIfU3Sig06Q+S3Q==
+X-Received: by 2002:adf:e48b:0:b0:2fb:7099:6070 with SMTP id i11-20020adfe48b000000b002fb70996070mr11889088wrm.47.1683664745349;
+        Tue, 09 May 2023 13:39:05 -0700 (PDT)
+Received: from [192.168.0.19] ([2.222.93.88])
+        by smtp.gmail.com with ESMTPSA id a14-20020a5d53ce000000b0030732d6e104sm15234707wrw.105.2023.05.09.13.39.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 13:37:32 -0700 (PDT)
-Date:   Tue, 9 May 2023 22:37:29 +0200
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        pjones@redhat.com, deller@gmx.de, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Cannot boot an i386-UEFI thinkpad lenovo tablet-2
-Message-ID: <ZFqvCeNxKJDOYDaT@Red>
-References: <ZFnoXiZGGhuWDl2S@Red>
- <af88a590-e20a-0669-c0d8-e073cc6e109f@intel.com>
+        Tue, 09 May 2023 13:39:04 -0700 (PDT)
+Message-ID: <e1fd41eb-71e9-f8d9-2607-363c88fd9ab3@gmail.com>
+Date:   Tue, 9 May 2023 21:39:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] rust: lock: Reflow long documentation line
+Content-Language: en-US
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     alice@ryhl.io, alex.gaynor@gmail.com, benno.lossin@proton.me,
+        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+        linux-kernel@vger.kernel.org, ojeda@kernel.org,
+        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com,
+        yakoyoku@gmail.com
+References: <7f464c01-d4ec-d632-fa40-0c3f18c2ffca@ryhl.io>
+ <20230507162739.17392-1-ben.gooding.dev@gmail.com>
+ <CANiq72=0bbXtRpfYp+CT5tfwcsDi_A6_WV-23Bw44nD+Bbk9uA@mail.gmail.com>
+From:   Ben Gooding <ben.gooding.dev@gmail.com>
+In-Reply-To: <CANiq72=0bbXtRpfYp+CT5tfwcsDi_A6_WV-23Bw44nD+Bbk9uA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <af88a590-e20a-0669-c0d8-e073cc6e109f@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Antivirus: AVG (VPS 230509-4, 9/5/2023), Outbound message
+X-Antivirus-Status: Clean
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, May 09, 2023 at 07:01:02AM -0700, Dave Hansen a écrit :
-> On 5/8/23 23:29, Corentin Labbe wrote:
-> > The tablet has only one port, so I use a hub for keyboard and USB key.
-> > Immediatly after booting Linux, all hub port light goes to off.
-> 
-> If it's dying in the installer, can you boot it to a shell or rescue
-> media?  Are you getting any kernel messages on the screen before the
-> installer?
-> 
+Hi Miguel,
 
-Sorry my sentence was not precise ("after booting linux"),
+On 08/05/2023 21:37, Miguel Ojeda wrote:
+> Hi Ben,
+>
+> On Sun, May 7, 2023 at 6:27â€¯PM Ben Gooding <ben.gooding.dev@gmail.com> wrote:
+>> Suggested-by: Alice Ryhl <alice@ryhl.io>
+>> Signed-off-by: Ben Gooding <ben.gooding.dev@gmail.com>
+> Thanks for the patch! Several notes:
+>
+>    - Missing commit message -- in general, please check your patches
+> with `scripts/checkpatch.pl` and please read
+> https://docs.kernel.org/process/submitting-patches.html.
+>
+>    - This patch goes on top of the previous one you sent but, in the
+> kernel workflow, what you are expected to do is send a v2 of your
+> patch series instead. You can use `-v2` in `git format-patch` for
+> that.
+>
+>    - This patch is not just reflowing as the title implies, but it also
+> changes the style of the link -- is there a reason for that? If yes,
+> this should be explained.
+>
+> Cheers,
+> Miguel
 
-It die after pressing enter on grub menu.
-No kernel message, nothing new on screen.
-Only visible change are USB light off.
+Thank you very much for your feedback, this is really helpful as I'm 
+learning the process.
 
-I have really no clue.
+I've submitted a proper v2 of my patch based on your feedback which is 
+hopefully much more like what you would expect - please let me know.
+
+Many thanks,
+
+Ben
+
