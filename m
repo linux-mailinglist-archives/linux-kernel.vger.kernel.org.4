@@ -2,95 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905846FBC70
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 03:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C041B6FBC75
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 03:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232230AbjEIBWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 21:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
+        id S230101AbjEIB0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 21:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjEIBWl (ORCPT
+        with ESMTP id S233664AbjEIB0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 21:22:41 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B036F46BA;
-        Mon,  8 May 2023 18:22:40 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64115eef620so38799625b3a.1;
-        Mon, 08 May 2023 18:22:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683595360; x=1686187360;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=au9agmn1fAuoWBQtARq17AEbHUZT+qsMcq+Xb5cLNzo=;
-        b=X7RgVwL3v5eZwAel21m1GADrylU7pxTYwYAbeUz0i+OqdQ7EDkvsvrGjwb2nX4KAuG
-         HevzDBP25xpEFqkAcaQND3xyTYg0e+dI45oLGjsA14M5QNsVI3pCBfaQchWiqFAYi7L2
-         TcVBR8ZDrmYWVsiCOvly4ujN6FkqEyxaXKUmPl/5ihYlZ+N2E/6rS9W8fdslRNgn8BAv
-         ph1ryHBu/tAM7n9fES9W58FSqzzLTXWddmnrtfGl2LMPGVsSCCjosCzLhx3+3gl660hp
-         qeLgurWYE+UeaDnPwFQNkh381G11FzWqzjqxB+3IOrFii/nyV71QOsOjmb3VDlFZoI97
-         DMww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683595360; x=1686187360;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=au9agmn1fAuoWBQtARq17AEbHUZT+qsMcq+Xb5cLNzo=;
-        b=D7bdZXs54yGYi3FuzhXdj+uyV7IaS3LTfvaKj9hjJOkQwaMGq9e0Wo39F4nQgj2tvz
-         GQ1e/5niPLCIgQvzx6OPAxX2aV3XZc1nEM3Wz6ZMBx0U+1ca0IG+hDYvXMYxUEuds9LJ
-         sh7aQg2LyYm2TdxlJSrCbsbL1K1pF+CQBc69gzmaAXJEYQ2fYihb6EmzLXhytASQE17F
-         MlOfps8pQvuolk0VXztU4WJ8IVIp4+gcTERx45CRc8h+ks8WFKbP6G6z9KebYFjYo5b3
-         LY6PM440V7OQUuZsJDP+W5+KxzUImMK0jvdsGji5Qh6iziEnjpSS6ibiLLgyT4K1Jepg
-         nEqw==
-X-Gm-Message-State: AC+VfDz25SaT0aPcRD5t/s+tkvJuhvPDmkLm0Qkgrirz/zCwF1AQ1aXn
-        YvVGpLje7onnibKoZGQKJk8=
-X-Google-Smtp-Source: ACHHUZ7W13EJUM1P+PLUNr3IIAIDRFzJWLHkdEj8grXPNYZ91UoGrP/4BSqjLbd1oCaLf72OdDn9vQ==
-X-Received: by 2002:a17:902:da92:b0:1ac:94b3:3ab4 with SMTP id j18-20020a170902da9200b001ac94b33ab4mr859171plx.27.1683595359795;
-        Mon, 08 May 2023 18:22:39 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id f11-20020a17090274cb00b001a6db2bef16sm98287plt.303.2023.05.08.18.22.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 18:22:39 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 8 May 2023 15:22:37 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     jiangshanlai@gmail.com
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 12/22] scsi: Use alloc_ordered_workqueue() to create
- ordered workqueues
-Message-ID: <ZFmgXcSadQpizbwI@slm.duckdns.org>
-References: <20230421025046.4008499-1-tj@kernel.org>
- <20230421025046.4008499-13-tj@kernel.org>
- <ZFmMaraKKz8D_YGY@slm.duckdns.org>
+        Mon, 8 May 2023 21:26:39 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C73083EE;
+        Mon,  8 May 2023 18:26:37 -0700 (PDT)
+From:   "Ahmed S. Darwish" <darwi@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683595595;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EH7EJCy+zaOYirnoFTx4j8Sz/5+BcH8LizE4QJejMqI=;
+        b=zIbXZrgRQbJHKb8OzPbZ7vMxSTyfY46CvnA/s8gUORRkBMUxa1xGgYRVUF2F/P7zgg8maa
+        dxruFxMyxqU4pIXtnvtZalhqhgcp3P1Reuy3pwWGwsnxshkqBzxfosXC99eitBu4Q4V5ko
+        SE7twaUCtizq56kWDyhV4YKhKvw4EhF0uLBLu0gvmuJTBP/9u3al/taNNyKNshSItMgtuA
+        TuX2o1qOKGMMkJWv7UR2iiCWo29GjH6oO4DO1j/AArqZLlzzTnMrguHrqjPgtOkLFPaZLz
+        w0EEjLG8F1qN5B4uYM+MnprGMgpNgheGd4tzd88UBjQ+EfypLDKpw+cXuN+o7g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683595595;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EH7EJCy+zaOYirnoFTx4j8Sz/5+BcH8LizE4QJejMqI=;
+        b=LBDu6RpBg2cbJvicyJUcsmEvUlVyxh2w2toUNuTWgSsO2y9weEgLHVaa3qRxsL2iUrpEbL
+        MBZ8CeY5gdnzaoBw==
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kbuild@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>
+Subject: [PATCH v2 0/2] scripts: Resolve gtags empty index generation
+Date:   Tue,  9 May 2023 03:26:14 +0200
+Message-Id: <20230509012616.81579-1-darwi@linutronix.de>
+In-Reply-To: <20230504201833.202494-1-darwi@linutronix.de>
+References: <20230504201833.202494-1-darwi@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFmMaraKKz8D_YGY@slm.duckdns.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 01:57:30PM -1000, Tejun Heo wrote:
-> Applied to wq/for-6.5-cleanup-ordered.
+Hi,
 
-Oops, strike that. All scsi core workqueues have WQ_SYSFS set which means
-that their max_active could be adjusted upwards through sysfs. The shouldn't
-be ordered workqueues. This only leaves NCR5380 the only remaining
-conversion candidate; however, that one only uses a single work item, so the
-better thing to do there is using the default @max_active instead.
+v2-changelog
+------------
 
-I'm dropping this patch and will add a patch for NCR5380 in the next round.
+Handle review remarks from Masahiro Yamada:
 
-Thanks.
+  - scripts/tags.sh: remove the O= language, and focus on the general
+    case of the build directory being different from the kernel source
+    tree, as specified in kernel Makefile L159.
 
--- 
-tejun
+  - Fix failure when build directory is a subdirectory of the kernel
+    source tree.
+
+NEW:
+
+  - Update Documentation/process/changes.rst with new gtags (GNU GLOBAL)
+    requirements.
+
+Thanks!
+
+Cover letter / v1
+-----------------
+
+https://lkml.kernel.org/r/20230504201833.202494-1-darwi@linutronix.de
+
+make gtags for O= kernel builds is currently broken. For example, when doing:
+
+   make O=../build/ x86_64_defconfig
+   make O=../build/ gtags
+
+gtags generates a warning for each kernel source file to be indexed:
+
+   make[1]: Entering directory '/home/darwi/build'
+     GEN     gtags
+   Warning: '/home/darwi/linux/arch/x86/include/asm/qspinlock.h' is out of source tree. ignored.
+   Warning: '/home/darwi/linux/arch/x86/include/asm/hpet.h' is out of source tree. ignored.
+   ...
+   Warning: '/home/darwi/linux/virt/lib/irqbypass.c' is out of source tree. ignored.
+   make[1]: Leaving directory '/home/darwi/build/'
+
+and then generates an empty index:
+
+   $ du -hs ~/build/G*
+   16K	/home/darwi/build/GPATH
+   16K	/home/darwi/build/GRTAGS
+   16K	/home/darwi/build/GTAGS
+
+This series includes a proposed fix. After applying it:
+
+   $ make O=../build/ gtags
+   make[1]: Entering directory '/home/darwi/build'
+     GEN     gtags
+   make[1]: Leaving directory '/home/darwi/build'
+
+   $ du -hs ~/build/G*
+   9.1M	/home/darwi/build/GPATH
+   506M	/home/darwi/build/GRTAGS
+   696M	/home/darwi/build/GTAGS
+
+The generated files can then be integrated with editors or IDEs as
+usual.
+
+=>
+
+Ahmed S. Darwish (2):
+  scripts/tags.sh: Resolve gtags empty index generation
+  docs: Set minimal gtags / GNU GLOBAL version to 6.6.5
+
+ Documentation/process/changes.rst |  7 +++++++
+ scripts/tags.sh                   | 14 +++++++++++++-
+ 2 files changed, 20 insertions(+), 1 deletion(-)
+
+base-commit: ba0ad6ed89fd5dada3b7b65ef2b08e95d449d4ab
+--
+2.40.0
