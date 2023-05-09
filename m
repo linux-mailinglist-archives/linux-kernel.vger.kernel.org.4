@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752AB6FBF66
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC5A6FBF62
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234986AbjEIGjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 02:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
+        id S234926AbjEIGj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 02:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234771AbjEIGji (ORCPT
+        with ESMTP id S234952AbjEIGjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 02:39:38 -0400
+        Tue, 9 May 2023 02:39:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D275BDC53;
-        Mon,  8 May 2023 23:39:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFA1AD25;
+        Mon,  8 May 2023 23:39:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4640A61BB8;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 530C162FE1;
+        Tue,  9 May 2023 06:39:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9CFAC433D2;
         Tue,  9 May 2023 06:39:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25D82C433EF;
-        Tue,  9 May 2023 06:39:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683614356;
-        bh=INBPQ8y3g/7EUeHHHVr3w5P6C4GQfzSlBDZrauXOIOg=;
+        s=k20201202; t=1683614361;
+        bh=KXkW/Qg8nbm4fuj0v5jtuJso+Jg1YeFUBlNRcgIPRSs=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=e9vK78zS97QkvcJoQT5DpVwfb7YnqqQRm6YUkseC8Wib9fzMIMVGsOoxurlNOSHWi
-         7HrvxlTZa0tYgRpJht19+lZ/zqn05VKWE5FI2eKDfXPcXdmehNy2nxuQFBUXmc+TYo
-         hYq7tDsniCGTNUhTV0CxpcEjXTU/f6DDOzp9vqmkYI1/yGOXm2HjZqrn+wK1WgTkTw
-         yuweZx0+iuga43ADxxqLs0cA1UPImcsF1yxRpCS9gv8NK1CW/kN+jRVX2xfuFRlFNR
-         BIV4qb4KRlX9wH1q2lglnrUZ4b/Hv9cCmCIKFgtX5RWs0f2RBJKh1cTTcN5PRWcoIq
-         AKP1g8QD6JXOA==
+        b=R4VJbUJbQzcgCollmbqeGo9krMqPJxslF6QHynyHq4ogYe2eCTaMsBcgKBPQbK6Ww
+         DXZeFAkZxBA0FfYNEVuwaECUH0YTuV87VER+s5IbD3ZWjlnwUoqbFWr3yAbxZ3oFke
+         2ZCBSV7ImJCg2LJRk+0Ssmrw/+8YB1eEs5fswwLzP6EPezl+EmNRXM/9eoYhj9aHKK
+         Xf93BXQpVif7O/twDRXO4CVIQQ9bOSTK0it6QVjVPpqVQq5sWmc9LpQ2AoWvtZY5FS
+         uSj/5bExDJgQRSE7kEEhgf9AkMW7CWjxf0hrWxn6Qrp1uPfJHhr6uJaNNTcXLzSoGP
+         f0ZNymha3thhA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Tony Lindgren <tony@atomide.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jerome Neanne <jneanne@baylibre.com>,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     stable@vger.kernel.org, khilman@baylibre.com, msp@baylibre.com,
-        j-keerthy@ti.com
-In-Reply-To: <20230507144656.192800-1-krzysztof.kozlowski@linaro.org>
-References: <20230507144656.192800-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [RESEND PATCH] regulator: tps65219: Fix matching interrupts
- for their regulators
-Message-Id: <168361435149.303261.3406346409850990450.b4-ty@kernel.org>
-Date:   Tue, 09 May 2023 15:39:11 +0900
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        kernel@axis.com
+In-Reply-To: <20230502-tps6287x-driver-v3-0-e25140a023f5@axis.com>
+References: <20230502-tps6287x-driver-v3-0-e25140a023f5@axis.com>
+Subject: Re: [PATCH v3 0/2] regulator: Add support for TPS6287x
+Message-Id: <168361435697.303261.4023695080353832209.b4-ty@kernel.org>
+Date:   Tue, 09 May 2023 15:39:16 +0900
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Mailer: b4 0.13-dev-bfdf5
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -60,14 +58,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 07 May 2023 16:46:56 +0200, Krzysztof Kozlowski wrote:
-> The driver's probe() first registers regulators in a loop and then in a
-> second loop passes them as irq data to the interrupt handlers.  However
-> the function to get the regulator for given name
-> tps65219_get_rdev_by_name() was a no-op due to argument passed by value,
-> not pointer, thus the second loop assigned always same value - from
-> previous loop.  The interrupts, when fired, where executed with wrong
-> data.  Compiler also noticed it:
+On Mon, 08 May 2023 15:14:06 +0200, Mårten Lindahl wrote:
+> This series adds basic support for TI's TPS62870/TPS62871/TPS62872/
+> TPS62873 high-frequency single-channel step-down converters with an
+> I2C interface.
+> 
+> The devices can operate in power save mode for maximum efficiency, or
+> forced-PWM mode for best transient performance and lowest output
+> voltage ripple. All chip variants have four output voltage ranges and
+> the driver changes active range depending on the requested voltage
+> setting.
 > 
 > [...]
 
@@ -77,8 +77,10 @@ Applied to
 
 Thanks!
 
-[1/1] regulator: tps65219: Fix matching interrupts for their regulators
-      commit: f050e56de80591fee55bedbdf5b6b998c740cd0c
+[1/2] regulator: dt-bindings: Add bindings for TPS6287x
+      commit: 034008dd227877cca1588d66e2df505f5fae26c9
+[2/2] regulator: Add support for TI TPS6287x regulators
+      commit: 7b0518fbf2befd7c4afb81eb06c95c8fc93998be
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
