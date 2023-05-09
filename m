@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA67F6FCC56
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 19:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F60B6FCC59
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 19:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235451AbjEIRHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 13:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
+        id S234952AbjEIRHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 13:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234956AbjEIRHQ (ORCPT
+        with ESMTP id S234911AbjEIRHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 13:07:16 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371C9DD93;
-        Tue,  9 May 2023 10:04:44 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1aaf21bb427so44243445ad.1;
-        Tue, 09 May 2023 10:04:44 -0700 (PDT)
+        Tue, 9 May 2023 13:07:31 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F252983C5;
+        Tue,  9 May 2023 10:05:05 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b9a7e639656so9296013276.0;
+        Tue, 09 May 2023 10:05:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683651874; x=1686243874;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cqwYJC2a32+Z6h234kt8dpAjjln4imJVcBQC4D4MUi8=;
-        b=jaY2ZrpWSQ2CfwkRMbKibXqOX/GLsR53W6H6XyjXjqvx3qsNBjGX6/PABq9XQAuDfz
-         GKRoCrP73N/US1bT0/K8BaGTY+q/5ZuIRCn6FyS28za/gpHn03b+d4O/HByy07po17KV
-         n4YYjgDnG+BW1D91s1bz9do/4fcfZB4LOY4sgkdT79r5+s9qb7EavfGuigho+b48HSjV
-         XFhqvoueCNXhzppgDLWYUDeKoYeRBBWcwiEsCaRXyYZSF6jYJ2utDV5/7Y5aioRVCUSH
-         CYlkV4+DrJ2Gg45DIti0YTMGf79wj/NebLWeJ9cTzzMG5AWr2eYC8fFLgznTsFn6mfp+
-         rxQw==
+        d=gmail.com; s=20221208; t=1683651894; x=1686243894;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=owOMixsqPNTyMBJNKUX/FgFLQqeBQlm+1l2rTnwK/fs=;
+        b=JOX0hNsoJ+nxU9HMHvvY9dGTFLfJLh7mmQS+GkpFIK4WwUd39rCAACztJrQ0Lo5Y6/
+         DLAb3z5i6KRx9o2dVXq6X33tjCkcBj1JbVQoYT5+iLz2CPUkSsOSX55MMRZymFDcN220
+         hMqnW1LxW5XKGdygadMgT+2xCLuAdatcQCbKyilp8lenEYfuWsSUSR293yncexEbj6ji
+         LAaV5mhLpwljgj9SKdaWFNLRHFP/5Q85uEVaBHre+UnpFc+0UDA4kvyu6EsJvBDZ5/r4
+         /UEYyBW9zrvTxUi9TX1dMElAgEw/YJ7+x2x+sgJokDV2nU+Ltm86CtwgLbWnDglmtS0n
+         5JlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683651874; x=1686243874;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cqwYJC2a32+Z6h234kt8dpAjjln4imJVcBQC4D4MUi8=;
-        b=Bykvm8wNFchhpT3eph4/BMTEPJxIBZa75kaOUipc050fF2QdvL+M+/VdD29+vP0bbE
-         kyLxj89/+fCO1hlrjC23ZYvJn6ybUOGwyItgqaEHtDfnxaIMVdByUaOLIT5isITsuq/q
-         GZO1xPcBjHqEi0oLNx8ipFfuN49UAYoPbfdayB2xdwCD33UJJUoOb3d6nAyDBFzeZySj
-         zX5UBJQKcSLQa8VrN/65/SihJbh7k/7ESfZ4iXc1RxzbaTHong1S3pz3s+9JOFOlXl83
-         sk/SryGqpb7ZRstor4XLhAGTwVp3vZa/66pnPd+6I0IbegYGP1gYJqQJC53gKpyN+ob0
-         P5+w==
-X-Gm-Message-State: AC+VfDyP2exsjg46zloTGOuBzw9QKBH4LhWE4UBDY3kdcBYYqO2rICaq
-        afY6vGUA1fxyopRG6AMLxWe2JsoALWkIvdEWLDg=
-X-Google-Smtp-Source: ACHHUZ67/FhEiGui4khV15HtrKuQbRNbJ3wk4wnpBI377nKp9v2/95FfYMrHMF6HJ9iMcA61OBTtybgJyICWz4PsBFI=
-X-Received: by 2002:a17:903:247:b0:1ab:16cd:51a3 with SMTP id
- j7-20020a170903024700b001ab16cd51a3mr19228370plh.10.1683651874673; Tue, 09
- May 2023 10:04:34 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683651894; x=1686243894;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=owOMixsqPNTyMBJNKUX/FgFLQqeBQlm+1l2rTnwK/fs=;
+        b=Z5B970k/68FHZqAks962MF5NxkjrA2hsnC7vXoex2YSHfyFvNDEwKyn2k2jRpV4XDW
+         Xrh/ufBlvorQKWkge10pclpbPgahQmYlhr9QUHyCNTQ+LE74EvHvRHhdfV3RvvQTCwd2
+         xPS4J4KD2KCGXU0JAsPWrAg/61Yf9vQjHTg8aq8aZqNC7O2Ag7Ta4D2SYGn5IrQH1EZH
+         j5wlI4gmMhXJ0kzRoEfZ3oXQzIy24phwPevDNdG9QHsK/P5N2LvC5vrWwMqbdiqVFU/X
+         kSjZN9vQxMegrcoL1KaF/OkDZvfZiAG18rW33k2/+Sx6BKqNJfjmLNexLOhDppEaDYxW
+         L2fw==
+X-Gm-Message-State: AC+VfDzuYc9T95t1dyEYzGFICuFgSNN7R1kbFnCJnrCKZAQghMGYr1jX
+        zZ8mOrPm+yz2kvwR3n8MXCgcP/2fd1dh4/goag4=
+X-Google-Smtp-Source: ACHHUZ4Ap8lrkdUmK6J87mlrt06sBuonBxyNhWV6PrQXF5/y8Czghn3iJSEmbpcJ2d/Ohw8GgN9pM4qcPala3tWkprA=
+X-Received: by 2002:a05:6902:1508:b0:b9e:45e1:3ff with SMTP id
+ q8-20020a056902150800b00b9e45e103ffmr17231824ybu.42.1683651894352; Tue, 09
+ May 2023 10:04:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230509030653.039732630@linuxfoundation.org>
-In-Reply-To: <20230509030653.039732630@linuxfoundation.org>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Tue, 9 May 2023 10:04:23 -0700
-Message-ID: <CAJq+SaCr5qarZJPRdFkWFXppoAPx4KFEwOKiVm8rSkZ53vseNQ@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/610] 6.1.28-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev> <20230509165657.1735798-2-kent.overstreet@linux.dev>
+In-Reply-To: <20230509165657.1735798-2-kent.overstreet@linux.dev>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 9 May 2023 19:04:43 +0200
+Message-ID: <CANiq72mLmAG1Vus5-r4ynQciyypZbO8ueva2jbiEvaOAQTTzdQ@mail.gmail.com>
+Subject: Re: [PATCH 01/32] Compiler Attributes: add __flatten
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,28 +72,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 6.1.28 release.
-> There are 610 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, May 9, 2023 at 6:57=E2=80=AFPM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
 >
-> Responses should be made by Thu, 11 May 2023 03:05:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.28-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+> This makes __attribute__((flatten)) available, which is used by
+> bcachefs.
 
-Compiled and booted on my x86_64 and ARM64 test systems. No errors or
-regressions.
+We already have it in mainline, so I think it is one less patch you
+need to care about! :)
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
-
-Thanks.
+Cheers,
+Miguel
