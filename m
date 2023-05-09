@@ -2,93 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F0A6FCA5B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719B66FCA5D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235814AbjEIPiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 11:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
+        id S235757AbjEIPjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 11:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234828AbjEIPiB (ORCPT
+        with ESMTP id S234828AbjEIPjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 11:38:01 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272B646B2
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 08:37:59 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1aad5245571so41549125ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 08:37:59 -0700 (PDT)
+        Tue, 9 May 2023 11:39:11 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D694119A4;
+        Tue,  9 May 2023 08:39:09 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f42b984405so7014235e9.3;
+        Tue, 09 May 2023 08:39:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683646678; x=1686238678;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=znDwmoweGIbazinqZk+RMiWAEky714GctekUC5TPRSI=;
-        b=KKOZZnf9GqB+bW2sq2bGj2OI4Eksv6MexBLK85NQVZrQbRXviqwAWY5u3yzTIeTtW6
-         YtVYXZiCtfv1Ymn8pVeuL9rZZYJFYH8ay+4vC1dPp7IJNo5eWO31dxpkxT62JzvWBgMh
-         I/T+6AmVV4FoUE04NVug7mYJmZb0vUH6TciApC35IgdiGsCSqrRkYP1PnQTutASx/0NG
-         lsOq3BnDP6SBV4BZ19RYWCVYPNaCAW6+PtB7nTeU6nCcfx7rCmbomBZkuhhLLBkpSmP3
-         uTBJufpBY0KQijq+q5j3XyfvziuhLI2WRViYJwl0lP1FecYYL3b8Hw7PkofkfkjYcpZf
-         JDqA==
+        d=gmail.com; s=20221208; t=1683646748; x=1686238748;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BAP6y9vENbOGTUMhyFaj/H50h+Cw78KTsgpA0Rfk0rk=;
+        b=MufmtxbdxskYNVPPTGC4wvh5lnaRXX5HH8PFcWRPdIDNo5A5tuqVl1P7E/DC2oqNvn
+         bXbUuYsN9QmwXlKoS8aSxKjfaEI2l0DchyG2G1HsZeQjFD8jp2zv6Nsyq5M3uUvMAjM0
+         qjKoRkVK3vdJ54iePMleWGLCzvbKZa7L7VFcHjBdxA7Nszp8fcrKy40YzqCxklOPpD+k
+         uQrfNZTBDx0hkpiNxq6PUcwpdIkDToBDoeBwfGGYVHMgkn7NYRo0/QIe7oZQPkwbQdhc
+         9e435yLIw5Zy2bPFrZp3DvZDVkubxvzA5VwbPoTDYZ/TAPc4HjsdpxGmJrDAUzrdIwFQ
+         UXNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683646678; x=1686238678;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=znDwmoweGIbazinqZk+RMiWAEky714GctekUC5TPRSI=;
-        b=aqLvEVN5Qlbma03dJ1qx+kmHDzK6EXC8bJjEjDXCZhQI+MOh/ILTpegFgxdoHm8mHs
-         FnxZ5LEPBce2NxZeo6mifmgX2xESmY+pPVGWm7o/XBnSYEcWc8/S6WoxFU/XhYB4tbu4
-         OLqn2a671INAgtpFqULkQVahKLju3heXtbH/cNO6p2Hn5ywGwbbnW20ACEte6CsSFey9
-         egiPeSwFaVt1QBo2sVCq/0T7Op8EHIZncQglOZmalcMxqRE1F2J3paKQIkf0n2sert+9
-         3Mc05GRUKQAZSnAkKrFa6OQXCse4sjbDP+p5VjNbAhGaCHIea/gZEsTlIOEBklAqBUjf
-         ShHg==
-X-Gm-Message-State: AC+VfDzKsv3JxO0K2xkxTBALq6ymLQQO8aikIdfg39Rk39ldZye0rnKi
-        wWhGs66Vc5P5PgZQvle8jH8exskN8NM=
-X-Google-Smtp-Source: ACHHUZ5V3bE4bDm1bOJVAoybprrK78mLfVXMFJins9Cj4n2R6LdEU6vQr+B5gQDJsvJaxb54BBdLOQ==
-X-Received: by 2002:a17:902:d2cb:b0:1ac:7ea7:6ccd with SMTP id n11-20020a170902d2cb00b001ac7ea76ccdmr8190149plc.34.1683646678123;
-        Tue, 09 May 2023 08:37:58 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id i1-20020a1709026ac100b001a64011899asm1753977plt.25.2023.05.09.08.37.57
+        d=1e100.net; s=20221208; t=1683646748; x=1686238748;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BAP6y9vENbOGTUMhyFaj/H50h+Cw78KTsgpA0Rfk0rk=;
+        b=TsxAQNzvv5PgoC5EFd4/Rx5Axzwr9MtvwublpuuQl4FWvzlb839uhDxzE+L2FtWT2O
+         WHFhiIAmi4fUBrTqkUuPLJVjegjWYhqXUovGM70fuDk1XYxrXGxEteoxJMUengRUIrg0
+         SUPQmVGIuTEA1hTooLfFi5GDKEB8wnEtftu0k6IJJF5N1ifKfw492UlMX2k23XZGRjBT
+         zcrmzyTdFWtNehednZ8SwAEI43sd2suvHJUmon+I2cEeq8FhVYv1t1W6JD4lGuNTqOho
+         y84JuHs++nIHY2Da95i7ChiiGwvbgo2e+z3aiermNxonEWPoMX33unBNSR1kw+UMW9dX
+         aI6Q==
+X-Gm-Message-State: AC+VfDyBNigIRf6QWbG68DjK3BC/qTUdzXTe9bxLe+RrG0FKp5ki8pSf
+        pYN9lwm0woaeNNglYenvihQNMD+WJBKc6Jdo2XQ=
+X-Google-Smtp-Source: ACHHUZ4aKda1ezxfuzftb1TPzU+2RoACFlSNYWggFpqk8qP96GfUNv2pmL5E+0OyroVm0hmVFu9jeQ==
+X-Received: by 2002:a5d:4c49:0:b0:306:2c16:8361 with SMTP id n9-20020a5d4c49000000b003062c168361mr10045612wrt.22.1683646747911;
+        Tue, 09 May 2023 08:39:07 -0700 (PDT)
+Received: from localhost.localdomain ([146.70.132.238])
+        by smtp.gmail.com with ESMTPSA id x18-20020a5d6b52000000b002ff2c39d072sm14743147wrw.104.2023.05.09.08.39.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 08:37:57 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 9 May 2023 05:37:56 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH workqueues] Further upgrade queue_work_on() comment
-Message-ID: <ZFpo1OA7hnRaVrgx@slm.duckdns.org>
-References: <ae548f82-fd4e-490e-889a-3307b9a2c531@paulmck-laptop>
+        Tue, 09 May 2023 08:39:07 -0700 (PDT)
+From:   Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+To:     linux-pci@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kw@linux.com, robh@kernel.org, bhelgaas@google.com,
+        heiko@sntech.de, lgirdwood@gmail.com, broonie@kernel.org,
+        skhan@linuxfoundation.org, shawn.lin@rock-chips.com,
+        lpieralisi@kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Subject: [PATCH v1 0/1] Add configurable sleep for pcie-rockchip-host
+Date:   Tue,  9 May 2023 17:39:02 +0200
+Message-Id: <20230509153902.515106-1-vincenzopalazzodev@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ae548f82-fd4e-490e-889a-3307b9a2c531@paulmck-laptop>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 04:47:07PM -0700, Paul E. McKenney wrote:
-> The current queue_work_on() docbook comment says that the caller must
-> ensure that the specified CPU can't go away, and further says that the
-> penalty for failing to nail down the specified CPU is that the workqueue
-> handler might find itself executing on some other CPU.  This is true
-> as far as it goes, but fails to note what happens if the specified CPU
-> never was online.  Therefore, further expand this comment to say that
-> specifying a CPU that was never online will result in a splat.
-> 
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-> Cc: Tejun Heo <tj@kernel.org>
+I am submitting a patch to add a configurable sleep for the
+Rockchip PCIe driver in the hope of resolving a persistent
+issue with old ARM platforms.
 
-Applied to wq/for-6.5.
+It has been observed that the driver requires an extra
+sleep before probing the device, particularly on some older ARM
+devices like Pine64 RockPro64. While an original patch was deployed
+in Manjaro ARM, the issue still persists with the upstream kernel.
 
-Thanks.
+This patch introduces a module parameter "bus_scan_delay" which allows users
+to configure the delay before probing the device. I have tested this patch
+on several platforms and it has proven to be effective.
 
--- 
-tejun
+I hope that by starting this discussion, we can collaborate and
+find a more robust upstream solution for this issue.
+
+P.S: I sent again this because I forget to add some people to the list
+of cc.
+
+Cheers!
+
+Vincent.
+-------
+Vincenzo Palazzo (1):
+  drivers: pci: introduce configurable delay for Rockchip PCIe bus scan
+
+ .../admin-guide/kernel-parameters.txt         |  8 +++++
+ .../boot/dts/rockchip/rk3399-rockpro64.dtsi   |  3 +-
+ drivers/pci/controller/pcie-rockchip-host.c   | 29 +++++++++++++++++++
+ drivers/pci/controller/pcie-rockchip.c        |  5 ++++
+ drivers/pci/controller/pcie-rockchip.h        |  9 ++++++
+ 5 files changed, 53 insertions(+), 1 deletion(-)
+
+--
+2.40.1
+
