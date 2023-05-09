@@ -2,106 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED786FCF95
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70E46FCFB5
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234986AbjEIUfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 16:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
+        id S235105AbjEIUlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 16:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234959AbjEIUfT (ORCPT
+        with ESMTP id S235087AbjEIUlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 16:35:19 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6882122;
-        Tue,  9 May 2023 13:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683664517; x=1715200517;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zDgUrx46HKYf2WDUcb3OSI439GIUg2nqyHSQb8R/LPM=;
-  b=nD68BybdIjLNpuiq8tgOuHCTcDottfMKgtZ+yImSzbu4n2LVCIQe3vlW
-   ZZay5VaYrKwGJynQwN83YB0/xmPBzHt1mdeQycE0UYs02wYyU0BjZlad0
-   i5k+utyEXtgA0W0yc9YRP3ki8UZTc/cNmFkruIMjRNqPDQPU213pYcNts
-   pSqrG9Rle3yOklduDPsIu5wiJt2vcI+wjaOr/8dDFiWcHGilMHlW/KEzd
-   Aylk0rGcHOCQuDkb6fIO1KEwFuuygWkoQah308lSkkbvKeL9BdYdq/aTu
-   Y7IYFRpYCCBIdX+8mnpOlSEQdU+IDLn04Y/Dda4xVQQOVeiSNvpL9MoIF
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="334504614"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="334504614"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 13:35:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="702004029"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="702004029"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 13:35:15 -0700
-Date:   Tue, 9 May 2023 13:39:40 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        "David Woodhouse" <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        "Ranganathan, Narayan" <narayan.ranganathan@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v5 1/7] iommu: Generalize default PCIe requester ID
- PASID
-Message-ID: <20230509133940.6bf0a053@jacob-builder>
-In-Reply-To: <BN9PR11MB5276A1CC0B5FF8D9394F22F98C729@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230427174937.471668-1-jacob.jun.pan@linux.intel.com>
-        <20230427174937.471668-2-jacob.jun.pan@linux.intel.com>
-        <BN9PR11MB5276FD027EC3D6BAA24046F58C6B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <20230428085615.58e437c9@jacob-builder>
-        <BN9PR11MB5276A1CC0B5FF8D9394F22F98C729@BN9PR11MB5276.namprd11.prod.outlook.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 9 May 2023 16:41:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAB2E4A;
+        Tue,  9 May 2023 13:41:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D72962E9A;
+        Tue,  9 May 2023 20:41:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E0BDC433EF;
+        Tue,  9 May 2023 20:41:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683664907;
+        bh=p7gqrjaa3BLpQFidpX4R4K9UjjHkyxfu2VmA/bZDg4o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zh8SgB1qAxHsKtO9C1bFv1mRmgH1gELHqELdIX6SRGYExXHrfFNFaRSrg7yyzCJ5a
+         VPrRf99KWWVorUjkQ216ZuZG6iA4EIecaWaxQ5yqTMIsuFAW1b4SHAhM4UsdfkApci
+         Hv6EC1kVbWTJonTgGZRCcI5rHN7UVPwJEMPY33SYJzxZtWxCm2Q12rcFISJbke132B
+         0orLwyKxNtiesi+TCmA/IhxBbHh0mRexxclGE6pSZeHRyunmtOgLIu9GuaEeVhBIvX
+         y5m8nhoGOcrP5EmE91eceGPYABWT9pSYJsuGomiiSX600JJrmRDlLCgwHoqmbIybdI
+         CFKD05dUhfVeg==
+Date:   Tue, 9 May 2023 21:41:42 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/610] 6.1.28-rc2 review
+Message-ID: <20230509-robust-crate-5fe128d00e6d@spud>
+References: <20230509030653.039732630@linuxfoundation.org>
+ <0837e157-8615-418a-a3d3-1c14af11aba5@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="dPlG/RYuOnEulgQG"
+Content-Disposition: inline
+In-Reply-To: <0837e157-8615-418a-a3d3-1c14af11aba5@roeck-us.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
 
-On Fri, 5 May 2023 08:28:13 +0000, "Tian, Kevin" <kevin.tian@intel.com>
-wrote:
+--dPlG/RYuOnEulgQG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > >
-> > > > By having a common RID_PASID, we can avoid conflicts between
-> > > > different use cases in the generic code. e.g. SVA and DMA API with
-> > > > PASIDs.  
-> > >
-> > > You intend it to be generic but in the end only vt-d driver is changed
-> > > to use it in this series...  
-> > change for SVA is in the patch.  
-> 
-> My point was that since it is common why there is no change in arm-smmu
-> driver to use the common macro?
-Got it, I will include changes to SSID 0 in smmu code.
+On Tue, May 09, 2023 at 12:57:58PM -0700, Guenter Roeck wrote:
+> On Tue, May 09, 2023 at 05:26:31AM +0200, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 6.1.28 release.
+> > There are 610 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >=20
+> > Responses should be made by Thu, 11 May 2023 03:05:05 +0000.
+> > Anything received after that time might be too late.
+> >=20
+>=20
+> Build results:
+> 	total: 155 pass: 155 fail: 0
+> Qemu test results:
+> 	total: 519 pass: 519 fail: 0
+>=20
+> New persistent runtime warning when booting riscv32/64 images:
 
-Thanks,
+You sure this is new? I seem to be able to reproduce for QEMU (which I
+don't usually test) in several versions of 6.1. Don't see it in (my)
+hardware though, as the particular platform doesn't end up calling the
+offending function. Out of curiosity, what's your QEMU invocation?
 
-Jacob
+Anyways, looks like a partial backport is the cause. How's it look with:
+
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index 694267d1fe81..fd1238df6149 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -9,6 +9,7 @@
+ #include <linux/bitmap.h>
+ #include <linux/ctype.h>
+ #include <linux/libfdt.h>
++#include <linux/memory.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <asm/alternative.h>
+@@ -316,8 +317,11 @@ void __init_or_module riscv_cpufeature_patch_func(stru=
+ct alt_entry *begin,
+ 		}
+=20
+ 		tmp =3D (1U << alt->errata_id);
+-		if (cpu_req_feature & tmp)
++		if (cpu_req_feature & tmp) {
++			mutex_lock(&text_mutex);
+ 			patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
++			mutex_unlock(&text_mutex);
++		}
+ 	}
+ }
+ #endif
+
+
+--dPlG/RYuOnEulgQG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFqwBQAKCRB4tDGHoIJi
+0kM+AP9mKBjfrOyYoDc67TNucbnE9c6dNPmztCZ0QCsJmIB+oAD9EIjXXj2Lt/JO
+9RCBwNWZe7IRi0/mz287+r4DFtmmwgY=
+=eiF8
+-----END PGP SIGNATURE-----
+
+--dPlG/RYuOnEulgQG--
