@@ -2,71 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4416FCA1B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E4A6FCA24
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235841AbjEIPTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 11:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
+        id S235631AbjEIPYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 11:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjEIPTh (ORCPT
+        with ESMTP id S229477AbjEIPYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 11:19:37 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C5B40DB;
-        Tue,  9 May 2023 08:19:36 -0700 (PDT)
-Date:   Tue, 9 May 2023 17:19:32 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683645574;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UqejwA2SlPIA1S+P2yVF0lec7SSacjZYHG6Osl3fEK0=;
-        b=XDQ+dwnbV7nZxmUwjIXs5pTmoLevO7PaY+Q4jZPMB/dTmmCx6S8z1itFDv36Od3MUAQit4
-        53k6ygQanN4A6V7eJHaGS0fOuusfNV4+KhzWXN+x7etFfCgRv6hx/gAwmRoJrFMAvbUJbu
-        vYj4lBPfrq1dB8/9qh4G+ExHqoRiA8SLvZ3K+Qnxdo6Eb9bbaXE/2qyrudSK+nYJq4Cf3G
-        23ds3uIqGvXF5OnX4dtnYq1E10vbXtcBrfclDnxXcz1EaUl/L0s5OV3KAEFQPnhwT04vbj
-        i2bvHMPrimru0nmNNYOUkfNYBajbhokBJ7t31qm1V/RBryQwTokyDGEPKe0n0w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683645574;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UqejwA2SlPIA1S+P2yVF0lec7SSacjZYHG6Osl3fEK0=;
-        b=HnwHBvm6HDawxNscWo2HIqrtPYCczNWcpuTexLzQbvJ7eRXpmnEwVRB+6KDwzfZnjl52OQ
-        BZHo3Kcvx2voF3CA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Jason Xing <kerneljasonxing@gmail.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH] revert: "softirq: Let ksoftirqd do its job"
-Message-ID: <20230509151932.0YIQkuy6@linutronix.de>
-References: <57e66b364f1b6f09c9bc0316742c3b14f4ce83bd.1683526542.git.pabeni@redhat.com>
+        Tue, 9 May 2023 11:24:44 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CA01729;
+        Tue,  9 May 2023 08:24:43 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f1fe1208a4so3885793e87.2;
+        Tue, 09 May 2023 08:24:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683645881; x=1686237881;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ko7fzt9nOGMj8UcJACPmdJ37rpoFvFpIcWe4r0HuiUA=;
+        b=sTgTHurDmGKxDtOnlVSkAhLPkTW1zo3AeBefovmRj/j61oY+wmDqzx3EK5fembdMXn
+         fedDkv/XL9zQOZbz0OHhjmU20y29cAXQIa6oMDih0EfFzRSXYvz865vlB9yQZnuGMpwz
+         LWNw1WVOO0NQUj8BY+F7Y3O1Vbpi2uUUzdxHpW49kEfdn9CJCXKaFhXIePtAwKTJFF9m
+         SDAitzKH+ViHP0jcp1ZhIx4jQb2dtuRt9ccYJ2Bxd59GEZZIXoEEVZsKafK/Ot2DueJm
+         aXGzw760HZrwAvbkLUCndnGUaD/XNpvmUj6OUnmjhIlJXH/Dk8+DA39gy1Ng2lxZNG9D
+         dp/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683645881; x=1686237881;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ko7fzt9nOGMj8UcJACPmdJ37rpoFvFpIcWe4r0HuiUA=;
+        b=SP3PLfEn3MIlrPReK5GM5luhl0roitz3p/wxHSLCtX7eH2NFR4E6TP4SqOeFsV5Qvx
+         t/1Fy7gvF5rX9T8C8oqvX2CgFtENTiwoGFlIA1UUx5PCQeRajW2kcpaSnaEcjK3kPkS8
+         BlOq/dZL/EQ4MOJLVS17dEtt/DRDXRf0alCqidm6Cz0cERDu7IvgxLj2IRjc2DZjk/19
+         6kRixxxt006sVz8Z+rHr7LP5PJe4AqdQw52hLoWV3LYIhYUqA+867xM6U+Lj1L0Kw13K
+         J9BLyRpgTuLzQcZO4eXJb3C7gGqyYP+7KlaLYoRsFBnJ6n9VWAKeR60QUxCQmJnRIWrc
+         79RQ==
+X-Gm-Message-State: AC+VfDx6kWOjqP2zHh6VFxqipiTq+7OuJn1B0UFqTOA0IYZwhIcms6aI
+        n3JMTW9OSDK47brV4VYYJdBfNDlY9HIZyeKrwpAC9sBHSbY=
+X-Google-Smtp-Source: ACHHUZ4SjZ4qo86WxxKUIJ/Bu0/inKxyyPbh66X5cGqOTGy6JV7MupaZQuR+oDw6wgU+MgNXDKdthrDInbs0bXQYFmg=
+X-Received: by 2002:a2e:3012:0:b0:2a7:a719:5943 with SMTP id
+ w18-20020a2e3012000000b002a7a7195943mr885570ljw.40.1683645880861; Tue, 09 May
+ 2023 08:24:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <57e66b364f1b6f09c9bc0316742c3b14f4ce83bd.1683526542.git.pabeni@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230508163751.841-1-beaub@linux.microsoft.com>
+In-Reply-To: <20230508163751.841-1-beaub@linux.microsoft.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 9 May 2023 08:24:29 -0700
+Message-ID: <CAADnVQLYL-ZaP_2vViaktw0G4UKkmpOK2q4ZXBa+f=M7cC25Rg@mail.gmail.com>
+Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-08 08:17:44 [+0200], Paolo Abeni wrote:
-> Due to the mentioned commit, when the ksoftirqd processes take charge
-> of softirq processing, the system can experience high latencies.
+On Mon, May 8, 2023 at 9:38=E2=80=AFAM Beau Belgrave <beaub@linux.microsoft=
+.com> wrote:
+>
+> Programs that utilize user_events today only get the event payloads via
+> perf or ftrace when writing event data. When BPF programs are attached
+> to tracepoints created by user_events the BPF programs do not get run
+> even though the attach succeeds. This causes confusion by the users of
+> the programs, as they expect the data to be available via BPF programs
+> they write. We have several projects that have hit this and requested
+> BPF program support when publishing data via user_events from their
+> user processes in production.
+>
+> Swap out perf_trace_buf_submit() for perf_trace_run_bpf_submit() to
+> ensure BPF programs that are attached are run in addition to writing to
+> perf or ftrace buffers. This requires no changes to the BPF infrastructur=
+e
+> and only utilizes the GPL exported function that modules and other
+> components may use for the same purpose. This keeps user_events consisten=
+t
+> with how other kernel, modules, and probes expose tracepoint data to allo=
+w
+> attachment of a BPF program.
 
-Yes. RT wise I tried a lot to keep ksoftirqd from getting scheduled.
-With this change, it makes the life a lot easier.
+Sorry, I have to keep my Nack here.
 
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+I see no practical use case for bpf progs to be connected to user events.
 
-Sebastian
+There must be a different way to solve your user needs
+and this is not bpf.
