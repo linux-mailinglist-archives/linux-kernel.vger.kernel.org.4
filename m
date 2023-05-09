@@ -2,181 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7560A6FBE40
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 06:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DCD6FBE3E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 06:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234758AbjEIEfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 00:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57502 "EHLO
+        id S232812AbjEIEfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 00:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjEIEfj (ORCPT
+        with ESMTP id S234662AbjEIEfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 00:35:39 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2087.outbound.protection.outlook.com [40.107.94.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3825277
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 21:35:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UKu3Cr48oTZpx0n0+ZOb8EdxRqg5l4m8XzKDc3CVpHcZp8EQCMI7VpmB525/0TVbDYrBd1uExUo8UveHMwEh958mkyeVgADVFp9bhP6g+Hog7TEqCqEGoL0+1AWxaDWveYgAM4wzEKBVGCvohfp+mBJigF34R8IdC5VgNboi0skJdv2Y/YszGNA1uULGMBKoKIY5Du20oQXFDKbz/ZhrekCXx/ZvZ/TFvHn80aVAYtKSWTUwoF/C9b3zrI6oUDiHj+Cl9e49cThfNKRa5mO5jLmYXKZf49c3tDHBnYof5cCE/wZvdLhakbKICMh8Erll4AsxCvXwbmWtvjmywcwBHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YGCt+lEbuJiYJ0LeTMzI6mvBdMIDGxxK+DGCrtOTcaU=;
- b=Cwrclx0FvvMU1c/H+BlHa4AJdNvegcb4N3joBVTH2ZjthLSbiEV/ZWj4bATEwsxkGry9hgMP/D3dDBmR89wOzG+Ad2vZ5oyHHPLJwMphTxJpcsql6YC2JCUNufjsiaYdEcPu8kpevoN7tH8i+/LNlHVbaQL1+zc305OMfjNQ9rt4rkWUwqhJY6SuwSwcagmmWRjDelMne9MilIorF13PK9kwMuvjjdtZWvckN2RMllrAkBDV3h2grIPDOtzQyrkLbMBZYJZMzzKBeENkkwqV2OfL3EzazT7UdYrXHlYyWmwIS33L1pe4/iDdg4jC1L5wjNHv9sHn8yI+fsERp2MYvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YGCt+lEbuJiYJ0LeTMzI6mvBdMIDGxxK+DGCrtOTcaU=;
- b=EfC2RGZDRytbYnDr2mbk1/uhxY3Ng20YdEkHzbx4UGOa9/Co4CLy+ylrYKbQxpL0Bm0OUZN58sPFixKI7ScapApGvY5rXDalKomLkBMUliohl5Yk1enE0luwl4hk5JPT8aZvhbGiVJBWNyd5+fhaDVGn//EKBAy57G/MhdLeDAVYUyHlOei5bdxrCn0KJhTSpMyAg1X/n1RlgNntRUK+VfL3qXeoOXQTuRnOUDwSI9GwDIYk2q2WDHwo3tXZaBjmShELNc0ZCmo1jFWSZGDFFYwY5jzknPF1cfc5ZlF8ddmwToyBK1BjLA45PqT96RS6gpax5GJaEEjYyBh9jcu+Fw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by MN0PR12MB6344.namprd12.prod.outlook.com (2603:10b6:208:3d3::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Tue, 9 May
- 2023 04:35:35 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::8738:993e:ee40:94b9]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::8738:993e:ee40:94b9%5]) with mapi id 15.20.6363.026; Tue, 9 May 2023
- 04:35:34 +0000
-References: <20230509022014.380493-1-ying.huang@intel.com>
- <20230509022014.380493-2-ying.huang@intel.com>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Huang Ying <ying.huang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Xin Hao <xhao@linux.alibaba.com>,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>
-Subject: Re: [PATCH 2/2] migrate_pages_batch: code cleanup: remove is_large
-Date:   Tue, 09 May 2023 14:33:50 +1000
-In-reply-to: <20230509022014.380493-2-ying.huang@intel.com>
-Message-ID: <87lehyktpv.fsf@nvidia.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0201.namprd05.prod.outlook.com
- (2603:10b6:a03:330::26) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+        Tue, 9 May 2023 00:35:05 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66ACB59FE
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 21:34:57 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-2fe3fb8e25fso3443449f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 21:34:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683606896; x=1686198896;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dbxwRvm7hhLbWBjkdeZJS6kDPtZzWa2hv6bdpCzQNOs=;
+        b=FyrREQGyPf3mgBNk+E9I7yMwwnb2oTREUqTwqCPL+TyzzXAIaN+r6aqa8Bmbuukz9C
+         vvojGx4O7N34hvnzjs2gHqJXV75PEUomgzWmHWBPKA89hyvLx9KZjLpqKtRoYIZcK3WE
+         bTOE7qAfsnvFYIPtKX3sbNVtd0r0fV2ZiReSL1HGGGXHaMT3QkutJVNtpO9YkNf+tEXB
+         bX2NFYn7rh3btp8XEU+OoUzE8FZuZexWKoaeVDgLhH7dSTCbIThntYxoN11Aj9YnBG5m
+         RGUQzeEnN/PlIxBqII3YDz8/4/IYecVUhj1wFRDxzFPGzgWm3XTeJUDLB9WP5vvEZfM2
+         ZRDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683606896; x=1686198896;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dbxwRvm7hhLbWBjkdeZJS6kDPtZzWa2hv6bdpCzQNOs=;
+        b=GI6I4rgw+CMmIJC+dlV1rHOM5kLvD0z69RBEWbNykvMnEhz3tMsEQxsvUpCRCCHU52
+         gy9OMv4BCiv9LgoqOU7RYGWyBrNgJRA/GwrMcMqAZFQlcf+J/K6mQg6BmvlKdRgRtXPL
+         bS5HV1e3MuGNkMooy/s69u882zPTePPNU0082ALWlwVzCkCVQejIwbga3KYkdzpLQZqu
+         j+WbZdmS4IyXEJxqVrQ8m61qGC+gTtoPRB8xUklbpKXC/mPn/gfLp0eWrH4+TqB8FXpg
+         GYscqkBY8sch8rMNP95BFZ/6R0lbHSEAgnEt1ffZGEwzBKI2hYVHHSY88ledDkmcbuEU
+         Lzsg==
+X-Gm-Message-State: AC+VfDyA/hOIA7KaN3IoibxpwG4sqMec320W622q6fgvILYQYuxiDS3M
+        sx6q+suPQxYcrqLuUR/0hOaLXg==
+X-Google-Smtp-Source: ACHHUZ50cJG2ecUgRUUxm1qCr/sqs2v3uPdbQ2dXF+tf3xoNy1MV3R71hPhHLVckRNydvtbcOqf++g==
+X-Received: by 2002:a5d:604e:0:b0:306:29c8:23f7 with SMTP id j14-20020a5d604e000000b0030629c823f7mr8426342wrt.29.1683606895750;
+        Mon, 08 May 2023 21:34:55 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id q15-20020adff94f000000b003078b3e2845sm8882952wrr.31.2023.05.08.21.34.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 21:34:54 -0700 (PDT)
+Date:   Tue, 9 May 2023 07:34:50 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev,
+        Alejandro Lucero <alejandro.lucero-palau@amd.com>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>
+Subject: drivers/net/ethernet/sfc/ef100_netdev.c:457 ef100_probe_netdev()
+ warn: 'net_dev' from alloc_etherdev_mqs() not released on lines: 418.
+Message-ID: <c953d588-7323-4b49-aa94-40138f1b1e6d@kili.mountain>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|MN0PR12MB6344:EE_
-X-MS-Office365-Filtering-Correlation-Id: 30e4565b-78a4-44d7-931e-08db5046d46a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yeFVFcIsYMCCagbFDMYao2k4V43Qq0Ugio7Ke3NfJTK6h0I9ghduEIYpJ6ySi29/M9CB/tIj9MP3c46vhB+t+NWC0oSlRxecnmT/jue/CtZ8MqfeMCXVthYZwxh+Oglv57Pznjb5a4oweJAr0vUKOGQer3Ds2M9SQd7nbadLt8hGvz/eHOy3TFPEt8yZJhWt25oNxreZc4BTXf+7jzcohw59SkaPCBMNh6RXY6P6YQtkrXfhp1HbhYyfF9mbfnipa2bFDL1flZd7VMUEvyiuj+pfVCfgqLEFT6IQmWB4z+mdzt2n89KfpWYs8sQK7IdmTxvnO/+t5XCw1pFWHmnuUIRyOkOQMi5Oe/oK1pQ6ZzY/p+/fepkjLVT0TyS90c5dObltTPMJBxuR4e0IYFBFUvQ4hPBpgdWQVEiEsXJf/UMvAG40Uhj7SwjrRDjupxQbcwbKlnuY1V21DYKLeSaoiWPdHgHX/+u83yEtqcjsNc4OIOg7+p4iDK49T0spr8arbpxSeUsOKTrXPCn85cQ0LOkH6EfcybXIs12wlpOpSU5nOA96z0p7H2fkJgqT8k4r
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(366004)(396003)(346002)(136003)(451199021)(2906002)(5660300002)(36756003)(38100700002)(86362001)(54906003)(6506007)(186003)(478600001)(26005)(6512007)(83380400001)(6486002)(6666004)(316002)(2616005)(8936002)(66556008)(8676002)(41300700001)(66946007)(66476007)(4326008)(6916009);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OGuxiAeJ/Ymsfq+gHNv286ZGkkqoJSGp7+dPKMyftzWMNmCKOUOss3HhQrMg?=
- =?us-ascii?Q?z4uJVcZoCBYKqSs7wrBt2gXpZi9F7xf61EeGUZnp3bpS/LocTSJIxLzqp4lw?=
- =?us-ascii?Q?DPoM0qUjHqsJ+eUNu1WcvrJif8zzXnxRt3IJ6WH+NaTTgbb02arhRur4FjUm?=
- =?us-ascii?Q?p8/ulXswCwBn12Tk2efGTiHMPBh0krAs8C/cMJ1um21kifTPGHSbvX1r96US?=
- =?us-ascii?Q?wFRe4gLYW4GsA+UliBJKAG460W+QBnWlDrDoOoG1BGrGfvJJcfNcekrZD3J+?=
- =?us-ascii?Q?8E1ZAP5Tib6PYSKGukiBN0RDm55aVy3gTj1zUnlUQqrSSgM5llX61lomKNo9?=
- =?us-ascii?Q?IqxE1AMRkWcRUR0gTvu72DEoUKJyOzbbLRpjkqyCYC6PC0XiAQAqCakWtFCc?=
- =?us-ascii?Q?tOya3HIue/+lIOFLppCRu/psyNAi97V9HMNsNsdV9JykmU/v+LBzBSzji04Q?=
- =?us-ascii?Q?QK/lUqYSZ6uBb2xFtT50v36D36BIt2qgKI/3ZmXYEuyJK7blAIyy1eaFzUFF?=
- =?us-ascii?Q?CfJG2tkWIT0AA/vRmXMOsqCus5lcfzueN3Pqhjax9nEON2S+xHsz6smJQjQJ?=
- =?us-ascii?Q?lz4iEsb/I1Ujw9FHmjg3ONf2u4BGt5FhwMrNt3dq3uzR8RPEd3OTXNtC2O7j?=
- =?us-ascii?Q?qdFK1yOboAce5gLQOxlqIayOn7yPQ2vuPgGrZKG4Gf9FSXxK0wlCbH2t3owJ?=
- =?us-ascii?Q?TvT9Cwlxnk1GYQ5rEVce31BzowjFHtxfWgV9t1Df33k+SLC3GE5RmlzL4sUe?=
- =?us-ascii?Q?7b6ln4VXKcXmfYAisAc701f5g0I1o0RWLURrnLXnBSy1k4DrYjg7AuI0C6vC?=
- =?us-ascii?Q?OHXs8rEAOH2u326vN2UyYlx/j2BZmDGqWHa6bFWy0w7P8XJf9Bp1UzlDU3gY?=
- =?us-ascii?Q?OEjocr6tBXAWT5OTreJug5plbrsg4s6sxNpRWLlTbw/pioQAN0CZ+8b9Tvsw?=
- =?us-ascii?Q?05ozAvy7E/HgZZcRpRrskbYzp+BwO9P/NsGsDyfG/fVdpRqA99bLQzKTVk+A?=
- =?us-ascii?Q?S+UILREJMFhw6IJNvF7FhM2YGt67mA//rLB3XA/acQ9Bg5yj7hBuO5FTW3wH?=
- =?us-ascii?Q?SVpbDiHLQQYWKDuBzX/Lj5MegEPztc4wiZj50UHBr78EORlXOVsFxn3I8q1F?=
- =?us-ascii?Q?6JUXDQjaiORVLXNe4lN7Uc29egolgajjkwTxvVlqZ4RhdEGmnMWREeugNdn8?=
- =?us-ascii?Q?S6KwExe1CG5W3Zw1oITEuzKHru6mZPQBFdUqb7I9LKYEN37B9CLZJBhGzLV0?=
- =?us-ascii?Q?73+tDMwIop1ZzX6IvH1P9CUnULKgEfocO/SLDDpdspIzwDt6pxFWTD8oGlao?=
- =?us-ascii?Q?RUKZ6oI6Buh3UGySSfh8fMqgKNPMljCIn8z6D9vSrnHBcy3+DJCicfeG0RYd?=
- =?us-ascii?Q?QzY9oxZ8qv3/2MO4QArZO55nCiwvY8GFCn9PSh2C8YyfnNreHAwb/kJZ19TE?=
- =?us-ascii?Q?osG1/h7j+uyMy9/TcU3M8qUhKov5U45EbhgbAkWm6R/bRhEjmi7U1XTj/ALw?=
- =?us-ascii?Q?VmFlUbWWH+dgqDHHqhLE8mbJnFdIvYIEHcVOKg6ETcP9YyqKV6aWp66DElVa?=
- =?us-ascii?Q?JRwf9gj7E+0vxbX2JOY+A/hzavbNklq8wrS1bsW3?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30e4565b-78a4-44d7-931e-08db5046d46a
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 04:35:34.6493
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pZ1hyaHu/sYzjGbgUHXUc4tpB/aeE2p5+TU+H1cUMt/Hv8ZfGuBawZeKB5XeJEFLX2iMpRDFr5fJOo5zuVyfFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6344
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ba0ad6ed89fd5dada3b7b65ef2b08e95d449d4ab
+commit: 7e056e2360d9267a20509aa2cdb8905485499e95 sfc: obtain device mac address based on firmware handle for ef100
+config: arm64-randconfig-m041-20230428 (https://download.01.org/0day-ci/archive/20230509/202305090926.xAinp8CH-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
 
-Huang Ying <ying.huang@intel.com> writes:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202305090926.xAinp8CH-lkp@intel.com/
 
-> Previously, in migrate_pages_batch we need to track whether the source
-> folio is large/THP before splitting.  So is_large is used to cache
-> folio_test_large() result.  Now, we don't need that variable any more
-> because we don't count retrying and failure of large folios (only
-> counting that of THP folios).  So, in this patch, is_large is removed
-> to simplify the code.
->
-> This is just code cleanup, no functionality changes are expected.
+New smatch warnings:
+drivers/net/ethernet/sfc/ef100_netdev.c:457 ef100_probe_netdev() warn: 'net_dev' from alloc_etherdev_mqs() not released on lines: 418.
 
-Reviewed-by: Alistair Popple <apopple@nvidia.com>
+Old smatch warnings:
+drivers/net/ethernet/sfc/ef100_netdev.c:141 ef100_net_open() warn: missing unwind goto?
 
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Cc: Xin Hao <xhao@linux.alibaba.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Alistair Popple <apopple@nvidia.com>
-> ---
->  mm/migrate.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
->
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 10709aed76d3..2ac927a82bbc 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1618,7 +1618,6 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->  	int nr_failed = 0;
->  	int nr_retry_pages = 0;
->  	int pass = 0;
-> -	bool is_large = false;
->  	bool is_thp = false;
->  	struct folio *folio, *folio2, *dst = NULL, *dst2;
->  	int rc, rc_saved = 0, nr_pages;
-> @@ -1635,13 +1634,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->  		nr_retry_pages = 0;
->  
->  		list_for_each_entry_safe(folio, folio2, from, lru) {
-> -			/*
-> -			 * Large folio statistics is based on the source large
-> -			 * folio. Capture required information that might get
-> -			 * lost during migration.
-> -			 */
-> -			is_large = folio_test_large(folio);
-> -			is_thp = is_large && folio_test_pmd_mappable(folio);
-> +			is_thp = folio_test_large(folio) && folio_test_pmd_mappable(folio);
->  			nr_pages = folio_nr_pages(folio);
->  
->  			cond_resched();
-> @@ -1688,7 +1681,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->  				nr_failed++;
->  				stats->nr_thp_failed += is_thp;
->  				/* Large folio NUMA faulting doesn't split to retry. */
-> -				if (is_large && !nosplit) {
-> +				if (folio_test_large(folio) && !nosplit) {
->  					int ret = try_split_folio(folio, split_folios);
->  
->  					if (!ret) {
+vim +/net_dev +457 drivers/net/ethernet/sfc/ef100_netdev.c
+
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  358  int ef100_probe_netdev(struct efx_probe_data *probe_data)
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  359  {
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  360  	struct efx_nic *efx = &probe_data->efx;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  361  	struct efx_probe_data **probe_ptr;
+7e056e2360d926 Alejandro Lucero 2023-02-15  362  	struct ef100_nic_data *nic_data;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  363  	struct net_device *net_dev;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  364  	int rc;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  365  
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  366  	if (efx->mcdi->fn_flags &
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  367  			(1 << MC_CMD_DRV_ATTACH_EXT_OUT_FLAG_NO_ACTIVE_PORT)) {
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  368  		pci_info(efx->pci_dev, "No network port on this PCI function");
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  369  		return 0;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  370  	}
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  371  
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  372  	/* Allocate and initialise a struct net_device */
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  373  	net_dev = alloc_etherdev_mq(sizeof(probe_data), EFX_MAX_CORE_TX_QUEUES);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  374  	if (!net_dev)
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  375  		return -ENOMEM;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  376  	probe_ptr = netdev_priv(net_dev);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  377  	*probe_ptr = probe_data;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  378  	efx->net_dev = net_dev;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  379  	SET_NETDEV_DEV(net_dev, &efx->pci_dev->dev);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  380  
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  381  	net_dev->features |= efx->type->offload_features;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  382  	net_dev->hw_features |= efx->type->offload_features;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  383  	net_dev->hw_enc_features |= efx->type->offload_features;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  384  	net_dev->vlan_features |= NETIF_F_HW_CSUM | NETIF_F_SG |
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  385  				  NETIF_F_HIGHDMA | NETIF_F_ALL_TSO;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  386  	netif_set_tso_max_segs(net_dev,
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  387  			       ESE_EF100_DP_GZ_TSO_MAX_HDR_NUM_SEGS_DEFAULT);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  388  	efx->mdio.dev = net_dev;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  389  
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  390  	rc = efx_ef100_init_datapath_caps(efx);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  391  	if (rc < 0)
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  392  		goto fail;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  393  
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  394  	rc = ef100_phy_probe(efx);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  395  	if (rc)
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  396  		goto fail;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  397  
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  398  	rc = efx_init_channels(efx);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  399  	if (rc)
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  400  		goto fail;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  401  
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  402  	down_write(&efx->filter_sem);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  403  	rc = ef100_filter_table_probe(efx);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  404  	up_write(&efx->filter_sem);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  405  	if (rc)
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  406  		goto fail;
+
+These goto fails are problematic because they call efx_probe_devlink_unlock()
+which was never locked.   Typical problem with one err label style
+error handling.
+
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  407  
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  408  	netdev_rss_key_fill(efx->rss_context.rx_hash_key,
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  409  			    sizeof(efx->rss_context.rx_hash_key));
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  410  
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  411  	/* Don't fail init if RSS setup doesn't work. */
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  412  	efx_mcdi_push_default_indir_table(efx, efx->n_rx_channels);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  413  
+7e056e2360d926 Alejandro Lucero 2023-02-15  414  	nic_data = efx->nic_data;
+7e056e2360d926 Alejandro Lucero 2023-02-15  415  	rc = ef100_get_mac_address(efx, net_dev->perm_addr, CLIENT_HANDLE_SELF,
+7e056e2360d926 Alejandro Lucero 2023-02-15  416  				   efx->type->is_vf);
+7e056e2360d926 Alejandro Lucero 2023-02-15  417  	if (rc)
+7e056e2360d926 Alejandro Lucero 2023-02-15  418  		return rc;
+
+No clean up on this path.  Needs to call free_netdev().
+
+7e056e2360d926 Alejandro Lucero 2023-02-15  419  	/* Assign MAC address */
+7e056e2360d926 Alejandro Lucero 2023-02-15  420  	eth_hw_addr_set(net_dev, net_dev->perm_addr);
+7e056e2360d926 Alejandro Lucero 2023-02-15  421  	ether_addr_copy(nic_data->port_id, net_dev->perm_addr);
+7e056e2360d926 Alejandro Lucero 2023-02-15  422  
+fa34a5140a8e8f Alejandro Lucero 2023-02-15  423  	/* devlink creation, registration and lock */
+fa34a5140a8e8f Alejandro Lucero 2023-02-15  424  	rc = efx_probe_devlink_and_lock(efx);
+fa34a5140a8e8f Alejandro Lucero 2023-02-15  425  	if (rc)
+fa34a5140a8e8f Alejandro Lucero 2023-02-15  426  		pci_info(efx->pci_dev, "devlink registration failed");
+fa34a5140a8e8f Alejandro Lucero 2023-02-15  427  
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  428  	rc = ef100_register_netdev(efx);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  429  	if (rc)
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  430  		goto fail;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  431  
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  432  	if (!efx->type->is_vf) {
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  433  		rc = ef100_probe_netdev_pf(efx);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  434  		if (rc)
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  435  			goto fail;
+25414b2a64ae7e Alejandro Lucero 2023-02-15  436  #ifdef CONFIG_SFC_SRIOV
+25414b2a64ae7e Alejandro Lucero 2023-02-15  437  		ef100_pf_set_devlink_port(efx);
+25414b2a64ae7e Alejandro Lucero 2023-02-15  438  #endif
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  439  	}
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  440  
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  441  	efx->netdev_notifier.notifier_call = ef100_netdev_event;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  442  	rc = register_netdevice_notifier(&efx->netdev_notifier);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  443  	if (rc) {
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  444  		netif_err(efx, probe, efx->net_dev,
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  445  			  "Failed to register netdevice notifier, rc=%d\n", rc);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  446  		goto fail;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  447  	}
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  448  
+25414b2a64ae7e Alejandro Lucero 2023-02-15  449  	efx_probe_devlink_unlock(efx);
+25414b2a64ae7e Alejandro Lucero 2023-02-15  450  	return rc;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  451  fail:
+25414b2a64ae7e Alejandro Lucero 2023-02-15  452  #ifdef CONFIG_SFC_SRIOV
+25414b2a64ae7e Alejandro Lucero 2023-02-15  453  	/* remove devlink port if does exist */
+25414b2a64ae7e Alejandro Lucero 2023-02-15  454  	ef100_pf_unset_devlink_port(efx);
+25414b2a64ae7e Alejandro Lucero 2023-02-15  455  #endif
+fa34a5140a8e8f Alejandro Lucero 2023-02-15  456  	efx_probe_devlink_unlock(efx);
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28 @457  	return rc;
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
 
