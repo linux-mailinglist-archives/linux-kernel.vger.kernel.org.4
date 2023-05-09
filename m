@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F166FC8D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B044D6FC8D4
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235853AbjEIOXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 10:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
+        id S235893AbjEIOX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 10:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235887AbjEIOXp (ORCPT
+        with ESMTP id S235900AbjEIOXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 10:23:45 -0400
+        Tue, 9 May 2023 10:23:53 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 882F54C2C
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 07:23:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88BEB559A
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 07:23:38 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 973191063;
-        Tue,  9 May 2023 07:24:19 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 544631576;
+        Tue,  9 May 2023 07:24:22 -0700 (PDT)
 Received: from e126864.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3ABC93F663;
-        Tue,  9 May 2023 07:23:32 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C71B3F663;
+        Tue,  9 May 2023 07:23:35 -0700 (PDT)
 From:   Kristina Martsenko <kristina.martsenko@arm.com>
 To:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -34,9 +34,9 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Luis Machado <luis.machado@arm.com>,
         Vladimir Murzin <vladimir.murzin@arm.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 06/11] KVM: arm64: hide MOPS from guests
-Date:   Tue,  9 May 2023 15:22:30 +0100
-Message-Id: <20230509142235.3284028-7-kristina.martsenko@arm.com>
+Subject: [PATCH v2 07/11] arm64: mops: handle MOPS exceptions
+Date:   Tue,  9 May 2023 15:22:31 +0100
+Message-Id: <20230509142235.3284028-8-kristina.martsenko@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230509142235.3284028-1-kristina.martsenko@arm.com>
 References: <20230509142235.3284028-1-kristina.martsenko@arm.com>
@@ -51,30 +51,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As FEAT_MOPS is not supported in guests yet, hide it from the ID
-registers for guests.
+The memory copy/set instructions added as part of FEAT_MOPS can take an
+exception (e.g. page fault) part-way through their execution and resume
+execution afterwards.
 
-The MOPS instructions are UNDEFINED in guests as HCRX_EL2.MSCEn is not
-set in HCRX_GUEST_FLAGS, and will take an exception to EL1 if executed.
+If however the task is re-scheduled and execution resumes on a different
+CPU, then the CPU may take a new type of exception to indicate this.
+This is because the architecture allows two options (Option A and Option
+B) to implement the instructions and a heterogeneous system can have
+different implementations between CPUs.
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+In this case the OS has to reset the registers and restart execution
+from the prologue instruction. The algorithm for doing this is provided
+as part of the Arm ARM.
+
+Add an exception handler for the new exception and wire it up for
+userspace tasks.
+
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Kristina Martsenko <kristina.martsenko@arm.com>
 ---
- arch/arm64/kvm/sys_regs.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/include/asm/esr.h       | 11 ++++++-
+ arch/arm64/include/asm/exception.h |  1 +
+ arch/arm64/kernel/entry-common.c   | 11 +++++++
+ arch/arm64/kernel/traps.c          | 52 ++++++++++++++++++++++++++++++
+ 4 files changed, 74 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-index 71b12094d613..6dae7fe91cfa 100644
---- a/arch/arm64/kvm/sys_regs.c
-+++ b/arch/arm64/kvm/sys_regs.c
-@@ -1252,6 +1252,7 @@ static u64 read_id_reg(const struct kvm_vcpu *vcpu, struct sys_reg_desc const *r
- 				 ARM64_FEATURE_MASK(ID_AA64ISAR2_EL1_GPA3));
- 		if (!cpus_have_final_cap(ARM64_HAS_WFXT))
- 			val &= ~ARM64_FEATURE_MASK(ID_AA64ISAR2_EL1_WFxT);
-+		val &= ~ARM64_FEATURE_MASK(ID_AA64ISAR2_EL1_MOPS);
+diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
+index 8487aec9b658..ca954f566861 100644
+--- a/arch/arm64/include/asm/esr.h
++++ b/arch/arm64/include/asm/esr.h
+@@ -47,7 +47,7 @@
+ #define ESR_ELx_EC_DABT_LOW	(0x24)
+ #define ESR_ELx_EC_DABT_CUR	(0x25)
+ #define ESR_ELx_EC_SP_ALIGN	(0x26)
+-/* Unallocated EC: 0x27 */
++#define ESR_ELx_EC_MOPS		(0x27)
+ #define ESR_ELx_EC_FP_EXC32	(0x28)
+ /* Unallocated EC: 0x29 - 0x2B */
+ #define ESR_ELx_EC_FP_EXC64	(0x2C)
+@@ -356,6 +356,15 @@
+ #define ESR_ELx_SME_ISS_ZA_DISABLED	3
+ #define ESR_ELx_SME_ISS_ZT_DISABLED	4
+ 
++/* ISS field definitions for MOPS exceptions */
++#define ESR_ELx_MOPS_ISS_MEM_INST	(UL(1) << 24)
++#define ESR_ELx_MOPS_ISS_FROM_EPILOGUE	(UL(1) << 18)
++#define ESR_ELx_MOPS_ISS_WRONG_OPTION	(UL(1) << 17)
++#define ESR_ELx_MOPS_ISS_OPTION_A	(UL(1) << 16)
++#define ESR_ELx_MOPS_ISS_DESTREG(esr)	(((esr) & (UL(0x1f) << 10)) >> 10)
++#define ESR_ELx_MOPS_ISS_SRCREG(esr)	(((esr) & (UL(0x1f) << 5)) >> 5)
++#define ESR_ELx_MOPS_ISS_SIZEREG(esr)	(((esr) & (UL(0x1f) << 0)) >> 0)
++
+ #ifndef __ASSEMBLY__
+ #include <asm/types.h>
+ 
+diff --git a/arch/arm64/include/asm/exception.h b/arch/arm64/include/asm/exception.h
+index e73af709cb7a..72e83af0135f 100644
+--- a/arch/arm64/include/asm/exception.h
++++ b/arch/arm64/include/asm/exception.h
+@@ -77,6 +77,7 @@ void do_el0_svc(struct pt_regs *regs);
+ void do_el0_svc_compat(struct pt_regs *regs);
+ void do_el0_fpac(struct pt_regs *regs, unsigned long esr);
+ void do_el1_fpac(struct pt_regs *regs, unsigned long esr);
++void do_el0_mops(struct pt_regs *regs, unsigned long esr);
+ void do_serror(struct pt_regs *regs, unsigned long esr);
+ void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags);
+ 
+diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
+index 3af3c01c93a6..a8ec174e5b0e 100644
+--- a/arch/arm64/kernel/entry-common.c
++++ b/arch/arm64/kernel/entry-common.c
+@@ -611,6 +611,14 @@ static void noinstr el0_bti(struct pt_regs *regs)
+ 	exit_to_user_mode(regs);
+ }
+ 
++static void noinstr el0_mops(struct pt_regs *regs, unsigned long esr)
++{
++	enter_from_user_mode(regs);
++	local_daif_restore(DAIF_PROCCTX);
++	do_el0_mops(regs, esr);
++	exit_to_user_mode(regs);
++}
++
+ static void noinstr el0_inv(struct pt_regs *regs, unsigned long esr)
+ {
+ 	enter_from_user_mode(regs);
+@@ -688,6 +696,9 @@ asmlinkage void noinstr el0t_64_sync_handler(struct pt_regs *regs)
+ 	case ESR_ELx_EC_BTI:
+ 		el0_bti(regs);
  		break;
- 	case SYS_ID_AA64DFR0_EL1:
- 		/* Limit debug to ARMv8.0 */
++	case ESR_ELx_EC_MOPS:
++		el0_mops(regs, esr);
++		break;
+ 	case ESR_ELx_EC_BREAKPT_LOW:
+ 	case ESR_ELx_EC_SOFTSTP_LOW:
+ 	case ESR_ELx_EC_WATCHPT_LOW:
+diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+index 4bb1b8f47298..32dc692bffd3 100644
+--- a/arch/arm64/kernel/traps.c
++++ b/arch/arm64/kernel/traps.c
+@@ -514,6 +514,57 @@ void do_el1_fpac(struct pt_regs *regs, unsigned long esr)
+ 	die("Oops - FPAC", regs, esr);
+ }
+ 
++void do_el0_mops(struct pt_regs *regs, unsigned long esr)
++{
++	bool wrong_option = esr & ESR_ELx_MOPS_ISS_WRONG_OPTION;
++	bool option_a = esr & ESR_ELx_MOPS_ISS_OPTION_A;
++	int dstreg = ESR_ELx_MOPS_ISS_DESTREG(esr);
++	int srcreg = ESR_ELx_MOPS_ISS_SRCREG(esr);
++	int sizereg = ESR_ELx_MOPS_ISS_SIZEREG(esr);
++	unsigned long dst, src, size;
++
++	dst = pt_regs_read_reg(regs, dstreg);
++	src = pt_regs_read_reg(regs, srcreg);
++	size = pt_regs_read_reg(regs, sizereg);
++
++	/*
++	 * Put the registers back in the original format suitable for a
++	 * prologue instruction, using the generic return routine from the
++	 * Arm ARM (DDI 0487I.a) rules CNTMJ and MWFQH.
++	 */
++	if (esr & ESR_ELx_MOPS_ISS_MEM_INST) {
++		/* SET* instruction */
++		if (option_a ^ wrong_option) {
++			/* Format is from Option A; forward set */
++			pt_regs_write_reg(regs, dstreg, dst + size);
++			pt_regs_write_reg(regs, sizereg, -size);
++		}
++	} else {
++		/* CPY* instruction */
++		if (!(option_a ^ wrong_option)) {
++			/* Format is from Option B */
++			if (regs->pstate & PSR_N_BIT) {
++				/* Backward copy */
++				pt_regs_write_reg(regs, dstreg, dst - size);
++				pt_regs_write_reg(regs, srcreg, src - size);
++			}
++		} else {
++			/* Format is from Option A */
++			if (size & BIT(63)) {
++				/* Forward copy */
++				pt_regs_write_reg(regs, dstreg, dst + size);
++				pt_regs_write_reg(regs, srcreg, src + size);
++				pt_regs_write_reg(regs, sizereg, -size);
++			}
++		}
++	}
++
++	if (esr & ESR_ELx_MOPS_ISS_FROM_EPILOGUE)
++		regs->pc -= 8;
++	else
++		regs->pc -= 4;
++}
++
+ #define __user_cache_maint(insn, address, res)			\
+ 	if (address >= TASK_SIZE_MAX) {				\
+ 		res = -EFAULT;					\
+@@ -824,6 +875,7 @@ static const char *esr_class_str[] = {
+ 	[ESR_ELx_EC_DABT_LOW]		= "DABT (lower EL)",
+ 	[ESR_ELx_EC_DABT_CUR]		= "DABT (current EL)",
+ 	[ESR_ELx_EC_SP_ALIGN]		= "SP Alignment",
++	[ESR_ELx_EC_MOPS]		= "MOPS",
+ 	[ESR_ELx_EC_FP_EXC32]		= "FP (AArch32)",
+ 	[ESR_ELx_EC_FP_EXC64]		= "FP (AArch64)",
+ 	[ESR_ELx_EC_SERROR]		= "SError",
 -- 
 2.25.1
 
