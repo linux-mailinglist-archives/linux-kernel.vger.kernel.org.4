@@ -2,130 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1436FCDD4
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6936FCDD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbjEISau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 14:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
+        id S234258AbjEISd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 14:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjEISaq (ORCPT
+        with ESMTP id S229911AbjEISd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 14:30:46 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5BD136
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 11:30:45 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-55c939fb24dso57758407b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 11:30:45 -0700 (PDT)
+        Tue, 9 May 2023 14:33:27 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5612107
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 11:33:25 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-645c4a0079dso569057b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 11:33:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683657045; x=1686249045;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cQ5hIfVGYt176X0mmh5Nxb3U1ww7Q7ORWMM97Hft4mM=;
-        b=VjqJEnqzTkEZ4iHn5ydijXymdY8/PV8bwyjXe+lzA3PjZfKpJ8NjCIR2auQ/yWySh6
-         ez1BUZukd6Xe9G6E6C2E+046wP2yVXKEmbXOaXCbEzKQITPhFpeGTZ3fkHkwTzKR6MYN
-         DUSVuUlscFmiptusPeEEDTQfX6ggVPePqlPcm9wLs2h423+rsZRL7r+POmNERu+u0op2
-         1bOwKAxlp4EP8SWOHg64z/c8oIY0BACcnNcfgoqlEvteOObaTHDywjJV1VnipYuZeYkY
-         1xyJU0CXqrOJDLvONs7qFLrjVA2J0DyTrcKNe6TaIsg/RBT6o3qSpKnKaXW3XWcYAM9S
-         qGMA==
+        d=gmail.com; s=20221208; t=1683657205; x=1686249205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=66XYrn3OxsOriMI735FsztsxhCcCNS7VnQ9CyIcun0k=;
+        b=sD2zZgzdekBu3FUs7ZFXAQMXGzFhvP8+sBg6DAO4BZLNDpTCTmYNeGQU+UOojZofXJ
+         xqyI9/Y1RjrFijaVMExTnl9BcPCd9enm5IyFR2hefmItlaUL7N2A1TJq3XAdbDK4rqFA
+         FssWB9V1vzAKCl31twmjXh6+4OuXkvE6X4zjUTuUbCvOgfTsKWufrA7fMb8xYg551lOp
+         C1/hL6gzqedWSlFvzv1KbFpQe9N3ociSmmTzu3Sn88X0/GTTVVTRlfyFF8ozDXL7IN4S
+         gqwVCWpyNL7ZFwuIz8lWOgbXqO7RKq0IItC9rQZn1rh2vgcIdkcRfwY3qaG/DaU/vvZT
+         S0KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683657045; x=1686249045;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cQ5hIfVGYt176X0mmh5Nxb3U1ww7Q7ORWMM97Hft4mM=;
-        b=J0Xh7gpPPuXEpV9pTr7XMYm1YbBH6kcnyt3IFqwfQTSpseiv1KTf3iYHEeHdNRISdu
-         SkTBr0PVFqF4xwqzuDtxtaKJ9BvnacMooE7L6fQOwuwql8/+UqWnRCibGPpD9nvDbUHE
-         1EXxQnNO/jOxSIOhheWy98gifV3qPW00mfnkoB3hDkJI/v2HHwofEgjvq39VZtEKxR6C
-         CyeIhe18gEiJXXpJdjnF4TToubAn+FRa+5PGAxcLwn+CYQZh8d4vZB6X4ytGbZmZuk1a
-         oCcK/J4g8P4BZ7I53/TDTp96wKGbkl2QqDgQdGH4zdibGqEA+cK2kwy/ubA7Rag2ay1/
-         WuxA==
-X-Gm-Message-State: AC+VfDyBybyVLF7DSCrjpuJn6NNZdr1yM+Q1/+RozE4t0EXyHBkeGDZN
-        R40zDLziTvihyWyeslF50ImfNAJhXHb4C1ZJnHR27A==
-X-Google-Smtp-Source: ACHHUZ64WObK4alO23JU4r2bWXEcbsP3Y6beKyvnef7Og3R6aLy+mmjR1HujeuofX7PzFky5/HHtl4QtPES8PUPQ3To=
-X-Received: by 2002:a25:c549:0:b0:b97:4b7b:945c with SMTP id
- v70-20020a25c549000000b00b974b7b945cmr17021207ybe.57.1683657044881; Tue, 09
- May 2023 11:30:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683657205; x=1686249205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=66XYrn3OxsOriMI735FsztsxhCcCNS7VnQ9CyIcun0k=;
+        b=Q/wTYcWe6ZwBYUr7DfjsPcTPdxw1hOJhGHrXiQPSnPUrmE2+qlx4SsEuN5ABzxcQ6p
+         dtFZd+WJ7BfsOh+YwgeEfI4HKGYgot/1n9nkIP1IztccDO+p+J4UMZ6sjc8jAR0p03tk
+         V8AugKZMaXjNAJm7MtYCn5VBhPGFMDdHJxJgUrlNBJRuKl+c8kkidAHyLMBHOgdnhdve
+         YwVc8iDcQO+GKPwLAYqyY6UflUgv6/GaCT4nG9ATNkuea4uny2n8IL+ksweEzp/d/Ksw
+         Cspwgu4seRzJ/Z4O7Si68RwPGasyIn9bNBS8b0GppKAFRzTb3vMo++fQgOj9GhI5ocFQ
+         Pmbw==
+X-Gm-Message-State: AC+VfDwF5puDuiw8LtktffD1t4C6dmeV6k61U8jyHH2aBYNVkpuNdsEK
+        tSkqKFWEi4cA60QMb46LoGI=
+X-Google-Smtp-Source: ACHHUZ4rEOCYnDYqNb/IIjjLkiAa8OHVI4MvSoSXzD0ClVpDs5JvDmkrE1YCeIWLD/OeZ7J4npNQ8g==
+X-Received: by 2002:a17:903:41ca:b0:1a4:f4e6:b68 with SMTP id u10-20020a17090341ca00b001a4f4e60b68mr19020579ple.3.1683657205076;
+        Tue, 09 May 2023 11:33:25 -0700 (PDT)
+Received: from olv-ct-22.c.googlers.com.com (217.108.125.34.bc.googleusercontent.com. [34.125.108.217])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902e9cd00b001ab0669d84csm1948277plk.26.2023.05.09.11.33.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 11:33:24 -0700 (PDT)
+From:   Chia-I Wu <olvaffe@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <marek.olsak@amd.com>,
+        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Philip Yang <Philip.Yang@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Danijel Slivka <danijel.slivka@amd.com>,
+        Mukul Joshi <mukul.joshi@amd.com>,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] amdgpu: validate drm_amdgpu_gem_va addrs for all ops
+Date:   Tue,  9 May 2023 11:32:54 -0700
+Message-ID: <20230509183301.1745462-1-olvaffe@gmail.com>
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
 MIME-Version: 1.0
-References: <20230506-seama-partitions-v1-0-5806af1e4ac7@linaro.org> <20230509093129.40b30c7a@xps-13>
-In-Reply-To: <20230509093129.40b30c7a@xps-13>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 9 May 2023 20:30:33 +0200
-Message-ID: <CACRpkdYLZ36Ad5y7qLUTFix6yx=jBQ=ZvxaB9U-fhqQ_fvvXCQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Add SEAMA partition types
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 9, 2023 at 9:31=E2=80=AFAM Miquel Raynal <miquel.raynal@bootlin=
-.com> wrote:
-> linus.walleij@linaro.org wrote on Sat, 06 May 2023 17:29:43 +0200:
->
-> > This type of firmware partition appear in some devices in
-> > NAND flash, so we need to be able to tag the partitions
-> > with the appropriate type.
-> >
-> > The origin of the "SEAttle iMAge" is unknown.
->
-> I don't see any kernel changes, why do we need an additional binding?
+Extend the address and size validations to AMDGPU_VA_OP_UNMAP and
+AMDGPU_VA_OP_CLEAR by moving the validations to amdgpu_gem_va_ioctl.
 
-The bindings are not strictly bound to Linux, it's more like all OS:es
-uses the Linux DT binding repo because it is the biggest project.
-Also we actually merge a bunch of bindings just to describe hardware
-(or things like partitions), in the hope of making use of them in the
-long run.
+Internal users of amdgpu_vm_bo_map are no longer validated but they
+should be fine.
 
-Anyways, for the record, the full story:
+Userspace (radeonsi and radv) seems fine as well.
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c | 12 ++++++++++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c  | 10 ----------
+ 2 files changed, 12 insertions(+), 10 deletions(-)
 
-Currently this binding is used in out-of-tree OpenWrt code, where it
-is used as magic for splitting partitions with mtdsplit.
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+index d8e683688daab..071f6565cf971 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+@@ -681,6 +681,18 @@ int amdgpu_gem_va_ioctl(struct drm_device *dev, void *data,
+ 	uint64_t vm_size;
+ 	int r = 0;
+ 
++	if (args->va_address & ~PAGE_MASK || args->offset_in_bo & ~PAGE_MASK ||
++	    args->map_size & ~PAGE_MASK) {
++		dev_dbg(dev->dev, "unaligned va_address 0x%LX, offset_in_bo 0x%LX, or map_size 0x%LX\n",
++			args->va_address, args->offset_in_bo, args->map_size);
++		return -EINVAL;
++	}
++
++	if (args->map_size == 0) {
++		dev_dbg(dev->dev, "invalid map_size 0x%LX\n", args->map_size);
++		return -EINVAL;
++	}
++
+ 	if (args->va_address < AMDGPU_VA_RESERVED_SIZE) {
+ 		dev_dbg(dev->dev,
+ 			"va_address 0x%LX is in reserved area 0x%LX\n",
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+index b9441ab457ea7..fa5819d581655 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+@@ -1435,11 +1435,6 @@ int amdgpu_vm_bo_map(struct amdgpu_device *adev,
+ 	struct amdgpu_vm *vm = bo_va->base.vm;
+ 	uint64_t eaddr;
+ 
+-	/* validate the parameters */
+-	if (saddr & ~PAGE_MASK || offset & ~PAGE_MASK ||
+-	    size == 0 || size & ~PAGE_MASK)
+-		return -EINVAL;
+-
+ 	/* make sure object fit at this offset */
+ 	eaddr = saddr + size - 1;
+ 	if (saddr >= eaddr ||
+@@ -1501,11 +1496,6 @@ int amdgpu_vm_bo_replace_map(struct amdgpu_device *adev,
+ 	uint64_t eaddr;
+ 	int r;
+ 
+-	/* validate the parameters */
+-	if (saddr & ~PAGE_MASK || offset & ~PAGE_MASK ||
+-	    size == 0 || size & ~PAGE_MASK)
+-		return -EINVAL;
+-
+ 	/* make sure object fit at this offset */
+ 	eaddr = saddr + size - 1;
+ 	if (saddr >= eaddr ||
+-- 
+2.40.1.521.gf1e218fcd8-goog
 
-I guess you might be familiar with mtdsplit. It is a software partition
-splitter that makes it possible to split a big partition into smaller
-partitions dynamically, using magic block identifiers.
-
-The typical usecase is to put the kernel in the first flash blocks,
-then pad up to the nearest even erase block, and then add a
-JFFS2 or UBI filesystem immediately there.
-
-This way it avoids using static partitioning, the tools rebuilding the
-firmware can dynamically split off more flash as the kernel image
-grows.
-
-The mtdsplit code uses different magic numbers to identify where
-the different partitions start.
-
-One such type of partition is seama, so the code needs to know
-that it should look for seama magic to determine the size and
-split this partition in a kernel and rootfs part. This is the code:
-https://git.openwrt.org/?p=3Dopenwrt/openwrt.git;a=3Dtree;f=3Dtarget/linux/=
-generic/files/drivers/mtd/mtdsplit;h=3D3e0df856713a84b1decf17190f171cb10ce7=
-a757;hb=3DHEAD
-
-It is a bit sad that no-one has the energy to propose mtdsplit
-upstream, I think it is quite generic and generally useful. I started
-to make an upstream patch but got exhausted with the task.
-
-Yours,
-Linus Walleij
