@@ -2,763 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1FC6FC01E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE5E6FC024
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235192AbjEIHHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 03:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
+        id S235218AbjEIHIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 03:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235204AbjEIHHW (ORCPT
+        with ESMTP id S235112AbjEIHHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 03:07:22 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA73659F;
-        Tue,  9 May 2023 00:07:14 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 3657424DBCE;
-        Tue,  9 May 2023 15:07:11 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 9 May
- 2023 15:07:11 +0800
-Received: from [192.168.125.124] (183.27.98.219) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 9 May
- 2023 15:07:10 +0800
-Message-ID: <30702189-5fcd-ad55-1fbb-c09d179f87ff@starfivetech.com>
-Date:   Tue, 9 May 2023 15:07:09 +0800
+        Tue, 9 May 2023 03:07:54 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A74EE43;
+        Tue,  9 May 2023 00:07:52 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34977aVt054583;
+        Tue, 9 May 2023 02:07:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683616056;
+        bh=m9xWIx7fRxqM+94No2mQfJDt43t0l4QUNDEOExprT2s=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=O6sSPHZwBpVWb4ruA5xFdtMkW6yRkC2D8VvUIszHcuutnNntvJ1I1YTUY0wYEZHSu
+         LzlBnPbggayfNVnQy3NvmBwZwpLpuU4Mqdk/kPx6D10cjWvx6XfvhT9nUwIrCB6d86
+         iFxsG895IjPdh0SL3KX9HyNokLlaEz889bzHrOCE=
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34977aur015186
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 9 May 2023 02:07:36 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
+ May 2023 02:07:36 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 9 May 2023 02:07:36 -0500
+Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34977WMT021513;
+        Tue, 9 May 2023 02:07:32 -0500
+Message-ID: <6dd91ab0-cc7f-45c4-bded-688bab5d6050@ti.com>
+Date:   Tue, 9 May 2023 12:37:31 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 2/3] ASoC: starfive: Add JH7110 TDM driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+CC:     <tjoseph@cadence.com>, <lpieralisi@kernel.org>, <robh@kernel.org>,
+        <kw@linux.com>, <bhelgaas@google.com>, <nadeem@cadence.com>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
+        <srk@ti.com>, <nm@ti.com>, <s-vadapalli@ti.com>
+Subject: Re: [PATCH v2] PCI: cadence: Fix Gen2 Link Retraining process
 Content-Language: en-US
-To:     <Claudiu.Beznea@microchip.com>, <broonie@kernel.org>,
-        <lgirdwood@gmail.com>, <perex@perex.cz>, <tiwai@suse.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <Conor.Dooley@microchip.com>, <emil.renner.berthing@canonical.com>
-CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20230506090116.9206-1-walker.chen@starfivetech.com>
- <20230506090116.9206-3-walker.chen@starfivetech.com>
- <bf12f28f-c458-9279-82a0-a673c075e440@microchip.com>
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <bf12f28f-c458-9279-82a0-a673c075e440@microchip.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+References: <20230508211430.GA1185556@bhelgaas>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20230508211430.GA1185556@bhelgaas>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.98.219]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Bjorn,
 
-On 2023/5/9 12:33, Claudiu.Beznea@microchip.com wrote:
-> On 06.05.2023 12:01, Walker Chen wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->> 
->> Add tdm driver support for the StarFive JH7110 SoC.
->> 
->> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+Thank you for reviewing the patch.
+
+On 09/05/23 02:44, Bjorn Helgaas wrote:
+> On Wed, Mar 15, 2023 at 12:38:00PM +0530, Siddharth Vadapalli wrote:
+>> The Link Retraining process is initiated to account for the Gen2 defect in
+>> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
+>> is i2085, documented at:
+>> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
+>>
+>> The existing workaround implemented for the errata waits for the Data Link
+>> initialization to complete and assumes that the link retraining process
+>> at the Physical Layer has completed. However, it is possible that the
+>> Physical Layer training might be ongoing as indicated by the
+>> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
+>>
+>> Fix the existing workaround, to ensure that the Physical Layer training
+>> has also completed, in addition to the Data Link initialization.
+>>
+>> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
 >> ---
->>  MAINTAINERS                     |   6 +
->>  sound/soc/Kconfig               |   1 +
->>  sound/soc/Makefile              |   1 +
->>  sound/soc/starfive/Kconfig      |  15 +
->>  sound/soc/starfive/Makefile     |   2 +
->>  sound/soc/starfive/jh7110_tdm.c | 573 ++++++++++++++++++++++++++++++++
->>  sound/soc/starfive/jh7110_tdm.h | 147 ++++++++
->>  7 files changed, 745 insertions(+)
->>  create mode 100644 sound/soc/starfive/Kconfig
->>  create mode 100644 sound/soc/starfive/Makefile
->>  create mode 100644 sound/soc/starfive/jh7110_tdm.c
->>  create mode 100644 sound/soc/starfive/jh7110_tdm.h
->> 
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 5f9c544bc189..add89615d327 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19945,6 +19945,12 @@ F:     Documentation/devicetree/bindings/power/starfive*
->>  F:     drivers/soc/starfive/jh71xx_pmu.c
->>  F:     include/dt-bindings/power/starfive,jh7110-pmu.h
->> 
->> +STARFIVE JH7110 TDM DRIVERS
->> +M:     Walker Chen <walker.chen@starfivetech.com>
->> +S:     Maintained
->> +F:     Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml
->> +F:     sound/soc/starfive/jh7110-tdm.*
+>> Changes from v1:
+>> 1. Collect Reviewed-by tag from Vignesh Raghavendra.
+>> 2. Rebase on next-20230315.
+>>
+>> v1:
+>> https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com
+>>
+>>  .../controller/cadence/pcie-cadence-host.c    | 27 +++++++++++++++++++
+>>  1 file changed, 27 insertions(+)
+>>
+>> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
+>> index 940c7dd701d6..5b14f7ee3c79 100644
+>> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
+>> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
+>> @@ -12,6 +12,8 @@
+>>  
+>>  #include "pcie-cadence.h"
+>>  
+>> +#define LINK_RETRAIN_TIMEOUT HZ
 >> +
->>  STARFIVE SOC DRIVERS
->>  M:     Conor Dooley <conor@kernel.org>
->>  S:     Maintained
->> diff --git a/sound/soc/Kconfig b/sound/soc/Kconfig
->> index 848fbae26c3b..8d1d9401ecf2 100644
->> --- a/sound/soc/Kconfig
->> +++ b/sound/soc/Kconfig
->> @@ -91,6 +91,7 @@ source "sound/soc/sh/Kconfig"
->>  source "sound/soc/sof/Kconfig"
->>  source "sound/soc/spear/Kconfig"
->>  source "sound/soc/sprd/Kconfig"
->> +source "sound/soc/starfive/Kconfig"
->>  source "sound/soc/sti/Kconfig"
->>  source "sound/soc/stm/Kconfig"
->>  source "sound/soc/sunxi/Kconfig"
->> diff --git a/sound/soc/Makefile b/sound/soc/Makefile
->> index 507eaed1d6a1..65aeb4ef4068 100644
->> --- a/sound/soc/Makefile
->> +++ b/sound/soc/Makefile
->> @@ -59,6 +59,7 @@ obj-$(CONFIG_SND_SOC) += sh/
->>  obj-$(CONFIG_SND_SOC)  += sof/
->>  obj-$(CONFIG_SND_SOC)  += spear/
->>  obj-$(CONFIG_SND_SOC)  += sprd/
->> +obj-$(CONFIG_SND_SOC)  += starfive/
->>  obj-$(CONFIG_SND_SOC)  += sti/
->>  obj-$(CONFIG_SND_SOC)  += stm/
->>  obj-$(CONFIG_SND_SOC)  += sunxi/
->> diff --git a/sound/soc/starfive/Kconfig b/sound/soc/starfive/Kconfig
->> new file mode 100644
->> index 000000000000..737c956f7b93
->> --- /dev/null
->> +++ b/sound/soc/starfive/Kconfig
->> @@ -0,0 +1,15 @@
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +config SND_SOC_STARFIVE
->> +       tristate "Audio support for StarFive SoC"
->> +       depends on COMPILE_TEST || SOC_STARFIVE
->> +       help
->> +         Say Y or M if you want to add support for codecs attached to
->> +         the Starfive SoCs' Audio interfaces. You will also need to
->> +         select the audio interfaces to support below.
->> +
->> +config SND_SOC_JH7110_TDM
->> +       tristate "JH7110 TDM device driver"
->> +       depends on HAVE_CLK && SND_SOC_STARFIVE
->> +       select SND_SOC_GENERIC_DMAENGINE_PCM
->> +       help
->> +         Say Y or M if you want to add support for StarFive TDM driver.
->> diff --git a/sound/soc/starfive/Makefile b/sound/soc/starfive/Makefile
->> new file mode 100644
->> index 000000000000..f7d960211d72
->> --- /dev/null
->> +++ b/sound/soc/starfive/Makefile
->> @@ -0,0 +1,2 @@
->> +# StarFive Platform Support
->> +obj-$(CONFIG_SND_SOC_JH7110_TDM) += jh7110_tdm.o
->> diff --git a/sound/soc/starfive/jh7110_tdm.c b/sound/soc/starfive/jh7110_tdm.c
->> new file mode 100644
->> index 000000000000..33f7cf43e4bd
->> --- /dev/null
->> +++ b/sound/soc/starfive/jh7110_tdm.c
->> @@ -0,0 +1,573 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * jh7110_tdm.c -- StarFive JH7110 TDM driver
->> + *
->> + * Copyright (C) 2022-2023 StarFive Technology Co., Ltd.
->> + *
->> + * Author: Walker Chen <walker.chen@starfivetech.com>
->> + */
->> +
->> +#include <linux/clk.h>
->> +#include <linux/device.h>
->> +#include <linux/module.h>
->> +#include <linux/of_irq.h>
->> +#include <linux/of_platform.h>
->> +#include <linux/pm_runtime.h>
->> +#include <linux/regmap.h>
->> +#include <linux/reset.h>
->> +#include <sound/initval.h>
->> +#include <sound/pcm_params.h>
->> +#include <sound/soc.h>
->> +#include <sound/soc-dai.h>
->> +#include "jh7110_tdm.h"
->> +
->> +static inline u32 jh7110_tdm_readl(struct jh7110_tdm_dev *tdm, u16 reg)
->> +{
->> +       return readl_relaxed(tdm->tdm_base + reg);
->> +}
->> +
->> +static inline void jh7110_tdm_writel(struct jh7110_tdm_dev *tdm, u16 reg, u32 val)
->> +{
->> +       writel_relaxed(val, tdm->tdm_base + reg);
->> +}
->> +
->> +static void jh7110_tdm_save_context(struct jh7110_tdm_dev *tdm,
->> +                                   struct snd_pcm_substream *substream)
->> +{
->> +       if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
->> +               tdm->saved_pcmtxcr = jh7110_tdm_readl(tdm, TDM_PCMTXCR);
->> +       else
->> +               tdm->saved_pcmrxcr = jh7110_tdm_readl(tdm, TDM_PCMRXCR);
->> +}
->> +
->> +static void jh7110_tdm_start(struct jh7110_tdm_dev *tdm,
->> +                            struct snd_pcm_substream *substream)
->> +{
->> +       u32 data;
->> +
->> +       data = jh7110_tdm_readl(tdm, TDM_PCMGBCR);
->> +       jh7110_tdm_writel(tdm, TDM_PCMGBCR, data | PCMGBCR_ENABLE);
->> +
->> +       /* restore context */
->> +       if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
->> +               jh7110_tdm_writel(tdm, TDM_PCMTXCR, tdm->saved_pcmtxcr | PCMTXCR_TXEN);
->> +       else
->> +               jh7110_tdm_writel(tdm, TDM_PCMRXCR, tdm->saved_pcmrxcr | PCMRXCR_RXEN);
->> +}
->> +
->> +static void jh7110_tdm_stop(struct jh7110_tdm_dev *tdm,
->> +                           struct snd_pcm_substream *substream)
->> +{
->> +       unsigned int val;
->> +
->> +       if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
->> +               val = jh7110_tdm_readl(tdm, TDM_PCMTXCR);
->> +               val &= ~PCMTXCR_TXEN;
->> +               jh7110_tdm_writel(tdm, TDM_PCMTXCR, val);
->> +       } else {
->> +               val = jh7110_tdm_readl(tdm, TDM_PCMRXCR);
->> +               val &= ~PCMRXCR_RXEN;
->> +               jh7110_tdm_writel(tdm, TDM_PCMRXCR, val);
->> +       }
->> +}
->> +
->> +static int jh7110_tdm_syncdiv(struct jh7110_tdm_dev *tdm)
->> +{
->> +       u32 sl, sscale, syncdiv;
->> +
->> +       if (tdm->rx.sl >= tdm->tx.sl)
->> +               sl = tdm->rx.sl;
->> +       else
->> +               sl = tdm->tx.sl;
->> +
->> +       if (tdm->rx.sscale >= tdm->tx.sscale)
->> +               sscale = tdm->rx.sscale;
->> +       else
->> +               sscale = tdm->tx.sscale;
->> +
->> +       syncdiv = tdm->pcmclk / tdm->samplerate - 1;
->> +
->> +       if ((syncdiv + 1) < (sl * sscale)) {
->> +               dev_err(tdm->dev, "Failed to set syncdiv!\n");
->> +               return -EINVAL;
->> +       }
->> +
->> +       if (tdm->syncm == TDM_SYNCM_LONG &&
->> +           (tdm->rx.sscale <= 1 || tdm->tx.sscale <= 1)) {
->> +               if ((syncdiv + 1) <= sl) {
->> +                       dev_err(tdm->dev, "Wrong syncdiv! It must be (syncdiv+1) > max[tx.sl, rx.sl]\n");
->> +                       return -EINVAL;
->> +               }
->> +       }
->> +
->> +       jh7110_tdm_writel(tdm, TDM_PCMDIV, syncdiv);
->> +       return 0;
->> +}
->> +
->> +static int jh7110_tdm_config(struct jh7110_tdm_dev *tdm,
->> +                            struct snd_pcm_substream *substream)
->> +{
->> +       u32 datarx, datatx;
->> +       int ret;
->> +
->> +       ret = jh7110_tdm_syncdiv(tdm);
->> +       if (ret)
->> +               return ret;
->> +
->> +       datarx = (tdm->rx.ifl << IFL_BIT) |
->> +                 (tdm->rx.wl << WL_BIT) |
->> +                 (tdm->rx.sscale << SSCALE_BIT) |
->> +                 (tdm->rx.sl << SL_BIT) |
->> +                 (tdm->rx.lrj << LRJ_BIT);
->> +
->> +       datatx = (tdm->tx.ifl << IFL_BIT) |
->> +                 (tdm->tx.wl << WL_BIT) |
->> +                 (tdm->tx.sscale << SSCALE_BIT) |
->> +                 (tdm->tx.sl << SL_BIT) |
->> +                 (tdm->tx.lrj << LRJ_BIT);
->> +
->> +       if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
->> +               jh7110_tdm_writel(tdm, TDM_PCMTXCR, datatx);
->> +       else
->> +               jh7110_tdm_writel(tdm, TDM_PCMRXCR, datarx);
->> +
->> +       return 0;
->> +}
->> +
->> +static void jh7110_tdm_clk_disable(struct jh7110_tdm_dev *tdm)
->> +{
->> +       int i;
->> +
->> +       for (i = tdm->num_clks - 1; i >= 0; i--)
->> +               clk_disable_unprepare(tdm->clks[i]);
->> +}
+>>  static u64 bar_max_size[] = {
+>>  	[RP_BAR0] = _ULL(128 * SZ_2G),
+>>  	[RP_BAR1] = SZ_2G,
+>> @@ -77,6 +79,27 @@ static struct pci_ops cdns_pcie_host_ops = {
+>>  	.write		= pci_generic_config_write,
+>>  };
+>>  
+>> +static int cdns_pcie_host_training_complete(struct cdns_pcie *pcie)
 > 
-> This could be replaced by clk_bulk_disable_unprepare().
+> This is kind of weird because it's named like a predicate, i.e., "this
+> function tells me whether link training is complete", but it returns
+> *zero* for success.
+> 
+> This is the opposite of j721e_pcie_link_up(), which returns "true"
+> when the link is up, so code like this reads naturally:
+> 
+>   if (pcie->ops->link_up(pcie))
+>     /* do something if the link is up */
 
-Thanks for your reminder, it will be changed.
+I agree. The function name can be changed to indicate that it is waiting for
+completion rather than indicating completion. If this is the only change, I will
+post a patch to fix it. On the other hand, based on your comments in the next
+section, I am thinking of an alternative approach of merging the current
+"cdns_pcie_host_training_complete()" function's operation as well into the
+"cdns_pcie_host_wait_for_link()" function. If this is acceptable, I will post a
+different patch and the name change patch won't be necessary.
 
 > 
->> +
->> +static int jh7110_tdm_clk_enable(struct jh7110_tdm_dev *tdm)
 >> +{
->> +       int i, ret;
+>> +	u32 pcie_cap_off = CDNS_PCIE_RP_CAP_OFFSET;
+>> +	unsigned long end_jiffies;
+>> +	u16 lnk_stat;
 >> +
->> +       for (i = 0; i < tdm->num_clks; i++) {
->> +               ret = clk_prepare_enable(tdm->clks[i]);
->> +               if (ret) {
->> +                       while (i-- > 0)
->> +                               clk_disable_unprepare(tdm->clks[i]);
->> +                       return ret;
->> +               }
->> +       }
-> 
-> 
-> And this could be replaced by clk_bulk_prepare_enable().
-
-Will be changed.
-
-> 
+>> +	/* Wait for link training to complete. Exit after timeout. */
+>> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
+>> +	do {
+>> +		lnk_stat = cdns_pcie_rp_readw(pcie, pcie_cap_off + PCI_EXP_LNKSTA);
+>> +		if (!(lnk_stat & PCI_EXP_LNKSTA_LT))
+>> +			break;
+>> +		usleep_range(0, 1000);
+>> +	} while (time_before(jiffies, end_jiffies));
 >> +
->> +       ret = reset_control_deassert(tdm->resets);
->> +       if (ret) {
->> +               dev_err(tdm->dev, "Failed to deassert tdm resets\n");
->> +               goto dis_tdm_clk;
->> +       }
+>> +	if (!(lnk_stat & PCI_EXP_LNKSTA_LT))
+>> +		return 0;
 >> +
->> +       /* select tdm_ext clock as the clock source for tdm */
->> +       ret = clk_set_parent(tdm->clks[5], tdm->clks[4]);
->> +       if (ret) {
->> +               dev_err(tdm->dev, "Can't set clock source for clk_tdm: %d\n", ret);
->> +               goto dis_tdm_clk;
->> +       }
->> +       return 0;
->> +
->> +dis_tdm_clk:
->> +       for (i = tdm->num_clks - 1; i >= 0; i--)
->> +               clk_disable_unprepare(tdm->clks[i]);
-> 
-> clk_bulk_disable_unprepare()
-
-Will be changed.
-
-> 
->> +
->> +       return ret;
+>> +	return -ETIMEDOUT;
 >> +}
 >> +
->> +#ifdef CONFIG_PM
->> +static int jh7110_tdm_runtime_suspend(struct device *dev)
->> +{
->> +       struct jh7110_tdm_dev *tdm = dev_get_drvdata(dev);
+>>  static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
+>>  {
+>>  	struct device *dev = pcie->dev;
+>> @@ -118,6 +141,10 @@ static int cdns_pcie_retrain(struct cdns_pcie *pcie)
+>>  		cdns_pcie_rp_writew(pcie, pcie_cap_off + PCI_EXP_LNKCTL,
+>>  				    lnk_ctl);
+>>  
+>> +		ret = cdns_pcie_host_training_complete(pcie);
+>> +		if (ret)
+>> +			return ret;
 >> +
->> +       jh7110_tdm_clk_disable(tdm);
->> +       return 0;
->> +}
->> +
->> +static int jh7110_tdm_runtime_resume(struct device *dev)
->> +{
->> +       struct jh7110_tdm_dev *tdm = dev_get_drvdata(dev);
->> +
->> +       return jh7110_tdm_clk_enable(tdm);
->> +}
->> +#endif
->> +
->> +#ifdef CONFIG_PM_SLEEP
->> +static int jh7110_tdm_suspend(struct snd_soc_component *component)
->> +{
->> +       /* save context */
->> +       tdm->saved_pcmgbcr = jh7110_tdm_readl(tdm, TDM_PCMGBCR);
->> +       tdm->saved_pcmdiv = jh7110_tdm_readl(tdm, TDM_PCMDIV);
->> +
->> +       return pm_runtime_force_suspend(component->dev);
->> +}
->> +
->> +static int jh7110_tdm_resume(struct snd_soc_component *component)
->> +{
->> +       struct jh7110_tdm_dev *tdm = snd_soc_component_get_drvdata(component);
->> +
->> +       /* restore context */
->> +       jh7110_tdm_writel(tdm, TDM_PCMGBCR, tdm->saved_pcmgbcr);
->> +       jh7110_tdm_writel(tdm, TDM_PCMDIV, tdm->saved_pcmdiv);
->> +
->> +       return pm_runtime_force_resume(component->dev);
->> +}
->> +
->> +#else
->> +#define jh7110_tdm_suspend     NULL
->> +#define jh7110_tdm_resume      NULL
->> +#endif
+>>  		ret = cdns_pcie_host_wait_for_link(pcie);
 > 
-> you may use pm_sleep_ptr() to avoid these.
+> It seems a little clumsy that we wait for two things in succession:
+> 
+>   - cdns_pcie_host_training_complete() waits up to 1s for
+>     PCI_EXP_LNKSTA_LT to be cleared
+> 
+>   - cdns_pcie_host_wait_for_link() waits between .9s and 1s for
+>     LINK_UP_DL_COMPLETED on j721e (and not at all for other platforms)
 
-OK, thanks for your prompt.
+Is it acceptable to merge "cdns_pcie_host_training_complete()" into
+"cdns_pcie_host_wait_for_link()"?
 
 > 
->> +
->> +static const struct snd_soc_component_driver jh7110_tdm_component = {
->> +       .name = "jh7110-tdm",
->> +       .suspend = jh7110_tdm_suspend,
->> +       .resume = jh7110_tdm_resume,
->> +};
->> +
->> +static int jh7110_tdm_startup(struct snd_pcm_substream *substream,
->> +                             struct snd_soc_dai *cpu_dai)
->> +{
->> +       struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
->> +       struct snd_soc_dai_link *dai_link = rtd->dai_link;
->> +
->> +       dai_link->stop_dma_first = 1;
->> +
->> +       return 0;
->> +}
->> +
->> +static int jh7110_tdm_hw_params(struct snd_pcm_substream *substream,
->> +                               struct snd_pcm_hw_params *params,
->> +                               struct snd_soc_dai *dai)
->> +{
->> +       struct jh7110_tdm_dev *tdm = snd_soc_dai_get_drvdata(dai);
->> +       int chan_wl, chan_sl, chan_nr;
->> +       unsigned int data_width;
->> +       unsigned int dma_bus_width;
->> +       struct snd_dmaengine_dai_dma_data *dma_data = NULL;
->> +       int ret = 0;
->> +
->> +       data_width = params_width(params);
->> +
->> +       tdm->samplerate = params_rate(params);
->> +       tdm->pcmclk = params_channels(params) * tdm->samplerate * data_width;
->> +
->> +       switch (params_format(params)) {
->> +       case SNDRV_PCM_FORMAT_S16_LE:
->> +               chan_wl = TDM_16BIT_WORD_LEN;
->> +               chan_sl = TDM_16BIT_SLOT_LEN;
->> +               dma_bus_width = DMA_SLAVE_BUSWIDTH_2_BYTES;
->> +               break;
->> +
->> +       case SNDRV_PCM_FORMAT_S32_LE:
->> +               chan_wl = TDM_32BIT_WORD_LEN;
->> +               chan_sl = TDM_32BIT_SLOT_LEN;
->> +               dma_bus_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
->> +               break;
->> +
->> +       default:
->> +               dev_err(tdm->dev, "tdm: unsupported PCM fmt");
->> +               return -EINVAL;
->> +       }
->> +
->> +       chan_nr = params_channels(params);
->> +       switch (chan_nr) {
->> +       case 1:
->> +       case 2:
->> +       case 4:
->> +       case 6:
->> +       case 8:
->> +               break;
->> +       default:
->> +               dev_err(tdm->dev, "channel not supported\n");
->> +               return -EINVAL;
->> +       }
->> +
->> +       if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
->> +               tdm->tx.wl = chan_wl;
->> +               tdm->tx.sl = chan_sl;
->> +               tdm->tx.sscale = chan_nr;
->> +               tdm->play_dma_data.addr_width = dma_bus_width;
->> +               dma_data = &tdm->play_dma_data;
->> +       } else {
->> +               tdm->rx.wl = chan_wl;
->> +               tdm->rx.sl = chan_sl;
->> +               tdm->rx.sscale = chan_nr;
->> +               tdm->capture_dma_data.addr_width = dma_bus_width;
->> +               dma_data = &tdm->capture_dma_data;
->> +       }
->> +
->> +       snd_soc_dai_set_dma_data(dai, substream, dma_data);
->> +
->> +       ret = jh7110_tdm_config(tdm, substream);
->> +       if (ret)
->> +               return ret;
->> +
->> +       jh7110_tdm_save_context(tdm, substream);
->> +       return 0;
->> +}
->> +
->> +static int jh7110_tdm_trigger(struct snd_pcm_substream *substream,
->> +                             int cmd, struct snd_soc_dai *dai)
->> +{
->> +       struct jh7110_tdm_dev *tdm = snd_soc_dai_get_drvdata(dai);
->> +       int ret = 0;
->> +
->> +       switch (cmd) {
->> +       case SNDRV_PCM_TRIGGER_START:
->> +       case SNDRV_PCM_TRIGGER_RESUME:
->> +       case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
->> +               jh7110_tdm_start(tdm, substream);
->> +               break;
->> +
->> +       case SNDRV_PCM_TRIGGER_STOP:
->> +       case SNDRV_PCM_TRIGGER_SUSPEND:
->> +       case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
->> +               jh7110_tdm_stop(tdm, substream);
->> +               break;
->> +       default:
->> +               ret = -EINVAL;
->> +               break;
->> +       }
->> +       return ret;
->> +}
->> +
->> +static int jh7110_tdm_set_dai_fmt(struct snd_soc_dai *cpu_dai,
->> +                                 unsigned int fmt)
->> +{
->> +       struct jh7110_tdm_dev *tdm = snd_soc_dai_get_drvdata(cpu_dai);
->> +       unsigned int gbcr;
->> +       int ret = 0;
->> +
->> +       /* set master/slave audio interface */
->> +       switch (fmt & SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK) {
->> +       case SND_SOC_DAIFMT_BP_FP:
->> +               /* cpu is master */
->> +               tdm->ms_mode = TDM_AS_MASTER;
->> +               break;
->> +       case SND_SOC_DAIFMT_BC_FC:
->> +               /* codec is master */
->> +               tdm->ms_mode = TDM_AS_SLAVE;
->> +               break;
->> +       case SND_SOC_DAIFMT_BC_FP:
->> +       case SND_SOC_DAIFMT_BP_FC:
->> +               ret = -EINVAL;
->> +               break;
->> +       default:
->> +               dev_dbg(tdm->dev, "dwc : Invalid clock provider format\n");
->> +               ret = -EINVAL;
->> +               break;
->> +       }
->> +
->> +       gbcr = (tdm->clkpolity << CLKPOL_BIT) |
->> +               (tdm->elm << ELM_BIT) |
->> +               (tdm->syncm << SYNCM_BIT) |
->> +               (tdm->ms_mode << MS_BIT);
->> +       jh7110_tdm_writel(tdm, TDM_PCMGBCR, gbcr);
->> +
->> +       return ret;
->> +}
->> +
->> +static const struct snd_soc_dai_ops jh7110_tdm_dai_ops = {
->> +       .startup        = jh7110_tdm_startup,
->> +       .hw_params      = jh7110_tdm_hw_params,
->> +       .trigger        = jh7110_tdm_trigger,
->> +       .set_fmt        = jh7110_tdm_set_dai_fmt,
->> +};
->> +
->> +static int jh7110_tdm_dai_probe(struct snd_soc_dai *dai)
->> +{
->> +       struct jh7110_tdm_dev *tdm = snd_soc_dai_get_drvdata(dai);
->> +
->> +       snd_soc_dai_init_dma_data(dai, &tdm->play_dma_data, &tdm->capture_dma_data);
->> +       snd_soc_dai_set_drvdata(dai, tdm);
->> +       return 0;
->> +}
->> +
->> +#define JH7110_TDM_RATES       SNDRV_PCM_RATE_8000_48000
->> +
->> +#define JH7110_TDM_FORMATS     (SNDRV_PCM_FMTBIT_S16_LE | \
->> +                                SNDRV_PCM_FMTBIT_S32_LE)
->> +
->> +static struct snd_soc_dai_driver jh7110_tdm_dai = {
->> +       .name = "sf_tdm",
->> +       .id = 0,
->> +       .playback = {
->> +               .stream_name    = "Playback",
->> +               .channels_min   = 1,
->> +               .channels_max   = 8,
->> +               .rates          = JH7110_TDM_RATES,
->> +               .formats        = JH7110_TDM_FORMATS,
->> +       },
->> +       .capture = {
->> +               .stream_name    = "Capture",
->> +               .channels_min   = 1,
->> +               .channels_max   = 8,
->> +               .rates          = JH7110_TDM_RATES,
->> +               .formats        = JH7110_TDM_FORMATS,
->> +       },
->> +       .ops = &jh7110_tdm_dai_ops,
->> +       .probe = jh7110_tdm_dai_probe,
->> +       .symmetric_rate = 1,
->> +};
->> +
->> +static const struct snd_pcm_hardware jh7110_pcm_hardware = {
->> +       .info                   = (SNDRV_PCM_INFO_MMAP          |
->> +                                  SNDRV_PCM_INFO_MMAP_VALID    |
->> +                                  SNDRV_PCM_INFO_PAUSE         |
->> +                                  SNDRV_PCM_INFO_RESUME        |
->> +                                  SNDRV_PCM_INFO_INTERLEAVED   |
->> +                                  SNDRV_PCM_INFO_BLOCK_TRANSFER),
->> +       .buffer_bytes_max       = 192512,
->> +       .period_bytes_min       = 4096,
->> +       .period_bytes_max       = 32768,
->> +       .periods_min            = 1,
->> +       .periods_max            = 48,
->> +       .fifo_size              = 16,
->> +};
->> +
->> +static const struct snd_dmaengine_pcm_config jh7110_dmaengine_pcm_config = {
->> +       .pcm_hardware = &jh7110_pcm_hardware,
->> +       .prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config,
->> +       .prealloc_buffer_size = 192512,
->> +};
->> +
->> +static void jh7110_tdm_init_params(struct jh7110_tdm_dev *tdm)
->> +{
->> +       tdm->clkpolity = TDM_TX_RASING_RX_FALLING;
->> +       tdm->elm = TDM_ELM_LATE;
->> +       tdm->syncm = TDM_SYNCM_SHORT;
->> +
->> +       tdm->rx.ifl = TDM_FIFO_HALF;
->> +       tdm->tx.ifl = TDM_FIFO_HALF;
->> +       tdm->rx.wl = TDM_16BIT_WORD_LEN;
->> +       tdm->tx.wl = TDM_16BIT_WORD_LEN;
->> +       tdm->rx.sscale = 2;
->> +       tdm->tx.sscale = 2;
->> +       tdm->rx.lrj = TDM_LEFT_JUSTIFT;
->> +       tdm->tx.lrj = TDM_LEFT_JUSTIFT;
->> +
->> +       tdm->play_dma_data.addr = JH7110_TDM_FIFO;
->> +       tdm->play_dma_data.addr_width = DMA_SLAVE_BUSWIDTH_2_BYTES;
->> +       tdm->play_dma_data.fifo_size = JH7110_TDM_FIFO_DEPTH / 2;
->> +       tdm->play_dma_data.maxburst = 16;
->> +
->> +       tdm->capture_dma_data.addr = JH7110_TDM_FIFO;
->> +       tdm->capture_dma_data.addr_width = DMA_SLAVE_BUSWIDTH_2_BYTES;
->> +       tdm->capture_dma_data.fifo_size = JH7110_TDM_FIFO_DEPTH / 2;
->> +       tdm->capture_dma_data.maxburst = 8;
->> +}
->> +
->> +static int jh7110_tdm_clk_reset_init(struct platform_device *pdev,
->> +                                    struct jh7110_tdm_dev *tdm)
->> +{
->> +       int i, ret;
->> +
->> +       for (i = 0; i < tdm->num_clks; i++) {
->> +               tdm->clks[i] = devm_clk_get(&pdev->dev, tdm->clk_names[i]);
->> +               if (IS_ERR(tdm->clks[i])) {
->> +                       dev_err(&pdev->dev, "Failed to get clock: %s\n",
->> +                               tdm->clk_names[i]);
->> +                       return PTR_ERR(tdm->clks[i]);
->> +               }
->> +       }
-> 
-> devm_clk_bulk_get() ?
+> dw_pcie_wait_for_link() is basically similar but has a single wait
+> loop around the dw_pcie_link_up() callback.  Several of those
+> callbacks check multiple things.  Can we do the same here?
 
-get/enable/disable clocks with 'devm_clk_bulk_' interface
+I assume you are referring to merging the functions together?
 
 > 
->> +
->> +       tdm->resets = devm_reset_control_array_get_exclusive(&pdev->dev);
->> +       if (IS_ERR(tdm->resets)) {
->> +               ret = PTR_ERR(tdm->resets);
->> +               dev_err(&pdev->dev, "Failed to get tdm resets");
->> +               return ret;
->> +       }
->> +
->> +       return jh7110_tdm_clk_enable(tdm);
->> +}
->> +
->> +static int jh7110_tdm_probe(struct platform_device *pdev)
->> +{
->> +       struct jh7110_tdm_dev *tdm;
->> +       const struct starfive_tdm_driverdata *driver_data;
->> +       int ret;
->> +
->> +       tdm = devm_kzalloc(&pdev->dev, sizeof(*tdm), GFP_KERNEL);
->> +       if (!tdm)
->> +               return -ENOMEM;
->> +
->> +       driver_data = of_device_get_match_data(&pdev->dev);
->> +       tdm->clk_names = (const char **)driver_data->clk_names;
->> +       tdm->num_clks = driver_data->num_clks;
->> +
->> +       tdm->tdm_base = devm_platform_ioremap_resource(pdev, 0);
->> +       if (IS_ERR(tdm->tdm_base))
->> +               return PTR_ERR(tdm->tdm_base);
->> +
->> +       tdm->dev = &pdev->dev;
->> +
->> +       ret = jh7110_tdm_clk_reset_init(pdev, tdm);
->> +       if (ret) {
->> +               dev_err(&pdev->dev, "Failed to enable audio-tdm clock\n");
->> +               return ret;
->> +       }
->> +
->> +       jh7110_tdm_init_params(tdm);
->> +
->> +       dev_set_drvdata(&pdev->dev, tdm);
->> +       ret = devm_snd_soc_register_component(&pdev->dev, &jh7110_tdm_component,
->> +                                             &jh7110_tdm_dai, 1);
->> +       if (ret != 0) {
-> 
-> if (ret)
+> Is the "host" in the cdns_pcie_host_wait_for_link() name necessary?
+> Maybe it could be cdns_pcie_wait_for_link() to be similar to
+> dw_pcie_wait_for_link()?  Or, if "host" is necessary, it could be
+> cdns_host_pcie_wait_for_link() so it matches the same
+> "pcie_wait_for_link" grep pattern as most of the others?
 
-Will be fixed.
+If the functions are merged, I believe that the word "host" can be dropped in
+the new function which can be named "cdns_pcie_wait_for_link()" as suggested by you.
+
+Please let me know.
 
 > 
->> +               dev_err(&pdev->dev, "Failed to register dai\n");
->> +               return ret;
->> +       }
->> +
->> +       ret = devm_snd_dmaengine_pcm_register(&pdev->dev,
->> +                                             &jh7110_dmaengine_pcm_config,
->> +                                             SND_DMAENGINE_PCM_FLAG_COMPAT);
->> +       if (ret) {
->> +               dev_err(&pdev->dev, "Could not register pcm: %d\n", ret);
->> +               return ret;
->> +       }
->> +
->> +       pm_runtime_enable(&pdev->dev);
->> +#ifdef CONFIG_PM
->> +       jh7110_tdm_clk_disable(tdm);
->> +#endif
->> +
->> +       return 0;
->> +}
->> +
->> +static int jh7110_tdm_dev_remove(struct platform_device *pdev)
->> +{
->> +       pm_runtime_disable(&pdev->dev);
->> +       return 0;
->> +}
->> +
->> +static const struct starfive_tdm_driverdata jh7110_drvdata = {
->> +       .clk_names = {"mclk_inner", "tdm_ahb", "tdm_apb", "tdm_internal", "tdm_ext", "tdm"},
->> +       .num_clks = 6,
->> +};
->> +
->> +static const struct of_device_id jh7110_tdm_of_match[] = {
->> +       { .compatible = "starfive,jh7110-tdm", .data = &jh7110_drvdata },
->> +       {}
->> +};
->> +
->> +MODULE_DEVICE_TABLE(of, jh7110_tdm_of_match);
->> +
->> +static const struct dev_pm_ops jh7110_tdm_pm_ops = {
->> +       SET_RUNTIME_PM_OPS(jh7110_tdm_runtime_suspend,
->> +                          jh7110_tdm_runtime_resume, NULL)
-> 
-> You can use RUNTIME_PM_OPS() and avoid having #ifdef CONFIG_PM around
-> jh7110_tdm_runtime_suspend and jh7110_tdm_runtime_resume definitions.
+>>  	}
+>>  	return ret;
 
-I found that the definition of SET_RUNTIME_PM_OPS is based on RUNTIME_PM_OPS,
-so CONFIG_PM is not needed.
-
-Thank you very much for your detailed review and comments !
-
-Best regards,
-Walker
+-- 
+Regards,
+Siddharth.
