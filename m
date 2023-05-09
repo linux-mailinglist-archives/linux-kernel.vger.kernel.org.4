@@ -2,110 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DECD6FC1E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09326FC22B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234625AbjEIIqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 04:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52758 "EHLO
+        id S234747AbjEII7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234593AbjEIIqp (ORCPT
+        with ESMTP id S229899AbjEII7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 04:46:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CFE8A67;
-        Tue,  9 May 2023 01:46:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E081631D6;
-        Tue,  9 May 2023 08:46:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DECEAC433D2;
-        Tue,  9 May 2023 08:46:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1683622000;
-        bh=Rosg6MIt+oWekqphy3JytZbJCDw525kHM44ZeRKAImo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UpK6iwdYthvcjHN6+BKNYjrGU+DfDKrInQ+XVJ3y3LF2xzUsyz0f7cMpW0Z3+s0a6
-         RovtM+pwcK3eCbIQqgQaGmCcLA8md8hEEk79Sah39rXSCBXtA72kOindkgCAA7IQj+
-         wLTIVZFV1dJvJsaFby6YJtzwZHsyCI93l4bRPI5A=
-Date:   Tue, 9 May 2023 10:46:37 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     gary@garyguo.net, alex.gaynor@gmail.com, benno.lossin@proton.me,
-        bjorn3_gh@protonmail.com, boqun.feng@gmail.com,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        wedsonaf@gmail.com
-Subject: Re: [PATCH v2] rust: error: add missing error codes
-Message-ID: <2023050937-scouring-truck-d7c0@gregkh>
-References: <20230508124701.443ba331.gary@garyguo.net>
- <20230509080700.1608146-1-aliceryhl@google.com>
+        Tue, 9 May 2023 04:59:16 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E562D050;
+        Tue,  9 May 2023 01:59:13 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 1FDC460187;
+        Tue,  9 May 2023 10:59:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1683622750; bh=KPZQypbGgzI0Uu0XwSNF25wVht5AlW8b9I12H+fXD3k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ELdKqKuIzVAbEOEDg70py/EEWcfCGfTrqQI22mIunfsmD4iyKQpYQdoovPj/8dutT
+         ytAcLbUhJgopPVkE4sigpu8YI3UQ8RCzR0CCP500A3t7Ile1RzKdh+IMLlyLLZzyd2
+         aLCZMkNFjWl7pY4ccTbu3giQI5jC0GoaedmuDL+R3vNyTHh1qegePuQvFIXXB4v8Bz
+         FLyTmwuS/OuNPYntp8qJ0Bx1B6iKAmUSY4igzX4puNgqSHWWS+5/l+LjbgDTAKua1m
+         FaDlNgLOXG80pfWmnDYogTVQu6WBnDD8YwLGTV60fgQo9WEGBO+7aTM0E83dw4iHTO
+         lRHIQu5UIRLwA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id GIxpZaOURNtL; Tue,  9 May 2023 10:59:07 +0200 (CEST)
+Received: by domac.alu.hr (Postfix, from userid 1014)
+        id AF1716018D; Tue,  9 May 2023 10:59:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1683622747; bh=KPZQypbGgzI0Uu0XwSNF25wVht5AlW8b9I12H+fXD3k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rqRjUWL0SBqRAeRgGo9aLUgjZz2efZY5hCb0gsbTHj3TDjC18nhiHmWMsWVLB+8b4
+         RRRFLzetFxb5Nm62vAQVkafsBNqqhQWx6jNFWTtVLaxHPylHVkSrbZkfGyW86kCW5M
+         uIUeAPgvrC7QDxFHoJ/5KzIL4+NSOShM+FvPAEhbRWlQQgyl7FE79WDw31u2cZ2W94
+         1M3wghmyLNJyJ8wZVSevNMSIko308OylReei/aK1yQIL64xM6+sOzPy7mX0u3gbK0D
+         lt3yEsZ5nUOcqLF6GNL4HftXAI2/FYgsIprcX1nFE8fJpiBTZSJyX2L4xpaKLql8YD
+         xgLBXwZHlZrsg==
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        linux-kernel@vger.kernel.org
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Tianfei Zhang <tianfei.zhang@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        Dan Carpenter <error27@gmail.com>
+Subject: [RESEND PATCH v5 1/3] test_firmware: prevent race conditions by a correct implementation of locking
+Date:   Tue,  9 May 2023 10:47:45 +0200
+Message-Id: <20230509084746.48259-1-mirsad.todorovac@alu.unizg.hr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509080700.1608146-1-aliceryhl@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 08:07:00AM +0000, Alice Ryhl wrote:
-> On Mon, 8 May 2023 12:47:01 +0100
-> Gary Guo <gary@garyguo.net> wrote:
-> > On Thu,  4 May 2023 06:48:54 +0000
-> > Alice Ryhl <aliceryhl@google.com> wrote:
-> > > This adds the error codes from `include/linux/errno.h` to the list of
-> > > Rust error constants. These errors were not included originally, because
-> > > they are not supposed to be visible from userspace. However, they are
-> > > still a perfectly valid error to use when writing a kernel driver. For
-> > > example, you might want to return ERESTARTSYS if you receive a signal
-> > > during a call to `schedule`.
-> > 
-> > `include/linux/errno.h` also includes all of `asm/errno.h`,
-> > which defines EDEADLK - EHWPOISON, which is not included in this patch.
-> > I feel like these error codes should be added first?
-> 
-> It seems like there are a lot of asm/errno.h files:
-> 
-> $ find . -name errno.h
-> ./arch/powerpc/include/uapi/asm/errno.h
-> ./arch/mips/include/asm/errno.h
-> ./arch/mips/include/uapi/asm/errno.h
-> ./arch/alpha/include/uapi/asm/errno.h
-> ./arch/parisc/include/uapi/asm/errno.h
-> ./arch/sparc/include/uapi/asm/errno.h
-> ./arch/x86/include/generated/uapi/asm/errno.h
-> ./tools/arch/powerpc/include/uapi/asm/errno.h
-> ./tools/arch/mips/include/asm/errno.h
-> ./tools/arch/mips/include/uapi/asm/errno.h
-> ./tools/arch/alpha/include/uapi/asm/errno.h
-> ./tools/arch/parisc/include/uapi/asm/errno.h
-> ./tools/arch/sparc/include/uapi/asm/errno.h
-> ./tools/arch/x86/include/uapi/asm/errno.h
-> ./tools/include/nolibc/errno.h
-> ./tools/include/uapi/asm/errno.h
-> ./tools/include/uapi/asm-generic/errno.h
+Dan Carpenter spotted a race condition in a couple of situations like
+these in the test_firmware driver:
 
-You can ignore the tool ones.
+static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+{
+        u8 val;
+        int ret;
 
-> ./include/uapi/asm-generic/errno.h
-> ./include/uapi/linux/errno.h
-> ./include/linux/errno.h
-> 
-> How should I proceed with this? You mention EDEADLK - EHWPOISON, but its
-> not clear to me which asm/errno.h file I should base this on.
+        ret = kstrtou8(buf, 10, &val);
+        if (ret)
+                return ret;
 
-It depends on which arch you are building for.  That's why we have
-per-platform errno.h files, the values are different for different ones.
-So you need to handle them all properly somehow.  How is rust going to
-handle per-arch stuff like this?
+        mutex_lock(&test_fw_mutex);
+        *(u8 *)cfg = val;
+        mutex_unlock(&test_fw_mutex);
 
-thanks,
+        /* Always return full write size even if we didn't consume all */
+        return size;
+}
 
-greg k-h
+static ssize_t config_num_requests_store(struct device *dev,
+                                         struct device_attribute *attr,
+                                         const char *buf, size_t count)
+{
+        int rc;
+
+        mutex_lock(&test_fw_mutex);
+        if (test_fw_config->reqs) {
+                pr_err("Must call release_all_firmware prior to changing config\n");
+                rc = -EINVAL;
+                mutex_unlock(&test_fw_mutex);
+                goto out;
+        }
+        mutex_unlock(&test_fw_mutex);
+
+        rc = test_dev_config_update_u8(buf, count,
+                                       &test_fw_config->num_requests);
+
+out:
+        return rc;
+}
+
+static ssize_t config_read_fw_idx_store(struct device *dev,
+                                        struct device_attribute *attr,
+                                        const char *buf, size_t count)
+{
+        return test_dev_config_update_u8(buf, count,
+                                         &test_fw_config->read_fw_idx);
+}
+
+The function test_dev_config_update_u8() is called from both the locked
+and the unlocked context, function config_num_requests_store() and
+config_read_fw_idx_store() which can both be called asynchronously as
+they are driver's methods, while test_dev_config_update_u8() and siblings
+change their argument pointed to by u8 *cfg or similar pointer.
+
+To avoid deadlock on test_fw_mutex, the lock is dropped before calling
+test_dev_config_update_u8() and re-acquired within test_dev_config_update_u8()
+itself, but alas this creates a race condition.
+
+Having two locks wouldn't assure a race-proof mutual exclusion.
+
+This situation is best avoided by the introduction of a new, unlocked
+function __test_dev_config_update_u8() which can be called from the locked
+context and reducing test_dev_config_update_u8() to:
+
+static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+{
+        int ret;
+
+        mutex_lock(&test_fw_mutex);
+        ret = __test_dev_config_update_u8(buf, size, cfg);
+        mutex_unlock(&test_fw_mutex);
+
+        return ret;
+}
+
+doing the locking and calling the unlocked primitive, which enables both
+locked and unlocked versions without duplication of code.
+
+The similar approach was applied to all functions called from the locked
+and the unlocked context, which safely mitigates both deadlocks and race
+conditions in the driver.
+
+__test_dev_config_update_bool(), __test_dev_config_update_u8() and
+__test_dev_config_update_size_t() unlocked versions of the functions
+were introduced to be called from the locked contexts as a workaround
+without releasing the main driver's lock and thereof causing a race
+condition.
+
+The test_dev_config_update_bool(), test_dev_config_update_u8() and
+test_dev_config_update_size_t() locked versions of the functions
+are being called from driver methods without the unnecessary multiplying
+of the locking and unlocking code for each method, and complicating
+the code with saving of the return value across lock.
+
+Fixes: 7feebfa487b92 ("test_firmware: add support for request_firmware_into_buf")
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Russ Weight <russell.h.weight@intel.com>
+Cc: Takashi Iwai <tiwai@suse.de>
+Cc: Tianfei Zhang <tianfei.zhang@intel.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Colin Ian King <colin.i.king@gmail.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kselftest@vger.kernel.org
+Cc: stable@vger.kernel.org # v5.4
+Suggested-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+---
+ lib/test_firmware.c | 52 ++++++++++++++++++++++++++++++---------------
+ 1 file changed, 35 insertions(+), 17 deletions(-)
+
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index 05ed84c2fc4c..35417e0af3f4 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -353,16 +353,26 @@ static ssize_t config_test_show_str(char *dst,
+ 	return len;
+ }
+ 
+-static int test_dev_config_update_bool(const char *buf, size_t size,
++static inline int __test_dev_config_update_bool(const char *buf, size_t size,
+ 				       bool *cfg)
+ {
+ 	int ret;
+ 
+-	mutex_lock(&test_fw_mutex);
+ 	if (kstrtobool(buf, cfg) < 0)
+ 		ret = -EINVAL;
+ 	else
+ 		ret = size;
++
++	return ret;
++}
++
++static int test_dev_config_update_bool(const char *buf, size_t size,
++				       bool *cfg)
++{
++	int ret;
++
++	mutex_lock(&test_fw_mutex);
++	ret = __test_dev_config_update_bool(buf, size, cfg);
+ 	mutex_unlock(&test_fw_mutex);
+ 
+ 	return ret;
+@@ -373,7 +383,8 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+ }
+ 
+-static int test_dev_config_update_size_t(const char *buf,
++static int __test_dev_config_update_size_t(
++					 const char *buf,
+ 					 size_t size,
+ 					 size_t *cfg)
+ {
+@@ -384,9 +395,7 @@ static int test_dev_config_update_size_t(const char *buf,
+ 	if (ret)
+ 		return ret;
+ 
+-	mutex_lock(&test_fw_mutex);
+ 	*(size_t *)cfg = new;
+-	mutex_unlock(&test_fw_mutex);
+ 
+ 	/* Always return full write size even if we didn't consume all */
+ 	return size;
+@@ -402,7 +411,7 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+ }
+ 
+-static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
++static int __test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+ {
+ 	u8 val;
+ 	int ret;
+@@ -411,14 +420,23 @@ static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+ 	if (ret)
+ 		return ret;
+ 
+-	mutex_lock(&test_fw_mutex);
+ 	*(u8 *)cfg = val;
+-	mutex_unlock(&test_fw_mutex);
+ 
+ 	/* Always return full write size even if we didn't consume all */
+ 	return size;
+ }
+ 
++static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
++{
++	int ret;
++
++	mutex_lock(&test_fw_mutex);
++	ret = __test_dev_config_update_u8(buf, size, cfg);
++	mutex_unlock(&test_fw_mutex);
++
++	return ret;
++}
++
+ static ssize_t test_dev_config_show_u8(char *buf, u8 val)
+ {
+ 	return snprintf(buf, PAGE_SIZE, "%u\n", val);
+@@ -471,10 +489,10 @@ static ssize_t config_num_requests_store(struct device *dev,
+ 		mutex_unlock(&test_fw_mutex);
+ 		goto out;
+ 	}
+-	mutex_unlock(&test_fw_mutex);
+ 
+-	rc = test_dev_config_update_u8(buf, count,
+-				       &test_fw_config->num_requests);
++	rc = __test_dev_config_update_u8(buf, count,
++					 &test_fw_config->num_requests);
++	mutex_unlock(&test_fw_mutex);
+ 
+ out:
+ 	return rc;
+@@ -518,10 +536,10 @@ static ssize_t config_buf_size_store(struct device *dev,
+ 		mutex_unlock(&test_fw_mutex);
+ 		goto out;
+ 	}
+-	mutex_unlock(&test_fw_mutex);
+ 
+-	rc = test_dev_config_update_size_t(buf, count,
+-					   &test_fw_config->buf_size);
++	rc = __test_dev_config_update_size_t(buf, count,
++					     &test_fw_config->buf_size);
++	mutex_unlock(&test_fw_mutex);
+ 
+ out:
+ 	return rc;
+@@ -548,10 +566,10 @@ static ssize_t config_file_offset_store(struct device *dev,
+ 		mutex_unlock(&test_fw_mutex);
+ 		goto out;
+ 	}
+-	mutex_unlock(&test_fw_mutex);
+ 
+-	rc = test_dev_config_update_size_t(buf, count,
+-					   &test_fw_config->file_offset);
++	rc = __test_dev_config_update_size_t(buf, count,
++					     &test_fw_config->file_offset);
++	mutex_unlock(&test_fw_mutex);
+ 
+ out:
+ 	return rc;
+-- 
+2.30.2
+
