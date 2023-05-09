@@ -2,127 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8430D6FC004
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FDC6FC021
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234899AbjEIHGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 03:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
+        id S235245AbjEIHHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 03:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234879AbjEIHGQ (ORCPT
+        with ESMTP id S235196AbjEIHHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 03:06:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE7049C2
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 00:06:11 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pwHQE-0002Zp-6w; Tue, 09 May 2023 09:06:06 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id F07121C09EC;
-        Tue,  9 May 2023 07:06:04 +0000 (UTC)
-Date:   Tue, 9 May 2023 09:06:04 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Frank Jungclaus <Frank.Jungclaus@esd.eu>,
-        Stefan =?utf-8?B?TcOkdGpl?= <Stefan.Maetje@esd.eu>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "wg@grandegger.com" <wg@grandegger.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] can: esd_usb: Add support for esd CAN-USB/3
-Message-ID: <20230509-smirk-viewing-5e13ea0abfeb-mkl@pengutronix.de>
-References: <20230504154414.1864615-1-frank.jungclaus@esd.eu>
- <20230504154414.1864615-3-frank.jungclaus@esd.eu>
- <CAMZ6RqKgJs-yJaaqREmN1SkUzE1EkGtjBzXiATKx5WL+=J48dQ@mail.gmail.com>
- <ff1374d58d98a42d5f78a2685c748730b26926b9.camel@esd.eu>
- <CAMZ6RqLaDNy-fZ2G0+QMhUEckkXLL+ZyELVSDFmqpd++aBzZQg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cztyro3zp6gjit3p"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqLaDNy-fZ2G0+QMhUEckkXLL+ZyELVSDFmqpd++aBzZQg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 9 May 2023 03:07:42 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95686D06A
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 00:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683616061; x=1715152061;
+  h=date:from:to:cc:subject:message-id;
+  bh=2mf9b07l8pIbK9jAvJOt5U67B+T2jSAq8CkRyc5jJL8=;
+  b=YZv5hx/sjaVMMS8rl9JFJuLmwcDl/10klfVmGgxBxnnMhsJNWJzJBois
+   yE5yhVax7GIUNl1dBd/zfNpd5C/uMPyPku4Qy+7XJ15XsbbNcfvyqwBD7
+   dCawEifYxwqYq5V3p7gsTothPdyWyl5DdV9dZK+AqTZSZUoIwulBPau2b
+   ZDig+1+ATGAVFKO9CVZ2ffCHp6hBi0rphvH4Rp5zY78E80jgXLHjzn8Qn
+   eMGwUIV1O+xXXuk/4U0IhRw+ArAfjOzDKtAk3e5y/55XhNun86932beT6
+   3DoCPkngSKtRBXrFvoAlOVs1N1tiwjHEVkMZa8fOfMg7FBz33n9c4Onb/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="377922075"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="377922075"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 00:07:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="822955436"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="822955436"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 09 May 2023 00:07:34 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwHRd-0001tI-1j;
+        Tue, 09 May 2023 07:07:33 +0000
+Date:   Tue, 09 May 2023 15:06:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.05.08a] BUILD SUCCESS
+ 35d7ef1042dcad011497cfed0b7af11d7e5d38cd
+Message-ID: <20230509070621.jfnBC%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.05.08a
+branch HEAD: 35d7ef1042dcad011497cfed0b7af11d7e5d38cd  docs: Add atomic operations to the driver basic API documentation
 
---cztyro3zp6gjit3p
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+elapsed time: 732m
 
-On 09.05.2023 10:28:13, Vincent MAILHOL wrote:
-> > > And because hdr.len is initially 3, hdr.len becomes 5. Right? Shouldn=
-'t it be 8?
-> >
-> > It might be a little confusing, but I think it's fine.
-> > hdr.len is given in units of longwords (4 bytes each)! Therefore we
-> > have 12 bytes (the initial 3 longwords) for struct tx_msg before
-> > tx_msg.data[].
-> > Than (8 + 3)/4=3D2 gives us 2 additional longwords for the 8 data bytes.
-> > So that 3+2=3D5 (equal to 20 bytes) should be ok.
+configs tested: 127
+configs skipped: 9
 
-I think the term longword is more commonly used in non-Unix operating
-systems :)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> OK. So you want to round up the length to the next sizeof(long) multiple,=
- right?
->=20
-> First, sizeof(long) being platform specific, you need to declare a
-> macro to make your intent explicit.
->=20
-> /* Size of a long int on esd devices */
-> #define USB_ESD_SIZEOF_LONG 4
->=20
-> Please test, but for what I understand, below line is an equivalent
-> and a more readable way to achieve your goal:
->=20
->           msg->hdr.len =3D DIV_ROUND_UP(cf->len, USB_ESD_SIZEOF_LONG);
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r003-20230508   gcc  
+alpha                randconfig-r014-20230507   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r002-20230507   gcc  
+arc          buildonly-randconfig-r003-20230508   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r002-20230508   gcc  
+arc                  randconfig-r043-20230507   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r002-20230507   clang
+arm                  randconfig-r003-20230507   clang
+arm                  randconfig-r011-20230507   gcc  
+arm                  randconfig-r023-20230508   clang
+arm                  randconfig-r036-20230508   gcc  
+arm                  randconfig-r046-20230507   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r001-20230507   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r004-20230508   clang
+arm64                randconfig-r015-20230507   clang
+csky                                defconfig   gcc  
+hexagon      buildonly-randconfig-r002-20230508   clang
+hexagon      buildonly-randconfig-r006-20230508   clang
+hexagon              randconfig-r041-20230507   clang
+hexagon              randconfig-r045-20230507   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230508   clang
+i386                 randconfig-a002-20230508   clang
+i386                 randconfig-a003-20230508   clang
+i386                 randconfig-a004-20230508   clang
+i386                 randconfig-a005-20230508   clang
+i386                 randconfig-a006-20230508   clang
+i386                 randconfig-a011-20230508   gcc  
+i386                 randconfig-a012-20230508   gcc  
+i386                 randconfig-a013-20230508   gcc  
+i386                 randconfig-a014-20230508   gcc  
+i386                 randconfig-a015-20230508   gcc  
+i386                 randconfig-a016-20230508   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r016-20230507   gcc  
+loongarch            randconfig-r031-20230508   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r015-20230508   gcc  
+microblaze           randconfig-r032-20230508   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r021-20230508   clang
+mips                 randconfig-r022-20230507   gcc  
+mips                 randconfig-r022-20230508   clang
+mips                 randconfig-r024-20230508   clang
+mips                 randconfig-r025-20230508   clang
+mips                 randconfig-r033-20230508   gcc  
+mips                 randconfig-r035-20230507   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r031-20230507   gcc  
+nios2                randconfig-r034-20230508   gcc  
+openrisc     buildonly-randconfig-r006-20230507   gcc  
+openrisc             randconfig-r011-20230508   gcc  
+parisc       buildonly-randconfig-r004-20230507   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r023-20230507   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r006-20230507   gcc  
+powerpc              randconfig-r026-20230508   gcc  
+powerpc              randconfig-r033-20230507   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r005-20230507   clang
+riscv                               defconfig   gcc  
+riscv                randconfig-r013-20230507   clang
+riscv                randconfig-r042-20230507   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230508   clang
+s390                 randconfig-r006-20230508   clang
+s390                 randconfig-r044-20230507   clang
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r003-20230507   gcc  
+sh           buildonly-randconfig-r005-20230508   gcc  
+sh                   randconfig-r005-20230508   gcc  
+sh                   randconfig-r016-20230508   gcc  
+sh                   randconfig-r032-20230507   gcc  
+sparc        buildonly-randconfig-r001-20230508   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r024-20230507   gcc  
+sparc64      buildonly-randconfig-r004-20230508   gcc  
+sparc64              randconfig-r001-20230507   gcc  
+sparc64              randconfig-r012-20230507   gcc  
+sparc64              randconfig-r021-20230507   gcc  
+sparc64              randconfig-r026-20230507   gcc  
+sparc64              randconfig-r035-20230508   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64               randconfig-a011-20230508   gcc  
+x86_64               randconfig-a012-20230508   gcc  
+x86_64               randconfig-a013-20230508   gcc  
+x86_64               randconfig-a014-20230508   gcc  
+x86_64               randconfig-a015-20230508   gcc  
+x86_64               randconfig-a016-20230508   gcc  
+x86_64               randconfig-r012-20230508   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r013-20230508   gcc  
 
-use "sizeof(u32)"
-
-> Also, add documentation to your structure to explain that hdr.len
-> represents the length in long, not in bytes.
-
-=2E..lengths in multiple of u32.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---cztyro3zp6gjit3p
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRZ8NkACgkQvlAcSiqK
-BOi/CAgArXZ33VpP5wJ4EAb+iWT5U6PxBpnmIS+/HV+/5DY0Jk8tc7eNJfTTVqGv
-95HKRAZJSfE/tI9B/SUWu4jDyn76IFR2/WvtB1KZmJtznQb3GN+xjsEEfzgckRZk
-JLJGfQpxt2DhZGY2xrGnWWjTZaPrha5IguFmSiFqfomMt1loYkksVlik7sdNRi/n
-WZgDZUw7hNRpbMR6ksnSZzN1JC+IXTifqv57drc5eA8LwZn8+jgyatfqZuSz0o7x
-THmEnaLWRhHgaSorH1vRE0YBmB2tcmetxZyVe1QyB4GEg+/DLBjrSwKo9bTDa7QD
-pcQ21qLLS32BnbzkLBCGrE3hoeFytQ==
-=IRkV
------END PGP SIGNATURE-----
-
---cztyro3zp6gjit3p--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
