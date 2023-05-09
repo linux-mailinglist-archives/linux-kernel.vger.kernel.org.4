@@ -2,139 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AC46FBD55
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 04:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA4C6FBD56
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 04:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233530AbjEICfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 22:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
+        id S233749AbjEICjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 22:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbjEICfO (ORCPT
+        with ESMTP id S233906AbjEICjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 22:35:14 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56FDE69
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 19:35:12 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-77d5083569fso1640652241.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 19:35:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683599712; x=1686191712;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yritB4z6Kqy8r2lo349eyuC/ueDu/IfImR1iz6M8Adk=;
-        b=Za9xxhlzJALA12W2xTNNfS4Ws39Ff0F9agUXnb9JqmK21argGiU7ikCEmspRw6uCMk
-         G3WnuKbcXJ7bFZQhwA4XO/xzU5NaARhaioTva2PrYd9qurMKJTNq67MHmpphBo8MUBK/
-         LPrp9SUp5c0svKgp0GpsyBba/ARFEZkjRsjX4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683599712; x=1686191712;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yritB4z6Kqy8r2lo349eyuC/ueDu/IfImR1iz6M8Adk=;
-        b=kWBBZjvKQTE4u2G0hJ9au+X6inmkvGjNLCI11VdlahNpnDaMis+Dq7ozsOMDz8UEWG
-         2l3DUQGopztS/JOz7fOLj8NwIJsKzGhqxuvVJujPFtZSjOthTwL8oOjsx8T8kmJZTn4u
-         jLiuWJtmCKSPWo1sK2BPVWrsyqgxTgySS9lOegteMbSQv3eu16rfYDwnAgOwt8STTdqY
-         imHTtQdFh0lCyHumzXDcmc9dSZZI2y7A8YmpuEzWQOEUGbQMXkfSmKdMwmTCsrWCMMVb
-         ZeypeZ1xC66Y+UrghkUib6BrpF+YGm/vH0FW2HY1gxfUf+5lpjBgy3VHqA6W1ajuyNxr
-         A06g==
-X-Gm-Message-State: AC+VfDzGeZ9mQumFQwDQdSsSXBkSZ2/BqJnmwYHE3CZ1wW3BzqbpgATW
-        CYi/ywgMt68dj3/7tiLX8HuCts/nX7l51TtFXR1FQtZg4nW1sREI
-X-Google-Smtp-Source: ACHHUZ43QicLmkfhH+oYvAXYrxdNOv42T+rZkBbCVZnxjLF94cGhsyXNXvAbH/yolD5ycizlZzmGm5mX2sje4ri8X/Y=
-X-Received: by 2002:a67:ce13:0:b0:42c:7df3:ca0a with SMTP id
- s19-20020a67ce13000000b0042c7df3ca0amr4149891vsl.17.1683599711858; Mon, 08
- May 2023 19:35:11 -0700 (PDT)
+        Mon, 8 May 2023 22:39:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6B39025
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 19:39:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C695562AD5
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:39:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99D46C433EF;
+        Tue,  9 May 2023 02:39:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1683599989;
+        bh=EUaU81xWJx9WG0nay9EqYTRkER2XdBgXE7vJ7tWle2E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ORfpTfCofdGii5ANlEoU0s2sNsqmALyuMGsXW5P7OLQ/nn3OJE5kgU8iAOqI+5aPL
+         jDUzPu44GhgD0l10EFmT+cOrlHtVmBZdIqoavieUMVa1Nv7Ve+e6wCjrufnxqpwZsg
+         0/+WxQDZErKr+bnDfCsqeUm8Fo7KrM8qNBOIVngQ=
+Date:   Tue, 9 May 2023 04:39:46 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     James Seo <james@equiv.tech>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] driver core: device.h: add some missing kerneldocs
+Message-ID: <2023050929-referable-exponent-d4a1@gregkh>
+References: <20230508154849.1946589-1-james@equiv.tech>
+ <ZFkftcxqQRblDgzX@equiv.tech>
+ <0a75a41e-6458-8f7a-67cd-89eb05eb822f@infradead.org>
+ <ZFmnGGzcTPdrvJrn@equiv.tech>
 MIME-Version: 1.0
-References: <9b2e791d-aeba-a2c7-1877-797ff5c680a3@kernel.dk>
- <20230508031852.GA4029098@google.com> <fb84f054-517c-77d4-eb11-d3df61f53701@kernel.dk>
-In-Reply-To: <fb84f054-517c-77d4-eb11-d3df61f53701@kernel.dk>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 9 May 2023 10:35:00 +0800
-Message-ID: <CAGXv+5GpeJ8hWt2Sc6L+4GB-ghA4vESobEaFGpo1_ZyPhOvW0g@mail.gmail.com>
-Subject: Re: [GIT PULL] Final io_uring updates for 6.4-rc1
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        io-uring <io-uring@vger.kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFmnGGzcTPdrvJrn@equiv.tech>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 9, 2023 at 2:42=E2=80=AFAM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 5/7/23 9:18?PM, Chen-Yu Tsai wrote:
-> > Hi,
-> >
-> > On Sun, May 07, 2023 at 06:00:48AM -0600, Jens Axboe wrote:
-> >> Hi Linus,
-> >>
-> >> Nothing major in here, just two different parts:
-> >>
-> >> - Small series from Breno that enables passing the full SQE down
-> >>   for ->uring_cmd(). This is a prerequisite for enabling full network
-> >>   socket operations. Queued up a bit late because of some stylistic
-> >>   concerns that got resolved, would be nice to have this in 6.4-rc1
-> >>   so the dependent work will be easier to handle for 6.5.
-> >>
-> >> - Fix for the huge page coalescing, which was a regression introduced
-> >>   in the 6.3 kernel release (Tobias).
-> >>
-> >> Note that this will throw a merge conflict in the ublk_drv code, due
-> >> to this branch still being based off the original for-6.4/io_uring
-> >> branch. Resolution is pretty straight forward, I'm including it below
-> >> for reference.
-> >>
-> >> Please pull!
-> >>
-> >>
-> >> The following changes since commit 3c85cc43c8e7855d202da184baf00c7b8ee=
-acf71:
-> >>
-> >>   Revert "io_uring/rsrc: disallow multi-source reg buffers" (2023-04-2=
-0 06:51:48 -0600)
-> >>
-> >> are available in the Git repository at:
-> >>
-> >>   git://git.kernel.dk/linux.git tags/for-6.4/io_uring-2023-05-07
-> >>
-> >> for you to fetch changes up to d2b7fa6174bc4260e496cbf84375c7363691464=
-1:
-> >>
-> >>   io_uring: Remove unnecessary BUILD_BUG_ON (2023-05-04 08:19:05 -0600=
-)
-> >>
-> >> ----------------------------------------------------------------
-> >> for-6.4/io_uring-2023-05-07
-> >>
-> >> ----------------------------------------------------------------
-> >> Breno Leitao (3):
-> >>       io_uring: Create a helper to return the SQE size
-> >>       io_uring: Pass whole sqe to commands
-> >
-> > This commit causes broken builds when IO_URING=3Dn and NVME_CORE=3Dy, a=
-s
-> > io_uring_sqe_cmd(), called in drivers/nvme/host/ioctl.c, ends up being
-> > undefined. This was also reported [1] by 0-day bot on your branch
-> > yesterday, but it's worse now that Linus merged the pull request.
-> >
-> > Not sure what the better fix would be. Move io_uring_sqe_cmd() outside
-> > of the "#if defined(CONFIG_IO_URING)" block?
->
-> Queued up a patch for this:
->
-> https://git.kernel.dk/cgit/linux/commit/?h=3Dio_uring-6.4&id=3D5d371b2f2b=
-0d1a047582563ee36af8ffb5022847
+On Mon, May 08, 2023 at 06:51:20PM -0700, James Seo wrote:
+> On Mon, May 08, 2023 at 11:55:47AM -0700, Randy Dunlap wrote:
+> > On 5/8/23 09:13, James Seo wrote:
+> >> On Mon, May 08, 2023 at 08:48:50AM -0700, James Seo wrote:
+> >>> Add the missing kerneldocs (except for DEVICE_ATTR_IGNORE_LOCKDEP(),
+> >>> which is only meaningful on debug builds with CONFIG_DEBUG_LOCK_ALLOC
+> >>> not #defined, and is aliased to DEVICE_ATTR() otherwise).
+> >>>
+> >>> Signed-off-by: James Seo <james@equiv.tech>
+> >>> ---
+> >> 
+> >> I just noticed that there shouldn't be a "not" before "#defined" in the
+> >> last line of the commit message. Apologies.
+> >> 
+> > 
+> > Other than that (above), LGTM.
+> > 
+> > Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> > Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> > 
+> > -- 
+> > ~Randy
+> 
+> Thanks for the review!
+> 
+> Just to be clear, that line should read "defined, and is aliased to..."
+> as commit messages can't have lines that begin with '#'.
 
-Thanks! Looks like the Reported-by line for the test bot is missing a right
-angle bracket?
+Please fix that up and send a new version please.
 
-Also, consider it
+thanks,
 
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+greg k-h
