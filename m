@@ -2,103 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 961A26FC1B7
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B8A6FC1C0
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjEII0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 04:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
+        id S233980AbjEII1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234872AbjEIIZ5 (ORCPT
+        with ESMTP id S230025AbjEII0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 04:25:57 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F64E74
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:25:55 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-55a829411b5so50617097b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 01:25:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683620754; x=1686212754;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9/EQwddc6PAPGkUKNCKLrOJreOJCtQZHVsYzRGthXKE=;
-        b=pfVlVMEmbHZghrvSkK47tLT4OqSuw+eFKNNvs26XPpeqoHlctw2ioS9vOAsO+27jpS
-         n9b51BJOlU99BYyB+WW+JDrHainWUJe7witEUWR3FtEe7Cy+rAcdg2JYC5vbUec13KXM
-         Hs7oVIxczypI7BWyCSCWKu2r0AWuA+8aQLyv4LUJbdomkR5tbgZ/I8M5jEmBHyumUR1w
-         ze/KPvW941Nj7tgghleqmXqEH1RuthBipkt5ShJTIhbs4uPf7RjaZ+oQQ6aRuxI+I/+O
-         vJNcS+lX5VCe7qfFbsML9bqWaTRup379qK7LJ7mXzulmMx4hfoKpx2POvQksLSWZgkql
-         5x3A==
+        Tue, 9 May 2023 04:26:52 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1662121
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:26:50 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-33177659771so36918265ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 01:26:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683620754; x=1686212754;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9/EQwddc6PAPGkUKNCKLrOJreOJCtQZHVsYzRGthXKE=;
-        b=AhYDxMxrauLryKkOn5z9iuNcOLJ7as7it4GVT3BjHsaw0LjFvoYGCKsHMSRTy/Ew+N
-         DIDf91PcRT0MbmfNHH8A+fHJkSB00R2nE8rXQsUNnlTRRE994NhC/zp2giQ6G6DKdX26
-         Bne1zDIFWM81DfCLwFmqA9BLvh8A6TofrlxZdv8WlT7xOGc0aiT4Yq5C0wHxCJkkWGRs
-         Fpq993Ubhxcqam7UECDvWbWiIONaVhd+QEeThlXEtHfQB0HH1SU2ABJ+widBmB4Cnkzz
-         mhXW0SU/2mjyGn4wMZ8d0F+26o6vctMfpi65j1Hz+kfVTObhxadQuc+OertNMkmUTZK4
-         +/ow==
-X-Gm-Message-State: AC+VfDzYzKLIduWANTOvREV76zq6nqYxWEHfcvg8EerABVDDyz7kCjQG
-        FUYbTSQab40meU86vF1ba0qIISjFZAnCs/JxkJqlfQ==
-X-Google-Smtp-Source: ACHHUZ4vTBpRnFQytZnTZstDKDR0LNcvD2BqlA9e99vRY3QCy6dBn0Wjl7CPUMhIGmlMKt1Sn59yE0Y9VTJfE+79Qx8=
-X-Received: by 2002:a25:d6cc:0:b0:b9e:2aa5:b21b with SMTP id
- n195-20020a25d6cc000000b00b9e2aa5b21bmr15268738ybg.15.1683620754395; Tue, 09
- May 2023 01:25:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683620809; x=1686212809;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6gRQ+bBEPt3ONaSQSYDvf6z2/bd3vD1FUSmzfa/Tgro=;
+        b=dwd6JkDMzAM0sevJnyxreih83zjkd9XB2Rp+2i6lPOVWf5F4GjKth/D63TOFeD1w8m
+         6hwRdydeF3C9C4YyUS17gTUabUMHmx4Wc5xopyD3sRTNUcX2utFd0Zeue0q27tcUR5ei
+         pjUJqSAGyiVO23ieUk1ttgxwwxN80WEj974SefAaJpLkN8N2BzJT8Bb9/9KcChMWD2M+
+         hMRlSEMedW5AEi6IbwHrlaGN9CBZWyACymlL8iTNVCEXwQd/6hJR/ngPXPnc5rM4IMBo
+         6eqiPKCZ36T35mTnAZ43IrXViMKVDKc5A51AOafcPtvRGCY5AJ5I5lZlLdLc1NMBvAXr
+         Fqiw==
+X-Gm-Message-State: AC+VfDzxi6JeMUDidy5y9JvaNiMZ1SdlaPNGtITP6l/UyeCDThI1G06z
+        U693577uvHovdupDIH/nkayoksMDVRsQkuITa4f74q3O9Ity
+X-Google-Smtp-Source: ACHHUZ5ThNyKBQb9/5WAb2YAnSQdYFpyFUPbJVqIr1PvKd9nqenB2hISCe+WSKmQ7G8OSSmL5tZH5x6Eg/IEVOKswX5YdbXiyuhk
 MIME-Version: 1.0
-References: <20230427123314.1997152-1-joychakr@google.com> <20230427123314.1997152-5-joychakr@google.com>
- <ZFj2QraXvNqBRwqM@finisterre.sirena.org.uk>
-In-Reply-To: <ZFj2QraXvNqBRwqM@finisterre.sirena.org.uk>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Tue, 9 May 2023 13:55:41 +0530
-Message-ID: <CAOSNQF1PAh-Z=smRrqscpdPdEjyE-3Qd9iXVWNBZ2NkPv4M9Wg@mail.gmail.com>
-Subject: Re: [PATCH v9 4/5] spi: dw: Add DMA address widths capability check
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        manugautam@google.com, rohitner@google.com
+X-Received: by 2002:a92:dc11:0:b0:335:479a:8eba with SMTP id
+ t17-20020a92dc11000000b00335479a8ebamr3431503iln.4.1683620809637; Tue, 09 May
+ 2023 01:26:49 -0700 (PDT)
+Date:   Tue, 09 May 2023 01:26:49 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004b8a1505fb3e84ac@google.com>
+Subject: [syzbot] [hfs?] kernel BUG in __filemap_get_folio (2)
+From:   syzbot <syzbot+8fab910f890e17016919@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023 at 6:46=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
-e:
->
-> On Thu, Apr 27, 2023 at 12:33:13PM +0000, Joy Chakraborty wrote:
-> > Store address width capabilities of DMA controller during init and chec=
-k
-> > the same per transfer to make sure the bits/word requirement can be met=
-.
-> >
-> > Current DW DMA driver requires both tx and rx channel to be configured
-> > and functional hence a subset of both tx and rx channel address width
-> > capability is checked with the width requirement(n_bytes) for a
-> > transfer.
->
-> This breaks an x86 allmodconfig build:
->
-> /build/stage/linux/drivers/spi/spi-dw-dma.c: In function =E2=80=98dw_spi_=
-dma_caps_init=E2=80=99:
-> /build/stage/linux/drivers/spi/spi-dw-dma.c:100:1: error: control reaches=
- end of non-void function [-Werror=3Dreturn-type]
->   100 | }
->       | ^
-> cc1: some warnings being treated as errors
+Hello,
 
-Moving "return 0" at the end of dw_spi_dma_caps_init() from patch
-[4/5] to patch [3/5] to solve this and sending a V10 Patch.
+syzbot found the following issue on:
 
-Thanks
-Joy
+HEAD commit:    3c4aa4434377 Merge tag 'ceph-for-6.4-rc1' of https://githu..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=170c6870280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=87f9126139666d37
+dashboard link: https://syzkaller.appspot.com/bug?extid=8fab910f890e17016919
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-3c4aa443.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1c522f5ebcfe/vmlinux-3c4aa443.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b923244383b5/bzImage-3c4aa443.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8fab910f890e17016919@syzkaller.appspotmail.com
+
+ kswapd+0x677/0xd60 mm/vmscan.c:7727
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+------------[ cut here ]------------
+kernel BUG at include/linux/mm.h:996!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 2 PID: 5174 Comm: syz-executor.3 Not tainted 6.3.0-syzkaller-13091-g3c4aa4434377 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:put_page_testzero include/linux/mm.h:996 [inline]
+RIP: 0010:folio_put_testzero include/linux/mm.h:1002 [inline]
+RIP: 0010:folio_put include/linux/mm.h:1429 [inline]
+RIP: 0010:__filemap_get_folio+0x8e2/0x990 mm/filemap.c:1937
+Code: e8 b3 20 d3 ff 48 c7 c6 00 b2 56 8a 4c 89 e7 e8 d4 a6 0e 00 0f 0b e8 9d 20 d3 ff 48 c7 c6 00 b2 56 8a 4c 89 e7 e8 be a6 0e 00 <0f> 0b e8 87 20 d3 ff 4c 89 e7 49 c7 c4 f5 ff ff ff e8 f8 44 03 00
+RSP: 0018:ffffc900038579a0 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: ffff888016a38000 RSI: ffffffff81b13d42 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000001 R09: ffffffff8e7a71d7
+R10: fffffbfff1cf4e3a R11: 0000000000000000 R12: ffffea00007e5b80
+R13: ffff8880734a4480 R14: 0000000000000000 R15: ffffea00007e5bb4
+FS:  0000000000000000(0000) GS:ffff88802c800000(0063) knlGS:00000000581dd380
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 00000000f734e1b0 CR3: 0000000071e9b000 CR4: 0000000000350ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ truncate_inode_pages_range+0x350/0xf10 mm/truncate.c:377
+ hfs_evict_inode+0x1a/0x100 fs/hfs/inode.c:563
+ evict+0x2ed/0x6b0 fs/inode.c:665
+ iput_final fs/inode.c:1747 [inline]
+ iput.part.0+0x50a/0x740 fs/inode.c:1773
+ iput+0x5c/0x80 fs/inode.c:1763
+ hfs_btree_close+0x282/0x390 fs/hfs/btree.c:158
+ hfs_mdb_put+0xbf/0x380 fs/hfs/mdb.c:360
+ generic_shutdown_super+0x158/0x480 fs/super.c:500
+ kill_block_super+0xa1/0x100 fs/super.c:1407
+ deactivate_locked_super+0x98/0x160 fs/super.c:331
+ deactivate_super+0xb1/0xd0 fs/super.c:362
+ cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1177
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+ __do_fast_syscall_32+0x72/0xf0 arch/x86/entry/common.c:181
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+RIP: 0023:0xf7fa7579
+Code: b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 00 00 00 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
+RSP: 002b:00000000ffa4afdc EFLAGS: 00000292 ORIG_RAX: 0000000000000034
+RAX: 0000000000000000 RBX: 00000000ffa4b080 RCX: 000000000000000a
+RDX: 00000000f734e000 RSI: 0000000000000000 RDI: 00000000f72a2535
+RBP: 00000000ffa4b080 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000292 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:put_page_testzero include/linux/mm.h:996 [inline]
+RIP: 0010:folio_put_testzero include/linux/mm.h:1002 [inline]
+RIP: 0010:folio_put include/linux/mm.h:1429 [inline]
+RIP: 0010:__filemap_get_folio+0x8e2/0x990 mm/filemap.c:1937
+Code: e8 b3 20 d3 ff 48 c7 c6 00 b2 56 8a 4c 89 e7 e8 d4 a6 0e 00 0f 0b e8 9d 20 d3 ff 48 c7 c6 00 b2 56 8a 4c 89 e7 e8 be a6 0e 00 <0f> 0b e8 87 20 d3 ff 4c 89 e7 49 c7 c4 f5 ff ff ff e8 f8 44 03 00
+RSP: 0018:ffffc900038579a0 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: ffff888016a38000 RSI: ffffffff81b13d42 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000001 R09: ffffffff8e7a71d7
+R10: fffffbfff1cf4e3a R11: 0000000000000000 R12: ffffea00007e5b80
+R13: ffff8880734a4480 R14: 0000000000000000 R15: ffffea00007e5bb4
+FS:  0000000000000000(0000) GS:ffff88802c900000(0063) knlGS:00000000581dd380
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 00000000f737c0c4 CR3: 0000000071e9b000 CR4: 0000000000350ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess), 2 bytes skipped:
+   0:	10 06                	adc    %al,(%rsi)
+   2:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
+   6:	10 07                	adc    %al,(%rdi)
+   8:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
+   c:	10 08                	adc    %cl,(%rax)
+   e:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
+  1e:	00 51 52             	add    %dl,0x52(%rcx)
+  21:	55                   	push   %rbp
+  22:	89 e5                	mov    %esp,%ebp
+  24:	0f 34                	sysenter
+  26:	cd 80                	int    $0x80
+* 28:	5d                   	pop    %rbp <-- trapping instruction
+  29:	5a                   	pop    %rdx
+  2a:	59                   	pop    %rcx
+  2b:	c3                   	retq
+  2c:	90                   	nop
+  2d:	90                   	nop
+  2e:	90                   	nop
+  2f:	90                   	nop
+  30:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+  37:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
