@@ -2,70 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 214B06FBBF0
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 02:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C076FBBFC
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 02:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbjEIAUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 20:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
+        id S232792AbjEIA2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 20:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234148AbjEIAUA (ORCPT
+        with ESMTP id S229479AbjEIA2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 20:20:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDEF49D0
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 17:19:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 349CE6309D
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 00:19:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9061EC4339B
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 00:19:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683591598;
-        bh=MjkItiypktEo25V6DO99EB7GxcQEs1EfAiVhHUuOnbQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RSSudBY16vz4RroQGxUhku5OYcaCkTjMO58/KDOi1njcr8zgMeihbJkxIfe65FdwA
-         WTKRFk6yLOIpAzrnwSc0mgGoLoqHAmwLcw5j+/ZcE4ExvVWFtdQZHfyiT5v2LqPQAL
-         CJjAqVGQZKTLiM7Geg+UAZwtw9PLqV72x8dfHDiQPcnMah4gDRlxD0mfA6PQtR1ygY
-         tSHHJaV+yO9jZA69YjZYgxwTxbKWNwxGoRQkoKHqh2LcT4jRNC4u7QTtaySrD+bmEI
-         Jwb9ej+fJqbGeMH8Q1vK9wkTdfbBAJF3cszo7dZOpRxsmLDp07qqoh+s+uHedZ8+xd
-         8LPuzMoSTBDxA==
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-50be0d835aaso9489177a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 17:19:58 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwaoXWySdGujuGpy870vTi5lK1nuhtv0E2QDKX33sAjfruXmE7g
-        kDLeq6umgxsuiwz6SE3QgUXlkcD0O7TcrHiwnE8U
-X-Google-Smtp-Source: ACHHUZ6XguvB359TJD5EVeTjXaiA2ucEsERS2+WbXhgo3pznKhng9msxWTb8gnB50Rzaq/efZNnWYP+FsScnG1YYBIM=
-X-Received: by 2002:a17:907:9808:b0:94f:4801:6d08 with SMTP id
- ji8-20020a170907980800b0094f48016d08mr10822326ejc.71.1683591597081; Mon, 08
- May 2023 17:19:57 -0700 (PDT)
+        Mon, 8 May 2023 20:28:51 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2AD4EEE;
+        Mon,  8 May 2023 17:28:49 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 348NswtK023495;
+        Tue, 9 May 2023 00:28:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=haDEAzScw5Q4ifeArnQZ0cit0TqKFjC9SaEKAqwZB8I=;
+ b=aV67UFldXXJJicIj6NILY0Zz44URayedZO6XsfBtLtbnRnpKFjsVd67o37hHT75PgbSS
+ bnhTRP7qvUOcMWhp3y9cuOQCdgNPvuOxYvlWjmCI3+doKPF0UVNqw3r/fCHYHs35VDjl
+ mzk1qH43YQqsRWcYtGIZO7xSHjr6ttpR/j7XR6L+BBoOcaixMYT/YA83Efh/7zAezYSh
+ aa2zbjQ9p3HhGxcDYtpIMwY6CntmghuDorLovBZOkGBnhk8vRKJmb5Ji/N0USL9N6+uS
+ hPfFAW4z6lomW0s8jxp1DpV1XvcUYUuw7g4SHL2KvxEJs9Z3smAyZAxfZADnCOkimB6F 3Q== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf781gds0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 May 2023 00:28:42 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3490SfCL011433
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 9 May 2023 00:28:41 GMT
+Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 8 May 2023
+ 17:28:40 -0700
+Message-ID: <9aad0f0a-f168-5162-68a0-9e9cde21c1f6@quicinc.com>
+Date:   Mon, 8 May 2023 17:28:30 -0700
 MIME-Version: 1.0
-References: <20230503183821.1473305-1-john.g.garry@oracle.com> <20230503183821.1473305-2-john.g.garry@oracle.com>
-In-Reply-To: <20230503183821.1473305-2-john.g.garry@oracle.com>
-From:   Mike Snitzer <snitzer@kernel.org>
-Date:   Mon, 8 May 2023 20:19:46 -0400
-X-Gmail-Original-Message-ID: <CAH6w=ay1NNxh=9mQv5PCcDi3OY0mgvRXO_0VrmKBLAd1dcUQqQ@mail.gmail.com>
-Message-ID: <CAH6w=ay1NNxh=9mQv5PCcDi3OY0mgvRXO_0VrmKBLAd1dcUQqQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 01/16] block: Add atomic write operations to
- request_queue limits
-To:     John Garry <john.g.garry@oracle.com>
-Cc:     axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
-        martin.petersen@oracle.com, djwong@kernel.org,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
-        jejb@linux.ibm.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        dm-devel@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 3/4] drm/msm/dpu: Add DPU_INTF_DATA_COMPRESS feature
+ flag
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+CC:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20230405-add-dsc-support-v2-0-1072c70e9786@quicinc.com>
+ <20230405-add-dsc-support-v2-3-1072c70e9786@quicinc.com>
+ <i6i2xj2tuy5mcxsj674d77kfdb3ne6immkmrzw5f6u4bfx2sth@ef7fzrhdyypx>
+ <1d7ccb5f-55c2-3b3a-df97-2c17beffabfc@quicinc.com>
+ <0aa4130d-bb37-4743-10e5-fd518276f4a2@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <0aa4130d-bb37-4743-10e5-fd518276f4a2@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IY3IKbLjwgT9ZKefPMrIKlptq8-QtoDd
+X-Proofpoint-ORIG-GUID: IY3IKbLjwgT9ZKefPMrIKlptq8-QtoDd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-08_17,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ suspectscore=0 clxscore=1015 mlxlogscore=999 malwarescore=0 mlxscore=0
+ impostorscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305090002
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,45 +90,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 2:40=E2=80=AFPM John Garry <john.g.garry@oracle.com>=
- wrote:
->
-> From: Himanshu Madhani <himanshu.madhani@oracle.com>
->
-> Add the following limits:
-> - atomic_write_boundary
-> - atomic_write_max_bytes
-> - atomic_write_unit_max
-> - atomic_write_unit_min
->
-> Signed-off-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-> Signed-off-by: John Garry <john.g.garry@oracle.com>
-> ---
->  Documentation/ABI/stable/sysfs-block | 42 +++++++++++++++++++++
->  block/blk-settings.c                 | 56 ++++++++++++++++++++++++++++
->  block/blk-sysfs.c                    | 33 ++++++++++++++++
->  include/linux/blkdev.h               | 23 ++++++++++++
->  4 files changed, 154 insertions(+)
->
 
-...
 
-> diff --git a/block/blk-settings.c b/block/blk-settings.c
-> index 896b4654ab00..e21731715a12 100644
-> --- a/block/blk-settings.c
-> +++ b/block/blk-settings.c
-> @@ -59,6 +59,9 @@ void blk_set_default_limits(struct queue_limits *lim)
->         lim->zoned =3D BLK_ZONED_NONE;
->         lim->zone_write_granularity =3D 0;
->         lim->dma_alignment =3D 511;
-> +       lim->atomic_write_unit_min =3D lim->atomic_write_unit_max =3D 1;
-> +       lim->atomic_write_max_bytes =3D 512;
-> +       lim->atomic_write_boundary =3D 0;
->  }
+On 5/8/2023 4:08 PM, Dmitry Baryshkov wrote:
+> On 09/05/2023 00:46, Jessica Zhang wrote:
+>>
+>>
+>> On 5/7/2023 9:00 AM, Marijn Suijten wrote:
+>>> On 2023-05-05 14:23:50, Jessica Zhang wrote:
+>>>> Add DATA_COMPRESS feature flag to DPU INTF block.
+>>>>
+>>>> In DPU 7.x and later, DSC/DCE enablement registers have been moved from
+>>>> PINGPONG to INTF.
+>>>>
+>>>> As core_rev (and related macros) was removed from the dpu_kms 
+>>>> struct, the
+>>>> most straightforward way to indicate the presence of this register 
+>>>> would be
+>>>> to have a feature flag.
+>>>
+>>> Irrelevant.  Even though core_rev was still in mainline until recently,
+>>> we always hardcoded the features in the catalog and only used core_rev
+>>> to select a dpu_mdss_cfg catalog entry.  There is no "if version >= X
+>>> then enable feature Y" logic, this manually-enabled feature flag is the
+>>> only, correct way to do it.
+>>
+>> Hi Marijn,
+>>
+>> Understood. FWIW, if we do find more register bit-level differences 
+>> between HW versions in the future, it might make more sense to keep 
+>> the HW catalog small and bring core_rev back, rather than keep adding 
+>> these kinds of small differences to caps.
+> 
+> Let's see how it goes. Abhinav suggested that there might be feature 
+> differences inside the DPU generations (and even inside the single DPU 
+> major/minor combo). So I'm not sure what core_rev will bring us.
+> 
 
-Not seeing required changes to blk_set_stacking_limits() nor blk_stack_limi=
-ts().
+It allows us to have if MDSS_REV() checks which are convenient for some 
+calculations / bit programming which we dont want to expose in the 
+catalog as they cannot be classified as a hw cap as such or atleast we 
+dont want them to be classified as such.
 
-Sorry to remind you of DM and MD limits stacking requirements. ;)
+> Let's land the platforms which are ready (or if there is anything close 
+> to be submitted). I'll post the next proposal for the catalog cleanups 
+> close to -rc4, when the dust settles then we can have one or two weaks 
+> for the discussion and polishing.
+> 
+> I'd like to consider:
+> - inlining foo_BLK macros, if that makes adding new features easier
+> - reformat of clk_ctrls
+> - maybe reintroduction of per-generation feature masks instead of 
+> keeping them named after the random SoC
+> - maybe a rework of mdss_irqs / INTFn_INTR. We already have this info in 
+> hw catalog.
+> 
+> Comments are appreciated.
+> 
 
-Mike
+I would say, lets wait for DSC to settle. Atleast the parts already on 
+the list. Continuous rebase of features already on the list is becoming 
+time consuming because of overlapping catalog reworks.
+
+> 
+>>
+>> Thanks,
+>>
+>> Jessica Zhang
+>>
+>>>
+>>>> Changes in v2:
+>>>> - Changed has_data_compress dpu_cap to a DATA_COMPRESS INTF feature 
+>>>> flag
+>>>>
+>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>>>
+>>> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>>
+>>>> ---
+>>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 2 +-
+>>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
+>>>>   2 files changed, 3 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
+>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>> index 7944481d0a33..c74051906d05 100644
+>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>> @@ -104,7 +104,7 @@
+>>>>   #define INTF_SC7180_MASK \
+>>>>       (BIT(DPU_INTF_INPUT_CTRL) | BIT(DPU_INTF_TE) | 
+>>>> BIT(DPU_INTF_STATUS_SUPPORTED))
+>>>> -#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
+>>>> +#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN) | 
+>>>> BIT(DPU_INTF_DATA_COMPRESS)
+>>>
+>>> Konrad: Your SM6350/SM6375 series v3 [1] switched from INTF_SC7180_MASK
+>>> to INTF_SC7280_MASK to enable HCTL on SM6375, but that will now
+>>> erroneously also receive this feature flag and write the new
+>>> DATA_COMPESS mask even if it's DPU 6.9 (< 7.x where it got added).
+>>>
+>>> [1]: 
+>>> https://lore.kernel.org/linux-arm-msm/80b46fcb-d6d0-1998-c273-5401fa924c7d@linaro.org/T/#u 
+>>>
+>>>
+>>> Depending on who lands first, this flag should be split.
+>>>
+>>> I still see value in inlining and removing these defines, though that
+>>> brings a host of other complexity.
+>>>
+>>> - Marijn
+>>>
+>>>>   #define WB_SM8250_MASK (BIT(DPU_WB_LINE_MODE) | \
+>>>>                BIT(DPU_WB_UBWC) | \
+>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h 
+>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>>> index 4eda2cc847ef..01c65f940f2a 100644
+>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>>> @@ -185,6 +185,7 @@ enum {
+>>>>    * @DPU_DATA_HCTL_EN                Allows data to be transferred 
+>>>> at different rate
+>>>>    *                                  than video timing
+>>>>    * @DPU_INTF_STATUS_SUPPORTED       INTF block has INTF_STATUS 
+>>>> register
+>>>> + * @DPU_INTF_DATA_COMPRESS          INTF block has DATA_COMPRESS 
+>>>> register
+>>>>    * @DPU_INTF_MAX
+>>>>    */
+>>>>   enum {
+>>>> @@ -192,6 +193,7 @@ enum {
+>>>>       DPU_INTF_TE,
+>>>>       DPU_DATA_HCTL_EN,
+>>>>       DPU_INTF_STATUS_SUPPORTED,
+>>>> +    DPU_INTF_DATA_COMPRESS,
+>>>>       DPU_INTF_MAX
+>>>>   };
+>>>>
+>>>> -- 
+>>>> 2.40.1
+>>>>
+> 
