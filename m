@@ -2,120 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89AE16FCB92
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635D96FCB94
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233784AbjEIQpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 12:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
+        id S233960AbjEIQqI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 9 May 2023 12:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjEIQpW (ORCPT
+        with ESMTP id S229489AbjEIQqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 12:45:22 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814A81BD3;
-        Tue,  9 May 2023 09:45:21 -0700 (PDT)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id D871ACED0E;
-        Tue,  9 May 2023 16:44:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1683650690; bh=6jShHaL5Bxrkqcx7amecTm8ijF8yqLIpR690Y68mxYA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=oY6birehiAO16hvkqDpR9EjJcuBAJMudXoAQD6T0CrXuusB10+hfH9dYFb0pOhtVY
-         zql0oo+JWog3pmO8EJuYL+tCbQuggxUhgUM88KsEue4K3/UEGXjRuX2EgCHuE/EyjT
-         kHchJcZ2u2vutda8g3egxFLyMNuVsTrl8sA6qnHw=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Brian Masney <masneyb@onstation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 4/6] dt-bindings: sram: qcom,ocmem: Add msm8226 support
-Date:   Tue, 09 May 2023 18:44:49 +0200
-Message-ID: <2449951.tdWV9SEqCh@z3ntu.xyz>
-In-Reply-To: <29d1d210-8752-56b4-34be-8b078c639d36@linaro.org>
-References: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
- <20230506-msm8226-ocmem-v1-4-3e24e2724f01@z3ntu.xyz>
- <29d1d210-8752-56b4-34be-8b078c639d36@linaro.org>
+        Tue, 9 May 2023 12:46:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B0740C2;
+        Tue,  9 May 2023 09:46:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A910862CFC;
+        Tue,  9 May 2023 16:46:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B120C433D2;
+        Tue,  9 May 2023 16:46:01 +0000 (UTC)
+Date:   Tue, 9 May 2023 12:45:59 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ajay Kaher <akaher@vmware.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "chinglinyu@google.com" <chinglinyu@google.com>,
+        Nadav Amit <namit@vmware.com>,
+        Srivatsa Bhat <srivatsab@vmware.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        Tapas Kundu <tkundu@vmware.com>,
+        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
+Subject: Re: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
+Message-ID: <20230509124559.0d5557ad@rorschach.local.home>
+In-Reply-To: <1CAC8265-A4F3-4AF6-80E4-8F264ED670A9@vmware.com>
+References: <1683026600-13485-9-git-send-email-akaher@vmware.com>
+        <202305030116.Gu6yyvKj-lkp@intel.com>
+        <1CAC8265-A4F3-4AF6-80E4-8F264ED670A9@vmware.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Montag, 8. Mai 2023 09:39:22 CEST Konrad Dybcio wrote:
-> On 7.05.2023 11:12, Luca Weiss wrote:
-> > Add the compatible for the OCMEM found on msm8226 which compared to
-> > msm8974 only has a core clock and no iface clock.
-> > 
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > ---
-> > 
-> >  Documentation/devicetree/bindings/sram/qcom,ocmem.yaml | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
-> > b/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml index
-> > 4bbf6db0b6bd..515f0d8ec641 100644
-> > --- a/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
-> > +++ b/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
-> > @@ -15,7 +15,9 @@ description: |
-> > 
-> >  properties:
-> >    compatible:
-> > -    const: qcom,msm8974-ocmem
-> > +    enum:
-> > +      - qcom,msm8226-ocmem
-> > +      - qcom,msm8974-ocmem
+On Tue, 9 May 2023 12:29:23 +0000
+Ajay Kaher <akaher@vmware.com> wrote:
+
+> ﻿> On 02/05/23, 11:42 PM, "kernel test robot" <lkp@intel.com> wrote:  
+> >   >> kernel/trace/trace_events.c:2424:17: warning: variable 'd_events' set but not used [-Wunused-but-set-variable]  
+> >           struct dentry *d_events;
+> >                       ^
+> >    1 warning generated.
+> >  
 > 
-> Any chance you could read the revision field on both and add comments
-> like:
+> Steve, with-in event_create_dir(), do we have any scenario when file->event_call->class->system
+> doesn't have TRACE_SYSTEM? And need to execute following:
 > 
-> - qcom,msm8974-ocmem # vX.Y
-
-Do you mean the OCMEM_REG_HW_VERSION register? It's currently not read in the 
-driver so no idea what the value is - without adding some code.
-
+> ae63b31e4d0e2e Steven Rostedt           2012-05-03  2437                d_events = parent;
 > 
-> >    reg:
-> >      items:
-> > @@ -28,11 +30,13 @@ properties:
-> >        - const: mem
-> >    
-> >    clocks:
-> > +    minItems: 1
-> > 
-> >      items:
-> >        - description: Core clock
-> >        - description: Interface clock
+> looking for your input if we could remove d_events from event_create_dir().
 > 
-> allOf: if: properties: compatible: 8974 / then: clock(s|-names): minItems: 2
 
-Sure, can update
+I have hit this in the beginning, but I don't think it's an issue
+anymore. Perhaps just have it be:
 
-> 
-> Konrad
-> 
-> >    clock-names:
-> > +    minItems: 1
-> > 
-> >      items:
-> >        - const: core
-> >        - const: iface
+        if (WARN_ON_ONCE(strcmp(call->class->system, TRACE_SYSTEM) == 0))
+		return -ENODEV;
 
+        ef_subsystem = event_subsystem_dir(tr, call->class->system, file, parent);
 
+Hmm, how about just add this patch before your patch set:
 
+-- Steve
+
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH] tracing: Require all trace events to have a TRACE_SYSTEM
+
+The creation of the trace event directory requires that a TRACE_SYSTEM is
+defined that the trace event directory is added within the system it was
+defined in.
+
+The code handled the case where a TRACE_SYSTEM was not added, and would
+then add the event at the events directory. But nothing should be doing
+this. This code also prevents the implementation of creating dynamic
+dentrys for the eventfs system.
+
+As this path has never been hit on correct code, remove it. If it does get
+hit, issues a WARN_ON_ONCE() and return ENODEV.
+
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+
+  (lightly tested)
+
+ kernel/trace/trace_events.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
+index 654ffa40457a..16bc5ba45507 100644
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -2424,14 +2424,15 @@ event_create_dir(struct dentry *parent, struct trace_event_file *file)
+ 
+ 	/*
+ 	 * If the trace point header did not define TRACE_SYSTEM
+-	 * then the system would be called "TRACE_SYSTEM".
++	 * then the system would be called "TRACE_SYSTEM". This should
++	 * never happen.
+ 	 */
+-	if (strcmp(call->class->system, TRACE_SYSTEM) != 0) {
+-		d_events = event_subsystem_dir(tr, call->class->system, file, parent);
+-		if (!d_events)
+-			return -ENOMEM;
+-	} else
+-		d_events = parent;
++	if (WARN_ON_ONCE(strcmp(call->class->system, TRACE_SYSTEM) == 0))
++		return -ENODEV;
++
++	d_events = event_subsystem_dir(tr, call->class->system, file, parent);
++	if (!d_events)
++		return -ENOMEM;
+ 
+ 	name = trace_event_name(call);
+ 	file->dir = tracefs_create_dir(name, d_events);
+-- 
+2.39.2
 
