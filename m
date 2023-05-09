@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314CD6FC5D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19C26FC5DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235497AbjEIMHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 08:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
+        id S235514AbjEIMIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 08:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235359AbjEIMHX (ORCPT
+        with ESMTP id S234562AbjEIMIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 08:07:23 -0400
+        Tue, 9 May 2023 08:08:34 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C5730D5;
-        Tue,  9 May 2023 05:07:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03097272D;
+        Tue,  9 May 2023 05:08:33 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683634040;
+        s=2020; t=1683634111;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=L8MCFM0FDR2P5xT6w7iIAowrB6rGKJkA6dzl9HivHWk=;
-        b=WQKf9JTpFPSQGT0uFg5INijnVR8R5fqcikzHfuS5DVBLQGQ7GwJQT+EVszHAmjT/3/UBuz
-        qVYnARbWYomJ6gliEb43t5la/h6VifzuO+zL/GRl0NjzHXmgK5N/FGwqL06FgLMkljqBFm
-        XyfTJfmksGnqa6BjZhyerBbGE6iuFhkjn27fQrUXAQ1QApceQPW64uUNRla+fMpap+pUkk
-        SWZ9l1mk0piAcuHN5EvFC700NqxfjfjIo2TZ35Uf44N6qz9M7DRMymepQA2ZWVsdTMQEJG
-        ZopQRoGBKBzZCgD4GsYTMKx5vSxJBSs3/zJnl8HdNjGWI5X3/Fou00r0/4324g==
+        bh=auvnPlCdrxbwfVCryOkTHE8CzjY0504gnLY8d2dRonQ=;
+        b=wafQfE3T818swYq6uLvh8KHiTe44B+AlTcCuev0YTvhSecK7fkanUUlrOFuq1HA2ASd8t+
+        BU6tHwwDMQA0mZaxMylheStrGpAitYQ7e4+1xdIBRK50qlGuPKGUbpzNoPFc/U7pFg4vp7
+        3txn/u3LsCuYBQ0eNUlaTm7ZlGVH1WlsNSZfP3xwKGSzwPqUJorHyzC7YM1MHYvCO7Lmx3
+        BiJQOvEs+Zr/r7cQvp3o3X/HSCezUruhmuDtMYKpw4lmxWL4y4XK9Xj0Ms0sscYlMfQk/M
+        8L9/ObIQjuOr/DXSdupvrplmykX+MkwMcI4Kqk1nxIkYGFdBkt+5ECVVyItbUg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683634040;
+        s=2020e; t=1683634111;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=L8MCFM0FDR2P5xT6w7iIAowrB6rGKJkA6dzl9HivHWk=;
-        b=HEbhRwUpE3y701WVF4If5EM5F8H8s6m0+F3iRYhv9+fKfUn3XmN66AS4uimVHFaZrmTvUY
-        YoYD1EwiDwf+ofDQ==
+        bh=auvnPlCdrxbwfVCryOkTHE8CzjY0504gnLY8d2dRonQ=;
+        b=iQxVDqhAuaPEJSQzwxbX/REaKwQ08dwCm2L5m3NrRVeFnmsUvKPu/IfGcUkN/jYTMsh6S3
+        yqlu1nzMP1/UIxCA==
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         David Woodhouse <dwmw2@infradead.org>,
@@ -72,12 +72,12 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         David Woodhouse <dwmw@amazon.co.uk>
 Subject: Re: [patch v3 08/36] x86/smpboot: Split up native_cpu_up() into
  separate phases and document them
-In-Reply-To: <20230509100421.GU83892@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230509101902.GV83892@hirez.programming.kicks-ass.net>
 References: <20230508181633.089804905@linutronix.de>
  <20230508185217.671595388@linutronix.de>
- <20230509100421.GU83892@hirez.programming.kicks-ass.net>
-Date:   Tue, 09 May 2023 14:07:20 +0200
-Message-ID: <87pm791zev.ffs@tglx>
+ <20230509101902.GV83892@hirez.programming.kicks-ass.net>
+Date:   Tue, 09 May 2023 14:08:31 +0200
+Message-ID: <87mt2d1zcw.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,31 +90,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09 2023 at 12:04, Peter Zijlstra wrote:
+On Tue, May 09 2023 at 12:19, Peter Zijlstra wrote:
 > On Mon, May 08, 2023 at 09:43:39PM +0200, Thomas Gleixner wrote:
->> +	/*
->> +	 * Sync point with wait_cpu_callin(). The AP doesn't wait here
->> +	 * but just sets the bit to let the controlling CPU (BSP) know that
->> +	 * it's got this far.
->> +	 */
->>  	smp_callin();
->>  
->> -	/* otherwise gcc will move up smp_processor_id before the cpu_init */
->> +	/* Otherwise gcc will move up smp_processor_id() before cpu_init() */
->>  	barrier();
+>> @@ -1048,60 +1066,89 @@ static int do_boot_cpu(int apicid, int c
 >
-> Not to the detriment of this patch, but this barrier() and it's comment
-> seem weird vs smp_callin(). That function ends with an atomic bitop (it
-> has to, at the very least it must not be weaker than store-release) but
-> also has an explicit wmb() to order setup vs CPU_STARTING.
+> 	/*
+> 	 * AP might wait on cpu_callout_mask in cpu_init() with
+> 	 * cpu_initialized_mask set if previous attempt to online
+> 	 * it timed-out. Clear cpu_initialized_mask so that after
+> 	 * INIT/SIPI it could start with a clean state.
+> 	 */
+> 	cpumask_clear_cpu(cpu, cpu_initialized_mask);
+> 	smp_mb();
 >
-> (arguably that should be a full fence *AND* get a comment)
+> ^^^ that barrier is weird too, cpumask_clear_cpu() is an atomic op and
+> implies much the same (this is x86 after all). If you want to be super
+> explicit about it write:
 >
-> There is no way the smp_processor_id() referred to in this comment can
-> land before cpu_init() even without the barrier().
+> 	smp_mb__after_atomic();
+>
+> (which is a no-op) but then it still very much requires a comment as to
+> what exactly it orders against what.
 
-Right. Let me clean that up.
-
-Thanks,
-
-        tglx
+As this is gone a few patches later, I just be lazy and leave it alone.
