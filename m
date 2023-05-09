@@ -2,181 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 866306FD054
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 497786FD056
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235200AbjEIUzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 16:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
+        id S235203AbjEIUzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 16:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbjEIUyt (ORCPT
+        with ESMTP id S235487AbjEIUzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 16:54:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EC34EF8
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 13:53:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683665466;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PNiIZHyonT4Lc3v22Wd8EHVvgd0ES2GAsHIl3w6taTA=;
-        b=SAeTk2ThdripM3HdxcC30tK7PwUcp+Rw8rfp994YqkwTknrFGGy55qc+B6CDulQxBBraq7
-        JMCAcMLt50Dw+KYBqcYFv3bYl8ae5KxJOs1LHFBhLuzJjfz4Wf9VacYVYam/jt4kJNdEw2
-        vVmWTvO2TrtQLmxXsFuILzflnu9kbBw=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-657-sqXfZKIbOwaTG7s_0DQe2g-1; Tue, 09 May 2023 16:51:04 -0400
-X-MC-Unique: sqXfZKIbOwaTG7s_0DQe2g-1
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-50a0a814498so5879693a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 13:51:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683665463; x=1686257463;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PNiIZHyonT4Lc3v22Wd8EHVvgd0ES2GAsHIl3w6taTA=;
-        b=Nz7X+efEwHSXt1TIhuVhz2DALHPADkpU+9Ry7cuWPA2uCshxAC8Zm4KJpZXBK7K9RT
-         K2cNv0I6/QvrbWhna1eEDYr/2//PN0n/53CdzWEO3pjBnwTCsCt/MI95RX7mLQjv4VC2
-         ncMDCCJhcTQ3jthP4jzUWqgliU1ek0HaAkuZzfnc/akuHuXDnRALD0uhILbSl0DKrFHQ
-         3aI8VA5H2qDjTD28VMYucXaI0x+gBsdg2M9O1f/KOKs51/P9Ao7FfjydHEQH7ySJrVyT
-         bYx6DE4+KlgBRqGrG2b9O2pTtrY61HAYnINn5W9EUEtszspXb3m6lyJ0c3SrEeozew+3
-         FsJA==
-X-Gm-Message-State: AC+VfDz/ZaxRoW9h/UrmKSSXwx+FesM9hvk4A/yibz1ZBpcg1th8kChw
-        xmqP9C4q6ypBAAmDTm06K6zWMAYwnEp+KgGvg0Fnr+ktVItcPyzXRW+GFdvqu5SgWDclwhVmnCN
-        EkYUKRs1sEXX3ndHKnFDfU9Sn
-X-Received: by 2002:a17:906:4fd1:b0:94f:21f3:b5f8 with SMTP id i17-20020a1709064fd100b0094f21f3b5f8mr12867366ejw.21.1683665463518;
-        Tue, 09 May 2023 13:51:03 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ64Z2n6Cyo1Ac1tIrysTfZgGptf8iyw8BdvNxTLiJKqxc+sT/Z3BRYol16b0K6FWwTa13f0sg==
-X-Received: by 2002:a17:906:4fd1:b0:94f:21f3:b5f8 with SMTP id i17-20020a1709064fd100b0094f21f3b5f8mr12867347ejw.21.1683665463199;
-        Tue, 09 May 2023 13:51:03 -0700 (PDT)
-Received: from redhat.com ([82.180.150.238])
-        by smtp.gmail.com with ESMTPSA id h9-20020a170906584900b0094e597f0e4dsm1735890ejs.121.2023.05.09.13.50.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 13:51:02 -0700 (PDT)
-Date:   Tue, 9 May 2023 16:50:53 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Yuanchu Xie <yuanchu@google.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        "Sudarshan Rajagopalan (QUIC)" <quic_sudaraja@quicinc.com>,
-        kai.huang@intel.com, hch@lst.de, jon@nutanix.com,
-        SeongJae Park <sj@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Yu Zhao <yuzhao@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        talumbau <talumbau@google.com>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] virtio-balloon: Add Working Set reporting
-Message-ID: <20230509164528-mutt-send-email-mst@kernel.org>
-References: <20230509185419.1088297-1-yuanchu@google.com>
- <20230509185419.1088297-3-yuanchu@google.com>
+        Tue, 9 May 2023 16:55:14 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476CE59E8;
+        Tue,  9 May 2023 13:54:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683665684; x=1715201684;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Qb7JnGYGX/q0kXPU2rhDE3PwsSlBsEq5dhBfzcKgApM=;
+  b=ItULmH/VZ61oT6Nwgz7iG+wxgLrigfSEv1M4VfXGit2kBCZM3+5TIPEm
+   GuVZVnu9DuD8yjMhGZRWyyuPMb06GKugXpElluDOXgAb8xlSbxyzUmFmI
+   XJjdHXSGEIv9nlBxLxRwyRaHnTrkVtX/zjR1CWlFqkhTJXnM8NyAqCbR2
+   esNg+TuFMHJoHtp1z8zqhC31evy210SPykq7XPL93ww1h9Xieqc3K76vO
+   UwJ4cklLYGyJEM9JW0Ku+4qXffQbR73gOnuFoKJ54DYlyva760UZZXZ2u
+   LkaYqs4tFyNC14kF5Xo81OIsSSWU7tyGhXDz0LMn4B5d60vtGId9oBbJ6
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="350081851"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="350081851"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 13:52:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="649486667"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="649486667"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 09 May 2023 13:52:50 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwUKH-0002UO-0a;
+        Tue, 09 May 2023 20:52:49 +0000
+Date:   Wed, 10 May 2023 04:51:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Youling Tang <tangyouling@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Zhangjin Wu <falcon@tinylab.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+Subject: Re: [PATCH] LoongArch: Add jump-label implementation
+Message-ID: <202305100412.gazWW71q-lkp@intel.com>
+References: <1683617390-18015-1-git-send-email-tangyouling@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230509185419.1088297-3-yuanchu@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1683617390-18015-1-git-send-email-tangyouling@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 02:54:19AM +0800, Yuanchu Xie wrote:
-> diff --git a/include/uapi/linux/virtio_balloon.h b/include/uapi/linux/virtio_balloon.h
-> index ddaa45e723c4..06d0683d8d8c 100644
-> --- a/include/uapi/linux/virtio_balloon.h
-> +++ b/include/uapi/linux/virtio_balloon.h
+Hi Youling,
 
-Any changes to this have to be documented in the virtio spec
-and be sent to virtio TC.
+kernel test robot noticed the following build errors:
 
-> @@ -37,6 +37,7 @@
->  #define VIRTIO_BALLOON_F_FREE_PAGE_HINT	3 /* VQ to report free pages */
->  #define VIRTIO_BALLOON_F_PAGE_POISON	4 /* Guest is using page poisoning */
->  #define VIRTIO_BALLOON_F_REPORTING	5 /* Page reporting virtqueue */
-> +#define VIRTIO_BALLOON_F_WS_REPORTING 6 /* Working Set Size reporting */
->  
->  /* Size of a PFN in the balloon interface. */
->  #define VIRTIO_BALLOON_PFN_SHIFT 12
-> @@ -59,6 +60,8 @@ struct virtio_balloon_config {
->  	};
->  	/* Stores PAGE_POISON if page poisoning is in use */
->  	__le32 poison_val;
-> +	/* Number of bins for Working Set report if in use. */
-> +	__le32 ws_num_bins;
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.4-rc1 next-20230509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-working_set_ pls. eschew abbreviation.
-Really __le32? Is 4G bins reasonable? what if it's 0?
+url:    https://github.com/intel-lab-lkp/linux/commits/Youling-Tang/LoongArch-Add-jump-label-implementation/20230509-153154
+base:   linus/master
+patch link:    https://lore.kernel.org/r/1683617390-18015-1-git-send-email-tangyouling%40loongson.cn
+patch subject: [PATCH] LoongArch: Add jump-label implementation
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20230510/202305100412.gazWW71q-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/369827734136be509a0c817517fed12548d9c41f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Youling-Tang/LoongArch-Add-jump-label-implementation/20230509-153154
+        git checkout 369827734136be509a0c817517fed12548d9c41f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch prepare
 
->  };
->  
->  #define VIRTIO_BALLOON_S_SWAP_IN  0   /* Amount of memory swapped in */
-> @@ -116,4 +119,22 @@ struct virtio_balloon_stat {
->  	__virtio64 val;
->  } __attribute__((packed));
->  
-> +enum virtio_balloon_ws_op {
-> +	VIRTIO_BALLOON_WS_REQUEST = 1,
-> +	VIRTIO_BALLOON_WS_CONFIG = 2,
-> +};
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305100412.gazWW71q-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-what's this?
-
-> +
-> +struct virtio_balloon_ws {
-
-document fields.
-
-> +#define VIRTIO_BALLOON_WS_RECLAIMABLE 0
-> +#define VIRTIO_BALLOON_WS_DISCARDABLE 1
-
-what are these?
-
-> +	/* TODO: Provide additional detail on memory, e.g. reclaimable. */
-
-Well? If we don't now hypervisors will come to depend on
-this being broken.
-
-> +	__virtio16 tag;
-> +	/* TODO: Support per-NUMA node reports. */
-
-Same. This is ABI we can't merge with unaddressed TODO items.
-
-> +	__virtio16 node_id;
-> +	uint8_t reserved[4];
-> +	__virtio64 idle_age_ms;
-> +	/* Track separately for ANON_AND_FILE. */
-
-What does this mean?
-
-> +	__virtio64 memory_size_bytes[2];
-
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+   In file included from include/linux/cpumask.h:16,
+                    from arch/loongarch/include/asm/processor.h:9,
+                    from arch/loongarch/include/asm/thread_info.h:15,
+                    from arch/loongarch/include/asm/ptrace.h:10,
+                    from arch/loongarch/include/asm/inst.h:10,
+                    from arch/loongarch/include/asm/jump_label.h:13,
+                    from include/linux/jump_label.h:112,
+                    from include/linux/dynamic_debug.h:6,
+                    from include/linux/printk.h:564,
+                    from include/asm-generic/bug.h:22,
+                    from arch/loongarch/include/asm/bug.h:59,
+                    from include/linux/bug.h:5,
+                    from include/linux/fortify-string.h:5,
+                    from include/linux/string.h:254,
+                    from include/linux/uuid.h:11,
+                    from include/linux/mod_devicetable.h:14,
+                    from scripts/mod/devicetable-offsets.c:3:
+   include/linux/numa.h: In function 'phys_to_target_node':
+>> include/linux/numa.h:41:9: error: implicit declaration of function 'pr_info_once' [-Werror=implicit-function-declaration]
+      41 |         pr_info_once("Unknown target node for memory at 0x%llx, assuming node 0\n",
+         |         ^~~~~~~~~~~~
+   include/linux/cpumask.h: In function 'cpu_max_bits_warn':
+>> include/linux/cpumask.h:143:9: error: implicit declaration of function 'WARN_ON_ONCE' [-Werror=implicit-function-declaration]
+     143 |         WARN_ON_ONCE(cpu >= bits);
+         |         ^~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+   make[2]: *** [scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1
+   make[2]: Target 'scripts/mod/' not remade because of errors.
+   make[1]: *** [Makefile:1286: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
+vim +/pr_info_once +41 include/linux/numa.h
 
-> +};
-> +
->  #endif /* _LINUX_VIRTIO_BALLOON_H */
-
-Use LE for new features please.
+a927bd6ba952d1 Dan Williams 2020-11-21  29  
+a927bd6ba952d1 Dan Williams 2020-11-21  30  #ifndef memory_add_physaddr_to_nid
+a927bd6ba952d1 Dan Williams 2020-11-21  31  static inline int memory_add_physaddr_to_nid(u64 start)
+a927bd6ba952d1 Dan Williams 2020-11-21  32  {
+a927bd6ba952d1 Dan Williams 2020-11-21  33  	pr_info_once("Unknown online node for memory at 0x%llx, assuming node 0\n",
+a927bd6ba952d1 Dan Williams 2020-11-21  34  			start);
+a927bd6ba952d1 Dan Williams 2020-11-21  35  	return 0;
+a927bd6ba952d1 Dan Williams 2020-11-21  36  }
+a927bd6ba952d1 Dan Williams 2020-11-21  37  #endif
+a927bd6ba952d1 Dan Williams 2020-11-21  38  #ifndef phys_to_target_node
+a927bd6ba952d1 Dan Williams 2020-11-21  39  static inline int phys_to_target_node(u64 start)
+a927bd6ba952d1 Dan Williams 2020-11-21  40  {
+a927bd6ba952d1 Dan Williams 2020-11-21 @41  	pr_info_once("Unknown target node for memory at 0x%llx, assuming node 0\n",
+a927bd6ba952d1 Dan Williams 2020-11-21  42  			start);
+a927bd6ba952d1 Dan Williams 2020-11-21  43  	return 0;
+a927bd6ba952d1 Dan Williams 2020-11-21  44  }
+a927bd6ba952d1 Dan Williams 2020-11-21  45  #endif
+a927bd6ba952d1 Dan Williams 2020-11-21  46  #else /* !CONFIG_NUMA */
+b2ca916ce392a9 Dan Williams 2020-02-16  47  static inline int numa_map_to_online_node(int node)
+b2ca916ce392a9 Dan Williams 2020-02-16  48  {
+b2ca916ce392a9 Dan Williams 2020-02-16  49  	return NUMA_NO_NODE;
+b2ca916ce392a9 Dan Williams 2020-02-16  50  }
+a927bd6ba952d1 Dan Williams 2020-11-21  51  static inline int memory_add_physaddr_to_nid(u64 start)
+a927bd6ba952d1 Dan Williams 2020-11-21  52  {
+a927bd6ba952d1 Dan Williams 2020-11-21  53  	return 0;
+a927bd6ba952d1 Dan Williams 2020-11-21  54  }
+a927bd6ba952d1 Dan Williams 2020-11-21  55  static inline int phys_to_target_node(u64 start)
+a927bd6ba952d1 Dan Williams 2020-11-21  56  {
+a927bd6ba952d1 Dan Williams 2020-11-21  57  	return 0;
+a927bd6ba952d1 Dan Williams 2020-11-21  58  }
+b2ca916ce392a9 Dan Williams 2020-02-16  59  #endif
+b2ca916ce392a9 Dan Williams 2020-02-16  60  
 
 -- 
-MST
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
