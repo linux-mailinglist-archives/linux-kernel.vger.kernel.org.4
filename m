@@ -2,95 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4473B6FD1AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2A66FD1B3
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236096AbjEIVye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 17:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
+        id S235593AbjEIV5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 17:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjEIVyd (ORCPT
+        with ESMTP id S230124AbjEIV5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 17:54:33 -0400
-Received: from out-57.mta1.migadu.com (out-57.mta1.migadu.com [95.215.58.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234D930CB
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 14:54:31 -0700 (PDT)
-Date:   Tue, 9 May 2023 17:54:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683669269;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1n3YMxW+Zb7xSLAr/eeZIRD4PtBRt8sxu+5EqSQhpSY=;
-        b=DnM8qOmeFjElK/7kmR9lrk8seVkOltc4T81yq9nzxwJ0tWrpzuZjphK0O0rFxUZuREoLjH
-        4BGrtcWLzxP0pNXP/Rrv20VFYXzZePCsv+ToELAp1vj4npjoYANBuaQ9qfSjDvpQsbPq+u
-        I+IxdbTG3un3iPQvVU9g3Lw60JsigXg=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org
-Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
-Message-ID: <ZFrBEsjrfseCUzqV@moria.home.lan>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-8-kent.overstreet@linux.dev>
- <ZFqxEWqD19eHe353@infradead.org>
- <ZFq3SdSBJ_LWsOgd@murray>
- <20230509214319.GA858791@frogsfrogsfrogs>
+        Tue, 9 May 2023 17:57:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69EC1715;
+        Tue,  9 May 2023 14:57:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7201B63527;
+        Tue,  9 May 2023 21:57:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6525FC433D2;
+        Tue,  9 May 2023 21:57:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683669422;
+        bh=7Mn7+p/Q2eLP62hMTaKJnMjclUksFkBAVMNLV+0pt8I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=q9tqYV5Uees60Y4yUW6dg9ClrZmsd7wYlvlVPN+9xtTwbaLYXjtUoj0qQzqvT9cEC
+         yL0WQ6AdtsvK/tPP5eDG+g6ewEGPphP7Zi1G3qnbNFn5wjMqld+sIjfHHSKEGkaV7m
+         WgOfOroyvgbsb8yfzS9ZZtfV9SWXpQWARRVv/fNOKxRRDVyQnvMkUNdr7v6KY6aUzj
+         u4I0VUd3D06gwDNvAQhqWXVjfokZ8x+lG+NE5aqIQJc8fKW25KhxcE5pB6yA38TNzh
+         DzioE/qMX5y+3KOwksL4JozFfO9PKDQumgXvE61hPne4T/zVHNrBKS7E9JYyg4s+lY
+         IVgYZwpVrGLHA==
+Date:   Tue, 9 May 2023 16:57:00 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Dominic Rath <rath@ibv-augsburg.de>,
+        krzysztof.kozlowski+dt@linaro.org, tjoseph@cadence.com,
+        bhelgaas@google.com, lpieralisi@kernel.org, nm@ti.com,
+        vigneshr@ti.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        bahle@ibv-augsburg.de
+Subject: Re: [PATCH v2 1/3] dt-bindings: phy: cadence-torrent: Add latency
+ properties
+Message-ID: <20230509215700.GA1277746@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230509214319.GA858791@frogsfrogsfrogs>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAH9NwWeJMnBTTOk-PG_5U-t5aLFEAWC+or9-FJYKSGbbHoH_YA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 02:43:19PM -0700, Darrick J. Wong wrote:
-> On Tue, May 09, 2023 at 02:12:41PM -0700, Lorenzo Stoakes wrote:
-> > On Tue, May 09, 2023 at 01:46:09PM -0700, Christoph Hellwig wrote:
-> > > On Tue, May 09, 2023 at 12:56:32PM -0400, Kent Overstreet wrote:
-> > > > From: Kent Overstreet <kent.overstreet@gmail.com>
-> > > >
-> > > > This is needed for bcachefs, which dynamically generates per-btree node
-> > > > unpack functions.
+On Tue, May 09, 2023 at 05:31:19PM +0200, Christian Gmeiner wrote:
+> > On Thu, Apr 27, 2023 at 07:50:30AM +0200, Dominic Rath wrote:
+> > > From: Alexander Bahle <bahle@ibv-augsburg.de>
 > > >
-> > > No, we will never add back a way for random code allocating executable
-> > > memory in kernel space.
-> > 
-> > Yeah I think I glossed over this aspect a bit as it looks ostensibly like simply
-> > reinstating a helper function because the code is now used in more than one
-> > place (at lsf/mm so a little distracted :)
-> > 
-> > But it being exported is a problem. Perhaps there's another way of acheving the
-> > same aim without having to do so?
+> > > Add "tx-phy-latency-ps" and "rx-phy-latency-ps" DT bindings for
+> > > setting the PCIe PHY latencies.
+> > > The properties expect a list of uint32 PHY latencies in picoseconds for
+> > > every supported speed starting at PCIe Gen1, e.g.:
+> > >
+> > >   tx-phy-latency-ps = <100000 200000>; /* Gen1: 100ns, Gen2: 200ns */
+> > >   rx-phy-latency-ps = <150000 250000>; /* Gen1: 150ns, Gen2: 250ns */
+> >
+> > Are these things that could/should be described in a more generic
+> > place?  They don't look necessarily Cadence-specific.
 > 
-> I already trolled Kent with this on IRC, but for the parts of bcachefs
-> that want better assembly code than whatever gcc generates from the C
-> source, could you compile code to BPF and then let the BPF JIT engines
-> turn that into machine code for you?
+> As there is currently no generic binding, would you like to see a new
+> yaml binding
+> added (Documentation/devicetree/bindings/phy/phy.yaml) that contains just the
+> two phy properties?
 
-It's an intriguing idea, but it'd be a _lot_ of work and this is old
-code that's never had a single bug - I'm not in a hurry to rewrite it.
+The whole thing is more a question for Rob.
 
-And there would still be the issue that we've still got lots of little
-unpack functions that go with other tables; we can't just burn a full
-page per unpack function, that would waste way too much memory, and if
-we put them together then we're stuck writing a whole nother allocator
-- nope, and then we're also mucking with the memory layout of the data
-structures used in the very hottest paths in the filesystem - I'm very
-wary of introducing performance regressions there.
-
-I think it'd be much more practical to find some way of making
-vmalloc_exec() more palatable. What are the exact concerns?
+Bjorn
