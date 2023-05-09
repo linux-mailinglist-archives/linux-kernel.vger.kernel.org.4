@@ -2,111 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C02D6FCDA0
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F026FCDA7
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234047AbjEISVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 14:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
+        id S234570AbjEISV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 14:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjEISVF (ORCPT
+        with ESMTP id S229543AbjEISV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 14:21:05 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FED10D4;
-        Tue,  9 May 2023 11:21:03 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-965d2749e2eso853066766b.1;
-        Tue, 09 May 2023 11:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683656462; x=1686248462;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XAU/TKhzNSlOY/Os7CAfOCmst5luRw79pGJePyYkmjI=;
-        b=Q8iWOLG5uyCKkbR+lm2anl3kCm8BNUVgJ+ifPXKKV8jNNhtFglfYnbqyQguZRWbpho
-         Siy9U83QD4C1BYdtwNRxa0i92Ut29ckJAn7oWa5OopTy63BszzXrEb+Evhar8i6w60AT
-         IArC0db4KqzpBSvBNLrv9qzDEvWAX0ji5jc5qIU05O+nOiGP+nfBuvF8DzzhLCLDT41J
-         BE6pkpp9AM8c7lhSKv9OoOlCHjeSEGRJHNlDKn270ma8/bmJxGKrRlJPI4VY+0ujToEh
-         P7vvlgnejBaNWfHtar3tFXRjdtnNIZpQM0psYne8nrr2EPzRXq8SZCgBzuHpGai3AG0x
-         6NVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683656462; x=1686248462;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XAU/TKhzNSlOY/Os7CAfOCmst5luRw79pGJePyYkmjI=;
-        b=CD2ZbhqXase0JwUm93CxRSx/OZN1uSGdm0pNLXpbxPcvzOuwzi8yC3akL8+r/toErz
-         E2aTRZVivvHPtne9fL6JxDY6SdaN91sEsZtqKruPSIKBE7cVX2it156y6nhAhzeM08w8
-         b1ThDhwQIM2hFzrcGjUIdDwh6usoYz5UxMUlUmbvozq9LbTnqtoVKDDjSq0CSP4VkrAi
-         eKjmZtN4lONdzSoQeOA0Rb2gK20LGvd1uUUpqZa/nQVe4GpDek/rEpC3R6wmH+F9vozJ
-         sWebRTJPgSe27dQa4W5e3bmLoL9g2m3Hf+v1pFQD0bLg/YZXRO68YIuNOis6TQKAtpEZ
-         brTg==
-X-Gm-Message-State: AC+VfDyeOGDhICJjwCQuk4QnLimLMTCSrK2cVrR55i8Iw0Y5n4ZakvlM
-        +NkDrtQxNI7bvkrVIImuQi2v17et3Ik+DdOW4RGpguUQgpY=
-X-Google-Smtp-Source: ACHHUZ6OjM7PCpD8/z2IYotZln1D2/7FpG9nyZ1pFrknkuSvitkhoy9/WsrSb21c+NIg37IKCXXJQTyeNhQBNAekXSQ=
-X-Received: by 2002:a17:907:5ca:b0:965:6cb9:b768 with SMTP id
- wg10-20020a17090705ca00b009656cb9b768mr10866237ejb.31.1683656462080; Tue, 09
- May 2023 11:21:02 -0700 (PDT)
+        Tue, 9 May 2023 14:21:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327EF4C2D;
+        Tue,  9 May 2023 11:21:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB6FA6132C;
+        Tue,  9 May 2023 18:21:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE77FC433EF;
+        Tue,  9 May 2023 18:21:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683656484;
+        bh=wTrGWZ/prXac+ksuuHC0df7jUrXSG9zBg0tuZm4eZAk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=eWEhqVADxc/GqJSwXnOQ3JLmV9EVm67GRKXU/8kCH+e7bYAn4tbjZ8OZRHVaX3ZcO
+         S0xv0AhCQd5NINM++YJU/lVWNxRqARJ2JdTZgkf8DKQ/aBVDAb43Y4DpvrsggmiDhc
+         VLuK4RypC1++gIMHtYJwDcVU3u+My56Q4IZYK0at1LgOku1qb8yZmqculMrILZXTXZ
+         neG8vnzAeERR8/VCvqWmCzd1JtSknWdohvz8yYije8I6fBKpAtZuUigoK/yqxiyRiQ
+         4E280Lp7b1rI5aQ6wbmUv7nAdHleWjJ8JY7/fVD00VEW304Ke/w4PCv+lqMsKKDnXi
+         XzOdVIUpJ2dRg==
+Date:   Tue, 9 May 2023 13:21:22 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        linux-pci@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-mips@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Andrew Lunn <andrew@lunn.ch>, sparclinux@vger.kernel.org,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-acpi@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        xen-devel@lists.xenproject.org, Matt Turner <mattst88@gmail.com>,
+        Anatolij Gustschin <agust@denx.de>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Juergen Gross <jgross@suse.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        linux-alpha@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>
+Subject: Re: [PATCH v8 0/7] Add pci_dev_for_each_resource() helper and update
+ users
+Message-ID: <20230509182122.GA1259567@bhelgaas>
 MIME-Version: 1.0
-References: <20230509084007.24373-1-lukas.bulwahn@gmail.com> <7cbe80f0-dcc3-bfc3-3bd8-c9f96704618d@intel.com>
-In-Reply-To: <7cbe80f0-dcc3-bfc3-3bd8-c9f96704618d@intel.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Tue, 9 May 2023 20:20:50 +0200
-Message-ID: <CAKXUXMxO4b-8wT-88fJ=++woH-p79_4R-vUr=aELNFYinGcEuw@mail.gmail.com>
-Subject: Re: [PATCH] x86: make config X86_FEATURE_NAMES visible with EXPERT
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404161101.GA3554747@bhelgaas>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 9, 2023 at 4:07=E2=80=AFPM Dave Hansen <dave.hansen@intel.com> =
-wrote:
->
-> On 5/9/23 01:40, Lukas Bulwahn wrote:
-> > Commit 6a108a14fa35 ("kconfig: rename CONFIG_EMBEDDED to CONFIG_EXPERT"=
-)
-> > introduces CONFIG_EXPERT to carry the previous intent of CONFIG_EMBEDDE=
-D
-> > and just gives that intent a much better name.
->
-> That was quite the changelog, and I'm still not quite sure:
->
-> What is the problem with the existing code?
->
-> What is the end user visible impact of this problem and of this proposed
-> change?
->
+On Tue, Apr 04, 2023 at 11:11:01AM -0500, Bjorn Helgaas wrote:
+> On Thu, Mar 30, 2023 at 07:24:27PM +0300, Andy Shevchenko wrote:
+> > Provide two new helper macros to iterate over PCI device resources and
+> > convert users.
 
-Thanks, Dave, for your feedback.
+> Applied 2-7 to pci/resource for v6.4, thanks, I really like this!
 
-The commit message is so lengthy, as I copied it from the original
-cover letter into each commit, but I agree with your feedback.
+This is 09cc90063240 ("PCI: Introduce pci_dev_for_each_resource()")
+upstream now.
 
-So maybe this commit message fits better:
+Coverity complains about each use, sample below from
+drivers/pci/vgaarb.c.  I didn't investigate at all, so it might be a
+false positive; just FYI.
 
-To simplify build configurations, the CONFIG_EMBEDDED is to be
-removed. All configs that are only visible with CONFIG_EMBEDDED=3Dy
-shall be now visible with CONFIG_EXPERT=3Dy.
+	  1. Condition screen_info.capabilities & (2U /* 1 << 1 */), taking true branch.
+  556        if (screen_info.capabilities & VIDEO_CAPABILITY_64BIT_BASE)
+  557                base |= (u64)screen_info.ext_lfb_base << 32;
+  558
+  559        limit = base + size;
+  560
+  561        /* Does firmware framebuffer belong to us? */
+	  2. Condition __b < PCI_NUM_RESOURCES, taking true branch.
+	  3. Condition (r = &pdev->resource[__b]) , (__b < PCI_NUM_RESOURCES), taking true branch.
+	  6. Condition __b < PCI_NUM_RESOURCES, taking true branch.
+	  7. cond_at_most: Checking __b < PCI_NUM_RESOURCES implies that __b may be up to 16 on the true branch.
+	  8. Condition (r = &pdev->resource[__b]) , (__b < PCI_NUM_RESOURCES), taking true branch.
+	  11. incr: Incrementing __b. The value of __b may now be up to 17.
+	  12. alias: Assigning: r = &pdev->resource[__b]. r may now point to as high as element 17 of pdev->resource (which consists of 17 64-byte elements).
+	  13. Condition __b < PCI_NUM_RESOURCES, taking true branch.
+	  14. Condition (r = &pdev->resource[__b]) , (__b < PCI_NUM_RESOURCES), taking true branch.
+  562        pci_dev_for_each_resource(pdev, r) {
+	  4. Condition resource_type(r) != 512, taking true branch.
+	  9. Condition resource_type(r) != 512, taking true branch.
 
-In the x86 architecture, the config X86_FEATURE_NAMES is visible when
-CONFIG_EMBEDDED is enabled. Now, make the config X86_FEATURE_NAMES
-visible when CONFIG_EXPERT is enabled.
-
-
-Dave, what do you think? If that is good enough for you, I will send
-an updated patch with that commit message.
-
-Lukas
+  CID 1529911 (#1 of 1): Out-of-bounds read (OVERRUN)
+  15. overrun-local: Overrunning array of 1088 bytes at byte offset 1088 by dereferencing pointer r. [show details]
+  563                if (resource_type(r) != IORESOURCE_MEM)
+	  5. Continuing loop.
+	  10. Continuing loop.
+  564                        continue;
