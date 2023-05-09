@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44D86FC147
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D973B6FC145
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235138AbjEIIIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 04:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
+        id S234908AbjEIIH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234431AbjEIIHq (ORCPT
+        with ESMTP id S234905AbjEIIHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 04:07:46 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DFA6A59
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:07:07 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6439b410679so3378680b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 01:07:07 -0700 (PDT)
+        Tue, 9 May 2023 04:07:41 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF5A10A23
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:07:06 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id 4fb4d7f45d1cf-506b21104faso6376245a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 01:07:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google; t=1683619627; x=1686211627;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=f4cw59kPp6A8r0eMeccn+YgGUjrNQrYf3COqrBqWzs0=;
-        b=iPcDFbd1lygQ4F1Bu7qfUjBBUUcYBUdy99AVsmAlYCaYknGCUjhMKTTb6PZdvuQ2MX
-         zgYx8Fn9O0L2wIhejJ4bSuNtC83Z3iCQpu8sk8Ihw7saNEfeNaO5lYlua/ZPIA3gKmk3
-         wSrnuT6pA8yinGPw0duk8IUjv/DwdM3883ynM=
+        d=google.com; s=20221208; t=1683619623; x=1686211623;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sefTIBuyPY1tklzs4eZt4f6X1hRT1gQo6nNE62cYqXw=;
+        b=RAsdyPEVtcl1EExzGMYbQfdm5z+ZKoRFQ1f/kG7J4e8rJnMYer1P31mOW1C96Hc1MD
+         xvQ1lBUrbVZjQPdDgWke++lW0s51PC8Cje+CBTwz+0lijAmKDThmd6z1F5M5LgNQwRQp
+         Sa96nUO740TqCB6OsdVxs8z1J0i+i4/zfaKVNOv+w1i5qijNgN01QENvxjYt/5fDbIRu
+         V65nwI1dm9D1w+oEf4GK03fMHS4d0uBm/ycFTMrsQGHJPlTL7HEfGIagMAcW5w9N8GKU
+         +KTOmfAjngAqdrJw2J4uVvc4CtePTpu3Twnl/SdATYXPzGlg72rS3FfUmIkXXqawvBj+
+         dszw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683619627; x=1686211627;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f4cw59kPp6A8r0eMeccn+YgGUjrNQrYf3COqrBqWzs0=;
-        b=iBtXIoVKv3fGeU6BwG55iT/oDHuXvFIqN0po8o5ie+Vnp4KAda3Tl3Hvs/uqQwN3V5
-         OflSq0C6a6VfOcjUrz3a2tYIZ0mYNkFG/Gw90dJJKb0xDWvdj7EjK+z96Qz0Yhuyrg/b
-         zDpArxyn5vh14TO2Athfmh5sd0bsl7SM9nBZba/R9SCgsNMt0yF7P/Ytuv3RB9uhN8Y7
-         bA3oKci/cYL56msnGedIWfHAJBua163m5KZFgZ0pNiBP09TTO6MqPAUa+Vlqnwl4cR4W
-         1T2XWDOhTHiMXUN1BmFXUA4vz77FHs3gVmcsfZ2FCs61MBpA8IttR+77j/SlqVF+ptWn
-         /2DA==
-X-Gm-Message-State: AC+VfDxDxBDh3LEdKCfRhFvCSqWw0IOmUIi4FfyjCVY+eyYANipvV5L1
-        McM6mmI0QqE7GB84fs8hnj+BDg==
-X-Google-Smtp-Source: ACHHUZ5mtkoo5NjkUfi/hBEfAL0GATyBF6WKT+ImyGPyuyHfKi6mBlfFBGUBQQLAyoZHVqKrByc9iA==
-X-Received: by 2002:a05:6a00:14d0:b0:63d:2f13:1f3 with SMTP id w16-20020a056a0014d000b0063d2f1301f3mr17321113pfu.33.1683619626805;
-        Tue, 09 May 2023 01:07:06 -0700 (PDT)
-Received: from d6921c044a31 ([122.199.31.200])
-        by smtp.gmail.com with ESMTPSA id j11-20020a62e90b000000b00571cdbd0771sm1165640pfh.102.2023.05.09.01.07.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 01:07:06 -0700 (PDT)
-Date:   Tue, 9 May 2023 08:06:58 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.3 000/694] 6.3.2-rc2 review
-Message-ID: <20230509080658.GA152864@d6921c044a31>
-References: <20230509030705.399628514@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509030705.399628514@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        d=1e100.net; s=20221208; t=1683619623; x=1686211623;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sefTIBuyPY1tklzs4eZt4f6X1hRT1gQo6nNE62cYqXw=;
+        b=iE5iBlIWglsY9A5Zo+I169LFCZI00Vy48rISP4TD3h3sX5Ih5GSJL4gc/DF1OuKPYx
+         bCTqQMUumDHJy5LkC4Y18uyclRsLSuDMXGILJhMRsnP4Jnbg8GssAZHTkUPAN3fpxExs
+         Ghg7vpMXx2OD+gs7gHBSJeeYuwOdNZ9anXJNVDQg1eHhPZUi/Q4Rdpjd1TSgDvK/olDa
+         6PHP2LLDtpKeVOC0nt4jKu2nW30NHIdpfGraN9TQKLsTspxu7IOL5+hrSeXEJd3bxvT1
+         QPEPOZ8SQZ/a0I//875JKWotkwxEAZhdvvYonQIJkirmG8pne8xJZwP3dCgfWTRvjw24
+         y+og==
+X-Gm-Message-State: AC+VfDzMr57/sS1rY/FXHjxgewtTKgfQ7flTPTWdGIeb/PSDBtkLEgrv
+        bOLpQtvdnm3GVXDWXemP6Nr51UGbFXY8U58=
+X-Google-Smtp-Source: ACHHUZ5kqoAPjPokTiyAE943lxaftoydddV0k1qApv9fmVkqFVgkZfSBpWevHNlo7ES/Qb9HwMzmv+czd7rl34M=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
+ (user=aliceryhl job=sendgmr) by 2002:a50:cd1a:0:b0:50b:c88a:f7cd with SMTP id
+ z26-20020a50cd1a000000b0050bc88af7cdmr4762794edi.4.1683619623130; Tue, 09 May
+ 2023 01:07:03 -0700 (PDT)
+Date:   Tue,  9 May 2023 08:07:00 +0000
+In-Reply-To: <20230508124701.443ba331.gary@garyguo.net>
+Mime-Version: 1.0
+References: <20230508124701.443ba331.gary@garyguo.net>
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
+Message-ID: <20230509080700.1608146-1-aliceryhl@google.com>
+Subject: Re: [PATCH v2] rust: error: add missing error codes
+From:   Alice Ryhl <aliceryhl@google.com>
+To:     gary@garyguo.net
+Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
+        benno.lossin@proton.me, bjorn3_gh@protonmail.com,
+        boqun.feng@gmail.com, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, patches@lists.linux.dev,
+        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,34 +71,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 05:26:44AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.2 release.
-> There are 694 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, 8 May 2023 12:47:01 +0100
+Gary Guo <gary@garyguo.net> wrote:
+> On Thu,  4 May 2023 06:48:54 +0000
+> Alice Ryhl <aliceryhl@google.com> wrote:
+> > This adds the error codes from `include/linux/errno.h` to the list of
+> > Rust error constants. These errors were not included originally, because
+> > they are not supposed to be visible from userspace. However, they are
+> > still a perfectly valid error to use when writing a kernel driver. For
+> > example, you might want to return ERESTARTSYS if you receive a signal
+> > during a call to `schedule`.
 > 
-> Responses should be made by Thu, 11 May 2023 03:05:05 +0000.
-> Anything received after that time might be too late.
+> `include/linux/errno.h` also includes all of `asm/errno.h`,
+> which defines EDEADLK - EHWPOISON, which is not included in this patch.
+> I feel like these error codes should be added first?
 
-Hi Greg,
+It seems like there are a lot of asm/errno.h files:
 
-6.3.2-rc2 tested.
+$ find . -name errno.h
+./arch/powerpc/include/uapi/asm/errno.h
+./arch/mips/include/asm/errno.h
+./arch/mips/include/uapi/asm/errno.h
+./arch/alpha/include/uapi/asm/errno.h
+./arch/parisc/include/uapi/asm/errno.h
+./arch/sparc/include/uapi/asm/errno.h
+./arch/x86/include/generated/uapi/asm/errno.h
+./tools/arch/powerpc/include/uapi/asm/errno.h
+./tools/arch/mips/include/asm/errno.h
+./tools/arch/mips/include/uapi/asm/errno.h
+./tools/arch/alpha/include/uapi/asm/errno.h
+./tools/arch/parisc/include/uapi/asm/errno.h
+./tools/arch/sparc/include/uapi/asm/errno.h
+./tools/arch/x86/include/uapi/asm/errno.h
+./tools/include/nolibc/errno.h
+./tools/include/uapi/asm/errno.h
+./tools/include/uapi/asm-generic/errno.h
+./include/uapi/asm-generic/errno.h
+./include/uapi/linux/errno.h
+./include/linux/errno.h
 
-Run tested on:
-- Intel Alder Lake x86_64 (nuc12 i7-1260P)
-
-In addition - build tested for:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- NXP iMX6
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos
-
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi
+How should I proceed with this? You mention EDEADLK - EHWPOISON, but its
+not clear to me which asm/errno.h file I should base this on.
