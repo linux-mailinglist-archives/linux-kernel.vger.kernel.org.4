@@ -2,224 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A07C6FCFD8
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 866306FD054
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjEIUsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 16:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S235200AbjEIUzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 16:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjEIUsl (ORCPT
+        with ESMTP id S235123AbjEIUyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 16:48:41 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2066.outbound.protection.outlook.com [40.107.22.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0FC5590;
-        Tue,  9 May 2023 13:48:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C8FngEewX8fMexqllVXSGmlqr+3IUwCJduHbvflwL06clAmjj9mggD/x4TKHZpy/t0B9IGETQGRodHE+KNM1okT59+H9NMZjKnT5pL/oeh159ZuqHZn85Yi4/mrQ1Kcfcs7L+2OEXWKNn06kk/pIqReeKMqdJdkdTGOEgE5PAQDJiZYCDzXbYvJPFtYXVxZkHLpTjRDcmLfd/8MIvE/QJPQJE2vf6qI5YgLf1O3L0LwBuzhB15c6araowM0GQOAEfHejEfyKsvlJc6Gu8x8iNS0DNGUA6WsgVBObZxfI5RWG1/IqOlRovGiwXmpjyF/hQTfas+s9VcaKpiHjfIPAog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=69MKZTDdjD0zWUaNtvtOhyLTOHIHn5u9Zpj9S/7D2W0=;
- b=FFW2mXxIPerFtDcSnV/Bry7mWDR1uzRTBsw1yBH1muesiGy+wfOxkmLGlWbhWlqL6QePiXn+VCAvahu7tFJt23Xr8/JYlnUp6EUqeyZ4HXgwQBi0Ito/nkO7dHU2SuYckN9MZVQ0g90wqZXQ3uU8fDHlLW3vUDch/8VrTOjRUBsGPQdW3CnXKY90BJaI3FJEuDv9ZVzQt2FsiUIIa7enHGNjmpB31WbeBPzUG2GsLHcdgz27Vi2pj5ohG2/X2c6JEnq+QvTbNHyjjN0jqxdqO6F20HHn/iqQslJhAwxCZH+aWYHfKJ3xplEsccHYwfFTO/rxL6zH7LGLZoGo1EzOUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=santannapisa.it; dmarc=pass action=none
- header.from=santannapisa.it; dkim=pass header.d=santannapisa.it; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=santannapisa.it;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=69MKZTDdjD0zWUaNtvtOhyLTOHIHn5u9Zpj9S/7D2W0=;
- b=JkNAeWi44BQaKRoSbxjOe0PY7CeB3AFmcTQdSaJA8wCmqQjwoDnQMlmNJHrotc4XaLafq5Cai7RoUV78/qflLaDaQv38Gr1f2HNWdQNgGg18xTT3AlyiMtTiDZkCihhprAR57eyJYNoKX6YTgoTmeKH7xI1UgyIGip/ABdQpXr4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=santannapisa.it;
-Received: from VI1PR03MB2880.eurprd03.prod.outlook.com (2603:10a6:802:2d::21)
- by PA4PR03MB7390.eurprd03.prod.outlook.com (2603:10a6:102:10a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Tue, 9 May
- 2023 20:48:33 +0000
-Received: from VI1PR03MB2880.eurprd03.prod.outlook.com
- ([fe80::8cd9:c5f1:f698:5600]) by VI1PR03MB2880.eurprd03.prod.outlook.com
- ([fe80::8cd9:c5f1:f698:5600%3]) with mapi id 15.20.6363.031; Tue, 9 May 2023
- 20:48:32 +0000
-Date:   Tue, 9 May 2023 22:48:29 +0200
-From:   luca abeni <luca.abeni@santannapisa.it>
-To:     Vineeth Remanan Pillai <vineeth@bitbyteword.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/2] sched/deadline: accurate reclaim bandwidth for GRUB
-Message-ID: <20230509224829.2fb547fd@nowhere>
-In-Reply-To: <CAO7JXPhrqKWfsp860rRmEenxARi8U2gNMGsOn4m+aKporWwBcg@mail.gmail.com>
-References: <20230508160829.2756405-1-vineeth@bitbyteword.org>
-        <20230509132534.09098acc@luca64>
-        <CAO7JXPhrqKWfsp860rRmEenxARi8U2gNMGsOn4m+aKporWwBcg@mail.gmail.com>
-Organization: Scuola Superiore Sant'Anna
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ZR0P278CA0197.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:44::8) To VI1PR03MB2880.eurprd03.prod.outlook.com
- (2603:10a6:802:2d::21)
+        Tue, 9 May 2023 16:54:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EC34EF8
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 13:53:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683665466;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PNiIZHyonT4Lc3v22Wd8EHVvgd0ES2GAsHIl3w6taTA=;
+        b=SAeTk2ThdripM3HdxcC30tK7PwUcp+Rw8rfp994YqkwTknrFGGy55qc+B6CDulQxBBraq7
+        JMCAcMLt50Dw+KYBqcYFv3bYl8ae5KxJOs1LHFBhLuzJjfz4Wf9VacYVYam/jt4kJNdEw2
+        vVmWTvO2TrtQLmxXsFuILzflnu9kbBw=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-657-sqXfZKIbOwaTG7s_0DQe2g-1; Tue, 09 May 2023 16:51:04 -0400
+X-MC-Unique: sqXfZKIbOwaTG7s_0DQe2g-1
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-50a0a814498so5879693a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 13:51:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683665463; x=1686257463;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PNiIZHyonT4Lc3v22Wd8EHVvgd0ES2GAsHIl3w6taTA=;
+        b=Nz7X+efEwHSXt1TIhuVhz2DALHPADkpU+9Ry7cuWPA2uCshxAC8Zm4KJpZXBK7K9RT
+         K2cNv0I6/QvrbWhna1eEDYr/2//PN0n/53CdzWEO3pjBnwTCsCt/MI95RX7mLQjv4VC2
+         ncMDCCJhcTQ3jthP4jzUWqgliU1ek0HaAkuZzfnc/akuHuXDnRALD0uhILbSl0DKrFHQ
+         3aI8VA5H2qDjTD28VMYucXaI0x+gBsdg2M9O1f/KOKs51/P9Ao7FfjydHEQH7ySJrVyT
+         bYx6DE4+KlgBRqGrG2b9O2pTtrY61HAYnINn5W9EUEtszspXb3m6lyJ0c3SrEeozew+3
+         FsJA==
+X-Gm-Message-State: AC+VfDz/ZaxRoW9h/UrmKSSXwx+FesM9hvk4A/yibz1ZBpcg1th8kChw
+        xmqP9C4q6ypBAAmDTm06K6zWMAYwnEp+KgGvg0Fnr+ktVItcPyzXRW+GFdvqu5SgWDclwhVmnCN
+        EkYUKRs1sEXX3ndHKnFDfU9Sn
+X-Received: by 2002:a17:906:4fd1:b0:94f:21f3:b5f8 with SMTP id i17-20020a1709064fd100b0094f21f3b5f8mr12867366ejw.21.1683665463518;
+        Tue, 09 May 2023 13:51:03 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ64Z2n6Cyo1Ac1tIrysTfZgGptf8iyw8BdvNxTLiJKqxc+sT/Z3BRYol16b0K6FWwTa13f0sg==
+X-Received: by 2002:a17:906:4fd1:b0:94f:21f3:b5f8 with SMTP id i17-20020a1709064fd100b0094f21f3b5f8mr12867347ejw.21.1683665463199;
+        Tue, 09 May 2023 13:51:03 -0700 (PDT)
+Received: from redhat.com ([82.180.150.238])
+        by smtp.gmail.com with ESMTPSA id h9-20020a170906584900b0094e597f0e4dsm1735890ejs.121.2023.05.09.13.50.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 13:51:02 -0700 (PDT)
+Date:   Tue, 9 May 2023 16:50:53 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Yuanchu Xie <yuanchu@google.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        "Sudarshan Rajagopalan (QUIC)" <quic_sudaraja@quicinc.com>,
+        kai.huang@intel.com, hch@lst.de, jon@nutanix.com,
+        SeongJae Park <sj@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Yu Zhao <yuzhao@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        talumbau <talumbau@google.com>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org
+Subject: Re: [RFC PATCH 2/2] virtio-balloon: Add Working Set reporting
+Message-ID: <20230509164528-mutt-send-email-mst@kernel.org>
+References: <20230509185419.1088297-1-yuanchu@google.com>
+ <20230509185419.1088297-3-yuanchu@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR03MB2880:EE_|PA4PR03MB7390:EE_
-X-MS-Office365-Filtering-Correlation-Id: a6b9f44a-503f-4bfd-94d7-08db50cec052
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TQ8PDvU8jtS9YmEudgJ6s1EdKjIkaxM87xuXZK0R/dwufyQ6OOULJV2G74ZPYpYD3QdYcZhDti/W3MHL9204lV0Hiu/1eGclxt8uHXwBbO0cNUslv+bBWnXqUdRpHb6xDngD42FY7sAYN9ycaRVnt9lHkvFPy1w+QpfkjbMkSMe9W3Vx3RSq6KMCUiUxsRM6yc+ghTDR2KtJI/svwhrxUgyj0kcGaIDdmrmdME+tQsP1eqj9FBPPCDZ7KHOgEkR7mQpNIpkE1RsA63VNA42CxDsb651dPYP/sXLhXi6BR+Y57uGnqI7FhVe1vCeWZ/vQ4uOavv/DPLH6PoTYyDPiwbIVaHpHi7qXExF3a8sh2FgAhlkiskwrz9YGQ8B+55x55w9U2hbGx58WEZT8vk9YEr/7TcX0a6lEvwi+QPvAgibhnn9FEAQKm3Ntns5K/9MSO/1UizdeCkUUY2MGYmjOBE3i+WBmajPHJfzc0ahvMP/9i46WSlUd9AJfwSkyvvfoXXF+iE9O6ZwyvvEZccjUTV4MPU0DT3zGeZo4k1mbbsg+QYD4hxui3mFiBzBOnKpa
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB2880.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(346002)(376002)(366004)(136003)(39860400002)(396003)(451199021)(86362001)(316002)(786003)(54906003)(66946007)(66476007)(4326008)(36916002)(6916009)(6486002)(6666004)(478600001)(66556008)(41320700001)(33716001)(8676002)(8936002)(2906002)(5660300002)(7416002)(41300700001)(38100700002)(186003)(9686003)(1076003)(6506007)(6512007)(26005)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?om0LSM6q007C9q0F+XKl0fQzWgiD2mh5nhPghWifrIUOkyn5BSHYoevEhUKT?=
- =?us-ascii?Q?EHy5lrZ7x5LxONHnKnFXHpoLEXdM3nx/vx+x+Nll4NhcMlKX6rMLr8UrsMNl?=
- =?us-ascii?Q?XEnaX1MNP5Fx6entpJjAMQzww0SP5Vpx2svmKxz9S6AqdPrBXXKStfaw+2TF?=
- =?us-ascii?Q?ga8Jmz6vX4bKCWYxaV6kAkk8hliQ/OFb7dulRa2w82ppV1B9XjAiWgG0M7iU?=
- =?us-ascii?Q?DP91CeOyok3AveiuLrq5o776AswM6E0g7hExBz4I4yBJ+NpZfgYBNsgF2QkK?=
- =?us-ascii?Q?NZ3FjgKIc9pFhLQqtUuFPvPJOaPgho7ahwgJYjq/wOxnygAEU8wd4Z+hvJhK?=
- =?us-ascii?Q?YpksLkbbZsxtaNMe9Oti8DNGhmXe3+VSzAHa8o6g/19XFfYNebaLh44khoZf?=
- =?us-ascii?Q?RDU/YfrNCR6P+OMc1CTzwwfC7kJV6DnFlcE5aGQtbKIAeulUUYgBCHD81UX9?=
- =?us-ascii?Q?gJQ1DAhXVL/HiEXrwrZhxp0xk5psBVFpesySIk9lGDW7cLmR2NLvfw4oZrD6?=
- =?us-ascii?Q?4FBHjWrB9/H83NHf3QEJ/VamuVQLEN4QjrwmFeqjwXJtUSjhfE2PEpqbHqdv?=
- =?us-ascii?Q?ILJbM5NbXeMBoClyE3ThJia313CcAGc1GQ0u1dhpMJGf1JXWtd7g7lvewhkh?=
- =?us-ascii?Q?5Jakd5BxRwvmAMSy3YOM5j5dDl+zTmf9lpcLpXMUVX7GDwXdz/6SrHAjdpAV?=
- =?us-ascii?Q?GDoBGjeuhGgbCW1BPjLfglYQSQE+NJl2wOJ+dIb1KLihN8VBJ8U00zMxrYVL?=
- =?us-ascii?Q?6xlwS3Po9flRpLpscJllIhS/Wgm51ShgK+7eQYbo+KxnlZq/sX7WB4+IvpEU?=
- =?us-ascii?Q?aBvQK3DeexE1CCSEVeQRV0EZWnOMq9jzuCd8mKAPPf82cRuawqnt6z5CS081?=
- =?us-ascii?Q?RC2X/zVdDjJ5reNc5DQg2APN6vPKnWBIvFoLDE2/C/hcVrsDT0w5OuZC45lO?=
- =?us-ascii?Q?ckVMmYEeB8MPnfMiUd1hegH+A6wdtPuCDlncobZFIdNUlyppV8W2kd9QrUfF?=
- =?us-ascii?Q?IipmWyb/NpwqOFcGoJFoFP7msMnb/z1Ov1lO/YUQXf/neXCapnB0gQ1Ehrpp?=
- =?us-ascii?Q?xbu+66LNppNv8dBEJ0tlDQspmQH877wN9gXtM8aiZyUvrzGBGwmtM+Gr64jo?=
- =?us-ascii?Q?MByvMFO4suuLNWWFR0Yj/QxLK8eBR26g7ZP+JIRw7RBBvDkzCrlrnMzNHlRh?=
- =?us-ascii?Q?vUK69tzpYbdcjfbeJZEwNky0fN6f+HxCaNFq6jRZsGokchdWYDAuyjZ2nJdU?=
- =?us-ascii?Q?4h2mfgA1mrgllRIcqS9wnUUpLzqQow68AuCr7ebILtniTtSPqZmtwA6y6lAN?=
- =?us-ascii?Q?CYZnJBtP/y+12LxXXsK35rafuFQ3JiLFBG4pfy7kOSLYOjy2pwE6XYyx78ej?=
- =?us-ascii?Q?iJsXRX2u2u8AFg5krosir0qdY0akebWabgnXg+WymIuxbTkWflQ/7rgPlnW2?=
- =?us-ascii?Q?bFZHNFdGTNl5/Zmf25qMFxFRBjc6/gfYFSyCvCN0K1Q5sOAYPY5T52nQ66pB?=
- =?us-ascii?Q?pzwoGXN/GrTQzWv2Uzjv9eshRoxNrp7RbHxfbJXD2Y42j6Ol+bSdwXfIdVPt?=
- =?us-ascii?Q?+aGnK7CYqCiBFXd8TADAhQyoqTu2WdvDu6hqdrKExA3RWLuJKcsM8kfMs0le?=
- =?us-ascii?Q?tg=3D=3D?=
-X-OriginatorOrg: santannapisa.it
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6b9f44a-503f-4bfd-94d7-08db50cec052
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB2880.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 20:48:32.5573
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d97360e3-138d-4b5f-956f-a646c364a01e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: P2989zjkGsmkW/nj5d1M4MGdt+Dt+uizNmqNAs4ggqgSRssEKAqNgaDhsNNOj57rU6isG4PW48kGq9eGmDbCcJL3R1/E04LRoLcrKB5wykA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR03MB7390
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509185419.1088297-3-yuanchu@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, May 10, 2023 at 02:54:19AM +0800, Yuanchu Xie wrote:
+> diff --git a/include/uapi/linux/virtio_balloon.h b/include/uapi/linux/virtio_balloon.h
+> index ddaa45e723c4..06d0683d8d8c 100644
+> --- a/include/uapi/linux/virtio_balloon.h
+> +++ b/include/uapi/linux/virtio_balloon.h
 
-On Tue, 9 May 2023 15:29:21 -0400
-Vineeth Remanan Pillai <vineeth@bitbyteword.org> wrote:
-[...]
-> > Is this understanding correct?  
-> Yes, the above two details are correct. In addition to that, I think
-> the existing equation had a small bug:
-> GRUB paper says, running time is depreciated as
->    "dq = -U dt" where U is running_bw.
-> This is assuming that the whole cpu bandwidth could be reclaimed. But
-> in our case, we cap at Umax. So the equation should be
->    "dq = -(U/Umax) dt"
+Any changes to this have to be documented in the virtio spec
+and be sent to virtio TC.
 
-Yes, this is the approximation I was mentioning... Instead of using a
-division, I approximated it with a different equation using a sum.
+> @@ -37,6 +37,7 @@
+>  #define VIRTIO_BALLOON_F_FREE_PAGE_HINT	3 /* VQ to report free pages */
+>  #define VIRTIO_BALLOON_F_PAGE_POISON	4 /* Guest is using page poisoning */
+>  #define VIRTIO_BALLOON_F_REPORTING	5 /* Page reporting virtqueue */
+> +#define VIRTIO_BALLOON_F_WS_REPORTING 6 /* Working Set Size reporting */
+>  
+>  /* Size of a PFN in the balloon interface. */
+>  #define VIRTIO_BALLOON_PFN_SHIFT 12
+> @@ -59,6 +60,8 @@ struct virtio_balloon_config {
+>  	};
+>  	/* Stores PAGE_POISON if page poisoning is in use */
+>  	__le32 poison_val;
+> +	/* Number of bins for Working Set report if in use. */
+> +	__le32 ws_num_bins;
 
+working_set_ pls. eschew abbreviation.
+Really __le32? Is 4G bins reasonable? what if it's 0?
 
-> And then we have an upper limit of (1 - Uextra - Uinact). I feel we
-> should be taking the minimum of these values to make sure that we
-> don't cross the upper bound. I think the equation should be:
->    "dq = -min{U/Umax, (1 - Uextra - Uinact)} dt"
-> 
-> But the current implementation is
->    "dq = -max{u/Umax, (1 - Uextra - Uinact)} dt"
->    Where u = dl_se->dl_bw.
-
-Well, here I think we should really use a "max{}", not a "min{}",
-otherwise we risk to subtract an amount of time which is too small (the
-"min{}" should be on the reclaimed bandwidth - so that we do not
-reclaim too much - but this expression is computing the runtime
-decrement - so I think this should be a "max{}").
-
-Or am I misunderstanding something?
-
-Did you try using u/Umax, but without changing the "max{}" into "min{}"?
-
-
-> After fixing the above equation, reclaim logic works well but when
-> only SCHED_FLAG_RECLAIM tasks are running. When we have a mix of both
-> normal deadline and SCHED_FLAG_RECLAIM, it breaks the reclaim logic.
-> As you pointed out, the second part of the fix is for that.
-
-OK
+>  };
+>  
+>  #define VIRTIO_BALLOON_S_SWAP_IN  0   /* Amount of memory swapped in */
+> @@ -116,4 +119,22 @@ struct virtio_balloon_stat {
+>  	__virtio64 val;
+>  } __attribute__((packed));
+>  
+> +enum virtio_balloon_ws_op {
+> +	VIRTIO_BALLOON_WS_REQUEST = 1,
+> +	VIRTIO_BALLOON_WS_CONFIG = 2,
+> +};
 
 
-> > If using div64_u64() does not introduce too much overhead, then I
-> > agree with the first change.  
-> In my testing, I did not see a change in the performance of the
-> grub_reclaim function. Both old and new implementations take 10 to
-> 20 nanoseconds on average. But my observation might not be accurate.
+what's this?
 
-Or maybe my assumption that div64 is bad was wrong :)
-Let's see what other people think about this.
+> +
+> +struct virtio_balloon_ws {
+
+document fields.
+
+> +#define VIRTIO_BALLOON_WS_RECLAIMABLE 0
+> +#define VIRTIO_BALLOON_WS_DISCARDABLE 1
+
+what are these?
+
+> +	/* TODO: Provide additional detail on memory, e.g. reclaimable. */
+
+Well? If we don't now hypervisors will come to depend on
+this being broken.
+
+> +	__virtio16 tag;
+> +	/* TODO: Support per-NUMA node reports. */
+
+Same. This is ABI we can't merge with unaddressed TODO items.
+
+> +	__virtio16 node_id;
+> +	uint8_t reserved[4];
+> +	__virtio64 idle_age_ms;
+> +	/* Track separately for ANON_AND_FILE. */
+
+What does this mean?
+
+> +	__virtio64 memory_size_bytes[2];
 
 
-			Thanks,
-				Luca
 
 
+> +};
+> +
+>  #endif /* _LINUX_VIRTIO_BALLOON_H */
 
+Use LE for new features please.
 
-> With this change, it is difficult to avoid division as the denominator
-> is a variable and we would not be able to pre-calculate an inverse. We
-> could probably calculate inverse during {__add/__sub}_running_bw so as
-> to reduce the frequency of div64_u64. I shall try this for v2.
-> 
-> > The second change also looks good to me.
-> >
-> > I have no comments on the code, but there is one thing in the
-> > comments that looks misleading to me (or I am misunderstanding the
-> > code or the comments):
-> >  
-> 
-> > > + * We can calculate Umax_reclaim as:
-> > > + *   Umax_reclaim:   this_bw + Uinact + Ureclaim  
-> >
-> > I think this looks like a typo (summing this_bw to Uinact
-> > looks wrong). Should "this_bw" be Uextra?
-> >  
-> Thanks a lot for pointing it out. Yes you are right, I messed up in
-> the comments. It should be Uextra and I shall fix it in v2.
-> 
-> > > + *   dq = -(Ureclaim / Umax_reclaim) * dt
-> > > + *      = -(Ureclaim / (Ureclaim + Uextra + Uinact)) * dt  
-> >
-> > I think this should be the correct equation. BTW, since you are
-> > summing Uextra and Uinact, mabe you could just use "Umax -
-> > running_bw"? 
-> Makes sense, it will avoid an extra variable Uinact. I shall modify
-> this in v2.
-> 
-> Thanks,
-> Vineeth
+-- 
+MST
 
