@@ -2,175 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FFA6FC421
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540126FC420
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235323AbjEIKm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 06:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
+        id S235086AbjEIKmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 06:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235299AbjEIKmU (ORCPT
+        with ESMTP id S235218AbjEIKmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 06:42:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108A3106CF
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 03:42:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68AB364595
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 10:42:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 388D1C4339C;
-        Tue,  9 May 2023 10:42:14 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>
-Cc:     Kees Cook <keescook@chromium.org>, chenhuacai@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH RFC] kthread: Unify kernel_thread() and user_mode_thread()
-Date:   Tue,  9 May 2023 18:41:27 +0800
-Message-Id: <20230509104127.1997562-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
+        Tue, 9 May 2023 06:42:13 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7541C59F1;
+        Tue,  9 May 2023 03:42:12 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 349Ag39D088292;
+        Tue, 9 May 2023 05:42:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683628923;
+        bh=Nomgq3t+4HfebnevX3WGB/j8KKfQAwmWlrWI5nUU5Fw=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=lTS3/k7owXlrwGfPC4vLNdyekhJ75RPL0xWc+6gn7jRhNelAJrXQbuZiaXWhGcZYq
+         0LxOcYW1pXJR43rB9chc47MpPee/E8+mOOkwvqieo5B9sHuHi86ZcodL8dp9OGFdtQ
+         kq2bhF5ZcTkhXsnYB374KXAbmGjyEFM+3+FKmF+8=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 349Ag3fA017716
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 9 May 2023 05:42:03 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
+ May 2023 05:42:03 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 9 May 2023 05:42:03 -0500
+Received: from [172.24.145.182] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 349Afxh8077375;
+        Tue, 9 May 2023 05:42:00 -0500
+Message-ID: <feddcd03-1848-b667-6a38-ae7c0f6ff160@ti.com>
+Date:   Tue, 9 May 2023 16:11:59 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 3/3] arm64: dts: ti: k3-j7200-mcu-wakeup: Update fss
+ node and hbmc_mux
+Content-Language: en-US
+To:     Vaishnav Achath <vaishnav.a@ti.com>, <nm@ti.com>, <afd@ti.com>,
+        <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <u-kumar1@ti.com>
+References: <20230505115858.7391-1-vaishnav.a@ti.com>
+ <20230505115858.7391-4-vaishnav.a@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20230505115858.7391-4-vaishnav.a@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 343f4c49f2438d8 ("kthread: Don't allocate kthread_struct for init
-and umh") introduces a new function user_mode_thread() for init and umh.
-But the name is a bit confusing because init and umh are indeed kernel
-threads at creation time, the real difference is "they will become user
-processes". So let's unify the kernel_thread() and user_mode_thread() to
-kernel_thread() again, and add a new 'user' parameter for init and umh.
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- include/linux/sched/task.h |  3 +--
- init/main.c                |  4 ++--
- kernel/fork.c              | 20 ++------------------
- kernel/kthread.c           |  2 +-
- kernel/umh.c               |  6 +++---
- 5 files changed, 9 insertions(+), 26 deletions(-)
 
-diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-index 537cbf9a2ade..1fc09768257c 100644
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -98,8 +98,7 @@ struct task_struct *copy_process(struct pid *pid, int trace, int node,
- struct task_struct *create_io_thread(int (*fn)(void *), void *arg, int node);
- struct task_struct *fork_idle(int);
- extern pid_t kernel_thread(int (*fn)(void *), void *arg, const char *name,
--			    unsigned long flags);
--extern pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags);
-+			    unsigned long flags, int user);
- extern long kernel_wait4(pid_t, int __user *, int, struct rusage *);
- int kernel_wait(pid_t pid, int *stat);
- 
-diff --git a/init/main.c b/init/main.c
-index af50044deed5..487d93da5eea 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -697,7 +697,7 @@ noinline void __ref __noreturn rest_init(void)
- 	 * the init task will end up wanting to create kthreads, which, if
- 	 * we schedule it before we create kthreadd, will OOPS.
- 	 */
--	pid = user_mode_thread(kernel_init, NULL, CLONE_FS);
-+	pid = kernel_thread(kernel_init, NULL, NULL, CLONE_FS, 1);
- 	/*
- 	 * Pin init on the boot CPU. Task migration is not properly working
- 	 * until sched_init_smp() has been run. It will set the allowed
-@@ -710,7 +710,7 @@ noinline void __ref __noreturn rest_init(void)
- 	rcu_read_unlock();
- 
- 	numa_default_policy();
--	pid = kernel_thread(kthreadd, NULL, NULL, CLONE_FS | CLONE_FILES);
-+	pid = kernel_thread(kthreadd, NULL, NULL, CLONE_FS | CLONE_FILES, 0);
- 	rcu_read_lock();
- 	kthreadd_task = find_task_by_pid_ns(pid, &init_pid_ns);
- 	rcu_read_unlock();
-diff --git a/kernel/fork.c b/kernel/fork.c
-index ed4e01daccaa..eeaf50944a0b 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2965,7 +2965,7 @@ pid_t kernel_clone(struct kernel_clone_args *args)
-  * Create a kernel thread.
-  */
- pid_t kernel_thread(int (*fn)(void *), void *arg, const char *name,
--		    unsigned long flags)
-+		    unsigned long flags, int user)
- {
- 	struct kernel_clone_args args = {
- 		.flags		= ((lower_32_bits(flags) | CLONE_VM |
-@@ -2974,23 +2974,7 @@ pid_t kernel_thread(int (*fn)(void *), void *arg, const char *name,
- 		.fn		= fn,
- 		.fn_arg		= arg,
- 		.name		= name,
--		.kthread	= 1,
--	};
--
--	return kernel_clone(&args);
--}
--
--/*
-- * Create a user mode thread.
-- */
--pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags)
--{
--	struct kernel_clone_args args = {
--		.flags		= ((lower_32_bits(flags) | CLONE_VM |
--				    CLONE_UNTRACED) & ~CSIGNAL),
--		.exit_signal	= (lower_32_bits(flags) & CSIGNAL),
--		.fn		= fn,
--		.fn_arg		= arg,
-+		.kthread	= !user,
- 	};
- 
- 	return kernel_clone(&args);
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index 490792b1066e..f4ac241c8d94 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -400,7 +400,7 @@ static void create_kthread(struct kthread_create_info *create)
- #endif
- 	/* We want our own signal handler (we take no signals by default). */
- 	pid = kernel_thread(kthread, create, create->full_name,
--			    CLONE_FS | CLONE_FILES | SIGCHLD);
-+			    CLONE_FS | CLONE_FILES | SIGCHLD, 0);
- 	if (pid < 0) {
- 		/* Release the structure when caller killed by a fatal signal. */
- 		struct completion *done = xchg(&create->done, NULL);
-diff --git a/kernel/umh.c b/kernel/umh.c
-index 60aa9e764a38..ec4ec12094b5 100644
---- a/kernel/umh.c
-+++ b/kernel/umh.c
-@@ -130,7 +130,7 @@ static void call_usermodehelper_exec_sync(struct subprocess_info *sub_info)
- 
- 	/* If SIGCLD is ignored do_wait won't populate the status. */
- 	kernel_sigaction(SIGCHLD, SIG_DFL);
--	pid = user_mode_thread(call_usermodehelper_exec_async, sub_info, SIGCHLD);
-+	pid = kernel_thread(call_usermodehelper_exec_async, sub_info, NULL, SIGCHLD, 1);
- 	if (pid < 0)
- 		sub_info->retval = pid;
- 	else
-@@ -169,8 +169,8 @@ static void call_usermodehelper_exec_work(struct work_struct *work)
- 		 * want to pollute current->children, and we need a parent
- 		 * that always ignores SIGCHLD to ensure auto-reaping.
- 		 */
--		pid = user_mode_thread(call_usermodehelper_exec_async, sub_info,
--				       CLONE_PARENT | SIGCHLD);
-+		pid = kernel_thread(call_usermodehelper_exec_async, sub_info,
-+				       NULL, CLONE_PARENT | SIGCHLD, 1);
- 		if (pid < 0) {
- 			sub_info->retval = pid;
- 			umh_complete(sub_info);
+On 05/05/23 17:28, Vaishnav Achath wrote:
+> From: Nishanth Menon <nm@ti.com>
+> 
+> fss node claims to be a syscon node, while it actually is a simple bus
+
+FSS
+
+> where ospi, hbmc peripherals are located and a mux for path select
+
+OSPI, HBMC
+
+> between OSPI and Hyperbus which can be modelled as a reg-mux. So model
+> it accordingly and use reg-mux to describe the hbmc-mux. Also update
+> the region size to the correct values as per the TRM.
+> 
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+> ---
+> 
+> V1->V2:
+>  * Address feedback from Udit to limit the FSS register region size as
+>  per TRM.
+>  * Use reg-mux changes to simplify the hbmc-mux modelling.
+>  * Update commit message to reflect changes.
+> 
+> Depends on:
+>  https://lore.kernel.org/all/20230424184810.29453-1-afd@ti.com/
+> 
+>  arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> index b58a31371bf3..333564ca9c91 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> @@ -338,22 +338,23 @@
+>  		status = "disabled";
+>  	};
+>  
+> -	fss: syscon@47000000 {
+> -		compatible = "syscon", "simple-mfd";
+> -		reg = <0x00 0x47000000 0x00 0x100>;
+> +	fss: bus@47000000 {
+> +		compatible = "simple-bus";
+> +		reg = <0x00 0x47000000 0x0 0x7c>;
+
+                                       ^^^^ 0x00
+
+I know the registers only go up to 0x7c, but its convention to map
+entire region that is reserved for the IP irrespective of how many
+registers are actually valid (I see this across arm64 SoC Vendors).
+Eg as per TRM,  Table 203 MCU Domain map:
+
+MCU_FSS0_CFG 0x0047000000 - 0x00470000FF (256B)
+
+
+
+
+>  		#address-cells = <2>;
+>  		#size-cells = <2>;
+>  		ranges;
+>  
+> -		hbmc_mux: hbmc-mux {
+> -			compatible = "mmio-mux";
+> +		hbmc_mux: mux-controller@47000004 {
+> +			compatible = "reg-mux";
+> +			reg = <0x00 0x47000004 0x00 0x2>;
+>  			#mux-control-cells = <1>;
+>  			mux-reg-masks = <0x4 0x2>; /* HBMC select */
+>  		};
+>  
+>  		hbmc: hyperbus@47034000 {
+>  			compatible = "ti,am654-hbmc";
+> -			reg = <0x00 0x47034000 0x00 0x100>,
+> +			reg = <0x00 0x47034000 0x00 0x0c>,
+
+Hmm, doesn't look correct? I see register addresses up to 0x47034048h in
+TRM?
+
+I prefer to map entire region reserved in the SoC memory map:
+MCU_FSS0_HPB_CTRL 0x0047034000 - 0x00470340FF (256B)
+
+
+>  				<0x05 0x00000000 0x01 0x0000000>;
+>  			power-domains = <&k3_pds 102 TI_SCI_PD_EXCLUSIVE>;
+>  			clocks = <&k3_clks 102 0>;
+
 -- 
-2.39.1
-
+Regards
+Vignesh
