@@ -2,114 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2426FC4FF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820C26FC4FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235521AbjEIL2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 07:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S235428AbjEIL1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 07:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235429AbjEIL2h (ORCPT
+        with ESMTP id S234305AbjEIL1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 07:28:37 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B256E2D78;
-        Tue,  9 May 2023 04:28:36 -0700 (PDT)
-Received: from dd-virtual-machine.localdomain ([183.202.113.128])
-        (user=u202112089@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 349BRnLs027222-349BRnLt027222
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Tue, 9 May 2023 19:27:54 +0800
-From:   Zongjie Li <u202112089@hust.edu.cn>
-To:     Jaya Kumar <jayalk@intworks.biz>, Helge Deller <deller@gmx.de>,
-        Andrew Morton <akpm@osdl.org>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Zongjie Li <u202112089@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers: fbdev: arcfb: Fix error handling in arcfb_probe()
-Date:   Tue,  9 May 2023 19:27:26 +0800
-Message-Id: <20230509112727.3899-1-u202112089@hust.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 9 May 2023 07:27:51 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CADC526AF
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 04:27:49 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EAA0FEC;
+        Tue,  9 May 2023 04:28:34 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.56.16])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5D1A33F67D;
+        Tue,  9 May 2023 04:27:48 -0700 (PDT)
+Date:   Tue, 9 May 2023 12:27:45 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] ARM: perf: Mark all accessor functions inline
+Message-ID: <ZFouMZpJEY23l9ZY@FVFF77S0Q05N>
+References: <cover.1683561087.git.geert+renesas@glider.be>
+ <3a7d9bc7470aa2d85696ee9765c74f8c03fb5454.1683561482.git.geert+renesas@glider.be>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: u202112089@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <3a7d9bc7470aa2d85696ee9765c74f8c03fb5454.1683561482.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch complains that:
-arcfb_probe() warn: 'irq' from request_irq() not released on lines: 587.
+On Mon, May 08, 2023 at 06:05:18PM +0200, Geert Uytterhoeven wrote:
+> When just including <asm/arm_pmuv3.h>:
+> 
+>     arch/arm/include/asm/arm_pmuv3.h:110:13: error: ‘write_pmevtypern’ defined but not used [-Werror=unused-function]
+>       110 | static void write_pmevtypern(int n, unsigned long val)
+> 	  |             ^~~~~~~~~~~~~~~~
+>     arch/arm/include/asm/arm_pmuv3.h:103:13: error: ‘write_pmevcntrn’ defined but not used [-Werror=unused-function]
+>       103 | static void write_pmevcntrn(int n, unsigned long val)
+> 	  |             ^~~~~~~~~~~~~~~
+>     arch/arm/include/asm/arm_pmuv3.h:95:22: error: ‘read_pmevcntrn’ defined but not used [-Werror=unused-function]
+>        95 | static unsigned long read_pmevcntrn(int n)
+> 	  |                      ^~~~~~~~~~~~~~
+> 
+> Fix this by adding the missing "inline" keywords to the three accessor
+> functions that lack them.
+> 
+> Fixes: 009d6dc87a568db6 ("ARM: perf: Allow the use of the PMUv3 driver on 32bit ARM")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Fix error handling in the arcfb_probe() function. If IO addresses are 
-not provided or framebuffer registration fails, the code will jump to 
-the err_addr or err_register_fb label to release resources. 
-If IRQ request fails, previously allocated resources will be freed.
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-Fixes: 1154ea7dcd8e ("[PATCH] Framebuffer driver for Arc LCD board")
-Signed-off-by: Zongjie Li <u202112089@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
- drivers/video/fbdev/arcfb.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+Mark.
 
-diff --git a/drivers/video/fbdev/arcfb.c b/drivers/video/fbdev/arcfb.c
-index 45e64016db32..024d0ee4f04f 100644
---- a/drivers/video/fbdev/arcfb.c
-+++ b/drivers/video/fbdev/arcfb.c
-@@ -523,7 +523,7 @@ static int arcfb_probe(struct platform_device *dev)
- 
- 	info = framebuffer_alloc(sizeof(struct arcfb_par), &dev->dev);
- 	if (!info)
--		goto err;
-+		goto err_fb_alloc;
- 
- 	info->screen_base = (char __iomem *)videomemory;
- 	info->fbops = &arcfb_ops;
-@@ -535,7 +535,7 @@ static int arcfb_probe(struct platform_device *dev)
- 
- 	if (!dio_addr || !cio_addr || !c2io_addr) {
- 		printk(KERN_WARNING "no IO addresses supplied\n");
--		goto err1;
-+		goto err_addr;
- 	}
- 	par->dio_addr = dio_addr;
- 	par->cio_addr = cio_addr;
-@@ -551,12 +551,12 @@ static int arcfb_probe(struct platform_device *dev)
- 			printk(KERN_INFO
- 				"arcfb: Failed req IRQ %d\n", par->irq);
- 			retval = -EBUSY;
--			goto err1;
-+			goto err_addr;
- 		}
- 	}
- 	retval = register_framebuffer(info);
- 	if (retval < 0)
--		goto err1;
-+		goto err_register_fb;
- 	platform_set_drvdata(dev, info);
- 	fb_info(info, "Arc frame buffer device, using %dK of video memory\n",
- 		videomemorysize >> 10);
-@@ -580,9 +580,12 @@ static int arcfb_probe(struct platform_device *dev)
- 	}
- 
- 	return 0;
--err1:
-+
-+err_register_fb:
-+	free_irq(par->irq, info);
-+err_addr:
- 	framebuffer_release(info);
--err:
-+err_fb_alloc:
- 	vfree(videomemory);
- 	return retval;
- }
--- 
-2.25.1
-
+> ---
+>  arch/arm/include/asm/arm_pmuv3.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pmuv3.h
+> index 78d3d4b82c6c2598..f4db3e75d75f024e 100644
+> --- a/arch/arm/include/asm/arm_pmuv3.h
+> +++ b/arch/arm/include/asm/arm_pmuv3.h
+> @@ -92,7 +92,7 @@
+>  
+>  #define RETURN_READ_PMEVCNTRN(n) \
+>  	return read_sysreg(PMEVCNTR##n)
+> -static unsigned long read_pmevcntrn(int n)
+> +static inline unsigned long read_pmevcntrn(int n)
+>  {
+>  	PMEVN_SWITCH(n, RETURN_READ_PMEVCNTRN);
+>  	return 0;
+> @@ -100,14 +100,14 @@ static unsigned long read_pmevcntrn(int n)
+>  
+>  #define WRITE_PMEVCNTRN(n) \
+>  	write_sysreg(val, PMEVCNTR##n)
+> -static void write_pmevcntrn(int n, unsigned long val)
+> +static inline void write_pmevcntrn(int n, unsigned long val)
+>  {
+>  	PMEVN_SWITCH(n, WRITE_PMEVCNTRN);
+>  }
+>  
+>  #define WRITE_PMEVTYPERN(n) \
+>  	write_sysreg(val, PMEVTYPER##n)
+> -static void write_pmevtypern(int n, unsigned long val)
+> +static inline void write_pmevtypern(int n, unsigned long val)
+>  {
+>  	PMEVN_SWITCH(n, WRITE_PMEVTYPERN);
+>  }
+> -- 
+> 2.34.1
+> 
