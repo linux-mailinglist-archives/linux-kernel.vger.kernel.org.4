@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297DC6FCA43
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB816FCA4D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235595AbjEIPbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 11:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
+        id S235814AbjEIPdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 11:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjEIPbc (ORCPT
+        with ESMTP id S235541AbjEIPdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 11:31:32 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B0644BB;
-        Tue,  9 May 2023 08:31:31 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6ab15dbef23so883588a34.3;
-        Tue, 09 May 2023 08:31:31 -0700 (PDT)
+        Tue, 9 May 2023 11:33:06 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C877318D;
+        Tue,  9 May 2023 08:33:05 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-643b7b8f8ceso2558964b3a.1;
+        Tue, 09 May 2023 08:33:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683646291; x=1686238291;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YRq/aD3id00csyltRjTJ0ftOlEFFMSQYHa31MfuaUnM=;
-        b=sgRRFgb7KtKM8zt5Fb3JxnHYjqTMByaeZ/I3aaObqzABZN2saFUvg7jIbTB+CnV0Gp
-         PVC92+Wd3PJsKkghOrUB3KZ/UrAjwevOqXkuGXqD0AnVI+1wai1eaIL7s3ZU8tkK+zCq
-         Dtlr26Uyb5ch6ytcHzOvIjE3aZkD64b0dsaApgwNrpYok9+A7rAhV/yanySZN1Vkr81r
-         vOQMWdfWnxH27IWB22sr0NgK0MLghhNBA//0SHV+6GmNfA9kfJpPfRWaJF0V0CLFBJTd
-         5vrvBYvU3Ybyn3qQey2mO4mtrOrHcPO6H2d3lgzze8bJcTOtL5QmWaLlZyWiWZ9a4SP/
-         iBkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683646291; x=1686238291;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1683646385; x=1686238385;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YRq/aD3id00csyltRjTJ0ftOlEFFMSQYHa31MfuaUnM=;
-        b=Dil/7+amy5j4M1LqfUCngMFiO1Zxuhh/Pv3CXy9SojHMkQfZ1zYw8dfu1f7m51UUoE
-         2NnodoVc0Wyjx+6J6vQZOC5sLlu9r02s71wrOrIbIUGs9JB2IUrkkr5YLRmxWixEezuf
-         /Q3RhmoM5KV0o8Tqf8EAcn8g8rHz53PBjBrBO68JFVZBuki6FN9psAZmkqeKgyNxSgjd
-         LL7rhafHtzUsW/vfZH/qpBxybu6kFcRWy02unucEi2WQ2YzP2xUd50DtCvVP0QbSq/mV
-         R8hZGHeeMalk7bPhRunuwdPAk7KFw+89xk+8n6pg9uDwDwXpxo0DICUG8YsDIjibIUNI
-         CA/Q==
-X-Gm-Message-State: AC+VfDx7Tyo3IV09eRAkuaxlSArkMWMDJLmh8cIEeLvPaMuweTnQH1MO
-        lZ0M7Y2b154n8KMmUCmMmFEb5ksRQp+AOYxyaRM=
-X-Google-Smtp-Source: ACHHUZ6JhLfo1J4qdGQamADfqvzqtpmuoC67PYVcnPOQ1MlOnqx2xDS8nZ5Pp1Gl/+rksyc+GLNFx4ITm3r/t77nX9c=
-X-Received: by 2002:a9d:6294:0:b0:6ab:1338:fed5 with SMTP id
- x20-20020a9d6294000000b006ab1338fed5mr1612620otk.11.1683646290910; Tue, 09
- May 2023 08:31:30 -0700 (PDT)
+        bh=i7WJkpzGGE6V0xVNeJVOJY0t5blLhcdTlZlbB7BS+gc=;
+        b=FMLxTBr+wd5rAK2nIKeykMToZJkUULXyulEWPfS6JYiK1UgR5o2h3w26z+Yp5/E1dr
+         bDqh6NUr1VibilmFjm0izLQlHS7O3u2QFaPLG8TDdue+dxViTl4cFiDPcodggspN4syC
+         0Jm5BWCsqs8t8xiPv8URVb3gGxjyDJE1h8qhQgkRNUUk5CFvN/6jMHeYjjnf+R5yfbCy
+         v1/v7D3FsFSTef9YGbO+6gzivSoPl9Osoj5hd77kSs5lZbAUkusRsi+f3KewpSPOUIWl
+         54LKKqInJG5+r4xX4y4CRd2skQp449TLmyTxz3UyHCpou2UndeaOOtJ1PVDJuQ/b9ImG
+         H1wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683646385; x=1686238385;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i7WJkpzGGE6V0xVNeJVOJY0t5blLhcdTlZlbB7BS+gc=;
+        b=gMg7NPmwWztfcJT5aTYC/En783mitl9xnA42u8zj8M89aBTfeC67yZfs8vFIeHEI3P
+         6RkOfFO7Vc6x+2a5SDaIaCObYgZbG+09FNEu5yFPrgHQlvf5XurH9GnZL1VmvA3TVgP+
+         NFXi8YUJAGNq/EvtxGxCUjssAEQdPuc7jK74/Si/WY9O6lnQflT9A94JhJ3n5TvTyA8C
+         pHQj6PueklhNSba3n/mkOK7+61PiaGYlqydC6bKhkSujRF+UJHfUtmgy4otnS6lml6ab
+         1RwpuofActfmN+ZnetaquFy8PqgZ1v+7c0dtAYZ9fndgx90SdMIyQsWHB8IBCPpQ8R3O
+         /lNg==
+X-Gm-Message-State: AC+VfDxJqGX/escsP68235p2l+hF7vBaQ7W4M5GVed2L/Z/1qibrbrZu
+        XIOUK5feX8R7nl+3rEFJT9k=
+X-Google-Smtp-Source: ACHHUZ74rXgHLVMBYI8vEBAiCwf0n8BlFeTay98rF3Y8zTkmdIFPU6Z4y3sKE+ysJMc+3elFYvlBmA==
+X-Received: by 2002:a05:6a00:9a7:b0:638:7c22:6fd with SMTP id u39-20020a056a0009a700b006387c2206fdmr21606404pfg.1.1683646384720;
+        Tue, 09 May 2023 08:33:04 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id p24-20020a62ab18000000b0063b5776b073sm1908446pff.117.2023.05.09.08.33.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 08:33:04 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 9 May 2023 05:33:02 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: boot warning
+Message-ID: <ZFpnroBw-tJnyDbF@slm.duckdns.org>
+References: <20230509122440.418068cb@canb.auug.org.au>
+ <87mt2ex9oo.fsf@mail.lhotse>
 MIME-Version: 1.0
-References: <20230427055032.85015-2-rath@ibv-augsburg.de> <20230427183040.GA263395@bhelgaas>
-In-Reply-To: <20230427183040.GA263395@bhelgaas>
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-Date:   Tue, 9 May 2023 17:31:19 +0200
-Message-ID: <CAH9NwWeJMnBTTOk-PG_5U-t5aLFEAWC+or9-FJYKSGbbHoH_YA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: cadence-torrent: Add latency properties
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Dominic Rath <rath@ibv-augsburg.de>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tjoseph@cadence.com,
-        bhelgaas@google.com, lpieralisi@kernel.org, nm@ti.com,
-        vigneshr@ti.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        bahle@ibv-augsburg.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87mt2ex9oo.fsf@mail.lhotse>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
-
->
-> On Thu, Apr 27, 2023 at 07:50:30AM +0200, Dominic Rath wrote:
-> > From: Alexander Bahle <bahle@ibv-augsburg.de>
+On Tue, May 09, 2023 at 05:09:43PM +1000, Michael Ellerman wrote:
+> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> > Hi all,
 > >
-> > Add "tx-phy-latency-ps" and "rx-phy-latency-ps" DT bindings for
-> > setting the PCIe PHY latencies.
-> > The properties expect a list of uint32 PHY latencies in picoseconds for
-> > every supported speed starting at PCIe Gen1, e.g.:
+> > Today's qemu test boot (powerpc pseries_le_defconfig) produced this
+> > warning:
 > >
-> >   tx-phy-latency-ps = <100000 200000>; /* Gen1: 100ns, Gen2: 200ns */
-> >   rx-phy-latency-ps = <150000 250000>; /* Gen1: 150ns, Gen2: 250ns */
->
-> Are these things that could/should be described in a more generic
-> place?  They don't look necessarily Cadence-specific.
->
+> > [    2.048588][    T1] ipr: IBM Power RAID SCSI Device Driver version: 2.6.4 (March 14, 2017)
+> > [    2.051560][    T1] ------------[ cut here ]------------
+> > [    2.052297][    T1] WARNING: CPU: 0 PID: 1 at kernel/workqueue.c:5925 workqueue_sysfs_register+0x20/0x1f0
+> 
+> Caused by 59709bb84c22 scsi: Use alloc_ordered_workqueue() to create ordered workqueues.
 
-As there is currently no generic binding, would you like to see a new
-yaml binding
-added (Documentation/devicetree/bindings/phy/phy.yaml) that contains just the
-two phy properties?
+The patch is already dropped. It was applied only for a short window
+yesterday. Should be okay now.
+
+Thanks.
 
 -- 
-greets
---
-Christian Gmeiner, MSc
-
-https://christian-gmeiner.info/privacypolicy
+tejun
