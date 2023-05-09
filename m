@@ -2,130 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B376FBF49
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4126FBF4C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234808AbjEIGfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 02:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
+        id S234886AbjEIGf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 02:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjEIGfU (ORCPT
+        with ESMTP id S234665AbjEIGfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 02:35:20 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D6D59D5
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 23:35:18 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3496YX1m111033;
-        Tue, 9 May 2023 01:34:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683614073;
-        bh=64hSoi+eRsccCXoBM3ThtnciX4raj/19dY5XXHek6OY=;
-        h=From:To:CC:Subject:Date;
-        b=cFYhwyTkJ85IVpSf2NEgo6ju1kWY0MQV9GPnj7x1qTqB1y/61p7SeEZVwgkU1g1a+
-         nAZILkJWUH+2JqEqkQRlibKcIyk2AgbcNoBvCWC3XZBR0qhOo/SjGhXK2K7K1fO9dC
-         4ahCSkbupjL0TZAkwBJgpXhBxrGfCCXAjBRqv294=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3496YXmr128508
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 9 May 2023 01:34:33 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
- May 2023 01:34:33 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 9 May 2023 01:34:33 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3496YWRB123740;
-        Tue, 9 May 2023 01:34:32 -0500
-From:   Achal Verma <a-verma1@ti.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "N_colas F . R . A . Prado" <nfraprado@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rafa_ Mi_ecki <rafal@milecki.pl>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>, Milind Parab <mparab@cadence.com>,
-        Swapnil Kashinath Jakhade <sjakhade@cadence.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Achal Verma <a-verma1@ti.com>
-Subject: [PATCH] arm64: defconfig: enable PCIe controller on TI platforms
-Date:   Tue, 9 May 2023 12:04:31 +0530
-Message-ID: <20230509063431.1203367-1-a-verma1@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 9 May 2023 02:35:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2896F9012;
+        Mon,  8 May 2023 23:35:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9549062FC2;
+        Tue,  9 May 2023 06:35:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD7EDC433D2;
+        Tue,  9 May 2023 06:35:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683614151;
+        bh=zpOHSdqVCQBn2YAqILJfgbw4dfnb2g8xfAWRoqWAjbE=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=JT/X4jPsrFCl2gJQ7d8jDxK0p5UfTg/oyy1MHnUzjjAgEVn9WHYrBBIntVUVkH8Wu
+         59H2HnO1TDxDNSiAmlaL99d/yrr2tAhm8w3QIVUMHSPxsPuLYyiM9UFx/A0djr2FLc
+         jOKADTqF05GzBoJ/XBhO1hWCzhcT2K2+jgRpucDp56FCv/tyLCoq2NDqDxq3MBLKUb
+         WviSYUPRcfq/DRFas9g//bfcOkCSlUZqye0mkzbXkVO0omebzPToapGKZqw8DRNT6t
+         ganRqlzDoi0SzRy5s7iMeEjMlRSY5j6rv8p8sIqyDDH1wwyHDJgxdrVeR+YWiOMpKn
+         wQtUctAEqNQGQ==
+Date:   Tue, 09 May 2023 07:35:46 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+CC:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_5/7=5D_dt-bindings=3A_soc=3A?= =?US-ASCII?Q?_starfive=3A_Add_StarFive_syscon_module?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <014dd7b2-9623-805c-97a6-5b3c5f120b79@starfivetech.com>
+References: <20230414024157.53203-1-xingyu.wu@starfivetech.com> <20230414024157.53203-6-xingyu.wu@starfivetech.com> <20230424-footsie-compost-d6624c8ef4e8@spud> <20230508-margarita-fondling-c9b970ad73a9@spud> <014dd7b2-9623-805c-97a6-5b3c5f120b79@starfivetech.com>
+Message-ID: <7527C059-95A2-49EA-AFE0-B089D3651A6B@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable PCIe controller and serdes drivers to enable PCIe functionality.
-* Enable Cadence serdes phy and wrapper driver.
-* Enable Cadence PCIe controller driver.
 
-Signed-off-by: Achal Verma <a-verma1@ti.com>
----
- arch/arm64/configs/defconfig | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index a24609e14d50..ff187dd585c2 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -230,9 +230,16 @@ CONFIG_PCIE_HISI_STB=y
- CONFIG_PCIE_TEGRA194_HOST=m
- CONFIG_PCIE_VISCONTI_HOST=y
- CONFIG_PCIE_LAYERSCAPE_GEN4=y
-+CONFIG_PCIE_CADENCE=y
-+CONFIG_PCIE_CADENCE_HOST=y
-+CONFIG_PCIE_CADENCE_EP=y
-+CONFIG_PCI_J721E=y
-+CONFIG_PCI_J721E_HOST=y
-+CONFIG_PCI_J721E_EP=y
- CONFIG_PCI_ENDPOINT=y
- CONFIG_PCI_ENDPOINT_CONFIGFS=y
- CONFIG_PCI_EPF_TEST=m
-+CONFIG_PCI_EPF_NTB=m
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_FW_LOADER_USER_HELPER=y
-@@ -1330,8 +1337,8 @@ CONFIG_RESET_TI_SCI=y
- CONFIG_PHY_XGENE=y
- CONFIG_PHY_CAN_TRANSCEIVER=m
- CONFIG_PHY_SUN4I_USB=y
--CONFIG_PHY_CADENCE_TORRENT=m
--CONFIG_PHY_CADENCE_SIERRA=m
-+CONFIG_PHY_CADENCE_TORRENT=y
-+CONFIG_PHY_CADENCE_SIERRA=y
- CONFIG_PHY_MIXEL_MIPI_DPHY=m
- CONFIG_PHY_FSL_IMX8M_PCIE=y
- CONFIG_PHY_HI6220_USB=y
-@@ -1363,8 +1370,8 @@ CONFIG_PHY_SAMSUNG_UFS=y
- CONFIG_PHY_UNIPHIER_USB2=y
- CONFIG_PHY_UNIPHIER_USB3=y
- CONFIG_PHY_TEGRA_XUSB=y
--CONFIG_PHY_AM654_SERDES=m
--CONFIG_PHY_J721E_WIZ=m
-+CONFIG_PHY_AM654_SERDES=y
-+CONFIG_PHY_J721E_WIZ=y
- CONFIG_ARM_CCI_PMU=m
- CONFIG_ARM_CCN=m
- CONFIG_ARM_CMN=m
--- 
-2.25.1
+On 9 May 2023 07:23:18 IST, Xingyu Wu <xingyu=2Ewu@starfivetech=2Ecom> wro=
+te:
+>On 2023/5/9 3:24, Conor Dooley wrote:
+>> On Mon, Apr 24, 2023 at 06:15:47PM +0100, Conor Dooley wrote:
+>>> On Fri, Apr 14, 2023 at 10:41:55AM +0800, Xingyu Wu wrote:
+>>> > From: William Qiu <william=2Eqiu@starfivetech=2Ecom>
+>>> >=20
+>>> > Add documentation to describe StarFive System Controller Registers=
+=2E
+>>> >=20
+>>> > Signed-off-by: William Qiu <william=2Eqiu@starfivetech=2Ecom>
+>>> > ---
+>>> >  =2E=2E=2E/soc/starfive/starfive,jh7110-syscon=2Eyaml  | 58 ++++++++=
++++++++++++
+>>> >  MAINTAINERS                                   |  6 ++
+>>> >  2 files changed, 64 insertions(+)
+>>> >  create mode 100644 Documentation/devicetree/bindings/soc/starfive/s=
+tarfive,jh7110-syscon=2Eyaml
+>>> >=20
+>>> > diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive=
+,jh7110-syscon=2Eyaml b/Documentation/devicetree/bindings/soc/starfive/star=
+five,jh7110-syscon=2Eyaml
+>>> > new file mode 100644
+>>> > index 000000000000=2E=2Ede086e74a229
+>>> > --- /dev/null
+>>> > +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110=
+-syscon=2Eyaml
+>>> > @@ -0,0 +1,58 @@
+>>> > +# SPDX-License-Identifier: (GPL-2=2E0 OR BSD-2-Clause)
+>>> > +%YAML 1=2E2
+>>> > +---
+>>> > +$id: http://devicetree=2Eorg/schemas/soc/starfive/starfive,jh7110-s=
+yscon=2Eyaml#
+>>> > +$schema: http://devicetree=2Eorg/meta-schemas/core=2Eyaml#
+>>> > +
+>>> > +title: StarFive JH7110 SoC system controller
+>>> > +
+>>> > +maintainers:
+>>> > +  - William Qiu <william=2Eqiu@starfivetech=2Ecom>
+>>> > +
+>>> > +description: |
+>>> > +  The StarFive JH7110 SoC system controller provides register infor=
+mation such
+>>> > +  as offset, mask and shift to configure related modules such as MM=
+C and PCIe=2E
+>>> > +
+>>> > +properties:
+>>> > +  compatible:
+>>> > +    oneOf:
+>>> > +      - items:
+>>> > +          - enum:
+>>> > +              - starfive,jh7110-aon-syscon
+>>> > +              - starfive,jh7110-sys-syscon
+>>> > +          - const: syscon
+>>> > +          - const: simple-mfd
+>>> > +      - items:
+>>> > +          - const: starfive,jh7110-stg-syscon
+>>> > +          - const: syscon
+>>> > +
+>>> > +  reg:
+>>> > +    maxItems: 1
+>>> > +
+>>> > +  clock-controller:
+>>> > +    $ref: /schemas/clock/starfive,jh7110-pll=2Eyaml#
+>>> > +    type: object
+>>> > +
+>>> > +  power-controller:
+>>> > +    $ref: /schemas/power/starfive,jh7110-pmu=2Eyaml#
+>>> > +    type: object
+>>>=20
+>>> My plan was to grab this patch after the merge window, but there's bee=
+n
+>>> some back and forth [1] about what exactly should be a power-controlle=
+r
+>>> here=2E Given the merge window is open & I know Emil wants to look at =
+the
+>>> various clock bits for the JH7110, I don't think there's a pressing ne=
+ed
+>>> for you to do anything here, but figured I'd at least mention how thin=
+gs
+>>> are going on this thread too=2E
+>>=20
+>> To follow up on this, it transpired in that thread that this node, not =
+a
+>> child node, should be the power controller=2E
+>>=20
+>> Up to you StarFive folk how you wish to resend, but I am fine with it
+>> being in this series, I shall just not pick up the soc driver patches
+>> until the resent binding is applied by Stephen=2E
+>>=20
+>
+>Thanks=2E I had discussed with changhuang=2Eliang about this=2E And I wil=
+l drop
+>the 'starfive,jh7110-aon-syscon' and 'power-controller' in next patchset=
+=2E
+>Changhuang will take these in his patchset=2E
 
+Won't that result in broken bindings, since there's a ref to the pll bindi=
+ng?
+Keeping it in the same series (i=2Ee=2E this one) makes
+the most sense to me=2E
+
+Cheers,
+Conor=2E
+
+>
+>Best regards,
+>Xingyu Wu
+>
