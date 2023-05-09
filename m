@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8426FC49F
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E086FC48E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234713AbjEILJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 07:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
+        id S235429AbjEILHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 07:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235464AbjEILJC (ORCPT
+        with ESMTP id S235247AbjEILHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 07:09:02 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA40B106FC;
-        Tue,  9 May 2023 04:08:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jRJqPjkZDLfU3CkfoL3myLBABJzadgOWoNWDI32Y8LI=; b=vSapig8PT+X9FleUgN3U0CZtui
-        relRtn1zPe77P0WIAsoYme9WGw5tkGy2jBjW361caFHw1VfseDENIJEioGXGsAlXDL56EYU9zLoKK
-        sYtsAQy08WKeWKCMyQFs1KJSr/OyChBFdzqL/MxK7qab9fpOnk7H5jh5WbiYQN/4wFh+Pj/AmUjtw
-        QaFbJledlkQi5f022TKkXoXPhIOBe4yd/n6XLOTCL2wmgcVNokN/6W7o9qCPn/qVvfH0K0rQjHZ6A
-        RGMSVi/rBgBEn6a8OS6m8fLIOlG3fUbF/IUlHnmjqIk+2Iwkmd+PWpBK1wBJ3ULFWthvylMJrnGnM
-        mBfXf0KA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pwLBl-00FBZV-VA; Tue, 09 May 2023 11:07:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 20197300023;
-        Tue,  9 May 2023 13:07:23 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0504E20B0882C; Tue,  9 May 2023 13:07:22 +0200 (CEST)
-Date:   Tue, 9 May 2023 13:07:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: Re: [patch v3 18/36] [patch V2 18/38] cpu/hotplug: Add CPU state
- tracking and synchronization
-Message-ID: <20230509110722.GZ83892@hirez.programming.kicks-ass.net>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185218.240871842@linutronix.de>
+        Tue, 9 May 2023 07:07:51 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE48219AF;
+        Tue,  9 May 2023 04:07:49 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a50cb65c92so40243865ad.0;
+        Tue, 09 May 2023 04:07:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683630469; x=1686222469;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GrfixzbraZH9Q9ixn6Nkit2FqnHKmBjaOHnxSQju84U=;
+        b=CsEvbAh+J4uE9iLr8y6EcDFVO7scBKKkTDYWsc76PmQGdiOpwEYrKSKaqw7FffLmIz
+         RhhCbFHg3qhWSZm0kJSSaU+Lw4O6xkddIwfvoWDAQJPRMYLWMz5Asvaq7tu9ZJvawS/e
+         Xwb9NMLnAGoSXgENfXxVjNcO2ZkUIWcKcrda85TIkZg+mQeAwvElz5Oi/QD7fPWQtszT
+         T3EYAOupzDmGVMR/UnA0R9WYyiAam1Lzapaxg/ctlnIBnSrzpcSy9NGepIARzwvomDjh
+         IuZHon74dTQzb4ViD4Bzco2L2UWNRhjsgpuVbA8p+M7CKyD2Od9/47wvM38yJs705Xr/
+         jSMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683630469; x=1686222469;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GrfixzbraZH9Q9ixn6Nkit2FqnHKmBjaOHnxSQju84U=;
+        b=TWnpZUVdLVSUAUc28+J33A6oEH06IWTyf5Fu8la38m2o4S6wBfd6tWB2+w1VkVpgmG
+         o4K8Gk94bX4az6PdpUhJp2NLAiU5fzF+JeYTp40OFwm6O/WSjo8+L8ZVEawd/hNf/sE8
+         vwKRpzgLoxsFnjBQEc4pmaqB1RthAmP0WfdgaRIFSKP2VvR8COsj6SBNkCaQAXxFB8cN
+         J8h5Fthk4mhT5bR4cc+qbTSFt16+BzFZFljX2fYHGdMkto3KOEI+WAONvA6LILVlbw+I
+         XppRP62AkOqaifOX1IW8wcWUYhV6aIYdYdTC0hYXnqjIZtyeJ0Cq6kVtl7AGWdzNLKZ2
+         CjnQ==
+X-Gm-Message-State: AC+VfDzZZIGfAPY88PLrvo3ZZS8R2pMgxNUn1Bb+jqBfr0DAb6Rt31CI
+        HKrgUwj0t5lZzmOIj8eX7sGBnivuDT4=
+X-Google-Smtp-Source: ACHHUZ6LRORx67H+n0hiniE3cE09LQJKDWrtWVc8q4Ho+j1++f9OQTtc1NYibPh2fH0UC8laIUkJ4A==
+X-Received: by 2002:a17:902:7b91:b0:1ac:34fe:d040 with SMTP id w17-20020a1709027b9100b001ac34fed040mr12429222pll.50.1683630468717;
+        Tue, 09 May 2023 04:07:48 -0700 (PDT)
+Received: from wheely.local0.net ([118.208.131.108])
+        by smtp.gmail.com with ESMTPSA id l5-20020a17090270c500b001a641ea111fsm1269923plt.112.2023.05.09.04.07.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 04:07:48 -0700 (PDT)
+From:   Nicholas Piggin <npiggin@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [RFC PATCH 0/3] Prohibit irq disable when disabled or enable when enabled
+Date:   Tue,  9 May 2023 21:07:36 +1000
+Message-Id: <20230509110739.241735-1-npiggin@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508185218.240871842@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 09:43:55PM +0200, Thomas Gleixner wrote:
+Hi,
 
-> +static inline void cpuhp_ap_update_sync_state(enum cpuhp_sync_state state)
-> +{
-> +	atomic_t *st = this_cpu_ptr(&cpuhp_state.ap_sync_state);
-> +	int sync = atomic_read(st);
-> +
-> +	while (!atomic_try_cmpxchg(st, &sync, state));
-> +}
+Any thoughts on tightening this up and adding some warnings for this?
+Motivated by a bug I added to powerpc which broke disabled-disable
+callers.
 
-Why isn't:
+Not that I necessarily want archs to be able to depend on this, it
+would always be better to be tolerant. But it seems a risky pattern
+for random code to be using.
 
-	atomic_set(st, state);
+This still fires off quite a few warnings on powerpc, and I haven't
+test booted any other arch so probably wouldn't ask to upstream patch
+3 just yet, but if there are no objections to the idea I might do a
+bit more work on it.
 
-any good?
+Thanks,
+Nick
+
+Nicholas Piggin (3):
+  hrtimer: balance irq save/restore
+  init: Require archs call start_kernel with arch irqs disabled
+  irqflags: Warn on irq disable when disabled and enable when enabled
+
+ include/linux/irqflags.h       | 26 ++++++++++++++++++++++++--
+ init/main.c                    |  6 +++++-
+ kernel/locking/irqflag-debug.c | 14 ++++++++++++++
+ kernel/time/hrtimer.c          | 22 +++++++++++-----------
+ 4 files changed, 54 insertions(+), 14 deletions(-)
+
+-- 
+2.40.1
 
