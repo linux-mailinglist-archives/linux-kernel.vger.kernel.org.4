@@ -2,145 +2,421 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3DD6FCB4D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 846B06FCB52
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjEIQ2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 12:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S229741AbjEIQa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 12:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjEIQ2c (ORCPT
+        with ESMTP id S229575AbjEIQaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 12:28:32 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70584210
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 09:28:31 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9659c5b14d8so990557166b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 09:28:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1683649710; x=1686241710;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OC8n/uXlcKr2NqIRtICycl1P6N257MT/IFD3g9x1RYg=;
-        b=F6X6VwC0MM2xJrULO90f7zNyo1CfUKrmhpdXPtVRAkWQfgAdS2ohwcmLedp51ovgEH
-         1FcajRwfbttk6crVdHc3QQ0Pje2CHSqZaDceVJA//v7ApHLQFzI1/OwlaTGcPLuufgip
-         BvKRkpeWwdGsAS7XKEUxSULt+qp+CvYdzsGCM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683649710; x=1686241710;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OC8n/uXlcKr2NqIRtICycl1P6N257MT/IFD3g9x1RYg=;
-        b=Zp8Oy+9QDq0T5ph/RE3W030c9oQC+R/Fu5oHWYK10lwkph0Cg6YlR8BxY7r5dIg1mN
-         hZ8NDtUECooooBFUU5nKXvZmx8wpImohSwYvh4rrV/8bNrJp4/vXho4AiIcpWU/bv/i/
-         SVfjDtaE92WcYN/fg6UtqF75RfQsAthjtwUK1SYK1kOw1l3jbQGmsD8HPRiq7xAno7Ja
-         5hL++UNTsbRGSN+NhBb9xDcO4SAj9Mb69qchjzfDEqE89o2n9cnVK6i/fks4DzEwGwft
-         WjrtaLtNkotWgPb+ax+tSCzWG8A1LUQqQRcHEDJhoi9h87BZ/zd3AwdnQ4yP/ZYW6Zpz
-         PlWg==
-X-Gm-Message-State: AC+VfDz8BW6b/D9cFAoCpauYNMXFJQ4iJjATM3bNHlhtKVj9SaeeCT11
-        jqb8TlSM704ht52V3woE+4wm0p3beykewaHwzDkJU7SCjuPtBSFm3t8=
-X-Google-Smtp-Source: ACHHUZ7tSJ0RwAGl4DjiCCbAgI+ex3IFXIGOR3DSWKYLtSIFkvou1biC9xLhpTVgM+jortXHE2iRtIO4s4DCsv0ap2E=
-X-Received: by 2002:a17:907:7291:b0:96a:717:d452 with SMTP id
- dt17-20020a170907729100b0096a0717d452mr1333174ejc.19.1683649709854; Tue, 09
- May 2023 09:28:29 -0700 (PDT)
+        Tue, 9 May 2023 12:30:25 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289C335B8
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 09:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=Mp8WHd6d928qQOX9CWPFdsX/EEp64P+t3Iil10Pcl6c=; b=lhE1jcKmi+tGn4NEm1qL0RAJTo
+        hLSApWhbiw4lzSfV4luL+DHgrWuXP7n1zUqPxa2DzhvISYLzJo9VWA5ObpcfIVgy/4gOZkiiLeBYP
+        nw9ObeBTfTJQp9xuvOXkfiCxyWR97/4DsWFluv37QvkXXuFf3Dy7C3OyJMzxnnZ5RErwzhS5Ea1rX
+        /riXg6GXn8WlYvd76njep0r+ROaoPFoHTjIxH2zDb46lOEn7o7NJcvGOPTXZ4AVquOOijXctrp7tG
+        VCOy7WycWlz+JYRi88CFmvFK6LufB1aCF2vtGibvJATcI6jdx5RHWkPAyxylis6Qs0zIwTIMF+PGG
+        i6z0jadg==;
+Received: from [38.44.72.37] (helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1pwQE7-0052WQ-Ub; Tue, 09 May 2023 18:30:12 +0200
+Date:   Tue, 9 May 2023 15:30:06 -0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     Harry Wentland <harry.wentland@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        sunpeng.li@amd.com, Alex Deucher <alexander.deucher@amd.com>,
+        dri-devel@lists.freedesktop.org, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        Joshua Ashton <joshua@froggi.es>,
+        Sebastian Wick <sebastian.wick@redhat.com>,
+        Xaver Hugl <xaver.hugl@gmail.com>,
+        Shashank Sharma <Shashank.Sharma@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        sungjoon.kim@amd.com, Alex Hung <alex.hung@amd.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 05/40] drm/amd/display: add shaper LUT driver-private
+ props
+Message-ID: <20230509163006.4gfxo6uzzdd7wakq@mail.igalia.com>
+References: <20230423141051.702990-1-mwen@igalia.com>
+ <20230423141051.702990-6-mwen@igalia.com>
+ <40bcc490-4057-0d2b-466a-bd7ce11cfc74@amd.com>
 MIME-Version: 1.0
-From:   Daniel Dao <dqminh@cloudflare.com>
-Date:   Tue, 9 May 2023 17:28:19 +0100
-Message-ID: <CA+wXwBS7YTHUmxGP3JrhcKMnYQJcd6=7HE+E1v-guk01L2K3Zw@mail.gmail.com>
-Subject: rcu_preempt self-detected stall in filemap_get_read_batch
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        kernel-team <kernel-team@cloudflare.com>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="luw2sap3czxitylx"
+Content-Disposition: inline
+In-Reply-To: <40bcc490-4057-0d2b-466a-bd7ce11cfc74@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthew,
 
-I'm trying to track down a problem that occurred intermittenly when
-doing rocksdb compaction
-and manifested in RCU self detected stall
+--luw2sap3czxitylx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  [949170.657126][   C97] rcu: INFO: rcu_preempt self-detected stall on CPU
-  [949170.666237][   C97] rcu:    97-....: (701243 ticks this GP)
-idle=948c/1/0x4000000000000000 softirq=295729919/295729919 fqs=286689
-  [949170.683019][   C97]         (t=718763 jiffies g=500631033
-q=31964872 ncpus=128)
-  [949170.692508][   C97] CPU: 97 PID: 184960 Comm: rocksdb:low1
-Kdump: loaded Tainted: G        W  O L     6.1.22-cloudflare-2023.3.27
-#1
-  [949170.710034][   C97] Hardware name: HYVE
-EDGE-METAL-GEN11/HS1811D_Lite, BIOS V0.11-sig 12/23/2022
-  [949170.721788][   C97] RIP: 0010:xas_load+0x61/0xa0
-  [949170.729326][   C97] Code: ea 83 e2 3f 89 d0 48 83 c0 04 48 8b 44
-c6 08 48 89 77 18 48 89 c1 83 e1 03 48 83 f9 02 75 08 48 3d fd 00 00
-00 76 0d 88 57 12 <80> 3e 00 75 a5 c3 cc cc cc cc 48 c1 e8 02 89 c2 89
-c0 48 83 c0 04
-  [949170.757643][   C97] RSP: 0018:ffffabeee65f3bf8 EFLAGS: 00000293
-  [949170.766704][   C97] RAX: fffff17ec1cc3000 RBX: ffffabeee65f3d70
-RCX: 0000000000000000
-  [949170.777729][   C97] RDX: 0000000000000000 RSI: ffff99e781536d80
-RDI: ffffabeee65f3c00
-  [949170.788799][   C97] RBP: 000000000000157e R08: 0000000000000402
-R09: fffff17ec1cc3000
-  [949170.799865][   C97] R10: 0000000000000001 R11: 0000000000000000
-R12: ffffabeee65f3e90
-  [949170.810927][   C97] R13: 000000000000157e R14: 0000000000001540
-R15: ffff99e2615f6538
-  [949170.821983][   C97] FS:  00007ff7be571700(0000)
-GS:ffff99d51fc40000(0000) knlGS:0000000000000000
-  [949170.834065][   C97] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [949170.843820][   C97] CR2: 00007fa0ea422000 CR3: 0000004b17f62002
-CR4: 0000000000770ee0
-  [949170.855008][   C97] PKRU: 55555554
-  [949170.861762][   C97] Call Trace:
-  [949170.868244][   C97]  <TASK>
-  [949170.874358][   C97]  filemap_get_read_batch+0x186/0x250
-  [949170.882949][   C97]  filemap_get_pages+0xa2/0x630
-  [949170.890991][   C97]  ? free_unref_page_commit+0x7c/0x170
-  [949170.899646][   C97]  ? _raw_spin_unlock_irqrestore+0x1b/0x40
-  [949170.908603][   C97]  ? free_unref_page+0x1a8/0x1e0
-  [949170.916604][   C97]  filemap_read+0xc1/0x320
-  [949170.923990][   C97]  ? find_css_set+0x200/0x680
-  [949170.931570][   C97]  xfs_file_buffered_read+0x50/0xd0
-  [949170.939639][   C97]  xfs_file_read_iter+0x6a/0xd0
-  [949170.947322][   C97]  vfs_read+0x204/0x2d0
-  [949170.954298][   C97]  __x64_sys_pread64+0x90/0xc0
-  [949170.961865][   C97]  do_syscall_64+0x3b/0x90
-  [949170.969094][   C97]  entry_SYSCALL_64_after_hwframe+0x4b/0xb5
-  [949170.977781][   C97] RIP: 0033:0x7ff7ee27b917
-  [949170.984964][   C97] Code: 08 89 3c 24 48 89 4c 24 18 e8 05 f4 ff
-ff 4c 8b 54 24 18 48 8b 54 24 10 41 89 c0 48 8b 74 24 08 8b 3c 24 b8
-11 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 31 44 89 c7 48 89 04 24 e8 35
-f4 ff ff 48 8b
-  [949171.013041][   C97] RSP: 002b:00007ff7be56d1b0 EFLAGS: 00000293
-ORIG_RAX: 0000000000000011
-  [949171.024300][   C97] RAX: ffffffffffffffda RBX: 0000000001595dd0
-RCX: 00007ff7ee27b917
-  [949171.035104][   C97] RDX: 00000000000b20c3 RSI: 0000000027460000
-RDI: 0000000000000050
-  [949171.045842][   C97] RBP: 00007ff7be56d2f0 R08: 0000000000000000
-R09: 00007ff7be56d3a0
-  [949171.056529][   C97] R10: 00000000014cccf2 R11: 0000000000000293
-R12: 0000000003a2fc80
-  [949171.067185][   C97] R13: 00000000000b20c3 R14: 00000000000b20c3
-R15: 00000000014cccf2
-  [949171.077761][   C97]  </TASK>
+On 05/08, Harry Wentland wrote:
+>=20
+>=20
+> On 4/23/23 10:10, Melissa Wen wrote:
+> > CRTC shaper LUT shapes the content after blending, i.e., de-linearizes
+> > or normalizes space before applying a 3D LUT color correction. In the
+> > next patch, we add CRTC 3D LUT property to DRM color management after
+> > this shaper LUT and before the current CRTC gamma LUT.
+> >=20
+>=20
+> It might be good to describe the motivation behind the "de-linearization"
+> of pixels. Since a 3DLUT has a limited number of entries in each dimension
+> we want to use them in an optimal fashion. This means using the 3DLUT in
+> a colorspace that is optimized for human vision, such as sRGB, PQ, or
+> another non-linear space.
 
-We have not been able to reproduce this reliably.
+ack.
 
-Does this look similar to problems seen in
-https://lore.kernel.org/linux-mm/Y1lZ9Rm87GpFRM%2FQ@casper.infradead.org/.
-I wonder if it's reasonable to try the patch and see what we have
-since it looks sane.
+>=20
+> > Signed-off-by: Melissa Wen <mwen@igalia.com>
+> > ---
+> >  drivers/gpu/drm/amd/amdgpu/amdgpu_display.c   |  28 ++++
+> >  drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h      |  14 ++
+> >  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h |  17 +++
+> >  .../amd/display/amdgpu_dm/amdgpu_dm_crtc.c    | 122 +++++++++++++++++-
+> >  4 files changed, 179 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/=
+drm/amd/amdgpu/amdgpu_display.c
+> > index 8632ab695a6c..44c22cb87dde 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+> > @@ -1247,6 +1247,30 @@ amdgpu_display_user_framebuffer_create(struct dr=
+m_device *dev,
+> >  	return &amdgpu_fb->base;
+> >  }
+> > =20
+> > +#ifdef CONFIG_STEAM_DECK
+>=20
+> Something like AMD_PRIVATE_COLOR would be better.
 
-Best,
-Daniel.
+Oh, I see your suggestion for my previous question here, so nvm.
+
+>=20
+> It might also be enough to guard only the bits that make the uAPI
+> appear, such as drm_property_create, etc.
+
+Makes sense. Joshie also suggested me this path.
+
+Thanks!
+
+>=20
+> Harry
+>=20
+> > +static int
+> > +amdgpu_display_create_color_properties(struct amdgpu_device *adev)
+> > +{
+> > +	struct drm_property *prop;
+> > +
+> > +	prop =3D drm_property_create(adev_to_drm(adev),
+> > +				   DRM_MODE_PROP_BLOB,
+> > +				   "AMD_SHAPER_LUT", 0);
+> > +	if (!prop)
+> > +		return -ENOMEM;
+> > +	adev->mode_info.shaper_lut_property =3D prop;
+> > +
+> > +	prop =3D drm_property_create_range(adev_to_drm(adev),
+> > +					 DRM_MODE_PROP_IMMUTABLE,
+> > +					 "AMD_SHAPER_LUT_SIZE", 0, UINT_MAX);
+> > +	if (!prop)
+> > +		return -ENOMEM;
+> > +	adev->mode_info.shaper_lut_size_property =3D prop;
+> > +
+> > +	return 0;
+> > +}
+> > +#endif
+> > +
+> >  const struct drm_mode_config_funcs amdgpu_mode_funcs =3D {
+> >  	.fb_create =3D amdgpu_display_user_framebuffer_create,
+> >  };
+> > @@ -1323,6 +1347,10 @@ int amdgpu_display_modeset_create_props(struct a=
+mdgpu_device *adev)
+> >  			return -ENOMEM;
+> >  	}
+> > =20
+> > +#ifdef CONFIG_STEAM_DECK
+> > +	if (amdgpu_display_create_color_properties(adev))
+> > +		return -ENOMEM;
+> > +#endif
+> >  	return 0;
+> >  }
+> > =20
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h b/drivers/gpu/drm=
+/amd/amdgpu/amdgpu_mode.h
+> > index b8633df418d4..1fd3497af3b5 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
+> > @@ -344,6 +344,20 @@ struct amdgpu_mode_info {
+> >  	int			disp_priority;
+> >  	const struct amdgpu_display_funcs *funcs;
+> >  	const enum drm_plane_type *plane_type;
+> > +
+> > +	/* Driver-private color mgmt props */
+> > +#ifdef CONFIG_STEAM_DECK
+> > +	/**
+> > +	 * @shaper_lut_property: CRTC property to set post-blending shaper LUT
+> > +	 * that converts content before 3D LUT gamma correction.
+> > +	 */
+> > +	struct drm_property *shaper_lut_property;
+> > +	/**
+> > +	 * @shaper_lut_size_property: CRTC property for the size of
+> > +	 * post-blending shaper LUT as supported by the driver (read-only).
+> > +	 */
+> > +	struct drm_property *shaper_lut_size_property;
+> > +#endif
+> >  };
+> > =20
+> >  #define AMDGPU_MAX_BL_LEVEL 0xFF
+> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h b/driver=
+s/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h
+> > index 2e2413fd73a4..de63455896cc 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h
+> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h
+> > @@ -726,6 +726,23 @@ struct dm_crtc_state {
+> >  	struct dc_info_packet vrr_infopacket;
+> > =20
+> >  	int abm_level;
+> > +
+> > +#ifdef CONFIG_STEAM_DECK
+> > +	/* AMD driver-private color mgmt pipeline
+> > +	 *
+> > +	 * DRM provides CRTC degamma/ctm/gamma color mgmt features, but AMD HW
+> > +	 * has a larger set of post-blending color calibration features, as
+> > +	 * below:
+> > +	 */
+> > +	/**
+> > +	 * @shaper_lut:
+> > +	 *
+> > +	 * Lookup table used to de-linearize pixel data for gamma correction.
+> > +	 * See drm_crtc_enable_color_mgmt(). The blob (if not NULL) is an arr=
+ay
+> > +	 * of &struct drm_color_lut.
+> > +	 */
+> > +	struct drm_property_blob *shaper_lut;
+> > +#endif
+> >  };
+> > =20
+> >  #define to_dm_crtc_state(x) container_of(x, struct dm_crtc_state, base)
+> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c b/d=
+rivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+> > index e3762e806617..503433e5cb38 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+> > @@ -229,7 +229,9 @@ static void dm_crtc_destroy_state(struct drm_crtc *=
+crtc,
+> >  	if (cur->stream)
+> >  		dc_stream_release(cur->stream);
+> > =20
+> > -
+> > +#ifdef CONFIG_STEAM_DECK
+> > +	drm_property_blob_put(cur->shaper_lut);
+> > +#endif
+> >  	__drm_atomic_helper_crtc_destroy_state(state);
+> > =20
+> > =20
+> > @@ -266,7 +268,12 @@ static struct drm_crtc_state *dm_crtc_duplicate_st=
+ate(struct drm_crtc *crtc)
+> >  	state->crc_skip_count =3D cur->crc_skip_count;
+> >  	state->mpo_requested =3D cur->mpo_requested;
+> >  	/* TODO Duplicate dc_stream after objects are stream object is flatte=
+ned */
+> > +#ifdef CONFIG_STEAM_DECK
+> > +	state->shaper_lut =3D cur->shaper_lut;
+> > =20
+> > +	if (state->shaper_lut)
+> > +		drm_property_blob_get(state->shaper_lut);
+> > +#endif
+> >  	return &state->base;
+> >  }
+> > =20
+> > @@ -299,6 +306,111 @@ static int amdgpu_dm_crtc_late_register(struct dr=
+m_crtc *crtc)
+> >  }
+> >  #endif
+> > =20
+> > +#ifdef CONFIG_STEAM_DECK
+> > +/**
+> > + * drm_crtc_additional_color_mgmt - enable additional color properties
+> > + * @crtc: DRM CRTC
+> > + *
+> > + * This function lets the driver enable the 3D LUT color correction pr=
+operty
+> > + * on a CRTC. This includes shaper LUT, 3D LUT and regamma TF. The sha=
+per
+> > + * LUT and 3D LUT property is only attached if its size is not 0.
+> > + */
+> > +static void
+> > +dm_crtc_additional_color_mgmt(struct drm_crtc *crtc)
+> > +{
+> > +	struct amdgpu_device *adev =3D drm_to_adev(crtc->dev);
+> > +
+> > +	if (adev->dm.dc->caps.color.mpc.num_3dluts) {
+> > +		drm_object_attach_property(&crtc->base,
+> > +					   adev->mode_info.shaper_lut_property, 0);
+> > +		drm_object_attach_property(&crtc->base,
+> > +					   adev->mode_info.shaper_lut_size_property,
+> > +					   MAX_COLOR_LUT_ENTRIES);
+> > +	}
+> > +}
+> > +
+> > +static int
+> > +atomic_replace_property_blob_from_id(struct drm_device *dev,
+> > +					 struct drm_property_blob **blob,
+> > +					 uint64_t blob_id,
+> > +					 ssize_t expected_size,
+> > +					 ssize_t expected_elem_size,
+> > +					 bool *replaced)
+> > +{
+> > +	struct drm_property_blob *new_blob =3D NULL;
+> > +
+> > +	if (blob_id !=3D 0) {
+> > +		new_blob =3D drm_property_lookup_blob(dev, blob_id);
+> > +		if (new_blob =3D=3D NULL)
+> > +			return -EINVAL;
+> > +
+> > +		if (expected_size > 0 &&
+> > +		    new_blob->length !=3D expected_size) {
+> > +			drm_property_blob_put(new_blob);
+> > +			return -EINVAL;
+> > +		}
+> > +		if (expected_elem_size > 0 &&
+> > +		    new_blob->length % expected_elem_size !=3D 0) {
+> > +			drm_property_blob_put(new_blob);
+> > +			return -EINVAL;
+> > +		}
+> > +	}
+> > +
+> > +	*replaced |=3D drm_property_replace_blob(blob, new_blob);
+> > +	drm_property_blob_put(new_blob);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int
+> > +amdgpu_dm_atomic_crtc_set_property(struct drm_crtc *crtc,
+> > +				   struct drm_crtc_state *state,
+> > +				   struct drm_property *property,
+> > +				   uint64_t val)
+> > +{
+> > +	struct amdgpu_device *adev =3D drm_to_adev(crtc->dev);
+> > +	struct dm_crtc_state *acrtc_state =3D to_dm_crtc_state(state);
+> > +	bool replaced =3D false;
+> > +	int ret;
+> > +
+> > +	if (property =3D=3D adev->mode_info.shaper_lut_property) {
+> > +		ret =3D atomic_replace_property_blob_from_id(crtc->dev,
+> > +					&acrtc_state->shaper_lut,
+> > +					val,
+> > +					-1, sizeof(struct drm_color_lut),
+> > +					&replaced);
+> > +		acrtc_state->base.color_mgmt_changed |=3D replaced;
+> > +		return ret;
+> > +	} else {
+> > +		drm_dbg_atomic(crtc->dev,
+> > +			       "[CRTC:%d:%s] unknown property [PROP:%d:%s]]\n",
+> > +			       crtc->base.id, crtc->name,
+> > +			       property->base.id, property->name);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int
+> > +amdgpu_dm_atomic_crtc_get_property(struct drm_crtc *crtc,
+> > +				   const struct drm_crtc_state *state,
+> > +				   struct drm_property *property,
+> > +				   uint64_t *val)
+> > +{
+> > +	struct amdgpu_device *adev =3D drm_to_adev(crtc->dev);
+> > +	struct dm_crtc_state *acrtc_state =3D to_dm_crtc_state(state);
+> > +
+> > +	if (property =3D=3D adev->mode_info.shaper_lut_property)
+> > +		*val =3D (acrtc_state->shaper_lut) ?
+> > +			acrtc_state->shaper_lut->base.id : 0;
+> > +	else
+> > +		return -EINVAL;
+> > +
+> > +	return 0;
+> > +}
+> > +#endif
+> > +
+> >  /* Implemented only the options currently available for the driver */
+> >  static const struct drm_crtc_funcs amdgpu_dm_crtc_funcs =3D {
+> >  	.reset =3D dm_crtc_reset_state,
+> > @@ -317,6 +429,10 @@ static const struct drm_crtc_funcs amdgpu_dm_crtc_=
+funcs =3D {
+> >  #if defined(CONFIG_DEBUG_FS)
+> >  	.late_register =3D amdgpu_dm_crtc_late_register,
+> >  #endif
+> > +#ifdef CONFIG_STEAM_DECK
+> > +	.atomic_set_property =3D amdgpu_dm_atomic_crtc_set_property,
+> > +	.atomic_get_property =3D amdgpu_dm_atomic_crtc_get_property,
+> > +#endif
+> >  };
+> > =20
+> >  static void dm_crtc_helper_disable(struct drm_crtc *crtc)
+> > @@ -477,9 +593,11 @@ int amdgpu_dm_crtc_init(struct amdgpu_display_mana=
+ger *dm,
+> >  	is_dcn =3D dm->adev->dm.dc->caps.color.dpp.dcn_arch;
+> >  	drm_crtc_enable_color_mgmt(&acrtc->base, is_dcn ? MAX_COLOR_LUT_ENTRI=
+ES : 0,
+> >  				   true, MAX_COLOR_LUT_ENTRIES);
+> > -
+> >  	drm_mode_crtc_set_gamma_size(&acrtc->base, MAX_COLOR_LEGACY_LUT_ENTRI=
+ES);
+> > =20
+> > +#ifdef CONFIG_STEAM_DECK
+> > +	dm_crtc_additional_color_mgmt(&acrtc->base);
+> > +#endif
+> >  	return 0;
+> > =20
+> >  fail:
+>=20
+>=20
+
+--luw2sap3czxitylx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmRadQ4ACgkQwqF3j0dL
+ehwXARAAjVDA2r1zAhLiIj7fE5c2XhzXFA62FBCGrYDh7xQP35EEIwhHkDtZqQrR
+roSLlR+M6rnvK163/FdX0gdKPPT4PTk/cv7jPD/dET/51+fQDTOW/kvpiFv814pL
+qXsKcNIY+H4rEz2ovbxN2mZqRbdHZ6dukmo5+nKif3bXs7yhfiQLJCxmdrUF6ufr
+8RSXxnAk6rRG12J1O+FDyGCFNCXScVidhhja6+bPVbLV8+R6R1Fm8ujqLMPYNFcC
+ChtqrKHjORP07mZ/sXnNmFo6OwaN2gUSUSU87l3q0V8dfM1KI/b83PPXAdlkBhO2
+WqaUvtX9KN1+HsiSB5R0hpzoMdYnl2kR4ygqwbkZWJ1QZzGC6+My2pNUG8p42n4z
+2pxP7n5guD2s45mXXyVE+0zKJcpakx7seYy0Y3CefHlP840+mlP2ELRH7msW6kdB
+YBKaOtDZivAsfVpXKZm9eVr9DTmEEhw5UCZR82dGCL0voXyZq/V4gWhRkgNn6LNO
+J5qSlYRt3dZLW8gMlnsv40hWX9qNQSRsFdTllqN0waAuTUwMAF4CZupytnzTogRV
+B2rvi9R1ZSXqGI1lxmqSNg9A6jBgZ39ETbYSgVFdxe6K4l5bZKgZVtDZ65IPpV89
+WEFlk/J8AoYP2gc6W42M5Q3xH8TsOLSDq1Rpd68a9PHGAPoGNL0=
+=7QSL
+-----END PGP SIGNATURE-----
+
+--luw2sap3czxitylx--
