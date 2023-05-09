@@ -2,124 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574CC6FC8E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330FA6FC8E4
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235214AbjEIO0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 10:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S235935AbjEIO0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 10:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235804AbjEIO0A (ORCPT
+        with ESMTP id S235906AbjEIO0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 10:26:00 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2089.outbound.protection.outlook.com [40.107.237.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82759524B;
-        Tue,  9 May 2023 07:25:35 -0700 (PDT)
+        Tue, 9 May 2023 10:26:17 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2062.outbound.protection.outlook.com [40.107.93.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BEA359D
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 07:25:56 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AYYj3b4ceR4L8iexqoTvou7s3jS/SB1VTWU/IZgNzynh840HX+PhxNz42utavl81uhUv+6ZLQ+1YhrLXP9IejKIRW6x3nfXYjsn7vLSfHNgEjUSUBYJ3UptSKz0ETsalJaQsDZxIFOID6deYTYH8QxSjAM/UL/hw0mscxgE9xIiTNCIshQ46ZcZV5CEryFLl3khlkJo/ddt8R1AnPzp4nidXhPLsbVemdXdDaAS6Xd/PrTg5ekgmHzj2jv6dwE73aqAQnE6Amv/SUTc++YBK9E2FmTVfIFQsjeoarjl5R72BMZyB8k4V3k6QBBBeCnwiCEpjN9nldMDlBZm6QCi7iA==
+ b=FglMg66t4/S46rROrEbU16QX3/6yyXnZ5z1aXwFxdCFRsAcNsujRjrR/vIZ25qhaNHWHb3o6qeEnpSyv1bNsG+8aSwy+WtsGiqA5OmByThw3sQ+yRYMQLtWm9kYeWAyewrE26S3/cOlbZnAZvKADZ85qBETf9w9Z4aJl35CNUHC69Fi4iplCZ3IG/Yx/nUG0U+yxnaiUxOg+KmG/hxJktCOGsH3PlCx2bLBJXwXwiTnTaBXRk9Z9fMehZMq+d2NtgBTdFvr2ql6qHrvY0i3rLHXOdutjpAp1YJzHeS3VCLIeNstUsm9GTIbex7XImr7tk8ki6Fc6wL4FexUgVv14hQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+pHAsvC7KhrnsIdlEBc4p27RhQ6VY6AqPVJIiv3j66Y=;
- b=MKWWfmZFHPgJxp2NGrNuoGqXAAbnDtjKurfIiMIgVctskG0k7HGjyoeW+RfcfvGoEtpoVd20ohMOaOVz4cRxtiqnudc0jNlTx+4u0exp0gJSjWHOpGKSNagJLrlhOTf6FltaF1jI4uMMX04UlxrvjQff7GZzYACs7NFFnyPv2EidP+mnsNFMLoGQ5tOFm0Gvdsfruk9F6uyLDynYJ0F0Fhu3e6VvR7CTcZ8MHwbVgxFtb0OqxCUeWkG7XDuCiDhFY3490ZMrzC8Qhnkr8UCq14TDCPFw2hNuJ3woTyNtzHpfTwsghYZHOuuTz+oL6t7paD9MjE23QTH8m/pVf1oY+g==
+ bh=N7wQ7cvystEx9HUeGeZ7Bv2urACEGyWoMD6puyBcNWc=;
+ b=K+Y9G7o/D88OyemzDzzEzRILMC1Ee2HHu3f5/A6DKeUn+HrAhILAj1VTQknDzB6wDQX8sD7jzSPt/YiV1hAbivZBhfM4BA1nxUZAiS+m+tfMcJ69cSXoCIh7dKr995acjBdXoPkXF1Y3fWDcBWkqIGn2Ytj8hGaPRYyOAwdmHv00excNZnBQukNRbLeUpVu2tx05kAE/pbKyUzKAWyh6fC9p8bj3e1Q/WRs7VBCRJD30caqSALQvXEKB2URkc4NfjwI4T/gNsUJlhKnvSrS3djOA/ksLLJIy69LJnLCDaJz4TCeAR7kGcXFeNmMuqGBQZvBQYk72i1j6t2s/Mdk7wQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+pHAsvC7KhrnsIdlEBc4p27RhQ6VY6AqPVJIiv3j66Y=;
- b=jzDxEl5i4B7YaQ/lK0JhB+uW/irXupqrkesISzivBQqnFJLpFOR2nxL1aez03BTnmBoFF+TjnS865i+TM8W31VZIRf1I5yELdZpoOAe1vZXQ+yUV0KJdZ2aIYqfdo15kiRiHkHKPxbzklmZAotEROCXKTML2NNujQI2p5Pmp0UA=
+ bh=N7wQ7cvystEx9HUeGeZ7Bv2urACEGyWoMD6puyBcNWc=;
+ b=MMrddurau8azFaN7RghCOMeXH9hwJkseAsIA4D7WC5ZilJQV3kBetmiQUDTMh7e8blrOz8OYwL5v5qFWKdNz9wQVGlF0//WiOGF4TYELwSUY5K9HOgGQX40HR1LAPu1LJX0gImpbqwVMYRcUHy6JD29Jqr3SRaKLVrVq+BLvCSH+OV+gOGV3LgjTVDbKNUNOSxD+vMxM4qISUdltCfcF9eBoHSLRBlTWXPZPVDPYmSixZj+mxtdSTOwT/WdXz0D5MU55By/4iZYIGkpKMpkir3ejPkCKNeIKZjHZBNmS7tI4E7ktdUySXy42fwqUZ9aFZVIrkvKsnZOIzQMP+0S5pQ==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by SA1PR12MB8860.namprd12.prod.outlook.com (2603:10b6:806:38b::15) with
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
+ SJ2PR12MB9085.namprd12.prod.outlook.com (2603:10b6:a03:564::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Tue, 9 May
- 2023 14:25:12 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::b911:e5f7:65a1:5ea2]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::b911:e5f7:65a1:5ea2%5]) with mapi id 15.20.6363.033; Tue, 9 May 2023
- 14:25:12 +0000
-Message-ID: <f629820c-50cf-7366-975e-68215b3f2bc5@amd.com>
-Date:   Tue, 9 May 2023 10:25:09 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     yazen.ghannam@amd.com, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        baolin.wang@linux.alibaba.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/mce/amd: init mce severity to handle deferred memory
- failure
-To:     Shuai Xue <xueshuai@linux.alibaba.com>, bp@alien8.de,
-        tony.luck@intel.com
-References: <20230425121829.61755-1-xueshuai@linux.alibaba.com>
-Content-Language: en-US
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-In-Reply-To: <20230425121829.61755-1-xueshuai@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN9PR03CA0571.namprd03.prod.outlook.com
- (2603:10b6:408:10d::6) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+ 2023 14:25:47 +0000
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::847b:988d:86fe:a0f8]) by DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::847b:988d:86fe:a0f8%5]) with mapi id 15.20.6387.018; Tue, 9 May 2023
+ 14:25:47 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Xin Hao <xhao@linux.alibaba.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Alistair Popple <apopple@nvidia.com>
+Subject: Re: [PATCH 1/2] migrate_pages_batch: simplify retrying and failure
+ counting of large folios
+Date:   Tue, 09 May 2023 10:25:44 -0400
+X-Mailer: MailMate (1.14r5963)
+Message-ID: <21078C33-2679-4C13-B46D-65858A4DC516@nvidia.com>
+In-Reply-To: <20230509022014.380493-1-ying.huang@intel.com>
+References: <20230509022014.380493-1-ying.huang@intel.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_B85438C4-05FF-4E80-8A43-167667617C89_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: MN2PR15CA0027.namprd15.prod.outlook.com
+ (2603:10b6:208:1b4::40) To DS7PR12MB5744.namprd12.prod.outlook.com
+ (2603:10b6:8:73::18)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|SA1PR12MB8860:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5d942b76-8b4e-45de-cd20-08db50993312
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|SJ2PR12MB9085:EE_
+X-MS-Office365-Filtering-Correlation-Id: 15145afe-8906-4677-f616-08db509947f8
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: s30fscSd8cDUOYNzUP2j3xkyfSVEeGBgESmlKrAGvnpMYrGAVIz5CuvP+icQcSg4fw6SeMXcmK16yEjF0B2c6d+ug7OJDiCf80uiSZWJ3eU/JU4ueUfInhsY8mib+2lAdO+qzVrx7F2Ep4TqegM8/f98k21vTuE/uLnKHl0wgWYfWCDcENcIUbY/Drrkj6nlZTQtzk+NJGiSPgzFayKo86danjtZPnAx2Sgy3irNfHfwcocAXOuAZKxDm0jow1UooKRKIqYtT78BoZBKb8J4lw8j3SZavAcspeb3k4QQpy+EGQ/1GxKsAgkB+LEireUieQcXJxOySqK9jGpyMwhJ2DPWA/UBpsu8kHUkC+UrpNnh0OgEq8E5ZekV5PS23nDJS3HRCBzIVfWRVeN/S/WJZ1DtFHpN9PkLgkRl3aUrqFkSs8xpUS8fyU1U8m4OucQhAcxeA3MWp9B/nhYDqWOvdJtnrkrUBsdIe8LqRWzAfMMpdDwCsBy7tR6eoIsUcqasHHlPJjtj6Ldjo81//0DXC0G687V8/+Wli4+aqr61ii7XwiuWknJbc9n5vGy/C5AEFDTxYy393QHgL264M45fAvdayt1B4CV5uLZrWqjHKvCbwxxLoRTuXzKN7pIL6rLE6i6nso6KUPQX2KfZQaG1iQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(366004)(376002)(136003)(346002)(451199021)(86362001)(36756003)(31696002)(6666004)(316002)(4326008)(478600001)(66556008)(66946007)(66476007)(6486002)(5660300002)(7416002)(8936002)(8676002)(2906002)(41300700001)(44832011)(186003)(38100700002)(53546011)(26005)(6506007)(6512007)(83380400001)(2616005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 3H43gZkw+KXQjOLigvoetucJZRg8Ze6tUKIV5wz9fUhliSRuWuOiEMQ5/VDb8VDCGtYKoa641N+t9cwqGcDyxm2KTbrpSYS+TJZqqN5Bo1UcDhsDoPXbLRXLBI6wCnX4dTrh19hMQ4iKYT4oSgrKub8dlR3kOeO9M6bqimbDD3Zprh+HpUFr8ZZi/fyqGxBzIEDEuF0kvhQlc53JldY1LNeAc/1H71L6A9NTkFJJ8y86kv7gYtw7dt5M0Xnrcv6Q4ayRepiR4DibNj8R4RcAkM3G3dqK4OyehyemNGuI0gbbZY9DLkFdxjxyoarXAC9l62LdAgNuXhe5m+1+jVtVOgAShjFYSX7Ga06zLxNvtIzvvx21/ZgmShJCLwVAT8Sy6XmSdlzjuVBkiOuyXFplm0qVh6BwF5uIGp+Yv5WmJOye3bBazBZ8cdBde+gLzYJwgkFS4rghCEuZGEq0ZOTx190y85A4JL2a+vWAM5xayIWM1IJaJO8Q5+Sef/1SfRuDQr1Du/V3LuNGLVbY+yu6uZ4J12NYWCS+d8f0W+IJexSP03xZ7Rua7gqn4UyEYKF0+H6GKwyssMlo2l1bWYxf9Er0G4Tskc2q3fL/guX8ZROk+T4z91szgKRUUbUK6zezr5xvmtmidZEN7ucaioUXVw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(136003)(366004)(39860400002)(451199021)(83380400001)(186003)(2616005)(36756003)(38100700002)(33656002)(86362001)(2906002)(6486002)(8936002)(316002)(6666004)(8676002)(41300700001)(5660300002)(6512007)(235185007)(54906003)(66556008)(4326008)(6916009)(66476007)(478600001)(66946007)(107886003)(53546011)(26005)(6506007)(45980500001)(72826004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZTQ5MEcwdi9PbW9NWVpVTkhDbE53dVFTaWRuYzZWd2ZseU9sdVM3VlVWU1Q2?=
- =?utf-8?B?YUR4OWJDYW9UakZaZUIvUGp2aFFuLzFDY3BLSUk1TkR6cGJqM3dpTGxFa3J6?=
- =?utf-8?B?bWxWcEk4NDFDUVB4VUhWN2l1RjF0RWY5d3dDT2JPTExIY3F4aEgxUGVVTVUw?=
- =?utf-8?B?U1FVdTVPRVY5QXpCK2FVUHRtK3A2YnR1VGVtQ1dhYmlkNTQrZWt2RExrbXE5?=
- =?utf-8?B?eVZDSVNIY0lSZngyNUJLbWlFcnUwUUxaOTlHd3BNTU1VRzNzREw3SXFJMGZ1?=
- =?utf-8?B?WVBQcUk0N2tJbFV6Ym1WVkEvTVQycFpxcStIZXhQSG92TFFpUloyYUt0eTRu?=
- =?utf-8?B?K2ViR0xMb3RaeU9qNy9jMmhPWUJKbnNuMFR3RDdGMWJ3d002K3MzblRwSGQr?=
- =?utf-8?B?RHZUZjJmMHlWSFI2U1R1QlJDQUpOMCtXWUJtWU05K3orQ3k5QUI4ZjFuaTcr?=
- =?utf-8?B?b0JHYVl4MVNVWjl0dWM0MmtqcEJ5dEtuZTRIWUxnbGVuSit6VW1SKzEwWVk4?=
- =?utf-8?B?OVp3cmZPVEFlanNQZXFqZGNseXQ3bnNKNjNFeVE0eFhZa09aOEJHbmozZUhh?=
- =?utf-8?B?VWFzMXBBaEpKRFNxU1V1c0ZLK1VQTTVVWjdhcGJHQTJ4Q0t3dnE3L3BVUy9O?=
- =?utf-8?B?cjh5Z3c3RzBqSkZSQWZwVUtwSmlYbEM5MWdXZkkyblJJaU1wbWt2Qjc4K2RL?=
- =?utf-8?B?UDlXNnVqeUpUY0l3MExIWXI1ZW1uSVU3QkFpL3NuWXRVVTEvNHN0NUpjT3FL?=
- =?utf-8?B?Nmxja1dkVExVMm1PS2hvNHVmdlRLaXF1ek96RnU1bXlpL3IzM0dHRnFMSUlJ?=
- =?utf-8?B?THdNK2JtdlFlc1NjWk8yRDZXdGZrN09KUkxiL3RaUnRMMjJiRnQvajJWWmVX?=
- =?utf-8?B?MEFmNDVNODRzT3JLRzZJYVNyY1BsdUdzSUdYbFY3SFlJYkkyREljUWRCamFx?=
- =?utf-8?B?bmlzOXh1NDYyTFRpMDAzQ3ZrZFp2Y0lqMW54T2t5cXJuSmdmTGE0U2hBbG5I?=
- =?utf-8?B?aTEvRlJHVVM1NjRKREN6dk1VWDFUZlBNZTcvVC9JQ3VuY3B1RmxRUUpnOGxm?=
- =?utf-8?B?RHI5QisxaHVtMnoxYnkrSTM5MXVqTy9VbjVTamJoMjV2RDE5U1dseG1ndHM0?=
- =?utf-8?B?UlV6UkNMdUxINkYzcE9hZkU1WDNjOEsrVWt2dFBhQW9CaWhzVW9HajdPK1Uz?=
- =?utf-8?B?WWdlUGZ6OHoxQW9CNmszQkdvVHR6N2wzRzA0eHZhZUYvb1BRUzBVRkRwSUd5?=
- =?utf-8?B?MGVsOVFkMm9KeXRmNW5vQ3R3Vk90NG1IZDdnMS9kSEtoVVlVc3FQcFFyS3Br?=
- =?utf-8?B?Ry83WVppQlhZNk9lNmdGV2tiWjI0Mm85SFBCM2lPQzJyd0JYV3hBSWxKRG9F?=
- =?utf-8?B?Qkp2amRudWlZRGtna05mK2pqN3BMQ29tcHdiMWdqK1ZHajh1YllJcnBiaVpw?=
- =?utf-8?B?UEcrK3d1UjZKRmpVOGhlVHBaOXNJT3pCaDZuODZTUkVVNE45dzgvVTdGNUFB?=
- =?utf-8?B?UCtRT01KYzBva1VWYW9kNHlkZUpmL1ZPYnkxNjlZZHlvd0ZvNC9JUUp2Uklm?=
- =?utf-8?B?UnhsMmRQTTJPRUFwTkNXMGpaOHE5SXlLbGlBZUVRTW0rY0NXN29ybmZTV0s0?=
- =?utf-8?B?TElYZSs1RzFyWU5jZENUS2wxcE1xZVhpRlRZV2h5bTJOa0ZzcW1CcjRrMVhT?=
- =?utf-8?B?R3ZXUkpWakJjaGxyNmh1M09wQ2xVV2s2dm10NzUzS0dXN3lRdWlVbk5kTi9o?=
- =?utf-8?B?Wm5mY3A2MjZ6K0ZsOVZDUThWQjhOZkJianBaKzJaZ1ZNQzFId1cvdk9McDhT?=
- =?utf-8?B?aWZ1cW9WZDJaY2tIVFJRaWlybW9iekR1UUx6UDdHWU84M3p5WTJ3SU9IMnlS?=
- =?utf-8?B?WlV0UnQ3RXY4Y2hEUGJMa21FNkt2MVQyc3NCVWM3a1dEcGEwcnp5TjZDNGo5?=
- =?utf-8?B?Tis2OW4yTHdscWZXcFFudksrSnAycGtvRFYzaG4zR0NNM3ptQXRQL2ZRSUk0?=
- =?utf-8?B?eURyU3ltM1FjWWRlcVpyUkZNQ3BsUEM0QmVyOS81RVd1NVFFcTViZ1BSbm5Q?=
- =?utf-8?B?SlNkL1V1V2l0QUFaZXBjUDlRbWU4dkwxcEI3Q2IvTDgwYjVzTnZjcUJoTGpk?=
- =?utf-8?Q?tcHZZ8NAQ5NROSJ7YT5Z94o59?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d942b76-8b4e-45de-cd20-08db50993312
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Q2ZpbHTJPD9yE9lKzZQRYkmT61IJuIYYRlklXiF65NmgItZASV5Qzm+asK12?=
+ =?us-ascii?Q?QvgVR4r8YsR+iTDAEQjlXyaG/IZntjiJgEsH5RX549NSv9Ob0Uu1zZlyzwv2?=
+ =?us-ascii?Q?ssqe092er59i6x5Hti5ljuf0rcsaACkPUP17LHTQeTwZ88dP5ARf6swJhZqZ?=
+ =?us-ascii?Q?NmeDDEV+f9wUjSmiqY4ob4yuKa+eRLH89W86RmR3HYjTWgKxcCaxXocqsKU9?=
+ =?us-ascii?Q?pT3J20n7qnyGyQwdIKP53TTbWhnGLqORM1Fr/uv9fKmMMC9VpFCNHwisafyY?=
+ =?us-ascii?Q?ZjQwwfVuDV36qS6jWu396eiUr1WbhfHg02TK+rydSnn/Ux/QOMzNQ/It1CAu?=
+ =?us-ascii?Q?erD+P0WcYDoLBCqQ9QmIaTUYpN28ICgVYxszotPUXaSezNjjAaY9Y0jIW17R?=
+ =?us-ascii?Q?EpH7+nZUBOBUOFDQLHbgjlZDu2jX6GnfF8Pb0Ko9gj/arE9he233gZdp7OSR?=
+ =?us-ascii?Q?jq6f9hrmocidRm37/RyOOWUSJ73Rl/KhBqbiswHzKLFsLOJMo/fJ/nRzenDM?=
+ =?us-ascii?Q?5UljEhmgphHLhpzBami1w8JmF7ZCob76QyMCUNKORrzKgXUNbbQ/BOGJOZc4?=
+ =?us-ascii?Q?0xMSJaBfQGAEwHSLjr64DPhmUOWc+CF5NDnGhQcpTT9IiIUqQ8iiBiQSlzp3?=
+ =?us-ascii?Q?1ttmOWJ7krgVa8CfnPEtXpFro7omV8ES209JYDLBKTvoMucbMdeJ+JUhjNIw?=
+ =?us-ascii?Q?z8wlDPf9AuVc5a6GudTDxNIrMehn2pf6Mc4QAFU3dtXkRbYGCHKs43XOkgdj?=
+ =?us-ascii?Q?22pOe4qVrhUvIB1Jsi8v5YBPZs19fEJcg9Y8pp0jmmMdsMqhTxw5WCLjhsat?=
+ =?us-ascii?Q?ynj/584Nqs6vdfaP8Jyqzxscbjl38UhWF4NdUA2ShfHzRf+LuyMSTO7RD3L4?=
+ =?us-ascii?Q?BUFrrkFhjqS6HosLSPWGnTUs+OqpZG3NbHh5zvAgvF1EhuybE3JLTYUx6i5Z?=
+ =?us-ascii?Q?l6/fu1Srzv7sP6QVyBG/fDsdhxO7wIO+VVQpSBRgHKr1rGy08gWiXzlq2jCs?=
+ =?us-ascii?Q?BzBbu+Lust3shBnJv4M1Z5sBzC3PXOYHg8R8k7bRXaqhUGDMX1UEUYVVSTE8?=
+ =?us-ascii?Q?utUX/IQjPo8fZYmgu7E+yF8DUYmK+wqXydn4wp1iGDVX6yH4toMVK1gTtcEU?=
+ =?us-ascii?Q?proWDFX58KLSURMlZTZZQwDzXxTTrntU77c7wXUgxnOh7wsDrkMbEW1eEssd?=
+ =?us-ascii?Q?bep/b6bdGdqTVc0p3xoF5sQQDozcFqe1LK6Xc6JvJMc2zOP/2qjRmhgdaUC3?=
+ =?us-ascii?Q?mIKaBjnE/gIaoDT6c5g0qgxx75knLgAEDf3uBZjCqlYRnflh8HhTFMkwsRyI?=
+ =?us-ascii?Q?b0T/XLdHwm4ylsrWFm5XQQaDqfvchZSSTGWUJLdslA/VBmqnG9N0YpMf6mSq?=
+ =?us-ascii?Q?X3hN3w6TpfA324YQvc/iEDXDT/AnjkwrWDVMc+qBYUm6Ob+6ItEV7u3TDIqD?=
+ =?us-ascii?Q?eGUJwLN9aXjgEcLVo4366aruduUBiWaYGrtgqw/IRAUOsc93dI4YJ5dDTJsq?=
+ =?us-ascii?Q?Xa7Gu3cgCxVzWBV36wA7XsPkcy36aY4FNPyNVG0hLk4LPr5KJCtTorw/GBJm?=
+ =?us-ascii?Q?E1glX9jcbfuDU9ojjGs=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15145afe-8906-4677-f616-08db509947f8
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 14:25:12.3277
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 14:25:47.3088
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zb0aLisM4QWC2QSCLudZv9XZ/QT1ddHJ6nu3SZA99O074ATOQgN/yeaDxQYZ/qpzl2VgxAwz2aljKFCG29zxMg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8860
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4foQDy/WZZvx1O1kzkGY4dRHsfuLeoxOqZvMvFWcnApH31rw1/tHHRHGBJRLafXx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9085
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
@@ -129,35 +121,282 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/23 8:18 AM, Shuai Xue wrote:
-> When a deferred UE error is detected, e.g by background patrol scruber, it
-> will be handled in APIC interrupt handler amd_deferred_error_interrupt().
-> The handler will collect MCA banks, init mce struct and process it by
-> nofitying the registered MCE decode chain.
-> 
-> The uc_decode_notifier, one of MCE decode chain, will process memory
-> failure but only limit to MCE_AO_SEVERITY and MCE_DEFERRED_SEVERITY.
-> However, APIC interrupt handler does not init mce severity and the
-> uninitialized severity is 0 (MCE_NO_SEVERITY).
-> 
-> To handle the deferred memory failure case, init mce severity when logging
-> MCA banks.
-> 
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+--=_MailMate_B85438C4-05FF-4E80-8A43-167667617C89_=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+On 8 May 2023, at 22:20, Huang Ying wrote:
+
+> After recent changes to the retrying and failure counting in
+> migrate_pages_batch(), it was found that it's unnecessary to count
+> retrying and failure for normal, large, and THP folios separately.
+> Because we don't use retrying and failure number of large folios
+> directly.  So, in this patch, we simplified retrying and failure
+> counting of large folios via counting retrying and failure of normal
+> and large folios together.  This results in the reduced line number.
 >
+> This is just code cleanup, no functionality changes are expected.
+>
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Xin Hao <xhao@linux.alibaba.com>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Alistair Popple <apopple@nvidia.com>
+> ---
+>  mm/migrate.c | 103 +++++++++++++++++----------------------------------=
 
-Hi Shuai Xue,
+>  1 file changed, 35 insertions(+), 68 deletions(-)
+>
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 01cac26a3127..10709aed76d3 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1614,11 +1614,9 @@ static int migrate_pages_batch(struct list_head =
+*from, new_page_t get_new_page,
+>  		int nr_pass)
+>  {
+>  	int retry =3D 1;
+> -	int large_retry =3D 1;
+>  	int thp_retry =3D 1;
+>  	int nr_failed =3D 0;
+>  	int nr_retry_pages =3D 0;
+> -	int nr_large_failed =3D 0;
+>  	int pass =3D 0;
+>  	bool is_large =3D false;
+>  	bool is_thp =3D false;
+> @@ -1631,9 +1629,8 @@ static int migrate_pages_batch(struct list_head *=
+from, new_page_t get_new_page,
+>  	VM_WARN_ON_ONCE(mode !=3D MIGRATE_ASYNC &&
+>  			!list_empty(from) && !list_is_singular(from));
+>
+> -	for (pass =3D 0; pass < nr_pass && (retry || large_retry); pass++) {
+> +	for (pass =3D 0; pass < nr_pass && retry; pass++) {
+>  		retry =3D 0;
+> -		large_retry =3D 0;
+>  		thp_retry =3D 0;
+>  		nr_retry_pages =3D 0;
+>
+> @@ -1660,7 +1657,7 @@ static int migrate_pages_batch(struct list_head *=
+from, new_page_t get_new_page,
+>  			 * list is processed.
+>  			 */
+>  			if (!thp_migration_supported() && is_thp) {
+> -				nr_large_failed++;
+> +				nr_failed++;
+>  				stats->nr_thp_failed++;
+>  				if (!try_split_folio(folio, split_folios)) {
+>  					stats->nr_thp_split++;
+> @@ -1688,38 +1685,33 @@ static int migrate_pages_batch(struct list_head=
+ *from, new_page_t get_new_page,
+>  				 * When memory is low, don't bother to try to migrate
+>  				 * other folios, move unmapped folios, then exit.
+>  				 */
+> -				if (is_large) {
+> -					nr_large_failed++;
+> -					stats->nr_thp_failed +=3D is_thp;
+> -					/* Large folio NUMA faulting doesn't split to retry. */
+> -					if (!nosplit) {
+> -						int ret =3D try_split_folio(folio, split_folios);
+> -
+> -						if (!ret) {
+> -							stats->nr_thp_split +=3D is_thp;
+> -							break;
+> -						} else if (reason =3D=3D MR_LONGTERM_PIN &&
+> -							   ret =3D=3D -EAGAIN) {
+> -							/*
+> -							 * Try again to split large folio to
+> -							 * mitigate the failure of longterm pinning.
+> -							 */
+> -							large_retry++;
+> -							thp_retry +=3D is_thp;
+> -							nr_retry_pages +=3D nr_pages;
+> -							/* Undo duplicated failure counting. */
+> -							nr_large_failed--;
+> -							stats->nr_thp_failed -=3D is_thp;
+> -							break;
+> -						}
+> +				nr_failed++;
+> +				stats->nr_thp_failed +=3D is_thp;
+> +				/* Large folio NUMA faulting doesn't split to retry. */
+> +				if (is_large && !nosplit) {
+> +					int ret =3D try_split_folio(folio, split_folios);
+> +
+> +					if (!ret) {
+> +						stats->nr_thp_split +=3D is_thp;
+> +						break;
+> +					} else if (reason =3D=3D MR_LONGTERM_PIN &&
+> +						   ret =3D=3D -EAGAIN) {
+> +						/*
+> +						 * Try again to split large folio to
+> +						 * mitigate the failure of longterm pinning.
+> +						 */
+> +						retry++;
+> +						thp_retry +=3D is_thp;
+> +						nr_retry_pages +=3D nr_pages;
+> +						/* Undo duplicated failure counting. */
+> +						nr_failed--;
+> +						stats->nr_thp_failed -=3D is_thp;
+> +						break;
+>  					}
+> -				} else {
+> -					nr_failed++;
+>  				}
+>
+>  				stats->nr_failed_pages +=3D nr_pages + nr_retry_pages;
+>  				/* nr_failed isn't updated for not used */
+> -				nr_large_failed +=3D large_retry;
+>  				stats->nr_thp_failed +=3D thp_retry;
+>  				rc_saved =3D rc;
+>  				if (list_empty(&unmap_folios))
+> @@ -1727,12 +1719,8 @@ static int migrate_pages_batch(struct list_head =
+*from, new_page_t get_new_page,
+>  				else
+>  					goto move;
+>  			case -EAGAIN:
+> -				if (is_large) {
+> -					large_retry++;
+> -					thp_retry +=3D is_thp;
+> -				} else {
+> -					retry++;
+> -				}
+> +				retry++;
+> +				thp_retry +=3D is_thp;
+>  				nr_retry_pages +=3D nr_pages;
+>  				break;
+>  			case MIGRATEPAGE_SUCCESS:
+> @@ -1750,20 +1738,14 @@ static int migrate_pages_batch(struct list_head=
+ *from, new_page_t get_new_page,
+>  				 * removed from migration folio list and not
+>  				 * retried in the next outer loop.
+>  				 */
+> -				if (is_large) {
+> -					nr_large_failed++;
+> -					stats->nr_thp_failed +=3D is_thp;
+> -				} else {
+> -					nr_failed++;
+> -				}
+> -
+> +				nr_failed++;
+> +				stats->nr_thp_failed +=3D is_thp;
+>  				stats->nr_failed_pages +=3D nr_pages;
+>  				break;
+>  			}
+>  		}
+>  	}
+>  	nr_failed +=3D retry;
+> -	nr_large_failed +=3D large_retry;
+>  	stats->nr_thp_failed +=3D thp_retry;
+>  	stats->nr_failed_pages +=3D nr_retry_pages;
+>  move:
+> @@ -1771,17 +1753,15 @@ static int migrate_pages_batch(struct list_head=
+ *from, new_page_t get_new_page,
+>  	try_to_unmap_flush();
+>
+>  	retry =3D 1;
+> -	for (pass =3D 0; pass < nr_pass && (retry || large_retry); pass++) {
+> +	for (pass =3D 0; pass < nr_pass && retry; pass++) {
+>  		retry =3D 0;
+> -		large_retry =3D 0;
+>  		thp_retry =3D 0;
+>  		nr_retry_pages =3D 0;
+>
+>  		dst =3D list_first_entry(&dst_folios, struct folio, lru);
+>  		dst2 =3D list_next_entry(dst, lru);
+>  		list_for_each_entry_safe(folio, folio2, &unmap_folios, lru) {
+> -			is_large =3D folio_test_large(folio);
+> -			is_thp =3D is_large && folio_test_pmd_mappable(folio);
+> +			is_thp =3D folio_test_large(folio) && folio_test_pmd_mappable(folio=
+);
 
-I think this patch is fair to do. But it won't have the intended effect
-in practice.
+Should this be part of patch 2? Or maybe just merge two patches?
 
-The value in MCA_ADDR for DRAM ECC errors will be a memory controller
-"normalized address". This is not a system physical address that the OS
-can use to take action.
+>  			nr_pages =3D folio_nr_pages(folio);
+>
+>  			cond_resched();
+> @@ -1797,12 +1777,8 @@ static int migrate_pages_batch(struct list_head =
+*from, new_page_t get_new_page,
+>  			 */
+>  			switch(rc) {
+>  			case -EAGAIN:
+> -				if (is_large) {
+> -					large_retry++;
+> -					thp_retry +=3D is_thp;
+> -				} else {
+> -					retry++;
+> -				}
+> +				retry++;
+> +				thp_retry +=3D is_thp;
+>  				nr_retry_pages +=3D nr_pages;
+>  				break;
+>  			case MIGRATEPAGE_SUCCESS:
+> @@ -1810,13 +1786,8 @@ static int migrate_pages_batch(struct list_head =
+*from, new_page_t get_new_page,
+>  				stats->nr_thp_succeeded +=3D is_thp;
+>  				break;
+>  			default:
+> -				if (is_large) {
+> -					nr_large_failed++;
+> -					stats->nr_thp_failed +=3D is_thp;
+> -				} else {
+> -					nr_failed++;
+> -				}
+> -
+> +				nr_failed++;
+> +				stats->nr_thp_failed +=3D is_thp;
+>  				stats->nr_failed_pages +=3D nr_pages;
+>  				break;
+>  			}
+> @@ -1825,14 +1796,10 @@ static int migrate_pages_batch(struct list_head=
+ *from, new_page_t get_new_page,
+>  		}
+>  	}
+>  	nr_failed +=3D retry;
+> -	nr_large_failed +=3D large_retry;
+>  	stats->nr_thp_failed +=3D thp_retry;
+>  	stats->nr_failed_pages +=3D nr_retry_pages;
+>
+> -	if (rc_saved)
+> -		rc =3D rc_saved;
+> -	else
+> -		rc =3D nr_failed + nr_large_failed;
+> +	rc =3D rc_saved ? : nr_failed;
+>  out:
+>  	/* Cleanup remaining folios */
+>  	dst =3D list_first_entry(&dst_folios, struct folio, lru);
+> -- =
 
-The mce_usable_address() function needs to be updated to handle this.
-I'll send a patchset this week to do so. Afterwards, the
-uc_decode_notifier will not attempt to handle these errors.
+> 2.39.2
 
-Thanks,
-Yazen
+Otherwise LGTM. Reviewed-by: Zi Yan <ziy@nvidia.com>
+
+
+--
+Best Regards,
+Yan, Zi
+
+--=_MailMate_B85438C4-05FF-4E80-8A43-167667617C89_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename=signature.asc
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmRaV+gPHHppeUBudmlk
+aWEuY29tAAoJEOJ/noEUByhUkNgP/2+mcTY8HRSNgqirL/LxAcnUMcrf/A8wxzLf
+2Di0j3auhBGJFa2EgKkK8yvCHC9JkH/KBdMOlkNndXosRNwo8UCUtBMYK/jwVhjw
+47hLiYMVYaSg2kQbMEAQia9H/S6tCefINZDVV2jvDn9mDGaRnPh8JT+vua1Ise4d
+eMZ/vYqcRu8xDHCzt473BqBeFCELQSDFpGeBCP8eRauXhqsh7L7+zytjOcy9GaNi
+BUxwjUArC18YKDJzhxdfOQ+5rVwXounF9P8JClguVM3xV/oteXavB/9Ke5XSTY+7
+u5Rwb6Xq5nDGr96WHifoIk7zAmWZymglyEdllpxCYKhIaROdnDyD3EJnGVGFySqY
+RaenRTjG6zBPMqAsbX0/YG+MdbA56GhcQv4tPaLZJ2UiLVBFlONVhzh/a5xLknEd
+ukwnpvDSnuQ699C1yM2Sg5Tq5PmApeVFo6DIhtZ1JbpJ+GXL/Xi/a2ciMB5mtsiX
+Kzmv5Nf0BMv30doZ5Vf+1hSOs3Y7fRIErWEcbHM2+9AhRWCJ1m3OcZHQbobf0fu3
+TsVQynl8hd7qedlCTRRyuQnM/AQdyjCT+guBchny/bNgMvYc8xiM4/gMrNBVh4UG
+G9CMoSbMcS84Ph/9Kbw9XiijR+Wj/a0hRTZwVvTYK6jy3yU1ckuyYz9yjX6ooEKs
++ABXKRDV
+=oV65
+-----END PGP SIGNATURE-----
+
+--=_MailMate_B85438C4-05FF-4E80-8A43-167667617C89_=--
