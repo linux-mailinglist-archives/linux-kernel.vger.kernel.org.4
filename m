@@ -2,311 +2,612 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADA96FCC76
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 19:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C55456FCC7E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 19:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbjEIRNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 13:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
+        id S233513AbjEIRP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 13:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjEIRNw (ORCPT
+        with ESMTP id S229533AbjEIRPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 13:13:52 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2066.outbound.protection.outlook.com [40.107.220.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE84111D;
-        Tue,  9 May 2023 10:13:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZgOeY9g/3+Zx5vOLvjBW20XDMrRV4SYN8nprgxH6zt4bJj+Vk4bCg7gSmss8zaYrpNrPS+9hB5j2LK+htFrnbWw5mfKWWO8OF3/BGsFPcw298KtZZ1IcrjzrjQpERvvyuUJG0LsMVxpWqD6VMvFmLSvEaXC+ewmGW56pBPrKERpFUgj+0CFINRsCouZvZC6xTAqL2OX8rPvYi9zxhKXOygpzv21oWt4QQJvSOrBX1O3HxUV/qLzVO2t+3ed3NTGnVEcl7NThh5F8bVrKG/4IRXoWc0Q8x63c4O3PaEBe/JDOsYhs5I0D14vloq+z5tb1xnHZF8VwKANyDYxx+3y8RA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WUcVpShuq4Vg1EiFn1oE60IOp0A1q5k8/OMOgWLWEpY=;
- b=Mka6sCkw1vsuO0SqfpFDngd7kGvvBqxtvmwhRhS5V4B9dcF1+eTkfH69Ly6pFcfHU3tBAIw8gKG43anJ38ZhMCfduk4BBuBs2JTQdr9wPr9OpEuoPobu3KFs1/dXlW/Z+nyWsnXPMIvW+9FfDj/2IlPGerhuvEhxYSsOwty/I+FV9nRyEjSw3bvlTN/DKaky+JgNFZqfFgrih1laR7RrhMHN7WoQQR39ZDokNKYE2WI0Sy44dbpRlMxwnjDr+nXmrWFewetQfy/fE8UJfBhVOzFqXg6kauhIA+965zWTPZBEX7XgWTwjth05RyT1wEXHrBANIv5apaLf5nbtXlx64Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WUcVpShuq4Vg1EiFn1oE60IOp0A1q5k8/OMOgWLWEpY=;
- b=I32ZMq3A3qZ8u1PAEtpkKJGghwYfnXH1A1SO35NUWzrLkxHO86mvqBqVZLx/6MLnA/+Ev0hBNrtPR/kBuceMVgWjnQdhteSSaLFKAfOeYFrQ/RiPHoVp1SVDjOGF7UqUESnYEOpNLdFNi/F6qlRtf+VwrMl8d8iIqLFKQCt+Z/k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SA0PR12MB4557.namprd12.prod.outlook.com (2603:10b6:806:9d::10)
- by BY5PR12MB4275.namprd12.prod.outlook.com (2603:10b6:a03:20a::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Tue, 9 May
- 2023 17:13:43 +0000
-Received: from SA0PR12MB4557.namprd12.prod.outlook.com
- ([fe80::25d0:8212:2ae3:2aec]) by SA0PR12MB4557.namprd12.prod.outlook.com
- ([fe80::25d0:8212:2ae3:2aec%6]) with mapi id 15.20.6363.032; Tue, 9 May 2023
- 17:13:43 +0000
-Message-ID: <e719e506-77c6-a5ae-6c18-98b02b31983a@amd.com>
-Date:   Tue, 9 May 2023 12:13:39 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Reply-To: babu.moger@amd.com
-Subject: Re: [PATCH v4 1/7] x86/resctrl: Add multiple tasks to the resctrl
- group at once
-Content-Language: en-US
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>
-Cc:     "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "chang.seok.bae@intel.com" <chang.seok.bae@intel.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "Das1, Sandipan" <Sandipan.Das@amd.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "eranian@google.com" <eranian@google.com>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "quic_jiles@quicinc.com" <quic_jiles@quicinc.com>,
-        "peternewman@google.com" <peternewman@google.com>
-References: <168177435378.1758847.8317743523931859131.stgit@bmoger-ubuntu>
- <168177444676.1758847.11474266921067437724.stgit@bmoger-ubuntu>
- <51a1b46e-9162-83bc-29df-8a154059f847@intel.com>
- <MW3PR12MB4553BAD1A9390D518D9919A895729@MW3PR12MB4553.namprd12.prod.outlook.com>
- <6ae80709-cf44-43bd-d539-650f72dcd670@intel.com>
-From:   "Moger, Babu" <babu.moger@amd.com>
-In-Reply-To: <6ae80709-cf44-43bd-d539-650f72dcd670@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DM6PR02CA0095.namprd02.prod.outlook.com
- (2603:10b6:5:1f4::36) To SA0PR12MB4557.namprd12.prod.outlook.com
- (2603:10b6:806:9d::10)
+        Tue, 9 May 2023 13:15:24 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BBFF3
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 10:15:19 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-b983027d0faso7954019276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 10:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683652519; x=1686244519;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m5K/VAWobe6QtxBJm14y/m85k0/aUzIPJ6lOqo+MArk=;
+        b=PHkY22nUfk6ytVvqirp/RANagas4xMclCKwMRG8BUr1dgA/WCO2jk84mRCxTTnEqIT
+         M0n37dDMZlDsNbMD5bGfgWxRk2G1upgUpXVvFPqc2kmyf1x2bT5E1vsTqWpEFLmrF8aZ
+         scgHU5xA0OuoOiF1UqBDDvZYd05/7yxKc1UUPn8foGN4UnAL0kP5jZKEmcseEIrYoOsR
+         WAmtSAmJgzpT5Jz4T9k3szfmDHTpUHf8z0bK9lfylRrn7r0ihWRPYddwE6MafErctofi
+         zuok2nfDNuUJSe97KdZ6862SdqYOapY5Un8ZEEpiyAb2hHWR7i6GxR04neU+af5eT8Lw
+         nR6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683652519; x=1686244519;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m5K/VAWobe6QtxBJm14y/m85k0/aUzIPJ6lOqo+MArk=;
+        b=CLsZlvunCNiNHgBGY8ImK+usOYL0oBFQZTqa6VM1uI+e/Eq8imJy34YO8EtAgO/2nZ
+         e6iINbCgP6GS1RpVrkTMEuPGu3L6us68nGfyprBBbPsBET1yaUbM/jM0Zu14HV2jei8w
+         ArhTeLv1jlzn/AdlyO8HZ7BOVaoEhhspgE5J5toLiVDwOwDujR//kKTrabD/CUWtvsGZ
+         hcG7m3DwMYWTjUZ1dcZUD6cr3G5qRdXygMb7gZDeFYFeKvvrp4U4lIPOr8ZRZblcKFOV
+         1wRE9Y6trkS/PiOutCbcqYP2XlTbr+T53jDk98Femv090GgYTXd7X/fiXDmTAFnRzCuk
+         t6Ig==
+X-Gm-Message-State: AC+VfDzmhyJ024tWA8tPli6zeQ8XRM1/ZlIvrnNtUTmz8qwd2qsJGO2Q
+        1NihlvrXo/kBw0Aa2fItwMIueZ7P4nJjqrXHLG9BYQ==
+X-Google-Smtp-Source: ACHHUZ7AVxP2o6Dea5tX2/rrit6n8sU9feVdJ1gls8GblkvBvwBO2QPgHpwK8l1GrqC5Ok74a+e2rRUA8cWtPZkQAB8=
+X-Received: by 2002:a25:1854:0:b0:b75:9a44:5342 with SMTP id
+ 81-20020a251854000000b00b759a445342mr16103411yby.4.1683652518988; Tue, 09 May
+ 2023 10:15:18 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4557:EE_|BY5PR12MB4275:EE_
-X-MS-Office365-Filtering-Correlation-Id: 85570b96-ad52-489f-210b-08db50b0bdd1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: av1wCu6iMDGvKPeJAMvanpMYCRoAJU5C6iXUNvVag2yeTDN1LpmukiDSJ1JSV4vHZro7nlU315+UavwVZ7B977lSo4lCwcImYu5pGHgIq8Cx4C7eQNDOJ59DPT5tsau2Jl9tEYzu3vYXOSyqZ9+TxIMj7fciOL6D578dc55gJdXajxroHf2VrblPNgUFhJDYqS9V5mXZD7020GW+waGuZ4drnYheSIiSzKr4+mRE+QRFb9CMpUBcEhJDq0ovt0wXRYrTOG16sC46LVdFtBWligBptBB3SgbMhwgqgN1kEQ44OAe2F57nQsEz18XvPmVOnef5+udvNLDX049T6G3hFFeEX/oh45S4hGPCLlLl+db5g2gBboZRkvK/aInBAitOQ1R5rGUbADF2JYVryo4TOtA6UjxVQUU5gHRmRQJGFD5QB3Seb3LbMS0VPn/hF3nSpSFJBy/cyGFzjxmefW3D61KuIG4oq5FwrouedL2fRokjajIi/1YZ2P0m3tC651fqd/KS0XjufwFllC+5g6pBwGgkDXGmUrPu3dztLxO2yzkDeXkoGYpVxyiphWm9riMo8CVGgllTloCbLm2KTyqhFQx2Wn+tukkb+sE6YNbgyTAxsq1rnjsDyapBzApK9+5qCS471roCzYPPY0IZGPT2Xg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB4557.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(39860400002)(346002)(376002)(396003)(451199021)(7406005)(5660300002)(7416002)(110136005)(54906003)(31686004)(6486002)(6666004)(41300700001)(8936002)(316002)(8676002)(53546011)(26005)(66899021)(3450700001)(66476007)(66556008)(66946007)(478600001)(4326008)(6512007)(6506007)(2906002)(83380400001)(2616005)(186003)(86362001)(31696002)(36756003)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SGJPdGQzbllJdnoyc3pWclhFcndpYjVoc1VwS1laSldVVWs5UXNZR1JMa2tv?=
- =?utf-8?B?RVNXZ3dSajZUc05YU003OWpvbElaWmFicGF3cVlaMkhUeHNNV0YrbzNxZThi?=
- =?utf-8?B?cGcrZFBvQXB5SWh6MmlkTXc3dkJOZWIxeUtta3R2WU5PUmNJZk0vK0V5Yy8v?=
- =?utf-8?B?OENmMnJ3VW5BMlhpTmxmY01VVEtMT1pZbHhsNjFFYXlpc2FJcW9XSkFrM0NG?=
- =?utf-8?B?d0hSbmF0dUpFWU13VWpOMEJ5M1Rnb0UvQStIWCt4MWxpcmVLZ2R1WThrcTFO?=
- =?utf-8?B?MnhCYXJjOGNtRlJxTG9ra2ZTRzdtYmVjNTNUMDJsOUpDVDgwR2wvbGg5TTB3?=
- =?utf-8?B?UkY2T1NpRVRoUURmNmhGamY2UkptdkY1QUF6ZlNnRTQxaXF6LzlVNzIxeVRZ?=
- =?utf-8?B?NURRLzNIMjhwbGZUR1VZRmIxMGRBWTlwT3ZqcnVxZklleDYyS0JiczVqZ0FR?=
- =?utf-8?B?Y2MrdmR3NWNRR3pMcmdFc2h2SHBOb2lLalVtTEJoVDlaZjgyaUdCUHNKZ3lJ?=
- =?utf-8?B?UHUxSzVOcjJ6TkRCUVM5R0Q3SjZUdFE4THNvbDVVZlpLVzhRUzE4dnpqMkFn?=
- =?utf-8?B?czlTREJXb3FQR1FnNzA5UkYxVWJDRU9ISHJhK25jR0VJbWdDRFd2b3ltZWVX?=
- =?utf-8?B?cWJTenkxaGpSUVNxRTdJbWZRb2dzZjh1SSsxS0RoakNYZ3hQcTgvVjUzNmpN?=
- =?utf-8?B?UEs4SmN0dTcrTlVXdHdEYW02MGgzdUNmSXJ6bVhHMllnb0puam55eFNhMjFx?=
- =?utf-8?B?d0NEekJRaFZtUERkOEZzdUxnN1EwL0lWbk8zV0szb1R1UlVhRzlUVnhlSXlv?=
- =?utf-8?B?aC9wR2NBTjRnOG1ZR2p1YjUxQkpQZkd3dEZ0UFFTNTFTVlU0bFRHdGdNSito?=
- =?utf-8?B?L0ZwNVZpakZ1ZXBHZmZDQ0REb1dpNHpqM2hDY2RxK3UreXM1aW13QWoxYTdx?=
- =?utf-8?B?SDB3T3FsVEIzeEswS0c2em9mcVgvcU9mYlVsQkpqL2g0RDlRbVduNzRkeVZo?=
- =?utf-8?B?NkhvQ1V3THF3U3FQYXNLUllyOUpjWC9lTW45bkp4VTFhNmJQMHdMbnJLN25p?=
- =?utf-8?B?SmlEQktkODlZcGhCWkFlT0NXTlB0ZlZNN0k4dEhzZkx4Y0JmT2s1am9vdWY3?=
- =?utf-8?B?RS9MaGY5Mk9wZ0NZeDNkY1VXa2M3ZkxsV0lpbC94cmRIYUpoeXNtL05TcVFl?=
- =?utf-8?B?Y2lKTEpPMUM0cmJFRlMrZTFCUzBvTVVDdkx6YmZya0xrbzMzVG9FOEtDSUNh?=
- =?utf-8?B?RVhJU1R1a3grVkpGM0FFdVU2N2ZSTWZsS0xzdCs1alJVcVBzdXZuS21PaGhS?=
- =?utf-8?B?eUdWZEZrdE56TU1DZHRMOTh2VC9WSzdhRU9MN3pVZ3N5WWt4THNib25XeUs2?=
- =?utf-8?B?bGdMUjFQMUxKZHRTYmV1c1kwRTRNR3pPZ1dhRmtadVBIV1VjblR6R0x2L2hP?=
- =?utf-8?B?K0t1VkRWamZVTjd1NHZjSnNCM0ZWVVJ1TDJrUkNRNEdQWXB5bUFvWEhRdHB6?=
- =?utf-8?B?TGI2dlVaNjFMV1owNlYwbVIrQnIwSCsvblhjSk0vdHJYSFUzanBWcFU3dXh4?=
- =?utf-8?B?TVIvdThHc1hWMXZXMUw0eUhYK2lSSWJzbHVTSVkwQWdDbnB2K0VobDg5TFNx?=
- =?utf-8?B?WmVoSGVYVk9aUDU0R1c3QW5ySUlTUE5LOFVjSlZYQmNUb01wTlJEMlZVTFN0?=
- =?utf-8?B?WHlrMHNZNnRMMjVxZTdqU3JQbENSbXB2d1N6RFovcjNlSkoyUzdVSVNLRk5y?=
- =?utf-8?B?dTBaMzFiRmZlZC9ZUnBpNFZNT0RLQnVacHlxYWwrQWdyVlNjaGZ4NUZZdGU2?=
- =?utf-8?B?U0JwOGlDSVJyQ1J3ZTVzekVKWFllUnphY3pNMmxhRUZSMHZQeFNZR25hQUhi?=
- =?utf-8?B?eHNodEV4SWxKU3ZWUjMwVWxhcUorWGo4Z01BM21RQWdud05UZVB4Q1hWN2JS?=
- =?utf-8?B?Ly93MDZDc0xRTDFLc1RTYTgwbDI5b2h3djFCcXlBK1kxbGZ4SXB3QnN5U2E1?=
- =?utf-8?B?TUpqalhNaDBNdGw3NXU2cDZraWtUQUxEVTk0VW5Qd3V1akxlL2tCcW1INCtr?=
- =?utf-8?B?b0FpTE9oNDdwWnlVblRQZ0F0ejRnSHQ1UmNyY2N1c0FWbmN3Ulc2dUU0cTVV?=
- =?utf-8?Q?TXYI=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85570b96-ad52-489f-210b-08db50b0bdd1
-X-MS-Exchange-CrossTenant-AuthSource: SA0PR12MB4557.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 17:13:43.4220
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZhCRkPIoRATC/t+I2JaCdbXimu4JHmBazdjXx/Iak4cxShffZI2zn5DE5JWtLLLx
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4275
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230509161218.11979-1-quic_jkona@quicinc.com> <20230509161218.11979-4-quic_jkona@quicinc.com>
+In-Reply-To: <20230509161218.11979-4-quic_jkona@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 9 May 2023 20:15:08 +0300
+Message-ID: <CAA8EJppn9=gPFk1RRB9y50aU_G3J6QrsOVQ9GH5gT86D_hOAgQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] clk: qcom: videocc-sm8550: Add video clock controller
+ driver for SM8550
+To:     Jagadeesh Kona <quic_jkona@quicinc.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
+On Tue, 9 May 2023 at 19:14, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
+>
+> Add support for the video clock controller for video clients to be able
+> to request for videocc clocks on SM8550 platform.
+>
+> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> ---
+>  drivers/clk/qcom/Kconfig          |  10 +
+>  drivers/clk/qcom/Makefile         |   1 +
+>  drivers/clk/qcom/videocc-sm8550.c | 468 ++++++++++++++++++++++++++++++
+>  3 files changed, 479 insertions(+)
+>  create mode 100644 drivers/clk/qcom/videocc-sm8550.c
+>
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index 12be3e2371b3..6bb9b4aff047 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -925,6 +925,16 @@ config SM_VIDEOCC_8250
+>           Say Y if you want to support video devices and functionality such as
+>           video encode and decode.
+>
+> +config SM_VIDEOCC_8550
+> +       tristate "SM8550 Video Clock Controller"
+> +       select SM_GCC_8550
+> +       select QCOM_GDSC
+> +       help
+> +         Support for the video clock controller on Qualcomm Technologies, Inc.
+> +         SM8550 devices.
+> +         Say Y if you want to support video devices and functionality such as
+> +         video encode/decode.
+> +
+>  config SPMI_PMIC_CLKDIV
+>         tristate "SPMI PMIC clkdiv Support"
+>         depends on SPMI || COMPILE_TEST
+> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+> index 9ff4c373ad95..f0b95fc217aa 100644
+> --- a/drivers/clk/qcom/Makefile
+> +++ b/drivers/clk/qcom/Makefile
+> @@ -127,6 +127,7 @@ obj-$(CONFIG_SM_GPUCC_8350) += gpucc-sm8350.o
+>  obj-$(CONFIG_SM_TCSRCC_8550) += tcsrcc-sm8550.o
+>  obj-$(CONFIG_SM_VIDEOCC_8150) += videocc-sm8150.o
+>  obj-$(CONFIG_SM_VIDEOCC_8250) += videocc-sm8250.o
+> +obj-$(CONFIG_SM_VIDEOCC_8550) += videocc-sm8550.o
+>  obj-$(CONFIG_SPMI_PMIC_CLKDIV) += clk-spmi-pmic-div.o
+>  obj-$(CONFIG_KPSS_XCC) += kpss-xcc.o
+>  obj-$(CONFIG_QCOM_HFPLL) += hfpll.o
+> diff --git a/drivers/clk/qcom/videocc-sm8550.c b/drivers/clk/qcom/videocc-sm8550.c
+> new file mode 100644
+> index 000000000000..10e4b2725ddf
+> --- /dev/null
+> +++ b/drivers/clk/qcom/videocc-sm8550.c
+> @@ -0,0 +1,468 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/regmap.h>
+> +
+> +#include <dt-bindings/clock/qcom,sm8550-videocc.h>
+> +
+> +#include "clk-alpha-pll.h"
+> +#include "clk-branch.h"
+> +#include "clk-rcg.h"
+> +#include "clk-regmap.h"
+> +#include "clk-regmap-divider.h"
+> +#include "common.h"
+> +#include "gdsc.h"
+> +#include "reset.h"
+> +
+> +enum {
+> +       DT_BI_TCXO,
 
-On 5/5/23 13:49, Reinette Chatre wrote:
-> Hi Babu,
-> 
-> On 5/5/2023 10:09 AM, Moger, Babu wrote:
->> [AMD Official Use Only - General]
->>
->> Hi Reinette,
->>
->>> -----Original Message-----
->>> From: Reinette Chatre <reinette.chatre@intel.com>
->>> Sent: Thursday, May 4, 2023 1:58 PM
->>> To: Moger, Babu <Babu.Moger@amd.com>; corbet@lwn.net;
->>> tglx@linutronix.de; mingo@redhat.com; bp@alien8.de
->>> Cc: fenghua.yu@intel.com; dave.hansen@linux.intel.com; x86@kernel.org;
->>> hpa@zytor.com; paulmck@kernel.org; akpm@linux-foundation.org;
->>> quic_neeraju@quicinc.com; rdunlap@infradead.org;
->>> damien.lemoal@opensource.wdc.com; songmuchun@bytedance.com;
->>> peterz@infradead.org; jpoimboe@kernel.org; pbonzini@redhat.com;
->>> chang.seok.bae@intel.com; pawan.kumar.gupta@linux.intel.com;
->>> jmattson@google.com; daniel.sneddon@linux.intel.com; Das1, Sandipan
->>> <Sandipan.Das@amd.com>; tony.luck@intel.com; james.morse@arm.com;
->>> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org;
->>> bagasdotme@gmail.com; eranian@google.com; christophe.leroy@csgroup.eu;
->>> jarkko@kernel.org; adrian.hunter@intel.com; quic_jiles@quicinc.com;
->>> peternewman@google.com
->>> Subject: Re: [PATCH v4 1/7] x86/resctrl: Add multiple tasks to the resctrl group
->>> at once
->>>
->>> Hi Babu,
->>>
->>> On 4/17/2023 4:34 PM, Babu Moger wrote:
->>>> The resctrl task assignment for MONITOR or CONTROL group needs to be
->>>> done one at a time. For example:
->>>
->>> Why all caps for monitor and control? If the intention is to use the terms for
->>> these groups then it may be easier to use the same terms as in the
->>> documentation, or you could just not use all caps like you do in later patches.
->>
->> Sure.
->>>
->>>>
->>>>   $mount -t resctrl resctrl /sys/fs/resctrl/
->>>>   $mkdir /sys/fs/resctrl/clos1
->>>>   $echo 123 > /sys/fs/resctrl/clos1/tasks
->>>>   $echo 456 > /sys/fs/resctrl/clos1/tasks
->>>>   $echo 789 > /sys/fs/resctrl/clos1/tasks
->>>>
->>>> This is not user-friendly when dealing with hundreds of tasks.
->>>>
->>>> It can be improved by supporting the multiple task id assignment in
->>>> one command with the tasks separated by commas. For example:
->>>
->>> Please use imperative mood (see Documentation/process/maintainer-tip.rst).
->>>
->>> Something like:
->>> "Improve multiple task id assignment ...."
->>
->> How about:
->> "Improve the assignment by supporting multiple task id assignment in
->> one command with the tasks separated by commas."
-> 
-> The double use of 'assignment' can be confusing. This is also a
-> changelog where a clear context->problem->solution format can help.
-> If your changelog is clear regarding the context and problem then it
-> can end with brief solution description like:
-> 
-> "Support multiple task assignment in one command with tasks ids separated
-> by commas. For example: " (and also please use a non-x86 term for the group
-> name in your example)
+Any additional handling for gcc_video_ahb clk? It doesn't seem to be
+used as a parent. Probably you intended to use it as a pm_clk?
 
-Sure.
+> +};
+> +
+> +enum {
+> +       P_BI_TCXO,
+> +       P_VIDEO_CC_PLL0_OUT_MAIN,
+> +       P_VIDEO_CC_PLL1_OUT_MAIN,
+> +};
+> +
+> +static const struct pll_vco lucid_ole_vco[] = {
+> +       { 249600000, 2300000000, 0 },
+> +};
+> +
+> +static const struct alpha_pll_config video_cc_pll0_config = {
+> +       .l = 0x44000025,
+> +       .alpha = 0x8000,
+> +       .config_ctl_val = 0x20485699,
+> +       .config_ctl_hi_val = 0x00182261,
+> +       .config_ctl_hi1_val = 0x82aa299c,
+> +       .test_ctl_val = 0x00000000,
+> +       .test_ctl_hi_val = 0x00000003,
+> +       .test_ctl_hi1_val = 0x00009000,
+> +       .test_ctl_hi2_val = 0x00000034,
+> +       .user_ctl_val = 0x00000000,
+> +       .user_ctl_hi_val = 0x00000005,
+> +};
+> +
+> +static struct clk_alpha_pll video_cc_pll0 = {
+> +       .offset = 0x0,
+> +       .vco_table = lucid_ole_vco,
+> +       .num_vco = ARRAY_SIZE(lucid_ole_vco),
+> +       .regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_OLE],
+> +       .clkr = {
+> +               .hw.init = &(const struct clk_init_data) {
+> +                       .name = "video_cc_pll0",
+> +                       .parent_data = &(const struct clk_parent_data) {
+> +                               .index = DT_BI_TCXO,
+> +                       },
+> +                       .num_parents = 1,
+> +                       .ops = &clk_alpha_pll_lucid_ole_ops,
+> +               },
+> +       },
+> +};
+> +
+> +static const struct alpha_pll_config video_cc_pll1_config = {
+> +       .l = 0x44000036,
+> +       .alpha = 0xb000,
+> +       .config_ctl_val = 0x20485699,
+> +       .config_ctl_hi_val = 0x00182261,
+> +       .config_ctl_hi1_val = 0x82aa299c,
+> +       .test_ctl_val = 0x00000000,
+> +       .test_ctl_hi_val = 0x00000003,
+> +       .test_ctl_hi1_val = 0x00009000,
+> +       .test_ctl_hi2_val = 0x00000034,
+> +       .user_ctl_val = 0x00000000,
+> +       .user_ctl_hi_val = 0x00000005,
+> +};
+> +
+> +static struct clk_alpha_pll video_cc_pll1 = {
+> +       .offset = 0x1000,
+> +       .vco_table = lucid_ole_vco,
+> +       .num_vco = ARRAY_SIZE(lucid_ole_vco),
+> +       .regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_OLE],
+> +       .clkr = {
+> +               .hw.init = &(const struct clk_init_data) {
+> +                       .name = "video_cc_pll1",
+> +                       .parent_data = &(const struct clk_parent_data) {
+> +                               .index = DT_BI_TCXO,
+> +                       },
+> +                       .num_parents = 1,
+> +                       .ops = &clk_alpha_pll_lucid_ole_ops,
+> +               },
+> +       },
+> +};
+> +
+> +static const struct parent_map video_cc_parent_map_0[] = {
+> +       { P_BI_TCXO, 0 },
+> +       { P_VIDEO_CC_PLL0_OUT_MAIN, 1 },
+> +};
+> +
+> +static const struct clk_parent_data video_cc_parent_data_0[] = {
+> +       { .index = DT_BI_TCXO },
+> +       { .hw = &video_cc_pll0.clkr.hw },
+> +};
+> +
+> +static const struct parent_map video_cc_parent_map_1[] = {
+> +       { P_BI_TCXO, 0 },
+> +       { P_VIDEO_CC_PLL1_OUT_MAIN, 1 },
+> +};
+> +
+> +static const struct clk_parent_data video_cc_parent_data_1[] = {
+> +       { .index = DT_BI_TCXO },
+> +       { .hw = &video_cc_pll1.clkr.hw },
+> +};
+> +
+> +static const struct freq_tbl ftbl_video_cc_mvs0_clk_src[] = {
+> +       F(720000000, P_VIDEO_CC_PLL0_OUT_MAIN, 1, 0, 0),
+> +       F(1014000000, P_VIDEO_CC_PLL0_OUT_MAIN, 1, 0, 0),
+> +       F(1098000000, P_VIDEO_CC_PLL0_OUT_MAIN, 1, 0, 0),
+> +       F(1332000000, P_VIDEO_CC_PLL0_OUT_MAIN, 1, 0, 0),
+> +       F(1600000000, P_VIDEO_CC_PLL0_OUT_MAIN, 1, 0, 0),
+> +       { }
+> +};
+> +
+> +static struct clk_rcg2 video_cc_mvs0_clk_src = {
+> +       .cmd_rcgr = 0x8000,
+> +       .mnd_width = 0,
+> +       .hid_width = 5,
+> +       .parent_map = video_cc_parent_map_0,
+> +       .freq_tbl = ftbl_video_cc_mvs0_clk_src,
+> +       .clkr.hw.init = &(const struct clk_init_data) {
+> +               .name = "video_cc_mvs0_clk_src",
+> +               .parent_data = video_cc_parent_data_0,
+> +               .num_parents = ARRAY_SIZE(video_cc_parent_data_0),
+> +               .flags = CLK_SET_RATE_PARENT,
+> +               .ops = &clk_rcg2_shared_ops,
+> +       },
+> +};
+> +
+> +static const struct freq_tbl ftbl_video_cc_mvs1_clk_src[] = {
+> +       F(1050000000, P_VIDEO_CC_PLL1_OUT_MAIN, 1, 0, 0),
+> +       F(1350000000, P_VIDEO_CC_PLL1_OUT_MAIN, 1, 0, 0),
+> +       F(1500000000, P_VIDEO_CC_PLL1_OUT_MAIN, 1, 0, 0),
+> +       F(1650000000, P_VIDEO_CC_PLL1_OUT_MAIN, 1, 0, 0),
+> +       { }
+> +};
+> +
+> +static struct clk_rcg2 video_cc_mvs1_clk_src = {
+> +       .cmd_rcgr = 0x8018,
+> +       .mnd_width = 0,
+> +       .hid_width = 5,
+> +       .parent_map = video_cc_parent_map_1,
+> +       .freq_tbl = ftbl_video_cc_mvs1_clk_src,
+> +       .clkr.hw.init = &(const struct clk_init_data) {
+> +               .name = "video_cc_mvs1_clk_src",
+> +               .parent_data = video_cc_parent_data_1,
+> +               .num_parents = ARRAY_SIZE(video_cc_parent_data_1),
+> +               .flags = CLK_SET_RATE_PARENT,
+> +               .ops = &clk_rcg2_shared_ops,
+> +       },
+> +};
+> +
+> +static struct clk_regmap_div video_cc_mvs0_div_clk_src = {
+> +       .reg = 0x80c4,
+> +       .shift = 0,
+> +       .width = 4,
+> +       .clkr.hw.init = &(const struct clk_init_data) {
+> +               .name = "video_cc_mvs0_div_clk_src",
+> +               .parent_hws = (const struct clk_hw*[]) {
+> +                       &video_cc_mvs0_clk_src.clkr.hw,
+> +               },
+> +               .num_parents = 1,
+> +               .flags = CLK_SET_RATE_PARENT,
+> +               .ops = &clk_regmap_div_ro_ops,
+> +       },
+> +};
+> +
+> +static struct clk_regmap_div video_cc_mvs0c_div2_div_clk_src = {
+> +       .reg = 0x8070,
+> +       .shift = 0,
+> +       .width = 4,
+> +       .clkr.hw.init = &(const struct clk_init_data) {
+> +               .name = "video_cc_mvs0c_div2_div_clk_src",
+> +               .parent_hws = (const struct clk_hw*[]) {
+> +                       &video_cc_mvs0_clk_src.clkr.hw,
+> +               },
+> +               .num_parents = 1,
+> +               .flags = CLK_SET_RATE_PARENT,
+> +               .ops = &clk_regmap_div_ro_ops,
+> +       },
+> +};
+> +
+> +static struct clk_regmap_div video_cc_mvs1_div_clk_src = {
+> +       .reg = 0x80ec,
+> +       .shift = 0,
+> +       .width = 4,
+> +       .clkr.hw.init = &(const struct clk_init_data) {
+> +               .name = "video_cc_mvs1_div_clk_src",
+> +               .parent_hws = (const struct clk_hw*[]) {
+> +                       &video_cc_mvs1_clk_src.clkr.hw,
+> +               },
+> +               .num_parents = 1,
+> +               .flags = CLK_SET_RATE_PARENT,
+> +               .ops = &clk_regmap_div_ro_ops,
+> +       },
+> +};
+> +
+> +static struct clk_regmap_div video_cc_mvs1c_div2_div_clk_src = {
+> +       .reg = 0x809c,
+> +       .shift = 0,
+> +       .width = 4,
+> +       .clkr.hw.init = &(const struct clk_init_data) {
+> +               .name = "video_cc_mvs1c_div2_div_clk_src",
+> +               .parent_hws = (const struct clk_hw*[]) {
+> +                       &video_cc_mvs1_clk_src.clkr.hw,
+> +               },
+> +               .num_parents = 1,
+> +               .flags = CLK_SET_RATE_PARENT,
+> +               .ops = &clk_regmap_div_ro_ops,
+> +       },
+> +};
+> +
+> +static struct clk_branch video_cc_mvs0_clk = {
+> +       .halt_reg = 0x80b8,
+> +       .halt_check = BRANCH_HALT_SKIP,
+> +       .hwcg_reg = 0x80b8,
+> +       .hwcg_bit = 1,
+> +       .clkr = {
+> +               .enable_reg = 0x80b8,
+> +               .enable_mask = BIT(0),
+> +               .hw.init = &(const struct clk_init_data) {
+> +                       .name = "video_cc_mvs0_clk",
+> +                       .parent_hws = (const struct clk_hw*[]) {
+> +                               &video_cc_mvs0_div_clk_src.clkr.hw,
+> +                       },
+> +                       .num_parents = 1,
+> +                       .flags = CLK_SET_RATE_PARENT,
+> +                       .ops = &clk_branch2_ops,
+> +               },
+> +       },
+> +};
+> +
+> +static struct clk_branch video_cc_mvs0c_clk = {
+> +       .halt_reg = 0x8064,
+> +       .halt_check = BRANCH_HALT,
+> +       .clkr = {
+> +               .enable_reg = 0x8064,
+> +               .enable_mask = BIT(0),
+> +               .hw.init = &(const struct clk_init_data) {
+> +                       .name = "video_cc_mvs0c_clk",
+> +                       .parent_hws = (const struct clk_hw*[]) {
+> +                               &video_cc_mvs0c_div2_div_clk_src.clkr.hw,
+> +                       },
+> +                       .num_parents = 1,
+> +                       .flags = CLK_SET_RATE_PARENT,
+> +                       .ops = &clk_branch2_ops,
+> +               },
+> +       },
+> +};
+> +
+> +static struct clk_branch video_cc_mvs1_clk = {
+> +       .halt_reg = 0x80e0,
+> +       .halt_check = BRANCH_HALT_SKIP,
+> +       .hwcg_reg = 0x80e0,
+> +       .hwcg_bit = 1,
+> +       .clkr = {
+> +               .enable_reg = 0x80e0,
+> +               .enable_mask = BIT(0),
+> +               .hw.init = &(const struct clk_init_data) {
+> +                       .name = "video_cc_mvs1_clk",
+> +                       .parent_hws = (const struct clk_hw*[]) {
+> +                               &video_cc_mvs1_div_clk_src.clkr.hw,
+> +                       },
+> +                       .num_parents = 1,
+> +                       .flags = CLK_SET_RATE_PARENT,
+> +                       .ops = &clk_branch2_ops,
+> +               },
+> +       },
+> +};
+> +
+> +static struct clk_branch video_cc_mvs1c_clk = {
+> +       .halt_reg = 0x8090,
+> +       .halt_check = BRANCH_HALT,
+> +       .clkr = {
+> +               .enable_reg = 0x8090,
+> +               .enable_mask = BIT(0),
+> +               .hw.init = &(const struct clk_init_data) {
+> +                       .name = "video_cc_mvs1c_clk",
+> +                       .parent_hws = (const struct clk_hw*[]) {
+> +                               &video_cc_mvs1c_div2_div_clk_src.clkr.hw,
+> +                       },
+> +                       .num_parents = 1,
+> +                       .flags = CLK_SET_RATE_PARENT,
+> +                       .ops = &clk_branch2_ops,
+> +               },
+> +       },
+> +};
+> +
+> +static struct gdsc video_cc_mvs0c_gdsc = {
+> +       .gdscr = 0x804c,
+> +       .en_rest_wait_val = 0x2,
+> +       .en_few_wait_val = 0x2,
+> +       .clk_dis_wait_val = 0x6,
+> +       .pd = {
+> +               .name = "video_cc_mvs0c_gdsc",
+> +       },
+> +       .pwrsts = PWRSTS_OFF_ON,
+> +       .flags = RETAIN_FF_ENABLE,
+> +};
+> +
+> +static struct gdsc video_cc_mvs0_gdsc = {
+> +       .gdscr = 0x80a4,
+> +       .en_rest_wait_val = 0x2,
+> +       .en_few_wait_val = 0x2,
+> +       .clk_dis_wait_val = 0x6,
+> +       .pd = {
+> +               .name = "video_cc_mvs0_gdsc",
+> +       },
+> +       .pwrsts = PWRSTS_OFF_ON,
+> +       .parent = &video_cc_mvs0c_gdsc.pd,
+> +       .flags = RETAIN_FF_ENABLE | HW_CTRL,
+> +};
+> +
+> +static struct gdsc video_cc_mvs1c_gdsc = {
+> +       .gdscr = 0x8078,
+> +       .en_rest_wait_val = 0x2,
+> +       .en_few_wait_val = 0x2,
+> +       .clk_dis_wait_val = 0x6,
+> +       .pd = {
+> +               .name = "video_cc_mvs1c_gdsc",
+> +       },
+> +       .pwrsts = PWRSTS_OFF_ON,
+> +       .flags = RETAIN_FF_ENABLE,
+> +};
+> +
+> +static struct gdsc video_cc_mvs1_gdsc = {
+> +       .gdscr = 0x80cc,
+> +       .en_rest_wait_val = 0x2,
+> +       .en_few_wait_val = 0x2,
+> +       .clk_dis_wait_val = 0x6,
+> +       .pd = {
+> +               .name = "video_cc_mvs1_gdsc",
+> +       },
+> +       .pwrsts = PWRSTS_OFF_ON,
+> +       .parent = &video_cc_mvs1c_gdsc.pd,
+> +       .flags = RETAIN_FF_ENABLE | HW_CTRL,
+> +};
+> +
+> +static struct clk_regmap *video_cc_sm8550_clocks[] = {
+> +       [VIDEO_CC_MVS0_CLK] = &video_cc_mvs0_clk.clkr,
+> +       [VIDEO_CC_MVS0_CLK_SRC] = &video_cc_mvs0_clk_src.clkr,
+> +       [VIDEO_CC_MVS0_DIV_CLK_SRC] = &video_cc_mvs0_div_clk_src.clkr,
+> +       [VIDEO_CC_MVS0C_CLK] = &video_cc_mvs0c_clk.clkr,
+> +       [VIDEO_CC_MVS0C_DIV2_DIV_CLK_SRC] = &video_cc_mvs0c_div2_div_clk_src.clkr,
+> +       [VIDEO_CC_MVS1_CLK] = &video_cc_mvs1_clk.clkr,
+> +       [VIDEO_CC_MVS1_CLK_SRC] = &video_cc_mvs1_clk_src.clkr,
+> +       [VIDEO_CC_MVS1_DIV_CLK_SRC] = &video_cc_mvs1_div_clk_src.clkr,
+> +       [VIDEO_CC_MVS1C_CLK] = &video_cc_mvs1c_clk.clkr,
+> +       [VIDEO_CC_MVS1C_DIV2_DIV_CLK_SRC] = &video_cc_mvs1c_div2_div_clk_src.clkr,
+> +       [VIDEO_CC_PLL0] = &video_cc_pll0.clkr,
+> +       [VIDEO_CC_PLL1] = &video_cc_pll1.clkr,
+> +};
+> +
+> +static struct gdsc *video_cc_sm8550_gdscs[] = {
+> +       [VIDEO_CC_MVS0C_GDSC] = &video_cc_mvs0c_gdsc,
+> +       [VIDEO_CC_MVS0_GDSC] = &video_cc_mvs0_gdsc,
+> +       [VIDEO_CC_MVS1C_GDSC] = &video_cc_mvs1c_gdsc,
+> +       [VIDEO_CC_MVS1_GDSC] = &video_cc_mvs1_gdsc,
+> +};
+> +
+> +static const struct qcom_reset_map video_cc_sm8550_resets[] = {
+> +       [CVP_VIDEO_CC_INTERFACE_BCR] = { 0x80f0 },
+> +       [CVP_VIDEO_CC_MVS0_BCR] = { 0x80a0 },
+> +       [CVP_VIDEO_CC_MVS0C_BCR] = { 0x8048 },
+> +       [CVP_VIDEO_CC_MVS1_BCR] = { 0x80c8 },
+> +       [CVP_VIDEO_CC_MVS1C_BCR] = { 0x8074 },
 
-> 
->>>>   $echo 123,456,789 > /sys/fs/resctrl/clos1/tasks
->>>>
-> 
-> ...
-> 
->>>> +	pid will be logged in /sys/fs/resctrl/info/last_cmd_status file.
->>>
->>> Would it not always print the failing pid (if error was encountered while
->>
->> Not always. In this case it does not print the pid,
->> rdt_last_cmd_puts("Can't move task to different control group\n");
->>                         return -EINVAL;
->>
-> 
-> What you quote above adds the relevant text to the last_cmd_status buffer ...
-> and later (see below) more text is added to the buffer that contains the
-> pid, no?
+Please rename them to start with the VIDEO_CC prefix.
 
-Yes. That is correct.
+> +       [VIDEO_CC_MVS0C_CLK_ARES] = { 0x8064, 2 },
+> +       [VIDEO_CC_MVS1C_CLK_ARES] = { 0x8090, 2 },
+> +};
+> +
+> +static const struct regmap_config video_cc_sm8550_regmap_config = {
+> +       .reg_bits = 32,
+> +       .reg_stride = 4,
+> +       .val_bits = 32,
+> +       .max_register = 0x9f4c,
+> +       .fast_io = true,
+> +};
+> +
+> +static struct qcom_cc_desc video_cc_sm8550_desc = {
+> +       .config = &video_cc_sm8550_regmap_config,
+> +       .clks = video_cc_sm8550_clocks,
+> +       .num_clks = ARRAY_SIZE(video_cc_sm8550_clocks),
+> +       .resets = video_cc_sm8550_resets,
+> +       .num_resets = ARRAY_SIZE(video_cc_sm8550_resets),
+> +       .gdscs = video_cc_sm8550_gdscs,
+> +       .num_gdscs = ARRAY_SIZE(video_cc_sm8550_gdscs),
+> +};
+> +
+> +static const struct of_device_id video_cc_sm8550_match_table[] = {
+> +       { .compatible = "qcom,sm8550-videocc" },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(of, video_cc_sm8550_match_table);
+> +
+> +static int video_cc_sm8550_probe(struct platform_device *pdev)
+> +{
+> +       struct regmap *regmap;
+> +       int ret;
+> +
+> +       ret = devm_pm_runtime_enable(&pdev->dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = pm_runtime_resume_and_get(&pdev->dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       regmap = qcom_cc_map(pdev, &video_cc_sm8550_desc);
+> +       if (IS_ERR(regmap)) {
+> +               pm_runtime_put(&pdev->dev);
+> +               return PTR_ERR(regmap);
+> +       }
+> +
+> +       clk_lucid_ole_pll_configure(&video_cc_pll0, regmap, &video_cc_pll0_config);
+> +       clk_lucid_ole_pll_configure(&video_cc_pll1, regmap, &video_cc_pll1_config);
+> +
+> +       /*
+> +        * Keep clocks always enabled:
+> +        *      video_cc_ahb_clk
+> +        *      video_cc_sleep_clk
+> +        *      video_cc_xo_clk
+> +        */
+> +       regmap_update_bits(regmap, 0x80f4, BIT(0), BIT(0));
+> +       regmap_update_bits(regmap, 0x8140, BIT(0), BIT(0));
+> +       regmap_update_bits(regmap, 0x8124, BIT(0), BIT(0));
+> +
+> +       ret = qcom_cc_really_probe(pdev, &video_cc_sm8550_desc, regmap);
+> +
+> +       pm_runtime_put(&pdev->dev);
+> +
+> +       return ret;
+> +}
+> +
+> +static struct platform_driver video_cc_sm8550_driver = {
+> +       .probe = video_cc_sm8550_probe,
+> +       .driver = {
+> +               .name = "video_cc-sm8550",
+> +               .of_match_table = video_cc_sm8550_match_table,
+> +       },
+> +};
+> +
+> +static int __init video_cc_sm8550_init(void)
+> +{
+> +       return platform_driver_register(&video_cc_sm8550_driver);
+> +}
+> +subsys_initcall(video_cc_sm8550_init);
 
-> 
-> ...
-> 
->>>>  	struct rdtgroup *rdtgrp;
->>>> +	char *pid_str;
->>>>  	int ret = 0;
->>>>  	pid_t pid;
->>>>
->>>> -	if (kstrtoint(strstrip(buf), 0, &pid) || pid < 0)
->>>> +	if (nbytes == 0)
->>>>  		return -EINVAL;
->>>> +
->>>> +	buf[nbytes - 1] = '\0';
->>>> +
->>>
->>> This seems like another remnant of the schemata write code that expects that
->>> the buffer ends with a '\n'. Since this code does not have this requirement the
->>> above may have unintended consequences if a tool provides a buffer that does
->>> not end with '\n'.
->>> I think you just want to ensure that the buffer is properly terminated and from
->>> what I understand when looking at kernfs_fop_write_iter() this is already taken
->>> care of.
->>
->> Sure. Will check. Then I will have to change the check below to if (!buf).
-> 
-> Please check what kernfs_fop_write_iter() does. From what I can tell it does
-> exactly what you are trying to do above, but without overwriting
-> part of the string that user space provides.
-> I thus do not think that the later check needs to change. From what I understand
-> it is used to handle the scenario if user space provides a string like "pid,"
-> (last character is the separator). Please do confirm that the code can handle
-> any variations that user space may throw at it.
+module_platform_driver() instead? There is no need to register videocc
+at the subsys level.
 
-Sure. Thanks
-Babu
-> 
->>>> @@ -716,6 +739,12 @@ static ssize_t rdtgroup_tasks_write(struct
->>> kernfs_open_file *of,
->>>>  	}
->>>>
->>>>  	ret = rdtgroup_move_task(pid, rdtgrp, of);
->>>> +	if (ret) {
->>>> +		rdt_last_cmd_printf("Error while processing task %d\n", pid);
-> 
-> Note here the pid is added to the buffer that is printed when user space
-> views last_cmd_status. I think this is the first time two lines of error may
-> be added to the buffer so you could double check all works as expected.
-> 
-> Reinette
+> +
+> +static void __exit video_cc_sm8550_exit(void)
+> +{
+> +       platform_driver_unregister(&video_cc_sm8550_driver);
+> +}
+> +module_exit(video_cc_sm8550_exit);
+> +
+> +MODULE_DESCRIPTION("QTI VIDEO_CC SM8550 Driver");
+> +MODULE_LICENSE("GPL");
 
 -- 
-Thanks
-Babu Moger
+With best wishes
+Dmitry
