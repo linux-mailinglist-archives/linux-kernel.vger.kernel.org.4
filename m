@@ -2,174 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE6E6FC611
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830FE6FC60D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235674AbjEIMQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 08:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S235671AbjEIMPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 08:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjEIMQI (ORCPT
+        with ESMTP id S229741AbjEIMPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 08:16:08 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160CA3C25;
-        Tue,  9 May 2023 05:16:04 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 846B63200437;
-        Tue,  9 May 2023 08:15:59 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 09 May 2023 08:16:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1683634559; x=1683720959; bh=jMFJATipArZQBRY6U4nByREOOWvUXM2jwlx
-        Y3nY6hu0=; b=ZfsaS5LDJ0o2jzmbku6hsKKp4oObCLeMCqZEuxd7nuCw81w3krt
-        pdTWFMEX9b9NcYaoE/uuu3vGgpdVsc0I0nGzz+Uay2NA7FhED7+e05ZXqfIMk/Iq
-        rRUOymcyzGBMyo3ksf/3lgDJaC63Rx6Z6PhM0P5ZpXPdtU+1Vef4AEsFNAKGdjgg
-        dZw2C//hotodyFWSm0gHFvmcYvhon9wVV5WTGatxB2Pxi5PqN9BABn1MDJV3H/lN
-        KS1YH+4O9/bOqLhy84QRVeo2cnXI0lHp+XiIr9BsL7f3UIotn67VTbPb+fossMxB
-        WuhptkpiWKvn/rtm8Hmdpjb7h8TYrF97bWg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1683634559; x=1683720959; bh=jMFJATipArZQBRY6U4nByREOOWvUXM2jwlx
-        Y3nY6hu0=; b=LC89PMaH+NrcQx7ntd8N9c3gGTHk77YGeaxocqDBUZVoNX0vYyy
-        21gcoBEEur2Z3DyJN+3uWL1oRfWL8EAasgFYOdQd/eNjdmqPmI46x8QcC0PjPOtY
-        Y+LEnUCBV6jci5GBm9+zGwL34nXM0OOZbJJ9puBraCNP6/TI3EEEy7ysKv4MZn1X
-        ZEyFb8kmi48FyJ7DV+rdwwABX4tr/MhG5bOXniO3Q5w6h9Jzue030dhaDd2e+8Br
-        InKeJCDAFNq4mzX+WoKT/gaZt/j7n5l1QJ4Zzj9q3UrUC60g4RLBxmXFXbUvmoOU
-        MnwFoU1scv97ZmqrJxT9ne0HWqResTECjDA==
-X-ME-Sender: <xms:fjlaZFpnnWGKp_l1wYq3iNuQN7Gni46QlwMzAqXckS9ufTk7JxjO_w>
-    <xme:fjlaZHr5zZUHXPswqpZWTP0A1G9OqmM--lh3voqG91_qHbZRx1tvIR2pGltEsWAXz
-    BCzQWPPGTasqg4oJJE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeegtddggeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:fjlaZCMtr5bwynHlhW4Lm9PXk7yAgi4-S0X3LzOd6BAzENQxRiM8dQ>
-    <xmx:fjlaZA4WS8a8pR5ljQ1U3Vkdw67Ko-30g3NdKzeSocpZ_eKZvDX2dA>
-    <xmx:fjlaZE689Ji7FiV5fy4mmoE47E22b3pwIcqN0eCGmtNGHn9o5JycAQ>
-    <xmx:fzlaZBwXX1FNQxwMzmeJm51odJp-ZEtamFOJuGxX1kWbn4B9CxIZ1w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 6606FB60086; Tue,  9 May 2023 08:15:58 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-415-gf2b17fe6c3-fm-20230503.001-gf2b17fe6
-Mime-Version: 1.0
-Message-Id: <eeeaf258-8f2b-436a-aba0-b32dc90b359f@app.fastmail.com>
-In-Reply-To: <2ba483e9-267f-2159-1ea8-75a2618fcdf9@linux.intel.com>
-References: <20230508025936.36776-1-ychuang570808@gmail.com>
- <20230508025936.36776-11-ychuang570808@gmail.com>
- <2ba483e9-267f-2159-1ea8-75a2618fcdf9@linux.intel.com>
-Date:   Tue, 09 May 2023 14:14:00 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        "Jacky Huang" <ychuang570808@gmail.com>
-Cc:     "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, "Lee Jones" <lee@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Jiri Slaby" <jirislaby@kernel.org>,
-        "Tomer Maimon" <tmaimon77@gmail.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-serial <linux-serial@vger.kernel.org>, schung@nuvoton.com,
-        mjchen@nuvoton.com, "Jacky Huang" <ychuang3@nuvoton.com>
-Subject: Re: [PATCH v10 10/10] tty: serial: Add Nuvoton ma35d1 serial driver support
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 9 May 2023 08:15:35 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74A94208
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 05:15:33 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pwMF8-0003R6-NN; Tue, 09 May 2023 14:14:58 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C08281C0DC1;
+        Tue,  9 May 2023 12:14:51 +0000 (UTC)
+Date:   Tue, 9 May 2023 14:14:51 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     kernel test robot <lkp@intel.com>
+Cc:     "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>,
+        wg@grandegger.com, michal.swiatkowski@linux.intel.com,
+        Steen.Hegelund@microchip.com, mailhol.vincent@wanadoo.fr,
+        oe-kbuild-all@lists.linux.dev, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        frank.jungclaus@esd.eu, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        hpeter+linux_kernel@gmail.com
+Subject: Re: [PATCH V7] can: usb: f81604: add Fintek F81604 support
+Message-ID: <20230509-exert-remindful-0c0e89bf6649-mkl@pengutronix.de>
+References: <20230509073821.25289-1-peter_hong@fintek.com.tw>
+ <202305091802.pRFS6n2j-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="n6k4denxlayn7yaw"
+Content-Disposition: inline
+In-Reply-To: <202305091802.pRFS6n2j-lkp@intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 9, 2023, at 12:17, Ilpo J=C3=A4rvinen wrote:
-> On Mon, 8 May 2023, Jacky Huang wrote:
->> +
->> +#define UART_NR			17
->> +
->> +#define UART_REG_RBR		0x00
->> +#define UART_REG_THR		0x00
->> +#define UART_REG_IER		0x04
->> +#define UART_REG_FCR		0x08
->> +#define UART_REG_LCR		0x0C
->> +#define UART_REG_MCR		0x10
->
-> These duplicate include/uapi/linux/serial_reg.h ones, use the std ones=20
-> directly.
->
-> Setup regshift too and use it in serial_in.
 
-I think this came up in previous reviews, but it turned out that
-only the first six registers are compatible, while the later
-ones are all different, and it's not 8250 compatible.
+--n6k4denxlayn7yaw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It might be helpful to rename the registers to something
-with a prefix other than UART_REG_*, to avoid the confusion
-and possible namespace clash.
+Good Bot!
 
->
->> +/* UART_REG_IER - Interrupt Enable Register */
->> +#define IER_RDA_IEN		BIT(0)  /* RBR Available Interrupt Enable */
->> +#define IER_THRE_IEN		BIT(1)  /* THR Empty Interrupt Enable */
->> +#define IER_RLS_IEN		BIT(2)  /* RX Line Status Interrupt Enable */
->
-> These look same as UART_IER bits, use the std ones.
-...
-> Are these same as UART_FCR_CLEAR_* functionality wise? If they're use =
-std=20
-> ones.
+On 09.05.2023 18:17:43, kernel test robot wrote:
+> Hi Ji-Ze,
+>=20
+> kernel test robot noticed the following build warnings:
+>=20
+> [auto build test WARNING on mkl-can-next/testing]
+> [also build test WARNING on linus/master v6.4-rc1 next-20230509]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>=20
+> url:    https://github.com/intel-lab-lkp/linux/commits/Ji-Ze-Hong-Peter-H=
+ong/can-usb-f81604-add-Fintek-F81604-support/20230509-154045
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-nex=
+t.git testing
+> patch link:    https://lore.kernel.org/r/20230509073821.25289-1-peter_hon=
+g%40fintek.com.tw
+> patch subject: [PATCH V7] can: usb: f81604: add Fintek F81604 support
+> config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230509=
+/202305091802.pRFS6n2j-lkp@intel.com/config)
+> compiler: sh4-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/9549380f8d5eea359=
+f8c83f48e10a0becfd13541
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Ji-Ze-Hong-Peter-Hong/can-usb-f8=
+1604-add-Fintek-F81604-support/20230509-154045
+>         git checkout 9549380f8d5eea359f8c83f48e10a0becfd13541
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
+ss W=3D1 O=3Dbuild_dir ARCH=3Dsh olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
+ss W=3D1 O=3Dbuild_dir ARCH=3Dsh SHELL=3D/bin/bash drivers/net/
+>=20
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202305091802.pRFS6n2j-lkp@i=
+ntel.com/
+>=20
+> All warnings (new ones prefixed by >>):
+>=20
+>    drivers/net/can/usb/f81604.c: In function 'f81604_read_bulk_callback':
+> >> drivers/net/can/usb/f81604.c:440:67: warning: format '%lu' expects arg=
+ument of type 'long unsigned int', but argument 4 has type 'unsigned int' [=
+-Wformat=3D]
+>      440 |                 netdev_warn(netdev, "URB length %u not equal t=
+o %lu\n",
+>          |                                                               =
+  ~~^
+>          |                                                               =
+    |
+>          |                                                               =
+    long unsigned int
+>          |                                                               =
+  %u
+>      441 |                             urb->actual_length, sizeof(*frame)=
+);
+>          |                                                 ~~~~~~~~~~~~~~=
+    =20
+>          |                                                 |
+>          |                                                 unsigned int
 
-Again, I'd think we're better off having a distinct naming for
-them than trying to share the definitions with 8250.
+Replaced "%lu% by "%zu" while applying the patch.
 
->> +static struct uart_driver ma35d1serial_reg =3D {
->> +	.owner        =3D THIS_MODULE,
->> +	.driver_name  =3D "serial",
->> +	.dev_name     =3D "ttyS",
->> +	.major        =3D TTY_MAJOR,
->> +	.minor        =3D 64,
->> +	.cons         =3D MA35D1SERIAL_CONSOLE,
->> +	.nr           =3D UART_NR,
->> +};
->
-> This doesn't seem necessary, 8250 core will have the uart_driver for y=
-ou
-> and most of the console stuff too. You just need to setup a few things=20
-> correctly (see the setup functions in 8250_early for ideas/examples).
->...
->> +
->> +	ret =3D uart_add_one_port(&ma35d1serial_reg, &up->port);
->
-> For 8250, you should be using serial8250_register_8250_port(). See the=20
-> other drivers how to setup the console functions.
+Marc
 
-Consequently, this should also be kept separate from the serial8250
-driver, I don't see a way to fit the nuvoton code into the existing
-driver without making the resulting driver worse for everyone.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-There is one thing that absolutely needs to be changed though:
-the driver_name/dev_name/major/minor fields all clash with the
-8250 driver, so you cannot have a kernel that has both drivers
-built-in. All of these should change to get out of the way of the
-existing drivers.
+--n6k4denxlayn7yaw
+Content-Type: application/pgp-signature; name="signature.asc"
 
-        Arnd
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRaOTgACgkQvlAcSiqK
+BOh9SggAgfKi9g6CXX8twuTW5gnJPOwYRXY17ehQj3aadTLd0SVqOV1IYSwJ5H0R
+JQmZmANMv/SXMRZveWaVm+PsJfiZr2YX2fB5wzTLiGmjo8ObVZD1rm0xVHFracNX
+oo1DovenPn8Qyj9/5p/dgIzbEWIUaM2hH7IWzzcvZ8EFkXD3TL3NXXdhxckIBBo1
+vpEKKLbcdNyFjgKg436XsxVBPFA2GHQFpHNF/9IGS/98nh7SO96Cjb+2sntSw3Rs
+KvoQy5lRMU+wb7ir+ewpKoPCJyYeBOUIsT6GOUDf4p4r7as7Bl6B1HvULDZiqeaZ
+7+233QdSU1x2MDN7qBHX4xvF9lzrZQ==
+=Pl8e
+-----END PGP SIGNATURE-----
+
+--n6k4denxlayn7yaw--
