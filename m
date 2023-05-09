@@ -2,82 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014906FC42D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4216FC42F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235356AbjEIKqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 06:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
+        id S235335AbjEIKqt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 9 May 2023 06:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235013AbjEIKqI (ORCPT
+        with ESMTP id S235365AbjEIKqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 06:46:08 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C8A4ECB;
-        Tue,  9 May 2023 03:46:07 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3499PCw1022180;
-        Tue, 9 May 2023 10:46:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=pzrwtycEGGairi7H5VWoKnmQe83IMyYowf+KnIHVI7U=;
- b=aSBIR3BWOlnHFOfNlLzPuZkUhnpgRQpE/W9lP4KPye4PgdH1Duz8eID3n4R3YU9HFUy9
- JsK2nIzwWYd6uaZsytY/ybQkB6UP+XzasaAjPiZBLtQuMQsYjxqCwCI6F2S3cycKhdJe
- L/i/tBB6iIP0fl8sYNgEIfQ0BTtEMDLEOyI2R6fkO7lM1y4EozXARorK9ph846bZmovM
- IasJxD5USWVqtYuFCY3snImdiFKJsQgAFpSbKvLelOxjcF8PiuSEtW4xiHmeu2YlORvL
- bgSuSsC2f1F7VbT4746uC797irQRPCC1bwX7ETAGZaiea+jc4JUl2qkSAYp2uHZRs5E3 vw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf7859ecm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 10:46:02 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 349AjeST000800
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 9 May 2023 10:45:40 GMT
-Received: from [10.242.243.41] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
- 03:45:35 -0700
-Message-ID: <e9680cc0-b11a-e29b-627f-51e771015c5d@quicinc.com>
-Date:   Tue, 9 May 2023 16:15:32 +0530
+        Tue, 9 May 2023 06:46:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66E7D2CC
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 03:46:43 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1pwKrb-0008OZ-II; Tue, 09 May 2023 12:46:35 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1pwKrZ-002DJr-Tp; Tue, 09 May 2023 12:46:33 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1pwKrZ-0005Ao-7z; Tue, 09 May 2023 12:46:33 +0200
+Message-ID: <63bf19dc9ce534703597e830799aa0866a6156b8.camel@pengutronix.de>
+Subject: Re: [PATCH 12/13] media: coda: Use alloc_ordered_workqueue() to
+ create ordered workqueues
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Tejun Heo <tj@kernel.org>, jiangshanlai@gmail.com
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Date:   Tue, 09 May 2023 12:46:33 +0200
+In-Reply-To: <20230509015032.3768622-13-tj@kernel.org>
+References: <20230509015032.3768622-1-tj@kernel.org>
+         <20230509015032.3768622-13-tj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1+deb11u2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V3 0/6] Incremental patches on minimal boot support
-Content-Language: en-US
-From:   Devi Priya <quic_devipriy@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
-References: <20230425084010.15581-1-quic_devipriy@quicinc.com>
-In-Reply-To: <20230425084010.15581-1-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: TLtl-Mc-cm5LTejOIxc7_nO2tbbyjzKx
-X-Proofpoint-GUID: TLtl-Mc-cm5LTejOIxc7_nO2tbbyjzKx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_06,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- bulkscore=0 adultscore=0 priorityscore=1501 mlxlogscore=999
- lowpriorityscore=0 malwarescore=0 mlxscore=0 impostorscore=0 clxscore=1015
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305090085
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,54 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mo, 2023-05-08 at 15:50 -1000, Tejun Heo wrote:
+> BACKGROUND
+> ==========
+> 
+> When multiple work items are queued to a workqueue, their execution order
+> doesn't match the queueing order. They may get executed in any order and
+> simultaneously. When fully serialized execution - one by one in the queueing
+> order - is needed, an ordered workqueue should be used which can be created
+> with alloc_ordered_workqueue().
+> 
+> However, alloc_ordered_workqueue() was a later addition. Before it, an
+> ordered workqueue could be obtained by creating an UNBOUND workqueue with
+> @max_active==1. This originally was an implementation side-effect which was
+> broken by 4c16bd327c74 ("workqueue: restore WQ_UNBOUND/max_active==1 to be
+> ordered"). Because there were users that depended on the ordered execution,
+> 5c0338c68706 ("workqueue: restore WQ_UNBOUND/max_active==1 to be ordered")
+> made workqueue allocation path to implicitly promote UNBOUND workqueues w/
+> @max_active==1 to ordered workqueues.
+> 
+> While this has worked okay, overloading the UNBOUND allocation interface
+> this way creates other issues. It's difficult to tell whether a given
+> workqueue actually needs to be ordered and users that legitimately want a
+> min concurrency level wq unexpectedly gets an ordered one instead. With
+> planned UNBOUND workqueue updates to improve execution locality and more
+> prevalence of chiplet designs which can benefit from such improvements, this
+> isn't a state we wanna be in forever.
+> 
+> This patch series audits all callsites that create an UNBOUND workqueue w/
+> @max_active==1 and converts them to alloc_ordered_workqueue() as necessary.
+> 
+> WHAT TO LOOK FOR
+> ================
+> 
+> The conversions are from
+> 
+>   alloc_workqueue(WQ_UNBOUND | flags, 1, args..)
+> 
+> to
+> 
+>   alloc_ordered_workqueue(flags, args...)
+> 
+> which don't cause any functional changes. If you know that fully ordered
+> execution is not ncessary, please let me know. I'll drop the conversion and
+> instead add a comment noting the fact to reduce confusion while conversion
+> is in progress.
+> 
+> If you aren't fully sure, it's completely fine to let the conversion
+> through. The behavior will stay exactly the same and we can always
+> reconsider later.
+> 
+> As there are follow-up workqueue core changes, I'd really appreciate if the
+> patch can be routed through the workqueue tree w/ your acks. Thanks.
+> 
+> Signed-off-by: Tejun Heo <tj@kernel.org>
 
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-On 4/25/2023 2:10 PM, Devi Priya wrote:
-> Patchset V9 of the series: Add minimal boot support for IPQ9574 has been
-> merged and is available in linux-next/master.
-> V12 being the latest revision posted in the series, the delta between
-> revisions V9 and V12 is posted as a separate series as suggested by
-> Bjorn to avoid possible confusions.
-> 
-> This series adds the delta changes between revisions V9 and V12.
-> 
-> V9 can be found at:
-> https://lore.kernel.org/linux-arm-msm/20230316072940.29137-1-quic_devipriy@quicinc.com/
-> 
-> V12 can be found at:
-> https://lore.kernel.org/linux-arm-msm/20230410135948.11970-1-quic_devipriy@quicinc.com/
-> 
-> Changes in V3:
-> 	- Detailed change logs are added to the respective patches.
-> 
-> Changes in V2:
-> https://lore.kernel.org/linux-arm-msm/20230417053355.25691-1-quic_devipriy@quicinc.com/
-> 	- Updated the subject & commit message of [PATCH V2 1/4]
-> 	- No changes were made to any other patches
-> 
-> Changes in V1:
-> 	- The Delta between V9 & V12 is added to the change log of
-> 	  the respective patches for quick reference
-
-Gentle Reminder!
-
-Thanks,
-Devi Priya
-
-> 
-> Devi Priya (6):
->    arm64: dts: qcom: ipq9574: Update the size of GICC & GICV regions
->    dt-bindings: clock: qcom,ipq9574-gcc: Add maintainer
->    clk: qcom: gcc-ipq9574: Clean up included headers
->    clk: qcom: gcc-ipq9574: constify struct clk_init_data
->    arm64: dts: qcom: ipq9574: Drop bias_pll_ubi_nc_clk input
->    arm64: dts: qcom: ipq9574: rename al02-c7 dts to rdp433
-> 
->   .../bindings/clock/qcom,ipq9574-gcc.yaml      |   1 +
->   arch/arm64/boot/dts/qcom/Makefile             |   2 +-
->   ...ipq9574-al02-c7.dts => ipq9574-rdp433.dts} |   2 +-
->   arch/arm64/boot/dts/qcom/ipq9574.dtsi         |  14 +-
->   drivers/clk/qcom/gcc-ipq9574.c                | 434 +++++++++---------
->   5 files changed, 224 insertions(+), 229 deletions(-)
->   rename arch/arm64/boot/dts/qcom/{ipq9574-al02-c7.dts => ipq9574-rdp433.dts} (97%)
-> 
+regards
+Philipp
