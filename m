@@ -2,113 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A06F6FC367
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F686FC369
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235054AbjEIKEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 06:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
+        id S235108AbjEIKEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 06:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234928AbjEIKEZ (ORCPT
+        with ESMTP id S234848AbjEIKE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 06:04:25 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB794C0B;
-        Tue,  9 May 2023 03:04:24 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1aaf70676b6so39720205ad.3;
-        Tue, 09 May 2023 03:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683626663; x=1686218663;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xjh4LrxhhSgX9bI32vEpSBC4Dyg6CYhB8VLx79usfsE=;
-        b=p2+Ns6zrGjoBa4qtiGvTjNXJggiKcQ40qT/z3yatZQsqFyqm4pnLxbLX0TPXJ108Yv
-         RxmwMhbHKtDxidQAa84karDJySiZUBgbsPM7Vfn5uLb1K1bIAkyr75NSTZiYIyoGe0E1
-         Z1KTKOtelb6oTqJmT6ni5VyWbqHLB9bGgni0OVeBjN1uEEL18Go2xhlo7R5fFYIBl0oP
-         NkagDSGrPlkgBHxm1R1GCBbY5ZuY/t9LNC7Sdp3X7alcfZdZYb0+BAitZ7I4IKntM6/J
-         XHiKWbBUHYsfk9UP5BNGhhAQYneffLMghsH/E3jAsPDLyljl2zAJeGztPW8jniwlj7vd
-         4vrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683626663; x=1686218663;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xjh4LrxhhSgX9bI32vEpSBC4Dyg6CYhB8VLx79usfsE=;
-        b=OgyqhfiKIY25zL7UqRUNU1ikZAKQn9m45TLcae9ReirqIIBrpcqEodv8ZopmQUv3gj
-         acnCtd4ABdi8E31VnjpPpe9OPBZiQn0kuRi2I4OW2m5DsFLpTL+6PGtq0UYHXA3ZD4i4
-         PIUsHrOq4ICL6r4+EyXzXc/scq3hdhYFTk9C81O8hZIbmd2PuhZ+qFjKpdyFDNgmcMWj
-         5h01nS8P3a8K7ydxxWyN9hIrX4r8u5IRhO0iW3Z2JlqKAv+vWNhW+DQv98ZwfMqQ5roF
-         7hLNLzPNhKkypw3an+R8SUa9BeisIb6cSOqcW0wJ0Q3g6roMscUCX7PftHoYika0QJCm
-         fQZg==
-X-Gm-Message-State: AC+VfDy9QNAeQ8I/t+e5NPhNG/q7qmNXEJ3AKEVWeEnWHanJhxLHM6JA
-        cKINnf4cd2zd/fqHU/dTmywaqi5WHE8=
-X-Google-Smtp-Source: ACHHUZ7zwgXnXDCe0OM4n84lh/VgQQ9oM9MfTp3sot72W5jF8XDvyAcK+gLoj9jLkDXimo+jgfwv7A==
-X-Received: by 2002:a17:902:aa8d:b0:1a6:db0a:8003 with SMTP id d13-20020a170902aa8d00b001a6db0a8003mr13380333plr.23.1683626663323;
-        Tue, 09 May 2023 03:04:23 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-80.three.co.id. [180.214.232.80])
-        by smtp.gmail.com with ESMTPSA id j5-20020a170902c3c500b001a6ff7bd4d9sm1147214plj.15.2023.05.09.03.04.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 03:04:22 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 4FE691068BA; Tue,  9 May 2023 17:04:19 +0700 (WIB)
-Date:   Tue, 9 May 2023 17:04:18 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 000/370] 5.15.111-rc2 review
-Message-ID: <ZFoaokPLcvnnP7Ns@debian.me>
-References: <20230509030611.521807993@linuxfoundation.org>
+        Tue, 9 May 2023 06:04:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D94246BD
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 03:04:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED14E62296
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 10:04:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82BDFC433D2;
+        Tue,  9 May 2023 10:04:21 +0000 (UTC)
+Date:   Tue, 9 May 2023 11:04:18 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Topi Miettinen <toiwoton@gmail.com>
+Cc:     Florent Revest <revest@chromium.org>, Peter Xu <peterx@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        joey.gouly@arm.com, mhocko@suse.com, keescook@chromium.org,
+        david@redhat.com, izbyshev@ispras.ru, nd@arm.com,
+        broonie@kernel.org, szabolcs.nagy@arm.com, lennart@poettering.net
+Subject: Re: [PATCH 0/4] MDWE without inheritance
+Message-ID: <ZFoaorv+aJDRdyqf@arm.com>
+References: <20230504170942.822147-1-revest@chromium.org>
+ <ZFQQSKijXQHWlYaI@x1n>
+ <CABRcYmJFcUs=3QYXz8iq7qvu2orJ4HL-cHdBKg9o7=Ma=nfPLw@mail.gmail.com>
+ <ZFhQcwDBFWcRCC4N@x1n>
+ <CABRcYm+RquNGYUyfCEmLrcaoMSKagzwXgto-24ZCaLAdFUKUjg@mail.gmail.com>
+ <ZFkCugTkQmZh3sJo@arm.com>
+ <ccc1a37b-f0f4-82da-22e8-d7b2a88afb0c@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/8nwasEa1JIA4aew"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230509030611.521807993@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <ccc1a37b-f0f4-82da-22e8-d7b2a88afb0c@gmail.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 08, 2023 at 08:21:16PM +0300, Topi Miettinen wrote:
+> On 8.5.2023 17.10, Catalin Marinas wrote:
+> > I think we should keep the original behaviour of systemd here, otherwise
+> > they won't transition to the new interface and keep using the SECCOMP
+> > BPF approach (which, in addition, prevents glibc from setting PROT_BTI
+> > on an already executable mapping).
+> 
+> Systemd has transitioned to prctl(PR_SET_MDWE) method since release of v253,
+> so the original behaviour definitely should be kept.
 
---/8nwasEa1JIA4aew
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That's great. So yes, no ABI changes allowed anymore.
 
-On Tue, May 09, 2023 at 05:26:15AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.111 release.
-> There are 370 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+> > x86 has protection keys and arm64 will soon have permission overlays
+> > that allow user-space to toggle between RX and RW (Joey is looking at
+> > the arm64 support). I'm not sure how we'll end up implemented this on
+> > arm64 (and haven't looked at x86) but I have a suspicion MDWE will get
+> > in the way as the base page table permission will probably need
+> > PROT_WRITE|PROT_EXEC.
+> 
+> Wouldn't those features defeat any gains from MDWE? The features probably
+> should be forbidden with MemoryDenyWriteExecute=yes.
 
-Successfully compiled in my computer (Acer Aspire E15, Intel Core i3
-Haswell).
+The permission overlays (controlled by the user) can only further
+restrict the mmap() permissions. So MDWE would still work as expected.
+If one wants to toggle between RW and RX with overlays, the overall
+mmap() needs to be RWX and it won't work if MDWE=yes. No need to
+explicitly disable the overlays feature.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+On arm64 at least, with the introduction of permission overlays we also
+have the notion of "Read, Execute if not Write". This permission
+automatically disables Exec if the mapping becomes writable (overlays
+can disable writable, allowing exec). We could have a new MDWE policy
+which allows this, though I'm not that keen on using it in Linux since
+background permission changes done by the kernel can lead to an
+unexpected executable permission (e.g. marking a page read-only for
+clean/dirty tracking or in preparation for CoW after fork()).
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---/8nwasEa1JIA4aew
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFoamwAKCRD2uYlJVVFO
-o6WgAQDncT8sJ1nd9eAmkwENwAdOKvkxmdt4P1Lonp5n5+77yQEA/Nlp2sy5kAyW
-ixAsQ0Ye6HjyJ6vDiuSGTh+ATPYLZwI=
-=c5ju
------END PGP SIGNATURE-----
-
---/8nwasEa1JIA4aew--
+-- 
+Catalin
