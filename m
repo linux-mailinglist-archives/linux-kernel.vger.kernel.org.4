@@ -2,110 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723FC6FCBC4
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB83B6FCBD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234694AbjEIQwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 12:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
+        id S234768AbjEIQyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 12:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234567AbjEIQwo (ORCPT
+        with ESMTP id S234639AbjEIQyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 12:52:44 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F5F5262;
-        Tue,  9 May 2023 09:52:38 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-24df4ef05d4so5498548a91.2;
-        Tue, 09 May 2023 09:52:38 -0700 (PDT)
+        Tue, 9 May 2023 12:54:09 -0400
+Received: from mailrelay6-1.pub.mailoutpod2-cph3.one.com (mailrelay6-1.pub.mailoutpod2-cph3.one.com [46.30.211.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A00D59CC
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 09:53:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683651157; x=1686243157;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eZGNkwcKrfK6pQ6D6N1O4LbckY0KJJq0dY3vsTxwcyE=;
-        b=AGyY3WW2FBb4ew7iD+Ep/FDnd4nymRYk0dx7wapzvRvgYFE/mCxPhometBJIMToJp0
-         XYUaM6mYNZDJdPc44pHh/juPGKoQAU19mgg6yTldNptpjoQzgKqeL1MVMCl71cT+t+0k
-         RznVihQBSYOnj82r/NfR1n+7XRZ9LLXLCXSgxlv6dU2bezps+t48ksAGP1+7f1ohvKwe
-         rbHFAR0s3hRKO4pBraKJ6nJN8vrtVSBzQbcgYtYuNh+LYyN3FYhPQoez7jv5oI8rAlFd
-         vyiwLgS5kceagWtGi2XglIRrxeLEnJz8IACWpif+kPFRfbGGnLWzVg4wF4hc1TCL2yqr
-         YW8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683651157; x=1686243157;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eZGNkwcKrfK6pQ6D6N1O4LbckY0KJJq0dY3vsTxwcyE=;
-        b=TQHPBg3n3S2WByGMg6EeMBVmYLqFPb87smeGVM1u7teVg0DcSUQDia0fwaWFGpPPJW
-         ehgxQR16kItsusoUXAa0Da10y8/w8CWNOUTilZoGcPP6+ZykpkAESc1WkVk00Ttw+BPw
-         SYntQciGzjRDEjo2c+GBa4GmHxGTqouTqJxlt84wC44zLnrlwzsQ31B5xmR8+LSQmtQ4
-         qoa9tyWGfgfWCG3m8Ev+RSBb2udNXPN8Vzb6IcN3zZ740uTYGipJC3zVSk/m+Lqib3+a
-         v8wL9D9fShOmfzW08MxgMNBrHmq/1SqeRGQ/h12gZ1sH6cymWiG8vzhtQX9wkLUGPmq3
-         NuCQ==
-X-Gm-Message-State: AC+VfDxAPJBUlVEnqwsSKha9CZNXUVZaA/wHZA1jkpyWdDgYGB9RYGsv
-        y595t2qDD7+Iy1GTWnERuNlHjcMwiok=
-X-Google-Smtp-Source: ACHHUZ6VFYARzED19gr6KhnH3Y0j9WNvGj1L9u8aYvUf37vsMdj1rHkYjVj2jlB8EBfb/B6n7ksk9g==
-X-Received: by 2002:a17:90a:608f:b0:24e:3b69:a87f with SMTP id z15-20020a17090a608f00b0024e3b69a87fmr14040121pji.25.1683651157268;
-        Tue, 09 May 2023 09:52:37 -0700 (PDT)
-Received: from cxl-test.. ([103.181.222.211])
-        by smtp.gmail.com with ESMTPSA id lw6-20020a17090b180600b002505f8b9c53sm5503986pjb.38.2023.05.09.09.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 09:52:36 -0700 (PDT)
-From:   Raghu Halharvi <raghuhack78@gmail.com>
-To:     linux-cxl@vger.kernel.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        raghuhack78@gmail.com, ira.weiny@intel.com, bwidawsk@kernel.org,
-        dan.j.williams@intel.com, vishal.l.verma@intel.com
-Cc:     linux-kernel@vger.kernel.org, Dave Jiang <dave.jiang@intel.com>
-Subject: [PATCH v5 2/2] cxl/region: Remove else after return statement
-Date:   Tue,  9 May 2023 16:52:17 +0000
-Message-Id: <20230509165218.139568-3-raghuhack78@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230509165218.139568-1-raghuhack78@gmail.com>
-References: <20230509165218.139568-1-raghuhack78@gmail.com>
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=cOysKkMBNzDpcv5J2MsGIrd6IfUZXEEIlgYWc9yAK1I=;
+        b=Amwj4o2W9+x26XSYidQ/xfjam9GfElktepI4/ezdc6Di/JAz0kJvOa7H9OAIf56tAysvU/tXe3M3v
+         TL6HeGLz5FevtuATssXRb92xxS76qq6gZToR06QaFb/wP8fAXgXV0m9im8bvPTRqoSyBZK7HyKGK6S
+         CuHuha/2o4ihYd9eE2fi8mtqptzxnx18mq0BWuzXNryagE+Xu8OrA2aAHo4jK/aUX/qJco4VJThz9+
+         mndVlUyRZiPAzF55bOhzBkfWYjGCUpnED5au0AGdjZFJzKJsAaxFdL9HpOJeNPcfxXWwBAfmvBNwgi
+         djeMx/mSgSVtHhAVDZ8hmQeuwErhIow==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=cOysKkMBNzDpcv5J2MsGIrd6IfUZXEEIlgYWc9yAK1I=;
+        b=qafW83QT/OqXnpLt+q4/N/9s/XB8IE/qbub0+3tIQ4iXiI+0eetRFTeoUfa7/wjKNHSdig+xPcFDo
+         bqfTGNdCQ==
+X-HalOne-ID: e4221e17-ee89-11ed-90db-6f01c1d0a443
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay6 (Halon) with ESMTPSA
+        id e4221e17-ee89-11ed-90db-6f01c1d0a443;
+        Tue, 09 May 2023 16:52:34 +0000 (UTC)
+Date:   Tue, 9 May 2023 18:52:32 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Maximilian Weigand <mweigand2017@gmail.com>
+Cc:     Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        Maximilian Weigand <mweigand@mweigand.net>
+Subject: Re: [PATCH v1] backlight: lm3630a: turn off both led strings when
+ display is blank
+Message-ID: <20230509165232.GA1072872@ravnborg.org>
+References: <20230505185752.969476-1-mweigand2017@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230505185752.969476-1-mweigand2017@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Issue found with checkpatch
+On Fri, May 05, 2023 at 08:57:52PM +0200, Maximilian Weigand wrote:
+> From: Maximilian Weigand <mweigand@mweigand.net>
+> 
+> Use display_is_blank() to determine if the led strings should be turned
+> off in the update_status() functions of both strings.
+> 
+> Signed-off-by: Maximilian Weigand <mweigand@mweigand.net>
+> ---
+>  drivers/video/backlight/lm3630a_bl.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/video/backlight/lm3630a_bl.c b/drivers/video/backlight/lm3630a_bl.c
+> index d8c42acecb5d..5498b57329f9 100644
+> --- a/drivers/video/backlight/lm3630a_bl.c
+> +++ b/drivers/video/backlight/lm3630a_bl.c
+> @@ -202,7 +202,9 @@ static int lm3630a_bank_a_update_status(struct backlight_device *bl)
+>  	usleep_range(1000, 2000);
+>  	/* minimum brightness is 0x04 */
+>  	ret = lm3630a_write(pchip, REG_BRT_A, bl->props.brightness);
+> -	if (bl->props.brightness < 0x4)
+> +
+> +	if (backlight_is_blank(bl) || (bl->props.brightness < 0x4))
+You could replace bl->props.brightness with backlight_get_brightness(bl)
+to avoid direct access to the properties.
 
-The else section here is redundant after return statement, removing it.
-Sanity and correctness is not affected due to this fix.
+> +		/* turn the string off  */
+>  		ret |= lm3630a_update(pchip, REG_CTRL, LM3630A_LEDA_ENABLE, 0);
+>  	else
+>  		ret |= lm3630a_update(pchip, REG_CTRL,
+> @@ -277,7 +279,9 @@ static int lm3630a_bank_b_update_status(struct backlight_device *bl)
+>  	usleep_range(1000, 2000);
+>  	/* minimum brightness is 0x04 */
+>  	ret = lm3630a_write(pchip, REG_BRT_B, bl->props.brightness);
+> -	if (bl->props.brightness < 0x4)
+> +
+> +	if (backlight_is_blank(bl) || (bl->props.brightness < 0x4))
+Same here
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-Reviewed-by: Vishal Verma <vishal.l.verma@intel.com>
-Signed-off-by: Raghu Halharvi <raghuhack78@gmail.com>
----
- drivers/cxl/core/region.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-index f29028148806..a46d6ad9ef0a 100644
---- a/drivers/cxl/core/region.c
-+++ b/drivers/cxl/core/region.c
-@@ -2666,11 +2666,11 @@ static int cxl_region_invalidate_memregion(struct cxl_region *cxlr)
- 				"Bypassing cpu_cache_invalidate_memregion() for testing!\n");
- 			clear_bit(CXL_REGION_F_INCOHERENT, &cxlr->flags);
- 			return 0;
--		} else {
--			dev_err(&cxlr->dev,
--				"Failed to synchronize CPU cache state\n");
--			return -ENXIO;
- 		}
-+
-+		dev_err(&cxlr->dev,
-+			"Failed to synchronize CPU cache state\n");
-+		return -ENXIO;
- 	}
- 
- 	cpu_cache_invalidate_memregion(IORES_DESC_CXL);
--- 
-2.39.2
-
+	Sam
