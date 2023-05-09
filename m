@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF436FC775
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D30DC6FC77E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235492AbjEING3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 09:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39896 "EHLO
+        id S235263AbjEINIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 09:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235376AbjEINGT (ORCPT
+        with ESMTP id S235365AbjEINIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 09:06:19 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4F749E8
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 06:06:09 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bc570b4a3so10950115a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 06:06:09 -0700 (PDT)
+        Tue, 9 May 2023 09:08:07 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA2E30DE
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 06:08:05 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-ba5ebdc4156so849209276.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 06:08:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683637567; x=1686229567;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dq27aAWxCkL5lh0gQsM04iiHCtmU3UirHOLrJGmxHBw=;
-        b=bTzFElQ0Ijj7Qqx+ITj7N8by0OSLOkJjap0bR5jb2buLViuMHSIwCpg2gPnbNxbiur
-         n33ue596ZSOoRMFmoqk2Nw+qulSAPRl9FFYrxG+D2hBsBpuJ9rzibf7y9hl7H2osQ8GV
-         e9Y2kuXfjDo1FnM7qhu8Xbnp5qKFZZ1JKEy8kyyruikEg+KOZ18yiV3ne2ALwGNSFm2g
-         Y9Pjr9teRy4OQkplB6eGyFeQQ/2RFgxPRgGrgYiTmhV3rK/WmKhBGkahCk3OLdhgtGmn
-         jhA2SRixz7fO3Vq/zMVXv+AT/afuzs+K/HadURIPOpJYvBaEs8iR4BF1A3otPPfzz5ej
-         +hwQ==
+        d=linaro.org; s=google; t=1683637684; x=1686229684;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=alSD/LYUTqJfX0eULQ7Dos6x9QJDjuDbku/vaMMg2mM=;
+        b=eSRY/H9cGw+xOv99Rkt9fVU+GIk/nTmztiI7WoSbsTTf/eDvBNBdRblaLuHP9Dumis
+         CnqmkXrk83jWJIezxiE3JuCtLIokdpZnOdKkqTsCDSFr/huG19nMF7ZqCW2UIS3F7Ejy
+         Fq9cpUtgkD6BJnLlFt6aCCM0ik1dikFPhdzOnsixORrJsEyUqewgnoyy51Pa1A3UXggW
+         9EVrEJHHBIXbp0A5YLcOQcb7Vnnzgmx9U7uPTAPZbCUVLT51BTvRRll2zJ7n/gEBP3go
+         MxNccG06M8zNnVZfqVyzOr6J7+TJQASrDX6ZsO3lJT4yhvtcqKaENJq7ozY+w1URHyf2
+         RRGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683637567; x=1686229567;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dq27aAWxCkL5lh0gQsM04iiHCtmU3UirHOLrJGmxHBw=;
-        b=H9MY6F8smlHiBF9mlHDiVCI6gahGG4FgFX0aV+lhkCAMmoa0raISTGP2nDGe0Ll11J
-         lNxPDx82NtWRT6c9RQbQPWdfUtQu+VEW8gWNUcM1UoayOdIsXgA3cb6ux/nI8k03k6qd
-         wvVeI7MKdPPYIgfhDpwRmTOBGrbdtFsFyRbnoQQ9dnG1Xb0/SpYT84LNwMyodU/W911C
-         Qv/eumbuhMNj5YuasBx1TsGFORTEjZiFGDkQkGnYMiJ2ztOW9u1uwWVOJ4BW+NWLYHd6
-         8Bg7RX+OeaeQ/FIu+dwr++JIk9hkfh0KHinMhOyfKTTo07t6pvsnlQNNAkKA5JIJ8kpW
-         +70w==
-X-Gm-Message-State: AC+VfDzepBw8pewvUp4LAxHJatFE3feDIu65zeVQf9WyatbITRJg4Mpe
-        qAKo/s/9xZjPsK0NCkYmRgFLHg==
-X-Google-Smtp-Source: ACHHUZ6HVGeI7Az5TQaNdcCmmaidSWz1zdgkmcirij9gIwYx2Yg390YoZ0P4jiPXBvOB89RSgg60Lw==
-X-Received: by 2002:aa7:c059:0:b0:50d:9b57:842a with SMTP id k25-20020aa7c059000000b0050d9b57842amr5582009edo.9.1683637567393;
-        Tue, 09 May 2023 06:06:07 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
-        by smtp.gmail.com with ESMTPSA id y2-20020a056402134200b00504ecc4fa96sm726424edw.95.2023.05.09.06.06.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 06:06:06 -0700 (PDT)
-Message-ID: <8b540cc2-bc0d-9d8b-45e6-98410322b3f6@linaro.org>
-Date:   Tue, 9 May 2023 15:06:05 +0200
+        d=1e100.net; s=20221208; t=1683637684; x=1686229684;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=alSD/LYUTqJfX0eULQ7Dos6x9QJDjuDbku/vaMMg2mM=;
+        b=QS4gcz5S+mvp3RZBCcQqPR4lnxzUWtpE4YAZSFoRwzVYn06qwELgFCOmnRmQKWUJII
+         4i8EOfRGjRqLhofQQ9qzAi4dPPl8sQlW6Hr7Z9ipmohtW67V2rn8why6kM4aEjDq9do2
+         0p6nNXFmkQ6Hl3AT0zeSZGXn2V/CqNsy086A8GIoo83uih7TupDy5zql2tiUK09NC/Te
+         R0kIGz9adWxkuzR8UdhIiE2i0amwVRROA+RzCRXwf9oEaWA+6QwGcE/VpAOvA/tckjP4
+         1QE8OUaPIrFv2btRdgfhND6S4Rkz0Qd1mcKfsiENrg1kTMgvxKouuQHNtctRQVbKq2kv
+         X64g==
+X-Gm-Message-State: AC+VfDzcyxy+FL3gAmIbVYV8lVHBXFskaC5/0//buHVoV2xG/ztbEoGp
+        EyydQ942P6KiJ1vfcffNQXMsuIcQYN0zf0LdCl0qnw==
+X-Google-Smtp-Source: ACHHUZ7eHh7oUs55p4PsRymZEwkOfiBBPgxu/ifd0C50xzBovPjQu9PPhdwLcNa1wVqEsXJ8GAAB1RYUv4jPFo6R1HI=
+X-Received: by 2002:a25:6943:0:b0:b9d:853e:5cef with SMTP id
+ e64-20020a256943000000b00b9d853e5cefmr17476795ybc.37.1683637684177; Tue, 09
+ May 2023 06:08:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [EXT] Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI
- system watchdog driver
-Content-Language: en-US
-To:     Bharat Bhushan <bbhushan2@marvell.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>
-References: <20230508131515.19403-1-bbhushan2@marvell.com>
- <ea9ae4c9-2808-bf22-70a3-bb7e7b1168d0@linaro.org>
- <DM5PR1801MB1883175A2538B85FEF571B7AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
- <8119eec8-0190-b6a5-85a7-301bcb81b0c9@linaro.org>
- <DM5PR1801MB1883A414F47BB56E9537673AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DM5PR1801MB1883A414F47BB56E9537673AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <cover.1683630932.git.quic_varada@quicinc.com> <1691872a83758cb65053dce7001e96e88dbeed2a.1683630932.git.quic_varada@quicinc.com>
+In-Reply-To: <1691872a83758cb65053dce7001e96e88dbeed2a.1683630932.git.quic_varada@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 9 May 2023 16:07:53 +0300
+Message-ID: <CAA8EJppDtY=Q5oOvXG+pE_+KAk59TPauabUav1f0=eggmLULYA@mail.gmail.com>
+Subject: Re: [PATCH v11 9/9] arm64: dts: qcom: ipq9574: Enable USB
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,82 +73,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/05/2023 11:01, Bharat Bhushan wrote:
-> 
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Tuesday, May 9, 2023 1:38 PM
->> To: Bharat Bhushan <bbhushan2@marvell.com>; wim@linux-watchdog.org;
->> linux@roeck-us.net; robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
->> linux-watchdog@vger.kernel.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; Sunil Kovvuri Goutham <sgoutham@marvell.com>
->> Subject: Re: [EXT] Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI system
->> watchdog driver
->>
->> On 09/05/2023 09:26, Bharat Bhushan wrote:
->>
->>
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    oneOf:
->>>>> +      - const: marvell,octeontx2-wdt
->>>>
->>>> Why is this alone? Judging by the enum below, octeontx2 is not specific.
->>>>
->>>>> +      - items:
->>>>> +          - enum:
->>>>> +              - marvell,octeontx2-95xx-wdt
->>>>> +              - marvell,octeontx2-96xx-wdt
->>>>> +              - marvell,octeontx2-98xx-wdt
->>>>
->>>> We don't allow wildcards in general
->>>
->>> Marvell have octeontx2 series of processor which have watchdog timer.
->>> In 95xx,98xx,96xx are the processors in octeontx2 series of processor. So
->> octeontx2-95xx is on soc, octeontx2-96xx is another and so on.
->>
->> No, 95xx is not a processor. Otherwise please point me to exact product
->> datasheet. Hint: I checked it.
-> 
-> Looks like 95xx data sheet is not public, will remove in that case.
+On Tue, 9 May 2023 at 14:56, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
+>
+> Turn on USB related nodes
+> Provide vdd info
+>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>  Changes in v11:
+>         - Rename dwc_0 -> usb_0_dwc3
+>         - Maintain sorted order for the usb nodes
+>
+>  Changes in v10:
+>         - Provide vdd info
+>
+>  Changes in v5:
+>         - Move "host" mode specification to board dts
+>         - Due to dependency with earlier patches board dts
+>           filename changed ipq9574-al02-c7.dts -> ipq9574-rdp433.dts
+>
+>  Changes in v2:
+>         - Fix node placement and coding style
+>         - "ok" -> "okay"
+> ---
+>  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 
-We can talk about 96xx. Can you point me to the SoC named exactly like
-this? Hint: I checked it.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-
-> 
->>
->>>
->>>>
->>>>> +          - const: marvell,octeontx2-wdt
->>>>> +      - const: marvell,cn10k-wdt
->>>>
->>>> Same question - why is this alone?
->>> Same here, Marvell have cn10k series of processors and cn10kx and cnf10kx are
->> the processor in this series.
->>
->> I don't understand how does it explain my concern. This is alone because there
->> are series of processors? How is that related?
-> 
-> Tried to make it look like other drivers. Let's keep it simple, we want to enable this only for below ones
-
-Enable what? None of these explains why do you need this entry alone,
-since it is covered by list further.
-
-> 
-> properties:
->   compatible:
->     enum:
->      - marvell,cn10k-wdt
->      - marvell,octeontx2-wdt
-> 
-> Are you good with that?
-
-Not sure, it sounds like it ignores our entire discussion. What's the
-name of the SoC? I see "OcteonTx2 CN9130", not "OcteonTx2". I linked
-your previously guide how to write bindings. Did you read it?
-
-Best regards,
-Krzysztof
-
+-- 
+With best wishes
+Dmitry
