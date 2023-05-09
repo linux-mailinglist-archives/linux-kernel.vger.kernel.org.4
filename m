@@ -2,119 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBFC6FCFA8
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AED786FCF95
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234872AbjEIUjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 16:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
+        id S234986AbjEIUfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 16:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjEIUjJ (ORCPT
+        with ESMTP id S234959AbjEIUfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 16:39:09 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC857A0;
-        Tue,  9 May 2023 13:39:06 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id ffacd0b85a97d-3062c1e7df8so4201966f8f.1;
-        Tue, 09 May 2023 13:39:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683664745; x=1686256745;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xzT2Qg7+gnTohAZR8U03MVTx3xSlsm1ApgjWGg/yeYo=;
-        b=qEHme8UZ/79GsnJuDa+hJvF24q+bvoWHIe4OGGF/RwMW9NPnWhSgdEkLCrisNYrwSK
-         l0uJTJinPPdpbhtmVhQjVmkw0PgCHRt9PN5HaJP3t2IAOAWBnXik99eannCuCrzVuROK
-         8Us4Uc06vcWW0A+COknpeEnuXt0+VB+wYNKKbiHYfh2aKDXuhf+2be7QJm4pdSSCBi/3
-         Wg1xP3tnF+tSHc4lrcgnjol8eIFkc5Q9Px/NCuyO3gwlsyLSL8E6LuDw4aQ4rG9nvF3I
-         zvLIQyTIFhjV1trdennbTuLHVnl4SnT7m1E3OCf1ZdgUNW95ivsJj59u4rM6hVcpVGS/
-         WyGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683664745; x=1686256745;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xzT2Qg7+gnTohAZR8U03MVTx3xSlsm1ApgjWGg/yeYo=;
-        b=jDGcDmSy6w5Jf7uH9mapaX95M4ixKxl1bH9TZkkHX39lsNip963WPXEZAXSC7SK/Mg
-         2/tiAiUggjEP6CXNp171qV3pKVKBpGzil5/rH/GzzvStPZK2DyBajC4SBTeDxgf27+hA
-         AOfHjQkJ0QmEF78fTjwJ8cd6XSKKdFmXD89XR2QAB7tA2fZnkfLE99Z631z9trh61kj8
-         aeyibMfoE+4msQyrFDXc+354KalOo7lIr/WTsur3Ik7ilEsO9tU5f5YlEtGwvwNQaM7X
-         aYiCyvS5W6zz1C/OL1NB4+WmObsuS8BawdzOAuH4Jzvi0x4X1Y890XjjW3/s4uVPwfwL
-         o1zQ==
-X-Gm-Message-State: AC+VfDyv0wY5oGFunjCSNHyPoqESfFJW98+isbrKx7weJkUaARcK1JbK
-        8iMnoelXGajWpdCs1gDKh062h0cEB/hsWnOP
-X-Google-Smtp-Source: ACHHUZ4f1RVMO5EGx6nj8UpK4sD07mMfYHSd70dWGenO9CfbdCN4EaaokO8sbgvaIfU3Sig06Q+S3Q==
-X-Received: by 2002:adf:e48b:0:b0:2fb:7099:6070 with SMTP id i11-20020adfe48b000000b002fb70996070mr11889088wrm.47.1683664745349;
-        Tue, 09 May 2023 13:39:05 -0700 (PDT)
-Received: from [192.168.0.19] ([2.222.93.88])
-        by smtp.gmail.com with ESMTPSA id a14-20020a5d53ce000000b0030732d6e104sm15234707wrw.105.2023.05.09.13.39.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 13:39:04 -0700 (PDT)
-Message-ID: <e1fd41eb-71e9-f8d9-2607-363c88fd9ab3@gmail.com>
-Date:   Tue, 9 May 2023 21:39:01 +0100
+        Tue, 9 May 2023 16:35:19 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6882122;
+        Tue,  9 May 2023 13:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683664517; x=1715200517;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zDgUrx46HKYf2WDUcb3OSI439GIUg2nqyHSQb8R/LPM=;
+  b=nD68BybdIjLNpuiq8tgOuHCTcDottfMKgtZ+yImSzbu4n2LVCIQe3vlW
+   ZZay5VaYrKwGJynQwN83YB0/xmPBzHt1mdeQycE0UYs02wYyU0BjZlad0
+   i5k+utyEXtgA0W0yc9YRP3ki8UZTc/cNmFkruIMjRNqPDQPU213pYcNts
+   pSqrG9Rle3yOklduDPsIu5wiJt2vcI+wjaOr/8dDFiWcHGilMHlW/KEzd
+   Aylk0rGcHOCQuDkb6fIO1KEwFuuygWkoQah308lSkkbvKeL9BdYdq/aTu
+   Y7IYFRpYCCBIdX+8mnpOlSEQdU+IDLn04Y/Dda4xVQQOVeiSNvpL9MoIF
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="334504614"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="334504614"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 13:35:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="702004029"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="702004029"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 13:35:15 -0700
+Date:   Tue, 9 May 2023 13:39:40 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        "David Woodhouse" <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        "Ranganathan, Narayan" <narayan.ranganathan@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v5 1/7] iommu: Generalize default PCIe requester ID
+ PASID
+Message-ID: <20230509133940.6bf0a053@jacob-builder>
+In-Reply-To: <BN9PR11MB5276A1CC0B5FF8D9394F22F98C729@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230427174937.471668-1-jacob.jun.pan@linux.intel.com>
+        <20230427174937.471668-2-jacob.jun.pan@linux.intel.com>
+        <BN9PR11MB5276FD027EC3D6BAA24046F58C6B9@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <20230428085615.58e437c9@jacob-builder>
+        <BN9PR11MB5276A1CC0B5FF8D9394F22F98C729@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] rust: lock: Reflow long documentation line
-Content-Language: en-US
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     alice@ryhl.io, alex.gaynor@gmail.com, benno.lossin@proton.me,
-        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, gary@garyguo.net,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com,
-        yakoyoku@gmail.com
-References: <7f464c01-d4ec-d632-fa40-0c3f18c2ffca@ryhl.io>
- <20230507162739.17392-1-ben.gooding.dev@gmail.com>
- <CANiq72=0bbXtRpfYp+CT5tfwcsDi_A6_WV-23Bw44nD+Bbk9uA@mail.gmail.com>
-From:   Ben Gooding <ben.gooding.dev@gmail.com>
-In-Reply-To: <CANiq72=0bbXtRpfYp+CT5tfwcsDi_A6_WV-23Bw44nD+Bbk9uA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Antivirus: AVG (VPS 230509-4, 9/5/2023), Outbound message
-X-Antivirus-Status: Clean
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miguel,
+Hi Kevin,
 
-On 08/05/2023 21:37, Miguel Ojeda wrote:
-> Hi Ben,
->
-> On Sun, May 7, 2023 at 6:27 PM Ben Gooding <ben.gooding.dev@gmail.com> wrote:
->> Suggested-by: Alice Ryhl <alice@ryhl.io>
->> Signed-off-by: Ben Gooding <ben.gooding.dev@gmail.com>
-> Thanks for the patch! Several notes:
->
->    - Missing commit message -- in general, please check your patches
-> with `scripts/checkpatch.pl` and please read
-> https://docs.kernel.org/process/submitting-patches.html.
->
->    - This patch goes on top of the previous one you sent but, in the
-> kernel workflow, what you are expected to do is send a v2 of your
-> patch series instead. You can use `-v2` in `git format-patch` for
-> that.
->
->    - This patch is not just reflowing as the title implies, but it also
-> changes the style of the link -- is there a reason for that? If yes,
-> this should be explained.
->
-> Cheers,
-> Miguel
+On Fri, 5 May 2023 08:28:13 +0000, "Tian, Kevin" <kevin.tian@intel.com>
+wrote:
 
-Thank you very much for your feedback, this is really helpful as I'm 
-learning the process.
+> > > >
+> > > > By having a common RID_PASID, we can avoid conflicts between
+> > > > different use cases in the generic code. e.g. SVA and DMA API with
+> > > > PASIDs.  
+> > >
+> > > You intend it to be generic but in the end only vt-d driver is changed
+> > > to use it in this series...  
+> > change for SVA is in the patch.  
+> 
+> My point was that since it is common why there is no change in arm-smmu
+> driver to use the common macro?
+Got it, I will include changes to SSID 0 in smmu code.
 
-I've submitted a proper v2 of my patch based on your feedback which is 
-hopefully much more like what you would expect - please let me know.
+Thanks,
 
-Many thanks,
-
-Ben
-
+Jacob
