@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4BC6FBCBE
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 03:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC0B6FBCC2
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 03:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbjEIBvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 21:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
+        id S234284AbjEIBvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 21:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233960AbjEIBva (ORCPT
+        with ESMTP id S234167AbjEIBvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 21:51:30 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F54A5FA;
-        Mon,  8 May 2023 18:50:56 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1ab0c697c2bso49726565ad.1;
-        Mon, 08 May 2023 18:50:56 -0700 (PDT)
+        Mon, 8 May 2023 21:51:31 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCF59EF3;
+        Mon,  8 May 2023 18:50:59 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64395e2a715so5178880b3a.3;
+        Mon, 08 May 2023 18:50:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683597055; x=1686189055;
+        d=gmail.com; s=20221208; t=1683597057; x=1686189057;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4wzzVWCLT7CybQfeQQoKtalxgsWtn1vK9dyFV4Pj3x8=;
-        b=dCnxds2h5O2JmS2nsr5K6wfDnSJwjmLkmuWoZ1BKnNWPks1H/TMA9WWYDqkkNmOl2U
-         Il4En8UeeDp+SHRwIagQnWPiKjBYH0qxsuqGVbpBnoKZZPK9/YXQ4ublXUCHRlhryEOF
-         vDXkFY1yxE5CjldZNuAfvDsMb0UNXwBy2tCDkOGo0HUvB7pLF97rnLrT3RI5QH3o2WEF
-         RruJx2RPaet2NyvHcHki5HqrXuF7BPwka9wJSy+EVUhQvU6E1DaOszxDjirQVpEYUwLN
-         WVfgRENEINfJgaCOJorTn1blvsAfZKKWhdum4RUllaImWV+qIboofUJcKiIr+xIWt2Kp
-         QRcA==
+        bh=r4f4E1+rA4dHfPSu/M3jA+g54pakUhc0stJxnLeN1Fs=;
+        b=BlC5e7sLPZcdnhGY9IdaZcf6A0c4mdvoKJTXiiChnnwy3x5RM8qM7xkAP0OVbMQaeW
+         MR3fcwXTNXAnyJWfklwKLK4Wets4jaq7tMX/6qGkC4e/KnUzhIGo1LMHJmvqaWpg7H6t
+         EJ2KqP10bIIhBuEDZiZ1yF5VKoXCvdV7bJ/oy/AttGnBg+cQJPeS91PtzTDi35LMH3/n
+         sRRodVOwL/YgILFkdVlMafLyauE+lc+mS/5klszWC3n+YKzsk4YJ/gSU044e6RMak5bG
+         GyZCnUUHTd5XJZDOH68e1lXrcHLBvLzB2hlUojtfAuupnCfaVlkmlCHj1tAjl7u8UdoT
+         27nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683597055; x=1686189055;
+        d=1e100.net; s=20221208; t=1683597057; x=1686189057;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=4wzzVWCLT7CybQfeQQoKtalxgsWtn1vK9dyFV4Pj3x8=;
-        b=j1LDOKYBQCXRSbDjdv9gHEqrUlmec4zWEKaemXiWTCE4HyNbUJb90GNBGxqkLp//WQ
-         PznfIVEHPP9J58oRLCRTDTD5o+kdyqK5AxIHNNJnX/cKPKrFVlpKjB8vFDZ3r8uOmE19
-         JoqRQQxqqWB1qJb6gNjHuILzYqnjfaz3jLY3ZmpFaC1esEdM26fn4xOyagNYWxHN89dP
-         UiCvVj3/R7sXV691T8Ll71T4ZTTuZFKGRFaCmcUa9nKrZyCVauCDZo01U7fznLINEF9g
-         fVFpTtkwFAJmYqClHVfbjjloEcZiaeuIQ+u+bOK2RbsOJ1f50Ihe+bNs9HehaCFEXpS4
-         VSFw==
-X-Gm-Message-State: AC+VfDx7yr7JmYPhuy1I1DKbQE8IUlTlCw3+pz96zwFLEyRVmxVeQ+9l
-        DLWYc+FlUsPNcB0xW3cINiU=
-X-Google-Smtp-Source: ACHHUZ6YLDxJo1rwXIAisaqpgSMigXLyXSlmwBj7vvQFm+3mgPQ2CFRhLRwxkgopk/t9TqwjFbLJ7A==
-X-Received: by 2002:a17:903:2292:b0:1a1:bff4:49e9 with SMTP id b18-20020a170903229200b001a1bff449e9mr17671752plh.23.1683597055036;
-        Mon, 08 May 2023 18:50:55 -0700 (PDT)
+        bh=r4f4E1+rA4dHfPSu/M3jA+g54pakUhc0stJxnLeN1Fs=;
+        b=TtJBBCrkFVWzxUhNNynjjB4fkk/xoGh1OkctoYFwVtKUEw1yOHXnww5hHv5t2nL27U
+         f1pK1C3wIH7lwPsx2DyTdxiDGz/SZNIRsxtmQzCLrTBNFzZYd83TvD8w9rXp1I/MRQtI
+         9TtJw/UDm0Rw8dCg3HnwfXnaiDmA6p4C468Q2kOoxBGgSPGZRurr/oDmJfurF/HBDvuq
+         IW54p8PiEbTmEx5lDkn6uCGZLqlL1IFfgeCAk0XutKXiigDwtR/dZPxIA3vUtn/HAeYh
+         yjLSlrpHh7tRv3pqwCjz1gtWM9EH90UrQyEm/Zbx5O++ivjqwwx08fF4FU1HGzROCzTF
+         6QrQ==
+X-Gm-Message-State: AC+VfDyN5OsY50FuLzdexjot5/GDe9HWURv2GZyjJG1D++MI3B8dvZtL
+        WJk1ViNGKp9n6vnSy8c6auE=
+X-Google-Smtp-Source: ACHHUZ78UP2KJlfYM2yhQBOhZcrpnls7iwQOh8gZKajnLTG0xzmGlHeQE6xKDmmCEP5FF6c1tSzwWw==
+X-Received: by 2002:a05:6a00:2310:b0:642:fbed:2808 with SMTP id h16-20020a056a00231000b00642fbed2808mr16104761pfh.25.1683597056841;
+        Mon, 08 May 2023 18:50:56 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id jd12-20020a170903260c00b001ac937171e4sm133425plb.254.2023.05.08.18.50.54
+        by smtp.gmail.com with ESMTPSA id y9-20020a62b509000000b0063f0c9eadc7sm534263pfe.200.2023.05.08.18.50.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 18:50:54 -0700 (PDT)
+        Mon, 08 May 2023 18:50:56 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     jiangshanlai@gmail.com
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Tejun Heo <tj@kernel.org>, David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
+        Tejun Heo <tj@kernel.org>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Arnaud Ebalard <arno@natisbad.org>,
+        Srujana Challa <schalla@marvell.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        netdev@vger.kernel.org
-Subject: [PATCH 10/13] rxrpc: Use alloc_ordered_workqueue() to create ordered workqueues
-Date:   Mon,  8 May 2023 15:50:29 -1000
-Message-Id: <20230509015032.3768622-11-tj@kernel.org>
+        Shijith Thotton <sthotton@marvell.com>,
+        Vladis Dronov <vdronov@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        linux-crypto@vger.kernel.org
+Subject: [PATCH 11/13] crypto: octeontx2: Use alloc_ordered_workqueue() to create ordered workqueues
+Date:   Mon,  8 May 2023 15:50:30 -1000
+Message-Id: <20230509015032.3768622-12-tj@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230509015032.3768622-1-tj@kernel.org>
 References: <20230509015032.3768622-1-tj@kernel.org>
@@ -133,31 +140,71 @@ As there are follow-up workqueue core changes, I'd really appreciate if the
 patch can be routed through the workqueue tree w/ your acks. Thanks.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Marc Dionne <marc.dionne@auristor.com>
+Cc: Boris Brezillon <bbrezillon@kernel.org>
+Cc: Arnaud Ebalard <arno@natisbad.org>
+Cc: Srujana Challa <schalla@marvell.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
 Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: linux-afs@lists.infradead.org
-Cc: netdev@vger.kernel.org
+Cc: Shijith Thotton <sthotton@marvell.com>
+Cc: Vladis Dronov <vdronov@redhat.com>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Alexander Lobakin <alobakin@pm.me>
+Cc: Minghao Chi <chi.minghao@zte.com.cn>
+Cc: ye xingchen <ye.xingchen@zte.com.cn>
+Cc: linux-crypto@vger.kernel.org
 ---
- net/rxrpc/af_rxrpc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/crypto/marvell/octeontx2/otx2_cptpf_main.c | 12 ++++++------
+ drivers/crypto/marvell/octeontx2/otx2_cptvf_main.c |  6 +++---
+ 2 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/net/rxrpc/af_rxrpc.c b/net/rxrpc/af_rxrpc.c
-index 31f738d65f1c..7eb24c25c731 100644
---- a/net/rxrpc/af_rxrpc.c
-+++ b/net/rxrpc/af_rxrpc.c
-@@ -988,7 +988,7 @@ static int __init af_rxrpc_init(void)
- 		goto error_call_jar;
- 	}
+diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptpf_main.c b/drivers/crypto/marvell/octeontx2/otx2_cptpf_main.c
+index ddf6e913c1c4..30e6acfc93d9 100644
+--- a/drivers/crypto/marvell/octeontx2/otx2_cptpf_main.c
++++ b/drivers/crypto/marvell/octeontx2/otx2_cptpf_main.c
+@@ -357,9 +357,9 @@ static int cptpf_vfpf_mbox_init(struct otx2_cptpf_dev *cptpf, int num_vfs)
+ 	u64 vfpf_mbox_base;
+ 	int err, i;
  
--	rxrpc_workqueue = alloc_workqueue("krxrpcd", WQ_HIGHPRI | WQ_MEM_RECLAIM | WQ_UNBOUND, 1);
-+	rxrpc_workqueue = alloc_ordered_workqueue("krxrpcd", WQ_HIGHPRI | WQ_MEM_RECLAIM);
- 	if (!rxrpc_workqueue) {
- 		pr_notice("Failed to allocate work queue\n");
- 		goto error_work_queue;
+-	cptpf->vfpf_mbox_wq = alloc_workqueue("cpt_vfpf_mailbox",
+-					      WQ_UNBOUND | WQ_HIGHPRI |
+-					      WQ_MEM_RECLAIM, 1);
++	cptpf->vfpf_mbox_wq =
++		alloc_ordered_workqueue("cpt_vfpf_mailbox",
++					WQ_HIGHPRI | WQ_MEM_RECLAIM);
+ 	if (!cptpf->vfpf_mbox_wq)
+ 		return -ENOMEM;
+ 
+@@ -453,9 +453,9 @@ static int cptpf_afpf_mbox_init(struct otx2_cptpf_dev *cptpf)
+ 	resource_size_t offset;
+ 	int err;
+ 
+-	cptpf->afpf_mbox_wq = alloc_workqueue("cpt_afpf_mailbox",
+-					      WQ_UNBOUND | WQ_HIGHPRI |
+-					      WQ_MEM_RECLAIM, 1);
++	cptpf->afpf_mbox_wq =
++		alloc_ordered_workqueue("cpt_afpf_mailbox",
++					WQ_HIGHPRI | WQ_MEM_RECLAIM);
+ 	if (!cptpf->afpf_mbox_wq)
+ 		return -ENOMEM;
+ 
+diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptvf_main.c b/drivers/crypto/marvell/octeontx2/otx2_cptvf_main.c
+index 392e9fee05e8..6023a7adb70c 100644
+--- a/drivers/crypto/marvell/octeontx2/otx2_cptvf_main.c
++++ b/drivers/crypto/marvell/octeontx2/otx2_cptvf_main.c
+@@ -75,9 +75,9 @@ static int cptvf_pfvf_mbox_init(struct otx2_cptvf_dev *cptvf)
+ 	resource_size_t offset, size;
+ 	int ret;
+ 
+-	cptvf->pfvf_mbox_wq = alloc_workqueue("cpt_pfvf_mailbox",
+-					      WQ_UNBOUND | WQ_HIGHPRI |
+-					      WQ_MEM_RECLAIM, 1);
++	cptvf->pfvf_mbox_wq =
++		alloc_ordered_workqueue("cpt_pfvf_mailbox",
++					WQ_HIGHPRI | WQ_MEM_RECLAIM);
+ 	if (!cptvf->pfvf_mbox_wq)
+ 		return -ENOMEM;
+ 
 -- 
 2.40.1
 
