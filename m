@@ -2,251 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B006FC0B6
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891046FC0B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234413AbjEIHss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 03:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S234496AbjEIHsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 03:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjEIHsf (ORCPT
+        with ESMTP id S229579AbjEIHsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 03:48:35 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BB483D2
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 00:48:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=nCx4dXo7Lz4D1HYH90X24EeQdam
-        uLkE/8vR5y71LMhI=; b=pvHVTAdNFTjuHdTHgGqbG0ZxtJpYlt4DNq5bWDOh6UN
-        oppVPgNMTykcsQGnStO7E1k5tiv4SUIFywFaXip2CP6NdhYSc7F/G+s04zB/fL9W
-        aJGh72UQIhxF3oCAevK8EI5XOw77jzS31uC2PfFKrobju+v3fcD2bq4Y1h887/mo
-        =
-Received: (qmail 1994258 invoked from network); 9 May 2023 09:48:24 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 May 2023 09:48:24 +0200
-X-UD-Smtp-Session: l3s3148p1@iejf+j375q8ujnsI
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm: rcar-du: remove R-Car H3 ES1.* workarounds
-Date:   Tue,  9 May 2023 09:48:17 +0200
-Message-Id: <20230509074818.4399-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        Tue, 9 May 2023 03:48:43 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E62E49;
+        Tue,  9 May 2023 00:48:42 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-956ff2399c9so1039951466b.3;
+        Tue, 09 May 2023 00:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683618521; x=1686210521;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ruBSrhAa2KCe3xFq+h2PyQJl3quIhNNbbuTeyicMoY0=;
+        b=qCck0pvQnTHjF+mFNSS17wB49c/kbITc2B14Rdb/hl2R4GXApQ6flXgxiAjIf+3K4L
+         GZFf7R/s/j4yyHAPd800Que5ia1XNbrzRocXBlgGSlVEdmWzIoloP+I0wNHSpMaore8H
+         wC2AwGxii5uDjraRT6Q2qtWCgG+seZLzd8qUWv2zUgKxB1K3+ZrB/pfOsQDHd1WAcn7d
+         lUXojHgxFwrRZUxcUaA5unSpy5W4juvU1N3siqbquUR6GDid5ELNSPzWpfnHaUyHvg1R
+         HbV57mkcOewzLwcMgqryFo0GSxuhzqrUaA9mRJQBmFAJ7UkiGkhDY4MZnKA3ELCOwr6f
+         xDjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683618521; x=1686210521;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ruBSrhAa2KCe3xFq+h2PyQJl3quIhNNbbuTeyicMoY0=;
+        b=esKqWariAsWbGaNxekmdh+gBN5ZFDIJfekYf1seqWzlH8ruYtGXtxe38TZfUGLUHO9
+         90oHZw4sQiXCJkuzQ+ZBLc//toR/piI6mgVSlZR/zL2U5eYChWH9A6jlMzS4xZY9cGH+
+         uuILmg5Z8bNqtFs6qM87wj/LNcXGWovPkqj1ZC3Q9e3NLVpUDwaySCJiWSeRrjaesYWw
+         1GFxC+nhSDNET+TnLodZubtJKysgrNYQAE9tGTpvd9RlLlCiUvvl2HxDKdjGhJ97bpXG
+         BKJzIepWD52O32twRt/fxEo017lFq+4Sc7XJtb68eJy/WVB7bzqesCph5xO2I66vc99X
+         Rk2g==
+X-Gm-Message-State: AC+VfDxHokd0pi3k5xnVW4ps7KGB65Ztbr8l39LCfX+IyYihEKRMNCbX
+        ffe/lh9k+aZ/Yzyb+g9IjHQ=
+X-Google-Smtp-Source: ACHHUZ6w0fJfY4rQJX3oXSXo3rY6SmQgVX5Rs578thAo292MEFdNF9hZAsEo+j8ho+ZeAH7ROoubew==
+X-Received: by 2002:a17:907:1c85:b0:94e:48ac:9a51 with SMTP id nb5-20020a1709071c8500b0094e48ac9a51mr12509959ejc.4.1683618520899;
+        Tue, 09 May 2023 00:48:40 -0700 (PDT)
+Received: from felia.fritz.box ([2a02:810d:7e40:14b0:b892:8631:69c7:ec2c])
+        by smtp.gmail.com with ESMTPSA id tc19-20020a1709078d1300b00969f2d5267asm397659ejc.114.2023.05.09.00.48.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 00:48:40 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: repair pattern in DIALOG SEMICONDUCTOR DRIVERS
+Date:   Tue,  9 May 2023 09:48:34 +0200
+Message-Id: <20230509074834.21521-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-R-Car H3 ES1.* was only available to an internal development group and
-needed a lot of quirks and workarounds. These become a maintenance
-burden now, so our development group decided to remove upstream support
-for this SoC and prevent booting it. Public users only have ES2 onwards.
+Commit 441613662db7 ("dt-bindings: mfd: Convert da9063 to yaml") converts
+da9063.txt to dlg,da9063.yaml and adds a new file pattern in MAINTAINERS.
+Unfortunately, the file pattern matches da90*.yaml, but the yaml file is
+prefixed with dlg,da90.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+broken file pattern.
+
+Repair this file pattern in DIALOG SEMICONDUCTOR DRIVERS.
+
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
-
-This is the last ES1 bit remaining, would be awesome if it could go
-soon.
-
-Changes since v1:
-* rebased to 6.4-rc1 (no code updates needed)
-* added Kieran's tag (thanks!)
-* mention in commit message that ES1 doesn't even boot anymore
+Andrew, please pick this minor MAINTAINERS patch.
 
 
- drivers/gpu/drm/rcar-du/rcar_du_crtc.c | 37 ++------------------
- drivers/gpu/drm/rcar-du/rcar_du_drv.c  | 48 --------------------------
- drivers/gpu/drm/rcar-du/rcar_du_drv.h  |  2 --
- drivers/gpu/drm/rcar-du/rcar_du_regs.h |  3 +-
- 4 files changed, 4 insertions(+), 86 deletions(-)
+Note: The patch was sent three times to Lee Jones to be picked up, but it wasn't. 
 
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-index d6d29be6b4f4..7e175dbfd892 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-@@ -223,20 +223,6 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
- 		 * DU channels that have a display PLL can't use the internal
- 		 * system clock, and have no internal clock divider.
- 		 */
--
--		/*
--		 * The H3 ES1.x exhibits dot clock duty cycle stability issues.
--		 * We can work around them by configuring the DPLL to twice the
--		 * desired frequency, coupled with a /2 post-divider. Restrict
--		 * the workaround to H3 ES1.x as ES2.0 and all other SoCs have
--		 * no post-divider when a display PLL is present (as shown by
--		 * the workaround breaking HDMI output on M3-W during testing).
--		 */
--		if (rcdu->info->quirks & RCAR_DU_QUIRK_H3_ES1_PCLK_STABILITY) {
--			target *= 2;
--			div = 1;
--		}
--
- 		extclk = clk_get_rate(rcrtc->extclock);
- 		rcar_du_dpll_divider(rcrtc, &dpll, extclk, target);
- 
-@@ -245,30 +231,13 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
- 		       | DPLLCR_N(dpll.n) | DPLLCR_M(dpll.m)
- 		       | DPLLCR_STBY;
- 
--		if (rcrtc->index == 1) {
-+		if (rcrtc->index == 1)
- 			dpllcr |= DPLLCR_PLCS1
- 			       |  DPLLCR_INCS_DOTCLKIN1;
--		} else {
--			dpllcr |= DPLLCR_PLCS0_PLL
-+		else
-+			dpllcr |= DPLLCR_PLCS0
- 			       |  DPLLCR_INCS_DOTCLKIN0;
- 
--			/*
--			 * On ES2.x we have a single mux controlled via bit 21,
--			 * which selects between DCLKIN source (bit 21 = 0) and
--			 * a PLL source (bit 21 = 1), where the PLL is always
--			 * PLL1.
--			 *
--			 * On ES1.x we have an additional mux, controlled
--			 * via bit 20, for choosing between PLL0 (bit 20 = 0)
--			 * and PLL1 (bit 20 = 1). We always want to use PLL1,
--			 * so on ES1.x, in addition to setting bit 21, we need
--			 * to set the bit 20.
--			 */
--
--			if (rcdu->info->quirks & RCAR_DU_QUIRK_H3_ES1_PLL)
--				dpllcr |= DPLLCR_PLCS0_H3ES1X_PLL1;
--		}
--
- 		rcar_du_group_write(rcrtc->group, DPLLCR, dpllcr);
- 
- 		escr = ESCR_DCLKSEL_DCLKIN | div;
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-index b9a94c5260e9..1ffde19cb87f 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-@@ -16,7 +16,6 @@
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/slab.h>
--#include <linux/sys_soc.h>
- #include <linux/wait.h>
- 
- #include <drm/drm_atomic_helper.h>
-@@ -387,43 +386,6 @@ static const struct rcar_du_device_info rcar_du_r8a7795_info = {
- 	.dpll_mask =  BIT(2) | BIT(1),
- };
- 
--static const struct rcar_du_device_info rcar_du_r8a7795_es1_info = {
--	.gen = 3,
--	.features = RCAR_DU_FEATURE_CRTC_IRQ
--		  | RCAR_DU_FEATURE_CRTC_CLOCK
--		  | RCAR_DU_FEATURE_VSP1_SOURCE
--		  | RCAR_DU_FEATURE_INTERLACED
--		  | RCAR_DU_FEATURE_TVM_SYNC,
--	.quirks = RCAR_DU_QUIRK_H3_ES1_PCLK_STABILITY
--		| RCAR_DU_QUIRK_H3_ES1_PLL,
--	.channels_mask = BIT(3) | BIT(2) | BIT(1) | BIT(0),
--	.routes = {
--		/*
--		 * R8A7795 has one RGB output, two HDMI outputs and one
--		 * LVDS output.
--		 */
--		[RCAR_DU_OUTPUT_DPAD0] = {
--			.possible_crtcs = BIT(3),
--			.port = 0,
--		},
--		[RCAR_DU_OUTPUT_HDMI0] = {
--			.possible_crtcs = BIT(1),
--			.port = 1,
--		},
--		[RCAR_DU_OUTPUT_HDMI1] = {
--			.possible_crtcs = BIT(2),
--			.port = 2,
--		},
--		[RCAR_DU_OUTPUT_LVDS0] = {
--			.possible_crtcs = BIT(0),
--			.port = 3,
--		},
--	},
--	.num_lvds = 1,
--	.num_rpf = 5,
--	.dpll_mask =  BIT(2) | BIT(1),
--};
--
- static const struct rcar_du_device_info rcar_du_r8a7796_info = {
- 	.gen = 3,
- 	.features = RCAR_DU_FEATURE_CRTC_IRQ
-@@ -614,11 +576,6 @@ static const struct of_device_id rcar_du_of_table[] = {
- 
- MODULE_DEVICE_TABLE(of, rcar_du_of_table);
- 
--static const struct soc_device_attribute rcar_du_soc_table[] = {
--	{ .soc_id = "r8a7795", .revision = "ES1.*", .data = &rcar_du_r8a7795_es1_info },
--	{ /* sentinel */ }
--};
--
- const char *rcar_du_output_name(enum rcar_du_output output)
- {
- 	static const char * const names[] = {
-@@ -707,7 +664,6 @@ static void rcar_du_shutdown(struct platform_device *pdev)
- 
- static int rcar_du_probe(struct platform_device *pdev)
- {
--	const struct soc_device_attribute *soc_attr;
- 	struct rcar_du_device *rcdu;
- 	unsigned int mask;
- 	int ret;
-@@ -725,10 +681,6 @@ static int rcar_du_probe(struct platform_device *pdev)
- 
- 	rcdu->info = of_device_get_match_data(rcdu->dev);
- 
--	soc_attr = soc_device_match(rcar_du_soc_table);
--	if (soc_attr)
--		rcdu->info = soc_attr->data;
--
- 	platform_set_drvdata(pdev, rcdu);
- 
- 	/* I/O resources */
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.h b/drivers/gpu/drm/rcar-du/rcar_du_drv.h
-index acc3673fefe1..5cfa2bb7ad93 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_drv.h
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.h
-@@ -34,8 +34,6 @@ struct rcar_du_device;
- #define RCAR_DU_FEATURE_NO_BLENDING	BIT(5)	/* PnMR.SPIM does not have ALP nor EOR bits */
- 
- #define RCAR_DU_QUIRK_ALIGN_128B	BIT(0)	/* Align pitches to 128 bytes */
--#define RCAR_DU_QUIRK_H3_ES1_PCLK_STABILITY BIT(1)	/* H3 ES1 has pclk stability issue */
--#define RCAR_DU_QUIRK_H3_ES1_PLL	BIT(2)	/* H3 ES1 PLL setup differs from non-ES1 */
- 
- enum rcar_du_output {
- 	RCAR_DU_OUTPUT_DPAD0,
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_regs.h b/drivers/gpu/drm/rcar-du/rcar_du_regs.h
-index 6c750fab6ebb..391de6661d8b 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_regs.h
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_regs.h
-@@ -283,8 +283,7 @@
- #define DPLLCR			0x20044
- #define DPLLCR_CODE		(0x95 << 24)
- #define DPLLCR_PLCS1		(1 << 23)
--#define DPLLCR_PLCS0_PLL	(1 << 21)
--#define DPLLCR_PLCS0_H3ES1X_PLL1	(1 << 20)
-+#define DPLLCR_PLCS0		(1 << 21)
- #define DPLLCR_CLKE		(1 << 18)
- #define DPLLCR_FDPLL(n)		((n) << 12)
- #define DPLLCR_N(n)		((n) << 5)
+v1: https://lore.kernel.org/all/20220623104456.27144-1-lukas.bulwahn@gmail.com/
+v1-resend: https://lore.kernel.org/all/20230110154901.20223-1-lukas.bulwahn@gmail.com/
+v1-resend2: https://lore.kernel.org/all/20230313050903.29416-1-lukas.bulwahn@gmail.com/
+
+v1 to resend:
+ - added the Acked-by from Conor Dooley.
+
+
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 460f953f331b..c10dd7aa8ed9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6026,7 +6026,7 @@ W:	http://www.dialog-semiconductor.com/products
+ F:	Documentation/devicetree/bindings/input/da90??-onkey.txt
+ F:	Documentation/devicetree/bindings/input/dlg,da72??.txt
+ F:	Documentation/devicetree/bindings/mfd/da90*.txt
+-F:	Documentation/devicetree/bindings/mfd/da90*.yaml
++F:	Documentation/devicetree/bindings/mfd/dlg,da90*.yaml
+ F:	Documentation/devicetree/bindings/regulator/dlg,da9*.yaml
+ F:	Documentation/devicetree/bindings/regulator/da92*.txt
+ F:	Documentation/devicetree/bindings/regulator/slg51000.txt
 -- 
-2.30.2
+2.17.1
 
