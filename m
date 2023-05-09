@@ -2,116 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E256FC0AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A006FC0B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 09:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234523AbjEIHrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 03:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
+        id S234437AbjEIHr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 03:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234486AbjEIHq5 (ORCPT
+        with ESMTP id S234413AbjEIHrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 03:46:57 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAF87EF0
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 00:46:50 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f195b164c4so35849165e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 00:46:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683618409; x=1686210409;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b1iixLC9RX2qMWRpDfnEL3lMWKjk7W8OVMFDuz9hQ0s=;
-        b=uDkUjjVOVU02sBKBne8xf0xR+N3JdspRULIu+uZoG013Jg6PvO8rTqm8LaAiMUR2RQ
-         Rq/hxS+6502gWRo9fk1PR/vayt9qGNU+MNHrRfcmJ12inVGK/Uk8GGJPal5QzQHKJI39
-         CX3eKzufst1ktiypBZHbHMeIf2R9h6XpFo2iSRH/Bq6z4xV0WTzrUjCfueXdCMvd1N7a
-         mKItASdxjvZmbpA7PXuUQ+aYc0GYrhGarMCaG2PRD9hB378YMnS+y9KEs8X7i97OMlwM
-         rElZjDRca4RuXh47Y/uAVmvZJ7BTdmCbJBEP97pqhVdHxBLCDAY2urJ3tz0KLQKasWcP
-         EPsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683618409; x=1686210409;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b1iixLC9RX2qMWRpDfnEL3lMWKjk7W8OVMFDuz9hQ0s=;
-        b=HoSpvTa0wBlYV4N+xx3abxqxGV+nhj/slNfHAesauIi6v0+o8wTirhnFcyZmNsST3A
-         DTjy8xbDKhif4xZR3Om2Yz2k5jqr/iom5YDvAZwPzKzcgkGkDKypSevphL350m+BkK3P
-         BGUpmT9z//709MSgzenXc91AYA5gGjdcViNxjiXOy5KQWX+8nJe48hE7lDmCIY+OtHmy
-         HZaWU48ByzoPw4BupoQYDLHWiPySAOm41BkH/uVepOUPRcb+gbkcwZr/QN4OkM72px41
-         n23JcmSDKF5GNZ1wIBBQYBXOsZlJCTIIoxjWZvQ+627XW7KnAn0gpYsRqBpP+dCKCtd/
-         efvA==
-X-Gm-Message-State: AC+VfDx60llvbNcneoGQKAgNA8RIhmzE51OOZSRyXzLtohNvBy3ocax6
-        vr8xOBQKIW4AJpbpTmJn0LABnA==
-X-Google-Smtp-Source: ACHHUZ5e8xCoGLYdKisfc9zZhJ3RhRhQsMhlp48C893h0J6BiBCK1oelOxCx/F7OgroHp3uvLsWbHw==
-X-Received: by 2002:a5d:444e:0:b0:306:2c59:3838 with SMTP id x14-20020a5d444e000000b003062c593838mr9593954wrr.44.1683618408864;
-        Tue, 09 May 2023 00:46:48 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id q23-20020a7bce97000000b003f42d2f4531sm61501wmj.48.2023.05.09.00.46.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 00:46:48 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com, hfdevel@gmx.net
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <trinity-bf20bcb9-790b-4ab9-99e3-0831ef8257f4-1680878185420@3c-app-gmx-bap55>
-References: <trinity-bf20bcb9-790b-4ab9-99e3-0831ef8257f4-1680878185420@3c-app-gmx-bap55>
-Subject: Re: [PATCH v2] ARM: dts: meson8b: correct uart_B and uart_C clock
- references
-Message-Id: <168361840805.3267296.10834531895749908992.b4-ty@linaro.org>
-Date:   Tue, 09 May 2023 09:46:48 +0200
+        Tue, 9 May 2023 03:47:21 -0400
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C872DD8D;
+        Tue,  9 May 2023 00:47:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9mfOEh12/KcZK8TFY/ZX3oxJrF5qjW2s2MPzvQR6Ugk=; b=ANXdghA1pad72REMAS3MA6NTWc
+        5jN+DUGCfIxMy4hgzzLjDSJTCbQsbFC7bFAXLPPF4uNx2A10yMgN94ZJHTR0eGfW1+Kxd/JO5IRXg
+        kJiqfsKryN+TBskVUgHOi1CkGD+kxtw1fcIdWyxOv6ntwxbXabNM0XN+26fQRfnpzP45ouIOGA/NF
+        FLHEzwwk6JqZ3tA+XWfTJtr459eri2EhsfEZcP3POXSDe2fhKUAvYe2g5hdImx46f6yLDsGCAEGmn
+        H53iYpWbotH2phcQDEqKTTDQzSVgx7OA8shwTeBsYBh3sT+0xwKwZw1DvqMHQwKlYmAQiITk13CJJ
+        a3/e6k3Q==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <kibi@debian.org>)
+        id 1pwI3j-008YQj-Ep; Tue, 09 May 2023 07:46:56 +0000
+Date:   Tue, 9 May 2023 09:46:51 +0200
+From:   Cyril Brulebois <kibi@debian.org>
+To:     Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>
+Subject: Re: [PATCH v5 0/5] PCI: brcmstb: Configure appropriate HW CLKREQ#
+ mode
+Message-ID: <20230509074651.ixcqhhmazjngxur6@mraw.org>
+Organization: Debian
+References: <20230508220126.16241-1-jim2101024@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5ogfywygslxit6od"
+Content-Disposition: inline
+In-Reply-To: <20230508220126.16241-1-jim2101024@gmail.com>
+X-Debian-User: kibi
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Fri, 07 Apr 2023 16:36:25 +0200, hfdevel@gmx.net wrote:
-> With the current device tree for meson8b, uarts B (e.g. available on pins
-> 8/10 on Odroid-C1) and C (pins 3/5 on Odroid-C1) do not work, because they
-> are relying on incorrect clocks. Change the references of pclk to the
-> correct CLKID, to allow use of the two uarts.
-> 
-> 
+--5ogfywygslxit6od
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.5/arm-dt)
+Hi Jim,
 
-[1/1] ARM: dts: meson8b: correct uart_B and uart_C clock references
-      https://git.kernel.org/amlogic/c/d542ce8d4769cdef6a7bc3437e59cfed9c68f0e4
+Jim Quinlan <jim2101024@gmail.com> (2023-05-08):
+> v5 -- Remove DT property "brcm,completion-timeout-us" from	=20
+>       "DT bindings" commit.  Although this error may be reported	=20
+>       as a completion timeout, its cause was traced to an	=20
+>       internal bus timeout which may occur even when there is	=20
+>       no PCIe access being processed.  We set a timeout of four	=20
+>       seconds only if we are operating in "L1SS CLKREQ#" mode.
+>    -- Correct CEM 2.0 reference provided by HW engineer,
+>       s/3.2.5.2.5/3.2.5.2.2/ (Bjorn)
+>    -- Add newline to dev_info() string (Stefan)
+>    -- Change variable rval to unsigned (Stefan)
+>    -- s/implementaion/implementation/ (Bjorn)
+>    -- s/superpowersave/powersupersave/ (Bjorn)
+>    -- Slightly modify message on "PERST#" commit.
+>    -- Rebase to torvalds master
 
-These changes has been applied on the intermediate git tree [1].
+Same results as with v4: looks good to me!
 
-The v6.5/arm-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
+Using an official CM4 IO Board, I've successfully tested the same 9
+setups as before, combining each:
+ - CM4 Lite Rev 1.0
+ - CM4 8/32 Rev 1.0
+ - CM4 4/32 Rev 1.1
 
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
+with each off-the-shelf PCIe/USB adapter at my disposal:
+ - SupaHub PCE6U1C-R02, VER 006
+ - SupaHub PCE6U1C-R02, VER 006S
+ - Waveshare based on VIA VL805/806
 
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
+Each system boots successfully, exposes the Kingston memory stick
+plugged onto the PCIe/USB adapter, and happily reads data from it.
 
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
+Note: I only tested each CM4 with the upgraded EEPROM (2023-01-11),
+and without tweaking the DTB (i.e. without adding brcm,enable-l1ss).
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 
--- 
-Neil
+Tested-By: Cyril Brulebois <cyril@debamax.com>
 
+
+Cheers,
+--=20
+Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
+D-I release manager -- Release team member -- Freelance Consultant
+
+--5ogfywygslxit6od
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmRZ+mgACgkQ/5FK8MKz
+VSCWQA/8C/o/6Lqq9PIxjWkSNDHEMmI/V+x09sfj0zDIX+56AVJmlYW9PbUrRM+b
+yXjmElnr++pl2ECeXyGgocO3YIfxKqNH+06/2xplScb9PlIfXwiyf5p6uxhiFoTn
+ROH6QqM17MUl3Fv1zYZfvB/AQqAfhi5Fx4kepc3I2wLxZREl6f627+xJ5R7p9bfe
+e4UnFTpQht4CVZj7HJ9KXsTibpeqzR79CnjX9iyFmYcDWSqHQ0jiM9glG6/HgbHp
+wMRHyswZp7sLsDTSkk31pL+VXSRFF5ABGeITw52LJnjNh+i8TYZbxpuYlPP4MlUo
+HzegbF2DdJDFssNkxXeBNRe7L5a82B2Bx5SW+DHNB5dmtaCQrM+2FzV5mBubba/L
+gEsbNLYngQZCoS3jV09mqc56dSpp7B+EC2IoDuJkhFqCB3UjLvimzM9CGDdM5Jm7
+NbQeeo9RUbdEOv9GLQwimp+h7S7N38XMnpTqDol0XQyYOMBRl5Ploi7JJwbGt6N7
+VvyTh5tGVtXycIDJ/+Gwy1RUIokMqHns+FPbJSig7oMdttz6GDk0Hr1QctFtN9CL
+3F61fVxJ+8QsXyrUtcnEPM6F9AmRJAtekOl4EjhJWlWlmXUkYwbcoKquzOUhJd1X
+OYLCHVj4DIA4NlXtump3gi68cW+SxUl/H2o0lBF27vLWGPKBlMU=
+=m9/Z
+-----END PGP SIGNATURE-----
+
+--5ogfywygslxit6od--
