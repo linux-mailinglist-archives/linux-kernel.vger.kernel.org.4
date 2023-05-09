@@ -2,174 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F056FC90D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CBB6FC91C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235867AbjEIObn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 10:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S235757AbjEIOfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 10:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235495AbjEIObl (ORCPT
+        with ESMTP id S235495AbjEIOfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 10:31:41 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415F0C3
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 07:31:40 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3f38824a025so201051cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 07:31:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683642699; x=1686234699;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UVfjjlZkJp0IYfrXhtcCeEFdqQLI9OZif8q75MPv2cU=;
-        b=olalahCXesiGetwDI0UJCDouvP+4kEGEnF+/v6CftgPAUla/oSp/Ta+Szf/a5A6wGC
-         DFl4OdFka/jmQB/Hi9FG7FMCbpMyWWuBUOGT3olzwl1Uo88DG/d60LfCDYaD/ofRMhgM
-         pqMzt0UfxfHLIPSKcwKRGXl3hpFO5CMcSW7Hfw7vji/ON8lLH43XJuNJ34n27qYKtCVw
-         HNYeIAKDFK8CxxNOVJh39aw1Kth55rvRcesDX9IUUwMkHjSpxgxjgrOi/radMW+1pBGX
-         Yz0+42hs0VjgghezD2Aru09jLJE0C55OKl0aHHI67Ai1aOV1sNQQU6KNavwLJMX5IUg2
-         uJqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683642699; x=1686234699;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UVfjjlZkJp0IYfrXhtcCeEFdqQLI9OZif8q75MPv2cU=;
-        b=iJ2oi+qN5dSVryoG4lkCfd3ZIph1vclkvGnPnnrjZngutUCR4YXY/YgmY5Q6To3s6g
-         QhqcDzMnxk/wX4VWS7dZ66WLSUwIyUSZ9JZwQfyiujDiGn9jkZOgwfAQNmNXheWsnCD0
-         12DbwcUK6U2NFAbZQBupMxaTzXMF2Yb2sp7jYjWBPl8ErkMDgNjRa130p0eV/W8LzOWG
-         ysSr4EOtMt3shzYhIAQy5TCPrck22niFg9HC1ulcF4sqOZzdwvamCveYsestR3bfgNnv
-         w6nHnUBRC8w+pzgDNvfUoyZKauujCgVUTeZM14ta5C8DF4Fb5qE13yQJ034C+0OAJI2B
-         xfuw==
-X-Gm-Message-State: AC+VfDxZDP32SINfV8gs65jtAGd6hK/lz+keg7hsBWbQlD4Cc/SBeHwk
-        IDmFaRkhve4Yaj2/Ve6FRjn/n6liZmVZgYGb9+8ULw==
-X-Google-Smtp-Source: ACHHUZ7dN/s0ctIZYprNETPi3u5BlxsS06tHXNKXEuu1OHxZqCi0W2hgAXXsyJZc/Lcj7URgbmO0HNEK4GP2jG0Hj14=
-X-Received: by 2002:ac8:5982:0:b0:3db:1c01:9d95 with SMTP id
- e2-20020ac85982000000b003db1c019d95mr470317qte.4.1683642699179; Tue, 09 May
- 2023 07:31:39 -0700 (PDT)
+        Tue, 9 May 2023 10:35:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A91C3
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 07:34:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683642861;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G2ai7ns1LZjyFqipe9+OXAgC6WA3MwOpCGdkhaCR2Rk=;
+        b=XSyQvuIWik6bGrwWqIGVxo9F+GOlr0rTxpnIcTvACiYBOj6Z+Bm8oKfme57SwAgibKlq5n
+        vePmsfuqi+M6pordXP/gPdMc/0j1tC4QdR4iNOzH7Ilymm9orZqqPiN3sFMbKHlTmR6EiO
+        kq0qISOJTovYa2FisFPHSC/fuEQeCGY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-230-NuXfkqBpMK-CjvPMx480rw-1; Tue, 09 May 2023 10:34:19 -0400
+X-MC-Unique: NuXfkqBpMK-CjvPMx480rw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 98BD18FC083;
+        Tue,  9 May 2023 14:33:31 +0000 (UTC)
+Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A8A4492C3F;
+        Tue,  9 May 2023 14:33:31 +0000 (UTC)
+Message-ID: <a98a5982-1a13-4e79-868e-0c21c04f61a1@redhat.com>
+Date:   Tue, 9 May 2023 10:33:31 -0400
 MIME-Version: 1.0
-References: <20230509135546.580158-1-dongchenchen2@huawei.com>
-In-Reply-To: <20230509135546.580158-1-dongchenchen2@huawei.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 9 May 2023 16:31:26 +0200
-Message-ID: <CANn89iJRe1-EXa8soRORCKSkQG+mK1MNYfR8B=VPbCrSJ5NpOA@mail.gmail.com>
-Subject: Re: [PATCH net, v3] net: nsh: Use correct mac_offset to unwind gso
- skb in nsh_gso_segment()
-To:     Dong Chenchen <dongchenchen2@huawei.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
-        simon.horman@corigine.com, jbenc@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yuehaibing@huawei.com, weiyongjun1@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/1] locking/qspinlock: Make the 1st spinner only spin on
+ locked_pending bits
+Content-Language: en-US
+To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230508081532.36379-1-qiuxu.zhuo@intel.com>
+ <29297e16-2c79-8367-cd6c-efedd0a8d9ed@redhat.com>
+ <IA1PR11MB617102EB293516D2DC81F28089769@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <3432de9e-6642-10c0-31e5-ac0ce65bea23@redhat.com>
+ <IA1PR11MB6171DBBD1F386020667324DD89769@IA1PR11MB6171.namprd11.prod.outlook.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <IA1PR11MB6171DBBD1F386020667324DD89769@IA1PR11MB6171.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 9, 2023 at 3:55=E2=80=AFPM Dong Chenchen <dongchenchen2@huawei.=
-com> wrote:
->
-> As the call trace shows, skb_panic was caused by wrong skb->mac_header
-> in nsh_gso_segment():
->
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-> CPU: 3 PID: 2737 Comm: syz Not tainted 6.3.0-next-20230505 #1
-> RIP: 0010:skb_panic+0xda/0xe0
-> call Trace:
->  skb_push+0x91/0xa0
->  nsh_gso_segment+0x4f3/0x570
->  skb_mac_gso_segment+0x19e/0x270
->  __skb_gso_segment+0x1e8/0x3c0
->  validate_xmit_skb+0x452/0x890
->  validate_xmit_skb_list+0x99/0xd0
->  sch_direct_xmit+0x294/0x7c0
->  __dev_queue_xmit+0x16f0/0x1d70
->  packet_xmit+0x185/0x210
->  packet_snd+0xc15/0x1170
->  packet_sendmsg+0x7b/0xa0
->  sock_sendmsg+0x14f/0x160
->
-> The root cause is:
-> nsh_gso_segment() use skb->network_header - nhoff to reset mac_header
-> in skb_gso_error_unwind() if inner-layer protocol gso fails.
-> However, skb->network_header may be reset by inner-layer protocol
-> gso function e.g. mpls_gso_segment. skb->mac_header reset by the
-> inaccurate network_header will be larger than skb headroom.
->
-> nsh_gso_segment
->     nhoff =3D skb->network_header - skb->mac_header;
->     __skb_pull(skb,nsh_len)
->     skb_mac_gso_segment
->         mpls_gso_segment
->             skb_reset_network_header(skb);//skb->network_header+=3Dnsh_le=
-n
->             return -EINVAL;
->     skb_gso_error_unwind
->         skb_push(skb, nsh_len);
->         skb->mac_header =3D skb->network_header - nhoff;
->         // skb->mac_header > skb->headroom, cause skb_push panic
->
-> Use correct mac_offset to restore mac_header to fix it.
->
-> Fixes: c411ed854584 ("nsh: add GSO support")
-> Signed-off-by: Dong Chenchen <dongchenchen2@huawei.com>
->
-> ---
-> v2:
->   - Use skb->mac_header not skb->network_header-nhoff for mac_offset.
->
-> v3:
->   - 'net' is noted in the subject.
->   - arrange local variable following reverse xmas tree order
-> ---
->  net/nsh/nsh.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/net/nsh/nsh.c b/net/nsh/nsh.c
-> index e9ca007718b7..793e0bd94558 100644
-> --- a/net/nsh/nsh.c
-> +++ b/net/nsh/nsh.c
-> @@ -77,6 +77,7 @@ static struct sk_buff *nsh_gso_segment(struct sk_buff *=
-skb,
->                                        netdev_features_t features)
->  {
->         struct sk_buff *segs =3D ERR_PTR(-EINVAL);
-> +       u16 mac_offset =3D skb->mac_header;
->         unsigned int nsh_len, mac_len;
->         __be16 proto;
->         int nhoff;
-> @@ -108,8 +109,7 @@ static struct sk_buff *nsh_gso_segment(struct sk_buff=
- *skb,
->         segs =3D skb_mac_gso_segment(skb, features);
->         if (IS_ERR_OR_NULL(segs)) {
->                 skb_gso_error_unwind(skb, htons(ETH_P_NSH), nsh_len,
-> -                                    skb->network_header - nhoff,
-> -                                    mac_len);
-> +                                    mac_offset, mac_len);
->                 goto out;
->         }
->
+On 5/8/23 23:30, Zhuo, Qiuxu wrote:
+>> From: Waiman Long <longman@redhat.com>
+>> Sent: Tuesday, May 9, 2023 10:58 AM
+>> To: Zhuo, Qiuxu <qiuxu.zhuo@intel.com>; Peter Zijlstra
+>> <peterz@infradead.org>; Ingo Molnar <mingo@redhat.com>; Will Deacon
+>> <will@kernel.org>
+>> Cc: Boqun Feng <boqun.feng@gmail.com>; linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH 1/1] locking/qspinlock: Make the 1st spinner only spin on
+>> locked_pending bits
+>>
+>>
+>> On 5/8/23 22:45, Zhuo, Qiuxu wrote:
+>>> Hi Waiman,
+>>>
+>>> Thanks for your review of this patch.
+>>> Please see the comments below.
+>>>
+>>>> From: Waiman Long <longman@redhat.com>
+>>>> Sent: Monday, May 8, 2023 11:31 PM
+>>>> To: Zhuo, Qiuxu <qiuxu.zhuo@intel.com>; Peter Zijlstra
+>>>> <peterz@infradead.org>; Ingo Molnar <mingo@redhat.com>; Will Deacon
+>>>> <will@kernel.org>
+>>>> Cc: Boqun Feng <boqun.feng@gmail.com>; linux-kernel@vger.kernel.org
+>>>> Subject: Re: [PATCH 1/1] locking/qspinlock: Make the 1st spinner only
+>>>> spin on locked_pending bits
+>>>>
+>>>>
+>>>> On 5/8/23 04:15, Qiuxu Zhuo wrote:
+>>>>> The 1st spinner (header of the MCS queue) spins on the whole
+>>>>> qspinlock variable to check whether the lock is released. For a
+>>>>> contended qspinlock, this spinning is a hotspot as each CPU queued
+>>>>> in the MCS queue performs the spinning when it becomes the 1st
+>>>>> spinner (header of
+>>>> the MCS queue).
+>>>>> The granularity among SMT h/w threads in the same core could be
+>> "byte"
+>>>>> which the Load-Store Unit (LSU) inside the core handles. Making the
+>>>>> 1st spinner only spin on locked_pending bits (not the whole
+>>>>> qspinlock) can avoid the false dependency between the tail field and
+>>>>> the locked_pending field. So this micro-optimization helps the h/w
+>>>>> thread (the 1st spinner) stay in a low power state and prevents it
+>>>>> from being woken up by other h/w threads in the same core when they
+>>>>> perform
+>>>>> xchg_tail() to update the tail field. Please see a similar
+>>>>> discussion in the link
+>>>> [1].
+>>>>> [1]
+>>>>> https://lore.kernel.org/r/20230105021952.3090070-1-
+>> guoren@kernel.org
+>>>>> Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+>>>>> ---
+>>>>>     kernel/locking/qspinlock.c | 13 +++++++++++++
+>>>>>     1 file changed, 13 insertions(+)
+>>>>>
+>>>>> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+>>>>> index efebbf19f887..e7b990b28610 100644
+>>>>> --- a/kernel/locking/qspinlock.c
+>>>>> +++ b/kernel/locking/qspinlock.c
+>>>>> @@ -513,7 +513,20 @@ void __lockfunc
+>>>> queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+>>>>>     	if ((val = pv_wait_head_or_lock(lock, node)))
+>>>>>     		goto locked;
+>>>>>
+>>>>> +#if _Q_PENDING_BITS == 8
+>>>>> +	/*
+>>>>> +	 * Spinning on the 2-byte locked_pending instead of the 4-byte
+>>>> qspinlock
+>>>>> +	 * variable can avoid the false dependency between the tail field and
+>>>>> +	 * the locked_pending field. This helps the h/w thread (the 1st
+>>>> spinner)
+>>>>> +	 * stay in a low power state and prevents it from being woken up
+>>>>> +by
+>>>> other
+>>>>> +	 * h/w threads in the same core when they perform xchg_tail() to
+>>>> update
+>>>>> +	 * the tail field only.
+>>>>> +	 */
+>>>>> +	smp_cond_load_acquire(&lock->locked_pending, !VAL);
+>>>>> +	val = atomic_read_acquire(&lock->val); #else
+>>>>>     	val = atomic_cond_read_acquire(&lock->val, !(VAL &
+>>>>> _Q_LOCKED_PENDING_MASK));
+>>>>> +#endif
+>>>>>
+>>>>>     locked:
+>>>>>     	/*
+>>>> What hardware can benefit from this change? Do you have any micro-
+>>>> benchmark that can show the performance benefit?
+>>> i)  I don't have the hardware to measure the data.
+>>>       But I run a benchmark [1] for the contended spinlock on an Intel
+>> Sapphire Rapids
+>>>       server (192 h/w threads, 2sockets) that showed that the 1st spinner
+>> spinning was
+>>>       a hotspot (contributed ~55% cache bouncing traffic measured by the
+>> perf C2C.
+>>>        I don't analyze the cache bouncing here, but just say the spinning is a
+>> hotspot).
+>> I believe the amount of cacheline bouncing will be the same whether you
+>> read 32 or 16 bits from the lock word. At least this is my understanding of the
+>> x86 arch. Please correct me if my assumption is incorrect.
+> You're right.
+> The amount of cache line bouncing was nearly the same either spinning 32 or 16 bits
+> (according to my measured perf C2C data on an x86 server).
+>   
+>>> ii) The similar micro-optimization discussion [2] (looked like it was accepted
+>> by you 😉) that
+>>>       avoiding the false dependency (between the tail field and the
+>> locked_pending field)
+>>>       should help some arches (e.g., some ARM64???) the h/w thread
+>> (spinner) stay in a
+>>>       low-power state without the disruption by its sibling h/w threads in the
+>> same core.
+>>
+>> That is true. However, this patch causes one more read from the lock
+>> cacheline which isn't necessary for arches that won't benefit from it.
+>> So I am less incline to accept it unless there is evidence of the
+>> benefit it can bring.
+> This patch removes a bitwise AND operation on the VAL value.
+> Does it compensate for the one more read from the cache line?
 
-I do not think this patch is enough ?
+Register to register operation in the case of bitwise AND doesn't cost 
+much, it is the potential reading from a hot cacheline that cause most 
+of the delay. Besides there is also an additional acquire barrier. 
+Again, if there is no concrete proof of a benefit, there is no point to 
+make the code more complicated.
 
-This is still not nice, because mac_header =3D=3D 0xFFFF
+Cheers,
+Longman
 
-nhoff =3D skb->network_header - skb->mac_header;
-...
-skb_set_mac_header(skb, -nhoff);
-
-I would simply restore mac_header with "skb->mac_header =3D  mac_offset"
-and get rid of nhoff.
-
-(Accept the fact that GSO layer should not rely on skb mac_header being set=
-)
-
-In the future, we might be able to rewrite GSO without any assumptions
-on skb->mac_header.
