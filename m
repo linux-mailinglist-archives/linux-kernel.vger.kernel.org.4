@@ -2,117 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7746FC51E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B663A6FC520
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235393AbjEILhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 07:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
+        id S235402AbjEILhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 07:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234976AbjEILhM (ORCPT
+        with ESMTP id S235398AbjEILh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 07:37:12 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C7D19B1;
-        Tue,  9 May 2023 04:36:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9uy06VylNOBEAiDOc+c/ggtZsNSxY44p/M1PWpIHlTo=; b=AdPs8XtYEpkR3G25UQ9/ynnaJQ
-        yoQ7TJHtTer78qTxQSruGfUSIJdNhTXt+0UcvF9ygN5qgsE6skCGKlKdAU+XGBlszdQLENogWL1pZ
-        XLDEoXkr1kINeJ7StBwuvXlWsxIhr3i/RPNAsp79LBG8KMNp3MRdGeYKSudMDFtBS86uE8nzWEe5v
-        a8CfaEawnbrmqXklNcksitW8TUN0x1wEip6a7zDZlkdKaRBllociBadnbaExT9c9ou3QCvpRH4AgG
-        bSH5gSP2c1D5dxXxDWXZkTYGeRAN4a/hJ1z/YW9bJKB/4Im2NbAtVPF75WnxH6OHWaCKH0GsK31IY
-        N6mfY+UQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pwLdH-00678Y-0c;
-        Tue, 09 May 2023 11:35:52 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8F613302F3D;
-        Tue,  9 May 2023 13:35:48 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6D04F20C342B1; Tue,  9 May 2023 13:35:48 +0200 (CEST)
-Date:   Tue, 9 May 2023 13:35:48 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: Re: [patch v3 18/36] [patch V2 18/38] cpu/hotplug: Add CPU state
- tracking and synchronization
-Message-ID: <20230509113548.GD38236@hirez.programming.kicks-ass.net>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185218.240871842@linutronix.de>
- <20230509110722.GZ83892@hirez.programming.kicks-ass.net>
+        Tue, 9 May 2023 07:37:26 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B839749D6
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 04:37:03 -0700 (PDT)
+Received: from zn.tnic (p5de8e8ea.dip0.t-ipconnect.de [93.232.232.234])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6392B1EC026E;
+        Tue,  9 May 2023 13:36:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1683632205;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=iRy9wit3VIAYkvswE/qzqrLiqHriAFmaIQ1jPlmHXYw=;
+        b=hbt5/+RIbh1pguP2LJ6Bl5Czpp0PnNgQGpUe9q4lIUT3AHO3EmnJACpVJN6l/E7AaXiacm
+        uCEQJJkx4Fk/uEsSKuPzditPVpu8r9KVaxV6KEO3nm2Hbc7vq9sPYmneUE49t3tyAgm8ut
+        xnEk4yifILc3IQ/BvznHDRZKP5rUGo4=
+Date:   Tue, 9 May 2023 13:36:40 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        mikelley@microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v6 11/16] x86/mtrr: construct a memory map with cache
+ modes
+Message-ID: <20230509113640.GDZFowSMVK66B30cAA@fat_crate.local>
+References: <20230502120931.20719-1-jgross@suse.com>
+ <20230502120931.20719-12-jgross@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230509110722.GZ83892@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230502120931.20719-12-jgross@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 01:07:23PM +0200, Peter Zijlstra wrote:
-> On Mon, May 08, 2023 at 09:43:55PM +0200, Thomas Gleixner wrote:
-> 
-> > +static inline void cpuhp_ap_update_sync_state(enum cpuhp_sync_state state)
-> > +{
-> > +	atomic_t *st = this_cpu_ptr(&cpuhp_state.ap_sync_state);
-> > +	int sync = atomic_read(st);
-> > +
-> > +	while (!atomic_try_cmpxchg(st, &sync, state));
-> > +}
-> 
-> Why isn't:
-> 
-> 	atomic_set(st, state);
-> 
-> any good?
+On Tue, May 02, 2023 at 02:09:26PM +0200, Juergen Gross wrote:
+> @@ -841,6 +1137,10 @@ static void generic_set_mtrr(unsigned int reg, unsigned long base,
+>  
+>  	cache_enable();
+>  	local_irq_restore(flags);
+> +
+> +	/* On the first CPU rebuild the cache mode memory map. */
+> +	if (smp_processor_id() == cpumask_first(cpu_online_mask))
+> +		rebuild_map();
 
-Hmm, should at the very least be atomic_set_release(), but if you want
-the full barrier then:
+I still don't like this. Anything against doing this instead?
 
-	(void)atomic_xchg(st, state);
+---
+diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
+index 163dca53796c..e69c8c56897f 100644
+--- a/arch/x86/kernel/cpu/mtrr/generic.c
++++ b/arch/x86/kernel/cpu/mtrr/generic.c
+@@ -458,8 +458,11 @@ static void map_add_var(void)
+  * removals of registers, which are complicated to handle without rebuild of
+  * the map.
+  */
+-static void rebuild_map(void)
++void rebuild_map(void)
+ {
++	if (mtrr_if != &generic_mtrr_ops)
++		return;
++
+ 	cache_map_n = cache_map_fixed;
+ 
+ 	map_add_var();
+@@ -1127,10 +1130,6 @@ static void generic_set_mtrr(unsigned int reg, unsigned long base,
+ 
+ 	cache_enable();
+ 	local_irq_restore(flags);
+-
+-	/* On the first CPU rebuild the cache mode memory map. */
+-	if (smp_processor_id() == cpumask_first(cpu_online_mask))
+-		rebuild_map();
+ }
+ 
+ int generic_validate_add_page(unsigned long base, unsigned long size,
+diff --git a/arch/x86/kernel/cpu/mtrr/legacy.c b/arch/x86/kernel/cpu/mtrr/legacy.c
+index d25882fcf181..30a3d51d06e0 100644
+--- a/arch/x86/kernel/cpu/mtrr/legacy.c
++++ b/arch/x86/kernel/cpu/mtrr/legacy.c
+@@ -67,6 +67,7 @@ static void mtrr_restore(void)
+ 				     mtrr_value[i].ltype);
+ 		}
+ 	}
++	rebuild_map();
+ }
+ 
+ static struct syscore_ops mtrr_syscore_ops = {
+diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
+index 5fb61bb97ab1..10608c7f9606 100644
+--- a/arch/x86/kernel/cpu/mtrr/mtrr.c
++++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
+@@ -187,6 +187,8 @@ static void set_mtrr(unsigned int reg, unsigned long base, unsigned long size,
+ 				    };
+ 
+ 	stop_machine_cpuslocked(mtrr_rendezvous_handler, &data, cpu_online_mask);
++
++	rebuild_map();
+ }
+ 
+ /**
+diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.h b/arch/x86/kernel/cpu/mtrr/mtrr.h
+index 48ffd89cf3a6..286ce89ce7f1 100644
+--- a/arch/x86/kernel/cpu/mtrr/mtrr.h
++++ b/arch/x86/kernel/cpu/mtrr/mtrr.h
+@@ -79,3 +79,4 @@ extern const struct mtrr_ops centaur_mtrr_ops;
+ 
+ extern int changed_by_mtrr_cleanup;
+ extern int mtrr_cleanup(void);
++void rebuild_map(void);
 
-is the much saner way to write the above.
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
