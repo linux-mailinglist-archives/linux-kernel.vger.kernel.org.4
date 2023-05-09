@@ -2,105 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BBD6FC5EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 869676FC5E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235631AbjEIMJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 08:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
+        id S235552AbjEIMIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 08:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235602AbjEIMJ2 (ORCPT
+        with ESMTP id S235572AbjEIMIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 08:09:28 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6602B272D;
-        Tue,  9 May 2023 05:09:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1683634113; i=deller@gmx.de;
-        bh=SSP2D0buVNvjEi9SU9T2UBPjDgOQCn0+r8mPHaHboGA=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=rwkFbAQTqvbAW14E3pe2FgIEvGvcDaaeVuNV2scBb2siYwx7HvlA2JefUKBVhwN2s
-         Iy6lBRPlqoeLkRlBAdCxyQats14ohehBwMv3V78LjaCe/o/53C/jHgJdGfi3pSZOAp
-         Qm68jdDnTDG3RjTJm4fgkqLxeQ7O617z56PdLr43QVIv92OVhQlVF9zXDpXOkozjsn
-         OtM7Ne1zzd+Vo5yZ2kqiBIHVNVJ97XpmIbDs9J+uriLgfpdiH0ilJD5MUvH2NdNFgH
-         U2HsKYWPZIxZGn4LY5b5oJNwF3etkJkGpeExa0YCquBcUPEXuzfJkb3/iA2KexL3CL
-         f+zh9HacJ1IAw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.153.17]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MUowb-1pnrgO1Sb3-00QmTh; Tue, 09
- May 2023 14:08:33 +0200
-Message-ID: <ad64af5e-050a-e103-3619-3ef0468985c6@gmx.de>
-Date:   Tue, 9 May 2023 14:08:31 +0200
+        Tue, 9 May 2023 08:08:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2108F3A88
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 05:08:43 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pwM90-0002Zs-FK; Tue, 09 May 2023 14:08:38 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pwM8z-0003f6-4P; Tue, 09 May 2023 14:08:37 +0200
+Date:   Tue, 9 May 2023 14:08:37 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+Cc:     krzysztof.kozlowski@linaro.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] arm64: dts: Add device tree for the Emtop SOM IMX8MM
+Message-ID: <20230509120837.yekbiz35hfqqugdk@pengutronix.de>
+References: <20230509111754.3301369-1-himanshu.bhavani@siliconsignals.io>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] parisc: kexec: include reboot.h
-To:     Simon Horman <horms@kernel.org>, Baoquan He <bhe@redhat.com>
-Cc:     "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        kexec@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230508-parisc-kexec-include-reboot-v1-1-78a155a8a0a4@kernel.org>
- <ZFoL9ntYCCfZFCNs@bhe.users.ipa.redhat.com> <ZFo0Gd/Eucw/0gtC@kernel.org>
-Content-Language: en-US
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <ZFo0Gd/Eucw/0gtC@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:huQVl1MfhsA2PJtPDXj3magrMc4c+GchOIrEFlqTz1QU4gwklwX
- 1UAiIPp4QD3+ro32aCeHAlc9f8uWlp7NRrLhGiyIDqAHqtxcGPSZGotXaxMEZjsK8mShOVt
- X6JPZRtjwbzKtjAARM3ySetJvN5TIvrTOaTJhBDAp3Vyz6D9ja67ZlPSqgUQOG/yf0VZ7cw
- x09qUnsuZH9N4CHsKdOFg==
-UI-OutboundReport: notjunk:1;M01:P0:8kXG0SA0J80=;fnZ+jx+0PyaBK4EpXc2kcDzgp6x
- vcfebN7G8qetIF7ZQVY6lWwUaOGDt5VFoiyOb/wjY5x6YyJOI8q2zpw5QlejhOAHqv3GmeDr5
- GXzPqqQwhtC/4OseGJ7XtbT66o7nGyyq5uY+vfgB3O0Q9mTM4yOj8UGMmKWCevzvyzE/jxlgZ
- JM9rMvtR9umAspewFSYEG/fVMnE4Vsm6ThKu18nZ+aG5pbnZhznR0s0Kul5L5VtgoId9WLIds
- 0RRadYK+lpaIzILOs+JDMSYFRQatGicOYLp3kh98yLPSMc1tulXMyCFgmYecEZrOjy45ERPSe
- 9NjJ1XMGnJ2lfFbP3MPlq2hr9nD3qcgdGXHISlm6m1iygQR6HsI/UmbrYoWCy1WAXXYV8N4Pp
- lCaT4XAJ0Vo4mJeoGurGgkD4Wu2qdqsVGDanjYV1KD56kgaQcqK4Uw7v57TPIbRaNMbBBltcc
- iWxG7ieq3kAZ85tRE3PKVbLR60LJ/ETUu9mv303PTBMx7vLLgyLnwNP22q7dnkYB7D9sqKyue
- OwkiJNFHi2gvhXPTWcT4YXXj7sURJOexoN1B0Z138A7zVtosRYOrm1R5cjKjoXcYiDnIK2jDU
- yRVSBCVwnGgSXh0cq2G4XCtiLkWWBCoW7RBm9r+zb05lzbYYlwaaj3rvI0cTQynx98W6D6xSS
- yvC+sKH4aqeXZFM6NGFK2f4Yu7Q45A0QNipIrTY9jPr1BYFg9PgvvfHicEsnyhtxMLBqZ+yat
- 0ouSTZABlcz6we942mtjL/Lgj0xs1s/63zMvtJHLkxCIBhtIlYaWjheH3h20X+j0EXmeVYNz7
- Y3LZ9U2jPrWIfs8EU0g7MqguyTZuiaRomPz/0i3AsYQa62UQVM+HSICbjUjmCY5Ob4SuF19LM
- 7uRAJgKfUA8J3eilgMTio6VXE4gfsYkt/H+PVzPrErmtdwC4sast+h1a/RLCaRs6+auYA2UCU
- Y7fzIQ==
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509111754.3301369-1-himanshu.bhavani@siliconsignals.io>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/23 13:52, Simon Horman wrote:
-> On Tue, May 09, 2023 at 05:01:42PM +0800, Baoquan He wrote:
->> On 05/09/23 at 09:01am, Simon Horman wrote:
->>> Include reboot.h in machine_kexec.c for declaration of
->>> machine_crash_shutdown and machine_shutdown.
->>>
->>> gcc-12 with W=1 reports:
->>>
->>>   arch/parisc/kernel/kexec.c:57:6: warning: no previous prototype for 'machine_crash_shutdown' [-Wmissing-prototypes]
->>>      57 | void machine_crash_shutdown(struct pt_regs *regs)
->>>         |      ^~~~~~~~~~~~~~~~~~~~~~
->>>   arch/parisc/kernel/kexec.c:61:6: warning: no previous prototype for 'machine_shutdown' [-Wmissing-prototypes]
->>>      61 | void machine_shutdown(void)
->>>         |      ^~~~~~~~~~~~~~~~
->>>
->>> No functional changes intended.
->>> Compile tested only.
->>>
->>> Signed-off-by: Simon Horman <horms@kernel.org>
->>
->> Acked-by: Baoquan He <bhe@redhat.com>
+Hi Bhavani,
 
-applied to parisc for-next git tree.
+thanks for the patch.
 
-Thanks!
-Helge
+On 23-05-09, Himanshu Bhavani wrote:
+> Add a device tree file describing the Emtop SOM IMX8MM
+> 
+> Signed-off-by: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+> index 198fff3731ae..36590515fbc1 100644
+> --- a/arch/arm64/boot/dts/freescale/Makefile
+> +++ b/arch/arm64/boot/dts/freescale/Makefile
+> @@ -54,6 +54,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-beacon-kit.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-data-modul-edm-sbc.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-ddr4-evk.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-emcon-avari.dtb
+> +dtb-$(CONFIG_ARCH_MXC) += imx8mm-emtop.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-ctouch2.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-edimm2.2.dtb
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts b/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
+> new file mode 100644
+> index 000000000000..461e1ef5dcb4
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
+> @@ -0,0 +1,261 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright 2023 Emtop
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/leds/common.h>
+> +#include <dt-bindings/usb/pd.h>
+> +
+> +#include "imx8mm.dtsi"
+> +
+> +/ {
+> +	model = "Emtop SOM i.MX8MM";
+> +	compatible = "emtop,imx8mm-emtop", "fsl,imx8mm";
 
+Missing update of
+Documentation/devicetree/bindings/vendor-prefixes.yaml? Also you should
+update Documentation/devicetree/bindings/arm/fsl.yaml.
+
+Regards,
+  Marco
+
+> +	chosen {
+> +		stdout-path = &uart2;
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_gpio_led>;
+> +
+> +		led-0 {
+> +			function = LED_FUNCTION_POWER;
+> +			gpios = <&gpio3 16 GPIO_ACTIVE_HIGH>;
+> +			linux,default-trigger = "heartbeat";
+> +		};
+> +	};
+> +};
+> +
+> +&A53_0 {
+> +	cpu-supply = <&buck2>;
+> +};
+> +
+> +&A53_1 {
+> +	cpu-supply = <&buck2>;
+> +};
+> +
+> +&A53_2 {
+> +	cpu-supply = <&buck2>;
+> +};
+> +
+> +&A53_3 {
+> +	cpu-supply = <&buck2>;
+> +};
+> +
+> +&uart2 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_uart2>;
+> +	status = "okay";
+> +};
+> +
+> +&usdhc3 {
+> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+> +	pinctrl-0 = <&pinctrl_usdhc3>;
+> +	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
+> +	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
+> +	bus-width = <8>;
+> +	non-removable;
+> +	status = "okay";
+> +};
+> +
+> +&wdog1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_wdog>;
+> +	fsl,ext-reset-output;
+> +	status = "okay";
+> +};
+> +
+> +&i2c1 {
+> +	clock-frequency = <400000>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_i2c1>;
+> +	status = "okay";
+> +
+> +	pmic@25 {
+> +		compatible = "nxp,pca9450c";
+> +		reg = <0x25>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_pmic>;
+> +		interrupt-parent = <&gpio1>;
+> +		interrupts = <3 IRQ_TYPE_EDGE_RISING>;
+> +
+> +		regulators {
+> +			buck1: BUCK1 {
+> +				regulator-name = "BUCK1";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <1000000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +				regulator-ramp-delay = <3125>;
+> +			};
+> +
+> +			buck2: BUCK2 {
+> +				regulator-name = "BUCK2";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <900000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +				regulator-ramp-delay = <3125>;
+> +			};
+> +
+> +			buck3: BUCK3 {
+> +				regulator-name = "BUCK3";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <1000000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			buck4: BUCK4 {
+> +				regulator-name = "BUCK4";
+> +				regulator-min-microvolt = <3000000>;
+> +				regulator-max-microvolt = <3600000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			buck5: BUCK5 {
+> +				regulator-name = "BUCK5";
+> +				regulator-min-microvolt = <1650000>;
+> +				regulator-max-microvolt = <1950000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			buck6: BUCK6 {
+> +				regulator-name = "BUCK6";
+> +				regulator-min-microvolt = <1100000>;
+> +				regulator-max-microvolt = <1200000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo1: LDO1 {
+> +				regulator-name = "LDO1";
+> +				regulator-min-microvolt = <1650000>;
+> +				regulator-max-microvolt = <1950000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo2: LDO2 {
+> +				regulator-name = "LDO2";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <945000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo3: LDO3 {
+> +				regulator-name = "LDO3";
+> +				regulator-min-microvolt = <1710000>;
+> +				regulator-max-microvolt = <1890000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo4: LDO4 {
+> +				regulator-name = "LDO4";
+> +				regulator-min-microvolt = <810000>;
+> +				regulator-max-microvolt = <945000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo5: LDO5 {
+> +				regulator-name = "LDO5";
+> +				regulator-min-microvolt = <1650000>;
+> +				regulator-max-microvolt = <3600000>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&iomuxc {
+> +	pinctrl_gpio_led: gpioledgrp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_NAND_READY_B_GPIO3_IO16			0x19
+> +			MX8MM_IOMUXC_SAI3_RXC_GPIO4_IO29			0x19
+> +		>;
+> +	};
+> +
+> +	pinctrl_i2c1: i2c1grp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_I2C1_SCL_I2C1_SCL				0x400001c3
+> +			MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA				0x400001c3
+> +		>;
+> +	};
+> +
+> +	pinctrl_pmic: pmicirq {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_GPIO1_IO03_GPIO1_IO3			0x41
+> +		>;
+> +	};
+> +
+> +	pinctrl_uart2: uart2grp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_UART2_RXD_UART2_DCE_RX			0x140
+> +			MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX			0x140
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc3: usdhc3grp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x190
+> +			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d0
+> +			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d0
+> +			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d0
+> +			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d0
+> +			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d0
+> +			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d0
+> +			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d0
+> +			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d0
+> +			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d0
+> +			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x190
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x194
+> +			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d4
+> +			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d4
+> +			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d4
+> +			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d4
+> +			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d4
+> +			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d4
+> +			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d4
+> +			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d4
+> +			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d4
+> +			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x194
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc3_200mhz: usdhc3-200mhzgrp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x196
+> +			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d6
+> +			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d6
+> +			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d6
+> +			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d6
+> +			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d6
+> +			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d6
+> +			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d6
+> +			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d6
+> +			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d6
+> +			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x196
+> +		>;
+> +	};
+> +
+> +	pinctrl_wdog: wdoggrp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B			0xc6
+> +		>;
+> +	};
+> +};
+> -- 
+> 2.25.1
+> 
+> 
+> 
