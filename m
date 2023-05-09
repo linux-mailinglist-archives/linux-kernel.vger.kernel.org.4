@@ -2,114 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 030596FCCF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 19:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB58D6FCCF7
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 19:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234670AbjEIRnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 13:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
+        id S230198AbjEIRoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 13:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234768AbjEIRnA (ORCPT
+        with ESMTP id S229627AbjEIRoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 13:43:00 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB214227
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 10:42:56 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-965d73eb65fso936215266b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 10:42:55 -0700 (PDT)
+        Tue, 9 May 2023 13:44:05 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE3940C0
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 10:44:03 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3ef32014101so63624801cf.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 10:44:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683654174; x=1686246174;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+6CqfpUOuhBdIMyw09BZEvQUMlZ2hFOGBcV2c6lnR3A=;
-        b=AjEyzOVffRUiFWnLDBmNtDe/ucBYt/5khszFHw6tm/dbF0kF3yzZgDjNA7WDufb08B
-         uzBy9ZyTRlDCm7YRIi8rcQWsUH7AaZCYDQUon7B1p9b+WAg86sk5zRyPGwCWdNiBR9vG
-         4J6STzl4OmM1bvOBmyOdfigRKfVsoa9lpD4eoMDeM0qU6Y4VRnkyvVpjM6TXtGNz2Lzd
-         38dlZmByEUfHcyaZ9bG1lwe8TP4cp7Mi4jn4eXkR9fSIuUclx8PW+Wo+m5XfQg8qmn/I
-         tsOBOl/zE6tghsvD+kr1FZgTsDjA+hbYVRXl0yAt7YcEP0sU4rkwuoq8GntYvtDRB0AS
-         JjLw==
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1683654243; x=1686246243;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=r0fIZgngQ9KHUBi5LfmXg+eaALuyGPQn+Ww+ZIcPQ0U=;
+        b=kxFqD539zFnEkgBZCYyu7NnPFgh0kPFxYhBgiNDcdQ1+OA/nVtDxlzETKFEbeVZqzp
+         EwJLxSPF6INV07BIfVc6eR+nO4TtYvRj+ieIwKUVc3TXytgXqf6MHQVw/0tUP7D/m/kT
+         7qLBu+YynZ5mDWd9WNgORyRNnY+SucsJ1ND/bsy2zWWCmX5/FFr+cQIK5MLaNIN9il1I
+         ATICBudLSSbANJGlOLiL9+j9S50UBkCjWRxOceUrlsuYph/lRISpphJS9TTIP+730otz
+         ZEJ9Bv2BGpmvaoeLyl+rCE0ZtqA5QLVyQlls0NTs/o6S3nME6ivIraebaBP6oyPI3NYJ
+         +H7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683654174; x=1686246174;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+6CqfpUOuhBdIMyw09BZEvQUMlZ2hFOGBcV2c6lnR3A=;
-        b=esGfhZt2Liijx0Mw7F40UUja/d/cMwa0Kb1IFM/SdbdhqPd4yDQtylVaiQtL0tbuCS
-         ITS1hCZktoOKjTg8NlPQ2SJoIXOi/2j12yXRcev05MXgKR9rJ8siytpt2wg9WEooglqK
-         4rj63nxs2/p3uMKi4ueSeGtiU63MGo+I6/CcxgT+GUqhycGxhwAJh8EpNRzOAvoWmwDm
-         H41i+XfOzmspPWOdUFIY5Sy8gPb5p8T0CkaYwQPZRojMJ1y8V2jgwM68Mdkka3tqnoOf
-         e8hqEzYfJdhQmEXlRG3kwnnzaR3YVHcdFEMCKg4nN4mWwGvS3/pxCWXDPcZP+5h/Wtlr
-         xRPg==
-X-Gm-Message-State: AC+VfDzvXFxH3jctFBYTfk00qesFD7rrFJKB+waWLbjYwV1jKqRsdOUq
-        60pxQ8VFu9m6dVDzW94fe18D9A==
-X-Google-Smtp-Source: ACHHUZ5BzzC72uJ14K+MspznYU/rIVE1+W55VLdtM401cMlKeEaJ5ckngVP1kmYaHsBg4uUNYt4FlA==
-X-Received: by 2002:a17:907:72cc:b0:969:9118:a98f with SMTP id du12-20020a17090772cc00b009699118a98fmr4852570ejc.10.1683654174473;
-        Tue, 09 May 2023 10:42:54 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170906300d00b009659cdb2f98sm1574510ejz.23.2023.05.09.10.42.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 10:42:53 -0700 (PDT)
-Message-ID: <193f3489-4937-6d4a-2466-a67d335ac37c@linaro.org>
-Date:   Tue, 9 May 2023 19:42:52 +0200
+        d=1e100.net; s=20221208; t=1683654243; x=1686246243;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r0fIZgngQ9KHUBi5LfmXg+eaALuyGPQn+Ww+ZIcPQ0U=;
+        b=RJ3r0Fc1GKghQ3ca3N5ObRuAnx+QWbW3SyUKvk0u4tX9fyPdjjIPkqP2mKIxwiBcHa
+         nsUJ1iJc2v9yW3ZM+y4Nc6GUKpzqfJjINd8f9jOUy9D1Fe0zHbap+WOL4T2l8xQ76UbF
+         7bTYT+bB1ATG8riniqG3UXV9Bk4CKdv27DJrZ+rrxIn4N3mmFHlhtmO5NLnF3lPlcTuf
+         6g+zevm/vyrj+FcpGz3ikJ22dGe5LyxJMdJxm8EZvkA0rrL0aTupYRuWF9YaYjRHdw/C
+         7rToPDp4HQE45Sk0qDlcHqqkG9r2uF3fMdDNmVtToLHL2IipX+KQWZPLjj2LXQX00ZsZ
+         o1Fw==
+X-Gm-Message-State: AC+VfDzKZt5Adw3Rv19X4sc+nMbgpAuiMCklPxt3+YWClk8B0qQxCfiB
+        j0oXEue+oNu6VO0jUYbBA/Fybg==
+X-Google-Smtp-Source: ACHHUZ47Lbl6FfgJE40t18HSn8iYgyFQWNIQwLznrwRRe0FDVvz79xSAK23cUlDdep0hmbYXDi9uTw==
+X-Received: by 2002:ac8:7f89:0:b0:3f3:9564:1135 with SMTP id z9-20020ac87f89000000b003f395641135mr6539548qtj.8.1683654242784;
+        Tue, 09 May 2023 10:44:02 -0700 (PDT)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id f5-20020ac840c5000000b003e0945575dasm373105qtm.1.2023.05.09.10.44.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 10:44:02 -0700 (PDT)
+Date:   Tue, 9 May 2023 13:44:01 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Nhat Pham <nphamcs@gmail.com>, Minchan Kim <minchan@kernel.org>,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ngupta@vflare.org,
+        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
+        kernel-team@meta.com
+Subject: Re: [PATCH] zsmalloc: move LRU update from zs_map_object() to
+ zs_malloc()
+Message-ID: <20230509174401.GA18828@cmpxchg.org>
+References: <20230505185054.2417128-1-nphamcs@gmail.com>
+ <20230506030140.GC3281499@google.com>
+ <20230508140658.GA3421@cmpxchg.org>
+ <CAKEwX=MtunOe6A--SG3ud-gUFg3bXFJgG4csgwHeZFAEqjCgHg@mail.gmail.com>
+ <20230509030030.GD11511@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 08/13] Revert "phy: Remove SOC_EXYNOS4212 dep. from
- PHY_EXYNOS4X12_USB"
-Content-Language: en-US
-To:     Artur Weber <aweber.kernel@gmail.com>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230501195525.6268-1-aweber.kernel@gmail.com>
- <20230501195525.6268-9-aweber.kernel@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230501195525.6268-9-aweber.kernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509030030.GD11511@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/05/2023 21:55, Artur Weber wrote:
-> Support for the Exynos4212 SoC was originally dropped as there were
-> no boards using it. We will be adding a device that uses it, so add
-> it back.
+On Tue, May 09, 2023 at 12:00:30PM +0900, Sergey Senozhatsky wrote:
+> On (23/05/08 09:00), Nhat Pham wrote:
+> > > The deeper bug here is that zs_map_object() tries to add the page to
+> > > the LRU list while the shrinker has it isolated for reclaim. This is
+> > > way too sutble and error prone. Even if it worked now, it'll cause
+> > > corruption issues down the line.
+> > >
+> > > For example, Nhat is adding a secondary entry point to reclaim.
+> > > Reclaim expects that a page that's on the LRU is also on the fullness
+> > > list, so this would lead to a double remove_zspage() and BUG_ON().
+> > >
+> > > This patch doesn't just fix the crash, it eliminates the deeper LRU
+> > > isolation issue and makes the code more robust and simple.
+> > 
+> > I agree. IMO, less unnecessary concurrent interaction is always a
+> > win for developers' and maintainers' cognitive load.
 > 
-> This reverts commit fee7e1d50c6e6da1d99035181ba5a5c88f5bb526.
+> Thanks for all the explanations.
+> 
+> > As a side benefit - this also gets rid of the inelegant check
+> > (mm == ZS_MM_WO). The fact that we had to include a
+> > a multi-paragraph explanation for a 3-line piece of code
+> > should have been a red flag.
+> 
+> Minchan had some strong opinion on that, so we need to hear from him
+> before we decide how do we fix it.
 
-Subject:
-phy: Revert "phy: Remove SOC_EXYNOS4212 dep. from PHY_EXYNOS4X12_USB"
+I'd be happy if he could validate the fix. But this fixes a crash, so
+the clock is ticking.
 
-I assume this will go via phy tree. If not, let me know.
+I will also say, his was a design preference. One we agreed to only
+very reluctantly: https://lore.kernel.org/lkml/Y3f6habiVuV9LMcu@google.com/
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Now we have a crash that is a direct result of it, and which cost us
+(and apparently is still costing us) time and energy to resolve.
 
-
-Best regards,
-Krzysztof
-
+Unless somebody surfaces a real technical problem with the fix, I'd
+say let's do it our way this time.
