@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5F36FBFAD
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38096FBFB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235118AbjEIGzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 02:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S235108AbjEIG4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 02:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbjEIGy7 (ORCPT
+        with ESMTP id S235109AbjEIGz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 02:54:59 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0ECAD2E
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 23:54:37 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1aaf70676b6so38411065ad.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 23:54:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683615277; x=1686207277;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8f7AFFRkXXKxkzsTH7JfwHgWYybfOeRANzMf6aB4GvY=;
-        b=oS/3s1VQfCdROM7w06UUy1feQDAkekR15S+W+Lck1hb5ImBoiw9PTJrGHvLGdhTWxX
-         YIO5QVFOI+XUkjxUqxVV3Jqo2HpFqpr0K5ZFfmXsTsaGMWK05+dMdJyyfOOjAoqu9k0M
-         GO33YahzUNlU+1+5U7niPyeqwzkzx/fVZs7IEsHtO22XI+sIS4ZGG2JF9rogkh2/8Q64
-         pJ2AA1fb4Lyq/cQl6LGsYw5vjhO7zc7/9CxueqbTm5gm8Zrb451c4H1g7aVDJKy5LfpF
-         yP8zbgyeQlqJ/c47Q/1Woo4pxbo+jHEAqO2sNJGFYpVV8etIY3Of/UPdn8K3elJmevyL
-         ZXVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683615277; x=1686207277;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8f7AFFRkXXKxkzsTH7JfwHgWYybfOeRANzMf6aB4GvY=;
-        b=SWFIYpz61wrjRzRJimf6jH+UwBTmTrp/noaatoZRmEKRdXmPgQOIVdovZyAnTHMK8W
-         jPPTalCx/73TUR7A450I5han8ZO/ZIuEWQc5k6xhHx5IQzipIEOw0ZmCo7O2JEF5WTQD
-         ayL6A2Gw7JKr+Xkrrr2u2B7Ru5Oj1nrtrH90llNuxvR2eKEqT/Ku6YFUYWyHw/uALzhL
-         4SN7neKMUBx/+KfmSFdJcnD74rzcbPWlACj9X1MD/X2VOpYQ1HlxpFF65d9zVTScNr2W
-         PHGKTN12sMOGWn9VaGs+o9clYml6tsmHITcUaEBfpWJzOQcQhTesAmfLWVY3Xlgttit6
-         uZZA==
-X-Gm-Message-State: AC+VfDwHji8y8/z3uRpEMeVL182Nnf2gApAiaJ96mRn16yLavgbJuaHp
-        eaMiZkfH1e/5RySnI1PLSQ9coA==
-X-Google-Smtp-Source: ACHHUZ7LdOHTKLDLgTu5Mf4elrCAwM8dbTu05hZuRJn2cRPKqYLnO0y9skDG4YG19caNlHilV8oKBA==
-X-Received: by 2002:a17:902:eb46:b0:1a6:5487:3f97 with SMTP id i6-20020a170902eb4600b001a654873f97mr12176228pli.64.1683615277073;
-        Mon, 08 May 2023 23:54:37 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
-        by smtp.gmail.com with ESMTPSA id g7-20020a170902868700b001aad4be4503sm719394plo.2.2023.05.08.23.54.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 23:54:36 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pwHF3-00D7ut-QH; Tue, 09 May 2023 16:54:33 +1000
-Date:   Tue, 9 May 2023 16:54:33 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     Dave Chinner <dchinner@redhat.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, linux-kernel@vger.kernel.org,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        ying.huang@intel.com, feng.tang@intel.com, fengwei.yin@intel.com
-Subject: Re: [linus:master] [xfs]  2edf06a50f:  fsmark.files_per_sec -5.7%
- regression
-Message-ID: <20230509065433.GT3223426@dread.disaster.area>
-References: <202305090905.aff4e0e6-oliver.sang@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202305090905.aff4e0e6-oliver.sang@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 9 May 2023 02:55:56 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E81F54ECE;
+        Mon,  8 May 2023 23:55:54 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxrOp57llkjN4GAA--.11631S3;
+        Tue, 09 May 2023 14:55:53 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOR47llkUDtSAA--.16572S2;
+        Tue, 09 May 2023 14:55:53 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     linux-perf-users@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH] perf symbol: Add LoongArch case in get_plt_sizes()
+Date:   Tue,  9 May 2023 14:55:52 +0800
+Message-Id: <1683615352-10794-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8BxoOR47llkUDtSAA--.16572S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7Jr4DWFWxGr1UGF4Utw47Jwb_yoWkGwb_ta
+        4fuF40yw1UArWvyrWDCrW5uFWruayrZFs5uFyDWw4xCa1ftF45WF47Zr93uF15Zw1Yvr9x
+        Jwn2q3yfArs8GjkaLaAFLSUrUUUUYb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        W7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS
+        14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv
+        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2
+        AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
+        xVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_
+        Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+        CTnIWIevJa73UjIFyTuYvjxUstxhDUUUU
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 10:13:19AM +0800, kernel test robot wrote:
-> 
-> 
-> Hello,
-> 
-> kernel test robot noticed a -5.7% regression of fsmark.files_per_sec on:
-> 
-> 
-> commit: 2edf06a50f5bbe664283f3c55c480fc013221d70 ("xfs: factor xfs_alloc_vextent_this_ag() for  _iterate_ags()")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+We can see the following definitions in bfd/elfnn-loongarch.c:
 
-This is just a refactoring patch and doesn't change any logic.
-Hence I'm sceptical that it actually resulted in a performance
-regression. Indeed, the profile indicates a significant change of
-behaviour in the allocator and I can't see how the commit above
-would cause anything like that.
+  #define PLT_HEADER_INSNS 8
+  #define PLT_HEADER_SIZE (PLT_HEADER_INSNS * 4)
 
-Was this a result of a bisect? If so, what were the original kernel
-versions where the regression was detected?
+  #define PLT_ENTRY_INSNS 4
+  #define PLT_ENTRY_SIZE (PLT_ENTRY_INSNS * 4)
 
-Cheers,
+so plt header size is 32 and plt entry size is 16 on LoongArch,
+let us add LoongArch case in get_plt_sizes().
 
-Dave.
+Link: https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elfnn-loongarch.c
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
 
+This is based on 6.4-rc1
+
+ tools/perf/util/symbol-elf.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+index b2ed9cc..5d409c2 100644
+--- a/tools/perf/util/symbol-elf.c
++++ b/tools/perf/util/symbol-elf.c
+@@ -411,6 +411,10 @@ static bool get_plt_sizes(struct dso *dso, GElf_Ehdr *ehdr, GElf_Shdr *shdr_plt,
+ 		*plt_header_size = 32;
+ 		*plt_entry_size = 16;
+ 		return true;
++	case EM_LOONGARCH:
++		*plt_header_size = 32;
++		*plt_entry_size = 16;
++		return true;
+ 	case EM_SPARC:
+ 		*plt_header_size = 48;
+ 		*plt_entry_size = 12;
 -- 
-Dave Chinner
-david@fromorbit.com
+2.1.0
+
