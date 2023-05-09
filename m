@@ -2,173 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17BF6FBC6C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 03:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 905846FBC70
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 03:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233559AbjEIBUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 21:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
+        id S232230AbjEIBWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 21:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjEIBUS (ORCPT
+        with ESMTP id S229526AbjEIBWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 21:20:18 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E67C7283
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 18:20:17 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6439d505274so2842154b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 May 2023 18:20:17 -0700 (PDT)
+        Mon, 8 May 2023 21:22:41 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B036F46BA;
+        Mon,  8 May 2023 18:22:40 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64115eef620so38799625b3a.1;
+        Mon, 08 May 2023 18:22:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683595217; x=1686187217;
+        d=gmail.com; s=20221208; t=1683595360; x=1686187360;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qvnKgDrLdGbPYsBYq8JxxD98sZ+MraP0qApL2fP5if4=;
-        b=iufZEJq7q54DB+83WSv76z5TKf12tRvtuirtcVl8etOYO+KDFOgEs5HzHXV8UXRpls
-         Gx1bclRmOPbq+s8Vfe44vd84pPXampuZyNEXwvmXDrBKdl2YExdkv4IRON39ESkJqC2i
-         8Ot/Te9Xub2Tw9BnsW4b0h5PTrp1lvtA2B6Jm9kTB5uaoeemy8aI2Ju2wLN5k1aL5Tf2
-         Bdvfs2SrGIHa91GTNbUcSC6537zXPmsiQgjjQPs79KsNpop9jDK11NwrITU9pCV8ObdZ
-         W+69n1y8r7o6Kka1hCH0e6prx2fs+MbbbodjeFMOQK2sbc7ULVJKnKKg/gWK0LBJO080
-         f3tw==
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=au9agmn1fAuoWBQtARq17AEbHUZT+qsMcq+Xb5cLNzo=;
+        b=X7RgVwL3v5eZwAel21m1GADrylU7pxTYwYAbeUz0i+OqdQ7EDkvsvrGjwb2nX4KAuG
+         HevzDBP25xpEFqkAcaQND3xyTYg0e+dI45oLGjsA14M5QNsVI3pCBfaQchWiqFAYi7L2
+         TcVBR8ZDrmYWVsiCOvly4ujN6FkqEyxaXKUmPl/5ihYlZ+N2E/6rS9W8fdslRNgn8BAv
+         ph1ryHBu/tAM7n9fES9W58FSqzzLTXWddmnrtfGl2LMPGVsSCCjosCzLhx3+3gl660hp
+         qeLgurWYE+UeaDnPwFQNkh381G11FzWqzjqxB+3IOrFii/nyV71QOsOjmb3VDlFZoI97
+         DMww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683595217; x=1686187217;
+        d=1e100.net; s=20221208; t=1683595360; x=1686187360;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qvnKgDrLdGbPYsBYq8JxxD98sZ+MraP0qApL2fP5if4=;
-        b=XHE7iSVVvvNFsGO+yeg2Wtp/icUUNM7aAsApAeLflxAheMMpwukjw7K4GarhFoFf19
-         g5S9kswqPwvDYCvX1bsrYZCatZACOT3GccDQFiN8+ULybtnisbUiW1J1ofbPZ1SvW6i0
-         JkX91prYklf2pAnFkE213Kadm1dAIKtSZdOyqNAfKGu7Mv/8axU9t9zwGDe25zFABZRI
-         o6q+i1eNxAbectqXWT8iXhbl4K0d/PiiO+33jd6u39N2hTsGDm9ZXRNXXnl5epDuH9pG
-         zZ+j24f5+nAAVYPzYOejQnAxWdVFEHVggw+INWE9Qo1rOF99b8tydgOoCSbI/+5TwoNo
-         QRKA==
-X-Gm-Message-State: AC+VfDxtJ04dsJapFqd7i7umCD7BU3MGOBKIfhgCM5a2gJ+mwVeRGiG0
-        /zqV7jBs27d6jKGTAe7ZGcTaOw==
-X-Google-Smtp-Source: ACHHUZ5h+1TgYj4KujZCQwdLTfcSFgNpCbTRC56j2A0dOjVoakdhu4USEX4rOpq23HrAkNhxodPAaw==
-X-Received: by 2002:a05:6a00:2343:b0:644:d775:60bb with SMTP id j3-20020a056a00234300b00644d77560bbmr10814865pfj.20.1683595216924;
-        Mon, 08 May 2023 18:20:16 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
-        by smtp.gmail.com with ESMTPSA id 17-20020aa79251000000b006468222af91sm581010pfp.48.2023.05.08.18.20.16
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=au9agmn1fAuoWBQtARq17AEbHUZT+qsMcq+Xb5cLNzo=;
+        b=D7bdZXs54yGYi3FuzhXdj+uyV7IaS3LTfvaKj9hjJOkQwaMGq9e0Wo39F4nQgj2tvz
+         GQ1e/5niPLCIgQvzx6OPAxX2aV3XZc1nEM3Wz6ZMBx0U+1ca0IG+hDYvXMYxUEuds9LJ
+         sh7aQg2LyYm2TdxlJSrCbsbL1K1pF+CQBc69gzmaAXJEYQ2fYihb6EmzLXhytASQE17F
+         MlOfps8pQvuolk0VXztU4WJ8IVIp4+gcTERx45CRc8h+ks8WFKbP6G6z9KebYFjYo5b3
+         LY6PM440V7OQUuZsJDP+W5+KxzUImMK0jvdsGji5Qh6iziEnjpSS6ibiLLgyT4K1Jepg
+         nEqw==
+X-Gm-Message-State: AC+VfDz25SaT0aPcRD5t/s+tkvJuhvPDmkLm0Qkgrirz/zCwF1AQ1aXn
+        YvVGpLje7onnibKoZGQKJk8=
+X-Google-Smtp-Source: ACHHUZ7W13EJUM1P+PLUNr3IIAIDRFzJWLHkdEj8grXPNYZ91UoGrP/4BSqjLbd1oCaLf72OdDn9vQ==
+X-Received: by 2002:a17:902:da92:b0:1ac:94b3:3ab4 with SMTP id j18-20020a170902da9200b001ac94b33ab4mr859171plx.27.1683595359795;
+        Mon, 08 May 2023 18:22:39 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id f11-20020a17090274cb00b001a6db2bef16sm98287plt.303.2023.05.08.18.22.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 18:20:16 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pwC1V-00D2Im-7t; Tue, 09 May 2023 11:20:13 +1000
-Date:   Tue, 9 May 2023 11:20:13 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     hch@infradead.org, djwong@kernel.org, sandeen@sandeen.net,
-        song@kernel.org, rafael@kernel.org, gregkh@linuxfoundation.org,
-        viro@zeniv.linux.org.uk, jack@suse.cz, jikos@kernel.org,
-        bvanassche@acm.org, ebiederm@xmission.com, mchehab@kernel.org,
-        keescook@chromium.org, p.raghav@samsung.com, da.gomez@samsung.com,
-        linux-fsdevel@vger.kernel.org, kernel@tuxforce.de,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] fs: add automatic kernel fs freeze / thaw and remove
- kthread freezing
-Message-ID: <20230509012013.GD2651828@dread.disaster.area>
-References: <20230508011717.4034511-1-mcgrof@kernel.org>
- <20230508011717.4034511-7-mcgrof@kernel.org>
+        Mon, 08 May 2023 18:22:39 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 8 May 2023 15:22:37 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     jiangshanlai@gmail.com
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 12/22] scsi: Use alloc_ordered_workqueue() to create
+ ordered workqueues
+Message-ID: <ZFmgXcSadQpizbwI@slm.duckdns.org>
+References: <20230421025046.4008499-1-tj@kernel.org>
+ <20230421025046.4008499-13-tj@kernel.org>
+ <ZFmMaraKKz8D_YGY@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230508011717.4034511-7-mcgrof@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZFmMaraKKz8D_YGY@slm.duckdns.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 07, 2023 at 06:17:17PM -0700, Luis Chamberlain wrote:
-> Add support to automatically handle freezing and thawing filesystems
-> during the kernel's suspend/resume cycle.
-> 
-> This is needed so that we properly really stop IO in flight without
-> races after userspace has been frozen. Without this we rely on
-> kthread freezing and its semantics are loose and error prone.
-> For instance, even though a kthread may use try_to_freeze() and end
-> up being frozen we have no way of being sure that everything that
-> has been spawned asynchronously from it (such as timers) have also
-> been stopped as well.
-> 
-> A long term advantage of also adding filesystem freeze / thawing
-> supporting during suspend / hibernation is that long term we may
-> be able to eventually drop the kernel's thread freezing completely
-> as it was originally added to stop disk IO in flight as we hibernate
-> or suspend.
-> 
-> This does not remove the superfluous freezer calls on all filesystems.
-> Each filesystem must remove all the kthread freezer stuff and peg
-> the fs_type flags as supporting auto-freezing with the FS_AUTOFREEZE
-> flag.
-> 
-> Subsequent patches remove the kthread freezer usage from each
-> filesystem, one at a time to make all this work bisectable.
-> Once all filesystems remove the usage of the kthread freezer we
-> can remove the FS_AUTOFREEZE flag.
-> 
-> Reviewed-by: Jan Kara <jack@suse.cz>
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> ---
->  fs/super.c             | 50 ++++++++++++++++++++++++++++++++++++++++++
->  include/linux/fs.h     | 14 ++++++++++++
->  kernel/power/process.c | 15 ++++++++++++-
->  3 files changed, 78 insertions(+), 1 deletion(-)
+On Mon, May 08, 2023 at 01:57:30PM -1000, Tejun Heo wrote:
+> Applied to wq/for-6.5-cleanup-ordered.
 
-.....
+Oops, strike that. All scsi core workqueues have WQ_SYSFS set which means
+that their max_active could be adjusted upwards through sysfs. The shouldn't
+be ordered workqueues. This only leaves NCR5380 the only remaining
+conversion candidate; however, that one only uses a single work item, so the
+better thing to do there is using the default @max_active instead.
 
-> diff --git a/kernel/power/process.c b/kernel/power/process.c
-> index cae81a87cc91..7ca7688f0b5d 100644
-> --- a/kernel/power/process.c
-> +++ b/kernel/power/process.c
-> @@ -140,6 +140,16 @@ int freeze_processes(void)
->  
->  	BUG_ON(in_atomic());
->  
-> +	pr_info("Freezing filesystems ... ");
-> +	error = iterate_supers_reverse_excl(fs_suspend_freeze_sb, NULL);
-> +	if (error) {
-> +		pr_cont("failed\n");
-> +		iterate_supers_excl(fs_suspend_thaw_sb, NULL);
-> +		thaw_processes();
-> +		return error;
+I'm dropping this patch and will add a patch for NCR5380 in the next round.
 
-That looks wrong. i.e. if the sb iteration fails to freeze a
-filesystem (for whatever reason) then every userspace frozen
-filesystem will be thawed by this call, right? i.e. it will thaw
-more than just the filesystems frozen by the suspend freeze
-iteration before it failed.
+Thanks.
 
-Don't we only want to thaw the superblocks we froze before the
-failure occurred? i.e. the "undo" iteration needs to start from the
-last superblock we successfully froze and then only walk to the tail
-of the list we started from?
-
-> +	}
-> +	pr_cont("done.\n");
-> +
->  	/*
->  	 * Now that the whole userspace is frozen we need to disable
->  	 * the OOM killer to disallow any further interference with
-> @@ -149,8 +159,10 @@ int freeze_processes(void)
->  	if (!error && !oom_killer_disable(msecs_to_jiffies(freeze_timeout_msecs)))
->  		error = -EBUSY;
->  
-> -	if (error)
-> +	if (error) {
-> +		iterate_supers_excl(fs_suspend_thaw_sb, NULL);
->  		thaw_processes();
-> +	}
-
-Does this also have the same problem? i.e. if fs_suspend_freeze_sb()
-skips over superblocks that are already userspace frozen without any
-error, then this will incorrectly thaw those userspace frozen
-filesystems.
-
-Cheers,
-
-Dave.
 -- 
-Dave Chinner
-david@fromorbit.com
+tejun
