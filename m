@@ -2,239 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5641F6FCD28
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CEB6FCD2C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjEISCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 14:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
+        id S233852AbjEISDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 14:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjEISCt (ORCPT
+        with ESMTP id S229738AbjEISDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 14:02:49 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7223448D;
-        Tue,  9 May 2023 11:02:47 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349Gg72H027919;
-        Tue, 9 May 2023 18:02:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=m5YYQNFMFcx+27YXz/ngiPPxOgcwkirsOJ9lHLR7kQA=;
- b=MWluBRIS4p4rsyno8B8qssSM28kP5WHetuqCX/wfKQUfSvPJS97pYJGHrdk0NMvkyNzD
- StcyJTZs/tmJYAIB4CkzQlz89LNzpc0BpXcN75tt9E/A1LmDSKFsvcM6KmqCIXsy4GUg
- BqDgAdDfswcNt25Ypfse6o3FFO0V30TQX/oqQOT2Ltqmm88OQvPn+wGeih5qKB/g9frj
- MHaWr+cmoP0zuG0hfMSdCvIytZAMQ91fbKY6royGt1vIG5PgU5UiFbmjsncw8h9/doGL
- j2wMresfu/DLnrwjnlrhVreGV7FEewbcJawmUEwXhCQ0E+BbYRJX/Buh+BhC+MdPXQaJ mQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qfr508h28-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 18:02:39 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 349I2cHe016199
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 9 May 2023 18:02:38 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
- 11:02:38 -0700
-Message-ID: <d42839ed-1c3a-c7ce-ec72-4a9d1e5723d3@quicinc.com>
-Date:   Tue, 9 May 2023 11:02:31 -0700
+        Tue, 9 May 2023 14:03:36 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F2E40F6;
+        Tue,  9 May 2023 11:03:34 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683655413;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H8lMKg/Pl8bB6qnYC08+nBqTm61HWmUyuaLIaj1gFuQ=;
+        b=p/DT4GAI2EtIvZG/E48g6Y7O0PSW6I7fXi+Elpt8is0SHczyNHYG4WQo1p8SYYocLErxKG
+        tmvgrxjIF+UxfScN840YPnkbKctQmYUakhWVsbINnsqgaMlRICOjt3Qfc6Up2X1bjDtoAO
+        ar+k+iD6nwCsxY3BjhAFgFJUIEJHTt1PrRE8rbODQZgYjBKNgq6ykZLI1Uu1z7pabrzvU3
+        BwVO+gXxHyh4uHTSjhXVxYRN+IF1E8Jy0qeflsgMafTVMfAIUm1oLIOiNDcRtX6ADo3QXJ
+        K1YoDfr+wSZLKitYMptlFZ4BJxPZWh1AEKhWq/8P8VH08qDCjiggV3Xig5/J1w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683655413;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H8lMKg/Pl8bB6qnYC08+nBqTm61HWmUyuaLIaj1gFuQ=;
+        b=o/GeRRk5OesDmJnkkrzpp/P4MfatYoS6Fv9RucWpaz9lKWhE91kzNOmkETuNZ878NLl+Jz
+        nDab+Y4hdtD/OPAA==
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        David Woodhouse <dwmw@amazon.co.uk>
+Subject: Re: [patch v3 08/36] x86/smpboot: Split up native_cpu_up() into
+ separate phases and document them
+In-Reply-To: <20230509101902.GV83892@hirez.programming.kicks-ass.net>
+References: <20230508181633.089804905@linutronix.de>
+ <20230508185217.671595388@linutronix.de>
+ <20230509101902.GV83892@hirez.programming.kicks-ass.net>
+Date:   Tue, 09 May 2023 20:03:32 +0200
+Message-ID: <87lehxz8jv.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [Freedreno] [PATCH 2/4] drm/msm/dsi: Fix compressed word count
- calculation
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <neil.armstrong@linaro.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
-References: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
- <20230405-add-dsc-support-v1-2-6bc6f03ae735@quicinc.com>
- <a60a9f37-bb43-6e2b-2535-995e9fae250a@linaro.org>
- <32d473a6-f7a5-9aa6-85cf-0f77f1c071ce@quicinc.com>
- <4cf2e9ab-7e08-fb26-d924-8ea8141d9f58@linaro.org>
- <44c47800-0913-b122-77ae-5ce0e5d4b443@linaro.org>
- <cd8cfbd5-1bde-08d8-dbb5-5489820d6a45@linaro.org>
- <5f069b2c-d1b1-e489-7494-67ef395437bc@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <5f069b2c-d1b1-e489-7494-67ef395437bc@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: JrLTldyWT2VorLZThbbApxULoyJsdVQF
-X-Proofpoint-ORIG-GUID: JrLTldyWT2VorLZThbbApxULoyJsdVQF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_11,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=999 bulkscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1015 impostorscore=0
- adultscore=0 phishscore=0 suspectscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305090150
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 09 2023 at 12:19, Peter Zijlstra wrote:
+> Again, not really this patch, but since I had to look at this code ....
+>
+> On Mon, May 08, 2023 at 09:43:39PM +0200, Thomas Gleixner wrote:
+>> @@ -1048,60 +1066,89 @@ static int do_boot_cpu(int apicid, int c
+>
+> 	/*
+> 	 * AP might wait on cpu_callout_mask in cpu_init() with
+> 	 * cpu_initialized_mask set if previous attempt to online
+> 	 * it timed-out. Clear cpu_initialized_mask so that after
+> 	 * INIT/SIPI it could start with a clean state.
+> 	 */
+> 	cpumask_clear_cpu(cpu, cpu_initialized_mask);
+> 	smp_mb();
+>
+> ^^^ that barrier is weird too, cpumask_clear_cpu() is an atomic op and
+> implies much the same (this is x86 after all). If you want to be super
+> explicit about it write:
+>
+> 	smp_mb__after_atomic();
+>
+> (which is a no-op) but then it still very much requires a comment as to
+> what exactly it orders against what.
 
-
-On 5/9/2023 4:42 AM, Dmitry Baryshkov wrote:
-> On 09/05/2023 11:54, Konrad Dybcio wrote:
->>
->>
->> On 9.05.2023 10:23, Neil Armstrong wrote:
->>> On 09/05/2023 01:27, Dmitry Baryshkov wrote:
->>>> On 08/05/2023 23:09, Abhinav Kumar wrote:
->>>>>
->>>>>
->>>>> On 5/3/2023 1:26 AM, Dmitry Baryshkov wrote:
->>>>>> On 03/05/2023 04:19, Jessica Zhang wrote:
->>>>>>> Currently, word count is calculated using slice_count. This is 
->>>>>>> incorrect
->>>>>>> as downstream uses slice per packet, which is different from
->>>>>>> slice_count.
->>>>>>>
->>>>>>> Slice count represents the number of soft slices per interface, 
->>>>>>> and its
->>>>>>> value will not always match that of slice per packet. For 
->>>>>>> example, it is
->>>>>>> possible to have cases where there are multiple soft slices per 
->>>>>>> interface
->>>>>>> but the panel specifies only one slice per packet.
->>>>>>>
->>>>>>> Thus, use the default value of one slice per packet and remove 
->>>>>>> slice_count
->>>>>>> from the word count calculation.
->>>>>>>
->>>>>>> Fixes: bc6b6ff8135c ("drm/msm/dsi: Use DSC slice(s) packet size 
->>>>>>> to compute word count")
->>>>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>>>>>> ---
->>>>>>>    drivers/gpu/drm/msm/dsi/dsi_host.c | 9 ++++++++-
->>>>>>>    1 file changed, 8 insertions(+), 1 deletion(-)
->>>>>>>
->>>>>>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c 
->>>>>>> b/drivers/gpu/drm/msm/dsi/dsi_host.c
->>>>>>> index 35c69dbe5f6f..b0d448ffb078 100644
->>>>>>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->>>>>>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->>>>>>> @@ -996,7 +996,14 @@ static void dsi_timing_setup(struct 
->>>>>>> msm_dsi_host *msm_host, bool is_bonded_dsi)
->>>>>>>            if (!msm_host->dsc)
->>>>>>>                wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 
->>>>>>> + 1;
->>>>>>>            else
->>>>>>> -            wc = msm_host->dsc->slice_chunk_size * 
->>>>>>> msm_host->dsc->slice_count + 1;
->>>>>>> +            /*
->>>>>>> +             * When DSC is enabled, WC = slice_chunk_size * 
->>>>>>> slice_per_packet + 1.
->>>>>>> +             * Currently, the driver only supports default value 
->>>>>>> of slice_per_packet = 1
->>>>>>> +             *
->>>>>>> +             * TODO: Expand drm_panel struct to hold 
->>>>>>> slice_per_packet info
->>>>>>> +             *       and adjust DSC math to account for 
->>>>>>> slice_per_packet.
->>>>>>
->>>>>> slice_per_packet is not a part of the standard DSC, so I'm not 
->>>>>> sure how that can be implemented. And definitely we should not 
->>>>>> care about the drm_panel here. It should be either a part of 
->>>>>> drm_dsc_config, or mipi_dsi_device.
->>>>>>
->>>>>
->>>>> This is not correct.
->>>>>
->>>>> It is part of the DSI standard (not DSC standard). Please refer to 
->>>>> Figure 40 "One Line Containing One Packet with Data from One or 
->>>>> More Compressed Slices" and Figure 41 "One Line Containing More 
->>>>> than One Compressed Pixel Stream Packet".
->>>>
->>>> I have reviewed section 8.8.24 and Annex D of the DSI standard.
->>>>
->>>> It is not clear to me, if we can get away with always using 
->>>> slice_per_packet = 1. What is the DSI sink's difference between Fig. 
->>>> 40.(b) and Fig 41?
->>>>
->>>> Are there are known panels that require slice_per_packet != 1? If 
->>>> so, we will have to implement support for such configurations.
->>>>
->>>>> This has details about this. So I still stand by my point that this 
->>>>> should be in the drm_panel.
->>>>
->>>> Note, the driver doesn't use drm_panel directly. So 
->>>> slices_per_packet should go to mipi_dsi_device instead (which in 
->>>> turn can be filled from e.g. drm_panel or from any other source).
->>>
->>> This is a big question, where should we set those parameters ?
->>>
->>> It's an even bigger questions for panels optionally supporting DSC in 
->>> Video or Command mode (like the vtdr6130),
->>> how to select DSC or not ? DT is not an option.
->> Compressed vs uncompressed modes, maybe? Would be nice to make this
->> togglable from userspace.. But then it may not scale for panels with e.g.
->> 10 resolutions, all cmd/vid/dsc/nodsc
-> 
-> Currently the panel/panel-bridge make decision on command vs video mode. 
-> We have no way to influence that decision. If you want to make that 
-> negotiable, I'd start with adding 
-> 'cmd_supported/video_supported/dsc_supported' flags to struct 
-> mipi_dsi_hosts.
-> 
-
-Right. Isn't that issue there even today that if a panel supports DSC in 
-only one of the modes, we have no way to tell that as we have not 
-encountered such a panel in upstream yet.
-
-Also, fundamental question to folks who had panels requiring 
-slice_per_pkt as 2,
-
-if you had some panels which need a slice_per_pkt as 2, this support 
-could have been added even earlier by someone who had these panels even 
-in DSC 1.1.
-
-If these panels are not yet upstreamed, may i please know why this is 
-considered as a "breakage"? If they were working "somehow" due to 
-incorrect math / panel settings /  DPU calculations, unfortunately we 
-have to work towards bringing up these panels properly and upstreaming 
-them rather than saying "oh, these panels were working somehow and now 
-we need to keep it working".
-
->>
->>
->> Konrad
->>>
->>> Those should tied to a panel+controller tuple.
->>>
->>> Neil
->>>
->>>>
->>>>>
->>>>>>> +             */
->>>>>>> +            wc = msm_host->dsc->slice_chunk_size + 1;
->>>>>>>            dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
->>>>>>>                DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
->>>>>>>
->>>>>>
->>>>
->>>
-> 
+Won't bother either as that mask is gone a few patches later.
