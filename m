@@ -2,53 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBF16FC54F
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 574176FC553
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235524AbjEILp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 07:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
+        id S235537AbjEILsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 07:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjEILp4 (ORCPT
+        with ESMTP id S235106AbjEILsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 07:45:56 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B5C7AA8
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 04:45:39 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-76c27782e30so253092939f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 04:45:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683632738; x=1686224738;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fsV+Ehp2LFEKgTK/TdzkA6cLPGWuwVF/okEYxjGPFc0=;
-        b=VwnfYz/aL7KJfzpQKB36V8bcPLs2xBZc08X+8cwuJ5p/h2trtPjunmZAEL/215btoD
-         MXM4U75hZk/3JRlffDV63c3L8c96XexRPtyye359oLQkUGo3jOvDwG5pyp2ujyX75xsI
-         Me/KHItw+QPsJF2uSE3b6hOBTCGnUcd93u8COydVxd6TL/VHFV91RsqqviQxidftvFB3
-         rM529oj2rScYjt7g7pzbLUNFgX5kGurCAoMs46wFhOsjWJ+dMdkTrShkUkJQjq2pIgyS
-         HRPPQVaXsGGUyhwK7kLjTBis/nw8ZboWF3hjKlNS4/ZpYCwF6iBqhBB5weicBcoHAq8N
-         o6+w==
-X-Gm-Message-State: AC+VfDzB0ogBS6eqe3aIOl+cqk2U5g+izd//keya6ns/KC/jDf2Vkkc2
-        95cVDMQ4Kuy0QKNBB9d10PIBsq0qPnEO6OiIy0NZZ8cjcbU+
-X-Google-Smtp-Source: ACHHUZ5gbZ8CX98GibNZriIvANArpZ0LsBVgwvzKAFOlZVEdQdoAw3dF1zKkphNtN7qXvvk3qF+EhzOxbnp/+DrF+gtU7Ex3gHPv
+        Tue, 9 May 2023 07:48:04 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EC940EC;
+        Tue,  9 May 2023 04:48:02 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QFxFD6pnLzsR5R;
+        Tue,  9 May 2023 19:46:08 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 9 May 2023 19:48:00 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH net-next v1 1/2] net: introduce and use skb_frag_fill_page_desc()
+Date:   Tue, 9 May 2023 19:46:20 +0800
+Message-ID: <20230509114620.21058-1-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-Received: by 2002:a02:6344:0:b0:414:39cf:e6b6 with SMTP id
- j65-20020a026344000000b0041439cfe6b6mr1195535jac.0.1683632738284; Tue, 09 May
- 2023 04:45:38 -0700 (PDT)
-Date:   Tue, 09 May 2023 04:45:38 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004c3e6b05fb414be2@google.com>
-Subject: [syzbot] [ext4?] BUG: sleeping function called from invalid context
- in alloc_buffer_head
-From:   syzbot <syzbot+3c6cac1550288f8e7060@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,214 +45,471 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Most users use __skb_frag_set_page()/skb_frag_off_set()/
+skb_frag_size_set() to fill the page desc for a skb frag.
 
-syzbot found the following issue on:
+Introduce skb_frag_fill_page_desc() to do that.
 
-HEAD commit:    52025ebbb518 Add linux-next specific files for 20230508
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=10c27582280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d1f55a88ec660cdb
-dashboard link: https://syzkaller.appspot.com/bug?extid=3c6cac1550288f8e7060
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+net/bpf/test_run.c does not call skb_frag_off_set() to
+set the offset, "copy_from_user(page_address(page), ...)"
+suggest that it is assuming offset to be initialized as
+zero, so call skb_frag_fill_page_desc() with offset being
+zero for this case.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Also, skb_frag_set_page() is not used anymore, so remove
+it.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/912ed8ef786f/disk-52025ebb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d53b6c9decdc/vmlinux-52025ebb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/f0d8a6edd999/bzImage-52025ebb.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3c6cac1550288f8e7060@syzkaller.appspotmail.com
-
-BUG: sleeping function called from invalid context at include/linux/sched/mm.h:306
-in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 4439, name: syslogd
-preempt_count: 0, expected: 0
-RCU nest depth: 1, expected: 0
-2 locks held by syslogd/4439:
- #0: ffff888085665e00 (&type->i_mutex_dir_key#3){++++}-{3:3}, at: inode_lock_shared include/linux/fs.h:785 [inline]
- #0: ffff888085665e00 (&type->i_mutex_dir_key#3){++++}-{3:3}, at: lookup_slow fs/namei.c:1706 [inline]
- #0: ffff888085665e00 (&type->i_mutex_dir_key#3){++++}-{3:3}, at: walk_component+0x332/0x5a0 fs/namei.c:1998
- #1: ffffffff8c799800 (rcu_read_lock){....}-{1:2}, at: lru_gen_refault mm/workingset.c:293 [inline]
- #1: ffffffff8c799800 (rcu_read_lock){....}-{1:2}, at: workingset_refault+0x175/0x11e0 mm/workingset.c:528
-CPU: 1 PID: 4439 Comm: syslogd Not tainted 6.4.0-rc1-next-20230508-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
- __might_resched+0x358/0x580 kernel/sched/core.c:10153
- might_alloc include/linux/sched/mm.h:306 [inline]
- slab_pre_alloc_hook mm/slab.h:670 [inline]
- slab_alloc_node mm/slub.c:3433 [inline]
- slab_alloc mm/slub.c:3459 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3466 [inline]
- kmem_cache_alloc+0x357/0x3b0 mm/slub.c:3475
- kmem_cache_zalloc include/linux/slab.h:670 [inline]
- alloc_buffer_head+0x24/0x150 fs/buffer.c:3044
- folio_alloc_buffers+0x2f2/0x810 fs/buffer.c:941
- alloc_page_buffers fs/buffer.c:976 [inline]
- grow_dev_page fs/buffer.c:1084 [inline]
- grow_buffers fs/buffer.c:1130 [inline]
- __getblk_slow+0x612/0x1230 fs/buffer.c:1157
- __getblk_gfp+0x72/0x80 fs/buffer.c:1452
- sb_getblk include/linux/buffer_head.h:369 [inline]
- ext4_getblk+0x211/0x850 fs/ext4/inode.c:845
- ext4_bread_batch+0x82/0x500 fs/ext4/inode.c:912
- __ext4_find_entry+0x451/0x1050 fs/ext4/namei.c:1650
- ext4_lookup_entry fs/ext4/namei.c:1751 [inline]
- ext4_lookup fs/ext4/namei.c:1819 [inline]
- ext4_lookup+0x500/0x700 fs/ext4/namei.c:1810
- __lookup_slow+0x24c/0x460 fs/namei.c:1690
- lookup_slow fs/namei.c:1707 [inline]
- walk_component+0x33f/0x5a0 fs/namei.c:1998
- link_path_walk.part.0+0x74e/0xd60 fs/namei.c:2325
- link_path_walk fs/namei.c:2250 [inline]
- path_openat+0x25c/0x2750 fs/namei.c:3787
- do_filp_open+0x1ba/0x410 fs/namei.c:3818
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1356
- do_sys_open fs/open.c:1372 [inline]
- __do_sys_openat fs/open.c:1388 [inline]
- __se_sys_openat fs/open.c:1383 [inline]
- __x64_sys_openat+0x143/0x1f0 fs/open.c:1383
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f97344a89a4
-Code: 24 20 48 8d 44 24 30 48 89 44 24 28 64 8b 04 25 18 00 00 00 85 c0 75 2c 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 76 60 48 8b 15 55 a4 0d 00 f7 d8 64 89 02 48 83
-RSP: 002b:00007ffc296981d0 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 000055d433717910 RCX: 00007f97344a89a4
-RDX: 0000000000000d41 RSI: 00007f9734647443 RDI: 00000000ffffff9c
-RBP: 00007f9734647443 R08: 0000000000000001 R09: 0000000000000000
-R10: 00000000000001b6 R11: 0000000000000246 R12: 0000000000000d41
-R13: 000000006459d39e R14: 0000000000000005 R15: 000055d433717a60
- </TASK>
-BUG: sleeping function called from invalid context at include/linux/buffer_head.h:408
-in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 4439, name: syslogd
-preempt_count: 0, expected: 0
-RCU nest depth: 1, expected: 0
-2 locks held by syslogd/4439:
- #0: ffff888085665e00 (&type->i_mutex_dir_key#3){++++}-{3:3}, at: inode_lock_shared include/linux/fs.h:785 [inline]
- #0: ffff888085665e00 (&type->i_mutex_dir_key#3){++++}-{3:3}, at: lookup_slow fs/namei.c:1706 [inline]
- #0: ffff888085665e00 (&type->i_mutex_dir_key#3){++++}-{3:3}, at: walk_component+0x332/0x5a0 fs/namei.c:1998
- #1: ffffffff8c799800 (rcu_read_lock){....}-{1:2}, at: lru_gen_refault mm/workingset.c:293 [inline]
- #1: ffffffff8c799800 (rcu_read_lock){....}-{1:2}, at: workingset_refault+0x175/0x11e0 mm/workingset.c:528
-CPU: 1 PID: 4439 Comm: syslogd Tainted: G        W          6.4.0-rc1-next-20230508-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
- __might_resched+0x358/0x580 kernel/sched/core.c:10153
- lock_buffer include/linux/buffer_head.h:408 [inline]
- ext4_read_bh_lock+0x28/0xc0 fs/ext4/super.c:208
- ext4_bread_batch+0x2cc/0x500 fs/ext4/inode.c:923
- __ext4_find_entry+0x451/0x1050 fs/ext4/namei.c:1650
- ext4_lookup_entry fs/ext4/namei.c:1751 [inline]
- ext4_lookup fs/ext4/namei.c:1819 [inline]
- ext4_lookup+0x500/0x700 fs/ext4/namei.c:1810
- __lookup_slow+0x24c/0x460 fs/namei.c:1690
- lookup_slow fs/namei.c:1707 [inline]
- walk_component+0x33f/0x5a0 fs/namei.c:1998
- link_path_walk.part.0+0x74e/0xd60 fs/namei.c:2325
- link_path_walk fs/namei.c:2250 [inline]
- path_openat+0x25c/0x2750 fs/namei.c:3787
- do_filp_open+0x1ba/0x410 fs/namei.c:3818
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1356
- do_sys_open fs/open.c:1372 [inline]
- __do_sys_openat fs/open.c:1388 [inline]
- __se_sys_openat fs/open.c:1383 [inline]
- __x64_sys_openat+0x143/0x1f0 fs/open.c:1383
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f97344a89a4
-Code: 24 20 48 8d 44 24 30 48 89 44 24 28 64 8b 04 25 18 00 00 00 85 c0 75 2c 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 76 60 48 8b 15 55 a4 0d 00 f7 d8 64 89 02 48 83
-RSP: 002b:00007ffc296981d0 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 000055d433717910 RCX: 00007f97344a89a4
-RDX: 0000000000000d41 RSI: 00007f9734647443 RDI: 00000000ffffff9c
-RBP: 00007f9734647443 R08: 0000000000000001 R09: 0000000000000000
-R10: 00000000000001b6 R11: 0000000000000246 R12: 0000000000000d41
-R13: 000000006459d39e R14: 0000000000000005 R15: 000055d433717a60
- </TASK>
-------------[ cut here ]------------
-Voluntary context switch within RCU read-side critical section!
-WARNING: CPU: 0 PID: 4439 at kernel/rcu/tree_plugin.h:318 rcu_note_context_switch+0xbb9/0x1800 kernel/rcu/tree_plugin.h:318
-Modules linked in:
-CPU: 0 PID: 4439 Comm: syslogd Tainted: G        W          6.4.0-rc1-next-20230508-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:rcu_note_context_switch+0xbb9/0x1800 kernel/rcu/tree_plugin.h:318
-Code: 9d d0 67 00 4c 8b 4c 24 30 8b 4c 24 28 48 8b 54 24 20 e9 8f 03 00 00 48 c7 c7 e0 2f 4e 8a c6 05 19 97 f5 0c 01 e8 67 bb dc ff <0f> 0b e9 4c f5 ff ff 81 e5 ff ff ff 7f 0f 84 d7 f6 ff ff 65 48 8b
-RSP: 0018:ffffc9000312f210 EFLAGS: 00010086
-RAX: 0000000000000000 RBX: ffff8880b983d4c0 RCX: 0000000000000000
-RDX: ffff88806a4b1dc0 RSI: ffffffff814bf407 RDI: 0000000000000001
-RBP: ffff88806a4b1dc0 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 00000000000186c8 R12: 0000000000000000
-R13: ffff88806a4b1dc0 R14: ffffffff8e7abcf0 R15: ffff8880b983c5c0
-FS:  00007f9734354380(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007feeab7831b8 CR3: 000000002780a000 CR4: 00000000003506f0
-DR0: 00000000ffff070c DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __schedule+0x276/0x5790 kernel/sched/core.c:6569
- schedule+0xde/0x1a0 kernel/sched/core.c:6745
- io_schedule+0xbe/0x130 kernel/sched/core.c:8979
- bit_wait_io+0x16/0xe0 kernel/sched/wait_bit.c:209
- __wait_on_bit+0x64/0x180 kernel/sched/wait_bit.c:49
- out_of_line_wait_on_bit+0xd9/0x110 kernel/sched/wait_bit.c:64
- wait_on_bit_io include/linux/wait_bit.h:101 [inline]
- __wait_on_buffer+0x63/0x70 fs/buffer.c:123
- wait_on_buffer include/linux/buffer_head.h:398 [inline]
- __ext4_find_entry+0x590/0x1050 fs/ext4/namei.c:1660
- ext4_lookup_entry fs/ext4/namei.c:1751 [inline]
- ext4_lookup fs/ext4/namei.c:1819 [inline]
- ext4_lookup+0x500/0x700 fs/ext4/namei.c:1810
- __lookup_slow+0x24c/0x460 fs/namei.c:1690
- lookup_slow fs/namei.c:1707 [inline]
- walk_component+0x33f/0x5a0 fs/namei.c:1998
- link_path_walk.part.0+0x74e/0xd60 fs/namei.c:2325
- link_path_walk fs/namei.c:2250 [inline]
- path_openat+0x25c/0x2750 fs/namei.c:3787
- do_filp_open+0x1ba/0x410 fs/namei.c:3818
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1356
- do_sys_open fs/open.c:1372 [inline]
- __do_sys_openat fs/open.c:1388 [inline]
- __se_sys_openat fs/open.c:1383 [inline]
- __x64_sys_openat+0x143/0x1f0 fs/open.c:1383
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f97344a89a4
-Code: 24 20 48 8d 44 24 30 48 89 44 24 28 64 8b 04 25 18 00 00 00 85 c0 75 2c 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 76 60 48 8b 15 55 a4 0d 00 f7 d8 64 89 02 48 83
-RSP: 002b:00007ffc296981d0 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 000055d433717910 RCX: 00007f97344a89a4
-RDX: 0000000000000d41 RSI: 00007f9734647443 RDI: 00000000ffffff9c
-RBP: 00007f9734647443 R08: 0000000000000001 R09: 0000000000000000
-R10: 00000000000001b6 R11: 0000000000000246 R12: 0000000000000d41
-R13: 000000006459d39e R14: 0000000000000005 R15: 000055d433717a60
- </TASK>
-
-
+Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ .../net/ethernet/aquantia/atlantic/aq_ring.c  |  6 ++--
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  5 ++-
+ drivers/net/ethernet/chelsio/cxgb3/sge.c      |  5 ++-
+ drivers/net/ethernet/emulex/benet/be_main.c   | 32 ++++++++++---------
+ drivers/net/ethernet/freescale/enetc/enetc.c  |  5 ++-
+ .../net/ethernet/fungible/funeth/funeth_rx.c  |  5 ++-
+ drivers/net/ethernet/marvell/mvneta.c         |  5 ++-
+ .../net/ethernet/mellanox/mlx5/core/en_rx.c   |  4 +--
+ drivers/net/ethernet/sun/cassini.c            |  8 ++---
+ drivers/net/virtio_net.c                      |  4 +--
+ drivers/net/vmxnet3/vmxnet3_drv.c             |  4 +--
+ drivers/net/xen-netback/netback.c             |  4 +--
+ include/linux/skbuff.h                        | 27 ++++++----------
+ net/bpf/test_run.c                            |  3 +-
+ net/core/gro.c                                |  4 +--
+ net/core/pktgen.c                             | 13 +++++---
+ net/core/skbuff.c                             |  7 ++--
+ net/tls/tls_device.c                          | 10 +++---
+ net/xfrm/xfrm_ipcomp.c                        |  5 +--
+ 19 files changed, 64 insertions(+), 92 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
+index 7f933175cbda..4de22eed099a 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
+@@ -532,10 +532,10 @@ static bool aq_add_rx_fragment(struct device *dev,
+ 					      buff_->rxdata.pg_off,
+ 					      buff_->len,
+ 					      DMA_FROM_DEVICE);
+-		skb_frag_off_set(frag, buff_->rxdata.pg_off);
+-		skb_frag_size_set(frag, buff_->len);
+ 		sinfo->xdp_frags_size += buff_->len;
+-		__skb_frag_set_page(frag, buff_->rxdata.page);
++		skb_frag_fill_page_desc(frag, buff_->rxdata.page,
++					buff_->rxdata.pg_off,
++					buff_->len);
+ 
+ 		buff_->is_cleaned = 1;
+ 
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index dcd9367f05af..efaff5018af8 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -1085,9 +1085,8 @@ static u32 __bnxt_rx_agg_pages(struct bnxt *bp,
+ 			    RX_AGG_CMP_LEN) >> RX_AGG_CMP_LEN_SHIFT;
+ 
+ 		cons_rx_buf = &rxr->rx_agg_ring[cons];
+-		skb_frag_off_set(frag, cons_rx_buf->offset);
+-		skb_frag_size_set(frag, frag_len);
+-		__skb_frag_set_page(frag, cons_rx_buf->page);
++		skb_frag_fill_page_desc(frag, cons_rx_buf->page,
++					cons_rx_buf->offset, frag_len);
+ 		shinfo->nr_frags = i + 1;
+ 		__clear_bit(cons, rxr->rx_agg_bmap);
+ 
+diff --git a/drivers/net/ethernet/chelsio/cxgb3/sge.c b/drivers/net/ethernet/chelsio/cxgb3/sge.c
+index efa7f401529e..2e9a74fe0970 100644
+--- a/drivers/net/ethernet/chelsio/cxgb3/sge.c
++++ b/drivers/net/ethernet/chelsio/cxgb3/sge.c
+@@ -2184,9 +2184,8 @@ static void lro_add_page(struct adapter *adap, struct sge_qset *qs,
+ 	len -= offset;
+ 
+ 	rx_frag += nr_frags;
+-	__skb_frag_set_page(rx_frag, sd->pg_chunk.page);
+-	skb_frag_off_set(rx_frag, sd->pg_chunk.offset + offset);
+-	skb_frag_size_set(rx_frag, len);
++	skb_frag_fill_page_desc(rx_frag, sd->pg_chunk.page,
++				sd->pg_chunk.offset + offset, len);
+ 
+ 	skb->len += len;
+ 	skb->data_len += len;
+diff --git a/drivers/net/ethernet/emulex/benet/be_main.c b/drivers/net/ethernet/emulex/benet/be_main.c
+index 7e408bcc88de..3164ed205cf7 100644
+--- a/drivers/net/ethernet/emulex/benet/be_main.c
++++ b/drivers/net/ethernet/emulex/benet/be_main.c
+@@ -2343,11 +2343,10 @@ static void skb_fill_rx_data(struct be_rx_obj *rxo, struct sk_buff *skb,
+ 		hdr_len = ETH_HLEN;
+ 		memcpy(skb->data, start, hdr_len);
+ 		skb_shinfo(skb)->nr_frags = 1;
+-		skb_frag_set_page(skb, 0, page_info->page);
+-		skb_frag_off_set(&skb_shinfo(skb)->frags[0],
+-				 page_info->page_offset + hdr_len);
+-		skb_frag_size_set(&skb_shinfo(skb)->frags[0],
+-				  curr_frag_len - hdr_len);
++		skb_frag_fill_page_desc(&skb_shinfo(skb)->frags[0],
++					page_info->page,
++					page_info->page_offset + hdr_len,
++					curr_frag_len - hdr_len);
+ 		skb->data_len = curr_frag_len - hdr_len;
+ 		skb->truesize += rx_frag_size;
+ 		skb->tail += hdr_len;
+@@ -2369,16 +2368,17 @@ static void skb_fill_rx_data(struct be_rx_obj *rxo, struct sk_buff *skb,
+ 		if (page_info->page_offset == 0) {
+ 			/* Fresh page */
+ 			j++;
+-			skb_frag_set_page(skb, j, page_info->page);
+-			skb_frag_off_set(&skb_shinfo(skb)->frags[j],
+-					 page_info->page_offset);
+-			skb_frag_size_set(&skb_shinfo(skb)->frags[j], 0);
++			skb_frag_fill_page_desc(&skb_shinfo(skb)->frags[j],
++						page_info->page,
++						page_info->page_offset,
++						curr_frag_len);
+ 			skb_shinfo(skb)->nr_frags++;
+ 		} else {
+ 			put_page(page_info->page);
++			skb_frag_size_add(&skb_shinfo(skb)->frags[j],
++					  curr_frag_len);
+ 		}
+ 
+-		skb_frag_size_add(&skb_shinfo(skb)->frags[j], curr_frag_len);
+ 		skb->len += curr_frag_len;
+ 		skb->data_len += curr_frag_len;
+ 		skb->truesize += rx_frag_size;
+@@ -2451,14 +2451,16 @@ static void be_rx_compl_process_gro(struct be_rx_obj *rxo,
+ 		if (i == 0 || page_info->page_offset == 0) {
+ 			/* First frag or Fresh page */
+ 			j++;
+-			skb_frag_set_page(skb, j, page_info->page);
+-			skb_frag_off_set(&skb_shinfo(skb)->frags[j],
+-					 page_info->page_offset);
+-			skb_frag_size_set(&skb_shinfo(skb)->frags[j], 0);
++			skb_frag_fill_page_desc(&skb_shinfo(skb)->frags[j],
++						page_info->page,
++						page_info->page_offset,
++						curr_frag_len);
+ 		} else {
+ 			put_page(page_info->page);
++			skb_frag_size_add(&skb_shinfo(skb)->frags[j],
++					  curr_frag_len);
+ 		}
+-		skb_frag_size_add(&skb_shinfo(skb)->frags[j], curr_frag_len);
++
+ 		skb->truesize += rx_frag_size;
+ 		remaining -= curr_frag_len;
+ 		memset(page_info, 0, sizeof(*page_info));
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
+index 3c4fa26f0f9b..63854294ac33 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc.c
++++ b/drivers/net/ethernet/freescale/enetc/enetc.c
+@@ -1445,9 +1445,8 @@ static void enetc_add_rx_buff_to_xdp(struct enetc_bdr *rx_ring, int i,
+ 		xdp_buff_set_frag_pfmemalloc(xdp_buff);
+ 
+ 	frag = &shinfo->frags[shinfo->nr_frags];
+-	skb_frag_off_set(frag, rx_swbd->page_offset);
+-	skb_frag_size_set(frag, size);
+-	__skb_frag_set_page(frag, rx_swbd->page);
++	skb_frag_fill_page_desc(frag, rx_swbd->page, rx_swbd->page_offset,
++				size);
+ 
+ 	shinfo->nr_frags++;
+ }
+diff --git a/drivers/net/ethernet/fungible/funeth/funeth_rx.c b/drivers/net/ethernet/fungible/funeth/funeth_rx.c
+index 29a6c2ede43a..7e2584895de3 100644
+--- a/drivers/net/ethernet/fungible/funeth/funeth_rx.c
++++ b/drivers/net/ethernet/fungible/funeth/funeth_rx.c
+@@ -323,9 +323,8 @@ static int fun_gather_pkt(struct funeth_rxq *q, unsigned int tot_len,
+ 		if (ref_ok)
+ 			ref_ok |= buf->node;
+ 
+-		__skb_frag_set_page(frags, buf->page);
+-		skb_frag_off_set(frags, q->buf_offset);
+-		skb_frag_size_set(frags++, frag_len);
++		skb_frag_fill_page_desc(frags++, buf->page, q->buf_offset,
++					frag_len);
+ 
+ 		tot_len -= frag_len;
+ 		if (!tot_len)
+diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
+index 2cad76d0a50e..01b0312977d6 100644
+--- a/drivers/net/ethernet/marvell/mvneta.c
++++ b/drivers/net/ethernet/marvell/mvneta.c
+@@ -2369,9 +2369,8 @@ mvneta_swbm_add_rx_fragment(struct mvneta_port *pp,
+ 	if (data_len > 0 && sinfo->nr_frags < MAX_SKB_FRAGS) {
+ 		skb_frag_t *frag = &sinfo->frags[sinfo->nr_frags++];
+ 
+-		skb_frag_off_set(frag, pp->rx_offset_correction);
+-		skb_frag_size_set(frag, data_len);
+-		__skb_frag_set_page(frag, page);
++		skb_frag_fill_page_desc(frag, page,
++					pp->rx_offset_correction, data_len);
+ 
+ 		if (!xdp_buff_has_frags(xdp)) {
+ 			sinfo->xdp_frags_size = *size;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+index 69634829558e..704b022cd1f0 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+@@ -491,9 +491,7 @@ mlx5e_add_skb_shared_info_frag(struct mlx5e_rq *rq, struct skb_shared_info *sinf
+ 	}
+ 
+ 	frag = &sinfo->frags[sinfo->nr_frags++];
+-	__skb_frag_set_page(frag, frag_page->page);
+-	skb_frag_off_set(frag, frag_offset);
+-	skb_frag_size_set(frag, len);
++	skb_frag_fill_page_desc(frag, frag_page->page, frag_offset, len);
+ 
+ 	if (page_is_pfmemalloc(frag_page->page))
+ 		xdp_buff_set_frag_pfmemalloc(xdp);
+diff --git a/drivers/net/ethernet/sun/cassini.c b/drivers/net/ethernet/sun/cassini.c
+index 4ef05bad4613..2d52f54ebb45 100644
+--- a/drivers/net/ethernet/sun/cassini.c
++++ b/drivers/net/ethernet/sun/cassini.c
+@@ -1998,10 +1998,8 @@ static int cas_rx_process_pkt(struct cas *cp, struct cas_rx_comp *rxc,
+ 		skb->truesize += hlen - swivel;
+ 		skb->len      += hlen - swivel;
+ 
+-		__skb_frag_set_page(frag, page->buffer);
++		skb_frag_fill_page_desc(frag, page->buffer, off, hlen - swivel);
+ 		__skb_frag_ref(frag);
+-		skb_frag_off_set(frag, off);
+-		skb_frag_size_set(frag, hlen - swivel);
+ 
+ 		/* any more data? */
+ 		if ((words[0] & RX_COMP1_SPLIT_PKT) && ((dlen -= hlen) > 0)) {
+@@ -2024,10 +2022,8 @@ static int cas_rx_process_pkt(struct cas *cp, struct cas_rx_comp *rxc,
+ 			skb->len      += hlen;
+ 			frag++;
+ 
+-			__skb_frag_set_page(frag, page->buffer);
++			skb_frag_fill_page_desc(frag, page->buffer, 0, hlen);
+ 			__skb_frag_ref(frag);
+-			skb_frag_off_set(frag, 0);
+-			skb_frag_size_set(frag, hlen);
+ 			RX_USED_ADD(page, hlen + cp->crc_size);
+ 		}
+ 
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 8d8038538fc4..b4c0d1acb3ae 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -1153,9 +1153,7 @@ static int virtnet_build_xdp_buff_mrg(struct net_device *dev,
+ 		}
+ 
+ 		frag = &shinfo->frags[shinfo->nr_frags++];
+-		__skb_frag_set_page(frag, page);
+-		skb_frag_off_set(frag, offset);
+-		skb_frag_size_set(frag, len);
++		skb_frag_fill_page_desc(frag, page, offset, len);
+ 		if (page_is_pfmemalloc(page))
+ 			xdp_buff_set_frag_pfmemalloc(xdp);
+ 
+diff --git a/drivers/net/vmxnet3/vmxnet3_drv.c b/drivers/net/vmxnet3/vmxnet3_drv.c
+index f2b76ee866a4..7fa74b8b2100 100644
+--- a/drivers/net/vmxnet3/vmxnet3_drv.c
++++ b/drivers/net/vmxnet3/vmxnet3_drv.c
+@@ -686,9 +686,7 @@ vmxnet3_append_frag(struct sk_buff *skb, struct Vmxnet3_RxCompDesc *rcd,
+ 
+ 	BUG_ON(skb_shinfo(skb)->nr_frags >= MAX_SKB_FRAGS);
+ 
+-	__skb_frag_set_page(frag, rbi->page);
+-	skb_frag_off_set(frag, 0);
+-	skb_frag_size_set(frag, rcd->len);
++	skb_frag_fill_page_desc(frag, rbi->page, 0, rcd->len);
+ 	skb->data_len += rcd->len;
+ 	skb->truesize += PAGE_SIZE;
+ 	skb_shinfo(skb)->nr_frags++;
+diff --git a/drivers/net/xen-netback/netback.c b/drivers/net/xen-netback/netback.c
+index c1501f41e2d8..3d79b35eb577 100644
+--- a/drivers/net/xen-netback/netback.c
++++ b/drivers/net/xen-netback/netback.c
+@@ -1128,9 +1128,7 @@ static int xenvif_handle_frag_list(struct xenvif_queue *queue, struct sk_buff *s
+ 			BUG();
+ 
+ 		offset += len;
+-		__skb_frag_set_page(&frags[i], page);
+-		skb_frag_off_set(&frags[i], 0);
+-		skb_frag_size_set(&frags[i], len);
++		skb_frag_fill_page_desc(&frags[i], page, 0, len);
+ 	}
+ 
+ 	/* Release all the original (foreign) frags. */
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 738776ab8838..30be21c7d05f 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -2411,6 +2411,15 @@ static inline unsigned int skb_pagelen(const struct sk_buff *skb)
+ 	return skb_headlen(skb) + __skb_pagelen(skb);
+ }
+ 
++static inline void skb_frag_fill_page_desc(skb_frag_t *frag,
++					   struct page *page,
++					   int off, int size)
++{
++	frag->bv_page = page;
++	frag->bv_offset = off;
++	skb_frag_size_set(frag, size);
++}
++
+ static inline void __skb_fill_page_desc_noacc(struct skb_shared_info *shinfo,
+ 					      int i, struct page *page,
+ 					      int off, int size)
+@@ -2422,9 +2431,7 @@ static inline void __skb_fill_page_desc_noacc(struct skb_shared_info *shinfo,
+ 	 * that not all callers have unique ownership of the page but rely
+ 	 * on page_is_pfmemalloc doing the right thing(tm).
+ 	 */
+-	frag->bv_page		  = page;
+-	frag->bv_offset		  = off;
+-	skb_frag_size_set(frag, size);
++	skb_frag_fill_page_desc(frag, page, off, size);
+ }
+ 
+ /**
+@@ -3496,20 +3503,6 @@ static inline void __skb_frag_set_page(skb_frag_t *frag, struct page *page)
+ 	frag->bv_page = page;
+ }
+ 
+-/**
+- * skb_frag_set_page - sets the page contained in a paged fragment of an skb
+- * @skb: the buffer
+- * @f: the fragment offset
+- * @page: the page to set
+- *
+- * Sets the @f'th fragment of @skb to contain @page.
+- */
+-static inline void skb_frag_set_page(struct sk_buff *skb, int f,
+-				     struct page *page)
+-{
+-	__skb_frag_set_page(&skb_shinfo(skb)->frags[f], page);
+-}
+-
+ bool skb_page_frag_refill(unsigned int sz, struct page_frag *pfrag, gfp_t prio);
+ 
+ /**
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index e79e3a415ca9..98143b86a9dd 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -1415,11 +1415,10 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 			}
+ 
+ 			frag = &sinfo->frags[sinfo->nr_frags++];
+-			__skb_frag_set_page(frag, page);
+ 
+ 			data_len = min_t(u32, kattr->test.data_size_in - size,
+ 					 PAGE_SIZE);
+-			skb_frag_size_set(frag, data_len);
++			skb_frag_fill_page_desc(frag, page, 0, data_len);
+ 
+ 			if (copy_from_user(page_address(page), data_in + size,
+ 					   data_len)) {
+diff --git a/net/core/gro.c b/net/core/gro.c
+index 2d84165cb4f1..6783a47a6136 100644
+--- a/net/core/gro.c
++++ b/net/core/gro.c
+@@ -239,9 +239,7 @@ int skb_gro_receive(struct sk_buff *p, struct sk_buff *skb)
+ 
+ 		pinfo->nr_frags = nr_frags + 1 + skbinfo->nr_frags;
+ 
+-		__skb_frag_set_page(frag, page);
+-		skb_frag_off_set(frag, first_offset);
+-		skb_frag_size_set(frag, first_size);
++		skb_frag_fill_page_desc(frag, page, first_offset, first_size);
+ 
+ 		memcpy(frag + 1, skbinfo->frags, sizeof(*frag) * skbinfo->nr_frags);
+ 		/* We dont need to clear skbinfo->nr_frags here */
+diff --git a/net/core/pktgen.c b/net/core/pktgen.c
+index 760238196db1..f56b8d697014 100644
+--- a/net/core/pktgen.c
++++ b/net/core/pktgen.c
+@@ -2785,14 +2785,17 @@ static void pktgen_finalize_skb(struct pktgen_dev *pkt_dev, struct sk_buff *skb,
+ 					break;
+ 			}
+ 			get_page(pkt_dev->page);
+-			skb_frag_set_page(skb, i, pkt_dev->page);
+-			skb_frag_off_set(&skb_shinfo(skb)->frags[i], 0);
++
+ 			/*last fragment, fill rest of data*/
+ 			if (i == (frags - 1))
+-				skb_frag_size_set(&skb_shinfo(skb)->frags[i],
+-				    (datalen < PAGE_SIZE ? datalen : PAGE_SIZE));
++				skb_frag_fill_page_desc(&skb_shinfo(skb)->frags[i],
++							pkt_dev->page, 0,
++							(datalen < PAGE_SIZE ?
++							 datalen : PAGE_SIZE));
+ 			else
+-				skb_frag_size_set(&skb_shinfo(skb)->frags[i], frag_len);
++				skb_frag_fill_page_desc(&skb_shinfo(skb)->frags[i],
++							pkt_dev->page, 0, frag_len);
++
+ 			datalen -= skb_frag_size(&skb_shinfo(skb)->frags[i]);
+ 			skb->len += skb_frag_size(&skb_shinfo(skb)->frags[i]);
+ 			skb->data_len += skb_frag_size(&skb_shinfo(skb)->frags[i]);
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 2112146092bf..06a94cb50945 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -4241,10 +4241,9 @@ static inline skb_frag_t skb_head_frag_to_page_desc(struct sk_buff *frag_skb)
+ 	struct page *page;
+ 
+ 	page = virt_to_head_page(frag_skb->head);
+-	__skb_frag_set_page(&head_frag, page);
+-	skb_frag_off_set(&head_frag, frag_skb->data -
+-			 (unsigned char *)page_address(page));
+-	skb_frag_size_set(&head_frag, skb_headlen(frag_skb));
++	skb_frag_fill_page_desc(&head_frag, page, frag_skb->data -
++				(unsigned char *)page_address(page),
++				skb_headlen(frag_skb));
+ 	return head_frag;
+ }
+ 
+diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
+index a7cc4f9faac2..daeff54bdbfa 100644
+--- a/net/tls/tls_device.c
++++ b/net/tls/tls_device.c
+@@ -268,9 +268,8 @@ static void tls_append_frag(struct tls_record_info *record,
+ 		skb_frag_size_add(frag, size);
+ 	} else {
+ 		++frag;
+-		__skb_frag_set_page(frag, pfrag->page);
+-		skb_frag_off_set(frag, pfrag->offset);
+-		skb_frag_size_set(frag, size);
++		skb_frag_fill_page_desc(frag, pfrag->page, pfrag->offset,
++					size);
+ 		++record->num_frags;
+ 		get_page(pfrag->page);
+ 	}
+@@ -357,9 +356,8 @@ static int tls_create_new_record(struct tls_offload_context_tx *offload_ctx,
+ 		return -ENOMEM;
+ 
+ 	frag = &record->frags[0];
+-	__skb_frag_set_page(frag, pfrag->page);
+-	skb_frag_off_set(frag, pfrag->offset);
+-	skb_frag_size_set(frag, prepend_size);
++	skb_frag_fill_page_desc(frag, pfrag->page, pfrag->offset,
++				prepend_size);
+ 
+ 	get_page(pfrag->page);
+ 	pfrag->offset += prepend_size;
+diff --git a/net/xfrm/xfrm_ipcomp.c b/net/xfrm/xfrm_ipcomp.c
+index 80143360bf09..9c0fa0e1786a 100644
+--- a/net/xfrm/xfrm_ipcomp.c
++++ b/net/xfrm/xfrm_ipcomp.c
+@@ -74,14 +74,11 @@ static int ipcomp_decompress(struct xfrm_state *x, struct sk_buff *skb)
+ 		if (!page)
+ 			return -ENOMEM;
+ 
+-		__skb_frag_set_page(frag, page);
+-
+ 		len = PAGE_SIZE;
+ 		if (dlen < len)
+ 			len = dlen;
+ 
+-		skb_frag_off_set(frag, 0);
+-		skb_frag_size_set(frag, len);
++		skb_frag_fill_page_desc(frag, page, 0, len);
+ 		memcpy(skb_frag_address(frag), scratch, len);
+ 
+ 		skb->truesize += len;
+-- 
+2.33.0
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
