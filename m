@@ -2,266 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68666FCF9A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F906FCF9D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235005AbjEIUft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 16:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
+        id S235111AbjEIUf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 16:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjEIUfq (ORCPT
+        with ESMTP id S234572AbjEIUfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 16:35:46 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCE640E0
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 13:35:45 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50c8d87c775so8263022a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 13:35:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=froggi.es; s=google; t=1683664543; x=1686256543;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CFfrBbjzveV/cBxnUtQTwzuCz8zfeuU2uWdukPGw3Is=;
-        b=jIYBQGMgFny7p3ungWiWv+xPBl57NAvyzUPp2H7NLs3TDYl70SKBjkhEQkk3xkopyO
-         pF8iWh+eZZguENizEUUVKYiXNGbo/HxypkfEISe95lPPYabeCa6bA4ZOuxEJ93r4ss1e
-         +umekLDgYFRTIMO6lfg149vTknUGZL1fWxwFlRcblqoIjIQkGQFp3YDOpMtgnPVf54C0
-         1U60pTHiaRVTsEwN6YGrPXVyYGw8PxstCB0u587wmZDq9ji3cf1gASCOhy/qwZfFrUQF
-         JsVDhlOBgP0sVMELfXebXlsNOSAo4vL2bX3fvEc9avEZONzUUQ7qhT4lip4ABeMwnOqS
-         NI5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683664543; x=1686256543;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CFfrBbjzveV/cBxnUtQTwzuCz8zfeuU2uWdukPGw3Is=;
-        b=VK/3AvjQZVucFzdD+WkoOxhZ7cdKv2Em8gv95W8TyJhrpYw3rdm0r0WZ+EXgO4/EDZ
-         Sw7K8elGa7dZE3H3oxFMkfimLHwapcbclIRNU4wA+t1hY6n5itzdQROmSd4FkjCnWZR0
-         3l6We0Q1x35CcWm2LpiKUcixCxCRbmWOo6tuGruagdGJuBOQX26bAzzNOXMyiTRENNWE
-         dAtWGLX0eN15SJ4xRIDdjvcF1LN7AA46FhdPn0j+tuSVpZnNR5x1LcBqemTW05fbXWGH
-         4ze6PPpJKHIM9nuYIwUr0hPDjkug+aDpN565CAU0/gtomTLcXhp+0KMW5BlhbtySSRPF
-         rOOw==
-X-Gm-Message-State: AC+VfDx6UhvsOfUyX9hokkc/6K6QwCjZY5E0/1wrLPV9X6D4240QDPri
-        tN7qY87rNbUmDN2r9so2gRx6+bIESgHwaUKmQ745sA==
-X-Google-Smtp-Source: ACHHUZ5ssNFjjC91vl7fil11M8Y5BDUhoaCdAiVNKZQpngVt33eZ6X9YZi3Ipa+RwcM2OJVdNZVBJ42tP1DYUz6gVB0=
-X-Received: by 2002:a05:6402:1a48:b0:50b:c3bf:c9ef with SMTP id
- bf8-20020a0564021a4800b0050bc3bfc9efmr13304021edb.40.1683664543662; Tue, 09
- May 2023 13:35:43 -0700 (PDT)
+        Tue, 9 May 2023 16:35:54 -0400
+Received: from out-36.mta0.migadu.com (out-36.mta0.migadu.com [91.218.175.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBC04C3E
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 13:35:51 -0700 (PDT)
+Date:   Tue, 9 May 2023 16:35:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683664550;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bOLU3sapllcewNBR7FzZE4kRKHtulEGc3tuPC3AF1dw=;
+        b=U8bcUVvotaRPyRRACFPnRTRwvPS3y5ur307IdPdCCWvv/UwWw7OvkRF5cbgs6N3lhpYgze
+        TrAoI+TVLgb0XR9foD0b810kH+b9S30Jf10Gm+3xJnpN8nlqTqJqHhGPlW/pNq0DDTZe9P
+        mUpbKetA3FAX/6MKkBpPLhT0lZ6E1d8=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH 03/32] locking/lockdep: lockdep_set_no_check_recursion()
+Message-ID: <ZFquoxJn1RzWhRiI@moria.home.lan>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-4-kent.overstreet@linux.dev>
+ <20230509193147.GC2148518@hirez.programming.kicks-ass.net>
+ <ZFqqsyDpatgb77Vh@moria.home.lan>
+ <d5b65b01-62a9-e483-dea8-5e2bb65be278@redhat.com>
 MIME-Version: 1.0
-References: <20230423141051.702990-1-mwen@igalia.com> <20230423141051.702990-13-mwen@igalia.com>
- <5bbd49b6-ad09-607f-521d-96f9d8eb3b20@amd.com> <20230509163701.57lf22phumicqv37@mail.igalia.com>
- <CAEZNXZAfq_6EZHBhBXjMPwOuU10rwKe3SPJpz1hetux=HRF4CQ@mail.gmail.com> <fc308aca-4ecf-7db9-3491-9ede18ee5562@amd.com>
-In-Reply-To: <fc308aca-4ecf-7db9-3491-9ede18ee5562@amd.com>
-From:   Joshua Ashton <joshua@froggi.es>
-Date:   Tue, 9 May 2023 20:35:32 +0000
-Message-ID: <CAEZNXZAFjn2zOEr33qZvEC5h-P4OowJ7sB8MVhBHAzntXBDgjw@mail.gmail.com>
-Subject: Re: [RFC PATCH 12/40] drm/amd/display: add plane HDR multiplier
- driver-private property
-To:     Harry Wentland <harry.wentland@amd.com>
-Cc:     Melissa Wen <mwen@igalia.com>, amd-gfx@lists.freedesktop.org,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        sunpeng.li@amd.com, Alex Deucher <alexander.deucher@amd.com>,
-        dri-devel@lists.freedesktop.org, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        Sebastian Wick <sebastian.wick@redhat.com>,
-        Xaver Hugl <xaver.hugl@gmail.com>,
-        Shashank Sharma <Shashank.Sharma@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        sungjoon.kim@amd.com, Alex Hung <alex.hung@amd.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d5b65b01-62a9-e483-dea8-5e2bb65be278@redhat.com>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FWIW, we technically do use it right now, but it is always set to 1 in S.31.32.
+On Tue, May 09, 2023 at 04:27:46PM -0400, Waiman Long wrote:
+> 
+> On 5/9/23 16:18, Kent Overstreet wrote:
+> > On Tue, May 09, 2023 at 09:31:47PM +0200, Peter Zijlstra wrote:
+> > > On Tue, May 09, 2023 at 12:56:28PM -0400, Kent Overstreet wrote:
+> > > > This adds a method to tell lockdep not to check lock ordering within a
+> > > > lock class - but to still check lock ordering w.r.t. other lock types.
+> > > > 
+> > > > This is for bcachefs, where for btree node locks we have our own
+> > > > deadlock avoidance strategy w.r.t. other btree node locks (cycle
+> > > > detection), but we still want lockdep to check lock ordering w.r.t.
+> > > > other lock types.
+> > > > 
+> > > ISTR you had a much nicer version of this where you gave a custom order
+> > > function -- what happend to that?
+> > Actually, I spoke too soon; this patch and the other series with the
+> > comparison function solve different problems.
+> > 
+> > For bcachefs btree node locks, we don't have a defined lock ordering at
+> > all - we do full runtime cycle detection, so we don't want lockdep
+> > checking for self deadlock because we're handling that but we _do_ want
+> > lockdep checking lock ordering of btree node locks w.r.t. other locks in
+> > the system.
+> 
+> Maybe you can use lock_set_novalidate_class() instead.
 
-Before we used shaper + 3D LUT we did use it for scaling SDR content,
-but given we always have a shaper + 3D LUT it made sense for us to
-roll that into there.
-
-On Tue, 9 May 2023 at 20:00, Harry Wentland <harry.wentland@amd.com> wrote:
->
-> On 5/9/23 12:54, Joshua Ashton wrote:
-> > We currently do not have a use for this as we settled on per-plane 3D
-> > LUT + Shaper, but we might end up wanting to use in our scRGB stack
-> > someday so I would like to keep it.
-> >
->
-> uAPI should always have a userspace that uses it. But if we go
-> and put it behind an #ifdef anyways I don't mind taking this
-> if we foresee use for it in the near future. A gamescope experiment
-> showing how this can be used to scale sRGB planes would be great.
-> I assume that's sort of how you intend to use it.
->
-> Harry
->
-> > On Tue, 9 May 2023 at 16:37, Melissa Wen <mwen@igalia.com> wrote:
-> >>
-> >> On 05/08, Harry Wentland wrote:
-> >>>
-> >>>
-> >>> On 4/23/23 10:10, Melissa Wen wrote:
-> >>>> From: Joshua Ashton <joshua@froggi.es>
-> >>>>
-> >>>> Multiplier to 'gain' the plane. When PQ is decoded using the fixed func
-> >>>> transfer function to the internal FP16 fb, 1.0 -> 80 nits (on AMD at
-> >>>> least) When sRGB is decoded, 1.0 -> 1.0.  Therefore, 1.0 multiplier = 80
-> >>>> nits for SDR content. So if you want, 203 nits for SDR content, pass in
-> >>>> (203.0 / 80.0).
-> >>>>
-> >>>
-> >>> Is gamescope intending to use this?
-> >>
-> >> I don't think so. Again, I'll double check and drop it accordingly.
-> >>
-> >> Melissa
-> >>
-> >>>
-> >>> Harry
-> >>>
-> >>>> Co-developed-by: Melissa Wen <mwen@igalia.com>
-> >>>> Signed-off-by: Melissa Wen <mwen@igalia.com>
-> >>>> Signed-off-by: Joshua Ashton <joshua@froggi.es>
-> >>>> ---
-> >>>>  drivers/gpu/drm/amd/amdgpu/amdgpu_display.c   |  6 +++++
-> >>>>  drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h      |  4 +++
-> >>>>  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h | 12 +++++++++
-> >>>>  .../amd/display/amdgpu_dm/amdgpu_dm_plane.c   | 25 ++++++++++++++-----
-> >>>>  4 files changed, 41 insertions(+), 6 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-> >>>> index 24595906dab1..dd658f162f6f 100644
-> >>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-> >>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-> >>>> @@ -1326,6 +1326,12 @@ amdgpu_display_create_color_properties(struct amdgpu_device *adev)
-> >>>>             return -ENOMEM;
-> >>>>     adev->mode_info.plane_degamma_tf_property = prop;
-> >>>>
-> >>>> +   prop = drm_property_create_range(adev_to_drm(adev),
-> >>>> +                                    0, "AMD_PLANE_HDR_MULT", 0, UINT_MAX);
-> >>>> +   if (!prop)
-> >>>> +           return -ENOMEM;
-> >>>> +   adev->mode_info.plane_hdr_mult_property = prop;
-> >>>> +
-> >>>>     return 0;
-> >>>>  }
-> >>>>  #endif
-> >>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
-> >>>> index ab9ce6f26c90..65a9d62ffbe4 100644
-> >>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
-> >>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
-> >>>> @@ -387,6 +387,10 @@ struct amdgpu_mode_info {
-> >>>>      * linearize content with or without LUT.
-> >>>>      */
-> >>>>     struct drm_property *plane_degamma_tf_property;
-> >>>> +   /**
-> >>>> +    * @plane_hdr_mult_property:
-> >>>> +    */
-> >>>> +   struct drm_property *plane_hdr_mult_property;
-> >>>>  #endif
-> >>>>  };
-> >>>>
-> >>>> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h
-> >>>> index 005632c1c9ec..bb7307b9cfd5 100644
-> >>>> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h
-> >>>> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h
-> >>>> @@ -51,6 +51,7 @@
-> >>>>
-> >>>>  #define AMDGPU_DMUB_NOTIFICATION_MAX 5
-> >>>>
-> >>>> +#define AMDGPU_HDR_MULT_DEFAULT (0x100000000LL)
-> >>>>  /*
-> >>>>  #include "include/amdgpu_dal_power_if.h"
-> >>>>  #include "amdgpu_dm_irq.h"
-> >>>> @@ -736,6 +737,17 @@ struct dm_plane_state {
-> >>>>      * linearize.
-> >>>>      */
-> >>>>     enum drm_transfer_function degamma_tf;
-> >>>> +   /**
-> >>>> +    * @hdr_mult:
-> >>>> +    *
-> >>>> +    * Multiplier to 'gain' the plane.  When PQ is decoded using the fixed
-> >>>> +    * func transfer function to the internal FP16 fb, 1.0 -> 80 nits (on
-> >>>> +    * AMD at least). When sRGB is decoded, 1.0 -> 1.0, obviously.
-> >>>> +    * Therefore, 1.0 multiplier = 80 nits for SDR content.  So if you
-> >>>> +    * want, 203 nits for SDR content, pass in (203.0 / 80.0).  Format is
-> >>>> +    * S31.32 sign-magnitude.
-> >>>> +    */
-> >>>> +   __u64 hdr_mult;
-> >>>>  #endif
-> >>>>  };
-> >>>>
-> >>>> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
-> >>>> index 5b458cc0781c..57169dae8b3d 100644
-> >>>> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
-> >>>> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
-> >>>> @@ -1321,8 +1321,10 @@ static void dm_drm_plane_reset(struct drm_plane *plane)
-> >>>>             __drm_atomic_helper_plane_reset(plane, &amdgpu_state->base);
-> >>>>
-> >>>>  #ifdef CONFIG_STEAM_DECK
-> >>>> -   if (amdgpu_state)
-> >>>> +   if (amdgpu_state) {
-> >>>>             amdgpu_state->degamma_tf = DRM_TRANSFER_FUNCTION_DEFAULT;
-> >>>> +           amdgpu_state->hdr_mult = AMDGPU_HDR_MULT_DEFAULT;
-> >>>> +   }
-> >>>>  #endif
-> >>>>  }
-> >>>>
-> >>>> @@ -1424,11 +1426,11 @@ static void dm_drm_plane_destroy_state(struct drm_plane *plane,
-> >>>>  #ifdef CONFIG_STEAM_DECK
-> >>>>  int
-> >>>>  amdgpu_dm_replace_property_blob_from_id(struct drm_device *dev,
-> >>>> -                                          struct drm_property_blob **blob,
-> >>>> -                                          uint64_t blob_id,
-> >>>> -                                          ssize_t expected_size,
-> >>>> -                                          ssize_t expected_elem_size,
-> >>>> -                                          bool *replaced)
-> >>>> +                                   struct drm_property_blob **blob,
-> >>>> +                                   uint64_t blob_id,
-> >>>> +                                   ssize_t expected_size,
-> >>>> +                                   ssize_t expected_elem_size,
-> >>>> +                                   bool *replaced)
-> >>>>  {
-> >>>>     struct drm_property_blob *new_blob = NULL;
-> >>>>
-> >>>> @@ -1482,6 +1484,10 @@ dm_plane_attach_color_mgmt_properties(struct amdgpu_display_manager *dm,
-> >>>>                                        dm->adev->mode_info.plane_degamma_tf_property,
-> >>>>                                        DRM_TRANSFER_FUNCTION_DEFAULT);
-> >>>>     }
-> >>>> +   /* HDR MULT is always available */
-> >>>> +   drm_object_attach_property(&plane->base,
-> >>>> +                              dm->adev->mode_info.plane_hdr_mult_property,
-> >>>> +                              AMDGPU_HDR_MULT_DEFAULT);
-> >>>>  }
-> >>>>
-> >>>>  static int
-> >>>> @@ -1507,6 +1513,11 @@ dm_atomic_plane_set_property(struct drm_plane *plane,
-> >>>>                     dm_plane_state->degamma_tf = val;
-> >>>>                     dm_plane_state->base.color_mgmt_changed = 1;
-> >>>>             }
-> >>>> +   } else if (property == adev->mode_info.plane_hdr_mult_property) {
-> >>>> +           if (dm_plane_state->hdr_mult != val) {
-> >>>> +                   dm_plane_state->hdr_mult = val;
-> >>>> +                   dm_plane_state->base.color_mgmt_changed = 1;
-> >>>> +           }
-> >>>>     } else {
-> >>>>             drm_dbg_atomic(plane->dev,
-> >>>>                            "[PLANE:%d:%s] unknown property [PROP:%d:%s]]\n",
-> >>>> @@ -1533,6 +1544,8 @@ dm_atomic_plane_get_property(struct drm_plane *plane,
-> >>>>                     dm_plane_state->degamma_lut->base.id : 0;
-> >>>>     } else if (property == adev->mode_info.plane_degamma_tf_property) {
-> >>>>             *val = dm_plane_state->degamma_tf;
-> >>>> +   } else if (property == adev->mode_info.plane_hdr_mult_property) {
-> >>>> +           *val = dm_plane_state->hdr_mult;
-> >>>>     } else {
-> >>>>             return -EINVAL;
-> >>>>     }
-> >>>
-> >>>
->
+No, we want that to go away, this is the replacement.
