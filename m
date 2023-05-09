@@ -2,60 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F796FBF81
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B976FBF83
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235013AbjEIGqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 02:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
+        id S235017AbjEIGrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 02:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235071AbjEIGqe (ORCPT
+        with ESMTP id S235061AbjEIGqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 02:46:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C349F19B1
-        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 23:46:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 9 May 2023 02:46:51 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9797530F5
+        for <linux-kernel@vger.kernel.org>; Mon,  8 May 2023 23:46:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 611E462A94
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 06:46:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C032C433EF;
-        Tue,  9 May 2023 06:46:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683614792;
-        bh=wLct1GIrBzmusyn7tpdRRrCtoSUnA5Mtanl3erWwjsU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KYGiL1hJTtkcNwiDVZihNcZxnZqffPgwVH4PXfAptpqKfALqiwqpjJd2HmZc3qA4w
-         uOXIsmGdZCb/t30uRDlYRI5Ne1A6EzLwJsK5gUKaZSbWx+0KyQMDaENrugjjpLR4yz
-         QFUZBJcAlRsiYWrGhcIKy67HxPqfyICxTEo5qwALXsWrsDDexcNk3m6jNyBTEnuG5m
-         3IT92DXLBK4XxeIthvnKc3PMXhBzFQWVpxvociUUTGmxsKkloXoWeOFZYs1xH3TC0r
-         X+pxnquOwpxU1rOQ38Cy9OquLiZzFyCI1SdiKwb+fyH/oDCPWJJ4FHag6WiC/H6v1T
-         Khnpr8TxcP4Lg==
-Date:   Tue, 9 May 2023 15:46:28 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2842C1FD5E;
+        Tue,  9 May 2023 06:46:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683614809; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WRMNHZPbYbrdt2F83wyb0od7K5lWumJsyKttfUv0Jlo=;
+        b=0wibozWlVy9JOruhL3jhkImW1N4jPbEBqsR3WDPvn7yt6bcfUHDy3LNc8AsTrZqiIFQU7P
+        c3RCQoYBFkOEaHQjMPQi9gT3UWrD27sGPmYiLvGhOgmUmb+6CBLuKUZRuS8/8SgWeNmWpI
+        AKrdZJg96wvPVIjv6rZ/KXvIzFsotrc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683614809;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WRMNHZPbYbrdt2F83wyb0od7K5lWumJsyKttfUv0Jlo=;
+        b=vr6yJPq3yl9Of2fgqXO/V1x4SPo8rGhMoSED+FUZLPzde3gqW8oLWOfWxYYcxs7ueeGwb/
+        1DRr8Gq3AhkWZwDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EA271139B3;
+        Tue,  9 May 2023 06:46:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RWZHOFjsWWReEgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 09 May 2023 06:46:48 +0000
+Date:   Tue, 09 May 2023 08:46:48 +0200
+Message-ID: <871qjq6lyf.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ALSA Subsystem Development 
+        <alsa-devel@alsa-project.org>, Oder Chiou <oder_chiou@realtek.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "moderated list:QCOM AUDIO (ASoC) DRIVERS" 
-        <alsa-devel@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ASoC:codecs: lpass: Fix for KASAN use_after_free out of
- bounds
-Message-ID: <ZFnsRJXEbajKxj3h@finisterre.sirena.org.uk>
-References: <20230509061321.10218-1-quic_visr@quicinc.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="POkgUCpmy5u6zSNw"
-Content-Disposition: inline
-In-Reply-To: <20230509061321.10218-1-quic_visr@quicinc.com>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: Re: Fwd: Asus ROG Zephyrus GX701L sound problem
+In-Reply-To: <466c0d68-5fac-74cc-c32e-23174f48add7@gmail.com>
+References: <466c0d68-5fac-74cc-c32e-23174f48add7@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,36 +76,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 07 May 2023 16:06:48 +0200,
+Bagas Sanjaya wrote:
+> 
+> Hi,
+> 
+> I notice a year-old bug report on bugzilla [1]. As many developers
+> don't take a look on it, I decided to forward it by email. You will
+> need to log in to bugzilla in order to contact the reporter.
+> 
+> Quoting from the bug report:
+> 
+> > Hello,
+> > 
+> > I must mention right at the beginning that I tried all the solutions I found on the forums, but without success.
+> > 
+> > The problem exists only with the speakers on the laptop, the microphone works, as do the headphones.
+> > 
+> > I extracted the audio dump from windows and compared it with the dump from Linux and thus created this pinfcg below.
+> > 
+> > Please, can someone add a kernel fix for ROG Zephyrus S17 GX701LWS_GX701LWS, Subsystem Id: 0x10431f01?
+> > 
+> > ```
+> > 
+> > [codec]
+> > 
+> > 0x10ec0294 0x10431f01 0
+> > 
+> > [pincfg]
+> > 
+> > 0x19 0x03A11050
+> > 
+> > 0x1a 0x03A11C30
+> > 
+> > ```
+> > 
+> > This is what a quirk should look like:
+> > 
+> > +SND_PCI_QUIRK(0x1043, 0x1f01, “ASUS GX701L”, ALC294_FIXUP_ASUS_SPK)
+> > 
+> > [ 2.396344] snd_hda_codec_realtek hdaudioC0D0: autoconfig for ALC294: line_outs=1 (0x17/0x0/0x0/0x0/0x0) type:speaker
+> > [ 2.396348] snd_hda_codec_realtek hdaudioC0D0: speaker_outs=0 (0x0/0x0/0x0/0x0/0x0)
+> > [ 2.396349] snd_hda_codec_realtek hdaudioC0D0: hp_outs=1 (0x21/0x0/0x0/0x0/0x0)
+> > [ 2.396350] snd_hda_codec_realtek hdaudioC0D0: mono: mono_out=0x0
+> > [ 2.396351] snd_hda_codec_realtek hdaudioC0D0: inputs:
+> > [ 2.396352] snd_hda_codec_realtek hdaudioC0D0: Headset Mic=0x19
+> > [ 2.396353] snd_hda_codec_realtek hdaudioC0D0: Internal Mic=0x12
+> > 
+> > 
+> > 
+> > 
+> >     hwinfo --sound  :heavy_check_mark:
+> >     22: PCI 1f.3: 0403 Audio device
+> >     [Created at pci.386]
+> >     Unique ID: nS1_.Qb7ky1jjQRD
+> >     SysFS ID: /devices/pci0000:00/0000:00:1f.3
+> >     SysFS BusID: 0000:00:1f.3
+> >     Hardware Class: sound
+> >     Model: “Intel Comet Lake PCH cAVS”
+> >     Vendor: pci 0x8086 “Intel Corporation”
+> >     Device: pci 0x06c8 “Comet Lake PCH cAVS”
+> >     SubVendor: pci 0x1043 “ASUSTeK Computer Inc.”
+> >     SubDevice: pci 0x1f01
+> >     Driver: “snd_hda_intel”
+> >     Driver Modules: “snd_hda_intel”
+> >     Memory Range: 0x94300000-0x94303fff (rw,non-prefetchable)
+> >     Memory Range: 0x94100000-0x941fffff (rw,non-prefetchable)
+> >     IRQ: 157 (817 events)
+> >     Module Alias: “pci:v00008086d000006C8sv00001043sd00001F01bc04sc03i80”
+> >     Driver Info #0:
+> >     Driver Status: snd_hda_intel is active
+> >     Driver Activation Cmd: “modprobe snd_hda_intel”
+> >     Driver Info #1:
+> >     Driver Status: snd_soc_skl is active
+> >     Driver Activation Cmd: “modprobe snd_soc_skl”
+> >     Driver Info #2:
+> >     Driver Status: snd_sof_pci_intel_cnl is active
+> >     Driver Activation Cmd: “modprobe snd_sof_pci_intel_cnl”
+> >     Config Status: cfg=new, avail=yes, need=no, active=unknown
+> > 
+> >     29: PCI 100.1: 0403 Audio device
+> >     [Created at pci.386]
+> >     Unique ID: NXNs.SkelvpPm387
+> >     Parent ID: vSkL.ZFPYIgTFUyC
+> >     SysFS ID: /devices/pci0000:00/0000:00:01.0/0000:01:00.1
+> >     SysFS BusID: 0000:01:00.1
+> >     Hardware Class: sound
+> >     Model: “nVidia TU104 HD Audio Controller”
+> >     Vendor: pci 0x10de “nVidia Corporation”
+> >     Device: pci 0x10f8 “TU104 HD Audio Controller”
+> >     SubVendor: pci 0x1043 “ASUSTeK Computer Inc.”
+> >     SubDevice: pci 0x186f
+> >     Revision: 0xa1
+> >     Driver: “snd_hda_intel”
+> >     Driver Modules: “snd_hda_intel”
+> >     Memory Range: 0x94080000-0x94083fff (rw,non-prefetchable)
+> >     IRQ: 17 (1698 events)
+> >     Module Alias: “pci:v000010DEd000010F8sv00001043sd0000186Fbc04sc03i00”
+> >     Driver Info #0:
+> >     Driver Status: snd_hda_intel is active
+> >     Driver Activation Cmd: “modprobe snd_hda_intel”
+> >     Config Status: cfg=new, avail=yes, need=no, active=unknown
+> >     Attached to: #13 (PCI bridge)
+> > 
+> > 
+> > If you need any more data, or smth just say so.
+> 
+> To the reporter: It seems like the hardware problem, right? If so, can
+> you test on different laptop?
+> 
+> Thanks.
+> 
+> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=216392
 
---POkgUCpmy5u6zSNw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This is a sort of problems that is difficult to help from the upstream
+side.  The symptom indicates that the likely culprit is some missing
+stuff for speaker amp behind the HD-audio codec, and those are usually
+all vendor-specific; the wild west without laws, and only the vendor
+knows how to drive.
 
-On Tue, May 09, 2023 at 11:43:21AM +0530, Ravulapati Vishnu Vardhan Rao wrote:
+User may try to apply the existing quirks one-by-one.  If nothing
+helps, they can try tracing the HD-audio verbs on Windows over VM
+(only if allowed).
 
->  	val = ucontrol->value.enumerated.item[0];
-> +	if (val < 0 && val > 15) {
-> +		dev_err(component->dev, "Wrong value for DMIC configuration");
-> +		return -EINVAL;
-> +	}
 
-This allows userspace to spam the system logs, no error should be
-printed for something like this which can be trivially triggered from
-userspace.
-
---POkgUCpmy5u6zSNw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRZ7EQACgkQJNaLcl1U
-h9DGcwf/cfo6G4f8hDzAGovnhM81PX6MSVusLCjspfaSjJvji4mpziG1QYfILtfZ
-vX6/VfNu7+S1899tLmMyvV3nvbho8qQ6NbuV1JXtpgcRtZn4sr8BDkS1oECDGXUc
-Ene58kkNvOOMHjwHR4Mm4MQJ/TY2mdoxBxesgj2qs6b8xvjbAVE+7In6FqzA8BuX
-mOuKyde/h/Hitgld6a45RHIlP/sOatN/+e5Zmu3xuDFS6YAqgS2vOtP4Y5gm5SGN
-ayZ+JNjsgQ7kYXEq6xB0fqSGhq6Cvja73Pq9FfNX2EqIATM/MIXBo6vTx5TAVHBb
-t5cW6F8Wo+zoKe1BGoVt0h6d54mWOQ==
-=ktQ6
------END PGP SIGNATURE-----
-
---POkgUCpmy5u6zSNw--
+Takashi
