@@ -2,156 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C9E6FCF0B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4776FCF15
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234814AbjEIUGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 16:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
+        id S234829AbjEIUIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 16:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbjEIUGl (ORCPT
+        with ESMTP id S229549AbjEIUIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 16:06:41 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E3A26B3
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 13:06:39 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2ad9f2926adso15879011fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 13:06:39 -0700 (PDT)
+        Tue, 9 May 2023 16:08:42 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4024E43
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 13:08:41 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1aad55244b7so48467765ad.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 13:08:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683662798; x=1686254798;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oJ9jtHBo5TjzGlydvjsWKFn9i61qE/XTmR3LKTATkiM=;
-        b=y+/hpJFrUaEohzJzbVB5FdcU9P1W71bN1cj8VPOfmyhYAp5d3/M03P9RK6NviqlqqT
-         m/OufIh1Clj9gAKqFJtfMNsMN/vXOXIXVLz9p5QO1BcqQPqL9zVcbxBm/8n7nKKvG3FR
-         VoPBoRKW3nXIu/1mH+rf022qAQrzlY4DEz6NNp8/x03XXWMnSb28ILfElb32aA2ENIT6
-         2MBnbOEmruS5ZzQ8RdU03PpfhvXGyCiV77QZWchmnKP5dl7mhh4FXFh6OKyJCfXB1Gvc
-         IfO7fo4Gv4Sf6Vzc8OKjerd/tX9gS88wVP1SCfNYLdcdV/qUgYMa6MUI6TPDcGLgDtCx
-         sPiw==
+        d=linaro.org; s=google; t=1683662921; x=1686254921;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R5yFXJpFYYPBvv2gYtK4nzvS+8gi0j0YQx+tpAx3do8=;
+        b=L4iW/eajQ1x43A3kVh5iovfAlknWcDNfeXtCswRGgNTSezbbw7WPVcJVEkuu3YTi3w
+         HZ4gHUbO7bdG/2a1KNobEGpb880qVxVkJz3mbMEZm18mpDComMQqgI8/RmV5iNNC2N5P
+         eNTO6EIl62w6O3JP1YjqYLO1wBvZoDyGhOFAUGIstyOrJDmqVnw9Ew3LfKm4o+V7fzpJ
+         smF0JFgstQK2UgaRRunidHmw7LUZ46bE4gUoDNA5ktFBOSoOuoGRIdoQNyC3dqxD6cW1
+         /uYMMl53WRytk6jlUA9wUoJHwvHGfemm/ILIBUvIU4cg9CCQn7ltKNQ6mB8cFTzwyWmt
+         LzeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683662798; x=1686254798;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oJ9jtHBo5TjzGlydvjsWKFn9i61qE/XTmR3LKTATkiM=;
-        b=JrFiOeucDvr5ANgjHWZa4W45jRyKwdRylORLRz9A3KO465PK1PNyZzhzHitQkZCN1U
-         pCyu7OufIu4RYzLrOAW1I5Q4lIRqiQnDn238yBPkLRvbs9CnGQL3JPgeQceywTv9OG1f
-         HP/6CmzAZtc2e0ylF3dDWJgwbWdaf806Anb03pcmHgMX6UKfSu3q5JY3SC23O5yJocgU
-         932zp3qsBue6rnayp+NA7OUNGqmAulqbNO35IKr/qHMaGwmAsOA6XcseVqX5C+EuqPwA
-         eb/5Y5qe+U9L6DrwGSOXnAyP3emah0JIzSsCNMZlLN9UvnY7Mmjwu6e+D2vT+sw8vfa8
-         AtQg==
-X-Gm-Message-State: AC+VfDw1LdRUGW5XYViseerQEeoerc9uHyFOwrI0+cf149/TBfCOT6gi
-        b0ntFYicSamwod/5tRabUT+nYg==
-X-Google-Smtp-Source: ACHHUZ5W4mKArgYFVe9lrMYtQfrg0Awr3PV3bhXgMJXSzDUzCORFVnZPXJyU5xogGHWZ+TxeWDCZxQ==
-X-Received: by 2002:a2e:9101:0:b0:299:ac61:4e78 with SMTP id m1-20020a2e9101000000b00299ac614e78mr1345994ljg.10.1683662797729;
-        Tue, 09 May 2023 13:06:37 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id y22-20020a2e9d56000000b002ac71095b61sm1642177ljj.64.2023.05.09.13.06.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 13:06:37 -0700 (PDT)
-Message-ID: <019999fd-3c86-8c85-76c7-8d0206e60f4d@linaro.org>
-Date:   Tue, 9 May 2023 22:06:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 1/4] clk: qcom: clk-alpha-pll: Add support for lucid ole
- pll ops
-Content-Language: en-US
-To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Conor Dooley <conor+dt@kernel.org>
+        d=1e100.net; s=20221208; t=1683662921; x=1686254921;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R5yFXJpFYYPBvv2gYtK4nzvS+8gi0j0YQx+tpAx3do8=;
+        b=YdYmFm+AyM4DkDogAC/BQbFC+Ed92hLqbbZi+GEI75cxXAB1KWoGJJ4lLZc2Ai+ixw
+         qQPN5gJSRq8gmdNFIULEo1oQk3adbAdVlYjs8kANFE8EOpPN/pI30BJBTbS2QuyGH0xd
+         CZDZ/pTs87MFoK71JEZ7Nm5rL3slTkRmVpEFkcdEOAARwLkfh3vdU+YfqPCRY2XS4tFB
+         eNSTu707rhoc+T8RW99wAwNfjCOLb3MLrQB29CNpKbZDuOKA0LXWUHVK9k+PU0vHx/g4
+         OMC+2GD3dU6IjoGGpHD+dLf2JjJcEq2Msij1gTWvI2xe0Mm0Qm5hnHxecDbP1nLPbW/j
+         HsYA==
+X-Gm-Message-State: AC+VfDx9+CVb5IZSRg9QbjJdozYHM1fylrm9lVVfz8y3OhYci0i/2abM
+        ya8Mzu0oojbXMd30MoHCpOU0/w==
+X-Google-Smtp-Source: ACHHUZ5YyMLX+oPAbFkOBk3bKpJA2/DvBwAFKb4s52WAPzLQ83YhSWdLsdsodIXw+4xsQjjgjgXkdA==
+X-Received: by 2002:a17:902:ecc3:b0:1ab:528:5f85 with SMTP id a3-20020a170902ecc300b001ab05285f85mr19803294plh.59.1683662921049;
+        Tue, 09 May 2023 13:08:41 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:5e48:ff40:3eaf:3f9e])
+        by smtp.gmail.com with ESMTPSA id l4-20020a170902f68400b001a19f3a661esm2015563plg.138.2023.05.09.13.08.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 13:08:40 -0700 (PDT)
+Date:   Tue, 9 May 2023 14:08:37 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230509161218.11979-1-quic_jkona@quicinc.com>
- <20230509161218.11979-2-quic_jkona@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230509161218.11979-2-quic_jkona@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Iuliana Prodan <iuliana.prodan@nxp.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Markus Elfring <Markus.Elfring@web.de>,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] remoteproc: imx_dsp_rproc: use modern pm_ops
+Message-ID: <ZFqoRdARznP/tPIq@p14s>
+References: <20230420213610.2219080-1-arnd@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420213610.2219080-1-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9.05.2023 18:12, Jagadeesh Kona wrote:
-> From: Taniya Das <quic_tdas@quicinc.com>
+On Thu, Apr 20, 2023 at 11:36:04PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Add support for lucid ole pll ops to configure and control the
-> lucid ole pll. The lucid ole pll has an additional test control
-> register which is required to be programmed, add support to
-> program the same.
+> Without CONFIG_PM, the driver warns about unused functions:
 > 
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+> drivers/remoteproc/imx_dsp_rproc.c:1210:12: error: 'imx_dsp_runtime_suspend' defined but not used [-Werror=unused-function]
+>  1210 | static int imx_dsp_runtime_suspend(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~~~~~~~
+> drivers/remoteproc/imx_dsp_rproc.c:1178:12: error: 'imx_dsp_runtime_resume' defined but not used [-Werror=unused-function]
+>  1178 | static int imx_dsp_runtime_resume(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~~~~~~
+> 
+> Change the old SET_SYSTEM_SLEEP_PM_OPS()/SET_RUNTIME_PM_OPS()
+> helpers to their modern replacements that avoid the warning,
+> and remove the now unnecessary __maybe_unused annotations
+> on the other PM helper functions.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
-Isn't this commit "write to PLL_TEST_CTL_U2 on LUCID_EVO" instead?
-
-Meaninglessly duplicating ops does not seem useful.
-
-Konrad
->  drivers/clk/qcom/clk-alpha-pll.c | 2 ++
->  drivers/clk/qcom/clk-alpha-pll.h | 4 ++++
->  2 files changed, 6 insertions(+)
+>  drivers/remoteproc/imx_dsp_rproc.c | 11 +++++------
+>  1 file changed, 5 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
-> index b9f6535a7ba7..f81c7c561352 100644
-> --- a/drivers/clk/qcom/clk-alpha-pll.c
-> +++ b/drivers/clk/qcom/clk-alpha-pll.c
-> @@ -55,6 +55,7 @@
->  #define PLL_TEST_CTL(p)		((p)->offset + (p)->regs[PLL_OFF_TEST_CTL])
->  #define PLL_TEST_CTL_U(p)	((p)->offset + (p)->regs[PLL_OFF_TEST_CTL_U])
->  #define PLL_TEST_CTL_U1(p)     ((p)->offset + (p)->regs[PLL_OFF_TEST_CTL_U1])
-> +#define PLL_TEST_CTL_U2(p)     ((p)->offset + (p)->regs[PLL_OFF_TEST_CTL_U2])
->  #define PLL_STATUS(p)		((p)->offset + (p)->regs[PLL_OFF_STATUS])
->  #define PLL_OPMODE(p)		((p)->offset + (p)->regs[PLL_OFF_OPMODE])
->  #define PLL_FRAC(p)		((p)->offset + (p)->regs[PLL_OFF_FRAC])
-> @@ -2096,6 +2097,7 @@ void clk_lucid_evo_pll_configure(struct clk_alpha_pll *pll, struct regmap *regma
->  	clk_alpha_pll_write_config(regmap, PLL_TEST_CTL(pll), config->test_ctl_val);
->  	clk_alpha_pll_write_config(regmap, PLL_TEST_CTL_U(pll), config->test_ctl_hi_val);
->  	clk_alpha_pll_write_config(regmap, PLL_TEST_CTL_U1(pll), config->test_ctl_hi1_val);
-> +	clk_alpha_pll_write_config(regmap, PLL_TEST_CTL_U2(pll), config->test_ctl_hi2_val);
+
+Applied.
+
+Thanks,
+Mathieu
+
+> diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
+> index cab06dbf37fb..2d75dea43f20 100644
+> --- a/drivers/remoteproc/imx_dsp_rproc.c
+> +++ b/drivers/remoteproc/imx_dsp_rproc.c
+> @@ -1243,7 +1243,7 @@ static void imx_dsp_load_firmware(const struct firmware *fw, void *context)
+>  	release_firmware(fw);
+>  }
 >  
->  	/* Disable PLL output */
->  	regmap_update_bits(regmap, PLL_MODE(pll), PLL_OUTCTRL, 0);
-> diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
-> index d07b17186b90..4d9b6d5b7062 100644
-> --- a/drivers/clk/qcom/clk-alpha-pll.h
-> +++ b/drivers/clk/qcom/clk-alpha-pll.h
-> @@ -125,6 +125,7 @@ struct alpha_pll_config {
->  	u32 test_ctl_val;
->  	u32 test_ctl_hi_val;
->  	u32 test_ctl_hi1_val;
-> +	u32 test_ctl_hi2_val;
->  	u32 main_output_mask;
->  	u32 aux_output_mask;
->  	u32 aux2_output_mask;
-> @@ -171,6 +172,7 @@ extern const struct clk_ops clk_alpha_pll_zonda_ops;
->  #define clk_alpha_pll_postdiv_zonda_ops clk_alpha_pll_postdiv_fabia_ops
+> -static __maybe_unused int imx_dsp_suspend(struct device *dev)
+> +static int imx_dsp_suspend(struct device *dev)
+>  {
+>  	struct rproc *rproc = dev_get_drvdata(dev);
+>  	struct imx_dsp_rproc *priv = rproc->priv;
+> @@ -1278,7 +1278,7 @@ static __maybe_unused int imx_dsp_suspend(struct device *dev)
+>  	return pm_runtime_force_suspend(dev);
+>  }
 >  
->  extern const struct clk_ops clk_alpha_pll_lucid_evo_ops;
-> +#define clk_alpha_pll_lucid_ole_ops clk_alpha_pll_lucid_evo_ops
->  extern const struct clk_ops clk_alpha_pll_reset_lucid_evo_ops;
->  #define clk_alpha_pll_reset_lucid_ole_ops clk_alpha_pll_reset_lucid_evo_ops
->  extern const struct clk_ops clk_alpha_pll_fixed_lucid_evo_ops;
-> @@ -196,6 +198,8 @@ void clk_zonda_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
->  			     const struct alpha_pll_config *config);
->  void clk_lucid_evo_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
->  				 const struct alpha_pll_config *config);
-> +#define clk_lucid_ole_pll_configure(pll, regmap, config) \
-> +			clk_lucid_evo_pll_configure(pll, regmap, config)
->  void clk_rivian_evo_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
->  				  const struct alpha_pll_config *config);
->  void clk_stromer_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+> -static __maybe_unused int imx_dsp_resume(struct device *dev)
+> +static int imx_dsp_resume(struct device *dev)
+>  {
+>  	struct rproc *rproc = dev_get_drvdata(dev);
+>  	int ret = 0;
+> @@ -1312,9 +1312,8 @@ static __maybe_unused int imx_dsp_resume(struct device *dev)
+>  }
+>  
+>  static const struct dev_pm_ops imx_dsp_rproc_pm_ops = {
+> -	SET_SYSTEM_SLEEP_PM_OPS(imx_dsp_suspend, imx_dsp_resume)
+> -	SET_RUNTIME_PM_OPS(imx_dsp_runtime_suspend,
+> -			   imx_dsp_runtime_resume, NULL)
+> +	SYSTEM_SLEEP_PM_OPS(imx_dsp_suspend, imx_dsp_resume)
+> +	RUNTIME_PM_OPS(imx_dsp_runtime_suspend, imx_dsp_runtime_resume, NULL)
+>  };
+>  
+>  static const struct of_device_id imx_dsp_rproc_of_match[] = {
+> @@ -1332,7 +1331,7 @@ static struct platform_driver imx_dsp_rproc_driver = {
+>  	.driver = {
+>  		.name = "imx-dsp-rproc",
+>  		.of_match_table = imx_dsp_rproc_of_match,
+> -		.pm = &imx_dsp_rproc_pm_ops,
+> +		.pm = pm_ptr(&imx_dsp_rproc_pm_ops),
+>  	},
+>  };
+>  module_platform_driver(imx_dsp_rproc_driver);
+> -- 
+> 2.39.2
+> 
