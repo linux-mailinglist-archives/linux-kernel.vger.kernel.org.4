@@ -2,136 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B856FD093
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739086FD096
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235095AbjEIVLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 17:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S235450AbjEIVMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 17:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjEIVLI (ORCPT
+        with ESMTP id S229656AbjEIVMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 17:11:08 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47862721;
-        Tue,  9 May 2023 14:11:06 -0700 (PDT)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 8BBBFC7021;
-        Tue,  9 May 2023 21:10:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1683666634; bh=G9P8GwMxO4SBZr0FJcEpePiv5xT0e9d3vve9PbLG8Cw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ZFfUb9SBKGHc5M/ZQAqEuqxT2fF58wYdUFzK8kD86b/CdmObg9QviLsIl3ZFFBo2Q
-         ldWAbkw4sES7KBqg/u5glgbHPHy0g0ANNfamaSpgnGGtOtrQ5+9I71NX2S3tOJdy7D
-         nXtAL+7TrG79CnNixyNHMWhxmqkC5jPxnYBbmYfM=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Brian Masney <masneyb@onstation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 4/6] dt-bindings: sram: qcom,ocmem: Add msm8226 support
-Date:   Tue, 09 May 2023 23:10:33 +0200
-Message-ID: <8118185.EvYhyI6sBW@z3ntu.xyz>
-In-Reply-To: <bac82710-da26-7acf-4375-5c5346c01705@linaro.org>
-References: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
- <2449951.tdWV9SEqCh@z3ntu.xyz>
- <bac82710-da26-7acf-4375-5c5346c01705@linaro.org>
+        Tue, 9 May 2023 17:12:44 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A6D198A;
+        Tue,  9 May 2023 14:12:43 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64384274895so4589372b3a.2;
+        Tue, 09 May 2023 14:12:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683666763; x=1686258763;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=svGV0USSt7ecLCHRTXbLuwPhCwC3JPPXKAzLDLNlRjA=;
+        b=UT/piCyqIzYoo+P2gSw+QQSyXT0S06eCT2Xlnjp6RY/huIoizI4Z37OkANO8EOPf0J
+         1FKeGRsDcihqTx55Tz1ahXEmVVP6dzwEjVwlk6WuSFffQ0TACXkSe+9wP8UAjcmARF1b
+         rDAy/rKtPPCRaLJfJte0zBsCo8pGHosvS/Eijb+xnJLKumBuC5cKSGZu6Mz3hw1Wbk9q
+         boLY7gSp3JIuzVYrSGaNiq/uag3s0MLcOIg6J5fO0xdr1qILObJbsId9/hnJcj0mqFHt
+         d0SmEg0kkhd/bKibWC3sGGVnEGXfOh31xRyfsI72weVAST/OE5Oko9LHzeSjwMwH3uJN
+         54bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683666763; x=1686258763;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=svGV0USSt7ecLCHRTXbLuwPhCwC3JPPXKAzLDLNlRjA=;
+        b=TQWWAfI7Xa5pqRxvTU+genEmeA1Qg239t28coexQDoc5oZwoqxI98y1Ekmd1b13VwW
+         GFWpxBTMJRua54X+2HSK/1WzJZRtC6iBTeM29AtewYvDGXfO70tXJRX+3RUDn/v8uAHs
+         RkmUsjeUPgPBs5A2e2MMapdF2I/e/lpqa1T5uE57RkUF0lnAqWgXs85nm0saurPFd4Xs
+         UoInWL3DRLQy3ALXheVKRNwhS+1gP1xXAVqbPSq6RCNzV6l/SfvOWghae8/308OBTxJb
+         zJdalTzGVbSpvALzxYykr/CKc0tj280YUpez1nUTd3yhqIKD8u1Zoi4guGEqkTtMjzWm
+         2C9Q==
+X-Gm-Message-State: AC+VfDy5FuBYWp5X8u7/UZpmW6bk9M0JykaMzRyPBJCeNihdPf6NxvA6
+        NbCKns/wdBqRSo1srY2grQ/QA0BlWoZM2A==
+X-Google-Smtp-Source: ACHHUZ5eWk0NpGNLDCVvDwN9Ku5AnbknilcOnjk0aKEKmCzXWCGhqSQlpGyrMrVu7tHz/auQMy6Vfw==
+X-Received: by 2002:a17:902:ce8d:b0:1aa:fc8c:8f1f with SMTP id f13-20020a170902ce8d00b001aafc8c8f1fmr19261002plg.50.1683666763082;
+        Tue, 09 May 2023 14:12:43 -0700 (PDT)
+Received: from localhost ([2001:4958:15a0:30:3c22:a6a6:f3a4:12ce])
+        by smtp.gmail.com with ESMTPSA id l6-20020a170902d34600b001a800e03cf9sm2050041plk.256.2023.05.09.14.12.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 14:12:42 -0700 (PDT)
+Date:   Tue, 9 May 2023 14:12:41 -0700
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Message-ID: <ZFq3SdSBJ_LWsOgd@murray>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <ZFqxEWqD19eHe353@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFqxEWqD19eHe353@infradead.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Dienstag, 9. Mai 2023 22:00:03 CEST Konrad Dybcio wrote:
-> On 9.05.2023 18:44, Luca Weiss wrote:
-> > On Montag, 8. Mai 2023 09:39:22 CEST Konrad Dybcio wrote:
-> >> On 7.05.2023 11:12, Luca Weiss wrote:
-> >>> Add the compatible for the OCMEM found on msm8226 which compared to
-> >>> msm8974 only has a core clock and no iface clock.
-> >>> 
-> >>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> >>> ---
-> >>> 
-> >>>  Documentation/devicetree/bindings/sram/qcom,ocmem.yaml | 6 +++++-
-> >>>  1 file changed, 5 insertions(+), 1 deletion(-)
-> >>> 
-> >>> diff --git a/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
-> >>> b/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml index
-> >>> 4bbf6db0b6bd..515f0d8ec641 100644
-> >>> --- a/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
-> >>> +++ b/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
-> >>> @@ -15,7 +15,9 @@ description: |
-> >>> 
-> >>>  properties:
-> >>>    compatible:
-> >>> -    const: qcom,msm8974-ocmem
-> >>> +    enum:
-> >>> +      - qcom,msm8226-ocmem
-> >>> +      - qcom,msm8974-ocmem
-> >> 
-> >> Any chance you could read the revision field on both and add comments
-> >> like:
-> >> 
-> >> - qcom,msm8974-ocmem # vX.Y
-> > 
-> > Do you mean the OCMEM_REG_HW_VERSION register?
-> 
-> Yep
-> 
-> It's currently not read in the
-> 
-> > driver so no idea what the value is - without adding some code.
-> 
-> Would be appreciated!
+On Tue, May 09, 2023 at 01:46:09PM -0700, Christoph Hellwig wrote:
+> On Tue, May 09, 2023 at 12:56:32PM -0400, Kent Overstreet wrote:
+> > From: Kent Overstreet <kent.overstreet@gmail.com>
+> >
+> > This is needed for bcachefs, which dynamically generates per-btree node
+> > unpack functions.
+>
+> No, we will never add back a way for random code allocating executable
+> memory in kernel space.
 
-Appears msm8974 has v1.4.0 and msm8226 has v1.1.0. Will include this in the
-next revision.
+Yeah I think I glossed over this aspect a bit as it looks ostensibly like simply
+reinstating a helper function because the code is now used in more than one
+place (at lsf/mm so a little distracted :)
 
-Regards
-Luca
-
-> 
-> Konrad
-> 
-> >>>    reg:
-> >>>      items:
-> >>> @@ -28,11 +30,13 @@ properties:
-> >>>        - const: mem
-> >>>    
-> >>>    clocks:
-> >>> +    minItems: 1
-> >>> 
-> >>>      items:
-> >>>        - description: Core clock
-> >>>        - description: Interface clock
-> >> 
-> >> allOf: if: properties: compatible: 8974 / then: clock(s|-names):
-> >> minItems: 2> 
-> > Sure, can update
-> > 
-> >> Konrad
-> >> 
-> >>>    clock-names:
-> >>> +    minItems: 1
-> >>> 
-> >>>      items:
-> >>>        - const: core
-> >>>        - const: iface
-
-
-
-
+But it being exported is a problem. Perhaps there's another way of acheving the
+same aim without having to do so?
