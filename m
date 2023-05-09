@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7266FD23A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959CE6FD26F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236052AbjEIWI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 18:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
+        id S234507AbjEIWPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 18:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234520AbjEIWI1 (ORCPT
+        with ESMTP id S229741AbjEIWPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 18:08:27 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2994C4498;
-        Tue,  9 May 2023 15:08:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683670106; x=1715206106;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=sPVyYMoOpz4OLD+LBv/kiP3jyMi6pwJbGrXHjxsYGrQ=;
-  b=IRoCEFPQBeamnvnIcOjhfDPxd/By2QFNzZ2wxU/EmgOYfwf3VvI2CP8X
-   lyJV6jWlnSa3XD0qsEfg8aEQ5fhJMWMZR1YF3QjvE41+alt/0OuysiKNS
-   yMcxzKl0BqueshEecBs1P9zZTByqXN8CenZVgUs4Sly0oWLiyRUpNzeaR
-   ggdpTrVW4oL/d8tgWzP4dwPP2rj3pl18rYAlJmcQ1XwggLToWq0qece5t
-   SaCSS5awoNv//DlwX2bAC8U+7/frrNiqrWkXtAOV/YVHHl5YvCVae4/4x
-   /6JsFnS6gHvpxIxVCe7acymMY+oCDyHnwBN/V+0nsecP3gGE0qvSPgVlv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="436385506"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="436385506"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 15:08:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="945453305"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="945453305"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.97.226]) ([10.212.97.226])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 15:08:24 -0700
-Message-ID: <3d320d04-a0e6-12dd-490a-f0111c2ad98a@intel.com>
-Date:   Tue, 9 May 2023 15:08:24 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v7 7/8] cxl/test: Add specific events
-Content-Language: en-US
-To:     Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
+        Tue, 9 May 2023 18:15:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0793A87
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 15:14:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683670487;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ydVLg8IPNtZ/Ju1d4KRWiYGNqw9BPaKTQueF/IDR2ec=;
+        b=Hz4ZQF9Tk/nCvM2rsnaBMee7Uyp6R0fe2AwYh8u680VAGImdpbEJ00nJEz7gQcvTCeIXze
+        jkYqpSxtw7KyXUNgmonB8LHopKN/RPyj/vqojxw6h2M3xp9xXrNIZ8QfjERXNHMytsmWAu
+        ZZBs7TbzxwsJFcm2jzrGKFjeaqKS5ko=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-496-S52LVMGYOBiaEpiZwT9FMQ-1; Tue, 09 May 2023 18:14:41 -0400
+X-MC-Unique: S52LVMGYOBiaEpiZwT9FMQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6743F185A79C;
+        Tue,  9 May 2023 22:14:40 +0000 (UTC)
+Received: from [10.22.18.234] (unknown [10.22.18.234])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 42D2C492B00;
+        Tue,  9 May 2023 22:14:39 +0000 (UTC)
+Message-ID: <e17e3aa2c9ac1d6e410f66986da3c41efa9f7462.camel@redhat.com>
+Subject: Re: [PATCH v2 1/4] sched/core: Provide sched_rtmutex() and expose
+ sched work helpers
+From:   Crystal Wood <swood@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Stultz <jstultz@google.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
         Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org
-References: <20221216-cxl-ev-log-v7-0-2316a5c8f7d8@intel.com>
- <20221216-cxl-ev-log-v7-7-2316a5c8f7d8@intel.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20221216-cxl-ev-log-v7-7-2316a5c8f7d8@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Date:   Tue, 09 May 2023 17:14:38 -0500
+In-Reply-To: <20230503132051.GB1676736@hirez.programming.kicks-ass.net>
+References: <20230427111937.2745231-1-bigeasy@linutronix.de>
+         <20230427111937.2745231-2-bigeasy@linutronix.de>
+         <20230503132051.GB1676736@hirez.programming.kicks-ass.net>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,116 +78,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2023-05-03 at 15:20 +0200, Peter Zijlstra wrote:
+> On Thu, Apr 27, 2023 at 01:19:34PM +0200, Sebastian Andrzej Siewior wrote=
+:
+> > From: Thomas Gleixner <tglx@linutronix.de>
+> >=20
+> > schedule() invokes sched_submit_work() before scheduling and
+> > sched_update_worker() afterwards to ensure that queued block requests
+> > are
+> > flushed and the (IO)worker machineries can instantiate new workers if
+> > required. This avoids deadlocks and starvation.
+> >=20
+> > With rt_mutexes this can lead to subtle problem:
+> >=20
+> > =C2=A0 When rtmutex blocks current::pi_blocked_on points to the rtmutex=
+ it
+> > =C2=A0 blocks on. When one of the functions in sched_submit/resume_work=
+()
+> > =C2=A0 contends on a rtmutex based lock then that would corrupt
+> > =C2=A0 current::pi_blocked_on.
+> >=20
+> > Make it possible to let rtmutex issue the calls outside of the slowpath=
+,
+> > i.e. when it is guaranteed that current::pi_blocked_on is NULL, by:
+> >=20
+> > =C2=A0 - Exposing sched_submit_work() and moving the task_running() con=
+dition
+> > =C2=A0=C2=A0=C2=A0 into schedule()
+> >=20
+> > =C2=A0 - Renamimg sched_update_worker() to sched_resume_work() and expo=
+sing
+> > it
+> > =C2=A0=C2=A0=C2=A0 too.
+> >=20
+> > =C2=A0 - Providing sched_rtmutex() which just does the inner loop of
+> > scheduling
+> > =C2=A0=C2=A0=C2=A0 until need_resched() is not longer set. Split out th=
+e loop so this
+> > does
+> > =C2=A0=C2=A0=C2=A0 not create yet another copy.
+> >=20
+> > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+>=20
+> Urgh, so I really don't like this.
+>=20
+> The end result is something like:
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0rt_mutex_lock()
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sched_submit_work(=
+);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // a n=
+ested rt_mutex_lock() here will not clobber
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // ->p=
+i_blocked_on because it's not set yet.
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 task_blocks_on_rt_=
+mutex();
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tsk->p=
+i_blocked_on =3D waiter;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rt_mut=
+ex_enqueue(lock, waiter); <-- the real problem
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rt_mutex_slowlock_=
+block();
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 schedu=
+le_rtmutex();
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sched_resume_work(=
+);
+>=20
+> And all of this it not just because tsk->pi_blocked_on, but mostly
+> because of task_blocks_on_rt_mutex() enqueueing the waiter. The whole
+> enqueue thing is what makes the 'simple' solution of saving/restoring
+> tsk->pi_blocked_on not work.
+>=20
+> Basically the pi_blocked_on curruption is a side effect, not the
+> fundamental issue. One task having two waiters registered is the bigger
+> issue.
 
+Where do you see pi_blocked_on being saved/restored?  The whole point of
+this patchset is to deal with sched_submit_work() before anything has
+been done on the "outer" lock acquisition (not just pi_blocked_on, but
+also enqueuing) other than failing the fast path.
 
-On 1/17/23 10:53 PM, Ira Weiny wrote:
-> Each type of event has different trace point outputs.
-> 
-> Add mock General Media Event, DRAM event, and Memory Module Event
-> records to the mock list of events returned.
-> 
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> Now, sched_submit_work() could also use (regular) mutex -- after all
+> it's a fully preemptible context. And then we're subject to the 'same'
+> problem but with tsk->blocked_on (DEBUG_MUTEXES=3Dy).
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+It's fully preemptible but it still shouldn't be doing things that would
+block on non-RT.  That'd already be broken for a number of reasons (task
+state corruption, infinite recursion if current->plug isn't cleared
+before doing whatever causes another standard schedule(), etc).
 
-> 
-> ---
-> Changes in v7:
->          <no change>
-> ---
->   tools/testing/cxl/test/mem.c | 73 ++++++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 73 insertions(+)
-> 
-> diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
-> index 90a463f83ae4..00bf19a68604 100644
-> --- a/tools/testing/cxl/test/mem.c
-> +++ b/tools/testing/cxl/test/mem.c
-> @@ -277,12 +277,85 @@ struct cxl_event_record_raw hardware_replace = {
->   	.data = { 0xDE, 0xAD, 0xBE, 0xEF },
->   };
->   
-> +struct cxl_event_gen_media gen_media = {
-> +	.hdr = {
-> +		.id = UUID_INIT(0xfbcd0a77, 0xc260, 0x417f,
-> +				0x85, 0xa9, 0x08, 0x8b, 0x16, 0x21, 0xeb, 0xa6),
-> +		.length = sizeof(struct cxl_event_gen_media),
-> +		.flags[0] = CXL_EVENT_RECORD_FLAG_PERMANENT,
-> +		/* .handle = Set dynamically */
-> +		.related_handle = cpu_to_le16(0),
-> +	},
-> +	.phys_addr = cpu_to_le64(0x2000),
-> +	.descriptor = CXL_GMER_EVT_DESC_UNCORECTABLE_EVENT,
-> +	.type = CXL_GMER_MEM_EVT_TYPE_DATA_PATH_ERROR,
-> +	.transaction_type = CXL_GMER_TRANS_HOST_WRITE,
-> +	/* .validity_flags = <set below> */
-> +	.channel = 1,
-> +	.rank = 30
-> +};
-> +
-> +struct cxl_event_dram dram = {
-> +	.hdr = {
-> +		.id = UUID_INIT(0x601dcbb3, 0x9c06, 0x4eab,
-> +				0xb8, 0xaf, 0x4e, 0x9b, 0xfb, 0x5c, 0x96, 0x24),
-> +		.length = sizeof(struct cxl_event_dram),
-> +		.flags[0] = CXL_EVENT_RECORD_FLAG_PERF_DEGRADED,
-> +		/* .handle = Set dynamically */
-> +		.related_handle = cpu_to_le16(0),
-> +	},
-> +	.phys_addr = cpu_to_le64(0x8000),
-> +	.descriptor = CXL_GMER_EVT_DESC_THRESHOLD_EVENT,
-> +	.type = CXL_GMER_MEM_EVT_TYPE_INV_ADDR,
-> +	.transaction_type = CXL_GMER_TRANS_INTERNAL_MEDIA_SCRUB,
-> +	/* .validity_flags = <set below> */
-> +	.channel = 1,
-> +	.bank_group = 5,
-> +	.bank = 2,
-> +	.column = {0xDE, 0xAD},
-> +};
-> +
-> +struct cxl_event_mem_module mem_module = {
-> +	.hdr = {
-> +		.id = UUID_INIT(0xfe927475, 0xdd59, 0x4339,
-> +				0xa5, 0x86, 0x79, 0xba, 0xb1, 0x13, 0xb7, 0x74),
-> +		.length = sizeof(struct cxl_event_mem_module),
-> +		/* .handle = Set dynamically */
-> +		.related_handle = cpu_to_le16(0),
-> +	},
-> +	.event_type = CXL_MMER_TEMP_CHANGE,
-> +	.info = {
-> +		.health_status = CXL_DHI_HS_PERFORMANCE_DEGRADED,
-> +		.media_status = CXL_DHI_MS_ALL_DATA_LOST,
-> +		.add_status = (CXL_DHI_AS_CRITICAL << 2) |
-> +			      (CXL_DHI_AS_WARNING << 4) |
-> +			      (CXL_DHI_AS_WARNING << 5),
-> +		.device_temp = { 0xDE, 0xAD},
-> +		.dirty_shutdown_cnt = { 0xde, 0xad, 0xbe, 0xef },
-> +		.cor_vol_err_cnt = { 0xde, 0xad, 0xbe, 0xef },
-> +		.cor_per_err_cnt = { 0xde, 0xad, 0xbe, 0xef },
-> +	}
-> +};
-> +
->   static void cxl_mock_add_event_logs(struct mock_event_store *mes)
->   {
-> +	put_unaligned_le16(CXL_GMER_VALID_CHANNEL | CXL_GMER_VALID_RANK,
-> +			   &gen_media.validity_flags);
-> +
-> +	put_unaligned_le16(CXL_DER_VALID_CHANNEL | CXL_DER_VALID_BANK_GROUP |
-> +			   CXL_DER_VALID_BANK | CXL_DER_VALID_COLUMN,
-> +			   &dram.validity_flags);
-> +
->   	mes_add_event(mes, CXL_EVENT_TYPE_INFO, &maint_needed);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_INFO,
-> +		      (struct cxl_event_record_raw *)&gen_media);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_INFO,
-> +		      (struct cxl_event_record_raw *)&mem_module);
->   	mes->ev_status |= CXLDEV_EVENT_STATUS_INFO;
->   
->   	mes_add_event(mes, CXL_EVENT_TYPE_FATAL, &hardware_replace);
-> +	mes_add_event(mes, CXL_EVENT_TYPE_FATAL,
-> +		      (struct cxl_event_record_raw *)&dram);
->   	mes->ev_status |= CXLDEV_EVENT_STATUS_FATAL;
->   }
->   
-> 
+-Crystal
+
