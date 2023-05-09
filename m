@@ -2,87 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACAA6FD2D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 805136FD2DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjEIWxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 18:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43064 "EHLO
+        id S229826AbjEIWzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 18:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjEIWxL (ORCPT
+        with ESMTP id S229489AbjEIWzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 18:53:11 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6435FCD;
-        Tue,  9 May 2023 15:53:09 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50bc4bc2880so10321619a12.2;
-        Tue, 09 May 2023 15:53:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683672788; x=1686264788;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xK5ASXc7Qk5k53BZegLrLl/LXq90ba90dKCrcJloGco=;
-        b=B6CGl1a7QJIoBWOzbZ1AK71oscdzTgkCseNZl2SM/l2v03d1z+uAqyyfcvFpne5IFF
-         IKyV4J0UXmpTH1ABNNmXXAkwkro6AYCNgeF37HZHrDKRI7XbZk5tePVrDDpIj4a54Mh8
-         zz3G4kyxzzm/l+8gfkUKvl3gnj/a/2qmAFNCAyHS78y5KY/c2OhHMs7mZgw2Utd0KJ3A
-         oEDz6GilQtm3yhrA7OrACPbmyACYAJrg5Mtvpbks+CGq4/6WDFJ+RQqX3/3P6osN3Sn6
-         fcvOmqV4rpPWeipKjYW0b8SYAwy/eErVyQ6P3jaMviq/aDOW7iBhIIjb/tuWfKPH04sM
-         sdBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683672788; x=1686264788;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xK5ASXc7Qk5k53BZegLrLl/LXq90ba90dKCrcJloGco=;
-        b=NHcGq59r3CrsKN7Mvq2jcdolhRovSj7Becn8zicfw2xTecOSx142YCT8V5rv6GaFdR
-         p99d36TasPzoybG+Wa8llhs7AGiXccVOUE4Nrx6x0mkSXs6yiSBpDyzUJC9b3OIDvw8+
-         PtiC/wZY2aoSsVxv27xvjF41xgDBje6IAKeQzeLFAf7g3G4BbZbMBflaY8qb6/omgYMl
-         eRxkEQwtTQsPva6oc3DxWIGhjOUn9UYFg05V+/Qwhba1dQf7NO+A+90PoxpqTA9N+ayt
-         f0hc0h2CIQLv80apnChPFSu1+jQKXroEH8XXb+n67iNkChTOxG6Z9HH9ucaA1nXpT2zF
-         pVIw==
-X-Gm-Message-State: AC+VfDw1bYlC8UlserojwLfKDYE2vHWA4pvTQcOtzx2Qmif2h2IVsYfq
-        57eMt6jPHHgMtTORL3nPsuct47IYPxSLU99saOM=
-X-Google-Smtp-Source: ACHHUZ4BIByOTQ+nZnZj6wMwAWaIjxIQtjE6aNXjYPCQmOchF0FzZGy4iRz1xrpYTOQE6G38v049dtcQ6UDwQjkIrbg=
-X-Received: by 2002:a17:906:4fcf:b0:94e:1764:b09b with SMTP id
- i15-20020a1709064fcf00b0094e1764b09bmr14500489ejw.45.1683672787994; Tue, 09
- May 2023 15:53:07 -0700 (PDT)
+        Tue, 9 May 2023 18:55:11 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AEC59E7;
+        Tue,  9 May 2023 15:55:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1683672871; i=j.neuschaefer@gmx.net;
+        bh=IjOsP3Hl5WOUcxHtKpSlXVU2zmb5sAncILY7B0EhNVs=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=ndYA2tf/LPtkgltTOvt7X2+Zi6uiTPSZbAqw/mXBwe2s3qEMYWIHbVw2U7syYOtiu
+         0ByeTgk6m0fQkzncsA2uFg7rs+4GDkYCaq3zleDHMNFIszwJSYZevaNUwCstSv1xs2
+         q2XsYVKyF7xXnp4qsykgKdmrMBdtxCsRttws9I9ls8dUQV5PBqFxC2CHyOsYGjarJ/
+         Rr2m1bZj51r337gAlDvnDkQfA5v+OxXvevYZAHhLDsYKtlfaLNIq481n2v1Dl3mPUG
+         +ciwlK0+ezWRctjT6rrS4cmxjRJOY33gMIuTSxMpaalo6ZUK907KGn7D4ZZQnJjuQD
+         xm3g+5vkab4wA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Ml6m4-1qdIgl1tr2-00lTxs; Wed, 10
+ May 2023 00:54:31 +0200
+Date:   Wed, 10 May 2023 00:54:29 +0200
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-aspeed@lists.ozlabs.org,
+        linux-realtek-soc@lists.infradead.org, linux-arm-kernel@axis.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        chrome-platform@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
+        openbmc@lists.ozlabs.org, Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-rockchip@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        kernel@dh-electronics.com, Olof Johansson <olof@lixom.net>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "linux-oxnas@groups.io" <linux-oxnas@groups.io>
+Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
+Message-ID: <ZFrPJQdwoxqFpzUO@probook>
+References: <20220328000915.15041-1-ansuelsmth@gmail.com>
+ <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
+ <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain>
+ <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
+ <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
+ <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
+ <720a2829-b6b5-411c-ac69-9a53e881f48d@app.fastmail.com>
+ <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230424231558.70911-1-quic_eberman@quicinc.com>
- <20230424231558.70911-7-quic_eberman@quicinc.com> <CABb+yY3ojsGNm1w+QSn2BnbOMdcQZAV+=UYiMiBrs=jujP=pSg@mail.gmail.com>
- <b4fa7ae9-da5e-7a94-3b82-00d9200aa67e@quicinc.com>
-In-Reply-To: <b4fa7ae9-da5e-7a94-3b82-00d9200aa67e@quicinc.com>
-From:   Jassi Brar <jassisinghbrar@gmail.com>
-Date:   Tue, 9 May 2023 17:52:56 -0500
-Message-ID: <CABb+yY2Pr30uhQzAdd=G2w=_pYYN926dMMAEgmJ436ZxVjziAQ@mail.gmail.com>
-Subject: Re: [PATCH v12 06/25] mailbox: Add Gunyah message queue mailbox
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ue5Z9u7UyMsdbJpp"
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqKCtmkwzKa01gyG65fH8ye6R3KhR41PJbJhOJ4X9j=znA@mail.gmail.com>
+X-Provags-ID: V03:K1:aR+k41JkL+Jax7RkQK1pXFPVqGsXbknpTCCf601eNGl3xQsbw4B
+ lW4IptIuDnFJb+jaCScKg4f1qDLjuoiDEqEJsUWT/Ek6YzDXkULOeXYq9EqgQyN8A6axbG1
+ JRKm5mq+iW4e1K1v2w2BOTrGSmAwegcfBLrzES8HGqnWOqrguxalKWu6+fqbhobKFkw7JNy
+ qeUuaRpvcFFSSatMddRDg==
+UI-OutboundReport: notjunk:1;M01:P0:NarrxlSjiwo=;5z5rCQykqX1e+FbZ2ba6e5Rh6DH
+ bfvBGeIXFywNjKNr0Tn58UPG96wezZLM4+H12pkCrjAC7Mqwg2PXJ70aoM1kBI8o+tAa0/419
+ 3XnQYa+XRlKna2zFjBCJKWpZoYii5XtCMCKO105lV0P6vMHckC89sxCK/LdwCvu0lF7OfocC+
+ 2ouaaWRHCt4YshSvfh5z/Ja+IC5J4jOv8eNZ6b4Ga79LPwxkC/RJjnB/nQ4E0edaxrobbRSOn
+ Mpc/31AKJOkyrRi41IgtGWTEODyE2XZV00pU1y5sHoF3JU/eGsc2doa+Rrzh30STHQZStIaTS
+ 0sulR/BBWHEsrZf3LZvhDzOcbQ+0mpl9BfQXNLiDuCZay2ePoIqaUwts7JSoeIsxQHjZrbVOf
+ h75oej0aNqoFhgx0M6WDh9xZydkRj4bbDxKZdwcWTSlHLDLbE26jSZC/2Oe+gjXSYJFSqcTIo
+ y61XXOKn0w6OleXfF53iuFeaDOuP15yxKD4yYijJGDa3gETH/hjoY9RV4RF3njrNZ9cpp0pyL
+ Wt5sq1md9IKuXv5zDNciEDB062aPPEfIdiuOL3ekvbmUkb/y0X/5vyJogDfXW1s/BcAt1Lw7O
+ 3fGQXfFWHtWSvKoTsdKwCQNoGLoqEX0ymmlOjO2H6zmOGgpDD61I3NBO058aLG0Ir0rXeho5F
+ meMuCSguMavkm9x2cC+ehI31nsDXo/+BF4SlfWoDxIdTlxFojtrUwUJw55+y8lR/UsTKS8nM4
+ UfuLe8Un7sHRz/mdblkfo8MYekpfSGy5OF1q4F6ySdpHLnN9/KLwguD2QRIXgxNbN+S3apSzh
+ 3RdOKnqeNprc0VYDcOdrgnL7BqsQDF2Rl2MSPh0TxeAydGQ6S6Uk6WUGWH/J/uB0ZIvQUETeq
+ 5wpcXi+kJF8q+LL66lQwIIQV2De+d1d5U2u4IhbVKY+H63H0/8T+2HkkllmX/vS+xMdVykkpc
+ +lGd2EXuA+PHYRD1FvmkNVjxg7g=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,43 +96,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 9, 2023 at 3:52=E2=80=AFPM Elliot Berman <quic_eberman@quicinc.=
-com> wrote:
->
-> Hi Jassi,
->
-> On 5/3/2023 11:21 PM, Jassi Brar wrote:
-> > On Mon, Apr 24, 2023 at 6:16=E2=80=AFPM Elliot Berman <quic_eberman@qui=
-cinc.com> wrote:
-> >>
-> >> Gunyah message queues are a unidirectional inter-VM pipe for messages =
-up
-> >> to 1024 bytes. This driver supports pairing a receiver message queue a=
-nd
-> >> a transmitter message queue to expose a single mailbox channel.
-> >>
-> >> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> >> ---
-> >>   Documentation/virt/gunyah/message-queue.rst |   8 +
-> >>   drivers/mailbox/Makefile                    |   2 +
-> >>   drivers/mailbox/gunyah-msgq.c               | 210 ++++++++++++++++++=
-++
-> >>   include/linux/gunyah.h                      |  57 ++++++
-> >>
-> > include/linux/gunyah.h  and
-> > Documentation/virt/gunyah/message-queue.rst would need to exist for
-> > this patch to apply.
-> > If you made this patch as the first in series, then I could apply.
-> >
->
-> The mailbox driver is dependent on patches 3-5. Could [1] be picked up
-> in meantime?
->
-[1] is already upstream.
 
-> I'll talk with QC Landing team folks about strategies to
-> merge once they finish review.
->
-OK.
+--ue5Z9u7UyMsdbJpp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-cheers.
+On Tue, May 02, 2023 at 02:40:19PM -0500, Rob Herring wrote:
+[...]
+> I've dusted off my script and made a branch[1] with the result.
+> There's just a couple of fixes needed after the script is run (see the
+> top commit). The cross arch includes are all fixed up by the script.
+> dtbs_install maintains a flat install. I compared the number of .dtbs
+> before and after to check the script.
+>=20
+> I think the only issue remaining is finalizing the mapping of
+> platforms to subdirs. What I have currently is a mixture of SoC
+> families and vendors. The most notable are all the Freescale/NXP
+> platforms, pxa, socfpga, and stm32. It's not consistent with arm64
+> either. Once that's finalized, I still need to go update MAINTAINERS.
+>=20
+> Here's the current mapping:
+>=20
+> vendor_map =3D {
+[...]
+>     'aspeed' : 'aspeed',
+>     'ast2' : 'aspeed',
+>     'facebook' : 'aspeed',
+>     'ibm' : 'aspeed',
+
+>     'openbmc' : 'aspeed',
+
+The openbmc flash layouts are currently only used by aspeed devicetrees,
+but they don't really depend on any aspeed details. It would be possible
+to reuse them in Nuvoton BMC devicetrees in the future, for example.
+
+In that sense, I think putting them in a separate "openbmc" directory
+would be slightly better.
+
+
+Jonathan
+
+
+
+[...]
+>     'nuvo' : 'nuvoton',
+[...]
+> }
+>=20
+> Rob
+>=20
+> [1] git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git arm-dts-=
+move-v2
+
+--ue5Z9u7UyMsdbJpp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmRazv0ACgkQCDBEmo7z
+X9tB/A//Y5MU9b+r/mxCUuxjsa0CB4Ewu8xmc+YTd1pdMEIrJYfgdpXFskBmzFsg
+QFYR1gBnq7P4mhusW4RaYWxpzD3M45B2vIuhgL6t8lqIWae0UuNbPEO4rbCIbvGZ
+PCx1dTAGZ2vg+mxRK0OYouuCE9EvgrC9PGmOcgDkqCLngGsr11gXz0GMNebggmie
+TX8iauQHnzfGaSQWtwIdQRu1gj2d/VO5NSn4CrgvMIuLCSwhTwY+e9H9/+CcrqHK
+wNiMG0W8yY5CMO7ZSYf7EkEidunJ0htwqJmUoLfpqN4NZ/21yno69v+L36ZRu/lq
++KrZJeaXC3Ar39R2x75Pns5em46uwJJdI5aXumj9xPU3A3rgWCQcrECZJ7i/HEoK
+hzhnsQhJNP4jAPVxdiaWJTYUXHRwafI6/GVvj1BvfgqZ9VHE28iGdDcgVvOfmkDx
+eRZQxcJzFaWZeWTOeM05/dHUDUJXFrYvDsj0+FgneBU/oqEc+H4bR9AP2ttU24hU
+4jBq2I2FlDyKlC0ARS22oRQlZG6KS50d1Nvx6cLr7lxeOHmcW09dPCqHijQVtX3V
+f/Z7MYrDEXgTK8r1wJk6PuvVN+jFX/l/Ali5L/OJqUsZB4bgteXKEWXWMmgik1/I
+d3nr3gTYEaykVkjCJORFKu4G2FHrzWgWpFYsl8Mu+safGLa+rdA=
+=Jzyt
+-----END PGP SIGNATURE-----
+
+--ue5Z9u7UyMsdbJpp--
