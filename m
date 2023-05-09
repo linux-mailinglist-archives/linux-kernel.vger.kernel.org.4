@@ -2,230 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4566C6FC758
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE576FC762
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235155AbjEINBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 09:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
+        id S235430AbjEINCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 09:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbjEINBb (ORCPT
+        with ESMTP id S235383AbjEINC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 09:01:31 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4271135A9
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 06:01:30 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-ba1911d60f5so8843956276.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 06:01:30 -0700 (PDT)
+        Tue, 9 May 2023 09:02:27 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F95E59DE
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 06:02:23 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-956ff2399b1so1096255066b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 06:02:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683637289; x=1686229289;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=y4BpEDlZK9m9CBXh2ISxknnux/s6zSVif+mGDRabek8=;
-        b=sm9zSk1XP42BdUNlC8QdFfbYpQ8dGmsf0Luxb/dmpd3ddIepdPHIQwy8xfSzkiN6wt
-         QFqYK7NKUUpCmDyJx/2zvDYoznjLDfq4aSVWjM860iY8CH0Q3lF7xBLbst+uH9qAml8m
-         HJrreUm7nwP+CcdilLmNrCs0yNd9wnUHlJKG4lu+zhOqHnn71HaQ382KwBRB5gHK5FZR
-         qQZ88foqm1nXaEbojn+D202kNTRyVlNA/BtBS5fhhd7kDxmM6krH6Z7rciYCdIk3JmFf
-         IiSZga86hjmgFnmll3q3si2hBQtOzhceGlKG5XsWRM4Wuy7C/4kahuzj3XVKQShGXhDl
-         WNXw==
+        d=linaro.org; s=google; t=1683637342; x=1686229342;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZpIAP3t6RkkpB/dslfsju5UGZqS1fqIKK8wFrjmFBkM=;
+        b=JX02OLLm84X5xmwMza4onDrd6Av1y+XmO6r6t7pnPyEMDyc+Jfi4aLpNO0ef1lhc/Y
+         B9ZJtoP77oI7P7sp+S8/ByxAQALfuO/Dt4EdGID8tZGL/40EUuAGlVbrSAvhfK5QLGQZ
+         90xe/qZZXqfcWVLBATxW3hzQ1p0YQu2e/OFPqKVTap7hdxdJ2GnvF00Att0PnmbA4Une
+         kvNOFdeaHfc/snrF+QDVkvDO4BSVPliZZCaMl33ji2kiZftDFEYkfrvE5MKE4+5T31Ua
+         2yIDfY8D4pNIHGK1d4eVRdzRjzBfdCQ6nVykKLcPer5LQwlQ+fLy4a7z9U7VSJft1TC9
+         DhpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683637289; x=1686229289;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y4BpEDlZK9m9CBXh2ISxknnux/s6zSVif+mGDRabek8=;
-        b=F95Qfg3aqDe68wBmDdl0Ie/TigGVWwRjgySFKaISr3FhaYUyK8ovlc2pRfWwc6lkLs
-         5ct6nw43rbqOpF0H0Ir7AcIz298wybuasjS/zNT97epSYApXZcli8OEehwlh3f0mFg0a
-         LhVBomaYYEGsOGmMcwzb81PZkJvSwo2JUQSWdcOUKNgxjnvVXmOmFcu/h6wYGEML3sdl
-         LWzItWG2B+gsV6Q5DCIqhAa/IAOapTQv8/U1pu4u+NMLkgsVSPyWSmgxX+mUiczLUPTQ
-         8sQ61vYSsv4ZXzTsCjM2KWBWPxWaKeAqZIG0MjkXBKYyH6BE1s5UZygu+f9oxDxh2rkv
-         VGcQ==
-X-Gm-Message-State: AC+VfDxq2W1uz2JNXDoNexuJeF2fUZ/RC29qTw+2odxeDhWKY/HNrdyf
-        rJfmHpbszTRzPckVJLFHtMV311IbXXMv6G++DdDOnA==
-X-Google-Smtp-Source: ACHHUZ5sAhwP6LQDqPNnwkyZIz/dkEQ2JaNjhO99KERRhkt54/p3SiebJMun57UU+rVsf+8V7TgXmJHOhsNCxLCxDI4=
-X-Received: by 2002:a25:ac9d:0:b0:b9e:92e3:7ab5 with SMTP id
- x29-20020a25ac9d000000b00b9e92e37ab5mr14874209ybi.26.1683637289138; Tue, 09
- May 2023 06:01:29 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683637342; x=1686229342;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZpIAP3t6RkkpB/dslfsju5UGZqS1fqIKK8wFrjmFBkM=;
+        b=lVhkjrK89uCC5bTFKQjzVpVJM2knB1BzNZUPRaXTNsp4NUUDWqSBdYSP31xylX5bSN
+         zD3OZaTqawVg6OYt/0dLRQyVYEem6AobTcONeh3IHP0UH6qFvuDdcGhO23qYYaTl5nD2
+         PVy32sUdBnAxWYRMarlwEO+7dRR+u9sEIn0Uas9Z0zmokHdXc7Qal/r7v4flLNwsmIv6
+         EJ1gsdmf9r/PDwXfXA+a1Zbs6jttzDDC88SKDHlvjdGrjswB1W5LLse2OjwIbVQuM8Yg
+         Ti4p6KUwm0ck5nupwALKjKAhvWK2aNW1ZvuPauiAZCYtmgDApzAeBfALnZoaIPEu1niW
+         qC0w==
+X-Gm-Message-State: AC+VfDzY0COoT2DejzHcyM2E2taum3/DHYG6xb0/cbt7tfJk3cXU5UNg
+        Sk8xYv8zLypnKPbZq2Q43X764g==
+X-Google-Smtp-Source: ACHHUZ70kubx3YLwOp6oEMBYLKUV3iI/XGmMuK2+SaTWFJkqJqP+xeDGaeUe/FM0QwqZbUO6Mp365A==
+X-Received: by 2002:a17:907:9718:b0:966:c09:1c57 with SMTP id jg24-20020a170907971800b009660c091c57mr11019088ejc.65.1683637341701;
+        Tue, 09 May 2023 06:02:21 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
+        by smtp.gmail.com with ESMTPSA id ot3-20020a170906ccc300b0096654eda57csm1308744ejb.75.2023.05.09.06.01.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 06:02:08 -0700 (PDT)
+Message-ID: <c1833e5b-9397-8a87-07c5-1b8bd84bd457@linaro.org>
+Date:   Tue, 9 May 2023 15:01:42 +0200
 MIME-Version: 1.0
-References: <cover.1683628357.git.quic_schowdhu@quicinc.com>
- <35863b47c04c2edd7ae49c57d23682aba6111d4f.1683628357.git.quic_schowdhu@quicinc.com>
- <CAA8EJppkqN6cuYUCC-THb8wb=deRv-01pbS0JgSGf-VXnm8qEg@mail.gmail.com> <82fcfc55-2879-2af0-5a91-4e9481d41976@quicinc.com>
-In-Reply-To: <82fcfc55-2879-2af0-5a91-4e9481d41976@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 9 May 2023 16:01:17 +0300
-Message-ID: <CAA8EJprKumrq=Zy0gBqSZ9Dga5mZuauCC4U0GpTs0T4YADrSoA@mail.gmail.com>
-Subject: Re: [PATCH V6 2/3] soc: qcom: boot_stat: Add Driver Support for Boot Stats
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 01/11] dt-bindings: remoteproc: qcom: Add support for
+ multipd model
+Content-Language: en-US
+To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jassisinghbrar@gmail.com, mathieu.poirier@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_gurus@quicinc.com,
+        loic.poulain@linaro.org, quic_eberman@quicinc.com,
+        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
+ <1678164097-13247-2-git-send-email-quic_mmanikan@quicinc.com>
+ <38a5a268-7d8a-6e61-4272-8e9155df0034@linaro.org>
+ <790496d7-98dc-c92e-dedc-1c89395a1ad8@quicinc.com>
+ <e63a3e34-1f73-3661-8655-e34e1e955804@linaro.org>
+ <b8b30b77-31df-15c3-3914-1198f90299e6@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b8b30b77-31df-15c3-3914-1198f90299e6@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 May 2023 at 15:27, Souradeep Chowdhury
-<quic_schowdhu@quicinc.com> wrote:
->
->
->
-> On 5/9/2023 5:09 PM, Dmitry Baryshkov wrote:
-> > On Tue, 9 May 2023 at 13:53, Souradeep Chowdhury
-> > <quic_schowdhu@quicinc.com> wrote:
+On 09/05/2023 12:34, Manikanta Mylavarapu wrote:
+>>> Sure, will add.
+>>>>> +    description:
+>>>>> +      Qualcomm G-Link subnode which represents communication edge, channels
+>>>>> +      and devices related to the Modem.
+>>>>> +
+>>>>> +patternProperties:
+>>>>> +  "^remoteproc_pd1|remoteproc_pd2|remoteproc_pd3":
+>>>>
+>>>> No, underscores are not allowed. Also, what is pd?
+>>>>
+>>> Sure, will remove underscores.
+>>
+>> Shouldn't this be just pd-1?
+>>
+>>
+> I think 'pd-1' not enough. Because child's i.e userpd's also considered
+> as remote processor's, so name should be like "remoteproc-pd1".
+
+"pd-1" is not enough for what? Why the node name has to be more specific?
 
 
-> >> diff --git a/drivers/soc/qcom/boot_stats.c b/drivers/soc/qcom/boot_stats.c
-> >> new file mode 100644
-> >> index 000000000000..ca67b6b5d8eb
-> >> --- /dev/null
-> >> +++ b/drivers/soc/qcom/boot_stats.c
-> >> @@ -0,0 +1,100 @@
-> >> +// SPDX-License-Identifier: GPL-2.0-only
-> >> +/*
-> >> + * Copyright (c) 2013-2019, 2021 The Linux Foundation. All rights reserved.
-> >> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> >> + */
-> >> +
-> >> +#include <linux/debugfs.h>
-> >> +#include <linux/err.h>
-> >> +#include <linux/io.h>
-> >> +#include <linux/init.h>
-> >> +#include <linux/kernel.h>
-> >> +#include <linux/module.h>
-> >> +#include <linux/of.h>
-> >> +#include <linux/of_address.h>
-> >> +#include <linux/platform_device.h>
-> >> +
-> >> +#define TO_MS(timestamp) ((timestamp * 1000) / 32768)
-> >
-> > Quoting v4 question, which got no answer:
-> >
-> > Some of the platforms DTs define 32KHz clock instead of 32.768 KHz
-> > What should be the divisor in this case?
->
-> This is the standard divisor used to calculate the pre_abl and abl times
-> across most QCOM SoCs. Can you give an example where the sleep_stat
-> counter has a different frequency?
+Best regards,
+Krzysztof
 
-Following SoCs declare 37000 as sleep_clk frequency:
-ipq6018, qdu1000, qru1000, sc7280, sm6125, sm6375, sm8350, sm8450, sm8550.
-
-This might be an error in the dtsi, or might be not.
-
->
-> >
-> >> +
-> >> +/**
-> >> + *  struct boot_stats - timestamp information related to boot stats
-> >> + *  @abl_start: Time for the starting point of the abl
-> >> + *  @abl_end: Time when the kernel starts loading from abl
-> >> + */
-> >> +struct boot_stats {
-> >> +       u32 abl_start;
-> >> +       u32 abl_end;
-> >> +} __packed;
-> >> +
-> >> +struct bs_data {
-> >> +       struct boot_stats __iomem *b_stats;
-> >> +       struct dentry *dbg_dir;
-> >> +};
-> >> +
-> >> +static void populate_boot_stats(char *abl_str, char *pre_abl_str, struct bs_data *drvdata)
-> >> +{
-> >> +        u32 abl_time, pre_abl_time;
-> >> +
-> >> +        abl_time = TO_MS(drvdata->b_stats->abl_end) - TO_MS(drvdata->b_stats->abl_start);
-> >> +        sprintf(abl_str, "%u ms", abl_time);
-> >> +
-> >> +        pre_abl_time =  TO_MS(drvdata->b_stats->abl_start);
-> >> +        sprintf(pre_abl_str, "%u ms", pre_abl_time);
-> >
-> > Another point from v4:
-> >
-> > It would be better to move the unit to the file name and include just
-> > the number.
->
-> Clarified from your first comment
->
-> >
-> >> +}
-> >> +
-> >> +static int boot_stats_probe(struct platform_device *pdev)
-> >> +{
-> >> +       char abl_str[20], pre_abl_str[20], *abl, *pre_abl;
-> >> +       struct device *bootstat_dev = &pdev->dev;
-> >> +       struct bs_data *drvdata;
-> >> +
-> >> +       drvdata = devm_kzalloc(bootstat_dev, sizeof(*drvdata), GFP_KERNEL);
-> >> +       if (!drvdata)
-> >> +               return dev_err_probe(bootstat_dev, -ENOMEM, "failed to allocate memory");
-> >> +       platform_set_drvdata(pdev, drvdata);
-> >> +
-> >> +       drvdata->b_stats = devm_of_iomap(bootstat_dev, bootstat_dev->of_node, 0, NULL);
-> >> +       if (IS_ERR(drvdata->b_stats))
-> >> +               return dev_err_probe(bootstat_dev, PTR_ERR(drvdata->b_stats),
-> >> +                                    "failed to map imem region");
-> >> +
-> >> +       drvdata->dbg_dir = debugfs_create_dir("qcom_boot_stats", NULL);
-> >> +       if (IS_ERR(drvdata->dbg_dir))
-> >> +               return dev_err_probe(bootstat_dev, PTR_ERR(drvdata->dbg_dir),
-> >> +                                    "failed to create debugfs directory");
-> >> +
-> >> +       populate_boot_stats(abl_str, pre_abl_str, drvdata);
-> >> +       abl = abl_str;
-> >> +       pre_abl = pre_abl_str;
-> >> +
-> >> +       debugfs_create_str("pre_abl_time", 0400, drvdata->dbg_dir, (char **)&pre_abl);
-> >> +       debugfs_create_str("abl_time", 0400, drvdata->dbg_dir, (char **)&abl);
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +void boot_stats_remove(struct platform_device *pdev)
-> >> +{
-> >> +       struct bs_data *drvdata = platform_get_drvdata(pdev);
-> >> +
-> >> +       debugfs_remove_recursive(drvdata->dbg_dir);
-> >> +}
-> >> +
-> >> +static const struct of_device_id boot_stats_dt_match[] = {
-> >> +       { .compatible = "qcom,imem-bootstats" },
-> >> +       { }
-> >> +};
-> >> +MODULE_DEVICE_TABLE(of, boot_stats_dt_match);
-> >> +
-> >> +static struct platform_driver boot_stat_driver = {
-> >> +       .probe  = boot_stats_probe,
-> >> +       .remove_new = boot_stats_remove,
-> >> +       .driver = {
-> >> +               .name = "qcom-boot-stats",
-> >> +               .of_match_table = boot_stats_dt_match,
-> >> +       },
-> >> +};
-> >> +module_platform_driver(boot_stat_driver);
-> >> +
-> >> +MODULE_DESCRIPTION("Qualcomm Technologies Inc. Boot Stat driver");
-> >> +MODULE_LICENSE("GPL");
-> >> --
-> >> 2.17.1
-> >>
-> >
-> >
-
-
-
--- 
-With best wishes
-Dmitry
