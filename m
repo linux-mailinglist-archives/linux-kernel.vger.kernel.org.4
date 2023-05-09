@@ -2,118 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327106FCE24
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 21:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DE96FCE43
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 21:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234267AbjEITDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 15:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38978 "EHLO
+        id S234267AbjEITIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 15:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjEITDd (ORCPT
+        with ESMTP id S229656AbjEITIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 15:03:33 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3647235B3
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 12:03:32 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bc456cc39so9544285a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 12:03:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683659010; x=1686251010;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5XAiN9wOh89SiyYeYfp6ErFWKCpwKQ6oBL8/wSiSp9c=;
-        b=dnSGiE2hRYVFPDNqnsAy7ojfu+hLyT+fl503XqYy+9X/xsjp26v+q/W3NOEOtMSyRw
-         wWdAMfRG6sH6Sj/qQAg2QwAlc41woVG+ZXMI30RsEhnLAZsnO9J+o3VzhqtPordOec3K
-         YyyzPuD3CcZ2zwS+DHxPYa/yyvqMgVJwXaclLUKaGjV81uqmftuBzuKkYFKugPC8Nai7
-         lXHR9+Ig1nJzAIOACw7Q7J/GwLTqpsutWOVYwuC0Pw/5qwlc5QBf2P9mQoKIEiw4CQmM
-         o3JgrrFqZA6uuk0pbgYthMrh5Dbo7lzZjecUdLm2AMlxsGRwvVLfQK8iPGrRzPikEb5u
-         +fQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683659010; x=1686251010;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5XAiN9wOh89SiyYeYfp6ErFWKCpwKQ6oBL8/wSiSp9c=;
-        b=Dyp6AYBoX9aOB+hwM0+Znnq3l2A3AdfQ2cUfq3xDANg75ILfvMZNv/kj3JuMk/mirj
-         KhfSKocAfqYIzbQVDwYWO+F1THbXsi8POC2jscisKw3OMkiyhpZ6rSntsmdcNV0ZPWp7
-         ltMO13kFdk00b0cKiTKiAwS21jUx4Wc/Y8FM79kwM5g9hWdklBR6c/w/KS0R4JV4g/OT
-         J10XyMB6ronxF/N4LtcM9wr9k5DTtgF/kjoJquB7Q0e9sI/sx20D4U6vXDVv6aaIkPlP
-         ROLxPnWch+xWAGwOK2+DVS0TdcCb+4c+eyMlDJWHzHt6tGBVVoT6uK5q2iov60pYysZm
-         7H0A==
-X-Gm-Message-State: AC+VfDySSW+6gzCzxFOUCVspO3aw+G9IE/abf976RcW1NDBi65jk5Vl0
-        1hlE+k9eMeRqSDqgD50qPHfkb1r1/YHRCg==
-X-Google-Smtp-Source: ACHHUZ4PmGS7F05GoGxIQh0wVLb2Sn2AW/DUV3zy42ddt1rVfgRARvvtZN1WvjncUYLqYvgtSqPBIA==
-X-Received: by 2002:a17:907:96a1:b0:966:a691:678d with SMTP id hd33-20020a17090796a100b00966a691678dmr7056761ejc.51.1683659010509;
-        Tue, 09 May 2023 12:03:30 -0700 (PDT)
-Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
-        by smtp.gmail.com with ESMTPSA id og40-20020a1709071de800b0095807ab4b57sm1670550ejc.178.2023.05.09.12.03.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 12:03:29 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Received: by eldamar.lan (Postfix, from userid 1000)
-        id E43ADBE2DE0; Tue,  9 May 2023 21:03:28 +0200 (CEST)
-Date:   Tue, 9 May 2023 21:03:28 +0200
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Ben Hutchings <ben@decadent.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf tools: Use $KBUILD_BUILD_TIMESTAMP as man page date
-Message-ID: <ZFqZAB2ZShmdKtvy@eldamar.lan>
-References: <20160517132809.GE7555@decadent.org.uk>
+        Tue, 9 May 2023 15:08:00 -0400
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FE840C8
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 12:07:57 -0700 (PDT)
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4QG72v0NH2z1r2sF;
+        Tue,  9 May 2023 21:07:51 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4QG72t5sZZz1qqlS;
+        Tue,  9 May 2023 21:07:50 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id yso-XuuckmCF; Tue,  9 May 2023 21:07:49 +0200 (CEST)
+X-Auth-Info: w4NQfO3soUsw8RkOB5e7u4hvvdQvUWQgRbXNQVjJq0PodgIkJvk8KeWFGS7X8Z2g
+Received: from igel.home (aftr-62-216-205-77.dynamic.mnet-online.de [62.216.205.77])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Tue,  9 May 2023 21:07:49 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+        id 463252C1D3C; Tue,  9 May 2023 21:07:49 +0200 (CEST)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Alexandre Ghiti <alex@ghiti.fr>
+Subject: Re: [PATCH v8 1/3] riscv: Introduce CONFIG_RELOCATABLE
+In-Reply-To: <20230215143626.453491-2-alexghiti@rivosinc.com> (Alexandre
+        Ghiti's message of "Wed, 15 Feb 2023 15:36:24 +0100")
+References: <20230215143626.453491-1-alexghiti@rivosinc.com>
+        <20230215143626.453491-2-alexghiti@rivosinc.com>
+X-Yow:  I want EARS!  I want two ROUND BLACK EARS to make me feel warm 'n
+ secure!!
+Date:   Tue, 09 May 2023 21:07:49 +0200
+Message-ID: <87wn1h5nne.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20160517132809.GE7555@decadent.org.uk>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter, Ingo, Arnaldo,
+That does not work with UEFI booting:
 
-On Tue, May 17, 2016 at 02:28:09PM +0100, Ben Hutchings wrote:
-> This allows man pages to be built reproducibly.
-> 
-> Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-> ---
-> --- a/tools/perf/Documentation/Makefile
-> +++ b/tools/perf/Documentation/Makefile
-> @@ -120,6 +120,9 @@ endif
->  ifdef DOCBOOK_SUPPRESS_SP
->  XMLTO_EXTRA += -m manpage-suppress-sp.xsl
->  endif
-> +ifdef KBUILD_BUILD_TIMESTAMP
-> +ASCIIDOC_EXTRA += -a revdate=$(shell date -u -d '$(KBUILD_BUILD_TIMESTAMP)' +%Y-%m-%d)
-> +endif
->  
->  SHELL_PATH ?= $(SHELL)
->  # Shell quote;
-> --- a/tools/perf/Documentation/asciidoc.conf
-> +++ b/tools/perf/Documentation/asciidoc.conf
-> @@ -71,6 +71,9 @@ ifdef::backend-docbook[]
->  [header]
->  template::[header-declarations]
->  <refentry>
-> +<refentryinfo>
-> +template::[docinfo]
-> +</refentryinfo>
->  <refmeta>
->  <refentrytitle>{mantitle}</refentrytitle>
->  <manvolnum>{manvolnum}</manvolnum>
+Loading Linux 6.4.0-rc1-1.g668187d-default ...
+Loading initial ramdisk ...
+Unhandled exception: Instruction access fault
+EPC: ffffffff80016d56 RA: 000000008020334e TVAL: 0000007f80016d56
+EPC: ffffffff002d1d56 RA: 00000000004be34e reloc adjusted
+Unhandled exception: Load access fault
+EPC: 00000000fff462d4 RA: 00000000fff462d0 TVAL: ffffffff80016d56
+EPC: 00000000802012d4 RA: 00000000802012d0 reloc adjusted
 
-As we do apply the change in Downstream in Debian, I was wondering if
-it just felt trough the cracks and could still be applied. Is there
-anything missing?
+Code: c825 8e0d 05b3 40b4 d0ef 0636 7493 ffe4 (d783 0004)
+UEFI image [0x00000000fe65e000:0x00000000fe6e3fff] '/efi\boot\bootriscv64.efi'
+UEFI image [0x00000000daa82000:0x00000000dcc2afff]
 
-Regards,
-Salvatore
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
