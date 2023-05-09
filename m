@@ -2,132 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 892336FC2A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4D56FC299
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235021AbjEIJUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 05:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
+        id S235053AbjEIJUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 05:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234962AbjEIJU0 (ORCPT
+        with ESMTP id S234972AbjEIJUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 05:20:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FBA97
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:19:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683623978;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GZWNrPjJClNk2tTJqQsLsON3RxLFqVAdo0C0Uzamz98=;
-        b=S8B8uMniZg9VXWSAs59uZloOsEXMWVTK9xfLmCIZN/ojT+q/QB9STpHPYkBe1OFAImMRYo
-        OUm+yFo1dfovG9+jP993FFVV+njN+FqHS1g/L9+1o9A0pRrK7Cy1lnWvmDgl+8IZhtjEpO
-        Hf4JtRplQIDQhN/DTODNAnVAJfHnQd0=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-503-ak6yng4zNeyaoOyG5xoEBQ-1; Tue, 09 May 2023 05:19:36 -0400
-X-MC-Unique: ak6yng4zNeyaoOyG5xoEBQ-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-969c36898d4so93807866b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 02:19:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683623975; x=1686215975;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GZWNrPjJClNk2tTJqQsLsON3RxLFqVAdo0C0Uzamz98=;
-        b=j+G51pfY/5n5Lu2fP7qFMPpQIctaZqFJwFch4VEetbHemhpZIKlSmqFkFUBR2A0AvZ
-         8EZnbY/zojR8k2f614OHbCSlOyYiN6btj3mNBMh0TTwE5hFx3/Md/B49SLqzIASaQyGT
-         wQk29jtd4RDNDLWMGiRp+ngfL1ogW1R+EzVsQB2jCiXdejgYrqboz9PfS++NaZUpc6V6
-         uZ+TJVqAalhRXbREQ+Y7euc4JK1TJCzKVVCxAOpD3FnEOfIJ/RJSUSvOZ03cAINlpdY9
-         tEYFNpi+SBEimRncm2ORbmJP4L/T5RvsyLW/C5CH2Nz7T1C9UEMH7M/K2Ch66Ki7/A6r
-         wNnA==
-X-Gm-Message-State: AC+VfDyxP/8iGlc66sLaiK8mg4ZUUcDxC3FtlvO6jiH6oDJF1w0ytMer
-        iMPcdapLELdV5LRmjghiu3B+CU/HJv8Va2QN+GiP29U3hj3QuyDHNgqHLY5KRm3wJU85yrODfy8
-        3QP9lQ2b8f0gKgh9sHWKMirVK
-X-Received: by 2002:a17:907:5c5:b0:95f:56e8:1c3c with SMTP id wg5-20020a17090705c500b0095f56e81c3cmr11216028ejb.17.1683623975516;
-        Tue, 09 May 2023 02:19:35 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5j287DFP8IHyRW9PPepnhjkGMk46wbQKsdzIHLY7OYt3AXaqK3kmnbU5pPVWrjfQbMf0Exsg==
-X-Received: by 2002:a17:907:5c5:b0:95f:56e8:1c3c with SMTP id wg5-20020a17090705c500b0095f56e81c3cmr11216009ejb.17.1683623975155;
-        Tue, 09 May 2023 02:19:35 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? ([2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id z4-20020a17090655c400b009660449b9a3sm1080351ejp.25.2023.05.09.02.19.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 02:19:34 -0700 (PDT)
-Message-ID: <5a8bba97-00dd-5a02-f378-944dbc075909@redhat.com>
-Date:   Tue, 9 May 2023 11:19:32 +0200
+        Tue, 9 May 2023 05:20:18 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C050CDD85
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:20:15 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3499Jd2x087067;
+        Tue, 9 May 2023 04:19:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683623979;
+        bh=XjeHZkAJennOHr258rCrV4GRf9FDx9zmj72yfhORqwI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=qMhKljM8Q9VweNL/0D/4ZEmzAC8DErC1ziqApufgdyTi8Pm5WyDn1zxvW5Ydds0xS
+         lj9JiQja+p7JoxnLyi2X/V45tZjwiPX5OeJBD1vVYH3igc+ooZeG7g4CTAaVKu2/UO
+         4z9q9d3OUwM7HLk+ZQk2lRIjrnz3Oh3LMYHF+mPc=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3499Jd8P014658
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 9 May 2023 04:19:39 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
+ May 2023 04:19:38 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 9 May 2023 04:19:39 -0500
+Received: from [10.249.131.60] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3499JXZq074545;
+        Tue, 9 May 2023 04:19:34 -0500
+Message-ID: <b48613f5-9442-5a41-34fb-760d9edf3682@ti.com>
+Date:   Tue, 9 May 2023 14:49:32 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2 0/3] Uncore frequency scaling using TPMI
-Content-Language: en-US, nl
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230418171340.681662-1-srinivas.pandruvada@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230418171340.681662-1-srinivas.pandruvada@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [EXTERNAL] Re: [PATCH] arm64: defconfig: enable PCIe controller
+ on TI platforms
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Nishanth Menon <nm@ti.com>, Milind Parab <mparab@cadence.com>,
+        Swapnil Kashinath Jakhade <sjakhade@cadence.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Achal Verma <a-verma1@ti.com>
+References: <20230509063431.1203367-1-a-verma1@ti.com>
+ <46b0dbd4-5695-1a2d-8d06-0a60a7c3a151@linaro.org>
+ <de6432db-0da0-b535-1f44-04541116be8b@ti.com>
+ <63dc3d1b-ba17-48ee-a02e-83b2903e360a@app.fastmail.com>
+Content-Language: en-US
+From:   "Verma, Achal" <a-verma1@ti.com>
+In-Reply-To: <63dc3d1b-ba17-48ee-a02e-83b2903e360a@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 4/18/23 19:13, Srinivas Pandruvada wrote:
-> Implement support of uncore frequency control via TPMI (Topology Aware
-> Register and PM Capsule Interface). This driver provides the similar
-> functionality as the current uncore frequency driver using MSRs.
+Hello,
+On 5/9/2023 1:58 PM, Arnd Bergmann wrote:
+> On Tue, May 9, 2023, at 10:08, Vignesh Raghavendra wrote:
 > 
-> Previously I posted only 1/3 and got reviewed and addressed with
-> this submission. The other two patches were links in the submission.
+>> Also, see [0] for history. We really want these to be
+>> modules unless its necessary for bootup.
+>>
+>> You may want to revive [1] and get it to mainline
+>>
+>> [0]
+>> https://lore.kernel.org/linux-arm-kernel/CAK8P3a2VSBvOn1o+q1PYZaQ6LS9U4cz+DZGuDbisHkwNs2dAAw@mail.gmail.com/
+>> [1]
+>> https://lore.kernel.org/linux-arm-kernel/20230110153805.GA1505901@bhelgaas/
 > 
-> But it is better that all three patches considered together.
-> I know this is close to merge window for 6.4, so it is fine to differ.
+> Agreed, that seems simple enough. Ideally these should even
+> be removable modules, not just single-load but unremovable.
 > 
-> Srinivas Pandruvada (3):
->   platform/x86/intel-uncore-freq: Uncore frequency control via TPMI
->   platform/x86/intel-uncore-freq: Support for cluster level controls
->   platform/x86/intel-uncore-freq: tpmi: Provide cluster level control
-
-Thank you for your patch-series, I've applied the series
-(with the updated 1/3) to my review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
-
-
+> Doing that may require changes to the cadence PCIe host
+> code if that does not support unloading yet (I have not
+> checked), but should not require any changes to the core
+> PCIe host code that supports loadable/removable modules.
 > 
->  .../pm/intel_uncore_frequency_scaling.rst     |  57 ++-
->  .../x86/intel/uncore-frequency/Kconfig        |   4 +
->  .../x86/intel/uncore-frequency/Makefile       |   2 +
->  .../uncore-frequency-common.c                 |  51 ++-
->  .../uncore-frequency-common.h                 |  16 +-
->  .../uncore-frequency/uncore-frequency-tpmi.c  | 418 ++++++++++++++++++
->  .../intel/uncore-frequency/uncore-frequency.c |   1 +
->  7 files changed, 545 insertions(+), 4 deletions(-)
->  create mode 100644 drivers/platform/x86/intel/uncore-frequency/uncore-frequency-tpmi.c
-> 
+>       Arnd
+So, my understanding is that following change is expected
++CONFIG_PCIE_CADENCE=m
++CONFIG_PCIE_CADENCE_HOST=m
++CONFIG_PCIE_CADENCE_EP=m
++CONFIG_PCI_J721E=m
++CONFIG_PCI_J721E_HOST=m
++CONFIG_PCI_J721E_EP=m
++CONFIG_PCI_EPF_NTB=m
+
+I also want to inform that pci_j721e.c is a single file with both host 
+and EP functionality, last attempt to build it as modules depending on 
+host or EP selected failed because of symbols dependency.
+Refactoring of pci_j721e.c into common, host and EP specific files could 
+work similar to the Cadence driver, So I will follow this way and push 
+the changes.
+
+Please let me know if there are concerns.
+
+
+Thanks,
+Achal Verma
+
 
