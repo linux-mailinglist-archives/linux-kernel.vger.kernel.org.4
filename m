@@ -2,77 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A356FC41B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68FFA6FC421
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235118AbjEIKkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 06:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S235323AbjEIKm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 06:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233962AbjEIKkm (ORCPT
+        with ESMTP id S235299AbjEIKmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 06:40:42 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DBA2D40;
-        Tue,  9 May 2023 03:40:41 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so57509124a12.0;
-        Tue, 09 May 2023 03:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683628839; x=1686220839;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=++f64RefmcF670/7QkgzMP/ms5dP0hwMYh5e7sZ2Wfs=;
-        b=PlAKhuJfjPNioANrQ5U//3syWfdWU1yA1rz+TwN/CPDPZKU/slaXnAcT47GvezaVR6
-         acGF9nnGWreoIYPRyqnlMg2NIMrThVsTI4SosaYEOjht4n/7Ey3I8Zl9+zso9Sj+HyoU
-         F8SFJ9AAZvXX39D8JhlNIcAq6ZXGsouTj68xS7Vn/RxQ5AYac/3kpum9rBjyPqZwEk8l
-         GqiM6qxFRca58G70aR1geH/oB13R7GNG6tHDzhW9G+QC07uwpxtlu9ZZXSKp8Fn2LoSB
-         Jd9hpZ4eCRcEBAGFOjPeqxCu6rlZfvfncj/ZAUQGgRJQ+y2Hh4Qadz0aRYtDZ8Vg7SdZ
-         TNfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683628839; x=1686220839;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=++f64RefmcF670/7QkgzMP/ms5dP0hwMYh5e7sZ2Wfs=;
-        b=BW1BMY04kmkuCVpXCrk47echH+X3wxUkLO0aN0y5gz87rGfAqXVna2Ecbs/BmFUeih
-         7aER4NmqQ4I6AxHj1Qygj14vvuaZocD/IqeULeVn/tKp4MnyU1H3MFL0SiyPcVdiBEN3
-         nJuRnplz6jDfogbVs2vWJrgVwBWAyn/nNiXcgB4JDEuuHxs3TnjzcbTmDkbCZtELFNil
-         kNJeZUR06Iee5sciFb2O8jkqkKlKxYoB8YNV/3wEbi+PEO+PM/HQdC0R6CAQfIh/RLbc
-         Zkxze/1g/E4Vtn6zH47+ZIW0DnOAe5TUejbTrSL93RmI+URjJfYovav73KerZgWXizpO
-         jQcA==
-X-Gm-Message-State: AC+VfDzNKlA0cQTbhpKfr1NfDugZ75JcHv9OsLnyty9tLryBPX5WBQGc
-        NeUmeaM4sMPjq101nhbkaOI=
-X-Google-Smtp-Source: ACHHUZ6NhGDoFk1rVzFxBjdZCzHQUPjukBjnaZ96rq8x5tr7nqUVpC7Fq9ztcxDWUyChf1eSchS/+g==
-X-Received: by 2002:aa7:dd42:0:b0:50c:804:20bb with SMTP id o2-20020aa7dd42000000b0050c080420bbmr12166306edw.16.1683628839225;
-        Tue, 09 May 2023 03:40:39 -0700 (PDT)
-Received: from ?IPV6:2a01:c22:7655:7200:7d37:a922:8b7f:288b? (dynamic-2a01-0c22-7655-7200-7d37-a922-8b7f-288b.c22.pool.telefonica.de. [2a01:c22:7655:7200:7d37:a922:8b7f:288b])
-        by smtp.googlemail.com with ESMTPSA id s24-20020aa7d798000000b0050bc37ff74asm632741edq.44.2023.05.09.03.40.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 03:40:38 -0700 (PDT)
-Message-ID: <973341c8-a8b1-840d-6e6b-d8a73aa7a946@gmail.com>
-Date:   Tue, 9 May 2023 12:40:37 +0200
+        Tue, 9 May 2023 06:42:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108A3106CF
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 03:42:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68AB364595
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 10:42:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 388D1C4339C;
+        Tue,  9 May 2023 10:42:14 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>
+Cc:     Kees Cook <keescook@chromium.org>, chenhuacai@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH RFC] kthread: Unify kernel_thread() and user_mode_thread()
+Date:   Tue,  9 May 2023 18:41:27 +0800
+Message-Id: <20230509104127.1997562-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH net v2] net: phy: dp83867: add w/a for packet errors seen
- with short cables
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     andrew@lunn.ch, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srk@ti.com
-References: <20230509052124.611875-1-s-vadapalli@ti.com>
- <7a53f0d3-3e9a-4024-6b19-72ad9c19ab97@gmail.com>
- <bb7d6644-38b9-c807-6ef2-45a9d5acefe9@ti.com>
-Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <bb7d6644-38b9-c807-6ef2-45a9d5acefe9@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,100 +44,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.05.2023 12:27, Siddharth Vadapalli wrote:
-> 
-> 
-> On 09/05/23 14:29, Heiner Kallweit wrote:
->> On 09.05.2023 07:21, Siddharth Vadapalli wrote:
->>> From: Grygorii Strashko <grygorii.strashko@ti.com>
->>>
->>> Introduce the W/A for packet errors seen with short cables (<1m) between
->>> two DP83867 PHYs.
->>>
->>> The W/A recommended by DM requires FFE Equalizer Configuration tuning by
->>> writing value 0x0E81 to DSP_FFE_CFG register (0x012C), surrounded by hard
->>> and soft resets as follows:
->>>
->>> write_reg(0x001F, 0x8000); //hard reset
->>> write_reg(DSP_FFE_CFG, 0x0E81);
->>> write_reg(0x001F, 0x4000); //soft reset
->>>
->>> Since  DP83867 PHY DM says "Changing this register to 0x0E81, will not
->>> affect Long Cable performance.", enable the W/A by default.
->>>
->>> Fixes: 2a10154abcb7 ("net: phy: dp83867: Add TI dp83867 phy")
->>> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
->>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->>> ---
->>>
->>> V1 patch at:
->>> https://lore.kernel.org/r/20230508070019.356548-1-s-vadapalli@ti.com
->>>
->>> Changes since v1 patch:
->>> - Wrap the line invoking phy_write_mmd(), limiting it to 80 characters.
->>> - Replace 0X0E81 with 0x0e81 in the call to phy_write_mmd().
->>> - Replace 0X012C with 0x012c in the new define for DP83867_DSP_FFE_CFG.
->>>
->>> RFC patch at:
->>> https://lore.kernel.org/r/20230425054429.3956535-2-s-vadapalli@ti.com/
->>>
->>> Changes since RFC patch:
->>> - Change patch subject to PATCH net.
->>> - Add Fixes tag.
->>> - Check return value of phy_write_mmd().
->>>
->>>  drivers/net/phy/dp83867.c | 18 +++++++++++++++++-
->>>  1 file changed, 17 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/net/phy/dp83867.c b/drivers/net/phy/dp83867.c
->>> index d75f526a20a4..bbdcc595715d 100644
->>> --- a/drivers/net/phy/dp83867.c
->>> +++ b/drivers/net/phy/dp83867.c
->>> @@ -44,6 +44,7 @@
->>>  #define DP83867_STRAP_STS1	0x006E
->>>  #define DP83867_STRAP_STS2	0x006f
->>>  #define DP83867_RGMIIDCTL	0x0086
->>> +#define DP83867_DSP_FFE_CFG	0x012c
->>>  #define DP83867_RXFCFG		0x0134
->>>  #define DP83867_RXFPMD1	0x0136
->>>  #define DP83867_RXFPMD2	0x0137
->>> @@ -941,8 +942,23 @@ static int dp83867_phy_reset(struct phy_device *phydev)
->>>  
->>>  	usleep_range(10, 20);
->>>  
->>> -	return phy_modify(phydev, MII_DP83867_PHYCTRL,
->>> +	err = phy_modify(phydev, MII_DP83867_PHYCTRL,
->>>  			 DP83867_PHYCR_FORCE_LINK_GOOD, 0);
->>> +	if (err < 0)
->>> +		return err;
->>> +
->>
->> Would be good to add a comment here explaining what this magic write does.
-> 
-> Sure. Is the following comment acceptable?
-> 
-> "Configure the DSP Feedforward Equalizer Configuration register to improve short
-> cable (< 1 meter) performance. This will not affect long cable performance."
-> 
-Sounds good. Important is just that the magic value write is explained, so that
-readers of the source code don't have to scroll through the commit history.
+Commit 343f4c49f2438d8 ("kthread: Don't allocate kthread_struct for init
+and umh") introduces a new function user_mode_thread() for init and umh.
+But the name is a bit confusing because init and umh are indeed kernel
+threads at creation time, the real difference is "they will become user
+processes". So let's unify the kernel_thread() and user_mode_thread() to
+kernel_thread() again, and add a new 'user' parameter for init and umh.
 
->>
->>> +	err = phy_write_mmd(phydev, DP83867_DEVADDR, DP83867_DSP_FFE_CFG,
->>> +			    0x0e81);
->>> +	if (err < 0)
->>> +		return err;
->>> +
->>> +	err = phy_write(phydev, DP83867_CTRL, DP83867_SW_RESTART);
->>> +	if (err < 0)
->>> +		return err;
->>> +
->>> +	usleep_range(10, 20);
->>> +
->>> +	return 0;
->>>  }
->>>  
->>>  static void dp83867_link_change_notify(struct phy_device *phydev)
->>
-> 
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ include/linux/sched/task.h |  3 +--
+ init/main.c                |  4 ++--
+ kernel/fork.c              | 20 ++------------------
+ kernel/kthread.c           |  2 +-
+ kernel/umh.c               |  6 +++---
+ 5 files changed, 9 insertions(+), 26 deletions(-)
+
+diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+index 537cbf9a2ade..1fc09768257c 100644
+--- a/include/linux/sched/task.h
++++ b/include/linux/sched/task.h
+@@ -98,8 +98,7 @@ struct task_struct *copy_process(struct pid *pid, int trace, int node,
+ struct task_struct *create_io_thread(int (*fn)(void *), void *arg, int node);
+ struct task_struct *fork_idle(int);
+ extern pid_t kernel_thread(int (*fn)(void *), void *arg, const char *name,
+-			    unsigned long flags);
+-extern pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags);
++			    unsigned long flags, int user);
+ extern long kernel_wait4(pid_t, int __user *, int, struct rusage *);
+ int kernel_wait(pid_t pid, int *stat);
+ 
+diff --git a/init/main.c b/init/main.c
+index af50044deed5..487d93da5eea 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -697,7 +697,7 @@ noinline void __ref __noreturn rest_init(void)
+ 	 * the init task will end up wanting to create kthreads, which, if
+ 	 * we schedule it before we create kthreadd, will OOPS.
+ 	 */
+-	pid = user_mode_thread(kernel_init, NULL, CLONE_FS);
++	pid = kernel_thread(kernel_init, NULL, NULL, CLONE_FS, 1);
+ 	/*
+ 	 * Pin init on the boot CPU. Task migration is not properly working
+ 	 * until sched_init_smp() has been run. It will set the allowed
+@@ -710,7 +710,7 @@ noinline void __ref __noreturn rest_init(void)
+ 	rcu_read_unlock();
+ 
+ 	numa_default_policy();
+-	pid = kernel_thread(kthreadd, NULL, NULL, CLONE_FS | CLONE_FILES);
++	pid = kernel_thread(kthreadd, NULL, NULL, CLONE_FS | CLONE_FILES, 0);
+ 	rcu_read_lock();
+ 	kthreadd_task = find_task_by_pid_ns(pid, &init_pid_ns);
+ 	rcu_read_unlock();
+diff --git a/kernel/fork.c b/kernel/fork.c
+index ed4e01daccaa..eeaf50944a0b 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2965,7 +2965,7 @@ pid_t kernel_clone(struct kernel_clone_args *args)
+  * Create a kernel thread.
+  */
+ pid_t kernel_thread(int (*fn)(void *), void *arg, const char *name,
+-		    unsigned long flags)
++		    unsigned long flags, int user)
+ {
+ 	struct kernel_clone_args args = {
+ 		.flags		= ((lower_32_bits(flags) | CLONE_VM |
+@@ -2974,23 +2974,7 @@ pid_t kernel_thread(int (*fn)(void *), void *arg, const char *name,
+ 		.fn		= fn,
+ 		.fn_arg		= arg,
+ 		.name		= name,
+-		.kthread	= 1,
+-	};
+-
+-	return kernel_clone(&args);
+-}
+-
+-/*
+- * Create a user mode thread.
+- */
+-pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags)
+-{
+-	struct kernel_clone_args args = {
+-		.flags		= ((lower_32_bits(flags) | CLONE_VM |
+-				    CLONE_UNTRACED) & ~CSIGNAL),
+-		.exit_signal	= (lower_32_bits(flags) & CSIGNAL),
+-		.fn		= fn,
+-		.fn_arg		= arg,
++		.kthread	= !user,
+ 	};
+ 
+ 	return kernel_clone(&args);
+diff --git a/kernel/kthread.c b/kernel/kthread.c
+index 490792b1066e..f4ac241c8d94 100644
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@ -400,7 +400,7 @@ static void create_kthread(struct kthread_create_info *create)
+ #endif
+ 	/* We want our own signal handler (we take no signals by default). */
+ 	pid = kernel_thread(kthread, create, create->full_name,
+-			    CLONE_FS | CLONE_FILES | SIGCHLD);
++			    CLONE_FS | CLONE_FILES | SIGCHLD, 0);
+ 	if (pid < 0) {
+ 		/* Release the structure when caller killed by a fatal signal. */
+ 		struct completion *done = xchg(&create->done, NULL);
+diff --git a/kernel/umh.c b/kernel/umh.c
+index 60aa9e764a38..ec4ec12094b5 100644
+--- a/kernel/umh.c
++++ b/kernel/umh.c
+@@ -130,7 +130,7 @@ static void call_usermodehelper_exec_sync(struct subprocess_info *sub_info)
+ 
+ 	/* If SIGCLD is ignored do_wait won't populate the status. */
+ 	kernel_sigaction(SIGCHLD, SIG_DFL);
+-	pid = user_mode_thread(call_usermodehelper_exec_async, sub_info, SIGCHLD);
++	pid = kernel_thread(call_usermodehelper_exec_async, sub_info, NULL, SIGCHLD, 1);
+ 	if (pid < 0)
+ 		sub_info->retval = pid;
+ 	else
+@@ -169,8 +169,8 @@ static void call_usermodehelper_exec_work(struct work_struct *work)
+ 		 * want to pollute current->children, and we need a parent
+ 		 * that always ignores SIGCHLD to ensure auto-reaping.
+ 		 */
+-		pid = user_mode_thread(call_usermodehelper_exec_async, sub_info,
+-				       CLONE_PARENT | SIGCHLD);
++		pid = kernel_thread(call_usermodehelper_exec_async, sub_info,
++				       NULL, CLONE_PARENT | SIGCHLD, 1);
+ 		if (pid < 0) {
+ 			sub_info->retval = pid;
+ 			umh_complete(sub_info);
+-- 
+2.39.1
 
