@@ -2,156 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A716A6FCDE1
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 003EB6FCDE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234572AbjEISgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 14:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
+        id S234671AbjEISh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 14:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjEISf6 (ORCPT
+        with ESMTP id S232313AbjEISh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 14:35:58 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728921FFA;
-        Tue,  9 May 2023 11:35:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683657357; x=1715193357;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=bv3kHlCe3S6QGoNcfyxBsNha/dIV3FKGpKQhxUAfOTs=;
-  b=OkhnyOen0xt/9Sg1W8mj7Sniy5FjA3PoD7KVSHMp4LNe9yeBwDjF1UMc
-   wggAEhz4vf2V4I58lWlzvGmjnWpnZ+NfmnFClHb2OyfHjtOQ5v58W556r
-   IvQLCyKNY2hvJ8ZRwJ3Qf5FRas5egv661ULuu48QOJ+4iknJRnc8Fy+8X
-   43SISUxSkb7rozLL5gW3RhMe1bNaXu6GqDeMzibZsVCvEcNVz0VtdWetE
-   KjDnSy1NVxYMCOIdvHZ9oBKov6lNWYTu5hsL9VLAQxQPnVkjKIsNKDpT6
-   qqHJ+zx1pZ9Hq7rwx23ExqYZw5fn74eSqZKKAI+ydiSxvYxAJyX/ZbINN
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="339256183"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="339256183"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 11:35:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="731846994"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="731846994"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga001.jf.intel.com with ESMTP; 09 May 2023 11:35:47 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 9 May 2023 11:35:46 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 9 May 2023 11:35:46 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.171)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 9 May 2023 11:35:46 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VjG8PJ36LTcJgLBgIduky8kPd9QqFgrg6vO0vThIX86au6nWHgzwbBTUZnWVjaQtLAZ0wIHNyZbPIVG9HHd+TuE1CVSkPOTxfpz0+E4u0kR50anY42/NKY5IkwWgDAQfiAcU6x8IB3aNGXj75h7rXgAj7vTH02QJbQxad79MZH2ywgAewso7jpGYCkHpiOuA40Jxv1i5SzCYWKRANyGHLdPK+wagMrAR+ptKStTPEdFy1n6BR/ZenQ0vmJGX6Y/Jxz0A/BmdvbB77NL+xUF6WTq5Bk5eqQZLIg128rfNcZ6MVpd33boAlXlq36jgQtDvJLbrBRURQC07SkfE5rdjqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bv3kHlCe3S6QGoNcfyxBsNha/dIV3FKGpKQhxUAfOTs=;
- b=YawMju2fTUjtE7QEwai4+59iBE7ET7twp7Dy7z3yuZCwRiHU95CUz4MIlilT3DGJ3Fyz7Vw7aiLyPjtTvxhqTO/Bv5uwnSbOvdR+rtNMPLCsI6m8xGX/rvg9Yq24X3H4dUM1Fv330DJxEe7dlmqRfSwWC5W0qpFg9NTDoUSlL7l6jXxeCGvqv4jjO88kcEDdi/kQGmzQjnJpvqk+PmL0ePlfDCv5laaS9KR+DaNUH3kCEklVbeFsmlEdV7bannagApiFuf3Q0Dh8c5C63vgHdI+ECdANqdTnYFuku36jv4LYGepa+PP2AVmmi+NSvRaLjvfI4aUonfh3zvmK0Z16Lg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Tue, 9 May
- 2023 18:35:44 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::a52e:e620:e80f:302]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::a52e:e620:e80f:302%6]) with mapi id 15.20.6363.032; Tue, 9 May 2023
- 18:35:44 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Piyush Malgujar <pmalgujar@marvell.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "xueshuai@linux.alibaba.com" <xueshuai@linux.alibaba.com>,
-        "benjamin.cheatham@amd.com" <benjamin.cheatham@amd.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "jannadurai@marvell.com" <jannadurai@marvell.com>,
-        "cchavva@marvell.com" <cchavva@marvell.com>
-Subject: RE: [PATCH v2] ACPI: APEI: EINJ: EINJV2 support added
-Thread-Topic: [PATCH v2] ACPI: APEI: EINJ: EINJV2 support added
-Thread-Index: AQHZfoz/HoY7ASH3bUeV4msZv1/xf69KTa1QgABJGICAB3OngIAALJJA
-Date:   Tue, 9 May 2023 18:35:44 +0000
-Message-ID: <SJ1PR11MB60831FCB30F2A642B95C9D9FFC769@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20230504133224.2669-1-pmalgujar@marvell.com>
- <SJ1PR11MB6083A266C4A869FC9AAA5A9AFC6D9@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <SJ1PR11MB608326A6AC3FFE42699DDB40FC6D9@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <20230509143721.GA10616@Dell2s-9>
-In-Reply-To: <20230509143721.GA10616@Dell2s-9>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|CO1PR11MB4820:EE_
-x-ms-office365-filtering-correlation-id: 5f7b0edf-aab5-4c23-e50e-08db50bc332b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8jlxwR5jTP1alnNi32c85/92o43KQ+dqrgtZ4v3W30lOZKcb1k3WavsVVZtXnQcJFshmxJJSaNSVCRGmzovb7MYbNhf546s43tZ6B80gXatUwChXRkm3+xvtR1/rFVZPz0wDBv1LzToCudAiL0qfQVUWTxZy2XK3oEBmnOwDaPutTba330QIzOSDbU5R3VbKsSzg2LBNd9sNKPUyJNGRrdjQ0VBh1TvlI23PamIxNgp6IDw9GDuY15hhCmQrglsPnGbJdNwXLnuaNL0tuMKoLyP04YwkJbJSEZsNDPc7D9snRxmstmv9gyu2OPM34QuDDvMWBLCXjgVvjxb7xwxEQ3XO0f9ZTuINbbZMe3vieQcaOs/FiOFBdExejNi77By4B/aHoxjUXwZbz50EMIgwqlhIPWSuTU4nRb6Bg4yU+Vl8kSAgRJHkmb7fJrlXzwep3j0HvZVfo6YFd6Zdc5/nbSjPWbhGltlct3D1xRHO894XT1JhPo3WtMQbbEYDhD1gczL+6YQWaWZG1/uHIJgZJqx7Dv/dOwCVL2eQDwj6XknJ08uFEUIIX6q4DWC0IVcIi/wzmm98j8FEMYQNiTNfluFchXGVks0yzzfbWGrkHJFQkRagfWJ0uaW4PhKY1eFz
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(366004)(136003)(376002)(346002)(451199021)(54906003)(33656002)(38070700005)(55016003)(316002)(122000001)(82960400001)(9686003)(41300700001)(6506007)(38100700002)(26005)(52536014)(8936002)(8676002)(6916009)(4326008)(66446008)(66476007)(66556008)(66946007)(64756008)(76116006)(5660300002)(86362001)(186003)(478600001)(7416002)(2906002)(7696005)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?J4JvQBekau29he7MLDxjaMqhT5ic8KxrOAadKm1S03F3sapGo7aYtL+UbEJm?=
- =?us-ascii?Q?dfBolg1SsHAzrQPD5d5BfMNYKqX2XCe+gGbMonBbkSQATTB26FrxYg/4oOn2?=
- =?us-ascii?Q?jwFu2b3xZOdjwXGWEeI3W74ac07icSn84BC5/88Pa55Pb/enaW0kCqlk8DDs?=
- =?us-ascii?Q?Y8RSYQvK31hu4lqsj70O3mJBh1RYDGLSTdO7Wir5mf0IEK6sAwlX6I6buPYm?=
- =?us-ascii?Q?iRX1w9Yz95IKE7jMxhnh8+sF0VKjcg8DaS4+IflCI+MceN/bD0/BvEJasbHA?=
- =?us-ascii?Q?Vo6hC3cka+b0FTNpaCQ2P4IMy1ZnCmAIkd24wFM6NWGS+fnL6lglErjVXvkX?=
- =?us-ascii?Q?nCaPBIL8ElGzIEGsru8qs3lIPoaFgfRnh88qGYaa+dTTOUFLYpy4Zd8uZlsM?=
- =?us-ascii?Q?o1aXzuGiwTNHFVYMruVB0kzu0RH6ZeVmUYvQk0g97TtUyDgokNtKUDD+RFVY?=
- =?us-ascii?Q?6aQnm0wko3/L6qaOzZA3Yy5Qq3P/WWRRg6UuPr9mWzfvBTjwqszaCP0M+WdX?=
- =?us-ascii?Q?vM2Hg54FQLnYLH4cA+GueBZXAcYcaWjtX9EtY16UsdAMD2tDUH1ldFh/spOz?=
- =?us-ascii?Q?PglKUmbRhEBG5V0EEgncXev1HWmvZIcYOz7MWfZ+1Hmr3sb6xZhIkaCdlwWc?=
- =?us-ascii?Q?kuATIEVZSaeiciP/TtgJl0hMVH7ymvhn669hL4YnThKl/O42z4VcZVn+WLkU?=
- =?us-ascii?Q?z9ZzjyUMvIPRFYCsec98Hcdk9zC6Z3XWwG1fSjr+ziHs1JhIO85aaik0QHEu?=
- =?us-ascii?Q?UEI0vkgBMbTObECSZrQ7KZPEWAhOsELl5g/yb2XXoPzf9nS/8bvNR45b1bvt?=
- =?us-ascii?Q?qjl688tSpciSbWa0+XU0y71oImDH4UrfiNN6ThZVkH4ALUDqUdk00H+ZaKxh?=
- =?us-ascii?Q?5td8o3CP8a9oPTkFOLWW3Ssg9LaAgJC7MPIUs0XYzORekX08lP0yP2K6D0Qq?=
- =?us-ascii?Q?dm3teglFSH6tLujYYPRbaolvI+TLzVBwM8XpzCUYOUqshD32mmTu54ibNG12?=
- =?us-ascii?Q?/AhyCT0cmoWtZpajLxge3/aXA4ueJDDQm5B3MGqV9hh5YzSWGPeP2SS9ysQJ?=
- =?us-ascii?Q?F2SdFOGaKHyOBlVTwPy9qlkBJG15iR9cDmqWuxF2WrtyGNsCpCiKNRZTVQGl?=
- =?us-ascii?Q?osildlRWF8ZCpljlPutAGO6UT+RWezw8aiSR5R9JpVxQ/u7103lpnDvIuAnI?=
- =?us-ascii?Q?M9hXcWnP4PG4GbFqxGA6mvRijyujxthMGGYoDAgSnjdKiacP9ughP6A0fXkL?=
- =?us-ascii?Q?C1QrP44dg8bm1PMHImuEXjiHNKZywIkYrnipK1s3VlOoxcowkioQp2T2liU2?=
- =?us-ascii?Q?MCgfl9Ratb9gGPH7UiHDWugHiyby+X12LXLz9AT3ZZFINp35UOcF5QKlhakJ?=
- =?us-ascii?Q?7ZAjsKg9mmb2dPPH+0WVjVArnlIUfPcNnpVh+oOaXHBoJhQ5/B0NHK4KaNhP?=
- =?us-ascii?Q?m/uWq4nJUSQCiwHI2o2WbJMLFvBpUbIefGxKnVXWQTzuVIzhtvaIMpbawKS8?=
- =?us-ascii?Q?g0ZpfG4XrZCvBSgOo331iqezLcSQOBATkc3n1odPAvOXmS/2Xw4hR8couvqH?=
- =?us-ascii?Q?btXBhbfJaTovU8M+rl0=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 9 May 2023 14:37:26 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB662126
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 11:37:24 -0700 (PDT)
+Received: from zn.tnic (p5de8e8ea.dip0.t-ipconnect.de [93.232.232.234])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 01C901EC0338;
+        Tue,  9 May 2023 20:37:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1683657443;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=uZBxm4/mI0TbVT4vVosHk4oYlGuPEwWCxuD7POwmsR4=;
+        b=dIzqqgXpZv9nXbM6cX0PK2WpnHXcvI96BiK+COoH8T04uipxXDXisRFTm/W7iMDy0OVp2O
+        tlhA7Lgzv7P0I3FJGELQ/ZT8NmTRJxDdQBTH8SAh4Oum8+/FfhaV2yemqhDjz2A8Q2lVew
+        6abOm40jVAXSI99pV9E+k0wv7Obdisw=
+Date:   Tue, 9 May 2023 20:37:15 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        mikelley@microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v6 06/16] x86/mtrr: replace vendor tests in MTRR code
+Message-ID: <20230509183715.GEZFqS20XTUZqpJEZ/@fat_crate.local>
+References: <20230502120931.20719-1-jgross@suse.com>
+ <20230502120931.20719-7-jgross@suse.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f7b0edf-aab5-4c23-e50e-08db50bc332b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2023 18:35:44.5036
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AelWWMpVA/MrspC2vYJ9bX/3JM8TacaqrynEMr0ulsxDs6WwCzXJaRkJ0XQwycuVDBbAIl394/ZNxO68IpY7kw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4820
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230502120931.20719-7-jgross@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -160,37 +55,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> If a platform supports einj v2, then the einj directory wont be needed, a=
-s per spec,
-> if a non-zero Error Type value is set by EINJV2_SET_ERROR_TYPE, then any =
-Error Type
-> value set by (einj case) SET_ERROR_TYPE_WITH_ADDRESS and/or SET_ERROR_TYP=
-E will be
-> ignored. So based on einjv2 is supported or not, we can have either einjv=
-2 or einj=20
-> directory with the related params files in it respectively.=20
-> Kindly let us know your thoughts.
+On Tue, May 02, 2023 at 02:09:21PM +0200, Juergen Gross wrote:
+> Modern CPUs all share the same MTRR interface implemented via
+> generic_mtrr_ops.
+> 
+> At several places in MTRR code this generic interface is deduced via
+> is_cpu(INTEL) tests, which is only working due to X86_VENDOR_INTEL
+> being 0 (the is_cpu() macro is testing mtrr_if->vendor, which isn't
+> explicitly set in generic_mtrr_ops).
+> 
+> Test the generic CPU feature X86_FEATURE_MTRR instead.
 
-Piyush,
+Doesn't work for the MTRRs disabled case - mtrr_trim_uncached_memory()
+gets called directly, where mtrr_if can be NULL.
 
-There are a lot of validation tests built on top of the EINJ v1 Linux inter=
-face and interest
-in keeping them working rather than forcing a giant "change everything" whe=
-n the first
-EINJ V2 system arrives.
+[    0.006508] MTRRs disabled by BIOS
+[    0.006522] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+[    0.006597] !mtrr_if
+[    0.006609] CPU: 0 PID: 0 Comm: swapper Not tainted 6.4.0-rc1+ #1
+[    0.006626] Hardware name: Acer AOA150/, BIOS v0.3309 10/06/2008
+[    0.006638] Call Trace:
+[    0.006663]  dump_stack_lvl+0x6a/0xdc
+[    0.006697]  dump_stack+0xd/0x14
+[    0.006719]  mtrr_trim_uncached_memory+0x317/0x440
+[    0.006761]  ? __this_cpu_preempt_check+0xf/0x1c
+[    0.006814]  ? _raw_spin_unlock+0x27/0x50
+[    0.006835]  ? cache_enable+0x3d/0x44
+[    0.006869]  setup_arch+0x746/0xcac
+[    0.006887]  ? vprintk_default+0x15/0x1c
+[    0.006922]  ? vprintk+0x55/0x64
+[    0.006953]  start_kernel+0x56/0x630
+[    0.006974]  ? idt_setup_early_handler+0x82/0x9c
+[    0.007007]  i386_start_kernel+0x48/0x48
+[    0.007027]  startup_32_smp+0x156/0x158
 
-BIOS team here thinks that the EINJ V2 spec change is (or can be) increment=
-al.
-Platform firmware can choose to continue supporting EINJ V1 while also prov=
-iding
-EINJ V2 actions.
+I've done this ontop. mtrr_enabled() must be used now before caller
+needs to do any mtrr_if-> accesses.
 
-So Linux should be prepared to handle:
+And yes, the MTRR code needs more scrubbing.
 
-1) Legacy systems with just the V1 interface.
+diff --git a/arch/x86/kernel/cpu/mtrr/cleanup.c b/arch/x86/kernel/cpu/mtrr/cleanup.c
+index 4a979086f00e..ed5f84c20ac2 100644
+--- a/arch/x86/kernel/cpu/mtrr/cleanup.c
++++ b/arch/x86/kernel/cpu/mtrr/cleanup.c
+@@ -689,6 +689,9 @@ int __init mtrr_cleanup(void)
+ 	int index_good;
+ 	int i;
+ 
++	if (!mtrr_enabled())
++		return 0;
++
+ 	if (!cpu_feature_enabled(X86_FEATURE_MTRR) || enable_mtrr_cleanup < 1)
+ 		return 0;
+ 
+@@ -882,6 +885,9 @@ int __init mtrr_trim_uncached_memory(unsigned long end_pfn)
+ 	/* extra one for all 0 */
+ 	int num[MTRR_NUM_TYPES + 1];
+ 
++	if (!mtrr_enabled())
++		return 0;
++
+ 	/*
+ 	 * Make sure we only trim uncachable memory on machines that
+ 	 * support the Intel MTRR architecture:
+diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
+index bcde9a754f62..ec8670bb5d88 100644
+--- a/arch/x86/kernel/cpu/mtrr/mtrr.c
++++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
+@@ -59,10 +59,6 @@
+ #define MTRR_TO_PHYS_WC_OFFSET 1000
+ 
+ u32 num_var_ranges;
+-static bool mtrr_enabled(void)
+-{
+-	return !!mtrr_if;
+-}
+ 
+ unsigned int mtrr_usage_table[MTRR_MAX_VAR_RANGES];
+ DEFINE_MUTEX(mtrr_mutex);
+diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.h b/arch/x86/kernel/cpu/mtrr/mtrr.h
+index 81babff29c59..4463a8db6f4e 100644
+--- a/arch/x86/kernel/cpu/mtrr/mtrr.h
++++ b/arch/x86/kernel/cpu/mtrr/mtrr.h
+@@ -80,3 +80,12 @@ extern const struct mtrr_ops centaur_mtrr_ops;
+ extern int changed_by_mtrr_cleanup;
+ extern int mtrr_cleanup(void);
+ void generic_rebuild_map(void);
++
++/*
++ * Must be used by code which uses mtrr_if to call platform-specific
++ * MTRR manipulation functions.
++ */
++static inline bool mtrr_enabled(void)
++{
++	return !!mtrr_if;
++}
 
-2) Incremental systems that have both V1 and V2 interfaces.
+-- 
+Regards/Gruss,
+    Boris.
 
-3) Future looking systems that only have the V2 interface.
-
--Tony
+https://people.kernel.org/tglx/notes-about-netiquette
