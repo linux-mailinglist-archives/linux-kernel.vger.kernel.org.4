@@ -2,180 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7B36FC996
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B90906FC99F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 16:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235867AbjEIOyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 10:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        id S235966AbjEIOya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 10:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235204AbjEIOyA (ORCPT
+        with ESMTP id S235204AbjEIOy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 10:54:00 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB0CDB
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 07:53:56 -0700 (PDT)
-X-UUID: 4e6e8494ee7911edb20a276fd37b9834-20230509
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=mHxLVPqeaIuocbSV8Cd4w0gqhd5gOpawunFhY3yOI5U=;
-        b=BHETdY7/RTYFkirLBzeBZt+J5Bem47VcqWIqXZwzuVabYCns2NKimrfYu23WDVJ28jbCPNzw0eRB+q1YDT0qQaIPvj5rxzoDqa40GDPI4Hunlxu8aT4LZ/TRs0IoYYVyHA+3VRC3I7nzD13hQA/W7uOV2TD/n02KlvotdxGzFcQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.24,REQID:454b514b-a572-46cb-9b44-69cc6e11c9a1,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:178d4d4,CLOUDID:4807426b-2f20-4998-991c-3b78627e4938,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 4e6e8494ee7911edb20a276fd37b9834-20230509
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <jason-jh.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 437683257; Tue, 09 May 2023 22:53:49 +0800
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 9 May 2023 22:53:48 +0800
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.237)
- by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 9 May 2023 22:53:47 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BCkVYUj9gsdBe+aHmyGuGUaQ/UbND9L7TFsijAkn0eRz0vFyRkHjKGVHQs+N33KwjFpIvgdzbiMCWU2m/7DGU6C9dMXPZOcbXP4QmdoWkVkPVTuh8kgsh2JMmk8Z6H4L9Ayy/WmUJTtxBXv0x1rcdBQ/KTKMxCgVaANMOJxf6Cq9YVpYihRdow0hTt6RCeQIMqdJU4Z+2H6rCQS7547ceqNzH4ek+GQAIXlbDm9MnFsZH5ryz1d2j3oGXeoEsLbseG+YmonJU9hvVcbwohZt+6GcSKmMKa6VfnGD+q7BXC6r5R2v1b1a4DqoBK1GLoANLtp48U0boNCTyoxtI3BNaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mHxLVPqeaIuocbSV8Cd4w0gqhd5gOpawunFhY3yOI5U=;
- b=P8wUZYJtISUxA8E2oPNuAkynGr+gnmpMSqOMPDj0zHX4yEcRCS7tTbGG1Kt0UMTMaEYsjp7jAB397Y1AIZDiVk9hP3kMGGE53qIHGtRxEeep19uIgFHnQdcigiyT7nnHBWl0ICBfQf3yeZcImPNqRfWgn9SEIenPSx7ngubvfYBvlJMOZZctG8gIzYQVAqLrqCds9bSPK2Mhsa9vLc7/GldTjLWStp5LBuIt/8+aKcUWYWY3f3+A7gMETTwsFMvEQZ3Ih3BTsXxkLHqZ4+5kT3mKifC75SeNWS4lj4NYNOh4oGbK/3RV8FED70KAjLq4vFf0HwIaZV/NN1CFmk+kVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
+        Tue, 9 May 2023 10:54:28 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FF83A80
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 07:54:26 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-b9a6d9dcbebso5250527276.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 07:54:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mHxLVPqeaIuocbSV8Cd4w0gqhd5gOpawunFhY3yOI5U=;
- b=G3fkB/Swik5xBtxjs2s8KOdT/1xokkr25rxBOS58W6U9etLJcT5NjRt6Dc8uPI9ta+MYXwJfiUhlbefJhLPhSaIwLetkxh48KvZp+ws+6E0aBgH3SWflEr0jnkUZMSaawP7i0WdX0r4muYq+Eu0FkZY6K9PLCb+e5HqCh1phkhc=
-Received: from PU1PR03MB3062.apcprd03.prod.outlook.com (2603:1096:803:3b::21)
- by JH0PR03MB7982.apcprd03.prod.outlook.com (2603:1096:990:36::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Tue, 9 May
- 2023 14:53:44 +0000
-Received: from PU1PR03MB3062.apcprd03.prod.outlook.com
- ([fe80::66d9:2bd0:26ba:d9bb]) by PU1PR03MB3062.apcprd03.prod.outlook.com
- ([fe80::66d9:2bd0:26ba:d9bb%7]) with mapi id 15.20.6363.033; Tue, 9 May 2023
- 14:53:44 +0000
-From:   =?utf-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
-        <Jason-JH.Lin@mediatek.com>
-To:     "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v3 11/11] drm/mediatek: gamma: Program gamma LUT type for
- descending or rising
-Thread-Topic: [PATCH v3 11/11] drm/mediatek: gamma: Program gamma LUT type for
- descending or rising
-Thread-Index: AQHZgBeboB+qwlQES0KGw/L3oFBzsa9SC+mA
-Date:   Tue, 9 May 2023 14:53:44 +0000
-Message-ID: <67977ed39a850f3ad7338265dbad5dcc5ac63f01.camel@mediatek.com>
-References: <20230506123549.101727-1-angelogioacchino.delregno@collabora.com>
-         <20230506123549.101727-12-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230506123549.101727-12-angelogioacchino.delregno@collabora.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PU1PR03MB3062:EE_|JH0PR03MB7982:EE_
-x-ms-office365-filtering-correlation-id: 5c88f9ab-f045-4c54-b521-08db509d2f99
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: J3DkBMOLqSGsL193+hqlQY/oGs+OOCBjdkZSY2HKPT3gaKV4mEuXU1b4FFXFGUPAOMmlkup42x2WEMgNvqLHJF0Yc0nNGuPVraX9Hk0uwJOE19IejilnL9IMctG6bGOHHXeuisE80cd3PUT23xolLOTpmmOyACcfuYcOxnx+cx9ri0+uhfc7x1f9IxP3l+zLCgFnTesDVOLrTfWcfpjRAnekaC5wO7RgDC6dXvF9jzfgfSTOzZT6CR7IKXrBeB3Dghgt9brXswyh0P1/Cn6Jn8Jawi+Fl4WeiT5mRv+k1cQWveHfhAnZbHokq2Ox8afZ6xsV9beuB6yvFpRjNChBp9TZcuInng3+9mPmby+sVqf66eQnkAX/YJEyMLqn4Fwieww2RSoUJyu7ssxmqhU1G51VBzxT7g3CcPxqqyKeuNaG/Sipad/qG6X4vmurSD14L6RCDDmcPf3mUOoXuaNl58Ib5EBd9AmsyAetpZJPFW401MyCS/tsuSe3rYMU/T0Z2sEcoBI8PSA6Ntm4aNp/Bsu9Ubv6t5Og3sqoMeqm35MIEGlN/BAbDM9pTRY5SUhljVE6IdWlBVYCYMQflXYRj3Vd1MK++1Gat4edoAjzkJJOFgXU/LDVcdlwQ4rrOb3i
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PU1PR03MB3062.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(346002)(366004)(136003)(451199021)(36756003)(316002)(478600001)(66556008)(83380400001)(91956017)(66446008)(66946007)(64756008)(66476007)(4326008)(76116006)(6486002)(2616005)(54906003)(71200400001)(6506007)(6512007)(26005)(110136005)(186003)(4744005)(86362001)(2906002)(85182001)(41300700001)(122000001)(5660300002)(8676002)(38100700002)(8936002)(38070700005)(7416002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TXRnSmZnOWg1VVdmTytWRlpxWUZCRU5NQWZxSjZJYjdDaTRJUGhSR1dteHhn?=
- =?utf-8?B?RC82cDh0dEZoeFNLdWE3TkR4WGZCT2t2T3ZVQkZhVHF5a3pLamRiZWJQVXRH?=
- =?utf-8?B?RkR6Sk9abTlZRm11dHQwYmI1NnA1QXpzalloVVZPR3FUSElYdnNUM0FUU1VJ?=
- =?utf-8?B?eXVuV1NMSWIxNFlkeVAxVXV4djVkTnlaVzRjZWdVUy9JT0tWR0EvcnJaMTdW?=
- =?utf-8?B?M3NPWHR0aitkN2tYQ3VSRWpYODlaa0h5N2lwYmVQaExyYlRpa1hBQXlBUGZz?=
- =?utf-8?B?VC9XWk1hNzBhWUhabWxvWi9GRExTTmpHRlJZYzdncVFKanNOckhUSXh4Smxq?=
- =?utf-8?B?RW82cXBycUhGUHlEWENaWDR6alZQaXZzN3RKU1pKK3BCVDVBTUx6dTFnNmV0?=
- =?utf-8?B?WSs0emNwNGNNMG9lYU1wY09jc2JuKy9KUFRqTEE5RVhKdFIxb1R6VzNsWURZ?=
- =?utf-8?B?cFJ6OE9MVWxpTnNJbFRLcFFkWGZiVVpvVVZlQm5CL0hWRVlFUFJMWXRNSHlB?=
- =?utf-8?B?YlpETjhKN2xTNTRITkRWYndBQnRJdVl1Zi85ZVNYMFBQNGpIQ2I3aGEzT2ZT?=
- =?utf-8?B?UkFEZVhKeUljN2xmMTFHNlVudUZiUnNTSy80OW5KcXB2RnppY0UwQngzWWVX?=
- =?utf-8?B?KzlhRDU4Mit5ZHNmbXdhK1JjMFlRS20yRXk1Q2FyRXRCSXh5TW9LWmx4R0wx?=
- =?utf-8?B?bmcwb1A1MDdubXFDVU5USXh3UW50YVlTd3lGTU5OVzg1NCtKTG10aWRrTnN5?=
- =?utf-8?B?dmtWd0RLTy9xNU5paTNsWGgxaFJ2bitHK085amlsc3BNRVpHamM0SWRNeEZD?=
- =?utf-8?B?dWpscVF1Z1ZlUExnN05KZjNkVG1jQzJ4aTJaZTJYcUdRNDI2dHV0d2hiZXN6?=
- =?utf-8?B?M1RYNE9pdGpBaXNKNXpmSVlYWjJXbUp4K3VoK2FMbkZ5SWFOM2gybDhEZHRu?=
- =?utf-8?B?TXd0U1hoc3BnMTVQZnFEYmx5UTZHK3JNSmI2SkduWWt3Z3BIR3pJYXVGR3pG?=
- =?utf-8?B?NXRUSXBaZDJqVDFVdG5DZ21qTnZtdXpjTEJEV0s4NUIrbkVaQWNnRzZ4alIw?=
- =?utf-8?B?Wk5TTnBmUmpTNlNzUm1nSGZBbjFUTnpuRHYxRXpKeS9kb1FyQ1lneHFLOG5v?=
- =?utf-8?B?NGxFZEk0MTFxL205dFdMdlVZcVhJMzNkdUVJaGRSQTRId1M5SER6ejYyeDNY?=
- =?utf-8?B?N0xhUjd4cXRtalp0TXc1dHhsU2tuRG8rOFNHd3dTZElIaW4vaFdvZ0c4TVg0?=
- =?utf-8?B?MG1FMzZVczY1ZFJYWERMYUFQRDVGbHExLzVOZmsrT01mYUh3L0g2V0JKMGg0?=
- =?utf-8?B?bU84Y3VxeXVNQy9lRHpJaUQreHcySVNRbkdFWFRBemc0TGdwcEVRc1RFeDhX?=
- =?utf-8?B?ckRBb2t6UTVBQTVKeVRNLzl1QUhWbHNWRkdjbHNpN0NvelRCTzlUeEJyeC8w?=
- =?utf-8?B?aW9weXNnVE5uQWRSNnpvUk9HM0R6Vkk3UXVwMDJVSElqNzR4aC8rVUs4U0Nh?=
- =?utf-8?B?WEtOYnJKRWJPNlRhUW9PejhjREt2aDY4clhNY0JNZlRVT2ZYTGdVQ1EyYnFo?=
- =?utf-8?B?U2FUek1QNyt3WXZtRkxNM1RiZ3UrUWFOenFvWmJVMERGOTdMT3NxN09aeHl3?=
- =?utf-8?B?Ujg2bmVNb2NzdXl2bXRwcURRU0NsQ1dJdXdtcEJoQzE0WVErWjIzangvTEZS?=
- =?utf-8?B?czhjbDlwNTFrWGlVenB3MnAwQWoyTWZPTVoxR0NuVThGendEM1ZJTUxaVEdB?=
- =?utf-8?B?bEFCaFFmemJYSEJ0cWdEenRtaDFLNk9md2hwNFFtakI0RmE5TkFYbTN3T2l3?=
- =?utf-8?B?REMzTUlyYmtuUnYxaG5UTzlVaHM5UzhHcExCNUtVekFSK0k5V3MwTmF6M0lN?=
- =?utf-8?B?bUdQYUpzSUczUGF3WGxHa3Qva3lXeDd6ZkVWVUtQcWdxSUlGMTVLTUp6QnpV?=
- =?utf-8?B?L3JFUGtjaGNtaTg1T1pHdzRJdXRrV0tjZ0NENVZOWHowSEI1ZUpxQXJ5WWlK?=
- =?utf-8?B?NkJWN2pzVDdLeTFYekswS3VhT2xxQ2djUEloRTRaSFZENUtlWm1sSVc5d2RR?=
- =?utf-8?B?ekQvNjlHTVdmTzloK0dOTDhkTXk4WHZUYUxXYm1FUVRsZWY3b1BPSUlPNjF4?=
- =?utf-8?B?eUtIQXo5ZHJoSzlSZDFlbWNtWGNUd0VWSXRjUVhtc1Ryb2lla1lCT0N3ekwz?=
- =?utf-8?B?Nmc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0A86FEDBFB7EBD499DD6163DFA3EA9D4@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=linaro.org; s=google; t=1683644065; x=1686236065;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OMoWAG5YcLWd7jHxPm4FwUTroek8lWQak19WkRdudgo=;
+        b=Io/MN5XgfwjV4qEXrXT32vfMuqvum8Uppk+n3hqfOVTQ1gxgSj1XFABZv0bPjPfx2f
+         zTw2QtEud5iDlPYOrkN4FfLhE63KI5GegvMmc0IJsLD57pEOdUUy1Ti4BygSEbQFg6Ox
+         Y80vZPlPGVwTBUR2qjtAfCSMLLYSvLAnvRYXWPrud4kxDexFthHqWcydfo402zB4N1/c
+         /EEDSSb4xG5/+qa8inlFTddjIMuXINnnhVfcZdRmk24Oakw89tXkYGpuROtu+AyviUFH
+         7NB2jj9ldu3myKEheVxcuNALFIAKmIlNyn+PEbJVbGGZDQ4euzXQDFTzxRlEaBIWdL/X
+         JQTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683644065; x=1686236065;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OMoWAG5YcLWd7jHxPm4FwUTroek8lWQak19WkRdudgo=;
+        b=Pb9COs+o4Z5UrGxDcklLMAERtlEZeslGtVXjmsCq4p/O6rXMBoBmclDLBN+YRjDvc4
+         Vo0xvYBoNsm6lBFNM+HsA99bgFqLLRPoVataLRB7ExVloyTY1Eacc3Br4Qb4x1Cyhpla
+         f53L9/Tuv7uW4nG0daZgVCCyjWcxzKApLRjAxk4VfQjidALbryINsyMuBm350N5gU+5j
+         7IcG9APwjcmgbCbwNIyKnhaZnWPaBiuHbofllRnP97+MVStDw1P43S6X2StFHShdqehf
+         iOitv/Y8IMYPoD5Jw+3Ht6WDsO8kufDqGgPh4ZKzV/JFhkuk8hWKXh0cZik0kixBgdUM
+         n1oQ==
+X-Gm-Message-State: AC+VfDyarBR6QiF1FFTVYH7NsGd/TIg5WRMqzQYX4AHxBa20QLQj2VCw
+        lsKSr0IhWIKBHhbjtldQSGy5KgLqalK4lzo7GCBg4w==
+X-Google-Smtp-Source: ACHHUZ6XS+Ciur4SJIYYmUxd/gl1SYLo4597xYrxEiSUH/3NIDIuEChvMl/HS9/Wg+rGPbQFz9pgMzgViPVv95JQEcI=
+X-Received: by 2002:a25:15ca:0:b0:b9e:2697:9d96 with SMTP id
+ 193-20020a2515ca000000b00b9e26979d96mr13164782ybv.3.1683644065358; Tue, 09
+ May 2023 07:54:25 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PU1PR03MB3062.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c88f9ab-f045-4c54-b521-08db509d2f99
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2023 14:53:44.1686
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hd6JZt532TDPTzLgRJ1geBB4kgBE3/wOIldP7c8aMIgHwRBl7ON26YHoZZqbuR2gI0M9yUD9EcTKmEqjJnpjNvZpOUbZgb3maCgJ2KjOC2g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: JH0PR03MB7982
+References: <20230505150241.3469424-1-abel.vesa@linaro.org> <20230505150241.3469424-3-abel.vesa@linaro.org>
+In-Reply-To: <20230505150241.3469424-3-abel.vesa@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 9 May 2023 16:53:49 +0200
+Message-ID: <CAPDyKFrphhrA5a5NBVji6p_w8=acjgZhvL=HeOtqsng+MVdxhQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 2/2] PM: domains: Skip disabling unused until sync state
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQW5nZWxvLA0KDQpPbiBTYXQsIDIwMjMtMDUtMDYgYXQgMTQ6MzUgKzAyMDAsIEFuZ2Vsb0dp
-b2FjY2hpbm8gRGVsIFJlZ25vIHdyb3RlOg0KPiBFeHRlcm5hbCBlbWFpbCA6IFBsZWFzZSBkbyBu
-b3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bnRpbA0KPiB5b3UgaGF2ZSB2ZXJp
-ZmllZCB0aGUgc2VuZGVyIG9yIHRoZSBjb250ZW50Lg0KPiANCj4gDQo+IEFsbCBvZiB0aGUgU29D
-cyB0aGF0IGRvbid0IGhhdmUgZGl0aGVyaW5nIGNvbnRyb2wgaW4gdGhlIGdhbW1hIElQDQo+IGhh
-dmUgZ290IGEgR0FNTUFfTFVUX1RZUEUgYml0IHRoYXQgdGVsbHMgdG8gdGhlIElQIGlmIHRoZSBM
-VVQgaXMNCj4gImRlc2NlbmRpbmciIChiaXQgc2V0KSBvciAicmlzaW5nIiAoYml0IGNsZWFyZWQp
-OiBtYWtlIHN1cmUgdG8gc2V0DQo+IGl0IGNvcnJlY3RseSBhZnRlciBwcm9ncmFtbWluZyB0aGUg
-TFVULg0KPiANCj4gU2lnbmVkLW9mZi1ieTogQW5nZWxvR2lvYWNjaGlubyBEZWwgUmVnbm8gPA0K
-PiBhbmdlbG9naW9hY2NoaW5vLmRlbHJlZ25vQGNvbGxhYm9yYS5jb20+DQoNClJldmlld2VkLWJ5
-OiBKYXNvbi1KSC5MaW4gPGphc29uLWpoLmxpbkBtZWRpYXRlay5jb20+DQoNClJlZ2FyZHMsDQpK
-YXNvbi1KSC5MaW4NCg==
+On Fri, 5 May 2023 at 17:02, Abel Vesa <abel.vesa@linaro.org> wrote:
+>
+> By storing the status of the domain at boot, specified by the provider,
+> we can decide to skip powering 'off' the domain on the late initcall,
+> strictly based on the status boot being 'on' or 'unknown', and then
+> assume the provider will disable it from its sync state callback.
+> Also, provide a generic genpd sync state callback for those providers
+> that only need that when they state synced.
+
+If I understand correctly, this means that providers that don't use
+the sync state callback, will be kept powered-on until the late
+initcall, even if those could be turned off at an earlier point. Is
+this really what we want?
+
+>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>  drivers/base/power/domain.c | 51 +++++++++++++++++++++++++++++++++++--
+>  include/linux/pm_domain.h   |  5 ++++
+>  2 files changed, 54 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 33a3945c023e..9cc0ce43b47b 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -125,6 +125,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+>  #define genpd_unlock(p)                        p->lock_ops->unlock(p)
+>
+>  #define genpd_status_on(genpd)         (genpd->status == GENPD_STATE_ON)
+> +#define genpd_boot_keep_on(genpd)      (!(genpd->boot_status == GENPD_STATE_OFF))
+
+This seems a bit unnecessarily complicated. Can't we just use bool in
+the genpd struct, to track whether we should allow powering off or
+not, based upon the boot condition.
+
+>  #define genpd_is_irq_safe(genpd)       (genpd->flags & GENPD_FLAG_IRQ_SAFE)
+>  #define genpd_is_always_on(genpd)      (genpd->flags & GENPD_FLAG_ALWAYS_ON)
+>  #define genpd_is_active_wakeup(genpd)  (genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
+> @@ -654,6 +655,29 @@ static void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
+>         queue_work(pm_wq, &genpd->power_off_work);
+>  }
+>
+> +/**
+> + * pm_genpd_power_off_unused_sync_state - Power off all domains for provider.
+> + * @dev: Provider's device.
+> + *
+> + * Request power off for all unused domains of the provider.
+> + * This should be used exclusively as sync state callback for genpd providers.
+> + */
+> +void pm_genpd_power_off_unused_sync_state(struct device *dev)
+> +{
+> +       struct generic_pm_domain *genpd;
+> +
+> +       mutex_lock(&gpd_list_lock);
+> +
+> +       list_for_each_entry(genpd, &gpd_list, gpd_list_node)
+
+It looks like we need the of_genpd_mutex here as well, as it's really
+the list of providers that we want to protect too.
+
+> +               if (genpd->provider->dev == dev && genpd_boot_keep_on(genpd)) {
+> +                       genpd->boot_status = GENPD_STATE_OFF;
+
+This needs to be done while holding the genpd's lock.
+
+> +                       genpd_queue_power_off_work(genpd);
+> +               }
+> +
+> +       mutex_unlock(&gpd_list_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(pm_genpd_power_off_unused_sync_state);
+> +
+>  /**
+>   * genpd_power_off - Remove power from a given PM domain.
+>   * @genpd: PM domain to power down.
+> @@ -674,6 +698,12 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+>         unsigned int not_suspended = 0;
+>         int ret;
+>
+> +       /*
+> +        * If the domain was left enabled at boot stage,
+> +        * abort power off until sync state is reached.
+> +        */
+> +       if (genpd_boot_keep_on(genpd))
+> +               return -EBUSY;
+>         /*
+>          * Do not try to power off the domain in the following situations:
+>          * (1) The domain is already in the "power off" state.
+> @@ -763,6 +793,12 @@ static int genpd_power_on(struct generic_pm_domain *genpd, unsigned int depth)
+>         struct gpd_link *link;
+>         int ret = 0;
+>
+> +       /*
+> +        * Just in case this is the first power on request, mark the boot
+> +        * status of it as 'off'.
+> +        */
+> +       genpd->boot_status = GENPD_STATE_OFF;
+> +
+>         if (genpd_status_on(genpd))
+>                 return 0;
+>
+> @@ -1095,8 +1131,16 @@ static int __init genpd_power_off_unused(void)
+>
+>         mutex_lock(&gpd_list_lock);
+>
+> +       /*
+> +        * If the provider has registered a 'sync state' callback,
+> +        * assume that callback will power off its registered unused domains,
+> +        * otherwise we power them off from here.
+> +        */
+>         list_for_each_entry(genpd, &gpd_list, gpd_list_node)
+> -               genpd_queue_power_off_work(genpd);
+> +               if (!dev_has_sync_state(&genpd->dev)) {
+
+The genpd->dev isn't really the one that is used by the genpd provider
+driver, hence this doesn't work.
+
+In the code you introduced above, you used the "genpd->provider->dev",
+which is probably what we want here too, right?
+
+> +                       genpd->boot_status = GENPD_STATE_OFF;
+
+Updating this needs to be protected by the genpd's lock.
+
+> +                       genpd_queue_power_off_work(genpd);
+> +               }
+
+The above said - I am concerned about having to hold each genpd's lock
+in this path.
+
+I realize that we need to update the genpd->boot_status at some point,
+but let me think a bit if we can do that in a slightly better way,
+without holding all the locks.
+
+>
+>         mutex_unlock(&gpd_list_lock);
+>
+> @@ -1124,6 +1168,9 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
+>  {
+>         struct gpd_link *link;
+>
+> +       if (genpd_boot_keep_on(genpd))
+> +               return;
+> +
+>         if (!genpd_status_on(genpd) || genpd_is_always_on(genpd))
+>                 return;
+>
+> @@ -2064,7 +2111,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>         genpd->gov = gov;
+>         INIT_WORK(&genpd->power_off_work, genpd_power_off_work_fn);
+>         atomic_set(&genpd->sd_count, 0);
+> -       genpd->status = boot_status;
+> +       genpd->status = genpd->boot_status = boot_status;
+>         genpd->device_count = 0;
+>         genpd->provider = NULL;
+>         genpd->has_provider = false;
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index c545e44ee52b..86bb531a319c 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -132,6 +132,7 @@ struct generic_pm_domain {
+>         const char *name;
+>         atomic_t sd_count;      /* Number of subdomains with power "on" */
+>         enum gpd_status status; /* Current state of the domain */
+> +       enum gpd_status boot_status;    /* Boot state of the domain */
+>         unsigned int device_count;      /* Number of devices */
+>         unsigned int suspended_count;   /* System suspend device counter */
+>         unsigned int prepared_count;    /* Suspend counter of prepared devices */
+> @@ -233,6 +234,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>                   struct dev_power_governor *gov,
+>                   enum gpd_status boot_status);
+>  int pm_genpd_remove(struct generic_pm_domain *genpd);
+> +void pm_genpd_power_off_unused_sync_state(struct device *dev);
+>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
+>  int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
+>  int dev_pm_genpd_remove_notifier(struct device *dev);
+> @@ -281,6 +283,9 @@ static inline int pm_genpd_remove(struct generic_pm_domain *genpd)
+>         return -EOPNOTSUPP;
+>  }
+>
+> +static inline void pm_genpd_power_off_unused_sync_state(struct device *dev)
+> +{ }
+> +
+>  static inline int dev_pm_genpd_set_performance_state(struct device *dev,
+>                                                      unsigned int state)
+>  {
+
+Kind regards
+Uffe
