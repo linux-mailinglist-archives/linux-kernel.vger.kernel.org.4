@@ -2,179 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074756FC355
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C87D6FC34C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235087AbjEIJ5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 05:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
+        id S234528AbjEIJ5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 05:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234304AbjEIJ5a (ORCPT
+        with ESMTP id S233625AbjEIJ5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 05:57:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA05830E4
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683626208;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oaTOQ0K27eQKF5yA9KfJtjHQBDHHdEjUJFt7kiZHIPo=;
-        b=ETlcmeKfmSpmxQcLtbkNMgclOoIk9w3c4tWs5iXt/UBcE/MfVDTBA8UWuy0n2VEjo1emI2
-        NFhgKeoHM6TnTpo3JZZDzcN1kZ1goe5AT2w1FLk4b20f8+lwts/hnd74RtnPft9q0mrYz/
-        F+dg2+6Z/RNomSd5rkkldMl8/8I/yIs=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-204-gwLvPgUGNmKdwVfu_4sKVQ-1; Tue, 09 May 2023 05:56:44 -0400
-X-MC-Unique: gwLvPgUGNmKdwVfu_4sKVQ-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-50bcb45f749so5340380a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 02:56:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683626202; x=1686218202;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oaTOQ0K27eQKF5yA9KfJtjHQBDHHdEjUJFt7kiZHIPo=;
-        b=SEGGV4aaVe825Xkz9I84e3qjuoZhBas8/rqdLXBIHVFtB4PDQsKoAHKhH6a5MH3iiN
-         g5x5BI6LjuIIXWc83DTtviekI8YovfToX4lYnM3LYLhdM3FQ0LaAur902+2/TNSshrtl
-         y6aLP2f4iMQWQebiZ7isgHnHC2FEbuJlcjVAKIvK2gqWSzJ8dk3dY04alUXQW3m4wG3C
-         4Mw1AHjmvJ7vz7Q56kC7MCCrtl3pZYESz0AKpsJxBQrzanXzPywE7UXEHNGV8xM6XhUz
-         OU4IqgTql27anP9VR8f1tDucNduYzryf9jxuprB/tR/7yuiPYMBF3frFUSfYCHL5lwKV
-         JsTQ==
-X-Gm-Message-State: AC+VfDzHX4IpdXzhhiO4+is2/ad7gRlG3vTFd9N5Dq6OVW9rdw2443V+
-        /CcNrncMANKqTJerQXtl3wQLtgeAIPxNDnxusguPj4zZZPMStPAc6qRHssVdsCdtCAOAiG7HG6N
-        5OZw/q4E9E6QBA9lroKIrPkp7
-X-Received: by 2002:a17:907:2d12:b0:969:98eb:3fdd with SMTP id gs18-20020a1709072d1200b0096998eb3fddmr3682171ejc.3.1683626202557;
-        Tue, 09 May 2023 02:56:42 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4pX3yMA1Jb7LATaSK68YRIv0ateTECpkbTpTf2fAXJwsPe5XwUK84/dvwoM1fY/s2nzL6R5w==
-X-Received: by 2002:a17:907:2d12:b0:969:98eb:3fdd with SMTP id gs18-20020a1709072d1200b0096998eb3fddmr3682154ejc.3.1683626202221;
-        Tue, 09 May 2023 02:56:42 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id j16-20020a1709062a1000b0094ed3abc937sm1106953eje.82.2023.05.09.02.56.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 02:56:41 -0700 (PDT)
-Message-ID: <4a2a701c-f764-8b98-015f-0aee776d921f@redhat.com>
-Date:   Tue, 9 May 2023 11:56:40 +0200
+        Tue, 9 May 2023 05:57:24 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2137.outbound.protection.outlook.com [40.107.215.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4231146BD
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 02:57:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sq+qFWuNWEQBQvFy3CcUgfbVuQSIv4jJzW2f576cy3D9N/+TkW4h/q8MP8GkbdYgPjfVZdoT4B45r32Otf3os57b5kRHML0/isyoPhN9KnmjcmQWmbBzR3bnPqnN3xjKbV2a3aVvPCOESh6FZg50i9FErkuTlAvLJckU+QZUjF23vmZrcSDJMOiTx/CN1/kvOI07reWvVnmCHVbfLhtBRQ2fKrRvXv5X7B9Y5iGpUdaOIEJ/QFOflBcUqKLel3sL+OloafVX+of+d18rMinC4x1jjRRkNEb8g0fzzXHQn3bso50CggdHWNKPdJ1MGrqyuH0GP3n/9FpHWVBbKVAdcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ciyak4ApemOiGcAYqhdzZj7ZzKBroG9JAocEbmxXWn0=;
+ b=I5TsMZdjLymrHjM9RFJ0RddAcFE0LFHJFrmsFWWS1wOgav6gSf32wu3+Porpro+w+qCWH+13csGxTL4SukXYB82Q9N0lgTLGItUvT+CvxdcU9MwG9kL5+lMnzT03/rX5qs9sbwZ6nj0DzEcwW8rYJ32ZaCfH7iIV4GThHPZHD9hEwd10wY4A6Jwz/3EjwGMBsXDt12H64bIWfLgriHpK7/5+vCJWF/K5uzv3GWgKKHvTbCP1Pk2kUKjbKOBKpUYkCCF0tXA6uDGzO92v/SogAhvWOm6Thdhn14gbrQQJwKLbpfvhYp697bs4xbAecr7oXdH/Wv6MnNR1i8nBAH8xAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ciyak4ApemOiGcAYqhdzZj7ZzKBroG9JAocEbmxXWn0=;
+ b=LhboLZJiiKE654Cqllo5dHACjMqaEhtmZz4sDgGquc4hkPrxJv4Xf/rkTC37izovVAxYMeoJ3mGUydoaGIKP9w6MNEINS50NOyGFaXhjo4GTwGBPgsy8+K2qtUtYo0oXcxLQ0Zn7ltXSfhwAgetO9NcBB+htdeQmvFQdGiPhG1GGWBHJQGRV2IpjU6QZdYWdC9tI1M8W1l2W79r5NwfiOMKKZvWNUaO7CcNRI0X0rCjP6Zyk0Ju7y2D+N5cjeWu9L341ytw0sh/Fzz5ACIsbjuNZeRN3c1YG0xFXyI/x+PTh5UQ/JCB5sC4f70dfn5HInPDlFunYYGw018S6F6/WsA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SEYPR06MB6130.apcprd06.prod.outlook.com (2603:1096:101:db::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Tue, 9 May
+ 2023 09:57:18 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965%3]) with mapi id 15.20.6363.033; Tue, 9 May 2023
+ 09:57:18 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH 1/4] f2fs: convert to use sbi directly
+Date:   Tue,  9 May 2023 17:57:03 +0800
+Message-Id: <20230509095706.17844-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR04CA0017.apcprd04.prod.outlook.com
+ (2603:1096:4:197::15) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1 1/1] platform/mellanox: fix potential race in
- mlxbf-tmfifo driver
-Content-Language: en-US, nl
-To:     Vadim Pasternak <vadimp@nvidia.com>,
-        Liming Sun <limings@nvidia.com>,
-        David Thompson <davthompson@nvidia.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <b98c0ab61d644ba38fa9b3fd1607b138b0dd820b.1682518748.git.limings@nvidia.com>
- <BN9PR12MB5381316B1E76612838BBB762AF769@BN9PR12MB5381.namprd12.prod.outlook.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <BN9PR12MB5381316B1E76612838BBB762AF769@BN9PR12MB5381.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEYPR06MB6130:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1487afe6-a0c3-49d3-3b56-08db5073c5fd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1yZAKTXTaPLt9jt5/Rjgay0t4Exuvr7XR+YWbZ+LKHt/2JXL5TJBLOByru+QamP/5YRR1YFxpRr4dqcD3rZ1Nim+vJ2mcVHSDZj87WfAg1IMEHEVTMViccfCCJEdyXtPURfkStVjV/8nE7LdGYTxbn5FMTCDQhNi42ZRZLPGEl5RSxJUh22J6zXGWdGfzbaAOu9akqgrwApuw2Fb7NLtyqBRJVH+ogSXFClICxFbgcuW4sa8/j06txZZ53SgfDpVCapIAIZaAkzmry25ZWIW65foYW1+csR4AWR8FbvAw7QvfLs14jwYn5yq5x0OmrH+87sZv9d1LPkzArf0gHrNJbPgeZLaer5bpDBIe7tvIX5nDICX28g490AK2qzHdpQxPPcnoiQKe2DfHr+eg0d494NTPJVa8I3vjFlZLZLEifrq6JslvPOru4o/Ta0Qe9cbbtTYg82Gsst+LerZX4XltIXaGU5ugeSr36fTOFTAwfAfwtMg8xf35FDDbRT4QtEP7BoCZ53zhAm7+fbE/ur0GXjPGt+aBZ2yFRSYWYnlO07Ode/NPCqnYV1RuAlO6kEaZzt8HjCkotq/P84NNWmv2YMRGjDitijnExzrwEZqU/A=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(39860400002)(136003)(376002)(366004)(451199021)(6486002)(83380400001)(316002)(66946007)(66476007)(66556008)(4326008)(478600001)(6666004)(52116002)(2616005)(6506007)(6512007)(1076003)(26005)(107886003)(186003)(2906002)(86362001)(36756003)(41300700001)(5660300002)(8676002)(8936002)(38100700002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KG251XEDqWAwpwIrilUHKd36dPcuFVswOyVSAsLbMHHePsUzqYJlcUgPg5XL?=
+ =?us-ascii?Q?Wv00JQlq3xZ24gH9DR1f1yOiZr+s2LMxuDz4HlYZvDapaYtp9FMVJ8/VB3/P?=
+ =?us-ascii?Q?r7z5PA7z6h2tyaEXWTdQSwSKLHaBmFifqlHKbxXPGSce7Jw17w+ggNq6CKJq?=
+ =?us-ascii?Q?JA/du/2G4uvJPPTx5GQ0eFeVOoXBXMb3RlKlFBYbYekAm9gN9ID7hBHM4+FX?=
+ =?us-ascii?Q?lFwQ4wpQlBO+dAKkql+/72CiALHEuYR6DqGRI1jm9MqeR0IA4q4DBIUFNFXB?=
+ =?us-ascii?Q?YtEolFHgOXWkKqfGF6cbuDZFFN0jSXBB8WWhoCNgoX6MYpLpv9sTe+9FFT6m?=
+ =?us-ascii?Q?+cRhhT40JmqiclVRuxrzXYHM/u62g8wwo97oURUgRKzEcuEPRTph3R99IbIe?=
+ =?us-ascii?Q?x4SofTx3LQ781VTchHqZyTZ3OMHtOClHumBJP7+oxA/YX82RIl6/94P3lnR8?=
+ =?us-ascii?Q?eS7Z+kXIme78nycVhgP2pUOJthU7VLqCRf8ocHVSYoqsu3Rk3Mg2G4GEgfts?=
+ =?us-ascii?Q?MuG27EBhhB9+k3ggMrnjaB5MrWgRTxrY6udJroMVnyuUVfare6y2xeFxqJYO?=
+ =?us-ascii?Q?jvVhdrgLfAfDP7Oh7dCDsRZY4jYTSOPxaguePZys5BdR2FJFDR6LJ9tZ3Ew5?=
+ =?us-ascii?Q?kuosKpZMcXxUXL177VxtMhRja/rN2PIvRI3KSZGWkPxrIEha/ai8nDfw2dyR?=
+ =?us-ascii?Q?ZnPsQm5n7AfpforV5OYy1tVU0JNVwWsdJJx2sslUQbopHUDPadid+sOeAWHY?=
+ =?us-ascii?Q?0on5dO21kqXhLmwX28ayPSv31SddDciSdxFIvuq496qc/pX2z4NAWUoH2VrW?=
+ =?us-ascii?Q?qiQesZegFSICiDJ9dLbPbxSynsH4Z1c7ZtiS9TRIq1IQKRkx+J/bENV/x7se?=
+ =?us-ascii?Q?BKMgDjD40eweas8LH7j0gqYksns795byeutwT9OIlg2mBtbGPyXvn0ovtXu/?=
+ =?us-ascii?Q?9JuBpPvl3omQ87Bx4g/aVHw6Kqne8bZ3IvngeLGzpakSOtqCu+4/DU9dw9k6?=
+ =?us-ascii?Q?WAr5psOvaa+FpVAnX/9YJyoPpG2qEiSoc5F14Uy9om2p/kYBzM+4cNBC/EaS?=
+ =?us-ascii?Q?23YkUd1mx70jStb1OkAGZKgz42JL0RczFXHtEQDdVUvqbmP2y8RE7bDw9sqq?=
+ =?us-ascii?Q?IK5nPQV0fvi9oitDshxa9ioFmHTMW1hypOyt+j1EYxBqTR2L8rV5OekRSSNE?=
+ =?us-ascii?Q?QPQ3cSyf+S38j5V/bSVGlwpWsMYHLkpj7wikGfLUVOwJsYOK7e+/yxKlez1C?=
+ =?us-ascii?Q?nBGVqNWOe4Zn6hLLPczpBRKNRgnayNhEQvOfIMISED7zxZseNIfcDOpFoBjE?=
+ =?us-ascii?Q?W/riK1DM4d70PnLhINi6qw1rzFqYPuXntuYi+2NMO6YNCu1pU+gAHruCIdxZ?=
+ =?us-ascii?Q?m55n/W9Vdd69abn7SEQj0vfo4Bkcq6lqxpCaF41MGwtcRjGKejhWtRTgr5Tg?=
+ =?us-ascii?Q?Is/Nc2/Fr6wydF92np3OsaQhYK7/dEhojsMJiI+OZ6YNCUu4SyfsGde0BC/R?=
+ =?us-ascii?Q?GI56DZtEkksiQX+g7fShYbzIGnKEQlqV21M8V6FRjTH1Z3yWUjQARWc+xC/Q?=
+ =?us-ascii?Q?TU/iKyZ6JspmigygrswDQ590Tw9WtQa6Cph6vqMk?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1487afe6-a0c3-49d3-3b56-08db5073c5fd
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 09:57:18.1483
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0rjJCbHO8V6pibiP8z4k7qbBgLWCO4H7/nYJOdP4yVxNTfkVbocYHICghTMdtTPoxABohW1NfDhKG4V/tYelCg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6130
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+F2FS_I_SB(inode) is redundant.
 
-On 5/9/23 11:35, Vadim Pasternak wrote:
-> 
-> 
->> -----Original Message-----
->> From: Liming Sun <limings@nvidia.com>
->> Sent: Wednesday, 26 April 2023 17:24
->> To: Vadim Pasternak <vadimp@nvidia.com>; David Thompson
->> <davthompson@nvidia.com>; Hans de Goede <hdegoede@redhat.com>;
->> Mark Gross <markgross@kernel.org>
->> Cc: Liming Sun <limings@nvidia.com>; platform-driver-x86@vger.kernel.org;
->> linux-kernel@vger.kernel.org
->> Subject: [PATCH v1 1/1] platform/mellanox: fix potential race in mlxbf-tmfifo
->> driver
->>
->> This commit adds memory barrier for the 'vq' update in function
->> mlxbf_tmfifo_virtio_find_vqs() to avoid potential race due to out-of-order
->> memory write. It also adds barrier for the 'is_ready'
->> flag to make sure the initializations are visible before this flag is checked.
->>
->> Signed-off-by: Liming Sun <limings@nvidia.com>
-> 
-> Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/file.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Thank you for your patch, I've applied this patch to my fixes
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
-
-Note it will show up in my fixes branch once I've pushed my
-local branch there, which might take a while.
-
-I will include this patch in my next fixes pull-req to Linus
-for the current kernel development cycle.
-
-Regards,
-
-Hans
-
-
-
->> ---
->>  drivers/platform/mellanox/mlxbf-tmfifo.c | 11 +++++++++--
->>  1 file changed, 9 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/platform/mellanox/mlxbf-tmfifo.c
->> b/drivers/platform/mellanox/mlxbf-tmfifo.c
->> index 91a077c35b8b..a79318e90a13 100644
->> --- a/drivers/platform/mellanox/mlxbf-tmfifo.c
->> +++ b/drivers/platform/mellanox/mlxbf-tmfifo.c
->> @@ -784,7 +784,7 @@ static void mlxbf_tmfifo_rxtx(struct
->> mlxbf_tmfifo_vring *vring, bool is_rx)
->>  	fifo = vring->fifo;
->>
->>  	/* Return if vdev is not ready. */
->> -	if (!fifo->vdev[devid])
->> +	if (!fifo || !fifo->vdev[devid])
->>  		return;
->>
->>  	/* Return if another vring is running. */ @@ -980,9 +980,13 @@
->> static int mlxbf_tmfifo_virtio_find_vqs(struct virtio_device *vdev,
->>
->>  		vq->num_max = vring->num;
->>
->> +		vq->priv = vring;
->> +
->> +		/* Make vq update visible before using it. */
->> +		virtio_mb(false);
->> +
->>  		vqs[i] = vq;
->>  		vring->vq = vq;
->> -		vq->priv = vring;
->>  	}
->>
->>  	return 0;
->> @@ -1302,6 +1306,9 @@ static int mlxbf_tmfifo_probe(struct
->> platform_device *pdev)
->>
->>  	mod_timer(&fifo->timer, jiffies + MLXBF_TMFIFO_TIMER_INTERVAL);
->>
->> +	/* Make all updates visible before setting the 'is_ready' flag. */
->> +	virtio_mb(false);
->> +
->>  	fifo->is_ready = true;
->>  	return 0;
->>
->> --
->> 2.30.1
-> 
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 0dbbcb406d3f..6f8936ec689c 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -3466,7 +3466,7 @@ static int f2fs_release_compress_blocks(struct file *filp, unsigned long arg)
+ 	int ret;
+ 	int writecount;
+ 
+-	if (!f2fs_sb_has_compression(F2FS_I_SB(inode)))
++	if (!f2fs_sb_has_compression(sbi))
+ 		return -EOPNOTSUPP;
+ 
+ 	if (!f2fs_compressed_file(inode))
+@@ -3479,7 +3479,7 @@ static int f2fs_release_compress_blocks(struct file *filp, unsigned long arg)
+ 	if (ret)
+ 		return ret;
+ 
+-	f2fs_balance_fs(F2FS_I_SB(inode), true);
++	f2fs_balance_fs(sbi, true);
+ 
+ 	inode_lock(inode);
+ 
+@@ -3636,7 +3636,7 @@ static int f2fs_reserve_compress_blocks(struct file *filp, unsigned long arg)
+ 	unsigned int reserved_blocks = 0;
+ 	int ret;
+ 
+-	if (!f2fs_sb_has_compression(F2FS_I_SB(inode)))
++	if (!f2fs_sb_has_compression(sbi))
+ 		return -EOPNOTSUPP;
+ 
+ 	if (!f2fs_compressed_file(inode))
+@@ -3652,7 +3652,7 @@ static int f2fs_reserve_compress_blocks(struct file *filp, unsigned long arg)
+ 	if (atomic_read(&F2FS_I(inode)->i_compr_blocks))
+ 		goto out;
+ 
+-	f2fs_balance_fs(F2FS_I_SB(inode), true);
++	f2fs_balance_fs(sbi, true);
+ 
+ 	inode_lock(inode);
+ 
+@@ -4046,7 +4046,7 @@ static int f2fs_ioc_decompress_file(struct file *filp)
+ 	if (!f2fs_compressed_file(inode))
+ 		return -EINVAL;
+ 
+-	f2fs_balance_fs(F2FS_I_SB(inode), true);
++	f2fs_balance_fs(sbi, true);
+ 
+ 	file_start_write(filp);
+ 	inode_lock(inode);
+@@ -4121,7 +4121,7 @@ static int f2fs_ioc_compress_file(struct file *filp)
+ 	if (!f2fs_compressed_file(inode))
+ 		return -EINVAL;
+ 
+-	f2fs_balance_fs(F2FS_I_SB(inode), true);
++	f2fs_balance_fs(sbi, true);
+ 
+ 	file_start_write(filp);
+ 	inode_lock(inode);
+-- 
+2.39.0
 
