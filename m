@@ -2,226 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6646FD08D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B856FD093
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 23:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235567AbjEIVKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 17:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
+        id S235095AbjEIVLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 17:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235450AbjEIVKL (ORCPT
+        with ESMTP id S229498AbjEIVLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 17:10:11 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0202A138;
-        Tue,  9 May 2023 14:10:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683666610; x=1715202610;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KjPYSE1JbH8g/utPpcER5AfLTVzK93rKvQog1KIojnc=;
-  b=V/TkuqhO8sve2R7CrfS53t8DiybQtO/lQZuJUoJHMUZh6Nwba2o/Ih7P
-   HTZUXAYXIXo8sflplinzEcNheOlkKPGIIXVHHDBFIqEX0mi0DNJrR0MHy
-   1zCfW2oq1EiRoKqgN1n5n9eCf8LTkKIPuEkGI5DzX9UrTIZPpWxFcQvl9
-   j+UBGOAVgsPQyY+PUlhRIMcyMSeE5exh6dnJnI6mzdKm9vloRXHQxxM1t
-   l8bGU7zJ5RxkoBvNZDxqVBgz3PFmLyA+qlpkwO4nJbzh19r0lheEZZhA9
-   /F4n/DPIexhHqn2pXXR11Lh9kdvTPHvjfRIIgTdIJJv9bC9F7Gl6g0a69
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="334511305"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="334511305"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 14:10:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="731892083"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="731892083"
-Received: from kvnguye3-mobl1.amr.corp.intel.com (HELO [10.212.145.31]) ([10.212.145.31])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 14:10:09 -0700
-Message-ID: <8e1e8daa-f6d5-3cb9-e2d1-cb4ef8f7f3ad@linux.intel.com>
-Date:   Tue, 9 May 2023 14:10:01 -0700
+        Tue, 9 May 2023 17:11:08 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47862721;
+        Tue,  9 May 2023 14:11:06 -0700 (PDT)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 8BBBFC7021;
+        Tue,  9 May 2023 21:10:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1683666634; bh=G9P8GwMxO4SBZr0FJcEpePiv5xT0e9d3vve9PbLG8Cw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=ZFfUb9SBKGHc5M/ZQAqEuqxT2fF58wYdUFzK8kD86b/CdmObg9QviLsIl3ZFFBo2Q
+         ldWAbkw4sES7KBqg/u5glgbHPHy0g0ANNfamaSpgnGGtOtrQ5+9I71NX2S3tOJdy7D
+         nXtAL+7TrG79CnNixyNHMWhxmqkC5jPxnYBbmYfM=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Brian Masney <masneyb@onstation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 4/6] dt-bindings: sram: qcom,ocmem: Add msm8226 support
+Date:   Tue, 09 May 2023 23:10:33 +0200
+Message-ID: <8118185.EvYhyI6sBW@z3ntu.xyz>
+In-Reply-To: <bac82710-da26-7acf-4375-5c5346c01705@linaro.org>
+References: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
+ <2449951.tdWV9SEqCh@z3ntu.xyz>
+ <bac82710-da26-7acf-4375-5c5346c01705@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/2] PCI: pciehp: Add support for async hotplug with
- native AER and DPC/EDR
-Content-Language: en-US
-To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, oohall@gmail.com,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Fontenot Nathan <Nathan.Fontenot@amd.com>
-References: <20230418210526.36514-1-Smita.KoralahalliChannabasappa@amd.com>
- <20230418210526.36514-2-Smita.KoralahalliChannabasappa@amd.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230418210526.36514-2-Smita.KoralahalliChannabasappa@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Dienstag, 9. Mai 2023 22:00:03 CEST Konrad Dybcio wrote:
+> On 9.05.2023 18:44, Luca Weiss wrote:
+> > On Montag, 8. Mai 2023 09:39:22 CEST Konrad Dybcio wrote:
+> >> On 7.05.2023 11:12, Luca Weiss wrote:
+> >>> Add the compatible for the OCMEM found on msm8226 which compared to
+> >>> msm8974 only has a core clock and no iface clock.
+> >>> 
+> >>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> >>> ---
+> >>> 
+> >>>  Documentation/devicetree/bindings/sram/qcom,ocmem.yaml | 6 +++++-
+> >>>  1 file changed, 5 insertions(+), 1 deletion(-)
+> >>> 
+> >>> diff --git a/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
+> >>> b/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml index
+> >>> 4bbf6db0b6bd..515f0d8ec641 100644
+> >>> --- a/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
+> >>> +++ b/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
+> >>> @@ -15,7 +15,9 @@ description: |
+> >>> 
+> >>>  properties:
+> >>>    compatible:
+> >>> -    const: qcom,msm8974-ocmem
+> >>> +    enum:
+> >>> +      - qcom,msm8226-ocmem
+> >>> +      - qcom,msm8974-ocmem
+> >> 
+> >> Any chance you could read the revision field on both and add comments
+> >> like:
+> >> 
+> >> - qcom,msm8974-ocmem # vX.Y
+> > 
+> > Do you mean the OCMEM_REG_HW_VERSION register?
+> 
+> Yep
+> 
+> It's currently not read in the
+> 
+> > driver so no idea what the value is - without adding some code.
+> 
+> Would be appreciated!
+
+Appears msm8974 has v1.4.0 and msm8226 has v1.1.0. Will include this in the
+next revision.
+
+Regards
+Luca
+
+> 
+> Konrad
+> 
+> >>>    reg:
+> >>>      items:
+> >>> @@ -28,11 +30,13 @@ properties:
+> >>>        - const: mem
+> >>>    
+> >>>    clocks:
+> >>> +    minItems: 1
+> >>> 
+> >>>      items:
+> >>>        - description: Core clock
+> >>>        - description: Interface clock
+> >> 
+> >> allOf: if: properties: compatible: 8974 / then: clock(s|-names):
+> >> minItems: 2> 
+> > Sure, can update
+> > 
+> >> Konrad
+> >> 
+> >>>    clock-names:
+> >>> +    minItems: 1
+> >>> 
+> >>>      items:
+> >>>        - const: core
+> >>>        - const: iface
 
 
-On 4/18/23 2:05 PM, Smita Koralahalli wrote:
-> According to Section 6.7.6 of PCIe Base Specification [1], async removal
-> with DPC and EDR may be unexpected and may result in a Surprise Down error.
-> This error is just a side effect of hot remove. Most of the time, these
-> errors will be abstract to the OS as current systems rely on Firmware-First
-> model for AER and DPC, where the error handling (side effects of async
-> remove) and other necessary HW sequencing actions is taken care by the FW
-> and is abstract to the OS. However, FW-First model poses issues while
-> rolling out updates or fixing bugs as the servers need to be brought down
-> for firmware updates.
-> 
-> Add support for async hot-plug with native AER and DPC/EDR. Here, OS is
-> responsible for handling async add and remove along with handling of AER
-> and DPC events which are generated as a side-effect of async remove.
 
-PCIe spec r6.0, sec 6.7.6 mentions that the async removal can be handled
-via DPC. So why treat it as a special case here? What do we gain with this
-patch other than preventing the error recovery process?
 
-> 
-> The implementation is as follows: On an async remove a DPC is triggered
-> along with a Presence Detect State change. Determine it's an async remove
-> by checking for DPC Trigger Status in DPC Status Register and Surprise Down
-> Error Status in AER Uncorrected Error Status to be non-zero. If true, treat
-> the DPC event as a side-effect of async remove, clear the error status
-> registers and continue with hot-plug tear down routines. If not, follow the
-> existing routine to handle AER and DPC errors.
-> 
-> Dmesg before:
-> 
->   pcieport 0000:00:01.4: DPC: containment event, status:0x1f01 source:0x0000
->   pcieport 0000:00:01.4: DPC: unmasked uncorrectable error detected
->   pcieport 0000:00:01.4: PCIe Bus Error: severity=Uncorrected (Fatal), type=Transaction Layer, (Receiver ID)
->   pcieport 0000:00:01.4:   device [1022:14ab] error status/mask=00000020/04004000
->   pcieport 0000:00:01.4:    [ 5] SDES (First)
->   nvme nvme2: frozen state error detected, reset controller
->   pcieport 0000:00:01.4: DPC: Data Link Layer Link Active not set in 1000 msec
->   pcieport 0000:00:01.4: AER: subordinate device reset failed
->   pcieport 0000:00:01.4: AER: device recovery failed
->   pcieport 0000:00:01.4: pciehp: Slot(16): Link Down
->   nvme2n1: detected capacity change from 1953525168 to 0
->   pci 0000:04:00.0: Removing from iommu group 49
-> 
-> Dmesg after:
-> 
->  pcieport 0000:00:01.4: pciehp: Slot(16): Link Down
->  nvme1n1: detected capacity change from 1953525168 to 0
->  pci 0000:04:00.0: Removing from iommu group 37
-> 
-> [1] PCI Express Base Specification Revision 6.0, Dec 16 2021.
->     https://members.pcisig.com/wg/PCI-SIG/document/16609
-> 
-> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-> ---
-> v2:
-> 	Indentation is taken care. (Bjorn)
-> 	Unrelevant dmesg logs are removed. (Bjorn)
-> 	Rephrased commit message, to be clear on native vs FW-First
-> 	handling. (Bjorn and Sathyanarayanan)
-> 	Prefix changed from pciehp_ to dpc_. (Lukas)
-> 	Clearing ARI and AtomicOp Requester are performed as a part of
-> 	(de-)enumeration in pciehp_unconfigure_device(). (Lukas)
-> 	Changed to clearing all optional capabilities in DEVCTL2.
-> 	OS-First -> native. (Sathyanarayanan)
-> 
-> Please note that, I have provided explanation why I'm not setting the
-> Surprise Down bit in uncorrectable error mask register in AER.
-> https://lore.kernel.org/all/fba22d6b-c225-4b44-674b-2c62306135ed@amd.com/
-> 
-> Also, while testing I noticed PCI_STATUS and PCI_EXP_DEVSTA will be set
-> on an async remove and will not be cleared while the device is brought
-> down. I have included clearing them here in order to mask any kind of
-> appearance that there was an error and as well duplicating our BIOS
-> functionality. I can remove if its not necessary.
-> 
-> On AMD systems we observe Presence Detect State change along with DPC
-> event on an async remove. Hence, the errors observed are benign on AMD
-> systems and the device will be brought down normally with PDSC. But the
-> errors logged might confuse users.
-> ---
->  drivers/pci/pcie/dpc.c | 50 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 50 insertions(+)
-> 
-> diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
-> index a5d7c69b764e..78559188b9ac 100644
-> --- a/drivers/pci/pcie/dpc.c
-> +++ b/drivers/pci/pcie/dpc.c
-> @@ -293,10 +293,60 @@ void dpc_process_error(struct pci_dev *pdev)
->  	}
->  }
->  
-> +static void pci_clear_surpdn_errors(struct pci_dev *pdev)
-> +{
-> +	u16 reg16;
-> +	u32 reg32;
-> +
-> +	pci_read_config_dword(pdev, pdev->dpc_cap + PCI_EXP_DPC_RP_PIO_STATUS, &reg32);
-> +	pci_write_config_dword(pdev, pdev->dpc_cap + PCI_EXP_DPC_RP_PIO_STATUS, reg32);
-> +
-> +	pci_read_config_word(pdev, PCI_STATUS, &reg16);
-> +	pci_write_config_word(pdev, PCI_STATUS, reg16);
-> +
-> +	pcie_capability_read_word(pdev, PCI_EXP_DEVSTA, &reg16);
-> +	pcie_capability_write_word(pdev, PCI_EXP_DEVSTA, reg16);
-> +}
-> +
-> +static void dpc_handle_surprise_removal(struct pci_dev *pdev)
-> +{
-> +	if (pdev->dpc_rp_extensions && dpc_wait_rp_inactive(pdev))
-> +		return;
-> +
-> +	/*
-> +	 * According to Section 6.7.6 of the PCIe Base Spec 6.0, since async
-> +	 * removal might be unexpected, errors might be reported as a side
-> +	 * effect of the event and software should handle them as an expected
-> +	 * part of this event.
-> +	 */
-> +	pci_aer_raw_clear_status(pdev);
-> +	pci_clear_surpdn_errors(pdev);
-> +
-> +	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_STATUS,
-> +			      PCI_EXP_DPC_STATUS_TRIGGER);
-> +}
-> +
-> +static bool dpc_is_surprise_removal(struct pci_dev *pdev)
-> +{
-> +	u16 status;
-> +
-> +	pci_read_config_word(pdev, pdev->aer_cap + PCI_ERR_UNCOR_STATUS, &status);
-> +
-> +	if (!(status & PCI_ERR_UNC_SURPDN))
-> +		return false;
-> +
-> +	dpc_handle_surprise_removal(pdev);
-> +
-> +	return true;
-> +}
-> +
->  static irqreturn_t dpc_handler(int irq, void *context)
->  {
->  	struct pci_dev *pdev = context;
->  
-> +	if (dpc_is_surprise_removal(pdev))
-> +		return IRQ_HANDLED;
-> +
->  	dpc_process_error(pdev);
->  
->  	/* We configure DPC so it only triggers on ERR_FATAL */
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
