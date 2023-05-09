@@ -2,86 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767B86FBF87
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAC86FBF8E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 08:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235021AbjEIGsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 02:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S235038AbjEIGtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 02:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235023AbjEIGry (ORCPT
+        with ESMTP id S235041AbjEIGto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 02:47:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B46010EF;
-        Mon,  8 May 2023 23:47:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3126762FE1;
-        Tue,  9 May 2023 06:47:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 633CEC433B0;
-        Tue,  9 May 2023 06:47:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683614872;
-        bh=/g0g3mKPSGSxoNisFazeQZrBZpWi+qa0Btk+6LTTmIg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=G93vkezyJ5JYgaRb8raNPkm0MUmUm0RExDdW2RI2ClwGyyHzr7qZEqTACUPj4teNl
-         J6d114DtyMKruzr4eXREji5JoWOz+0XOt69OWB0uDiSvPAzbSAkUv4tQXZG7F6ZmK0
-         0zFJpdTtBjzRoxRkqnBhmq+bQLDcoUwE3W/Fa4qYq88bucE8MBUY7Ci6URQtVOmJM4
-         ly8OEiapUmwHijFr3G16XY/uE15vZGS9Ek8wNkviYv3hPKHLIuMzCa7AbO/srsG2h5
-         vUgF2RUIteZg3V6uK8fnlY24uxBWvQiYWzWYFI6bN6FIHAiMC6SNjLILpCn+d2XsZ5
-         Onjq69jx6yuBQ==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4efe9a98736so6223761e87.1;
-        Mon, 08 May 2023 23:47:52 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwKoz/iNo88OKi2/Ox1+EeXO3BW0adtx1p4CbrGDMiFZkDo6Oe9
-        /ZoHL6z4eLoTRm1RvmPBodsJII6gPRFS9h1Z+w8=
-X-Google-Smtp-Source: ACHHUZ7eXCf2DhFoZbXsOooRbR89zqpckWA8L0hnCqv54zhuVpCXL2As1V2WvFbe4mhg1Z0pcGUw+ObvpEBuJ+DjYiI=
-X-Received: by 2002:ac2:5638:0:b0:4f1:26f5:7814 with SMTP id
- b24-20020ac25638000000b004f126f57814mr427935lff.20.1683614870122; Mon, 08 May
- 2023 23:47:50 -0700 (PDT)
+        Tue, 9 May 2023 02:49:44 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D86810EA;
+        Mon,  8 May 2023 23:49:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PbZUIlEwLxdApfWlTodlcMm6K5WCErVJpDX/q+SYV/o=; b=P6C0II8T3ToIDwdqzyhUAGJI/D
+        ZCNC7WWDlvhvS9TP8hS5heFGY2y1fn4CvmpBwZRLK/SUhz7LqJX/4Qa45fz11oJU8k/AMFOhAHEr3
+        +EWXJyg4O3XLRiADhyF/ipdHNeGii9lWT9BzHXZHp5pkptpBYBW632Ra0BctIfX/yhlj0k+Agmbuu
+        LnutvhNKYS+hmxC+61WS22dWlvIlP1iAdbPbzVHNi/48lEfafUa14tSUupbJbAoyuFdZn3h3yMAsC
+        ibLMeiZxLLk++miuJUDtabe5m1vwyoCbIE9NkFMB3XCQMNvk3dPsbTLKInjxivBc8zcfYlbVarwGF
+        n4DvmLgg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pwHA6-0060xC-0Z;
+        Tue, 09 May 2023 06:49:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 04BA530026A;
+        Tue,  9 May 2023 08:49:25 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E121A2B0DE80F; Tue,  9 May 2023 08:49:24 +0200 (CEST)
+Date:   Tue, 9 May 2023 08:49:24 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        pjones@redhat.com, deller@gmx.de, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Cannot boot an i386-UEFI thinkpad lenovo tablet-2
+Message-ID: <20230509064924.GB2065796@hirez.programming.kicks-ass.net>
+References: <ZFnoXiZGGhuWDl2S@Red>
 MIME-Version: 1.0
-References: <20230507234618.18067-1-kirill.shutemov@linux.intel.com>
- <20230507234618.18067-5-kirill.shutemov@linux.intel.com> <CAMj1kXE26G=HgqBHoJOWF+FyXs7Ryj7VFFY9A+xG7HmUXnb5bg@mail.gmail.com>
- <20230508190043.ouauzbghn27khdy4@box.shutemov.name> <CAMj1kXFxw4+opJuq=g2unocitRyKYz_hfrZb-grsZtPwBOyKgw@mail.gmail.com>
- <20230509005634.qtuiodpirexbxu2k@box.shutemov.name>
-In-Reply-To: <20230509005634.qtuiodpirexbxu2k@box.shutemov.name>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 9 May 2023 08:47:38 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGZ4j7nShGPoJzTZNa4NDvHnj_arY8XDXzW8cd6G==8Jg@mail.gmail.com>
-Message-ID: <CAMj1kXGZ4j7nShGPoJzTZNa4NDvHnj_arY8XDXzW8cd6G==8Jg@mail.gmail.com>
-Subject: Re: [PATCHv10 04/11] efi/x86: Implement support for unaccepted memory
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFnoXiZGGhuWDl2S@Red>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,55 +61,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 May 2023 at 02:56, Kirill A. Shutemov <kirill@shutemov.name> wrote:
->
-> On Tue, May 09, 2023 at 12:11:41AM +0200, Ard Biesheuvel wrote:
-> > > @@ -1324,13 +1325,15 @@ void __init e820__memblock_setup(void)
-> > >          * e820_table is not finalized and e820__end_of_ram_pfn() cannot be
-> > >          * used to get correct RAM size.
-> > >          */
-> > > -       if (boot_params.unaccepted_memory) {
-> > > +       if (efi.unaccepted != EFI_INVALID_TABLE_ADDR) {
-> > > +               struct efi_unaccepted_memory *unaccepted;
-> > >                 unsigned long size;
-> > >
-> > > -               /* One bit per 2MB */
-> > > -               size = DIV_ROUND_UP(e820__end_of_ram_pfn() * PAGE_SIZE,
-> > > -                                   PMD_SIZE * BITS_PER_BYTE);
-> > > -               memblock_reserve(boot_params.unaccepted_memory, size);
-> > > +               unaccepted = __va(efi.unaccepted);
-> > > +
-> > > +               size = sizeof(struct efi_unaccepted_memory);
-> > > +               size += unaccepted->size;
-> > > +               memblock_reserve(efi.unaccepted, size);
-> > >         }
-> > >
-> >
-> > This could be moved to generic code (but we'll need to use early_memremap())
->
-> I don't understand why early_memremap() is needed. EFI_LOADER_DATA already
-> mapped into direct mapping. We only need to reserve the memory so it
-> could not be reallocated for other things. Hm?
->
+On Tue, May 09, 2023 at 08:29:50AM +0200, Corentin Labbe wrote:
 
-*If* we move this to generic code, we have to ensure that we don't
-rely on x86 specific semantics. When parsing the EFI configuration
-tables, other architectures don't have a complete direct map yet, as
-they receive the memory description from EFI not from a translated
-E820 map.
+> The bios speak about a debug port, but I found nothing which seems a
+> physical debug port output.  I tried to wire the microusb power port
+> on a USB host, but the host fail to enumerate any device (I tried also
+> a spetial USB cable with data/power separated to be sure the problem
+> was not the host failling to give enough power)
+> 
+> The tablet has only one port, so I use a hub for keyboard and USB key.
 
-Note that this is only for getting the size of the reservation. Later
-on, when we actually consume the contents of the bitmap, generic or
-non-x86 code will need to use the ordinary memremap() API to map this
-memory, and this amounts to a __va() call when the memory is already
-mapped. But I am not suggesting changing that part for this series.
-And even the hunk above can remain as you suggest - we can revisit it
-once other architectures gain support for this.
+USB debug port is probably that one port, USB debug also does not work
+through a hub :/
 
-The main thing I would like to avoid at this point in time is to add
-new fields to struct bootparams that loaders such as GRUB may start to
-populate as well - I don't think there is a very strong case for
-pseudo-EFI boot [where GRUB calls ExitBootServices()] on confidential
-VMs (as it prevents the EFI stub and the kernel from accessing the
-measurement and attestation APIs), but let's not create more struct
-bootparams based API if we can avoid it.
+USB debug in general is a giant pain in the rear and I've never had much
+luck with is. If it's that old to still need a i386 kernel then it's
+probably USB2 at best and that requires a special magical cable too :-(
+
