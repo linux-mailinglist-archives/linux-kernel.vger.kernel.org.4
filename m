@@ -2,133 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F376FCBAB
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBA66FCBBD
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjEIQvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 12:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
+        id S234498AbjEIQw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 12:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjEIQvN (ORCPT
+        with ESMTP id S234360AbjEIQw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 12:51:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47C6019B9
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 09:51:09 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B4BAFEC
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 09:51:53 -0700 (PDT)
-Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C57043F67D
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 09:51:08 -0700 (PDT)
-Date:   Tue, 9 May 2023 17:50:47 +0100
-From:   Liviu Dudau <liviu.dudau@arm.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Joe Perches <joe@perches.com>,
-        "james qian wang (Arm Technology China)" <james.qian.wang@arm.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexandru Vasile <acvasile96@gmail.com>,
-        Brian Starkey <brian.starkey@arm.com>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] MAINTAINERS: Drop realname for L: entries
-Message-ID: <ZFp559hKH8snFt46@e110455-lin.cambridge.arm.com>
-References: <20230508144135.1450524-1-u.kleine-koenig@pengutronix.de>
+        Tue, 9 May 2023 12:52:26 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E2A2716
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 09:51:41 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7577ef2fa31so782368085a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 09:51:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683651101; x=1686243101;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8AiXugarlhHToBN2ueOGwWaX5E4llz8s13EASoB3wVI=;
+        b=BS1HNcwkQ2rlCzkdBshnUHFiIAbuDKnn2I2mNnAZMTF1aNma+5X+K7SPZhhTHpC1bi
+         7Z7GCoQGQSqymH2EwoTicH3fzcAnFP/TbqxD1wyy9TQ0oVApLg1PR3ii73RZ4XWS1udX
+         d9P/S1ZNbZTtGhSDaVEjzrnyWV+dkVDvE3n7mxfVjd4I8lc4nXUjg36W/eY/6C5axpcj
+         Gy1ZRApWffpu14eZAHvNpmycl/DYvm4PVw+X0jnN8vW3jrcEoZs+LJ+at7Xda5WWrv8u
+         virRkUH4za62ZWLhUPafgx2Rx3laWNlCJtBppDtOgIn3JG1XVR5aOWmREzjwsDTsayQ7
+         0uzg==
+X-Gm-Message-State: AC+VfDzizRsMsohzruSKW6PZAjc3A29uxqwVOg4WYyg5YZLcI+MITWlk
+        UkNh/Pa2s1tCybiyBq660lrr
+X-Google-Smtp-Source: ACHHUZ4xRyujKImbkSQcW8Z759B/taKjk2/BBWT+4ePbKXa9irKnpFPNPIQc/SyDOhMLc66FmfxRwA==
+X-Received: by 2002:a05:6214:29c7:b0:56e:c066:3cd2 with SMTP id gh7-20020a05621429c700b0056ec0663cd2mr19939922qvb.2.1683651100740;
+        Tue, 09 May 2023 09:51:40 -0700 (PDT)
+Received: from localhost ([217.138.208.150])
+        by smtp.gmail.com with ESMTPSA id m4-20020a0cf184000000b0061b3338d6d9sm890247qvl.50.2023.05.09.09.51.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 09:51:40 -0700 (PDT)
+Date:   Tue, 9 May 2023 12:51:38 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        stable@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v6 1/5] block: Don't invalidate pagecache for invalid
+ falloc modes
+Message-ID: <ZFp6GphV3H0eyrH+@redhat.com>
+References: <20230420004850.297045-1-sarthakkukreti@chromium.org>
+ <20230506062909.74601-1-sarthakkukreti@chromium.org>
+ <20230506062909.74601-2-sarthakkukreti@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230508144135.1450524-1-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230506062909.74601-2-sarthakkukreti@chromium.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 04:41:35PM +0200, Uwe Kleine-König wrote:
-> The format of L: entries in the MAINTAINERS file are expected to just
-> contain the list's email address. get_maintainers doesn't cope well, if
-> a realname is specified:
-> 
-> 	$ scripts/get_maintainer.pl -f Documentation/devicetree/bindings/display/arm,komeda.yaml
-> 	...
-> 	 (open list:ARM KOMEDA DRM-KMS DRIVER)
-> 	...
-> 
-> So drop the realname (and the < >).
-> 
-> Fixes: ab6911b73493 ("MAINTAINERS: Add maintainer for Arm komeda driver")
-> Fixes: 6865788f5ad9 ("MAINTAINERS: Update entries from the Nitro Enclaves section")
-> Fixes: 3affaa5a7ca3 ("drm/afbc: Add AFBC modifier usage documentation")
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-  > ---
-> Hello,
-> 
-> who will apply this patch? Joe?
-> 
-> Best regards
-> Uwe
-> 
->  MAINTAINERS | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 7e0b87d5aa2e..ae1d8e140a67 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1669,7 +1669,7 @@ ARM KOMEDA DRM-KMS DRIVER
->  M:	James (Qian) Wang <james.qian.wang@arm.com>
->  M:	Liviu Dudau <liviu.dudau@arm.com>
->  M:	Mihail Atanassov <mihail.atanassov@arm.com>
-> -L:	Mali DP Maintainers <malidp@foss.arm.com>
-> +L:	malidp@foss.arm.com
->  S:	Supported
->  T:	git git://anongit.freedesktop.org/drm/drm-misc
->  F:	Documentation/devicetree/bindings/display/arm,komeda.yaml
-> @@ -1691,7 +1691,7 @@ F:	include/uapi/drm/panfrost_drm.h
->  ARM MALI-DP DRM DRIVER
->  M:	Liviu Dudau <liviu.dudau@arm.com>
->  M:	Brian Starkey <brian.starkey@arm.com>
-> -L:	Mali DP Maintainers <malidp@foss.arm.com>
-> +L:	malidp@foss.arm.com
->  S:	Supported
->  T:	git git://anongit.freedesktop.org/drm/drm-misc
->  F:	Documentation/devicetree/bindings/display/arm,malidp.yaml
+On Sat, May 06 2023 at  2:29P -0400,
+Sarthak Kukreti <sarthakkukreti@chromium.org> wrote:
 
-Trying to save some churn, I will NAK this part as I'm planning on sending
-an update removing the mailing list completely and trimming down the list
-of maintainers, removing the people that have moved on.
-
-If it's too late, the appologies as I have seen this email only today.
-
-Best regards,
-Liviu
-
-
-> @@ -14825,7 +14825,7 @@ F:	arch/nios2/
->  NITRO ENCLAVES (NE)
->  M:	Alexandru Ciobotaru <alcioa@amazon.com>
->  L:	linux-kernel@vger.kernel.org
-> -L:	The AWS Nitro Enclaves Team <aws-nitro-enclaves-devel@amazon.com>
-> +L:	aws-nitro-enclaves-devel@amazon.com
->  S:	Supported
->  W:	https://aws.amazon.com/ec2/nitro/nitro-enclaves/
->  F:	Documentation/virt/ne_overview.rst
+> Only call truncate_bdev_range() if the fallocate mode is
+> supported. This fixes a bug where data in the pagecache
+> could be invalidated if the fallocate() was called on the
+> block device with an invalid mode.
 > 
-> base-commit: ac9a78681b921877518763ba0e89202254349d1b
-> -- 
-> 2.39.2
-> 
+> Fixes: 25f4c41415e5 ("block: implement (some of) fallocate for block devices")
+> Cc: stable@vger.kernel.org
+> Reported-by: Darrick J. Wong <djwong@kernel.org>
+> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
 
--- 
-====================
-| I would like to |
-| fix the world,  |
-| but they're not |
-| giving me the   |
- \ source code!  /
-  ---------------
-    ¯\_(ツ)_/¯
+Reviewed-by: Mike Snitzer <snitzer@kernel.org>
