@@ -2,168 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAEFB6FC640
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2536FC646
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 14:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234398AbjEIM0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 08:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
+        id S234876AbjEIM0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 08:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234811AbjEIM0G (ORCPT
+        with ESMTP id S230012AbjEIM0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 08:26:06 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3654201;
-        Tue,  9 May 2023 05:25:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683635150; x=1715171150;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=upRdd3SMsO3dE9kZLhoq1cDgJaHqitqd/ygcALdoe24=;
-  b=hDWpXuFP3GIewLqwVmTr4CzVkohhHbGsObijiW9N3+3kU4s2MRJbqN4E
-   WRvpcv8Y/BXxXZemD2Ni7dS7YcODRf1D7XK9+/I+o+3ym8GVZ3j6dvHbF
-   L5qJteul69CzNeonPZjYj+nivq1J5lIo1BM+m0R23B/O+2uwhe4hXxsE4
-   BCBcEm1vaN1BBDM6uPSt/fYCbyCrZKyB2yQayuphDDq7tD2V616mP3aLE
-   N5UJlWamnxa/KWJjyreP+57Waba2TgBXgA9ZNtaGVxejyRCT5lX+vzY2M
-   vULgKFmNWhQUVxuBjOG7kTMQS/wDB6RAmbh4KNM3fThXInbx1K5t20YnQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="352973445"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="352973445"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 05:25:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="788505129"
-X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
-   d="scan'208";a="788505129"
-Received: from mbrdon-mobl.ger.corp.intel.com ([10.251.219.121])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 05:25:44 -0700
-Date:   Tue, 9 May 2023 15:25:41 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-cc:     Jacky Huang <ychuang570808@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, Lee Jones <lee@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-serial <linux-serial@vger.kernel.org>, schung@nuvoton.com,
-        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-Subject: Re: [PATCH v10 10/10] tty: serial: Add Nuvoton ma35d1 serial driver
- support
-In-Reply-To: <eeeaf258-8f2b-436a-aba0-b32dc90b359f@app.fastmail.com>
-Message-ID: <b9573562-d4d7-3535-fb4d-f2bc694f2a4@linux.intel.com>
-References: <20230508025936.36776-1-ychuang570808@gmail.com> <20230508025936.36776-11-ychuang570808@gmail.com> <2ba483e9-267f-2159-1ea8-75a2618fcdf9@linux.intel.com> <eeeaf258-8f2b-436a-aba0-b32dc90b359f@app.fastmail.com>
+        Tue, 9 May 2023 08:26:36 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D34F40F7
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 05:26:35 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f42d937d61so1508325e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 05:26:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683635194; x=1686227194;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HJkrzczLXQ2vOsIEvj+HJWNbaauC+Ei52VybYLriynI=;
+        b=fx1H6x9zUiGsH11fp6Aj8DDoUhRE5WEV/dqLlJR9z4JYOLnXGRXV2Lmm3OaSfY8FaQ
+         pyeGF9f9bN93QT1EFwPTu4GXTzuFz/EMs644BQVf+veB1djyPqRdOoFETyyJujL/ggek
+         j1bCJIuGVdZc7muiKrtTW/98pSzqo1+c6SRo55xWiqF7ezTanAZm+j72cWiRp2H3OpTZ
+         zgFQm740zHefEgcdMbV5HmfzrHwZ4QCtwOiPJ4djvuP2RyeTqgM2WCxVDIx98MP/JpQr
+         bmzBKhhZkjjW7Sq5zR90rkICzTVq/guzrHldcHIO73HqodQvx97y9Nto63FV7w1TAjlR
+         g5Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683635194; x=1686227194;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HJkrzczLXQ2vOsIEvj+HJWNbaauC+Ei52VybYLriynI=;
+        b=a3Coltelq0GqaqAQsOkezzAzTjO4nlu3OfO3S5aMNvppoSlmfMpQKT1UJpbnLhjOC9
+         YFxJmoM3mWKTphncVniHuc0EcsLXGokdmBBRHIqV8F3z9uwj4MFZ5thNE5Dobs+Ud31/
+         pJlzMj2lcwChp9p7+0y/4wXEsq5twNmlvpM+SnRlR/VkP+QFSQxS1CiWQgFUAARz3DL8
+         NiYa3eRm8PYSGHLTx5ZuJj6XamQ7b3rhr5WIyBKjKiihldf3b36AGp9nYZbvv4dxsGO+
+         2pmHIDxa97xxrZfuL4Q/hFOCeszKJFHLyyaSWxh5TkAK5FI7DYIoUIHmZ5daGNFDjlOM
+         TEOw==
+X-Gm-Message-State: AC+VfDwnaVp3K086UnB/trSnW2bQ6ZrY/uxs66yEClLc8XrO17U3KNKp
+        KEaLghEkgrj4VS4WGUH/JVW1MlvpP5NaXvtncIw=
+X-Google-Smtp-Source: ACHHUZ72bk79+HSabo6iVnsvC4TpiytkhXT3xTqjg38X/qltYooTO2CJZ8gvQyj1tuTUbU4LIQwA3A==
+X-Received: by 2002:a1c:c917:0:b0:3f1:76d7:ae2b with SMTP id f23-20020a1cc917000000b003f176d7ae2bmr9915789wmb.13.1683635193642;
+        Tue, 09 May 2023 05:26:33 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id k9-20020a05600c1c8900b003f4283f5c1bsm3063641wms.2.2023.05.09.05.26.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 05:26:33 -0700 (PDT)
+Message-ID: <bb67f4b0-e96a-3718-f855-80e1d21e9d38@linaro.org>
+Date:   Tue, 9 May 2023 13:26:32 +0100
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1414178471-1683634754=:2036"
-Content-ID: <9bb37169-6cc8-9ecf-9c75-4d17151c32d@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] ASoC:codecs: lpass: Fix for KASAN use_after_free out of
+ bounds
+Content-Language: en-US
+To:     Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
+Cc:     Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:QCOM AUDIO (ASoC) DRIVERS" 
+        <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230509103232.20953-1-quic_visr@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230509103232.20953-1-quic_visr@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1414178471-1683634754=:2036
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <ba1258be-c4c9-856b-c814-9cd42d1740c8@linux.intel.com>
 
-On Tue, 9 May 2023, Arnd Bergmann wrote:
-
-> On Tue, May 9, 2023, at 12:17, Ilpo Järvinen wrote:
-> > On Mon, 8 May 2023, Jacky Huang wrote:
-> >> +
-> >> +#define UART_NR			17
-> >> +
-> >> +#define UART_REG_RBR		0x00
-> >> +#define UART_REG_THR		0x00
-> >> +#define UART_REG_IER		0x04
-> >> +#define UART_REG_FCR		0x08
-> >> +#define UART_REG_LCR		0x0C
-> >> +#define UART_REG_MCR		0x10
-> >
-> > These duplicate include/uapi/linux/serial_reg.h ones, use the std ones 
-> > directly.
-> >
-> > Setup regshift too and use it in serial_in.
+On 09/05/2023 11:32, Ravulapati Vishnu Vardhan Rao wrote:
+> When we run syzkaller we get below Out of Bounds error.
 > 
-> I think this came up in previous reviews, but it turned out that
-> only the first six registers are compatible, while the later
-> ones are all different, and it's not 8250 compatible.
-
-So use the normal name for compatible ones and HW specific names for the 
-others?
-
-It might not be compatible in everything but surely 8250 influence is 
-visible here and there.
-
-> It might be helpful to rename the registers to something
-> with a prefix other than UART_REG_*, to avoid the confusion
-> and possible namespace clash.
-
-That is what I also suggested for the rest of the registers.
-
--- 
- i.
-
-> >> +/* UART_REG_IER - Interrupt Enable Register */
-> >> +#define IER_RDA_IEN		BIT(0)  /* RBR Available Interrupt Enable */
-> >> +#define IER_THRE_IEN		BIT(1)  /* THR Empty Interrupt Enable */
-> >> +#define IER_RLS_IEN		BIT(2)  /* RX Line Status Interrupt Enable */
-> >
-> > These look same as UART_IER bits, use the std ones.
-> ...
-> > Are these same as UART_FCR_CLEAR_* functionality wise? If they're use std 
-> > ones.
+> "KASAN: slab-out-of-bounds Read in regcache_flat_read"
 > 
-> Again, I'd think we're better off having a distinct naming for
-> them than trying to share the definitions with 8250.
+> Below is the backtrace of the issue:
 > 
-> >> +static struct uart_driver ma35d1serial_reg = {
-> >> +	.owner        = THIS_MODULE,
-> >> +	.driver_name  = "serial",
-> >> +	.dev_name     = "ttyS",
-> >> +	.major        = TTY_MAJOR,
-> >> +	.minor        = 64,
-> >> +	.cons         = MA35D1SERIAL_CONSOLE,
-> >> +	.nr           = UART_NR,
-> >> +};
-> >
-> > This doesn't seem necessary, 8250 core will have the uart_driver for you
-> > and most of the console stuff too. You just need to setup a few things 
-> > correctly (see the setup functions in 8250_early for ideas/examples).
-> >...
-> >> +
-> >> +	ret = uart_add_one_port(&ma35d1serial_reg, &up->port);
-> >
-> > For 8250, you should be using serial8250_register_8250_port(). See the 
-> > other drivers how to setup the console functions.
+> BUG: KASAN: slab-out-of-bounds in regcache_flat_read+0x10c/0x110
+> Read of size 4 at addr ffffff8088fbf714 by task syz-executor.4/14144
+> CPU: 6 PID: 14144 Comm: syz-executor.4 Tainted: G        W
+> Hardware name: Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+) (DT)
+> Call trace:
+> dump_backtrace+0x0/0x4ec
+> show_stack+0x34/0x50
+> dump_stack_lvl+0xdc/0x11c
+> print_address_description+0x30/0x2d8
+> kasan_report+0x178/0x1e4
+> __asan_report_load4_noabort+0x44/0x50
+> regcache_flat_read+0x10c/0x110
+> regcache_read+0xf8/0x5a0
+> _regmap_read+0x45c/0x86c
+> _regmap_update_bits+0x128/0x290
+> regmap_update_bits_base+0xc0/0x15c
+> snd_soc_component_update_bits+0xa8/0x22c
+> snd_soc_component_write_field+0x68/0xd4
+> tx_macro_put_dec_enum+0x1d0/0x268
+> snd_ctl_elem_write+0x288/0x474
 > 
-> Consequently, this should also be kept separate from the serial8250
-> driver, I don't see a way to fit the nuvoton code into the existing
-> driver without making the resulting driver worse for everyone.
+> By Error checking and checking valid values issue gets rectifies.
 > 
-> There is one thing that absolutely needs to be changed though:
-> the driver_name/dev_name/major/minor fields all clash with the
-> 8250 driver, so you cannot have a kernel that has both drivers
-> built-in. All of these should change to get out of the way of the
-> existing drivers.
+> Signed-off-by: Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
+> ---
+>   sound/soc/codecs/lpass-tx-macro.c | 19 +++++++++++++++----
+>   1 file changed, 15 insertions(+), 4 deletions(-)
 > 
->         Arnd
-> 
---8323329-1414178471-1683634754=:2036--
+> diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
+> index da6fcf7f0991..2fc150b17f29 100644
+> --- a/sound/soc/codecs/lpass-tx-macro.c
+> +++ b/sound/soc/codecs/lpass-tx-macro.c
+> @@ -746,6 +746,8 @@ static int tx_macro_put_dec_enum(struct snd_kcontrol *kcontrol,
+>   	struct tx_macro *tx = snd_soc_component_get_drvdata(component);
+>   
+>   	val = ucontrol->value.enumerated.item[0];
+> +	if (val < 0 && val > 15)
+> +		return -EINVAL;
+
+how about
+
+if (val >= e->items)
+	return -EINVAL;
+
+
+We could get these checks if CONFIG_SND_CTL_INTPUT_VALIDATION  was enabled.
+
+>   
+>   	switch (e->reg) {
+>   	case CDC_TX_INP_MUX_ADC_MUX0_CFG0:
+> @@ -772,6 +774,9 @@ static int tx_macro_put_dec_enum(struct snd_kcontrol *kcontrol,
+>   	case CDC_TX_INP_MUX_ADC_MUX7_CFG0:
+>   		mic_sel_reg = CDC_TX7_TX_PATH_CFG0;
+>   		break;
+> +	default:
+> +		dev_err(component->dev, "Error in configuration!!\n");
+> +		return -EINVAL;
+>   	}
+>   
+>   	if (val != 0) {
+> @@ -785,10 +790,16 @@ static int tx_macro_put_dec_enum(struct snd_kcontrol *kcontrol,
+>   			snd_soc_component_write_field(component, mic_sel_reg,
+>   						      CDC_TXn_ADC_DMIC_SEL_MASK, 1);
+>   			dmic = TX_ADC_TO_DMIC(val);
+> -			dmic_clk_reg = CDC_TX_TOP_CSR_SWR_DMICn_CTL(dmic);
+> -			snd_soc_component_write_field(component, dmic_clk_reg,
+> -						CDC_TX_SWR_DMIC_CLK_SEL_MASK,
+> -						tx->dmic_clk_div);
+> +			if (dmic < 4) {
+> +				dmic_clk_reg = CDC_TX_TOP_CSR_SWR_DMICn_CTL(dmic);
+> +				snd_soc_component_write_field(component, dmic_clk_reg,
+> +							      CDC_TX_SWR_DMIC_CLK_SEL_MASK,
+> +								tx->dmic_clk_div);
+> +			} else {
+> +				dev_err(component->dev, "Error in dmic configuration!!\n");
+> +				return -EINVAL;
+> +			}
+
+These changes look unrelated.
+
+--srini
+
+> +
+>   		}
+>   	}
+>   
