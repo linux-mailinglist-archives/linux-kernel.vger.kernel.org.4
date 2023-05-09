@@ -2,654 +2,808 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1426FBC38
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 02:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5DD6FBC3E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 02:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjEIA6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 20:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
+        id S233064AbjEIA7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 20:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjEIA6a (ORCPT
+        with ESMTP id S232812AbjEIA6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 20:58:30 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E7126B3;
-        Mon,  8 May 2023 17:58:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1683593872; i=w_armin@gmx.de;
-        bh=MNjXHm47F7SMQlyP50lxTlLPOCbejrfPlEf154zoiEc=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=hY0vi0fYVvpHM0Sr/UShxaUzUurdChReHSxjjHtj/uo1P7McInI9cIP17gw+uqLAg
-         Ps2aDwwyrNeQg6P1ZooUaPTRcbIoOWE61TaxpCeMkHANhWHXYwIZi0BL0w7KecrKvi
-         sJganRoMg2cUgR+49EfI2MuvSzf6fEi+GjkoZNWjs1FHS8IzVEOIaH9c6RQYFIFH3z
-         GO7rjN9BbkCXrICU//JCXEhD8bky5kOyBYF9TZZQ9R7crfChWMLNFuVM/pF5fAX+LT
-         FtkZKUDv6lVX9XSYv5xFXvZvzDEreJLWC5jjp9SajJaBR0mwxdzPeWKVnWmR5k2SFE
-         +CMKc3Q4r90Pw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.14] ([141.30.226.119]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N3KTo-1qN6CA0rw2-010JEa; Tue, 09
- May 2023 02:57:52 +0200
-Subject: Re: [PATCHv2 3/6] hwmon: (socfpga) Add hardware monitoring support on
- SoCFPGA platforms
-To:     dinh.nguyen@linux.intel.com, linux-hwmon@vger.kernel.org
-Cc:     dinguyen@kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, jdelvare@suse.com,
-        linux@roeck-us.net,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20230508212852.8413-1-dinh.nguyen@linux.intel.com>
- <20230508212852.8413-3-dinh.nguyen@linux.intel.com>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <4aa37522-9072-ac8d-0ba7-c2234c3228bc@gmx.de>
-Date:   Tue, 9 May 2023 02:57:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 8 May 2023 20:58:55 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BB259E8;
+        Mon,  8 May 2023 17:58:46 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-644d9bf05b7so1764334b3a.3;
+        Mon, 08 May 2023 17:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683593925; x=1686185925;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0WhWKe5Ry9BFBJzgo91hGa8wb9flJdaliFeOwksUl9Q=;
+        b=HPuEVTh3BQ4mQ9/WHxjCA/BEhfhpnovyS7vh52JNXg3eMu6TB9jt2vkLAWJSMzA6MH
+         5CL2tkpII2im4hF4MpjwCQpRyhZyvE6OJ+/Yvu05G0zb3JFgedXYuSlGx9rc6JYTgXf6
+         6JQenRmgCnbhbx0SL/GuxOMxE9U0Yil33znelXg+hG6PN6VVogma4HLiJQu+bZZjeoqE
+         RIcyRdHQD4LXVg75fFMXDvC2wgTVG6BUfUA4SrWhkInqtVSezdo6zAygokq4zx8PTvA2
+         lNroIayegSbgWGjRj4LazFJTXjsZYqZ4bPdAIJS8Z2jr9uplj0BYlNve54OZYO3lDc6L
+         iWYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683593925; x=1686185925;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0WhWKe5Ry9BFBJzgo91hGa8wb9flJdaliFeOwksUl9Q=;
+        b=ZHIEPakg3R8HDvDvWPc/fuZKrZzhCBXelyvxVWMBzsAzcpPWnWVWEiJZ06qQfZgOi5
+         O+wodHMzVds7B6nYAdUEHjqCHbDpLaixOTKmVBaBEez/XXQB7D1VmVKRkzWxakBW+aX5
+         7T1FMLdgzoLHx4r0aUCn82e7uP2c7Nnju2fwvsrNqQx/JzDVs3OtNPr8aS06SiSvz2R+
+         weWBA1fT91JkpbkhfPtw4021oAENGoN+C9u5bHL/dWv7GOY79JmdSeBvvxEYL8cSJrOh
+         Rg2FtS1evcqjMeXk05NnRvDgL8+5y8ULFR16PSq3hRzWZHUWXPXxJR6r+dYz+negLK65
+         prJQ==
+X-Gm-Message-State: AC+VfDyh3noJybi0amNzn/R6VExLtArihC80a/CADUj8IFBUUCnxCpht
+        a+ftxLxZTxKwUkv1HutGH5I=
+X-Google-Smtp-Source: ACHHUZ5BFMhmyOTu8/XBaanGZRcpFsbOxBmVBt5qOGUCnnV5xwKwMWoxtYtpWk1JKNrryaFiUbO84Q==
+X-Received: by 2002:a05:6a00:cca:b0:643:7fcf:836d with SMTP id b10-20020a056a000cca00b006437fcf836dmr17455413pfv.25.1683593925198;
+        Mon, 08 May 2023 17:58:45 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id j10-20020a62e90a000000b0063f16daf7dbsm551288pfh.55.2023.05.08.17.58.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 17:58:44 -0700 (PDT)
+Message-ID: <0d715170-e9c9-ce1f-3105-5ba5d505b655@gmail.com>
+Date:   Tue, 9 May 2023 08:58:39 +0800
 MIME-Version: 1.0
-In-Reply-To: <20230508212852.8413-3-dinh.nguyen@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+From:   Jacky Huang <ychuang570808@gmail.com>
+Subject: Re: [PATCH v10 08/10] clk: nuvoton: Add clock driver for ma35d1 clock
+ controller
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, tmaimon77@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-serial <linux-serial@vger.kernel.org>, arnd@arndb.de,
+        schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230508025936.36776-1-ychuang570808@gmail.com>
+ <20230508025936.36776-9-ychuang570808@gmail.com>
+ <e417c2ab-f789-40ce-531-d6b9ea9c7e6b@linux.intel.com>
 Content-Language: en-US
-X-Provags-ID: V03:K1:927AKTC+xgO1vbAVjkAx0mBna0Jm9MvzadXzmSOHjmNsy8cGobV
- e+s92kBY7TNmWTXVkMxVbrKH8PCxRwLZRUxG68o67E77/OfBah+GfEpBXvv8tAP4fR+PH/c
- FoOZaBFRTtx8ESQYlWWf7YMv6gfe2gDkaJyWExsyTRxu2SkndrSWQ72n2HWmdLravdivQYz
- w5eNqaxDXXmMOB0/KUzvw==
-UI-OutboundReport: notjunk:1;M01:P0:JR+ryY/kbRA=;f8W3IMcjOChKsn1Ca5O9TugFDpT
- sTaduEDbS4P5xaitr9hZDmtm/QTmffxaOkBvP11mBuOL5DXPlNnIot9ldk2Yu/+zHNoBt3eB7
- DmScqafh6FbzIHkjPA/fIBPdOSdqm2l1Nou6jKjsyEE4D9JWdKPvUYpdhnCXTYu4NA48kesI2
- T4Wmr9YMAkbQeczHgk1uZjZjJgfOSxeiaew0kQtLPHo+tySbdQG6offGvzk8aVLMRmwLBTarQ
- D7b3qitQQFuqTeE3rNgbPpdFw/iHiZvSG52WdtjzpLVxKig3vo3Vnv2K+atdGPyPTu/VdDqBZ
- Bwa5BYG+0aMYMtzQ0cuILWbRZYZvg17mD3rl1Wo+5HoWTt+G3Gumw/9LJ5Sc0WBsgQdeYuUUL
- w3u7sulcGkABEx5OB9inSZv9pW8L9zqzC8bwsVk8lfHgsCn7oGApbffqK/mCmOncg23qZPqqi
- W86+dfKb6Wr4KRWm02/1Njve+OFcYpIZcLsYVrxhwlG0LTJHS5w8zUjs28/qDqCX5SWm3na9o
- lAieNXmPmy+Vrw6s7rLcD0d8xNWXSqqTmjBcmAkHrfBR0t/BWNBkv9ffjSKxscRgUG1/rNMEG
- syLVscj/sw4LlXWRVMErj3H65oFf5btgkY5Z6Aao71R175vURayf0CVUQnH28E0ZEjKdbk5UC
- lMEr0LiJycF/A2gjKizPA6dv7Qbf8uTZjfQ2X9IfauOfPdo/zktqshp3pQ5zLJpOgQN51ve9M
- jqSYjWS6gwZu5yeAtZj44svfG7hEkYqwX7nBzf7vPKsXliJMp0PeqHj666khJTP/NKpfWzD3g
- REyOZ9LNfnby79BaIoW/AYtZfPcR1E6/ICXrUihxZEhTBBclZ3/Vdc4z7ikU2LSmF010MZ9J8
- nei3WtmXI3hFW5LNCEh1I4hZGgbR2guwYK1X663d9X+DYsYGCN2+/liuwckzohrB8deZ26vld
- ZWomwh7b2/ryLSFjLaxKzTvF+is=
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e417c2ab-f789-40ce-531-d6b9ea9c7e6b@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 08.05.23 um 23:28 schrieb dinh.nguyen@linux.intel.com:
+Dear Ilpo,
 
-> From: Dinh Nguyen <dinh.nguyen@linux.intel.com>
+
+Thank you for the advice.
+
+
+On 2023/5/8 下午 06:52, Ilpo Järvinen wrote:
+> On Mon, 8 May 2023, Jacky Huang wrote:
 >
-> The driver supports 64-bit SoCFPGA platforms for temperature and voltage
-> reading using the platform's SDM(Secure Device Manager). The driver
-> also uses the Stratix10 Service layer driver.
+>> From: Jacky Huang<ychuang3@nuvoton.com>
+>>
+>> The clock controller generates clocks for the whole chip, including
+>> system clocks and all peripheral clocks. This driver support ma35d1
+>> clock gating, divider, and individual PLL configuration.
+>>
+>> There are 6 PLLs in ma35d1 SoC:
+>>    - CA-PLL for the two Cortex-A35 CPU clock
+>>    - SYS-PLL for system bus, which comes from the companion MCU
+>>      and cannot be programmed by clock controller.
+>>    - DDR-PLL for DDR
+>>    - EPLL for GMAC and GFX, Display, and VDEC IPs.
+>>    - VPLL for video output pixel clock
+>>    - APLL for SDHC, I2S audio, and other IPs.
+>> CA-PLL has only one operation mode.
+>> DDR-PLL, EPLL, VPLL, and APLL are advanced PLLs which have 3
+>> operation modes: integer mode, fraction mode, and spread specturm mode.
+>>
+>> Signed-off-by: Jacky Huang<ychuang3@nuvoton.com>
+>> Acked-by: Krzysztof Kozlowski<krzysztof.kozlowski@linaro.org>
+>> ---
+> Hi,
 >
-> This driver only supports OF SoCFPGA 64-bit platforms.
+> A few small things still below.
 >
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Dinh Nguyen <dinh.nguyen@linux.intel.com>
-> ---
-> v2: clean up race conditions in probe/remove functions
->      move changes in service driver to a separate patch
->      fix undefined 'ret' value in socfpga_read()
->      fix up socfpga_hwmon_err_to_errno() to handle signed integer
->      add platform specific dts binding
-> ---
->   Documentation/hwmon/index.rst         |   1 +
->   Documentation/hwmon/socfpga-hwmon.rst |  30 ++
->   drivers/hwmon/Kconfig                 |  11 +
->   drivers/hwmon/Makefile                |   1 +
->   drivers/hwmon/socfpga-hwmon.c         | 408 ++++++++++++++++++++++++++
->   5 files changed, 451 insertions(+)
->   create mode 100644 Documentation/hwmon/socfpga-hwmon.rst
->   create mode 100644 drivers/hwmon/socfpga-hwmon.c
+>> diff --git a/drivers/clk/nuvoton/clk-ma35d1-divider.c b/drivers/clk/nuvoton/clk-ma35d1-divider.c
+>> new file mode 100644
+>> index 000000000000..0d4d8186a85c
+>> --- /dev/null
+>> +++ b/drivers/clk/nuvoton/clk-ma35d1-divider.c
+>> @@ -0,0 +1,140 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (C) 2023 Nuvoton Technology Corp.
+>> + * Author: Chi-Fang Li<cfli0@nuvoton.com>
+>> + */
+>> +
+>> +#include <linux/clk-provider.h>
+>> +#include <linux/device.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/spinlock.h>
+>> +
+>> +struct ma35d1_adc_clk_div {
+>> +	struct clk_hw hw;
+>> +	void __iomem *reg;
+>> +	u8 shift;
+>> +	u8 width;
+>> +	u32 mask;
+>> +	const struct clk_div_table *table;
+>> +	/* protects concurrent access to clock divider registers */
+>> +	spinlock_t *lock;
+>> +};
+>> +
+>> +struct clk_hw *ma35d1_reg_adc_clkdiv(struct device *dev, const char *name,
+>> +				     struct clk_hw *parent_hw, spinlock_t *lock,
+>> +				     unsigned long flags, void __iomem *reg,
+>> +				     u8 shift, u8 width, u32 mask_bit);
+>> +
+>> +static inline struct ma35d1_adc_clk_div *to_ma35d1_adc_clk_div(struct clk_hw *_hw)
+>> +{
+>> +	return container_of(_hw, struct ma35d1_adc_clk_div, hw);
+>> +}
+>> +
+>> +static inline unsigned long ma35d1_clkdiv_recalc_rate(struct clk_hw *hw,
+>> +						      unsigned long parent_rate)
+>> +{
+>> +	unsigned int val;
+>> +	struct ma35d1_adc_clk_div *dclk = to_ma35d1_adc_clk_div(hw);
+>> +
+>> +	val = readl_relaxed(dclk->reg) >> dclk->shift;
+>> +	val &= clk_div_mask(dclk->width);
+>> +	val += 1;
+>> +	return divider_recalc_rate(hw, parent_rate, val, dclk->table,
+>> +				   CLK_DIVIDER_ROUND_CLOSEST, dclk->width);
+>> +}
+>> +
+>> +static inline long ma35d1_clkdiv_round_rate(struct clk_hw *hw,
+>> +					    unsigned long rate,
+>> +					    unsigned long *prate)
+>> +{
+>> +	struct ma35d1_adc_clk_div *dclk = to_ma35d1_adc_clk_div(hw);
+>> +
+>> +	return divider_round_rate(hw, rate, prate, dclk->table,
+>> +				  dclk->width, CLK_DIVIDER_ROUND_CLOSEST);
+>> +}
+>> +
+>> +static inline int ma35d1_clkdiv_set_rate(struct clk_hw *hw,
+>> +					 unsigned long rate,
+>> +					 unsigned long parent_rate)
+>> +{
+>> +	int value;
+>> +	unsigned long flags = 0;
+>> +	u32 data;
+>> +	struct ma35d1_adc_clk_div *dclk = to_ma35d1_adc_clk_div(hw);
+>> +
+>> +	value = divider_get_val(rate, parent_rate, dclk->table,
+>> +				dclk->width, CLK_DIVIDER_ROUND_CLOSEST);
+>> +
+>> +	spin_lock_irqsave(dclk->lock, flags);
+>> +
+>> +	data = readl_relaxed(dclk->reg);
+>> +	data &= ~(clk_div_mask(dclk->width) << dclk->shift);
+>> +	data |= (value - 1) << dclk->shift;
+>> +	data |= dclk->mask;
+>> +	writel_relaxed(data, dclk->reg);
+>> +
+>> +	spin_unlock_irqrestore(dclk->lock, flags);
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct clk_ops ma35d1_adc_clkdiv_ops = {
+>> +	.recalc_rate = ma35d1_clkdiv_recalc_rate,
+>> +	.round_rate = ma35d1_clkdiv_round_rate,
+>> +	.set_rate = ma35d1_clkdiv_set_rate,
+>> +};
+>> +
+>> +struct clk_hw *ma35d1_reg_adc_clkdiv(struct device *dev, const char *name,
+>> +				     struct clk_hw *parent_hw, spinlock_t *lock,
+>> +				     unsigned long flags, void __iomem *reg,
+>> +				     u8 shift, u8 width, u32 mask_bit)
+>> +{
+>> +	struct ma35d1_adc_clk_div *div;
+>> +	struct clk_init_data init;
+>> +	struct clk_div_table *table;
+>> +	struct clk_parent_data pdata = { .index = 0 };
+>> +	u32 max_div, min_div;
+>> +	struct clk_hw *hw;
+>> +	int ret;
+>> +	int i;
+>> +
+>> +	div = devm_kzalloc(dev, sizeof(*div), GFP_KERNEL);
+>> +	if (!div)
+>> +		return ERR_PTR(-ENOMEM);
+>> +
+>> +	max_div = clk_div_mask(width) + 1;
+>> +	min_div = 1;
+>> +
+>> +	table = devm_kcalloc(dev, max_div + 1, sizeof(*table), GFP_KERNEL);
+>> +	if (!table)
+>> +		return ERR_PTR(-ENOMEM);
+>> +
+>> +	for (i = 0; i < max_div; i++) {
+>> +		table[i].val = min_div + i;
+>> +		table[i].div = 2 * table[i].val;
+>> +	}
+>> +	table[max_div].val = 0;
+>> +	table[max_div].div = 0;
+>> +
+>> +	memset(&init, 0, sizeof(init));
+>> +	init.name = name;
+>> +	init.ops = &ma35d1_adc_clkdiv_ops;
+>> +	init.flags |= flags;
+>> +	pdata.hw = parent_hw;
+>> +	init.parent_data = &pdata;
+>> +	init.num_parents = 1;
+>> +
+>> +	div->reg = reg;
+>> +	div->shift = shift;
+>> +	div->width = width;
+>> +	div->mask = mask_bit ? BIT(mask_bit) : 0;
+>> +	div->lock = lock;
+>> +	div->hw.init = &init;
+>> +	div->table = table;
+>> +
+>> +	hw = &div->hw;
+>> +	ret = devm_clk_hw_register(dev, hw);
+>> +	if (ret)
+>> +		return ERR_PTR(ret);
+>> +	return hw;
+>> +}
+>> +EXPORT_SYMBOL_GPL(ma35d1_reg_adc_clkdiv);
+>> diff --git a/drivers/clk/nuvoton/clk-ma35d1-pll.c b/drivers/clk/nuvoton/clk-ma35d1-pll.c
+>> new file mode 100644
+>> index 000000000000..a9981db0a54a
+>> --- /dev/null
+>> +++ b/drivers/clk/nuvoton/clk-ma35d1-pll.c
+>> @@ -0,0 +1,365 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (C) 2023 Nuvoton Technology Corp.
+>> + * Author: Chi-Fang Li<cfli0@nuvoton.com>
+>> + */
+>> +
+>> +#include <linux/bitfield.h>
+>> +#include <linux/clk-provider.h>
+>> +#include <linux/container_of.h>
+>> +#include <linux/device.h>
+>> +#include <linux/io.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/math64.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/units.h>
+>> +#include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
+>> +
+>> +/* PLL frequency limits */
+>> +#define PLL_FREF_MAX_FREQ	(200 * HZ_PER_MHZ)
+>> +#define PLL_FREF_MIN_FREQ	(1 * HZ_PER_MHZ)
+>> +#define PLL_FREF_M_MAX_FREQ	(40 * HZ_PER_MHZ)
+>> +#define PLL_FREF_M_MIN_FREQ	(10 * HZ_PER_MHZ)
+>> +#define PLL_FCLK_MAX_FREQ	(2400 * HZ_PER_MHZ)
+>> +#define PLL_FCLK_MIN_FREQ	(600 * HZ_PER_MHZ)
+>> +#define PLL_FCLKO_MAX_FREQ	(2400 * HZ_PER_MHZ)
+>> +#define PLL_FCLKO_MIN_FREQ	(85700 * HZ_PER_KHZ)
+>> +#define PLL_SS_RATE		0x77
+>> +#define PLL_SLOPE		0x58CFA
+>> +
+>> +#define REG_PLL_CTL0_OFFSET	0x0
+>> +#define REG_PLL_CTL1_OFFSET	0x4
+>> +#define REG_PLL_CTL2_OFFSET	0x8
+>> +
+>> +/* bit fields for REG_CLK_PLL0CTL0, which is SMIC PLL design */
+>> +#define SPLL0_CTL0_FBDIV	GENMASK(7, 0)
+>> +#define SPLL0_CTL0_INDIV	GENMASK(11, 8)
+>> +#define SPLL0_CTL0_OUTDIV	GENMASK(13, 12)
+>> +#define SPLL0_CTL0_PD		BIT(16)
+>> +#define SPLL0_CTL0_BP		BIT(17)
+>> +
+>> +/* bit fields for REG_CLK_PLLxCTL0 ~ REG_CLK_PLLxCTL2, where x = 2 ~ 5 */
+>> +#define PLL_CTL0_FBDIV		GENMASK(10, 0)
+>> +#define PLL_CTL0_INDIV		GENMASK(17, 12)
+>> +#define PLL_CTL0_MODE		GENMASK(19, 18)
+>> +#define PLL_CTL0_SSRATE		GENMASK(30, 20)
+>> +#define PLL_CTL1_PD		BIT(0)
+>> +#define PLL_CTL1_BP		BIT(1)
+>> +#define PLL_CTL1_OUTDIV		GENMASK(6, 4)
+>> +#define PLL_CTL1_FRAC		GENMASK(31, 24)
+>> +#define PLL_CTL2_SLOPE		GENMASK(23, 0)
+>> +
+>> +#define INDIV_MIN		1
+>> +#define INDIV_MAX		63
+>> +#define FBDIV_MIN		16
+>> +#define FBDIV_MAX		2047
+>> +#define FBDIV_FRAC_MIN		1600
+>> +#define FBDIV_FRAC_MAX		204700
+>> +#define OUTDIV_MIN		1
+>> +#define OUTDIV_MAX		7
+>> +
+>> +#define PLL_MODE_INT            0
+>> +#define PLL_MODE_FRAC           1
+>> +#define PLL_MODE_SS             2
+>> +
+>> +struct ma35d1_clk_pll {
+>> +	struct clk_hw hw;
+>> +	u32 id;
+>> +	u8 mode;
+>> +	void __iomem *ctl0_base;
+>> +	void __iomem *ctl1_base;
+>> +	void __iomem *ctl2_base;
+>> +};
+>> +
+>> +struct clk_hw *ma35d1_reg_clk_pll(struct device *dev, u32 id, u8 u8mode, const char *name,
+>> +				  struct clk_hw *parent_hw, void __iomem *base);
+>> +
+>> +static inline struct ma35d1_clk_pll *to_ma35d1_clk_pll(struct clk_hw *_hw)
+>> +{
+>> +	return container_of(_hw, struct ma35d1_clk_pll, hw);
+>> +}
+>> +
+>> +static unsigned long ma35d1_calc_smic_pll_freq(u32 pll0_ctl0,
+>> +					       unsigned long parent_rate)
+>> +{
+>> +	const u32 clk_div_table[] = { 1, 2, 4, 8 };
+> This is just 1 << n so the table doesn't seem necessary.
 >
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.r=
-st
-> index f1fe75f596a5..9db4e1537481 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -196,6 +196,7 @@ Hardware Monitoring Kernel Drivers
->      smsc47b397
->      smsc47m192
->      smsc47m1
-> +   socfpga-hwmon
->      sparx5-temp
->      stpddc60
->      sy7636a-hwmon
-> diff --git a/Documentation/hwmon/socfpga-hwmon.rst b/Documentation/hwmon=
-/socfpga-hwmon.rst
-> new file mode 100644
-> index 000000000000..f6565c83cf40
-> --- /dev/null
-> +++ b/Documentation/hwmon/socfpga-hwmon.rst
-> @@ -0,0 +1,30 @@
-> +.. SPDX-License-Identifier: GPL-2.0-only
-> +
-> +Kernel driver socfpga-hwmon
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-> +
-> +Supported chips:
-> +
-> + * Intel Stratix10
-> + * Intel Agilex
-> + * Intel N5X
-> +
-> +Author: Dinh Nguyen <dinh.nguyen@linux.intel.com>
-> +
-> +Description
-> +-----------
-> +
-> +This driver supports hardware monitoring for 64-Bit SoCFPGA and eASIC d=
-evices
-> +based around the Secure Device Manager and Stratix 10 Service layer.
-> +
-> +The following sensor types are supported:
-> +
-> +  * temperature
-> +  * voltage
-> +
-> +Usage Notes
-> +-----------
-> +
-> +The driver relies on a device tree node to enumerate support present on=
- the
-> +specific device. See Documentation/devicetree/bindings/hwmon/intel,socf=
-pga-hwmon.yaml
-> +for details of the device-tree node.
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 5b3b76477b0e..c7c978acfece 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1875,6 +1875,17 @@ config SENSORS_SMSC47M192
->   	  This driver can also be built as a module. If so, the module
->   	  will be called smsc47m192.
->
-> +config SENSORS_SOCFPGA
-> +	tristate "SoCFPGA Hardware monitoring features"
-> +	depends on INTEL_STRATIX10_SERVICE
-> +	depends on OF || COMPILE_TEST
-> +	help
-> +	  If you say yes here you get support for the temperature and
-> +	  voltage sensors of 64-bit SoCFPGA devices.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called socfpga-hwmon.
-> +
->   config SENSORS_SMSC47B397
->   	tristate "SMSC LPC47B397-NC"
->   	depends on !PPC
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 88712b5031c8..c04c0b2578a4 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -193,6 +193,7 @@ obj-$(CONFIG_SENSORS_SMPRO)	+=3D smpro-hwmon.o
->   obj-$(CONFIG_SENSORS_SMSC47B397)+=3D smsc47b397.o
->   obj-$(CONFIG_SENSORS_SMSC47M1)	+=3D smsc47m1.o
->   obj-$(CONFIG_SENSORS_SMSC47M192)+=3D smsc47m192.o
-> +obj-$(CONFIG_SENSORS_SOCFPGA)	+=3D socfpga-hwmon.o
->   obj-$(CONFIG_SENSORS_SPARX5)	+=3D sparx5-temp.o
->   obj-$(CONFIG_SENSORS_STTS751)	+=3D stts751.o
->   obj-$(CONFIG_SENSORS_SY7636A)	+=3D sy7636a-hwmon.o
-> diff --git a/drivers/hwmon/socfpga-hwmon.c b/drivers/hwmon/socfpga-hwmon=
-.c
-> new file mode 100644
-> index 000000000000..01bdefa62b7f
-> --- /dev/null
-> +++ b/drivers/hwmon/socfpga-hwmon.c
-> @@ -0,0 +1,408 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * SoCFPGA hardware monitoring features
-> + *
-> + * Copyright (c) 2023 Intel Corporation. All rights reserved
-> + */
-> +#include <linux/arm-smccc.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/firmware/intel/stratix10-svc-client.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/units.h>
-> +
-> +#define HWMON_TIMEOUT	msecs_to_jiffies(SVC_HWMON_REQUEST_TIMEOUT_MS)
-> +
-> +/*
-> + * Selected temperature sensor channel is currently inactive.
-> + * Ensure that the tile where the TSD is located is actively in use.
-> + */
-> +#define ETEMP_INACTIVE		0
-> +/*
-> + * Selected temperature sensor channel returned a value that is not the
-> + * latest reading. Try retrieve the temperature reading again.
-> + */
-> +#define ETEMP_TOO_OLD		1
-> +/*
-> + * Selected temperature sensor channel is invalid for the device. Ignor=
-e
-> + * the returned data because the temperature sensor channel location is
-> + * invalid.
-> + */
-> +#define ETEMP_NOT_PRESENT	2
-> +/*
-> + * System is corrupted or failed to respond.
-> + */
-> +#define ETEMP_TIMEOUT		3
-> +#define ETEMP_CORRUPT		4
-> +/*
-> + * Communication mechanism is busy.
-> + */
-> +#define ETEMP_BUSY		5
-> +/*
-> + * System is corrupted or failed to respond.
-> + */
-> +#define ETEMP_NOT_INITIALIZED	255
-> +
-> +#define SOCFPGA_HWMON_ERR_MAX	-2147483648
-> +
-> +#define SOCFPGA_HWMON_MAXSENSORS	16
-> +
-> +/**
-> + * struct socfpga_hwmon_chan - channel input parameters.
-> + * @n : Number of channels.
-> + * @value: value read from the chip.
-> + * @names: names array from DTS labels.
-> + * @chan: channel array.
-> + *
-> + * The structure represents either the voltage or temperature informati=
-on
-> + * for the hwmon channels.
-> + */
-> +struct socfpga_hwmon_chan {
-> +	unsigned int n;
+>> +	u32 m, n, p, outdiv;
+>> +	u64 pll_freq;
+>> +
+>> +	if (pll0_ctl0 & SPLL0_CTL0_BP)
+>> +		return parent_rate;
+>> +
+>> +	n = FIELD_GET(SPLL0_CTL0_FBDIV, pll0_ctl0);
+>> +	m = FIELD_GET(SPLL0_CTL0_INDIV, pll0_ctl0);
+>> +	p = FIELD_GET(SPLL0_CTL0_OUTDIV, pll0_ctl0);
+>> +	outdiv = clk_div_table[p];
+>> +	pll_freq = (u64)parent_rate * n;
+>> +	div_u64(pll_freq, m * outdiv);
+>> +	return pll_freq;
+>> +}
+>> +
+>> +static unsigned long ma35d1_calc_pll_freq(u8 mode, u32 *reg_ctl, unsigned long parent_rate)
+>> +{
+>> +	unsigned long pll_freq, x;
+>> +	u32 m, n, p;
+>> +
+>> +	if (reg_ctl[1] & PLL_CTL1_BP)
+>> +		return parent_rate;
+>> +
+>> +	n = FIELD_GET(PLL_CTL0_FBDIV, reg_ctl[0]);
+>> +	m = FIELD_GET(PLL_CTL0_INDIV, reg_ctl[0]);
+>> +	p = FIELD_GET(PLL_CTL1_OUTDIV, reg_ctl[1]);
+>> +
+>> +	if (mode == PLL_MODE_INT) {
+>> +		pll_freq = (u64)parent_rate * n;
+>> +		div_u64(pll_freq, m * p);
+>> +	} else {
+>> +		x = FIELD_GET(PLL_CTL1_FRAC, reg_ctl[1]);
+>> +		/* 2 decimal places floating to integer (ex. 1.23 to 123) */
+>> +		n = n * 100 + ((x * 100) / FIELD_MAX(PLL_CTL1_FRAC));
+>> +
+>> +		/* pll_freq = parent_rate * n / 100 / m / p */
+> Repeats what the code does, drop.
 
-Hi,
+I will remove it.
 
-renaming n to something like sensor_count would allow other people
-to immediately understand what n does.
+>> +		pll_freq = div_u64(parent_rate * n, 100 * m * p);
+>> +	}
+>> +	return pll_freq;
+>> +}
+>> +
+>> +static int ma35d1_pll_find_closest(struct ma35d1_clk_pll *pll, unsigned long rate,
+>> +				   unsigned long parent_rate, u32 *reg_ctl,
+>> +				   unsigned long *freq)
+>> +{
+>> +	unsigned long min_diff = ULONG_MAX;
+>> +	int fbdiv_min, fbdiv_max;
+>> +	int p, m, n;
+>> +
+>> +	*freq = 0;
+>> +	if (rate < PLL_FCLKO_MIN_FREQ || rate > PLL_FCLKO_MAX_FREQ)
+>> +		return -EINVAL;
+>> +
+>> +	if (pll->mode == PLL_MODE_INT) {
+>> +		fbdiv_min = FBDIV_MIN;
+>> +		fbdiv_max = FBDIV_MAX;
+>> +	} else {
+>> +		fbdiv_min = FBDIV_FRAC_MIN;
+>> +		fbdiv_max = FBDIV_FRAC_MAX;
+>> +	}
+>> +
+>> +	for (m = INDIV_MIN; m <= INDIV_MAX; m++) {
+>> +		for (n = fbdiv_min; n <= fbdiv_max; n++) {
+>> +			for (p = OUTDIV_MIN; p <= OUTDIV_MAX; p++) {
+>> +				unsigned long tmp, fout, fclk, diff;
+>> +
+>> +				tmp = div_u64(parent_rate, m);
+>> +				if (tmp < PLL_FREF_M_MIN_FREQ ||
+>> +				    tmp > PLL_FREF_M_MAX_FREQ)
+>> +					continue; /* constrain */
+>> +
+>> +				fclk = div_u64(parent_rate * n, m);
+>> +				/* for 2 decimal places */
+>> +				if (pll->mode != PLL_MODE_INT)
+>> +					fclk = div_u64(fclk, 100);
+>> +
+>> +				if (fclk < PLL_FCLK_MIN_FREQ ||
+>> +				    fclk > PLL_FCLK_MAX_FREQ)
+>> +					continue; /* constrain */
+>> +
+>> +				fout = div_u64(fclk, p);
+>> +				if (fout < PLL_FCLKO_MIN_FREQ ||
+>> +				    fout > PLL_FCLKO_MAX_FREQ)
+>> +					continue; /* constrain */
+>> +
+>> +				diff = abs(rate - fout);
+>> +				if (diff < min_diff) {
+>> +					reg_ctl[0] = FIELD_PREP(PLL_CTL0_INDIV, m) |
+>> +						     FIELD_PREP(PLL_CTL0_FBDIV, n);
+>> +					reg_ctl[1] = FIELD_PREP(PLL_CTL1_OUTDIV, p);
+>> +					*freq = fout;
+>> +					min_diff = diff;
+>> +					if (min_diff == 0)
+>> +						break;
+>> +				}
+>> +			}
+>> +		}
+>> +	}
+>> +	if (*freq == 0)
+>> +		return -EINVAL; /* cannot find even one valid setting */
+>> +	return 0;
+>> +}
+>> +
+>> +static int ma35d1_clk_pll_set_rate(struct clk_hw *hw, unsigned long rate,
+>> +				   unsigned long parent_rate)
+>> +{
+>> +	struct ma35d1_clk_pll *pll = to_ma35d1_clk_pll(hw);
+>> +	u32 reg_ctl[3] = { 0 };
+>> +	unsigned long pll_freq;
+>> +	int ret;
+>> +
+>> +	if (parent_rate < PLL_FREF_MIN_FREQ ||
+>> +	    parent_rate > PLL_FREF_MAX_FREQ)
+> One line.
 
-> +	int value;
-> +	const char *names[SOCFPGA_HWMON_MAXSENSORS];
-> +	u32 chan[SOCFPGA_HWMON_MAXSENSORS];
-> +};
-> +
-> +struct socfpga_hwmon_priv {
-> +	struct device *hwmon_dev;
-> +	struct stratix10_svc_client client;
-> +	struct stratix10_svc_client_msg msg;
-> +	struct stratix10_svc_chan *chan;
-> +	struct completion completion;
-> +	struct mutex lock; /* lock for reading the hardware volts/temps */
-> +	struct socfpga_hwmon_chan temperature;
-> +	struct socfpga_hwmon_chan voltage;
-> +};
-> +
-> +enum hwmon_type_op {
-> +	SOCFPGA_HWMON_TYPE_TEMP,
-> +	SOCFPGA_HWMON_TYPE_VOLT
-> +};
-> +
-> +static const char *const hwmon_types_str[] =3D { "temperature", "voltag=
-e" };
-> +
-> +static umode_t socfpga_is_visible(const void *dev,
-> +				  enum hwmon_sensor_types type,
-> +				  u32 attr, int chan)
-> +{
-> +	switch (type) {
-> +	case hwmon_temp:
-> +	case hwmon_in:
-> +		return 0444;
-> +	default:
-> +		return 0;
-> +	}
-> +}
+I will fix it.
 
-socfpga_is_visible() should actually check the number of temp/voltage chan=
-nels ("n")
-discovered over dt, and return 0 if a channel does not exist. Otherwise so=
-cfpga_read()
-could access temperature.chan[channel] and voltage.chan[channel] with "cha=
-nnel" being
-out-of-bounds and chan[channel] still being zero from devm_kzalloc().
-Something similar would happen in socfpga_read_string().
+>> +		return -EINVAL;
+>> +
+>> +	ret = ma35d1_pll_find_closest(pll, rate, parent_rate, reg_ctl, &pll_freq);
+>> +	if (ret != 0)
+>> +		return ret;
+>> +
+>> +	switch (pll->mode) {
+>> +	case PLL_MODE_INT:
+>> +		reg_ctl[0] |= FIELD_PREP(PLL_CTL0_MODE, PLL_MODE_INT);
+>> +		break;
+>> +	case PLL_MODE_FRAC:
+>> +		reg_ctl[0] |= FIELD_PREP(PLL_CTL0_MODE, PLL_MODE_FRAC);
+>> +		break;
+>> +	case PLL_MODE_SS:
+>> +		reg_ctl[0] |= FIELD_PREP(PLL_CTL0_MODE, PLL_MODE_SS) |
+>> +			      FIELD_PREP(PLL_CTL0_SSRATE, PLL_SS_RATE);
+>> +		reg_ctl[2] = FIELD_PREP(PLL_CTL2_SLOPE, PLL_SLOPE);
+>> +		break;
+>> +	}
+>> +	reg_ctl[1] |= PLL_CTL1_PD;
+>> +
+>> +	writel_relaxed(reg_ctl[0], pll->ctl0_base);
+>> +	writel_relaxed(reg_ctl[1], pll->ctl1_base);
+>> +	writel_relaxed(reg_ctl[2], pll->ctl2_base);
+>> +	return 0;
+>> +}
+>> +
+>> +static unsigned long ma35d1_clk_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+>> +{
+>> +	struct ma35d1_clk_pll *pll = to_ma35d1_clk_pll(hw);
+>> +	u32 reg_ctl[3];
+>> +	unsigned long pll_freq;
+>> +
+>> +	if (parent_rate < PLL_FREF_MIN_FREQ || parent_rate > PLL_FREF_MAX_FREQ)
+>> +		return 0;
+>> +
+>> +	switch (pll->id) {
+>> +	case CAPLL:
+>> +		reg_ctl[0] = readl_relaxed(pll->ctl0_base);
+>> +		pll_freq = ma35d1_calc_smic_pll_freq(reg_ctl[0], parent_rate);
+>> +		return pll_freq;
+>> +	case DDRPLL:
+>> +	case APLL:
+>> +	case EPLL:
+>> +	case VPLL:
+>> +		reg_ctl[0] = readl_relaxed(pll->ctl0_base);
+>> +		reg_ctl[1] = readl_relaxed(pll->ctl1_base);
+>> +		pll_freq = ma35d1_calc_pll_freq(pll->mode, reg_ctl, parent_rate);
+>> +		return pll_freq;
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> +static long ma35d1_clk_pll_round_rate(struct clk_hw *hw, unsigned long rate,
+>> +				      unsigned long *parent_rate)
+>> +{
+>> +	struct ma35d1_clk_pll *pll = to_ma35d1_clk_pll(hw);
+>> +	u32 reg_ctl[3] = { 0 };
+>> +	unsigned long pll_freq;
+>> +	long ret;
+>> +
+>> +	if (*parent_rate < PLL_FREF_MIN_FREQ || *parent_rate > PLL_FREF_MAX_FREQ)
+>> +		return -EINVAL;
+>> +
+>> +	ret = ma35d1_pll_find_closest(pll, rate, *parent_rate, reg_ctl, &pll_freq);
+>> +	if (ret != 0)
+> < 0
 
-> +
-> +static void socfpga_smc_callback(struct stratix10_svc_client *client,
-> +				 struct stratix10_svc_cb_data *data)
-> +{
-> +	struct socfpga_hwmon_priv *priv =3D client->priv;
-> +	struct arm_smccc_res *res =3D data->kaddr1;
-> +
-> +	if (data->status =3D=3D BIT(SVC_STATUS_OK))	{
-> +		if (priv->msg.command =3D=3D COMMAND_HWMON_READTEMP)
-> +			priv->temperature.value =3D res->a0;
-> +		else
-> +			priv->voltage.value =3D res->a0;
-> +	} else {
-> +		dev_err(client->dev, "%s returned 0x%lX\n", __func__, res->a0);
-> +	}
-> +
-> +	complete(&priv->completion);
-> +}
-> +
-> +static int socfpga_hwmon_send(struct socfpga_hwmon_priv *priv)
-> +{
-> +	int ret;
-> +
-> +	priv->client.receive_cb =3D socfpga_smc_callback;
-> +
-> +	ret =3D stratix10_svc_send(priv->chan, &priv->msg);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (!wait_for_completion_timeout(&priv->completion, HWMON_TIMEOUT)) {
-> +		dev_err(priv->client.dev, "SMC call timeout!\n");
-> +		return -ETIMEDOUT;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int socfpga_hwmon_err_to_errno(struct socfpga_hwmon_priv *priv)
-> +{
-> +	int value =3D priv->temperature.value;
-> +	int err;
-> +
-> +	if (value >=3D SOCFPGA_HWMON_ERR_MAX)
-> +		return 0;
-> +
-> +	err =3D abs(SOCFPGA_HWMON_ERR_MAX - value);
-> +	switch (err) {
-> +	case ETEMP_NOT_PRESENT:
-> +		return -ENOENT;
-> +	case ETEMP_CORRUPT:
-> +	case ETEMP_NOT_INITIALIZED:
-> +		return -ENODATA;
-> +	case ETEMP_BUSY:
-> +		return -EBUSY;
-> +	case ETEMP_INACTIVE:
-> +	case ETEMP_TIMEOUT:
-> +	case ETEMP_TOO_OLD:
-> +		return -EAGAIN;
-> +	default:
-> +		/* Unknown error */
-> +		return -EIO;
-> +	}
-> +}
-> +
-> +static int socfpga_read(struct device *dev, enum hwmon_sensor_types typ=
-e,
-> +			u32 attr, int chan, long *val)
-> +{
-> +	struct socfpga_hwmon_priv *priv =3D dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	mutex_lock(&priv->lock);
-> +	reinit_completion(&priv->completion);
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		priv->msg.arg[0] =3D BIT_ULL(priv->temperature.chan[chan]);
-> +		priv->msg.command =3D COMMAND_HWMON_READTEMP;
-> +		ret =3D socfpga_hwmon_send(priv);
-> +		if (ret)
-> +			goto status_done;
-> +
-> +		ret =3D socfpga_hwmon_err_to_errno(priv);
-> +		if (ret)
-> +			break;
-> +		/*
-> +		 * The Temperature Sensor IP core returns the Celsius
-> +		 * temperature value in signed 32-bit fixed point binary
-> +		 * format, with eight bits below binary point.
-> +		 */
-> +		*val =3D (priv->temperature.value * MILLIDEGREE_PER_DEGREE) / 256;
-> +		break;
-> +	case hwmon_in:
-> +		priv->msg.arg[0] =3D BIT_ULL(priv->voltage.chan[chan]);
-> +		priv->msg.command =3D COMMAND_HWMON_READVOLT;
-> +		ret =3D socfpga_hwmon_send(priv);
-> +		if (ret)
-> +			goto status_done;
-> +
-> +		/*
-> +		 * The Voltage Sensor IP core returns the sampled voltage
-> +		 * in unsigned 32-bit fixed point binary format, with 16 bits
-> +		 * below binary point.
-> +		 */
-> +		*val =3D (priv->voltage.value * MILLIVOLT_PER_VOLT) / 65536;
-> +		break;
-> +	default:
-> +		ret =3D -EOPNOTSUPP;
-> +		break;
-> +	}
-> +
-> +status_done:
-> +	stratix10_svc_done(priv->chan);
-> +	mutex_unlock(&priv->lock);
-> +	return ret;
-> +}
-> +
-> +static int socfpga_read_string(struct device *dev,
-> +			       enum hwmon_sensor_types type, u32 attr,
-> +			       int chan, const char **str)
-> +{
-> +	struct socfpga_hwmon_priv *priv =3D dev_get_drvdata(dev);
-> +
-> +	switch (type) {
-> +	case hwmon_in:
-> +		*str =3D priv->voltage.names[chan];
-> +		return 0;
-> +	case hwmon_temp:
-> +		*str =3D priv->temperature.names[chan];
-> +		return 0;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static const struct hwmon_ops socfpga_ops =3D {
-> +	.is_visible =3D socfpga_is_visible,
-> +	.read =3D socfpga_read,
-> +	.read_string =3D socfpga_read_string,
-> +};
-> +
-> +static const struct hwmon_channel_info *socfpga_info[] =3D {
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL),
-> +	HWMON_CHANNEL_INFO(in,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL, HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL, HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL, HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL, HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL, HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL, HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL, HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL, HWMON_I_INPUT | HWMON_I_LABEL),
-> +	NULL
-> +};
+I will fix it.
 
-With two sensors entries sharing a line, someone might accidentally think =
-that the driver
-supports only up to 8 temp/voltage channels instead of 16.
+>> +		return ret;
+>> +
+>> +	switch (pll->id) {
+>> +	case CAPLL:
+>> +		reg_ctl[0] = readl_relaxed(pll->ctl0_base);
+>> +		pll_freq = ma35d1_calc_smic_pll_freq(reg_ctl[0], *parent_rate);
+>> +		return pll_freq;
+>> +	case DDRPLL:
+>> +	case APLL:
+>> +	case EPLL:
+>> +	case VPLL:
+>> +		reg_ctl[0] = readl_relaxed(pll->ctl0_base);
+>> +		reg_ctl[1] = readl_relaxed(pll->ctl1_base);
+>> +		pll_freq = ma35d1_calc_pll_freq(pll->mode, reg_ctl, *parent_rate);
+>> +		return pll_freq;
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> +static int ma35d1_clk_pll_is_prepared(struct clk_hw *hw)
+>> +{
+>> +	struct ma35d1_clk_pll *pll = to_ma35d1_clk_pll(hw);
+>> +	u32 val = readl_relaxed(pll->ctl1_base);
+>> +
+>> +	return !(val & PLL_CTL1_PD);
+>> +}
+>> +
+>> +static int ma35d1_clk_pll_prepare(struct clk_hw *hw)
+>> +{
+>> +	struct ma35d1_clk_pll *pll = to_ma35d1_clk_pll(hw);
+>> +	u32 val;
+>> +
+>> +	val = readl_relaxed(pll->ctl1_base);
+>> +	val &= ~PLL_CTL1_PD;
+>> +	writel_relaxed(val, pll->ctl1_base);
+>> +	return 0;
+>> +}
+>> +
+>> +static void ma35d1_clk_pll_unprepare(struct clk_hw *hw)
+>> +{
+>> +	struct ma35d1_clk_pll *pll = to_ma35d1_clk_pll(hw);
+>> +	u32 val;
+>> +
+>> +	val = readl_relaxed(pll->ctl1_base);
+>> +	val |= PLL_CTL1_PD;
+>> +	writel_relaxed(val, pll->ctl1_base);
+>> +}
+>> +
+>> +static const struct clk_ops ma35d1_clk_pll_ops = {
+>> +	.is_prepared = ma35d1_clk_pll_is_prepared,
+>> +	.prepare = ma35d1_clk_pll_prepare,
+>> +	.unprepare = ma35d1_clk_pll_unprepare,
+>> +	.set_rate = ma35d1_clk_pll_set_rate,
+>> +	.recalc_rate = ma35d1_clk_pll_recalc_rate,
+>> +	.round_rate = ma35d1_clk_pll_round_rate,
+>> +};
+>> +
+>> +static const struct clk_ops ma35d1_clk_fixed_pll_ops = {
+>> +	.recalc_rate = ma35d1_clk_pll_recalc_rate,
+>> +	.round_rate = ma35d1_clk_pll_round_rate,
+>> +};
+>> +
+>> +struct clk_hw *ma35d1_reg_clk_pll(struct device *dev, u32 id, u8 u8mode, const char *name,
+>> +				  struct clk_hw *parent_hw, void __iomem *base)
+>> +{
+>> +	struct clk_parent_data pdata = { .index = 0 };
+>> +	struct clk_init_data init = {};
+>> +	struct ma35d1_clk_pll *pll;
+>> +	struct clk_hw *hw;
+>> +	int ret;
+>> +
+>> +	pll = devm_kzalloc(dev, sizeof(*pll), GFP_KERNEL);
+>> +	if (!pll)
+>> +		return ERR_PTR(-ENOMEM);
+>> +
+>> +	pll->id = id;
+>> +	pll->mode = u8mode;
+>> +	pll->ctl0_base = base + REG_PLL_CTL0_OFFSET;
+>> +	pll->ctl1_base = base + REG_PLL_CTL1_OFFSET;
+>> +	pll->ctl2_base = base + REG_PLL_CTL2_OFFSET;
+>> +
+>> +	init.name = name;
+>> +	init.flags = 0;
+>> +	pdata.hw = parent_hw;
+>> +	init.parent_data = &pdata;
+>> +	init.num_parents = 1;
+>> +
+>> +	if (id == CAPLL || id == DDRPLL)
+>> +		init.ops = &ma35d1_clk_fixed_pll_ops;
+>> +	else
+>> +		init.ops = &ma35d1_clk_pll_ops;
+>> +
+>> +	pll->hw.init = &init;
+>> +	hw = &pll->hw;
+>> +
+>> +	ret = devm_clk_hw_register(dev, hw);
+>> +	if (ret)
+>> +		return ERR_PTR(ret);
+>> +	return hw;
+>> +}
+>> +EXPORT_SYMBOL_GPL(ma35d1_reg_clk_pll);
+>> diff --git a/drivers/clk/nuvoton/clk-ma35d1.c b/drivers/clk/nuvoton/clk-ma35d1.c
+>> new file mode 100644
+>> index 000000000000..68fbaf2f4945
+>> --- /dev/null
+>> +++ b/drivers/clk/nuvoton/clk-ma35d1.c
+>> @@ -0,0 +1,948 @@
+>> +static inline struct clk_hw *ma35d1_clk_fixed(const char *name, int rate)
+>> +{
+>> +	return clk_hw_register_fixed_rate(NULL, name, NULL, 0, rate);
+>> +}
+>> +
+>> +static inline struct clk_hw *ma35d1_clk_mux_parent(struct device *dev,
+>> +						   const char *name,
+>> +						   void __iomem *reg,
+>> +						   u8 shift, u8 width,
+>> +						   const struct clk_parent_data *pdata,
+>> +						   int num_pdata)
+>> +{
+>> +	return clk_hw_register_mux_parent_data(dev, name, pdata, num_pdata,
+>> +					       CLK_SET_RATE_NO_REPARENT, reg, shift,
+>> +					       width, 0, &ma35d1_lock);
+>> +}
+>> +
+>> +static inline struct clk_hw *ma35d1_clk_mux(struct device *dev,
+>> +					    const char *name,
+>> +					    void __iomem *reg,
+>> +					    u8 shift, u8 width,
+>> +					    const char *const *parents,
+>> +					    int num_parents)
+>> +{
+>> +	return devm_clk_hw_register_mux(dev, name, parents, num_parents,
+>> +					CLK_SET_RATE_NO_REPARENT, reg, shift,
+>> +					width, 0, &ma35d1_lock);
+>> +}
+>> +
+>> +static inline struct clk_hw *ma35d1_clk_divider(struct device *dev,
+>> +						const char *name,
+>> +						const char *parent,
+>> +						void __iomem *reg, u8 shift,
+>> +						u8 width)
+>> +{
+>> +	return devm_clk_hw_register_divider(dev, name, parent, CLK_SET_RATE_PARENT,
+>> +					    reg, shift, width, 0, &ma35d1_lock);
+>> +}
+>> +
+>> +static inline struct clk_hw *ma35d1_clk_divider_pow2(struct device *dev,
+>> +						     const char *name,
+>> +						     const char *parent,
+>> +						     void __iomem *reg,
+>> +						     u8 shift, u8 width)
+>> +{
+>> +	return devm_clk_hw_register_divider(dev, name, parent,
+>> +					    CLK_DIVIDER_POWER_OF_TWO, reg, shift,
+>> +					    width, 0, &ma35d1_lock);
+>> +}
+>> +
+>> +static inline struct clk_hw *ma35d1_clk_divider_table(struct device *dev,
+>> +						      const char *name,
+>> +						      const char *parent,
+>> +						      void __iomem *reg,
+>> +						      u8 shift, u8 width,
+>> +						      const struct clk_div_table *table)
+>> +{
+>> +	return devm_clk_hw_register_divider_table(dev, name, parent, 0,
+>> +						  reg, shift, width, 0,
+>> +						  table, &ma35d1_lock);
+>> +}
+>> +
+>> +static inline struct clk_hw *ma35d1_clk_fixed_factor(struct device *dev,
+>> +						     const char *name,
+>> +						     const char *parent,
+>> +						     unsigned int mult,
+>> +						     unsigned int div)
+>> +{
+>> +	return devm_clk_hw_register_fixed_factor(dev, name, parent,
+>> +					    CLK_SET_RATE_PARENT, mult, div);
+>> +}
+>> +
+>> +static inline struct clk_hw *ma35d1_clk_gate(struct device *dev,
+>> +					     const char *name,
+>> +					     const char *parent,
+>> +					     void __iomem *reg, u8 shift)
+>> +{
+>> +	return devm_clk_hw_register_gate(dev, name, parent, CLK_SET_RATE_PARENT,
+>> +				    reg, shift, 0, &ma35d1_lock);
+>> +}
+> Inline is not something that should be used that much in .c files, just
+> leave it up to the compiler to decide whether to inline or not. There were
+> some other inlines in the other file I noted later but I didn't mark them
+> but please check their inline usage too.
 
-> +
-> +static const struct hwmon_chip_info socfpga_chip_info =3D {
-> +	.ops =3D &socfpga_ops,
-> +	.info =3D socfpga_info,
-> +};
-> +
-> +static int socfpga_add_channel(struct device *dev,  const char *type,
-> +			       u32 val, const char *label,
-> +			       struct socfpga_hwmon_priv *priv)
-> +{
-> +	int type_index;
-> +	struct socfpga_hwmon_chan *p;
-> +
-> +	type_index =3D match_string(hwmon_types_str, ARRAY_SIZE(hwmon_types_st=
-r), type);
-> +	switch (type_index) {
-> +	case SOCFPGA_HWMON_TYPE_TEMP:
-> +		p =3D &priv->temperature;
-> +		break;
-> +	case SOCFPGA_HWMON_TYPE_VOLT:
-> +		p =3D &priv->voltage;
-> +		break;
-> +	default:
-> +		return -ENODATA;
-> +	}
-> +	if (p->n >=3D SOCFPGA_HWMON_MAXSENSORS)
-> +		return -ENOSPC;
-> +
-> +	p->names[p->n] =3D label;
-> +	p->chan[p->n] =3D val;
-> +	p->n++;
-> +
-> +	return 0;
-> +}
-> +
-> +static int socfpga_probe_child_from_dt(struct device *dev,
-> +				       struct device_node *child,
-> +				       struct socfpga_hwmon_priv *priv)
-> +{
-> +	struct device_node *grandchild;
-> +	const char *label;
-> +	const char *type;
-> +	u32 val;
-> +	int ret;
-> +
-> +	if (of_property_read_string(child, "name", &type))
-> +		return dev_err_probe(dev, -EINVAL, "No type for %pOF\n", child);
-> +
-> +	for_each_child_of_node(child, grandchild) {
-> +		ret =3D of_property_read_u32(grandchild, "reg", &val);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret, "missing reg property of %pOF\n",
-> +					     grandchild);
-> +
-> +		ret =3D of_property_read_string(grandchild, "label", &label);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret, "missing label propoerty of %pOF\n",
-> +					     grandchild);
-> +		ret =3D socfpga_add_channel(dev, type, val, label, priv);
-> +		if (ret =3D=3D -ENOSPC)
-> +			return dev_err_probe(dev, ret, "too many channels, only %d supported=
-\n",
-> +					     SOCFPGA_HWMON_MAXSENSORS);
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int socfpga_probe_from_dt(struct device *dev,
-> +				 struct socfpga_hwmon_priv *priv)
-> +{
-> +	const struct device_node *np =3D dev->of_node;
-> +	struct device_node *child;
-> +	int ret =3D 0;
-> +
-> +	for_each_child_of_node(np, child) {
-> +		ret =3D socfpga_probe_child_from_dt(dev, child, priv);
-> +		if (ret)
-> +			break;
-> +	}
-> +	of_node_put(child);
-> +
-> +	return ret;
-> +}
-> +
-> +static int socfpga_hwmon_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev =3D &pdev->dev;
-> +	struct socfpga_hwmon_priv *priv;
-> +	int ret;
-> +
-> +	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->client.dev =3D dev;
-> +	priv->client.priv =3D priv;
-> +
-> +	ret =3D socfpga_probe_from_dt(dev, priv);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Unable to probe from device tree\n");
-> +
-> +	mutex_init(&priv->lock);
-> +	init_completion(&priv->completion);
-> +	priv->chan =3D stratix10_svc_request_channel_byname(&priv->client,
-> +							  SVC_CLIENT_HWMON);
-> +	if (IS_ERR(priv->chan))
-> +		return dev_err_probe(dev, PTR_ERR(priv->chan),
-> +				     "couldn't get service channel %s\n",
-> +				     SVC_CLIENT_RSU);
+Okay, I will check these .c files and remove the inline usage.
 
-Could it be that stratix10_svc_free_channel() needs to be called if
-devm_hwmon_device_register_with_info() fails?
-In such a case devm_add_action_or_reset() would be useful.
+>> +static int ma35d1_get_pll_setting(struct device_node *clk_node, u32 *pllmode)
+>> +{
+>> +	const char *of_str;
+>> +	int i;
+>> +
+>> +	for (i = 0; i < PLL_MAX_NUM; i++) {
+>> +		if (of_property_read_string_index(clk_node, "nuvoton,pll-mode", i, &of_str))
+>> +			return -EINVAL;
+>> +		if (!strcmp(of_str, "integer"))
+>> +			pllmode[i] = PLL_MODE_INT;
+>> +		else if (!strcmp(of_str, "fractional"))
+>> +			pllmode[i] = PLL_MODE_FRAC;
+>> +		else if (!strcmp(of_str, "spread-spectrum"))
+>> +			pllmode[i] = PLL_MODE_SS;
+>> +		else
+>> +			return -EINVAL;
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> +static int ma35d1_clocks_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct device_node *clk_node = pdev->dev.of_node;
+>> +	struct resource *res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> +	void __iomem *clk_base;
+>> +	static struct clk_hw **hws;
+>> +	static struct clk_hw_onecell_data *ma35d1_hw_data;
+>> +	u32 pllmode[PLL_MAX_NUM];
+>> +	int ret;
+>> +
+>> +	ma35d1_hw_data = devm_kzalloc(dev,
+>> +				      struct_size(ma35d1_hw_data, hws, CLK_MAX_IDX),
+>> +				      GFP_KERNEL);
+>> +	if (WARN_ON(!ma35d1_hw_data))
+> Alloc error should not be WARN_ON()'ed, it's not a bug. If you want to
+> notify about normal (non-programming) errors, use dev_err() instead.
 
-> +
-> +	priv->hwmon_dev =3D devm_hwmon_device_register_with_info(dev, "socfpga=
-hwmon",
-> +							       priv,
-> +							       &socfpga_chip_info,
-> +							       NULL);
-> +	if (IS_ERR(priv->hwmon_dev))
-> +		return PTR_ERR(priv->hwmon_dev);
-> +
-> +	platform_set_drvdata(pdev, priv);
-> +
-> +	return 0;
-> +}
-> +
-> +static int socfpga_hwmon_remove(struct platform_device *pdev)
-> +{
-> +	struct socfpga_hwmon_priv *priv =3D platform_get_drvdata(pdev);
-> +
-> +	hwmon_device_unregister(priv->hwmon_dev);
+Yes, I will use dev_err() instead.
 
-The hwmon device registered with devm_hwmon_device_register_with_info() is
-already cleaned-up by devres, hwmon_device_unregister() should not be call=
-ed here.
+>> +		return -ENOMEM;
+>> +
+>> +	ma35d1_hw_data->num = CLK_MAX_IDX;
+>> +	hws = ma35d1_hw_data->hws;
+>> +
+>> +	clk_base = devm_ioremap_resource(dev, res);
+>> +	if (IS_ERR(clk_base))
+>> +		return PTR_ERR(clk_base);
+>> +
+>> +	ret = ma35d1_get_pll_setting(clk_node, pllmode);
+>> +	if (ret < 0) {
+>> +		dev_err(dev, "Invalid PLL setting!\n");
+>> +		return -EINVAL;
+>> +	}
 
-> +	stratix10_svc_free_channel(priv->chan);
 
-Using devm_add_action_or_reset() would allow for socfpga_hwmon_remove() to=
- be dropped.
+Best Regards,
+Jacky Huang
 
-Armin Wolf
-
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id socfpga_of_match[] =3D {
-> +	{ .compatible =3D "intel,socfpga-hwmon" },
-> +	{ .compatible =3D "intel,socfpga-agilex-hwmon" },
-> +	{ .compatible =3D "intel,socfpga-n5x-hwmon" },
-> +	{ .compatible =3D "intel,socfpga-stratix10-hwmon" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, socfpga_of_match);
-> +
-> +static struct platform_driver socfpga_hwmon_driver =3D {
-> +	.driver =3D {
-> +		.name =3D "socfpga-hwmon",
-> +		.of_match_table =3D socfpga_of_match,
-> +	},
-> +	.probe =3D socfpga_hwmon_probe,
-> +	.remove =3D socfpga_hwmon_remove,
-> +};
-> +module_platform_driver(socfpga_hwmon_driver);
-> +
-> +MODULE_AUTHOR("Intel Corporation");
-> +MODULE_DESCRIPTION("SoCFPGA hardware monitoring features");
-> +MODULE_LICENSE("GPL");
