@@ -2,94 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5038A6FC7CB
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C546FC7D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 15:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234764AbjEINXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 09:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
+        id S235413AbjEIN0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 09:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjEINXp (ORCPT
+        with ESMTP id S229477AbjEINZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 09:23:45 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF373C01;
-        Tue,  9 May 2023 06:23:43 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349Cc06g023990;
-        Tue, 9 May 2023 13:23:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Ztn5cr2+ZzyLZNYlN4HERQHsgAwqhpff8Mu0TMY37L8=;
- b=F7yVdNngGGU/CXbalbwgLhlQEwRt+TdhgqARpq9VknRt30uts4zD3QXJgBI56wFXaGxa
- ygIVkYCstrCZFffzpSG3INe6+/LtMyaFQ1YgwFK/pihRBuQPKxDJ+JqtQQ2VQVjqWml5
- 7jJQStJeXSKnSMpd/deWhjhSEETLpLFU2z9ivmAgo+T7By0innnKhh67rF09Pj+MJWbx
- fWmFz/Zbuxlg3T7YX+fx7crZgn92A8h9F7EHsTvyrQkGad/xZsu/0sd4TfIwy98rttXL
- hpcBqAQ3F1CdurL8KkNp2BwyEHyd0ba5XXSOq07Y41G60v0dJDsRFvlJSct1IdDCRRfz xQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf77kstph-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 13:23:39 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 349DNcNc025061
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 9 May 2023 13:23:38 GMT
-Received: from [10.242.242.190] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
- 06:23:29 -0700
-Message-ID: <1aa64a2f-fa57-2f06-b993-2e158512361c@quicinc.com>
-Date:   Tue, 9 May 2023 18:53:26 +0530
+        Tue, 9 May 2023 09:25:58 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2B23A9E;
+        Tue,  9 May 2023 06:25:57 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50bc040c7b8so9090670a12.2;
+        Tue, 09 May 2023 06:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683638756; x=1686230756;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LxNZhYmFEaJqtUTo9wQLUCL/RgshP6WY7TNYd/ukvKU=;
+        b=ZJRI1t+cYl7tz72VjJBwFQGixlrxxddnkk+WSxZ5pK5sBDba24zyi7GeSRipR49wKK
+         QtkQ77I2NuLS1ujx0WU/bsBf1GGdIoJxzFsrdNpQ5548xyhKP7EIcOrvYms8N9HtPqa1
+         v2ne7i0ZIGZ2KYAYprB8C/mTnKfwWlxZkaRqkV5hvR157UAu6aU3RZnkvgfWlxSYrpSF
+         zPZs6C5KHOGpt3FTJO0AuwXw7l+xzj+fYqoBQqWMo3ty1fDy55/gKyIpqAbjgJysSS7Q
+         uIl8JuSq3oKWvYIpzhXbpmglrAemzuJ/IxtsOZajcxulV/G0rWtvDEYdgiA3JCcTWr6z
+         h2RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683638756; x=1686230756;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LxNZhYmFEaJqtUTo9wQLUCL/RgshP6WY7TNYd/ukvKU=;
+        b=I4+mKF8a9sS+MXrxYIVTbfr2SAFPTvFvBwAQjRMDKtoWvrEaCHplTObGQMswq/RUGq
+         ibjCX47uKGV40A2agB+MQakUaPePN/GgPRiIP8DtO9BeqpZHCFEi74R950WVAIglxLw6
+         y7fnXd8QS8qGYx5fLUEr58An75iHTVJLrds9VKxekzrcW3jHTQH0ZKkaUnCJbqcGwtlE
+         bCYRlHinQOvRKos2RHKOb/AKCSILQbrmjlT1LpI8wfxJuwXxzTcmxvqYSY7glE9n3CKn
+         LDvjo6NyX9oCwvJw1WPf+AwYbilIdVz4v6HsEP1bshmKf31O9Ud+EjAH7TIU6NbW8/+Q
+         xvbw==
+X-Gm-Message-State: AC+VfDwSIsjbtkS8P16C7xyOo1WoLlJuOzkqT85r9Z5FJzuItK7CMjuW
+        jaHpxFYhhYi30HAoZD4lCEUbFgYVsIQxSGuF4bk=
+X-Google-Smtp-Source: ACHHUZ5B2MTV3MMMwCj2/JgH46LjHIUzm3k+mekYn5oXNoBPwAEa57Iv4NXm3tR4O4eRvzj98VoVlfvbr9K1v4x0aM0=
+X-Received: by 2002:aa7:d945:0:b0:50b:d26d:c57e with SMTP id
+ l5-20020aa7d945000000b0050bd26dc57emr10432054eds.12.1683638755891; Tue, 09
+ May 2023 06:25:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 01/11] dt-bindings: remoteproc: qcom: Add support for
- multipd model
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
-        <mathieu.poirier@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <quic_gurus@quicinc.com>,
-        <loic.poulain@linaro.org>, <quic_eberman@quicinc.com>,
-        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-2-git-send-email-quic_mmanikan@quicinc.com>
- <38a5a268-7d8a-6e61-4272-8e9155df0034@linaro.org>
- <790496d7-98dc-c92e-dedc-1c89395a1ad8@quicinc.com>
- <e63a3e34-1f73-3661-8655-e34e1e955804@linaro.org>
- <b8b30b77-31df-15c3-3914-1198f90299e6@quicinc.com>
- <c1833e5b-9397-8a87-07c5-1b8bd84bd457@linaro.org>
-From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-In-Reply-To: <c1833e5b-9397-8a87-07c5-1b8bd84bd457@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: zpdH6aWB3suKursu49WPMBHucX_FhXI9
-X-Proofpoint-ORIG-GUID: zpdH6aWB3suKursu49WPMBHucX_FhXI9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_08,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 bulkscore=0 suspectscore=0 clxscore=1015 phishscore=0
- spamscore=0 malwarescore=0 mlxlogscore=598 impostorscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305090109
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230410023041.49857-1-kerneljasonxing@gmail.com> <87y1lxzmc1.ffs@tglx>
+In-Reply-To: <87y1lxzmc1.ffs@tglx>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Tue, 9 May 2023 21:25:19 +0800
+Message-ID: <CAL+tcoDyCYjdW1E7gs0EsKGAN1Esv524EeA_=ORt+Chyd5Sj5w@mail.gmail.com>
+Subject: Re: [PATCH] softirq: let the userside tune the SOFTIRQ_NOW_MASK with sysctl
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     paulmck@kernel.org, peterz@infradead.org, bigeasy@linutronix.de,
+        frederic@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,36 +70,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 9, 2023 at 9:05=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de>=
+ wrote:
+>
+> On Mon, Apr 10 2023 at 10:30, Jason Xing wrote:
+> > From: Jason Xing <kernelxing@tencent.com>
+> >
+> > Currently we have two exceptions which could avoid ksoftirqd when
+> > invoking softirqs: HI_SOFTIRQ and TASKLET_SOFTIRQ. They were introduced
+> > in the commit 3c53776e29f8 ("Mark HI and TASKLET softirq synchronous")
+> > which says if we don't mask them, it will cause excessive latencies in
+> > some cases.
+>
+> As we are ripping this out, I'll ignore this patch.
 
+Sure, please ignore this heuristic patch. Paolo and I have already
+tested that revert patch in the production environment before and
+verified its usefulness, please take that one if you could.
 
-On 5/9/2023 6:31 PM, Krzysztof Kozlowski wrote:
-> On 09/05/2023 12:34, Manikanta Mylavarapu wrote:
->>>> Sure, will add.
->>>>>> +    description:
->>>>>> +      Qualcomm G-Link subnode which represents communication edge, channels
->>>>>> +      and devices related to the Modem.
->>>>>> +
->>>>>> +patternProperties:
->>>>>> +  "^remoteproc_pd1|remoteproc_pd2|remoteproc_pd3":
->>>>>
->>>>> No, underscores are not allowed. Also, what is pd?
->>>>>
->>>> Sure, will remove underscores.
->>>
->>> Shouldn't this be just pd-1?
->>>
->>>
->> I think 'pd-1' not enough. Because child's i.e userpd's also considered
->> as remote processor's, so name should be like "remoteproc-pd1".
-> 
-> "pd-1" is not enough for what? Why the node name has to be more specific?
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
-
-Sure. "pd-1" also seems fine. I will change child node name to "pd-1".
-
-Thanks & Regards,
-Manikanta.
+Thanks,
+Jason
