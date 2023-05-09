@@ -2,63 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAB46FCD32
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8474B6FCD42
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 20:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234779AbjEISFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 14:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
+        id S234897AbjEISH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 14:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjEISFX (ORCPT
+        with ESMTP id S229527AbjEISHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 14:05:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9DF40F6;
-        Tue,  9 May 2023 11:05:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C1036362A;
-        Tue,  9 May 2023 18:05:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB86C433EF;
-        Tue,  9 May 2023 18:05:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683655521;
-        bh=Tdj/22kgA8XkFoA986JPGYnfWwEcnwTjUAalnblqCYg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tj8rEfD8bzoP3ENFKkSFpA1LpSIJGrsf+RXdNrYIADnUN+NMZGhCT2IEPRUyBPrja
-         eqxRN5d7VgGo0SC5AX6Lk0khulo2GSo8RLS8umt1fKU44FyknV8dUzIsIvx374hh06
-         0BMTJAP6QOSzEYMiEEZDLEtgxA1EL3cjqwKRNzxIt6h31s7Xfh2BI1+dVxMDywkLFR
-         umJTE/5AVlKQRBYOdSGi6KW4dFZP1YlUFhIpAa3TYIg3iCPFwrO0B+6gKnFS+0rhvv
-         hLSgQC1RNqvq5dHpzsKAbFrBarlyE8dY/BM7pQyk2oHXWEc7BuKxyBNOOLIJE0ntEC
-         iFd572OME5hsg==
-Date:   Tue, 9 May 2023 19:05:16 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Walker Chen <walker.chen@starfivetech.com>
-Cc:     Mark Brown <broonie@kernel.org>,
+        Tue, 9 May 2023 14:07:25 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C560E10C2
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 11:07:23 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349GgReT028290;
+        Tue, 9 May 2023 18:07:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=mVQZRuD+3P2r942mwHwPs57XW9EIasfEdq69rorUZAk=;
+ b=RJ+iP4UJSK48LBKOGpe5CN3lxw4UaVVYKM+iHG6HXagjn2pHdJhR20MxankyDXDI3SUq
+ cn/JGKK+/8vcwkwih92Per7/+ijf3e1EbBQWa1GReSBOljTiWgCx8123ZKpRMDkDw3ZW
+ xVjISRPFunfB3Jj1jg1eBi3MWd62qXFuoAkzFiwYg2vMjfff64PeI3gKaDwxmWy8ve93
+ NklmtABcBDg1I0LH9PqezdIyYh0m6cbxcR7FMnFmlZWLd0BBTo1KA5k2dSOpZj7Vn9tp
+ AvNfgd/tkc9S/cSoN8ZAmiSpiJ8BjAq6Ap6pqrsSmOaw/nXs2jvsnvWxz6dy/vcxzsDg HQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qfr508hbe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 May 2023 18:07:01 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 349I70Ge016716
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 9 May 2023 18:07:00 GMT
+Received: from [10.216.0.143] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
+ 11:06:57 -0700
+Message-ID: <94a81b02-e8e0-3b99-f63b-aef288790c82@quicinc.com>
+Date:   Tue, 9 May 2023 23:36:46 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] ASoC:codecs: lpass: Fix for KASAN use_after_free out of
+ bounds
+To:     Mark Brown <broonie@kernel.org>
+CC:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 3/3] riscv: dts: starfive: add tdm node and sound card
-Message-ID: <20230509-overheat-pliable-00d60523637e@spud>
-References: <20230506090116.9206-1-walker.chen@starfivetech.com>
- <20230506090116.9206-4-walker.chen@starfivetech.com>
- <a0932e84-3813-bbbe-762d-948d75fbcd8a@starfivetech.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="cgSWW3RzfwlIKhhN"
-Content-Disposition: inline
-In-Reply-To: <a0932e84-3813-bbbe-762d-948d75fbcd8a@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        "moderated list:QCOM AUDIO (ASoC) DRIVERS" 
+        <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230509103232.20953-1-quic_visr@quicinc.com>
+ <ZFpaiBs19P2m2i/q@finisterre.sirena.org.uk>
+From:   VISHNUVARDHAN RAO RAVULAPATI <quic_visr@quicinc.com>
+In-Reply-To: <ZFpaiBs19P2m2i/q@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MOzKdvGzFMlCiX5w2XRUJWaq9xZ80NnM
+X-Proofpoint-ORIG-GUID: MOzKdvGzFMlCiX5w2XRUJWaq9xZ80NnM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-09_11,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 mlxscore=0 mlxlogscore=440 bulkscore=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 impostorscore=0
+ adultscore=0 phishscore=0 suspectscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305090150
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,39 +88,17 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---cgSWW3RzfwlIKhhN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 5/9/2023 8:06 PM, Mark Brown wrote:
+> On Tue, May 09, 2023 at 04:02:31PM +0530, Ravulapati Vishnu Vardhan Rao wrote:
+>
+>>   	val = ucontrol->value.enumerated.item[0];
+>> +	if (val < 0 && val > 15)
+>> +		return -EINVAL;
+> Srini is right that it'd be better to read the upper bound from the
+> control, that way it can't geto out of sync.
 
-On Tue, May 09, 2023 at 08:52:48PM +0800, Walker Chen wrote:
-> Hi Conor/Emil,
->=20
-> DT overlay is used to describe combinations of VF2 and hat.
-> Do you have any comments on this patch ?
+Will address and resend it..
 
-Up to Emil :)
+Thanks for review.
 
-I seem to recall that he said at the linux-riscv sync-up call that we
-have* that he was not in favour of overlays for hats like this.
-I'll let him confirm that though, I might very well be misinterpreting or
-misremembering what he said.
 
-Cheers,
-Conor.
-
-* https://lore.kernel.org/linux-riscv/mhng-775d4068-6c1e-48a4-a1dc-b4a76ff2=
-6bb3@palmer-ri-x1c9a/
-
---cgSWW3RzfwlIKhhN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFqLXAAKCRB4tDGHoIJi
-0qBCAPsE8YwhVOhYQs79hkq8MKo8na1XocNJROiloe+mcYefYQEA354Svch8qplg
-cy1NtrkXNW4PClswD2VNVAVe/IphjAc=
-=UgFO
------END PGP SIGNATURE-----
-
---cgSWW3RzfwlIKhhN--
