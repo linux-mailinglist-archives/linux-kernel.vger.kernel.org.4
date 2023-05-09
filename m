@@ -2,328 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7470B6FC1F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4BF6FC208
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234584AbjEIIth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 04:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
+        id S234221AbjEIIwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjEIItf (ORCPT
+        with ESMTP id S234768AbjEIIvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 04:49:35 -0400
-Received: from out-35.mta0.migadu.com (out-35.mta0.migadu.com [91.218.175.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC7610D4
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:49:33 -0700 (PDT)
-Message-ID: <ae0a6842-6445-3c0b-f7bc-737227897697@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683622171;
+        Tue, 9 May 2023 04:51:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1A426AE
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:51:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683622259;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=y2YEfLTZ+2kTzwk8gTK4luSx3j7sfqMv1rQowFERaEE=;
-        b=OUrOHUcc9ndBY1igjL544+Vqnyiuj5FmdoZggfWppDKXt5E+qsBfShmo6gAEv5i/BbB4dD
-        //w1iLCa1QTG2LYoNStpSRlpkvyBY6WSW99DF39RFcKItw2SRqfHAHfoZtTkk+i55zSy8L
-        sFgYGscbsf0qlA9o7OXMF1Kr4hehNCA=
-Date:   Tue, 9 May 2023 16:49:23 +0800
+        bh=BkaiU4x3nb/m17t7da/BF+paIsIxbmGrYRV18L4UmqM=;
+        b=JSE5XFTIOF13eT58bIyPpCTMERwq5S6CvGfxp46XziP/JFb5CriETPlY3Nc7Chz03/PGPN
+        wEmvpf6XLT1eLCVCiIxtqeU9M5ARAr9qx5LdUAtR/chd9q5y8f0kMyAvu7hMWAa5AUJ1U5
+        X9xTpsSr1g+yGSMaXNYPVnN6ki+WXxk=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-669-JCescyMkOEuT4cu-bCncdw-1; Tue, 09 May 2023 04:50:53 -0400
+X-MC-Unique: JCescyMkOEuT4cu-bCncdw-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-969c36898d4so90378766b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 01:50:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683622252; x=1686214252;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BkaiU4x3nb/m17t7da/BF+paIsIxbmGrYRV18L4UmqM=;
+        b=FWh0kyuybZuzVmxdLSJPdzAryeWh5iuwB9V5Uqavx/0HoHv9xyx/EIhVd+Wdunbr9S
+         cEfUYtiB7j384DGVINo7Fc5rtP56TrfTrcEDWL2qXhuitBF4bcOB+uLvFAd2SIQNFyPu
+         m1lgpRovtxCZOthSNPBfDv2MjNr/cPMnTWdYrNYjUILedTYZU9vvwOO8FiJcbiqRT7ys
+         dOnegvCXxEMncgokJcmemTbm+nZwJ8CBx2Gitu9zqZs0LO3GfH+DQXlC0L5G8uHIURY7
+         W4WMdaUMCvWX3S9zt+4loejxdYpy8oEUC7bcAFsCCwEIBd3gfqYtqzaIe4aSXo2i9HG+
+         aacQ==
+X-Gm-Message-State: AC+VfDwVmF0OEJ9alt4RhV2KR/bSwdKCdtMWaR//7KZ0m9yUOhXPUkOO
+        JItoUp7KW5gdmOa52n2iSoZkRPSkE8D3HId+Da49prE80o0Bt9HWDoHz5GTU9nWushDMSfLTo2I
+        03ZCD+06w7JxPUs09i7iXJ++8
+X-Received: by 2002:a17:906:db07:b0:94f:6058:4983 with SMTP id xj7-20020a170906db0700b0094f60584983mr9472731ejb.76.1683622252372;
+        Tue, 09 May 2023 01:50:52 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7Lys4qdpzHH9JUAe/2W8oRmKIyI5dKTyBiJp+bDzHM33dUKLdgufbsI8thNpHUtEOQx0Kl7w==
+X-Received: by 2002:a17:906:db07:b0:94f:6058:4983 with SMTP id xj7-20020a170906db0700b0094f60584983mr9472718ejb.76.1683622252039;
+        Tue, 09 May 2023 01:50:52 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id e26-20020a170906845a00b00965cd15c9bbsm1063350ejy.62.2023.05.09.01.50.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 01:50:51 -0700 (PDT)
+Message-ID: <0ca69990-064f-8b9d-4b7f-7024ad85951f@redhat.com>
+Date:   Tue, 9 May 2023 10:50:50 +0200
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/1] kernel/fork: Fix the error "raw_local_irq_restore()
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Zhu Yanjun <yanjun.zhu@linux.dev>
-To:     "leon@kernel.org" <leon@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        RDMA mailing list <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        akpm@linux-foundation.org
-References: <a694638f-9fb4-88b2-cbba-bb5de2aadc3e@linux.dev>
- <3064a4ac-4008-1f48-99ba-80524c8d3a79@linux.dev>
-In-Reply-To: <3064a4ac-4008-1f48-99ba-80524c8d3a79@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/2] platform/x86: thinkpad_acpi: Fix platform profiles on
+ T490
+Content-Language: en-US, nl
+To:     Mark Pearson <mpearson-lenovo@squebb.ca>
+Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <mpearson-lenovo@squebb.ca>
+ <20230505132523.214338-1-mpearson-lenovo@squebb.ca>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230505132523.214338-1-mpearson-lenovo@squebb.ca>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is something wrong with this commit. Please ignore it.
+Hi,
 
-Zhu Yanjun
+On 5/5/23 15:25, Mark Pearson wrote:
+> I had incorrectly thought that PSC profiles were not usable on Intel
+> platforms so had blocked them in the driver initialistion. This broke
+> platform profiles on the T490.
+> 
+> After discussion with the FW team PSC does work on Intel platforms and
+> should be allowed.
+> 
+> Note - it's possible this may impact other platforms where it is advertised
+> but special driver support that only Windows has is needed. But if it does
+> then they will need fixing via quirks. Please report any issues to me so I
+> can get them addressed - but I haven't found any problems in testing...yet
+> 
+> Fixes: bce6243f767f ("platform/x86: thinkpad_acpi: do not use PSC mode on Intel platforms")
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2177962
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 
-在 2023/5/8 16:57, Zhu Yanjun 写道:
-> The following can fix this problem. Not sure if this will introduce any 
-> risks.
-> 
-> Subject: [PATCH 1/1] kernel/fork: Fix the error "raw_local_irq_restore()
->   called with IRQs enabled"
-> 
-> The call trace are as below.
-> "
-> [ 6020.092175] Call Trace:
-> [ 6020.092178]  <TASK>
-> [ 6020.092181]  _raw_spin_unlock_irqrestore+0x67/0x70
-> [ 6020.092190]  ib_send_mad+0x3fa/0x7d0 [ib_core]
-> [ 6020.092299]  ? __pfx_ib_send_mad+0x10/0x10 [ib_core]
-> [ 6020.092429]  ib_post_send_mad+0x338/0x4c0 [ib_core]
-> [ 6020.092519]  ib_send_cm_rep+0x4b0/0x790 [ib_cm]
-> [ 6020.092553]  rdma_accept+0x432/0x550 [rdma_cm]
-> [ 6020.092585]  ? __pfx_rdma_accept+0x10/0x10 [rdma_cm]
-> [ 6020.092613]  ? do_raw_spin_unlock+0x97/0x130
-> [ 6020.092623]  ? preempt_count_sub+0x14/0xc0
-> [ 6020.092632]  ? _raw_spin_unlock+0x29/0x50
-> [ 6020.092637]  ? ucma_get_ctx+0xab/0x180 [rdma_ucm]
-> [ 6020.092650]  ? check_stack_object+0x22/0x70
-> [ 6020.092659]  ucma_accept+0x1e7/0x2e0 [rdma_ucm]
-> [ 6020.092671]  ? __pfx_ucma_accept+0x10/0x10 [rdma_ucm]
-> [ 6020.092683]  ? 
-> __pfx_ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0x10/0x10 [ib_uverbs]
-> [ 6020.092720]  ? _find_next_bit+0x37/0xc0
-> [ 6020.092741]  ucma_write+0x139/0x1f0 [rdma_ucm]
-> [ 6020.092752]  ? __pfx_ucma_write+0x10/0x10 [rdma_ucm]
-> [ 6020.092764]  ? security_file_permission+0x4b/0x2b0
-> [ 6020.092774]  vfs_write+0x161/0x740
-> [ 6020.092781]  ? ib_uverbs_ioctl+0x17f/0x210 [ib_uverbs]
-> [ 6020.092815]  ? __pfx_vfs_write+0x10/0x10
-> [ 6020.092822]  ? __fget_files+0x158/0x230
-> [ 6020.092831]  ? __fget_light+0xe2/0x100
-> [ 6020.092838]  ksys_write+0x13f/0x160
-> [ 6020.092843]  ? __pfx_ksys_write+0x10/0x10
-> [ 6020.092847]  ? ktime_get_coarse_real_ts64+0x107/0x120
-> [ 6020.092854]  ? ktime_get_coarse_real_ts64+0xaf/0x120
-> [ 6020.092863]  do_syscall_64+0x37/0x90
-> [ 6020.092870]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> [ 6020.092877] RIP: 0033:0x7f2151e11847
-> [ 6020.092882] Code: c3 66 90 41 54 49 89 d4 55 48 89 f5 53 89 fb 48 83 
-> ec 10 e8 1b fd ff ff 4c 89 e2 48 89 ee 89 df 41 89 c0 b8 01 00 00 00 0f 
-> 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 48 89 44 24 08 e8 54 fd ff ff 48
-> [ 6020.092886] RSP: 002b:00007ffc2439a0f0 EFLAGS: 00000293 ORIG_RAX: 
-> 0000000000000001
-> [ 6020.092892] RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 
-> 00007f2151e11847
-> [ 6020.092896] RDX: 0000000000000130 RSI: 00007ffc2439a120 RDI: 
-> 0000000000000003
-> [ 6020.092899] RBP: 00007ffc2439a120 R08: 0000000000000000 R09: 
-> 0000000000000000
-> [ 6020.092902] R10: 00000000ffffffff R11: 0000000000000293 R12: 
-> 0000000000000130
-> [ 6020.092905] R13: 0000000000000011 R14: 0000000000000000 R15: 
-> 000055c0ea6ffa18
-> [ 6020.092914]  </TASK>
-> [ 6020.092917] irq event stamp: 0
-> [ 6020.092919] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
-> [ 6020.092923] hardirqs last disabled at (0): [<ffffffffad94dae6>] 
-> copy_process+0x13e6/0x3720
-> [ 6020.092931] softirqs last  enabled at (0): [<ffffffffad94dae6>] 
-> copy_process+0x13e6/0x3720
-> [ 6020.092936] softirqs last disabled at (0): [<0000000000000000>] 0x0
-> [ 6020.092939] ---[ end trace 0000000000000000 ]---
-> 
-> "
-> 
-> Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
+Thank you for your patch series, I've applied this series
+to my fixes branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
+
+Note it will show up in my fixes branch once I've pushed my
+local branch there, which might take a while.
+
+I will include this patch in my next fixes pull-req to Linus
+for the current kernel development cycle.
+
+Regards,
+
+Hans
+
+
+
 > ---
->   kernel/fork.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
+>  drivers/platform/x86/thinkpad_acpi.c | 5 -----
+>  1 file changed, 5 deletions(-)
 > 
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index ed4e01daccaa..802e11e55494 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -2250,6 +2250,7 @@ __latent_entropy struct task_struct *copy_process(
->                                          struct kernel_clone_args *args)
->   {
->          int pidfd = -1, retval;
-> +       unsigned long flags;
->          struct task_struct *p;
->          struct multiprocess_signals delayed;
->          struct file *pidfile = NULL;
-> @@ -2320,11 +2321,11 @@ __latent_entropy struct task_struct *copy_process(
->          sigemptyset(&delayed.signal);
->          INIT_HLIST_NODE(&delayed.node);
-> 
-> -       spin_lock_irq(&current->sighand->siglock);
-> +       spin_lock_irqsave(&current->sighand->siglock, flags);
->          if (!(clone_flags & CLONE_THREAD))
->                  hlist_add_head(&delayed.node, 
-> &current->signal->multiprocess);
->          recalc_sigpending();
-> -       spin_unlock_irq(&current->sighand->siglock);
-> +       spin_unlock_irqrestore(&current->sighand->siglock, flags);
->          retval = -ERESTARTNOINTR;
->          if (task_sigpending(current))
->                  goto fork_out;
-> -- 
-> 2.27.0
-> 
-> 
-> 在 2023/5/8 16:53, Zhu Yanjun 写道:
->> Hi, all
->>
->> I confronted the following problem. The call traces are as below.
->>
->> kernel/fork.c:
->>
->> "
->>
->> 2323 spin_lock_irq(&current->sighand->siglock); <---disable
->> 2324         if (!(clone_flags & CLONE_THREAD))
->> 2325                 hlist_add_head(&delayed.node, 
->> &current->signal->multiprocess);
->> 2326         recalc_sigpending();
->> 2327 spin_unlock_irq(&current->sighand->siglock); <--enable
->> "
->>
->> conflicts with the following
->>
->> "
->>
->> 1031         spin_lock_irqsave(&qp_info->send_queue.lock, flags); 
->> <---save
->> 1032         if (qp_info->send_queue.count < 
->> qp_info->send_queue.max_active) {
->> 1033                 trace_ib_mad_ib_send_mad(mad_send_wr, qp_info);
->> 1034                 ret = ib_post_send(mad_agent->qp, 
->> &mad_send_wr->send_wr.wr,
->> 1035                                    NULL);
->> 1036                 list = &qp_info->send_queue.list;
->> 1037         } else {
->> 1038                 ret = 0;
->> 1039                 list = &qp_info->overflow_list;
->> 1040         }
->> 1041
->> 1042         if (!ret) {
->> 1043                 qp_info->send_queue.count++;
->> 1044 list_add_tail(&mad_send_wr->mad_list.list, list);
->> 1045         }
->> 1046 spin_unlock_irqrestore(&qp_info->send_queue.lock, flags); <--restore
->>
->> "
->>
->> If we change spin_lock_irq/spin_unlock_irq to 
->> spin_lock_irqsave/spin_unlock_irqrestore, it seems that this problem 
->> is resolved.
->>
->> But not sure if other problems are introduced.
->>
->> [ 6020.091840] ------------[ cut here ]------------
->> [ 6020.091846] raw_local_irq_restore() called with IRQs enabled
->> [ 6020.091857] WARNING: CPU: 82 PID: 10603 at 
->> kernel/locking/irqflag-debug.c:10 warn_bogus_irq_restore+0x21/0x30
->> [ 6020.091872] Modules linked in: rdma_rxe ip6_udp_tunnel udp_tunnel 
->> xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT nf_reject_ipv4 
->> nft_compat nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 
->> nf_defrag_ipv4 nf_tables nfnetlink tun bridge stp llc vfat fat ext4 
->> mbcache jbd2 rpcrdma sunrpc intel_rapl_msr intel_rapl_common rdma_ucm 
->> i10nm_edac ib_srpt nfit ib_isert libnvdimm iscsi_target_mod 
->> target_core_mod x86_pkg_temp_thermal ib_iser intel_powerclamp libiscsi 
->> coretemp scsi_transport_iscsi ib_umad rdma_cm ib_ipoib iw_cm kvm_intel 
->> ib_cm ipmi_ssif kvm mlx5_ib i40e irqbypass crct10dif_pclmul 
->> crc32_pclmul ghash_clmulni_intel ib_uverbs sha512_ssse3 iTCO_wdt rapl 
->> iTCO_vendor_support mei_me intel_cstate ib_core joydev acpi_ipmi 
->> intel_uncore mei ipmi_si pcspkr i2c_i801 dax_hmem isst_if_mmio 
->> isst_if_mbox_pci wmi_bmof isst_if_common intel_pch_thermal i2c_smbus 
->> ipmi_devintf ipmi_msghandler acpi_power_meter ip_tables xfs libcrc32c 
->> sd_mod t10_pi crc64_rocksoft crc64 sg mgag200 mlx5_core drm_kms_helper 
->> syscopyarea mlxfw sysfillrect
->> [ 6020.092063]  sysimgblt tls i2c_algo_bit ahci drm_shmem_helper 
->> libahci ice pci_hyperv_intf crc32c_intel drm psample megaraid_sas 
->> libata tg3 wmi dm_mirror dm_region_hash dm_log dm_mod fuse [last 
->> unloaded: irdma]
->> [ 6020.092108] CPU: 82 PID: 10603 Comm: rping Kdump: loaded Tainted: G 
->> S  B              6.4.0-rc1+ #30
->> [ 6020.092115] Hardware name: Dell Inc. PowerEdge R750/06V45N, BIOS 
->> 1.2.4 05/28/2021
->> [ 6020.092119] RIP: 0010:warn_bogus_irq_restore+0x21/0x30
->> [ 6020.092126] Code: 90 90 90 90 90 90 90 90 90 80 3d 35 50 79 01 00 
->> 74 05 c3 cc cc cc cc 48 c7 c7 a0 d7 e9 ae c6 05 20 50 79 01 01 e8 1f 
->> 15 da fe <0f> 0b c3 cc cc cc cc cc cc cc cc cc cc cc cc 90 90 90 90 90 
->> 90 90
->> [ 6020.092131] RSP: 0018:ff11000180e477e8 EFLAGS: 00010286
->> [ 6020.092137] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 
->> 0000000000000000
->> [ 6020.092141] RDX: 0000000000000004 RSI: dffffc0000000000 RDI: 
->> ffffffffb27b31c0
->> [ 6020.092144] RBP: ff110001175d69e8 R08: ffe21c02006d7f6a R09: 
->> ffe21c02006d7f6a
->> [ 6020.092148] R10: ff110010036bfb4b R11: ffe21c02006d7f69 R12: 
->> ff110001175d6a28
->> [ 6020.092152] R13: ff110001175d6a30 R14: ff110001175d69e8 R15: 
->> 0000000000000000
->> [ 6020.092155] FS:  00007f215281c740(0000) GS:ff11001003680000(0000) 
->> knlGS:0000000000000000
->> [ 6020.092160] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> [ 6020.092163] CR2: 00007f2147fffda0 CR3: 00000001a1b2c005 CR4: 
->> 0000000000771ee0
->> [ 6020.092167] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
->> 0000000000000000
->> [ 6020.092170] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 
->> 0000000000000400
->> [ 6020.092173] PKRU: 55555554
->> [ 6020.092175] Call Trace:
->> [ 6020.092178]  <TASK>
->> [ 6020.092181]  _raw_spin_unlock_irqrestore+0x67/0x70
->> [ 6020.092190]  ib_send_mad+0x3fa/0x7d0 [ib_core]
->> [ 6020.092299]  ? __pfx_ib_send_mad+0x10/0x10 [ib_core]
->> [ 6020.092429]  ib_post_send_mad+0x338/0x4c0 [ib_core]
->> [ 6020.092519]  ib_send_cm_rep+0x4b0/0x790 [ib_cm]
->> [ 6020.092553]  rdma_accept+0x432/0x550 [rdma_cm]
->> [ 6020.092585]  ? __pfx_rdma_accept+0x10/0x10 [rdma_cm]
->> [ 6020.092613]  ? do_raw_spin_unlock+0x97/0x130
->> [ 6020.092623]  ? preempt_count_sub+0x14/0xc0
->> [ 6020.092632]  ? _raw_spin_unlock+0x29/0x50
->> [ 6020.092637]  ? ucma_get_ctx+0xab/0x180 [rdma_ucm]
->> [ 6020.092650]  ? check_stack_object+0x22/0x70
->> [ 6020.092659]  ucma_accept+0x1e7/0x2e0 [rdma_ucm]
->> [ 6020.092671]  ? __pfx_ucma_accept+0x10/0x10 [rdma_ucm]
->> [ 6020.092683]  ? 
->> __pfx_ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0x10/0x10 [ib_uverbs]
->> [ 6020.092720]  ? _find_next_bit+0x37/0xc0
->> [ 6020.092741]  ucma_write+0x139/0x1f0 [rdma_ucm]
->> [ 6020.092752]  ? __pfx_ucma_write+0x10/0x10 [rdma_ucm]
->> [ 6020.092764]  ? security_file_permission+0x4b/0x2b0
->> [ 6020.092774]  vfs_write+0x161/0x740
->> [ 6020.092781]  ? ib_uverbs_ioctl+0x17f/0x210 [ib_uverbs]
->> [ 6020.092815]  ? __pfx_vfs_write+0x10/0x10
->> [ 6020.092822]  ? __fget_files+0x158/0x230
->> [ 6020.092831]  ? __fget_light+0xe2/0x100
->> [ 6020.092838]  ksys_write+0x13f/0x160
->> [ 6020.092843]  ? __pfx_ksys_write+0x10/0x10
->> [ 6020.092847]  ? ktime_get_coarse_real_ts64+0x107/0x120
->> [ 6020.092854]  ? ktime_get_coarse_real_ts64+0xaf/0x120
->> [ 6020.092863]  do_syscall_64+0x37/0x90
->> [ 6020.092870]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
->> [ 6020.092877] RIP: 0033:0x7f2151e11847
->> [ 6020.092882] Code: c3 66 90 41 54 49 89 d4 55 48 89 f5 53 89 fb 48 
->> 83 ec 10 e8 1b fd ff ff 4c 89 e2 48 89 ee 89 df 41 89 c0 b8 01 00 00 
->> 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 48 89 44 24 08 e8 54 fd ff 
->> ff 48
->> [ 6020.092886] RSP: 002b:00007ffc2439a0f0 EFLAGS: 00000293 ORIG_RAX: 
->> 0000000000000001
->> [ 6020.092892] RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 
->> 00007f2151e11847
->> [ 6020.092896] RDX: 0000000000000130 RSI: 00007ffc2439a120 RDI: 
->> 0000000000000003
->> [ 6020.092899] RBP: 00007ffc2439a120 R08: 0000000000000000 R09: 
->> 0000000000000000
->> [ 6020.092902] R10: 00000000ffffffff R11: 0000000000000293 R12: 
->> 0000000000000130
->> [ 6020.092905] R13: 0000000000000011 R14: 0000000000000000 R15: 
->> 000055c0ea6ffa18
->> [ 6020.092914]  </TASK>
->> [ 6020.092917] irq event stamp: 0
->> [ 6020.092919] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
->> [ 6020.092923] hardirqs last disabled at (0): [<ffffffffad94dae6>] 
->> copy_process+0x13e6/0x3720
->> [ 6020.092931] softirqs last  enabled at (0): [<ffffffffad94dae6>] 
->> copy_process+0x13e6/0x3720
->> [ 6020.092936] softirqs last disabled at (0): [<0000000000000000>] 0x0
->> [ 6020.092939] ---[ end trace 0000000000000000 ]---
->>
->> Zhu Yanjun
->>
+> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+> index 826c522ed1c0..d84a4c7e3c35 100644
+> --- a/drivers/platform/x86/thinkpad_acpi.c
+> +++ b/drivers/platform/x86/thinkpad_acpi.c
+> @@ -10585,11 +10585,6 @@ static int tpacpi_dytc_profile_init(struct ibm_init_struct *iibm)
+>  				dytc_mmc_get_available = true;
+>  		}
+>  	} else if (dytc_capabilities & BIT(DYTC_FC_PSC)) { /* PSC MODE */
+> -		/* Support for this only works on AMD platforms */
+> -		if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD) {
+> -			dbg_printk(TPACPI_DBG_INIT, "PSC not support on Intel platforms\n");
+> -			return -ENODEV;
+> -		}
+>  		pr_debug("PSC is supported\n");
+>  	} else {
+>  		dbg_printk(TPACPI_DBG_INIT, "No DYTC support available\n");
+
