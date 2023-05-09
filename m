@@ -2,88 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063EF6FCACF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CAB6FCAFA
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 18:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235834AbjEIQJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 12:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
+        id S235396AbjEIQQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 12:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235798AbjEIQJV (ORCPT
+        with ESMTP id S233731AbjEIQQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 12:09:21 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF2046B5;
-        Tue,  9 May 2023 09:09:19 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id ABB76FF802;
-        Tue,  9 May 2023 16:09:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1683648558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AMT/NRMGkvesRao22DI/CnATsgCB4x0ohxacGPVBFig=;
-        b=DNwEcu3RL6mBBxwzjx2zv1J3gagktt8if0saz4r/gGoQPfx4Ig4ER6xU7frrOy5DXjbQfG
-        MHwGoXiyUijMfVoVxTLDIRRfCkx4LMzvfF1MerzQSCX2rU/iVj07cM/43IthEadMMrzWh4
-        kN13T4BWHXnQBQ70naWAUzvRDedYgNl6OAvVkHZ3PHrnwlisEk1BS4A29zD414dEX3XMHH
-        Ulw0EcFLw+d5G+fICU5/krijqSZSb6EJMfJtjlI4dYp6/QaF3dlKoagW0bdrjXQmw9eC4A
-        iKPfoBRxuyff09j+w7in4nmkfnU+2UNv6xcCTeKJkbzF3QDrVScf0Obqj8QEhQ==
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v4 3/3] MAINTAINERS: add the Renesas X9250 driver entry
-Date:   Tue,  9 May 2023 18:08:52 +0200
-Message-Id: <20230509160852.158101-4-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230509160852.158101-1-herve.codina@bootlin.com>
-References: <20230509160852.158101-1-herve.codina@bootlin.com>
+        Tue, 9 May 2023 12:16:22 -0400
+X-Greylist: delayed 372 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 09 May 2023 09:16:19 PDT
+Received: from sender3-of-o58.zoho.com (sender3-of-o58.zoho.com [136.143.184.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453324202;
+        Tue,  9 May 2023 09:16:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1683648561; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=e8z1GRKHIutI17sD6Ooa+GsqxZ6LiVUfaM2CBuq8Fnl8NkgMxccjJcIrLDwAp2AUFpse+WGI2R/+IhIwcdj+ZpURqgiXFh/3MQANM/u/SrCS5YDPCYRVn3jlne5PxwqF9qHJUE+2udAR3VOFk0gcRTuEqSXVNS1vmXslPZQ4KMY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1683648561; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=qGk4Rls13lFQhdUfzwlL+5GIuudpucnLpMrkFUq4WaI=; 
+        b=EuJwYk5JFudfE1FA1+kyp1s7cosrwAQvGkYpJIqCWrw/drRm7W3tBpSTR8qG1T0YVT679qzwII3KdnJmusJ9i50PdxKmXiEfZqRml52LXLn8BqSGyKJmx54K5jjLh3TWp9uzlAdMPLU3RIq2iHBdCga2Hjm7FAPPC4PZQmuzirg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=apertussolutions.com;
+        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+        dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1683648561;
+        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=qGk4Rls13lFQhdUfzwlL+5GIuudpucnLpMrkFUq4WaI=;
+        b=SNFsz95maKu0/BHCbIqIyqUPOIR4r7MdlMd2xIlqC3KZ/LoT7dARRjOYEYESg5CP
+        0/GLY2THkxoK8LM8zNM85SqghmumzF7tBHxSS7X/VzJIeyypFttd0ukbH/+B0G2CV21
+        DHNisWZA600cfK7c2MQCmBpROG/vdDyyDEiXN2U8=
+Received: from [10.10.1.128] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
+        with SMTPS id 1683648559080793.9506296306162; Tue, 9 May 2023 09:09:19 -0700 (PDT)
+Message-ID: <dad2d0b2-65d6-89bf-d2f0-7f420436e44c@apertussolutions.com>
+Date:   Tue, 9 May 2023 12:09:14 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 06/14] x86: Add early SHA support for Secure Launch
+ early measurements
+Content-Language: en-US
+To:     Simon Horman <horms@kernel.org>,
+        Ross Philipson <ross.philipson@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        ardb@kernel.org, mjg59@srcf.ucam.org,
+        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
+        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-7-ross.philipson@oracle.com>
+ <ZFUwLjPfhz8Ch9bE@kernel.org>
+From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
+In-Reply-To: <ZFUwLjPfhz8Ch9bE@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After contributing the driver, add myself as the maintainer for the
-Renesas X9250 IIO driver.
+On 5/5/23 12:34, Simon Horman wrote:
+> On Thu, May 04, 2023 at 02:50:15PM +0000, Ross Philipson wrote:
+>> From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
+>>
+>> The SHA algorithms are necessary to measure configuration information into
+>> the TPM as early as possible before using the values. This implementation
+>> uses the established approach of #including the SHA libraries directly in
+>> the code since the compressed kernel is not uncompressed at this point.
+>>
+>> The SHA code here has its origins in the code from the main kernel:
+>>
+>> commit c4d5b9ffa31f ("crypto: sha1 - implement base layer for SHA-1")
+>>
+>> That code could not be pulled directly into the setup portion of the
+>> compressed kernel because of other dependencies it pulls in. The result
+>> is this is a modified copy of that code that still leverages the core
+>> SHA algorithms.
+>>
+>> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
+>> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+>> ---
+>>   arch/x86/boot/compressed/Makefile       |  2 +
+>>   arch/x86/boot/compressed/early_sha1.c   | 97 +++++++++++++++++++++++++++++++++
+>>   arch/x86/boot/compressed/early_sha1.h   | 17 ++++++
+>>   arch/x86/boot/compressed/early_sha256.c |  7 +++
+>>   lib/crypto/sha1.c                       |  4 ++
+>>   lib/crypto/sha256.c                     |  8 +++
+>>   6 files changed, 135 insertions(+)
+>>   create mode 100644 arch/x86/boot/compressed/early_sha1.c
+>>   create mode 100644 arch/x86/boot/compressed/early_sha1.h
+>>   create mode 100644 arch/x86/boot/compressed/early_sha256.c
+>>
+>> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+>> index 6b6cfe6..1d327d4 100644
+>> --- a/arch/x86/boot/compressed/Makefile
+>> +++ b/arch/x86/boot/compressed/Makefile
+>> @@ -112,6 +112,8 @@ vmlinux-objs-$(CONFIG_EFI) += $(obj)/efi.o
+>>   vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_mixed.o
+>>   vmlinux-objs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
+>>   
+>> +vmlinux-objs-$(CONFIG_SECURE_LAUNCH) += $(obj)/early_sha1.o $(obj)/early_sha256.o
+>> +
+>>   $(obj)/vmlinux: $(vmlinux-objs-y) FORCE
+>>   	$(call if_changed,ld)
+>>   
+>> diff --git a/arch/x86/boot/compressed/early_sha1.c b/arch/x86/boot/compressed/early_sha1.c
+>> new file mode 100644
+>> index 0000000..524ec23
+>> --- /dev/null
+>> +++ b/arch/x86/boot/compressed/early_sha1.c
+>> @@ -0,0 +1,97 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2022 Apertus Solutions, LLC.
+>> + */
+>> +
+>> +#include <linux/init.h>
+>> +#include <linux/linkage.h>
+>> +#include <linux/string.h>
+>> +#include <asm/boot.h>
+>> +#include <asm/unaligned.h>
+>> +
+>> +#include "early_sha1.h"
+>> +
+>> +#define SHA1_DISABLE_EXPORT
+> 
+> Hi Ross,
+> 
+> I could be mistaken, but it seems to me that *_DISABLE_EXPORT
+> is a mechanism of this patch to disable exporting symbols
+> (use of EXPORT_SYMBOL), at compile time.
+> 
+> If so, this doesn't strike me as something that should be part of upstream
+> kernel code.  Could you consider dropping this part of the patch?
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+Greetings Simon,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7517002b7735..159b3e7ce566 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18046,6 +18046,13 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/clock/renesas,versaclock7.yaml
- F:	drivers/clk/clk-versaclock7.c
- 
-+RENESAS X9250 DIGITAL POTENTIOMETERS DRIVER
-+M:	Herve Codina <herve.codina@bootlin.com>
-+L:	linux-iio@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/iio/potentiometer/renesas,x9250.yaml
-+F:	drivers/iio/potentiometer/x9250.c
-+
- RESET CONTROLLER FRAMEWORK
- M:	Philipp Zabel <p.zabel@pengutronix.de>
- S:	Maintained
--- 
-2.40.1
+This was patterned after the move of sha256 to /lib. Upon re-inspection, 
+it appears this has since been updated to use the __DISABLE_EXPORTS 
+CFLAG mechanism of EXPORT_SYMBOL as a conditionally included rule in the 
+Makefile where the desire to disable exporting is wanted. We will update 
+this patch to follow the same pattern.
 
+V/r,
+Daniel P. Smith
