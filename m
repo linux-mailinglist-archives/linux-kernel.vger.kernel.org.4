@@ -2,115 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0936FCF65
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C60FC6FCF6C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 22:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234838AbjEIUYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 16:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
+        id S234922AbjEIUZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 16:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjEIUYg (ORCPT
+        with ESMTP id S229650AbjEIUZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 16:24:36 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF0340C2;
-        Tue,  9 May 2023 13:24:34 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3078fa679a7so3134194f8f.3;
-        Tue, 09 May 2023 13:24:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683663873; x=1686255873;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+fA8ozPK1R+gWSVuxj7Oooge25CINHzv42GXaEYpyEU=;
-        b=NxSi6yL1CDcUwPBB94+pd5DZhAra6avgmwN+C3k7c+U2jJfUkmL0b7hUufXqCK9Ywi
-         0aIqSEC8jKkZb2IHnaPkSrMcWJJ7/jnx+S2M44HNP7FJCj1cRggeLAO6ZMRO2WCX9Vc1
-         MmCH7YikUJcY/4gjomhr32NMY7DF3XLLEAFV8tbQjSP7vrnjr+0htuXOXr595E2Mu2RX
-         cUaDYaxwrAvVHg7OSjHYpsoTBpFoAhEApUekxSj9L/1y5M1oTOUs6EtlPmXrBKG+JxLb
-         CNOJlrnWLYQLR0MB9l1jf3D55mEBHZs3vDjTZovDczSIf5S9eSLb3xjZdesWWNdLDJU9
-         JOhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683663873; x=1686255873;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+fA8ozPK1R+gWSVuxj7Oooge25CINHzv42GXaEYpyEU=;
-        b=QmQOOLHuyxgMrNtO/zjhGwng0kFi7HwyqbLn2QtvpT+NPe899x/LFhr/D2o9HcspLF
-         sdvDWbeu3Pvn+kxeD1GN6+yCBzp3VNqdWqTyof9VYUGlSExdt3lcsKAt9Jpt5xEo1nqw
-         69o6tKzmrWNx+hhRfkqcAnGLazpsfPM+RVbWWu36f2+teu5XeYuFZcoobeDMsf1G7pkn
-         BWoeQZ9EXqsPQSEaWtUea5Hz/jJUDbak4wxWa2Iz+SFyVqfdguX5EE30nFAMHthdoQiO
-         TNAanV+hA3JdcPRPs9vOOKhAnGCcBFKOaL9JSKi2BmHBsT38GIPaML9CnJyP3jrtgZtN
-         IR/A==
-X-Gm-Message-State: AC+VfDzo2n8Ame8PbJ/udTNBEQh1rJdFp0Tr+j/ycNbTh/e4/o53S1Tp
-        76/oNsnQWu/IPOhjpmdA758=
-X-Google-Smtp-Source: ACHHUZ7zw4C5PvKOGNFMk0W4TGh29ZhzgbZPSQDFCJmjuhxc6moBgDBqhkC3uyowg0x98zUWB04VrA==
-X-Received: by 2002:adf:ef4a:0:b0:306:44a9:76a0 with SMTP id c10-20020adfef4a000000b0030644a976a0mr11768165wrp.9.1683663872870;
-        Tue, 09 May 2023 13:24:32 -0700 (PDT)
-Received: from localhost.localdomain ([2.222.93.88])
-        by smtp.gmail.com with ESMTPSA id d18-20020adfe852000000b002fe13ec49fasm15196126wrn.98.2023.05.09.13.24.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 13:24:32 -0700 (PDT)
-From:   Ben Gooding <ben.gooding.dev@gmail.com>
-To:     miguel.ojeda.sandonis@gmail.com
-Cc:     alex.gaynor@gmail.com, ben.gooding.dev@gmail.com,
-        benno.lossin@proton.me, bjorn3_gh@protonmail.com,
-        boqun.feng@gmail.com, gary@garyguo.net,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com,
-        yakoyoku@gmail.com
-Subject: [PATCH v2] rust: lock: Add intra-doc links to the Backend trait
-Date:   Tue,  9 May 2023 21:23:14 +0100
-Message-Id: <20230509202314.8248-1-ben.gooding.dev@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CANiq72n-swO1L1zsPNDz=ZMMm=Ox5MOJHzXBbxgX0f_vWFWDmg@mail.gmail.com>
-References: <CANiq72n-swO1L1zsPNDz=ZMMm=Ox5MOJHzXBbxgX0f_vWFWDmg@mail.gmail.com>
+        Tue, 9 May 2023 16:25:27 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387AD40C2;
+        Tue,  9 May 2023 13:25:26 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349JmAqe005801;
+        Tue, 9 May 2023 20:25:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=vOw4KeOLh5CQjPPz0zZ3wSLP2wtyOVw1Qyg4I9juF2A=;
+ b=d8S5pn12tjCRuGBiZHiUiLl30fN0B7IC3+JhCxKHP8O4QjEeP8effjoQKe6P5qcBwvJh
+ A4RrnZ/ogPh1zbgpP7vMdmMIgaZwskDZEZmddsa1OJYmRfSRqwvGNtH/PHH3L+1u3mI1
+ Hx+7Vrria6deeFh+6k9H9pk2OM+XBzvhp8wtZYh5ojJFI7N09OHTqNlCjKYfI3ap7yee
+ 0wZF61SP0Rl4iuBErqdiCXyG4J43pr12AWmuenMHagTqTFlhGE+sFu2JOZldT2nvnUoL
+ sYLXmNuU+iV8caoKEQZZV5fL56gQzowdpl1ldl111MpSV8Fba2HcIEZ2dRqCpo8WwU/p 0Q== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf77f2t4m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 May 2023 20:25:18 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 349KPIEl024165
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 9 May 2023 20:25:18 GMT
+Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
+ 13:25:17 -0700
+Message-ID: <8556e1c5-8f96-7e4c-2f54-066499266414@quicinc.com>
+Date:   Tue, 9 May 2023 13:25:17 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [Freedreno] [PATCH 2/4] drm/msm/dsi: Fix compressed word count
+ calculation
+Content-Language: en-US
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <neil.armstrong@linaro.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+References: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
+ <20230405-add-dsc-support-v1-2-6bc6f03ae735@quicinc.com>
+ <a60a9f37-bb43-6e2b-2535-995e9fae250a@linaro.org>
+ <32d473a6-f7a5-9aa6-85cf-0f77f1c071ce@quicinc.com>
+ <4cf2e9ab-7e08-fb26-d924-8ea8141d9f58@linaro.org>
+ <44c47800-0913-b122-77ae-5ce0e5d4b443@linaro.org>
+ <cd8cfbd5-1bde-08d8-dbb5-5489820d6a45@linaro.org>
+ <5f069b2c-d1b1-e489-7494-67ef395437bc@linaro.org>
+ <d42839ed-1c3a-c7ce-ec72-4a9d1e5723d3@quicinc.com>
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+In-Reply-To: <d42839ed-1c3a-c7ce-ec72-4a9d1e5723d3@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: dkpDAUXtUu1z-0z_i0Wc9TsYEznixQC-
+X-Proofpoint-GUID: dkpDAUXtUu1z-0z_i0Wc9TsYEznixQC-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-09_13,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 phishscore=0
+ mlxlogscore=999 suspectscore=0 malwarescore=0 adultscore=0 impostorscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305090168
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing intra-doc links to the Backend trait to make navigating the
-documentation easier.
 
-Suggested-by: Benno Lossin <benno.lossin@proton.me>
-Link: https://lore.kernel.org/rust-for-linux/94625fe6-b87a-a8f0-5b2a-a8152d5f7436@proton.me/
-Link: https://github.com/Rust-for-Linux/linux/issues/1001
-Signed-off-by: Ben Gooding <ben.gooding.dev@gmail.com>
----
- rust/kernel/sync/lock.rs | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
-index a2216325632d..05ac8107ff3c 100644
---- a/rust/kernel/sync/lock.rs
-+++ b/rust/kernel/sync/lock.rs
-@@ -72,8 +72,8 @@ pub unsafe trait Backend {
- 
- /// A mutual exclusion primitive.
- ///
--/// Exposes one of the kernel locking primitives. Which one is exposed depends on the lock backend
--/// specified as the generic parameter `B`.
-+/// Exposes one of the kernel locking primitives. Which one is exposed depends on the lock
-+/// [`Backend`] specified as the generic parameter `B`.
- #[pin_data]
- pub struct Lock<T: ?Sized, B: Backend> {
-     /// The kernel lock object.
-@@ -126,7 +126,7 @@ impl<T: ?Sized, B: Backend> Lock<T, B> {
- 
- /// A lock guard.
- ///
--/// Allows mutual exclusion primitives that implement the `Backend` trait to automatically unlock
-+/// Allows mutual exclusion primitives that implement the [`Backend`] trait to automatically unlock
- /// when a guard goes out of scope. It also provides a safe and convenient way to access the data
- /// protected by the lock.
- #[must_use = "the lock unlocks immediately when the guard is unused"]
--- 
-2.34.1
+On 5/9/2023 11:02 AM, Abhinav Kumar wrote:
+> 
+> 
+> On 5/9/2023 4:42 AM, Dmitry Baryshkov wrote:
+>> On 09/05/2023 11:54, Konrad Dybcio wrote:
+>>>
+>>>
+>>> On 9.05.2023 10:23, Neil Armstrong wrote:
+>>>> On 09/05/2023 01:27, Dmitry Baryshkov wrote:
+>>>>> On 08/05/2023 23:09, Abhinav Kumar wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 5/3/2023 1:26 AM, Dmitry Baryshkov wrote:
+>>>>>>> On 03/05/2023 04:19, Jessica Zhang wrote:
+>>>>>>>> Currently, word count is calculated using slice_count. This is 
+>>>>>>>> incorrect
+>>>>>>>> as downstream uses slice per packet, which is different from
+>>>>>>>> slice_count.
+>>>>>>>>
+>>>>>>>> Slice count represents the number of soft slices per interface, 
+>>>>>>>> and its
+>>>>>>>> value will not always match that of slice per packet. For 
+>>>>>>>> example, it is
+>>>>>>>> possible to have cases where there are multiple soft slices per 
+>>>>>>>> interface
+>>>>>>>> but the panel specifies only one slice per packet.
+>>>>>>>>
+>>>>>>>> Thus, use the default value of one slice per packet and remove 
+>>>>>>>> slice_count
+>>>>>>>> from the word count calculation.
+>>>>>>>>
+>>>>>>>> Fixes: bc6b6ff8135c ("drm/msm/dsi: Use DSC slice(s) packet size 
+>>>>>>>> to compute word count")
+>>>>>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>>>>>>>> ---
+>>>>>>>>    drivers/gpu/drm/msm/dsi/dsi_host.c | 9 ++++++++-
+>>>>>>>>    1 file changed, 8 insertions(+), 1 deletion(-)
+>>>>>>>>
+>>>>>>>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c 
+>>>>>>>> b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>>>>>>>> index 35c69dbe5f6f..b0d448ffb078 100644
+>>>>>>>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+>>>>>>>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>>>>>>>> @@ -996,7 +996,14 @@ static void dsi_timing_setup(struct 
+>>>>>>>> msm_dsi_host *msm_host, bool is_bonded_dsi)
+>>>>>>>>            if (!msm_host->dsc)
+>>>>>>>>                wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 
+>>>>>>>> + 1;
+>>>>>>>>            else
+>>>>>>>> -            wc = msm_host->dsc->slice_chunk_size * 
+>>>>>>>> msm_host->dsc->slice_count + 1;
+>>>>>>>> +            /*
+>>>>>>>> +             * When DSC is enabled, WC = slice_chunk_size * 
+>>>>>>>> slice_per_packet + 1.
+>>>>>>>> +             * Currently, the driver only supports default 
+>>>>>>>> value of slice_per_packet = 1
+>>>>>>>> +             *
+>>>>>>>> +             * TODO: Expand drm_panel struct to hold 
+>>>>>>>> slice_per_packet info
+>>>>>>>> +             *       and adjust DSC math to account for 
+>>>>>>>> slice_per_packet.
+>>>>>>>
+>>>>>>> slice_per_packet is not a part of the standard DSC, so I'm not 
+>>>>>>> sure how that can be implemented. And definitely we should not 
+>>>>>>> care about the drm_panel here. It should be either a part of 
+>>>>>>> drm_dsc_config, or mipi_dsi_device.
+>>>>>>>
+>>>>>>
+>>>>>> This is not correct.
+>>>>>>
+>>>>>> It is part of the DSI standard (not DSC standard). Please refer to 
+>>>>>> Figure 40 "One Line Containing One Packet with Data from One or 
+>>>>>> More Compressed Slices" and Figure 41 "One Line Containing More 
+>>>>>> than One Compressed Pixel Stream Packet".
+>>>>>
+>>>>> I have reviewed section 8.8.24 and Annex D of the DSI standard.
+>>>>>
+>>>>> It is not clear to me, if we can get away with always using 
+>>>>> slice_per_packet = 1. What is the DSI sink's difference between 
+>>>>> Fig. 40.(b) and Fig 41?
+>>>>>
+>>>>> Are there are known panels that require slice_per_packet != 1? If 
+>>>>> so, we will have to implement support for such configurations.
+>>>>>
+>>>>>> This has details about this. So I still stand by my point that 
+>>>>>> this should be in the drm_panel.
+>>>>>
+>>>>> Note, the driver doesn't use drm_panel directly. So 
+>>>>> slices_per_packet should go to mipi_dsi_device instead (which in 
+>>>>> turn can be filled from e.g. drm_panel or from any other source).
+>>>>
+>>>> This is a big question, where should we set those parameters ?
+>>>>
+>>>> It's an even bigger questions for panels optionally supporting DSC 
+>>>> in Video or Command mode (like the vtdr6130),
+>>>> how to select DSC or not ? DT is not an option.
+>>> Compressed vs uncompressed modes, maybe? Would be nice to make this
+>>> togglable from userspace.. But then it may not scale for panels with 
+>>> e.g.
+>>> 10 resolutions, all cmd/vid/dsc/nodsc
+>>
+>> Currently the panel/panel-bridge make decision on command vs video 
+>> mode. We have no way to influence that decision. If you want to make 
+>> that negotiable, I'd start with adding 
+>> 'cmd_supported/video_supported/dsc_supported' flags to struct 
+>> mipi_dsi_hosts.
+>>
+> 
+> Right. Isn't that issue there even today that if a panel supports DSC in 
+> only one of the modes, we have no way to tell that as we have not 
+> encountered such a panel in upstream yet.
+> 
+> Also, fundamental question to folks who had panels requiring 
+> slice_per_pkt as 2,
+> 
+> if you had some panels which need a slice_per_pkt as 2, this support 
+> could have been added even earlier by someone who had these panels even 
+> in DSC 1.1.
+> 
+> If these panels are not yet upstreamed, may i please know why this is 
+> considered as a "breakage"? If they were working "somehow" due to 
+> incorrect math / panel settings /  DPU calculations, unfortunately we 
+> have to work towards bringing up these panels properly and upstreaming 
+> them rather than saying "oh, these panels were working somehow and now 
+> we need to keep it working".
 
+I also want to add on top of Abhinav's point:
+
+Currently, the panel I'm testing this series on only uses 
+slice_per_pkt=1, so I have no way to testing slice_per_pkt > 1.
+
+So in the case where we add support for slice_per_pkt > 1, I would 
+prefer that be as a separate series as I would not be able to validate 
+those changes on my current setup.
+
+Thanks,
+
+Jessica Zhang
+
+> 
+>>>
+>>>
+>>> Konrad
+>>>>
+>>>> Those should tied to a panel+controller tuple.
+>>>>
+>>>> Neil
+>>>>
+>>>>>
+>>>>>>
+>>>>>>>> +             */
+>>>>>>>> +            wc = msm_host->dsc->slice_chunk_size + 1;
+>>>>>>>>            dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
+>>>>>>>>                DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
+>>>>>>>>
+>>>>>>>
+>>>>>
+>>>>
+>>
