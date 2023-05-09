@@ -2,140 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD81A6FC373
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6BB6FC36D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234791AbjEIKGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 06:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S233835AbjEIKGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 06:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbjEIKGr (ORCPT
+        with ESMTP id S229520AbjEIKGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 06:06:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FA74220;
-        Tue,  9 May 2023 03:06:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=iQWsW3vK30T3lTlKXPjWF0ZCCCbqYMC5X75lG5LhBXg=; b=cDPXLQL0z0hLF1/yioFQfmCaBB
-        N8lg3b/6x/H60+tu73L248gNyd5xmZKox7zPuU6VKCA8HcngpEx3i7EoIRxvCJJ2pou+WtOB8+c9l
-        YAHhjctqF48WprPL0AyMzqqVZVwEpLUFVHpyjG9u8qxjZkI2cmceUyq18t9h1WvD06PgFHVUtc705
-        oUIyYOlqGQYWw9krcv5O2YQSBJhVKeLH6KQpRFn783U2eBmeNUpii/ZsJVFV2chFCnrg6UHHo2dd7
-        DFXEbQ718ZPPJ5wbZiakPwUWdfgyQIDGAdRJdu8G/8DVLYhi0TuNwKpexszZz1O5menSPb5zkPzoM
-        5WEFDxwA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pwKCp-00F8Kf-BN; Tue, 09 May 2023 10:04:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AE21E300451;
-        Tue,  9 May 2023 12:04:21 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 36C9B20B0882F; Tue,  9 May 2023 12:04:21 +0200 (CEST)
-Date:   Tue, 9 May 2023 12:04:21 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [patch v3 08/36] x86/smpboot: Split up native_cpu_up() into
- separate phases and document them
-Message-ID: <20230509100421.GU83892@hirez.programming.kicks-ass.net>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185217.671595388@linutronix.de>
+        Tue, 9 May 2023 06:06:16 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753652126;
+        Tue,  9 May 2023 03:06:15 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64384c6797eso4587027b3a.2;
+        Tue, 09 May 2023 03:06:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683626775; x=1686218775;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rSHR0ehtB2U6yMU0nFNA2cGE1gtgPOWWyVaF76Frhk8=;
+        b=Vi1G1NAKv9XWgPjE7QbWiX6BlpCxh9Ni3BopbDive+HIIjZbGW7FE7U108+iq6i7S6
+         C/a1ej6xB+ulyDR7HiP+yXHg81X/j+Ooxig2TD+AN/NfAuHsEsfQpRLcfW36lZJ+jx2O
+         G04xxxnaUToXtkMrgcWhRgvrnx8RbBJZY4+ZHWdczzKZRTI1TXQQf8jtuYEMKoebceZC
+         qVygZPznG/eRY8P6ZV6B6uLI38ow4fHNB0Wh7fsYiPlTr2tI/X1Pzr9X6J6TV+F12BHd
+         ZNiaTaFNsrLxaHYshT3D8EO35F/wW6dBvU2diBxUJcub1mEUAOqJ+0Pz47xF7NQacau9
+         uQpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683626775; x=1686218775;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rSHR0ehtB2U6yMU0nFNA2cGE1gtgPOWWyVaF76Frhk8=;
+        b=fTZh7bXWi5UV3+wsVeth41w+fEBpXZYmkluKRs+i7AdU/EAHiUSsur+ekBzxftLllx
+         OPKtBI2AufxlZFoZ1vtLQI+8Qm4rkIUzzFWg5fTn0K6oy0hloN8wVLtQwWMwnc5P4lLI
+         qVIHMdVf/TaO7FwW6gWgMCMQ5DmKcDk3/riUOriPy7CDFgdMfMSCzREp5K5Mstna2Y1A
+         0wXz6rXNLaVQmwVq8hrcqj9abGuFK4VVLnPWKdU6NvRkmZ6U0LRPXZqqzug+bmTAqBRL
+         VEISJGfXjiDHKEhDZ15/rodlysQ1Nsw2eWZs6m3zPhOZf2YiwuvCUdvHJc1vA/AP9ku5
+         3i6Q==
+X-Gm-Message-State: AC+VfDwJxOPcFR798ZcdLosLI72athkwWJGvr/XK7+YyBEBT8yekLPs2
+        mb42qSAE4Y6Xl7Edm3i2C/w=
+X-Google-Smtp-Source: ACHHUZ652st2RqBIyIOxPTtzqMCXN3fTicm9MdVndNcyYFPE2GW2Cw6lX0OD7sa2m2xrZX5ffT0ivA==
+X-Received: by 2002:a05:6a00:1688:b0:647:5409:5d08 with SMTP id k8-20020a056a00168800b0064754095d08mr854975pfc.17.1683626774849;
+        Tue, 09 May 2023 03:06:14 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-80.three.co.id. [180.214.232.80])
+        by smtp.gmail.com with ESMTPSA id f17-20020aa78b11000000b00642ea56f06fsm1460696pfd.0.2023.05.09.03.06.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 03:06:14 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 0207D1068BA; Tue,  9 May 2023 17:06:11 +0700 (WIB)
+Date:   Tue, 9 May 2023 17:06:11 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/610] 6.1.28-rc2 review
+Message-ID: <ZFobE/Zo8FjJ/o+P@debian.me>
+References: <20230509030653.039732630@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="k4sHR0uTJkFkorbG"
 Content-Disposition: inline
-In-Reply-To: <20230508185217.671595388@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230509030653.039732630@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 09:43:39PM +0200, Thomas Gleixner wrote:
 
-> @@ -233,14 +237,31 @@ static void notrace start_secondary(void
->  	load_cr3(swapper_pg_dir);
->  	__flush_tlb_all();
->  #endif
-> +	/*
-> +	 * Sync point with wait_cpu_initialized(). Before proceeding through
-> +	 * cpu_init(), the AP will call wait_for_master_cpu() which sets its
-> +	 * own bit in cpu_initialized_mask and then waits for the BSP to set
-> +	 * its bit in cpu_callout_mask to release it.
-> +	 */
->  	cpu_init_secondary();
->  	rcu_cpu_starting(raw_smp_processor_id());
->  	x86_cpuinit.early_percpu_clock_init();
-> +
-> +	/*
-> +	 * Sync point with wait_cpu_callin(). The AP doesn't wait here
-> +	 * but just sets the bit to let the controlling CPU (BSP) know that
-> +	 * it's got this far.
-> +	 */
->  	smp_callin();
->  
-> -	/* otherwise gcc will move up smp_processor_id before the cpu_init */
-> +	/* Otherwise gcc will move up smp_processor_id() before cpu_init() */
->  	barrier();
+--k4sHR0uTJkFkorbG
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Not to the detriment of this patch, but this barrier() and it's comment
-seem weird vs smp_callin(). That function ends with an atomic bitop (it
-has to, at the very least it must not be weaker than store-release) but
-also has an explicit wmb() to order setup vs CPU_STARTING.
+On Tue, May 09, 2023 at 05:26:31AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.28 release.
+> There are 610 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-(arguably that should be a full fence *AND* get a comment)
+Successfully compiled in my computer (Acer Aspire E15, Intel Core i3
+Haswell).
 
-There is no way the smp_processor_id() referred to in this comment can
-land before cpu_init() even without the barrier().
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-> -	/* Check TSC synchronization with the control CPU: */
-> +
-> +	/*
-> +	 * Check TSC synchronization with the control CPU, which will do
-> +	 * its part of this from wait_cpu_online(), making it an implicit
-> +	 * synchronization point.
-> +	 */
->  	check_tsc_sync_target();
->  
->  	/*
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--k4sHR0uTJkFkorbG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFobEwAKCRD2uYlJVVFO
+o9MtAQC8eEi7ld6tOVtOypT4uakIZtPXwLzw06E9oaCvDXhg4QEAtn+2Z7MJeDW1
+DlNakHo1LaSZvW8sfS0tUZ0EiK4lhgo=
+=NfSP
+-----END PGP SIGNATURE-----
+
+--k4sHR0uTJkFkorbG--
