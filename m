@@ -2,174 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959CE6FD26F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9036FD268
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 00:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234507AbjEIWPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 18:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
+        id S234795AbjEIWO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 18:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjEIWPf (ORCPT
+        with ESMTP id S229998AbjEIWO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 18:15:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0793A87
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 15:14:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683670487;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ydVLg8IPNtZ/Ju1d4KRWiYGNqw9BPaKTQueF/IDR2ec=;
-        b=Hz4ZQF9Tk/nCvM2rsnaBMee7Uyp6R0fe2AwYh8u680VAGImdpbEJ00nJEz7gQcvTCeIXze
-        jkYqpSxtw7KyXUNgmonB8LHopKN/RPyj/vqojxw6h2M3xp9xXrNIZ8QfjERXNHMytsmWAu
-        ZZBs7TbzxwsJFcm2jzrGKFjeaqKS5ko=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-496-S52LVMGYOBiaEpiZwT9FMQ-1; Tue, 09 May 2023 18:14:41 -0400
-X-MC-Unique: S52LVMGYOBiaEpiZwT9FMQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6743F185A79C;
-        Tue,  9 May 2023 22:14:40 +0000 (UTC)
-Received: from [10.22.18.234] (unknown [10.22.18.234])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 42D2C492B00;
-        Tue,  9 May 2023 22:14:39 +0000 (UTC)
-Message-ID: <e17e3aa2c9ac1d6e410f66986da3c41efa9f7462.camel@redhat.com>
-Subject: Re: [PATCH v2 1/4] sched/core: Provide sched_rtmutex() and expose
- sched work helpers
-From:   Crystal Wood <swood@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        John Stultz <jstultz@google.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
-Date:   Tue, 09 May 2023 17:14:38 -0500
-In-Reply-To: <20230503132051.GB1676736@hirez.programming.kicks-ass.net>
-References: <20230427111937.2745231-1-bigeasy@linutronix.de>
-         <20230427111937.2745231-2-bigeasy@linutronix.de>
-         <20230503132051.GB1676736@hirez.programming.kicks-ass.net>
-Organization: Red Hat
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Tue, 9 May 2023 18:14:56 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD723A88
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 15:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683670495; x=1715206495;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dANONa1DPO/BbwE8Bny4oBm6ve4Cbsy61v0wAbQU4Og=;
+  b=nBp8af6t+ql0eA04Ch5s/bbJP4QGVUDYRLR9tgvwVK86JMDmhLRh/XGL
+   fOuWkURlbheeDpqS7LAfGtE2/AF87WSJPWJvwnKPLJ3deCfGnHKV9Fuw8
+   ev5JMu3B6isL0kiZVlr95/kH3x0n4s5p6u9NZM8Ird6hsj3OlUHzSOgWO
+   XbLxFEOvrFg2FjyLktXgub242SJGTjiF5W5w2pvtKF/27xMSdCONZZFmg
+   0aIYBRpu/NeSp6tmjyWm8Jl3RAW9RSnSRXOnszgjgczdy3p4/mUQzjmM6
+   gD3RvHnnLTGA4FSLPZ76k6aHT/wuZvSWpQo2EkJIC/JAVnXdDAMoVe54z
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="334523734"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="334523734"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 15:14:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="649513029"
+X-IronPort-AV: E=Sophos;i="5.99,262,1677571200"; 
+   d="scan'208";a="649513029"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 09 May 2023 15:14:53 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwVbg-0002Yr-2O;
+        Tue, 09 May 2023 22:14:52 +0000
+Date:   Wed, 10 May 2023 06:14:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Johannes Berg <johannes.berg@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Richard Weinberger <richard@nod.at>
+Subject: arch/um/drivers/harddog_user.c:6:10: fatal error: stdio.h: No such
+ file or directory
+Message-ID: <202305100640.HGwVAUIt-lkp@intel.com>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-05-03 at 15:20 +0200, Peter Zijlstra wrote:
-> On Thu, Apr 27, 2023 at 01:19:34PM +0200, Sebastian Andrzej Siewior wrote=
-:
-> > From: Thomas Gleixner <tglx@linutronix.de>
-> >=20
-> > schedule() invokes sched_submit_work() before scheduling and
-> > sched_update_worker() afterwards to ensure that queued block requests
-> > are
-> > flushed and the (IO)worker machineries can instantiate new workers if
-> > required. This avoids deadlocks and starvation.
-> >=20
-> > With rt_mutexes this can lead to subtle problem:
-> >=20
-> > =C2=A0 When rtmutex blocks current::pi_blocked_on points to the rtmutex=
- it
-> > =C2=A0 blocks on. When one of the functions in sched_submit/resume_work=
-()
-> > =C2=A0 contends on a rtmutex based lock then that would corrupt
-> > =C2=A0 current::pi_blocked_on.
-> >=20
-> > Make it possible to let rtmutex issue the calls outside of the slowpath=
-,
-> > i.e. when it is guaranteed that current::pi_blocked_on is NULL, by:
-> >=20
-> > =C2=A0 - Exposing sched_submit_work() and moving the task_running() con=
-dition
-> > =C2=A0=C2=A0=C2=A0 into schedule()
-> >=20
-> > =C2=A0 - Renamimg sched_update_worker() to sched_resume_work() and expo=
-sing
-> > it
-> > =C2=A0=C2=A0=C2=A0 too.
-> >=20
-> > =C2=A0 - Providing sched_rtmutex() which just does the inner loop of
-> > scheduling
-> > =C2=A0=C2=A0=C2=A0 until need_resched() is not longer set. Split out th=
-e loop so this
-> > does
-> > =C2=A0=C2=A0=C2=A0 not create yet another copy.
-> >=20
-> > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
->=20
-> Urgh, so I really don't like this.
->=20
-> The end result is something like:
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0rt_mutex_lock()
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sched_submit_work(=
-);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // a n=
-ested rt_mutex_lock() here will not clobber
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // ->p=
-i_blocked_on because it's not set yet.
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 task_blocks_on_rt_=
-mutex();
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tsk->p=
-i_blocked_on =3D waiter;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rt_mut=
-ex_enqueue(lock, waiter); <-- the real problem
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rt_mutex_slowlock_=
-block();
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 schedu=
-le_rtmutex();
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sched_resume_work(=
-);
->=20
-> And all of this it not just because tsk->pi_blocked_on, but mostly
-> because of task_blocks_on_rt_mutex() enqueueing the waiter. The whole
-> enqueue thing is what makes the 'simple' solution of saving/restoring
-> tsk->pi_blocked_on not work.
->=20
-> Basically the pi_blocked_on curruption is a side effect, not the
-> fundamental issue. One task having two waiters registered is the bigger
-> issue.
+Hi Johannes,
 
-Where do you see pi_blocked_on being saved/restored?  The whole point of
-this patchset is to deal with sched_submit_work() before anything has
-been done on the "outer" lock acquisition (not just pi_blocked_on, but
-also enqueuing) other than failing the fast path.
+FYI, the error/warning still remains.
 
-> Now, sched_submit_work() could also use (regular) mutex -- after all
-> it's a fully preemptible context. And then we're subject to the 'same'
-> problem but with tsk->blocked_on (DEBUG_MUTEXES=3Dy).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   16a8829130ca22666ac6236178a6233208d425c3
+commit: fc54a4f15988e228cf88f888483e985c5f35031e um: prevent user code in modules
+date:   3 weeks ago
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20230510/202305100640.HGwVAUIt-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fc54a4f15988e228cf88f888483e985c5f35031e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fc54a4f15988e228cf88f888483e985c5f35031e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um olddefconfig
+        make W=1 O=build_dir ARCH=um SHELL=/bin/bash
 
-It's fully preemptible but it still shouldn't be doing things that would
-block on non-RT.  That'd already be broken for a number of reasons (task
-state corruption, infinite recursion if current->plug isn't cleared
-before doing whatever causes another standard schedule(), etc).
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305100640.HGwVAUIt-lkp@intel.com/
 
--Crystal
+All errors (new ones prefixed by >>):
 
+>> arch/um/drivers/harddog_user.c:6:10: fatal error: stdio.h: No such file or directory
+       6 | #include <stdio.h>
+         |          ^~~~~~~~~
+   compilation terminated.
+
+
+vim +6 arch/um/drivers/harddog_user.c
+
+^1da177e4c3f41 Linus Torvalds 2005-04-16  @6  #include <stdio.h>
+^1da177e4c3f41 Linus Torvalds 2005-04-16   7  #include <unistd.h>
+^1da177e4c3f41 Linus Torvalds 2005-04-16   8  #include <errno.h>
+37185b33240870 Al Viro        2012-10-08   9  #include <os.h>
+^1da177e4c3f41 Linus Torvalds 2005-04-16  10  
+
+:::::: The code at line 6 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
