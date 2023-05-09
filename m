@@ -2,76 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23226FC168
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E026FC16C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 10:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234925AbjEIILm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 04:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
+        id S233731AbjEIIMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 04:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235073AbjEIILY (ORCPT
+        with ESMTP id S234431AbjEIIMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 04:11:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E59561BF;
-        Tue,  9 May 2023 01:11:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E72F644F2;
-        Tue,  9 May 2023 08:10:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04613C433EF;
-        Tue,  9 May 2023 08:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683619858;
-        bh=WXMC7u/DQzxADg0YM9i8LeJYiu5SJNEj74paM0J7l50=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kj5o24cUk7Fa6tWkPQ+fy3OzF18n7Rb3TJ3AknPltp0rmPFfRqJ0DZsguxTC1cZtb
-         ir8aVE+Miud7+m014RyDeZeQFlsx1u9ddcOTB1rMprGWG02iQf8RgcJPujrpbAwJvz
-         9ONuXZtFnKT9NtoKpbzt8c6/AW0RiUNadhQVfg2U9UqSZoMlvKXLGegWtIBdBjTBqm
-         11k8jlRXmdgDQD0v2dsmAw1u1gcT0LoyiwwmW41d51MPriwGHVqkbMaGRjuHjc1jTG
-         1+3EB47ENNLW4fJkSzXHutMml0UCCrKg/aXyFg2REz5YJgW99/3BkmMhZ8l+X7lYGW
-         LuCAHd1Z19YlQ==
-Date:   Tue, 9 May 2023 11:10:54 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: skbuff: remove special handling for SLOB
-Message-ID: <20230509081054.GH38143@unreal>
-References: <20230509071207.28942-1-lukas.bulwahn@gmail.com>
+        Tue, 9 May 2023 04:12:18 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B284610DD
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 01:12:16 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2ac8d9399d5so42740081fa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 01:12:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683619935; x=1686211935;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5XmVgWUkbGZmH29o+XZsTCuQqgOysUDCxIShsao+BgM=;
+        b=htBUkBschRRomgR3PiEMWZoBNU9slAbP0wxrXrJjfIEspJ6Q+lQONSshDs8J6Rr4iS
+         TBxQYxNao2FfSB3G/52eUf7IrwLx43h3VdpphWbAlkyh9Y/21IfxHoRlml65YIAm95HE
+         z3qhfTNjaHXLtGAeWZAmN04nfEWBuM+N3RWEaqZkYhbuMuavEd+voV63g/U8xeKVXrD+
+         x37o1A0k7U5jKr+3n3l0nuU3j5uICGA1ThsBBPL3xnskBviTvdddnJoglPY1a7zNrS1N
+         YbrvOrEiqMztykgsKmtNagPTCBEumAIbwiTlP/+2ips/105gEcJRUcB9Hx4REqiJ/cr0
+         vh0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683619935; x=1686211935;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5XmVgWUkbGZmH29o+XZsTCuQqgOysUDCxIShsao+BgM=;
+        b=hY7mxb93jtIfG44P1zfaqV8Sz8XFwoY5B0IM13O+s847FXYA/DQsgFSJTSsD/Eldar
+         5C0BCa77Q7nvsThMHQRQGTAFnAXLbygDDNKUNtOvT0XgtTTd/nCzYcnywrjno1Y6cXyv
+         xXaEV/TVQHkwPaOjWuXp70Y36tTNjGVu1LY71pFcWy1lOc536ekdjQusDbnMNWp5g6bm
+         xQkD50O7r2gCktoFbBpcvzlZV2jMpRDlnKpri9EdRK5IwjYZQpY/tAm/Tw52rpWpRRsm
+         CrMHHpwyadLWb6HCCsHlxdwp8nFK13lG9NUeNjwvOQa7blX1hcBbFGhjUQfeKY4oF0Xo
+         2ZHw==
+X-Gm-Message-State: AC+VfDxrg49LCktqtAA+QOietOsroGBi+PRAk9RvkeDhJvc2hQL8+23s
+        klQ0jr+fkSJUumGKE2hKAM04fw==
+X-Google-Smtp-Source: ACHHUZ7h8aaZAMor4jHygqzrp/yoUgufiF6uxaXuQ5T+wYdTfkV23g5TLxZA0j9mSHHfKJWz5zMgig==
+X-Received: by 2002:a2e:90ca:0:b0:29a:8580:8140 with SMTP id o10-20020a2e90ca000000b0029a85808140mr655790ljg.3.1683619934926;
+        Tue, 09 May 2023 01:12:14 -0700 (PDT)
+Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
+        by smtp.gmail.com with ESMTPSA id g12-20020a19ee0c000000b004eb42f5367bsm263799lfb.19.2023.05.09.01.12.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 01:12:14 -0700 (PDT)
+Message-ID: <8a4716dc-440b-e061-3074-fca9689289e7@linaro.org>
+Date:   Tue, 9 May 2023 10:12:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509071207.28942-1-lukas.bulwahn@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 2/4] drm/msm/dsi: Fix compressed word count calculation
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com>
+ <20230405-add-dsc-support-v1-2-6bc6f03ae735@quicinc.com>
+ <a60a9f37-bb43-6e2b-2535-995e9fae250a@linaro.org>
+ <32d473a6-f7a5-9aa6-85cf-0f77f1c071ce@quicinc.com>
+ <4cf2e9ab-7e08-fb26-d924-8ea8141d9f58@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <4cf2e9ab-7e08-fb26-d924-8ea8141d9f58@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 09:12:07AM +0200, Lukas Bulwahn wrote:
-> Commit c9929f0e344a ("mm/slob: remove CONFIG_SLOB") removes CONFIG_SLOB.
-> Now, we can also remove special handling for socket buffers with the SLOB
-> allocator. The code with HAVE_SKB_SMALL_HEAD_CACHE=1 is now the default
-> behavior for all allocators.
-> 
-> Remove an unnecessary distinction between SLOB and SLAB/SLUB allocator
-> after the SLOB allocator is gone.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  net/core/skbuff.c | 17 -----------------
->  1 file changed, 17 deletions(-)
-> 
 
-Thanks,
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+
+On 9.05.2023 01:27, Dmitry Baryshkov wrote:
+> On 08/05/2023 23:09, Abhinav Kumar wrote:
+>>
+>>
+>> On 5/3/2023 1:26 AM, Dmitry Baryshkov wrote:
+>>> On 03/05/2023 04:19, Jessica Zhang wrote:
+>>>> Currently, word count is calculated using slice_count. This is incorrect
+>>>> as downstream uses slice per packet, which is different from
+>>>> slice_count.
+>>>>
+>>>> Slice count represents the number of soft slices per interface, and its
+>>>> value will not always match that of slice per packet. For example, it is
+>>>> possible to have cases where there are multiple soft slices per interface
+>>>> but the panel specifies only one slice per packet.
+>>>>
+>>>> Thus, use the default value of one slice per packet and remove slice_count
+>>>> from the word count calculation.
+>>>>
+>>>> Fixes: bc6b6ff8135c ("drm/msm/dsi: Use DSC slice(s) packet size to compute word count")
+>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>>>> ---
+>>>>   drivers/gpu/drm/msm/dsi/dsi_host.c | 9 ++++++++-
+>>>>   1 file changed, 8 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>>>> index 35c69dbe5f6f..b0d448ffb078 100644
+>>>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+>>>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>>>> @@ -996,7 +996,14 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>>>>           if (!msm_host->dsc)
+>>>>               wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
+>>>>           else
+>>>> -            wc = msm_host->dsc->slice_chunk_size * msm_host->dsc->slice_count + 1;
+>>>> +            /*
+>>>> +             * When DSC is enabled, WC = slice_chunk_size * slice_per_packet + 1.
+>>>> +             * Currently, the driver only supports default value of slice_per_packet = 1
+>>>> +             *
+>>>> +             * TODO: Expand drm_panel struct to hold slice_per_packet info
+>>>> +             *       and adjust DSC math to account for slice_per_packet.
+>>>
+>>> slice_per_packet is not a part of the standard DSC, so I'm not sure how that can be implemented. And definitely we should not care about the drm_panel here. It should be either a part of drm_dsc_config, or mipi_dsi_device.
+>>>
+>>
+>> This is not correct.
+>>
+>> It is part of the DSI standard (not DSC standard). Please refer to Figure 40 "One Line Containing One Packet with Data from One or More Compressed Slices" and Figure 41 "One Line Containing More than One Compressed Pixel Stream Packet".
+> 
+> I have reviewed section 8.8.24 and Annex D of the DSI standard.
+> 
+> It is not clear to me, if we can get away with always using slice_per_packet = 1. What is the DSI sink's difference between Fig. 40.(b) and Fig 41?
+> 
+> Are there are known panels that require slice_per_packet != 1? If so, we will have to implement support for such configurations.
+At least two different ones on expensive Xperias (souxp00_a+amb650wh07 and
+sofef03_m)
+
+Konrad
+> 
+>> This has details about this. So I still stand by my point that this should be in the drm_panel.
+> 
+> Note, the driver doesn't use drm_panel directly. So slices_per_packet should go to mipi_dsi_device instead (which in turn can be filled from e.g. drm_panel or from any other source).
+> 
+>>
+>>>> +             */
+>>>> +            wc = msm_host->dsc->slice_chunk_size + 1;
+>>>>           dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
+>>>>               DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
+>>>>
+>>>
+> 
