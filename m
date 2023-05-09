@@ -2,96 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FDB6FC4F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2426FC4FF
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235459AbjEIL0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 07:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
+        id S235521AbjEIL2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 07:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234625AbjEIL0r (ORCPT
+        with ESMTP id S235429AbjEIL2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 07:26:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E13DC1724
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 04:26:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B783DFEC;
-        Tue,  9 May 2023 04:27:29 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.56.16])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0EA063F67D;
-        Tue,  9 May 2023 04:26:43 -0700 (PDT)
-Date:   Tue, 9 May 2023 12:26:34 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] ARM/arm64: Mark all accessor functions inline
-Message-ID: <ZFot3325jfshzhIa@FVFF77S0Q05N>
-References: <cover.1683561087.git.geert+renesas@glider.be>
+        Tue, 9 May 2023 07:28:37 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B256E2D78;
+        Tue,  9 May 2023 04:28:36 -0700 (PDT)
+Received: from dd-virtual-machine.localdomain ([183.202.113.128])
+        (user=u202112089@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 349BRnLs027222-349BRnLt027222
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Tue, 9 May 2023 19:27:54 +0800
+From:   Zongjie Li <u202112089@hust.edu.cn>
+To:     Jaya Kumar <jayalk@intworks.biz>, Helge Deller <deller@gmx.de>,
+        Andrew Morton <akpm@osdl.org>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Zongjie Li <u202112089@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers: fbdev: arcfb: Fix error handling in arcfb_probe()
+Date:   Tue,  9 May 2023 19:27:26 +0800
+Message-Id: <20230509112727.3899-1-u202112089@hust.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1683561087.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: u202112089@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 06:05:17PM +0200, Geert Uytterhoeven wrote:
-> 	Hi all,
-> 
-> This patch series adds missing "inline" keywords to the few perf
-> accessors that lack them.
-> 
-> BTW, I tried converting my local timing code to the new unified system.
-> This works fine on arm64, but broke on arm32.  Is read_pmccntr()
-> supposed to work on arm32? I get an undefined instruction exception on
-> Cortex A15 and A9.
+Smatch complains that:
+arcfb_probe() warn: 'irq' from request_irq() not released on lines: 587.
 
-That's expected.
+Fix error handling in the arcfb_probe() function. If IO addresses are 
+not provided or framebuffer registration fails, the code will jump to 
+the err_addr or err_register_fb label to release resources. 
+If IRQ request fails, previously allocated resources will be freed.
 
-This code is for PMUv3 (which was added as part of ARMv8), and one of the
-things changed in PMUv3 was that PMCCNTR was expanded to 64 bits accessible via
-MRRC and MCRR.
+Fixes: 1154ea7dcd8e ("[PATCH] Framebuffer driver for Arc LCD board")
+Signed-off-by: Zongjie Li <u202112089@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+ drivers/video/fbdev/arcfb.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-Previously, PMCCNTR was only 32 bits, and that's what Cortex-A9 and Cortex-A15
-implement.
+diff --git a/drivers/video/fbdev/arcfb.c b/drivers/video/fbdev/arcfb.c
+index 45e64016db32..024d0ee4f04f 100644
+--- a/drivers/video/fbdev/arcfb.c
++++ b/drivers/video/fbdev/arcfb.c
+@@ -523,7 +523,7 @@ static int arcfb_probe(struct platform_device *dev)
+ 
+ 	info = framebuffer_alloc(sizeof(struct arcfb_par), &dev->dev);
+ 	if (!info)
+-		goto err;
++		goto err_fb_alloc;
+ 
+ 	info->screen_base = (char __iomem *)videomemory;
+ 	info->fbops = &arcfb_ops;
+@@ -535,7 +535,7 @@ static int arcfb_probe(struct platform_device *dev)
+ 
+ 	if (!dio_addr || !cio_addr || !c2io_addr) {
+ 		printk(KERN_WARNING "no IO addresses supplied\n");
+-		goto err1;
++		goto err_addr;
+ 	}
+ 	par->dio_addr = dio_addr;
+ 	par->cio_addr = cio_addr;
+@@ -551,12 +551,12 @@ static int arcfb_probe(struct platform_device *dev)
+ 			printk(KERN_INFO
+ 				"arcfb: Failed req IRQ %d\n", par->irq);
+ 			retval = -EBUSY;
+-			goto err1;
++			goto err_addr;
+ 		}
+ 	}
+ 	retval = register_framebuffer(info);
+ 	if (retval < 0)
+-		goto err1;
++		goto err_register_fb;
+ 	platform_set_drvdata(dev, info);
+ 	fb_info(info, "Arc frame buffer device, using %dK of video memory\n",
+ 		videomemorysize >> 10);
+@@ -580,9 +580,12 @@ static int arcfb_probe(struct platform_device *dev)
+ 	}
+ 
+ 	return 0;
+-err1:
++
++err_register_fb:
++	free_irq(par->irq, info);
++err_addr:
+ 	framebuffer_release(info);
+-err:
++err_fb_alloc:
+ 	vfree(videomemory);
+ 	return retval;
+ }
+-- 
+2.25.1
 
-Thanks,
-Mark.
-
-> Before, my custom code used "mrc p15, 0, %0, c9,
-> c13, 0" (as is also used in arch/arm/kernel/perf_event_v7.c), for which
-> there is no accessor yet.
-> 
-> Thanks for your comments!
-> 
-> Geert Uytterhoeven (2):
->   ARM: perf: Mark all accessor functions inline
->   arm64: perf: Mark all accessor functions inline
-> 
->  arch/arm/include/asm/arm_pmuv3.h   | 6 +++---
->  arch/arm64/include/asm/arm_pmuv3.h | 6 +++---
->  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
-> Gr{oetje,eeting}s,
-> 
-> 						Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
-> 							    -- Linus Torvalds
