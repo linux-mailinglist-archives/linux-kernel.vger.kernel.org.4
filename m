@@ -2,172 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D134F6FC2E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BEC6FC2F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 11:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234483AbjEIJf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 05:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
+        id S234716AbjEIJie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 05:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234039AbjEIJfy (ORCPT
+        with ESMTP id S234621AbjEIJiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 05:35:54 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2058.outbound.protection.outlook.com [40.107.243.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044C5E6;
-        Tue,  9 May 2023 02:35:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l4Tk0A9oja34ziDEsAaVPUSUlbCZZj75qmR+mMME7VuG+oSEQE0YU9nf6fSSdEM1sWDkmCvTXiF2hpzLZQsocL16vPPEbvNGuExGuHhSUw+xVDQjv982EjVutcdhYVEWrG9zNyXnguAAHl/36TC+HwlW5mXSHCZlyV6d+iYB4KFfG3nenv98/cQudT7ez+eG7X4SP2u/WRBSYoxjAVXwDaOLNec5cXyh9hx9KmdHBSiP8oByeZLii+TdLSY771v8QGUFBKlO80+8mAfu5V1RdaRHVN14WZC0Zbg+0YOrjyPToUTHPts3qgNdqigWmmYPBsic6E7QH3cTwnR9sRMiSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kGez5DNflNuIoqf6VeiFcRtCwkgxIKFmbuW4EomqtC4=;
- b=jJ9P9SC5qXa9VJlLcJkF+W7AeHsd6bsweVsvKkSzD8zTvk4uLhkkPBJ2vSKftQisiYqAHzolpzo/p89Ybeo+Ky4QAAuh/fFrMVb5kZ8e75bDA9DAodkrsQe/OfY9/Tpyj5KlI6Gi2+7/fRWSooQ2lUy7CfVEuyleqO6/ozFh7rPrTaxrr7sQWsig8rPrg9/WDSi9ukIDGOc0D5BDij05J0atJmB93ytvWSsbcxwa5Eo1YuOry5YtkgtwJQiNy5nrLbDrERuSKNCrczyvNp9M4WN4/4LRVu3m3I94b1KdQYX6LpGg1L2tdmA1oIpyL7XijQTZIg2Svj9QLE6TWL7dNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kGez5DNflNuIoqf6VeiFcRtCwkgxIKFmbuW4EomqtC4=;
- b=c+rCSk3QkfypKGHV8An0FY72wrCDp9yvCkfvG7VvReqLTyoRA89RtD5efqvLUpNiAzXCuRetln1qZvjuc9bD72mFGU9OdW7K0jsKkqL00+9RReE5OtkwB8Yl3e/2rtZ/MbzsSAnxN1OTarRij0BJpM3W9cIYY8maypYexsq5yIHhmXKlQKLLKTcnRO21TP6Ib8uTv8bisr7zTHnMnzMcIItMX12e+7Kb7RkDCWO1f+kMUPAbyI0cNFmrw0tkSe3qzNOSITBvX50TKGiPKJxS1FV7LopVwWQwOf+Z+YNcVDaTwGK3KT3uHnociJ2W3gPc4444gbLFHI2ioYRNaXSucw==
-Received: from BN9PR12MB5381.namprd12.prod.outlook.com (2603:10b6:408:102::24)
- by DS0PR12MB8198.namprd12.prod.outlook.com (2603:10b6:8:f2::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Tue, 9 May
- 2023 09:35:51 +0000
-Received: from BN9PR12MB5381.namprd12.prod.outlook.com
- ([fe80::affc:9f98:eb16:ab5e]) by BN9PR12MB5381.namprd12.prod.outlook.com
- ([fe80::affc:9f98:eb16:ab5e%3]) with mapi id 15.20.6363.033; Tue, 9 May 2023
- 09:35:51 +0000
-From:   Vadim Pasternak <vadimp@nvidia.com>
-To:     Liming Sun <limings@nvidia.com>,
-        David Thompson <davthompson@nvidia.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-CC:     "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v1 1/1] platform/mellanox: fix potential race in
- mlxbf-tmfifo driver
-Thread-Topic: [PATCH v1 1/1] platform/mellanox: fix potential race in
- mlxbf-tmfifo driver
-Thread-Index: AQHZeErCeevS3HVKBU67hl1SlQVFQ69RwnYA
-Date:   Tue, 9 May 2023 09:35:51 +0000
-Message-ID: <BN9PR12MB5381316B1E76612838BBB762AF769@BN9PR12MB5381.namprd12.prod.outlook.com>
-References: <b98c0ab61d644ba38fa9b3fd1607b138b0dd820b.1682518748.git.limings@nvidia.com>
-In-Reply-To: <b98c0ab61d644ba38fa9b3fd1607b138b0dd820b.1682518748.git.limings@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR12MB5381:EE_|DS0PR12MB8198:EE_
-x-ms-office365-filtering-correlation-id: f4b4ae67-0f95-4be3-c6fc-08db5070c724
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jbDyit01vtp/3t4I+49OKtf6EJ08vXcU2lHZHKCMt25viM3XLDdwQtHwip4/+DDsOyBoKD8rYLtHr/HtBv2g2xilZ5jEt67EeuWno6Tq5X3h3c171+P9Hb0R1MLaT71q6IH3nDNDJ7EZ+f4Kjx6FTgS4qXfG5AQDGWafiq+paTveyGPidlNc5jA+52QDAzA9tWNjuwPYysPrANn3n/LW/oMsrLZf12GpRIwmEEdYruwGUkevlzh1FWAtrxZZEnhWJEwXya9gsyePFPn1ct/U8mziwzeMpVOry1FsmEAUn2tYgZ81XwDBjyo9VlWVlTd7V7DGcmAzGH8iCTUsEWo25fDE3i7IAzeODNGN1r4eAEKuJzpKOXxVV77+NemwLu0IEWhhQnWb/xIN4gg/iD8/HFMJRoT95Dhxsi48V5tuJZHqgPWAoAjwhYl2OxsdqfRnloi0EVhyH26m5ji7lW8QHIRPBq6zvYWlSKmYr9ML9tkC9fd4b+ojHxRacNXkv9JOAE5Z8Rbt75pyHAykQGRVBpJalUtksl7quxT2LDMJeV0qeaHsuo+KOx1Xqec3tVPcXtHnsN08a0FVJ0d31bnysnFa+ZeV2y7eed7I+av6mP+xWhSQievvLZwg4k7WCUV3
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5381.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(376002)(136003)(39860400002)(451199021)(122000001)(2906002)(5660300002)(55016003)(33656002)(52536014)(4326008)(316002)(41300700001)(8936002)(8676002)(71200400001)(66556008)(66476007)(64756008)(66446008)(76116006)(66946007)(54906003)(110136005)(478600001)(86362001)(9686003)(83380400001)(38100700002)(7696005)(6506007)(53546011)(186003)(38070700005)(26005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aUF1WWhOaFdUbTM3bGUzcXd3bXdUYmdacUhDMXNGUXVZNDBLY01NNFowaG5q?=
- =?utf-8?B?djkvdEJ4a3laUzBMSTJycUdkSUJZdW14bGliREVQK1RKS3JuR1g5ZWlORXA3?=
- =?utf-8?B?NTRsdU9nZkk0MTFVdmF5RnQ1Tis5TGZ0YmcydHp3cmxBNjlpaXZiZWtuMzc3?=
- =?utf-8?B?dXhqRkZLZzljczFUWGc0WmdwVnRsbjdnWmJkUHNCekFLQzVYdnB6d1FrVjBB?=
- =?utf-8?B?MnNjQWF5ajc5MTV0bDZCeHJweXlQZENvNEtRRURwVGRQUmlEbFJUdnFEN2lo?=
- =?utf-8?B?NEs5VUNIQkEyaVZiVTZiSEREUmxtRmhENStOVlZUODVFSXpTaGdKdnRhSkQ2?=
- =?utf-8?B?V1ZLWXMxUE5JOHQrM0laK2MxNlFaSWQ1MjU5QU9WekFaSGM3Qm1lYTdQQmhH?=
- =?utf-8?B?TVdwTmJzT21KQVQ5eVlic2JPSEZZb3FnZW5WaGlZZy9TUGh5TEp0Tm85NFY4?=
- =?utf-8?B?UkdFV1hYRFpoZWhoVmJKQURsNVpjMjNDWFVHaW1xc0xMOU93dGwwbjdSaCtQ?=
- =?utf-8?B?akphNnVhZWR0MEpwTlNiVTh2SzV3RVZjdlIxdHpnOU8vUjl2ZW9RYTFnenpz?=
- =?utf-8?B?cU5vT1Z2Qm1RYVlaMklwcFRTeDhuL2FST3BNUG5YSHlGKzYweHdVeGlEOXlQ?=
- =?utf-8?B?RHFWVHQ5cGlHbnhzN0U1bklqRVp4N2pjMXZMNW5ZeWxVK2I5K0R0TmIvc01J?=
- =?utf-8?B?R3puc3kzeVVnTGxyNXhDcC9iL1ltT2ZnaFB5amlVeTdhem1kTCtUV1p2L3Rx?=
- =?utf-8?B?ZlgwMUtJMVV0cERNMW5ZQ1FLQjJRZUFCMWZFajZGeThiZGJyY0wvZklBMDZ1?=
- =?utf-8?B?UzB0ZVpYeGR5L1BBMm1jcVNnNUNwYVJ3SkdCMVQydFU0RXZPU2kzcUZJWFhq?=
- =?utf-8?B?ZnJ2WWdnNDFvWnVKV3NmUlBlRngxQUw1c1djTEZGOUwwM3N6WTJUdk9IZUtZ?=
- =?utf-8?B?TDZFbGp6L0s4aHloUFBMd2d4MktROGdIWDhzeTVITkpUbmhTU1IrbURvYmlH?=
- =?utf-8?B?RU00a0FaUW9LSnhyc3YzRW95UEFoVE5YT1VFbzdCS0pUUzJ4cXh4OGgreFpP?=
- =?utf-8?B?dWMwdnlLeDR6a09LcjY0Zno3NXFxVVlaS1VHY2loS0FVcXg0ZXYrUDhlbWhk?=
- =?utf-8?B?Y0hPUjVUcWQxUGk2akVCZGtXajgwMWQ0eERsc3R3Q1BHdXFhQ2Fmb2dNVmdK?=
- =?utf-8?B?Q2Z3OFRkK2pSSlVpczN5UkVUcWFkb3p0S1ZhaFZ2OXd5aTNJSHpQNzdzUDBE?=
- =?utf-8?B?S25WY3RTQTFtaTJ1L1NMRFdEZ1J2YmZZVVMydnljSjBzWEp6b1lMR1JaN1Rp?=
- =?utf-8?B?Z1JJQnVDUmZYUXZRN21PM2RiRHNXajF3YUNBNE5PQ0xmSjFFOUlPbXE4RTJa?=
- =?utf-8?B?TEZEOE9xa2ErNlZCYXZ0MkU0U0lqTU9QZ1UwaTh5eEN1ak0rcWtVeTBPellk?=
- =?utf-8?B?Z0NPTktTNEZPaVRGbDBBUlNBK0w4QVoyQ3NCb3FUVUlnUTNoWGFyOGh1QTJp?=
- =?utf-8?B?c0xvbys3UUdHY3N3WWZCMkNORTZZWnJlWmdLNVRpL3pjd0FMSkNOVXNwcDRR?=
- =?utf-8?B?WHZPZ09hZHloVHRkZ0thQzNqQ2dac2pqOTAzQmwyZTVMRjdiQjErbk9ueHB4?=
- =?utf-8?B?ZmRoN0xKQXA2QUg3SDhESTJFUm45UkJIVlZOVitBMlAvTTRBdGlSWHpqdllJ?=
- =?utf-8?B?bkdBSm5KQkh3bU9IUXQwN1lsWUtJQVRPbW5KeFlNRm01bWEzMnlkQkFNUjkv?=
- =?utf-8?B?U2VzckNDdG9sNGJzWWoxT1I5WmVXU3ZSY3UrZmVyd2prajhqaVNXb3o5M29w?=
- =?utf-8?B?bEh1VEpTTnE1eFVlMlBFU2V6aUg4dTFxM0p3VUgyYi95NlNSb3JyNWorUUgx?=
- =?utf-8?B?a2Irdzh4bzNzUkUxRnJ5NUdqbG1kYkxFdzNKcTRUMm1ra1RzekVINy8zbVNs?=
- =?utf-8?B?ZUVjUFdmK01CNFVUYmZQUWYzSlU3N2UxM3NONnk5dnNqeS9MMzk5d3JIMEdZ?=
- =?utf-8?B?ckh4VnREa1RMTThpaWxVa1F5ZFkwL0FZOUM3ckFVbm9UU2hMbndpMUVCT2xR?=
- =?utf-8?B?SVF0bzZsQjlRNkZGYm9VdzVxcWN5VW1hSkNQM3FDWE9nY2RGTkozZlE2eG9o?=
- =?utf-8?Q?Kv4VmxEw4tBCRF8loEqmjYJZ0?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 9 May 2023 05:38:21 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4F34225;
+        Tue,  9 May 2023 02:38:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683625099; x=1715161099;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U1tu/Ou4injYrbKydLUxfBy7dyxZrBMFc9DZnhXqJmY=;
+  b=iE7+6ttEOB9f0f0h5J1sjbc0YwG7lff7OEwScAgNXk43X5W0HpFLsP2Z
+   DAkCLKTJ4Zy8IRU98c11F05Wxv8zwIJc46d85FaEyhlm9fsTMQNXYktjn
+   8aRTgLsVAj44rqi6Srz1kyR7wpX8BnPvusCKNXalbfM3P5TX23mf4XxTl
+   bbqmK04VCDS+KtkCzl8cLgPCgXf1vd2U15k5IAqn4W6mznl5EwWaMh0Jf
+   gtyokcGkSxGDNDzypu1RDjRthZSoZLNMaA0OrZGQw1aa9Gws0l5OHuqs5
+   a0j4hJlTTtzR09Jo15XfJQ9HZ+FQXN6O1X5b6Se8an6OTXsNOWqSKtZeR
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="436192420"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="436192420"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 02:38:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="768432339"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="768432339"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 09 May 2023 02:36:51 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwJm7-00021I-0F;
+        Tue, 09 May 2023 09:36:51 +0000
+Date:   Tue, 9 May 2023 17:36:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Bharat Bhushan <bbhushan2@marvell.com>
+Subject: Re: [PATCH 2/2 v7] Watchdog: Add marvell GTI watchdog driver
+Message-ID: <202305091728.1XZ6IePZ-lkp@intel.com>
+References: <20230508131515.19403-2-bbhushan2@marvell.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5381.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4b4ae67-0f95-4be3-c6fc-08db5070c724
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2023 09:35:51.0683
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JGaAjzVHY9S5ToZ4iPU1fdYTDCbwJ+yslox7+kj8ne+lvq+GCkb7XNFmSLKO54PxXy+yHZa7bj/PZfC8/B59PA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8198
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508131515.19403-2-bbhushan2@marvell.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTGltaW5nIFN1biA8bGlt
-aW5nc0BudmlkaWEuY29tPg0KPiBTZW50OiBXZWRuZXNkYXksIDI2IEFwcmlsIDIwMjMgMTc6MjQN
-Cj4gVG86IFZhZGltIFBhc3Rlcm5hayA8dmFkaW1wQG52aWRpYS5jb20+OyBEYXZpZCBUaG9tcHNv
-bg0KPiA8ZGF2dGhvbXBzb25AbnZpZGlhLmNvbT47IEhhbnMgZGUgR29lZGUgPGhkZWdvZWRlQHJl
-ZGhhdC5jb20+Ow0KPiBNYXJrIEdyb3NzIDxtYXJrZ3Jvc3NAa2VybmVsLm9yZz4NCj4gQ2M6IExp
-bWluZyBTdW4gPGxpbWluZ3NAbnZpZGlhLmNvbT47IHBsYXRmb3JtLWRyaXZlci14ODZAdmdlci5r
-ZXJuZWwub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFtQ
-QVRDSCB2MSAxLzFdIHBsYXRmb3JtL21lbGxhbm94OiBmaXggcG90ZW50aWFsIHJhY2UgaW4gbWx4
-YmYtdG1maWZvDQo+IGRyaXZlcg0KPiANCj4gVGhpcyBjb21taXQgYWRkcyBtZW1vcnkgYmFycmll
-ciBmb3IgdGhlICd2cScgdXBkYXRlIGluIGZ1bmN0aW9uDQo+IG1seGJmX3RtZmlmb192aXJ0aW9f
-ZmluZF92cXMoKSB0byBhdm9pZCBwb3RlbnRpYWwgcmFjZSBkdWUgdG8gb3V0LW9mLW9yZGVyDQo+
-IG1lbW9yeSB3cml0ZS4gSXQgYWxzbyBhZGRzIGJhcnJpZXIgZm9yIHRoZSAnaXNfcmVhZHknDQo+
-IGZsYWcgdG8gbWFrZSBzdXJlIHRoZSBpbml0aWFsaXphdGlvbnMgYXJlIHZpc2libGUgYmVmb3Jl
-IHRoaXMgZmxhZyBpcyBjaGVja2VkLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogTGltaW5nIFN1biA8
-bGltaW5nc0BudmlkaWEuY29tPg0KDQpSZXZpZXdlZC1ieTogVmFkaW0gUGFzdGVybmFrIDx2YWRp
-bXBAbnZpZGlhLmNvbT4NCg0KPiAtLS0NCj4gIGRyaXZlcnMvcGxhdGZvcm0vbWVsbGFub3gvbWx4
-YmYtdG1maWZvLmMgfCAxMSArKysrKysrKystLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDkgaW5zZXJ0
-aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BsYXRm
-b3JtL21lbGxhbm94L21seGJmLXRtZmlmby5jDQo+IGIvZHJpdmVycy9wbGF0Zm9ybS9tZWxsYW5v
-eC9tbHhiZi10bWZpZm8uYw0KPiBpbmRleCA5MWEwNzdjMzViOGIuLmE3OTMxOGU5MGExMyAxMDA2
-NDQNCj4gLS0tIGEvZHJpdmVycy9wbGF0Zm9ybS9tZWxsYW5veC9tbHhiZi10bWZpZm8uYw0KPiAr
-KysgYi9kcml2ZXJzL3BsYXRmb3JtL21lbGxhbm94L21seGJmLXRtZmlmby5jDQo+IEBAIC03ODQs
-NyArNzg0LDcgQEAgc3RhdGljIHZvaWQgbWx4YmZfdG1maWZvX3J4dHgoc3RydWN0DQo+IG1seGJm
-X3RtZmlmb192cmluZyAqdnJpbmcsIGJvb2wgaXNfcngpDQo+ICAJZmlmbyA9IHZyaW5nLT5maWZv
-Ow0KPiANCj4gIAkvKiBSZXR1cm4gaWYgdmRldiBpcyBub3QgcmVhZHkuICovDQo+IC0JaWYgKCFm
-aWZvLT52ZGV2W2RldmlkXSkNCj4gKwlpZiAoIWZpZm8gfHwgIWZpZm8tPnZkZXZbZGV2aWRdKQ0K
-PiAgCQlyZXR1cm47DQo+IA0KPiAgCS8qIFJldHVybiBpZiBhbm90aGVyIHZyaW5nIGlzIHJ1bm5p
-bmcuICovIEBAIC05ODAsOSArOTgwLDEzIEBADQo+IHN0YXRpYyBpbnQgbWx4YmZfdG1maWZvX3Zp
-cnRpb19maW5kX3ZxcyhzdHJ1Y3QgdmlydGlvX2RldmljZSAqdmRldiwNCj4gDQo+ICAJCXZxLT5u
-dW1fbWF4ID0gdnJpbmctPm51bTsNCj4gDQo+ICsJCXZxLT5wcml2ID0gdnJpbmc7DQo+ICsNCj4g
-KwkJLyogTWFrZSB2cSB1cGRhdGUgdmlzaWJsZSBiZWZvcmUgdXNpbmcgaXQuICovDQo+ICsJCXZp
-cnRpb19tYihmYWxzZSk7DQo+ICsNCj4gIAkJdnFzW2ldID0gdnE7DQo+ICAJCXZyaW5nLT52cSA9
-IHZxOw0KPiAtCQl2cS0+cHJpdiA9IHZyaW5nOw0KPiAgCX0NCj4gDQo+ICAJcmV0dXJuIDA7DQo+
-IEBAIC0xMzAyLDYgKzEzMDYsOSBAQCBzdGF0aWMgaW50IG1seGJmX3RtZmlmb19wcm9iZShzdHJ1
-Y3QNCj4gcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiANCj4gIAltb2RfdGltZXIoJmZpZm8tPnRp
-bWVyLCBqaWZmaWVzICsgTUxYQkZfVE1GSUZPX1RJTUVSX0lOVEVSVkFMKTsNCj4gDQo+ICsJLyog
-TWFrZSBhbGwgdXBkYXRlcyB2aXNpYmxlIGJlZm9yZSBzZXR0aW5nIHRoZSAnaXNfcmVhZHknIGZs
-YWcuICovDQo+ICsJdmlydGlvX21iKGZhbHNlKTsNCj4gKw0KPiAgCWZpZm8tPmlzX3JlYWR5ID0g
-dHJ1ZTsNCj4gIAlyZXR1cm4gMDsNCj4gDQo+IC0tDQo+IDIuMzAuMQ0KDQo=
+Hi Bharat,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on groeck-staging/hwmon-next linus/master v6.4-rc1 next-20230509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230508-211645
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230508131515.19403-2-bbhushan2%40marvell.com
+patch subject: [PATCH 2/2 v7] Watchdog: Add marvell GTI watchdog driver
+config: hexagon-randconfig-r015-20230508 (https://download.01.org/0day-ci/archive/20230509/202305091728.1XZ6IePZ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0b1fbcf987da442c837b205256c6400adf6d298e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230508-211645
+        git checkout 0b1fbcf987da442c837b205256c6400adf6d298e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/watchdog/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305091728.1XZ6IePZ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/watchdog/marvell_gti_wdt.c:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/watchdog/marvell_gti_wdt.c:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/watchdog/marvell_gti_wdt.c:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/watchdog/marvell_gti_wdt.c:89:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+           ^
+   drivers/watchdog/marvell_gti_wdt.c:101:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           writeq(GTI_CWD_POKE_VAL,
+           ^
+   drivers/watchdog/marvell_gti_wdt.c:118:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+           ^
+>> drivers/watchdog/marvell_gti_wdt.c:126:11: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+                    ^
+   drivers/watchdog/marvell_gti_wdt.c:139:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           writeq(GTI_CWD_INT_ENA_CLR_VAL(priv->wdt_timer_idx),
+           ^
+   drivers/watchdog/marvell_gti_wdt.c:143:11: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+                    ^
+   drivers/watchdog/marvell_gti_wdt.c:177:11: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+                    ^
+   drivers/watchdog/marvell_gti_wdt.c:181:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+           ^
+   6 warnings and 8 errors generated.
+
+
+vim +/writeq +89 drivers/watchdog/marvell_gti_wdt.c
+
+    82	
+    83	static irqreturn_t gti_wdt_interrupt(int irq, void *data)
+    84	{
+    85		struct watchdog_device *wdev = data;
+    86		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+    87	
+    88		/* Clear Interrupt Pending Status */
+  > 89		writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+    90		       priv->base + GTI_CWD_INT);
+    91	
+    92		watchdog_notify_pretimeout(wdev);
+    93	
+    94		return IRQ_HANDLED;
+    95	}
+    96	
+    97	static int gti_wdt_ping(struct watchdog_device *wdev)
+    98	{
+    99		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+   100	
+   101		writeq(GTI_CWD_POKE_VAL,
+   102		       priv->base + GTI_CWD_POKE(priv->wdt_timer_idx));
+   103	
+   104		return 0;
+   105	}
+   106	
+   107	static int gti_wdt_start(struct watchdog_device *wdev)
+   108	{
+   109		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+   110		u64 regval;
+   111	
+   112		if (!wdev->pretimeout)
+   113			return -EINVAL;
+   114	
+   115		set_bit(WDOG_HW_RUNNING, &wdev->status);
+   116	
+   117		/* Clear any pending interrupt */
+   118		writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+   119		       priv->base + GTI_CWD_INT);
+   120	
+   121		/* Enable Interrupt */
+   122		writeq(GTI_CWD_INT_ENA_SET_VAL(priv->wdt_timer_idx),
+   123		       priv->base + GTI_CWD_INT_ENA_SET);
+   124	
+   125		/* Set (Interrupt + SCP interrupt (DEL3T) + core domain reset) Mode */
+ > 126		regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+   127		regval |= GTI_CWD_WDOG_MODE_INT_DEL3T_RST;
+   128		writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+   129	
+   130		return 0;
+   131	}
+   132	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
