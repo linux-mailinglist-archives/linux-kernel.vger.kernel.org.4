@@ -2,249 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39A06FCA79
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391636FCA98
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 17:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235616AbjEIPqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 11:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
+        id S235781AbjEIP5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 11:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbjEIPqF (ORCPT
+        with ESMTP id S235616AbjEIP5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 11:46:05 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F46110CF;
-        Tue,  9 May 2023 08:46:04 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6435bbedb4fso6530350b3a.3;
-        Tue, 09 May 2023 08:46:04 -0700 (PDT)
+        Tue, 9 May 2023 11:57:19 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE20230DF;
+        Tue,  9 May 2023 08:57:18 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6439f186366so3469566b3a.2;
+        Tue, 09 May 2023 08:57:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683647164; x=1686239164;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=71PM0c8jNHbE9hDVzelzE+44lPJ6yhnjh+al/DYMEGM=;
-        b=SEA4YE+jIMxurE4v8za3MHr2O6gaolZclraB7UcAIamSS+Dj8yKy0jXrX7aKbd7XqM
-         ODwEULvon/ZHeJlDO0e2X7NsBu3EQ9VjifJNDxJysAg5ImkgjjCBTeJ6aV/SAr+2PnrP
-         r73qgNNowQKOJlzR61Cj6po0v3hMx2fl8dDNacu/Ul+YccRQ6EzlQKoue3Ew4PvJ64e9
-         CvqZRSE4RgeGuuxOY+r+YWXqXDEAKd58vhrbbpGyklzNWQkYD10DyrnkdVVSnasi0q9O
-         3yA4Docte3BTc1xIHgWT7+39MYRFhDvH4p+r7yzJJlKu8w6kZxSHJqhNaPKRBoLRIFjE
-         2fYg==
+        d=gmail.com; s=20221208; t=1683647838; x=1686239838;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RbVH4vqkeFwPRNjfxUo33/C88de6z8TiEMMkxHNwSTk=;
+        b=XzmgQY1ax4Ijq6szx6EFvcc2YO+Q9SE+K02EQW+RhKzGl9zyTFm+PtjW4l0imfvHHy
+         zbagoAZXHdco7WAPssK6/AGqfqhyEAlVWmUFmekjlbQUIZixsBI5Q/tqOzBUCE0AagR6
+         ssHcfNv4chwvAGLpAgEN+XkAYz/v+kFUHAniUzo7OWwJjxZicTOq1VchUiX89awbNIhU
+         r5Cf+rWWL0sLJGzb9faSBDe2rTMbHWdl62sNQUEw8o82AxfCpXy4PJig1hpcXhSoexdL
+         TFNzLsa0gO8UH6trDBJgmnfsGWheywPkHXwI7dmbQdqe316eEHtykdfvfULCZnRpZ2OK
+         Rmfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683647164; x=1686239164;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=71PM0c8jNHbE9hDVzelzE+44lPJ6yhnjh+al/DYMEGM=;
-        b=FZcL8YF2172WCJ8SW2A+oz5iqIR7xklbEojaXM1KRdq5+8AXOyXjQyeEsaufIvR9lQ
-         txnJejphe+YD3iywews/JcyNfV7thdisO3N3PvdYAO6MiJ438qeBT1/7RGj0ruL6vZ4I
-         5OvgBTIQ/B5EyGYtjdqY/VUhTiyjcd9fwehECWKffsP9F/OuKFLBry0Jtu9TpX1J7pcm
-         af/MzEMxAYHL1a5fJzcL5yCL1puMfWJvDVescbzwShvCYnr/xITk9vfose4YoCXdB0rO
-         6NBU9GIrMbOTOj665my2ZK+4J7CylfwhfgQtinjTKrvlr5vcS/4mlDsJTGSNrwDHF69z
-         s8MA==
-X-Gm-Message-State: AC+VfDwdM6AQhMDYRhzUCktQafOGcm4ydRhun5QQhppVuW9yQ8bVbmMO
-        tWmxV06c/x777tVc2VstzNM=
-X-Google-Smtp-Source: ACHHUZ40OSB3ygellDJMvNryY1OSEE6VRfNqx3TuFWOwXIXAE8QVpIUy0A0EEw+J+Wkbd/hFvnAwEA==
-X-Received: by 2002:a05:6a20:429b:b0:101:4c8c:d1fa with SMTP id o27-20020a056a20429b00b001014c8cd1famr3595014pzj.5.1683647163538;
-        Tue, 09 May 2023 08:46:03 -0700 (PDT)
-Received: from [192.168.50.148] (net-2-32-39-33.cust.vodafonedsl.it. [2.32.39.33])
-        by smtp.gmail.com with ESMTPSA id b30-20020a631b1e000000b0050bd4bb900csm1489844pgb.71.2023.05.09.08.45.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 08:46:02 -0700 (PDT)
-Message-ID: <e59064e1-a826-1b90-fed4-29b0cabb1a87@gmail.com>
-Date:   Tue, 9 May 2023 17:45:54 +0200
+        d=1e100.net; s=20221208; t=1683647838; x=1686239838;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RbVH4vqkeFwPRNjfxUo33/C88de6z8TiEMMkxHNwSTk=;
+        b=Bt4MriYsDbWBrZfNtsNn0B1OpCuMiTa38i8BsXDqtvMPqmsM3xiWapCXlBpj19LK8U
+         oEPnEYnoakhuPX/iHHPJ2sgDJpvJSmrNteroxq31yCtz0ZwOhBOCISEs4Azdkoi5lPKZ
+         31qeAL9cN726hcAikDs+CR5sMdc16DhWPphWysN8WY/7FKQlkeEwzf2+C3rE6R1Ssv6x
+         urH5WqRlWsEnwXzbod2munBfgEQaLmIQ8hrnoBd1KJWXRZZl26riBiZ8eaCBfzW4tRWA
+         9LM9ZowwuRXKyCoIeTmpjJspARQjZInVp+D4/UrvqdYOpmog78gI3WuJnYpGFyaegdG8
+         24Iw==
+X-Gm-Message-State: AC+VfDyHuFEQGI6HshC/Lw2sgYLXU0N4aOFdeJqVyqrECn5NZ1A0uge8
+        fuHnIg5CYJ0ip9muawOEJQo=
+X-Google-Smtp-Source: ACHHUZ6RecSEW9U5L+EeUoIeI0y9R14pXguMOGOkmg+a6MOa9MYIjdIka06kPIuXfjzUKSvWBEYjjg==
+X-Received: by 2002:a05:6a00:240a:b0:63d:3a18:4a08 with SMTP id z10-20020a056a00240a00b0063d3a184a08mr17455102pfh.24.1683647837866;
+        Tue, 09 May 2023 08:57:17 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id y20-20020a62b514000000b0062e12f945adsm1910114pfe.135.2023.05.09.08.57.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 08:57:17 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 9 May 2023 05:57:16 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, Wang Yugui <wangyugui@e16-tech.com>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH 08/13] btrfs: Use alloc_ordered_workqueue() to create
+ ordered workqueues
+Message-ID: <ZFptXG44WVoWE0s4@slm.duckdns.org>
+References: <20230509015032.3768622-1-tj@kernel.org>
+ <20230509015032.3768622-9-tj@kernel.org>
+ <20230509145332.GA32559@twin.jikos.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 12/18] soc: qcom: Register pstore frontend region with
- minidump
-Content-Language: en-US
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, corbet@lwn.net,
-        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        srinivas.kandagatla@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
-References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
- <1683133352-10046-13-git-send-email-quic_mojha@quicinc.com>
-From:   Luca Stefani <luca.stefani.ge1@gmail.com>
-In-Reply-To: <1683133352-10046-13-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509145332.GA32559@twin.jikos.cz>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FYI the following comments also apply to the downstream driver, as the 
-same bogus logic is implemented.
+Hello, David.
 
-On 03/05/23 19:02, Mukesh Ojha wrote:
+Thanks for taking a look.
 
-> Since qcom_pstore_minidump driver creates platform device
-> for qualcomm devices, so it knows the physical addresses
-> of the frontend region now. Let's register the regions
-> with qcom_minidump driver.
->
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
->   drivers/soc/qcom/qcom_pstore_minidump.c | 80 ++++++++++++++++++++++++++++++++-
->   1 file changed, 79 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/soc/qcom/qcom_pstore_minidump.c b/drivers/soc/qcom/qcom_pstore_minidump.c
-> index 8d58500..c2bba4e 100644
-> --- a/drivers/soc/qcom/qcom_pstore_minidump.c
-> +++ b/drivers/soc/qcom/qcom_pstore_minidump.c
-> @@ -11,6 +11,8 @@
->   #include <linux/pstore_ram.h>
->   #include <soc/qcom/qcom_minidump.h>
->   
-> +#define QCOM_PSTORE_TYPE_MAX	4
-Unused
-> +
->   struct qcom_ramoops_config {
->   	unsigned long	record_size;
->   	unsigned long	console_size;
-> @@ -24,6 +26,11 @@ struct qcom_ramoops_config {
->   struct qcom_ramoops_dd {
->   	struct ramoops_platform_data qcom_ramoops_pdata;
->   	struct platform_device *ramoops_pdev;
-> +	struct device *dev;
-> +	struct qcom_apss_minidump_region *record_region;
+On Tue, May 09, 2023 at 04:53:32PM +0200, David Sterba wrote:
+> > diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
+> > index 59ea049fe7ee..32d08aed88b6 100644
+> > --- a/fs/btrfs/disk-io.c
+> > +++ b/fs/btrfs/disk-io.c
+> > @@ -2217,7 +2217,7 @@ static int btrfs_init_workqueues(struct btrfs_fs_info *fs_info)
+> >  	fs_info->qgroup_rescan_workers =
+> >  		btrfs_alloc_workqueue(fs_info, "qgroup-rescan", flags, 1, 0);
+> >  	fs_info->discard_ctl.discard_workers =
+> > -		alloc_workqueue("btrfs_discard", WQ_UNBOUND | WQ_FREEZABLE, 1);
+> > +		alloc_ordered_workqueue("btrfs_discard", WQ_FREEZABLE);
+> >  
+> >  	if (!(fs_info->workers && fs_info->hipri_workers &&
+> >  	      fs_info->delalloc_workers && fs_info->flush_workers &&
+> 
+> I think there are a few more conversions missing. There's a local flags
+> variable in btrfs_init_workqueues
+> 
+> 2175 static int btrfs_init_workqueues(struct btrfs_fs_info *fs_info)
+> 2176 {
+> 2177         u32 max_active = fs_info->thread_pool_size;
+> 2178         unsigned int flags = WQ_MEM_RECLAIM | WQ_FREEZABLE | WQ_UNBOUND;
+> 
+> And used like
+> 
+> 2194         fs_info->fixup_workers =
+> 2195                 btrfs_alloc_workqueue(fs_info, "fixup", flags, 1, 0);
+> 
+> 2213         fs_info->qgroup_rescan_workers =
+> 2214                 btrfs_alloc_workqueue(fs_info, "qgroup-rescan", flags, 1, 0);
 
-In the pstore driver record_size is used to split the KDMESG region into 
-different chunks.
+Right you are.
 
-There's no "record" region anywhere in RAM that should be preserved, it 
-should instead be the dmesg_region.
+> WQ_UNBOUND is not mentioned explicitliy like for the "btrfs_discard"
+> workqueue.  Patch v2 did the switch in btrfs_alloc_workqueue according
+> to the max_active/limit_active parameter but this would affect all
+> queues and not all of them require to be ordered.
 
-> +	struct qcom_apss_minidump_region *console_region;
-> +	struct qcom_apss_minidump_region *pmsg_region;
-> +	struct qcom_apss_minidump_region *ftrace_region;
->   };
->   
->   static struct qcom_ramoops_config default_ramoops_config = {
-> @@ -35,6 +42,64 @@ static struct qcom_ramoops_config default_ramoops_config = {
->   };
->   
->   static struct qcom_ramoops_dd *qcom_rdd;
-> +
-> +static int
-> +__qcom_ramoops_minidump_region_register(struct qcom_apss_minidump_region *md_region,
-> +					const char *name, phys_addr_t phys_addr,
-> +					unsigned long size)
-> +{
-> +	int ret;
-> +
-> +	if (!size)
-> +		return 0;
-> +
-> +	md_region = devm_kzalloc(qcom_rdd->dev, sizeof(*md_region), GFP_KERNEL);
-> +	if (!md_region)
-> +		return -ENOMEM;
-> +
-> +	strlcpy(md_region->name, name, sizeof(md_region->name));
-> +	md_region->phys_addr = phys_addr;
-> +	md_region->virt_addr = phys_to_virt(phys_addr);
-> +	md_region->size = size;
-> +	ret = qcom_apss_minidump_region_register(md_region);
-> +	if (ret)
-> +		dev_err(qcom_rdd->dev,
-> +			"failed to add %s in minidump: err: %d\n", name, ret);
-> +
-> +	return ret;
-> +}
-> +
-> +static int
-> +qcom_ramoops_minidump_region_register(struct ramoops_platform_data *qcom_ramoops_data)
-> +{
-> +	phys_addr_t phys_addr;
-> +	int ret = 0;
-> +
-> +	phys_addr = qcom_ramoops_data->mem_address;
-> +	ret = __qcom_ramoops_minidump_region_register(qcom_rdd->record_region,
-> +			"KDMESG", phys_addr, qcom_ramoops_data->record_size);
+The thresh mechanism which auto adjusts max active means that the workqueues
+allocated btrfs_alloc_workqueue() can't be ordered, right? When thresh is
+smaller than DFT_THRESHOLD, the mechanism is disabled but that looks like an
+optimization.
 
-You can't use record_size here as it's not the actual size of the dmesg 
-region.
+> In btrfs_resize_thread_pool the workqueue_set_max_active is called
+> directly or indirectly so this can set the max_active to a user-defined
+> mount option. Could this be a problem or trigger a warning? This would
+> lead to max_active==1 + WQ_UNBOUND.
 
-The size is calculated in fs/pstore/ram.c as mem_size - console_size - 
-ftrace_size - pmsg_size, where mem_size is the size on the ramoops 
-memory region in the devicetree.
+That's not a problem. The only thing we need to make sure is that the
+workqueues which actually *must* be ordered use alloc_ordered_workqueue() as
+they won't be implicitly treated as ordered in the future.
 
-Since the actual size is never exposed by the pstore driver you have to 
-re-purpose the same logic in this driver, hoping it never changes.
+* The current patch converts two - fs_info->discard_ctl.discard_workers and
+  scrub_workers when @is_dev_replace is set. Do they actually need to be
+  ordered?
 
-> +	if (ret)
-> +		return ret;
-> +
-> +	phys_addr += qcom_ramoops_data->record_size;
-> +	ret = __qcom_ramoops_minidump_region_register(qcom_rdd->console_region,
-> +			"KCONSOLE", phys_addr, qcom_ramoops_data->console_size);
-> +	if (ret)
-> +		return ret;
-> +
-> +	phys_addr += qcom_ramoops_data->console_size;
-> +	ret = __qcom_ramoops_minidump_region_register(qcom_rdd->pmsg_region,
-> +			"KPMSG", phys_addr, qcom_ramoops_data->pmsg_size);
-> +	if (ret)
-> +		return ret;
-> +
-> +	phys_addr += qcom_ramoops_data->pmsg_size;
-> +	ret = __qcom_ramoops_minidump_region_register(qcom_rdd->ftrace_region,
-> +			"KFTRACE", phys_addr, qcom_ramoops_data->ftrace_size);
-> +
-> +	return ret;
-> +}
-> +
->   static int qcom_ramoops_probe(struct platform_device *pdev)
->   {
->   	struct device_node *of_node = pdev->dev.of_node;
-> @@ -59,6 +124,7 @@ static int qcom_ramoops_probe(struct platform_device *pdev)
->   	if (!qcom_rdd)
->   		return -ENOMEM;
->   
-> +	qcom_rdd->dev = &pdev->dev;
->   	cfg = of_device_get_match_data(&pdev->dev);
->   	if (!cfg) {
->   		dev_err(&pdev->dev, "failed to get supported matched data\n");
-> @@ -81,13 +147,25 @@ static int qcom_ramoops_probe(struct platform_device *pdev)
->   		ret = PTR_ERR(qcom_rdd->ramoops_pdev);
->   		dev_err(&pdev->dev, "could not create platform device: %ld\n", ret);
->   		qcom_rdd->ramoops_pdev = NULL;
-> +		return ret;
->   	}
->   
-> -	return ret;
-> +	return qcom_ramoops_minidump_region_register(pdata);
->   }
->   
->   static int qcom_ramoops_remove(struct platform_device *pdev)
->   {
-> +	struct ramoops_platform_data *pdata;
-> +
-> +	pdata = &qcom_rdd->qcom_ramoops_pdata;
-> +	if (pdata->record_size)
-> +		qcom_apss_minidump_region_unregister(qcom_rdd->record_region);
-> +	if (pdata->console_size)
-> +		qcom_apss_minidump_region_unregister(qcom_rdd->console_region);
-> +	if (pdata->pmsg_size)
-> +		qcom_apss_minidump_region_unregister(qcom_rdd->pmsg_region);
-> +	if (pdata->ftrace_size)
-> +		qcom_apss_minidump_region_unregister(qcom_rdd->ftrace_region);
->   	platform_device_unregister(qcom_rdd->ramoops_pdev);
->   	qcom_rdd->ramoops_pdev = NULL;
->   
+* As you pointed out, fs_info->fixup_workers and
+  fs_info->qgroup_rescan_workers are also currently implicitly ordered. Do
+  they actually need to be ordered?
 
-Regards,
+Thanks.
 
-Luca Stefani
-
+-- 
+tejun
