@@ -2,91 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63066FBE03
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 05:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7C26FBE05
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 05:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbjEID6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 May 2023 23:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
+        id S234788AbjEID6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 May 2023 23:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234723AbjEID5l (ORCPT
+        with ESMTP id S234534AbjEID5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 May 2023 23:57:41 -0400
+        Mon, 8 May 2023 23:57:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EA0D04A;
-        Mon,  8 May 2023 20:56:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340D7DC73;
+        Mon,  8 May 2023 20:56:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD23262401;
-        Tue,  9 May 2023 03:56:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3973EC433EF;
-        Tue,  9 May 2023 03:56:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0A746440C;
+        Tue,  9 May 2023 03:56:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 218E2C433AA;
+        Tue,  9 May 2023 03:56:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683604578;
-        bh=toR2bLyq3hM+oXjKQG0SLyCCD/d68pj9onuC5lV3trw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=axAVK+2UNntyb0T3vl8aGeNtR1I/2IU3zopOwTCVWhZhX3ue3XqTA7P8uspB5MsPY
-         5qJaVSJDfQelMl2Ag6kihhQXv/OjU47BPo4ziMg3A/jZNzH4GHxW2m2gVvcKBlUsAS
-         rxJydDEMDHWIZJ3h29HaqT0n1LJ1L/FVXeC/oXnqlEjs1KddHSZ6HqN9WOhJdO5SNq
-         XDq1Axt3ulOmz8f38kFm0+2F+xrk9UYoTsMgwLqGvgZLPFQqXZJF9xC6oxplTm68oo
-         jGNPvCcGyef3cUUzKgkatosC6lDjUZYQ6t+HrZC1mdOWH04rkNxjZ9Tt18/Sl1PbaN
-         08ML+m4XM2/Cw==
+        s=k20201202; t=1683604582;
+        bh=7cXJeGa9L60sslKWQNgFOhVcQcwL/gbLCz39lyzO+II=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=u87NvmzV0A3g/UXZvz5+iijNu5IeKf3yYmQQ+7gQjgOKgEb6yDVYY2BGzEajy/F+P
+         yZ3LR/W3yNtk685Zfnnq54AeX4BQC1jYoKbcpAdFcX1cL7D74nOBE1XmhDwud7Vd7V
+         3YtQuQYWbfvm6queGCSp+Zf2vnzvFqOw3uSav5GTae20swrP+HMOZh10antSHrR+my
+         koctGxFj+gzGEhxJmj0qbdJPo1OFG8dxwGVH82rm1ozUjxKvXG3xAxcCsFCu6DQQY2
+         U9nL+fRjhrY+FrzNTV+sDXtui7TS3+t3ueYZBpJgiYPHTrq+h0IFtY6XATydkPSv2T
+         QQSK1BJ/o7ewA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.4 1/3] sched: Fix KCSAN noinstr violation
-Date:   Mon,  8 May 2023 23:56:09 -0400
-Message-Id: <20230509035616.60683-1-sashal@kernel.org>
+Cc:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de,
+        linus.walleij@linaro.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH AUTOSEL 5.4 2/3] powerpc/fsl_uli1575: Allow to disable FSL_ULI1575 support
+Date:   Mon,  8 May 2023 23:56:10 -0400
+Message-Id: <20230509035616.60683-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230509035616.60683-1-sashal@kernel.org>
+References: <20230509035616.60683-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit e0b081d17a9f4e5c0cbb0e5fbeb1abe3de0f7e4e ]
+[ Upstream commit 22fdf79171e8509db54599fd2c05ef0022ee83f5 ]
 
-With KCSAN enabled, end_of_stack() can get out-of-lined.  Force it
-inline.
+ULI1575 PCIe south bridge exists only on some Freescale boards. Allow to
+disable CONFIG_FSL_ULI1575 symbol when it is not explicitly selected and
+only implied. This is achieved by marking symbol as visible by providing
+short description. Also adds dependency for this symbol to prevent enabling
+it on platforms on which driver does not compile.
 
-Fixes the following warnings:
-
-  vmlinux.o: warning: objtool: check_stackleak_irqoff+0x2b: call to end_of_stack() leaves .noinstr.text section
-
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/cc1b4d73d3a428a00d206242a68fdf99a934ca7b.1681320026.git.jpoimboe@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://msgid.link/20230409000812.18904-7-pali@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/sched/task_stack.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/platforms/Kconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/sched/task_stack.h b/include/linux/sched/task_stack.h
-index 1009b6b5ce403..879a5c8f930b6 100644
---- a/include/linux/sched/task_stack.h
-+++ b/include/linux/sched/task_stack.h
-@@ -23,7 +23,7 @@ static __always_inline void *task_stack_page(const struct task_struct *task)
+diff --git a/arch/powerpc/platforms/Kconfig b/arch/powerpc/platforms/Kconfig
+index 18792a5b003a0..d239667ea72f6 100644
+--- a/arch/powerpc/platforms/Kconfig
++++ b/arch/powerpc/platforms/Kconfig
+@@ -269,7 +269,9 @@ config CPM2
+ 	  on it (826x, 827x, 8560).
  
- #define setup_thread_stack(new,old)	do { } while(0)
- 
--static inline unsigned long *end_of_stack(const struct task_struct *task)
-+static __always_inline unsigned long *end_of_stack(const struct task_struct *task)
- {
- #ifdef CONFIG_STACK_GROWSUP
- 	return (unsigned long *)((unsigned long)task->stack + THREAD_SIZE) - 1;
+ config FSL_ULI1575
+-	bool
++	bool "ULI1575 PCIe south bridge support"
++	depends on FSL_SOC_BOOKE || PPC_86xx
++	select FSL_PCI
+ 	select GENERIC_ISA_DMA
+ 	help
+ 	  Supports for the ULI1575 PCIe south bridge that exists on some
 -- 
 2.39.2
 
