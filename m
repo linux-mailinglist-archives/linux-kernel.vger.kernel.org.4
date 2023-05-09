@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0DC6FC426
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014906FC42D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 12:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235324AbjEIKol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 06:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
+        id S235356AbjEIKqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 06:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235013AbjEIKog (ORCPT
+        with ESMTP id S235013AbjEIKqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 06:44:36 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9772A4ECB;
-        Tue,  9 May 2023 03:44:35 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 349AiQuM038472;
-        Tue, 9 May 2023 05:44:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683629066;
-        bh=brW6qq64lo8T90mzL6db2C3UWARKcso94AHe4Od7SYU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=kUA542d0WyewJLXuYsrpbk3UEV2/je3szNM+2FUU7z1fTZG/onQY3alEXvPaRCFej
-         26iGHrhzEBQbQ7k5B8vjz5tt2i2HjUk9QU9MrJGOhhIi1b2Oo27YKSQBxX0U9AFjw+
-         ZkM0qiUj+8jIX1TCHDf2r1SJSscqYQar4cpGpQy4=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 349AiQeH074218
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 9 May 2023 05:44:26 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
- May 2023 05:44:25 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 9 May 2023 05:44:25 -0500
-Received: from [172.24.145.182] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 349AiMBW029553;
-        Tue, 9 May 2023 05:44:23 -0500
-Message-ID: <8aae9af7-22ea-4b2b-563c-0f01e361775c@ti.com>
-Date:   Tue, 9 May 2023 16:14:22 +0530
+        Tue, 9 May 2023 06:46:08 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C8A4ECB;
+        Tue,  9 May 2023 03:46:07 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3499PCw1022180;
+        Tue, 9 May 2023 10:46:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=pzrwtycEGGairi7H5VWoKnmQe83IMyYowf+KnIHVI7U=;
+ b=aSBIR3BWOlnHFOfNlLzPuZkUhnpgRQpE/W9lP4KPye4PgdH1Duz8eID3n4R3YU9HFUy9
+ JsK2nIzwWYd6uaZsytY/ybQkB6UP+XzasaAjPiZBLtQuMQsYjxqCwCI6F2S3cycKhdJe
+ L/i/tBB6iIP0fl8sYNgEIfQ0BTtEMDLEOyI2R6fkO7lM1y4EozXARorK9ph846bZmovM
+ IasJxD5USWVqtYuFCY3snImdiFKJsQgAFpSbKvLelOxjcF8PiuSEtW4xiHmeu2YlORvL
+ bgSuSsC2f1F7VbT4746uC797irQRPCC1bwX7ETAGZaiea+jc4JUl2qkSAYp2uHZRs5E3 vw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qf7859ecm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 May 2023 10:46:02 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 349AjeST000800
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 9 May 2023 10:45:40 GMT
+Received: from [10.242.243.41] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
+ 03:45:35 -0700
+Message-ID: <e9680cc0-b11a-e29b-627f-51e771015c5d@quicinc.com>
+Date:   Tue, 9 May 2023 16:15:32 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH] arm64: defconfig: Enable UBIFS
+Subject: Re: [PATCH V3 0/6] Incremental patches on minimal boot support
 Content-Language: en-US
-To:     Dhruva Gole <d-gole@ti.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-CC:     Vaishnav Achath <vaishnav.a@ti.com>,
-        Apurva Nandan <a-nandan@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230417092243.967871-1-d-gole@ti.com>
- <a25ce95e-126e-7a1a-1bb0-2a3d73ea4aee@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <a25ce95e-126e-7a1a-1bb0-2a3d73ea4aee@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+From:   Devi Priya <quic_devipriy@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
+        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
+References: <20230425084010.15581-1-quic_devipriy@quicinc.com>
+In-Reply-To: <20230425084010.15581-1-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: TLtl-Mc-cm5LTejOIxc7_nO2tbbyjzKx
+X-Proofpoint-GUID: TLtl-Mc-cm5LTejOIxc7_nO2tbbyjzKx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-09_06,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ bulkscore=0 adultscore=0 priorityscore=1501 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 mlxscore=0 impostorscore=0 clxscore=1015
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305090085
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,43 +87,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 08/05/23 13:13, Dhruva Gole wrote:
-> Hi,
+On 4/25/2023 2:10 PM, Devi Priya wrote:
+> Patchset V9 of the series: Add minimal boot support for IPQ9574 has been
+> merged and is available in linux-next/master.
+> V12 being the latest revision posted in the series, the delta between
+> revisions V9 and V12 is posted as a separate series as suggested by
+> Bjorn to avoid possible confusions.
 > 
-> On 17/04/23 14:52, Dhruva Gole wrote:
->> UBIFS is a file system for flash devices which works on top of UBI.
->>
->> Signed-off-by: Dhruva Gole <d-gole@ti.com>
->> ---
->>   arch/arm64/configs/defconfig | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
->> index 4f59fa575b47..a632d2a1db93 100644
->> --- a/arch/arm64/configs/defconfig
->> +++ b/arch/arm64/configs/defconfig
->> @@ -267,6 +267,8 @@ CONFIG_MTD_NAND_BRCMNAND=m
->>   CONFIG_MTD_NAND_FSL_IFC=y
->>   CONFIG_MTD_NAND_QCOM=y
->>   CONFIG_MTD_SPI_NOR=y
->> +CONFIG_MTD_UBI=m
->> +CONFIG_UBIFS_FS=m
+> This series adds the delta changes between revisions V9 and V12.
 > 
-> Gentle ping on this patch, can we please pull this in since nobody has
-> raised any objections since over 3 weeks?
+> V9 can be found at:
+> https://lore.kernel.org/linux-arm-msm/20230316072940.29137-1-quic_devipriy@quicinc.com/
+> 
+> V12 can be found at:
+> https://lore.kernel.org/linux-arm-msm/20230410135948.11970-1-quic_devipriy@quicinc.com/
+> 
+> Changes in V3:
+> 	- Detailed change logs are added to the respective patches.
+> 
+> Changes in V2:
+> https://lore.kernel.org/linux-arm-msm/20230417053355.25691-1-quic_devipriy@quicinc.com/
+> 	- Updated the subject & commit message of [PATCH V2 1/4]
+> 	- No changes were made to any other patches
+> 
+> Changes in V1:
+> 	- The Delta between V9 & V12 is added to the change log of
+> 	  the respective patches for quick reference
 
-I am planning to queuing this via TI arch tree, if there no objections.
+Gentle Reminder!
 
-Unfortunately, your patch landed post v6.4-rc1 PRs were sent out. And
-thus will only be part of v6.5 cycle. Note that v6.4-rc1 was tagged last
-Monday, so you may have to wait a while for folks to catch up
+Thanks,
+Devi Priya
 
 > 
->>   CONFIG_BLK_DEV_LOOP=y
->>   CONFIG_BLK_DEV_NBD=m
->>   CONFIG_VIRTIO_BLK=y
+> Devi Priya (6):
+>    arm64: dts: qcom: ipq9574: Update the size of GICC & GICV regions
+>    dt-bindings: clock: qcom,ipq9574-gcc: Add maintainer
+>    clk: qcom: gcc-ipq9574: Clean up included headers
+>    clk: qcom: gcc-ipq9574: constify struct clk_init_data
+>    arm64: dts: qcom: ipq9574: Drop bias_pll_ubi_nc_clk input
+>    arm64: dts: qcom: ipq9574: rename al02-c7 dts to rdp433
 > 
-
--- 
-Regards
-Vignesh
+>   .../bindings/clock/qcom,ipq9574-gcc.yaml      |   1 +
+>   arch/arm64/boot/dts/qcom/Makefile             |   2 +-
+>   ...ipq9574-al02-c7.dts => ipq9574-rdp433.dts} |   2 +-
+>   arch/arm64/boot/dts/qcom/ipq9574.dtsi         |  14 +-
+>   drivers/clk/qcom/gcc-ipq9574.c                | 434 +++++++++---------
+>   5 files changed, 224 insertions(+), 229 deletions(-)
+>   rename arch/arm64/boot/dts/qcom/{ipq9574-al02-c7.dts => ipq9574-rdp433.dts} (97%)
+> 
