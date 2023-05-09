@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1A76FC4FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882226FC503
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 May 2023 13:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235258AbjEIL2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 07:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
+        id S235054AbjEILah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 07:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235342AbjEIL2M (ORCPT
+        with ESMTP id S234299AbjEILaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 07:28:12 -0400
+        Tue, 9 May 2023 07:30:35 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BEE972D49
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 04:28:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3A3A26B8
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 04:30:33 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 05BAEFEC;
-        Tue,  9 May 2023 04:28:55 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 26707FEC;
+        Tue,  9 May 2023 04:31:18 -0700 (PDT)
 Received: from FVFF77S0Q05N (unknown [10.57.56.16])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53A493F67D;
-        Tue,  9 May 2023 04:28:09 -0700 (PDT)
-Date:   Tue, 9 May 2023 12:28:06 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 69BFC3F67D;
+        Tue,  9 May 2023 04:30:32 -0700 (PDT)
+Date:   Tue, 9 May 2023 12:30:29 +0100
 From:   Mark Rutland <mark.rutland@arm.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Will Deacon <will@kernel.org>
 Cc:     Marc Zyngier <maz@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] arm64: perf: Mark all accessor functions inline
-Message-ID: <ZFouRoZiAVyoMZ9y@FVFF77S0Q05N>
-References: <3a7d9bc7470aa2d85696ee9765c74f8c03fb5454.1683561482.git.geert+renesas@glider.be>
- <d53a19043c0c3bd25f6c203e73a2fb08a9661824.1683561482.git.geert+renesas@glider.be>
+Subject: Re: [PATCH 0/2] ARM/arm64: Mark all accessor functions inline
+Message-ID: <ZFou1SdT8SQaqpQu@FVFF77S0Q05N>
+References: <cover.1683561087.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d53a19043c0c3bd25f6c203e73a2fb08a9661824.1683561482.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1683561087.git.geert+renesas@glider.be>
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -47,63 +45,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 06:05:19PM +0200, Geert Uytterhoeven wrote:
-> When just including <asm/arm_pmuv3.h>:
+On Mon, May 08, 2023 at 06:05:17PM +0200, Geert Uytterhoeven wrote:
+> 	Hi all,
 > 
->     arch/arm64/include/asm/arm_pmuv3.h:31:13: error: ‘write_pmevtypern’ defined but not used [-Werror=unused-function]
->        31 | static void write_pmevtypern(int n, unsigned long val)
-> 	  |             ^~~~~~~~~~~~~~~~
->     arch/arm64/include/asm/arm_pmuv3.h:24:13: error: ‘write_pmevcntrn’ defined but not used [-Werror=unused-function]
->        24 | static void write_pmevcntrn(int n, unsigned long val)
-> 	  |             ^~~~~~~~~~~~~~~
->     arch/arm64/include/asm/arm_pmuv3.h:16:22: error: ‘read_pmevcntrn’ defined but not used [-Werror=unused-function]
->        16 | static unsigned long read_pmevcntrn(int n)
-> 	  |                      ^~~~~~~~~~~~~~
-> 
-> Fix this by adding the missing "inline" keywords to the three accessor
-> functions that lack them.
-> 
-> Fixes: df29ddf4f04b00cf ("arm64: perf: Abstract system register accesses away")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> This patch series adds missing "inline" keywords to the few perf
+> accessors that lack them.
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+Will, I assume that you'll pick these up as a cleanup/fix.
 
+Thanks,
 Mark.
 
-> ---
->  arch/arm64/include/asm/arm_pmuv3.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> BTW, I tried converting my local timing code to the new unified system.
+> This works fine on arm64, but broke on arm32.  Is read_pmccntr()
+> supposed to work on arm32? I get an undefined instruction exception on
+> Cortex A15 and A9.  Before, my custom code used "mrc p15, 0, %0, c9,
+> c13, 0" (as is also used in arch/arm/kernel/perf_event_v7.c), for which
+> there is no accessor yet.
 > 
-> diff --git a/arch/arm64/include/asm/arm_pmuv3.h b/arch/arm64/include/asm/arm_pmuv3.h
-> index d6b51deb7bf0ff2f..18dc2fb3d7b7b2d0 100644
-> --- a/arch/arm64/include/asm/arm_pmuv3.h
-> +++ b/arch/arm64/include/asm/arm_pmuv3.h
-> @@ -13,7 +13,7 @@
->  
->  #define RETURN_READ_PMEVCNTRN(n) \
->  	return read_sysreg(pmevcntr##n##_el0)
-> -static unsigned long read_pmevcntrn(int n)
-> +static inline unsigned long read_pmevcntrn(int n)
->  {
->  	PMEVN_SWITCH(n, RETURN_READ_PMEVCNTRN);
->  	return 0;
-> @@ -21,14 +21,14 @@ static unsigned long read_pmevcntrn(int n)
->  
->  #define WRITE_PMEVCNTRN(n) \
->  	write_sysreg(val, pmevcntr##n##_el0)
-> -static void write_pmevcntrn(int n, unsigned long val)
-> +static inline void write_pmevcntrn(int n, unsigned long val)
->  {
->  	PMEVN_SWITCH(n, WRITE_PMEVCNTRN);
->  }
->  
->  #define WRITE_PMEVTYPERN(n) \
->  	write_sysreg(val, pmevtyper##n##_el0)
-> -static void write_pmevtypern(int n, unsigned long val)
-> +static inline void write_pmevtypern(int n, unsigned long val)
->  {
->  	PMEVN_SWITCH(n, WRITE_PMEVTYPERN);
->  }
+> Thanks for your comments!
+> 
+> Geert Uytterhoeven (2):
+>   ARM: perf: Mark all accessor functions inline
+>   arm64: perf: Mark all accessor functions inline
+> 
+>  arch/arm/include/asm/arm_pmuv3.h   | 6 +++---
+>  arch/arm64/include/asm/arm_pmuv3.h | 6 +++---
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+> 
 > -- 
 > 2.34.1
 > 
+> Gr{oetje,eeting}s,
+> 
+> 						Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+> 							    -- Linus Torvalds
