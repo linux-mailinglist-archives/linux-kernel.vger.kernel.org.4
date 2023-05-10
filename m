@@ -2,233 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 465B96FD3BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 04:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBD66FD3BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 04:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234743AbjEJCCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 22:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S230199AbjEJCK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 22:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjEJCCd (ORCPT
+        with ESMTP id S229564AbjEJCKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 22:02:33 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CE63ABA;
-        Tue,  9 May 2023 19:02:30 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R891e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0ViDXbKF_1683684146;
-Received: from 30.221.130.59(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0ViDXbKF_1683684146)
-          by smtp.aliyun-inc.com;
-          Wed, 10 May 2023 10:02:27 +0800
-Message-ID: <1297b2c6-00c2-adc9-3abe-af12471e2838@linux.alibaba.com>
-Date:   Wed, 10 May 2023 10:02:26 +0800
+        Tue, 9 May 2023 22:10:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6805C4201;
+        Tue,  9 May 2023 19:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD94562F2F;
+        Wed, 10 May 2023 02:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BB05C433EF;
+        Wed, 10 May 2023 02:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683684619;
+        bh=poI666OI/xsZPVnr06pLwQAkEzT1SEYPhOfJQcJRHw8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WvYIzReuFXvL7NWwO5OG68hV84RKTLdKoP1oCl2TR8I1Y0FOR6/EdqJsLSr4PSPiv
+         3LrFhIJSEZ4ijpVINxD5n51oDYBfbSdvft/Z1ejFYfRUAt9UB1LI5vaalQKi9thGyD
+         kqFZDd4/zKyUzRR8567MvtoWIpn61Q6asj/L0dy3aisq0e5+LQhzkS/5uZwdPP2+4r
+         Ee5oR5s0cUwTggR4m79UHTcbKg5c7XB+mOzo4JG/qRRc08zUa9l5S3GY+PfFddKWjV
+         YZ0xEoRbnDNK9m56cqXEGWC6B33PjLW9aN47OhxOoxP1+474T8kHMm2XY7+lKBqKMn
+         5FxwMnevFYVdg==
+Date:   Wed, 10 May 2023 11:10:16 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        asahi@lists.linux.dev, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] ASoC: dt-bindings: Add adi,ssm3515 amp schema
+Message-ID: <ZFr9CP3Dfmb/3LzP@finisterre.sirena.org.uk>
+References: <20230509163828.86003-1-povik+lin@cutebit.org>
+ <20230509-marxism-plug-759c99ac601c@spud>
+ <0216884B-A6F4-46B0-AEB9-AA16B3F24C8C@cutebit.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [RFC PATCH net-next v5 0/9] net/smc: Introduce SMC-D-based OS
- internal communication acceleration
-From:   Wen Gu <guwen@linux.alibaba.com>
-To:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, jaka@linux.ibm.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexandra Winter <wintera@linux.ibm.com>
-References: <1682252271-2544-1-git-send-email-guwen@linux.alibaba.com>
-In-Reply-To: <1682252271-2544-1-git-send-email-guwen@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,NUMERIC_HTTP_ADDR,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="x8yWm22KI+W3sa7J"
+Content-Disposition: inline
+In-Reply-To: <0216884B-A6F4-46B0-AEB9-AA16B3F24C8C@cutebit.org>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wenjia & Jan:
 
-Does this version work fine on your platform?
+--x8yWm22KI+W3sa7J
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-And any comments on this version? :)
+On Tue, May 09, 2023 at 09:38:46PM +0200, Martin Povi=C5=A1er wrote:
+> > On 9. 5. 2023, at 20:25, Conor Dooley <conor@kernel.org> wrote:
 
+> >> +        00: 8.4 V Full-Scale Gain Mapping
+> >> +        01: 12.6 V Full-Scale Gain Mapping
+> >> +        10: 14 V Full-Scale Gain Mapping
+> >> +        11: 15 V Full-Scale Gain Mapping
 
-Best regards,
-Wen Gu
+> > Putting register values into the DT does not seem correct, although
+> > I know nothing about sound and will have to defer to Krzysztof & Co. on
+> > that front.
 
+> I thought this should be here, and not with the other gain controls to be
+> exported to userspace, since it relates to the supply voltage. You probab=
+ly
+> can=E2=80=99t select a gain value close or over the amp=E2=80=99s supply =
+and expect proper
+> functioning, so the value here should be the system=E2=80=99s integrator =
+choice.
 
-On 2023/4/23 20:17, Wen Gu wrote:
+> On second thought there doesn=E2=80=99t seem to be any risk of damage to =
+the amp
+> itself, so the knowledge of what=E2=80=99s the optimal value could be lef=
+t up to
+> ALSA use-case configuration, and there=E2=80=99s no real downside in trea=
+ting it
+> like other gain controls.
 
-> Hi, all
-> 
-> # Background
-> 
-> The background and previous discussion can be referred from [1]~[3].
-> 
-> We found SMC-D can be used to accelerate OS internal communication, such as
-> loopback or between two containers within the same OS instance. So this patch
-> set provides a kind of SMC-D dummy device (we call it the SMC-D loopback device)
-> to emulate an ISM device, so that SMC-D can also be used on architectures
-> other than s390. The SMC-D loopback device are designed as a system global
-> device, visible to all containers.
-> 
-> # Design
-> 
-> This patch set basically follows the design of the previous version.
-> 
-> Patch #1/9 ~ #3/9 attempt to decouple ISM-related structures from the SMC-D
-> generalized code and extract some helpers to make SMC-D protocol compatible
-> with devices other than s390 ISM device.
-> 
-> Patch #4/9 introduces a kind of loopback device, which is defined as SMC-Dv2
-> device and designed to provide communication between SMC sockets on the same
-> OS instance.
-> 
->   +-------------------------------------------+
->   |  +--------------+       +--------------+  |
->   |  | SMC socket A |       | SMC socket B |  |
->   |  +--------------+       +--------------+  |
->   |       ^                         ^         |
->   |       |    +----------------+   |         |
->   |       |    |   SMC stack    |   |         |
->   |       +--->| +------------+ |<--|         |
->   |            | |   dummy    | |             |
->   |            | |   device   | |             |
->   |            +-+------------+-+             |
->   |                   OS                      |
->   +-------------------------------------------+
-> 
-> Patch #5/9 ~ #8/9 expand SMC-D protocol interface (smcd_ops) for scenarios where
-> SMC-D is used to communicate within VM (loopback here) or between VMs on the same
-> host (based on virtio-ism device, see [4]). What these scenarios have in common
-> is that the local sndbuf and peer RMB can be mapped to same physical memory region,
-> so the data copy between the local sndbuf and peer RMB can be omitted. Performance
-> improvement brought by this extension can be found in # Benchmark Test.
-> 
->   +----------+                     +----------+
->   | socket A |                     | socket B |
->   +----------+                     +----------+
->         |                               ^
->         |         +---------+           |
->    regard as      |         | ----------|
->    local sndbuf   |  B's    |     regard as
->         |         |  RMB    |     local RMB
->         |-------> |         |
->                   +---------+
-> 
-> Patch #9/9 realizes the support of loopback device for the above-mentioned expanded
-> SMC-D protocol interface.
-> 
-> # Benchmark Test
-> 
->   * Test environments:
->        - VM with Intel Xeon Platinum 8 core 2.50GHz, 16 GiB mem.
->        - SMC sndbuf/RMB size 1MB.
-> 
->   * Test object:
->        - TCP lo: run on TCP loopback.
->        - domain: run on UNIX domain.
->        - SMC lo: run on SMC loopback device with patch #1/9 ~ #4/9.
->        - SMC lo-nocpy: run on SMC loopback device with patch #1/9 ~ #9/9.
-> 
-> 1. ipc-benchmark (see [5])
-> 
->   - ./<foo> -c 1000000 -s 100
-> 
->                      TCP-lo              domain              SMC-lo          SMC-lo-nocpy
-> Message
-> rate (msg/s)         79025      115736(+46.45%)    146760(+85.71%)       149800(+89.56%)
-> 
-> 2. sockperf
-> 
->   - serv: <smc_run> taskset -c <cpu> sockperf sr --tcp
->   - clnt: <smc_run> taskset -c <cpu> sockperf { tp | pp } --tcp --msg-size={ 64000 for tp | 14 for pp } -i 127.0.0.1 -t 30
-> 
->                      TCP-lo                  SMC-lo             SMC-lo-nocpy
-> Bandwidth(MBps)   4822.388        4940.918(+2.56%)         8086.67(+67.69%)
-> Latency(us)          6.298          3.352(-46.78%)            3.35(-46.81%)
-> 
-> 3. iperf3
-> 
->   - serv: <smc_run> taskset -c <cpu> iperf3 -s
->   - clnt: <smc_run> taskset -c <cpu> iperf3 -c 127.0.0.1 -t 15
-> 
->                      TCP-lo                  SMC-lo             SMC-lo-nocpy
-> Bitrate(Gb/s)         40.7            40.5(-0.49%)            72.4(+77.89%)
-> 
-> 4. nginx/wrk
-> 
->   - serv: <smc_run> nginx
->   - clnt: <smc_run> wrk -t 8 -c 500 -d 30 http://127.0.0.1:80
-> 
->                      TCP-lo                  SMC-lo             SMC-lo-nocpy
-> Requests/s       155994.57      214544.79(+37.53%)       215538.55(+38.17%)
-> 
-> 
-> v5->v4
->   1. The loopback device generates SEID in the same way as the ISM devices when coexisting
->      with ISM devices and uses a default fixed SEID in other cases.
->   2. Ensure each DMB token of the same loopback device is unique.
->   3. Fixe a crash caused by setting smcd_ops->signal_event interface to NULL.
->   4. Fixe a compilation warning complained by kernel test rebot.
-> 
-> v4->v3
->   1. Rebase to the latest net-next;
->   2. Introduce SEID helper. SMC-D loopback will return SMCD_DEFAULT_V2_SEID. And if it
->      coexist with ISM device, the SEID of ISM device will overwrite SMCD_DEFAULT_V2_SEID
->      as smc_ism_v2_system_eid.
->   3. Won't remove dmb_node from hashtable until no sndbuf attaching to it.
-> 
->   Something postponed in this version
->   1. Hierarchy perference of SMC-D devices when loopback and ISM devices coexist, which
->      will be determinated after comparing the performance of loopback and ISM.
-> 
-> v3->v2
->   1. Adapt new generalized interface provided by [2];
->   2. Select loopback device through SMC-D v2 protocol;
->   3. Split the loopback-related implementation and generic implementation into different
->      patches more reasonably.
-> 
-> v1->v2
->   1. Fix some build WARNINGs complained by kernel test rebot
->      Reported-by: kernel test robot <lkp@intel.com>
->   2. Add iperf3 test data.
-> 
-> 
-> [1] https://lore.kernel.org/netdev/1671506505-104676-1-git-send-email-guwen@linux.alibaba.com/
-> [2] https://lore.kernel.org/netdev/1676477905-88043-1-git-send-email-guwen@linux.alibaba.com/
-> [3] https://lore.kernel.org/netdev/1679887699-54797-1-git-send-email-guwen@linux.alibaba.com/
-> [4] https://lore.kernel.org/all/20230209033056.96657-1-xuanzhuo@linux.alibaba.com/
-> [5] https://github.com/goldsborough/ipc-bench
-> 
-> 
-> 
-> Wen Gu (9):
->    net/smc: Decouple ism_dev from SMC-D device dump
->    net/smc: Decouple ism_dev from SMC-D DMB registration
->    net/smc: Extract v2 check helper from SMC-D device registration
->    net/smc: Introduce SMC-D loopback device
->    net/smc: Introduce an interface for getting DMB attribute
->    net/smc: Introudce interfaces for DMB attach and detach
->    net/smc: Avoid data copy from sndbuf to peer RMB in SMC-D
->    net/smc: Modify cursor update logic when using mappable DMB
->    net/smc: Add interface implementation of loopback device
-> 
->   drivers/s390/net/ism_drv.c |   5 +-
->   include/net/smc.h          |  18 +-
->   net/smc/Makefile           |   2 +-
->   net/smc/af_smc.c           |  26 ++-
->   net/smc/smc_cdc.c          |  59 ++++--
->   net/smc/smc_cdc.h          |   1 +
->   net/smc/smc_core.c         |  70 ++++++-
->   net/smc/smc_core.h         |   1 +
->   net/smc/smc_ism.c          |  79 ++++++--
->   net/smc/smc_ism.h          |   6 +
->   net/smc/smc_loopback.c     | 491 +++++++++++++++++++++++++++++++++++++++++++++
->   net/smc/smc_loopback.h     |  56 ++++++
->   12 files changed, 777 insertions(+), 37 deletions(-)
->   create mode 100644 net/smc/smc_loopback.c
->   create mode 100644 net/smc/smc_loopback.h
-> 
+Alternatively why not just query the supply voltage via the regulator
+API?  Those are kind of weird numbers (eg, 12.6V rather than 12V)
+though, it looks like they're not expected to be the actual maximum
+supply values but rather something slightly less.
+
+--x8yWm22KI+W3sa7J
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRa/QcACgkQJNaLcl1U
+h9BY4QgAhWukkwf/Q+KJ/O1mA+WDot7Z/4HgoZ6HQ1Ah1oeMY2KKVMctkt+Fjjsu
+71JOb30GLBJNLiU71/915kUVu6da4KdpfvWJAPT94yfishybk+Kvre0c4YsSuPnR
+oToqrQLzMr14EHPYMgCB6xEOGyUgpQHJ+FXhhvlTaYme5wEwpUYrx7lNLCZCN5Xh
+pBUJEWWAlImA/FqNICvl9pHooolRe/nkvvPb0m0RgWnQ90cxJXtfRQ5Louixv7l5
+jmOqaO2hSFCuoRED54pUqOVKq3qGj/rzEGONEwxdSlIKaKYQWmkCzdx+xt+pCW8i
+KwhMWrajFDoxxoo+t43SuOqOZyLsDg==
+=Vdq1
+-----END PGP SIGNATURE-----
+
+--x8yWm22KI+W3sa7J--
