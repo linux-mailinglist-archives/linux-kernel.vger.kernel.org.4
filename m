@@ -2,99 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3666FD354
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 02:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7CC6FD356
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 02:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235253AbjEJAnA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 9 May 2023 20:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
+        id S235286AbjEJAnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 20:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjEJAm6 (ORCPT
+        with ESMTP id S235277AbjEJAnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 20:42:58 -0400
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A45273E
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 17:42:57 -0700 (PDT)
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-77d049b9040so33576179241.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 17:42:57 -0700 (PDT)
+        Tue, 9 May 2023 20:43:31 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9D240CA
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 17:43:29 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ab0c697c84so50406135ad.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 17:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683679409; x=1686271409;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LB5BvKVhpQvSgLgVUrNJenXGRMdvldh0g4Gcs6bhWrE=;
+        b=HPbYKMQ5Wg+g7ufWpMTcp5rqPsA91Fr6NLQntWXMkEfvXTuYKggZYysFqLT2A/WB1T
+         GI2PUYjbL1t1r9urkgHIh8iWlyzJamQLQzh0+ArEF0HwKpT16yAguf+AEUMNYpiyynxz
+         Iad/X7zYJhQRlHFHfTwlUlcktR5AOmjBf5fa3vsgoj6IOG3NuM92pqD7hQ7aW60a+W0O
+         z+IZUPdq2jBcRM6NLPTMeOBzVvkKqQXs4uKq8CzuXYJ1dA9aHsoEduOMZSIzXBN/uZ1r
+         whYrqQ3MBiXSrF2/BpUdkDBoolAJ2UnUbZdg7f0IVS4xyLRFuyQnSrSl4z91anehu/yk
+         nryg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683679377; x=1686271377;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683679409; x=1686271409;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CfRga80IFuib6OMLZt4mIA+A4rhSmfiaklSGZGPK0eo=;
-        b=j6jM2RsRggsIUWWDWav+T+GSfgONKJ2cfTHzigFEsD4nVoLDhSJyO9nWLq6z3tiB29
-         5k5zHxnYxi6++Uc+cWX5diuWzdn2GNsZeCbh7UPeDubpSNqEC5PTPNpCd1Fz5NgYojeZ
-         gs2ymbbyClB5Uy6pX5GVIHy4nbI6Ed1utcBUjmQc8ZBe2QNpKb9tXEnTf4YAeUdrpQWE
-         RodTHexICk/ZRV+9hdHUz1iV6CaJJmBoQLfNJqi+vxfJ+LuhjiEzVDQguXY26VkclIUo
-         5qwoJWb1dmRMHgGK/ndxJgqspoFGj2iUQSnXnKRFKfK+Bb9zgJ79EaB1MYQ1TMqgWF3P
-         JM8w==
-X-Gm-Message-State: AC+VfDxwC+5wgUXKl2zXAxkAeddy4iqCw0VPzcfHMS2Ln5/PUDQI0QpR
-        0cdqqh0udMoT26SMr2mYeLWdIEufa0TDotz5f94=
-X-Google-Smtp-Source: ACHHUZ5M12ot5FKEaJ5k49lbu1dAcp1028MakEWQcpTLZLKGbIECvQUnFJA2gmhzEzB2i/34d/bIGY6+uxvGP8l4C7Y=
-X-Received: by 2002:a05:6122:dd:b0:440:4c82:6508 with SMTP id
- h29-20020a05612200dd00b004404c826508mr4556264vkc.3.1683679376495; Tue, 09 May
- 2023 17:42:56 -0700 (PDT)
+        bh=LB5BvKVhpQvSgLgVUrNJenXGRMdvldh0g4Gcs6bhWrE=;
+        b=PT6OP0AXHWJsmc7Y9zKmUkMZ4khNBB9vDfJhC5U3McexQpB0h89pIOpLv3V8L0rSQ4
+         6sLLT5zCbAn7kOeOk3WDZdZYtLDHg+efUkSr1dx9LN5GyISnAHGNpOx3OHokV6c9uHDB
+         u3EHeuSTlaOe28GOfDHVaCYmbq29OJlvXBQdPOOhsY1Lfgn8c1sH3NtbPavDzyX2WxYY
+         DnLm7/TMg9qFdpCHwcyrhMZpZ2Zw92pX3m5li1VgFPmz5TOhYGcOzZtXNpyOEblpZj0c
+         q5J06+sNtYdEzHJbWaPzsRLQo9qpO+xrQoOUjD6iXjS7Z91rmtS9P+Z0FMlA0qZaEYk6
+         m55w==
+X-Gm-Message-State: AC+VfDwHwVJRKGEnEtuLid+7aLUdr61isEdsivI4OUgJmaefIoaxA+/l
+        HcQvgjHj2cIRiO0/QEJTg0OTCwmv/Ik=
+X-Google-Smtp-Source: ACHHUZ7eqxLfsHQns/lKbthdAm3VjUaNgtCiQfxUlk9DYsKHiUkyAq6NgV3Z7//QdOq2xG92FfNlYA==
+X-Received: by 2002:a17:902:e801:b0:1a9:a3b3:f935 with SMTP id u1-20020a170902e80100b001a9a3b3f935mr21443981plg.57.1683679409012;
+        Tue, 09 May 2023 17:43:29 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id s16-20020a170902989000b001acae093442sm530732plp.82.2023.05.09.17.43.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 17:43:28 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 9 May 2023 14:43:27 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        security@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: kernfs: Prefer strscpy over strlcpy calls
+Message-ID: <ZFror6rRtvHFi9Tj@slm.duckdns.org>
+References: <20230509223036.3007500-1-azeemshaikh38@gmail.com>
+ <ZFrK9Vw9sbE6NSLi@slm.duckdns.org>
+ <CADmuW3VAP3-oZSK5Hix5sk62+bbwiCoC3MFoFHmBd-OwXS-pHA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230425181827.219128101@linutronix.de> <20230425183312.932345089@linutronix.de>
- <ZFUXrCZtWyNG3Esi@lothringen> <87zg6i2xn3.ffs@tglx> <87v8h62vwp.ffs@tglx>
- <878rdy32ri.ffs@tglx> <87v8h126p2.ffs@tglx> <875y911xeg.ffs@tglx>
-In-Reply-To: <875y911xeg.ffs@tglx>
-From:   Andrey Vagin <avagin@openvz.org>
-Date:   Tue, 9 May 2023 17:42:43 -0700
-Message-ID: <CANaxB-zyaS2OZsdmAGRjz8ZQxGUU8b_cEAgtXNmUW+hyCLY9GQ@mail.gmail.com>
-Subject: Re: [patch 02/20] posix-timers: Ensure timer ID search-loop limit is valid
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADmuW3VAP3-oZSK5Hix5sk62+bbwiCoC3MFoFHmBd-OwXS-pHA@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 9, 2023 at 5:50 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> On Tue, May 09 2023 at 11:30, Thomas Gleixner wrote:
-> > On Mon, May 08 2023 at 23:57, Thomas Gleixner wrote:
-> >> More thoughts on this. If we go there and accept the extra page of
-> >> memory then we can just go all the way and make the xarray per process,
-> >> actually per signal.
-> >
-> > Thinking more about it. The current scheme how timer ID allocation works
-> > is really interesting vs. CRIU.
-> >
-> > Assume a process creates/deletes timers frequently. It's not hard to
-> > move the next ID close to INT_MAX, i.e. 2G
-> >
-> > Now checkpoint that thing and restore it which means to do the
-> > create/delete dance to move next ID up to the last one-1. Will only take
-> > a couple of hours....
->
-> I'm cursing myself for overlooking this back then when the CRIU changes
-> to the timer ID management were made. Why?
->
->    Because that created an ABI which CRIU relies on.
->
-> The proper solution for this would be to make it possible to create a
-> timer with a given ID. That's not rocket science, but we need buy in
-> from the CRIU folks. Otherwise we are up the regression creek without a
-> paddle.
+On Tue, May 09, 2023 at 08:40:08PM -0400, Azeem Shaikh wrote:
+> Thanks for the quick response Tejun! I forgot to include the relevant links
+> in the commit log, sorry about that.
+> https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> mentions that strlcpy is deprecated and should be replaced with strscpy
+> instead. https://github.com/KSPP/linux/issues/89 is the relevant security
+> bug which aims to remove strlcpy from the kernel entirely.
+> 
+> Does that help justify this change? And if so, would you like me to resend
+> this patch with the relevant links included in the commit log?
 
-Let's go with the proper solution. I will prepare CRIU changes when
-kernel patches are ready.
+Yeah, I think so. Please explicitly state that this is a part of tree-wide
+cleanup.
 
-Thanks,
-Andrei
+Thanks.
+
+-- 
+tejun
