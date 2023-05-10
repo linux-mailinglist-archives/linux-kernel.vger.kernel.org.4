@@ -2,288 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9294F6FE70D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 00:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F14416FE70F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 00:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236125AbjEJWLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 18:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S236163AbjEJWM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 18:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbjEJWL2 (ORCPT
+        with ESMTP id S236208AbjEJWM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 18:11:28 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D147AB7
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 15:11:08 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-33456e0a12bso41397105ab.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 15:11:08 -0700 (PDT)
+        Wed, 10 May 2023 18:12:26 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69DF7AB0;
+        Wed, 10 May 2023 15:11:44 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-33131d7a26eso54973885ab.0;
+        Wed, 10 May 2023 15:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683756703; x=1686348703;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0eBhWhdJvdbtP/cnVajG86saO4yJvG+Hc382nRSfhlk=;
+        b=E6lG0OwFWDZ3U5f5gxctcCZMhZvskxVFapXQloPJidJO5OXcaTafBoprkIJmKztiGd
+         lYHNFouCAzYFQ4aKNZAL+n2h96PR4yVksN8hS3qehBXukLl48zGkmjEw3lms3wc6Gder
+         EFATSGHOZ8gTI+omzuPAVGZDAuX3wb+kaeU2JCddTcBGe4ieMQk1PAu9vlH9i9uF5vJl
+         Nc34xtYtaT1OqNvtTuw5bzXsY8fX7HYMAhAGVeTOJz20nm+7rvlMPT/sQ5PC3T+9TkrK
+         GcRANDErjMl4tN6OfXtvFBqHhGAPn0KuOQ6EVvt3K1ei+e7v68cRfxzQ9CAwfC+WUJRN
+         LwGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683756650; x=1686348650;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mkr2bOPc9nVI1WAeOY6kJv8RHdnlSYhXsBD5uOHimu0=;
-        b=JQjffGDxUZJCPOb2NoTR54lYKi0liFlyJDpyzM2cMubY/sYrM8R8hZslQu3SfDbVks
-         5j6PmzfQfatXX2zGbLDb504n++NOehmabavEvddSUSlYkrR7An706Va9xD1NlToYjI3H
-         OfG0XbqoiA2PB5zuTuuX1HkvCaNWa5soGf6EH9ENeV9euc4O7ixFeRKkJ/kp+UEsVrVA
-         GfFd/GxUstJSbuitZs+C1t3j5zyXg/gNNIYnb8lDbr1/ND+9ugkIzocFs7S5jpq/XtzQ
-         +49g8nrZQGwosul4QzmRMmbOPEjvUnNcPvmDTioz9C20/ZETzsfyg+NI3oKeTKm2ApiM
-         B5Hw==
-X-Gm-Message-State: AC+VfDwTpOwcXB6HyRN57CwvNHLxCGq60lkZmlvx0CYtD1sxyPG/OzS/
-        fgoNcvUc/myIPJPe685CU7feqobKnaCL7pl+Q0h99kdeNBlN
-X-Google-Smtp-Source: ACHHUZ4D6SjM0BH7i5jx39mJwAh6Xyy3oug6udn/rZYrVX5IuNCD8V6amvZNJORWGpe3CJCQ9dMaLpQycKyJ6tTyB6LB4HwWurBx
+        d=1e100.net; s=20221208; t=1683756703; x=1686348703;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0eBhWhdJvdbtP/cnVajG86saO4yJvG+Hc382nRSfhlk=;
+        b=MVzFrTa7dhBH4XRvenhMdSyvivYbbwWj9hRxVayKbA37X9knCXHYOHJIoA6ZxWgSYA
+         3Wj6KoFZoLTESXseHWAAy8T+se2iai8tVie2alhJmCIV7m08tJ+oURECZEKFXhTFL/lJ
+         RMxq+6dGDuj5/Etsy8ubiay1/5ZERxJper/n6xb2DbiUjE5ZjctZ6rLAlKQhvqUv3Xmt
+         Hhn+kihCx95p9BkhJSepkpkEuf3ynfSG6OqCaMeJiQ48dfZ8iLghZ2bdASjyXguNw3s+
+         GU6HNB8NpuncGCzGQpQAWEEarvIaMsI+3zg4yfj1Fk6T7Yzq5ivcbieO4XyrK8wgIf8b
+         lhmw==
+X-Gm-Message-State: AC+VfDzNqm3BkIOrYLs85wQu0n/wf7tOnsAqoRNWu176zjdE3ABiy4zu
+        kX6YGo0Aih71Zi4gQHPliC0=
+X-Google-Smtp-Source: ACHHUZ6dy/sktjvNLR2RqHL7AB5LFLvOZuXHCXS1SnsViBu1Kh6VwYfbpECS2u25e1DewEbHqJsApg==
+X-Received: by 2002:a92:609:0:b0:328:8770:b9c2 with SMTP id x9-20020a920609000000b003288770b9c2mr13419316ilg.14.1683756703349;
+        Wed, 10 May 2023 15:11:43 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id b16-20020a92c850000000b0032e28db67dcsm3479124ilq.84.2023.05.10.15.11.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 15:11:42 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] vfs: Replace all non-returning strlcpy with strscpy
+Date:   Wed, 10 May 2023 22:11:19 +0000
+Message-ID: <20230510221119.3508930-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
 MIME-Version: 1.0
-X-Received: by 2002:a92:d4ce:0:b0:335:de72:23d7 with SMTP id
- o14-20020a92d4ce000000b00335de7223d7mr1040978ilm.3.1683756649842; Wed, 10 May
- 2023 15:10:49 -0700 (PDT)
-Date:   Wed, 10 May 2023 15:10:49 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000008ddb05fb5e2576@google.com>
-Subject: [syzbot] [kernel?] possible deadlock in __mod_timer (2)
-From:   syzbot <syzbot+fe0c72f0ccbb93786380@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, brauner@kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with strscpy().
+No return values were used, so direct replacement is safe.
 
-syzbot found the following issue on:
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
 
-HEAD commit:    1dc3731daf1f Merge tag 'for-6.4-rc1-tag' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=153dd834280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8bc832f563d8bf38
-dashboard link: https://syzkaller.appspot.com/bug?extid=fe0c72f0ccbb93786380
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-1dc3731d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9ac41c523f85/vmlinux-1dc3731d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/40b82936b92f/bzImage-1dc3731d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fe0c72f0ccbb93786380@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.4.0-rc1-syzkaller-00011-g1dc3731daf1f #0 Not tainted
-------------------------------------------------------
-kworker/u16:0/11 is trying to acquire lock:
-ffff88807ffdaba0 (&pgdat->kswapd_wait){....}-{2:2}, at: __wake_up_common_lock+0xb8/0x140 kernel/sched/wait.c:137
-
-but task is already holding lock:
-ffff88802c7296d8 (&base->lock){-.-.}-{2:2}, at: __mod_timer+0x69c/0xe80 kernel/time/timer.c:1112
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #3 (&base->lock){-.-.}-{2:2}:
-       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-       _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
-       lock_timer_base+0x5a/0x1f0 kernel/time/timer.c:999
-       __mod_timer+0x3f9/0xe80 kernel/time/timer.c:1080
-       add_timer+0x62/0x90 kernel/time/timer.c:1244
-       __queue_delayed_work+0x1a7/0x270 kernel/workqueue.c:1685
-       queue_delayed_work_on+0x109/0x120 kernel/workqueue.c:1710
-       psi_task_change+0x1bf/0x300 kernel/sched/psi.c:920
-       psi_enqueue kernel/sched/stats.h:139 [inline]
-       enqueue_task kernel/sched/core.c:2078 [inline]
-       activate_task kernel/sched/core.c:2112 [inline]
-       wake_up_new_task+0xc13/0x1000 kernel/sched/core.c:4833
-       kernel_clone+0x219/0x890 kernel/fork.c:2949
-       user_mode_thread+0xb1/0xf0 kernel/fork.c:2996
-       rest_init+0x27/0x2b0 init/main.c:700
-       arch_call_rest_init+0x13/0x30 init/main.c:834
-       start_kernel+0x3b6/0x490 init/main.c:1088
-       x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:556
-       x86_64_start_kernel+0xb3/0xc0 arch/x86/kernel/head64.c:537
-       secondary_startup_64_no_verify+0xf4/0xfb
-
--> #2 (&rq->__lock){-.-.}-{2:2}:
-       _raw_spin_lock_nested+0x34/0x40 kernel/locking/spinlock.c:378
-       raw_spin_rq_lock_nested+0x2f/0x120 kernel/sched/core.c:558
-       raw_spin_rq_lock kernel/sched/sched.h:1366 [inline]
-       rq_lock kernel/sched/sched.h:1653 [inline]
-       task_fork_fair+0x74/0x4f0 kernel/sched/fair.c:12095
-       sched_cgroup_fork+0x3d1/0x540 kernel/sched/core.c:4777
-       copy_process+0x4b8a/0x7600 kernel/fork.c:2618
-       kernel_clone+0xeb/0x890 kernel/fork.c:2918
-       user_mode_thread+0xb1/0xf0 kernel/fork.c:2996
-       rest_init+0x27/0x2b0 init/main.c:700
-       arch_call_rest_init+0x13/0x30 init/main.c:834
-       start_kernel+0x3b6/0x490 init/main.c:1088
-       x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:556
-       x86_64_start_kernel+0xb3/0xc0 arch/x86/kernel/head64.c:537
-       secondary_startup_64_no_verify+0xf4/0xfb
-
--> #1 (&p->pi_lock){-.-.}-{2:2}:
-       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-       _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
-       try_to_wake_up+0xab/0x1c40 kernel/sched/core.c:4191
-       autoremove_wake_function+0x16/0x150 kernel/sched/wait.c:419
-       __wake_up_common+0x147/0x650 kernel/sched/wait.c:107
-       __wake_up_common_lock+0xd4/0x140 kernel/sched/wait.c:138
-       wakeup_kswapd+0x3fe/0x5c0 mm/vmscan.c:7797
-       rmqueue mm/page_alloc.c:3057 [inline]
-       get_page_from_freelist+0x6c5/0x2c00 mm/page_alloc.c:3499
-       __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:4768
-       __folio_alloc+0x16/0x40 mm/page_alloc.c:4800
-       vma_alloc_folio+0x155/0x890 mm/mempolicy.c:2240
-       wp_page_copy mm/memory.c:3070 [inline]
-       do_wp_page+0x173d/0x33c0 mm/memory.c:3432
-       handle_pte_fault mm/memory.c:4964 [inline]
-       __handle_mm_fault+0x1635/0x41c0 mm/memory.c:5089
-       handle_mm_fault+0x2af/0x9f0 mm/memory.c:5243
-       do_user_addr_fault+0x2ca/0x1210 arch/x86/mm/fault.c:1349
-       handle_page_fault arch/x86/mm/fault.c:1534 [inline]
-       exc_page_fault+0x98/0x170 arch/x86/mm/fault.c:1590
-       asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
-
--> #0 (&pgdat->kswapd_wait){....}-{2:2}:
-       check_prev_add kernel/locking/lockdep.c:3108 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
-       validate_chain kernel/locking/lockdep.c:3842 [inline]
-       __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
-       lock_acquire kernel/locking/lockdep.c:5691 [inline]
-       lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5656
-       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-       _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
-       __wake_up_common_lock+0xb8/0x140 kernel/sched/wait.c:137
-       wakeup_kswapd+0x3fe/0x5c0 mm/vmscan.c:7797
-       wake_all_kswapds+0x182/0x2d0 mm/page_alloc.c:4028
-       __alloc_pages_slowpath.constprop.0+0x1724/0x2170 mm/page_alloc.c:4296
-       __alloc_pages+0x408/0x4a0 mm/page_alloc.c:4781
-       alloc_pages+0x1aa/0x270 mm/mempolicy.c:2279
-       alloc_slab_page mm/slub.c:1851 [inline]
-       allocate_slab+0x25f/0x390 mm/slub.c:1998
-       new_slab mm/slub.c:2051 [inline]
-       ___slab_alloc+0xa91/0x1400 mm/slub.c:3192
-       __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3291
-       __slab_alloc_node mm/slub.c:3344 [inline]
-       slab_alloc_node mm/slub.c:3441 [inline]
-       slab_alloc mm/slub.c:3459 [inline]
-       __kmem_cache_alloc_lru mm/slub.c:3466 [inline]
-       kmem_cache_alloc+0x38e/0x3b0 mm/slub.c:3475
-       kmem_cache_zalloc include/linux/slab.h:670 [inline]
-       fill_pool+0x264/0x5c0 lib/debugobjects.c:168
-       debug_objects_fill_pool lib/debugobjects.c:597 [inline]
-       debug_object_activate+0xfd/0x400 lib/debugobjects.c:693
-       debug_timer_activate kernel/time/timer.c:782 [inline]
-       __mod_timer+0x80d/0xe80 kernel/time/timer.c:1119
-       add_timer+0x62/0x90 kernel/time/timer.c:1244
-       __queue_delayed_work+0x1a7/0x270 kernel/workqueue.c:1685
-       queue_delayed_work_on+0x109/0x120 kernel/workqueue.c:1710
-       process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
-       worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
-       kthread+0x344/0x440 kernel/kthread.c:379
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-other info that might help us debug this:
-
-Chain exists of:
-  &pgdat->kswapd_wait --> &rq->__lock --> &base->lock
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&base->lock);
-                               lock(&rq->__lock);
-                               lock(&base->lock);
-  lock(&pgdat->kswapd_wait);
-
- *** DEADLOCK ***
-
-3 locks held by kworker/u16:0/11:
- #0: ffff8880444ff138 ((wq_completion)bat_events){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff8880444ff138 ((wq_completion)bat_events){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff8880444ff138 ((wq_completion)bat_events){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1324 [inline]
- #0: ffff8880444ff138 ((wq_completion)bat_events){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:643 [inline]
- #0: ffff8880444ff138 ((wq_completion)bat_events){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:670 [inline]
- #0: ffff8880444ff138 ((wq_completion)bat_events){+.+.}-{0:0}, at: process_one_work+0x883/0x15e0 kernel/workqueue.c:2376
- #1: ffffc900003d7db0 ((work_completion)(&(&bat_priv->nc.work)->work)){+.+.}-{0:0}, at: process_one_work+0x8b7/0x15e0 kernel/workqueue.c:2380
- #2: ffff88802c7296d8 (&base->lock){-.-.}-{2:2}, at: __mod_timer+0x69c/0xe80 kernel/time/timer.c:1112
-
-stack backtrace:
-CPU: 1 PID: 11 Comm: kworker/u16:0 Not tainted 6.4.0-rc1-syzkaller-00011-g1dc3731daf1f #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Workqueue: bat_events batadv_nc_worker
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2188
- check_prev_add kernel/locking/lockdep.c:3108 [inline]
- check_prevs_add kernel/locking/lockdep.c:3227 [inline]
- validate_chain kernel/locking/lockdep.c:3842 [inline]
- __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
- lock_acquire kernel/locking/lockdep.c:5691 [inline]
- lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5656
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
- __wake_up_common_lock+0xb8/0x140 kernel/sched/wait.c:137
- wakeup_kswapd+0x3fe/0x5c0 mm/vmscan.c:7797
- wake_all_kswapds+0x182/0x2d0 mm/page_alloc.c:4028
- __alloc_pages_slowpath.constprop.0+0x1724/0x2170 mm/page_alloc.c:4296
- __alloc_pages+0x408/0x4a0 mm/page_alloc.c:4781
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2279
- alloc_slab_page mm/slub.c:1851 [inline]
- allocate_slab+0x25f/0x390 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3192
- __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3291
- __slab_alloc_node mm/slub.c:3344 [inline]
- slab_alloc_node mm/slub.c:3441 [inline]
- slab_alloc mm/slub.c:3459 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3466 [inline]
- kmem_cache_alloc+0x38e/0x3b0 mm/slub.c:3475
- kmem_cache_zalloc include/linux/slab.h:670 [inline]
- fill_pool+0x264/0x5c0 lib/debugobjects.c:168
- debug_objects_fill_pool lib/debugobjects.c:597 [inline]
- debug_object_activate+0xfd/0x400 lib/debugobjects.c:693
- debug_timer_activate kernel/time/timer.c:782 [inline]
- __mod_timer+0x80d/0xe80 kernel/time/timer.c:1119
- add_timer+0x62/0x90 kernel/time/timer.c:1244
- __queue_delayed_work+0x1a7/0x270 kernel/workqueue.c:1685
- queue_delayed_work_on+0x109/0x120 kernel/workqueue.c:1710
- process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
- worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
- kthread+0x344/0x440 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ fs/char_dev.c |    2 +-
+ fs/super.c    |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/fs/char_dev.c b/fs/char_dev.c
+index 13deb45f1ec6..950b6919fb87 100644
+--- a/fs/char_dev.c
++++ b/fs/char_dev.c
+@@ -150,7 +150,7 @@ __register_chrdev_region(unsigned int major, unsigned int baseminor,
+ 	cd->major = major;
+ 	cd->baseminor = baseminor;
+ 	cd->minorct = minorct;
+-	strlcpy(cd->name, name, sizeof(cd->name));
++	strscpy(cd->name, name, sizeof(cd->name));
+ 
+ 	if (!prev) {
+ 		cd->next = curr;
+diff --git a/fs/super.c b/fs/super.c
+index 34afe411cf2b..8d8d68799b34 100644
+--- a/fs/super.c
++++ b/fs/super.c
+@@ -595,7 +595,7 @@ struct super_block *sget_fc(struct fs_context *fc,
+ 	fc->s_fs_info = NULL;
+ 	s->s_type = fc->fs_type;
+ 	s->s_iflags |= fc->s_iflags;
+-	strlcpy(s->s_id, s->s_type->name, sizeof(s->s_id));
++	strscpy(s->s_id, s->s_type->name, sizeof(s->s_id));
+ 	list_add_tail(&s->s_list, &super_blocks);
+ 	hlist_add_head(&s->s_instances, &s->s_type->fs_supers);
+ 	spin_unlock(&sb_lock);
+@@ -674,7 +674,7 @@ struct super_block *sget(struct file_system_type *type,
+ 		return ERR_PTR(err);
+ 	}
+ 	s->s_type = type;
+-	strlcpy(s->s_id, type->name, sizeof(s->s_id));
++	strscpy(s->s_id, type->name, sizeof(s->s_id));
+ 	list_add_tail(&s->s_list, &super_blocks);
+ 	hlist_add_head(&s->s_instances, &type->fs_supers);
+ 	spin_unlock(&sb_lock);
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
