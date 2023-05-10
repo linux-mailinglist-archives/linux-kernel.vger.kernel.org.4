@@ -2,173 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C3256FE2DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 18:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8166FE2E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236194AbjEJQ66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 12:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
+        id S236055AbjEJRBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 13:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235430AbjEJQ6h (ORCPT
+        with ESMTP id S236082AbjEJRBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 12:58:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0940A0;
-        Wed, 10 May 2023 09:58:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 244C6648A5;
-        Wed, 10 May 2023 16:58:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50CA7C433A0;
-        Wed, 10 May 2023 16:58:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683737914;
-        bh=/JbkLgwzzOQw92qBmmq/yGo6ZclGT5J4rQaInPIkh3E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BD+k8SWq90YgLMtHTS24acU0iCn9eU2nCp4Z4aNrQGfhlQF1IN2hBetV/VGpBm+uZ
-         Lt+p/aOzggTlzacrVMzwAbdiTJ46iVS+FkazkI2ynZR4u1ytOywQK46oCLPJAAnDNP
-         6tvcOI8UZ1tcCuxRcLTzvzmH0Bh52Jvg2uaJlytq7WdfBF37Al6bfcqTONfyhIZ5k2
-         1ul2MImZG8wTzQ4ORh3/EWyCQzhQT5cfe9UJYClX0z0/c190K4ZGucjlmUwnQCEHVt
-         BZqo1MLet+fhu90ivqHlblDEyrWIYPG2fMVwVPDjEuXnzX8xa/pOdiqNfovopk/ffi
-         BNGwyMH9dtevw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 98EF1CE134A; Wed, 10 May 2023 09:58:33 -0700 (PDT)
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Tejun Heo <tj@kernel.org>
-Subject: [PATCH rcu 8/8] rcu-tasks: Stop rcu_tasks_invoke_cbs() from using never-onlined CPUs
-Date:   Wed, 10 May 2023 09:58:32 -0700
-Message-Id: <20230510165832.2187453-8-paulmck@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cb50897b-1153-4958-8132-f0366667b3a4@paulmck-laptop>
-References: <cb50897b-1153-4958-8132-f0366667b3a4@paulmck-laptop>
+        Wed, 10 May 2023 13:01:09 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3640661A4;
+        Wed, 10 May 2023 10:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683738043; x=1715274043;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gKhRGj85UbImK57Kh1ESFgEHiDGK4xuek1Ky82rVH5g=;
+  b=XOnaOmTSHMg4Opqb2c1N5LwrCLwv3IUtbqkhm23ETre5NKuCCHlsoRpm
+   4LPVSmpnnDprnYGk35hQVKIJnskU2EgiHjqjYovqw/qUYZdm8eiw4JlGn
+   /CrQBOC0LVDzD1qHtmIhB3QbtyWslRkVLShIAHlxWBV+Y94S/QeBrKZqr
+   IZFWj9onLmZ2wjUvGK6A5Ll3aGvFPC6xTIx8Ghbm8GLKk5I/CMOdNDLMj
+   2hjJXvovPrh8Xss7KH+uOu38ZCYOuJYMdIZEEXKopmMqWrMua6H6/3rkY
+   CaFw0Sm8mqf53saXChIRtLvKUJEAl3Jcfnws24HDH42LkE33R4HAuB8bP
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="436590206"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="436590206"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 10:00:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="764375418"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="764375418"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 10 May 2023 10:00:40 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwnB9-0003S4-24;
+        Wed, 10 May 2023 17:00:39 +0000
+Date:   Thu, 11 May 2023 01:00:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zong Li <zong.li@sifive.com>, vkoul@kernel.org, palmer@dabbelt.com,
+        radhey.shyam.pandey@amd.com, dmaengine@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Zong Li <zong.li@sifive.com>
+Subject: Re: [PATCH v2] dmaengine: xilinx: dma: remove arch dependency
+Message-ID: <202305110023.SRQHQ5Sg-lkp@intel.com>
+References: <20230510060421.30982-1-zong.li@sifive.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510060421.30982-1-zong.li@sifive.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rcu_tasks_invoke_cbs() function relies on queue_work_on() to silently
-fall back to WORK_CPU_UNBOUND when the specified CPU is offline.  However,
-the queue_work_on() function's silent fallback mechanism relies on that
-CPU having been online at some time in the past.  When queue_work_on()
-is passed a CPU that has never been online, workqueue lockups ensue,
-which can be bad for your kernel's general health and well-being.
+Hi Zong,
 
-This commit therefore checks whether a given CPU has ever been online,
-and, if not substitutes WORK_CPU_UNBOUND in the subsequent call to
-queue_work_on().  Why not simply omit the queue_work_on() call entirely?
-Because this function is flooding callback-invocation notifications
-to all CPUs, and must deal with possibilities that include a sparse
-cpu_possible_mask.
+kernel test robot noticed the following build errors:
 
-This commit also moves the setting of the rcu_data structure's
-->beenonline field to rcu_cpu_starting(), which executes on the
-incoming CPU before that CPU has ever enabled interrupts.  This ensures
-that the required workqueues are present.  In addition, because the
-incoming CPU has not yet enabled its interrupts, there cannot yet have
-been any softirq handlers running on this CPU, which means that the
-WARN_ON_ONCE(!rdp->beenonline) within the RCU_SOFTIRQ handler cannot
-have triggered yet.
+[auto build test ERROR on vkoul-dmaengine/next]
+[also build test ERROR on linus/master v6.4-rc1 next-20230510]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Fixes: d363f833c6d88 rcu-tasks: Use workqueues for multiple rcu_tasks_invoke_cbs() invocations
-Reported-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
----
- kernel/rcu/rcu.h   |  6 ++++++
- kernel/rcu/tasks.h |  7 +++++--
- kernel/rcu/tree.c  | 12 +++++++++++-
- 3 files changed, 22 insertions(+), 3 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Zong-Li/dmaengine-xilinx-dma-remove-arch-dependency/20230510-140509
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+patch link:    https://lore.kernel.org/r/20230510060421.30982-1-zong.li%40sifive.com
+patch subject: [PATCH v2] dmaengine: xilinx: dma: remove arch dependency
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230511/202305110023.SRQHQ5Sg-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/5ffa30d0089e127bb702f8904856e05dfdee85d5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Zong-Li/dmaengine-xilinx-dma-remove-arch-dependency/20230510-140509
+        git checkout 5ffa30d0089e127bb702f8904856e05dfdee85d5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-index 4a1b9622598b..98c1544cf572 100644
---- a/kernel/rcu/rcu.h
-+++ b/kernel/rcu/rcu.h
-@@ -642,4 +642,10 @@ void show_rcu_tasks_trace_gp_kthread(void);
- static inline void show_rcu_tasks_trace_gp_kthread(void) {}
- #endif
- 
-+#ifdef CONFIG_TINY_RCU
-+static inline bool rcu_cpu_beenfullyonline(int cpu) { return true; }
-+#else
-+bool rcu_cpu_beenfullyonline(int cpu);
-+#endif
-+
- #endif /* __LINUX_RCU_H */
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index 5f4fc8184dd0..8f08c087142b 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -463,6 +463,7 @@ static void rcu_tasks_invoke_cbs(struct rcu_tasks *rtp, struct rcu_tasks_percpu
- {
- 	int cpu;
- 	int cpunext;
-+	int cpuwq;
- 	unsigned long flags;
- 	int len;
- 	struct rcu_head *rhp;
-@@ -473,11 +474,13 @@ static void rcu_tasks_invoke_cbs(struct rcu_tasks *rtp, struct rcu_tasks_percpu
- 	cpunext = cpu * 2 + 1;
- 	if (cpunext < smp_load_acquire(&rtp->percpu_dequeue_lim)) {
- 		rtpcp_next = per_cpu_ptr(rtp->rtpcpu, cpunext);
--		queue_work_on(cpunext, system_wq, &rtpcp_next->rtp_work);
-+		cpuwq = rcu_cpu_beenfullyonline(cpunext) ? cpunext : WORK_CPU_UNBOUND;
-+		queue_work_on(cpuwq, system_wq, &rtpcp_next->rtp_work);
- 		cpunext++;
- 		if (cpunext < smp_load_acquire(&rtp->percpu_dequeue_lim)) {
- 			rtpcp_next = per_cpu_ptr(rtp->rtpcpu, cpunext);
--			queue_work_on(cpunext, system_wq, &rtpcp_next->rtp_work);
-+			cpuwq = rcu_cpu_beenfullyonline(cpunext) ? cpunext : WORK_CPU_UNBOUND;
-+			queue_work_on(cpuwq, system_wq, &rtpcp_next->rtp_work);
- 		}
- 	}
- 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 23685407dcf6..54963f8c244c 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -4305,7 +4305,6 @@ int rcutree_prepare_cpu(unsigned int cpu)
- 	 */
- 	rnp = rdp->mynode;
- 	raw_spin_lock_rcu_node(rnp);		/* irqs already disabled. */
--	rdp->beenonline = true;	 /* We have now been online. */
- 	rdp->gp_seq = READ_ONCE(rnp->gp_seq);
- 	rdp->gp_seq_needed = rdp->gp_seq;
- 	rdp->cpu_no_qs.b.norm = true;
-@@ -4332,6 +4331,16 @@ static void rcutree_affinity_setting(unsigned int cpu, int outgoing)
- 	rcu_boost_kthread_setaffinity(rdp->mynode, outgoing);
- }
- 
-+/*
-+ * Has the specified (known valid) CPU ever been fully online?
-+ */
-+bool rcu_cpu_beenfullyonline(int cpu)
-+{
-+	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
-+
-+	return smp_load_acquire(&rdp->beenonline);
-+}
-+
- /*
-  * Near the end of the CPU-online process.  Pretty much all services
-  * enabled, and the CPU is now very much alive.
-@@ -4435,6 +4444,7 @@ void rcu_cpu_starting(unsigned int cpu)
- 		raw_spin_unlock_rcu_node(rnp);
- 	}
- 	arch_spin_unlock(&rcu_state.ofl_lock);
-+	smp_store_release(&rdp->beenonline, true);
- 	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
- }
- 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305110023.SRQHQ5Sg-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/xilinx/xilinx_dma.ko] undefined!
+ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
+ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/idma64.ko] undefined!
+ERROR: modpost: "devm_platform_ioremap_resource" [drivers/char/xillybus/xillybus_of.ko] undefined!
+ERROR: modpost: "devm_memremap" [drivers/misc/open-dice.ko] undefined!
+ERROR: modpost: "devm_memunmap" [drivers/misc/open-dice.ko] undefined!
+ERROR: modpost: "devm_ioremap" [drivers/net/ethernet/altera/altera_tse.ko] undefined!
+ERROR: modpost: "iounmap" [drivers/pcmcia/pcmcia.ko] undefined!
+ERROR: modpost: "ioremap" [drivers/pcmcia/pcmcia.ko] undefined!
+
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
