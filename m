@@ -2,185 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843686FDD0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A236FDD0F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236979AbjEJLnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 07:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
+        id S237007AbjEJLoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 07:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236623AbjEJLnc (ORCPT
+        with ESMTP id S236623AbjEJLoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 07:43:32 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39F4FE;
-        Wed, 10 May 2023 04:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683719010; x=1715255010;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=MSj618sbErzIYmOGI7vjCs5DAq9sbq+ULbuXkoSQgsk=;
-  b=YyB6LTBjw4bBiuRjmDfZ2TFDUuB/yY2ARv7ER7dA0CtB/Hu4WezOq671
-   fW5dU0GJQnTGB9F1lS4pJk97JJSJ6xUzQQxL6VMkmR2RU12GuIXLNGWoM
-   ZCYXKwdy+EOTJS4ONJc7bvec4z714b2dPQ9+TSaRDkGFOeoeGi+Fd/aAl
-   m24j0U3ZUw6rtf0s4oZ8Q0ssRbHfU3rlw7nGYKoAuCYPkTeLP41fa/oUf
-   ldlJ7Yl3pIgEUcUpkwaNQY1n+SudWjuJncd1R9er29vIvCm9fjjMAPjo+
-   7TkYUVaJxKKINjwvPvMB8nDtPgJf4aIJNGXmuOHFvoaEeMBoWqBzvtdGF
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="329812487"
-X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
-   d="scan'208";a="329812487"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 04:43:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="1029188655"
-X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
-   d="scan'208";a="1029188655"
-Received: from sschutze-mobl.ger.corp.intel.com ([10.251.218.236])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 04:43:28 -0700
-Date:   Wed, 10 May 2023 14:43:25 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lukasz Majczak <lma@semihalf.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, upstream@semihalf.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] serial: core: enable FIFO after resume
-In-Reply-To: <20230405111559.110220-3-lma@semihalf.com>
-Message-ID: <2b3f5b4e-c75e-5c20-bb86-c5628e7e91a7@linux.intel.com>
-References: <20230405111559.110220-1-lma@semihalf.com> <20230405111559.110220-3-lma@semihalf.com>
+        Wed, 10 May 2023 07:44:19 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117FF139;
+        Wed, 10 May 2023 04:44:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H1amMV8FVvEJ8XmLoKjFAVDpAZ90aFnh0+1I22l6cdhggKB1P/WcbtEA2ziL0hwKIs0VcSFgNSSyG4Z1NtT+Ub0lns1Vkf0cc4p0ksxA4M6WIOSDY1xAF8GGVd57qaww9TPH60jcM7SUtINzC3dvXNLPUhQySRR3Wo9UsVPQwWF9hLoYVKYI/zFfw0mZb54eMDYh4WPlTkiNPcnfc0nGNCdqYQCAX59zZ18KuiOiW6srwmARCCyVnPs55OFMR9hVc/NMvyQUdmjhzD3Glim0uB2uvIyF7Igxo+ZK+Zhj6vc5PBzifAC/ylbsbZyZpoJpmdLQQzzc3gnPfD+O3YMfvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9x8TMLu5CAF6YrYbx9lnza1YKxgGnpMMNrRl1POcQOM=;
+ b=XkGJHnKo0AqEJHBHsxSAjYUDHC5BeQ9y5rjTr/JqNvNo4zf/bKyToODnbvkighx0jcJGNtkcsinRuU3sq0Y7l1NNaa/tSaDxSRASIFxagybJJ0cYKD+QThD5LVP2APVvj0kHiIkBhzZNfPr0DK1+17iu7YO/oeR2ojhr5L4ZMDC3vjKaQbr7qgwMV5bnHTKmmqLzTQqCC6CPtFRjyQAUWixQm+fHmdzfBbcIXNkWhlxEY8JSfuDmAL3bLCHPemDoP02O0MLuWdYTRrB4uqmQ/56QMv1OZQWzBskKZFFp22AE1Xjca+iE8I5T6loVXTo3g5J8jbNI14rY2S+y5Pwi+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9x8TMLu5CAF6YrYbx9lnza1YKxgGnpMMNrRl1POcQOM=;
+ b=PCvpBxlOkcN0b4pP82GQv4r5rhayQGRkUctAxCpx9bfGc3JSvWzuboCyqBI+f12WmjP4tvorn1trCqNSUJMZxNXgMf2Fg3AGdRib2mOzYM75UzsovXLVcOhCrGFReeLcnPCsxE0w1CXKjbjkXBwJ/8Sztd6z0ysM52RRVsm90mn9d/+b/g/dvEGCKfSJeyaxorKAsB6GHhsh+SVSd+13uP8gloM/bz0G62syXTINut3XfUNm/2TP+qF0vB1tev5OuXmdaXDMTdhmdeJw4Ch7cS6sebJV/1XhoIiSrjJbw74q04A9lmES8jGHXly0NXMCbGhO30bWfPoJORDX7ndpOQ==
+Received: from DM6PR02CA0050.namprd02.prod.outlook.com (2603:10b6:5:177::27)
+ by CH0PR12MB5044.namprd12.prod.outlook.com (2603:10b6:610:e3::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20; Wed, 10 May
+ 2023 11:44:15 +0000
+Received: from DS1PEPF0000E63E.namprd02.prod.outlook.com
+ (2603:10b6:5:177:cafe::dd) by DM6PR02CA0050.outlook.office365.com
+ (2603:10b6:5:177::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.34 via Frontend
+ Transport; Wed, 10 May 2023 11:44:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS1PEPF0000E63E.mail.protection.outlook.com (10.167.17.196) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6387.20 via Frontend Transport; Wed, 10 May 2023 11:44:14 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 10 May 2023
+ 04:44:04 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Wed, 10 May
+ 2023 04:44:04 -0700
+Received: from localhost (10.127.8.9) by mail.nvidia.com (10.129.68.7) with
+ Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Wed, 10 May 2023
+ 04:44:03 -0700
+Date:   Wed, 10 May 2023 14:44:02 +0300
+From:   Peter De Schrijver <pdeschrijver@nvidia.com>
+To:     <stefank@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>
+CC:     <jassisinghbrar@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH v2 0/6] firmware: tegra: Add MRQ support for Tegra264.
+Message-ID: <ZFuDgmLXmTs91FqI@44189d9-lcedt>
+References: <20230510113129.4167493-1-pdeschrijver@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230510113129.4167493-1-pdeschrijver@nvidia.com>
+X-NVConfidentiality: public
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E63E:EE_|CH0PR12MB5044:EE_
+X-MS-Office365-Filtering-Correlation-Id: ff1f52f2-8a8f-4173-bb6d-08db514be169
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3sD77dQTqr+04QMdS5/gkjXjzYP20Og9zO0EUYxd56qBVbNOZ648//wmhiU2soSGT9E50H+hD+tbdT8Zr/sJ3BkeS6WXPQxpHAdfEKON/IP1B+RKO5tNfvtpJdt28/DY2RbvMW8YgCxqUuiT6kIysv5LGfvB5RqPxx7ekWx3rVc5fDK6sFigd/wv0dMmv6B9S9oPM4r1bHBiH9BilTDCH2EILo7x5vYdNw5hIcIfR0u0+kCkPvoHT20rWmhwOzZN+nz+rvbQKA/vDj1GhPt2TID6paaCWppnENoqpBZe1tkv/5BWUtGPwEaRtUMTZlBJHm3LSmJkuapCdao+MZvmpmFqwXZwGAqTuV+9DlqW+X58SVgahT1XcoDP8neY3AjZALE4mntyHbf/jV0qMdNistZdveFcfmpBr+pqV6A2wVqcm/O/StYV2+F6RxBU7DTFF7Zt2esN7OvHVQZcKBbn0JA55JAPXG22+TolC/RZilOZwG//d3Hk71xpPrOTzL6Epfi6yfrOwXzovTom8aFB6uwZ7gxCvkCK54UA/Din6YPHRgTJPruU09Cw3wWhIXFTllr2fLYcbRAp0YYWvqwD46hLJj+P5VPLWqbGL8aZqbZFa++Xu1Po6H141gSIMf3P65Rj5turpl0uJkEUWe80M9qHa7PrvN3bgBOzV2aki3C9WFR4EQdV7Eio5a2zCztR4Tsn1uSQwlUN0+DWtv7dPGjx65mNsxMJofhCytxc93mRz+Bg6xWbkN3hu1PrCXkw
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(7916004)(39860400002)(346002)(136003)(396003)(376002)(451199021)(36840700001)(40470700004)(46966006)(40460700003)(426003)(336012)(47076005)(83380400001)(186003)(2906002)(4744005)(86362001)(33716001)(82310400005)(82740400003)(356005)(7636003)(36860700001)(40480700001)(8936002)(8676002)(316002)(41300700001)(5660300002)(478600001)(54906003)(110136005)(70586007)(70206006)(4326008)(6636002)(26005)(9686003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 11:44:14.7694
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff1f52f2-8a8f-4173-bb6d-08db514be169
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E63E.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5044
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Apr 2023, Lukasz Majczak wrote:
-
-> The "serial/8250: Use fifo in 8250 console driver" commit
-
-Use canonical formatting when referring to commit:
-
-commit 12char_SHA1 ("shortlog")
-
-> has revealed an issue of not re-enabling FIFO after resume.
-> The problematic path is inside uart_resume_port() function.
-> First, when the console device is re-enabled,
-> a call to uport->ops->set_termios() internally initializes FIFO
-> (in serial8250_do_set_termios()), although further code
-
-I'd drop "First," and start with "When" and change "although" to "then"
-
-> disables it by issuing ops->startup() (pointer to serial8250_do_startup,
-> internally calling serial8250_clear_fifos()).
-> There is even a comment saying "Clear the FIFO buffers and disable them.
-> (they will be reenabled in set_termios())", but in this scenario,
-> set_termios() has been called already and FIFO remains disabled.
-
-Also, you should reflow the text to 72 chars per line.
-
-> This patch address the issue by reversing the order - first checks
-> if tty port is suspended and performs actions accordingly
-> (e.g. call to ops->startup()), then tries to re-enable
-> the console device after suspend (and call to uport->ops->set_termios()).
+On Wed, May 10, 2023 at 02:31:24PM +0300, Peter De Schrijver wrote:
+> In Tegra264 the carveouts (GSCs) used to communicate between BPMP and
+> CPU-NS may reside in DRAM. The location will be signalled using reserved
+> memory node in DT. Additionally some minor updates to the HSP driver are
+> done to support the new chip.
 > 
-> Signed-off-by: Lukasz Majczak <lma@semihalf.com>
-> Cc: <stable@vger.kernel.org> # 6.1+
-> ---
->  drivers/tty/serial/serial_core.c | 54 ++++++++++++++++----------------
->  1 file changed, 27 insertions(+), 27 deletions(-)
+> Peter De Schrijver (4):
+>   dt-bindings: mailbox: tegra: Document Tegra264 HSP
+>   dt-bindings: Add bindings to support DRAM MRQ GSCs
+>   dt-bindings: memory-region property for tegra186-bpmp
+>   firmware: tegra: bpmp: Add support for DRAM MRQ GSCs
 > 
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index 394a05c09d87..57a153adba3a 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -2406,33 +2406,6 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
->  	put_device(tty_dev);
->  	uport->suspended = 0;
->  
-> -	/*
-> -	 * Re-enable the console device after suspending.
-> -	 */
-> -	if (uart_console(uport)) {
-> -		/*
-> -		 * First try to use the console cflag setting.
-> -		 */
-> -		memset(&termios, 0, sizeof(struct ktermios));
-> -		termios.c_cflag = uport->cons->cflag;
-> -		termios.c_ispeed = uport->cons->ispeed;
-> -		termios.c_ospeed = uport->cons->ospeed;
-> -
-> -		/*
-> -		 * If that's unset, use the tty termios setting.
-> -		 */
-> -		if (port->tty && termios.c_cflag == 0)
-> -			termios = port->tty->termios;
-> -
-> -		if (console_suspend_enabled)
-> -			uart_change_pm(state, UART_PM_STATE_ON);
-> -		uport->ops->set_termios(uport, &termios, NULL);
-> -		if (!console_suspend_enabled && uport->ops->start_rx)
-> -			uport->ops->start_rx(uport);
-> -		if (console_suspend_enabled)
-> -			console_start(uport->cons);
-> -	}
-> -
->  	if (tty_port_suspended(port)) {
->  		const struct uart_ops *ops = uport->ops;
->  		int ret;
-> @@ -2471,6 +2444,33 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
->  		tty_port_set_suspended(port, false);
->  	}
->  
-> +	/*
-> +	 * Re-enable the console device after suspending.
-> +	 */
-> +	if (uart_console(uport)) {
-> +		/*
-> +		 * First try to use the console cflag setting.
-> +		 */
-> +		memset(&termios, 0, sizeof(struct ktermios));
-> +		termios.c_cflag = uport->cons->cflag;
-> +		termios.c_ispeed = uport->cons->ispeed;
-> +		termios.c_ospeed = uport->cons->ospeed;
-> +
-> +		/*
-> +		 * If that's unset, use the tty termios setting.
-> +		 */
-> +		if (port->tty && termios.c_cflag == 0)
-> +			termios = port->tty->termios;
-> +
-> +		if (console_suspend_enabled)
-> +			uart_change_pm(state, UART_PM_STATE_ON);
-> +		uport->ops->set_termios(uport, &termios, NULL);
-> +		if (!console_suspend_enabled && uport->ops->start_rx)
-> +			uport->ops->start_rx(uport);
-> +		if (console_suspend_enabled)
-> +			console_start(uport->cons);
-> +	}
-> +
->  	mutex_unlock(&port->mutex);
->  
->  	return 0;
-> 
+> Stefan Kristiansson (2):
+>   mailbox: tegra: add support for Tegra264
+>   soc: tegra: fuse: add support for Tegra264
 
-To me it looks the whole function is too messed up to fix anything this 
-easily. I'd start with splitting the two large ifs block so that the 
-ordering makes sense:
+Changes in v2:
 
-- set_termios / uart_change_line_settings is called only once
-- rx and tx is started only after set_termios
-- failure path (the one doing uart_shutdown) logic is reverse + gotoed
-
-
--- 
- i.
-
+- Added signoff messages
+- Updated bindings to support DRAM MRQ GSCs
+- Split out memory-region property for tegra186-bpmp
+- Addressed sparse errors in bpmp-tegra186.c
