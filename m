@@ -2,139 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A466FDB42
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5486FDB48
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbjEJKDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 06:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
+        id S235768AbjEJKFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 06:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjEJKDg (ORCPT
+        with ESMTP id S229755AbjEJKFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 06:03:36 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2138.outbound.protection.outlook.com [40.107.100.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BA66A4B;
-        Wed, 10 May 2023 03:03:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lC0mhAh2D8AjnZeqwrKdofclDwijdJxaYX+2kU5IcyKU4nY9sQjxHfH7rGfbBSl5TTx7Ebjz/adEiE6QyA2w4NX4NYchVyluWKdiBIwK2cP3emhswMQWf8bhc6e504CoHsWV6yiayyd5G4vuU1zNFdIAsioMDwm0Xo/K3Nphu/ZW4lh1Ne7AsG8ROPY0A6f9I9/ad9ATOp7GIN2WO78of/r7VMHe5cC6T0RNldmWhT2MCFA/K0OXozLY/mWM0BWvEbw3uZDTQfHNhTjqPKgMvmcLvgrORvC8Zmc0BGF3wdcypj1ignSqlHFOSXUnrjPQ2Zt4dlxomK7oZvS0+aAwtA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=phuWtBxAlF2JypLpgwuN88me+nfm7qmUO7l1d2mamQY=;
- b=bNppwuzooa/Q7LjMsggSc63dqdRZAhvnUz3xPbnf+dppK1mStOVyN0sNiNJ4bER3boJbSrZKYUH3flaIKCxRviqPgqbsIN0TRa1kv4HfEJdIKA2MxcO/Dkla8TnK5CzR7pZh9K8x/vxeGye/3oMPTm33KAN/xppol/4HE/dcTGJyQsGNmGghJMQJaDHn4U29BcciynMlnUjNJKrUXNnzURscSZo4e7K2p2oH5E1CN8AQti8Bay8xSQ+g/e55dvOD7IbOwD/MZoTWvXTFMwXohcaHWscTNurK8o0JuokL5iCk0CVKLwMlsBW1ewfC5jtxGLYVPSX8rNE6OlPfzEQEFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=phuWtBxAlF2JypLpgwuN88me+nfm7qmUO7l1d2mamQY=;
- b=DQ3lrt38Ev9LrWgpR3Q5tKy3WOmdAcm+icWir+U/tmleENKP/qgIoxFYIIBZk0UwyBUn67W5tVIY5LhyFjGcvPs1+FJgLZUCR0Kcu2awbFVanbcNaOzRkpLXgIwNVQaPDLB7I6HGjM362UVDR8Z8SefmLYfnIZRHo9w21ZlvNiQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB5590.namprd13.prod.outlook.com (2603:10b6:510:128::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20; Wed, 10 May
- 2023 10:03:24 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Wed, 10 May 2023
- 10:03:24 +0000
-Date:   Wed, 10 May 2023 12:03:15 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Yan Wang <rk.code@outlook.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk
-Subject: Re: [PATCH v3] net: mdiobus: Add a function to deassert reset
-Message-ID: <ZFtr47e5Q9oZ73yq@corigine.com>
-References: <KL1PR01MB5448A33A549CDAD7D68945B9E6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <KL1PR01MB5448A33A549CDAD7D68945B9E6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
-X-ClientProxiedBy: AM8P189CA0014.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:218::19) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Wed, 10 May 2023 06:05:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A992659D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:04:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683713076;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mxi0tssM/MIAC/Us8XUva2O6e9fov44nkm6fQlyWJnA=;
+        b=B9/ZWLkKgz8obRLJxxxZ0rp8JeLEK257gW5Ud205VBuCK5jqHgB4sTfLB/TDfhchJ3rJ4H
+        XvNeWJLfHA/0ksUFerQYo/fE4viEm40FEOECzBhjsj+ExAPAGW1cSg2Fbv8VD63Y+7r07J
+        q+q04s0oJAgs7sUlctfaaycQaDc+mFI=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-231-eBu-xCx_Mn2ftR4odSHhQQ-1; Wed, 10 May 2023 06:04:35 -0400
+X-MC-Unique: eBu-xCx_Mn2ftR4odSHhQQ-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-965f0c4ae32so548027466b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:04:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683713074; x=1686305074;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mxi0tssM/MIAC/Us8XUva2O6e9fov44nkm6fQlyWJnA=;
+        b=X8KtbxWiOW8h/BBfUinPEgBroVBjyeI58ZdD3TZZUWYffFIuQb3TD92QHMRIfhJysT
+         HKh4cE64JKB/stU/HYv5PmK7Ez8ngSNioBrPFPBzditcDGNjQq/725nKMS58CcqLOYvG
+         uWzAaUTphSF8AijvWNh2GNH0dbNAfAr60Tjeo65KKbF3hG+A8vBOXxkWPvuE9LVyxSwF
+         yeSLO3oXASHVkPblMerfpqguNE9kEl+9WEScjuP2s+1Axbp49YdharUD+jXRyQSKAMIj
+         E7JV4ZYluraOxme3do9DUYX/NMV3tIkmMBi+0I+yvhHIsCkMWp6DmUFTU8QU00TD+fA9
+         ixbg==
+X-Gm-Message-State: AC+VfDxCX9TdSDJFg7NpwFEDS39A5kSa6jgTM0Oyarx+il8a4dk3jY+F
+        62R3FsAlDFbyNQyxJ6e/16e3NeZFWgICX6iNteAi4Y40+fRYbgPhy0hOYfEKtRVP5RgKqcJiZVk
+        58PqDXT6tUhFU19J8wwXbsPo7
+X-Received: by 2002:a17:906:dc93:b0:94f:a292:20cc with SMTP id cs19-20020a170906dc9300b0094fa29220ccmr15643198ejc.41.1683713074310;
+        Wed, 10 May 2023 03:04:34 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6g3VLlchZ4NQ4dVKKV7VFeDXbAdsULvGoTQhQBYH7wgUiWDxOc+E6cOLAsZqVz3BCBbS6/Sw==
+X-Received: by 2002:a17:906:dc93:b0:94f:a292:20cc with SMTP id cs19-20020a170906dc9300b0094fa29220ccmr15643186ejc.41.1683713074026;
+        Wed, 10 May 2023 03:04:34 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id de25-20020a1709069bd900b0096664376ec9sm2486973ejc.55.2023.05.10.03.04.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 03:04:33 -0700 (PDT)
+Message-ID: <c7aa9034-59f8-11aa-7170-86c0db012dda@redhat.com>
+Date:   Wed, 10 May 2023 12:04:32 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5590:EE_
-X-MS-Office365-Filtering-Correlation-Id: b0b3f243-8fc7-4240-71dd-08db513dcabc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VpG3ytNLWPMrDEKuVcMNeRBzUhTWyYWrFsp6sR7fm8EW4RW69m3o+Ki4LL9IttLI97MJ+mbYokpIQ3SfDpIra3UVJllXypAlED5Owly6/4hEjX2AVB7lJYuCSixE/woPPbZLH4eh8xUoYHq2OT1KprEB41ctTAxbuwJ4CJUslIF4VbwcedRJs7o3u5qQWWg/aqSJNxLCs232MY6vk+caOVbBbIf1PbwUKHIuI7bTLPVTKEXdw3zMdRP+zGLJ35Xh1JsGwz/+DT0zNhQ0+lr0h8BVIaHunKj6zeAKbLytk1G+0ZkfZ9PFDOyBiwuCSrdoLMmJSqt74cUIx0SD/bk7F5AkSFp3gcauXLyF8JcgMsiZCm8FblhCRIFKiJnFnTkjWHjGoUXY8uXysL9frujxseTeNpEH810QOFuXsb7ZEXPnUheyNt2HMDq8QyhyOu7W7H9Sxpb9IFQY/ltFAgJ4utdjzD1RMdCzQ8y1NtRZDsq4D/vJEfbW+RF50BJnr4XEsGAkWaE+KDNNjqkIGV/ElhCMyPcNB02/TDUVGd2306vAWbgrQQ4KDS+6RJ1SE30Q06cXeRPSBm/oOUe3xK5SRA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(346002)(136003)(39840400004)(451199021)(41300700001)(2906002)(4744005)(6512007)(186003)(6506007)(5660300002)(44832011)(38100700002)(8936002)(7416002)(8676002)(478600001)(45080400002)(2616005)(36756003)(6486002)(6666004)(966005)(86362001)(66556008)(66476007)(66946007)(6916009)(316002)(4326008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GadyNb3K4bL9qSR+YgaTj/YdWSYnGePZscjmZ0tyZrtXWmEzzWRcBiXvuBs9?=
- =?us-ascii?Q?sfW+0ZOFpS8bwVY54kHb1tv2N7RKqcTEMjiAvRRI5w/lloN+WdVM2G6ir+iv?=
- =?us-ascii?Q?4OYHw6tHu1NgY+ixG2KgcHFnojTfKeu+utiHRgB024ML7V6rQq6w/7nZtZO0?=
- =?us-ascii?Q?TSZVxuBd10iR/jJL1uhVNL0x+5HlXLJJPlOx7hNPtggilWV4hqTod/MKGiXC?=
- =?us-ascii?Q?NF1v5sWZlZNf40jat5zCBx1sHOKI3a7S/Xrgv9I4ASDTVaefHemwVg1T8Juc?=
- =?us-ascii?Q?OSoMDfCfHvVS+u0HnQimGPe+WII4gqt7MSUcc9z0qgTT86YNQ0Xjueb1a0gT?=
- =?us-ascii?Q?lH96CiaX7Vj4IotLshG06Plg/XTzZbcSegyGR+vKKwNVGjJhwARuxymQ1e4Y?=
- =?us-ascii?Q?huFmUyn6qdBehH6Tuo2ShsX5c2OplUC6mbq++mmf+udYOiEVu/8KQdqbE0wn?=
- =?us-ascii?Q?Mck/pY3vcFO+UlpzV4VdOxnP9//R4ibCY0krdWVQpgiOYD8V/o8pgWo3tcQk?=
- =?us-ascii?Q?MlNwOeVp+2jTNRXui7eeQ42A4X7CLPQ/CshStLuLGoPRglR9giTYpk8x3iQo?=
- =?us-ascii?Q?FY0sHcWBclluH5ihZlxtDeLASwB2gXQIvyKO9R2NfXNciyKY8VI2g0Nwt5mY?=
- =?us-ascii?Q?MVEGf4FEgir7mI2qrP9x+EBz+gMLOCTlAsvQGFcR5MEu/gauKBCnA/6YfQyO?=
- =?us-ascii?Q?xkGCNCEJGz3qSwapJAsnjgZrETjtmY2MJzJE1eB5FSpKxAfCHQohBBXvVhej?=
- =?us-ascii?Q?ey2RvzxZhTtnBHV5XMb20bQI/0O+ui3AV5AK4cs+YUHwwuxQ3FmqONuESny5?=
- =?us-ascii?Q?i+xTBV/VJe1txjSmBY6/bRRAbolTXBS+O6YBdPMGRCR+juaTmzKnTs0Jyg/P?=
- =?us-ascii?Q?acjqBdRgsy5tEUxru0SMGiLH4F06XgtnV3E/7FnJaNYTNHvSTzEXFtawadvL?=
- =?us-ascii?Q?5Me9Iot/LlNVXUtDrQPYc5eepb8ZBJCZlChZZgBAW+xh4hKtgT7CRqUfJCfx?=
- =?us-ascii?Q?IqytnLhIzv6jwUy5fh2PMrPeOGj1dB9DByMJM7w0FL9CIeR91rSF2F5n1jnl?=
- =?us-ascii?Q?iivhzfnfWzLCjKgGf3+CXn+Ek36J2iwdDjpe9lXbj48KFbx//v3DXSpnMixD?=
- =?us-ascii?Q?dQ1H968COTDW/Q2oxWVuP2VAHq2PgdasZEyRroChT7eMV/IA1Xy3rbAu9Mmv?=
- =?us-ascii?Q?Q0Us6P5YtoTEhgPnYCA+LAxR4Jcj2s96EpElThrwa8h6g4Tullc+2xDJWsPU?=
- =?us-ascii?Q?MQv21fP0sndaJqffLiUI/+GNBY0gxukUblVu17z20OsBTDUw7Fkxro1AHUoH?=
- =?us-ascii?Q?TiXqRg4hNdDSFsMYkonuXdSIaxhmXKoENAXMjqEb3VnAuNOkOcGiur4QmXOh?=
- =?us-ascii?Q?3UPQGtROM1OISaPRJGdUlmOZFVGk+zoP3M0cm5Br0GU7bTCI1jTVwKE+AfNK?=
- =?us-ascii?Q?/09yN8khzGbEJkBPnjU/l640F4TM852v8Xb+Mesho2WvmmsWguf+dpxJ/+Rd?=
- =?us-ascii?Q?24GXsZk3/gUTQwoT613Mx4xZAXVYzSoup9TSOjVruj9AGKGYLr9YhOIu9AS6?=
- =?us-ascii?Q?tHezDF41hYBaChpEuin0xT1toZDB1uagH9RhMQ7rCcIJ34C2L2qB4OZe4Fy4?=
- =?us-ascii?Q?G+KZbQndj/Lzy9rsQWQb67lVENXWhk+gFQpg9oWds+SZU4JxFpv/1m5JPJVp?=
- =?us-ascii?Q?cYjhgw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0b3f243-8fc7-4240-71dd-08db513dcabc
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 10:03:24.1445
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0XUXARiDQEJCn3bRcmG4UEOOvwCyC17ALVz99OHF6Fk3XeSmqgAIqprKq0A+a5zTUQ/MvIoWkjvJ8vdQhjN/JrNbaNLp8v1VKHHYOxlD0cY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5590
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [REGRESSION] wifi: brcmfmac: add firmware vendor info in driver
+ info
+Content-Language: en-US, nl
+To:     Felix <nimrod4garoa@gmail.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>
+Cc:     regressions@lists.linux.dev,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <4ef3f252ff530cbfa336f5a0d80710020fc5cb1e.camel@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <4ef3f252ff530cbfa336f5a0d80710020fc5cb1e.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 04:15:22PM +0800, Yan Wang wrote:
-> It is possible to mount multiple sub-devices on the mido bus.
-> The hardware power-on does not necessarily reset these devices.
-> The device may be in an uncertain state, causing the device's ID
-> to not be scanned.
-> 
-> So, before adding a reset to the scan, make sure the device is in
-> normal working mode.
-> 
-> I found that the subsequent drive registers the reset pin into the
-> structure of the sub-device to prevent conflicts, so release the
-> reset pin.
-> 
-> Signed-off-by: Yan Wang <rk.code@outlook.com>
+Hi Felix,
 
-Hi Yan,
+On 5/10/23 10:25, Felix wrote:
+> Changes made by the mentioned commit lead to Oops when waking up after
+> suspend to RAM.
+> 
+> When waking up a Dell XPS 13 9350 with BCM4350 wifi card after suspend
+> to RAM, the kernel hangs with a NULL pointer dereference and Oops. The
+> issues was introduced by commit
+> da6d9c8ecd00e20218461007948f2b0a8e7fa242 and only happens when the
+> brcmfmac module is loaded. This issue is the reason we could not
+> upgrade to newer kernels than the 6.1 series on the affected machine.
+> 
+> 
+> Details:
+> 
+> On a Dell XPS 13 9350 laptop with Broadcom BCM4350 wifi card (according
+> to lspci), every kernel starting with 6.2 hangs when waking up after
+> suspend to RAM. The issue persisted as of May 2nd (last tested commit
+> was 348551ddaf311c76b01cdcbaf61b6fef06a49144). Passing the debug and
+> no_console_suspend parameters to the kernel show that a NULL pointer
+> dereference and an Oops happen at wakeup. Please find the kernel
+> messages readable on the screen at this point attached
+> (kernel_log_after_suspend.txt).
+> 
+> A bisection was successful and produced the first bad commit
+> [da6d9c8ecd00e20218461007948f2b0a8e7fa242] wifi: brcmfmac: add firmware
+> vendor info in driver info
+> I've attached the bisection log as well (bisect.txt).
+> 
+> Suspend to RAM works on this machine on newer kernels once the brcmfmac
+> module is unloaded.
+> 
+> Distribution: Arch Linux
+> Architecture: x86_64
+> Device: Dell XPS 13 9350 with BCM4350 wifi card
+> Kernel config used at compilation (created using the Arch Linux default
+> config and make olddefconfig):
+> https://gist.githubusercontent.com/maclomhair/e33fa7eece8f8c77e5a88c4eede2f523/raw/429dfb022498c026225865dbb3ab2f75d5030a54/config
+> Dmesg output after boot:
+> https://gist.githubusercontent.com/maclomhair/47c75fa759d93800e7fb5e937fabef3e/raw/10750996a1ea9dcb3fa14d9b94e11fedd3abf280/dmesg
+> 
+> #regzbot introduced da6d9c8ecd00e20218461007948f2b0a8e7fa242
 
-v3 was posted less than 15 minutes after v2.
-Please wait 24h between posting patches to give reviewers an opportunity
-to review patches.
+Thank you for reporting this and thank you for bisecting it too!
 
-Link: https://kernel.org/doc/html/v6.1/process/maintainer-netdev.html
+As a result of your excellent bug report I've been able to write
+a fix for this. I'm confident enough in the fix that I've submitted
+it upstream right away.
+
+But it would still be good if you can test the fix and let us know
+if it fixes this issue for you. You should have received a copy
+of the patch when I submitted it upstream.
+
+Regards,
+
+Hans
+
+
+
+
