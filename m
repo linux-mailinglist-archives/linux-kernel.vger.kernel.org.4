@@ -2,245 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED156FE1A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 17:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C928A6FE18D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 17:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237427AbjEJPgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 11:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
+        id S237286AbjEJPaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 11:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236614AbjEJPgd (ORCPT
+        with ESMTP id S231941AbjEJPaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 11:36:33 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720B12D66
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:36:31 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50b9ef67f35so13199912a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683732989; x=1686324989;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qzhn1S4hfKcOd1E/ek0bvXDc8iMvqfYzj4agdzIw7zg=;
-        b=egRCEgNcEW1A3AXd0hvy/3Q+t+UZtpUtwzg8cfxE/riXg5ELdKKuara8whwNmffDG9
-         fMFJJvFOgRl417VsRAYzn9tLr1Egb5ESRCthBw5jxE99CN9VZld4V6ifYIkjpNHvOcab
-         IVg1kTTlrFHZ1CME7lpSxiLuQm2plzUdzujZ0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683732989; x=1686324989;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qzhn1S4hfKcOd1E/ek0bvXDc8iMvqfYzj4agdzIw7zg=;
-        b=RL53tVGJQ4smr3CZTP30qfbrNob/3C/yFGAr2Za2ldKrDmOtnkleIbe29hCIJag1/A
-         X+aCGFf9OYHAal5LiI7TlCZplX6lVByt/zZr4F93wr/xfTmVV8poL5oyGNJrV/V3Iti2
-         mZjJM2dB8BpkmMk6yfDS2CC0TFx38hlsBK8A41jVmsHibzebvtfWp56cl52sZmgambgj
-         9ZWWzV4fH5im5HRNHs3gpKF9/0/IxiHXKf5q5s0a6OSc/rqM7asVO6E3cUGoUXFGPAt2
-         P+C/dMVab//yiLa1ecDVGzq+pfZ7brILuLMBiGWAgmZzmltCwMyrv4NZpTtIqusIppRJ
-         4ybA==
-X-Gm-Message-State: AC+VfDywFA2PffUEwJDGxRrKziuHCADjF00Nv+0JXaId2IHJD21AoNKe
-        v6QAdGhN21TYsEubowhovnBMwOFAk4hgT6WxFc9MIQ==
-X-Google-Smtp-Source: ACHHUZ4veKXRRozC38OH3i4hS/LDh5fOnr6a/4U+C6zV32x2kXuJfL6pQW/Alvv/u1Ko61ttwTapvQ==
-X-Received: by 2002:aa7:ca57:0:b0:50c:1e2:4a42 with SMTP id j23-20020aa7ca57000000b0050c01e24a42mr14662041edt.15.1683732989533;
-        Wed, 10 May 2023 08:36:29 -0700 (PDT)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
-        by smtp.gmail.com with ESMTPSA id a17-20020aa7d751000000b0050d988bf956sm2038352eds.45.2023.05.10.08.36.29
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 08:36:29 -0700 (PDT)
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-3f2548256d0so120095e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:36:29 -0700 (PDT)
-X-Received: by 2002:a05:600c:600f:b0:3f1:6fe9:4a98 with SMTP id
- az15-20020a05600c600f00b003f16fe94a98mr178073wmb.5.1683732511119; Wed, 10 May
- 2023 08:28:31 -0700 (PDT)
+        Wed, 10 May 2023 11:30:19 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331D530D5;
+        Wed, 10 May 2023 08:30:18 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34AFU9ft025437;
+        Wed, 10 May 2023 10:30:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683732609;
+        bh=DzRXX0V8EZhaDFBcLK4Yf1y6yB+z6JFJVVMC+sc6RgE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=lU2yp0OkVPSmg0087E2xrevo17EROtc46ogpaePyz2Y98SrmHPDvHK91xX0FU4cjv
+         6LcjZHFrw+PdWYueKXBnqBnN9Rh2vDO1Zp/Th275ZUx8KS9iFHi0gvmazY9rZYzjlP
+         zCGZSSF8C5ZmgS1cipo8ztW4FMmKph9NdrRLTiog=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34AFU91c002952
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 10 May 2023 10:30:09 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 10
+ May 2023 10:30:09 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 10 May 2023 10:30:09 -0500
+Received: from [10.250.221.249] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34AFU8Kc040535;
+        Wed, 10 May 2023 10:30:08 -0500
+Message-ID: <f4826740-0312-7c5e-973e-cab266df2e6a@ti.com>
+Date:   Wed, 10 May 2023 08:30:08 -0700
 MIME-Version: 1.0
-References: <20230419225604.21204-1-dianders@chromium.org>
-In-Reply-To: <20230419225604.21204-1-dianders@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 10 May 2023 08:28:17 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Wny=iFQf2GGuC2qP9hy4FHzpiRpV=ZvxEW77DX02XGzQ@mail.gmail.com>
-Message-ID: <CAD=FV=Wny=iFQf2GGuC2qP9hy4FHzpiRpV=ZvxEW77DX02XGzQ@mail.gmail.com>
-Subject: Re: [PATCH v8 00/10] arm64: Add framework to turn an IPI as NMI
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     ito-yuichi@fujitsu.com, kgdb-bugreport@lists.sourceforge.net,
-        Chen-Yu Tsai <wens@csie.org>,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-perf-users@vger.kernel.org,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Ben Dooks <ben-linux@fluff.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 3/3] arm64: dts: ti: k3-j7200-mcu-wakeup: Update fss
+ node and hbmc_mux
+Content-Language: en-US
+To:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Vaishnav Achath <vaishnav.a@ti.com>, <nm@ti.com>,
+        <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <u-kumar1@ti.com>
+References: <20230505115858.7391-1-vaishnav.a@ti.com>
+ <20230505115858.7391-4-vaishnav.a@ti.com>
+ <feddcd03-1848-b667-6a38-ae7c0f6ff160@ti.com>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <feddcd03-1848-b667-6a38-ae7c0f6ff160@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 5/9/23 5:41 AM, Vignesh Raghavendra wrote:
+> 
+> 
+> On 05/05/23 17:28, Vaishnav Achath wrote:
+>> From: Nishanth Menon <nm@ti.com>
+>>
+>> fss node claims to be a syscon node, while it actually is a simple bus
+> 
+> FSS
+> 
+>> where ospi, hbmc peripherals are located and a mux for path select
+> 
+> OSPI, HBMC
+> 
+>> between OSPI and Hyperbus which can be modelled as a reg-mux. So model
+>> it accordingly and use reg-mux to describe the hbmc-mux. Also update
+>> the region size to the correct values as per the TRM.
+>>
+>> Signed-off-by: Nishanth Menon <nm@ti.com>
+>> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+>> ---
+>>
+>> V1->V2:
+>>   * Address feedback from Udit to limit the FSS register region size as
+>>   per TRM.
+>>   * Use reg-mux changes to simplify the hbmc-mux modelling.
+>>   * Update commit message to reflect changes.
+>>
+>> Depends on:
+>>   https://lore.kernel.org/all/20230424184810.29453-1-afd@ti.com/
+>>
+>>   arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi | 13 +++++++------
+>>   1 file changed, 7 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+>> index b58a31371bf3..333564ca9c91 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+>> @@ -338,22 +338,23 @@
+>>   		status = "disabled";
+>>   	};
+>>   
+>> -	fss: syscon@47000000 {
+>> -		compatible = "syscon", "simple-mfd";
+>> -		reg = <0x00 0x47000000 0x00 0x100>;
+>> +	fss: bus@47000000 {
+>> +		compatible = "simple-bus";
+>> +		reg = <0x00 0x47000000 0x0 0x7c>;
+> 
+>                                         ^^^^ 0x00
+> 
+> I know the registers only go up to 0x7c, but its convention to map
+> entire region that is reserved for the IP irrespective of how many
+> registers are actually valid (I see this across arm64 SoC Vendors).
+> Eg as per TRM,  Table 203 MCU Domain map:
+> 
+> MCU_FSS0_CFG 0x0047000000 - 0x00470000FF (256B)
+> 
+> 
+> 
+> 
+>>   		#address-cells = <2>;
+>>   		#size-cells = <2>;
+>>   		ranges;
+>>   
+>> -		hbmc_mux: hbmc-mux {
+>> -			compatible = "mmio-mux";
+>> +		hbmc_mux: mux-controller@47000004 {
+>> +			compatible = "reg-mux";
+>> +			reg = <0x00 0x47000004 0x00 0x2>;
+>>   			#mux-control-cells = <1>;
+>>   			mux-reg-masks = <0x4 0x2>; /* HBMC select */
+>>   		};
+>>   
+>>   		hbmc: hyperbus@47034000 {
+>>   			compatible = "ti,am654-hbmc";
+>> -			reg = <0x00 0x47034000 0x00 0x100>,
+>> +			reg = <0x00 0x47034000 0x00 0x0c>,
+> 
+> Hmm, doesn't look correct? I see register addresses up to 0x47034048h in
+> TRM?
+> 
+> I prefer to map entire region reserved in the SoC memory map:
+> MCU_FSS0_HPB_CTRL 0x0047034000 - 0x00470340FF (256B)
+> 
 
-On Wed, Apr 19, 2023 at 3:57=E2=80=AFPM Douglas Anderson <dianders@chromium=
-.org> wrote:
->
-> This is an attempt to resurrect Sumit's old patch series [1] that
-> allowed us to use the arm64 pseudo-NMI to get backtraces of CPUs and
-> also to round up CPUs in kdb/kgdb. The last post from Sumit that I
-> could find was v7, so I called this series v8. I haven't copied all of
-> his old changelongs here, but you can find them from the link.
->
-> Since v7, I have:
-> * Addressed the small amount of feedback that was there for v7.
-> * Rebased.
-> * Added a new patch that prevents us from spamming the logs with idle
->   tasks.
-> * Added an extra patch to gracefully fall back to regular IPIs if
->   pseudo-NMIs aren't there.
->
-> Since there appear to be a few different patches series related to
-> being able to use NMIs to get stack traces of crashed systems, let me
-> try to organize them to the best of my understanding:
->
-> a) This series. On its own, a) will (among other things) enable stack
->    traces of all running processes with the soft lockup detector if
->    you've enabled the sysctl "kernel.softlockup_all_cpu_backtrace". On
->    its own, a) doesn't give a hard lockup detector.
->
-> b) A different recently-posted series [2] that adds a hard lockup
->    detector based on perf. On its own, b) gives a stack crawl of the
->    locked up CPU but no stack crawls of other CPUs (even if they're
->    locked too). Together with a) + b) we get everything (full lockup
->    detect, full ability to get stack crawls).
->
-> c) The old Android "buddy" hard lockup detector [3] that I'm
->    considering trying to upstream. If b) lands then I believe c) would
->    be redundant (at least for arm64). c) on its own is really only
->    useful on arm64 for platforms that can print CPU_DBGPCSR somehow
->    (see [4]). a) + c) is roughly as good as a) + b).
->
-> [1] https://lore.kernel.org/linux-arm-kernel/1604317487-14543-1-git-send-=
-email-sumit.garg@linaro.org/
-> [2] https://lore.kernel.org/linux-arm-kernel/20220903093415.15850-1-lecop=
-zer.chen@mediatek.com/
-> [3] https://issuetracker.google.com/172213097
-> [4] https://issuetracker.google.com/172213129
->
-> Changes in v8:
-> - dynamic_ipi_setup() and dynamic_ipi_teardown() no longer take cpu param
-> - dynamic_ipi_setup() and dynamic_ipi_teardown() no longer take cpu param
-> - Add loongarch support, too
-> - Removed "#ifdef CONFIG_SMP" since arm64 is always SMP
-> - "Tag the arm64 idle functions as __cpuidle" new for v8
-> - "Provide a stub kgdb_nmicallback() if !CONFIG_KGDB" new for v8
-> - "Fallback to a regular IPI if NMI isn't enabled" new for v8
->
-> Douglas Anderson (3):
->   arm64: idle: Tag the arm64 idle functions as __cpuidle
->   kgdb: Provide a stub kgdb_nmicallback() if !CONFIG_KGDB
->   arm64: ipi_nmi: Fallback to a regular IPI if NMI isn't enabled
->
-> Sumit Garg (7):
->   arm64: Add framework to turn IPI as NMI
->   irqchip/gic-v3: Enable support for SGIs to act as NMIs
->   arm64: smp: Assign and setup an IPI as NMI
->   nmi: backtrace: Allow runtime arch specific override
->   arm64: ipi_nmi: Add support for NMI backtrace
->   kgdb: Expose default CPUs roundup fallback mechanism
->   arm64: kgdb: Roundup cpus using IPI as NMI
->
->  arch/arm/include/asm/irq.h       |   2 +-
->  arch/arm/kernel/smp.c            |   3 +-
->  arch/arm64/include/asm/irq.h     |   4 ++
->  arch/arm64/include/asm/nmi.h     |  17 +++++
->  arch/arm64/kernel/Makefile       |   2 +-
->  arch/arm64/kernel/idle.c         |   4 +-
->  arch/arm64/kernel/ipi_nmi.c      | 103 +++++++++++++++++++++++++++++++
->  arch/arm64/kernel/kgdb.c         |  18 ++++++
->  arch/arm64/kernel/smp.c          |   8 +++
->  arch/loongarch/include/asm/irq.h |   2 +-
->  arch/loongarch/kernel/process.c  |   3 +-
->  arch/mips/include/asm/irq.h      |   2 +-
->  arch/mips/kernel/process.c       |   3 +-
->  arch/powerpc/include/asm/nmi.h   |   2 +-
->  arch/powerpc/kernel/stacktrace.c |   3 +-
->  arch/sparc/include/asm/irq_64.h  |   2 +-
->  arch/sparc/kernel/process_64.c   |   4 +-
->  arch/x86/include/asm/irq.h       |   2 +-
->  arch/x86/kernel/apic/hw_nmi.c    |   3 +-
->  drivers/irqchip/irq-gic-v3.c     |  29 ++++++---
->  include/linux/kgdb.h             |  13 ++++
->  include/linux/nmi.h              |  12 ++--
->  kernel/debug/debug_core.c        |   8 ++-
->  23 files changed, 217 insertions(+), 32 deletions(-)
+I do agree here 0x100 is more clean, but we do have to watch for the
+holes we have in memory right after some register spaces which cause
+SErrors on access..
 
-It's been 3 weeks and I haven't heard a peep on this series. That
-means nobody has any objections and it's all good to land, right?
-Right? :-P
+Either way this reg change should have been its own patch, not squashed
+into this otherwise correct s/mmio-mux/reg-mux patch.
 
-Seriously, though, I really think we should figure out how to get this
-landed. There's obviously interest from several different parties and
-I'm chomping at the bit waiting to spin this series according to your
-wishes. I also don't think there's anything super scary/ugly here. IMO
-the ideal situation is that folks are OK with the idea presented in
-the last patch in the series ("arm64: ipi_nmi: Fallback to a regular
-IPI if NMI isn't enabled") and then I can re-spin this series to be
-_much_ simpler. That being said, I'm also OK with dropping that patch
-and starting the discussion for how to land the rest of the patches in
-the series.
+Andrew
 
-Please let me know!
-
--Doug
+> 
+>>   				<0x05 0x00000000 0x01 0x0000000>;
+>>   			power-domains = <&k3_pds 102 TI_SCI_PD_EXCLUSIVE>;
+>>   			clocks = <&k3_clks 102 0>;
+> 
