@@ -2,76 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE426FD384
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 03:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 533DE6FD388
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 03:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235093AbjEJBZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 21:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52646 "EHLO
+        id S235140AbjEJB1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 21:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjEJBZc (ORCPT
+        with ESMTP id S230316AbjEJB1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 21:25:32 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1465CE52
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 18:25:31 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-44ff2f8ec9dso4104574e0c.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 18:25:31 -0700 (PDT)
+        Tue, 9 May 2023 21:27:01 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED1E26BD;
+        Tue,  9 May 2023 18:26:59 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6435bbedb4fso7159750b3a.3;
+        Tue, 09 May 2023 18:26:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20221208.gappssmtp.com; s=20221208; t=1683681930; x=1686273930;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m0ARqn6lUh+8+K75vz/NE3HQE8qKTumvzAuTMNY1vXo=;
-        b=UOdGmj2HqWuDuWFZ07gN0GFZa4HwwCBPfIzGLenp/qvEd2r4ggMpmDoVZGnYRbxtah
-         oBol6sEQL7XFtEAb62UbScv8R1N0hlTEN9NatwWc8T31ewa08EjnUSH9OzLTwX+1CBZo
-         tW8jB2RIy6BaXZtewZNP03ZbyL64/M8me5itTDUoR2G1NnGMpL888cHz5mLmLLPYhvHN
-         Uj+syFwvxBIBqxz9DREUdHu5jVZueMCTgb1BrC3SKQmjVe7mXS5BWet+RiiI9EDtNW6j
-         7n6UkZ76ztdDpLtJJnhn/uD7CqBD/u8TNujykPOTUkAwdWYbPkim9KOKWyZLvPjBH5HU
-         2l7A==
+        d=gmail.com; s=20221208; t=1683682019; x=1686274019;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eEArS+kabsb+fSj/X6VQ7ACodsIFNt5JLcPXN1+j86M=;
+        b=AMofmhhQxuI+/Ta/xu+zM0kGDlwMOD4fuf2FL646bvCis5kncCEXK8AT4f5ZvuIwqk
+         oCroTcsYRu4Du+YQSHP/YrGptUN63h3JJlXOmukQUQjqZ18bttEnvW3se533CBAdszr5
+         TyQrYfkrgOb0Y7TbM60svXzh12GzV8LyS9IAw9VqU3ka5vrDQs9bMxWdJeMka4CzntIS
+         8C3ymzUXGRk7wa3sxNsMbSOhfiOiv0tuDEx2sIHTMRsTk9zb+N8cNXIyjvbiEv0lWp+e
+         rVdSpXKKNO1RCfGPs5deb/tGsUynv+DjfJMF2XPrRhzrLQ+WmB3QJ+3tFP9sxKuABk+f
+         Y+kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683681930; x=1686273930;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m0ARqn6lUh+8+K75vz/NE3HQE8qKTumvzAuTMNY1vXo=;
-        b=GtSfHOBUaVJY7hOXoQeTvO4VxcrNo+z0NTFJrKOVW80mVer68R6HX+W/WGlV5EPgJO
-         1UcpX2DzhaOa2GVjh3p4xkouCxl/T5K77O7NNg/wmdTSorn91GCQ2slgo9k639GYwmZM
-         DITCHUfGfwjfqkmRjw4uIWdH8Tpk6dKXK2nKbI5qqDnM/HA1JEPgLcSlgJtpdNq08gkd
-         U0i+7oIKK02W1wAlKuuL03vzJ6mBpiRYxfNsz4xMHT34JCu8QFHKIuHz72A9FSx56qPm
-         emBVlT3YERRHAyxrUXKdnaFZxCGDx0fG0AxaSPQjjETsERWsEq7fNLugI1bhPgsfEXIN
-         cosg==
-X-Gm-Message-State: AC+VfDxumsfQ5MTv57mCKupALqwytB4Qihz9yFmx1Ms4sC/54NPZGbds
-        OgMHSG8PcMsvtw+okOZRIL56DbVHtnH/SATT6IR/2w==
-X-Google-Smtp-Source: ACHHUZ7Bi0L6Y5RYYpzfwbgMQqZU/tca8oH+br74IUhODrNZZunpV78eUf1PcSHKT6yiWgGGNBSQ7pQhnQ9IefTgUFw=
-X-Received: by 2002:a1f:c112:0:b0:43f:ea80:e8af with SMTP id
- r18-20020a1fc112000000b0043fea80e8afmr5234632vkf.4.1683681929848; Tue, 09 May
- 2023 18:25:29 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683682019; x=1686274019;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eEArS+kabsb+fSj/X6VQ7ACodsIFNt5JLcPXN1+j86M=;
+        b=ZDWxV1sQcuJKiGnf1P5b4EjMBw3jx7TnP2MldZKudWShSoCXfQh0Oh5EGpi/rWmM36
+         JIVeVJvmkoq2EJY828GvAigsG/aeK2svSe21tEK4VlIpgS6qjGmtxAelqas6EKmS+qiX
+         WFVODWfuz8q01VgUU4+7fC1AzYP0Ru3s+EkFeP4RD+iqXRKst9p+D/cOJ/QIvZ6RBeL1
+         BoUZm57eIpT8O01qMsnQ/ODLq7w5i9+0ujcRJ6LTBqm0VjdWfS056gQwS54xEAEJ1Zqu
+         GSSYJF89AJOCPNFtNbAhs841WvaJeAY/FuIUpSVlHCHEsZSkweKNKUs72IWGy1v25xtL
+         dp/w==
+X-Gm-Message-State: AC+VfDw2OsKG+p7KjE5eaKP8iuIzxgMVkpxGBLyRjr0R2Sgb14ugUVJi
+        ydK4r+ZVGeg+JccnyykUdcA=
+X-Google-Smtp-Source: ACHHUZ7Fe4IYlb9nVqD1imy2o9VmsAZXxyb26u3Hau9eW97be7LwC+3ZfqjpjiWPm4YHL9LsNN9IVA==
+X-Received: by 2002:a05:6a20:1608:b0:f2:c2a3:3a1 with SMTP id l8-20020a056a20160800b000f2c2a303a1mr20395456pzj.43.1683682018908;
+        Tue, 09 May 2023 18:26:58 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id a16-20020a62e210000000b006439df7ed5fsm2426977pfi.6.2023.05.09.18.26.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 18:26:58 -0700 (PDT)
+Message-ID: <6bee2314-043d-e1af-016b-779df88f1868@gmail.com>
+Date:   Wed, 10 May 2023 09:26:53 +0800
 MIME-Version: 1.0
-References: <20230427104428.862643-4-mie@igel.co.jp> <20230427180906.GA261441@bhelgaas>
-In-Reply-To: <20230427180906.GA261441@bhelgaas>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Wed, 10 May 2023 10:25:19 +0900
-Message-ID: <CANXvt5pNH-y-p8Sy3E8o_KNHDjeMb6USZivJVtDmn1rfRqp3wA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 3/3] PCI: endpoint: Add EP function driver to
- provide virtio-console functionality
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, Frank Li <Frank.Li@nxp.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v10 10/10] tty: serial: Add Nuvoton ma35d1 serial driver
+ support
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, Lee Jones <lee@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-serial <linux-serial@vger.kernel.org>, schung@nuvoton.com,
+        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230508025936.36776-1-ychuang570808@gmail.com>
+ <20230508025936.36776-11-ychuang570808@gmail.com>
+ <2ba483e9-267f-2159-1ea8-75a2618fcdf9@linux.intel.com>
+ <eeeaf258-8f2b-436a-aba0-b32dc90b359f@app.fastmail.com>
+ <b9573562-d4d7-3535-fb4d-f2bc694f2a4@linux.intel.com>
+ <72983689-0e98-4482-b549-ba2530274943@app.fastmail.com>
+From:   Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <72983689-0e98-4482-b549-ba2530274943@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,261 +94,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
-Thanks for the many comments. I will fix the mannerisms and typos as noted.
 
-2023=E5=B9=B44=E6=9C=8828=E6=97=A5(=E9=87=91) 3:09 Bjorn Helgaas <helgaas@k=
-ernel.org>:
->
-> Random typos and trivial things.  No need to repost until somebody
-> does a more substantive review.
->
-> On Thu, Apr 27, 2023 at 07:44:28PM +0900, Shunsuke Mie wrote:
-> > Add a new PCIe endpoint function driver that works as a pci virtio-cons=
-ole
-> > device. The console connect to endpoint side console. It enables to
-> > communicate PCIe host and endpoint.
->
-> s/pci/PCI/
->
-> > Architecture is following:
-> >
-> >  =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90         =E2=94=8C=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=AC=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=90
-> >  =E2=94=82virtioe     =E2=94=82         =E2=94=82                      =
-=E2=94=82virtio      =E2=94=82
-> >  =E2=94=82console drv =E2=94=82         =E2=94=9C=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90      =E2=94=82console drv =
-=E2=94=82
-> >  =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4         =E2=94=82=
-(virtio console=E2=94=82      =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=A4
-> >  =E2=94=82 virtio bus =E2=94=82         =E2=94=82 device)       =E2=94=
-=82=E2=97=84=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=96=BA=E2=94=82 virtio b=
-us =E2=94=82
-> >  =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4         =E2=94=9C=
----------------=E2=94=A4      =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=A4
-> >  =E2=94=82            =E2=94=82         =E2=94=82 pci ep virtio =E2=94=
-=82                   =E2=94=82
-> >  =E2=94=82  pci bus   =E2=94=82         =E2=94=82  console drv  =E2=94=
-=82                   =E2=94=82
-> >  =E2=94=82            =E2=94=82  pcie   =E2=94=9C=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4                   =E2=94=
-=82
-> >  =E2=94=82            =E2=94=82 =E2=97=84=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=96=BA =E2=94=82  pci ep Bus   =E2=94=82                 =
-  =E2=94=82
-> >  =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=98         =E2=94=94=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=B4=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=98
-> >    PCIe Root              PCIe Endpoint
->
-> s/virtioe/virtio/
-> s/pci/PCI/
-> s/pcie/PCIe/
-> s/ep/EP/
->
-> > +config PCI_EPF_VCON
-> > +     tristate "PCI Endpoint virito-console driver"
->
-> s/virito/virtio/
->
-> > +     depends on PCI_ENDPOINT
-> > +     select VHOST_RING
-> > +     select PCI_EPF_VIRTIO
-> > +     help
-> > +       PCIe Endpoint virtio-console function implementatino. This modu=
-le
-> > +       enables to show the virtio-console as pci device to PCIe host s=
-ide, and
-> > +       another virtual virtio-console device registers to endpoint sys=
-tem.
-> > +       Those devices are connected virtually and can communicate each =
-other.
->
-> s/implementatino/implementation/
-> s/pci/PCI/
-> s/can communicate/can communicate with/
->
-> > + * PCI Endpoint function driver to impliment virtio-console device
-> > + * functionality.
->
-> s/impliment/implement/
->
-> > +static int virtio_queue_size =3D 0x100;
-> > +module_param(virtio_queue_size, int, 0444);
-> > +MODULE_PARM_DESC(virtio_queue_size, "A length of virtqueue");
->
-> When and why would users need this parameter?  Where is it documented?
->
-> > +     /* To access virtqueus of local host driver */
->
-> s/virtqueus/virtqueues/
->
-> > +     /* To show a status whether this driver is ready and the remote i=
-s connected */
->
-> Make this fit in 80 columns.
->
-> > +     /* This is a minimum implementation. Doesn't support any features=
- of
-> > +      * virtio console. It means driver and device use just 2 virtuque=
- for tx
-> > +      * and rx.
-> > +      */
->
-> Use common multi-line comment style:
->
->   /*
->    * This is ...
->    */
-I'll follow the style.
-> s/virtuque/virtqueues/
->
-> > +static void epf_vcon_raise_irq_handler(struct work_struct *work)
-> > +{
-> > +     struct epf_vcon *vcon =3D
-> > +             container_of(work, struct epf_vcon, raise_irq_work);
->
-> Rewrap.
->
-> > +static int epf_vcon_setup_common(struct epf_vcon *vcon)
-> > +{
-> > +     vcon->features =3D 0;
-> > +     vcon->connected =3D false;
-> > +
-> > +     vcon->task_wq =3D
-> > +             alloc_workqueue("pci-epf-vcon/task-wq",
->
-> Looks like this would fit on the previous line?
->
-> > +                             WQ_MEM_RECLAIM | WQ_HIGHPRI | WQ_UNBOUND,=
- 0);
->
-> > +static void epf_vcon_initialize_complete(void *param)
-> > +{
-> > +     struct epf_vcon *vcon =3D param;
-> > +
-> > +     pr_debug("Remote host has connected\n");
->
-> Is there any device info you could include here, e.g., with dev_dbg()?
-> It's nice if users have a little context.
-I see. I'll use it.
-> > +static int epf_vcon_setup_ep_func(struct epf_vcon *vcon, struct pci_ep=
-f *epf)
-> > +{
-> > +     int err;
-> > +     struct epf_virtio *evio =3D &vcon->evio;
-> > +     unsigned int nvq =3D epf_vcon_get_nvq(vcon);
-> > +
-> > +     vcon->rdev_iovs =3D
-> > +             kmalloc_array(nvq, sizeof(vcon->rdev_iovs[0]), GFP_KERNEL=
-);
->
-> Move the function name and as many parameters as fit in 80 columns to
-> the previous line to match prevailing style.
-I've just applied clang-format... Ok, I'll fix it manually.
-> > +     /* There is no config for virtio console because this console dev=
-ice
-> > +      * doesn't any support features
-> > +      */
->
-> Multi-line comment style.
->
-> s/doesn't any support/doesn't support any/?  Is that what you mean?
->
-> > +     /* Do nothing because this console device doesn't any support fea=
-tures */
->
-> Same.
->
-> > +static void epf_vcon_vdev_set_status(struct virtio_device *vdev, u8 st=
-atus)
-> > +{
-> > +     if (status & VIRTIO_CONFIG_S_FAILED)
-> > +             pr_debug("driver failed to setup this device\n");
->
-> dev_dbg() if possible.
->
-> > +             err =3D vringh_init_kern(&vcon->vdev_vrhs[i], vcon->featu=
-res,
-> > +                                    virtio_queue_size, false, vring->d=
-esc,
-> > +                                    vring->avail, vring->used);
-> > +             if (err) {
-> > +                     pr_err("failed to init vringh for vring %d\n", i)=
-;
->
-> dev_err() if possible.
->
-> > +static int epf_vcon_setup_vdev(struct epf_vcon *vcon, struct device *p=
-arent)
-> > +{
-> > +     int err;
-> > +     struct virtio_device *vdev =3D &vcon->vdev;
-> > +     const unsigned int nvq =3D epf_vcon_get_nvq(vcon);
-> > +
-> > +     vcon->vdev_vrhs =3D
-> > +             kmalloc_array(nvq, sizeof(vcon->vdev_vrhs[0]), GFP_KERNEL=
-);
->
-> Rewrap.
->
-> > +     vcon->vdev_iovs =3D
-> > +             kmalloc_array(nvq, sizeof(vcon->vdev_iovs[0]), GFP_KERNEL=
-);
->
-> Rewrap.
->
-> > +     vcon->vdev_vqs =3D
-> > +             kmalloc_array(nvq, sizeof(vcon->vdev_vrhs[0]), GFP_KERNEL=
-);
->
-> Rewrap.
->
-> > +static void epf_vcon_cleanup_vdev(struct epf_vcon *vcon)
-> > +{
-> > +     unregister_virtio_device(&vcon->vdev);
-> > +     /* Cleanup struct virtio_device that has kobject, otherwise error=
- occures when
-> > +      * reregister the virtio device.
-> > +      */
->
-> Multi-line style and rewrap to fit in 80 columns.
->
-> > +static int __init epf_vcon_init(void)
-> > +{
-> > +     int err;
-> > +
-> > +     err =3D pci_epf_register_driver(&epf_vcon_drv);
-> > +     if (err)
-> > +             pr_err("Failed to register PCI EP virtio-console function=
-\n");
->
-> dev_err() if possible (doesn't look like it *is* possible).
->
-> Looks like this registers a *driver*, so maybe change the message from
-> "function" to "driver"?
-It should be "driver".
-https://docs.kernel.org/PCI/endpoint/pci-endpoint.html#epc-apis-for-the-pci=
--endpoint-function-driver
-> Bjorn
+Dear Arnd and Ilpo,
 
-Best regards,
-Shunsuke
+
+Thank you for the comments.
+
+
+On 2023/5/9 下午 08:32, Arnd Bergmann wrote:
+> On Tue, May 9, 2023, at 14:25, Ilpo Järvinen wrote:
+>> On Tue, 9 May 2023, Arnd Bergmann wrote:
+>>> On Tue, May 9, 2023, at 12:17, Ilpo Järvinen wrote:
+>>>> On Mon, 8 May 2023, Jacky Huang wrote:
+>>>>> +
+>>>>> +#define UART_NR			17
+>>>>> +
+>>>>> +#define UART_REG_RBR		0x00
+>>>>> +#define UART_REG_THR		0x00
+>>>>> +#define UART_REG_IER		0x04
+>>>>> +#define UART_REG_FCR		0x08
+>>>>> +#define UART_REG_LCR		0x0C
+>>>>> +#define UART_REG_MCR		0x10
+>>>> These duplicate include/uapi/linux/serial_reg.h ones, use the std ones
+>>>> directly.
+>>>>
+>>>> Setup regshift too and use it in serial_in.
+>>> I think this came up in previous reviews, but it turned out that
+>>> only the first six registers are compatible, while the later
+>>> ones are all different, and it's not 8250 compatible.
+>> So use the normal name for compatible ones and HW specific names for the
+>> others?
+>>
+>> It might not be compatible in everything but surely 8250 influence is
+>> visible here and there.
+> I'd rename all of them and share nothing. I had the same thought as you
+> when I first looked at the driver, and thought of how we merged the omap
+> uart into 8250 for this reason, but after I found a datasheet for this
+> one, my impression was that it's a much more distant cousin of 8250
+> than the others,
+>
+> There is clearly some family lineage, but there are differences
+> everywhere, and I don't think it was designed by extending a 8250
+> compatible hardware block with extra features, but rather built
+> from scratch (sigh) based only loosely on a register description
+> but then extending it with no intent of retaining compatibility.
+>
+>         Arnd
+
+Yes, the design of this UART IP is indeed incompatible with the 8250, but it
+does imitate the 8250 in some register and register bit field naming, and
+even in usage definitions, which can easily lead to misunderstandings.
+
+In order to distinguish it from the 8250 and make it clear that it has 
+nothing
+to do with the 8250, I hope you can agree with me not to use the existing
+register and bit field definitions of the 8250 in this driver.
+
+In fact, this UART design has been used for more than 15 years and is used
+in our M0/M23/M4, ARM7/ARM9 MCUs and MPUs. The MA35 series will also
+continue to use this design. I will add the MA35_ prefix to all 
+registers and bit
+fields, and make the modifications suggested by Ilpo that are unrelated to
+this 8250 issue.
+
+
+Best Regards,
+Jacky Huang
+
