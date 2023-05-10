@@ -2,89 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8CF6FDDCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6B96FDDCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236964AbjEJM2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 08:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S237009AbjEJM3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 08:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbjEJM2V (ORCPT
+        with ESMTP id S232073AbjEJM3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 08:28:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0654F44B0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:28:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 438A11063;
-        Wed, 10 May 2023 05:29:04 -0700 (PDT)
-Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BE9AF3F5A1;
-        Wed, 10 May 2023 05:28:18 -0700 (PDT)
-From:   Liviu Dudau <liviu.dudau@arm.com>
-To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Joe Perches <joe@perches.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Brian Starkey <brian.starkey@arm.com>,
-        Mihail Atanassov <mihail.atanassov@arm.com>
-Subject: [PATCH v2] MAINTAINERS: Cleanup Arm Display IP maintainers
-Date:   Wed, 10 May 2023 13:28:11 +0100
-Message-Id: <20230510122811.1872358-1-liviu.dudau@arm.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230510121618.1871790-1-liviu.dudau@arm.com>
-References: <20230510121618.1871790-1-liviu.dudau@arm.com>
+        Wed, 10 May 2023 08:29:04 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C878149CE
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:29:01 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-76371bc5167so1051926239f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:29:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683721741; x=1686313741;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PtyEHgMICM4fpwcH4FzG9uK+8/49FVxPeU/+8ghuGA8=;
+        b=WH0Zy3Z5uXPmW549Th65NdF/Dil/hBmI+TPlQUfVDzH1ABNlZZhaEvJf/poAm0Lhu+
+         x4usEFWl4Nts/ZB+2hLa2tqwMXS73//JkEYVFcNLFn8rNDX0JrR9V7La5Su145BXshUG
+         gPBlZQctk69nt0zxwJXaiMpGtfNAUL/WWJHBq/IpU+ayNLxPc6ZO2xZAINea27M+A+/4
+         CPqWP9eZc9UALSVXgj0X3qzx7KeGMJxwe9C64hTvWjhkfkRPd4YJuwK2heQyUKNVflYS
+         Kp3IqNE1waz2hTf8dMoLyyBMI7w3SHe37rvkICILHOh/lHxm3oWTohyig9kF+5mtvq3k
+         aghQ==
+X-Gm-Message-State: AC+VfDzzhdSxPyf7Biu4+U+JUMK79U+SS5FK4VIEptXfeoEUx9S1l1fw
+        IkBFA932nDSK2AqvZFybOK7AkU+48hr+BlAqhsnO94/GIZvi
+X-Google-Smtp-Source: ACHHUZ715Id6Yl8UOuYVL97pihs/7YYSStE2/G6P8oZi1RSPuLJ7j79XDEYBl9L3nBtumnGYxsXF0ZFRz/09fg7Yq/3l4GP4gCe3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:860e:0:b0:40f:7382:e4aa with SMTP id
+ e14-20020a02860e000000b0040f7382e4aamr3101580jai.2.1683721741181; Wed, 10 May
+ 2023 05:29:01 -0700 (PDT)
+Date:   Wed, 10 May 2023 05:29:01 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000048abb105fb5604c1@google.com>
+Subject: [syzbot] [bpf?] [net?] kernel BUG in pskb_expand_head (2)
+From:   syzbot <syzbot+78bac731178aabdb6307@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
+        haoluo@google.com, hawk@kernel.org, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@linux.dev,
+        netdev@vger.kernel.org, pabeni@redhat.com, sdf@google.com,
+        song@kernel.org, syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some people have moved to different roles and are no longer involved
-in the upstream development. As there is only one person left,
-remove the mailing list as well as it serves no purpose.
+Hello,
 
-Cc: Brian Starkey <brian.starkey@arm.com>
-Cc: Mihail Atanassov <mihail.atanassov@arm.com>
-Signed-off-by: Liviu Dudau <liviu.dudau@arm.com>
+syzbot found the following issue on:
+
+HEAD commit:    ed23734c23d2 Merge tag 'net-6.4-rc1' of git://git.kernel.o..
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=10ecc3b0280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=87f9126139666d37
+dashboard link: https://syzkaller.appspot.com/bug?extid=78bac731178aabdb6307
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d103acfdbd1d/disk-ed23734c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4448a632b1df/vmlinux-ed23734c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/758a66ebff4f/bzImage-ed23734c.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+78bac731178aabdb6307@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at net/core/skbuff.c:2047!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 16973 Comm: syz-executor.5 Not tainted 6.3.0-syzkaller-13379-ged23734c23d2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+RIP: 0010:pskb_expand_head+0xc4a/0x1170 net/core/skbuff.c:2047
+Code: 8d 75 ff e9 0f fe ff ff e8 b3 20 7c f9 48 c7 c6 40 cb 5d 8b 4c 89 f7 e8 14 a4 b7 f9 0f 0b e8 9d 20 7c f9 0f 0b e8 96 20 7c f9 <0f> 0b e8 8f 20 7c f9 48 89 df e8 87 50 ff ff e9 75 f5 ff ff e8 7d
+RSP: 0018:ffffc90003797818 EFLAGS: 00010216
+RAX: 0000000000001b49 RBX: ffff888015b06870 RCX: ffffc900056ba000
+RDX: 0000000000040000 RSI: ffffffff8808244a RDI: 0000000000000005
+RBP: 0000000000000002 R08: 0000000000000005 R09: 0000000000000001
+R10: 0000000000000002 R11: 1ffff110040ad08a R12: 0000000000000820
+R13: dffffc0000000000 R14: ffff888015b06940 R15: 0000000000000000
+FS:  00007f4a686bb700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2e124000 CR3: 000000007314b000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ skb_ensure_writable net/core/skbuff.c:6001 [inline]
+ skb_ensure_writable+0x2cb/0x450 net/core/skbuff.c:5993
+ __bpf_try_make_writable net/core/filter.c:1658 [inline]
+ sk_skb_try_make_writable net/core/filter.c:1881 [inline]
+ ____sk_skb_pull_data net/core/filter.c:1895 [inline]
+ sk_skb_pull_data+0x8b/0xa0 net/core/filter.c:1884
+ bpf_prog_53daab6e9cefb4fc+0x1a/0x1c
+ bpf_dispatcher_nop_func include/linux/bpf.h:1168 [inline]
+ __bpf_prog_run include/linux/filter.h:600 [inline]
+ bpf_prog_run include/linux/filter.h:607 [inline]
+ bpf_prog_run_pin_on_cpu include/linux/filter.h:624 [inline]
+ sk_psock_verdict_recv+0x36d/0x7a0 net/core/skmsg.c:1201
+ tcp_read_skb+0x177/0x670 net/ipv4/tcp.c:1773
+ sk_psock_verdict_data_ready+0xad/0xd0 net/core/skmsg.c:1220
+ tcp_data_ready+0x10a/0x520 net/ipv4/tcp_input.c:5006
+ tcp_rcv_established+0x194f/0x1f90 net/ipv4/tcp_input.c:5986
+ tcp_v4_do_rcv+0x65a/0x9c0 net/ipv4/tcp_ipv4.c:1721
+ sk_backlog_rcv include/net/sock.h:1113 [inline]
+ __release_sock+0x133/0x3b0 net/core/sock.c:2917
+ release_sock+0x58/0x1b0 net/core/sock.c:3484
+ tcp_sendmsg+0x3a/0x50 net/ipv4/tcp.c:1486
+ inet_sendmsg+0x9d/0xe0 net/ipv4/af_inet.c:825
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:747
+ __sys_sendto+0x23a/0x340 net/socket.c:2144
+ __do_sys_sendto net/socket.c:2156 [inline]
+ __se_sys_sendto net/socket.c:2152 [inline]
+ __x64_sys_sendto+0xe1/0x1b0 net/socket.c:2152
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4a6788c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f4a686bb168 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00007f4a679abf80 RCX: 00007f4a6788c169
+RDX: 0000000000000001 RSI: 00000000200000c0 RDI: 0000000000000003
+RBP: 00007f4a678e7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff06f0778f R14: 00007f4a686bb300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:pskb_expand_head+0xc4a/0x1170 net/core/skbuff.c:2047
+Code: 8d 75 ff e9 0f fe ff ff e8 b3 20 7c f9 48 c7 c6 40 cb 5d 8b 4c 89 f7 e8 14 a4 b7 f9 0f 0b e8 9d 20 7c f9 0f 0b e8 96 20 7c f9 <0f> 0b e8 8f 20 7c f9 48 89 df e8 87 50 ff ff e9 75 f5 ff ff e8 7d
+RSP: 0018:ffffc90003797818 EFLAGS: 00010216
+RAX: 0000000000001b49 RBX: ffff888015b06870 RCX: ffffc900056ba000
+RDX: 0000000000040000 RSI: ffffffff8808244a RDI: 0000000000000005
+RBP: 0000000000000002 R08: 0000000000000005 R09: 0000000000000001
+R10: 0000000000000002 R11: 1ffff110040ad08a R12: 0000000000000820
+R13: dffffc0000000000 R14: ffff888015b06940 R15: 0000000000000000
+FS:  00007f4a686bb700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007feddbf47100 CR3: 000000007314b000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Appologies to Mihail, looks like I have forgot how to spell his name.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
- MAINTAINERS | 5 -----
- 1 file changed, 5 deletions(-)
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 276298cfc7ee4..7d5184550a11e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1660,10 +1660,7 @@ F:	drivers/power/reset/arm-versatile-reboot.c
- F:	drivers/soc/versatile/
- 
- ARM KOMEDA DRM-KMS DRIVER
--M:	James (Qian) Wang <james.qian.wang@arm.com>
- M:	Liviu Dudau <liviu.dudau@arm.com>
--M:	Mihail Atanassov <mihail.atanassov@arm.com>
--L:	Mali DP Maintainers <malidp@foss.arm.com>
- S:	Supported
- T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	Documentation/devicetree/bindings/display/arm,komeda.yaml
-@@ -1684,8 +1681,6 @@ F:	include/uapi/drm/panfrost_drm.h
- 
- ARM MALI-DP DRM DRIVER
- M:	Liviu Dudau <liviu.dudau@arm.com>
--M:	Brian Starkey <brian.starkey@arm.com>
--L:	Mali DP Maintainers <malidp@foss.arm.com>
- S:	Supported
- T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	Documentation/devicetree/bindings/display/arm,malidp.yaml
--- 
-2.40.1
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
