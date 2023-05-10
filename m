@@ -2,187 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2CA6FE655
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 23:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8F86FE65D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 23:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235731AbjEJVbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 17:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S230016AbjEJVjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 17:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjEJVbh (ORCPT
+        with ESMTP id S229586AbjEJVjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 17:31:37 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C40273A
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:31:36 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-643990c5373so7787961b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:31:36 -0700 (PDT)
+        Wed, 10 May 2023 17:39:22 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DAC3A85
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:39:21 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-6438e9e9f91so4431698b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:39:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683754296; x=1686346296;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dilDKvLCh912/JBRw2vO/HiVmrKv/M0bEgV3+XRucAc=;
-        b=CWdjuapDrxVvjL+NbU0Z7r7YLgIF/8WG4X8TGoU/rY0/jBkTpsVNpN8BuGOUwfDydi
-         /C4sQDaca9lTm7Ttwlpxhy3oiv8L86cQJ5n2s8e5XZEI8VJeiXykB6wcUDMLwC8WToUK
-         57Xwdy7G1OtX1rHqs6ynvUDGhszNOmgbxEszHbS8+DYh8lxr9iDXkbL52IDHpVVdDqbD
-         vWhS7GmUZLXfoGHkBUpYxrmqrR88fCnywib0lJs4+j2t/o4U4CGrjQr9NJSGNooy6oFj
-         BFlZhhvk4fJ+C6xOld8dFfukqDzRflnVqtuxW78TGmvpx3vbohx35h1SAV0G/yNxpb7R
-         kZxw==
+        d=google.com; s=20221208; t=1683754760; x=1686346760;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pvMo88ZxTu4JSemHWRpCdEPpg2ynZCnKfs0n5ONEGjQ=;
+        b=CeJmhLiVeMl/SalaT3UbgWDd6VZbKL0myvmAHYqsphIPwK8cGR848wCnLDAuc7yd1I
+         zELWkkT3aTqEiAbKdsf2hUs2GkeJ5MiWLGlN7rfO7jK+hivnkfmWMO8Ru5GlsM6lceBE
+         yO+HEbccZlJDHHuIKD8xBhM0otHLjuZ67zmdfokxtRJYJROWpRI+2/9vi3RZDuK4uZmI
+         zSwmnX/xQDN/QXBlGizERLvYFs4nZgznpyz4aAHbuxFw+Kw4pUjqkzZDmWVoUZFsx+Ul
+         mFwv1sCMTb345np8OlMSroX5+ovzXWZzMYE7RVmfr6ZfnFfQfI789o8jit9LcGvg/eAD
+         66eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683754296; x=1686346296;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dilDKvLCh912/JBRw2vO/HiVmrKv/M0bEgV3+XRucAc=;
-        b=Cn7+9ggDKHDtGFIfORyVeN55/irLqXcq0/27tnX1Vuw/Dtlb5yPpqvOQ/iMHWmoY5J
-         5UDd1DGuURmXB/O3k9F7Fm1sJAtg38pS495mj5SuUSnKvUCKZQw9LF8ZoraGB8TuL2lU
-         YHSWQkbrZvQg2NxgzTjf3rKkEZKdI/ZMLcpggaPcZWLmutq2KsTvVi99ViqF2tpo4b5P
-         p2p4pdF5CYcHi/BTVMrKrMrSDVLoSjrf0Ssqk+fOww/G9fiLKSIrhlZc7FcL9ZvYHvS5
-         uAeaiGMx0T9mTuCIsf651IPlie6oUKGESSslqFp5fAr+NskGRnrWBI2ow4kk0hfFGDqL
-         Le1w==
-X-Gm-Message-State: AC+VfDxwnMPLML+pT4y/LAol7oCjS3RPtG2lRg7dqIedg6LWUjBp5LPX
-        WhcB12/JY3hNfsE4vFBFGOL5raxkvMl358XzCdZ1Cw==
-X-Google-Smtp-Source: ACHHUZ74oA92M2oyte9ZwQqFQMLwi4FAmCL45SgTYqyIDZnMMcH93WNEj5//wMcp0Tf/bB3sl4rmpo4z3TUompF7XqU=
-X-Received: by 2002:a17:902:ba84:b0:1ab:1c09:2df8 with SMTP id
- k4-20020a170902ba8400b001ab1c092df8mr19326387pls.50.1683754295424; Wed, 10
- May 2023 14:31:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230510152216.1392682-1-aleksandr.mikhalitsyn@canonical.com>
-In-Reply-To: <20230510152216.1392682-1-aleksandr.mikhalitsyn@canonical.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 10 May 2023 14:31:24 -0700
-Message-ID: <CAKH8qBuAoobsVP2Q5KN06fZ2NM3_aMwT7Y2OoKwS4Cf=cv3ZGg@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: core: add SOL_SOCKET filter for bpf
- getsockopt hook
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     davem@davemloft.net, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20221208; t=1683754760; x=1686346760;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pvMo88ZxTu4JSemHWRpCdEPpg2ynZCnKfs0n5ONEGjQ=;
+        b=NR/aV56usrmfmZjJThkfivwagKWS5HnIOlLf0SMfUd/XXTrL5BEvAN74NphUmbDwTo
+         4853LbV0EUTkEf5vCymBM9113nKE4O0DmPBuzm6aNmx4Iae0+YOX1v9ye4M9S+uAxJpn
+         ybbi3MNVD2MyKdYhplh6QFVC4LF2v94e1F0GI2Fr4Mu/kIG+ytZRQWPkJ3WvTdMoCGug
+         hdfpdpjotMUvxNYKiur8k1LPQIVN20gTAXvk3Q6+ehNi4Pzpc8EPZdz9aAJ+YUbz+Xt2
+         cEanW5iyyyJQRfFR141VTROv37CXtTeMafDeH1I/PGGMwMD2HcnThkX+5BVaWYopvumF
+         ofyQ==
+X-Gm-Message-State: AC+VfDzf3qmLEUgbWNsE97yenvAu081YwhldhZoMINj66MU4/HJY506e
+        zoyjZwjWzBH80YBT0KrGKyNcD5ZILBQ=
+X-Google-Smtp-Source: ACHHUZ5vj9DFK0NhJYCWC3eWM91MVLeZUtPl8EkfA8521q2N+H8FD8crn4+g5/DykvygR1tXhlUlPIZU59U=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:7c9:b0:643:78c0:ec65 with SMTP id
+ n9-20020a056a0007c900b0064378c0ec65mr4990145pfu.5.1683754760622; Wed, 10 May
+ 2023 14:39:20 -0700 (PDT)
+Date:   Wed, 10 May 2023 14:39:18 -0700
+In-Reply-To: <CAGtprH_+bF4VZg2ps6CM8vjJVvShsvSGAvaLfTedts4cKqhSUw@mail.gmail.com>
+Mime-Version: 1.0
+References: <ZD1oevE8iHsi66T2@google.com> <658018f9-581c-7786-795a-85227c712be0@redhat.com>
+ <ZD12htq6dWg0tg2e@google.com> <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
+ <ZD2bBB00eKP6F8kz@google.com> <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
+ <ZD86E23gyzF6Q7AF@google.com> <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
+ <ZEM5Zq8oo+xnApW9@google.com> <CAGtprH_+bF4VZg2ps6CM8vjJVvShsvSGAvaLfTedts4cKqhSUw@mail.gmail.com>
+Message-ID: <ZFwPBqGeW+d9xMEs@google.com>
+Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
+ KVM: mm: fd-based approach for supporting KVM)
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        tabba@google.com, Michael Roth <michael.roth@amd.com>,
+        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 8:23=E2=80=AFAM Alexander Mikhalitsyn
-<aleksandr.mikhalitsyn@canonical.com> wrote:
->
-> We have per struct proto ->bpf_bypass_getsockopt callback
-> to filter out bpf socket cgroup getsockopt hook from being called.
->
-> It seems worthwhile to add analogical helper for SOL_SOCKET
-> level socket options. First user will be SO_PEERPIDFD.
->
-> This patch was born as a result of discussion around a new SCM_PIDFD inte=
-rface:
-> https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn=
-@canonical.com/
->
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: bpf@vger.kernel.org
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com=
->
-> ---
->  include/linux/bpf-cgroup.h | 8 +++++---
->  include/net/sock.h         | 1 +
->  net/core/sock.c            | 5 +++++
->  3 files changed, 11 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-> index 57e9e109257e..97d8a49b35bf 100644
-> --- a/include/linux/bpf-cgroup.h
-> +++ b/include/linux/bpf-cgroup.h
-> @@ -387,10 +387,12 @@ static inline bool cgroup_bpf_sock_enabled(struct s=
-ock *sk,
->         int __ret =3D retval;                                            =
-        \
->         if (cgroup_bpf_enabled(CGROUP_GETSOCKOPT) &&                     =
-      \
->             cgroup_bpf_sock_enabled(sock, CGROUP_GETSOCKOPT))            =
-      \
-> -               if (!(sock)->sk_prot->bpf_bypass_getsockopt ||           =
-      \
-> -                   !INDIRECT_CALL_INET_1((sock)->sk_prot->bpf_bypass_get=
-sockopt, \
-> +               if (((level !=3D SOL_SOCKET) ||                          =
-        \
-> +                    !sock_bpf_bypass_getsockopt(level, optname)) &&     =
-      \
-> +                   (!(sock)->sk_prot->bpf_bypass_getsockopt ||          =
-      \
+On Wed, May 10, 2023, Vishal Annapurve wrote:
+> On Fri, Apr 21, 2023 at 6:33=E2=80=AFPM Sean Christopherson <seanjc@googl=
+e.com> wrote:
+> >
+> > ...
+> > cold.  I poked around a bit to see how we could avoid reinventing all o=
+f that
+> > infrastructure for fd-only memory, and the best idea I could come up wi=
+th is
+> > basically a rehash of Kirill's very original "KVM protected memory" RFC=
+[3], i.e.
+> > allow "mapping" fd-only memory, but ensure that memory is never actuall=
+y present
+> > from hardware's perspective.
+> >
+>=20
+> I am most likely missing a lot of context here and possibly venturing
+> into an infeasible/already shot down direction here.
 
-Any reason we are not putting this into bpf_bypass_getsockopt for
-af_unix struct proto? SO_PEERPIDFD seems relevant only for af_unix?
+Both :-)
 
-> +                    !INDIRECT_CALL_INET_1((sock)->sk_prot->bpf_bypass_ge=
-tsockopt, \
->                                         tcp_bpf_bypass_getsockopt,       =
-      \
-> -                                       level, optname))                 =
-      \
-> +                                       level, optname)))                =
-      \
->                         __ret =3D __cgroup_bpf_run_filter_getsockopt(    =
-        \
->                                 sock, level, optname, optval, optlen,    =
-      \
->                                 max_optlen, retval);                     =
-      \
-> diff --git a/include/net/sock.h b/include/net/sock.h
-> index 8b7ed7167243..530d6d22f42d 100644
-> --- a/include/net/sock.h
-> +++ b/include/net/sock.h
-> @@ -1847,6 +1847,7 @@ int sk_getsockopt(struct sock *sk, int level, int o=
-ptname,
->                   sockptr_t optval, sockptr_t optlen);
->  int sock_getsockopt(struct socket *sock, int level, int op,
->                     char __user *optval, int __user *optlen);
-> +bool sock_bpf_bypass_getsockopt(int level, int optname);
->  int sock_gettstamp(struct socket *sock, void __user *userstamp,
->                    bool timeval, bool time32);
->  struct sk_buff *sock_alloc_send_pskb(struct sock *sk, unsigned long head=
-er_len,
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 5440e67bcfe3..194a423eb6e5 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -1963,6 +1963,11 @@ int sock_getsockopt(struct socket *sock, int level=
-, int optname,
->                              USER_SOCKPTR(optlen));
->  }
->
-> +bool sock_bpf_bypass_getsockopt(int level, int optname)
-> +{
-> +       return false;
-> +}
-> +
->  /*
->   * Initialize an sk_lock.
->   *
-> --
-> 2.34.1
->
+> But I would still like to get this discussed here before we move on.
+>=20
+> I am wondering if it would make sense to implement
+> restricted_mem/guest_mem file to expose both private and shared memory
+> regions, inline with Kirill's original proposal now that the file
+> implementation is controlled by KVM.
+>=20
+> Thinking from userspace perspective:
+> 1) Userspace creates guest mem files and is able to mmap them but all
+> accesses to these files result into faults as no memory is allowed to
+> be mapped into userspace VMM pagetables.
+
+Never mapping anything into the userspace page table is infeasible.  Techni=
+cally
+it's doable, but it'd effectively require all of the work of an fd-based ap=
+proach
+(and probably significantly more), _and_ it'd require touching core mm code=
+.
+
+VMAs don't provide hva=3D>pfn information, they're the kernel's way of impl=
+ementing
+the abstraction provided to userspace by mmap(), mprotect() etc.  Among man=
+y other
+things, a VMA describes properties of what is mapped, e.g. hugetblfs versus
+anonymous, where memory is mapped (virtual address), how memory is mapped, =
+e.g.
+RWX protections, etc.  But a VMA doesn't track the physical address, that i=
+nfo
+is all managed through the userspace page tables.
+
+To make it possible to allow userspace to mmap() but not access memory (wit=
+hout
+redoing how the kernel fundamentally manages virtual=3D>physical mappings),=
+ the
+simplest approach is to install PTEs into userspace page tables, but never =
+mark
+them Present in hardware, i.e. prevent actually accessing the backing memor=
+y.
+This is is exactly what Kirill's series in link [3] below implemented.
+
+Issues that led to us abandoning the "map with special !Present PTEs" appro=
+ach:
+
+ - Using page tables, i.e. hardware defined structures, to track gfn=3D>pfn=
+ mappings
+   is inefficient and inflexible compared to software defined structures, e=
+specially
+   for the expected use cases for CoCo guests.
+
+ - The kernel wouldn't _easily_ be able to enforce a 1:1 page:guest associa=
+tion,
+   let alone a 1:1 pfn:gfn mapping.
+=20
+ - Does not work for memory that isn't backed by 'struct page', e.g. if dev=
+ices
+   gain support for exposing encrypted memory regions to guests.
+
+ - Poking into the VMAs to convert memory would be likely be less performan=
+t due
+   to using infrastructure that is much "heavier", e.g. would require takin=
+g
+   mmap_lock for write.
+
+In short, shoehorning this into mmap() requires fighting how the kernel wor=
+ks at
+pretty much every step, and in the end, adding e.g. fbind() is a lot easier=
+.
+
+> 2) Userspace registers mmaped HVA ranges with KVM with additional
+> KVM_MEM_PRIVATE flag
+> 3) Userspace converts memory attributes and this memory conversion
+> allows userspace to access shared ranges of the file because those are
+> allowed to be faulted in from guest_mem. Shared to private conversion
+> unmaps the file ranges from userspace VMM pagetables.
+> 4) Granularity of userspace pagetable mappings for shared ranges will
+> have to be dictated by KVM guest_mem file implementation.
+>=20
+> Caveat here is that once private pages are mapped into userspace view.
+>=20
+> Benefits here:
+> 1) Userspace view remains consistent while still being able to use HVA ra=
+nges
+> 2) It would be possible to use HVA based APIs from userspace to do
+> things like binding.
+> 3) Double allocation wouldn't be a concern since hva ranges and gpa
+> ranges possibly map to the same HPA ranges.
+
+#3 isn't entirely correct.  If a different process (call it "B") maps share=
+d memory,
+and then the guest converts that memory from shared to private, the backing=
+ pages
+for the previously shared mapping will still be mapped by process B unless =
+userspace
+also ensures process B also unmaps on conversion.
+
+#3 is also a limiter.  E.g. if a guest is primarly backed by 1GiB pages, ke=
+eping
+the 1GiB mapping is desirable if the guest converts a few KiB of memory to =
+shared,
+and possibly even if the guest converts a few MiB of memory.
+
+> > Code is available here if folks want to take a look before any kind of =
+formal
+> > posting:
+> >
+> >         https://github.com/sean-jc/linux.git x86/kvm_gmem_solo
+> >
+> > [1] https://lore.kernel.org/all/ff5c5b97-acdf-9745-ebe5-c6609dd6322e@go=
+ogle.com
+> > [2] https://lore.kernel.org/all/20230418-anfallen-irdisch-6993a61be10b@=
+brauner
+> > [3] https://lore.kernel.org/linux-mm/20200522125214.31348-1-kirill.shut=
+emov@linux.intel.com
