@@ -2,234 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DAF6FDABF
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9B46FDAC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236778AbjEJJ27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 05:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43256 "EHLO
+        id S236711AbjEJJaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 05:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235731AbjEJJ25 (ORCPT
+        with ESMTP id S235731AbjEJJaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 05:28:57 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF62A3A88;
-        Wed, 10 May 2023 02:28:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1683710933; bh=Iwd4HphEtoXFGpfJUevca/hbM8Q5YO+WAm14znZJ13k=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ure98uSxlqxpy3kj2lJZZLp+wJOVoHih0i3q9H3v6hyHP9iCSPjbSN/BSAhuGS4WE
-         tUyWj4INmQGl44m5Pcoh8NwrHJHxocpXHLl5jdxX/UAWWZbKEki+caa5EVhfj37XeS
-         JrWt0+Jb4HhtLXpM4plniB7kEM40+qqUO6xZj8Vo=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 10 May 2023 05:30:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE033A9D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 02:30:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id CD4E2600CE;
-        Wed, 10 May 2023 17:28:52 +0800 (CST)
-Message-ID: <3b360532-6ad5-b22c-b02a-103be491be4c@xen0n.name>
-Date:   Wed, 10 May 2023 17:28:52 +0800
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18CA96315B
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 09:30:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82820C433D2;
+        Wed, 10 May 2023 09:30:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683711005;
+        bh=dJfehcE0kgEjFIIypQ1MeCfLml/7htEHGgEVOwaVWuk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JoHETf7Ss/WuVW6Gr1C23/qUuA+dTimmT38gaKfgpqkUm6h2YaYR2zW292Jn8FmtU
+         SXTt7+TIj6kC9hN80NsdTcgS/ZBeYyW8z1VbzjWsZvVzPYv1PMvSe4gpm+vM97yYAM
+         v6+DTj9m8TLF14Bg5fLdv741/+E3XMh+P6JTWMli6nrleMkTVpaYVtB0bRVeD1xYHJ
+         ANdKacgOG56v0zBl5Ihz00FDetvzUupqtUUjPAZYpLYyO/L8y6mJjtaqvyP1aVzwfE
+         CeWPwxoaV5sfs1kymzLpjO1sAJKogXGS/6VXJXvgIHRMkBnpqzOuifBlJzM8dlLwz3
+         7ZFYwo9U8nsSg==
+Message-ID: <05bbc1ea-1be8-ec0e-9e6e-3601629d4b18@kernel.org>
+Date:   Wed, 10 May 2023 12:30:00 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH v2] LoongArch: Add jump-label implementation
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] phy: cadence: Sierra: Add single link SGMII register
+ configuration
 Content-Language: en-US
-To:     Youling Tang <tangyouling@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Zhangjin Wu <falcon@tinylab.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-References: <1683710206-23905-1-git-send-email-tangyouling@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <1683710206-23905-1-git-send-email-tangyouling@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Marcin Wierzbicki <mawierzb@cisco.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     xe-linux-external@cisco.com, danielwa@cisco.com, olicht@cisco.com,
+        Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+References: <20230508160142.2489365-1-mawierzb@cisco.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230508160142.2489365-1-mawierzb@cisco.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UPPERCASE_50_75 autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Youling,
+Hi,
 
-On 2023/5/10 17:16, Youling Tang wrote:
-> Add jump-label implementation based on the ARM64 version.
-
-"Add support for jump labels based on ..." sounds better IMO.
-
+On 08/05/2023 19:01, Marcin Wierzbicki wrote:
+> Add single link SGMII register configuration for no SSC for
+> cdns,sierra-phy-t0 compatibility string.
+> The configuration is based on Sierra Programmer's Guide and
+> validated in Cisco CrayAR SoC.
 > 
-> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+> Co-developed-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+> Signed-off-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+> Signed-off-by: Marcin Wierzbicki <mawierzb@cisco.com>
+> Change-Id: Id4c093a1bbf409f3176736b5326854a1396391c1
 > ---
-> Changes in v2:
-> - Fix build errors.
-> - fix comment.
+
+What changed in v2?
+
+>  drivers/phy/cadence/phy-cadence-sierra.c | 103 +++++++++++++++++++++++
+>  1 file changed, 103 insertions(+)
 > 
->   .../core/jump-labels/arch-support.txt         |  2 +-
->   arch/loongarch/Kconfig                        |  2 +
->   arch/loongarch/configs/loongson3_defconfig    |  1 +
->   arch/loongarch/include/asm/jump_label.h       | 51 +++++++++++++++++++
->   arch/loongarch/kernel/Makefile                |  2 +
->   arch/loongarch/kernel/jump_label.c            | 23 +++++++++
->   6 files changed, 80 insertions(+), 1 deletion(-)
->   create mode 100644 arch/loongarch/include/asm/jump_label.h
->   create mode 100644 arch/loongarch/kernel/jump_label.c
-> 
-> diff --git a/Documentation/features/core/jump-labels/arch-support.txt b/Documentation/features/core/jump-labels/arch-support.txt
-> index 2328eada3a49..94d9dece580f 100644
-> --- a/Documentation/features/core/jump-labels/arch-support.txt
-> +++ b/Documentation/features/core/jump-labels/arch-support.txt
-> @@ -13,7 +13,7 @@
->       |        csky: |  ok  |
->       |     hexagon: | TODO |
->       |        ia64: | TODO |
-> -    |   loongarch: | TODO |
-> +    |   loongarch: |  ok  |
+> diff --git a/drivers/phy/cadence/phy-cadence-sierra.c b/drivers/phy/cadence/phy-cadence-sierra.c
+> index 13fcd3a65fe9..6c3870a6b236 100644
+> --- a/drivers/phy/cadence/phy-cadence-sierra.c
+> +++ b/drivers/phy/cadence/phy-cadence-sierra.c
+> @@ -30,28 +30,40 @@
+>  #define SIERRA_COMMON_CDB_OFFSET			0x0
+>  #define SIERRA_MACRO_ID_REG				0x0
+>  #define SIERRA_CMN_PLLLC_GEN_PREG			0x42
+> +#define SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG		0x43
+> +#define SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG		0x45
+> +#define SIERRA_CMN_PLLLC_INIT_PREG			0x46
+> +#define SIERRA_CMN_PLLLC_ITERTMR_PREG			0x47
+>  #define SIERRA_CMN_PLLLC_MODE_PREG			0x48
+>  #define SIERRA_CMN_PLLLC_LF_COEFF_MODE1_PREG		0x49
+>  #define SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG		0x4A
+>  #define SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG		0x4B
+> +#define SIERRA_CMN_PLLLC_LOCKSEARCH_PREG		0x4C
+>  #define SIERRA_CMN_PLLLC_CLK1_PREG			0x4D
+> +#define SIERRA_CMN_PLLLC_CLK0_PREG			0x4E
+>  #define SIERRA_CMN_PLLLC_BWCAL_MODE1_PREG		0x4F
+>  #define SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG		0x50
+>  #define SIERRA_CMN_PLLLC_DSMCORR_PREG			0x51
+>  #define SIERRA_CMN_PLLLC_SS_PREG			0x52
+>  #define SIERRA_CMN_PLLLC_SS_AMP_STEP_SIZE_PREG		0x53
+>  #define SIERRA_CMN_PLLLC_SSTWOPT_PREG			0x54
+> +#define SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG		0x5D
+> +#define SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG		0x5E
+>  #define SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG	0x62
+>  #define SIERRA_CMN_PLLLC_LOCK_DELAY_CTRL_PREG		0x63
+> +#define SIERRA_SDOSCCAL_CLK_CNT_PREG			0x6E
+>  #define SIERRA_CMN_REFRCV_PREG				0x98
+> +#define SIERRA_CMN_RESCAL_CTRLA_PREG			0xA0
+>  #define SIERRA_CMN_REFRCV1_PREG				0xB8
+>  #define SIERRA_CMN_PLLLC1_GEN_PREG			0xC2
+>  #define SIERRA_CMN_PLLLC1_FBDIV_INT_PREG		0xC3
+> +#define SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG		0xC5
+>  #define SIERRA_CMN_PLLLC1_LF_COEFF_MODE0_PREG		0xCA
+>  #define SIERRA_CMN_PLLLC1_CLK0_PREG			0xCE
+>  #define SIERRA_CMN_PLLLC1_BWCAL_MODE0_PREG		0xD0
+>  #define SIERRA_CMN_PLLLC1_SS_TIME_STEPSIZE_MODE_PREG	0xE2
+>  
+> +
 
-+1 for updating the docs along with the implementation!
+unnecessary new line
 
->       |        m68k: | TODO |
->       |  microblaze: | TODO |
->       |        mips: |  ok  |
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index d38b066fc931..193a959a5611 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -83,6 +83,8 @@ config LOONGARCH
->   	select GPIOLIB
->   	select HAS_IOPORT
->   	select HAVE_ARCH_AUDITSYSCALL
-> +	select HAVE_ARCH_JUMP_LABEL
-> +	select HAVE_ARCH_JUMP_LABEL_RELATIVE
->   	select HAVE_ARCH_MMAP_RND_BITS if MMU
->   	select HAVE_ARCH_SECCOMP_FILTER
->   	select HAVE_ARCH_TRACEHOOK
-> diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-> index 6cd26dd3c134..33a0f5f742f6 100644
-> --- a/arch/loongarch/configs/loongson3_defconfig
-> +++ b/arch/loongarch/configs/loongson3_defconfig
-> @@ -63,6 +63,7 @@ CONFIG_EFI_ZBOOT=y
->   CONFIG_EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER=y
->   CONFIG_EFI_CAPSULE_LOADER=m
->   CONFIG_EFI_TEST=m
-> +CONFIG_JUMP_LABEL=y
->   CONFIG_MODULES=y
->   CONFIG_MODULE_FORCE_LOAD=y
->   CONFIG_MODULE_UNLOAD=y
-> diff --git a/arch/loongarch/include/asm/jump_label.h b/arch/loongarch/include/asm/jump_label.h
-> new file mode 100644
-> index 000000000000..2f9fdec256c5
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/jump_label.h
-> @@ -0,0 +1,51 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2023 Loongson Technology Corporation Limited
-> + *
-> + * Based on arch/arm64/include/asm/jump_label.h
-> + */
-> +#ifndef __ASM_JUMP_LABEL_H
-> +#define __ASM_JUMP_LABEL_H
+>  #define SIERRA_LANE_CDB_OFFSET(ln, block_offset, reg_offset)	\
+>  				((0x4000 << (block_offset)) + \
+>  				 (((ln) << 9) << (reg_offset)))
+> @@ -86,6 +98,7 @@
+>  #define SIERRA_DFE_BIASTRIM_PREG			0x04C
+>  #define SIERRA_DRVCTRL_ATTEN_PREG			0x06A
+>  #define SIERRA_DRVCTRL_BOOST_PREG			0x06F
+> +#define SIERRA_LANE_TX_RECEIVER_DETECT_PREG		0x071
+>  #define SIERRA_TX_RCVDET_OVRD_PREG			0x072
+>  #define SIERRA_CLKPATHCTRL_TMR_PREG			0x081
+>  #define SIERRA_RX_CREQ_FLTR_A_MODE3_PREG		0x085
+> @@ -101,6 +114,8 @@
+>  #define SIERRA_CREQ_SPARE_PREG				0x096
+>  #define SIERRA_CREQ_EQ_OPEN_EYE_THRESH_PREG		0x097
+>  #define SIERRA_CTLELUT_CTRL_PREG			0x098
+> +#define SIERRA_DEQ_BLK_TAU_CTRL1_PREG			0x0AC
+> +#define SIERRA_DEQ_BLK_TAU_CTRL4_PREG			0x0AF
+>  #define SIERRA_DFE_ECMP_RATESEL_PREG			0x0C0
+>  #define SIERRA_DFE_SMP_RATESEL_PREG			0x0C1
+>  #define SIERRA_DEQ_PHALIGN_CTRL				0x0C4
+> @@ -129,6 +144,9 @@
+>  #define SIERRA_DEQ_GLUT14				0x0F6
+>  #define SIERRA_DEQ_GLUT15				0x0F7
+>  #define SIERRA_DEQ_GLUT16				0x0F8
+> +#define SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG		0x0F9
+> +#define SIERRA_TAU_EN_CEPH2TO0_PREG			0x0FB
+> +#define SIERRA_TAU_EN_CEPH5TO3_PREG			0x0FC
+>  #define SIERRA_DEQ_ALUT0				0x108
+>  #define SIERRA_DEQ_ALUT1				0x109
+>  #define SIERRA_DEQ_ALUT2				0x10A
+> @@ -143,6 +161,7 @@
+>  #define SIERRA_DEQ_ALUT11				0x113
+>  #define SIERRA_DEQ_ALUT12				0x114
+>  #define SIERRA_DEQ_ALUT13				0x115
+> +#define SIERRA_OEPH_EN_CTRL_PREG			0x124
+>  #define SIERRA_DEQ_DFETAP_CTRL_PREG			0x128
+>  #define SIERRA_DEQ_DFETAP0				0x129
+>  #define SIERRA_DEQ_DFETAP1				0x12B
+> @@ -157,6 +176,7 @@
+>  #define SIERRA_DEQ_TAU_CTRL2_PREG			0x151
+>  #define SIERRA_DEQ_TAU_CTRL3_PREG			0x152
+>  #define SIERRA_DEQ_OPENEYE_CTRL_PREG			0x158
+> +#define SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG		0x159
+>  #define SIERRA_DEQ_PICTRL_PREG				0x161
+>  #define SIERRA_CPICAL_TMRVAL_MODE1_PREG			0x170
+>  #define SIERRA_CPICAL_TMRVAL_MODE0_PREG			0x171
+> @@ -165,6 +185,7 @@
+>  #define SIERRA_CPI_RESBIAS_BIN_PREG			0x17E
+>  #define SIERRA_CPI_TRIM_PREG				0x17F
+>  #define SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG		0x183
+> +#define SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG		0x184
+>  #define SIERRA_EPI_CTRL_PREG				0x187
+>  #define SIERRA_LFPSDET_SUPPORT_PREG			0x188
+>  #define SIERRA_LFPSFILT_NS_PREG				0x18A
+> @@ -176,6 +197,7 @@
+>  #define SIERRA_RXBUFFER_CTLECTRL_PREG			0x19E
+>  #define SIERRA_RXBUFFER_RCDFECTRL_PREG			0x19F
+>  #define SIERRA_RXBUFFER_DFECTRL_PREG			0x1A0
+> +#define SIERRA_LN_SPARE_REG_PREG			0x1B0
+>  #define SIERRA_DEQ_TAU_CTRL1_FAST_MAINT_PREG		0x14F
+>  #define SIERRA_DEQ_TAU_CTRL1_SLOW_MAINT_PREG		0x150
+>  
+> @@ -2401,6 +2423,77 @@ static struct cdns_sierra_vals usb_100_ext_ssc_ln_vals = {
+>  	.num_regs = ARRAY_SIZE(cdns_usb_ln_regs_ext_ssc),
+>  };
+>  
+> +/* SGMII PHY common configuration */
+> +static const struct cdns_reg_pairs sgmii_cmn_regs[] = {
+> +	{0x0180, SIERRA_SDOSCCAL_CLK_CNT_PREG},
+> +	{0x6000, SIERRA_CMN_REFRCV_PREG},
+> +	{0x0031, SIERRA_CMN_RESCAL_CTRLA_PREG},
+> +	{0x001C, SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG},
+> +	{0x2106, SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG},
+> +	{0x0000, SIERRA_CMN_PLLLC_LOCKSEARCH_PREG},
+> +	{0x8103, SIERRA_CMN_PLLLC_CLK0_PREG},
+> +	{0x0000, SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG},
+> +	{0x0027, SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG},
+> +	{0x0062, SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG},
+> +	{0x0800, SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG},
+> +	{0x0000, SIERRA_CMN_PLLLC_INIT_PREG},
+> +	{0x0000, SIERRA_CMN_PLLLC_ITERTMR_PREG},
+> +	{0x0020, SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG},
+> +	{0x0013, SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG},
+> +	{0x0013, SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG},
+> +};
 > +
-> +#ifndef __ASSEMBLY__
-> +
-> +#include <linux/types.h>
-> +
-> +#define JUMP_LABEL_NOP_SIZE	4
+> +static struct cdns_sierra_vals sgmii_cmn_vals = {
 
-Saying LOONGARCH_INSN_SIZE here might be better for reducing redundancy, 
-although that'll necessitate an extra include of <asm/inst.h>. Leaving 
-the 4 alone won't cause much harm so I'm fine with either.
+Could you please rename this to sgmii_pma_cmn_vals as there are
+2 types of cmn_vals.
 
+> +	.reg_pairs = sgmii_cmn_regs,
+> +	.num_regs = ARRAY_SIZE(sgmii_cmn_regs),
+> +};
 > +
-> +static __always_inline bool arch_static_branch(struct static_key * const key,
-> +					       const bool branch)
-> +{
-> +	asm_volatile_goto(
-> +		"1:	nop					\n\t"
-> +		 "	.pushsection	__jump_table, \"aw\"	\n\t"
-> +		 "	.align		3			\n\t"
-> +		 "	.long		1b - ., %l[l_yes] - .	\n\t"
-> +		 "	.quad		%0 - .			\n\t"
-> +		 "	.popsection				\n\t"
-> +		 :  :  "i"(&((char *)key)[branch]) :  : l_yes);
+> +/* SGMII PHY lane configuration */
+> +static const struct cdns_reg_pairs sgmii_ln_regs[] = {
+> +	{0x691E, SIERRA_DET_STANDEC_D_PREG},
+> +	{0x0FFE, SIERRA_PSC_RX_A0_PREG},
+> +	{0x0104, SIERRA_PLLCTRL_FBDIV_MODE01_PREG},
+> +	{0x0013, SIERRA_PLLCTRL_SUBRATE_PREG},
+> +	{0x0106, SIERRA_PLLCTRL_GEN_D_PREG},
+> +	{0x5234, SIERRA_PLLCTRL_CPGAIN_MODE_PREG},
+> +	{0x0000, SIERRA_DRVCTRL_ATTEN_PREG},
+> +	{0x00AB, SIERRA_RX_CREQ_FLTR_A_MODE0_PREG},
+> +	{0x3C0E, SIERRA_CREQ_CCLKDET_MODE01_PREG},
+> +	{0x3220, SIERRA_CREQ_FSMCLK_SEL_PREG},
+> +	{0x0000, SIERRA_CREQ_EQ_CTRL_PREG},
+> +	{0x6320, SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG},
+> +	{0x0000, SIERRA_CPI_OUTBUF_RATESEL_PREG},
+> +	{0x15A2, SIERRA_LN_SPARE_REG_PREG},
+> +	{0x7900, SIERRA_DEQ_BLK_TAU_CTRL1_PREG},
+> +	{0x2202, SIERRA_DEQ_BLK_TAU_CTRL4_PREG},
+> +	{0x2206, SIERRA_DEQ_TAU_CTRL2_PREG},
+> +	{0x0005, SIERRA_LANE_TX_RECEIVER_DETECT_PREG},
+> +	{0x8001, SIERRA_CREQ_SPARE_PREG},
+> +	{0x0000, SIERRA_DEQ_CONCUR_CTRL1_PREG},
+> +	{0xD004, SIERRA_DEQ_CONCUR_CTRL2_PREG},
+> +	{0x0101, SIERRA_DEQ_GLUT9},
+> +	{0x0101, SIERRA_DEQ_GLUT10},
+> +	{0x0101, SIERRA_DEQ_GLUT11},
+> +	{0x0101, SIERRA_DEQ_GLUT12},
+> +	{0x0000, SIERRA_DEQ_GLUT13},
+> +	{0x0000, SIERRA_DEQ_GLUT16},
+> +	{0x0000, SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG},
+> +	{0x0000, SIERRA_TAU_EN_CEPH2TO0_PREG},
+> +	{0x0003, SIERRA_TAU_EN_CEPH5TO3_PREG},
+> +	{0x0101, SIERRA_DEQ_ALUT8},
+> +	{0x0101, SIERRA_DEQ_ALUT9},
+> +	{0x0100, SIERRA_DEQ_ALUT10},
+> +	{0x0000, SIERRA_OEPH_EN_CTRL_PREG},
+> +	{0x5425, SIERRA_DEQ_OPENEYE_CTRL_PREG},
+> +	{0x7458, SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG},
+> +	{0x321F, SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG},
+> +};
 > +
-> +	return false;
-> +l_yes:
-> +	return true;
-> +}
-> +
-> +static __always_inline bool arch_static_branch_jump(struct static_key * const key,
-> +						    const bool branch)
-> +{
-> +	asm_volatile_goto(
-> +		"1:	b		%l[l_yes]		\n\t"
-> +		 "	.pushsection	__jump_table, \"aw\"	\n\t"
-> +		 "	.align		3			\n\t"
-> +		 "	.long		1b - ., %l[l_yes] - .	\n\t"
-> +		 "	.quad		%0 - .			\n\t"
-> +		 "	.popsection				\n\t"
-> +		 :  :  "i"(&((char *)key)[branch]) :  : l_yes);
-> +
-> +	return false;
-> +l_yes:
-> +	return true;
-> +}
-> +
-> +#endif  /* __ASSEMBLY__ */
-> +#endif	/* __ASM_JUMP_LABEL_H */
-> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-> index 9a72d91cd104..64ea76f60e2c 100644
-> --- a/arch/loongarch/kernel/Makefile
-> +++ b/arch/loongarch/kernel/Makefile
-> @@ -54,4 +54,6 @@ obj-$(CONFIG_HAVE_HW_BREAKPOINT)	+= hw_breakpoint.o
->   
->   obj-$(CONFIG_KPROBES)		+= kprobes.o kprobes_trampoline.o
->   
-> +obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
-> +
->   CPPFLAGS_vmlinux.lds		:= $(KBUILD_CFLAGS)
-> diff --git a/arch/loongarch/kernel/jump_label.c b/arch/loongarch/kernel/jump_label.c
-> new file mode 100644
-> index 000000000000..b06245955f7a
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/jump_label.c
-> @@ -0,0 +1,23 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2023 Loongson Technology Corporation Limited
-> + *
-> + * Based on arch/arm64/kernel/jump_label.c
-> + */
-> +#include <linux/jump_label.h>
-> +#include <linux/kernel.h>
-> +#include <asm/inst.h>
-> +
-> +void arch_jump_label_transform(struct jump_entry *entry,
-> +			       enum jump_label_type type)
-> +{
-> +	void *addr = (void *)jump_entry_code(entry);
-> +	u32 insn;
-> +
-> +	if (type == JUMP_LABEL_JMP)
+> +static struct cdns_sierra_vals sgmii_ln_vals = {
 
-Please use a switch for dealing with enum-typed values.
+Could you please rename this to sgmii_pma_ln_vals as there are
+2 types of pma_ln_vals
 
-> +		insn = larch_insn_gen_b(jump_entry_code(entry), jump_entry_target(entry));
-> +	else
-> +		insn = larch_insn_gen_nop();
+> +	.reg_pairs = sgmii_ln_regs,
+> +	.num_regs = ARRAY_SIZE(sgmii_ln_regs),
+> +};
 > +
-> +	larch_insn_patch_text(addr, insn);
-> +}
+>  static const struct cdns_sierra_data cdns_map_sierra = {
+>  	.id_value = SIERRA_MACRO_ID,
+>  	.block_offset_shift = 0x2,
+> @@ -2461,6 +2554,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
+>  				[INTERNAL_SSC] = &qsgmii_100_no_ssc_plllc1_cmn_vals,
+>  			},
+>  		},
+> +		[TYPE_SGMII] = {
+> +			[TYPE_NONE] = {
+> +				[NO_SSC] = &sgmii_cmn_vals,
+> +			},
+> +		},
+>  	},
+>  	.pma_ln_vals = {
+>  		[TYPE_PCIE] = {
+> @@ -2499,6 +2597,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
+>  				[INTERNAL_SSC] = &qsgmii_100_no_ssc_plllc1_ln_vals,
+>  			},
+>  		},
+> +		[TYPE_SGMII] = {
+> +			[TYPE_NONE] = {
+> +				[NO_SSC] = &sgmii_ln_vals,
+> +			},
+> +		},
+>  	},
+>  };
+>  
 
 -- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+cheers,
+-roger
