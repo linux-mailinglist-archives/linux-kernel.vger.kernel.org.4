@@ -2,102 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F1B6FD8C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2196FD8D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236517AbjEJH7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
+        id S236485AbjEJIBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 04:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236207AbjEJH64 (ORCPT
+        with ESMTP id S235798AbjEJIBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:58:56 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F87DDE;
-        Wed, 10 May 2023 00:58:55 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1EBAC1F388;
-        Wed, 10 May 2023 07:58:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683705534; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T06RMDj39gQfDe4f9XSCb72BIGFfA58STfsWWVeFeM4=;
-        b=ak3e9SQEJZT4WXcnpGYykh1nJYqRLsEh+4hNqfrnDxepqVa/CR2FQtu93O78KfbpHPEmhp
-        TUmRaEakKEBTGTfvnfrB9vK51JPWEmivQzLwhcleN93l74RD53mmo4HPSr3BolZqlwtrid
-        pvDMEVTJxq2JgsHk5NcaoaDGgPCjhiw=
-Received: from suse.cz (dhcp129.suse.cz [10.100.51.129])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BEA4F2C141;
-        Wed, 10 May 2023 07:58:51 +0000 (UTC)
-Date:   Wed, 10 May 2023 09:58:51 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     bigeasy@linutronix.de, mark.rutland@arm.com, maz@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, pbonzini@redhat.com, wanpengli@tencent.com,
-        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, jgross@suse.com, boris.ostrovsky@oracle.com,
-        daniel.lezcano@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        rafael@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, jstultz@google.com, sboyd@kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [RFC][PATCH 1/9] seqlock/latch: Provide
- raw_read_seqcount_latch_retry()
-Message-ID: <ZFtOu5dypMeWW9ax@alley>
-References: <20230508211951.901961964@infradead.org>
- <20230508213147.448097252@infradead.org>
+        Wed, 10 May 2023 04:01:30 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4028DF0;
+        Wed, 10 May 2023 01:01:28 -0700 (PDT)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id 90583E000A;
+        Wed, 10 May 2023 08:01:13 +0000 (UTC)
+Message-ID: <6ad10e79-74e5-7c48-d10c-78229187da32@ghiti.fr>
+Date:   Wed, 10 May 2023 10:01:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508213147.448097252@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 14/23] riscv/hugetlb: pte_alloc_huge() pte_offset_huge()
+To:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
+ <d1e54510-9ea2-edf-3851-fa7635ce1e5e@google.com>
+Content-Language: en-US
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <d1e54510-9ea2-edf-3851-fa7635ce1e5e@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2023-05-08 23:19:52, Peter Zijlstra wrote:
-> The read side of seqcount_latch consists of:
-> 
->   do {
->     seq = raw_read_seqcount_latch(&latch->seq);
->     ...
->   } while (read_seqcount_latch_retry(&latch->seq, seq));
-> 
-> which is asymmetric in the raw_ department, and sure enough,
-> read_seqcount_latch_retry() includes (explicit) instrumentation where
-> raw_read_seqcount_latch() does not.
-> 
-> This inconsistency becomes a problem when trying to use it from
-> noinstr code. As such, fix it by renaming and re-implementing
-> raw_read_seqcount_latch_retry() without the instrumentation.
-> 
-> Specifically the instrumentation in question is kcsan_atomic_next(0)
-> in do___read_seqcount_retry(). Loosing this annotation is not a
-> problem because raw_read_seqcount_latch() does not pass through
-> kcsan_atomic_next(KCSAN_SEQLOCK_REGION_MAX).
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Hi Hugh,
 
-Makes sense:
+On 5/10/23 06:59, Hugh Dickins wrote:
+> pte_alloc_map() expects to be followed by pte_unmap(), but hugetlb omits
+> that: to keep balance in future, use the recently added pte_alloc_huge()
+> instead; with pte_offset_huge() a better name for pte_offset_kernel().
+>
+> Signed-off-by: Hugh Dickins <hughd@google.com>
+> ---
+>   arch/riscv/mm/hugetlbpage.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/riscv/mm/hugetlbpage.c b/arch/riscv/mm/hugetlbpage.c
+> index a163a3e0f0d4..80926946759f 100644
+> --- a/arch/riscv/mm/hugetlbpage.c
+> +++ b/arch/riscv/mm/hugetlbpage.c
+> @@ -43,7 +43,7 @@ pte_t *huge_pte_alloc(struct mm_struct *mm,
+>   
+>   	for_each_napot_order(order) {
+>   		if (napot_cont_size(order) == sz) {
+> -			pte = pte_alloc_map(mm, pmd, addr & napot_cont_mask(order));
+> +			pte = pte_alloc_huge(mm, pmd, addr & napot_cont_mask(order));
+>   			break;
+>   		}
+>   	}
+> @@ -90,7 +90,7 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
+>   
+>   	for_each_napot_order(order) {
+>   		if (napot_cont_size(order) == sz) {
+> -			pte = pte_offset_kernel(pmd, addr & napot_cont_mask(order));
+> +			pte = pte_offset_huge(pmd, addr & napot_cont_mask(order));
+>   			break;
+>   		}
+>   	}
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-Best Regards,
-Petr
+Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+
+Thanks,
+
+Alex
+
