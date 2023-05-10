@@ -2,107 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8906D6FDE57
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9475D6FDE5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236996AbjEJNRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 09:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
+        id S236928AbjEJNSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 09:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjEJNRS (ORCPT
+        with ESMTP id S236672AbjEJNSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 09:17:18 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3583C76B7;
-        Wed, 10 May 2023 06:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+qrq/mo5VPvcpdlilPoSg0gpK2tGH3zsYjRUh/mtynI=; b=gmSUWcEluIFGMhZfnaqi0WCy5X
-        OJgr05KExnaf9gouKQ1TppKOtz2Z8DoEXlWxa9wpktSaINvC4zvJiQrZmVmaalopDVm3Bd5iWFela
-        mpyZFBWiiLjBK1sbsVsUjTbpV2S5xEKCfuuZRZ0z+1R+hCHAiOHhG2Kcj9LTOAtbOt2vydZPu6e3n
-        VOK7CZ68w7qjIEZWoBQSl4XzBEWb68ojLa3Mqz4yXRmWCo6EHb/UcG9d6p4YGcdiSCiKT7rBM23Rt
-        c3+yypyDmShq8RpReCxDAzb+DD6iNgk4QW18rz7qVlKoM1E16rt24k3LMw2YnPYA2Ns9sWBfyg9CT
-        jke6Xmcg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pwjgq-006D1Y-0G;
-        Wed, 10 May 2023 13:17:08 +0000
-Date:   Wed, 10 May 2023 06:17:08 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, pasha.tatashin@soleen.com,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: usbdev_mmap causes type confusion in page_table_check
-Message-ID: <ZFuZVDcU81WmqEvJ@infradead.org>
-References: <000000000000258e5e05fae79fc1@google.com>
- <20230507135844.1231056-1-lrh2000@pku.edu.cn>
- <ZFpJ1rs+XinCYfPs@infradead.org>
- <2023050934-launch-shifty-0bbb@gregkh>
+        Wed, 10 May 2023 09:18:21 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1998E9EE9;
+        Wed, 10 May 2023 06:18:09 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34ADHqn0008399;
+        Wed, 10 May 2023 08:17:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683724672;
+        bh=e04CwVGEcYcZioFWK5DNhxUsu5YL8S/UKSIPmLEP1PY=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=PnVxA6OrVMYMncIUBXh2q16QlEakh7HOMHzC5f46OuAKMud72GmxqncdACQLe1Qts
+         DLn1DDNyj5mbgLZPaNTphJ0/J/5UmoTuDCmtCY/dIT9ygfj+jxEKRljWv4A9nYVuW9
+         3qJUWEyz5NcJ0GEbpbLCXsXZufky1jTM7167iIKw=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34ADHq9b043784
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 10 May 2023 08:17:52 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 10
+ May 2023 08:17:51 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 10 May 2023 08:17:51 -0500
+Received: from [10.249.138.110] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34ADHlia007546;
+        Wed, 10 May 2023 08:17:48 -0500
+Message-ID: <0ef69859-7ff9-1988-3c7e-692d8692b59f@ti.com>
+Date:   Wed, 10 May 2023 18:47:46 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023050934-launch-shifty-0bbb@gregkh>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+CC:     <tjoseph@cadence.com>, <lpieralisi@kernel.org>, <robh@kernel.org>,
+        <kw@linux.com>, <bhelgaas@google.com>, <nadeem@cadence.com>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
+        <srk@ti.com>, <nm@ti.com>, <s-vadapalli@ti.com>
+Subject: Re: [PATCH v2] PCI: cadence: Fix Gen2 Link Retraining process
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+References: <20230509182416.GA1259841@bhelgaas>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20230509182416.GA1259841@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 04:01:02PM +0200, Greg KH wrote:
-> > > 	mem = usb_alloc_coherent(ps->dev, size, GFP_USER | __GFP_NOWARN,
-> > > 			&dma_handle);
-> > > 	// ...
-> > > 	if (hcd->localmem_pool || !hcd_uses_dma(hcd)) {
-> > > 		if (remap_pfn_range(vma, vma->vm_start,
-> > > 				    virt_to_phys(usbm->mem) >> PAGE_SHIFT,
-> > 
-> > usb_alloc_coherent and up in the DMA coherent allocator (usually
-> > anyway), and you absolutely must never do a virt_to_phys or virt_to_page
-> > on that return value.  This code is a buggy as f**k.
+
+
+On 09-05-2023 23:54, Bjorn Helgaas wrote:
+> On Tue, May 09, 2023 at 12:37:31PM +0530, Siddharth Vadapalli wrote:
+>> Bjorn,
+>>
+>> Thank you for reviewing the patch.
+>>
+>> On 09/05/23 02:44, Bjorn Helgaas wrote:
+>>> On Wed, Mar 15, 2023 at 12:38:00PM +0530, Siddharth Vadapalli wrote:
+>>>> The Link Retraining process is initiated to account for the Gen2 defect in
+>>>> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
+>>>> is i2085, documented at:
+>>>> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
+>>>>
+>>>> The existing workaround implemented for the errata waits for the Data Link
+>>>> initialization to complete and assumes that the link retraining process
+>>>> at the Physical Layer has completed. However, it is possible that the
+>>>> Physical Layer training might be ongoing as indicated by the
+>>>> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
+>>>>
+>>>> Fix the existing workaround, to ensure that the Physical Layer training
+>>>> has also completed, in addition to the Data Link initialization.
+>>>>
+>>>> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
+>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>>>> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+>>>> ---
+>>>> Changes from v1:
+>>>> 1. Collect Reviewed-by tag from Vignesh Raghavendra.
+>>>> 2. Rebase on next-20230315.
+>>>>
+>>>> v1:
+>>>> https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com
+>>>>
+>>>>  .../controller/cadence/pcie-cadence-host.c    | 27 +++++++++++++++++++
+>>>>  1 file changed, 27 insertions(+)
+>>>>
+>>>> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
+>>>> index 940c7dd701d6..5b14f7ee3c79 100644
+>>>> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
+>>>> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
+>>>> @@ -12,6 +12,8 @@
+>>>>  
+>>>>  #include "pcie-cadence.h"
+>>>>  
+>>>> +#define LINK_RETRAIN_TIMEOUT HZ
+>>>> +
+>>>>  static u64 bar_max_size[] = {
+>>>>  	[RP_BAR0] = _ULL(128 * SZ_2G),
+>>>>  	[RP_BAR1] = SZ_2G,
+>>>> @@ -77,6 +79,27 @@ static struct pci_ops cdns_pcie_host_ops = {
+>>>>  	.write		= pci_generic_config_write,
+>>>>  };
+>>>>  
+>>>> +static int cdns_pcie_host_training_complete(struct cdns_pcie *pcie)
+>>>
+>>> This is kind of weird because it's named like a predicate, i.e., "this
+>>> function tells me whether link training is complete", but it returns
+>>> *zero* for success.
+>>>
+>>> This is the opposite of j721e_pcie_link_up(), which returns "true"
+>>> when the link is up, so code like this reads naturally:
+>>>
+>>>   if (pcie->ops->link_up(pcie))
+>>>     /* do something if the link is up */
+>>
+>> I agree. The function name can be changed to indicate that it is
+>> waiting for completion rather than indicating completion. If this is
+>> the only change, I will post a patch to fix it. On the other hand,
+>> based on your comments in the next section, I am thinking of an
+>> alternative approach of merging the current
+>> "cdns_pcie_host_training_complete()" function's operation as well
+>> into the "cdns_pcie_host_wait_for_link()" function. If this is
+>> acceptable, I will post a different patch and the name change patch
+>> won't be necessary.
 > 
-> Odd, you gave it a reviewed-by: in commit a0e710a7def4 ("USB: usbfs: fix
-> mmap dma mismatch") back in 2020 when it was merged as you said that was
-> the way to fix this up.  :)
+> Yeah, sorry, I meant to delete this part of my response after I wrote
+> the one below.
 > 
-> Do you have a better way to do it now that is more correct?  Did some
-> DMA changes happen that missed this codepath getting fixed up?
+>>>> @@ -118,6 +141,10 @@ static int cdns_pcie_retrain(struct cdns_pcie *pcie)
+>>>>  		cdns_pcie_rp_writew(pcie, pcie_cap_off + PCI_EXP_LNKCTL,
+>>>>  				    lnk_ctl);
+>>>>  
+>>>> +		ret = cdns_pcie_host_training_complete(pcie);
+>>>> +		if (ret)
+>>>> +			return ret;
+>>>> +
+>>>>  		ret = cdns_pcie_host_wait_for_link(pcie);
+>>>
+>>> It seems a little clumsy that we wait for two things in succession:
+>>>
+>>>   - cdns_pcie_host_training_complete() waits up to 1s for
+>>>     PCI_EXP_LNKSTA_LT to be cleared
+>>>
+>>>   - cdns_pcie_host_wait_for_link() waits between .9s and 1s for
+>>>     LINK_UP_DL_COMPLETED on j721e (and not at all for other platforms)
+>>
+>> Is it acceptable to merge "cdns_pcie_host_training_complete()" into
+>> "cdns_pcie_host_wait_for_link()"?
+> 
+> That's what I'm proposing.  Maybe someone who is more familiar with
+> Cadence would have an argument against it, but I think making it
+> structurally the same as dw_pcie_wait_for_link() would be a good
+> thing.
 
-Sorry, I should not have shouted as quickly.  The code is clearly
-guarded by the same conditional that makes it not use the DMA API,
-so from the DMA API POV this is actually correct, just ugly.
+Thank you for the confirmation. I will work on it and post a patch.
 
-The fix for the actual remap_file_ranges thing is probably something
-like this:
+> 
+> Bjorn
 
-diff --git a/drivers/usb/core/buffer.c b/drivers/usb/core/buffer.c
-index fbb087b728dc98..be56eba2558814 100644
---- a/drivers/usb/core/buffer.c
-+++ b/drivers/usb/core/buffer.c
-@@ -131,7 +131,7 @@ void *hcd_buffer_alloc(
- 	/* some USB hosts just use PIO */
- 	if (!hcd_uses_dma(hcd)) {
- 		*dma = ~(dma_addr_t) 0;
--		return kmalloc(size, mem_flags);
-+		return (void *)__get_free_pages(get_order(size), mem_flags);
- 	}
- 
- 	for (i = 0; i < HCD_BUFFER_POOLS; i++) {
-@@ -160,7 +160,7 @@ void hcd_buffer_free(
- 	}
- 
- 	if (!hcd_uses_dma(hcd)) {
--		kfree(addr);
-+		free_pages((unsigned long)addr, get_order(size));
- 		return;
- 	}
- 
+-- 
+Regards,
+Siddharth.
