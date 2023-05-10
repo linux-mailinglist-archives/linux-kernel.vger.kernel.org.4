@@ -2,92 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C496FE7E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5BB6FE7EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236848AbjEJXFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 19:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S236801AbjEJXFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 19:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236801AbjEJXFB (ORCPT
+        with ESMTP id S236829AbjEJXFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 19:05:01 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4333065AA;
-        Wed, 10 May 2023 16:04:46 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 10 May 2023 19:05:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D5E524C;
+        Wed, 10 May 2023 16:04:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QGrFm3QXbz4x3g;
-        Thu, 11 May 2023 09:04:44 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1683759885;
-        bh=tTpG+ABzn2ZUqISn9XxbfeodhS9FYuzOIfhGYTqJVc8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KidURmCfHk3g93+VCNjrXg1pyeKO8TbkfxPITrpChw6RqXoxp+Mw0AA4bcmtr3vIO
-         kzuEyWCWztMe/Gm1YAj//CRKsAa45WUPX3UWp5l9xydWeWO7/tK2t7GfROTsQtoOpg
-         jsnfeLRU89ES4wmLXAYGY/I/lzV5B28LraBohqiSJvNVnPX3mv6BrBiLb9mbORJR92
-         gNyxUqkLeGSX19F9IVFz44XLNJY7aXyTlEJxo1UYgJSUo+NO6YS7Y433SbP2RlUkYw
-         V55H7y4FaXmbuR9+okOYxcYnj4ZM8466FniLu+HD149ym3mALGdX7Jw0Cy49NJEWiH
-         5OoeCxMIscpvw==
-Date:   Thu, 11 May 2023 09:04:43 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Andreas Kemnade <andreas@kemnade.info>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the leds-lj tree
-Message-ID: <20230511090443.359b120b@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hARB360zHctH=7F=L4ssbde";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DF0E636E4;
+        Wed, 10 May 2023 23:04:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC8E5C433D2;
+        Wed, 10 May 2023 23:04:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683759892;
+        bh=QxtvXxDtUmO2zciTU9oZisOXrc+rH38HVyRqoKkNSF0=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=jxqufG+qooH4aJVMNjh2O09Sd+b03vlSqSVZwvPJFqf855TFAXGtc/cXNknIFIma3
+         JsMe4/YBqLkuayBZN6xHYBuiil2dRiQfdRci+VO2FEFdWkzbyOCIckowL3kcVuH5XU
+         pGPZCpMVQeUJki4RoervOwfbZQYT3ku4mLwdrHgPg4QmMrGxUz/kYOlutbENNgnwjN
+         K8I+BVuw2hezglvSVaOw5VJ18WpelPJEsc/fARh+V+dDVZTkPIJug7p2mObnNO6bAI
+         49j9mDbx/JKn0sV1f2vXuwlJqtdewvUC0e72YsmRP6QxItVW+hDJW/3XT5rjTID3wj
+         DV7Vsm5t7ac6A==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 11 May 2023 02:04:47 +0300
+Message-Id: <CSIZ2DT5C4WQ.19ZUUIWKNAJY9@suppilovahvero>
+Cc:     <dpsmith@apertussolutions.com>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
+        <ardb@kernel.org>, <mjg59@srcf.ucam.org>,
+        <James.Bottomley@hansenpartnership.com>, <luto@amacapital.net>,
+        <nivedita@alum.mit.edu>, <kanth.ghatraju@oracle.com>,
+        <trenchboot-devel@googlegroups.com>
+Subject: Re: [PATCH v6 04/14] x86: Secure Launch Resource Table header file
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Ross Philipson" <ross.philipson@oracle.com>,
+        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        <linux-integrity@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+        <kexec@lists.infradead.org>, <linux-efi@vger.kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-5-ross.philipson@oracle.com>
+In-Reply-To: <20230504145023.835096-5-ross.philipson@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/hARB360zHctH=7F=L4ssbde
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu May 4, 2023 at 5:50 PM EEST, Ross Philipson wrote:
+> Introduce the Secure Launch Resource Table which forms the formal
+> interface between the pre and post launch code.
+>
+> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+> ---
+>  include/linux/slr_table.h | 270 ++++++++++++++++++++++++++++++++++++++++=
+++++++
+>  1 file changed, 270 insertions(+)
+>  create mode 100644 include/linux/slr_table.h
+>
+> diff --git a/include/linux/slr_table.h b/include/linux/slr_table.h
+> new file mode 100644
+> index 0000000..d4b76e5
+> --- /dev/null
+> +++ b/include/linux/slr_table.h
+> @@ -0,0 +1,270 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Secure Launch Resource Table
+> + *
+> + * Copyright (c) 2023, Oracle and/or its affiliates.
+> + */
+> +
+> +#ifndef _LINUX_SLR_TABLE_H
+> +#define _LINUX_SLR_TABLE_H
+> +
+> +/* Put this in efi.h if it becomes a standard */
+> +#define SLR_TABLE_GUID				EFI_GUID(0x877a9b2a, 0x0385, 0x45d1, 0xa0, 0x3=
+4, 0x9d, 0xac, 0x9c, 0x9e, 0x56, 0x5f)
+> +
+> +/* SLR table header values */
+> +#define SLR_TABLE_MAGIC		0x4452544d
+> +#define SLR_TABLE_REVISION	1
+> +
+> +/* Current revisions for the policy and UEFI config */
+> +#define SLR_POLICY_REVISION		1
+> +#define SLR_UEFI_CONFIG_REVISION	1
+> +
+> +/* SLR defined architectures */
+> +#define SLR_INTEL_TXT		1
+> +#define SLR_AMD_SKINIT		2
+> +
+> +/* SLR defined bootloaders */
+> +#define SLR_BOOTLOADER_INVALID	0
+> +#define SLR_BOOTLOADER_GRUB	1
+> +
+> +/* Log formats */
+> +#define SLR_DRTM_TPM12_LOG	1
+> +#define SLR_DRTM_TPM20_LOG	2
+> +
+> +/* DRTM Policy Entry Flags */
+> +#define SLR_POLICY_FLAG_MEASURED	0x1
+> +#define SLR_POLICY_IMPLICIT_SIZE	0x2
+> +
+> +/* Array Lengths */
+> +#define TPM_EVENT_INFO_LENGTH		32
+> +#define TXT_VARIABLE_MTRRS_LENGTH	32
+> +
+> +/* Tags */
+> +#define SLR_ENTRY_INVALID	0x0000
+> +#define SLR_ENTRY_DL_INFO	0x0001
+> +#define SLR_ENTRY_LOG_INFO	0x0002
+> +#define SLR_ENTRY_ENTRY_POLICY	0x0003
+> +#define SLR_ENTRY_INTEL_INFO	0x0004
+> +#define SLR_ENTRY_AMD_INFO	0x0005
+> +#define SLR_ENTRY_ARM_INFO	0x0006
+> +#define SLR_ENTRY_UEFI_INFO	0x0007
+> +#define SLR_ENTRY_UEFI_CONFIG	0x0008
+> +#define SLR_ENTRY_END		0xffff
 
-Hi all,
+"Enums are preferred when defining several related constants."
 
-The following commit is also in Linus Torvalds' tree as a `different
-commit (but the same patch):
+See:
 
-  fea27b037127 ("leds: bd2606mvv: Driver for the Rohm 6 Channel i2c LED dri=
-ver")
+https://www.kernel.org/doc/html/latest/process/coding-style.html#macros-enu=
+ms-and-rtl
 
-This is commit
-
-  8325642d2757 ("leds: bd2606mvv: Driver for the Rohm 6 Channel i2c LED dri=
-ver")
-
-in Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/hARB360zHctH=7F=L4ssbde
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRcIwsACgkQAVBC80lX
-0GxLTQf/UzW/BVSiljzyguuX9tYXP/Iu5dz/QuI/E/pwDuDzuirV8Bm6ly1+pFWd
-jCXEG9NV3ROyclEo3KoJQWLYmyj/Lh0VffigaXPxBXElG2GCZATqEGmVL9e81+xz
-/xFf5y5lolNm/LhlgOt5jQ0p0TC2fzCDOWcsGNJFoa0P3BNFAhc6cvEpwcWF0U7z
-48SSEHVN2hxMskoibmnC8cWUk96HhLHiZdkHYksWAf8nK9g/FRiIzILlPOws03wn
-mSVm1hDaoUJix/XbUSgUM+L/10HtYpP4C/eA5eUwWohMRjt9+AB1/jdgwmBCm8lu
-WqxbO4iubs1lDrC0HP5jUr3LQHcvkg==
-=S+yO
------END PGP SIGNATURE-----
-
---Sig_/hARB360zHctH=7F=L4ssbde--
+BR, Jarkko
