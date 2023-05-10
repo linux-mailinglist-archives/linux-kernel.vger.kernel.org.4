@@ -2,108 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E060E6FD8DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D84F6FD8DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236526AbjEJIDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 04:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
+        id S236461AbjEJIFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 04:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235798AbjEJIDp (ORCPT
+        with ESMTP id S236015AbjEJIFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 04:03:45 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2014.outbound.protection.outlook.com [40.92.53.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9557D1BB;
-        Wed, 10 May 2023 01:03:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jiNLETpt0YlxMHAPXVXdUsA2uV7ZEB7qXQyEtCGMthUXmzExcQwLfg0XQbi/+jO+v+6ojmT6XStbGjRTMMjv2cWXRgoo/jGGfsisSauHJ+xOkOqZzeE+Zbn2J2xSwGUa+2LFDlrkMhGmsoPNFcHPpL+/ETYNAeMwTNI2Lg2ahhT6k2diZG1QIKZvygconfH9jFjsiIiFOdUhsO2qxIa5Ryr6dTFvH6VwOrRg2VcHk/lli/ZNg90wvXBOvS4hE98p4hAyyt+dy03tYnlHKnkTOQHxZWlexmKy2dVSRgnlAI4XbopMlodmSKmzIgBe1M5tDmJzmsx31C0ITZDPe5KkvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BvMsFh4FPO1iP15Ypt6iloZ1FDVKWvXhmfyczyjOwM8=;
- b=Qev5T4zOnH+ld2wZM4kmQ8lr6nIF64huY8xwlPKkGWq0z/mx4pL1381LQ0mU6fae6Wiyh8Q6pcTBWTfv0ydrvso+HRLey9RPH1H1S7nvnVT5DRLdWZC1qoEA79tXDpgqoRaCuMVlZquhrCkHSeDYP3an+LkNUVy+qfeODgWB2dobNZB5WbLvILkRYT52Cebt16sYf2aAGQR1NG+X3oUCKnurpYh4hRFmZnLLBuq13nDaAJ7qoRqmFMBM7GOyS2r/uyYxAZWG2E5SLbaXhYSSTJXy8cYga+QU6HXOHgQSYHo7G+GtG6MM//md0B/JQrpY+weIGu8wIndZ5GJpZvNGuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BvMsFh4FPO1iP15Ypt6iloZ1FDVKWvXhmfyczyjOwM8=;
- b=R3NtbwNlpiPiH5g7W4VgHPwnuxgUlffSMzNiRHShefgbmwwtYBxEC74SKOjq9VLW2kgYkCw70c0GDJBGteBpFa4vCOGGrrs/a0uvIDFK+lCMKCTGLUKIla2gXy1LrPnmYz+SDf5b/YB83Ukwf7oeDDjOIbk+RVHT7vB23Mu0r3pRASfFsB7aM/FTI5BuSoe0KNn5xqxWUCLQlrwd7CGPac9x+JBdThzAJg+7TlRK7OlCi7icGkA/sklNhmy+77sUKXvlu5MPgaJLUiUnTKGDENi5BtBnx+kFmlPWsZF+5HaMTZmB+slvzw5KPjSkMStvz0Iry8T73OWYM4Iy9GSH/w==
-Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
- (2603:1096:820:9a::12) by TYZPR01MB5157.apcprd01.prod.exchangelabs.com
- (2603:1096:400:342::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Wed, 10 May
- 2023 08:03:38 +0000
-Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
- ([fe80::93cb:1631:4c4c:1821]) by KL1PR01MB5448.apcprd01.prod.exchangelabs.com
- ([fe80::93cb:1631:4c4c:1821%4]) with mapi id 15.20.6387.018; Wed, 10 May 2023
- 08:03:38 +0000
-From:   Yan Wang <rk.code@outlook.com>
-To:     andrew@lunn.ch
-Cc:     Yan Wang <rk.code@outlook.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev@vger.kernel.org (open list:ETHERNET PHY LIBRARY),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] net: mdiobus: Add a function to deassert reset
-Date:   Wed, 10 May 2023 16:02:52 +0800
-Message-ID: <KL1PR01MB54482416A8BE0D80EA27223CE6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <96a1b95e-d05e-40f0-ada9-1956f43010e0@lunn.ch>
-References: <96a1b95e-d05e-40f0-ada9-1956f43010e0@lunn.ch>
-Content-Type: text/plain
-X-TMN:  [EWmoEiRTzNj2A+LopQ533GNSoOZxDleJBgyBYkdfV1s=]
-X-ClientProxiedBy: SG2PR04CA0216.apcprd04.prod.outlook.com
- (2603:1096:4:187::18) To KL1PR01MB5448.apcprd01.prod.exchangelabs.com
- (2603:1096:820:9a::12)
-X-Microsoft-Original-Message-ID: <20230510080252.8584-1-rk.code@outlook.com>
+        Wed, 10 May 2023 04:05:09 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A85C1BC0;
+        Wed, 10 May 2023 01:05:08 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-643912bca6fso5525350b3a.0;
+        Wed, 10 May 2023 01:05:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683705908; x=1686297908;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ljqJSEHf5rB6CjYX95aOeKks26kY/lRoTVOs3zuSrsY=;
+        b=Ys7J/ceWGdZcQJJI0XvvUCM74oG4/0PMQGNnl1WEClOA1YLotv/SSKEBh/8ZcHhy6n
+         qr/kIenbhTa6BOLhA249rxp4PreFX/LSsWwwgnI1jyp/T2yG7Rfj279R67k6xQf4wuiv
+         Nk7iDYGWtrQ6MO0yDwkEfNu6+o+Hx+mSybkB7FjlmQ73VJGunMUbda8aeggnyixDpNI+
+         2Zi4PJBw3g7sI01lezMCpf6hT6dfObmyn0RjCm3LGaNa1ILZjK68i9RoJsoZ9QTie280
+         yBm0kP9/K02g1Vu1d0XpUtqB31iSW5jZCUcR1zqwIlfEn4PYipFy+/iDZiDjqnPnugZe
+         9Pmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683705908; x=1686297908;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ljqJSEHf5rB6CjYX95aOeKks26kY/lRoTVOs3zuSrsY=;
+        b=UO7OaBwv4EOZl03Q7f5FbiUKensTyTvmoBE2bJQioxXEtKWopgvdXFzlSZSRY/q+it
+         EShOxDA5HKoM20sr2mhkjOClVh0c/fK9rzfy45NNAmf7K8W3MSuxMbOtIftXtH2FZROU
+         EeOXdpUbRN0P+YwcsGhEE87dJ/yvDfwCrgaiHDTc+CTZlwgHQGhIzE2Jeag9jBxDe+cX
+         ze5nPUMDIf7c2hbgWBdxcVxzqu6bABtWeHBEtoGJzOLYj2rUI5SDRgoCHWU/VPs86hay
+         wi85+/7YY6FyHHUk/9lcPNtreS66tePMriFpCZsukwozuCDvmkXJsT05XHdYtR10cwXr
+         5png==
+X-Gm-Message-State: AC+VfDzg68RJKtgbgVlVuMrgHFHl847MFx3svbmjUJxLjKvTZiC8dzRJ
+        yeUoG3vUugxExHWFJsvr6m0=
+X-Google-Smtp-Source: ACHHUZ4lDifCu3ZS5CJ5soAkm9+6gAWNvWTXy/zEqbc1HNnzCB99N08rr5bjRNhCMa2Tdh4HHTPQog==
+X-Received: by 2002:a05:6a20:394a:b0:101:9344:bf82 with SMTP id r10-20020a056a20394a00b001019344bf82mr4648069pzg.15.1683705907881;
+        Wed, 10 May 2023 01:05:07 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-68.three.co.id. [180.214.233.68])
+        by smtp.gmail.com with ESMTPSA id x23-20020aa79197000000b00640f51801e6sm2949635pfa.159.2023.05.10.01.05.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 01:05:07 -0700 (PDT)
+Message-ID: <b97d63e4-0ff7-720b-30d7-ad27611e9a8c@gmail.com>
+Date:   Wed, 10 May 2023 15:05:01 +0700
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: KL1PR01MB5448:EE_|TYZPR01MB5157:EE_
-X-MS-Office365-Filtering-Correlation-Id: b881ed19-be2f-401b-1500-08db512d0ca1
-X-MS-Exchange-SLBlob-MailProps: YfhX3sd/0TX2BmCZQdbdnh7GRQzK1Scz7pFxnsAzYmi/NvFeTcavnYsLt8sW6SRPHvQ9N986QLLiN2tE8mrB5ilPKZ98oHLdmTWqVHBQcj4gL8ad9WPnHPd74G4FLxXXPkn+EN7fWqdR/b6ZWob1s1GI2/grzPF8NqtUsG5SXtdJMKY2SKaoC13EF/CYWp6HEJ7sjPPHERhWLaS5ULtc2QUcAZYX731zKGNMruUv0Wxg5jGJGDiyPRY4/Z6VIt/17tUSvYWf48e8mMPLYqQSN3xCjVg+W/VodkOioWq363mPvzTfyej7rs6nqiNXnnux1AyYQqdQW/rEfSXluCNxeEDorcBfh+l5hAojUCS7QZnr7YEe68C6K46CcRvWzLioZ90vxuXcbp8Ymjlm6oy0UKHPfH8i1HcYNeeN+XIlyus777VvRK1bq0aMUR/AAz1imU4j75AKk9puo0Oisy4DEF/sgMKxr0kEfarVs7kkXGAGncILkrENqnbWGQ8XxrBiIzeRzC9iIXxlwrkKyuh/9nzaM6U3Sh/zINrcS7t3bO+f5p4Z40su1G1TpmfbTWCspQn19uWIA87Ub+BMWwFMBtEJV4QAb6efaRIsgt5auKqOpKIKi1XPbdTnPahTThJ8IEI+kceQcOqxvi+yVF1YU/iyeQhUEk0O5Gn8PkrMn3W0OeD4G0h7FZ9U8D/pt+D1XnbnD9k/mcnqurRGx4wLm1WSJu1hVODKK5Ndbb8IO9wL1QuR4nPdzhUdlIauqPLkgtA5NBQB/IxSXaBGjjdq7L7KJ1Ajx3tF/aEFGM+dgpQ=
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6Fli9N7P8blhukmc19wOrQMa16gHnbl7s5z+MLuUfIKWn7+QviPwRQROa1hrCEiwj7NNKhkqT5RigaYpQWv8j8u1KoBVnJ6qt4DLJhMSfpVDm7KUb6w8EVKQRX4NTRt1wma6+AKvYTy4i5y9ylh9zZAn/rc6m9f47dV3zUPaS06Uo9BTSVUNtIlMdr1Vmxj3Gy73fr8id13P7l+YNWrJU/cf7KkN/T+U8g3+YjOLl0y8VzM0l/YAo+fVKQDCAoDBu9Yaj9lfba5pZ3+dxLRY7M7JyeTqDn2rojRk7Ga9r0juMlxuSoBZ26n9ejUlae/HJ/NTfLBvDd+hpHe4s7zUdr0tcq8rwzozXguRQTsK06SNSoA1ndN9skz5pijq6auu8aBBfBJzQxzGIteZUacLRQET/m16VXpEUAAYzK3kkktugIWjbANTP5/abN0QXwVRue5BbiGAV7OBJyZB6h0yQLoOzB5RxDqeb3v85guSutlMb+LIhxcxvJQQWNpHxDd+XWBtWe4vOFflqHbNVQs73sLBDdGkXJygRSSSWbdMkqh1yf8t1CGubQn12Ly9NnQYyO1n6xldNKtkS1Y5Y0aXjzw3qMhn3Mf1kaNlVAAA3Fo=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rEmRRDp6iOHdLxxDrxPBNSuR1cANfqTpIkanbEh+nfh8YWoZe98G8QifVTPY?=
- =?us-ascii?Q?76np7S5D+Jv1ZHZVBVAMpSzi0+I1xq3V7jvuw88RrCvHHkQKLtJJmD8ny3dC?=
- =?us-ascii?Q?6Kf0xPYJ+vBBWMbl1KTlAQMNA/obCL+EgRdoQW/iBpsottHLW0rga7TNQxfV?=
- =?us-ascii?Q?BlJkobymHFI8x9aHWoasOHnVTVN9JwVNF+ePnW/sW+T0dsMWCdB9myxwWVN0?=
- =?us-ascii?Q?unIDkMHQ9GGbQPMqBRERs5gdymZCmRQGnhfVZBcsqw+f3Kjk7lGuEroTAeXE?=
- =?us-ascii?Q?+CS7KB0JPiSNiMUWLHSAUVqAWoGwlRvvYtccEIABpo/yRoFAigBvwNsgmxvW?=
- =?us-ascii?Q?P3/+4E8ImD7TdvbaNoNwZ7dqTPYcmtQuv+F3gaZEggCYWeu1dNIzlAsztjyb?=
- =?us-ascii?Q?XrdYZPchZPaY4vFcwU54T+2MwaR2VsL1XiTCY7EX8Uk3dmHeyQp22qbVTfTf?=
- =?us-ascii?Q?GDZEH5cu1JjD+nNJTupS68mOPu4QM0+9X3V/3Y2JzeTDPaiuv13DuaSv7sRp?=
- =?us-ascii?Q?gIco8lIxsbs4A989Hx6nAumoW8GfI5rar7zYqc7zaDa4mepRzQyLao6dMA7q?=
- =?us-ascii?Q?mGU02urdlrt7Mwn/hTBAvocMwVn8UjwC5AKN2W4EKs1HU274aM+LuwkjR49O?=
- =?us-ascii?Q?8DywCS9YB5CChJWRjrTnTMRBcaLXmTysDJ6vcK3TgQqLCuQIKl0bxG6rvbzn?=
- =?us-ascii?Q?Z81mY3yJQS1bbsgNEpr6qIbrk8LH+FEnQ7uXVvwIUrSnMSgoHZL/Y01C/PSL?=
- =?us-ascii?Q?LcmOhxuEdYgtyMgySWe6DYdh6Hc7/6ms3ckz3NB/HeQ0sgGz6bMQy7M+vaT3?=
- =?us-ascii?Q?PmmP0aOwlVFrH9FXYzJMK6biriml87+ow7w9ayZ2d01wTqLHaDeGGzyYVabt?=
- =?us-ascii?Q?h/4z44Qag6qAuHWNvaTTa/IUNcJ58x87qGv4XYO3fAztkCMPNZtQhqjikAhO?=
- =?us-ascii?Q?7mj8NQjic5t2Fp1tYZ5R3nhF+pvEvbpKkarK7G8z3NhCtEvYLBN93ZcEPpCk?=
- =?us-ascii?Q?W1see3V3ApgeJkrANj0muA29/Y+twbGmD2JFyqMDnd2GWaTP0Sr4gOVAR7a7?=
- =?us-ascii?Q?NqUoBmKEaEacmofLVmyyPC6Qn+evaqNMd3kPLr0RzSaedi2gMa0vmIw2WQ33?=
- =?us-ascii?Q?DDsS1Dh6QhYfUriXQG+RWXlGp/lnGTqAeBvbcM1SttrQAQXroOnVrcOG/ONS?=
- =?us-ascii?Q?KyZpUaz1mfc8zdyLMvVB/WgoGUuQmJfEhS0kXA=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b881ed19-be2f-401b-1500-08db512d0ca1
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR01MB5448.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 08:03:38.7585
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR01MB5157
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] Documentation: sched/deadline: Update GRUB
+ description
+Content-Language: en-US
+To:     Vineeth Pillai <vineeth@bitbyteword.org>,
+        luca.abeni@santannapisa.it, Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20230508160829.2756405-1-vineeth@bitbyteword.org>
+ <20230508160829.2756405-2-vineeth@bitbyteword.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20230508160829.2756405-2-vineeth@bitbyteword.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,64 +87,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is possible to mount multiple sub-devices on the mido bus.
-The hardware power-on does not necessarily reset these devices.
-The device may be in an uncertain state, causing the device's ID
-to be scanned.
+On 5/8/23 23:08, Vineeth Pillai wrote:
+> diff --git a/Documentation/scheduler/sched-deadline.rst b/Documentation/scheduler/sched-deadline.rst
+> index 9d9be52f221a..0c73f07f712d 100644
+> --- a/Documentation/scheduler/sched-deadline.rst
+> +++ b/Documentation/scheduler/sched-deadline.rst
+> @@ -195,11 +195,15 @@ Deadline Task Scheduling
+>        its utilization is added to the active utilization of the runqueue where
+>        it has been enqueued.
+>  
+> - For each runqueue, the algorithm GRUB keeps track of two different bandwidths:
+> + For each runqueue, the algorithm GRUB keeps track of three different bandwidths:
+>  
+>    - Active bandwidth (running_bw): this is the sum of the bandwidths of all
+>      tasks in active state (i.e., ActiveContending or ActiveNonContending);
+>  
+> +  - Active bandwidth of SCHED_FLAG_RECLAIM tasks(reclaim_bw): this is the sum of
+> +    bandwidth of all tasks in active state which participates in GRUB. This is a
+> +    subset of running_bw and is needed for reclaimable bandwidth calculation.
+> +
+>    - Total bandwidth (this_bw): this is the sum of all tasks "belonging" to the
+>      runqueue, including the tasks in Inactive state.
+>  
+> @@ -209,12 +213,12 @@ Deadline Task Scheduling
+>   to
+>  
+>             dq = -max{ Ui / Umax, (1 - Uinact - Uextra) } dt
+> +           dq = -(Ureclaim / (Uextra + Uinact + Ureclaim)) dt
+>  
+>   where:
+>  
+> -  - Ui is the bandwidth of task Ti;
+> -  - Umax is the maximum reclaimable utilization (subjected to RT throttling
+> -    limits);
+> +  - Ureclaim is the (per runqueue) bandwidth of all SCHED_FLAG_RECLAIM tasks
+> +    in active state;
+>    - Uinact is the (per runqueue) inactive utilization, computed as
+>      (this_bq - running_bw);
+>    - Uextra is the (per runqueue) extra reclaimable utilization
+> @@ -222,7 +226,8 @@ Deadline Task Scheduling
+>  
+>  
+>   Let's now see a trivial example of two deadline tasks with runtime equal
+> - to 4 and period equal to 8 (i.e., bandwidth equal to 0.5)::
+> + to 4 and period equal to 8 (i.e., bandwidth equal to 0.5). Tasks are
+> + allowed to use the whole cpu(Umax = 1)::
+>  
+>           A            Task T1
+>           |
+> @@ -244,7 +249,7 @@ Deadline Task Scheduling
+>           0   1   2   3   4   5   6   7   8
+>  
+>  
+> -         A            running_bw
+> +         A            reclaim_bw
+>           |
+>         1 -----------------               ------
+>           |               |               |
+> @@ -272,7 +277,7 @@ Deadline Task Scheduling
+>  
+>      This is the 0-lag time for Task T1. Since it didn't woken up in the
+>      meantime, it enters the Inactive state. Its bandwidth is removed from
+> -    running_bw.
+> +    running_bw and reclaim_bw.
+>      Task T2 continues its execution. However, its runtime is now decreased as
+>      dq = - 0.5 dt because Uinact = 0.5.
+>      Task T2 therefore reclaims the bandwidth unused by Task T1.
+> @@ -280,7 +285,7 @@ Deadline Task Scheduling
+>    - Time t = 8:
+>  
+>      Task T1 wakes up. It enters the ActiveContending state again, and the
+> -    running_bw is incremented.
+> +    running_bw and reclaim_bw are incremented.
+>  
+>  
+>  2.3 Energy-aware scheduling
 
-So, before adding a reset to the scan, make sure the device is in
-normal working mode.
+LGTM, thanks!
 
-I found that the subsequent drive registers the reset pin into the
-structure of the sub-device to prevent conflicts, so release the
-reset pin.
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Signed-off-by: Yan Wang <rk.code@outlook.com>
----
-v2:
-  - fixed commit message
-  - Using gpiod_ replace gpio_
-v1: https://lore.kernel.org/all/KL1PR01MB5448631F2D6F71021602117FE6769@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
-  - Incorrect description of commit message.
-  - The gpio-api too old
----
- drivers/net/mdio/fwnode_mdio.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
-index 1183ef5e203e..6695848b8ef2 100644
---- a/drivers/net/mdio/fwnode_mdio.c
-+++ b/drivers/net/mdio/fwnode_mdio.c
-@@ -57,6 +57,20 @@ fwnode_find_mii_timestamper(struct fwnode_handle *fwnode)
- 	return register_mii_timestamper(arg.np, arg.args[0]);
- }
- 
-+static void fwnode_mdiobus_pre_enable_phy(struct fwnode_handle *fwnode)
-+{
-+	struct gpio_desc *reset;
-+
-+	reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_HIGH, NULL);
-+	if (IS_ERR(reset) && PTR_ERR(reset) != -EPROBE_DEFER)
-+		return;
-+
-+	usleep_range(100, 200);
-+	gpiod_set_value_cansleep(reset, 0);
-+	/*Release the reset pin,it needs to be registered with the PHY.*/
-+	gpiod_put(reset);
-+}
-+
- int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
- 				       struct phy_device *phy,
- 				       struct fwnode_handle *child, u32 addr)
-@@ -119,6 +133,8 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
- 	u32 phy_id;
- 	int rc;
- 
-+	fwnode_mdiobus_pre_enable_phy(child);
-+
- 	psec = fwnode_find_pse_control(child);
- 	if (IS_ERR(psec))
- 		return PTR_ERR(psec);
 -- 
-2.17.1
+An old man doll... just what I always wanted! - Clara
 
