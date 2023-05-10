@@ -2,128 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4536FE820
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FD86FE823
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236946AbjEJXay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 19:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
+        id S236955AbjEJXfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 19:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjEJXaw (ORCPT
+        with ESMTP id S232410AbjEJXf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 19:30:52 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BF52693;
-        Wed, 10 May 2023 16:30:50 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34AND972000752;
-        Wed, 10 May 2023 23:30:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=7WDGO1bd4jzyFHOcFubfjRxmEOxwHUYGzdTE8qwNHVc=;
- b=m3Awv65oMaH6mo2w8CV3admiZdcOjcOyuWme5W8XS+bBcSP35zYCfn4XRhorDHfVjsEO
- 3k8yklVWFIfKgnQQ0I06enRT3b7KdVzYZE/uUXTSY8C7GA+1gex8sc5+ws/bQixmx6Lz
- YO/vIpQrZiF0jfBbNS/uvw5FzTMloFPkh4QcTYDFWrNfWfU3Pxl5YfJ+BUSDZb+EEwF6
- 49UtXvGmWuiNcK3C972wmpICEMlVfQh/6KClOew6z5XRVsWCyboIe1F7PlJIHYacobPc
- MN+z13p6BgwA/vk2VJga+BfnGIJzH+vrmwbDxQeczOTbGxYetdMQcjw+YwYN1n5PXc78 LA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qg5mpsxca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 23:30:40 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34ANUdSC003058
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 23:30:39 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 10 May
- 2023 16:30:38 -0700
-Message-ID: <9d405506-3083-3827-990b-ff2151bf6024@quicinc.com>
-Date:   Wed, 10 May 2023 16:30:38 -0700
+        Wed, 10 May 2023 19:35:27 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D86211C
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 16:35:24 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230510233520epoutp02da1701719f4a6b34d36659258ccafcb7~d7F0-aNEb1405314053epoutp02H
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:35:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230510233520epoutp02da1701719f4a6b34d36659258ccafcb7~d7F0-aNEb1405314053epoutp02H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683761720;
+        bh=o752e7x8drNytVH+xeQYDrNah5bJ9JO8rEbU4yGJyIo=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=mbgyUyX8aiR+wM2dpRPKJJcQG8/fG/vWw+pkJZ+biLK6Yn4F+Vci8KSA3+o0sCiPt
+         oYctl5SqZ6GIvC9LXCgGqJYJXkZ497vEKcKXJ3gdZOY6N7pAmf4cppal+gyrsa7cT/
+         k8rQunYNylgDu49JQGLZN5SdR47Rxzs/RrLpsjdM=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230510233520epcas2p15451d03fa410d7178aa5d6861e232e07~d7F0ULuQz2289522895epcas2p10;
+        Wed, 10 May 2023 23:35:20 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.92]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4QGrx339mRz4x9Pw; Wed, 10 May
+        2023 23:35:19 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2B.74.17293.73A2C546; Thu, 11 May 2023 08:35:19 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20230510233518epcas2p3897c71373d936a19339f02ca16fdbc5b~d7Fy-ueay2020620206epcas2p3J;
+        Wed, 10 May 2023 23:35:18 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230510233518epsmtrp1f5c6035a1cd196d1dd43aa2def5ab3dc~d7Fy8aAuL0960809608epsmtrp1h;
+        Wed, 10 May 2023 23:35:18 +0000 (GMT)
+X-AuditID: b6c32a46-b23fd7000001438d-71-645c2a37a8f8
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4B.D7.28392.63A2C546; Thu, 11 May 2023 08:35:18 +0900 (KST)
+Received: from KORCO011456 (unknown [10.229.38.105]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230510233518epsmtip13321ccc948753e312a21d3bee2a10388~d7FytOsCO0879908799epsmtip1F;
+        Wed, 10 May 2023 23:35:18 +0000 (GMT)
+From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
+To:     "'Bao D. Nguyen'" <quic_nguyenb@quicinc.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <beanhuo@micron.com>, <adrian.hunter@intel.com>,
+        <sc.suh@samsung.com>, <hy50.seo@samsung.com>,
+        <sh425.lee@samsung.com>, <kwangwon.min@samsung.com>
+In-Reply-To: <991cac52-22bc-0150-4332-76ac044c5bcb@quicinc.com>
+Subject: RE: [RFC PATCH v1] ufs: poll HCS.UCRDY before issuing a UIC command
+Date:   Thu, 11 May 2023 08:35:18 +0900
+Message-ID: <039001d98398$1478d0b0$3d6a7210$@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v1 2/2] drm/msm/dp: add mutex to protect internal_hpd
- against race condition between different threads
-Content-Language: en-US
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <airlied@gmail.com>, <andersson@kernel.org>, <daniel@ffwll.ch>,
-        <dianders@chromium.org>, <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <marijn.suijten@somainline.org>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683750665-8764-1-git-send-email-quic_khsieh@quicinc.com>
- <1683750665-8764-3-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n532y=ARQ_+urEA_b3zUn+gKTu1fgK_siHNt3CpbLB9PZg@mail.gmail.com>
- <74ae5514-2b04-9363-902e-cb4d7cbe1128@quicinc.com>
- <6721cc2c-6988-948c-65d6-f50edb925ded@quicinc.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <6721cc2c-6988-948c-65d6-f50edb925ded@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: y6hM4sdyexagpy1sdVrL5qAcZG5QEkOo
-X-Proofpoint-GUID: y6hM4sdyexagpy1sdVrL5qAcZG5QEkOo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=673 clxscore=1015
- suspectscore=0 malwarescore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305100193
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: ko
+Thread-Index: AQGTQ//Bn9HITMBER2fQmcGpYd1IAgEVn6BsAYR8HMavy9ctsA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTVxzeaS+3F5eaa0U8dEFKiSYwwBYpvV1EDTjsptlIyJaxLeu69to2
+        faYPwszimOmwIJGClcXOoPKQrCwwCa2FsslD1zC3YdLhaqeERttQsWuHLptuM2u5uPHfd77v
+        9zvf9zsPjM6aRNmYSmcmjTqphotuQDwzhcISYdG7cl5kLJuYvfclSix2e1Ai9ngeJabCLQgx
+        2LuIED1BD41wB8cQIjB+FiVO/OxFiQH/UxpxesnPIFrvBAHR/zSO7GOKeydiNLG9ZxKI/xi2
+        oeLfIiFE3DFxVHxy1AXED0e2iY9PnqDVYm+rdytJqZw0ckidTC9X6RSV3IN1kmqJoILHL+GL
+        CCGXo5NqyUru/kO1JTUqTSoyl9Mg1VhSVK3UZOLu3LPbqLeYSY5SbzJXckmDXGMQGkpNUq3J
+        olOU6kjzS3wer0yQKnxfrVwMJhiGKxsb/7K+1wQ8z7eCTAzi5bC9L4K2gg0YC/cCGP7FR0sL
+        LHwFQFfPy5TwMIWvjKDPOuYW7iKUMA6gIxQB1CIGYHLeT09XofiLsCvsy0gLWfgKDQ5FzzHS
+        Qia+F45+Pw/SeDN+CPZPWVf9EHw7TAx+mtoWw5i4CA59Jk/TTHwTnD1zD0ljOp4HL8fP0qkU
+        HPg4cjGD4rPg5y3Nq3wWXgUv+TtW00H8BgaX7v4OqIb90NHvy6DwZnjfP8qgMBvG2psZaV+I
+        q+HEhWyKboS9XXGEwrugM3ocpEvoeCEcHt9JVRfAq6G1ZBuhbeaftU2Y0NbMohoL4JPOU2v+
+        OfDMrdtrnmK48PdVYAf5znUzOtfN6Fw3l/N/3/MAcYFs0mDSKkhTmaHsv5uW6bUjYPUpF9V4
+        gSOeLJ0GNAxMA4jRuVnMeN87chZTLv3wCGnUS4wWDWmaBoLUoXfQ2Vtk+tRf0Jkl/HIRr7yi
+        gi8sE/CE3K3MFypnZSxcITWTapI0kMZnfTQsk91EY8vbdh1QHjV/9cbW74q15j0Zr8V890UW
+        X2ZLfvLwg4NPVLjIlReU1V2ou2UL173ZcDlUL7K3Ng3muQUzhfZ91+64cy3XE8uBOYPm9XMD
+        w9/m5tY/ktmWChs17K8NO0qDku5v4tfQI0kk+5Vi9XO8OeNNd1/NxAcOkXfg1YAq57qA5IWH
+        iJ9Uvzr6KpZa6pNVWvRRuy7/QHVOhGxw79imYCYuleg/ia58jBdwzmvxfPTPhljbQqdHzj65
+        94Fzsaq4Wh6NIm+h3sMfhXg/dFpdgS+aayY15sRY12jCuoXfdrFogMU/ViVRhm525nBOoT9O
+        3TiWXO62MwLW5eBtLmJSSvlFdKNJ+i+osvE0UwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEIsWRmVeSWpSXmKPExsWy7bCSnK6ZVkyKwecX6hYnn6xhs3gwbxub
+        xcufV9ksDj7sZLFYvfgBi8WiG9uYLLbe2MlicXnXHDaL7us72CyWH//HZDH1xXF2i667Nxgt
+        lv57y+LA67F4z0smjwmLDjB6fF/fwebx8ektFo+Je+o8+rasYvT4vEnOo/1AN1MARxSXTUpq
+        TmZZapG+XQJXxoMb79kL9vNV/G6Ja2Dcxt3FyMkhIWAicf7eY5YuRi4OIYEdjBL7nr5mh0hI
+        SpzY+ZwRwhaWuN9yhBWi6DmjxIUV25hBEmwC2hLTHu4GS4gINDBLzP9+hQUkISRwmlHi60QL
+        EJtTwF5iy5mrYJOEBXwklh5sYQKxWQRUJd6vbgWq5+DgFbCUWDc9BSTMKyAocXLmE7AxzEDz
+        ex+2MkLY8hLb385hhjhIQeLn02WsEHERidmdbWBxEQEniY3HJ7JMYBSahWTULCSjZiEZNQtJ
+        +wJGllWMkqkFxbnpucWGBUZ5qeV6xYm5xaV56XrJ+bmbGMHRqKW1g3HPqg96hxiZOBgPMUpw
+        MCuJ8L5dEp0ixJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dU
+        A1PO/MzY/Vtk+f1YlLy4RXqMmCQtlzmeuBrSPenl5nwWxZcH5h/Qtpl0ozP2pBDHvL0XLtp1
+        tLUJaGgVrpy+hHHHf8YNZSzno3NDbbcvvOMZFc1pz+0e4TmH6bO9+bFmufmcPj8Yzoq4qp5Z
+        9Hbxv1xR6wPV7q3ndG9fn+T+7/uFCTa3AmPPOHmYrf6utOV7sNysZzvn+inzLfjRFim2WzCm
+        LKtIfeHFg5F7tbddKpN/9/RrpsSUWVLnfvlnP+U53FyZHj95sWaenHCQyxSO65sWl6zPXv9q
+        0aXbEzqvuixbaNvoMuXhK78zvJPXmMx4/rXT1aR1T2LnJDOxXMGnas3ZR+9LSzuarip+nnbE
+        bYkSS3FGoqEWc1FxIgBHPtP0NQMAAA==
+X-CMS-MailID: 20230510233518epcas2p3897c71373d936a19339f02ca16fdbc5b
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230509083312epcas2p375f77d18a9026f7d263750baf9c9a5bb
+References: <CGME20230509083312epcas2p375f77d18a9026f7d263750baf9c9a5bb@epcas2p3.samsung.com>
+        <1683620674-160173-1-git-send-email-kwmad.kim@samsung.com>
+        <991cac52-22bc-0150-4332-76ac044c5bcb@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen
+> On 5/9/2023 1:24 AM, Kiwoong Kim wrote:
+> > With auto hibern8 enabled, UIC could be working for a while to process
+> > a hibern8 operation and HCI reports UIC not ready for a short term
+> > through HCS.UCRDY.
+> > And UFS driver can't recognize the operation.
+> > UFSHCI spec specifies UCRDY like this:
+> > whether the host controller is ready to process UIC COMMAND
+> >
+> > The 'ready' could be seen as many different meanings. If the meaning
+> > includes not processing any request from HCI, processing a hibern8
+> > operation can be 'not ready'. In this situation, the driver needs to
+> > wait until the operations is completed.
+> >
+> > Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+> > ---
+> >   drivers/ufs/core/ufshcd.c | 13 ++++++++++++-
+> >   1 file changed, 12 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> > index 96ce6af..fc79539 100644
+> > --- a/drivers/ufs/core/ufshcd.c
+> > +++ b/drivers/ufs/core/ufshcd.c
+> > @@ -2368,7 +2368,18 @@ static inline int ufshcd_hba_capabilities(struct
+> ufs_hba *hba)
+> >    */
+> >   static inline bool ufshcd_ready_for_uic_cmd(struct ufs_hba *hba)
+> >   {
+> > -	return ufshcd_readl(hba, REG_CONTROLLER_STATUS) & UIC_COMMAND_READY;
+> > +	ktime_t timeout = ktime_add_ms(ktime_get(), UIC_CMD_TIMEOUT);
+> > +	u32 val = 0;
+> > +
+> > +	do {
+> > +		val = ufshcd_readl(hba, REG_CONTROLLER_STATUS) &
+> > +			UIC_COMMAND_READY;
+> > +		if (val)
+> > +			break;
+> > +		usleep_range(500, 1000);
+> Hi Kiwoong,
+> It looks like you are sleeping while holding the spin_lock_irqsave(hba-
+> >host->host_lock, flags) in ufshcd_send_uic_cmd()?
 
-On 5/10/2023 4:19 PM, Kuogee Hsieh wrote:
-> internal_hpd is referenced at both plug and unplug handle.
-> 
-> The majority purpose of  mutext is try to serialize internal_hpd between 
-> dp_bridge_hpd_disable() and either plug or unplug handle.
-> 
-> 
-> On 5/10/2023 4:11 PM, Abhinav Kumar wrote:
->>
->>
->> On 5/10/2023 3:46 PM, Stephen Boyd wrote:
->>> Quoting Kuogee Hsieh (2023-05-10 13:31:05)
->>>> Intrenal_hpd is referenced by event thread but set by drm bridge 
->>>> callback
->>>> context. Add mutex to protect internal_hpd to avoid conflicts between
->>>> threads.
->>>>
->>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>> ---
->>>
->>> This patch looks completely unnecessary. How can dp_bridge_hpd_enable()
->>> be called at the same time that dp_bridge_hpd_disable() is called or
->>> dp_bridge_hpd_notify() is called? Isn't there locking or ordering at a
->>> higher layer?
->>
->> Ack. We can drop this patch because we are protected by 
->> bridge->hpd_mutex in drm_bridge_hpd_enable() / drm_bridge_hpd_disable 
->> () and drm_bridge_hpd_notify().
+Right. Let me fix it.
 
-I understood now, so what kuogee is referring to is that this 
-event_mutex protection is to not protect those 3 calls from each other 
-(since they are already protected as we saw above) but because 
-dp_hpd_plug_handle/dp_hpd_unplug_handle still uses 
-dp_display.internal_hpd to re-enable the hot-plug interrupt, this is 
-making sure that flow is protected as well.
+Thanks.
+Kiwoong Kim
+
+> 
+> 
+> > +	} while (ktime_before(ktime_get(), timeout));
+> > +
+> > +	return val ? true : false;
+> >   }
+> >
+> >   /**
+
+
