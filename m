@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB7C6FD825
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8166FD824
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235925AbjEJH25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
+        id S235883AbjEJH2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235728AbjEJH2v (ORCPT
+        with ESMTP id S235830AbjEJH2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 10 May 2023 03:28:51 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE8B7AA8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C287AA7
         for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:28:37 -0700 (PDT)
 From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683703715;
+        s=2020; t=1683703716;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=O5nXiqMgCa2OYCOkf4JPFNZUWtGToltv6G0Iw34JEBM=;
-        b=yKMzioS/WLKt1mjb1d15ayb4qofW4/Q3QxUZ08yPD+7WwVBVdVBMWeHaEVBVCUBPOaO+JT
-        35JumrUCe0Sg3Z+2Am8FTSI3r2C5Dn03BNDDdH0YNz//dcAfX9DF0M1IKBlfCFHOp1d8up
-        VFnTRWu+GGpxzKs71I3/AAgZMK0AoqRNf/mGofx58HPlamBmpFiF7trXBcdxcgeriXoqsk
-        +J6OA+kXAroSYMNcvr3T3CKuQektEk9wtN87fA++pFefnL3/8USBRp34E+VytxvLLM7c3Z
-        DpIuuznPNylkIKL8T0kTcWMYULFBRNjtP8WETv2VsiEE2WJ3mEZybiy3zGkyJg==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PQ3NXQMtig0Ydn+DZ27wQ54KKOjUtVfs2xndfW98O6U=;
+        b=D1z8D7w3JzNIOBDodikGpgba/haCLy1TxmxP/1wSCOZKJuKDVD8q6m1tAVemn7SY1VMWfX
+        6inJI1GFRSek4B7U+lxGZiw87qltifNke3JPTbMUysJgKWHviXMFJyHEtcUVC+7ILLMW9h
+        nmo1GduNR6p9ELH1LAs8wPS+1y1Zy4qGBabcXVgtpq96Pi5Rm6DGeX8uMQFlHKifa2b268
+        qMRrYVXrF9NhOdDFIgse2Mhu5ZVo0Qtzo+AeyfIiUILGHXgxGjQmSVsjpP++ZaEKDKBBCq
+        Q6gSE/tTo6gXH2v+zwCnuTMQQbfceTvYFc7Sg815OQlx8zkCGzNMBQ5jMKOM4A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683703715;
+        s=2020e; t=1683703716;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=O5nXiqMgCa2OYCOkf4JPFNZUWtGToltv6G0Iw34JEBM=;
-        b=pVzkdN87DOsGcQ1YWYaIFSsI/07Vz2uaElGI0UtKW/reWDH2fCiLNr8PlupwGMIlZLuaGU
-        kn+k9Am06vsq7jDg==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PQ3NXQMtig0Ydn+DZ27wQ54KKOjUtVfs2xndfW98O6U=;
+        b=gouTsahUwW0QIcMnc5t/uebABITaHYIEOsA+7sqa8xzzd0gbx4fXMQfK0n2Cp3y0Ht/nMd
+        AFCfNmzT2tNM68Aw==
 To:     linux-kernel@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         John Stultz <jstultz@google.com>,
@@ -50,10 +52,13 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Giovanni Gherdovich <ggherdovich@suse.cz>,
         Lukasz Luba <lukasz.luba@arm.com>,
         "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>
-Subject: [PATCH v6 00/21] timer: Move from a push remote at enqueue to a pull at expiry model
-Date:   Wed, 10 May 2023 09:27:56 +0200
-Message-Id: <20230510072817.116056-1-anna-maria@linutronix.de>
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: [PATCH v6 01/21] tick-sched: Warn when next tick seems to be in the past
+Date:   Wed, 10 May 2023 09:27:57 +0200
+Message-Id: <20230510072817.116056-2-anna-maria@linutronix.de>
+In-Reply-To: <20230510072817.116056-1-anna-maria@linutronix.de>
+References: <20230510072817.116056-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -66,166 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Placing timers at enqueue time on a target CPU based on dubious heuristics
-does not make any sense:
+When the next tick is in the past, the delta between basemono and the next
+tick gets negativ. But the next tick should never be in the past. The
+negative effect of a wrong next tick might be a stop of the tick and timers
+might expire late.
 
- 1) Most timer wheel timers are canceled or rearmed before they expire.
+To prevent expensive debugging when changing underlying code, add a
+WARN_ON_ONCE into this code path.
 
- 2) The heuristics to predict which CPU will be busy when the timer expires
-    are wrong by definition.
+Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+---
+ kernel/time/tick-sched.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-So placing the timers at enqueue wastes precious cycles.
-
-The proper solution to this problem is to always queue the timers on the
-local CPU and allow the non pinned timers to be pulled onto a busy CPU at
-expiry time.
-
-Therefore split the timer storage into local pinned and global timers:
-Local pinned timers are always expired on the CPU on which they have been
-queued. Global timers can be expired on any CPU.
-
-As long as a CPU is busy it expires both local and global timers. When a
-CPU goes idle it arms for the first expiring local timer. If the first
-expiring pinned (local) timer is before the first expiring movable timer,
-then no action is required because the CPU will wake up before the first
-movable timer expires. If the first expiring movable timer is before the
-first expiring pinned (local) timer, then this timer is queued into a idle
-timerqueue and eventually expired by some other active CPU.
-
-To avoid global locking the timerqueues are implemented as a hierarchy. The
-lowest level of the hierarchy holds the CPUs. The CPUs are associated to
-groups of 8, which are separated per node. If more than one CPU group
-exist, then a second level in the hierarchy collects the groups. Depending
-on the size of the system more than 2 levels are required. Each group has a
-"migrator" which checks the timerqueue during the tick for remote timers to
-be expired.
-
-If the last CPU in a group goes idle it reports the first expiring event in
-the group up to the next group(s) in the hierarchy. If the last CPU goes
-idle it arms its timer for the first system wide expiring timer to ensure
-that no timer event is missed.
-
-
-Testing
-~~~~~~~
-
-The impact of wasting cycles during enqueue by using the heuristic in
-contrast to always queuing the timer on the local CPU was measured with a
-micro benchmark. Therefore a timer is enqueued and dequeued in a loop with
-1000 repetitions on a isolated CPU. The time the loop takes is measured. A
-quarter of the remaining CPUs was kept busy. This measurement was repeated
-several times. With the patch queue the average duration was reduced by
-approximately 25%.
-
-	145ns	plain v6
-	109ns	v6 with patch queue
-
-
-Furthermore the impact of residence in deep idle states of an idle system
-was investigated. The patch queue doesn't downgrade this behavior.
-
-
-During testing on a mostly idle machine a ping pong game could be observed:
-a process_timeout timer is expired remotely on a non idle CPU. Then the CPU
-where the schedule_timeout() was executed to enqueue the timer comes out of
-idle and restarts the timer using schedule_timeout() and goes back to idle
-again. This is due to the fair scheduler which tries to keep the task on
-the CPU which it previously executed on.
-
-
-Next Steps
-~~~~~~~~~~
-
-Simple deferrable timers are no longer required as they can be converted to
-global timers. If a CPU goes idle, a formerly deferrable timer will not
-prevent the CPU to sleep as long as possible. Only the last migrator CPU
-has to take care of them. Deferrable timers with timer pinned flags needs
-to be expired on the specified CPU but must not prevent CPU from going
-idle. They require their own timer base which is never taken into account
-when calculating the next expiry time. This conversation and required
-cleanup will be done in a follow up series.
-
-
-v5..v6:
-
-  - Address review of Frederic Weisbecker and Peter Zijlstra (spelling,
-    locking, race in tmigr_handle_remote_cpu())
-
-  - unconditionally set TIMER_PINNED flag in add_timer_on(); introduce
-    add_timer() variants which set/unset TIMER_PINNED flag; drop fixing
-    add_timer_on() call sites, as TIMER_PINNED flag is set implicitly;
-    Fixing workqueue to use add_timer_global() instead of simply
-    add_timer() for unbound work.
-
-  - Drop support for siblings to end up in the same level 0 group (could be
-    added again in a better way as an improvement later on)
-
-  - Do not send IPI for new first deferrable timers
-
-v4..v5:
-  - address review feedback of Frederic Weisbecker
-  - fix issue with group timer update after remote expiry
-
-v3..v4:
-  - address review feedback of Frederic Weisbecker
-  - address kernel test robot fallout
-  - Move patch 16 "add_timer_on(): Make sure callers have TIMER_PINNED
-    flag" at the begin of the queue to prevent timers to end up in global
-    timer base when they were queued using add_timer_on()
-  - Fix some comments and typos
-
-v2..v3: https://lore.kernel.org/r/20170418111102.490432548@linutronix.de/
-  - Minimize usage of locks by storing data using atomic_cmpxchg() for
-    migrator information and information about active cpus.
-
-
-Thanks,
-
-	Anna-Maria
-
-
-Anna-Maria Behnsen (18):
-  tick-sched: Warn when next tick seems to be in the past
-  timer: Do not IPI for deferrable timers
-  timer: Add comment to get_next_timer_interrupt() description
-  timer: Move store of next event into __next_timer_interrupt()
-  timer: Split next timer interrupt logic
-  timers: Introduce add_timer() variants which modify timer flags
-  workqueue: Use global variant for add_timer()
-  timer: add_timer_on(): Make sure TIMER_PINNED flag is set
-  timers: Ease code in run_local_timers()
-  timers: Create helper function to forward timer base clk
-  timer: Keep the pinned timers separate from the others
-  timer: Retrieve next expiry of pinned/non-pinned timers separately
-  timer: Split out "get next timer interrupt" functionality
-  timer: Add get next timer interrupt functionality for remote CPUs
-  timer: Check if timers base is handled already
-  timer: Implement the hierarchical pull model
-  timer_migration: Add tracepoints
-  timer: Always queue timers on the local CPU
-
-Richard Cochran (linutronix GmbH) (2):
-  timer: Restructure internal locking
-  tick/sched: Split out jiffies update helper function
-
-Thomas Gleixner (1):
-  timer: Rework idle logic
-
- include/linux/cpuhotplug.h             |    1 +
- include/linux/timer.h                  |   16 +-
- include/trace/events/timer_migration.h |  277 +++++
- kernel/time/Makefile                   |    3 +
- kernel/time/tick-internal.h            |   10 +
- kernel/time/tick-sched.c               |   20 +-
- kernel/time/timer.c                    |  446 ++++++--
- kernel/time/timer_migration.c          | 1346 ++++++++++++++++++++++++
- kernel/time/timer_migration.h          |  138 +++
- kernel/workqueue.c                     |    2 +-
- 10 files changed, 2153 insertions(+), 106 deletions(-)
- create mode 100644 include/trace/events/timer_migration.h
- create mode 100644 kernel/time/timer_migration.c
- create mode 100644 kernel/time/timer_migration.h
-
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index 52254679ec48..62836490ba4d 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -831,6 +831,8 @@ static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
+ 	 * If the tick is due in the next period, keep it ticking or
+ 	 * force prod the timer.
+ 	 */
++	WARN_ON_ONCE(basemono > next_tick);
++
+ 	delta = next_tick - basemono;
+ 	if (delta <= (u64)TICK_NSEC) {
+ 		/*
 -- 
 2.30.2
 
