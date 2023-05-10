@@ -2,134 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81156FE467
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 21:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A226FE464
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 21:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236116AbjEJTMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 15:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
+        id S236033AbjEJTJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 15:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235455AbjEJTMH (ORCPT
+        with ESMTP id S235944AbjEJTJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 15:12:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792692705
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 12:12:05 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683745923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/MECbkgCGOoBuvWtbOq2MxOu4fITVWEjEY+BBqAF9ns=;
-        b=ffQ9fl3MaMTDG2AfJn3s0Hg+wrzUBDxCiJhn7ptHhlD3kBqhQNZ+u8taPzbQz/MBMGvWc9
-        mYIczIfyPbP1YPZoHjbqNLPHGm7v88AWqvHoAmon3XZhtiLE9knDAj+y14BOeza7RPOmN/
-        7elzRdT/aZLaluD1zGDW2M1/CiRs7H5Hm/cabxFX+esVHLVI+WnsRRmeEYGmu1pvUXShJh
-        ExDfLZjWaGY68GPIC6zaUUX1f699sEYhdBKX7KS/kKhTuIjWiHpH93jgCzDBpI4ll7x9PB
-        UmofVWYNcwDeY6GiZmxJN2JODggkR7hQ4aQNTFbNGZv3Knlr3QfHdkE7UKbb8g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683745923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/MECbkgCGOoBuvWtbOq2MxOu4fITVWEjEY+BBqAF9ns=;
-        b=X4nOfMSYbZJkbpGd2m7OBEYGn2P8QP4+/B1iFgR2q7AgEF+4m0+jXgpEnhqFVTGaKYgqzZ
-        cfTAyfqD2ZApXaCQ==
-To:     Shanker Donthineni <sdonthineni@nvidia.com>
-Cc:     Yujie Liu <yujie.liu@intel.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Michael Walle <michael@walle.cc>,
-        Vikram Sethi <vsethi@nvidia.com>
-Subject: Re: [PATCH v3 3/3] genirq: Use the maple tree for IRQ descriptors
- management
-In-Reply-To: <e1c50a59-f85a-02bc-6b48-fceaa390b2ad@nvidia.com>
-References: <202304251035.19367560-yujie.liu@intel.com>
- <87a5yuzvzd.ffs@tglx> <ZEsiYbi8dorXTI5t@yujie-X299> <877ctw5mdp.ffs@tglx>
- <ZFdbtipfTsIF0u6z@yujie-X299> <87mt2f2mhm.ffs@tglx>
- <ZFtGvfDFLyHeFVFH@yujie-X299> <87ttwkxn96.ffs@tglx> <87r0roxmvu.ffs@tglx>
- <e1c50a59-f85a-02bc-6b48-fceaa390b2ad@nvidia.com>
-Date:   Wed, 10 May 2023 21:12:02 +0200
-Message-ID: <87lehwxapp.ffs@tglx>
+        Wed, 10 May 2023 15:09:11 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930D24203
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 12:09:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683745749; x=1715281749;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OX6gA3T2IWk0qU+f+3B+ygKjVIhA9IRmzlWxPyfDCVM=;
+  b=I0C2cNQI0UewZorR20L7P3z3ryF1c1Q4mjxkMXPZac308k5+ynGnu3iq
+   HZvRyWvZ4bIdApJPx7KsD4KMEFukanVzol5UBvNrAVXyaaRBWCy5X+0Si
+   cN0iJ6ClZGjda5puMxT3mDoUYYzVezjVmI+k8HKzu4u9M4qeAAFw308Y5
+   OgD7uzgMG2VYBcdGHXHtctDcp+oCcVGoDB7FdyW/+7OUEIZ4eZ3DFXSuo
+   6eImNuZ7+Nh00Qiid7sCJNPa2tyEysKIAVQi6YuljfnJORgay5NGPU0f6
+   3SELEDtX+TmWWvTTANHboCf+QQtnBkKW9ljVPC9j+pttDNiq6mPcvdbs8
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="339551384"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="339551384"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 12:09:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="730046070"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="730046070"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga008.jf.intel.com with ESMTP; 10 May 2023 12:09:08 -0700
+Date:   Wed, 10 May 2023 12:12:07 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Radu Rendec <rrendec@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Pierre Gondois <Pierre.Gondois@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 1/3] cacheinfo: Add arch specific early level
+ initializer
+Message-ID: <20230510191207.GA18514@ranerica-svr.sc.intel.com>
+References: <20230412185759.755408-1-rrendec@redhat.com>
+ <20230412185759.755408-2-rrendec@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412185759.755408-2-rrendec@redhat.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shanker!
+On Wed, Apr 12, 2023 at 02:57:57PM -0400, Radu Rendec wrote:
+> This patch gives architecture specific code the ability to initialize
+> the cache level and allocate cacheinfo memory early, when cache level
+> initialization runs on the primary CPU for all possible CPUs.
+> 
+> This is part of a patch series that attempts to further the work in
+> commit 5944ce092b97 ("arch_topology: Build cacheinfo from primary CPU").
+> Previously, in the absence of any DT/ACPI cache info, architecture
+> specific cache detection and info allocation for secondary CPUs would
+> happen in non-preemptible context during early CPU initialization and
+> trigger a "BUG: sleeping function called from invalid context" splat on
+> an RT kernel.
+> 
+> More specifically, this patch adds the early_cache_level() function,
+> which is called by fetch_cache_info() as a fallback when the number of
+> cache leaves cannot be extracted from DT/ACPI. In the default generic
+> (weak) implementation, this new function returns -ENOENT, which
+> preserves the original behavior for architectures that do not implement
+> the function.
+> 
+> Since early detection can get the number of cache leaves wrong in some
+> cases*, additional logic is added to still call init_cache_level() later
+> on the secondary CPU, therefore giving the architecture specific code an
+> opportunity to go back and fix the initial guess. Again, the original
+> behavior is preserved for architectures that do not implement the new
+> function.
+> 
+> * For example, on arm64, CLIDR_EL1 detection works only when it runs on
+>   the current CPU. In other words, a CPU cannot detect the cache depth
+>   for any other CPU than itself.
+> 
+> Signed-off-by: Radu Rendec <rrendec@redhat.com>
+> Reviewed-by: Pierre Gondois <pierre.gondois@arm.com>
+> ---
+>  drivers/base/cacheinfo.c  | 75 +++++++++++++++++++++++++++------------
+>  include/linux/cacheinfo.h |  2 ++
+>  2 files changed, 55 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
+> index f3903d002819..d783896c8a1f 100644
+> --- a/drivers/base/cacheinfo.c
+> +++ b/drivers/base/cacheinfo.c
+> @@ -398,6 +398,11 @@ static void free_cache_attributes(unsigned int cpu)
+>  	cache_shared_cpu_map_remove(cpu);
+>  }
+>  
+> +int __weak early_cache_level(unsigned int cpu)
+> +{
+> +	return -ENOENT;
+> +}
+> +
+>  int __weak init_cache_level(unsigned int cpu)
+>  {
+>  	return -ENOENT;
+> @@ -423,56 +428,82 @@ int allocate_cache_info(int cpu)
+>  
+>  int fetch_cache_info(unsigned int cpu)
+>  {
+> -	struct cpu_cacheinfo *this_cpu_ci;
+> +	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
+>  	unsigned int levels = 0, split_levels = 0;
+>  	int ret;
+>  
+>  	if (acpi_disabled) {
+>  		ret = init_of_cache_level(cpu);
+> -		if (ret < 0)
+> -			return ret;
+>  	} else {
+>  		ret = acpi_get_cache_info(cpu, &levels, &split_levels);
+> -		if (ret < 0)
+> +		if (!ret) {
+> +			this_cpu_ci->num_levels = levels;
+> +			/*
+> +			 * This assumes that:
+> +			 * - there cannot be any split caches (data/instruction)
+> +			 *   above a unified cache
+> +			 * - data/instruction caches come by pair
+> +			 */
+> +			this_cpu_ci->num_leaves = levels + split_levels;
+> +		}
+> +	}
+> +
+> +	if (ret || !cache_leaves(cpu)) {
+> +		ret = early_cache_level(cpu);
+> +		if (ret)
+>  			return ret;
+>  
+> -		this_cpu_ci = get_cpu_cacheinfo(cpu);
+> -		this_cpu_ci->num_levels = levels;
+> -		/*
+> -		 * This assumes that:
+> -		 * - there cannot be any split caches (data/instruction)
+> -		 *   above a unified cache
+> -		 * - data/instruction caches come by pair
+> -		 */
+> -		this_cpu_ci->num_leaves = levels + split_levels;
+> +		if (!cache_leaves(cpu))
+> +			return -ENOENT;
+> +
+> +		this_cpu_ci->early_ci_levels = true;
+>  	}
+> -	if (!cache_leaves(cpu))
+> -		return -ENOENT;
+>  
+>  	return allocate_cache_info(cpu);
+>  }
+>  
+> -int detect_cache_attributes(unsigned int cpu)
+> +static inline int init_level_allocate_ci(unsigned int cpu)
+>  {
+> -	int ret;
+> +	unsigned int early_leaves = cache_leaves(cpu);
+>  
+>  	/* Since early initialization/allocation of the cacheinfo is allowed
+>  	 * via fetch_cache_info() and this also gets called as CPU hotplug
+>  	 * callbacks via cacheinfo_cpu_online, the init/alloc can be skipped
+>  	 * as it will happen only once (the cacheinfo memory is never freed).
+> -	 * Just populate the cacheinfo.
+> +	 * Just populate the cacheinfo. However, if the cacheinfo has been
+> +	 * allocated early through the arch-specific early_cache_level() call,
+> +	 * there is a chance the info is wrong (this can happen on arm64). In
+> +	 * that case, call init_cache_level() anyway to give the arch-specific
+> +	 * code a chance to make things right.
+>  	 */
+> -	if (per_cpu_cacheinfo(cpu))
+> -		goto populate_leaves;
+> +	if (per_cpu_cacheinfo(cpu) && !ci_cacheinfo(cpu)->early_ci_levels)
+> +		return 0;
+>  
+>  	if (init_cache_level(cpu) || !cache_leaves(cpu))
+>  		return -ENOENT;
+>  
+> -	ret = allocate_cache_info(cpu);
+> +	/*
+> +	 * Now that we have properly initialized the cache level info, make
+> +	 * sure we don't try to do that again the next time we are called
+> +	 * (e.g. as CPU hotplug callbacks).
+> +	 */
+> +	ci_cacheinfo(cpu)->early_ci_levels = false;
+> +
+> +	if (cache_leaves(cpu) <= early_leaves)
+> +		return 0;
+> +
 
-On Wed, May 10 2023 at 10:19, Shanker Donthineni wrote:
-> Apologies for my lack of familiarity with the maple tree data structure and
-> not testing all functions. I received advice from the review comments below
-> regarding the iterator.
->
-> https://lore.kernel.org/linux-arm-kernel/875ydej9ur.ffs@tglx/
->
-> static unsigned int irq_find_next_irq(unsigned int offset)
-> {
->          MA_STATE(mas, &sparse_irqs, offset, nr_irqs);
->          struct irq_desc *desc = mas_next(&mas, nr_irqs);
->
->          return desc ? irq_desc_get_irq(desc) : nr_irqs;
-> }
+Hi,
 
-You gracefully omitted what I wrote below this:
+I had posted a patchset[1] for x86 that initializes
+ci_cacheinfo(cpu)->num_leaves during SMP boot.
 
-    "or something like that."
+This means that early_leaves and a late cache_leaves() are equal but
+per_cpu_cacheinfo(cpu) is never allocated. Currently, x86 does not use
+fetch_cache_info().
 
-which means that it's a suggestion and not claiming that it is in any
-way correct.
+I think that we should check here that per_cpu_cacheinfo() has been allocated to
+take care of the case in which early and late cache leaves remain the same:
 
-It does not mean that you should copy it verbatim and assume that it is
-correct. It means that if you pick that suggestion up it's your
-responsibility to thoroughly understand and test the code you submit,
-no?
+-       if (cache_leaves(cpu) <= early_leaves)
++       if (cache_leaves(cpu) <= early_leaves && per_cpu_cacheinfo(cpu))
 
-That has nothing to do with familiarity vs. the maple tree. I'm neither
-familiar with the maple tree and all I did was reading through the
-documentation, which is pretty well done, except for that tiny
-documentation error vs. the return value of mt_next().
+Otherwise, in v6.4-rc1 + [1] I observe a NULL pointer dereference from
+last_level_cache_is_valid().
 
-It's a simple question of engineering principles:
+I can post a patch with this fix if it makes sense.
 
-     "correctness first" vs. "works for me".
-
-> I am looking for your guidance to address the issue with the iterator
-
-You must be kidding.
-
-  1) You got 90% of the solution on a silber tablet
-
-  2) You failed to understand and test the stuff you submitted
-
-  3) You ignored the bug report. Someone else debugged the fallout and
-     explained where and what the problem is.
-
-  4) Now you ask that someone else goes and reads the maple tree
-     documentation for you to find the proper function to use.  So that
-     you can go and blindly apply the change and then go back to #2.
-
-I'm really happy to help and guide people, but what you are asking for
-is that I do your homework completely. Seriously?
-
-> if not possible can we increase NR_IRQS for ARM64 arch.
-
-Definitely not. The maple tree conversion is the right thing to do and
-fixing the issue at hand is definitely not rocket science.
-
-I'm pretty sure that it is about 3 lines of change to make it work. Plus
-some polishing afterwards to make it palatable.
-
-Thanks,
-
-        tglx
-
-
+[1]. https://lore.kernel.org/all/20230424001956.21434-3-ricardo.neri-calderon@linux.intel.com/
