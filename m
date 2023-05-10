@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449036FD402
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 05:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E65C6FD403
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 05:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234986AbjEJDIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 23:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
+        id S235280AbjEJDIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 23:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjEJDIN (ORCPT
+        with ESMTP id S230188AbjEJDIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 23:08:13 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3681D2703
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 20:08:12 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-643990c5373so6603148b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 20:08:12 -0700 (PDT)
+        Tue, 9 May 2023 23:08:15 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6701994
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 20:08:13 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1aaea43def7so46147755ad.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 20:08:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683688091; x=1686280091;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=C9PwoT9duAavJS8s+p5CuyuLX7BseRfO8juntKgv42o=;
-        b=ctdVFaRIxyeEKOu2W4YIc/naAkQsLrd70upydX2LJpmnDMCM+urrGY26KAxG9gTaB3
-         VFQLJ+EJw6ocFbf4B7KVtCEqXXlYPm4rlUdRZCUWntszU/u6qT7uAT+yVNKRnvuKraLE
-         oZejDDTP2N7rXLXjNVFV+M/IpRxFvKNEtu0xLo4AKe712l/uskUOhnyCjhpvTwYw6hfC
-         79UW3rNtZUzVZjUXX4UVy/BuilMRXyWVx3PLuO7EOQmXbx9lKogG1FFepyrTPqUL0coe
-         vnibNo3+spvu4mW99d8c7wVcrd9eWnpNhdkyNOQDqjBeNLVtXPOI+cShU15bgcbporMG
-         UasQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683688091; x=1686280091;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1683688093; x=1686280093;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=C9PwoT9duAavJS8s+p5CuyuLX7BseRfO8juntKgv42o=;
-        b=V0OvaMbV/3I6/01aFBJCdjRqTBetwhD46N/hF2wm0qwWERLWT8q09Ve3buHztKdzeE
-         0h1c8OgFEx95Tv7+ePHcUQaszU1xWjUXUfc1gsiA6p7Na6Eb+Yt57DMdDCqoTfpcuM65
-         T9RTA0SeTtF0KN7dsStAlaEbIL24Z0yjkXlvmLHC1cH+xj0lkhb7DGevsxE3AfwsmfP9
-         TYusX4X2/H/J9NZP4fhv9IbO81Uj/03tjEobRYxvZREn6Gv/Pr78pz/DNv15rRifqMqr
-         tn/JDH6dHCFdXrBW7lsbQUy+Zmcqeet+Ly+pf0+9v2r2ENv1NeR9aMugjzXDVm+z5Y54
-         753g==
-X-Gm-Message-State: AC+VfDwsC0JM3bVAMbX2GM1Tpim922snPfA2VjxmBXKdbuFYZ8NVz+il
-        qTNZI9kTaPETT/qPmiFFLk1hnoeBzww=
-X-Google-Smtp-Source: ACHHUZ7ZsSOmrW94nfFTyksHJbLysaAso7syek6ihBBDfegwH+a3VgDKpVXcTBGsG4Vk7MAUycYZWw==
-X-Received: by 2002:a05:6a00:10cd:b0:645:fc7b:63d6 with SMTP id d13-20020a056a0010cd00b00645fc7b63d6mr11487506pfu.6.1683688091176;
-        Tue, 09 May 2023 20:08:11 -0700 (PDT)
+        bh=mdyIuzCEQXkuMCMgyrDXSrNFYsBJ81LFvpXdEhZyndE=;
+        b=KF+RqwztN2NZt9pfLjeNVxLHOActmRjgW2a2Bjvrz/FwXmPpKnJgIu798OC/MZV2p5
+         VCQOpzjCJLlQAf1MuoBQumqDZNDagmRb2DdslUqIBSnOLvfNa5zEopoUGQ6MaelyFAfc
+         tCcVk3FzDXRlxHWx3awgzaEKkJybGh4/3XHPPXCXB//npFd5GRGo3J4HfGZNZtziyv/n
+         pdzBaQD/GEZ7wHfGVJ7rT1h9vT0iE0EoifWGcMSAH6RzT8kK+QfS7HjMU04AG+fIgvoP
+         qObHY70UDTbs+4ofd7x8h7LxE5/uI/udjIJoTeScUrs7dN3B5D6yWme/xM6YNYroDlZt
+         JByA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683688093; x=1686280093;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mdyIuzCEQXkuMCMgyrDXSrNFYsBJ81LFvpXdEhZyndE=;
+        b=bYfM2z+rYIw/b0/zSIt9x9cHzYZAVRlJQKWaeoi4+jhvwXoD2yuethHhs61bgM+MDj
+         7bRwi+WyrnG2w4pYmBViLbipfTknGFasOhDy0RlUShaaSOlJRSyXlYY718k0YWkhcPMT
+         feVE9sl+2wHrRfpeoFmEHnFj72y/7boYjdxJUDEsqCuPSiUMu+NK39SIjQcB5sWqhsao
+         XvfWYT21k9Exwqlyygo4D3yOlz2GzsNA7VSwM+ei5BuT70plFVT+5Ldwy78vmpChhx8y
+         mR4HUSeLmZeZQoZa3Us797NTO+0h6EXza2PAcGC5AFCmTMCoEeeJL3/l59BztfPPWstW
+         G+uA==
+X-Gm-Message-State: AC+VfDxjUW+WIWhkdZyik6C+0QsGZmDjncVRA3O8/2O/I4HEy7TsskA1
+        aNm2CyXZzfQncz2UMbxR3+YRWL45mRs=
+X-Google-Smtp-Source: ACHHUZ57hGVF/muezA/SAkuROfDs+4BN9tM4MRvLt47M9MpE2CUehPOuJhXoVo3bHV9Yqnxe/ICnJA==
+X-Received: by 2002:a17:902:f690:b0:1ab:29bc:bd87 with SMTP id l16-20020a170902f69000b001ab29bcbd87mr18643199plg.35.1683688092869;
+        Tue, 09 May 2023 20:08:12 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id bm17-20020a056a00321100b0063b54ccc123sm2443307pfb.196.2023.05.09.20.08.10
+        by smtp.gmail.com with ESMTPSA id h6-20020a170902b94600b001ac78ac2cafsm2419642pls.239.2023.05.09.20.08.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 20:08:10 -0700 (PDT)
+        Tue, 09 May 2023 20:08:12 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     jiangshanlai@gmail.com
 Cc:     torvalds@linux-foundation.org, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: [PATCHSET v2 wq/for-6.5] workqueue: Implement automatic CPU intensive detection and add monitoring
-Date:   Tue,  9 May 2023 17:07:46 -1000
-Message-Id: <20230510030752.542340-1-tj@kernel.org>
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH 1/6] workqueue, sched: Notify workqueue of scheduling of RUNNING and preempted tasks
+Date:   Tue,  9 May 2023 17:07:47 -1000
+Message-Id: <20230510030752.542340-2-tj@kernel.org>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230510030752.542340-1-tj@kernel.org>
+References: <20230510030752.542340-1-tj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,74 +75,250 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v2: * Lai pointed out that !SM_NONE cases should also be notified. 0001 and
-      0004 are updated accordingly.
+When a workqueue kworker goes to sleep, wq_worker_sleeping() is called so
+that workqueue can manage concurrency. This patch renames
+wq_worker_sleeping() to wq_worker_stopping() and calls it whenever a kworker
+is scheduled out whether it's going to sleep or not.
 
-    * PeterZ suggested reporting on work items that trigger the auto CPU
-      intensive mechanism. 0006 adds reporting of work functions that
-      trigger the mechanism repeatedly with exponential backoff.
+Workqueue will use the schedule-out events of RUNNING tasks to automatically
+detect CPU hogging work items and exclude them from concurrency management
+so that they can't stall other work items.
 
-Hello,
+sched_submit_work() and sched_update_work() were only called by schedule().
+As workqueue would need to be notified of all scheduling events including
+preemptions, make the two functions notrace, add @sched_mode and call them
+from all schedule functions. As wq_worker_sleeping() is now called from
+preemption path, it's also marked notrace.
 
-To reduce the number of concurrent worker threads, workqueue holds back
-starting per-cpu work items while the previous work item stays in the
-RUNNING state. As such a per-cpu work item which consumes a lot of CPU
-cycles, even if it has cond_resched()'s in the right places, can stall other
-per-cpu work items.
+As sched_update_work() is noop when called !SM_NONE, it's debatable whether
+it needs to be called from !SM_NONE paths. However, it shouldn't add any
+actual overhead and is possibly less confusing to keep the symmetry. This
+can go either way.
 
-To support per-cpu work items that may occupy the CPU for a substantial
-period of time, workqueue has WQ_CPU_INTENSIVE flag which exempts work items
-issued through the marked workqueue from concurrency management - they're
-started immediately and don't block other work items. While this works, it's
-error-prone in that a workqueue user can easily forget to set the flag or
-set it unnecessarily. Furthermore, the impacts of the wrong flag setting can
-be rather indirect and challenging to root-cause.
+The only functional change is that wq_worker_sleeping() is now called from
+all scheduling paths. As this patch adds early exit conditions which make it
+noop in all new invocations, there shouldn't be any behavior change. While
+at it, remove the already outdated comment which doesn't cover the io_wq
+case.
 
-This patchset makes workqueue auto-detect CPU intensive work items based on
-CPU consumption. If a work item consumes more than the threshold (5ms by
-default) of CPU time, it's automatically marked as CPU intensive when it
-gets scheduled out which unblocks starting of pending per-cpu work items.
+v2: Lai pointed out that !SM_NONE cases should also be notified. Updated
+    accordingly.
 
-The mechanism isn't foolproof in that the detection delays can add up if
-many CPU-hogging work items are queued at the same time. However, in such
-situations, the bigger problem likely is the CPU being saturated with
-per-cpu work items and the solution would be making them UNBOUND. Future
-changes will make UNBOUND workqueues more attractive by improving their
-locality behaviors and configurability. We might eventually remove the
-explicit WQ_CPU_INTENSIVE flag.
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+---
+ kernel/sched/core.c         | 48 ++++++++++++++++++++++++-------------
+ kernel/workqueue.c          | 23 +++++++++++++-----
+ kernel/workqueue_internal.h |  2 +-
+ 3 files changed, 49 insertions(+), 24 deletions(-)
 
-While at it, add statistics and a monitoring script. Lack of visibility has
-always been a bit of pain point when debugging workqueue related issues and
-with this change and more drastic ones planned for workqueue, this is a good
-time to address the shortcoming.
-
-This patchset was born out of the discussion in the following thread:
-
- https://lkml.kernel.org/r/CAHk-=wgE9kORADrDJ4nEsHHLirqPCZ1tGaEPAZejHdZ03qCOGg@mail.gmail.com
-
-and contains the following five patches:
-
- 0001-workqueue-sched-Notify-workqueue-of-scheduling-of-RU.patch
- 0002-workqueue-Re-order-struct-worker-fields.patch
- 0003-workqueue-Move-worker_set-clr_flags-upwards.patch
- 0004-workqueue-Automatically-mark-CPU-hogging-work-items-.patch
- 0005-workqueue-Report-work-funcs-that-trigger-automatic-C.patch
- 0006-workqueue-Add-pwq-stats-and-a-monitoring-script.patch
-
-and also available in the following git branch:
-
- git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git auto-cpu-intensive-v2
-
-diffstat follows. Thanks.
-
- Documentation/core-api/workqueue.rst |   30 ++
- kernel/sched/core.c                  |   48 ++--
- kernel/workqueue.c                   |  364 +++++++++++++++++++++++++++--------
- kernel/workqueue_internal.h          |   14 -
- lib/Kconfig.debug                    |   13 +
- tools/workqueue/wq_monitor.py        |  148 ++++++++++++++
- 6 files changed, 513 insertions(+), 104 deletions(-)
-
---
-tejun
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 944c3ae39861..ab4317a8e11a 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6692,24 +6692,20 @@ void __noreturn do_task_dead(void)
+ 		cpu_relax();
+ }
+ 
+-static inline void sched_submit_work(struct task_struct *tsk)
++static inline notrace void sched_submit_work(struct task_struct *tsk,
++					     unsigned int sched_mode)
+ {
+-	unsigned int task_flags;
++	unsigned int task_flags = tsk->flags;
++	bool voluntary = sched_mode == SM_NONE;
+ 
+-	if (task_is_running(tsk))
++	if (task_flags & PF_WQ_WORKER)
++		wq_worker_stopping(tsk, voluntary);
++
++	if (!voluntary || task_is_running(tsk))
+ 		return;
+ 
+-	task_flags = tsk->flags;
+-	/*
+-	 * If a worker goes to sleep, notify and ask workqueue whether it
+-	 * wants to wake up a task to maintain concurrency.
+-	 */
+-	if (task_flags & (PF_WQ_WORKER | PF_IO_WORKER)) {
+-		if (task_flags & PF_WQ_WORKER)
+-			wq_worker_sleeping(tsk);
+-		else
+-			io_wq_worker_sleeping(tsk);
+-	}
++	if (task_flags & PF_IO_WORKER)
++		io_wq_worker_sleeping(tsk);
+ 
+ 	/*
+ 	 * spinlock and rwlock must not flush block requests.  This will
+@@ -6725,8 +6721,12 @@ static inline void sched_submit_work(struct task_struct *tsk)
+ 	blk_flush_plug(tsk->plug, true);
+ }
+ 
+-static void sched_update_worker(struct task_struct *tsk)
++static notrace void sched_update_worker(struct task_struct *tsk,
++					unsigned int sched_mode)
+ {
++	if (sched_mode != SM_NONE)
++		return;
++
+ 	if (tsk->flags & (PF_WQ_WORKER | PF_IO_WORKER)) {
+ 		if (tsk->flags & PF_WQ_WORKER)
+ 			wq_worker_running(tsk);
+@@ -6739,13 +6739,13 @@ asmlinkage __visible void __sched schedule(void)
+ {
+ 	struct task_struct *tsk = current;
+ 
+-	sched_submit_work(tsk);
++	sched_submit_work(tsk, SM_NONE);
+ 	do {
+ 		preempt_disable();
+ 		__schedule(SM_NONE);
+ 		sched_preempt_enable_no_resched();
+ 	} while (need_resched());
+-	sched_update_worker(tsk);
++	sched_update_worker(tsk, SM_NONE);
+ }
+ EXPORT_SYMBOL(schedule);
+ 
+@@ -6808,17 +6808,24 @@ void __sched schedule_preempt_disabled(void)
+ #ifdef CONFIG_PREEMPT_RT
+ void __sched notrace schedule_rtlock(void)
+ {
++	struct task_struct *tsk = current;
++
++	sched_submit_work(tsk, SM_RTLOCK_WAIT);
+ 	do {
+ 		preempt_disable();
+ 		__schedule(SM_RTLOCK_WAIT);
+ 		sched_preempt_enable_no_resched();
+ 	} while (need_resched());
++	sched_update_worker(tsk, SM_RTLOCK_WAIT);
+ }
+ NOKPROBE_SYMBOL(schedule_rtlock);
+ #endif
+ 
+ static void __sched notrace preempt_schedule_common(void)
+ {
++	struct task_struct *tsk = current;
++
++	sched_submit_work(tsk, SM_PREEMPT);
+ 	do {
+ 		/*
+ 		 * Because the function tracer can trace preempt_count_sub()
+@@ -6844,6 +6851,7 @@ static void __sched notrace preempt_schedule_common(void)
+ 		 * between schedule and now.
+ 		 */
+ 	} while (need_resched());
++	sched_update_worker(tsk, SM_PREEMPT);
+ }
+ 
+ #ifdef CONFIG_PREEMPTION
+@@ -6901,11 +6909,13 @@ EXPORT_SYMBOL(dynamic_preempt_schedule);
+  */
+ asmlinkage __visible void __sched notrace preempt_schedule_notrace(void)
+ {
++	struct task_struct *tsk = current;
+ 	enum ctx_state prev_ctx;
+ 
+ 	if (likely(!preemptible()))
+ 		return;
+ 
++	sched_submit_work(tsk, SM_PREEMPT);
+ 	do {
+ 		/*
+ 		 * Because the function tracer can trace preempt_count_sub()
+@@ -6934,6 +6944,7 @@ asmlinkage __visible void __sched notrace preempt_schedule_notrace(void)
+ 		preempt_latency_stop(1);
+ 		preempt_enable_no_resched_notrace();
+ 	} while (need_resched());
++	sched_update_worker(tsk, SM_PREEMPT);
+ }
+ EXPORT_SYMBOL_GPL(preempt_schedule_notrace);
+ 
+@@ -6968,11 +6979,13 @@ EXPORT_SYMBOL(dynamic_preempt_schedule_notrace);
+  */
+ asmlinkage __visible void __sched preempt_schedule_irq(void)
+ {
++	struct task_struct *tsk = current;
+ 	enum ctx_state prev_state;
+ 
+ 	/* Catch callers which need to be fixed */
+ 	BUG_ON(preempt_count() || !irqs_disabled());
+ 
++	sched_submit_work(tsk, SM_PREEMPT);
+ 	prev_state = exception_enter();
+ 
+ 	do {
+@@ -6984,6 +6997,7 @@ asmlinkage __visible void __sched preempt_schedule_irq(void)
+ 	} while (need_resched());
+ 
+ 	exception_exit(prev_state);
++	sched_update_worker(tsk, SM_PREEMPT);
+ }
+ 
+ int default_wake_function(wait_queue_entry_t *curr, unsigned mode, int wake_flags,
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 4666a1a92a31..cbcdc11adabd 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -867,7 +867,10 @@ static void wake_up_worker(struct worker_pool *pool)
+  * wq_worker_running - a worker is running again
+  * @task: task waking up
+  *
+- * This function is called when a worker returns from schedule()
++ * This function is called when a worker returns from schedule().
++ *
++ * Unlike wq_worker_stopping(), this function is only called from schedule() but
++ * not other scheduling paths including preemption and can be traced safely.
+  */
+ void wq_worker_running(struct task_struct *task)
+ {
+@@ -890,17 +893,25 @@ void wq_worker_running(struct task_struct *task)
+ }
+ 
+ /**
+- * wq_worker_sleeping - a worker is going to sleep
+- * @task: task going to sleep
++ * wq_worker_stopping - a worker is stopping
++ * @task: task stopping
++ * @voluntary: being called from schedule()
++ *
++ * This function is called from scheduling paths including schedule() and
++ * preemption when a busy worker is going off the CPU.
+  *
+- * This function is called from schedule() when a busy worker is
+- * going to sleep.
++ * As this function may be called from preempt_enable_notrace() and friends when
++ * !@voluntary, it must be notrace and limit reentrancy when @voluntary to avoid
++ * infinite recursions.
+  */
+-void wq_worker_sleeping(struct task_struct *task)
++void notrace wq_worker_stopping(struct task_struct *task, bool voluntary)
+ {
+ 	struct worker *worker = kthread_data(task);
+ 	struct worker_pool *pool;
+ 
++	if (!voluntary || task_is_running(task))
++		return;
++
+ 	/*
+ 	 * Rescuers, which may not have all the fields set up like normal
+ 	 * workers, also reach here, let's not access anything before
+diff --git a/kernel/workqueue_internal.h b/kernel/workqueue_internal.h
+index e00b1204a8e9..c34b876af16d 100644
+--- a/kernel/workqueue_internal.h
++++ b/kernel/workqueue_internal.h
+@@ -75,7 +75,7 @@ static inline struct worker *current_wq_worker(void)
+  * sched/ and workqueue.c.
+  */
+ void wq_worker_running(struct task_struct *task);
+-void wq_worker_sleeping(struct task_struct *task);
++void wq_worker_stopping(struct task_struct *task, bool voluntary);
+ work_func_t wq_worker_last_func(struct task_struct *task);
+ 
+ #endif /* _KERNEL_WORKQUEUE_INTERNAL_H */
+-- 
+2.40.1
 
