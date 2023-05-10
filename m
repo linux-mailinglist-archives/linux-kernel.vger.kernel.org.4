@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D77B86FE688
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 23:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1CC6FE6D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 00:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236150AbjEJV7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 17:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
+        id S236082AbjEJWAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 18:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjEJV7u (ORCPT
+        with ESMTP id S229461AbjEJWAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 17:59:50 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8618610FF
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:59:49 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-760718e6878so1141814239f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:59:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683755989; x=1686347989;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xjllICd3LQIMP/gta6LsmZizuNSUq+Z9Txu8r2Eu7/c=;
-        b=JEiFoEgJ4YOhqiLWkfGUpCF2dhbdYnhjPxy64yzssnhqfbYaQBO+s2SrA48ZWkgQVE
-         ogzIYEW8fB7ip27aPsyK/PHOuab6afm9nJoBNQt8k6oqxU2fnGIm51ELZ/+xA/Ehkk5X
-         y4I8rHzf2bMCpfTUEnKKp0Ua6QSs6jylvI2U/PJSjKgn/XN2xcIVEcC1Xr/+4WUei/k/
-         u60CQ0frPFcPmH6dLroWF9Mz7Re8tapQGQhTEwrYj/A6mbPQ5EnWwXqE9kh0OwYRPL4h
-         CI/8cRf6JSolpFd6kfxMR/BtGc0YHqhlmHgkslo8r1Zkkj5QWzgWLnN20G4s1cl/M/zx
-         k+kQ==
-X-Gm-Message-State: AC+VfDwKSg5IKLxdNF5aYif9o2OAVvhnrpb2A3RJ31UlUYUiwr7YGBMQ
-        PIOM6uzA1d3Vex5Wd6T5Rr5j/8n6z5ry68cwt65b0dx6eaYC
-X-Google-Smtp-Source: ACHHUZ4Tlf9yInWtJSWzOY5LQEm1B9HNNpfKXMRdZpzR3mazFAPq/l3UdS4ttb0lSmmO33WpYrmE//7sGJJMm/9hDRi5aZatLYI0
-MIME-Version: 1.0
-X-Received: by 2002:a02:b054:0:b0:40f:ae69:a144 with SMTP id
- q20-20020a02b054000000b0040fae69a144mr4093051jah.5.1683755988887; Wed, 10 May
- 2023 14:59:48 -0700 (PDT)
-Date:   Wed, 10 May 2023 14:59:48 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009b5b5705fb5dfda0@google.com>
-Subject: [syzbot] [ext4?] WARNING in __ext4fs_dirhash
-From:   syzbot <syzbot+344aaa8697ebd232bfc8@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+        Wed, 10 May 2023 18:00:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9250A1FFE;
+        Wed, 10 May 2023 15:00:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27B3E613B3;
+        Wed, 10 May 2023 22:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F02CC4339B;
+        Wed, 10 May 2023 22:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683756017;
+        bh=1MHQpmGZcXSSS+kzDgHs6bDhpvIk3cK9wU4y4fA2vZs=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=qWYQ47Io/qPOgqN0ky0IoAjCzxsZcxPsr2qwlvGki94ljhao3wyplrff79ifW9EOO
+         M4+KLnnKzFOmUQhseAMwH1gM26TyPd+h3Ougvw+q9SCEJQDYk/7sLsez3xqDF6emn2
+         yBmEot/WhP3qPjYINHvqX4u61WBYUm1oTIx2Ybpqrb8g/1CoQsySGlip8WF6Pii4MT
+         Z9gttlwrnMWqSIXsKOMkFNskF4AJAQqz+PV7btH39P109jfFDIb4M8TE+tNBkLMRYF
+         tQuc1yZ04wXMDuDmPjUDiuBpVb8OQTNAzmR46pHMyX2NMG+LHf3fg+5oacwnVv0FXS
+         OwFlMuVVD8ieg==
+Message-ID: <d80b180a569a9f068d3a2614f062cfa3a78af5a6.camel@kernel.org>
+Subject: Re: [linus:master] [tpm, tpm_tis] e644b2f498: RIP:acpi_safe_halt
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-kernel@vger.kernel.org,
+        Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>,
+        linux-integrity@vger.kernel.org
+Date:   Thu, 11 May 2023 01:00:13 +0300
+In-Reply-To: <202305041325.ae8b0c43-yujie.liu@intel.com>
+References: <202305041325.ae8b0c43-yujie.liu@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.0-1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,88 +57,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Lino,
 
-syzbot found the following issue on:
+Have you had time to peek into this? I just noticed the email, just
+asking if some findings have been already made or not.
 
-HEAD commit:    578215f3e21c Add linux-next specific files for 20230510
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=10a11e34280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bb5a64fc61c29c5f
-dashboard link: https://syzkaller.appspot.com/bug?extid=344aaa8697ebd232bfc8
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+BR, Jarkko
 
-Unfortunately, I don't have any reproducer for this issue yet.
+On Thu, 2023-05-04 at 14:12 +0800, kernel test robot wrote:
+> Hello,
+>=20
+> kernel test robot noticed "RIP:acpi_safe_halt" on:
+>=20
+> commit: e644b2f498d297a928efcb7ff6f900c27f8b788e ("tpm, tpm_tis: Enable i=
+nterrupt test")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+>=20
+> [test failed on linux-next/master 84e2893b4573da3bc0c9f24e2005442e420e383=
+1]
+>=20
+> in testcase: stress-ng
+> version: stress-ng-x86_64-0.15.04-1_20230427
+> with following parameters:
+>=20
+> 	nr_threads: 100%
+> 	disk: 1HDD
+> 	testtime: 60s
+> 	class: interrupt
+> 	test: signest
+> 	cpufreq_governor: performance
+>=20
+> compiler: gcc-11
+> test machine: 64 threads 2 sockets Intel(R) Xeon(R) Gold 6346 CPU @ 3.10G=
+Hz (Ice Lake) with 256G memory
+>=20
+> (please refer to attached dmesg/kmsg for entire log/backtrace)
+>=20
+>=20
+> If you fix the issue, kindly add following tag
+> > Reported-by: kernel test robot <yujie.liu@intel.com>
+> > Link: https://lore.kernel.org/oe-lkp/202305041325.ae8b0c43-yujie.liu@in=
+tel.com
+>=20
+>=20
+> kern  :warn  : [   26.609994] CPU: 21 PID: 0 Comm: swapper/21 Not tainted=
+ 6.3.0-00022-ge644b2f498d2 #1
+> kern  :warn  : [   26.609994] Hardware name: Inspur NF5180M6/NF5180M6, BI=
+OS 06.00.04 04/12/2022
+> kern  :warn  : [   26.609994] Call Trace:
+> kern  :warn  : [   26.609994]  <IRQ>
+> kern :warn : [   26.609994] dump_stack_lvl (lib/dump_stack.c:107 (discrim=
+inator 1))
+> kern :warn : [   26.609994] __report_bad_irq (kernel/irq/spurious.c:214)
+> kern :warn : [   26.609994] note_interrupt (kernel/irq/spurious.c:423)
+> kern :warn : [   26.609994] handle_irq_event (kernel/irq/handle.c:198 ker=
+nel/irq/handle.c:210)
+> kern :warn : [   26.609994] handle_fasteoi_irq (kernel/irq/chip.c:661 ker=
+nel/irq/chip.c:716)
+> kern :warn : [   26.609994] __common_interrupt (include/linux/irqdesc.h:1=
+58 arch/x86/kernel/irq.c:231 arch/x86/kernel/irq.c:250)
+> kern :warn : [   26.609994] common_interrupt (arch/x86/kernel/irq.c:240 (=
+discriminator 14))
+> kern  :warn  : [   26.609994]  </IRQ>
+> kern  :warn  : [   26.713811]  <TASK>
+> kern :warn : [   26.713811] asm_common_interrupt (arch/x86/include/asm/id=
+tentry.h:636)
+> kern :warn : [   26.713811] RIP: 0010:acpi_safe_halt (arch/x86/include/as=
+m/irqflags.h:37 arch/x86/include/asm/irqflags.h:72 drivers/acpi/processor_i=
+dle.c:113)
+> kern :warn : [ 26.713811] Code: 90 90 90 90 90 90 90 90 90 90 90 90 90 90=
+ 90 65 48 8b 04 25 80 ce 02 00 48 8b 00 a8 08 75 0c 66 90 0f 00 2d f1 dc 38=
+ 00 fb f4 <fa> c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 =
+90
+> All code
+> =3D=3D=3D=3D=3D=3D=3D=3D
+>    0:   90                      nop
+>    1:   90                      nop
+>    2:   90                      nop
+>    3:   90                      nop
+>    4:   90                      nop
+>    5:   90                      nop
+>    6:   90                      nop
+>    7:   90                      nop
+>    8:   90                      nop
+>    9:   90                      nop
+>    a:   90                      nop
+>    b:   90                      nop
+>    c:   90                      nop
+>    d:   90                      nop
+>    e:   90                      nop
+>    f:   65 48 8b 04 25 80 ce    mov    %gs:0x2ce80,%rax
+>   16:   02 00
+>   18:   48 8b 00                mov    (%rax),%rax
+>   1b:   a8 08                   test   $0x8,%al
+>   1d:   75 0c                   jne    0x2b
+>   1f:   66 90                   xchg   %ax,%ax
+>   21:   0f 00 2d f1 dc 38 00    verw   0x38dcf1(%rip)        # 0x38dd19
+>   28:   fb                      sti
+>   29:   f4                      hlt
+>   2a:*  fa                      cli             <-- trapping instruction
+>   2b:   c3                      ret
+>   2c:   cc                      int3
+>   2d:   cc                      int3
+>   2e:   cc                      int3
+>   2f:   cc                      int3
+>   30:   66 66 2e 0f 1f 84 00    data16 cs nopw 0x0(%rax,%rax,1)
+>   37:   00 00 00 00
+>   3b:   0f 1f 40 00             nopl   0x0(%rax)
+>   3f:   90                      nop
+>=20
+> Code starting with the faulting instruction
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>    0:   fa                      cli
+>    1:   c3                      ret
+>    2:   cc                      int3
+>    3:   cc                      int3
+>    4:   cc                      int3
+>    5:   cc                      int3
+>    6:   66 66 2e 0f 1f 84 00    data16 cs nopw 0x0(%rax,%rax,1)
+>    d:   00 00 00 00
+>   11:   0f 1f 40 00             nopl   0x0(%rax)
+>   15:   90                      nop
+> kern  :warn  : [   26.713811] RSP: 0000:ffa00000003cfe68 EFLAGS: 00000246
+> kern  :warn  : [   26.713811] RAX: 0000000000004000 RBX: ff11002088776400=
+ RCX: 00000000000000a0
+> kern  :warn  : [   26.713811] RDX: ff11003fc2d40000 RSI: ff110020896fbc00=
+ RDI: ff110020896fbc64
+> kern  :warn  : [   26.713811] RBP: 0000000000000001 R08: ffffffff82cc6620=
+ R09: 0000000000000008
+> kern  :warn  : [   26.713811] R10: 0000000000000006 R11: 0000000000000006=
+ R12: 0000000000000001
+> kern  :warn  : [   26.713811] R13: ffffffff82cc66a0 R14: 0000000000000001=
+ R15: 0000000000000000
+> kern  :warn  : [   26.713811] ? ct_kernel_exit+0x6b/0xb0
+> kern :warn : [   26.713811] acpi_idle_enter (drivers/acpi/processor_idle.=
+c:713 (discriminator 3))
+> kern :warn : [   26.713811] cpuidle_enter_state (drivers/cpuidle/cpuidle.=
+c:267)
+> kern :warn : [   26.713811] cpuidle_enter (drivers/cpuidle/cpuidle.c:390)
+> kern :warn : [   26.713811] cpuidle_idle_call (kernel/sched/idle.c:219)
+> kern :warn : [   26.713811] do_idle (kernel/sched/idle.c:284)
+> kern :warn : [   26.713811] cpu_startup_entry (kernel/sched/idle.c:378 (d=
+iscriminator 1))
+> kern :warn : [   26.713811] start_secondary (arch/x86/kernel/smpboot.c:19=
+8 arch/x86/kernel/smpboot.c:232)
+> kern :warn : [   26.713811] secondary_startup_64_no_verify (arch/x86/kern=
+el/head_64.S:358)
+> kern  :warn  : [   26.713811]  </TASK>
+> kern  :err   : [   26.713811] handlers:
+> kern :err : [   26.713811] irq_default_primary_handler (kernel/irq/manage=
+.c:1027)
+> kern :warn : [   26.713811] threaded tis_int_handler (drivers/char/tpm/tp=
+m_tis_core.c:756)
+>=20
+>=20
+> To reproduce:
+>=20
+>         git clone https://github.com/intel/lkp-tests.git
+>         cd lkp-tests
+>         sudo bin/lkp install job.yaml           # job file is attached in=
+ this email
+>         bin/lkp split-job --compatible job.yaml # generate the yaml file =
+for lkp run
+>         sudo bin/lkp run generated-yaml-file
+>=20
+>         # if come across any failure that blocks the test,
+>         # please remove ~/.lkp and /lkp dir to run from a clean state.
+>=20
+>=20
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/61ae2512b5cb/disk-578215f3.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e16190a5b183/vmlinux-578215f3.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/04000a0b9ddf/bzImage-578215f3.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+344aaa8697ebd232bfc8@syzkaller.appspotmail.com
-
-EXT4-fs warning (device loop1): __ext4fs_dirhash:281: invalid/unsupported hash tree version 135
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 16903 at fs/ext4/hash.c:284 __ext4fs_dirhash+0xa34/0xb40 fs/ext4/hash.c:281
-Modules linked in:
-CPU: 1 PID: 16903 Comm: syz-executor.1 Not tainted 6.4.0-rc1-next-20230510-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:__ext4fs_dirhash+0xa34/0xb40 fs/ext4/hash.c:284
-Code: 00 0f 85 16 01 00 00 48 8b 04 24 41 89 d8 48 c7 c1 60 d2 62 8a ba 19 01 00 00 48 c7 c6 80 d3 62 8a 48 8b 78 28 e8 9c 7a 12 00 <0f> 0b 41 bc ea ff ff ff e9 2a fd ff ff e8 aa 94 5a ff 8b 9c 24 88
-RSP: 0018:ffffc9000438f768 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000087 RCX: ffffc90016a21000
-RDX: 0000000000040000 RSI: ffffffff823bfd38 RDI: 0000000000000005
-RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000001 R12: 000000005948191c
-R13: 0000000000000001 R14: dffffc0000000000 R15: ffff88802825c0c4
-FS:  00007f06285fe700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffaa49ad988 CR3: 000000007b715000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ext4fs_dirhash+0x13e/0x2e0 fs/ext4/hash.c:323
- htree_dirblock_to_tree+0x81e/0xc90 fs/ext4/namei.c:1122
- ext4_htree_fill_tree+0x327/0xc40 fs/ext4/namei.c:1217
- ext4_dx_readdir fs/ext4/dir.c:597 [inline]
- ext4_readdir+0x1d18/0x35f0 fs/ext4/dir.c:142
- iterate_dir+0x56e/0x6f0 fs/readdir.c:65
- __do_sys_getdents64 fs/readdir.c:369 [inline]
- __se_sys_getdents64 fs/readdir.c:354 [inline]
- __x64_sys_getdents64+0x13e/0x2c0 fs/readdir.c:354
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0629a8c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f06285fe168 EFLAGS: 00000246 ORIG_RAX: 00000000000000d9
-RAX: ffffffffffffffda RBX: 00007f0629bac050 RCX: 00007f0629a8c169
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000008
-RBP: 00007f0629ae7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc126daaaf R14: 00007f06285fe300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
