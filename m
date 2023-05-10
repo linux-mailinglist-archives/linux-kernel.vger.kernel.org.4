@@ -2,187 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D506FD34E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 02:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E536FD352
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 02:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235211AbjEJAcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 20:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
+        id S235221AbjEJAjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 20:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjEJAcF (ORCPT
+        with ESMTP id S229559AbjEJAja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 20:32:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B6230C2
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 17:31:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683678676;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AaGvAGLjFXPfpvTNP/bdiZ7J41peMCCPDlY16Vtsnuk=;
-        b=I6Pio3IH4I//3GkGh+Gsw9ucigcLx3Jl7k744dReQoXNKVpohqs9JL2PvNiCSDOa6f0QB6
-        iNAaflMWw/WYSDvYbIzhPz9u1KRjlT42GffglSDgxbiPbk7qDMaqChiz9OrHqXeCQufIwE
-        88mSjyDD2uC7LkKbVSEQspL/wXa/3dQ=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-570-4mLrxowqNw6zlMO6t_sWmg-1; Tue, 09 May 2023 20:31:14 -0400
-X-MC-Unique: 4mLrxowqNw6zlMO6t_sWmg-1
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3318baf6a8bso43395685ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 17:31:14 -0700 (PDT)
+        Tue, 9 May 2023 20:39:30 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914B33C14
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 17:39:29 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1ab1b79d3a7so45436285ad.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 17:39:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683679169; x=1686271169;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZcViK9IobKDKWPhV8NMoXtvaRoAckuBG9q8Pc6JSThg=;
+        b=nXY2qvmGJh7n28CT9igHKbqJhLwZbxCmkmJruRksz7lOOJuVke+sKIur9g8YYh/aOt
+         jPCSVSvLW8jbZfXorsMloqZYr0kCzmHAZxlbUDDYNINlHwjKpBqDQisRLHmoiuoXmPwH
+         0aHMsLMekAm1ZNNCi5dUMtMEP8cQqiXJzLzbQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683678674; x=1686270674;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AaGvAGLjFXPfpvTNP/bdiZ7J41peMCCPDlY16Vtsnuk=;
-        b=ixGpRPc4l8TmmciLnFpc0nS/vsc62jzfDeoSpRcOupitiab0CDwjYpU/WFQ3M5S+Ra
-         H6dyMyVG8aDtsIIvaISOSt4wQr0zHbbVrLeF7Zw17V+NOOni/h0Jti2ghfd0W/XV5oSD
-         uDyvKBiJqc46MAygDPQ6Bjm7Opb97T5q/SzxiWk56Sv1rFUf1qMpUqAzIXrsCccbya6b
-         1rS6o68z/l06rflxrKs6uI/6REoHTSK7alaV6foLZzs1LuX2pGGWBhXGzqhAsUGHBXrK
-         8xZf9vHr8+DH2x1ZE9XjnzSM0grv6VqnVo85TdSK2xi2p9FUDg9fafoPkUUtO9dEdkt+
-         b1xQ==
-X-Gm-Message-State: AC+VfDwu+J2ZQU6Eown8plq6fmhWdjE/UTpK2abAS52jvFv/NHz1hoTz
-        d4JkiQ3wPHrtVN4RpqjL/jD32UIVFDB2RpTwMnwEYqR3prccV8osmUExeI/OqTwSnF61vhM6JZX
-        P3QpRZX4fjZkQwjSJ+d09qb3s
-X-Received: by 2002:a92:4a06:0:b0:32b:7df:f753 with SMTP id m6-20020a924a06000000b0032b07dff753mr9869335ilf.11.1683678674074;
-        Tue, 09 May 2023 17:31:14 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ79Yj2G0XIIcmZ/c1KruTGfkagj0u9LrnxFQ/2bXVIs32rC2FuiPnD49eLE6EdbC76r06jWUw==
-X-Received: by 2002:a92:4a06:0:b0:32b:7df:f753 with SMTP id m6-20020a924a06000000b0032b07dff753mr9869323ilf.11.1683678673720;
-        Tue, 09 May 2023 17:31:13 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id t13-20020a92d14d000000b0033154d10283sm3386377ilg.40.2023.05.09.17.31.12
+        d=1e100.net; s=20221208; t=1683679169; x=1686271169;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZcViK9IobKDKWPhV8NMoXtvaRoAckuBG9q8Pc6JSThg=;
+        b=I7FZIkqKFO4LwjQsKCSK/ArUdsoINcbY9BpI20i8WH9pTjhy20bppkkClotBfz1vgP
+         oAfZHaXrdjkXGXwUfrxM2wo/2WqYlYevjJM8zuK4gFiqjvx9CCWwLSkIPFN5XHdNPvKy
+         a6L0fqzfWt1QWNDH7M+xijanG4Fn6LLVNWBiaq0bKMMx/h9vzPufTeyjhg6RXvPhM5Rx
+         5Ik188pyY3/+RjGCmMDpEf13Bk1hSxuWo4/hVjEt/JwkN2gp8Hi+N2w/NDwqIo8LFb41
+         LBGHg9TqzfXcCncAkcXPAsytZoBVZBZj7ReXOt9jOxL4jahR6UVscKCEY1WooXa7y3uC
+         Shpw==
+X-Gm-Message-State: AC+VfDxwkXsqTpzoEsBiaUSLblCda7vNqy8SoQsF8OJG7u5hW+t3ytBt
+        KQoWimuM4iVKLA6Ve9mdvdwUNA==
+X-Google-Smtp-Source: ACHHUZ7VeUOPvO8vvgYTw9Zp2bTuVqG5xU+a1K/++6VYrIoBAxq1tEqbeBiwSSts7jOHtj9FuOI3cw==
+X-Received: by 2002:a17:902:a50b:b0:19a:9880:175f with SMTP id s11-20020a170902a50b00b0019a9880175fmr14549353plq.51.1683679169061;
+        Tue, 09 May 2023 17:39:29 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id p16-20020a170902e75000b001aadd0d7364sm2277606plf.83.2023.05.09.17.39.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 17:31:13 -0700 (PDT)
-Date:   Tue, 9 May 2023 18:31:11 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Nicolin Chen" <nicolinc@nvidia.com>,
-        "Lu, Baolu" <baolu.lu@intel.com>
-Subject: Re: vPASID capability for VF
-Message-ID: <20230509183111.6a4a7f39.alex.williamson@redhat.com>
-In-Reply-To: <BN9PR11MB52760816DC23D5322A4318228C769@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <BN9PR11MB52764BE569672A02FE2A8CCA8C769@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <ZFrMneCMKuCtu7JF@nvidia.com>
-        <BN9PR11MB527627F407BB2942ADFF800E8C769@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <ZFrThMhUnsYOE3WP@nvidia.com>
-        <BN9PR11MB52760816DC23D5322A4318228C769@BN9PR11MB5276.namprd11.prod.outlook.com>
-Organization: Red Hat
+        Tue, 09 May 2023 17:39:28 -0700 (PDT)
+Date:   Wed, 10 May 2023 09:39:22 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com, kernel-team@meta.com
+Subject: Re: [PATCH] zsmalloc: move LRU update from zs_map_object() to
+ zs_malloc()
+Message-ID: <20230510003922.GF11511@google.com>
+References: <20230505185054.2417128-1-nphamcs@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230505185054.2417128-1-nphamcs@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 May 2023 23:41:44 +0000
-"Tian, Kevin" <kevin.tian@intel.com> wrote:
+On (23/05/05 11:50), Nhat Pham wrote:
+[..]
+> zswap_frontswap_store()            shrink_worker()
+>   zs_malloc()                        zs_zpool_shrink()
+>     spin_lock(&pool->lock)             zs_reclaim_page()
+>     zspage = find_get_zspage()
+>     spin_unlock(&pool->lock)
+>                                          spin_lock(&pool->lock)
+>                                          zspage = list_first_entry(&pool->lru)
+>                                          list_del(&zspage->lru)
+>                                            zspage->lru.next = LIST_POISON1
+>                                            zspage->lru.prev = LIST_POISON2
+>                                          spin_unlock(&pool->lock)
+>   zs_map_object()
+>     spin_lock(&pool->lock)
+>     if (!list_empty(&zspage->lru))
+>       list_del(&zspage->lru)
+>         CHECK_DATA_CORRUPTION(next == LIST_POISON1) /* BOOM */
+> 
+> With the current upstream code, this issue rarely happens. zswap only
+> triggers writeback when the pool is already full, at which point all
+> further store attempts are short-circuited. This creates an implicit
+> pseudo-serialization between reclaim and store. I am working on a new
+> zswap shrinking mechanism, which makes interleaving reclaim and store
+> more likely, exposing this bug.
+> 
+> zbud and z3fold do not have this problem, because they perform the LRU
+> list update in the alloc function, while still holding the pool's lock.
+> This patch fixes the aforementioned bug by moving the LRU update back to
+> zs_malloc(), analogous to zbud and z3fold.
+> 
+> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
 
-> > From: Jason Gunthorpe <jgg@nvidia.com>
-> > Sent: Wednesday, May 10, 2023 7:13 AM
-> > 
-> > On Tue, May 09, 2023 at 10:57:04PM +0000, Tian, Kevin wrote:  
-> > > > From: Jason Gunthorpe <jgg@nvidia.com>
-> > > > Sent: Wednesday, May 10, 2023 6:44 AM
-> > > >
-> > > > On Tue, May 09, 2023 at 08:34:53AM +0000, Tian, Kevin wrote:  
-> > > > > According to PCIe spec (7.8.9 PASID Extended Capability Structure):
-> > > > >
-> > > > >   The PASID configuration of the single non-VF Function representing
-> > > > >   the device is also used by all VFs in the device. A PF is permitted
-> > > > >   to implement the PASID capability, but VFs must not implement it.
-> > > > >
-> > > > > To enable PASID on VF then one open is where to locate the PASID
-> > > > > capability in VF's vconfig space. vfio-pci doesn't know which offset
-> > > > > may contain VF specific config registers. Finding such offset must
-> > > > > come from a device specific knowledge.  
-> > > >
-> > > > Why? Can't vfio probe the cap tree and just find a gap to insert a new
-> > > > cap? We already mangle the cap list, I'm not sure I see what
-> > > > the problem is?
-> > > >  
-> > >
-> > > PCI config space includes not only caps, but also device specific
-> > > defined fields. e.g. Intel IGD defines offset 0xfc as a pointer to
-> > > OpRegion. I'm sure Alex can give many other examples.  
-> > 
-> > Do we even expose those over VIFO? I thought in general we blocked of  
-> 
-> Yes. I did a quick check:
-> 
-> /*
->  * Default unassigned regions to raw read-write access.  Some devices
->  * require this to function as they hide registers between the gaps in
->  * config space (be2net).  Like MMIO and I/O port registers, we have
->  * to trust the hardware isolation.
->  */
-> static struct perm_bits unassigned_perms = {
-> 	.readfn = vfio_raw_config_read,
-> 	.writefn = vfio_raw_config_write
-> };
-> 
-> vfio_config_do_rw()
-> {
-> 	...
-> 	if (cap_id == PCI_CAP_ID_INVALID) {
-> 		perm = &unassigned_perms;
-> 		cap_start = *ppos;
-> 	} ...
-> }
-> 
-> vfio_config_init()
-> {
-> 	...
-> 	memset(map, PCI_CAP_ID_BASIC, PCI_STD_HEADER_SIZEOF);
-> 	memset(map + PCI_STD_HEADER_SIZEOF, PCI_CAP_ID_INVALID,
->               		 pdev->cfg_size - PCI_STD_HEADER_SIZEOF);
-> 	...
-> }
-> 
-> > various parts of the config space. I keep seeing patches to unblock
-> > parts of config space?
-> > 
-> > I'd do the reverse and say devices that want to pass parts of their
-> > config space should have a special hook to do it and otherwise we
-> > should sanitize and block?  
-> 
-> This then may break backward compatibility. We don't know how
-> many devices have such hidden registers so if anyone misses a hook
-> immediately it cannot be assigned after we start blocking as default.
-> 
-> > 
-> > eg we already have a hook to pass the opregion
-> >   
-> > > So it's easy to find the gap between caps, but not easy to know
-> > > whether that gap is actually free to use.  
-> > 
-> > Because, let's face it, this is a horrible thing to do, and the
-> > opregion stuff is just ugly as s sin.
-> >   
-> 
-> It's ugly, but that is the reality. :/
-
-Have a peak at the config space of an NVIDIA GPU and tell me which of
-those non-zero fields between capabilities are used as well.  Glass
-houses...  ;-)
-
-IIRC we originally needed to enable this for a Broadcom NIC that
-stuffed device specific registers in un-architected config space. The
-capabilities we're {un}hiding are architected things that we know are
-unsupported or unsafe, the gaps, just like device specific
-capabilities, we're obliged to expose for functionality.  Thanks,
-
-Alex
-
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
