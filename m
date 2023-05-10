@@ -2,140 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC176FDB9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E4E6FDB99
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236629AbjEJKYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 06:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S236605AbjEJKYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 06:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236610AbjEJKY2 (ORCPT
+        with ESMTP id S236499AbjEJKYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 06:24:28 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6C072A6;
-        Wed, 10 May 2023 03:24:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1683714268; x=1715250268;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0/dKuhBAooiK7NxI6ZJD57YCt/AXZDva/ko2oLS9g9Q=;
-  b=o0ubfRV52ZQg15wS7XmNXQgv59GhwUoCapeccR0aZQHLtV7UaTceYc+v
-   Qgpg+9vENcZgs511IX8w9acpVkc5EQMkTmtx3sDGR9fHOlAo0RkgegCsV
-   umbChr9XtFXTzgdY48XevKD4e+4MyPSJjxtAEzvBue3pYGbTtRomSk52S
-   SblbkZF6ai8GVrWWTSFVTiM5X05tqhh4oRSJtmr8eEF7tT3wFeaIxIPdr
-   CQ69kuY8gCIN2VYhVbdcnlb3xlVRAYWOs+jlMObcdhyGfbrRuy66STTnq
-   g7/h8nvP4c/cUAKFjr56Mvjl58YHTwLp4s6fRburaGW6t9rXmdfLRhMVb
-   w==;
-X-IronPort-AV: E=Sophos;i="5.99,264,1677567600"; 
-   d="asc'?scan'208";a="213245200"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 May 2023 03:24:27 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 10 May 2023 03:24:25 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 10 May 2023 03:24:22 -0700
-Date:   Wed, 10 May 2023 11:24:03 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-CC:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <iommu@lists.linux.dev>
-Subject: Re: [PATCH v3 00/11] Linux RISC-V AIA Support
-Message-ID: <20230510-parchment-saxophone-f91f9d96156c@wendy>
-References: <20230508142842.854564-1-apatel@ventanamicro.com>
+        Wed, 10 May 2023 06:24:22 -0400
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400092D7E
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:24:21 -0700 (PDT)
+Received: by mail-ua1-x933.google.com with SMTP id a1e0cc1a2514c-76ee8f09692so2368560241.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:24:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683714260; x=1686306260;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x7fqRHvgnRvB5mh9CqhIQkHQtj78V1mjTrY+n0K4wyM=;
+        b=H3ZAqCri6LjaN5x36ti1pRjQk5EnhBXVodTDpqXpjq9B9H3jJ1zIjjviz/Zt6KVvUx
+         4ExsZwVU4QLl9VbqNJsOsKsKDW6N3AyCV/vynQDapHKL1XjD/ell+Vu9GBXgTNHK9/jv
+         E/S2eZl6iPVL9ZRIgbg3DNorTArQ9Z5Noquq85dbehdqtjIyTifsKwaPeTiLdH0QsWSi
+         ayxE2P9iu5AyeAfZLAffCW04bKauTbwG6UR5YPZZYQFQg4ANaVCZUxYzs6XLY9iyBmp5
+         SIrRP6llIKdkNt0y8nxpYHgaoH/t5xS5ju3sHpVn94GV0nbhsdjWbaRzCkF/nHDOVKC1
+         U06w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683714260; x=1686306260;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x7fqRHvgnRvB5mh9CqhIQkHQtj78V1mjTrY+n0K4wyM=;
+        b=chMyCXtNun6QB9rDH8HiZmAKY05yK0OTxFd/kZGT56EgGy6OnYsooIjhldlIWx39yQ
+         eLS84r/GS2iLHp4cZvS6c4Jf7SaWHHFXo1Z2zXAaBvoMn22YXDg/svgwbibuCHLZpWaK
+         vBJid07xPOdLmFIqYsZR/VZ9OaBgHy2tyc+Xt0Gt40M6mk8CH0zj84Om64ccmjtP+V6i
+         kvr43CM294hCIsX8ifJCb0gFi3aN9JA0t86PSt+R+ZgF1Es9nA7Ln1iVYSGB+Gh0tc1K
+         IEwVAmuMRoZmtkFq1afC7S/CP5KZQ6bXWY9ZXqWLwgE5r6F9ASBxPZ/safqgkCmc0WYs
+         FIrA==
+X-Gm-Message-State: AC+VfDzRRN5x0nY5hl4RVQsWBHOV+z4U/qkba5mtYF9c+p2DlUmVGM+l
+        S0N6a+yL9FxnBnhAbdNJClklbcqASqrBjxlB4tZQvQ==
+X-Google-Smtp-Source: ACHHUZ5IaRFRz709QDQCQuGIQdmAmCBNQHnaBbFFxnKsy2JE8rNTtcqDWC0Y+zspWRYlHB2CiK3dgoG8Uc0s6adZb00=
+X-Received: by 2002:a05:6102:a32:b0:430:7548:c049 with SMTP id
+ 18-20020a0561020a3200b004307548c049mr5502855vsb.7.1683714260420; Wed, 10 May
+ 2023 03:24:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="drOWBx1kyE087zJ+"
-Content-Disposition: inline
-In-Reply-To: <20230508142842.854564-1-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230505184318.1355446-1-etienne.carriere@linaro.org>
+In-Reply-To: <20230505184318.1355446-1-etienne.carriere@linaro.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 10 May 2023 15:54:09 +0530
+Message-ID: <CAFA6WYOfFm9R2GynH0bN7hQ4t81T3hkJX5JurCUDG8oOU-RZ4w@mail.gmail.com>
+Subject: Re: [PATCH] char: tpm: ftpm_tee: use kernel login identifier
+To:     Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---drOWBx1kyE087zJ+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Etienne,
 
-Hey Anup,
+On Sat, 6 May 2023 at 00:14, Etienne Carriere
+<etienne.carriere@linaro.org> wrote:
+>
+> Changes fTPM TEE driver to open the TEE session with REE kernel login
+> identifier rather than public login. This is needed in case fTPM service
+> it denied to user land application and restricted to kernel operating
+> system services only.
 
-On Mon, May 08, 2023 at 07:58:31PM +0530, Anup Patel wrote:
-> The RISC-V AIA specification is now frozen as-per the RISC-V international
-> process. The latest frozen specifcation can be found at:
-> https://github.com/riscv/riscv-aia/releases/download/1.0-RC1/riscv-interr=
-upts-1.0-RC1.pdf
->=20
-> At a high-level, the AIA specification adds three things:
-> 1) AIA CSRs
->    - Improved local interrupt support
-> 2) Incoming Message Signaled Interrupt Controller (IMSIC)
->    - Per-HART MSI controller
->    - Support MSI virtualization
->    - Support IPI along with virtualization
-> 3) Advanced Platform-Level Interrupt Controller (APLIC)
->    - Wired interrupt controller
->    - In MSI-mode, converts wired interrupt into MSIs (i.e. MSI generator)
->    - In Direct-mode, injects external interrupts directly into HARTs
->=20
-> For an overview of the AIA specification, refer the recent AIA virtualiza=
-tion
-> talk at KVM Forum 2022:
-> https://static.sched.com/hosted_files/kvmforum2022/a1/AIA_Virtualization_=
-in_KVM_RISCV_final.pdf
-> https://www.youtube.com/watch?v=3Dr071dL8Z0yo
->=20
-> The PATCH3 of this series conflicts with the "irqchip/riscv-intc: Add ACPI
-> support" patch of the "Add basic ACPI support for RISC-V" series.
-> (Refer, https://lore.kernel.org/linux-riscv/20230508115237.216337-1-sunil=
-vl@ventanamicro.com/)
+This is a valid restriction to avoid any unintended use of fTPM by
+user-space. But has the corresponding patch landed in fTPM TA which
+would enforce this restriction?
 
-This series does not apply for me (or the patchwork automation) on top of
-v6.4-rc1, which was released prior to you sending this & contains the AIA
-definitions this series relies on.
-You note here that there is a *conflict* with Sunil's series, but what
-you actually did, as far as I can tell, is base your series on top of
-theirs?
-If you're going to do that, at least point it out so that reviewers
-don't have to figure out what your intention was :( Better yet, for the
-sake of our automation in particular, don't do it at all.
+-Sumit
 
-Thanks,
-Conor.
-
---drOWBx1kyE087zJ+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFtwwwAKCRB4tDGHoIJi
-0t1JAQDg/nff4RAapk5rR40Fc9M7gbVoPtea9uxe8wNvwzKrFgD8DzIxMd1/AHTL
-9YZT8pbRkIczFFTrwTSfcWJL2zf7Rg4=
-=T9IK
------END PGP SIGNATURE-----
-
---drOWBx1kyE087zJ+--
+>
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> ---
+>  drivers/char/tpm/tpm_ftpm_tee.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+> index 528f35b14fb6..6d32e260af43 100644
+> --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> @@ -241,7 +241,7 @@ static int ftpm_tee_probe(struct device *dev)
+>         /* Open a session with fTPM TA */
+>         memset(&sess_arg, 0, sizeof(sess_arg));
+>         export_uuid(sess_arg.uuid, &ftpm_ta_uuid);
+> -       sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
+> +       sess_arg.clnt_login = TEE_IOCTL_LOGIN_REE_KERNEL;
+>         sess_arg.num_params = 0;
+>
+>         rc = tee_client_open_session(pvt_data->ctx, &sess_arg, NULL);
+> --
+> 2.25.1
+>
