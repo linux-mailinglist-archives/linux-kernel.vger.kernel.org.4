@@ -2,260 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067CC6FD4A6
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE216FD4A7
 	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 05:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235735AbjEJDxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 23:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
+        id S235265AbjEJDxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 23:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235637AbjEJDxQ (ORCPT
+        with ESMTP id S235642AbjEJDxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 9 May 2023 23:53:16 -0400
 Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B475199D
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 20:53:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF98E10D
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 20:53:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=whf+T
-        AG7OCcV2LDVpNChSoc8r0T2b3ye10CxikYpsv4=; b=aSvVdGelI8nU99QxPsZCE
-        hkvRIckr4V703o7xurjurOErD4fDYRP+EqQ0UcYU2wavk0LdF9LzM4nt7fzv2C7l
-        zjnaJnyJ7pPW9cMhWPnRP9ExP20/W3/L8L4Qvlt+Wk2Z6kyNvqL0qN3DlFUed9sZ
-        M1iXQ77tSs1BBGudLFanr0=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=iEiFU
+        y1jQsRM6aIe5Ug6C6I5S7K8RRjm4135kykYFHY=; b=kauZQLk2XXLBOu4xJE3XR
+        4fl5u+T5bRybY2yydZfvCRtnVIU1brx6hI4krs+8NYWr8KCZr8RnRUx6IM2ToyCw
+        WGvfxfyHK3trkzUq+mZJdVrTOxikBJMNxLlvGci0/xdttQF3TOjh6bXljEFv+712
+        3TdLFvcSz+cZzw1PaQipCQ=
 Received: from zhangf-virtual-machine.localdomain (unknown [180.111.102.183])
-        by zwqz-smtp-mta-g3-4 (Coremail) with SMTP id _____wBHlVQOFVtk+zPWBQ--.60792S3;
-        Wed, 10 May 2023 11:52:48 +0800 (CST)
+        by zwqz-smtp-mta-g3-4 (Coremail) with SMTP id _____wBHlVQOFVtk+zPWBQ--.60792S4;
+        Wed, 10 May 2023 11:52:56 +0800 (CST)
 From:   zhangfei <zhang_fei_0403@163.com>
 To:     ajones@ventanamicro.com
 Cc:     aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, palmer@dabbelt.com,
         paul.walmsley@sifive.com, zhang_fei_0403@163.com,
-        zhangfei@nj.iscas.ac.cn, Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH 1/2] RISC-V: lib: Improve memset assembler formatting
-Date:   Wed, 10 May 2023 11:52:41 +0800
-Message-Id: <20230510035243.8586-2-zhang_fei_0403@163.com>
+        zhangfei@nj.iscas.ac.cn
+Subject: [PATCH 2/2] riscv: Optimize memset
+Date:   Wed, 10 May 2023 11:52:42 +0800
+Message-Id: <20230510035243.8586-3-zhang_fei_0403@163.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230510035243.8586-1-zhang_fei_0403@163.com>
 References: <20230509-b0dc346928ddc8d2b5690f67@orel>
  <20230510035243.8586-1-zhang_fei_0403@163.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBHlVQOFVtk+zPWBQ--.60792S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCF4fGF13Aw45Cr4kArW8Zwb_yoWrtr4Upw
-        4fG34rGayqkF1rW34YqFyrKFWDJw4Sq3Z5Xw1ayr12kr1UKry7Za4qqFW5twnFyrW3ur4D
-        ZF1DJrW7ZFy5XrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UpxRgUUUUU=
+X-CM-TRANSID: _____wBHlVQOFVtk+zPWBQ--.60792S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GryxZw13AFWrKrWxtrW8JFb_yoWkAFc_Gr
+        WxCa97JFyDJFZ3Xa9rtw13Kry8uFZ8KrykG3WDtw1UG3WFkwnxtrWYqry5AF18XwsrGay3
+        G3ZrJr4rXr1UGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUWlkPUUUUU==
 X-Originating-IP: [180.111.102.183]
-X-CM-SenderInfo: x2kd0w5bihxsiquqjqqrwthudrp/1tbiWxVrl2I0Z90ZqwAAss
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-CM-SenderInfo: x2kd0w5bihxsiquqjqqrwthudrp/xtbCfAlrl2DcJd-5aAAAse
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Jones <ajones@ventanamicro.com>
+From: zhangfei <zhangfei@nj.iscas.ac.cn>
 
-Aligning the first operand of each instructions with a tab is a
-typical style which improves readability. Apply it to memset.S.
-While there, we also make a small grammar change to a comment.
+This patch has been optimized for memset data sizes less than 16 bytes.
+Compared to byte by byte storage, significant performance improvement has been achieved.
+It allows storage instructions to be executed in parallel and reduces the number of jumps.
 
-No functional change intended.
-
-Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Fei Zhang <zhangfei@nj.iscas.ac.cn>
 ---
- arch/riscv/lib/memset.S | 143 ++++++++++++++++++++--------------------
- 1 file changed, 72 insertions(+), 71 deletions(-)
+ arch/riscv/lib/memset.S | 33 ++++++++++++++++++++++++++++++---
+ 1 file changed, 30 insertions(+), 3 deletions(-)
 
 diff --git a/arch/riscv/lib/memset.S b/arch/riscv/lib/memset.S
-index 34c5360c6705..e613c5c27998 100644
+index e613c5c27998..6113a2696e79 100644
 --- a/arch/riscv/lib/memset.S
 +++ b/arch/riscv/lib/memset.S
-@@ -3,111 +3,112 @@
-  * Copyright (C) 2013 Regents of the University of California
-  */
- 
--
- #include <linux/linkage.h>
- #include <asm/asm.h>
- 
- /* void *memset(void *, int, size_t) */
- ENTRY(__memset)
- WEAK(memset)
--	move t0, a0  /* Preserve return value */
-+	move	t0, a0			/* Preserve return value */
- 
- 	/* Defer to byte-oriented fill for small sizes */
--	sltiu a3, a2, 16
--	bnez a3, 4f
-+	sltiu	a3, a2, 16
-+	bnez	a3, 4f
- 
- 	/*
- 	 * Round to nearest XLEN-aligned address
--	 * greater than or equal to start address
-+	 * greater than or equal to the start address.
- 	 */
--	addi a3, t0, SZREG-1
--	andi a3, a3, ~(SZREG-1)
--	beq a3, t0, 2f  /* Skip if already aligned */
-+	addi	a3, t0, SZREG-1
-+	andi	a3, a3, ~(SZREG-1)
-+	beq	a3, t0, 2f		/* Skip if already aligned */
-+
- 	/* Handle initial misalignment */
--	sub a4, a3, t0
-+	sub	a4, a3, t0
- 1:
--	sb a1, 0(t0)
--	addi t0, t0, 1
--	bltu t0, a3, 1b
--	sub a2, a2, a4  /* Update count */
-+	sb	a1, 0(t0)
-+	addi	t0, t0, 1
-+	bltu	t0, a3, 1b
-+	sub	a2, a2, a4		/* Update count */
- 
- 2: /* Duff's device with 32 XLEN stores per iteration */
- 	/* Broadcast value into all bytes */
--	andi a1, a1, 0xff
--	slli a3, a1, 8
--	or a1, a3, a1
--	slli a3, a1, 16
--	or a1, a3, a1
-+	andi	a1, a1, 0xff
-+	slli	a3, a1, 8
-+	or	a1, a3, a1
-+	slli	a3, a1, 16
-+	or	a1, a3, a1
- #ifdef CONFIG_64BIT
--	slli a3, a1, 32
--	or a1, a3, a1
-+	slli	a3, a1, 32
-+	or	a1, a3, a1
- #endif
- 
- 	/* Calculate end address */
--	andi a4, a2, ~(SZREG-1)
--	add a3, t0, a4
-+	andi	a4, a2, ~(SZREG-1)
-+	add	a3, t0, a4
- 
--	andi a4, a4, 31*SZREG  /* Calculate remainder */
--	beqz a4, 3f            /* Shortcut if no remainder */
--	neg a4, a4
--	addi a4, a4, 32*SZREG  /* Calculate initial offset */
-+	andi	a4, a4, 31*SZREG	/* Calculate remainder */
-+	beqz	a4, 3f			/* Shortcut if no remainder */
-+	neg	a4, a4
-+	addi	a4, a4, 32*SZREG	/* Calculate initial offset */
- 
- 	/* Adjust start address with offset */
--	sub t0, t0, a4
-+	sub	t0, t0, a4
- 
- 	/* Jump into loop body */
- 	/* Assumes 32-bit instruction lengths */
--	la a5, 3f
-+	la	a5, 3f
- #ifdef CONFIG_64BIT
--	srli a4, a4, 1
-+	srli	a4, a4, 1
- #endif
--	add a5, a5, a4
--	jr a5
-+	add	a5, a5, a4
-+	jr	a5
- 3:
--	REG_S a1,        0(t0)
--	REG_S a1,    SZREG(t0)
--	REG_S a1,  2*SZREG(t0)
--	REG_S a1,  3*SZREG(t0)
--	REG_S a1,  4*SZREG(t0)
--	REG_S a1,  5*SZREG(t0)
--	REG_S a1,  6*SZREG(t0)
--	REG_S a1,  7*SZREG(t0)
--	REG_S a1,  8*SZREG(t0)
--	REG_S a1,  9*SZREG(t0)
--	REG_S a1, 10*SZREG(t0)
--	REG_S a1, 11*SZREG(t0)
--	REG_S a1, 12*SZREG(t0)
--	REG_S a1, 13*SZREG(t0)
--	REG_S a1, 14*SZREG(t0)
--	REG_S a1, 15*SZREG(t0)
--	REG_S a1, 16*SZREG(t0)
--	REG_S a1, 17*SZREG(t0)
--	REG_S a1, 18*SZREG(t0)
--	REG_S a1, 19*SZREG(t0)
--	REG_S a1, 20*SZREG(t0)
--	REG_S a1, 21*SZREG(t0)
--	REG_S a1, 22*SZREG(t0)
--	REG_S a1, 23*SZREG(t0)
--	REG_S a1, 24*SZREG(t0)
--	REG_S a1, 25*SZREG(t0)
--	REG_S a1, 26*SZREG(t0)
--	REG_S a1, 27*SZREG(t0)
--	REG_S a1, 28*SZREG(t0)
--	REG_S a1, 29*SZREG(t0)
--	REG_S a1, 30*SZREG(t0)
--	REG_S a1, 31*SZREG(t0)
--	addi t0, t0, 32*SZREG
--	bltu t0, a3, 3b
--	andi a2, a2, SZREG-1  /* Update count */
-+	REG_S	a1,        0(t0)
-+	REG_S	a1,    SZREG(t0)
-+	REG_S	a1,  2*SZREG(t0)
-+	REG_S	a1,  3*SZREG(t0)
-+	REG_S	a1,  4*SZREG(t0)
-+	REG_S	a1,  5*SZREG(t0)
-+	REG_S	a1,  6*SZREG(t0)
-+	REG_S	a1,  7*SZREG(t0)
-+	REG_S	a1,  8*SZREG(t0)
-+	REG_S	a1,  9*SZREG(t0)
-+	REG_S	a1, 10*SZREG(t0)
-+	REG_S	a1, 11*SZREG(t0)
-+	REG_S	a1, 12*SZREG(t0)
-+	REG_S	a1, 13*SZREG(t0)
-+	REG_S	a1, 14*SZREG(t0)
-+	REG_S	a1, 15*SZREG(t0)
-+	REG_S	a1, 16*SZREG(t0)
-+	REG_S	a1, 17*SZREG(t0)
-+	REG_S	a1, 18*SZREG(t0)
-+	REG_S	a1, 19*SZREG(t0)
-+	REG_S	a1, 20*SZREG(t0)
-+	REG_S	a1, 21*SZREG(t0)
-+	REG_S	a1, 22*SZREG(t0)
-+	REG_S	a1, 23*SZREG(t0)
-+	REG_S	a1, 24*SZREG(t0)
-+	REG_S	a1, 25*SZREG(t0)
-+	REG_S	a1, 26*SZREG(t0)
-+	REG_S	a1, 27*SZREG(t0)
-+	REG_S	a1, 28*SZREG(t0)
-+	REG_S	a1, 29*SZREG(t0)
-+	REG_S	a1, 30*SZREG(t0)
-+	REG_S	a1, 31*SZREG(t0)
-+
-+	addi	t0, t0, 32*SZREG
-+	bltu	t0, a3, 3b
-+	andi	a2, a2, SZREG-1		/* Update count */
- 
- 4:
- 	/* Handle trailing misalignment */
--	beqz a2, 6f
--	add a3, t0, a2
-+	beqz	a2, 6f
-+	add	a3, t0, a2
+@@ -106,9 +106,36 @@ WEAK(memset)
+ 	beqz	a2, 6f
+ 	add	a3, t0, a2
  5:
--	sb a1, 0(t0)
--	addi t0, t0, 1
--	bltu t0, a3, 5b
-+	sb	a1, 0(t0)
-+	addi	t0, t0, 1
-+	bltu	t0, a3, 5b
+-	sb	a1, 0(t0)
+-	addi	t0, t0, 1
+-	bltu	t0, a3, 5b
++       sb      a1,  0(t0)
++       sb      a1, -1(a3)
++       li      a4, 2
++       bgeu    a4, a2, 6f
++
++       sb 	a1,  1(t0)
++       sb 	a1,  2(t0)
++       sb 	a1, -2(a3)
++       sb 	a1, -3(a3)
++       li 	a4, 6
++       bgeu 	a4, a2, 6f
++
++       sb 	a1,  3(t0)
++       sb 	a1, -4(a3)
++       li 	a4, 8
++       bgeu    a4, a2, 6f
++
++       sb 	a1,  4(t0)
++       sb 	a1, -5(a3)
++       li 	a4, 10
++       bgeu 	a4, a2, 6f
++
++       sb 	a1,  5(t0)
++       sb 	a1,  6(t0)
++       sb 	a1, -6(a3)
++       sb 	a1, -7(a3)
++       li 	a4, 14
++       bgeu 	a4, a2, 6f
++
++       sb 	a1, 7(t0)
  6:
  	ret
  END(__memset)
