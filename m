@@ -2,320 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01356FDC15
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D42ED6FDC1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236420AbjEJLAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 07:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
+        id S236306AbjEJLBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 07:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235609AbjEJLAq (ORCPT
+        with ESMTP id S236495AbjEJLBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 07:00:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05251A6
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:59:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683716397;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=klTkQpAcV6SKZuTTTJDC6BVd45oo5jRxo9X6P15ri5s=;
-        b=OR4x0acGuLB8mpYtH8rKsHbBl/XD2FM3UfdguUXnoYhsaLOPJ1Juml3VM5KK3V6y4JfJDD
-        kFizteTLjqe3fShjpBPGwUo3wPqevg6YuUl3dFl3jqMzu6JVAW2ZT8FCKx8we2p7PtWit6
-        k/KS9xo480rUC0Sy5aIiQd2ErhsR430=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-256--oW2oDl4PRC5-sHYHtWKbg-1; Wed, 10 May 2023 06:59:56 -0400
-X-MC-Unique: -oW2oDl4PRC5-sHYHtWKbg-1
-Received: by mail-yb1-f198.google.com with SMTP id 3f1490d57ef6-ba6386e6f7aso1645165276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:59:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683716395; x=1686308395;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=klTkQpAcV6SKZuTTTJDC6BVd45oo5jRxo9X6P15ri5s=;
-        b=HIPt4TiAPj6sMMAnpVR9mtS4sltHRxw8d9Qy1fd7LXfAvIgNsi1BCQs8oZJIEinXgP
-         84sP4QKDO3f4AZ+uYmmxrxoPab7ZfWFGKiLa4qe8fAhqGCRyXUEzXpoyKj/eg2BVSbdb
-         sLSMDxrIrLE9yBvpaFOEwhyCUVh7w8jn64uowaiKZHaxee+zbtZTj4ss9UO0Lan+HDcd
-         9hSKCh4KwTGWe7pF0HjOA61mvnb+2bbuxWJnwp6lUQBEVL5wshcGroU5NKeeBpewzSTd
-         uadwBeubX4LQPs2XKHQJFjzUoIYjuXiYy6ohfALZ+eLnJ5dxhBoihziVYZH/hN1ob4dU
-         pmyg==
-X-Gm-Message-State: AC+VfDz6fUhLUO/x6CP4VNj/CoqDpbzUmbux6B8euBN4+MCpZoYJmfeH
-        NbNrmGfpeTuZ8EAAJ46GvvDXJowbVVf//Ma1VK0yG3WWuRYNKhPwBXixji2PVa+KTQf4tETSJpp
-        tDkIW2Fu45fu8x7ZhM6TC+BKyzG45eABDx7RmUryQ
-X-Received: by 2002:a25:2413:0:b0:b9a:25c4:9d2f with SMTP id k19-20020a252413000000b00b9a25c49d2fmr17103009ybk.51.1683716394857;
-        Wed, 10 May 2023 03:59:54 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5zDkLJ/xyScXESn1a/sP+lVMUwHakOms5GTDowbEv0gHexX0oaalh2EcUj4sg8A7EFOYZx1LjanzdW/FgnrZM=
-X-Received: by 2002:a25:2413:0:b0:b9a:25c4:9d2f with SMTP id
- k19-20020a252413000000b00b9a25c49d2fmr17102988ybk.51.1683716394496; Wed, 10
- May 2023 03:59:54 -0700 (PDT)
+        Wed, 10 May 2023 07:01:00 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20624.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::624])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3CF4207;
+        Wed, 10 May 2023 04:00:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cLpYN3MS+Mu2reEvM4FDXqDrO9YxsW3gXDygJ4OhCRpv/tqgr8KONXz280wHlQeb3SZjxO9ahX9X9P6b7d6QwmEO3pkPYdKU2pu650RJ9pHoEE7I7K4qwsg/+eBAS00Vfc0+rZFqeKetguqj/fVWPCVAHkYFIntUhgpXLqD9twAG+1xD3iXUmEGhax4OB5Yg/2s2tTIOHGX5Rwec/MSp54WHoNwiX35f3AdoP2KYaEjALvxO24scpbgeCUEjEfJhkiotpgs2XPF0rWml9PvtW/GaCvsPHBaTih0dQ1yUALJXAU2KU1QFiO6dlY3PEr48CWVp7CVjUNjrctA7daIS2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bw7tPuDZD9dOrwvmymwaoL/j7H1fbhVMhy23sdnJXzI=;
+ b=HTOz4hntjCPpkmwMjA/OxbrdzboQkKCQ4yIfKbPbLsNNwABrkxCGmhXOVr0WC1MTjfUitCDlAnVHQYMvA95ZOgO6gJFsU0uvo6Qhq0vyM5rdyg4JfBCg7QzZXYjRkHJu20BLqja/8nH6+1Kc+poin1C/3IZ9FRFgeLY0EarD2dDNXaNcM7Se0puA5hsT/PrXMA6cu9nliOxtfHvJt0uUSDQT2yh0A8kBAKmB5Ynx9buYsI33EhHW4OmvNU6POqjBRN6Fw1G/BzfkwHO0MN16CfE2FxJ5uRQuhdHtsbBuvb3q1t1ULFsSe+qwyurzOHJeiNF21FOz48s61gX3xK9Ytw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bw7tPuDZD9dOrwvmymwaoL/j7H1fbhVMhy23sdnJXzI=;
+ b=zyd/8GwWGsVVG8UFtDUHKcRFHMxIjaOyXr56AareSbvpYaGnGZ9hC4qpD4VqPGhJYMnP7UaHI3MQS70SQYdlHZetEDtnv8xj8eZKA21yx1SlzKCm/nuKQzm4CRzeA9IdbQcOStTzxvqsc472vCC0f6MVHioNYw6A0tXveh0z2FI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB4765.namprd12.prod.outlook.com (2603:10b6:805:e4::24)
+ by CH3PR12MB8934.namprd12.prod.outlook.com (2603:10b6:610:17a::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Wed, 10 May
+ 2023 11:00:49 +0000
+Received: from SN6PR12MB4765.namprd12.prod.outlook.com
+ ([fe80::edcd:752d:df60:d4ae]) by SN6PR12MB4765.namprd12.prod.outlook.com
+ ([fe80::edcd:752d:df60:d4ae%6]) with mapi id 15.20.6363.032; Wed, 10 May 2023
+ 11:00:49 +0000
+Message-ID: <882f0cb5-7a5f-fe56-fdd9-f6074c1e359a@amd.com>
+Date:   Wed, 10 May 2023 13:00:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2] dt-bindings: usb: Add binding for Microchip usb5744
+ hub controller
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com,
+        ilias.apalodimas@linaro.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Piyush Mehta <piyush.mehta@amd.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <dd31f987316fb2739644628b5840a6d447b5a587.1683293125.git.michal.simek@amd.com>
+ <32aa46df-9ed5-7d2a-868f-a36414f54534@linaro.org>
+ <1868d9ae-1376-d91d-a789-9e510bde96a7@amd.com>
+ <27232a95-6ef8-1a98-4f5d-7d0ea29c20c4@linaro.org>
+From:   Michal Simek <michal.simek@amd.com>
+In-Reply-To: <27232a95-6ef8-1a98-4f5d-7d0ea29c20c4@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0022.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:14::9) To SN6PR12MB4765.namprd12.prod.outlook.com
+ (2603:10b6:805:e4::24)
 MIME-Version: 1.0
-References: <20230125-hid-unregister-leds-v1-0-9a5192dcef16@diag.uniroma1.it> <288ed0da-8903-7dda-eb4e-f17037031e68@molgen.mpg.de>
-In-Reply-To: <288ed0da-8903-7dda-eb4e-f17037031e68@molgen.mpg.de>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 10 May 2023 12:59:43 +0200
-Message-ID: <CAO-hwJLmuB0=TiK6RcPKh4uFcX+A5bU9rivQ-K6Y7bzZKA6n4w@mail.gmail.com>
-Subject: Re: [PATCH 0/5] HID: manually unregister leds on device removal to
- prevent UAFs
-To:     Donald Buczek <buczek@molgen.mpg.de>
-Cc:     Pietro Borrello <borrello@diag.uniroma1.it>,
-        Jiri Kosina <jikos@kernel.org>, Hanno Zulla <kontakt@hanno.de>,
-        Carlo Caione <carlo@endlessm.com>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>,
-        Roderick Colenbrander <roderick.colenbrander@sony.com>,
-        Sven Eckelmann <sven@narfation.org>,
-        linux-leds@vger.kernel.org,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Kosina <jkosina@suse.cz>,
-        Roderick Colenbrander <roderick@gaikai.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR12MB4765:EE_|CH3PR12MB8934:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8b2322f4-a89a-45fe-4577-08db5145d061
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iOiLVTzD23C2yEoTr6iPerJ2n1TURpFvUfHfn0+fz+ZnC9Rgbw0ANg7uTF6QtqaAo01/2CNq1sf109NnWD5LkR9DrdZaMTW7Z6riYAoVyXnOAHHdUOvrDsWHOCC6WhL+vEbggZRqiQRtx2P1exNu2o8UHXONPpLv6T1JXG76FzV1DWSIphRBM2VQjN7TnL5BPEhZskwwKiKDTTtDbp3276lOd7QMTx6sB5S0DVkiM1/ZdtJAP+w4be2zq+/ehlz/ZqtJ7BzxZ+8wP7yH4Z+++vpzT/wgC+WF2Gk6lKlrQU0ag6vAaVZkivTLuswyZ57A8OXlylvA4Ss9Z5x0kn/Ft71vp0j4aBBgKSzX32+nnYWSYsi4VLrFCrDB0bKts3AgLcWAbcmbyQyUV00G2A2SfpXc78QcOzzenPWxNzdLlwwWT5P0aGfekmP4JK+aYZT8Ti/Opob5TXWzsuuRkDM8C26OHDDbU/N+U8qctw6YnsRs16XMd0lzwFau4RHYAjc2rB0vTTe2q+f+pPcOf2VwjXKfGQ7AbpDikd8LDgF3MutyNdRrFlag98/M6atBQGmjNgIX/+wDf56FbpICjWOzgo3Jg4OslVJyA/XQyEeyxTsEbOMOqwrry1Xf7J9FtVA4Lf2XwmKSaDOr0iFTbXVpyQfEALU/hsT9T85FtBmIYU7Ar3zOeO8iKYtM/a64SoLQ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB4765.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(346002)(366004)(136003)(396003)(451199021)(966005)(53546011)(6506007)(6512007)(26005)(66476007)(83380400001)(2616005)(2906002)(7416002)(8936002)(186003)(44832011)(5660300002)(8676002)(36756003)(478600001)(6486002)(31696002)(316002)(6666004)(54906003)(41300700001)(66556008)(66946007)(86362001)(4326008)(38100700002)(31686004)(66899021)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b1BTSW42UDNVTEkzYTNhU2tzNEFrd3RsUGJCTFQzemptcElMUDcwMCtIQU50?=
+ =?utf-8?B?RVI0S2hUVHFXb25GaVRhV0JFRGpsSklZTElKLy9LTmNBdXZDSldnRkMrWVRJ?=
+ =?utf-8?B?M1JoblBYNkNjcTB6VWhmbEdSL0tuUHlkeFFrenFmakE5QVlBV0Z0R1VIUXdG?=
+ =?utf-8?B?Mm11dWN1QzRGSnhITVk3SFJPTFBXQnlUdDNPWk5KSXMrazRIU0VrWHk1dE16?=
+ =?utf-8?B?ZnFpMlFDOEQ0eTEzSmppNGdZaXhXUHpxRXNvQy9JTFhMQWUvMmNrNHUvZEl0?=
+ =?utf-8?B?WWt5UnNucitydS9PeWhJaktmY3BLUXFVSDNpRERZK2hXSmc5TGIxS0FJNU9z?=
+ =?utf-8?B?d1ZYaDRZYjI5dkNYVTBzK3NYMTRkNUJJNTFxcVBKQ3ZOb1NTd3FiemZtaG1F?=
+ =?utf-8?B?RnhiOU9IL29HbGY0a3VMQ2xRWFNINndqYnZtdUlMdEo2bVI1VnV0N0JNejdV?=
+ =?utf-8?B?a1BRR1cyWk5uOFNhNlI4ZjBDQUU0RjNEbVRpV05BVlRic0hMTU5na1ZvZzJT?=
+ =?utf-8?B?N3RVTGJMNWRtZ0VoNDF2Mk5BcTN3anMvQklSTFYwb1NVQ0p1aFBaclhHeVRX?=
+ =?utf-8?B?MUpKdysxTUh2TngwRjk0bSs5WGpHSWN6MStQRU5wd3F5MEc4WnRGZEdlMVJr?=
+ =?utf-8?B?VVFmT2VDalAyYXg2ZFdtVzVYSU5qdExHQkFiVnhRMzRvRWlWQmgrdnpaNmRi?=
+ =?utf-8?B?b250ZG83TS9YNlNyRGhJRjByUXg1YVhWbXc2TVR5MzF4cDB4dHkvVVhHcVVr?=
+ =?utf-8?B?WmtITFpWWWY3T0J3OXpXS1JxRUJDRUhGL1VIc25ZUGhnWlQ1MTNmdEZ5ZVRP?=
+ =?utf-8?B?VTlwUlpYUHM2RGlybmlzZmcxangybjdHTmVKNjQxNjFFUEd1Smx2YU5scUtX?=
+ =?utf-8?B?UUVhWi9qYW1tNlgySm1TUHkxYjdGbVc2TlNoNkgwNm1YeWkxSVFydXluekt2?=
+ =?utf-8?B?dE5qeFUxT1NmS0daZk13aXgrMWs2T010MFhVdTlMWDNXeUwxVHR3NUNlMFFj?=
+ =?utf-8?B?L2t5Vm1NUnNlL2dFRDBiZHB1UHZleGFUTzdXSFM0LzZZcU9ZM2dQNEVhK2ph?=
+ =?utf-8?B?bWJyOUpyQ013WkJlaUkvUWVmQWNTckVxTFh1MWxqeHgzeHg1Q0I5aEZMZmQr?=
+ =?utf-8?B?UVFWTDlodWpuWlAva1VHaEdrUjEwd2hLQ1pxZE0wMnFvbVhMbjVPSzNEUUdv?=
+ =?utf-8?B?WnBiOW93R25JbXdyMzBmNnYreVozTEF3RWgxdUlRREh1UE0zT3ZvbVdmUkdZ?=
+ =?utf-8?B?K1R1dTA4MW1UQzdLQ3ZYSVM3d2R6TSsyWksyMEp5N3h6T0pjMzFDdDYySGp3?=
+ =?utf-8?B?TDBuVzJvN1pYZWMxZFdKdG5MejZSVHdxWmJjcDdaSUZ5V241RXp4ZzBJaWcz?=
+ =?utf-8?B?SHJZd3E0d2xxY0w2L0lUMmNwK3puR2FhQ0YrUk53a3dkdjhBdG4xR1lTa3Nk?=
+ =?utf-8?B?ZFA3cEozRVF2N2ZUWEFkSTlXOGFyL2R3V3RsTVo2VHluTm9VNmhqSTdLdG5x?=
+ =?utf-8?B?a2FCRDdSVDJMQUpIT0ViNFA5L3VRblk1OFI0MzV5UitBeHptejN5VXJDYUlu?=
+ =?utf-8?B?T0FsZGVrblR2QUJ2VFpTemVxVGt1L2NYUDRHRVFKZ1o1dmtkWkp1bkVCbjdJ?=
+ =?utf-8?B?RzJLWE43ZWhKT0F2czJlUWRWR3Z6UmZzVXdKSWh5Y3Bmb3Z3TzVzWUd6cS9G?=
+ =?utf-8?B?cmxSUGtnVVp1WUJBVEVFK3BUWnVkQzZtU0dOZWFtbWRGZ2dFQ1lFSjI0WU84?=
+ =?utf-8?B?WUxTTHhyZ3lCVXZHVzAxaFgyZmZUa05PbmR6cmhUSFN6MHZaRDJ1ZEFRdHVl?=
+ =?utf-8?B?UEdpUmJZQnN3WkxVTDBIN05MZGxJWXhrRWh6c0p2amlqY1pDMnJFekV1Ritr?=
+ =?utf-8?B?MTA1VldVYXFKVjlBWHN3SFhlcmVta1IyZ2k3WGNIU1ppcjZ2dTJhQ1ZCN2Z2?=
+ =?utf-8?B?U1ZJaGN4Y2FmUXN2Q2VqUFhZZWpGRWpWUDVQbXdQOHkwSTl3WlVkRWhzbjg2?=
+ =?utf-8?B?STN1TTd3NEJYdEdSektQYXdWMkJEcjJ1RFp5N0YwR3pURkVJQ2JvM2Q4bTNq?=
+ =?utf-8?B?dTJjVXA1NDFOOXdzR1E3NjdCOFdPc3Y2OUMrdE5QSGVyeGlCdWNhMmxsRzBK?=
+ =?utf-8?Q?w7jiC/knV3aXjRYPvUoI25e3q?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b2322f4-a89a-45fe-4577-08db5145d061
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB4765.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 11:00:49.5142
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fM+ZahkgA/WDhIPpkXOueZH04CYiwQk4WAhQcoUquUtZ08C3MGGn0unjnLRPLI1x
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8934
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 12:21=E2=80=AFPM Donald Buczek <buczek@molgen.mpg.d=
-e> wrote:
->
-> Is this series in a queue somewhere?
 
-Yes, but not in that form.
 
->
->
-> Seems rather important and I don't find progress.
+On 5/9/23 18:04, Krzysztof Kozlowski wrote:
+> On 09/05/2023 16:19, Michal Simek wrote:
+>>
+>>
+>> On 5/7/23 10:07, Krzysztof Kozlowski wrote:
+>>> On 05/05/2023 15:25, Michal Simek wrote:
+>>>> The Microchip usb5744 is a SS/HS USB 3.0 hub controller with 4 ports.
+>>>> The binding describes USB related aspects of the USB5744 hub, it as
+>>>> well cover the option of connecting the controller as an i2c slave.
+>>>> When i2c interface is connected hub needs to be initialized first.
+>>>> Hub itself has fixed i2c address 0x2D but hardcoding address is not good
+>>>> idea because address can be shifted by i2c address translator in the
+>>>> middle.
+>>>>
+>>>> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+>>>> Signed-off-by: Michal Simek <michal.simek@amd.com>
+>>>> ---
+>>>>
+>>>> Changes in v2:
+>>>> - fix i2c-bus property
+>>>> - swap usb2.0/3.0 compatible strings
+>>>> - fix indentation in example (4 spaces)
+>>>> - add new i2c node with microchip,usb5744 compatible property
+>>>>
+>>>> It looks like that usb8041 has also an optional i2c interface which is not
+>>>> covered. But it is mentioned at commit 40e58a8a7ca6 ("dt-bindings: usb:
+>>>> Add binding for TI USB8041 hub controller").
+>>>>
+>>>> i2c-bus name property was suggested by Rob at
+>>>> https://lore.kernel.org/all/CAL_JsqJedhX6typpUKbnzV7CLK6UZVjq3CyG9iY_j5DLPqvVdw@mail.gmail.com/
+>>>> and
+>>>> https://lore.kernel.org/all/CAL_JsqJZBbu+UXqUNdZwg-uv0PAsNg55026PTwhKr5wQtxCjVQ@mail.gmail.com/
+>>>>
+>>>> the question is if adding address like this is acceptable.
+>>>> But it must be specified.
+>>>>
+>>>> Driver will follow based on final dt-binding.
+>>>>
+>>>> $ref: usb-device.yaml# should be also added but have no idea how to wire it
+>>>> up to be applied only on usb node not i2c one.
+>>>>
+>>>> ---
+>>>>    .../bindings/usb/microchip,usb5744.yaml       | 110 ++++++++++++++++++
+>>>>    1 file changed, 110 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..7e0a3472ea95
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+>>>> @@ -0,0 +1,110 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/usb/microchip,usb5744.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Microchip USB5744 4-port Hub Controller
+>>>> +
+>>>> +description:
+>>>> +  Microchip's USB5744 SmartHubTM IC is a 4 port, SuperSpeed (SS)/Hi-Speed (HS),
+>>>> +  low power, low pin count configurable and fully compliant with the USB 3.1
+>>>> +  Gen 1 specification. The USB5744 also supports Full Speed (FS) and Low Speed
+>>>> +  (LS) USB signaling, offering complete coverage of all defined USB operating
+>>>> +  speeds. The new SuperSpeed hubs operate in parallel with the USB 2.0
+>>>> +  controller, so 5 Gbps SuperSpeed data transfers are not affected by slower
+>>>> +  USB 2.0 traffic.
+>>>> +
+>>>> +maintainers:
+>>>> +  - Piyush Mehta <piyush.mehta@amd.com>
+>>>> +  - Michal Simek <michal.simek@amd.com>
+>>>> +
+>>>> +select:
+>>>> +  properties:
+>>>> +    compatible:
+>>>> +      contains:
+>>>> +        const: microchip,usb5744
+>>>> +  required:
+>>>> +    - compatible
+>>>
+>>> I don't understand why do you need this select. It basically disables
+>>> schema matching for other ones.
+>>
+>> I didn't find a way how to have usbXXX,XXXX compatible strings and
+>> microchip,usb5744 compatible in the same file. I am definitely lacking knowledge
+>> how to write it properly that's why any advise is welcome.
+> 
+> Hm, if you just have both of them like you have now, what happens?
 
-Well, there has been a v4 that has been merged already.
 
->
-> Also, should be cc: stable@vger.kernel.org , right?
+make 
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/usb/microchip,usb5744.yaml 
+dt_binding_check
+   DTEX    Documentation/devicetree/bindings/usb/microchip,usb5744.example.dts
+   LINT    Documentation/devicetree/bindings
+   CHKDT   Documentation/devicetree/bindings/processed-schema.json
+   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+   DTC_CHK Documentation/devicetree/bindings/usb/microchip,usb5744.example.dtb
+/home/monstr/data/disk/linux/Documentation/devicetree/bindings/usb/microchip,usb5744.example.dtb: 
+hub@1: 'i2c-bus', 'peer-hub', 'reset-gpios' do not match any of the regexes: 
+'pinctrl-[0-9]+'
+	From schema: 
+/home/monstr/data/disk/linux/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
+/home/monstr/data/disk/linux/Documentation/devicetree/bindings/usb/microchip,usb5744.example.dtb: 
+hub@2: 'i2c-bus', 'peer-hub', 'reset-gpios' do not match any of the regexes: 
+'pinctrl-[0-9]+'
+	From schema: 
+/home/monstr/data/disk/linux/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
 
-The fixes are already backported to stable, because Pietro added the
-"fixes" tags which is a trigger for them to backport stuff.
+And this is even without usb-device.yaml wired.
 
->
-> CVE-2023-25012
+Thanks,
+Michal
 
-You have no idea how much I hate CVEs and how they are used as a way
-to force an answer to an email or to force code inclusion...
-
-Cheers,
-Benjamin
-
->
-> Best
->
->   Donald
->
-> On 1/26/23 1:24 AM, Pietro Borrello wrote:
-> > I noticed a recurring pattern is present in multiple hid devices in the
-> > Linux tree, where the LED controller of a device schedules a work_struc=
-t
-> > to interact with the hardware.
-> > The work_struct is embedded in the device structure and thus, is freed
-> > at device removal.
-> >
-> > The issue is that a LED worker may be scheduled by a timer concurrently
-> > with device removal, causing the work_struct to be accessed after havin=
-g
-> > been freed.
-> > I was able to trigger the issue in hid-bigbenff.c and hid-asus.c
-> > where the work_structs may be scheduled by the LED controller
-> > while the device is disconnecting, triggering use-after-frees.
-> > I can attach the reproducer, but it's very simple USB configuration,
-> > using the /dev/raw-gadget interface with some more USB interactions
-> > to manage LEDs configuration and pass checks in asus_kbd_init()
-> > and asus_kbd_get_functions() in case of hid-asus.c.
-> > I triggered the issue by connecting a device and immediately
-> > disconnecting it, so that the remove function runs before the LED one
-> > which remains pending.
-> >
-> > More drivers have the same pattern (hid-lg-g15.c, hid-playstation.c,
-> > hid-sony.c) but I wasn't able to properly pass the right descriptors
-> > to trigger the led configurations needed to trigger the workers.
-> > Some other drivers manually unregister at removal (hid-corsair.c,
-> > hid-gt683r.c, hid-lenovo.c) since they do not use the managed
-> > interface, which is safe, to my understanding.
-> > Also, a similar pattern is present with callbacks which schedule
-> > a worker originating from input_ff_create_memless() (e.g.,
-> > in hid-bigbenff.c) but in these cases, I wasn't able to trigger
-> > the race condition with the event handling to schedule the worker
-> > during device removal. However, I have no experience with the USB
-> > protocol and I'm not able to say that they cannot be triggered.
-> >
-> > I am currently wondering if this is due to some emulation of the
-> > /dev/raw-gadget interface or if it's effectively an issue with how each
-> > device manages resource removal.
-> > But I wonder why syzkaller didn't find any crash while fuzzing the
-> > interface with upstream-usb.config, as they seem pretty
-> > straightforward to trigger.
-> > Configuring the kernel with CONFIG_DEBUG_OBJECTS, it emits
-> > a warning in debug_check_no_obj_freed, which makes it clear that
-> > device removal is freeing resources in use.
-> > KASAN detects them as use-after-free.
-> >
-> > I am attaching multiple patches for all the drivers I suspect the bug
-> > is present.
-> > The proposed patches unregister the LED controllers before removing the
-> > device itself.
-> >
-> > I attach the (partial for brevity) ODEBUG dumps:
-> >
-> > ```hid-bigbenff.c
-> > [   37.803135][ T1170] usb 1-1: USB disconnect, device number 2
-> > [   37.827979][ T1170] ODEBUG: free active (active state 0) object
-> > type: work_struct hint: bigben_worker+0x0/0x860
-> > [   37.829634][ T1170] WARNING: CPU: 0 PID: 1170 at
-> > lib/debugobjects.c:505 debug_check_no_obj_freed+0x43a/0x630
-> > [   37.830904][ T1170] Modules linked in:
-> > [   37.831413][ T1170] CPU: 0 PID: 1170 Comm: kworker/0:3 Not tainted
-> > 6.1.0-rc4-dirty #43
-> > [   37.832465][ T1170] Hardware name: QEMU Standard PC (i440FX + PIIX,
-> > 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-> > [   37.833751][ T1170] Workqueue: usb_hub_wq hub_event
-> > [   37.834409][ T1170] RIP: 0010:debug_check_no_obj_freed+0x43a/0x630
-> > [   37.835218][ T1170] Code: 48 89 ef e8 28 82 58 ff 49 8b 14 24 4c 8b
-> > 45 00 48 c7 c7 40 5f 09 87 48 c7 c6 60 5b 09 87 89 d9 4d 89 f9 31 c0
-> > e8 46 25 ef fe <0f> 0b 4c 8b 64 24 20 48 ba 00 00 00 00 00 fc ff df ff
-> > 05 4f 7c 17
-> > [   37.837667][ T1170] RSP: 0018:ffffc900006fee60 EFLAGS: 00010246
-> > [   37.838503][ T1170] RAX: 0d2d19ffcded3d00 RBX: 0000000000000000
-> > RCX: ffff888117fc9b00
-> > [   37.839519][ T1170] RDX: 0000000000000000 RSI: 0000000000000000
-> > RDI: 0000000000000000
-> > [   37.840570][ T1170] RBP: ffffffff86e88380 R08: ffffffff8130793b
-> > R09: fffff520000dfd85
-> > [   37.841618][ T1170] R10: fffff520000dfd85 R11: 0000000000000000
-> > R12: ffffffff87095fb8
-> > [   37.842649][ T1170] R13: ffff888117770ad8 R14: ffff888117770acc
-> > R15: ffffffff852b7420
-> > [   37.843728][ T1170] FS:  0000000000000000(0000)
-> > GS:ffff8881f6600000(0000) knlGS:0000000000000000
-> > [   37.844877][ T1170] CS:  0010 DS: 0000 ES: 0000 CR0: 000000008005003=
-3
-> > [   37.845749][ T1170] CR2: 00007f992eaab380 CR3: 000000011834b000
-> > CR4: 00000000001006f0
-> > [   37.846794][ T1170] Call Trace:
-> > [   37.847245][ T1170]  <TASK>
-> > [   37.847643][ T1170]  slab_free_freelist_hook+0x89/0x160
-> > [   37.848409][ T1170]  ? devres_release_all+0x262/0x350
-> > [   37.849156][ T1170]  __kmem_cache_free+0x71/0x110
-> > [   37.849829][ T1170]  devres_release_all+0x262/0x350
-> > [   37.850478][ T1170]  ? devres_release+0x90/0x90
-> > [   37.851118][ T1170]  device_release_driver_internal+0x5e5/0x8a0
-> > [   37.851944][ T1170]  bus_remove_device+0x2ea/0x400
-> > [   37.852611][ T1170]  device_del+0x64f/0xb40
-> > [   37.853212][ T1170]  ? kill_device+0x150/0x150
-> > [   37.853831][ T1170]  ? print_irqtrace_events+0x1f0/0x1f0
-> > [   37.854564][ T1170]  hid_destroy_device+0x66/0x100
-> > [   37.855226][ T1170]  usbhid_disconnect+0x9a/0xc0
-> > [   37.855887][ T1170]  usb_unbind_interface+0x1e1/0x890
-> > ```
-> >
-> > ``` hid-asus.c
-> > [   77.409878][ T1169] usb 1-1: USB disconnect, device number 2
-> > [   77.423606][ T1169] ODEBUG: free active (active state 0) object
-> > type: work_struct hint: asus_kbd_backlight_work+0x0/0x2c0
-> > [   77.425222][ T1169] WARNING: CPU: 0 PID: 1169 at
-> > lib/debugobjects.c:505 debug_check_no_obj_freed+0x43a/0x630
-> > [   77.426599][ T1169] Modules linked in:
-> > [   77.427322][ T1169] CPU: 0 PID: 1169 Comm: kworker/0:3 Not tainted
-> > 6.1.0-rc4-dirty #43
-> > [   77.428404][ T1169] Hardware name: QEMU Standard PC (i440FX + PIIX,
-> > 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-> > [   77.429644][ T1169] Workqueue: usb_hub_wq hub_event
-> > [   77.430296][ T1169] RIP: 0010:debug_check_no_obj_freed+0x43a/0x630
-> > [   77.431142][ T1169] Code: 48 89 ef e8 28 82 58 ff 49 8b 14 24 4c 8b
-> > 45 00 48 c7 c7 40 5f 09 87 48 c7 c6 60 5b 09 87 89 d9 4d 89 f9 31 c0
-> > e8 46 25 ef fe <0f> 0b 4c 8b 64 24 20 48 ba 00 00 00 00 00 fc ff df ff
-> > 05 4f 7c 17
-> > [   77.433691][ T1169] RSP: 0018:ffffc9000069ee60 EFLAGS: 00010246
-> > [   77.434470][ T1169] RAX: b85d2b40c12d7600 RBX: 0000000000000000
-> > RCX: ffff888117a78000
-> > [   77.435507][ T1169] RDX: 0000000000000000 RSI: 0000000080000000
-> > RDI: 0000000000000000
-> > [   77.436521][ T1169] RBP: ffffffff86e88380 R08: ffffffff8130793b
-> > R09: ffffed103ecc4ed6
-> > [   77.437582][ T1169] R10: ffffed103ecc4ed6 R11: 0000000000000000
-> > R12: ffffffff87095fb8
-> > [   77.438593][ T1169] R13: ffff88810e348fe0 R14: ffff88810e348fd4
-> > R15: ffffffff852b5780
-> > [   77.439667][ T1169] FS:  0000000000000000(0000)
-> > GS:ffff8881f6600000(0000) knlGS:0000000000000000
-> > [   77.440842][ T1169] CS:  0010 DS: 0000 ES: 0000 CR0: 000000008005003=
-3
-> > [   77.441688][ T1169] CR2: 00007ffc05495ff0 CR3: 000000010cdf0000
-> > CR4: 00000000001006f0
-> > [   77.442720][ T1169] Call Trace:
-> > [   77.443167][ T1169]  <TASK>
-> > [   77.443555][ T1169]  slab_free_freelist_hook+0x89/0x160
-> > [   77.444302][ T1169]  ? devres_release_all+0x262/0x350
-> > [   77.444990][ T1169]  __kmem_cache_free+0x71/0x110
-> > [   77.445638][ T1169]  devres_release_all+0x262/0x350
-> > [   77.446309][ T1169]  ? devres_release+0x90/0x90
-> > [   77.446978][ T1169]  device_release_driver_internal+0x5e5/0x8a0
-> > [   77.447748][ T1169]  bus_remove_device+0x2ea/0x400
-> > [   77.448421][ T1169]  device_del+0x64f/0xb40
-> > [   77.448976][ T1169]  ? kill_device+0x150/0x150
-> > [   77.449577][ T1169]  ? print_irqtrace_events+0x1f0/0x1f0
-> > [   77.450307][ T1169]  hid_destroy_device+0x66/0x100
-> > [   77.450938][ T1169]  usbhid_disconnect+0x9a/0xc0
-> > ```
-> >
-> > To: Jiri Kosina <jikos@kernel.org>
-> > To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > To: Hanno Zulla <kontakt@hanno.de>
-> > To: Carlo Caione <carlo@endlessm.com>
-> > To: Pavel Machek <pavel@ucw.cz>
-> > To: Lee Jones <lee@kernel.org>
-> > To: Roderick Colenbrander <roderick.colenbrander@sony.com>
-> > To: Sven Eckelmann <sven@narfation.org>
-> > Cc: linux-leds@vger.kernel.org
-> > Cc: Cristiano Giuffrida <c.giuffrida@vu.nl>
-> > Cc: "Bos, H.J." <h.j.bos@vu.nl>
-> > Cc: Jakob Koschel <jkl820.git@gmail.com>
-> > Cc: linux-input@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: Jiri Kosina <jkosina@suse.cz>
-> > Cc: Roderick Colenbrander <roderick@gaikai.com>
-> > Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
-> >
-> > ---
-> > Pietro Borrello (5):
-> >       HID: bigben_remove: manually unregister leds
-> >       HID: asus_remove: manually unregister led
-> >       HID: dualsense_remove: manually unregister leds
-> >       HID: dualshock4_remove: manually unregister leds
-> >       HID: sony_remove: manually unregister leds
-> >
-> >  drivers/hid/hid-asus.c        | 1 +
-> >  drivers/hid/hid-bigbenff.c    | 5 +++++
-> >  drivers/hid/hid-playstation.c | 8 ++++++++
-> >  drivers/hid/hid-sony.c        | 8 ++++++++
-> >  4 files changed, 22 insertions(+)
-> > ---
-> > base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
-> > change-id: 20230125-hid-unregister-leds-4cbf67099e1d
-> >
-> > Best regards,
-> >
->
->
-> --
-> Donald Buczek
-> buczek@molgen.mpg.de
-> Tel: +49 30 8413 1433
->
 
