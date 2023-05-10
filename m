@@ -2,133 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBF46FD493
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 05:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE0D6FD496
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 05:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235628AbjEJDrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 23:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        id S235631AbjEJDtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 23:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235560AbjEJDrI (ORCPT
+        with ESMTP id S230423AbjEJDtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 23:47:08 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE9E2114
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 20:47:06 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-18f4a6d2822so42038370fac.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 20:47:06 -0700 (PDT)
+        Tue, 9 May 2023 23:49:46 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D80210A
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 20:49:45 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id ada2fe7eead31-436161f2cf2so459346137.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 20:49:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1683690424; x=1686282424;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ifGsiDNA4DSRmYfOgUypvWteVU13/UhrU3vLKCdk6uY=;
-        b=gpu59KdBTaV2y1OrztVKMXiHwwwuoI3UpLzcobU/TQ2lpWwCXqfQeLrRAXWEPGtJSt
-         tm1d0OXblLRJdNQRMO2buSn3nl1xIhAN8Kauc/LZVWUMo8CXL0iFI3d6DEDxF1ycqWDw
-         r1rHmplIjra3BgAkeBX8t7EOBIdRohvoIDuRjqlOuvOXLOP6YOeNU2ZpS5MKq642wdhX
-         GfNYlzC0XytTFCaerhonm26O9xJ9/8MhM6sd7/oIFtzgrZQLfmX3yglSVV8N/PhPQkiH
-         i7/Yi2ApjQ0JBdYqdm0OldmwCNu0AoOvfYm4ktvDPD+BwoUqLs1zBdJSVi+IJmJVihcs
-         6wRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683690424; x=1686282424;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=igel-co-jp.20221208.gappssmtp.com; s=20221208; t=1683690584; x=1686282584;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ifGsiDNA4DSRmYfOgUypvWteVU13/UhrU3vLKCdk6uY=;
-        b=KTp+qfrG43/ngK5wlltvOCwGfN7sDP195MsSYo+xwlS4wpOONiI/U8T+aaccutXlkc
-         y/LvD0YM5PW6BQThucazn9Km2k3iC7wpu1dGq8/t6lUsfCTI6BxhI8HBN+vcxnkMMif+
-         M44y9yIRGssFlO4LClBX6FcTzhxGDiRvjZt7c83bqi80SwIMtLoD2a5yDzCdAmlaWDfb
-         x73unVgvl9VeL/7LU9Xnld5rYkg4iUaFiB4Ia00+1nsqIxpyqy+tCqJz47IwjtPedHGi
-         PARxUi/m10kcrbdflyY6FN7LoWi0I8JPLntdR8InOyFnEIHdE5s6DhTbxAphAIJERT1k
-         5/eQ==
-X-Gm-Message-State: AC+VfDzwd3o++NZBbz9n2btUJxzYyr9BSoOPfNf1TzHY69hZDCwNuRQw
-        MuhejHswQY0qELqoZAZ8Ga4mSA==
-X-Google-Smtp-Source: ACHHUZ4YePMDzR3NxPf56dWWs0438cRvarCHuKqCLPxWMl4dytqu+RlEXReFpB+kOAyPzW2K5KhhxQ==
-X-Received: by 2002:a05:6830:6081:b0:6ab:1aa5:1634 with SMTP id by1-20020a056830608100b006ab1aa51634mr2429359otb.10.1683690424388;
-        Tue, 09 May 2023 20:47:04 -0700 (PDT)
-Received: from sunil-laptop ([106.51.189.144])
-        by smtp.gmail.com with ESMTPSA id j16-20020a9d7690000000b006a6558ef17fsm5865716otl.30.2023.05.09.20.46.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 20:47:04 -0700 (PDT)
-Date:   Wed, 10 May 2023 09:16:47 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Weili Qian <qianweili@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH V5 08/21] RISC-V: ACPI: Cache and retrieve the RINTC
- structure
-Message-ID: <ZFsTp/cbuPFauDui@sunil-laptop>
-References: <20230508115237.216337-1-sunilvl@ventanamicro.com>
- <20230508115237.216337-9-sunilvl@ventanamicro.com>
- <20230509-atlantic-writing-3ceea38e050e@spud>
+        bh=EI3dcKXw4MhS4ti0/DI9c0u69YLYabnxg/e6vkj4TDk=;
+        b=3eLCbR86w+2RQbTKOZka2AFvBx7g3Zj+idJSXkQMLalMFcGXeUz+XfvSjS5T3uv4tC
+         ipbYKnmAnxFqtIVoYb9RRc5rWc8sSZhMBetTu/C84ZGz+xO5n46P7DxYAjCWVKh/bbB6
+         zQ7X8BJpXXEa5XKfssyss21KSZ2HVUbaWfYmpNAR+B9M1rfFQrCE33GyKnSywu0Srhcy
+         wlA6oN61GpbDDJunhNaEKhWlN2tYP9Cvy7flCv1W+OC1dPkdup2MESB1tUqfcZBxCqdI
+         AwXrCWE2QhMWEc+DDu0ix4QKDbYBsc/wFjMoh7T7VtmDSWtwZi63QsOKmJzpVGp9lmaD
+         x4tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683690584; x=1686282584;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EI3dcKXw4MhS4ti0/DI9c0u69YLYabnxg/e6vkj4TDk=;
+        b=dAAxtRUntlhcP3kLEht6giV+n2NkMWUqElplAxzZQXzRh1RpCB5v6noQnVZ31Frq6s
+         g64S/oLgG67xjAGp4vgZMP565THsw6S8DYRYM2u016Ax1ggrVSCMln1gy80rbrmOYfBw
+         ymlyjunU69qGw6jCgOF46F8GxgRdJRqCa81FKrl5DZvPqOcElQM3iMX+5djXvv67pa+n
+         ECXOrYr4nDUoW7guyMw6ouVkYdgS3csJRQNfqRs1gWqAqi9NuYPXX2higBgehLqWSiLi
+         7G8IfZfBZRl1kXrFvFKdMKPXdcTHvGsgEz/Nd9ApisYGVfnohrs/OtX72jbRtTthJrHd
+         lUMw==
+X-Gm-Message-State: AC+VfDxH+7l/cYWa39XCFFfiJV5Prq9YkGXAZuaBQOYkCGC0ZO4wEdzh
+        kBBXY5JV71wA1WULfF25GK0hKWAZLU6hFgeo5wrRMQ==
+X-Google-Smtp-Source: ACHHUZ5W4HIi6OHBDK+zBBO2lQH7G6noO4SUmFIUN+gOf8a5U8CeUgGQGiYpYu38azJw/nTo5dfKqporeqDX0nEv7wI=
+X-Received: by 2002:a67:f9c2:0:b0:435:5255:a1fd with SMTP id
+ c2-20020a67f9c2000000b004355255a1fdmr3666179vsq.3.1683690584107; Tue, 09 May
+ 2023 20:49:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509-atlantic-writing-3ceea38e050e@spud>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230427104428.862643-2-mie@igel.co.jp> <20230427182812.GA262399@bhelgaas>
+In-Reply-To: <20230427182812.GA262399@bhelgaas>
+From:   Shunsuke Mie <mie@igel.co.jp>
+Date:   Wed, 10 May 2023 12:49:33 +0900
+Message-ID: <CANXvt5oYq3CL9gPFZevAx30_Q=Ad1rsG2oCp7p9aNhNZaHvN+A@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/3] PCI: endpoint: introduce a helper to implement
+ pci ep virtio function
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>, linux-pci@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Frank Li <Frank.Li@nxp.com>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
-
-On Tue, May 09, 2023 at 06:50:07PM +0100, Conor Dooley wrote:
-> Hey Sunil,
-> 
-> On Mon, May 08, 2023 at 05:22:24PM +0530, Sunil V L wrote:
-> > RINTC structures in the MADT provide mapping between the hartid
-> > and the CPU. This is required many times even at run time like
-> > cpuinfo. So, instead of parsing the ACPI table every time, cache
-> > the RINTC structures and provide a function to get the correct
-> > RINTC structure for a given cpu.
-> > 
-> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> From this patch until "RISC-V: Add ACPI initialization in
-> setup_arch()" (which is 19/21), the series fails to build.
-> 
-> allmodconfig, clang-16:
-> ../arch/riscv/include/asm/acpi.h:22:23: error: unknown type name 'acpi_physical_address'; did you mean 'efi_physical_addr_t'?
-> ../arch/riscv/include/asm/acpi.h:22:51: error: unknown type name 'acpi_size'
-> 
-> rv32_defconfig, clang-16:
-> arch/riscv/kernel/setup.c:297:7: error: use of undeclared identifier 'acpi_disabled'; did you mean '__cpu_disable'?
-> arch/riscv/kernel/setup.c:297:7: warning: address of function '__cpu_disable' will always evaluate to 'true' [-Wpointer-bool-conversion]
+I'll fix the typo and some styles you mentioned.
+In this e-mail, I reply to the other comments.
+2023=E5=B9=B44=E6=9C=8828=E6=97=A5(=E9=87=91) 3:28 Bjorn Helgaas <helgaas@k=
+ernel.org>:
 >
-> I ballsed up a toolchain upgrade to gcc-13, so the whole series is
-> showing build issues on patchwork for the gcc configurations:
-> https://patchwork.kernel.org/project/linux-riscv/list/?series=745787
-> 
-> However, I suspect that the same patches that fail for clang-16 will
-> fail for gcc-13 too, once I have fixed that!
-> 
-My bad. It is a commit order issue. Let me fix it.
+> Simple typos, don't repost until there's more substantive feedback.
+>
+> On Thu, Apr 27, 2023 at 07:44:26PM +0900, Shunsuke Mie wrote:
+> > The Linux PCIe Endpoint framework supports to implement PCIe endpoint
+> > functions using a PCIe controller operating in endpoint mode.
+> > It is possble to realize the behavior of PCIe device, such as virtio PC=
+I
+> > device. This patch introduces a setof helper functions and data structu=
+res
+> > to implement a PCIe endpoint function that behaves as a virtio device.
+>
+> s/possble/possible/
+> s/setof/set of/
+>
+> > Those functions enable the implementation PCIe endpoint function that
+> > comply with the virtio lecacy specification. Because modern virtio
+> > specifications require devices to implement custom PCIe capabilities, w=
+hich
+> > are not currently supported by either PCIe controllers/drivers or the P=
+CIe
+> > endpoint framework.
+>
+> s/implementation PCIe endpoint function/implementation of PCIe endpoint f=
+unctions/
+> s/lecacy/legacy/ (What does "legacy" mean?  Is there a spec for this?)
+Yes, it is defined in spec.
+> I guess "legacy virtio" devices need not implement custom PCIe
+> capabilities, but "modern virtio" devices must implement them?
+That I wanted to explain here.
+> Capitalize "Endpoint framework" consistently; sometimes it's
+> "Endpoint", other times it's "endpoint".
+I'll take care to be consistent.
+> > While this patch provides functions for negotiating with host drivers a=
+nd
+> > copying data, each PCIe function driver must impl ement operations that
+> > depend on each specific device, such as network, block, etc.
+>
+> s/impl ement/implement/
+>
+> > +#include <linux/virtio_pci.h>
+> > +#include <linux/virtio_config.h>
+> > +#include <linux/kthread.h>
+>
+> Typically the header includes would be alphabetized if possible.
+I'll try to reorder them.
+> > +     vq_virt =3D pci_epc_map_addr(epf->epc, epf->func_no, epf->vfunc_n=
+o,
+> > +                                vq_pci_addr, vq_phys, vq_size);
+> > +     if (IS_ERR(vq_virt)) {
+> > +             pr_err("Failed to map virtuqueue to local");
+>
+> s/virtuqueue/virtqueue/
+>
+> I know you probably don't have any way to use dev_err(), but this
+> message really needs some context, like a driver name and instance or
+> something.
+I'll try to use the dev_* function appropriately If possible.
+> > +#define VIRTIO_PCI_LEGACY_CFG_BAR 0
+>
+> What makes this a "legacy cfg BAR"?  Is there some spec that covers
+> virtio BAR usage?
+Yes. Virtio Legacy interface defines the PCI BAR number to use.
+https://docs.oasis-open.org/virtio/virtio/v1.2/csd01/virtio-v1.2-csd01.html=
+#x1-14500010
 
-Thanks!
-Sunil 
+> > + * epf_virtio_init - initialize struct epf_virtio and setup BAR for vi=
+rtio
+> > + * @evio: struct epf_virtio to initialize.
+> > + * @hdr: pci configuration space to show remote host.
+> > + * @bar_size: pci BAR size it depends on the virtio device type.
+>
+> s/pci/PCI/ (there were also a few more instances above in messages or
+> comments)
+>
+> > + * epf_virtio_final - finalize struct epf_virtio. it frees bar and mem=
+ories
+> > + * @evio: struct epf_virtio to finalize.
+>
+> s/bar/BAR/
+>
+> > +static void epf_virtio_monitor_qnotify(struct epf_virtio *evio)
+> > +{
+> > +     const u16 qn_default =3D evio->nvq;
+> > +     u16 tmp;
+> > +
+> > +     /* Since there is no way to synchronize between the host and EP f=
+unctions,
+> > +      * it is possible to miss multiple notifications.
+>
+> Multi-line comment style.
+>
+> > +     err =3D epf_virtio_negotiate_vq(evio);
+> > +     if (err < 0) {
+> > +             pr_err("failed to negoticate configs with driver\n");
+>
+> s/negoticate/negotiate/
+>
+> > + * epf_virtio_reset - reset virtio status
+>
+> Some of the function descriptions end with a period (".") and others
+> don't.  Please figure out what the most common style is and use that
+> consistently.
+I agree. I'll fix to be consistent.
+> > +                     dst =3D pci_epc_map_addr(epf->epc, epf->func_no,
+> > +                                            epf->vfunc_no, dbase, &phy=
+s,
+> > +                                            slen);
+> > +                     if (IS_ERR(dst)) {
+> > +                             pr_err("failed to map pci mmoery spact to=
+ local\n");
+>
+> s/pci/PCI/
+> s/mmoery/memory/
+> s/spact/space/ ?
+>
+> Also below.
+>
+> IIRC some previous messages started with a capital letter.  Please
+> make them all consistent.
+Sure.
+> > +             if (dir =3D=3D DMA_MEM_TO_DEV) {
+> > +                     pci_epc_unmap_addr(epf->epc, epf->func_no,
+> > +                                        epf->vfunc_no, phys, dst, slen=
+);
+> > +             } else {
+> > +                     pci_epc_unmap_addr(epf->epc, epf->func_no,
+> > +                                        epf->vfunc_no, phys, src, slen=
+);
+> > +             }
+> > +     }
+> > +
+> > +     return 1;
+>
+> I guess this function returns either a negative error code or the
+> value 1?  That seems sort of weird (I think "negative error code or
+> *zero* is more typical), but maybe you're following some convention?
+It has to be 0. It is my mistake.
+
+Some vringh functions return 0 (data does not exist), 1 (it exists),
+or error. But this functions is not related.
+> > +#include <linux/pci-epf.h>
+> > +#include <linux/pci-epc.h>
+> > +#include <linux/vringh.h>
+> > +#include <linux/dmaengine.h>
+>
+> Alpha order if possible
+Yes.
+> > +     /* Virtual address of pci configuration space */
+>
+> s/pci/PCI/
+>
+> > +     /* Callback function and parameter for queue notifcation
+> > +      * Note: PCI EP function cannot detect qnotify accurately, theref=
+ore this
+> > +      * callback function should check all of virtqueue's changes.
+> > +      */
+>
+> Multi-line comment style.
+>
+> Bjorn
+
+Best regards,
+Shunsuke
