@@ -2,39 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF9F6FD38D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 03:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 678686FD399
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 03:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235320AbjEJB37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 21:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
+        id S235135AbjEJBm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 21:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbjEJB35 (ORCPT
+        with ESMTP id S229549AbjEJBmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 21:29:57 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 04ED03AAF;
-        Tue,  9 May 2023 18:29:52 -0700 (PDT)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 7BE33180081FD7;
-        Wed, 10 May 2023 09:29:49 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   Su Hui <suhui@nfschina.com>
-To:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Su Hui <suhui@nfschina.com>
-Subject: [PATCH] media: platform: Remove unnecessary (void*) conversions
-Date:   Wed, 10 May 2023 09:29:44 +0800
-Message-Id: <20230510012944.42240-1-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 9 May 2023 21:42:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED163596;
+        Tue,  9 May 2023 18:42:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B01246389E;
+        Wed, 10 May 2023 01:42:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C79BAC433EF;
+        Wed, 10 May 2023 01:42:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683682972;
+        bh=f/rcaaI0vOxfs1ijETmOM15ICYB5wdv1jc5B+TEIPJ4=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=W4RjvBr2p+u/Q4LGfwnGvSjdWOgdtFDInkNQ8PfaZz0iNLHiyQxq5nxmlA5jktPPM
+         ww6WOsu2GkXXn6exT7sHrV2bRvaHkXxv05JZvra4aR093Hkn4ZQNpUTlRNHemRVP6E
+         k9kGgNC0Y2k/XXdDQqGhPPWOPy9ERoIVoYkbZ6kfY25od9U6NleE4UpPo+HDJoMgvH
+         kKfx4AHOLI1W0czyptASUScCtXBwaKq7mKngpC/c7UMJyyWlRNjgF4bpl8fS5GonFM
+         fmP62JH1RCz9ICG9GGKYve3+3tdAltooNjYaT/2hf1mWrHlU/H8PMsxvX4y4Ui41Fi
+         z4PWqloKcABcg==
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-54f2ae4b825so2555039eaf.0;
+        Tue, 09 May 2023 18:42:52 -0700 (PDT)
+X-Gm-Message-State: AC+VfDw2MnWcWSOZpsJcPVgSoQhdqZSwrVNkZk1I55x8ALewh/kX6cn6
+        MjGg8m/DpnmD6GCsDcXRxTE27liS93BthyhJh0g=
+X-Google-Smtp-Source: ACHHUZ439VAAMegvsPiMPVTxgTWk+w3QZywrOAPF38lmCJ+XBlvQi+He+rwyYvcEi0Uku8fNESdEAa1o0B5E1Rw2EJ8=
+X-Received: by 2002:a05:6820:291:b0:54f:51f3:48b0 with SMTP id
+ q17-20020a056820029100b0054f51f348b0mr2313500ood.7.1683682972035; Tue, 09 May
+ 2023 18:42:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Received: by 2002:a8a:290:0:b0:4da:311c:525d with HTTP; Tue, 9 May 2023
+ 18:42:51 -0700 (PDT)
+In-Reply-To: <20221017213303.862794-1-colin.i.king@gmail.com>
+References: <20221017213303.862794-1-colin.i.king@gmail.com>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Wed, 10 May 2023 10:42:51 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd_ReyuZWQp6uMkaz6+fmWjtN0yrdfbEsF=fJTn84+5dpw@mail.gmail.com>
+Message-ID: <CAKYAXd_ReyuZWQp6uMkaz6+fmWjtN0yrdfbEsF=fJTn84+5dpw@mail.gmail.com>
+Subject: Re: [PATCH] fs/ntfs: remove redundant assignment to pointer m
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Anton Altaparmakov <anton@tuxera.com>,
+        linux-ntfs-dev@lists.sourceforge.net,
+        kernel-janitors@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,70 +67,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No need cast (void*) to (struct stdemux *),(struct hva_h264_ctx *)
-or (struct hva_h264_task *).
-
-Signed-off-by: Su Hui <suhui@nfschina.com>
----
- drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c | 4 ++--
- drivers/media/platform/st/sti/hva/hva-h264.c             | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-index 45ade7210d26..120830973d22 100644
---- a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-+++ b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-@@ -135,7 +135,7 @@ static void channel_swdemux_tsklet(struct tasklet_struct *t)
- static int c8sectpfe_start_feed(struct dvb_demux_feed *dvbdmxfeed)
- {
- 	struct dvb_demux *demux = dvbdmxfeed->demux;
--	struct stdemux *stdemux = (struct stdemux *)demux->priv;
-+	struct stdemux *stdemux = demux->priv;
- 	struct c8sectpfei *fei = stdemux->c8sectpfei;
- 	struct channel_info *channel;
- 	u32 tmp;
-@@ -256,7 +256,7 @@ static int c8sectpfe_stop_feed(struct dvb_demux_feed *dvbdmxfeed)
- {
- 
- 	struct dvb_demux *demux = dvbdmxfeed->demux;
--	struct stdemux *stdemux = (struct stdemux *)demux->priv;
-+	struct stdemux *stdemux = demux->priv;
- 	struct c8sectpfei *fei = stdemux->c8sectpfei;
- 	struct channel_info *channel;
- 	int idlereq;
-diff --git a/drivers/media/platform/st/sti/hva/hva-h264.c b/drivers/media/platform/st/sti/hva/hva-h264.c
-index 98cb00d2d868..196e631fa4b8 100644
---- a/drivers/media/platform/st/sti/hva/hva-h264.c
-+++ b/drivers/media/platform/st/sti/hva/hva-h264.c
-@@ -591,7 +591,7 @@ static int hva_h264_prepare_task(struct hva_ctx *pctx,
- {
- 	struct hva_dev *hva = ctx_to_hdev(pctx);
- 	struct device *dev = ctx_to_dev(pctx);
--	struct hva_h264_ctx *ctx = (struct hva_h264_ctx *)pctx->priv;
-+	struct hva_h264_ctx *ctx = pctx->priv;
- 	struct hva_buffer *seq_info = ctx->seq_info;
- 	struct hva_buffer *fwd_ref_frame = ctx->ref_frame;
- 	struct hva_buffer *loc_rec_frame = ctx->rec_frame;
-@@ -984,7 +984,7 @@ static int hva_h264_open(struct hva_ctx *pctx)
- 
- static int hva_h264_close(struct hva_ctx *pctx)
- {
--	struct hva_h264_ctx *ctx = (struct hva_h264_ctx *)pctx->priv;
-+	struct hva_h264_ctx *ctx = pctx->priv;
- 	struct device *dev = ctx_to_dev(pctx);
- 
- 	if (ctx->seq_info)
-@@ -1007,8 +1007,8 @@ static int hva_h264_close(struct hva_ctx *pctx)
- static int hva_h264_encode(struct hva_ctx *pctx, struct hva_frame *frame,
- 			   struct hva_stream *stream)
- {
--	struct hva_h264_ctx *ctx = (struct hva_h264_ctx *)pctx->priv;
--	struct hva_h264_task *task = (struct hva_h264_task *)ctx->task->vaddr;
-+	struct hva_h264_ctx *ctx = pctx->priv;
-+	struct hva_h264_task *task = ctx->task->vaddr;
- 	u32 stuffing_bytes = 0;
- 	int ret = 0;
- 
--- 
-2.30.2
-
+2022-10-18 6:33 GMT+09:00, Colin Ian King <colin.i.king@gmail.com>:
+> The pointer m is being assigned a value that is never read, it
+> is being re-assigned to a NULL later on. The assignment is
+> redundant and can be removed.
+>
+> Cleans up clang scan build warning:
+> fs/ntfs/file.c:194:3: warning: Value stored to 'm' is never
+> read [deadcode.DeadStores]
+>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Reviewed-by: Namjae Jeon <linkinjeon@kernel.org>
