@@ -2,86 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E436FE80B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 212146FE80E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236495AbjEJXUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 19:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
+        id S236717AbjEJXVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 19:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbjEJXUB (ORCPT
+        with ESMTP id S231468AbjEJXVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 19:20:01 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7006135A7;
-        Wed, 10 May 2023 16:20:00 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34ANDB71006548;
-        Wed, 10 May 2023 23:19:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=xXC3x0ghD/GK5dky7enjJf95Js0sCp6TmUasomsHc+g=;
- b=eXhLELdGkjh7S3sf6R3VLh5RGwngulFXlzXxuC2xQ75Qxz9cWpRWTbFDB0LSBAp5iy+j
- 47MYrCGsGZs/Ba2eQK7xZ6v+kMdL3EE26vE3B+kqHLsIIn3NQDRhO/OPI6fiJmLIrT9X
- p6GAGjGPHGwhy/OUL245ds8aKsyraIb5jsDVKZpur7pkxLdldMitjWpbCqR3O0ZHrAoV
- O821TMBae/JuWhGHNj8Iygd4Zy3+d6+Gaz4140dwzmzNyFFcNoxsUF9zGlJtgj21QgCR
- xv49LWdB/ehFklVhe+ySiiKYd4dbNa82za8Cbi1VVQ5963Ls7Rd9SNNTaQ286vmefu3H Dw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgj14093q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 23:19:49 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34ANJmJe013930
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 23:19:48 GMT
-Received: from [10.71.110.189] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 10 May
- 2023 16:19:48 -0700
-Message-ID: <6721cc2c-6988-948c-65d6-f50edb925ded@quicinc.com>
-Date:   Wed, 10 May 2023 16:19:29 -0700
+        Wed, 10 May 2023 19:21:06 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAA9211C;
+        Wed, 10 May 2023 16:21:05 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id 6a1803df08f44-61a80fcc4c9so36487956d6.2;
+        Wed, 10 May 2023 16:21:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683760864; x=1686352864;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ffPJ36adGh8uykiqGm+Ey1/eCjuKTv/sqWzbZCfRdDI=;
+        b=S7hOLkYVCWVG5PMBbtuHycDhHI6kEnt0fLdUg3EwKYSCqk5sITaFuUBnhndWwjCCCa
+         pLNWcTIvvkJ/2mm81GmcMnLtYqNqh/GJ2hNiBNk89WWf1iKmYTOzDu3FbzuZZ7JcUyAN
+         yDdI65FSMjnyuzruMDSPp0QKNlT+/pps1oKcw7hUWwUx8OaYW1eoQaRfCzJXCD12GsAx
+         IqJH6XuF9RHpLOiSpuDWASCMnXFtYNcgezk7PzSBpVOrPpdAVt6oPZNMhKjsa5Ng8tTB
+         mZWgIXzmwikA87tOQtCfbsCFgmwI3qEA1bPpe+NEtUwu7BxxbSC4khqqn2OMpTpvJG6A
+         DGDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683760864; x=1686352864;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ffPJ36adGh8uykiqGm+Ey1/eCjuKTv/sqWzbZCfRdDI=;
+        b=DkuM02agDnJYhActst5jXJgpNIiM8RKJ8Ix8Ou+zZm0/LBQCjqm5Nnw/0oOESfKGng
+         MBUqWvpl3dUI+CndOVeOmz8MFegGPNQKIL5/C/4yBKVnCqkju3G9sT+inub+2faCtVBj
+         GQxKf0Y826GqpCBBHpwqk+VJe1IHRoYH7fDMl25mAV5I+a81j8+3NW7F2XITylpR9Qrd
+         V9WHhLT9JZurpWm4RQUi8d2K/z2yHjcdzCUe3KIfer0bGSC2oJDgRcgz754j1voOtzdy
+         3UivOT0BFaDEs4IVY5NChHHaYZpO+s1IwopJJSHAYSKoaXt+JOsSYNvHnsfZbTUWOmce
+         hQpw==
+X-Gm-Message-State: AC+VfDyaVJ3kQDKkHxMZX5Li1Lk2cfTTR5/pUSaRGwcMuDBKyafCEQJr
+        /JdVrvWi3jeT4ege58ayfwA0WxocU9i+pUmW2+0=
+X-Google-Smtp-Source: ACHHUZ4gHR0jLRERlyyoSMGNLDZmc4Z3jce3P/QKFAGW6LFV3wUi+CM2p/kktGAEkyx3iK1sdOc4WZwCkopCwaXOGOY=
+X-Received: by 2002:a05:6214:c46:b0:621:45b2:3370 with SMTP id
+ r6-20020a0562140c4600b0062145b23370mr8196366qvj.31.1683760864576; Wed, 10 May
+ 2023 16:21:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1 2/2] drm/msm/dp: add mutex to protect internal_hpd
- against race condition between different threads
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <airlied@gmail.com>, <andersson@kernel.org>, <daniel@ffwll.ch>,
-        <dianders@chromium.org>, <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <marijn.suijten@somainline.org>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683750665-8764-1-git-send-email-quic_khsieh@quicinc.com>
- <1683750665-8764-3-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n532y=ARQ_+urEA_b3zUn+gKTu1fgK_siHNt3CpbLB9PZg@mail.gmail.com>
- <74ae5514-2b04-9363-902e-cb4d7cbe1128@quicinc.com>
-Content-Language: en-US
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <74ae5514-2b04-9363-902e-cb4d7cbe1128@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: sw_gn0kObOohdSe9sK1qDz9q7NyshaKK
-X-Proofpoint-ORIG-GUID: sw_gn0kObOohdSe9sK1qDz9q7NyshaKK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- suspectscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=604
- clxscore=1015 impostorscore=0 priorityscore=1501 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305100192
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230503013608.2431726-1-nphamcs@gmail.com> <20230503013608.2431726-3-nphamcs@gmail.com>
+ <CAMuHMdWUtb_A-uhXrBg6kC9L2zbC_q3m8oCZoq80ZSJvk6mUAA@mail.gmail.com>
+ <20230505133426.d70a6599d9a729496b68a70c@linux-foundation.org> <315e7ec2-169c-4c4b-93df-485380bc0852@app.fastmail.com>
+In-Reply-To: <315e7ec2-169c-4c4b-93df-485380bc0852@app.fastmail.com>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Wed, 10 May 2023 16:20:53 -0700
+Message-ID: <CAKEwX=NW=sHAkQQw3TPA5tK9O+MC9AwX05=Wp8DRFbRZ4w-JAg@mail.gmail.com>
+Subject: Re: [PATCH v13 2/3] cachestat: implement cachestat syscall
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-api@vger.kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,30 +75,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-internal_hpd is referenced at both plug and unplug handle.
-
-The majority purpose of  mutext is try to serialize internal_hpd between 
-dp_bridge_hpd_disable() and either plug or unplug handle.
-
-
-On 5/10/2023 4:11 PM, Abhinav Kumar wrote:
+On Sat, May 6, 2023 at 10:35=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote=
+:
 >
+> On Fri, May 5, 2023, at 22:34, Andrew Morton wrote:
+> > On Thu, 4 May 2023 19:26:11 +0200 Geert Uytterhoeven
+> > <geert@linux-m68k.org> wrote:
+> >
+> >> >  arch/x86/entry/syscalls/syscall_32.tbl |   1 +
+> >> >  arch/x86/entry/syscalls/syscall_64.tbl |   1 +
+> >>
+> >> This should be wired up on each and every architecture.
+> >> Currently we're getting
+> >>
+> >>     <stdin>:1567:2: warning: #warning syscall cachestat not implemente=
+d [-Wcpp]
+> >>
+> >> in linux-next for all the missing architectures.
+> >
+> > Is that wise?  We risk adding a syscall to an architecture without the
+> > arch maintainers and testers even knowing about it.
+> >
+> > The compile-time nag is there to inform the arch maintainers that a new
+> > syscall is available and that they should wire it up, run the selftest
+> > and then ship the code if they're happy with the result.
 >
-> On 5/10/2023 3:46 PM, Stephen Boyd wrote:
->> Quoting Kuogee Hsieh (2023-05-10 13:31:05)
->>> Intrenal_hpd is referenced by event thread but set by drm bridge 
->>> callback
->>> context. Add mutex to protect internal_hpd to avoid conflicts between
->>> threads.
->>>
->>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>> ---
->>
->> This patch looks completely unnecessary. How can dp_bridge_hpd_enable()
->> be called at the same time that dp_bridge_hpd_disable() is called or
->> dp_bridge_hpd_notify() is called? Isn't there locking or ordering at a
->> higher layer?
+> The usual approach is for the author of a new syscall to
+> include a patch with all the architecture specific changes
+> and Cc the architecture maintainers for that.
 >
-> Ack. We can drop this patch because we are protected by 
-> bridge->hpd_mutex in drm_bridge_hpd_enable() / drm_bridge_hpd_disable 
-> () and drm_bridge_hpd_notify().
+> Note that half the architectures get the entry from
+> include/uapi/asm-generic/unistd.h, so adding it there
+> does not necessarily trigger adding each maintainer
+> from scripts/get_maintainer.pl.
+>
+> The only real risk in adding a new syscall is passing __u64
+> register arguments that behave differently across
+> architectures, or using pointers to data structures that
+> require a compat handler on some architectures. I watch out
+> for those as they get sent to me or the linux-arch list,
+> and this one is fine.
+>
+>      Arnd
+
+I took a stab at wiring the new syscall in this follow-up patch:
+
+https://lore.kernel.org/lkml/20230510195806.2902878-1-nphamcs@gmail.com/
+
+Let me know if I missed something! Review and/or suggestion
+is very much appreciated.
