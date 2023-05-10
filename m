@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084CF6FE577
+	by mail.lfdr.de (Postfix) with ESMTP id 559B06FE578
 	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236725AbjEJUtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
+        id S236761AbjEJUt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235806AbjEJUtT (ORCPT
+        with ESMTP id S236568AbjEJUtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:49:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925E1E66;
-        Wed, 10 May 2023 13:49:18 -0700 (PDT)
+        Wed, 10 May 2023 16:49:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1973DE7D;
+        Wed, 10 May 2023 13:49:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CE87635A0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9ABD7633FA;
         Wed, 10 May 2023 20:49:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67FBAC433D2;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE8FC4339B;
         Wed, 10 May 2023 20:49:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683751757;
-        bh=+CClwmlhhoXRV/flrOSGPQcZOJ5y9G17Co5fZemzFmM=;
+        s=k20201202; t=1683751758;
+        bh=2D64oLm2SWw4kW5p6P/UQQvw/Y6FYEg/jfD5h3DAZhA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iQaRpVFKxg1T2PyBc1mT2crUJT2HXBRyDwvw6lNHWLzQQD7twiSsgMAluJaEPbk3K
-         CxnMkyJvAXq8XqhE1XEDZ6Lm10t1PWUlhlgQBbFwUPgVYqzUMusQNZxMXrtBf2uspV
-         rcsg68Mi0P9BHPeKer2zmSNYf7NJfYKUDAh2frtUQ/qmXkDiNPrn9DwlXirPMPwu/P
-         yAQW0kRCDMDALwIA7UXUuduJoMUbiCAliPm2a5fKwIbWC8OprDmSluoCw+dQG0UA8t
-         qMdUZ59XATel8xIik2OHt24IN5C+/KdkDDXnIzUJjiBnszJaQcSGNw3jFVCG2KSOzL
-         GVeo+xaJyKobw==
+        b=ksygm9EWJIqP7JP0MSt6JVjLfrxcN/TTF5LjmjgYVv6MT9eN/FE5D1OPToYO6D9NS
+         XVYZz9G3hcD4MOduRqv7M98nTV36y3vvlK+APM9JeOpqNun3sW1pIOb6dgTyqDoveE
+         35q/v+qu+lyDHKr3Dd+8tfbThEJHOpbry1jKnNWOFwdWfrUpwD2Stx2TJbuMNnIM7e
+         QjaPf//AaxHLs5Mm7wYEzKFGhG5yKiReGlgTqtJPupQmF3T6sqVQGHFGbY5gQskFnv
+         SFzDL5Cn3xi4DcVd/GxSDvLHpcny741/qXrt0cmWnuUZ7+WqixzBLW+utN5m+ws8zg
+         p1RrEMvgmTCCQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Eugene Huang <eugene.huang99@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
+Cc:     Alain Volmat <avolmat@me.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
         Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 6.3 2/9] soundwire: dmi-quirks: add remapping for Intel 'Rooks County' NUC M15
-Date:   Wed, 10 May 2023 16:48:58 -0400
-Message-Id: <20230510204905.104628-2-sashal@kernel.org>
+        kishon@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.3 3/9] phy: st: miphy28lp: use _poll_timeout functions for waits
+Date:   Wed, 10 May 2023 16:48:59 -0400
+Message-Id: <20230510204905.104628-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230510204905.104628-1-sashal@kernel.org>
 References: <20230510204905.104628-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,68 +59,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eugene Huang <eugene.huang99@gmail.com>
+From: Alain Volmat <avolmat@me.com>
 
-[ Upstream commit 01b33e284ca28cc977bdcfb23be2c719f2139175 ]
+[ Upstream commit e3be4dd2c8d8aabfd2c3127d0e2e5754d3ae82d6 ]
 
-Same DSDT problem as the HP Omen 16-k0005TX, except rt1316 amp is on
-link2.
+This commit introduces _poll_timeout functions usage instead of
+wait loops waiting for a status bit.
 
-Link: https://github.com/thesofproject/linux/issues/4088
-Signed-off-by: Eugene Huang <eugene.huang99@gmail.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Link: https://lore.kernel.org/r/20230314090618.498716-1-yung-chuan.liao@linux.intel.com
+Signed-off-by: Alain Volmat <avolmat@me.com>
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Link: https://lore.kernel.org/r/20230210224309.98452-1-avolmat@me.com
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soundwire/dmi-quirks.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ drivers/phy/st/phy-miphy28lp.c | 42 ++++++++--------------------------
+ 1 file changed, 10 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/soundwire/dmi-quirks.c b/drivers/soundwire/dmi-quirks.c
-index 7969881f126dc..58ea013fa918a 100644
---- a/drivers/soundwire/dmi-quirks.c
-+++ b/drivers/soundwire/dmi-quirks.c
-@@ -73,6 +73,23 @@ static const struct adr_remap hp_omen_16[] = {
- 	{}
- };
+diff --git a/drivers/phy/st/phy-miphy28lp.c b/drivers/phy/st/phy-miphy28lp.c
+index 068160a34f5cc..e30305b77f0d1 100644
+--- a/drivers/phy/st/phy-miphy28lp.c
++++ b/drivers/phy/st/phy-miphy28lp.c
+@@ -9,6 +9,7 @@
  
-+/*
-+ * Intel NUC M15 LAPRC510 and LAPRC710
-+ */
-+static const struct adr_remap intel_rooks_county[] = {
-+	/* rt711-sdca on link0 */
-+	{
-+		0x000020025d071100ull,
-+		0x000030025d071101ull
-+	},
-+	/* rt1316-sdca on link2 */
-+	{
-+		0x000120025d071100ull,
-+		0x000230025d131601ull
-+	},
-+	{}
-+};
-+
- static const struct dmi_system_id adr_remap_quirk_table[] = {
- 	/* TGL devices */
- 	{
-@@ -98,6 +115,14 @@ static const struct dmi_system_id adr_remap_quirk_table[] = {
- 		},
- 		.driver_data = (void *)intel_tgl_bios,
- 	},
-+	{
-+		/* quirk used for NUC15 'Rooks County' LAPRC510 and LAPRC710 skews */
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Intel(R) Client Systems"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "LAPRC"),
-+		},
-+		.driver_data = (void *)intel_rooks_county,
-+	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc"),
+ #include <linux/platform_device.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+@@ -484,19 +485,11 @@ static inline void miphy28lp_pcie_config_gen(struct miphy28lp_phy *miphy_phy)
+ 
+ static inline int miphy28lp_wait_compensation(struct miphy28lp_phy *miphy_phy)
+ {
+-	unsigned long finish = jiffies + 5 * HZ;
+ 	u8 val;
+ 
+ 	/* Waiting for Compensation to complete */
+-	do {
+-		val = readb_relaxed(miphy_phy->base + MIPHY_COMP_FSM_6);
+-
+-		if (time_after_eq(jiffies, finish))
+-			return -EBUSY;
+-		cpu_relax();
+-	} while (!(val & COMP_DONE));
+-
+-	return 0;
++	return readb_relaxed_poll_timeout(miphy_phy->base + MIPHY_COMP_FSM_6,
++					  val, val & COMP_DONE, 1, 5 * USEC_PER_SEC);
+ }
+ 
+ 
+@@ -805,7 +798,6 @@ static inline void miphy28lp_configure_usb3(struct miphy28lp_phy *miphy_phy)
+ 
+ static inline int miphy_is_ready(struct miphy28lp_phy *miphy_phy)
+ {
+-	unsigned long finish = jiffies + 5 * HZ;
+ 	u8 mask = HFC_PLL | HFC_RDY;
+ 	u8 val;
+ 
+@@ -816,21 +808,14 @@ static inline int miphy_is_ready(struct miphy28lp_phy *miphy_phy)
+ 	if (miphy_phy->type == PHY_TYPE_SATA)
+ 		mask |= PHY_RDY;
+ 
+-	do {
+-		val = readb_relaxed(miphy_phy->base + MIPHY_STATUS_1);
+-		if ((val & mask) != mask)
+-			cpu_relax();
+-		else
+-			return 0;
+-	} while (!time_after_eq(jiffies, finish));
+-
+-	return -EBUSY;
++	return readb_relaxed_poll_timeout(miphy_phy->base + MIPHY_STATUS_1,
++					  val, (val & mask) == mask, 1,
++					  5 * USEC_PER_SEC);
+ }
+ 
+ static int miphy_osc_is_ready(struct miphy28lp_phy *miphy_phy)
+ {
+ 	struct miphy28lp_dev *miphy_dev = miphy_phy->phydev;
+-	unsigned long finish = jiffies + 5 * HZ;
+ 	u32 val;
+ 
+ 	if (!miphy_phy->osc_rdy)
+@@ -839,17 +824,10 @@ static int miphy_osc_is_ready(struct miphy28lp_phy *miphy_phy)
+ 	if (!miphy_phy->syscfg_reg[SYSCFG_STATUS])
+ 		return -EINVAL;
+ 
+-	do {
+-		regmap_read(miphy_dev->regmap,
+-				miphy_phy->syscfg_reg[SYSCFG_STATUS], &val);
+-
+-		if ((val & MIPHY_OSC_RDY) != MIPHY_OSC_RDY)
+-			cpu_relax();
+-		else
+-			return 0;
+-	} while (!time_after_eq(jiffies, finish));
+-
+-	return -EBUSY;
++	return regmap_read_poll_timeout(miphy_dev->regmap,
++					miphy_phy->syscfg_reg[SYSCFG_STATUS],
++					val, val & MIPHY_OSC_RDY, 1,
++					5 * USEC_PER_SEC);
+ }
+ 
+ static int miphy28lp_get_resource_byname(struct device_node *child,
 -- 
 2.39.2
 
