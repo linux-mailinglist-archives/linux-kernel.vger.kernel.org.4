@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB5F6FE580
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 866726FE588
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236869AbjEJUtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
+        id S236897AbjEJUue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236781AbjEJUtb (ORCPT
+        with ESMTP id S236848AbjEJUuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:49:31 -0400
+        Wed, 10 May 2023 16:50:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7301718;
-        Wed, 10 May 2023 13:49:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D30B7A8A;
+        Wed, 10 May 2023 13:49:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EFB464055;
-        Wed, 10 May 2023 20:49:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80FDCC4331F;
-        Wed, 10 May 2023 20:49:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 429E861380;
+        Wed, 10 May 2023 20:49:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79BDDC433D2;
+        Wed, 10 May 2023 20:49:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683751765;
-        bh=9rGJoJO7RgySdArNWzGJPgLnRAXGcjh9LFZnabg/7Z4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ONtyHj08tiTt5EJZ1JKEhY66TrTTHzoxiuTOORon/jy/2kp2Pt9A5P3rcspkVZVRU
-         d/RbmCpV/CK97nMkVXOEO72hY1OXkeSWC3VVKSJJ4I/cRcQs48CqRqn4SfWZzYOdgf
-         jlG32KbZqOrhebx2U0LG1eIX0aqf5BaTO50pWFR1wJ5l5nIHZi3CaArGsQRNXFx8RE
-         IXH78VPQB/AWlqZz4D4CJT28MqO5umBGEX1x5gMJxejofEq/ZpmrtMV5xII3TN6ZK9
-         p/Axx+BK20zIS3q1TTKWyd/5dhtv6JC7BuuRpVg3CJBv4v2JUZaXC8fTzGLIg5n6eG
-         H38KmU3QfzCIw==
+        s=k20201202; t=1683751782;
+        bh=xl6G8yc6vNmG4q6vayBP1pskVK69TK32jZsANQIhq2Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U340RIukB7baPgt9agjTBeVSf0I2JkNzxfhDFLP7oYxGG+7zcoMBSM3CGS6pj5Dn9
+         kmzyldnBt9eR7fM5SAXG/V3Hk6HlyJc4+f9c3tJQiPD/VLwEVVgi65azR1EfNYzF2R
+         h2uIzZ69NsoFtAKimR86GNySntTgsn6cHJdsn8ArSyme4g/g4SEumynP3Riy92z0ke
+         euIPW0i+umh2oYIQ+qYZpDdXd2NXWPQYMO8oHcb95eBWUJ4GBN6mc8KKG2GzuMli5U
+         YorjC1PNWJo7t0NY/UxbLhBzqfxIU0NDITIy6E0qkzkYfgD4TCZuHwTWcuDyPLzZd2
+         VLWBe9d04evRg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Jeroen Roovers <jer@xs4all.nl>, Helge Deller <deller@gmx.de>,
-        Sasha Levin <sashal@kernel.org>, linux-parisc@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 9/9] parisc: Replace regular spinlock with spin_trylock on panic path
-Date:   Wed, 10 May 2023 16:49:05 -0400
-Message-Id: <20230510204905.104628-9-sashal@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>,
+        ludovic.desroches@microchip.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 1/9] pinctrl: at91: use devm_kasprintf() to avoid potential leaks (part 2)
+Date:   Wed, 10 May 2023 16:49:18 -0400
+Message-Id: <20230510204926.104747-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230510204905.104628-1-sashal@kernel.org>
-References: <20230510204905.104628-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,133 +59,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[ Upstream commit 829632dae8321787525ee37dc4828bbe6edafdae ]
+[ Upstream commit f494c1913cbb34b9e2078b7b045c87c1ca6df791 ]
 
-The panic notifiers' callbacks execute in an atomic context, with
-interrupts/preemption disabled, and all CPUs not running the panic
-function are off, so it's very dangerous to wait on a regular
-spinlock, there's a risk of deadlock.
+Use devm_kasprintf() instead of kasprintf() to avoid any potential
+leaks. At the moment drivers have no remove functionality hence
+there is no need for fixes tag.
 
-Refactor the panic notifier of parisc/power driver to make use
-of spin_trylock - for that, we've added a second version of the
-soft-power function. Also, some comments were reorganized and
-trailing white spaces, useless header inclusion and blank lines
-were removed.
+While at it, switch to use devm_kasprintf_strarray().
 
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Jeroen Roovers <jer@xs4all.nl>
-Acked-by: Helge Deller <deller@gmx.de> # parisc
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Tested-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20230215134242.37618-2-andriy.shevchenko@linux.intel.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/parisc/include/asm/pdc.h |  1 +
- arch/parisc/kernel/firmware.c | 27 +++++++++++++++++++++++----
- drivers/parisc/power.c        | 16 ++++++++++------
- 3 files changed, 34 insertions(+), 10 deletions(-)
+ drivers/pinctrl/pinctrl-at91.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/arch/parisc/include/asm/pdc.h b/arch/parisc/include/asm/pdc.h
-index 40793bef8429f..2b4fad8328e85 100644
---- a/arch/parisc/include/asm/pdc.h
-+++ b/arch/parisc/include/asm/pdc.h
-@@ -80,6 +80,7 @@ int pdc_do_firm_test_reset(unsigned long ftc_bitmap);
- int pdc_do_reset(void);
- int pdc_soft_power_info(unsigned long *power_reg);
- int pdc_soft_power_button(int sw_control);
-+int pdc_soft_power_button_panic(int sw_control);
- void pdc_io_reset(void);
- void pdc_io_reset_devices(void);
- int pdc_iodc_getc(void);
-diff --git a/arch/parisc/kernel/firmware.c b/arch/parisc/kernel/firmware.c
-index 6817892a2c585..cc124d9f1f7f7 100644
---- a/arch/parisc/kernel/firmware.c
-+++ b/arch/parisc/kernel/firmware.c
-@@ -1232,15 +1232,18 @@ int __init pdc_soft_power_info(unsigned long *power_reg)
- }
+diff --git a/drivers/pinctrl/pinctrl-at91.c b/drivers/pinctrl/pinctrl-at91.c
+index c405296e49896..2a081b13846e2 100644
+--- a/drivers/pinctrl/pinctrl-at91.c
++++ b/drivers/pinctrl/pinctrl-at91.c
+@@ -18,6 +18,7 @@
+ #include <linux/pm.h>
+ #include <linux/seq_file.h>
+ #include <linux/slab.h>
++#include <linux/string_helpers.h>
  
- /*
-- * pdc_soft_power_button - Control the soft power button behaviour
-- * @sw_control: 0 for hardware control, 1 for software control 
-+ * pdc_soft_power_button{_panic} - Control the soft power button behaviour
-+ * @sw_control: 0 for hardware control, 1 for software control
-  *
-  *
-  * This PDC function places the soft power button under software or
-  * hardware control.
-- * Under software control the OS may control to when to allow to shut 
-- * down the system. Under hardware control pressing the power button 
-+ * Under software control the OS may control to when to allow to shut
-+ * down the system. Under hardware control pressing the power button
-  * powers off the system immediately.
-+ *
-+ * The _panic version relies on spin_trylock to prevent deadlock
-+ * on panic path.
-  */
- int pdc_soft_power_button(int sw_control)
+ /* Since we request GPIOs from ourself */
+ #include <linux/pinctrl/consumer.h>
+@@ -1364,6 +1365,7 @@ static int at91_pinctrl_probe_dt(struct platform_device *pdev,
+ 
+ static int at91_pinctrl_probe(struct platform_device *pdev)
  {
-@@ -1254,6 +1257,22 @@ int pdc_soft_power_button(int sw_control)
- 	return retval;
- }
++	struct device *dev = &pdev->dev;
+ 	struct at91_pinctrl *info;
+ 	struct pinctrl_pin_desc *pdesc;
+ 	int ret, i, j, k, ngpio_chips_enabled = 0;
+@@ -1404,9 +1406,19 @@ static int at91_pinctrl_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
  
-+int pdc_soft_power_button_panic(int sw_control)
-+{
-+	int retval;
-+	unsigned long flags;
+ 	for (i = 0, k = 0; i < gpio_banks; i++) {
++		char **names;
 +
-+	if (!spin_trylock_irqsave(&pdc_lock, flags)) {
-+		pr_emerg("Couldn't enable soft power button\n");
-+		return -EBUSY; /* ignored by the panic notifier */
-+	}
++		names = devm_kasprintf_strarray(dev, "pio", MAX_NB_GPIO_PER_BANK);
++		if (!names)
++			return -ENOMEM;
 +
-+	retval = mem_pdc_call(PDC_SOFT_POWER, PDC_SOFT_POWER_ENABLE, __pa(pdc_result), sw_control);
-+	spin_unlock_irqrestore(&pdc_lock, flags);
+ 		for (j = 0; j < MAX_NB_GPIO_PER_BANK; j++, k++) {
++			char *name = names[j];
 +
-+	return retval;
-+}
++			strreplace(name, '-', i + 'A');
 +
- /*
-  * pdc_io_reset - Hack to avoid overlapping range registers of Bridges devices.
-  * Primarily a problem on T600 (which parisc-linux doesn't support) but
-diff --git a/drivers/parisc/power.c b/drivers/parisc/power.c
-index 456776bd8ee66..6f5e5f0230d39 100644
---- a/drivers/parisc/power.c
-+++ b/drivers/parisc/power.c
-@@ -37,7 +37,6 @@
- #include <linux/module.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
--#include <linux/notifier.h>
- #include <linux/panic_notifier.h>
- #include <linux/reboot.h>
- #include <linux/sched/signal.h>
-@@ -175,16 +174,21 @@ static void powerfail_interrupt(int code, void *x)
+ 			pdesc->number = k;
+-			pdesc->name = kasprintf(GFP_KERNEL, "pio%c%d", i + 'A', j);
++			pdesc->name = name;
+ 			pdesc++;
+ 		}
+ 	}
+@@ -1807,7 +1819,8 @@ static const struct of_device_id at91_gpio_of_match[] = {
  
- 
- 
--/* parisc_panic_event() is called by the panic handler.
-- * As soon as a panic occurs, our tasklets above will not be
-- * executed any longer. This function then re-enables the 
-- * soft-power switch and allows the user to switch off the system
-+/*
-+ * parisc_panic_event() is called by the panic handler.
-+ *
-+ * As soon as a panic occurs, our tasklets above will not
-+ * be executed any longer. This function then re-enables
-+ * the soft-power switch and allows the user to switch off
-+ * the system. We rely in pdc_soft_power_button_panic()
-+ * since this version spin_trylocks (instead of regular
-+ * spinlock), preventing deadlocks on panic path.
-  */
- static int parisc_panic_event(struct notifier_block *this,
- 		unsigned long event, void *ptr)
+ static int at91_gpio_probe(struct platform_device *pdev)
  {
- 	/* re-enable the soft-power switch */
--	pdc_soft_power_button(0);
-+	pdc_soft_power_button_panic(0);
- 	return NOTIFY_DONE;
- }
+-	struct device_node *np = pdev->dev.of_node;
++	struct device *dev = &pdev->dev;
++	struct device_node *np = dev->of_node;
+ 	struct at91_gpio_chip *at91_chip = NULL;
+ 	struct gpio_chip *chip;
+ 	struct pinctrl_gpio_range *range;
+@@ -1876,16 +1889,14 @@ static int at91_gpio_probe(struct platform_device *pdev)
+ 			chip->ngpio = ngpio;
+ 	}
+ 
+-	names = devm_kcalloc(&pdev->dev, chip->ngpio, sizeof(char *),
+-			     GFP_KERNEL);
+-
++	names = devm_kasprintf_strarray(dev, "pio", chip->ngpio);
+ 	if (!names) {
+ 		ret = -ENOMEM;
+ 		goto clk_enable_err;
+ 	}
+ 
+ 	for (i = 0; i < chip->ngpio; i++)
+-		names[i] = devm_kasprintf(&pdev->dev, GFP_KERNEL, "pio%c%d", alias_idx + 'A', i);
++		strreplace(names[i], '-', alias_idx + 'A');
+ 
+ 	chip->names = (const char *const *)names;
  
 -- 
 2.39.2
