@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CD66FD8AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC136FD89E
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236415AbjEJHyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
+        id S236379AbjEJHwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236278AbjEJHyu (ORCPT
+        with ESMTP id S236223AbjEJHw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:54:50 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC4449F5
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:54:15 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-643995a47f7so6936820b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:54:15 -0700 (PDT)
+        Wed, 10 May 2023 03:52:28 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABA7CD
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:52:27 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bc37e1525so13162428a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:52:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1683705255; x=1686297255;
+        d=linaro.org; s=google; t=1683705146; x=1686297146;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7q73aRqorgOcknsCbwBW7p8VJg521sVWQzKmYQBnQok=;
-        b=YaMHHRBqvYEppbP9MhGxOEuJqH2pwde8SRyoa9tntc1oCxq7iQ+Z6jHQMWQYyNlUfH
-         acHzXMBdBmDaGfkjxdZqZiPQ7pbULH3tV+0JoESt2YQwhC8zYB7D5Xwe4bACkbG2bclf
-         /rT4+JaAmlIp6K0OIBrat5TkqefvnGjDJqukWbvwLS5bcVnHPKyeI5YT7ABfF62erQdn
-         nWlEjz9O6NZXFpihkgfzuoRn3Xt3fXCgElkkEF3h/TsiDUM8HiY+FU+EgK+1CVIdES9S
-         QMg3JS7uzAdPFvOljFxfybx/ATIqXO272WGC/amB1cKOm1OFS+kfJtIsxhgd7bHx2ASZ
-         /Ssw==
+        bh=buV1oS+q5zSYMCb+Vk5Sei3x9AdpdZjHmxNoX6GDBRE=;
+        b=Q4XRlsa/ttO62lIK4GlvTimIidf2aZ8yWta4S1EEsfZMxipw4+4vFyoxAMvBO3WFtg
+         SLnrwwacDR91Ltcs6KRK2lB9oz5WNqvkCQ2r6BV2RpFVUuC+bxpxblT5dd1LJ0HuGM1c
+         TZyR+ILO+ItOWB7mfM/2AI9FVgrklZOFMsO7BVyxebCvru0hF4K69Fsh3eWXZrE/vsZD
+         y0IxnpRhuCHlpspg1zMQXxJhTmu+Qy7RveEvP23D77fHuQv/9vJA/T3WaPr1ZxkGLMQv
+         sSPrTIdo2yJeKQnWlS76VfEDyHdcHtENmMxvaKlxhk5Kz2kkyib3R7XGcdbfKOvEZUDW
+         6NhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683705255; x=1686297255;
+        d=1e100.net; s=20221208; t=1683705146; x=1686297146;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7q73aRqorgOcknsCbwBW7p8VJg521sVWQzKmYQBnQok=;
-        b=JEh4QdeP8vhsC7G/BiQKzv0hqb28ThFuf1O48u7vjJ+w9FO81oJV12imtWPI9f01TI
-         DR5FEPY9uywyrsv0NWBFeGHEWEfr0ziGJO4Ucrx3kO03rG83jotctfro2pE9zN3V5kI1
-         1m00XSOFrvoz3mUxv/8xRMEubzPOiuGPlP240iv+fDiCuJmsIksD7eHl6ayu8oKaGKI+
-         8E0VIx9uYEZ2G/XZ6Re5h5E9kOBdy0L5XDp8GxeP6kdAs66gB+4qj50FWhhpVtaca4pr
-         lW24rka1NRUtuD+H9OLibofDnDJrAUbKG6FjG7n7/dBefLzffm+G3+MA8phel0eHuxxs
-         RDYQ==
-X-Gm-Message-State: AC+VfDxQwrvRFibN/TqW6zdESjbSD+c7tSqyNxI3F51NTvftlVW1xUut
-        lXH8Y7VA/cY8+HIxdG7WTRFqDQ==
-X-Google-Smtp-Source: ACHHUZ7S5mZ25pzyjyTGOW2qmzisuZigWqCxJk/tR7QPbGt6SrtGod5RsiwLeeIB3fwbCOD6tTafnw==
-X-Received: by 2002:a05:6a20:918c:b0:100:28e0:6854 with SMTP id v12-20020a056a20918c00b0010028e06854mr14651943pzd.45.1683705255396;
-        Wed, 10 May 2023 00:54:15 -0700 (PDT)
-Received: from [10.3.43.196] ([61.213.176.6])
-        by smtp.gmail.com with ESMTPSA id 17-20020aa79251000000b006468222af91sm2986619pfp.48.2023.05.10.00.54.12
+        bh=buV1oS+q5zSYMCb+Vk5Sei3x9AdpdZjHmxNoX6GDBRE=;
+        b=M1x1VGhrYeVurgNdsdlmoo6o/xTLxQphk7wJyl7Ztvaj/zId3jDjuv7+OVf+Iid7BY
+         o3Rw8khXmylc5RaWvQUGEj3FgQo1x3dWD3F4dX8pMgl96Mhn8rsS26TWuy+CPeAPnvpO
+         7BZUgpODMlukDThhD1QAm8BW5RGLE9WW1JQK+Tpf5yRyjeIg8zRBggxtyNw8NzqJ8G00
+         HxlSXzXnErPdJbNcZz0hz9X2ex7zHwXX9Aevls/bmTmUqZ+Gy/z6dOm4UcNcic1WFBsf
+         Y8XzPrh2eIHG6qd2uigcl1QPWKmHJMPk59vExm4o0yT23fmPgO1+bZf+egDBYBrNZdXn
+         5gUQ==
+X-Gm-Message-State: AC+VfDyX1ZCoGhb/0yVLjK7UuJwsMugq+TxTv+BGkxoLxHu11h3cTIm/
+        T9H1TmRVG1Gd3WGZPBa2a/r7bg==
+X-Google-Smtp-Source: ACHHUZ4PkilMztZzdtCbud0lGz7T8NDnLixfG28NHHOUaUz/5BDZAb+4ZEG6FXuOIsei4a4hftLJhQ==
+X-Received: by 2002:a17:906:fe07:b0:953:8249:1834 with SMTP id wy7-20020a170906fe0700b0095382491834mr13901254ejb.16.1683705145939;
+        Wed, 10 May 2023 00:52:25 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
+        by smtp.gmail.com with ESMTPSA id v20-20020a170906b01400b0096165b2703asm2338115ejy.110.2023.05.10.00.52.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 00:54:14 -0700 (PDT)
-Message-ID: <8254f1bb-dfd0-5ff0-651f-7f664bca65ba@bytedance.com>
-Date:   Wed, 10 May 2023 15:52:13 +0800
+        Wed, 10 May 2023 00:52:24 -0700 (PDT)
+Message-ID: <a575e8df-4882-79bc-ea1b-005961afb77f@linaro.org>
+Date:   Wed, 10 May 2023 09:52:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Re: [PATCH] virtio_ring: use u32 for virtio_max_dma_size
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 8/9] ASoC: dt-bindings: mediatek,mt8188-afe: correct
+ clock name
 Content-Language: en-US
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>,
-        mst@redhat.com, jasowang@redhat.com
-References: <20230510025437.377807-1-pizhenwei@bytedance.com>
- <1683689214.9647853-1-xuanzhuo@linux.alibaba.com>
-From:   zhenwei pi <pizhenwei@bytedance.com>
-In-Reply-To: <1683689214.9647853-1-xuanzhuo@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com
+Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230510035526.18137-1-trevor.wu@mediatek.com>
+ <20230510035526.18137-9-trevor.wu@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230510035526.18137-9-trevor.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -77,95 +81,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/05/2023 05:55, Trevor Wu wrote:
+> The original clock names are different from the list in driver code.
+> Correct the mismatched binding names in the patch.
+> 
+> Because no mt8188 upstream dts exists, it doesn't affect the existing
+> dts file.
+> 
+> Fixes: 692d25b67e10 ("ASoC: dt-bindings: mediatek,mt8188-afe: add audio afe document")
+> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+> ---
+>  .../bindings/sound/mediatek,mt8188-afe.yaml   | 36 +++++++++----------
 
 
-On 5/10/23 11:26, Xuan Zhuo wrote:
-> On Wed, 10 May 2023 10:54:37 +0800, zhenwei pi <pizhenwei@bytedance.com> wrote:
->> Both split ring and packed ring use 32bits to describe the length of
->> a descriptor: see struct vring_desc and struct vring_packed_desc.
->> This means the max segment size supported by virtio is U32_MAX.
->>
->> An example of virtio_max_dma_size in virtio_blk.c:
->>    u32 v, max_size;
->>
->>    max_size = virtio_max_dma_size(vdev);  -> implicit convert
->>    err = virtio_cread_feature(vdev, VIRTIO_BLK_F_SIZE_MAX,
->>                               struct virtio_blk_config, size_max, &v);
->>    max_size = min(max_size, v);
->>
->> There is a risk during implicit convert here, once virtio_max_dma_size
->> returns 4G, max_size becomes 0.
->>
->> Fixes: e6d6dd6c875e ("virtio: Introduce virtio_max_dma_size()")
->> Cc: Joerg Roedel <jroedel@suse.de>
->> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
->> ---
->>   drivers/virtio/virtio_ring.c | 12 ++++++++----
->>   include/linux/virtio.h       |  2 +-
->>   2 files changed, 9 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
->> index c5310eaf8b46..55cfecf030a1 100644
->> --- a/drivers/virtio/virtio_ring.c
->> +++ b/drivers/virtio/virtio_ring.c
->> @@ -289,12 +289,16 @@ static bool vring_use_dma_api(const struct virtio_device *vdev)
->>   	return false;
->>   }
->>
->> -size_t virtio_max_dma_size(const struct virtio_device *vdev)
->> +u32 virtio_max_dma_size(const struct virtio_device *vdev)
-> 
-> 
-> LGTM
-> 
-> But, should we change the parameter to vq, then use the dma_dev?
-> 
-> @Jason
-> 
-> Thanks.
-> 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-The max DMA size is a attribute of a virtio device rather than any VQ, 
-so I guess virtio_max_dma_size(const struct virtio_device *vdev) is clear.
+Best regards,
+Krzysztof
 
-On the other hand, if changing the parameter to vq, we need select a VQ, 
-then the question is:
-1, which VQ to select? VQ0 or a random one? this leads confusing.
-2, The virtio spec defines: Each device can have zero or more virtqueues
-
-
-> 
->>   {
->> -	size_t max_segment_size = SIZE_MAX;
->> +	u32 max_segment_size = U32_MAX;
->>
->> -	if (vring_use_dma_api(vdev))
->> -		max_segment_size = dma_max_mapping_size(vdev->dev.parent);
->> +	if (vring_use_dma_api(vdev)) {
->> +		size_t max_dma_size = dma_max_mapping_size(vdev->dev.parent);
->> +
->> +		if (max_dma_size < max_segment_size)
->> +			max_segment_size = max_dma_size;
->> +	}
->>
->>   	return max_segment_size;
->>   }
->> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
->> index b93238db94e3..1a605f408329 100644
->> --- a/include/linux/virtio.h
->> +++ b/include/linux/virtio.h
->> @@ -147,7 +147,7 @@ int virtio_device_restore(struct virtio_device *dev);
->>   #endif
->>   void virtio_reset_device(struct virtio_device *dev);
->>
->> -size_t virtio_max_dma_size(const struct virtio_device *vdev);
->> +u32 virtio_max_dma_size(const struct virtio_device *vdev);
->>
->>   #define virtio_device_for_each_vq(vdev, vq) \
->>   	list_for_each_entry(vq, &vdev->vqs, list)
->> --
->> 2.20.1
->>
-
--- 
-zhenwei pi
