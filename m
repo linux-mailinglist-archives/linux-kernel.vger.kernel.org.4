@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C666FDF1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C0F6FDF1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237354AbjEJNtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 09:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
+        id S237062AbjEJNt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 09:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237272AbjEJNtX (ORCPT
+        with ESMTP id S237264AbjEJNtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 10 May 2023 09:49:23 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E82D7D96;
-        Wed, 10 May 2023 06:49:19 -0700 (PDT)
-Date:   Wed, 10 May 2023 13:49:12 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E6B132;
+        Wed, 10 May 2023 06:49:20 -0700 (PDT)
+Date:   Wed, 10 May 2023 13:49:13 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683726552;
+        s=2020; t=1683726553;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=daQbWBn3z/bvLFEar+JNX4QlqkiGxgGZ2GC2wZDBP28=;
-        b=KCPxjakpb1DTXH5KU3uqYR8/XSkWM2tuIn9yfutd+3eAdfqC2ZcFTuP7FzDtP4J5E3l2mI
-        9hNBfbOlk5WN2yfVAL3rCpFR8Zq83VuprtiM6SGsE5kTQUCYs2BUtFi2KpP9iTRwXu9X9P
-        +mKlfgFDDZRlNdXVcXrOV/Q8bzYhZpYAvoh1uyAZHAKU3s1rTl7vLKPoLSCzG/+kO478fz
-        rlM7F3ik9yaN/8hPr5MmBI/kJvu4UGsnuvOWvTldMMa2d0r7nhbLRnnDUOpPQiMacN3jGu
-        7YiHggxw14ZvSQWd3jTeMdJjyBxpYbxIcYDhKI1UhMih40JkEToUUgTfaJPULQ==
+        bh=STLE+lEn62lghiT5iyQdNTaJC1NuBzr89zYXWMekTp0=;
+        b=CtPMBuVF7WaWozv6J/2r2cPCspuBicu0mgOKHgKgyZzBmA2IjQbgNibO0EgHXx2zKTGp9w
+        yrHDv+69j1GNkbG1ZFtmnPjO8uM/9SPvfEK1J3Z5WwV6llTPs7sYrwwbNdbYn0Jw5b8WVV
+        aL6Ik/VjNslXFj8AqF37yefAzM0rrwNzwhB14aG5zO+Gk54VOB4/ohf66dbI4OZH2aqVjL
+        dF5ZPnyHBe0rvNYSRTvgcVtuwzG1WsLwfGHMyRmCc9FVcDxacV5iHr62wm+RDzCcPJy28f
+        uPBipye2MbhXDh9LI1y+6+W42TwtFRSwqBdBlKV6jjEvyyxNdx716dZP6fsEzg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683726552;
+        s=2020e; t=1683726553;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=daQbWBn3z/bvLFEar+JNX4QlqkiGxgGZ2GC2wZDBP28=;
-        b=1Nj8HBSJfrBJuU2UTNJp2flUKQ8sxOdyQ2Cv4ddPB2jbLBFYfVCZyVIDAd2m7Hiu/0Pcpd
-        NNUJu6SAv+x/N5DQ==
+        bh=STLE+lEn62lghiT5iyQdNTaJC1NuBzr89zYXWMekTp0=;
+        b=qdK8CC51mcF/5yQ4xwGrP1jwTrcPp0N8/lKICf2Wz09XpBSo7vH9gLUvPvcVpa0+10BJxU
+        un6tQDRg5B0aK/CA==
 From:   "tip-bot2 for Ricardo Neri" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/topology: Check SDF_SHARED_CHILD in
- highest_flag_domain()
-Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
+Subject: [tip: sched/core] sched/fair: Use the busiest group to set prefer_sibling
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230406203148.19182-9-ricardo.neri-calderon@linux.intel.com>
-References: <20230406203148.19182-9-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230406203148.19182-7-ricardo.neri-calderon@linux.intel.com>
+References: <20230406203148.19182-7-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
-Message-ID: <168372655213.404.5276333289857461855.tip-bot2@tip-bot2>
+Message-ID: <168372655311.404.12627370082433827466.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,70 +69,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     40b4d3dc328265c8ec6688657d74813edf785c83
-Gitweb:        https://git.kernel.org/tip/40b4d3dc328265c8ec6688657d74813edf785c83
+Commit-ID:     43726bdedd29797d8e1fee2e7300a6d2b9a74ba8
+Gitweb:        https://git.kernel.org/tip/43726bdedd29797d8e1fee2e7300a6d2b9a74ba8
 Author:        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-AuthorDate:    Thu, 06 Apr 2023 13:31:44 -07:00
+AuthorDate:    Thu, 06 Apr 2023 13:31:42 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 08 May 2023 10:58:36 +02:00
+CommitterDate: Mon, 08 May 2023 10:58:35 +02:00
 
-sched/topology: Check SDF_SHARED_CHILD in highest_flag_domain()
+sched/fair: Use the busiest group to set prefer_sibling
 
-Do not assume that all the children of a scheduling domain have a given
-flag. Check whether it has the SDF_SHARED_CHILD meta flag.
+The prefer_sibling setting acts on the busiest group to move excess tasks
+to the local group. This should be done as per request of the child of the
+busiest group's sched domain, not the local group's.
 
-Suggested-by: Ionela Voinescu <ionela.voinescu@arm.com>
+Using the flags of the child domain of the local group works fortuitously
+if both groups have child domains.
+
+There are cases, however, in which the busiest group's sched domain has
+child but the local group's does not. Consider, for instance a non-SMT
+core (or an SMT core with only one online sibling) doing load balance with
+an SMT core at the MC level. SD_PREFER_SIBLING of the busiest group's child
+domain will not be honored. We are left with a fully busy SMT core and an
+idle non-SMT core.
+
+Suggested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20230406203148.19182-9-ricardo.neri-calderon@linux.intel.com
+Tested-by: Zhang Rui <rui.zhang@intel.com>
+Link: https://lore.kernel.org/r/20230406203148.19182-7-ricardo.neri-calderon@linux.intel.com
 ---
- kernel/sched/sched.h | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ kernel/sched/fair.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index ec7b3e0..6784462 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1772,6 +1772,13 @@ queue_balance_callback(struct rq *rq,
- 	for (__sd = rcu_dereference_check_sched_domain(cpu_rq(cpu)->sd); \
- 			__sd; __sd = __sd->parent)
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 4a9f040..3bb8934 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -10109,7 +10109,6 @@ static void update_idle_cpu_scan(struct lb_env *env,
  
-+/* A mask of all the SD flags that have the SDF_SHARED_CHILD metaflag */
-+#define SD_FLAG(name, mflags) (name * !!((mflags) & SDF_SHARED_CHILD)) |
-+static const unsigned int SD_SHARED_CHILD_MASK =
-+#include <linux/sched/sd_flags.h>
-+0;
-+#undef SD_FLAG
-+
- /**
-  * highest_flag_domain - Return highest sched_domain containing flag.
-  * @cpu:	The CPU whose highest level of sched domain is to
-@@ -1779,16 +1786,25 @@ queue_balance_callback(struct rq *rq,
-  * @flag:	The flag to check for the highest sched_domain
-  *		for the given CPU.
-  *
-- * Returns the highest sched_domain of a CPU which contains the given flag.
-+ * Returns the highest sched_domain of a CPU which contains @flag. If @flag has
-+ * the SDF_SHARED_CHILD metaflag, all the children domains also have @flag.
-  */
- static inline struct sched_domain *highest_flag_domain(int cpu, int flag)
+ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sds)
  {
- 	struct sched_domain *sd, *hsd = NULL;
+-	struct sched_domain *child = env->sd->child;
+ 	struct sched_group *sg = env->sd->groups;
+ 	struct sg_lb_stats *local = &sds->local_stat;
+ 	struct sg_lb_stats tmp_sgs;
+@@ -10150,8 +10149,13 @@ next_group:
+ 		sg = sg->next;
+ 	} while (sg != env->sd->groups);
  
- 	for_each_domain(cpu, sd) {
--		if (!(sd->flags & flag))
-+		if (sd->flags & flag) {
-+			hsd = sd;
-+			continue;
-+		}
-+
-+		/*
-+		 * Stop the search if @flag is known to be shared at lower
-+		 * levels. It will not be found further up.
-+		 */
-+		if (flag & SD_SHARED_CHILD_MASK)
- 			break;
--		hsd = sd;
+-	/* Tag domain that child domain prefers tasks go to siblings first */
+-	sds->prefer_sibling = child && child->flags & SD_PREFER_SIBLING;
++	/*
++	 * Indicate that the child domain of the busiest group prefers tasks
++	 * go to a child's sibling domains first. NB the flags of a sched group
++	 * are those of the child domain.
++	 */
++	if (sds->busiest)
++		sds->prefer_sibling = !!(sds->busiest->flags & SD_PREFER_SIBLING);
+ 
+ 
+ 	if (env->sd->flags & SD_NUMA)
+@@ -10461,7 +10465,10 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+ 			goto out_balanced;
  	}
  
- 	return hsd;
+-	/* Try to move all excess tasks to child's sibling domain */
++	/*
++	 * Try to move all excess tasks to a sibling domain of the busiest
++	 * group's child domain.
++	 */
+ 	if (sds.prefer_sibling && local->group_type == group_has_spare &&
+ 	    busiest->sum_nr_running > local->sum_nr_running + 1)
+ 		goto force_balance;
