@@ -2,123 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E036FDD8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0136FDD93
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236268AbjEJMRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 08:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55848 "EHLO
+        id S236701AbjEJMTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 08:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236975AbjEJMRJ (ORCPT
+        with ESMTP id S234032AbjEJMTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 08:17:09 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844BC7EE6;
-        Wed, 10 May 2023 05:16:52 -0700 (PDT)
+        Wed, 10 May 2023 08:19:36 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E108AF3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:19:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1683721012; x=1715257012;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683721174; x=1715257174;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=c0LtGL7zvuyoxmCVFA1srE+yHPP0jp3sH5qXd5mFOug=;
-  b=Ma9nUqUaNloHrr3LpEi8uA2s2ZkI8wtDR2N4Rl/SIXXCeODmncAb6rny
-   4wbCh0Fq4GwDo2w2Pb6UBD/ux0SgJaPvdauvkb5NQY1nDMNGpvJMfwkIt
-   B5LUAiRgMJEmLwDUXEUpZDjGbzLj9EkidbsjZ/gLtOWiJSzCK/BFQpwK8
-   DlUEb7snYL/902HtkwcbjKLcyt28rr/GabynQkUuvVqAfvNGagaDeB+1t
-   GfpJWq3T/bPu1v4UZRCAmmz3ZeCp3x9pND/6cR6BRxBFgCGjnwluDSY28
-   v2BSlZqJvHetOC2S2i14HHci9et5UVAaAF0fo6BG2mNx4vU0Zy75rNbRA
+  bh=qq8fVQ7gjdkMiSHS1W+8BaigREYmj/b60CdMkbnsI0I=;
+  b=kuSb2OQjNVfS5vlx+OCIh42RwftdNBMPsu33NoVnNgZLqtKQCAXDfWdd
+   UmIKdysjTLS9ydxxzcabn6Mco3SEGGfRb+LdvpHgAq0Vu7paAJiXyhmll
+   YNCuSJdOpi7eMYz7l5DCyXRK+xflOPvA+9PkflXLatYBpm7mDyGyJYpiT
+   nqe97d5sb7pEuy9HAR4M63UgIPeYH5Y32hXg77DOvH1vf8M1+HfvbNrQe
+   BONSgZGKa0iLqwOYP3ZsqxKL2+D43q4YFfBJGH/5lBdemwLKRoO387k2c
+   6IoNOGlNpHWsyoHY09XVRHLoD09hgkhB4cpzLBf5HYKi5VYEpZXOigiDA
    w==;
-X-IronPort-AV: E=Sophos;i="5.99,264,1677567600"; 
-   d="asc'?scan'208";a="210553509"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 May 2023 05:16:50 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 10 May 2023 05:16:45 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 10 May 2023 05:16:43 -0700
-Date:   Wed, 10 May 2023 13:16:23 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-CC:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="330561055"
+X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
+   d="scan'208";a="330561055"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 05:19:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="1029195409"
+X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
+   d="scan'208";a="1029195409"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 10 May 2023 05:19:30 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwin3-0003GQ-2R;
+        Wed, 10 May 2023 12:19:29 +0000
+Date:   Wed, 10 May 2023 20:18:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <iommu@lists.linux.dev>
-Subject: Re: [PATCH v3 04/11] dt-bindings: interrupt-controller: Add RISC-V
- incoming MSI controller
-Message-ID: <20230510-untried-duvet-7e3c230fcefd@wendy>
-References: <20230508142842.854564-1-apatel@ventanamicro.com>
- <20230508142842.854564-5-apatel@ventanamicro.com>
+        linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Subject: Re: [PATCH 2/3] linux/bits.h: Add fixed-width GENMASK and BIT macros
+Message-ID: <202305102048.2O5u4Wia-lkp@intel.com>
+References: <20230509051403.2748545-3-lucas.demarchi@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="yuw4pefuYIA+XBN4"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230508142842.854564-5-apatel@ventanamicro.com>
+In-Reply-To: <20230509051403.2748545-3-lucas.demarchi@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---yuw4pefuYIA+XBN4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Lucas,
 
-Hey Anup,
+kernel test robot noticed the following build errors:
 
-On Mon, May 08, 2023 at 07:58:35PM +0530, Anup Patel wrote:
-> +  interrupts-extended:
-> +    minItems: 1
-> +    maxItems: 16384
-> +    description:
-> +      This property represents the set of CPUs (or HARTs) for which given
-> +      device tree node describes the IMSIC interrupt files. Each node pointed
-> +      to should be a riscv,cpu-intc node, which has a riscv node (i.e. RISC-V
-> +      HART) as parent.
+[auto build test ERROR on drm-intel/for-linux-next]
+[also build test ERROR on drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.4-rc1 next-20230510]
+[cannot apply to drm-misc/drm-misc-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-One minor nit here about wording - "riscv node" doesn't seem
-particularly clear to me, should it be s/riscv node/cpu node/?
+url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-De-Marchi/drm-amd-Remove-wrapper-macros-over-get_u-32-16-8/20230509-131544
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+patch link:    https://lore.kernel.org/r/20230509051403.2748545-3-lucas.demarchi%40intel.com
+patch subject: [PATCH 2/3] linux/bits.h: Add fixed-width GENMASK and BIT macros
+config: arm64-randconfig-r021-20230509 (https://download.01.org/0day-ci/archive/20230510/202305102048.2O5u4Wia-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/dc308f14f76fa2d6c1698a701dfbe0f1b247e6bd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Lucas-De-Marchi/drm-amd-Remove-wrapper-macros-over-get_u-32-16-8/20230509-131544
+        git checkout dc308f14f76fa2d6c1698a701dfbe0f1b247e6bd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash lib/
 
-My only thing last time around was my misunderstanding, and you also
-appear to have resolved Rob's complaints, so:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305102048.2O5u4Wia-lkp@intel.com/
 
-Just to note, it'd be great if you could CC me on series that I've
-already reviewed when you resubmit them?
-Although in this case, if you ran get_maintainer.pl on v6.4-rc1 it'd have
-told you to CC me anyway ;)
+All errors (new ones prefixed by >>):
 
-Thanks,
-Conor.
+>> lib/zstd/compress/zstd_opt.c:785:9: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   typedef U32 (*ZSTD_getAllMatchesFn)(
+   ~~~~~~~ ^
+   int
+   include/vdso/const.h:7:18: note: expanded from macro 'U32'
+   #define U32(x)          (_U32(x))
+                            ^
+   include/uapi/linux/const.h:25:19: note: expanded from macro '_U32'
+   #define _U32(x)         (_AC(x, U))
+                            ^
+   include/uapi/linux/const.h:21:18: note: expanded from macro '_AC'
+   #define _AC(X,Y)        __AC(X,Y)
+                           ^
+   include/uapi/linux/const.h:20:20: note: expanded from macro '__AC'
+   #define __AC(X,Y)       (X##Y)
+                            ^
+   <scratch space>:178:1: note: expanded from here
+   ZSTD_getAllMatchesFnU
+   ^
+>> lib/zstd/compress/zstd_opt.c:851:8: error: unknown type name 'ZSTD_getAllMatchesFn'; did you mean 'ZSTD_getAllMatchesFnU'?
+   static ZSTD_getAllMatchesFn
+          ^~~~~~~~~~~~~~~~~~~~
+          ZSTD_getAllMatchesFnU
+   lib/zstd/compress/zstd_opt.c:785:9: note: 'ZSTD_getAllMatchesFnU' declared here
+   typedef U32 (*ZSTD_getAllMatchesFn)(
+           ^
+   include/vdso/const.h:7:18: note: expanded from macro 'U32'
+   #define U32(x)          (_U32(x))
+                            ^
+   include/uapi/linux/const.h:25:19: note: expanded from macro '_U32'
+   #define _U32(x)         (_AC(x, U))
+                            ^
+   include/uapi/linux/const.h:21:18: note: expanded from macro '_AC'
+   #define _AC(X,Y)        __AC(X,Y)
+                           ^
+   include/uapi/linux/const.h:20:20: note: expanded from macro '__AC'
+   #define __AC(X,Y)       (X##Y)
+                            ^
+   <scratch space>:178:1: note: expanded from here
+   ZSTD_getAllMatchesFnU
+   ^
+>> lib/zstd/compress/zstd_opt.c:854:5: error: use of undeclared identifier 'ZSTD_getAllMatchesFn'
+       ZSTD_getAllMatchesFn const getAllMatchesFns[3][4] = {
+       ^
+>> lib/zstd/compress/zstd_opt.c:862:12: error: use of undeclared identifier 'getAllMatchesFns'
+       return getAllMatchesFns[(int)dictMode][mls - 3];
+              ^
+   lib/zstd/compress/zstd_opt.c:1054:5: error: unknown type name 'ZSTD_getAllMatchesFn'; did you mean 'ZSTD_getAllMatchesFnU'?
+       ZSTD_getAllMatchesFn getAllMatches = ZSTD_selectBtGetAllMatches(ms, dictMode);
+       ^~~~~~~~~~~~~~~~~~~~
+       ZSTD_getAllMatchesFnU
+   lib/zstd/compress/zstd_opt.c:785:9: note: 'ZSTD_getAllMatchesFnU' declared here
+   typedef U32 (*ZSTD_getAllMatchesFn)(
+           ^
+   include/vdso/const.h:7:18: note: expanded from macro 'U32'
+   #define U32(x)          (_U32(x))
+                            ^
+   include/uapi/linux/const.h:25:19: note: expanded from macro '_U32'
+   #define _U32(x)         (_AC(x, U))
+                            ^
+   include/uapi/linux/const.h:21:18: note: expanded from macro '_AC'
+   #define _AC(X,Y)        __AC(X,Y)
+                           ^
+   include/uapi/linux/const.h:20:20: note: expanded from macro '__AC'
+   #define __AC(X,Y)       (X##Y)
+                            ^
+   <scratch space>:178:1: note: expanded from here
+   ZSTD_getAllMatchesFnU
+   ^
+   5 errors generated.
 
---yuw4pefuYIA+XBN4
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+vim +/int +785 lib/zstd/compress/zstd_opt.c
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFuLFwAKCRB4tDGHoIJi
-0rSoAQDigVc1zoOIAq0GeK2C6LRDT48ecB1I90Fv+aw41IVdHwEApAt8ew3bob+u
-Bn7gu+nIK1drEkZwQYODA5bMAVpuzwA=
-=g+th
------END PGP SIGNATURE-----
+e0c1b49f5b674c Nick Terrell 2020-09-11  784  
+2aa14b1ab2c41a Nick Terrell 2022-10-17 @785  typedef U32 (*ZSTD_getAllMatchesFn)(
+2aa14b1ab2c41a Nick Terrell 2022-10-17  786      ZSTD_match_t*,
+2aa14b1ab2c41a Nick Terrell 2022-10-17  787      ZSTD_matchState_t*,
+2aa14b1ab2c41a Nick Terrell 2022-10-17  788      U32*,
+2aa14b1ab2c41a Nick Terrell 2022-10-17  789      const BYTE*,
+2aa14b1ab2c41a Nick Terrell 2022-10-17  790      const BYTE*,
+2aa14b1ab2c41a Nick Terrell 2022-10-17  791      const U32 rep[ZSTD_REP_NUM],
+2aa14b1ab2c41a Nick Terrell 2022-10-17  792      U32 const ll0,
+2aa14b1ab2c41a Nick Terrell 2022-10-17  793      U32 const lengthToBeat);
+e0c1b49f5b674c Nick Terrell 2020-09-11  794  
+2aa14b1ab2c41a Nick Terrell 2022-10-17  795  FORCE_INLINE_TEMPLATE U32 ZSTD_btGetAllMatches_internal(
+2aa14b1ab2c41a Nick Terrell 2022-10-17  796          ZSTD_match_t* matches,
+e0c1b49f5b674c Nick Terrell 2020-09-11  797          ZSTD_matchState_t* ms,
+e0c1b49f5b674c Nick Terrell 2020-09-11  798          U32* nextToUpdate3,
+2aa14b1ab2c41a Nick Terrell 2022-10-17  799          const BYTE* ip,
+2aa14b1ab2c41a Nick Terrell 2022-10-17  800          const BYTE* const iHighLimit,
+e0c1b49f5b674c Nick Terrell 2020-09-11  801          const U32 rep[ZSTD_REP_NUM],
+e0c1b49f5b674c Nick Terrell 2020-09-11  802          U32 const ll0,
+2aa14b1ab2c41a Nick Terrell 2022-10-17  803          U32 const lengthToBeat,
+2aa14b1ab2c41a Nick Terrell 2022-10-17  804          const ZSTD_dictMode_e dictMode,
+2aa14b1ab2c41a Nick Terrell 2022-10-17  805          const U32 mls)
+e0c1b49f5b674c Nick Terrell 2020-09-11  806  {
+2aa14b1ab2c41a Nick Terrell 2022-10-17  807      assert(BOUNDED(3, ms->cParams.minMatch, 6) == mls);
+2aa14b1ab2c41a Nick Terrell 2022-10-17  808      DEBUGLOG(8, "ZSTD_BtGetAllMatches(dictMode=%d, mls=%u)", (int)dictMode, mls);
+2aa14b1ab2c41a Nick Terrell 2022-10-17  809      if (ip < ms->window.base + ms->nextToUpdate)
+2aa14b1ab2c41a Nick Terrell 2022-10-17  810          return 0;   /* skipped area */
+2aa14b1ab2c41a Nick Terrell 2022-10-17  811      ZSTD_updateTree_internal(ms, ip, iHighLimit, mls, dictMode);
+2aa14b1ab2c41a Nick Terrell 2022-10-17  812      return ZSTD_insertBtAndGetAllMatches(matches, ms, nextToUpdate3, ip, iHighLimit, dictMode, rep, ll0, lengthToBeat, mls);
+2aa14b1ab2c41a Nick Terrell 2022-10-17  813  }
+2aa14b1ab2c41a Nick Terrell 2022-10-17  814  
+2aa14b1ab2c41a Nick Terrell 2022-10-17  815  #define ZSTD_BT_GET_ALL_MATCHES_FN(dictMode, mls) ZSTD_btGetAllMatches_##dictMode##_##mls
+2aa14b1ab2c41a Nick Terrell 2022-10-17  816  
+2aa14b1ab2c41a Nick Terrell 2022-10-17  817  #define GEN_ZSTD_BT_GET_ALL_MATCHES_(dictMode, mls)            \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  818      static U32 ZSTD_BT_GET_ALL_MATCHES_FN(dictMode, mls)(      \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  819              ZSTD_match_t* matches,                             \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  820              ZSTD_matchState_t* ms,                             \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  821              U32* nextToUpdate3,                                \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  822              const BYTE* ip,                                    \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  823              const BYTE* const iHighLimit,                      \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  824              const U32 rep[ZSTD_REP_NUM],                       \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  825              U32 const ll0,                                     \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  826              U32 const lengthToBeat)                            \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  827      {                                                          \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  828          return ZSTD_btGetAllMatches_internal(                  \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  829                  matches, ms, nextToUpdate3, ip, iHighLimit,    \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  830                  rep, ll0, lengthToBeat, ZSTD_##dictMode, mls); \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  831      }
+2aa14b1ab2c41a Nick Terrell 2022-10-17  832  
+2aa14b1ab2c41a Nick Terrell 2022-10-17  833  #define GEN_ZSTD_BT_GET_ALL_MATCHES(dictMode)  \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  834      GEN_ZSTD_BT_GET_ALL_MATCHES_(dictMode, 3)  \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  835      GEN_ZSTD_BT_GET_ALL_MATCHES_(dictMode, 4)  \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  836      GEN_ZSTD_BT_GET_ALL_MATCHES_(dictMode, 5)  \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  837      GEN_ZSTD_BT_GET_ALL_MATCHES_(dictMode, 6)
+2aa14b1ab2c41a Nick Terrell 2022-10-17  838  
+2aa14b1ab2c41a Nick Terrell 2022-10-17  839  GEN_ZSTD_BT_GET_ALL_MATCHES(noDict)
+2aa14b1ab2c41a Nick Terrell 2022-10-17  840  GEN_ZSTD_BT_GET_ALL_MATCHES(extDict)
+2aa14b1ab2c41a Nick Terrell 2022-10-17  841  GEN_ZSTD_BT_GET_ALL_MATCHES(dictMatchState)
+2aa14b1ab2c41a Nick Terrell 2022-10-17  842  
+2aa14b1ab2c41a Nick Terrell 2022-10-17  843  #define ZSTD_BT_GET_ALL_MATCHES_ARRAY(dictMode)  \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  844      {                                            \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  845          ZSTD_BT_GET_ALL_MATCHES_FN(dictMode, 3), \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  846          ZSTD_BT_GET_ALL_MATCHES_FN(dictMode, 4), \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  847          ZSTD_BT_GET_ALL_MATCHES_FN(dictMode, 5), \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  848          ZSTD_BT_GET_ALL_MATCHES_FN(dictMode, 6)  \
+2aa14b1ab2c41a Nick Terrell 2022-10-17  849      }
+2aa14b1ab2c41a Nick Terrell 2022-10-17  850  
+2aa14b1ab2c41a Nick Terrell 2022-10-17 @851  static ZSTD_getAllMatchesFn
+2aa14b1ab2c41a Nick Terrell 2022-10-17  852  ZSTD_selectBtGetAllMatches(ZSTD_matchState_t const* ms, ZSTD_dictMode_e const dictMode)
+e0c1b49f5b674c Nick Terrell 2020-09-11  853  {
+2aa14b1ab2c41a Nick Terrell 2022-10-17 @854      ZSTD_getAllMatchesFn const getAllMatchesFns[3][4] = {
+2aa14b1ab2c41a Nick Terrell 2022-10-17  855          ZSTD_BT_GET_ALL_MATCHES_ARRAY(noDict),
+2aa14b1ab2c41a Nick Terrell 2022-10-17  856          ZSTD_BT_GET_ALL_MATCHES_ARRAY(extDict),
+2aa14b1ab2c41a Nick Terrell 2022-10-17  857          ZSTD_BT_GET_ALL_MATCHES_ARRAY(dictMatchState)
+2aa14b1ab2c41a Nick Terrell 2022-10-17  858      };
+2aa14b1ab2c41a Nick Terrell 2022-10-17  859      U32 const mls = BOUNDED(3, ms->cParams.minMatch, 6);
+2aa14b1ab2c41a Nick Terrell 2022-10-17  860      assert((U32)dictMode < 3);
+2aa14b1ab2c41a Nick Terrell 2022-10-17  861      assert(mls - 3 < 4);
+2aa14b1ab2c41a Nick Terrell 2022-10-17 @862      return getAllMatchesFns[(int)dictMode][mls - 3];
+e0c1b49f5b674c Nick Terrell 2020-09-11  863  }
+e0c1b49f5b674c Nick Terrell 2020-09-11  864  
 
---yuw4pefuYIA+XBN4--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
