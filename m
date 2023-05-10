@@ -2,351 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B3F6FDC90
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2BA6FDC6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236410AbjEJLVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 07:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
+        id S236594AbjEJLQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 07:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235609AbjEJLVr (ORCPT
+        with ESMTP id S229656AbjEJLQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 07:21:47 -0400
-X-Greylist: delayed 180 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 10 May 2023 04:21:42 PDT
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D57A1;
-        Wed, 10 May 2023 04:21:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1683717337; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=J+1EAuLJokg4C+dYGA0M6FoT04+N0uIEdidg6fxEqu7O8uAh9UfKzqHNZBLTCQzwFK
-    XAOSmFBB/b8Z98K5hzEfzVFNEPAhIHl6RZy3fYjS4ckoYo/kWHAeGCYgoGNUyFtxUYR7
-    0RNkNaY6750lkBz+JDMYx3Qq2w6yfvAVYD4fxCZB+3XrYNKR1llbnx3ORXI+6CfWcr0q
-    jHNlq7hmN67LloB6d7379XRVv1Ve193lkYRAzv5yMhr+5jnMfUQFQLmRsA3MmtjgSMwY
-    px9olVKdogHpkVLwd/R3DWAXd4trPjJPBjFgxzTNl4yRr6oVKiKG9yIcpAtXjmAhCIpD
-    p26g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1683717337;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=7upIsiVeWndtxTPEBohl0p4xeRRcIer4RHSycw0Iylc=;
-    b=qwIkRBmchJCasA1tSz9XLAnfTWktHBnjuCbvi4t9uEepKk+ILHFnwkZbydkP6Es2jw
-    UU1FbYc78cFaP0fwT94KB7qtdmFf+RGkqA5w7zetDe9SOwaGsWUOhx4A59/f6SvS2Jup
-    yr/xiYraPjO/ZKUK0QAUtwmgLVT2YoOIJbi5uFn4cT8SKaEeAv4F/Mk01bem1p719VvP
-    D5OWddEBvi2HHXuLdW5dRFIY1aXSlTxFlHcbys56QO5fdZ30Hq9TqoG6yOxe2XUVYQYR
-    J9khQqCKW1Ia81RKtzyuxNFV2+dujSabgxIPxvxN2WRmozKhW7iszvUyArXzziQM5zoa
-    5HIw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1683717337;
-    s=strato-dkim-0002; d=ict42.de;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=7upIsiVeWndtxTPEBohl0p4xeRRcIer4RHSycw0Iylc=;
-    b=KZKkrfyZwraiqMYEGOyo6/cW6cCCA0styhP/i8W0tUXDkBql+vpUUHum6eBF1cW2hy
-    EQpHaLB8WcLNRmNQSpuhousw0HUQKpmBMmE4oqcwzCaDPcep4KR3IEzHRX0FXjLyjpKn
-    BhNjxE6L5oeP6wFUZj33yWDhYrQBmBPbkEwagOmLX6V+zYpXdDKd98Rvk9HfE3bq1qo/
-    XPcmbus/uJtC11Pt/yQ7YNhdwHVGromSUIcD0DDkmDPoiSSR2x02j+1CzqvDLC4CciPz
-    i/cHiSYNR7TONHzxaJIvhka08VVovcUGd+d3DlilD5HUoEbOYU22RgZ4Xh8FN2ZNhyox
-    1jpA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1683717337;
-    s=strato-dkim-0003; d=ict42.de;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=7upIsiVeWndtxTPEBohl0p4xeRRcIer4RHSycw0Iylc=;
-    b=+pqbGB/04rS3mmSZAC0A8ZucTCv6qiY+i6g+UueA4l4eUgB0hnGdpfOplKoHhkzlug
-    EZOldJ7vJ5UcsVMzTOAg==
-X-RZG-AUTH: ":IHkAYkmvNfSwjg/qSc4u8zZOVaURsoXe3UH2mQA0KglxDI1B7BeEcdPLARTmoNSwY8PK6ePqLwYCwAs="
-Received: from debian-test.local.in-circuit.de
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id R2b608z4ABFaJXx
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 10 May 2023 13:15:36 +0200 (CEST)
-From:   Ludwig Kormann <ludwig.kormann@ict42.de>
-To:     samuel@sholland.org, jernej.skrabec@gmail.com, wens@csie.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andre.przywara@arm.com
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/2] arm: dts: sunxi: Add ICnova A20 ADB4006 board
-Date:   Wed, 10 May 2023 13:15:28 +0200
-Message-Id: <20230510111528.2155582-3-ludwig.kormann@ict42.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230510111528.2155582-1-ludwig.kormann@ict42.de>
-References: <20230510111528.2155582-1-ludwig.kormann@ict42.de>
-MIME-Version: 1.0
+        Wed, 10 May 2023 07:16:28 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F831732;
+        Wed, 10 May 2023 04:16:25 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f475366514so4905665e9.2;
+        Wed, 10 May 2023 04:16:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683717384; x=1686309384;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pBsIndB/0JBmV2qr33mCTEeeS4Iy2jxh4GLVwKZXMKo=;
+        b=iqcXJrveVHEU+GGtZG8f4wqg4YspiZKIHvie8TtfVwGgTD3tvMR0xvGhZZ+HoWynG1
+         tiWh37AR3cI3KXwzfwrmATe8liUZzPRsaQLrv9r3X6DcTCVriQERbmMMBZGgl/7kcokv
+         ZTmlvGG/OnxLo/bHNt58wE8sPHrH517gvo60eesWA/laL4yfQWxrhP8K23wwBsqFP/eS
+         e3JNZjcp39c37KFewemN05oTv2E3O2YfBbIG8ZA+6YohNs8VXkFR+MlEo2UiYcS7z1E3
+         6Fb8VqHQEPXdWhcLUA6EMPTN/ycQSFiNTSC988uv0nuS9Th3TSGI/kGQYg7Ng5A8MnL1
+         iztQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683717384; x=1686309384;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pBsIndB/0JBmV2qr33mCTEeeS4Iy2jxh4GLVwKZXMKo=;
+        b=FpjIr0u0uzLTrwXfoMfWATMV1E8mP9/kxzLKGVEscT1SZW6xdtkYxGQCYJh+OcaPrO
+         j+4MCYf3DyuD4zeab4Ah14qwnphYKiLjAK6AsulQcNHzFDFAf/7NZeWRMB3HWwS2HitZ
+         jMpDEk/hg/UW+gORS2qpJ7esw8kUltR+qFCO1L61Ivx1fpJG6QIo3sQYoxIfv+Blo+e+
+         Q728IL3iZp1/9rsU5iKzJNZDDUCCuaFumCeOISzitWU2IIBtBB9RI0MN91MVb6xUmrI7
+         97kGPazjSidSX2VSlbYCyjhjCm9AyQK/tQbaY1bI9oHF2neSzykkSvEeDdMIu4mcRyLo
+         v7nA==
+X-Gm-Message-State: AC+VfDxtR0aUGSksexddjT8n1pgzmAWDSfQBBfQ4Y9lsMXCSmvSCp0ge
+        bg2D78GdJ1ShbM8dIRxPj0I/UdXoFwVWFdSMKyw=
+X-Google-Smtp-Source: ACHHUZ6CkBmwDOlHCbYrI/mphVqzmMF7zFthMe87Sh8XjvMWEmrUJjFgtJQjuQrwXn/I0+sYY1bmIg==
+X-Received: by 2002:a05:600c:28f:b0:3f1:8430:523 with SMTP id 15-20020a05600c028f00b003f184300523mr12094415wmk.14.1683717384131;
+        Wed, 10 May 2023 04:16:24 -0700 (PDT)
+Received: from localhost ([146.70.133.78])
+        by smtp.gmail.com with ESMTPSA id f4-20020adffcc4000000b003063d83a168sm16937426wrs.26.2023.05.10.04.16.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 04:16:23 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Wed, 10 May 2023 13:16:21 +0200
+Message-Id: <CSIJZYWBC38N.2M99O6W1PLR4B@vincent-arch>
+Cc:     <linux-pci@vger.kernel.org>, <robh@kernel.org>, <heiko@sntech.de>,
+        <kw@linux.com>, <shawn.lin@rock-chips.com>,
+        <linux-kernel@vger.kernel.org>, <lgirdwood@gmail.com>,
+        <linux-rockchip@lists.infradead.org>, <broonie@kernel.org>,
+        <bhelgaas@google.com>,
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        <lpieralisi@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        "Dan Johansen" <strit@manjaro.org>
+Subject: Re: [PATCH v1] drivers: pci: introduce configurable delay for
+ Rockchip PCIe bus scan
+From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
+To:     "Peter Geis" <pgwipeout@gmail.com>,
+        "Bjorn Helgaas" <helgaas@kernel.org>
+X-Mailer: aerc 0.15.1
+References: <20230509153912.515218-1-vincenzopalazzodev@gmail.com>
+ <20230509211902.GA1270901@bhelgaas>
+ <CAMdYzYp6=mYSoUHN3TEXVSMbRt1HpRm0X_4RMez09V0XzQewaw@mail.gmail.com>
+In-Reply-To: <CAMdYzYp6=mYSoUHN3TEXVSMbRt1HpRm0X_4RMez09V0XzQewaw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add board support for ICnova A20 SomPi compute module on
-ICnova ADB4006 development board.
+> On Tue, May 9, 2023 at 5:19=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org>=
+ wrote:
+> >
+> > Hi Vincenzo,
+> >
+> > Thanks for raising this issue.  Let's see what we can do to address
+> > it.
+> >
+> > On Tue, May 09, 2023 at 05:39:12PM +0200, Vincenzo Palazzo wrote:
+> > > Add a configurable delay to the Rockchip PCIe driver to address
+> > > crashes that occur on some old devices, such as the Pine64 RockPro64.
+> > >
+> > > This issue is affecting the ARM community, but there is no
+> > > upstream solution for it yet.
+> >
+> > It sounds like this happens with several endpoints, right?  And I
+> > assume the endpoints work fine in other non-Rockchip systems?  If
+> > that's the case, my guess is the problem is with the Rockchip host
+> > controller and how it's initialized, not with the endpoints.
+> >
+> > The only delays and timeouts I see in the driver now are in
+> > rockchip_pcie_host_init_port(), where it waits for link training to
+> > complete.  I assume the link training did completely successfully
+> > since you don't mention either a gen1 or gen2 timeout (although the
+> > gen2 message is a dev_dbg() that normally wouldn't go to the console).
+> >
+> > I don't know that the spec contains a retrain timeout value.  Several
+> > other drivers use 1 second, while rockchip uses 500ms (for example,
+> > see LINK_RETRAIN_TIMEOUT and LINK_UP_TIMEOUT).
+> >
+> > I think we need to understand the issue better before adding a DT
+> > property and a module parameter.  Those are hard for users to deal
+> > with.  If we can figure out a value that works for everybody, it would
+> > be better to just hard-code it in the driver and use that all the
+> > time.
+>
+> Good Evening,
+>
+> The main issue with the rk3399 is the PCIe controller is buggy and
+> triggers a SoC panic when certain error conditions occur that should
+> be handled gracefully. One of those conditions is when an endpoint
+> requests an access to wait and retry later. Many years ago we ran that
+> issue to ground and with Robin Murphy's help we found that while it's
+> possible to gracefully handle that condition it required hijacking the
+> entire arm64 error handling routine. Not exactly scalable for just one
+> SoC. The configurable waits allow us to program reasonable times for
+> 90% of the endpoints that come up in the normal amount of time, while
+> being able to adjust it for the other 10% that do not. Some require
+> multiple seconds before they return without error. Part of the reason
+> we don't want to hardcode the wait time is because the probe isn't
+> handled asynchronously, so the kernel appears to hang while waiting
+> for the timeout.
 
-Specification:
-SoM
-- Processor: Allwinner A20 Cortex-A7 Dual Core at 1GHz
-- 512MB DDR3 RAM
-- Fast Ethernet (Phy: Realtek RTL8201CP)
-ADB4006
-- I2C
-- 2x USB 2.0
-- 1x Fast Ethernet port
-- 1x SATA
-- 2x buttons (PWRON, Boot)
-- 2x LEDS
-- serial console
-- HDMI
-- µSD-Card slot
-- Audio Line-In / Line-Out
-- GPIO pinheaders
+Yeah, I smell a hardware bug in my code. I hate waiting in this way inside=
+=20
+the code, so it's usually wrong when you need to do something like that.
 
-https://wiki.in-circuit.de/index.php5?title=ICnova_ADB4006
-https://wiki.in-circuit.de/index.php5?title=ICnova_A20_SODIMM
+During my research, I also found this patch (https://bugzilla.redhat.com/sh=
+ow_bug.cgi?id=3D2134177)=20
+that provides a fix in another possibly cleaner way.
 
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-Signed-off-by: Ludwig Kormann <ludwig.kormann@ict42.de>
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/sun7i-a20-icnova-a20-adb4006.dts | 137 ++++++++++++++++++
- arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi   |  62 ++++++++
- 3 files changed, 200 insertions(+)
- create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
- create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
+But I don't understand the reasoning behind it, so maybe I=20
+haven't spent enough time thinking about it.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 59829fc90315..b4e10c379edf 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1335,6 +1335,7 @@ dtb-$(CONFIG_MACH_SUN7I) += \
- 	sun7i-a20-hummingbird.dtb \
- 	sun7i-a20-itead-ibox.dtb \
- 	sun7i-a20-i12-tvbox.dtb \
-+	sun7i-a20-icnova-a20-adb4006.dtb \
- 	sun7i-a20-icnova-swac.dtb \
- 	sun7i-a20-lamobo-r1.dtb \
- 	sun7i-a20-linutronix-testbox-v2.dtb \
-diff --git a/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts b/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
-new file mode 100644
-index 000000000000..577ead1d02a0
---- /dev/null
-+++ b/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
-@@ -0,0 +1,137 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+// Copyright (C) 2023 In-Circuit GmbH
-+
-+/dts-v1/;
-+
-+#include "sun7i-a20-icnova-a20.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	model = "In-Circuit ICnova A20 ADB4006";
-+	compatible = "incircuit,icnova-a20-adb4006", "incircuit,icnova-a20",
-+		     "allwinner,sun7i-a20";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	hdmi-connector {
-+		compatible = "hdmi-connector";
-+		type = "a";
-+
-+		port {
-+			hdmi_con_in: endpoint {
-+				remote-endpoint = <&hdmi_out_con>;
-+			};
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-0 {
-+			function = LED_FUNCTION_POWER;
-+			color = <LED_COLOR_ID_YELLOW>;
-+			gpios = <&pio 7 21 GPIO_ACTIVE_HIGH>; /* PH21 */
-+			default-state = "on";
-+		};
-+
-+		led-1 {
-+			function = LED_FUNCTION_HEARTBEAT;
-+			color = <LED_COLOR_ID_RED>;
-+			gpios = <&pio 7 20 GPIO_ACTIVE_HIGH>; /* PH20 */
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+};
-+
-+&ahci {
-+	target-supply = <&reg_ahci_5v>;
-+	status = "okay";
-+};
-+
-+&codec {
-+	status = "okay";
-+};
-+
-+&de {
-+	status = "okay";
-+};
-+
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&ehci1 {
-+	status = "okay";
-+};
-+
-+&hdmi {
-+	status = "okay";
-+};
-+
-+&hdmi_out {
-+	hdmi_out_con: endpoint {
-+		remote-endpoint = <&hdmi_con_in>;
-+	};
-+};
-+
-+&mmc0 {
-+	vmmc-supply = <&reg_vcc3v3>;
-+	bus-width = <4>;
-+	cd-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
-+	status = "okay";
-+};
-+
-+&ohci0 {
-+	status = "okay";
-+};
-+
-+&ohci1 {
-+	status = "okay";
-+};
-+
-+&otg_sram {
-+	status = "okay";
-+};
-+
-+&reg_ahci_5v {
-+	status = "okay";
-+};
-+
-+&ac_power_supply {
-+	status = "okay";
-+};
-+
-+&reg_usb1_vbus {
-+	status = "okay";
-+};
-+
-+&reg_usb2_vbus {
-+	status = "okay";
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_pb_pins>;
-+	status = "okay";
-+};
-+
-+&usb_otg {
-+	dr_mode = "otg";
-+	status = "okay";
-+};
-+
-+&usbphy {
-+	usb0_id_det-gpios = <&pio 7 4 GPIO_ACTIVE_HIGH>; /* PH4 */
-+	usb0_vbus_det-gpios = <&pio 7 5 GPIO_ACTIVE_HIGH>; /* PH5 */
-+	usb1_vbus-supply = <&reg_usb1_vbus>;
-+	usb2_vbus-supply = <&reg_usb2_vbus>;
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi b/arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
-new file mode 100644
-index 000000000000..46616c6bc899
---- /dev/null
-+++ b/arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
-@@ -0,0 +1,62 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+// Copyright (C) 2023 In-Circuit GmbH
-+
-+#include "sun7i-a20.dtsi"
-+#include "sunxi-common-regulators.dtsi"
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+&cpu0 {
-+	cpu-supply = <&reg_dcdc2>;
-+};
-+
-+&gmac {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&gmac_mii_pins>;
-+	phy-handle = <&phy1>;
-+	phy-mode = "mii";
-+	status = "okay";
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+
-+	axp209: pmic@34 {
-+		reg = <0x34>;
-+		interrupt-parent = <&nmi_intc>;
-+		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+};
-+
-+&gmac_mdio {
-+	phy1: ethernet-phy@1 {
-+		reg = <1>;
-+	};
-+};
-+
-+#include "axp209.dtsi"
-+
-+&reg_dcdc2 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <1000000>;
-+	regulator-max-microvolt = <1400000>;
-+	regulator-name = "vdd-cpu";
-+};
-+
-+&reg_dcdc3 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <1000000>;
-+	regulator-max-microvolt = <1400000>;
-+	regulator-name = "vdd-int-dll";
-+};
-+
-+&reg_ldo1 {
-+	regulator-name = "vdd-rtc";
-+};
-+
-+&reg_ldo2 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3000000>;
-+	regulator-max-microvolt = <3000000>;
-+	regulator-name = "avcc";
-+};
--- 
-2.30.2
+> I'm curious if it's been tested with this series on top:
+> https://lore.kernel.org/linux-arm-kernel/20230418074700.1083505-8-rick.we=
+rtenbroek@gmail.com/T/
+> I'm particularly curious if
+> [v5,04/11] PCI: rockchip: Add poll and timeout to wait for PHY PLLs to be=
+ locked
+> makes a difference in the behavior. Please test this and see if it
+> improves the timeouts you need for the endpoints you're testing
+> against.
 
+Mh, I can try to cherry-pick the commit and test it in my own test environm=
+ent. Currently, I haven't been=20
+able to test it due to a lack of hardware, but I'm seeking a way to obtain =
+one.=20
+Luckily, I have someone on the Manjaro arm team who can help me test it,=20
+so I'll try to do that.
+
+Cheers!
+
+Vincent.
