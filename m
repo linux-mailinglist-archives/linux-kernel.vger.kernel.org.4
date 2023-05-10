@@ -2,131 +2,493 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A6A6FD821
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367476FD83A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235768AbjEJH2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
+        id S235999AbjEJHa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235734AbjEJH2f (ORCPT
+        with ESMTP id S236303AbjEJHaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:28:35 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E9576AC;
-        Wed, 10 May 2023 00:28:18 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2ac7462d9f1so75710701fa.2;
-        Wed, 10 May 2023 00:28:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683703697; x=1686295697;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TYmd4jZ4uKJYBWkoRF0QajqwynVbLsLUJz+V+LkFPUQ=;
-        b=Th/zxDObwpYwY9d+oBj/zxhDQlG7F4CuBi2drJgZzj1032Bzab1bAUgXzQHvetrN+H
-         l5VVuw9Y2+OuBIxP2x0wuywFldZXvp9PeQb9kIzcEOe66tzF4XTyd8dDzDK5fL2mUE5v
-         gFeXj5U6t/1wf6uHGEDfXFgHNBjh3HRpyuTnQbFw5BHTYt+CsmEmFDeH7CHNlJqNb5OE
-         GHSaP9pjLcFn1VJHG0dxTZBxUFSP8ecmomta6ZOBJsph3OtZ1WpCUwjt8LDX45IGUZlm
-         K8umv5ZoeE3AZyjCibBwiJ2K+HUwX2BCwRFdQNgGtdjM5DlyDH1pbsV5YOsp+//EprVz
-         +oMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683703697; x=1686295697;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TYmd4jZ4uKJYBWkoRF0QajqwynVbLsLUJz+V+LkFPUQ=;
-        b=EoZQ1Kw1CGkW4hdPAMgO2HL39A8KPi05QSvsR2a0uqLpSGlSVjX6tZMvzBY3RBRTHN
-         iRGnbQLM1/fn1ENsXTA3tOiWYZ4NDXKTrK5d3C8S6/wBoJ//O27nbB3dciYPS9EBc7MB
-         rJ9CPWKXZKl5FBmwgyfRd2D+004qkBoGQeSJ8VOCMi7tn8RLWkBt/Z1/Sr/utJNWdGsQ
-         pZNudgU4MjNi99svUMEAlTM927ULJR221WbZ8G5SlTNsmzQbWjbzBFvdXuanYB/r2+jp
-         6BY8a9BVemcQFTUkTMuPx8gh67srmNka8kbsTDMqsFmuczXH2N2zlkcgQD4T4HzlYSx1
-         nIgw==
-X-Gm-Message-State: AC+VfDwZHqwb87fDaw3+UDZ70KsPD2TWty88GeKMZA948aIbdzNn+MeN
-        89fBSZFI6uwtlCOJW67uC1/UqmoL1oNsuQ3W
-X-Google-Smtp-Source: ACHHUZ772AWf8qrWaquyBIknc0nHxrJ/m1rxw6lYNMpBF9RcKYGF9BojsknDe+icKsuoplASYG3llg==
-X-Received: by 2002:a2e:910d:0:b0:2ac:6858:45ba with SMTP id m13-20020a2e910d000000b002ac685845bamr1672370ljg.48.1683703696886;
-        Wed, 10 May 2023 00:28:16 -0700 (PDT)
-Received: from [192.168.0.31] ([94.242.171.95])
-        by smtp.gmail.com with ESMTPSA id l29-20020ac2555d000000b004f25c1e2cf5sm464267lfk.173.2023.05.10.00.28.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 00:28:16 -0700 (PDT)
-Message-ID: <af4eb7c9-52ad-4173-ec91-0d74b1ad265c@gmail.com>
-Date:   Wed, 10 May 2023 10:28:15 +0300
+        Wed, 10 May 2023 03:30:25 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71797869A
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:29:39 -0700 (PDT)
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683703727;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DyAKWfyxjIX2BG4rSv+/0LYcifwNkMse08WwDlCLvBc=;
+        b=2Z1etC06d4lDLpwjKAOGimT4b+2yNvR89djJPCVhuuxnWs+94hROwFS5LDJDU64oPQUjx3
+        CD2BuCRG1KTsSaA5LgdCY2iQZV+UZw1sR30vTMEdoNLSrrK5uuWgCy3HfbbW03yo44bb2/
+        gPFcoEyszk5MyPahZY29vhLOifwR6kfaTP/ya/oECYv0cJAlAKpx9Y1q5kIJfLhbtR68g1
+        Ih+jZgdD/K0OtU4h3OQwo3ykUkMLRAPGGRXqhS1SnOtoUg1dCweRg2YetWeD2hA/yFQ88Y
+        AxCMZPSGmjG7GfHU5dVqjC2RR9LTOYtYnj3I5DFs9lRjWO1GMojn54CMJFQDig==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683703727;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DyAKWfyxjIX2BG4rSv+/0LYcifwNkMse08WwDlCLvBc=;
+        b=7VFQE7/nQ8DK+Fxgmu5I7LR8QTaLS/ESlflG86BFSBFu7POvc3QeFadmM5QsWKHbm4cHRK
+        oy/sKen7gKCAy4Dw==
+To:     linux-kernel@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>
+Subject: [PATCH v6 20/21] timer_migration: Add tracepoints
+Date:   Wed, 10 May 2023 09:28:16 +0200
+Message-Id: <20230510072817.116056-21-anna-maria@linutronix.de>
+In-Reply-To: <20230510072817.116056-1-anna-maria@linutronix.de>
+References: <20230510072817.116056-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/4] audit: refactor queue full checks
-Content-Language: en-US, ru-RU
-To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        "eparis@redhat.com" <eparis@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "audit@vger.kernel.org" <audit@vger.kernel.org>
-References: <20230508075812.76077-1-eiichi.tsukata@nutanix.com>
- <20230508075812.76077-2-eiichi.tsukata@nutanix.com>
- <527bf278-48a3-1b43-a23f-dd4cbb92ef19@gmail.com>
- <53C78149-AE5B-4554-B08C-AEBBEBA1EA95@nutanix.com>
-From:   Rinat Gadelshin <rgadelsh@gmail.com>
-In-Reply-To: <53C78149-AE5B-4554-B08C-AEBBEBA1EA95@nutanix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The timer pull logic needs proper debugging aids. Add tracepoints so the
+hierarchical idle machinery can be diagnosed.
 
-On 10.05.2023 10:17, Eiichi Tsukata wrote:
->
->> On May 10, 2023, at 15:54, Rinat Gadelshin <rgadelsh@gmail.com> wrote:
->>
->> Hi Eiichi!
->>
->> Just one one for your patch.
->>
->> On 08.05.2023 10:58, Eiichi Tsukata wrote:
->>> Currently audit queue full checks are done in multiple places.
->>> Consolidate them into one audit_queue_full().
->>>
->>> Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
->>> ---
->>>   kernel/audit.c | 21 +++++++++++----------
->>>   1 file changed, 11 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/kernel/audit.c b/kernel/audit.c
->>> index 9bc0b0301198..c15694e1a76b 100644
->>> --- a/kernel/audit.c
->>> +++ b/kernel/audit.c
->>> @@ -341,6 +341,12 @@ static inline int audit_rate_check(void)
->>>    return retval;
->>>   }
->>>   +static inline int audit_queue_full(const struct sk_buff_head *queue)
->>> +{
->>> + return audit_backlog_limit &&
->>> +        (skb_queue_len(queue) > audit_backlog_limit);
->> It seems that we should use `>=` here.
-> Hi Rinat
->
-> Could you provide the detailed reason?
->
-> Currently queue full checks are done with ‘>’,
-> on the other hand queue NOT full checks are done with ‘<‘.
->
-> Looking into other similar checks in the kernel, unix_recvq_full() is using ‘>’.
-Was (OR statement): `if (!audit_backlog_limit || 
-skb_queue_len(&audit_retry_queue) < audit_backlog_limit)
-For AND-statement it should be `if (audit_backlog_limit && 
-(skb_queue_len(&audit_retry_queue) >= audit_backlog_limit))
-Otherwise we get false for case `(skb_queue_len(&audit_retry_queue) == 
-audit_backlog_limit)` which was true for the old implementation.
->
-> Paul, how do you think about it?
->
-> Eiichi
->
->
+Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+---
+ include/trace/events/timer_migration.h | 277 +++++++++++++++++++++++++
+ kernel/time/timer_migration.c          |  24 +++
+ 2 files changed, 301 insertions(+)
+ create mode 100644 include/trace/events/timer_migration.h
+
+diff --git a/include/trace/events/timer_migration.h b/include/trace/events/timer_migration.h
+new file mode 100644
+index 000000000000..9efbaf5dabe6
+--- /dev/null
++++ b/include/trace/events/timer_migration.h
+@@ -0,0 +1,277 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM timer_migration
++
++#if !defined(_TRACE_TIMER_MIGRATION_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_TIMER_MIGRATION_H
++
++#include <linux/tracepoint.h>
++
++/* Group events */
++TRACE_EVENT(tmigr_group_set,
++
++	TP_PROTO(struct tmigr_group *group),
++
++	TP_ARGS(group),
++
++	TP_STRUCT__entry(
++		__field( void *,	group		)
++		__field( unsigned int,	lvl		)
++		__field( unsigned int,	numa_node	)
++	),
++
++	TP_fast_assign(
++		__entry->group		= group;
++		__entry->lvl		= group->level;
++		__entry->numa_node	= group->numa_node;
++	),
++
++	TP_printk("group=%p lvl=%d numa=%d",
++		  __entry->group, __entry->lvl, __entry->numa_node)
++);
++
++TRACE_EVENT(tmigr_connect_child_parent,
++
++	TP_PROTO(struct tmigr_group *child),
++
++	TP_ARGS(child),
++
++	TP_STRUCT__entry(
++		__field( void *,	child		)
++		__field( void *,	parent		)
++		__field( unsigned int,	lvl		)
++		__field( unsigned int,	numa_node	)
++		__field( unsigned int,	num_children	)
++		__field( u32,		childmask	)
++	),
++
++	TP_fast_assign(
++		__entry->child		= child;
++		__entry->parent		= child->parent;
++		__entry->lvl		= child->parent->level;
++		__entry->numa_node	= child->parent->numa_node;
++		__entry->numa_node	= child->parent->num_children;
++		__entry->childmask	= child->childmask;
++	),
++
++	TP_printk("group=%p childmask=%0x parent=%p lvl=%d numa=%d num_children=%d",
++		  __entry->child,  __entry->childmask, __entry->parent,
++		  __entry->lvl, __entry->numa_node, __entry->num_children)
++);
++
++TRACE_EVENT(tmigr_connect_cpu_parent,
++
++	TP_PROTO(struct tmigr_cpu *tmc),
++
++	TP_ARGS(tmc),
++
++	TP_STRUCT__entry(
++		__field( void *,	parent		)
++		__field( unsigned int,	cpu		)
++		__field( unsigned int,	lvl		)
++		__field( unsigned int,	numa_node	)
++		__field( unsigned int,	num_children	)
++		__field( u32,		childmask	)
++	),
++
++	TP_fast_assign(
++		__entry->parent		= tmc->tmgroup;
++		__entry->cpu		= tmc->cpuevt.cpu;
++		__entry->lvl		= tmc->tmgroup->level;
++		__entry->numa_node	= tmc->tmgroup->numa_node;
++		__entry->numa_node	= tmc->tmgroup->num_children;
++		__entry->childmask	= tmc->childmask;
++	),
++
++	TP_printk("cpu=%d childmask=%0x parent=%p lvl=%d numa=%d num_children=%d",
++		  __entry->cpu,	 __entry->childmask, __entry->parent,
++		  __entry->lvl, __entry->numa_node, __entry->num_children)
++);
++
++DECLARE_EVENT_CLASS(tmigr_group_and_cpu,
++
++	TP_PROTO(struct tmigr_group *group, union tmigr_state state, u32 childmask),
++
++	TP_ARGS(group, state, childmask),
++
++	TP_STRUCT__entry(
++		__field( void *,	group		)
++		__field( void *,	parent		)
++		__field( unsigned int,	lvl		)
++		__field( unsigned int,	numa_node	)
++		__field( u8,		active		)
++		__field( u8,		migrator	)
++		__field( u32,		childmask	)
++	),
++
++	TP_fast_assign(
++		__entry->group		= group;
++		__entry->parent		= group->parent;
++		__entry->lvl		= group->level;
++		__entry->numa_node	= group->numa_node;
++		__entry->active		= state.active;
++		__entry->migrator	= state.migrator;
++		__entry->childmask	= childmask;
++	),
++
++	TP_printk("group=%p lvl=%d numa=%d active=%0x migrator=%0x "
++		  "parent=%p childmask=%0x",
++		  __entry->group, __entry->lvl, __entry->numa_node,
++		  __entry->active, __entry->migrator,
++		  __entry->parent, __entry->childmask)
++);
++
++DEFINE_EVENT(tmigr_group_and_cpu, tmigr_group_set_cpu_inactive,
++
++	TP_PROTO(struct tmigr_group *group, union tmigr_state state, u32 childmask),
++
++	TP_ARGS(group, state, childmask)
++);
++
++DEFINE_EVENT(tmigr_group_and_cpu, tmigr_group_set_cpu_active,
++
++	TP_PROTO(struct tmigr_group *group, union tmigr_state state, u32 childmask),
++
++	TP_ARGS(group, state, childmask)
++);
++
++/* CPU events*/
++DECLARE_EVENT_CLASS(tmigr_cpugroup,
++
++	TP_PROTO(struct tmigr_cpu *tmc),
++
++	TP_ARGS(tmc),
++
++	TP_STRUCT__entry(
++		__field( void *,	parent)
++		__field( unsigned int,	cpu)
++	),
++
++	TP_fast_assign(
++		__entry->cpu		= tmc->cpuevt.cpu;
++		__entry->parent		= tmc->tmgroup;
++	),
++
++	TP_printk("cpu=%d parent=%p", __entry->cpu, __entry->parent)
++);
++
++DEFINE_EVENT(tmigr_cpugroup, tmigr_cpu_new_timer,
++
++	TP_PROTO(struct tmigr_cpu *tmc),
++
++	TP_ARGS(tmc)
++);
++
++DEFINE_EVENT(tmigr_cpugroup, tmigr_cpu_active,
++
++	TP_PROTO(struct tmigr_cpu *tmc),
++
++	TP_ARGS(tmc)
++);
++
++DEFINE_EVENT(tmigr_cpugroup, tmigr_cpu_online,
++
++	TP_PROTO(struct tmigr_cpu *tmc),
++
++	TP_ARGS(tmc)
++);
++
++DEFINE_EVENT(tmigr_cpugroup, tmigr_cpu_offline,
++
++	TP_PROTO(struct tmigr_cpu *tmc),
++
++	TP_ARGS(tmc)
++);
++
++DEFINE_EVENT(tmigr_cpugroup, tmigr_handle_remote_cpu,
++
++	TP_PROTO(struct tmigr_cpu *tmc),
++
++	TP_ARGS(tmc)
++);
++
++TRACE_EVENT(tmigr_cpu_idle,
++
++	TP_PROTO(struct tmigr_cpu *tmc, u64 nextevt),
++
++	TP_ARGS(tmc, nextevt),
++
++	TP_STRUCT__entry(
++		__field( void *,	parent)
++		__field( unsigned int,	cpu)
++		__field( u64,		nextevt)
++	),
++
++	TP_fast_assign(
++		__entry->cpu		= tmc->cpuevt.cpu;
++		__entry->parent		= tmc->tmgroup;
++		__entry->nextevt	= nextevt;
++	),
++
++	TP_printk("cpu=%d parent=%p nextevt=%llu",
++		  __entry->cpu, __entry->parent, __entry->nextevt)
++);
++
++TRACE_EVENT(tmigr_update_events,
++
++	TP_PROTO(struct tmigr_group *child, struct tmigr_group *group,
++		 union tmigr_state childstate,	union tmigr_state groupstate,
++		 u64 nextevt),
++
++	TP_ARGS(child, group, childstate, groupstate, nextevt),
++
++	TP_STRUCT__entry(
++		__field( void *,	child			)
++		__field( void *,	group			)
++		__field( u64,		nextevt			)
++		__field( u64,		group_next_expiry	)
++		__field( unsigned int,	group_lvl		)
++		__field( u8,		child_active		)
++		__field( u8,		group_active		)
++		__field( unsigned int,	child_evtcpu		)
++		__field( u64,		child_evt_expiry	)
++	),
++
++	TP_fast_assign(
++		__entry->child			= child;
++		__entry->group			= group;
++		__entry->nextevt		= nextevt;
++		__entry->group_next_expiry	= group->next_expiry;
++		__entry->group_lvl		= group->level;
++		__entry->child_active		= childstate.active;
++		__entry->group_active		= groupstate.active;
++		__entry->child_evtcpu		= child ? child->groupevt.cpu : 0;
++		__entry->child_evt_expiry	= child ? child->groupevt.nextevt.expires : 0;
++	),
++
++	TP_printk("child=%p group=%p group_lvl=%d child_active=%0x group_active=%0x "
++		  "nextevt=%llu next_expiry=%llu child_evt_expiry=%llu child_evtcpu=%d",
++		  __entry->child, __entry->group, __entry->group_lvl, __entry->child_active,
++		  __entry->group_active,
++		  __entry->nextevt, __entry->group_next_expiry, __entry->child_evt_expiry,
++		  __entry->child_evtcpu)
++);
++
++TRACE_EVENT(tmigr_handle_remote,
++
++	TP_PROTO(struct tmigr_group *group),
++
++	TP_ARGS(group),
++
++	TP_STRUCT__entry(
++		__field( void * ,	group	)
++		__field( unsigned int ,	lvl	)
++	),
++
++	TP_fast_assign(
++		__entry->group		= group;
++		__entry->lvl		= group->level;
++	),
++
++	TP_printk("group=%p lvl=%d",
++		   __entry->group, __entry->lvl)
++);
++
++#endif /*  _TRACE_TIMER_MIGRATION_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/kernel/time/timer_migration.c b/kernel/time/timer_migration.c
+index accce2b368f4..7418743d3334 100644
+--- a/kernel/time/timer_migration.c
++++ b/kernel/time/timer_migration.c
+@@ -14,6 +14,9 @@
+ #include "timer_migration.h"
+ #include "tick-internal.h"
+ 
++#define CREATE_TRACE_POINTS
++#include <trace/events/timer_migration.h>
++
+ /*
+  * The timer migration mechanism is built on a hierarchy of groups. The
+  * lowest level group contains CPUs, the next level groups of CPU groups
+@@ -403,6 +406,8 @@ static bool tmigr_active_up(struct tmigr_group *group,
+ 	 */
+ 	group->groupevt.ignore = 1;
+ 
++	trace_tmigr_group_set_cpu_active(group, newstate, childmask);
++
+ 	return walk_done;
+ }
+ 
+@@ -433,6 +438,7 @@ void tmigr_cpu_activate(void)
+ 	raw_spin_lock(&tmc->lock);
+ 	tmc->idle = 0;
+ 	tmc->wakeup = KTIME_MAX;
++	trace_tmigr_cpu_active(tmc);
+ 	__tmigr_cpu_activate(tmc);
+ 	raw_spin_unlock(&tmc->lock);
+ }
+@@ -541,6 +547,9 @@ static bool tmigr_update_events(struct tmigr_group *group,
+ 		data->nextexp = tmigr_next_groupevt_expires(group);
+ 	}
+ 
++	trace_tmigr_update_events(child, group, data->childstate,
++				  data->groupstate, nextexp);
++
+ unlock:
+ 	raw_spin_unlock(&group->lock);
+ 
+@@ -584,6 +593,8 @@ static u64 tmigr_new_timer(struct tmigr_cpu *tmc, u64 nextexp)
+ 	if (tmc->remote)
+ 		return KTIME_MAX;
+ 
++	trace_tmigr_cpu_new_timer(tmc);
++
+ 	tmc->cpuevt.ignore = 0;
+ 
+ 	data.groupstate.state = atomic_read(&tmc->tmgroup->migr_state);
+@@ -686,6 +697,8 @@ static bool tmigr_inactive_up(struct tmigr_group *group,
+ 		}
+ 	}
+ 
++	trace_tmigr_group_set_cpu_inactive(group, newstate, childmask);
++
+ 	return walk_done;
+ }
+ 
+@@ -758,6 +771,7 @@ u64 tmigr_cpu_deactivate(u64 nextexp)
+ 	tmc->idle = 1;
+ 
+ unlock:
++	trace_tmigr_cpu_idle(tmc, ret);
+ 	raw_spin_unlock(&tmc->lock);
+ 	return ret;
+ }
+@@ -783,6 +797,8 @@ static u64 tmigr_handle_remote_cpu(unsigned int cpu, u64 now,
+ 		return next;
+ 	}
+ 
++	trace_tmigr_handle_remote_cpu(tmc);
++
+ 	tmc->remote = 1;
+ 
+ 	/* Drop the lock to allow the remote CPU to exit idle */
+@@ -853,6 +869,7 @@ static bool tmigr_handle_remote_up(struct tmigr_group *group,
+ 
+ 	childmask = data->childmask;
+ 
++	trace_tmigr_handle_remote(group);
+ again:
+ 	/*
+ 	 * Handle the group only if @childmask is the migrator or if the
+@@ -1059,6 +1076,7 @@ static struct tmigr_group *tmigr_get_group(unsigned int cpu, unsigned int node,
+ 
+ 	/* Setup successful. Add it to the hierarchy */
+ 	list_add(&group->list, &tmigr_level_list[lvl]);
++	trace_tmigr_group_set(group);
+ 	return group;
+ }
+ 
+@@ -1076,6 +1094,8 @@ static void tmigr_connect_child_parent(struct tmigr_group *child,
+ 	raw_spin_unlock(&parent->lock);
+ 	raw_spin_unlock_irq(&child->lock);
+ 
++	trace_tmigr_connect_child_parent(child);
++
+ 	/*
+ 	 * To prevent inconsistent states, active children need to be
+ 	 * active in new parent as well. Inactive children are already
+@@ -1159,6 +1179,8 @@ static int tmigr_setup_groups(unsigned int cpu, unsigned int node)
+ 
+ 			raw_spin_unlock_irq(&group->lock);
+ 
++			trace_tmigr_connect_cpu_parent(tmc);
++
+ 			/* There are no children that need to be connected */
+ 			continue;
+ 		} else {
+@@ -1227,6 +1249,7 @@ static int tmigr_cpu_online(unsigned int cpu)
+ 		tmc->wakeup = KTIME_MAX;
+ 	}
+ 	raw_spin_lock_irq(&tmc->lock);
++	trace_tmigr_cpu_online(tmc);
+ 	__tmigr_cpu_activate(tmc);
+ 	tmc->online = 1;
+ 	raw_spin_unlock_irq(&tmc->lock);
+@@ -1245,6 +1268,7 @@ static int tmigr_cpu_offline(unsigned int cpu)
+ 	 * offline; Therefore nextevt value is set to KTIME_MAX
+ 	 */
+ 	__tmigr_cpu_deactivate(tmc, KTIME_MAX);
++	trace_tmigr_cpu_offline(tmc);
+ 	raw_spin_unlock_irq(&tmc->lock);
+ 
+ 	return 0;
+-- 
+2.30.2
+
