@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B91E6FE5AB
+	by mail.lfdr.de (Postfix) with ESMTP id B28316FE5AD
 	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237097AbjEJUwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
+        id S237126AbjEJUwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237071AbjEJUvn (ORCPT
+        with ESMTP id S237072AbjEJUvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:51:43 -0400
+        Wed, 10 May 2023 16:51:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771945FD7;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE2F76BC;
         Wed, 10 May 2023 13:51:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCDFD64061;
-        Wed, 10 May 2023 20:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1073C4339E;
-        Wed, 10 May 2023 20:50:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0342D6404A;
+        Wed, 10 May 2023 20:50:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A519C433D2;
+        Wed, 10 May 2023 20:50:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683751814;
-        bh=0zEhhhCmNTO71RRyYFEphvjnrK4i5lwbgUgB0A/xcjI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DlHsnnZAwSV6J9ExyKkiZfWaEJRI7z8JBAjkPs89McdcxvqSobDpgIoy6JQ5CvkzL
-         5bGltJ/kbC99q3Z//eN+uACWXXS8rZNJTnZmivtguhB9LGBtejdoS9k8moCORfQmGw
-         8dgnrbcYtjlyTxZJW1t/doFbMvoln/WepEACd3+s1w4ZR0Ecc2+8+Nx5VP+DypEwzE
-         bvDD+G61I/Hg9WBMPSHqpwt4931uD7I5XAH9fhSI43cU8yGOLkveBxRc3ebR9udmMs
-         +JUV3uOmqyUkzARMWFchqX3az8hZ86e+LYzeYzwUU50qpCIDo5LvHUA0F/RinbeBEh
-         1mqYSoHLL5/yQ==
+        s=k20201202; t=1683751825;
+        bh=2D64oLm2SWw4kW5p6P/UQQvw/Y6FYEg/jfD5h3DAZhA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Siy0z9sIM7nkZG+XmRfr45HkrDVv0lmtIfPQBy6N4eGwCadO8qYyf6K/KZcHfHX65
+         0ZHjWfx4f7k9qHROPTJ5l7tp4FAoQGcQxk24uVYVj7ua52ywPQCwNruIZCzRjk1FRv
+         IDGaUoFzXsvpKZMvRehcOXqkaEtVZ1gY92Bjpf0BbL/SqnIwoL3JxOUIm4Dxd5Gd13
+         H/WauwPaXoWCc5V8ZwRtkol7YiBLI/LXUponvdWYl8wV+GevRX7jQEKAuowC3zw4lU
+         Tul5O1lg8YTCLQTtna4iepCkXQcY8lRywbdfRCoe5DL76thIehpd2aRtwMi7HtoLIj
+         sh1UXSGQD/axw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Jeroen Roovers <jer@xs4all.nl>, Helge Deller <deller@gmx.de>,
-        Sasha Levin <sashal@kernel.org>, linux-parisc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 4/4] parisc: Replace regular spinlock with spin_trylock on panic path
-Date:   Wed, 10 May 2023 16:50:08 -0400
-Message-Id: <20230510205008.104981-4-sashal@kernel.org>
+Cc:     Alain Volmat <avolmat@me.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        kishon@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.10 1/2] phy: st: miphy28lp: use _poll_timeout functions for waits
+Date:   Wed, 10 May 2023 16:50:13 -0400
+Message-Id: <20230510205014.105043-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230510205008.104981-1-sashal@kernel.org>
-References: <20230510205008.104981-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,134 +57,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+From: Alain Volmat <avolmat@me.com>
 
-[ Upstream commit 829632dae8321787525ee37dc4828bbe6edafdae ]
+[ Upstream commit e3be4dd2c8d8aabfd2c3127d0e2e5754d3ae82d6 ]
 
-The panic notifiers' callbacks execute in an atomic context, with
-interrupts/preemption disabled, and all CPUs not running the panic
-function are off, so it's very dangerous to wait on a regular
-spinlock, there's a risk of deadlock.
+This commit introduces _poll_timeout functions usage instead of
+wait loops waiting for a status bit.
 
-Refactor the panic notifier of parisc/power driver to make use
-of spin_trylock - for that, we've added a second version of the
-soft-power function. Also, some comments were reorganized and
-trailing white spaces, useless header inclusion and blank lines
-were removed.
-
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Jeroen Roovers <jer@xs4all.nl>
-Acked-by: Helge Deller <deller@gmx.de> # parisc
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Alain Volmat <avolmat@me.com>
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Link: https://lore.kernel.org/r/20230210224309.98452-1-avolmat@me.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/parisc/include/asm/pdc.h |  1 +
- arch/parisc/kernel/firmware.c | 27 +++++++++++++++++++++++----
- drivers/parisc/power.c        | 16 ++++++++++------
- 3 files changed, 34 insertions(+), 10 deletions(-)
+ drivers/phy/st/phy-miphy28lp.c | 42 ++++++++--------------------------
+ 1 file changed, 10 insertions(+), 32 deletions(-)
 
-diff --git a/arch/parisc/include/asm/pdc.h b/arch/parisc/include/asm/pdc.h
-index b388d81765883..2f48e0a80d9c6 100644
---- a/arch/parisc/include/asm/pdc.h
-+++ b/arch/parisc/include/asm/pdc.h
-@@ -81,6 +81,7 @@ int pdc_do_firm_test_reset(unsigned long ftc_bitmap);
- int pdc_do_reset(void);
- int pdc_soft_power_info(unsigned long *power_reg);
- int pdc_soft_power_button(int sw_control);
-+int pdc_soft_power_button_panic(int sw_control);
- void pdc_io_reset(void);
- void pdc_io_reset_devices(void);
- int pdc_iodc_getc(void);
-diff --git a/arch/parisc/kernel/firmware.c b/arch/parisc/kernel/firmware.c
-index 8e5a906df9175..5385e0fe98426 100644
---- a/arch/parisc/kernel/firmware.c
-+++ b/arch/parisc/kernel/firmware.c
-@@ -1158,15 +1158,18 @@ int __init pdc_soft_power_info(unsigned long *power_reg)
- }
+diff --git a/drivers/phy/st/phy-miphy28lp.c b/drivers/phy/st/phy-miphy28lp.c
+index 068160a34f5cc..e30305b77f0d1 100644
+--- a/drivers/phy/st/phy-miphy28lp.c
++++ b/drivers/phy/st/phy-miphy28lp.c
+@@ -9,6 +9,7 @@
  
- /*
-- * pdc_soft_power_button - Control the soft power button behaviour
-- * @sw_control: 0 for hardware control, 1 for software control 
-+ * pdc_soft_power_button{_panic} - Control the soft power button behaviour
-+ * @sw_control: 0 for hardware control, 1 for software control
-  *
-  *
-  * This PDC function places the soft power button under software or
-  * hardware control.
-- * Under software control the OS may control to when to allow to shut 
-- * down the system. Under hardware control pressing the power button 
-+ * Under software control the OS may control to when to allow to shut
-+ * down the system. Under hardware control pressing the power button
-  * powers off the system immediately.
-+ *
-+ * The _panic version relies on spin_trylock to prevent deadlock
-+ * on panic path.
-  */
- int pdc_soft_power_button(int sw_control)
- {
-@@ -1180,6 +1183,22 @@ int pdc_soft_power_button(int sw_control)
- 	return retval;
- }
- 
-+int pdc_soft_power_button_panic(int sw_control)
-+{
-+	int retval;
-+	unsigned long flags;
-+
-+	if (!spin_trylock_irqsave(&pdc_lock, flags)) {
-+		pr_emerg("Couldn't enable soft power button\n");
-+		return -EBUSY; /* ignored by the panic notifier */
-+	}
-+
-+	retval = mem_pdc_call(PDC_SOFT_POWER, PDC_SOFT_POWER_ENABLE, __pa(pdc_result), sw_control);
-+	spin_unlock_irqrestore(&pdc_lock, flags);
-+
-+	return retval;
-+}
-+
- /*
-  * pdc_io_reset - Hack to avoid overlapping range registers of Bridges devices.
-  * Primarily a problem on T600 (which parisc-linux doesn't support) but
-diff --git a/drivers/parisc/power.c b/drivers/parisc/power.c
-index 456776bd8ee66..6f5e5f0230d39 100644
---- a/drivers/parisc/power.c
-+++ b/drivers/parisc/power.c
-@@ -37,7 +37,6 @@
- #include <linux/module.h>
- #include <linux/init.h>
+ #include <linux/platform_device.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
  #include <linux/kernel.h>
--#include <linux/notifier.h>
- #include <linux/panic_notifier.h>
- #include <linux/reboot.h>
- #include <linux/sched/signal.h>
-@@ -175,16 +174,21 @@ static void powerfail_interrupt(int code, void *x)
+ #include <linux/module.h>
+ #include <linux/of.h>
+@@ -484,19 +485,11 @@ static inline void miphy28lp_pcie_config_gen(struct miphy28lp_phy *miphy_phy)
  
- 
- 
--/* parisc_panic_event() is called by the panic handler.
-- * As soon as a panic occurs, our tasklets above will not be
-- * executed any longer. This function then re-enables the 
-- * soft-power switch and allows the user to switch off the system
-+/*
-+ * parisc_panic_event() is called by the panic handler.
-+ *
-+ * As soon as a panic occurs, our tasklets above will not
-+ * be executed any longer. This function then re-enables
-+ * the soft-power switch and allows the user to switch off
-+ * the system. We rely in pdc_soft_power_button_panic()
-+ * since this version spin_trylocks (instead of regular
-+ * spinlock), preventing deadlocks on panic path.
-  */
- static int parisc_panic_event(struct notifier_block *this,
- 		unsigned long event, void *ptr)
+ static inline int miphy28lp_wait_compensation(struct miphy28lp_phy *miphy_phy)
  {
- 	/* re-enable the soft-power switch */
--	pdc_soft_power_button(0);
-+	pdc_soft_power_button_panic(0);
- 	return NOTIFY_DONE;
+-	unsigned long finish = jiffies + 5 * HZ;
+ 	u8 val;
+ 
+ 	/* Waiting for Compensation to complete */
+-	do {
+-		val = readb_relaxed(miphy_phy->base + MIPHY_COMP_FSM_6);
+-
+-		if (time_after_eq(jiffies, finish))
+-			return -EBUSY;
+-		cpu_relax();
+-	} while (!(val & COMP_DONE));
+-
+-	return 0;
++	return readb_relaxed_poll_timeout(miphy_phy->base + MIPHY_COMP_FSM_6,
++					  val, val & COMP_DONE, 1, 5 * USEC_PER_SEC);
  }
  
+ 
+@@ -805,7 +798,6 @@ static inline void miphy28lp_configure_usb3(struct miphy28lp_phy *miphy_phy)
+ 
+ static inline int miphy_is_ready(struct miphy28lp_phy *miphy_phy)
+ {
+-	unsigned long finish = jiffies + 5 * HZ;
+ 	u8 mask = HFC_PLL | HFC_RDY;
+ 	u8 val;
+ 
+@@ -816,21 +808,14 @@ static inline int miphy_is_ready(struct miphy28lp_phy *miphy_phy)
+ 	if (miphy_phy->type == PHY_TYPE_SATA)
+ 		mask |= PHY_RDY;
+ 
+-	do {
+-		val = readb_relaxed(miphy_phy->base + MIPHY_STATUS_1);
+-		if ((val & mask) != mask)
+-			cpu_relax();
+-		else
+-			return 0;
+-	} while (!time_after_eq(jiffies, finish));
+-
+-	return -EBUSY;
++	return readb_relaxed_poll_timeout(miphy_phy->base + MIPHY_STATUS_1,
++					  val, (val & mask) == mask, 1,
++					  5 * USEC_PER_SEC);
+ }
+ 
+ static int miphy_osc_is_ready(struct miphy28lp_phy *miphy_phy)
+ {
+ 	struct miphy28lp_dev *miphy_dev = miphy_phy->phydev;
+-	unsigned long finish = jiffies + 5 * HZ;
+ 	u32 val;
+ 
+ 	if (!miphy_phy->osc_rdy)
+@@ -839,17 +824,10 @@ static int miphy_osc_is_ready(struct miphy28lp_phy *miphy_phy)
+ 	if (!miphy_phy->syscfg_reg[SYSCFG_STATUS])
+ 		return -EINVAL;
+ 
+-	do {
+-		regmap_read(miphy_dev->regmap,
+-				miphy_phy->syscfg_reg[SYSCFG_STATUS], &val);
+-
+-		if ((val & MIPHY_OSC_RDY) != MIPHY_OSC_RDY)
+-			cpu_relax();
+-		else
+-			return 0;
+-	} while (!time_after_eq(jiffies, finish));
+-
+-	return -EBUSY;
++	return regmap_read_poll_timeout(miphy_dev->regmap,
++					miphy_phy->syscfg_reg[SYSCFG_STATUS],
++					val, val & MIPHY_OSC_RDY, 1,
++					5 * USEC_PER_SEC);
+ }
+ 
+ static int miphy28lp_get_resource_byname(struct device_node *child,
 -- 
 2.39.2
 
