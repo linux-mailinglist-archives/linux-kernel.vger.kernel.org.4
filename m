@@ -2,153 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286996FDCC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94166FDCD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236737AbjEJLeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 07:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S236944AbjEJLf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 07:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234032AbjEJLeU (ORCPT
+        with ESMTP id S236926AbjEJLfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 07:34:20 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82503E7E;
-        Wed, 10 May 2023 04:34:18 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (softbank126090219015.bbtec.net [126.90.219.15])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 55CBD800;
-        Wed, 10 May 2023 13:34:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1683718449;
-        bh=sGzDOPmvFTFpaZnjXkMm5j+0zPDP9TPOfOzpGzfrYOM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HAOIjyAKxGEhIXFc0Vm5J1h3CJYRriNKSp9hg8g91jLEqSVPTXqVemw9HnaGYs6S0
-         S4lSp09bDr3kA8haX8vulsIOBjl+8hKZWxABVqJecLaFqprll8SO7GhoVsd8TCbFtI
-         l3+z1hP8jP2iIFVh4RdJVjTWez4LjSrI2PnhhCrE=
-Date:   Wed, 10 May 2023 14:34:12 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com,
-        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Tanmay Shah <tanmay.shah@amd.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 05/23] arm64: zynqmp: Add L2 cache nodes
-Message-ID: <20230510113412.GJ11711@pendragon.ideasonboard.com>
-References: <cover.1683034376.git.michal.simek@amd.com>
- <cf4ced33cb7dc8d43b79bb9d4ad6acd3b8ecc09b.1683034376.git.michal.simek@amd.com>
- <20230510065750.GD11711@pendragon.ideasonboard.com>
- <9da13d84-b6f0-e606-6467-a545bc308c12@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9da13d84-b6f0-e606-6467-a545bc308c12@amd.com>
+        Wed, 10 May 2023 07:35:50 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A476173D;
+        Wed, 10 May 2023 04:35:47 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f420618d5bso28677235e9.1;
+        Wed, 10 May 2023 04:35:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683718546; x=1686310546;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tvApClf6Vwq7pYYq456swXVsLdXe4Yk/kHkfI1zIbf0=;
+        b=A7JK7Aa8+cE+lTIOQPBBguTGx4LVhzygAywBRaxRWDXJpKHRJStUaUY0rPCDStOCSq
+         GBOwjR+1YuWTe1dVqZQcobgsVkrlYymiSSrIgo+y0ASEPz75m0AzfCcw0fQzFPjjjYS7
+         d6bzOGfAsvxNKXSfg0xZdsHy5GLoUdan879eDcH7YNC+L+C7ZB2Q+noqlVV1W1Pk56KR
+         7bEuYPaKJmyf9WpoT0p220LaMblPNU6x98SZYeR65vem9VFLS+ZxqbhOETZtq+tXPA5r
+         PVytCKL5HNhUazNOxTgiBgva7e24kHjSXwKigglEJI+dTeP4GBSTvCjnBOWyCxdAaAqP
+         0bFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683718546; x=1686310546;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tvApClf6Vwq7pYYq456swXVsLdXe4Yk/kHkfI1zIbf0=;
+        b=Q8Fi6pjE1JQgGsYixguCQow2hYw3XPspzSk/WbnLT3LihHNjuVT6HzvksKmiz0qYbb
+         2Hc9DwaYfZehq5EgLQASNzsbaPk3SovUBwIjjIA2GRQBSPil3PvYQgbU3CppSLMxIUUa
+         2HLn5hRHk3VrwUPkrRyg458kTLfhGbZTldeq4TCUyqTa998QnJRyhoEPtO9rsODz+egf
+         3MOxW0t46z4lmsoox+os73uylfA8eKr/VQcavHPX3NmCnYTPxuNb2VWbLOsokVggWYve
+         7K08BDyC81V/G5rfuo4vOJhGnU6bz8imQev0YuLX0ftaFr92Scrs3YMRvI0CcObDg1ca
+         27og==
+X-Gm-Message-State: AC+VfDzleigypY4qzTaWzLNdvxG7hNVvIaycZoW9DUZwZOSm9upXLNyc
+        7tH/b2E1RRBbqzHrbQnGL9s=
+X-Google-Smtp-Source: ACHHUZ7wo+6G+OTP/f1njXi4NgMQmaiEiKJ9+AcmhQdxQJiCG8NzXngE14HdSos3iGEqNEoox2RfcQ==
+X-Received: by 2002:a05:600c:2298:b0:3f4:2bce:eeff with SMTP id 24-20020a05600c229800b003f42bceeeffmr3624831wmf.25.1683718545727;
+        Wed, 10 May 2023 04:35:45 -0700 (PDT)
+Received: from localhost ([146.70.133.78])
+        by smtp.gmail.com with ESMTPSA id y10-20020a7bcd8a000000b003f16fc33fbesm22321946wmj.17.2023.05.10.04.35.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 04:35:45 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 10 May 2023 13:35:43 +0200
+Message-Id: <CSIKESNNLX5D.4VDA3E6NBN3N@vincent-arch>
+Subject: Re: [PATCH v1] drivers: pci: introduce configurable delay for
+ Rockchip PCIe bus scan
+From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
+To:     "Bjorn Helgaas" <helgaas@kernel.org>
+Cc:     <linux-pci@vger.kernel.org>, <robh@kernel.org>, <heiko@sntech.de>,
+        <kw@linux.com>, <shawn.lin@rock-chips.com>,
+        <linux-kernel@vger.kernel.org>, <lgirdwood@gmail.com>,
+        <linux-rockchip@lists.infradead.org>, <broonie@kernel.org>,
+        <bhelgaas@google.com>,
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        <lpieralisi@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        "Dan Johansen" <strit@manjaro.org>
+X-Mailer: aerc 0.15.1
+References: <20230509153912.515218-1-vincenzopalazzodev@gmail.com>
+ <20230509211902.GA1270901@bhelgaas>
+In-Reply-To: <20230509211902.GA1270901@bhelgaas>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
+> Hi Vincenzo,
 
-On Wed, May 10, 2023 at 09:15:30AM +0200, Michal Simek wrote:
-> On 5/10/23 08:57, Laurent Pinchart wrote:
-> > On Tue, May 02, 2023 at 03:35:33PM +0200, Michal Simek wrote:
-> >> From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> >>
-> >> Linux kernel throws "cacheinfo: Unable to detect cache hierarchy for
-> >> CPU 0" warning when booting on zu+ Soc. To fix it add the L2 cache
-> >> node and let each CPU point to it.
-> > 
-> > The commit message should focus on how this change brings the DT in line
-> > with the hardware, not on what the Linux kernel does.
-> 
-> ok.
-> 
-> >> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> >> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> >> ---
-> >>
-> >>   arch/arm64/boot/dts/xilinx/zynqmp.dtsi | 9 +++++++++
-> >>   1 file changed, 9 insertions(+)
-> >>
-> >> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> >> index bb0d0be30aa0..c2d80c7967e9 100644
-> >> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> >> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> >> @@ -33,6 +33,7 @@ cpu0: cpu@0 {
-> >>   			operating-points-v2 = <&cpu_opp_table>;
-> >>   			reg = <0x0>;
-> >>   			cpu-idle-states = <&CPU_SLEEP_0>;
-> >> +			next-level-cache = <&L2>;
-> >>   		};
-> >>   
-> >>   		cpu1: cpu@1 {
-> >> @@ -42,6 +43,7 @@ cpu1: cpu@1 {
-> >>   			reg = <0x1>;
-> >>   			operating-points-v2 = <&cpu_opp_table>;
-> >>   			cpu-idle-states = <&CPU_SLEEP_0>;
-> >> +			next-level-cache = <&L2>;
-> >>   		};
-> >>   
-> >>   		cpu2: cpu@2 {
-> >> @@ -51,6 +53,7 @@ cpu2: cpu@2 {
-> >>   			reg = <0x2>;
-> >>   			operating-points-v2 = <&cpu_opp_table>;
-> >>   			cpu-idle-states = <&CPU_SLEEP_0>;
-> >> +			next-level-cache = <&L2>;
-> >>   		};
-> >>   
-> >>   		cpu3: cpu@3 {
-> >> @@ -60,6 +63,12 @@ cpu3: cpu@3 {
-> >>   			reg = <0x3>;
-> >>   			operating-points-v2 = <&cpu_opp_table>;
-> >>   			cpu-idle-states = <&CPU_SLEEP_0>;
-> >> +			next-level-cache = <&L2>;
-> >> +		};
-> >> +
-> >> +		L2: l2-cache {
-> > 
-> > Shouldn't labels be lower-case ?
-> 
-> Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml:220:        L2_0: 
-> l2-cache {
-> Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml:241: 
-> L2_100: l2-cache {
-> Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml:257: 
-> L2_200: l2-cache {
-> Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml:273: 
-> L2_300: l2-cache {
-> Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml:289: 
-> L2_400: l2-cache {
-> Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml:305: 
-> L2_500: l2-cache {
-> Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml:321: 
-> L2_600: l2-cache {
-> Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml:337: 
-> L2_700: l2-cache {
-> Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml:116: 
-> L2_0: l2-cache {
-> Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml:151: 
-> L2_1: l2-cache {
-> Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml:77: 
->               L2_0: l2-cache {
-> 
-> And in dt spec - 6.2 chapter uppercase letter is valid chars for DTS labels.
+Hi :)
 
-Thanks for the clarification. It's all good.
+> Thanks for raising this issue.  Let's see what we can do to address
+> it.
 
--- 
-Regards,
+Yeah, as I said in my cover letter, I am not happy with my solution,
+but we should start somewhere to discuss it.
 
-Laurent Pinchart
+> > Add a configurable delay to the Rockchip PCIe driver to address
+> > crashes that occur on some old devices, such as the Pine64 RockPro64.
+> >=20
+> > This issue is affecting the ARM community, but there is no
+> > upstream solution for it yet.
+>
+> It sounds like this happens with several endpoints, right?  And I
+> assume the endpoints work fine in other non-Rockchip systems?  If
+> that's the case, my guess is the problem is with the Rockchip host
+> controller and how it's initialized, not with the endpoints.
+
+
+Yeah, the crash is only reproducible with the Rockchip system, or better,=
+=20
+the crash is reproducible only in some modern devices that use the old=20
+Rockchip driver mentioned in this patch.
+
+> The only delays and timeouts I see in the driver now are in
+> rockchip_pcie_host_init_port(), where it waits for link training to
+> complete.  I assume the link training did completely successfully
+> since you don't mention either a gen1 or gen2 timeout (although the
+> gen2 message is a dev_dbg() that normally wouldn't go to the console).
+>
+> I don't know that the spec contains a retrain timeout value.  Several
+> other drivers use 1 second, while rockchip uses 500ms (for example,
+> see LINK_RETRAIN_TIMEOUT and LINK_UP_TIMEOUT).
+>
+> I think we need to understand the issue better before adding a DT
+> property and a module parameter.  Those are hard for users to deal
+> with.  If we can figure out a value that works for everybody, it would
+> be better to just hard-code it in the driver and use that all the
+> time.
+
+Yeah, I see, I see. This makes sense. Is there any path that I can follow i=
+n=20
+order to better understand what's going on at the hardware level? In other=
+=20
+words, how can I help to understand this issue better and provide a
+unique solution for everybody?
+
+Thanks for the nits in the patch, I will take a look with a fresh mind
+later in the day.
+
+Cheers!
+
+Vincent.
