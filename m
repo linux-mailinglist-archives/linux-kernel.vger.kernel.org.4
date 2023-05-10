@@ -2,110 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10586FE04B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCCB6FE04C
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237438AbjEJObL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
+        id S237479AbjEJObU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237012AbjEJObJ (ORCPT
+        with ESMTP id S237374AbjEJObR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:31:09 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF6F3C3A;
-        Wed, 10 May 2023 07:31:07 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34AEDOC5025734;
-        Wed, 10 May 2023 14:31:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=qvkap/Y4TOHNL07iP0yA+DU+o2en3bsNw5khWwqRep4=;
- b=JuT76hqv1dTTTGM76rlFed3VtXYMk2irmt6VJdHtnvsN5wZcF8hR+OwIPFhyALcA2Ieo
- Ybp0EgABwL+5A9PBhmmsXjvxIqdLZIJ5mLSIleJfUF4CekpqsCazCt9EaHGwrYA9R1EH
- cxKaJXE9g13Q6ho50ktGu4kPm4w8+F9M2OcZUCzN8xJ/TfyNm6y8kebxcQhldOPjycdL
- NEHvTGzO1ngIYaBQ7lZdToIDdvPtgzPk3i4gjSXRN1RUktpb5pnowZMBXq+0Vfm5xjin
- UgjhVwYnoVwnsX6OUa+4rHUqaG6h6m1g8Kx4NVOg3dFObLiNY9iUkmQbIymobUmmCp+t zQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qg6u0gs6r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 14:31:00 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34AEV0nH016864
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 14:31:00 GMT
-Received: from [10.216.41.111] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 10 May
- 2023 07:30:54 -0700
-Message-ID: <1ffc9474-0a05-44d8-0cc0-24a065443b18@quicinc.com>
-Date:   Wed, 10 May 2023 20:00:50 +0530
+        Wed, 10 May 2023 10:31:17 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452323C0B
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:31:15 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bc5197d33so13576974a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1683729073; x=1686321073;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rw1MLlzzJH/+STgxvKYi/t/faSj/QeBANMCtgkem3lM=;
+        b=g+zH5fnw/H7+bg71JqmY1XT6HACMA8B7hk9/64yMwh8ocGg1RpDgnwtwQE2dQUOGYO
+         16GNFtGL+vmQwQWJK8EQKgKYw330gpxqbpywwqfCCj9Bt/s2pm8iYTvA/mf+kfeHYEZY
+         7/iC0jBVMpW7yAHgKjLCsU5b2SKMzfz/AaDFI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683729073; x=1686321073;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rw1MLlzzJH/+STgxvKYi/t/faSj/QeBANMCtgkem3lM=;
+        b=XcnUrWybZBAPI6w05c8got4XAO+Pr8HfH7VVZpDEUAWubii3CX+NK9pHnd8WlJ7yg+
+         EW2eZ5AxeYUmqFowPWO+8zAXVvlxFg8tJ0uqz+8CrNGttXpnEk3NjzdmU/kUniTuNGLb
+         cXtMEqMMKAIamnEAAZ2BWI6uSudxz8l2T5e4DFL7cmIMKivV5803iMH4QbGnByKsdz3f
+         5vEUM/tCBOuwViOygTyuucHjK7KPlXIIIYxoYgJnY/JhY+WL+maZjY1y/OacFYeRzmQi
+         O3h+Xl18AFlaX/f/Fu2EHvqUQq5tVsHL3xaA8xeOo7HtzrXJy6evGSGJ/etivxy08Ed9
+         V+DA==
+X-Gm-Message-State: AC+VfDwm1Op+0iXkpfAimEB5N+o2eAekUCzEmsZlI8YEDKKHDuZfFab9
+        iNvblzYE2XLeTdSRsxs+abNK3R4EZ20N5varkn3q+A==
+X-Google-Smtp-Source: ACHHUZ6Fceu5xdoZxp5/uXwqZbSJ+cuIEkDh8tJ1WLEZryisxpZBTcJazCrSQLZfloyslQXv3RwJHg==
+X-Received: by 2002:a05:6402:295:b0:50b:c6c9:2146 with SMTP id l21-20020a056402029500b0050bc6c92146mr12960129edv.24.1683729073416;
+        Wed, 10 May 2023 07:31:13 -0700 (PDT)
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
+        by smtp.gmail.com with ESMTPSA id g8-20020aa7d1c8000000b00501d73cfc86sm1919937edp.9.2023.05.10.07.31.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 07:31:12 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-9661047f8b8so925154066b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:31:12 -0700 (PDT)
+X-Received: by 2002:a17:907:31c4:b0:94e:8431:4767 with SMTP id
+ xf4-20020a17090731c400b0094e84314767mr14327246ejb.38.1683729072247; Wed, 10
+ May 2023 07:31:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v6 4/4] pinctrl: qcom: Add SDX75 pincontrol driver
-Content-Language: en-US
-To:     <andy.shevchenko@gmail.com>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linus.walleij@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <richardcochran@gmail.com>, <manivannan.sadhasivam@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <1683718725-14869-1-git-send-email-quic_rohiagar@quicinc.com>
- <1683718725-14869-5-git-send-email-quic_rohiagar@quicinc.com>
- <ZFun8m5y-r0yUHhq@surfacebook>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <ZFun8m5y-r0yUHhq@surfacebook>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: J_TKjw0X-VTOUwa6NEhUNkLYpk-zGXbJ
-X-Proofpoint-ORIG-GUID: J_TKjw0X-VTOUwa6NEhUNkLYpk-zGXbJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- malwarescore=0 mlxlogscore=844 clxscore=1015 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 adultscore=0 spamscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305100117
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230510030752.542340-1-tj@kernel.org> <20230510030752.542340-4-tj@kernel.org>
+In-Reply-To: <20230510030752.542340-4-tj@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 10 May 2023 09:30:55 -0500
+X-Gmail-Original-Message-ID: <CAHk-=wiu5vwNeiDbwueHtpnTp1Be7r3_ssG07Qsv2N=V9K454Q@mail.gmail.com>
+Message-ID: <CAHk-=wiu5vwNeiDbwueHtpnTp1Be7r3_ssG07Qsv2N=V9K454Q@mail.gmail.com>
+Subject: Re: [PATCH 3/6] workqueue: Move worker_set/clr_flags() upwards
+To:     Tejun Heo <tj@kernel.org>
+Cc:     jiangshanlai@gmail.com, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 5/10/2023 7:49 PM, andy.shevchenko@gmail.com wrote:
-> Wed, May 10, 2023 at 05:08:45PM +0530, Rohit Agarwal kirjoitti:
->> Add initial Qualcomm SDX75 pinctrl driver to support pin configuration
->> with pinctrl framework for SDX75 SoC.
->> While at it, reordering the SDX65 entry.
-> ...
+On Tue, May 9, 2023 at 10:08=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
 >
->> +#define FUNCTION(n)							\
->> +	[msm_mux_##n] = {						\
->> +			.func = PINCTRL_PINFUNCTION(#n,			\
->> +					n##_groups,			\
->> +					ARRAY_SIZE(n##_groups))		\
->> +			}
-> But don't you now have MSM_PIN_FUNCTION() macro?
+> They're gonna be used wq_worker_stopping(). Move them upwards.
 
-So Sorry, a mistake from my end. Will immediately update.
+I got points deducted in fifth grade for using "gonna" instead of
+"going to". Here I am, 40+ years later, and I still feel it.
 
-Thanks for reviewing.
-Rohit.
+Please use "going to". And add the missing "in" while at it.
 
-
->
+             Linus "scarred for life" Torvalds
