@@ -2,135 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3BD66FE66F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 23:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E176FE672
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 23:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjEJVtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 17:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
+        id S235708AbjEJVuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 17:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjEJVtR (ORCPT
+        with ESMTP id S232030AbjEJVuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 17:49:17 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79AB46A5
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:49:15 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-32b5ec09cffso51727145ab.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:49:15 -0700 (PDT)
+        Wed, 10 May 2023 17:50:18 -0400
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D2746A2;
+        Wed, 10 May 2023 14:50:18 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-64115e652eeso53554609b3a.0;
+        Wed, 10 May 2023 14:50:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683755355; x=1686347355;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B1SGREDmcRfCOLqe/Yt3nb430iTEdmGYJDyvnyaeePE=;
-        b=ULl7ALvUd8YPS5Ql0ijNPR46XYF02pFBYweXx2pqpAXBRQE+SyNxfqmDQa1hwfAoo8
-         IGmlV62pLGxA7+5AZGIXhMRRHIBzvlOZgkJzVoKmIYQEwCL0idwtg0p95yIm0CkYnRL0
-         D17D0iSqn/AL/FCVFagI1FA3xcQyRIxleP6dhUfM6fvraXChAuWAWJwbPEWPTijbzq3X
-         qAQPz5KY29WntmjU4cMdtmFEof6moE4q1AuGb/NBdclppoeXOb02REcLLhrdvBwx+tDY
-         yu46CXS/Px6/C54sfweb3RtQ9Z/XgcodtWeqs0F6rk9RZ9oUyom6/h9jSd0Vq2ycWJmi
-         eglw==
-X-Gm-Message-State: AC+VfDzJsdA1CxAe2/qAok7kKBGXtzTxQUvBUK6nuMy4tQ6dGWNnclm8
-        AAYcfYN64VlBoAFIdaVdrTj2wmagH27/qOHSmoC/NA+CjytX
-X-Google-Smtp-Source: ACHHUZ5RxOuGNZBLxewywHGqqnTg/z2+mfExTWYHm1eP9owdJyXGIgOFdY8rvNLrw1U9JIdALuIDsMRcQfGEAZwYOuijgs60pn5B
+        d=1e100.net; s=20221208; t=1683755417; x=1686347417;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ugw5yiiRWKEosECd8DYoddLHj5cw2hGZNdWX0C0svT8=;
+        b=Hsgz2aE0+tX+z3B9o+5/GPH7NsLKjV5So8OMGOvOxe8uCbMB4Z4pDMzUmOMsFvX1rE
+         HY1YPyJ9F/p52iktxnGnewiAVGwpS6Tjn/8GttXgh/Rn/xM6LgujEq7x7DH69v/s8ptm
+         DcveH97ksCI9HIQI+nlV8knOnCi9PgLutEvbT2y2yevAxov/i3ZqOqQ9cd+McxNnKG0H
+         eXdHHJSfge34DVckw46p06ypCrhY22r5OMzbQd1+IcxcWZa6QAKOSF5qXua2KK8pDcp1
+         GQH25y5Q4EMbkrlX1ufrgNCkfHmaVCwdwqvF5O15L0CzpZUAX1OmJ8y10+4n4tbhBA76
+         9bxA==
+X-Gm-Message-State: AC+VfDwhRNIe7ApZFGPjojLoB3h1LpH3EXM9h4DcNBDuLXf2SjuO6Wer
+        EkEF719jskoSIIxQsNolPwA=
+X-Google-Smtp-Source: ACHHUZ615GAKND1ytPyK2/No1AtrqjHqwrLRynk3v/GEup14KBlPJnJGJghuuYohdmZ1DvOUnxzvBw==
+X-Received: by 2002:a05:6a00:1894:b0:646:c56c:f0e0 with SMTP id x20-20020a056a00189400b00646c56cf0e0mr10363435pfh.15.1683755417431;
+        Wed, 10 May 2023 14:50:17 -0700 (PDT)
+Received: from ?IPV6:2001:4958:15a0:30:d8b7:fa5f:6808:3db3? ([2001:4958:15a0:30:d8b7:fa5f:6808:3db3])
+        by smtp.gmail.com with ESMTPSA id e11-20020a62ee0b000000b00642ea56f06dsm3984120pfi.26.2023.05.10.14.50.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 14:50:16 -0700 (PDT)
+Message-ID: <9022430e-a50b-7744-d8f5-d5953b5460e2@acm.org>
+Date:   Wed, 10 May 2023 14:50:16 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a92:90c:0:b0:331:3168:9c33 with SMTP id
- y12-20020a92090c000000b0033131689c33mr10139371ilg.0.1683755355037; Wed, 10
- May 2023 14:49:15 -0700 (PDT)
-Date:   Wed, 10 May 2023 14:49:15 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d368dd05fb5dd7d3@google.com>
-Subject: [syzbot] [reiserfs?] KMSAN: uninit-value in reiserfs_security_init
-From:   syzbot <syzbot+00a3779539a23cbee38c@syzkaller.appspotmail.com>
-To:     glider@google.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH v3 3/7] ufs: mcq: Add supporting functions for mcq abort
+To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com, mani@kernel.org,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        beanhuo@micron.com, avri.altman@wdc.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Alice Chao <alice.chao@mediatek.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1683688692.git.quic_nguyenb@quicinc.com>
+ <d58b5c068bdc03d5fe6d0219bb211370ae681ed2.1683688693.git.quic_nguyenb@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <d58b5c068bdc03d5fe6d0219bb211370ae681ed2.1683688693.git.quic_nguyenb@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 5/9/23 22:24, Bao D. Nguyen wrote:
+> +/**
+> + * ufshcd_mcq_sq_cleanup - Clean up submission queue resources
+> + * associated with the pending command.
+> + * @hba - per adapter instance.
+> + * @task_tag - The command's task tag.
+> + * @result - Result of the clean up operation.
+> + *
+> + * Returns 0 and result on completion. Returns error code if
+> + * the operation fails.
+> + */
+> +int ufshcd_mcq_sq_cleanup(struct ufs_hba *hba, int task_tag, int *result)
+> +{
+> +	struct ufshcd_lrb *lrbp = &hba->lrb[task_tag];
+> +	struct scsi_cmnd *cmd = lrbp->cmd;
+> +	struct ufs_hw_queue *hwq;
+> +	void __iomem *reg, *opr_sqd_base;
+> +	u32 nexus, id, val;
+> +	int err;
+> +
+> +	if (task_tag != hba->nutrs - UFSHCD_NUM_RESERVED) {
+> +		if (!cmd)
+> +			return FAILED;
+> +		hwq = ufshcd_mcq_req_to_hwq(hba, scsi_cmd_to_rq(cmd));
+> +	} else {
+> +		hwq = hba->dev_cmd_queue;
+> +	}
+> +
+> +	id = hwq->id;
+> +
+> +	mutex_lock(&hwq->sq_mutex);
+> +
+> +	/* stop the SQ fetching before working on it */
+> +	err = ufshcd_mcq_sq_stop(hba, hwq);
+> +	if (err)
+> +		goto unlock;
+> +
+> +	/* SQCTI = EXT_IID, IID, LUN, Task Tag */
+> +	nexus = lrbp->lun << 8 | task_tag;
+> +	opr_sqd_base = mcq_opr_base(hba, OPR_SQD, id);
+> +	writel(nexus, opr_sqd_base + REG_SQCTI);
+> +
+> +	/* SQRTCy.ICU = 1 */
+> +	writel(SQ_ICU, opr_sqd_base + REG_SQRTC);
+> +
+> +	/* Poll SQRTSy.CUS = 1. Return result from SQRTSy.RTC */
+> +	reg = opr_sqd_base + REG_SQRTS;
+> +	err = read_poll_timeout(readl, val, val & SQ_CUS, 20,
+> +				MCQ_POLL_US, false, reg);
+> +	if (err)
+> +		dev_err(hba->dev, "%s: failed. hwq=%d, lun=0x%x, tag=%d\n",
+> +			__func__, id, lrbp->lun, task_tag);
+> +
+> +	*result = FIELD_GET(SQ_ICU_ERR_CODE_MASK, readl(reg));
+> +
+> +	if (ufshcd_mcq_sq_start(hba, hwq))
+> +		err = FAILED;
+> +
+> +unlock:
+> +	mutex_unlock(&hwq->sq_mutex);
+> +	return err;
+> +}
 
-syzbot found the following issue on:
+Please do not use the FAILED / SUCCESS return values in this function. 
+These values should only be returned by functions related to SCSI error 
+handling. Please do the following:
+* Return a negative Unix error code in case of failure.
+* Return zero upon success.
+* Return the FIELD_GET() result as a positive value.
+* Remove the 'int *result' argument.
 
-HEAD commit:    46e8b6e7cfeb string: use __builtin_memcpy() in strlcpy/str..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ea03bc280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a7a1059074b7bdce
-dashboard link: https://syzkaller.appspot.com/bug?extid=00a3779539a23cbee38c
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+> +	/* prevent concurrent access to sq hw */
+> +	struct mutex sq_mutex;
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Hmm ... a submission queue (SQ) exists in host memory so I'm not sure 
+the "hw" part of the above comment is correct.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ad7fff770529/disk-46e8b6e7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ca6a66fcd14c/vmlinux-46e8b6e7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9dc8f5fe8588/bzImage-46e8b6e7.xz
+Thanks,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+00a3779539a23cbee38c@syzkaller.appspotmail.com
-
-REISERFS (device loop5): journal params: device loop5, size 512, journal first block 18, max trans len 256, max batch 225, max commit age 30, max trans age 30
-REISERFS (device loop5): checking transaction log (loop5)
-REISERFS (device loop5): Using r5 hash to sort names
-reiserfs: enabling write barrier flush mode
-=====================================================
-BUG: KMSAN: uninit-value in reiserfs_security_init+0x663/0x750 fs/reiserfs/xattr_security.c:84
- reiserfs_security_init+0x663/0x750 fs/reiserfs/xattr_security.c:84
- reiserfs_mkdir+0x418/0xfc0 fs/reiserfs/namei.c:823
- xattr_mkdir fs/reiserfs/xattr.c:77 [inline]
- create_privroot fs/reiserfs/xattr.c:890 [inline]
- reiserfs_xattr_init+0x47e/0xc00 fs/reiserfs/xattr.c:1006
- reiserfs_remount+0xf9c/0x2390
- legacy_reconfigure+0x182/0x1d0 fs/fs_context.c:633
- reconfigure_super+0x346/0xdf0 fs/super.c:956
- do_remount fs/namespace.c:2701 [inline]
- path_mount+0x19c1/0x1ee0 fs/namespace.c:3361
- do_mount fs/namespace.c:3382 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x725/0x810 fs/namespace.c:3568
- __ia32_sys_mount+0xe3/0x150 fs/namespace.c:3568
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
-Local variable security created at:
- reiserfs_mkdir+0x5f/0xfc0 fs/reiserfs/namei.c:791
- xattr_mkdir fs/reiserfs/xattr.c:77 [inline]
- create_privroot fs/reiserfs/xattr.c:890 [inline]
- reiserfs_xattr_init+0x47e/0xc00 fs/reiserfs/xattr.c:1006
-
-CPU: 1 PID: 7610 Comm: syz-executor.5 Not tainted 6.4.0-rc1-syzkaller-g46e8b6e7cfeb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-=====================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Bart.
