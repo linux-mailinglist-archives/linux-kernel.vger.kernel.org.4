@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5134B6FE315
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B4A6FE317
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236479AbjEJRMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 13:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
+        id S235728AbjEJRNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 13:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjEJRMr (ORCPT
+        with ESMTP id S236499AbjEJRMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 10 May 2023 13:12:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB5E55AD;
-        Wed, 10 May 2023 10:12:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620B61BFE;
+        Wed, 10 May 2023 10:12:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BA9664A32;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A3F164A31;
         Wed, 10 May 2023 17:12:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7D3EC433A0;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8BB4C43443;
         Wed, 10 May 2023 17:12:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1683738760;
-        bh=KDLz2XZ/U61uBOSzISq5Lmmyrsw5rPfsdBYT/yaU1gs=;
+        bh=Mf57p9lptadAfKL3dhRFXC+h5FKe4rU53uP5IBmR1S8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kH2H8Nwzm84ddIvkA4D8C9Uo9xeEuzeudQxT16AV+LHp7D+4rWV9ORCvdVjzzlIxD
-         4EAU3MzApfhHoow7hEvlePyhVbv0OeLcrO1TjT6C1DltuNBxUd0WVjNJTw6ZY9j97F
-         hVTOfKJlqD99jV+gmzDgvUJN7LS8MdBpRnBBKPBrUp2GuaO53Eb6x91TnzdSVsPGck
-         4DbVhhmHJoHnPr4yO562ldfMcPuFT2xGTmdEk35s3HnbeKo94MUcfsrZ6jbkxbqAxE
-         Rbui9GV7ISb8wviqseT/2pMpBAzF8VYZnx2ebknwWjz3Wj4x3GUueqzhnFY1Kv6j5r
-         yBjaPgNySlVUw==
+        b=hLmtVJbWAWlZzBF+yKt1RteGr77Rvk+5w0UB5Gf8f6T6n+GRid+C80Kdcn3+JlLlV
+         Qz3YcVsnXDXuoVz1q+ZQyBKEdl0lMma7LV3XVtCNqX2uVvt0AkXLO4NsertlFVrC8v
+         L9qXqrpuh70ftBlagA0tkVnxzqA3D9i7jwb5pIAsLeHk1Xk78rRfUKdAwy2ixgNuEm
+         alDDxEdObxdNYFRemZPO2e8Vu+OX+VGuWEn63Gh5RL4VFgwbAERGZJKOjf2Zavdwiv
+         WUEF/VMNknNwjPEi5dRw5Ok5kQdLMEvP8DOxlRxEK9WKtkTq3ygJhlug0eeUt56qU7
+         g0CbXzjSG2rnw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5D937CE127D; Wed, 10 May 2023 10:12:40 -0700 (PDT)
+        id 60574CE127F; Wed, 10 May 2023 10:12:40 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Joel Fernandes <joel@joelfernandes.org>,
+        rostedt@goodmis.org, Zqiang <qiang1.zhang@intel.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 4/6] rcu/rcuscale: Stop kfree_scale_thread thread(s) after unloading rcuscale
-Date:   Wed, 10 May 2023 10:12:36 -0700
-Message-Id: <20230510171238.2189921-4-paulmck@kernel.org>
+Subject: [PATCH rcu 5/6] doc/rcutorture: Add description of rcutorture.stall_cpu_block
+Date:   Wed, 10 May 2023 10:12:37 -0700
+Message-Id: <20230510171238.2189921-5-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <7ffd4a5d-61e9-4b4c-a312-a85bcde08c39@paulmck-laptop>
 References: <7ffd4a5d-61e9-4b4c-a312-a85bcde08c39@paulmck-laptop>
@@ -59,75 +57,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+From: Zqiang <qiang1.zhang@intel.com>
 
-Running the 'kfree_rcu_test' test case [1] results in a splat [2].
-The root cause is the kfree_scale_thread thread(s) continue running
-after unloading the rcuscale module.  This commit fixes that isue by
-invoking kfree_scale_cleanup() from rcu_scale_cleanup() when removing
-the rcuscale module.
+If you build a kernel with CONFIG_PREEMPTION=n and CONFIG_PREEMPT_COUNT=y,
+then run the rcutorture tests specifying stalls as follows:
 
-[1] modprobe rcuscale kfree_rcu_test=1
-    // After some time
-    rmmod rcuscale
-    rmmod torture
+runqemu kvm slirp nographic qemuparams="-m 1024 -smp 4" \
+	bootparams="console=ttyS0 rcutorture.stall_cpu=30 \
+	rcutorture.stall_no_softlockup=1 rcutorture.stall_cpu_block=1" -d
 
-[2] BUG: unable to handle page fault for address: ffffffffc0601a87
-    #PF: supervisor instruction fetch in kernel mode
-    #PF: error_code(0x0010) - not-present page
-    PGD 11de4f067 P4D 11de4f067 PUD 11de51067 PMD 112f4d067 PTE 0
-    Oops: 0010 [#1] PREEMPT SMP NOPTI
-    CPU: 1 PID: 1798 Comm: kfree_scale_thr Not tainted 6.3.0-rc1-rcu+ #1
-    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
-    RIP: 0010:0xffffffffc0601a87
-    Code: Unable to access opcode bytes at 0xffffffffc0601a5d.
-    RSP: 0018:ffffb25bc2e57e18 EFLAGS: 00010297
-    RAX: 0000000000000000 RBX: ffffffffc061f0b6 RCX: 0000000000000000
-    RDX: 0000000000000000 RSI: ffffffff962fd0de RDI: ffffffff962fd0de
-    RBP: ffffb25bc2e57ea8 R08: 0000000000000000 R09: 0000000000000000
-    R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
-    R13: 0000000000000000 R14: 000000000000000a R15: 00000000001c1dbe
-    FS:  0000000000000000(0000) GS:ffff921fa2200000(0000) knlGS:0000000000000000
-    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-    CR2: ffffffffc0601a5d CR3: 000000011de4c006 CR4: 0000000000370ee0
-    DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-    DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-    Call Trace:
-     <TASK>
-     ? kvfree_call_rcu+0xf0/0x3a0
-     ? kthread+0xf3/0x120
-     ? kthread_complete_and_exit+0x20/0x20
-     ? ret_from_fork+0x1f/0x30
-     </TASK>
-    Modules linked in: rfkill sunrpc ... [last unloaded: torture]
-    CR2: ffffffffc0601a87
-    ---[ end trace 0000000000000000 ]---
+The tests will produce the following splat:
 
-Fixes: e6e78b004fa7 ("rcuperf: Add kfree_rcu() performance Tests")
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+[   10.841071] rcu-torture: rcu_torture_stall begin CPU stall
+[   10.841073] rcu_torture_stall start on CPU 3.
+[   10.841077] BUG: scheduling while atomic: rcu_torture_sta/66/0x0000000
+....
+[   10.841108] Call Trace:
+[   10.841110]  <TASK>
+[   10.841112]  dump_stack_lvl+0x64/0xb0
+[   10.841118]  dump_stack+0x10/0x20
+[   10.841121]  __schedule_bug+0x8b/0xb0
+[   10.841126]  __schedule+0x2172/0x2940
+[   10.841157]  schedule+0x9b/0x150
+[   10.841160]  schedule_timeout+0x2e8/0x4f0
+[   10.841192]  schedule_timeout_uninterruptible+0x47/0x50
+[   10.841195]  rcu_torture_stall+0x2e8/0x300
+[   10.841199]  kthread+0x175/0x1a0
+[   10.841206]  ret_from_fork+0x2c/0x50
+
+This is because the rcutorture.stall_cpu_block=1 module parameter causes
+rcu_torture_stall() to invoke schedule_timeout_uninterruptible() within
+an RCU read-side critical section.  This in turn results in a quiescent
+state (which prevents the stall) and a sleep in an atomic context (which
+produces the above splat).
+
+Although this code is operating as designed, the design has proven to
+be counterintuitive to many.  This commit therefore updates the description
+in kernel-parameters.txt accordingly.
+
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/rcuscale.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/admin-guide/kernel-parameters.txt | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
-index 7e8965b0827a..d1221731c7cf 100644
---- a/kernel/rcu/rcuscale.c
-+++ b/kernel/rcu/rcuscale.c
-@@ -797,6 +797,11 @@ rcu_scale_cleanup(void)
- 	if (gp_exp && gp_async)
- 		SCALEOUT_ERRSTRING("No expedited async GPs, so went with async!");
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 9e5bab29685f..eaffe0f8771d 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5087,8 +5087,16 @@
  
-+	if (kfree_rcu_test) {
-+		kfree_scale_cleanup();
-+		return;
-+	}
+ 	rcutorture.stall_cpu_block= [KNL]
+ 			Sleep while stalling if set.  This will result
+-			in warnings from preemptible RCU in addition
+-			to any other stall-related activity.
++			in warnings from preemptible RCU in addition to
++			any other stall-related activity.  Note that
++			in kernels built with CONFIG_PREEMPTION=n and
++			CONFIG_PREEMPT_COUNT=y, this parameter will
++			cause the CPU to pass through a quiescent state.
++			Any such quiescent states will suppress RCU CPU
++			stall warnings, but the time-based sleep will
++			also result in scheduling-while-atomic splats.
++			Which might or might not be what you want.
 +
- 	if (torture_cleanup_begin())
- 		return;
- 	if (!cur_ops) {
+ 
+ 	rcutorture.stall_cpu_holdoff= [KNL]
+ 			Time to wait (s) after boot before inducing stall.
 -- 
 2.40.1
 
