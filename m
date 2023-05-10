@@ -2,112 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BE86FE3B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1228C6FE3D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbjEJSQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 14:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
+        id S236088AbjEJSSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 14:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjEJSQJ (ORCPT
+        with ESMTP id S236089AbjEJSSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 14:16:09 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1562B61B0;
-        Wed, 10 May 2023 11:16:03 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1aad5245632so54648195ad.3;
-        Wed, 10 May 2023 11:16:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683742562; x=1686334562;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MV9KKbnlL+o+b9x6xmrTpuZGcH+89cbdDhrFO47jPDI=;
-        b=o5Y7xv20o5mb5unhzSkkqEMFLfZemZ3Fq7tIeDgj5NY1msy0Go/2xY/wrMzxSfT9D9
-         JwJMcse7ELe/2fUUuGgymqY0hXejB61olNuRHmUKr0Z8boiMUjl7njBt3h9xf/bNKwFd
-         xVkjozoLCJQOL0/KCaHABwNZ0vbBae2mjSS+/jhRJl3/V91GXz7iWNNn4AVYNHoZSaYZ
-         dmQvMPiRSQbmR9YgMom1IYy94DESmAzhyBARwsmm9FsMMHhdiJyPZwdij2iXvsuYkf93
-         miMGoKNSWCwprwfIgGEMuVLBCAWWkFDY5uJmxg4nDETy0lz5FHKo1Okb+ouDQemKHr15
-         o9Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683742562; x=1686334562;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MV9KKbnlL+o+b9x6xmrTpuZGcH+89cbdDhrFO47jPDI=;
-        b=kzFRYuA0zfGGYB8TmhLvGuge5JkqplhH/PW8feAIumZXCORS1I/AQkRJwFCM3X2jzJ
-         rl45HrjyXUQxNcMeyaZNJWwcKKirub4uSo8hVaMUjTworBVK2s0P1qDRrufEuKW/Qg4J
-         U78vYdRYGn+Ntc2rSFcircIUAsPVYBLI2S2FP9WQotC0sdg0qSxh9DJcjtEJoA6ypLrn
-         AbYbSB9eBRS4zX9pMjsCipf/nXROSuxtHTyRsPquj4RaconI2Y3H1ardRFUqHSVRH8d1
-         RPUqQPz1lNxLNUEN+iPVP1bemrc/7l8Jo9fKMuvo4BvNTS/NiepDBiWAHewnW+5fK2Qt
-         5ivQ==
-X-Gm-Message-State: AC+VfDxU4lXZEhmZ0yRzvjD+iBh78RzOgxOvlbDDA6tIZXldqq8GtH+A
-        URUe24yybYPBTxGyuYEE5CY=
-X-Google-Smtp-Source: ACHHUZ5zdzxE/nxzHwipE7aLMexdW6UuNkId05cX7KuDNO37PTIHoYGXQ2ZzwwAuGUkqY/Bm0hpOJg==
-X-Received: by 2002:a17:902:eb4b:b0:1a6:7632:2b20 with SMTP id i11-20020a170902eb4b00b001a676322b20mr19942490pli.40.1683742562313;
-        Wed, 10 May 2023 11:16:02 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id j12-20020a170902690c00b001a04d27ee92sm4082703plk.241.2023.05.10.11.16.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 11:16:01 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 10 May 2023 08:16:00 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 02/13] wifi: mwifiex: Use default @max_active for
- workqueues
-Message-ID: <ZFvfYK-u8suHjPFw@slm.duckdns.org>
-References: <20230509015032.3768622-1-tj@kernel.org>
- <20230509015032.3768622-3-tj@kernel.org>
- <ZFvd8zcPq4ijSszM@google.com>
+        Wed, 10 May 2023 14:18:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722B57A8A;
+        Wed, 10 May 2023 11:17:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB5D163F7A;
+        Wed, 10 May 2023 18:17:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32FCFC433D2;
+        Wed, 10 May 2023 18:17:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683742639;
+        bh=KB8lXc7zZ3+DrRqeJZSACdw3EUil7+a97nQI2II+M98=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AD+barTaVX8y+DNIVRHjyZVk6aMS9U9wGnwdUs+i6L7QVRCp2GNxW0J4DvKl8xUNp
+         bef+WyWRqxQ2qNXW0T4LmPXu0Tb/ybPtFbl+QQpTI1slzRMZRQszn8vuuhXH/Zr/Z3
+         WGIICvcEU0TWzGd5ZK76KKHSI2Yu/RyGaXDFWRZrKjuOwaOCsBrB4nle1fUDxbdL+L
+         zSBm6cWODgesfyDPnvqjTkKlymAb4LaVjjTQ0bNTlKYK/28BkVarf4OtUL5sBx1xZC
+         IwFBwpnaBe1ltvrGZxViCB1Tpmx9dF1IE8bHX8muehsIXUXqQtxJPkYkuB+562ZEst
+         BCQf7NrxipUUw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D024CCE120B; Wed, 10 May 2023 11:17:18 -0700 (PDT)
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, akiyks@gmail.com, linux-doc@vger.kernel.org,
+        kernel-team@meta.com, "Paul E. McKenney" <paulmck@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: [PATCH locking/atomic 01/19] locking/atomic: Fix fetch_add_unless missing-period typo
+Date:   Wed, 10 May 2023 11:16:59 -0700
+Message-Id: <20230510181717.2200934-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop>
+References: <19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFvd8zcPq4ijSszM@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The fetch_add_unless() kernel-doc header is missing a period (".").
+Therefore, add it.
 
-On Wed, May 10, 2023 at 11:09:55AM -0700, Brian Norris wrote:
-> I'll admit, the workqueue documentation sounds a bit like "max_active ==
-> 1 + WQ_UNBOUND" is what we want ("one work item [...] active at any
-> given time"), but that's more of my misunderstanding than anything --
-> each work item can only be active in a single context at any given time,
-> so that note is talking about distinct (i.e., more than 1) work items.
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+---
+ include/linux/atomic/atomic-arch-fallback.h | 6 +++---
+ scripts/atomic/fallbacks/fetch_add_unless   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Yeah, a future patch is gonna change the semantics a bit and I'll update the
-doc to be clearer.
-
-> While I'm here: we're still debugging what's affecting WiFi performance
-> on some of our WiFi systems, but it's possible I'll be turning some of
-> these into struct kthread_worker instead. We can cross that bridge
-> (including potential conflicts) if/when we come to it though.
-
-Can you elaborate the performance problem you're seeing? I'm working on a
-major update for workqueue to improve its locality behavior, so if you're
-experiencing issues on CPUs w/ multiple L3 caches, it'd be a good test case.
-
-Thanks.
-
+diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
+index a6e4437c5f36..c4087c32fb0e 100644
+--- a/include/linux/atomic/atomic-arch-fallback.h
++++ b/include/linux/atomic/atomic-arch-fallback.h
+@@ -1351,7 +1351,7 @@ arch_atomic_add_negative(int i, atomic_t *v)
+  * @u: ...unless v is equal to u.
+  *
+  * Atomically adds @a to @v, so long as @v was not already @u.
+- * Returns original value of @v
++ * Returns original value of @v.
+  */
+ static __always_inline int
+ arch_atomic_fetch_add_unless(atomic_t *v, int a, int u)
+@@ -2567,7 +2567,7 @@ arch_atomic64_add_negative(s64 i, atomic64_t *v)
+  * @u: ...unless v is equal to u.
+  *
+  * Atomically adds @a to @v, so long as @v was not already @u.
+- * Returns original value of @v
++ * Returns original value of @v.
+  */
+ static __always_inline s64
+ arch_atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
+@@ -2668,4 +2668,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
+ #endif
+ 
+ #endif /* _LINUX_ATOMIC_FALLBACK_H */
+-// ad2e2b4d168dbc60a73922616047a9bfa446af36
++// 201cc01b616875888e0b2c79965c569a89c0edcd
+diff --git a/scripts/atomic/fallbacks/fetch_add_unless b/scripts/atomic/fallbacks/fetch_add_unless
+index 68ce13c8b9da..a1692df0d514 100755
+--- a/scripts/atomic/fallbacks/fetch_add_unless
++++ b/scripts/atomic/fallbacks/fetch_add_unless
+@@ -6,7 +6,7 @@ cat << EOF
+  * @u: ...unless v is equal to u.
+  *
+  * Atomically adds @a to @v, so long as @v was not already @u.
+- * Returns original value of @v
++ * Returns original value of @v.
+  */
+ static __always_inline ${int}
+ arch_${atomic}_fetch_add_unless(${atomic}_t *v, ${int} a, ${int} u)
 -- 
-tejun
+2.40.1
+
