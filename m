@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F44C6FDE6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5236FDE6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237009AbjEJNXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 09:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
+        id S237031AbjEJNXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 09:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236644AbjEJNXk (ORCPT
+        with ESMTP id S236019AbjEJNXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 09:23:40 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFED5BAC
+        Wed, 10 May 2023 09:23:41 -0400
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A257961B7
         for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 06:23:35 -0700 (PDT)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:cc75:d8ef:4074:8af9])
-        by albert.telenet-ops.be with bizsmtp
-        id v1PG2900C3l7qvk061PGDS; Wed, 10 May 2023 15:23:32 +0200
+        by andre.telenet-ops.be with bizsmtp
+        id v1PG2900T3l7qvk011PGsd; Wed, 10 May 2023 15:23:32 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtp (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1pwjme-001nDk-DC;
+        id 1pwjme-001nDl-DW;
         Wed, 10 May 2023 15:23:16 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1pwjmm-00F6qK-40;
+        id 1pwjmm-00F6qN-4j;
         Wed, 10 May 2023 15:23:16 +0200
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
 To:     Stephen Boyd <sboyd@kernel.org>,
@@ -51,9 +51,9 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2 1/2] iopoll: Call cpu_relax() in busy loops
-Date:   Wed, 10 May 2023 15:23:13 +0200
-Message-Id: <fe235a1f65bb6c86d2afcdf52d85f80ae728dcc5.1683722688.git.geert+renesas@glider.be>
+Subject: [PATCH v2 2/2] iopoll: Do not use timekeeping in read_poll_timeout_atomic()
+Date:   Wed, 10 May 2023 15:23:14 +0200
+Message-Id: <8db63020d18fc22e137e4a8f0aa15e6b9949a6f6.1683722688.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1683722688.git.geert+renesas@glider.be>
 References: <cover.1683722688.git.geert+renesas@glider.be>
@@ -61,75 +61,95 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is considered good practice to call cpu_relax() in busy loops, see
-Documentation/process/volatile-considered-harmful.rst.  This can not
-only lower CPU power consumption or yield to a hyperthreaded twin
-processor, but also allows an architecture to mitigate hardware issues
-(e.g. ARM Erratum 754327 for Cortex-A9 prior to r2p0) in the
-architecture-specific cpu_relax() implementation.
+read_poll_timeout_atomic() uses ktime_get() to implement the timeout
+feature, just like its non-atomic counterpart.  However, there are
+several issues with this, due to its use in atomic contexts:
 
-In addition, cpu_relax() is also a compiler barrier.  It is not
-immediately obvious that the @op argument "function" will result in an
-actual function call (e.g. in case of inlining).
+  1. When called in the s2ram path (as typically done by clock or PM
+     domain drivers), timekeeping may be suspended, triggering the
+     WARN_ON(timekeeping_suspended) in ktime_get():
 
-Where a function call is a C sequence point, this is lost on inlining.
-Therefore, with agressive enough optimization it might be possible for
-the compiler to hoist the:
+	WARNING: CPU: 0 PID: 654 at kernel/time/timekeeping.c:843 ktime_get+0x28/0x78
 
-        (val) = op(args);
+     Calling ktime_get_mono_fast_ns() instead of ktime_get() would get
+     rid of that warning.  However, that would break timeout handling,
+     as (at least on systems with an ARM architectured timer), the time
+     returned by ktime_get_mono_fast_ns() does not advance while
+     timekeeping is suspended.
+     Interestingly, (on the same ARM systems) the time returned by
+     ktime_get() does advance while timekeeping is suspended, despite
+     the warning.
 
-"load" out of the loop because it doesn't see the value changing. The
-addition of cpu_relax() would inhibit this.
+  2. Depending on the actual clock source, and especially before a
+     high-resolution clocksource (e.g. the ARM architectured timer)
+     becomes available, time may not advance in atomic contexts, thus
+     breaking timeout handling.
 
-As the iopoll helpers lack calls to cpu_relax(), people are sometimes
-reluctant to use them, and may fall back to open-coded polling loops
-(including cpu_relax() calls) instead.
-
-Fix this by adding calls to cpu_relax() to the iopoll helpers:
-  - For the non-atomic case, it is sufficient to call cpu_relax() in
-    case of a zero sleep-between-reads value, as a call to
-    usleep_range() is a safe barrier otherwise.  However, it doesn't
-    hurt to add the call regardless, for simplicity, and for similarity
-    with the atomic case below.
-  - For the atomic case, cpu_relax() must be called regardless of the
-    sleep-between-reads value, as there is no guarantee all
-    architecture-specific implementations of udelay() handle this.
+Fix this by abandoning the idea that one can rely on timekeeping to
+implement timeout handling in all atomic contexts, and switch from a
+global time-based to a locally-estimated timeout handling.  In most
+(all?) cases the timeout condition is exceptional and an error
+condition, hence any additional delays due to underestimating wall clock
+time are irrelevant.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
 ---
+Alternatively, one could use a mixed approach (use both
+ktime_get_mono_fast_ns() and a local (under)estimate, and timeout on the
+earliest occasion), but I think that would complicate things without
+much gain.
+
 v2:
-  - Add Acked-by,
-  - Add compiler barrier and inlining explanation (thanks, Peter!).
+  - New.
 ---
- include/linux/iopoll.h | 2 ++
- 1 file changed, 2 insertions(+)
+ include/linux/iopoll.h | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
 diff --git a/include/linux/iopoll.h b/include/linux/iopoll.h
-index 2c8860e406bd8cae..0417360a6db9b0d6 100644
+index 0417360a6db9b0d6..bb2e1d9117e96679 100644
 --- a/include/linux/iopoll.h
 +++ b/include/linux/iopoll.h
-@@ -53,6 +53,7 @@
+@@ -81,22 +81,30 @@
+ 					delay_before_read, args...) \
+ ({ \
+ 	u64 __timeout_us = (timeout_us); \
++	s64 __left_ns = __timeout_us * NSEC_PER_USEC; \
+ 	unsigned long __delay_us = (delay_us); \
+-	ktime_t __timeout = ktime_add_us(ktime_get(), __timeout_us); \
+-	if (delay_before_read && __delay_us) \
++	u64 __delay_ns = __delay_us * NSEC_PER_USEC; \
++	if (delay_before_read && __delay_us) { \
+ 		udelay(__delay_us); \
++		if (__timeout_us) \
++			__left_ns -= __delay_ns; \
++	} \
+ 	for (;;) { \
+ 		(val) = op(args); \
+ 		if (cond) \
+ 			break; \
+-		if (__timeout_us && \
+-		    ktime_compare(ktime_get(), __timeout) > 0) { \
++		if (__timeout_us && __left_ns < 0) { \
+ 			(val) = op(args); \
+ 			break; \
  		} \
- 		if (__sleep_us) \
- 			usleep_range((__sleep_us >> 2) + 1, __sleep_us); \
-+		cpu_relax(); \
- 	} \
- 	(cond) ? 0 : -ETIMEDOUT; \
- })
-@@ -95,6 +96,7 @@
- 		} \
- 		if (__delay_us) \
+-		if (__delay_us) \
++		if (__delay_us) { \
  			udelay(__delay_us); \
-+		cpu_relax(); \
++			if (__timeout_us) \
++				__left_ns -= __delay_ns; \
++		} \
+ 		cpu_relax(); \
++		if (__timeout_us) \
++			__left_ns--; \
  	} \
  	(cond) ? 0 : -ETIMEDOUT; \
  })
