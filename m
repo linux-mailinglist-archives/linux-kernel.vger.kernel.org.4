@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFB46FD63D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 07:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853206FD63F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 07:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235728AbjEJFiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 01:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S235806AbjEJFim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 01:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEJFiR (ORCPT
+        with ESMTP id S235642AbjEJFij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 01:38:17 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55442719;
-        Tue,  9 May 2023 22:38:16 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50bc0117683so12182560a12.1;
-        Tue, 09 May 2023 22:38:16 -0700 (PDT)
+        Wed, 10 May 2023 01:38:39 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6C4271B
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 22:38:38 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-6439bc1e3aaso3889528b3a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 22:38:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683697095; x=1686289095;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+        d=google.com; s=20221208; t=1683697118; x=1686289118;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=IRV+sBk5PSnkH2cvQJEurZPQMXkcZOja4gthBlnfdvw=;
-        b=A1h54Fif7vGJHhX9m1f3Kshr1flFcjj5AzZ/ocnSu3BiLmXjzWi8eQZxj/rncY8miQ
-         0v27z+lMPwGBmHopVHW2+2J14kjpyubV1MgJlX+pboaAr0MZToQgz/2v2g3expkwDpKe
-         WZ3tAFfb7li10tp/88owAqkA0zPC+8hxwtaA6ff26GFvXDgrFw78JG7QQUH2LYdwFv5u
-         vN1FyOhDc6JeOVeA1f6OWLEPfCBTQVmdWhzybqZa7gw0D+OsML6oniiMpxYs4T4nzHQ6
-         JOlHgzkLxan/XMa7ezvhi7uRB3nazYJl74itRiBJ+qcoWns94wmL1BbIUw6l/93Qu5jR
-         rODA==
+        bh=sgUiCgU3PluO8I1muuqpEf3Ia4SIHEPSkMyiMMz9or4=;
+        b=JKhkMANCdve8/KBZ4tWsLrb35Ucn/9dbb9jOBv/cRu6xQ/8H3lm0z/6DMAVTLAIzaw
+         wkNm5xjm+/pjNc1SnszT3K4+5jNChom8yxYBZwbbIixJvKEh+sgePhKMCaTzfHtUeUaT
+         gvod4z/BVz2J2+2WuGUi+SU7x1j0FYs7nO0M6QiVJH68DVPP5I9TGulaAFihJjXjnYnM
+         oq9j5k/J4FDucGgQU4ZJQRRxegTkCqM/DJ1hK+Yl2Sbt6MSyxfoZjQ0TD/okUUhNfqx/
+         rH6mAiZWWIXzFtImVi9wK8jQkVNqZ6dqYr3l9sVgJNGaqmXd2QXSh/EYgzNqiWHDloGY
+         yrBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683697095; x=1686289095;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+        d=1e100.net; s=20221208; t=1683697118; x=1686289118;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IRV+sBk5PSnkH2cvQJEurZPQMXkcZOja4gthBlnfdvw=;
-        b=TLkqNKUsFgJO9oCgg0szbMQ8U1WFEULHsEBtlFNcWB/1CEKp0Mgr+HTUsi2NKNB1Hj
-         HyXhJIj7HpYUQl5g4boMbf8VkbsQNWvVu+SxOOJYk3zcQiVeCzP32ORWaGb4T1K56kdB
-         9X1wktJ/fnxCxZ6knmP8MqAj3Syd+10oKq1POX845PNPmpxI+dGmASiz3sajzN6hw6vc
-         tNPCZzLuLiGquMzfTIpMLdfhmPV4F7+aVR0jTt+4eKGTclGeUJHUQ0n6d0SxMV8/sA66
-         irXP6qnrxcGilP1P3oSoPXm0FHDYfa0ftu4yNPnkcmMkkQiW3zPo9AD62BR3WQy0Pq+T
-         TfTQ==
-X-Gm-Message-State: AC+VfDzqlEAnAOe8rkp5XJ4kA8SixYPC+hkrvVDUBHcC4iwkH2rlcrhc
-        JRwk9E7Kuu2FLo/OcDB5J29UONcxKqJKdpGRxE4=
-X-Google-Smtp-Source: ACHHUZ4ogjZtGrQXMJMKwEGu0G0AbD0KpYVERcNwR4arcIxdi5S+ollKjEgImzB7I/MuJA0JZh7eBw+2jTW/8V51pB4=
-X-Received: by 2002:a17:907:9808:b0:94f:4801:6d08 with SMTP id
- ji8-20020a170907980800b0094f48016d08mr15277609ejc.71.1683697095024; Tue, 09
- May 2023 22:38:15 -0700 (PDT)
-MIME-Version: 1.0
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Wed, 10 May 2023 07:38:04 +0200
-Message-ID: <CAKXUXMy3_krgwHMS6TaDZhBePkaHTHigntwBD0WFxMJ=DtgWYA@mail.gmail.com>
-Subject: Situation of CONFIG_CLK_SUNXI_PRCM_SUN9I
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-sunxi@lists.linux.dev, linux-clk@vger.kernel.org,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        bh=sgUiCgU3PluO8I1muuqpEf3Ia4SIHEPSkMyiMMz9or4=;
+        b=PNxRbXcNbdyHeYkMm+UBN7JBlIPWHcovTiajaeyKrQGJS/C4WRwVDnypBTkjH2KrzW
+         G+mMu73b1cvOTX23SN75DBQ91QYV9n1lUrfFag1KMHUk411thTWfOyRN6u90Ei84Lh/q
+         ndhsA4iQlJhS0/lZaqdpQL4hsWoDWlFrxlNHkgzWHZrWBqMYt7SeoLJVEF1Mr8oStxcg
+         OWAZOUvdMiEYIJmgRNDVoaTz86RmIlqtyCIW7rPwFt+yliMrlyYUY+W+jzC43XsrAZhl
+         MGbwyJKI7oh9I1GOUdAPvxLsJZl0uCjC90Z4D0yIqY1e5Om+qt7TbkJlgswk3sQr+KHy
+         W6ng==
+X-Gm-Message-State: AC+VfDzYzyfCJfrJhkEuAbYEWP7u43rfv4B64GQlt8uAyfFUK5/KnRwJ
+        s4Z23e/BNeZR1CvdnSfHvEHOXafgFVUjJQ==
+X-Google-Smtp-Source: ACHHUZ7vHZ8F8rpi4vKX8dfvMN6thxrKRmRi02Tukl1XOtNa2jsns36iWDO8yi0vzcNoxWchQEjeYLQNwfQc0w==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a05:6a00:d5a:b0:643:536b:e764 with SMTP
+ id n26-20020a056a000d5a00b00643536be764mr4660893pfv.4.1683697118051; Tue, 09
+ May 2023 22:38:38 -0700 (PDT)
+Date:   Wed, 10 May 2023 13:38:29 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
+Message-ID: <20230510053832.438529-1-davidgow@google.com>
+Subject: [PATCH v4 1/4] kunit: Always run cleanup from a test kthread
+From:   David Gow <davidgow@google.com>
+To:     Benjamin Berg <benjamin@sipsolutions.net>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Rae Moar <rmoar@google.com>,
+        Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>, maxime@cerno.tech,
+        Stephen Boyd <sboyd@kernel.org>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sadiya Kazi <sadiyakazi@google.com>,
+        Benjamin Berg <benjamin.berg@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,25 +73,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Maxime,
+KUnit tests run in a kthread, with the current->kunit_test pointer set
+to the test's context. This allows the kunit_get_current_test() and
+kunit_fail_current_test() macros to work. Normally, this pointer is
+still valid during test shutdown (i.e., the suite->exit function, and
+any resource cleanup). However, if the test has exited early (e.g., due
+to a failed assertion), the cleanup is done in the parent KUnit thread,
+which does not have an active context.
 
-with commit 49c726d55c1b ("clk: sunxi: Add Kconfig options"), you
-introduce various build configurations for Legacy clock support for
-Allwinner SoCs. Among them, you introduce the config
-CLK_SUNXI_PRCM_SUN9I in drivers/clk/sunxi/Kconfig, but this config is
-not used anywhere in the kernel tree.
+Instead, in the event test terminates early, run the test exit and
+cleanup from a new 'cleanup' kthread, which sets current->kunit_test,
+and better isolates the rest of KUnit from issues which arise in test
+cleanup.
 
-Can we just delete this config CLK_SUNXI_PRCM_SUN9I again, as it is
-not needed, or did you simply miss to adjust the Makefile for this
-option to be effective?
+If a test cleanup function itself aborts (e.g., due to an assertion
+failing), there will be no further attempts to clean up: an error will
+be logged and the test failed. For example:
+	 # example_simple_test: test aborted during cleanup. continuing without cleaning up
 
-I will gladly send a patch, once you could give me a quick pointer.
+This should also make it easier to get access to the KUnit context,
+particularly from within resource cleanup functions, which may, for
+example, need access to data in test->priv.
 
+Reviewed-by: Benjamin Berg <benjamin.berg@intel.com>
+Reviewed-by: Maxime Ripard <maxime@cerno.tech>
+Tested-by: Maxime Ripard <maxime@cerno.tech>
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-Best regards,
+This is an updated version of / replacement for "kunit: Set the current
+KUnit context when cleaning up", which instead creates a new kthread
+for cleanup tasks if the original test kthread is aborted. This protects
+us from failed assertions during cleanup, if the test exited early.
 
-Lukas
+Changes since v3:
+https://lore.kernel.org/all/20230421040218.2156548-1-davidgow@google.com/
+- Get rid of a unused 'suite' variable (kernel test robot)
+- Add Benjamin and Maxime's Reviewed-by tags.
 
-Note: This is a resent email (see original email:
-https://lore.kernel.org/all/CAKXUXMzqCktKz7vGN4_QAp4n1SeP0-YHL19evmVSfseZOemd5g@mail.gmail.com/);
-now hopefully with an email address for Maxime that reaches Maxime.
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20230419085426.1671703-1-davidgow@google.com/
+- Always run cleanup in its own kthread
+  - Therefore, never attempt to re-run it if it exits
+  - Thanks, Benjamin.
+
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20230415091401.681395-1-davidgow@google.com/
+- Move cleanup execution to another kthread
+  - (Thanks, Benjamin, for pointing out the assertion issues)
+
+---
+ lib/kunit/test.c | 56 +++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 48 insertions(+), 8 deletions(-)
+
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index e2910b261112..f5e4ceffd282 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -419,15 +419,54 @@ static void kunit_try_run_case(void *data)
+ 	 * thread will resume control and handle any necessary clean up.
+ 	 */
+ 	kunit_run_case_internal(test, suite, test_case);
+-	/* This line may never be reached. */
++}
++
++static void kunit_try_run_case_cleanup(void *data)
++{
++	struct kunit_try_catch_context *ctx = data;
++	struct kunit *test = ctx->test;
++	struct kunit_suite *suite = ctx->suite;
++
++	current->kunit_test = test;
++
+ 	kunit_run_case_cleanup(test, suite);
+ }
+ 
++static void kunit_catch_run_case_cleanup(void *data)
++{
++	struct kunit_try_catch_context *ctx = data;
++	struct kunit *test = ctx->test;
++	int try_exit_code = kunit_try_catch_get_result(&test->try_catch);
++
++	/* It is always a failure if cleanup aborts. */
++	kunit_set_failure(test);
++
++	if (try_exit_code) {
++		/*
++		 * Test case could not finish, we have no idea what state it is
++		 * in, so don't do clean up.
++		 */
++		if (try_exit_code == -ETIMEDOUT) {
++			kunit_err(test, "test case cleanup timed out\n");
++		/*
++		 * Unknown internal error occurred preventing test case from
++		 * running, so there is nothing to clean up.
++		 */
++		} else {
++			kunit_err(test, "internal error occurred during test case cleanup: %d\n",
++				  try_exit_code);
++		}
++		return;
++	}
++
++	kunit_err(test, "test aborted during cleanup. continuing without cleaning up\n");
++}
++
++
+ static void kunit_catch_run_case(void *data)
+ {
+ 	struct kunit_try_catch_context *ctx = data;
+ 	struct kunit *test = ctx->test;
+-	struct kunit_suite *suite = ctx->suite;
+ 	int try_exit_code = kunit_try_catch_get_result(&test->try_catch);
+ 
+ 	if (try_exit_code) {
+@@ -448,12 +487,6 @@ static void kunit_catch_run_case(void *data)
+ 		}
+ 		return;
+ 	}
+-
+-	/*
+-	 * Test case was run, but aborted. It is the test case's business as to
+-	 * whether it failed or not, we just need to clean up.
+-	 */
+-	kunit_run_case_cleanup(test, suite);
+ }
+ 
+ /*
+@@ -478,6 +511,13 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+ 	context.test_case = test_case;
+ 	kunit_try_catch_run(try_catch, &context);
+ 
++	/* Now run the cleanup */
++	kunit_try_catch_init(try_catch,
++			     test,
++			     kunit_try_run_case_cleanup,
++			     kunit_catch_run_case_cleanup);
++	kunit_try_catch_run(try_catch, &context);
++
+ 	/* Propagate the parameter result to the test case. */
+ 	if (test->status == KUNIT_FAILURE)
+ 		test_case->status = KUNIT_FAILURE;
+-- 
+2.40.1.521.gf1e218fcd8-goog
+
