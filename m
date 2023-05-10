@@ -2,113 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48286FE43C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FC36FE43F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235881AbjEJSx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 14:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
+        id S236051AbjEJSyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 14:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235765AbjEJSxz (ORCPT
+        with ESMTP id S236026AbjEJSyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 14:53:55 -0400
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7C319A2;
-        Wed, 10 May 2023 11:53:54 -0700 (PDT)
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-644d9bf05b7so3575794b3a.3;
-        Wed, 10 May 2023 11:53:54 -0700 (PDT)
+        Wed, 10 May 2023 14:54:52 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AB9128;
+        Wed, 10 May 2023 11:54:50 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bc456cc39so11425773a12.1;
+        Wed, 10 May 2023 11:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683744889; x=1686336889;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tpps0vuMSlTbVQSBZ3c03u7OEs5zj2+Xyh6XKEwYQRk=;
+        b=T9SSHxghDSA53XZUgiO0MzcDudpZJHg7tVnkzMeB7cDUoCg5Frs9+NwvhbF/9kkoLC
+         klfiu6RIv31S57mDxkeGjsZaZ35N5PjMJ5cPsCAVyHQtgYFzPtjuIW5TDy+OIfiUbe8w
+         4/nMjgBAz/FglLT+02TUMv/Eifaw4d0EynnRH+MjOrK3ZQmVbj+FNscUd8dZaQWrkEdH
+         BN21P7TgTmgPMk/WtxQexmnrCEdV6h7kqz8EUDrrxc3tGUTzOzVHpuAMK1wd4EgOeBxd
+         zX/BgydfsqeCOkarw56CooCg0Ix8QbsWi0kqokBo4eZvppj/QjcggYPgmpCHggCqaRjn
+         Sg+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683744834; x=1686336834;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9XZnXZk2NqNpZbu4ppDYH+lMIUnLxZBrdrLy3iG8Aa8=;
-        b=mBTxO1/kU9efMJdBRh7elV1kxyqMZIH/fZehDAYB/rGAUQxPEyuZH0hSkfeoWpkCAF
-         LhQoOO5JpM15T3ZljMBSUtlIb6BOQVbRuTymYNIP7nQnebDE2TM/qKDZHUHiTKCFkLYN
-         yL/dsW9ET4qtLdrUfyLYnaeLZ30MWIDnWIZaKJ2XNLoAZ+VuT8e0ed4jeYDYEx1N+6wK
-         1JBVb0cxDAAOs6ygKIYg+ZE1Hw2zuleTGN0w7AkXKtvHPKITME4dYGY2x/1EGqwh1W38
-         8nRNnnV/LMZGEDd4/g7Np/Xft3seD4OLDJlvCl6gAsePUv+c3F+/02Ph5veN990bm39s
-         hGhg==
-X-Gm-Message-State: AC+VfDyhSPgzq3ahlKNQASYb9P/dJ4RNpN7D0efY+5+hi34L2e/C1+sS
-        z7wDJ89d3P7r+bSysm8TFnpRwbefk3+HGQ==
-X-Google-Smtp-Source: ACHHUZ7HVQwdpYNHayRmEK7RfOJmhYOj4rPihYbqAz35h7Lwx5+EkcXZaO2LHdWD25WtT/YAFPJSgQ==
-X-Received: by 2002:a05:6a00:2e0e:b0:63d:24c0:1223 with SMTP id fc14-20020a056a002e0e00b0063d24c01223mr27077278pfb.29.1683744833649;
-        Wed, 10 May 2023 11:53:53 -0700 (PDT)
-Received: from ?IPV6:2001:4958:15a0:30:62b7:b46c:dff7:98a0? ([2001:4958:15a0:30:62b7:b46c:dff7:98a0])
-        by smtp.gmail.com with ESMTPSA id t7-20020aa79387000000b0063f2a5a59d1sm3828371pfe.190.2023.05.10.11.53.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 11:53:53 -0700 (PDT)
-Message-ID: <3b0a9357-88a6-c435-34d6-c75e9dfe9aaa@acm.org>
-Date:   Wed, 10 May 2023 11:53:52 -0700
+        d=1e100.net; s=20221208; t=1683744889; x=1686336889;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tpps0vuMSlTbVQSBZ3c03u7OEs5zj2+Xyh6XKEwYQRk=;
+        b=EFveUK3tp1sPwSZMYAtuPyvcbxS/DRn3ALGUCAYWUDy5JCO0n+6hFqQXMDNkIdhdi9
+         PI3c3Na53q6HORmvGC5EYVfTiF5lOJTBu1hhXPeT+DUvelUMOTeUPG9ZTIW79Jp+2qJL
+         cygGG4vZgMt1JUYGILLHWkqlERsxiyVFMXwrM2jJUV7RzcQ9qYVHFfLH0bwupjG7QIYA
+         m1M4ougbdWqzHNGR76lYWFjpz2/xBWgkvK5TaAeMivOc7e92EvF0nfyhSlfldqJD9ps+
+         1qbQUmEDkdTcyN/wJt9f9E1zyHdJIG3eGCfl6HAcfgqkT2LCzYds9DOzHZn4Rnnxyify
+         FHHg==
+X-Gm-Message-State: AC+VfDwfRdsscPXs01DmskOMU/sk3rUhOxiOuCXFD8HmBCgTxw9jtxTT
+        BKb4lpqAOBQEuJ3lpZSKQ10=
+X-Google-Smtp-Source: ACHHUZ4NAD8Wr3jSfg4mRi6MrmEydNrcDgkDp7wpSSCh2F4XtqVw74F5RsRQ5mvzdo/DOMGiZh3FAQ==
+X-Received: by 2002:aa7:cd76:0:b0:50b:c5b0:4de6 with SMTP id ca22-20020aa7cd76000000b0050bc5b04de6mr13966850edb.9.1683744889194;
+        Wed, 10 May 2023 11:54:49 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id y15-20020a50e60f000000b0050bc27a4967sm2160813edm.21.2023.05.10.11.54.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 11:54:48 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     samuel@sholland.org, wens@csie.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andre.przywara@arm.com,
+        Ludwig Kormann <ludwig.kormann@ict42.de>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v4 1/2] dt-bindings: arm: sunxi: add ICnova A20 ADB4006 binding
+Date:   Wed, 10 May 2023 20:54:41 +0200
+Message-ID: <2284225.ElGaqSPkdT@jernej-laptop>
+In-Reply-To: <20230510111528.2155582-2-ludwig.kormann@ict42.de>
+References: <20230510111528.2155582-1-ludwig.kormann@ict42.de>
+ <20230510111528.2155582-2-ludwig.kormann@ict42.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [RFC PATCH v1] ufs: poll HCS.UCRDY before issuing a UIC command
-Content-Language: en-US
-To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
-        sh425.lee@samsung.com, kwangwon.min@samsung.com
-References: <CGME20230509083312epcas2p375f77d18a9026f7d263750baf9c9a5bb@epcas2p3.samsung.com>
- <1683620674-160173-1-git-send-email-kwmad.kim@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1683620674-160173-1-git-send-email-kwmad.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/23 01:24, Kiwoong Kim wrote:
-> With auto hibern8 enabled, UIC could be working
-> for a while to process a hibern8 operation and HCI
-> reports UIC not ready for a short term through HCS.UCRDY.
-> And UFS driver can't recognize the operation.
-> UFSHCI spec specifies UCRDY like this:
-> whether the host controller is ready to process UIC COMMAND
+Dne sreda, 10. maj 2023 ob 13:15:27 CEST je Ludwig Kormann napisal(a):
+> Document board compatible names for In-Circuit ICnova A20 ADB4006
+> development board.
 > 
-> The 'ready' could be seen as many different meanings. If the meaning
-> includes not processing any request from HCI, processing a hibern8
-> operation can be 'not ready'. In this situation, the driver needs to
-> wait until the operations is completed.
-> 
-> Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
-> ---
->   drivers/ufs/core/ufshcd.c | 13 ++++++++++++-
->   1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index 96ce6af..fc79539 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -2368,7 +2368,18 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
->    */
->   static inline bool ufshcd_ready_for_uic_cmd(struct ufs_hba *hba)
->   {
-> -	return ufshcd_readl(hba, REG_CONTROLLER_STATUS) & UIC_COMMAND_READY;
-> +	ktime_t timeout = ktime_add_ms(ktime_get(), UIC_CMD_TIMEOUT);
-> +	u32 val = 0;
-> +
-> +	do {
-> +		val = ufshcd_readl(hba, REG_CONTROLLER_STATUS) &
-> +			UIC_COMMAND_READY;
-> +		if (val)
-> +			break;
-> +		usleep_range(500, 1000);
-> +	} while (ktime_before(ktime_get(), timeout));
-> +
-> +	return val ? true : false;
->   }
->   
->   /**
+> Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Ludwig Kormann <ludwig.kormann@ict42.de>
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+
+Best regards,
+Jernej
+
+
