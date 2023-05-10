@@ -2,92 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C756FE7D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853726FE7DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236721AbjEJXAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 19:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
+        id S236777AbjEJXCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 19:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236708AbjEJXAs (ORCPT
+        with ESMTP id S236497AbjEJXC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 19:00:48 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D578E64;
-        Wed, 10 May 2023 16:00:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QGr8x67C8z4x1f;
-        Thu, 11 May 2023 09:00:33 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1683759634;
-        bh=QzCFn1h29G/bL/3Cx7X3b+tfyK5M2OFZLl+RPDBwflI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Z0rVdoAWq9UibTNPKD71/nJ3Q+IjOlb/cwFNhD2m5xHJAVVDqGG82opnrC0fmP28r
-         7+WZTAvclUWeE0x6sLnUX5dgUuad1gOtQl86hkMRcIWx+JAI7weC6gutqrNoA5CPCj
-         wgERIQF8n9G8puNEDkYC2K2TCjvA5Uo9mhDJCux4C0glhcY3AslZ0GFDStdi8fFZgn
-         nRAyRTldg5x0Bi7WVDLQ+SdJWCrNtA7C4xNDqmsJzUX4Vyq0ll43t7BjqagvYfc9kX
-         JGBXHms5DCPRJsAvL97UgY/yopOQ08zPG2j42uGe6yswUUvwdOMPw7S40r3m0vDIV7
-         1sJgt7+Xm/9Jg==
-Date:   Thu, 11 May 2023 09:00:10 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the rcu tree
-Message-ID: <20230511090010.2916e9d7@canb.auug.org.au>
+        Wed, 10 May 2023 19:02:28 -0400
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06305249;
+        Wed, 10 May 2023 16:02:26 -0700 (PDT)
+Received: from local
+        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pwspE-0004Wg-2T;
+        Wed, 10 May 2023 23:02:25 +0000
+Date:   Thu, 11 May 2023 01:00:21 +0200
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH net-next 8/8] net: phy: realtek: setup ALDPS on RTL8221B
+Message-ID: <701034ea45c08db557af926a5a44113e4e45c634.1683756691.git.daniel@makrotopia.org>
+References: <cover.1683756691.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cWMP8pMeBl8/GQPDZfDGahB";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1683756691.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/cWMP8pMeBl8/GQPDZfDGahB
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Setup Link Down Power Saving Mode according the DTS property
+just like for RTL821x 1GE PHYs.
 
-Hi all,
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ drivers/net/phy/realtek.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-The following commit is also in the kselftest-fixes tree as a different
-commit (but the same patch):
+diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
+index 29168f98f451..b5d7208004d8 100644
+--- a/drivers/net/phy/realtek.c
++++ b/drivers/net/phy/realtek.c
+@@ -62,6 +62,10 @@
+ #define RTL8221B_SERDES_OPTION_MODE_2500BASEX		2
+ #define RTL8221B_SERDES_OPTION_MODE_HISGMII		3
+ 
++#define RTL8221B_PHYCR1				0xa430
++#define RTL8221B_PHYCR1_ALDPS_EN		BIT(2)
++#define RTL8221B_PHYCR1_ALDPS_XTAL_OFF_EN	BIT(12)
++
+ #define RTL8366RB_POWER_SAVE			0x15
+ #define RTL8366RB_POWER_SAVE_ON			BIT(12)
+ 
+@@ -757,6 +761,25 @@ static int rtl8226_match_phy_device(struct phy_device *phydev)
+ 	       rtlgen_supports_2_5gbps(phydev);
+ }
+ 
++static int rtl822x_probe(struct phy_device *phydev)
++{
++	struct device *dev = &phydev->mdio.dev;
++	int val;
++
++	val = phy_read_mmd(phydev, RTL8221B_MMD_SERDES_CTRL, RTL8221B_PHYCR1);
++	if (val < 0)
++		return val;
++
++	if (of_property_read_bool(dev->of_node, "realtek,aldps-enable"))
++		val |= RTL8221B_PHYCR1_ALDPS_EN | RTL8221B_PHYCR1_ALDPS_XTAL_OFF_EN;
++	else
++		val &= ~(RTL8221B_PHYCR1_ALDPS_EN | RTL8221B_PHYCR1_ALDPS_XTAL_OFF_EN);
++
++	phy_write_mmd(phydev, RTL8221B_MMD_SERDES_CTRL, RTL8221B_PHYCR1, val);
++
++	return 0;
++}
++
+ static int rtlgen_resume(struct phy_device *phydev)
+ {
+ 	int ret = genphy_resume(phydev);
+@@ -1034,6 +1057,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.match_phy_device = rtl8226_match_phy_device,
+ 		.get_features	= rtl822x_get_features,
+ 		.config_aneg	= rtl822x_config_aneg,
++		.probe          = rtl822x_probe,
+ 		.read_status	= rtl822x_read_status,
+ 		.suspend	= genphy_suspend,
+ 		.resume		= rtlgen_resume,
+@@ -1048,6 +1072,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.get_features	= rtl822x_get_features,
+ 		.config_aneg	= rtl822x_config_aneg,
+ 		.config_init	= rtl8221b_config_init,
++		.probe          = rtl822x_probe,
+ 		.read_status	= rtl822x_read_status,
+ 		.suspend	= genphy_suspend,
+ 		.resume		= rtlgen_resume,
+@@ -1061,6 +1086,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.name           = "RTL8226-CG 2.5Gbps PHY",
+ 		.get_features   = rtl822x_get_features,
+ 		.config_aneg    = rtl822x_config_aneg,
++		.probe          = rtl822x_probe,
+ 		.read_status    = rtl822x_read_status,
+ 		.suspend        = genphy_suspend,
+ 		.resume         = rtlgen_resume,
+@@ -1073,6 +1099,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.get_features   = rtl822x_get_features,
+ 		.config_aneg    = rtl822x_config_aneg,
+ 		.config_init    = rtl8221b_config_init,
++		.probe          = rtl822x_probe,
+ 		.read_status    = rtl822x_read_status,
+ 		.suspend        = genphy_suspend,
+ 		.resume         = rtlgen_resume,
+@@ -1085,6 +1112,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.get_features   = rtl822x_get_features,
+ 		.config_aneg    = rtl822x_config_aneg,
+ 		.config_init    = rtl8221b_config_init,
++		.probe          = rtl822x_probe,
+ 		.read_status    = rtl822x_read_status,
+ 		.suspend        = genphy_suspend,
+ 		.resume         = rtlgen_resume,
+@@ -1097,6 +1125,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.get_features   = rtl822x_get_features,
+ 		.config_aneg    = rtl822x_config_aneg,
+ 		.config_init    = rtl8221b_config_init,
++		.probe          = rtl822x_probe,
+ 		.read_status    = rtl822x_read_status,
+ 		.suspend        = genphy_suspend,
+ 		.resume         = rtlgen_resume,
+-- 
+2.40.0
 
-  6d9ed63d8bc3 ("tools/nolibc: Fix build of stdio.h due to header ordering")
-
-This is commit
-
-  d7eafa64a158 ("tools/nolibc: Fix build of stdio.h due to header ordering")
-
-in the kselftest-fixes tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/cWMP8pMeBl8/GQPDZfDGahB
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRcIfsACgkQAVBC80lX
-0GxtVggAl58IIBbzXmmlw5jkg8O6jGeWQLan9BcXuw4YzxDGovpw4ghpKS61/lnB
-WnyVn0UJfkWfuih0bhgH5Y0L1mkVjDxsuBLHLEl8m5cWHZYRMgPH2OH9Jw3bqPDV
-TAGjnI7Be4m3Ez0L6KzWfuNYLdcrXi4zR1QuU7ZS90OA+7mvxO77Rx0dGN6apo46
-lDW/2lnLfT0GKO7Xm4xdCLnkbwm/L7NVqCkaF1FrwnKpQhu7vcg8nWL4yB7yDfUI
-ZOvwBoS0xdSjwjXkTX2sW738KL1xT3KbmVVI7utYGG18o/WJXlNxKlHAXng1tXuq
-Jr8Oq2WuXitV9Ks/kIY9I0bo31XhQw==
-=dS1F
------END PGP SIGNATURE-----
-
---Sig_/cWMP8pMeBl8/GQPDZfDGahB--
