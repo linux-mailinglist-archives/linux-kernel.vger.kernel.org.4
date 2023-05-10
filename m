@@ -2,153 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A068D6FD81E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB7C6FD825
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235403AbjEJH2K convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 10 May 2023 03:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S235925AbjEJH25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbjEJH2A (ORCPT
+        with ESMTP id S235728AbjEJH2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:28:00 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEE77685;
-        Wed, 10 May 2023 00:27:59 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-55aa1da9d4aso123011427b3.2;
-        Wed, 10 May 2023 00:27:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683703678; x=1686295678;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R/M4kBUQ3T71VECB9ErMGjXnIVkB1Yfzf0h7hxHFNps=;
-        b=blE96rx1QifM9syqNe7EpWFVYV4LG8z9NHEuPR2xuMrm7QJBBoTpxV6TpZ5lttGrLa
-         eq/8AU3LJKnAtHEcfSZyeyIcmNJApSXBMAJXMbpgjjhXNGIufgnY89DfMTVuYXe/7UBR
-         ajMjae5p46inKTAcTmRpAzOo3tjEt3r2XEh8TTM24XHcbxHMOzykdHgCwg3wv9dYpDip
-         FrCp0hUBUQHb3Flx/OWh1ihUtFHkXCMppafimgD6nYiV2pIYVoNNm0SzVDsoEeSbrKWj
-         p0dW5WD46hgxo2BgAcH5XswoxFYZ9+cuXKKUNDPyc3snmTCAV9Rswys3zV4rAeqhlcL8
-         qdlw==
-X-Gm-Message-State: AC+VfDxo4GuJdhHEiyuRxTA9nvTfIpVBj+mlRvolJDcFB5Xybp9m/8zx
-        DMBK2MBiNinFYZSP782KMwfetu4OTinwvw==
-X-Google-Smtp-Source: ACHHUZ5JnMefCibY/HE/Hy3rWSTd9jmQve5j9uQ9uqfFULkt7vvfv7yfj1Xd3Q7BS2fbMDyXQoGJkA==
-X-Received: by 2002:a81:bf52:0:b0:559:f0ef:aac0 with SMTP id s18-20020a81bf52000000b00559f0efaac0mr17717074ywk.30.1683703677952;
-        Wed, 10 May 2023 00:27:57 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id x8-20020a814a08000000b0054f56baf3f2sm3665267ywa.122.2023.05.10.00.27.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 00:27:57 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-55a00da4e53so123092807b3.0;
-        Wed, 10 May 2023 00:27:57 -0700 (PDT)
-X-Received: by 2002:a81:5b54:0:b0:559:f52b:7c5f with SMTP id
- p81-20020a815b54000000b00559f52b7c5fmr17815046ywb.17.1683703677625; Wed, 10
- May 2023 00:27:57 -0700 (PDT)
+        Wed, 10 May 2023 03:28:51 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE8B7AA8
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:28:37 -0700 (PDT)
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683703715;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=O5nXiqMgCa2OYCOkf4JPFNZUWtGToltv6G0Iw34JEBM=;
+        b=yKMzioS/WLKt1mjb1d15ayb4qofW4/Q3QxUZ08yPD+7WwVBVdVBMWeHaEVBVCUBPOaO+JT
+        35JumrUCe0Sg3Z+2Am8FTSI3r2C5Dn03BNDDdH0YNz//dcAfX9DF0M1IKBlfCFHOp1d8up
+        VFnTRWu+GGpxzKs71I3/AAgZMK0AoqRNf/mGofx58HPlamBmpFiF7trXBcdxcgeriXoqsk
+        +J6OA+kXAroSYMNcvr3T3CKuQektEk9wtN87fA++pFefnL3/8USBRp34E+VytxvLLM7c3Z
+        DpIuuznPNylkIKL8T0kTcWMYULFBRNjtP8WETv2VsiEE2WJ3mEZybiy3zGkyJg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683703715;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=O5nXiqMgCa2OYCOkf4JPFNZUWtGToltv6G0Iw34JEBM=;
+        b=pVzkdN87DOsGcQ1YWYaIFSsI/07Vz2uaElGI0UtKW/reWDH2fCiLNr8PlupwGMIlZLuaGU
+        kn+k9Am06vsq7jDg==
+To:     linux-kernel@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>
+Subject: [PATCH v6 00/21] timer: Move from a push remote at enqueue to a pull at expiry model
+Date:   Wed, 10 May 2023 09:27:56 +0200
+Message-Id: <20230510072817.116056-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
-References: <20230510065819.3987-1-wsa+renesas@sang-engineering.com> <20230510065819.3987-3-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20230510065819.3987-3-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 10 May 2023 09:27:46 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVHydQUBD6+zyLneuczd-3ixFbcF5z0toxZmhePT+ShSw@mail.gmail.com>
-Message-ID: <CAMuHMdVHydQUBD6+zyLneuczd-3ixFbcF5z0toxZmhePT+ShSw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PCI: rcar-host: add support for optional regulators
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+Placing timers at enqueue time on a target CPU based on dubious heuristics
+does not make any sense:
 
-On Wed, May 10, 2023 at 8:59 AM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> The KingFisher board has regulators. They just need to be en-/disabled,
-> so we can leave the handling to devm.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->
-> Changes since RFC:
-> * add 12v regulator
-> * add comment about the order of enabling the regulators
-> * use a for-loop to iterate over the regulators
+ 1) Most timer wheel timers are canceled or rearmed before they expire.
 
-Thanks for the update!
+ 2) The heuristics to predict which CPU will be busy when the timer expires
+    are wrong by definition.
 
-> --- a/drivers/pci/controller/pcie-rcar-host.c
-> +++ b/drivers/pci/controller/pcie-rcar-host.c
-> @@ -29,6 +29,7 @@
->  #include <linux/phy/phy.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/regulator/consumer.h>
->
->  #include "pcie-rcar.h"
->
-> @@ -974,13 +975,18 @@ static const struct of_device_id rcar_pcie_of_match[] = {
->         {},
->  };
->
-> +/* Design note 346 from Linear Technology says order is not important */
-> +static const char * const rcar_pcie_supplies[] = {
-> +       "vpcie12v", "vpcie3v3", "vpcie1v5"
-> +};
-> +
->  static int rcar_pcie_probe(struct platform_device *pdev)
->  {
->         struct device *dev = &pdev->dev;
->         struct rcar_pcie_host *host;
->         struct rcar_pcie *pcie;
->         u32 data;
-> -       int err;
-> +       int i, err;
+So placing the timers at enqueue wastes precious cycles.
 
-unsigned int i?
+The proper solution to this problem is to always queue the timers on the
+local CPU and allow the non pinned timers to be pulled onto a busy CPU at
+expiry time.
 
->         struct pci_host_bridge *bridge;
+Therefore split the timer storage into local pinned and global timers:
+Local pinned timers are always expired on the CPU on which they have been
+queued. Global timers can be expired on any CPU.
 
-The (lack of) reverse-Xmas-tree ordering is hurting my OCD, but that's
-not your fault...
+As long as a CPU is busy it expires both local and global timers. When a
+CPU goes idle it arms for the first expiring local timer. If the first
+expiring pinned (local) timer is before the first expiring movable timer,
+then no action is required because the CPU will wake up before the first
+movable timer expires. If the first expiring movable timer is before the
+first expiring pinned (local) timer, then this timer is queued into a idle
+timerqueue and eventually expired by some other active CPU.
 
-> @@ -992,6 +998,13 @@ static int rcar_pcie_probe(struct platform_device *pdev)
->         pcie->dev = dev;
->         platform_set_drvdata(pdev, host);
->
-> +       for (i = 0; i < ARRAY_SIZE(rcar_pcie_supplies); i++) {
-> +               err = devm_regulator_get_enable_optional(dev, rcar_pcie_supplies[i]);
-> +               if (err < 0 && err != -ENODEV)
-> +                       dev_err_probe(dev, err, "error enabling regulator %s\n",
-> +                                     rcar_pcie_supplies[i]);
+To avoid global locking the timerqueues are implemented as a hierarchy. The
+lowest level of the hierarchy holds the CPUs. The CPUs are associated to
+groups of 8, which are separated per node. If more than one CPU group
+exist, then a second level in the hierarchy collects the groups. Depending
+on the size of the system more than 2 levels are required. Each group has a
+"migrator" which checks the timerqueue during the tick for remote timers to
+be expired.
 
-Shouldn't this return, and propagate the error code upstream?
+If the last CPU in a group goes idle it reports the first expiring event in
+the group up to the next group(s) in the hierarchy. If the last CPU goes
+idle it arms its timer for the first system wide expiring timer to ensure
+that no timer event is missed.
 
-> +       }
-> +
->         pm_runtime_enable(pcie->dev);
->         err = pm_runtime_get_sync(pcie->dev);
->         if (err < 0) {
 
-Gr{oetje,eeting}s,
+Testing
+~~~~~~~
 
-                        Geert
+The impact of wasting cycles during enqueue by using the heuristic in
+contrast to always queuing the timer on the local CPU was measured with a
+micro benchmark. Therefore a timer is enqueued and dequeued in a loop with
+1000 repetitions on a isolated CPU. The time the loop takes is measured. A
+quarter of the remaining CPUs was kept busy. This measurement was repeated
+several times. With the patch queue the average duration was reduced by
+approximately 25%.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+	145ns	plain v6
+	109ns	v6 with patch queue
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+Furthermore the impact of residence in deep idle states of an idle system
+was investigated. The patch queue doesn't downgrade this behavior.
+
+
+During testing on a mostly idle machine a ping pong game could be observed:
+a process_timeout timer is expired remotely on a non idle CPU. Then the CPU
+where the schedule_timeout() was executed to enqueue the timer comes out of
+idle and restarts the timer using schedule_timeout() and goes back to idle
+again. This is due to the fair scheduler which tries to keep the task on
+the CPU which it previously executed on.
+
+
+Next Steps
+~~~~~~~~~~
+
+Simple deferrable timers are no longer required as they can be converted to
+global timers. If a CPU goes idle, a formerly deferrable timer will not
+prevent the CPU to sleep as long as possible. Only the last migrator CPU
+has to take care of them. Deferrable timers with timer pinned flags needs
+to be expired on the specified CPU but must not prevent CPU from going
+idle. They require their own timer base which is never taken into account
+when calculating the next expiry time. This conversation and required
+cleanup will be done in a follow up series.
+
+
+v5..v6:
+
+  - Address review of Frederic Weisbecker and Peter Zijlstra (spelling,
+    locking, race in tmigr_handle_remote_cpu())
+
+  - unconditionally set TIMER_PINNED flag in add_timer_on(); introduce
+    add_timer() variants which set/unset TIMER_PINNED flag; drop fixing
+    add_timer_on() call sites, as TIMER_PINNED flag is set implicitly;
+    Fixing workqueue to use add_timer_global() instead of simply
+    add_timer() for unbound work.
+
+  - Drop support for siblings to end up in the same level 0 group (could be
+    added again in a better way as an improvement later on)
+
+  - Do not send IPI for new first deferrable timers
+
+v4..v5:
+  - address review feedback of Frederic Weisbecker
+  - fix issue with group timer update after remote expiry
+
+v3..v4:
+  - address review feedback of Frederic Weisbecker
+  - address kernel test robot fallout
+  - Move patch 16 "add_timer_on(): Make sure callers have TIMER_PINNED
+    flag" at the begin of the queue to prevent timers to end up in global
+    timer base when they were queued using add_timer_on()
+  - Fix some comments and typos
+
+v2..v3: https://lore.kernel.org/r/20170418111102.490432548@linutronix.de/
+  - Minimize usage of locks by storing data using atomic_cmpxchg() for
+    migrator information and information about active cpus.
+
+
+Thanks,
+
+	Anna-Maria
+
+
+Anna-Maria Behnsen (18):
+  tick-sched: Warn when next tick seems to be in the past
+  timer: Do not IPI for deferrable timers
+  timer: Add comment to get_next_timer_interrupt() description
+  timer: Move store of next event into __next_timer_interrupt()
+  timer: Split next timer interrupt logic
+  timers: Introduce add_timer() variants which modify timer flags
+  workqueue: Use global variant for add_timer()
+  timer: add_timer_on(): Make sure TIMER_PINNED flag is set
+  timers: Ease code in run_local_timers()
+  timers: Create helper function to forward timer base clk
+  timer: Keep the pinned timers separate from the others
+  timer: Retrieve next expiry of pinned/non-pinned timers separately
+  timer: Split out "get next timer interrupt" functionality
+  timer: Add get next timer interrupt functionality for remote CPUs
+  timer: Check if timers base is handled already
+  timer: Implement the hierarchical pull model
+  timer_migration: Add tracepoints
+  timer: Always queue timers on the local CPU
+
+Richard Cochran (linutronix GmbH) (2):
+  timer: Restructure internal locking
+  tick/sched: Split out jiffies update helper function
+
+Thomas Gleixner (1):
+  timer: Rework idle logic
+
+ include/linux/cpuhotplug.h             |    1 +
+ include/linux/timer.h                  |   16 +-
+ include/trace/events/timer_migration.h |  277 +++++
+ kernel/time/Makefile                   |    3 +
+ kernel/time/tick-internal.h            |   10 +
+ kernel/time/tick-sched.c               |   20 +-
+ kernel/time/timer.c                    |  446 ++++++--
+ kernel/time/timer_migration.c          | 1346 ++++++++++++++++++++++++
+ kernel/time/timer_migration.h          |  138 +++
+ kernel/workqueue.c                     |    2 +-
+ 10 files changed, 2153 insertions(+), 106 deletions(-)
+ create mode 100644 include/trace/events/timer_migration.h
+ create mode 100644 kernel/time/timer_migration.c
+ create mode 100644 kernel/time/timer_migration.h
+
+-- 
+2.30.2
+
