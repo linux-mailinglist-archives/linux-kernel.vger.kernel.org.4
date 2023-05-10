@@ -2,62 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1646FE0E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49C26FE0E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237396AbjEJO6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
+        id S237432AbjEJO7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237478AbjEJO6f (ORCPT
+        with ESMTP id S237343AbjEJO7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:58:35 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC216A4B
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:58:33 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9659f452148so1298253466b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:58:33 -0700 (PDT)
+        Wed, 10 May 2023 10:59:17 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2004769D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:59:15 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-966400ee79aso842387766b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683730711; x=1686322711;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w/UBHPKxIZ4JawY5ZT352GPCH+e08nQLi6u7hwlLAXc=;
-        b=j+zo9oYaEuy0CQ1yPYewsqZT8iOyo7nqk9+FS1hlC6qw557hqfck+/+BW1lj6GPgXZ
-         HDAfbXHofDfmmqD2Ac0/BDIxfzfMe7xDqq0I/ix0G3tz5vI9S+lxZwOhgiOipsxJc0Yl
-         d79EB2ZO5SMXn599gIj533042J8wF7fRBBxMo9LJOGhSyKtezrkOb2CS4mPzUzEqcQq+
-         DmlmrIC7e8958Fij8tEqgFlomjXfBpiZZ32xxIleGaXBnTdciW4YqE7VXQP4LhOrWlEi
-         6/UihfJX3NeiOVf3h9SCOwiRTGowtRjdmdmNEani6cvO74KMcMB1BwZZg9iUhM2gnVtj
-         j/6g==
+        d=linaro.org; s=google; t=1683730754; x=1686322754;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aehoaVgCSePqbPoVe97WNYRMqFAtsRLIVpWyzt/4WLc=;
+        b=FmOs1NFd1SUzPGky5Rpf7/Z8g9QRT97ttT6uYa3ubjDXQrP8hHxDo9RNsx971U3bCC
+         N1NoF+W3vZRR426+tirpbFlYKcZTTe99FVS8DhCulR1WjTSxTRyRERIk818Yb1gDvwUp
+         IyVsrIl2M57sqIM/nXeJdLKQODQeyrSCHt1hqodknn/UOtH7On/RIPGPi5zCarqscwf7
+         K8kkURtLhoOxsVwbbkcJcsdLIr9itFchAUHdqp5TvxSm1S9f+Gktgy2fWG4l3NocjdPI
+         QzA2KKSIZEJDuCXXthoBHGMuoSaPUdEnMbZFWX8Zm2W/w/0aj47jJxSouYII/vwdJQ9i
+         GNzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683730711; x=1686322711;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w/UBHPKxIZ4JawY5ZT352GPCH+e08nQLi6u7hwlLAXc=;
-        b=ViQEqGMFdoSDoqTxXyKeHuHKFOwqW39nqM04HeC+uLKtmWWc0P0zZZj3ZIvGlpYCC4
-         8Dt9ex7Sx0fQdo0A8dXO+1TfSZASV4rpWXEUm2ts9kjW0rN22rz7jNDEPGnwMqpFakC8
-         bEUo016KPJVd9glRTj8wqJBmv3OiyEfal+jRFMY0ofi1rvOQviPIZCR8/OrAjcdAKqvO
-         Myte4Nj1UTOeJIVWpDHBNNbqRNhW8qBZxkg16L/LXL9SJyruZqT9CqsR6g10JbczWZau
-         e4xX5ZUsA5Kb+UMtfHYqA/Jnvf4vdTxKhIhHHHbi76RgPBP7XGwYWAUKjkayGhaszhSO
-         IECA==
-X-Gm-Message-State: AC+VfDws8wJfrshz7UEDVGTxyh+pkG0BESNz7x+gTe1xYyivM4ASUlrp
-        DVOqGuwoWatW/QZ8a/il2b+Uca5Dkwqp9hBgj14piw==
-X-Google-Smtp-Source: ACHHUZ7oL9DXclxaSedBSFf8N2z5uwXAKyVZCgk8oUZzhxWZOqTyR9x4tBt3VEqdqYrfgTSxz1Eg9c9w4VUC1CxzZhQ=
-X-Received: by 2002:a17:907:940e:b0:950:e44:47ae with SMTP id
- dk14-20020a170907940e00b009500e4447aemr17373264ejc.40.1683730711623; Wed, 10
- May 2023 07:58:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683730754; x=1686322754;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aehoaVgCSePqbPoVe97WNYRMqFAtsRLIVpWyzt/4WLc=;
+        b=b9Wqb9SaNq2Msp2tVg0fg61ysEh/dlpDk7x1Y4Xnha1eOM3FWscWzaBQ7IZtt51Q31
+         n6zJAuqQHVd4emaRUMSxjrtXf+dzmDO3eH445l/erXEtw29viNnLLF/rp1f/X3W+T9Oz
+         cwKM3NkF20pxFnLi2aZTUguDZMt7axZ2mP6TwALRQFHQ3zawOQfdhl0ItKT+FnvouPWt
+         z8ltmK/YZhzljAW9VhvG9SlpJfygemdpnlBkjsJ5BkTdTfFainRszDUUR3E9v6LhCIUX
+         HCcjwtZCwOKhdAt3sN9F94xl3ODcIeIuCRez4WtPYa0YDX/i7is1YER5bDWvAPcniOAL
+         OY+w==
+X-Gm-Message-State: AC+VfDzsL1QQPOIUw0R2JY+ZuouW/2LbVdhT6ftjczN6aqESX2s0HV6h
+        mzyBcwDq7qTbTgUbDzLP6v5qwqUsGKoFkJwPm4o=
+X-Google-Smtp-Source: ACHHUZ6aBvD/dAkRrEm1gMWqoodG9M6ZxMPCBaWChZGOxhPwLp0/OMEolD8JvPElBRGEK6s7TeDm9w==
+X-Received: by 2002:a17:907:3183:b0:965:626a:26cc with SMTP id xe3-20020a170907318300b00965626a26ccmr15378746ejb.65.1683730754154;
+        Wed, 10 May 2023 07:59:14 -0700 (PDT)
+Received: from krzk-bin ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
+        by smtp.gmail.com with ESMTPSA id jz10-20020a17090775ea00b00965ef79ae14sm2738079ejc.189.2023.05.10.07.59.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 07:59:13 -0700 (PDT)
+Date:   Wed, 10 May 2023 16:59:11 +0200
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc:     Bastian Hecht <hechtb@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-input@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: input: touchscreen: st1232: add example
+ with ts-virtobj
+Message-ID: <20230510145911.66jxevntvzrghoct@krzk-bin>
+References: <20230510-feature-ts_virtobj_patch-v1-0-5ae5e81bc264@wolfvision.net>
+ <20230510-feature-ts_virtobj_patch-v1-4-5ae5e81bc264@wolfvision.net>
 MIME-Version: 1.0
-References: <20230505184318.1355446-1-etienne.carriere@linaro.org> <CAFA6WYOfFm9R2GynH0bN7hQ4t81T3hkJX5JurCUDG8oOU-RZ4w@mail.gmail.com>
-In-Reply-To: <CAFA6WYOfFm9R2GynH0bN7hQ4t81T3hkJX5JurCUDG8oOU-RZ4w@mail.gmail.com>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Wed, 10 May 2023 16:58:20 +0200
-Message-ID: <CAN5uoS8QCL+s2Kt0QSBAz4B84KWPKFhVYNG=+3T=rtdvK-jwEw@mail.gmail.com>
-Subject: Re: [PATCH] char: tpm: ftpm_tee: use kernel login identifier
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230510-feature-ts_virtobj_patch-v1-4-5ae5e81bc264@wolfvision.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -68,59 +80,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Sumit,
+On Wed, 10 May 2023 15:50:49 +0200, Javier Carrasco wrote:
+> The st1232 driver supports the virtual-touchscreen and virtual-buttons
+> objects defined in the generic touchscreen bindings and implemented in
+> the ts-virtobj module. Add an example where nodes for a virtual
+> touchscreen and virtual buttons are defined.
+> 
+> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+> ---
+>  .../input/touchscreen/sitronix,st1232.yaml         | 40 ++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+> 
 
-On Wed, 10 May 2023 at 12:24, Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> Hi Etienne,
->
-> On Sat, 6 May 2023 at 00:14, Etienne Carriere
-> <etienne.carriere@linaro.org> wrote:
-> >
-> > Changes fTPM TEE driver to open the TEE session with REE kernel login
-> > identifier rather than public login. This is needed in case fTPM service
-> > it denied to user land application and restricted to kernel operating
-> > system services only.
->
-> This is a valid restriction to avoid any unintended use of fTPM by
-> user-space. But has the corresponding patch landed in fTPM TA which
-> would enforce this restriction?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Not yet. Actually, I've posted some other change requests in the repo
-[1]  but got no feedback. Not nice from me but I didn't post any other
-changes since.
-In the mean time, I think Linux kernel should be ready for this before
-fTPM implementation is fixed.
-Note that U-Boot already integrate this login identifier change, see [2].
+yamllint warnings/errors:
 
-[1] https://github.com/microsoft/ms-tpm-20-ref/pull/83
-[2] https://source.denx.de/u-boot/u-boot/-/commit/33ba80303e93869c439828dd289fb8ef64ed3bfc
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/input/touchscreen/sitronix,st1232.example.dtb: touchscreen@55: Unevaluated properties are not allowed ('virtual-buttons', 'virtual-touchscreen' were unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/input/touchscreen/sitronix,st1232.yaml
 
-Best regards,
-Etienne
+See https://patchwork.ozlabs.org/patch/1779521
 
->
-> -Sumit
->
-> >
-> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> > ---
-> >  drivers/char/tpm/tpm_ftpm_tee.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
-> > index 528f35b14fb6..6d32e260af43 100644
-> > --- a/drivers/char/tpm/tpm_ftpm_tee.c
-> > +++ b/drivers/char/tpm/tpm_ftpm_tee.c
-> > @@ -241,7 +241,7 @@ static int ftpm_tee_probe(struct device *dev)
-> >         /* Open a session with fTPM TA */
-> >         memset(&sess_arg, 0, sizeof(sess_arg));
-> >         export_uuid(sess_arg.uuid, &ftpm_ta_uuid);
-> > -       sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
-> > +       sess_arg.clnt_login = TEE_IOCTL_LOGIN_REE_KERNEL;
-> >         sess_arg.num_params = 0;
-> >
-> >         rc = tee_client_open_session(pvt_data->ctx, &sess_arg, NULL);
-> > --
-> > 2.25.1
-> >
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
