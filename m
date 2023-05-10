@@ -2,72 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B5D6FD7D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A30A6FD7B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236381AbjEJHHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
+        id S236301AbjEJHAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236163AbjEJHHo (ORCPT
+        with ESMTP id S236300AbjEJHAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:07:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E75F53C0C;
-        Wed, 10 May 2023 00:07:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C4AB61063;
-        Wed, 10 May 2023 00:00:23 -0700 (PDT)
-Received: from [10.57.22.157] (unknown [10.57.22.157])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BA7A73F663;
-        Tue,  9 May 2023 23:59:36 -0700 (PDT)
-Message-ID: <5572cf25-b89b-1044-f3db-29bb2100be41@arm.com>
-Date:   Wed, 10 May 2023 07:59:37 +0100
+        Wed, 10 May 2023 03:00:44 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341CB35AE;
+        Wed, 10 May 2023 00:00:21 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (softbank126090219015.bbtec.net [126.90.219.15])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 81A7E547;
+        Wed, 10 May 2023 09:00:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1683702012;
+        bh=4RQz1Ad0wpBZCJyrJ1iwEcnhoii6dJVdb+YGrwVqGE0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Roca8TdPGdB7WIGLhHaXY997ignzSF1jF1weIf2FFPzZ37Yt+Gmp1pEdP/iMXFEuR
+         24eO2BqBWxffj68mmCkcLbuwuBFG/Rw+U2OY/LXcnyg9oBm9CACNuwdrlff65CEk9A
+         ofzxqke1CKOzWZJINDa5rqdKWCK4T+Q92ZIdX7as=
+Date:   Wed, 10 May 2023 10:00:15 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com,
+        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Parth Gajjar <parth.gajjar@amd.com>,
+        Piyush Mehta <piyush.mehta@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Tanmay Shah <tanmay.shah@amd.com>,
+        Vishal Sagar <vishal.sagar@amd.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 07/23] arm64: zynqmp: Add pmu interrupt-affinity
+Message-ID: <20230510070015.GF11711@pendragon.ideasonboard.com>
+References: <cover.1683034376.git.michal.simek@amd.com>
+ <4c6674bf7e048e7370248e50ed3d011d604d020e.1683034376.git.michal.simek@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 05/17] trace: energy_model: Add trace event for EM runtime
- modifications
-Content-Language: en-US
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     dietmar.eggemann@arm.com, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, amit.kucheria@verdurent.com,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
-        rafael@kernel.org, ionela.voinescu@arm.com,
-        linux-kernel@vger.kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org
-References: <20230314103357.26010-1-lukasz.luba@arm.com>
- <20230314103357.26010-6-lukasz.luba@arm.com>
- <9994acf8-e0bc-55ce-9012-e36ef3b8ddab@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <9994acf8-e0bc-55ce-9012-e36ef3b8ddab@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4c6674bf7e048e7370248e50ed3d011d604d020e.1683034376.git.michal.simek@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Michal,
 
+Thank you for the patch.
 
-On 4/11/23 16:39, Pierre Gondois wrote:
-> Hello Lukasz,
-> Just a suggestion, maybe it would be good to trace the CPUs affected by
+On Tue, May 02, 2023 at 03:35:35PM +0200, Michal Simek wrote:
+> From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> 
+> Explicitly specify interrupt affinity to avoid HW perfevents
+> need to guess. This avoids the following error upon linux boot:
+> armv8-pmu pmu: hw perfevents: no interrupt-affinity property,
+> guessing.
 
-We print the device name in the trace event, which would be the first
-CPU in the frequency domain.
+As mentioned for some of the previous patches, the commit message should
+explain why this change improves the DT system description. The fact
+that it gets rid of a warning message may be mentioned, but it shouldn't
+be the main focus.
 
-> the modification. It is possible to retrieve this information by going
-> to /sys/kernel/debug/energy_model/xxx/cpus, but might be simpler when
-> parsing a trace.
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
+> 
+>  arch/arm64/boot/dts/xilinx/zynqmp.dtsi | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> index 61c7045eb992..a117294dc890 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> @@ -161,6 +161,10 @@ pmu {
+>  			     <0 144 4>,
+>  			     <0 145 4>,
+>  			     <0 146 4>;
+> +		interrupt-affinity = <&cpu0>,
+> +				     <&cpu1>,
+> +				     <&cpu2>,
+> +				     <&cpu3>;
+>  	};
+>  
+>  	psci {
 
-We don't want to introduce an array of CPUs, or a name like cpus0-3,
-which than has to be parsed in more complex way. Also, the other devices
-like GPU might use this trace event, so I just wanted to keep it simple
-and generic to handle them all.
+-- 
+Regards,
 
+Laurent Pinchart
