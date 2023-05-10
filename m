@@ -2,354 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BA86FD7E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E40C6FD7EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236436AbjEJHKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
+        id S236452AbjEJHM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236423AbjEJHKA (ORCPT
+        with ESMTP id S233875AbjEJHMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:10:00 -0400
-Received: from out0-194.mail.aliyun.com (out0-194.mail.aliyun.com [140.205.0.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D4F3A9A
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:09:57 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047202;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---.SdI1U1x_1683702589;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.SdI1U1x_1683702589)
-          by smtp.aliyun-inc.com;
-          Wed, 10 May 2023 15:09:50 +0800
-Date:   Wed, 10 May 2023 15:09:49 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     <linux-kernel@vger.kernel.org>,
-        "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Petr Mladek" <pmladek@suse.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "Song Liu" <song@kernel.org>,
-        "Julian Pidancet" <julian.pidancet@oracle.com>
-Subject: Re: [PATCH RFC 31/43] x86/modules: Adapt module loading for PIE
- support
-Message-ID: <20230510070949.GA7127@k08j02272.eu95sqa>
-References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
- <c79285bfa4450fd5ad160ddd4919ac9ad826de04.1682673543.git.houwenlong.hwl@antgroup.com>
- <CAMj1kXH8E7AgvmJ-Spa+EwHSz7kcqd+AMGvtxRUo3jFD3PAWsQ@mail.gmail.com>
- <20230508083223.GA116442@k08j02272.eu95sqa>
- <CAMj1kXH1P4owoSV9OmRwEZyKritBFmCpQaa68EMrTHi0LvUrFg@mail.gmail.com>
+        Wed, 10 May 2023 03:12:55 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2071.outbound.protection.outlook.com [40.107.220.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185FA3C2F;
+        Wed, 10 May 2023 00:12:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BUHUsBQXiuLV7GiwNsGDivyI1YY8w42gw5jSUasMyq4v9OOGaCvEA4wuL8WFBWQVz15it40P0gnzLfNXdfNQRQhUrugDbJb4AGWR+RVgzwdzTpgSev0XNeRzElUd+xNiLhWU1IRdg2W3fJY2VbqFS5xnbNpQJlQBg0Vovs9h3R6B5zz6jKKy5QXVqkdKjixWB3m46cfc6YpyViOhikwphWoOl6hWeOYYf5nI4FQwIdpFTtzc2B6w1qQVcXWn46q0uZnjq+2UuWa780CcFAelJq8N0xn9BUXkOmhn0pKTMacQqkEr1E+NmDxN2xGNjl+ihFz3QyX61zmse5JkH6WvQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JCUg3mmFSdnDyt458yucRGWozCLq7kYw507D7T7GcAo=;
+ b=SlgZv91ys2EOmDrH7fKtWZbPPklOR8y5kTEbXd9LXdxFqvICzIsbMvN/v9f+d0ZflZt9Ub/p8EEFSOjMCzjSR77c7GOh4q5Cfy7NpghywuURsmXdM5JXLfClGifvNux3DAKNBbxhzQGSArSWzfdMaxY0QX804EPKispdCvyed2UM+9pRJ0aTyWn+xiTXwaceZ4ffICYKHAWJTmr+vtAajqIRdsJFsyo8+D6EWD4LP6r53TBhLMMXRB5oBIFFpXTDtEss+ih40ow+qeN2+uDkIF3PqmKXLLo3Wt1igwhfuMSKFPNpG9cxbMlt9gu4aFcRPj8ocERMMKk90xhHCX7D5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JCUg3mmFSdnDyt458yucRGWozCLq7kYw507D7T7GcAo=;
+ b=Ut+K3G9MlKph6+WoPxnhKYSnQD+lJ/P7q5aVxIzDveQLmLsxV39Rn0pVsPLHx04EtCTyucJ/Mf0LGWCKkwIr9DJnkB3Woj/hIwUqOeu5HYDq/rW0a0qMh5mwWO+DODvl6bQe8DiNXqgK4Fcq4QIjQPDlPYdbQT4phTe1nl+7X/0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB4765.namprd12.prod.outlook.com (2603:10b6:805:e4::24)
+ by CYYPR12MB8856.namprd12.prod.outlook.com (2603:10b6:930:c0::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Wed, 10 May
+ 2023 07:12:51 +0000
+Received: from SN6PR12MB4765.namprd12.prod.outlook.com
+ ([fe80::edcd:752d:df60:d4ae]) by SN6PR12MB4765.namprd12.prod.outlook.com
+ ([fe80::edcd:752d:df60:d4ae%6]) with mapi id 15.20.6363.032; Wed, 10 May 2023
+ 07:12:51 +0000
+Message-ID: <9e94c275-4752-061c-3090-144d83769eb6@amd.com>
+Date:   Wed, 10 May 2023 09:11:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Ashok Reddy Soma <ashok.reddy.soma@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Parth Gajjar <parth.gajjar@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vishal Sagar <vishal.sagar@amd.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <cover.1683034376.git.michal.simek@amd.com>
+ <9eefc40c727928e0c7b794a3a2e061ecf6ea230c.1683034376.git.michal.simek@amd.com>
+ <20230510065253.GA11711@pendragon.ideasonboard.com>
+From:   Michal Simek <michal.simek@amd.com>
+Subject: Re: [PATCH 01/23] arm64: zynqmp: Describe TI phy as ethernet-phy-id
+In-Reply-To: <20230510065253.GA11711@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0201.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:ad::10) To SN6PR12MB4765.namprd12.prod.outlook.com
+ (2603:10b6:805:e4::24)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXH1P4owoSV9OmRwEZyKritBFmCpQaa68EMrTHi0LvUrFg@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR12MB4765:EE_|CYYPR12MB8856:EE_
+X-MS-Office365-Filtering-Correlation-Id: 559d4ac3-c4df-4397-6609-08db5125f7a6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: r4Mb9HCWsESsnWcXLJUi68rYE+kilBxlEuSVEe4YkQUvXdWv8C9wmuFIDRsVw+2q5gOSP2m6I+WbCMiW0ZZYAEoSH2ipOFlCHaTuKsZX5pkET1QhSHhruaadbCcJI7Aglt9AuevtAtFksjesjELy0yPk+i4/afJuGX1eAULhfuqRpjmgrg+Hupicd8Q9AKdu9tclxIAQSxCRUOVS4wRyCaDEQ3Gjne3fd2tVVCPw1XZ2Oi7MKfJVM31I+ygQm7saE0S9cgo31sH7ENWTF/2A3F2xO9JHMn9Uq7SKZYIU8e9JxYM8sBRUgrSxfK9IfkZzwaSSZBE0bZ3weGay/4wMsanMl8iyLrr5wjLugBNxgSrRBpM8NpFZS/s2zeTUqUDziJWPK6/GgWNcsTYGQebhf+vVZUNEEbeMcy24y2F+sYyK97D3H9kZ7GCy6b0xGLId0REqjRudTmCP+CxhusjPoY3LyG3woe9Ocv5qSUg6f2K/RxPZo2LfjD2bnpqkvZ2/3K4KeHaaH7tDB1EAD9ozjIHcEGogej4rCnyVhsmxx/GAsgBTUekg4e4dIMoq2H8d3dPROyF60KfMC+FEhj9ZsAUhzEQo/mC8NShBpMfILolhUbOGFZgPY0HRsfOKU2Zn1EYfvaUSwFeo/ij0uYKHCg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB4765.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(396003)(136003)(39860400002)(346002)(451199021)(6506007)(6512007)(6916009)(4326008)(66556008)(66476007)(66946007)(316002)(41300700001)(6486002)(478600001)(54906003)(31686004)(26005)(8936002)(8676002)(53546011)(5660300002)(6666004)(44832011)(7416002)(31696002)(86362001)(186003)(2906002)(2616005)(83380400001)(38100700002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RW04L21tZGtmazJCM21CU0x0QTBxOU55WHBLbFJzNktyelR1UXJEa0x3cnNa?=
+ =?utf-8?B?ZFpLMDlVRFZ2a0RmZHFRT2YwZzdya2NNaWtSN0FaQTJjYmQxKzRDU2t5dTR6?=
+ =?utf-8?B?dVRiTUlnckNrbDJjeVByeU40U3BRa1pjcFVDZDROSHplZXppRDltQnFVekFW?=
+ =?utf-8?B?RmV4SUFaYmhzNUdNT3FYZEVKR1BsUjZ1RDAzaVMxcXpjek5jZ0UzdTlucVZS?=
+ =?utf-8?B?SzF0cnkvdUpNL2JPNDlpMTJwTkhHMUJEVG5xYmtWamVRSk1QUDF6Q29Dd05H?=
+ =?utf-8?B?OUJtZGlISWp5VzBtZnhLMVdvTDl5VVBiRTFKR3cxZ2o1N2JyNVNTZURHMnVI?=
+ =?utf-8?B?ZmtuNWVvTFFEOWJaK2dENWo4UUtUSmVreTQ2RkVKSEhqckM5WjNLNHB5WnVV?=
+ =?utf-8?B?WElXSnFDV3d6dVArQ3RmT3E3QkY5OGcwRzJ3ZDRPaWlKNlEvemF2NE1BY0U4?=
+ =?utf-8?B?NER3OEdQS0duSGg5bzYrUUFZSXNvVlpoaXZrbWVYT1hNd0wyckV6RmhmUE05?=
+ =?utf-8?B?REFvbStaKy9NRnAvSUlPT1k5M09vbUNRalVMQURGS0t1Y2hYVTNha3RCblNm?=
+ =?utf-8?B?ZnE2NDNUT0VmanZseWZGQlBpL2VBMVFYdXJCWHl6Yy9ISThHcDNDeERpQ1Jp?=
+ =?utf-8?B?WExtZjVOVzNCUnlPNUdvUVZKYWJtRG5KQ2d1R3RUdWM2TU1NTXVscm0rUVVM?=
+ =?utf-8?B?eFRlT1JsVHZxYlBaTmo0VFhsTnZUSkFyQ1J6eG5tNkFHMXNqNXZSbFFtNUpx?=
+ =?utf-8?B?WitiT3E2UUJSY0grdnFkOEl1NEJ1bjJNa0g2L0Faak51WjVBa1NrNHdLUFdp?=
+ =?utf-8?B?enFIdVlabWwrWUwvcVFOWlZIR04vZlExa1FRY2taYW9JNkpqQlVLOHNNeFJG?=
+ =?utf-8?B?RTNWaTZzMjlLb3ZOd3pVclJCNVFYNGd1Vy9VTkM2dnJUcjlFTVc4NGRzaTU0?=
+ =?utf-8?B?QVB3L3BVL2xTSzRyWDdzQXkxVWFNUmV0ZVpPZjVRS2x0YW9BdFVPQ2NESVRp?=
+ =?utf-8?B?ZkJqWW9vYU9ra3g1eCs3cHVEMWQxNE0zMXl3UEhXYXBoN2ZGd1N2SW5YKzlj?=
+ =?utf-8?B?LzVSY3hXQ0FuQXF2a1B0eVhvK3lEUndhRkVEK1NpS1ljTTNOOHgvYmpwaU9q?=
+ =?utf-8?B?Qm0xSzFGWlE4OEJta2NpeXhsbm5CbUpDYWZlUWk0amhJcGFNOWI1ZzVtRkVO?=
+ =?utf-8?B?Q2txVnQ3U3UyREJQcExmSlBDM3lVcDhiTUlxM2NOMjcvWUNOb3B1NjFRUDQ0?=
+ =?utf-8?B?S09uVituc2ZrNGp6QlVSOWVYS0w2QUZVRWJyU25CRFJBalZ1UFNnQzRiNEl5?=
+ =?utf-8?B?di9YYXcvbm9oZmwzdWFDbGYyQ3ViSGJ3NDBWbERaUkxrVnNMU205YTRBQXh2?=
+ =?utf-8?B?WW1Rd0dPMU03cDFDN0xldDVQQkFjTnNKWjZBY3VwV1BoeUpkK1pDUHlNc3dK?=
+ =?utf-8?B?a0Izc2prbGF4eS9UQnhGREI5ZFRYQkJ1SFVEUUVkaElOak9rWDM3Nnhrdy94?=
+ =?utf-8?B?RHZUNDRJeHlFaFIrR0JFUnRmZ29LcFNsQmxFWG9QTzh4SWx2ODJHZDk5azFh?=
+ =?utf-8?B?THFnSmwxaG9iUmwzQzdNVFE5ZkxhTHhzL29lNmpvQ1ZYZ1ViVVJLKzQvV2ZF?=
+ =?utf-8?B?ait5Y0hBK0RRYWVpT202bUJOV3JOTEhiOTA0L09od205ZCtXSitNSlBEZ2p1?=
+ =?utf-8?B?M1ZVa3ZtVFBpMzVodEZTci9EZHVXVjdxQjZoU0NrWlFrZnpQdFZ2OEhNTVM3?=
+ =?utf-8?B?UUU2Rk9KajdOMkw0ZWswTG1BWFpFSnZndnczSUowSXpPb0NTL0NuUlpXUkNT?=
+ =?utf-8?B?NVJMSWVXcllIUCttNnNrYkxjWmtXVGFWSGZOMnhaV0JlZVd6aFkvK29BbU1y?=
+ =?utf-8?B?TWxKTjczU3QydExXdnA0MWQ2UjFoamhBTWhtZUwvSGlVa2V2eDBxUThiSUlk?=
+ =?utf-8?B?bzd3YUpDREpMbTVBK0dJL2w0OEVvSm01ZkpaanlWdXkvbXZNNk9zZ280Sjg5?=
+ =?utf-8?B?bHh3MEdIRVZSTjVhVmd6dEhBbDkrd0hGLzJFWGtIYlFxemJNN0lzdnNPTTZv?=
+ =?utf-8?B?Q2htNXRRK2htUzhlKzVqdFMwWHpSV0ExcnJYbVdKWng1Z29CZmF1RjFMTkJB?=
+ =?utf-8?Q?XU0lGx33CgT5qGejDm+zQmRN5?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 559d4ac3-c4df-4397-6609-08db5125f7a6
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB4765.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 07:12:51.4865
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6WA/4HakD//2CLKyKv13FlruVds8dYiDT1d2o3ch4PIwlqtqCIGcR8z6NhxW+0mk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8856
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 05:16:34PM +0800, Ard Biesheuvel wrote:
-> On Mon, 8 May 2023 at 10:38, Hou Wenlong <houwenlong.hwl@antgroup.com> wrote:
-> >
-> > On Sat, Apr 29, 2023 at 03:29:32AM +0800, Ard Biesheuvel wrote:
-> > > On Fri, 28 Apr 2023 at 10:53, Hou Wenlong <houwenlong.hwl@antgroup.com> wrote:
-> > > >
-> > > > Adapt module loading to support PIE relocations. No GOT is generared for
-> > > > module, all the GOT entry of got references in module should exist in
-> > > > kernel GOT.  Currently, there is only one usable got reference for
-> > > > __fentry__().
-> > > >
-> > >
-> > > I don't think this is the right approach. We should permit GOTPCREL
-> > > relocations properly, which means making them point to a location in
-> > > memory that carries the absolute address of the symbol. There are
-> > > several ways to go about that, but perhaps the simplest way is to make
-> > > the symbol address in ksymtab a 64-bit absolute value (but retain the
-> > > PC32 references for the symbol name and the symbol namespace name).
-> > > That way, you can always resolve such GOTPCREL relocations by pointing
-> > > it to the ksymtab entry. Another option would be to take inspiration
-> > > from the PLT code we have on ARM and arm64 (and other architectures,
-> > > surely) and to count the GOT based relocations, allocate some extra
-> > > r/o module space for each, and allocate slots and populate them with
-> > > the right value as you fix up the relocations.
-> > >
-> > > Then, many such relocations can be relaxed at module load time if the
-> > > symbol is in range. IIUC, the module and kernel will still be inside
-> > > the same 2G window even after widening the KASLR range to 512G, so
-> > > most GOT loads can be converted into RIP relative LEA instructions.
-> > >
-> > > Note that this will also permit you to do things like
-> > >
-> > > #define PV_VCPU_PREEMPTED_ASM \
-> > >  "leaq __per_cpu_offset(%rip), %rax \n\t" \
-> > >  "movq (%rax,%rdi,8), %rax \n\t" \
-> > >  "addq steal_time@GOTPCREL(%rip), %rax \n\t" \
-> > >  "cmpb $0, " __stringify(KVM_STEAL_TIME_preempted) "(%rax) \n\t" \
-> > >  "setne %al\n\t"
-> > >
-> > > or
-> > >
-> > > +#ifdef CONFIG_X86_PIE
-> > > + " pushq arch_rethook_trampoline@GOTPCREL(%rip)\n"
-> > > +#else
-> > > " pushq $arch_rethook_trampoline\n"
-> > > +#endif
-> > >
-> > > instead of having these kludgy push/pop sequences to free up temp registers.
-> > >
-> > > (FYI I have looked into this PIE linking just a few weeks ago [0] so
-> > > this is all rather fresh in my memory)
-> > >
-> > >
-> > >
-> > >
-> > > [0] https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=x86-pie
-> > >
-> > >
-> > Hi Ard,
-> > Thanks for providing the link, it has been very helpful for me as I am
-> > new to the topic of compilers.
-> 
-> Happy to hear that.
-> 
-> > One key difference I noticed is that you
-> > linked the kernel with "-pie" instead of "--emit-reloc". I also noticed
-> > that Thomas' initial patchset[0] used "-pie", but in RFC v3 [1], it
-> > switched to "--emit-reloc" in order to reduce dynamic relocation space
-> > on mapped memory.
-> >
-> 
-> The problem with --emit-relocs is that the relocations emitted into
-> the binary may get out of sync with the actual code after the linker
-> has applied relocations.
-> 
-> $ cat /tmp/a.s
-> foo:movq foo@GOTPCREL(%rip), %rax
-> 
-> $ x86_64-linux-gnu-gcc -c -o /tmp/a.o /tmp/a.s
-> ard@gambale:~/linux$ x86_64-linux-gnu-objdump -dr /tmp/a.o
-> 
-> /tmp/a.o:     file format elf64-x86-64
-> 
-> 
-> Disassembly of section .text:
-> 
-> 0000000000000000 <foo>:
->    0: 48 8b 05 00 00 00 00 mov    0x0(%rip),%rax        # 7 <foo+0x7>
-> 3: R_X86_64_REX_GOTPCRELX foo-0x4
-> 
-> $ x86_64-linux-gnu-gcc -c -o /tmp/a.o /tmp/a.s
-> $ x86_64-linux-gnu-objdump -dr /tmp/a.o
-> 0000000000000000 <foo>:
->    0: 48 8b 05 00 00 00 00 mov    0x0(%rip),%rax        # 7 <foo+0x7>
-> 3: R_X86_64_REX_GOTPCRELX foo-0x4
-> 
-> $ x86_64-linux-gnu-gcc -o /tmp/a.elf -nostartfiles
-> -Wl,-no-pie,-q,--defsym,_start=0x0 /tmp/a.s
-> $ x86_64-linux-gnu-objdump -dr /tmp/a.elf
-> 0000000000401000 <foo>:
->   401000: 48 c7 c0 00 10 40 00 mov    $0x401000,%rax
-> 401003: R_X86_64_32S foo
-> 
-> $ x86_64-linux-gnu-gcc -o /tmp/a.elf -nostartfiles
-> -Wl,-q,--defsym,_start=0x0 /tmp/a.s
-> $ x86_64-linux-gnu-objdump -dr /tmp/a.elf
-> 0000000000001000 <foo>:
->     1000: 48 8d 05 f9 ff ff ff lea    -0x7(%rip),%rax        # 1000 <foo>
-> 1003: R_X86_64_PC32 foo-0x4
-> 
-> This all looks as expected. However, when using Clang, we end up with
-> 
-> $ clang -target x86_64-linux-gnu -o /tmp/a.elf -nostartfiles
-> -fuse-ld=lld -Wl,--relax,-q,--defsym,_start=0x0 /tmp/a.s
-> $ x86_64-linux-gnu-objdump -dr /tmp/a.elf
-> 00000000000012c0 <foo>:
->     12c0: 48 8d 05 f9 ff ff ff lea    -0x7(%rip),%rax        # 12c0 <foo>
-> 12c3: R_X86_64_REX_GOTPCRELX foo-0x4
-> 
-> So in this case, what --emit-relocs gives us is not what is actually
-> in the binary. We cannot just ignore these either, given that they are
-> treated differently depending on whether the symbol is a per-CPU
-> symbol or not - in the former case, we need to perform a fixup if the
-> relaxed reference is RIP relative, and in the latter case, if the
-> relaxed reference is absolute.
-> 
-> On top of that, --emit-relocs does not cover the GOT, so we'd still
-> need to process that from the code explicitly.
-> 
-> In general, relying on --emit-relocs is kind of dodgy, and I think
-> combining PIE linking with --emit-relocs is a bad idea.
-> 
-> > The another issue is that it requires the addition of the
-> > "-mrelax-relocations=no" option to support older compilers and linkers.
-> 
-> Why? The decompressor is now linked in PIE mode so we should be able
-> to drop that. Or do you need to add is somewhere else?
->
-Hi Ard,
+Hi Laurent,
 
-After removing the "-mrelax-relocations=no" option, I noticed that the
-linker was relaxing GOT references as absolute references for mov
-instructions, even if the symbol was in a high address, as long as I
-kept the compile-time base address of the kernel image in the top 2G. I
-consulted the "Optimize GOTPCRELX Relocations" chapter in x86-64 psABI,
-which stated that "When position-independent code is disabled and foo is
-defined locally in the lower 32-bit address space, memory operand in mov
-can be converted into immediate operand". However, it seemed that if the
-symbol was in the higher 32-bit address space, the memory operand in mov
-would also be converted into an immediate operand. If I decreased the
-compile-time base address of the kernel image, it would be relaxed as
-lea. Therefore, I believe that using "-mrelax-relocations=no" without
-"-pie" option is necessary. Is there a way to force the linker to relax
-it as lea without using the "-pie" option when linking?
+On 5/10/23 08:52, Laurent Pinchart wrote:
+> Hi Michal,
+> 
+> Thank you for the patch.
+> 
+> On Tue, May 02, 2023 at 03:35:29PM +0200, Michal Simek wrote:
+>> TI DP83867 is using strapping based on MIO pins. Tristate setup can influce
 
-Since all GOT references cannot be omitted, perhaps I should try linking
-the kernel with the "-pie" option.
+And typo here.
 
-Thanks!
+>> PHY address. That's why switch description with ethernet-phy-id compatible
+>> string which enable calling reset. PHY itself setups phy address after
+>> power up or reset.
+> 
+> I'm sorry but I don't understand this :-(
 
-> > R_X86_64_GOTPCRELX and R_X86_64_REX_GOTPCRELX relocations are supported
-> > in binutils 2.26 and later, but the mini version required for the kernel
-> > is 2.25. This option disables relocation relaxation, which makes GOT not
-> > empty. I also noticed this option in arch/x86/boot/compressed/Makefile
-> > with the reason given in [2]. Without relocation relaxation, GOT
-> > references would increase the size of GOT. Therefore, I do not want to
-> > use GOT reference in assembly directly.  However, I realized that the
-> > compiler could still generate GOT references in some cases such as
-> > "fentry" calls and stack canary references.
-> >
+What exactly is not clear? Phy has some pins which is using for strapping for 
+phy address after phy reset or power on. Pretty much it is resistor array which 
+based on datasheet is decoded to certain phy address.
+And because some phy pins are also used as data pin for RGMII they are connected 
+via MIO pins on a silicon. That's why IO block output setting really matter here 
+because it changes resistor array and it moves phy address.
+That's why there is a need to do proper IO pin setup and after it call phy reset 
+to get it to address which was decided by PCB designer.
+
 > 
-> The stack canary references are under discussion here [3]. I have also
-> sent a patch for kallsyms symbol references [4]. Beyond that, there
-> should be very few cases where GOT entries are emitted, so I don't
-> think this is fundamentally a problem.
+>> Phy reset is done via gpio.
+>>
+>> Signed-off-by: Michal Simek <michal.simek@amd.com>
+>> ---
+>>
+>> Checkpatch is reporting issue
+>> warning: DT compatible string "ethernet-phy-id2000.a231" appears un-documented
+>> but it should be fully aligned with
+>> Documentation/devicetree/bindings/net/ethernet-phy.yaml
+>> ---
+>>   .../boot/dts/xilinx/zynqmp-zcu102-revA.dts    | 23 +++++++++++------
+>>   .../boot/dts/xilinx/zynqmp-zcu102-revB.dts    | 25 +++++++++++--------
+>>   .../boot/dts/xilinx/zynqmp-zcu104-revA.dts    | 22 ++++++++++------
+>>   .../boot/dts/xilinx/zynqmp-zcu104-revC.dts    | 22 ++++++++++------
+>>   .../boot/dts/xilinx/zynqmp-zcu106-revA.dts    | 22 ++++++++++------
+>>   .../boot/dts/xilinx/zynqmp-zcu111-revA.dts    | 22 ++++++++++------
+>>   6 files changed, 90 insertions(+), 46 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
+>> index 13c43324f1d2..c193579400cf 100644
+>> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
+>> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
+>> @@ -2,7 +2,8 @@
+>>   /*
+>>    * dts file for Xilinx ZynqMP ZCU102 RevA
+>>    *
+>> - * (C) Copyright 2015 - 2021, Xilinx, Inc.
+>> + * (C) Copyright 2015 - 2022, Xilinx, Inc.
+>> + * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
+>>    *
+>>    * Michal Simek <michal.simek@xilinx.com>
+>>    */
+>> @@ -200,13 +201,19 @@ &gem3 {
+>>   	phy-mode = "rgmii-id";
+>>   	pinctrl-names = "default";
+>>   	pinctrl-0 = <&pinctrl_gem3_default>;
+>> -	phy0: ethernet-phy@21 {
+>> -		reg = <21>;
+>> -		ti,rx-internal-delay = <0x8>;
+>> -		ti,tx-internal-delay = <0xa>;
+>> -		ti,fifo-depth = <0x1>;
+>> -		ti,dp83867-rxctrl-strap-quirk;
+>> -		/* reset-gpios = <&tca6416_u97 6 GPIO_ACTIVE_LOW>; */
+>> +	mdio: mdio {
 > 
-> I haven't run into the __fentry__ issue myself: do you think we should
-> fix this in the compiler?
-> 
-> > Regarding module loading, I agree that we should support GOT reference
-> > for the module itself. I will refactor it according to your suggestion.
-> >
-> 
-> Excellent, good luck with that.
-> 
-> However, you will still need to make a convincing case for why this is
-> all worth the trouble. Especially given that you disable the depth
-> tracking code, which I don't think should be mutually exclusive.
-> 
-> I am aware that this a rather tricky, and involves rewriting
-> RIP-relative per-CPU variable accesses, but it would be good to get a
-> discussion started on that topic, and figure out whether there is a
-> way forward there. Ignoring it is not going to help.
-> 
-> 
-> >
-> > [0] https://yhbt.net/lore/all/20170718223333.110371-20-thgarnie@google.com
-> > [1] https://yhbt.net/lore/all/20171004212003.28296-1-thgarnie@google.com
-> > [2] https://lore.kernel.org/all/20200903203053.3411268-2-samitolvanen@google.com/
-> >
-> 
-> [3] https://github.com/llvm/llvm-project/issues/60116
-> [4] 20230504174320.3930345-1-ardb@kernel.org
-> 
-> > > > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> > > > Cc: Thomas Garnier <thgarnie@chromium.org>
-> > > > Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> > > > Cc: Kees Cook <keescook@chromium.org>
-> > > > ---
-> > > >  arch/x86/include/asm/sections.h |  5 +++++
-> > > >  arch/x86/kernel/module.c        | 27 +++++++++++++++++++++++++++
-> > > >  2 files changed, 32 insertions(+)
-> > > >
-> > > > diff --git a/arch/x86/include/asm/sections.h b/arch/x86/include/asm/sections.h
-> > > > index a6e8373a5170..dc1c2b08ec48 100644
-> > > > --- a/arch/x86/include/asm/sections.h
-> > > > +++ b/arch/x86/include/asm/sections.h
-> > > > @@ -12,6 +12,11 @@ extern char __end_rodata_aligned[];
-> > > >
-> > > >  #if defined(CONFIG_X86_64)
-> > > >  extern char __end_rodata_hpage_align[];
-> > > > +
-> > > > +#ifdef CONFIG_X86_PIE
-> > > > +extern char __start_got[], __end_got[];
-> > > > +#endif
-> > > > +
-> > > >  #endif
-> > > >
-> > > >  extern char __end_of_kernel_reserve[];
-> > > > diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-> > > > index 84ad0e61ba6e..051f88e6884e 100644
-> > > > --- a/arch/x86/kernel/module.c
-> > > > +++ b/arch/x86/kernel/module.c
-> > > > @@ -129,6 +129,18 @@ int apply_relocate(Elf32_Shdr *sechdrs,
-> > > >         return 0;
-> > > >  }
-> > > >  #else /*X86_64*/
-> > > > +#ifdef CONFIG_X86_PIE
-> > > > +static u64 find_got_kernel_entry(Elf64_Sym *sym, const Elf64_Rela *rela)
-> > > > +{
-> > > > +       u64 *pos;
-> > > > +
-> > > > +       for (pos = (u64 *)__start_got; pos < (u64 *)__end_got; pos++)
-> > > > +               if (*pos == sym->st_value)
-> > > > +                       return (u64)pos + rela->r_addend;
-> > > > +       return 0;
-> > > > +}
-> > > > +#endif
-> > > > +
-> > > >  static int __write_relocate_add(Elf64_Shdr *sechdrs,
-> > > >                    const char *strtab,
-> > > >                    unsigned int symindex,
-> > > > @@ -171,6 +183,7 @@ static int __write_relocate_add(Elf64_Shdr *sechdrs,
-> > > >                 case R_X86_64_64:
-> > > >                         size = 8;
-> > > >                         break;
-> > > > +#ifndef CONFIG_X86_PIE
-> > > >                 case R_X86_64_32:
-> > > >                         if (val != *(u32 *)&val)
-> > > >                                 goto overflow;
-> > > > @@ -181,6 +194,13 @@ static int __write_relocate_add(Elf64_Shdr *sechdrs,
-> > > >                                 goto overflow;
-> > > >                         size = 4;
-> > > >                         break;
-> > > > +#else
-> > > > +               case R_X86_64_GOTPCREL:
-> > > > +                       val = find_got_kernel_entry(sym, rel);
-> > > > +                       if (!val)
-> > > > +                               goto unexpected_got_reference;
-> > > > +                       fallthrough;
-> > > > +#endif
-> > > >                 case R_X86_64_PC32:
-> > > >                 case R_X86_64_PLT32:
-> > > >                         val -= (u64)loc;
-> > > > @@ -214,11 +234,18 @@ static int __write_relocate_add(Elf64_Shdr *sechdrs,
-> > > >         }
-> > > >         return 0;
-> > > >
-> > > > +#ifdef CONFIG_X86_PIE
-> > > > +unexpected_got_reference:
-> > > > +       pr_err("Target got entry doesn't exist in kernel got, loc %p\n", loc);
-> > > > +       return -ENOEXEC;
-> > > > +#else
-> > > >  overflow:
-> > > >         pr_err("overflow in relocation type %d val %Lx\n",
-> > > >                (int)ELF64_R_TYPE(rel[i].r_info), val);
-> > > >         pr_err("`%s' likely not compiled with -mcmodel=kernel\n",
-> > > >                me->name);
-> > > > +#endif
-> > > > +
-> > > >         return -ENOEXEC;
-> > > >  }
-> > > >
-> > > > --
-> > > > 2.31.1
-> > > >
+> The "mdio" label isn't needed. Same below.
+
+I am doing it by purpose to be able to reference all nodes and add/remove 
+property in an easy way. There shouldn't be any conflict with dt spec to have 
+labels even they are not used in current DT.
+
+Thanks,
+Michal
