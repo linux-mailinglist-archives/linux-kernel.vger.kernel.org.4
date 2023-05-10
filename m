@@ -2,63 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99046FD3C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 04:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D13A46FD3C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 04:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbjEJCQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 22:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
+        id S233875AbjEJCR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 22:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbjEJCQm (ORCPT
+        with ESMTP id S229651AbjEJCR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 22:16:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6065F4229;
-        Tue,  9 May 2023 19:16:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5DF8638BF;
-        Wed, 10 May 2023 02:16:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 694C8C433D2;
-        Wed, 10 May 2023 02:16:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683684990;
-        bh=U6aBhk/Q3uUnMk2O77E0L4T+7y5ww55Q2QBKyfZlPTc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tDCHGHa1qYxnTXFB9bLTFz3ZHJo8VAlcbicvPIppEAzkjn81E/RYICcNwlrTXS7/B
-         uRj0Ye9WtzJkHlYqxCnoihSBRvP7GvAHmpVqW0WoxUi0eLiytI0L5h6JCzuaCnHxWO
-         2SOj0DD3FSyqSxNYCIWlr1xs81rnVgtnKrMF0l/VRuW9Nk+kc25yOpstF6Dm2hQJ8w
-         Zy8Tc8kWUygooW27RI8L9+P6W7rxQQ9H7Agj3FRWdWwVxpOy+qJJqdAtIXL2Yp/Xg7
-         aNI62wk69cxWOEImf+ALmOuABH3AOoUmCxdeYPTJStTkSsjtf2d2RxRf1hG+VU68Y2
-         AKOEO/Xrtww2A==
-Date:   Wed, 10 May 2023 11:16:27 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        asahi@lists.linux.dev, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] ASoC: ssm3515: Add new amp driver
-Message-ID: <ZFr+e+bM86Rwj2LH@finisterre.sirena.org.uk>
-References: <20230509163828.86003-1-povik+lin@cutebit.org>
- <20230509163828.86003-2-povik+lin@cutebit.org>
+        Tue, 9 May 2023 22:17:27 -0400
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E10123;
+        Tue,  9 May 2023 19:17:26 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0ViDWdbf_1683685041;
+Received: from 30.240.113.228(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0ViDWdbf_1683685041)
+          by smtp.aliyun-inc.com;
+          Wed, 10 May 2023 10:17:23 +0800
+Message-ID: <b384d621-6b2d-7aab-adbf-7045f23f4af9@linux.alibaba.com>
+Date:   Wed, 10 May 2023 10:17:18 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cxYPFokHHwYbjCKb"
-Content-Disposition: inline
-In-Reply-To: <20230509163828.86003-2-povik+lin@cutebit.org>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH] x86/mce/amd: init mce severity to handle deferred memory
+ failure
+Content-Language: en-US
+To:     Yazen Ghannam <yazen.ghannam@amd.com>, bp@alien8.de,
+        tony.luck@intel.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, baolin.wang@linux.alibaba.com,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230425121829.61755-1-xueshuai@linux.alibaba.com>
+ <f629820c-50cf-7366-975e-68215b3f2bc5@amd.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <f629820c-50cf-7366-975e-68215b3f2bc5@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,67 +50,55 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---cxYPFokHHwYbjCKb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 09, 2023 at 06:38:28PM +0200, Martin Povi=C5=A1er wrote:
+On 2023/5/9 22:25, Yazen Ghannam wrote:
+> On 4/25/23 8:18 AM, Shuai Xue wrote:
+>> When a deferred UE error is detected, e.g by background patrol scruber, it
+>> will be handled in APIC interrupt handler amd_deferred_error_interrupt().
+>> The handler will collect MCA banks, init mce struct and process it by
+>> nofitying the registered MCE decode chain.
+>>
+>> The uc_decode_notifier, one of MCE decode chain, will process memory
+>> failure but only limit to MCE_AO_SEVERITY and MCE_DEFERRED_SEVERITY.
+>> However, APIC interrupt handler does not init mce severity and the
+>> uninitialized severity is 0 (MCE_NO_SEVERITY).
+>>
+>> To handle the deferred memory failure case, init mce severity when logging
+>> MCA banks.
+>>
+>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+>>
+> 
+> Hi Shuai Xue,
+> 
+> I think this patch is fair to do. But it won't have the intended effect
+> in practice.
+> 
+> The value in MCA_ADDR for DRAM ECC errors will be a memory controller
+> "normalized address". This is not a system physical address that the OS
+> can use to take action.
+> 
+> The mce_usable_address() function needs to be updated to handle this.
+> I'll send a patchset this week to do so. Afterwards, the
+> uc_decode_notifier will not attempt to handle these errors.
 
-> +static int ssm3515_setup(struct snd_soc_component *component)
-> +{
-> +	struct ssm3515_data *data =3D
-> +			snd_soc_component_get_drvdata(component);
-> +	int ret;
-> +
-> +	ret =3D snd_soc_component_update_bits(component, SSM3515_GEC,
-> +			SSM3515_GEC_ANA_GAIN,
-> +			FIELD_PREP(SSM3515_GEC_ANA_GAIN, data->ana_gain));
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Start out muted */
-> +	ret =3D snd_soc_component_update_bits(component, SSM3515_DAC,
-> +			SSM3515_DAC_MUTE, SSM3515_DAC_MUTE);
-> +	if (ret < 0)
-> +		return ret;
+From the experience of other platforms (e.g. ARM64 RAS and Intel MCA),
+uc_decode_notifier should handle these error to hard offline the corrupted
+page. If the corrupted page is a free buddy page, we can isolate it and avoid
+using the page in the future.
 
-Why are we not using the chip defaults here?  We use those for most
-things as what's appropraite for one user might not be appropriate for
-another and it's easier to agree to follow what the chip does than to
-select things.  There's some exceptions like for zero cross options but
-not typically for gains and mutes.
+In my test case, the error is detected by patrol scrubber in memory controller.
+The scrubber may lack of system address space perspective, and only reports
+"normalized address". But we can decode the "normalized address" to system address
+by EDAC (umc_normaddr_to_sysaddr), right?
 
-> +static int ssm3515_probe(struct snd_soc_component *component)
-> +{
-> +	struct ssm3515_data *data =3D
-> +			snd_soc_component_get_drvdata(component);
-> +	int ret;
-> +
-> +	ret =3D ssm3515_reset(component);
-> +	if (ret < 0)
-> +		return ret;
-> +	regmap_reinit_cache(data->regmap, &ssm3515_i2c_regmap);
-> +
-> +	return ssm3515_setup(component);
-> +}
+(I am not quite familiar with AMD RAS, please correct me if I am wrong)
 
-We don't normally reset things on component probe, only on bus level
-probe...
+> 
+> Thanks,
+> Yazen
 
---cxYPFokHHwYbjCKb
-Content-Type: application/pgp-signature; name="signature.asc"
+Thank you.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRa/nsACgkQJNaLcl1U
-h9AK2Qf/bWiXFzpCWnZoxxEX3Xk0rhx83Vd2brRM+A9E0ZKdJuHIjfT9W31cWaMH
-SrpE3KzlpOaGr6c1s89QhCT8/EA0gNUBcrOOkiALAlkQVMPrDaUq890JRPvmj40B
-NL4Eh4Y2JeW8vcFL0v66NbpTTlko6z+M5vX9geeQMcujYzzf4XynRk2VvOOaaXim
-aRuM7+COfpF5mwUfOY7AMNjbTtO0L60++LcU04oH2kUnEpOyAy5PPcn1oFg8DirS
-ioTe1/rpDimXpt6+vp/VzMSF0StpKCstmx95qPxJxv8C3w6nqWOGhcwYVBunD9vW
-/MS3OS0aTvfjAvOoYz2w4oli8jc+jA==
-=tvnt
------END PGP SIGNATURE-----
-
---cxYPFokHHwYbjCKb--
+Best Regards,
+Shuai
