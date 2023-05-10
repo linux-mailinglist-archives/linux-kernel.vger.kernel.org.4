@@ -2,137 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44936FD91B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BB26FD914
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236349AbjEJIV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 04:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
+        id S236109AbjEJIVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 04:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjEJIVz (ORCPT
+        with ESMTP id S229893AbjEJIVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 04:21:55 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8DB171B;
-        Wed, 10 May 2023 01:21:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1WZCLagr9yk4Cbp+6qSxxsSMmqvOctxqT3bVkNGFhnY=; b=CzmDvf3rqlZoWLTgd3FVOKNA13
-        am3KRsvw5dx0zZtORpSkeQixmHm2I0T/j68VXo57hz3B2sKfsZlkzT6mcIfsGM8QExy3tEBmFQg15
-        5knvERiYGPZKMBkmsOAK/iQ/5rtOFvAqMTYH7nFMXqdqWWfvmHjqNDYraw79BjtqAXxEKvC5IXPLi
-        v4WkUXSf6SdYO2DxNqGoNj/9jzwXI/RVqLwvIK8H89K9xhFYfEkKkPofOod7rLsPcDYQd4FB4I+bb
-        ncPfZdYjPCu8FZ1ut2ZqCkZjLMrUhqEHRkvEROX3xUgFItRMwb3mnY6amim7reKFoxZZ2cjlGh5hD
-        cm+pskqQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pwf2E-007PM8-2r;
-        Wed, 10 May 2023 08:20:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4DA20300338;
-        Wed, 10 May 2023 10:18:48 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2369E20B04BA2; Wed, 10 May 2023 10:18:48 +0200 (CEST)
-Date:   Wed, 10 May 2023 10:18:48 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 21/23] x86: Allow get_locked_pte() to fail
-Message-ID: <20230510081848.GD83892@hirez.programming.kicks-ass.net>
-References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
- <eba2b72f-2180-498b-c8bd-ce8f717fc78a@google.com>
+        Wed, 10 May 2023 04:21:14 -0400
+Received: from bluemchen.kde.org (bluemchen.kde.org [IPv6:2001:470:142:8::100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77C694
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:21:12 -0700 (PDT)
+Received: from ugly.fritz.box (localhost [127.0.0.1])
+        by bluemchen.kde.org (Postfix) with ESMTP id 1972023FB4;
+        Wed, 10 May 2023 04:21:09 -0400 (EDT)
+Received: by ugly.fritz.box (masqmail 0.3.4, from userid 1000)
+        id 1pwf4O-XGY-00; Wed, 10 May 2023 10:21:08 +0200
+Date:   Wed, 10 May 2023 10:21:08 +0200
+From:   Oswald Buddenhagen <oswald.buddenhagen@gmx.de>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, perex@perex.cz,
+        tiwai@suse.com, axboe@kernel.dk, 42.hyeyoo@gmail.com,
+        surenb@google.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] ALSA: PCM: Fix codestyle issues in pcm_native.c
+Message-ID: <ZFtT9J0DQI9uSd1x@ugly>
+Mail-Followup-To: Takashi Iwai <tiwai@suse.de>,
+        Ivan Orlov <ivan.orlov0322@gmail.com>, perex@perex.cz,
+        tiwai@suse.com, axboe@kernel.dk, 42.hyeyoo@gmail.com,
+        surenb@google.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+References: <20230510072726.435247-1-ivan.orlov0322@gmail.com>
+ <2023051052-recoil-headache-1594@gregkh>
+ <f1a912ea-884b-fdcd-1c05-87089f1e97b7@gmail.com>
+ <87a5yc626f.wl-tiwai@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <eba2b72f-2180-498b-c8bd-ce8f717fc78a@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87a5yc626f.wl-tiwai@suse.de>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 10:08:37PM -0700, Hugh Dickins wrote:
-> In rare transient cases, not yet made possible, pte_offset_map() and
-> pte_offset_map_lock() may not find a page table: handle appropriately.
-> 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> ---
->  arch/x86/kernel/ldt.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/ldt.c b/arch/x86/kernel/ldt.c
-> index 525876e7b9f4..eb844549cd83 100644
-> --- a/arch/x86/kernel/ldt.c
-> +++ b/arch/x86/kernel/ldt.c
-> @@ -367,8 +367,10 @@ static void unmap_ldt_struct(struct mm_struct *mm, struct ldt_struct *ldt)
->  
->  		va = (unsigned long)ldt_slot_va(ldt->slot) + offset;
->  		ptep = get_locked_pte(mm, va, &ptl);
-> -		pte_clear(mm, va, ptep);
-> -		pte_unmap_unlock(ptep, ptl);
-> +		if (ptep) {
-> +			pte_clear(mm, va, ptep);
-> +			pte_unmap_unlock(ptep, ptl);
-> +		}
->  	}
+On Wed, May 10, 2023 at 10:06:16AM +0200, Takashi Iwai wrote:
+>Also, if it's only about white space fix or some indent level issues,
+>that could be rather more noise and disturbs the git change history,
+>e.g. it makes difficult to find out the real code changes via git
+>blame, especially it touches a huge amount of lines like this.
+>
+>That said, I'm not going to take such "coding style cleanup" patch
+>blindly.  If it's associated with other real fix or enhancement, I'll
+>happily take it.  Otherwise, I'd rather leave it.
+>
+a maybe less confusing way to put it would be "do whitespace cleanups 
+only on the lines that contain "real" changes, and maybe in their 
+immediate proximity for consistency". that means that whitespace-only 
+patches are by definition not acceptable.
 
-Ow geez, now I have to go remember how the whole PTI/LDT crud worked :/
-
-At first glance this seems wrong; we can't just not unmap the LDT if we
-can't find it in a hurry. Also, IIRC this isn't in fact a regular user
-mapping, so it should not be subject to THP induced seizures.
-
-... memory bubbles back ... for PTI kernels we need to map this in the
-user and kernel page-tables because obviously userspace needs to be able
-to have access to the LDT. But it is not directly acessible by
-userspace. It lives in the cpu_entry_area as a virtual map of the real
-kernel allocation, and this virtual address is used for LLDT.
-Modification is done through sys_modify_ldt().
-
-I think I would feel much better if this were something like:
-
-	if (!WARN_ON_ONCE(!ptep))
-
-This really shouldn't fail and if it does, simply skipping it isn't the
-right thing either.
+regards
