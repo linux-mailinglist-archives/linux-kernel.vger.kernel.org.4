@@ -2,137 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E436FDBA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBDB6FDBA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236662AbjEJKaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 06:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46050 "EHLO
+        id S230023AbjEJKbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 06:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236712AbjEJK36 (ORCPT
+        with ESMTP id S236707AbjEJKah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 06:29:58 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA97F65BA;
-        Wed, 10 May 2023 03:29:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fdNhmYBNSS6G7Ta25/bvw46nBpCxDvqfm485kRjftqGtBecRbSCFpw/U0+djR6x1Syc7mvAf6nUKBuX2dh2JXXfplHn1Vou3GbFjxq0ruFi8uKptpaGWxQKdL5YP3qfcNo8FN6vwYQkwfdIfhrnBzmSMP+feynAbF5uwuUmDZDdVKt2uX0sD8mReyQeYLuYNC2lxrLr1/jpJjef8lEJ0hjtGlYdh0M22ICfAA4ajrEJLeqK/glSHzwdgkxZX4yWVWeO1F1HGCgzi//c5y5cXMw77oT6UXZ13g/J/8h3ABlTCvXOxJU9TgHPfxzs5ffpAtKXYoJcPO0VOo2mcoATwWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UwMwsdHZju1qwEKq7LkQ3KxElP8U2odGSYsw+1O/3MA=;
- b=maETvv76PocqpmOtrVuYj/h7th9bHCYVxjuUJai5Cl583+PVkntYPwwscjLTe0koQmpN8h89zX5yEov/+Bn+C/pQjOxWtkwvrxpY6iMA9XAaMK2gENb7F3Zc9nQ7kbDYnK6Uas2BrLkVXEfkKAkE0Q8a1L+WCw1Q05WmTeoXEjmR4vPEEPu5LvUv0bTWU6atExGxogp6RUWmgCcl6AwV1ZBqNn/0XpoH2I2mcJE9M9hP9Sb0vkQ8qCZ1rJIurcPDhsfK65q58EIO9oED8wZL00PirZ3QN5lSW6XvMoHjLT8iCodFbyfHRwKC64H1pZQCODH9n4izTbgf56jt1ub8tg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UwMwsdHZju1qwEKq7LkQ3KxElP8U2odGSYsw+1O/3MA=;
- b=HMQoRcLGX6FXFqm79pD7K042f18cYQxl8myXL7q09LJxMcyzwcRrpNnlD2oaepKf0j3VBn4OcEm7ZjO2cncIlb3fIi3JCeBKklwCThdKG+sEHqQLihZwBKYtKnO7MfIyY/r/AzY3jNPGKNcQlB867O0vCwdFZY4exx+PX1II3Lw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH7PR13MB5550.namprd13.prod.outlook.com (2603:10b6:510:130::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Wed, 10 May
- 2023 10:29:52 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Wed, 10 May 2023
- 10:29:52 +0000
-Date:   Wed, 10 May 2023 12:29:43 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Subbaraya Sundeep <sbhatta@marvell.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, saeedm@nvidia.com, tariqt@nvidia.com,
-        roid@nvidia.com, leon@kernel.org, maxtram95@gmail.com,
-        kliteyn@nvidia.com, irusskikh@marvell.com, liorna@nvidia.com,
-        ehakim@nvidia.com, dbogdanov@marvell.com, sd@queasysnail.net,
-        sgoutham@marvell.com, gakula@marvell.com, naveenm@marvell.com,
-        hkelam@marvell.com, lcherian@marvell.com
-Subject: Re: [net-next PATCH] macsec: Use helper macsec_netdev_priv for
- offload drivers
-Message-ID: <ZFtyF3SqLCQleCZy@corigine.com>
-References: <1683707289-2854-1-git-send-email-sbhatta@marvell.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1683707289-2854-1-git-send-email-sbhatta@marvell.com>
-X-ClientProxiedBy: AM0PR04CA0029.eurprd04.prod.outlook.com
- (2603:10a6:208:122::42) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Wed, 10 May 2023 06:30:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157B744BA
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683714594;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=WtuxbebE1vm0Cyf2ccSCCbuiNJdzXkyIZyuRiPAW/XY=;
+        b=ignBV4w0bLfhAPiAXWjXbYzZ8qIX0etfj/ttJKqrvg2MvJ1y1DnE5HP4ydNUdTKnr6rVe4
+        7ZBQ4OLr3fOQQHa/kU1RcyulyTo4H2r07d/7b7cVO3nvSp9J/RYapCbPzuACl3HU9MToJ2
+        xzhWPCBtyPayIItHwctQVtocUjRR8Wg=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-35-PoxjcH6ROiyfEoDvHn5m9A-1; Wed, 10 May 2023 06:29:52 -0400
+X-MC-Unique: PoxjcH6ROiyfEoDvHn5m9A-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94a355cf318so818922766b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:29:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683714591; x=1686306591;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WtuxbebE1vm0Cyf2ccSCCbuiNJdzXkyIZyuRiPAW/XY=;
+        b=lqB3NT4Pb9ss/iiLwsClIUtkAMFrHjANndA7l0JbazjsVWMYCzkt2jmq2odZpocnZ8
+         XRWuEbZcOqdevnUiy9LfMEDN3LrYAXW2AVEwaIpC/gJIMOql3RpVFcBImRZfmte3RbfN
+         3pfj6qOP3BzbYK6wAaalfr3wKbkvtjJZSlOQ1XuU/17K7yETqqLYJiKjCQOmEKRbLDyB
+         yiH5yLrG9wpOThaDtvc9AePu4HkV5nmsE+AlIkaoC/Gin4/Rbab0x1YG5OrFNq3QKrhk
+         8ImmqxhMkegQtwozuQlXuWIZZF8YC5a6uxpYoHNkAWtazeWdcYWeNVilQKqUF/Pc0ole
+         7qrw==
+X-Gm-Message-State: AC+VfDy56cm+KZZH6/7qPtuggjByk4bF0eCyYR4PcY8xBtfWJoH5C5OR
+        zXPY5+aBHyAx9uub4XFMouo3Np72faDBGzIpyYVwQ/9xTbgfmcsxeUQj+T59TQnQjcnNMXDUnlJ
+        heikrLZK+MIX25xOgbZtn+RG/
+X-Received: by 2002:a17:907:1622:b0:94a:9f9a:b3c4 with SMTP id hb34-20020a170907162200b0094a9f9ab3c4mr17644440ejc.49.1683714591666;
+        Wed, 10 May 2023 03:29:51 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5zoYGJIzNTbDeliJHH6ShUAOp0YxJQ2KMTXLbcFVPVpTuqWdJLii4BQu+3aiM1+MRoy2FqFA==
+X-Received: by 2002:a17:907:1622:b0:94a:9f9a:b3c4 with SMTP id hb34-20020a170907162200b0094a9f9ab3c4mr17644425ejc.49.1683714591371;
+        Wed, 10 May 2023 03:29:51 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id d4-20020a170907272400b00965e9b435dfsm2506419ejl.65.2023.05.10.03.29.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 03:29:50 -0700 (PDT)
+Message-ID: <fcddbd63-758f-4e05-c9c5-39a904eebf9d@redhat.com>
+Date:   Wed, 10 May 2023 12:29:50 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB5550:EE_
-X-MS-Office365-Filtering-Correlation-Id: 46106809-d2d1-4eea-9bcc-08db51417d18
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: c8dDSQ54W2/uvt5SMO8nMicuybIemx88utMLoTajYIctOntpLK7+FmKjzprFLKk36eCyxi4VunHi9Z19QHnowTAoiN6pAvDMcMAkvadFNybwtJFF1wPvJign0iHhnIoPeqUP2QMY4kP/a8ypELouwDZLUpyurVBrniSY+Z2tcWPTXRB+9bCmwHH2WVKZPEDBfdnvrFuBcCdneN2XGRxq22G7r4tU4NbHPsy2+digGYlLD593CMvovasg5f0Mf9FWJMtYBoUvXS0gr/JfPtwe9bKCC8rKNpKCqLr2q0DcV8+E1qHeh7Hhj0DZHHkrZhqcTvvduOo9RN+4prwF7itBhZl41TrThtKln7TjXgdvtT5xG1Pow4Wg38ySJKAlXpQkS2PC0mKvlGHbN/PslTGp+ZqNzxYJms0P0w0+fttacqgxKF2ZLoXlc79sRGKJ2fWsTcCFn/ZTAWvuCOeDm9iXgbHluBwHLUBGVR1hzy6cbiswQqpSqZoOWz5Q+v42USMfubGDdYrMZ46G5HbneKDW/mK4nVd/YqZE2tReKlhM5nXhpQP4x73DJ98EWMCQkLhi
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(396003)(366004)(136003)(376002)(346002)(451199021)(8936002)(8676002)(7416002)(44832011)(38100700002)(66476007)(66556008)(66946007)(2906002)(4744005)(478600001)(4326008)(316002)(5660300002)(6916009)(6486002)(6666004)(41300700001)(86362001)(6512007)(186003)(6506007)(2616005)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?N84QaWg8nLlYcFrZ5yLYZNDZX6tZjzEkPkiCgdHbtVncd/z/hqK4IyxfjwsI?=
- =?us-ascii?Q?E+bs3EEseM9ODy35iQG13c3nWwxq/to1sS1wQzilX1QHkDG6GCVp2g/I7yUy?=
- =?us-ascii?Q?uTg+59unFF9XD3X8ut2PGxd6mBdlnkI8LAZPtK8z3Rb33cmYNLtSUtlLnych?=
- =?us-ascii?Q?DGCluXzfP9/E8z1bgZRCl7xj0lDXmHjoYttavrPYjjRMB+lyysC6ZXdkUuaj?=
- =?us-ascii?Q?mSeqwtLTyAmEiYT7JeQZwzlAnOd1r9w0Ux8hCQWc0jpZABRUqQjRzSOKZtRt?=
- =?us-ascii?Q?iX9IsRZycHpxabOSOi98pWhmC2OaG3LWGZisUqTcXPWwifGPLmjcwJeNCx/B?=
- =?us-ascii?Q?LNIm5IymTkS8Aedm5zg5yBZK5vDtPUC/2tglQ44VOn61AiEsjXAb8m/QYzvW?=
- =?us-ascii?Q?GxihhLTvtMUrRI9EKeraAKEmInMa/rJyJFy2qTfPFBty5uAVn8yiJUVZk3mf?=
- =?us-ascii?Q?TrFWcb6NP/LryKpoWvhVCP9BJk2NJMlpo/91eV/AA3qmdLU1eCP1qCfZiF4A?=
- =?us-ascii?Q?s/EBmf2cVx9brPbRqxNvPnys8KMEIoXVX4FlfKIVWwC108JRbsUs1PAtlhML?=
- =?us-ascii?Q?bBGUuJHA3dNPlduBx5xsy3SVgjzIh5jvUCBAhpIogpVQwo79N+NlIIbNMgoK?=
- =?us-ascii?Q?LpsWAT6aD81EB4SLrC+wSy8O6/LfxQdjGWsEdbyRlq62P2YXYtnvjJsm/7jJ?=
- =?us-ascii?Q?4GhU12yWoi/dr03dZeJBAU62zcMcwnkiagRpa7wkyQm0wGdmBAcBq8/BZ//s?=
- =?us-ascii?Q?6wDUAwULgNnw2zS+XDGko9LNus1nMJJcWd5KeSRA2qHWtcrVdqhzAGJq59og?=
- =?us-ascii?Q?DTIq6XFFRXTC6piB/y2ivjRCKkawrqMhoIhseGy6kByre1U9PdI1WJCqGYM1?=
- =?us-ascii?Q?fKj9g6tozFrYpeHIpfNkvhG4tiSZiL3c008aa650ut3/Vx4x/HV1pTg+Mnfm?=
- =?us-ascii?Q?pJLsHSmlu9Ep1Fvq+R+9e5RZd1TUzimX8lgLBsCfBrdxJUWDugmO2tzJxbgs?=
- =?us-ascii?Q?19ht2HY4n1nnOIO6XGeB97rqIb3HVcRXBSVRWQpIPZSfuX01QKjs/tKsLLNv?=
- =?us-ascii?Q?94GTlO3KKU3pJKAlY+KQ3soL0aDwF+lhAhiWPpc72/v6EjN2K2rOUDiwf/B9?=
- =?us-ascii?Q?4G5AI3jpKGVXsXcUp0exnca+NcyPyHzgqddB49D0YACTJzTDRh10XQXgPSEM?=
- =?us-ascii?Q?/rOk9J08K3mhgAC9MaHO0vdcXhDL8uBr8s6GiYesBPZLy//sTULlmmOHC6q5?=
- =?us-ascii?Q?r3DzQP0n/3pkqydcJHpegAP7OgeWS2EmCsndXiLz65NCOyS72M8oXodK0D1T?=
- =?us-ascii?Q?g+Tl2y4EqF+qMecVTgUJV/V6JTXZEhzqCmRhc6zbZDSwkyMyZltTD32AiXq9?=
- =?us-ascii?Q?v7Bsv8TrIUKY4fuYDl3R/2RkckDzmapdTYXfPVR0aGPR3UW/PBOwphvMhEnW?=
- =?us-ascii?Q?OoU/g5kTr+KnsXLJ9XOWMfno/ZxVsqvPXhMUdVP9UheKjTyv8DDWoliBbA+4?=
- =?us-ascii?Q?GyYHjzuWPs+AsM1oKMW+VD/aKpQYBYdBq09PINxTumXMUraZY6+WO2jFChbO?=
- =?us-ascii?Q?KujCS1pg0dIh0flejHL8nIaMu/QRV2kBvtZgxcf/YEuXcaMw0UwiOt5dtA9w?=
- =?us-ascii?Q?4+7Sal9c7nx+hRqhNCLW3L8JHuJneFyh8ZnF7Wof6gJKzWeliffWNhOWJVmp?=
- =?us-ascii?Q?DhpcHg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 46106809-d2d1-4eea-9bcc-08db51417d18
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 10:29:51.8571
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zBU0Fkaayqo/gB6NKQN4M9iGId/h0ZNRMG8Wzv9ykNpGsm89J7qCV/tVPrzIgWipTtS3+NiWCRmy9MsDDXyIotLWZog7xgqErTWSUF8ViZo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB5550
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Hans de Goede <hdegoede@redhat.com>
+Subject: [GIT PULL] platform-drivers-x86 for 6.4-2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Gross <mgross@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org
+Content-Language: en-US, nl
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 01:58:09PM +0530, Subbaraya Sundeep wrote:
-> Now macsec on top of vlan can be offloaded to macsec offloading
-> devices so that VLAN tag is sent in clear text on wire i.e,
-> packet structure is DMAC|SMAC|VLAN|SECTAG. Offloading devices can
-> simply enable NETIF_F_HW_MACSEC feature in netdev->vlan_features for
-> this to work. But the logic in offloading drivers to retrieve the
-> private structure from netdev needs to be changed to check whether
-> the netdev received is real device or a vlan device and get private
-> structure accordingly. This patch changes the offloading drivers to
-> use helper macsec_netdev_priv instead of netdev_priv.
-> 
-> Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
+Hi Linus,
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Here is the first round of fixes for platform-drivers-x86 for 6.4.
+
+Nothing special to report just various small fixes:
+
+ -  thinkpad_acpi: Fix profile (performance/bal/low-power) regression on T490
+ -  misc. other small fixes / hw-id additions
+
+Regards,
+
+Hans
+
+
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.4-2
+
+for you to fetch changes up to 3d43f9f639542fadfb28f40b509bf147a6624d48:
+
+  platform/mellanox: fix potential race in mlxbf-tmfifo driver (2023-05-09 11:54:35 +0200)
+
+----------------------------------------------------------------
+platform-drivers-x86 for v6.4-2
+
+Highlights:
+ -  thinkpad_acpi: Fix profile (performance/bal/low-power) regression on T490
+ -  misc. other small fixes / hw-id additions
+
+The following is an automated git shortlog grouped by driver:
+
+hp-wmi:
+ -  add micmute to hp_wmi_keymap struct
+
+intel_scu_pcidrv:
+ -  Add back PCI ID for Medfield
+
+platform/mellanox:
+ -  fix potential race in mlxbf-tmfifo driver
+
+platform/x86/intel-uncore-freq:
+ -  Return error on write frequency
+
+thinkpad_acpi:
+ -  Add profile force ability
+ -  Fix platform profiles on T490
+
+touchscreen_dmi:
+ -  Add info for the Dexp Ursus KX210i
+ -  Add upside-down quirk for GDIX1002 ts on the Juno Tablet
+
+----------------------------------------------------------------
+Andrey Avdeev (1):
+      platform/x86: touchscreen_dmi: Add info for the Dexp Ursus KX210i
+
+Fae (1):
+      platform/x86: hp-wmi: add micmute to hp_wmi_keymap struct
+
+Hans de Goede (1):
+      platform/x86: touchscreen_dmi: Add upside-down quirk for GDIX1002 ts on the Juno Tablet
+
+Julian Winkler (1):
+      platform/x86: intel_scu_pcidrv: Add back PCI ID for Medfield
+
+Liming Sun (1):
+      platform/mellanox: fix potential race in mlxbf-tmfifo driver
+
+Mark Pearson (2):
+      platform/x86: thinkpad_acpi: Fix platform profiles on T490
+      platform/x86: thinkpad_acpi: Add profile force ability
+
+Srinivas Pandruvada (1):
+      platform/x86/intel-uncore-freq: Return error on write frequency
+
+ drivers/platform/mellanox/mlxbf-tmfifo.c           | 11 ++++--
+ drivers/platform/x86/hp/hp-wmi.c                   |  1 +
+ .../uncore-frequency/uncore-frequency-common.c     |  6 +++-
+ drivers/platform/x86/intel_scu_pcidrv.c            |  1 +
+ drivers/platform/x86/thinkpad_acpi.c               | 24 ++++++++++---
+ drivers/platform/x86/touchscreen_dmi.c             | 41 ++++++++++++++++++++++
+ 6 files changed, 76 insertions(+), 8 deletions(-)
 
