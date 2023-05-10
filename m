@@ -2,142 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD62D6FE546
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248FD6FE54B
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236570AbjEJUjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
+        id S236607AbjEJUlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjEJUjX (ORCPT
+        with ESMTP id S236589AbjEJUlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:39:23 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2047.outbound.protection.outlook.com [40.107.243.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4675FE7;
-        Wed, 10 May 2023 13:39:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UpUr6FxLFxkNjfE34rQW80RaZMXqHWFZUvM0cwhkHyak0nVnyQTG3PyJV5OLeJnBNhzfnAZtnWZ+ghnhHheiqA5YYSARc/9UmMQ2K8Tq2VjUKADhxhE0CefMxcwQOVmJ/WDAtKkfTffS6pqjlL4ZMd2JLCF9O5RycftbiaTVWuuON9DtDSaZ7iATeFtmcg/6nAukMQuebCLRQfvUyjZ4V7a/cuxR19+gP+BCa6ZyDR7EKEdRALrQ11+3oEVklAeVbfgHp/5L5YHQ/lDrKW8/kNH/xgg4NHT0SGU0w9Imi6kMS2Ey28C7LkSH4pvmZugFIRCdRuTTmdl9zcDeuKll5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vO18wdob9o5FWDIdL6PN6i3D2KtD8/yY9qEr+5x7l0I=;
- b=oTAMrF0QPH6/VnUbs4vxSTypXByho626Vf0CqKtdCEuwguZNSSLwLOfH2UQDHv3Tb1fUIETOOWmYgWqvD233+VDzwcB38e1bnMHpeYVyoPerLvaJDBRWeXcPeaBJqMDqjIZCrcJEUyPoUBsDXRhjfKOZkVLPttJaxGOcK+e4W1yUNEWtKBUhsGBaDLP/gBhjxFe/hmbHYhWAP7PLidj68iNrU2RlZsKfMxl1Af8uOCogbsHJf4YlBcUWT6nO8cPsYANKXCe/vEO6TOkEVWd5MsvkXyFPtKPM86LXVV3EKxqx1zibat1AQ8nbdHcL75SDl5Tb5CIqFe5vqTWe0ICRZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vO18wdob9o5FWDIdL6PN6i3D2KtD8/yY9qEr+5x7l0I=;
- b=a1BRNnmMawsnY8e+RjLMxo9y42WqU2By+m1yC9zJdkONFpMHUVK4DZ3iYpO/PMrcMpmEHkreREORUyC7GgXaZ1XmdlTPHqIclpnbHrwwKE8H8STknWcjHX+PZRGo7Kq84SZV3BdH8RvxB4VWbyv0+jotAhrkcIxdbF/8q50tY6oAvR+omjBRbXKI5lcSUg/sUo2qhbuuS9AX2/3DFuqS7gEkBhDaxDayT/FTW8UH9ox8NfU5fZ2gMcbK/+i1lF0M32tw7yanFLCNIvCXgE9rGuFOo88zU/L+AXTZtxkQGA/yEf/5ylidrqpE6gsMXQ63uH+B89zWy5qZbJpH9saygQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL1PR12MB5947.namprd12.prod.outlook.com (2603:10b6:208:39a::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Wed, 10 May
- 2023 20:39:20 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6363.032; Wed, 10 May 2023
- 20:39:20 +0000
-Date:   Wed, 10 May 2023 17:39:18 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        "Lu, Baolu" <baolu.lu@intel.com>
-Subject: Re: vPASID capability for VF
-Message-ID: <ZFwA9vAJAaoUi4xE@nvidia.com>
-References: <BN9PR11MB52764BE569672A02FE2A8CCA8C769@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZFrMneCMKuCtu7JF@nvidia.com>
- <BN9PR11MB527627F407BB2942ADFF800E8C769@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZFrThMhUnsYOE3WP@nvidia.com>
- <BN9PR11MB52760816DC23D5322A4318228C769@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20230509183111.6a4a7f39.alex.williamson@redhat.com>
- <ZFrsYZPRpHqVyjcZ@nvidia.com>
- <BN9PR11MB52765638CD15BBDC762100EB8C779@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Wed, 10 May 2023 16:41:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED9E5FD3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683751218;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c+YVOgzbPmVhXEjjEWcuvNv2oF/4/N7gIelXpRLUbJk=;
+        b=LxhfOZ/YRVlidjE1asv1mxyclInc32VbhAC6w61AJBG3FHBfLHYJ+nDVTmRqCMlURRVE0T
+        GrMAFl5VWSkXWi0npkwTTY9cCuxBYAAWZw4Q/aydCbmdsQRfFtu0KwlvCq0xFo9qJRsk6+
+        elW5ryhlfghjfUBVedeb6RD2sTx3Wn8=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-281-4KTB9fucMa6UjWKmbtTWQg-1; Wed, 10 May 2023 16:40:15 -0400
+X-MC-Unique: 4KTB9fucMa6UjWKmbtTWQg-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f41dcf1e28so18845365e9.3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:40:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683751214; x=1686343214;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c+YVOgzbPmVhXEjjEWcuvNv2oF/4/N7gIelXpRLUbJk=;
+        b=GCZdrB2Z+BclNIWEBFBlbc65mesxVlPhxr4JnLCcECNyKC49GNvV5qcduFKj4pDX0K
+         XjZBWM0wRstKrcdMTV3NZePjXZJR85z2acN16HFUBmwB9waQlUXiL0uUdyF4BLsEiywB
+         4eif/il5bm7P+WHcz7FHP5VQ2zbfJG0df0edBm0VsGDR1xtzGnvkKft9uZND5T7C3xdg
+         8cvM4kvVwRWjXr+DgQfvAlJH6M+ZRyc9Mizz8LWYe7emNjuExmfRPYxEm+9JRvfl3FF5
+         t4L8xPFtVZw1eYSwUdzMB9SR5j0RG4HCvXM1N1Q2OYfEHyvNPYSQySl52L08Lj6FFCWG
+         PhFg==
+X-Gm-Message-State: AC+VfDwemkNEHsWJTSKfCnX23s4d9ZyMQtk2UkupVvEGx3etW+aa1qpN
+        FNSR14ALuwAxPleUkBV7JpcneBMhxlCkLJeQs8HGcJyoVV4GEJoDACDHwahrENo/pOeHKb62qdu
+        6AnOwYHEZAEe2GrM2X0AsEqYb
+X-Received: by 2002:a1c:7319:0:b0:3f1:8ef0:7e2f with SMTP id d25-20020a1c7319000000b003f18ef07e2fmr12174292wmb.25.1683751213961;
+        Wed, 10 May 2023 13:40:13 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6eDoURduChHVCCN6+Chl5iorNMrvcKwRG8uiLTVLS+FrkSHsjJPGzuXrbkWId0VcjA4xStFA==
+X-Received: by 2002:a1c:7319:0:b0:3f1:8ef0:7e2f with SMTP id d25-20020a1c7319000000b003f18ef07e2fmr12174282wmb.25.1683751213568;
+        Wed, 10 May 2023 13:40:13 -0700 (PDT)
+Received: from redhat.com ([31.187.78.71])
+        by smtp.gmail.com with ESMTPSA id 10-20020a05600c22ca00b003f42158288dsm12676432wmg.20.2023.05.10.13.40.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 13:40:12 -0700 (PDT)
+Date:   Wed, 10 May 2023 16:40:04 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Simon Horman <horms@kernel.org>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtio: Add missing documentation for structure fields
+Message-ID: <20230510163954-mutt-send-email-mst@kernel.org>
+References: <20230510-virtio-kdoc-v1-1-d2b1824a9a2b@kernel.org>
+ <20230510120332-mutt-send-email-mst@kernel.org>
+ <ZFv4DfUcipQAII5R@kernel.org>
+ <20230510161442-mutt-send-email-mst@kernel.org>
+ <ZFv8GSdpg1sgVqxy@kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BN9PR11MB52765638CD15BBDC762100EB8C779@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: MW4PR03CA0222.namprd03.prod.outlook.com
- (2603:10b6:303:b9::17) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5947:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd140a69-8b7b-4729-33ac-08db5196a1a5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qjdXHwxRTQnAec/KrfBuv07egssDo72SsvRGLgH6wuzX57CX5h256fG9Cm9pzFtkY5hRiHIv/jd28bx0+VGkK739rjOwF+G99dy9dPZlF+PZEmB/rw8seBSmDODV0ERmyR1cuwNZBwcfuO935RvDdRil9eeidJBGFPKmjApiKUS4kUXpWpNF8gUkKvHBM1KjTOWlEyOEmP50tbk5Cs5wQ8ZHHlLismj2p1oQ1XU7KHLHzq9oF9NBTCXVYOG+ivK5NzfQPvD2/lo4gySVacbMjvt/5ZdJnfxuT3HZDJj/53CUoEAfSQUm2DzkkqM6/komFyrivvjPs6N9WaP6G8bMPT4zwNIheXlCDNmnQdNea/gQZfKtPuWS1oAsgljG/M4frnaM3z6xl9BIDHqBp1mLyh1pebwuutNY9BbDV3PbIo7qsOd71eHyAt8USTT684bppB+MtstfRnzEsuhuW6465kSH5Pkm0OveSj80QhbX/wDWcNgvlteyvng6HOi7+pwyzygkynMcWssL6mWtr1kqMbusykrAN15ntHSBdzRTVDaBUvfA+Vi3o3LOeV7tqaD3
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(39860400002)(346002)(136003)(396003)(451199021)(6486002)(54906003)(478600001)(186003)(8676002)(66556008)(6916009)(41300700001)(6512007)(26005)(66946007)(316002)(66476007)(2616005)(2906002)(4744005)(86362001)(3480700007)(8936002)(36756003)(5660300002)(6506007)(4326008)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5SyZAJdFYwaY2IxK55gqvNGuZAx401AZrLyYyx5wRm2TrICaKpM8CbF8laTk?=
- =?us-ascii?Q?ths7Pp5yappV1eqoXu2M8oZ7EmywQUYnjHCwOvgHy2xzMPv8N0zEP7GlywvX?=
- =?us-ascii?Q?KZ4eN1pAftR25pEUZAjppwtD4ZHfaPvI7WJYlXcMnSUW1OCpR/AX+EcxK8dA?=
- =?us-ascii?Q?w/fA3VBW3f4phkNxWaXGEffnAMUN+6iPpNQtnDP5SEd0xecuRqArty2c9sLG?=
- =?us-ascii?Q?eEfEP71ECa0ioBmQmQwUkJaF5U/MAgtHMt2ToSPIyYK0+dRzgpHTYWzEMvKz?=
- =?us-ascii?Q?UScIc2OPz8sGwRfnrgutydgv3MVghBW9Du3o8GyvN5PDz2c61/J5tyYAwhnp?=
- =?us-ascii?Q?CUqE4ZjxmSjUTVL0XN7P8dqo0EdEybqz1obUJBXGx/m/7SJZMAPnsaVuRpex?=
- =?us-ascii?Q?x9jCO/KmdK/iEWZjg40VIY5pLAikga9DECPJ6oKl3LhgmGGaZyS8dlkSReua?=
- =?us-ascii?Q?Nbiz0g7eNo4TaaSGFCuifn6DEVSblZVIQp3M8g4YT+zSG6p95z6P/WQ6ZdIR?=
- =?us-ascii?Q?K0SlCD0vKd2FVXQl77MqegIatJVtV+8Q1xB3fsjbh7RWAitGZkk7vRsgNY7e?=
- =?us-ascii?Q?NZcDYOHYpE3XsIHIcb6l0+h4vp8aDNVCuOpb2Ac4X5ws+IF9FgkANtDbBiP+?=
- =?us-ascii?Q?JdUMHyuXoyrcFScqKpFZnR1DHx79YoR0FbbzH8fcoEPGVsJJqPB6KlzGp0RN?=
- =?us-ascii?Q?gqhx5hW8Gmv8Nf6KaJ9eFvPzpXn4eqIncZQa8o3E5Pee0yunB0vk1K/bvAhj?=
- =?us-ascii?Q?YfjMe4uzu0KI5e9srGCEoo57A7CpFth5UjZr3q6AzuDu3OSZosKOceWqpEAa?=
- =?us-ascii?Q?XMC3N3kk39MXuc84M7G9PK2ffSjGd89p7C0BvM+kephnE7gGGEwrcHAbX0hA?=
- =?us-ascii?Q?AyHpslme36XMNImcbyOZV/7vpt2rvfE52k5maRJ21CEsR7wbrrYeX+QdmFG2?=
- =?us-ascii?Q?pUpthPKRUonT0yNdHoU3fNoVxIFDDvifmCM3IGzuqL0V3iBTMaVfEarTn949?=
- =?us-ascii?Q?MF3LIHvHk621x1lqzLSnbRyWFSM2x8pE8krRoMRTQH/kgAKhX76PDqRPWaCq?=
- =?us-ascii?Q?LLMGlmDrgWOMipXgFsYE26qLODYUVetlDRcQ8DQBy57UU80ks1k/r9vXwLrD?=
- =?us-ascii?Q?pARW0BfYFt4yY9hk8lunx7IaQ0SMb455GmHhAW0+zKV3JDK7RoqDXvvipoiP?=
- =?us-ascii?Q?kTULXy955aaM8+NbAOjsbqts0Yh+JZsUKcdSdh7NtkbvsolrLPWq3hUgTgb+?=
- =?us-ascii?Q?x/dTr8ijp/yqwOtBhs7t9soAEo58IPL20e5lipvDViNy4hP/u2EO6aIpBhNW?=
- =?us-ascii?Q?DZkVRqL6aDy0fjmCIA6iV+rzJvPjoibjmtItpuboYfkvjU3sC+0+8y6iyvC7?=
- =?us-ascii?Q?xZdvh0HFqbFUZVsFXV4CF9o49w5Jtt1chRKgQS2ESRK65h6S/uMmKxFbrPz/?=
- =?us-ascii?Q?G0DlCe++JtXOp3IjgMmRvc9u821ESzaYLVRwkBuALuwMBuzhYBK3Qj2lunVU?=
- =?us-ascii?Q?yIaKokUaVOej1MR4Zg2C5261mwQJ2DLVJXKx3L+r04YO/mm9hJZEDnNdK0Yi?=
- =?us-ascii?Q?61FKO1tAnscBmH3sx6c=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd140a69-8b7b-4729-33ac-08db5196a1a5
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 20:39:20.3737
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mtA6CQ+4YxxOefxZ0ql5z14pYCEOs03WNp5UA4ilDXXsPNjikI/RrG7eibYJqGcR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5947
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZFv8GSdpg1sgVqxy@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 02:16:05AM +0000, Tian, Kevin wrote:
-
-> We don't have a control knob to hide/unhide a specific PCI cap
-> today. It's hardcoded with proper virtualization policy in vfio-pci.
+On Wed, May 10, 2023 at 10:18:33PM +0200, Simon Horman wrote:
+> On Wed, May 10, 2023 at 04:14:53PM -0400, Michael S. Tsirkin wrote:
+> > On Wed, May 10, 2023 at 10:01:17PM +0200, Simon Horman wrote:
+> > > On Wed, May 10, 2023 at 12:04:21PM -0400, Michael S. Tsirkin wrote:
+> > > > On Wed, May 10, 2023 at 02:23:12PM +0200, Simon Horman wrote:
+> > > > > Add missing documentation for the vqs_list_lock field of struct virtio_device,
+> > > > > and the validate field of struct virtio_driver.
+> > > > > 
+> > > > > ./scripts/kernel-doc says:
+> > > > > 
+> > > > >  .../virtio.h:131: warning: Function parameter or member 'vqs_list_lock' not described in 'virtio_device'
+> > > > >  .../virtio.h:192: warning: Function parameter or member 'validate' not described in 'virtio_driver'
+> > > > >  2 warnings as Errors
+> > > > > 
+> > > > > No functional changes intended.
+> > > > > 
+> > > > > Signed-off-by: Simon Horman <horms@kernel.org>
+> > > > > ---
+> > > > >  include/linux/virtio.h | 2 ++
+> > > > >  1 file changed, 2 insertions(+)
+> > > > > 
+> > > > > diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+> > > > > index b93238db94e3..0b2b82ee3220 100644
+> > > > > --- a/include/linux/virtio.h
+> > > > > +++ b/include/linux/virtio.h
+> > > > > @@ -103,6 +103,7 @@ int virtqueue_resize(struct virtqueue *vq, u32 num,
+> > > > >   * @config_enabled: configuration change reporting enabled
+> > > > >   * @config_change_pending: configuration change reported while disabled
+> > > > >   * @config_lock: protects configuration change reporting
+> > > > > + * @vqs_list_lock: protects @vqs.
+> > > > >   * @dev: underlying device.
+> > > > >   * @id: the device type identification (used to match it with a driver).
+> > > > >   * @config: the configuration ops for this device.
+> > > > > @@ -160,6 +161,7 @@ size_t virtio_max_dma_size(const struct virtio_device *vdev);
+> > > > >   * @feature_table_size: number of entries in the feature table array.
+> > > > >   * @feature_table_legacy: same as feature_table but when working in legacy mode.
+> > > > >   * @feature_table_size_legacy: number of entries in feature table legacy array.
+> > > > > + * @validate: the function to call to vaidate features at probe time.
+> > > > 
+> > > > typo
+> > > > 
+> > > > and this is called before probe actually not at probe time
+> > > 
+> > > Thanks, how about the following?
+> > > 
+> > > * @validate: the function to call to validate features
+> > 
+> > ... and config space
 > 
-> Following current convention once vfio-pci adds the support for the
-> PASID cap it will be exposed if present (for VF it's the presence in PF).
+> Ok, so:
+> 
+> * @validate: the function to call to validate features and config spaces
 
-We probably shouldn't do this - the PASID cap should only exist if the
-VMM is actualy able to handle PASID throughout, and currently no VMM
-does this.
+config space
 
-So we can't just have the kernel unconditionally add the cap. There
-needs to be a negotiation with the VMM
+> > > > >   * @probe: the function to call when a device is found.  Returns 0 or -errno.
+> > > > >   * @scan: optional function to call after successful probe; intended
+> > > > >   *    for virtio-scsi to invoke a scan.
+> > > > 
+> > 
 
-Jason
