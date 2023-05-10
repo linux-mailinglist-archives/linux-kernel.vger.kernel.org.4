@@ -2,59 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7C16FE09B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5B66FE0A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237575AbjEJOll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45636 "EHLO
+        id S237535AbjEJOm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237574AbjEJOl2 (ORCPT
+        with ESMTP id S237258AbjEJOmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:41:28 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D99268E
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:41:12 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683729670;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x2Qh6i4Y+AB0pDG6u/iYkTlhIK7xQT7b36qrwW0oarA=;
-        b=3uewY1C7KOXhSuvl1De6gi9NZzV1cOm2flGjELQem0gRhXBtDrycninQeL2Hb5GoZqUghu
-        Q3oIOJ7LuWlrUZNJb49WBmLVqxGGRRjwEdJqXXKyJwISvxUY15uqXaksugkuxxtHJ6zMkN
-        qB3Kw9vI9J5XN4gkEkMuH8o6dC7z32+ZO14zUMnO7GzPFU30ia2QjdVLbRcAcdCSNvOpf6
-        RHBxQDn2l3AhPhbwQgsCaQDWTN6dFl0OvydSLDvQ31SB+gUn32Bn72ZPdvrSUEOAtng7Nw
-        vdDW5yBX+VyAiaqI1rT2Zuas5x/ecR2IGvrAWtEjjMrtc5fCjrNoOer2NdkeJA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683729670;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x2Qh6i4Y+AB0pDG6u/iYkTlhIK7xQT7b36qrwW0oarA=;
-        b=trce9v7ndgkCG97sqWC7ONvp59REw9dhfEULHP6zIDcTMl2qCslDv1Sgd1Z9B61gH70GKw
-        U2qDk7+OkSfqxbAw==
-To:     Yujie Liu <yujie.liu@intel.com>
-Cc:     Shanker Donthineni <sdonthineni@nvidia.com>,
-        oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Michael Walle <michael@walle.cc>,
-        Vikram Sethi <vsethi@nvidia.com>
-Subject: Re: [PATCH v3 3/3] genirq: Use the maple tree for IRQ descriptors
- management
-In-Reply-To: <ZFtGvfDFLyHeFVFH@yujie-X299>
-References: <202304251035.19367560-yujie.liu@intel.com>
- <87a5yuzvzd.ffs@tglx> <ZEsiYbi8dorXTI5t@yujie-X299> <877ctw5mdp.ffs@tglx>
- <ZFdbtipfTsIF0u6z@yujie-X299> <87mt2f2mhm.ffs@tglx>
- <ZFtGvfDFLyHeFVFH@yujie-X299>
-Date:   Wed, 10 May 2023 16:41:09 +0200
-Message-ID: <87ttwkxn96.ffs@tglx>
+        Wed, 10 May 2023 10:42:23 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711A2BC;
+        Wed, 10 May 2023 07:42:22 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34AD7v6R020389;
+        Wed, 10 May 2023 14:41:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=yXhxwsbwi+08VkxnQt2ohjYL4NlaY/YYuUapTdI3wxc=;
+ b=pOizwmYzf1xO5LUmU3Al0wnCTSwbfrUb5CHD1ZycsEUMxw2pYfz3J5bBh3t1InNutbU1
+ mN38a0+vAu2sJCorvbP1IP+6lXU7nN9rRDA1CqaxMXk0IveC0dkq4iyI0rn2IYlQQZ98
+ R8dAi6Mp3l7UN4KMC7wdA8WYY+gYSY1Ld7cK8KXnSCItn6u7epFiFAnfdXkJzWhhg+TB
+ ZMPTpAgoTId0vPBjeV6MxzdlCtN7HU5shcue7094vM0+hsiDK2Nnhjgo7jqlo8VLphEE
+ /OiGMc62NEAV0iEn73qYQ7/1juFy1u12fyogiruWKvE6Y1bUeOR1QVp1WK6VpXgWDlFX mw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qg79crqqy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 May 2023 14:41:52 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34AEfpKs021064
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 May 2023 14:41:51 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 10 May
+ 2023 07:41:50 -0700
+Message-ID: <7e28b8b7-1bc1-bd3a-a198-a0dfaf356c01@quicinc.com>
+Date:   Wed, 10 May 2023 08:41:33 -0600
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 2/3] dt-bindings: clock: qcom,mmcc: define
+ clocks/clock-names for MSM8226
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <20230509-msm8226-mmcc-parents-v1-0-83a2dfc986ab@z3ntu.xyz>
+ <20230509-msm8226-mmcc-parents-v1-2-83a2dfc986ab@z3ntu.xyz>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230509-msm8226-mmcc-parents-v1-2-83a2dfc986ab@z3ntu.xyz>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: XbLxN-6knLr6YD1gg7LF60DfIzBiSfEr
+X-Proofpoint-ORIG-GUID: XbLxN-6knLr6YD1gg7LF60DfIzBiSfEr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1011 mlxscore=0 suspectscore=0
+ bulkscore=0 spamscore=0 priorityscore=1501 mlxlogscore=807 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305100118
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,30 +91,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yujie!
+On 5/9/2023 3:16 PM, Luca Weiss wrote:
+> Define clock/clock-names properties of the MMCC device node to be used
+> on MSM8226 platform.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 
-On Wed, May 10 2023 at 15:24, Yujie Liu wrote:
-> On Mon, May 08, 2023 at 11:36:37AM +0200, Thomas Gleixner wrote:
->> Ok. So one difference might be that a 64 bit kernel enables interrupt
->> rempping. Can you add 'intremap=off' to the kernel command line please?
->
-> Sorry, my previous info was incorrect.
->
-> The block/008 (do IO while hotplugging CPUs) failure also happens on a
-> 64-bit kernel no matter having 'intremap=off' or not, and persists when
-> tested against v6.3, but the warning in default_send_IPI_mask_logical
-> function is not triggered on a 64-bit kernel. Not sure if that function
-> is 32-bit specific since it is set in arch/x86/kernel/apic/probe_32.c.
-
-Ok. That makes more sense as the issue is clearly independent of 32 or
-64 bit.
-
-I decoded it by now and that maple_tree conversion is the culprit. It
-broke irq_get_next_irq() which is used during hotplug. It misses every
-other interrupt, so affinities are not fixed up.
-
-Please ignore that series.
-
-Thanks a lot for your help!
-
-       tglx
+Acked-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
