@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1DF6FE7CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 00:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7095A6FE7CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236594AbjEJW7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 18:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57206 "EHLO
+        id S236642AbjEJXAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 19:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235708AbjEJW7i (ORCPT
+        with ESMTP id S236614AbjEJXAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 18:59:38 -0400
+        Wed, 10 May 2023 19:00:07 -0400
 Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74F6E64;
-        Wed, 10 May 2023 15:59:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64F9E64;
+        Wed, 10 May 2023 16:00:05 -0700 (PDT)
 Received: from local
         by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
          (Exim 4.96)
         (envelope-from <daniel@makrotopia.org>)
-        id 1pwsmV-0004TO-1A;
-        Wed, 10 May 2023 22:59:35 +0000
-Date:   Thu, 11 May 2023 00:57:42 +0200
+        id 1pwsmy-0004U1-1A;
+        Wed, 10 May 2023 23:00:04 +0000
+Date:   Thu, 11 May 2023 00:58:10 +0200
 From:   Daniel Golle <daniel@makrotopia.org>
 To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -34,9 +34,9 @@ To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
         Paolo Abeni <pabeni@redhat.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH net-next 3/8] net: phy: realtek: use genphy_soft_reset for
+Subject: [PATCH net-next 4/8] net: phy: realtek: disable SGMII in-band AN for
  2.5G PHYs
-Message-ID: <0c1e578a5b02fe49e1114ea75e3c6282eb230ad3.1683756691.git.daniel@makrotopia.org>
+Message-ID: <574c9703523af5643af0623144db3aa385635e84.1683756691.git.daniel@makrotopia.org>
 References: <cover.1683756691.git.daniel@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -51,68 +51,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some vendor bootloaders do weird things with those PHYs which result in
-link modes being reported wrongly. Start from a clean sheet by resetting
-the PHY.
+MAC drivers don't use SGMII in-band autonegotiation unless told to do so
+in device tree using 'managed = "in-band-status"'. When using MDIO to
+access a PHY, in-band-status is unneeded as we have link-status via
+MDIO. Switch off SGMII in-band autonegotiation using magic values.
 
+Reported-by: Chen Minqiang <ptpt52@gmail.com>
+Reported-by: Chukun Pan <amadeus@jmu.edu.cn>
 Reported-by: Yevhen Kolomeiko <jarvis2709@gmail.com>
+Tested-by: Yevhen Kolomeiko <jarvis2709@gmail.com>
 Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
- drivers/net/phy/realtek.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/phy/realtek.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
-index 4a2c1ad02d48..0cf7846c9812 100644
+index 0cf7846c9812..acadb6f0057b 100644
 --- a/drivers/net/phy/realtek.c
 +++ b/drivers/net/phy/realtek.c
-@@ -1038,6 +1038,7 @@ static struct phy_driver realtek_drvs[] = {
- 		.write_page	= rtl821x_write_page,
- 		.read_mmd	= rtl822x_read_mmd,
- 		.write_mmd	= rtl822x_write_mmd,
-+		.soft_reset     = genphy_soft_reset,
- 	}, {
- 		PHY_ID_MATCH_EXACT(0x001cc840),
- 		.name		= "RTL8226B_RTL8221B 2.5Gbps PHY",
-@@ -1051,6 +1052,7 @@ static struct phy_driver realtek_drvs[] = {
- 		.write_page	= rtl821x_write_page,
- 		.read_mmd	= rtl822x_read_mmd,
- 		.write_mmd	= rtl822x_write_mmd,
-+		.soft_reset     = genphy_soft_reset,
- 	}, {
- 		PHY_ID_MATCH_EXACT(0x001cc838),
- 		.name           = "RTL8226-CG 2.5Gbps PHY",
-@@ -1061,6 +1063,7 @@ static struct phy_driver realtek_drvs[] = {
- 		.resume         = rtlgen_resume,
- 		.read_page      = rtl821x_read_page,
- 		.write_page     = rtl821x_write_page,
-+		.soft_reset     = genphy_soft_reset,
- 	}, {
- 		PHY_ID_MATCH_EXACT(0x001cc848),
- 		.name           = "RTL8226B-CG_RTL8221B-CG 2.5Gbps PHY",
-@@ -1072,6 +1075,7 @@ static struct phy_driver realtek_drvs[] = {
- 		.resume         = rtlgen_resume,
- 		.read_page      = rtl821x_read_page,
- 		.write_page     = rtl821x_write_page,
-+		.soft_reset     = genphy_soft_reset,
- 	}, {
- 		PHY_ID_MATCH_EXACT(0x001cc849),
- 		.name           = "RTL8221B-VB-CG 2.5Gbps PHY",
-@@ -1083,6 +1087,7 @@ static struct phy_driver realtek_drvs[] = {
- 		.resume         = rtlgen_resume,
- 		.read_page      = rtl821x_read_page,
- 		.write_page     = rtl821x_write_page,
-+		.soft_reset     = genphy_soft_reset,
- 	}, {
- 		PHY_ID_MATCH_EXACT(0x001cc84a),
- 		.name           = "RTL8221B-VM-CG 2.5Gbps PHY",
-@@ -1094,6 +1099,7 @@ static struct phy_driver realtek_drvs[] = {
- 		.resume         = rtlgen_resume,
- 		.read_page      = rtl821x_read_page,
- 		.write_page     = rtl821x_write_page,
-+		.soft_reset     = genphy_soft_reset,
- 	}, {
- 		PHY_ID_MATCH_EXACT(0x001cc961),
- 		.name		= "RTL8366RB Gigabit Ethernet",
+@@ -666,7 +666,7 @@ static int rtl822x_get_features(struct phy_device *phydev)
+ 
+ static int rtl822x_config_aneg(struct phy_device *phydev)
+ {
+-	int ret = 0;
++	int val, ret = 0;
+ 
+ 	if (phydev->autoneg == AUTONEG_ENABLE) {
+ 		u16 adv2500 = 0;
+@@ -681,6 +681,19 @@ static int rtl822x_config_aneg(struct phy_device *phydev)
+ 			return ret;
+ 	}
+ 
++	/* MACs using phylink assume SGMII in-band status is not used.
++	 * Keep things as they are for MACs not using phylink such as
++	 * RealTek PCIe chips which come with built-in PHYs
++	 */
++	if (phydev->phylink) {
++		/* Disable SGMII AN */
++		phy_write_mmd(phydev, RTL8221B_MMD_SERDES_CTRL, 0x7588, 0x2);
++		phy_write_mmd(phydev, RTL8221B_MMD_SERDES_CTRL, 0x7589, 0x71d0);
++		phy_write_mmd(phydev, RTL8221B_MMD_SERDES_CTRL, 0x7587, 0x3);
++		phy_read_mmd_poll_timeout(phydev, RTL8221B_MMD_SERDES_CTRL, 0x7587,
++					  val, !(val & BIT(0)), 500, 100000, false);
++	}
++
+ 	return __genphy_config_aneg(phydev, ret);
+ }
+ 
 -- 
 2.40.0
 
