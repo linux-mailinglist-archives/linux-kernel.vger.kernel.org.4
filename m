@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E09DA6FE4EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72D46FE4EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236225AbjEJUSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
+        id S236244AbjEJUSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235944AbjEJUSi (ORCPT
+        with ESMTP id S236051AbjEJUSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:18:38 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548302D66;
-        Wed, 10 May 2023 13:18:35 -0700 (PDT)
-Received: (Authenticated sender: jeanmichel.hautbois@yoseli.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id F027A40002;
-        Wed, 10 May 2023 20:18:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yoseli.org; s=gm1;
-        t=1683749913;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VNEEyYKpfVOr28cZNeS8TXCo4aaHFV1TNLCNzOagDv0=;
-        b=ELECcCHLGPcxNkrpYZYraLgOrjS5PDyS2mL3IFcfqH8hD8Y2tl5JxMtz1yJprviEWoXzKa
-        n+pqsU6hefDA94kpbUvx0pl6qhcgOlt7uEc4TjJ6jN4enhcnPhMu/fsgMf7VDbZxL+5JoY
-        2T911dXkh87toWnlLMrvqNux1rU6cH33Kt9ieYsAyEKIhRM5wn6gFOThuhxBT7F7kwRvxx
-        9qSFu2yq9anRTQRVShjeGHJbm0Ew8yvOzaXJsNXLOJ5Pmc5rmMovr3MJOTSCCOd92gzu0w
-        RyKMbCNF3ujSqMWbQBGNbIsWiq0Nhoj6/0PeThL9+M30w43J8wLCObcEJiJa+Q==
-Message-ID: <32ecb9f3-1443-210c-0fc9-40891629e25a@yoseli.org>
-Date:   Wed, 10 May 2023 22:18:32 +0200
+        Wed, 10 May 2023 16:18:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57C344B0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:18:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8211A63F9A
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 20:18:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD53C4339B;
+        Wed, 10 May 2023 20:18:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683749917;
+        bh=P8yyqVepAWX+m1BQJQjKe4Mv/4+ifST6MckJVlaGOdA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DUIJa7ApzzBTrhaQ9hB5kmorGJ8vmhsZUFZ3Ct2nwHxTX1bWnFu6Tk3otU3T/CqTU
+         CL1YWEMYTsV9ChYjApfckj8HjPdUMWHzhmJSVVH+4gs9HD56o/ls5D4f2UkRAVWWi4
+         XTCUc2qqQVDGFXL0EFx62lYenkHtElpUtjT1knMbRuK7Pd4ctMsbRJYLNZ+T5y5HKL
+         A4mU6VsCPPMoFFhD5AVlq9c8SVfm02mouTYgo7ROtsdOHklpCcIE8SOJd/h5dt9pAU
+         xGtVGjqsvVagMEAGgCmJvmomJpO2pZ8aG7tfPialyrzVovkZTBVw2tyjM0jScbQA89
+         ir7lpHIZlD1kA==
+Date:   Wed, 10 May 2023 22:18:33 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtio: Add missing documentation for structure fields
+Message-ID: <ZFv8GSdpg1sgVqxy@kernel.org>
+References: <20230510-virtio-kdoc-v1-1-d2b1824a9a2b@kernel.org>
+ <20230510120332-mutt-send-email-mst@kernel.org>
+ <ZFv4DfUcipQAII5R@kernel.org>
+ <20230510161442-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: pca953x issue when driving a DSI bridge
-Content-Language: en-US
-To:     andy.shevchenko@gmail.com
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brgl@bgdev.pl, linus.walleij@linaro.org
-References: <0b3a257a-f1e5-ad86-4c69-93e038a33ce9@yoseli.org>
- <ZFvTi3tQGUq2OCHi@surfacebook>
-From:   Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-In-Reply-To: <ZFvTi3tQGUq2OCHi@surfacebook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510161442-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Wed, May 10, 2023 at 04:14:53PM -0400, Michael S. Tsirkin wrote:
+> On Wed, May 10, 2023 at 10:01:17PM +0200, Simon Horman wrote:
+> > On Wed, May 10, 2023 at 12:04:21PM -0400, Michael S. Tsirkin wrote:
+> > > On Wed, May 10, 2023 at 02:23:12PM +0200, Simon Horman wrote:
+> > > > Add missing documentation for the vqs_list_lock field of struct virtio_device,
+> > > > and the validate field of struct virtio_driver.
+> > > > 
+> > > > ./scripts/kernel-doc says:
+> > > > 
+> > > >  .../virtio.h:131: warning: Function parameter or member 'vqs_list_lock' not described in 'virtio_device'
+> > > >  .../virtio.h:192: warning: Function parameter or member 'validate' not described in 'virtio_driver'
+> > > >  2 warnings as Errors
+> > > > 
+> > > > No functional changes intended.
+> > > > 
+> > > > Signed-off-by: Simon Horman <horms@kernel.org>
+> > > > ---
+> > > >  include/linux/virtio.h | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > > 
+> > > > diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+> > > > index b93238db94e3..0b2b82ee3220 100644
+> > > > --- a/include/linux/virtio.h
+> > > > +++ b/include/linux/virtio.h
+> > > > @@ -103,6 +103,7 @@ int virtqueue_resize(struct virtqueue *vq, u32 num,
+> > > >   * @config_enabled: configuration change reporting enabled
+> > > >   * @config_change_pending: configuration change reported while disabled
+> > > >   * @config_lock: protects configuration change reporting
+> > > > + * @vqs_list_lock: protects @vqs.
+> > > >   * @dev: underlying device.
+> > > >   * @id: the device type identification (used to match it with a driver).
+> > > >   * @config: the configuration ops for this device.
+> > > > @@ -160,6 +161,7 @@ size_t virtio_max_dma_size(const struct virtio_device *vdev);
+> > > >   * @feature_table_size: number of entries in the feature table array.
+> > > >   * @feature_table_legacy: same as feature_table but when working in legacy mode.
+> > > >   * @feature_table_size_legacy: number of entries in feature table legacy array.
+> > > > + * @validate: the function to call to vaidate features at probe time.
+> > > 
+> > > typo
+> > > 
+> > > and this is called before probe actually not at probe time
+> > 
+> > Thanks, how about the following?
+> > 
+> > * @validate: the function to call to validate features
+> 
+> ... and config space
 
-On 10/05/2023 19:25, andy.shevchenko@gmail.com wrote:
-> Wed, May 10, 2023 at 06:12:19PM +0200, Jean-Michel Hautbois kirjoitti:
->> Hello there !
->>
->> I have a custom board, based on a i.MX8mm SoC which has a MIPI-DSI to eDP
->> bridge (namely, a TI sn65dsi86). This bridge has a DSI enable pin, which is
->> basically its reset pin, connected to my PCA9539 GPIO expander.
->>
->> The issue is that this pin can't be sleeping, and it is tested in the
->> gpiod_set_value() function.
->>
->> Here is where it fails in my dmesg:
-> 
-> ...
-> 
->> [   11.273968]  gpiod_set_value+0x5c/0xcc
->> [   11.277722]  ti_sn65dsi86_resume+0x4c/0x94 [ti_sn65dsi86]
-> 
-> Your problem even worse, i.e. ->resume() might sleep.
+Ok, so:
 
-Indeed it is worse ;-).
+* @validate: the function to call to validate features and config spaces
 
+> > > >   * @probe: the function to call when a device is found.  Returns 0 or -errno.
+> > > >   * @scan: optional function to call after successful probe; intended
+> > > >   *    for virtio-scsi to invoke a scan.
+> > > 
 > 
->> [   11.283131]  __rpm_callback+0x48/0x19c
->> [   11.286885]  rpm_callback+0x6c/0x80
->> [   11.290375]  rpm_resume+0x3b0/0x660
->> [   11.293864]  __pm_runtime_resume+0x4c/0x90
->> [   11.297960]  __device_attach+0x90/0x1e4
->> [   11.301797]  device_initial_probe+0x14/0x20
->> [   11.305980]  bus_probe_device+0x9c/0xa4
->> [   11.309817]  device_add+0x3d8/0x820
->> [   11.313308]  __auxiliary_device_add+0x40/0xa0
->> [   11.317668]  ti_sn65dsi86_add_aux_device.isra.0+0xb0/0xe0 [ti_sn65dsi86]
->> [   11.324381]  ti_sn65dsi86_probe+0x20c/0x2ec [ti_sn65dsi86]
->> [   11.329876]  i2c_device_probe+0x3b8/0x3f0
->> [   11.333889]  really_probe+0xc0/0x3dc
-> 
-> ...
-> 
->> I suppose this is not a corner case and we may have other drivers and other
->> boards connecting a GPIO which can sleep in a context where it should not ?
->>
->> I would like to add one thing: on this board, the expander is routed in a
->> way that makes it impossible to "sleep" as the reset is forced pulled-up and
->> the power regulators are fixed and can't be stopped.
-> 
-> Can you elaborate why you think there is a problem?
-
-I didn't know if it could be an issue or not, so I mentioned it but 
-sounds like a nonsense :-).
-
-> 
->> I don't know how to address this issue nicely and any thoughts is
->> appreciated !
-> 
-> As a workaround you can consider the code around i2c_in_atomic_xfer_mode()
-> but since I have heard about i.MX8 so many negative remarks which makes me
-> think that hardware is a train wreck and shouldn't be used at all.
->
-
-Not sure to get the workaround proposal right...
-I won't argue about i.MX8 ;-).
-
-Thanks,
-JM
