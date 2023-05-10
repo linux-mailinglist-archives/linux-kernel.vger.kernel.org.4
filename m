@@ -2,53 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369EC6FE46C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 21:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 575156FE471
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 21:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236192AbjEJTQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 15:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
+        id S236116AbjEJTTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 15:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235757AbjEJTQS (ORCPT
+        with ESMTP id S230200AbjEJTTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 15:16:18 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6512D4EE8;
-        Wed, 10 May 2023 12:16:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=0Z07kJM8D8m5d5kKwLUHNNFE7+72EIHO1gqBnUjzXog=;
-        t=1683746172; x=1684955772; b=QplBH4kyZn2y5tVuthkVAzha52SVEDfrgYu4eN8qGOrLSTw
-        iZupeyF9iSJlb1cKx+sevHT0N82zI+j8/JgkEwWByBk5cJBywKviybwOpNkNELlvxGLOkRdJfYNah
-        Hcv4MoMVOzK/JuaAe4ec6iBmgHyHvcivW5b5qKBrInB08CsV9Ks2raZqhSmSMwB4xd/kHP1ABi21f
-        vrl8YCbSM+/ZZcIHQV+3JgtT7VdiIGC3Xn437imOcjBcISaZMS0Qh2ZafByFg65uw9fEyvZ12N9Lm
-        PAqDnyQnMysBeM2QBGjMVksEBPrbu188FOZofjdSvLytkpOmon+wtHTCk9SzxxHQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1pwpII-005Z6D-1q;
-        Wed, 10 May 2023 21:16:10 +0200
-Message-ID: <0c44265eae421eff49e19be3ebfe20d1fb5e6f9a.camel@sipsolutions.net>
-Subject: Re: [RFC PATCH 2/4] workqueue: support holding a mutex for each work
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Wed, 10 May 2023 21:16:09 +0200
-In-Reply-To: <ZFvjoUtg2ax11UlC@slm.duckdns.org>
-References: <20230510160428.175409-1-johannes@sipsolutions.net>
-         <20230510175846.cc21c84b0e6b.I9d3df459c43a78530d9c2046724bb45626402d5f@changeid>
-         <ZFvjoUtg2ax11UlC@slm.duckdns.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 10 May 2023 15:19:23 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB78F5255;
+        Wed, 10 May 2023 12:19:22 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6439e6f5a33so4431114b3a.2;
+        Wed, 10 May 2023 12:19:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683746362; x=1686338362;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vdKoW9P2jhBRnfmfNK6oFRBXOmfqdpLVW/L7FZNRlBQ=;
+        b=RPF5HXOjB1S+X34THeUgO74GhOevm4XKHWyln3kcxR64HMWwEYRMAiv1yihOGbxoOY
+         V68pDwIC6StEtl85K2ZEvsrtryxcSaTDq5fB5gSK849T/Y7nrVESXimWoInf04t8SqQD
+         ugZEhVj6IAhE+5df0H8ElTx8vUhoxXLjstdOUdEU7cauKmrKgeTbrivxOxCsPsEfBubs
+         x+FOeiipp2XiYXuLQYlRkHnh4BBDzK6Vu/WgbUE7LcLq3l+nGqvR9k51fhCDko5r2jXB
+         eismONkkFymXXp6+VZy7E5uNPwWetYXO+8CJH1GRfWeAjDlA2QpJqHAFcJKfMR3E+tPf
+         4NGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683746362; x=1686338362;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vdKoW9P2jhBRnfmfNK6oFRBXOmfqdpLVW/L7FZNRlBQ=;
+        b=EXUAkhoqi4SJ62AAhcKaKGnhCJn2dwP/sl8mxIkiaPAvCxc8xMaFLJQqMC912l9V5I
+         Xsx7XOdYzDdLFZu2NWJMmDtMjaOq2OanC20IhznRy4SUN+89O5vuvz411qp5dSWpfrrP
+         IqaD0B4SbjjSFiE+SP3Jp9sB5253VkNHfhhTNygXP+mkDvEtqC90uJ87BfvsKnC3HBUq
+         kJ9QGZuM47H0lWTXtRJBl9v9beOPfll9v05rjSltnCOmPJEnQ46C/MtEaGK2UD+H/cMP
+         o11pqTuhCR/WN50H054ehBKGNOOeIJitYlVuizlvgjqAqQaTkvJQyLFpFKv45Fu6UiSX
+         h80A==
+X-Gm-Message-State: AC+VfDy5WZo2gr1VLfwDWNyY3GrhRu4p6LGV6dpWDFcyzE5K4UC8EP4r
+        vNhUu5Kn1AuQe26d7x5SU5o=
+X-Google-Smtp-Source: ACHHUZ4dbVM57Fb+/Mp2jiw4JmUznHlGsRzKlTeN0YuWMzJY71pwMBbkE3WhK4cDOE37L/6/O0B3Iw==
+X-Received: by 2002:a05:6a00:248d:b0:63a:8f4c:8be1 with SMTP id c13-20020a056a00248d00b0063a8f4c8be1mr27949390pfv.10.1683746362066;
+        Wed, 10 May 2023 12:19:22 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id n22-20020aa79056000000b0063d24fcc2b7sm3918870pfo.1.2023.05.10.12.19.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 12:19:21 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 10 May 2023 09:19:20 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Pin-yen Lin <treapking@chromium.org>
+Subject: Re: [PATCH 02/13] wifi: mwifiex: Use default @max_active for
+ workqueues
+Message-ID: <ZFvuOK_dpGTE4UVS@slm.duckdns.org>
+References: <20230509015032.3768622-1-tj@kernel.org>
+ <20230509015032.3768622-3-tj@kernel.org>
+ <ZFvd8zcPq4ijSszM@google.com>
+ <ZFvfYK-u8suHjPFw@slm.duckdns.org>
+ <ZFvpJb9Dh0FCkLQA@google.com>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFvpJb9Dh0FCkLQA@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,42 +89,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-05-10 at 08:34 -1000, Tejun Heo wrote:
-> On Wed, May 10, 2023 at 06:04:26PM +0200, Johannes Berg wrote:
-> > @@ -2387,7 +2389,13 @@ __acquires(&pool->lock)
-> >  	 */
-> >  	lockdep_invariant_state(true);
-> >  	trace_workqueue_execute_start(work);
-> > -	worker->current_func(work);
-> > +	if (unlikely(pwq->wq->work_mutex)) {
-> > +		mutex_lock(pwq->wq->work_mutex);
-> > +		worker->current_func(work);
-> > +		mutex_unlock(pwq->wq->work_mutex);
-> > +	} else {
-> > +		worker->current_func(work);
-> > +	}
->=20
-> Ah, I don't know about this. This can't be that difficult to do from the
-> callee side, right?
->=20
+Hello,
 
-Yeah I thought you'd say that :)
+On Wed, May 10, 2023 at 11:57:41AM -0700, Brian Norris wrote:
+> Test case: iperf TCP RX (i.e., hits "MWIFIEX_RX_WORK_QUEUE" a lot) at
+> some of the higher (VHT 80 MHz) data rates.
+> 
+> Hardware: Mediatek MT8173 2xA53 (little) + 2xA72 (big) CPU
+> (I'm not familiar with its cache details)
+> +
+> Marvell SD8897 SDIO WiFi (mwifiex_sdio)
 
-It isn't difficult, the issue is just that in the case I'm envisioning,
-you can't just call wiphy_lock() since that would attempt to pause the
-workqueue, which can't work from on the workqueue itself. So you need
-wiphy_lock_from_work()/wiphy_unlock_from_work() or remember to use the
-mutex directly there, which all seemed more error-prone and harder to
-maintain.
+Yeah, we had multiple of similar cases on, what I think are, similar
+configurations, which is why I'm working on improving workqueue locality.
 
-But anyway I could easily implement _both_ of these in cfg80211
-directly, with just a linked list of works and a single struct
-work_struct to execute things on the list, with the right locking. That
-might be easier overall, just at the expense of more churn while
-converting, but that's not even necessarily _bad_, it would really
-guarantee that we can tell immediately the work is properly done...
+> We're looking at a major regression from our 4.19 kernel to a 5.15
+> kernel (yeah, that's downstream reality). So far, we've found that
+> performance is:
 
-I'll play with that idea some, I guess. Would you still want the
-pause/resume patch anyway, even if I end up not using it then?
+That's curious. 4.19 is old but I scanned the history and there's nothing
+which can cause that kind of perf regression for unbound workqueues between
+4.19 and 5.15.
 
-johannes
+> (1) much better (nearly the same as 4.19) if we add WQ_SYSFS and pin the
+> work queue to one CPU (doesn't really matter which CPU, as long as it's
+> not the one loaded with IRQ(?) work)
+> 
+> (2) moderately better if we pin the CPU frequency (e.g., "performance"
+> cpufreq governor instead of "schedutil")
+> 
+> (3) moderately better (not quite as good as (2)) if we switch a
+> kthread_worker and don't pin anything.
+
+Hmm... so it's not just workqueue.
+
+> We tried (2) because we saw a lot more CPU migration on kernel 5.15
+> (work moves across all 4 CPUs throughout the run; on kernel 4.19 it
+> mostly switched between 2 CPUs).
+
+Workqueue can contribute to this but it seems more likely that scheduling
+changes are also part of the story.
+
+> We tried (3) suspecting some kind of EAS issue (instead of distributing
+> our workload onto 4 different kworkers, our work (and therefore our load
+> calculation) is mostly confined to a single kernel thread). But it still
+> seems like our issues are more than "just" EAS / cpufreq issues, since
+> (2) and (3) aren't as good as (1).
+> 
+> NB: there weren't many relevant mwifiex or MTK-SDIO changes in this
+> range.
+> 
+> So we're still investigating a few other areas, but it does seem like
+> "locality" (in some sense of the word) is relevant. We'd probably be
+> open to testing any patches you have, although it's likely we'd have the
+> easiest time if we can port those to 5.15. We're constantly working on
+> getting good upstream support for Chromebook chips, but ARM SoC reality
+> is that it still varies a lot as to how much works upstream on any given
+> system.
+
+I should be able to post the patchset later today or tomorrow. It comes with
+sysfs knobs to control affinity scopes and strictness, so hopefully you
+should be able to find the configuration that works without too much
+difficulty.
+
+Thanks.
+
+-- 
+tejun
