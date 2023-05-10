@@ -2,130 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9306FE443
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E019E6FE444
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235609AbjEJS4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 14:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
+        id S236057AbjEJS44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 14:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEJS4h (ORCPT
+        with ESMTP id S229482AbjEJS4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 14:56:37 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B2B128;
-        Wed, 10 May 2023 11:56:34 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-24de9c66559so5408328a91.0;
-        Wed, 10 May 2023 11:56:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683744994; x=1686336994;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K+VF2cenGaqPThFTtrzmmuO5OlyCDcnj1nuwccLlAO4=;
-        b=OjrR/ayeoIMIBguaKTn9DcEVjZ49C9hak/6fsfckw3hPUuFZWDXtPZ9dnHgYxscdi3
-         HujEox9sq2doYRtDfuvPXRHPMIXqX2OmaDi08jyvnWvdfdL3DLaSid6P1R85QG9KgFdD
-         iFuWpESmIPwdBWme90X0kMUJzjoWjeFT1hd13fvyjYhEFNeHHJLvKf7qECTCxG/TkFpI
-         Py3Jho/jv87NLQB91tVZ8g5/cf2thvu+vyHvB9Av2P0jRIk7EHOBTKF+8f2s8Ek/Zc2h
-         uIc7b9TyqEB1S2T1H0GqDbTVio3hC1yXJ86BdgWRUpYbdNEaxW02woF0pgW2iR5L8EBV
-         t7DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683744994; x=1686336994;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K+VF2cenGaqPThFTtrzmmuO5OlyCDcnj1nuwccLlAO4=;
-        b=GNjLL37HFA0fZxWc3cndv51hGckr6egLn6kOsulFnELzf/7TIbQnmciGPJYh7oX78K
-         zIgSs/e99ZAXMPkH/fdi6KnqzQpTQikDFp2O8F4ilvA8lMCi9qB8eBmnU+Ut2TiUKQKs
-         yT2Gj78VLaWspxkMyfg1+MPEnrys3G0gnLq5gfzxcsq473XDL8M/3louo9jLs2Jchp4G
-         TJjYdjNje6TZLXvjjUZ9PRhBMuNdo0OeVsbfV0XlqpbDjtLrv6rqbitElcZwy+3L2mbO
-         c6tZ/blmfT9h8h/Z8SqLXRYVDOlmTkuQ70aPmTd4n1r3Xch/RRnsfsmWgECSFGFxz/cE
-         8h4Q==
-X-Gm-Message-State: AC+VfDx7+E/N5lQ2g/MWjCUmLkUrQ8VLKPqfX3/btYNTyR7mfkFPOpeu
-        7y5Wex898Bcuzdi7K55AxQswEFtHClWlgg==
-X-Google-Smtp-Source: ACHHUZ4fEqdWtbErDiyNfBvmE8x8eFLMQaahpMGODJGNB9tPZQ/SFPalSsTeXoockjBtSnWUBtYQdQ==
-X-Received: by 2002:a17:90a:e398:b0:24e:5bc0:355e with SMTP id b24-20020a17090ae39800b0024e5bc0355emr18649333pjz.2.1683744993600;
-        Wed, 10 May 2023 11:56:33 -0700 (PDT)
-Received: from yoga ([2400:1f00:13:cea:b660:cefb:7eb9:2b8f])
-        by smtp.gmail.com with ESMTPSA id q4-20020a17090a304400b0024e2230fdafsm15797974pjl.54.2023.05.10.11.56.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 11:56:33 -0700 (PDT)
-Date:   Thu, 11 May 2023 00:26:25 +0530
-From:   Anup Sharma <anupnewsmail@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Anup Sharma <anupnewsmail@gmail.com>,
-        Peter Meerwald <pmeerw@pmeerw.net>, broonie@kernel.org
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: iio: temperature: Add DT bindings for TMP006
-Message-ID: <ZFvo2TIiPiMFlbXC@yoga>
+        Wed, 10 May 2023 14:56:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E2410D3;
+        Wed, 10 May 2023 11:56:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33EDE63FC4;
+        Wed, 10 May 2023 18:56:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36A18C433EF;
+        Wed, 10 May 2023 18:56:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683745010;
+        bh=hnjNpJ/WI6twjro0xk2Nr8Le9Sc2ewfqjnIfqLVYWXA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ks6OQHE3+6zg0Buwwl+2k0aQIIxjKrtCGH4lX+coXTjtimmMBzqrljL1CJAw7IgPz
+         4Z0b765QPWea8zWV8ETgqugT94lYzmT10zVDrH6SDOzsR/8dyibSgvwHSfNc8mC6w3
+         jUs78Hm/crFMKmUJ9B7wvJhdD621dSUYW/+zwlNO62sGAINp8Cutt5dHcSFVd9ukTh
+         u2b7XX5pYsVemAfN5eLS2khUUeakfD4ajmrb1x/3ObSQKviBkkkM7mK/l+3olZAd15
+         sRUKEF2x/KQzZOoMq2WVL//g8cattukNRY582GDQcXHOzfUKIaM95L+xNfXKZCrB8R
+         4zpdawR8SzLyw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 558B7403B5; Wed, 10 May 2023 15:56:47 -0300 (-03)
+Date:   Wed, 10 May 2023 15:56:47 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>, Jiri Olsa <olsajiri@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Song Liu <song@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Hao Luo <haoluo@google.com>, James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Roman Lozko <lozko.roma@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Paul Clarke <pc@us.ibm.com>
+Subject: Re: [PATCH RFC/RFT] perf bpf skels: Stop using vmlinux.h generated
+ from BTF, use subset of used structs + CO-RE. was Re: BPF skels in perf .Re:
+ [GIT PULL] perf tools changes for v6.4
+Message-ID: <ZFvo79pOroYOFC/I@kernel.org>
+References: <ZFQCccsx6GK+gY0j@kernel.org>
+ <ZFQoQjCNtyMIulp+@kernel.org>
+ <CAP-5=fU8HQorW+7O6vfEKGs1mEFkjkzXZMVPACzurtcMcRhVzQ@mail.gmail.com>
+ <ZFQ5sjjtfEYzvHNP@krava>
+ <ZFUFmxDU/6Z/JEsi@kernel.org>
+ <ZFU1PJrn8YtHIqno@kernel.org>
+ <CAP-5=fWfmmMCRnEmzj_CXTKacp6gjrzmR49Ge_C5XRyfTegRjg@mail.gmail.com>
+ <ZFVqeKLssg7uzxzI@krava>
+ <CAP-5=fVgJdBvjV8S2xKswAFiSZvyCcUvZTO1bsLyUf-wQ0pBuw@mail.gmail.com>
+ <CAM9d7cjrZ-sHhO1ErqVdrN8Vv-ocCmsONc443yoPiCvnoiXj9A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAM9d7cjrZ-sHhO1ErqVdrN8Vv-ocCmsONc443yoPiCvnoiXj9A@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add devicetree binding document for TMP006, IR thermopile sensor.
+Em Fri, May 05, 2023 at 01:48:52PM -0700, Namhyung Kim escreveu:
+> On Fri, May 5, 2023 at 1:46 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > On Fri, May 5, 2023 at 1:43 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > >
+> > > On Fri, May 05, 2023 at 10:04:47AM -0700, Ian Rogers wrote:
+> > > > On Fri, May 5, 2023 at 9:56 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > > > >
+> > > > > Em Fri, May 05, 2023 at 10:33:15AM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > > > Em Fri, May 05, 2023 at 01:03:14AM +0200, Jiri Olsa escreveu:
+> > > > > > That with the preserve_access_index isn't needed, we need just the
+> > > > > > fields that we access in the tools, right?
+> > > > >
+> > > > > I'm now doing build test this in many distro containers, without the two
+> > > > > reverts, i.e. BPF skels continue as opt-out as in my pull request, to
+> > > > > test build and also for the functionality tests on the tools using such
+> > > > > bpf skels, see below, no touching of vmlinux nor BTF data during the
+> > > > > build.
+> > > > >
+> > > > > - Arnaldo
+> > > > >
+> > > > > From 882adaee50bc27f85374aeb2fbaa5b76bef60d05 Mon Sep 17 00:00:00 2001
+> > > > > From: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > > > > Date: Thu, 4 May 2023 19:03:51 -0300
+> > > > > Subject: [PATCH 1/1] perf bpf skels: Stop using vmlinux.h generated from BTF,
+> > > > >  use subset of used structs + CO-RE
+> > > > >
+> > > > > Linus reported a build break due to using a vmlinux without a BTF elf
+> > > > > section to generate the vmlinux.h header with bpftool for use in the BPF
+> > > > > tools in tools/perf/util/bpf_skel/*.bpf.c.
+> > > > >
+> > > > > Instead add a vmlinux.h file with the structs needed with the fields the
+> > > > > tools need, marking the structs with __attribute__((preserve_access_index)),
+> > > > > so that libbpf's CO-RE code can fixup the struct field offsets.
+> > > > >
+> > > > > In some cases the vmlinux.h file that was being generated by bpftool
+> > > > > from the kernel BTF information was not needed at all, just including
+> > > > > linux/bpf.h, sometimes linux/perf_event.h was enough as non-UAPI
+> > > > > types were not being used.
+> > > > >
+> > > > > To keep te patch small, include those UAPI headers from the trimmed down
+> > > > > vmlinux.h file, that then provides the tools with just the structs and
+> > > > > the subset of its fields needed for them.
+> > > > >
+> > > > > Testing it:
+> > > > >
+> > > > >   # perf lock contention -b find / > /dev/null
+> > >
+> > > I tested perf lock con -abv -L rcu_state sleep 1
+> > > and needed fix below
+> > >
+> > > jirka
+> >
+> > I thought this was fixed by:
+> > https://lore.kernel.org/lkml/20230427234833.1576130-1-namhyung@kernel.org/
 
-Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
----
- .../bindings/iio/temperature/ti,tmp006.yaml   | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml
+Those are upstream already:
 
-diff --git a/Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml b/Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml
-new file mode 100644
-index 000000000000..c6c5a4d10898
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/temperature/ti,tmp006.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: TI TMP006 IR thermopile sensor
-+
-+maintainers:
-+  - Peter Meerwald <pmeerw@pmeerw.net>
-+
-+description: |
-+  TI TMP006 - Infrared Thermopile Sensor in Chip-Scale Package.
-+  https://cdn.sparkfun.com/datasheets/Sensors/Temp/tmp006.pdf
-+
-+properties:
-+  compatible:
-+    const: ti,tmp006
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        tmp006@40 {
-+            compatible = "ti,tmp006";
-+            reg = <0x40>;
-+        };
-+    };
--- 
-2.34.1
+⬢[acme@toolbox perf-tools]$ git log --oneline torvalds/master | grep -m1 -B1 "perf lock contention: Fix struct rq lock access"
+b9f82b5c63bf5390 perf lock contention: Rework offset calculation with BPF CO-RE
+e53de7b65a3ca59a perf lock contention: Fix struct rq lock access
+⬢[acme@toolbox perf-tools]$
 
+> > but I think that is just in perf-tools-next.
+ 
+> Right, but we might still need the empty rq definition.
+
+Yeah, without the empty struct diff libbpf complains about a mismatch of
+just a forward declaration as the type for 'runqueues' on the
+lock_contention.bpf.c file while the kernel has a the type as 'struct
+rq':
+
+[root@quaco ~]# perf lock con -ab sleep 1
+libbpf: extern (var ksym) 'runqueues': incompatible types, expected [95] fwd rq, but kernel has [55509] struct rq
+libbpf: failed to load object 'lock_contention_bpf'
+libbpf: failed to load BPF skeleton 'lock_contention_bpf': -22
+Failed to load lock-contention BPF skeleton
+lock contention BPF setup failed
+[root@quaco ~]#
+
+Adding:
+
+struct rq {};
+
+libbpf is happy:
+
+[root@quaco ~]# perf lock con -ab sleep 1
+ contended   total wait     max wait     avg wait         type   caller
+
+         2     50.64 us     25.38 us     25.32 us     spinlock   tick_do_update_jiffies64+0x25
+         1     26.18 us     26.18 us     26.18 us     spinlock   tick_do_update_jiffies64+0x25
+[root@quaco ~]#
+
+- Arnaldo
