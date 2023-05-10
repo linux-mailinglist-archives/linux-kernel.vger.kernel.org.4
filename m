@@ -2,113 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23406FD8B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A36B6FD8B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235798AbjEJHzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
+        id S236461AbjEJHz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235985AbjEJHzV (ORCPT
+        with ESMTP id S236431AbjEJHzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:55:21 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D7C139
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:55:19 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bc4bc2880so10815373a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:55:19 -0700 (PDT)
+        Wed, 10 May 2023 03:55:23 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2ACDE
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:55:22 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso174972166b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:55:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683705318; x=1686297318;
+        d=gmail.com; s=20221208; t=1683705321; x=1686297321;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Oob8w8ofobCi5vSBmyGbDt7IQ2Ps/8J6O1qvcfUAdXw=;
-        b=AOIvpkjd/QsRYky8F0xjpBaEpCuRDCwXik8hQIKdGmZTprdNKPydwA7egtHhiHtr+S
-         g2DxMuC5mGadrCd2Y1TRlOVFfNCYW/IFQGSiF0YpDgehbAJxB7YXFk8s6Q58OyZ+8eoz
-         L+Rws7THJpOxpDSnPsTtc653HLV3t1x50t+nz8rPNGQdU8KuprFbPcIU1UTFiVpSnzce
-         z9QeH8IHslagm1hRjPit9r00XaVF/4pP3HFhGCbW9GjU+P0icUPgqqZTGTa9MLnbY6Xc
-         27LBZ7EdR0WEKeShlDHohSrXbBWJcu2B7txNGYADsWsWE0x9f0KJwiM6clU6zNI4CWRa
-         fW0Q==
+        bh=GIJKyRBEjdyUl/MVV9x2JqKCqHZQzxhquAJ+JI/f5XA=;
+        b=a3T9bDodW1/k5HN5DT6PH4X9lv2Dbf5kR59lnt3ABrgC+Kle9jBuRgvo8pYQuSXECQ
+         npw2L4nGfhgTq/XJKcDxDMFFwxE6PmiTf4k34cjdmZgiYC8ola/kc4pTRb8NuxGYht58
+         qSclKzvYvMKJ8da54yy5Jhn3LL0ITzet4+nykowvYW6vW0OtqD/KbezsfgO/zlonoIGn
+         HjQpf3m2oHdydnewz5Ofg3xmhwForC/o69EppfOEMvMRoZqaa91REZHoBVV6eNiZEXA9
+         DX1OWn9Lpc7fKvsMPh7dG4M8CTWtv16zMcTBYN3ssm2XxJQAxD3qHwmiO4zvLB/iK01X
+         KMIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683705318; x=1686297318;
+        d=1e100.net; s=20221208; t=1683705321; x=1686297321;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oob8w8ofobCi5vSBmyGbDt7IQ2Ps/8J6O1qvcfUAdXw=;
-        b=fOb0mr6XXC7yBcamP51LNWgipZOSh8bkMzEkZojx/nthwa8uIG0hz7bc5inzLBOczm
-         GOzRpHiU0ll1z5gza3WPoq1Il62rB66KsrXG6L+ML0v9vBb3F9a23ACJwbw7MKPMKgSY
-         QobV22v8H72q8QH2JTcNSdZAj4oLOYr7J+YExfqt+3QwPpO7e6KftRvzHeK1ERZ/3WF7
-         Mj3fBlMwUwQjvtt/PfbzoXQjJF+3GOL7gl/5+M3JIGt9Yg+QJQOcksPDgMQQJ8EcoojH
-         +/YXfyBQxyOl7MiwxgY32t3CExxt16dnADJUvFJmgkxrWJzrrBF+fZdQ7vO8FJnVLa2G
-         8nKA==
-X-Gm-Message-State: AC+VfDzadJa3bzMt/oKZ/UKj/w6TGuJGbIeAMTYVH3FNk34IEyZXczZw
-        o2N4ZOOBQmnP4eGPO34wB1fXIQ==
-X-Google-Smtp-Source: ACHHUZ5golxil0e/W6BJ4TEDUe+sdgf27BzQ05eUIRsCUCgqLSWgzqWxOAj1zjkOs3zNleeaZHYFig==
-X-Received: by 2002:a17:907:70d:b0:94b:d57e:9d4b with SMTP id xb13-20020a170907070d00b0094bd57e9d4bmr13863359ejb.2.1683705318163;
-        Wed, 10 May 2023 00:55:18 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
-        by smtp.gmail.com with ESMTPSA id de9-20020a1709069bc900b0094e6a9c1d24sm2386066ejc.12.2023.05.10.00.55.16
+        bh=GIJKyRBEjdyUl/MVV9x2JqKCqHZQzxhquAJ+JI/f5XA=;
+        b=kRFGETQOJ1PP1k1Rdj6X/eO4lPesHsmD+9d1x1ppVPaqPu6eTzt8imeEnStBtCoHdg
+         FaZyOj8t5dSR+A2m2oJ0eJeatG6mGkWQP3T7H19yBegRjY7PItnfhKqnNmVVm4crYN1H
+         N21gl6bSK3uZE5T9ZbRne2RX53hwHJw6F9Atki7LBh4ytobaZI9DBhWoGD2N+NCBeZr4
+         X0LZixB2nPkAvYC0HPfsOvSobKdLo6NYJCnIM5oYy0gRnHUezLF1BWLXMUk8/8lzd0N2
+         Z0dfq1Z6azCAsEX1Y6qvhXJtHL1rudOeeNZs9WcZLZHfVVxOm2s69rzjnPaApBpX6kTy
+         70qw==
+X-Gm-Message-State: AC+VfDz/KF3jNvmURnMAOKwisRM8aEvFglZT87u0ky5mWxJtLIYtT4RL
+        LHOCXAqjqhFUnNTSOo7PbYg=
+X-Google-Smtp-Source: ACHHUZ4Etamrv/XEITbdotEx2ui0eic7/8Gzjz6mioeFp38Zuvsrbto00bt1j4JEIfAzxCT4KgGXCQ==
+X-Received: by 2002:a17:906:7794:b0:965:9db5:3823 with SMTP id s20-20020a170906779400b009659db53823mr13650720ejm.3.1683705320717;
+        Wed, 10 May 2023 00:55:20 -0700 (PDT)
+Received: from [192.168.10.10] ([37.252.94.55])
+        by smtp.gmail.com with ESMTPSA id tk13-20020a170907c28d00b0094f185d82dcsm2313239ejc.21.2023.05.10.00.55.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 00:55:16 -0700 (PDT)
-Message-ID: <7d426635-1d0b-2317-3b45-fb28b068b0da@linaro.org>
-Date:   Wed, 10 May 2023 09:55:15 +0200
+        Wed, 10 May 2023 00:55:20 -0700 (PDT)
+Message-ID: <f1a912ea-884b-fdcd-1c05-87089f1e97b7@gmail.com>
+Date:   Wed, 10 May 2023 11:55:18 +0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/8] dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp: Add
- ports and orientation-switch
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] ALSA: PCM: Fix codestyle issues in pcm_native.c
 Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Johan Hovold <johan@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-References: <20230510031930.1996020-1-quic_bjorande@quicinc.com>
- <20230510031930.1996020-2-quic_bjorande@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230510031930.1996020-2-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+To:     ivan.orlov0322@gmail.com
+Cc:     perex@perex.cz, tiwai@suse.com, oswald.buddenhagen@gmx.de,
+        axboe@kernel.dk, 42.hyeyoo@gmail.com, surenb@google.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+References: <20230510072726.435247-1-ivan.orlov0322@gmail.com>
+ <2023051052-recoil-headache-1594@gregkh>
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <2023051052-recoil-headache-1594@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2023 05:19, Bjorn Andersson wrote:
-> The QMP combo phy can be connected to a TCPM, a USB controller and a
-> DisplayPort controller for handling USB Type-C orientation switching
-> and propagating HPD signals.
+On 5/10/23 11:48, Greg KH wrote:
+> - Your patch did many different things all at once, making it difficult
+>    to review.  All Linux kernel patches need to only do one thing at a
+>    time.  If you need to do multiple things (such as clean up all coding
+>    style issues in a file/driver), do it in a sequence of patches, each
+>    one doing only one thing.  This will make it easier to review the
+>    patches to ensure that they are correct, and to help alleviate any
+>    merge issues that larger patches can cause.
 > 
-> Extend the binding to allow these connections to be described.
+> If you wish to discuss this problem further, or you have questions about
+> how to resolve this issue, please feel free to respond to this email and
+> Greg will reply once he has dug out from the pending patches received
+> from other developers.
 > 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> Tested-by: Abel Vesa <abel.vesa@linaro.org>
-> Tested-by: Steev Klimaszewski <steev@kali.org>
-> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on HDK8450
-> Tested-by: Johan Hovold <johan+linaro@kernel.org>	# X13s
-> ---
+> thanks,
 > 
-> Changes since v1:
-> - Corrected port $ref
-> 
+> greg k-h's patch email bot
 
+Greg's Bot is right, it will be better as a sequence of patches. Sorry 
+for bothering!
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Kind regards,
+Ivan Orlov.
