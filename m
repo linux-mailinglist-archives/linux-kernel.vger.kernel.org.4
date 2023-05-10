@@ -2,134 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417B86FD93A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C016FD941
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236168AbjEJI0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 04:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
+        id S235765AbjEJI1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 04:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236493AbjEJI0R (ORCPT
+        with ESMTP id S236372AbjEJI1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 04:26:17 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA39A6189
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:26:08 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bc394919cso10390583a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:26:08 -0700 (PDT)
+        Wed, 10 May 2023 04:27:05 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C864488
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:27:04 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6436e004954so7149256b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:27:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683707167; x=1686299167;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qAE2fvj6ngiYCTALJ8b5fSfpwVP8HXfEvzHqNFJqicg=;
-        b=GcteouF28l9Xdngx3lT29G9bjqnkDEypYnNEAW9ECSjcFbL5o4VXOmw/p25PcHRUU1
-         Q782amV7v0Oo7WAJEhxdyO0VBq6YxuQ+geZeRjWBIERMCB3DL3FiK22Dyr+aY9lxpLRn
-         1qUc/RbrGlnT0RiBJ8P2gs/eByEgwn93n2V3uZ8yJ0RXASYW3pbFmKeCcFGNMJxndWDz
-         8y1korS/tKyBvGJe6k0Ghi+F+hjN7GIMngGd7twqeOFgJRN+aWgug+zm85JMkxZkbpTk
-         BN/jVEqIOtMDgiYEgSv3Xh8bx8B2CU4LJIjsYBXpy979JcbO0QgeZ8RXHL1absEMMh7O
-         GS0Q==
+        d=gmail.com; s=20221208; t=1683707224; x=1686299224;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fGI6Lm0AtHzSQXtW9u+HWh/q47GLCgh6RMnfXKjtk10=;
+        b=YnwK0D3uKISsnbmkLu/Sz2qEaUpF/rrJT6uvrOoLYwds3FdiFRlmjeK476qnd3MGE9
+         AJdtQgkElfru8rnQ2nKkw1UTf/5MfGgd9GnsCVqvHrkuD+Emyu2IBMWaIJmUVRi5RxG4
+         sMisuF/kJ4orfSI6BK56uzDEOAjgthG/g/oY/TWl+MN49yBtsIIca3n8+bwT67POXErD
+         embuMk0HH8YV1SA0WHY4yqOoYeh4r5EBo24AxQcTR65mDc6KIrAC0MvG6pQ9pXRD57PT
+         F/hWGRPfhJP6LE/bSa6zVUUxJ/pd7L/60Lw1VYq80XAovRMRZz+kJ7zuqngQnWOr6snr
+         iYug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683707167; x=1686299167;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qAE2fvj6ngiYCTALJ8b5fSfpwVP8HXfEvzHqNFJqicg=;
-        b=R2ozjIqVG+sOZUn6kvvcNGt2J0u3ygBx3H9B7D+h2RR6Mpd5GK7gQcE+8/ANSBNtsL
-         OzvpW9pYsSn7nrjYCziRVhWu/9OmF3NgouO/JJ8ZxJGteL9RObmf5ej3t5o4ZHxuHpTv
-         +vFeL8TAJU1uz0kR1SjN5nkh1mpDvMJQOkFZnIY+cG9cpY4Eq9P0bBzulvkLOd1IYryA
-         ffX5NlIlRe/AvL7ANt7CcYDIAZPGtxAjVUGRjpciUgygqBnnZzSqP1vlqdVjwcosdSuK
-         e6imlMpFJn6UxINuJXILmByUmPD8rjEfc0PxaHihYebK48DCWSiclxev3FeqRF/jKylf
-         PdVA==
-X-Gm-Message-State: AC+VfDzYZcwZVruXUiuAxicYdEFHyGiZ54vZENub6a2tIt8uN2v9YtX7
-        zdqYIR7sMK0qPa533tU9rOjj
-X-Google-Smtp-Source: ACHHUZ6ANRgSKht5oULvyIaPdfZ5v19or9q+4ru9P0mW8AkYLxwvHRrDE4izHVwXKdQpFue8bhYPdQ==
-X-Received: by 2002:a17:907:ea4:b0:969:fd4b:554a with SMTP id ho36-20020a1709070ea400b00969fd4b554amr4090831ejc.24.1683707166800;
-        Wed, 10 May 2023 01:26:06 -0700 (PDT)
-Received: from thinkpad ([117.193.209.28])
-        by smtp.gmail.com with ESMTPSA id z6-20020a17090665c600b00968382ebf40sm2360767ejn.40.2023.05.10.01.26.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 01:26:06 -0700 (PDT)
-Date:   Wed, 10 May 2023 13:55:55 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH] soc: qcom: Rename ice to qcom-ice to avoid module name
- conflict
-Message-ID: <20230510082555.GA7268@thinkpad>
-References: <20230510074404.3520340-1-abel.vesa@linaro.org>
+        d=1e100.net; s=20221208; t=1683707224; x=1686299224;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fGI6Lm0AtHzSQXtW9u+HWh/q47GLCgh6RMnfXKjtk10=;
+        b=AEfMr8UkNDXF1krOjcZ2haSc+zb2j86cnwUHLpn1c2A42AXcGZ9km1EGWgWjoZY9M3
+         QeC1tHbe50qMdDoyKI2wwygEFsvVq+uyXsV2AnpWPRGfDXLzwJYujxRpDuWdm1UAFmHU
+         Eai0D71ufZHgjoVdFUijH/QyVTuDNsPmMxXCh3py+CnxX4WZI/p6HUZCHNp9GfU5Z2bu
+         vjsSSAuZ0l+xYDiM52E/Qb/QcmBdlfYEzoY91IzrwCVwiwUflpjbh0NuNLJttzLitZa+
+         2e2d2ZwLcbO7J5j4eP6oJJmZrnnddNGmqpJc2+xsnEvaT9VLAEPTzifFYmuUFlgjm7IY
+         Acxg==
+X-Gm-Message-State: AC+VfDzmwhPE/RzOWN07T2bluQIXnfvtkxRKQpVXeFN54rhcMoywE0Qc
+        V0r78NazMVo+YieM/LcrkPWvxgv/zkCI8w==
+X-Google-Smtp-Source: ACHHUZ7G4coGPv/o20Pt3xAf2wqBDv9uLRjifxHDFgKM8gjudvDiKaJ8QVkC6VJLFijHhAiDaiMFGg==
+X-Received: by 2002:a05:6a20:6a14:b0:d9:250:665c with SMTP id p20-20020a056a206a1400b000d90250665cmr20275025pzk.15.1683707224082;
+        Wed, 10 May 2023 01:27:04 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-68.three.co.id. [180.214.233.68])
+        by smtp.gmail.com with ESMTPSA id p15-20020a63fe0f000000b00514256c05c2sm2671485pgh.7.2023.05.10.01.26.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 01:27:03 -0700 (PDT)
+Message-ID: <c2168e4f-4d47-0d5d-a1b7-d237f0760df8@gmail.com>
+Date:   Wed, 10 May 2023 15:26:56 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230510074404.3520340-1-abel.vesa@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hawking Zhang <Hawking.Zhang@amd.com>, Le Ma <le.ma@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        "Jiadong.Zhu" <Jiadong.Zhu@amd.com>,
+        Yang Wang <KevinYang.Wang@amd.com>,
+        Candice Li <candice.li@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Likun Gao <Likun.Gao@amd.com>,
+        Linux AMDGPU <amd-gfx@lists.freedesktop.org>,
+        Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Cc:     "Azamat S. Kalimoulline" <turtle@bazon.ru>,
+        max <kernel-ODwfxu5zp4@maxxor.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: Kernel 5.11 crashes when it boots, it produces black screen.
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 10:44:04AM +0300, Abel Vesa wrote:
-> The following error was reported when building x86_64 allmodconfig:
-> 
-> error: the following would cause module name conflict:
->   drivers/soc/qcom/ice.ko
->   drivers/net/ethernet/intel/ice/ice.ko
-> 
-> Seems the 'ice' module name is already used by some Intel ethernet
-> driver, so lets rename the Qualcomm Inline Crypto Engine (ICE) from
-> 'ice' to 'qcom-ice' to avoid any kind of errors/confusions.
-> 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Fixes: 2afbf43a4aec ("soc: qcom: Make the Qualcomm UFS/SDCC ICE a dedicated driver")
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> 
-> The build failure was reported here:
-> https://lore.kernel.org/all/20230510111833.17810885@canb.auug.org.au/
-> 
->  drivers/soc/qcom/Makefile              | 2 +-
->  drivers/soc/qcom/{ice.c => qcom-ice.c} | 0
->  2 files changed, 1 insertion(+), 1 deletion(-)
->  rename drivers/soc/qcom/{ice.c => qcom-ice.c} (100%)
-> 
+Hi,
 
-You can just rename the module name to "qcom-ice" and still keep the driver name
-as "ice" as it is already under "qcom" subdirectory.
+I noticed a regression report on Bugzilla ([1]). As many developers don't
+have a look on it, I decided to forward it by email. See the report
+for the full thread.
 
-We do it for other drivers as well.
+Quoting from the report:
 
-- Mani
-
-> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-> index 0f43a88b4894..30219c164cb0 100644
-> --- a/drivers/soc/qcom/Makefile
-> +++ b/drivers/soc/qcom/Makefile
-> @@ -32,4 +32,4 @@ obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
->  obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
->  obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
->  obj-$(CONFIG_QCOM_ICC_BWMON)	+= icc-bwmon.o
-> -obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= ice.o
-> +obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= qcom-ice.o
-> diff --git a/drivers/soc/qcom/ice.c b/drivers/soc/qcom/qcom-ice.c
-> similarity index 100%
-> rename from drivers/soc/qcom/ice.c
-> rename to drivers/soc/qcom/qcom-ice.c
-> -- 
-> 2.34.1
+>  Azamat S. Kalimoulline 2021-04-06 15:45:08 UTC
 > 
+> Same as in https://bugzilla.kernel.org/show_bug.cgi?id=212133, but not StoneyRidge related. I have same issue in 5.11.9 kernel, but on Renoir architecture. I have AMD Ryzen 5 PRO 4650U with Radeon Graphics. Same stuck on loading initial ramdisk. modprobe.blacklist=amdgpu 3` didn't help to boot. Same stuck. Also iommu=off and acpi=off too. 5.10.26 boots fine. I boot via efi and I have no option boot without it.
+
+Azamat, can you try reproducing this issue on latest mainline?
+
+Anyway, let me add this regression to regzbot:
+
+#regzbot introduced: v5.10..v5.11 https://bugzilla.kernel.org/show_bug.cgi?id=212579
+#regzbot title: Booting kernel on AMD Ryzen 5 PRO stucks in loading initrd
+
+Thanks.
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=212579
 
 -- 
-மணிவண்ணன் சதாசிவம்
+An old man doll... just what I always wanted! - Clara
