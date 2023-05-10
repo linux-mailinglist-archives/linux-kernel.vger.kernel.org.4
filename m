@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C026FD82F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818796FD830
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236120AbjEJH3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S235912AbjEJH35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235960AbjEJH3Y (ORCPT
+        with ESMTP id S235989AbjEJH3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 10 May 2023 03:29:24 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8B57D8C
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FBE7D9E
         for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:28:56 -0700 (PDT)
 From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683703720;
+        s=2020; t=1683703721;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lT6/GGqloCM8AGirZHb7HkPsMCoi/5vNo/Me8IGb/1s=;
-        b=2Mqiuo92z48phqeRXqWoUMsZPEFrzIhRVT+J1YshgWz2+4P5b0LOYTvyGZNPUacrQPW48v
-        Z7kIMwxy5G2iejQIhaNULoIdStlvO7o6vUpR93xf70jDDcfA+wrTJUua0n+Rn9v4Rq2sE/
-        pyw7HGciP4RjJowBhZob4+L3wNVRygHGARQV6i4FKn82r/W+mANXqfck9Gp6tGIkCm6zfY
-        zYrx15iXJ2PRmdN2uZ3WlZmi3YV0AD9oGDQKDN8HN39PfysngFvs3EAj48ntPDTt0l4JsT
-        qxAQ2/xArJL5MNJyTUXUkHAk4xtb0Mfv6dQU9pvMSFWgxlcF7yP7E9xbezfzPg==
+        bh=LtOGw35GRW9p2fx5MhyE24mUeYiFRQ6uZYmjDalJe0M=;
+        b=g43kSLsCvsBVYt75QYo04ZxrbB29sC2d+aq9pvzsoClHr1seHUwqJkztn/XgKOFRIFE9y1
+        JEs1Mcmz/tmhNYEOK0yDxAHf5gFHj9dua+rM69MZ3BAfN40fVs19yVxTOyKSo+WESXmBZ3
+        JH0/6w9U7VfTvDDVVHZeH/HBmc/4KMXbwGjxih5LvQljMsOJ3ub0sShZ34Ge2i+6rHleTD
+        25bgQbgG8F3fC0Sl1XAaC0hLUnzdCYiGLkBJzeRyKIiz7bo68iAVnj5JL2lgdqE8zPg00J
+        LXQXnWbk5rO3KzUC7j5TDIWDGjO6bHEMiuibTuzzXZwmJMKZHxZkAcV3V0cRaA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683703720;
+        s=2020e; t=1683703721;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lT6/GGqloCM8AGirZHb7HkPsMCoi/5vNo/Me8IGb/1s=;
-        b=oTESrKHaMqa70qHNvL8JepL8nZJkSya/Ea+0tjziXKVDAwcT7cKPQBsgFKvRQlfPqEk502
-        7tq0z6BFiVGrC5BQ==
+        bh=LtOGw35GRW9p2fx5MhyE24mUeYiFRQ6uZYmjDalJe0M=;
+        b=cKwyVn7or9yQccCxK2Rm204woR9anf0wh7qVDvxMzmu4DFf0GoQoJ1yEZ1B/vouRtywvn7
+        nC7j3KTcBt0P0ZDw==
 To:     linux-kernel@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         John Stultz <jstultz@google.com>,
@@ -52,10 +52,11 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Giovanni Gherdovich <ggherdovich@suse.cz>,
         Lukasz Luba <lukasz.luba@arm.com>,
         "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>
-Subject: [PATCH v6 09/21] timer: add_timer_on(): Make sure TIMER_PINNED flag is set
-Date:   Wed, 10 May 2023 09:28:05 +0200
-Message-Id: <20230510072817.116056-10-anna-maria@linutronix.de>
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: [PATCH v6 10/21] timers: Ease code in run_local_timers()
+Date:   Wed, 10 May 2023 09:28:06 +0200
+Message-Id: <20230510072817.116056-11-anna-maria@linutronix.de>
 In-Reply-To: <20230510072817.116056-1-anna-maria@linutronix.de>
 References: <20230510072817.116056-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
@@ -70,43 +71,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When adding a timer to the timer wheel using add_timer_on(), it is an
-implicitly pinned timer. With the timer pull at expiry time model in place,
-TIMER_PINNED flag is required to make sure timers end up in proper base.
+The logic for raising a softirq the way it is implemented right now, is
+readable for two timer bases. When increasing numbers of timer bases, code
+gets harder to read. With the introduction of the timer migration
+hierarchy, there will be three timer bases.
 
-Add TIMER_PINNED flag unconditionally when add_timer_on() is executed.
+Therefore ease the code. No functional change.
 
 Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- kernel/time/timer.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+v5: New patch to decrease patch size of follow up patches
+---
+ kernel/time/timer.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
 diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index ab9a8bb11a8a..b7599216d183 100644
+index b7599216d183..749b1570bdcd 100644
 --- a/kernel/time/timer.c
 +++ b/kernel/time/timer.c
-@@ -1281,7 +1281,10 @@ EXPORT_SYMBOL(add_timer_global);
-  * @timer:	The timer to be started
-  * @cpu:	The CPU to start it on
-  *
-- * Same as add_timer() except that it starts the timer on the given CPU.
-+ * Same as add_timer() except that it starts the timer on the given CPU and
-+ * the TIMER_PINNED flag is set. When timer shouldn't be a pinned timer in
-+ * the next round, add_timer_global() should be used instead as it unsets
-+ * the TIMER_PINNED flag.
-  *
-  * See add_timer() for further details.
-  */
-@@ -1295,6 +1298,9 @@ void add_timer_on(struct timer_list *timer, int cpu)
- 	if (WARN_ON_ONCE(timer_pending(timer)))
- 		return;
+@@ -2093,16 +2093,14 @@ static void run_local_timers(void)
+ 	struct timer_base *base = this_cpu_ptr(&timer_bases[BASE_STD]);
  
-+	/* Make sure timer flags have TIMER_PINNED flag set */
-+	timer->flags |= TIMER_PINNED;
+ 	hrtimer_run_queues();
+-	/* Raise the softirq only if required. */
+-	if (time_before(jiffies, base->next_expiry)) {
+-		if (!IS_ENABLED(CONFIG_NO_HZ_COMMON))
+-			return;
+-		/* CPU is awake, so check the deferrable base. */
+-		base++;
+-		if (time_before(jiffies, base->next_expiry))
 +
- 	new_base = get_timer_cpu_base(timer->flags, cpu);
++	for (int i = 0; i < NR_BASES; i++, base++) {
++		/* Raise the softirq only if required. */
++		if (time_after_eq(jiffies, base->next_expiry)) {
++			raise_softirq(TIMER_SOFTIRQ);
+ 			return;
++		}
+ 	}
+-	raise_softirq(TIMER_SOFTIRQ);
+ }
  
- 	/*
+ /*
 -- 
 2.30.2
 
