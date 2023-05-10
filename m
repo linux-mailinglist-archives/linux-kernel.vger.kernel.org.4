@@ -2,182 +2,454 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698296FD775
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 08:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117FA6FD778
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 08:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234959AbjEJGxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 02:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
+        id S235893AbjEJGyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 02:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236144AbjEJGxv (ORCPT
+        with ESMTP id S236015AbjEJGy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 02:53:51 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F952711
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 23:53:49 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64359d9c531so5143883b3a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 23:53:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google; t=1683701629; x=1686293629;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ARlpM+pAsr8BGSZNletFEdMQRPC07jRQRvs7jrtEQg=;
-        b=Ba6Qxb6tPiVzsdverLvJeaA6NMNs1ESe2582fx4Ch2x9nGbxGoede5BMdVMhrMkMXG
-         aQp2cdPrwDF+HEclzi3fHCh2YX612MHaOqfL2bgAKvp0V3reXphaf7Ar9w8jPv6aeEQB
-         Pf30hlSXS0yL7rqaXpmkiJ5OkARMDSPDV/p+0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683701629; x=1686293629;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9ARlpM+pAsr8BGSZNletFEdMQRPC07jRQRvs7jrtEQg=;
-        b=dFwXvA4a6EWSyMjvy89JIbPdjsupr6gVZnq0cA2KzPt6v6Bn7uy7r+n/DVQ0Ow3UZb
-         vcrZJ7ZPN0HC/b1KrQaqsOyClZWw8gP/ME1XXGju9RkmyKZ8QPVPlSW8EhTksLyKLurK
-         JiX0F84tBp8purLhL5zbpFiyObYdc/XtKrQj8YS+CNLu5VhtFrKiX0Kaj1pRA9ExUE8o
-         uDgPQS3idZyixYZPuDY6X+/IPnWMrA38dYtDMumxRXYSFmR0HBl3U3/byjZLUL317WSX
-         7OxVANk0hWeMhA+udBjGxxYFiFVRXx711DuPY00+fkbdNNxSwpCC4mn51bqnZIfQgJKj
-         O+XQ==
-X-Gm-Message-State: AC+VfDxC0inogVIh9D8YF0BZ8yquxzdPXLjn4uJ4zrHDZupDc6B7ThuX
-        00RBthsE5jEwHycZovvTu09WmMMy6lwXgTvkZNOstQ==
-X-Google-Smtp-Source: ACHHUZ5cDWPb1mJZ0ZYYOzrCTrAw5KODsZQvrHxo2j5ECdRSUuDCYP5w1GI6SDTCL5wXkAlKoem2FIwX4BIuiyjMU8U=
-X-Received: by 2002:a05:6a21:3391:b0:101:5f33:94ad with SMTP id
- yy17-20020a056a21339100b001015f3394admr5767688pzb.52.1683701628619; Tue, 09
- May 2023 23:53:48 -0700 (PDT)
+        Wed, 10 May 2023 02:54:29 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5552711;
+        Tue,  9 May 2023 23:54:28 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (softbank126090219015.bbtec.net [126.90.219.15])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B8606547;
+        Wed, 10 May 2023 08:54:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1683701659;
+        bh=rfTXcWN2v7WbqgO1wFmE1HPPEOFBTwIEbnS+0CguvK4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bT2CVwOWdkHjguWk2h4qe9qT/Fz7aWLnSWiOUKuM0Y7BGJGTLp2lmCRxHgFeGgShM
+         iUHElVASsUTIt/k64BddeSYI5z6GEnusS330/VLVfbJTvlDbTmJtQO3rHeJ5gu6LWz
+         v4+JYdqbHn0Bbq2tzoEB2gJ22iRXY7sHpjeRuGeo=
+Date:   Wed, 10 May 2023 09:54:21 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com,
+        Ashok Reddy Soma <ashok.reddy.soma@xilinx.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Andrew Davis <afd@ti.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Parth Gajjar <parth.gajjar@amd.com>,
+        Piyush Mehta <piyush.mehta@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vishal Sagar <vishal.sagar@amd.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 02/23] arm64: zynqmp: Fix usb node drive strength and
+ slew rate
+Message-ID: <20230510065421.GB11711@pendragon.ideasonboard.com>
+References: <cover.1683034376.git.michal.simek@amd.com>
+ <1b2914e5e6010b174c14603f92626ac3b11a2263.1683034376.git.michal.simek@amd.com>
 MIME-Version: 1.0
-References: <20230509030705.399628514@linuxfoundation.org> <20230509080658.GA152864@d6921c044a31>
- <20230509131032.GA8@9ed91d9f7b3c> <2023050913-spearhead-angrily-fc58@gregkh>
- <20230509145806.GA8@df3c0d7ae0b0> <CA+G9fYuCLSuPchYoSfqnu6y+CUV+Km3TVFr1NhGj0dik-ScEdQ@mail.gmail.com>
-In-Reply-To: <CA+G9fYuCLSuPchYoSfqnu6y+CUV+Km3TVFr1NhGj0dik-ScEdQ@mail.gmail.com>
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-Date:   Wed, 10 May 2023 16:53:36 +1000
-Message-ID: <CAG9oJsnsSdkj=rEVSmuSa2U4GfLqPhtgWm=a_71d7orZ=r4CJg@mail.gmail.com>
-Subject: Re: [PATCH 6.3 000/694] 6.3.2-rc2 review
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        ntfs3@lists.linux.dev, almaz.alexandrovich@paragon-software.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1b2914e5e6010b174c14603f92626ac3b11a2263.1683034376.git.michal.simek@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 May 2023 at 05:30, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> On Tue, 9 May 2023 at 20:28, Rudi Heitbaum <rudi@heitbaum.com> wrote:
-> >
-> > On Tue, May 09, 2023 at 03:56:42PM +0200, Greg Kroah-Hartman wrote:
-> > > On Tue, May 09, 2023 at 01:10:32PM +0000, Rudi Heitbaum wrote:
-> > > > On Tue, May 09, 2023 at 08:06:58AM +0000, Rudi Heitbaum wrote:
-> > > > > On Tue, May 09, 2023 at 05:26:44AM +0200, Greg Kroah-Hartman wrote:
-> > > > > > This is the start of the stable review cycle for the 6.3.2 release.
-> > > > > > There are 694 patches in this series, all will be posted as a response
-> > > > > > to this one.  If anyone has any issues with these being applied, please
-> > > > > > let me know.
-> > > > > >
-> > > > > > Responses should be made by Thu, 11 May 2023 03:05:05 +0000.
-> > > > > > Anything received after that time might be too late.
-> > > > >
-> > > > > Hi Greg,
-> > > > >
-> > > > > 6.3.2-rc2 tested.
-> > > >
-> > > > Hi Greg,
-> > > >
-> > > > Further testing and have seen ntfs3: NULL pointer dereference with ntfs_lookup errors
-> > > > with 6.3.2-rc2 (I have not seen this error before.) No other errors in the logs.
-> > >
-> > > Can you reproduce this without the extern, gpl-violation module loaded?
->
-> Please share the steps to reproduce
->  test case / Kconfigs / device under test environment / firmware / boot loaders.
+Hi Michal,
 
-Hi Naresh,
+Thank you for the patch.
 
-Test case:
-- general use - no specific case
+On Tue, May 02, 2023 at 03:35:30PM +0200, Michal Simek wrote:
+> From: Ashok Reddy Soma <ashok.reddy.soma@xilinx.com>
+> 
+> As per design, all input/rx pins should have fast slew rate and 12mA
+> drive strength.
 
-Test device:
-LibreELEC with docker used as media player with docker for development
-/ package testing for LibreELEC
-[    0.000000] microcode: updated early: 0x421 -> 0x429, date = 2023-01-11
-[    0.000000] DMI: Intel(R) Client Systems NUC12WSKi7/NUC12WSBi7,
-BIOS WSADL357.0085.2022.0718.1739 07/18/2022
+Why does the slow rate and drive strength matter for input pins ?
 
-ntfs3 volume is:
-/dev/sdb2 on /var/media/L-Z type ntfs3
-(rw,relatime,uid=0,gid=0,fmask=0133,iocharset=utf8)
+> Rest all pins should be slow slew rate and 4mA drive
+> strength. Fix usb nodes as per this and remove setting of slow slew rate
+> for all the usb group pins.
+> 
+> Signed-off-by: Ashok Reddy Soma <ashok.reddy.soma@xilinx.com>
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
+> 
+>  .../arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso |  8 ++++++--
+>  .../arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso |  8 ++++++--
+>  .../boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts     |  8 ++++++--
+>  .../boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts     |  8 ++++++--
+>  arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts   | 13 ++++++++++---
+>  arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts   |  5 ++++-
+>  arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts   |  6 ++++--
+>  arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts   |  6 ++++--
+>  arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts   |  5 ++++-
+>  arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts   |  5 ++++-
+>  10 files changed, 54 insertions(+), 18 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso
+> index b610e65e0cdf..2f7a17ec58b4 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso
+> @@ -2,7 +2,8 @@
+>  /*
+>   * dts file for KV260 revA Carrier Card
+>   *
+> - * (C) Copyright 2020 - 2021, Xilinx, Inc.
+> + * (C) Copyright 2020 - 2022, Xilinx, Inc.
+> + * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
+>   *
+>   * SD level shifter:
+>   * "A" – A01 board un-modified (NXP)
+> @@ -259,19 +260,22 @@ mux {
+>  	pinctrl_usb0_default: usb0-default {
+>  		conf {
+>  			groups = "usb0_0_grp";
+> -			slew-rate = <SLEW_RATE_SLOW>;
+>  			power-source = <IO_STANDARD_LVCMOS18>;
+>  		};
+>  
+>  		conf-rx {
+>  			pins = "MIO52", "MIO53", "MIO55";
+>  			bias-high-impedance;
+> +			drive-strength = <12>;
+> +			slew-rate = <SLEW_RATE_FAST>;
+>  		};
+>  
+>  		conf-tx {
+>  			pins = "MIO54", "MIO56", "MIO57", "MIO58", "MIO59",
+>  			"MIO60", "MIO61", "MIO62", "MIO63";
+>  			bias-disable;
+> +			drive-strength = <4>;
+> +			slew-rate = <SLEW_RATE_SLOW>;
+>  		};
+>  
+>  		mux {
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso
+> index a52dafbfd59e..4695e0e3714f 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso
+> @@ -2,7 +2,8 @@
+>  /*
+>   * dts file for KV260 revA Carrier Card
+>   *
+> - * (C) Copyright 2020 - 2021, Xilinx, Inc.
+> + * (C) Copyright 2020 - 2022, Xilinx, Inc.
+> + * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
+>   *
+>   * Michal Simek <michal.simek@xilinx.com>
+>   */
+> @@ -242,19 +243,22 @@ mux {
+>  	pinctrl_usb0_default: usb0-default {
+>  		conf {
+>  			groups = "usb0_0_grp";
+> -			slew-rate = <SLEW_RATE_SLOW>;
+>  			power-source = <IO_STANDARD_LVCMOS18>;
+>  		};
+>  
+>  		conf-rx {
+>  			pins = "MIO52", "MIO53", "MIO55";
+>  			bias-high-impedance;
+> +			drive-strength = <12>;
+> +			slew-rate = <SLEW_RATE_FAST>;
+>  		};
+>  
+>  		conf-tx {
+>  			pins = "MIO54", "MIO56", "MIO57", "MIO58", "MIO59",
+>  			"MIO60", "MIO61", "MIO62", "MIO63";
+>  			bias-disable;
+> +			drive-strength = <4>;
+> +			slew-rate = <SLEW_RATE_SLOW>;
+>  		};
+>  
+>  		mux {
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts
+> index f89ef2afcd9e..5fa9604f05d1 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts
+> @@ -2,7 +2,8 @@
+>  /*
+>   * dts file for Xilinx ZynqMP zc1751-xm015-dc1
+>   *
+> - * (C) Copyright 2015 - 2021, Xilinx, Inc.
+> + * (C) Copyright 2015 - 2022, Xilinx, Inc.
+> + * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
+>   *
+>   * Michal Simek <michal.simek@xilinx.com>
+>   */
+> @@ -187,19 +188,22 @@ mux {
+>  
+>  		conf {
+>  			groups = "usb0_0_grp";
+> -			slew-rate = <SLEW_RATE_SLOW>;
+>  			power-source = <IO_STANDARD_LVCMOS18>;
+>  		};
+>  
+>  		conf-rx {
+>  			pins = "MIO52", "MIO53", "MIO55";
+>  			bias-high-impedance;
+> +			drive-strength = <12>;
+> +			slew-rate = <SLEW_RATE_FAST>;
+>  		};
+>  
+>  		conf-tx {
+>  			pins = "MIO54", "MIO56", "MIO57", "MIO58", "MIO59",
+>  			       "MIO60", "MIO61", "MIO62", "MIO63";
+>  			bias-disable;
+> +			drive-strength = <4>;
+> +			slew-rate = <SLEW_RATE_SLOW>;
+>  		};
+>  	};
+>  
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts
+> index 938b76bd0527..a2031187d9b3 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts
+> @@ -2,7 +2,8 @@
+>  /*
+>   * dts file for Xilinx ZynqMP zc1751-xm016-dc2
+>   *
+> - * (C) Copyright 2015 - 2021, Xilinx, Inc.
+> + * (C) Copyright 2015 - 2022, Xilinx, Inc.
+> + * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
+>   *
+>   * Michal Simek <michal.simek@xilinx.com>
+>   */
+> @@ -281,19 +282,22 @@ mux {
+>  
+>  		conf {
+>  			groups = "usb1_0_grp";
+> -			slew-rate = <SLEW_RATE_SLOW>;
+>  			power-source = <IO_STANDARD_LVCMOS18>;
+>  		};
+>  
+>  		conf-rx {
+>  			pins = "MIO64", "MIO65", "MIO67";
+>  			bias-high-impedance;
+> +			drive-strength = <12>;
+> +			slew-rate = <SLEW_RATE_FAST>;
+>  		};
+>  
+>  		conf-tx {
+>  			pins = "MIO66", "MIO68", "MIO69", "MIO70", "MIO71",
+>  			       "MIO72", "MIO73", "MIO74", "MIO75";
+>  			bias-disable;
+> +			drive-strength = <4>;
+> +			slew-rate = <SLEW_RATE_SLOW>;
+>  		};
+>  	};
+>  
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts
+> index c74bc3ff703b..2dd552cf51fb 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts
+> @@ -2,7 +2,8 @@
+>  /*
+>   * dts file for Xilinx ZynqMP ZCU100 revC
+>   *
+> - * (C) Copyright 2016 - 2021, Xilinx, Inc.
+> + * (C) Copyright 2016 - 2022, Xilinx, Inc.
+> + * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
+>   *
+>   * Michal Simek <michal.simek@xilinx.com>
+>   * Nathalie Chan King Choy
+> @@ -423,19 +424,22 @@ mux {
+>  
+>  		conf {
+>  			groups = "usb0_0_grp";
+> -			slew-rate = <SLEW_RATE_SLOW>;
+>  			power-source = <IO_STANDARD_LVCMOS18>;
+>  		};
+>  
+>  		conf-rx {
+>  			pins = "MIO52", "MIO53", "MIO55";
+>  			bias-high-impedance;
+> +			drive-strength = <12>;
+> +			slew-rate = <SLEW_RATE_FAST>;
+>  		};
+>  
+>  		conf-tx {
+>  			pins = "MIO54", "MIO56", "MIO57", "MIO58", "MIO59",
+>  			       "MIO60", "MIO61", "MIO62", "MIO63";
+>  			bias-disable;
+> +			drive-strength = <4>;
+> +			slew-rate = <SLEW_RATE_SLOW>;
+>  		};
+>  	};
+>  
+> @@ -447,19 +451,22 @@ mux {
+>  
+>  		conf {
+>  			groups = "usb1_0_grp";
+> -			slew-rate = <SLEW_RATE_SLOW>;
+>  			power-source = <IO_STANDARD_LVCMOS18>;
+>  		};
+>  
+>  		conf-rx {
+>  			pins = "MIO64", "MIO65", "MIO67";
+>  			bias-high-impedance;
+> +			drive-strength = <12>;
+> +			slew-rate = <SLEW_RATE_FAST>;
+>  		};
+>  
+>  		conf-tx {
+>  			pins = "MIO66", "MIO68", "MIO69", "MIO70", "MIO71",
+>  			       "MIO72", "MIO73", "MIO74", "MIO75";
+>  			bias-disable;
+> +			drive-strength = <4>;
+> +			slew-rate = <SLEW_RATE_SLOW>;
+>  		};
+>  	};
+>  };
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
+> index c193579400cf..78043d9de7cc 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
+> @@ -783,19 +783,22 @@ mux {
+>  
+>  		conf {
+>  			groups = "usb0_0_grp";
+> -			slew-rate = <SLEW_RATE_SLOW>;
+>  			power-source = <IO_STANDARD_LVCMOS18>;
+>  		};
+>  
+>  		conf-rx {
+>  			pins = "MIO52", "MIO53", "MIO55";
+>  			bias-high-impedance;
+> +			drive-strength = <12>;
+> +			slew-rate = <SLEW_RATE_FAST>;
+>  		};
+>  
+>  		conf-tx {
+>  			pins = "MIO54", "MIO56", "MIO57", "MIO58", "MIO59",
+>  			       "MIO60", "MIO61", "MIO62", "MIO63";
+>  			bias-disable;
+> +			drive-strength = <4>;
+> +			slew-rate = <SLEW_RATE_SLOW>;
+>  		};
+>  	};
+>  
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts
+> index 11c1eaef9f53..c1779c88ec34 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts
+> @@ -410,20 +410,22 @@ mux {
+>  
+>  		conf {
+>  			groups = "usb0_0_grp";
+> -			slew-rate = <SLEW_RATE_SLOW>;
+>  			power-source = <IO_STANDARD_LVCMOS18>;
+> -			drive-strength = <12>;
+>  		};
+>  
+>  		conf-rx {
+>  			pins = "MIO52", "MIO53", "MIO55";
+>  			bias-high-impedance;
+> +			drive-strength = <12>;
+> +			slew-rate = <SLEW_RATE_FAST>;
+>  		};
+>  
+>  		conf-tx {
+>  			pins = "MIO54", "MIO56", "MIO57", "MIO58", "MIO59",
+>  			       "MIO60", "MIO61", "MIO62", "MIO63";
+>  			bias-disable;
+> +			drive-strength = <4>;
+> +			slew-rate = <SLEW_RATE_SLOW>;
+>  		};
+>  	};
+>  };
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts
+> index c06c138fa3e5..b857c1950496 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts
+> @@ -422,20 +422,22 @@ mux {
+>  
+>  		conf {
+>  			groups = "usb0_0_grp";
+> -			slew-rate = <SLEW_RATE_SLOW>;
+>  			power-source = <IO_STANDARD_LVCMOS18>;
+> -			drive-strength = <12>;
+>  		};
+>  
+>  		conf-rx {
+>  			pins = "MIO52", "MIO53", "MIO55";
+>  			bias-high-impedance;
+> +			drive-strength = <12>;
+> +			slew-rate = <SLEW_RATE_FAST>;
+>  		};
+>  
+>  		conf-tx {
+>  			pins = "MIO54", "MIO56", "MIO57", "MIO58", "MIO59",
+>  			       "MIO60", "MIO61", "MIO62", "MIO63";
+>  			bias-disable;
+> +			drive-strength = <4>;
+> +			slew-rate = <SLEW_RATE_SLOW>;
+>  		};
+>  	};
+>  };
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts
+> index 52cdec33f190..e4e09afbdc1a 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts
+> @@ -794,19 +794,22 @@ mux {
+>  
+>  		conf {
+>  			groups = "usb0_0_grp";
+> -			slew-rate = <SLEW_RATE_SLOW>;
+>  			power-source = <IO_STANDARD_LVCMOS18>;
+>  		};
+>  
+>  		conf-rx {
+>  			pins = "MIO52", "MIO53", "MIO55";
+>  			bias-high-impedance;
+> +			drive-strength = <12>;
+> +			slew-rate = <SLEW_RATE_FAST>;
+>  		};
+>  
+>  		conf-tx {
+>  			pins = "MIO54", "MIO56", "MIO57", "MIO58", "MIO59",
+>  			       "MIO60", "MIO61", "MIO62", "MIO63";
+>  			bias-disable;
+> +			drive-strength = <4>;
+> +			slew-rate = <SLEW_RATE_SLOW>;
+>  		};
+>  	};
+>  
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts
+> index 699cc9ce7898..791b2ac9fbdb 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts
+> @@ -660,19 +660,22 @@ mux {
+>  
+>  		conf {
+>  			groups = "usb0_0_grp";
+> -			slew-rate = <SLEW_RATE_SLOW>;
+>  			power-source = <IO_STANDARD_LVCMOS18>;
+>  		};
+>  
+>  		conf-rx {
+>  			pins = "MIO52", "MIO53", "MIO55";
+>  			bias-high-impedance;
+> +			drive-strength = <12>;
+> +			slew-rate = <SLEW_RATE_FAST>;
+>  		};
+>  
+>  		conf-tx {
+>  			pins = "MIO54", "MIO56", "MIO57", "MIO58", "MIO59",
+>  			       "MIO60", "MIO61", "MIO62", "MIO63";
+>  			bias-disable;
+> +			drive-strength = <4>;
+> +			slew-rate = <SLEW_RATE_SLOW>;
+>  		};
+>  	};
+>  
 
-                 *-usb:1
-                      description: Mass storage device
-                      product: USB to ATA/ATAPI Bridge
-                      vendor: JMicron
-                      physical id: 2
-                      bus info: usb@4:2.2
-                      logical name: scsi1
-                      version: 5.08
-                      serial:
-                      capabilities: usb-3.00 scsi
-                      configuration: driver=uas maxpower=896mA speed=5000Mbit/s
-                    *-disk
-                         description: SCSI Disk
-                         product: Generic
-                         vendor: JMicron
-                         physical id: 0.0.0
-                         bus info: scsi@1:0.0.0
-                         logical name: /dev/sdb
-                         version: 0508
-                         serial:
-                         size: 10TiB (12TB)
-                         capabilities: gpt-1.00 partitioned partitioned:gpt
-                         configuration: ansiversion=6
-guid=7fe84503-eeb0-4ee6-806d-9cbe22dc50f2 logicalsectorsize=512
-sectorsize=4096
-                       *-volume:0
-                            description: reserved partition
-                            vendor: Windows
-                            physical id: 1
-                            bus info: scsi@1:0.0.0,1
-                            logical name: /dev/sdb1
-                            serial:
-                            capacity: 15MiB
-                            capabilities: nofs
-                            configuration: name=Microsoft reserved partition
-                       *-volume:1
-                            description: Windows NTFS volume
-                            vendor: Windows
-                            physical id: 2
-                            bus info: scsi@1:0.0.0,2
-                            logical name: /dev/sdb2
-                            logical name: /var/media/L-Z
-                            version: 3.1
-                            serial:
-                            size: 935GiB
-                            capacity: 10TiB
-                            capabilities: ntfs initialized
-                            configuration: clustersize=4096
-created=2022-10-01 10:18:29 filesystem=ntfs label=L-Z
-mount.fstype=ntfs3
-mount.options=rw,relatime,uid=0,gid=0,fmask=0133,iocharset=utf8
-name=Basic data partition state=mounted
+-- 
+Regards,
 
-Operating system:
-- LibreELEC - https://libreelec.tv/ (master+ branch)
-
-Boot loader:
-- syslinux
-
-Kconfig:
-- https://github.com/LibreELEC/LibreELEC.tv/blob/master/projects/Generic/linux/linux.x86_64.conf
-
-> - Naresh
+Laurent Pinchart
