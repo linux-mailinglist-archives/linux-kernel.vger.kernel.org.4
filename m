@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DDF6FDF38
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76EFE6FDF3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237101AbjEJNwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 09:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
+        id S237237AbjEJNxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 09:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237064AbjEJNwY (ORCPT
+        with ESMTP id S237316AbjEJNww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 09:52:24 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on20618.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1a::618])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C20A116;
-        Wed, 10 May 2023 06:51:45 -0700 (PDT)
+        Wed, 10 May 2023 09:52:52 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on20631.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1a::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F92AD10;
+        Wed, 10 May 2023 06:52:28 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nvNXpkeGbDwGryBSYe2ZzX50uSb9LyGNirzhHS4cnbst+tWGzYfTo5U9xrvzdZJjYtRS03TedT/iHJNpVJYCVuVLXE/bNAdfhoZdq5ZLGGgD7XWk6UjvtiJ0LHUSukjvzzW1z+5ZMOzxZS1qpIyuD7jdZEgOiCiX0jw3ARQafSFZroSOQQ2szpgcdi2jYR/gV7a9iWfgYiCAbAsI5KaFTt6IXETfbI7QAEBhYOIiaviALL/yZ6Dwx5W7zcwWTSuNQ9dKSIGge0yNK+KYfr/b/LViqqgqH2nuNQ0vMBgVKZiYyan0u5fCvDKHPpuUdeLQ1ZzktMI8BGoncSdukFxxfA==
+ b=mwQQBROZv3j7ugdrMULOAM7tL1PRY40cTe22aWq9zwtXYK0FFtcampY33ZdJZh7ViN8RE6OkhUo5rg3urnyRmD+H8ew+O84ckhO+9JOdWdW2z+Dqjjt1oTwDS3NihwTdtIuoPFeUTAhaWiWuabsIMmGeG7r03aD5PcIDSQaiDRRQb1QNcB5l26YsOnTcjn4aY9LIvrxBGX4i62yo27mDSkA+SfbAuwwSiTZwyTGhMCymAArpvsgW/jQEHJ1j1PZ9cuD/oUBx10bzTVcWwQ4tCfZY91D0kxH6rkU8RemaVvrv35scNiMNGPB0Ep9yhRNI3z9KLqRwC4qLcshXMwJ+bw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wzgk7NACNpVo4yLJ6SiMcWCrzayoLFdPfoLoNCtqjhU=;
- b=Jo2RKSOzrHaNsBZSDjOKuNPLXsBPS/jhzpLBMb9x/KfSyUanzHKSjEHwwUgWQzjEXPuFeLqwsepAQ47I9D3lL94011NDjX5XdqlHTgDeSVRc+JTaG/eQCVk/YqXLnaumoTKW4v8lbnwTz5yPIz6Uf8jFPJRdBBsXm/UkRh/SHamkWaVqLAj8aF5oqhpz1z0CXOkHuWXD2/OpLzkTc3TDUiYNETFvFPZk6b58gBPKA1GZVt0Rq6bR2+0xNYwpIa4U0SRn29CfU0c5s4Smia5hrzBt93WjgEqUdgiXQ/U4+WmOtsroPHOvC/7PrYRvPD5oG2rjKjm1G0UJZs5gmHIf/w==
+ bh=CFVRitJFlI6mxlQmNRx8FZPHBNUHRPAFfG+HfHhgBjY=;
+ b=bkB3KChpVtb4Op0nn0aRvS4nU3tN74zg3+ITUVmrdH8ElwBVKW2wcUvQqER+VIPMql22f8GW9qz857oRqabMq0ifO8uNF6YErSPQqDsaRYb3lvTQfvLhfEZPnHCk9XVoyiFt97ORcCqTr7mjDMsjVXmVVbwv5IiZ1WIyf1llXdA2eIbIXDMQt8JWBOWgwZ8DVlht+Ib4RZ/Zl2ILrw1EqIckDSlrOa4o463gVs02SQ4XJNcPVRap7g7moOS0ju8SbQglqO92883wErxZ3MWD7ZtrksWnlUPAqLan8nswUY8ceSrQmH2wJMimyV0r9JkhNF7Srw+7eEXK7NuiJtjFsA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wolfvision.net; dmarc=pass action=none
  header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Wzgk7NACNpVo4yLJ6SiMcWCrzayoLFdPfoLoNCtqjhU=;
- b=M47ZPgn3dTh7tznqtKs4fgtQSwGo3WM8GXWNi1iKZU6L0Dn/6A2Gvtogzhj9gFCMph1TDWMWE88uuHw8s42xUjzhEt73GBxvgSAYVOk8DTWjVEH4gQyNrJj0F01gSRYkht0YbH+aZ4ExBKGu0YlojtLk8q9bG3w+9LsWBTRTCJY=
+ bh=CFVRitJFlI6mxlQmNRx8FZPHBNUHRPAFfG+HfHhgBjY=;
+ b=VThCI4MSPH921HY9ZTo4k7pKXkZyWKtcvzNpg9mXnn2A6IeEsjKsgowDJZQ+lO4oq47WmHDJWdmldbngQ/IQ6yxdXj+TL6pk4ZkIz7mESCk+phiJz0XpYDJZIgvu+uljbmcXjpX1CQhPEh7QfJPE2FjK0HrcPdVvIhQJrEHq8GY=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=wolfvision.net;
 Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
- by AS2PR08MB9896.eurprd08.prod.outlook.com (2603:10a6:20b:5fe::9) with
+ by PAWPR08MB10212.eurprd08.prod.outlook.com (2603:10a6:102:369::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Wed, 10 May
- 2023 13:51:11 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.19; Wed, 10 May
+ 2023 13:51:12 +0000
 Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
  ([fe80::bd0e:a139:9e67:b86d]) by VE1PR08MB4974.eurprd08.prod.outlook.com
  ([fe80::bd0e:a139:9e67:b86d%4]) with mapi id 15.20.6387.019; Wed, 10 May 2023
- 13:51:11 +0000
+ 13:51:12 +0000
 From:   Javier Carrasco <javier.carrasco@wolfvision.net>
-Subject: [PATCH 0/4] Input: support virtual objects on touchscreens
-Date:   Wed, 10 May 2023 15:50:45 +0200
-Message-Id: <20230510-feature-ts_virtobj_patch-v1-0-5ae5e81bc264@wolfvision.net>
+Date:   Wed, 10 May 2023 15:50:46 +0200
+Subject: [PATCH 1/4] Input: ts-virtobj - Add touchsreen virtual object
+ handling
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIADWhW2QC/x2NQQrDIBBFrxJcd4pak0CvUkIY7aROFyaMVgohd
- 6/p8vF5/+0qkzBlde92JVQ585oamEunQsT0IuBnY2W1veneaFgIy0cISp4rS1n9e96whAhkh7F
- 3GpFGp5ruMRN4wRTieVCHqwMJ5pw2oYW//+pjOo4f97Ir9IUAAAA=
+Message-Id: <20230510-feature-ts_virtobj_patch-v1-1-5ae5e81bc264@wolfvision.net>
+References: <20230510-feature-ts_virtobj_patch-v1-0-5ae5e81bc264@wolfvision.net>
+In-Reply-To: <20230510-feature-ts_virtobj_patch-v1-0-5ae5e81bc264@wolfvision.net>
 To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -61,11 +61,11 @@ Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         devicetree@vger.kernel.org,
         Javier Carrasco <javier.carrasco@wolfvision.net>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1683726670; l=1997;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1683726670; l=14195;
  i=javier.carrasco@wolfvision.net; s=20230509; h=from:subject:message-id;
- bh=ax5hdrOTGsPudux6dPEA+8b4eWTi/NC3+64oRXySfD0=;
- b=gnm9OJXWivQ4WZkDx0sRrBVS7tu3l6gWjmMVXv5QF/bDEdQ7inaeWKUenNmTOWlg14G5LHk5G
- 2ENGkezwlfIBGAMztkrljCN55RJ8SUvrMIjPgzNOYtX6o5kV49TsN1d
+ bh=9hafbOgn/l1b7xRyuf2Eep+jcODbpHfdSt2LYOw75W0=;
+ b=BRd7C1/IJJAmoc/hyGLE1XAGxzeBJaR62fc3FAXnpim3wtGYMXJxXYcZwh+HnUiySS2YD2v6a
+ 2xfvos7lz6bDjSQEdgKKVuZZYjN3jqpSkKURqgtuaiGM7MrGwLCu547
 X-Developer-Key: i=javier.carrasco@wolfvision.net; a=ed25519;
  pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
 X-ClientProxiedBy: VI1PR0102CA0093.eurprd01.prod.exchangelabs.com
@@ -73,62 +73,62 @@ X-ClientProxiedBy: VI1PR0102CA0093.eurprd01.prod.exchangelabs.com
  (2603:10a6:803:111::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|AS2PR08MB9896:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3b2645ac-569f-4ee1-840f-08db515d9d09
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|PAWPR08MB10212:EE_
+X-MS-Office365-Filtering-Correlation-Id: 11566b4a-2bc9-4a07-a6cd-08db515d9d4e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4yF9bxJi0ib4qLk3zM2A5W1sw1HZC9lTmBh+/TY06zFHyZrC6ESPkPrMFTrw/Su3ZymgjOSNbNua0KX+mCIfrl7v3Aj/stQQUFVKPX2NTgORocMkUIvFNjmm2cVaPZWaqbnKjWoSr8r+i67y33BYdbwG4cnmvzyTT/6MiFnpLbC4u7EgY4Pq4YcFcT/2fo20Gvjq0Z+VxS2eQ0Z745D1eN6cY09yKeslLvxLz7WbSMX0cFhJabl4aY+exR5eWz92BGe3vXLlRalqD1HtDZpr0/iaqXA62hR79kpVkMzeBOYma1A6G0HXYAtTwcKtK3Lmm6RYFANyXIk4PxOpf37LoCZJYWvSMq57WXrD7ixoqsTdaXVcNVqPrdzbEAjdsQcgleybDgHc1qFjymh00MtPEukf1hNlkFHdb7vhMIyoL5spVf9hBxMMHdpIeTmZbjp4ix3ZY8gQFyTH7K6Ub4HhpTBTDoM8Muqzb6Xj4UH+X2hQseTrBgpPPF4EpZKQld6ijB6XKGIvQMYaMg15hZn2ApWevUlvh24E2F4SAtKR0ccyOERBSaYTwkAmMdhS8C9iPy2IewlBGYrSjAbp/5KgT3mp3K0uy3attL1LMXcK+OBcptrUo4sXBySIRKfKQRVc
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(376002)(346002)(136003)(396003)(366004)(451199021)(6486002)(52116002)(6506007)(26005)(6512007)(107886003)(83380400001)(38100700002)(36756003)(2616005)(38350700002)(86362001)(186003)(110136005)(4326008)(2906002)(5660300002)(6636002)(8676002)(316002)(8936002)(41300700001)(66476007)(478600001)(44832011)(66556008)(66946007)(66899021)(6666004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Arf0hmoMSwoSdU2tnCT73QfLnU+2h35o/GZUcudmOZt+9uYIIEnrGDoa3vNkBueA4JSYLZMlijLODXu+pBXUc0xu+pZrFXDD4CAH5u1oDxADKZiChc3AMSErga75nwVK+fwQsywfb8kzhknXgZCCg7FtHhYed3WnZ0n1gjvM32JRarbyu6RSpd6o5bODNgx3Q/PlIZCK9xPdmV6hMIas7Pab0Hi8IavotYlanBNM4xdLB3xWytL7Yneo8AI+POTFyCufj8d6z1ahV/UUiT52vGkwIe5Ggs8fZPd4qc1MB3l55jHGBcL3OZqlSoZcXi9wj73tfGm/9/dHeRi7LzsZc1xSsa3gwOMcXDmRZaG9mlpC9RxiY3nAqAyMwjzRTLbwfx4xXAsLEwxyg4LoBhRpdOLhU+8EbEAtm/jsXgdFWssu7dmnEnRDm7WT0LrXohtma05Y0dPr87xzYVGTHooIj4mijOsUzT5YptYJWmCdcjP7Bd/75psQU8w+rDnATTlMgXCIl0iOpnzp4TyP3yIucvQIUHnZoeX3j0tjktdJT+ydmh5R/2UdGxDBgAHfQ5tyCdO97xwBPlaTuwISIU1UhMnBNiObxlWFw4QIML896LU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(136003)(39850400004)(396003)(451199021)(86362001)(36756003)(6666004)(966005)(110136005)(316002)(6636002)(4326008)(66476007)(52116002)(478600001)(66946007)(66556008)(6486002)(41300700001)(5660300002)(44832011)(8936002)(8676002)(2906002)(30864003)(38100700002)(38350700002)(186003)(2616005)(26005)(6512007)(107886003)(6506007)(83380400001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RkdybXdsRzBVZWJ6YTRBRXBPYUV4R2orZjZKUW9rL1pHMXUzRHpIUWZ5N3Jy?=
- =?utf-8?B?KzloSkptcGp2L2xMVzd4V0g4bkVhT0JXTUdJa2ZYSFM5bE9YNFc4My9CcXp2?=
- =?utf-8?B?L1JJeUkvRHVzTWUzbzdKK0U3aUZpS3VQL1U3TDRUNEwxdkhrYmVjVkN3ZTlm?=
- =?utf-8?B?ZWZtbjVhdjdIS2Z3bmVyV0tYVzFNbWR2MjJDbUY0RTVGdlpFM0c2Vytnby9H?=
- =?utf-8?B?NkcwS2NMNjMvUkZsUVc3dVRJRVprQkY2b0Fvbkhha0ExY2VRZ3lpNXBOVXRN?=
- =?utf-8?B?M3BGKzVxWkp6WFJaWjNUM2RWdzY1QmpTbWJ3MG9CUlczOTNzVklhdmRTeXMr?=
- =?utf-8?B?MTk5WWRWQm82TGcvTmZTQ3ZXOFliU1l4anF3ejEveXJSeGM5WXdLNGNDZitD?=
- =?utf-8?B?Y2tuNk9ob0RyemNwRWlieUsvRGdVcmNVNnp3SFRHNEJRNm1TTjJhaEFRekF2?=
- =?utf-8?B?ai9RSG1EM0NrR3JlditHSnJPZlR4dWtuRU9wVUt5Nnlmc25sS2VhQXl0ekov?=
- =?utf-8?B?aW52YXNkbTVEcVZXb1pXemRzcTZTU3U1UkF0WXNUOHBUaFUrRk8yRXVxZjVp?=
- =?utf-8?B?VUVlVXk2S1p2dEp1Smp2TVBBaEtLdlBGbWlhQWxDMmRCMVAxL3dYZXNNK1dm?=
- =?utf-8?B?ZXJiamRsQlBFTDcrU3lpM0psUzdPUk1jOFdITHdwMVdqMmptMXBKaHo0cjJT?=
- =?utf-8?B?c3dCOENsS21DbktaTHRaYytEdHVvT3JUTWJObkwzSWxTM3RqdzB6a2F4cE10?=
- =?utf-8?B?a09RSTlJNkdVN2lVaVhpYVo3ZXRnbVBvSjl6OXpPaDNIRWlsTEF2Q05hMW1h?=
- =?utf-8?B?U1o5SjRLWko1UFNGTExiQWlhTTJyeUY4b0lGaDkvZVJxdHVVM0dZdTdTYTFu?=
- =?utf-8?B?eUNJUlNnN2xOSlBMUnRFVURPR3R6bFR6UmNycWloY2hmQ0t2eTF5cVd5STAv?=
- =?utf-8?B?aHYwYk1XTTkrTzJ0Qkc3YWNDbUdiN3UxNXZuMEpGdjY1ZWZPaG40TmlidUtN?=
- =?utf-8?B?ZSt0QjhnYXQvdFhxN2pGT0ZIZU55MGlJbTh5OGNIeUQwM0lnaGkwdzhmMTNy?=
- =?utf-8?B?V2VnZXlkb283T1F4V1hJMFRWYkdmdE1UVDIxTUpGbFUrb1FXM3h1WTBwVHJp?=
- =?utf-8?B?dk1BdmZBc3F3VFk0WkFPd2ovY3pMQkN0eTJZWFpuellzS0pCRzJnbGxEWTNv?=
- =?utf-8?B?Y2k3VStpZkNiTEpjVEVMRDJ4RmV3ZzVGcVpHWTIrTVdsdEJnY1BXWEhYcXdw?=
- =?utf-8?B?d2xvZ2ZLZkFaOVFsNEk2UHhWTjUwS05aWDgxM2pMeU4yeUFRdHhFdjlycTl1?=
- =?utf-8?B?b2E4dldUd1l6YjkwZnI3NjhNaXZkd0NPaWlZN3VIVEdCOHpTYnBYZVdzeWZH?=
- =?utf-8?B?YUZyOHlrc1ZlYXh5dmU0N1pQZm1reTRRU3U0aVBrL1FRMjNjdDVvN0FxdDZE?=
- =?utf-8?B?emRRQ1NNTXNySEk2bWQ4RWN2end4R3RtcnNFdlg4VUJPeXQzL1pwNkgrbFpU?=
- =?utf-8?B?NjVZUDEzcmtZNVlJMVFiTE9XN2Z3dWxvUFZZM04rdUZqYThlNHJlT2s3Y095?=
- =?utf-8?B?b3NkK0lNdjJlNEswMi8xeDRycFJGZEZmb1BhL2hkSXd0N29MMGs5eU51TEdT?=
- =?utf-8?B?WTFsbGdraXRIdzVEVjZxMVk0TkNlbk1vZlBScGo1TGtwRUpadXFPeXFYWXNQ?=
- =?utf-8?B?U3MvNEI4OWFrVkV2bEF0WFNnakV6VzNxOExyMHhla3ovRDRjQXdnQ1FGWGdS?=
- =?utf-8?B?eHVvWWpHOUhwZExXRUM0c0NIK3lLcFQyNlpXTmhmR2l2YjZ5Rm15RGRsREtw?=
- =?utf-8?B?VndhNGlNS0p0Ym0vZDVEVTFYT2hQVFRwU0Q1UE10ZWp0bUVYK2ErTXdyT1h3?=
- =?utf-8?B?d1lXTGw2Q1U2cmhCakdVelVqeEVOOUw0K2ExRzg1MHMvaE5xbisycmZzcDVM?=
- =?utf-8?B?SEZ4d1Frc1VGTEc4Y2c4WHp4eEFBV0l1M29ZQ29CVnBQMmtXYm8zT3cwd250?=
- =?utf-8?B?MGkzWDUvK1V0SGl6ZmJPWUx1YjdzK21kTTRjVk5uZWRyV1RKQjJiTWc0dVdS?=
- =?utf-8?B?cVNzZWM0MXJlbWFoTmU4aEJJanpIanI2M2JQN1JpTU5Xa1A3QVoxck1ZM21S?=
- =?utf-8?B?d1NWTTE0NUtUd0FrN2oxQnFrNzUyMER1UU5zTkdQbVM4dzFKWlN0TlROeS9T?=
- =?utf-8?Q?kNpO1i/HQ4NjU2CigHb8iEA=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cU1JVkpHNmp1cG0yb09nVjBEMnd5bjR0S0xISmFoeGJmckE5R2tVdVg1bEc4?=
+ =?utf-8?B?bnRKUUphdzhSbVQ5M0dHb0hubWhlTXZUSGNhdkxWUGpRd3pRU290Z0dKeW5o?=
+ =?utf-8?B?LzV1am9WdndCRWRwVSt2MVNUSzdvMEw0b2d6U3hrOGt4bllKVXBGVVZ5WE5H?=
+ =?utf-8?B?eHIwUzFkUjgxVldvL2V1WjJVRkdMcndFNG9xUlVKUi9OUW5yMWJyY1hyNkl0?=
+ =?utf-8?B?N1l2TGM3bi92dFVBSkNJK3dsMXNPODBHMDVTeUZvcHRnVmhHd1l2dU1KL1B2?=
+ =?utf-8?B?SDhwMFhLdysvN2NGaDdwcWxZTHZtR05DbmtQeFNFdVhwSHNrQ3pTTHBTT1Qr?=
+ =?utf-8?B?QkxGMEV1VGp1R1pUdE9MVXJjZmRzYUtqRThlbkJjaDFkMTBXbjM2dS81cUl4?=
+ =?utf-8?B?eEVZRTZSL3ovNU9mT3BkclM1M3RMVzFFRys1elhZWVZVdGNSMXdQT3V1N2g0?=
+ =?utf-8?B?Z2hwbXdwYWFLWFZib2d2dTJNUDh5U3lJaU1USnhNdWZ5SFJYRFd3V0JSMVpr?=
+ =?utf-8?B?akx4cnFobmVoQWQ5NTJ0NmNLMy9WajQrNXJrTEFJUU41TTJmOTBRdFlzeFBE?=
+ =?utf-8?B?LzMzRTU5U2tRQUx5bkozOXRpZUNnNjlTYzhPWFN0ZlRxSWFlUnJheUtocnN4?=
+ =?utf-8?B?QXFEajBUSWl6bE9vaXBpQUlxK0VmWmI5MlprbXJuYlBCS1FoVURwTEJqdmhS?=
+ =?utf-8?B?M2FmYVRkUlhOUEltNGFnQjhzQ0pPVVhoV0JuQTZGd0MraW5sTHBwazBBQm5z?=
+ =?utf-8?B?czZ1S2RmRzhIQythY3NFWW1UNXUwOVlqSWpoMnp2dTJ6QWRGYkdrSHZwNXhK?=
+ =?utf-8?B?ZXp2YW9LNWFXeG0ySU8rRjZ3cjFEOHRyOEIwdDlBb1lwWjVlNGNkKy8yZk5Z?=
+ =?utf-8?B?RUdVRkNYVmk4VVNDMjEwbzdiVGFBdWZ5dFFlTVNhY1BFTVVyQkNSWU5SeG9l?=
+ =?utf-8?B?QnBpbC8wMkhSMFVHQ1YzSTBZdVZpZFYvalBMUHlEd3ZBTVNJMkwyVnFqaVBu?=
+ =?utf-8?B?NFVzK0RyOG81Uyt1ZytOZkRBSXk2cmxjZmwrbEZ3WCtJUkVIN1NBWWh3Qzhj?=
+ =?utf-8?B?ejdrSk5CNGxpNVVDQ3orMUlsS1BPa0RrSys5TDdFd25RL3MxRXRVSDBHYkR6?=
+ =?utf-8?B?ZUVmcjc3aWp1czQwZU1RUVU0ZE5nUFgxTzhaS1F5UzdWbWI0cWJkREwxcXJV?=
+ =?utf-8?B?SzlXa25EK0Y5VGhuWE4vajdpZThIVE9vSkI3MWFHdUxiS3pUWGdNVVRTQlNM?=
+ =?utf-8?B?V2ZYaWc1bUZFNnhBcWRFRXh5S3g5SkJXU0hPcUU4Q1VRaDRrMXN2TllTMmlU?=
+ =?utf-8?B?cTI0UnhyY0RsNkFUeTJWdGdQRmxHNFY5c0cvMmxQS2RrZDJxYk0vMlBYdC94?=
+ =?utf-8?B?bWVTdTFudXFOSGVRcW02VWRkSGFrM1VSODJnRlRRb0l1c0o1ejd4RnVEL0Ra?=
+ =?utf-8?B?QWJpUDBLQ3JCQU05SWc4RVB1T3lIcDBVamdaUHNUMW5kZll0WHZsd1NsSDhU?=
+ =?utf-8?B?N1ZpbGhqbzdqTEM3SWJrdHJNd25zeDNoUmZlcGtiTjVPQ3NkNkxzMHNmQlpk?=
+ =?utf-8?B?OGhwUUhnQVVDMG9tSDVnK3RMSXp4a1o4RFZCVER0cEhrUmdmdmgvTFZISUdo?=
+ =?utf-8?B?Vy92VGUzT0xJdHZhc3l3OTFYcE4xRTVmTVlhSVl3VWZ2S3BwZzhJVE9KWUxv?=
+ =?utf-8?B?c05FOTh4dlNpZ0ZUbDk1bWRPemZqRnRJbHg4cy90eDhNRi8xbVlzZkVRbVBJ?=
+ =?utf-8?B?Z0EvZzVZZTRXU2llZmxzbDVnb3lBZXQ4T0wwanJIdG91YjVISGV5TCtDNFFI?=
+ =?utf-8?B?RmJCVkgzNENFOWk5NDJST3QzMTlmL3d2QXdHNENUd1daSWR4WDFoMWxhbGhY?=
+ =?utf-8?B?SWdvN3B6YlhwcHNacVBnWHMvVVFNSTFqSG43UitweDVWQ3VMUkVBZGdTYkRX?=
+ =?utf-8?B?a1lzT1BUdEg1OWM3RjRVbXg4VnlxZHNta2dHc0ZFTzhxejBWNHQ3dlF0cjJU?=
+ =?utf-8?B?eS9MQWdnQmhCS2dkME1KV3g4WVhSTSt2QmhKT3hyTU84UENDU2xSS05tb0Zn?=
+ =?utf-8?B?MnRkRDhBa1JEWk5JRkNkT1Zvd1UrUFc3bThaYWVQRy9uOHl2Q2Z0YXEwZFA1?=
+ =?utf-8?B?U2doaEhPMlVVaG5ybTdaNFhzZUJtV1FjTWVpUys2TUpCS1ZtdS8wL3Avbzhn?=
+ =?utf-8?Q?F+sndBSijuaeTN1KO/NU+2g=3D?=
 X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b2645ac-569f-4ee1-840f-08db515d9d09
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11566b4a-2bc9-4a07-a6cd-08db515d9d4e
 X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 13:51:11.3158
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 13:51:11.7855
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RIYCVMjWsr5sbaMFkTBIY8NZiyC2/GAq+OeP0atUR87pyRfWAVjXDLohrnPHXR+XtWY61N0cNuHTabmMU2CDp3k+chzUT1UoFMi57zBXWsE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB9896
+X-MS-Exchange-CrossTenant-UserPrincipalName: rQ3o/S5kMuqLC47esDe8AiuZy9CKh0LssFffWXOo+Xo7KwtkQj+GI9TkBHmC1+xs6a1x0q50zZbo8pUYI+dIJUqS8VomsaShQ79WicOj2wU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR08MB10212
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -139,45 +139,538 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some touchscreens are shipped with a physical layer on top of them where
-a number of buttons and a resized touchscreen surface might be available.
+Some touchscreens provide mechanical overlays with different objects
+like buttons or clipped touchscreen surfaces.
 
-In order to generate proper key events by overlay buttons and adjust the
-touch events to a clipped surface, these patches offer a documented,
-device-tree-based solution by means of helper functions.
-An implementation for a specific touchscreen driver is also included.
+In order to support these objects, add a series of helper functions
+to the input subsystem to transform them into virtual objects via
+device tree nodes.
 
-The functions in ts-virtobj provide a simple workflow to acquire
-physical objects from the device tree, map them into the device driver
-structures as virtual objects and generate events according to
-the object descriptions.
-
-This solution has been tested with a JT240MHQS-E3 display, which uses
-the st1624 as a touchscreen and provides two overlay buttons and a frame
-that clips its effective surface.
+These virtual objects consume the raw touch events and report the
+expected input events depending on the object properties.
 
 Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
 ---
-Javier Carrasco (4):
-      Input: ts-virtobj - Add touchsreen virtual object handling
-      dt-bindings: touchscreen: add virtual-touchscreen and virtual-buttons properties
-      Input: st1232 - add virtual touchscreen and buttons handling
-      dt-bindings: input: touchscreen: st1232: add example with ts-virtobj
+ MAINTAINERS                            |   7 +
+ drivers/input/touchscreen/Kconfig      |   9 +
+ drivers/input/touchscreen/Makefile     |   1 +
+ drivers/input/touchscreen/ts-virtobj.c | 360 +++++++++++++++++++++++++++++++++
+ include/linux/input/ts-virtobj.h       |  95 +++++++++
+ 5 files changed, 472 insertions(+)
 
- .../input/touchscreen/sitronix,st1232.yaml         |  40 +++
- .../bindings/input/touchscreen/touchscreen.yaml    |  54 ++++
- MAINTAINERS                                        |   7 +
- drivers/input/touchscreen/Kconfig                  |   9 +
- drivers/input/touchscreen/Makefile                 |   1 +
- drivers/input/touchscreen/st1232.c                 |  87 +++--
- drivers/input/touchscreen/ts-virtobj.c             | 360 +++++++++++++++++++++
- include/linux/input/ts-virtobj.h                   |  95 ++++++
- 8 files changed, 635 insertions(+), 18 deletions(-)
----
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
-change-id: 20230510-feature-ts_virtobj_patch-e267540aae74
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7e0b87d5aa2e..296f71bcfe92 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21434,6 +21434,13 @@ W:	https://github.com/srcres258/linux-doc
+ T:	git git://github.com/srcres258/linux-doc.git doc-zh-tw
+ F:	Documentation/translations/zh_TW/
+ 
++TOUCHSCREEN VIRTUAL OBJECTS
++M:	Javier Carrasco <javier.carrasco@wolfvision.net>
++L:	linux-input@vger.kernel.org
++S:	Maintained
++F:	drivers/input/touchscreen/ts-virtobj.c
++F:	include/linux/input/ts-virtobj.h
++
+ TTY LAYER
+ M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ M:	Jiri Slaby <jirislaby@kernel.org>
+diff --git a/drivers/input/touchscreen/Kconfig b/drivers/input/touchscreen/Kconfig
+index 143ff43c67ae..276f6e0b914b 100644
+--- a/drivers/input/touchscreen/Kconfig
++++ b/drivers/input/touchscreen/Kconfig
+@@ -1388,4 +1388,13 @@ config TOUCHSCREEN_HIMAX_HX83112B
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called himax_hx83112b.
+ 
++config TOUCHSCREEN_TS_VIRTOBJ
++	tristate "Touchscreen Virtual Objects"
++	help
++	  Say Y here if you are using a touchscreen driver that supports
++	  printed overlays with keys or a clipped touchscreen area.
++
++	  To compile this feature as a module, choose M here: the
++	  module will be called ts-virtobj.
++
+ endif
+diff --git a/drivers/input/touchscreen/Makefile b/drivers/input/touchscreen/Makefile
+index 159cd5136fdb..dc315d58a03b 100644
+--- a/drivers/input/touchscreen/Makefile
++++ b/drivers/input/touchscreen/Makefile
+@@ -117,3 +117,4 @@ obj-$(CONFIG_TOUCHSCREEN_RASPBERRYPI_FW)	+= raspberrypi-ts.o
+ obj-$(CONFIG_TOUCHSCREEN_IQS5XX)	+= iqs5xx.o
+ obj-$(CONFIG_TOUCHSCREEN_ZINITIX)	+= zinitix.o
+ obj-$(CONFIG_TOUCHSCREEN_HIMAX_HX83112B)	+= himax_hx83112b.o
++obj-$(CONFIG_TOUCHSCREEN_TS_VIRTOBJ)	+= ts-virtobj.o
+diff --git a/drivers/input/touchscreen/ts-virtobj.c b/drivers/input/touchscreen/ts-virtobj.c
+new file mode 100644
+index 000000000000..56c137fc49a3
+--- /dev/null
++++ b/drivers/input/touchscreen/ts-virtobj.c
+@@ -0,0 +1,360 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ *  Helper functions for virtual objects on touchscreens
++ *
++ *  Copyright (c) 2023 Javier Carrasco <javier.carrasco@wolfvision.net>
++ */
++
++#include <linux/property.h>
++#include <linux/input.h>
++#include <linux/input/mt.h>
++#include <linux/module.h>
++#include <linux/input/ts-virtobj.h>
++
++#if IS_ENABLED(CONFIG_TOUCHSCREEN_TS_VIRTOBJ)
++
++enum ts_virtobj_valid_objects {
++	TOUCHSCREEN,
++	BUTTON,
++};
++
++static const char *const ts_virtobj_names[] = {
++	[TOUCHSCREEN] = "virtual-touchscreen",
++	[BUTTON] = "virtual-buttons",
++};
++
++struct ts_virtobj_shape {
++	u32 x_origin;
++	u32 y_origin;
++	u32 x_size;
++	u32 y_size;
++};
++
++struct ts_virtobj_button {
++	struct ts_virtobj_shape shape;
++	u32 key;
++	bool pressed;
++	int slot;
++};
++
++static int ts_virtobj_get_shape_properties(struct fwnode_handle *child_node,
++					   struct ts_virtobj_shape *shape)
++{
++	int rc;
++
++	rc = fwnode_property_read_u32(child_node, "x-origin", &shape->x_origin);
++	if (rc < 0)
++		return rc;
++
++	rc = fwnode_property_read_u32(child_node, "y-origin", &shape->y_origin);
++	if (rc < 0)
++		return rc;
++
++	rc = fwnode_property_read_u32(child_node, "x-size", &shape->x_size);
++	if (rc < 0)
++		return rc;
++
++	rc = fwnode_property_read_u32(child_node, "y-size", &shape->y_size);
++	if (rc < 0)
++		return rc;
++
++	return 0;
++}
++
++static int ts_virtobj_get_button_properties(struct device *dev,
++					    struct fwnode_handle *child_node,
++					    struct ts_virtobj_button *btn)
++{
++	struct fwnode_handle *child_btn;
++	int rc;
++	int j = 0;
++
++	fwnode_for_each_child_node(child_node, child_btn) {
++		rc = ts_virtobj_get_shape_properties(child_btn, &btn[j].shape);
++		if (rc < 0)
++			goto button_prop_cleanup;
++
++		rc = fwnode_property_read_u32(child_btn, "linux,code",
++					      &btn[j].key);
++		if (rc < 0)
++			goto button_prop_cleanup;
++
++		dev_info(dev, "Added button at (%u, %u), size %ux%u, code=%u\n",
++			 btn[j].shape.x_origin, btn[j].shape.y_origin,
++			 btn[j].shape.x_size, btn[j].shape.y_size, btn[j].key);
++		j++;
++	}
++
++	return 0;
++
++button_prop_cleanup:
++	fwnode_handle_put(child_btn);
++	return rc;
++}
++
++void ts_virtobj_set_button_caps(struct ts_virtobj_map *map,
++				struct input_dev *dev)
++{
++	int i;
++
++	for (i = 0; i < map->button_count; i++)
++		input_set_capability(dev, EV_KEY, map->buttons[i].key);
++}
++EXPORT_SYMBOL(ts_virtobj_set_button_caps);
++
++static int ts_virtobj_count_buttons(struct device *dev)
++{
++	struct fwnode_handle *child_node;
++	struct fwnode_handle *child_button;
++	int count = 0;
++
++	child_node = device_get_named_child_node(dev, ts_virtobj_names[BUTTON]);
++	if (!child_node)
++		return 0;
++
++	fwnode_for_each_child_node(child_node, child_button)
++		count++;
++	fwnode_handle_put(child_node);
++
++	return count;
++}
++
++static int ts_virtobj_map_touchscreen(struct device *dev,
++				      struct ts_virtobj_map *map)
++{
++	struct fwnode_handle *child;
++	int rc = 0;
++
++	child = device_get_named_child_node(dev, ts_virtobj_names[TOUCHSCREEN]);
++	if (!child)
++		goto touchscreen_ret;
++
++	map->touchscreen =
++		devm_kzalloc(dev, sizeof(*map->touchscreen), GFP_KERNEL);
++	if (!map->touchscreen) {
++		rc = -ENOMEM;
++		goto touchscreen_handle;
++	}
++	rc = ts_virtobj_get_shape_properties(child, map->touchscreen);
++	if (rc < 0)
++		goto touchscreen_free;
++
++	map->virtual_touchscreen = true;
++	dev_info(dev, "Added virtual touchscreen at (%u, %u), size %u x %u\n",
++		 map->touchscreen->x_origin, map->touchscreen->y_origin,
++		 map->touchscreen->x_size, map->touchscreen->y_size);
++
++	rc = 0;
++	goto touchscreen_handle;
++
++touchscreen_free:
++	devm_kfree(dev, map->touchscreen);
++touchscreen_handle:
++	fwnode_handle_put(child);
++touchscreen_ret:
++	return rc;
++}
++
++static int ts_virtobj_map_buttons(struct device *dev,
++				  struct ts_virtobj_map *map,
++				  struct input_dev *input)
++{
++	struct fwnode_handle *child;
++	u32 button_count;
++	int rc = 0;
++
++	button_count = ts_virtobj_count_buttons(dev);
++	if (button_count) {
++		map->buttons = devm_kcalloc(dev, button_count,
++					    sizeof(*map->buttons), GFP_KERNEL);
++		if (!map->buttons) {
++			rc = -ENOMEM;
++			goto map_buttons_ret;
++		}
++		child = device_get_named_child_node(dev,
++						    ts_virtobj_names[BUTTON]);
++		if (unlikely(!child))
++			goto map_buttons_free;
++
++		rc = ts_virtobj_get_button_properties(dev, child, map->buttons);
++		if (rc < 0)
++			goto map_buttons_free;
++
++		map->button_count = button_count;
++	}
++
++	return 0;
++
++map_buttons_free:
++	devm_kfree(dev, map->buttons);
++map_buttons_ret:
++	return rc;
++}
++
++static bool ts_virtobj_defined_objects(struct device *dev)
++{
++	struct fwnode_handle *child;
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(ts_virtobj_names); i++) {
++		child = device_get_named_child_node(dev, ts_virtobj_names[i]);
++		if (child) {
++			fwnode_handle_put(child);
++			return true;
++		}
++		fwnode_handle_put(child);
++	}
++
++	return false;
++}
++
++struct ts_virtobj_map *ts_virtobj_map_objects(struct device *dev,
++					      struct input_dev *input)
++{
++	struct ts_virtobj_map *map = NULL;
++	int rc;
++
++	if (!ts_virtobj_defined_objects(dev))
++		return NULL;
++
++	map = devm_kzalloc(dev, sizeof(*map), GFP_KERNEL);
++	if (!map) {
++		rc = -ENOMEM;
++		goto objects_err;
++	}
++	rc = ts_virtobj_map_touchscreen(dev, map);
++	if (rc < 0)
++		goto objects_free;
++
++	rc = ts_virtobj_map_buttons(dev, map, input);
++	if (rc < 0)
++		goto objects_free;
++
++	return map;
++
++objects_free:
++	devm_kfree(dev, map);
++objects_err:
++	return ERR_PTR(rc);
++}
++EXPORT_SYMBOL(ts_virtobj_map_objects);
++
++void ts_virtobj_get_touchscreen_abs(struct ts_virtobj_map *map, u16 *x, u16 *y)
++{
++	*x = map->touchscreen->x_size - 1;
++	*y = map->touchscreen->y_size - 1;
++}
++EXPORT_SYMBOL(ts_virtobj_get_touchscreen_abs);
++
++static bool ts_virtobj_shape_event(struct ts_virtobj_shape *shape, u32 x, u32 y)
++{
++	if (!shape)
++		return false;
++
++	if (x >= shape->x_origin && x < (shape->x_origin + shape->x_size) &&
++	    y >= shape->y_origin && y < (shape->y_origin + shape->y_size))
++		return true;
++
++	return false;
++}
++
++static bool ts_virtobj_touchscreen_event(struct ts_virtobj_shape *touchscreen,
++					 u32 *x, u32 *y)
++{
++	if (ts_virtobj_shape_event(touchscreen, *x, *y)) {
++		*x -= touchscreen->x_origin;
++		*y -= touchscreen->y_origin;
++		return true;
++	}
++
++	return false;
++}
++
++bool ts_virtobj_mapped_touchscreen(struct ts_virtobj_map *map)
++{
++	if (!map || !map->virtual_touchscreen)
++		return false;
++
++	return true;
++}
++EXPORT_SYMBOL(ts_virtobj_mapped_touchscreen);
++
++bool ts_virtobj_mapped_buttons(struct ts_virtobj_map *map)
++{
++	if (!map || !map->button_count)
++		return false;
++
++	return true;
++}
++EXPORT_SYMBOL(ts_virtobj_mapped_buttons);
++
++bool ts_virtobj_mt_on_touchscreen(struct ts_virtobj_map *map, u32 *x, u32 *y)
++{
++	if (!ts_virtobj_mapped_touchscreen(map))
++		return true;
++
++	if (!ts_virtobj_touchscreen_event(map->touchscreen, x, y))
++		return false;
++
++	return true;
++}
++EXPORT_SYMBOL(ts_virtobj_mt_on_touchscreen);
++
++bool ts_virtobj_button_press(struct ts_virtobj_map *map,
++			     struct input_dev *input, u32 x, u32 y, u32 slot)
++{
++	int i;
++
++	if (!ts_virtobj_mapped_buttons(map))
++		return false;
++
++	for (i = 0; i < map->button_count; i++) {
++		if (ts_virtobj_shape_event(&map->buttons[i].shape, x, y)) {
++			input_report_key(input, map->buttons[i].key, 1);
++			map->buttons[i].pressed = true;
++			map->buttons[i].slot = slot;
++			return true;
++		}
++	}
++
++	return false;
++}
++EXPORT_SYMBOL(ts_virtobj_button_press);
++
++bool ts_virtobj_is_button_slot(struct ts_virtobj_map *map, int slot)
++{
++	int i;
++
++	if (!map || !map->button_count)
++		return false;
++
++	for (i = 0; i < map->button_count; i++) {
++		if (map->buttons[i].pressed && map->buttons[i].slot == slot)
++			return true;
++	}
++
++	return false;
++}
++EXPORT_SYMBOL(ts_virtobj_is_button_slot);
++
++void ts_virtobj_button_release(struct ts_virtobj_map *map,
++			       struct input_dev *input, u32 slot)
++{
++	int i;
++
++	if (!map || !map->button_count)
++		return;
++
++	for (i = 0; i < map->button_count; i++) {
++		if (map->buttons[i].pressed && map->buttons[i].slot == slot) {
++			input_report_key(input, map->buttons[i].key, 0);
++			map->buttons[i].pressed = false;
++		}
++	}
++}
++EXPORT_SYMBOL(ts_virtobj_button_release);
++
++#endif
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Helper functions for virtual objects on touchscreens");
+diff --git a/include/linux/input/ts-virtobj.h b/include/linux/input/ts-virtobj.h
+new file mode 100644
+index 000000000000..5f9d0059451e
+--- /dev/null
++++ b/include/linux/input/ts-virtobj.h
+@@ -0,0 +1,95 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2023 Javier Carrasco <javier.carrasco@wolfvision.net>
++ */
++
++#ifndef _TS_VIRTOBJ
++#define _TS_VIRTOBJ
++
++#include <linux/types.h>
++
++struct input_dev;
++struct device;
++
++struct ts_virtobj_map {
++	struct ts_virtobj_shape *touchscreen;
++	bool virtual_touchscreen;
++	struct ts_virtobj_button *buttons;
++	u32 button_count;
++};
++
++#if IS_ENABLED(CONFIG_TOUCHSCREEN_TS_VIRTOBJ)
++struct ts_virtobj_map *ts_virtobj_map_objects(struct device *dev,
++					      struct input_dev *input);
++
++void ts_virtobj_get_touchscreen_abs(struct ts_virtobj_map *map, u16 *x, u16 *y);
++
++bool ts_virtobj_mapped_touchscreen(struct ts_virtobj_map *map);
++
++bool ts_virtobj_mapped_buttons(struct ts_virtobj_map *map);
++
++bool ts_virtobj_mt_on_touchscreen(struct ts_virtobj_map *map, u32 *x, u32 *y);
++
++bool ts_virtobj_button_press(struct ts_virtobj_map *map,
++			     struct input_dev *input, u32 x, u32 y, u32 slot);
++
++bool ts_virtobj_is_button_slot(struct ts_virtobj_map *map, int slot);
++
++void ts_virtobj_button_release(struct ts_virtobj_map *map,
++			       struct input_dev *input, u32 slot);
++
++void ts_virtobj_set_button_caps(struct ts_virtobj_map *map,
++				struct input_dev *dev);
++#else
++static inline struct ts_virtobj_map *
++ts_virtobj_map_objects(struct device *dev, struct input_dev *input)
++{
++	return NULL;
++}
++
++static inline void ts_virtobj_get_touchscreen_abs(struct ts_virtobj_map *map,
++						  u16 *x, u16 *y)
++{
++}
++
++static inline bool ts_virtobj_mapped_touchscreen(struct ts_virtobj_map *map)
++{
++	return false;
++}
++
++static inline bool ts_virtobj_mapped_buttons(struct ts_virtobj_map *map)
++{
++	return false;
++}
++
++static inline bool ts_virtobj_mt_on_touchscreen(struct ts_virtobj_map *map,
++						u32 *x, u32 *y)
++{
++	return true;
++}
++
++static inline bool ts_virtobj_button_press(struct ts_virtobj_map *map,
++					   struct input_dev *input, u32 x,
++					   u32 y, u32 slot)
++{
++	return false;
++}
++
++static inline bool ts_virtobj_is_button_slot(struct ts_virtobj_map *map,
++					     int slot)
++{
++	return false;
++}
++
++static inline void ts_virtobj_button_release(struct ts_virtobj_map *map,
++					     struct input_dev *input, u32 slot)
++{
++}
++
++static inline void ts_virtobj_set_button_caps(struct ts_virtobj_map *map,
++					      struct input_dev *dev)
++{
++}
++#endif
++
++#endif
 
-Best regards,
 -- 
-Javier Carrasco <javier.carrasco@wolfvision.net>
+2.39.2
 
