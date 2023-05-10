@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCAB96FDA4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B456FDA51
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236761AbjEJJDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 05:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
+        id S236739AbjEJJDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 05:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236146AbjEJJDH (ORCPT
+        with ESMTP id S236055AbjEJJDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 05:03:07 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D92E4A;
-        Wed, 10 May 2023 02:03:03 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pwfir-0000w9-Vv; Wed, 10 May 2023 11:02:58 +0200
-Message-ID: <742856c0-ab93-1a6c-4fc8-9451c0908930@leemhuis.info>
-Date:   Wed, 10 May 2023 11:02:57 +0200
+        Wed, 10 May 2023 05:03:12 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABB93AB6;
+        Wed, 10 May 2023 02:03:11 -0700 (PDT)
+Date:   Wed, 10 May 2023 11:03:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683709388;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=koD4cPNLIm/3wGHC3EUteEyEyTTF+ReaD/tXyekbMOQ=;
+        b=Sj6Q+mZK1Sh7wD3GRIO91IlUZaDPN4ecfDyK/X12c0k+idExcfzk1ObRV8y2qd/iHVhy27
+        lOx4FLgfQGv0fEm0PiDmkcMQS4iG/W/UzlZHBTu7y7XgZqSDbAsNWbddaAkTvehhFn1I4z
+        lZUsCU1fGAhILvmaR/k3yjMIJ8jg5MddbKXTiV+yIkFhb323++gcq3SIkI9xSSkXXcQs44
+        3GgJ5KSoEQeIef4I3O7ozG5iaTuDJWs+P6mXyNmaxIvUteRFi+04mH0DVBmIIcyq9t/J1j
+        6eJn9b8efjrIXsPAvsQTHcus0IS5nbMTx//f+Jxt8+U9WUiyBEFuSX+Y/E0hSw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683709388;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=koD4cPNLIm/3wGHC3EUteEyEyTTF+ReaD/tXyekbMOQ=;
+        b=N6EJm5GFButoC3rcZLzq6db/2Fkhmh5G15xAkRJ/6bGGMMESFiSlG2yQR/2QCu2NS3m/oX
+        c0ytQj07XX+2f0Bg==
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+To:     Andrea Righi <andrea.righi@canonical.com>
+cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] timers/nohz: introduce nohz_full_aggressive
+In-Reply-To: <ZFe1IY+TdzSC0RLZ@righiandr-XPS-13-7390>
+Message-ID: <2161b8c0-b08c-7bf7-4c99-3bb89ca44ad8@linutronix.de>
+References: <20230507090700.18470-1-andrea.righi@canonical.com> <20230507100852.54a354ca@rorschach.local.home> <ZFe1IY+TdzSC0RLZ@righiandr-XPS-13-7390>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: mainline build failure due to cf21f328fcaf ("media: nxp: Add
- i.MX8 ISI driver")
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-References: <ZElaVmxDsOkZj2DK@debian>
- <51cff63a-3a04-acf5-8264-bb19b0bee8a3@leemhuis.info>
- <CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com>
- <20230510090527.25e26127@sal.lan>
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <20230510090527.25e26127@sal.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1683709383;f0523dc6;
-X-HE-SMSGID: 1pwfir-0000w9-Vv
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.05.23 10:05, Mauro Carvalho Chehab wrote:
-> Em Mon, 8 May 2023 09:27:28 -0700
-> Linus Torvalds <torvalds@linux-foundation.org> escreveu:
->> On Mon, May 8, 2023 at 3:55 AM Linux regression tracking #adding
->> (Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
->>>
->>> Thanks for the report. The fixes (see the mail from Laurent) apparently
->>> are still not mainlined (or am I missing something?), so let me add this
->>> report to the tracking to ensure this is not forgotten:  
->>
->> Gaah. I was intending to apply the patch directly before rc1, but then
->> I forgot about this issue.
->>
->> Mauro: I'm currently really *really* fed up with the media tree. This
->> exact same thing happened last merge window, where the media tree
->> caused pointless build errors, and it took way too long to get the
->> fixes the proper ways.
-> [...]
->
-> In the specific case of this fixup patch, I didn't identify it as a build
-> issue, so it followed the usual workflow. We have a huge number of patches
-> for media, and it usually takes some time to handle all of them. This one
-> just followed the normal flow, as it didn't break Jenkins builds nor the
-> subject mentioned anything about build breakage.
+On Sun, 7 May 2023, Andrea Righi wrote:
 
-Makes me wonder again if we should start adding
+> On Sun, May 07, 2023 at 10:08:52AM -0400, Steven Rostedt wrote:
+> > 
+> > [ Added Anna-Maria who is doing some timer work as well ]
+> > 
+> > On Sun,  7 May 2023 11:07:00 +0200
+> > Andrea Righi <andrea.righi@canonical.com> wrote:
+> > 
+> > Now, I think what is really happening here is that you are somewhat
+> > simulating the results that Anna-Maria has indirectly. That is, you
+> > just prevent an idle CPU from waking up to handle interrupts when not
+> > needed.
+> > 
+> > Anna-Maria,
+> > 
+> > Do you have some patches that Andrea could test with?
+> > 
+> > Thanks,
+> > 
+> > -- Steve
+> 
+> Thanks for looking at this (and I'm happy to help Anna-Maria with any
+> test).
 
- CC: regressions@lists.linux.dev
+I posted v6 of the queue - but forgot to add you to cc list. Here is the
+current version:
 
-to any patches that fix regressions, that way maintainers and reviewers
-would have something to filter for -- and I would become aware of all
-regression fixes in the work, too.
+  https://lore.kernel.org/lkml/20230510072817.116056-1-anna-maria@linutronix.de/
 
-Ciao, Thorsten
+I have to mention, that there is still the issue with the fair scheduler
+which wakes up the CPU where the process_timeout() timer was enqueued,
+because it assumes that context is still cache hot.
 
-P.S.: BTW, let me tell regzbot that Linus merged the fix for the build
-failure.
+Thanks,
 
-#regzbot fix: ba0ad6ed89f
+	Anna-Maria
 
-FWIW, the one for the gcc warnings[1] Laurent mentioned elsewhere in
-this thread is not merged yet afaics.
-
-[1] https://lore.kernel.org/all/20230418092007.2902984-1-arnd@kernel.org/
