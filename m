@@ -2,115 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE016FDC1C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E566FDC2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236497AbjEJLBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 07:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
+        id S236672AbjEJLGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 07:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236558AbjEJLBA (ORCPT
+        with ESMTP id S230205AbjEJLGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 07:01:00 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB9B2102;
-        Wed, 10 May 2023 04:00:57 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so67654591a12.1;
-        Wed, 10 May 2023 04:00:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683716456; x=1686308456;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jN8Aq5FPpTGT1iEz1Qibhge7nHg3W8S6IukcnA1rLJs=;
-        b=Ka21o6/aTnVF7QxoBAedmbFD/WSc64NQR+z+k0+hdpONgv5UDwY6REYffmS9LpV8o0
-         KfhKLwSUUjaTA6tv+mycvyGvYyn6tw4/Io2BLU54eqUTmNoIU68dR8hhVZ1gfzZfqmk5
-         BrASUKIqTa5ohPgrFrGtQB5dxUzi/6jEqjafoyCgG62xLp6ju2EmDeU9ClvCC3mBOMiG
-         ljADfyg7F/mXQ+agc4rGQFUTFfRDKa1pJZP2Rmd+m2LwgHT9YSHluPaf36p794voaWIp
-         J2S2BT+uitZxQs/xAYNdjUGcgIvgBycKfjlhNFWDL3H/t4i5FMw7ENWWqycYg/7uihzM
-         ZjZg==
-X-Gm-Message-State: AC+VfDyPYwAiJPM5u8+HcyYwvrbq1MXHaaq93IFtzpSfweOtNUEsK0IC
-        zBSJCTa+5ZEfYEyjMYpBQvg=
-X-Google-Smtp-Source: ACHHUZ4sTK7JZjZwEPcQNhZrPqaKoUvD88ysV1xqCI+I3ekCSPJGfAIEx3Xw8KISbPB6Vve4LqCuIA==
-X-Received: by 2002:aa7:cb11:0:b0:504:a3ec:eacc with SMTP id s17-20020aa7cb11000000b00504a3eceaccmr14624020edt.4.1683716456162;
-        Wed, 10 May 2023 04:00:56 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
-        by smtp.gmail.com with ESMTPSA id c4-20020a056402100400b0050bc41352d9sm1731271edu.46.2023.05.10.04.00.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 04:00:55 -0700 (PDT)
-Message-ID: <4cb758c7-f4f5-820c-c7e7-5b900ccc2534@kernel.org>
-Date:   Wed, 10 May 2023 13:00:54 +0200
+        Wed, 10 May 2023 07:06:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4880719B;
+        Wed, 10 May 2023 04:06:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B2BA11F388;
+        Wed, 10 May 2023 11:06:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683716765; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=8W+Q+r0g3mw6ipQ9VB8oBVPwJD25yg38F3zvEI0QrWI=;
+        b=xsqTAyRUUHiT1tcTopM9KBzj2+MMqQbkJhsuxa0/vyp3il1j+EufLJjTLSNhmwY736dymt
+        beipLzXFzi2x06B170786gLMc00/aufz0q+zQ9JJ2aR9U29J6fLzaZ3ENrPtnxG+X7OjKg
+        NqFl67xrzCTyQ/5vVpXGiOsoNWbZsL4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683716765;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=8W+Q+r0g3mw6ipQ9VB8oBVPwJD25yg38F3zvEI0QrWI=;
+        b=S3VjVYLm7fDDz6TEUjM2HUYJgPdTN/ojk7o3k5n/zTMAV6d6H21pXszVtOT1O1zccafNDB
+        +4CWx0QCUD0RTCCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 42DE713519;
+        Wed, 10 May 2023 11:06:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bC02D516W2QfRAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 10 May 2023 11:06:05 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
+        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, davem@davemloft.net,
+        James.Bottomley@HansenPartnership.com, arnd@arndb.de,
+        sam@ravnborg.org, suijingfeng@loongson.cn
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v6 0/6] fbdev: Move framebuffer I/O helpers to <asm/fb.h>
+Date:   Wed, 10 May 2023 13:05:51 +0200
+Message-Id: <20230510110557.14343-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        YehezkelShB@gmail.com, USB list <linux-usb@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: make localmodconfig doesn't work for thunderbolt
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Fbdev provides helpers for framebuffer I/O, such as fb_readl(),
+fb_writel() or fb_memcpy_to_fb(). The implementation of each helper
+depends on the architecture, but they are all equivalent to regular
+I/O functions of similar names. So use regular functions instead and
+move all helpers into <asm-generic/fb.h>
 
-if I use localmodconfig for example like this:
-mkdir /tmp/tb/
-echo thunderbolt >/tmp/tb/lsmod
-make O=/tmp/tb LSMOD=/tmp/tb/lsmod localmodconfig
+The first patch a simple whitespace cleanup.
 
-I get:
-using config: '.config'
-thunderbolt config not found!!
+Until now, <linux/fb.h> contained an include of <asm/io.h>. As this
+will go away, patches 2 to 4 prepare include statements in the various
+drivers. Source files that use regular I/O helpers, such as readl(),
+now include <linux/io.h>. Source files that use framebuffer I/O
+helpers, such as fb_readl(), now include <linux/fb.h>.
 
-$ grep 'USB4\>' /tmp/tb/.config
-# CONFIG_USB4 is not set
+Patch 5 replaces the architecture-based if-else branching in 
+<linux/fb.h> by helpers in <asm-generic/fb.h>. All helpers use Linux'
+existing I/O functions.
 
-I believe it's due to:
-   obj-${CONFIG_USB4} := thunderbolt.o
-in drivers/thunderbolt/Makefile. I.e. ${} used instead of more common $().
+Patch 6 harmonizes naming among fbdev and existing I/O functions.
 
-But even if I change the parser:
+The patchset has been built for a variety of platforms, such as x86-64,
+arm, aarch64, ppc64, parisc, m64k, mips and sparc.
 
---- a/scripts/kconfig/streamline_config.pl
-+++ b/scripts/kconfig/streamline_config.pl
-@@ -317,7 +317,7 @@ foreach my $makefile (@makefiles) {
-         $_ = convert_vars($_, %make_vars);
+v6:
+	* fix build on 64-bit mips (kernel test robot)
+	* update fb_io_fops.c
+v5:
+      	* fix build on s390
+v4:
+	* keep fb_mem*() as-is on ia64, loongarch, sparc64 (Arnd)
+	* don't include <asm/fb.h> (Sam)
+v3:
+	* add the new helpers in <asm-generic/fb.h>
+	* support reordering and native byte order (Geert, Arnd)
+v2:
+	* use Linux I/O helpers (Sam, Arnd)
 
-         # collect objects after obj-$(CONFIG_FOO_BAR)
--       if (/obj-\$\((CONFIG_[^\)]*)\)\s*[+:]?=\s*(.*)/) {
-+       if (/obj-\$[({](CONFIG_[^})]*)[)}]\s*[+:]?=\s*(.*)/) {
-             $var = $1;
-             $objs = $2;
+Thomas Zimmermann (6):
+  fbdev/matrox: Remove trailing whitespaces
+  ipu-v3: Include <linux/io.h>
+  fbdev: Include <linux/io.h> in various drivers
+  fbdev: Include <linux/fb.h> instead of <asm/fb.h>
+  fbdev: Move framebuffer I/O helpers into <asm/fb.h>
+  fbdev: Rename fb_mem*() helpers
 
+ arch/ia64/include/asm/fb.h                  |  20 ++++
+ arch/loongarch/include/asm/fb.h             |  21 ++++
+ arch/mips/include/asm/fb.h                  |  22 +++++
+ arch/parisc/video/fbdev.c                   |   3 +-
+ arch/sparc/include/asm/fb.h                 |  20 ++++
+ arch/sparc/video/fbdev.c                    |   1 -
+ arch/x86/video/fbdev.c                      |   2 -
+ drivers/gpu/ipu-v3/ipu-prv.h                |   1 +
+ drivers/staging/sm750fb/sm750.c             |   2 +-
+ drivers/video/fbdev/arcfb.c                 |   1 +
+ drivers/video/fbdev/aty/atyfb.h             |   2 +
+ drivers/video/fbdev/aty/mach64_cursor.c     |   2 +-
+ drivers/video/fbdev/chipsfb.c               |   2 +-
+ drivers/video/fbdev/core/fb_io_fops.c       |   4 +-
+ drivers/video/fbdev/core/fbcon.c            |   1 -
+ drivers/video/fbdev/core/fbmem.c            |   2 -
+ drivers/video/fbdev/kyro/fbdev.c            |   2 +-
+ drivers/video/fbdev/matrox/matroxfb_accel.c |   6 +-
+ drivers/video/fbdev/matrox/matroxfb_base.h  |   4 +-
+ drivers/video/fbdev/pvr2fb.c                |   2 +-
+ drivers/video/fbdev/sstfb.c                 |   2 +-
+ drivers/video/fbdev/stifb.c                 |   4 +-
+ drivers/video/fbdev/tdfxfb.c                |   2 +-
+ drivers/video/fbdev/wmt_ge_rops.c           |   2 +
+ include/asm-generic/fb.h                    | 102 ++++++++++++++++++++
+ include/linux/fb.h                          |  55 +----------
+ 26 files changed, 210 insertions(+), 77 deletions(-)
 
-I see:
-module thunderbolt did not have configs CONFIG_USB4
-
-and:
-$ grep 'USB4\>' /tmp/tb/.config
-# CONFIG_USB4 is not set
-
-So two questions:
-1) is ${} supported and should be the above change sent as a patch? Or 
-should be drivers/thunderbolt/Makefile fixed to use $(). (And maybe 
-other Makefiles too.)
-
-2) how to fix that 'thunderbolt did not have configs'?
-
-thanks,
 -- 
-js
-suse labs
+2.40.1
+
