@@ -2,80 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E745E6FDCD2
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DC76FDCD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236946AbjEJLgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 07:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
+        id S236481AbjEJLgP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 10 May 2023 07:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236932AbjEJLgA (ORCPT
+        with ESMTP id S236966AbjEJLgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 07:36:00 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F7C2D77
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 04:35:59 -0700 (PDT)
-Received: from zn.tnic (p5de8e8ea.dip0.t-ipconnect.de [93.232.232.234])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5C6511EC067E;
-        Wed, 10 May 2023 13:35:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1683718557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=PkOGxR0M+FAPkq52+rH7zXIhdbVNcWipgwSVZpJf70E=;
-        b=TPM3gYl37YJLIK/XtmqUOJzS/ZpXdHIBRxfQ1+mDeUyBpZ6jBdiJaAj7aAN0YhQFS8n0IS
-        de/IUb0zIXCU74S+IvKw+cgKTXRWHlqbtzjVHPRCI+mFjciO/fUQuQ5PqE91tJvG68TtQl
-        qCbrBq1I7LqzUsmnj5jWlUunepuk04E=
-Date:   Wed, 10 May 2023 13:35:53 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/amd_nb: Check for invalid SMN reads
-Message-ID: <20230510113553.GAZFuBmZbhAFkbqm1a@fat_crate.local>
-References: <20230403164244.471141-1-yazen.ghannam@amd.com>
- <20230403193245.GCZCsp3RjNZFSE5f9s@fat_crate.local>
- <abc57738-6ab9-50e6-6c05-5059299d19d1@amd.com>
- <20230403203623.GDZCs4x5yVReaPVOaS@fat_crate.local>
- <a8826972-376a-5af6-8e61-d74520e355df@amd.com>
- <20230405180648.GEZC24uJ+GSMZxczaW@fat_crate.local>
- <05c682d7-bddc-d990-37fb-cd1779f7e604@amd.com>
- <83d4ad40-4812-0583-ba4a-da3e79732e51@amd.com>
+        Wed, 10 May 2023 07:36:06 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B99061B0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 04:36:03 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-323-7MEPhWXaOseOIC1jJ3PU8w-1; Wed, 10 May 2023 12:36:00 +0100
+X-MC-Unique: 7MEPhWXaOseOIC1jJ3PU8w-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 10 May
+ 2023 12:35:59 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Wed, 10 May 2023 12:35:59 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Uros Bizjak' <ubizjak@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>
+Subject: RE: [PATCH] atomics: Use atomic_try_cmpxchg_release in
+ rcuref_put_slowpath()
+Thread-Topic: [PATCH] atomics: Use atomic_try_cmpxchg_release in
+ rcuref_put_slowpath()
+Thread-Index: AQHZgodhH2M1prck1UuVC7CPAwIZ1q9TYArw
+Date:   Wed, 10 May 2023 11:35:59 +0000
+Message-ID: <655cab1a213440f682eddc9cc1ad2d44@AcuMS.aculab.com>
+References: <20230509150255.3691-1-ubizjak@gmail.com>
+In-Reply-To: <20230509150255.3691-1-ubizjak@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <83d4ad40-4812-0583-ba4a-da3e79732e51@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 03:10:09PM -0400, Yazen Ghannam wrote:
-> What do you think?
+From: Uros Bizjak
+> Sent: 09 May 2023 16:03
+> 
+> Use atomic_try_cmpxchg instead of atomic_cmpxchg (*ptr, old, new) == old
+> in rcuref_put_slowpath(). 86 CMPXCHG instruction returns success in
+> ZF flag, so this change saves a compare after cmpxchg.  Additionaly,
+> the compiler reorders some code blocks to follow likely/unlikely
+> annotations in the atomic_try_cmpxchg macro, improving the code from
+> 
+>   9a:	f0 0f b1 0b          	lock cmpxchg %ecx,(%rbx)
+>   9e:	83 f8 ff             	cmp    $0xffffffff,%eax
+>   a1:	74 04                	je     a7 <rcuref_put_slowpath+0x27>
+>   a3:	31 c0                	xor    %eax,%eax
+> 
+> to
+> 
+>   9a:	f0 0f b1 0b          	lock cmpxchg %ecx,(%rbx)
+>   9e:	75 4c                	jne    ec <rcuref_put_slowpath+0x6c>
+>   a0:	b0 01                	mov    $0x1,%al
+> 
+> No functional change intended.
 
-Yes, please put that as a comment over __amd_smn_rw() as to why callers
-should check the retval *and* make both the read and the write
-__must_check and get rid of
+While I'm not against the change I bet you can't detect
+any actual difference. IIRC:
+- The 'cmp+je' get merged into a single u-op.
+- The 'lock cmpxchg' will take long enough that the instruction
+  decoder won't be a bottleneck.
+- Whether the je/jne is predicted taken is pretty much random.
+  So you'll speculatively execute somewhere (could be anywhere)
+  while the locked cycle completes.
+So the only change is three less bytes of object code.
+That will change the cache line alignment of later code.
 
-        if (err)
-                pr_warn("Error %s SMN address 0x%x.\n",
-                        (write ? "writing to" : "reading from"), address);
+	David
 
-which won't be seen in all cases. The __must_check will force the
-callers to do the proper checking which is the only sane thing to do
-with such a variety of bit behaviors.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
