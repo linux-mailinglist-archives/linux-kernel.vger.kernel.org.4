@@ -2,137 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4506FE4C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 899716FE4CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbjEJUFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
+        id S233875AbjEJUFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjEJUFN (ORCPT
+        with ESMTP id S229461AbjEJUFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:05:13 -0400
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB294214;
-        Wed, 10 May 2023 13:05:12 -0700 (PDT)
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-24e16918323so5382559a91.2;
-        Wed, 10 May 2023 13:05:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683749112; x=1686341112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JI4LwvKM5+Xgz5dAdUGOizqLHGpbVCwyYyAwDCTs06o=;
-        b=EvUa/2utcvV6rrtuDHS74jULqEE+jjMDZL8E6Ntk3RFGfBYDt+UdWL+TMY9bUjzMmX
-         0We7dBJ+xPjERs6ZPl1MCOtPzHqt3L/aldrw28jM1M1GsMWeR2Dz1cHC6g6fxRYy9J4r
-         S2orml43XVJhXkguOhgObyioVJEj7b9bWJlo60i7VTAo1HDzlwhYqr8jV/JOAEHje54b
-         /v04CrjpA9livkNiPIeFzKvZNkcfamSZoWKpwMBN7NawzEvjiv9A474TQ+pRYu0JIAKJ
-         hhgtIA0YadiEv9nDC9Huw5uLlZj3ukvr9Dlf7SGDMTS3BoST6YnBx6A51Xz+gFV0YUEE
-         nf8w==
-X-Gm-Message-State: AC+VfDylo3tkel8zVFzDqRCQMhibuTz5DA21tYu7tTxMCxKGfQXZSbbr
-        m7gdLazxe9UNwu7BV10pTjA=
-X-Google-Smtp-Source: ACHHUZ4/47itR7Tir8ZXsdlJexoDaX4FouunjoYVgeF7nl41ZKWG77ZNE4zjJqvJyyjBGuxpJH3uHA==
-X-Received: by 2002:a17:90a:4a0a:b0:250:6730:a364 with SMTP id e10-20020a17090a4a0a00b002506730a364mr13803643pjh.3.1683749111922;
-        Wed, 10 May 2023 13:05:11 -0700 (PDT)
-Received: from ?IPV6:2001:4958:15a0:30:7dec:e5e7:f25d:e7e9? ([2001:4958:15a0:30:7dec:e5e7:f25d:e7e9])
-        by smtp.gmail.com with ESMTPSA id j8-20020a17090a318800b00246f9725ffcsm274358pjb.33.2023.05.10.13.05.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 13:05:11 -0700 (PDT)
-Message-ID: <60542301-e77f-ad26-e249-29d42f446d74@acm.org>
-Date:   Wed, 10 May 2023 13:05:10 -0700
+        Wed, 10 May 2023 16:05:43 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2056.outbound.protection.outlook.com [40.107.20.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56513C38;
+        Wed, 10 May 2023 13:05:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H4xJitITL/pD8mj4ZCyW/hsxcqEa5UoGJCrnAY3tegqG5ZQBVsyKV+rTv0jUYGzEuGFafJl+uANMdqWVEo5pAMdIzGRxwA06BCcQYX2+s/fihEL6QR+UlXpC1ztY5BAr/G1gzcgx+U5KIrmW+S+DihF0ee76JZYqYpuXI9/w7bTdRw2uB9/M5eNXe+qdlhPZEyjQEDhJdrhlypUCxTbx7OaABPupS+YZRb0IPccWbSahPrnxoSiVo3b/y1eW7D4q8Ollg3qTtj/vR7cMaag9ejsPhzGonqAoVs/HW7Bi6jm6/dVznLQun5FRpA19YWVJmb+P+ttkBKOkEUxhOIbAig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L+lBEg+dBLko0PB35HiDXVZuSacoYvd4clpEPpLDoyM=;
+ b=bjemSVH8KyXFzi5TKbJsNrjo1m1Ow+nLYcRt6MuQZEMG+bNE5ilGun6KtNCxi7TZ8gqYRXraxMCkixpYqzjQzyvv8y9Fzow6BxqEIcEAgULNUae1HKZVCzCOBVksSQM2QvUXEPFTfW/ZKWb3LETDPZBgZG+xCWJIIpkOY3Q3mR0rFNDR+t8NtitIBEpMYBtixBKBGKTe1kDiua5VjaFIii9uYFjFXLtNkfEI4S+EIeIpBEpFAU790/EaBLI6kp8FI9ePG9DiYqEJ6FWe0HAvM6LkTVq7sIox/PmKIF7xgtxnIxxVxUOTubt4Ms/GuNNMqvhbXIOxz4m+MkQqxXJRtQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L+lBEg+dBLko0PB35HiDXVZuSacoYvd4clpEPpLDoyM=;
+ b=PGTtSqIQ5Tvo6XGfLEDslYigfFnBBF4jJb+8pnHhHq3H0yl47Ri5W5HWF2oYzMMhappWx9RXzf39UJ3oWxpwbaKrNxBjsKJxSDOqQ1I3f7lWIaf1kwlOmZyWURvfobtbfSup60H9jcgDADX5wPYCRnc4IbmLcGYQGMAiu57AwLw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
+ by DU0PR04MB9419.eurprd04.prod.outlook.com (2603:10a6:10:35a::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Wed, 10 May
+ 2023 20:05:37 +0000
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::28fb:82ec:7a6:62f3]) by PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::28fb:82ec:7a6:62f3%5]) with mapi id 15.20.6387.020; Wed, 10 May 2023
+ 20:05:37 +0000
+From:   Shenwei Wang <shenwei.wang@nxp.com>
+To:     Wei Fang <wei.fang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        imx@lists.linux.dev
+Subject: [PATCH v2 net 1/1] net: fec: using the standard return codes when xdp xmit errors
+Date:   Wed, 10 May 2023 15:05:23 -0500
+Message-Id: <20230510200523.1352951-1-shenwei.wang@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR13CA0035.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c2::10) To PAXPR04MB9185.eurprd04.prod.outlook.com
+ (2603:10a6:102:231::11)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2] ufs: poll pmc until another pa request is completed
-Content-Language: en-US
-To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
-        sh425.lee@samsung.com, bhoon95.kim@samsung.com,
-        kwangwon.min@samsung.com, junwoo80.lee@samsung.com
-References: <CGME20230425012857epcas2p45eaa3f5f87de424bbf951b22653b3e70@epcas2p4.samsung.com>
- <1682385635-43601-1-git-send-email-kwmad.kim@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1682385635-43601-1-git-send-email-kwmad.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9185:EE_|DU0PR04MB9419:EE_
+X-MS-Office365-Filtering-Correlation-Id: 01dc9724-b7f4-4df2-457a-08db5191ebb2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DBAe7HorieiW8cAlknOny//p0nUGE6w2aOxnGmM5o7lyjB1iGksLsgjlcvKzlrWh5gl987dTE+2VC678uO1ANV7nSWl/1ht5TYJWmJjiZ/bdOKa/onQ0IVd6D3uwAOYGDJVaPA4C4qZLsmRgVFyZfXrnjiMhQk6ruSkwBjol8XwfzAaOl/y9SEIK3cmx9oibpG05CZeZpm2A9eTVVa2gBTPVyGFOz4iMODAM42sGDbvqfK/55wsWOc71qmdJcpN2zcb4XupiTiPP9/+eRgmXnkp/DfGgID0G0/JQLZ6LI9Tpy6e4ZItVpcljOnfp8A1DJAVFhaqlAmhgoEXszZkFi8OlZMXEpVi9BTHYLILA4KVVLD6iRGR0dolWgOQOkjVOIKjbyOZBha5A5+Phroh3TTLmPucvfzLOaKgYWQzLO3pGaESLyRjyDMQB97Zi64UGGh4/yTEqq7lbXymQQYYJiC1i0oRew/vWDiNZXKFDRvTK3CMcJ84Q35gy2ZAFuXSrWzHAIB7dBWF4W+yUcS9RfJCCbCEbdVL3dqtFvZCnpuPAq35gmGUqqjOXFAdW+ukfs80cNW+wpXh06FCfYUq1IGwoZsK/hv5nrzSVWDL4AkDwX6SWzqk5Sq3SkvL4bGzr
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(136003)(376002)(396003)(39860400002)(451199021)(36756003)(6666004)(41300700001)(86362001)(2906002)(8676002)(38100700002)(44832011)(38350700002)(8936002)(7416002)(5660300002)(4326008)(66946007)(478600001)(6486002)(66476007)(54906003)(316002)(83380400001)(66556008)(186003)(6512007)(55236004)(6506007)(26005)(1076003)(2616005)(110136005)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZMwYX53Pcn8EiY2TCx3xuP6wme1/vnQId9uTmufdftsg/KQN3vmjH8UCal0C?=
+ =?us-ascii?Q?aAB26G1m0lsKRYFvIJmJJ1fLTfwk+oERqMr0q3987jJc9Yq/w7UQvGPtXMBu?=
+ =?us-ascii?Q?g3NhC4+O78cpW4mRaF7ABWCNk4BPZTyh15gdRJBEzSN0eI7YwWsiqxUBaUip?=
+ =?us-ascii?Q?z7VDVPYlQy7V8gB8JJX3GGADKsBwpTthq574Bg3aKYt3MZKWMUZqtGMo6uPy?=
+ =?us-ascii?Q?aExBOWINigrqclDmoaXcpqvnqLPdoyFPi7gr6IFRUVd/3NGa9HIeRkvcd1m7?=
+ =?us-ascii?Q?oO/RjDlx1voltv/6PiEFApBBYVu+mUeIRAxfsIq1kNai16JhmzhnJi0BGIgK?=
+ =?us-ascii?Q?cDXFQEf4+KU16Y8aVcCnMt2VIy/DC2ZVKO9lGFfMS8DlhAz8OyR1LwBDT/Jl?=
+ =?us-ascii?Q?/taHNodXwx1tDg+eavnSUWPV7qC9u1AWSEBwge3wTjCOZ1Biw3mnhOE/qaon?=
+ =?us-ascii?Q?edxqtHZwWRyJuQM4r5UUiUpnCLG9oXia6WibkJJyFLs0o2UC4PjNHDdbAlCG?=
+ =?us-ascii?Q?3wb+HMEr4/8eF7g3s/7849zjhE8NbzuUggQw7BXaihRg162746Ei6Pgvg9CN?=
+ =?us-ascii?Q?IYUt7gKNde851bop3XROq7EW1mvk3N6xBoXbvbj1+rwCFuzFIOYJLV8zlT5K?=
+ =?us-ascii?Q?TWwfc6zF//FokpaRChzyVntTgPOApIlpwEo4cWfcLNPSCqli47HDSd4f1/AV?=
+ =?us-ascii?Q?nEAESkCSOdWwYeK5c3TEvbLn97PrjfDt+Xf+o8OrNUpXK7w4qORzkYNWnqTf?=
+ =?us-ascii?Q?GOR9ctro1a4tqGKXBS6ruqdhQpd0uTYFVyERI/zePVi5BDiah75y0peGQn+H?=
+ =?us-ascii?Q?rpxWvkzRVBq12MwDvXUt3J7k7fqnWJtr06TiTcyLUFLbXRTRt45z+R+iKqCH?=
+ =?us-ascii?Q?8KCrBhH7EVh9rgzWGWcMYdgokmuI+LtdpmKgwNr78M4YaLa+NtFT45bVY5PQ?=
+ =?us-ascii?Q?+47hQ6NtC/EkkW3Ux5a+m3REV2T/7zFD9mDABXjxjvGf7s+4cxV9PD00rPdI?=
+ =?us-ascii?Q?ulgLpk97FbGy9ZBE3BOsSJdsm824+R7XB8CEIWadKNBHpDj5lohC89WCl+rD?=
+ =?us-ascii?Q?VHKLbX1vtp8L2BLUl/mSW7N2uwgZIPYte+McrBytxbsKD6mp/ESGKInr2uei?=
+ =?us-ascii?Q?K/BZM+uuZsMGlEvV8swjXH43dIpt03v0R6Kn1xLcwdlbZGQVD7aSpkPpNUkh?=
+ =?us-ascii?Q?KBpW7qdSlz8+gp46Zt7JJe2EBxyyaCcuIIdNyN1Y9hViClbtX5j84xNhq+Ww?=
+ =?us-ascii?Q?P3hE82jvqR8lNdraDskALN699O71ZL1tpddH6A54UzNind7YqF4jzatbRsfO?=
+ =?us-ascii?Q?OwkPzbIPfWTDIZiF5zUFUh8bnP5vewf5iiEQelpzIwq/at40dJ5VPsL768Bi?=
+ =?us-ascii?Q?WNTGDHAp5zTAq/nQ/N/O3IlGDL3+hS3z3e1sbN1vJoOHnGSZRPbtwcEBZxiS?=
+ =?us-ascii?Q?OXkBsCZr9xeUHlDYGmQCaYXeTRG+pKTy7H9tdju7la6bbO7WrFjgskbQ/4u4?=
+ =?us-ascii?Q?7JmJWlZg/YEtAx5vt2eRFMgjGbZONpRE53ZlzmYQtYwoMjLV1QZELAhC1btt?=
+ =?us-ascii?Q?O5CiPpWmeohwMuFYSNYQUeTKr/rBGDWC+nAG7ReC?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01dc9724-b7f4-4df2-457a-08db5191ebb2
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 20:05:37.2663
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uEe/akf1cNWtMhIoe4nc+7uJDP0p1QhlCAxQ3ldjhiG5zVSH7Y67OEzU/pv6Nh2cxDG7RQbms9PiWBwL7Ud0Tg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9419
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/23 18:20, Kiwoong Kim wrote:
-> @@ -4138,6 +4141,61 @@ int ufshcd_dme_get_attr(struct ufs_hba *hba, u32 attr_sel,
->   }
->   EXPORT_SYMBOL_GPL(ufshcd_dme_get_attr);
->   
-> +static int __ufshcd_poll_uic_pwr(struct ufs_hba *hba, struct uic_command *cmd,
-> +		struct completion *cnf)
+This patch standardizes the inconsistent return values for unsuccessful
+XDP transmits by using standardized error codes (-EBUSY or -ENOMEM).
 
-What does the name "cnf" mean? To me it seems to be a weird name for a 
-completion function pointer.
+Fixes: 26312c685ae0 ("net: fec: correct the counting of XDP sent frames")
+Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
+---
+ v2:
+  - focusing on code clean up per Simon's feedback.
 
-> +{
-> +	unsigned long flags;
-> +	int ret;
-> +	ktime_t timeout;
-> +	u32 mode = cmd->argument3;
+ drivers/net/ethernet/freescale/fec_main.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-Is my understanding correct that __ufshcd_send_uic_cmd() does not modify 
-cmd->argument3? If so, why does this function copy cmd->argument3 and 
-re-assign cmd->argument3?
+diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+index 42ec6ca3bf03..6a021fe24dfe 100644
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -3798,8 +3798,7 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
+ 	entries_free = fec_enet_get_free_txdesc_num(txq);
+ 	if (entries_free < MAX_SKB_FRAGS + 1) {
+ 		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
+-		xdp_return_frame(frame);
+-		return NETDEV_TX_BUSY;
++		return -EBUSY;
+ 	}
 
-> +	timeout = ktime_add_ms(ktime_get(), UIC_PA_RDY_TIMEOUT);
+ 	/* Fill in a Tx ring entry */
+@@ -3813,7 +3812,7 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
+ 	dma_addr = dma_map_single(&fep->pdev->dev, frame->data,
+ 				  frame->len, DMA_TO_DEVICE);
+ 	if (dma_mapping_error(&fep->pdev->dev, dma_addr))
+-		return FEC_ENET_XDP_CONSUMED;
++		return -ENOMEM;
 
-"deadline" is probably a better name for this variable than "timeout". 
-Additionally, please consider using jiffies since I think that the 
-accuracy of the jiffies counter is sufficient in this context.
+ 	status |= (BD_ENET_TX_INTR | BD_ENET_TX_LAST);
+ 	if (fep->bufdesc_ex)
+@@ -3869,7 +3868,7 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
+ 	__netif_tx_lock(nq, cpu);
 
-> +	do {
-> +		spin_lock_irqsave(hba->host->host_lock, flags);
-> +		hba->active_uic_cmd = NULL;
+ 	for (i = 0; i < num_frames; i++) {
+-		if (fec_enet_txq_xmit_frame(fep, txq, frames[i]) != 0)
++		if (fec_enet_txq_xmit_frame(fep, txq, frames[i]) < 0)
+ 			break;
+ 		sent_frames++;
+ 	}
+--
+2.34.1
 
-Is my understanding correct that it is guaranteed that 
-hba->active_uic_cmd is NULL here? If so, what is the purpose of the 
-above statement?
-
-> +		ret = __ufshcd_send_uic_cmd(hba, cmd, true);
-> +		spin_unlock_irqrestore(hba->host->host_lock, flags);
-> +		if (ret) {
-> +			dev_err(hba->dev,
-> +				"pwr ctrl cmd 0x%x with mode 0x%x uic error %d\n",
-> +				cmd->command, cmd->argument3, ret);
-> +			goto out;
-> +		}
-> +
-> +		/* This value is heuristic */
-> +		if (!wait_for_completion_timeout(&cmd->done,
-> +		    msecs_to_jiffies(5))) {
-
-Please align msecs_to_jiffies(5) with the first argument ("&cmd->done").
-
-> +			ret = -ETIMEDOUT;
-> +			dev_err(hba->dev,
-> +				"pwr ctrl cmd 0x%x with mode 0x%x timeout\n",
-> +				cmd->command, cmd->argument3);
-> +			if (cmd->cmd_active)
-> +				goto out;
-> +
-> +			dev_info(hba->dev, "%s: pwr ctrl cmd has already been completed\n", __func__);
-> +		}
-> +
-> +		/* retry for only busy cases */
-
-Please fix the word order in the above comment (for only -> only for)
-
-Thanks,
-
-Bart.
