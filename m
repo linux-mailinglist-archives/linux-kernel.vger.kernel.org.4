@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911596FD53B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 06:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 521326FD545
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 06:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjEJEqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 00:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
+        id S235006AbjEJEr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 00:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbjEJEqE (ORCPT
+        with ESMTP id S235093AbjEJErT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 00:46:04 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423724201
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 21:46:02 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-55a5a830238so62370247b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 21:46:02 -0700 (PDT)
+        Wed, 10 May 2023 00:47:19 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F2940CE
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 21:47:16 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-b9a7e639656so10168422276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 21:47:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683693961; x=1686285961;
+        d=google.com; s=20221208; t=1683694036; x=1686286036;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Y3cIigX+Nl9tLTZ0FqCTIXHUTdUKJPmRsHmBn2kODQ=;
-        b=X3r36dHHiJLgvp7jU0d4K3JzjfQ3mFZ409XlDfQRUNXPcZqJbsAuZzM3s3dqfqjzC7
-         8KZfl7/K1d5O90p8GZrKYknrba26nw1LDXST+K7c2aBIUL4D4zJxqgAKfbG2qxu2Yo5u
-         /0/dJOnRitUjxODeANtGQgBQxAoaXYK9cmTYbd/KEH4Bma0mqugbvo9G65UfkX3CZvm4
-         /qVdLnQuXbtkydB1O0CAPyBH6Uxg3CoJyNGPZLXWNXdI0kdPUkxDZks6+sU3ASKIjHEF
-         kaGykgOemp+4zkq4W/ysBBuFcBH4LTuAgjoNUoWbJlUwxz7uYcWBFSnWP85ZFQDgSIRR
-         fYQg==
+        bh=hqbvyW6crf6toTfKG311uSxHzLZVjYgM3m9zpPIhyDA=;
+        b=o+pw/FxefUIAOoasXSGcewgZKtzCiK6gey4asLS52yE6RcSKCLcg/5+Oke4t4tL5mt
+         WY+uEeh7LusBVdVQVoeJLXBzhVEJAgg/+wrnr5YnLWD3Y+xgGcCb1JLs6JvP8/f0rR6I
+         tOIJAEnPqeFziCHRIMxBgLXFbcRpC1yoUKiEwz+VxRsKMOaCzI+eqG6JH5jyJ802ZkSp
+         N+BiAknrKD5ka0lvzxWcjKQzAZAWQASg3Zoa2F4mVxsPlzCTR7qCguvvguU/AtX+AHcL
+         WDe1lJ7cP45MCFknO9sG2YoZVBoQ/kny4LfOudEYqHVSkK2nfJ78GhDEjEHbvmzj6Rt9
+         PQHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683693961; x=1686285961;
+        d=1e100.net; s=20221208; t=1683694036; x=1686286036;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Y3cIigX+Nl9tLTZ0FqCTIXHUTdUKJPmRsHmBn2kODQ=;
-        b=Qoq+QGHPMcB9Dh6NuQUVrGBh04sPghoH+N738Y8mHGjEqZtvvXdDXEu3lBf0t9jqD0
-         FQGL9ypX4n34ANaatpBdko82SFz0LAI3AUU23lFvzfX8GFDJJX5hHfDbNNytI9ACLNcv
-         HiW7N+3dhcVppikGd36tIZjN+BzuqQpUAMyKAkpdYeHmvgNs/ffKhqThVs+2vxeZp1j8
-         jfqya0aHJydIqfvilz6bPFwIPBX+aTPtQrxoG4nGTwqVZzKJ1irszZXP3y+3lMWg4AK7
-         xzP5Vbi4GZsghQvLKIXiP/OkDoHY/fKvg0MfMquAWPwAsQqsKJ2JFa2vOdfOCMgF69DA
-         rQtQ==
-X-Gm-Message-State: AC+VfDzcpY6M3Ie7h2gz/pFLSq/XPYrSqti48KTaU/Ax2nKUrTumjRkN
-        twfdkfTAKZ/R1MPTwOq92nopag==
-X-Google-Smtp-Source: ACHHUZ7XGWNGIkPY+5hFXQ4Kt5/NxLbXPMIaWsRvM1j0AuAelIXLbwAPwZwsOjvzazAJBFrFLzpKOA==
-X-Received: by 2002:a0d:e242:0:b0:52e:f109:ba7a with SMTP id l63-20020a0de242000000b0052ef109ba7amr17438159ywe.51.1683693961209;
-        Tue, 09 May 2023 21:46:01 -0700 (PDT)
+        bh=hqbvyW6crf6toTfKG311uSxHzLZVjYgM3m9zpPIhyDA=;
+        b=PvbMZx8fNUsbmu+m0cDLTBymGgjYjxc2Ivx4qq2JMFGbQWHsyGn4GEFajiiks0GrqZ
+         Jzss23XmdSLSEXiU/pKCTF1De5vbo599Qxc/TOBYeBvodZn0y+XvEiV3KCGAUvnhg6Tq
+         jNwZ/0zZlT4nj0MTNrzRGoaYPQ7ATTqXNfuf1xQzFdq7KltF+g9dwQhMCUa6yawSmzHI
+         yNg7RuYuySeTcQJUB+HYDPWyJT+ejkWEQUV94L6qCAkLo4PukgfNVAEfYfQyffDza45k
+         6PGesLxF8KTVA4ncZgvAy2Rig47/6/GnzdByvgJecSI/uaIxC5oVKBm56z++FbPIF1Vp
+         oMkw==
+X-Gm-Message-State: AC+VfDx3ad0d/+NeugEcERsjI64fZZ03gBq6xnGDGLxqyxcvhEwrAuml
+        7AUoREOoNLMfH0Ks4NLOkI2lVA==
+X-Google-Smtp-Source: ACHHUZ7chwpqHYv2bkU0Ao/t6DWECrNjxiYg/IB0spMttiifVb5o/XZ8DrM/lCVX0msD4U/PtCIM9g==
+X-Received: by 2002:a05:6902:1883:b0:b9d:58d9:8c with SMTP id cj3-20020a056902188300b00b9d58d9008cmr22251628ybb.11.1683694035986;
+        Tue, 09 May 2023 21:47:15 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id s126-20020a815e84000000b0054c0c9e4043sm3833116ywb.95.2023.05.09.21.45.57
+        by smtp.gmail.com with ESMTPSA id 185-20020a2506c2000000b00b9dc4620f95sm3505720ybg.6.2023.05.09.21.47.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 21:46:00 -0700 (PDT)
-Date:   Tue, 9 May 2023 21:45:57 -0700 (PDT)
+        Tue, 09 May 2023 21:47:15 -0700 (PDT)
+Date:   Tue, 9 May 2023 21:47:11 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -85,9 +85,9 @@ cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 03/23] arm64/hugetlb: pte_alloc_huge() pte_offset_huge()
+Subject: [PATCH 04/23] ia64/hugetlb: pte_alloc_huge() pte_offset_huge()
 In-Reply-To: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
-Message-ID: <dda2885-929b-c278-14e-5f447e9eec52@google.com>
+Message-ID: <baef2acf-7368-79a-a27-a87c2f2dfcb@google.com>
 References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -108,38 +108,31 @@ instead; with pte_offset_huge() a better name for pte_offset_kernel().
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- arch/arm64/mm/hugetlbpage.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ arch/ia64/mm/hugetlbpage.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-index 95364e8bdc19..21716c940682 100644
---- a/arch/arm64/mm/hugetlbpage.c
-+++ b/arch/arm64/mm/hugetlbpage.c
-@@ -307,14 +307,7 @@ pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
- 			return NULL;
- 
- 		WARN_ON(addr & (sz - 1));
--		/*
--		 * Note that if this code were ever ported to the
--		 * 32-bit arm platform then it will cause trouble in
--		 * the case where CONFIG_HIGHPTE is set, since there
--		 * will be no pte_unmap() to correspond with this
--		 * pte_alloc_map().
--		 */
--		ptep = pte_alloc_map(mm, pmdp, addr);
-+		ptep = pte_alloc_huge(mm, pmdp, addr);
- 	} else if (sz == PMD_SIZE) {
- 		if (want_pmd_share(vma, addr) && pud_none(READ_ONCE(*pudp)))
- 			ptep = huge_pmd_share(mm, vma, addr, pudp);
-@@ -366,7 +359,7 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
- 		return (pte_t *)pmdp;
- 
- 	if (sz == CONT_PTE_SIZE)
--		return pte_offset_kernel(pmdp, (addr & CONT_PTE_MASK));
-+		return pte_offset_huge(pmdp, (addr & CONT_PTE_MASK));
- 
- 	return NULL;
+diff --git a/arch/ia64/mm/hugetlbpage.c b/arch/ia64/mm/hugetlbpage.c
+index 78a02e026164..adc49f2d22e8 100644
+--- a/arch/ia64/mm/hugetlbpage.c
++++ b/arch/ia64/mm/hugetlbpage.c
+@@ -41,7 +41,7 @@ huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
+ 	if (pud) {
+ 		pmd = pmd_alloc(mm, pud, taddr);
+ 		if (pmd)
+-			pte = pte_alloc_map(mm, pmd, taddr);
++			pte = pte_alloc_huge(mm, pmd, taddr);
+ 	}
+ 	return pte;
  }
+@@ -64,7 +64,7 @@ huge_pte_offset (struct mm_struct *mm, unsigned long addr, unsigned long sz)
+ 			if (pud_present(*pud)) {
+ 				pmd = pmd_offset(pud, taddr);
+ 				if (pmd_present(*pmd))
+-					pte = pte_offset_map(pmd, taddr);
++					pte = pte_offset_huge(pmd, taddr);
+ 			}
+ 		}
+ 	}
 -- 
 2.35.3
 
