@@ -2,265 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B84C6FD994
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5A46FD999
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236760AbjEJIhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 04:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
+        id S236646AbjEJIiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 04:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236655AbjEJIgh (ORCPT
+        with ESMTP id S236565AbjEJIie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 04:36:37 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC9A8A47
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:35:25 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6439b410679so4420961b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:35:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1683707714; x=1686299714;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J9KFKim9W01aJymh56M6VmTxV6CKXPMr8i9NknkamPs=;
-        b=CRFPSzqnXZyTKeH0oGgPtDQU3S+snO8OdyPSf42zcLC3S6PMoI+NxYjj0usTBKikNq
-         HbMBQldWEslhmFG+JQ4sRgnPmHhw7UtYThmRq9KIg3/ATPyBbZmFK0ubyZm4ug/Edvu/
-         /IqU8DF80AtLE8P3cLspnu+Y4qJI8kgWeH4H6ibUEdpENEl2BpPDCSOvleSXmRUdWSCI
-         up5Wbt8qlAa8maY2e18bocYXWRQLgyiQixqBnpmxR5HU8N6Ihxmizi7uBVNxPzbEIMrG
-         28lwGPR45dRVrN5pl9Eso/7Z9Lb8rj/0JuXuhi6h6T0AcYuOn1mlmw7Mo+RW/jphFb3u
-         i88Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683707714; x=1686299714;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J9KFKim9W01aJymh56M6VmTxV6CKXPMr8i9NknkamPs=;
-        b=VYxqaWawXK9aAln8Gg611yetM/xT30n0fCI+Ols4U8hZnrb6TKQD8bZa4lMyI566AW
-         SycUGYX2xIqJFxf4ZX8dZhyQBFwtwXox7Zmpo52DcYur7lR6H7tMDF2V5EpC9a2IDHWh
-         vg1V8ORWhiQLS1d1ZjsFHyCNbj2HfMmUxDZoxOObv8kjGRdpWORn6zaHzcoaxDw1/i0G
-         SKSPHjFqIyk7DdP5DyIltphBjyWL9X4rGNdEkjc81yMV4+RC+jtMzIJ7q8WOiY30KcXy
-         xH5n/K7rBDf991jnpRK+E2ocVV/+5NXBJgiz0zpyOX/BoL7BeBYLqcm57ooPnDN9THVN
-         1VvQ==
-X-Gm-Message-State: AC+VfDz+lka3nlkQ5Ey30sSPUfptszu8yz9OC0fuc1RIzj11pth2phZk
-        iyn4H2MNTxeaVwKt3TqnW77ecw==
-X-Google-Smtp-Source: ACHHUZ5qDHzXMnufTfjs4kU7sjOy1RfmcCIp1QUSDU3GgU42SzeMg2VMDMy5num3nSRYputH9ZDmmA==
-X-Received: by 2002:a05:6a21:380e:b0:f0:69db:ebea with SMTP id yi14-20020a056a21380e00b000f069dbebeamr14435119pzb.30.1683707714663;
-        Wed, 10 May 2023 01:35:14 -0700 (PDT)
-Received: from C02G87K0MD6R.bytedance.net ([139.177.225.247])
-        by smtp.gmail.com with ESMTPSA id m2-20020a17090a668200b002504a1a5d1asm7588359pjj.29.2023.05.10.01.35.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 01:35:14 -0700 (PDT)
-From:   Hao Jia <jiahao.os@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net
-Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
-Subject: [PATCH v2 2/2] sched/core: Avoid double calling update_rq_clock()
-Date:   Wed, 10 May 2023 16:34:50 +0800
-Message-Id: <20230510083450.62334-3-jiahao.os@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-In-Reply-To: <20230510083450.62334-1-jiahao.os@bytedance.com>
-References: <20230510083450.62334-1-jiahao.os@bytedance.com>
+        Wed, 10 May 2023 04:38:34 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80EAB8F;
+        Wed, 10 May 2023 01:37:20 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:45248.711497179
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 0FE43102969;
+        Wed, 10 May 2023 16:36:58 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-85667d6c59-lhcrq with ESMTP id 8ebd37e3e9f24f0b8fb8fc6bae1f9d22 for maarten.lankhorst@linux.intel.com;
+        Wed, 10 May 2023 16:37:01 CST
+X-Transaction-ID: 8ebd37e3e9f24f0b8fb8fc6bae1f9d22
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <54fb1691-af8c-8c11-7d92-523cb4a2415f@189.cn>
+Date:   Wed, 10 May 2023 16:36:58 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v12 0/2] drm: add kms driver for loongson display
+ controller
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        nathan@kernel.org, linux-media@vger.kernel.org
+References: <20230504080406.1213623-1-suijingfeng@loongson.cn>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <20230504080406.1213623-1-suijingfeng@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are some double rq clock update warnings are triggered.
-------------[ cut here ]------------
-rq->clock_update_flags & RQCF_UPDATED
-WARNING: CPU: 17 PID: 138 at kernel/sched/core.c:741
-update_rq_clock+0xaf/0x180
-Call Trace:
- <TASK>
- __balance_push_cpu_stop+0x146/0x180
- ? migration_cpu_stop+0x2a0/0x2a0
- cpu_stopper_thread+0xa3/0x140
- smpboot_thread_fn+0x14f/0x210
- ? sort_range+0x20/0x20
- kthread+0xe6/0x110
- ? kthread_complete_and_exit+0x20/0x20
- ret_from_fork+0x1f/0x30
+ping ?
 
-------------[ cut here ]------------
-rq->clock_update_flags & RQCF_UPDATED
-WARNING: CPU: 54 PID: 0 at kernel/sched/core.c:741
-update_rq_clock+0xaf/0x180
-Call Trace:
- <TASK>
- unthrottle_cfs_rq+0x4b/0x300
- __cfsb_csd_unthrottle+0xe0/0x100
- __flush_smp_call_function_queue+0xaf/0x1d0
- flush_smp_call_function_queue+0x49/0x90
- do_idle+0x17c/0x270
- cpu_startup_entry+0x19/0x20
- start_secondary+0xfa/0x120
- secondary_startup_64_no_verify+0xce/0xdb
-
-------------[ cut here ]------------
-rq->clock_update_flags & RQCF_UPDATED
-WARNING: CPU: 0 PID: 3323 at kernel/sched/core.c:741
-update_rq_clock+0xaf/0x180
-Call Trace:
- <TASK>
- unthrottle_cfs_rq+0x4b/0x300
- rq_offline_fair+0x89/0x90
- set_rq_offline.part.118+0x28/0x60
- rq_attach_root+0xc4/0xd0
- cpu_attach_domain+0x3dc/0x7f0
- partition_sched_domains_locked+0x2a5/0x3c0
- rebuild_sched_domains_locked+0x477/0x830
- rebuild_sched_domains+0x1b/0x30
- cpuset_hotplug_workfn+0x2ca/0xc90
- ? balance_push+0x56/0xf0
- ? _raw_spin_unlock+0x15/0x30
- ? finish_task_switch+0x98/0x2f0
- ? __switch_to+0x291/0x410
- ? __schedule+0x65e/0x1310
- process_one_work+0x1bc/0x3d0
- worker_thread+0x4c/0x380
- ? preempt_count_add+0x92/0xa0
- ? rescuer_thread+0x310/0x310
- kthread+0xe6/0x110
- ? kthread_complete_and_exit+0x20/0x20
- ret_from_fork+0x1f/0x30
-
-For the __balance_push_cpu_stop() case, we remove update_rq_clock() from
-the __migrate_task() function to avoid double updating the rq clock.
-And in order to avoid missing rq clock update, add update_rq_clock()
-call before migration_cpu_stop() calls __migrate_task().
-
-For the unthrottle_cfs_rq() case, we use rq_clock_start_loop_update() to
-prevent multiple calls to update_rq_clock() in unthrottle_cfs_rq().
-
-Note that the rq clock has been updated before the set_rq_offline()
-function runs, so we don't need to call update_rq_clock() in
-unthrottle_offline_cfs_rqs().
-
-Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
-Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
----
- kernel/sched/core.c  |  7 ++++---
- kernel/sched/fair.c  | 16 ++++++++++++++++
- kernel/sched/sched.h | 21 +++++++++++++++++++++
- 3 files changed, 41 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 944c3ae39861..2bcf6a8e71fc 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2398,7 +2398,6 @@ static struct rq *__migrate_task(struct rq *rq, struct rq_flags *rf,
- 	if (!is_cpu_allowed(p, dest_cpu))
- 		return rq;
- 
--	update_rq_clock(rq);
- 	rq = move_queued_task(rq, rf, p, dest_cpu);
- 
- 	return rq;
-@@ -2456,10 +2455,12 @@ static int migration_cpu_stop(void *data)
- 				goto out;
- 		}
- 
--		if (task_on_rq_queued(p))
-+		if (task_on_rq_queued(p)) {
-+			update_rq_clock(rq);
- 			rq = __migrate_task(rq, &rf, p, arg->dest_cpu);
--		else
-+		} else {
- 			p->wake_cpu = arg->dest_cpu;
-+		}
- 
- 		/*
- 		 * XXX __migrate_task() can fail, at which point we might end
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 373ff5f55884..9ec7bde620ff 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -5575,6 +5575,13 @@ static void __cfsb_csd_unthrottle(void *arg)
- 	struct rq_flags rf;
- 
- 	rq_lock(rq, &rf);
-+	/*
-+	 * Iterating over the list can trigger several call to
-+	 * update_rq_clock() in unthrottle_cfs_rq().
-+	 * Do it once and skip the potential next ones.
-+	 */
-+	update_rq_clock(rq);
-+	rq_clock_start_loop_update(rq);
- 
- 	/*
- 	 * Since we hold rq lock we're safe from concurrent manipulation of
-@@ -5595,6 +5602,7 @@ static void __cfsb_csd_unthrottle(void *arg)
- 
- 	rcu_read_unlock();
- 
-+	rq_clock_stop_loop_update(rq);
- 	rq_unlock(rq, &rf);
- }
- 
-@@ -6114,6 +6122,12 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
- 	struct task_group *tg;
- 
- 	lockdep_assert_rq_held(rq);
-+	/*
-+	 * The rq clock has already been updated before the
-+	 * set_rq_offline() runs, so we should skip updating
-+	 * the rq clock again in unthrottle_cfs_rq().
-+	 */
-+	rq_clock_start_loop_update(rq);
- 
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(tg, &task_groups, list) {
-@@ -6137,6 +6151,8 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
- 			unthrottle_cfs_rq(cfs_rq);
- 	}
- 	rcu_read_unlock();
-+
-+	rq_clock_stop_loop_update(rq);
- }
- 
- #else /* CONFIG_CFS_BANDWIDTH */
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index ec7b3e0a2b20..9c712f29e5a4 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1536,6 +1536,27 @@ static inline void rq_clock_skip_update(struct rq *rq)
- 	rq->clock_update_flags |= RQCF_REQ_SKIP;
- }
- 
-+/*
-+ * During cpu offlining and rq wide unthrottling, we can trigger
-+ * an update_rq_clock() for several cfs and rt runqueues (Typically
-+ * when using list_for_each_entry_*)
-+ * rq_clock_start_loop_update() can be called after updating the clock
-+ * once and before iterating over the list to prevent multiple update.
-+ * After the iterative traversal, we need to call rq_clock_stop_loop_update()
-+ * to restore rq->clock_update_flags.
-+ */
-+static inline void rq_clock_start_loop_update(struct rq *rq)
-+{
-+	lockdep_assert_rq_held(rq);
-+	rq->clock_update_flags |= RQCF_ACT_SKIP;
-+}
-+
-+static inline void rq_clock_stop_loop_update(struct rq *rq)
-+{
-+	lockdep_assert_rq_held(rq);
-+	rq->clock_update_flags &= ~RQCF_ACT_SKIP;
-+}
-+
- /*
-  * See rt task throttling, which is the only time a skip
-  * request is canceled.
--- 
-2.37.0
-
+On 2023/5/4 16:04, Sui Jingfeng wrote:
+> Loongson display controller IP has been integrated in both Loongson north
+> bridge chipset(ls7a1000/ls7a2000) and Loongson SoCs(ls2k1000/ls2k2000), it
+> has been even included in Loongson self-made BMC products.
+>
+> This display controller is a PCI device. It has two display pipes and each
+> display pipe support a primary plane and a cursor plane. For the DC in the
+> ls7a1000 and ls2k1000, each display pipe has a DVO output interface which
+> provide RGB888 signals, vertical & horizontal synchronisations and pixel
+> clock. Each CRTC is able to support 1920x1080@60Hz, the maximum resolution
+> of each display pipe is 2048x2048 according to the hardware spec.
+>
+> For the DC in LS7A2000, each display pipe is equipped with a built-in HDMI
+> encoder which is compliant with the HDMI 1.4 specification, thus it support
+> 3840x2160@30Hz. The first display pipe is also equipped with a transparent
+> vga encoder which is parallel with the HDMI encoder. The DC in LS7A2000 is
+> more complete compare with the one in old chips, besides above feature, it
+> has two hardware cursors, two hardware vblank counter and two scanout
+> position recorders unit. It also support tiled framebuffer format which
+> can be scanout the tiled framebuffer rendered by the LoongGPU directly.
+>
+> v1 -> v2:
+>   1) Use hpd status reg when polling for ls7a2000
+>   2) Fix all warnings emerged when compile with W=1
+>
+> v2 -> v3:
+>   1) Add COMPILE_TEST in Kconfig and make the driver off by default
+>   2) Alphabetical sorting headers (Thomas)
+>   3) Untangle register access functions as much as possible (Thomas)
+>   4) Switch to TTM based memory manager and prefer cached mapping
+>      for Loongson SoC (Thomas)
+>   5) Add chip id detection method, now all models are distinguishable.
+>   6) Revise builtin HDMI phy driver, nearly all main stream mode
+>      below 4K@30Hz is tested, this driver supported these mode very
+>      well including clone display mode and extend display mode.
+>
+> v3 -> v4:
+>   1) Quickly fix a small mistake.
+>
+> v4 -> v5:
+>   1) Drop potential support for Loongson 2K series SoC temporary,
+>      this part should be resend with the DT binding patch in the future.
+>   2) Add per display pipe debugfs support to the builtin HDMI encoder.
+>   3) Rewrite atomic_update() for hardware cursors plane(Thomas)
+>   4) Rewrite encoder and connector initialization part, untangle it
+>      according to the chip(Thomas).
+>
+> v5 -> v6:
+>   1) Remove stray code which didn't get used, say lsdc_of_get_reserved_ram
+>   2) Fix all typos I could found, make sentences and code more readable
+>   3) Untangle lsdc_hdmi*_connector_detect() function according to the pipe
+>   4) After a serious consideration, we rename this driver as loongson.
+>      Because we also have drivers toward the LoongGPU IP in LS7A2000 and
+>      LS2K2000. Besides, there are also drivers about the external encoder,
+>      HDMI audio driver and vbios support etc. This patch only provide DC
+>      driver part, my teammate Li Yi believe that loongson will be more
+>      suitable for loongson graphics than lsdc in the long run.
+>
+>      loongson.ko = LSDC + LoongGPU + encoders driver + vbios/DT ...
+>
+> v6 -> v7:
+>   1) Add prime support, self-sharing is works. sharing buffer with etnaviv
+>      is also tested, and its works with limitation.
+>   2) Implement buffer objects tracking with list_head.
+>   3) S3(sleep to RAM) is tested on ls3a5000+ls7a2000 evb and it works.
+>   4) Rewrite lsdc_bo_move, since ttm core stop allocating resources
+>      during BO creation. Patch V1 ~ V6 of this series no longer works
+>      on latest kernel. Thus, we send V7 to revival them.
+>
+> v7 -> v8:
+>   1) Zero a compile warnnings on 32-bit platform, compile with W=1
+>   2) Revise lsdc_bo_gpu_offset() and minor cleanup
+>   3) Pageflip tested on the virtual terminal with following commands
+>
+>      modetest -M loongson -s 32:1920x1080 -v
+>      modetest -M loongson -s 34:1920x1080 -v -F tiles
+>
+>     It works like a charm, when running pageflip test with dual screnn
+>     configuration, another two additional bo created by the modetest
+>     emerged, VRAM usage up to 40+MB, well we have at least 64MB, still
+>     enough.
+>
+>     # cat bos
+>
+>         bo[0000]: size:     8112kB VRAM
+>         bo[0001]: size:       16kB VRAM
+>         bo[0002]: size:       16kB VRAM
+>         bo[0003]: size:    16208kB VRAM
+>         bo[0004]: size:     8112kB VRAM
+>         bo[0005]: size:     8112kB VRAM
+>
+> v8 -> v9:
+>   1) Select I2C and I2C_ALGOBIT in Kconfig and should depend on MMU.
+>   2) Using pci_get_domain_bus_and_slot to get the GPU device.
+>   3) Other minor improvements.
+>
+>   Those patches are tested on ls3a5000 + ls7a1000 CRB, ls3a5000 + ls7a2000
+>   evb, and lemote a1901 board(ls3a4000 + ls7a1000). On loongson mips CPU,
+>   the write combine support should be enabled, to get a decent performance
+>   for writing framebuffer data to the VRAM.
+>
+> v9 -> v10:
+>   1) Revise lsdc_drm_freeze() to implement S3 completely and correctly.
+>      I suddenly realized that pinned buffer can not move and VRAM lost
+>      power when sleep to RAM. Thus, the data in the buffer who is pinned
+>      in VRAM will get lost when resume. Yet it's not big problem because
+>      we are software rendering solution which relay on the CPU update the
+>      front framebuffer. We can see the garbage data when resume from S3,
+>      but the screen will show correct image as I move the cursor. This is
+>      due to the cpu repaint. v10 of this patch make S3 perfect by unpin
+>      all of BOs in VRAM, evict them all to system RAM.
+>
+> v10 -> v11:
+>   1) On double screen case, the single giant framebuffer is referenced by
+>      two GEM object, hence, it will be pinned by prepare_fb() at lease two
+>      times. This cause its pin count > 1. V10 of this patch only unpin VRAM
+>      BOs once when suspend, which is not correct on double screen case. V11
+>      of this patch unpin BOs until its pin count reach to zero when suspend.
+>      Then, we make the S3 support complete finally. With v11, I can't see
+>      any garbage data after resume. Teste on both ls7a1000 and ls7a2000
+>      platform, with single screen and double screen configuration tested.
+>   2) Fix vblank wait timeout when disable CRTC.
+>   3) Test against IGT, at least fbdev test and kms_flip test of it passed,
+>      while most tests of it passed.
+>   4) Rewrite pixel PLL update function, magic numbers eliminated (Emil)
+>   5) Drop a few common hardware features description in lsdc_desc (Emil)
+>   6) Drop lsdc_mode_config_mode_valid(), instead add restrictions in dumb
+>      create function. (Emil)
+>   7) Untangle the ls7a1000 case and ls7a2000 case completely (Thomas)
+>
+> v11 -> v12:
+>   none
+>
+> Sui Jingfeng (2):
+>    MAINTAINERS: add maintainers for DRM LOONGSON driver
+>    drm: add kms driver for loongson display controller
+>
+>   MAINTAINERS                                 |    7 +
+>   drivers/gpu/drm/Kconfig                     |    2 +
+>   drivers/gpu/drm/Makefile                    |    1 +
+>   drivers/gpu/drm/loongson/Kconfig            |   17 +
+>   drivers/gpu/drm/loongson/Makefile           |   19 +
+>   drivers/gpu/drm/loongson/ls7a1000_outputs.c |  160 +++
+>   drivers/gpu/drm/loongson/ls7a2000_outputs.c |  534 ++++++++++
+>   drivers/gpu/drm/loongson/lsdc_crtc.c        | 1064 +++++++++++++++++++
+>   drivers/gpu/drm/loongson/lsdc_debugfs.c     |   78 ++
+>   drivers/gpu/drm/loongson/lsdc_device.c      |  104 ++
+>   drivers/gpu/drm/loongson/lsdc_drv.c         |  484 +++++++++
+>   drivers/gpu/drm/loongson/lsdc_drv.h         |  485 +++++++++
+>   drivers/gpu/drm/loongson/lsdc_gem.c         |  319 ++++++
+>   drivers/gpu/drm/loongson/lsdc_gem.h         |   37 +
+>   drivers/gpu/drm/loongson/lsdc_gfxpll.c      |  199 ++++
+>   drivers/gpu/drm/loongson/lsdc_gfxpll.h      |   52 +
+>   drivers/gpu/drm/loongson/lsdc_i2c.c         |  179 ++++
+>   drivers/gpu/drm/loongson/lsdc_i2c.h         |   29 +
+>   drivers/gpu/drm/loongson/lsdc_irq.c         |   81 ++
+>   drivers/gpu/drm/loongson/lsdc_irq.h         |   16 +
+>   drivers/gpu/drm/loongson/lsdc_output.h      |   21 +
+>   drivers/gpu/drm/loongson/lsdc_pixpll.c      |  485 +++++++++
+>   drivers/gpu/drm/loongson/lsdc_pixpll.h      |   86 ++
+>   drivers/gpu/drm/loongson/lsdc_plane.c       |  639 +++++++++++
+>   drivers/gpu/drm/loongson/lsdc_probe.c       |   56 +
+>   drivers/gpu/drm/loongson/lsdc_probe.h       |   12 +
+>   drivers/gpu/drm/loongson/lsdc_regs.h        |  400 +++++++
+>   drivers/gpu/drm/loongson/lsdc_ttm.c         |  547 ++++++++++
+>   drivers/gpu/drm/loongson/lsdc_ttm.h         |   88 ++
+>   29 files changed, 6201 insertions(+)
+>   create mode 100644 drivers/gpu/drm/loongson/Kconfig
+>   create mode 100644 drivers/gpu/drm/loongson/Makefile
+>   create mode 100644 drivers/gpu/drm/loongson/ls7a1000_outputs.c
+>   create mode 100644 drivers/gpu/drm/loongson/ls7a2000_outputs.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_crtc.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_debugfs.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_device.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_gfxpll.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_gfxpll.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_output.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_pixpll.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_pixpll.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_plane.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_regs.h
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.c
+>   create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.h
+>
