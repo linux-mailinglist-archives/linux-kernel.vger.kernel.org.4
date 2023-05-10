@@ -2,99 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C52036FDBE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903DF6FDBEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236505AbjEJKuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 06:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
+        id S236599AbjEJKxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 06:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236538AbjEJKuP (ORCPT
+        with ESMTP id S230100AbjEJKxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 06:50:15 -0400
-Received: from smtp-fw-80009.amazon.com (smtp-fw-80009.amazon.com [99.78.197.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3458C40E2;
-        Wed, 10 May 2023 03:50:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1683715812; x=1715251812;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=D8G7zICS6PJVXNJOjDWWVFXKeW/ytHctEbQLqspKx3I=;
-  b=c8i5F1wC0iJ+qlFO0mrMiW7VnBoTzUB0evUZpP9nit1q5BtwACPe5/pJ
-   orYoPq30UbFXh/8ayt4+EQx2RiSQjKkqx+NRdxUnFBuQ/9ISXTtKm1Jc4
-   MwVQDNzRPaW8oPiTy9ShAssofwTn5NIU6ZSMlTy9KXVlblfM7B9ojtx5Y
-   g=;
-X-IronPort-AV: E=Sophos;i="5.99,264,1677542400"; 
-   d="scan'208";a="1857121"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-25ac6bd5.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80009.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 10:50:09 +0000
-Received: from EX19D002EUA003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1d-m6i4x-25ac6bd5.us-east-1.amazon.com (Postfix) with ESMTPS id F3D2B44256;
-        Wed, 10 May 2023 10:50:07 +0000 (UTC)
-Received: from EX19MTAUWB001.ant.amazon.com (10.250.64.248) by
- EX19D002EUA003.ant.amazon.com (10.252.50.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 10 May 2023 10:50:06 +0000
-Received: from HFA15G9466L0F.amazon.com (10.106.82.11) by
- mail-relay.amazon.com (10.250.64.254) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 10 May 2023 10:50:03 +0000
-From:   <amitbern@amazon.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-CC:     Amit Bernstein <amitbern@amazon.com>,
-        "Matushevsky, Alexander" <matua@amazon.com>,
-        Saeed Bshara <saeedb@amazon.com>,
-        "Kiyanovski, Arthur" <akiyano@amazon.com>,
-        "Dagan, Noam" <ndagan@amazon.com>,
-        "Agroskin, Shay" <shayagr@amazon.com>,
-        "Arinzon, David" <darinzon@amazon.com>,
-        "Itzko, Shahar" <itzko@amazon.com>,
-        "Abboud, Osama" <osamaabb@amazon.com>
-Subject: [PATCH v1] testptp: fix format specifier in nsec print
-Date:   Wed, 10 May 2023 13:49:58 +0300
-Message-ID: <20230510104958.13437-1-amitbern@amazon.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 10 May 2023 06:53:16 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBF944B0;
+        Wed, 10 May 2023 03:53:14 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id BBC83C01E; Wed, 10 May 2023 12:53:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1683715990; bh=2ATyOmXz9gM5g9c9sCOy2OnjdcTD3k16TX+u9CVj00Q=;
+        h=From:Subject:Date:To:Cc:From;
+        b=UIt4n0PrUA8ORk/bUfcneviEwFrVQ5DbhccTthi3qJRqTp4WgFOkILi93ZRnYPp6P
+         g1U1iSPqAkuC35TFI6T6uRVjo2IXUm6QMqTIhN3TSXmL5RVY1oNUJClqeJo8cUmbcy
+         D0uh9JG+tAZ0o3lHjC60EOnDPe/tm/nOvwciogdZFTk+czzVYNuzAMgwtRaIxdfurr
+         WVfIgDsDElCM0y4wWaNSxUg/AuTeHnb+whyJL2XPtSBCjM6xfYf0u9TqibsTJbHoYZ
+         RQNkdHtCrVyqGLmbprG9EmaJdwOej6tvBWcrMbi9HxjlyzI+mFr59R0pjLoAl5TytR
+         RhRgjp7zy3XIw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id CC15DC009;
+        Wed, 10 May 2023 12:53:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1683715989; bh=2ATyOmXz9gM5g9c9sCOy2OnjdcTD3k16TX+u9CVj00Q=;
+        h=From:Subject:Date:To:Cc:From;
+        b=IDe2E37v6O3hJXa7airBrCA3TCn9eK+THa/3eT4TSiGz8/XIAKUL4W/eJJO7u4SH4
+         /zR5asagyS4fKpiCUcUzjCaHeIkRRhM+xMTGVPA3pLG0vLYFHll2Q9rsHT4/NAN58W
+         h8P6BJPlNgvIZQyilHXRRAUlNb8hUfd8aWCiuE7VXwN9OUHGCmQivY/gnBVWPd5jkq
+         MTPFA3/tdQOhc77P60GnKJ80KURXaMOB6sXTiFWEiCNh0JvbY0TfoqqoVd1s+21Apw
+         eNuu1bYUjMQPukBkbaPifZxZTufWVAXAln905MnhsLMfIplbpB7wyu3cPeICg77c32
+         MB/u0E8jiVFaQ==
+Received: from [127.0.0.2] (localhost [::1])
+        by odin.codewreck.org (OpenSMTPD) with ESMTP id d02ee382;
+        Wed, 10 May 2023 10:53:02 +0000 (UTC)
+From:   Dominique Martinet <asmadeus@codewreck.org>
+Subject: [PATCH v2 0/6] io_uring: add getdents support, take 2
+Date:   Wed, 10 May 2023 19:52:48 +0900
+Message-Id: <20230422-uring-getdents-v2-0-2db1e37dc55e@codewreck.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIB3W2QC/3WOzQrCMBCEX6Xs2UiyDVI9+R5SJD9rGoRENrUqp
+ e9uWvDo8Ru+YWaGQhypwKmZgWmKJeZUAXcNuMGkQCL6yoASW6kRxZNjCiLQ6CmNRaAxttMetTQ
+ GasmaQsKySW5Ya5t9/dmr8GC6xfe2eOkrD7GMmT/bgUmt6d+tSQkplHbK2/ZAx86dXfb0YnL3f
+ eYA/bIsX9JoPNLRAAAA
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Roesch <shr@fb.com>
+Cc:     Clay Harris <bugs@claycon.org>, Dave Chinner <david@fromorbit.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>
+X-Mailer: b4 0.13-dev-f371f
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4262;
+ i=asmadeus@codewreck.org; h=from:subject:message-id;
+ bh=0OsutV/yoQv9ekBoChihF+xOGj4mEsA/cvJvIUMwTqg=;
+ b=owEBbQKS/ZANAwAIAatOm+xqmOZwAcsmYgBkW3eNCdFZKyUG0jvdRZT0krquoS78tNuQww1Wm
+ QpWgfM9MvSJAjMEAAEIAB0WIQT8g9txgG5a3TOhiE6rTpvsapjmcAUCZFt3jQAKCRCrTpvsapjm
+ cABzD/0QK2sc7luOm5deMUyR+EFVfmz0r+IBqlAYIxT//RvUseai0GRFi+XWCD2tmyDWVGQBg20
+ HE5F0PQVBhMnjt+TkBKMsf2Sgwdx1TuuuTJu940dRHeLterDBKlmntSSc256sVK1haf4n5+/Po+
+ kQXc21uLYapK6pIwij44JX5TuXbScjMGuh4XCg8jTK2MOCHve6Y/2NqVHxtNLWPTQMpQ1eghNHh
+ GE+SOnBVkXt7+wVKlOwwmoObrAVRI3K+KWosTRxtQcj+GY91qrCcWk8Rqc9YTk/QA0+GmEDm1Zq
+ oFHP47sjWSy+2Th1IpDE1785N2eZjdOWludddLLeWg/IdMHuO63y8Dj1cn8/aszmuXNg+ub41XH
+ 5PmnL6jP9PplYQQpWTggv3HFFofD3aDevR+Ariq9pjRI+YkcdpjXnk3zWzwj/afhdkr/dVdNGKY
+ bf8eZDT/4IZ54uPW6/uDnc2h6DmJd1D7TLnYhLfYnJZT4GdtfAiOuSlZmPjPyXdhbvV1E+lr3Vi
+ 5XKerdViPmAycdey1mm/Mx/6Dmbm3lZ1DESBv9YxF/5gcuqDRc8O9l3CEnsI78itGwgpImWrIK9
+ p1Wt+RGQUjVZdlVnxAIiPMPbe+OoR60TNsIr3gJUw5sH1t8h05FR9G7dt4RLv++VabH8RyllPJo
+ Oi35qAW5TUIZm/Q==
+X-Developer-Key: i=asmadeus@codewreck.org; a=openpgp;
+ fpr=B894379F662089525B3FB1B9333F1F391BBBB00A
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amit Bernstein <amitbern@amazon.com>
+This is an attempt to revive discussion after bringing it up as a reply
+to the last attempt last week.
 
-Fix printf to include leading zeros when the nsec component is less
-than 9 digits to ensure correct time representation of "sec.nsec".
+Since the problem with the previous attempt at adding getdents to
+io_uring was that offset was problematic, we can just not add an offset
+parameter: using different offsets is rarely useful in practice (maybe
+for some cacheless userspace NFS server?) and more isn't worth the cost
+of allowing arbitrary offsets: just allow rewind as a flag instead.
+[happy to drop even that flag for what I care about, but that might be
+useful enough on its own as io_uring rightfully has no seek API]
 
-Signed-off-by: Amit Bernstein <amitbern@amazon.com>
+The new API does nothing that cannot be achieved with plain syscalls so
+it shouldn't be introducing any new problem, the only downside is that
+having the state in the file struct isn't very uring-ish and if a
+better solution is found later that will probably require duplicating
+some logic in a new flag... But that seems like it would likely be a
+distant future, and this version should be usable right away.
+
+To repeat the rationale for having getdents available from uring as it
+has been a while, while I believe there can be real performance
+improvements as suggested in [1], the real reason is to allow coherency
+in code: applications using io_uring usually center their event loop
+around the ring, and having the occasional synchronous getdents call in
+there is cumbersome and hard to do properly when you consider e.g. a
+slow or acting up network fs...
+[1] https://lore.kernel.org/linux-fsdevel/20210218122640.GA334506@wantstofly.org/
+(unfortunately the source is no longer available...)
+
+liburing implementation:
+https://github.com/martinetd/liburing/commits/getdents
+(will submit properly after initial discussions here)
+
+Previous discussion:
+https://lore.kernel.org/all/20211221164004.119663-1-shr@fb.com/T/#m517583f23502f32b040c819d930359313b3db00c
+
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
 ---
- tools/testing/selftests/ptp/testptp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes in v2:
+- implement NOWAIT as suggested by dchinner; I'm unable to provide
+reliable benchmarks but it does indeed look positive (and makes sense)
+to avoid spinning out to another thread when not required.
+FWIW though, the serializing readdirs per inode argument given in v1
+thread isn't valid: serialization is only done in io_prep_async_work
+for regular files (REQ_F_ISREG, set from file mode through FFS_ISREG),
+so dir operations aren't serialized in our case.
+If I was pedantic I'd say we might want that hashing for filesystems
+that don't implement interate_shared, but that info comes too late and
+these filesystems should become less frequent so leaving as is.
+- implement NOWAIT for kernfs and libfs to test with /sys
+(the tentative patch for xfs didn't seem to work, didn't take the time
+to debug)
+- try to implement some EOF flag in CQE as suggested by Clay Harris,
+this is less clearly cut and left as RFC.
+The liburing test/getdents.t implementation has grown options to test
+this flag and also try async explicitly in the latest commit:
+https://github.com/martinetd/liburing/commits/getdents
+- vfs_getdents split: add missing internal.h include
+- Link to v1: https://lore.kernel.org/r/20230422-uring-getdents-v1-0-14c1db36e98c@codewreck.org
 
-diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/selftests/ptp/testptp.c
-index 198ad5f32..cfa9562f3 100644
---- a/tools/testing/selftests/ptp/testptp.c
-+++ b/tools/testing/selftests/ptp/testptp.c
-@@ -502,11 +502,11 @@ int main(int argc, char *argv[])
- 			interval = t2 - t1;
- 			offset = (t2 + t1) / 2 - tp;
- 
--			printf("system time: %lld.%u\n",
-+			printf("system time: %lld.%09u\n",
- 				(pct+2*i)->sec, (pct+2*i)->nsec);
--			printf("phc    time: %lld.%u\n",
-+			printf("phc    time: %lld.%09u\n",
- 				(pct+2*i+1)->sec, (pct+2*i+1)->nsec);
--			printf("system time: %lld.%u\n",
-+			printf("system time: %lld.%09u\n",
- 				(pct+2*i+2)->sec, (pct+2*i+2)->nsec);
- 			printf("system/phc clock time offset is %" PRId64 " ns\n"
- 			       "system     clock time delay  is %" PRId64 " ns\n",
+---
+Dominique Martinet (6):
+      fs: split off vfs_getdents function of getdents64 syscall
+      vfs_getdents/struct dir_context: add flags field
+      io_uring: add support for getdents
+      kernfs: implement readdir FMODE_NOWAIT
+      libfs: set FMODE_NOWAIT on dir open
+      RFC: io_uring getdents: test returning an EOF flag in CQE
+
+ fs/internal.h                 |  8 ++++++
+ fs/kernfs/dir.c               | 21 ++++++++++++++-
+ fs/libfs.c                    | 10 ++++---
+ fs/readdir.c                  | 38 +++++++++++++++++++++------
+ include/linux/fs.h            | 10 +++++++
+ include/uapi/linux/io_uring.h |  9 +++++++
+ io_uring/fs.c                 | 61 +++++++++++++++++++++++++++++++++++++++++++
+ io_uring/fs.h                 |  3 +++
+ io_uring/opdef.c              |  8 ++++++
+ 9 files changed, 156 insertions(+), 12 deletions(-)
+---
+base-commit: 58390c8ce1bddb6c623f62e7ed36383e7fa5c02f
+change-id: 20230422-uring-getdents-2aab84d240aa
+
+Best regards,
 -- 
-2.17.1
+Dominique Martinet | Asmadeus
 
