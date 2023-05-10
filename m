@@ -2,85 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440BE6FD3E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 04:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BD16FD3F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 04:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235134AbjEJCua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 22:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
+        id S235203AbjEJC5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 22:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjEJCu2 (ORCPT
+        with ESMTP id S229536AbjEJC5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 22:50:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55BA2D57;
-        Tue,  9 May 2023 19:50:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C39B638F7;
-        Wed, 10 May 2023 02:50:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 58910C433AA;
-        Wed, 10 May 2023 02:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683687026;
-        bh=V/s57uoRYEm3pt8pyrooJhQRvtvYvdzEJkOWGFvknYA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=jJ8DYJTM7t85KbCetZz9MeOS7h5OZrVbjms6jCiXUsnqU7pQZ0QkFfbFYCJad/oJX
-         I+MmejcG9Ls09bnlclIqZx86Sg0/+PzGkBwsuUXVD8mp1umEDtOKHEh0wMvfPs0iEQ
-         g2u5wsE56LPVd72UzACZY3QnYr9i02W/dw4Ywz+GnlsnuaYQnEITkdABWW4UdHmG3N
-         TH/kdtXPis5wOBKrSzYelKI2fZ6CHI4p0Cmjv+jC4T5RgRyXvIH46BD+m7WcvY/gB2
-         kuLrmJ1uMkr9B8SRoRJYtb3U3c/JYIgOEIwoiRzJ3yBfZsxpy9b1USfj8q5+KlAl8a
-         JAXkOv0uTSQyg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42745E26D23;
-        Wed, 10 May 2023 02:50:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 9 May 2023 22:57:08 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2533030FF
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 19:56:42 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-643b7b8f8ceso3042328b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 19:56:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1683687401; x=1686279401;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hTSesuixdo5vZ8I9+v28R7iSHBf2PWhulvCTlSJ6srA=;
+        b=AJvosUCnaL7DVrTLt0wEHVdYm9nezT1Xn8WsRYZ5yIuyP3499YqOnLadpQLSAn9yt2
+         05U+onyUhUO0mNusq+LU34DX+jo3WaPD3xduRVgLNMAF77mNjHIkNOYFHbwMi2ZH2trk
+         WPZ9SWFvn+9Oms0zV++Xge+Rah4vggZDy/1Uo3NnXa+zOnJLgi0MH0+/ob20TT8QWfu1
+         +J9vUcfhAUXHBr43YbyXF3BjQRTXP98x9z9WWJpyRvW/zsSk21J5ZhzoJQPAtU2vN7IN
+         xvHx8OiV3wiV9PenK6h+w2quENNK8h/hjJOEtp1BW6HfgIuiAPKYOvDkMTW2ow/8lFG0
+         T2vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683687401; x=1686279401;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hTSesuixdo5vZ8I9+v28R7iSHBf2PWhulvCTlSJ6srA=;
+        b=j4NY28Z1HqdLcqcacwLzargonPtf9TE/AHTbEwNWSJyEqJa5a8I501bojnrmYxiiLb
+         ajkn7UQA+Mx1HGcztfcoJa3YZS1fNMRrxDJudStERpZHTYWJsGJBtx9Ioossp65X0/dm
+         aGxisfeSGCwEJEZjrZeFwEsCVmH+ehUVBLOovetEIXvypyB7bz0BzsdFhqVR/QvqoXR5
+         MkhdM/xp3vSKy7Zn6s5ZfBfbhP0zmj9Xj/HhDiW4nIWkME6Jmj6eWMWgM1FTXP7KOteV
+         t00bWpDNVSVloxS54eS72lXiuadH/eFyLXfkr/hG8Cy0pV83m4+Mk3JMZdZPtmqP6xNP
+         DSnA==
+X-Gm-Message-State: AC+VfDxo9+Yql+hBblAXc9cxVn6M8XZQ41151RmpTVx/g4LIvi8tlkgt
+        Akzhht9kEjv92CZffqnMr2K8Vw==
+X-Google-Smtp-Source: ACHHUZ7epXyNWWiXW4YoeAFuCY/XUA4Zk4Pul30toUu70L0SWA9Ls5aa6OrepD3ODL0dvoiAKxTHbw==
+X-Received: by 2002:a05:6a20:4421:b0:101:914e:da75 with SMTP id ce33-20020a056a20442100b00101914eda75mr3401063pzb.25.1683687401584;
+        Tue, 09 May 2023 19:56:41 -0700 (PDT)
+Received: from always-x1.bytedance.net ([61.213.176.13])
+        by smtp.gmail.com with ESMTPSA id h13-20020a63e14d000000b00524cfd635cesm2083080pgk.69.2023.05.09.19.56.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 19:56:41 -0700 (PDT)
+From:   zhenwei pi <pizhenwei@bytedance.com>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, xuanzhuo@linux.alibaba.com,
+        zhenwei pi <pizhenwei@bytedance.com>,
+        Joerg Roedel <jroedel@suse.de>
+Subject: [PATCH] virtio_ring: use u32 for virtio_max_dma_size
+Date:   Wed, 10 May 2023 10:54:37 +0800
+Message-Id: <20230510025437.377807-1-pizhenwei@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: skbuff: remove special handling for SLOB
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168368702626.23144.11127488053640074262.git-patchwork-notify@kernel.org>
-Date:   Wed, 10 May 2023 02:50:26 +0000
-References: <20230509071207.28942-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20230509071207.28942-1-lukas.bulwahn@gmail.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, vbabka@suse.cz, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Both split ring and packed ring use 32bits to describe the length of
+a descriptor: see struct vring_desc and struct vring_packed_desc.
+This means the max segment size supported by virtio is U32_MAX.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+An example of virtio_max_dma_size in virtio_blk.c:
+  u32 v, max_size;
 
-On Tue,  9 May 2023 09:12:07 +0200 you wrote:
-> Commit c9929f0e344a ("mm/slob: remove CONFIG_SLOB") removes CONFIG_SLOB.
-> Now, we can also remove special handling for socket buffers with the SLOB
-> allocator. The code with HAVE_SKB_SMALL_HEAD_CACHE=1 is now the default
-> behavior for all allocators.
-> 
-> Remove an unnecessary distinction between SLOB and SLAB/SLUB allocator
-> after the SLOB allocator is gone.
-> 
-> [...]
+  max_size = virtio_max_dma_size(vdev);  -> implicit convert
+  err = virtio_cread_feature(vdev, VIRTIO_BLK_F_SIZE_MAX,
+                             struct virtio_blk_config, size_max, &v);
+  max_size = min(max_size, v);
 
-Here is the summary with links:
-  - net: skbuff: remove special handling for SLOB
-    https://git.kernel.org/netdev/net-next/c/559ae55cfc33
+There is a risk during implicit convert here, once virtio_max_dma_size
+returns 4G, max_size becomes 0.
 
-You are awesome, thank you!
+Fixes: e6d6dd6c875e ("virtio: Introduce virtio_max_dma_size()")
+Cc: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+---
+ drivers/virtio/virtio_ring.c | 12 ++++++++----
+ include/linux/virtio.h       |  2 +-
+ 2 files changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index c5310eaf8b46..55cfecf030a1 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -289,12 +289,16 @@ static bool vring_use_dma_api(const struct virtio_device *vdev)
+ 	return false;
+ }
+ 
+-size_t virtio_max_dma_size(const struct virtio_device *vdev)
++u32 virtio_max_dma_size(const struct virtio_device *vdev)
+ {
+-	size_t max_segment_size = SIZE_MAX;
++	u32 max_segment_size = U32_MAX;
+ 
+-	if (vring_use_dma_api(vdev))
+-		max_segment_size = dma_max_mapping_size(vdev->dev.parent);
++	if (vring_use_dma_api(vdev)) {
++		size_t max_dma_size = dma_max_mapping_size(vdev->dev.parent);
++
++		if (max_dma_size < max_segment_size)
++			max_segment_size = max_dma_size;
++	}
+ 
+ 	return max_segment_size;
+ }
+diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+index b93238db94e3..1a605f408329 100644
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -147,7 +147,7 @@ int virtio_device_restore(struct virtio_device *dev);
+ #endif
+ void virtio_reset_device(struct virtio_device *dev);
+ 
+-size_t virtio_max_dma_size(const struct virtio_device *vdev);
++u32 virtio_max_dma_size(const struct virtio_device *vdev);
+ 
+ #define virtio_device_for_each_vq(vdev, vq) \
+ 	list_for_each_entry(vq, &vdev->vqs, list)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.20.1
 
