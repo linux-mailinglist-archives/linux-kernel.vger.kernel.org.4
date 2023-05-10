@@ -2,142 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C6D6FD7D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC1C6FD7D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236364AbjEJHHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38162 "EHLO
+        id S236400AbjEJHHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236056AbjEJHG7 (ORCPT
+        with ESMTP id S236370AbjEJHHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:06:59 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48363AB6;
-        Wed, 10 May 2023 00:06:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1683702417; x=1715238417;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+8dv/brKBQt1wPqiVrN9ewc+Fk5nJ8ddNHlReu2K9z4=;
-  b=a/Ck5SxajrRKerhTsvvMxoYP4H/UmfOeUcMw/Ehd+KYkKw6K50hljVqD
-   WcC+TMlI3M43EgEyu1Uu8E3Ni7gSqzEgJW2Z4QKDayatBJhpNsC7AKLIk
-   mNfecIBfPW1XT0gnY4SX3TpHvgFyAcRFzmV8mF9BeeZ2Kdkx3QNCgZRkf
-   f8HKLAGXt2qRHIFP0euqrwvHG3FdR1iCm2l9ttt80rymF+1CQlUhmd2OY
-   nUDVihxUbo59/e44pJJ7aE3HLeIg4QE+h2Ckib39yvCoOkKDTTALlOkre
-   9WJCDf4DHA2D421QQkz5X0DBzNtKZ2G2ukVihXOjs8TurcSr8u2z3GaEM
-   A==;
-X-IronPort-AV: E=Sophos;i="5.99,264,1677567600"; 
-   d="asc'?scan'208";a="224659027"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 May 2023 00:06:56 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+        Wed, 10 May 2023 03:07:06 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18D0618E;
+        Wed, 10 May 2023 00:07:03 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QGQvL6p9yzTkQY;
+        Wed, 10 May 2023 15:02:22 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 10 May 2023 00:06:47 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 10 May 2023 00:06:45 -0700
-Date:   Wed, 10 May 2023 08:06:25 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v3 1/5] dt-bindings: power: Add JH7110 AON PMU support
-Message-ID: <20230510-cloning-clapping-e262f00a94e8@wendy>
-References: <20230510015311.27505-1-changhuang.liang@starfivetech.com>
- <20230510015311.27505-2-changhuang.liang@starfivetech.com>
+ 15.1.2507.23; Wed, 10 May 2023 15:06:59 +0800
+Message-ID: <11481869-52a9-037a-c7a4-ebbc7d426229@huawei.com>
+Date:   Wed, 10 May 2023 15:06:59 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="E1sIU8pcpx5FtKdh"
-Content-Disposition: inline
-In-Reply-To: <20230510015311.27505-2-changhuang.liang@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next] arm64,bpf: Support struct arguments in the BPF
+ trampoline
+Content-Language: en-US
+To:     Florent Revest <revest@chromium.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kpsingh@kernel.org>, <mark.rutland@arm.com>,
+        <xukuohai@huaweicloud.com>, <zlim.lnx@gmail.com>
+References: <20230508164650.3217164-1-revest@chromium.org>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <20230508164650.3217164-1-revest@chromium.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---E1sIU8pcpx5FtKdh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, May 09, 2023 at 06:53:07PM -0700, Changhuang Liang wrote:
-> Add AON PMU for StarFive JH7110 SoC, it can be used to turn on/off DPHY
-> rx/tx power switch, and it don't need the property of interrupts. It
-> also can use syscon operation.
->=20
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+On 5/9/2023 12:46 AM, Florent Revest wrote:
+> This extends the BPF trampoline JIT to support attachment to functions
+> that take small structures (up to 128bit) as argument. This is trivially
+> achieved by saving/restoring a number of "argument registers" rather
+> than a number of arguments.
+> 
+> The AAPCS64 section 6.8.2 describes the parameter passing ABI.
+> "Composite types" (like C structs) below 16 bytes (as enforced by the
+> BPF verifier) are provided as part of the 8 argument registers as
+> explained in the section C.12.
+> 
+> Signed-off-by: Florent Revest <revest@chromium.org>
 > ---
->  .../bindings/power/starfive,jh7110-pmu.yaml   | 28 +++++++++++++++++--
->  .../dt-bindings/power/starfive,jh7110-pmu.h   |  5 +++-
->  2 files changed, 29 insertions(+), 4 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/power/starfive,jh7110-pmu.=
-yaml b/Documentation/devicetree/bindings/power/starfive,jh7110-pmu.yaml
-> index 98eb8b4110e7..0591a4e9db6c 100644
-> --- a/Documentation/devicetree/bindings/power/starfive,jh7110-pmu.yaml
-> +++ b/Documentation/devicetree/bindings/power/starfive,jh7110-pmu.yaml
-> @@ -8,6 +8,7 @@ title: StarFive JH7110 Power Management Unit
-> =20
->  maintainers:
->    - Walker Chen <walker.chen@starfivetech.com>
-> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
-> =20
->  description: |
->    StarFive JH7110 SoC includes support for multiple power domains which =
-can be
-> @@ -15,8 +16,13 @@ description: |
-> =20
->  properties:
->    compatible:
-> -    enum:
-> -      - starfive,jh7110-pmu
-> +    oneOf:
-> +      - enum:
-> +          - starfive,jh7110-pmu
-> +      - items:
-> +          - enum:
-> +              - starfive,jh7110-aon-syscon
-> +          - const: syscon
+>   arch/arm64/net/bpf_jit_comp.c                | 51 ++++++++++----------
+>   tools/testing/selftests/bpf/DENYLIST.aarch64 |  1 -
+>   2 files changed, 26 insertions(+), 26 deletions(-)
+> 
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index b26da8efa616..22e3c456554f 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -1731,21 +1731,21 @@ static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+>   	}
+>   }
+>   
+> -static void save_args(struct jit_ctx *ctx, int args_off, int nargs)
+> +static void save_args(struct jit_ctx *ctx, int args_off, int nregs)
+>   {
+>   	int i;
+>   
+> -	for (i = 0; i < nargs; i++) {
+> +	for (i = 0; i < nregs; i++) {
+>   		emit(A64_STR64I(i, A64_SP, args_off), ctx);
+>   		args_off += 8;
+>   	}
+>   }
+>   
+> -static void restore_args(struct jit_ctx *ctx, int args_off, int nargs)
+> +static void restore_args(struct jit_ctx *ctx, int args_off, int nregs)
+>   {
+>   	int i;
+>   
+> -	for (i = 0; i < nargs; i++) {
+> +	for (i = 0; i < nregs; i++) {
+>   		emit(A64_LDR64I(i, A64_SP, args_off), ctx);
+>   		args_off += 8;
+>   	}
+> @@ -1764,7 +1764,7 @@ static void restore_args(struct jit_ctx *ctx, int args_off, int nargs)
+>    */
+>   static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+>   			      struct bpf_tramp_links *tlinks, void *orig_call,
+> -			      int nargs, u32 flags)
+> +			      int nregs, u32 flags)
+>   {
+>   	int i;
+>   	int stack_size;
+> @@ -1772,7 +1772,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+>   	int regs_off;
+>   	int retval_off;
+>   	int args_off;
+> -	int nargs_off;
+> +	int nregs_off;
+>   	int ip_off;
+>   	int run_ctx_off;
+>   	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+> @@ -1799,7 +1799,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+>   	 *                  [ ...               ]
+>   	 * SP + args_off    [ arg1              ]
+>   	 *
+> -	 * SP + nargs_off   [ args count        ]
+> +	 * SP + nregs_off   [ arg regs count    ]
 
-Unfortunately, this is not what was wanted.
-This syscon, of which power domain control is just one of the things that
-it can do, should be documented in
-Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
-alongside it's brethern "starfive,jh7110-sys-syscon" &
-"starfive,jh7110-stg-syscon".
+For description consistency, should arg1 ... argN in the previous
+lines also be changed to arg reg 1 ... arg reg N?
 
-Thanks,
-Conor.
+>   	 *
+>   	 * SP + ip_off      [ traced function   ] BPF_TRAMP_F_IP_ARG flag
+>   	 *
+> @@ -1816,13 +1816,13 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+>   	if (flags & BPF_TRAMP_F_IP_ARG)
+>   		stack_size += 8;
+>   
+> -	nargs_off = stack_size;
+> +	nregs_off = stack_size;
+>   	/* room for args count */
+>   	stack_size += 8;
+>   
+>   	args_off = stack_size;
+>   	/* room for args */
+> -	stack_size += nargs * 8;
+> +	stack_size += nregs * 8;
+>   
+>   	/* room for return value */
+>   	retval_off = stack_size;
+> @@ -1865,12 +1865,12 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+>   		emit(A64_STR64I(A64_R(10), A64_SP, ip_off), ctx);
+>   	}
+>   
+> -	/* save args count*/
+> -	emit(A64_MOVZ(1, A64_R(10), nargs, 0), ctx);
+> -	emit(A64_STR64I(A64_R(10), A64_SP, nargs_off), ctx);
+> +	/* save arg regs count*/
+> +	emit(A64_MOVZ(1, A64_R(10), nregs, 0), ctx);
+> +	emit(A64_STR64I(A64_R(10), A64_SP, nregs_off), ctx);
+>   
+> -	/* save args */
+> -	save_args(ctx, args_off, nargs);
+> +	/* save arg regs */
+> +	save_args(ctx, args_off, nregs);
+>   
+>   	/* save callee saved registers */
+>   	emit(A64_STR64I(A64_R(19), A64_SP, regs_off), ctx);
+> @@ -1897,7 +1897,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+>   	}
+>   
+>   	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+> -		restore_args(ctx, args_off, nargs);
+> +		restore_args(ctx, args_off, nregs);
+>   		/* call original func */
+>   		emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
+>   		emit(A64_ADR(A64_LR, AARCH64_INSN_SIZE * 2), ctx);
+> @@ -1926,7 +1926,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+>   	}
+>   
+>   	if (flags & BPF_TRAMP_F_RESTORE_REGS)
+> -		restore_args(ctx, args_off, nargs);
+> +		restore_args(ctx, args_off, nregs);
+>   
+>   	/* restore callee saved register x19 and x20 */
+>   	emit(A64_LDR64I(A64_R(19), A64_SP, regs_off), ctx);
+> @@ -1967,24 +1967,25 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
+>   				void *orig_call)
+>   {
+>   	int i, ret;
+> -	int nargs = m->nr_args;
+> +	int nregs = m->nr_args;
+>   	int max_insns = ((long)image_end - (long)image) / AARCH64_INSN_SIZE;
+>   	struct jit_ctx ctx = {
+>   		.image = NULL,
+>   		.idx = 0,
+>   	};
+>   
+> -	/* the first 8 arguments are passed by registers */
+> -	if (nargs > 8)
+> -		return -ENOTSUPP;
+> -
+> -	/* don't support struct argument */
+> +	/* extra registers needed for struct argument */
+>   	for (i = 0; i < MAX_BPF_FUNC_ARGS; i++) {
+> +		/* The arg_size is at most 16 bytes, enforced by the verifier. */
+>   		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
+> -			return -ENOTSUPP;
+> +			nregs += (m->arg_size[i] + 7) / 8 - 1;
+>   	}
+>   
+> -	ret = prepare_trampoline(&ctx, im, tlinks, orig_call, nargs, flags);
+> +	/* the first 8 registers are used for arguments */
+> +	if (nregs > 8)
+> +		return -ENOTSUPP;
+> +
+> +	ret = prepare_trampoline(&ctx, im, tlinks, orig_call, nregs, flags);
+>   	if (ret < 0)
+>   		return ret;
+>   
+> @@ -1995,7 +1996,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
+>   	ctx.idx = 0;
+>   
+>   	jit_fill_hole(image, (unsigned int)(image_end - image));
+> -	ret = prepare_trampoline(&ctx, im, tlinks, orig_call, nargs, flags);
+> +	ret = prepare_trampoline(&ctx, im, tlinks, orig_call, nregs, flags);
+>   
+>   	if (ret > 0 && validate_code(&ctx) < 0)
+>   		ret = -EINVAL;
+> diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
+> index cd42e2825bd2..08adc805878b 100644
+> --- a/tools/testing/selftests/bpf/DENYLIST.aarch64
+> +++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
+> @@ -10,4 +10,3 @@ kprobe_multi_test/link_api_addrs                 # link_fd unexpected link_fd: a
+>   kprobe_multi_test/link_api_syms                  # link_fd unexpected link_fd: actual -95 < expected 0
+>   kprobe_multi_test/skel_api                       # libbpf: failed to load BPF skeleton 'kprobe_multi': -3
+>   module_attach                                    # prog 'kprobe_multi': failed to auto-attach: -95
+> -tracing_struct                                   # tracing_struct__attach unexpected error: -524 (errno 524)
 
---E1sIU8pcpx5FtKdh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFtCZAAKCRB4tDGHoIJi
-0hrGAP45+4QtUN3O67mViY6Se2nDCL4YzvmakMHafqtLg1oFTAD+I/zW+xPAB+gH
-Ql2h5U3oPdpEOUYmunmawFTjoUiHNgE=
-=DRst
------END PGP SIGNATURE-----
-
---E1sIU8pcpx5FtKdh--
