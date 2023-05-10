@@ -2,120 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B552C6FD4AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 05:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BDC6FD4B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 05:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235968AbjEJDyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 23:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
+        id S235993AbjEJDzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 23:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjEJDyE (ORCPT
+        with ESMTP id S235742AbjEJDzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 23:54:04 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62A065AC
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 20:53:39 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6ab2efc79aeso249117a34.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 20:53:39 -0700 (PDT)
+        Tue, 9 May 2023 23:55:04 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E593AB1;
+        Tue,  9 May 2023 20:54:35 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-643557840e4so7262403b3a.2;
+        Tue, 09 May 2023 20:54:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitbyteword.org; s=google; t=1683690819; x=1686282819;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TcfrOIdvUuFGebqMil2KCc3m77DT7hwnQo4PHUmoYnA=;
-        b=jFMdyxIusCKNc6XWfdeSgaLqvkxv2kvRPs2db08EZcfhOxW3F/j7Q9zV+1XAIPsPz3
-         dISVfe6zZVNDexzFXCyc2vGJyY0FLfjdMvK6q57o5qNJQfQTDmqlUTGr2jUmCtCRlhUu
-         lpHRlPIZDG4FexVxH/OCJpPLxrY4JHZjPTnx0fG0ZtaROkKRbEfJZeRw4JLo3s9gnjgQ
-         VePs6PfxwBKeFtI6+9HlCqCWjLiIt8WgPNe9Yo7XnFwRqsLqphihMh/ApY3RhCC7z3/T
-         Zw5HnbQBPPO+iwhFtm3LR7S3fu+S+nERxywFGAJRBZvuQrQ8CSJNWCvcT8Y7MTMRBILO
-         i7+Q==
+        d=gmail.com; s=20221208; t=1683690874; x=1686282874;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c7VfK4HmZZECZTc8y6PXzxcQ+L1k1OBzevJBYhlk87o=;
+        b=gaGdt28RcEpkgfk5GFzurtmArKfRYnu6pEdKCjfjsy9niCtJd4Gz2Bh2fGXcyQFYR9
+         u0Z0AykqnECM+9pfe/+NKE/uLaagxLuGJfeueBS+arjRhCUwOBsdxdbsuIDD5F4jJUH1
+         xqLiDHd2unyx6iADRqN4sBWL6Z5vES+kL3sMGOCfMr/jnfQmQxKmkHJu4kBVtLHGHTe3
+         tE40r7gXuOvY1XuVsAH485ZqhWJAC8+YJf+1Jow0QY4kRXxMkyP4CwSrkZrNDpasJzek
+         AYV4bUdr4v9aS5ZAMbEphFq8TnWUcTu+VG8KcOmHPNZS/vEhXzOUPRAyaDlfDnYb1Oml
+         9atA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683690819; x=1686282819;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TcfrOIdvUuFGebqMil2KCc3m77DT7hwnQo4PHUmoYnA=;
-        b=HxDz8rhCllBJrCNRI9b9rH3HcmDJwvhZ7PSxveXGbhbGpskQ7ZdqTFQsXC/k64G5jg
-         6F79XlJbkANvbjUV7WmZDAUKn82wXcJz+mL+NaNK/lDjPMapx4YZLNLlRB3CaYSer/Qw
-         HDg3xd71yWMHb7+hwXIIg3BWAjb+R5Lz7fMKofbp3dqz/0bAEBAEPbwVLbYyIjjseEAj
-         0FjUdCVRcs16SedzEhH/25Zi+xSUVocKYZEzS0U8h6kXiOL8+qY0yeDfl92LsrilMzT/
-         BnZtZ2xB7CY3IRjR94H0hCotley9+H6YBW6LiV/xdXudH2tADnEQvF7fxrm3oeJz78X8
-         EehQ==
-X-Gm-Message-State: AC+VfDy2fGfnbtbesjBsIk7ZUTYXyEeF0ntJmRUDNnayD0LWtWH0ouZ4
-        761ZHPSG9D46UJBLHFZbvgQbMF7OPUfnkSMDUvzshQ==
-X-Google-Smtp-Source: ACHHUZ4uUJmP8iooUjOb4xntN3XMSOB6rCYr4hiLzlcFMaZqEEoolUlgGwQv8knC3XQj/DlXR7ceyWpLjtvQ191Go7Y=
-X-Received: by 2002:a9d:75ca:0:b0:6a6:2a83:84f8 with SMTP id
- c10-20020a9d75ca000000b006a62a8384f8mr2056335otl.38.1683690818928; Tue, 09
- May 2023 20:53:38 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683690874; x=1686282874;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c7VfK4HmZZECZTc8y6PXzxcQ+L1k1OBzevJBYhlk87o=;
+        b=jwxhN5+VNrLYydZNAM1fH6bOeie1PdwrgQsddup5BJ5KcWDL732W5tTDSUv0kpGB17
+         TDJTozhzJ79yZyTNxjsz5Hb/zj5Is3as59BQxnH1z6dmHbL8LrGauOk66dcKINCGAHID
+         WmEl1knaUfq0u9rxjXJBRqDcMkXXzz34q9Ua/FtIf84puON3uZ4br8BhCbgF+a2EDyDd
+         YX5OfIhqK7LOSUCmnRAaLQOXZHc3coe9EwV47BBWvItn9dS2C02RetUlvBEsJR6N7HrB
+         l6OmJCug8L21FlZPSc/ZSGyCCbsa41nHSbosHOKxkDqFJz34P4lc2GqajLkskRF/S15t
+         5uBg==
+X-Gm-Message-State: AC+VfDxDiWxrnc4KtUTqR8izThbGrV5aifZ/E7N81EkCGFhxjrN3E0+5
+        mpUVHXNX8qtFa8OIZcpMO+3/OxX3sNw=
+X-Google-Smtp-Source: ACHHUZ61odxsumH5leyGMsZ34hnHK9BEErNzNUPT3fzJH0vkclEldYH16tylwJmy8KD1dWBCVtzTvw==
+X-Received: by 2002:a05:6a00:1915:b0:647:e45f:1a49 with SMTP id y21-20020a056a00191500b00647e45f1a49mr2265962pfi.4.1683690874616;
+        Tue, 09 May 2023 20:54:34 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-21.three.co.id. [116.206.28.21])
+        by smtp.gmail.com with ESMTPSA id bm17-20020a056a00321100b0063b54ccc123sm2495273pfb.196.2023.05.09.20.54.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 20:54:34 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id BB0CD106AA6; Wed, 10 May 2023 10:54:29 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux Networking <netdev@vger.kernel.org>,
+        Remote Direct Memory Access Kernel Subsystem 
+        <linux-rdma@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Rahul Rameshbabu <rrameshbabu@nvidia.com>,
+        Maher Sanalla <msanalla@nvidia.com>,
+        Moshe Shemesh <moshe@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>
+Subject: [PATCH net v2 0/4] Documentation fixes for Mellanox mlx5 devlink info
+Date:   Wed, 10 May 2023 10:54:11 +0700
+Message-Id: <20230510035415.16956-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230508160829.2756405-1-vineeth@bitbyteword.org>
- <20230509132534.09098acc@luca64> <CAO7JXPhrqKWfsp860rRmEenxARi8U2gNMGsOn4m+aKporWwBcg@mail.gmail.com>
- <20230509224829.2fb547fd@nowhere> <20230509225417.61d36733@nowhere>
-In-Reply-To: <20230509225417.61d36733@nowhere>
-From:   Vineeth Remanan Pillai <vineeth@bitbyteword.org>
-Date:   Tue, 9 May 2023 23:53:28 -0400
-Message-ID: <CAO7JXPhk5qbz9kmiu9WuXS+gXCt9+X8pP2c37hd9ChByLmXYjA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sched/deadline: accurate reclaim bandwidth for GRUB
-To:     luca abeni <luca.abeni@santannapisa.it>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=925; i=bagasdotme@gmail.com; h=from:subject; bh=vGIotmQ0XAH1YOV1sWVtot5K851N4Z7SeyiHpdnYFh0=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCnRolEXIj9qV7y9N2PGueXP551Z/dSYf43widwLXn617 yt/HLr/tKOUhUGMi0FWTJFlUiJf0+ldRiIX2tc6wsxhZQIZwsDFKQATKbViZFjivkVAM9Zzm+f8 dTsDzh4zPlDItJPb4ZhRxMP/5/Zs7V3B8E/3SoDgxIvyN/w0L6v/OfmK6+p8g3LjpN6szKWNNyQ 1KtgB
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 9, 2023 at 4:54=E2=80=AFPM luca abeni <luca.abeni@santannapisa.=
-it> wrote:
+Here are fixes for mlx5 devlink info documentation. The first fixes
+htmldocs warnings on the mainline, while the rest is formatting fixes.
 
-> > Yes, this is the approximation I was mentioning... Instead of using a
-> > division, I approximated it with a different equation using a sum.
->
-> Sorry, ignore this comment (and the following); I misinterpreted the
-> code (and my old notes).
->
-> I do not understand why the "max{}" doe not work well, I need to double
-> think about it.
->
-I was thinking more about this and was doing some more digging into
-this. I was also wrong about min{}. Giving it some more thought, I think
-(U/Umax) is indeed the only equation we need and it will take care
-of caping the reclaiming at Umax. The reason why it was not working
-is because of the loss of precision when we did the inverse. I tried
-replacing (delta * running_bw * bw_ratio) by
-div64_u64(delta * running_bw, Umax) and it worked as expected and
-reclaimed only till Umax with only SCHED_FLAG_RECLAIM tasks. As an
-example a task with reservation (1, 100) and RT capacity 95%, and
-delta =3D 4ms, we get scaled_delta as
-delta * running_bw * bw_ratio ~=3D .040000 (roughly)
-div64_u64(delta * running_bw, Umax) ~=3D .04210526 (roughly)
+Changes since v1 [1]:
 
-This caused the inverse logic to consume ~99% bw, while the other
-one consumed ~95% as expected.
+  * Pick up Reviewed-by tags from Leon Romanovsky
+  * Rebase on current net tree
 
-I still could not figure out why min{} works. As you mentioned in
-the previous thread, its the loss of precision thats the culprit and
-I think we only need U/Umax if we have enough precision. This along
-with accounting for both type of tasks will be the solution.
+[1]: https://lore.kernel.org/linux-doc/20230503094248.28931-1-bagasdotme@gmail.com/
 
-I will look deeper into any performance issues with using div64_u64
-over multiplication and shall let you know soon.
+Bagas Sanjaya (4):
+  Documentation: net/mlx5: Wrap vnic reporter devlink commands in code
+    blocks
+  Documentation: net/mlx5: Use bullet and definition lists for vnic
+    counters description
+  Documentation: net/mlx5: Add blank line separator before numbered
+    lists
+  Documentation: net/mlx5: Wrap notes in admonition blocks
 
-Thanks,
-Vineeth
+ .../ethernet/mellanox/mlx5/devlink.rst        | 60 ++++++++++++-------
+ 1 file changed, 37 insertions(+), 23 deletions(-)
+
+
+base-commit: 582dbb2cc1a0a7427840f5b1e3c65608e511b061
+-- 
+An old man doll... just what I always wanted! - Clara
+
