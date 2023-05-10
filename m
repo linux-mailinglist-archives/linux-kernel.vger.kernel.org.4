@@ -2,86 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6D56FE0A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7C16FE09B
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237537AbjEJOmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
+        id S237575AbjEJOll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237276AbjEJOmU (ORCPT
+        with ESMTP id S237574AbjEJOl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:42:20 -0400
-X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 10 May 2023 07:42:19 PDT
-Received: from rcdn-iport-7.cisco.com (rcdn-iport-7.cisco.com [173.37.86.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6600C55A2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:42:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=709; q=dns/txt; s=iport;
-  t=1683729739; x=1684939339;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7RnPl13OyYFSy+YWgrlrfVWl2glDCa70vHjcwnO1YZw=;
-  b=IO0MOhDNS8CvQ5LoTdLNoXmsBX6l3X2SQlPfNpqFSuiHEtOq8Dinacby
-   hHGDtvUN5V/me8zg4qgr5T9LsEG42XD761ErYzTMeiYy0TqePUoU1Whdg
-   mvwkaMnYEcjphqtQtMHHrYE+7KdtNfT+LlIGnnCTJtJD5WfN8dLRKVgxE
-   s=;
-X-IronPort-AV: E=Sophos;i="5.99,264,1677542400"; 
-   d="scan'208";a="55053121"
-Received: from rcdn-core-12.cisco.com ([173.37.93.148])
-  by rcdn-iport-7.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 10 May 2023 14:41:17 +0000
-Received: from sjc-ads-7449.cisco.com (sjc-ads-7449.cisco.com [10.30.220.234])
-        by rcdn-core-12.cisco.com (8.15.2/8.15.2) with ESMTPS id 34AEfG3E001846
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 10 May 2023 14:41:17 GMT
-Received: by sjc-ads-7449.cisco.com (Postfix, from userid 1777032)
-        id 81DD2CCD0B1; Wed, 10 May 2023 07:41:16 -0700 (PDT)
-From:   Marcin Wierzbicki <mawierzb@cisco.com>
-To:     rogerq@kernel.org
-Cc:     mawierzb@cisco.com, bwawrzyn@cisco.com, danielwa@cisco.com,
-        kishon@kernel.org, lars@metafoo.de, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, olicht@cisco.com,
-        sjakhade@cadence.com, u.kleine-koenig@pengutronix.de,
-        vkoul@kernel.org, xe-linux-external@cisco.com
-Subject: Re: [PATCH v2] phy: cadence: Sierra: Add single link SGMII register configuration
-Date:   Wed, 10 May 2023 14:40:56 +0000
-Message-Id: <20230510144056.3648269-1-mawierzb@cisco.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20230508160142.2489365-1-mawierzb@cisco.com>
-References: <20230508160142.2489365-1-mawierzb@cisco.com>
+        Wed, 10 May 2023 10:41:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D99268E
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:41:12 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683729670;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x2Qh6i4Y+AB0pDG6u/iYkTlhIK7xQT7b36qrwW0oarA=;
+        b=3uewY1C7KOXhSuvl1De6gi9NZzV1cOm2flGjELQem0gRhXBtDrycninQeL2Hb5GoZqUghu
+        Q3oIOJ7LuWlrUZNJb49WBmLVqxGGRRjwEdJqXXKyJwISvxUY15uqXaksugkuxxtHJ6zMkN
+        qB3Kw9vI9J5XN4gkEkMuH8o6dC7z32+ZO14zUMnO7GzPFU30ia2QjdVLbRcAcdCSNvOpf6
+        RHBxQDn2l3AhPhbwQgsCaQDWTN6dFl0OvydSLDvQ31SB+gUn32Bn72ZPdvrSUEOAtng7Nw
+        vdDW5yBX+VyAiaqI1rT2Zuas5x/ecR2IGvrAWtEjjMrtc5fCjrNoOer2NdkeJA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683729670;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x2Qh6i4Y+AB0pDG6u/iYkTlhIK7xQT7b36qrwW0oarA=;
+        b=trce9v7ndgkCG97sqWC7ONvp59REw9dhfEULHP6zIDcTMl2qCslDv1Sgd1Z9B61gH70GKw
+        U2qDk7+OkSfqxbAw==
+To:     Yujie Liu <yujie.liu@intel.com>
+Cc:     Shanker Donthineni <sdonthineni@nvidia.com>,
+        oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Michael Walle <michael@walle.cc>,
+        Vikram Sethi <vsethi@nvidia.com>
+Subject: Re: [PATCH v3 3/3] genirq: Use the maple tree for IRQ descriptors
+ management
+In-Reply-To: <ZFtGvfDFLyHeFVFH@yujie-X299>
+References: <202304251035.19367560-yujie.liu@intel.com>
+ <87a5yuzvzd.ffs@tglx> <ZEsiYbi8dorXTI5t@yujie-X299> <877ctw5mdp.ffs@tglx>
+ <ZFdbtipfTsIF0u6z@yujie-X299> <87mt2f2mhm.ffs@tglx>
+ <ZFtGvfDFLyHeFVFH@yujie-X299>
+Date:   Wed, 10 May 2023 16:41:09 +0200
+Message-ID: <87ttwkxn96.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-Outbound-SMTP-Client: 10.30.220.234, sjc-ads-7449.cisco.com
-X-Outbound-Node: rcdn-core-12.cisco.com
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Yujie!
 
-> On 08/05/2023 19:01, Marcin Wierzbicki wrote:
->> Add single link SGMII register configuration for no SSC for
->> cdns,sierra-phy-t0 compatibility string.
->> The configuration is based on Sierra Programmer's Guide and validated
->> in Cisco CrayAR SoC.
->>
->> Co-developed-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
->> Signed-off-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
->> Signed-off-by: Marcin Wierzbicki <mawierzb@cisco.com>
->> Change-Id: Id4c093a1bbf409f3176736b5326854a1396391c1
->> ---
+On Wed, May 10 2023 at 15:24, Yujie Liu wrote:
+> On Mon, May 08, 2023 at 11:36:37AM +0200, Thomas Gleixner wrote:
+>> Ok. So one difference might be that a 64 bit kernel enables interrupt
+>> rempping. Can you add 'intremap=off' to the kernel command line please?
+>
+> Sorry, my previous info was incorrect.
+>
+> The block/008 (do IO while hotplugging CPUs) failure also happens on a
+> 64-bit kernel no matter having 'intremap=off' or not, and persists when
+> tested against v6.3, but the warning in default_send_IPI_mask_logical
+> function is not triggered on a 64-bit kernel. Not sure if that function
+> is 32-bit specific since it is set in arch/x86/kernel/apic/probe_32.c.
 
-> What changed in v2?
+Ok. That makes more sense as the issue is clearly independent of 32 or
+64 bit.
 
-This is actually a rebased version of the v1 (in the meantime there have been some SGMII related changes). Should have mentioned that before.
+I decoded it by now and that maple_tree conversion is the culprit. It
+broke irq_get_next_irq() which is used during hotplug. It misses every
+other interrupt, so affinities are not fixed up.
 
-Best regards,
-Marcin
+Please ignore that series.
+
+Thanks a lot for your help!
+
+       tglx
