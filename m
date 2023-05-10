@@ -2,100 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE37E6FE06B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F296FE06A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237524AbjEJOe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
+        id S237512AbjEJOez convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 10 May 2023 10:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237361AbjEJOeq (ORCPT
+        with ESMTP id S237528AbjEJOev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:34:46 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F7B11D;
-        Wed, 10 May 2023 07:34:45 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id af79cd13be357-75131c2997bso2593463785a.1;
-        Wed, 10 May 2023 07:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683729285; x=1686321285;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N3GG0ZoCFLdF+IhloxAqhSUzqvE1UvnFSXjfPq8BjX8=;
-        b=pg6KCrpq4etIlqmSDAHj4tf0U0nFI6ApVG5xybW00dHnSKS9qXORBYMXDoXvXe/EtY
-         PCtFoohpuZf0yeAlDJEEtkbaBbiHejWzAz5hSNMmu996dFnSWGj7r6lGuVZLGxb2UslN
-         8PDrGxcgN2pyK2DEjHWSEDooGvU6snbLlgzqXuiV75jDNqQqVhlFiNRVCS2xrwlVPkCY
-         +/VZh701ddmqetDo0qzhyuZQ41y2y0U3kOvnKNHPn2Qe7n9IuY8GF5+5bDoO0eN7AK7+
-         X1wmHV+da/2/Eu4TR8X9AlOswDMIjcjHpWPWwQbbxRmxFI7TWnUw3V+oJNCnfRzPauZe
-         fRdw==
+        Wed, 10 May 2023 10:34:51 -0400
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25FFDE;
+        Wed, 10 May 2023 07:34:49 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-559de1d36a9so105794767b3.1;
+        Wed, 10 May 2023 07:34:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683729285; x=1686321285;
+        d=1e100.net; s=20221208; t=1683729288; x=1686321288;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N3GG0ZoCFLdF+IhloxAqhSUzqvE1UvnFSXjfPq8BjX8=;
-        b=BxhApeqNoMM7B3JoKjWf3fquR5yWItl9lHIUSh3B/Zxax82hVh8ebDjCuWAoi1n7L4
-         Mr45KiI/l0yCHgDuhNPNh1a3ocY6SL9B2LyVL28XlMB79LlaaJ6qNpBtd5P9p9vOpDGr
-         ZdyVQBvplJ/dk+hjiACHuOUeM4+Oic1mmodpRk89iDvxmQmLPb2ZeEpttLi9+TSihZOi
-         6lpFytD1HO/Zfj6obmOALEEqnsusqQKsU0t306l08PxNAvsxypvelk5iCEFD2iXAgmeV
-         k+3wM4G49Gi801rOakogIBMXaD9guews95rqAQD6gt7En+Qa2NDQryDguUq2XFUUMhIy
-         chCg==
-X-Gm-Message-State: AC+VfDxfjerzdBnhm8o9tXnGPj++4NyGllMHwntTaIkMywNT0LN5sEuS
-        GBantpeOGN0UN5LDbsOtVaGnzQ+8JFGca6EVps4=
-X-Google-Smtp-Source: ACHHUZ47kFkGv5DWJ4FIB7/9Y6ScllXX9dI6c1TwVNpSKc60n5AKTMW68fzzHUSBVE4C8mVkq33jz3XE7HCl3fx559w=
-X-Received: by 2002:a05:6214:76c:b0:61b:5faf:9a72 with SMTP id
- f12-20020a056214076c00b0061b5faf9a72mr34208469qvz.3.1683729284734; Wed, 10
- May 2023 07:34:44 -0700 (PDT)
+        bh=ozQA/cDvPs2H88bJoE4ZEXy4NN+hc65oP+0zn7oNwKg=;
+        b=lnuPn/Md3kCrpmgC5T8hatrzEdfDmfbrpqj24AAGR9nWRm52Yy4eK7YAbvanqeg3HV
+         9n0GNyok/WHq0nNra4bon6B40n/7cSdBdpofD0Zqvm3GKUIIjrlhTfwezs1X3yYyi+nc
+         yJP5oJJ4SuKr0dbg/6ce7E0sVLK2MHL9UCsCXLCUJt1zdZLcsZaB1Kz3nTUBiMKfV15f
+         HRnymY03+fsI6lX/6H49I7lsopPpilGyOEJF9bVEcqq1Nd2cae6YLS9UzekgaGrcXD4f
+         Mj6Ll78QBPEW2InSLP/GmjWO2liBXwG2gRyjCK6W80qeB0kpGTvmAUC+byl5zxKHAbxW
+         QgeQ==
+X-Gm-Message-State: AC+VfDw0quOdmRljp0t2BPdk76YuzvTnb9a/uwHpLgDcOKw5wgIRuOyL
+        B90gGEkT2wzOm5eI5XcK5jdaRJMh5vISLA==
+X-Google-Smtp-Source: ACHHUZ7REBtXk8+GACjdQjmrsTHQhYdFGPhmtQd9s+M3OG8pOeEyAufWYRO0lRqWNlYyEsPvKL4Nxg==
+X-Received: by 2002:a81:6d48:0:b0:55a:881d:e744 with SMTP id i69-20020a816d48000000b0055a881de744mr19986822ywc.47.1683729288666;
+        Wed, 10 May 2023 07:34:48 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id m67-20020a817146000000b0055a8b115f6esm4112292ywc.128.2023.05.10.07.34.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 07:34:47 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-b983027d0faso9323113276.0;
+        Wed, 10 May 2023 07:34:46 -0700 (PDT)
+X-Received: by 2002:a05:6902:18c6:b0:b99:5707:4e6f with SMTP id
+ ck6-20020a05690218c600b00b9957074e6fmr23871358ybb.32.1683729286388; Wed, 10
+ May 2023 07:34:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <1683718725-14869-1-git-send-email-quic_rohiagar@quicinc.com>
- <1683718725-14869-5-git-send-email-quic_rohiagar@quicinc.com>
- <ZFun8m5y-r0yUHhq@surfacebook> <1ffc9474-0a05-44d8-0cc0-24a065443b18@quicinc.com>
-In-Reply-To: <1ffc9474-0a05-44d8-0cc0-24a065443b18@quicinc.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 10 May 2023 17:34:08 +0300
-Message-ID: <CAHp75VcCYo2uF2VY6x3jFb3v-whXrCW_U_bKnnWAfzg+dAe1zQ@mail.gmail.com>
-Subject: Re: [PATCH v6 4/4] pinctrl: qcom: Add SDX75 pincontrol driver
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linus.walleij@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, richardcochran@gmail.com,
-        manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <20230510110557.14343-1-tzimmermann@suse.de> <20230510110557.14343-6-tzimmermann@suse.de>
+ <CAMuHMdVV-MQV3C_o6JxPj23h3zo0kMmsn9ZEWJxsrzr6YpKmyg@mail.gmail.com> <487ff03b-d753-972f-7a06-a1d5efda917d@suse.de>
+In-Reply-To: <487ff03b-d753-972f-7a06-a1d5efda917d@suse.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 10 May 2023 16:34:34 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWQLF6QZi4j5Yg3oiy8dMbuApk+r=5c2tSLvYxvAaudMA@mail.gmail.com>
+Message-ID: <CAMuHMdWQLF6QZi4j5Yg3oiy8dMbuApk+r=5c2tSLvYxvAaudMA@mail.gmail.com>
+Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into <asm/fb.h>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     deller@gmx.de, javierm@redhat.com, daniel@ffwll.ch,
+        vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
+        davem@davemloft.net, James.Bottomley@hansenpartnership.com,
+        arnd@arndb.de, sam@ravnborg.org, suijingfeng@loongson.cn,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 5:31=E2=80=AFPM Rohit Agarwal <quic_rohiagar@quicin=
-c.com> wrote:
-> On 5/10/2023 7:49 PM, andy.shevchenko@gmail.com wrote:
-> > Wed, May 10, 2023 at 05:08:45PM +0530, Rohit Agarwal kirjoitti:
+Hi Thomas,
 
-...
+On Wed, May 10, 2023 at 4:20 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> Am 10.05.23 um 14:34 schrieb Geert Uytterhoeven:
+> > On Wed, May 10, 2023 at 1:06 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> >> Implement framebuffer I/O helpers, such as fb_read*() and fb_write*(),
+> >> in the architecture's <asm/fb.h> header file or the generic one.
+> >>
+> >> The common case has been the use of regular I/O functions, such as
+> >> __raw_readb() or memset_io(). A few architectures used plain system-
+> >> memory reads and writes. Sparc used helpers for its SBus.
+> >>
+> >> The architectures that used special cases provide the same code in
+> >> their __raw_*() I/O helpers. So the patch replaces this code with the
+> >> __raw_*() functions and moves it to <asm-generic/fb.h> for all
+> >> architectures.
+> >>
+> >> v6:
+> >>          * fix fb_readq()/fb_writeq() on 64-bit mips (kernel test robot)
+> >> v5:
+> >>          * include <linux/io.h> in <asm-generic/fb>; fix s390 build
+> >> v4:
+> >>          * ia64, loongarch, sparc64: add fb_mem*() to arch headers
+> >>            to keep current semantics (Arnd)
+> >> v3:
+> >>          * implement all architectures with generic helpers
+> >>          * support reordering and native byte order (Geert, Arnd)
+> >>
+> >> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> >> Tested-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> >> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-> >> +#define FUNCTION(n)                                                 \
-> >> +    [msm_mux_##n] =3D {                                              =
- \
-> >> +                    .func =3D PINCTRL_PINFUNCTION(#n,                =
- \
-> >> +                                    n##_groups,                     \
-> >> +                                    ARRAY_SIZE(n##_groups))         \
-> >> +                    }
-> > But don't you now have MSM_PIN_FUNCTION() macro?
+> >> --- a/arch/mips/include/asm/fb.h
+> >> +++ b/arch/mips/include/asm/fb.h
+> >> @@ -12,6 +12,28 @@ static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
+> >>   }
+> >>   #define fb_pgprotect fb_pgprotect
+> >>
+> >> +/*
+> >> + * MIPS doesn't define __raw_ I/O macros, so the helpers
+> >> + * in <asm-generic/fb.h> don't generate fb_readq() and
+> >> + * fb_write(). We have to provide them here.
+> >
+> > MIPS does not include <asm-generic/io.h>,  nor define its own
 >
-> So Sorry, a mistake from my end. Will immediately update.
+> I know, that's why the TODO says to convert it to generic I/O.
+>
+> > __raw_readq() and __raw_writeq()...
+>
+> It doesn't define those macros, but it generates function calls of the
+> same names. Follow the macros at
+>
+>
+> https://elixir.bootlin.com/linux/latest/source/arch/mips/include/asm/io.h#L357
+>
+> It expands to a variety of helpers, including __raw_*().
 
-Don't forget to collect my tags for the other patches.
+Thanks, I forgot MIPS is using these grep-unfriendly factories...
 
---=20
-With Best Regards,
-Andy Shevchenko
+> >> + *
+> >> + * TODO: Convert MIPS to generic I/O. The helpers below can
+> >> + *       then be removed.
+> >> + */
+> >> +#ifdef CONFIG_64BIT
+> >> +static inline u64 fb_readq(const volatile void __iomem *addr)
+> >> +{
+> >> +       return __raw_readq(addr);
+> >
+> > ... so how can this call work?
+>
+> On 64-bit builds, there's __raw_readq() and __raw_writeq().
+>
+> At first, I tried to do the right thing and convert MIPS to work with
+> <asm-generic/io.h>. But that created a ton of follow-up errors in other
+> headers. So for now, it's better to handle this problem in asm/fb.h.
+
+So isn't just adding
+
+    #define __raw_readq __raw_readq
+    #define __raw_writeq __raw_writeq
+
+to arch/mips/include/asm/io.h sufficient to make <asm-generic/fb.h>
+do the right thing?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
