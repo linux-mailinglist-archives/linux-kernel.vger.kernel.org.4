@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FEF6FDBC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B1B6FDBD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236211AbjEJKdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 06:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48680 "EHLO
+        id S236404AbjEJKkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 06:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236369AbjEJKdv (ORCPT
+        with ESMTP id S229656AbjEJKkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 06:33:51 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 429D535BD;
-        Wed, 10 May 2023 03:33:50 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70CF11063;
-        Wed, 10 May 2023 03:34:34 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 845DE3F5A1;
-        Wed, 10 May 2023 03:33:47 -0700 (PDT)
-Date:   Wed, 10 May 2023 11:33:45 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Maksim Kiselev <bigunclemax@gmail.com>
-Cc:     Icenowy Zheng <icenowy@aosc.io>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 1/5] dt-bindings: spi: sun6i: add DT bindings for
- Allwinner R329/D1/R528/T113s SPI
-Message-ID: <20230510113345.0850c7f3@donnerap.cambridge.arm.com>
-In-Reply-To: <20230510081121.3463710-2-bigunclemax@gmail.com>
-References: <20230510081121.3463710-1-bigunclemax@gmail.com>
-        <20230510081121.3463710-2-bigunclemax@gmail.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Wed, 10 May 2023 06:40:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9888535B3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:40:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D72A63D04
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 10:40:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 67E41C433EF;
+        Wed, 10 May 2023 10:40:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683715221;
+        bh=hXXfTYfIfdfbstZ9WJjnJFY6BKlXJ+cnTyT35FzKEPk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AAQkYRfb8vh6wAkda5fpGUHKX4QLCJWdEybteuE07R3k/FC5t+ye7nlBWQChvwGLu
+         mq078viMR9ylZ/bi4BRaooFy0oClEq24/xv0Ca99IX1nWMTyRTZc5F/29CdoAm/YoT
+         SBM3eX46L6XO4FlYEpL0V0ZQLg4ebVFXbgMtnRA8Z9DNWLQIsDoYsB379MHrzO4RSa
+         4Ds1F0zEDCO+WHok9sTnfWUYjBlUvqEKwXcNokmTsHcaR8B9oHHhxYfDfNM6j1W206
+         OUcPsdZyMWhr2Vyfe8cX6eVs7ehU86DUrNcWM/pxr/r27jkJ21cABIr9JoiShjxUiq
+         9nZmvXzMJWyng==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4BC87E270C4;
+        Wed, 10 May 2023 10:40:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] net: liquidio: lio_vf_main: Remove unnecessary
+ (void*) conversions
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168371522130.27469.6976975356086997885.git-patchwork-notify@kernel.org>
+Date:   Wed, 10 May 2023 10:40:21 +0000
+References: <20230510060649.210238-1-yunchuan@nfschina.com>
+In-Reply-To: <20230510060649.210238-1-yunchuan@nfschina.com>
+To:     wuych <yunchuan@nfschina.com>
+Cc:     dchickles@marvell.com, sburla@marvell.com, fmanlunas@marvell.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,57 +60,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 May 2023 11:11:08 +0300
-Maksim Kiselev <bigunclemax@gmail.com> wrote:
+Hello:
 
-Hi,
+This patch was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-> Listed above Allwinner SoCs has two SPI controllers. First is the regular
-> SPI controller and the second one has additional functionality for
-> MIPI-DBI Type C.
+On Wed, 10 May 2023 14:06:49 +0800 you wrote:
+> Pointer variables of void * type do not require type cast.
 > 
-> Add compatible strings for these controllers
-> 
-> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-thanks for the changes, looks good now and dt-validate passes.
-
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-
-Cheers,
-Andre
-
+> Signed-off-by: wuych <yunchuan@nfschina.com>
 > ---
->  .../bindings/spi/allwinner,sun6i-a31-spi.yaml          | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> index de36c6a34a0f..fa5260eca531 100644
-> --- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> @@ -19,6 +19,7 @@ properties:
->  
->    compatible:
->      oneOf:
-> +      - const: allwinner,sun50i-r329-spi
->        - const: allwinner,sun6i-a31-spi
->        - const: allwinner,sun8i-h3-spi
->        - items:
-> @@ -28,6 +29,15 @@ properties:
->                - allwinner,sun50i-h616-spi
->                - allwinner,suniv-f1c100s-spi
->            - const: allwinner,sun8i-h3-spi
-> +      - items:
-> +          - enum:
-> +              - allwinner,sun20i-d1-spi
-> +              - allwinner,sun50i-r329-spi-dbi
-> +          - const: allwinner,sun50i-r329-spi
-> +      - items:
-> +          - const: allwinner,sun20i-d1-spi-dbi
-> +          - const: allwinner,sun50i-r329-spi-dbi
-> +          - const: allwinner,sun50i-r329-spi
->  
->    reg:
->      maxItems: 1
+>  .../net/ethernet/cavium/liquidio/lio_vf_main.c    | 15 +++++----------
+>  1 file changed, 5 insertions(+), 10 deletions(-)
+
+Here is the summary with links:
+  - [net-next] net: liquidio: lio_vf_main: Remove unnecessary (void*) conversions
+    https://git.kernel.org/netdev/net-next/c/6096bc055572
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
