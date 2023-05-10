@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3E26FDF22
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 397F86FDF23
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237020AbjEJNuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 09:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52042 "EHLO
+        id S236834AbjEJNuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 09:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237279AbjEJNtX (ORCPT
+        with ESMTP id S237281AbjEJNtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 09:49:23 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D541D3A88;
-        Wed, 10 May 2023 06:49:20 -0700 (PDT)
-Date:   Wed, 10 May 2023 13:49:14 -0000
+        Wed, 10 May 2023 09:49:24 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF1A469B;
+        Wed, 10 May 2023 06:49:21 -0700 (PDT)
+Date:   Wed, 10 May 2023 13:49:15 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683726554;
+        s=2020; t=1683726556;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=F7U5mUytH1qvTyKHQoLqeFYjjmc4tobmvVpTivDaTIU=;
-        b=nDuz4WFmI0GZJWiuhkG7YKkRPTdOPylceCe3yHWPTowHLIPDkCSPz8CbBZQvJ2Wx4AiggV
-        u7Qm890xqtR7tSk2Eyrs9XuLQCkjdoAyqe7Kc2GB3K1+v/PJcSb4OumAjqBxeX2W2VlNez
-        ZlOmzGSRMxYBAWr1zymIRODy2iYDBB+QizarvH8uqBzrQoXpzWrBdfzDF9+XeHGJmUeozh
-        KY0GyMeR0FhhUaNzmv4TiK/gR29Q4GMFP3vroEKL+ZVjYgb3svA6X/IKrSAzqGMPyiWLaw
-        mWEkoReimw+4WaurTBqQCdsAP58Vjqzg+0sO7y2Q7RqxLHuqisemyREsjSf73g==
+        bh=5Qa6epiS/rQZ6R6hQykpfIRIE1kFbFThqRMJpi8z/Ro=;
+        b=UYIHxwniLV3tlvYSngJ/wxmw3CImKjnBLbm9EnQwCyWPh02SXTn6xWKAF9av+falLlbEwB
+        4l3/l7v+ZJnUGMSiQvNdn/jHhmIdo29HrwQDSqgtpnobodb+tNs+feGvxiCs7v3YFVW8aZ
+        ERO1YYDJOleeeB2xAw+w+jPxnl3ZyNfwNr4lZ/4LF+dGmSkI0wmOQTIWFKDkzRsfS27HxN
+        4acPK/La6GO+KUg8rnHW0mAt/dPVtQ4L74P957xxxdcGLWSyjWiM2yD5VX5RoRD/eDBkt3
+        Je8kZtQMLlDrVp1XJGKyBdmLayv7cH+hwPQZQ59TMUcv2PQEV6SP60lkTVyjUw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683726554;
+        s=2020e; t=1683726556;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=F7U5mUytH1qvTyKHQoLqeFYjjmc4tobmvVpTivDaTIU=;
-        b=+Gh1gSuEBpmfx8fNenN4VYs2RPDi9f08TOfu0q+GNBMoQ/O1DNTP8ZYQd6794dNfsiW4S5
-        Gqe0QcDwH3iN+GAg==
+        bh=5Qa6epiS/rQZ6R6hQykpfIRIE1kFbFThqRMJpi8z/Ro=;
+        b=br7TRLPXyn60a7ohtzxKpLuGg8BCfsKD4c738Nlj3tVB2ETG43QpvXl2ngTFmHG6x5CU52
+        W6uuwsysMH54IHDA==
 From:   "tip-bot2 for Ricardo Neri" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Let low-priority cores help
- high-priority busy SMT cores
-Cc:     Valentin Schneider <vschneid@redhat.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+Subject: [tip: sched/core] sched/fair: Move is_core_idle() out of CONFIG_NUMA
+Cc:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Zhang Rui <rui.zhang@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230406203148.19182-5-ricardo.neri-calderon@linux.intel.com>
-References: <20230406203148.19182-5-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230406203148.19182-2-ricardo.neri-calderon@linux.intel.com>
+References: <20230406203148.19182-2-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
-Message-ID: <168372655417.404.18317397549108469001.tip-bot2@tip-bot2>
+Message-ID: <168372655561.404.2932262333236727103.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -70,73 +68,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     18ad34532755feb5b9f4284b07769b1bfec18ab3
-Gitweb:        https://git.kernel.org/tip/18ad34532755feb5b9f4284b07769b1bfec18ab3
+Commit-ID:     8b36d07f1d63de102d464f44a89704bc62d00811
+Gitweb:        https://git.kernel.org/tip/8b36d07f1d63de102d464f44a89704bc62d00811
 Author:        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-AuthorDate:    Thu, 06 Apr 2023 13:31:40 -07:00
+AuthorDate:    Thu, 06 Apr 2023 13:31:37 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 08 May 2023 10:58:35 +02:00
+CommitterDate: Mon, 08 May 2023 10:58:33 +02:00
 
-sched/fair: Let low-priority cores help high-priority busy SMT cores
+sched/fair: Move is_core_idle() out of CONFIG_NUMA
 
-Using asym_packing priorities within an SMT core is straightforward. Just
-follow the priorities that hardware indicates.
+asym_packing needs this function to determine whether an SMT core is a
+suitable destination for load balancing.
 
-When balancing load from an SMT core, also consider the idle state of its
-siblings. Priorities do not reflect that an SMT core divides its throughput
-among all its busy siblings. They only makes sense when exactly one sibling
-is busy.
-
-Indicate that active balance is needed if the destination CPU has lower
-priority than the source CPU but the latter has busy SMT siblings.
-
-Make find_busiest_queue() not skip higher-priority SMT cores with more than
-busy sibling.
-
-Suggested-by: Valentin Schneider <vschneid@redhat.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Tested-by: Zhang Rui <rui.zhang@intel.com>
-Link: https://lore.kernel.org/r/20230406203148.19182-5-ricardo.neri-calderon@linux.intel.com
+Link: https://lore.kernel.org/r/20230406203148.19182-2-ricardo.neri-calderon@linux.intel.com
 ---
- kernel/sched/fair.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ kernel/sched/fair.c | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index a8a02ae..85ce249 100644
+index 373ff5f..a47208d 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -10551,8 +10551,15 @@ static struct rq *find_busiest_queue(struct lb_env *env,
- 		    nr_running == 1)
- 			continue;
+@@ -1064,6 +1064,23 @@ update_stats_curr_start(struct cfs_rq *cfs_rq, struct sched_entity *se)
+  * Scheduling class queueing methods:
+  */
  
--		/* Make sure we only pull tasks from a CPU of lower priority */
-+		/*
-+		 * Make sure we only pull tasks from a CPU of lower priority
-+		 * when balancing between SMT siblings.
-+		 *
-+		 * If balancing between cores, let lower priority CPUs help
-+		 * SMT cores with more than one busy sibling.
-+		 */
- 		if ((env->sd->flags & SD_ASYM_PACKING) &&
-+		    sched_use_asym_prio(env->sd, i) &&
- 		    sched_asym_prefer(i, env->dst_cpu) &&
- 		    nr_running == 1)
- 			continue;
-@@ -10645,10 +10652,15 @@ asym_active_balance(struct lb_env *env)
- 	 * priority CPUs in order to pack all tasks in the highest priority
- 	 * CPUs. When done between cores, do it only if the whole core if the
- 	 * whole core is idle.
-+	 *
-+	 * If @env::src_cpu is an SMT core with busy siblings, let
-+	 * the lower priority @env::dst_cpu help it. Do not follow
-+	 * CPU priority.
- 	 */
- 	return env->idle != CPU_NOT_IDLE && (env->sd->flags & SD_ASYM_PACKING) &&
- 	       sched_use_asym_prio(env->sd, env->dst_cpu) &&
--	       sched_asym_prefer(env->dst_cpu, env->src_cpu);
-+	       (sched_asym_prefer(env->dst_cpu, env->src_cpu) ||
-+		!sched_use_asym_prio(env->sd, env->src_cpu));
- }
++static inline bool is_core_idle(int cpu)
++{
++#ifdef CONFIG_SCHED_SMT
++	int sibling;
++
++	for_each_cpu(sibling, cpu_smt_mask(cpu)) {
++		if (cpu == sibling)
++			continue;
++
++		if (!idle_cpu(sibling))
++			return false;
++	}
++#endif
++
++	return true;
++}
++
+ #ifdef CONFIG_NUMA
+ #define NUMA_IMBALANCE_MIN 2
  
- static inline bool
+@@ -1700,23 +1717,6 @@ struct numa_stats {
+ 	int idle_cpu;
+ };
+ 
+-static inline bool is_core_idle(int cpu)
+-{
+-#ifdef CONFIG_SCHED_SMT
+-	int sibling;
+-
+-	for_each_cpu(sibling, cpu_smt_mask(cpu)) {
+-		if (cpu == sibling)
+-			continue;
+-
+-		if (!idle_cpu(sibling))
+-			return false;
+-	}
+-#endif
+-
+-	return true;
+-}
+-
+ struct task_numa_env {
+ 	struct task_struct *p;
+ 
