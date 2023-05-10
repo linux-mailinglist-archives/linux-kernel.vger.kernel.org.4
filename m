@@ -2,156 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6A56FDE1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 282246FDE20
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236872AbjEJMwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 08:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        id S236907AbjEJMwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 08:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbjEJMwF (ORCPT
+        with ESMTP id S236450AbjEJMwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 08:52:05 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCB66188;
-        Wed, 10 May 2023 05:52:02 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34ACpiLG001859;
-        Wed, 10 May 2023 07:51:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683723104;
-        bh=2RMALsxCD9vv+3SY36ICjcgswL3/hso7mKW8Q7aCQGc=;
-        h=From:To:CC:Subject:Date;
-        b=wYnla6Aub9v10PjLTXMjAyLHh6nnvjLp+/E5NrlJ3UROaQvFAomSvSLguhpzkIuGy
-         g94ahy8crx9heecSoCAS9Do4fMHrHxe2rw0SLfpHlz8/W/gcCi4aAMGLd5aA3thiN7
-         Ny+sGPhHYNbYn5iTgS7fty4pnSVQueTLex8Yl0jw=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34ACpiZx022718
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 10 May 2023 07:51:44 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 10
- May 2023 07:51:44 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 10 May 2023 07:51:44 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34ACpeZY006649;
-        Wed, 10 May 2023 07:51:41 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH net v3] net: phy: dp83867: add w/a for packet errors seen with short cables
-Date:   Wed, 10 May 2023 18:21:39 +0530
-Message-ID: <20230510125139.646222-1-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 10 May 2023 08:52:16 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAD1659D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:52:13 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pwjIK-0001K5-6f; Wed, 10 May 2023 14:51:48 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pwjIF-0005Aq-TN; Wed, 10 May 2023 14:51:43 +0200
+Date:   Wed, 10 May 2023 14:51:43 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+Cc:     krzysztof.kozlowski@linaro.org, Heiko Stuebner <heiko@sntech.de>,
+        devicetree@vger.kernel.org,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Marek Vasut <marex@denx.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Markus Niebel <Markus.Niebel@tq-group.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Jagan Teki <jagan@edgeble.ai>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Li Yang <leoyang.li@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH v4 1/3] arm64: dts: Add device tree for the Emtop SOM
+ IMX8MM
+Message-ID: <20230510125143.p7adxxhyttuzshfw@pengutronix.de>
+References: <20230510112347.3766247-1-himanshu.bhavani@siliconsignals.io>
+ <20230510112347.3766247-2-himanshu.bhavani@siliconsignals.io>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510112347.3766247-2-himanshu.bhavani@siliconsignals.io>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Grygorii Strashko <grygorii.strashko@ti.com>
+Hi,
 
-Introduce the W/A for packet errors seen with short cables (<1m) between
-two DP83867 PHYs.
+On 23-05-10, Himanshu Bhavani wrote:
+> Add a device tree file describing the Emtop SOM IMX8MM
+> 
+> Signed-off-by: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+> ---
+>  arch/arm64/boot/dts/freescale/Makefile        |   1 +
+>  .../arm64/boot/dts/freescale/imx8mm-emtop.dts | 261 ++++++++++++++++++
+>  2 files changed, 262 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+> index 198fff3731ae..36590515fbc1 100644
+> --- a/arch/arm64/boot/dts/freescale/Makefile
+> +++ b/arch/arm64/boot/dts/freescale/Makefile
+> @@ -54,6 +54,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-beacon-kit.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-data-modul-edm-sbc.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-ddr4-evk.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-emcon-avari.dtb
+> +dtb-$(CONFIG_ARCH_MXC) += imx8mm-emtop.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-ctouch2.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-edimm2.2.dtb
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts b/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
+> new file mode 100644
+> index 000000000000..461e1ef5dcb4
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
+> @@ -0,0 +1,261 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright 2023 Emtop
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/leds/common.h>
+> +#include <dt-bindings/usb/pd.h>
+> +
+> +#include "imx8mm.dtsi"
+> +
+> +/ {
+> +	model = "Emtop SOM i.MX8MM";
+> +	compatible = "emtop,imx8mm-emtop", "fsl,imx8mm";
+> +
+> +	chosen {
+> +		stdout-path = &uart2;
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_gpio_led>;
+> +
+> +		led-0 {
+> +			function = LED_FUNCTION_POWER;
+> +			gpios = <&gpio3 16 GPIO_ACTIVE_HIGH>;
+> +			linux,default-trigger = "heartbeat";
+> +		};
+> +	};
+> +};
+> +
+> +&A53_0 {
+> +	cpu-supply = <&buck2>;
+> +};
+> +
+> +&A53_1 {
+> +	cpu-supply = <&buck2>;
+> +};
+> +
+> +&A53_2 {
+> +	cpu-supply = <&buck2>;
+> +};
+> +
+> +&A53_3 {
+> +	cpu-supply = <&buck2>;
+> +};
+> +
+> +&uart2 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_uart2>;
+> +	status = "okay";
+> +};
+> +
+> +&usdhc3 {
+> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+> +	pinctrl-0 = <&pinctrl_usdhc3>;
+> +	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
+> +	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
+> +	bus-width = <8>;
+> +	non-removable;
+> +	status = "okay";
+> +};
+> +
+> +&wdog1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_wdog>;
+> +	fsl,ext-reset-output;
+> +	status = "okay";
+> +};
 
-The W/A recommended by DM requires FFE Equalizer Configuration tuning by
-writing value 0x0E81 to DSP_FFE_CFG register (0x012C), surrounded by hard
-and soft resets as follows:
+The nodes should be ordered alphabetical only exception is the iomuxc at
+the end.
 
-write_reg(0x001F, 0x8000); //hard reset
-write_reg(DSP_FFE_CFG, 0x0E81);
-write_reg(0x001F, 0x4000); //soft reset
+Regards,
+  Marco
 
-Since  DP83867 PHY DM says "Changing this register to 0x0E81, will not
-affect Long Cable performance.", enable the W/A by default.
-
-Fixes: 2a10154abcb7 ("net: phy: dp83867: Add TI dp83867 phy")
-Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
-
-V2 patch at:
-https://lore.kernel.org/r/20230509052124.611875-1-s-vadapalli@ti.com/
-
-Changes since v2 patch:
-- Add comment describing the short cable w/a register configuration.
-
-V1 patch at:
-https://lore.kernel.org/r/20230508070019.356548-1-s-vadapalli@ti.com
-
-Changes since v1 patch:
-- Wrap the line invoking phy_write_mmd(), limiting it to 80 characters.
-- Replace 0X0E81 with 0x0e81 in the call to phy_write_mmd().
-- Replace 0X012C with 0x012c in the new define for DP83867_DSP_FFE_CFG.
-
-RFC patch at:
-https://lore.kernel.org/r/20230425054429.3956535-2-s-vadapalli@ti.com/
-
-Changes since RFC patch:
-- Change patch subject to PATCH net.
-- Add Fixes tag.
-- Check return value of phy_write_mmd().
-
- drivers/net/phy/dp83867.c | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/phy/dp83867.c b/drivers/net/phy/dp83867.c
-index d75f526a20a4..76f5a2402fb0 100644
---- a/drivers/net/phy/dp83867.c
-+++ b/drivers/net/phy/dp83867.c
-@@ -44,6 +44,7 @@
- #define DP83867_STRAP_STS1	0x006E
- #define DP83867_STRAP_STS2	0x006f
- #define DP83867_RGMIIDCTL	0x0086
-+#define DP83867_DSP_FFE_CFG	0x012c
- #define DP83867_RXFCFG		0x0134
- #define DP83867_RXFPMD1	0x0136
- #define DP83867_RXFPMD2	0x0137
-@@ -941,8 +942,27 @@ static int dp83867_phy_reset(struct phy_device *phydev)
- 
- 	usleep_range(10, 20);
- 
--	return phy_modify(phydev, MII_DP83867_PHYCTRL,
-+	err = phy_modify(phydev, MII_DP83867_PHYCTRL,
- 			 DP83867_PHYCR_FORCE_LINK_GOOD, 0);
-+	if (err < 0)
-+		return err;
-+
-+	/* Configure the DSP Feedforward Equalizer Configuration register to
-+	 * improve short cable (< 1 meter) performance. This will not affect
-+	 * long cable performance.
-+	 */
-+	err = phy_write_mmd(phydev, DP83867_DEVADDR, DP83867_DSP_FFE_CFG,
-+			    0x0e81);
-+	if (err < 0)
-+		return err;
-+
-+	err = phy_write(phydev, DP83867_CTRL, DP83867_SW_RESTART);
-+	if (err < 0)
-+		return err;
-+
-+	usleep_range(10, 20);
-+
-+	return 0;
- }
- 
- static void dp83867_link_change_notify(struct phy_device *phydev)
--- 
-2.25.1
-
+> +
+> +&i2c1 {
+> +	clock-frequency = <400000>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_i2c1>;
+> +	status = "okay";
+> +
+> +	pmic@25 {
+> +		compatible = "nxp,pca9450c";
+> +		reg = <0x25>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_pmic>;
+> +		interrupt-parent = <&gpio1>;
+> +		interrupts = <3 IRQ_TYPE_EDGE_RISING>;
+> +
+> +		regulators {
+> +			buck1: BUCK1 {
+> +				regulator-name = "BUCK1";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <1000000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +				regulator-ramp-delay = <3125>;
+> +			};
+> +
+> +			buck2: BUCK2 {
+> +				regulator-name = "BUCK2";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <900000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +				regulator-ramp-delay = <3125>;
+> +			};
+> +
+> +			buck3: BUCK3 {
+> +				regulator-name = "BUCK3";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <1000000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			buck4: BUCK4 {
+> +				regulator-name = "BUCK4";
+> +				regulator-min-microvolt = <3000000>;
+> +				regulator-max-microvolt = <3600000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			buck5: BUCK5 {
+> +				regulator-name = "BUCK5";
+> +				regulator-min-microvolt = <1650000>;
+> +				regulator-max-microvolt = <1950000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			buck6: BUCK6 {
+> +				regulator-name = "BUCK6";
+> +				regulator-min-microvolt = <1100000>;
+> +				regulator-max-microvolt = <1200000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo1: LDO1 {
+> +				regulator-name = "LDO1";
+> +				regulator-min-microvolt = <1650000>;
+> +				regulator-max-microvolt = <1950000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo2: LDO2 {
+> +				regulator-name = "LDO2";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <945000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo3: LDO3 {
+> +				regulator-name = "LDO3";
+> +				regulator-min-microvolt = <1710000>;
+> +				regulator-max-microvolt = <1890000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo4: LDO4 {
+> +				regulator-name = "LDO4";
+> +				regulator-min-microvolt = <810000>;
+> +				regulator-max-microvolt = <945000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo5: LDO5 {
+> +				regulator-name = "LDO5";
+> +				regulator-min-microvolt = <1650000>;
+> +				regulator-max-microvolt = <3600000>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&iomuxc {
+> +	pinctrl_gpio_led: gpioledgrp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_NAND_READY_B_GPIO3_IO16			0x19
+> +			MX8MM_IOMUXC_SAI3_RXC_GPIO4_IO29			0x19
+> +		>;
+> +	};
+> +
+> +	pinctrl_i2c1: i2c1grp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_I2C1_SCL_I2C1_SCL				0x400001c3
+> +			MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA				0x400001c3
+> +		>;
+> +	};
+> +
+> +	pinctrl_pmic: pmicirq {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_GPIO1_IO03_GPIO1_IO3			0x41
+> +		>;
+> +	};
+> +
+> +	pinctrl_uart2: uart2grp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_UART2_RXD_UART2_DCE_RX			0x140
+> +			MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX			0x140
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc3: usdhc3grp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x190
+> +			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d0
+> +			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d0
+> +			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d0
+> +			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d0
+> +			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d0
+> +			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d0
+> +			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d0
+> +			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d0
+> +			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d0
+> +			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x190
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x194
+> +			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d4
+> +			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d4
+> +			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d4
+> +			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d4
+> +			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d4
+> +			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d4
+> +			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d4
+> +			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d4
+> +			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d4
+> +			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x194
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc3_200mhz: usdhc3-200mhzgrp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x196
+> +			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d6
+> +			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d6
+> +			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d6
+> +			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d6
+> +			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d6
+> +			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d6
+> +			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d6
+> +			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d6
+> +			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d6
+> +			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x196
+> +		>;
+> +	};
+> +
+> +	pinctrl_wdog: wdoggrp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B			0xc6
+> +		>;
+> +	};
+> +};
+> -- 
+> 2.25.1
+> 
+> 
+> 
