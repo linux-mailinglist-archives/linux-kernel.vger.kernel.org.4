@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FA76FE7C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 00:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E246FE7C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 00:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjEJW4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 18:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
+        id S232071AbjEJW52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 18:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236654AbjEJW4n (ORCPT
+        with ESMTP id S232030AbjEJW5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 18:56:43 -0400
+        Wed, 10 May 2023 18:57:25 -0400
 Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F57E5FE7;
-        Wed, 10 May 2023 15:56:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8ED4690;
+        Wed, 10 May 2023 15:57:17 -0700 (PDT)
 Received: from local
         by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
          (Exim 4.96)
         (envelope-from <daniel@makrotopia.org>)
-        id 1pwsjY-0004QI-1d;
-        Wed, 10 May 2023 22:56:32 +0000
-Date:   Thu, 11 May 2023 00:54:36 +0200
-From:   Chukun Pan <amadeus@jmu.edu.cn>
+        id 1pwskF-0004Qx-2b;
+        Wed, 10 May 2023 22:57:16 +0000
+Date:   Thu, 11 May 2023 00:55:11 +0200
+From:   Daniel Golle <daniel@makrotopia.org>
 To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Andrew Lunn <andrew@lunn.ch>,
@@ -34,81 +34,85 @@ To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
         Paolo Abeni <pabeni@redhat.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH net-next 2/8] net: phy: realtek: switch interface mode for
- RTL822x series
-Message-ID: <537a12131132614ce9600ca9370dab823a262347.1683756691.git.daniel@makrotopia.org>
+Subject: [PATCH net-next 3/8] net: phy: realtek: use genphy_soft_reset for
+ 2.5G PHYs
+Message-ID: <0c1e578a5b02fe49e1114ea75e3c6282eb230ad3.1683756691.git.daniel@makrotopia.org>
 References: <cover.1683756691.git.daniel@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1683756691.git.daniel@makrotopia.org>
-Sender: daniel@makrotopia.org
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The RTL822x phy can work in Cisco SGMII and 2500BASE-X modes respectively.
-Add interface automatic switching MAC-side interface mode for RTL822x
-phy to match various wire speeds when using Clause-45 MDIO.
+Some vendor bootloaders do weird things with those PHYs which result in
+link modes being reported wrongly. Start from a clean sheet by resetting
+the PHY.
 
-Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
+Reported-by: Yevhen Kolomeiko <jarvis2709@gmail.com>
 Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
- drivers/net/phy/realtek.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
+ drivers/net/phy/realtek.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
-index a7dd5a075135..4a2c1ad02d48 100644
+index 4a2c1ad02d48..0cf7846c9812 100644
 --- a/drivers/net/phy/realtek.c
 +++ b/drivers/net/phy/realtek.c
-@@ -684,6 +684,25 @@ static int rtl822x_config_aneg(struct phy_device *phydev)
- 	return __genphy_config_aneg(phydev, ret);
- }
- 
-+static void rtl822x_update_interface(struct phy_device *phydev)
-+{
-+	/* Automatically switch SERDES interface between
-+	 * SGMII and 2500-BaseX according to speed.
-+	 */
-+	switch (phydev->speed) {
-+	case SPEED_2500:
-+		phydev->interface = PHY_INTERFACE_MODE_2500BASEX;
-+		break;
-+	case SPEED_1000:
-+	case SPEED_100:
-+	case SPEED_10:
-+		phydev->interface = PHY_INTERFACE_MODE_SGMII;
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
- static int rtl822x_read_status(struct phy_device *phydev)
- {
- 	int ret;
-@@ -702,11 +721,14 @@ static int rtl822x_read_status(struct phy_device *phydev)
- 			phydev->lp_advertising, lpadv & RTL_LPADV_2500FULL);
- 	}
- 
--	ret = genphy_read_status(phydev);
-+	ret = rtlgen_read_status(phydev);
- 	if (ret < 0)
- 		return ret;
- 
--	return rtlgen_get_speed(phydev);
-+	if (phydev->is_c45 && phydev->link)
-+		rtl822x_update_interface(phydev);
-+
-+	return 0;
- }
- 
- static bool rtlgen_supports_2_5gbps(struct phy_device *phydev)
+@@ -1038,6 +1038,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.write_page	= rtl821x_write_page,
+ 		.read_mmd	= rtl822x_read_mmd,
+ 		.write_mmd	= rtl822x_write_mmd,
++		.soft_reset     = genphy_soft_reset,
+ 	}, {
+ 		PHY_ID_MATCH_EXACT(0x001cc840),
+ 		.name		= "RTL8226B_RTL8221B 2.5Gbps PHY",
+@@ -1051,6 +1052,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.write_page	= rtl821x_write_page,
+ 		.read_mmd	= rtl822x_read_mmd,
+ 		.write_mmd	= rtl822x_write_mmd,
++		.soft_reset     = genphy_soft_reset,
+ 	}, {
+ 		PHY_ID_MATCH_EXACT(0x001cc838),
+ 		.name           = "RTL8226-CG 2.5Gbps PHY",
+@@ -1061,6 +1063,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.resume         = rtlgen_resume,
+ 		.read_page      = rtl821x_read_page,
+ 		.write_page     = rtl821x_write_page,
++		.soft_reset     = genphy_soft_reset,
+ 	}, {
+ 		PHY_ID_MATCH_EXACT(0x001cc848),
+ 		.name           = "RTL8226B-CG_RTL8221B-CG 2.5Gbps PHY",
+@@ -1072,6 +1075,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.resume         = rtlgen_resume,
+ 		.read_page      = rtl821x_read_page,
+ 		.write_page     = rtl821x_write_page,
++		.soft_reset     = genphy_soft_reset,
+ 	}, {
+ 		PHY_ID_MATCH_EXACT(0x001cc849),
+ 		.name           = "RTL8221B-VB-CG 2.5Gbps PHY",
+@@ -1083,6 +1087,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.resume         = rtlgen_resume,
+ 		.read_page      = rtl821x_read_page,
+ 		.write_page     = rtl821x_write_page,
++		.soft_reset     = genphy_soft_reset,
+ 	}, {
+ 		PHY_ID_MATCH_EXACT(0x001cc84a),
+ 		.name           = "RTL8221B-VM-CG 2.5Gbps PHY",
+@@ -1094,6 +1099,7 @@ static struct phy_driver realtek_drvs[] = {
+ 		.resume         = rtlgen_resume,
+ 		.read_page      = rtl821x_read_page,
+ 		.write_page     = rtl821x_write_page,
++		.soft_reset     = genphy_soft_reset,
+ 	}, {
+ 		PHY_ID_MATCH_EXACT(0x001cc961),
+ 		.name		= "RTL8366RB Gigabit Ethernet",
 -- 
 2.40.0
 
