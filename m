@@ -2,82 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A056A6FE0DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1646FE0E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237623AbjEJO5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
+        id S237396AbjEJO6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237154AbjEJO5c (ORCPT
+        with ESMTP id S237478AbjEJO6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:57:32 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060C02D64
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:57:31 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-965f7bdab6bso1154071766b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:57:30 -0700 (PDT)
+        Wed, 10 May 2023 10:58:35 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC216A4B
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:58:33 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9659f452148so1298253466b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:58:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683730649; x=1686322649;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gGKIDnp5BcnMW9gCpRCUAYeE1qjMs1lyP7Vbjiy3irY=;
-        b=l14bycRfrRlZbpxmWjdd9s/MZYHJ9DwLn51cx+fW8/aKCO5bN4RQY4P9sZc/VWqyHc
-         LUVBCcAqC0+To0VuR3CRZj4rphtpF8RFVibo8CaEPG3Z4bUJai9QA9bCGb2799qhhYUA
-         gdtMrr4W7bQFgQWiKr1oZVB49Z2LVAOrfenh1bEtPZA3lA0L3mxjTxEQaqVj2lKCUYxA
-         IK8i62rMzgx22Anj7I4QuGMEnfJ//oJtMwgU7whvbcLeMlPg2GrV6AaHbHW1I0Kj/dzx
-         4CtTvWDgKNa8PxFBCzrV3eBb9xlutfJgi+bR8pUK0P6KL/Gn6Z+1LRToGihau6Fl1Hg4
-         +ctw==
+        d=linaro.org; s=google; t=1683730711; x=1686322711;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=w/UBHPKxIZ4JawY5ZT352GPCH+e08nQLi6u7hwlLAXc=;
+        b=j+zo9oYaEuy0CQ1yPYewsqZT8iOyo7nqk9+FS1hlC6qw557hqfck+/+BW1lj6GPgXZ
+         HDAfbXHofDfmmqD2Ac0/BDIxfzfMe7xDqq0I/ix0G3tz5vI9S+lxZwOhgiOipsxJc0Yl
+         d79EB2ZO5SMXn599gIj533042J8wF7fRBBxMo9LJOGhSyKtezrkOb2CS4mPzUzEqcQq+
+         DmlmrIC7e8958Fij8tEqgFlomjXfBpiZZ32xxIleGaXBnTdciW4YqE7VXQP4LhOrWlEi
+         6/UihfJX3NeiOVf3h9SCOwiRTGowtRjdmdmNEani6cvO74KMcMB1BwZZg9iUhM2gnVtj
+         j/6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683730649; x=1686322649;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gGKIDnp5BcnMW9gCpRCUAYeE1qjMs1lyP7Vbjiy3irY=;
-        b=Cd/1J2z64PwjVsaWsvCuhe1HPy5P4e/CPmSQ1l0O11/GEyc1Yfvm+c/fNzK/Axr94r
-         jZrE+4Hzw/Y3UusuMJMGtR+Bl1VQRZ9oFBK8M1VopuseeZ+dceIN51ubp4t9fMuenUx+
-         Ccl3o+2sDuZ0ZHUh9yIWbvbB/FHY+p3dLGFZ/I5ZB4wXnijPok7iaWmkIMgJCl0uGb7t
-         HLieBTMQkOHgut3dcBqDwRhV7EjcRp6p4GUnYqPYBhB0Z0hgcIWbYFoKIXnWFhl4HWmi
-         281yhNRwWWYQAMwBgyGN28CfAK5ozuNdkboQ1gxf7CzFbxXiMyYzw34CiB5AKkiNgIZa
-         Rr4A==
-X-Gm-Message-State: AC+VfDztArhTeE99768gHxU8ytxD9XYFTp48/tdRB21W8YUcMg/gNcMT
-        WdN+su0cFw+YWL074jI5WGGMPg==
-X-Google-Smtp-Source: ACHHUZ7yADfN3NfDdk+MGaKfjHxbNijO2SdsdYQ3qjq9eAyKgll64Pb46yoHy2sfNGTo4FIilvALFA==
-X-Received: by 2002:a17:906:9c83:b0:95f:4889:412a with SMTP id fj3-20020a1709069c8300b0095f4889412amr17648241ejc.33.1683730649389;
-        Wed, 10 May 2023 07:57:29 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
-        by smtp.gmail.com with ESMTPSA id ci17-20020a170907267100b009682b2b3d66sm2731221ejc.197.2023.05.10.07.57.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 07:57:28 -0700 (PDT)
-Message-ID: <96c63925-91d5-994a-a531-2d7bdb3b642a@linaro.org>
-Date:   Wed, 10 May 2023 16:57:26 +0200
+        d=1e100.net; s=20221208; t=1683730711; x=1686322711;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w/UBHPKxIZ4JawY5ZT352GPCH+e08nQLi6u7hwlLAXc=;
+        b=ViQEqGMFdoSDoqTxXyKeHuHKFOwqW39nqM04HeC+uLKtmWWc0P0zZZj3ZIvGlpYCC4
+         8Dt9ex7Sx0fQdo0A8dXO+1TfSZASV4rpWXEUm2ts9kjW0rN22rz7jNDEPGnwMqpFakC8
+         bEUo016KPJVd9glRTj8wqJBmv3OiyEfal+jRFMY0ofi1rvOQviPIZCR8/OrAjcdAKqvO
+         Myte4Nj1UTOeJIVWpDHBNNbqRNhW8qBZxkg16L/LXL9SJyruZqT9CqsR6g10JbczWZau
+         e4xX5ZUsA5Kb+UMtfHYqA/Jnvf4vdTxKhIhHHHbi76RgPBP7XGwYWAUKjkayGhaszhSO
+         IECA==
+X-Gm-Message-State: AC+VfDws8wJfrshz7UEDVGTxyh+pkG0BESNz7x+gTe1xYyivM4ASUlrp
+        DVOqGuwoWatW/QZ8a/il2b+Uca5Dkwqp9hBgj14piw==
+X-Google-Smtp-Source: ACHHUZ7oL9DXclxaSedBSFf8N2z5uwXAKyVZCgk8oUZzhxWZOqTyR9x4tBt3VEqdqYrfgTSxz1Eg9c9w4VUC1CxzZhQ=
+X-Received: by 2002:a17:907:940e:b0:950:e44:47ae with SMTP id
+ dk14-20020a170907940e00b009500e4447aemr17373264ejc.40.1683730711623; Wed, 10
+ May 2023 07:58:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: mtd: Add SEAMA partition bindings
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230506-seama-partitions-v1-0-5806af1e4ac7@linaro.org>
- <20230506-seama-partitions-v1-1-5806af1e4ac7@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230506-seama-partitions-v1-1-5806af1e4ac7@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230505184318.1355446-1-etienne.carriere@linaro.org> <CAFA6WYOfFm9R2GynH0bN7hQ4t81T3hkJX5JurCUDG8oOU-RZ4w@mail.gmail.com>
+In-Reply-To: <CAFA6WYOfFm9R2GynH0bN7hQ4t81T3hkJX5JurCUDG8oOU-RZ4w@mail.gmail.com>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Wed, 10 May 2023 16:58:20 +0200
+Message-ID: <CAN5uoS8QCL+s2Kt0QSBAz4B84KWPKFhVYNG=+3T=rtdvK-jwEw@mail.gmail.com>
+Subject: Re: [PATCH] char: tpm: ftpm_tee: use kernel login identifier
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,69 +68,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/05/2023 17:29, Linus Walleij wrote:
-> This types of NAND partitions appear in OpenWrt and
-> U-Boot.
-> 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  .../devicetree/bindings/mtd/partitions/seama.yaml  | 50 ++++++++++++++++++++++
->  1 file changed, 50 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mtd/partitions/seama.yaml b/Documentation/devicetree/bindings/mtd/partitions/seama.yaml
-> new file mode 100644
-> index 000000000000..352f008ffdb1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mtd/partitions/seama.yaml
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mtd/partitions/seama.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Seattle Image Partitions
-> +
-> +description: The SEAttle iMAge (SEAMA) partition is a type of partition
-> +  used for NAND flash devices. This type of flash image is found in some
-> +  D-Link routers such as DIR-645, DIR-842, DIR-859, DIR-860L, DIR-885L,
-> +  DIR890L and DCH-M225, as well as in WD and NEC routers on the ath79
-> +  (MIPS), Broadcom BCM53xx, and RAMIPS platforms.
-> +
-> +maintainers:
-> +  - Linus Walleij <linus.walleij@linaro.org>
-> +
-> +select: false
+Hello Sumit,
 
-You miss update to partitions.yaml. Anyway, for your testing,
-temporarily change it to true, to see errors.
+On Wed, 10 May 2023 at 12:24, Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> Hi Etienne,
+>
+> On Sat, 6 May 2023 at 00:14, Etienne Carriere
+> <etienne.carriere@linaro.org> wrote:
+> >
+> > Changes fTPM TEE driver to open the TEE session with REE kernel login
+> > identifier rather than public login. This is needed in case fTPM service
+> > it denied to user land application and restricted to kernel operating
+> > system services only.
+>
+> This is a valid restriction to avoid any unintended use of fTPM by
+> user-space. But has the corresponding patch landed in fTPM TA which
+> would enforce this restriction?
 
-> +
-> +properties:
-> +  compatible:
-> +    const: seama
-> +
-> +  '#address-cells': false
-> +
-> +  '#size-cells': false
+Not yet. Actually, I've posted some other change requests in the repo
+[1]  but got no feedback. Not nice from me but I didn't post any other
+changes since.
+In the mean time, I think Linux kernel should be ready for this before
+fTPM implementation is fixed.
+Note that U-Boot already integrate this login identifier change, see [2].
 
-You have children, so these must be true.
-
-> +
-> +patternProperties:
-> +  "@[0-9a-f]+$":
-> +    $ref: partition.yaml#
-> +
-> +required:
-> +  - compatible
-
-address/size-cells as well
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
+[1] https://github.com/microsoft/ms-tpm-20-ref/pull/83
+[2] https://source.denx.de/u-boot/u-boot/-/commit/33ba80303e93869c439828dd289fb8ef64ed3bfc
 
 Best regards,
-Krzysztof
+Etienne
 
+>
+> -Sumit
+>
+> >
+> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> > ---
+> >  drivers/char/tpm/tpm_ftpm_tee.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+> > index 528f35b14fb6..6d32e260af43 100644
+> > --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> > +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> > @@ -241,7 +241,7 @@ static int ftpm_tee_probe(struct device *dev)
+> >         /* Open a session with fTPM TA */
+> >         memset(&sess_arg, 0, sizeof(sess_arg));
+> >         export_uuid(sess_arg.uuid, &ftpm_ta_uuid);
+> > -       sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
+> > +       sess_arg.clnt_login = TEE_IOCTL_LOGIN_REE_KERNEL;
+> >         sess_arg.num_params = 0;
+> >
+> >         rc = tee_client_open_session(pvt_data->ctx, &sess_arg, NULL);
+> > --
+> > 2.25.1
+> >
