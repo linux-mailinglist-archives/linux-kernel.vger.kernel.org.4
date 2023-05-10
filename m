@@ -2,99 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5B66FE0A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022466FE0AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237535AbjEJOm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S237591AbjEJOnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237258AbjEJOmX (ORCPT
+        with ESMTP id S237589AbjEJOnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:42:23 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711A2BC;
-        Wed, 10 May 2023 07:42:22 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34AD7v6R020389;
-        Wed, 10 May 2023 14:41:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=yXhxwsbwi+08VkxnQt2ohjYL4NlaY/YYuUapTdI3wxc=;
- b=pOizwmYzf1xO5LUmU3Al0wnCTSwbfrUb5CHD1ZycsEUMxw2pYfz3J5bBh3t1InNutbU1
- mN38a0+vAu2sJCorvbP1IP+6lXU7nN9rRDA1CqaxMXk0IveC0dkq4iyI0rn2IYlQQZ98
- R8dAi6Mp3l7UN4KMC7wdA8WYY+gYSY1Ld7cK8KXnSCItn6u7epFiFAnfdXkJzWhhg+TB
- ZMPTpAgoTId0vPBjeV6MxzdlCtN7HU5shcue7094vM0+hsiDK2Nnhjgo7jqlo8VLphEE
- /OiGMc62NEAV0iEn73qYQ7/1juFy1u12fyogiruWKvE6Y1bUeOR1QVp1WK6VpXgWDlFX mw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qg79crqqy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 14:41:52 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34AEfpKs021064
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 14:41:51 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 10 May
- 2023 07:41:50 -0700
-Message-ID: <7e28b8b7-1bc1-bd3a-a198-a0dfaf356c01@quicinc.com>
-Date:   Wed, 10 May 2023 08:41:33 -0600
+        Wed, 10 May 2023 10:43:35 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755B159EB
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:43:31 -0700 (PDT)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6573C3F486
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:43:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1683729807;
+        bh=VsRr4UycG64Ad7Wwitdyuus/KJ2GRNbGK68qU7i6U64=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=pNcxgBXPFFodaeYlu/o2D06g8I4U1cFk935AI5+DBzamPez+oJXnjt7T0PNM5448A
+         xjHFUWScYj/5EzuCjDilxYpQBx7drPoIm7NhZP1e3iFaYO/wO68QnkRo8jM2bGSn5U
+         sq2Af2W2KRvy8DmYOSglmdGXVy5uynLY/+rdUGU6ErVZQhQndINeYjXByZHOsTV51e
+         cSavG4n0B0LL7TtkAGKt1GQv36vZtNgh43D4DgjP8BzeCR/L05xN2nxFziMfdu9wdL
+         5A4kNy41+1iYDmGl02GHr5lpPR5cY9/us4gAT2OPrRQ5HzPkt3gOcaY30grtcwxZfM
+         zCJaW69tRRjew==
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-965f0c4ae32so579892066b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:43:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683729804; x=1686321804;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VsRr4UycG64Ad7Wwitdyuus/KJ2GRNbGK68qU7i6U64=;
+        b=LBDpzciRrPbmpYj5PCZFN6fF7dqVyHIP4tSi7t27Uk8QdV1mCW0ZenQHqEB+nzA3LV
+         IcXj5U3zUQEmb9AQtmKgnZ1t4sYoThDZGtYa+1lmOcxT5UT5dzUtqU5hzUyfqUWDyhpl
+         //IIFa6AaYtfOouMAlmYYL0zDngzxjzWdmHEevv1xgg719pEMdlYUTdPWclEadssQaYk
+         73+CQHUaav32blLsoio6FyMehJqqvOL8kBQg6dx6+1GNBoJQMEuxF8Ifw72JKZZeB0UZ
+         zalIXz9dRkTpH9nT5swsFRmJFgYv4af2eGGwzGl0oVAZw4PAwwpyN5zYPJTqF+h+2E47
+         nKRQ==
+X-Gm-Message-State: AC+VfDxrWP3NIu1NJ1Pf0Lb1P1ajsQHdHXPl1QbbImcOx0gRo6yKLsvR
+        Eh6U8/QQ81EA25WLJe90rJEAHF5nVbFPiIsf3P27wUfLP/k5p4eyDrdxXLrpmiWLeAvxYpF0gIu
+        SxModCSHwkHr2NlniIukpSyX0QmelHnG2bRx9C/qivg==
+X-Received: by 2002:a17:907:94cf:b0:8b8:c06e:52d8 with SMTP id dn15-20020a17090794cf00b008b8c06e52d8mr18552876ejc.36.1683729804689;
+        Wed, 10 May 2023 07:43:24 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4p3WcCR9YYlvqH5FEUdsaxVk8iHhVqAwORD/x5tdhZuSVIvkPty0YtMpelRGfmwuLtWDzKFw==
+X-Received: by 2002:a17:907:94cf:b0:8b8:c06e:52d8 with SMTP id dn15-20020a17090794cf00b008b8c06e52d8mr18552853ejc.36.1683729804415;
+        Wed, 10 May 2023 07:43:24 -0700 (PDT)
+Received: from amikhalitsyn.. (ip5f5bf3d5.dynamic.kabel-deutschland.de. [95.91.243.213])
+        by smtp.gmail.com with ESMTPSA id ci18-20020a170907267200b009659ecdf29fsm2753044ejc.1.2023.05.10.07.43.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 07:43:23 -0700 (PDT)
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To:     nhorman@tuxdriver.com
+Cc:     davem@davemloft.net,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Christian Brauner <brauner@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v2] sctp: add bpf_bypass_getsockopt proto callback
+Date:   Wed, 10 May 2023 16:42:58 +0200
+Message-Id: <20230510144258.1343471-1-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 2/3] dt-bindings: clock: qcom,mmcc: define
- clocks/clock-names for MSM8226
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-References: <20230509-msm8226-mmcc-parents-v1-0-83a2dfc986ab@z3ntu.xyz>
- <20230509-msm8226-mmcc-parents-v1-2-83a2dfc986ab@z3ntu.xyz>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20230509-msm8226-mmcc-parents-v1-2-83a2dfc986ab@z3ntu.xyz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: XbLxN-6knLr6YD1gg7LF60DfIzBiSfEr
-X-Proofpoint-ORIG-GUID: XbLxN-6knLr6YD1gg7LF60DfIzBiSfEr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 adultscore=0 clxscore=1011 mlxscore=0 suspectscore=0
- bulkscore=0 spamscore=0 priorityscore=1501 mlxlogscore=807 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305100118
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/2023 3:16 PM, Luca Weiss wrote:
-> Define clock/clock-names properties of the MMCC device node to be used
-> on MSM8226 platform.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+Add bpf_bypass_getsockopt proto callback and filter out
+SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS socket options
+from running eBPF hook on them.
 
-Acked-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
+hook returns an error after success of the original handler
+sctp_getsockopt(...), userspace will receive an error from getsockopt
+syscall and will be not aware that fd was successfully installed into fdtable.
+
+This patch was born as a result of discussion around a new SCM_PIDFD interface:
+https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com/
+
+Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Neil Horman <nhorman@tuxdriver.com>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc: Xin Long <lucien.xin@gmail.com>
+Cc: linux-sctp@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Suggested-by: Stanislav Fomichev <sdf@google.com>
+Acked-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+---
+ net/sctp/socket.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index cda8c2874691..fed6057beb60 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -8281,6 +8281,29 @@ static int sctp_getsockopt(struct sock *sk, int level, int optname,
+ 	return retval;
+ }
+ 
++static bool sctp_bpf_bypass_getsockopt(int level, int optname)
++{
++	/*
++	 * These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
++	 * hook returns an error after success of the original handler
++	 * sctp_getsockopt(...), userspace will receive an error from getsockopt
++	 * syscall and will be not aware that fd was successfully installed into fdtable.
++	 *
++	 * Let's prevent bpf cgroup hook from running on them.
++	 */
++	if (level == SOL_SCTP) {
++		switch (optname) {
++		case SCTP_SOCKOPT_PEELOFF:
++		case SCTP_SOCKOPT_PEELOFF_FLAGS:
++			return true;
++		default:
++			return false;
++		}
++	}
++
++	return false;
++}
++
+ static int sctp_hash(struct sock *sk)
+ {
+ 	/* STUB */
+@@ -9650,6 +9673,7 @@ struct proto sctp_prot = {
+ 	.shutdown    =	sctp_shutdown,
+ 	.setsockopt  =	sctp_setsockopt,
+ 	.getsockopt  =	sctp_getsockopt,
++	.bpf_bypass_getsockopt	= sctp_bpf_bypass_getsockopt,
+ 	.sendmsg     =	sctp_sendmsg,
+ 	.recvmsg     =	sctp_recvmsg,
+ 	.bind        =	sctp_bind,
+@@ -9705,6 +9729,7 @@ struct proto sctpv6_prot = {
+ 	.shutdown	= sctp_shutdown,
+ 	.setsockopt	= sctp_setsockopt,
+ 	.getsockopt	= sctp_getsockopt,
++	.bpf_bypass_getsockopt	= sctp_bpf_bypass_getsockopt,
+ 	.sendmsg	= sctp_sendmsg,
+ 	.recvmsg	= sctp_recvmsg,
+ 	.bind		= sctp_bind,
+-- 
+2.34.1
+
