@@ -2,139 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9D46FDCD5
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D6F6FDCE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236826AbjEJLg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 07:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
+        id S236808AbjEJLid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 07:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235317AbjEJLgy (ORCPT
+        with ESMTP id S236840AbjEJLic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 07:36:54 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834A67DBD;
-        Wed, 10 May 2023 04:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683718594; x=1715254594;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OIHMQRBUSAAIKqFfKJ0b5Sjxv6B77OgJnTeBhK6P5aQ=;
-  b=dXBGBh5R/o3DNHsgtLR5PAgJEaS6vokq+bbHJWyges3p7jCX5REzbD++
-   5iC3umMYUQQQX1JpcGRAV8OXdApiNEjSfKVUskqMOq56ubax45wvRBTtO
-   bafcS7BNPwbJYqwWmv9DeoBlXM19KAW77dRnoS80B2YxZs922UEVYv9Mq
-   drqtoSMwXYpeG1ZGXAo7C0eMSIWZA3+bQ51sA/LZeZX6km2U1rY5469Mo
-   Z89tMXjyg56LnV8AlqVUphxc5y7V/oXnH4e7Ca5av7OrM4CCIS2NC1dfJ
-   prZ49O77EoN4kv6soGDQ9QGdsnxUG8xj4tiW7S+uzbuDHwYIBqCEbl2EP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="347651912"
-X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
-   d="scan'208";a="347651912"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 04:36:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="764253680"
-X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
-   d="scan'208";a="764253680"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 10 May 2023 04:36:29 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pwi7Q-0003EC-2a;
-        Wed, 10 May 2023 11:36:28 +0000
-Date:   Wed, 10 May 2023 19:36:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yan Wang <rk.code@outlook.com>, andrew@lunn.ch,
-        hkallweit1@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Yan Wang <rk.code@outlook.com>
-Subject: Re: [PATCH v3] net: mdiobus: Add a function to deassert reset
-Message-ID: <202305101922.dXHLqoSw-lkp@intel.com>
-References: <KL1PR01MB5448A33A549CDAD7D68945B9E6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+        Wed, 10 May 2023 07:38:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362F030F4
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 04:37:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683718666;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q6W2Dw41SOm3qVvAWDDmCFfV0SEGNy54raIoegI7jQ0=;
+        b=SRj/IcOj77KAZZy6OCBrqbTe3QtAFLk9PTeIcSxXd4wHr05lrwBommZ6BRW2XSGUHz/pCH
+        r3Xt/Hx9YQXnPwoZlrj6UQamludmB1GuHKr+7CIQ2jn5TgUYu4GcTbWdcjkF8bSAPnJdcJ
+        qrJ0nYm5NMarks8O3AZCGsWKgn1wqnU=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-531-aous2K8HOeqPA54T8Q7MSw-1; Wed, 10 May 2023 07:37:45 -0400
+X-MC-Unique: aous2K8HOeqPA54T8Q7MSw-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30641258c9eso2454267f8f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 04:37:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683718663; x=1686310663;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q6W2Dw41SOm3qVvAWDDmCFfV0SEGNy54raIoegI7jQ0=;
+        b=SkqxfFPpEqaChJocDFeroIvmhNXE0o+l2NJewPwNW637qo+rXVOv1K9WxI42lko5oE
+         BOQshFuUXbjSLulFbe8cdQ7Nf7M4N+hSqx1YEfRfoSFqr6/yaeYig2j0Ym+dHriv4qgA
+         u/3I9zSdJsn713tz46CDEqaL3cQ0B6kr0Fc+9IhxEL/Vb9klic6hhKq6YN9re5UwMpVv
+         cXx8H3ner2b98sqghKAwZuchg4GKFfR3e2jdDR01T45RzjFoBQNHXzZHn1UwG4PE8ovP
+         CQwwnFuf6H5X6zonUyr1v2f5P/ZnM1PD2Hh/YmAPdr4ZizQ/mkzeq8iSXwfpqkgiKnlR
+         vrkg==
+X-Gm-Message-State: AC+VfDwBLcN061z52s2SqdM67+6SPWS7sTkAgKg+uLZD/oZdRVNUpATr
+        XAoJ4rQ/hV4dKfVXTQpIdlxWilUCK/g0v6dFMWDjQvehtEQhSylCtO+niyWPEZg6WZYDiwgYrqH
+        kkf7PPlYGc+KuOv9Am9j0Qi4mZyQfD5sW
+X-Received: by 2002:adf:ee46:0:b0:306:26d7:3805 with SMTP id w6-20020adfee46000000b0030626d73805mr12746643wro.63.1683718663783;
+        Wed, 10 May 2023 04:37:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ55hv52rdA9ePi18bMW8pKcGBFLT/tiSzgCXsRLDdbk5GEk3fHYjtKTRQQdDL62Wkv1T/cUPg==
+X-Received: by 2002:adf:ee46:0:b0:306:26d7:3805 with SMTP id w6-20020adfee46000000b0030626d73805mr12746627wro.63.1683718663512;
+        Wed, 10 May 2023 04:37:43 -0700 (PDT)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id q18-20020a056000137200b003063176ef09sm17328517wrz.6.2023.05.10.04.37.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 04:37:43 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juri Lelli <juri.lelli@redhat.com>
+Subject: Re: [ANNOUNCE] v6.3.1-rt13
+In-Reply-To: <20230509164640.-aaZNrjH@linutronix.de>
+References: <20230509164640.-aaZNrjH@linutronix.de>
+Date:   Wed, 10 May 2023 12:37:42 +0100
+Message-ID: <xhsmhy1lwifi1.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <KL1PR01MB5448A33A549CDAD7D68945B9E6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yan,
+On 09/05/23 18:46, Sebastian Andrzej Siewior wrote:
+> Dear RT folks!
+>
+> I'm pleased to announce the v6.3.1-rt13 patch set.
+>
+> Changes since v6.3.1-rt12:
+>
+>   - Two posix-timers picked-up from the list. They are scheduled for
+>     upstream inclusion. One of prevents a livelock on PREEMPT_RT in
+>     itimer_delete(). Patches by Thomas Gleixner.
+>
+>   - A softirq handling patch from the list 'revert: "softirq: Let
+>     ksoftirqd do its job' from Paolo Abeni. This revert should reduce a
+>     lot of trouble which start once ksoftirqd is woken up.
+>     The 6.1-RT series has the ktimersd thread which mitigates some of
+>     the pain. This patch should render the patch obsolete.
+>     Should everything work out as expected I intend to backport this
+>     patch the earlier RT series and revert the ktimersd patch in the
+>     v6.1 series.
 
-kernel test robot noticed the following build errors:
+The ktimersd threads solved some priority inversion problem we were seeing,
+IIRC it looked something like so:
+- GP kthread is waiting on swait_event_idle_timeout_exclusive(...)
+- p0 (CFS NICE0) did spin_lock(L) then got throttled by CFS bandwidth
+- p1 (CFS NICE0) did local_bh_disable() + did spin_lock(L)
 
-[auto build test ERROR on net-next/main]
-[also build test ERROR on net/main linus/master v6.4-rc1 next-20230510]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+So p0 owns L, but cannot get bandwidth replenished since local softirqs are
+disabled, and the GP kthread can't be woken up by timeout to initiate
+boosting either.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yan-Wang/net-mdiobus-Add-a-function-to-deassert-reset/20230510-161736
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/KL1PR01MB5448A33A549CDAD7D68945B9E6779%40KL1PR01MB5448.apcprd01.prod.exchangelabs.com
-patch subject: [PATCH v3] net: mdiobus: Add a function to deassert reset
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20230510/202305101922.dXHLqoSw-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f7ded94d887d1020adb4813c2b1025142288e882
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yan-Wang/net-mdiobus-Add-a-function-to-deassert-reset/20230510-161736
-        git checkout f7ded94d887d1020adb4813c2b1025142288e882
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/mdio/
+Even if ksoftirqd has its priority tuned to ensure timers can be expired,
+the above never wakes ksoftirqd due to:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305101922.dXHLqoSw-lkp@intel.com/
+static inline bool should_wake_ksoftirqd(void)
+{
+        return !this_cpu_read(softirq_ctrl.cnt);
+}
 
-All errors (new ones prefixed by >>):
+on the other hand, ktimersd are woken up unconditionally, so in this
+scenario it gets to run and donate its priority via
 
->> drivers/net/mdio/fwnode_mdio.c:64:10: error: implicit declaration of function 'fwnode_gpiod_get_index' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_HIGH, NULL);
-                   ^
->> drivers/net/mdio/fwnode_mdio.c:64:53: error: use of undeclared identifier 'GPIOD_OUT_HIGH'
-           reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_HIGH, NULL);
-                                                              ^
->> drivers/net/mdio/fwnode_mdio.c:69:2: error: implicit declaration of function 'gpiod_set_value_cansleep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           gpiod_set_value_cansleep(reset, 0);
-           ^
->> drivers/net/mdio/fwnode_mdio.c:71:2: error: implicit declaration of function 'gpiod_put' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           gpiod_put(reset);
-           ^
-   4 errors generated.
+  ksoftirqd_run_begin()
+  `\
+    local_lock(&softirq_ctrl.lock)
+
+(note that this only solves the CFS bandwidth issue if ktimersd are FIFO or
+above, but they are spawned as FIFO1)
 
 
-vim +/fwnode_gpiod_get_index +64 drivers/net/mdio/fwnode_mdio.c
+TL;DR: for RT, I think we should also kill should_wake_ksoftirqd()
 
-    59	
-    60	static void fwnode_mdiobus_pre_enable_phy(struct fwnode_handle *fwnode)
-    61	{
-    62		struct gpio_desc *reset;
-    63	
-  > 64		reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_HIGH, NULL);
-    65		if (IS_ERR(reset) && PTR_ERR(reset) != -EPROBE_DEFER)
-    66			return;
-    67	
-    68		usleep_range(100, 200);
-  > 69		gpiod_set_value_cansleep(reset, 0);
-    70		/*Release the reset pin,it needs to be registered with the PHY.*/
-  > 71		gpiod_put(reset);
-    72	}
-    73	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
