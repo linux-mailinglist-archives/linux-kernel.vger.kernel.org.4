@@ -2,98 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB7F6FDDD6
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B166FDDE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236761AbjEJMck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 08:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        id S237048AbjEJMfJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 10 May 2023 08:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236681AbjEJMci (ORCPT
+        with ESMTP id S237044AbjEJMet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 08:32:38 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DA865BD;
-        Wed, 10 May 2023 05:32:34 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34ACWM8Z117245;
-        Wed, 10 May 2023 07:32:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683721942;
-        bh=0zvvZEHkm43gIFcoIqh9+DsFglNnTVurBewGEC2HdI4=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=UWkvDC5kXIV8DIo3+QheM6q7O5paXigKFGKWzd3GrybLPbI6biK2z+xkq34DIn0UM
-         7D1w0fyFJ6LV7qxUB3hPZtvDFXDuPjkfATEqwSUPBhG/ednWRTSSBUW+cPwp9w+bV1
-         mhgf5r1PF1eGTVDm3ddXiSvn/z3v79gLacGjeU9k=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34ACWM01070642
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 10 May 2023 07:32:22 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 10
- May 2023 07:32:21 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 10 May 2023 07:32:21 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34ACWKPE027737;
-        Wed, 10 May 2023 07:32:21 -0500
-From:   Nitin Yadav <n-yadav@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] arm64: dts: ti: k3-am62-main: add sa3_secproxy in cbass_main
-Date:   Wed, 10 May 2023 18:02:16 +0530
-Message-ID: <20230510123216.3440019-3-n-yadav@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230510123216.3440019-1-n-yadav@ti.com>
-References: <20230510123216.3440019-1-n-yadav@ti.com>
+        Wed, 10 May 2023 08:34:49 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333A47EE6;
+        Wed, 10 May 2023 05:34:48 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-559e2051d05so103544817b3.3;
+        Wed, 10 May 2023 05:34:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683722087; x=1686314087;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kGY/0htSfGIvsVgPn7bx+ykp3agguIOsAu0irnl44Xg=;
+        b=b3fqZuX/o+l+JPHZU/oNUSUIQokf+iQ2h3VQEGv3wrlo+2YoF6yE+8nEDaj7BWOhnd
+         cwTS69SgVDeoXoeZLP/jbDPVB+WNcBOU+WONdfvVcZXsyu12BwDxZwkGinMDzrYLzX4n
+         NxshY0P63163cpZuhl1EgjowDnHhEQHxbQzsuA5AJy/k9eClGFPpRn9BHMoqLvbD54IL
+         9nvcvALf4lKWFcLg5QExmogZZCDYmR+OWMJWLQr1NraLVdDS3suQGv4dlKqnVdGx5Ic2
+         qBHxGYEU0t6NHbpqnH08RrwyMYuQ9mYYX/HPaFgOFQWVwDT5gqNDZ/jLozQf0Cox+Ald
+         lTOA==
+X-Gm-Message-State: AC+VfDxNs7/QlEEhfPMQYEq6TlXAz88Pa31bBT0oi5sGf5iI+xpRMfvV
+        wvVZEsRqePzxl3RxtASaIrucPFmJoPnirA==
+X-Google-Smtp-Source: ACHHUZ4IgCsZzVyln8keZ1hl6teCvscT6HCafQroCO5qDcfhcANm4gjeIOVoxSMTBZodjSK9mGXFJw==
+X-Received: by 2002:a25:50c1:0:b0:ba1:b7e4:e0dd with SMTP id e184-20020a2550c1000000b00ba1b7e4e0ddmr18447949ybb.56.1683722087169;
+        Wed, 10 May 2023 05:34:47 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id b2-20020a251b02000000b00b7767ca7485sm3742166ybb.34.2023.05.10.05.34.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 05:34:45 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-559de1d36a9so103567617b3.1;
+        Wed, 10 May 2023 05:34:45 -0700 (PDT)
+X-Received: by 2002:a0d:ead7:0:b0:55a:ae08:163f with SMTP id
+ t206-20020a0dead7000000b0055aae08163fmr22367018ywe.32.1683722085095; Wed, 10
+ May 2023 05:34:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230510110557.14343-1-tzimmermann@suse.de> <20230510110557.14343-6-tzimmermann@suse.de>
+In-Reply-To: <20230510110557.14343-6-tzimmermann@suse.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 10 May 2023 14:34:33 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVV-MQV3C_o6JxPj23h3zo0kMmsn9ZEWJxsrzr6YpKmyg@mail.gmail.com>
+Message-ID: <CAMuHMdVV-MQV3C_o6JxPj23h3zo0kMmsn9ZEWJxsrzr6YpKmyg@mail.gmail.com>
+Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into <asm/fb.h>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     deller@gmx.de, javierm@redhat.com, daniel@ffwll.ch,
+        vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
+        davem@davemloft.net, James.Bottomley@hansenpartnership.com,
+        arnd@arndb.de, sam@ravnborg.org, suijingfeng@loongson.cn,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add sa3_secproxy node in k3-am62-main.dtsi to keep device tree
-nodes in sync with u-boot nodes.
+Hi Thomas,
 
-Signed-off-by: Nitin Yadav <n-yadav@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+On Wed, May 10, 2023 at 1:06 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> Implement framebuffer I/O helpers, such as fb_read*() and fb_write*(),
+> in the architecture's <asm/fb.h> header file or the generic one.
+>
+> The common case has been the use of regular I/O functions, such as
+> __raw_readb() or memset_io(). A few architectures used plain system-
+> memory reads and writes. Sparc used helpers for its SBus.
+>
+> The architectures that used special cases provide the same code in
+> their __raw_*() I/O helpers. So the patch replaces this code with the
+> __raw_*() functions and moves it to <asm-generic/fb.h> for all
+> architectures.
+>
+> v6:
+>         * fix fb_readq()/fb_writeq() on 64-bit mips (kernel test robot)
+> v5:
+>         * include <linux/io.h> in <asm-generic/fb>; fix s390 build
+> v4:
+>         * ia64, loongarch, sparc64: add fb_mem*() to arch headers
+>           to keep current semantics (Arnd)
+> v3:
+>         * implement all architectures with generic helpers
+>         * support reordering and native byte order (Geert, Arnd)
+>
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Tested-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+>
+> add mips fb_q()
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-index b3e4857bbbe4..7c2af5b0e022 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-@@ -42,6 +42,15 @@ gic_its: msi-controller@1820000 {
- 		};
- 	};
- 
-+	sa3_secproxy: secproxy@44880000 {
-+		compatible = "ti,am654-secure-proxy";
-+		#mbox-cells = <1>;
-+		reg-names = "rt", "scfg", "target_data";
-+		reg = <0x00 0x44880000 0x00 0x20000>,
-+		      <0x0 0x44860000 0x0 0x20000>,
-+		      <0x0 0x43600000 0x0 0x10000>;
-+	};
-+
- 	main_conf: syscon@100000 {
- 		compatible = "syscon", "simple-mfd";
- 		reg = <0x00 0x00100000 0x00 0x20000>;
+> --- a/arch/mips/include/asm/fb.h
+> +++ b/arch/mips/include/asm/fb.h
+> @@ -12,6 +12,28 @@ static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
+>  }
+>  #define fb_pgprotect fb_pgprotect
+>
+> +/*
+> + * MIPS doesn't define __raw_ I/O macros, so the helpers
+> + * in <asm-generic/fb.h> don't generate fb_readq() and
+> + * fb_write(). We have to provide them here.
+
+MIPS does not include <asm-generic/io.h>,  nor define its own
+__raw_readq() and __raw_writeq()...
+
+> + *
+> + * TODO: Convert MIPS to generic I/O. The helpers below can
+> + *       then be removed.
+> + */
+> +#ifdef CONFIG_64BIT
+> +static inline u64 fb_readq(const volatile void __iomem *addr)
+> +{
+> +       return __raw_readq(addr);
+
+... so how can this call work?
+
+> +}
+> +#define fb_readq fb_readq
+> +
+> +static inline void fb_writeq(u64 b, volatile void __iomem *addr)
+> +{
+> +       __raw_writeq(b, addr);
+> +}
+> +#define fb_writeq fb_writeq
+> +#endif
+> +
+>  #include <asm-generic/fb.h>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.25.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
