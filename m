@@ -2,102 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8358E6FD441
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 05:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C106FD443
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 05:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235427AbjEJD0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 23:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33450 "EHLO
+        id S235664AbjEJD1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 23:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235540AbjEJDZj (ORCPT
+        with ESMTP id S235634AbjEJD1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 23:25:39 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBE66593;
-        Tue,  9 May 2023 20:22:49 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34A2wf8w019001;
-        Wed, 10 May 2023 03:22:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=jYfWkb3nvw2s1Yb4lS3IVzdPiVJQmcdbojNMM9X1xmM=;
- b=C6DIND7D4p80tv7NPY9tRDm3hYbrIMjUbAKfSsDSPrmlUrs9qjHzmKXhpF0TSIBnH1K2
- lFSYneCz9/C+PTBx3at6sCS+6OwGKTXEOEbqxdOgrMkZZN3bV8IwkxFzJpQnOAprxzCh
- 7MJ+1+E/pFjORRCP4NW7IeU3IiA5ck6IXle5pnUBQ3zieb2J4OhZgi2r+QK/Ri0imWa0
- M2UdVm3SLnVA4JKKeEmuGlhy1tbc8JzW8XIq0AKSlfaZ3YCPiHJctL/IRei6qsmFA2B9
- lP4KvaXIMR9Vt8mEDSLlQuYXGWm1+UB1TnixlKFK9ywdPUX/8MpgcgEj3mJ9InpzB9UY KQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qfw3d0k1v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 03:22:09 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34A3M8HK032683
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 03:22:08 GMT
-Received: from [10.233.17.245] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
- 20:22:02 -0700
-Message-ID: <4535f993-156c-5401-53a8-bcf938bf24b7@quicinc.com>
-Date:   Wed, 10 May 2023 11:21:59 +0800
+        Tue, 9 May 2023 23:27:04 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BB110EC;
+        Tue,  9 May 2023 20:24:59 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QGL4Q56JCz4f3l8M;
+        Wed, 10 May 2023 11:24:54 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgBH9CGHDltkLdqYIQ--.29139S3;
+        Wed, 10 May 2023 11:24:56 +0800 (CST)
+Subject: Re: Situation of CONFIG_BLK_WBT_MQ after commit b11d31ae01e6
+ ("blk-wbt: remove unnecessary check in wbt_enable_default()")
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <CAKXUXMzfKq_J9nKHGyr5P5rvUETY4B-fxoQD4sO+NYjFOfVtZA@mail.gmail.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <8a86ba08-cde4-97a4-d7e2-dc340609381c@huaweicloud.com>
+Date:   Wed, 10 May 2023 11:24:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4 2/3] dt-bindings: arm: Add Coresight Dummy Trace
-Content-Language: en-US
-To:     Leo Yan <leo.yan@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        James Clark <james.clark@arm.com>
-CC:     Mike Leach <mike.leach@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        <linux-doc@vger.kernel.org>
-References: <20230505092422.32217-1-quic_hazha@quicinc.com>
- <20230505092422.32217-3-quic_hazha@quicinc.com>
- <958ae925-dee2-3273-0cd6-b5edc891ba70@arm.com>
- <20230505120529.GB898031@leoy-yangtze.lan>
-From:   Hao Zhang <quic_hazha@quicinc.com>
-In-Reply-To: <20230505120529.GB898031@leoy-yangtze.lan>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ppfiNE2VQvAMtKiS4ZW5wAhZLyVorj4L
-X-Proofpoint-GUID: ppfiNE2VQvAMtKiS4ZW5wAhZLyVorj4L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_16,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 malwarescore=0 impostorscore=0 adultscore=0
- mlxlogscore=999 mlxscore=0 bulkscore=0 suspectscore=0 phishscore=0
- spamscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305100024
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <CAKXUXMzfKq_J9nKHGyr5P5rvUETY4B-fxoQD4sO+NYjFOfVtZA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgBH9CGHDltkLdqYIQ--.29139S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF1fAr1rAF4fWryDCFyrXrb_yoW8Crykp3
+        4UJr17t3WvgFs7Kr4xZ34UKayFyFZ7K347Gryruw1UXrn8Aw4xZr4F9F1avFyqvr4vqw43
+        t3ySqr9akry5Za7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbPEf5UUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,133 +65,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suzuki, Leo,
+Hi,
 
-On 5/5/2023 8:05 PM, Leo Yan wrote:
-> On Fri, May 05, 2023 at 11:54:03AM +0100, Suzuki Kuruppassery Poulose wrote:
+在 2023/05/08 12:37, Lukas Bulwahn 写道:
+> Dear Yu Kuai, dear Christoph, dear Jens,
 > 
-> [...]
 > 
->>> +title: ARM Coresight Dummy component
->>> +
->>> +description: |
->>> +  Coresight Dummy Trace Module is for the specific devices that kernel
->>> +  don't have permission to access or configure, e.g., CoreSight TPDMs
->>> +  on Qualcomm platforms. So there need driver to register dummy devices
->>> +  as Coresight devices. It may also be used to define components that
->>> +  may not have any programming interfaces (e.g, static links), so that
->>> +  paths can be established in the driver. Provide Coresight API for
->>> +  dummy device operations, such as enabling and disabling dummy devices.
->>> +  Build the Coresight path for dummy sink or dummy source for debugging. > +
->>> +  The primary use case of the coresight dummy is to build path in kernel
->>> +  side for dummy sink and dummy source.
->>> +
->>> +maintainers:
->>> +  - Mao Jinlong <quic_jinlmao@quicinc.com>
->>> +  - Tao Zhang <quic_taozha@quicinc.com>
->>> +  - Hao Zhang <quic_hazha@quicinc.com>
->>> +  - Yuanfang Zhang <quic_yuanfang@quicinc.com>
->>
->> Given this is a generic "CoreSight" component, I would prefer to have the
->> CoreSight subsystem maintainers listed here (too). I don't mind
->> the entries above, but would like to make sure that the subsystem
->> people are aware of the changes happening here. Please use:
->>
->> Mike Leach <mike.leach@linaro.org>
->> Suzuki K Poulose <suzuki.poulose@arm.com>
->> Leo Yan <leo.yan@linaro.org>
->  > Given I am spending little time on CoreSight reviewing, I'd like to
-> use James Clark's email address to replace my own; I believe this
-> would benefit long term maintenance.
+> The commit b11d31ae01e6 ("blk-wbt: remove unnecessary check in
+> wbt_enable_default()") removes the only reference to the config
+> BLK_WBT_MQ in the kernel tree.
 > 
->    James Clark <james.clark@arm.com>
+> The commit comes with the statement "If CONFIG_BLK_WBT_MQ is disabled,
+> wbt_init() won't do anything.". The statement "If CONFIG_BLK_WBT is
+> disabled, wbt_init() won't do anything." (note: CONFIG_BLK_WBT vs.
+> CONFIG_BLK_WBT_MQ) is certainly true, but I do not see that "If
+> CONFIG_BLK_WBT_MQ is disabled, wbt_init() won't do anything.", but I
+> believe it would simply do what wbt_init() does with CONFIG_BLK_WBT
+> being enabled.
 > 
-> Thanks!
->
-Thanks for your review. I will update the maintainers in the next patch 
-series.
+> Now, it seems that with this commit applied, the intended switch of
+> the config BLK_WBT_MQ is gone, and the config really now has no effect
+> at all.
+> 
+> So, I am a bit puzzled:
+> 
+> 1. Either the config BLK_WBT_MQ does have an effect somewhere, but one
+> cannot find its reference with 'git grep -i "BLK_WBT_MQ" .' --- so, my
+> investigation is just incomplete or wrong, or
+> 
+> 2. We really do not need this further build config BLK_WBT_MQ beyond
+> the other configs already there --- then this config should just be
+> removed, or
+> 
+> 3. the commit unintentionally broke the purpose of the config
+> BLK_WBT_MQ --- then this commit above should be reverted.
 
-Thanks,
-Hao
+Thanks for the report, it's the above case and it's my mistake.
+I will fix this.
 
->> With the above:
->>
->> Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
->>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    items:
->>> +      - enum:
->>> +          - arm,coresight-dummy-sink
->>> +          - arm,coresight-dummy-source
->>> +
->>> +  out-ports:
->>> +    $ref: /schemas/graph.yaml#/properties/ports
->>> +
->>> +    properties:
->>> +      port:
->>> +        description: Output connection from the source to Coresight
->>> +          Trace bus.
->>> +        $ref: /schemas/graph.yaml#/properties/port
->>> +
->>> +  in-ports:
->>> +    $ref: /schemas/graph.yaml#/properties/ports
->>> +
->>> +    properties:
->>> +      port:
->>> +        description: Input connection from the Coresight Trace bus to
->>> +          dummy sink, such as Embedded USB debugger(EUD).
->>> +        $ref: /schemas/graph.yaml#/properties/port
->>> +
->>> +required:
->>> +  - compatible
->>> +
->>> +if:
->>> +  # If the compatible contains the below value
->>> +  properties:
->>> +    compatible:
->>> +      contains:
->>> +        const: arm,coresight-dummy-sink
->>> +
->>> +then:
->>> +  required:
->>> +    - in-ports
->>> +
->>> +else:
->>> +  required:
->>> +    - out-ports
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  # Minimum dummy sink definition. Dummy sink connect to coresight replicator.
->>> +  - |
->>> +    sink {
->>> +      compatible = "arm,coresight-dummy-sink";
->>> +
->>> +      in-ports {
->>> +        port {
->>> +          eud_in_replicator_swao: endpoint {
->>> +            remote-endpoint = <&replicator_swao_out_eud>;
->>> +          };
->>> +        };
->>> +      };
->>> +    };
->>> +
->>> +  # Minimum dummy source definition. Dummy source connect to coresight funnel.
->>> +  - |
->>> +    source {
->>> +      compatible = "arm,coresight-dummy-source";
->>> +
->>> +      out-ports {
->>> +        port {
->>> +          dummy_riscv_out_funnel_swao: endpoint {
->>> +            remote-endpoint = <&funnel_swao_in_dummy_riscv>;
->>> +          };
->>> +        };
->>> +      };
->>> +    };
->>> +
->>> +...
->>
+Kuai
+> 
+> I would be happy if you could provide some guidance on what is the
+> situation with config BLK_WBT_MQ.
+> 
+> Currently, I am guessing it is option 2 and the config BLK_WBT_MQ
+> simply can be deleted, but I am really unsure. Probably, this build
+> option is not used by many people and its effect is hardly noticed, if
+> one does not specifically check for that in the running system.
+> 
+> 
+> Best regards,
+> 
+> Lukas
+> .
+> 
+
