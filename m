@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A096FDF1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852D96FDF19
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237232AbjEJNtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 09:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
+        id S237244AbjEJNtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 09:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237266AbjEJNtT (ORCPT
+        with ESMTP id S237234AbjEJNtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 10 May 2023 09:49:19 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7022E5FE9;
-        Wed, 10 May 2023 06:49:12 -0700 (PDT)
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1F049D9;
+        Wed, 10 May 2023 06:49:11 -0700 (PDT)
 Date:   Wed, 10 May 2023 13:49:10 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683726551;
+        s=2020; t=1683726550;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sHJS/7EoNzb+6ZuL9sAOr94pTTj6EYKfBFQrZhf/VNM=;
-        b=iVN3X91VSPuCjWJO2SZd5Xy8TOoQllZ5oRTxeJ8kcEbg+GcEfBYWWWgY5ZAuAg8ar1P9Fg
-        QLElCT0EEHI+9UdQkC+siE2BXmvoR7H/0BHlzOUB8Sn4G2L599fSUszXyiPmtunVOANYYX
-        psAqO3wTQTZgHsGSixT+/E7075KjjtHiyqwMKfk0+JxJiQkf3Ii+whsO2Fea2Cd2A0WaPO
-        trxlS8kcwcEZMqgxiUAb02TpuTXiKWR4tA/5Gj0SDHzQjxPneaypcTdYDdSbzdZafu4tru
-        aGYlzNdbrcRHd0vjEWnf6XTiPl4iFb2EmrL9MoBc5E0V/qvm1xbmDlceuCIf1w==
+        bh=v3CUVMRHP/ypNgb8JPhTrDX1Fy7uqajPDfdvFNptxK8=;
+        b=afQZlGc7k86PSie8RsYEHgo4OhO6gT2JAgL9h2K3hj/EandjRv7FLjbwK7OpA9MQxPsOdd
+        /bcmzmsEOIKnFM9Vt5YfRJiTVf1Zx64uWjN8cA6uTXRycqtokT2v7mKMlRbjxdeppD7hUt
+        X4+hZmGRvRs3tlyauTU6xIMeeTjeKqjj7fjGQO8rfqg98uhVeENQW6JcHhUWLhUGzFW7uO
+        xBJ5E89M5H6W2/i/GHE57N/Aw8ah7t+1x4ViZodYxATp6R+O1+jS5zOAffXmZDDvjQaTA4
+        dUzL6k4i3lD+nvYXyuhKZhHNzhPylP0TwNyMneKuIyNWeUb47+hUqA4hXyL7RA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683726551;
+        s=2020e; t=1683726550;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sHJS/7EoNzb+6ZuL9sAOr94pTTj6EYKfBFQrZhf/VNM=;
-        b=U+7eppPQt8Vgv5TrJorYxO1goYPSh/HRPFxXhjPMJkoYxt3FUpsctTZ4OLLXXkULtEu/2R
-        FaZK/KH0Gi2iqxAw==
-From:   "tip-bot2 for Ricardo Neri" <tip-bot2@linutronix.de>
+        bh=v3CUVMRHP/ypNgb8JPhTrDX1Fy7uqajPDfdvFNptxK8=;
+        b=aEMEgFV8FFa/aYOdgsymqSz8KzJwB0IPxmCCzoUVtDf1vMkVrza9q5On3P6zZRYvg8NWNc
+        U0I+b+tqt0RJcgCQ==
+From:   "tip-bot2 for Chen Yu" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] x86/sched/itmt: Give all SMT siblings of a core the
- same priority
+Subject: [tip: sched/core] x86/sched: Add the SD_ASYM_PACKING flag to the die
+ domain of hybrid processors
 Cc:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Len Brown <len.brown@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>, x86@kernel.org,
+        Chen Yu <yu.c.chen@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230406203148.19182-12-ricardo.neri-calderon@linux.intel.com>
-References: <20230406203148.19182-12-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230406203148.19182-13-ricardo.neri-calderon@linux.intel.com>
+References: <20230406203148.19182-13-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
-Message-ID: <168372655068.404.6128574669002418339.tip-bot2@tip-bot2>
+Message-ID: <168372655018.404.15652276815766387273.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -70,67 +69,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     046a5a95c3b0425cfe79e43021d8ee90c1c4f8c9
-Gitweb:        https://git.kernel.org/tip/046a5a95c3b0425cfe79e43021d8ee90c1c4f8c9
-Author:        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-AuthorDate:    Thu, 06 Apr 2023 13:31:47 -07:00
+Commit-ID:     044f0e27dec6e30bb8875a4a12c5f2594964e93f
+Gitweb:        https://git.kernel.org/tip/044f0e27dec6e30bb8875a4a12c5f2594964e93f
+Author:        Chen Yu <yu.c.chen@intel.com>
+AuthorDate:    Thu, 06 Apr 2023 13:31:48 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 08 May 2023 10:58:38 +02:00
 
-x86/sched/itmt: Give all SMT siblings of a core the same priority
+x86/sched: Add the SD_ASYM_PACKING flag to the die domain of hybrid processors
 
-X86 does not have the SD_ASYM_PACKING flag in the SMT domain. The scheduler
-knows how to handle SMT and non-SMT cores of different priority. There is
-no reason for SMT siblings of a core to have different priorities.
+Intel Meteor Lake hybrid processors have cores in two separate dies. The
+cores in one of the dies have higher maximum frequency. Use the SD_ASYM_
+PACKING flag to give higher priority to the die with CPUs of higher maximum
+frequency.
 
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Suggested-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Len Brown <len.brown@intel.com>
-Tested-by: Zhang Rui <rui.zhang@intel.com>
-Link: https://lore.kernel.org/r/20230406203148.19182-12-ricardo.neri-calderon@linux.intel.com
+Link: https://lore.kernel.org/r/20230406203148.19182-13-ricardo.neri-calderon@linux.intel.com
 ---
- arch/x86/kernel/itmt.c | 23 +++++------------------
- 1 file changed, 5 insertions(+), 18 deletions(-)
+ arch/x86/kernel/smpboot.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/itmt.c b/arch/x86/kernel/itmt.c
-index 670eb08..ee4fe8c 100644
---- a/arch/x86/kernel/itmt.c
-+++ b/arch/x86/kernel/itmt.c
-@@ -165,32 +165,19 @@ int arch_asym_cpu_priority(int cpu)
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index a335abd..34066f6 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -583,7 +583,7 @@ static struct sched_domain_topology_level x86_hybrid_topology[] = {
+ #ifdef CONFIG_SCHED_MC
+ 	{ cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC) },
+ #endif
+-	{ cpu_cpu_mask, SD_INIT_NAME(DIE) },
++	{ cpu_cpu_mask, x86_sched_itmt_flags, SD_INIT_NAME(DIE) },
+ 	{ NULL, },
+ };
  
- /**
-  * sched_set_itmt_core_prio() - Set CPU priority based on ITMT
-- * @prio:	Priority of cpu core
-- * @core_cpu:	The cpu number associated with the core
-+ * @prio:	Priority of @cpu
-+ * @cpu:	The CPU number
-  *
-  * The pstate driver will find out the max boost frequency
-  * and call this function to set a priority proportional
-- * to the max boost frequency. CPU with higher boost
-+ * to the max boost frequency. CPUs with higher boost
-  * frequency will receive higher priority.
-  *
-  * No need to rebuild sched domain after updating
-  * the CPU priorities. The sched domains have no
-  * dependency on CPU priorities.
-  */
--void sched_set_itmt_core_prio(int prio, int core_cpu)
-+void sched_set_itmt_core_prio(int prio, int cpu)
- {
--	int cpu, i = 1;
--
--	for_each_cpu(cpu, topology_sibling_cpumask(core_cpu)) {
--		int smt_prio;
--
--		/*
--		 * Ensure that the siblings are moved to the end
--		 * of the priority chain and only used when
--		 * all other high priority cpus are out of capacity.
--		 */
--		smt_prio = prio * smp_num_siblings / (i * i);
--		per_cpu(sched_core_priority, cpu) = smt_prio;
--		i++;
--	}
-+	per_cpu(sched_core_priority, cpu) = prio;
- }
