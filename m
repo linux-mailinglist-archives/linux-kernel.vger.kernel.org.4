@@ -2,79 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2296FD75B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 08:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0559A6FD75F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 08:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236016AbjEJGrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 02:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
+        id S236083AbjEJGr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 02:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235502AbjEJGrM (ORCPT
+        with ESMTP id S229737AbjEJGr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 02:47:12 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF7B270E
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 23:47:10 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-965ac4dd11bso1354748366b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 23:47:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1683701229; x=1686293229;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H//eZGlEJS/35YEhZwhGTWp7oEUZuMDqjOLd1KsW/Dk=;
-        b=je9yKiewPEqrhtPLrQqwPtxJPJwBxoylsg0o6HBvbvHaeaOCMwK2O/K63M9TCx581q
-         KMMEW5t63lQuVAUf1xo+olgAm9NiF6RqPLHCm5i+3249dA9gRah3aSuUILXkeOSWeZbG
-         nfU0EK3FPHsTNEA2Rzwnv+XtlWgxujJ+iefazA07nVnVP+axplHu7lDjdx8lkxhv/I1h
-         z9kYI5FDwrnlSuLvF0oE2woDtXjyXIGcPgE9ii0MybB5S5nbkMhDjAd0K6pMvyE+H0pd
-         xr+vKV4JEGeOhwrPDqHa3bBrM65Isgzv9dun7qEXa6Y9blruDQQRXwqOIl8ZCJ6oRCUs
-         Eu9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683701229; x=1686293229;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=H//eZGlEJS/35YEhZwhGTWp7oEUZuMDqjOLd1KsW/Dk=;
-        b=JHhmI+oyg6tdHdYXYp1sWSS6m1NqWBCA42T/kEdLRq3o4+x2Qua26CbXQF9QOIOVRX
-         0Ta1RA7DAJxHWh3zkHK+YD0Eh23xV4Yik2Ro1Aw6jccKiiiJmKBpOrr1rIfS2MRQauiY
-         4zNoM5LSUqIw0aWMliL0pBvrlGgjuLp5nr9hkRCF/88EPHJ5w4dlb5/wofkV6nnWmobp
-         wE08ursBafcsycLCVH9AXamG1oZBE8Mdc+wvcX7ayBuWdKZoxlysWlBpr8/lVRvUc9+Q
-         K8PxzqdlN9HYpXjxlYg4Hj29y6PpxE+ylUed6m/EIdtdz5nWV9F6rqEy2L/WmfA3QCU0
-         qRzw==
-X-Gm-Message-State: AC+VfDweS0FLhEyS5pQOuDkpZTrtzSzEI1MI7yV1CIRnK5+Khm4QN9Ox
-        RwAUCpxLj3m5SY4TF+JE8HjcRo++r8cy4tzVWM3ffA==
-X-Google-Smtp-Source: ACHHUZ6oiJs4TBNp02xqpzNHKA1CCtOPDo+5SW3bC6Ts4SsxO/AZwHbz9fCAzOA3jOsEMZHvm8MaFg==
-X-Received: by 2002:a17:906:fd8d:b0:94f:3521:394 with SMTP id xa13-20020a170906fd8d00b0094f35210394mr13259517ejb.51.1683701229329;
-        Tue, 09 May 2023 23:47:09 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id pk25-20020a170906d7b900b00965d9892bafsm2273306ejb.111.2023.05.09.23.47.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 23:47:08 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 10 May 2023 08:47:07 +0200
-Message-Id: <CSIE9TYTQUHL.3E769C2Y4RAAO@otso>
-Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: pm7250b: make SID configurable
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Konrad Dybcio" <konrad.dybcio@somainline.org>
-X-Mailer: aerc 0.15.1
-References: <20230407-pm7250b-sid-v1-0-fc648478cc25@fairphone.com>
- <20230407-pm7250b-sid-v1-2-fc648478cc25@fairphone.com>
- <f52524da-719b-790f-ad2c-0c3f313d9fe9@linaro.org>
-In-Reply-To: <f52524da-719b-790f-ad2c-0c3f313d9fe9@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Wed, 10 May 2023 02:47:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AEA270B;
+        Tue,  9 May 2023 23:47:56 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QGQTn0WDLzpSyv;
+        Wed, 10 May 2023 14:43:41 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 10 May 2023 14:47:51 +0800
+Subject: Re: [PATCH] perf bpf skels: vmlinux.h uses bpf.h and perf_event.h in
+ the source directory
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     <peterz@infradead.org>, <mingo@redhat.com>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+        <namhyung@kernel.org>, <irogers@google.com>,
+        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230509063649.239942-1-yangjihong1@huawei.com>
+ <ZFqPKU0p73sMb+IG@kernel.org>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <427c2d97-64bb-ab0d-77d6-547bd73947d5@huawei.com>
+Date:   Wed, 10 May 2023 14:47:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+MIME-Version: 1.0
+In-Reply-To: <ZFqPKU0p73sMb+IG@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,49 +55,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Hello,
 
-On Fri Apr 7, 2023 at 10:27 AM CEST, Krzysztof Kozlowski wrote:
-> On 07/04/2023 09:45, Luca Weiss wrote:
-> > Like other Qualcomm PMICs the PM7250B can be used on different addresse=
-s
-> > on the SPMI bus. Use similar defines like the PMK8350 to make this
-> > possible.
-> >=20
-> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/pm7250b.dtsi | 23 ++++++++++++++++-------
-> >  1 file changed, 16 insertions(+), 7 deletions(-)
-> >=20
-> > diff --git a/arch/arm64/boot/dts/qcom/pm7250b.dtsi b/arch/arm64/boot/dt=
-s/qcom/pm7250b.dtsi
-> > index daa6f1d30efa..eeb476edc79a 100644
-> > --- a/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-> > @@ -7,6 +7,15 @@
-> >  #include <dt-bindings/interrupt-controller/irq.h>
-> >  #include <dt-bindings/spmi/spmi.h>
-> > =20
-> > +/* This PMIC can be configured to be at different SIDs */
-> > +#ifndef PM7250B_SID
-> > +	#define PM7250B_SID 2
->
-> Drop indentation, although anyway I am against this. Please don't bring
-> new patterns of this at least till we settle previous discussion.
->
-> https://lore.kernel.org/linux-arm-msm/46658cbb-fff5-e98b-fdad-88fa683a9c7=
-5@linaro.org/
+On 2023/5/10 2:21, Arnaldo Carvalho de Melo wrote:
+> Em Tue, May 09, 2023 at 06:36:49AM +0000, Yang Jihong escreveu:
+>> Currently, vmlinux.h uses the bpf.h and perf_event.h header files in the
+>> system path. If the header files in compilation environment are old,
+>> compilation may fail. For example:
+>>
+>>    /home/yangjihong/linux/tools/perf/util/bpf_skel/.tmp/../vmlinux.h:151:27: error: field has incomplete type 'union perf_sample_weight'
+>>            union perf_sample_weight weight;
+> 
+> 
+> Can this be solved in the Makefile directives for building BPF targets?
+> 
+OK, will send v2 patch, use Makefile to specify path of header file that 
+is preferentially used. Pls check whether the solution is OK.
 
-What's the outcome of the discussion? For this PMIC it's totally enough
-to have the SID configurable like in this patch, I don't think this PMIC
-will be included twice in a board - at least I'm not aware of such a
-configuration.
-
-Regards
-Luca
-
->
->
-> Best regards,
-> Krzysztof
-
+Thanks,
+Yang
