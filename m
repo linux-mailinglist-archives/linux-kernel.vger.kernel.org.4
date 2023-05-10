@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2161E6FE3E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB5A6FE3F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236405AbjEJSTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 14:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
+        id S236557AbjEJSTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 14:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236076AbjEJSSQ (ORCPT
+        with ESMTP id S236117AbjEJSST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 14:18:16 -0400
+        Wed, 10 May 2023 14:18:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76457ED6;
-        Wed, 10 May 2023 11:18:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C4D659D;
+        Wed, 10 May 2023 11:18:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 317EB63F87;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C27F063F92;
         Wed, 10 May 2023 18:17:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 970B4C433D2;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA228C433A7;
         Wed, 10 May 2023 18:17:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1683742644;
-        bh=0NNr6pXpT4nPPvOEzgx3h6iYrhe2MKVVK49PaoO8bUE=;
+        bh=cpvv3VEJW+5eargd3gZNCUUoeAAIBIzdoTFRowhV52A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PkJiGnQerc3TzX9FDzvkK0UUi8VoowqO17Bvc8Qkmk4MgxT0yW1ov0ieLq/k85k04
-         53uap/CnEtEHlOQDl4Nvh/O7z1phP+S2JjGGbRGPZIDCXLLywN3DUnQlpt/UXo330q
-         niA/E173A+Fewiy5EMprfUqmqE1AGqkblzsb1a1SYhWOKjRJMmcF8Qx1A395qKvaGy
-         Dg4uIZ97XwwFRs9hIbOqWEx92vvWSycBV+qrUnJpXKnjHp70Fx2ol4e1dQN8yOet0q
-         lZDjjBKHNUIVPxvc6XSwKl/w3aX37wPfqX4XNNKf8HJIEIozqslPe5DM5HYjHYP//t
-         FJ0D2H36Wxftw==
+        b=TUE0DR8KKEgUfULoaQ+FPC48KAJ1L4SA47gpCRvQARqdCe61E9oPwdXH5TvmAMA1N
+         Ximd1pFgunErS+/C2N7OswCuWRiBM2JrRGZrbVNKpa6jMch5KLANSc7n9Hz1opC1lg
+         7I9ym2zcUBki9qM2mDr23AcFxIdIQBqfAeDiCfQ9kDk0+gwy4YJBGjI+aaOC3XuhcN
+         2zMAHHHwArF12aGVqQCrGQ3PtH6JxeRAMBWQqJanuNjgpNq55KYM4jQeS/4oG5ichb
+         B5O4g4J81HHy77Mrt2dUPkQn/Xd0Sq53vgt31PPCyeDqCiZ0l1MMq91uPqZ5gyGmgJ
+         2lmUW3agwjV+g==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DD7FECE16A7; Wed, 10 May 2023 11:17:18 -0700 (PDT)
+        id E039ACE18F0; Wed, 10 May 2023 11:17:18 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     x86@kernel.org, akiyks@gmail.com, linux-doc@vger.kernel.org,
@@ -42,9 +42,9 @@ Cc:     x86@kernel.org, akiyks@gmail.com, linux-doc@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Boqun Feng <boqun.feng@gmail.com>,
         Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH locking/atomic 06/19] locking/atomic: Add kernel-doc header for arch_${atomic}_${pfx}andnot${sfx}${order}
-Date:   Wed, 10 May 2023 11:17:04 -0700
-Message-Id: <20230510181717.2200934-6-paulmck@kernel.org>
+Subject: [PATCH locking/atomic 07/19] locking/atomic: Add kernel-doc header for arch_${atomic}_try_cmpxchg${order}
+Date:   Wed, 10 May 2023 11:17:05 -0700
+Message-Id: <20230510181717.2200934-7-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop>
 References: <19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop>
@@ -60,10 +60,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add kernel-doc header template for arch_${atomic}_${pfx}andnot${sfx}${order}
+Add kernel-doc header template for arch_${atomic}_try_cmpxchg${order}
 function family.
-
-[ paulmck: Apply feedback from Akira Yokosawa. ]
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Cc: Will Deacon <will@kernel.org>
@@ -72,185 +70,173 @@ Cc: Boqun Feng <boqun.feng@gmail.com>
 Cc: Mark Rutland <mark.rutland@arm.com>
 ---
  include/linux/atomic/atomic-arch-fallback.h | 82 ++++++++++++++++++++-
- scripts/atomic/fallbacks/andnot             |  8 ++
- 2 files changed, 89 insertions(+), 1 deletion(-)
+ scripts/atomic/fallbacks/try_cmpxchg        | 10 +++
+ 2 files changed, 91 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
-index 41e43e8dff8d..d5ff29a7128d 100644
+index d5ff29a7128d..ed72d94346e9 100644
 --- a/include/linux/atomic/atomic-arch-fallback.h
 +++ b/include/linux/atomic/atomic-arch-fallback.h
-@@ -950,6 +950,14 @@ arch_atomic_fetch_and(int i, atomic_t *v)
- #endif /* arch_atomic_fetch_and_relaxed */
+@@ -1255,6 +1255,16 @@ arch_atomic_cmpxchg(atomic_t *v, int old, int new)
+ #endif /* arch_atomic_try_cmpxchg */
  
- #ifndef arch_atomic_andnot
+ #ifndef arch_atomic_try_cmpxchg
 +/**
-+ * arch_atomic_andnot - Atomic and-not
-+ * @i: the quantity to and-not with *@v
-+ * @v: pointer of type atomic_t
++ * arch_atomic_try_cmpxchg - Atomic cmpxchg with bool return value
++ * @v:  pointer of type atomic_t
++ * @old:  desired old value to match
++ * @new:  new value to put in
 + *
-+ * Atomically and-not @i with @v using full ordering.
-+ * returning no value.
++ * Atomically compares @new to *@v, and if equal, stores @new to *@v,
++ * providing full ordering.
++ * Returns @true if the cmpxchg operation succeeded, and false otherwise.
 + */
- static __always_inline void
- arch_atomic_andnot(int i, atomic_t *v)
+ static __always_inline bool
+ arch_atomic_try_cmpxchg(atomic_t *v, int *old, int new)
  {
-@@ -966,6 +974,14 @@ arch_atomic_andnot(int i, atomic_t *v)
- #endif /* arch_atomic_fetch_andnot */
- 
- #ifndef arch_atomic_fetch_andnot
-+/**
-+ * arch_atomic_fetch_andnot - Atomic and-not
-+ * @i: the quantity to and-not with *@v
-+ * @v: pointer of type atomic_t
-+ *
-+ * Atomically and-not @i with @v using full ordering.
-+ * returning old value.
-+ */
- static __always_inline int
- arch_atomic_fetch_andnot(int i, atomic_t *v)
- {
-@@ -975,6 +991,14 @@ arch_atomic_fetch_andnot(int i, atomic_t *v)
+@@ -1268,6 +1278,16 @@ arch_atomic_try_cmpxchg(atomic_t *v, int *old, int new)
  #endif
  
- #ifndef arch_atomic_fetch_andnot_acquire
+ #ifndef arch_atomic_try_cmpxchg_acquire
 +/**
-+ * arch_atomic_fetch_andnot_acquire - Atomic and-not
-+ * @i: the quantity to and-not with *@v
-+ * @v: pointer of type atomic_t
++ * arch_atomic_try_cmpxchg_acquire - Atomic cmpxchg with bool return value
++ * @v:  pointer of type atomic_t
++ * @old:  desired old value to match
++ * @new:  new value to put in
 + *
-+ * Atomically and-not @i with @v using acquire ordering.
-+ * returning old value.
++ * Atomically compares @new to *@v, and if equal, stores @new to *@v,
++ * providing acquire ordering.
++ * Returns @true if the cmpxchg operation succeeded, and false otherwise.
 + */
- static __always_inline int
- arch_atomic_fetch_andnot_acquire(int i, atomic_t *v)
+ static __always_inline bool
+ arch_atomic_try_cmpxchg_acquire(atomic_t *v, int *old, int new)
  {
-@@ -984,6 +1008,14 @@ arch_atomic_fetch_andnot_acquire(int i, atomic_t *v)
+@@ -1281,6 +1301,16 @@ arch_atomic_try_cmpxchg_acquire(atomic_t *v, int *old, int new)
  #endif
  
- #ifndef arch_atomic_fetch_andnot_release
+ #ifndef arch_atomic_try_cmpxchg_release
 +/**
-+ * arch_atomic_fetch_andnot_release - Atomic and-not
-+ * @i: the quantity to and-not with *@v
-+ * @v: pointer of type atomic_t
++ * arch_atomic_try_cmpxchg_release - Atomic cmpxchg with bool return value
++ * @v:  pointer of type atomic_t
++ * @old:  desired old value to match
++ * @new:  new value to put in
 + *
-+ * Atomically and-not @i with @v using release ordering.
-+ * returning old value.
++ * Atomically compares @new to *@v, and if equal, stores @new to *@v,
++ * providing release ordering.
++ * Returns @true if the cmpxchg operation succeeded, and false otherwise.
 + */
- static __always_inline int
- arch_atomic_fetch_andnot_release(int i, atomic_t *v)
+ static __always_inline bool
+ arch_atomic_try_cmpxchg_release(atomic_t *v, int *old, int new)
  {
-@@ -993,6 +1025,14 @@ arch_atomic_fetch_andnot_release(int i, atomic_t *v)
+@@ -1294,6 +1324,16 @@ arch_atomic_try_cmpxchg_release(atomic_t *v, int *old, int new)
  #endif
  
- #ifndef arch_atomic_fetch_andnot_relaxed
+ #ifndef arch_atomic_try_cmpxchg_relaxed
 +/**
-+ * arch_atomic_fetch_andnot_relaxed - Atomic and-not
-+ * @i: the quantity to and-not with *@v
-+ * @v: pointer of type atomic_t
++ * arch_atomic_try_cmpxchg_relaxed - Atomic cmpxchg with bool return value
++ * @v:  pointer of type atomic_t
++ * @old:  desired old value to match
++ * @new:  new value to put in
 + *
-+ * Atomically and-not @i with @v using no ordering.
-+ * returning old value.
++ * Atomically compares @new to *@v, and if equal, stores @new to *@v,
++ * providing no ordering.
++ * Returns @true if the cmpxchg operation succeeded, and false otherwise.
 + */
- static __always_inline int
- arch_atomic_fetch_andnot_relaxed(int i, atomic_t *v)
+ static __always_inline bool
+ arch_atomic_try_cmpxchg_relaxed(atomic_t *v, int *old, int new)
  {
-@@ -2292,6 +2332,14 @@ arch_atomic64_fetch_and(s64 i, atomic64_t *v)
- #endif /* arch_atomic64_fetch_and_relaxed */
+@@ -2637,6 +2677,16 @@ arch_atomic64_cmpxchg(atomic64_t *v, s64 old, s64 new)
+ #endif /* arch_atomic64_try_cmpxchg */
  
- #ifndef arch_atomic64_andnot
+ #ifndef arch_atomic64_try_cmpxchg
 +/**
-+ * arch_atomic64_andnot - Atomic and-not
-+ * @i: the quantity to and-not with *@v
-+ * @v: pointer of type atomic64_t
++ * arch_atomic64_try_cmpxchg - Atomic cmpxchg with bool return value
++ * @v:  pointer of type atomic64_t
++ * @old:  desired old value to match
++ * @new:  new value to put in
 + *
-+ * Atomically and-not @i with @v using full ordering.
-+ * returning no value.
++ * Atomically compares @new to *@v, and if equal, stores @new to *@v,
++ * providing full ordering.
++ * Returns @true if the cmpxchg operation succeeded, and false otherwise.
 + */
- static __always_inline void
- arch_atomic64_andnot(s64 i, atomic64_t *v)
+ static __always_inline bool
+ arch_atomic64_try_cmpxchg(atomic64_t *v, s64 *old, s64 new)
  {
-@@ -2308,6 +2356,14 @@ arch_atomic64_andnot(s64 i, atomic64_t *v)
- #endif /* arch_atomic64_fetch_andnot */
- 
- #ifndef arch_atomic64_fetch_andnot
-+/**
-+ * arch_atomic64_fetch_andnot - Atomic and-not
-+ * @i: the quantity to and-not with *@v
-+ * @v: pointer of type atomic64_t
-+ *
-+ * Atomically and-not @i with @v using full ordering.
-+ * returning old value.
-+ */
- static __always_inline s64
- arch_atomic64_fetch_andnot(s64 i, atomic64_t *v)
- {
-@@ -2317,6 +2373,14 @@ arch_atomic64_fetch_andnot(s64 i, atomic64_t *v)
+@@ -2650,6 +2700,16 @@ arch_atomic64_try_cmpxchg(atomic64_t *v, s64 *old, s64 new)
  #endif
  
- #ifndef arch_atomic64_fetch_andnot_acquire
+ #ifndef arch_atomic64_try_cmpxchg_acquire
 +/**
-+ * arch_atomic64_fetch_andnot_acquire - Atomic and-not
-+ * @i: the quantity to and-not with *@v
-+ * @v: pointer of type atomic64_t
++ * arch_atomic64_try_cmpxchg_acquire - Atomic cmpxchg with bool return value
++ * @v:  pointer of type atomic64_t
++ * @old:  desired old value to match
++ * @new:  new value to put in
 + *
-+ * Atomically and-not @i with @v using acquire ordering.
-+ * returning old value.
++ * Atomically compares @new to *@v, and if equal, stores @new to *@v,
++ * providing acquire ordering.
++ * Returns @true if the cmpxchg operation succeeded, and false otherwise.
 + */
- static __always_inline s64
- arch_atomic64_fetch_andnot_acquire(s64 i, atomic64_t *v)
+ static __always_inline bool
+ arch_atomic64_try_cmpxchg_acquire(atomic64_t *v, s64 *old, s64 new)
  {
-@@ -2326,6 +2390,14 @@ arch_atomic64_fetch_andnot_acquire(s64 i, atomic64_t *v)
+@@ -2663,6 +2723,16 @@ arch_atomic64_try_cmpxchg_acquire(atomic64_t *v, s64 *old, s64 new)
  #endif
  
- #ifndef arch_atomic64_fetch_andnot_release
+ #ifndef arch_atomic64_try_cmpxchg_release
 +/**
-+ * arch_atomic64_fetch_andnot_release - Atomic and-not
-+ * @i: the quantity to and-not with *@v
-+ * @v: pointer of type atomic64_t
++ * arch_atomic64_try_cmpxchg_release - Atomic cmpxchg with bool return value
++ * @v:  pointer of type atomic64_t
++ * @old:  desired old value to match
++ * @new:  new value to put in
 + *
-+ * Atomically and-not @i with @v using release ordering.
-+ * returning old value.
++ * Atomically compares @new to *@v, and if equal, stores @new to *@v,
++ * providing release ordering.
++ * Returns @true if the cmpxchg operation succeeded, and false otherwise.
 + */
- static __always_inline s64
- arch_atomic64_fetch_andnot_release(s64 i, atomic64_t *v)
+ static __always_inline bool
+ arch_atomic64_try_cmpxchg_release(atomic64_t *v, s64 *old, s64 new)
  {
-@@ -2335,6 +2407,14 @@ arch_atomic64_fetch_andnot_release(s64 i, atomic64_t *v)
+@@ -2676,6 +2746,16 @@ arch_atomic64_try_cmpxchg_release(atomic64_t *v, s64 *old, s64 new)
  #endif
  
- #ifndef arch_atomic64_fetch_andnot_relaxed
+ #ifndef arch_atomic64_try_cmpxchg_relaxed
 +/**
-+ * arch_atomic64_fetch_andnot_relaxed - Atomic and-not
-+ * @i: the quantity to and-not with *@v
-+ * @v: pointer of type atomic64_t
++ * arch_atomic64_try_cmpxchg_relaxed - Atomic cmpxchg with bool return value
++ * @v:  pointer of type atomic64_t
++ * @old:  desired old value to match
++ * @new:  new value to put in
 + *
-+ * Atomically and-not @i with @v using no ordering.
-+ * returning old value.
++ * Atomically compares @new to *@v, and if equal, stores @new to *@v,
++ * providing no ordering.
++ * Returns @true if the cmpxchg operation succeeded, and false otherwise.
 + */
- static __always_inline s64
- arch_atomic64_fetch_andnot_relaxed(s64 i, atomic64_t *v)
+ static __always_inline bool
+ arch_atomic64_try_cmpxchg_relaxed(atomic64_t *v, s64 *old, s64 new)
  {
-@@ -2920,4 +3000,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
+@@ -3000,4 +3080,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
  #endif
  
  #endif /* _LINUX_ATOMIC_FALLBACK_H */
--// 1a1d30491494653253bfe3b5d2e2c6583cb57473
-+// e403f06ce98fe72ae0698e8f2c78f8a45894e465
-diff --git a/scripts/atomic/fallbacks/andnot b/scripts/atomic/fallbacks/andnot
-index 5a42f54a3595..9fbc0ce75a7c 100755
---- a/scripts/atomic/fallbacks/andnot
-+++ b/scripts/atomic/fallbacks/andnot
-@@ -1,4 +1,12 @@
+-// e403f06ce98fe72ae0698e8f2c78f8a45894e465
++// 3b29d5595f48f921507f19bc794c91aecb782ad3
+diff --git a/scripts/atomic/fallbacks/try_cmpxchg b/scripts/atomic/fallbacks/try_cmpxchg
+index 890f850ede37..baf7412f9bf4 100755
+--- a/scripts/atomic/fallbacks/try_cmpxchg
++++ b/scripts/atomic/fallbacks/try_cmpxchg
+@@ -1,4 +1,14 @@
  cat <<EOF
 +/**
-+ * arch_${atomic}_${pfx}andnot${sfx}${order} - Atomic and-not
-+ * @i: the quantity to and-not with *@v
-+ * @v: pointer of type ${atomic}_t
++ * arch_${atomic}_try_cmpxchg${order} - Atomic cmpxchg with bool return value
++ * @v:  pointer of type ${atomic}_t
++ * @old:  desired old value to match
++ * @new:  new value to put in
 + *
-+ * Atomically and-not @i with @v using ${docbook_order} ordering.
-+ * returning ${docbook_oldnew} value.
++ * Atomically compares @new to *@v, and if equal, stores @new to *@v,
++ * providing ${docbook_order} ordering.
++ * Returns @true if the cmpxchg operation succeeded, and false otherwise.
 + */
- static __always_inline ${ret}
- arch_${atomic}_${pfx}andnot${sfx}${order}(${int} i, ${atomic}_t *v)
+ static __always_inline bool
+ arch_${atomic}_try_cmpxchg${order}(${atomic}_t *v, ${int} *old, ${int} new)
  {
 -- 
 2.40.1
