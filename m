@@ -2,153 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC936FD3D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 04:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD95C6FD3DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 04:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235134AbjEJC1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 22:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43854 "EHLO
+        id S234000AbjEJCho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 22:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjEJC1R (ORCPT
+        with ESMTP id S229501AbjEJChm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 22:27:17 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB07213C
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 19:27:15 -0700 (PDT)
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com [209.85.128.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 867A63F4D6
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 02:27:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1683685631;
-        bh=y5bI/misqR+WRX+BTmIKcOem6MQLYfoxEtgDnZLbuN4=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=c2OVFq1nZW2y3JfBbQ2JaHtAQXVn/cxTbueAZvzVysGPFcECOLY/G20lVwxUOvwSW
-         Jd6qUQE6gJTuf/D7XKJwY2iJwsvck7+XqF6btLH7nAOUQIAzTJAJKKPs6Vbf2qIDl5
-         9Er3JPzTL3SZaiYUlZq0IxPj1wCY245Zo1T2CIjxB9CRsGmWvvmj9HBck92W18xPDm
-         e9Eh2cH5v/4UrllHoulo2f0jUggF8MGHS5LWqcrduRaZEJAFIWX5+fDGIvJ3qTPcFn
-         hZaMS+0JO50RsjuLgwjPRZi5pjtJqkgq5Gym2YajFY5bPhUUpribI3jzPGb0JowXHl
-         5S//ewfTYzYQg==
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-559ffd15df9so109065567b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 19:27:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683685630; x=1686277630;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y5bI/misqR+WRX+BTmIKcOem6MQLYfoxEtgDnZLbuN4=;
-        b=ScrKQFiJ27HixewRz+zKjgwu1giRW/HE21eNlr0pSHxkKA2YVWhMCrQ90pHmyufOzU
-         374wtWTRFoFgYb1NZpkhxh9gs6u5iqN8l4V/pVBaYlUwjtd76i0Np83Z09U2Bc571rnw
-         26gUM+xxVPiGUcHEF1WoJe/uHeSmq+/DY8kpyH6hVFmpqIqMHE+d/Q7jymsGGAIn0Y7h
-         dRPuaUchm+wiH4R7bencPvsiTdC7Sn1EZtTr6D3Tl0yGYLS3ZsMzoIlGC5QHXkPS6L91
-         i6wHjjLv7IahYvwmjUUVqxnlzt9+8ujKLmLJ7n6xt2Uxp4QyRAmgf5SmRGic5q/uBlj2
-         eqsA==
-X-Gm-Message-State: AC+VfDxNOx7jfU6TEWKoh38uPeOoxJYsX2+KWNDdHvfNdHLogdO6wjFb
-        En+mRGf8/t2oHgBwdH+DS/8Ek6ATZrUlNd2rkj0pBKlWmuW8/gxl2vH8jw0ybY2Yri/H+j9nuJM
-        Dc/NkjCR2mU88Kbk7Ns6LVavL2byMaNXWvEfQEnTIqZgryrOdNcrziLKpmxA589SqFyER
-X-Received: by 2002:a81:4e0f:0:b0:559:e5e2:756d with SMTP id c15-20020a814e0f000000b00559e5e2756dmr17891969ywb.48.1683685630134;
-        Tue, 09 May 2023 19:27:10 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4ysxRGbPhh3hrAKvBnznvLCCCVJ3uzuJ1Yg5X6PBUfHMt+OMWxwnH1VViUQJuzIcznMT0IPRJI04nfd6Dbn5E=
-X-Received: by 2002:a81:4e0f:0:b0:559:e5e2:756d with SMTP id
- c15-20020a814e0f000000b00559e5e2756dmr17891964ywb.48.1683685629916; Tue, 09
- May 2023 19:27:09 -0700 (PDT)
+        Tue, 9 May 2023 22:37:42 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B68C171A
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 19:37:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683686260; x=1715222260;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=1cvf0IAzLY3A36IfABph2686OaIaxENCHqp1nBwNdDk=;
+  b=YVRCXRgUtatPhgzKtSuakMWWGms5IXEU9wngosm1H4vsNS3M70gIfUqa
+   E+T0Bcla61lNsGKF7DLXFAEWqZ1QrzVaPvL1Iw7b9v7Zu9/YhTjwnVycL
+   3jxb96H+rjmMXuThoeE41RGZeMyj0grwn2WhvHT4PhfXKlHsIoR3xdU/f
+   2B7y7eJhovRLZb2yHG0IWFVbWRrSp53FubFbqLjTFSZ9QcdWXqks6N60c
+   ZeIyfN8B9TdhLEsiAU5d8NfQz+qtweCPVE4HdhiKr1zBN1bWSwUrJeqRG
+   D/KCEoyMnmAIxSIbZMOANS8tMrvCxl1YX+EWS1bD89brz4mcyEve6a/Km
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="329728760"
+X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
+   d="scan'208";a="329728760"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 19:37:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="676687536"
+X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
+   d="scan'208";a="676687536"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 19:37:37 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, Xin Hao <xhao@linux.alibaba.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        "Oscar Salvador" <osalvador@suse.de>,
+        Alistair Popple <apopple@nvidia.com>
+Subject: Re: [PATCH 1/2] migrate_pages_batch: simplify retrying and failure
+ counting of large folios
+References: <20230509022014.380493-1-ying.huang@intel.com>
+        <21078C33-2679-4C13-B46D-65858A4DC516@nvidia.com>
+Date:   Wed, 10 May 2023 10:36:24 +0800
+In-Reply-To: <21078C33-2679-4C13-B46D-65858A4DC516@nvidia.com> (Zi Yan's
+        message of "Tue, 09 May 2023 10:25:44 -0400")
+Message-ID: <875y90ap5j.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20230411030248.53356-1-chengen.du@canonical.com>
- <CAPt2mGNqqDeRMeCSVh6oX_=nS0UcGCfhBfVcuaVG9HpdwVSzVg@mail.gmail.com>
- <CAPza5qee7vHKwjwhS27xB8xXTgAFHEmv7eiFk6zGTUUc4s8=TQ@mail.gmail.com> <B9E03B97-F67C-48FC-B5EE-5B02E288C227@redhat.com>
-In-Reply-To: <B9E03B97-F67C-48FC-B5EE-5B02E288C227@redhat.com>
-From:   Chengen Du <chengen.du@canonical.com>
-Date:   Wed, 10 May 2023 10:26:59 +0800
-Message-ID: <CAPza5qeTqYfnpDa+h+d_nGTz4xh=aiFZZJuH81ZaTA0-t1iqpw@mail.gmail.com>
-Subject: Re: [PATCH] NFS: Add mount option 'nofasc'
-To:     Benjamin Coddington <bcodding@redhat.com>
-Cc:     trond.myklebust@hammerspace.com, anna@kernel.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=ascii
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+Zi Yan <ziy@nvidia.com> writes:
 
-Thank you so much for your valuable advice.
-I truly appreciate your input and it has been very helpful for me.
+> On 8 May 2023, at 22:20, Huang Ying wrote:
+>
+>> After recent changes to the retrying and failure counting in
+>> migrate_pages_batch(), it was found that it's unnecessary to count
+>> retrying and failure for normal, large, and THP folios separately.
+>> Because we don't use retrying and failure number of large folios
+>> directly.  So, in this patch, we simplified retrying and failure
+>> counting of large folios via counting retrying and failure of normal
+>> and large folios together.  This results in the reduced line number.
+>>
+>> This is just code cleanup, no functionality changes are expected.
+>>
+>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>> Cc: Xin Hao <xhao@linux.alibaba.com>
+>> Cc: Zi Yan <ziy@nvidia.com>
+>> Cc: Yang Shi <shy828301@gmail.com>
+>> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> Cc: Oscar Salvador <osalvador@suse.de>
+>> Cc: Alistair Popple <apopple@nvidia.com>
+>> ---
+>>  mm/migrate.c | 103 +++++++++++++++++----------------------------------
+>>  1 file changed, 35 insertions(+), 68 deletions(-)
+>>
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index 01cac26a3127..10709aed76d3 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1614,11 +1614,9 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>  		int nr_pass)
+>>  {
+>>  	int retry = 1;
+>> -	int large_retry = 1;
+>>  	int thp_retry = 1;
+>>  	int nr_failed = 0;
+>>  	int nr_retry_pages = 0;
+>> -	int nr_large_failed = 0;
+>>  	int pass = 0;
+>>  	bool is_large = false;
+>>  	bool is_thp = false;
+>> @@ -1631,9 +1629,8 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>  	VM_WARN_ON_ONCE(mode != MIGRATE_ASYNC &&
+>>  			!list_empty(from) && !list_is_singular(from));
+>>
+>> -	for (pass = 0; pass < nr_pass && (retry || large_retry); pass++) {
+>> +	for (pass = 0; pass < nr_pass && retry; pass++) {
+>>  		retry = 0;
+>> -		large_retry = 0;
+>>  		thp_retry = 0;
+>>  		nr_retry_pages = 0;
+>>
+>> @@ -1660,7 +1657,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>  			 * list is processed.
+>>  			 */
+>>  			if (!thp_migration_supported() && is_thp) {
+>> -				nr_large_failed++;
+>> +				nr_failed++;
+>>  				stats->nr_thp_failed++;
+>>  				if (!try_split_folio(folio, split_folios)) {
+>>  					stats->nr_thp_split++;
+>> @@ -1688,38 +1685,33 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>  				 * When memory is low, don't bother to try to migrate
+>>  				 * other folios, move unmapped folios, then exit.
+>>  				 */
+>> -				if (is_large) {
+>> -					nr_large_failed++;
+>> -					stats->nr_thp_failed += is_thp;
+>> -					/* Large folio NUMA faulting doesn't split to retry. */
+>> -					if (!nosplit) {
+>> -						int ret = try_split_folio(folio, split_folios);
+>> -
+>> -						if (!ret) {
+>> -							stats->nr_thp_split += is_thp;
+>> -							break;
+>> -						} else if (reason == MR_LONGTERM_PIN &&
+>> -							   ret == -EAGAIN) {
+>> -							/*
+>> -							 * Try again to split large folio to
+>> -							 * mitigate the failure of longterm pinning.
+>> -							 */
+>> -							large_retry++;
+>> -							thp_retry += is_thp;
+>> -							nr_retry_pages += nr_pages;
+>> -							/* Undo duplicated failure counting. */
+>> -							nr_large_failed--;
+>> -							stats->nr_thp_failed -= is_thp;
+>> -							break;
+>> -						}
+>> +				nr_failed++;
+>> +				stats->nr_thp_failed += is_thp;
+>> +				/* Large folio NUMA faulting doesn't split to retry. */
+>> +				if (is_large && !nosplit) {
+>> +					int ret = try_split_folio(folio, split_folios);
+>> +
+>> +					if (!ret) {
+>> +						stats->nr_thp_split += is_thp;
+>> +						break;
+>> +					} else if (reason == MR_LONGTERM_PIN &&
+>> +						   ret == -EAGAIN) {
+>> +						/*
+>> +						 * Try again to split large folio to
+>> +						 * mitigate the failure of longterm pinning.
+>> +						 */
+>> +						retry++;
+>> +						thp_retry += is_thp;
+>> +						nr_retry_pages += nr_pages;
+>> +						/* Undo duplicated failure counting. */
+>> +						nr_failed--;
+>> +						stats->nr_thp_failed -= is_thp;
+>> +						break;
+>>  					}
+>> -				} else {
+>> -					nr_failed++;
+>>  				}
+>>
+>>  				stats->nr_failed_pages += nr_pages + nr_retry_pages;
+>>  				/* nr_failed isn't updated for not used */
+>> -				nr_large_failed += large_retry;
+>>  				stats->nr_thp_failed += thp_retry;
+>>  				rc_saved = rc;
+>>  				if (list_empty(&unmap_folios))
+>> @@ -1727,12 +1719,8 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>  				else
+>>  					goto move;
+>>  			case -EAGAIN:
+>> -				if (is_large) {
+>> -					large_retry++;
+>> -					thp_retry += is_thp;
+>> -				} else {
+>> -					retry++;
+>> -				}
+>> +				retry++;
+>> +				thp_retry += is_thp;
+>>  				nr_retry_pages += nr_pages;
+>>  				break;
+>>  			case MIGRATEPAGE_SUCCESS:
+>> @@ -1750,20 +1738,14 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>  				 * removed from migration folio list and not
+>>  				 * retried in the next outer loop.
+>>  				 */
+>> -				if (is_large) {
+>> -					nr_large_failed++;
+>> -					stats->nr_thp_failed += is_thp;
+>> -				} else {
+>> -					nr_failed++;
+>> -				}
+>> -
+>> +				nr_failed++;
+>> +				stats->nr_thp_failed += is_thp;
+>>  				stats->nr_failed_pages += nr_pages;
+>>  				break;
+>>  			}
+>>  		}
+>>  	}
+>>  	nr_failed += retry;
+>> -	nr_large_failed += large_retry;
+>>  	stats->nr_thp_failed += thp_retry;
+>>  	stats->nr_failed_pages += nr_retry_pages;
+>>  move:
+>> @@ -1771,17 +1753,15 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>  	try_to_unmap_flush();
+>>
+>>  	retry = 1;
+>> -	for (pass = 0; pass < nr_pass && (retry || large_retry); pass++) {
+>> +	for (pass = 0; pass < nr_pass && retry; pass++) {
+>>  		retry = 0;
+>> -		large_retry = 0;
+>>  		thp_retry = 0;
+>>  		nr_retry_pages = 0;
+>>
+>>  		dst = list_first_entry(&dst_folios, struct folio, lru);
+>>  		dst2 = list_next_entry(dst, lru);
+>>  		list_for_each_entry_safe(folio, folio2, &unmap_folios, lru) {
+>> -			is_large = folio_test_large(folio);
+>> -			is_thp = is_large && folio_test_pmd_mappable(folio);
+>> +			is_thp = folio_test_large(folio) && folio_test_pmd_mappable(folio);
+>
+> Should this be part of patch 2? Or maybe just merge two patches?
 
-In my humble opinion, users should base their decision on the remote
-target they use to mount.
-If the remote target has stable group membership or if they have
-performance concerns,
-they can consider skipping the clearing of the file access cache.
-In order to avoid affecting current behavior, I will also change the
-default to not clear the file access cache.
+OK.  Will merge 2 patches.
 
-I understand that my choice may not be the best, but I will try to
-propose the mount option first.
-After I modify the man page description, I will resend the patches and
-discuss with the upstream.
+>>  			nr_pages = folio_nr_pages(folio);
+>>
+>>  			cond_resched();
+>> @@ -1797,12 +1777,8 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>  			 */
+>>  			switch(rc) {
+>>  			case -EAGAIN:
+>> -				if (is_large) {
+>> -					large_retry++;
+>> -					thp_retry += is_thp;
+>> -				} else {
+>> -					retry++;
+>> -				}
+>> +				retry++;
+>> +				thp_retry += is_thp;
+>>  				nr_retry_pages += nr_pages;
+>>  				break;
+>>  			case MIGRATEPAGE_SUCCESS:
+>> @@ -1810,13 +1786,8 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>  				stats->nr_thp_succeeded += is_thp;
+>>  				break;
+>>  			default:
+>> -				if (is_large) {
+>> -					nr_large_failed++;
+>> -					stats->nr_thp_failed += is_thp;
+>> -				} else {
+>> -					nr_failed++;
+>> -				}
+>> -
+>> +				nr_failed++;
+>> +				stats->nr_thp_failed += is_thp;
+>>  				stats->nr_failed_pages += nr_pages;
+>>  				break;
+>>  			}
+>> @@ -1825,14 +1796,10 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>  		}
+>>  	}
+>>  	nr_failed += retry;
+>> -	nr_large_failed += large_retry;
+>>  	stats->nr_thp_failed += thp_retry;
+>>  	stats->nr_failed_pages += nr_retry_pages;
+>>
+>> -	if (rc_saved)
+>> -		rc = rc_saved;
+>> -	else
+>> -		rc = nr_failed + nr_large_failed;
+>> +	rc = rc_saved ? : nr_failed;
+>>  out:
+>>  	/* Cleanup remaining folios */
+>>  	dst = list_first_entry(&dst_folios, struct folio, lru);
+>> -- 
+>> 2.39.2
+>
+> Otherwise LGTM. Reviewed-by: Zi Yan <ziy@nvidia.com>
 
-Once again, I really appreciate your help and guidance.
+Thanks!
 
-Best regards,
-Chengen Du
-
-On Tue, May 9, 2023 at 11:16=E2=80=AFPM Benjamin Coddington <bcodding@redha=
-t.com> wrote:
->
-> On 24 Apr 2023, at 21:41, Chengen Du wrote:
->
-> > Hi,
-> >
-> > May I ask if there are any concerns or opinions regarding the
-> > introduction of the new mount option?
-> > If there is a more suitable solution, we can discuss it, and I can
-> > work on implementing it.
->
-> I suspect there's some weariness of mount options, we have a lot of them =
-and
-> they are not easily removed once implemented.  Additionally, requests to =
-add
-> them usually can show the appropriate changes to the nfs-utils mount.nfs =
-and
-> man pages required.  Incompleteness here may be the reason you're not
-> hearing back from a maintainer.
->
-> However, without guidance from a maintainer, you might end up doing extra
-> work trying to meet unclear standards.
->
-> There's a couple of other ways to address the access cache performance
-> "degradation" that was introduced by the changes that other folks
-> desperately needed for correctness.
->
-> We can change nfs_access_login_time to have a module parameter modifying
-> the behavior.  The downside is this would affect every mount.
->
-> We can grow a sysfs knob to change the behavior.  Downside is we only hav=
-e
-> very preliminary sysfs scaffolding as of yet.
->
-> However, if you want to keep pushing for the mount option, I'd suggest do=
-ing
-> a v2 with the userspace patches, and if that gets ignored then do a "PATC=
-H
-> RESEND" on that a month or so before each mainline merge window.
->
-> I've found that bump-replying to old patches isn't as effective at gettin=
-g
-> work merged here.  I believe the maintainers want to see that you're
-> rebasing as mainline progresses, and you have active ownership over the w=
-ork
-> to fix bugs that may follow or address other fallout from the community.
->
-> Ben
->
+Best Regards,
+Huang, Ying
