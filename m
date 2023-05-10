@@ -2,159 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B076FD380
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 03:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE426FD384
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 03:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233120AbjEJBYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 21:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
+        id S235093AbjEJBZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 21:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjEJBYk (ORCPT
+        with ESMTP id S230119AbjEJBZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 21:24:40 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A90E52
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 18:24:39 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52160f75920so4449884a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 18:24:39 -0700 (PDT)
+        Tue, 9 May 2023 21:25:32 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1465CE52
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 18:25:31 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-44ff2f8ec9dso4104574e0c.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 18:25:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683681879; x=1686273879;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=igRRy0hX7f/8CQM1lxoKnRs6kwwNUxJvg8cGqw0HOuQ=;
-        b=k1O+dADODFwAhrz4JbRuNYY+8NScyFBnJzcuqM1iWQ4IUs7H2EPDSAafNUd49nYt9X
-         ORpfIMbhkA+ODuZoNhsJTMc8FjkeFDteswksik9ouMLRPd0Mw/2IIL8SuIRgNKHZOd3q
-         iVEdBjcLKkLtrXTZFLmY+he37DpGG1gOSkZW0OrUe7n/hDPI0Mt5bwPTO8WWsCZ4xvtn
-         zmmcuCRpDufO+Y+yy3NmdvThiyrnIvCqEAAzERKWMYqDS5yRQ2bvxtQQjCUPcKQjpwrf
-         DDCcdyZyEsWzxu11yCiD+2W4U6Pie2VUbtpxw/sMOL7AAdWF694/56gGj35JRGUCg9/T
-         PDJw==
+        d=igel-co-jp.20221208.gappssmtp.com; s=20221208; t=1683681930; x=1686273930;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m0ARqn6lUh+8+K75vz/NE3HQE8qKTumvzAuTMNY1vXo=;
+        b=UOdGmj2HqWuDuWFZ07gN0GFZa4HwwCBPfIzGLenp/qvEd2r4ggMpmDoVZGnYRbxtah
+         oBol6sEQL7XFtEAb62UbScv8R1N0hlTEN9NatwWc8T31ewa08EjnUSH9OzLTwX+1CBZo
+         tW8jB2RIy6BaXZtewZNP03ZbyL64/M8me5itTDUoR2G1NnGMpL888cHz5mLmLLPYhvHN
+         Uj+syFwvxBIBqxz9DREUdHu5jVZueMCTgb1BrC3SKQmjVe7mXS5BWet+RiiI9EDtNW6j
+         7n6UkZ76ztdDpLtJJnhn/uD7CqBD/u8TNujykPOTUkAwdWYbPkim9KOKWyZLvPjBH5HU
+         2l7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683681879; x=1686273879;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683681930; x=1686273930;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=igRRy0hX7f/8CQM1lxoKnRs6kwwNUxJvg8cGqw0HOuQ=;
-        b=FZBTFT+NqlUgEjI8uYRhyVMj4rd6tJE52eHCsnySfdVdkXpupiI9Wl6oN4EoydTlVw
-         idcmabXVRyoq5FxlONDaozquCGpVGXpOVxWlBGjhbw2JZOtCyVCUBUA6BA4XNhMFPoqy
-         SQ8yMfEKIhsgozl6y3KOcM1F/joQ53qKBKWWUPySNpYnnckiGYVBl+yYLj9Bl3/VwYPY
-         /p1DlFGdMqUnd3IDH3yeyVMgNyS+THq7ECHUqChbvhq6719G4DJJHpEbh0hnrIJLFiA1
-         UxWjX7AgHkI5n8kc3rJmbbvmI0nZ11QqlkTgNDr6Xe5yVJ9ZWrZAEnpnKv3FSIXubQKV
-         34rw==
-X-Gm-Message-State: AC+VfDyH9Y8ixeONvYi+Q65tzFTEY1lMoUfX4alH9ZyqH5Z3GtFCeVsF
-        8Jcb2FFgD7dviREX4HM6lbA=
-X-Google-Smtp-Source: ACHHUZ6GTXyHapDnbueeMr+/heuvgq8+sYS6+2PYxm+oa36EdoJBtzUt+Ba2VWcrodtlqLOJkXTHKA==
-X-Received: by 2002:a17:903:2347:b0:1a9:91d7:ba2 with SMTP id c7-20020a170903234700b001a991d70ba2mr19855801plh.48.1683681878925;
-        Tue, 09 May 2023 18:24:38 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id s8-20020a170902a50800b001ac8e0ea157sm2298979plq.144.2023.05.09.18.24.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 18:24:38 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 9 May 2023 15:24:37 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        security@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] kernfs: Prefer strscpy over strlcpy calls
-Message-ID: <ZFryVUHtkN5QbKTP@slm.duckdns.org>
-References: <20230510011122.3040915-1-azeemshaikh38@gmail.com>
+        bh=m0ARqn6lUh+8+K75vz/NE3HQE8qKTumvzAuTMNY1vXo=;
+        b=GtSfHOBUaVJY7hOXoQeTvO4VxcrNo+z0NTFJrKOVW80mVer68R6HX+W/WGlV5EPgJO
+         1UcpX2DzhaOa2GVjh3p4xkouCxl/T5K77O7NNg/wmdTSorn91GCQ2slgo9k639GYwmZM
+         DITCHUfGfwjfqkmRjw4uIWdH8Tpk6dKXK2nKbI5qqDnM/HA1JEPgLcSlgJtpdNq08gkd
+         U0i+7oIKK02W1wAlKuuL03vzJ6mBpiRYxfNsz4xMHT34JCu8QFHKIuHz72A9FSx56qPm
+         emBVlT3YERRHAyxrUXKdnaFZxCGDx0fG0AxaSPQjjETsERWsEq7fNLugI1bhPgsfEXIN
+         cosg==
+X-Gm-Message-State: AC+VfDxumsfQ5MTv57mCKupALqwytB4Qihz9yFmx1Ms4sC/54NPZGbds
+        OgMHSG8PcMsvtw+okOZRIL56DbVHtnH/SATT6IR/2w==
+X-Google-Smtp-Source: ACHHUZ7Bi0L6Y5RYYpzfwbgMQqZU/tca8oH+br74IUhODrNZZunpV78eUf1PcSHKT6yiWgGGNBSQ7pQhnQ9IefTgUFw=
+X-Received: by 2002:a1f:c112:0:b0:43f:ea80:e8af with SMTP id
+ r18-20020a1fc112000000b0043fea80e8afmr5234632vkf.4.1683681929848; Tue, 09 May
+ 2023 18:25:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230510011122.3040915-1-azeemshaikh38@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230427104428.862643-4-mie@igel.co.jp> <20230427180906.GA261441@bhelgaas>
+In-Reply-To: <20230427180906.GA261441@bhelgaas>
+From:   Shunsuke Mie <mie@igel.co.jp>
+Date:   Wed, 10 May 2023 10:25:19 +0900
+Message-ID: <CANXvt5pNH-y-p8Sy3E8o_KNHDjeMb6USZivJVtDmn1rfRqp3wA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 3/3] PCI: endpoint: Add EP function driver to
+ provide virtio-console functionality
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, Frank Li <Frank.Li@nxp.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 01:11:22AM +0000, Azeem Shaikh wrote:
-...
-> +/* strscpy_mock_strlcpy - imitates strlcpy API but uses strscpy underneath. */
-> +static size_t strscpy_mock_strlcpy(char *dest, const char *src, size_t count)
-> +{
-> +	strscpy(dest, src, count);
-> +	return strlen(src);
-> +}
+Hi Bjorn,
+Thanks for the many comments. I will fix the mannerisms and typos as noted.
 
-I'm not sure this is a meaningful conversion. One benefit of strscpy() is
-that it's less error-prone to check for overflows. What's the point of
-removing strlcpy() if we end up sprinkling lesser duplicates in the tree?
+2023=E5=B9=B44=E6=9C=8828=E6=97=A5(=E9=87=91) 3:09 Bjorn Helgaas <helgaas@k=
+ernel.org>:
+>
+> Random typos and trivial things.  No need to repost until somebody
+> does a more substantive review.
+>
+> On Thu, Apr 27, 2023 at 07:44:28PM +0900, Shunsuke Mie wrote:
+> > Add a new PCIe endpoint function driver that works as a pci virtio-cons=
+ole
+> > device. The console connect to endpoint side console. It enables to
+> > communicate PCIe host and endpoint.
+>
+> s/pci/PCI/
+>
+> > Architecture is following:
+> >
+> >  =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90         =E2=94=8C=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=AC=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=90
+> >  =E2=94=82virtioe     =E2=94=82         =E2=94=82                      =
+=E2=94=82virtio      =E2=94=82
+> >  =E2=94=82console drv =E2=94=82         =E2=94=9C=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90      =E2=94=82console drv =
+=E2=94=82
+> >  =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4         =E2=94=82=
+(virtio console=E2=94=82      =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=A4
+> >  =E2=94=82 virtio bus =E2=94=82         =E2=94=82 device)       =E2=94=
+=82=E2=97=84=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=96=BA=E2=94=82 virtio b=
+us =E2=94=82
+> >  =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4         =E2=94=9C=
+---------------=E2=94=A4      =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=A4
+> >  =E2=94=82            =E2=94=82         =E2=94=82 pci ep virtio =E2=94=
+=82                   =E2=94=82
+> >  =E2=94=82  pci bus   =E2=94=82         =E2=94=82  console drv  =E2=94=
+=82                   =E2=94=82
+> >  =E2=94=82            =E2=94=82  pcie   =E2=94=9C=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4                   =E2=94=
+=82
+> >  =E2=94=82            =E2=94=82 =E2=97=84=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=96=BA =E2=94=82  pci ep Bus   =E2=94=82                 =
+  =E2=94=82
+> >  =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=98         =E2=94=94=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=B4=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=98
+> >    PCIe Root              PCIe Endpoint
+>
+> s/virtioe/virtio/
+> s/pci/PCI/
+> s/pcie/PCIe/
+> s/ep/EP/
+>
+> > +config PCI_EPF_VCON
+> > +     tristate "PCI Endpoint virito-console driver"
+>
+> s/virito/virtio/
+>
+> > +     depends on PCI_ENDPOINT
+> > +     select VHOST_RING
+> > +     select PCI_EPF_VIRTIO
+> > +     help
+> > +       PCIe Endpoint virtio-console function implementatino. This modu=
+le
+> > +       enables to show the virtio-console as pci device to PCIe host s=
+ide, and
+> > +       another virtual virtio-console device registers to endpoint sys=
+tem.
+> > +       Those devices are connected virtually and can communicate each =
+other.
+>
+> s/implementatino/implementation/
+> s/pci/PCI/
+> s/can communicate/can communicate with/
+>
+> > + * PCI Endpoint function driver to impliment virtio-console device
+> > + * functionality.
+>
+> s/impliment/implement/
+>
+> > +static int virtio_queue_size =3D 0x100;
+> > +module_param(virtio_queue_size, int, 0444);
+> > +MODULE_PARM_DESC(virtio_queue_size, "A length of virtqueue");
+>
+> When and why would users need this parameter?  Where is it documented?
+>
+> > +     /* To access virtqueus of local host driver */
+>
+> s/virtqueus/virtqueues/
+>
+> > +     /* To show a status whether this driver is ready and the remote i=
+s connected */
+>
+> Make this fit in 80 columns.
+>
+> > +     /* This is a minimum implementation. Doesn't support any features=
+ of
+> > +      * virtio console. It means driver and device use just 2 virtuque=
+ for tx
+> > +      * and rx.
+> > +      */
+>
+> Use common multi-line comment style:
+>
+>   /*
+>    * This is ...
+>    */
+I'll follow the style.
+> s/virtuque/virtqueues/
+>
+> > +static void epf_vcon_raise_irq_handler(struct work_struct *work)
+> > +{
+> > +     struct epf_vcon *vcon =3D
+> > +             container_of(work, struct epf_vcon, raise_irq_work);
+>
+> Rewrap.
+>
+> > +static int epf_vcon_setup_common(struct epf_vcon *vcon)
+> > +{
+> > +     vcon->features =3D 0;
+> > +     vcon->connected =3D false;
+> > +
+> > +     vcon->task_wq =3D
+> > +             alloc_workqueue("pci-epf-vcon/task-wq",
+>
+> Looks like this would fit on the previous line?
+>
+> > +                             WQ_MEM_RECLAIM | WQ_HIGHPRI | WQ_UNBOUND,=
+ 0);
+>
+> > +static void epf_vcon_initialize_complete(void *param)
+> > +{
+> > +     struct epf_vcon *vcon =3D param;
+> > +
+> > +     pr_debug("Remote host has connected\n");
+>
+> Is there any device info you could include here, e.g., with dev_dbg()?
+> It's nice if users have a little context.
+I see. I'll use it.
+> > +static int epf_vcon_setup_ep_func(struct epf_vcon *vcon, struct pci_ep=
+f *epf)
+> > +{
+> > +     int err;
+> > +     struct epf_virtio *evio =3D &vcon->evio;
+> > +     unsigned int nvq =3D epf_vcon_get_nvq(vcon);
+> > +
+> > +     vcon->rdev_iovs =3D
+> > +             kmalloc_array(nvq, sizeof(vcon->rdev_iovs[0]), GFP_KERNEL=
+);
+>
+> Move the function name and as many parameters as fit in 80 columns to
+> the previous line to match prevailing style.
+I've just applied clang-format... Ok, I'll fix it manually.
+> > +     /* There is no config for virtio console because this console dev=
+ice
+> > +      * doesn't any support features
+> > +      */
+>
+> Multi-line comment style.
+>
+> s/doesn't any support/doesn't support any/?  Is that what you mean?
+>
+> > +     /* Do nothing because this console device doesn't any support fea=
+tures */
+>
+> Same.
+>
+> > +static void epf_vcon_vdev_set_status(struct virtio_device *vdev, u8 st=
+atus)
+> > +{
+> > +     if (status & VIRTIO_CONFIG_S_FAILED)
+> > +             pr_debug("driver failed to setup this device\n");
+>
+> dev_dbg() if possible.
+>
+> > +             err =3D vringh_init_kern(&vcon->vdev_vrhs[i], vcon->featu=
+res,
+> > +                                    virtio_queue_size, false, vring->d=
+esc,
+> > +                                    vring->avail, vring->used);
+> > +             if (err) {
+> > +                     pr_err("failed to init vringh for vring %d\n", i)=
+;
+>
+> dev_err() if possible.
+>
+> > +static int epf_vcon_setup_vdev(struct epf_vcon *vcon, struct device *p=
+arent)
+> > +{
+> > +     int err;
+> > +     struct virtio_device *vdev =3D &vcon->vdev;
+> > +     const unsigned int nvq =3D epf_vcon_get_nvq(vcon);
+> > +
+> > +     vcon->vdev_vrhs =3D
+> > +             kmalloc_array(nvq, sizeof(vcon->vdev_vrhs[0]), GFP_KERNEL=
+);
+>
+> Rewrap.
+>
+> > +     vcon->vdev_iovs =3D
+> > +             kmalloc_array(nvq, sizeof(vcon->vdev_iovs[0]), GFP_KERNEL=
+);
+>
+> Rewrap.
+>
+> > +     vcon->vdev_vqs =3D
+> > +             kmalloc_array(nvq, sizeof(vcon->vdev_vrhs[0]), GFP_KERNEL=
+);
+>
+> Rewrap.
+>
+> > +static void epf_vcon_cleanup_vdev(struct epf_vcon *vcon)
+> > +{
+> > +     unregister_virtio_device(&vcon->vdev);
+> > +     /* Cleanup struct virtio_device that has kobject, otherwise error=
+ occures when
+> > +      * reregister the virtio device.
+> > +      */
+>
+> Multi-line style and rewrap to fit in 80 columns.
+>
+> > +static int __init epf_vcon_init(void)
+> > +{
+> > +     int err;
+> > +
+> > +     err =3D pci_epf_register_driver(&epf_vcon_drv);
+> > +     if (err)
+> > +             pr_err("Failed to register PCI EP virtio-console function=
+\n");
+>
+> dev_err() if possible (doesn't look like it *is* possible).
+>
+> Looks like this registers a *driver*, so maybe change the message from
+> "function" to "driver"?
+It should be "driver".
+https://docs.kernel.org/PCI/endpoint/pci-endpoint.html#epc-apis-for-the-pci=
+-endpoint-function-driver
+> Bjorn
 
->  static int kernfs_name_locked(struct kernfs_node *kn, char *buf, size_t buflen)
->  {
->  	if (!kn)
-> -		return strlcpy(buf, "(null)", buflen);
-> +		return strscpy_mock_strlcpy(buf, "(null)", buflen);
->  
-> -	return strlcpy(buf, kn->parent ? kn->name : "/", buflen);
-> +	return strscpy_mock_strlcpy(buf, kn->parent ? kn->name : "/", buflen);
->  }
-
-Can you follow the users and convert the users accordingly rather than
-masking it from here? ie. make kernfs_name() and friends return -E2BIG when
-source is too long like strscpy(). I don't think anybody cares, actually.
-
->  /* kernfs_node_depth - compute depth from @from to @to */
-> @@ -141,13 +148,13 @@ static int kernfs_path_from_node_locked(struct kernfs_node *kn_to,
->  	int i, j;
->  
->  	if (!kn_to)
-> -		return strlcpy(buf, "(null)", buflen);
-> +		return strscpy_mock_strlcpy(buf, "(null)", buflen);
->  
->  	if (!kn_from)
->  		kn_from = kernfs_root(kn_to)->kn;
->  
->  	if (kn_from == kn_to)
-> -		return strlcpy(buf, "/", buflen);
-> +		return strscpy_mock_strlcpy(buf, "/", buflen);
->  
->  	common = kernfs_common_ancestor(kn_from, kn_to);
->  	if (WARN_ON(!common))
-> @@ -159,16 +166,16 @@ static int kernfs_path_from_node_locked(struct kernfs_node *kn_to,
->  	buf[0] = '\0';
->  
->  	for (i = 0; i < depth_from; i++)
-> -		len += strlcpy(buf + len, parent_str,
-> +		len += strscpy_mock_strlcpy(buf + len, parent_str,
->  			       len < buflen ? buflen - len : 0);
->  
->  	/* Calculate how many bytes we need for the rest */
->  	for (i = depth_to - 1; i >= 0; i--) {
->  		for (kn = kn_to, j = 0; j < i; j++)
->  			kn = kn->parent;
-> -		len += strlcpy(buf + len, "/",
-> +		len += strscpy_mock_strlcpy(buf + len, "/",
->  			       len < buflen ? buflen - len : 0);
-> -		len += strlcpy(buf + len, kn->name,
-> +		len += strscpy_mock_strlcpy(buf + len, kn->name,
->  			       len < buflen ? buflen - len : 0);
->  	}
-
-Ditto, please convert all the users accordingly. If that's not feasible, I
-think it'd be better to leave it as-is. I don't see how the new code is
-better.
-
-> @@ -851,7 +858,7 @@ static struct kernfs_node *kernfs_walk_ns(struct kernfs_node *parent,
->  
->  	spin_lock_irq(&kernfs_pr_cont_lock);
->  
-> -	len = strlcpy(kernfs_pr_cont_buf, path, sizeof(kernfs_pr_cont_buf));
-> +	len = strscpy_mock_strlcpy(kernfs_pr_cont_buf, path, sizeof(kernfs_pr_cont_buf));
->  
->  	if (len >= sizeof(kernfs_pr_cont_buf)) {
->  		spin_unlock_irq(&kernfs_pr_cont_lock);
-
-This is an easy conversion to strscpy().
-
-Thanks.
-
--- 
-tejun
+Best regards,
+Shunsuke
