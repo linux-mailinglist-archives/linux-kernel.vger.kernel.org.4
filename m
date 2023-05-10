@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73D96FDD63
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6557D6FDD71
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236853AbjEJMCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 08:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
+        id S236853AbjEJMIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 08:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236785AbjEJMCt (ORCPT
+        with ESMTP id S236747AbjEJMIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 08:02:49 -0400
-Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936467DB6;
-        Wed, 10 May 2023 05:02:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-        s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=CN7Du21sI7b6jGDaBlQmutgYmHF034Timd3PFCK1lso=; b=M2zpdK72/0OU+ZG8ALGEXrwrwo
-        pbCuExJ9wxSviUCBdK/C6l3sKwYmBGSE6VrnOxgHXG6su0pMooB1N0aeEVjJUvlOumaGxmYxHdCNc
-        wZisbB4/diwj151NoHNhkEsEW9tWL9A2wS5+c+68TnkUt9J7YzvFUGqv4+5F3L3UXmdBYzMgTk+pm
-        Az9USfra7VkwiQ1wCLFVntirYXPfcOrErtfVN9ChS9lecVuC/s5jOh1zeXkcaWianIiITNRS9pVkT
-        t3NuaT+qUvvWAmF8fvs3PGyVbVRg5NjX6zdrC9Qg316hiqRoLw98b3gDiSZlCNjglz4Oi2zeRW3ta
-        mCcvrOmw==;
-Received: from [2001:4d48:ad59:1403::16a3] (helo=earth.li)
-        by the.earth.li with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <noodles@earth.li>)
-        id 1pwiWf-007ujP-UW; Wed, 10 May 2023 13:02:34 +0100
-Date:   Wed, 10 May 2023 13:02:28 +0100
-From:   Jonathan McDowell <noodles@earth.li>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Subject: [PATCH v2 5/5] ARM: dts: axp209: Add iio-hwmon node for internal
- temperature
-Message-ID: <2a9bd53a65c4a154cccba622c60cbffcdceaeb95.1683719613.git.noodles@earth.li>
-References: <cover.1681580558.git.noodles@earth.li>
- <cover.1683719613.git.noodles@earth.li>
+        Wed, 10 May 2023 08:08:12 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E057D9E
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:08:08 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-96598a7c5e0so1140636166b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:08:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683720487; x=1686312487;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N79rnLnBBvifpn/rGywONJKqPsgsUMB/5px3PC0SkJA=;
+        b=Evqvcrrv0vlZHKChv7OVRMequxaI02TVQV8IaRj4X+NX5lmgapKKFQHtsCjNUNbtY+
+         cb5Epl2tgNebU6v45utxn2CNZzJ+eMzMr2ZfCoVTRbSeHM9uz5+C4e0kilVpZ+jdo9Jy
+         h0HVzGeVs0d0fuj8viMJJxDmkAk7VIAWQL7XpBDtoiOIZOmMav8RFMCAR4rtoF+0vml0
+         CVf3KJlMk1BuqGT7a7QmuBo5IkHXJqA66By67ZDIWb4EhDEuqvUkuRZsbC+Wy5pB3f2k
+         kUMCuBnlimnbkRsv/ZBiM0SIfVHEAjVac0/GUdhiTeJxmFpZPhYKueEa4nM3W1PqITCG
+         BOWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683720487; x=1686312487;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N79rnLnBBvifpn/rGywONJKqPsgsUMB/5px3PC0SkJA=;
+        b=MqwyyCgHVa7eOQhrr8/kcLVtg/LK2NXN4qfz+Ie3wVtbVBQNgOc8dyYy9gCL3kIQBR
+         KkeuTPksIhWiO4Z21sxVUmYnOgzY8hUi/nUB6IJ+HrZJygt043xkdsDi2rAHn1tyexFN
+         TCi1EfiLxhJhXEXUeGxsmkRNh03blAKh82MDCCI11Wqj3coMBIX3MzhyYHPFy4sKE3xl
+         0NHqQA+mWY7/b/3T/isFhuP/8uG3MNGtapJvNFB0CEQpE3xElDFJ0j5j+Cp5ukwdYMHv
+         pNwtcy1uq41hFmNQ8wlWcVMF3ULZigQGJs//G0lrSjj9cVqgpzfMItj5RCjwSXvtxchl
+         JDpg==
+X-Gm-Message-State: AC+VfDxi5vkQx/SsDsz6YISiQ7X2m1E0pcMl5M7ySkldvrxOD8XscMT9
+        CQjX9PuGEbAS3DXfltdrveWsvw==
+X-Google-Smtp-Source: ACHHUZ7u0aa8wR9dxWCV3LnMuyxcpEgpuKFHc8KUeQWzoxnJciQDNmuM1yiUkbRpGtwtCgKG5D/oUg==
+X-Received: by 2002:a17:906:478a:b0:969:b88c:b8a2 with SMTP id cw10-20020a170906478a00b00969b88cb8a2mr7297470ejc.10.1683720487193;
+        Wed, 10 May 2023 05:08:07 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
+        by smtp.gmail.com with ESMTPSA id d4-20020a170907272400b00965e9b435dfsm2608471ejl.65.2023.05.10.05.08.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 05:08:06 -0700 (PDT)
+Message-ID: <ffc244d4-74cc-ab82-1479-b8a6671ecbac@linaro.org>
+Date:   Wed, 10 May 2023 14:08:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1683719613.git.noodles@earth.li>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] spi: s3c64xx: Disable IRQ mode when using DMA
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+References: <CGME20230510120245epcas2p2cea91a04ef2fd46f0fa9f22f73c5b2eb@epcas2p2.samsung.com>
+ <20230510113942.89994-1-jaewon02.kim@samsung.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230510113942.89994-1-jaewon02.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a DT node to hook up the internal temperature ADC to the
-iio-hwmon driver. The various voltage + current ADCs are consumed and
-exposed by their respective drivers, but this is not and is always
-available. Naming chosen to match the axp20x_ prefix the power sensors
-use.
+On 10/05/2023 13:39, Jaewon Kim wrote:
+> Fixing the problem of enabling DMA mode and IRQ mode at the same time.
+> In this case, a value of more than 6bits is written to RDY_LVL, it can
+> cause an invasion of other registers, potentially leading to SPI
+> transfer failure.
+> 
+> Fixes: 1ee806718d5e ("spi: s3c64xx: support interrupt based pio mode")
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> ---
 
-Signed-off-by: Jonathan McDowell <noodles@earth.li>
----
- arch/arm/boot/dts/axp209.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm/boot/dts/axp209.dtsi b/arch/arm/boot/dts/axp209.dtsi
-index ca240cd6f6c3..469d0f7d5185 100644
---- a/arch/arm/boot/dts/axp209.dtsi
-+++ b/arch/arm/boot/dts/axp209.dtsi
-@@ -48,6 +48,13 @@
-  * http://dl.linux-sunxi.org/AXP/AXP209%20Datasheet%20v1.0_cn.pdf
-  */
- 
-+/ {
-+	pmic-temp {
-+		compatible = "iio-hwmon";
-+		io-channels = <&axp_adc 4>; /* Internal temperature */
-+	};
-+};
-+
- &axp209 {
- 	compatible = "x-powers,axp209";
- 	interrupt-controller;
--- 
-2.39.2
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
