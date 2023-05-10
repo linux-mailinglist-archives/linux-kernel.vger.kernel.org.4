@@ -2,124 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCF96FD9E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F8F6FD9E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236605AbjEJIsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 04:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S236653AbjEJItH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 04:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235904AbjEJIsp (ORCPT
+        with ESMTP id S236688AbjEJItD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 04:48:45 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2054.outbound.protection.outlook.com [40.107.7.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1786DE69;
-        Wed, 10 May 2023 01:48:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nbD53cRZuJBiJtwNGE1X4zzj8jNcjNwcWUqg3ShOdYezVME6S1AcPWR0P+C9PusuZX27rpkD2G3mf2NzqbyOateiOBEQXm1mtSmE93zwtwPGZ5eD6EytglDuVWYT4HD5eAuOAwCugXsX0zAuA+oQTPeqeGcACIESmbObgquYNZOI24MXhJKxFUJAsNYqq0+3QSrY6ge+5jlzJ2jmDUgPAfYmn9esBxM/cVU4KODfNSpicuE7/BkJEVcuc/YvCmr1LEJuJkkAefXxhwGVjjLGHUwqMORRLXT0vOgsnW7NhbDtJlfXUjbPEHLC/sjEp3CtPvvSvgXCOzs1ubOD7Dj+xQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bluWGJmrtO6+YoJNSTOJX3xpI9wJAGqGZ2MBcPqzMbo=;
- b=aySY4pU8z9DVdZK3Z4AL5vgy/LhFScvYE29Sg/PGa4q8Ecjfe5ci/5WdLGc4jkaoMEdSvyg52VqeDrAymzZ4djYEB2tmZphmsvq4EBhWgG+1NpFP6tYlSg2fByHpqqyfAOkgOD4E7Mtfs9Uc6qLxvUH4QCbIT20pAk+XRFdfnhMm9O8/gjMIZp3ayxXgJniSke8aw5uB+QQaSVEOcAoWiqZwNR4bMBST+LEILnejRu6DxBX3RHt7oOkKT7APv4vnY3GqEJ1sZvDO7S1EyPNKIU5mbZ3XzY0Bk5Dhi6X7R2cpe3Z9IL9KRZv885a+EPhaXGc2P3YUwXn26DS5WI0s8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bluWGJmrtO6+YoJNSTOJX3xpI9wJAGqGZ2MBcPqzMbo=;
- b=ir2Wl3vRteTSD6UHsfflNxZNFkiTO/LCwZFNIj6bZv97fVCiYa2pAsS8Z7NJtu+LjtfrYwp8RfgwaqDY75UgrliK2l3nD4rIj3mKIUYWRIyAw4ZYUDZe3w8bwMvE1j0CF68orhn3wom0AVv7oOzXf/7ogEsXElDX5DXUL/pNLcauv/PHy6bnK5Q6tFWfImYQ32fTuZkV5DPRKI+V8anR1xx7Ndrtio+tX8wKwxGmgUtJQ9gL96+nVDaQprV2EYUMIpSrdeka7Ey5HK+rceN91xgEzF+D5jd/H+bRbxzXUk7IWaIvMu2+6XGbRGr9JI71ObLtfAmcQrVZHZn0suoxgg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16) by AM9PR04MB8082.eurprd04.prod.outlook.com
- (2603:10a6:20b:3e8::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Wed, 10 May
- 2023 08:48:40 +0000
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::c1be:e15a:5cf9:b881]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::c1be:e15a:5cf9:b881%4]) with mapi id 15.20.6363.032; Wed, 10 May 2023
- 08:48:40 +0000
-Message-ID: <d63c25f5-0b10-b153-023f-4b2d4a42f9a5@suse.com>
-Date:   Wed, 10 May 2023 10:48:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4] ACPI: cpufreq: use a platform device to load ACPI PPC
- and PCC drivers
-Content-Language: en-US
-To:     Kevin Locke <kevin@kevinlocke.name>
-References: <20230316151036.10181-1-petr.pavlu@suse.com>
- <ZFreh8SDMX67EaB6@kevinlocke.name>
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        pmladek@suse.com, mcgrof@kernel.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <ZFreh8SDMX67EaB6@kevinlocke.name>
-Content-Type: text/plain; charset=UTF-8
+        Wed, 10 May 2023 04:49:03 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8B96188
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:48:57 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230510084856epoutp02bc5ca10fcf12b20eaeee93610509ade8~du-43bRgX3185231852epoutp02L
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:48:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230510084856epoutp02bc5ca10fcf12b20eaeee93610509ade8~du-43bRgX3185231852epoutp02L
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683708536;
+        bh=Tz77v0EHvEPWfXqlEtqfHLelknA3uibxNOyXoCv2mHI=;
+        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
+        b=a/tkjC2Zn2ZmfdsOspgH4sqVfeqOfVRRzlVSMAF+Bj8JcAIyiIMmEeZpM5kIjGwi1
+         cgMW7rOFJm3RunZ9e6sGgDzcVs6ZoTcRlomQxL0Ei8sPJjzUGct4IPzuiVLC91GnE8
+         RoSMmLa5NlP+fbU1rIgC/ALz/00vyXKy0LVJYJDE=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20230510084855epcas2p23743e3f954c737e37af22c644fb94869~du-4dDxCw2852728527epcas2p2B;
+        Wed, 10 May 2023 08:48:55 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.91]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4QGTGH1kbZz4x9Pv; Wed, 10 May
+        2023 08:48:55 +0000 (GMT)
+X-AuditID: b6c32a45-465ff70000020cc1-fd-645b5a77e407
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1B.E7.03265.77A5B546; Wed, 10 May 2023 17:48:55 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v2 02/14] block: bio-integrity: modify
+ bio_integrity_add_page()
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     Jinyoung CHOI <j-young.choi@samsung.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "kbusch@kernel.org" <kbusch@kernel.org>, "hch@lst.de" <hch@lst.de>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
+        "kch@nvidia.com" <kch@nvidia.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p1>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230510084854epcms2p756a3e1055399ead6bf539d3419c74c3e@epcms2p7>
+Date:   Wed, 10 May 2023 17:48:54 +0900
+X-CMS-MailID: 20230510084854epcms2p756a3e1055399ead6bf539d3419c74c3e
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0255.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:af::18) To AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|AM9PR04MB8082:EE_
-X-MS-Office365-Filtering-Correlation-Id: b83fb943-f798-49d8-3b05-08db513359e7
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EoHulkyO4cQ0k5qq7Oa1nRCLyBprP8r0LfEFc2b4aLz6kcktbAH8GStvs7uUqilTDF+MN4UHcpZZv4v72EmEIR/OrFUlxgrX+o7IkA4B0lJOYjW5+nTaYUb0rPiMAklBI3og9KCRyRFDF0UsWLMe9L7G6Z4+J4kxxVabuK1B86dHyhXCGBsHmtvpgCcbFxSesfdY1UVtV1HhKCTNBEjb+139hTSTJwrU84IqkMv01EC6EYMpuoVNIlwgqDvYwzUwF1Zh9jLcjp4YbOJPd7/atBfy0SIq+l4CPg1ZpdBvJ0b9F9j/gC5FMFXA3ObznZn5h9ERyzA5ZH0pAC/rj6K9BmzBCV6+SOusY1JH56ed2UbiSLCGuU6YTpWKAqDz3RZAN6syhFD8Wsi1mrd7rgyreChhsI6iTod12oVwjs5E06XWz9vQ0FpLwi8dSdlcpvcg1WduPJv4ARZsU2qheWdKTljjDicvqvLbqpggpYVdDKOoyURCAnm9Lv1V/EwAZ91Up8LTKovoP1dEEz3446+ap32WxFcFgAMqKBVAsMFU6E7uzXJkt21kMp23cDmM5QIdlHw8GAVENv7XxsonwswxBMP9JZkH8Ar+4Oq1kylT9UziAzTL8LpQRseRuP7fiLINWH6qe8DmBOI8vVlH7PofkQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(396003)(39860400002)(136003)(346002)(451199021)(66946007)(66476007)(66556008)(2906002)(83380400001)(2616005)(38100700002)(86362001)(31696002)(6486002)(186003)(53546011)(55236004)(6512007)(6506007)(36756003)(26005)(478600001)(31686004)(316002)(4326008)(6916009)(8936002)(8676002)(44832011)(41300700001)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MDdYR3VJUklJdUxJRzZ3MmJmM3FoSENxVHhiQVVlR1FnOXBXcWoySFdUeDlJ?=
- =?utf-8?B?SytJY1drTWh6Umovak12WHp0OWE2WU5XL3BXYVo4TnhpTnM1dVY0a3I4YmJa?=
- =?utf-8?B?M2J4NW1oZldzWExSYVVOZUJIdERzbndUMVVOL0pQYmxKUWVDTEJyRkJHV2tQ?=
- =?utf-8?B?UWtGMVB2ZS9RSUtwRWtxTVdaZmJhSEROYWNEczRiWTgwQjN3Z0lLMU8zWnBL?=
- =?utf-8?B?UWRFV1VEbC81NUZESmlXb2c1d0pWWU9qckl2R01uZ2ZzY3NpejAvZVd1UDc0?=
- =?utf-8?B?NG5hUVlsTG8zS1ZHUmdMbTlyNkJKeHN1QWNjV1JtM0xxeXIxU25McFh0QlFX?=
- =?utf-8?B?ZHp6alhLNU5oVHJPdFd6ZnpFVkkvcEI4VGVxb1p3aEJaUXIzWFFIRzJrblhD?=
- =?utf-8?B?ai9oMDVpNlZ3cTBxOFlvOVRVaW5rMEs3ZC9RMTFNTnVLd0JBQXRuK1ZFUTFu?=
- =?utf-8?B?TTI2QkFBTHN3R0RhSG5Tb3BjQ2xBQjgrQ3J0V09OYzYyTGZuQ2Y2Q094M2g2?=
- =?utf-8?B?U3IrMWdyQThFRVVUZFNvblJTbXN0RlJybkUrcEpBcWIrWHR6REpzM1hscXJr?=
- =?utf-8?B?Sys4R1doSE5pZU51U1ViU1EyRWlVVWh3cHVHTk5jbnZrZHJOUmF5QkpzQ3k1?=
- =?utf-8?B?RkNDaDc1Ky8yajZrK0c4Q3dTSnc3bWJsR0xic29lb2dtZFp4UHY0OGk5eEZa?=
- =?utf-8?B?akFNaFp3bUlBa1BrTTdsMTdMOVdSR0daYVE5VHhPZXZvU1hOdERVMjEyY1N4?=
- =?utf-8?B?bzJiVnRpRE0zS1NPcXBEcVc3VkVVSDM1TFNXWHIzcDZaZkVId2RaSDdxMWhj?=
- =?utf-8?B?VjJPMVhQNFNCM3pmZTNmeDlnVFcrR2NMMWVLZUIwYzRRd1BldGZZZnJ4Vk1l?=
- =?utf-8?B?aitYY2h4MTFTMGVvSjBrVWt0Y00wQjN2SFhMTFBOaTVNOUdpbWRnQWdMRVdu?=
- =?utf-8?B?WUp1d0JJc0JmYVQ2VXRzV0ZUV3VzTzdQTjVVZ3hZUEZwYUtCbkUvZEI0RTdy?=
- =?utf-8?B?ZTFxMTV4THZ2cW8zd284bE1KZExFdkpLekE4SW1LL244VU56WW5vNXdTK21B?=
- =?utf-8?B?TUFBcWpIanR1aGhxMUZTZVVPbEE1cFFXZFNQOVg0elYxVXdxZHRSeHMxWUVP?=
- =?utf-8?B?dHl6U0djd0FFM0VmY0ZBTGw1ODF1V1R0R3VGOFRSQlp4emQvK2EvWlVWWFFv?=
- =?utf-8?B?UDJIZTQrdlRUN0oyUGZob3FVZVE4dTVaclBHRVRzM1AwV2hxTmZETVNoZlFx?=
- =?utf-8?B?MEdpajBObk50eWtpc1ZGSkJSZzVROTgra0p6dUNIS0ErYnZ6NThEcWZHU2k0?=
- =?utf-8?B?NE5mS0laK28wWkFYbDVJZDh4OUhmL1A2LzhZRzhodThHYWU1S08yRzlJTVJl?=
- =?utf-8?B?Z2ZBYXZrVUdwcDAxQ1V6eVNRY3ovYXlpRUV4Ui85V1hHUittZ3ZDWG9wQmtG?=
- =?utf-8?B?bGxPVzVlemVGZk1tSW8wUzZwa2RtV1JYSkh0M3JFMnNPVFMzYUNYeWw3Q0dr?=
- =?utf-8?B?S04vdjZWVWt5cXQ2NGdHMW8yRkU3Q2g0ZWJwd1BIcVd3STdlQXAwWlZoUjY4?=
- =?utf-8?B?TnRPRU16Z1FLN3FjSjkyM3kvTkM5UFE0OEJuVktLcW01UXUrZWl6NFhHQUxK?=
- =?utf-8?B?TFU5aWozbjhNSnR5YVZyeDlOVkVLMk5KRUV6NzlGbWR2VnV5QXBjUEpYeUVM?=
- =?utf-8?B?bEFkb3JuWkJFZ29Ib2dSL1JTVmtQUHRVRVdtQWYwTFlrQ210cXlDSGdsbW9B?=
- =?utf-8?B?VXNmZmtKdkRrd01IR3E5QzBma29IN0h3NmhEbVJFRFlLcEpCZlVmV1Bqd0oy?=
- =?utf-8?B?c2pDMWQyZmVZV1k0L25PTDAza0xoRVlhdHU5TlAvbXJIUVl5LzNOTjY4NTk4?=
- =?utf-8?B?Q2ZqNFRncEFPOGtybk5MZlg3NG5tMFF5S2dNZ2ZINDdiNE9mSFZIWDFIU0Rr?=
- =?utf-8?B?VDlYYlRvcFllbkNiN0d6MWt2dHRvRDkrS1VldUQ0WHVtbUJQRTVaazFiYk9o?=
- =?utf-8?B?aXJVdGF2ZFp6alVWQzFRVEFndEgyT3N1ZWpxRFc4MDIvckhEM0hGM2l3R1Zp?=
- =?utf-8?B?U2VRTXV2Q0tyZXp5TFJxTThUaE1qckhxQTVDV2RKaHNYdWR3Z3Z3MlRrazF5?=
- =?utf-8?Q?bJdBo+juSbmjPwac98Cr/mOe8?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b83fb943-f798-49d8-3b05-08db513359e7
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 08:48:39.8239
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5ySClGdg//1wB7DZG5vwTCKJkpsharVzhNx1elL8yrlCUDy0sF88msJpxSdskQLTYYehBgoKNEVfJWTBrPyKew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8082
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFJsWRmVeSWpSXmKPExsWy7bCmhW55VHSKwdK1HBar7/azWbw8pGmx
+        cvVRJove/q1sFotubGOy+Nt1j8li0qFrjBZPr85isth7S9vi8q45bBbLj/9jslj3+j2Lxe8f
+        c9gceD3O39vI4rF5hZbH5bOlHptWdbJ5TFh0gNFj980GNo/e5ndsHh+f3mLx6NuyitHj8yY5
+        j/YD3UwB3FHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+Abpu
+        mTlA5ysplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCswL9IoTc4tL89L18lJLrAwN
+        DIxMgQoTsjN6dl9gK7jnWTG/5StbA+Msqy5GTg4JAROJi1u+sHYxcnEICexglOh/OJupi5GD
+        g1dAUOLvDmGQGmGBQInjB28zgdhCAkoS59bMYgQpERYwkLjVaw4SZhPQk/i5ZAYbyBgRgZ0s
+        Et/vH2WEmM8rMaP9KQuELS2xfflWsF5OAT+J1seWEGENiR/LepkhbFGJm6vfssPY74/Nhxoj
+        ItF67yxUjaDEg5+7oeKSEocOfWUDGSkhkC+x4UAgRLhG4u3yA1Al+hLXOjaCXcAr4Cux/PRP
+        sDiLgKrE1CM3oVa5SGxeMwEsziwgL7H97RxmkJHMApoS63fpQ0xXljhyiwWigk+i4/Bfdpj/
+        Gjb+xsreMe8JE0SrmsSiJiOIsIzE18Pz2ScwKs1CBPIsJGtnIaxdwMi8ilEstaA4Nz212KjA
+        EB6vyfm5mxjBiVjLdQfj5Lcf9A4xMnEwHmKU4GBWEuH1Do1KEeJNSaysSi3Kjy8qzUktPsRo
+        CvTwRGYp0eR8YC7IK4k3NLE0MDEzMzQ3MjUwVxLnlbY9mSwkkJ5YkpqdmlqQWgTTx8TBKdXA
+        lOJvf2rhU2W5Lqcb82IunTzWN2HNLK+0HRM5KgQORz3J5v/dYMEmw/rviums7uIf786cD10r
+        ul5lifOx6Ftnq7f7aN55dzFIhTtf/NL30LkTawzlEzbvMlLK+TLjMWfscynmM0s2MIToOGi8
+        n7LhakbOwjgljkM8rtES9XNUtK3mL65mMiv4pTAreIXOv9uf2QzuZEw1/VHOsPkLR6vqxCA2
+        5YKYi/pnL+v0GCZfnMC8975KSYxfd8tO9foXwte8nCuCP/rIxS9h8laLuvXt0RPBXt3fJf3s
+        eqf+qy+2fmd9+/GE1bOnW3m6yzssi2bl5NvcN0H3x6pfTCE9/4NWuM/d4r0m9uYCu139WkVZ
+        SizFGYmGWsxFxYkAxjrOmE0EAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684
+References: <20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p1>
+        <CGME20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p7>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -128,40 +105,299 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/23 02:00, Kevin Locke wrote:
-> On Thu, 2023-03-16 at 16:10 +0100, Petr Pavlu wrote:
->> The patch extends the ACPI parsing logic to check the ACPI namespace if
->> the PPC or PCC interface is present and creates a virtual platform
->> device for each if it is available. The acpi-cpufreq and pcc-cpufreq
->> drivers are then updated to map to these devices.
->>
->> This allows to try loading acpi-cpufreq and pcc-cpufreq only once during
->> boot and only if a given interface is available in the firmware.
-> 
-> As a result of this patch (691a637123470bfe63bccf5836ead40fac4c7fab)
-> my ThinkPad T430 with an i5-3320M CPU configured with
-> CONFIG_X86_INTEL_PSTATE=y and CONFIG_X86_ACPI_CPUFREQ=m (Debian's
-> amd64 kernel config) now logs
-> 
-> kernel: acpi-cpufreq: probe of acpi-cpufreq failed with error -17
-> 
-> during boot.  Presumably this occurs because loading acpi-cpufreq
-> returns -EEXIST when intel-pstate is already loaded (or built-in, as
-> in this case).  I'm unsure why the message was not printed before;
-> perhaps a difference between driver probing for platform and cpu bus
-> types?  Although the error message is not wrong, it may lead to
-> unnecessary investigation by sysadmins, as it did for me.  I thought
-> it was worth reporting so you can consider whether the change is
-> desirable.
+Considering the constraints of hardware, the physically continuous pages
+were to be composed of one bio_vec.
+Previously, bio_vec was created separately for each page entering the
+parameter.
 
-Thanks for reporting this issue. The patch moved the setup of
-acpi-cpufreq from being done directly in its module init function to
-going through the probe logic. The reported warning newly comes from
-call_driver_probe() when the probe fails.
+The page merge process for data and integrity is almost the same. Thus,
+the bio was not used as a parameter, but the values referred to in
+the merge process were passed to the parameter. At this time, the
+parameter could be more than seven, so the page_merge_ctx structure
+was added.
 
-One immediate option that I can see to silence this warning would be to
-change the return code for this case in acpi_cpufreq_probe() from
--EEXIST to -ENODEV/ENXIO. Function call_driver_probe() then prints only
-a debug message about the probe rejecting the device.
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Martin K. Petersen <martin.petersen@oracle.com>
 
--- Petr
+Fixes: 783b94bd9250 ("nvme-pci: do not build a scatterlist to map metadata")
+Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
+---
+ block/bio-integrity.c | 66 ++++++++++++++++++++++++++++++++++---------
+ block/bio.c           | 56 +++++++++++++++++++++++-------------
+ block/blk.h           | 13 +++++++++
+ 3 files changed, 102 insertions(+), 33 deletions(-)
+
+diff --git a/block/bio-integrity.c b/block/bio-integrity.c
+index 4533eb491661..20444ec447cb 100644
+--- a/block/bio-integrity.c
++++ b/block/bio-integrity.c
+@@ -111,6 +111,23 @@ void bio_integrity_free(struct bio *bio)
+ 	bio->bi_opf &= ~REQ_INTEGRITY;
+ }
+ 
++/**
++ * bip_full - check if the bip is full
++ * @bip:	bip to check
++ * @len:	length of one segment to be added
++ *
++ * Return true if @bip is full and one segment with @len bytes can't be
++ * added to the bip, otherwise return false
++ */
++static inline bool bip_full(struct bio_integrity_payload *bip, unsigned int len)
++{
++	if (bip->bip_vcnt >= bip->bip_max_vcnt)
++		return true;
++	if (bip->bip_iter.bi_size > UINT_MAX - len)
++		return true;
++	return false;
++}
++
+ /**
+  * bio_integrity_add_page - Attach integrity metadata
+  * @bio:	bio to update
+@@ -118,25 +135,53 @@ void bio_integrity_free(struct bio *bio)
+  * @len:	number of bytes of integrity metadata in page
+  * @offset:	start offset within page
+  *
+- * Description: Attach a page containing integrity metadata to bio.
++ * Add a page containing integrity metadata to a bio while respecting
++ * the hardware max_sectors, max_segment and gap limitations.
+  */
+ int bio_integrity_add_page(struct bio *bio, struct page *page,
+ 			   unsigned int len, unsigned int offset)
+ {
++	struct request_queue *q = bdev_get_queue(bio->bi_bdev);
+ 	struct bio_integrity_payload *bip = bio_integrity(bio);
+ 
+-	if (bip->bip_vcnt >= bip->bip_max_vcnt) {
++	if (((bip->bip_iter.bi_size + len) >> 9) > queue_max_hw_sectors(q))
++		return 0;
++
++	if (bip->bip_vcnt > 0) {
++		struct bio_vec *bv = &bip->bip_vec[bip->bip_vcnt - 1];
++		bool same_page = false;
++		struct page_merge_ctx pmc = {
++			.bv = bv,
++			.bi_vcnt = bip->bip_vcnt,
++			.bi_iter = &bip->bip_iter,
++			.page = page,
++			.len = len,
++			.offset = offset,
++			.same_page = &same_page,
++		};
++
++		if (bio_try_merge_hw_seg(q, &pmc))
++			return len;
++
++		/*
++		 * If the queue doesn't support SG gaps and adding this segment
++		 * would create a gap, disallow it.
++		 */
++		if (bvec_gap_to_prev(&q->limits, bv, offset))
++			return 0;
++	}
++
++	if (bip_full(bip, len)) {
+ 		printk(KERN_ERR "%s: bip_vec full\n", __func__);
+ 		return 0;
+ 	}
+ 
+-	if (bip->bip_vcnt &&
+-	    bvec_gap_to_prev(&bdev_get_queue(bio->bi_bdev)->limits,
+-			     &bip->bip_vec[bip->bip_vcnt - 1], offset))
++	if (bip->bip_vcnt >= queue_max_integrity_segments(q))
+ 		return 0;
+ 
+ 	bvec_set_page(&bip->bip_vec[bip->bip_vcnt], page, len, offset);
+ 	bip->bip_vcnt++;
++	bip->bip_iter.bi_size += len;
+ 
+ 	return len;
+ }
+@@ -249,7 +294,6 @@ bool bio_integrity_prep(struct bio *bio)
+ 	}
+ 
+ 	bip->bip_flags |= BIP_BLOCK_INTEGRITY;
+-	bip->bip_iter.bi_size = len;
+ 	bip_set_seed(bip, bio->bi_iter.bi_sector);
+ 
+ 	if (bi->flags & BLK_INTEGRITY_IP_CHECKSUM)
+@@ -258,7 +302,6 @@ bool bio_integrity_prep(struct bio *bio)
+ 	/* Map it */
+ 	offset = offset_in_page(buf);
+ 	for (i = 0 ; i < nr_pages ; i++) {
+-		int ret;
+ 		bytes = PAGE_SIZE - offset;
+ 
+ 		if (len <= 0)
+@@ -267,18 +310,13 @@ bool bio_integrity_prep(struct bio *bio)
+ 		if (bytes > len)
+ 			bytes = len;
+ 
+-		ret = bio_integrity_add_page(bio, virt_to_page(buf),
+-					     bytes, offset);
+-
+-		if (ret == 0) {
++		if (bio_integrity_add_page(bio, virt_to_page(buf),
++					   bytes, offset) < bytes) {
+ 			printk(KERN_ERR "could not attach integrity payload\n");
+ 			status = BLK_STS_RESOURCE;
+ 			goto err_end_io;
+ 		}
+ 
+-		if (ret < bytes)
+-			break;
+-
+ 		buf += bytes;
+ 		len -= bytes;
+ 		offset = 0;
+diff --git a/block/bio.c b/block/bio.c
+index 1be17dea603a..45af9e39acff 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -926,22 +926,23 @@ static inline bool page_is_mergeable(const struct bio_vec *bv,
+ 	return (bv->bv_page + bv_end / PAGE_SIZE) == (page + off / PAGE_SIZE);
+ }
+ 
+-static bool __bio_try_merge_page(struct bio *bio, struct page *page,
+-				 unsigned int len, unsigned int off,
+-				 bool *same_page)
++static bool __bio_try_merge_page(struct page_merge_ctx *pmc)
+ {
+-	struct bio_vec *bv = &bio->bi_io_vec[bio->bi_vcnt - 1];
++	struct bio_vec *bv = pmc->bv;
++	struct bvec_iter *bi_iter = pmc->bi_iter;
++	unsigned int len = pmc->len;
++	bool *same_page = pmc->same_page;
+ 
+-	if (!page_is_mergeable(bv, page, len, off, same_page))
++	if (!page_is_mergeable(bv, pmc->page, len, pmc->offset, same_page))
+ 		return false;
+ 
+-	if (bio->bi_iter.bi_size > UINT_MAX - len) {
++	if (bi_iter->bi_size > UINT_MAX - len) {
+ 		*same_page = false;
+ 		return false;
+ 	}
+ 
+ 	bv->bv_len += len;
+-	bio->bi_iter.bi_size += len;
++	bi_iter->bi_size += len;
+ 
+ 	return true;
+ }
+@@ -966,13 +967,23 @@ static bool bio_try_merge_page(struct bio *bio, struct page *page,
+ 			       unsigned int len, unsigned int off,
+ 			       bool *same_page)
+ {
++	struct page_merge_ctx pmc;
++
+ 	if (WARN_ON_ONCE(bio_flagged(bio, BIO_CLONED)))
+ 		return false;
+ 
+ 	if (!bio->bi_vcnt)
+ 		return false;
+ 
+-	return __bio_try_merge_page(bio, page, len, off, same_page);
++	pmc.bv = &bio->bi_io_vec[bio->bi_vcnt - 1];
++	pmc.bi_vcnt = bio->bi_vcnt;
++	pmc.bi_iter = &bio->bi_iter;
++	pmc.page = page;
++	pmc.len = len;
++	pmc.offset = off;
++	pmc.same_page = same_page;
++
++	return __bio_try_merge_page(&pmc);
+ }
+ 
+ /*
+@@ -980,20 +991,19 @@ static bool bio_try_merge_page(struct bio *bio, struct page *page,
+  * size limit.  This is not for normal read/write bios, but for passthrough
+  * or Zone Append operations that we can't split.
+  */
+-static bool bio_try_merge_hw_seg(struct request_queue *q, struct bio *bio,
+-				 struct page *page, unsigned len,
+-				 unsigned offset, bool *same_page)
++bool bio_try_merge_hw_seg(struct request_queue *q, struct page_merge_ctx *pmc)
+ {
+-	struct bio_vec *bv = &bio->bi_io_vec[bio->bi_vcnt - 1];
+ 	unsigned long mask = queue_segment_boundary(q);
++	struct bio_vec *bv = pmc->bv;
++	unsigned int len = pmc->len;
+ 	phys_addr_t addr1 = page_to_phys(bv->bv_page) + bv->bv_offset;
+-	phys_addr_t addr2 = page_to_phys(page) + offset + len - 1;
++	phys_addr_t addr2 = page_to_phys(pmc->page) + pmc->offset + len - 1;
+ 
+ 	if ((addr1 | mask) != (addr2 | mask))
+ 		return false;
+ 	if (bv->bv_len + len > queue_max_segment_size(q))
+ 		return false;
+-	return __bio_try_merge_page(bio, page, len, offset, same_page);
++	return __bio_try_merge_page(pmc);
+ }
+ 
+ /**
+@@ -1013,8 +1023,6 @@ int bio_add_hw_page(struct request_queue *q, struct bio *bio,
+ 		struct page *page, unsigned int len, unsigned int offset,
+ 		unsigned int max_sectors, bool *same_page)
+ {
+-	struct bio_vec *bvec;
+-
+ 	if (WARN_ON_ONCE(bio_flagged(bio, BIO_CLONED)))
+ 		return 0;
+ 
+@@ -1022,15 +1030,25 @@ int bio_add_hw_page(struct request_queue *q, struct bio *bio,
+ 		return 0;
+ 
+ 	if (bio->bi_vcnt > 0) {
+-		if (bio_try_merge_hw_seg(q, bio, page, len, offset, same_page))
++		struct bio_vec *bv = &bio->bi_io_vec[bio->bi_vcnt - 1];
++		struct page_merge_ctx pmc = {
++			.bv = bv,
++			.bi_vcnt = bio->bi_vcnt,
++			.bi_iter = &bio->bi_iter,
++			.page = page,
++			.len = len,
++			.offset = offset,
++			.same_page = same_page,
++		};
++
++		if (bio_try_merge_hw_seg(q, &pmc))
+ 			return len;
+ 
+ 		/*
+ 		 * If the queue doesn't support SG gaps and adding this segment
+ 		 * would create a gap, disallow it.
+ 		 */
+-		bvec = &bio->bi_io_vec[bio->bi_vcnt - 1];
+-		if (bvec_gap_to_prev(&q->limits, bvec, offset))
++		if (bvec_gap_to_prev(&q->limits, bv, offset))
+ 			return 0;
+ 	}
+ 
+diff --git a/block/blk.h b/block/blk.h
+index 45547bcf1119..dd7cbb57ce43 100644
+--- a/block/blk.h
++++ b/block/blk.h
+@@ -118,6 +118,19 @@ static inline bool bvec_gap_to_prev(const struct queue_limits *lim,
+ 	return __bvec_gap_to_prev(lim, bprv, offset);
+ }
+ 
++/* page merge context */
++struct page_merge_ctx {
++	struct bio_vec *bv;		/* bvec where @page will be merged */
++	unsigned short bi_vcnt;		/* how many bio_vec's */
++	struct bvec_iter *bi_iter;	/* actual i/o information on device */
++	struct page *page;		/* start page to add */
++	unsigned int len;		/* length of the data to add */
++	unsigned int offset;		/* offset of the data relative to @page */
++	bool *same_page;		/* return if the segment has been merged inside the same page*/
++};
++
++bool bio_try_merge_hw_seg(struct request_queue *q, struct page_merge_ctx *pmc);
++
+ static inline bool rq_mergeable(struct request *rq)
+ {
+ 	if (blk_rq_is_passthrough(rq))
+-- 
+2.34.1
