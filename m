@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D396FDAEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D076B6FDAE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjEJJkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 05:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236381AbjEJJjz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S236572AbjEJJjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 10 May 2023 05:39:55 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBD130C7;
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231207AbjEJJjw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 10 May 2023 05:39:52 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6C84207;
         Wed, 10 May 2023 02:39:49 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1ab1b79d3a7so48253095ad.3;
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-643990c5319so4943790b3a.2;
         Wed, 10 May 2023 02:39:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20221208; t=1683711589; x=1686303589;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=18EQqAro/ad1eftntjuXlU/cZiRt+RKEhODutQksVwo=;
-        b=DfigwJZ47/bLQRCdvJigqpDLCygUkaZN0OoF7QunAKjpfeOCNVoGWnJxQsgaUEY49P
-         /sv0qtlgs7i5MTFMgXiuOXRxGekp2O+SyBTphRr2ab90LAIw98OCxz7BpdHLzLBiqN7T
-         /+8EXgV3mAPaHUSwdtgJxv2WrrXlGPwf82VG2UwgxOylrqrPUk3Y9Tv1COjDSHposDKJ
-         V6OcPyRJkN5gdO5PRi0SyttrM8VfP0tcwCN7X08TOPjopCjrEKD1RkWoyda4sb4NQ3AY
-         jz8Y5owjqM2DMzTtHXW3o7wL7XLaN9c0unNgasfM3wyd5m9zmVPQRbqo8O9UMtfTLXe0
-         RYIQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ckUkgH/LBnma6i9Vpo625SXqSP6maiHgE6xir4pKJms=;
+        b=m/7g9q2gDUy79+/IGUGORh8Y7n3vgTLW1eXsaskk5Y2v+SDrACdtEW0NrPgmqHqvT4
+         /TYZukg4HzB7OWEn2AZLtStG8gudqMhFlRNDduE1MhQFES079vi0huIstWLDZVTrhnFO
+         o3RFIhoVKf4iAwTU5gaS/HJhMoUs5giGua0N4DAzCU6ZkQgN4C6WZMcDYPjjCAJwcOF+
+         r8GqJJJfm6BHrB6GwsqWXic4Of2MhHIBoQLhfYcBxGIa9uxJvKj9yyDhBIRsVGE1Bx/H
+         8PJjQsScIUQw0WvTw3ViQLc2a+eLc0Q/Nkt/ue7YW2zrT4YZgF5L56/oMZYKCsurLtGA
+         E54A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1683711589; x=1686303589;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=18EQqAro/ad1eftntjuXlU/cZiRt+RKEhODutQksVwo=;
-        b=bE6Bc07WFYTtHhUgClYltDym6Vqr87sKPyCKNA9+LmuBmSrjF8BrfBCgWluNRqRrDB
-         ubGHwEUVoQlUtKtt5+NjNI256Qqyp97/TCn6pGl93IPNILWt/NGyWg/yHUeaPr7IYMCS
-         ia6K+NtzTx/SGAZ5ap3SPHflR27WjI9jWUTw2WgMhrm4kix8m0M9s8opaZGCpPDgibol
-         8XJTdu9CvzeRk9qUksM8A2tUIRewzXEcKQh2lSx7O+jXNdBFI8Qxck4LRrJ6TQ9ACHdC
-         ++s3LWV9nQYbc9F0lGl0jukX8MhVsj8r+AhwlOk12X4h1T+xOCZ/HuhagwRsKYn0JYri
-         ve+w==
-X-Gm-Message-State: AC+VfDzOxMDKzQlwzZizQPXmtwgmIEXMeaJizyM15iuOjwSO/wV0jfOK
-        NrLTIbBQudHSxnJLGegbkQA=
-X-Google-Smtp-Source: ACHHUZ4+uwuvU7/tAnLudmCDhFqpNl7vDBQiZNvzmWs9AIz082YvGqdnUQuDNvkkkkMEj9ffJUAfWA==
-X-Received: by 2002:a17:902:da90:b0:1a2:2091:eeae with SMTP id j16-20020a170902da9000b001a22091eeaemr20945498plx.40.1683711588919;
-        Wed, 10 May 2023 02:39:48 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ckUkgH/LBnma6i9Vpo625SXqSP6maiHgE6xir4pKJms=;
+        b=cQAQyE/lyh5JOLqe2KFLLHRriKPxHASULR2iap211Fkv1mIfdsgSCoreiNo/PWW/ZM
+         ZeLIHNw/u6XEXNHw2OTjGFWaqg4TvyxKoD7WglUDPdFVNIodUWFnSjX7K6AKiZNYd2QL
+         bgzXeR+kS6Uy5LN6uaupJjtBpXWU9sZnHLWSlZ39SxeWTryf4shpUWUi6qJ1LyVt/j9J
+         vg4cqgHLM/CWlI8r2IcMRZFVsuwts0PRPdtCFeU8DeZ9XEP5fE+ubK4IIDNvboE447ST
+         aTV3Wo6RK4X4x1Pz4m7/iY0ktNwQUwydTiRmSCey7cBPYB/xX4K1ROKMMIzTcZIQN7Df
+         6vNQ==
+X-Gm-Message-State: AC+VfDxJllXtnkhKKYT9Z4HO91+ImdN2DDqM+M2Lj1VwBiU0DyOp6duF
+        Zzxvu6wvNdSk1xJKwakett4=
+X-Google-Smtp-Source: ACHHUZ5h1CcuHuK9TqFByVj4+TJuybYkXRAb2fs0LdBAx6tO7lb8dtKMK754kG524icZ86ZmFh6e/A==
+X-Received: by 2002:a05:6a21:9987:b0:102:1083:b4aa with SMTP id ve7-20020a056a21998700b001021083b4aamr3086031pzb.25.1683711589075;
+        Wed, 10 May 2023 02:39:49 -0700 (PDT)
 Received: from debian.me (subs02-180-214-232-71.three.co.id. [180.214.232.71])
-        by smtp.gmail.com with ESMTPSA id i12-20020a17090332cc00b001aaf5dcd762sm3272082plr.214.2023.05.10.02.39.48
+        by smtp.gmail.com with ESMTPSA id y14-20020a17090a784e00b00246b7b8b43asm3099735pjl.49.2023.05.10.02.39.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 10 May 2023 02:39:48 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id 57A811068F8; Wed, 10 May 2023 16:39:43 +0700 (WIB)
+        id 9DCE0103AAB; Wed, 10 May 2023 16:39:43 +0700 (WIB)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     Linux SCSI <linux-scsi@vger.kernel.org>,
         Linux Documentation <linux-doc@vger.kernel.org>,
@@ -60,12 +61,14 @@ Cc:     Oliver Neukum <oliver@neukum.org>, Ali Akcaagac <aliakc@web.de>,
         Jamie Lenehan <lenehan@twibble.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH v2 0/3] dc395x stale reference cleanup
-Date:   Wed, 10 May 2023 16:39:30 +0700
-Message-Id: <20230510093933.19985-1-bagasdotme@gmail.com>
+Subject: [PATCH v2 1/3] MAINTAINERS: Drop DC395x list and site
+Date:   Wed, 10 May 2023 16:39:31 +0700
+Message-Id: <20230510093933.19985-2-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230510093933.19985-1-bagasdotme@gmail.com>
+References: <20230510093933.19985-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3714; i=bagasdotme@gmail.com; h=from:subject; bh=TWTNCLmcRakutTicPxbt0ytozPj8yzxWmym8TVOTjjc=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCnRaSH1cW8L+Zi9Ft3r+z1ja8aGrw/ZNxet/3lgyTKxY N6aL/qHOkpZGMS4GGTFFFkmJfI1nd5lJHKhfa0jzBxWJpAhDFycAjCRpw2MDDvFhO2Sb5UtEE3f lO5loVl0aeHeFcUvGHT5sl2X/FEUaGP4nyhXYXn0tVPapYtvD/82/hwryaJx94Ga5/77b04fn5f 1iBEA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=823; i=bagasdotme@gmail.com; h=from:subject; bh=Sn0BZ1jABONtyvPtSO4/uSeRQGjS1WJByjZ9y+aap0Q=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCnRaaHrrmYb2P5RaVsWKBx55HR38UHhyplnZgdzdtQoc IQL/73XUcrCIMbFICumyDIpka/p9C4jkQvtax1h5rAygQxh4OIUgIlMvcXIcNJgvn/olRAFqaV/ bDfePM6VJRN5IvP5rvsT5jc8O7tvwRNGhodnTLM6RfsPfXBgvPW3amtOKedvcT3uM1Ixp4yToyU f8gEA
 X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,88 +82,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A small stale reference cleanup series for DC395x driver. The shortlog
-below should be self-explanatory.
+Emails to DC395x list bounce (550 error) and visiting the site returns
+404 page.
 
-This series is based on fixes branch of scsi tree.
+Drop both twibble.org links. The driver should now be covered by
+linux-scsi list.
 
-Changes since v1 [1]:
-  * Do not explicitly mention linux-scsi list in MAINTAINERS
-  * Keep the attribution to the 2.4 driver but reword it to remove mention
-    to 2.5/2.6 version
-  * Use web.archive.org snapshot of 2.4 driver link.
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ MAINTAINERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Bagas Sanjaya (3):
-  MAINTAINERS: Drop DC395x list and site
-  Documentation: scsi: dc395x: Replace non-functional twibble.org list
-  Documentation: scsi: dc395x: Reword original driver attribution
-
- Documentation/scsi/dc395x.rst | 11 ++++-------
- MAINTAINERS                   |  3 ---
- 2 files changed, 4 insertions(+), 10 deletions(-)
-
-Range-diff against v1 [1]:
-1:  aaec6b1333457f ! 1:  8db1313161119c MAINTAINERS: Drop DC395x list and site
-    @@ Commit message
-         Emails to DC395x list bounce (550 error) and visiting the site returns
-         404 page.
-     
-    -    Drop both twibble.org links, replacing the list with linux-scsi list.
-    +    Drop both twibble.org links. The driver should now be covered by
-    +    linux-scsi list.
-     
-         Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-     
-    @@ MAINTAINERS: DC395x SCSI driver
-      M:	Ali Akcaagac <aliakc@web.de>
-      M:	Jamie Lenehan <lenehan@twibble.org>
-     -L:	dc395x@twibble.org
-    -+L:	linux-scsi@vger.kernel.org
-      S:	Maintained
-     -W:	http://twibble.org/dist/dc395x/
-     -W:	http://lists.twibble.org/mailman/listinfo/dc395x/
-2:  af1800664dcc46 ! 2:  70a3006779bcb6 Documentation: scsi: dc395x: Replace non-functional twibble.org list
-    @@ Metadata
-      ## Commit message ##
-         Documentation: scsi: dc395x: Replace non-functional twibble.org list
-     
-    -    Now that the mailing list has been replaced in MAINTAINERS with
-    -    linux-scsi list, do the same in the documentation.
-    +    Sync mailing list address in the documentation to follow MAINTAINERS.
-     
-         Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-     
-3:  ed579e038a7984 ! 3:  379a2d4ceed777 Documentation: scsi: dc395x: Remove reference to 2.4 driver
-    @@ Metadata
-     Author: Bagas Sanjaya <bagasdotme@gmail.com>
-     
-      ## Commit message ##
-    -    Documentation: scsi: dc395x: Remove reference to 2.4 driver
-    +    Documentation: scsi: dc395x: Reword original driver attribution
-     
-    -    The 2.4 driver link returns 404. As no one runs 2.4 kernel anymore,
-    -    remove the stale reference.
-    +    The Linux kernel isn't in 2.6.x anymore, but rather the major version
-    +    has advanced much (currently 6.x). Reword the attribution.
-     
-    +    Also, replace 404'ed 2.4 driver link with web.archive.org snapshot [1].
-    +
-    +    Link: https://web.archive.org/web/20140129181343/http://www.garloff.de/kurt/linux/dc395/ [1]
-         Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-     
-      ## Documentation/scsi/dc395x.rst ##
-    @@ Documentation/scsi/dc395x.rst: be safe to use. Testing with hard disks has not b
-     -driver (which this driver started from) at
-     -http://www.garloff.de/kurt/linux/dc395/
-     -
-    ++This driver is evolved from `the original 2.4 driver
-    ++<https://web.archive.org/web/20140129181343/http://www.garloff.de/kurt/linux/dc395/>`_.
-      Problems, questions and patches should be submitted to the `Linux SCSI
-      mailing list <linux-scsi@vger.kernel.org>`_.
-      
-[1]: https://lore.kernel.org/linux-doc/20230505082704.16228-1-bagasdotme@gmail.com/
-
-base-commit: 1a7edd041f2d252f251523ba3f2eaead076a8f8d
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7e0b87d5aa2e57..ca88932ee04e2f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5716,10 +5716,7 @@ DC395x SCSI driver
+ M:	Oliver Neukum <oliver@neukum.org>
+ M:	Ali Akcaagac <aliakc@web.de>
+ M:	Jamie Lenehan <lenehan@twibble.org>
+-L:	dc395x@twibble.org
+ S:	Maintained
+-W:	http://twibble.org/dist/dc395x/
+-W:	http://lists.twibble.org/mailman/listinfo/dc395x/
+ F:	Documentation/scsi/dc395x.rst
+ F:	drivers/scsi/dc395x.*
+ 
 -- 
 An old man doll... just what I always wanted! - Clara
 
