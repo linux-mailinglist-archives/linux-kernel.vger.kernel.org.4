@@ -2,182 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E756FE274
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 18:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F086FE278
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 18:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjEJQ1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 12:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
+        id S229703AbjEJQ3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 12:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235540AbjEJQ0x (ORCPT
+        with ESMTP id S229487AbjEJQ3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 12:26:53 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526A5903F
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 09:26:14 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-52c6f8ba7e3so6821830a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 09:26:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683735972; x=1686327972;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1pslZOgz8wkHeX8xxKxzfahRXVqtGiv01nZPHkXBTPI=;
-        b=I00Q9fmZldW6VKmGYvR0kwD3KwNq31xAm7SgntwuvdDgZQvVU/M17zc/OLdH6a+h3t
-         /f3hvwToz2QrD27di2LVQWLQuowAnHC5Jn6kbl9UyavtJ2K9NrDMocNpHbyHJbDblpo1
-         AZpiwQd871Rt2i6Flu8ATmD+91ouHh+A/jR9P/rIgGxF5wFyfhVye97E60orhrOt42pQ
-         Z+qOu7hZDLu+kkBruVMqUndAB8VfpBkpSNlouY4kP++WARX3HqB6cbBti/Jlgb7uMgkZ
-         WGuIemMVDE7LS+0v2lksthGK25464aVrJHh79OZln8IHirYrOzKy8hPywmgkPPD3CED4
-         MtAw==
+        Wed, 10 May 2023 12:29:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6C67D80
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 09:28:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683736091;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wug8MPxwb1qwikFpXl+LsvcQU0BExfoIt784lLQszUA=;
+        b=Ns3y+AMVl+2a9ertl3kZIXOonu7Jg4tNe7BkDOMgSKbgnaINnmDBu0fH3gIZTLQnvHfJjy
+        tmRgj/yb7QeXnlDJpL9PHWFU0hMUydRO884/jEzoROE8+tZxamKdEqOfWYKmy4jiwrc1lb
+        UCTTtfuzOUDPnLGG0ruH++tsspL3qiU=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-638-1Kwm6vD6NBqm5ZXGguP5Ng-1; Wed, 10 May 2023 12:28:10 -0400
+X-MC-Unique: 1Kwm6vD6NBqm5ZXGguP5Ng-1
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-24e00b8cc73so4155526a91.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 09:28:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683735972; x=1686327972;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1683736089; x=1686328089;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1pslZOgz8wkHeX8xxKxzfahRXVqtGiv01nZPHkXBTPI=;
-        b=kZ9qZTynNtM2Ex1k0Wtr9S7TpbCb5j2vAAcHiBH+Z3YM4KeDYK3KsZVUMdxXZE9AJO
-         l97micFk27fUkdQf4ZWDwOoVMO+LqWa03k2lZy6dCf+c1vvBVdtnTcq9YCrVi065vx1s
-         z3NvlOvLEgQ0lFMoS8xmPXRcqfp2eRgHy7zQjBKJtRrUI+D8lgg3GIIBiD+aSKIkBzEI
-         4anTV9hrq5tHTBjvfrmTwDlF1Fa0/I+/B+3iVmKmeECZFBHP6dqH4D2NyFBWjBvQF6pT
-         Gg0AX23cL3wNFeBhPwZAzp5Qi0Fp0mh/We/PZooYqwRN77+QwhRYLEPBTgtol5CENicn
-         GqDw==
-X-Gm-Message-State: AC+VfDw+8JPth7QgxwaaflRAdkvp2QZbxA7xT7Z8oANK3fIJmJZge2Ww
-        /KGrbOazDse72y+/z4QVvXc=
-X-Google-Smtp-Source: ACHHUZ58TnBTMiT7Ug0Q8LJkOim+f1uHutHZVndU+ZFGouu8a9YPGmzX2yycRlUPyF4kSS5KnMa29g==
-X-Received: by 2002:a17:90a:13ce:b0:24e:3ed9:23a1 with SMTP id s14-20020a17090a13ce00b0024e3ed923a1mr18810874pjf.28.1683735971667;
-        Wed, 10 May 2023 09:26:11 -0700 (PDT)
-Received: from localhost ([2001:4958:15a0:30:c4b3:fc4f:6ca4:f972])
-        by smtp.gmail.com with ESMTPSA id gp24-20020a17090adf1800b0024e227828a9sm8872127pjb.24.2023.05.10.09.26.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 09:26:10 -0700 (PDT)
-Date:   Wed, 10 May 2023 09:26:10 -0700
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH] mm/mmap/vma_merge: always check invariants
-Message-ID: <ZFvFoj--H21sxzCQ@murray>
-References: <df548a6ae3fa135eec3b446eb3dae8eb4227da97.1682885809.git.lstoakes@gmail.com>
- <ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com>
- <ZFvAnF0DzEUN7F9r@murray>
- <ZFvDrZRV8RnoPR69@FVFF77S0Q05N.cambridge.arm.com>
+        bh=wug8MPxwb1qwikFpXl+LsvcQU0BExfoIt784lLQszUA=;
+        b=JHxHZBz1OiErplTw5Ef8eowOvjcwDXMG6nJJbb0LlXWhiqKqd+/hF/BBHhUPU5Qnlg
+         HEMQfqs5G7WAJQin+OnTPRvvBOgAq0dp9Mez5VBFgJQkLtwQIjtLrkBzTPVM9kavV05+
+         fptS4OYBJOlfwN9texeaZ6gUygWG7tEoFuVZsCQtly2DYN75B2iug0VWr+xJngoTbRbE
+         3Tw2bxM7//4xxZe30QtFWwNDZo1imjd9cYVUYSf1LxBCYfTNFsXtj8Jwf8+TxF6w6Q7+
+         zmeegdWmckPk+l0ru36EKyG9TEkcqmMe/OE+B1cQx9uIGH72NMDSDOpbHVNtDjURdcTu
+         Sjug==
+X-Gm-Message-State: AC+VfDwTbF2jG3yoSpeeSHwGxxwXD2QJpxINW2cEBFju2CU+YPs0LRYZ
+        HYsixb76M4hyHKHCSSTyPAUmFKe2761eV4oU0VUrkOTZ6qzL152ZF6v5JzC+jWBCxRNW+pxoHOb
+        wKZb4nR1vVpzZEC6vxNXXtX4b
+X-Received: by 2002:a17:90b:3b8b:b0:252:7114:b37a with SMTP id pc11-20020a17090b3b8b00b002527114b37amr1700951pjb.47.1683736089092;
+        Wed, 10 May 2023 09:28:09 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ71vWUUnU7AsOBwsGxC0ccIsutZeH6ArG3YH506jPelGdB7oxxS6W/XHzHY2l9G3KKb1qg+vQ==
+X-Received: by 2002:a17:90b:3b8b:b0:252:7114:b37a with SMTP id pc11-20020a17090b3b8b00b002527114b37amr1700938pjb.47.1683736088796;
+        Wed, 10 May 2023 09:28:08 -0700 (PDT)
+Received: from ?IPV6:2001:4958:15a0:30:5835:5bd3:f0c8:e5ef? ([2001:4958:15a0:30:5835:5bd3:f0c8:e5ef])
+        by smtp.gmail.com with ESMTPSA id lr8-20020a17090b4b8800b0024752ff8061sm22035186pjb.12.2023.05.10.09.28.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 09:28:08 -0700 (PDT)
+Message-ID: <7d72d054-2994-cc5a-53fb-c28eba32be49@redhat.com>
+Date:   Wed, 10 May 2023 18:28:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFvDrZRV8RnoPR69@FVFF77S0Q05N.cambridge.arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] mm: memory_hotplug: Fix format string in warnings
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        rick.wertenbroek@heig-vd.ch
+Cc:     Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230510090758.3537242-1-rick.wertenbroek@gmail.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230510090758.3537242-1-rick.wertenbroek@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 05:17:49PM +0100, Mark Rutland wrote:
-> On Wed, May 10, 2023 at 09:04:44AM -0700, Lorenzo Stoakes wrote:
-> > On Wed, May 10, 2023 at 03:15:51PM +0100, Mark Rutland wrote:
-> > > Hi,
-> > >
-> > > On Sun, Apr 30, 2023 at 09:19:17PM +0100, Lorenzo Stoakes wrote:
-> > > > We may still have inconsistent input parameters even if we choose not to
-> > > > merge and the vma_merge() invariant checks are useful for checking this
-> > > > with no production runtime cost (these are only relevant when
-> > > > CONFIG_DEBUG_VM is specified).
-> > > >
-> > > > Therefore, perform these checks regardless of whether we merge.
-> > > >
-> > > > This is relevant, as a recent issue (addressed in commit "mm/mempolicy:
-> > > > Correctly update prev when policy is equal on mbind") in the mbind logic
-> > > > was only picked up in the 6.2.y stable branch where these assertions are
-> > > > performed prior to determining mergeability.
-> > > >
-> > > > Had this remained the same in mainline this issue may have been picked up
-> > > > faster, so moving forward let's always check them.
-> > > >
-> > > > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> > > > ---
-> > > >  mm/mmap.c | 10 +++++-----
-> > > >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > > >
-> > > > diff --git a/mm/mmap.c b/mm/mmap.c
-> > > > index 5522130ae606..13678edaa22c 100644
-> > > > --- a/mm/mmap.c
-> > > > +++ b/mm/mmap.c
-> > > > @@ -960,17 +960,17 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
-> > > >  		merge_next = true;
-> > > >  	}
-> > > >
-> > > > +	/* Verify some invariant that must be enforced by the caller. */
-> > > > +	VM_WARN_ON(prev && addr <= prev->vm_start);
-> > > > +	VM_WARN_ON(curr && (addr != curr->vm_start || end > curr->vm_end));
-> > > > +	VM_WARN_ON(addr >= end);
-> > > > +
-> > >
-> > > I'm seeing this fire a lot when fuzzing v6.4-rc1 on arm64 using Syzkaller.
-> > >
-> >
-> > Thanks, from the line I suspect addr != curr->vm_start, but need to look
-> > into the repro, at lsf/mm so a bit time lagged :)
->
-> No problem; FWIW I can confirm your theory, the reproducer is causing:
->
-> 	addr > curr->vm_start
->
-> ... confirmed the the following hack, log below.
+On 10.05.23 11:07, Rick Wertenbroek wrote:
+> The format string in __add_pages and __remove_pages has a typo
+> and prints e.g., "Misaligned __add_pages start: 0xfc605 end: #fc609"
+> instead of "Misaligned __add_pages start: 0xfc605 end: 0xfc609"
+> Fix "#%lx" => "%#lx"
+> 
+> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
+> ---
+>   mm/memory_hotplug.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 8e0fa209d533..9061ac69b1b6 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -325,7 +325,7 @@ int __ref __add_pages(int nid, unsigned long pfn, unsigned long nr_pages,
+>   	}
+>   
+>   	if (check_pfn_span(pfn, nr_pages)) {
+> -		WARN(1, "Misaligned %s start: %#lx end: #%lx\n", __func__, pfn, pfn + nr_pages - 1);
+> +		WARN(1, "Misaligned %s start: %#lx end: %#lx\n", __func__, pfn, pfn + nr_pages - 1);
+>   		return -EINVAL;
+>   	}
+>   
+> @@ -525,7 +525,7 @@ void __remove_pages(unsigned long pfn, unsigned long nr_pages,
+>   	map_offset = vmem_altmap_offset(altmap);
+>   
+>   	if (check_pfn_span(pfn, nr_pages)) {
+> -		WARN(1, "Misaligned %s start: %#lx end: #%lx\n", __func__, pfn, pfn + nr_pages - 1);
+> +		WARN(1, "Misaligned %s start: %#lx end: %#lx\n", __func__, pfn, pfn + nr_pages - 1);
+>   		return;
+>   	}
+>   
 
-Awesome thanks for that! Just been firing up qemu to do this.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Cases 5-8 should really have addr == curr->vm_start, I wonder if it's
-another case but curr is being set incorrectly, it should in theory not be
-the case.
+-- 
+Thanks,
 
-(See [1] for a visualisation of merge cases as a handy reference)
+David / dhildenb
 
-Of course userfaultfd might be the offender here and might be relying on no
-merge case arising but passing dodgy parameters.
-
-[1]:https://ljs.io/merge_cases.png
-
->
-> | diff --git a/mm/mmap.c b/mm/mmap.c
-> | index 13678edaa22c..2cdebba15719 100644
-> | --- a/mm/mmap.c
-> | +++ b/mm/mmap.c
-> | @@ -961,9 +961,21 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
-> |         }
-> |
-> |         /* Verify some invariant that must be enforced by the caller. */
-> | -       VM_WARN_ON(prev && addr <= prev->vm_start);
-> | -       VM_WARN_ON(curr && (addr != curr->vm_start || end > curr->vm_end));
-> | -       VM_WARN_ON(addr >= end);
-> | +       VM_WARN(prev && addr <= prev->vm_start,
-> | +               "addr = 0x%016lx, prev->vm_start = 0x%016lx\n",
-> | +               addr, prev->vm_start);
-> | +
-> | +       VM_WARN(curr && addr != curr->vm_start,
-> | +               "addr = 0x%016lx, curr->vm_start = 0x%016lx\n",
-> | +               addr, curr->vm_start);
-> | +
-> | +       VM_WARN(curr && addr > curr->vm_end,
-> | +               "addr = 0x%016lx, curr->vm_end = 0x%016lx\n",
-> | +               addr, curr->vm_end);
-> | +
-> | +       VM_WARN(addr >= end,
-> | +               "addr = 0x%016lx, end = 0x%016lx\n",
-> | +               addr, end);
-> |
-> |         if (!merge_prev && !merge_next)
-> |                 return NULL; /* Not mergeable. */
->
-> ... with that applied, running the reproducer results in:
->
-> | addr = 0x0000ffff99dc2000, curr->vm_start = 0x0000ffff99db2000
-> | WARNING: CPU: 0 PID: 163 at mm/mmap.c:968 vma_merge+0x3d4/0x1260
->
-> ... i.e. addr > curr->vm_start
->
-> Thanks,
-> Mark.
