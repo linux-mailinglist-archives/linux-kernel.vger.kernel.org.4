@@ -2,393 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C8A46FE7DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE776FE7E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236339AbjEJXCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 19:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
+        id S230467AbjEJXEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 19:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236357AbjEJXCm (ORCPT
+        with ESMTP id S232030AbjEJXD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 19:02:42 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2075.outbound.protection.outlook.com [40.107.237.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5BA65AA;
-        Wed, 10 May 2023 16:02:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OEq0MnSOoXNFsSwXVM+KDAwMlF27YILvRttubHbYAdSyp1ldx5p+GyZXN9PiKPqbQ62XdQMMazb/ydLpNp5LtPJJTl0bc/StoISEu/V9zh5Mf9Ld0GaN4Ih7LQTzakwWllkBlDdqyHdjzNG72v8BUuc5imHedfcblLGyLGdjiKwqr99UjoQgWLXzq9WC6JVTsuhw6N4SYsb95R3wGob+EcO0GBymqcJDNTpe1E6gL6fR2rVg3Nbqu5wn/QMcAKaPdk6wUsG/lNP9/TH9e7djWsOA6iOBXO24qZYhsz2HcJ5f5ZnH/Q2IpL0ulyWdjDG6g0gnUg3b5uVM9ag2KiLedg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mff1qYk2vHwANb+z5MAyOys4fpzBakWsJRJHpF57UwU=;
- b=O/RhPNhmdpQQsCRaSCkDAZ6RyM23tCp5ZXYnkgLJdQrxJwtCNRlaDXkDdwEI1RFYyI7EL7ZcpPMn8QsRsQpqDdr//htUOoJsnbFE5lbeWSu/FhEZoAOwBdUbhIEIXHG60PlM30Tk/37qb64GRXtJEGISI3d2v66YbN/q26kUWJAEEBRIbdADoxlQgUKlTsSBd4vcvSn4xuBKTHo7f9qEh1DgII3svL045LHEQfnBqRWuNHsiC1Z9XoamEX0z82NPW8mLM6V7JQqzvZbNWooBM6VlqF6SrZIqezoFNujqBmWfUUbhY6ugmOS4S2pyATXPlFEeKCv5mD4HNKJyQcKsog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mff1qYk2vHwANb+z5MAyOys4fpzBakWsJRJHpF57UwU=;
- b=jGGXiXWYo+qXqSFQyOfQEw67MGEN7czSFZSzjopAwPz01DJAGt9otBOeRsDyYqCjRgx6kowZRZOBmOaYTEmdHAHqjfXStiEfVp5KHt539E4PxTllrxmIsqPAC6SauckOxWBSvoeJzDee6/OXWK8g1i6PGIfd60mOB094tVc3l83db5Jn3ZTi7MyxabXdP5l0CRzFs+5kW8gso8JBABfNJuWIaM9K8JpG9Wz0EwA5JLp03fNFIpVlHYfS0JCYm8kNEwVSr4QO3R3Ggzhwjymwj5WHahCLgO/4GNAaJlJ5JeFXO3oWY7QkPMtPP0FMavTSt336S+n4UOlLu7LSAxE+Cg==
-Received: from BL0PR12MB5521.namprd12.prod.outlook.com (2603:10b6:208:1c7::12)
- by DM6PR12MB4217.namprd12.prod.outlook.com (2603:10b6:5:219::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Wed, 10 May
- 2023 23:02:35 +0000
-Received: from BL0PR12MB5521.namprd12.prod.outlook.com
- ([fe80::45c7:723:54c7:9148]) by BL0PR12MB5521.namprd12.prod.outlook.com
- ([fe80::45c7:723:54c7:9148%6]) with mapi id 15.20.6363.033; Wed, 10 May 2023
- 23:02:35 +0000
-From:   David Thompson <davthompson@nvidia.com>
-To:     Liming Sun <limings@nvidia.com>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-CC:     "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] mlxbf-bootctl: Add sysfs file for BlueField boot log
-Thread-Topic: [PATCH v2] mlxbf-bootctl: Add sysfs file for BlueField boot log
-Thread-Index: AQHZgzY+h/vbiPqEuk2dOyVolWTn769UHl5Q
-Date:   Wed, 10 May 2023 23:02:35 +0000
-Message-ID: <BL0PR12MB55214CBEAAE8CB4241BCBBDCC7779@BL0PR12MB5521.namprd12.prod.outlook.com>
-References: <1f778872d177146336318cf856a2c0b06870b1b7.1683568762.git.limings@nvidia.com>
- <20230510115434.50166-1-limings@nvidia.com>
-In-Reply-To: <20230510115434.50166-1-limings@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL0PR12MB5521:EE_|DM6PR12MB4217:EE_
-x-ms-office365-filtering-correlation-id: e4cd5eac-1723-4b88-317c-08db51aaa4ba
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Pbxa+R9eRuXYRLNtVBZiOBagNn033hZZ/OdQkaTke6YdRPnqFozdDewhKdxq2qtAMdfqZ2diZuhA3uZ7LpCcsx5btLEZ6gs0sCOStu7Oax59WP62J0VjSGQ/3VLamYxQhYldnuKEy7I810lkvlKBwlkCd89p7a+A145+v9otnEqou/Bi8DiRWF+s9v4LmGNPrUKB+S6PiMUcIc72U2Gxw64HkBnhqW1BU0+XCNTRLU2dG7WBDcGpUi2YCVyKzKe8krym+8J0n+W7M4TCsKmNmuubhJuwMTFDrJwtEZnnQmSPdsgFp8imip/d+orkDLhZSeoy0A00B8Jf7QxMv5V1vBHf9akh9p7MyuMBZrU2vmmefb3o/ezQoPLRchxMpx3UkrNoTy+JKZOCT5aG4ZWDMMcLiOj051PODssTThKIMUEZmKrEFawGAk8Bjdqi84VV5BrNCV72twC1MO7OWdKEKaJscmB8/e3m0lO7QdRaBPaMJsEMMnOzJkaZEqYCPxVHPg4r63K3IKC4uimBNC9FKDBE+4xkjfn98xQpfsRfw+NoIzM89M5Ao/n4G0Mh2nbFEbkfHqcXgRNKk5uhGAA7egIPJ7hZWrnhfAeb98K3w4piq3G/xLrrvbGzy/m7CY6o
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5521.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(136003)(39860400002)(346002)(376002)(451199021)(478600001)(54906003)(83380400001)(86362001)(55016003)(71200400001)(6506007)(26005)(7696005)(66946007)(4326008)(66556008)(122000001)(110136005)(64756008)(66476007)(66446008)(76116006)(53546011)(9686003)(186003)(316002)(38100700002)(41300700001)(8676002)(5660300002)(52536014)(8936002)(2906002)(38070700005)(33656002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Ag5B1sNNluuutlP58YQ+6GH/Pq/NR+khFidHkCgyDeGsZx12hxeD9ulpM3Vd?=
- =?us-ascii?Q?6jCUAPHgyoh13ddL1VgTTza8bqbMSVI1xiO2QgXqgbLvOTCqK8W6klXuOZiv?=
- =?us-ascii?Q?a2Btxr359YfjVdoSBXLAshnlRXnwehUiG80mJGmjKRK6JQcaOZ26eJ6J+c7Z?=
- =?us-ascii?Q?BGE+hB17TR1UOvPF5FsuWAg/IAPi46Ek7uo5AA61f2xn6ApCjX+9AHCnmBaT?=
- =?us-ascii?Q?49RRa5uu+eOlyRxcrHZD0eTpcYXOV++dfMd1HfdPQSE/HJkIeSIN5YOACa/w?=
- =?us-ascii?Q?jhW9hftiUxCwIoiQzSK8LPf6rsSI6+62zYk1ZA03dCzf2ZldoA14DCaX3N2B?=
- =?us-ascii?Q?UK+q1xhy2r/OA9eR1SzHvuWJsaoI0FWq/iXQqdw64uG2w+4HNNQTt1CbsOmC?=
- =?us-ascii?Q?5V+Eo5XHN3C2XlIF3+wLBiiSwW4Lf3mSsDN1L012xPiYHh97Qm5irPOMmgO/?=
- =?us-ascii?Q?AcJQF3jYNP04Py4YWpD4zWYaXxBAFucukOWDRlbY1EKqUuBywGDvITQCwC2K?=
- =?us-ascii?Q?c5F8Depr327Yj11RA2h3riwAZdoFq1ixTMbQwFdpl+PIeSLEgGjcx3YUqxNs?=
- =?us-ascii?Q?2MTOIe6ff2GMUUNE+XOVPvoMi1XsTmWwwf+bo5xoGOldqyMLLtQr56J8Peug?=
- =?us-ascii?Q?FYcR1aIkikX4vccnDXzjckiyx4g5/0XaLAbD2RiCFs5JqKVeaC509L2lwdcM?=
- =?us-ascii?Q?FXxRl5LDRTesiWi0VQLqLgq/UHhqU5Lm8quLoYpoAS/ymvmqK32WdJaRGL8G?=
- =?us-ascii?Q?riFuOBOAgFtGJlvRZ41ro7dx2cklp/fdWqgiloLeROohzORpSwMebJu9zVUm?=
- =?us-ascii?Q?USjN1l8d7zwyFqMI3gm+386qUEb7Otk8FUIYA7cM7dMSzwZ6bnC0G5FY6lwm?=
- =?us-ascii?Q?w3JgFDbmCzndUTM4nHia+Wd7Vg8dxllrMPkQBiRMNecgKoyJ3tVgqnor3ddF?=
- =?us-ascii?Q?hrR9xtGQIXXO38no2SBcGJGQ4PVLbaIBxZXb/tPFeqnia/zmYcZpTa9JvQFv?=
- =?us-ascii?Q?wwiEi8+RGcRjWpvBMOVZjJp6594sAp+Y3JOu6rBiYPvVGoiHHNBQgS3Wox4F?=
- =?us-ascii?Q?pm/my0Mc3d/n3RWYU5B9M0irKXS8nk/mD6XYajkAd6db2DVaRt7NiArmGD3g?=
- =?us-ascii?Q?xkALgs53kFdXWsbH6KtUGhyDlUI/SMAGx39aGQqpx2W9E7uqSijKp3ADUvQa?=
- =?us-ascii?Q?rYM1oHeCUWlG2c8U7UuufWBPcnUbnSP+PNRjXJ2Oez44pZwdYncASNmpo06e?=
- =?us-ascii?Q?ScNowts0WuUSWhCPHg0YoaZ+3V52pFmiK0OYhWOr/udt7SHQkOZLHDQySeWH?=
- =?us-ascii?Q?4Zo8ZXcU+DTG/Az4bk8J2dBKOJsfit2t+MsmpD3jIasABiFTJF0VKv2hPl+k?=
- =?us-ascii?Q?sl0lxGV0yKhja8mylWxUE+G0RoVOEYwVNh3O6KYNcUyj2rOD4kei3BSA3ZHs?=
- =?us-ascii?Q?KKENVRF9K3+6jaFj+xlOs75vZvpIBrQxQUxCnCRkth0wgN6LCYT5zQ4Y5/CJ?=
- =?us-ascii?Q?7+2AY1ctNAmXc1OM69fkMYEPGyxCkaHk7x6BuqDEXjLGZ9Pi7fM9chr1mfSK?=
- =?us-ascii?Q?17/x+rkD+v6zivfeOpZWFX169cAO9b+DAbVA3dgD?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 10 May 2023 19:03:59 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1EF76BB
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 16:03:26 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bcae898b2so14004135a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 16:03:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683759805; x=1686351805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1R4G4N9xNRse1S8Qy+Upxa7B2Fk7s5Bd8H1DsXqUpgw=;
+        b=Us3qewPs7FH0/9W5JtJ6Kc+Ny8oizpy0w1yqNC9NtnBqieR4BooJyWYdJuZSVZwzOi
+         aL3Hr2XiQ9JlpVNz+ZQv67KbXosCmCJ2aNmLEi4+F7rRKNJhFnK34x6osrzkg73R0lbR
+         e3YAAS9c2kCME6hc2ZY+09KeWVWXyi/xB6sMkjaoculZn63ChhHu2dB3XsOvZn6YZkmo
+         xvG/rsPacDlpdM1VHePpDcPH1X2F/ATqnz6UrAKKE43rNSiIVy4RPtB5RfZHKPcJC6OW
+         pWbShUSwkMN+9TTabPsmilevPoLJxN4REG0CQlkxSEs9eMAO0lrjqetZ7Y8y9UZ1nOhI
+         DVjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683759805; x=1686351805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1R4G4N9xNRse1S8Qy+Upxa7B2Fk7s5Bd8H1DsXqUpgw=;
+        b=VioNsyR5Am3/zssKwIOpMafKTC2/GvkNe7TrjEMp66AIwa0xYq9IUtWXljfQiAcSTF
+         En4aOLzK2V2Wb9URGTW5vTTki9sAqhYNGq6wUi7aeitK9BR2BlJvncbV2AFV3fsGYjfN
+         Kau0W1z1+2RVwXROEHKLkLgl0w4D8kqG91TGSam9kQRu+yYKr3lJj1GRw8Q/2U0Ed9+6
+         19mrqHv8t/HUtcL+6m2OqkwAM0stf7kQUDSe5/r91qZd2UNWAjOND597K+w5UdAX6eJ5
+         u9sHKETV2yCmKQMzevh/Mvwd9Ad3jVWT29JS+TgZqf3jT7Q3cPFWO5hZJdMHVLPL5idr
+         BVuw==
+X-Gm-Message-State: AC+VfDzG5O5CiRkN6KAqAcdM+ojeauqalkLhubKkR1jncxFNaI1v3YyI
+        NaVGf8UF1PfPpjr6kmCNbdgSv/+aJ2ZINXAX6sgveg==
+X-Google-Smtp-Source: ACHHUZ4v5M4IuwVasytIBzHFiuO2mXW3bXcaw1h9dErieYg9F2g83Pin19NJjFwbluHfeDQMhpE31ioFQgqUa76b610=
+X-Received: by 2002:a05:6402:605:b0:50d:91c8:9e10 with SMTP id
+ n5-20020a056402060500b0050d91c89e10mr12970238edv.10.1683759805082; Wed, 10
+ May 2023 16:03:25 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5521.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4cd5eac-1723-4b88-317c-08db51aaa4ba
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2023 23:02:35.2796
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 54pTzAItCfJvgfUF+P7dw88oodhvC8elTTLJ9DjWX3yI650avgWntpEfMPFLBSdQ+zF3pipKiXis8JRxxhEetA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4217
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <ZD1oevE8iHsi66T2@google.com> <658018f9-581c-7786-795a-85227c712be0@redhat.com>
+ <ZD12htq6dWg0tg2e@google.com> <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
+ <ZD2bBB00eKP6F8kz@google.com> <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
+ <ZD86E23gyzF6Q7AF@google.com> <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
+ <ZEM5Zq8oo+xnApW9@google.com> <CAGtprH_+bF4VZg2ps6CM8vjJVvShsvSGAvaLfTedts4cKqhSUw@mail.gmail.com>
+ <ZFwPBqGeW+d9xMEs@google.com>
+In-Reply-To: <ZFwPBqGeW+d9xMEs@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Wed, 10 May 2023 16:03:13 -0700
+Message-ID: <CAGtprH8jUAM015h4eEhbdAv6Oq2UNbX3P5Z-VCVbcrHtnATJwQ@mail.gmail.com>
+Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
+ KVM: mm: fd-based approach for supporting KVM)
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        tabba@google.com, Michael Roth <michael.roth@amd.com>,
+        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 10, 2023 at 2:39=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> On Wed, May 10, 2023, Vishal Annapurve wrote:
+> > On Fri, Apr 21, 2023 at 6:33=E2=80=AFPM Sean Christopherson <seanjc@goo=
+gle.com> wrote:
+> > >
+> > > ...
+> > > cold.  I poked around a bit to see how we could avoid reinventing all=
+ of that
+> > > infrastructure for fd-only memory, and the best idea I could come up =
+with is
+> > > basically a rehash of Kirill's very original "KVM protected memory" R=
+FC[3], i.e.
+> > > allow "mapping" fd-only memory, but ensure that memory is never actua=
+lly present
+> > > from hardware's perspective.
+> > >
+> >
+> > I am most likely missing a lot of context here and possibly venturing
+> > into an infeasible/already shot down direction here.
+>
+> Both :-)
+>
+> > But I would still like to get this discussed here before we move on.
+> >
+> > I am wondering if it would make sense to implement
+> > restricted_mem/guest_mem file to expose both private and shared memory
+> > regions, inline with Kirill's original proposal now that the file
+> > implementation is controlled by KVM.
+> >
+> > Thinking from userspace perspective:
+> > 1) Userspace creates guest mem files and is able to mmap them but all
+> > accesses to these files result into faults as no memory is allowed to
+> > be mapped into userspace VMM pagetables.
+>
+> Never mapping anything into the userspace page table is infeasible.  Tech=
+nically
+> it's doable, but it'd effectively require all of the work of an fd-based =
+approach
+> (and probably significantly more), _and_ it'd require touching core mm co=
+de.
+>
+> VMAs don't provide hva=3D>pfn information, they're the kernel's way of im=
+plementing
+> the abstraction provided to userspace by mmap(), mprotect() etc.  Among m=
+any other
+> things, a VMA describes properties of what is mapped, e.g. hugetblfs vers=
+us
+> anonymous, where memory is mapped (virtual address), how memory is mapped=
+, e.g.
+> RWX protections, etc.  But a VMA doesn't track the physical address, that=
+ info
+> is all managed through the userspace page tables.
+>
+> To make it possible to allow userspace to mmap() but not access memory (w=
+ithout
+> redoing how the kernel fundamentally manages virtual=3D>physical mappings=
+), the
+> simplest approach is to install PTEs into userspace page tables, but neve=
+r mark
+> them Present in hardware, i.e. prevent actually accessing the backing mem=
+ory.
+> This is is exactly what Kirill's series in link [3] below implemented.
+>
 
+Maybe it's simpler to do when mmaped regions are backed with files.
 
-> -----Original Message-----
-> From: Liming Sun <limings@nvidia.com>
-> Sent: Wednesday, May 10, 2023 7:55 AM
-> To: Vadim Pasternak <vadimp@nvidia.com>; David Thompson
-> <davthompson@nvidia.com>; Hans de Goede <hdegoede@redhat.com>; Mark
-> Gross <markgross@kernel.org>
-> Cc: Liming Sun <limings@nvidia.com>; platform-driver-x86@vger.kernel.org;
-> linux-kernel@vger.kernel.org
-> Subject: [PATCH v2] mlxbf-bootctl: Add sysfs file for BlueField boot log
->=20
-> This commit adds sysfs interface to be used to write into the boot log wh=
-ich is 1KB
-> HW buffer on BlueField SoC. The same log buffer is also used by firmware =
-code
-> like ATF/UEFI, and can be displayed by userspace tools or from external h=
-ost via
-> USB/PCIe.
->=20
-> Signed-off-by: Liming Sun <limings@nvidia.com>
-> Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
-> ---
-> v1->v2:
->     Fixes for comments from Hans:
->     - Add more details in Documentation about the log levels;
->     - Replace 0x0a with '\n';
->     - Solve comment 'Why len + 1, this seems intended to assume some
->       separator between prefix'. The change is to remove the '+ 1'
->       here to avoid confusion. Yes, it's trying to remove the space
->       separator. Since the next block 'Ignore leading spaces' already
->       has similar logic, no need for the '+ 1" here.
-> v1: Initial version.
-> ---
->  .../testing/sysfs-platform-mellanox-bootctl   |   9 ++
->  drivers/platform/mellanox/mlxbf-bootctl.c     | 141 ++++++++++++++++++
->  2 files changed, 150 insertions(+)
->=20
-> diff --git a/Documentation/ABI/testing/sysfs-platform-mellanox-bootctl
-> b/Documentation/ABI/testing/sysfs-platform-mellanox-bootctl
-> index 9b99a81babb1..4c5c02d8f870 100644
-> --- a/Documentation/ABI/testing/sysfs-platform-mellanox-bootctl
-> +++ b/Documentation/ABI/testing/sysfs-platform-mellanox-bootctl
-> @@ -75,3 +75,12 @@ KernelVersion:	6.4
->  Contact:	"Liming Sun <limings@nvidia.com>"
->  Description:
->  		The file used to access the BlueField boot fifo.
-> +
-> +What:		/sys/bus/platform/devices/MLNXBF04:00/rsh_log
-> +Date:		May 2023
-> +KernelVersion:	6.4
-> +Contact:	"Liming Sun <limings@nvidia.com>"
-> +Description:
-> +		The file used to write BlueField boot log with the format
-> +                "[INFO|WARN|ERR|ASSERT ]<msg>". Log level 'INFO' is used=
- by
-> +                default if not specified.
-> diff --git a/drivers/platform/mellanox/mlxbf-bootctl.c
-> b/drivers/platform/mellanox/mlxbf-bootctl.c
-> index 1bad1d278672..e88ce68acb89 100644
-> --- a/drivers/platform/mellanox/mlxbf-bootctl.c
-> +++ b/drivers/platform/mellanox/mlxbf-bootctl.c
-> @@ -45,10 +45,38 @@ static const char * const mlxbf_bootctl_lifecycle_sta=
-tes[]
-> =3D {
->  	[3] =3D "RMA",
->  };
->=20
-> +/* Log header format. */
-> +#define MLXBF_RSH_LOG_TYPE_SHIFT	56
-> +#define MLXBF_RSH_LOG_LEN_SHIFT		48
-> +#define MLXBF_RSH_LOG_LEVEL_SHIFT	0
-> +
-> +/* Log module ID and type (only MSG type in Linux driver for now). */
-> +#define MLXBF_RSH_LOG_TYPE_MSG		0x04ULL
-> +
-> +/* Log ctl/data register offset. */
-> +#define MLXBF_RSH_SCRATCH_BUF_CTL_OFF	0
-> +#define MLXBF_RSH_SCRATCH_BUF_DATA_OFF	0x10
-> +
-> +/* Log message levels. */
-> +enum {
-> +	MLXBF_RSH_LOG_INFO,
-> +	MLXBF_RSH_LOG_WARN,
-> +	MLXBF_RSH_LOG_ERR
-> +};
-> +
+I see that shmem has fault handlers for accesses to VMA regions
+associated with the files, In theory a file implementation can always
+choose to not allocate physical pages for such faults (similar to
+F_SEAL_FAULT_AUTOALLOCATE that was discussed earlier).
 
-Should add "MLXBF_RSH_LOG_ASSERT" to enum for completeness
+> Issues that led to us abandoning the "map with special !Present PTEs" app=
+roach:
+>
+>  - Using page tables, i.e. hardware defined structures, to track gfn=3D>p=
+fn mappings
+>    is inefficient and inflexible compared to software defined structures,=
+ especially
+>    for the expected use cases for CoCo guests.
+>
+>  - The kernel wouldn't _easily_ be able to enforce a 1:1 page:guest assoc=
+iation,
+>    let alone a 1:1 pfn:gfn mapping.
 
->  /* Mapped pointer for RSH_BOOT_FIFO_DATA and RSH_BOOT_FIFO_COUNT
-> register. */  static void __iomem *mlxbf_rsh_boot_data;  static void __io=
-mem
-> *mlxbf_rsh_boot_cnt;
->=20
-> +/* Mapped pointer for rsh log semaphore/ctrl/data register. */ static
-> +void __iomem *mlxbf_rsh_semaphore; static void __iomem
-> +*mlxbf_rsh_scratch_buf_ctl; static void __iomem
-> +*mlxbf_rsh_scratch_buf_data;
-> +
-> +/* Rsh log levels. */
-> +static const char * const mlxbf_rsh_log_level[] =3D {
-> +	"INFO", "WARN", "ERR", "ASSERT"};
-> +
->  /* ARM SMC call which is atomic and no need for lock. */  static int
-> mlxbf_bootctl_smc(unsigned int smc_op, int smc_arg)  { @@ -266,12 +294,11=
-1
-> @@ static ssize_t fw_reset_store(struct device *dev,
->  	return count;
->  }
->=20
-> +/* Size(8-byte words) of the log buffer. */
-> +#define RSH_SCRATCH_BUF_CTL_IDX_MASK	0x7f
-> +
-> +static int mlxbf_rsh_log_sem_lock(void) {
-> +	unsigned long timeout;
-> +
-> +	/* Take the semaphore. */
-> +	timeout =3D jiffies + msecs_to_jiffies(100);
-> +	while (readq(mlxbf_rsh_semaphore)) {
-> +		if (time_after(jiffies, timeout))
-> +			return -ETIMEDOUT;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void mlxbf_rsh_log_sem_unlock(void) {
-> +	writeq(0, mlxbf_rsh_semaphore);
-> +}
-> +
-> +static ssize_t rsh_log_store(struct device *dev,
-> +			     struct device_attribute *attr,
-> +			     const char *buf, size_t count)
-> +{
-> +	int rc, idx, num, len, size =3D (int)count, level =3D MLXBF_RSH_LOG_INF=
-O;
-> +	u64 data;
-> +
-> +	if (!size)
-> +		return -EINVAL;
-> +
-> +	if (!mlxbf_rsh_semaphore || !mlxbf_rsh_scratch_buf_ctl)
-> +		return -EOPNOTSUPP;
-> +
-> +	/* Ignore line break at the end. */
-> +	if (buf[size - 1] =3D=3D '\n')
-> +		size--;
-> +
-> +	/* Check the message prefix. */
-> +	for (idx =3D 0; idx < ARRAY_SIZE(mlxbf_rsh_log_level); idx++) {
-> +		len =3D strlen(mlxbf_rsh_log_level[idx]);
-> +		if (len + 1 < size &&
-> +		    !strncmp(buf, mlxbf_rsh_log_level[idx], len)) {
-> +			buf +=3D len;
-> +			size -=3D len;
-> +			level =3D idx;
-> +			break;
-> +		}
-> +	}
-> +
-> +	/* Ignore leading spaces. */
-> +	while (size > 0 && buf[0] =3D=3D ' ') {
-> +		size--;
-> +		buf++;
-> +	}
-> +
-> +	/* Take the semaphore. */
-> +	rc =3D mlxbf_rsh_log_sem_lock();
-> +	if (rc)
-> +		return rc;
-> +
-> +	/* Calculate how many words are available. */
-> +	num =3D (size + sizeof(u64) - 1) / sizeof(u64);
-> +	idx =3D readq(mlxbf_rsh_scratch_buf_ctl);
-> +	if (idx + num + 1 >=3D RSH_SCRATCH_BUF_CTL_IDX_MASK)
-> +		num =3D RSH_SCRATCH_BUF_CTL_IDX_MASK - idx - 1;
-> +	if (num <=3D 0)
-> +		goto done;
-> +
-> +	/* Write Header. */
-> +	data =3D (MLXBF_RSH_LOG_TYPE_MSG << MLXBF_RSH_LOG_TYPE_SHIFT)
-> |
-> +		((u64)num << MLXBF_RSH_LOG_LEN_SHIFT) |
-> +		((u64)level << MLXBF_RSH_LOG_LEVEL_SHIFT);
+Maybe KVM can ensure that each page of the guest_mem file is
+associated with a single memslot. HVAs when they are registered can be
+associated with offsets into guest_mem files.
 
-Should use FIELD_PREP() macro to generate value in "data"
+>
+>  - Does not work for memory that isn't backed by 'struct page', e.g. if d=
+evices
+>    gain support for exposing encrypted memory regions to guests.
+>
+>  - Poking into the VMAs to convert memory would be likely be less perform=
+ant due
+>    to using infrastructure that is much "heavier", e.g. would require tak=
+ing
+>    mmap_lock for write.
 
-> +	writeq(data, mlxbf_rsh_scratch_buf_data);
-> +
-> +	/* Write message. */
-> +	for (idx =3D 0, len =3D size; idx < num && len > 0; idx++) {
-> +		if (len <=3D sizeof(u64)) {
-> +			data =3D 0;
-> +			memcpy(&data, buf, len);
-> +			len =3D 0;
-> +		} else {
-> +			memcpy(&data, buf, sizeof(u64));
-> +			len -=3D sizeof(u64);
-> +			buf +=3D sizeof(u64);
-> +		}
-> +		writeq(data, mlxbf_rsh_scratch_buf_data);
-> +	}
-> +
-> +done:
-> +	/* Release the semaphore. */
-> +	mlxbf_rsh_log_sem_unlock();
-> +
-> +	/* Ignore the rest if no more space. */
-> +	return count;
-> +}
-> +
->  static DEVICE_ATTR_RW(post_reset_wdog);  static
-> DEVICE_ATTR_RW(reset_action);  static
-> DEVICE_ATTR_RW(second_reset_action);
->  static DEVICE_ATTR_RO(lifecycle_state);  static
-> DEVICE_ATTR_RO(secure_boot_fuse_state);
->  static DEVICE_ATTR_WO(fw_reset);
-> +static DEVICE_ATTR_WO(rsh_log);
->=20
->  static struct attribute *mlxbf_bootctl_attrs[] =3D {
->  	&dev_attr_post_reset_wdog.attr,
-> @@ -280,6 +407,7 @@ static struct attribute *mlxbf_bootctl_attrs[] =3D {
->  	&dev_attr_lifecycle_state.attr,
->  	&dev_attr_secure_boot_fuse_state.attr,
->  	&dev_attr_fw_reset.attr,
-> +	&dev_attr_rsh_log.attr,
->  	NULL
->  };
->=20
-> @@ -345,6 +473,7 @@ static bool mlxbf_bootctl_guid_match(const guid_t *gu=
-id,
-> static int mlxbf_bootctl_probe(struct platform_device *pdev)  {
->  	struct arm_smccc_res res =3D { 0 };
-> +	void __iomem *reg;
->  	guid_t guid;
->  	int ret;
->=20
-> @@ -358,6 +487,18 @@ static int mlxbf_bootctl_probe(struct platform_devic=
-e
-> *pdev)
->  	if (IS_ERR(mlxbf_rsh_boot_cnt))
->  		return PTR_ERR(mlxbf_rsh_boot_cnt);
->=20
-> +	/* Get the resource of the bootfifo counter register. */
+Converting memory doesn't necessarily need to poke holes into VMA, but
+rather just unmap pagetables just like what would happen when mmapped
+files are punched to free the backing file offsets.
 
-Wrong comment, seems like cut-and-paste error
+>
+> In short, shoehorning this into mmap() requires fighting how the kernel w=
+orks at
+> pretty much every step, and in the end, adding e.g. fbind() is a lot easi=
+er.
+>
+> > 2) Userspace registers mmaped HVA ranges with KVM with additional
+> > KVM_MEM_PRIVATE flag
+> > 3) Userspace converts memory attributes and this memory conversion
+> > allows userspace to access shared ranges of the file because those are
+> > allowed to be faulted in from guest_mem. Shared to private conversion
+> > unmaps the file ranges from userspace VMM pagetables.
+> > 4) Granularity of userspace pagetable mappings for shared ranges will
+> > have to be dictated by KVM guest_mem file implementation.
+> >
+> > Caveat here is that once private pages are mapped into userspace view.
+> >
+> > Benefits here:
+> > 1) Userspace view remains consistent while still being able to use HVA =
+ranges
+> > 2) It would be possible to use HVA based APIs from userspace to do
+> > things like binding.
+> > 3) Double allocation wouldn't be a concern since hva ranges and gpa
+> > ranges possibly map to the same HPA ranges.
+>
+> #3 isn't entirely correct.  If a different process (call it "B") maps sha=
+red memory,
+> and then the guest converts that memory from shared to private, the backi=
+ng pages
+> for the previously shared mapping will still be mapped by process B unles=
+s userspace
+> also ensures process B also unmaps on conversion.
+>
 
-> +	mlxbf_rsh_semaphore =3D devm_platform_ioremap_resource(pdev, 2);
-> +	if (IS_ERR(mlxbf_rsh_semaphore))
-> +		return PTR_ERR(mlxbf_rsh_semaphore);
-> +
-> +	/* Get the resource of the bootfifo counter register. */
+This should be ideally handled by something like: unmap_mapping_range()
 
-Wrong comment, seems like cut-and-paste error
+> #3 is also a limiter.  E.g. if a guest is primarly backed by 1GiB pages, =
+keeping
+> the 1GiB mapping is desirable if the guest converts a few KiB of memory t=
+o shared,
+> and possibly even if the guest converts a few MiB of memory.
 
-> +	reg =3D devm_platform_ioremap_resource(pdev, 3);
-> +	if (IS_ERR(reg))
-> +		return PTR_ERR(reg);
-> +	mlxbf_rsh_scratch_buf_ctl =3D reg + MLXBF_RSH_SCRATCH_BUF_CTL_OFF;
-> +	mlxbf_rsh_scratch_buf_data =3D reg +
-> MLXBF_RSH_SCRATCH_BUF_DATA_OFF;
-> +
->  	/* Ensure we have the UUID we expect for this service. */
->  	arm_smccc_smc(MLXBF_BOOTCTL_SIP_SVC_UID, 0, 0, 0, 0, 0, 0, 0,
-> &res);
->  	guid_parse(mlxbf_bootctl_svc_uuid_str, &guid);
-> --
-> 2.30.1
+This caveat maybe can be lived with as shared ranges most likely will
+not be backed by 1G pages anyways, possibly causing IO performance to
+get hit. This possibly needs more discussion about conversion
+granularity used by guests.
 
+>
+> > > Code is available here if folks want to take a look before any kind o=
+f formal
+> > > posting:
+> > >
+> > >         https://github.com/sean-jc/linux.git x86/kvm_gmem_solo
+> > >
+> > > [1] https://lore.kernel.org/all/ff5c5b97-acdf-9745-ebe5-c6609dd6322e@=
+google.com
+> > > [2] https://lore.kernel.org/all/20230418-anfallen-irdisch-6993a61be10=
+b@brauner
+> > > [3] https://lore.kernel.org/linux-mm/20200522125214.31348-1-kirill.sh=
+utemov@linux.intel.com
