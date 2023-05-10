@@ -2,197 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B3C6FDB6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F06F6FDB76
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236499AbjEJKO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 06:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
+        id S236073AbjEJKQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 06:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236520AbjEJKOk (ORCPT
+        with ESMTP id S229500AbjEJKQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 06:14:40 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6DA1FE3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:14:37 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id ada2fe7eead31-43612ffa82fso609082137.3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:14:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683713676; x=1686305676;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WyxVh6Bn3n5sF3blHhR2SMLSrwGlWm6CrpKH8IXQruk=;
-        b=HHN+OeUM82c1krqfQ6MHczVzsN+73g7gPQHvTAAIaNM8L5gGQdN1XZIbDnnRKEwUEC
-         AicqQ4Vm5pkXWeP8/UF65ABzf0E2etYl0y4YnC29Q3lwigk+rtGhA6FGrPcoM8W1WGj6
-         ieXIUkdky4Xg1jpzSyLEgpEcdYt1+ELJq57GaUxkId8T+iU+4EgPD81mi5Zi0o/UEnj5
-         YAWl0kG60VWFh47yZqBnUaY/WDm3Cf3ZGyKJB8UGhir4pi+kIH7gGZGTAG1InoLxRlRQ
-         LwoRbX2HlykHILABUZjCW5iked4wrhf/OKE/StWgp1tUKk2ZnPyWfWwsNddW2XVf13RQ
-         +r5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683713676; x=1686305676;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WyxVh6Bn3n5sF3blHhR2SMLSrwGlWm6CrpKH8IXQruk=;
-        b=kSWDWGxuICHaKQwMHcAoxunbGnc7IJTvpFgtFf6Lny6rWnSdOYnVkTd1JkGsFNZVTm
-         2vJ7aj4C56z4keu24xr2RWj/ZN7ywg8t4+dF9XS2S1UR69PhIk+hvryaXqSS2/6Yk9Gf
-         atBLkPp3g68j5fcrBJOcCC2VaM2Nr7jhctvAfkj0do45bTDS/PuVk9af+gw8/+dklc9z
-         PpIfgf+aTy0VxxDnVFQvXQYOdk86x+m81sJ1OF5XFZVelrqhJqMp0FzOaGi3BieLJ90p
-         BDDuGI0FvEU/V+1OHnXm30MRxkHkWbFa1nlfo1j0ElSYCkbQk3NLXAN0HwRVH+PXTP8O
-         HQQw==
-X-Gm-Message-State: AC+VfDzO1X2WQKXHun/6Z508D1jGL8zgo+p0aurKG8PM+rRbXDrDSmcb
-        +7LmmYRpPVoWanpUV3EVFxFMf99MRR1CbVa5Kq46yA==
-X-Google-Smtp-Source: ACHHUZ4ci5AeFP/wGYzXq/glgfJYeGQTOfOiLiltAurW+oVfwMLsJcpiv1S5t1Pshl1vXfUDGpiwhwAGPh3/595Y9uo=
-X-Received: by 2002:a05:6102:3a57:b0:435:ffcc:cdd2 with SMTP id
- c23-20020a0561023a5700b00435ffcccdd2mr3032160vsu.35.1683713676582; Wed, 10
- May 2023 03:14:36 -0700 (PDT)
+        Wed, 10 May 2023 06:16:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91D11BE7
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:16:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D24864860
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 10:16:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBBCCC433EF;
+        Wed, 10 May 2023 10:16:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683713786;
+        bh=ZSbZgAoMh5LnKeTr6TYqbQqHTrrmga9LBiMNaVOVVKM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yqcy2PtThYGb4x7qcBy1q02y2LyCP2zZIkqTCIuvP1FmbDNJREdVmNwlS6LfXO745
+         +2v5i16x8L5Q/INe+tElDmUpG2delFKOGXOoljfN5x2Za+sOcXccHElvqb/cV56HMc
+         negVOx81D9h5P50hbPnjxAA3Cmm3ktKPexbI9yaIBYqVH1j2ZWmdPwLz/5l6SrMA/P
+         f89V4L85KDo/jYwbQkgxjv5Pjz6sLY0G00G1SnSrlUyA3mtpWNOfTQErBnVO/vKZ3g
+         LqMu/HpPhEh1TgzFgElrtZEopTKfy/mAlyW5zuKxHOX9dccAPOvVXYngJ+UF6EGR3i
+         qjUsLUC7NaZHw==
+Date:   Wed, 10 May 2023 12:16:22 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>
+Subject: Re: [PATCH v6 15/21] timer: Add get next timer interrupt
+ functionality for remote CPUs
+Message-ID: <ZFtu9l35Tg89NAiZ@localhost.localdomain>
+References: <20230510072817.116056-1-anna-maria@linutronix.de>
+ <20230510072817.116056-16-anna-maria@linutronix.de>
 MIME-Version: 1.0
-References: <20230505173012.881083-1-etienne.carriere@linaro.org> <20230505173012.881083-2-etienne.carriere@linaro.org>
-In-Reply-To: <20230505173012.881083-2-etienne.carriere@linaro.org>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 10 May 2023 15:44:25 +0530
-Message-ID: <CAFA6WYPC36vqQLzOfArvy2GnVJAXLwbDGenhBARzJ7-Fri-sVA@mail.gmail.com>
-Subject: Re: [PATCH v6 2/4] tee: system session
-To:     Etienne Carriere <etienne.carriere@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230510072817.116056-16-anna-maria@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 5 May 2023 at 23:01, Etienne Carriere
-<etienne.carriere@linaro.org> wrote:
->
-> Adds kernel client API function tee_client_system_session() for a client
-> to request a system service entry in TEE context.
->
-> This feature is needed to prevent a system deadlock when several TEE
-> client applications invoke TEE, consuming all TEE thread contexts
-> available in the secure world. The deadlock can happen in the OP-TEE
-> driver for example if all these TEE threads issue an RPC call from TEE
-> to Linux OS to access an eMMC RPMB partition (TEE secure storage) which
-> device clock or regulator controller is accessed through an OP-TEE SCMI
-> services. In that case, Linux SCMI driver must reach OP-TEE SCMI service
-> without waiting one of the consumed TEE thread is freed.
->
-
-s/waiting one/waiting until one/
-s/thread/threads/
-
-> Co-developed-by: Jens Wiklander <jens.wiklander@linaro.org>
-> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
-> No change since v5
->
-
-With above typos fixes, feel free to add:
-
-Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-
--Sumit
-
-> Changes since v4:
-> - Changes extracted from "[PATCH v4 1/2] tee: system invocation" and
->   revised with Jens contribution to cover only definition of tee driver
->   new API function tee_client_system_session() for kernel clients to
->   register their session as a system session.
-> - Commit message rephrased, including header line changed from
->   "tee: system invocation" to "tee: system session" has the feature
->   relates to system attributes of tee sessions.
->
-> Changes since v3:
-> - Fixed new SMC funcIDs to reserved/unreserve OP-TEE thread contexts:
->   minor renaming + define as fastcall funcIDs.
-> - Moved system_ctx_count from generic struct tee_context to optee's
->   private struct optee_context_data. This changes optee smc_abi.c
->   to release reserved thread contexts when the optee device is released.
-> - Fixed inline description comments.
->
-> No change since v2
->
-> Change since v1
-> - Addressed comment on Linux client to claim reservation on TEE context.
->   This brings 2 new operations from client to TEE to request and release
->   system thread contexts: 2 new tee_drv.h API functions, 2 new ops
->   functions in struct tee_driver_ops. The OP-TEE implement shall implement
->   2 new fastcall SMC funcIDs.
-> - Fixed typos in commit message.
-> ---
->  drivers/tee/tee_core.c  |  8 ++++++++
->  include/linux/tee_drv.h | 16 ++++++++++++++++
->  2 files changed, 24 insertions(+)
->
-> diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
-> index 0eb342de0b00..91932835d0f7 100644
-> --- a/drivers/tee/tee_core.c
-> +++ b/drivers/tee/tee_core.c
-> @@ -1170,6 +1170,14 @@ int tee_client_close_session(struct tee_context *ctx, u32 session)
->  }
->  EXPORT_SYMBOL_GPL(tee_client_close_session);
->
-> +int tee_client_system_session(struct tee_context *ctx, u32 session)
-> +{
-> +       if (!ctx->teedev->desc->ops->system_session)
-> +               return -EINVAL;
-> +       return ctx->teedev->desc->ops->system_session(ctx, session);
-> +}
-> +EXPORT_SYMBOL_GPL(tee_client_system_session);
-> +
->  int tee_client_invoke_func(struct tee_context *ctx,
->                            struct tee_ioctl_invoke_arg *arg,
->                            struct tee_param *param)
-> diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
-> index 17eb1c5205d3..911ddf92dcee 100644
-> --- a/include/linux/tee_drv.h
-> +++ b/include/linux/tee_drv.h
-> @@ -84,6 +84,7 @@ struct tee_param {
->   * @release:           release this open file
->   * @open_session:      open a new session
->   * @close_session:     close a session
-> + * @system_session:    declare session as a system session
->   * @invoke_func:       invoke a trusted function
->   * @cancel_req:                request cancel of an ongoing invoke or open
->   * @supp_recv:         called for supplicant to get a command
-> @@ -100,6 +101,7 @@ struct tee_driver_ops {
->                             struct tee_ioctl_open_session_arg *arg,
->                             struct tee_param *param);
->         int (*close_session)(struct tee_context *ctx, u32 session);
-> +       int (*system_session)(struct tee_context *ctx, u32 session);
->         int (*invoke_func)(struct tee_context *ctx,
->                            struct tee_ioctl_invoke_arg *arg,
->                            struct tee_param *param);
-> @@ -429,6 +431,20 @@ int tee_client_open_session(struct tee_context *ctx,
->   */
->  int tee_client_close_session(struct tee_context *ctx, u32 session);
->
+Le Wed, May 10, 2023 at 09:28:11AM +0200, Anna-Maria Behnsen a écrit :
 > +/**
-> + * tee_client_system_session() - Declare session as a system session
-> + * @ctx:       TEE Context
-> + * @session:   Session id
+> + * fetch_next_timer_interrupt_remote
+> + * @basej:	base time jiffies
+> + * @basem:	base time clock monotonic
+> + * @tevt:	Pointer to the storage for the expiry values
+> + * @cpu:	Remote CPU
 > + *
-> + * This function requests TEE to provision an entry context ready to use for
-> + * that session only. The provisioned entry context is used for command
-> + * invocation and session closure, not for command cancelling requests.
-> + * TEE releases the provisioned context upon session closure.
+> + * Stores the next pending local and global timer expiry values in the
+> + * struct pointed to by @tevt. If a queue is empty the corresponding
+> + * field is set to KTIME_MAX. If local event expires before global
+> + * event, global event is set to KTIME_MAX as well.
 > + *
-> + * Return < 0 on error else 0 if an entry context has been provisioned.
+> + * Caller needs to make sure timer base locks are held (use
+> + * timer_lock_remote_bases() for this purpose). Caller must make sure
+> + * interrupts are reopened, if required.
 > + */
-> +int tee_client_system_session(struct tee_context *ctx, u32 session);
+> +void fetch_next_timer_interrupt_remote(unsigned long basej, u64 basem,
+> +				       struct timer_events *tevt,
+> +				       unsigned int cpu)
+> +{
+> +	struct timer_base *base_local, *base_global;
 > +
->  /**
->   * tee_client_invoke_func() - Invoke a function in a Trusted Application
->   * @ctx:       TEE Context
-> --
-> 2.25.1
->
+> +	/* Preset local / global events */
+> +	tevt->local = tevt->global = KTIME_MAX;
+> +
+> +	base_local = per_cpu_ptr(&timer_bases[BASE_LOCAL], cpu);
+> +	base_global = per_cpu_ptr(&timer_bases[BASE_GLOBAL], cpu);
+> +
+> +	lockdep_assert_held(&base_local->lock);
+> +	lockdep_assert_held(&base_global->lock);
+> +
+> +	fetch_next_timer_interrupt(base_local, base_global, basej, basem, tevt);
+> +
+> +	raw_spin_unlock(&base_global->lock);
+> +	raw_spin_unlock(&base_local->lock);
+
+Oh so that makes:
+
+LOCK(baseL)
+LOCK(baseG)
+LOCK(tmc)
+UNLOCK(baseG)
+UNLOCK(baseL)
+UNLOCK(tmc)
+
+I guess you can keep the bases locks locked until the end of
+tmigr_handle_remote_cpu(). After all that's what get_next_timer_interrupt()
+does. I'm not sure the above early release of bases locks will bring much
+in case of contention...
+
+Then a timer_unlock_remote_bases() would restore symmetry.
+
+> +/**
+> + * timer_lock_remote_bases - lock timer bases of cpu
+> + * @cpu:	Remote CPU
+> + *
+> + * Locks the remote timer bases.
+> + *
+> + * Returns false if cpu is offline, otherwise true is returned.
+> + */
+> +bool timer_lock_remote_bases(unsigned int cpu)
+> +{
+> +	struct timer_base *base_local, *base_global;
+> +
+> +	/*
+> +	 * Pretend that there is no timer pending if the cpu is offline.
+> +	 * Possible pending timers will be migrated later to an active cpu.
+> +	 */
+> +	if (cpu_is_offline(cpu))
+> +		return false;
+
+This value is never checked and the caller assumes the bases are
+always locked upon calling this (more on this on the big patch).
+
+Thanks.
+
+> +
+> +	base_local = per_cpu_ptr(&timer_bases[BASE_LOCAL], cpu);
+> +	base_global = per_cpu_ptr(&timer_bases[BASE_GLOBAL], cpu);
+> +
+> +	raw_spin_lock_irq(&base_local->lock);
+> +	raw_spin_lock_nested(&base_global->lock, SINGLE_DEPTH_NESTING);
+> +
+> +	return true;
+> +}
+
