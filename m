@@ -2,124 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BFA6FDA0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5676FDA0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236879AbjEJIx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 04:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
+        id S236853AbjEJIxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 04:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236892AbjEJIxH (ORCPT
+        with ESMTP id S236898AbjEJIxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 04:53:07 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A333140F6;
-        Wed, 10 May 2023 01:52:51 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-306dbad5182so4441705f8f.1;
-        Wed, 10 May 2023 01:52:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683708770; x=1686300770;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sRhXhkL36qHDCTJUPZJ0gK4JtbzzIKwrgaPUffLmcS4=;
-        b=oG8mhrPN17kkUirhBiS9xZM7Nax7ezuXWWn0z7PndTZ7BTrMJoaOch4OdduhXkfI/f
-         F1tcjT9OW1w49Za65TxRxLWsa9AL+CNPIfkH/jdoiHdrE6d0se+xpilb9SaU/rerV+Wt
-         4GFVTbr+8REGG65ejKLrTU1YW1y+aLP4O00vl9Bh8M5xPYuySq67zgv6JW+bn7harRR+
-         oLOzsTjCdD0tHiDuZeOM9QnRzJR5PXNTlGnUH7wrqVbXaQqk0WXabCF5fX8h+zMKdVm1
-         WferQ9/7qxOGapUd9MCkFIUIyz7ci2aXsW9lKl6Ou1AO7idtk9agds/AY87tU/a901/B
-         Zy5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683708770; x=1686300770;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sRhXhkL36qHDCTJUPZJ0gK4JtbzzIKwrgaPUffLmcS4=;
-        b=gwbkbrZdxKlQ/EXfSIsKq4tK+cGod9UBwLn0NxBp3zMMXC/SqPVzz0n0g5RWRB1rPo
-         1XU6+exWP81GuJkpdifnJGmL0QWMeQUbgnaGLtgFTZ4dGfWD/JhXfUXFBQOR1sSi0hPK
-         l+excmylyn+JpsK+EqZNUWU5sH825tgXDLSNeczD5ngE8MjFBlUM3gnGEXRLOgYJEOBF
-         4ozuXGteAcjLoV6Gpz6Wz9CxRDAKzSnS15Y7VjXFtkbiJKdLdOargyWj/3JeVtMiJtst
-         W2+n7ts5j/x0ZT5+r44NyfjCLuIOPBTwSjFaA46vHmFQpMhmwjA6K+eQOzryIVt3kGCx
-         FsZw==
-X-Gm-Message-State: AC+VfDx7KYYr6mr+cIVw9BBpQUm8dh/ONmTWm61fBashYtqQE6e/ctHj
-        x/cj0sKB4GpfiicPodba4Oo=
-X-Google-Smtp-Source: ACHHUZ7ih61hE9Yfr+pU8+QPzsVKR+QvTP+Uv980w8E1G8xoVAtDcpQ/O5PinNK/Mlk2eFtDJjKS/g==
-X-Received: by 2002:a5d:5082:0:b0:307:a36b:e7a5 with SMTP id a2-20020a5d5082000000b00307a36be7a5mr3554624wrt.60.1683708769923;
-        Wed, 10 May 2023 01:52:49 -0700 (PDT)
-Received: from koko.localdomain (cgn-89-1-213-9.nc.de. [89.1.213.9])
-        by smtp.gmail.com with ESMTPSA id e15-20020a5d4e8f000000b0030629536e64sm16730766wru.30.2023.05.10.01.52.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 01:52:49 -0700 (PDT)
-From:   Maximilian Weigand <mweigand2017@gmail.com>
-To:     Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-Cc:     Maximilian Weigand <mweigand@mweigand.net>
-Subject: [PATCH v2] backlight: lm3630a: turn off both led strings when display is blank
-Date:   Wed, 10 May 2023 10:52:39 +0200
-Message-Id: <20230510085239.1253896-1-mweigand2017@gmail.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 10 May 2023 04:53:30 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0002783FF
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:53:10 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230510085309epoutp01ac7be1161f53ad4a179b7165bf69b673~dvDkpaouM1575315753epoutp01D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:53:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230510085309epoutp01ac7be1161f53ad4a179b7165bf69b673~dvDkpaouM1575315753epoutp01D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683708789;
+        bh=hAgsUYvwnAwGZ8MCXuf3w6+KGzCXW9Ae7hJz02geX9Y=;
+        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
+        b=jR+Xf2AEHZd8CzlaLwDcpQnCsA1+wjmvoIIaxRCHWrl9ELYKhHhXPdt/jUBrj/VVA
+         /EMTwvMd6nGYlBf6IpsH036kDENRTDz/Tvg9aYhgMgKYmb/3FFkLEIsrOWkI46t1Cs
+         7raEp9pSxJVoH2uY8neNDeEi1Yium1YtfN5I64lk=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230510085308epcas2p19f03621cc47872e5931aeeeb9463f545~dvDj-t8151264312643epcas2p1U;
+        Wed, 10 May 2023 08:53:08 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.101]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4QGTM80VzXz4x9Q0; Wed, 10 May
+        2023 08:53:08 +0000 (GMT)
+X-AuditID: b6c32a45-6d1fd70000020cc1-4e-645b5b7392d8
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        29.6A.03265.37B5B546; Wed, 10 May 2023 17:53:08 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v2 06/14] block: blk-merge: fix merging two requests in
+ ll_merge_requests_fn
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     Jinyoung CHOI <j-young.choi@samsung.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "kbusch@kernel.org" <kbusch@kernel.org>, "hch@lst.de" <hch@lst.de>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
+        "kch@nvidia.com" <kch@nvidia.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p1>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230510085307epcms2p2118fe232ab7e7707c0fc70d5ede6aa58@epcms2p2>
+Date:   Wed, 10 May 2023 17:53:07 +0900
+X-CMS-MailID: 20230510085307epcms2p2118fe232ab7e7707c0fc70d5ede6aa58
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJJsWRmVeSWpSXmKPExsWy7bCmhW5JdHSKwZbfjBar7/azWbw8pGmx
+        cvVRJove/q1sFotubGOy+Nt1j8li0qFrjBZPr85isth7S9vi8q45bBbLj/9jslj3+j2Lxe8f
+        c9gceD3O39vI4rF5hZbH5bOlHptWdbJ5TFh0gNFj980GNo/e5ndsHh+f3mLx6NuyitHj8yY5
+        j/YD3UwB3FHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+Abpu
+        mTlA5ysplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCswL9IoTc4tL89L18lJLrAwN
+        DIxMgQoTsjMO9R5iLOjmq+i+c5atgfEudxcjJ4eEgInE+sVX2EFsIYEdjBJTP0t2MXJw8AoI
+        SvzdIQwSFhaIk7j0eiVUiZLEuTWzGEFKhAUMJG71moOE2QT0JH4umcHWxcjFISKwk0Xi+/2j
+        jBDjeSVmtD9lgbClJbYv3wrWyyngJ9H62BIirCHxY1kvM4QtKnFz9Vt2GPv9sflQY0QkWu+d
+        haoRlHjwczdUXFLi0KGvbCAjJQTyJTYcCIQI10i8XX4AqkRf4lrHRrALeAV8Jd59aAIbzyKg
+        KtF9bR3USBeJ9SeOgdUwC8hLbH87hxlkJLOApsT6XfoQ05UljtyCquCT6Dj8lx3mv4aNv7Gy
+        d8x7wgTRqiaxqMkIIiwj8fXwfPYJjEqzEIE8C8naWQhrFzAyr2IUSy0ozk1PLTYqMIRHa3J+
+        7iZGcBrWct3BOPntB71DjEwcjIcYJTiYlUR4vUOjUoR4UxIrq1KL8uOLSnNSiw8xmgI9PJFZ
+        SjQ5H5gJ8kriDU0sDUzMzAzNjUwNzJXEeaVtTyYLCaQnlqRmp6YWpBbB9DFxcEo1MPXzPRD3
+        dZHdpGGVvj+sKH1h6ddPFdKrTefYmd91F9Kxi5n6mS9PyrW0fv1Vv6eHPl9hU2fijdqyTsBs
+        z3xLl2/cgboSt0zCNx64Xy/ccqjkH/fjn2tfNfWY+S7juKSyboNT/WztnE3bt17qXWiw4pGJ
+        gvIfz8ePpwqx3P0SvY1nYaP7xczp2W/1Pp1OWMr7ycyT5ayp3us19y7M/fn91JN36cq+8/S1
+        j7xP4Xr786PJtua1wmdbPrin/zp81W3Jhcz9q1/vzFb2lLn6Wsruk0S++XPvHpV1K8XvL+34
+        svHP2dXm7ZY/W9/0M5/lPaDD9ltoaylzUYRrW8o0M96774rny6/iMvi/qF1oydv4bzVKLMUZ
+        iYZazEXFiQAFrTqKTAQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684
+References: <20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p1>
+        <CGME20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p2>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maximilian Weigand <mweigand@mweigand.net>
+blk_integrity_merge_rq() merges integrity segment information of two
+requests. However, it is only a condition check and does not perform the
+actual integrity information update. So this was modified.
 
-Use backlight_is_blank() to determine if the led strings should be turned
-off in the update_status() functions of both strings.
+After it is called, the merge process of the requests may fail
+due to other conditions. At this time, there is an error in the integrity
+segment information of request. So the call location was also changed.
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
-Signed-off-by: Maximilian Weigand <mweigand@mweigand.net>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Martin K. Petersen <martin.petersen@oracle.com>
+
+Fixes: 13f05c8d8e98 ("block/scsi: Provide a limit on the number of integrity segments")
+Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
 ---
-Changes in v2:
-- fix description, replace display_is_black() with backlight_is_black()
-- use backlight_get_brightness() instead of accessing the property
-  directly
+ block/blk-integrity.c | 2 ++
+ block/blk-merge.c     | 5 +++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
- drivers/video/backlight/lm3630a_bl.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/video/backlight/lm3630a_bl.c b/drivers/video/backlight/lm3630a_bl.c
-index d8c42acecb5d..faf92c8d70c1 100644
---- a/drivers/video/backlight/lm3630a_bl.c
-+++ b/drivers/video/backlight/lm3630a_bl.c
-@@ -202,7 +202,9 @@ static int lm3630a_bank_a_update_status(struct backlight_device *bl)
- 	usleep_range(1000, 2000);
- 	/* minimum brightness is 0x04 */
- 	ret = lm3630a_write(pchip, REG_BRT_A, bl->props.brightness);
--	if (bl->props.brightness < 0x4)
+diff --git a/block/blk-integrity.c b/block/blk-integrity.c
+index 03a85e1f6d2e..f97b7e8a6d4d 100644
+--- a/block/blk-integrity.c
++++ b/block/blk-integrity.c
+@@ -181,6 +181,8 @@ bool blk_integrity_merge_rq(struct request_queue *q, struct request *req,
+ 	if (integrity_req_gap_back_merge(req, next->bio))
+ 		return false;
+ 
++	req->nr_integrity_segments += next->nr_integrity_segments;
 +
-+	if (backlight_is_blank(bl) || (backlight_get_brightness(bl) < 0x4))
-+		/* turn the string off  */
- 		ret |= lm3630a_update(pchip, REG_CTRL, LM3630A_LEDA_ENABLE, 0);
- 	else
- 		ret |= lm3630a_update(pchip, REG_CTRL,
-@@ -277,7 +279,9 @@ static int lm3630a_bank_b_update_status(struct backlight_device *bl)
- 	usleep_range(1000, 2000);
- 	/* minimum brightness is 0x04 */
- 	ret = lm3630a_write(pchip, REG_BRT_B, bl->props.brightness);
--	if (bl->props.brightness < 0x4)
-+
-+	if (backlight_is_blank(bl) || (backlight_get_brightness(bl) < 0x4))
-+		/* turn the string off  */
- 		ret |= lm3630a_update(pchip, REG_CTRL, LM3630A_LEDB_ENABLE, 0);
- 	else
- 		ret |= lm3630a_update(pchip, REG_CTRL,
-
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
---
-2.39.2
-
+ 	return true;
+ }
+ 
+diff --git a/block/blk-merge.c b/block/blk-merge.c
+index 8509f468d6d4..c6a0958e8df1 100644
+--- a/block/blk-merge.c
++++ b/block/blk-merge.c
+@@ -711,10 +711,11 @@ static int ll_merge_requests_fn(struct request_queue *q, struct request *req,
+ 	if (!blk_cgroup_mergeable(req, next->bio))
+ 		return 0;
+ 
+-	if (blk_integrity_merge_rq(q, req, next) == false)
++	if (!bio_crypt_ctx_merge_rq(req, next))
+ 		return 0;
+ 
+-	if (!bio_crypt_ctx_merge_rq(req, next))
++	/* this will merge integrity segments */
++	if (!blk_integrity_merge_rq(q, req, next))
+ 		return 0;
+ 
+ 	/* Merge is OK... */
+-- 
+2.34.1
