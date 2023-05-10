@@ -2,140 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2748F6FE08C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE466FE082
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237519AbjEJOka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
+        id S237435AbjEJOkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237111AbjEJOkW (ORCPT
+        with ESMTP id S237117AbjEJOj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:40:22 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552A86EB5;
-        Wed, 10 May 2023 07:40:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1683729615;
-        bh=SKIms/x8UkuCSr7MMpMwCUwu5UFRx/RZRLA+rEglAko=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=jZseRr+FoEyBwmEDpOSOuV1XqLGTpFkp1YdWeGNopmPeGlzWr+noMhhYkVGLQNh3t
-         4UsvxDcUNQ5HXZZ7Sy/uoPqRg0fLJuIHMmL0UU/3CAYhAwyohY6O/b/5qNVLaOsuZY
-         wjhMsT8NASw5rWXUj6PPGo9iS0Va3Vi2NusYDoOEFIGi1J0RXwxDFO6SH5Cqr6llv2
-         yRXVxl59iYbuDsvrxKCnqAKB81J6o0cmRUQo0fKBaVN8xTZeXQZF5Yj2Co+tkCFI7M
-         +ifDSBzTkmRGiRBL6QdyHiSWyfjL29BjyFJw+ypvllEQv/nsEjshIN0PZGK3g30KEx
-         kGzk4Cd/aI+DA==
-Received: from integral2.. (unknown [101.128.114.135])
-        by gnuweeb.org (Postfix) with ESMTPSA id B13FE245CF1;
-        Wed, 10 May 2023 21:40:13 +0700 (WIB)
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        =?UTF-8?q?Barnab=C3=A1s=20P=C5=91cze?= <pobrn@protonmail.com>,
-        Michael William Jonathan <moe@gnuweeb.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [PATCH liburing v1 2/2] recv-msgall: Fix invalid mutex usage
-Date:   Wed, 10 May 2023 21:39:27 +0700
-Message-Id: <20230510143927.123170-3-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230510143927.123170-1-ammarfaizi2@gnuweeb.org>
-References: <20230510143927.123170-1-ammarfaizi2@gnuweeb.org>
+        Wed, 10 May 2023 10:39:58 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CEB268E;
+        Wed, 10 May 2023 07:39:57 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-19288cce249so5529121fac.0;
+        Wed, 10 May 2023 07:39:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683729597; x=1686321597;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fk9eUG3U91hgmCg1FDe/Uo4ursc9HcJP8f9e+bw6f08=;
+        b=hWmtYYeyl6nRGXKgze90Q4gRzbsa+Kdn9hDEGFvIihz4xDElSdRP7BAhs7xib2OaPg
+         bUj062RwMs0INiSlMhO5qb7hhff4fL5vdqAuVDlMjRQeqqk74xJUWficiKqJVIjENfQf
+         79+EJYEJVVUGspDM2S2iqbpnVeHu3vNHn2eOLKgAw3kfMupRi2hLSUVXwo0fR4i2uwdT
+         0QVpxw3ikPUBxmcPzYtWOOipzQJ84cb0gOAyZTT7XI8wq6jk+JxJgUtk+0CHQyY75TpF
+         DfTG/9+fi7M4FCc7OdNi/xuLW9yPVwxBf2+dST2A2uu6RrY5Q7lgS74ju9Dl9d8RLIWa
+         w+Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683729597; x=1686321597;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fk9eUG3U91hgmCg1FDe/Uo4ursc9HcJP8f9e+bw6f08=;
+        b=eCXIEuaVT1ojSxJazh7l46lGLUTL7OR8Lk0R3HEn6oioLDiHry45dodiouN/wzzi6b
+         y6TqskXZrv0OL1/WU1vuadohZ160ZOTJG8aNJLwDa7Suvlsmo5uLHYBoJnPVFebFJy/c
+         aGBBozkXUCAgwTzQc1+5kICRyqtfGRaVURI/iPjL4+1qOfirnztwVkZZP5xvY85gvtLO
+         MIoDPr7qtLVpuVfmNrYa81BLIMApEYcvx+aTgNgZgpuofny+DPN0DqfYatW/1N/5I5nD
+         VXq81VCQivuZxnjoyW/hiQXYj5JE35Ji9hnGETUZ8oCVOI6US5ydEad5Llly4DvoYgfb
+         w5xw==
+X-Gm-Message-State: AC+VfDxHb6iyj1+LozXCA2WToi3zlu7/zCAiEhAWn/4i2qt+NQlCQWee
+        3e+JwZF0rUlWB9yqCmnNkYs=
+X-Google-Smtp-Source: ACHHUZ5pF+M++RxLzw+et8XA4BnqeGBSkMIpGL9wjTOHn5jtyuulDOVKMxiKgQKK2qIlAwKnMk2PgA==
+X-Received: by 2002:a05:6870:9544:b0:192:85fb:3a33 with SMTP id v4-20020a056870954400b0019285fb3a33mr6652658oal.2.1683729597002;
+        Wed, 10 May 2023 07:39:57 -0700 (PDT)
+Received: from t14s.localdomain ([177.92.48.137])
+        by smtp.gmail.com with ESMTPSA id n3-20020a056870034300b00176d49bb898sm6973892oaf.44.2023.05.10.07.39.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 07:39:56 -0700 (PDT)
+Received: by t14s.localdomain (Postfix, from userid 1000)
+        id 70AEA616D93; Wed, 10 May 2023 11:39:54 -0300 (-03)
+Date:   Wed, 10 May 2023 11:39:54 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     nhorman@tuxdriver.com, davem@davemloft.net,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Christian Brauner <brauner@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next] sctp: add bpf_bypass_getsockopt proto callback
+Message-ID: <ZFusunmfAaQVmBE2@t14s.localdomain>
+References: <20230510131527.1244929-1-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510131527.1244929-1-aleksandr.mikhalitsyn@canonical.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Calling pthread_mutex_lock() twice with the same mutex in the same
-thread without unlocking it first is invalid. The intention behind this
-pattern was to wait for the recv_fn() thread to be ready.
+On Wed, May 10, 2023 at 03:15:27PM +0200, Alexander Mikhalitsyn wrote:
+> Add bpf_bypass_getsockopt proto callback and filter out
+> SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS socket options
+> from running eBPF hook on them.
+> 
+> These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
+> hook returns an error after success of the original handler
+> sctp_getsockopt(...), userspace will receive an error from getsockopt
+> syscall and will be not aware that fd was successfully installed into fdtable.
+> 
+> This patch was born as a result of discussion around a new SCM_PIDFD interface:
+> https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com/
 
-Use the pthread barrier instead. It is more straightforward and correct.
+I read some of the emails in there but I don't get why the fd leak is
+special here. I mean, I get that it leaks, but masking the error
+return like this can lead to several other problems in the application
+as well.
 
-Fixes: https://github.com/axboe/liburing/issues/855
-Reported-by: Barnabás Pőcze <pobrn@protonmail.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
- test/recv-msgall.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+For example, SCTP_SOCKOPT_CONNECTX3 will trigger a connect(). If it
+failed, and the hook returns success, the user app will at least log a
+wrong "connection successful".
 
-diff --git a/test/recv-msgall.c b/test/recv-msgall.c
-index f809834b2e427fc5..d1fcdb0d510423e7 100644
---- a/test/recv-msgall.c
-+++ b/test/recv-msgall.c
-@@ -19,7 +19,7 @@
- #define HOST	"127.0.0.1"
- static __be16 bind_port;
- struct recv_data {
--	pthread_mutex_t mutex;
-+	pthread_barrier_t barrier;
- 	int use_recvmsg;
- 	struct msghdr msg;
- };
-@@ -122,11 +122,11 @@ static void *recv_fn(void *data)
- 
- 	ret = t_create_ring_params(1, &ring, &p);
- 	if (ret == T_SETUP_SKIP) {
--		pthread_mutex_unlock(&rd->mutex);
-+		pthread_barrier_wait(&rd->barrier);
- 		ret = 0;
- 		goto err;
- 	} else if (ret < 0) {
--		pthread_mutex_unlock(&rd->mutex);
-+		pthread_barrier_wait(&rd->barrier);
- 		goto err;
- 	}
- 
-@@ -135,7 +135,7 @@ static void *recv_fn(void *data)
- 		fprintf(stderr, "recv_prep failed: %d\n", ret);
- 		goto err;
- 	}
--	pthread_mutex_unlock(&rd->mutex);
-+	pthread_barrier_wait(&rd->barrier);
- 	ret = do_recv(&ring);
- 	close(sock);
- 	io_uring_queue_exit(&ring);
-@@ -219,28 +219,24 @@ err:
- 
- static int test(int use_recvmsg)
- {
--	pthread_mutexattr_t attr;
- 	pthread_t recv_thread;
- 	struct recv_data rd;
- 	int ret;
- 	void *retval;
- 
--	pthread_mutexattr_init(&attr);
--	pthread_mutexattr_setpshared(&attr, 1);
--	pthread_mutex_init(&rd.mutex, &attr);
--	pthread_mutex_lock(&rd.mutex);
-+	pthread_barrier_init(&rd.barrier, NULL, 2);
- 	rd.use_recvmsg = use_recvmsg;
- 
- 	ret = pthread_create(&recv_thread, NULL, recv_fn, &rd);
- 	if (ret) {
- 		fprintf(stderr, "Thread create failed: %d\n", ret);
--		pthread_mutex_unlock(&rd.mutex);
- 		return 1;
- 	}
- 
--	pthread_mutex_lock(&rd.mutex);
-+	pthread_barrier_wait(&rd.barrier);
- 	do_send();
- 	pthread_join(recv_thread, &retval);
-+	pthread_barrier_destroy(&rd.barrier);
- 	return (intptr_t)retval;
- }
- 
--- 
-Ammar Faizi
+If the hook can't be responsible for cleaning up before returning a
+different value, then maybe we want to extend the list of sockopts in
+here. AFAICT these would be the 3 most critical sockopts.
 
