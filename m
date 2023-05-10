@@ -2,146 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF296FDD66
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22ACF6FDDEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236883AbjEJMDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 08:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
+        id S237131AbjEJMhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 08:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236902AbjEJMC5 (ORCPT
+        with ESMTP id S237098AbjEJMgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 08:02:57 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F647294
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:02:49 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230510120247epoutp03b5f23ecf03cbf7e0529ba15021db4171~dxpJBtciH1545715457epoutp03U
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 12:02:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230510120247epoutp03b5f23ecf03cbf7e0529ba15021db4171~dxpJBtciH1545715457epoutp03U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683720167;
-        bh=CUGfWQVDfEC5k+8Md6XQtTpXOoA0eMh5vCwgvW3SvH4=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=jMHwSxvvVzXHgHokGsxbYndBTYjpqM/7OWwHepahN6vJcbxEsrtP4FXx7IgYxMvqQ
-         6XwJSs94CokQA9nMnTQjoXyNJQralN/ZMXMTMUP+XoQQvxuHEZo/MuZrObvV44QO8o
-         A+Dy8CSw97rKyFAG+OWh4cUd/xRfaMS2FoCOS1Fo=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230510120246epcas2p4f486084a95e25e9c4420fec4a731afc1~dxpIkwJIw2560325603epcas2p4S;
-        Wed, 10 May 2023 12:02:46 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.69]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4QGYYx6TnFz4x9Pt; Wed, 10 May
-        2023 12:02:45 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        52.B5.03265.5E78B546; Wed, 10 May 2023 21:02:45 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230510120245epcas2p2cea91a04ef2fd46f0fa9f22f73c5b2eb~dxpHRMzzk2509125091epcas2p2w;
-        Wed, 10 May 2023 12:02:45 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230510120245epsmtrp24ed9483bc2edd0df4238447044360c22~dxpHQbcbS1651316513epsmtrp2I;
-        Wed, 10 May 2023 12:02:45 +0000 (GMT)
-X-AuditID: b6c32a45-465ff70000020cc1-26-645b87e557d4
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EB.60.28392.5E78B546; Wed, 10 May 2023 21:02:45 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.229.9.55]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230510120244epsmtip2d935ed4f6fafad2cd53b1cd23dccc6cd~dxpG_IGYa2649226492epsmtip2a;
-        Wed, 10 May 2023 12:02:44 +0000 (GMT)
-From:   Jaewon Kim <jaewon02.kim@samsung.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>
-Subject: [PATCH] spi: s3c64xx: Disable IRQ mode when using DMA
-Date:   Wed, 10 May 2023 20:39:42 +0900
-Message-Id: <20230510113942.89994-1-jaewon02.kim@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOKsWRmVeSWpSXmKPExsWy7bCmue7T9ugUg0/HjC0ezNvGZrH4x3Mm
-        i6kPn7BZXN6vbbGj4Qirxd7XW9ktNj2+xmpxedccNosZ5/cxWTR+vMlusfbIXXYHbo/rSz4x
-        e2xa1cnmcefaHjaPzUvqPfq2rGL0+LxJLoAtKtsmIzUxJbVIITUvOT8lMy/dVsk7ON453tTM
-        wFDX0NLCXEkhLzE31VbJxSdA1y0zB+g6JYWyxJxSoFBAYnGxkr6dTVF+aUmqQkZ+cYmtUmpB
-        Sk6BeYFecWJucWleul5eaomVoYGBkSlQYUJ2xrbumYwFCzgqNv/8xtTA+Jqti5GTQ0LARKKh
-        eQV7FyMXh5DADkaJR3vnsUI4nxglfi9aygbhfGaUmHJvNSNMy8/JK1kgEruAEhtaoZyPjBJ9
-        TzazgFSxCWhLfF+/GGyWiMBiRokFV3eCbWEWaGeSOHd5GStIlbCAncSLdYeBbA4OFgFVif1b
-        rEHCvAK2Eq87DjFDrJOXWL3hADNIr4TAJXaJuR87WSASLhLXJ39jhbCFJV4d38IOYUtJfH63
-        F+q9bIn26X+gaiokLm6YDRU3lpj1rJ0RZC+zgKbE+l36IKaEgLLEkVtg05kF+CQ6Dv9lhwjz
-        SnS0CUE0qkncn3oOaoiMxKQjK5kgbA+JL5sug9lCArESZ9dcZpzAKDsLYf4CRsZVjGKpBcW5
-        6anFRgWG8FhKzs/dxAhOcVquOxgnv/2gd4iRiYPxEKMEB7OSCK93aFSKEG9KYmVValF+fFFp
-        TmrxIUZTYGhNZJYSTc4HJtm8knhDE0sDEzMzQ3MjUwNzJXFeaduTyUIC6YklqdmpqQWpRTB9
-        TBycUg1Mqbmr2NlC+J9xmE0v49Jf1TLbdNqHEwVzd8amVXvJpiybp9EZdDPqhpLTVv95XDm8
-        j2ImhG+7NOvGYme3kFC7aMkzeV4v375Zvk2q3tGUTU0w4K3AnZvG2dLL1M9U391+QWpLn9iO
-        afwBB7RsjFdsLSw853A674u9tbzmIZui3/v2nL7xOu64fN781/v33RdPSNhb6/WL8QKzZMik
-        5xL/J/n9ahT3Fy5w+681cfHLeP7VH7vSzYX5n9/+rnb4/6dGF/4/hSbau63nzDFY+yR0t7bm
-        hxW56d/0b0efLRG7reXz6GttkOHSR6dyJr5JzDiszbAhLSNp7fHZX7bPPaT/8FrEnO+u/xnZ
-        rlQ+qPqnrcRSnJFoqMVcVJwIAAL2PG76AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGLMWRmVeSWpSXmKPExsWy7bCSvO7T9ugUg8kd7BYP5m1js1j84zmT
-        xdSHT9gsLu/XttjRcITVYu/rrewWmx5fY7W4vGsOm8WM8/uYLBo/3mS3WHvkLrsDt8f1JZ+Y
-        PTat6mTzuHNtD5vH5iX1Hn1bVjF6fN4kF8AWxWWTkpqTWZZapG+XwJWxrXsmY8ECjorNP78x
-        NTC+Zuti5OSQEDCR+Dl5JUsXIxeHkMAORolL8+YwQSRkJJY/64MqEpa433KEFaLoPaPE2l+3
-        WEASbALaEt/XLwZLiAgsZZR4vOcxWIJZoJdJYt4mcxBbWMBO4sW6w0BFHBwsAqoS+7dYg4R5
-        BWwlXnccYoZYIC+xesMB5gmMPAsYGVYxSqYWFOem5xYbFhjlpZbrFSfmFpfmpesl5+duYgQH
-        nZbWDsY9qz7oHWJk4mA8xCjBwawkwusdGpUixJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4
-        IYH0xJLU7NTUgtQimCwTB6dUA1Mzq1KNYk+Xb8qsxzZ1YisYPnycefGdiMb5dTnfZpTunc4/
-        27nlduX2rwcUb7geVHXvu9n6+/uRF+EXv4Zv7lF7nlHPKbeq51nNkmO9m5L/7LuztDvjG3d9
-        wtV58nsT2XLDP+lZLGN4uHc/77M5URrRMxOXxaXcXckRMO+wfURwe0dIi3ejboXqiZuPxO38
-        cp7+FDzhbmf8TvLKJxWLy8/Mlh1SaX+usGvWKssPn3OnbbyS3bpvkpylQLS/4QnBs63m87q+
-        fKpdt4uNd1e4RPzzsnh7bf2z13Ynp1xJ8/ytVMj6V/Vu7955d5+r569K4Lmh+quh69znJ48M
-        p822PHj0xPIvZpuLz5zc6uM014dNiaU4I9FQi7moOBEAa/YXj6kCAAA=
-X-CMS-MailID: 20230510120245epcas2p2cea91a04ef2fd46f0fa9f22f73c5b2eb
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230510120245epcas2p2cea91a04ef2fd46f0fa9f22f73c5b2eb
-References: <CGME20230510120245epcas2p2cea91a04ef2fd46f0fa9f22f73c5b2eb@epcas2p2.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 10 May 2023 08:36:35 -0400
+Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1FEAD22;
+        Wed, 10 May 2023 05:36:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+        s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=qL5OwOHKWsGEJz5LBeBEW7MkLSt6oAOQjlwwT1NVmAE=; b=IXJjsg74s+hgDNm9yBKSa5Hcyn
+        BKfy08wg9lHyXZBWy0eLO/F9bItUkyLMqeKqlaiSiItJ1L5381VNREpC5S5BkACtUBxGE1OD/aQdl
+        jH899dZGGTz8mWR9YzTko2X7qqY07Uu5JmNG19Cg9zQjfGl0Y4EKu17Njh6+QnGHWaafmHDB0e8E1
+        akZ/PT8dnbatOo7wgxKXTWnw7YL5pTUz4DqfQ00gsYhiNqOLQlBJW5PAGEvCuvIfmgtsqh4kPcHKp
+        sRmt9571hgXxwyGCuyVC6/azdCAVEdvimaoDD9ATOfnnZPHjgTTvzvgravKkmozIp9fLC5MIxrF6Y
+        8rT5Jtog==;
+Received: from [2001:4d48:ad59:1403::16a3] (helo=earth.li)
+        by the.earth.li with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <noodles@earth.li>)
+        id 1pwiVB-007udb-3Z; Wed, 10 May 2023 13:01:01 +0100
+Date:   Wed, 10 May 2023 13:00:55 +0100
+From:   Jonathan McDowell <noodles@earth.li>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Subject: [PATCH v2 0/5] Minor device-tree additions for C.H.I.P
+Message-ID: <cover.1683719613.git.noodles@earth.li>
+References: <cover.1681580558.git.noodles@earth.li>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1681580558.git.noodles@earth.li>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixing the problem of enabling DMA mode and IRQ mode at the same time.
-In this case, a value of more than 6bits is written to RDY_LVL, it can
-cause an invasion of other registers, potentially leading to SPI
-transfer failure.
+This small patch series adds some improvements for the C.H.I.P DTS,
+enabling bluetooth, exporting the PMIC temperature details via iio-hwmon
+and finally adding the appropriate base pinmux info for an external MMC
+card. As a pre-requisite for the Bluetooth it also adds support to the
+AXP209 driver for GPIO3, which is the Bluetooth device wakeup line.
 
-Fixes: 1ee806718d5e ("spi: s3c64xx: support interrupt based pio mode")
-Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/spi/spi-s3c64xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2:
+- Fix missing ; on bluetooth stanza in DTS
+- Add device/host wake GPIOs for Bluetooth device
+- Add omit-if-no-ref on the port E pinmux stanza
+- Rename axp20x_temp to pmic-temp
+- Add AXP209 GPIO3 support
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 238db29fc93b..c6a8a6434140 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -782,7 +782,7 @@ static int s3c64xx_spi_transfer_one(struct spi_master *master,
- 
- 	do {
- 		/* transfer size is greater than 32, change to IRQ mode */
--		if (xfer->len > S3C64XX_SPI_POLLING_SIZE)
-+		if (!use_dma && xfer->len > S3C64XX_SPI_POLLING_SIZE)
- 			use_irq = true;
- 
- 		if (use_irq) {
+Jonathan McDowell (5):
+  dt-bindings: gpio: Add GPIO3 for AXP209 GPIO binding schema
+  pinctrl: axp209: Add support for GPIO3 on the AXP209
+  ARM: dts: sun5i: chip: Enable bluetooth
+  ARM: dts: sun5i: Add port E pinmux settings for mmc2
+  ARM: dts: axp209: Add iio-hwmon node for internal temperature
+
+ .../bindings/gpio/x-powers,axp209-gpio.yaml   |  1 +
+ arch/arm/boot/dts/axp209.dtsi                 |  7 ++++
+ arch/arm/boot/dts/sun5i-r8-chip.dts           |  6 +++
+ arch/arm/boot/dts/sun5i.dtsi                  |  9 ++++
+ drivers/pinctrl/pinctrl-axp209.c              | 42 +++++++++++++++++++
+ 5 files changed, 65 insertions(+)
+
 -- 
-2.17.1
+2.39.2
 
