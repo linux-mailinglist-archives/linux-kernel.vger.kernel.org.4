@@ -2,91 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F52D6FE4AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 21:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E8C6FE4B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 21:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236336AbjEJT5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 15:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
+        id S235791AbjEJT6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 15:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjEJT5C (ORCPT
+        with ESMTP id S229521AbjEJT6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 15:57:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECEA2126;
-        Wed, 10 May 2023 12:57:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 807186354A;
-        Wed, 10 May 2023 19:57:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51A0AC433EF;
-        Wed, 10 May 2023 19:57:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683748620;
-        bh=DCbaf6xVpFEDtn0H7lDuPNgtj7JSCv0rwyzi3AwTjg4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LzQpL+4LP9d3GVhwXGOeQaNXtUMYBB8t+NORX9vmt1hf193JvWXJRgjvPg5+V7crn
-         Ab3x3CQk19I5VvbTxQY5TMR9AlLLiD2qtD1pgQJTBYuO+Du7qj/zbp9t2O4yVCMlqH
-         F2B4mFpllWNaOviTJiUWY0ifTir5vQwWNkH92RP0g78GAjnAkElHqr4IsjyxBwKhZw
-         y3VubZG0brs+vC+QTjXOYXFgHlqNB5jn9E9+yWTcAyafp6/1Lquljsei+DxARO8uEU
-         zRWn1u15DFmFru4fnJKPV1bwGt/mMOz2SEr/SX+nSIPjdnhziPeTif2E0s4PXu7k9j
-         x56C6kstXMtsA==
-Message-ID: <ed579a55-c300-b89e-4741-efdc1f3b5ba5@kernel.org>
-Date:   Wed, 10 May 2023 13:56:59 -0600
+        Wed, 10 May 2023 15:58:10 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C0944B0;
+        Wed, 10 May 2023 12:58:08 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-250175762b8so6631574a91.1;
+        Wed, 10 May 2023 12:58:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683748687; x=1686340687;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vrx8jUkYApu9SW/+pw7TCUy5jAaSOx8fwCfGK3LodVQ=;
+        b=cNfvtEg/+MJREEIXc8i2FMKkB0WQkc8kpFbwpZNegWdKFWhI58Qu/5Dl6RY7rgClL4
+         ZbYJQlMaYc0ZZ4jAT4kdrCSxEfW+oyjRgQfhHQslvIttyNP5nQZeoJBIIUhewaZckeSp
+         z8hazt7Ua+tZUeFQuzfskcMu+XGsjLGkjQh287f04HkoakF+uOYzSwLzxZ9SMJO4cnPQ
+         3Y3JRXTLDBR13s7sYYCbFO9CMg+P65shwNk0pyrlFSa1gBBrYKcfrOjOq7Lt8PMrNl3B
+         v5V21g/ZbP1FhaLsWju2CINDJaf9dRcGpqievi+vxLnE2g5yf5n+B1HL7WvJugoJcZz7
+         /qvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683748687; x=1686340687;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vrx8jUkYApu9SW/+pw7TCUy5jAaSOx8fwCfGK3LodVQ=;
+        b=Q6P5Lpsr4Qo+zT5AIN7cN4klDIewOu3TWrUNs9PEeyT4U+p3h53w89AxW/rLtkfvZi
+         5I9vyUluLBBT6jP/M3V/dDW0qdAgQ9DwRKDktcO3CSNS9BpfDS6MqnvQ6Kdzgvjl935v
+         pCkpVzGFztdf81/NnekEe9glVgvKhlq+lizOCwoItMWFvJ4wsk9rHSgYzJc7ok6UVWBc
+         tXxHXtk20kCeb9Q44TYP+8p0S7qdrOCUUDPpxbGf+6cAxlN6PdKjaABzml8YyjHR3Lva
+         nXqZw0u/tAG2xACTKfIBIpap6fIyVjtu+/RCaTrjkrwsLH2yaqqsnoj+RuxPsPeOc8km
+         o/3w==
+X-Gm-Message-State: AC+VfDxbvcpCPnhPAXBp7Xt6DTOmwCvUVOO5YT1j0w6uUHMJKPEUVJHD
+        pN+KAhzzACpJz1NZUslnBoA=
+X-Google-Smtp-Source: ACHHUZ5hK9VGUuyMmTnmAQ9kmEZlouRZGOv1NQBM2ITyyig1tB1tBZEus8BNk0FQqRn/fXp2f9PNIw==
+X-Received: by 2002:a17:90b:b85:b0:24b:a5b6:e866 with SMTP id bd5-20020a17090b0b8500b0024ba5b6e866mr19822621pjb.24.1683748687406;
+        Wed, 10 May 2023 12:58:07 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-118.fbsv.net. [2a03:2880:ff:76::face:b00c])
+        by smtp.gmail.com with ESMTPSA id 191-20020a6305c8000000b004e28be19d1csm3601518pgf.32.2023.05.10.12.58.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 12:58:07 -0700 (PDT)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-api@vger.kernel.org,
+        kernel-team@meta.com, linux-arch@vger.kernel.org,
+        hannes@cmpxchg.org, richard.henderson@linaro.org,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        linux@armlinux.org.uk, geert@linux-m68k.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, davem@davemloft.net,
+        chris@zankel.net, jcmvbkbc@gmail.com, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: [PATCH] cachestat: wire up cachestat for other architectures
+Date:   Wed, 10 May 2023 12:58:06 -0700
+Message-Id: <20230510195806.2902878-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [net 2/2] selftets: seg6: disable rp_filter by default in
- srv6_end_dt4_l3vpn_test
-Content-Language: en-US
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
-        Hangbin Liu <liuhangbin@gmail.com>
-References: <20230510111638.12408-1-andrea.mayer@uniroma2.it>
- <20230510111638.12408-3-andrea.mayer@uniroma2.it>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20230510111638.12408-3-andrea.mayer@uniroma2.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/23 5:16 AM, Andrea Mayer wrote:
-> On some distributions, the rp_filter is automatically set (=1) by
-> default on a netdev basis (also on VRFs).
-> In an SRv6 End.DT4 behavior, decapsulated IPv4 packets are routed using
-> the table associated with the VRF bound to that tunnel. During lookup
-> operations, the rp_filter can lead to packet loss when activated on the
-> VRF.
-> Therefore, we chose to make this selftest more robust by explicitly
-> disabling the rp_filter during tests (as it is automatically set by some
-> Linux distributions).
-> 
-> Fixes: 2195444e09b4 ("selftests: add selftest for the SRv6 End.DT4 behavior")
-> Reported-by: Hangbin Liu <liuhangbin@gmail.com>
-> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> Tested-by: Hangbin Liu <liuhangbin@gmail.com>
-> ---
->  .../testing/selftests/net/srv6_end_dt4_l3vpn_test.sh  | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
+cachestat is previously only wired in for x86 (and architectures using
+the generic unistd.h table):
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com/
 
+This patch wires cachestat in for all the other architectures.
+
+Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+---
+ arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
+ arch/arm/tools/syscall.tbl                  | 1 +
+ arch/ia64/kernel/syscalls/syscall.tbl       | 1 +
+ arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
+ arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
+ arch/s390/kernel/syscalls/syscall.tbl       | 1 +
+ arch/sh/kernel/syscalls/syscall.tbl         | 1 +
+ arch/sparc/kernel/syscalls/syscall.tbl      | 1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     | 1 +
+ 14 files changed, 14 insertions(+)
+
+diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
+index 8ebacf37a8cf..1f13995d00d7 100644
+--- a/arch/alpha/kernel/syscalls/syscall.tbl
++++ b/arch/alpha/kernel/syscalls/syscall.tbl
+@@ -490,3 +490,4 @@
+ 558	common	process_mrelease		sys_process_mrelease
+ 559	common  futex_waitv                     sys_futex_waitv
+ 560	common	set_mempolicy_home_node		sys_ni_syscall
++561	common	cachestat			sys_cachestat
+diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+index ac964612d8b0..8ebed8a13874 100644
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -464,3 +464,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common	futex_waitv			sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	cachestat			sys_cachestat
+diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
+index 72c929d9902b..f8c74ffeeefb 100644
+--- a/arch/ia64/kernel/syscalls/syscall.tbl
++++ b/arch/ia64/kernel/syscalls/syscall.tbl
+@@ -371,3 +371,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	cachestat			sys_cachestat
+diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+index b1f3940bc298..4f504783371f 100644
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -450,3 +450,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	cachestat			sys_cachestat
+diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
+index 820145e47350..858d22bf275c 100644
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@ -456,3 +456,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	cachestat			sys_cachestat
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index 253ff994ed2e..1976317d4e8b 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -389,3 +389,4 @@
+ 448	n32	process_mrelease		sys_process_mrelease
+ 449	n32	futex_waitv			sys_futex_waitv
+ 450	n32	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	n32	cachestat			sys_cachestat
+diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+index 3f1886ad9d80..cfda2511badf 100644
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -365,3 +365,4 @@
+ 448	n64	process_mrelease		sys_process_mrelease
+ 449	n64	futex_waitv			sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	n64	cachestat			sys_cachestat
+diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+index 8f243e35a7b2..7692234c3768 100644
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -438,3 +438,4 @@
+ 448	o32	process_mrelease		sys_process_mrelease
+ 449	o32	futex_waitv			sys_futex_waitv
+ 450	o32	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	o32	cachestat			sys_cachestat
+diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
+index 0e42fceb2d5e..3c71fad78318 100644
+--- a/arch/parisc/kernel/syscalls/syscall.tbl
++++ b/arch/parisc/kernel/syscalls/syscall.tbl
+@@ -448,3 +448,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common	futex_waitv			sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	cachestat			sys_cachestat
+diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
+index a0be127475b1..8c0b08b7a80e 100644
+--- a/arch/powerpc/kernel/syscalls/syscall.tbl
++++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+@@ -537,3 +537,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	cachestat			sys_cachestat
+diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
+index 799147658dee..7df0329d46cb 100644
+--- a/arch/s390/kernel/syscalls/syscall.tbl
++++ b/arch/s390/kernel/syscalls/syscall.tbl
+@@ -453,3 +453,4 @@
+ 448  common	process_mrelease	sys_process_mrelease		sys_process_mrelease
+ 449  common	futex_waitv		sys_futex_waitv			sys_futex_waitv
+ 450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
++451  common	cachestat		sys_cachestat			sys_cachestat
+diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
+index 2de85c977f54..97377e8c5025 100644
+--- a/arch/sh/kernel/syscalls/syscall.tbl
++++ b/arch/sh/kernel/syscalls/syscall.tbl
+@@ -453,3 +453,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	cachestat			sys_cachestat
+diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
+index 4398cc6fb68d..faa835f3c54a 100644
+--- a/arch/sparc/kernel/syscalls/syscall.tbl
++++ b/arch/sparc/kernel/syscalls/syscall.tbl
+@@ -496,3 +496,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	cachestat			sys_cachestat
+diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
+index 52c94ab5c205..2b69c3c035b6 100644
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@ -421,3 +421,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	cachestat			sys_cachestat
+-- 
+2.34.1
 
